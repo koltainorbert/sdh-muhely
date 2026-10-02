@@ -439,6 +439,31 @@
                 }
 
                 if (!eredmeny.talalat) {
+                    // Nem járt még nálunk – a TAC-adatbázis legalább a
+                    // gyártót és a típust megmondja.
+                    if (eredmeny.tac) {
+                        var gyarto = urlap.querySelector('[name="gyarto"]');
+                        var tipus = urlap.querySelector('[name="tipus"]');
+
+                        if (gyarto && !gyarto.value) {
+                            gyarto.value = eredmeny.tac.gyarto;
+                        }
+
+                        if (tipus && !tipus.value) {
+                            tipus.value = eredmeny.tac.tipus;
+                        }
+
+                        jelzes(
+                            urlap,
+                            'siker',
+                            'Új készülék: ' +
+                                (eredmeny.tac.gyarto + ' ' + eredmeny.tac.tipus).trim() +
+                                ' – az IMEI alapján. Az ügyfelet és a többi adatot töltsd ki.'
+                        );
+
+                        return;
+                    }
+
                     if (eredmeny.ervenyes === false) {
                         jelzes(
                             urlap,

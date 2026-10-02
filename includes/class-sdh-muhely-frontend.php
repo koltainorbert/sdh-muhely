@@ -118,6 +118,13 @@ final class SDH_Muhely_Frontend
 
         $modul = $kulcs === 'attekintes' ? null : SDH_Muhely_Modulok::egy($kulcs);
 
+        // A csak adminos modulok (karbantartás, importálás) nem részei a
+        // napi felületnek.
+        if ($modul !== null && !empty($modul['csak_admin'])) {
+            $modul = null;
+            $kulcs = 'ismeretlen';
+        }
+
         if ($kulcs !== 'attekintes' && $modul === null) {
             status_header(404);
             self::keret(
@@ -202,6 +209,9 @@ final class SDH_Muhely_Frontend
                 </a>
 
                 <?php foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) : ?>
+                    <?php if (!empty($modul['csak_admin'])) : ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
                     <?php if (!empty($modul['keszul'])) : ?>
                         <span class="sdh-app__link sdh-app__link--keszul" title="Készül">
                             <?php echo esc_html($modul['cim']); ?>

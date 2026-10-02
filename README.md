@@ -57,6 +57,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.7.0
+- TAC-adatbázis: az IMEI első nyolc számjegyéből a gyártó és a típus
+  soha nem látott készüléknél is kitöltődik. 248 364 készüléktípus,
+  a plugin mellé csomagolva (`data/tac.csv.gz`, 1,8 MB).
+- Helyi másolat, nem online API: a rendszernek internet nélkül is
+  mennie kell az irodai szerveren.
+- Betöltő képernyő (SDH Műhely → TAC adatbázis): darabokban fut,
+  megszakítható, ismételt futtatás nem duplikál.
+
 ### 0.6.0
 - IMEI-kikeresés: a 15. számjegy beírása után a rendszer megnézi, járt-e
   már nálunk a készülék. Ha igen, kitölti az adatait és az ügyfelet, és a

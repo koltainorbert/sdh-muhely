@@ -93,7 +93,15 @@ final class SDH_Muhely_Eszkoz
         );
 
         if ($sor === null) {
-            wp_send_json_success(['talalat' => false, 'ervenyes' => self::imei_ervenyes($imei)]);
+            // Nem járt még nálunk: a TAC-adatbázisból próbáljuk
+            // megmondani, milyen készülék ez.
+            $tac = class_exists('SDH_Muhely_Tac') ? SDH_Muhely_Tac::keres($imei) : null;
+
+            wp_send_json_success([
+                'talalat'  => false,
+                'ervenyes' => self::imei_ervenyes($imei),
+                'tac'      => $tac,
+            ]);
         }
 
         wp_send_json_success([

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.3.0';
+    public const DB_VERSION = '0.4.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -93,6 +93,7 @@ final class SDH_Muhely_Schema
     {
         $ugyfel = self::tabla('ugyfel');
         $eszkoz = self::tabla('eszkoz');
+        $tac    = self::tabla('tac');
 
         $definiciok = [];
 
@@ -191,6 +192,27 @@ final class SDH_Muhely_Schema
             key gyarto (gyarto),
             key aktiv (aktiv),
             key kulso_azonosito (kulso_azonosito)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * TAC – készüléktípus-adatbázis
+         *
+         * Az IMEI első nyolc számjegye a TAC: ez azonosítja a
+         * készüléktípust. Ez a tábla a nyilvános TAC-adatbázis helyi
+         * másolata, hogy IMEI beírásakor ismeretlen készüléknél is
+         * kitölthessük a gyártót és a típust.
+         *
+         * Miért helyi másolat és nem online lekérdezés: a rendszernek
+         * internet nélkül, az irodai szerveren is mennie kell. Egy
+         * külső API ott az első hálózatkimaradáskor megállítaná a
+         * pultot.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$tac} (
+            tac char(8) NOT NULL,
+            gyarto varchar(80) NOT NULL default '',
+            tipus varchar(120) NOT NULL default '',
+            PRIMARY KEY  (tac),
+            key gyarto (gyarto)
         ) {$charset};";
 
         return $definiciok;
