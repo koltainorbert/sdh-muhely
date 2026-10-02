@@ -554,6 +554,32 @@ final class SDH_Muhely_Eszkoz
         <input type="hidden" name="kontextus" value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php wp_nonce_field('sdh_muhely_eszkoz_mentes', 'sdh_nonce'); ?>
 
+        <div class="sdh-doboz sdh-doboz--beilleszt">
+            <h2 class="sdh-doboz__cim">Gyári adatok beillesztése</h2>
+
+            <p style="margin:0 0 .8rem;font-size:12px;line-height:1.6;color:var(--sdh-halvany);max-width:62em">
+                Kérdezd le az IMEI-t a megszokott ingyenes oldalon, jelöld ki az eredményt,
+                és illeszd ide be. A mezőket magamtól kitöltöm – gyári szám, sorozatszám,
+                garancia, gyártási dátum, kép.
+            </p>
+
+            <div class="sdh-mezo sdh-mezo--szeles">
+                <textarea data-sdh-beillesztes rows="3"
+                          placeholder="Model Name: SM-A505F/DS&#10;Serial Number: R58M51QT5RE&#10;…"></textarea>
+            </div>
+
+            <div class="sdh-urlap__lablec" style="padding-top:.6rem">
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-beillesztes-feldolgoz>
+                    Feldolgozás
+                </button>
+                <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-imei-lekerdez>
+                        Lekérdezés a szolgáltatótól
+                    </button>
+                <?php endif; ?>
+            </div>
+        </div>
+
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Ügyfél és készülék</h2>
 
@@ -628,12 +654,6 @@ final class SDH_Muhely_Eszkoz
                     <span class="sdh-mezo__sugo">
                         15 számjegy után megnézem, járt-e már nálunk ez a készülék.
                     </span>
-                    <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
-                        <button type="button" class="sdh-gomb sdh-gomb--vilagos"
-                                data-sdh-imei-lekerdez style="margin-top:.35rem">
-                            Gyári adatok lekérdezése
-                        </button>
-                    <?php endif; ?>
                 </div>
 
                 <div class="sdh-mezo">
@@ -933,7 +953,8 @@ final class SDH_Muhely_Eszkoz
                 (string) ($adatok['imei'] ?? ''),
                 (string) ($adatok['gyarto'] ?? ''),
                 (string) ($adatok['tipus'] ?? ''),
-                (string) ($adatok['megnevezes'] ?? '')
+                (string) ($adatok['megnevezes'] ?? ''),
+                (string) ($adatok['kep_url'] ?? '')
             );
         }
 

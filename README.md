@@ -57,6 +57,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.12.0
+- Gyári adatok beillesztéssel: az ingyenes IMEI-ellenőrzés eredményét
+  bemásolod, és a rendszer kitölti a mezőket. Beillesztéskor magától fut,
+  gombot sem kell keresni.
+- Nincs előfizetés-kényszer: a fizetős szolgáltató opcionális maradt,
+  ugyanazt a feldolgozót használja.
+- A készülékkép a TAC-adatbázisba is bekerül, így a következő ugyanolyan
+  típusnál magától megjelenik.
+
 ### 0.11.0
 - Teljes gyári adatlap: modellszám, garancia állapota, gyártási dátum,
   ország, szolgáltató, készülékkép – az eszköz-űrlapon és a listában.

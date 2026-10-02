@@ -948,6 +948,93 @@
     });
 
     /* ---------------------------------------------------------------- */
+    /* Beillesztett eredmény feldolgozása                               */
+    /* ---------------------------------------------------------------- */
+
+    function beillesztesFeldolgoz(urlap, szoveg, csendben) {
+        if (!szoveg.trim()) {
+            if (!csendben) {
+                jelzes(urlap, 'figyelem', 'Előbb illeszd be az eredményt a mezőbe.');
+            }
+
+            return;
+        }
+
+        var adatok = new FormData();
+        adatok.set('action', 'sdh_muhely_imei_beillesztes');
+        adatok.set('szoveg', szoveg);
+        adatok.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(beallitas.ajax, {
+            method: 'POST',
+            body: adatok,
+            credentials: 'same-origin'
+        })
+            .then(function (v) { return v.json(); })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    jelzes(
+                        urlap,
+                        'hiba',
+                        (valasz && valasz.data && valasz.data.uzenet) ||
+                            'Ebből nem tudtam adatot kiolvasni.'
+                    );
+
+                    return;
+                }
+
+                // A beillesztett adat a gyártótól jön, tehát erősebb a
+                // korábbi becslésünknél – itt felülírunk.
+                var beirt = mezoketKitolt(urlap, valasz.data.mezok, true);
+
+                jelzes(
+                    urlap,
+                    beirt ? 'siker' : 'figyelem',
+                    beirt
+                        ? 'Kész – ' + beirt + ' mező kitöltve a beillesztett adatból.'
+                        : 'Nem találtam benne használható mezőt.'
+                );
+            })
+            .catch(function (ok) {
+                jelzes(urlap, 'hiba', 'A feldolgozás nem sikerült. ' + ok.message);
+            });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest('[data-sdh-beillesztes-feldolgoz]');
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var urlap = gomb.closest('form');
+        var mezo = urlap.querySelector('[data-sdh-beillesztes]');
+
+        beillesztesFeldolgoz(urlap, mezo ? mezo.value : '', false);
+    });
+
+    // Beillesztéskor rögtön feldolgozzuk – ne kelljen gombot keresni.
+    document.addEventListener('paste', function (esemeny) {
+        var mezo = esemeny.target.closest('[data-sdh-beillesztes]');
+
+        if (!mezo) {
+            return;
+        }
+
+        var szoveg = (esemeny.clipboardData || window.clipboardData).getData('text');
+
+        if (!szoveg) {
+            return;
+        }
+
+        window.setTimeout(function () {
+            beillesztesFeldolgoz(mezo.closest('form'), szoveg, true);
+        }, 0);
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 

@@ -67,6 +67,47 @@ final class SDH_Muhely_Imei_Lekerdezes
     public static function init(): void
     {
         add_action('wp_ajax_sdh_muhely_imei_lekerdez', [self::class, 'ajax_lekerdez']);
+        add_action('wp_ajax_sdh_muhely_imei_beillesztes', [self::class, 'ajax_beillesztes']);
+    }
+
+    /* =================================================================
+     * Beillesztés
+     * ============================================================== */
+
+    /**
+     * A böngészőben elvégzett ingyenes IMEI-ellenőrzés eredményét
+     * dolgozza fel.
+     *
+     * Ugyanaz a feldolgozó fut rajta, mint a fizetős szolgáltató
+     * válaszán – a formátum ugyanaz. Így nem kell előfizetni, és a
+     * szolgáltató oldalát sem terheljük automatizált lekérdezésekkel.
+     */
+    public static function ajax_beillesztes(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $szoveg = isset($_POST['szoveg'])
+            ? wp_kses_post(wp_unslash($_POST['szoveg']))
+            : '';
+
+        if (trim($szoveg) === '') {
+            wp_send_json_error(['uzenet' => 'Nincs mit feldolgozni – illeszd be az eredményt.']);
+        }
+
+        $mezok = self::feldolgoz($szoveg);
+
+        if ($mezok === []) {
+            wp_send_json_error([
+                'uzenet' => 'Ebből nem tudtam adatot kiolvasni. '
+                    . 'Az egész eredményblokkot másold ki, a címkékkel együtt.',
+            ]);
+        }
+
+        wp_send_json_success(['mezok' => $mezok]);
     }
 
     /* =================================================================
@@ -203,6 +244,12 @@ final class SDH_Muhely_Imei_Lekerdezes
 
         $mezok = [];
 
+        // A beillesztett blokkban néha csak egy képhivatkozás van, címke
+        // nélkül – azt külön halásszuk ki.
+        if (preg_match('#https?://\S+\.(?:jpg|jpeg|png|webp)#i', $torzs, $kep) === 1) {
+            $mezok['kep_url'] = $kep[0];
+        }
+
         foreach ($parok as $cimke => $ertek) {
             $kulcs = self::MEZOK[self::normalizal($cimke)] ?? '';
 
@@ -211,8 +258,9 @@ final class SDH_Muhely_Imei_Lekerdezes
             }
 
             // Az elsőként talált érték nyer: a JSON megbízhatóbb, mint a
-            // szövegblokk, és azt dolgozzuk fel előbb.
-            if (isset($mezok[$kulcs])) {
+            // szövegblokk, és azt dolgozzuk fel előbb. Kivétel a kép:
+            // a címkézett hivatkozás erősebb a szövegből halászottnál.
+            if (isset($mezok[$kulcs]) && $kulcs !== 'kep_url') {
                 continue;
             }
 

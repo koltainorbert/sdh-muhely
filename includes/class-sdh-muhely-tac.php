@@ -63,7 +63,7 @@ final class SDH_Muhely_Tac
     /**
      * Egy IMEI (vagy TAC) alapján a készüléktípus.
      *
-     * @return array{gyarto: string, modell: string, megnevezes: string}|null
+     * @return array{gyarto: string, modell: string, megnevezes: string, kep_url: string}|null
      */
     public static function keres(string $imei_vagy_tac): ?array
     {
@@ -77,7 +77,7 @@ final class SDH_Muhely_Tac
 
         $sor = $wpdb->get_row(
             $wpdb->prepare(
-                'SELECT gyarto, modell, megnevezes FROM ' . self::tabla() . ' WHERE tac = %s',
+                'SELECT gyarto, modell, megnevezes, kep_url FROM ' . self::tabla() . ' WHERE tac = %s',
                 $tac
             )
         );
@@ -90,6 +90,7 @@ final class SDH_Muhely_Tac
             'gyarto'     => (string) $sor->gyarto,
             'modell'     => (string) $sor->modell,
             'megnevezes' => (string) $sor->megnevezes,
+            'kep_url'    => (string) $sor->kep_url,
         ];
     }
 
@@ -127,7 +128,13 @@ final class SDH_Muhely_Tac
      *
      * A saját bejegyzést a csomagolt lista újratöltése nem írja felül.
      */
-    public static function tanul(string $imei, string $gyarto, string $modell, string $megnevezes = ''): void
+    public static function tanul(
+        string $imei,
+        string $gyarto,
+        string $modell,
+        string $megnevezes = '',
+        string $kep_url = ''
+    ): void
     {
         global $wpdb;
 
@@ -139,11 +146,22 @@ final class SDH_Muhely_Tac
         }
 
         $meglevo = $wpdb->get_row(
-            $wpdb->prepare('SELECT modell, forras FROM ' . self::tabla() . ' WHERE tac = %s', $tac)
+            $wpdb->prepare(
+                'SELECT modell, kep_url, forras FROM ' . self::tabla() . ' WHERE tac = %s',
+                $tac
+            )
         );
 
-        // Ha már ismerjük a gyári számát, nem bántjuk.
+        // Ha már ismerjük a gyári számát, csak a hiányzó képet pótoljuk.
         if ($meglevo !== null && trim((string) $meglevo->modell) !== '') {
+            if (trim($kep_url) !== '' && trim((string) $meglevo->kep_url) === '') {
+                $wpdb->update(
+                    self::tabla(),
+                    ['kep_url' => mb_substr(trim($kep_url), 0, 255)],
+                    ['tac' => $tac]
+                );
+            }
+
             return;
         }
 
@@ -152,6 +170,7 @@ final class SDH_Muhely_Tac
             'gyarto'     => mb_substr(trim($gyarto), 0, 80),
             'modell'     => mb_substr(trim($modell), 0, 60),
             'megnevezes' => mb_substr(trim($megnevezes), 0, 120),
+            'kep_url'    => mb_substr(trim($kep_url), 0, 255),
             'forras'     => 'sajat',
             'frissitve'  => current_time('mysql'),
         ];
@@ -414,6 +433,7 @@ final class SDH_Muhely_Tac
                 . " gyarto = IF(forras = 'sajat', gyarto, VALUES(gyarto)),"
                 . " modell = IF(forras = 'sajat', modell, VALUES(modell)),"
                 . " megnevezes = IF(forras = 'sajat', megnevezes, VALUES(megnevezes))";
+            // A kep_url-t az import soha nem nullazza: az sajat gyujtes.
 
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $wpdb->query($wpdb->prepare($sql, $ertekek));

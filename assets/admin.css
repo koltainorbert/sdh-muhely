@@ -634,6 +634,28 @@ a.sdh-kartya:focus {
 }
 
 /* ------------------------------------------------------------------ */
+/* Beillesztő doboz                                                    */
+/* ------------------------------------------------------------------ */
+
+.sdh-doboz--beilleszt {
+    border-style: dashed;
+    border-color: #c3c7cc;
+    background: #fbfbfc;
+}
+
+.sdh-doboz--beilleszt textarea {
+    width: 100%;
+    min-height: 68px;
+    padding: .5rem .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+/* ------------------------------------------------------------------ */
 /* Készülékkép                                                         */
 /* ------------------------------------------------------------------ */
 
