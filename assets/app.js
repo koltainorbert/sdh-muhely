@@ -106,6 +106,7 @@
             .then(function (html) {
                 torzs.innerHTML = html;
                 bekotUrlap();
+                mintaKeres(torzs);
 
                 var elso = torzs.querySelector('input:not([type="hidden"]), select, textarea');
                 if (elso) {
@@ -548,6 +549,268 @@
             imeiKereses(urlap, tiszta);
         }, 150);
     });
+
+    /* ---------------------------------------------------------------- */
+    /* Feloldó minta – 3×3 rács, egérrel behúzható                      */
+    /* ---------------------------------------------------------------- */
+
+    var MINTA_NS = 'http://www.w3.org/2000/svg';
+
+    /** Egy pötty középpontja a 240×240-es rajzvásznon. */
+    function mintaPont(index) {
+        var sor = Math.floor((index - 1) / 3);
+        var oszlop = (index - 1) % 3;
+
+        return { x: 40 + oszlop * 80, y: 40 + sor * 80 };
+    }
+
+    /**
+     * Két pötty között átlépett harmadik pötty.
+     *
+     * Az Android ugyanígy működik: ha 1-ből 3-ba húzol, a 2 is bekerül,
+     * akár akarod, akár nem. Enélkül a felvett minta nem az lenne, amit
+     * az ügyfél valójában rajzol.
+     */
+    function mintaKozbenso(a, b) {
+        var sa = Math.floor((a - 1) / 3), oa = (a - 1) % 3;
+        var sb = Math.floor((b - 1) / 3), ob = (b - 1) % 3;
+
+        if ((sa + sb) % 2 !== 0 || (oa + ob) % 2 !== 0) {
+            return 0;
+        }
+
+        var sk = (sa + sb) / 2;
+        var ok = (oa + ob) / 2;
+        var kozep = sk * 3 + ok + 1;
+
+        return kozep === a || kozep === b ? 0 : kozep;
+    }
+
+    function mintaElem(nev, tulajdonsagok) {
+        var elem = document.createElementNS(MINTA_NS, nev);
+
+        Object.keys(tulajdonsagok).forEach(function (kulcs) {
+            elem.setAttribute(kulcs, tulajdonsagok[kulcs]);
+        });
+
+        return elem;
+    }
+
+    function mintaRajzol(doboz, sorrend, elonezetPont) {
+        var svg = doboz.querySelector('.sdh-minta__rajz');
+        var piros = '#d4231d';
+
+        svg.textContent = '';
+
+        // Vonalak a már bejárt pöttyök között
+        for (var i = 0; i < sorrend.length - 1; i++) {
+            var p1 = mintaPont(sorrend[i]);
+            var p2 = mintaPont(sorrend[i + 1]);
+
+            svg.appendChild(mintaElem('line', {
+                x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
+                stroke: piros, 'stroke-width': 4, 'stroke-linecap': 'round'
+            }));
+
+            // Nyílhegy a szakasz közepén – ez mutatja az irányt
+            var kx = (p1.x + p2.x) / 2;
+            var ky = (p1.y + p2.y) / 2;
+            var szog = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+
+            svg.appendChild(mintaElem('path', {
+                d: 'M -9 -7 L 9 0 L -9 7 Z',
+                fill: piros,
+                transform: 'translate(' + kx + ',' + ky + ') rotate(' + szog + ')'
+            }));
+        }
+
+        // A húzás közbeni szabad szakasz az egérig
+        if (elonezetPont && sorrend.length) {
+            var utolso = mintaPont(sorrend[sorrend.length - 1]);
+
+            svg.appendChild(mintaElem('line', {
+                x1: utolso.x, y1: utolso.y, x2: elonezetPont.x, y2: elonezetPont.y,
+                stroke: piros, 'stroke-width': 3, 'stroke-linecap': 'round',
+                'stroke-dasharray': '6 6', opacity: '.6'
+            }));
+        }
+
+        // A kilenc pötty
+        for (var n = 1; n <= 9; n++) {
+            var p = mintaPont(n);
+            var helye = sorrend.indexOf(n);
+
+            svg.appendChild(mintaElem('circle', {
+                cx: p.x, cy: p.y, r: helye === -1 ? 7 : 11,
+                fill: helye === -1 ? '#c3c7cc' : piros
+            }));
+
+            // A kezdőpont kap egy gyűrűt, hogy ránézésre látszódjon
+            if (helye === 0) {
+                svg.appendChild(mintaElem('circle', {
+                    cx: p.x, cy: p.y, r: 18,
+                    fill: 'none', stroke: piros, 'stroke-width': 2, opacity: '.5'
+                }));
+            }
+        }
+
+        var sorElem = doboz.querySelector('.sdh-minta__sor');
+
+        if (sorElem) {
+            sorElem.textContent = sorrend.length
+                ? sorrend.join(' → ')
+                : 'Nincs minta felvéve.';
+        }
+    }
+
+    function mintaErtek(doboz) {
+        var rejtett = doboz.querySelector('input[type="hidden"]');
+        var nyers = (rejtett.value || '').replace(/[^1-9]/g, '');
+        var sorrend = [];
+
+        nyers.split('').forEach(function (sz) {
+            var n = parseInt(sz, 10);
+
+            if (sorrend.indexOf(n) === -1) {
+                sorrend.push(n);
+            }
+        });
+
+        return sorrend;
+    }
+
+    function mintaMent(doboz, sorrend) {
+        doboz.querySelector('input[type="hidden"]').value = sorrend.join('');
+    }
+
+    /** Képernyő-koordinátából rajzvászon-koordináta. */
+    function mintaVasznon(svg, esemeny) {
+        var teglalap = svg.getBoundingClientRect();
+
+        return {
+            x: (esemeny.clientX - teglalap.left) / teglalap.width * 240,
+            y: (esemeny.clientY - teglalap.top) / teglalap.height * 240
+        };
+    }
+
+    function mintaTalalat(pont) {
+        for (var n = 1; n <= 9; n++) {
+            var p = mintaPont(n);
+            var tav = Math.hypot(p.x - pont.x, p.y - pont.y);
+
+            if (tav <= 30) {
+                return n;
+            }
+        }
+
+        return 0;
+    }
+
+    function mintaBekot(doboz) {
+        if (doboz.dataset.sdhMintaKesz) {
+            return;
+        }
+
+        doboz.dataset.sdhMintaKesz = '1';
+
+        var svg = doboz.querySelector('.sdh-minta__rajz');
+        var sorrend = mintaErtek(doboz);
+        var huzas = false;
+
+        mintaRajzol(doboz, sorrend, null);
+
+        svg.addEventListener('pointerdown', function (esemeny) {
+            esemeny.preventDefault();
+            huzas = true;
+            sorrend = [];
+
+            var elso = mintaTalalat(mintaVasznon(svg, esemeny));
+
+            if (elso) {
+                sorrend.push(elso);
+            }
+
+            svg.setPointerCapture(esemeny.pointerId);
+            mintaRajzol(doboz, sorrend, mintaVasznon(svg, esemeny));
+        });
+
+        svg.addEventListener('pointermove', function (esemeny) {
+            if (!huzas) {
+                return;
+            }
+
+            var pont = mintaVasznon(svg, esemeny);
+            var talalat = mintaTalalat(pont);
+
+            if (talalat && sorrend.indexOf(talalat) === -1) {
+                if (sorrend.length) {
+                    var kozbenso = mintaKozbenso(sorrend[sorrend.length - 1], talalat);
+
+                    if (kozbenso && sorrend.indexOf(kozbenso) === -1) {
+                        sorrend.push(kozbenso);
+                    }
+                }
+
+                sorrend.push(talalat);
+            }
+
+            mintaRajzol(doboz, sorrend, pont);
+        });
+
+        function lezar(esemeny) {
+            if (!huzas) {
+                return;
+            }
+
+            huzas = false;
+
+            // Egyetlen pötty nem minta – azt eldobjuk.
+            if (sorrend.length < 2) {
+                sorrend = [];
+            }
+
+            mintaMent(doboz, sorrend);
+            mintaRajzol(doboz, sorrend, null);
+
+            if (esemeny && esemeny.pointerId !== undefined && svg.hasPointerCapture(esemeny.pointerId)) {
+                svg.releasePointerCapture(esemeny.pointerId);
+            }
+        }
+
+        svg.addEventListener('pointerup', lezar);
+        svg.addEventListener('pointercancel', lezar);
+        svg.addEventListener('pointerleave', lezar);
+
+        var torol = doboz.querySelector('[data-sdh-minta-torol]');
+
+        if (torol) {
+            torol.addEventListener('click', function (esemeny) {
+                esemeny.preventDefault();
+                sorrend = [];
+                mintaMent(doboz, sorrend);
+                mintaRajzol(doboz, sorrend, null);
+            });
+        }
+    }
+
+    /**
+     * Az űrlap a popupba AJAX-szal érkezik, ezért a rajzolót akkor
+     * kötjük be, amikor megjelenik.
+     */
+    function mintaKeres(gyoker) {
+        Array.prototype.forEach.call(
+            (gyoker || document).querySelectorAll('[data-sdh-minta]'),
+            mintaBekot
+        );
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        mintaKeres(document);
+    });
+
+    if (document.readyState !== 'loading') {
+        mintaKeres(document);
+    }
 
     /* ---------------------------------------------------------------- */
     /* Indítás                                                          */

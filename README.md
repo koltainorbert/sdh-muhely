@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.10.0
+- Feloldó minta rajzolható mező: 3×3 pöttyrács, egérrel behúzható piros
+  vonal, nyilakkal az irányról és gyűrűvel a kezdőponton.
+- Átlépett pötty automatikusan bekerül (1→3 esetén a 2 is), ahogy az
+  Android is csinálja – különben nem azt vennénk fel, amit az ügyfél rajzol.
+- A minta a pöttyök sorrendjeként tárolódik (`minta` oszlop), a zárkód
+  mező ezentúl a PIN/jelszó helye.
+
 ### 0.9.0
 - **A gyári szám az elsődleges azonosító**, nem a kereskedelmi név:
   `SM-A505F/DS`, nem `Galaxy A50`. A listák, a fejlécek és az IMEI-ből

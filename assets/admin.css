@@ -592,6 +592,48 @@ a.sdh-kartya:focus {
 }
 
 /* ------------------------------------------------------------------ */
+/* Feloldó minta                                                       */
+/* ------------------------------------------------------------------ */
+
+.sdh-minta {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-items: flex-start;
+}
+
+.sdh-minta__rajz {
+    width: 190px;
+    height: 190px;
+    background: #fff;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 10px;
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+}
+
+.sdh-minta__lab {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.sdh-minta__sor {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--sdh-szoveg);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-minta__lab .sdh-gomb {
+    height: 30px;
+    padding: 0 .7rem;
+    font-size: 12px;
+}
+
+/* ------------------------------------------------------------------ */
 /* Kis képernyő                                                        */
 /* ------------------------------------------------------------------ */
 

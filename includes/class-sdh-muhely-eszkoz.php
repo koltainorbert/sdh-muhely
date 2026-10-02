@@ -630,11 +630,18 @@ final class SDH_Muhely_Eszkoz
                 </div>
 
                 <div class="sdh-mezo">
-                    <label for="zarkod">Zárkód / minta</label>
+                    <label for="zarkod">Zárkód / PIN</label>
                     <input type="text" name="zarkod" id="zarkod"
                            value="<?php echo esc_attr($ert('zarkod')); ?>">
                     <span class="sdh-mezo__sugo">E nélkül a javítás nagy része nem tesztelhető.</span>
                 </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label>Feloldó minta</label>
+                    <?php self::minta_mezo($ert('minta')); ?>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
 
@@ -698,6 +705,63 @@ final class SDH_Muhely_Eszkoz
         <?php
     }
 
+    /**
+     * A feloldó minta rajzolható mezője.
+     *
+     * Szövegként leírva a minta félreérthető („balról jobbra az alsó
+     * sor" – melyik irányból?), és a pultnál ez naponta okoz gondot.
+     * Itt egérrel behúzható, és a nyilak mutatják az irányt. A tárolt
+     * érték a pöttyök sorrendje: a bal felső az 1, a jobb alsó a 9.
+     */
+    private static function minta_mezo(string $ertek): void
+    {
+        ?>
+        <div class="sdh-minta" data-sdh-minta>
+            <input type="hidden" name="minta" value="<?php echo esc_attr($ertek); ?>">
+
+            <svg class="sdh-minta__rajz" viewBox="0 0 240 240"
+                 role="img" aria-label="Feloldó minta rajzolása"></svg>
+
+            <div class="sdh-minta__lab">
+                <span class="sdh-minta__sor"></span>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-minta-torol>
+                    Törlés
+                </button>
+            </div>
+
+            <span class="sdh-mezo__sugo">
+                Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik.
+                A sorszámozás balról jobbra, fentről lefelé: 1–9.
+            </span>
+        </div>
+        <?php
+    }
+
+    /**
+     * A feloldó minta megtisztítása.
+     *
+     * Csak 1–9 közötti számjegy, mindegyik legfeljebb egyszer – a
+     * telefon sem enged ugyanarra a pöttyre kétszer lépni. Ami ennek
+     * nem felel meg, azt eldobjuk, nem próbáljuk megjavítani: egy
+     * félig értelmezett minta rosszabb, mint a semmi.
+     */
+    private static function minta_tisztit(string $ertek): string
+    {
+        $szamjegyek = preg_replace('/[^1-9]/', '', $ertek) ?? '';
+
+        $latott = [];
+
+        foreach (str_split($szamjegyek) as $szamjegy) {
+            if (in_array($szamjegy, $latott, true)) {
+                return '';
+            }
+
+            $latott[] = $szamjegy;
+        }
+
+        return count($latott) >= 2 ? implode('', $latott) : '';
+    }
+
     private static function kontextus_ertek(): string
     {
         if (wp_doing_ajax() && isset($_REQUEST['kontextus'])) {
@@ -748,6 +812,7 @@ final class SDH_Muhely_Eszkoz
             'sorozatszam'      => $szoveg('sorozatszam'),
             'szin'             => $szoveg('szin'),
             'zarkod'           => $szoveg('zarkod'),
+            'minta'            => self::minta_tisztit($szoveg('minta')),
             'tartozekok'       => $szoveg('tartozekok'),
             'atveteli_allapot' => isset($_POST['atveteli_allapot'])
                 ? sanitize_textarea_field(wp_unslash($_POST['atveteli_allapot']))
