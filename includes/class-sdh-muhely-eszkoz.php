@@ -764,7 +764,22 @@ final class SDH_Muhely_Eszkoz
             $uzenet   = 'letrehozva_eszkoz';
         }
 
-        return $eredmeny === false ? null : [$id, $uzenet];
+        if ($eredmeny === false) {
+            return null;
+        }
+
+        // Minden mentés taníthatja a TAC-adatbázist: ha ez a típus még
+        // ismeretlen volt, a következő ugyanolyan készüléknél már
+        // magától kitöltődik.
+        if (class_exists('SDH_Muhely_Tac')) {
+            SDH_Muhely_Tac::tanul(
+                (string) ($adatok['imei'] ?? ''),
+                (string) ($adatok['gyarto'] ?? ''),
+                (string) ($adatok['tipus'] ?? '')
+            );
+        }
+
+        return [$id, $uzenet];
     }
 
     /**

@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.8.0
+- A TAC-adatbázis tanul: ismeretlen TAC-ú készülék kézi felvitelekor a
+  gyártó és a típus bekerül a saját táblába, és a következő ugyanolyan
+  készüléknél már magától kitöltődik.
+- A csomagolt lista 2025 végéig tart; a saját bejegyzéseket az
+  újratöltés nem írja felül (`forras = 'sajat'`).
+- A TAC képernyő külön mutatja a saját felvitelből tanult darabszámot.
+
 ### 0.7.0
 - TAC-adatbázis: az IMEI első nyolc számjegyéből a gyártó és a típus
   soha nem látott készüléknél is kitöltődik. 248 364 készüléktípus,

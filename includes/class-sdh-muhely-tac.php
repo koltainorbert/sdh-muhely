@@ -93,6 +93,70 @@ final class SDH_Muhely_Tac
         return (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . self::tabla());
     }
 
+    public static function sajat_darabszam(): int
+    {
+        global $wpdb;
+
+        return (int) $wpdb->get_var(
+            'SELECT COUNT(*) FROM ' . self::tabla() . " WHERE forras = 'sajat'"
+        );
+    }
+
+    /* =================================================================
+     * Tanulás
+     * ============================================================== */
+
+    /**
+     * Megjegyzi egy új készüléktípus TAC-ját a saját felvitelből.
+     *
+     * A csomagolt lista 2025 végéig tart, tehát a 2026-os és későbbi
+     * készülékek nincsenek benne. Ezt nem úgy oldjuk meg, hogy
+     * negyedévente fájlt cserélünk: amikor egy ismeretlen TAC-ú
+     * készüléket kézzel felvisznek, a gyártó és a típus bekerül ide.
+     *
+     * Apple IRP és Samsung hivatalos szervizként az új típusok amúgy is
+     * elsőként nálatok fordulnak meg – így az adatbázis magától nő, és
+     * internet nélkül is naprakész marad.
+     *
+     * A saját bejegyzést a csomagolt lista újratöltése nem írja felül.
+     */
+    public static function tanul(string $imei, string $gyarto, string $tipus): void
+    {
+        global $wpdb;
+
+        $tac = substr(preg_replace('/\D/', '', $imei) ?? '', 0, 8);
+
+        // Üres típussal nem érdemes tanulni: abból nem lesz kitöltés.
+        if (strlen($tac) !== 8 || trim($tipus) === '' || trim($gyarto) === '') {
+            return;
+        }
+
+        $meglevo = $wpdb->get_row(
+            $wpdb->prepare('SELECT tipus, forras FROM ' . self::tabla() . ' WHERE tac = %s', $tac)
+        );
+
+        // Ha már ismerjük és van rendes típusneve, nem bántjuk.
+        if ($meglevo !== null && trim((string) $meglevo->tipus) !== '') {
+            return;
+        }
+
+        $adatok = [
+            'tac'       => $tac,
+            'gyarto'    => mb_substr(trim($gyarto), 0, 80),
+            'tipus'     => mb_substr(trim($tipus), 0, 120),
+            'forras'    => 'sajat',
+            'frissitve' => current_time('mysql'),
+        ];
+
+        if ($meglevo === null) {
+            $wpdb->insert(self::tabla(), $adatok);
+
+            return;
+        }
+
+        $wpdb->update(self::tabla(), $adatok, ['tac' => $tac]);
+    }
+
     /* =================================================================
      * Admin képernyő
      * ============================================================== */
@@ -102,6 +166,7 @@ final class SDH_Muhely_Tac
         SDH_Muhely_Admin_UI::jog_ellenoriz();
 
         $darab    = self::darabszam();
+        $sajat    = self::sajat_darabszam();
         $van_fajl = is_readable(self::fajl());
 
         ?>
@@ -123,6 +188,10 @@ final class SDH_Muhely_Tac
                             <td><code id="sdh-tac-darab"><?php
                                 echo esc_html(number_format_i18n($darab));
                             ?></code></td>
+                        </tr>
+                        <tr>
+                            <th>Saját felvitelből tanult</th>
+                            <td><code><?php echo esc_html(number_format_i18n($sajat)); ?></code></td>
                         </tr>
                         <tr>
                             <th>Forrásfájl</th>
@@ -153,11 +222,17 @@ final class SDH_Muhely_Tac
 
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Honnan jön az adat</h2>
+                <p style="margin:0 0 .9rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                    A csomagolt fájl a nyilvános, MIT-licencű TAC-adatbázisból készült, és
+                    <strong>2025 végéig tart</strong> – a 2026-os és későbbi típusok nincsenek benne.
+                </p>
                 <p style="margin:0;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
-                    A csomagolt fájl a nyilvános, MIT-licencű TAC-adatbázisból készült, 2025 végéig
-                    bezárólag. Helyben tároljuk, mert a rendszernek internet nélkül is mennie kell.
-                    Ami ebből hiányzik – egészen friss típusok –, azt az első felvitelkor kézzel
-                    írod be, és onnantól a saját eszköznyilvántartásunk ismeri a készüléket.
+                    Ezt nem fájlcserével oldjuk meg: amikor egy ismeretlen TAC-ú készüléket
+                    kézzel felvisztek, a gyártó és a típus bekerül ide, és onnantól a következő
+                    ugyanolyan telefonnál magától kitöltődik. Apple IRP és Samsung hivatalos
+                    szervizként az új típusok elsőként nálatok fordulnak meg, úgyhogy az
+                    adatbázis magától nő – internet nélkül is. A saját bejegyzéseket a
+                    csomagolt lista újratöltése nem írja felül.
                 </p>
             </div>
         </div>
@@ -316,13 +391,17 @@ final class SDH_Muhely_Tac
             $ertekek = [];
 
             foreach ($darab as $sor) {
-                $helyek[] = '(%s, %s, %s)';
+                $helyek[] = "(%s, %s, %s, 'csomag')";
                 array_push($ertekek, $sor[0], $sor[1], $sor[2]);
             }
 
-            $sql = "INSERT INTO {$tabla} (tac, gyarto, tipus) VALUES "
+            $sql = "INSERT INTO {$tabla} (tac, gyarto, tipus, forras) VALUES "
                 . implode(', ', $helyek)
-                . ' ON DUPLICATE KEY UPDATE gyarto = VALUES(gyarto), tipus = VALUES(tipus)';
+                . ' ON DUPLICATE KEY UPDATE'
+                // A saját felvitelből tanult sorokat a csomagolt lista
+                // nem írja felül – azok frissebbek nálunk.
+                . " gyarto = IF(forras = 'sajat', gyarto, VALUES(gyarto)),"
+                . " tipus = IF(forras = 'sajat', tipus, VALUES(tipus))";
 
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $wpdb->query($wpdb->prepare($sql, $ertekek));

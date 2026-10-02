@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.4.0';
+    public const DB_VERSION = '0.5.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -211,8 +211,11 @@ final class SDH_Muhely_Schema
             tac char(8) NOT NULL,
             gyarto varchar(80) NOT NULL default '',
             tipus varchar(120) NOT NULL default '',
+            forras varchar(20) NOT NULL default 'csomag',
+            frissitve datetime NULL,
             PRIMARY KEY  (tac),
-            key gyarto (gyarto)
+            key gyarto (gyarto),
+            key forras (forras)
         ) {$charset};";
 
         return $definiciok;
