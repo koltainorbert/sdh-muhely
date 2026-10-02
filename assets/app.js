@@ -204,10 +204,150 @@
     }
 
     /* ---------------------------------------------------------------- */
+    /* Választómező (gépelésre kereső)                                  */
+    /* ---------------------------------------------------------------- */
+
+    var keresesIdozito = null;
+
+    function valasztoLista(doboz) {
+        return doboz.querySelector('.sdh-valaszto__lista');
+    }
+
+    function valasztoTorol(doboz) {
+        var lista = valasztoLista(doboz);
+        lista.innerHTML = '';
+        lista.hidden = true;
+    }
+
+    function valasztoKeres(doboz, q) {
+        var modul = doboz.dataset.sdhValaszto;
+        var lista = valasztoLista(doboz);
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_' + modul + '_kereso');
+        cim.searchParams.set('q', q);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (eredmeny) {
+                var talalatok = (eredmeny && eredmeny.success && eredmeny.data) || [];
+
+                lista.innerHTML = '';
+
+                if (!talalatok.length) {
+                    lista.innerHTML = '<li class="sdh-valaszto__ures">Nincs találat.</li>';
+                    lista.hidden = false;
+
+                    return;
+                }
+
+                talalatok.forEach(function (talalat) {
+                    var elem = document.createElement('li');
+                    elem.className = 'sdh-valaszto__elem';
+                    elem.dataset.id = talalat.id;
+                    elem.dataset.nev = talalat.nev;
+                    elem.innerHTML =
+                        '<strong>' + szovegBiztonsagos(talalat.nev) + '</strong>' +
+                        (talalat.reszlet
+                            ? '<span>' + szovegBiztonsagos(talalat.reszlet) + '</span>'
+                            : '');
+
+                    lista.appendChild(elem);
+                });
+
+                lista.hidden = false;
+            })
+            .catch(function () {
+                valasztoTorol(doboz);
+            });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target.closest('.sdh-valaszto__mezo');
+
+        if (!mezo) {
+            return;
+        }
+
+        var doboz = mezo.closest('.sdh-valaszto');
+        var rejtett = doboz.querySelector('input[type="hidden"]');
+
+        // Amíg nem választott a listából, nincs érvényes azonosító.
+        // Így nem fordulhat elő, hogy átírja a nevet, és közben a régi
+        // ügyfélhez menti az eszközt.
+        rejtett.value = '0';
+
+        window.clearTimeout(keresesIdozito);
+
+        var q = mezo.value.trim();
+
+        if (q.length < 2) {
+            valasztoTorol(doboz);
+
+            return;
+        }
+
+        keresesIdozito = window.setTimeout(function () {
+            valasztoKeres(doboz, q);
+        }, 250);
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        var mezo = esemeny.target.closest('.sdh-valaszto__mezo');
+
+        if (!mezo) {
+            return;
+        }
+
+        var doboz = mezo.closest('.sdh-valaszto');
+        var elso = doboz.querySelector('.sdh-valaszto__elem');
+
+        if (esemeny.key === 'Escape') {
+            valasztoTorol(doboz);
+
+            return;
+        }
+
+        // Enterre az első találat – a pultnál ez a leggyorsabb.
+        if (esemeny.key === 'Enter' && elso) {
+            esemeny.preventDefault();
+            valasztoValaszt(doboz, elso);
+        }
+    });
+
+    function valasztoValaszt(doboz, elem) {
+        doboz.querySelector('input[type="hidden"]').value = elem.dataset.id;
+        doboz.querySelector('.sdh-valaszto__mezo').value = elem.dataset.nev;
+        valasztoTorol(doboz);
+    }
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 
     document.addEventListener('click', function (esemeny) {
+        var talalat = esemeny.target.closest('.sdh-valaszto__elem');
+
+        if (talalat) {
+            esemeny.preventDefault();
+            valasztoValaszt(talalat.closest('.sdh-valaszto'), talalat);
+
+            return;
+        }
+
+        // Máshová kattintva a nyitott találati listák bezárulnak.
+        Array.prototype.forEach.call(
+            document.querySelectorAll('.sdh-valaszto'),
+            function (doboz) {
+                if (!doboz.contains(esemeny.target)) {
+                    valasztoTorol(doboz);
+                }
+            }
+        );
+
         var indito = esemeny.target.closest('[data-sdh-urlap]');
 
         if (!indito) {

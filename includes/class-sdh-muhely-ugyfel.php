@@ -49,6 +49,98 @@ final class SDH_Muhely_Ugyfel
         // Popup: az űrlap lekérése és beküldése.
         add_action('wp_ajax_sdh_muhely_ugyfelek_urlap', [self::class, 'ajax_urlap']);
         add_action('wp_ajax_sdh_muhely_ugyfelek_ment', [self::class, 'ajax_mentes']);
+
+        // Más modulok ügyfélválasztó mezője ebből él.
+        add_action('wp_ajax_sdh_muhely_ugyfelek_kereso', [self::class, 'ajax_kereso']);
+    }
+
+    /* =================================================================
+     * Ügyfélválasztó – más modulok használják
+     * ============================================================== */
+
+    /**
+     * Gépelésre kereső ügyfélmező.
+     *
+     * Legördülő helyett azért, mert az átvett állományban közel 40 ezer
+     * ügyfél lesz: egy <select> ennyi elemmel használhatatlan, és a
+     * böngészőt is megfogná.
+     */
+    public static function valaszto_mezo(int $ugyfel_id = 0, string $mezo_nev = 'ugyfel_id'): void
+    {
+        $ugyfel = $ugyfel_id > 0 ? self::egy($ugyfel_id) : null;
+
+        ?>
+        <div class="sdh-valaszto" data-sdh-valaszto="ugyfelek">
+            <input type="hidden" name="<?php echo esc_attr($mezo_nev); ?>"
+                   value="<?php echo (int) $ugyfel_id; ?>">
+            <input type="text" class="sdh-valaszto__mezo" autocomplete="off"
+                   placeholder="Kezdd el írni a nevet, telefont, ügyfélszámot…"
+                   value="<?php echo esc_attr($ugyfel !== null ? $ugyfel->nev : ''); ?>">
+            <ul class="sdh-valaszto__lista" hidden></ul>
+        </div>
+        <?php
+    }
+
+    /**
+     * Az ügyfélválasztó mögötti kereső.
+     *
+     * Csak aktív ügyfeleket ad vissza, és legfeljebb tízet: a lista
+     * nem böngészésre való, hanem arra, hogy gépelés közben megtaláld
+     * a megfelelőt.
+     */
+    public static function ajax_kereso(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        global $wpdb;
+
+        $q = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+
+        if (mb_strlen($q) < 2) {
+            wp_send_json_success([]);
+        }
+
+        $minta = '%' . $wpdb->esc_like($q) . '%';
+        $tabla = self::tabla();
+
+        $sorok = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT id, nev, telefon, szamlazasi_telepules, ugyfel_szam
+                 FROM {$tabla}
+                 WHERE aktiv = 1
+                   AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
+                        OR email LIKE %s OR ugyfel_szam LIKE %s)
+                 ORDER BY nev ASC
+                 LIMIT 10",
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta
+            )
+        );
+
+        $talalatok = [];
+
+        foreach ($sorok as $sor) {
+            $reszletek = array_filter([
+                $sor->telefon,
+                $sor->szamlazasi_telepules,
+                $sor->ugyfel_szam,
+            ]);
+
+            $talalatok[] = [
+                'id'       => (int) $sor->id,
+                'nev'      => $sor->nev,
+                'reszlet'  => implode(' · ', $reszletek),
+            ];
+        }
+
+        wp_send_json_success($talalatok);
     }
 
     private static function tabla(): string
@@ -73,6 +165,26 @@ final class SDH_Muhely_Ugyfel
         );
 
         return $sor ?: null;
+    }
+
+    /**
+     * Egy ügyfél neve az azonosítója alapján, vagy üres sztring, ha
+     * nincs ilyen. Más modulok ezzel ellenőrzik, hogy a kapott
+     * azonosító valódi ügyfélre mutat-e.
+     */
+    public static function nev(int $id): string
+    {
+        global $wpdb;
+
+        if ($id <= 0) {
+            return '';
+        }
+
+        $nev = $wpdb->get_var(
+            $wpdb->prepare('SELECT nev FROM ' . self::tabla() . ' WHERE id = %d', $id)
+        );
+
+        return is_string($nev) ? $nev : '';
     }
 
     /* =================================================================
@@ -563,6 +675,13 @@ final class SDH_Muhely_Ugyfel
             <?php endif; ?>
 
             <?php if (!$uj) : ?>
+                <a class="sdh-gomb sdh-gomb--vilagos"
+                   href="<?php echo esc_url(
+                       SDH_Muhely_Modulok::url('eszkozok', ['ugyfel_id' => (int) $ugyfel->id])
+                   ); ?>">
+                    Készülékei
+                </a>
+
                 <?php
                 $allapot_url = wp_nonce_url(
                     add_query_arg(

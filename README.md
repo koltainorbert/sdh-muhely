@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.5.0
+- Eszköz-modul: ügyfélhez kötött készülék (gyártó, típus, IMEI,
+  sorozatszám, zárkód, tartozékok, átvételkori állapot, garancia).
+  Lista kereséssel, popupos felvitel, ügyfélre szűrve is.
+- Ügyfélválasztó mező: gépelésre keres, mert 40 ezer rekordnál egy
+  legördülő használhatatlan. Enter az első találatot veszi.
+- Az ügyfél adatlapjáról egy gombbal átlépsz a készülékeire.
+
 ### 0.4.0
 - Popup (modál) rendszer: a felvitel és a szerkesztés párbeszédablakban
   nyílik, így a lista és a keresés nem vész el. Natív `<dialog>`, nincs

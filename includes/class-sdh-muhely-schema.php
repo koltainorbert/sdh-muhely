@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.2.0';
+    public const DB_VERSION = '0.3.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -92,6 +92,7 @@ final class SDH_Muhely_Schema
     private static function tabla_definiciok(string $charset): array
     {
         $ugyfel = self::tabla('ugyfel');
+        $eszkoz = self::tabla('eszkoz');
 
         $definiciok = [];
 
@@ -139,6 +140,55 @@ final class SDH_Muhely_Schema
             key nev (nev),
             key telefon (telefon),
             key email (email),
+            key aktiv (aktiv),
+            key kulso_azonosito (kulso_azonosito)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Eszköz
+         *
+         * A MunkaLap „Tárgy" fogalmának megfelelője: egy konkrét
+         * készülék, ami egy ügyfélhez tartozik. A munkalap mindig egy
+         * eszközre hivatkozik majd – így a készülék előélete
+         * (hányszor járt már nálunk, mivel) egyben látszik.
+         *
+         * Miért van külön tábla, miért nem a munkalapon vannak a
+         * készülékadatok: ugyanaz a telefon többször is visszajöhet.
+         * Ha az adatai a munkalapon ülnének, minden alkalommal újra
+         * kellene gépelni az IMEI-t, és az előzmény szétesne.
+         *
+         * A zárkód azért kell, mert e nélkül a legtöbb javítás nem
+         * tesztelhető. Belső rendszerben tároljuk, és csak az fér
+         * hozzá, aki a műhelyrendszert egyáltalán használhatja.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$eszkoz} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            kategoria varchar(40) NOT NULL default 'telefon',
+            gyarto varchar(80) NOT NULL default '',
+            tipus varchar(120) NOT NULL default '',
+            imei varchar(40) NOT NULL default '',
+            imei2 varchar(40) NOT NULL default '',
+            sorozatszam varchar(60) NOT NULL default '',
+            szin varchar(40) NOT NULL default '',
+            zarkod varchar(60) NOT NULL default '',
+            tartozekok varchar(255) NOT NULL default '',
+            atveteli_allapot text NULL,
+            garancias tinyint(1) NOT NULL default 0,
+            vasarlas_datuma date NULL,
+            garancia_lejar date NULL,
+            megjegyzes text NULL,
+            aktiv tinyint(1) NOT NULL default 1,
+            forras varchar(30) NOT NULL default 'kezi',
+            kulso_azonosito varchar(40) NOT NULL default '',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key ugyfel_id (ugyfel_id),
+            key imei (imei),
+            key sorozatszam (sorozatszam),
+            key gyarto (gyarto),
             key aktiv (aktiv),
             key kulso_azonosito (kulso_azonosito)
         ) {$charset};";

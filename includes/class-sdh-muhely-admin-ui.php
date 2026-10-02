@@ -225,13 +225,15 @@ final class SDH_Muhely_Admin_UI
         }
 
         $uzenetek = [
-            'mentve'      => ['siker', 'Elmentve.'],
-            'letrehozva'  => ['siker', 'Az ügyfél létrejött.'],
-            'inaktivalva' => ['siker', 'Az ügyfél inaktívra állítva.'],
-            'aktivalva'   => ['siker', 'Az ügyfél újra aktív.'],
-            'hianyzo_nev' => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
-            'nincs_ilyen' => ['hiba',  'Nincs ilyen ügyfél. Lehet, hogy időközben törölték.'],
-            'mentes_hiba' => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
+            'mentve'            => ['siker', 'Elmentve.'],
+            'letrehozva'        => ['siker', 'Az ügyfél létrejött.'],
+            'letrehozva_eszkoz' => ['siker', 'Az eszköz létrejött.'],
+            'inaktivalva'       => ['siker', 'Az ügyfél inaktívra állítva.'],
+            'aktivalva'         => ['siker', 'Az ügyfél újra aktív.'],
+            'hianyzo_nev'       => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
+            'hianyzo_ugyfel'    => ['hiba',  'Válassz ügyfelet a listából – eszköz ügyfél nélkül nem vihető fel.'],
+            'nincs_ilyen'       => ['hiba',  'Nincs ilyen rekord. Lehet, hogy időközben törölték.'],
+            'mentes_hiba'       => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
         ];
 
         if (!isset($uzenetek[$kulcs])) {
@@ -272,7 +274,10 @@ final class SDH_Muhely_Admin_UI
         global $wpdb;
 
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
-        $ugyfel_db    = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
+        $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
+
+        $ugyfel_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
+        $eszkoz_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$eszkoz_tabla} WHERE aktiv = 1");
 
         $gombok = [
             [
@@ -307,10 +312,10 @@ final class SDH_Muhely_Admin_UI
                     <span class="sdh-kartya__cimke">aktív ügyfél</span>
                 </a>
 
-                <div class="sdh-kartya sdh-kartya--keszul">
-                    <span class="sdh-kartya__szam">—</span>
-                    <span class="sdh-kartya__cimke">eszköz · készül</span>
-                </div>
+                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('eszkozok')); ?>">
+                    <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($eszkoz_db)); ?></span>
+                    <span class="sdh-kartya__cimke">nyilvántartott eszköz</span>
+                </a>
 
                 <div class="sdh-kartya sdh-kartya--keszul">
                     <span class="sdh-kartya__szam">—</span>
