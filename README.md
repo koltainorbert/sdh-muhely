@@ -57,6 +57,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.9.0
+- **A gyári szám az elsődleges azonosító**, nem a kereskedelmi név:
+  `SM-A505F/DS`, nem `Galaxy A50`. A listák, a fejlécek és az IMEI-ből
+  való kitöltés mind ezt használják.
+- A kereskedelmi név külön mezőbe került (keresni lehet rá, azonosítani
+  nem). A keresés mindkettőre megy.
+- A TAC-adatbázis újragenerálva modellkóddal: 248 364 TAC, ebből
+  131 802-nél (53%) van gyári szám is.
+
 ### 0.8.0
 - A TAC-adatbázis tanul: ismeretlen TAC-ú készülék kézi felvitelekor a
   gyártó és a típus bekerül a saját táblába, és a következő ugyanolyan

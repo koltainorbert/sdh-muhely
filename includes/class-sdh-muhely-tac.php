@@ -63,7 +63,7 @@ final class SDH_Muhely_Tac
     /**
      * Egy IMEI (vagy TAC) alapján a készüléktípus.
      *
-     * @return array{gyarto: string, tipus: string}|null
+     * @return array{gyarto: string, modell: string, megnevezes: string}|null
      */
     public static function keres(string $imei_vagy_tac): ?array
     {
@@ -76,14 +76,21 @@ final class SDH_Muhely_Tac
         }
 
         $sor = $wpdb->get_row(
-            $wpdb->prepare('SELECT gyarto, tipus FROM ' . self::tabla() . ' WHERE tac = %s', $tac)
+            $wpdb->prepare(
+                'SELECT gyarto, modell, megnevezes FROM ' . self::tabla() . ' WHERE tac = %s',
+                $tac
+            )
         );
 
         if ($sor === null) {
             return null;
         }
 
-        return ['gyarto' => (string) $sor->gyarto, 'tipus' => (string) $sor->tipus];
+        return [
+            'gyarto'     => (string) $sor->gyarto,
+            'modell'     => (string) $sor->modell,
+            'megnevezes' => (string) $sor->megnevezes,
+        ];
     }
 
     public static function darabszam(): int
@@ -120,32 +127,33 @@ final class SDH_Muhely_Tac
      *
      * A saját bejegyzést a csomagolt lista újratöltése nem írja felül.
      */
-    public static function tanul(string $imei, string $gyarto, string $tipus): void
+    public static function tanul(string $imei, string $gyarto, string $modell, string $megnevezes = ''): void
     {
         global $wpdb;
 
-        $tac = substr(preg_replace('/\D/', '', $imei) ?? '', 0, 8);
+        $tac = substr(preg_replace('/\\D/', '', $imei) ?? '', 0, 8);
 
-        // Üres típussal nem érdemes tanulni: abból nem lesz kitöltés.
-        if (strlen($tac) !== 8 || trim($tipus) === '' || trim($gyarto) === '') {
+        // Gyári szám nélkül nem érdemes tanulni: abból nem lesz kitöltés.
+        if (strlen($tac) !== 8 || trim($modell) === '' || trim($gyarto) === '') {
             return;
         }
 
         $meglevo = $wpdb->get_row(
-            $wpdb->prepare('SELECT tipus, forras FROM ' . self::tabla() . ' WHERE tac = %s', $tac)
+            $wpdb->prepare('SELECT modell, forras FROM ' . self::tabla() . ' WHERE tac = %s', $tac)
         );
 
-        // Ha már ismerjük és van rendes típusneve, nem bántjuk.
-        if ($meglevo !== null && trim((string) $meglevo->tipus) !== '') {
+        // Ha már ismerjük a gyári számát, nem bántjuk.
+        if ($meglevo !== null && trim((string) $meglevo->modell) !== '') {
             return;
         }
 
         $adatok = [
-            'tac'       => $tac,
-            'gyarto'    => mb_substr(trim($gyarto), 0, 80),
-            'tipus'     => mb_substr(trim($tipus), 0, 120),
-            'forras'    => 'sajat',
-            'frissitve' => current_time('mysql'),
+            'tac'        => $tac,
+            'gyarto'     => mb_substr(trim($gyarto), 0, 80),
+            'modell'     => mb_substr(trim($modell), 0, 60),
+            'megnevezes' => mb_substr(trim($megnevezes), 0, 120),
+            'forras'     => 'sajat',
+            'frissitve'  => current_time('mysql'),
         ];
 
         if ($meglevo === null) {
@@ -225,6 +233,8 @@ final class SDH_Muhely_Tac
                 <p style="margin:0 0 .9rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
                     A csomagolt fájl a nyilvános, MIT-licencű TAC-adatbázisból készült, és
                     <strong>2025 végéig tart</strong> – a 2026-os és későbbi típusok nincsenek benne.
+                    A TAC-ok nagyjából felénél van meg a gyári szám (modellkód); a többinél
+                    csak a gyártó és a kereskedelmi név.
                 </p>
                 <p style="margin:0;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
                     Ezt nem fájlcserével oldjuk meg: amikor egy ismeretlen TAC-ú készüléket
@@ -344,14 +354,15 @@ final class SDH_Muhely_Tac
 
             $mezok = str_getcsv(rtrim($sor, "\r\n"));
 
-            if (count($mezok) < 3 || !preg_match('/^\d{8}$/', (string) $mezok[0])) {
+            if (count($mezok) < 4 || !preg_match('/^\d{8}$/', (string) $mezok[0])) {
                 continue;
             }
 
             $sorok[] = [
                 (string) $mezok[0],
                 mb_substr((string) $mezok[1], 0, 80),
-                mb_substr((string) $mezok[2], 0, 120),
+                mb_substr((string) $mezok[2], 0, 60),
+                mb_substr((string) $mezok[3], 0, 120),
             ];
         }
 
@@ -374,7 +385,7 @@ final class SDH_Muhely_Tac
     /**
      * Beírja a sorokat. Meglévő TAC-ot frissít, nem duplikál.
      *
-     * @param array<int, array{0: string, 1: string, 2: string}> $sorok
+     * @param array<int, array{0: string, 1: string, 2: string, 3: string}> $sorok
      */
     private static function beir(array $sorok): void
     {
@@ -391,17 +402,18 @@ final class SDH_Muhely_Tac
             $ertekek = [];
 
             foreach ($darab as $sor) {
-                $helyek[] = "(%s, %s, %s, 'csomag')";
-                array_push($ertekek, $sor[0], $sor[1], $sor[2]);
+                $helyek[] = "(%s, %s, %s, %s, 'csomag')";
+                array_push($ertekek, $sor[0], $sor[1], $sor[2], $sor[3]);
             }
 
-            $sql = "INSERT INTO {$tabla} (tac, gyarto, tipus, forras) VALUES "
+            $sql = "INSERT INTO {$tabla} (tac, gyarto, modell, megnevezes, forras) VALUES "
                 . implode(', ', $helyek)
                 . ' ON DUPLICATE KEY UPDATE'
                 // A saját felvitelből tanult sorokat a csomagolt lista
                 // nem írja felül – azok frissebbek nálunk.
                 . " gyarto = IF(forras = 'sajat', gyarto, VALUES(gyarto)),"
-                . " tipus = IF(forras = 'sajat', tipus, VALUES(tipus))";
+                . " modell = IF(forras = 'sajat', modell, VALUES(modell)),"
+                . " megnevezes = IF(forras = 'sajat', megnevezes, VALUES(megnevezes))";
 
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $wpdb->query($wpdb->prepare($sql, $ertekek));

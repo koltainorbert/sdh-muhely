@@ -444,21 +444,34 @@
                     if (eredmeny.tac) {
                         var gyarto = urlap.querySelector('[name="gyarto"]');
                         var tipus = urlap.querySelector('[name="tipus"]');
+                        var megnev = urlap.querySelector('[name="megnevezes"]');
 
                         if (gyarto && !gyarto.value) {
                             gyarto.value = eredmeny.tac.gyarto;
                         }
 
                         if (tipus && !tipus.value) {
-                            tipus.value = eredmeny.tac.tipus;
+                            tipus.value = eredmeny.tac.modell;
+                        }
+
+                        if (megnev && !megnev.value) {
+                            megnev.value = eredmeny.tac.megnevezes;
+                        }
+
+                        var cimke = (eredmeny.tac.gyarto + ' ' + eredmeny.tac.modell).trim();
+
+                        if (eredmeny.tac.megnevezes) {
+                            cimke += ' (' + eredmeny.tac.megnevezes + ')';
                         }
 
                         jelzes(
                             urlap,
-                            'siker',
-                            'Új készülék: ' +
-                                (eredmeny.tac.gyarto + ' ' + eredmeny.tac.tipus).trim() +
-                                ' – az IMEI alapján. Az ügyfelet és a többi adatot töltsd ki.'
+                            eredmeny.tac.modell ? 'siker' : 'figyelem',
+                            eredmeny.tac.modell
+                                ? 'Új készülék: ' + cimke + ' – az IMEI alapján. ' +
+                                  'Az ügyfelet és a többi adatot töltsd ki.'
+                                : 'Az IMEI alapján ' + eredmeny.tac.gyarto +
+                                  ', de a gyári szám nincs az adatbázisban – írd be kézzel.'
                         );
 
                         return;

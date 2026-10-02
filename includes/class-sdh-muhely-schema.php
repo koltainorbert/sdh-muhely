@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.5.0';
+    public const DB_VERSION = '0.6.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -168,6 +168,7 @@ final class SDH_Muhely_Schema
             kategoria varchar(40) NOT NULL default 'telefon',
             gyarto varchar(80) NOT NULL default '',
             tipus varchar(120) NOT NULL default '',
+            megnevezes varchar(120) NOT NULL default '',
             imei varchar(40) NOT NULL default '',
             imei2 varchar(40) NOT NULL default '',
             sorozatszam varchar(60) NOT NULL default '',
@@ -210,11 +211,13 @@ final class SDH_Muhely_Schema
         $definiciok[] = "CREATE TABLE {$tac} (
             tac char(8) NOT NULL,
             gyarto varchar(80) NOT NULL default '',
-            tipus varchar(120) NOT NULL default '',
+            modell varchar(60) NOT NULL default '',
+            megnevezes varchar(120) NOT NULL default '',
             forras varchar(20) NOT NULL default 'csomag',
             frissitve datetime NULL,
             PRIMARY KEY  (tac),
             key gyarto (gyarto),
+            key modell (modell),
             key forras (forras)
         ) {$charset};";
 

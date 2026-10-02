@@ -118,6 +118,7 @@ final class SDH_Muhely_Eszkoz
                 'kategoria'        => (string) $sor->kategoria,
                 'gyarto'           => (string) $sor->gyarto,
                 'tipus'            => (string) $sor->tipus,
+                'megnevezes'       => (string) $sor->megnevezes,
                 'szin'             => (string) $sor->szin,
                 'imei'             => (string) $sor->imei,
                 'imei2'            => (string) $sor->imei2,
@@ -235,10 +236,10 @@ final class SDH_Muhely_Eszkoz
         if ($kereses !== '') {
             $minta = '%' . $wpdb->esc_like($kereses) . '%';
 
-            $feltetelek[] = '(e.gyarto LIKE %s OR e.tipus LIKE %s OR e.imei LIKE %s '
-                . 'OR e.imei2 LIKE %s OR e.sorozatszam LIKE %s OR u.nev LIKE %s)';
+            $feltetelek[] = '(e.gyarto LIKE %s OR e.tipus LIKE %s OR e.megnevezes LIKE %s '
+                . 'OR e.imei LIKE %s OR e.imei2 LIKE %s OR e.sorozatszam LIKE %s OR u.nev LIKE %s)';
 
-            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta);
+            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta, $minta);
         }
 
         $hol = 'WHERE ' . implode(' AND ', $feltetelek);
@@ -297,7 +298,7 @@ final class SDH_Muhely_Eszkoz
                 <?php endif; ?>
 
                 <input type="search" name="k" value="<?php echo esc_attr($kereses); ?>"
-                       placeholder="Gyártó, típus, IMEI, sorozatszám, ügyfél neve…">
+                       placeholder="Gyári szám, kereskedelmi név, IMEI, sorozatszám, ügyfél…">
 
                 <button type="submit" class="sdh-gomb sdh-gomb--vilagos">Keresés</button>
 
@@ -315,7 +316,7 @@ final class SDH_Muhely_Eszkoz
             <table class="sdh-tabla">
                 <thead>
                     <tr>
-                        <th>Készülék</th>
+                        <th>Készülék (gyári szám)</th>
                         <th>Ügyfél</th>
                         <th>IMEI / sorozatszám</th>
                         <th class="sdh-tabla__rejtheto">Kategória</th>
@@ -345,10 +346,15 @@ final class SDH_Muhely_Eszkoz
                                 <a href="<?php echo esc_url($szerkeszt_url); ?>"
                                    data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
                                    data-sdh-id="<?php echo (int) $sor->id; ?>">
-                                    <?php echo esc_html(trim($sor->gyarto . ' ' . $sor->tipus) ?: 'Névtelen eszköz'); ?>
+                                    <?php echo esc_html(self::megnevezes($sor)); ?>
                                 </a>
-                                <?php if ($sor->szin !== '') : ?>
-                                    <div class="sdh-tabla__halvany"><?php echo esc_html($sor->szin); ?></div>
+                                <?php
+                                $alatta = array_filter([$sor->megnevezes, $sor->szin]);
+                                ?>
+                                <?php if ($alatta !== []) : ?>
+                                    <div class="sdh-tabla__halvany">
+                                        <?php echo esc_html(implode(' · ', $alatta)); ?>
+                                    </div>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -571,9 +577,22 @@ final class SDH_Muhely_Eszkoz
                 </div>
 
                 <div class="sdh-mezo">
-                    <label for="tipus">Típus</label>
+                    <label for="tipus">Gyári szám <span class="sdh-kotelezo">*</span></label>
                     <input type="text" name="tipus" id="tipus"
                            value="<?php echo esc_attr($ert('tipus')); ?>">
+                    <span class="sdh-mezo__sugo">
+                        A gyártó modellkódja, pl. SM-A505F/DS vagy A1660 – ez az azonosító,
+                        nem a kereskedelmi név.
+                    </span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="megnevezes">Kereskedelmi név</label>
+                    <input type="text" name="megnevezes" id="megnevezes"
+                           value="<?php echo esc_attr($ert('megnevezes')); ?>">
+                    <span class="sdh-mezo__sugo">
+                        Amin az ügyfél keresi: Galaxy A50, iPhone 7. Kereséshez jó, azonosításra nem.
+                    </span>
                 </div>
 
                 <div class="sdh-mezo">
@@ -723,6 +742,7 @@ final class SDH_Muhely_Eszkoz
             'kategoria'        => self::kategoria_ervenyes($szoveg('kategoria')),
             'gyarto'           => $szoveg('gyarto'),
             'tipus'            => $szoveg('tipus'),
+            'megnevezes'       => $szoveg('megnevezes'),
             'imei'             => $szoveg('imei'),
             'imei2'            => $szoveg('imei2'),
             'sorozatszam'      => $szoveg('sorozatszam'),
@@ -775,7 +795,8 @@ final class SDH_Muhely_Eszkoz
             SDH_Muhely_Tac::tanul(
                 (string) ($adatok['imei'] ?? ''),
                 (string) ($adatok['gyarto'] ?? ''),
-                (string) ($adatok['tipus'] ?? '')
+                (string) ($adatok['tipus'] ?? ''),
+                (string) ($adatok['megnevezes'] ?? '')
             );
         }
 
@@ -860,9 +881,20 @@ final class SDH_Muhely_Eszkoz
      * Segédek
      * ============================================================== */
 
+    /**
+     * A készülék megnevezése a listákban és a fejlécben.
+     *
+     * A gyári szám az elsődleges – az azonosít egyértelműen. A
+     * kereskedelmi név csak akkor jelenik meg helyette, ha gyári szám
+     * nincs felvéve.
+     */
     public static function megnevezes(object $eszkoz): string
     {
         $nev = trim(($eszkoz->gyarto ?? '') . ' ' . ($eszkoz->tipus ?? ''));
+
+        if (trim((string) ($eszkoz->tipus ?? '')) === '') {
+            $nev = trim(($eszkoz->gyarto ?? '') . ' ' . ($eszkoz->megnevezes ?? ''));
+        }
 
         return $nev !== '' ? $nev : 'Névtelen eszköz';
     }
