@@ -37,6 +37,12 @@ final class SDH_Muhely_Beallitasok
 
         $b = SDH_Muhely_Imei_Lekerdezes::beallitas();
 
+        $ellenorzok = get_option('sdh_muhely_imei_ellenorzok', '');
+
+        if (!is_string($ellenorzok) || trim($ellenorzok) === '') {
+            $ellenorzok = SDH_Muhely_Imei_Lekerdezes::alap_ellenorzok_szovegkent();
+        }
+
         ?>
         <div class="sdh-wrap">
             <?php
@@ -91,6 +97,28 @@ final class SDH_Muhely_Beallitasok
                     </div>
                 </div>
 
+                <div class="sdh-doboz">
+                    <h2 class="sdh-doboz__cim">Ingyenes ellenőrző oldalak</h2>
+
+                    <p style="margin:0 0 1.2rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                        Ezek a gombok jelennek meg az eszköz-űrlap tetején. Soronként egy:
+                        <code>Név | URL</code>. A gomb megnyitja az oldalt, és az IMEI-t a
+                        vágólapra teszi, hogy ott csak be kelljen illeszteni. Ha egy oldal
+                        az URL-ben is fogadja az IMEI-t, írd a címbe az <code>{imei}</code>
+                        jelölőt – akkor már kitöltve nyílik meg.
+                    </p>
+
+                    <div class="sdh-mezo sdh-mezo--szeles">
+                        <label for="ellenorzok">Oldalak</label>
+                        <textarea name="ellenorzok" id="ellenorzok" rows="4"
+                                  style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px"
+                        ><?php echo esc_textarea($ellenorzok); ?></textarea>
+                        <span class="sdh-mezo__sugo">
+                            Üresen hagyva az alapértelmezett lista jön vissza.
+                        </span>
+                    </div>
+                </div>
+
                 <div class="sdh-urlap__lablec">
                     <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">Mentés</button>
                 </div>
@@ -122,6 +150,13 @@ final class SDH_Muhely_Beallitasok
                 'kulcs' => isset($_POST['kulcs']) ? sanitize_text_field(wp_unslash($_POST['kulcs'])) : '',
                 'aktiv' => !empty($_POST['aktiv']),
             ]
+        );
+
+        update_option(
+            'sdh_muhely_imei_ellenorzok',
+            isset($_POST['ellenorzok'])
+                ? sanitize_textarea_field(wp_unslash($_POST['ellenorzok']))
+                : ''
         );
 
         wp_safe_redirect(SDH_Muhely_Modulok::admin_url(self::KULCS, ['uzenet' => 'mentve']));

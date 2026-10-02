@@ -1035,6 +1035,63 @@
     });
 
     /* ---------------------------------------------------------------- */
+    /* Ellenőrző oldal megnyitása                                       */
+    /* ---------------------------------------------------------------- */
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest('[data-sdh-ellenorzo]');
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var urlap = gomb.closest('form');
+        var imeiMezo = urlap ? urlap.querySelector('[data-sdh-imei]') : null;
+        var imei = imeiMezo ? imeiMezo.value.replace(/\D/g, '') : '';
+        var cim = gomb.dataset.sdhEllenorzo;
+
+        if (imei.length !== 15) {
+            jelzes(urlap, 'figyelem', 'Előbb írd be a teljes, 15 számjegyű IMEI-t.');
+
+            return;
+        }
+
+        // Ha az oldal URL-ben is fogadja az IMEI-t, beírva nyitjuk meg.
+        if (cim.indexOf('{imei}') !== -1) {
+            window.open(cim.replace('{imei}', encodeURIComponent(imei)), '_blank', 'noopener');
+            jelzes(urlap, 'siker', 'Megnyitottam az ellenőrzőt. Az eredményt másold ide vissza.');
+
+            return;
+        }
+
+        // Különben a vágólapra tesszük, hogy ott csak be kelljen illeszteni.
+        var nyit = function (uzenet, tipus) {
+            window.open(cim, '_blank', 'noopener');
+            jelzes(urlap, tipus, uzenet);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(imei)
+                .then(function () {
+                    nyit(
+                        'Az IMEI a vágólapon – illeszd be az oldalon, majd az eredményt ' +
+                            'másold vissza a fenti mezőbe.',
+                        'siker'
+                    );
+                })
+                .catch(function () {
+                    nyit('Megnyitottam az ellenőrzőt. Az IMEI: ' + imei, 'siker');
+                });
+
+            return;
+        }
+
+        nyit('Megnyitottam az ellenőrzőt. Az IMEI: ' + imei, 'siker');
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 

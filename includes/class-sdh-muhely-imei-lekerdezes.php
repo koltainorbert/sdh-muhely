@@ -136,6 +136,74 @@ final class SDH_Muhely_Imei_Lekerdezes
     }
 
     /* =================================================================
+     * Ellenőrző oldalak
+     * ============================================================== */
+
+    /**
+     * Az ingyenes IMEI-ellenőrzők, amiket a felvitelkor egy kattintással
+     * meg lehet nyitni.
+     *
+     * Nem automatizáljuk őket – azt a feltételeik tiltják, és a
+     * robotvédelem úgyis megfogná. A gomb csak megnyitja az oldalt, és
+     * a vágólapra teszi az IMEI-t, hogy ott csak be kelljen illeszteni.
+     *
+     * Ha egy oldal URL-ben is fogadja az IMEI-t, írd bele a címbe az
+     * {imei} jelölőt, és akkor már beírva nyílik meg.
+     *
+     * @return array<int, array{nev: string, url: string}>
+     */
+    public static function ellenorzok(): array
+    {
+        $mentett = get_option('sdh_muhely_imei_ellenorzok', null);
+
+        if (!is_string($mentett) || trim($mentett) === '') {
+            return self::alap_ellenorzok();
+        }
+
+        $lista = [];
+
+        foreach (preg_split('/\r\n|\r|\n/', $mentett) ?: [] as $sor) {
+            $sor = trim($sor);
+
+            if ($sor === '' || !str_contains($sor, '|')) {
+                continue;
+            }
+
+            [$nev, $url] = array_map('trim', explode('|', $sor, 2));
+
+            if ($nev === '' || !str_starts_with($url, 'http')) {
+                continue;
+            }
+
+            $lista[] = ['nev' => $nev, 'url' => $url];
+        }
+
+        return $lista === [] ? self::alap_ellenorzok() : $lista;
+    }
+
+    /**
+     * @return array<int, array{nev: string, url: string}>
+     */
+    public static function alap_ellenorzok(): array
+    {
+        return [
+            ['nev' => 'imeicheck.com', 'url' => 'https://imeicheck.com/imei-check'],
+            ['nev' => 'iunlocker.com', 'url' => 'https://iunlocker.com/check_imei_xiaomi.php'],
+        ];
+    }
+
+    public static function alap_ellenorzok_szovegkent(): string
+    {
+        $sorok = [];
+
+        foreach (self::alap_ellenorzok() as $e) {
+            $sorok[] = $e['nev'] . ' | ' . $e['url'];
+        }
+
+        return implode("\n", $sorok);
+    }
+
+    /* =================================================================
      * Lekérdezés
      * ============================================================== */
 

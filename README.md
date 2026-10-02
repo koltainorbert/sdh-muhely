@@ -57,6 +57,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.13.0
+- Ellenőrző gombok a Feldolgozás mellett: imeicheck.com és iunlocker.com
+  egy kattintással, az IMEI-vel a vágólapon.
+- A lista a Beállításokban szerkeszthető (`Név | URL` soronként); ha egy
+  oldal URL-ben fogadja az IMEI-t, az `{imei}` jelölővel kitöltve nyílik.
+
 ### 0.12.0
 - Gyári adatok beillesztéssel: az ingyenes IMEI-ellenőrzés eredményét
   bemásolod, és a rendszer kitölti a mezőket. Beillesztéskor magától fut,

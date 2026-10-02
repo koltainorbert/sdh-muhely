@@ -568,10 +568,18 @@ final class SDH_Muhely_Eszkoz
                           placeholder="Model Name: SM-A505F/DS&#10;Serial Number: R58M51QT5RE&#10;…"></textarea>
             </div>
 
-            <div class="sdh-urlap__lablec" style="padding-top:.6rem">
-                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-beillesztes-feldolgoz>
+            <div class="sdh-urlap__lablec" style="padding-top:.6rem;flex-wrap:wrap">
+                <?php foreach (SDH_Muhely_Imei_Lekerdezes::ellenorzok() as $ellenorzo) : ?>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos"
+                            data-sdh-ellenorzo="<?php echo esc_attr($ellenorzo['url']); ?>">
+                        <?php echo esc_html($ellenorzo['nev']); ?> ↗
+                    </button>
+                <?php endforeach; ?>
+
+                <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-beillesztes-feldolgoz>
                     Feldolgozás
                 </button>
+
                 <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-imei-lekerdez>
                         Lekérdezés a szolgáltatótól
