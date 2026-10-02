@@ -57,6 +57,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.4.0
+- Popup (modál) rendszer: a felvitel és a szerkesztés párbeszédablakban
+  nyílik, így a lista és a keresés nem vész el. Natív `<dialog>`, nincs
+  külső könyvtár.
+- Az ügyfél-űrlap egy helyen íródik, és onnan megy a popupba és a teljes
+  oldalas változatba is.
+- JavaScript nélkül minden link a teljes oldalas űrlapra visz – a
+  rendszer JS nélkül is használható.
+- Az „Új ügyfél" gomb az áttekintőn is megjelenik.
+
 ### 0.3.0
 - Saját műhely-felület a `/muhely/` útvonalon: nem használja a sablont,
   bejelentkezés nélkül átirányít, saját fejléccel és menüvel.

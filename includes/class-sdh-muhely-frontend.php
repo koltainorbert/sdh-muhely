@@ -229,6 +229,13 @@ final class SDH_Muhely_Frontend
             <?php call_user_func($tartalom); ?>
         </main>
 
+        <script>
+            window.SDH_MUHELY = <?php
+                echo wp_json_encode(SDH_Muhely_Admin_UI::js_beallitas('frontend'));
+            ?>;
+        </script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_MUHELY_VERSION); ?>"></script>
+
         </body>
         </html>
         <?php

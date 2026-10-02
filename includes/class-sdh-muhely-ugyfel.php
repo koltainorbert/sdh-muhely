@@ -2,12 +2,16 @@
 /**
  * Ügyfél-modul.
  *
- * A rendszer első valódi modulja: ügyfelek listája kereséssel és lapozással,
- * felvitel és szerkesztés egy űrlapon, inaktiválás törlés helyett.
+ * Ügyfelek listája kereséssel és lapozással, felvitel és szerkesztés
+ * popupban, inaktiválás törlés helyett.
  *
  * Ugyanez a kód fut a saját műhely-felületen és a wp-adminban is. A modul
  * nem tudja, melyiken van – minden URL-t a SDH_Muhely_Modulok épít, az
  * pedig ismeri a kontextust.
+ *
+ * A felvitel popupban történik, hogy ne veszítsd el a listát és a
+ * keresést. A teljes oldalas űrlap megmarad tartalékként: ha a
+ * JavaScript nem fut, a linkek oda visznek, és a rendszer működik tovább.
  *
  * Miért nincs törlés: egy ügyfélre később munkalapok hivatkoznak. Ha az
  * ügyfél eltűnne, a munkalap története értelmezhetetlen lenne. Ezért az
@@ -23,7 +27,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Muhely_Ugyfel
 {
-    /** A modul kulcsa az URL-ekben és a menüben. */
+    /** A modul kulcsa az URL-ekben, a menüben és az AJAX-műveletekben. */
     public const KULCS = 'ugyfelek';
 
     /** Hány sor egy oldalon. */
@@ -38,9 +42,13 @@ final class SDH_Muhely_Ugyfel
             'sorrend' => 10,
         ]);
 
-        // Az űrlap mindkét felületről ide küld be; mentés után átirányítunk.
+        // Teljes oldalas űrlap beküldése (tartalék, JS nélkül is működik).
         add_action('admin_post_sdh_muhely_ugyfel_mentes', [self::class, 'mentes']);
         add_action('admin_post_sdh_muhely_ugyfel_allapot', [self::class, 'allapot_valtas']);
+
+        // Popup: az űrlap lekérése és beküldése.
+        add_action('wp_ajax_sdh_muhely_ugyfelek_urlap', [self::class, 'ajax_urlap']);
+        add_action('wp_ajax_sdh_muhely_ugyfelek_ment', [self::class, 'ajax_mentes']);
     }
 
     private static function tabla(): string
@@ -54,6 +62,17 @@ final class SDH_Muhely_Ugyfel
     private static function url(array $parameterek = []): string
     {
         return SDH_Muhely_Modulok::url(self::KULCS, $parameterek);
+    }
+
+    private static function egy(int $id): ?object
+    {
+        global $wpdb;
+
+        $sor = $wpdb->get_row(
+            $wpdb->prepare('SELECT * FROM ' . self::tabla() . ' WHERE id = %d', $id)
+        );
+
+        return $sor ?: null;
     }
 
     /* =================================================================
@@ -133,6 +152,7 @@ final class SDH_Muhely_Ugyfel
                         'cimke'      => '+ Új ügyfél',
                         'url'        => self::url(['nezet' => 'uj']),
                         'elsodleges' => true,
+                        'adatok'     => ['sdh-urlap' => self::KULCS, 'sdh-id' => '0'],
                     ],
                 ]
             );
@@ -190,7 +210,9 @@ final class SDH_Muhely_Ugyfel
                                 Erre a keresésre nincs találat.
                             <?php else : ?>
                                 Még nincs <?php echo $inaktiv ? 'inaktív' : ''; ?> ügyfél.
-                                Kezdd egy új felvitelével.
+                                <a href="<?php echo esc_url(self::url(['nezet' => 'uj'])); ?>"
+                                   data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
+                                   data-sdh-id="0">Vidd fel az elsőt.</a>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -199,7 +221,9 @@ final class SDH_Muhely_Ugyfel
                         <?php $szerkeszt_url = self::url(['nezet' => 'szerkeszt', 'id' => (int) $sor->id]); ?>
                         <tr>
                             <td class="sdh-tabla__nev">
-                                <a href="<?php echo esc_url($szerkeszt_url); ?>">
+                                <a href="<?php echo esc_url($szerkeszt_url); ?>"
+                                   data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
+                                   data-sdh-id="<?php echo (int) $sor->id; ?>">
                                     <?php echo esc_html($sor->nev); ?>
                                 </a>
                                 <?php if ((int) $sor->aktiv === 0) : ?>
@@ -223,7 +247,10 @@ final class SDH_Muhely_Ugyfel
                             </td>
                             <td class="sdh-tabla__halvany"><?php echo esc_html($sor->ugyfel_szam); ?></td>
                             <td>
-                                <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url($szerkeszt_url); ?>">
+                                <a class="sdh-gomb sdh-gomb--vilagos"
+                                   href="<?php echo esc_url($szerkeszt_url); ?>"
+                                   data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
+                                   data-sdh-id="<?php echo (int) $sor->id; ?>">
                                     Megnyit
                                 </a>
                             </td>
@@ -261,33 +288,22 @@ final class SDH_Muhely_Ugyfel
     }
 
     /* =================================================================
-     * Űrlap
+     * Űrlap – teljes oldalas változat (tartalék)
      * ============================================================== */
 
     private static function urlap_oldal(string $nezet): void
     {
-        global $wpdb;
-
         $ugyfel = null;
 
         if ($nezet === 'szerkeszt') {
-            $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-            $ugyfel = $wpdb->get_row(
-                $wpdb->prepare('SELECT * FROM ' . self::tabla() . ' WHERE id = %d', $id)
-            );
+            $id     = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            $ugyfel = self::egy($id);
 
             if ($ugyfel === null) {
                 wp_safe_redirect(self::url(['uzenet' => 'nincs_ilyen']));
                 exit;
             }
         }
-
-        // Minden mezőnek van alapértéke, hogy az űrlap új és meglévő
-        // ügyfélnél ugyanazt a kódot használhassa.
-        $ert = static fn (string $mezo, string $alap = ''): string => $ugyfel !== null
-            ? (string) $ugyfel->{$mezo}
-            : $alap;
 
         $uj = $ugyfel === null;
 
@@ -311,194 +327,278 @@ final class SDH_Muhely_Ugyfel
 
             <form class="sdh-urlap" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_ugyfel_mentes">
-                <input type="hidden" name="id" value="<?php echo (int) ($ugyfel->id ?? 0); ?>">
-                <input type="hidden" name="kontextus"
-                       value="<?php echo esc_attr(SDH_Muhely_Modulok::kontextus()); ?>">
-                <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
-
-                <div class="sdh-doboz">
-                    <h2 class="sdh-doboz__cim">Alapadatok</h2>
-
-                    <div class="sdh-mezok">
-                        <div class="sdh-mezo">
-                            <label for="tipus">Típus</label>
-                            <select name="tipus" id="tipus">
-                                <?php foreach (self::tipusok() as $kulcs => $cimke) : ?>
-                                    <option value="<?php echo esc_attr($kulcs); ?>"
-                                        <?php selected($ert('tipus', 'maganszemely'), $kulcs); ?>>
-                                        <?php echo esc_html($cimke); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="nev">Név <span class="sdh-kotelezo">*</span></label>
-                            <input type="text" name="nev" id="nev" required
-                                   value="<?php echo esc_attr($ert('nev')); ?>">
-                            <span class="sdh-mezo__sugo">Cégnél a cég neve, magánszemélynél a teljes név.</span>
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="kapcsolattarto">Kapcsolattartó</label>
-                            <input type="text" name="kapcsolattarto" id="kapcsolattarto"
-                                   value="<?php echo esc_attr($ert('kapcsolattarto')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="adoszam">Adószám</label>
-                            <input type="text" name="adoszam" id="adoszam"
-                                   value="<?php echo esc_attr($ert('adoszam')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="telefon">Telefon</label>
-                            <input type="tel" name="telefon" id="telefon"
-                                   value="<?php echo esc_attr($ert('telefon')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="telefon2">Telefon 2.</label>
-                            <input type="tel" name="telefon2" id="telefon2"
-                                   value="<?php echo esc_attr($ert('telefon2')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="email">E-mail</label>
-                            <input type="email" name="email" id="email"
-                                   value="<?php echo esc_attr($ert('email')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="ugyfel_szam">Ügyfélszám</label>
-                            <input type="text" name="ugyfel_szam" id="ugyfel_szam"
-                                   value="<?php echo esc_attr($ert('ugyfel_szam')); ?>">
-                            <span class="sdh-mezo__sugo">Üresen hagyva a mentéskor generálódik.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sdh-doboz">
-                    <h2 class="sdh-doboz__cim">Számlázási cím</h2>
-
-                    <div class="sdh-mezok">
-                        <div class="sdh-mezo">
-                            <label for="szamlazasi_iranyitoszam">Irányítószám</label>
-                            <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam"
-                                   value="<?php echo esc_attr($ert('szamlazasi_iranyitoszam')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="szamlazasi_telepules">Település</label>
-                            <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules"
-                                   value="<?php echo esc_attr($ert('szamlazasi_telepules')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo sdh-mezo--szeles">
-                            <label for="szamlazasi_cim">Utca, házszám</label>
-                            <input type="text" name="szamlazasi_cim" id="szamlazasi_cim"
-                                   value="<?php echo esc_attr($ert('szamlazasi_cim')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="szamlazasi_orszag">Ország</label>
-                            <input type="text" name="szamlazasi_orszag" id="szamlazasi_orszag"
-                                   value="<?php echo esc_attr($ert('szamlazasi_orszag', 'Magyarország')); ?>">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sdh-doboz">
-                    <h2 class="sdh-doboz__cim">Levelezési cím</h2>
-
-                    <div class="sdh-mezo sdh-mezo--jelolo" style="margin-bottom:1rem">
-                        <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
-                            <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
-                        <label for="levelezesi_azonos">Megegyezik a számlázási címmel</label>
-                    </div>
-
-                    <div class="sdh-mezok">
-                        <div class="sdh-mezo">
-                            <label for="levelezesi_iranyitoszam">Irányítószám</label>
-                            <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam"
-                                   value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="levelezesi_telepules">Település</label>
-                            <input type="text" name="levelezesi_telepules" id="levelezesi_telepules"
-                                   value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo sdh-mezo--szeles">
-                            <label for="levelezesi_cim">Utca, házszám</label>
-                            <input type="text" name="levelezesi_cim" id="levelezesi_cim"
-                                   value="<?php echo esc_attr($ert('levelezesi_cim')); ?>">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sdh-doboz">
-                    <h2 class="sdh-doboz__cim">Besorolás és megjegyzés</h2>
-
-                    <div class="sdh-mezok">
-                        <div class="sdh-mezo">
-                            <label for="kategoria">Kategória</label>
-                            <input type="text" name="kategoria" id="kategoria"
-                                   value="<?php echo esc_attr($ert('kategoria')); ?>">
-                            <span class="sdh-mezo__sugo">Pl. viszonteladó, szerződéses partner.</span>
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="kedvezmeny">Kedvezmény (%)</label>
-                            <input type="number" name="kedvezmeny" id="kedvezmeny"
-                                   step="0.01" min="0" max="100"
-                                   value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
-                        </div>
-
-                        <div class="sdh-mezo sdh-mezo--szeles">
-                            <label for="megjegyzes">Megjegyzés</label>
-                            <textarea name="megjegyzes" id="megjegyzes"><?php
-                                echo esc_textarea($ert('megjegyzes'));
-                            ?></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sdh-urlap__lablec">
-                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
-                        <?php echo $uj ? 'Ügyfél létrehozása' : 'Mentés'; ?>
-                    </button>
-
-                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">
-                        Mégsem
-                    </a>
-
-                    <?php if (!$uj) : ?>
-                        <?php
-                        $allapot_url = wp_nonce_url(
-                            add_query_arg(
-                                [
-                                    'action'    => 'sdh_muhely_ugyfel_allapot',
-                                    'id'        => (int) $ugyfel->id,
-                                    'ertek'     => (int) $ugyfel->aktiv === 1 ? 0 : 1,
-                                    'kontextus' => SDH_Muhely_Modulok::kontextus(),
-                                ],
-                                admin_url('admin-post.php')
-                            ),
-                            'sdh_muhely_ugyfel_allapot_' . (int) $ugyfel->id
-                        );
-                        ?>
-                        <a class="sdh-gomb sdh-gomb--vilagos"
-                           style="margin-left:auto"
-                           href="<?php echo esc_url($allapot_url); ?>">
-                            <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>
-                        </a>
-                    <?php endif; ?>
-                </div>
+                <?php self::urlap_belso($ugyfel, false); ?>
             </form>
         </div>
         <?php
+    }
+
+    /* =================================================================
+     * Űrlap – popup változat
+     * ============================================================== */
+
+    public static function ajax_urlap(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            status_header(403);
+            echo '<div class="sdh-uzenet sdh-uzenet--hiba">Nincs jogosultságod ehhez.</div>';
+            wp_die();
+        }
+
+        $id     = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $ugyfel = $id > 0 ? self::egy($id) : null;
+
+        if ($id > 0 && $ugyfel === null) {
+            echo '<div class="sdh-uzenet sdh-uzenet--hiba">Nincs ilyen ügyfél.</div>';
+            wp_die();
+        }
+
+        $uj = $ugyfel === null;
+
+        ?>
+        <h2 class="sdh-modal__cim"><?php echo esc_html($uj ? 'Új ügyfél' : $ugyfel->nev); ?></h2>
+        <p class="sdh-modal__alcim">
+            <?php
+            echo esc_html(
+                $uj
+                    ? 'Csak a név kötelező. A többi mezőt bármikor pótolhatod.'
+                    : 'Ügyfélszám: ' . ($ugyfel->ugyfel_szam !== '' ? $ugyfel->ugyfel_szam : '—')
+            );
+            ?>
+        </p>
+
+        <form class="sdh-urlap" method="post"
+              action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+              data-sdh-ajax-action="sdh_muhely_ugyfelek_ment">
+            <input type="hidden" name="action" value="sdh_muhely_ugyfel_mentes">
+            <?php self::urlap_belso($ugyfel, true); ?>
+        </form>
+        <?php
+
+        wp_die();
+    }
+
+    /**
+     * Az űrlap belseje: rejtett mezők, dobozok, lábléc.
+     *
+     * Ugyanez megy a teljes oldalas és a popupos változatba – egy helyen
+     * írjuk meg, hogy ne csússzon szét a kettő.
+     */
+    private static function urlap_belso(?object $ugyfel, bool $modal): void
+    {
+        // Minden mezőnek van alapértéke, hogy az űrlap új és meglévő
+        // ügyfélnél ugyanazt a kódot használhassa.
+        $ert = static fn (string $mezo, string $alap = ''): string => $ugyfel !== null
+            ? (string) $ugyfel->{$mezo}
+            : $alap;
+
+        $uj = $ugyfel === null;
+
+        ?>
+        <input type="hidden" name="id" value="<?php echo (int) ($ugyfel->id ?? 0); ?>">
+        <input type="hidden" name="kontextus"
+               value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
+        <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Alapadatok</h2>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="tipus">Típus</label>
+                    <select name="tipus" id="tipus">
+                        <?php foreach (self::tipusok() as $kulcs => $cimke) : ?>
+                            <option value="<?php echo esc_attr($kulcs); ?>"
+                                <?php selected($ert('tipus', 'maganszemely'), $kulcs); ?>>
+                                <?php echo esc_html($cimke); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="nev">Név <span class="sdh-kotelezo">*</span></label>
+                    <input type="text" name="nev" id="nev" required
+                           value="<?php echo esc_attr($ert('nev')); ?>">
+                    <span class="sdh-mezo__sugo">Cégnél a cég neve, magánszemélynél a teljes név.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="kapcsolattarto">Kapcsolattartó</label>
+                    <input type="text" name="kapcsolattarto" id="kapcsolattarto"
+                           value="<?php echo esc_attr($ert('kapcsolattarto')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="adoszam">Adószám</label>
+                    <input type="text" name="adoszam" id="adoszam"
+                           value="<?php echo esc_attr($ert('adoszam')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="telefon">Telefon</label>
+                    <input type="tel" name="telefon" id="telefon"
+                           value="<?php echo esc_attr($ert('telefon')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="telefon2">Telefon 2.</label>
+                    <input type="tel" name="telefon2" id="telefon2"
+                           value="<?php echo esc_attr($ert('telefon2')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="email">E-mail</label>
+                    <input type="email" name="email" id="email"
+                           value="<?php echo esc_attr($ert('email')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="ugyfel_szam">Ügyfélszám</label>
+                    <input type="text" name="ugyfel_szam" id="ugyfel_szam"
+                           value="<?php echo esc_attr($ert('ugyfel_szam')); ?>">
+                    <span class="sdh-mezo__sugo">Üresen hagyva a mentéskor generálódik.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Számlázási cím</h2>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="szamlazasi_iranyitoszam">Irányítószám</label>
+                    <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam"
+                           value="<?php echo esc_attr($ert('szamlazasi_iranyitoszam')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamlazasi_telepules">Település</label>
+                    <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules"
+                           value="<?php echo esc_attr($ert('szamlazasi_telepules')); ?>">
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="szamlazasi_cim">Utca, házszám</label>
+                    <input type="text" name="szamlazasi_cim" id="szamlazasi_cim"
+                           value="<?php echo esc_attr($ert('szamlazasi_cim')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamlazasi_orszag">Ország</label>
+                    <input type="text" name="szamlazasi_orszag" id="szamlazasi_orszag"
+                           value="<?php echo esc_attr($ert('szamlazasi_orszag', 'Magyarország')); ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Levelezési cím</h2>
+
+            <div class="sdh-mezo sdh-mezo--jelolo" style="margin-bottom:1rem">
+                <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
+                    <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
+                <label for="levelezesi_azonos">Megegyezik a számlázási címmel</label>
+            </div>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="levelezesi_iranyitoszam">Irányítószám</label>
+                    <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam"
+                           value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="levelezesi_telepules">Település</label>
+                    <input type="text" name="levelezesi_telepules" id="levelezesi_telepules"
+                           value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="levelezesi_cim">Utca, házszám</label>
+                    <input type="text" name="levelezesi_cim" id="levelezesi_cim"
+                           value="<?php echo esc_attr($ert('levelezesi_cim')); ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Besorolás és megjegyzés</h2>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="kategoria">Kategória</label>
+                    <input type="text" name="kategoria" id="kategoria"
+                           value="<?php echo esc_attr($ert('kategoria')); ?>">
+                    <span class="sdh-mezo__sugo">Pl. viszonteladó, szerződéses partner.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="kedvezmeny">Kedvezmény (%)</label>
+                    <input type="number" name="kedvezmeny" id="kedvezmeny"
+                           step="0.01" min="0" max="100"
+                           value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="megjegyzes">Megjegyzés</label>
+                    <textarea name="megjegyzes" id="megjegyzes"><?php
+                        echo esc_textarea($ert('megjegyzes'));
+                    ?></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="sdh-urlap__lablec">
+            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
+                <?php echo $uj ? 'Ügyfél létrehozása' : 'Mentés'; ?>
+            </button>
+
+            <?php if ($modal) : ?>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
+            <?php else : ?>
+                <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
+            <?php endif; ?>
+
+            <?php if (!$uj) : ?>
+                <?php
+                $allapot_url = wp_nonce_url(
+                    add_query_arg(
+                        [
+                            'action'    => 'sdh_muhely_ugyfel_allapot',
+                            'id'        => (int) $ugyfel->id,
+                            'ertek'     => (int) $ugyfel->aktiv === 1 ? 0 : 1,
+                            'kontextus' => self::kontextus_ertek(),
+                        ],
+                        admin_url('admin-post.php')
+                    ),
+                    'sdh_muhely_ugyfel_allapot_' . (int) $ugyfel->id
+                );
+                ?>
+                <a class="sdh-gomb sdh-gomb--vilagos" style="margin-left:auto"
+                   href="<?php echo esc_url($allapot_url); ?>">
+                    <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>
+                </a>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * Melyik felületen készül az űrlap.
+     *
+     * AJAX-hívásnál a kontextus nem állapítható meg magától – a
+     * JavaScript küldi el, mert ő tudja, honnan nyitották a popupot.
+     */
+    private static function kontextus_ertek(): string
+    {
+        if (wp_doing_ajax() && isset($_REQUEST['kontextus'])) {
+            return sanitize_key(wp_unslash($_REQUEST['kontextus'])) === 'frontend' ? 'frontend' : 'admin';
+        }
+
+        return SDH_Muhely_Modulok::kontextus();
     }
 
     /* =================================================================
@@ -525,29 +625,13 @@ final class SDH_Muhely_Ugyfel
         return SDH_Muhely_Modulok::visszateres(self::KULCS, $parameterek, self::bekuldes_kontextusa());
     }
 
-    public static function mentes(): void
+    /**
+     * A beküldött mezőkből adatbázisra kész tömb.
+     *
+     * @return array<string, mixed>
+     */
+    private static function adatok_osszeallit(): array
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
-        check_admin_referer('sdh_muhely_ugyfel_mentes', 'sdh_nonce');
-
-        global $wpdb;
-
-        $id  = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-        $nev = isset($_POST['nev']) ? sanitize_text_field(wp_unslash($_POST['nev'])) : '';
-
-        if ($nev === '') {
-            wp_safe_redirect(
-                self::vissza(
-                    array_filter([
-                        'nezet'  => $id > 0 ? 'szerkeszt' : 'uj',
-                        'id'     => $id > 0 ? $id : null,
-                        'uzenet' => 'hianyzo_nev',
-                    ])
-                )
-            );
-            exit;
-        }
-
         $szoveg = static fn (string $mezo): string => isset($_POST[$mezo])
             ? sanitize_text_field(wp_unslash($_POST[$mezo]))
             : '';
@@ -556,7 +640,7 @@ final class SDH_Muhely_Ugyfel
 
         $adatok = [
             'tipus'                   => self::tipus_ervenyes($szoveg('tipus')),
-            'nev'                     => $nev,
+            'nev'                     => $szoveg('nev'),
             'kapcsolattarto'          => $szoveg('kapcsolattarto'),
             'adoszam'                 => $szoveg('adoszam'),
             'telefon'                 => $szoveg('telefon'),
@@ -592,6 +676,19 @@ final class SDH_Muhely_Ugyfel
             $adatok['levelezesi_cim']          = $szoveg('levelezesi_cim');
         }
 
+        return $adatok;
+    }
+
+    /**
+     * Beírja az adatbázisba. Visszatérés: [azonosító, üzenetkulcs] vagy null hibánál.
+     *
+     * @param array<string, mixed> $adatok
+     * @return array{0: int, 1: string}|null
+     */
+    private static function adatbazisba(int $id, array $adatok): ?array
+    {
+        global $wpdb;
+
         if ($id > 0) {
             $eredmeny = $wpdb->update(self::tabla(), $adatok, ['id' => $id]);
             $uzenet   = 'mentve';
@@ -607,12 +704,11 @@ final class SDH_Muhely_Ugyfel
         }
 
         if ($eredmeny === false) {
-            wp_safe_redirect(self::vissza(['uzenet' => 'mentes_hiba']));
-            exit;
+            return null;
         }
 
         // Ügyfélszám pótlása, ha a felhasználó nem adott meg sajátot.
-        if ($id > 0 && $adatok['ugyfel_szam'] === '') {
+        if ($id > 0 && ($adatok['ugyfel_szam'] ?? '') === '') {
             $wpdb->update(
                 self::tabla(),
                 ['ugyfel_szam' => sprintf('U-%06d', $id)],
@@ -620,10 +716,75 @@ final class SDH_Muhely_Ugyfel
             );
         }
 
+        return [$id, $uzenet];
+    }
+
+    /** Teljes oldalas beküldés (JS nélküli tartalék). */
+    public static function mentes(): void
+    {
+        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        check_admin_referer('sdh_muhely_ugyfel_mentes', 'sdh_nonce');
+
+        $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $adatok = self::adatok_osszeallit();
+
+        if ($adatok['nev'] === '') {
+            wp_safe_redirect(
+                self::vissza(
+                    array_filter([
+                        'nezet'  => $id > 0 ? 'szerkeszt' : 'uj',
+                        'id'     => $id > 0 ? $id : null,
+                        'uzenet' => 'hianyzo_nev',
+                    ])
+                )
+            );
+            exit;
+        }
+
+        $eredmeny = self::adatbazisba($id, $adatok);
+
+        if ($eredmeny === null) {
+            wp_safe_redirect(self::vissza(['uzenet' => 'mentes_hiba']));
+            exit;
+        }
+
+        [$uj_id, $uzenet] = $eredmeny;
+
         wp_safe_redirect(
-            self::vissza(['nezet' => 'szerkeszt', 'id' => $id, 'uzenet' => $uzenet])
+            self::vissza(['nezet' => 'szerkeszt', 'id' => $uj_id, 'uzenet' => $uzenet])
         );
         exit;
+    }
+
+    /** Popupos beküldés. */
+    public static function ajax_mentes(): void
+    {
+        check_ajax_referer('sdh_muhely_ugyfel_mentes', 'sdh_nonce');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $adatok = self::adatok_osszeallit();
+
+        if ($adatok['nev'] === '') {
+            wp_send_json_error(['uzenet' => 'A név kitöltése kötelező.']);
+        }
+
+        $eredmeny = self::adatbazisba($id, $adatok);
+
+        if ($eredmeny === null) {
+            wp_send_json_error(['uzenet' => 'Az adatbázis visszautasította a mentést.']);
+        }
+
+        [$uj_id, $uzenet] = $eredmeny;
+
+        // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
+        wp_send_json_success([
+            'id'     => $uj_id,
+            'vissza' => self::vissza(['uzenet' => $uzenet]),
+        ]);
     }
 
     /* =================================================================
@@ -650,8 +811,6 @@ final class SDH_Muhely_Ugyfel
 
         wp_safe_redirect(
             self::vissza([
-                'nezet'  => 'szerkeszt',
-                'id'     => $id,
                 'uzenet' => $ertek === 1 ? 'aktivalva' : 'inaktivalva',
             ])
         );

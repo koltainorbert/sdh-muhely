@@ -133,6 +133,37 @@ final class SDH_Muhely_Admin_UI
             [],
             SDH_MUHELY_VERSION
         );
+
+        wp_enqueue_script(
+            'sdh-muhely-app',
+            SDH_MUHELY_URL . 'assets/app.js',
+            [],
+            SDH_MUHELY_VERSION,
+            true
+        );
+
+        wp_add_inline_script(
+            'sdh-muhely-app',
+            'window.SDH_MUHELY = ' . wp_json_encode(self::js_beallitas('admin')) . ';',
+            'before'
+        );
+    }
+
+    /**
+     * A JavaScriptnek átadott beállítások.
+     *
+     * Egy helyen, mert a két felület ugyanazt az app.js-t használja, csak
+     * más kontextussal.
+     *
+     * @return array<string, string>
+     */
+    public static function js_beallitas(string $kontextus): array
+    {
+        return [
+            'ajax'      => admin_url('admin-ajax.php'),
+            'nonce'     => wp_create_nonce('sdh_muhely_modal'),
+            'kontextus' => $kontextus,
+        ];
     }
 
     /* =================================================================
@@ -142,7 +173,11 @@ final class SDH_Muhely_Admin_UI
     /**
      * Az oldal fejléce: cím, alcím, jobbra igazított gombok.
      *
-     * @param array<int, array{cimke: string, url: string, elsodleges?: bool}> $gombok
+     * Egy gomb kaphat `adatok` kulcsot is: abból data-* attribútumok
+     * lesznek. Így tud egy gomb popupot nyitni, miközben a href-je
+     * JavaScript nélkül is működő oldalra mutat.
+     *
+     * @param array<int, array{cimke: string, url: string, elsodleges?: bool, adatok?: array<string, string>}> $gombok
      */
     public static function fejlec(string $cim, string $alcim = '', array $gombok = []): void
     {
@@ -160,7 +195,12 @@ final class SDH_Muhely_Admin_UI
                 <div class="sdh-fejlec__gombok">
                     <?php foreach ($gombok as $gomb) : ?>
                         <a href="<?php echo esc_url($gomb['url']); ?>"
-                           class="sdh-gomb <?php echo !empty($gomb['elsodleges']) ? 'sdh-gomb--elsodleges' : ''; ?>">
+                           class="sdh-gomb <?php echo !empty($gomb['elsodleges']) ? 'sdh-gomb--elsodleges' : ''; ?>"
+                           <?php
+                            foreach ($gomb['adatok'] ?? [] as $nev => $ertek) {
+                                printf(' data-%s="%s"', esc_attr($nev), esc_attr($ertek));
+                            }
+                           ?>>
                             <?php echo esc_html($gomb['cimke']); ?>
                         </a>
                     <?php endforeach; ?>
@@ -234,13 +274,19 @@ final class SDH_Muhely_Admin_UI
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
         $ugyfel_db    = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
 
-        $gombok = [];
+        $gombok = [
+            [
+                'cimke'      => '+ Új ügyfél',
+                'url'        => SDH_Muhely_Modulok::url('ugyfelek', ['nezet' => 'uj']),
+                'elsodleges' => true,
+                'adatok'     => ['sdh-urlap' => 'ugyfelek', 'sdh-id' => '0'],
+            ],
+        ];
 
         if ($technikai) {
             $gombok[] = [
-                'cimke'      => 'Megnyitás a műhely-felületen ↗',
-                'url'        => SDH_Muhely_Modulok::frontend_url(),
-                'elsodleges' => true,
+                'cimke' => 'Megnyitás a műhely-felületen ↗',
+                'url'   => SDH_Muhely_Modulok::frontend_url(),
             ];
         }
 
