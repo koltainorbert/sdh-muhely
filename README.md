@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.2.0
+- Verziózott adatbázis-séma (`SDH_Muhely_Schema`), aktiváláskor és
+  sémaverzió-váltáskor magától lefut.
+- Közös admin arculat: menüszerkezet, oldalfejléc, értesítések, saját CSS.
+  A modulok az `sdh_muhely_menupontok` szűrőn át jelentkeznek be.
+- Ügyfél-modul: lista kereséssel és lapozással, felvitel/szerkesztés,
+  inaktiválás törlés helyett.
+
 ### 0.1.0
 - A plugin váza: admin nyitóképernyő, verzió- és környezet-kijelzés.
 - A Local + Git munkafolyamat ellenőrzésére.

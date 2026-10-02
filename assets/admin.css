@@ -1,0 +1,457 @@
+/*
+ * SDH Műhely – admin arculat
+ *
+ * Sötét fejléc, piros kiemelés, az sdh.hu stílusához igazítva. A tartalom
+ * világos marad, mert a napi adatbevitel ezen olvashatóbb.
+ *
+ * Minden osztálynév "sdh-" előtaggal, hogy semmi ne ütközzön a WordPress
+ * vagy más bővítmény stílusaival.
+ */
+
+:root {
+    --sdh-piros: #d4231d;
+    --sdh-piros-sotet: #ab1a15;
+    --sdh-sotet: #15181d;
+    --sdh-sotet-vilagos: #23272e;
+    --sdh-szoveg: #1d2327;
+    --sdh-halvany: #646970;
+    --sdh-keret: #dcdfe3;
+    --sdh-hatter: #fff;
+    --sdh-siker: #1a7f37;
+    --sdh-hiba: #b32d2e;
+    --sdh-radius: 10px;
+}
+
+.sdh-wrap {
+    max-width: 1180px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Fejléc                                                              */
+/* ------------------------------------------------------------------ */
+
+.sdh-fejlec {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin: 1.4rem 0 1.5rem;
+    padding: 1.4rem 1.6rem;
+    background: linear-gradient(135deg, var(--sdh-sotet) 0%, var(--sdh-sotet-vilagos) 100%);
+    border-radius: var(--sdh-radius);
+    color: #edeff2;
+}
+
+.sdh-fejlec__kalap {
+    margin: 0 0 .35rem;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--sdh-piros);
+}
+
+.sdh-fejlec__cim {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    color: #fff;
+}
+
+.sdh-fejlec__alcim {
+    margin: .45rem 0 0;
+    max-width: 60ch;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #aeb6c2;
+}
+
+.sdh-fejlec__gombok {
+    display: flex;
+    gap: .5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Gombok                                                              */
+/* ------------------------------------------------------------------ */
+
+.sdh-gomb {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 1rem;
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: 7px;
+    background: transparent;
+    color: #edeff2;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.sdh-gomb:hover,
+.sdh-gomb:focus {
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, .4);
+}
+
+.sdh-gomb--elsodleges {
+    background: var(--sdh-piros);
+    border-color: var(--sdh-piros);
+    color: #fff;
+}
+
+.sdh-gomb--elsodleges:hover,
+.sdh-gomb--elsodleges:focus {
+    background: var(--sdh-piros-sotet);
+    border-color: var(--sdh-piros-sotet);
+    color: #fff;
+}
+
+/* Világos háttéren álló gombok (űrlap lábléce, lista műveletei) */
+.sdh-gomb--vilagos {
+    border-color: var(--sdh-keret);
+    color: var(--sdh-szoveg);
+    background: #fff;
+}
+
+.sdh-gomb--vilagos:hover,
+.sdh-gomb--vilagos:focus {
+    background: #f3f4f6;
+    color: var(--sdh-szoveg);
+    border-color: #c3c7cc;
+}
+
+/* ------------------------------------------------------------------ */
+/* Értesítések                                                         */
+/* ------------------------------------------------------------------ */
+
+.sdh-uzenet {
+    margin: 1.2rem 0 0;
+    padding: .8rem 1rem;
+    border-left: 4px solid;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.sdh-uzenet--siker {
+    border-color: var(--sdh-siker);
+}
+
+.sdh-uzenet--hiba {
+    border-color: var(--sdh-hiba);
+}
+
+/* ------------------------------------------------------------------ */
+/* Áttekintő kártyák                                                   */
+/* ------------------------------------------------------------------ */
+
+.sdh-kartyak {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+}
+
+.sdh-kartya {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: 1.1rem 1.2rem;
+    background: var(--sdh-hatter);
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-radius);
+    text-decoration: none;
+    color: var(--sdh-szoveg);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+a.sdh-kartya:hover,
+a.sdh-kartya:focus {
+    border-color: var(--sdh-piros);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, .06);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-kartya__szam {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+}
+
+.sdh-kartya__cimke {
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-kartya--keszul {
+    opacity: .55;
+}
+
+/* ------------------------------------------------------------------ */
+/* Keresősáv                                                           */
+/* ------------------------------------------------------------------ */
+
+.sdh-kereso {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sdh-kereso input[type="search"] {
+    min-width: 280px;
+    height: 36px;
+}
+
+.sdh-kereso__talalat {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+/* ------------------------------------------------------------------ */
+/* Táblázat                                                            */
+/* ------------------------------------------------------------------ */
+
+.sdh-tabla {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--sdh-hatter);
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-radius);
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.sdh-tabla--keskeny {
+    max-width: 520px;
+}
+
+.sdh-tabla th,
+.sdh-tabla td {
+    padding: .65rem .9rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #eceef0;
+}
+
+.sdh-tabla thead th {
+    background: #f6f7f8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+    white-space: nowrap;
+}
+
+.sdh-tabla tbody tr:last-child th,
+.sdh-tabla tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.sdh-tabla tbody tr:hover {
+    background: #fafbfc;
+}
+
+.sdh-tabla__nev {
+    font-weight: 600;
+}
+
+.sdh-tabla__nev a {
+    text-decoration: none;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-tabla__nev a:hover {
+    color: var(--sdh-piros);
+}
+
+.sdh-tabla__halvany {
+    color: var(--sdh-halvany);
+}
+
+.sdh-tabla__ures {
+    padding: 2.4rem 1rem;
+    text-align: center;
+    color: var(--sdh-halvany);
+}
+
+.sdh-cimke {
+    display: inline-block;
+    padding: .1rem .45rem;
+    border-radius: 4px;
+    background: #eef0f2;
+    font-size: 11px;
+    color: #4b5159;
+    white-space: nowrap;
+}
+
+.sdh-cimke--inaktiv {
+    background: #fbeaea;
+    color: #9a2c2c;
+}
+
+/* ------------------------------------------------------------------ */
+/* Lapozó                                                              */
+/* ------------------------------------------------------------------ */
+
+.sdh-lapozo {
+    display: flex;
+    gap: .3rem;
+    margin-top: 1rem;
+    font-size: 13px;
+}
+
+.sdh-lapozo a,
+.sdh-lapozo span {
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 .65rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--sdh-szoveg);
+    background: #fff;
+}
+
+.sdh-lapozo .sdh-lapozo__aktiv {
+    background: var(--sdh-sotet);
+    border-color: var(--sdh-sotet);
+    color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Űrlap                                                               */
+/* ------------------------------------------------------------------ */
+
+.sdh-urlap {
+    max-width: 880px;
+}
+
+.sdh-doboz {
+    margin-bottom: 1.2rem;
+    padding: 1.2rem 1.4rem 1.4rem;
+    background: var(--sdh-hatter);
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-radius);
+}
+
+.sdh-doboz__cim {
+    margin: 0 0 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid #eceef0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+}
+
+.sdh-mezok {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem 1.2rem;
+}
+
+.sdh-mezo {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+.sdh-mezo--szeles {
+    grid-column: 1 / -1;
+}
+
+.sdh-mezo label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3c434a;
+}
+
+.sdh-mezo input[type="text"],
+.sdh-mezo input[type="email"],
+.sdh-mezo input[type="tel"],
+.sdh-mezo input[type="number"],
+.sdh-mezo select,
+.sdh-mezo textarea {
+    width: 100%;
+    max-width: none;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--sdh-keret);
+}
+
+.sdh-mezo textarea {
+    height: auto;
+    min-height: 90px;
+    padding: .5rem .6rem;
+    line-height: 1.5;
+}
+
+.sdh-mezo__sugo {
+    font-size: 11px;
+    color: var(--sdh-halvany);
+    line-height: 1.5;
+}
+
+.sdh-mezo--jelolo {
+    flex-direction: row;
+    align-items: center;
+    gap: .45rem;
+}
+
+.sdh-mezo--jelolo label {
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.sdh-kotelezo {
+    color: var(--sdh-piros);
+}
+
+.sdh-urlap__lablec {
+    display: flex;
+    gap: .6rem;
+    align-items: center;
+    padding-top: .2rem;
+}
+
+.sdh-urlap__lablec .sdh-gomb--elsodleges {
+    height: 38px;
+    padding: 0 1.4rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Kis képernyő                                                        */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 782px) {
+    .sdh-fejlec {
+        align-items: flex-start;
+    }
+
+    .sdh-kereso input[type="search"] {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+
+    .sdh-tabla__rejtheto {
+        display: none;
+    }
+}
