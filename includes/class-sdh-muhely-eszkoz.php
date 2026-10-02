@@ -35,6 +35,126 @@ final class SDH_Muhely_Eszkoz
         add_action('admin_post_sdh_muhely_eszkoz_mentes', [self::class, 'mentes']);
         add_action('wp_ajax_sdh_muhely_eszkozok_urlap', [self::class, 'ajax_urlap']);
         add_action('wp_ajax_sdh_muhely_eszkozok_ment', [self::class, 'ajax_mentes']);
+        add_action('wp_ajax_sdh_muhely_eszkozok_imei', [self::class, 'ajax_imei']);
+    }
+
+    /* =================================================================
+     * IMEI-kikeresés
+     * ============================================================== */
+
+    /**
+     * Megkeresi a készüléket IMEI alapján, és visszaadja az adatait.
+     *
+     * A saját adatbázisunkban keres: ha a telefon már járt nálunk,
+     * minden kitöltődik, és a mentés a meglévő rekordot frissíti
+     * ahelyett, hogy másodszor is felvinné ugyanazt a készüléket.
+     *
+     * Gyártót és típust az IMEI-ből kiolvasni nem tudunk: ahhoz a
+     * GSMA TAC-adatbázisa kellene, ami fizetős külső szolgáltatás.
+     * Ha van ilyen előfizetésed, be lehet kötni ide.
+     */
+    public static function ajax_imei(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        global $wpdb;
+
+        $imei = isset($_GET['imei'])
+            ? preg_replace('/\D/', '', (string) wp_unslash($_GET['imei']))
+            : '';
+
+        if (strlen((string) $imei) !== 15) {
+            wp_send_json_success(['talalat' => false]);
+        }
+
+        // Kizárjuk azt a rekordot, amit épp szerkesztünk – különben a
+        // saját IMEI-je „találat" lenne a szerkesztés közben.
+        $kizar = isset($_GET['kizar']) ? (int) $_GET['kizar'] : 0;
+
+        $eszkoz_tabla = self::tabla();
+        $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
+
+        $sor = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT e.*, u.nev AS ugyfel_nev
+                 FROM {$eszkoz_tabla} e
+                 LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id
+                 WHERE (e.imei = %s OR e.imei2 = %s) AND e.id <> %d
+                 ORDER BY e.modositva DESC
+                 LIMIT 1",
+                $imei,
+                $imei,
+                $kizar
+            )
+        );
+
+        if ($sor === null) {
+            wp_send_json_success(['talalat' => false, 'ervenyes' => self::imei_ervenyes($imei)]);
+        }
+
+        wp_send_json_success([
+            'talalat'  => true,
+            'ervenyes' => self::imei_ervenyes($imei),
+            'id'       => (int) $sor->id,
+            'megnevez' => self::megnevezes($sor),
+            'utoljara' => $sor->modositva ? mysql2date('Y. m. d.', $sor->modositva) : '',
+            'ugyfel'   => [
+                'id'  => (int) $sor->ugyfel_id,
+                'nev' => (string) ($sor->ugyfel_nev ?? ''),
+            ],
+            'mezok'    => [
+                'kategoria'        => (string) $sor->kategoria,
+                'gyarto'           => (string) $sor->gyarto,
+                'tipus'            => (string) $sor->tipus,
+                'szin'             => (string) $sor->szin,
+                'imei'             => (string) $sor->imei,
+                'imei2'            => (string) $sor->imei2,
+                'sorozatszam'      => (string) $sor->sorozatszam,
+                'zarkod'           => (string) $sor->zarkod,
+                'tartozekok'       => (string) $sor->tartozekok,
+                'atveteli_allapot' => (string) ($sor->atveteli_allapot ?? ''),
+                'megjegyzes'       => (string) ($sor->megjegyzes ?? ''),
+                'garancias'        => (int) $sor->garancias === 1,
+                'vasarlas_datuma'  => self::datum((string) ($sor->vasarlas_datuma ?? '')),
+                'garancia_lejar'   => self::datum((string) ($sor->garancia_lejar ?? '')),
+            ],
+        ]);
+    }
+
+    /**
+     * IMEI ellenőrzőszám (Luhn).
+     *
+     * Nem tiltunk vele semmit – elgépelést jelez, és a pultnál ez
+     * többet ér, mint egy elutasított mentés.
+     */
+    public static function imei_ervenyes(string $imei): bool
+    {
+        if (!preg_match('/^\d{15}$/', $imei)) {
+            return false;
+        }
+
+        $osszeg = 0;
+
+        for ($i = 0; $i < 15; $i++) {
+            $szamjegy = (int) $imei[$i];
+
+            // Hátulról a második számjegytől minden másodikat duplázunk.
+            if ((14 - $i) % 2 === 1) {
+                $szamjegy *= 2;
+
+                if ($szamjegy > 9) {
+                    $szamjegy -= 9;
+                }
+            }
+
+            $osszeg += $szamjegy;
+        }
+
+        return $osszeg % 10 === 0;
     }
 
     private static function tabla(): string
@@ -462,8 +582,12 @@ final class SDH_Muhely_Eszkoz
             <div class="sdh-mezok">
                 <div class="sdh-mezo">
                     <label for="imei">IMEI</label>
-                    <input type="text" name="imei" id="imei" inputmode="numeric"
+                    <input type="text" name="imei" id="imei" inputmode="numeric" maxlength="15"
+                           data-sdh-imei
                            value="<?php echo esc_attr($ert('imei')); ?>">
+                    <span class="sdh-mezo__sugo">
+                        15 számjegy után megnézem, járt-e már nálunk ez a készülék.
+                    </span>
                 </div>
 
                 <div class="sdh-mezo">

@@ -325,6 +325,193 @@
     }
 
     /* ---------------------------------------------------------------- */
+    /* IMEI – kikeresés és kitöltés                                     */
+    /* ---------------------------------------------------------------- */
+
+    var imeiIdozito = null;
+
+    /**
+     * IMEI ellenőrzőszám (Luhn). Elgépelést jelez, nem tilt.
+     */
+    function imeiErvenyes(imei) {
+        if (!/^\d{15}$/.test(imei)) {
+            return false;
+        }
+
+        var osszeg = 0;
+
+        for (var i = 0; i < 15; i++) {
+            var szamjegy = parseInt(imei[i], 10);
+
+            if ((14 - i) % 2 === 1) {
+                szamjegy *= 2;
+
+                if (szamjegy > 9) {
+                    szamjegy -= 9;
+                }
+            }
+
+            osszeg += szamjegy;
+        }
+
+        return osszeg % 10 === 0;
+    }
+
+    function jelzesTorol(urlap) {
+        var regi = urlap.querySelector('.sdh-urlap__jelzes');
+
+        if (regi) {
+            regi.remove();
+        }
+    }
+
+    function jelzes(urlap, tipus, szoveg) {
+        jelzesTorol(urlap);
+
+        var doboz = document.createElement('div');
+        doboz.className = 'sdh-uzenet sdh-uzenet--' + tipus + ' sdh-urlap__jelzes';
+        doboz.textContent = szoveg;
+
+        urlap.insertBefore(doboz, urlap.firstChild);
+    }
+
+    /**
+     * A megtalált készülék adatait beírja az űrlapba.
+     */
+    function urlapKitolt(urlap, eredmeny) {
+        Object.keys(eredmeny.mezok).forEach(function (nev) {
+            var mezo = urlap.querySelector('[name="' + nev + '"]');
+
+            if (!mezo) {
+                return;
+            }
+
+            if (mezo.type === 'checkbox') {
+                mezo.checked = !!eredmeny.mezok[nev];
+
+                return;
+            }
+
+            mezo.value = eredmeny.mezok[nev];
+        });
+
+        // Ügyfélválasztó: a rejtett azonosító és a látható név együtt.
+        var valaszto = urlap.querySelector('.sdh-valaszto');
+
+        if (valaszto && eredmeny.ugyfel && eredmeny.ugyfel.id) {
+            valaszto.querySelector('input[type="hidden"]').value = eredmeny.ugyfel.id;
+            valaszto.querySelector('.sdh-valaszto__mezo').value = eredmeny.ugyfel.nev;
+        }
+
+        // Innentől ezt a rekordot szerkesztjük – nem viszünk fel másodszor
+        // ugyanazt a készüléket.
+        var azonosito = urlap.querySelector('input[name="id"]');
+
+        if (azonosito) {
+            azonosito.value = eredmeny.id;
+        }
+
+        var gomb = urlap.querySelector('button[type="submit"]');
+
+        if (gomb) {
+            gomb.textContent = 'Mentés';
+        }
+    }
+
+    function imeiKereses(urlap, imei) {
+        var azonosito = urlap.querySelector('input[name="id"]');
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_eszkozok_imei');
+        cim.searchParams.set('imei', imei);
+        cim.searchParams.set('kizar', azonosito ? azonosito.value : '0');
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                var eredmeny = valasz && valasz.success ? valasz.data : null;
+
+                if (!eredmeny) {
+                    return;
+                }
+
+                if (!eredmeny.talalat) {
+                    if (eredmeny.ervenyes === false) {
+                        jelzes(
+                            urlap,
+                            'figyelem',
+                            'Ez a 15 számjegy nem ad ki érvényes IMEI-t – nézd meg, nem gépelted-e el. ' +
+                                'Menteni így is tudod.'
+                        );
+                    } else {
+                        jelzes(urlap, 'siker', 'Ez a készülék még nem járt nálunk – új rekord lesz.');
+                    }
+
+                    return;
+                }
+
+                urlapKitolt(urlap, eredmeny);
+
+                jelzes(
+                    urlap,
+                    'siker',
+                    'Ez a készülék már szerepel: ' + eredmeny.megnevez +
+                        (eredmeny.ugyfel && eredmeny.ugyfel.nev ? ' – ' + eredmeny.ugyfel.nev : '') +
+                        (eredmeny.utoljara ? ' (utoljára ' + eredmeny.utoljara + ')' : '') +
+                        '. Az adatait betöltöttem, a mentés ezt a rekordot frissíti.'
+                );
+            })
+            .catch(function () {
+                // A kikeresés kényelmi funkció: ha nem megy, a kézi
+                // kitöltés attól még működik.
+            });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target.closest('[data-sdh-imei]');
+
+        if (!mezo) {
+            return;
+        }
+
+        // Az IMEI csak számjegy – a vonalkódolvasók néha szóközt is küldenek.
+        var tiszta = mezo.value.replace(/\D/g, '');
+
+        if (tiszta !== mezo.value) {
+            mezo.value = tiszta;
+        }
+
+        var urlap = mezo.closest('form');
+
+        if (!urlap) {
+            return;
+        }
+
+        window.clearTimeout(imeiIdozito);
+
+        if (tiszta.length !== 15) {
+            jelzesTorol(urlap);
+
+            return;
+        }
+
+        if (!imeiErvenyes(tiszta)) {
+            jelzes(
+                urlap,
+                'figyelem',
+                'Ez a 15 számjegy nem ad ki érvényes IMEI-t – nézd meg, nem gépelted-e el.'
+            );
+        }
+
+        imeiIdozito = window.setTimeout(function () {
+            imeiKereses(urlap, tiszta);
+        }, 150);
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 

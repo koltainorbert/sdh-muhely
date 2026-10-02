@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.6.0
+- IMEI-kikeresés: a 15. számjegy beírása után a rendszer megnézi, járt-e
+  már nálunk a készülék. Ha igen, kitölti az adatait és az ügyfelet, és a
+  mentés a meglévő rekordot frissíti – nem keletkezik duplikátum.
+- IMEI ellenőrzőszám (Luhn) figyelmeztetésként: elgépelést jelez, de nem
+  tiltja a mentést.
+- Az IMEI mező csak számjegyet fogad (vonalkódolvasó szóközeit kiszűri).
+
 ### 0.5.0
 - Eszköz-modul: ügyfélhez kötött készülék (gyártó, típus, IMEI,
   sorozatszám, zárkód, tartozékok, átvételkori állapot, garancia).
