@@ -493,6 +493,7 @@
                 }
 
                 urlapKitolt(urlap, eredmeny);
+                kepFrissit(urlap);
 
                 jelzes(
                     urlap,
@@ -811,6 +812,140 @@
     if (document.readyState !== 'loading') {
         mintaKeres(document);
     }
+
+    /* ---------------------------------------------------------------- */
+    /* Gyári adatok lekérdezése a szolgáltatótól                        */
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * Beírja a kapott mezőket, és frissíti a képet.
+     *
+     * A már kitöltött mezőket nem írja felül: amit a kollégád kézzel
+     * beírt, az erősebb, mint amit a szolgáltató gondol.
+     */
+    function mezoketKitolt(urlap, mezok, felulir) {
+        var beirt = 0;
+
+        Object.keys(mezok).forEach(function (nev) {
+            var mezo = urlap.querySelector('[name="' + nev + '"]');
+
+            if (!mezo || !mezok[nev]) {
+                return;
+            }
+
+            if (mezo.value && !felulir) {
+                return;
+            }
+
+            mezo.value = mezok[nev];
+            beirt++;
+        });
+
+        kepFrissit(urlap);
+
+        return beirt;
+    }
+
+    function kepFrissit(urlap) {
+        var mezo = urlap.querySelector('[data-sdh-kep-mezo]');
+        var doboz = urlap.querySelector('[data-sdh-kep]');
+
+        if (!mezo || !doboz) {
+            return;
+        }
+
+        doboz.innerHTML = '';
+
+        if (!mezo.value) {
+            return;
+        }
+
+        var kep = document.createElement('img');
+        kep.src = mezo.value;
+        kep.alt = '';
+        doboz.appendChild(kep);
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest('[data-sdh-imei-lekerdez]');
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var urlap = gomb.closest('form');
+        var imeiMezo = urlap.querySelector('[data-sdh-imei]');
+        var imei = imeiMezo ? imeiMezo.value.replace(/\D/g, '') : '';
+
+        if (imei.length !== 15) {
+            jelzes(urlap, 'figyelem', 'Előbb írd be a teljes, 15 számjegyű IMEI-t.');
+
+            return;
+        }
+
+        var eredeti = gomb.textContent;
+        gomb.disabled = true;
+        gomb.textContent = 'Lekérdezés…';
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_imei_lekerdez');
+        cim.searchParams.set('imei', imei);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (valasz) {
+                gomb.disabled = false;
+                gomb.textContent = eredeti;
+
+                if (!valasz || !valasz.success) {
+                    jelzes(
+                        urlap,
+                        'hiba',
+                        (valasz && valasz.data && valasz.data.uzenet) ||
+                            'A lekérdezés nem sikerült.'
+                    );
+
+                    return;
+                }
+
+                // A szolgáltató adata hitelesebb, mint a korábbi
+                // becslésünk, ezért itt felülírunk.
+                var beirt = mezoketKitolt(urlap, valasz.data.mezok, true);
+
+                var jelzo = urlap.querySelector('input[name="lekerdezve"]');
+
+                if (!jelzo) {
+                    jelzo = document.createElement('input');
+                    jelzo.type = 'hidden';
+                    jelzo.name = 'lekerdezve';
+                    urlap.appendChild(jelzo);
+                }
+
+                jelzo.value = '1';
+
+                jelzes(
+                    urlap,
+                    beirt ? 'siker' : 'figyelem',
+                    beirt
+                        ? 'Gyári adatok betöltve – ' + beirt + ' mező frissült.'
+                        : 'A szolgáltató válaszolt, de nem adott használható mezőt.'
+                );
+            })
+            .catch(function (ok) {
+                gomb.disabled = false;
+                gomb.textContent = eredeti;
+                jelzes(urlap, 'hiba', 'A lekérdezés nem sikerült. ' + ok.message);
+            });
+    });
+
+    document.addEventListener('input', function (esemeny) {
+        if (esemeny.target.closest('[data-sdh-kep-mezo]')) {
+            kepFrissit(esemeny.target.closest('form'));
+        }
+    });
 
     /* ---------------------------------------------------------------- */
     /* Indítás                                                          */

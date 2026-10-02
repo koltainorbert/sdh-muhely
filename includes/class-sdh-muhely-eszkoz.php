@@ -123,6 +123,12 @@ final class SDH_Muhely_Eszkoz
                 'imei'             => (string) $sor->imei,
                 'imei2'            => (string) $sor->imei2,
                 'sorozatszam'      => (string) $sor->sorozatszam,
+                'modell_szam'      => (string) $sor->modell_szam,
+                'garancia_allapot' => (string) $sor->garancia_allapot,
+                'gyartas_datuma'   => self::datum((string) ($sor->gyartas_datuma ?? '')),
+                'orszag'           => (string) $sor->orszag,
+                'szolgaltato'      => (string) $sor->szolgaltato,
+                'kep_url'          => (string) $sor->kep_url,
                 'zarkod'           => (string) $sor->zarkod,
                 'tartozekok'       => (string) $sor->tartozekok,
                 'atveteli_allapot' => (string) ($sor->atveteli_allapot ?? ''),
@@ -316,6 +322,7 @@ final class SDH_Muhely_Eszkoz
             <table class="sdh-tabla">
                 <thead>
                     <tr>
+                        <th style="width:60px"></th>
                         <th>Készülék (gyári szám)</th>
                         <th>Ügyfél</th>
                         <th>IMEI / sorozatszám</th>
@@ -327,7 +334,7 @@ final class SDH_Muhely_Eszkoz
                 <tbody>
                 <?php if ($sorok === []) : ?>
                     <tr>
-                        <td colspan="6" class="sdh-tabla__ures">
+                        <td colspan="7" class="sdh-tabla__ures">
                             <?php if ($kereses !== '' || $ugyfel_id > 0) : ?>
                                 Erre a szűrésre nincs találat.
                             <?php else : ?>
@@ -342,6 +349,12 @@ final class SDH_Muhely_Eszkoz
                     <?php foreach ($sorok as $sor) : ?>
                         <?php $szerkeszt_url = self::url(['nezet' => 'szerkeszt', 'id' => (int) $sor->id]); ?>
                         <tr>
+                            <td>
+                                <?php if ($sor->kep_url !== '') : ?>
+                                    <img class="sdh-tabla__kep"
+                                         src="<?php echo esc_url($sor->kep_url); ?>" alt="" loading="lazy">
+                                <?php endif; ?>
+                            </td>
                             <td class="sdh-tabla__nev">
                                 <a href="<?php echo esc_url($szerkeszt_url); ?>"
                                    data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
@@ -615,6 +628,12 @@ final class SDH_Muhely_Eszkoz
                     <span class="sdh-mezo__sugo">
                         15 számjegy után megnézem, járt-e már nálunk ez a készülék.
                     </span>
+                    <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos"
+                                data-sdh-imei-lekerdez style="margin-top:.35rem">
+                            Gyári adatok lekérdezése
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="sdh-mezo">
@@ -634,6 +653,13 @@ final class SDH_Muhely_Eszkoz
                     <input type="text" name="zarkod" id="zarkod"
                            value="<?php echo esc_attr($ert('zarkod')); ?>">
                     <span class="sdh-mezo__sugo">E nélkül a javítás nagy része nem tesztelhető.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="modell_szam">Modellszám</label>
+                    <input type="text" name="modell_szam" id="modell_szam"
+                           value="<?php echo esc_attr($ert('modell_szam')); ?>">
+                    <span class="sdh-mezo__sugo">A teljes gyári kód, pl. SM-A505FZBCAFG.</span>
                 </div>
 
                 <div class="sdh-mezo sdh-mezo--szeles">
@@ -665,6 +691,41 @@ final class SDH_Muhely_Eszkoz
                     <label for="garancia_lejar">Garancia lejár</label>
                     <input type="date" name="garancia_lejar" id="garancia_lejar"
                            value="<?php echo esc_attr(self::datum($ert('garancia_lejar'))); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="garancia_allapot">Garancia állapota</label>
+                    <input type="text" name="garancia_allapot" id="garancia_allapot"
+                           value="<?php echo esc_attr($ert('garancia_allapot')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="gyartas_datuma">Gyártás dátuma</label>
+                    <input type="date" name="gyartas_datuma" id="gyartas_datuma"
+                           value="<?php echo esc_attr(self::datum($ert('gyartas_datuma'))); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="orszag">Ország</label>
+                    <input type="text" name="orszag" id="orszag"
+                           value="<?php echo esc_attr($ert('orszag')); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szolgaltato">Szolgáltató / SIM-zár</label>
+                    <input type="text" name="szolgaltato" id="szolgaltato"
+                           value="<?php echo esc_attr($ert('szolgaltato')); ?>">
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="kep_url">Készülékkép (URL)</label>
+                    <input type="text" name="kep_url" id="kep_url" data-sdh-kep-mezo
+                           value="<?php echo esc_attr($ert('kep_url')); ?>">
+                    <div class="sdh-kep" data-sdh-kep>
+                        <?php if ($ert('kep_url') !== '') : ?>
+                            <img src="<?php echo esc_url($ert('kep_url')); ?>" alt="">
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="sdh-mezo sdh-mezo--szeles">
@@ -810,6 +871,14 @@ final class SDH_Muhely_Eszkoz
             'imei'             => $szoveg('imei'),
             'imei2'            => $szoveg('imei2'),
             'sorozatszam'      => $szoveg('sorozatszam'),
+            'modell_szam'      => $szoveg('modell_szam'),
+            'garancia_allapot' => $szoveg('garancia_allapot'),
+            'gyartas_datuma'   => self::datum_vagy_null($szoveg('gyartas_datuma')),
+            'orszag'           => $szoveg('orszag'),
+            'szolgaltato'      => $szoveg('szolgaltato'),
+            'kep_url'          => isset($_POST['kep_url'])
+                ? esc_url_raw(wp_unslash($_POST['kep_url']))
+                : '',
             'szin'             => $szoveg('szin'),
             'zarkod'           => $szoveg('zarkod'),
             'minta'            => self::minta_tisztit($szoveg('minta')),
@@ -824,6 +893,9 @@ final class SDH_Muhely_Eszkoz
                 ? sanitize_textarea_field(wp_unslash($_POST['megjegyzes']))
                 : '',
             'modositva'        => current_time('mysql'),
+            'lekerdezve'       => isset($_POST['lekerdezve']) && $_POST['lekerdezve'] === '1'
+                ? current_time('mysql')
+                : null,
         ];
     }
 

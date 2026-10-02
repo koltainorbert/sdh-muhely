@@ -57,6 +57,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.11.0
+- Teljes gyári adatlap: modellszám, garancia állapota, gyártási dátum,
+  ország, szolgáltató, készülékkép – az eszköz-űrlapon és a listában.
+- Külső IMEI-szolgáltató beköthető (SDH Műhely → Beállítások): végpont
+  URL `{imei}` és `{kulcs}` jelölőkkel, API-kulcs, be/ki kapcsoló.
+  Nincs szolgáltató beégetve – más szerviz más előfizetést használhat.
+- A válasz feldolgozása JSON-t és „Címke: érték" szövegblokkot is ismer,
+  a dátumokat egységes alakra hozza.
+- Ez az egyetlen pont, ami internetet igényel; nélküle minden megy tovább.
+
 ### 0.10.0
 - Feloldó minta rajzolható mező: 3×3 pöttyrács, egérrel behúzható piros
   vonal, nyilakkal az irányról és gyűrűvel a kezdőponton.

@@ -634,6 +634,39 @@ a.sdh-kartya:focus {
 }
 
 /* ------------------------------------------------------------------ */
+/* Készülékkép                                                         */
+/* ------------------------------------------------------------------ */
+
+.sdh-kep:empty {
+    display: none;
+}
+
+.sdh-kep {
+    margin-top: .5rem;
+    padding: .7rem;
+    background: #fff;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.sdh-kep img {
+    display: block;
+    max-width: 150px;
+    max-height: 190px;
+    height: auto;
+}
+
+.sdh-tabla__kep {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid #eceef0;
+    border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------ */
 /* Kis képernyő                                                        */
 /* ------------------------------------------------------------------ */
 

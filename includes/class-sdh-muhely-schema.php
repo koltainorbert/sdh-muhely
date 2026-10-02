@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.7.0';
+    public const DB_VERSION = '0.8.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -172,6 +172,13 @@ final class SDH_Muhely_Schema
             imei varchar(40) NOT NULL default '',
             imei2 varchar(40) NOT NULL default '',
             sorozatszam varchar(60) NOT NULL default '',
+            modell_szam varchar(60) NOT NULL default '',
+            garancia_allapot varchar(60) NOT NULL default '',
+            gyartas_datuma date NULL,
+            orszag varchar(80) NOT NULL default '',
+            szolgaltato varchar(80) NOT NULL default '',
+            kep_url varchar(255) NOT NULL default '',
+            lekerdezve datetime NULL,
             szin varchar(40) NOT NULL default '',
             zarkod varchar(60) NOT NULL default '',
             minta varchar(20) NOT NULL default '',
