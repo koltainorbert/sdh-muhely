@@ -1,0 +1,42 @@
+# =================================================================
+#  SDH Műhely – mit NE kövessen a Git
+#
+#  A repo gyökere maga a plugin mappa (wp-content/plugins/sdh-muhely),
+#  tehát csak a plugin kódját verziózzuk, nem az egész WordPресst.
+# =================================================================
+
+# --- Operációs rendszer szemét ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Szerkesztő / IDE ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+*~
+*.swp
+*.bak
+*.tmp
+
+# --- Függőségek (ha később jön Composer / npm) ---
+/vendor/
+/node_modules/
+composer.lock
+package-lock.json
+
+# --- Build és fordítási melléktermékek ---
+/dist/
+/build/
+*.map
+
+# --- Helyi, gépfüggő beállítások (ide semmi titkot!) ---
+.env
+.env.local
+*.local.php
+
+# --- Naplók, ideiglenes kimenetek ---
+*.log
+/tmp/
