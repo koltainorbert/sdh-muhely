@@ -5,6 +5,10 @@
  * A rendszer első valódi modulja: ügyfelek listája kereséssel és lapozással,
  * felvitel és szerkesztés egy űrlapon, inaktiválás törlés helyett.
  *
+ * Ugyanez a kód fut a saját műhely-felületen és a wp-adminban is. A modul
+ * nem tudja, melyiken van – minden URL-t a SDH_Muhely_Modulok épít, az
+ * pedig ismeri a kontextust.
+ *
  * Miért nincs törlés: egy ügyfélre később munkalapok hivatkoznak. Ha az
  * ügyfél eltűnne, a munkalap története értelmezhetetlen lenne. Ezért az
  * ügyfél inaktívvá válik – kikerül a napi listából, de a régi munkalapok
@@ -19,40 +23,37 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Muhely_Ugyfel
 {
-    /** Az admin-oldal slugja. */
-    public const SLUG = 'sdh-muhely-ugyfelek';
+    /** A modul kulcsa az URL-ekben és a menüben. */
+    public const KULCS = 'ugyfelek';
 
     /** Hány sor egy oldalon. */
     private const OLDAL_MERET = 25;
 
     public static function init(): void
     {
-        add_filter('sdh_muhely_menupontok', [self::class, 'menupont']);
+        SDH_Muhely_Modulok::regisztral([
+            'kulcs'   => self::KULCS,
+            'cim'     => 'Ügyfelek',
+            'render'  => [self::class, 'oldal'],
+            'sorrend' => 10,
+        ]);
 
-        // Az űrlap ide küldi be magát; mentés után átirányítunk.
+        // Az űrlap mindkét felületről ide küld be; mentés után átirányítunk.
         add_action('admin_post_sdh_muhely_ugyfel_mentes', [self::class, 'mentes']);
         add_action('admin_post_sdh_muhely_ugyfel_allapot', [self::class, 'allapot_valtas']);
-    }
-
-    /**
-     * @param array<int, array<string, mixed>> $pontok
-     * @return array<int, array<string, mixed>>
-     */
-    public static function menupont(array $pontok): array
-    {
-        $pontok[] = [
-            'slug'     => self::SLUG,
-            'cim'      => 'Ügyfelek',
-            'callback' => [self::class, 'oldal'],
-            'sorrend'  => 10,
-        ];
-
-        return $pontok;
     }
 
     private static function tabla(): string
     {
         return SDH_Muhely_Schema::tabla('ugyfel');
+    }
+
+    /**
+     * @param array<string, mixed> $parameterek
+     */
+    private static function url(array $parameterek = []): string
+    {
+        return SDH_Muhely_Modulok::url(self::KULCS, $parameterek);
     }
 
     /* =================================================================
@@ -82,20 +83,17 @@ final class SDH_Muhely_Ugyfel
     {
         global $wpdb;
 
-        $kereses  = isset($_GET['k']) ? sanitize_text_field(wp_unslash($_GET['k'])) : '';
-        $inaktiv  = !empty($_GET['inaktiv']);
-        $oldal    = isset($_GET['oldalszam']) ? max(1, (int) $_GET['oldalszam']) : 1;
-        $eltolas  = ($oldal - 1) * self::OLDAL_MERET;
+        $kereses = isset($_GET['k']) ? sanitize_text_field(wp_unslash($_GET['k'])) : '';
+        $inaktiv = !empty($_GET['inaktiv']);
+        $oldal   = isset($_GET['oldalszam']) ? max(1, (int) $_GET['oldalszam']) : 1;
+        $eltolas = ($oldal - 1) * self::OLDAL_MERET;
 
         $tabla = self::tabla();
 
         // A feltételeket külön építjük, hogy a számláló és a lekérdezés
         // ugyanazt lássa.
-        $feltetelek = [];
-        $ertekek    = [];
-
-        $feltetelek[] = 'aktiv = %d';
-        $ertekek[]    = $inaktiv ? 0 : 1;
+        $feltetelek = ['aktiv = %d'];
+        $ertekek    = [$inaktiv ? 0 : 1];
 
         if ($kereses !== '') {
             $minta = '%' . $wpdb->esc_like($kereses) . '%';
@@ -124,7 +122,7 @@ final class SDH_Muhely_Ugyfel
         $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
 
         ?>
-        <div class="wrap sdh-wrap">
+        <div class="sdh-wrap">
             <?php
             SDH_Muhely_Admin_UI::uzenet();
             SDH_Muhely_Admin_UI::fejlec(
@@ -133,15 +131,17 @@ final class SDH_Muhely_Ugyfel
                 [
                     [
                         'cimke'      => '+ Új ügyfél',
-                        'url'        => SDH_Muhely_Admin_UI::url(self::SLUG, ['nezet' => 'uj']),
+                        'url'        => self::url(['nezet' => 'uj']),
                         'elsodleges' => true,
                     ],
                 ]
             );
             ?>
 
-            <form method="get" class="sdh-kereso">
-                <input type="hidden" name="page" value="<?php echo esc_attr(self::SLUG); ?>">
+            <form method="get" class="sdh-kereso"
+                  action="<?php echo esc_url(SDH_Muhely_Modulok::urlap_cel(self::KULCS)); ?>">
+                <?php SDH_Muhely_Modulok::urlap_rejtett(self::KULCS); ?>
+
                 <?php if ($inaktiv) : ?>
                     <input type="hidden" name="inaktiv" value="1">
                 <?php endif; ?>
@@ -155,13 +155,13 @@ final class SDH_Muhely_Ugyfel
 
                 <?php if ($kereses !== '') : ?>
                     <a class="sdh-gomb sdh-gomb--vilagos"
-                       href="<?php echo esc_url(SDH_Muhely_Admin_UI::url(self::SLUG, $inaktiv ? ['inaktiv' => 1] : [])); ?>">
+                       href="<?php echo esc_url(self::url($inaktiv ? ['inaktiv' => 1] : [])); ?>">
                         Szűrő törlése
                     </a>
                 <?php endif; ?>
 
                 <a class="sdh-gomb sdh-gomb--vilagos"
-                   href="<?php echo esc_url(SDH_Muhely_Admin_UI::url(self::SLUG, $inaktiv ? [] : ['inaktiv' => 1])); ?>">
+                   href="<?php echo esc_url(self::url($inaktiv ? [] : ['inaktiv' => 1])); ?>">
                     <?php echo $inaktiv ? 'Aktív ügyfelek' : 'Inaktívak'; ?>
                 </a>
 
@@ -196,12 +196,7 @@ final class SDH_Muhely_Ugyfel
                     </tr>
                 <?php else : ?>
                     <?php foreach ($sorok as $sor) : ?>
-                        <?php
-                        $szerkeszt_url = SDH_Muhely_Admin_UI::url(
-                            self::SLUG,
-                            ['nezet' => 'szerkeszt', 'id' => (int) $sor->id]
-                        );
-                        ?>
+                        <?php $szerkeszt_url = self::url(['nezet' => 'szerkeszt', 'id' => (int) $sor->id]); ?>
                         <tr>
                             <td class="sdh-tabla__nev">
                                 <a href="<?php echo esc_url($szerkeszt_url); ?>">
@@ -245,13 +240,15 @@ final class SDH_Muhely_Ugyfel
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
                             <?php
-                            $lap_url = SDH_Muhely_Admin_UI::url(
-                                self::SLUG,
-                                array_filter([
-                                    'oldalszam' => $i,
-                                    'k'         => $kereses !== '' ? $kereses : null,
-                                    'inaktiv'   => $inaktiv ? 1 : null,
-                                ], static fn ($ertek): bool => $ertek !== null)
+                            $lap_url = self::url(
+                                array_filter(
+                                    [
+                                        'oldalszam' => $i,
+                                        'k'         => $kereses !== '' ? $kereses : null,
+                                        'inaktiv'   => $inaktiv ? 1 : null,
+                                    ],
+                                    static fn ($ertek): bool => $ertek !== null
+                                )
                             );
                             ?>
                             <a href="<?php echo esc_url($lap_url); ?>"><?php echo (int) $i; ?></a>
@@ -281,9 +278,7 @@ final class SDH_Muhely_Ugyfel
             );
 
             if ($ugyfel === null) {
-                wp_safe_redirect(
-                    SDH_Muhely_Admin_UI::url(self::SLUG, ['uzenet' => 'nincs_ilyen'])
-                );
+                wp_safe_redirect(self::url(['uzenet' => 'nincs_ilyen']));
                 exit;
             }
         }
@@ -297,7 +292,7 @@ final class SDH_Muhely_Ugyfel
         $uj = $ugyfel === null;
 
         ?>
-        <div class="wrap sdh-wrap">
+        <div class="sdh-wrap">
             <?php
             SDH_Muhely_Admin_UI::uzenet();
             SDH_Muhely_Admin_UI::fejlec(
@@ -308,7 +303,7 @@ final class SDH_Muhely_Ugyfel
                 [
                     [
                         'cimke' => '← Vissza a listához',
-                        'url'   => SDH_Muhely_Admin_UI::url(self::SLUG),
+                        'url'   => self::url(),
                     ],
                 ]
             );
@@ -317,6 +312,8 @@ final class SDH_Muhely_Ugyfel
             <form class="sdh-urlap" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_ugyfel_mentes">
                 <input type="hidden" name="id" value="<?php echo (int) ($ugyfel->id ?? 0); ?>">
+                <input type="hidden" name="kontextus"
+                       value="<?php echo esc_attr(SDH_Muhely_Modulok::kontextus()); ?>">
                 <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
 
                 <div class="sdh-doboz">
@@ -473,8 +470,7 @@ final class SDH_Muhely_Ugyfel
                         <?php echo $uj ? 'Ügyfél létrehozása' : 'Mentés'; ?>
                     </button>
 
-                    <a class="sdh-gomb sdh-gomb--vilagos"
-                       href="<?php echo esc_url(SDH_Muhely_Admin_UI::url(self::SLUG)); ?>">
+                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">
                         Mégsem
                     </a>
 
@@ -483,9 +479,10 @@ final class SDH_Muhely_Ugyfel
                         $allapot_url = wp_nonce_url(
                             add_query_arg(
                                 [
-                                    'action' => 'sdh_muhely_ugyfel_allapot',
-                                    'id'     => (int) $ugyfel->id,
-                                    'ertek'  => (int) $ugyfel->aktiv === 1 ? 0 : 1,
+                                    'action'    => 'sdh_muhely_ugyfel_allapot',
+                                    'id'        => (int) $ugyfel->id,
+                                    'ertek'     => (int) $ugyfel->aktiv === 1 ? 0 : 1,
+                                    'kontextus' => SDH_Muhely_Modulok::kontextus(),
                                 ],
                                 admin_url('admin-post.php')
                             ),
@@ -508,6 +505,26 @@ final class SDH_Muhely_Ugyfel
      * Mentés
      * ============================================================== */
 
+    /**
+     * Honnan jött a beküldés – oda is megy vissza.
+     */
+    private static function bekuldes_kontextusa(): string
+    {
+        $kontextus = isset($_REQUEST['kontextus'])
+            ? sanitize_key(wp_unslash($_REQUEST['kontextus']))
+            : 'admin';
+
+        return $kontextus === 'frontend' ? 'frontend' : 'admin';
+    }
+
+    /**
+     * @param array<string, mixed> $parameterek
+     */
+    private static function vissza(array $parameterek): string
+    {
+        return SDH_Muhely_Modulok::visszateres(self::KULCS, $parameterek, self::bekuldes_kontextusa());
+    }
+
     public static function mentes(): void
     {
         SDH_Muhely_Admin_UI::jog_ellenoriz();
@@ -520,8 +537,7 @@ final class SDH_Muhely_Ugyfel
 
         if ($nev === '') {
             wp_safe_redirect(
-                SDH_Muhely_Admin_UI::url(
-                    self::SLUG,
+                self::vissza(
                     array_filter([
                         'nezet'  => $id > 0 ? 'szerkeszt' : 'uj',
                         'id'     => $id > 0 ? $id : null,
@@ -591,9 +607,7 @@ final class SDH_Muhely_Ugyfel
         }
 
         if ($eredmeny === false) {
-            wp_safe_redirect(
-                SDH_Muhely_Admin_UI::url(self::SLUG, ['uzenet' => 'mentes_hiba'])
-            );
+            wp_safe_redirect(self::vissza(['uzenet' => 'mentes_hiba']));
             exit;
         }
 
@@ -607,10 +621,7 @@ final class SDH_Muhely_Ugyfel
         }
 
         wp_safe_redirect(
-            SDH_Muhely_Admin_UI::url(
-                self::SLUG,
-                ['nezet' => 'szerkeszt', 'id' => $id, 'uzenet' => $uzenet]
-            )
+            self::vissza(['nezet' => 'szerkeszt', 'id' => $id, 'uzenet' => $uzenet])
         );
         exit;
     }
@@ -638,14 +649,11 @@ final class SDH_Muhely_Ugyfel
         );
 
         wp_safe_redirect(
-            SDH_Muhely_Admin_UI::url(
-                self::SLUG,
-                [
-                    'nezet'  => 'szerkeszt',
-                    'id'     => $id,
-                    'uzenet' => $ertek === 1 ? 'aktivalva' : 'inaktivalva',
-                ]
-            )
+            self::vissza([
+                'nezet'  => 'szerkeszt',
+                'id'     => $id,
+                'uzenet' => $ertek === 1 ? 'aktivalva' : 'inaktivalva',
+            ])
         );
         exit;
     }

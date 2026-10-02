@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.3.0
+- Saját műhely-felület a `/muhely/` útvonalon: nem használja a sablont,
+  bejelentkezés nélkül átirányít, saját fejléccel és menüvel.
+- Modul-nyilvántartás (`SDH_Muhely_Modulok`): a modulok egyszer íródnak
+  meg, és mindkét felületen megjelennek. Az URL-építés kontextusfüggő.
+- Az ügyfél-modul mindkét felületen fut; a mentés oda tér vissza,
+  ahonnan a beküldés jött.
+
 ### 0.2.0
 - Verziózott adatbázis-séma (`SDH_Muhely_Schema`), aktiváláskor és
   sémaverzió-váltáskor magától lefut.

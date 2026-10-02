@@ -1,0 +1,239 @@
+/*
+ * SDH Műhely – frontend alkalmazás.
+ *
+ * Ez a réteg az admin.css fölé jön: az admin.css adja a komponenseket
+ * (táblázat, űrlap, gomb, kártya), ez a fájl pedig a saját felület
+ * keretét – fejléc, menü, törzs. Így a két felület ugyanúgy néz ki,
+ * és egy helyen kell javítani, ha valami elcsúszik.
+ */
+
+* {
+    box-sizing: border-box;
+}
+
+body.sdh-app {
+    margin: 0;
+    padding: 0;
+    background: #f1f2f4;
+    color: var(--sdh-szoveg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------ */
+/* Fejléc                                                              */
+/* ------------------------------------------------------------------ */
+
+.sdh-app__fejlec {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 0 1.6rem;
+    height: 56px;
+    background: var(--sdh-sotet);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+}
+
+.sdh-app__logo {
+    flex: 0 0 auto;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sdh-app__logo span {
+    color: var(--sdh-piros);
+}
+
+.sdh-app__menu {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.sdh-app__menu::-webkit-scrollbar {
+    display: none;
+}
+
+.sdh-app__link {
+    display: inline-flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 .85rem;
+    border-bottom: 2px solid transparent;
+    color: #aeb6c2;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .15s ease, border-color .15s ease;
+}
+
+.sdh-app__link:hover,
+.sdh-app__link:focus {
+    color: #fff;
+}
+
+.sdh-app__link--aktiv {
+    color: #fff;
+    border-bottom-color: var(--sdh-piros);
+}
+
+.sdh-app__link--keszul {
+    color: #5d646e;
+    cursor: default;
+}
+
+.sdh-app__jobb {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin-left: auto;
+}
+
+.sdh-app__felhasznalo {
+    font-size: 12px;
+    color: #aeb6c2;
+    white-space: nowrap;
+}
+
+.sdh-app__kilep {
+    font-size: 12px;
+    color: #aeb6c2;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.sdh-app__kilep:hover,
+.sdh-app__kilep:focus {
+    color: #fff;
+    border-bottom-color: rgba(255, 255, 255, .4);
+}
+
+/* ------------------------------------------------------------------ */
+/* Törzs                                                               */
+/* ------------------------------------------------------------------ */
+
+.sdh-app__torzs {
+    padding: 0 1.6rem 3rem;
+}
+
+.sdh-app .sdh-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+/* A frontendnek nincs szüksége a WordPress .wrap margóira. */
+.sdh-app .sdh-fejlec {
+    margin-top: 1.6rem;
+}
+
+/* Az űrlapmezők az adminban a WordPress alapstílusából élnek – itt
+   nincs ilyen, úgyhogy megadjuk magunknak. */
+.sdh-app input[type="text"],
+.sdh-app input[type="search"],
+.sdh-app input[type="email"],
+.sdh-app input[type="tel"],
+.sdh-app input[type="number"],
+.sdh-app select,
+.sdh-app textarea {
+    padding: .4rem .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--sdh-szoveg);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.sdh-app input[type="text"]:focus,
+.sdh-app input[type="search"]:focus,
+.sdh-app input[type="email"]:focus,
+.sdh-app input[type="tel"]:focus,
+.sdh-app input[type="number"]:focus,
+.sdh-app select:focus,
+.sdh-app textarea:focus {
+    outline: 2px solid rgba(212, 35, 29, .35);
+    outline-offset: 1px;
+    border-color: var(--sdh-piros);
+}
+
+.sdh-app button {
+    font-family: inherit;
+}
+
+.sdh-app a {
+    color: var(--sdh-piros);
+}
+
+/* ------------------------------------------------------------------ */
+/* Középre zárt üzenetoldal (403)                                      */
+/* ------------------------------------------------------------------ */
+
+.sdh-app--uzenet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.sdh-app__kozep {
+    max-width: 30rem;
+    padding: 2rem 2.2rem;
+    background: #fff;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-radius);
+    text-align: center;
+}
+
+.sdh-app__kozep h1 {
+    margin: .2rem 0 .6rem;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.sdh-app__kozep p {
+    margin: 0 0 1.2rem;
+    color: var(--sdh-halvany);
+    font-size: 13px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Kis képernyő                                                        */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 782px) {
+    .sdh-app__fejlec {
+        flex-wrap: wrap;
+        height: auto;
+        padding: .7rem 1rem 0;
+        gap: .8rem;
+    }
+
+    .sdh-app__menu {
+        order: 3;
+        width: 100%;
+    }
+
+    .sdh-app__link {
+        height: 42px;
+    }
+
+    .sdh-app__torzs {
+        padding: 0 1rem 2.5rem;
+    }
+}

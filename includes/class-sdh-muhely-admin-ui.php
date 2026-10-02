@@ -1,15 +1,14 @@
 <?php
 /**
- * Közös admin arculat.
+ * Közös arculat.
  *
- * Itt születik a menüszerkezet és az a néhány segédfüggvény, amire minden
- * modulnak szüksége van: jogosultság-ellenőrzés, oldalfejléc, értesítések,
- * a saját CSS betöltése. A modulok nem regisztrálnak menüt maguknak –
- * ide jelentkeznek be az `sdh_muhely_menupontok` szűrőn keresztül.
+ * A rendszer két felületen jelenik meg – a saját frontendjén és a
+ * wp-adminban –, és mindkettő ezeket az építőelemeket használja:
+ * oldalfejléc, értesítés, jogosultság-ellenőrzés, áttekintő tartalom.
  *
- * Miért így: a cél az, hogy a napi munka ne a wp-admin alapértelmezett
- * képernyőin menjen. Ezért minden oldal ugyanazt a vázat kapja, és a
- * WordPress sallangjából annyi látszik, amennyi muszáj.
+ * A modulok nem regisztrálnak menüt maguknak: a SDH_Muhely_Modulok
+ * nyilvántartásába jelentkeznek be, és az admin-menü abból épül fel.
+ * Így egy modul megírásakor nem kell tudni, hány felületen fog látszani.
  *
  * @package SDH_Muhely
  */
@@ -25,7 +24,8 @@ final class SDH_Muhely_Admin_UI
 
     public static function init(): void
     {
-        add_action('admin_menu', [self::class, 'menu'], 9);
+        // Későn fut, hogy addigra minden modul bejelentkezzen.
+        add_action('admin_menu', [self::class, 'menu'], 20);
         add_action('admin_enqueue_scripts', [self::class, 'eszkozok']);
     }
 
@@ -40,9 +40,6 @@ final class SDH_Muhely_Admin_UI
         return (string) apply_filters('sdh_muhely_jogosultsag', 'manage_options');
     }
 
-    /**
-     * Megállítja a kérést, ha a belépett felhasználónak nincs jogosultsága.
-     */
     public static function jog_ellenoriz(): void
     {
         if (!current_user_can(self::jog())) {
@@ -51,16 +48,19 @@ final class SDH_Muhely_Admin_UI
     }
 
     /**
-     * Egy admin-oldal URL-je a pluginon belül.
+     * Régi hívásokhoz megtartott URL-segéd.
      *
-     * @param string               $slug   Az oldal slugja (pl. 'sdh-muhely-ugyfelek').
-     * @param array<string, mixed> $parameterek További lekérdezési paraméterek.
+     * Új kódban a SDH_Muhely_Modulok::url() a helyes, mert az tudja,
+     * melyik felületen vagyunk.
+     *
+     * @param array<string, mixed> $parameterek
      */
     public static function url(string $slug, array $parameterek = []): string
     {
-        $parameterek = array_merge(['page' => $slug], $parameterek);
-
-        return add_query_arg($parameterek, admin_url('admin.php'));
+        return add_query_arg(
+            array_merge(['page' => $slug], $parameterek),
+            admin_url('admin.php')
+        );
     }
 
     /* =================================================================
@@ -76,52 +76,41 @@ final class SDH_Muhely_Admin_UI
             'SDH Műhely',
             $jog,
             self::FOMENU,
-            [self::class, 'attekintes'],
+            [self::class, 'admin_attekintes'],
             'dashicons-hammer',
             3
         );
 
-        // Az első almenü ugyanaz az oldal, csak beszédesebb névvel.
         add_submenu_page(
             self::FOMENU,
             'Áttekintés',
             'Áttekintés',
             $jog,
             self::FOMENU,
-            [self::class, 'attekintes']
+            [self::class, 'admin_attekintes']
         );
 
-        /**
-         * A modulok itt jelentkeznek be egy-egy menüponttal.
-         *
-         * Egy elem: [
-         *   'slug'    => 'sdh-muhely-ugyfelek',
-         *   'cim'     => 'Ügyfelek',
-         *   'callback'=> callable,
-         *   'sorrend' => 10,
-         * ]
-         *
-         * @var array<int, array<string, mixed>> $menupontok
-         */
-        $menupontok = apply_filters('sdh_muhely_menupontok', []);
-
-        usort(
-            $menupontok,
-            static fn (array $a, array $b): int => ($a['sorrend'] ?? 50) <=> ($b['sorrend'] ?? 50)
-        );
-
-        foreach ($menupontok as $pont) {
-            if (empty($pont['slug']) || empty($pont['callback'])) {
+        foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
+            if (!empty($modul['keszul'])) {
                 continue;
             }
 
+            $render = $modul['render'];
+
             add_submenu_page(
                 self::FOMENU,
-                (string) ($pont['cim'] ?? $pont['slug']),
-                (string) ($pont['cim'] ?? $pont['slug']),
+                (string) $modul['cim'],
+                (string) $modul['cim'],
                 $jog,
-                (string) $pont['slug'],
-                $pont['callback']
+                self::FOMENU . '-' . $kulcs,
+                static function () use ($render): void {
+                    self::jog_ellenoriz();
+                    SDH_Muhely_Modulok::kontextus_beallit('admin');
+
+                    echo '<div class="wrap">';
+                    call_user_func($render);
+                    echo '</div>';
+                }
             );
         }
     }
@@ -130,10 +119,6 @@ final class SDH_Muhely_Admin_UI
      * Eszközök (CSS)
      * ============================================================== */
 
-    /**
-     * A saját CSS csak a plugin oldalain töltődik be – a többi
-     * admin-képernyőt nem piszkáljuk.
-     */
     public static function eszkozok(string $hook): void
     {
         $oldal = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
@@ -200,13 +185,13 @@ final class SDH_Muhely_Admin_UI
         }
 
         $uzenetek = [
-            'mentve'       => ['siker', 'Elmentve.'],
-            'letrehozva'   => ['siker', 'Az ügyfél létrejött.'],
-            'inaktivalva'  => ['siker', 'Az ügyfél inaktívra állítva.'],
-            'aktivalva'    => ['siker', 'Az ügyfél újra aktív.'],
-            'hianyzo_nev'  => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
-            'nincs_ilyen'  => ['hiba',  'Nincs ilyen ügyfél. Lehet, hogy időközben törölték.'],
-            'mentes_hiba'  => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
+            'mentve'      => ['siker', 'Elmentve.'],
+            'letrehozva'  => ['siker', 'Az ügyfél létrejött.'],
+            'inaktivalva' => ['siker', 'Az ügyfél inaktívra állítva.'],
+            'aktivalva'   => ['siker', 'Az ügyfél újra aktív.'],
+            'hianyzo_nev' => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
+            'nincs_ilyen' => ['hiba',  'Nincs ilyen ügyfél. Lehet, hogy időközben törölték.'],
+            'mentes_hiba' => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
         ];
 
         if (!isset($uzenetek[$kulcs])) {
@@ -223,30 +208,55 @@ final class SDH_Muhely_Admin_UI
     }
 
     /* =================================================================
-     * Áttekintő képernyő
+     * Áttekintés
      * ============================================================== */
 
-    public static function attekintes(): void
+    /** A wp-admines változat: kontextus beállítása, majd a közös tartalom. */
+    public static function admin_attekintes(): void
     {
         self::jog_ellenoriz();
+        SDH_Muhely_Modulok::kontextus_beallit('admin');
 
+        echo '<div class="wrap">';
+        self::attekintes_tartalom(true);
+        echo '</div>';
+    }
+
+    /**
+     * Az áttekintő képernyő tartalma. Mindkét felület ezt használja.
+     *
+     * @param bool $technikai Mutassa-e a verzió-táblázatot (adminban igen).
+     */
+    public static function attekintes_tartalom(bool $technikai = false): void
+    {
         global $wpdb;
 
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
         $ugyfel_db    = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
 
+        $gombok = [];
+
+        if ($technikai) {
+            $gombok[] = [
+                'cimke'      => 'Megnyitás a műhely-felületen ↗',
+                'url'        => SDH_Muhely_Modulok::frontend_url(),
+                'elsodleges' => true,
+            ];
+        }
+
         ?>
-        <div class="wrap sdh-wrap">
+        <div class="sdh-wrap">
             <?php
             self::uzenet();
             self::fejlec(
                 'Áttekintés',
-                'A belső műhely- és ügyfélkezelő rendszer. Innen érhető el minden modul.'
+                'A belső műhely- és ügyfélkezelő rendszer. Innen érhető el minden modul.',
+                $gombok
             );
             ?>
 
             <div class="sdh-kartyak">
-                <a class="sdh-kartya" href="<?php echo esc_url(self::url('sdh-muhely-ugyfelek')); ?>">
+                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('ugyfelek')); ?>">
                     <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($ugyfel_db)); ?></span>
                     <span class="sdh-kartya__cimke">aktív ügyfél</span>
                 </a>
@@ -262,14 +272,19 @@ final class SDH_Muhely_Admin_UI
                 </div>
             </div>
 
-            <table class="sdh-tabla sdh-tabla--keskeny">
-                <tbody>
-                    <tr><th>Plugin verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
-                    <tr><th>Séma verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>
-                    <tr><th>WordPress</th><td><code><?php echo esc_html(get_bloginfo('version')); ?></code></td></tr>
-                    <tr><th>PHP</th><td><code><?php echo esc_html(PHP_VERSION); ?></code></td></tr>
-                </tbody>
-            </table>
+            <?php if ($technikai) : ?>
+                <table class="sdh-tabla sdh-tabla--keskeny">
+                    <tbody>
+                        <tr><th>Plugin verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
+                        <tr><th>Séma verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>
+                        <tr><th>Műhely-felület</th><td><code><?php
+                            echo esc_html(SDH_Muhely_Modulok::frontend_url());
+                        ?></code></td></tr>
+                        <tr><th>WordPress</th><td><code><?php echo esc_html(get_bloginfo('version')); ?></code></td></tr>
+                        <tr><th>PHP</th><td><code><?php echo esc_html(PHP_VERSION); ?></code></td></tr>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
         <?php
     }
