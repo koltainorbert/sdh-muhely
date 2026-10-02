@@ -27,6 +27,127 @@ final class SDH_Muhely_Admin_UI
         // Későn fut, hogy addigra minden modul bejelentkezzen.
         add_action('admin_menu', [self::class, 'menu'], 20);
         add_action('admin_enqueue_scripts', [self::class, 'eszkozok']);
+        add_action('wp_ajax_sdh_muhely_globalis_kereso', [self::class, 'ajax_kereso']);
+    }
+
+    /* =================================================================
+     * Globális kereső
+     * ============================================================== */
+
+    /**
+     * A fejlécben lévő kereső: egyszerre néz ügyfelet és eszközt.
+     *
+     * A pultnál ez a leggyakoribb mozdulat – az ügyfél mond egy nevet,
+     * egy telefonszámot vagy egy IMEI-t, és abból kell eljutni a
+     * rekordhoz. Ezért nem modulonként külön keresünk.
+     */
+    public static function ajax_kereso(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(self::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        global $wpdb;
+
+        $q = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+
+        if (mb_strlen($q) < 2) {
+            wp_send_json_success([]);
+        }
+
+        // A kereső a frontendről jön, de adminból is hívható – a
+        // találatok oda mutassanak, ahonnan kerestek.
+        SDH_Muhely_Modulok::kontextus_beallit(
+            isset($_GET['kontextus']) && sanitize_key(wp_unslash($_GET['kontextus'])) === 'admin'
+                ? 'admin'
+                : 'frontend'
+        );
+
+        $minta = '%' . $wpdb->esc_like($q) . '%';
+
+        $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
+        $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
+
+        $ugyfelek = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT id, nev, telefon, szamlazasi_telepules, ugyfel_szam
+                 FROM {$ugyfel_tabla}
+                 WHERE aktiv = 1
+                   AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
+                        OR email LIKE %s OR ugyfel_szam LIKE %s)
+                 ORDER BY nev ASC LIMIT 5",
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta
+            )
+        );
+
+        $eszkozok = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT e.id, e.gyarto, e.tipus, e.megnevezes, e.imei, e.sorozatszam,
+                        u.nev AS ugyfel_nev
+                 FROM {$eszkoz_tabla} e
+                 LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id
+                 WHERE e.aktiv = 1
+                   AND (e.imei LIKE %s OR e.imei2 LIKE %s OR e.sorozatszam LIKE %s
+                        OR e.tipus LIKE %s OR e.megnevezes LIKE %s OR e.modell_szam LIKE %s)
+                 ORDER BY e.modositva DESC LIMIT 5",
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta
+            )
+        );
+
+        $csoportok = [];
+
+        if ($ugyfelek !== []) {
+            $talalatok = [];
+
+            foreach ($ugyfelek as $sor) {
+                $talalatok[] = [
+                    'cim'     => $sor->nev,
+                    'reszlet' => implode(
+                        ' · ',
+                        array_filter([$sor->telefon, $sor->szamlazasi_telepules, $sor->ugyfel_szam])
+                    ),
+                    'url'     => SDH_Muhely_Modulok::url(
+                        SDH_Muhely_Ugyfel::KULCS,
+                        ['nezet' => 'szerkeszt', 'id' => (int) $sor->id]
+                    ),
+                ];
+            }
+
+            $csoportok[] = ['cim' => 'Ügyfelek', 'talalatok' => $talalatok];
+        }
+
+        if ($eszkozok !== []) {
+            $talalatok = [];
+
+            foreach ($eszkozok as $sor) {
+                $talalatok[] = [
+                    'cim'     => trim($sor->gyarto . ' ' . $sor->tipus) ?: 'Névtelen eszköz',
+                    'reszlet' => implode(
+                        ' · ',
+                        array_filter([$sor->megnevezes, $sor->imei ?: $sor->sorozatszam, $sor->ugyfel_nev])
+                    ),
+                    'url'     => SDH_Muhely_Modulok::url(
+                        SDH_Muhely_Eszkoz::KULCS,
+                        ['nezet' => 'szerkeszt', 'id' => (int) $sor->id]
+                    ),
+                ];
+            }
+
+            $csoportok[] = ['cim' => 'Eszközök', 'talalatok' => $talalatok];
+        }
+
+        wp_send_json_success($csoportok);
     }
 
     /**

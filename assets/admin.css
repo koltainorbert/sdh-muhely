@@ -1,34 +1,134 @@
 /*
- * SDH Műhely – admin arculat
+ * SDH Műhely – formanyelv.
  *
- * Sötét fejléc, piros kiemelés, az sdh.hu stílusához igazítva. A tartalom
- * világos marad, mert a napi adatbevitel ezen olvashatóbb.
+ * Ez a fájl két dolgot tartalmaz: a színváltozókat (világos és sötét
+ * módra, választható kiemelő színnel) és a komponenseket, amiket minden
+ * modul használ – gomb, kártya, táblázat, űrlap, modál.
  *
- * Minden osztálynév "sdh-" előtaggal, hogy semmi ne ütközzön a WordPress
- * vagy más bővítmény stílusaival.
+ * Mindkét felület ezt tölti be: a saját műhely-felület és a wp-admin is.
+ * A váz (oldalsáv, fejléc) az app.css-ben van, az csak a frontendnek kell.
+ *
+ * Betűkészlet: szándékosan rendszerbetű. A rendszernek internet nélkül
+ * is futnia kell az irodai szerveren, egy webfont-hívás ott az első
+ * betöltésnél elakadna, és a felület betű nélkül maradna.
  */
 
+/* ================================================================== */
+/* Színek – világos mód                                                */
+/* ================================================================== */
+
 :root {
-    --sdh-piros: #d4231d;
-    --sdh-piros-sotet: #ab1a15;
-    --sdh-sotet: #15181d;
-    --sdh-sotet-vilagos: #23272e;
-    --sdh-szoveg: #1d2327;
-    --sdh-halvany: #646970;
-    --sdh-keret: #dcdfe3;
-    --sdh-hatter: #fff;
-    --sdh-siker: #1a7f37;
-    --sdh-hiba: #b32d2e;
-    --sdh-radius: 10px;
+    /* Kiemelő szín. A data-accent attribútum írja felül. */
+    --sdh-accent: #d4231d;
+    --sdh-accent-sotet: #ab1a15;
+    --sdh-accent-halvany: rgba(212, 35, 29, .1);
+
+    --sdh-vaszon: #f6f7f9;
+    --sdh-felulet: #ffffff;
+    --sdh-felulet-2: #f1f3f5;
+    --sdh-keret: #e4e7ec;
+    --sdh-keret-eros: #d2d7de;
+
+    --sdh-szoveg: #16191d;
+    --sdh-szoveg-2: #4b5159;
+    --sdh-halvany: #6b7280;
+
+    --sdh-siker: #16794a;
+    --sdh-hiba: #be2f2f;
+    --sdh-figyelem: #a96500;
+
+    --sdh-arnyek: 0 1px 2px rgba(16, 19, 23, .05);
+    --sdh-arnyek-emelt: 0 10px 30px rgba(16, 19, 23, .12);
+
+    --sdh-r: 8px;
+    --sdh-r-nagy: 12px;
+
+    /* Régi nevek, hogy a korábbi kód ne törjön. */
+    --sdh-piros: var(--sdh-accent);
+    --sdh-piros-sotet: var(--sdh-accent-sotet);
+    --sdh-sotet: #1b1f24;
+    --sdh-sotet-vilagos: #2a2f36;
+    --sdh-hatter: var(--sdh-felulet);
+    --sdh-radius: var(--sdh-r);
+}
+
+/* Választható kiemelő színek – a mintán látott módon. */
+:root[data-accent="kek"] {
+    --sdh-accent: #2563eb;
+    --sdh-accent-sotet: #1d4ed8;
+    --sdh-accent-halvany: rgba(37, 99, 235, .1);
+}
+
+:root[data-accent="smaragd"] {
+    --sdh-accent: #047857;
+    --sdh-accent-sotet: #036046;
+    --sdh-accent-halvany: rgba(4, 120, 87, .1);
+}
+
+:root[data-accent="ibolya"] {
+    --sdh-accent: #6d28d9;
+    --sdh-accent-sotet: #5b21b6;
+    --sdh-accent-halvany: rgba(109, 40, 217, .1);
+}
+
+:root[data-accent="borostyan"] {
+    --sdh-accent: #b45309;
+    --sdh-accent-sotet: #92400e;
+    --sdh-accent-halvany: rgba(180, 83, 9, .1);
+}
+
+:root[data-accent="palaszurke"] {
+    --sdh-accent: #475569;
+    --sdh-accent-sotet: #334155;
+    --sdh-accent-halvany: rgba(71, 85, 105, .1);
+}
+
+/* ================================================================== */
+/* Színek – sötét mód                                                  */
+/* ================================================================== */
+
+:root[data-theme="dark"] {
+    --sdh-vaszon: #121417;
+    --sdh-felulet: #1a1d21;
+    --sdh-felulet-2: #22262b;
+    --sdh-keret: #2b3036;
+    --sdh-keret-eros: #3a4047;
+
+    --sdh-szoveg: #e8eaed;
+    --sdh-szoveg-2: #b9bfc7;
+    --sdh-halvany: #868e99;
+
+    --sdh-siker: #4ade80;
+    --sdh-hiba: #f87171;
+    --sdh-figyelem: #fbbf24;
+
+    --sdh-arnyek: 0 1px 2px rgba(0, 0, 0, .4);
+    --sdh-arnyek-emelt: 0 10px 30px rgba(0, 0, 0, .55);
+
+    --sdh-sotet: #0d0f12;
+    --sdh-sotet-vilagos: #1a1d21;
+}
+
+/* ================================================================== */
+/* Alaptipográfia                                                      */
+/* ================================================================== */
+
+.sdh-wrap,
+.sdh-app,
+.sdh-modal {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "tnum" 0;
 }
 
 .sdh-wrap {
-    max-width: 1180px;
+    max-width: 1320px;
+    color: var(--sdh-szoveg);
 }
 
-/* ------------------------------------------------------------------ */
-/* Fejléc                                                              */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* Oldalfejléc                                                         */
+/* ================================================================== */
 
 .sdh-fejlec {
     display: flex;
@@ -36,38 +136,36 @@
     gap: 1rem;
     align-items: flex-end;
     justify-content: space-between;
-    margin: 1.4rem 0 1.5rem;
-    padding: 1.4rem 1.6rem;
-    background: linear-gradient(135deg, var(--sdh-sotet) 0%, var(--sdh-sotet-vilagos) 100%);
-    border-radius: var(--sdh-radius);
-    color: #edeff2;
+    margin: 0 0 1.4rem;
+    padding: 0 0 1rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: none;
+    border-radius: 0;
+    color: inherit;
 }
 
+/* A „kalap" felirat a régi fejlécben volt; a vázban már a logó viszi,
+   ezért itt elrejtjük, hogy ne ismételjük magunkat. */
 .sdh-fejlec__kalap {
-    margin: 0 0 .35rem;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--sdh-piros);
+    display: none;
 }
 
 .sdh-fejlec__cim {
     margin: 0;
     padding: 0;
-    font-size: 25px;
-    line-height: 1.2;
+    font-size: 21px;
+    line-height: 1.25;
     font-weight: 600;
-    letter-spacing: -.02em;
-    color: #fff;
+    letter-spacing: -.015em;
+    color: var(--sdh-szoveg);
 }
 
 .sdh-fejlec__alcim {
-    margin: .45rem 0 0;
-    max-width: 60ch;
+    margin: .3rem 0 0;
+    max-width: 68ch;
     font-size: 13px;
     line-height: 1.6;
-    color: #aeb6c2;
+    color: var(--sdh-halvany);
 }
 
 .sdh-fejlec__gombok {
@@ -75,126 +173,134 @@
     gap: .5rem;
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Gombok                                                              */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-gomb {
     display: inline-flex;
     align-items: center;
-    height: 36px;
-    padding: 0 1rem;
-    border: 1px solid rgba(255, 255, 255, .22);
+    gap: .4rem;
+    height: 34px;
+    padding: 0 .85rem;
+    border: 1px solid var(--sdh-keret-eros);
     border-radius: 7px;
-    background: transparent;
-    color: #edeff2;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
     font-size: 13px;
     font-weight: 500;
     text-decoration: none;
+    white-space: nowrap;
     cursor: pointer;
-    transition: background .15s ease, border-color .15s ease;
+    transition: background .12s ease, border-color .12s ease;
 }
 
 .sdh-gomb:hover,
-.sdh-gomb:focus {
-    background: rgba(255, 255, 255, .1);
-    color: #fff;
-    border-color: rgba(255, 255, 255, .4);
+.sdh-gomb:focus-visible {
+    background: var(--sdh-felulet-2);
+    border-color: var(--sdh-keret-eros);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-gomb:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
 }
 
 .sdh-gomb--elsodleges {
-    background: var(--sdh-piros);
-    border-color: var(--sdh-piros);
+    background: var(--sdh-accent);
+    border-color: var(--sdh-accent);
     color: #fff;
 }
 
 .sdh-gomb--elsodleges:hover,
-.sdh-gomb--elsodleges:focus {
-    background: var(--sdh-piros-sotet);
-    border-color: var(--sdh-piros-sotet);
+.sdh-gomb--elsodleges:focus-visible {
+    background: var(--sdh-accent-sotet);
+    border-color: var(--sdh-accent-sotet);
     color: #fff;
 }
 
-/* Világos háttéren álló gombok (űrlap lábléce, lista műveletei) */
+/* Régi módosító – ma már ez az alap. */
 .sdh-gomb--vilagos {
-    border-color: var(--sdh-keret);
-    color: var(--sdh-szoveg);
-    background: #fff;
+    background: var(--sdh-felulet);
 }
 
-.sdh-gomb--vilagos:hover,
-.sdh-gomb--vilagos:focus {
-    background: #f3f4f6;
-    color: var(--sdh-szoveg);
-    border-color: #c3c7cc;
+.sdh-gomb[disabled] {
+    opacity: .55;
+    cursor: default;
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Értesítések                                                         */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-uzenet {
-    margin: 1.2rem 0 0;
-    padding: .8rem 1rem;
-    border-left: 4px solid;
-    border-radius: 6px;
-    background: #fff;
+    display: flex;
+    gap: .5rem;
+    margin: 0 0 1.2rem;
+    padding: .7rem .9rem;
+    border: 1px solid var(--sdh-keret);
+    border-left: 3px solid var(--sdh-halvany);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 .sdh-uzenet--siker {
-    border-color: var(--sdh-siker);
+    border-left-color: var(--sdh-siker);
 }
 
 .sdh-uzenet--hiba {
-    border-color: var(--sdh-hiba);
+    border-left-color: var(--sdh-hiba);
 }
 
 .sdh-uzenet--figyelem {
-    border-color: #bb7a00;
+    border-left-color: var(--sdh-figyelem);
 }
 
 .sdh-urlap__jelzes {
     margin: 0 0 1rem;
 }
 
-/* ------------------------------------------------------------------ */
-/* Áttekintő kártyák                                                   */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* Kártyák                                                             */
+/* ================================================================== */
 
 .sdh-kartyak {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: .9rem;
+    margin-bottom: 1.5rem;
 }
 
 .sdh-kartya {
     display: flex;
     flex-direction: column;
-    gap: .25rem;
-    padding: 1.1rem 1.2rem;
-    background: var(--sdh-hatter);
+    gap: .15rem;
+    padding: 1rem 1.1rem;
+    background: var(--sdh-felulet);
     border: 1px solid var(--sdh-keret);
-    border-radius: var(--sdh-radius);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek);
     text-decoration: none;
     color: var(--sdh-szoveg);
-    transition: border-color .15s ease, box-shadow .15s ease;
+    transition: border-color .12s ease;
 }
 
 a.sdh-kartya:hover,
-a.sdh-kartya:focus {
-    border-color: var(--sdh-piros);
-    box-shadow: 0 1px 10px rgba(0, 0, 0, .06);
+a.sdh-kartya:focus-visible {
+    border-color: var(--sdh-accent);
     color: var(--sdh-szoveg);
 }
 
 .sdh-kartya__szam {
-    font-size: 30px;
+    font-size: 27px;
     font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -.02em;
+    line-height: 1.15;
+    letter-spacing: -.025em;
+    font-variant-numeric: tabular-nums;
 }
 
 .sdh-kartya__cimke {
@@ -203,45 +309,48 @@ a.sdh-kartya:focus {
 }
 
 .sdh-kartya--keszul {
-    opacity: .55;
+    opacity: .5;
 }
 
-/* ------------------------------------------------------------------ */
-/* Keresősáv                                                           */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* Keresősáv a listák fölött                                           */
+/* ================================================================== */
 
 .sdh-kereso {
     display: flex;
     flex-wrap: wrap;
     gap: .5rem;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: .9rem;
 }
 
 .sdh-kereso input[type="search"] {
-    min-width: 280px;
-    height: 36px;
+    min-width: 300px;
+    height: 34px;
 }
 
 .sdh-kereso__talalat {
     margin-left: auto;
     font-size: 12px;
     color: var(--sdh-halvany);
+    font-variant-numeric: tabular-nums;
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Táblázat                                                            */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-tabla {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background: var(--sdh-hatter);
+    background: var(--sdh-felulet);
     border: 1px solid var(--sdh-keret);
-    border-radius: var(--sdh-radius);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek);
     overflow: hidden;
     font-size: 13px;
+    color: var(--sdh-szoveg);
 }
 
 .sdh-tabla--keskeny {
@@ -250,18 +359,20 @@ a.sdh-kartya:focus {
 
 .sdh-tabla th,
 .sdh-tabla td {
-    padding: .65rem .9rem;
+    padding: .6rem .9rem;
     text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid #eceef0;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--sdh-keret);
 }
 
 .sdh-tabla thead th {
-    background: #f6f7f8;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    padding-top: .55rem;
+    padding-bottom: .55rem;
+    background: var(--sdh-felulet-2);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--sdh-halvany);
     white-space: nowrap;
 }
@@ -272,7 +383,7 @@ a.sdh-kartya:focus {
 }
 
 .sdh-tabla tbody tr:hover {
-    background: #fafbfc;
+    background: var(--sdh-felulet-2);
 }
 
 .sdh-tabla__nev {
@@ -285,42 +396,52 @@ a.sdh-kartya:focus {
 }
 
 .sdh-tabla__nev a:hover {
-    color: var(--sdh-piros);
+    color: var(--sdh-accent);
 }
 
 .sdh-tabla__halvany {
     color: var(--sdh-halvany);
+    font-weight: 400;
 }
 
 .sdh-tabla__ures {
-    padding: 2.4rem 1rem;
+    padding: 3rem 1rem;
     text-align: center;
     color: var(--sdh-halvany);
 }
 
+.sdh-tabla code {
+    background: none;
+    padding: 0;
+    font-size: 12px;
+    color: var(--sdh-szoveg-2);
+}
+
 .sdh-cimke {
     display: inline-block;
-    padding: .1rem .45rem;
-    border-radius: 4px;
-    background: #eef0f2;
+    padding: .12rem .45rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 5px;
+    background: var(--sdh-felulet-2);
     font-size: 11px;
-    color: #4b5159;
+    color: var(--sdh-szoveg-2);
     white-space: nowrap;
 }
 
 .sdh-cimke--inaktiv {
-    background: #fbeaea;
-    color: #9a2c2c;
+    border-color: rgba(190, 47, 47, .3);
+    background: rgba(190, 47, 47, .08);
+    color: var(--sdh-hiba);
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Lapozó                                                              */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-lapozo {
     display: flex;
-    gap: .3rem;
-    margin-top: 1rem;
+    gap: .25rem;
+    margin-top: .9rem;
     font-size: 13px;
 }
 
@@ -328,58 +449,67 @@ a.sdh-kartya:focus {
 .sdh-lapozo span {
     display: inline-flex;
     align-items: center;
+    min-width: 30px;
     height: 30px;
-    padding: 0 .65rem;
+    padding: 0 .55rem;
+    justify-content: center;
     border: 1px solid var(--sdh-keret);
     border-radius: 6px;
     text-decoration: none;
+    color: var(--sdh-szoveg-2);
+    background: var(--sdh-felulet);
+}
+
+.sdh-lapozo a:hover {
+    border-color: var(--sdh-keret-eros);
     color: var(--sdh-szoveg);
-    background: #fff;
 }
 
 .sdh-lapozo .sdh-lapozo__aktiv {
-    background: var(--sdh-sotet);
-    border-color: var(--sdh-sotet);
+    background: var(--sdh-accent);
+    border-color: var(--sdh-accent);
     color: #fff;
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Űrlap                                                               */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-urlap {
-    max-width: 880px;
+    max-width: 920px;
 }
 
 .sdh-doboz {
-    margin-bottom: 1.2rem;
-    padding: 1.2rem 1.4rem 1.4rem;
-    background: var(--sdh-hatter);
+    margin-bottom: 1rem;
+    padding: 1.1rem 1.2rem 1.3rem;
+    background: var(--sdh-felulet);
     border: 1px solid var(--sdh-keret);
-    border-radius: var(--sdh-radius);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek);
 }
 
 .sdh-doboz__cim {
     margin: 0 0 1rem;
-    padding-bottom: .6rem;
-    border-bottom: 1px solid #eceef0;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--sdh-halvany);
+    padding: 0 0 .6rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--sdh-szoveg);
 }
 
 .sdh-mezok {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 1rem 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: .9rem 1.1rem;
 }
 
 .sdh-mezo {
     display: flex;
     flex-direction: column;
     gap: .3rem;
+    min-width: 0;
 }
 
 .sdh-mezo--szeles {
@@ -388,28 +518,43 @@ a.sdh-kartya:focus {
 
 .sdh-mezo label {
     font-size: 12px;
-    font-weight: 600;
-    color: #3c434a;
+    font-weight: 500;
+    color: var(--sdh-szoveg-2);
 }
 
 .sdh-mezo input[type="text"],
 .sdh-mezo input[type="email"],
 .sdh-mezo input[type="tel"],
 .sdh-mezo input[type="number"],
+.sdh-mezo input[type="date"],
 .sdh-mezo select,
-.sdh-mezo textarea {
+.sdh-mezo textarea,
+.sdh-valaszto__mezo {
     width: 100%;
     max-width: none;
-    height: 36px;
-    border-radius: 6px;
-    border: 1px solid var(--sdh-keret);
+    height: 34px;
+    padding: 0 .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
 }
 
 .sdh-mezo textarea {
     height: auto;
-    min-height: 90px;
-    padding: .5rem .6rem;
-    line-height: 1.5;
+    min-height: 84px;
+    padding: .45rem .55rem;
+    line-height: 1.55;
+}
+
+.sdh-mezo input:focus,
+.sdh-mezo select:focus,
+.sdh-mezo textarea:focus,
+.sdh-valaszto__mezo:focus {
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+    border-color: var(--sdh-accent);
 }
 
 .sdh-mezo__sugo {
@@ -427,127 +572,96 @@ a.sdh-kartya:focus {
 .sdh-mezo--jelolo label {
     font-weight: 400;
     font-size: 13px;
+    color: var(--sdh-szoveg);
 }
 
 .sdh-kotelezo {
-    color: var(--sdh-piros);
+    color: var(--sdh-accent);
 }
 
 .sdh-urlap__lablec {
     display: flex;
-    gap: .6rem;
+    gap: .5rem;
     align-items: center;
     padding-top: .2rem;
 }
 
 .sdh-urlap__lablec .sdh-gomb--elsodleges {
-    height: 38px;
-    padding: 0 1.4rem;
+    height: 36px;
+    padding: 0 1.2rem;
 }
 
-/* ------------------------------------------------------------------ */
-/* Popup (modál)                                                       */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* Beillesztő doboz                                                    */
+/* ================================================================== */
 
-.sdh-modal {
-    width: min(900px, calc(100vw - 2rem));
-    max-width: none;
-    max-height: calc(100vh - 3rem);
-    padding: 0;
-    border: 0;
-    border-radius: var(--sdh-radius);
-    background: transparent;
-    overflow: visible;
+.sdh-doboz--beilleszt {
+    border-style: dashed;
+    border-color: var(--sdh-keret-eros);
+    background: var(--sdh-felulet-2);
+    box-shadow: none;
 }
 
-.sdh-modal::backdrop {
-    background: rgba(12, 14, 18, .55);
-}
-
-.sdh-modal__doboz {
-    position: relative;
-    max-height: calc(100vh - 3rem);
-    overflow-y: auto;
-    padding: 1.6rem 1.8rem 1.8rem;
-    background: #f6f7f8;
-    border-radius: var(--sdh-radius);
-    box-shadow: 0 18px 50px rgba(0, 0, 0, .3);
-}
-
-.sdh-modal__bezar {
-    position: absolute;
-    top: .7rem;
-    right: .8rem;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 0;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--sdh-halvany);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.sdh-modal__bezar:hover,
-.sdh-modal__bezar:focus {
-    background: #e8eaec;
+.sdh-doboz--beilleszt textarea {
+    width: 100%;
+    min-height: 64px;
+    padding: .5rem .6rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
-}
-
-.sdh-modal__toltes {
-    padding: 3rem 1rem;
-    text-align: center;
-    color: var(--sdh-halvany);
-    font-size: 13px;
-}
-
-.sdh-modal__cim {
-    margin: 0 2rem .2rem 0;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -.01em;
-}
-
-.sdh-modal__alcim {
-    margin: 0 0 1.2rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 12px;
-    color: var(--sdh-halvany);
+    line-height: 1.5;
+    resize: vertical;
 }
 
-.sdh-modal__hiba {
-    margin: 0 0 1rem;
+/* ================================================================== */
+/* Készülékkép                                                         */
+/* ================================================================== */
+
+.sdh-kep:empty {
+    display: none;
 }
 
-/* A popupban az űrlap a teljes szélességet használja. */
-.sdh-modal .sdh-urlap {
-    max-width: none;
+.sdh-kep {
+    margin-top: .5rem;
+    padding: .6rem;
+    background: #fff;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    width: fit-content;
 }
 
-.sdh-modal .sdh-doboz:last-of-type {
-    margin-bottom: 1.2rem;
+.sdh-kep img {
+    display: block;
+    max-width: 140px;
+    max-height: 180px;
+    height: auto;
 }
 
-/* ------------------------------------------------------------------ */
-/* Választómező (gépelésre kereső)                                     */
-/* ------------------------------------------------------------------ */
+.sdh-tabla__kep {
+    display: block;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 6px;
+}
+
+/* ================================================================== */
+/* Választómező                                                        */
+/* ================================================================== */
 
 .sdh-valaszto {
     position: relative;
 }
 
-.sdh-valaszto__mezo {
-    width: 100%;
-    height: 36px;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 6px;
-}
-
 .sdh-valaszto__lista {
     position: absolute;
-    z-index: 30;
-    top: calc(100% + 2px);
+    z-index: 60;
+    top: calc(100% + 3px);
     left: 0;
     right: 0;
     max-height: 17rem;
@@ -555,29 +669,29 @@ a.sdh-kartya:focus {
     padding: .25rem;
     overflow-y: auto;
     list-style: none;
-    background: #fff;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    box-shadow: var(--sdh-arnyek-emelt);
 }
 
 .sdh-valaszto__elem {
     display: flex;
     flex-direction: column;
-    gap: .1rem;
-    padding: .45rem .55rem;
+    gap: .05rem;
+    padding: .4rem .55rem;
     border-radius: 5px;
     cursor: pointer;
     font-size: 13px;
+    color: var(--sdh-szoveg);
 }
 
-.sdh-valaszto__elem:hover,
-.sdh-valaszto__elem:focus {
-    background: #f3f4f6;
+.sdh-valaszto__elem:hover {
+    background: var(--sdh-felulet-2);
 }
 
 .sdh-valaszto__elem:first-child {
-    background: #f6f7f8;
+    background: var(--sdh-accent-halvany);
 }
 
 .sdh-valaszto__elem span {
@@ -586,14 +700,14 @@ a.sdh-kartya:focus {
 }
 
 .sdh-valaszto__ures {
-    padding: .6rem .55rem;
+    padding: .55rem;
     font-size: 12px;
     color: var(--sdh-halvany);
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Feloldó minta                                                       */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-minta {
     display: flex;
@@ -603,11 +717,11 @@ a.sdh-kartya:focus {
 }
 
 .sdh-minta__rajz {
-    width: 190px;
-    height: 190px;
-    background: #fff;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 10px;
+    width: 180px;
+    height: 180px;
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
     cursor: crosshair;
     touch-action: none;
     user-select: none;
@@ -628,69 +742,99 @@ a.sdh-kartya:focus {
 }
 
 .sdh-minta__lab .sdh-gomb {
+    height: 28px;
+    padding: 0 .65rem;
+    font-size: 12px;
+}
+
+/* ================================================================== */
+/* Popup (modál)                                                       */
+/* ================================================================== */
+
+.sdh-modal {
+    width: min(920px, calc(100vw - 2rem));
+    max-width: none;
+    max-height: calc(100vh - 3rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--sdh-r-nagy);
+    background: transparent;
+    overflow: visible;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-modal::backdrop {
+    background: rgba(12, 14, 18, .5);
+    backdrop-filter: blur(2px);
+}
+
+.sdh-modal__doboz {
+    position: relative;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    padding: 1.5rem 1.7rem 1.7rem;
+    background: var(--sdh-vaszon);
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+.sdh-modal__bezar {
+    position: absolute;
+    top: .7rem;
+    right: .8rem;
+    width: 30px;
     height: 30px;
-    padding: 0 .7rem;
-    font-size: 12px;
-}
-
-/* ------------------------------------------------------------------ */
-/* Beillesztő doboz                                                    */
-/* ------------------------------------------------------------------ */
-
-.sdh-doboz--beilleszt {
-    border-style: dashed;
-    border-color: #c3c7cc;
-    background: #fbfbfc;
-}
-
-.sdh-doboz--beilleszt textarea {
-    width: 100%;
-    min-height: 68px;
-    padding: .5rem .6rem;
-    border: 1px solid var(--sdh-keret);
+    padding: 0;
+    border: 0;
     border-radius: 6px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: transparent;
+    color: var(--sdh-halvany);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sdh-modal__bezar:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-modal__toltes {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--sdh-halvany);
+    font-size: 13px;
+}
+
+.sdh-modal__cim {
+    margin: 0 2rem .2rem 0;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -.015em;
+}
+
+.sdh-modal__alcim {
+    margin: 0 0 1.1rem;
     font-size: 12px;
-    line-height: 1.5;
-    resize: vertical;
+    color: var(--sdh-halvany);
 }
 
-/* ------------------------------------------------------------------ */
-/* Készülékkép                                                         */
-/* ------------------------------------------------------------------ */
-
-.sdh-kep:empty {
-    display: none;
+.sdh-modal__hiba {
+    margin: 0 0 1rem;
 }
 
-.sdh-kep {
-    margin-top: .5rem;
-    padding: .7rem;
-    background: #fff;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 10px;
-    width: fit-content;
+.sdh-modal .sdh-urlap {
+    max-width: none;
 }
 
-.sdh-kep img {
-    display: block;
-    max-width: 150px;
-    max-height: 190px;
-    height: auto;
+.sdh-modal .sdh-doboz:last-of-type {
+    margin-bottom: 1.1rem;
 }
 
-.sdh-tabla__kep {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    background: #fff;
-    border: 1px solid #eceef0;
-    border-radius: 6px;
-}
-
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Kis képernyő                                                        */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 @media (max-width: 782px) {
     .sdh-fejlec {
@@ -711,6 +855,13 @@ a.sdh-kartya:focus {
     }
 
     .sdh-modal__doboz {
-        padding: 1.3rem 1.1rem 1.4rem;
+        padding: 1.2rem 1rem 1.3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
     }
 }

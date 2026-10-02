@@ -1,187 +1,496 @@
 /*
- * SDH Műhely – frontend alkalmazás.
+ * SDH Műhely – alkalmazás-váz.
  *
- * Ez a réteg az admin.css fölé jön: az admin.css adja a komponenseket
- * (táblázat, űrlap, gomb, kártya), ez a fájl pedig a saját felület
- * keretét – fejléc, menü, törzs. Így a két felület ugyanúgy néz ki,
- * és egy helyen kell javítani, ha valami elcsúszik.
+ * Csak a saját műhely-felületnek kell: oldalsáv, fejléc, tartalomterület.
+ * A komponensek (gomb, tábla, űrlap) és a színváltozók az admin.css-ben
+ * vannak, az előbb töltődik be.
  */
 
 * {
     box-sizing: border-box;
 }
 
+html {
+    background: var(--sdh-vaszon);
+}
+
 body.sdh-app {
     margin: 0;
     padding: 0;
-    background: #f1f2f4;
+    min-height: 100vh;
+    background: var(--sdh-vaszon);
     color: var(--sdh-szoveg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    grid-template-rows: 52px 1fr;
+    grid-template-areas:
+        "oldalsav fejlec"
+        "oldalsav torzs";
 }
 
-/* ------------------------------------------------------------------ */
-/* Fejléc                                                              */
-/* ------------------------------------------------------------------ */
+body.sdh-app[data-sav="csukva"] {
+    grid-template-columns: 60px 1fr;
+}
 
-.sdh-app__fejlec {
+/* ================================================================== */
+/* Oldalsáv                                                            */
+/* ================================================================== */
+
+.sdh-sav {
+    grid-area: oldalsav;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0 .55rem .7rem;
+    background: var(--sdh-felulet);
+    border-right: 1px solid var(--sdh-keret);
     position: sticky;
     top: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 1.6rem;
-    padding: 0 1.6rem;
-    height: 56px;
-    background: var(--sdh-sotet);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
-.sdh-app__logo {
-    flex: 0 0 auto;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: .02em;
-    color: #fff;
+.sdh-sav__fej {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    height: 52px;
+    padding: 0 .35rem;
+    margin-bottom: .5rem;
     text-decoration: none;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-sav__jel {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: var(--sdh-accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.sdh-sav__nev {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -.01em;
     white-space: nowrap;
 }
 
-.sdh-app__logo span {
-    color: var(--sdh-piros);
+.sdh-sav__cim {
+    padding: .9rem .6rem .35rem;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+    white-space: nowrap;
 }
 
-.sdh-app__menu {
+.sdh-sav__link {
     display: flex;
     align-items: center;
-    gap: .2rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-
-.sdh-app__menu::-webkit-scrollbar {
-    display: none;
-}
-
-.sdh-app__link {
-    display: inline-flex;
-    align-items: center;
-    height: 56px;
-    padding: 0 .85rem;
-    border-bottom: 2px solid transparent;
-    color: #aeb6c2;
+    gap: .6rem;
+    height: 34px;
+    padding: 0 .6rem;
+    margin-bottom: 1px;
+    border-radius: 7px;
+    color: var(--sdh-szoveg-2);
     font-size: 13px;
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
-    transition: color .15s ease, border-color .15s ease;
 }
 
-.sdh-app__link:hover,
-.sdh-app__link:focus {
-    color: #fff;
+.sdh-sav__link:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
 }
 
-.sdh-app__link--aktiv {
-    color: #fff;
-    border-bottom-color: var(--sdh-piros);
+.sdh-sav__link--aktiv {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent);
+    font-weight: 600;
 }
 
-.sdh-app__link--keszul {
-    color: #5d646e;
+.sdh-sav__link--keszul {
+    color: var(--sdh-halvany);
+    opacity: .6;
     cursor: default;
 }
 
-.sdh-app__jobb {
+.sdh-sav__link--keszul:hover {
+    background: none;
+    color: var(--sdh-halvany);
+}
+
+.sdh-sav__ikon {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-sav__also {
+    margin-top: auto;
+    padding-top: .6rem;
+}
+
+/* Összecsukott állapot: csak az ikonok maradnak. */
+body.sdh-app[data-sav="csukva"] .sdh-sav__nev,
+body.sdh-app[data-sav="csukva"] .sdh-sav__cim,
+body.sdh-app[data-sav="csukva"] .sdh-sav__felirat {
+    display: none;
+}
+
+body.sdh-app[data-sav="csukva"] .sdh-sav__link,
+body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
+    justify-content: center;
+    padding: 0;
+}
+
+/* ================================================================== */
+/* Fejléc                                                              */
+/* ================================================================== */
+
+.sdh-fej {
+    grid-area: fejlec;
+    position: sticky;
+    top: 0;
+    z-index: 40;
     display: flex;
     align-items: center;
-    gap: .9rem;
+    gap: .8rem;
+    height: 52px;
+    padding: 0 1.1rem;
+    background: var(--sdh-felulet);
+    border-bottom: 1px solid var(--sdh-keret);
+}
+
+.sdh-fej__morzsa {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: 13px;
+    color: var(--sdh-halvany);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sdh-fej__morzsa a {
+    color: var(--sdh-halvany);
+    text-decoration: none;
+}
+
+.sdh-fej__morzsa a:hover {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-fej__morzsa strong {
+    color: var(--sdh-szoveg);
+    font-weight: 600;
+}
+
+.sdh-fej__ikongomb {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: none;
+    color: var(--sdh-halvany);
+    cursor: pointer;
+}
+
+.sdh-fej__ikongomb:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-fej__ikongomb svg {
+    width: 17px;
+    height: 17px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-fej__jobb {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
     margin-left: auto;
 }
 
-.sdh-app__felhasznalo {
-    font-size: 12px;
-    color: #aeb6c2;
-    white-space: nowrap;
+/* ================================================================== */
+/* Globális kereső                                                     */
+/* ================================================================== */
+
+.sdh-kutat {
+    position: relative;
+    flex: 0 1 420px;
+    margin-left: 1rem;
 }
 
-.sdh-app__kilep {
-    font-size: 12px;
-    color: #aeb6c2;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    white-space: nowrap;
-}
-
-.sdh-app__kilep:hover,
-.sdh-app__kilep:focus {
-    color: #fff;
-    border-bottom-color: rgba(255, 255, 255, .4);
-}
-
-/* ------------------------------------------------------------------ */
-/* Törzs                                                               */
-/* ------------------------------------------------------------------ */
-
-.sdh-app__torzs {
-    padding: 0 1.6rem 3rem;
-}
-
-.sdh-app .sdh-wrap {
-    max-width: 1180px;
-    margin: 0 auto;
-}
-
-/* A frontendnek nincs szüksége a WordPress .wrap margóira. */
-.sdh-app .sdh-fejlec {
-    margin-top: 1.6rem;
-}
-
-/* Az űrlapmezők az adminban a WordPress alapstílusából élnek – itt
-   nincs ilyen, úgyhogy megadjuk magunknak. */
-.sdh-app input[type="text"],
-.sdh-app input[type="search"],
-.sdh-app input[type="email"],
-.sdh-app input[type="tel"],
-.sdh-app input[type="number"],
-.sdh-app select,
-.sdh-app textarea {
-    padding: .4rem .6rem;
+.sdh-kutat__mezo {
+    width: 100%;
+    height: 32px;
+    padding: 0 2.6rem 0 .7rem;
     border: 1px solid var(--sdh-keret);
+    border-radius: 7px;
+    background: var(--sdh-vaszon);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.sdh-kutat__mezo:focus {
+    outline: 2px solid var(--sdh-accent-halvany);
+    border-color: var(--sdh-accent);
+    background: var(--sdh-felulet);
+}
+
+.sdh-kutat__jel {
+    position: absolute;
+    right: .5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: .1rem .3rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--sdh-halvany);
+    pointer-events: none;
+}
+
+.sdh-kutat__lista {
+    position: absolute;
+    z-index: 70;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    max-height: 24rem;
+    margin: 0;
+    padding: .3rem;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+.sdh-kutat__csoport {
+    padding: .45rem .55rem .25rem;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+}
+
+.sdh-kutat__elem {
+    display: block;
+    padding: .4rem .55rem;
     border-radius: 6px;
-    background: #fff;
+    text-decoration: none;
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+}
+
+.sdh-kutat__elem:hover,
+.sdh-kutat__elem:focus-visible {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-kutat__elem span {
+    display: block;
+    font-size: 11px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-kutat__ures {
+    padding: .7rem .55rem;
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+/* ================================================================== */
+/* Profil-menü                                                         */
+/* ================================================================== */
+
+.sdh-profil {
+    position: relative;
+}
+
+.sdh-profil__gomb {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    height: 34px;
+    padding: 0 .4rem 0 .4rem;
+    border: 0;
+    border-radius: 7px;
+    background: none;
     color: var(--sdh-szoveg);
     font-family: inherit;
     font-size: 13px;
-    line-height: 1.4;
+    cursor: pointer;
 }
 
-.sdh-app input[type="text"]:focus,
-.sdh-app input[type="search"]:focus,
-.sdh-app input[type="email"]:focus,
-.sdh-app input[type="tel"]:focus,
-.sdh-app input[type="number"]:focus,
-.sdh-app select:focus,
-.sdh-app textarea:focus {
-    outline: 2px solid rgba(212, 35, 29, .35);
-    outline-offset: 1px;
-    border-color: var(--sdh-piros);
+.sdh-profil__gomb:hover {
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-profil__kezdo {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--sdh-accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.sdh-profil__panel {
+    position: absolute;
+    z-index: 70;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 258px;
+    padding: .7rem;
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+.sdh-profil__nev {
+    padding: .1rem .35rem .5rem;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sdh-profil__nev span {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--sdh-halvany);
+}
+
+.sdh-profil__cim {
+    padding: .6rem .35rem .4rem;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+}
+
+.sdh-valto {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .25rem;
+    padding: .2rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 8px;
+    background: var(--sdh-vaszon);
+}
+
+.sdh-valto button {
+    height: 28px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: var(--sdh-szoveg-2);
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sdh-valto button[aria-pressed="true"] {
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    box-shadow: var(--sdh-arnyek);
+    font-weight: 600;
+}
+
+.sdh-szinek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    padding: .2rem .35rem 0;
+}
+
+.sdh-szin {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    background-clip: content-box;
+}
+
+.sdh-szin[aria-pressed="true"] {
+    border-color: var(--sdh-szoveg);
+}
+
+.sdh-profil__kilep {
+    display: block;
+    margin-top: .7rem;
+    padding: .45rem .35rem 0;
+    border-top: 1px solid var(--sdh-keret);
+    color: var(--sdh-szoveg-2);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.sdh-profil__kilep:hover {
+    color: var(--sdh-accent);
+}
+
+/* ================================================================== */
+/* Tartalom                                                            */
+/* ================================================================== */
+
+.sdh-app__torzs {
+    grid-area: torzs;
+    padding: 1.4rem 1.4rem 3rem;
+    min-width: 0;
+}
+
+.sdh-app .sdh-wrap {
+    margin: 0 auto;
+}
+
+.sdh-app a {
+    color: var(--sdh-accent);
 }
 
 .sdh-app button {
     font-family: inherit;
 }
 
-.sdh-app a {
-    color: var(--sdh-piros);
-}
-
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Középre zárt üzenetoldal (403)                                      */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
 .sdh-app--uzenet {
     display: flex;
@@ -192,17 +501,18 @@ body.sdh-app {
 }
 
 .sdh-app__kozep {
-    max-width: 30rem;
+    max-width: 29rem;
     padding: 2rem 2.2rem;
-    background: #fff;
+    background: var(--sdh-felulet);
     border: 1px solid var(--sdh-keret);
-    border-radius: var(--sdh-radius);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek);
     text-align: center;
 }
 
 .sdh-app__kozep h1 {
     margin: .2rem 0 .6rem;
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 600;
 }
 
@@ -212,28 +522,39 @@ body.sdh-app {
     font-size: 13px;
 }
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /* Kis képernyő                                                        */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 
-@media (max-width: 782px) {
-    .sdh-app__fejlec {
-        flex-wrap: wrap;
-        height: auto;
-        padding: .7rem 1rem 0;
-        gap: .8rem;
+@media (max-width: 860px) {
+    body.sdh-app,
+    body.sdh-app[data-sav="csukva"] {
+        grid-template-columns: 60px 1fr;
     }
 
-    .sdh-app__menu {
-        order: 3;
-        width: 100%;
+    body.sdh-app .sdh-sav__nev,
+    body.sdh-app .sdh-sav__cim,
+    body.sdh-app .sdh-sav__felirat {
+        display: none;
     }
 
-    .sdh-app__link {
-        height: 42px;
+    body.sdh-app .sdh-sav__link,
+    body.sdh-app .sdh-sav__fej {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .sdh-kutat {
+        flex: 1 1 auto;
+        margin-left: .4rem;
+    }
+
+    .sdh-kutat__jel,
+    .sdh-profil__gomb span:not(.sdh-profil__kezdo) {
+        display: none;
     }
 
     .sdh-app__torzs {
-        padding: 0 1rem 2.5rem;
+        padding: 1rem .9rem 2.5rem;
     }
 }

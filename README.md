@@ -57,6 +57,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.14.0
+- Új felület: valódi CRM-váz. Bal oldalt összecsukható ikonos menü,
+  felül morzsamenü, globális kereső és profilmenü.
+- Formanyelv: világos semleges vászon, fehér felületek, sűrű 13 px-es
+  táblázatok. Rendszerbetű – webfont nélkül, hogy internet nélkül is
+  jól nézzen ki.
+- Világos / sötét / rendszer megjelenés és hat választható kiemelő szín,
+  böngészőben megjegyezve. A beállítás a stílusok előtt áll be, így
+  sötét módban nincs felvillanás.
+- Globális kereső a fejlécben: ügyfél és eszköz egyszerre, név, telefon,
+  IMEI, gyári szám és sorozatszám alapján. A `/` billentyű ráugrik.
+
 ### 0.13.0
 - Ellenőrző gombok a Feldolgozás mellett: imeicheck.com és iunlocker.com
   egy kattintással, az IMEI-vel a vágólapon.
