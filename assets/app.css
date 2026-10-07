@@ -118,7 +118,7 @@ body.sdh-app[data-sav="csukva"] {
 
 .sdh-sav__link--aktiv {
     background: var(--sdh-accent-halvany);
-    color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
     font-weight: 600;
 }
 
@@ -463,7 +463,7 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
 }
 
 .sdh-profil__kilep:hover {
-    color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
 }
 
 /* ================================================================== */
@@ -481,7 +481,7 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
 }
 
 .sdh-app a {
-    color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
 }
 
 .sdh-app button {

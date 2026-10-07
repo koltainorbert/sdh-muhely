@@ -208,7 +208,7 @@ final class SDH_Muhely_Tac
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Állapot</h2>
 
-                <table class="sdh-tabla sdh-tabla--keskeny" style="margin-bottom:1.2rem">
+                <table class="sdh-tabla sdh-tabla--keskeny sdh-tabla--ter">
                     <tbody>
                         <tr>
                             <th>Betöltött készüléktípus</th>
@@ -232,7 +232,7 @@ final class SDH_Muhely_Tac
                         A <code>data/tac.csv.gz</code> fájl nincs a plugin mappájában, így nincs mit betölteni.
                     </div>
                 <?php else : ?>
-                    <p style="margin:0 0 1rem;font-size:13px;color:var(--sdh-halvany);line-height:1.6;max-width:62em">
+                    <p class="sdh-sugo">
                         A betöltés darabokban fut, és eltart egy percig. Nyugodtan megszakíthatod:
                         a már beírt sorok megmaradnak, és újraindításkor onnan folytatja.
                         Ismételt futtatás nem csinál duplikátumot – a meglévő sorokat frissíti.
@@ -242,20 +242,20 @@ final class SDH_Muhely_Tac
                         <button type="button" class="sdh-gomb sdh-gomb--elsodleges" id="sdh-tac-indit">
                             <?php echo $darab > 0 ? 'Újratöltés' : 'Betöltés indítása'; ?>
                         </button>
-                        <span id="sdh-tac-allapot" style="font-size:13px;color:var(--sdh-halvany)"></span>
+                        <span id="sdh-tac-allapot" class="sdh-allapot"></span>
                     </div>
                 <?php endif; ?>
             </div>
 
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Honnan jön az adat</h2>
-                <p style="margin:0 0 .9rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                <p class="sdh-sugo">
                     A csomagolt fájl a nyilvános, MIT-licencű TAC-adatbázisból készült, és
                     <strong>2025 végéig tart</strong> – a 2026-os és későbbi típusok nincsenek benne.
                     A TAC-ok nagyjából felénél van meg a gyári szám (modellkód); a többinél
                     csak a gyártó és a kereskedelmi név.
                 </p>
-                <p style="margin:0;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                <p class="sdh-sugo sdh-sugo--utolso">
                     Ezt nem fájlcserével oldjuk meg: amikor egy ismeretlen TAC-ú készüléket
                     kézzel felvisztek, a gyártó és a típus bekerül ide, és onnantól a következő
                     ugyanolyan telefonnál magától kitöltődik. Apple IRP és Samsung hivatalos

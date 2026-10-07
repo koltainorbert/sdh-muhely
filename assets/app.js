@@ -597,9 +597,17 @@
         return elem;
     }
 
+    /** Egy CSS-változó aktuális értéke – így a minta is követi a témát. */
+    function szinValtozo(nev, tartalek) {
+        var ertek = getComputedStyle(document.documentElement).getPropertyValue(nev).trim();
+
+        return ertek || tartalek;
+    }
+
     function mintaRajzol(doboz, sorrend, elonezetPont) {
         var svg = doboz.querySelector('.sdh-minta__rajz');
-        var piros = '#d4231d';
+        var piros = szinValtozo('--sdh-accent', '#d4231d');
+        var halvanyPotty = szinValtozo('--sdh-keret-eros', '#c3c7cc');
 
         svg.textContent = '';
 
@@ -643,7 +651,7 @@
 
             svg.appendChild(mintaElem('circle', {
                 cx: p.x, cy: p.y, r: helye === -1 ? 7 : 11,
-                fill: helye === -1 ? '#c3c7cc' : piros
+                fill: helye === -1 ? halvanyPotty : piros
             }));
 
             // A kezdőpont kap egy gyűrűt, hogy ránézésre látszódjon
@@ -1144,8 +1152,19 @@
     }
 
     function megjelenesIndul() {
-        temaAlkalmaz(beallitasOlvas('sdh-tema', 'rendszer'));
-        szinAlkalmaz(beallitasOlvas('sdh-szin', ''));
+        // Előbb amit a dolgozó állított ezen a gépen, aztán a cég
+        // alapértelmezése az Arculat képernyőről.
+        temaAlkalmaz(beallitasOlvas('sdh-tema', beallitas.alapTema || 'rendszer'));
+
+        var szin = null;
+
+        try {
+            szin = localStorage.getItem('sdh-szin');
+        } catch (e) {
+            szin = null;
+        }
+
+        szinAlkalmaz(szin === null ? (beallitas.alapSzin || '') : szin);
 
         if (document.body && beallitasOlvas('sdh-sav', '') === 'csukva') {
             document.body.dataset.sav = 'csukva';
@@ -1154,11 +1173,13 @@
 
     // A rendszer módot követjük, ha közben vált a gép.
     if (window.matchMedia) {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-            if (beallitasOlvas('sdh-tema', 'rendszer') === 'rendszer') {
-                temaAlkalmaz('rendszer');
-            }
-        });
+        if (window.matchMedia('(prefers-color-scheme: dark)').addEventListener) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                if (beallitasOlvas('sdh-tema', beallitas.alapTema || 'rendszer') === 'rendszer') {
+                    temaAlkalmaz('rendszer');
+                }
+            });
+        }
     }
 
     document.addEventListener('click', function (esemeny) {

@@ -22,6 +22,9 @@
     --sdh-accent: #d4231d;
     --sdh-accent-sotet: #ab1a15;
     --sdh-accent-halvany: rgba(212, 35, 29, .1);
+    /* A kiemelő szín szövegként. Sötét módban világosabb változat áll
+       a helyére, mert a telt szín sötét háttéren nem olvasható. */
+    --sdh-accent-szoveg: var(--sdh-accent);
 
     --sdh-vaszon: #f6f7f9;
     --sdh-felulet: #ffffff;
@@ -31,7 +34,7 @@
 
     --sdh-szoveg: #16191d;
     --sdh-szoveg-2: #4b5159;
-    --sdh-halvany: #6b7280;
+    --sdh-halvany: #5f6670;
 
     --sdh-siker: #16794a;
     --sdh-hiba: #be2f2f;
@@ -107,6 +110,25 @@
 
     --sdh-sotet: #0d0f12;
     --sdh-sotet-vilagos: #1a1d21;
+}
+
+:root[data-theme="dark"] {
+    --sdh-accent-szoveg: #f0736d;
+}
+:root[data-theme="dark"][data-accent="kek"] {
+    --sdh-accent-szoveg: #7ba7f8;
+}
+:root[data-theme="dark"][data-accent="smaragd"] {
+    --sdh-accent-szoveg: #45c08d;
+}
+:root[data-theme="dark"][data-accent="ibolya"] {
+    --sdh-accent-szoveg: #b08cf5;
+}
+:root[data-theme="dark"][data-accent="borostyan"] {
+    --sdh-accent-szoveg: #e5a25a;
+}
+:root[data-theme="dark"][data-accent="palaszurke"] {
+    --sdh-accent-szoveg: #a3b0c2;
 }
 
 /* ================================================================== */
@@ -396,7 +418,7 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-tabla__nev a:hover {
-    color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
 }
 
 .sdh-tabla__halvany {
@@ -576,7 +598,7 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-kotelezo {
-    color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
 }
 
 .sdh-urlap__lablec {
@@ -831,6 +853,117 @@ a.sdh-kartya:focus-visible {
 .sdh-modal .sdh-doboz:last-of-type {
     margin-bottom: 1.1rem;
 }
+
+/* ================================================================== */
+/* Apró segédosztályok                                                 */
+/*                                                                     */
+/* Ezek azért vannak, hogy a PHP-ban ne maradjon soron belüli stílus –  */
+/* különben az átszínezés nem egy fájlból menne, és a sötét mód         */
+/* elromlana ott, ahol valaki beégetett egy szövegszínt.                */
+/* ================================================================== */
+
+.sdh-sugo {
+    margin: 0 0 1.2rem;
+    max-width: 68ch;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-sugo--kicsi {
+    margin-bottom: .8rem;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--sdh-halvany);
+}
+
+.sdh-sugo--utolso {
+    margin-bottom: 0;
+}
+
+.sdh-sugo code {
+    padding: .05rem .25rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 4px;
+    background: var(--sdh-felulet-2);
+    font-size: 12px;
+}
+
+.sdh-allapot {
+    font-size: 13px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-mezo--also-ter {
+    margin-bottom: 1rem;
+}
+
+.sdh-tabla--ter {
+    margin-bottom: 1.2rem;
+}
+
+.sdh-urlap__lablec--tordel {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: .6rem;
+}
+
+.sdh-gomb--jobbra {
+    margin-left: auto;
+}
+
+.sdh-oszlop--kep {
+    width: 60px;
+}
+
+.sdh-kod {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+}
+
+/* Stíluskalauz palettája. */
+.sdh-paletta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .6rem;
+}
+
+.sdh-paletta__elem {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: .6rem;
+    align-items: center;
+    padding: .5rem .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    font-size: 12px;
+}
+
+.sdh-paletta__folt {
+    grid-row: 1 / 3;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 6px;
+}
+
+.sdh-paletta__elem code {
+    font-size: 11px;
+    color: var(--sdh-halvany);
+    background: none;
+    padding: 0;
+}
+
+/* A kiemelő színek korongjai a profilmenüben. */
+.sdh-szin--alap { background: #d4231d; }
+.sdh-szin--kek { background: #2563eb; }
+.sdh-szin--smaragd { background: #047857; }
+.sdh-szin--ibolya { background: #6d28d9; }
+.sdh-szin--borostyan { background: #b45309; }
+.sdh-szin--palaszurke { background: #475569; }
 
 /* ================================================================== */
 /* Kis képernyő                                                        */

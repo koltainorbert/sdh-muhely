@@ -57,6 +57,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.15.0
+- Arculat képernyő (SDH Műhely → Arculat): élő stíluskalauz az összes
+  színnel és komponenssel, plusz a cég alapértelmezett megjelenése.
+  A dolgozó saját beállítása a profilmenüben ezt felülírja.
+- Minden beégetett szín kivezetve a PHP-ból és a JavaScriptből:
+  az átszínezés egyetlen fájlból (`assets/admin.css`) megy.
+- Külön `--sdh-accent-szoveg` változó: sötét módban világosabb, mint a
+  gombszín. Enélkül a piros linkek 3,3:1 kontraszton álltak.
+- A paletta minden párosa méréssel ellenőrizve: a legrosszabb érték
+  világos módban 4,62:1, sötétben 4,60:1 – mindkettő WCAG AA fölött.
+
 ### 0.14.0
 - Új felület: valódi CRM-váz. Bal oldalt összecsukható ikonos menü,
   felül morzsamenü, globális kereső és profilmenü.

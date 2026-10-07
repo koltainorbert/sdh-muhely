@@ -61,7 +61,7 @@ final class SDH_Muhely_Beallitasok
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">IMEI-szolgáltató</h2>
 
-                    <p style="margin:0 0 1.2rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                    <p class="sdh-sugo">
                         A gyári szám, a sorozatszám, a garancia és a gyártási dátum a gyártó
                         szerveréről jön – ezt fizetős szolgáltatón keresztül lehet lekérdezni
                         (imeicheck.com, imeicheck.net, sickw és társaik). Írd be a végpont
@@ -70,7 +70,7 @@ final class SDH_Muhely_Beallitasok
                         azt is elküldjük <code>Authorization: Bearer</code> formában.
                     </p>
 
-                    <div class="sdh-mezo sdh-mezo--jelolo" style="margin-bottom:1rem">
+                    <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
                         <input type="checkbox" name="aktiv" id="aktiv" value="1"
                             <?php checked($b['aktiv']); ?>>
                         <label for="aktiv">Lekérdezés bekapcsolva</label>
@@ -100,7 +100,7 @@ final class SDH_Muhely_Beallitasok
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">Ingyenes ellenőrző oldalak</h2>
 
-                    <p style="margin:0 0 1.2rem;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                    <p class="sdh-sugo">
                         Ezek a gombok jelennek meg az eszköz-űrlap tetején. Soronként egy:
                         <code>Név | URL</code>. A gomb megnyitja az oldalt, és az IMEI-t a
                         vágólapra teszi, hogy ott csak be kelljen illeszteni. Ha egy oldal
@@ -111,7 +111,7 @@ final class SDH_Muhely_Beallitasok
                     <div class="sdh-mezo sdh-mezo--szeles">
                         <label for="ellenorzok">Oldalak</label>
                         <textarea name="ellenorzok" id="ellenorzok" rows="4"
-                                  style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px"
+                                  class="sdh-kod"
                         ><?php echo esc_textarea($ellenorzok); ?></textarea>
                         <span class="sdh-mezo__sugo">
                             Üresen hagyva az alapértelmezett lista jön vissza.
@@ -126,7 +126,7 @@ final class SDH_Muhely_Beallitasok
 
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Ami enélkül is megy</h2>
-                <p style="margin:0;font-size:13px;line-height:1.7;color:#3c434a;max-width:62em">
+                <p class="sdh-sugo sdh-sugo--utolso">
                     Szolgáltató nélkül a rendszer a saját nyilvántartásából és a helyi
                     TAC-adatbázisból tölti ki a gyártót, a gyári számot és a kereskedelmi
                     nevet. A sorozatszámot, a garanciát és a gyártási dátumot kézzel kell

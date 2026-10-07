@@ -609,7 +609,7 @@ final class SDH_Muhely_Ugyfel
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Levelezési cím</h2>
 
-            <div class="sdh-mezo sdh-mezo--jelolo" style="margin-bottom:1rem">
+            <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
                 <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
                     <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
                 <label for="levelezesi_azonos">Megegyezik a számlázási címmel</label>
@@ -696,7 +696,7 @@ final class SDH_Muhely_Ugyfel
                     'sdh_muhely_ugyfel_allapot_' . (int) $ugyfel->id
                 );
                 ?>
-                <a class="sdh-gomb sdh-gomb--vilagos" style="margin-left:auto"
+                <a class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra"
                    href="<?php echo esc_url($allapot_url); ?>">
                     <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>
                 </a>

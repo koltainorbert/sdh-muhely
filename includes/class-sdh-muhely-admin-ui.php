@@ -280,10 +280,16 @@ final class SDH_Muhely_Admin_UI
      */
     public static function js_beallitas(string $kontextus): array
     {
+        $arculat = class_exists('SDH_Muhely_Arculat')
+            ? SDH_Muhely_Arculat::beallitas()
+            : ['tema' => 'rendszer', 'szin' => ''];
+
         return [
             'ajax'      => admin_url('admin-ajax.php'),
             'nonce'     => wp_create_nonce('sdh_muhely_modal'),
             'kontextus' => $kontextus,
+            'alapTema'  => $arculat['tema'],
+            'alapSzin'  => $arculat['szin'],
         ];
     }
 

@@ -125,7 +125,7 @@ final class SDH_Muhely_Frontend
                 'Nincs ilyen oldal',
                 '',
                 static function (): void {
-                    echo '<div class="sdh-wrap"><div class="sdh-doboz"><p style="margin:0">'
+                    echo '<div class="sdh-wrap"><div class="sdh-doboz"><p class="sdh-sugo sdh-sugo--utolso">'
                         . 'Ez a modul nem létezik. Nézd meg az URL-t, vagy válassz '
                         . 'a bal oldali menüből.</p></div></div>';
                 }
@@ -216,20 +216,28 @@ final class SDH_Muhely_Frontend
 
             <script>
                 /* A mentett megjelenés még a stílusok előtt beáll, hogy
-                   sötét módban ne villanjon fel a világos felület. */
+                   sötét módban ne villanjon fel a világos felület.
+                   Sorrend: amit a dolgozó állított a saját gépén, azután
+                   a cég alapértelmezése. */
                 (function () {
+                    <?php
+                    $sdh_arculat = class_exists('SDH_Muhely_Arculat')
+                        ? SDH_Muhely_Arculat::beallitas()
+                        : ['tema' => 'rendszer', 'szin' => ''];
+                    ?>
+                    var alapTema = <?php echo wp_json_encode($sdh_arculat['tema']); ?>;
+                    var alapSzin = <?php echo wp_json_encode($sdh_arculat['szin']); ?>;
+
                     try {
-                        var t = localStorage.getItem('sdh-tema') || 'rendszer';
+                        var t = localStorage.getItem('sdh-tema') || alapTema;
                         var sotet = t === 'sotet' ||
                             (t === 'rendszer' &&
                              window.matchMedia('(prefers-color-scheme: dark)').matches);
                         document.documentElement.setAttribute('data-theme', sotet ? 'dark' : 'light');
 
                         var sz = localStorage.getItem('sdh-szin');
+                        sz = sz === null ? alapSzin : sz;
                         if (sz) { document.documentElement.setAttribute('data-accent', sz); }
-
-                        var s = localStorage.getItem('sdh-sav');
-                        if (s === 'csukva') { document.documentElement.dataset.savInit = 'csukva'; }
                     } catch (e) {}
                 }());
             </script>
@@ -327,18 +335,12 @@ final class SDH_Muhely_Frontend
 
                         <p class="sdh-profil__cim">Kiemelő szín</p>
                         <div class="sdh-szinek" data-sdh-szin>
-                            <button type="button" class="sdh-szin" data-ertek=""
-                                    style="background:#d4231d" aria-label="SDH piros"></button>
-                            <button type="button" class="sdh-szin" data-ertek="kek"
-                                    style="background:#2563eb" aria-label="Kék"></button>
-                            <button type="button" class="sdh-szin" data-ertek="smaragd"
-                                    style="background:#047857" aria-label="Smaragd"></button>
-                            <button type="button" class="sdh-szin" data-ertek="ibolya"
-                                    style="background:#6d28d9" aria-label="Ibolya"></button>
-                            <button type="button" class="sdh-szin" data-ertek="borostyan"
-                                    style="background:#b45309" aria-label="Borostyán"></button>
-                            <button type="button" class="sdh-szin" data-ertek="palaszurke"
-                                    style="background:#475569" aria-label="Palaszürke"></button>
+                            <button type="button" class="sdh-szin sdh-szin--alap" data-ertek="" aria-label="SDH piros"></button>
+                            <button type="button" class="sdh-szin sdh-szin--kek" data-ertek="kek" aria-label="Kék"></button>
+                            <button type="button" class="sdh-szin sdh-szin--smaragd" data-ertek="smaragd" aria-label="Smaragd"></button>
+                            <button type="button" class="sdh-szin sdh-szin--ibolya" data-ertek="ibolya" aria-label="Ibolya"></button>
+                            <button type="button" class="sdh-szin sdh-szin--borostyan" data-ertek="borostyan" aria-label="Borostyán"></button>
+                            <button type="button" class="sdh-szin sdh-szin--palaszurke" data-ertek="palaszurke" aria-label="Palaszürke"></button>
                         </div>
 
                         <a class="sdh-profil__kilep"
@@ -385,7 +387,7 @@ final class SDH_Muhely_Frontend
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_MUHELY_VERSION); ?>">
         </head>
-        <body class="sdh-app sdh-app--uzenet" style="display:flex">
+        <body class="sdh-app sdh-app--uzenet" >
             <div class="sdh-app__kozep">
                 <h1>Ehhez nincs jogosultságod.</h1>
                 <p>A fiókod be van jelentkezve, de nem fér hozzá a műhelyrendszerhez.

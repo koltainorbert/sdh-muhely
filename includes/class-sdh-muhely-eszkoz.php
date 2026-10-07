@@ -322,7 +322,7 @@ final class SDH_Muhely_Eszkoz
             <table class="sdh-tabla">
                 <thead>
                     <tr>
-                        <th style="width:60px"></th>
+                        <th class="sdh-oszlop--kep"></th>
                         <th>Készülék (gyári szám)</th>
                         <th>Ügyfél</th>
                         <th>IMEI / sorozatszám</th>
@@ -557,7 +557,7 @@ final class SDH_Muhely_Eszkoz
         <div class="sdh-doboz sdh-doboz--beilleszt">
             <h2 class="sdh-doboz__cim">Gyári adatok beillesztése</h2>
 
-            <p style="margin:0 0 .8rem;font-size:12px;line-height:1.6;color:var(--sdh-halvany);max-width:62em">
+            <p class="sdh-sugo sdh-sugo--kicsi">
                 Kérdezd le az IMEI-t a megszokott ingyenes oldalon, jelöld ki az eredményt,
                 és illeszd ide be. A mezőket magamtól kitöltöm – gyári szám, sorozatszám,
                 garancia, gyártási dátum, kép.
@@ -568,7 +568,7 @@ final class SDH_Muhely_Eszkoz
                           placeholder="Model Name: SM-A505F/DS&#10;Serial Number: R58M51QT5RE&#10;…"></textarea>
             </div>
 
-            <div class="sdh-urlap__lablec" style="padding-top:.6rem;flex-wrap:wrap">
+            <div class="sdh-urlap__lablec sdh-urlap__lablec--tordel">
                 <?php foreach (SDH_Muhely_Imei_Lekerdezes::ellenorzok() as $ellenorzo) : ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos"
                             data-sdh-ellenorzo="<?php echo esc_attr($ellenorzo['url']); ?>">
@@ -702,7 +702,7 @@ final class SDH_Muhely_Eszkoz
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Átvétel és garancia</h2>
 
-            <div class="sdh-mezo sdh-mezo--jelolo" style="margin-bottom:1rem">
+            <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
                 <input type="checkbox" name="garancias" id="garancias" value="1"
                     <?php checked($ert('garancias'), '1'); ?>>
                 <label for="garancias">Garanciális készülék</label>
