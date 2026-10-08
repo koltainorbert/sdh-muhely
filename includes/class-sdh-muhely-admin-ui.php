@@ -28,6 +28,29 @@ final class SDH_Muhely_Admin_UI
         add_action('admin_menu', [self::class, 'menu'], 20);
         add_action('admin_enqueue_scripts', [self::class, 'eszkozok']);
         add_action('wp_ajax_sdh_muhely_globalis_kereso', [self::class, 'ajax_kereso']);
+
+        // Minden saját AJAX-válasz megmondja, melyik CSS/JS verzió a friss, így a
+        // már megnyitott oldal észreveszi, ha közben fájlcsere történt.
+        add_action('admin_init', [self::class, 'verzio_fejlec'], 1);
+    }
+
+    /**
+     * `X-SDH-Verzio: <css>|<js>` fejléc a saját AJAX-kérésekre. Az app.js ebből
+     * tudja, hogy az oldal elavult stíluslappal / szkripttel fut-e.
+     */
+    public static function verzio_fejlec(): void
+    {
+        if (!wp_doing_ajax() || headers_sent()) {
+            return;
+        }
+
+        $akcio = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+
+        if (strpos($akcio, 'sdh_muhely_') !== 0) {
+            return;
+        }
+
+        header('X-SDH-Verzio: ' . self::eszkoz_verzio('assets/admin.css') . '|' . self::eszkoz_verzio('assets/app.js'));
     }
 
     /* =================================================================

@@ -57,6 +57,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.2
+- **Elavult oldal felismerése**: minden saját AJAX-válasz egy `X-SDH-Verzio`
+  fejlécben megadja a friss CSS|JS verziót. Ha a nyitva felejtett oldal régi
+  stíluslappal fut, az app.js az oldal újratöltése nélkül kicseréli; régi
+  szkriptnél egyszer frissíti az oldalt (a popup ilyenkor még csak töltődik).
+  Ok: fájlcsere után a régi oldal új űrlap-HTML-t kapott régi CSS-sel (az
+  Azonosítók fül „összenyomva” jelent meg).
+
 ### 0.19.1
 - Eszközűrlap: **IMEI és Sorozatszám az Eszköz lapfülön** (az Azonosítók fülről
   ide kerültek); az **Azonosítók fül tömör**: mezők balra, kicsinyített feloldó

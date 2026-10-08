@@ -112,6 +112,66 @@
     }
 
     /* ---------------------------------------------------------------- */
+    /* Elavult CSS/JS felismerése                                       */
+    /* ---------------------------------------------------------------- */
+
+    function elemVerzio(elem, attr) {
+        var cim = elem ? elem.getAttribute(attr) || '' : '';
+        var talalat = /[?&](?:v|ver)=([^&]+)/.exec(cim);
+
+        return talalat ? decodeURIComponent(talalat[1]) : '';
+    }
+
+    /**
+     * A szerver minden válaszban megadja a friss CSS|JS verziót. Ha a nyitva
+     * felejtett oldal régi stíluslapot használ, kicseréljük (az oldal marad);
+     * régi szkriptnél egyszer frissítjük az oldalt – ilyenkor a popup még csak
+     * töltődik, tehát nincs mit elveszíteni.
+     */
+    function verzioEllenoriz(fejlec) {
+        if (!fejlec || fejlec.indexOf('|') < 0) {
+            return;
+        }
+
+        var resz = fejlec.split('|');
+        var css = document.querySelector('link[rel="stylesheet"][href*="assets/admin.css"]');
+        var regiCss = elemVerzio(css, 'href');
+
+        if (css && regiCss && resz[0] && regiCss !== resz[0]) {
+            var uj = css.cloneNode(false);
+            uj.setAttribute('href', css.getAttribute('href').replace(/([?&](?:v|ver)=)[^&]+/, '$1' + encodeURIComponent(resz[0])));
+            uj.addEventListener('load', function () {
+                if (css.parentNode) {
+                    css.parentNode.removeChild(css);
+                }
+            });
+            css.parentNode.insertBefore(uj, css.nextSibling);
+        }
+
+        var js = document.querySelector('script[src*="assets/app.js"]');
+        var regiJs = elemVerzio(js, 'src');
+
+        if (js && regiJs && resz[1] && regiJs !== resz[1]) {
+            var kulcs = 'sdhFrissitve:' + resz[1];
+            var mehet = true;
+
+            try {
+                if (window.sessionStorage.getItem(kulcs)) {
+                    mehet = false;
+                } else {
+                    window.sessionStorage.setItem(kulcs, '1');
+                }
+            } catch (e) { /* nincs tárhely: egyszeri frissítés nem garantálható */
+                mehet = false;
+            }
+
+            if (mehet) {
+                window.location.reload();
+            }
+        }
+    }
+
+    /* ---------------------------------------------------------------- */
     /* Megnyitás                                                        */
     /* ---------------------------------------------------------------- */
 
@@ -152,6 +212,8 @@
                 if (!valasz.ok) {
                     throw new Error('A szerver ' + valasz.status + ' hibakóddal válaszolt.');
                 }
+
+                verzioEllenoriz(valasz.headers.get('X-SDH-Verzio'));
 
                 return valasz.text();
             })
