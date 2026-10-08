@@ -2268,8 +2268,9 @@ a.sdh-kartya:focus-visible {
 
 /* Az alsó lapfülek szövegdoboza alacsonyabb, hogy a popup ne nőjön túl. */
 .sdh-eszkozurlap .sdh-fulek--also textarea {
+    flex: 1 1 auto;
     min-height: 62px;
-    height: 62px;
+    resize: none;
 }
 
 /* Dátummező: naptár-ikon a lenyíló nyíl helyett. */
@@ -2371,4 +2372,34 @@ a.sdh-kartya:focus-visible {
     .sdh-azon {
         grid-template-columns: minmax(0, 1fr);
     }
+}
+
+/* ------------------------------------------------------------------ */
+/* Eszközűrlap: a lapfülek panelei egy cellában, a legmagasabb méretével */
+/* → fülváltáskor a popup nem ugrál (nem változik a magassága).         */
+/* ------------------------------------------------------------------ */
+
+.sdh-eszkozurlap .sdh-fulek {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.sdh-eszkozurlap .sdh-fulek__sav {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.sdh-eszkozurlap .sdh-fulek__panel {
+    display: flex;
+    grid-row: 2;
+    grid-column: 1;
+    box-sizing: border-box;
+    visibility: hidden;
+}
+
+.sdh-eszkozurlap .sdh-fulek__ful--1:checked ~ .sdh-fulek__panel--1,
+.sdh-eszkozurlap .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2,
+.sdh-eszkozurlap .sdh-fulek__ful--3:checked ~ .sdh-fulek__panel--3,
+.sdh-eszkozurlap .sdh-fulek__ful--4:checked ~ .sdh-fulek__panel--4 {
+    visibility: visible;
 }

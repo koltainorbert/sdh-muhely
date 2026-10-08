@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.3
+- Eszközűrlap: **fülváltáskor nem ugrál a popup** – a felső és alsó lapfülek
+  panelei egy rácscellában vannak, így a popup magassága minden fülnél azonos
+  (a legmagasabb panelé); a megjegyzés-szövegdobozok kitöltik a panelt.
+
 ### 0.19.2
 - **Elavult oldal felismerése**: minden saját AJAX-válasz egy `X-SDH-Verzio`
   fejlécben megadja a friss CSS|JS verziót. Ha a nyitva felejtett oldal régi
