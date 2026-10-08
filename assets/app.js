@@ -21,11 +21,12 @@
 
     var beallitas = window.SDH_MUHELY || {};
     /*
-     * Két popup-szint van: a 0. a fő (munkalap, ügyfél, eszköz), az 1. erre
+     * Több popup-szint van: a 0. a fő (munkalap, ügyfél, eszköz), a 1–3. erre
      * épül rá – például az új ügyfél vagy új eszköz felvitele a munkalap
-     * űrlapjáról. A ráépülő szint bezárása után a fő popup érintetlen marad.
+     * űrlapjáról, vagy az új ügyfél az eszközűrlapról, ami maga is a munkalap
+     * fölött áll. A ráépülő szint bezárása után az alatta lévő popup érintetlen marad.
      */
-    var szintek = [null, null];
+    var szintek = [null, null, null, null];
 
     /* ---------------------------------------------------------------- */
     /* A popup váza – szintenként egyszer jön létre, utána újrahasznosul */
@@ -1129,6 +1130,12 @@
     /* Ellenőrző oldal megnyitása                                       */
     /* ---------------------------------------------------------------- */
 
+    /**
+     * Az ellenőrző gombok valódi linkek: a kattintás mindig megnyitja az
+     * oldalt új lapon – az IMEI hiánya sem akadály. Ha már megvan a teljes
+     * IMEI, a vágólapra tesszük, hogy az oldalon csak be kelljen illeszteni.
+     * Ha a cím tartalmaz {imei} helyőrzőt, abba beírjuk.
+     */
     document.addEventListener('click', function (esemeny) {
         var gomb = esemeny.target.closest('[data-sdh-ellenorzo]');
 
@@ -1136,50 +1143,445 @@
             return;
         }
 
-        esemeny.preventDefault();
-
         var urlap = gomb.closest('form');
         var imeiMezo = urlap ? urlap.querySelector('[data-sdh-imei]') : null;
         var imei = imeiMezo ? imeiMezo.value.replace(/\D/g, '') : '';
-        var cim = gomb.dataset.sdhEllenorzo;
+        var teljes = imei.length === 15;
+        var cim = gomb.dataset.sdhEllenorzo || gomb.getAttribute('href') || '';
 
-        if (imei.length !== 15) {
-            jelzes(urlap, 'figyelem', 'Előbb írd be a teljes, 15 számjegyű IMEI-t.');
-
-            return;
-        }
-
-        // Ha az oldal URL-ben is fogadja az IMEI-t, beírva nyitjuk meg.
         if (cim.indexOf('{imei}') !== -1) {
-            window.open(cim.replace('{imei}', encodeURIComponent(imei)), '_blank', 'noopener');
-            jelzes(urlap, 'siker', 'Megnyitottam az ellenőrzőt. Az eredményt másold ide vissza.');
+            esemeny.preventDefault();
+            window.open(cim.replace('{imei}', teljes ? encodeURIComponent(imei) : ''), '_blank', 'noopener');
+
+            if (urlap) {
+                jelzes(
+                    urlap,
+                    teljes ? 'siker' : 'figyelem',
+                    teljes
+                        ? 'Megnyitottam az ellenőrzőt. Az eredményt másold ide vissza.'
+                        : 'Megnyitottam az ellenőrzőt. Az IMEI-t még nem írtad be teljesen (15 számjegy).'
+                );
+            }
 
             return;
         }
 
-        // Különben a vágólapra tesszük, hogy ott csak be kelljen illeszteni.
-        var nyit = function (uzenet, tipus) {
-            window.open(cim, '_blank', 'noopener');
-            jelzes(urlap, tipus, uzenet);
-        };
+        // A link maga nyílik meg (böngésző kezeli) – itt csak a vágólap és a jelzés.
+        if (!urlap) {
+            return;
+        }
+
+        if (!teljes) {
+            jelzes(urlap, 'figyelem', 'Megnyílt az ellenőrző. Az IMEI-t még nem írtad be teljesen (15 számjegy).');
+
+            return;
+        }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(imei)
                 .then(function () {
-                    nyit(
-                        'Az IMEI a vágólapon – illeszd be az oldalon, majd az eredményt ' +
-                            'másold vissza a fenti mezőbe.',
-                        'siker'
+                    jelzes(
+                        urlap,
+                        'siker',
+                        'Az IMEI a vágólapon – illeszd be az oldalon, majd az eredményt másold ide vissza.'
                     );
                 })
                 .catch(function () {
-                    nyit('Megnyitottam az ellenőrzőt. Az IMEI: ' + imei, 'siker');
+                    jelzes(urlap, 'siker', 'Megnyílt az ellenőrző. Az IMEI: ' + imei);
                 });
 
             return;
         }
 
-        nyit('Megnyitottam az ellenőrzőt. Az IMEI: ' + imei, 'siker');
+        jelzes(urlap, 'siker', 'Megnyílt az ellenőrző. Az IMEI: ' + imei);
+    });
+
+    /* ---------------------------------------------------------------- */
+    /* Popupból választható mezők (kategória, gyártó, szín, tartozék)   */
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * A mező csak olvasható; kattintásra középen felugró választó jön.
+     * A választás visszaíródik a mezőbe, így a mentés és az IMEI-kitöltés
+     * ugyanúgy látja, mint bármelyik sima szövegmezőt.
+     *
+     * A tartalom a mező data-sdh-pop-adat attribútumában utazik (JSON):
+     *   kategoria, gyarto: [{cim, elemek: [szöveg…]}]
+     *   szin:              [{nev, h}]   (h = a mintakör CSS-háttere)
+     *   tartozek:          [szöveg…]
+     */
+
+    function popElem(tag, osztaly, szoveg) {
+        var elem = document.createElement(tag);
+
+        if (osztaly) {
+            elem.className = osztaly;
+        }
+
+        if (szoveg !== undefined) {
+            elem.textContent = szoveg;
+        }
+
+        return elem;
+    }
+
+    function popBeir(mezo, ertek) {
+        mezo.value = ertek;
+        mezo.dispatchEvent(new Event('input', { bubbles: true }));
+        mezo.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function popNorm(szoveg) {
+        return String(szoveg || '').toLowerCase().trim();
+    }
+
+    /** Kereső a választó tetején: a nem egyező gombokat és üres csoportokat elrejti. */
+    function popKereso(torzs, hely) {
+        var mezo = popElem('input', 'sdh-pop__kereso');
+        mezo.type = 'search';
+        mezo.placeholder = 'Keresés…';
+        mezo.setAttribute('aria-label', 'Keresés');
+        mezo.autocomplete = 'off';
+        hely.appendChild(mezo);
+
+        mezo.addEventListener('input', function () {
+            var q = popNorm(mezo.value);
+
+            Array.prototype.forEach.call(torzs.querySelectorAll('[data-pop-elem]'), function (elem) {
+                elem.hidden = q !== '' && popNorm(elem.dataset.popElem).indexOf(q) === -1;
+            });
+
+            Array.prototype.forEach.call(torzs.querySelectorAll('[data-pop-csoport]'), function (csoport) {
+                csoport.hidden = !csoport.querySelector('[data-pop-elem]:not([hidden])');
+            });
+        });
+
+        return mezo;
+    }
+
+    /** Csoportosított gombok (kategória, gyártó). */
+    function popCsoportok(torzs, adat, aktualis, valasztott) {
+        adat.forEach(function (csoport) {
+            var doboz = popElem('section', 'sdh-pop__csoport');
+            doboz.setAttribute('data-pop-csoport', '');
+            doboz.appendChild(popElem('h4', 'sdh-pop__csoportcim', csoport.cim));
+
+            var racs = popElem('div', 'sdh-pop__racs');
+
+            csoport.elemek.forEach(function (nev) {
+                var gomb = popElem('button', 'sdh-pop__chip', nev);
+                gomb.type = 'button';
+                gomb.setAttribute('data-pop-elem', nev);
+
+                if (popNorm(nev) === popNorm(aktualis)) {
+                    gomb.classList.add('is-aktiv');
+                }
+
+                gomb.addEventListener('click', function () {
+                    valasztott(nev);
+                });
+
+                racs.appendChild(gomb);
+            });
+
+            doboz.appendChild(racs);
+            torzs.appendChild(doboz);
+        });
+    }
+
+    /** „Saját érték” sor: szövegmező + Használ gomb. */
+    function popSajat(hely, cimke, helyorzo, kezdet, valasztott) {
+        var sor = popElem('div', 'sdh-pop__sajat');
+        sor.appendChild(popElem('span', 'sdh-pop__sajatcimke', cimke));
+
+        var mezo = popElem('input', 'sdh-pop__sajatmezo');
+        mezo.type = 'text';
+        mezo.placeholder = helyorzo;
+        mezo.value = kezdet || '';
+        mezo.autocomplete = 'off';
+
+        sor.appendChild(mezo);
+
+        // Valasztott nélkül (tartozéklista) csak mező van: a „Kész” gomb gyűjti össze.
+        if (valasztott) {
+            var gomb = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Használ');
+            gomb.type = 'button';
+
+            var kesz = function () {
+                var ertek = mezo.value.trim();
+
+                if (ertek) {
+                    valasztott(ertek);
+                }
+            };
+
+            gomb.addEventListener('click', kesz);
+            sor.appendChild(gomb);
+        }
+
+        mezo.addEventListener('keydown', function (esemeny) {
+            if (esemeny.key === 'Enter') {
+                esemeny.preventDefault();
+
+                if (valasztott) {
+                    var ertek = mezo.value.trim();
+
+                    if (ertek) {
+                        valasztott(ertek);
+                    }
+                }
+            }
+        });
+
+        hely.appendChild(sor);
+
+        return mezo;
+    }
+
+    function popSzinek(torzs, adat, aktualis, valasztott) {
+        var racs = popElem('div', 'sdh-pop__racs sdh-pop__racs--szin');
+
+        adat.forEach(function (szin) {
+            var gomb = popElem('button', 'sdh-pop__chip sdh-pop__chip--szin');
+            gomb.type = 'button';
+            gomb.setAttribute('data-pop-elem', szin.nev);
+
+            var kor = popElem('span', 'sdh-pop__szin');
+            kor.style.background = szin.h;
+            gomb.appendChild(kor);
+            gomb.appendChild(popElem('span', '', szin.nev));
+
+            if (popNorm(szin.nev) === popNorm(aktualis)) {
+                gomb.classList.add('is-aktiv');
+            }
+
+            gomb.addEventListener('click', function () {
+                valasztott(szin.nev);
+            });
+
+            racs.appendChild(gomb);
+        });
+
+        torzs.appendChild(racs);
+    }
+
+    function popTartozekok(torzs, lista, aktualis, valasztott) {
+        var jelolt = String(aktualis || '').split(',').map(function (t) {
+            return t.trim();
+        }).filter(Boolean);
+
+        var ismert = lista.map(popNorm);
+        var egyeb = jelolt.filter(function (t) {
+            return ismert.indexOf(popNorm(t)) === -1;
+        });
+
+        var racs = popElem('div', 'sdh-pop__racs sdh-pop__racs--tartozek');
+        var dobozok = [];
+
+        lista.forEach(function (nev) {
+            var cimke = popElem('label', 'sdh-pop__jelolo');
+            cimke.setAttribute('data-pop-elem', nev);
+
+            var doboz = document.createElement('input');
+            doboz.type = 'checkbox';
+            doboz.value = nev;
+            doboz.checked = jelolt.some(function (t) {
+                return popNorm(t) === popNorm(nev);
+            });
+
+            cimke.appendChild(doboz);
+            cimke.appendChild(popElem('span', '', nev));
+            racs.appendChild(cimke);
+            dobozok.push(doboz);
+        });
+
+        torzs.appendChild(racs);
+
+        var lab = popElem('div', 'sdh-pop__lab');
+        var egyebMezo = popSajat(torzs, 'Egyéb', 'Más tartozék – vesszővel több is írható', egyeb.join(', '), null);
+
+        var kesz = popElem('button', 'sdh-gomb sdh-gomb--elsodleges', 'Kész');
+        kesz.type = 'button';
+        kesz.addEventListener('click', function () {
+            var ki = dobozok.filter(function (d) {
+                return d.checked;
+            }).map(function (d) {
+                return d.value;
+            });
+
+            egyebMezo.value.split(',').forEach(function (t) {
+                t = t.trim();
+
+                if (t && ki.indexOf(t) === -1) {
+                    ki.push(t);
+                }
+            });
+
+            valasztott(ki.join(', '));
+        });
+
+        var torol = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Mindet töröl');
+        torol.type = 'button';
+        torol.addEventListener('click', function () {
+            dobozok.forEach(function (d) {
+                d.checked = false;
+            });
+            egyebMezo.value = '';
+        });
+
+        lab.appendChild(kesz);
+        lab.appendChild(torol);
+        torzs.appendChild(lab);
+    }
+
+    function popNyit(mezo) {
+        var tipus = mezo.dataset.sdhPop;
+        var adat;
+
+        try {
+            adat = JSON.parse(mezo.getAttribute('data-sdh-pop-adat') || '[]');
+        } catch (e) {
+            adat = [];
+        }
+
+        var cimek = {
+            kategoria: 'Kategória',
+            gyarto: 'Gyártó',
+            szin: 'Szín',
+            tartozek: 'Tartozékok'
+        };
+
+        var dialog = document.createElement('dialog');
+        dialog.className = 'sdh-modal sdh-modal--pop sdh-modal--pop-' + tipus;
+        dialog.innerHTML =
+            '<div class="sdh-modal__doboz">' +
+            '  <button type="button" class="sdh-modal__bezar" aria-label="Bezárás">&times;</button>' +
+            '  <div class="sdh-modal__torzs"></div>' +
+            '</div>';
+
+        document.body.appendChild(dialog);
+
+        var torzs = dialog.querySelector('.sdh-modal__torzs');
+        var bezarva = false;
+
+        var bezarPop = function () {
+            if (!bezarva) {
+                bezarva = true;
+
+                if (dialog.open) {
+                    dialog.close();
+                }
+            }
+        };
+
+        var valasztott = function (ertek) {
+            popBeir(mezo, ertek);
+            bezarPop();
+        };
+
+        dialog.querySelector('.sdh-modal__bezar').addEventListener('click', bezarPop);
+
+        dialog.addEventListener('click', function (esemeny) {
+            if (esemeny.target === dialog) {
+                bezarPop();
+            }
+        });
+
+        dialog.addEventListener('close', function () {
+            dialog.remove();
+            mezo.focus();
+        });
+
+        torzs.appendChild(popElem('h2', 'sdh-modal__cim', cimek[tipus] || 'Választás'));
+
+        var fej = popElem('div', 'sdh-pop__fej');
+        var targy = popElem('div', 'sdh-pop__targy');
+        var kereso = null;
+
+        if (tipus === 'kategoria' || tipus === 'gyarto') {
+            kereso = popKereso(targy, fej);
+            torzs.appendChild(fej);
+        }
+
+        torzs.appendChild(targy);
+
+        if (tipus === 'kategoria') {
+            popCsoportok(targy, adat, mezo.value, valasztott);
+        } else if (tipus === 'gyarto') {
+            popCsoportok(targy, adat, mezo.value, valasztott);
+
+            var alj = popElem('div', 'sdh-pop__alj');
+            popSajat(alj, 'Más gyártó', 'Írd be a nevét', '', valasztott);
+
+            if (mezo.value) {
+                var ures = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Gyártó törlése');
+                ures.type = 'button';
+                ures.addEventListener('click', function () {
+                    valasztott('');
+                });
+                alj.appendChild(ures);
+            }
+
+            torzs.appendChild(alj);
+        } else if (tipus === 'szin') {
+            popSzinek(targy, adat, mezo.value, valasztott);
+
+            var szinAlj = popElem('div', 'sdh-pop__alj');
+            popSajat(szinAlj, 'Más szín', 'Pl. Neon sárga', '', valasztott);
+
+            if (mezo.value) {
+                var szinUres = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Szín törlése');
+                szinUres.type = 'button';
+                szinUres.addEventListener('click', function () {
+                    valasztott('');
+                });
+                szinAlj.appendChild(szinUres);
+            }
+
+            torzs.appendChild(szinAlj);
+        } else if (tipus === 'tartozek') {
+            popTartozekok(targy, adat, mezo.value, valasztott);
+        }
+
+        dialog.showModal();
+
+        var elso = kereso || torzs.querySelector('input[type="text"], .is-aktiv, .sdh-pop__chip, input[type="checkbox"]');
+
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var mezo = esemeny.target.closest('[data-sdh-pop]');
+
+        if (!mezo) {
+            return;
+        }
+
+        esemeny.preventDefault();
+        popNyit(mezo);
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        var mezo = esemeny.target.closest ? esemeny.target.closest('[data-sdh-pop]') : null;
+
+        if (!mezo) {
+            return;
+        }
+
+        if (esemeny.key === 'Enter' || esemeny.key === ' ' || esemeny.key === 'ArrowDown') {
+            esemeny.preventDefault();
+            popNyit(mezo);
+
+            return;
+        }
+
+        // Gyors törlés a mezőből – kategóriát nem lehet üresre venni.
+        if ((esemeny.key === 'Backspace' || esemeny.key === 'Delete') && mezo.dataset.sdhPop !== 'kategoria') {
+            esemeny.preventDefault();
+            popBeir(mezo, '');
+        }
     });
 
     /* ---------------------------------------------------------------- */
@@ -1544,11 +1946,22 @@
      * „+” az ügyfélmező mellett: az új ügyfél popupban nyílik a munkalap
      * fölött. Mentés után az űrlap megmarad, az új ügyfél be van töltve.
      */
+    function sajatSzint(elem) {
+        for (var i = 0; i < szintek.length; i++) {
+            if (szintek[i] && szintek[i].dialog.contains(elem)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     function munkalapUjUgyfel(gomb) {
         var urlap = gomb.closest('form');
 
         nyit('ugyfelek', '0', {
-            szint: 1,
+            // Az űrlap fölé épül: munkalapról vagy eszközről, popupból vagy oldalról is.
+            szint: Math.min(sajatSzint(gomb) + 1, szintek.length - 1),
             siker: function (adat) {
                 var doboz = munkalapUgyfelBeallit(urlap, adat.id, adat.nev);
 
@@ -1576,7 +1989,7 @@
         var ugyfelId = valaszto ? valaszto.querySelector('input[type="hidden"]').value : '0';
 
         nyit('eszkozok', '0', {
-            szint: 1,
+            szint: Math.min(sajatSzint(gomb) + 1, szintek.length - 1),
             parameterek: ugyfelId && ugyfelId !== '0' ? { ugyfel_id: ugyfelId } : {},
             siker: function (adat) {
                 var doboz = munkalapUgyfelBeallit(urlap, adat.ugyfel_id, adat.ugyfel_nev);

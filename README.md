@@ -57,6 +57,33 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.0
+- **Eszközűrlap újratervezve** az ügyfélűrlap kompakt, lekerekített mintájára
+  (lapfülek, címke + mező sorban, két szimmetrikus oszlop, nem táblázatos):
+  Eszköz | Azonosítók | Garancia és átvétel; alul Megjegyzés | Belső megjegyzés |
+  Átvételkori állapot | Készülékkép / fájlok.
+- **Új ügyfél a „+” gombbal** az eszközűrlapon is (ráépülő popup; az új ügyfél
+  azonnal be van töltve). A ráépülő popup mostantól az űrlap saját szintje fölé
+  nyílik, így az eszköz-popup is lehet egy munkalap fölött.
+- **IMEI-ellenőrző gombok valódi linkek**: mindig megnyitják az oldalt új lapon
+  (korábban 15 számjegy nélkül nem történt semmi). Teljes IMEI-nél a vágólapra
+  kerül; `{imei}` helyőrzős címbe beírja.
+- **Kategória** a teljes elektronikai piacot lefedi (52 kategória, 9 csoportban:
+  telefon, TV, konzol, hajszárító, háztartási gépek…); középen felugró
+  popupban, kereséssel. A régi kulcsok (telefon, tablet, laptop, ora, asztali,
+  egyeb) változatlanok.
+- **Gyártó** (102 nagy gyártó, csoportosítva, kereséssel, „Más gyártó” sorral),
+  **Szín** (színmintás paletta, „Más szín” sorral) és **Tartozékok** (jelölőnégyzetes
+  lista a MunkaLap 3 átvételi lapja szerint + Egyéb) is popupban.
+- **Készülékkép / csatolt fájlok**: ugyanaz a panel, mint az ügyfélnél
+  (húzás, ikon/lista/tömör nézet, eltávolítás mentéskor); `SDH_Muhely_Csatolmany`
+  típusa: `eszkoz`.
+- **Belső megjegyzés** (új oszlop: `belso_megjegyzes`): csak a CRM-ben látszik.
+  Az ügyfél felé menő bármilyen kimenet (nyomtatvány, elismervény, üzenet) az
+  eszköz adatait a `SDH_Muhely_Eszkoz::kulso_adatok()` függvényen át kérje –
+  abban a belső megjegyzés szándékosan nincs benne.
+- DB_VERSION 0.13.0: `belso_megjegyzes` (text), `tartozekok` varchar(255) → text.
+
 ### 0.18.3
 - Irányítószám-lista: a **Magyar Posta hivatalos táblázata** (2026-09-23)
   a GeoNames helyett, **településrészekkel**: 3569 sor, 3155 település,

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.12.0';
+    public const DB_VERSION = '0.13.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -142,6 +142,7 @@ final class SDH_Muhely_Schema
             kategoria varchar(60) NOT NULL default '',
             kedvezmeny decimal(5,2) NOT NULL default 0.00,
             megjegyzes text NULL,
+            belso_megjegyzes text NULL,
             aktiv tinyint(1) NOT NULL default 1,
             forras varchar(30) NOT NULL default 'kezi',
             kulso_azonosito varchar(40) NOT NULL default '',
@@ -194,7 +195,7 @@ final class SDH_Muhely_Schema
             szin varchar(40) NOT NULL default '',
             zarkod varchar(60) NOT NULL default '',
             minta varchar(20) NOT NULL default '',
-            tartozekok varchar(255) NOT NULL default '',
+            tartozekok text NULL,
             atveteli_allapot text NULL,
             garancias tinyint(1) NOT NULL default 0,
             vasarlas_datuma date NULL,

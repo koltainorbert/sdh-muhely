@@ -33,7 +33,7 @@ final class SDH_Muhely_Csatolmany
     private const MAPPA = 'sdh-muhely/csatolmany';
 
     /** Mely modulokhoz lehet csatolni (új modulnál ide kell felvenni). */
-    private const TIPUSOK = ['ugyfel'];
+    private const TIPUSOK = ['ugyfel', 'eszkoz'];
 
     /** A mi felső korlátunk fájlonként; a szerver saját korlátja ennél kisebb is lehet. */
     private const MAX_FAJL_MB = 25;
