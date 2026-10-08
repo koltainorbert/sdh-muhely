@@ -514,154 +514,152 @@ final class SDH_Muhely_Ugyfel
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
 
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Alapadatok</h2>
+        <div class="sdh-ugyfelurlap">
+            <?php
+            // Kompakt, lapfüles elrendezés a MunkaLap 3 ügyfélszerkesztője nyomán.
+            // A lapfülek tisztán CSS-ből működnek (rádiógombok), ezért JS nélkül
+            // is használhatók. A „Központi cím” a számlázási cím mezőit tárolja.
+            ?>
+            <div class="sdh-fulek">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_cim"
+                       id="ful_kozponti" checked>
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_cim"
+                       id="ful_levelezesi">
 
-            <div class="sdh-mezok">
-                <div class="sdh-mezo">
-                    <label for="tipus">Típus</label>
-                    <select name="tipus" id="tipus">
-                        <?php foreach (self::tipusok() as $kulcs => $cimke) : ?>
-                            <option value="<?php echo esc_attr($kulcs); ?>"
-                                <?php selected($ert('tipus', 'maganszemely'), $kulcs); ?>>
-                                <?php echo esc_html($cimke); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="sdh-fulek__sav">
+                    <label for="ful_kozponti">Központi cím</label>
+                    <label for="ful_levelezesi">Levelezési cím</label>
                 </div>
 
-                <div class="sdh-mezo">
-                    <label for="nev">Név <span class="sdh-kotelezo">*</span></label>
-                    <input type="text" name="nev" id="nev" required
-                           value="<?php echo esc_attr($ert('nev')); ?>">
-                    <span class="sdh-mezo__sugo">Cégnél a cég neve, magánszemélynél a teljes név.</span>
+                <div class="sdh-fulek__panel sdh-fulek__panel--1">
+                    <div class="sdh-sor">
+                        <input type="text" name="nev" id="nev" required aria-label="Név"
+                               placeholder="Név * (cégnél a cég neve, magánszemélynél a teljes név)"
+                               value="<?php echo esc_attr($ert('nev')); ?>">
+                    </div>
+
+                    <div class="sdh-sor sdh-sor--cim">
+                        <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam"
+                               aria-label="Irányítószám" placeholder="Isz."
+                               value="<?php echo esc_attr($ert('szamlazasi_iranyitoszam')); ?>">
+                        <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules"
+                               aria-label="Település" placeholder="Település"
+                               value="<?php echo esc_attr($ert('szamlazasi_telepules')); ?>">
+                        <input type="text" name="szamlazasi_cim" id="szamlazasi_cim"
+                               aria-label="Utca, házszám" placeholder="Utca, házszám"
+                               value="<?php echo esc_attr($ert('szamlazasi_cim')); ?>">
+                        <input type="text" name="szamlazasi_orszag" id="szamlazasi_orszag"
+                               aria-label="Ország" placeholder="Ország"
+                               value="<?php echo esc_attr($ert('szamlazasi_orszag', 'Magyarország')); ?>">
+                    </div>
+
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
+                            <label for="kategoria">Kategória</label>
+                            <input type="text" name="kategoria" id="kategoria"
+                                   placeholder="Pl. viszonteladó, szerződéses partner"
+                                   value="<?php echo esc_attr($ert('kategoria')); ?>">
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="ugyfel_szam">Ügyfélszám</label>
+                            <input type="text" name="ugyfel_szam" id="ugyfel_szam"
+                                   placeholder="Mentéskor generálódik"
+                                   value="<?php echo esc_attr($ert('ugyfel_szam')); ?>">
+                        </div>
+                    </div>
+
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
+                            <label for="adoszam">Adószám</label>
+                            <input type="text" name="adoszam" id="adoszam"
+                                   value="<?php echo esc_attr($ert('adoszam')); ?>">
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="kedvezmeny">Kedvezmény</label>
+                            <input type="number" name="kedvezmeny" id="kedvezmeny"
+                                   step="0.01" min="0" max="100"
+                                   value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
+                            <span class="sdh-ig__egyseg">%</span>
+                        </div>
+                    </div>
+
+                    <div class="sdh-sor">
+                        <div class="sdh-ig">
+                            <span class="sdh-ig__cimke">Státusz</span>
+                            <div class="sdh-szegmens" role="radiogroup" aria-label="Státusz">
+                                <?php foreach (self::tipusok() as $kulcs => $cimke) : ?>
+                                    <label class="sdh-szegmens__elem">
+                                        <input type="radio" name="tipus"
+                                               value="<?php echo esc_attr($kulcs); ?>"
+                                            <?php checked($ert('tipus', 'maganszemely'), $kulcs); ?>>
+                                        <span><?php echo esc_html($cimke); ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sdh-racs">
+                        <div class="sdh-racs__cella">
+                            <label for="telefon">Telefon</label>
+                            <input type="tel" name="telefon" id="telefon"
+                                   value="<?php echo esc_attr($ert('telefon')); ?>">
+                        </div>
+                        <div class="sdh-racs__cella">
+                            <label for="telefon2">Telefon 2.</label>
+                            <input type="tel" name="telefon2" id="telefon2"
+                                   value="<?php echo esc_attr($ert('telefon2')); ?>">
+                        </div>
+                        <div class="sdh-racs__cella">
+                            <label for="email">E-mail</label>
+                            <input type="email" name="email" id="email"
+                                   value="<?php echo esc_attr($ert('email')); ?>">
+                        </div>
+                        <div class="sdh-racs__cella">
+                            <label for="kapcsolattarto">Kapcsolattartó</label>
+                            <input type="text" name="kapcsolattarto" id="kapcsolattarto"
+                                   value="<?php echo esc_attr($ert('kapcsolattarto')); ?>">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="sdh-mezo">
-                    <label for="kapcsolattarto">Kapcsolattartó</label>
-                    <input type="text" name="kapcsolattarto" id="kapcsolattarto"
-                           value="<?php echo esc_attr($ert('kapcsolattarto')); ?>">
-                </div>
+                <div class="sdh-fulek__panel sdh-fulek__panel--2">
+                    <label class="sdh-jelolo" for="levelezesi_azonos">
+                        <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
+                            <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
+                        Megegyezik a központi címmel
+                    </label>
 
-                <div class="sdh-mezo">
-                    <label for="adoszam">Adószám</label>
-                    <input type="text" name="adoszam" id="adoszam"
-                           value="<?php echo esc_attr($ert('adoszam')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="telefon">Telefon</label>
-                    <input type="tel" name="telefon" id="telefon"
-                           value="<?php echo esc_attr($ert('telefon')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="telefon2">Telefon 2.</label>
-                    <input type="tel" name="telefon2" id="telefon2"
-                           value="<?php echo esc_attr($ert('telefon2')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="email">E-mail</label>
-                    <input type="email" name="email" id="email"
-                           value="<?php echo esc_attr($ert('email')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="ugyfel_szam">Ügyfélszám</label>
-                    <input type="text" name="ugyfel_szam" id="ugyfel_szam"
-                           value="<?php echo esc_attr($ert('ugyfel_szam')); ?>">
-                    <span class="sdh-mezo__sugo">Üresen hagyva a mentéskor generálódik.</span>
+                    <div class="sdh-sor sdh-sor--cim3 sdh-cimsor">
+                        <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam"
+                               aria-label="Irányítószám" placeholder="Isz."
+                               value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
+                        <input type="text" name="levelezesi_telepules" id="levelezesi_telepules"
+                               aria-label="Település" placeholder="Település"
+                               value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
+                        <input type="text" name="levelezesi_cim" id="levelezesi_cim"
+                               aria-label="Utca, házszám" placeholder="Utca, házszám"
+                               value="<?php echo esc_attr($ert('levelezesi_cim')); ?>">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Számlázási cím</h2>
+            <div class="sdh-fulek sdh-fulek--also">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_also"
+                       id="ful_megjegyzes" checked>
 
-            <div class="sdh-mezok">
-                <div class="sdh-mezo">
-                    <label for="szamlazasi_iranyitoszam">Irányítószám</label>
-                    <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam"
-                           value="<?php echo esc_attr($ert('szamlazasi_iranyitoszam')); ?>">
+                <div class="sdh-fulek__sav">
+                    <label for="ful_megjegyzes">Megjegyzés</label>
                 </div>
 
-                <div class="sdh-mezo">
-                    <label for="szamlazasi_telepules">Település</label>
-                    <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules"
-                           value="<?php echo esc_attr($ert('szamlazasi_telepules')); ?>">
-                </div>
-
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label for="szamlazasi_cim">Utca, házszám</label>
-                    <input type="text" name="szamlazasi_cim" id="szamlazasi_cim"
-                           value="<?php echo esc_attr($ert('szamlazasi_cim')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="szamlazasi_orszag">Ország</label>
-                    <input type="text" name="szamlazasi_orszag" id="szamlazasi_orszag"
-                           value="<?php echo esc_attr($ert('szamlazasi_orszag', 'Magyarország')); ?>">
-                </div>
-            </div>
-        </div>
-
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Levelezési cím</h2>
-
-            <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
-                <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
-                    <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
-                <label for="levelezesi_azonos">Megegyezik a számlázási címmel</label>
-            </div>
-
-            <div class="sdh-mezok">
-                <div class="sdh-mezo">
-                    <label for="levelezesi_iranyitoszam">Irányítószám</label>
-                    <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam"
-                           value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="levelezesi_telepules">Település</label>
-                    <input type="text" name="levelezesi_telepules" id="levelezesi_telepules"
-                           value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
-                </div>
-
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label for="levelezesi_cim">Utca, házszám</label>
-                    <input type="text" name="levelezesi_cim" id="levelezesi_cim"
-                           value="<?php echo esc_attr($ert('levelezesi_cim')); ?>">
-                </div>
-            </div>
-        </div>
-
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Besorolás és megjegyzés</h2>
-
-            <div class="sdh-mezok">
-                <div class="sdh-mezo">
-                    <label for="kategoria">Kategória</label>
-                    <input type="text" name="kategoria" id="kategoria"
-                           value="<?php echo esc_attr($ert('kategoria')); ?>">
-                    <span class="sdh-mezo__sugo">Pl. viszonteladó, szerződéses partner.</span>
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="kedvezmeny">Kedvezmény (%)</label>
-                    <input type="number" name="kedvezmeny" id="kedvezmeny"
-                           step="0.01" min="0" max="100"
-                           value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
-                </div>
-
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label for="megjegyzes">Megjegyzés</label>
-                    <textarea name="megjegyzes" id="megjegyzes"><?php
+                <div class="sdh-fulek__panel sdh-fulek__panel--1">
+                    <textarea name="megjegyzes" id="megjegyzes" aria-label="Megjegyzés"><?php
                         echo esc_textarea($ert('megjegyzes'));
                     ?></textarea>
                 </div>
             </div>
-        </div>
 
         <div class="sdh-urlap__lablec">
             <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
@@ -708,6 +706,7 @@ final class SDH_Muhely_Ugyfel
                     <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>
                 </a>
             <?php endif; ?>
+        </div>
         </div>
         <?php
     }

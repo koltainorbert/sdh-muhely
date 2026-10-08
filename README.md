@@ -57,6 +57,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.16.4
+- Új / szerkesztett ügyfél: kompakt, lapfüles űrlap a MunkaLap 3 mintájára.
+  Központi cím lap (név, cím egy sorban, kategória, ügyfélszám, adószám,
+  kedvezmény, státusz gombsor, elérhetőségek rácsban) és Levelezési cím lap;
+  alul Megjegyzés lap. Nem kell lapozni: 1280×720-as képernyőn is egy
+  képernyőn elfér. A lapfülek CSS-ből működnek (JS nélkül is). A „Központi
+  cím” a számlázási cím mezőit tárolja; Szállítási cím / Telephely lap még
+  nincs (nincs hozzá adatmező).
+- Hibás mezőnél (pl. üres név) az űrlap automatikusan a hibát tartalmazó
+  lapfülre vált.
+
 ### 0.16.3
 - Új munkalap: az alapértelmezett állapot a Nyitott (az állapotlistában az
   `alap` jelzővel állítható; a lista sorrendje változatlan).

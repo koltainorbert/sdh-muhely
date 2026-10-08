@@ -1575,6 +1575,32 @@
         });
     }
 
+    /**
+     * Lapfüles űrlapon (pl. ügyfél) a rejtett lapfülön lévő hibás mező nem
+     * fókuszálható, a böngésző ilyenkor szó nélkül nem küldi be az űrlapot.
+     * Ezért érvénytelen mezőnél átváltunk az őt tartalmazó lapfülre.
+     */
+    document.addEventListener('invalid', function (esemeny) {
+        var panel = esemeny.target.closest ? esemeny.target.closest('.sdh-fulek__panel') : null;
+        var fulek = panel ? panel.closest('.sdh-fulek') : null;
+
+        if (!fulek) {
+            return;
+        }
+
+        var panelek = Array.prototype.filter.call(fulek.children, function (elem) {
+            return elem.classList.contains('sdh-fulek__panel');
+        });
+        var valasztok = Array.prototype.filter.call(fulek.children, function (elem) {
+            return elem.classList.contains('sdh-fulek__ful');
+        });
+        var radio = valasztok[panelek.indexOf(panel)];
+
+        if (radio && !radio.checked) {
+            radio.checked = true;
+        }
+    }, true);
+
     /** Új hibasor: a <template> sablont klónozza a következő indexszel. */
     function hibasorUj(gomb) {
         var doboz = gomb.closest('.sdh-doboz');
