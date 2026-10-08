@@ -907,8 +907,11 @@ final class SDH_Muhely_Ugyfel
         [$uj_id, $uzenet] = $eredmeny;
 
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
+        // A nevet a munkalap-űrlap „+” gombja használja: a frissen felvitt
+        // ügyfelet oldalfrissítés nélkül tölti be az ügyfélmezőbe.
         wp_send_json_success([
             'id'     => $uj_id,
+            'nev'    => (string) $adatok['nev'],
             'vissza' => self::vissza(['uzenet' => $uzenet]),
         ]);
     }

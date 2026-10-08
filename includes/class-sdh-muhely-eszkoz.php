@@ -1037,9 +1037,16 @@ final class SDH_Muhely_Eszkoz
 
         [$uj_id, $uzenet] = $eredmeny;
 
+        // Az ügyfél adatai a munkalap-űrlap „+” gombjához kellenek: az új
+        // eszköz oldalfrissítés nélkül kiválasztódik, és az ügyfélmező is
+        // követi, ha a popupban másik ügyfelet választottak.
+        $ugyfel_id = (int) $adatok['ugyfel_id'];
+
         wp_send_json_success([
-            'id'     => $uj_id,
-            'vissza' => self::vissza(['uzenet' => $uzenet]),
+            'id'         => $uj_id,
+            'ugyfel_id'  => $ugyfel_id,
+            'ugyfel_nev' => SDH_Muhely_Ugyfel::nev($ugyfel_id),
+            'vissza'     => self::vissza(['uzenet' => $uzenet]),
         ]);
     }
 

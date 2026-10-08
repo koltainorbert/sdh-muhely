@@ -57,6 +57,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.16.3
+- Új munkalap: az alapértelmezett állapot a Nyitott (az állapotlistában az
+  `alap` jelzővel állítható; a lista sorrendje változatlan).
+- Új munkalap: az ügyfél és az eszköz mellett „+” gomb. Az új ügyfél / új eszköz
+  a munkalap fölött, külön popupban nyílik; mentés után a munkalap-űrlap
+  megmarad, az új ügyfél / eszköz be van töltve. Az eszköz popupja a már
+  kiválasztott ügyféllel előtöltve nyílik, és ha ott másik ügyfelet választanak,
+  az ügyfélmező követi.
+- A popup két szintes lett (fő + ráépülő).
+
 ### 0.16.2
 - A `/muhely/…` címet a bővítmény akkor is felismeri, ha a WordPress
   szabálylistájából a szabály kiesett: a felület elérhetősége már nem függ

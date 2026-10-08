@@ -189,7 +189,7 @@ final class SDH_Muhely_Munkalap
             'arajanlat | Árajánlat | zold |',
             'sablon | Sablon | szurke |',
             'fuggo | Függő | kek | szamozott',
-            'nyitott | Nyitott | narancs | szamozott',
+            'nyitott | Nyitott | narancs | szamozott, alap',
             'elkeszult | Elkészült | olajzold | szamozott',
             'lezart | Lezárt | lila | szamozott, zart',
             'ervenytelen | Érvénytelen | piros | szamozott, zart',
@@ -244,6 +244,7 @@ final class SDH_Muhely_Munkalap
                 'szin'      => isset(self::szinek()[$szin]) ? $szin : 'szurke',
                 'szamozott' => in_array('szamozott', $jelzok, true),
                 'zart'      => in_array('zart', $jelzok, true),
+                'alap'      => in_array('alap', $jelzok, true),
             ];
         }
 
@@ -331,12 +332,26 @@ final class SDH_Muhely_Munkalap
     }
 
     /**
-     * Az új munkalap alapértelmezett állapota: az első számozott.
+     * Az új munkalap alapértelmezett állapota.
+     *
+     * Sorrend: az `alap` jelzővel ellátott állapot; ha a mentett
+     * beállításban még nincs ilyen (a jelző későbbi), a `nyitott` kulcsú;
+     * végül az első számozott.
      *
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $lista
      */
     private static function alap_kulcs(array $lista): string
     {
+        foreach ($lista as $kulcs => $allapot) {
+            if (!empty($allapot['alap'])) {
+                return (string) $kulcs;
+            }
+        }
+
+        if (isset($lista['nyitott'])) {
+            return 'nyitott';
+        }
+
         foreach ($lista as $kulcs => $allapot) {
             if ($allapot['szamozott']) {
                 return (string) $kulcs;
@@ -491,8 +506,9 @@ final class SDH_Muhely_Munkalap
                 adatbázisban tárolt azonosító – amint használatban van, ne írd át, csak a nevét.
                 Színek: <?php echo esc_html(implode(', ', array_keys(self::szinek()))); ?>.
                 Jelzők (vesszővel): <code>szamozott</code> – a lap munkalapszámot kap;
-                <code>zart</code> – a lap lezárt, nem számít nyitottnak. A sorrend a lista
-                sorrendje.
+                <code>zart</code> – a lap lezárt, nem számít nyitottnak;
+                <code>alap</code> – új munkalapnál ez az állapot van előre kiválasztva
+                (több <code>alap</code> esetén az első). A sorrend a lista sorrendje.
             </p>
 
             <div class="sdh-mezo sdh-mezo--szeles">
@@ -1201,26 +1217,36 @@ final class SDH_Muhely_Munkalap
 
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label>Ügyfél <span class="sdh-kotelezo">*</span></label>
-                    <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
+                    <div class="sdh-mezo__sor">
+                        <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
+                                data-sdh-uj-ugyfel
+                                title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                    </div>
                     <span class="sdh-mezo__sugo">
-                        Gépelj legalább két betűt, és válassz a listából. Enter az első találatot veszi.
+                        Gépelj legalább két betűt, és válassz a listából. Nincs még a rendszerben? A + gombbal felviheted.
                     </span>
                 </div>
 
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="eszkoz_id">Eszköz <span class="sdh-kotelezo">*</span></label>
-                    <select name="eszkoz_id" id="eszkoz_id" data-sdh-eszkoz-valaszto>
-                        <option value="0">
-                            <?php echo esc_html($ugyfel_id > 0 ? '— válassz eszközt —' : '— előbb válassz ügyfelet —'); ?>
-                        </option>
-                        <?php foreach ($eszkozok as $id => $felirat) : ?>
-                            <option value="<?php echo (int) $id; ?>" <?php selected($eszkoz_id, $id); ?>>
-                                <?php echo esc_html($felirat); ?>
+                    <div class="sdh-mezo__sor">
+                        <select name="eszkoz_id" id="eszkoz_id" data-sdh-eszkoz-valaszto>
+                            <option value="0">
+                                <?php echo esc_html($ugyfel_id > 0 ? '— válassz eszközt —' : '— előbb válassz ügyfelet —'); ?>
                             </option>
-                        <?php endforeach; ?>
-                    </select>
+                            <?php foreach ($eszkozok as $id => $felirat) : ?>
+                                <option value="<?php echo (int) $id; ?>" <?php selected($eszkoz_id, $id); ?>>
+                                    <?php echo esc_html($felirat); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
+                                data-sdh-uj-eszkoz
+                                title="Új eszköz felvétele" aria-label="Új eszköz felvétele">+</button>
+                    </div>
                     <span class="sdh-mezo__sugo">
-                        Az ügyfél felvitt eszközei közül. Ha még nincs, vidd fel az Eszközök oldalon.
+                        Az ügyfél felvitt eszközei közül. Nincs még a rendszerben? A + gombbal felviheted.
                     </span>
                 </div>
 
