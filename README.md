@@ -57,6 +57,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.18.0
+- Ügyfél: új **Szállítási cím** és **Telephely** lap (a MunkaLap 3 sorrendjében:
+  Központi | Levelezési | Szállítási | Telephely). Mindkettő alapból
+  „Megegyezik a központi címmel”; kivéve a jelölést Isz. / Település / Utca
+  mezők, irányítószám ↔ település automatikus kitöltéssel. A Telephelyen
+  külön (nem kötelező) név mező is van. Azonos címnél a mezők üresen
+  tárolódnak (nincs két külön igazság). Új oszlopok: `szallitasi_*`,
+  `telephely_*` (DB_VERSION 0.12.0, a meglévő ügyfeleknél alapból „azonos”).
+- Keskeny kijelzőn a lapfülsor vízszintesen görgethető, nem tördel.
+
 ### 0.17.0
 - Új ügyfél: **Csatolt fájlok** lap a Megjegyzés mellett (fotó, PDF, számla,
   dokumentum). Húzd ide a fájlokat vagy „+ Fájl hozzáadása”; Ikon / Lista /

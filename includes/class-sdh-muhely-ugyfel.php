@@ -27,6 +27,13 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Muhely_Ugyfel
 {
+    /** A központi mellett tárolt címek és mezőik (a lapfülek sorrendjében). */
+    private const MASODLAGOS_CIMEK = [
+        'levelezesi' => ['iranyitoszam', 'telepules', 'cim'],
+        'szallitasi' => ['iranyitoszam', 'telepules', 'cim'],
+        'telephely'  => ['nev', 'iranyitoszam', 'telepules', 'cim'],
+    ];
+
     /** A modul kulcsa az URL-ekben, a menüben és az AJAX-műveletekben. */
     public const KULCS = 'ugyfelek';
 
@@ -504,7 +511,7 @@ final class SDH_Muhely_Ugyfel
         // Minden mezőnek van alapértéke, hogy az űrlap új és meglévő
         // ügyfélnél ugyanazt a kódot használhassa.
         $ert = static fn (string $mezo, string $alap = ''): string => $ugyfel !== null
-            ? (string) $ugyfel->{$mezo}
+            ? (string) ($ugyfel->{$mezo} ?? $alap)
             : $alap;
 
         $uj = $ugyfel === null;
@@ -526,10 +533,16 @@ final class SDH_Muhely_Ugyfel
                        id="ful_kozponti" checked>
                 <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_cim"
                        id="ful_levelezesi">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--3" name="_ful_cim"
+                       id="ful_szallitasi">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--4" name="_ful_cim"
+                       id="ful_telephely">
 
                 <div class="sdh-fulek__sav">
                     <label for="ful_kozponti">Központi cím</label>
                     <label for="ful_levelezesi">Levelezési cím</label>
+                    <label for="ful_szallitasi">Szállítási cím</label>
+                    <label for="ful_telephely">Telephely</label>
                 </div>
 
                 <div class="sdh-fulek__panel sdh-fulek__panel--1">
@@ -626,25 +639,11 @@ final class SDH_Muhely_Ugyfel
                     </div>
                 </div>
 
-                <div class="sdh-fulek__panel sdh-fulek__panel--2">
-                    <label class="sdh-jelolo" for="levelezesi_azonos">
-                        <input type="checkbox" name="levelezesi_azonos" id="levelezesi_azonos" value="1"
-                            <?php checked($uj ? '1' : $ert('levelezesi_azonos'), '1'); ?>>
-                        Megegyezik a központi címmel
-                    </label>
-
-                    <div class="sdh-sor sdh-sor--cim3 sdh-cimsor" data-sdh-cimsor>
-                        <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam" data-sdh-isz
-                               inputmode="numeric" maxlength="10" autocomplete="off" aria-label="Irányítószám" placeholder="Isz."
-                               value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
-                        <input type="text" name="levelezesi_telepules" id="levelezesi_telepules" data-sdh-telepules
-                               autocomplete="off" aria-label="Település" placeholder="Település"
-                               value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
-                        <input type="text" name="levelezesi_cim" id="levelezesi_cim"
-                               aria-label="Utca, házszám" placeholder="Utca, házszám"
-                               value="<?php echo esc_attr($ert('levelezesi_cim')); ?>">
-                    </div>
-                </div>
+                <?php
+                self::cim_panel(2, 'levelezesi', $ert, $uj);
+                self::cim_panel(3, 'szallitasi', $ert, $uj);
+                self::cim_panel(4, 'telephely', $ert, $uj, true);
+                ?>
             </div>
 
             <div class="sdh-fulek sdh-fulek--also">
@@ -724,6 +723,54 @@ final class SDH_Muhely_Ugyfel
     }
 
     /**
+     * Egy „másodlagos” cím lapfüle (levelezési, szállítási, telephely).
+     *
+     * Mindegyik alapból megegyezik a központi címmel; ilyenkor a mezők
+     * halványak, és mentéskor üresen tárolódnak (nincs két külön igazság).
+     *
+     * @param callable(string, string=): string $ert
+     */
+    private static function cim_panel(int $sorszam, string $elotag, callable $ert, bool $uj, bool $nevmezo = false): void
+    {
+        $mezo = static fn (string $nev): string => $elotag . '_' . $nev;
+
+        ?>
+                <div class="sdh-fulek__panel sdh-fulek__panel--<?php echo (int) $sorszam; ?>">
+                    <label class="sdh-jelolo" for="<?php echo esc_attr($mezo('azonos')); ?>">
+                        <input type="checkbox" name="<?php echo esc_attr($mezo('azonos')); ?>"
+                               id="<?php echo esc_attr($mezo('azonos')); ?>" value="1"
+                            <?php checked($uj ? '1' : $ert($mezo('azonos'), '1'), '1'); ?>>
+                        Megegyezik a központi címmel
+                    </label>
+
+                    <?php if ($nevmezo) : ?>
+                        <div class="sdh-sor sdh-cimsor">
+                            <input type="text" name="<?php echo esc_attr($mezo('nev')); ?>"
+                                   id="<?php echo esc_attr($mezo('nev')); ?>"
+                                   aria-label="Telephely neve" placeholder="Telephely neve (nem kötelező)"
+                                   value="<?php echo esc_attr($ert($mezo('nev'))); ?>">
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="sdh-sor sdh-sor--cim3 sdh-cimsor" data-sdh-cimsor>
+                        <input type="text" name="<?php echo esc_attr($mezo('iranyitoszam')); ?>"
+                               id="<?php echo esc_attr($mezo('iranyitoszam')); ?>" data-sdh-isz
+                               inputmode="numeric" maxlength="10" autocomplete="off" aria-label="Irányítószám" placeholder="Isz."
+                               value="<?php echo esc_attr($ert($mezo('iranyitoszam'))); ?>">
+                        <input type="text" name="<?php echo esc_attr($mezo('telepules')); ?>"
+                               id="<?php echo esc_attr($mezo('telepules')); ?>" data-sdh-telepules
+                               autocomplete="off" aria-label="Település" placeholder="Település"
+                               value="<?php echo esc_attr($ert($mezo('telepules'))); ?>">
+                        <input type="text" name="<?php echo esc_attr($mezo('cim')); ?>"
+                               id="<?php echo esc_attr($mezo('cim')); ?>"
+                               aria-label="Utca, házszám" placeholder="Utca, házszám"
+                               value="<?php echo esc_attr($ert($mezo('cim'))); ?>">
+                    </div>
+                </div>
+        <?php
+    }
+
+    /**
      * Melyik felületen készül az űrlap.
      *
      * AJAX-hívásnál a kontextus nem állapítható meg magától – a
@@ -773,8 +820,6 @@ final class SDH_Muhely_Ugyfel
             ? sanitize_text_field(wp_unslash($_POST[$mezo]))
             : '';
 
-        $levelezesi_azonos = !empty($_POST['levelezesi_azonos']) ? 1 : 0;
-
         $adatok = [
             'tipus'                   => self::tipus_ervenyes($szoveg('tipus')),
             'nev'                     => $szoveg('nev'),
@@ -789,7 +834,6 @@ final class SDH_Muhely_Ugyfel
             'szamlazasi_telepules'    => $szoveg('szamlazasi_telepules'),
             'szamlazasi_cim'          => $szoveg('szamlazasi_cim'),
             'szamlazasi_orszag'       => $szoveg('szamlazasi_orszag'),
-            'levelezesi_azonos'       => $levelezesi_azonos,
             'kategoria'               => $szoveg('kategoria'),
             'kedvezmeny'              => isset($_POST['kedvezmeny'])
                 ? min(100, max(0, (float) wp_unslash($_POST['kedvezmeny'])))
@@ -801,16 +845,16 @@ final class SDH_Muhely_Ugyfel
             'modositva'               => current_time('mysql'),
         ];
 
-        // Ha a levelezési cím megegyezik a számlázásival, nem tárolunk
-        // két külön igazságot – a másolat idővel szétcsúszna.
-        if ($levelezesi_azonos === 1) {
-            $adatok['levelezesi_iranyitoszam'] = '';
-            $adatok['levelezesi_telepules']    = '';
-            $adatok['levelezesi_cim']          = '';
-        } else {
-            $adatok['levelezesi_iranyitoszam'] = $szoveg('levelezesi_iranyitoszam');
-            $adatok['levelezesi_telepules']    = $szoveg('levelezesi_telepules');
-            $adatok['levelezesi_cim']          = $szoveg('levelezesi_cim');
+        // Ha egy cím megegyezik a központival, nem tárolunk két külön
+        // igazságot – a másolat idővel szétcsúszna.
+        foreach (self::MASODLAGOS_CIMEK as $elotag => $mezok) {
+            $azonos = !empty($_POST[$elotag . '_azonos']) ? 1 : 0;
+
+            $adatok[$elotag . '_azonos'] = $azonos;
+
+            foreach ($mezok as $mezo) {
+                $adatok[$elotag . '_' . $mezo] = $azonos === 1 ? '' : $szoveg($elotag . '_' . $mezo);
+            }
         }
 
         return $adatok;

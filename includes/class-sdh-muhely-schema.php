@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.11.0';
+    public const DB_VERSION = '0.12.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -130,6 +130,15 @@ final class SDH_Muhely_Schema
             levelezesi_iranyitoszam varchar(10) NOT NULL default '',
             levelezesi_telepules varchar(120) NOT NULL default '',
             levelezesi_cim varchar(190) NOT NULL default '',
+            szallitasi_azonos tinyint(1) NOT NULL default 1,
+            szallitasi_iranyitoszam varchar(10) NOT NULL default '',
+            szallitasi_telepules varchar(120) NOT NULL default '',
+            szallitasi_cim varchar(190) NOT NULL default '',
+            telephely_azonos tinyint(1) NOT NULL default 1,
+            telephely_nev varchar(190) NOT NULL default '',
+            telephely_iranyitoszam varchar(10) NOT NULL default '',
+            telephely_telepules varchar(120) NOT NULL default '',
+            telephely_cim varchar(190) NOT NULL default '',
             kategoria varchar(60) NOT NULL default '',
             kedvezmeny decimal(5,2) NOT NULL default 0.00,
             megjegyzes text NULL,

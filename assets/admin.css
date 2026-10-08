@@ -765,6 +765,12 @@ a.sdh-kartya:focus-visible {
     display: flex;
     gap: 2px;
     margin-bottom: -1px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.sdh-fulek__sav::-webkit-scrollbar {
+    display: none;
 }
 
 .sdh-fulek__sav label {
@@ -777,6 +783,8 @@ a.sdh-kartya:focus-visible {
     font-weight: 500;
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
+    flex: 0 0 auto;
 }
 
 .sdh-fulek__sav label:hover {
@@ -795,13 +803,15 @@ a.sdh-kartya:focus-visible {
 
 .sdh-fulek__ful--1:checked ~ .sdh-fulek__panel--1,
 .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2,
-.sdh-fulek__ful--3:checked ~ .sdh-fulek__panel--3 {
+.sdh-fulek__ful--3:checked ~ .sdh-fulek__panel--3,
+.sdh-fulek__ful--4:checked ~ .sdh-fulek__panel--4 {
     display: flex;
 }
 
 .sdh-fulek__ful--1:checked ~ .sdh-fulek__sav label:nth-child(1),
 .sdh-fulek__ful--2:checked ~ .sdh-fulek__sav label:nth-child(2),
-.sdh-fulek__ful--3:checked ~ .sdh-fulek__sav label:nth-child(3) {
+.sdh-fulek__ful--3:checked ~ .sdh-fulek__sav label:nth-child(3),
+.sdh-fulek__ful--4:checked ~ .sdh-fulek__sav label:nth-child(4) {
     border-bottom-color: var(--sdh-felulet);
     background: var(--sdh-felulet);
     box-shadow: inset 0 2px 0 var(--sdh-accent);
@@ -811,7 +821,8 @@ a.sdh-kartya:focus-visible {
 
 .sdh-fulek__ful--1:focus-visible ~ .sdh-fulek__sav label:nth-child(1),
 .sdh-fulek__ful--2:focus-visible ~ .sdh-fulek__sav label:nth-child(2),
-.sdh-fulek__ful--3:focus-visible ~ .sdh-fulek__sav label:nth-child(3) {
+.sdh-fulek__ful--3:focus-visible ~ .sdh-fulek__sav label:nth-child(3),
+.sdh-fulek__ful--4:focus-visible ~ .sdh-fulek__sav label:nth-child(4) {
     outline: 2px solid var(--sdh-accent);
     outline-offset: -2px;
 }
