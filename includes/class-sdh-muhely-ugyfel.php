@@ -615,23 +615,28 @@ final class SDH_Muhely_Ugyfel
                         </div>
                     </div>
 
-                    <div class="sdh-racs">
-                        <div class="sdh-racs__cella">
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
                             <label for="telefon">Telefon</label>
                             <input type="tel" name="telefon" id="telefon"
                                    value="<?php echo esc_attr($ert('telefon')); ?>">
                         </div>
-                        <div class="sdh-racs__cella">
+
+                        <div class="sdh-ig">
                             <label for="telefon2">Telefon 2.</label>
                             <input type="tel" name="telefon2" id="telefon2"
                                    value="<?php echo esc_attr($ert('telefon2')); ?>">
                         </div>
-                        <div class="sdh-racs__cella">
+                    </div>
+
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
                             <label for="email">E-mail</label>
                             <input type="email" name="email" id="email"
                                    value="<?php echo esc_attr($ert('email')); ?>">
                         </div>
-                        <div class="sdh-racs__cella">
+
+                        <div class="sdh-ig">
                             <label for="kapcsolattarto">Kapcsolattartó</label>
                             <input type="text" name="kapcsolattarto" id="kapcsolattarto"
                                    value="<?php echo esc_attr($ert('kapcsolattarto')); ?>">

@@ -57,6 +57,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.18.1
+- Ügyfél: a Telefon / Telefon 2. / E-mail / Kapcsolattartó már nem szegélyes
+  rács, hanem külön mezők, ugyanúgy, mint a Kategória / Adószám sorok
+  (címke + mező, két oszlop; mobilon egy oszlop).
+- Az ügyfélűrlap összes mezőcímkéje balra igazított.
+
 ### 0.18.0
 - Ügyfél: új **Szállítási cím** és **Telephely** lap (a MunkaLap 3 sorrendjében:
   Központi | Levelezési | Szállítási | Telephely). Mindkettő alapból
