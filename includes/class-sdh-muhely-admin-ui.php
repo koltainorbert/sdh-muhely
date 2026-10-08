@@ -290,6 +290,9 @@ final class SDH_Muhely_Admin_UI
             'kontextus' => $kontextus,
             'alapTema'  => $arculat['tema'],
             'alapSzin'  => $arculat['szin'],
+            // Az irányítószám-lista verziója: a böngésző egy napig tárolja a
+            // listát, új adatfájlnál ettől kéri le azonnal az újat.
+            'iszVerzio' => self::eszkoz_verzio('data/iranyitoszam.csv.gz'),
         ];
     }
 

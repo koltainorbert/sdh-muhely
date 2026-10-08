@@ -73,6 +73,8 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 - Javítva: gépelés közben a Település mezőt nem írja át (korábban pl. a
   „Tap” „Táp”-ra javult, és eltűnt a kötőjel); a hivatalos alak (ékezet,
   kötőjel) kilépéskor kerül be.
+- A böngésző a listát a fájl verziójával kéri (`v=`), így adatcserénél
+  azonnal az újat tölti le, nem a gyorsítótárban maradt régit.
 - Frissítés új Posta táblázatból: `tools/iranyitoszam_posta.py`
   (leírás: `data/iranyitoszam-forras.txt`).
 

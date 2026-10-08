@@ -1834,6 +1834,7 @@
         var cim = new URL(beallitas.ajax, window.location.origin);
         cim.searchParams.set('action', 'sdh_muhely_iranyitoszamok');
         cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+        cim.searchParams.set('v', beallitas.iszVerzio || '');
 
         iszIgeret = fetch(cim.toString(), { credentials: 'same-origin' })
             .then(function (valasz) {
