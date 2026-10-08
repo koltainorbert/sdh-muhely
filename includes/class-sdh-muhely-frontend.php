@@ -41,6 +41,10 @@ final class SDH_Muhely_Frontend
     {
         add_action('init', [self::class, 'szabalyok']);
         add_filter('query_vars', [self::class, 'query_vars']);
+        // Tartalék útvonal-felismerés: a /muhely/… cím akkor is működik, ha a
+        // WordPress tárolt szabálylistájából a mi szabályunk kiesett (pl. egy
+        // félbemaradt core-frissítés vagy más bővítmény újraírta a listát).
+        add_filter('request', [self::class, 'utvonal_tartalek'], 1);
         // Nem csak adminban: ha a szabály kiesik, a /muhely/ 404-et adna, és
         // admin-oldalt épp az nyitna meg, aki a felületre nem jut be.
         add_action('init', [self::class, 'szabalyok_frissitese'], 99);
@@ -64,6 +68,57 @@ final class SDH_Muhely_Frontend
             'index.php?' . self::QUERY_VAR . '=$matches[1]',
             'top'
         );
+    }
+
+    /**
+     * Ha a rewrite szabály nem illeszkedett, a címet magunk ismerjük fel.
+     *
+     * A WordPress a nem illeszkedő címre 404-et jelölne; itt ezt a jelölést
+     * eldobjuk, és a saját útvonalunkat állítjuk be helyette. Így a felület
+     * elérhetősége nem függ a szabálylista épségétől.
+     *
+     * @param array<string, mixed> $vars
+     * @return array<string, mixed>
+     */
+    public static function utvonal_tartalek(array $vars): array
+    {
+        if (!empty($vars[self::QUERY_VAR])) {
+            return $vars;
+        }
+
+        $kulcs = self::kulcs_a_cimbol(
+            isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '',
+            (string) wp_parse_url(home_url('/'), PHP_URL_PATH)
+        );
+
+        return $kulcs === null ? $vars : [self::QUERY_VAR => $kulcs];
+    }
+
+    /**
+     * A kért címből a modulkulcs, vagy null, ha a cím nem a miénk.
+     *
+     * Külön függvény, hogy WordPress nélkül is tesztelhető legyen.
+     * Az alkönyvtárba telepített WordPresst (pl. /wp/muhely/) is kezeli.
+     */
+    public static function kulcs_a_cimbol(string $keres, string $alap_ut): ?string
+    {
+        $ut = (string) parse_url($keres, PHP_URL_PATH);
+        $alap_ut = '/' . trim($alap_ut, '/');
+        $alap_ut = $alap_ut === '/' ? '' : $alap_ut;
+
+        if ($alap_ut !== '' && !str_starts_with($ut, $alap_ut . '/')) {
+            return null;
+        }
+
+        $ut = substr($ut, strlen($alap_ut));
+
+        if (preg_match('#^/' . preg_quote(self::ALAP, '#') . '(?:/([^/]+))?/?$#', $ut, $talalat) !== 1) {
+            return null;
+        }
+
+        $kulcs = isset($talalat[1]) ? strtolower(preg_replace('/[^a-zA-Z0-9_\-]/', '', $talalat[1]) ?? '') : '';
+
+        return $kulcs === '' ? 'attekintes' : $kulcs;
     }
 
     /**

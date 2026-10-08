@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.16.2
+- A `/muhely/…` címet a bővítmény akkor is felismeri, ha a WordPress
+  szabálylistájából a szabály kiesett: a felület elérhetősége már nem függ
+  a rewrite szabályoktól (tartalék a `request` szűrőben).
+
 ### 0.16.1
 - A `/muhely/` útvonal szabálya önjavító: minden verzióváltás után, és ha a
   szabály kiesik a WordPress listájából, az első kérésnél újraíródik (a
