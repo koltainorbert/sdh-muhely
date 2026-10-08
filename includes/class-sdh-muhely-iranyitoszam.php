@@ -7,9 +7,10 @@
  * több lehetőségnél (pl. Budapest, vagy több településnek közös a kódja)
  * listából lehet választani.
  *
- * Az adat a data/iranyitoszam.csv.gz fájlban van (forrás és licenc:
- * data/iranyitoszam-forras.txt). A böngésző egyszer tölti le a teljes listát
- * (kb. 100 KB), utána minden keresés helyben megy – így gépelés közben nincs
+ * Az adat a data/iranyitoszam.csv.gz fájlban van: a Magyar Posta hivatalos
+ * irányítószám-táblázatából, településrészekkel (pl. 8411 Veszprém – Kádárta).
+ * Forrás és frissítés: data/iranyitoszam-forras.txt. A böngésző egyszer tölti le a teljes listát
+ * (kb. 90 KB), utána minden keresés helyben megy – így gépelés közben nincs
  * várakozás, és a lista ugyanúgy működik lassú vagy ingadozó kapcsolaton is.
  *
  * @package SDH_Muhely
@@ -31,13 +32,16 @@ final class SDH_Muhely_Iranyitoszam
     /**
      * A teljes lista a fájlból.
      *
-     * @return array{megyek: array<int, string>, sorok: array<int, array{0: string, 1: string, 2: int}>}
+     * Egy sor: [irányítószám, település, településrész]. A településrész üres,
+     * ha a kód a település egészéé (Budapestnél a kerület áll itt).
+     *
+     * @return array{sorok: array<int, array{0: string, 1: string, 2: string}>}
      */
     public static function lista(): array
     {
         $ut = SDH_MUHELY_DIR . self::FAJL;
 
-        $ures = ['megyek' => [], 'sorok' => []];
+        $ures = ['sorok' => []];
 
         if (!is_readable($ut) || !function_exists('gzdecode')) {
             return $ures;
@@ -50,8 +54,7 @@ final class SDH_Muhely_Iranyitoszam
             return $ures;
         }
 
-        $megyek = [];
-        $sorok  = [];
+        $sorok = [];
 
         foreach (preg_split('/\R/u', $szoveg) ?: [] as $szam => $sor) {
             // Az első sor a fejléc.
@@ -61,21 +64,14 @@ final class SDH_Muhely_Iranyitoszam
 
             $reszek = explode(';', $sor);
 
-            if (count($reszek) < 3 || !preg_match('/^\d{4}$/', $reszek[0])) {
+            if (count($reszek) < 2 || !preg_match('/^\d{4}$/', $reszek[0]) || $reszek[1] === '') {
                 continue;
             }
 
-            $megye = array_search($reszek[2], $megyek, true);
-
-            if ($megye === false) {
-                $megyek[] = $reszek[2];
-                $megye    = count($megyek) - 1;
-            }
-
-            $sorok[] = [$reszek[0], $reszek[1], (int) $megye];
+            $sorok[] = [$reszek[0], $reszek[1], $reszek[2] ?? ''];
         }
 
-        return ['megyek' => $megyek, 'sorok' => $sorok];
+        return ['sorok' => $sorok];
     }
 
     /**

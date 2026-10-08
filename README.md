@@ -57,6 +57,25 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.18.3
+- Irányítószám-lista: a **Magyar Posta hivatalos táblázata** (2026-09-23)
+  a GeoNames helyett, **településrészekkel**: 3569 sor, 3155 település,
+  3046 irányítószám, 339 településrész (pl. 8411 Veszprém – Kádárta,
+  8412 Veszprém – Gyulafirátót, 8297 Tapolca – Diszel; Budapestnél a kerület).
+- A legördülőben a településrész is látszik („8411 Veszprém – Kádárta”), és a
+  saját települése alatt áll. Kitöltéskor a mezőbe „Veszprém-Kádárta” kerül;
+  Budapestnél csak „Budapest” (a kerületet a kód hordozza).
+- Településrészre is lehet keresni („Kádárta”, „Diszel”); a település
+  beírásakor a részei is felkínálódnak.
+- Közös kódnál, ha több település osztozik rajta (pl. 8300 Tapolca / Raposka),
+  nem tölt ki magától, csak listát ad; ha egy település részei osztoznak, a
+  fő település azonnal bekerül.
+- Javítva: gépelés közben a Település mezőt nem írja át (korábban pl. a
+  „Tap” „Táp”-ra javult, és eltűnt a kötőjel); a hivatalos alak (ékezet,
+  kötőjel) kilépéskor kerül be.
+- Frissítés új Posta táblázatból: `tools/iranyitoszam_posta.py`
+  (leírás: `data/iranyitoszam-forras.txt`).
+
 ### 0.18.2
 - Ügyfélűrlap: minden címke balra zárva; a két oszlop szimmetrikus (azonos
   címkeoszlop, azonos mezőszélesség, bal és jobb margó egyenlő).
@@ -103,9 +122,7 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
   közös kódnál listát ad, nyilakkal / Enterrel / egérrel választható;
   ékezet nélkül is keres. A teljes lista egyszer töltődik le (kb. 86 KB), a
   keresés helyben fut.
-- Adat: GeoNames HU, 3571 sor, 3155 település, 3046 irányítószám. Nem a
-  Magyar Posta hivatalos listája – forrás és licenc: `data/iranyitoszam-forras.txt`.
-  *Irányítószám-adatok: GeoNames, geonames.org, CC BY 4.0.*
+- Adat: GeoNames HU (0.18.3 óta a Magyar Posta hivatalos listája váltotta).
 
 ### 0.16.4
 - Új / szerkesztett ügyfél: kompakt, lapfüles űrlap a MunkaLap 3 mintájára.

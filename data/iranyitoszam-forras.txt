@@ -1,15 +1,18 @@
-Irányítószám–település adat (iranyitoszam.csv.gz)
-=================================================
+Irányítószám–település lista (data/iranyitoszam.csv.gz)
 
-Forrás:   GeoNames postal codes, Magyarország (HU) – https://www.geonames.org/
-Licenc:   Creative Commons Attribution 4.0 (CC BY 4.0) – https://creativecommons.org/licenses/by/4.0/
-Átvétel:  a zauberware/postal-codes-json-xml-csv nyilvános tárház data/HU.zip fájljából
-          (a GeoNames export CSV-re alakítva), 2026-10-08.
-Tartalom: 3571 sor, 3046 különböző irányítószám, 3155 különböző településnév
-          (a települések hivatalos száma 3155). Oszlopok: irsz;telepules;megye.
+Forrás: Magyar Posta Zrt. hivatalos irányítószám-táblázata
+        (Iranyitoszam-Internet_uj.xlsx, a posta.hu-ról; a táblázat utolsó
+        módosítása 2026-09-23). Átvéve: 2026-10-08.
 
-Fontos: ez NEM a Magyar Posta hivatalos irányítószám-törzse. Újonnan kiosztott
-vagy megváltozott irányítószám késéssel kerülhet bele; az űrlap ezért nem
-tiltja az ismeretlen irányítószámot, csak nem tud hozzá települést kitölteni.
+Tartalom: 3569 sor, 3155 település, 3046 irányítószám, ebből 339 sorban
+          településrész (pl. 8411 Veszprém – Kádárta, 8297 Tapolca – Diszel,
+          Budapestnél a kerület: 1051 Budapest – V. kerület).
 
-Forrásmegjelölés (CC BY 4.0): "Irányítószám-adatok: GeoNames, geonames.org, CC BY 4.0."
+Felépítés: „irsz;telepules;telepulesresz”, gzip.
+- A „Települések” lap sorai változtatás nélkül (a fölös szóközök nélkül).
+- Budapest, Miskolc, Debrecen, Szeged, Pécs és Győr kódjai a Posta fájlban
+  külön utcajegyzék-lapokon vannak; innen kerülnek be. Budapestnél a kerület
+  a kód 2–3. számjegyéből jön.
+
+Frissítés, ha a Posta új táblázatot ad ki:
+  python3 -I tools/iranyitoszam_posta.py Iranyitoszam-Internet_uj.xlsx data/iranyitoszam.csv.gz

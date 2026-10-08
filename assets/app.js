@@ -1792,8 +1792,34 @@
             .toLowerCase()
             .normalize('NFD')
             .replace(/[̀-ͯ]/g, '')
-            .replace(/\s+/g, ' ')
+            .replace(/[\s\-–]+/g, ' ')
             .trim();
+    }
+
+    /*
+     * Egy sor: { isz, nev (település), resz (településrész vagy ''),
+     *            kitolt (ami a Település mezőbe kerül), nk (kitolt normalizálva),
+     *            fo (településnév normalizálva), rk (rész normalizálva) }.
+     *
+     * Településrésznél a mezőbe „Veszprém-Kádárta” kerül, ahogy postai címben
+     * írják. Budapest kerületei csak megjelennek a listában („V. kerület”), a
+     * mezőbe „Budapest” kerül – a kerületet az irányítószám már hordozza.
+     */
+    function iszSor(s) {
+        var nev = s[1] || '';
+        var resz = s[2] || '';
+        var kerulet = nev === 'Budapest' && / kerület$/.test(resz);
+        var kitolt = resz && !kerulet ? nev + '-' + resz : nev;
+
+        return {
+            isz: s[0],
+            nev: nev,
+            resz: resz,
+            kitolt: kitolt,
+            nk: iszNorm(kitolt),
+            fo: iszNorm(nev),
+            rk: iszNorm(resz)
+        };
     }
 
     function iszBetolt() {
@@ -1822,18 +1848,18 @@
                     throw new Error('Üres válasz');
                 }
 
-                var sorok = valasz.data.sorok.map(function (s) {
-                    return { isz: s[0], nev: s[1], nk: iszNorm(s[1]) };
-                });
+                var sorok = valasz.data.sorok.map(iszSor);
                 var iszSzerint = {};
                 var nevSzerint = {};
+                var foSzerint = {};
 
                 sorok.forEach(function (s) {
                     (iszSzerint[s.isz] = iszSzerint[s.isz] || []).push(s);
                     (nevSzerint[s.nk] = nevSzerint[s.nk] || []).push(s);
+                    (foSzerint[s.fo] = foSzerint[s.fo] || []).push(s);
                 });
 
-                iszAdat = { sorok: sorok, iszSzerint: iszSzerint, nevSzerint: nevSzerint };
+                iszAdat = { sorok: sorok, iszSzerint: iszSzerint, nevSzerint: nevSzerint, foSzerint: foSzerint };
 
                 return iszAdat;
             })
@@ -1872,38 +1898,54 @@
             return talalat;
         }
 
+        // Csoport = egy kitöltendő név (pl. „Veszprém”, „Veszprém-Kádárta”).
+        // Keresünk a teljes névben és külön a településrész nevében is,
+        // így a „Kádárta” vagy a „Diszel” is megtalálja a helyét.
         var csoportok = {};
         var rend = [];
 
         adat.sorok.forEach(function (s) {
             var hely = s.nk.indexOf(kulcs);
+            var reszHely = s.rk ? s.rk.indexOf(kulcs) : -1;
 
-            if (hely === -1) {
+            if (hely === -1 && reszHely === -1) {
                 return;
             }
 
+            var rang = s.nk === kulcs || s.rk === kulcs ? 0
+                : (hely === 0 || reszHely === 0 ? 1 : 2);
+
             if (!csoportok[s.nk]) {
-                csoportok[s.nk] = { nev: s.nev, nk: s.nk, hely: s.nk === kulcs ? -1 : hely, sorok: [] };
+                csoportok[s.nk] = { s: s, nk: s.nk, rang: rang, sorok: [] };
                 rend.push(csoportok[s.nk]);
             }
 
+            csoportok[s.nk].rang = Math.min(csoportok[s.nk].rang, rang);
             csoportok[s.nk].sorok.push(s);
         });
 
-        // Pontos egyezés, aztán az elején egyező (rövidebb név előbb), végül a többi.
-        rend.sort(function (a, b) {
-            var ra = a.hely === -1 ? 0 : (a.hely === 0 ? 1 : 2);
-            var rb = b.hely === -1 ? 0 : (b.hely === 0 ? 1 : 2);
+        // Pontos egyezés, aztán az elején egyező, végül a többi; a rövidebb
+        // név előbb, a fő település a részei előtt.
+        // A településrészek közvetlenül a saját településük alatt állnak.
+        var foRang = {};
+        rend.forEach(function (g) {
+            foRang[g.s.fo] = Math.min(foRang[g.s.fo] === undefined ? 9 : foRang[g.s.fo], g.rang);
+        });
 
-            return ra - rb || a.nk.length - b.nk.length || (a.nk < b.nk ? -1 : 1);
+        rend.sort(function (a, b) {
+            return foRang[a.s.fo] - foRang[b.s.fo] ||
+                a.s.fo.length - b.s.fo.length ||
+                (a.s.fo < b.s.fo ? -1 : (a.s.fo > b.s.fo ? 1 : 0)) ||
+                (a.s.resz ? 1 : 0) - (b.s.resz ? 1 : 0) ||
+                (a.nk < b.nk ? -1 : 1);
         });
 
         return rend.slice(0, max).map(function (g) {
-            // Egy irányítószámú település közvetlenül választható; többnél a
-            // választás után a település kódjai közül lehet választani.
+            // Egy irányítószámú név közvetlenül választható; többnél (Budapest,
+            // Miskolc…) a választás után a kódjai közül lehet választani.
             return g.sorok.length === 1
                 ? g.sorok[0]
-                : { isz: '', nev: g.nev, csoport: g.sorok };
+                : { isz: '', nev: g.s.nev, resz: '', kitolt: g.s.kitolt, nk: g.nk, csoport: g.sorok };
         });
     }
 
@@ -1926,11 +1968,21 @@
         };
     }
 
-    /** Beírja a kiválasztott párt, és jelzi a változást a többi szkriptnek. */
-    function iszKitolt(sor, tetel) {
+    /**
+     * Beírja a kiválasztott párt, és jelzi a változást a többi szkriptnek.
+     * `csakSzam`: gépelés közben a Település mezőt nem írjuk át (különben a
+     * „Tap” → „Táp” javítás vagy a kötőjel eltűnése belerontana a gépelésbe);
+     * a pontos alak kilépéskor kerül be (lásd focusout).
+     */
+    function iszKitolt(sor, tetel, csakSzam) {
         var mezok = iszMezok(sor);
+        var parok = [[mezok.isz, tetel.isz]];
 
-        [[mezok.isz, tetel.isz], [mezok.nev, tetel.nev]].forEach(function (par) {
+        if (!csakSzam) {
+            parok.push([mezok.nev, tetel.kitolt]);
+        }
+
+        parok.forEach(function (par) {
             if (par[0] && par[0].value !== par[1]) {
                 par[0].value = par[1];
                 par[0].dispatchEvent(new Event('change', { bubbles: true }));
@@ -1943,7 +1995,7 @@
         }, 700);
     }
 
-    /** Egy listaelem kiválasztása: kitölti a párt, vagy a település kódjait kínálja fel. */
+    /** Egy listaelem kiválasztása: kitölti a párt, vagy a név kódjait kínálja fel. */
     function iszValaszt(tetel) {
         var sor = iszAllapot && iszAllapot.sor;
 
@@ -1955,7 +2007,7 @@
             var mezok = iszMezok(sor);
 
             if (mezok.nev) {
-                mezok.nev.value = tetel.nev;
+                mezok.nev.value = tetel.kitolt;
                 mezok.nev.dispatchEvent(new Event('change', { bubbles: true }));
             }
 
@@ -1977,6 +2029,20 @@
         if (kovetkezo) {
             kovetkezo.focus();
         }
+    }
+
+    function iszTetelHtml(t) {
+        var resz = t.resz
+            ? ' <span class="sdh-isz__resz">' + szovegBiztonsagos(t.resz) + '</span>'
+            : '';
+
+        if (t.csoport) {
+            return '<b></b><span class="sdh-isz__nev">' + szovegBiztonsagos(t.kitolt) + '</span>' +
+                ' <i>' + t.csoport.length + ' irányítószám ›</i>';
+        }
+
+        return '<b>' + szovegBiztonsagos(t.isz) + '</b><span class="sdh-isz__nev">' +
+            szovegBiztonsagos(t.nev) + '</span>' + resz;
     }
 
     function iszListaRajzol() {
@@ -2026,9 +2092,7 @@
         iszLista.innerHTML = iszAllapot.talalatok.map(function (t, i) {
             return '<li role="option" data-sdh-isz-tetel="' + i + '"' +
                 (i === iszAllapot.kijelolt ? ' class="is-kijelolt" aria-selected="true"' : '') + '>' +
-                (t.csoport
-                    ? '<b></b> ' + szovegBiztonsagos(t.nev) + ' <i>' + t.csoport.length + ' irányítószám ›</i>'
-                    : '<b>' + szovegBiztonsagos(t.isz) + '</b> ' + szovegBiztonsagos(t.nev)) + '</li>';
+                iszTetelHtml(t) + '</li>';
         }).join('');
 
         var hely = mezo.getBoundingClientRect();
@@ -2036,13 +2100,30 @@
 
         iszLista.style.left = Math.round(hely.left - szuloHely.left) + 'px';
         iszLista.style.top = Math.round(hely.bottom - szuloHely.top + 2) + 'px';
-        iszLista.style.minWidth = Math.max(180, Math.round(hely.width)) + 'px';
+        iszLista.style.minWidth = Math.max(240, Math.round(hely.width)) + 'px';
         iszLista.hidden = false;
 
         var kijelolt = iszLista.querySelector('.is-kijelolt');
         if (kijelolt && kijelolt.scrollIntoView) {
             kijelolt.scrollIntoView({ block: 'nearest' });
         }
+    }
+
+    /** A lista megnyitása; a kijelölt sor az, amelyik most a mezőkben áll. */
+    function iszListaNyit(sor, mezo, talalatok) {
+        var mezok = iszMezok(sor);
+        var most = iszNorm(mezok.nev && mezok.nev.value);
+        var szamMost = mezok.isz ? mezok.isz.value.replace(/\s+/g, '') : '';
+        var kijelolt = 0;
+
+        talalatok.forEach(function (t, i) {
+            if (!t.csoport && t.nk === most && t.isz === szamMost) {
+                kijelolt = i;
+            }
+        });
+
+        iszAllapot = { sor: sor, mezo: mezo, talalatok: talalatok, kijelolt: kijelolt };
+        iszListaRajzol();
     }
 
     /** Egy mező módosítása után: kitöltés vagy lista. */
@@ -2083,13 +2164,21 @@
                         return;
                     }
 
-                    iszAllapot = { sor: sor, mezo: 'isz', talalatok: pontos, kijelolt: 0 };
-                    iszListaRajzol();
+                    // Egy település több része ugyanazon a kódon: a fő település
+                    // azonnal bekerül, a részek közül a listából lehet pontosítani.
+                    var fok = {};
+                    pontos.forEach(function (t) { fok[t.fo] = true; });
+
+                    if (Object.keys(fok).length === 1) {
+                        var fo = pontos.filter(function (t) { return !t.resz; })[0] || pontos[0];
+                        iszKitolt(sor, fo);
+                    }
+
+                    iszListaNyit(sor, 'isz', pontos);
                     return;
                 }
 
-                iszAllapot = { sor: sor, mezo: 'isz', talalatok: iszKeres(adat, 'isz', szam, 8), kijelolt: 0 };
-                iszListaRajzol();
+                iszListaNyit(sor, 'isz', iszKeres(adat, 'isz', szam, 8));
                 return;
             }
 
@@ -2098,9 +2187,19 @@
             var pontosNev = kulcs !== '' ? adat.nevSzerint[kulcs] : null;
 
             if (pontosNev && pontosNev.length === 1) {
-                // Egyetlen irányítószámú település: kitöltjük, ami még hiányzik.
-                iszZar();
-                iszKitolt(sor, pontosNev[0]);
+                // Egyetlen irányítószámú név: kitöltjük az irányítószámot.
+                iszKitolt(sor, pontosNev[0], true);
+
+                // Ha a településnek vannak részei (pl. Veszprém – Kádárta),
+                // a lista nyitva marad, hogy pontosítani lehessen.
+                var csalad = adat.foSzerint[pontosNev[0].fo] || [];
+
+                if (!pontosNev[0].resz && csalad.length > 1 && csalad.length <= 40) {
+                    iszListaNyit(sor, 'nev', csalad);
+                } else {
+                    iszZar();
+                }
+
                 return;
             }
 
@@ -2113,14 +2212,12 @@
                     return;
                 }
 
-                // Pontos név, több irányítószám: csak ennek a településnek a kódjait mutatjuk.
-                iszAllapot = { sor: sor, mezo: 'nev', talalatok: pontosNev, kijelolt: 0 };
-                iszListaRajzol();
+                // Pontos név, több irányítószám: csak ennek a névnek a kódjait mutatjuk.
+                iszListaNyit(sor, 'nev', pontosNev);
                 return;
             }
 
-            iszAllapot = { sor: sor, mezo: 'nev', talalatok: iszKeres(adat, 'nev', ertek, 10), kijelolt: 0 };
-            iszListaRajzol();
+            iszListaNyit(sor, 'nev', iszKeres(adat, 'nev', ertek, 12));
         }).catch(function () {
             iszZar();
         });
@@ -2145,6 +2242,17 @@
 
     document.addEventListener('focusout', function (esemeny) {
         var mezo = esemeny.target;
+
+        // Kilépéskor a Település mező a hivatalos alakot kapja (ékezet,
+        // kötőjel: „veszprem kadarta” → „Veszprém-Kádárta”), ha egyértelmű.
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-telepules]') && iszAdat) {
+            var talalt = iszAdat.nevSzerint[iszNorm(mezo.value)];
+
+            if (talalt && talalt.length && mezo.value !== talalt[0].kitolt) {
+                mezo.value = talalt[0].kitolt;
+                mezo.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
 
         if (mezo && mezo.matches && mezo.matches('[data-sdh-isz], [data-sdh-telepules]')) {
             window.setTimeout(function () {

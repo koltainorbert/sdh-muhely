@@ -1872,3 +1872,18 @@ a.sdh-kartya:focus-visible {
 :root[data-theme="dark"] .sdh-modal select:not([multiple]):not([size]) {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%23a3aab3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
+
+/* Irányítószám-lista: a településrész (pl. Kádárta, V. kerület) halványabban, a név után. */
+.sdh-isz__nev {
+    font-weight: 500;
+}
+
+.sdh-isz__resz {
+    margin-left: .35rem;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-isz__resz::before {
+    content: "– ";
+    color: var(--sdh-halvany);
+}
