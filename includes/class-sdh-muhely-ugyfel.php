@@ -437,7 +437,8 @@ final class SDH_Muhely_Ugyfel
             );
             ?>
 
-            <form class="sdh-urlap" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <form class="sdh-urlap" method="post" enctype="multipart/form-data"
+                  action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_ugyfel_mentes">
                 <?php self::urlap_belso($ugyfel, false); ?>
             </form>
@@ -481,7 +482,7 @@ final class SDH_Muhely_Ugyfel
             ?>
         </p>
 
-        <form class="sdh-urlap" method="post"
+        <form class="sdh-urlap" method="post" enctype="multipart/form-data"
               action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
               data-sdh-ajax-action="sdh_muhely_ugyfelek_ment">
             <input type="hidden" name="action" value="sdh_muhely_ugyfel_mentes">
@@ -538,12 +539,12 @@ final class SDH_Muhely_Ugyfel
                                value="<?php echo esc_attr($ert('nev')); ?>">
                     </div>
 
-                    <div class="sdh-sor sdh-sor--cim">
-                        <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam"
-                               aria-label="Irányítószám" placeholder="Isz."
+                    <div class="sdh-sor sdh-sor--cim" data-sdh-cimsor>
+                        <input type="text" name="szamlazasi_iranyitoszam" id="szamlazasi_iranyitoszam" data-sdh-isz
+                               inputmode="numeric" maxlength="10" autocomplete="off" aria-label="Irányítószám" placeholder="Isz."
                                value="<?php echo esc_attr($ert('szamlazasi_iranyitoszam')); ?>">
-                        <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules"
-                               aria-label="Település" placeholder="Település"
+                        <input type="text" name="szamlazasi_telepules" id="szamlazasi_telepules" data-sdh-telepules
+                               autocomplete="off" aria-label="Település" placeholder="Település"
                                value="<?php echo esc_attr($ert('szamlazasi_telepules')); ?>">
                         <input type="text" name="szamlazasi_cim" id="szamlazasi_cim"
                                aria-label="Utca, házszám" placeholder="Utca, házszám"
@@ -632,12 +633,12 @@ final class SDH_Muhely_Ugyfel
                         Megegyezik a központi címmel
                     </label>
 
-                    <div class="sdh-sor sdh-sor--cim3 sdh-cimsor">
-                        <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam"
-                               aria-label="Irányítószám" placeholder="Isz."
+                    <div class="sdh-sor sdh-sor--cim3 sdh-cimsor" data-sdh-cimsor>
+                        <input type="text" name="levelezesi_iranyitoszam" id="levelezesi_iranyitoszam" data-sdh-isz
+                               inputmode="numeric" maxlength="10" autocomplete="off" aria-label="Irányítószám" placeholder="Isz."
                                value="<?php echo esc_attr($ert('levelezesi_iranyitoszam')); ?>">
-                        <input type="text" name="levelezesi_telepules" id="levelezesi_telepules"
-                               aria-label="Település" placeholder="Település"
+                        <input type="text" name="levelezesi_telepules" id="levelezesi_telepules" data-sdh-telepules
+                               autocomplete="off" aria-label="Település" placeholder="Település"
                                value="<?php echo esc_attr($ert('levelezesi_telepules')); ?>">
                         <input type="text" name="levelezesi_cim" id="levelezesi_cim"
                                aria-label="Utca, házszám" placeholder="Utca, házszám"
@@ -650,14 +651,25 @@ final class SDH_Muhely_Ugyfel
                 <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_also"
                        id="ful_megjegyzes" checked>
 
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_also"
+                       id="ful_csatolt">
+
                 <div class="sdh-fulek__sav">
                     <label for="ful_megjegyzes">Megjegyzés</label>
+                    <label for="ful_csatolt">Csatolt fájlok<?php
+                        $csat_db = $uj ? 0 : SDH_Muhely_Csatolmany::darab('ugyfel', (int) $ugyfel->id);
+                        echo $csat_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $csat_db . '</span>' : '';
+                    ?></label>
                 </div>
 
                 <div class="sdh-fulek__panel sdh-fulek__panel--1">
                     <textarea name="megjegyzes" id="megjegyzes" aria-label="Megjegyzés"><?php
                         echo esc_textarea($ert('megjegyzes'));
                     ?></textarea>
+                </div>
+
+                <div class="sdh-fulek__panel sdh-fulek__panel--2">
+                    <?php SDH_Muhely_Csatolmany::panel('ugyfel', $uj ? 0 : (int) $ugyfel->id); ?>
                 </div>
             </div>
 
@@ -866,6 +878,21 @@ final class SDH_Muhely_Ugyfel
             exit;
         }
 
+        $csat_hiba = SDH_Muhely_Csatolmany::ellenoriz();
+
+        if ($csat_hiba !== null) {
+            wp_safe_redirect(
+                self::vissza(
+                    array_filter([
+                        'nezet'  => $id > 0 ? 'szerkeszt' : 'uj',
+                        'id'     => $id > 0 ? $id : null,
+                        'uzenet' => 'csatolmany_hiba',
+                    ])
+                )
+            );
+            exit;
+        }
+
         $eredmeny = self::adatbazisba($id, $adatok);
 
         if ($eredmeny === null) {
@@ -874,6 +901,8 @@ final class SDH_Muhely_Ugyfel
         }
 
         [$uj_id, $uzenet] = $eredmeny;
+
+        SDH_Muhely_Csatolmany::feldolgoz('ugyfel', $uj_id);
 
         wp_safe_redirect(
             self::vissza(['nezet' => 'szerkeszt', 'id' => $uj_id, 'uzenet' => $uzenet])
@@ -897,6 +926,13 @@ final class SDH_Muhely_Ugyfel
             wp_send_json_error(['uzenet' => 'A név kitöltése kötelező.']);
         }
 
+        // Hibás fájl esetén semmi sem mentődik félig.
+        $csat_hiba = SDH_Muhely_Csatolmany::ellenoriz();
+
+        if ($csat_hiba !== null) {
+            wp_send_json_error(['uzenet' => $csat_hiba]);
+        }
+
         $eredmeny = self::adatbazisba($id, $adatok);
 
         if ($eredmeny === null) {
@@ -904,6 +940,15 @@ final class SDH_Muhely_Ugyfel
         }
 
         [$uj_id, $uzenet] = $eredmeny;
+
+        $csat = SDH_Muhely_Csatolmany::feldolgoz('ugyfel', $uj_id);
+
+        if ($csat['hibak'] !== []) {
+            // Az ügyfél már mentve van, ezért ezt külön, érthetően jelezzük.
+            wp_send_json_error([
+                'uzenet' => 'Az ügyfél mentve, de néhány fájl nem: ' . implode(' ', $csat['hibak']),
+            ]);
+        }
 
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
         // A nevet a munkalap-űrlap „+” gombja használja: a frissen felvitt

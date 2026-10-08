@@ -1437,3 +1437,359 @@ a.sdh-kartya:focus-visible {
         animation-duration: .01ms !important;
     }
 }
+
+/* ================================================================== */
+/* Irányítószám ↔ település: találati lista                            */
+/* ================================================================== */
+
+.sdh-isz__lista {
+    position: absolute;
+    z-index: 100000;
+    max-height: 15rem;
+    margin: 0;
+    padding: 3px;
+    overflow-y: auto;
+    list-style: none;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+    font-size: 13px;
+}
+
+.sdh-isz__lista[hidden] {
+    display: none;
+}
+
+.sdh-isz__lista li {
+    margin: 0;
+    padding: .35rem .55rem;
+    border-radius: 5px;
+    color: var(--sdh-szoveg);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.sdh-isz__lista li b {
+    display: inline-block;
+    min-width: 2.9rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-isz__lista li i {
+    margin-left: .5rem;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+    font-style: normal;
+}
+
+.sdh-isz__lista li:hover,
+.sdh-isz__lista li.is-kijelolt {
+    background: var(--sdh-accent-halvany);
+}
+
+/* A kitöltött pár egy pillanatra felvillan, hogy látsszon, mi változott. */
+.sdh-cimsor--kitoltve input[data-sdh-isz],
+.sdh-cimsor--kitoltve input[data-sdh-telepules] {
+    border-color: var(--sdh-siker);
+    box-shadow: 0 0 0 2px rgba(22, 121, 74, .18);
+}
+
+/* ================================================================== */
+/* Csatolt fájlok                                                      */
+/* ================================================================== */
+
+.sdh-fulek__db {
+    display: inline-block;
+    min-width: 1.25em;
+    margin-left: .3rem;
+    padding: 0 .35em;
+    border-radius: 999px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.sdh-csat {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.sdh-csat__fej {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.sdh-csat__nezet {
+    display: inline-flex;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.sdh-csat__nezet-gomb {
+    padding: .28rem .7rem;
+    border: 0;
+    border-right: 1px solid var(--sdh-keret-eros);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+}
+
+.sdh-csat__nezet-gomb:last-child {
+    border-right: 0;
+}
+
+.sdh-csat__nezet-gomb[aria-pressed="true"] {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-weight: 600;
+}
+
+/* A húzós felület: szaggatott keret, ide lehet ejteni a fájlokat. */
+.sdh-csat__zona {
+    position: relative;
+    min-height: 9.5rem;
+    max-height: 15rem;
+    padding: .6rem;
+    overflow-y: auto;
+    border: 2px dashed var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+    cursor: pointer;
+}
+
+.sdh-csat__zona--huzas {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+}
+
+/* A valódi fájlmező láthatatlan: a gomb és a felület nyitja meg. */
+.sdh-csat__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sdh-csat__ures {
+    display: none;
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    color: var(--sdh-halvany);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.sdh-csat--ures .sdh-csat__ures {
+    display: flex;
+}
+
+.sdh-csat__lista {
+    display: grid;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sdh-csat__elem {
+    position: relative;
+    margin: 0;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    cursor: default;
+}
+
+.sdh-csat__elem--uj {
+    border-style: dashed;
+    border-color: var(--sdh-accent);
+}
+
+.sdh-csat__elem--torolve {
+    opacity: .5;
+}
+
+.sdh-csat__elem--torolve .sdh-csat__nev {
+    text-decoration: line-through;
+}
+
+.sdh-csat__kep {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    text-decoration: none;
+}
+
+.sdh-csat__kep img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sdh-csat__ikon {
+    padding: .1rem .4rem;
+    border-radius: 4px;
+    background: var(--sdh-keret);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+.sdh-csat__nev {
+    overflow: hidden;
+    color: var(--sdh-szoveg);
+    font-size: 12.5px;
+    font-weight: 500;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-csat__meta {
+    overflow: hidden;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-csat__muveletek {
+    display: flex;
+    gap: 3px;
+}
+
+.sdh-csat__gomb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 6px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sdh-csat__gomb:hover {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-csat__sugo {
+    margin: 0;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+}
+
+.sdh-csat__figyelem {
+    margin: 0;
+    padding: .4rem .6rem;
+    border-radius: 7px;
+    background: rgba(190, 47, 47, .1);
+    color: var(--sdh-hiba);
+    font-size: 12.5px;
+}
+
+.sdh-csat__figyelem[hidden] {
+    display: none;
+}
+
+/* Ikon nézet: bélyegképes csempék. */
+.sdh-csat[data-nezet="ikon"] .sdh-csat__lista {
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+}
+
+.sdh-csat[data-nezet="ikon"] .sdh-csat__elem {
+    display: grid;
+    grid-template-rows: 5.5rem auto auto;
+    padding-bottom: .35rem;
+}
+
+.sdh-csat[data-nezet="ikon"] .sdh-csat__kep {
+    border-radius: 7px 7px 0 0;
+}
+
+.sdh-csat[data-nezet="ikon"] .sdh-csat__nev,
+.sdh-csat[data-nezet="ikon"] .sdh-csat__meta {
+    padding: 0 .4rem;
+}
+
+.sdh-csat[data-nezet="ikon"] .sdh-csat__meta {
+    font-size: 10.5px;
+}
+
+.sdh-csat[data-nezet="ikon"] .sdh-csat__muveletek {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+/* Lista nézet: soronként, kis bélyeggel, mérettel és dátummal. */
+.sdh-csat[data-nezet="lista"] .sdh-csat__elem {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+    grid-template-areas: "kep nev muv" "kep meta muv";
+    align-items: center;
+    column-gap: .6rem;
+    padding: .3rem .5rem .3rem .3rem;
+}
+
+/* Tömör nézet: egy sor, csak név és gombok. */
+.sdh-csat[data-nezet="tomor"] .sdh-csat__lista {
+    gap: 3px;
+}
+
+.sdh-csat[data-nezet="tomor"] .sdh-csat__elem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "nev muv";
+    align-items: center;
+    padding: .2rem .35rem .2rem .55rem;
+}
+
+.sdh-csat[data-nezet="tomor"] .sdh-csat__kep,
+.sdh-csat[data-nezet="tomor"] .sdh-csat__meta {
+    display: none;
+}
+
+.sdh-csat[data-nezet="lista"] .sdh-csat__kep {
+    grid-area: kep;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 6px;
+}
+
+.sdh-csat[data-nezet="lista"] .sdh-csat__nev { grid-area: nev; }
+.sdh-csat[data-nezet="lista"] .sdh-csat__meta { grid-area: meta; }
+.sdh-csat[data-nezet="lista"] .sdh-csat__muveletek,
+.sdh-csat[data-nezet="tomor"] .sdh-csat__muveletek { grid-area: muv; }
+.sdh-csat[data-nezet="tomor"] .sdh-csat__nev { grid-area: nev; }

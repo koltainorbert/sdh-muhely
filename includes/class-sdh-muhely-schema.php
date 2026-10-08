@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.10.0';
+    public const DB_VERSION = '0.11.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -96,6 +96,7 @@ final class SDH_Muhely_Schema
         $tac    = self::tabla('tac');
         $munkalap = self::tabla('munkalap');
         $hiba     = self::tabla('munkalap_hiba');
+        $csatolmany = self::tabla('csatolmany');
 
         $definiciok = [];
 
@@ -298,6 +299,27 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key munkalap_id (munkalap_id),
             key allapot (allapot)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Csatolt fájlok
+         *
+         * Bármelyik modulhoz tartozhat: tipus + ref_id adja a gazdát
+         * (pl. 'ugyfel', 12). A fájl maga a feltöltési mappában van,
+         * kitalálhatatlan néven; ide az eredeti név és a típus kerül.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$csatolmany} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            tipus varchar(30) NOT NULL default '',
+            ref_id bigint(20) unsigned NOT NULL default 0,
+            eredeti_nev varchar(190) NOT NULL default '',
+            tarolt_nev varchar(40) NOT NULL default '',
+            mime varchar(100) NOT NULL default '',
+            meret bigint(20) unsigned NOT NULL default 0,
+            feltoltve datetime NULL,
+            feltolto bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key gazda (tipus, ref_id)
         ) {$charset};";
 
         return $definiciok;

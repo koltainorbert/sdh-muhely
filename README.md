@@ -57,6 +57,28 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.17.0
+- Új ügyfél: **Csatolt fájlok** lap a Megjegyzés mellett (fotó, PDF, számla,
+  dokumentum). Húzd ide a fájlokat vagy „+ Fájl hozzáadása”; Ikon / Lista /
+  Tömör nézet. A fájlok az űrlap mentésekor kerülnek fel; meglévő fájl
+  törlésre jelölhető (× / ↺). Fájlonként legfeljebb 25 MB, de nem több, mint
+  amit a szerver (upload_max_filesize / post_max_size) enged – a felületen
+  kiírja. Hibás fájlnál semmi nem mentődik félig. Biztonság: engedélyezett
+  kiterjesztések, képek és PDF tartalmi ellenőrzése, véletlen tárolt név a
+  wp-content/uploads/sdh-muhely/csatolmany/ mappában, közvetlen elérés tiltva;
+  letöltés csak bejelentkezett, jogosult felhasználónak, nosniff fejléccel,
+  nem kép/PDF mindig letöltésként. Új tábla: `sdh_csatolmany`
+  (DB_VERSION 0.11.0), bármely modulhoz használható (`tipus` + `ref_id`).
+- **Irányítószám ↔ település** (Isz. / Település mezők, központi és
+  levelezési cím is): irányítószámra azonnal kitölti a települést, településre
+  az irányítószámot. Több kódú településnél (Budapest, Győr, Veszprém…) vagy
+  közös kódnál listát ad, nyilakkal / Enterrel / egérrel választható;
+  ékezet nélkül is keres. A teljes lista egyszer töltődik le (kb. 86 KB), a
+  keresés helyben fut.
+- Adat: GeoNames HU, 3571 sor, 3155 település, 3046 irányítószám. Nem a
+  Magyar Posta hivatalos listája – forrás és licenc: `data/iranyitoszam-forras.txt`.
+  *Irányítószám-adatok: GeoNames, geonames.org, CC BY 4.0.*
+
 ### 0.16.4
 - Új / szerkesztett ügyfél: kompakt, lapfüles űrlap a MunkaLap 3 mintájára.
   Központi cím lap (név, cím egy sorban, kategória, ügyfélszám, adószám,

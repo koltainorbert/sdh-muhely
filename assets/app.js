@@ -163,6 +163,7 @@
 
                 bekotUrlap(szint, n, opciok);
                 mintaKeres(szint.torzs);
+                csatKeres(szint.torzs);
 
                 var elso = szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
                 if (elso) {
@@ -213,7 +214,18 @@
                 credentials: 'same-origin'
             })
                 .then(function (valasz) {
-                    return valasz.json();
+                    return valasz.text().then(function (szoveg) {
+                        try {
+                            return JSON.parse(szoveg);
+                        } catch (e) {
+                            // Jellemzően a szerver beküldési korlátja (post_max_size) vágta el.
+                            throw new Error(
+                                valasz.status === 413 || valasz.status === 403 || szoveg === '-1'
+                                    ? 'A beküldött adat túl nagy vagy lejárt a munkamenet. Kevesebb vagy kisebb fájllal próbáld, vagy frissítsd az oldalt.'
+                                    : 'A szerver válasza nem értelmezhető.'
+                            );
+                        }
+                    });
                 })
                 .then(function (eredmeny) {
                     if (eredmeny && eredmeny.success) {
@@ -1759,4 +1771,685 @@
         esemeny.preventDefault();
         nyit(indito.dataset.sdhUrlap, indito.dataset.sdhId || '0');
     });
+
+    /* ---------------------------------------------------------------- */
+    /* Irányítószám ↔ település                                         */
+    /* ---------------------------------------------------------------- */
+
+    /*
+     * A teljes magyar lista egyszer töltődik le (kb. 100 KB, a böngésző
+     * napokra gyorsítótárazza), utána minden keresés helyben fut, ezért
+     * gépelés közben nincs várakozás. Az egyező mezőpárt a [data-sdh-cimsor]
+     * sor adja: abban az Isz. ([data-sdh-isz]) és a Település
+     * ([data-sdh-telepules]) mező tartozik össze.
+     */
+    var iszAdat = null;
+    var iszIgeret = null;
+
+    function iszNorm(szoveg) {
+        return String(szoveg || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function iszBetolt() {
+        if (iszAdat) {
+            return Promise.resolve(iszAdat);
+        }
+
+        if (iszIgeret) {
+            return iszIgeret;
+        }
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_iranyitoszamok');
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        iszIgeret = fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                if (!valasz.ok) {
+                    throw new Error('HTTP ' + valasz.status);
+                }
+
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    throw new Error('Üres válasz');
+                }
+
+                var sorok = valasz.data.sorok.map(function (s) {
+                    return { isz: s[0], nev: s[1], nk: iszNorm(s[1]) };
+                });
+                var iszSzerint = {};
+                var nevSzerint = {};
+
+                sorok.forEach(function (s) {
+                    (iszSzerint[s.isz] = iszSzerint[s.isz] || []).push(s);
+                    (nevSzerint[s.nk] = nevSzerint[s.nk] || []).push(s);
+                });
+
+                iszAdat = { sorok: sorok, iszSzerint: iszSzerint, nevSzerint: nevSzerint };
+
+                return iszAdat;
+            })
+            .catch(function (ok) {
+                // Hiba esetén a következő mezőérintés újra próbálkozhat.
+                iszIgeret = null;
+                throw ok;
+            });
+
+        return iszIgeret;
+    }
+
+    /** Helyi keresés: a találatok listája, legfeljebb `max` darab. */
+    function iszKeres(adat, mezo, szoveg, max) {
+        var talalat = [];
+
+        if (mezo === 'isz') {
+            var szam = String(szoveg).replace(/\s+/g, '');
+
+            if (szam === '') {
+                return talalat;
+            }
+
+            for (var i = 0; i < adat.sorok.length && talalat.length < max; i++) {
+                if (adat.sorok[i].isz.indexOf(szam) === 0) {
+                    talalat.push(adat.sorok[i]);
+                }
+            }
+
+            return talalat;
+        }
+
+        var kulcs = iszNorm(szoveg);
+
+        if (kulcs.length < 2) {
+            return talalat;
+        }
+
+        var csoportok = {};
+        var rend = [];
+
+        adat.sorok.forEach(function (s) {
+            var hely = s.nk.indexOf(kulcs);
+
+            if (hely === -1) {
+                return;
+            }
+
+            if (!csoportok[s.nk]) {
+                csoportok[s.nk] = { nev: s.nev, nk: s.nk, hely: s.nk === kulcs ? -1 : hely, sorok: [] };
+                rend.push(csoportok[s.nk]);
+            }
+
+            csoportok[s.nk].sorok.push(s);
+        });
+
+        // Pontos egyezés, aztán az elején egyező (rövidebb név előbb), végül a többi.
+        rend.sort(function (a, b) {
+            var ra = a.hely === -1 ? 0 : (a.hely === 0 ? 1 : 2);
+            var rb = b.hely === -1 ? 0 : (b.hely === 0 ? 1 : 2);
+
+            return ra - rb || a.nk.length - b.nk.length || (a.nk < b.nk ? -1 : 1);
+        });
+
+        return rend.slice(0, max).map(function (g) {
+            // Egy irányítószámú település közvetlenül választható; többnél a
+            // választás után a település kódjai közül lehet választani.
+            return g.sorok.length === 1
+                ? g.sorok[0]
+                : { isz: '', nev: g.nev, csoport: g.sorok };
+        });
+    }
+
+    var iszLista = null;      // az éppen nyitott találati lista elem
+    var iszAllapot = null;    // { sor, mezo, talalatok, kijelolt }
+
+    function iszZar() {
+        if (iszLista) {
+            iszLista.hidden = true;
+            iszLista.innerHTML = '';
+        }
+
+        iszAllapot = null;
+    }
+
+    function iszMezok(sor) {
+        return {
+            isz: sor.querySelector('[data-sdh-isz]'),
+            nev: sor.querySelector('[data-sdh-telepules]')
+        };
+    }
+
+    /** Beírja a kiválasztott párt, és jelzi a változást a többi szkriptnek. */
+    function iszKitolt(sor, tetel) {
+        var mezok = iszMezok(sor);
+
+        [[mezok.isz, tetel.isz], [mezok.nev, tetel.nev]].forEach(function (par) {
+            if (par[0] && par[0].value !== par[1]) {
+                par[0].value = par[1];
+                par[0].dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+
+        sor.classList.add('sdh-cimsor--kitoltve');
+        window.setTimeout(function () {
+            sor.classList.remove('sdh-cimsor--kitoltve');
+        }, 700);
+    }
+
+    /** Egy listaelem kiválasztása: kitölti a párt, vagy a település kódjait kínálja fel. */
+    function iszValaszt(tetel) {
+        var sor = iszAllapot && iszAllapot.sor;
+
+        if (!sor || !tetel) {
+            return;
+        }
+
+        if (tetel.csoport) {
+            var mezok = iszMezok(sor);
+
+            if (mezok.nev) {
+                mezok.nev.value = tetel.nev;
+                mezok.nev.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            if (mezok.isz) {
+                mezok.isz.value = '';
+                mezok.isz.focus();
+            }
+
+            iszAllapot = { sor: sor, mezo: 'isz', talalatok: tetel.csoport, kijelolt: 0 };
+            iszListaRajzol();
+
+            return;
+        }
+
+        iszZar();
+        iszKitolt(sor, tetel);
+
+        var kovetkezo = sor.querySelector('input[name$="_cim"]');
+        if (kovetkezo) {
+            kovetkezo.focus();
+        }
+    }
+
+    function iszListaRajzol() {
+        if (!iszAllapot) {
+            return;
+        }
+
+        if (!iszLista) {
+            iszLista = document.createElement('ul');
+            iszLista.className = 'sdh-isz__lista';
+            iszLista.setAttribute('role', 'listbox');
+            iszLista.hidden = true;
+
+            // Egérkattintásnál ne vegye el a fókuszt a mezőtől.
+            iszLista.addEventListener('mousedown', function (esemeny) {
+                esemeny.preventDefault();
+            });
+
+            iszLista.addEventListener('click', function (esemeny) {
+                var li = esemeny.target.closest('[data-sdh-isz-tetel]');
+
+                if (!li || !iszAllapot) {
+                    return;
+                }
+
+                iszValaszt(iszAllapot.talalatok[parseInt(li.dataset.sdhIszTetel, 10)]);
+            });
+
+            document.body.appendChild(iszLista);
+        }
+
+        // A lista a popup (<dialog>) tetején jelenik meg, ezért a dialóguson belül kell lennie.
+        var szulo = iszAllapot.sor.closest('dialog') || document.body;
+
+        if (iszLista.parentNode !== szulo) {
+            szulo.appendChild(iszLista);
+        }
+
+        var mezok = iszMezok(iszAllapot.sor);
+        var mezo = iszAllapot.mezo === 'isz' ? mezok.isz : mezok.nev;
+
+        if (!mezo || iszAllapot.talalatok.length === 0) {
+            iszZar();
+            return;
+        }
+
+        iszLista.innerHTML = iszAllapot.talalatok.map(function (t, i) {
+            return '<li role="option" data-sdh-isz-tetel="' + i + '"' +
+                (i === iszAllapot.kijelolt ? ' class="is-kijelolt" aria-selected="true"' : '') + '>' +
+                (t.csoport
+                    ? '<b></b> ' + szovegBiztonsagos(t.nev) + ' <i>' + t.csoport.length + ' irányítószám ›</i>'
+                    : '<b>' + szovegBiztonsagos(t.isz) + '</b> ' + szovegBiztonsagos(t.nev)) + '</li>';
+        }).join('');
+
+        var hely = mezo.getBoundingClientRect();
+        var szuloHely = szulo === document.body ? { left: 0, top: 0 } : szulo.getBoundingClientRect();
+
+        iszLista.style.left = Math.round(hely.left - szuloHely.left) + 'px';
+        iszLista.style.top = Math.round(hely.bottom - szuloHely.top + 2) + 'px';
+        iszLista.style.minWidth = Math.max(180, Math.round(hely.width)) + 'px';
+        iszLista.hidden = false;
+
+        var kijelolt = iszLista.querySelector('.is-kijelolt');
+        if (kijelolt && kijelolt.scrollIntoView) {
+            kijelolt.scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    /** Egy mező módosítása után: kitöltés vagy lista. */
+    function iszValtozas(mezo) {
+        var sor = mezo.closest('[data-sdh-cimsor]');
+
+        if (!sor) {
+            return;
+        }
+
+        var melyik = mezo.hasAttribute('data-sdh-isz') ? 'isz' : 'nev';
+        var mezok = iszMezok(sor);
+        var ertek = mezo.value.trim();
+
+        iszBetolt().then(function (adat) {
+            // Közben a mező változhatott vagy elveszett a fókusz.
+            if (mezo.value.trim() !== ertek || document.activeElement !== mezo) {
+                return;
+            }
+
+            if (melyik === 'isz') {
+                var szam = ertek.replace(/\s+/g, '');
+                var pontos = /^\d{4}$/.test(szam) ? adat.iszSzerint[szam] : null;
+
+                if (pontos && pontos.length === 1) {
+                    iszZar();
+                    iszKitolt(sor, pontos[0]);
+                    return;
+                }
+
+                if (pontos && pontos.length > 1) {
+                    var mostani = iszNorm(mezok.nev && mezok.nev.value);
+                    var egyezo = pontos.filter(function (t) { return t.nk === mostani; });
+
+                    // Ha a település már be van írva és ehhez a kódhoz tartozik, békén hagyjuk.
+                    if (egyezo.length === 1) {
+                        iszZar();
+                        return;
+                    }
+
+                    iszAllapot = { sor: sor, mezo: 'isz', talalatok: pontos, kijelolt: 0 };
+                    iszListaRajzol();
+                    return;
+                }
+
+                iszAllapot = { sor: sor, mezo: 'isz', talalatok: iszKeres(adat, 'isz', szam, 8), kijelolt: 0 };
+                iszListaRajzol();
+                return;
+            }
+
+            // Település mező.
+            var kulcs = iszNorm(ertek);
+            var pontosNev = kulcs !== '' ? adat.nevSzerint[kulcs] : null;
+
+            if (pontosNev && pontosNev.length === 1) {
+                // Egyetlen irányítószámú település: kitöltjük, ami még hiányzik.
+                iszZar();
+                iszKitolt(sor, pontosNev[0]);
+                return;
+            }
+
+            if (pontosNev && pontosNev.length > 1) {
+                var szamMost = mezok.isz ? mezok.isz.value.replace(/\s+/g, '') : '';
+                var jo = pontosNev.filter(function (t) { return t.isz === szamMost; });
+
+                if (jo.length === 1) {
+                    iszZar();
+                    return;
+                }
+
+                // Pontos név, több irányítószám: csak ennek a településnek a kódjait mutatjuk.
+                iszAllapot = { sor: sor, mezo: 'nev', talalatok: pontosNev, kijelolt: 0 };
+                iszListaRajzol();
+                return;
+            }
+
+            iszAllapot = { sor: sor, mezo: 'nev', talalatok: iszKeres(adat, 'nev', ertek, 10), kijelolt: 0 };
+            iszListaRajzol();
+        }).catch(function () {
+            iszZar();
+        });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-isz], [data-sdh-telepules]')) {
+            iszValtozas(mezo);
+        }
+    });
+
+    document.addEventListener('focusin', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-isz], [data-sdh-telepules]')) {
+            // Már az első érintésnél elkezdjük letölteni, hogy gépeléskor kész legyen.
+            iszBetolt().catch(function () {});
+        }
+    });
+
+    document.addEventListener('focusout', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-isz], [data-sdh-telepules]')) {
+            window.setTimeout(function () {
+                if (!document.activeElement || !document.activeElement.matches ||
+                    !document.activeElement.matches('[data-sdh-isz], [data-sdh-telepules]')) {
+                    iszZar();
+                }
+            }, 120);
+        }
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        if (!iszAllapot || !iszLista || iszLista.hidden) {
+            return;
+        }
+
+        var mezo = esemeny.target;
+
+        if (!mezo || !mezo.matches || !mezo.matches('[data-sdh-isz], [data-sdh-telepules]')) {
+            return;
+        }
+
+        var db = iszAllapot.talalatok.length;
+
+        if (esemeny.key === 'ArrowDown') {
+            esemeny.preventDefault();
+            iszAllapot.kijelolt = (iszAllapot.kijelolt + 1) % db;
+            iszListaRajzol();
+        } else if (esemeny.key === 'ArrowUp') {
+            esemeny.preventDefault();
+            iszAllapot.kijelolt = (iszAllapot.kijelolt - 1 + db) % db;
+            iszListaRajzol();
+        } else if (esemeny.key === 'Enter') {
+            esemeny.preventDefault();
+
+            iszValaszt(iszAllapot.talalatok[iszAllapot.kijelolt]);
+        } else if (esemeny.key === 'Escape') {
+            // A popup se záródjon be a lista helyett.
+            esemeny.preventDefault();
+            esemeny.stopPropagation();
+            iszZar();
+        }
+    }, true);
+
+    /* ---------------------------------------------------------------- */
+    /* Csatolt fájlok                                                   */
+    /* ---------------------------------------------------------------- */
+
+    function csatMeret(bajt) {
+        if (bajt >= 1048576) {
+            return (bajt / 1048576).toFixed(1).replace('.', ',') + ' MB';
+        }
+
+        return Math.max(1, Math.round(bajt / 1024)) + ' KB';
+    }
+
+    function csatKiterjesztes(nev) {
+        var pont = String(nev).lastIndexOf('.');
+
+        return pont > -1 ? String(nev).slice(pont + 1).toLowerCase() : '';
+    }
+
+    function csatBekot(doboz) {
+        if (doboz.dataset.sdhCsatKesz) {
+            return;
+        }
+
+        doboz.dataset.sdhCsatKesz = '1';
+
+        var input = doboz.querySelector('[data-sdh-csat-input]');
+        var lista = doboz.querySelector('[data-sdh-csat-lista]');
+        var zona = doboz.querySelector('[data-sdh-csat-zona]');
+        var figyelem = doboz.querySelector('[data-sdh-csat-figyelem]');
+        var maxFajl = parseInt(doboz.dataset.maxFajl, 10) || 0;
+        var maxOsszes = parseInt(doboz.dataset.maxOsszes, 10) || 0;
+        var engedett = (doboz.dataset.engedett || '').split(',');
+        var varakozo = []; // a még fel nem töltött, kiválasztott fájlok
+
+        function jelez(szoveg) {
+            if (!figyelem) {
+                return;
+            }
+
+            figyelem.textContent = szoveg || '';
+            figyelem.hidden = !szoveg;
+        }
+
+        function frissit() {
+            // A böngészőnek csak az input.files adja át a fájlokat az űrlapnak.
+            var gyujto = new DataTransfer();
+            varakozo.forEach(function (elem) {
+                gyujto.items.add(elem.fajl);
+            });
+            input.files = gyujto.files;
+
+            doboz.classList.toggle('sdh-csat--ures', lista.children.length === 0);
+        }
+
+        function ujElem(fajl) {
+            var ext = csatKiterjesztes(fajl.name);
+            var li = document.createElement('li');
+            li.className = 'sdh-csat__elem sdh-csat__elem--uj';
+            li.setAttribute('data-sdh-csat-uj', '');
+
+            var kep = document.createElement('span');
+            kep.className = 'sdh-csat__kep';
+
+            var url = null;
+
+            if (/^image\/(jpeg|png|gif|webp)$/.test(fajl.type)) {
+                url = URL.createObjectURL(fajl);
+
+                var img = document.createElement('img');
+                img.alt = '';
+                img.src = url;
+                kep.appendChild(img);
+            } else {
+                var ikon = document.createElement('span');
+                ikon.className = 'sdh-csat__ikon';
+                ikon.textContent = (ext || 'fájl').toUpperCase();
+                kep.appendChild(ikon);
+            }
+
+            var nev = document.createElement('span');
+            nev.className = 'sdh-csat__nev';
+            nev.textContent = fajl.name;
+            nev.title = fajl.name;
+
+            var meta = document.createElement('span');
+            meta.className = 'sdh-csat__meta';
+            meta.textContent = csatMeret(fajl.size) + ' · mentéskor kerül fel';
+
+            var muv = document.createElement('span');
+            muv.className = 'sdh-csat__muveletek';
+
+            var torol = document.createElement('button');
+            torol.type = 'button';
+            torol.className = 'sdh-csat__gomb sdh-csat__gomb--torol';
+            torol.title = 'Mégsem csatolom';
+            torol.setAttribute('aria-label', 'Mégsem csatolom');
+            torol.textContent = '×';
+            muv.appendChild(torol);
+
+            li.appendChild(kep);
+            li.appendChild(nev);
+            li.appendChild(meta);
+            li.appendChild(muv);
+
+            var elem = { fajl: fajl, li: li, url: url };
+
+            torol.addEventListener('click', function () {
+                varakozo = varakozo.filter(function (x) { return x !== elem; });
+                if (elem.url) {
+                    URL.revokeObjectURL(elem.url);
+                }
+                li.remove();
+                jelez('');
+                frissit();
+            });
+
+            return elem;
+        }
+
+        function hozzaad(fajlok) {
+            var hibak = [];
+            var osszes = varakozo.reduce(function (o, x) { return o + x.fajl.size; }, 0);
+
+            Array.prototype.forEach.call(fajlok, function (fajl) {
+                var ext = csatKiterjesztes(fajl.name);
+
+                if (engedett.indexOf(ext) === -1) {
+                    hibak.push('„' + fajl.name + '” típusa nem engedélyezett.');
+                } else if (maxFajl && fajl.size > maxFajl) {
+                    hibak.push('„' + fajl.name + '” túl nagy (legfeljebb ' + csatMeret(maxFajl) + ').');
+                } else if (maxOsszes && osszes + fajl.size > maxOsszes) {
+                    hibak.push('„' + fajl.name + '” már nem fér bele egy mentésbe (összesen legfeljebb ' + csatMeret(maxOsszes) + ').');
+                } else if (varakozo.some(function (x) {
+                    return x.fajl.name === fajl.name && x.fajl.size === fajl.size && x.fajl.lastModified === fajl.lastModified;
+                })) {
+                    // Ugyanaz a fájl kétszer: csendben kihagyjuk.
+                } else {
+                    var elem = ujElem(fajl);
+                    varakozo.push(elem);
+                    lista.appendChild(elem.li);
+                    osszes += fajl.size;
+                }
+            });
+
+            jelez(hibak.join(' '));
+            frissit();
+        }
+
+        input.addEventListener('change', function () {
+            // A böngésző az input.files-t felülírja, ezért a mostani választást
+            // átmásoljuk a gyűjtőbe, és a régieket visszatesszük.
+            var uj = Array.prototype.slice.call(input.files);
+            var regi = varakozo.map(function (x) { return x.fajl; });
+            var azonos = uj.length === regi.length && uj.every(function (f, i) { return f === regi[i]; });
+
+            if (azonos) {
+                return;
+            }
+
+            hozzaad(uj.filter(function (f) { return regi.indexOf(f) === -1; }));
+        });
+
+        doboz.querySelector('[data-sdh-csat-hozzaad]').addEventListener('click', function () {
+            input.click();
+        });
+
+        // Az üres felületre kattintva is megnyílik a tallózó.
+        zona.addEventListener('click', function (esemeny) {
+            if (esemeny.target.closest('[data-sdh-csat-elem], [data-sdh-csat-uj], button, a')) {
+                return;
+            }
+
+            input.click();
+        });
+
+        // Húzás és ejtés.
+        ['dragenter', 'dragover'].forEach(function (nev) {
+            zona.addEventListener(nev, function (esemeny) {
+                if (esemeny.dataTransfer && Array.prototype.indexOf.call(esemeny.dataTransfer.types, 'Files') > -1) {
+                    esemeny.preventDefault();
+                    zona.classList.add('sdh-csat__zona--huzas');
+                }
+            });
+        });
+
+        ['dragleave', 'dragend'].forEach(function (nev) {
+            zona.addEventListener(nev, function (esemeny) {
+                if (!zona.contains(esemeny.relatedTarget)) {
+                    zona.classList.remove('sdh-csat__zona--huzas');
+                }
+            });
+        });
+
+        zona.addEventListener('drop', function (esemeny) {
+            esemeny.preventDefault();
+            zona.classList.remove('sdh-csat__zona--huzas');
+
+            if (esemeny.dataTransfer && esemeny.dataTransfer.files.length) {
+                hozzaad(esemeny.dataTransfer.files);
+            }
+        });
+
+        // Meglévő fájl törlésre jelölése (mentéskor törlődik); újra kattintva visszavonható.
+        lista.addEventListener('click', function (esemeny) {
+            var gomb = esemeny.target.closest('[data-sdh-csat-torol]');
+
+            if (!gomb) {
+                return;
+            }
+
+            var li = gomb.closest('[data-sdh-csat-elem]');
+            var rejtett = li.querySelector('input[name="torol_csatolmany[]"]');
+            var jelolt = li.classList.toggle('sdh-csat__elem--torolve');
+
+            rejtett.disabled = !jelolt;
+            gomb.textContent = jelolt ? '↺' : '×';
+            gomb.title = jelolt ? 'Mégsem törlöm' : 'Eltávolítás mentéskor';
+            gomb.setAttribute('aria-label', gomb.title);
+        });
+
+        // Nézetváltó.
+        var nezetek = doboz.querySelectorAll('[data-sdh-csat-nezet]');
+
+        Array.prototype.forEach.call(nezetek, function (gomb) {
+            gomb.addEventListener('click', function () {
+                doboz.dataset.nezet = gomb.dataset.sdhCsatNezet;
+
+                Array.prototype.forEach.call(nezetek, function (g) {
+                    g.setAttribute('aria-pressed', g === gomb ? 'true' : 'false');
+                });
+
+                try {
+                    window.localStorage.setItem('sdhCsatNezet', gomb.dataset.sdhCsatNezet);
+                } catch (e) { /* privát ablak: nem baj */ }
+            });
+        });
+
+        try {
+            var mentett = window.localStorage.getItem('sdhCsatNezet');
+            var gombMentett = mentett ? doboz.querySelector('[data-sdh-csat-nezet="' + mentett + '"]') : null;
+
+            if (gombMentett) {
+                gombMentett.click();
+            }
+        } catch (e) { /* nincs tároló: marad az ikon nézet */ }
+
+        frissit();
+    }
+
+    function csatKeres(gyoker) {
+        Array.prototype.forEach.call(
+            (gyoker || document).querySelectorAll('[data-sdh-csat]'),
+            csatBekot
+        );
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        csatKeres(document);
+    });
+
+    if (document.readyState !== 'loading') {
+        csatKeres(document);
+    }
+
 }());

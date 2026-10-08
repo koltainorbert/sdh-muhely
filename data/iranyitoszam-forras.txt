@@ -1,0 +1,15 @@
+Irányítószám–település adat (iranyitoszam.csv.gz)
+=================================================
+
+Forrás:   GeoNames postal codes, Magyarország (HU) – https://www.geonames.org/
+Licenc:   Creative Commons Attribution 4.0 (CC BY 4.0) – https://creativecommons.org/licenses/by/4.0/
+Átvétel:  a zauberware/postal-codes-json-xml-csv nyilvános tárház data/HU.zip fájljából
+          (a GeoNames export CSV-re alakítva), 2026-10-08.
+Tartalom: 3571 sor, 3046 különböző irányítószám, 3155 különböző településnév
+          (a települések hivatalos száma 3155). Oszlopok: irsz;telepules;megye.
+
+Fontos: ez NEM a Magyar Posta hivatalos irányítószám-törzse. Újonnan kiosztott
+vagy megváltozott irányítószám késéssel kerülhet bele; az űrlap ezért nem
+tiltja az ismeretlen irányítószámot, csak nem tud hozzá települést kitölteni.
+
+Forrásmegjelölés (CC BY 4.0): "Irányítószám-adatok: GeoNames, geonames.org, CC BY 4.0."
