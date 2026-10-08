@@ -43,6 +43,18 @@
     --sdh-arnyek: 0 1px 2px rgba(16, 19, 23, .05);
     --sdh-arnyek-emelt: 0 10px 30px rgba(16, 19, 23, .12);
 
+    /* Munkalap-állapotok színei. A PHP csak a nevüket ismeri (sarga, zold…),
+       a Beállításokban az állapotokhoz ezek közül lehet választani. A
+       MunkaLap 3 állapotszíneit követik. */
+    --sdh-allapot-sarga: #f2c200;
+    --sdh-allapot-zold: #1fa83a;
+    --sdh-allapot-szurke: #9aa1ab;
+    --sdh-allapot-kek: #4f86e0;
+    --sdh-allapot-narancs: #f08a14;
+    --sdh-allapot-olajzold: #7d7d14;
+    --sdh-allapot-lila: #4f44a8;
+    --sdh-allapot-piros: #e0302a;
+
     --sdh-r: 8px;
     --sdh-r-nagy: 12px;
 
@@ -110,6 +122,10 @@
 
     --sdh-sotet: #0d0f12;
     --sdh-sotet-vilagos: #1a1d21;
+
+    --sdh-allapot-szurke: #8a929d;
+    --sdh-allapot-olajzold: #a9a92a;
+    --sdh-allapot-lila: #8f85e6;
 }
 
 :root[data-theme="dark"] {
@@ -454,6 +470,112 @@ a.sdh-kartya:focus-visible {
     border-color: rgba(190, 47, 47, .3);
     background: rgba(190, 47, 47, .08);
     color: var(--sdh-hiba);
+}
+
+/* ================================================================== */
+/* Munkalap – állapotjelvény, hibasorok                                */
+/* ================================================================== */
+
+.sdh-allapot,
+.sdh-allapot-pont {
+    --allapot-szin: var(--sdh-allapot-szurke);
+}
+
+.sdh-allapot--sarga { --allapot-szin: var(--sdh-allapot-sarga); }
+.sdh-allapot--zold { --allapot-szin: var(--sdh-allapot-zold); }
+.sdh-allapot--szurke { --allapot-szin: var(--sdh-allapot-szurke); }
+.sdh-allapot--kek { --allapot-szin: var(--sdh-allapot-kek); }
+.sdh-allapot--narancs { --allapot-szin: var(--sdh-allapot-narancs); }
+.sdh-allapot--olajzold { --allapot-szin: var(--sdh-allapot-olajzold); }
+.sdh-allapot--lila { --allapot-szin: var(--sdh-allapot-lila); }
+.sdh-allapot--piros { --allapot-szin: var(--sdh-allapot-piros); }
+
+.sdh-allapot {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .12rem .6rem .12rem .45rem;
+    border: 1px solid color-mix(in srgb, var(--allapot-szin) 45%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--allapot-szin) 14%, var(--sdh-felulet));
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sdh-szoveg);
+    white-space: nowrap;
+}
+
+.sdh-allapot::before,
+.sdh-allapot-pont {
+    flex: 0 0 auto;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--allapot-szin);
+}
+
+.sdh-allapot::before {
+    content: "";
+}
+
+.sdh-allapot-valaszto {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+}
+
+.sdh-allapot-valaszto select {
+    flex: 1 1 auto;
+}
+
+.sdh-hatarido--lejart {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-hibasorok {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: .7rem;
+}
+
+.sdh-hibasor {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) 150px minmax(0, 2fr) 34px;
+    gap: .5rem;
+    align-items: end;
+    padding: .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-hibasor .sdh-mezo {
+    min-width: 0;
+}
+
+.sdh-hibasor .sdh-mezo input[type="text"],
+.sdh-hibasor .sdh-mezo select {
+    background: var(--sdh-felulet);
+}
+
+.sdh-hibasor__torol {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+}
+
+@media (max-width: 760px) {
+    .sdh-hibasor {
+        grid-template-columns: 1fr;
+    }
+
+    .sdh-hibasor__torol {
+        width: 100%;
+    }
 }
 
 /* ================================================================== */

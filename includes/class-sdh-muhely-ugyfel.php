@@ -682,6 +682,13 @@ final class SDH_Muhely_Ugyfel
                     Készülékei
                 </a>
 
+                <a class="sdh-gomb sdh-gomb--vilagos"
+                   href="<?php echo esc_url(
+                       SDH_Muhely_Modulok::url('munkalapok', ['ugyfel_id' => (int) $ugyfel->id, 'allapot' => 'mind'])
+                   ); ?>">
+                    Munkalapjai
+                </a>
+
                 <?php
                 $allapot_url = wp_nonce_url(
                     add_query_arg(

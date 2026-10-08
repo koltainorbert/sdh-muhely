@@ -2,8 +2,8 @@
 /**
  * Beállítások.
  *
- * Egyelőre egyetlen dolgot kezel: a külső IMEI-szolgáltatót. Azért van
- * saját képernyője, mert a rendszert később más szervizeknek is el
+ * Két dolgot kezel: a munkalap-modul beállításait (számozás, állapotok)
+ * és a külső IMEI-szolgáltatót. Azért van saját képernyője, mert a rendszert később más szervizeknek is el
  * akarjátok adni – ott más szolgáltató és más kulcs lesz, és semmi sem
  * lehet beégetve a kódba.
  *
@@ -57,6 +57,8 @@ final class SDH_Muhely_Beallitasok
                   action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_beallitasok">
                 <?php wp_nonce_field('sdh_muhely_beallitasok', 'sdh_nonce'); ?>
+
+                <?php SDH_Muhely_Munkalap::beallitas_dobozok(); ?>
 
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">IMEI-szolgáltató</h2>
@@ -158,6 +160,8 @@ final class SDH_Muhely_Beallitasok
                 ? sanitize_textarea_field(wp_unslash($_POST['ellenorzok']))
                 : ''
         );
+
+        SDH_Muhely_Munkalap::beallitas_mentes();
 
         wp_safe_redirect(SDH_Muhely_Modulok::admin_url(self::KULCS, ['uzenet' => 'mentve']));
         exit;

@@ -355,6 +355,9 @@ final class SDH_Muhely_Admin_UI
             'mentve'            => ['siker', 'Elmentve.'],
             'letrehozva'        => ['siker', 'Az ügyfél létrejött.'],
             'letrehozva_eszkoz' => ['siker', 'Az eszköz létrejött.'],
+            'munkalap_mentve'      => ['siker', 'A munkalap elmentve.'],
+            'munkalap_letrehozva'  => ['siker', 'A munkalap létrejött.'],
+            'munkalap_hiba'        => ['hiba',  'A munkalap nem menthető.'],
             'inaktivalva'       => ['siker', 'Az ügyfél inaktívra állítva.'],
             'aktivalva'         => ['siker', 'Az ügyfél újra aktív.'],
             'hianyzo_nev'       => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
@@ -367,7 +370,30 @@ final class SDH_Muhely_Admin_UI
             return;
         }
 
+        // A munkalap hibaüzenete szabad szöveg (pl. melyik mező hiányzik),
+        // ezért külön paraméterben jön – kiírás előtt tisztítjuk.
+        if ($kulcs === 'munkalap_hiba') {
+            $hiba = isset($_GET['hiba']) ? sanitize_text_field(wp_unslash($_GET['hiba'])) : '';
+
+            printf(
+                '<div class="sdh-uzenet sdh-uzenet--hiba">%s</div>',
+                esc_html($hiba !== '' ? $hiba : 'A munkalap nem menthető.')
+            );
+
+            return;
+        }
+
         [$tipus, $szoveg] = $uzenetek[$kulcs];
+
+        // Új munkalapnál a kiosztott számot is kiírjuk – a pultnál erre van
+        // szükség, hogy ráírják a készülék tasakjára.
+        if ($kulcs === 'munkalap_letrehozva' && isset($_GET['szam'])) {
+            $szam = sanitize_text_field(wp_unslash($_GET['szam']));
+
+            if ($szam !== '') {
+                $szoveg = 'A munkalap létrejött. Száma: ' . $szam;
+            }
+        }
 
         printf(
             '<div class="sdh-uzenet sdh-uzenet--%s">%s</div>',
@@ -403,15 +429,22 @@ final class SDH_Muhely_Admin_UI
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
         $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
 
+        $munkalap_db = SDH_Muhely_Munkalap::nyitott_db();
+
         $ugyfel_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
         $eszkoz_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$eszkoz_tabla} WHERE aktiv = 1");
 
         $gombok = [
             [
-                'cimke'      => '+ Új ügyfél',
-                'url'        => SDH_Muhely_Modulok::url('ugyfelek', ['nezet' => 'uj']),
+                'cimke'      => '+ Új munkalap',
+                'url'        => SDH_Muhely_Modulok::url('munkalapok', ['nezet' => 'uj']),
                 'elsodleges' => true,
-                'adatok'     => ['sdh-urlap' => 'ugyfelek', 'sdh-id' => '0'],
+                'adatok'     => ['sdh-urlap' => 'munkalapok', 'sdh-id' => '0'],
+            ],
+            [
+                'cimke'  => '+ Új ügyfél',
+                'url'    => SDH_Muhely_Modulok::url('ugyfelek', ['nezet' => 'uj']),
+                'adatok' => ['sdh-urlap' => 'ugyfelek', 'sdh-id' => '0'],
             ],
         ];
 
@@ -444,10 +477,10 @@ final class SDH_Muhely_Admin_UI
                     <span class="sdh-kartya__cimke">nyilvántartott eszköz</span>
                 </a>
 
-                <div class="sdh-kartya sdh-kartya--keszul">
-                    <span class="sdh-kartya__szam">—</span>
-                    <span class="sdh-kartya__cimke">nyitott munkalap · készül</span>
-                </div>
+                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('munkalapok')); ?>">
+                    <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($munkalap_db)); ?></span>
+                    <span class="sdh-kartya__cimke">nyitott munkalap</span>
+                </a>
             </div>
 
             <?php if ($technikai) : ?>

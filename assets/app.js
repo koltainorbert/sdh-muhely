@@ -280,6 +280,7 @@
         // Így nem fordulhat elő, hogy átírja a nevet, és közben a régi
         // ügyfélhez menti az eszközt.
         rejtett.value = '0';
+        munkalapEszkozFrissit(doboz, '0');
 
         window.clearTimeout(keresesIdozito);
 
@@ -323,6 +324,7 @@
         doboz.querySelector('input[type="hidden"]').value = elem.dataset.id;
         doboz.querySelector('.sdh-valaszto__mezo').value = elem.dataset.nev;
         valasztoTorol(doboz);
+        munkalapEszkozFrissit(doboz, elem.dataset.id);
     }
 
     /* ---------------------------------------------------------------- */
@@ -1369,6 +1371,163 @@
     });
 
     /* ---------------------------------------------------------------- */
+    /* Munkalap – eszközválasztó, hibasorok, állapotpötty               */
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * A munkalap-űrlapon az eszközlista az ügyfélhez igazodik: ügyfélváltáskor
+     * újratöltjük, hogy ne lehessen másik ügyfél készülékét kiválasztani.
+     * Más űrlapon (nincs eszközválasztó) nem csinál semmit.
+     */
+    function munkalapEszkozFrissit(doboz, ugyfelId) {
+        var urlap = doboz.closest('form');
+        var valaszto = urlap ? urlap.querySelector('[data-sdh-eszkoz-valaszto]') : null;
+
+        if (!valaszto) {
+            return;
+        }
+
+        var eloszor = function (felirat) {
+            valaszto.innerHTML = '';
+            var elem = document.createElement('option');
+            elem.value = '0';
+            elem.textContent = felirat;
+            valaszto.appendChild(elem);
+        };
+
+        if (!ugyfelId || ugyfelId === '0') {
+            eloszor('— előbb válassz ügyfelet —');
+
+            return;
+        }
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_munkalapok_eszkozok');
+        cim.searchParams.set('ugyfel_id', ugyfelId);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (eredmeny) {
+                var eszkozok = (eredmeny && eredmeny.success && eredmeny.data) || [];
+
+                if (!eszkozok.length) {
+                    eloszor('Ennek az ügyfélnek még nincs eszköze – vidd fel az Eszközök oldalon');
+
+                    return;
+                }
+
+                eloszor('— válassz eszközt —');
+
+                eszkozok.forEach(function (eszkoz) {
+                    var elem = document.createElement('option');
+                    elem.value = String(eszkoz.id);
+                    elem.textContent = eszkoz.nev;
+                    valaszto.appendChild(elem);
+                });
+
+                // Egyetlen készüléknél nincs mit választani.
+                if (eszkozok.length === 1) {
+                    valaszto.value = String(eszkozok[0].id);
+                }
+            })
+            .catch(function () {
+                eloszor('Az eszközök nem töltődtek be');
+            });
+    }
+
+    /** Új hibasor: a <template> sablont klónozza a következő indexszel. */
+    function hibasorUj(gomb) {
+        var doboz = gomb.closest('.sdh-doboz');
+        var lista = doboz ? doboz.querySelector('[data-sdh-hibasorok]') : null;
+        var sablon = doboz ? doboz.querySelector('[data-sdh-hibasor-sablon]') : null;
+
+        if (!lista || !sablon) {
+            return;
+        }
+
+        var index = parseInt(lista.dataset.kovetkezo || '0', 10);
+        lista.dataset.kovetkezo = String(index + 1);
+
+        var html = sablon.innerHTML.split('__I__').join(String(index));
+        var tarolo = document.createElement('div');
+        tarolo.innerHTML = html;
+
+        var sor = tarolo.firstElementChild;
+
+        if (!sor) {
+            return;
+        }
+
+        lista.appendChild(sor);
+
+        var elso = sor.querySelector('input[type="text"]');
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    /**
+     * Hibasor eltávolítása. Az utolsó sort nem töröljük, csak kiürítjük,
+     * hogy az űrlap mindig mutasson legalább egy sort.
+     */
+    function hibasorTorol(gomb) {
+        var sor = gomb.closest('[data-sdh-hibasor]');
+        var lista = gomb.closest('[data-sdh-hibasorok]');
+
+        if (!sor || !lista) {
+            return;
+        }
+
+        if (lista.querySelectorAll('[data-sdh-hibasor]').length <= 1) {
+            Array.prototype.forEach.call(sor.querySelectorAll('input[type="text"]'), function (mezo) {
+                mezo.value = '';
+            });
+
+            return;
+        }
+
+        sor.remove();
+    }
+
+    /** Az állapotválasztó melletti pötty színe követi a kiválasztott állapotot. */
+    function allapotPontFrissit(valaszto) {
+        var pont = valaszto.parentNode.querySelector('[data-sdh-allapot-pont]');
+        var kivalasztott = valaszto.options[valaszto.selectedIndex];
+
+        if (!pont || !kivalasztott) {
+            return;
+        }
+
+        Array.prototype.slice.call(pont.classList).forEach(function (nev) {
+            if (nev.indexOf('sdh-allapot--') === 0) {
+                pont.classList.remove(nev);
+            }
+        });
+
+        pont.classList.add('sdh-allapot--' + (kivalasztott.dataset.szin || 'szurke'));
+    }
+
+    document.addEventListener('change', function (esemeny) {
+        var allapot = esemeny.target.closest('[data-sdh-allapot-valaszto]');
+
+        if (allapot) {
+            allapotPontFrissit(allapot);
+
+            return;
+        }
+
+        // A listák szűrője azonnal érvényesül, külön Keresés-gomb nélkül.
+        var szuro = esemeny.target.closest('select[data-sdh-szuro]');
+
+        if (szuro && szuro.form) {
+            szuro.form.submit();
+        }
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 
@@ -1391,6 +1550,24 @@
                 }
             }
         );
+
+        var hibasorUjGomb = esemeny.target.closest('[data-sdh-hibasor-uj]');
+
+        if (hibasorUjGomb) {
+            esemeny.preventDefault();
+            hibasorUj(hibasorUjGomb);
+
+            return;
+        }
+
+        var hibasorTorolGomb = esemeny.target.closest('[data-sdh-hibasor-torol]');
+
+        if (hibasorTorolGomb) {
+            esemeny.preventDefault();
+            hibasorTorol(hibasorTorolGomb);
+
+            return;
+        }
 
         var indito = esemeny.target.closest('[data-sdh-urlap]');
 

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.9.0';
+    public const DB_VERSION = '0.10.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -94,6 +94,8 @@ final class SDH_Muhely_Schema
         $ugyfel = self::tabla('ugyfel');
         $eszkoz = self::tabla('eszkoz');
         $tac    = self::tabla('tac');
+        $munkalap = self::tabla('munkalap');
+        $hiba     = self::tabla('munkalap_hiba');
 
         $definiciok = [];
 
@@ -228,6 +230,74 @@ final class SDH_Muhely_Schema
             key gyarto (gyarto),
             key modell (modell),
             key forras (forras)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Munkalap
+         *
+         * Egy ügyfél egy eszközéhez tartozó javítási ügy. A munkalap
+         * nem törlődik: ha érvénytelen, az az állapota (Érvénytelen),
+         * így a számozásban nem keletkezik lyuk.
+         *
+         * A "munkalap_szam" NULL, amíg a lap nem kapott számot: a
+         * Sablon és az Árajánlat állapotú lapok még nem igazi munkalapok.
+         * A szám az első számozott állapotba lépéskor generálódik. A
+         * NULL-t a MySQL egyedi kulcsnál nem tekinti ütközésnek, a
+         * valódi számokat viszont egyedinek tartja – két lap nem
+         * kaphatja ugyanazt a számot, versenyhelyzetben sem.
+         *
+         * Az "allapot" a beállításokban szerkeszthető lista egy kulcsa,
+         * ezért varchar, nem enum: új állapot felvételéhez nem kell
+         * sémát módosítani.
+         *
+         * A "kulso_azonosito" a MunkaLap 3 saját kulcsa az átvételhez.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$munkalap} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_szam bigint(20) unsigned NULL,
+            allapot varchar(30) NOT NULL default 'bejelentett',
+            nev varchar(190) NOT NULL default '',
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
+            felelos bigint(20) unsigned NOT NULL default 0,
+            keszult date NULL,
+            hatarido date NULL,
+            megjegyzes text NULL,
+            forras varchar(30) NOT NULL default 'kezi',
+            kulso_azonosito varchar(40) NOT NULL default '',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            unique key munkalap_szam (munkalap_szam),
+            key allapot (allapot),
+            key ugyfel_id (ugyfel_id),
+            key eszkoz_id (eszkoz_id),
+            key felelos (felelos),
+            key hatarido (hatarido),
+            key kulso_azonosito (kulso_azonosito)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Munkalap – hibasorok
+         *
+         * Egy munkalapon több hiba is lehet (pl. törött kijelző és
+         * gyenge akku), és mindegyiknek külön haladása van: az egyik
+         * már kész, a másik alkatrészre vár. Ezért külön tábla, saját
+         * állapottal – a munkalap állapota ettől független.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$hiba} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            sorrend int(11) NOT NULL default 0,
+            leiras varchar(255) NOT NULL default '',
+            javitas text NULL,
+            allapot varchar(30) NOT NULL default 'uj',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id),
+            key allapot (allapot)
         ) {$charset};";
 
         return $definiciok;

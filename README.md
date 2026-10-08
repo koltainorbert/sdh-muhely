@@ -57,6 +57,31 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.16.0
+- Munkalap-modul (Munkalapok a menüben): lista kereséssel (szám, név,
+  ügyfél, telefon, IMEI, készülék) és állapotszűrővel, felvitel és
+  szerkesztés popupban, JS nélküli teljes oldalas tartalékkal.
+- A munkalap állapotai a MunkaLap 3-éi: Bejelentett, Árajánlat, Sablon,
+  Függő, Nyitott, Elkészült, Lezárt, Érvénytelen – a MunkaLap 3 színeivel.
+  Az állapotlista a Beállításokban szerkeszthető (kulcs, név, szín,
+  `szamozott` és `zart` jelző), semmi sincs beégetve.
+- Munkalapszám: csak a `szamozott` állapotú lap kap számot (a Sablon és az
+  Árajánlat nem), az első számozott állapotba lépéskor, zár alatt, egyedi
+  kulccsal – két gép nem kaphatja ugyanazt. A Beállításokban a következő
+  szám, az előtag és a kitöltés állítható. A MunkaLap 3-ból való átvétel
+  után a kezdőérték: 34983.
+- Hibasorok: egy munkalapon több hiba, mindegyik saját állapottal
+  (Új, Folyamatban, Kész, Nem javítható – szerkeszthető) és javítási
+  megjegyzéssel. A listában „x / y kész” látszik.
+- Számozott állapotnál az ügyfél és az eszköz kötelező, és az eszköznek az
+  ügyfélé kell lennie. Az eszközválasztó az ügyfél kiválasztása után töltődik.
+- Munkalap nem törölhető: az érvénytelen lap az Érvénytelen állapotba kerül.
+- Állapotszínek: `--sdh-allapot-*` változók az `assets/admin.css` tetején,
+  sötét módra külön értékekkel.
+- Az áttekintőn a „nyitott munkalap” kártya élő számot mutat; az ügyfél
+  adatlapján új „Munkalapjai” gomb.
+- Sémaverzió: 0.10.0 (`munkalap`, `munkalap_hiba` tábla).
+
 ### 0.15.0
 - Arculat képernyő (SDH Műhely → Arculat): élő stíluskalauz az összes
   színnel és komponenssel, plusz a cég alapértelmezett megjelenése.

@@ -280,11 +280,6 @@ final class SDH_Muhely_Frontend
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <span class="sdh-sav__link sdh-sav__link--keszul" title="Készül">
-                <?php echo self::ikon('munkalapok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                <span class="sdh-sav__felirat">Munkalapok</span>
-            </span>
-
             <div class="sdh-sav__also">
                 <a class="sdh-sav__link" href="<?php echo esc_url(admin_url('admin.php?page=sdh-muhely')); ?>">
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
