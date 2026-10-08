@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.16.1
+- A `/muhely/` útvonal szabálya önjavító: minden verzióváltás után, és ha a
+  szabály kiesik a WordPress listájából, az első kérésnél újraíródik (a
+  frontenden is, nem csak adminban). Kézi permalink-mentés nem kell.
+
 ### 0.16.0
 - Munkalap-modul (Munkalapok a menüben): lista kereséssel (szám, név,
   ügyfél, telefon, IMEI, készülék) és állapotszűrővel, felvitel és

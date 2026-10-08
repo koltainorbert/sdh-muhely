@@ -29,14 +29,21 @@ final class SDH_Muhely_Frontend
     /** A query var, ami szép URL nélkül is működik. */
     public const QUERY_VAR = 'muhely';
 
-    /** Ha ezt léptetjük, a rewrite szabályok újraíródnak. */
-    private const REWRITE_VERZIO = '1';
+    /**
+     * A rewrite szabályok akkor íródnak újra, ha ez eltér a mentettől.
+     *
+     * A plugin verziójához kötjük: minden frissítés után az első kérésnél
+     * újraíródnak, így nem kell kézzel a Közvetlen hivatkozásokat menteni.
+     */
+    private const REWRITE_VERZIO_ELOTAG = 'v';
 
     public static function init(): void
     {
         add_action('init', [self::class, 'szabalyok']);
         add_filter('query_vars', [self::class, 'query_vars']);
-        add_action('admin_init', [self::class, 'szabalyok_frissitese']);
+        // Nem csak adminban: ha a szabály kiesik, a /muhely/ 404-et adna, és
+        // admin-oldalt épp az nyitna meg, aki a felületre nem jut be.
+        add_action('init', [self::class, 'szabalyok_frissitese'], 99);
         add_action('template_redirect', [self::class, 'fogadas'], 1);
     }
 
@@ -75,13 +82,37 @@ final class SDH_Muhely_Frontend
      */
     public static function szabalyok_frissitese(): void
     {
-        if (get_option('sdh_muhely_rewrite_verzio') === self::REWRITE_VERZIO) {
+        $cel = self::REWRITE_VERZIO_ELOTAG . SDH_MUHELY_VERSION;
+
+        // Kétszeres védelem: a mentett verzió egyezik, és a szabály tényleg
+        // ott van a WordPress listájában. Ha a lista máshol íródott felül,
+        // a szabály hiánya is újraíratja.
+        // A pihenő megakadályozza, hogy egy váratlanul mindig hiányzó
+        // szabály minden kérésnél újraírja a listát: óránként egyszer próbál.
+        if (
+            get_option('sdh_muhely_rewrite_verzio') === $cel
+            && (self::szabaly_megvan() || get_transient('sdh_muhely_rewrite_pihen'))
+        ) {
             return;
         }
 
         self::szabalyok();
         flush_rewrite_rules(false);
-        update_option('sdh_muhely_rewrite_verzio', self::REWRITE_VERZIO);
+        update_option('sdh_muhely_rewrite_verzio', $cel);
+        set_transient('sdh_muhely_rewrite_pihen', 1, HOUR_IN_SECONDS);
+    }
+
+    /** Benne van-e a /muhely/ szabály a tárolt szabálylistában. */
+    private static function szabaly_megvan(): bool
+    {
+        $szabalyok = get_option('rewrite_rules');
+
+        // Szép URL nélkül nincs szabálylista, a ?muhely= link úgyis megy.
+        if (!is_array($szabalyok)) {
+            return true;
+        }
+
+        return isset($szabalyok['^' . self::ALAP . '/?$']);
     }
 
     /* =================================================================
