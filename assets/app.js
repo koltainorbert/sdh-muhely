@@ -1434,6 +1434,152 @@
         torzs.appendChild(lab);
     }
 
+    var HONAPOK = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július',
+        'Augusztus', 'Szeptember', 'Október', 'November', 'December'];
+    var NAPOK = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'];
+
+    function datumKettes(n) {
+        return (n < 10 ? '0' : '') + n;
+    }
+
+    function datumIso(ev, honap, nap) {
+        return ev + '-' + datumKettes(honap + 1) + '-' + datumKettes(nap);
+    }
+
+    /**
+     * Saját naptár a natív helyett: a böngésző beépített naptára nem
+     * stílusozható, és a popupok közé sem illett. Az érték mindig ÉÉÉÉ-HH-NN.
+     */
+    function popDatum(torzs, aktualis, valasztott) {
+        var ma = new Date();
+        var egyezes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(aktualis || ''));
+        var kijelolt = egyezes ? aktualis : '';
+        var ev = egyezes ? parseInt(egyezes[1], 10) : ma.getFullYear();
+        var honap = egyezes ? parseInt(egyezes[2], 10) - 1 : ma.getMonth();
+        var maIso = datumIso(ma.getFullYear(), ma.getMonth(), ma.getDate());
+
+        var fej = popElem('div', 'sdh-naptar__fej');
+        var elozo = popElem('button', 'sdh-naptar__lep', '‹');
+        var kovetkezo = popElem('button', 'sdh-naptar__lep', '›');
+        var honapValaszto = popElem('select', 'sdh-naptar__valaszto');
+        var evValaszto = popElem('select', 'sdh-naptar__valaszto sdh-naptar__valaszto--ev');
+        var racs = popElem('div', 'sdh-naptar__racs');
+
+        elozo.type = 'button';
+        kovetkezo.type = 'button';
+        elozo.setAttribute('aria-label', 'Előző hónap');
+        kovetkezo.setAttribute('aria-label', 'Következő hónap');
+
+        HONAPOK.forEach(function (nev, i) {
+            var elem = popElem('option', '', nev);
+            elem.value = String(i);
+            honapValaszto.appendChild(elem);
+        });
+
+        for (var e = ma.getFullYear() + 6; e >= ma.getFullYear() - 40; e--) {
+            var evElem = popElem('option', '', String(e));
+            evElem.value = String(e);
+            evValaszto.appendChild(evElem);
+        }
+
+        function rajzol() {
+            honapValaszto.value = String(honap);
+
+            if (!evValaszto.querySelector('option[value="' + ev + '"]')) {
+                var kulon = popElem('option', '', String(ev));
+                kulon.value = String(ev);
+                evValaszto.insertBefore(kulon, evValaszto.firstChild);
+            }
+
+            evValaszto.value = String(ev);
+            racs.innerHTML = '';
+
+            NAPOK.forEach(function (nev) {
+                racs.appendChild(popElem('span', 'sdh-naptar__nev', nev));
+            });
+
+            // Hétfővel kezdünk: a JS vasárnapja 0, ezért tolunk egyet.
+            var eltolas = (new Date(ev, honap, 1).getDay() + 6) % 7;
+            var napokSzama = new Date(ev, honap + 1, 0).getDate();
+
+            for (var u = 0; u < eltolas; u++) {
+                racs.appendChild(popElem('span', 'sdh-naptar__ures'));
+            }
+
+            for (var nap = 1; nap <= napokSzama; nap++) {
+                var iso = datumIso(ev, honap, nap);
+                var gomb = popElem('button', 'sdh-naptar__nap', String(nap));
+                gomb.type = 'button';
+                gomb.dataset.iso = iso;
+
+                if (iso === maIso) {
+                    gomb.classList.add('is-ma');
+                }
+
+                if (iso === kijelolt) {
+                    gomb.classList.add('is-aktiv');
+                }
+
+                racs.appendChild(gomb);
+            }
+        }
+
+        function lep(irany) {
+            honap += irany;
+
+            if (honap < 0) {
+                honap = 11;
+                ev--;
+            } else if (honap > 11) {
+                honap = 0;
+                ev++;
+            }
+
+            rajzol();
+        }
+
+        elozo.addEventListener('click', function () { lep(-1); });
+        kovetkezo.addEventListener('click', function () { lep(1); });
+
+        honapValaszto.addEventListener('change', function () {
+            honap = parseInt(honapValaszto.value, 10);
+            rajzol();
+        });
+
+        evValaszto.addEventListener('change', function () {
+            ev = parseInt(evValaszto.value, 10);
+            rajzol();
+        });
+
+        racs.addEventListener('click', function (esemeny) {
+            var gomb = esemeny.target.closest('[data-iso]');
+
+            if (gomb) {
+                valasztott(gomb.dataset.iso);
+            }
+        });
+
+        fej.appendChild(elozo);
+        fej.appendChild(honapValaszto);
+        fej.appendChild(evValaszto);
+        fej.appendChild(kovetkezo);
+        torzs.appendChild(fej);
+        torzs.appendChild(racs);
+
+        var lab = popElem('div', 'sdh-pop__lab sdh-pop__lab--kozep');
+        var maGomb = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Ma');
+        var torolGomb = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Törlés');
+        maGomb.type = 'button';
+        torolGomb.type = 'button';
+        maGomb.addEventListener('click', function () { valasztott(maIso); });
+        torolGomb.addEventListener('click', function () { valasztott(''); });
+        lab.appendChild(maGomb);
+        lab.appendChild(torolGomb);
+        torzs.appendChild(lab);
+
+        rajzol();
+    }
+
     function popNyit(mezo) {
         var tipus = mezo.dataset.sdhPop;
         var adat;
@@ -1448,7 +1594,8 @@
             kategoria: 'Kategória',
             gyarto: 'Gyártó',
             szin: 'Szín',
-            tartozek: 'Tartozékok'
+            tartozek: 'Tartozékok',
+            datum: 'Dátum'
         };
 
         var dialog = document.createElement('dialog');
@@ -1541,14 +1688,16 @@
             torzs.appendChild(szinAlj);
         } else if (tipus === 'tartozek') {
             popTartozekok(targy, adat, mezo.value, valasztott);
+        } else if (tipus === 'datum') {
+            popDatum(targy, mezo.value, valasztott);
         }
 
         dialog.showModal();
 
-        var elso = kereso || torzs.querySelector('input[type="text"], .is-aktiv, .sdh-pop__chip, input[type="checkbox"]');
-
-        if (elso) {
-            elso.focus();
+        // Csak a keresőbe ugrik a kurzor: gombra, jelölőnégyzetre vagy más mezőre
+        // tett fókusz keretet rajzolna megnyitáskor, ami zavaró.
+        if (kereso) {
+            kereso.focus();
         }
     }
 

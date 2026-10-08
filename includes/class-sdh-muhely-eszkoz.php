@@ -514,14 +514,6 @@ final class SDH_Muhely_Eszkoz
 
         ?>
         <h2 class="sdh-modal__cim"><?php echo esc_html($uj ? 'Új eszköz' : self::megnevezes($eszkoz)); ?></h2>
-        <p class="sdh-modal__alcim">
-            <?php echo esc_html(
-                $uj
-                    ? 'Előbb válaszd ki az ügyfelet, akihez a készülék tartozik.'
-                    : 'A készülék adatai. A munkalapok ehhez az eszközhöz fognak kapcsolódni.'
-            ); ?>
-        </p>
-
         <form class="sdh-urlap" method="post" enctype="multipart/form-data"
               action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
               data-sdh-ajax-action="sdh_muhely_eszkozok_ment">
@@ -626,6 +618,22 @@ final class SDH_Muhely_Eszkoz
 
                     <div class="sdh-sor sdh-sor--ketto">
                         <div class="sdh-ig">
+                            <label for="imei">IMEI</label>
+                            <input type="text" name="imei" id="imei" inputmode="numeric" maxlength="15"
+                                   data-sdh-imei autocomplete="off" placeholder="15 számjegy"
+                                   title="15 számjegy után megnézem, járt-e már nálunk ez a készülék."
+                                   value="<?php echo esc_attr($ert('imei')); ?>">
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="sorozatszam">Sorozatszám</label>
+                            <input type="text" name="sorozatszam" id="sorozatszam"
+                                   value="<?php echo esc_attr($ert('sorozatszam')); ?>">
+                        </div>
+                    </div>
+
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
                             <label for="szin">Szín</label>
                             <?php self::pop_mezo('szin', 'szin', $ert('szin'), 'Válassz színt…', self::szinek()); ?>
                         </div>
@@ -638,48 +646,34 @@ final class SDH_Muhely_Eszkoz
                 </div>
 
                 <div class="sdh-fulek__panel sdh-fulek__panel--2">
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="imei">IMEI</label>
-                            <input type="text" name="imei" id="imei" inputmode="numeric" maxlength="15"
-                                   data-sdh-imei autocomplete="off"
-                                   title="15 számjegy után megnézem, járt-e már nálunk ez a készülék."
-                                   value="<?php echo esc_attr($ert('imei')); ?>">
+                    <?php
+                    // Kompakt: balra a mezők egymás alatt, jobbra a kicsinyített minta.
+                    // Az IMEI és a sorozatszám az Eszköz lapfülön van.
+                    ?>
+                    <div class="sdh-azon">
+                        <div class="sdh-azon__mezok">
+                            <div class="sdh-ig">
+                                <label for="imei2">IMEI 2.</label>
+                                <input type="text" name="imei2" id="imei2" inputmode="numeric" autocomplete="off"
+                                       value="<?php echo esc_attr($ert('imei2')); ?>">
+                            </div>
+
+                            <div class="sdh-ig">
+                                <label for="modell_szam">Modellszám</label>
+                                <input type="text" name="modell_szam" id="modell_szam"
+                                       title="A teljes gyári kód, pl. SM-A505FZBCAFG."
+                                       value="<?php echo esc_attr($ert('modell_szam')); ?>">
+                            </div>
+
+                            <div class="sdh-ig">
+                                <label for="zarkod">Zárkód / PIN</label>
+                                <input type="text" name="zarkod" id="zarkod" autocomplete="off"
+                                       title="E nélkül a javítás nagy része nem tesztelhető."
+                                       value="<?php echo esc_attr($ert('zarkod')); ?>">
+                            </div>
                         </div>
 
-                        <div class="sdh-ig">
-                            <label for="imei2">IMEI 2.</label>
-                            <input type="text" name="imei2" id="imei2" inputmode="numeric" autocomplete="off"
-                                   value="<?php echo esc_attr($ert('imei2')); ?>">
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="sorozatszam">Sorozatszám</label>
-                            <input type="text" name="sorozatszam" id="sorozatszam"
-                                   value="<?php echo esc_attr($ert('sorozatszam')); ?>">
-                        </div>
-
-                        <div class="sdh-ig">
-                            <label for="modell_szam">Modellszám</label>
-                            <input type="text" name="modell_szam" id="modell_szam"
-                                   title="A teljes gyári kód, pl. SM-A505FZBCAFG."
-                                   value="<?php echo esc_attr($ert('modell_szam')); ?>">
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="zarkod">Zárkód / PIN</label>
-                            <input type="text" name="zarkod" id="zarkod" autocomplete="off"
-                                   title="E nélkül a javítás nagy része nem tesztelhető."
-                                   value="<?php echo esc_attr($ert('zarkod')); ?>">
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor">
-                        <div class="sdh-ig sdh-ig--felso">
+                        <div class="sdh-azon__minta">
                             <span class="sdh-ig__cimke">Feloldó minta</span>
                             <?php self::minta_mezo($ert('minta')); ?>
                         </div>
@@ -736,14 +730,12 @@ final class SDH_Muhely_Eszkoz
                     <div class="sdh-sor sdh-sor--ketto">
                         <div class="sdh-ig">
                             <label for="vasarlas_datuma">Vásárlás</label>
-                            <input type="date" name="vasarlas_datuma" id="vasarlas_datuma"
-                                   value="<?php echo esc_attr(self::datum($ert('vasarlas_datuma'))); ?>">
+                            <?php self::pop_mezo('vasarlas_datuma', 'datum', self::datum($ert('vasarlas_datuma')), 'éééé-hh-nn', []); ?>
                         </div>
 
                         <div class="sdh-ig">
                             <label for="garancia_lejar">Garancia lejár</label>
-                            <input type="date" name="garancia_lejar" id="garancia_lejar"
-                                   value="<?php echo esc_attr(self::datum($ert('garancia_lejar'))); ?>">
+                            <?php self::pop_mezo('garancia_lejar', 'datum', self::datum($ert('garancia_lejar')), 'éééé-hh-nn', []); ?>
                         </div>
                     </div>
 
@@ -756,8 +748,7 @@ final class SDH_Muhely_Eszkoz
 
                         <div class="sdh-ig">
                             <label for="gyartas_datuma">Gyártás</label>
-                            <input type="date" name="gyartas_datuma" id="gyartas_datuma"
-                                   value="<?php echo esc_attr(self::datum($ert('gyartas_datuma'))); ?>">
+                            <?php self::pop_mezo('gyartas_datuma', 'datum', self::datum($ert('gyartas_datuma')), 'éééé-hh-nn', []); ?>
                         </div>
                     </div>
 
@@ -859,7 +850,7 @@ final class SDH_Muhely_Eszkoz
     {
         ?>
         <input type="text" name="<?php echo esc_attr($nev); ?>" id="<?php echo esc_attr($nev); ?>"
-               class="sdh-pop" readonly autocomplete="off"
+               class="sdh-pop<?php echo $tipus === 'datum' ? ' sdh-pop--datum' : ''; ?>" readonly autocomplete="off"
                data-sdh-pop="<?php echo esc_attr($tipus); ?>"
                data-sdh-pop-adat="<?php echo esc_attr((string) wp_json_encode($adat)); ?>"
                placeholder="<?php echo esc_attr($helyorzo); ?>"
@@ -878,7 +869,8 @@ final class SDH_Muhely_Eszkoz
     private static function minta_mezo(string $ertek): void
     {
         ?>
-        <div class="sdh-minta" data-sdh-minta>
+        <div class="sdh-minta" data-sdh-minta
+             title="Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik. Sorszámozás balról jobbra, fentről lefelé: 1–9.">
             <input type="hidden" name="minta" value="<?php echo esc_attr($ertek); ?>">
 
             <svg class="sdh-minta__rajz" viewBox="0 0 240 240"
@@ -1226,7 +1218,7 @@ final class SDH_Muhely_Eszkoz
                 'halozat'    => 'Router / hálózati eszköz',
                 'tarolo'     => 'Külső tároló (SSD, HDD)',
                 'periferia'  => 'Billentyűzet / egér / webkamera',
-                'alkatresz'  => 'PC-alkatrész (VGA, alaplap, RAM)',
+                'alkatresz'  => 'PC-alkatrész',
                 'ups'        => 'Szünetmentes tápegység (UPS)',
                 'pos'        => 'Pénztárgép / vonalkódolvasó',
             ],
@@ -1248,8 +1240,8 @@ final class SDH_Muhely_Eszkoz
                 'drone'      => 'Drón',
             ],
             'Háztartás' => [
-                'nagygep'    => 'Nagygép (mosógép, hűtő, mosogatógép)',
-                'kisgep'     => 'Kisgép (kávéfőző, turmixgép, sütő)',
+                'nagygep'    => 'Nagygép (mosógép, hűtő)',
+                'kisgep'     => 'Kisgép (kávéfőző, turmixgép)',
                 'porszivo'   => 'Porszívó / robotporszívó',
                 'klima'      => 'Klíma / fűtés / ventilátor',
                 'vasalo'     => 'Vasaló / gőzállomás',
@@ -1258,7 +1250,7 @@ final class SDH_Muhely_Eszkoz
                 'hajszarito' => 'Hajszárító',
                 'hajformazo' => 'Hajvasaló / hajformázó',
                 'borotva'    => 'Borotva / szakállvágó',
-                'fogkefe'    => 'Elektromos fogkefe / szájzuhany',
+                'fogkefe'    => 'Elektromos fogkefe',
             ],
             'Okosotthon és biztonság' => [
                 'okosotthon' => 'Okosotthon-eszköz',
@@ -1267,7 +1259,7 @@ final class SDH_Muhely_Eszkoz
             ],
             'Közlekedés' => [
                 'roller'     => 'Elektromos roller / kerékpár',
-                'auto_elektronika' => 'Autós elektronika (fejegység, GPS)',
+                'auto_elektronika' => 'Autós elektronika',
             ],
             'Egyéb' => [
                 'szerszam'   => 'Akkus szerszám',

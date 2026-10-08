@@ -57,6 +57,19 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.1
+- Eszközűrlap: **IMEI és Sorozatszám az Eszköz lapfülön** (az Azonosítók fülről
+  ide kerültek); az **Azonosítók fül tömör**: mezők balra, kicsinyített feloldó
+  minta jobbra, az egész popup görgetés nélkül elfér.
+- **Saját naptár** a böngésző beépített dátumválasztója helyett (hónap/év
+  választó, Ma, Törlés); az érték továbbra is ÉÉÉÉ-HH-NN.
+- **Szélesebb, alacsonyabb választó popupok**: a kategória és a gyártó
+  csoportjai 4–5 oszlopban egymás mellett állnak; a tartozéklista 3 oszlopos.
+- Javítva: a tartozék-popup megnyitásakor az első elem fókuszkerete
+  elcsúszva/levágva látszott – megnyitáskor nincs automatikus fókusz, a keret
+  belül rajzolódik, a görgetődoboz nem vágja le.
+- A modal alcíme elmaradt az eszközűrlapról (helyet takarít).
+
 ### 0.19.0
 - **Eszközűrlap újratervezve** az ügyfélűrlap kompakt, lekerekített mintájára
   (lapfülek, címke + mező sorban, két szimmetrikus oszlop, nem táblázatos):
