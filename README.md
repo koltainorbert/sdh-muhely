@@ -57,6 +57,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.18.2
+- Ügyfélűrlap: minden címke balra zárva; a két oszlop szimmetrikus (azonos
+  címkeoszlop, azonos mezőszélesség, bal és jobb margó egyenlő).
+- Kedvezmény: a % jel a mezőn belül van.
+- Az egész rendszerben modern fel/le léptető minden számmezőn (a böngésző
+  nyilai helyett): két kis chevron-gomb a mezőn belül, nyomva tartva
+  folyamatosan léptet, a min/max határon a gomb letilt, a fókusz a mezőn
+  marad. Popupban betöltött űrlapokon is.
+- Minden legördülő (select) saját vékony chevront kap, sötét módban is.
+- CSS/JS gyorsítótár-törés a fájl módosítási idejével is (nem csak a
+  verziószámmal), hogy frissítés után biztosan az új stílus töltődjön be.
+
 ### 0.18.1
 - Ügyfél: a Telefon / Telefon 2. / E-mail / Kapcsolattartó már nem szegélyes
   rács, hanem külön mezők, ugyanúgy, mint a Kategória / Adószám sorok

@@ -880,20 +880,17 @@ a.sdh-kartya:focus-visible {
 
 .sdh-ig {
     display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
     align-items: center;
     gap: .5rem;
 }
 
+/* Címkék balra zárva: mindkét oszlopban ugyanott kezdődik a címke és a mező. */
 .sdh-ig > label,
 .sdh-ig__cimke {
+    justify-self: start;
     text-align: left;
     font-size: 12.5px;
-    color: var(--sdh-szoveg-2);
-}
-
-.sdh-ig__egyseg {
-    font-size: 13px;
     color: var(--sdh-szoveg-2);
 }
 
@@ -977,7 +974,7 @@ a.sdh-kartya:focus-visible {
     }
 
     .sdh-ig {
-        grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+        grid-template-columns: 5.5rem minmax(0, 1fr);
     }
 }
 
@@ -1750,3 +1747,128 @@ a.sdh-kartya:focus-visible {
 .sdh-csat[data-nezet="lista"] .sdh-csat__muveletek,
 .sdh-csat[data-nezet="tomor"] .sdh-csat__muveletek { grid-area: muv; }
 .sdh-csat[data-nezet="tomor"] .sdh-csat__nev { grid-area: nev; }
+
+/* ================================================================== */
+/* Számmezők: saját fel/le léptető (a böngésző nyilai helyett)         */
+/* ================================================================== */
+
+/*
+ * Az app.js minden számmezőt .sdh-szam dobozba tesz, és jobb oldalra két
+ * kis, lekerekített chevron-gombot rak. Nyomva tartva folyamatosan léptet.
+ * Mértékegység (pl. %) a mezőn belül, a gombok előtt: .sdh-szam__utotag.
+ */
+.sdh-szam {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+.sdh-szam > input[type="number"] {
+    width: 100%;
+    max-width: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.sdh-szam--kesz > input[type="number"] {
+    padding-right: 2.2rem;
+}
+
+.sdh-szam--kesz.sdh-szam--utotag > input[type="number"],
+.sdh-szam--utotag > input[type="number"] {
+    padding-right: 3.3rem;
+}
+
+.sdh-szam > input[type="number"]::-webkit-inner-spin-button,
+.sdh-szam > input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sdh-szam__utotag {
+    position: absolute;
+    top: 50%;
+    right: .7rem;
+    transform: translateY(-50%);
+    color: var(--sdh-halvany);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.sdh-szam--kesz .sdh-szam__utotag {
+    right: 2.2rem;
+}
+
+.sdh-szam__gombok {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 1.45rem;
+}
+
+.sdh-szam__gombok button {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .12s, color .12s;
+}
+
+.sdh-szam__gombok button:hover {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-szam__gombok button:active {
+    background: var(--sdh-accent);
+    color: #fff;
+}
+
+.sdh-szam__gombok button:disabled {
+    opacity: .35;
+    cursor: default;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-szam__gombok svg {
+    display: block;
+    width: 10px;
+    height: 10px;
+}
+
+/* ================================================================== */
+/* Legördülők: saját, vékony chevron a rendszer-nyíl helyett           */
+/* ================================================================== */
+
+.sdh-app select:not([multiple]):not([size]),
+.sdh-wrap select:not([multiple]):not([size]),
+.sdh-modal select:not([multiple]):not([size]) {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%235f6670' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .6rem center;
+    background-size: 12px 12px;
+    cursor: pointer;
+}
+
+:root[data-theme="dark"] .sdh-app select:not([multiple]):not([size]),
+:root[data-theme="dark"] .sdh-wrap select:not([multiple]):not([size]),
+:root[data-theme="dark"] .sdh-modal select:not([multiple]):not([size]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%23a3aab3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}

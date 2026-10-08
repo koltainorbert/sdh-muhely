@@ -329,9 +329,9 @@ final class SDH_Muhely_Frontend
             </script>
 
             <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_MUHELY_VERSION); ?>">
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
             <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_MUHELY_VERSION); ?>">
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.css')); ?>">
         </head>
         <body class="sdh-app">
 
@@ -440,7 +440,7 @@ final class SDH_Muhely_Frontend
                 echo wp_json_encode(SDH_Muhely_Admin_UI::js_beallitas('frontend'));
             ?>;
         </script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_MUHELY_VERSION); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')); ?>"></script>
 
         </body>
         </html>
@@ -464,9 +464,9 @@ final class SDH_Muhely_Frontend
             <meta name="robots" content="noindex, nofollow">
             <title>Nincs jogosultság – SDH Műhely</title>
             <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_MUHELY_VERSION); ?>">
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
             <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_MUHELY_VERSION); ?>">
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.css')); ?>">
         </head>
         <body class="sdh-app sdh-app--uzenet" >
             <div class="sdh-app__kozep">

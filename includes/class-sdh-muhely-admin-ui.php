@@ -252,14 +252,14 @@ final class SDH_Muhely_Admin_UI
             'sdh-muhely-admin',
             SDH_MUHELY_URL . 'assets/admin.css',
             [],
-            SDH_MUHELY_VERSION
+            self::eszkoz_verzio('assets/admin.css')
         );
 
         wp_enqueue_script(
             'sdh-muhely-app',
             SDH_MUHELY_URL . 'assets/app.js',
             [],
-            SDH_MUHELY_VERSION,
+            self::eszkoz_verzio('assets/app.js'),
             true
         );
 
@@ -499,5 +499,17 @@ final class SDH_Muhely_Admin_UI
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    /**
+     * A CSS/JS fájl verziója a böngésző-gyorsítótárhoz: plugin-verzió + a fájl
+     * módosítási ideje. Így minden fájlcsere után az első betöltés már az újat
+     * kéri, akkor is, ha a PHP-gyorsítótár (OPcache) még a régi verziószámot adná.
+     */
+    public static function eszkoz_verzio(string $relativ): string
+    {
+        $ido = @filemtime(SDH_MUHELY_DIR . $relativ);
+
+        return SDH_MUHELY_VERSION . ($ido ? '.' . $ido : '');
     }
 }

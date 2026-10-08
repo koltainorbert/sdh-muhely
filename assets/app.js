@@ -164,6 +164,7 @@
                 bekotUrlap(szint, n, opciok);
                 mintaKeres(szint.torzs);
                 csatKeres(szint.torzs);
+                szamKeres(szint.torzs);
 
                 var elso = szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
                 if (elso) {
@@ -2450,6 +2451,134 @@
 
     if (document.readyState !== 'loading') {
         csatKeres(document);
+    }
+
+    /* ---------------------------------------------------------------- */
+    /* Számmezők: modern fel/le léptető                                 */
+    /* ---------------------------------------------------------------- */
+
+    var SZAM_NYIL_FEL = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 6.4 5 3.6l2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var SZAM_NYIL_LE = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 3.6 5 6.4l2.8-2.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    /** A gombok tiltása a mező határain (min / max). */
+    function szamHatar(input, doboz) {
+        var gombok = doboz.querySelectorAll('.sdh-szam__gombok button');
+        var ertek = parseFloat(input.value);
+        var min = input.min !== '' ? parseFloat(input.min) : null;
+        var max = input.max !== '' ? parseFloat(input.max) : null;
+
+        if (gombok.length === 2) {
+            gombok[0].disabled = input.disabled || input.readOnly || (max !== null && !isNaN(ertek) && ertek >= max);
+            gombok[1].disabled = input.disabled || input.readOnly || (min !== null && !isNaN(ertek) && ertek <= min);
+        }
+    }
+
+    function szamLep(input, irany) {
+        try {
+            if (irany > 0) {
+                input.stepUp();
+            } else {
+                input.stepDown();
+            }
+        } catch (e) {
+            // Érvénytelen kiinduló érték: a lépésköz szerint indulunk.
+            input.value = input.min !== '' ? input.min : '0';
+        }
+
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function szamBekot(input) {
+        if (input.dataset.sdhSzamKesz) {
+            return;
+        }
+
+        input.dataset.sdhSzamKesz = '1';
+
+        var doboz = input.parentElement && input.parentElement.classList.contains('sdh-szam')
+            ? input.parentElement
+            : null;
+
+        if (!doboz) {
+            doboz = document.createElement('span');
+            doboz.className = 'sdh-szam';
+            input.parentNode.insertBefore(doboz, input);
+            doboz.appendChild(input);
+        }
+
+        doboz.classList.add('sdh-szam--kesz');
+
+        var gombok = document.createElement('span');
+        gombok.className = 'sdh-szam__gombok';
+        gombok.innerHTML =
+            '<button type="button" tabindex="-1" data-irany="1" aria-label="Növelés">' + SZAM_NYIL_FEL + '</button>' +
+            '<button type="button" tabindex="-1" data-irany="-1" aria-label="Csökkentés">' + SZAM_NYIL_LE + '</button>';
+        doboz.appendChild(gombok);
+
+        var idozito = null;
+        var ismetlo = null;
+
+        function megall() {
+            window.clearTimeout(idozito);
+            window.clearInterval(ismetlo);
+            idozito = null;
+            ismetlo = null;
+        }
+
+        gombok.addEventListener('pointerdown', function (esemeny) {
+            var gomb = esemeny.target.closest('button');
+
+            if (!gomb || gomb.disabled || esemeny.button !== 0) {
+                return;
+            }
+
+            // A fókusz a mezőn marad, a gomb nem veszi el.
+            esemeny.preventDefault();
+            input.focus();
+
+            var irany = parseInt(gomb.dataset.irany, 10);
+
+            szamLep(input, irany);
+            megall();
+
+            // Nyomva tartva: kis szünet után gyorsan léptet tovább.
+            idozito = window.setTimeout(function () {
+                ismetlo = window.setInterval(function () {
+                    if (gomb.disabled) {
+                        megall();
+                        return;
+                    }
+
+                    szamLep(input, irany);
+                }, 60);
+            }, 400);
+        });
+
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (nev) {
+            gombok.addEventListener(nev, megall);
+        });
+
+        input.addEventListener('input', function () {
+            szamHatar(input, doboz);
+        });
+
+        szamHatar(input, doboz);
+    }
+
+    function szamKeres(gyoker) {
+        Array.prototype.forEach.call(
+            (gyoker || document).querySelectorAll('input[type="number"]'),
+            szamBekot
+        );
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        szamKeres(document);
+    });
+
+    if (document.readyState !== 'loading') {
+        szamKeres(document);
     }
 
 }());

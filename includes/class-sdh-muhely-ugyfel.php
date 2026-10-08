@@ -592,10 +592,12 @@ final class SDH_Muhely_Ugyfel
 
                         <div class="sdh-ig">
                             <label for="kedvezmeny">Kedvezmény</label>
-                            <input type="number" name="kedvezmeny" id="kedvezmeny"
-                                   step="0.01" min="0" max="100"
-                                   value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
-                            <span class="sdh-ig__egyseg">%</span>
+                            <span class="sdh-szam sdh-szam--utotag">
+                                <input type="number" name="kedvezmeny" id="kedvezmeny"
+                                       step="0.01" min="0" max="100"
+                                       value="<?php echo esc_attr($ert('kedvezmeny', '0')); ?>">
+                                <span class="sdh-szam__utotag" aria-hidden="true">%</span>
+                            </span>
                         </div>
                     </div>
 
