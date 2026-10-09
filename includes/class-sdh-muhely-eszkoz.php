@@ -870,7 +870,7 @@ final class SDH_Muhely_Eszkoz
     {
         ?>
         <div class="sdh-minta" data-sdh-minta
-             title="Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik. Sorszámozás balról jobbra, fentről lefelé: 1–9.">
+             title="Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik. Sorszámozás balról jobbra, fentről lefelé: 1–9. Szabad rajznál pöttyönként kattints: újra érinthető pötty, kihagyható köztes pötty.">
             <input type="hidden" name="minta" value="<?php echo esc_attr($ertek); ?>">
 
             <svg class="sdh-minta__rajz" viewBox="0 0 240 240"
@@ -878,10 +878,20 @@ final class SDH_Muhely_Eszkoz
 
             <div class="sdh-minta__lab">
                 <span class="sdh-minta__sor"></span>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-minta-vissza
+                        title="Az utolsó lépés visszavonása">
+                    Vissza
+                </button>
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-minta-torol>
                     Törlés
                 </button>
             </div>
+
+            <label class="sdh-minta__szabad"
+                   title="Pöttyönként kattintva rajzolsz: egy pötty többször is érinthető, és a köztes pötty kihagyható.">
+                <input type="checkbox" data-sdh-minta-szabad>
+                Szabad rajz (kattintással)
+            </label>
 
             <span class="sdh-mezo__sugo">
                 Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik.
@@ -894,26 +904,25 @@ final class SDH_Muhely_Eszkoz
     /**
      * A feloldó minta megtisztítása.
      *
-     * Csak 1–9 közötti számjegy, mindegyik legfeljebb egyszer – a
-     * telefon sem enged ugyanarra a pöttyre kétszer lépni. Ami ennek
-     * nem felel meg, azt eldobjuk, nem próbáljuk megjavítani: egy
+     * Csak 1–9 közötti számjegy; ugyanaz a pötty többször is szerepelhet
+     * (a vonalak keresztezhetik egymást, egy pötty újra érinthető), két egymás
+     * utáni azonban nem lehet azonos. Legalább 2, legfeljebb 20 lépés. Ami
+     * ennek nem felel meg, azt eldobjuk, nem próbáljuk megjavítani: egy
      * félig értelmezett minta rosszabb, mint a semmi.
      */
     private static function minta_tisztit(string $ertek): string
     {
         $szamjegyek = preg_replace('/[^1-9]/', '', $ertek) ?? '';
 
-        $latott = [];
-
-        foreach (str_split($szamjegyek) as $szamjegy) {
-            if (in_array($szamjegy, $latott, true)) {
-                return '';
-            }
-
-            $latott[] = $szamjegy;
+        if (strlen($szamjegyek) < 2 || strlen($szamjegyek) > 20) {
+            return '';
         }
 
-        return count($latott) >= 2 ? implode('', $latott) : '';
+        if (preg_match('/(.)\1/', $szamjegyek) === 1) {
+            return '';
+        }
+
+        return $szamjegyek;
     }
 
     private static function kontextus_ertek(): string

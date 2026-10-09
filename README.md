@@ -57,6 +57,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.5
+- **Feloldó minta: keresztezés.** A vonalak metszhetik egymást, egy pötty
+  többször is érinthető, és a köztes pötty kihagyható. A „Szabad rajz
+  (kattintással)” kapcsolóval pöttyönként kattintva épül a minta; alapban marad
+  az Android-szerű behúzás. Új „Vissza” gomb (utolsó lépés). Tárolás: legfeljebb
+  20 lépés, két egymás utáni nem lehet azonos (a szerver már nem dobja el az
+  ismétlődő pöttyöt tartalmazó mintát). A nyílhegy a szakasz 60%-nál ül, hogy
+  keresztezésnél ne fedjék egymást.
+
 ### 0.19.4
 - Eszközűrlap: a **feloldó minta visszakapta az eredeti, 180 px-es méretét**
   (0.19.1 óta kicsinyítve volt); az alsó megjegyzés-dobozok visszaálltak 62 px-re.

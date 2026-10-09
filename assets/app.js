@@ -766,8 +766,8 @@
             }));
 
             // Nyílhegy a szakasz közepén – ez mutatja az irányt
-            var kx = (p1.x + p2.x) / 2;
-            var ky = (p1.y + p2.y) / 2;
+            var kx = p1.x + (p2.x - p1.x) * 0.6;
+            var ky = p1.y + (p2.y - p1.y) * 0.6;
             var szog = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
 
             svg.appendChild(mintaElem('path', {
@@ -816,6 +816,12 @@
         }
     }
 
+    var MINTA_MAX = 20;
+
+    /**
+     * A tárolt érték a pöttyök sorrendje; ugyanaz a pötty többször is szerepelhet
+     * (szabad rajz), csak két egymás utáni nem lehet azonos.
+     */
     function mintaErtek(doboz) {
         var rejtett = doboz.querySelector('input[type="hidden"]');
         var nyers = (rejtett.value || '').replace(/[^1-9]/g, '');
@@ -824,7 +830,7 @@
         nyers.split('').forEach(function (sz) {
             var n = parseInt(sz, 10);
 
-            if (sorrend.indexOf(n) === -1) {
+            if (sorrend[sorrend.length - 1] !== n && sorrend.length < MINTA_MAX) {
                 sorrend.push(n);
             }
         });
@@ -872,8 +878,25 @@
 
         mintaRajzol(doboz, sorrend, null);
 
+        var szabadJelolo = doboz.querySelector('[data-sdh-minta-szabad]');
+
         svg.addEventListener('pointerdown', function (esemeny) {
             esemeny.preventDefault();
+
+            // Szabad rajz: pöttyönként kattintva (érintve) építhető a minta. Így egy
+            // pötty újra érinthető, és a köztes pötty kihagyható (pl. 1→3 a 2 nélkül).
+            if (szabadJelolo && szabadJelolo.checked) {
+                var kattintott = mintaTalalat(mintaVasznon(svg, esemeny));
+
+                if (kattintott && sorrend[sorrend.length - 1] !== kattintott && sorrend.length < MINTA_MAX) {
+                    sorrend.push(kattintott);
+                    mintaMent(doboz, sorrend.length >= 2 ? sorrend : []);
+                    mintaRajzol(doboz, sorrend, null);
+                }
+
+                return;
+            }
+
             huzas = true;
             sorrend = [];
 
@@ -933,6 +956,17 @@
         svg.addEventListener('pointerup', lezar);
         svg.addEventListener('pointercancel', lezar);
         svg.addEventListener('pointerleave', lezar);
+
+        var vissza = doboz.querySelector('[data-sdh-minta-vissza]');
+
+        if (vissza) {
+            vissza.addEventListener('click', function (esemeny) {
+                esemeny.preventDefault();
+                sorrend.pop();
+                mintaMent(doboz, sorrend.length >= 2 ? sorrend : []);
+                mintaRajzol(doboz, sorrend, null);
+            });
+        }
 
         var torol = doboz.querySelector('[data-sdh-minta-torol]');
 
