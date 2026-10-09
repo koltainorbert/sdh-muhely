@@ -1,0 +1,5 @@
+tFPDF 1.33 (based on FPDF 1.85) – https://github.com/Setasign/tFPDF
+Authors: Ian Back, Tycho Veltmeijer. License: LGPL.
+FPDF: (c) Olivier Plathey – permission is granted to use, copy, modify and distribute it free of charge.
+DejaVu fonts: Bitstream Vera / DejaVu license (free to use, embed and redistribute) – https://dejavu-fonts.github.io/License.html
+Unmodified copies; only the two font files used by the plugin are included.

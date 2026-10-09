@@ -40,3 +40,8 @@ package-lock.json
 # --- Naplók, ideiglenes kimenetek ---
 *.log
 /tmp/
+
+# A tFPDF betűkészlet-gyorsítótára (futás közben keletkezik)
+includes/lib/tfpdf/font/unifont/*.mtx.php
+includes/lib/tfpdf/font/unifont/*.cw.dat
+includes/lib/tfpdf/font/unifont/*.cw127.php

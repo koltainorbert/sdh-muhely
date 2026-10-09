@@ -4504,3 +4504,22 @@ a.sdh-szamlajel:hover {
         margin-left: 0;
     }
 }
+
+/* Helyi nyomtatvány: letöltő link a gomb mellett, alcím a beállítás-dobozban. */
+.sdh-szamlaurlap__letoltes {
+    display: inline-flex;
+    align-items: center;
+}
+
+.sdh-szamlaurlap__jelolok[hidden] {
+    display: none;
+}
+
+.sdh-doboz__alcim {
+    margin: 1.4rem 0 .5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sdh-keret);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sdh-szoveg);
+}

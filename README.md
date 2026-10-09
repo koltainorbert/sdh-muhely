@@ -57,6 +57,22 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.30.0
+- **Helyi nyomtatvány (számla-előkészítő) – API nélkül**: a munkalap láblécének harmadik gombja
+  helyben készít letölthető, nyomtatható PDF-et a kipipált tételekből, a szerviz logójával és
+  adataival (kiállító, adószám, bank, vevő, fizetési adatok, tételek nettó/áfa/bruttó bontásban,
+  végösszeg). Internet és Számlázz.hu nélkül is megy, hiányos vevőcímmel is elkészül. Ez az a papír,
+  ami a kész termék mellé kerül, és amiből később a számla készül.
+- **Nem számla, és nem is nézhet ki annak**: a címe a Beállításokban választható (Számla-előkészítő,
+  Díjbekérő, Elszámolás, Átadási bizonylat – „Számla" nincs köztük), a törzsben és minden oldal
+  láblécében ott áll, hogy nem minősül számlának, a sorszáma pedig előtag-év-munkalapszám, saját
+  előtaggal (alap: SDE), amely nem egyezhet a számlatömbök előtagjával. Nem megy róla adat sehová,
+  és a számlák nyilvántartásába sem kerül.
+- Beállítások → Számlázás → „Helyi nyomtatvány": cím, előtag, kiállító adatai, bank, lábléc, logó.
+  A kiállító kezdőértékei a `data/kiallito.json`-ból jönnek (más szerviznek adott példányból kiürítendő),
+  az alap logó az `assets/logo-nyomtatvany.png`.
+- PDF: tFPDF 1.33 (LGPL) + DejaVu Sans Condensed, az `includes/lib/tfpdf` alatt – csak PDF-készítéskor töltődik be.
+
 ### 0.29.0
 - **Számlázz.hu-összekötés** (`SDH_Muhely_Szamla`, Számla Agent): a munkalap-ablak láblécében
   „Számlázz.hu számla" és „SDH számla" gomb. A gomb elmenti a munkalapot, és megnyitja a számla

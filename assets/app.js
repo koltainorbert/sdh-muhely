@@ -5528,7 +5528,9 @@
 
         var id = azonosito.value;
         var n = sajatSzint(gomb);
-        var sorozat = gomb.getAttribute('data-sdh-szamla') === 'sdh' ? 'sdh' : 'fo';
+        var kert = gomb.getAttribute('data-sdh-szamla');
+        // fo / sdh = Számlázz.hu számla; helyi = helyben készülő nyomtatvány (nem számla).
+        var sorozat = kert === 'sdh' || kert === 'helyi' ? kert : 'fo';
         var gombok = urlap.querySelectorAll('[data-sdh-szamla]');
         var felirat = gomb.textContent;
 
@@ -5594,24 +5596,31 @@
         mlIr(urlap.querySelector('[data-sdh-szamla-ossz="netto"]'), mlPenz(netto));
         mlIr(urlap.querySelector('[data-sdh-szamla-ossz="brutto"]'), mlPenz(brutto));
 
-        var kuldes = urlap.querySelector('button[type="submit"]');
+        var kuldes = urlap.querySelector('[data-sdh-szamla-kuld]');
 
         if (kuldes && !kuldes.hasAttribute('data-sdh-tiltva')) {
             kuldes.disabled = db === 0;
         }
     }
 
-    /** Előnézet: a Számlázz.hu PDF-je új lapon – számla nem készül. */
-    function szamlaElonezet(gomb) {
+    /**
+     * PDF új lapon a számla ablakából:
+     *   előnézet     – a Számlázz.hu PDF-je, számla nem készül;
+     *   nyomtatvány  – a helyben készülő számla-előkészítő (API nélkül); ehhez
+     *                  letöltő link is megjelenik a gomb mellett.
+     */
+    function szamlaPdf(gomb, muvelet, folyamatban) {
         var urlap = gomb.closest('form');
         var felirat = gomb.textContent;
         // Az új lapot még a kattintásban kell megnyitni, különben a böngésző letiltja.
         var ablak = window.open('', '_blank');
         var adat = new FormData(urlap);
+        var fajlnev = gomb.getAttribute('data-fajlnev') || '';
+        var letoltes = urlap.querySelector('[data-sdh-szamla-letoltes]');
 
-        adat.set('action', 'sdh_muhely_szamla_elonezet');
+        adat.set('action', muvelet);
         gomb.disabled = true;
-        gomb.textContent = 'Előnézet készül…';
+        gomb.textContent = folyamatban;
 
         fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
             .then(function (valasz) {
@@ -5624,11 +5633,23 @@
                         } else {
                             window.open(cim, '_blank');
                         }
+
+                        if (letoltes && fajlnev) {
+                            var link = document.createElement('a');
+
+                            link.href = cim;
+                            link.download = fajlnev;
+                            link.className = 'sdh-szamlajel';
+                            link.setAttribute('data-sdh-szamla-letolt', '');
+                            link.textContent = 'Letöltés: ' + fajlnev;
+                            letoltes.textContent = '';
+                            letoltes.appendChild(link);
+                        }
                     });
                 }
 
                 return valasz.json().then(function (eredmeny) {
-                    throw new Error((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'Az előnézet nem készült el.');
+                    throw new Error((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'A PDF nem készült el.');
                 });
             })
             .catch(function (hiba) {
@@ -5697,7 +5718,16 @@
 
         if (elonezet) {
             esemeny.preventDefault();
-            szamlaElonezet(elonezet);
+            szamlaPdf(elonezet, 'sdh_muhely_szamla_elonezet', 'Előnézet készül…');
+
+            return;
+        }
+
+        var nyomtat = cel.closest('[data-sdh-szamla-nyomtat]');
+
+        if (nyomtat) {
+            esemeny.preventDefault();
+            szamlaPdf(nyomtat, 'sdh_muhely_szamla_nyomtatvany', 'PDF készül…');
 
             return;
         }
@@ -5729,7 +5759,7 @@
         var szamlaUrlap = torzs.querySelector('[data-sdh-szamlaurlap]');
 
         if (szamlaUrlap) {
-            var kuldes = szamlaUrlap.querySelector('button[type="submit"]');
+            var kuldes = szamlaUrlap.querySelector('[data-sdh-szamla-kuld]');
 
             // Amit a szerver tiltott le (nincs kulcs, hiányos vevő), azt a pipák nem oldják fel.
             if (kuldes && kuldes.disabled) {

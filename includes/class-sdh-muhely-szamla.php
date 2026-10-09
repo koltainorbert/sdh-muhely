@@ -23,6 +23,15 @@
  * és a következő számlánál alapból nincs kipipálva – így a bevizsgálási díj
  * átvételkor, a javítás a végén külön is számlázható.
  *
+ * HELYI NYOMTATVÁNY (API nélkül): a harmadik gomb a munkalap tételeiből
+ * helyben készít letölthető, nyomtatható PDF-et a szerviz saját logójával és
+ * adataival – ez az a papír, amit a kolléga a kész termék mellé tesz, és
+ * amiből később a számla készül. NEM számla: a címe választható
+ * (Számla-előkészítő, Díjbekérő, Elszámolás, Átadási bizonylat), rajta áll,
+ * hogy nem minősül számlának, és a sorszáma (előtag-év-munkalapszám) saját
+ * előtagot kap, amely nem egyezhet a számlatömbök előtagjával – így nem
+ * téveszthető össze a NAV felé jelentett számlákkal. Offline is működik.
+ *
  * A hivatalos PHP SDK helyett saját, vékony kliens beszél az Agenttel
  * (WordPress HTTP API): nincs külső függőség, és nem ír a plugin mappájába.
  * Dokumentáció: https://docs.szamlazz.hu/hu/agent/
@@ -56,6 +65,9 @@ final class SDH_Muhely_Szamla
         add_action('wp_ajax_sdh_muhely_szamla_elonezet', [self::class, 'ajax_elonezet']);
         add_action('wp_ajax_sdh_muhely_szamla_pdf', [self::class, 'ajax_pdf']);
 
+        // Helyi nyomtatvány (számla-előkészítő): PDF a szerveren, API nélkül.
+        add_action('wp_ajax_sdh_muhely_szamla_nyomtatvany', [self::class, 'ajax_nyomtatvany']);
+
         // Beállítások: a kapcsolat ellenőrzése (számla nem készül).
         add_action('wp_ajax_sdh_muhely_szamla_kapcsolat', [self::class, 'ajax_kapcsolat']);
     }
@@ -85,11 +97,56 @@ final class SDH_Muhely_Szamla
             'email_kuldes'       => false,
             'megjegyzes'         => 'Munkalap: {munkalap} · {eszkoz}',
             'bevizsgalas_sablon' => '{eszkoz} {fajta} bevizsgálási díj',
+            // Helyi nyomtatvány
+            'nyomt_cim'          => 'elokeszito',
+            'nyomt_elotag'       => 'SDE',
+            'logo'               => '',
+            'kiallito_nev'       => '',
+            'kiallito_cim1'      => '',
+            'kiallito_cim2'      => '',
+            'kiallito_adoszam'   => '',
+            'bank_nev'           => '',
+            'bankszamla'         => '',
+            'levelezes'          => '',
+            'telefon'            => '',
         ];
 
+        // A kiállító kezdőértékei adatfájlból jönnek (nem a kódból), és a Beállításokban átírhatók.
+        $fajl   = SDH_MUHELY_DIR . 'data/kiallito.json';
+        $kezdo  = is_readable($fajl) ? json_decode((string) file_get_contents($fajl), true) : [];
+        $alap   = array_merge($alap, is_array($kezdo) ? array_intersect_key(array_map('strval', $kezdo), $alap) : []);
         $mentett = get_option(self::OPTION, []);
 
         return array_merge($alap, is_array($mentett) ? array_intersect_key($mentett, $alap) : []);
+    }
+
+    /**
+     * A helyi nyomtatvány választható címei. Szándékosan nincs köztük „Számla":
+     * ez a bizonylat nem számla, és nem is nézhet ki annak.
+     *
+     * @return array<string, string> kulcs => cím
+     */
+    public static function nyomtatvany_cimek(): array
+    {
+        return [
+            'elokeszito' => 'Számla-előkészítő',
+            'dijbekero'  => 'Díjbekérő',
+            'elszamolas' => 'Elszámolás',
+            'atadas'     => 'Átadási bizonylat',
+        ];
+    }
+
+    public static function nyomtatvany_cim(): string
+    {
+        $cimek = self::nyomtatvany_cimek();
+
+        return $cimek[(string) self::beallitas()['nyomt_cim']] ?? $cimek['elokeszito'];
+    }
+
+    /** A helyi nyomtatvány sorszáma: előtag-év-munkalapszám. */
+    public static function nyomtatvany_szam(object $munkalap): string
+    {
+        return self::beallitas()['nyomt_elotag'] . '-' . current_time('Y') . '-' . (int) $munkalap->munkalap_szam;
     }
 
     public static function beallitva(): bool
@@ -195,6 +252,85 @@ final class SDH_Muhely_Szamla
                     </span>
                 </div>
             </div>
+
+            <h3 class="sdh-doboz__alcim">Helyi nyomtatvány (API nélkül)</h3>
+
+            <p class="sdh-sugo">
+                A munkalap harmadik gombja helyben készít letölthető, nyomtatható PDF-et a tételekből, a szerviz
+                logójával és adataival – internet és Számlázz.hu nélkül. Ez az a papír, ami a kész termék mellé kerül,
+                és amiből később a számla készül. <strong>Nem számla</strong>: ez rajta is áll, és a sorszáma saját előtagot kap.
+            </p>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="szamla_nyomt_cim">A nyomtatvány címe</label>
+                    <select name="szamla_nyomt_cim" id="szamla_nyomt_cim">
+                        <?php foreach (self::nyomtatvany_cimek() as $kulcs => $cim) : ?>
+                            <option value="<?php echo esc_attr($kulcs); ?>" <?php selected((string) $b['nyomt_cim'], $kulcs); ?>><?php echo esc_html($cim); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="sdh-mezo__sugo">Ez a gomb felirata is a munkalapon.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_nyomt_elotag">Sorszám-előtag</label>
+                    <input type="text" name="szamla_nyomt_elotag" id="szamla_nyomt_elotag" maxlength="6"
+                           value="<?php echo esc_attr((string) $b['nyomt_elotag']); ?>">
+                    <span class="sdh-mezo__sugo">
+                        A sorszám: előtag-év-munkalapszám (pl. <?php echo esc_html($b['nyomt_elotag'] . '-' . current_time('Y')); ?>-1747).
+                        Nem egyezhet a számlatömbök előtagjával, hogy a nyomtatvány ne legyen összetéveszthető a számlákkal.
+                    </span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_kiallito_nev">Kiállító neve</label>
+                    <input type="text" name="szamla_kiallito_nev" id="szamla_kiallito_nev" maxlength="120" value="<?php echo esc_attr((string) $b['kiallito_nev']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_kiallito_adoszam">Adószám</label>
+                    <input type="text" name="szamla_kiallito_adoszam" id="szamla_kiallito_adoszam" maxlength="60" value="<?php echo esc_attr((string) $b['kiallito_adoszam']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_kiallito_cim1">Cím – irányítószám, település</label>
+                    <input type="text" name="szamla_kiallito_cim1" id="szamla_kiallito_cim1" maxlength="120" value="<?php echo esc_attr((string) $b['kiallito_cim1']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_kiallito_cim2">Cím – utca, házszám</label>
+                    <input type="text" name="szamla_kiallito_cim2" id="szamla_kiallito_cim2" maxlength="120" value="<?php echo esc_attr((string) $b['kiallito_cim2']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_bank_nev">Bank neve</label>
+                    <input type="text" name="szamla_bank_nev" id="szamla_bank_nev" maxlength="80" value="<?php echo esc_attr((string) $b['bank_nev']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_bankszamla">Bankszámlaszám</label>
+                    <input type="text" name="szamla_bankszamla" id="szamla_bankszamla" maxlength="60" value="<?php echo esc_attr((string) $b['bankszamla']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_levelezes">Levelezési cím (lábléc)</label>
+                    <input type="text" name="szamla_levelezes" id="szamla_levelezes" maxlength="160" value="<?php echo esc_attr((string) $b['levelezes']); ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="szamla_telefon">Telefon (lábléc)</label>
+                    <input type="text" name="szamla_telefon" id="szamla_telefon" maxlength="60" value="<?php echo esc_attr((string) $b['telefon']); ?>">
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="szamla_logo">Logó a nyomtatványon</label>
+                    <input type="text" name="szamla_logo" id="szamla_logo" maxlength="300" value="<?php echo esc_attr((string) $b['logo']); ?>"
+                           placeholder="(a beépített logó)">
+                    <span class="sdh-mezo__sugo">
+                        Üresen a pluginnal szállított logó. Másikhoz töltsd fel a Médiatárba (PNG vagy JPG), és másold ide a fájl címét.
+                    </span>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -234,6 +370,26 @@ final class SDH_Muhely_Szamla
         $b['bevizsgalas_sablon'] = $szoveg('szamla_bevizsgalas_sablon', 200) !== ''
             ? $szoveg('szamla_bevizsgalas_sablon', 200)
             : '{eszkoz} {fajta} bevizsgálási díj';
+
+        // Helyi nyomtatvány
+        $b['nyomt_cim'] = isset(self::nyomtatvany_cimek()[$szoveg('szamla_nyomt_cim', 20)]) ? $szoveg('szamla_nyomt_cim', 20) : 'elokeszito';
+
+        // Az előtag nem egyezhet a számlatömbökével: a nyomtatvány sorszáma ne
+        // legyen összetéveszthető egy valódi számla számával.
+        $nyomt_elotag = strtoupper(mb_substr($elotag('szamla_nyomt_elotag'), 0, 6));
+
+        if ($nyomt_elotag === '' || in_array($nyomt_elotag, array_map('strtoupper', [(string) $b['elotag_fo'], (string) $b['elotag_sdh']]), true)) {
+            $nyomt_elotag = ($nyomt_elotag === '' ? 'SD' : mb_substr($nyomt_elotag, 0, 5)) . 'E';
+        }
+
+        $b['nyomt_elotag'] = $nyomt_elotag;
+        $b['logo']         = isset($_POST['szamla_logo']) ? esc_url_raw(trim((string) wp_unslash($_POST['szamla_logo']))) : '';
+
+        foreach (['kiallito_nev' => 120, 'kiallito_cim1' => 120, 'kiallito_cim2' => 120, 'kiallito_adoszam' => 60, 'bank_nev' => 80, 'bankszamla' => 60, 'levelezes' => 160, 'telefon' => 60] as $mezo => $hossz) {
+            if (isset($_POST['szamla_' . $mezo])) {
+                $b[$mezo] = $szoveg('szamla_' . $mezo, $hossz);
+            }
+        }
         // phpcs:enable
 
         // Nem töltődik be minden oldalon (autoload = no): a kulcs csak számlázáskor kell.
@@ -784,6 +940,11 @@ final class SDH_Muhely_Szamla
                 </button>
             <?php endif; ?>
 
+            <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla="helyi"
+                    title="Letölthető, nyomtatható PDF a tételekből – helyben készül, internet és Számlázz.hu nélkül. Nem számla.">
+                <?php echo esc_html(self::nyomtatvany_cim()); ?> (PDF)
+            </button>
+
             <?php foreach (array_slice($szamlak, 0, 3) as $sz) : ?>
                 <a class="sdh-szamlajel" href="<?php echo esc_url(self::pdf_url((int) $sz->id)); ?>" target="_blank" rel="noopener"
                    title="<?php echo esc_attr(mysql2date('Y. m. d.', (string) $sz->kelt) . ' · ' . self::penz((float) $sz->brutto) . ' Ft · PDF megnyitása'); ?>">
@@ -863,7 +1024,9 @@ final class SDH_Muhely_Szamla
         self::jog_ellenorzes(false);
 
         $munkalap = self::munkalap(isset($_GET['id']) ? (int) $_GET['id'] : 0);
-        $sorozat  = isset($_GET['sorozat']) && sanitize_key(wp_unslash($_GET['sorozat'])) === 'sdh' ? 'sdh' : 'fo';
+        $kert     = isset($_GET['sorozat']) ? sanitize_key(wp_unslash($_GET['sorozat'])) : 'fo';
+        $sorozat  = in_array($kert, ['sdh', 'helyi'], true) ? $kert : 'fo';
+        $helyi    = $sorozat === 'helyi';
 
         if ($munkalap === null || (int) $munkalap->munkalap_szam <= 0) {
             echo '<h2 class="sdh-modal__cim">Számla</h2>'
@@ -873,7 +1036,7 @@ final class SDH_Muhely_Szamla
 
         $b       = self::beallitas();
         $elotag  = self::elotag($sorozat);
-        $cim     = $sorozat === 'sdh' ? (string) $b['gomb_sdh'] : 'Számlázz.hu számla';
+        $cim     = $helyi ? self::nyomtatvany_cim() : ($sorozat === 'sdh' ? (string) $b['gomb_sdh'] : 'Számlázz.hu számla');
         $ugyfel  = self::ugyfel((int) $munkalap->ugyfel_id);
         $vevo    = self::vevo($ugyfel);
         $tetelek = self::tetelek((int) $munkalap->id);
@@ -889,14 +1052,24 @@ final class SDH_Muhely_Szamla
             <?php echo esc_html($cim); ?>
             <span class="sdh-modal__cim-megj">
                 Munkalap <?php echo esc_html($szam); ?> ·
-                <?php echo $elotag !== '' ? esc_html($elotag) . ' előtagú számlatömb' : 'a fiók alap számlatömbje'; ?>
+                <?php
+                if ($helyi) {
+                    echo 'sorszám: ' . esc_html(self::nyomtatvany_szam($munkalap));
+                } else {
+                    echo $elotag !== '' ? esc_html($elotag) . ' előtagú számlatömb' : 'a fiók alap számlatömbje';
+                }
+                ?>
             </span>
         </h2>
         <p class="sdh-modal__alcim">
-            Itt döntöd el, mi kerül a számlára. A számlát a Számlázz.hu állítja ki és jelenti a NAV felé – a kiállítás végleges, javítani sztornóval lehet.
+            <?php if ($helyi) : ?>
+                Letölthető, nyomtatható PDF a kipipált tételekből – helyben készül, internet nélkül is. Nem számla: ez a papír megy a kész termék mellé, a számla ebből készül.
+            <?php else : ?>
+                Itt döntöd el, mi kerül a számlára. A számlát a Számlázz.hu állítja ki és jelenti a NAV felé – a kiállítás végleges, javítani sztornóval lehet.
+            <?php endif; ?>
         </p>
 
-        <?php if (!self::beallitva()) : ?>
+        <?php if (!$helyi && !self::beallitva()) : ?>
             <div class="sdh-uzenet sdh-uzenet--hiba">
                 Még nincs megadva a Számla Agent kulcs. Add meg itt: Beállítások → Számlázás – Számlázz.hu.
             </div>
@@ -943,8 +1116,8 @@ final class SDH_Muhely_Szamla
 
                             <?php if ($vevo['hianyzik'] !== []) : ?>
                                 <p class="sdh-szamlaurlap__hiany">
-                                    Hiányzik a számlához: <?php echo esc_html(implode(', ', $vevo['hianyzik'])); ?>.
-                                    Pótold az ügyfél adatlapján (Ügyfelek menü), aztán nyisd meg újra a számlát.
+                                    Hiányzik a vevő adataiból: <?php echo esc_html(implode(', ', $vevo['hianyzik'])); ?>.
+                                    <?php echo $helyi ? 'A nyomtatvány így is elkészül; a számlához pótolni kell az ügyfél adatlapján.' : 'Pótold az ügyfél adatlapján (Ügyfelek menü), aztán nyisd meg újra a számlát.'; ?>
                                 </p>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -973,7 +1146,7 @@ final class SDH_Muhely_Szamla
                             <?php self::datum_mezo('hatarido', $hatar, 'Fizetési határidő'); ?>
                         </div>
 
-                        <div class="sdh-szamlaurlap__jelolok">
+                        <div class="sdh-szamlaurlap__jelolok"<?php echo $helyi ? ' hidden' : ''; ?>>
                             <label class="sdh-jelolo" title="A számlán „Fizetve" szerepel">
                                 <input type="checkbox" name="fizetve" value="1" <?php checked((int) $munkalap->fizetve === 1 || self::azonnali($fizmod)); ?>>
                                 Fizetve
@@ -1038,7 +1211,7 @@ final class SDH_Muhely_Szamla
                     <tfoot>
                         <tr>
                             <td></td>
-                            <td class="sdh-tabla__szumma" colspan="4">A számla végösszege (a kipipált tételek)</td>
+                            <td class="sdh-tabla__szumma" colspan="4">Végösszeg (a kipipált tételek)</td>
                             <td class="sdh-tabla__szam"><output data-sdh-szamla-ossz="netto">0</output></td>
                             <td class="sdh-tabla__szam"><strong><output data-sdh-szamla-ossz="brutto">0</output> Ft</strong></td>
                         </tr>
@@ -1061,15 +1234,25 @@ final class SDH_Muhely_Szamla
                 <?php endif; ?>
 
                 <div class="sdh-urlap__lablec">
-                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges"
-                        <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
-                        Számla kiállítása
-                    </button>
-                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-elonezet
-                            title="PDF-előnézet a Számlázz.hu-tól – számla NEM készül"
-                        <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
-                        Előnézet (PDF)
-                    </button>
+                    <?php if ($helyi) : ?>
+                        <?php // Nincs beküldés: a PDF a szerveren készül, és új lapon nyílik (app.js szamlaPdf). ?>
+                        <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szamla-kuld data-sdh-szamla-nyomtat
+                                data-fajlnev="<?php echo esc_attr(self::nyomtatvany_szam($munkalap) . '.pdf'); ?>"
+                            <?php disabled($ugyfel === null || $tetelek === []); ?>>
+                            PDF megnyitása
+                        </button>
+                        <span class="sdh-szamlaurlap__letoltes" data-sdh-szamla-letoltes></span>
+                    <?php else : ?>
+                        <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szamla-kuld
+                            <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
+                            Számla kiállítása
+                        </button>
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-elonezet
+                                title="PDF-előnézet a Számlázz.hu-tól – számla NEM készül"
+                            <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
+                            Előnézet (PDF)
+                        </button>
+                    <?php endif; ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
                 </div>
             </div>
@@ -1084,10 +1267,10 @@ final class SDH_Muhely_Szamla
      *
      * @return array{munkalap: object, sorozat: string, fej: array<string, mixed>, vevo: array<string, mixed>, sorok: array<int, array<string, mixed>>, tetel_idk: array<int, int>}|string
      */
-    private static function kerelem()
+    private static function kerelem(bool $agent = true)
     {
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- a hívó ellenőrizte.
-        if (!self::beallitva()) {
+        if ($agent && !self::beallitva()) {
             return 'Nincs megadva a Számla Agent kulcs (Beállítások → Számlázás – Számlázz.hu).';
         }
 
@@ -1099,7 +1282,8 @@ final class SDH_Muhely_Szamla
 
         $vevo = self::vevo(self::ugyfel((int) $munkalap->ugyfel_id));
 
-        if ($vevo['hianyzik'] !== []) {
+        // A helyi nyomtatvány hiányos címmel is elkészül (a helyszínen nincs mindig meg minden adat).
+        if ($agent ? $vevo['hianyzik'] !== [] : $vevo['adat'] === []) {
             return 'A vevő adatai hiányosak: ' . implode(', ', $vevo['hianyzik']) . '.';
         }
 
@@ -1110,13 +1294,13 @@ final class SDH_Muhely_Szamla
         // Csak ennek a munkalapnak a tételei kerülhetnek a számlára.
         foreach (self::tetelek((int) $munkalap->id) as $t) {
             if (in_array((int) $t->id, $kert, true)) {
-                $sorok[] = self::tetel_sor($t);
+                $sorok[] = self::tetel_sor($t) + ['brutto_egysegar' => (float) $t->brutto_ar * (1 - min(100.0, max(0.0, (float) $t->kedvezmeny)) / 100)];
                 $idk[]   = (int) $t->id;
             }
         }
 
         if ($sorok === []) {
-            return 'Pipálj ki legalább egy tételt – üres számla nem állítható ki.';
+            return 'Pipálj ki legalább egy tételt.';
         }
 
         $szoveg = static fn (string $k, int $hossz): string => isset($_POST[$k]) && is_scalar($_POST[$k])
@@ -1130,7 +1314,7 @@ final class SDH_Muhely_Szamla
 
         return [
             'munkalap'  => $munkalap,
-            'sorozat'   => $szoveg('sorozat', 5) === 'sdh' ? 'sdh' : 'fo',
+            'sorozat'   => in_array($szoveg('sorozat', 5), ['sdh', 'helyi'], true) ? $szoveg('sorozat', 5) : 'fo',
             'fej'       => [
                 'kelt'       => $ma,
                 'teljesites' => $datum('teljesites', $ma),
@@ -1189,6 +1373,10 @@ final class SDH_Muhely_Szamla
             wp_send_json_error(['uzenet' => $k]);
         }
 
+        if ($k['sorozat'] === 'helyi') {
+            wp_send_json_error(['uzenet' => 'A helyi nyomtatvány nem számla – a „PDF megnyitása" gombbal készül.']);
+        }
+
         $munkalap = $k['munkalap'];
         $valasz   = self::agent_kuld('action-xmlagentxmlfile', self::xml($k['sorozat'], $k['fej'], $k['vevo'], $k['sorok']));
 
@@ -1238,6 +1426,391 @@ final class SDH_Muhely_Szamla
             'pdf'        => $szamla_id > 0 ? self::pdf_url($szamla_id) : '',
             'email'      => $k['fej']['email'] && (string) $k['vevo']['email'] !== '',
         ]);
+    }
+
+    /* =================================================================
+     * Helyi nyomtatvány (számla-előkészítő) – PDF, API nélkül
+     * ============================================================== */
+
+    /** A logó helyi fájlja: a beállított médiafájl, különben a pluginnal szállított. */
+    private static function logo_fajl(): string
+    {
+        $url = trim((string) self::beallitas()['logo']);
+
+        if ($url !== '') {
+            $feltoltes = wp_upload_dir();
+            $alap      = trailingslashit((string) $feltoltes['baseurl']);
+
+            // Csak a saját feltöltési mappából olvasunk – távoli címet a PDF-készítő nem tölt le.
+            if (strpos($url, $alap) === 0) {
+                $ut = realpath(trailingslashit((string) $feltoltes['basedir']) . ltrim(rawurldecode(substr($url, strlen($alap))), '/'));
+
+                if ($ut !== false && strpos($ut, (string) realpath((string) $feltoltes['basedir'])) === 0
+                    && is_readable($ut) && preg_match('/\.(png|jpe?g)$/i', $ut) === 1) {
+                    return $ut;
+                }
+            }
+        }
+
+        $beepitett = SDH_MUHELY_DIR . 'assets/logo-nyomtatvany.png';
+
+        return is_readable($beepitett) ? $beepitett : '';
+    }
+
+    /** Forintösszeg a nyomtatványra: egész, ezres tagolással (sima szóközzel – a betűkészlet miatt). */
+    private static function ft(float $osszeg): string
+    {
+        return number_format(round($osszeg), 0, ',', ' ');
+    }
+
+    /**
+     * A nyomtatvány sorai egész forintra: a bruttó a munkalap szerinti (az a
+     * mérvadó, azt fizeti az ügyfél), a nettó és az áfa abból adódik.
+     *
+     * @param array<int, array<string, mixed>> $sorok tetel_sor() eredményei, `brutto_egysegar`-ral
+     * @return array{sorok: array<int, array<string, mixed>>, netto: float, afa: float, brutto: float, kulcsok: array<string, float>}
+     */
+    public static function nyomtatvany_sorok(array $sorok): array
+    {
+        $ki      = [];
+        $ossz    = ['netto' => 0.0, 'afa' => 0.0, 'brutto' => 0.0];
+        $kulcsok = [];
+
+        foreach ($sorok as $s) {
+            $szazalek = is_numeric($s['afakulcs']) ? (float) $s['afakulcs'] : 0.0;
+            $menny    = (float) $s['mennyiseg'];
+            $brutto   = round((float) ($s['brutto_egysegar'] ?? 0) * $menny);
+            $netto    = round($brutto / (1 + $szazalek / 100));
+            $afa      = $brutto - $netto;
+            $kulcs    = is_numeric($s['afakulcs']) ? $s['afakulcs'] . '%' : (string) $s['afakulcs'];
+
+            $ki[] = [
+                'megnevezes' => (string) $s['megnevezes'],
+                'mennyiseg'  => SDH_Muhely_Termek::menny($menny) . ' ' . $s['me'],
+                'egysegar'   => $menny > 0 ? round($netto / $menny) : $netto,
+                'netto'      => $netto,
+                'kulcs'      => $kulcs,
+                'afa'        => $afa,
+                'brutto'     => $brutto,
+            ];
+
+            $ossz['netto']  += $netto;
+            $ossz['afa']    += $afa;
+            $ossz['brutto'] += $brutto;
+            $kulcsok[$kulcs] = ($kulcsok[$kulcs] ?? 0.0) + $afa;
+        }
+
+        return ['sorok' => $ki, 'netto' => $ossz['netto'], 'afa' => $ossz['afa'], 'brutto' => $ossz['brutto'], 'kulcsok' => $kulcsok];
+    }
+
+    /**
+     * A nyomtatvány PDF-je. Elrendezés: fent a logó, a kiállító és a bank; a
+     * cím és a sorszám; a vevő és a fizetési adatok; a tételek táblázata; a
+     * végösszeg; a láblécben az elérhetőség. Minden oldalon ott áll, hogy nem számla.
+     *
+     * @param array<string, mixed> $k A kerelem(false) eredménye.
+     */
+    public static function nyomtatvany_pdf(array $k): string
+    {
+        require_once SDH_MUHELY_DIR . 'includes/lib/sdh-pdf.php';
+
+        $b       = self::beallitas();
+        $cim     = self::nyomtatvany_cim();
+        $szam    = self::nyomtatvany_szam($k['munkalap']);
+        $t       = self::nyomtatvany_sorok($k['sorok']);
+        $vevo    = $k['vevo'];
+        $fej     = $k['fej'];
+        $bal     = 12.4;
+        $jobb    = 198.0;
+        $szeles  = $jobb - $bal;
+        $szin    = [201, 60, 54];     // kiemelő (a logó pirosának tompított árnyalata)
+        $datum   = static fn (string $iso): string => str_replace('-', '.', $iso) . '.';
+        $kiallito = (string) $b['kiallito_nev'] !== '' ? (string) $b['kiallito_nev'] : get_bloginfo('name');
+
+        $pdf = new SDH_Muhely_Pdf('P', 'mm', 'A4');
+        $pdf->SetCompression(true);
+        $pdf->SetTitle($cim . ' ' . $szam, true);
+        $pdf->SetAuthor($kiallito, true);
+        $pdf->SetCreator('SDH Műhely', true);
+        $pdf->AddFont('DejaVu', '', 'DejaVuSansCondensed.ttf', true);
+        $pdf->AddFont('DejaVu', 'B', 'DejaVuSansCondensed-Bold.ttf', true);
+        $pdf->SetMargins($bal, 18, 210 - $jobb);
+        $pdf->SetAutoPageBreak(true, 34);
+        $pdf->AliasNbPages();
+        $pdf->sdh_lab = array_values(array_filter([
+            (string) $b['levelezes'] !== '' ? 'Levelezés: ' . $b['levelezes'] : '',
+            (string) $b['telefon'] !== '' ? 'Telefon: ' . $b['telefon'] : '',
+        ]));
+        $pdf->sdh_keszitette = 'A bizonylatot készítette: ' . rtrim($kiallito, '. ') . '. – Nem minősül számlának.';
+        $pdf->AddPage();
+        $pdf->SetTextColor(20, 20, 20);
+
+        // --- Fej: logó, kiállító, bank ---------------------------------------
+        $logo = self::logo_fajl();
+
+        if ($logo !== '') {
+            $pdf->Image($logo, $bal, 18.5, 32);
+        }
+
+        $sor = static function (float $x, float $y, array $reszek) use ($pdf): void {
+            $pdf->SetXY($x, $y);
+
+            foreach ($reszek as [$stilus, $szoveg]) {
+                $pdf->SetFont('DejaVu', $stilus, 9);
+                $pdf->Cell($pdf->GetStringWidth($szoveg) + 0.6, 4.3, $szoveg, 0, 0, 'L');
+            }
+        };
+
+        $y = 18.2;
+
+        foreach (array_filter([
+            [['B', $kiallito]],
+            (string) $b['kiallito_cim1'] !== '' ? [['', (string) $b['kiallito_cim1']]] : null,
+            (string) $b['kiallito_cim2'] !== '' ? [['', (string) $b['kiallito_cim2']]] : null,
+            (string) $b['kiallito_adoszam'] !== '' ? [['B', 'Adószám:'], ['', ' ' . $b['kiallito_adoszam']]] : null,
+        ]) as $reszek) {
+            $sor(56.5, $y, $reszek);
+            $y += 4.3;
+        }
+
+        $y = 18.2;
+
+        foreach (array_filter([
+            (string) $b['bank_nev'] !== '' ? [['B', 'Bank neve:'], ['', ' ' . $b['bank_nev']]] : null,
+            (string) $b['bankszamla'] !== '' ? [['B', 'Bankszámlaszám:']] : null,
+            (string) $b['bankszamla'] !== '' ? [['', (string) $b['bankszamla']]] : null,
+        ]) as $reszek) {
+            $sor(138.5, $y, $reszek);
+            $y += 4.3;
+        }
+
+        // --- Cím, vonal, sorszám ---------------------------------------------
+        $pdf->SetFont('DejaVu', 'B', 19);
+        $pdf->SetXY($bal, 41.5);
+        $pdf->Cell($szeles, 9, mb_strtoupper($cim, 'UTF-8'), 0, 0, 'R');
+
+        $pdf->SetFillColor($szin[0], $szin[1], $szin[2]);
+        $pdf->Rect($bal, 52.6, $szeles, 0.9, 'F');
+
+        $pdf->SetFont('DejaVu', '', 9.5);
+        $pdf->SetXY($bal, 54.6);
+        $pdf->Cell($szeles, 5, 'Sorszám: ' . $szam, 0, 0, 'R');
+
+        // --- Vevő --------------------------------------------------------------
+        $pdf->SetFont('DejaVu', '', 12.5);
+        $pdf->SetXY($bal, 74.5);
+        $pdf->Cell(100, 6, 'VEVŐ:', 0, 0, 'L');
+
+        $y = 80.6;
+        $pdf->SetFont('DejaVu', 'B', 9.5);
+
+        foreach (array_filter([
+            (string) ($vevo['nev'] ?? ''),
+            trim(($vevo['irsz'] ?? '') . ' ' . ($vevo['telepules'] ?? '')),
+            (string) ($vevo['cim'] ?? ''),
+        ]) as $szoveg) {
+            $pdf->SetXY($bal, $y);
+            $pdf->Cell(105, 5, $szoveg, 0, 0, 'L');
+            $y += 5;
+        }
+
+        if ((string) ($vevo['adoszam'] ?? '') !== '') {
+            $pdf->SetXY($bal, $y);
+            $pdf->SetFont('DejaVu', 'B', 9.5);
+            $pdf->Cell($pdf->GetStringWidth('Adószám:') + 1.2, 5, 'Adószám:', 0, 0, 'L');
+            $pdf->SetFont('DejaVu', '', 9.5);
+            $pdf->Cell(60, 5, (string) $vevo['adoszam'], 0, 0, 'L');
+        }
+
+        // --- Fizetési adatok ---------------------------------------------------
+        $fx = 122.0;
+        $fw = $jobb - $fx;
+        $y  = 75.6;
+
+        foreach ([
+            ['Fizetési mód:', mb_strtolower((string) $fej['fizmod'], 'UTF-8')],
+            ['Teljesítés dátuma:', $datum((string) $fej['teljesites'])],
+            ['Kiállítás dátuma:', $datum((string) $fej['kelt'])],
+        ] as [$cimke, $ertek]) {
+            $pdf->SetFont('DejaVu', '', 9.5);
+            $pdf->SetXY($fx, $y);
+            $pdf->Cell($fw / 2, 5.2, $cimke, 0, 0, 'L');
+            $pdf->SetFont('DejaVu', 'B', 9.5);
+            $pdf->Cell($fw / 2, 5.2, $ertek, 0, 0, 'R');
+            $y += 5.2;
+        }
+
+        $pdf->SetFillColor($szin[0], $szin[1], $szin[2]);
+        $pdf->Rect($fx, $y + 0.3, $fw, 6.6, 'F');
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('DejaVu', '', 9.5);
+        $pdf->SetXY($fx + 1.4, $y + 0.3);
+        $pdf->Cell($fw / 2, 6.6, 'Fizetési határidő:', 0, 0, 'L');
+        $pdf->SetFont('DejaVu', 'B', 10.5);
+        $pdf->SetXY($fx + $fw / 2, $y + 0.3);
+        $pdf->Cell($fw / 2 - 1.4, 6.6, $datum((string) $fej['hatarido']), 0, 0, 'R');
+        $pdf->SetTextColor(20, 20, 20);
+
+        // --- Tételek -----------------------------------------------------------
+        // Oszlopok: megnevezés, mennyiség, egységár, nettó, áfa, áfaérték, bruttó.
+        $oszlop = [66.6, 18, 24, 24, 14, 20, 19];
+        $igazit = ['L', 'R', 'R', 'R', 'R', 'R', 'R'];
+        $fejlec = ['Megnevezés', 'Menny.', 'Egységár', 'Nettó ár', 'Áfa', 'Áfaérték', 'Bruttó ár'];
+
+        $tablafej = static function () use ($pdf, $oszlop, $igazit, $fejlec, $bal, $szeles, $szin): void {
+            $pdf->SetFont('DejaVu', 'B', 9);
+            $pdf->SetX($bal);
+
+            foreach ($fejlec as $i => $nev) {
+                $pdf->Cell($oszlop[$i], 6, $nev, 0, 0, $igazit[$i]);
+            }
+
+            $pdf->Ln(6.4);
+            $pdf->SetFillColor($szin[0], $szin[1], $szin[2]);
+            $pdf->Rect($bal, $pdf->GetY() - 0.5, $szeles, 0.35, 'F');
+        };
+
+        $pdf->SetY(113);
+        $tablafej();
+
+        foreach ($t['sorok'] as $i => $s) {
+            $pdf->SetFont('DejaVu', '', 9);
+
+            // A hosszú megnevezés több sorba törik; a sor magassága ehhez igazodik.
+            $sorok_szama = max(1, count(self::tordel($pdf, (string) $s['megnevezes'], $oszlop[0] - 4)));
+            $magas       = 5.2 * $sorok_szama + 0.8;
+
+            if ($pdf->GetY() + $magas > 297 - 36) {
+                $pdf->AddPage();
+                $pdf->SetY(22);
+                $tablafej();
+                $pdf->SetFont('DejaVu', '', 9);
+            }
+
+            $y0 = $pdf->GetY();
+
+            if ($i % 2 === 0) {
+                $pdf->SetFillColor(236, 236, 236);
+                $pdf->Rect($bal, $y0, $szeles, $magas, 'F');
+            }
+
+            $pdf->SetXY($bal + 2, $y0 + 0.4);
+            $pdf->MultiCell($oszlop[0] - 4, 5.2, (string) $s['megnevezes'], 0, 'L');
+
+            $x = $bal + $oszlop[0];
+
+            foreach ([$s['mennyiseg'], self::ft((float) $s['egysegar']), self::ft((float) $s['netto']), $s['kulcs'], self::ft((float) $s['afa']), self::ft((float) $s['brutto'])] as $j => $ertek) {
+                $pdf->SetXY($x, $y0 + 0.4);
+                $pdf->Cell($oszlop[$j + 1] - ($j === 5 ? 2 : 0), 5.2, (string) $ertek, 0, 0, 'R');
+                $x += $oszlop[$j + 1];
+            }
+
+            $pdf->SetY($y0 + $magas);
+        }
+
+        // --- Összesen ------------------------------------------------------------
+        if ($pdf->GetY() > 297 - 78) {
+            $pdf->AddPage();
+            $pdf->SetY(22);
+        }
+
+        $y = $pdf->GetY() + 3;
+        $pdf->SetFont('DejaVu', 'B', 9.5);
+        $pdf->SetXY($bal, $y);
+        $pdf->Cell($oszlop[0] + $oszlop[1] + $oszlop[2], 5.5, 'Összesen:', 0, 0, 'L');
+        $pdf->Cell($oszlop[3], 5.5, self::ft($t['netto']), 0, 0, 'R');
+        $pdf->Cell($oszlop[4], 5.5, '', 0, 0);
+        $pdf->Cell($oszlop[5], 5.5, self::ft($t['afa']), 0, 0, 'R');
+        $pdf->Cell($oszlop[6] - 2, 5.5, self::ft($t['brutto']), 0, 0, 'R');
+        $y += 6;
+
+        $pdf->SetFont('DejaVu', '', 7.5);
+        $pdf->SetTextColor(95, 95, 95);
+
+        foreach ($t['kulcsok'] as $kulcs => $afa) {
+            $pdf->SetXY($bal, $y);
+            $pdf->Cell($oszlop[0] + $oszlop[1] + $oszlop[2] + $oszlop[3] + $oszlop[4], 4, 'áfa ' . str_replace('%', ' %', (string) $kulcs) . ':', 0, 0, 'R');
+            $pdf->Cell($oszlop[5], 4, self::ft((float) $afa), 0, 0, 'R');
+            $y += 4;
+        }
+
+        $pdf->SetTextColor(20, 20, 20);
+        $pdf->SetFont('DejaVu', '', 14);
+        $pdf->SetXY($bal, $y + 9);
+        $pdf->Cell($szeles - 1, 7, 'Fizetendő összesen:', 0, 0, 'R');
+        $pdf->SetFont('DejaVu', 'B', 15);
+        $pdf->SetTextColor($szin[0], $szin[1], $szin[2]);
+        $pdf->SetXY($bal, $y + 17);
+        $pdf->Cell($szeles - 1, 8, self::ft($t['brutto']) . ' Ft', 0, 0, 'R');
+
+        // Jól láthatóan: ez nem számla.
+        $pdf->SetTextColor(20, 20, 20);
+        $pdf->SetFont('DejaVu', 'B', 8.5);
+        $pdf->SetXY($bal, $y + 27);
+        $pdf->Cell($szeles - 1, 4.4, 'Ez a bizonylat nem minősül számlának – a számlát külön állítjuk ki.', 0, 0, 'R');
+
+        $megjegyzes = trim((string) $fej['megjegyzes']);
+
+        if ($megjegyzes !== '') {
+            $pdf->SetFont('DejaVu', '', 8.5);
+            $pdf->SetXY($bal, $y + 36);
+            $pdf->MultiCell($szeles, 4.4, $megjegyzes, 0, 'L');
+        }
+
+        return (string) $pdf->Output('S');
+    }
+
+    /**
+     * Szöveg tördelése adott szélességre (a sormagasság kiszámításához).
+     *
+     * @return array<int, string>
+     */
+    private static function tordel(object $pdf, string $szoveg, float $szelesseg): array
+    {
+        $sorok = [];
+        $sor   = '';
+
+        foreach (preg_split('/\s+/u', trim($szoveg)) ?: [] as $szo) {
+            $proba = $sor === '' ? $szo : $sor . ' ' . $szo;
+
+            if ($sor !== '' && $pdf->GetStringWidth($proba) > $szelesseg - 2) {
+                $sorok[] = $sor;
+                $sor     = $szo;
+            } else {
+                $sor = $proba;
+            }
+        }
+
+        if ($sor !== '') {
+            $sorok[] = $sor;
+        }
+
+        return $sorok;
+    }
+
+    /** A helyi nyomtatvány PDF-je a számlaűrlapból. Semmilyen külső kérés nem megy ki. */
+    public static function ajax_nyomtatvany(): void
+    {
+        self::jog_ellenorzes();
+
+        $k = self::kerelem(false);
+
+        if (!is_array($k)) {
+            wp_send_json_error(['uzenet' => $k]);
+        }
+
+        try {
+            $pdf = self::nyomtatvany_pdf($k);
+        } catch (\Throwable $hiba) {
+            wp_send_json_error(['uzenet' => 'A PDF nem készült el: ' . $hiba->getMessage()]);
+        }
+
+        nocache_headers();
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="' . sanitize_file_name(self::nyomtatvany_szam($k['munkalap'])) . '.pdf"');
+        header('Content-Length: ' . strlen($pdf));
+        echo $pdf; // phpcs:ignore WordPress.Security.EscapeOutput -- PDF.
+        exit;
     }
 
     /* =================================================================
