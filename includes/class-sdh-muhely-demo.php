@@ -52,6 +52,7 @@ final class SDH_Muhely_Demo
                 10 fiktív magyar ügyfél, mindegyikhez egy készülékkel és egy munkalappal – minden mező
                 kitöltve (címek, telefonszámok, IMEI, zárkód, minta, garancia, tartozékok, megjegyzések),
                 a munkalapok a nyolc állapot mindegyikét használják, hibasorokkal és tételekkel.
+                Vele jön 20 fiktív mintatermék is a Termékek modulba, nyitókészlettel.
                 A rekordok „demo-” azonosítót kapnak, a gomb nem hoz létre kétszer ugyanazt.
                 A számozott demó munkalapok valódi munkalapszámot kapnak, ezért éles rendszerbe ne töltsd be.
                 <?php if ($db > 0) : ?>
@@ -165,6 +166,11 @@ final class SDH_Muhely_Demo
             if ($wpdb->insert($eszkoz_tabla, $sor) !== false) {
                 $uj_eszkoz++;
             }
+        }
+
+        // A 20 mintatermék is a demó része (ami megvan, nem jön létre újra).
+        if (class_exists('SDH_Muhely_Termek')) {
+            SDH_Muhely_Termek::demo_betolt();
         }
 
         return ['ugyfel' => $uj_ugyfel, 'eszkoz' => $uj_eszkoz, 'munkalap' => self::munkalapok_betolt()];

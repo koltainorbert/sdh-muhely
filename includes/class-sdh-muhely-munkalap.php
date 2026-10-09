@@ -2046,7 +2046,7 @@ final class SDH_Muhely_Munkalap
                 <span></span>
                 <span>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj
-                            <?php echo $termek ? '' : 'title="Szolgáltatás választása a listából"'; ?>>
+                            title="<?php echo $termek ? 'Termék választása a készletből' : 'Szolgáltatás választása a listából'; ?>">
                         <?php echo $termek ? '+ Termék' : '+ Szolgáltatás'; ?>
                     </button>
                 </span>
@@ -2092,9 +2092,19 @@ final class SDH_Muhely_Munkalap
             <span class="sdh-tetelsor__sorszam"><?php echo $tetel !== null ? (int) $tetel->id : 'új'; ?></span>
 
             <?php if ($termek) : ?>
-                <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
-                       aria-label="Megnevezés" autocomplete="off" placeholder="Pl. Samsung A54 USB panel"
-                       value="<?php echo esc_attr($ert('megnevezes')); ?>">
+                <?php // A sor végi gomb a termékválasztó popupot nyitja (app.js termValasztoNyit). ?>
+                <span class="sdh-szolgmezo">
+                    <input type="hidden" name="<?php echo esc_attr($elotag); ?>[termek_id]" data-sdh-termek-id
+                           value="<?php echo (int) ($tetel->termek_id ?? 0); ?>">
+                    <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
+                           aria-label="Megnevezés" autocomplete="off" data-sdh-termek
+                           placeholder="Válassz a készletből (jobbra), vagy írd be"
+                           value="<?php echo esc_attr($ert('megnevezes')); ?>">
+                    <button type="button" class="sdh-szolgmezo__gomb" data-sdh-termek-valaszt
+                            title="Termék választása a készletből" aria-label="Termék választása a készletből">
+                        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+                    </button>
+                </span>
             <?php else : ?>
                 <?php // A sor végi gomb a szolgáltatás-választó popupot nyitja (app.js szolgValasztoNyit). ?>
                 <span class="sdh-szolgmezo">

@@ -2488,6 +2488,22 @@ a.sdh-kartya:focus-visible {
     width: min(1040px, calc(100vw - 1.5rem));
 }
 
+.sdh-modal.sdh-modal--pop-termekkat,
+.sdh-modal.sdh-modal--pop-beszallito {
+    width: min(720px, calc(100vw - 1.5rem));
+}
+
+.sdh-modal--pop-termekkat .sdh-pop__targy,
+.sdh-modal--pop-beszallito .sdh-pop__targy {
+    column-width: 280px;
+    column-gap: 1.3rem;
+}
+
+.sdh-modal--pop-termekkat .sdh-pop__csoport,
+.sdh-modal--pop-beszallito .sdh-pop__csoport {
+    break-inside: avoid;
+}
+
 .sdh-modal.sdh-modal--pop-szin,
 .sdh-modal.sdh-modal--pop-tartozek {
     width: min(780px, calc(100vw - 1.5rem));
@@ -3817,4 +3833,458 @@ a.sdh-kartya:focus-visible {
     flex-wrap: wrap;
     gap: 4px;
     margin-top: .8rem;
+}
+
+/* ================================================================== */
+/* Termékek: lista, készletjelzés, választó popup, termékűrlap         */
+/* ================================================================== */
+
+/* A lista fölötti nézetfülek (Összes / Készleten / Rendelni kell / mozgások). */
+.sdh-nezetfulek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin-bottom: .8rem;
+}
+
+.sdh-nezetfulek__ful {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    height: 32px;
+    padding: 0 .9rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sdh-nezetfulek__ful:hover {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-nezetfulek__ful.is-aktiv {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-weight: 600;
+}
+
+.sdh-nezetfulek__db {
+    min-width: 1.3rem;
+    padding: 0 .35rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-nezetfulek__db.is-figyelem {
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+}
+
+/* A terméklista sűrű, mint a MunkaLap 3 készletrácsa. */
+.sdh-tabla--termek th,
+.sdh-tabla--termek td,
+.sdh-tabla--mozgas th,
+.sdh-tabla--mozgas td {
+    padding: .45rem .6rem;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* A Megnevezés kapja a maradék helyet, és csonkol – a táblázat így soha
+   nem lóg ki az oldalból (max-width: 0 + width: 100% = „ami marad"). */
+.sdh-tabla--termek {
+    width: 100%;
+}
+
+.sdh-tabla--termek td.sdh-tabla__nev {
+    width: 100%;
+    max-width: 0;
+    min-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ritkán nézett oszlopok: csak széles képernyőn férnek ki. */
+@media (max-width: 1899px) {
+    .sdh-tabla--termek .sdh-tabla__ritka {
+        display: none;
+    }
+}
+
+@media (max-width: 1365px) {
+    .sdh-tabla--termek .sdh-tabla__ritka2 {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .sdh-tabla--termek .sdh-tabla__rejtheto {
+        display: none;
+    }
+}
+
+/* Telefonon csak a lényeg: megnevezés, készlet, bruttó ár. */
+@media (max-width: 760px) {
+    .sdh-tabla--termek .sdh-tabla__mobil-nem {
+        display: none;
+    }
+
+    .sdh-tabla--termek td.sdh-tabla__nev {
+        min-width: 7rem;
+    }
+
+    .sdh-tabla--mozgas th,
+    .sdh-tabla--mozgas td {
+        white-space: normal;
+    }
+
+    .sdh-tabla--mozgas th:first-child,
+    .sdh-tabla--mozgas td:first-child {
+        display: none;
+    }
+}
+
+.sdh-tabla--termek tfoot td {
+    border-top: 2px solid var(--sdh-keret-eros);
+    border-bottom: 0;
+    background: var(--sdh-felulet-2);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-tabla__szumma {
+    color: var(--sdh-halvany);
+    font-weight: 500;
+}
+
+.sdh-tabla__rendez {
+    color: inherit;
+    text-decoration: none;
+}
+
+.sdh-tabla__rendez:hover,
+.sdh-tabla__rendez.is-aktiv {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-tabla tbody tr.sdh-sor--inaktiv td {
+    opacity: .55;
+}
+
+.sdh-tabla__urlap {
+    display: inline-block;
+    margin-left: .4rem;
+    vertical-align: middle;
+}
+
+/* Készletjelzés: zöld = van, sárga = a minimum alatt, piros = nincs. */
+.sdh-keszlet {
+    display: inline-block;
+    min-width: 1.6rem;
+    padding: 0 .45rem;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sdh-keszlet--ok {
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 16%, transparent);
+    color: var(--sdh-siker);
+}
+
+.sdh-keszlet--keves {
+    background: color-mix(in srgb, var(--sdh-allapot-sarga) 28%, transparent);
+    color: var(--sdh-figyelem);
+}
+
+.sdh-keszlet--nincs {
+    background: color-mix(in srgb, var(--sdh-allapot-piros) 16%, transparent);
+    color: var(--sdh-hiba);
+}
+
+.sdh-mozgas {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-mozgas--be {
+    color: var(--sdh-siker);
+}
+
+.sdh-mozgas--ki {
+    color: var(--sdh-hiba);
+}
+
+/* ---- Termékválasztó popup (a szolgáltatás-választó vázára épül) ---- */
+
+.sdh-modal.sdh-modal[data-sdh-modul="termvalaszto"] {
+    width: min(1080px, calc(100vw - 2rem));
+}
+
+.sdh-szolgval__tabla.sdh-termval__tabla th:nth-child(2) { width: 10rem; }
+.sdh-szolgval__tabla.sdh-termval__tabla th:nth-child(3) { width: 7.5rem; }
+.sdh-szolgval__tabla.sdh-termval__tabla th:nth-child(4) { width: 6.5rem; }
+.sdh-szolgval__tabla.sdh-termval__tabla th:nth-child(5) { width: 7.5rem; }
+.sdh-szolgval__tabla.sdh-termval__tabla th:nth-child(6) { width: 3.6rem; }
+
+.sdh-termval__kat {
+    margin-left: .4rem;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--sdh-halvany);
+}
+
+/* ---- Termékűrlap: balra a kódok, jobbra a név, a készlet és az árak ---- */
+
+.sdh-modal.sdh-modal[data-sdh-modul="termekek"] {
+    width: min(1040px, calc(100vw - 2rem));
+}
+
+.sdh-termekurlap__felso {
+    display: grid;
+    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+    gap: .9rem 1.2rem;
+    align-items: start;
+}
+
+.sdh-termekurlap__kodok {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    min-width: 0;
+    margin: 0;
+    padding: .55rem .75rem .75rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-termekurlap__kodok legend {
+    padding: 0 .35rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-termekurlap__kodok .sdh-ig {
+    grid-template-columns: 5.2rem minmax(0, 1fr);
+}
+
+.sdh-termekurlap__fo {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    min-width: 0;
+}
+
+.sdh-termekurlap .is-jobb {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-termekurlap select {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 2rem 0 .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    line-height: 30px;
+    text-overflow: ellipsis;
+    box-shadow: none;
+}
+
+.sdh-termekurlap select:focus {
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+    border-color: var(--sdh-accent);
+}
+
+.sdh-termekurlap textarea {
+    font-family: inherit;
+}
+
+/* Készletsor: jelölő, készlet, egység, minimum, és (ha a készlet változott) az ok. */
+.sdh-termekurlap__keszlet {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    padding: .5rem .7rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-termekurlap__kmezo {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    min-width: 0;
+}
+
+.sdh-termekurlap__kmezo > label {
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+    white-space: nowrap;
+}
+
+.sdh-termekurlap__kmezo > input[type="text"] {
+    width: 5.2rem;
+}
+
+/* A készletsor második sora: súgó, vagy – ha a készletet átírták – a változás oka.
+   Egyforma magas, a popup így nem ugrál. */
+.sdh-termekurlap__kmezo--szeles {
+    flex: 1 1 100%;
+    min-height: 34px;
+}
+
+.sdh-termekurlap__sugo {
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-termekurlap__ok {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    min-width: 0;
+}
+
+.sdh-termekurlap__ok[hidden],
+.sdh-termekurlap__sugo[hidden] {
+    display: none;
+}
+
+.sdh-termekurlap__ok > label {
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+    white-space: nowrap;
+}
+
+.sdh-termekurlap__ok > input[type="text"] {
+    flex: 1 1 auto;
+}
+
+.sdh-termekurlap__kmezo.is-kikapcsolt {
+    opacity: .4;
+}
+
+/* A Kódok doboz a DOM-ban a fő oszlop után áll (a fókusz a Megnevezésé), a képen balra. */
+.sdh-termekurlap__kodok {
+    order: -1;
+}
+
+/* Árak: címke, nettó, bruttó, áfakulcs, haszonkulcs – soronként egy ár. */
+.sdh-termekurlap__arak {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, .8fr);
+    gap: .4rem .5rem;
+    align-items: center;
+}
+
+.sdh-termekurlap__arak > label {
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-termekurlap__arfej {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+}
+
+.sdh-termekurlap input.sdh-termekurlap__fomezo {
+    border-color: var(--sdh-accent);
+    font-weight: 700;
+}
+
+.sdh-termekurlap__szazalek {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    min-width: 0;
+}
+
+.sdh-termekurlap__szazalek > span {
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-termekurlap__haszon {
+    grid-column: 3 / -1;
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Az alsó lapfülek panelje egyforma magas: fülváltáskor a popup nem ugrál. */
+.sdh-termekurlap__also > .sdh-fulek__panel {
+    min-height: 8.6rem;
+}
+
+.sdh-termekurlap__also textarea {
+    min-height: 7rem;
+    resize: none;
+}
+
+.sdh-termekurlap__mozgasok td {
+    padding: .22rem .5rem;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.sdh-termekurlap__ures {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+@media (max-width: 860px) {
+    .sdh-termekurlap__felso {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdh-termekurlap__kodok {
+        order: 0;
+    }
+
+    .sdh-termekurlap__arak {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .sdh-termekurlap__arak > span:empty,
+    .sdh-termekurlap__arfej {
+        display: none;
+    }
+
+    .sdh-termekurlap__arak > label,
+    .sdh-termekurlap__haszon {
+        grid-column: 1 / -1;
+    }
 }

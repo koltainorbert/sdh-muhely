@@ -2032,7 +2032,16 @@
             gyarto: 'Gyártó',
             szin: 'Szín',
             tartozek: 'Tartozékok',
-            datum: 'Dátum'
+            datum: 'Dátum',
+            termekkat: 'Kategória',
+            beszallito: 'Beszállító'
+        };
+
+        // Bővíthető listák: csoportosított gombok + „saját érték" sor + törlés.
+        var bovitheto = {
+            gyarto: ['Más gyártó', 'Írd be a nevét', 'Gyártó törlése'],
+            termekkat: ['Új kategória', 'Írd be a nevét', 'Kategória törlése'],
+            beszallito: ['Más beszállító', 'Írd be a nevét', 'Beszállító törlése']
         };
 
         var dialog = document.createElement('dialog');
@@ -2082,7 +2091,7 @@
         var targy = popElem('div', 'sdh-pop__targy');
         var kereso = null;
 
-        if (tipus === 'kategoria' || tipus === 'gyarto') {
+        if (tipus === 'kategoria' || bovitheto[tipus]) {
             kereso = popKereso(targy, fej);
             torzs.appendChild(fej);
         }
@@ -2091,14 +2100,14 @@
 
         if (tipus === 'kategoria') {
             popCsoportok(targy, adat, mezo.value, valasztott);
-        } else if (tipus === 'gyarto') {
+        } else if (bovitheto[tipus]) {
             popCsoportok(targy, adat, mezo.value, valasztott);
 
             var alj = popElem('div', 'sdh-pop__alj');
-            popSajat(alj, 'Más gyártó', 'Írd be a nevét', '', valasztott);
+            popSajat(alj, bovitheto[tipus][0], bovitheto[tipus][1], '', valasztott);
 
             if (mezo.value) {
-                var ures = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Gyártó törlése');
+                var ures = popElem('button', 'sdh-gomb sdh-gomb--vilagos', bovitheto[tipus][2]);
                 ures.type = 'button';
                 ures.addEventListener('click', function () {
                     valasztott('');
@@ -2725,6 +2734,13 @@
             });
             // Az azonosító törlésével a mentés új sorként kezeli – a régi tétel törlődik.
             sor.querySelector('input[type="hidden"]').value = '0';
+
+            // A kiürített sor a terméktörzshöz sem kötődik tovább.
+            var termekAzonosito = sor.querySelector('[data-sdh-termek-id]');
+
+            if (termekAzonosito) {
+                termekAzonosito.value = '0';
+            }
             sor.querySelector('.sdh-tetelsor__sorszam').textContent = 'új';
         } else {
             sor.remove();
@@ -3486,9 +3502,11 @@
 
             var tetelPanel = tetelUjGomb.closest('[data-sdh-tetelek]');
 
-            // Szolgáltatásnál nem üres sor nyílik, hanem a választó popup.
+            // Nem üres sor nyílik, hanem a választó popup (szolgáltatás, illetve termék).
             if (tetelPanel && tetelPanel.getAttribute('data-sdh-tetelek') === 'szolgaltatas') {
                 szolgValasztoNyit(tetelPanel, null, tetelUjGomb);
+            } else if (tetelPanel && tetelPanel.getAttribute('data-sdh-tetelek') === 'termek') {
+                termValasztoNyit(tetelPanel, null, tetelUjGomb);
             } else {
                 tetelUj(tetelUjGomb);
             }
@@ -4700,6 +4718,759 @@
 
     // Munkalap mentése után a törzs változhatott: a következő nyitáskor újra lekérjük.
     document.addEventListener('sdh:mentve', szolgElavult);
+
+    /* ---------------------------------------------------------------- */
+    /* Terméktörzs: választó popup a munkalapon és a termék űrlapja     */
+    /* ---------------------------------------------------------------- */
+
+    /*
+     * A munkalap „Termékek" lapfülén a terméket a készletből lehet
+     * kiválasztani: a „+ Termék" gomb és a Megnevezés mező végén álló gomb
+     * nyitja a választót. A keresés a névben és minden kódban fut (cikkszám,
+     * termékkód, gyári szám, vonalkód) – vonalkódolvasóval beolvasott kód +
+     * Enter a terméket rögtön a munkalapra teszi. A választás kitölti a
+     * nevet, a kódokat, az egységet, a bruttó árat és az áfakulcsot, és a
+     * sor megjegyzi a termék azonosítóját: mentéskor ennyi lejön a
+     * készletről (szerver: SDH_Muhely_Termek::munkalap_mozgasok).
+     */
+    var TERM_OLDAL = 10;
+    var termAdat = null;       // [{ id, nev, me, ar, afa, keszlet, cikkszam, termekkod, gyari, vonalkod, kategoria, kedv, jelzes, nk }]
+    var termIgeret = null;
+    var termVal = null;        // a nyitott választó: { n, panel, sor, gomb, kerdes, oldal, kijelolt, talalatok }
+
+    function termElavult() {
+        termAdat = null;
+        termIgeret = null;
+    }
+
+    function termObjektum(s) {
+        var t = Array.isArray(s)
+            ? {
+                id: s[0], nev: s[1], me: s[2], ar: s[3], afa: s[4], keszlet: s[5], cikkszam: s[6],
+                termekkod: s[7], gyari: s[8], vonalkod: s[9], kategoria: s[10], kedv: s[11], jelzes: s[12]
+            }
+            : {
+                id: s.id, nev: s.nev, me: s.me, ar: s.brutto_ar, afa: s.afa_kulcs, keszlet: s.keszlet, cikkszam: s.cikkszam,
+                termekkod: s.termekkod, gyari: s.gyari_szam, vonalkod: s.vonalkod, kategoria: s.kategoria, kedv: s.kedvezmeny, jelzes: s.jelzes
+            };
+
+        t.nk = iszNorm([t.nev, t.cikkszam, t.termekkod, t.gyari, t.vonalkod, t.kategoria].join(' '));
+        t.nevk = iszNorm(t.nev);
+
+        return t;
+    }
+
+    function termBetolt() {
+        if (termAdat) {
+            return Promise.resolve(termAdat);
+        }
+
+        if (termIgeret) {
+            return termIgeret;
+        }
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+        cim.searchParams.set('action', 'sdh_muhely_termekek');
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        var igeret = fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                if (!valasz.ok) {
+                    throw new Error('HTTP ' + valasz.status);
+                }
+
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    throw new Error('Üres válasz');
+                }
+
+                var adat = valasz.data.sorok.map(termObjektum);
+
+                // Közben elavulttá vált kérés eredménye nem kerül a tárba.
+                if (termIgeret === igeret) {
+                    termAdat = adat;
+                    termIgeret = null;
+                }
+
+                return adat;
+            })
+            .catch(function (hiba) {
+                if (termIgeret === igeret) {
+                    termIgeret = null;
+                }
+
+                throw hiba;
+            });
+
+        termIgeret = igeret;
+
+        return igeret;
+    }
+
+    /**
+     * Keresés: minden beírt szónak szerepelnie kell a névben vagy valamelyik
+     * kódban. Elöl a pontos kódegyezés (vonalkód, cikkszám, termékkód, gyári
+     * szám), aztán a beírt szöveggel kezdődő nevek, végül a többi.
+     */
+    function termKeres(adat, szoveg) {
+        var kerdes = iszNorm(szoveg);
+
+        if (kerdes === '') {
+            return adat.slice();
+        }
+
+        var szavak = kerdes.split(' ');
+        var talalatok = [];
+
+        adat.forEach(function (t, i) {
+            var mind = szavak.every(function (szo) {
+                return t.nk.indexOf(szo) >= 0;
+            });
+
+            if (!mind) {
+                return;
+            }
+
+            var pontos = [t.vonalkod, t.cikkszam, t.termekkod, t.gyari].some(function (kod) {
+                return kod && iszNorm(kod) === kerdes;
+            });
+
+            talalatok.push({ t: t, rang: pontos ? 0 : (t.nevk.indexOf(kerdes) === 0 ? 1 : 2), i: i });
+        });
+
+        talalatok.sort(function (a, b) {
+            return a.rang - b.rang || a.i - b.i;
+        });
+
+        return talalatok.map(function (x) { return x.t; });
+    }
+
+    function termSorMezo(sor, nev) {
+        return sor.querySelector('input[name$="[' + nev + ']"]');
+    }
+
+    /** A munkalap tételsorának kitöltése a terméktörzsből. */
+    function termKitolt(sor, t) {
+        var beir = function (mezo, ertek) {
+            if (mezo) {
+                mezo.value = ertek === null || ertek === undefined ? '' : String(ertek);
+            }
+        };
+
+        beir(termSorMezo(sor, 'termek_id'), t.id);
+        beir(termSorMezo(sor, 'megnevezes'), t.nev);
+        beir(termSorMezo(sor, 'termekkod'), t.termekkod);
+        beir(termSorMezo(sor, 'cikkszam'), t.cikkszam);
+        beir(termSorMezo(sor, 'gyari_szam'), t.gyari);
+        beir(sor.querySelector('[data-sdh-tetel="me"]'), t.me || 'db');
+        beir(sor.querySelector('[data-sdh-tetel="ar"]'), t.ar > 0 ? szolgAr(t.ar) : '');
+
+        var afa = sor.querySelector('[data-sdh-tetel="afa"]');
+
+        if (afa && t.afa) {
+            afa.value = t.afa;
+        }
+
+        if (t.kedv > 0) {
+            beir(sor.querySelector('[data-sdh-tetel="kedv"]'), szolgAr(t.kedv));
+        }
+
+        // A munkalap élő számolása az input eseményre figyel.
+        termSorMezo(sor, 'megnevezes').dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    function termKeszletSzoveg(t) {
+        if (t.keszlet === null || t.keszlet === undefined) {
+            return '<span class="sdh-tabla__halvany" title="Nincs készletkezelés">—</span>';
+        }
+
+        return '<span class="sdh-keszlet sdh-keszlet--' + (t.jelzes || 'ok') + '">' +
+            mlMenny(t.keszlet) + ' ' + szovegBiztonsagos(t.me || '') + '</span>';
+    }
+
+    /* ---- A választó popup ---- */
+
+    function termValTorzs() {
+        return termVal && szintek[termVal.n] ? szintek[termVal.n].torzs : null;
+    }
+
+    function termValNyitva() {
+        var torzs = termValTorzs();
+
+        return !!(torzs && szintek[termVal.n].dialog.open && torzs.querySelector('[data-sdh-termval]'));
+    }
+
+    /**
+     * A választó megnyitása.
+     *   panel – a munkalap Termékek panelje ([data-sdh-tetelek]);
+     *   sor   – a kitöltendő tételsor, vagy null: akkor új sor készül;
+     *   gomb  – a „+ Termék" gomb (új sorhoz).
+     */
+    function termValasztoNyit(panel, sor, gomb) {
+        var n = Math.min(sajatSzint(panel) + 1, szintek.length - 1);
+        var szint = vaz(n);
+        var mezo = sor ? termSorMezo(sor, 'megnevezes') : null;
+        var azonosito = sor ? termSorMezo(sor, 'termek_id') : null;
+
+        szint.dialog.sdhModul = 'termvalaszto';
+        szint.dialog.sdhMeret = meretOlvas('termvalaszto');
+        szint.dialog.setAttribute('data-sdh-modul', 'termvalaszto');
+
+        var fejSorok = '';
+
+        for (var i = 0; i < TERM_OLDAL; i++) {
+            fejSorok += '<tr class="sdh-szolgval__ures"><td colspan="6">&nbsp;</td></tr>';
+        }
+
+        szint.torzs.innerHTML =
+            '<h2 class="sdh-modal__cim">Termék választása</h2>' +
+            '<p class="sdh-modal__alcim">Kattints a sorra, vagy ↑ ↓ és Enter. Vonalkód, cikkszám és termékkód is kereshető.</p>' +
+            '<div class="sdh-szolgval" data-sdh-termval>' +
+            '  <div class="sdh-szolgval__fej">' +
+            '    <input type="search" autocomplete="off" data-sdh-termval-kereso' +
+            '           aria-label="Keresés a termékek között" placeholder="Megnevezés, cikkszám, termékkód, vonalkód…">' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-termval-uj>+ Új termék</button>' +
+            '  </div>' +
+            '  <table class="sdh-tabla sdh-szolgval__tabla sdh-termval__tabla">' +
+            '    <thead><tr><th>Megnevezés</th><th>Cikkszám</th><th>Termékkód</th>' +
+            '      <th class="is-jobb">Készlet</th><th class="is-jobb">Bruttó ár</th><th></th></tr></thead>' +
+            '    <tbody data-sdh-termval-sorok>' + fejSorok + '</tbody>' +
+            '  </table>' +
+            '  <div class="sdh-szolgval__lab">' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-termval-lap="-1" aria-label="Előző oldal">‹</button>' +
+            '    <span class="sdh-szolgval__oldal" data-sdh-termval-oldal></span>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-termval-lap="1" aria-label="Következő oldal">›</button>' +
+            '    <span class="sdh-szolgval__db" data-sdh-termval-db></span>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra" data-sdh-termval-kezi' +
+            '            title="Üres sor a munkalapon: a nevet és az árat kézzel írod be, a készlet nem változik">Kézzel írom be</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-termval-megsem>Mégsem</button>' +
+            '  </div>' +
+            '</div>';
+
+        // Ha a sorban kézzel beírt (a törzshöz nem kötött) szöveg áll, azzal indul a keresés.
+        var kezdo = mezo && mezo.value.trim() !== '' && !(azonosito && parseInt(azonosito.value, 10) > 0) ? mezo.value.trim() : '';
+
+        termVal = { n: n, panel: panel, sor: sor, gomb: gomb || null, kerdes: kezdo, oldal: 0, kijelolt: 0, talalatok: [] };
+
+        if (!szint.dialog.open) {
+            szint.dialog.showModal();
+        }
+
+        var kereso = szint.torzs.querySelector('[data-sdh-termval-kereso]');
+
+        kereso.value = kezdo;
+        kereso.focus();
+
+        termValFrissit();
+    }
+
+    /** A törzs (újra)betöltése és a táblázat kirajzolása. */
+    function termValFrissit() {
+        var allapot = termVal;
+
+        termBetolt().then(function (adat) {
+            if (termVal !== allapot || !termValNyitva()) {
+                return;
+            }
+
+            allapot.talalatok = termKeres(adat, allapot.kerdes);
+            termValRajzol();
+        }).catch(function () {
+            var torzs = termValTorzs();
+            var sorok = torzs ? torzs.querySelector('[data-sdh-termval-sorok]') : null;
+
+            if (sorok) {
+                sorok.innerHTML = '<tr><td colspan="6" class="sdh-tabla__ures">A termékek listája nem töltődött be.</td></tr>';
+            }
+        });
+    }
+
+    function termValRajzol() {
+        var torzs = termValTorzs();
+
+        if (!torzs || !termVal) {
+            return;
+        }
+
+        var db = termVal.talalatok.length;
+        var oldalak = Math.max(1, Math.ceil(db / TERM_OLDAL));
+
+        termVal.kijelolt = Math.max(0, Math.min(termVal.kijelolt, db - 1));
+        termVal.oldal = db > 0 ? Math.floor(termVal.kijelolt / TERM_OLDAL) : 0;
+
+        var kezdet = termVal.oldal * TERM_OLDAL;
+        var html = '';
+
+        // Mindig ugyanannyi sor: a popup magassága gépelés közben nem ugrál.
+        for (var i = kezdet; i < kezdet + TERM_OLDAL; i++) {
+            var t = termVal.talalatok[i];
+
+            if (!t) {
+                html += i === 0
+                    ? '<tr class="sdh-szolgval__ures"><td colspan="6" class="sdh-tabla__ures">' +
+                        (termVal.kerdes !== ''
+                            ? 'Nincs ilyen termék. Az „+ Új termék" gombbal felveheted.'
+                            : 'Még nincs termék. Az „+ Új termék" gombbal felveheted az elsőt.') +
+                        '</td></tr>'
+                    : '<tr class="sdh-szolgval__ures"><td colspan="6">&nbsp;</td></tr>';
+                continue;
+            }
+
+            html += '<tr data-sdh-termval-sor="' + i + '"' + (i === termVal.kijelolt ? ' class="is-kijelolt" aria-selected="true"' : '') + '>' +
+                '<td class="sdh-szolgval__nev" title="' + szovegBiztonsagos(t.nev) + '">' + szovegBiztonsagos(t.nev) +
+                (t.kategoria ? ' <span class="sdh-termval__kat">' + szovegBiztonsagos(t.kategoria) + '</span>' : '') + '</td>' +
+                '<td>' + szovegBiztonsagos(t.cikkszam || '') + '</td>' +
+                '<td>' + szovegBiztonsagos(t.termekkod || '') + '</td>' +
+                '<td class="is-jobb">' + termKeszletSzoveg(t) + '</td>' +
+                '<td class="is-jobb">' + (t.ar > 0 ? mlPenz(t.ar) + ' Ft' : '—') + '</td>' +
+                '<td class="is-jobb"><button type="button" class="sdh-szolgval__szerk" data-sdh-termval-szerk="' + t.id + '"' +
+                ' title="Szerkesztés" aria-label="' + szovegBiztonsagos(t.nev) + ' szerkesztése">' +
+                '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.8 2.7l2.5 2.5-7.6 7.6-3 .5.5-3z"/></svg></button></td></tr>';
+        }
+
+        torzs.querySelector('[data-sdh-termval-sorok]').innerHTML = html;
+        torzs.querySelector('[data-sdh-termval-oldal]').textContent = (termVal.oldal + 1) + ' / ' + oldalak;
+        torzs.querySelector('[data-sdh-termval-db]').textContent = db + ' termék';
+        torzs.querySelector('[data-sdh-termval-lap="-1"]').disabled = termVal.oldal <= 0;
+        torzs.querySelector('[data-sdh-termval-lap="1"]').disabled = termVal.oldal >= oldalak - 1;
+    }
+
+    /** A munkalap tételsora, amelyet a választás kitölt (ha kell, újat készít). */
+    function termValCelsor() {
+        if (termVal.sor && termVal.sor.isConnected) {
+            return termVal.sor;
+        }
+
+        var lista = termVal.panel.querySelector('[data-sdh-tetelsorok]');
+        var sorok = lista ? lista.querySelectorAll('[data-sdh-tetelsor]') : [];
+        var utolso = sorok.length ? sorok[sorok.length - 1] : null;
+
+        // Az üresen álló utolsó sort használjuk fel, nem nyitunk mellé újat.
+        if (utolso) {
+            var nev = termSorMezo(utolso, 'megnevezes');
+            var ar = utolso.querySelector('[data-sdh-tetel="ar"]');
+
+            if (nev && nev.value.trim() === '' && (!ar || mlSzam(ar.value) <= 0)) {
+                return utolso;
+            }
+        }
+
+        var gomb = termVal.gomb || termVal.panel.querySelector('[data-sdh-tetel-uj]');
+
+        return gomb ? tetelUj(gomb) : null;
+    }
+
+    function termValValaszt(t) {
+        if (!termVal || !t) {
+            return;
+        }
+
+        var sor = termValCelsor();
+
+        bezar(termVal.n);
+        termVal = null;
+
+        if (!sor) {
+            return;
+        }
+
+        termKitolt(sor, t);
+
+        var menny = sor.querySelector('[data-sdh-tetel="menny"]');
+
+        if (menny) {
+            menny.focus();
+            menny.select();
+        }
+    }
+
+    /** „Kézzel írom be": üres sor a munkalapon, a fókusz a Megnevezés mezőn. */
+    function termValKezi() {
+        if (!termVal) {
+            return;
+        }
+
+        var sor = termValCelsor();
+
+        bezar(termVal.n);
+        termVal = null;
+
+        var mezo = sor ? termSorMezo(sor, 'megnevezes') : null;
+
+        if (mezo) {
+            mezo.focus();
+        }
+    }
+
+    /** Új felvitel vagy szerkesztés a választó fölött; mentés után a választó frissül. */
+    function termValUrlap(id) {
+        if (!termVal) {
+            return;
+        }
+
+        var allapot = termVal;
+        var uj = !id;
+
+        nyit('termekek', uj ? '0' : String(id), {
+            szint: Math.min(allapot.n + 1, szintek.length - 1),
+            parameterek: uj && allapot.kerdes !== '' ? { nev: allapot.kerdes } : {},
+            siker: function (adat) {
+                termElavult();
+
+                if (termVal !== allapot) {
+                    return;
+                }
+
+                // Az új termék rögtön a munkalapra kerül.
+                if (uj) {
+                    termValValaszt(termObjektum(adat));
+
+                    return;
+                }
+
+                termValFrissit();
+
+                var kereso = termValTorzs().querySelector('[data-sdh-termval-kereso]');
+
+                if (kereso) {
+                    kereso.focus();
+                }
+            }
+        });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+
+        if (!cel.closest) {
+            return;
+        }
+
+        // A Megnevezés mező végén álló gomb: választás ebbe a sorba.
+        var valaszt = cel.closest('[data-sdh-termek-valaszt]');
+
+        if (valaszt) {
+            esemeny.preventDefault();
+            termValasztoNyit(valaszt.closest('[data-sdh-tetelek]'), valaszt.closest('[data-sdh-tetelsor]'), null);
+
+            return;
+        }
+
+        // Törlés a termék űrlapján: az első kattintás csak rákérdez.
+        var torol = cel.closest('[data-sdh-termek-torol]');
+
+        if (torol) {
+            esemeny.preventDefault();
+            termTorol(torol);
+
+            return;
+        }
+
+        if (!termVal || !cel.closest('[data-sdh-termval]')) {
+            return;
+        }
+
+        var szerk = cel.closest('[data-sdh-termval-szerk]');
+
+        if (szerk) {
+            termValUrlap(parseInt(szerk.getAttribute('data-sdh-termval-szerk'), 10));
+
+            return;
+        }
+
+        var sor = cel.closest('[data-sdh-termval-sor]');
+
+        if (sor) {
+            termValValaszt(termVal.talalatok[parseInt(sor.getAttribute('data-sdh-termval-sor'), 10)]);
+
+            return;
+        }
+
+        var lap = cel.closest('[data-sdh-termval-lap]');
+
+        if (lap) {
+            var irany = parseInt(lap.getAttribute('data-sdh-termval-lap'), 10);
+
+            termVal.kijelolt = (termVal.oldal + irany) * TERM_OLDAL;
+            termValRajzol();
+
+            return;
+        }
+
+        if (cel.closest('[data-sdh-termval-uj]')) {
+            termValUrlap(0);
+        } else if (cel.closest('[data-sdh-termval-kezi]')) {
+            termValKezi();
+        } else if (cel.closest('[data-sdh-termval-megsem]')) {
+            bezar(termVal.n);
+            termVal = null;
+        }
+    });
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (!mezo || !mezo.matches) {
+            return;
+        }
+
+        if (termVal && mezo.matches('[data-sdh-termval-kereso]')) {
+            termVal.kerdes = mezo.value;
+            termVal.kijelolt = 0;
+            termVal.talalatok = termAdat ? termKeres(termAdat, mezo.value) : [];
+            termValRajzol();
+
+            return;
+        }
+
+        // A kiürített Megnevezés elengedi a terméket: az a sor már nem fogyaszt készletet.
+        if (mezo.matches('[data-sdh-termek]') && mezo.value.trim() === '') {
+            var azonosito = termSorMezo(mezo.closest('[data-sdh-tetelsor]'), 'termek_id');
+
+            if (azonosito) {
+                azonosito.value = '0';
+            }
+
+            return;
+        }
+
+        var urlap = mezo.closest('[data-sdh-termekurlap]');
+
+        if (urlap) {
+            termUrlapSzamol(urlap, mezo.getAttribute('data-t') || '');
+        }
+    });
+
+    document.addEventListener('change', function (esemeny) {
+        var mezo = esemeny.target;
+        var urlap = mezo && mezo.closest ? mezo.closest('[data-sdh-termekurlap]') : null;
+
+        if (urlap) {
+            termUrlapSzamol(urlap, mezo.tagName === 'SELECT' || mezo.type === 'checkbox' ? (mezo.getAttribute('data-t') || '') : '');
+        }
+
+        // A lista szűrője (kategória) választásra rögtön keres.
+        if (mezo && mezo.matches && mezo.matches('select[data-sdh-auto-kuld]') && mezo.form) {
+            mezo.form.submit();
+        }
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (!mezo || !mezo.matches) {
+            return;
+        }
+
+        // A munkalap Megnevezés mezőjében a lefelé nyíl is a választót nyitja.
+        if (mezo.matches('[data-sdh-termek]') && esemeny.key === 'ArrowDown') {
+            esemeny.preventDefault();
+            termValasztoNyit(mezo.closest('[data-sdh-tetelek]'), mezo.closest('[data-sdh-tetelsor]'), null);
+
+            return;
+        }
+
+        if (!termVal || !mezo.matches('[data-sdh-termval-kereso]')) {
+            return;
+        }
+
+        var db = termVal.talalatok.length;
+        var lepes = { ArrowDown: 1, ArrowUp: -1, PageDown: TERM_OLDAL, PageUp: -TERM_OLDAL }[esemeny.key];
+
+        if (lepes && db > 0) {
+            esemeny.preventDefault();
+            termVal.kijelolt = Math.max(0, Math.min(db - 1, termVal.kijelolt + lepes));
+            termValRajzol();
+        } else if (esemeny.key === 'Enter') {
+            esemeny.preventDefault();
+
+            if (db > 0) {
+                termValValaszt(termVal.talalatok[termVal.kijelolt]);
+            }
+        }
+    }, true);
+
+    document.addEventListener('focusin', function (esemeny) {
+        var mezo = esemeny.target;
+
+        // Már az első érintésnél letöltjük a törzset, hogy a választó azonnal nyíljon.
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-termek]')) {
+            termBetolt().catch(function () {});
+        }
+    });
+
+    /* ---- A termék űrlapja (Termékek modul és a választó fölött) ---- */
+
+    function termMezo(urlap, nev) {
+        return urlap.querySelector('[data-t="' + nev + '"]');
+    }
+
+    function termSzazalek(select) {
+        var opcio = select ? select.options[select.selectedIndex] : null;
+
+        return opcio ? parseFloat(opcio.getAttribute('data-szazalek') || '0') || 0 : 0;
+    }
+
+    function termIr(mezo, n) {
+        if (mezo) {
+            mezo.value = n > 0 ? String(mlKerek(n)).replace('.', ',') : '';
+        }
+    }
+
+    /**
+     * Az űrlap élő számolása. `forras`: melyik mező változott (data-t) –
+     * az marad érintetlen, a többi abból adódik:
+     *   beszerzési nettó ↔ bruttó (a beszerzés áfakulcsával),
+     *   eladási nettó ↔ bruttó (az eladás áfakulcsával; áfaváltásnál a bruttó marad),
+     *   haszonkulcs → eladási ár (a beszerzési nettóból), különben az árakból a haszonkulcs.
+     * Mentéskor a szerver az eladási bruttóból és a beszerzési nettóból számol.
+     */
+    function termUrlapSzamol(urlap, forras) {
+        var beszNetto = termMezo(urlap, 'besz_netto');
+        var beszBrutto = termMezo(urlap, 'besz_brutto');
+        var netto = termMezo(urlap, 'netto');
+        var brutto = termMezo(urlap, 'brutto');
+        var haszon = termMezo(urlap, 'haszon');
+
+        if (!beszNetto || !beszBrutto || !netto || !brutto || !haszon) {
+            return;
+        }
+
+        var beszAfa = termSzazalek(termMezo(urlap, 'besz_afa'));
+        var afa = termSzazalek(termMezo(urlap, 'afa'));
+
+        if (forras === 'besz_brutto') {
+            termIr(beszNetto, mlSzam(beszBrutto.value) / (1 + beszAfa / 100));
+        } else if (forras === 'besz_netto' || forras === 'besz_afa') {
+            termIr(beszBrutto, mlSzam(beszNetto.value) * (1 + beszAfa / 100));
+        }
+
+        var besz = mlSzam(beszNetto.value);
+
+        if (forras === 'haszon') {
+            if (besz > 0 && haszon.value.trim() !== '') {
+                termIr(netto, besz * (1 + mlSzam(haszon.value) / 100));
+                termIr(brutto, mlSzam(netto.value) * (1 + afa / 100));
+            }
+        } else if (forras === 'netto') {
+            termIr(brutto, mlSzam(netto.value) * (1 + afa / 100));
+        } else if (forras === 'brutto' || forras === 'afa') {
+            termIr(netto, mlSzam(brutto.value) / (1 + afa / 100));
+        }
+
+        var eladasi = mlSzam(netto.value);
+
+        if (forras !== 'haszon') {
+            haszon.value = besz > 0 && eladasi > 0
+                ? String(Math.round((eladasi - besz) / besz * 1000) / 10).replace('.', ',')
+                : '';
+        }
+
+        mlIr(termMezo(urlap, 'haszon_ft'), besz > 0 && eladasi > 0
+            ? 'Haszon darabonként: ' + mlPenz(eladasi - besz) + ' Ft (nettó)'
+            : '');
+
+        // Készletkezelés nélkül a készletmezők halványak; az átírt készlethez ok is írható.
+        var kezelt = termMezo(urlap, 'kezelt');
+        var keszlet = termMezo(urlap, 'keszlet');
+        var be = !kezelt || kezelt.checked;
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-t-keszletsor]'), function (elem) {
+            elem.classList.toggle('is-kikapcsolt', !be);
+        });
+
+        var ok = urlap.querySelector('[data-t-keszletok]');
+        var sugo = urlap.querySelector('[data-t-keszletsugo]');
+        var gyoker = urlap.closest('form');
+        var eredeti = gyoker ? gyoker.querySelector('input[name="keszlet_eredeti"]') : null;
+
+        // Ugyanazon a helyen áll a súgó és a „változás oka" mező: a popup nem ugrál.
+        if (ok && keszlet && eredeti) {
+            var valtozott = be && Math.abs(mlSzam(keszlet.value) - (parseFloat(eredeti.value) || 0)) >= 0.0005;
+
+            ok.hidden = !valtozott;
+
+            if (sugo) {
+                sugo.hidden = valtozott;
+            }
+        }
+    }
+
+    // A betöltött űrlap rögtön kiírja a számolt mezőket.
+    document.addEventListener('sdh:urlap-betoltve', function (esemeny) {
+        var urlap = esemeny.detail && esemeny.detail.torzs ? esemeny.detail.torzs.querySelector('[data-sdh-termekurlap]') : null;
+
+        if (urlap) {
+            termUrlapSzamol(urlap, '');
+        }
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-termekurlap]'), function (urlap) {
+        termUrlapSzamol(urlap, '');
+    });
+
+    /** Törlés két lépésben (rákérdezés a gombon, natív ablak nélkül). */
+    function termTorol(gomb) {
+        if (gomb.dataset.sdhBiztos !== '1') {
+            gomb.dataset.sdhBiztos = '1';
+            gomb.dataset.sdhFelirat = gomb.textContent;
+            gomb.textContent = 'Biztosan törlöd?';
+            gomb.classList.add('is-veszely');
+
+            window.setTimeout(function () {
+                if (gomb.isConnected && gomb.dataset.sdhBiztos === '1') {
+                    gomb.dataset.sdhBiztos = '';
+                    gomb.textContent = gomb.dataset.sdhFelirat;
+                    gomb.classList.remove('is-veszely');
+                }
+            }, 4000);
+
+            return;
+        }
+
+        var urlap = gomb.closest('form');
+        var adat = new FormData();
+
+        adat.append('action', 'sdh_muhely_termek_torol');
+        adat.append('_wpnonce', beallitas.nonce || '');
+        adat.append('id', gomb.getAttribute('data-sdh-termek-torol'));
+        gomb.disabled = true;
+
+        fetch(beallitas.ajax, { method: 'POST', credentials: 'same-origin', body: adat })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    throw new Error((valasz && valasz.data && valasz.data.uzenet) || 'A törlés nem sikerült.');
+                }
+
+                termElavult();
+
+                var n = sajatSzint(gomb);
+
+                // A választó fölött: csak ez a popup zárul, a választó frissül.
+                if (termVal && n > termVal.n && termValNyitva()) {
+                    bezar(n);
+                    termValFrissit();
+
+                    return;
+                }
+
+                window.location.href = (valasz.data.inaktiv ? gomb.getAttribute('data-vissza-inaktiv') : gomb.getAttribute('data-vissza'))
+                    || window.location.href;
+            })
+            .catch(function (hiba) {
+                gomb.disabled = false;
+
+                if (urlap) {
+                    mutatUrlapHiba(urlap, hiba.message);
+                }
+            });
+    }
+
+    // Munkalap mentése után a készlet változhatott: a következő nyitáskor újra lekérjük.
+    document.addEventListener('sdh:mentve', termElavult);
 
     /* ---------------------------------------------------------------- */
     /* Csatolt fájlok                                                   */

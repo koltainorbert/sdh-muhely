@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.19.0';
+    public const DB_VERSION = '0.20.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -105,6 +105,8 @@ final class SDH_Muhely_Schema
         $szolgaltatas = self::tabla('szolgaltatas');
         $naplo        = self::tabla('munkalap_naplo');
         $uzenet       = self::tabla('uzenet');
+        $termek       = self::tabla('termek');
+        $termek_mozgas = self::tabla('termek_mozgas');
 
         $definiciok = [];
 
@@ -364,6 +366,7 @@ final class SDH_Muhely_Schema
             idopont date NULL,
             szamla varchar(40) NOT NULL default '',
             megnevezes varchar(255) NOT NULL default '',
+            termek_id bigint(20) unsigned NOT NULL default 0,
             termekkod varchar(60) NOT NULL default '',
             cikkszam varchar(60) NOT NULL default '',
             gyari_szam varchar(60) NOT NULL default '',
@@ -385,6 +388,7 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key munkalap_id (munkalap_id),
             key tipus (tipus),
+            key termek_id (termek_id),
             key kulso_azonosito (kulso_azonosito)
         ) {$charset};";
 
@@ -475,6 +479,80 @@ final class SDH_Muhely_Schema
             key munkalap_id (munkalap_id),
             key ugyfel_id (ugyfel_id),
             key olvasva (olvasva)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Terméktörzs (készlet)
+         *
+         * A MunkaLap 3 „Tétel" ablakának megfelelője: alkatrészek és
+         * eladható termékek. Az eladási ár BRUTTÓ egységár (mint a
+         * munkalap tételeinél), a beszerzési ár nettó; mindkettőnek saját
+         * áfakulcsa van. A "keszlet" a mozgások összege, ide másolva,
+         * hogy a lista egy táblából rendezzen és szűrjön – kézzel soha
+         * nem írjuk, mindig a SDH_Muhely_Termek::keszlet_ujraszamol().
+         * A "keszletkezeles" nélküli terméknek nincs készletmozgása.
+         * A terméket nem töröljük, ha már szerepelt munkalapon: inaktív lesz.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$termek} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            megnevezes varchar(255) NOT NULL default '',
+            leiras text NULL,
+            kategoria varchar(120) NOT NULL default '',
+            beszallito varchar(190) NOT NULL default '',
+            gyari_szam varchar(60) NOT NULL default '',
+            cikkszam varchar(60) NOT NULL default '',
+            termekkod varchar(60) NOT NULL default '',
+            vonalkod varchar(60) NOT NULL default '',
+            osztaly varchar(60) NOT NULL default '',
+            keszletkezeles tinyint(1) NOT NULL default 1,
+            keszlet decimal(12,3) NOT NULL default 0.000,
+            min_keszlet decimal(12,3) NOT NULL default 0.000,
+            me varchar(20) NOT NULL default 'db',
+            besz_netto decimal(14,2) NOT NULL default 0.00,
+            besz_afa_kulcs varchar(12) NOT NULL default '27',
+            brutto_ar decimal(14,2) NOT NULL default 0.00,
+            afa_kulcs varchar(12) NOT NULL default '27',
+            kedvezmeny decimal(5,2) NOT NULL default 0.00,
+            konyvelve date NULL,
+            megjegyzes text NULL,
+            aktiv tinyint(1) NOT NULL default 1,
+            forras varchar(30) NOT NULL default 'kezi',
+            kulso_azonosito varchar(40) NOT NULL default '',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key megnevezes (megnevezes(120)),
+            key kategoria (kategoria),
+            key cikkszam (cikkszam),
+            key termekkod (termekkod),
+            key vonalkod (vonalkod),
+            key aktiv (aktiv),
+            key kulso_azonosito (kulso_azonosito)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Termék – készletmozgások
+         *
+         * Minden készletváltozás egy sor, előjeles mennyiséggel:
+         * nyito / bevet / korrekcio kézi mozgás, munkalap = egy munkalap
+         * terméktétele (ekkor a "tetel_id" azonosítja, tételenként
+         * legfeljebb egy sor van). A termék készlete e sorok összege.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$termek_mozgas} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            termek_id bigint(20) unsigned NOT NULL default 0,
+            tipus varchar(20) NOT NULL default 'korrekcio',
+            mennyiseg decimal(12,3) NOT NULL default 0.000,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            tetel_id bigint(20) unsigned NOT NULL default 0,
+            megjegyzes varchar(255) NOT NULL default '',
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key termek_id (termek_id),
+            key munkalap_id (munkalap_id),
+            key tetel_id (tetel_id)
         ) {$charset};";
 
         return $definiciok;

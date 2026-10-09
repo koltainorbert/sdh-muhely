@@ -107,9 +107,9 @@ final class SDH_Muhely_Rma_Oldal
             'Dieser Link ist ungültig oder der Auftrag ist noch nicht erfasst. Bitte scannen Sie den QR-Code auf Ihrem Beleg erneut oder wenden Sie sich an den Service.',
         ],
         'elonezet'        => [
-            'Munkatársi előnézet – az ügyfél a telefonszámával és a munkalap sorszámával lép be. Innen üzenetet nem lehet küldeni.',
-            'Staff preview – customers sign in with their phone number and job number. Messages cannot be sent from here.',
-            'Mitarbeiter-Vorschau – Kunden melden sich mit Telefon- und Auftragsnummer an. Von hier aus können keine Nachrichten gesendet werden.',
+            'Munkatársi előnézet – pontosan ezt látja az ügyfél, miután a telefonszámával és a munkalap sorszámával belépett. Az innen küldött üzenet az ügyfél nevében kerül a munkalap üzenetei közé.',
+            'Staff preview – this is exactly what the customer sees after signing in with their phone number and job number. A message sent from here is added to the job as if the customer had written it.',
+            'Mitarbeiter-Vorschau – genau das sieht der Kunde nach der Anmeldung mit Telefon- und Auftragsnummer. Eine von hier gesendete Nachricht wird dem Auftrag im Namen des Kunden hinzugefügt.',
         ],
         'pelda'           => ['pl.', 'e.g.', 'z. B.'],
         'ctrl_enter'      => ['Ctrl + Enter: küldés', 'Ctrl + Enter: send', 'Strg + Enter: senden'],
@@ -969,10 +969,13 @@ final class SDH_Muhely_Rma_Oldal
         <form method="post" class="rma-uz-urlap" data-rma-uz-urlap>
             <input type="hidden" name="sdh_rma_muvelet" value="valasz">
             <input type="hidden" name="jel" value="<?php echo esc_attr(SDH_Muhely_Rma::urlap_jel($munkalap)); ?>">
+            <?php if ($elonezet) : ?>
+                <input type="hidden" name="elonezet" value="1">
+            <?php endif; ?>
             <textarea name="szoveg" rows="2" maxlength="<?php echo (int) SDH_Muhely_Rma::UZENET_HOSSZ; ?>" required
                       placeholder="<?php echo esc_attr(self::t('uz_mezo')); ?>"
-                      aria-label="<?php echo esc_attr(self::t('uz_mezo')); ?>"<?php echo $elonezet ? ' disabled' : ''; ?>></textarea>
-            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" title="<?php echo esc_attr(self::t('ctrl_enter')); ?>"<?php echo $elonezet ? ' disabled' : ''; ?>>
+                      aria-label="<?php echo esc_attr(self::t('uz_mezo')); ?>"></textarea>
+            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" title="<?php echo esc_attr(self::t('ctrl_enter')); ?>">
                 <?php echo self::ikon('kuld'); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html(self::t('kuldes')); ?></span>
             </button>
         </form>

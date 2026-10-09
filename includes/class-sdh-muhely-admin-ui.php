@@ -424,6 +424,12 @@ final class SDH_Muhely_Admin_UI
             'szolg_osszevonva'  => ['siker', 'Ilyen nevű szolgáltatás már volt – a kettőt összevontam, egy maradt.'],
             'szolg_torolve'     => ['siker', 'A szolgáltatás törölve a törzsből. A munkalapok tételei megmaradtak.'],
             'szolg_hianyzo_nev' => ['hiba',  'A megnevezés kitöltése kötelező.'],
+            'termek_mentve'     => ['siker', 'A termék elmentve.'],
+            'termek_letrehozva' => ['siker', 'A termék létrejött.'],
+            'termek_torolve'    => ['siker', 'A termék törölve.'],
+            'termek_inaktiv'    => ['siker', 'A termék már szerepelt munkalapon, ezért nem törlődött: inaktív lett.'],
+            'termek_demo'       => ['siker', 'A 20 mintatermék betöltve.'],
+            'termek_hiba'       => ['hiba',  'A termék nem menthető: a megnevezés kötelező.'],
             'csatolmany_hiba'   => ['hiba',  'A csatolt fájl nem fogadható el (túl nagy, nem engedélyezett típus vagy sérült fájl). Semmi nem mentődött.'],
         ];
 

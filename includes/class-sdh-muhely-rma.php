@@ -880,7 +880,13 @@ final class SDH_Muhely_Rma
         }
 
         if ($muvelet === 'valasz') {
-            if (!self::feloldva($munkalap, $ugyfel)) {
+            // Munkatársi előnézetből is küldhető üzenet (az ügyfél nevében kerül
+            // a szálba) – így a teljes út kipróbálható belépés nélkül.
+            $elonezet = !empty($_POST['elonezet']) && self::munkatars();
+
+            if ($elonezet) {
+                $vissza = add_query_arg('elonezet', '1', $vissza);
+            } elseif (!self::feloldva($munkalap, $ugyfel)) {
                 wp_safe_redirect($vissza);
                 return;
             }

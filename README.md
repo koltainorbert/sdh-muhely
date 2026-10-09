@@ -57,6 +57,28 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.28.0
+- **Termékek modul** (`SDH_Muhely_Termek`, oldalsáv: Termékek) – a MunkaLap 3 „Tétel" ablakának megfelelője.
+  Lista széltől szélig (kódok, készlet, beszerzési és eladási ár, készletérték Σ), kereső minden kódra,
+  kategóriaszűrő, rendezhető oszlopok, nézetfülek: Összes / Készleten / Rendelni kell / Inaktív /
+  Összes tételmozgás. Felvitel és szerkesztés popupban: balra a kódok (gyári szám, cikkszám, termékkód,
+  vonalkód, osztály, könyvelve), jobbra megnevezés, kategória, beszállító, készlet, árak; alul
+  Leírás / Megjegyzés / Készletmozgás fül. Az űrlap élőben számol: nettó ↔ bruttó, haszonkulcs ↔ eladási ár.
+- **Készlet**: minden változás egy sor a `sdh_termek_mozgas` táblában (nyitókészlet, bevételezés,
+  korrekció, munkalap); a termék készlete ezek összege. Az űrlapon átírt készlet mozgásként rögzül
+  (okkal). A munkalapra tett termék magától levonódik – csak számozott, nem érvénytelen lapnál;
+  az árajánlat és a sablon nem fogyaszt, az érvénytelenített lap visszaadja a készletet.
+- **Termékválasztó a munkalapon**: a „+ Termék" gomb és a Megnevezés végén álló gomb popupot nyit
+  (kereső névre és minden kódra – vonalkódolvasó + Enter –, lapozás, szerkesztés, új termék,
+  „Kézzel írom be"). A választás kitölti a nevet, a kódokat, az egységet, az árat és az áfakulcsot;
+  a tétel megjegyzi a terméket (`munkalap_tetel.termek_id`).
+- **20 fiktív mintatermék** nyitókészlettel: helyi/fejlesztői telepítésen és demó adatok mellett a
+  frissítés magától betölti (üres terméktörzsbe), egyébként az üres lista gombjával tölthető be.
+- **RMA ügyféloldal**: a munkatársi előnézetből (`?elonezet=1`, a CRM „Ügyféloldal" gombja) eddig nem
+  lehetett üzenetet küldeni – most lehet, az üzenet az ügyfél nevében kerül a szálba. A valódi
+  ügyfél (telefonszám + sorszám után) eddig is tudott írni; kijelentkezve az előnézet nem él.
+- Séma 0.20.0: `sdh_termek`, `sdh_termek_mozgas`, `munkalap_tetel.termek_id`.
+
 ### 0.27.0
 - **QR és vonalkód javítva az Áttekintésben**: a részletpanel ikon-szabálya (`stroke: currentColor`)
   összefolyatta a QR-modulokat. A kód-SVG-k inline stílussal védettek; a címke-blokk

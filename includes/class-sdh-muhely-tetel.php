@@ -273,6 +273,7 @@ final class SDH_Muhely_Tetel
                 : null,
             'szamla'          => mb_substr((string) ($adat['szamla'] ?? ''), 0, 40),
             'megnevezes'      => mb_substr((string) ($adat['megnevezes'] ?? ''), 0, 255),
+            'termek_id'       => $tipus === 'termek' ? max(0, (int) ($adat['termek_id'] ?? 0)) : 0,
             'termekkod'       => mb_substr((string) ($adat['termekkod'] ?? ''), 0, 60),
             'cikkszam'        => mb_substr((string) ($adat['cikkszam'] ?? ''), 0, 60),
             'gyari_szam'      => mb_substr((string) ($adat['gyari_szam'] ?? ''), 0, 60),
@@ -301,6 +302,7 @@ final class SDH_Muhely_Tetel
 
         self::megjegyez($sor);
         self::ujraszamol($munkalap_id);
+        self::keszlet_kovet($munkalap_id);
 
         return $id;
     }
@@ -384,6 +386,8 @@ final class SDH_Muhely_Tetel
                     'id'         => isset($sor['id']) ? max(0, (int) $sor['id']) : 0,
                     'tipus'      => $tipus,
                     'megnevezes' => $megnevezes,
+                    // A terméktörzs sora, amelyből a tétel készült (0 = kézzel beírt).
+                    'termek_id'  => $tipus === 'termek' && isset($sor['termek_id']) ? max(0, (int) $sor['termek_id']) : 0,
                     // A szolgáltatások sorában ez a három mező nincs az űrlapon:
                     // null = „nem jött", a meglévő érték érintetlen marad.
                     'termekkod'  => array_key_exists('termekkod', $sor) ? $szoveg('termekkod', 60) : null,
@@ -449,6 +453,7 @@ final class SDH_Muhely_Tetel
                 'sorrend'      => $sorrend[$sor['tipus']]++,
                 'tipus'        => $sor['tipus'],
                 'megnevezes'   => $sor['megnevezes'],
+                'termek_id'    => (int) ($sor['termek_id'] ?? 0),
                 'mennyiseg'    => $menny,
                 'me'           => $sor['me'],
                 'kedvezmeny'   => $kedv,
@@ -502,6 +507,18 @@ final class SDH_Muhely_Tetel
         }
 
         self::ujraszamol($munkalap_id);
+        self::keszlet_kovet($munkalap_id);
+    }
+
+    /**
+     * A munkalap terméktételeinek készletmozgása a terméktörzsben
+     * (SDH_Muhely_Termek): amit a lapra tettek, az lejön a készletről.
+     */
+    private static function keszlet_kovet(int $munkalap_id): void
+    {
+        if (class_exists('SDH_Muhely_Termek')) {
+            SDH_Muhely_Termek::munkalap_mozgasok($munkalap_id);
+        }
     }
 
     /**
