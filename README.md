@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.4
+- Eszközűrlap: a **feloldó minta visszakapta az eredeti, 180 px-es méretét**
+  (0.19.1 óta kicsinyítve volt); az alsó megjegyzés-dobozok visszaálltak 62 px-re.
+  Az egyenlő panelmagasság (nincs ugrálás) csak a felső három fülre vonatkozik.
+
 ### 0.19.3
 - Eszközűrlap: **fülváltáskor nem ugrál a popup** – a felső és alsó lapfülek
   panelei egy rácscellában vannak, így a popup magassága minden fülnél azonos
