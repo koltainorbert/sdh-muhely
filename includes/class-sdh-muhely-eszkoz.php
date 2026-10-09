@@ -890,7 +890,7 @@ final class SDH_Muhely_Eszkoz
             <label class="sdh-minta__szabad"
                    title="Pöttyönként kattintva rajzolsz: egy pötty többször is érinthető, és a köztes pötty kihagyható.">
                 <input type="checkbox" data-sdh-minta-szabad>
-                Szabad rajz (kattintással)
+                Szabad rajz
             </label>
 
             <span class="sdh-mezo__sugo">

@@ -2382,6 +2382,17 @@ a.sdh-kartya:focus-visible {
 }
 
 /* Feloldó minta: szabad rajz kapcsoló */
+.sdh-azon__minta {
+    position: relative;
+}
+
+/* A „Szabad rajz” kapcsoló a „Feloldó minta” címsorba kerül (jobbra), hogy ne nyújtsa a fület. */
+.sdh-azon__minta .sdh-minta__szabad {
+    position: absolute;
+    top: -1px;
+    right: 0;
+}
+
 .sdh-minta__szabad {
     display: inline-flex;
     align-items: center;
