@@ -57,6 +57,19 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.22.0
+- **Munkalap-popup széles és alacsony**: az űrlap ugyanazt a kompakt, lapfüles szerkezetet kapta,
+  mint az ügyfél és az eszköz (címke + mező egy sorban, két szimmetrikus oszlop; alul
+  „Hibasorok" és „Belső megjegyzés" lapfül). A régi, három egymás alatti dobozból álló űrlap
+  túl magas volt, ezért a képernyőhöz kicsinyítve keskeny sávként jelent meg. A Készült és a
+  Határidő a saját naptárat használja (nem a böngészőét); a hibasorok egy sorban, oszlopfejjel.
+- **Minden űrlap-popup méretezhető és teljes képernyőre tehető** (`app.js` `meretezhetoveTesz`,
+  a `vaz()` minden ablakára – új modulhoz nem kell semmi): ⬜ gomb a bezárás mellett, vagy dupla
+  kattintás a címen; húzható a négy szél és a négy sarok (a popup középen marad, a szemközti szél
+  együtt mozog). A méret űrlapfajtánként megmarad (`localStorage` `sdh-popup:<modul>`); dupla
+  kattintás egy szélen = alapméret. Megnövelt ablakban a többlethelyet az alsó lapfülsor kapja.
+  Görgetősáv így sincs: a magasság csak a tartalom fölé nőhet, és ha kell, a popup kicsinyít.
+
 ### 0.21.0
 - **Kezdőképernyő = munkalap-rács** (a MunkaLap 3 főablaka): az összes munkalap egy rácsban,
   a MunkaLap oszlopaival (Sorszám, Jelzés, Állapot, Felelős, Azonosító, Gyártó, Típus, Garancia,

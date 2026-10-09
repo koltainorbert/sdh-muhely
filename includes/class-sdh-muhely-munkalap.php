@@ -1349,16 +1349,12 @@ final class SDH_Muhely_Munkalap
         ?>
         <h2 class="sdh-modal__cim">
             <?php echo esc_html($uj ? 'Új munkalap' : 'Munkalap ' . self::szam_formaz($munkalap->munkalap_szam)); ?>
+            <?php if (!$uj) : ?>
+                <span class="sdh-modal__cim-megj">
+                    módosítva: <?php echo esc_html(self::datumido_megjelenit((string) $munkalap->modositva)); ?>
+                </span>
+            <?php endif; ?>
         </h2>
-        <p class="sdh-modal__alcim">
-            <?php
-            echo esc_html(
-                $uj
-                    ? 'A munkalapszám az első számozott állapotba lépéskor generálódik.'
-                    : 'Utoljára módosítva: ' . self::datumido_megjelenit((string) $munkalap->modositva)
-            );
-            ?>
-        </p>
 
         <form class="sdh-urlap" method="post"
               action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
@@ -1396,8 +1392,11 @@ final class SDH_Muhely_Munkalap
         $keszult  = $uj ? current_time('Y-m-d') : self::datum_ertek((string) $munkalap->keszult);
         $hatarido = $uj ? '' : self::datum_ertek((string) $munkalap->hatarido);
 
-        $hibak = $uj ? [] : self::hibasorok((int) $munkalap->id);
-        $hibak = $hibak === [] ? [null] : $hibak;
+        $hibak    = $uj ? [] : self::hibasorok((int) $munkalap->id);
+        $hiba_db  = count($hibak);
+        $hibak    = $hibak === [] ? [null] : $hibak;
+
+        $megjegyzes = $uj ? '' : (string) $munkalap->megjegyzes;
 
         $felelosok = self::felelosok();
 
@@ -1418,153 +1417,208 @@ final class SDH_Muhely_Munkalap
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php wp_nonce_field('sdh_muhely_munkalap_mentes', 'sdh_nonce'); ?>
 
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Alapadatok</h2>
+        <?php
+        // Ugyanaz a kompakt, széles, lapfüles szerkezet, mint az ügyfél- és az
+        // eszközűrlapon: címke + mező egy sorban, két szimmetrikus oszlopban.
+        // Így a popup alacsony marad, és nem kell a képernyőhöz kicsinyíteni.
+        ?>
+        <div class="sdh-ugyfelurlap sdh-munkalapurlap">
+            <div class="sdh-fulek">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_munkalap"
+                       id="ful_m_alap" checked>
 
-            <div class="sdh-mezok">
-                <div class="sdh-mezo">
-                    <label for="allapot">Állapot</label>
-                    <div class="sdh-allapot-valaszto">
-                        <span class="sdh-allapot-pont sdh-allapot--<?php
-                            echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
-                        ?>" data-sdh-allapot-pont></span>
-                        <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
-                            <?php foreach ($allapotok as $kulcs => $a) : ?>
-                                <option value="<?php echo esc_attr((string) $kulcs); ?>"
-                                        data-szin="<?php echo esc_attr($a['szin']); ?>"
-                                    <?php selected($allapot, (string) $kulcs); ?>>
-                                    <?php echo esc_html($a['nev']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                            <?php if (!isset($allapotok[$allapot])) : ?>
-                                <option value="<?php echo esc_attr($allapot); ?>"
-                                        data-szin="szurke" selected>
-                                    <?php echo esc_html($allapot); ?> (törölt állapot)
-                                </option>
-                            <?php endif; ?>
-                        </select>
+                <div class="sdh-fulek__sav">
+                    <label for="ful_m_alap">Munkalap</label>
+                </div>
+
+                <div class="sdh-fulek__panel sdh-fulek__panel--1">
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
+                            <span class="sdh-ig__cimke">Ügyfél <span class="sdh-kotelezo">*</span></span>
+                            <div class="sdh-mezo__sor">
+                                <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
+                                        data-sdh-uj-ugyfel
+                                        title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                            </div>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="eszkoz_id">Eszköz <span class="sdh-kotelezo">*</span></label>
+                            <div class="sdh-mezo__sor">
+                                <select name="eszkoz_id" id="eszkoz_id" data-sdh-eszkoz-valaszto>
+                                    <option value="0">
+                                        <?php echo esc_html($ugyfel_id > 0 ? '— válassz eszközt —' : '— előbb válassz ügyfelet —'); ?>
+                                    </option>
+                                    <?php foreach ($eszkozok as $id => $felirat) : ?>
+                                        <option value="<?php echo (int) $id; ?>" <?php selected($eszkoz_id, $id); ?>>
+                                            <?php echo esc_html($felirat); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
+                                        data-sdh-uj-eszkoz
+                                        title="Új eszköz felvétele" aria-label="Új eszköz felvétele">+</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="sdh-mezo">
-                    <label for="nev">Név</label>
-                    <input type="text" name="nev" id="nev" maxlength="190"
-                           value="<?php echo esc_attr($uj ? '' : (string) $munkalap->nev); ?>">
-                    <span class="sdh-mezo__sugo">Rövid tárgy, pl. „kijelzőcsere”. Nem kötelező.</span>
-                </div>
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
+                            <label for="allapot">Állapot</label>
+                            <div class="sdh-allapot-valaszto">
+                                <span class="sdh-allapot-pont sdh-allapot--<?php
+                                    echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
+                                ?>" data-sdh-allapot-pont></span>
+                                <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
+                                    <?php foreach ($allapotok as $kulcs => $a) : ?>
+                                        <option value="<?php echo esc_attr((string) $kulcs); ?>"
+                                                data-szin="<?php echo esc_attr($a['szin']); ?>"
+                                            <?php selected($allapot, (string) $kulcs); ?>>
+                                            <?php echo esc_html($a['nev']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                    <?php if (!isset($allapotok[$allapot])) : ?>
+                                        <option value="<?php echo esc_attr($allapot); ?>"
+                                                data-szin="szurke" selected>
+                                            <?php echo esc_html($allapot); ?> (törölt állapot)
+                                        </option>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label>Ügyfél <span class="sdh-kotelezo">*</span></label>
-                    <div class="sdh-mezo__sor">
-                        <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
-                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
-                                data-sdh-uj-ugyfel
-                                title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                        <div class="sdh-ig">
+                            <label for="felelos">Felelős</label>
+                            <select name="felelos" id="felelos">
+                                <option value="0">— nincs —</option>
+                                <?php foreach ($felelosok as $id => $nev) : ?>
+                                    <option value="<?php echo (int) $id; ?>" <?php selected($felelos, $id); ?>>
+                                        <?php echo esc_html($nev); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
-                    <span class="sdh-mezo__sugo">
-                        Gépelj legalább két betűt, és válassz a listából. Nincs még a rendszerben? A + gombbal felviheted.
-                    </span>
-                </div>
 
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label for="eszkoz_id">Eszköz <span class="sdh-kotelezo">*</span></label>
-                    <div class="sdh-mezo__sor">
-                        <select name="eszkoz_id" id="eszkoz_id" data-sdh-eszkoz-valaszto>
-                            <option value="0">
-                                <?php echo esc_html($ugyfel_id > 0 ? '— válassz eszközt —' : '— előbb válassz ügyfelet —'); ?>
-                            </option>
-                            <?php foreach ($eszkozok as $id => $felirat) : ?>
-                                <option value="<?php echo (int) $id; ?>" <?php selected($eszkoz_id, $id); ?>>
-                                    <?php echo esc_html($felirat); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
-                                data-sdh-uj-eszkoz
-                                title="Új eszköz felvétele" aria-label="Új eszköz felvétele">+</button>
+                    <div class="sdh-sor sdh-sor--ketto">
+                        <div class="sdh-ig">
+                            <label for="keszult">Készült</label>
+                            <?php self::datum_mezo('keszult', $keszult); ?>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="hatarido">Határidő</label>
+                            <?php self::datum_mezo('hatarido', $hatarido); ?>
+                        </div>
                     </div>
-                    <span class="sdh-mezo__sugo">
-                        Az ügyfél felvitt eszközei közül. Nincs még a rendszerben? A + gombbal felviheted.
-                    </span>
+
+                    <div class="sdh-sor">
+                        <div class="sdh-ig">
+                            <label for="nev">Név</label>
+                            <input type="text" name="nev" id="nev" maxlength="190"
+                                   placeholder="Rövid tárgy, pl. „kijelzőcsere” – nem kötelező"
+                                   value="<?php echo esc_attr($uj ? '' : (string) $munkalap->nev); ?>">
+                        </div>
+                    </div>
+
+                    <?php if ($uj) : ?>
+                        <span class="sdh-mezo__sugo">
+                            A munkalapszám az első számozott állapotba lépéskor generálódik; ahhoz ügyfél és eszköz kell.
+                        </span>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="sdh-fulek sdh-fulek--also">
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_also_m"
+                       id="ful_m_hibak" checked>
+                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_also_m"
+                       id="ful_m_megjegyzes">
+
+                <div class="sdh-fulek__sav">
+                    <label for="ful_m_hibak">Hibasorok<?php
+                        echo $hiba_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $hiba_db . '</span>' : '';
+                    ?></label>
+                    <label for="ful_m_megjegyzes">Belső megjegyzés<?php
+                        echo trim($megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
+                    ?></label>
                 </div>
 
-                <div class="sdh-mezo">
-                    <label for="felelos">Felelős</label>
-                    <select name="felelos" id="felelos">
-                        <option value="0">— nincs —</option>
-                        <?php foreach ($felelosok as $id => $nev) : ?>
-                            <option value="<?php echo (int) $id; ?>" <?php selected($felelos, $id); ?>>
-                                <?php echo esc_html($nev); ?>
-                            </option>
+                <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-hibak>
+                    <div class="sdh-hibafej" aria-hidden="true">
+                        <span>Hiba</span>
+                        <span>Állapot</span>
+                        <span>Javítás / megjegyzés</span>
+                        <span></span>
+                    </div>
+
+                    <div class="sdh-hibasorok" data-sdh-hibasorok
+                         data-kovetkezo="<?php echo (int) count($hibak); ?>">
+                        <?php foreach ($hibak as $i => $hiba) : ?>
+                            <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok); ?>
                         <?php endforeach; ?>
-                    </select>
+                    </div>
+
+                    <template data-sdh-hibasor-sablon>
+                        <?php self::hibasor_sor('__I__', null, $hiba_allapotok); ?>
+                    </template>
+
+                    <div class="sdh-hibalab">
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-hibasor-uj>
+                            + Hibasor
+                        </button>
+                        <span class="sdh-mezo__sugo">
+                            Minden hibának saját állapota van. Az üresen hagyott sor mentéskor eldobódik.
+                        </span>
+                    </div>
                 </div>
 
-                <div class="sdh-mezo">
-                    <label for="keszult">Készült</label>
-                    <input type="date" name="keszult" id="keszult"
-                           value="<?php echo esc_attr($keszult); ?>">
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="hatarido">Határidő</label>
-                    <input type="date" name="hatarido" id="hatarido"
-                           value="<?php echo esc_attr($hatarido); ?>">
+                <div class="sdh-fulek__panel sdh-fulek__panel--2">
+                    <textarea name="megjegyzes" id="megjegyzes" aria-label="Belső megjegyzés"
+                              placeholder="Csak a CRM-ben látszik."><?php
+                        echo esc_textarea($megjegyzes);
+                    ?></textarea>
+                    <span class="sdh-zar">
+                        Belső: az ügyfél nem látja, nyomtatványra nem kerül ki.
+                    </span>
                 </div>
             </div>
-        </div>
 
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Hibasorok</h2>
+            <div class="sdh-urlap__lablec">
+                <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
+                    <?php echo $uj ? 'Munkalap létrehozása' : 'Mentés'; ?>
+                </button>
 
-            <p class="sdh-sugo">
-                Minden hibának saját állapota van – az egyik lehet már kész, a másik alkatrészre vár.
-                Az üresen hagyott sor mentéskor eldobódik.
-            </p>
-
-            <div class="sdh-hibasorok" data-sdh-hibasorok
-                 data-kovetkezo="<?php echo (int) count($hibak); ?>">
-                <?php foreach ($hibak as $i => $hiba) : ?>
-                    <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok); ?>
-                <?php endforeach; ?>
+                <?php if ($modal) : ?>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
+                <?php else : ?>
+                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
+                <?php endif; ?>
             </div>
-
-            <template data-sdh-hibasor-sablon>
-                <?php self::hibasor_sor('__I__', null, $hiba_allapotok); ?>
-            </template>
-
-            <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-hibasor-uj>
-                + Hibasor
-            </button>
-        </div>
-
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Megjegyzés</h2>
-
-            <div class="sdh-mezo sdh-mezo--szeles">
-                <label for="megjegyzes">Belső megjegyzés</label>
-                <textarea name="megjegyzes" id="megjegyzes"><?php
-                    echo esc_textarea($uj ? '' : (string) $munkalap->megjegyzes);
-                ?></textarea>
-            </div>
-        </div>
-
-        <div class="sdh-urlap__lablec">
-            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
-                <?php echo $uj ? 'Munkalap létrehozása' : 'Mentés'; ?>
-            </button>
-
-            <?php if ($modal) : ?>
-                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
-            <?php else : ?>
-                <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
-            <?php endif; ?>
         </div>
         <?php
     }
 
     /**
-     * Egy hibasor az űrlapban.
+     * Dátummező saját naptárral (app.js: data-sdh-pop="datum") – ugyanaz,
+     * mint az eszközűrlapon; a böngésző natív dátumválasztója helyett.
+     * Az érték ISO alakú (éééé-hh-nn) vagy üres.
+     */
+    private static function datum_mezo(string $nev, string $ertek): void
+    {
+        ?>
+        <input type="text" name="<?php echo esc_attr($nev); ?>" id="<?php echo esc_attr($nev); ?>"
+               class="sdh-pop sdh-pop--datum" readonly autocomplete="off"
+               data-sdh-pop="datum" data-sdh-pop-adat="[]"
+               placeholder="éééé-hh-nn"
+               value="<?php echo esc_attr($ertek); ?>">
+        <?php
+    }
+
+    /**
+     * Egy hibasor az űrlapban: hiba, állapot, javítás egy sorban. A mezők
+     * neve az oszlopfejben áll (.sdh-hibafej), a sorokban csak a mezők.
      *
      * Ugyanez a függvény rajzolja a meglévő sorokat és a JavaScript által
      * klónozott sablont (az indexe ott `__I__`), hogy a kettő ne csússzon szét.
@@ -1581,38 +1635,34 @@ final class SDH_Muhely_Munkalap
             <input type="hidden" name="<?php echo esc_attr($nev_elotag); ?>[id]"
                    value="<?php echo (int) ($hiba->id ?? 0); ?>">
 
-            <div class="sdh-mezo sdh-hibasor__leiras">
-                <label>Hiba</label>
-                <input type="text" name="<?php echo esc_attr($nev_elotag); ?>[leiras]" maxlength="255"
-                       placeholder="Pl. törött kijelző"
-                       value="<?php echo esc_attr($hiba !== null ? (string) $hiba->leiras : ''); ?>">
-            </div>
+            <input type="text" name="<?php echo esc_attr($nev_elotag); ?>[leiras]" maxlength="255"
+                   class="sdh-hibasor__leiras" aria-label="Hiba" placeholder="Pl. törött kijelző"
+                   value="<?php echo esc_attr($hiba !== null ? (string) $hiba->leiras : ''); ?>">
 
-            <div class="sdh-mezo sdh-hibasor__allapot">
-                <label>Állapot</label>
-                <select name="<?php echo esc_attr($nev_elotag); ?>[allapot]">
-                    <?php foreach ($allapotok as $kulcs => $a) : ?>
-                        <option value="<?php echo esc_attr((string) $kulcs); ?>"
-                            <?php selected($allapot, (string) $kulcs); ?>>
-                            <?php echo esc_html($a['nev']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                    <?php if (!isset($allapotok[$allapot])) : ?>
-                        <option value="<?php echo esc_attr($allapot); ?>" selected>
-                            <?php echo esc_html($allapot); ?> (törölt állapot)
-                        </option>
-                    <?php endif; ?>
-                </select>
-            </div>
+            <select name="<?php echo esc_attr($nev_elotag); ?>[allapot]" class="sdh-hibasor__allapot"
+                    aria-label="A hiba állapota">
+                <?php foreach ($allapotok as $kulcs => $a) : ?>
+                    <option value="<?php echo esc_attr((string) $kulcs); ?>"
+                            data-szin="<?php echo esc_attr($a['szin']); ?>"
+                        <?php selected($allapot, (string) $kulcs); ?>>
+                        <?php echo esc_html($a['nev']); ?>
+                    </option>
+                <?php endforeach; ?>
+                <?php if (!isset($allapotok[$allapot])) : ?>
+                    <option value="<?php echo esc_attr($allapot); ?>" selected>
+                        <?php echo esc_html($allapot); ?> (törölt állapot)
+                    </option>
+                <?php endif; ?>
+            </select>
 
-            <div class="sdh-mezo sdh-hibasor__javitas">
-                <label>Javítás / megjegyzés</label>
-                <input type="text" name="<?php echo esc_attr($nev_elotag); ?>[javitas]"
-                       value="<?php echo esc_attr($hiba !== null ? (string) $hiba->javitas : ''); ?>">
-            </div>
+            <input type="text" name="<?php echo esc_attr($nev_elotag); ?>[javitas]"
+                   class="sdh-hibasor__javitas" aria-label="Javítás / megjegyzés"
+                   placeholder="Mit csináltunk vele"
+                   value="<?php echo esc_attr($hiba !== null ? (string) $hiba->javitas : ''); ?>">
 
             <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-hibasor__torol"
-                    data-sdh-hibasor-torol aria-label="Hibasor eltávolítása">&times;</button>
+                    data-sdh-hibasor-torol title="Hibasor eltávolítása"
+                    aria-label="Hibasor eltávolítása">&times;</button>
         </div>
         <?php
     }

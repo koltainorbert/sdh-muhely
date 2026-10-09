@@ -1330,6 +1330,158 @@ a.sdh-kartya:focus-visible {
     color: var(--sdh-szoveg);
 }
 
+/* ------------------------------------------------------------------ */
+/* Popup: teljes képernyő gomb és méretező fogók (app.js:               */
+/* meretezhetoveTesz). Minden űrlap-popup megkapja, modultól függetlenül. */
+/* ------------------------------------------------------------------ */
+
+.sdh-modal__teljes {
+    position: absolute;
+    top: .7rem;
+    right: calc(.8rem + 34px);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sdh-halvany);
+    cursor: pointer;
+}
+
+.sdh-modal__teljes:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-modal__teljes svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-modal__teljes-ki,
+.sdh-modal--teljes .sdh-modal__teljes-be {
+    display: none;
+}
+
+.sdh-modal--teljes .sdh-modal__teljes-ki {
+    display: block;
+}
+
+/* A fogók a doboz szélén BELÜL ülnek (a belső ráhagyásban), így nem lógnak
+   ki belőle, és nem növelik a görgethető területet. */
+.sdh-modal__fogo {
+    position: absolute;
+    z-index: 4;
+}
+
+.sdh-modal__fogo--b,
+.sdh-modal__fogo--j {
+    top: 16px;
+    bottom: 16px;
+    width: 8px;
+    cursor: ew-resize;
+}
+
+.sdh-modal__fogo--b { left: 0; }
+.sdh-modal__fogo--j { right: 0; }
+
+.sdh-modal__fogo--f,
+.sdh-modal__fogo--a {
+    left: 16px;
+    right: 16px;
+    height: 8px;
+    cursor: ns-resize;
+}
+
+.sdh-modal__fogo--f { top: 0; }
+.sdh-modal__fogo--a { bottom: 0; }
+
+.sdh-modal__fogo--bf,
+.sdh-modal__fogo--jf,
+.sdh-modal__fogo--ba,
+.sdh-modal__fogo--ja {
+    width: 16px;
+    height: 16px;
+}
+
+.sdh-modal__fogo--bf { top: 0; left: 0; cursor: nwse-resize; }
+.sdh-modal__fogo--jf { top: 0; right: 0; cursor: nesw-resize; }
+.sdh-modal__fogo--ba { bottom: 0; left: 0; cursor: nesw-resize; }
+.sdh-modal__fogo--ja { bottom: 0; right: 0; cursor: nwse-resize; }
+
+/* A jobb alsó sarok látható jele: innen húzva méretezhető az ablak. */
+.sdh-modal__fogo--ja::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--sdh-keret-eros);
+    border-bottom: 2px solid var(--sdh-keret-eros);
+    border-radius: 0 0 3px 0;
+}
+
+.sdh-modal__fogo--ja:hover::after {
+    border-color: var(--sdh-accent);
+}
+
+/* Megnövelt (vagy teljes képernyős) ablak: a tartalom kitölti a magasságot,
+   a többlet az alsó lapfülsoré (megjegyzés, hibasorok, fájlok). */
+.sdh-modal--meretezett .sdh-modal__doboz {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.sdh-modal--meretezett .sdh-modal__torzs,
+.sdh-modal--meretezett .sdh-modal__torzs > form,
+.sdh-modal--meretezett .sdh-modal__torzs > form > .sdh-ugyfelurlap {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.sdh-modal--meretezett .sdh-modal__torzs > form > .sdh-ugyfelurlap > .sdh-fulek--also {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.sdh-modal--meretezett .sdh-fulek--also > .sdh-fulek__sav {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.sdh-modal--meretezett .sdh-fulek--also > .sdh-fulek__panel {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+.sdh-modal--meretezett .sdh-fulek--also > .sdh-fulek__panel > textarea {
+    flex: 1 1 auto;
+    height: auto;
+    resize: none;
+}
+
+.sdh-modal__cim-megj {
+    margin-left: .6rem;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--sdh-halvany);
+}
+
 .sdh-modal__toltes {
     padding: 3rem 1rem;
     text-align: center;
@@ -1338,7 +1490,7 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-modal__cim {
-    margin: 0 2rem .2rem 0;
+    margin: 0 4.6rem .2rem 0;
     font-size: 19px;
     font-weight: 600;
     letter-spacing: -.015em;
@@ -2368,6 +2520,127 @@ a.sdh-kartya:focus-visible {
 .sdh-eszkozurlap .sdh-fulek--also textarea {
     min-height: 62px;
     height: 62px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Munkalapűrlap – ugyanaz a kompakt, széles, lapfüles szerkezet        */
+/* ------------------------------------------------------------------ */
+
+.sdh-munkalapurlap select {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 2rem 0 .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    line-height: 32px;
+    box-shadow: none;
+}
+
+.sdh-munkalapurlap select:focus {
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+    border-color: var(--sdh-accent);
+}
+
+.sdh-munkalapurlap .sdh-mezo__sor {
+    align-items: center;
+    min-width: 0;
+}
+
+.sdh-munkalapurlap .sdh-allapot-valaszto {
+    min-width: 0;
+}
+
+/* A munkalap első lapfüle a popup megnyitásakor mutatott cím alatt áll:
+   kicsit több hely kell a címnek. */
+.sdh-modal__cim + form > .sdh-munkalapurlap {
+    margin-top: .7rem;
+}
+
+/* Az alsó lapfülek panelei egy cellában állnak, a magasabb méretével:
+   fülváltáskor a popup nem ugrál, és a megjegyzés kitölti a helyét. */
+.sdh-munkalapurlap .sdh-fulek--also {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__sav {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__panel {
+    display: flex;
+    grid-row: 2;
+    grid-column: 1;
+    box-sizing: border-box;
+    min-height: 152px;
+    visibility: hidden;
+}
+
+.sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__ful--1:checked ~ .sdh-fulek__panel--1,
+.sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2 {
+    visibility: visible;
+}
+
+.sdh-munkalapurlap .sdh-fulek--also textarea {
+    flex: 1 1 auto;
+    min-height: 62px;
+    resize: none;
+}
+
+/* Hibasorok: oszlopfej + soronként hiba, állapot, javítás, törlés. */
+.sdh-hibafej,
+.sdh-munkalapurlap .sdh-hibasor {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) 11rem minmax(0, 1.4fr) 34px;
+    gap: .5rem;
+    align-items: center;
+}
+
+.sdh-hibafej {
+    padding: 0 .1rem;
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-munkalapurlap .sdh-hibasorok {
+    gap: .4rem;
+    margin-bottom: 0;
+}
+
+.sdh-munkalapurlap .sdh-hibasor {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.sdh-hibalab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .7rem;
+    margin-top: auto;
+    padding-top: .2rem;
+}
+
+@media (max-width: 760px) {
+    .sdh-hibafej {
+        display: none;
+    }
+
+    .sdh-munkalapurlap .sdh-hibasor {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 /* Dátummező: naptár-ikon a lenyíló nyíl helyett. */

@@ -41,8 +41,21 @@
         dialog.className = 'sdh-modal' + (n > 0 ? ' sdh-modal--ralepo' : '');
         dialog.innerHTML =
             '<div class="sdh-modal__doboz">' +
+            '  <button type="button" class="sdh-modal__teljes" aria-label="Teljes képernyő" title="Teljes képernyő">' +
+            '    <svg class="sdh-modal__teljes-be" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"/></svg>' +
+            '    <svg class="sdh-modal__teljes-ki" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="5" width="8.5" height="8.5" rx="1.4"/><path d="M5.2 5V3.9c0-.8.6-1.4 1.4-1.4h5.5c.8 0 1.4.6 1.4 1.4v5.5c0 .8-.6 1.4-1.4 1.4H11"/></svg>' +
+            '  </button>' +
             '  <button type="button" class="sdh-modal__bezar" aria-label="Bezárás">&times;</button>' +
             '  <div class="sdh-modal__torzs"></div>' +
+            // Méretező fogók a négy szélen és a négy sarkon (data-x / data-y: melyik irányba húz).
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--b" data-x="-1" data-y="0"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--j" data-x="1" data-y="0"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--f" data-x="0" data-y="-1"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--a" data-x="0" data-y="1"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--bf" data-x="-1" data-y="-1"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--jf" data-x="1" data-y="-1"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--ba" data-x="-1" data-y="1"></span>' +
+            '  <span class="sdh-modal__fogo sdh-modal__fogo--ja" data-x="1" data-y="1"></span>' +
             '</div>';
 
         document.body.appendChild(dialog);
@@ -64,6 +77,8 @@
                 bezar(n);
             }
         });
+
+        meretezhetoveTesz(dialog);
 
         return szint;
     }
@@ -129,14 +144,217 @@
 
         dialog.style.zoom = '';
         dialog.classList.add('sdh-modal--illeszt');
+        meretBeallit(dialog, 1);
 
         var termeszetes = dialog.getBoundingClientRect().height;
-        var szabad = window.innerHeight - 24;
+        var szabad = window.innerHeight - MERET_SZEL;
 
         // A class marad: a popupnak nincs max-magassága és görgetése, csak zoomja.
-        if (termeszetes > szabad && termeszetes > 0) {
-            dialog.style.zoom = String(Math.max(ILLESZT_MIN, szabad / termeszetes));
+        if (termeszetes > szabad + 0.5 && termeszetes > 0) {
+            var zoom = Math.max(ILLESZT_MIN, szabad / termeszetes);
+
+            // A kért (vagy teljes képernyős) méret a kicsinyítés UTÁNI méret:
+            // a popupot annyival szélesebbre vesszük, amennyivel a zoom összehúzza.
+            if (dialog.sdhMeret) {
+                meretBeallit(dialog, zoom);
+                termeszetes = dialog.getBoundingClientRect().height;
+                zoom = Math.max(ILLESZT_MIN, Math.min(zoom, szabad / termeszetes));
+            }
+
+            dialog.style.zoom = String(zoom);
         }
+    }
+
+    /* ---------------------------------------------------------------- */
+    /* Popup méretezése és teljes képernyő                              */
+    /* ---------------------------------------------------------------- */
+    /*
+     * Minden űrlap-popup (a vaz() által létrehozott ablak) húzással
+     * méretezhető és teljes képernyőre tehető – új modulhoz nem kell semmi.
+     * A méret űrlapfajtánként (modulonként) megmarad a böngészőben.
+     *
+     * A popup középen áll, ezért a méretezés a közepe körül szimmetrikus:
+     * a megfogott szél követi az egeret, a szemközti ugyanannyit mozdul.
+     * A magasság csak nőhet a tartalom fölé – görgetősáv így sincs.
+     */
+    var MERET_SZEL = 24;
+    var MERET_MIN_SZELES = 420;
+
+    function meretKulcs(modul) {
+        return 'sdh-popup:' + (modul || 'altalanos');
+    }
+
+    function meretOlvas(modul) {
+        try {
+            var m = JSON.parse(window.localStorage.getItem(meretKulcs(modul)) || 'null');
+
+            if (m && typeof m === 'object') {
+                return {
+                    w: Math.max(0, parseInt(m.w, 10) || 0),
+                    h: Math.max(0, parseInt(m.h, 10) || 0),
+                    teljes: !!m.teljes
+                };
+            }
+        } catch (e) { /* nincs tárhely vagy sérült érték: alapméret */ }
+
+        return null;
+    }
+
+    function meretIr(modul, meret) {
+        try {
+            if (meret && (meret.w || meret.h || meret.teljes)) {
+                window.localStorage.setItem(meretKulcs(modul), JSON.stringify(meret));
+            } else {
+                window.localStorage.removeItem(meretKulcs(modul));
+            }
+        } catch (e) { /* nincs tárhely: a méret erre a megnyitásra szól */ }
+    }
+
+    /**
+     * A popupra írja a kért méretet. A `zoom` az a kicsinyítés, amit az
+     * illesztPopup utána alkalmazni fog: a méretet azzal előre visszaosztjuk.
+     * Csak a méretezhető popupokhoz nyúl (a választó popupok mérete a CSS-é).
+     */
+    function meretBeallit(dialog, zoom) {
+        var gomb = dialog.querySelector('.sdh-modal__teljes');
+
+        if (!gomb) {
+            return;
+        }
+
+        var m = dialog.sdhMeret;
+        var doboz = dialog.querySelector('.sdh-modal__doboz');
+        var teljes = !!(m && m.teljes);
+        var maxSz = window.innerWidth - MERET_SZEL;
+        var maxM = window.innerHeight - MERET_SZEL;
+        var w = 0;
+        var h = 0;
+
+        if (teljes) {
+            w = maxSz;
+            h = maxM;
+        } else if (m) {
+            w = m.w ? Math.min(maxSz, Math.max(MERET_MIN_SZELES, m.w)) : 0;
+            h = m.h ? Math.min(maxM, m.h) : 0;
+        }
+
+        dialog.style.width = w ? (w / zoom) + 'px' : '';
+
+        if (doboz) {
+            doboz.style.minHeight = h ? (h / zoom) + 'px' : '';
+        }
+
+        dialog.classList.toggle('sdh-modal--meretezett', h > 0);
+        dialog.classList.toggle('sdh-modal--teljes', teljes);
+
+        var felirat = teljes ? 'Vissza ablakméretre' : 'Teljes képernyő';
+
+        gomb.setAttribute('aria-label', felirat);
+        gomb.setAttribute('title', felirat);
+        gomb.setAttribute('aria-pressed', teljes ? 'true' : 'false');
+    }
+
+    function teljesValt(dialog) {
+        var m = dialog.sdhMeret || { w: 0, h: 0, teljes: false };
+
+        m = { w: m.w || 0, h: m.h || 0, teljes: !m.teljes };
+
+        dialog.sdhMeret = (m.w || m.h || m.teljes) ? m : null;
+        meretIr(dialog.sdhModul, dialog.sdhMeret);
+        illesztPopup(dialog);
+    }
+
+    function meretezhetoveTesz(dialog) {
+        dialog.querySelector('.sdh-modal__teljes').addEventListener('click', function () {
+            teljesValt(dialog);
+        });
+
+        dialog.addEventListener('dblclick', function (esemeny) {
+            // Dupla kattintás a címsoron: teljes képernyő ki/be – ahogy egy ablaknál.
+            if (esemeny.target.closest('.sdh-modal__cim')) {
+                teljesValt(dialog);
+
+                return;
+            }
+
+            // Dupla kattintás egy fogón: vissza az alapméretre.
+            if (esemeny.target.closest('.sdh-modal__fogo')) {
+                dialog.sdhMeret = null;
+                meretIr(dialog.sdhModul, null);
+                illesztPopup(dialog);
+            }
+        });
+
+        dialog.addEventListener('mousedown', function (esemeny) {
+            var fogo = esemeny.target.closest('.sdh-modal__fogo');
+
+            if (!fogo || esemeny.button !== 0) {
+                return;
+            }
+
+            esemeny.preventDefault();
+
+            var ix = parseInt(fogo.getAttribute('data-x'), 10) || 0;
+            var iy = parseInt(fogo.getAttribute('data-y'), 10) || 0;
+            var r = dialog.getBoundingClientRect();
+            var kozepX = r.left + r.width / 2;
+            var kozepY = r.top + r.height / 2;
+            // A fogót nem pontosan a szélén fogjuk meg: ennyivel beljebb. E nélkül
+            // az ablak az első mozdulatra ugrana egyet.
+            var eltX = r.width / 2 - Math.abs(esemeny.clientX - kozepX);
+            var eltY = r.height / 2 - Math.abs(esemeny.clientY - kozepY);
+            var elozo = dialog.sdhMeret || {};
+            // Teljes képernyőről indulva a mostani látható méret a kiindulás.
+            var m = {
+                w: elozo.teljes ? Math.round(r.width) : (elozo.w || 0),
+                h: elozo.teljes ? Math.round(r.height) : (elozo.h || 0),
+                teljes: false
+            };
+            var kep = 0;
+            var mozdult = false;
+
+            document.body.style.cursor = window.getComputedStyle(fogo).cursor;
+
+            function mozog(e) {
+                mozdult = true;
+
+                if (ix) {
+                    m.w = Math.round(Math.min(
+                        window.innerWidth - MERET_SZEL,
+                        Math.max(MERET_MIN_SZELES, 2 * (Math.abs(e.clientX - kozepX) + eltX))
+                    ));
+                }
+
+                if (iy) {
+                    m.h = Math.round(Math.min(
+                        window.innerHeight - MERET_SZEL,
+                        Math.max(120, 2 * (Math.abs(e.clientY - kozepY) + eltY))
+                    ));
+                }
+
+                dialog.sdhMeret = m;
+
+                window.cancelAnimationFrame(kep);
+                kep = window.requestAnimationFrame(function () {
+                    illesztPopup(dialog);
+                });
+            }
+
+            function vege() {
+                document.removeEventListener('mousemove', mozog);
+                document.removeEventListener('mouseup', vege);
+                document.body.style.cursor = '';
+
+                if (mozdult) {
+                    window.cancelAnimationFrame(kep);
+                    meretIr(dialog.sdhModul, m);
+                    illesztPopup(dialog);
+                }
+            }
+
+            document.addEventListener('mousemove', mozog);
+            document.addEventListener('mouseup', vege);
+        });
     }
 
     function illesztMind() {
@@ -272,6 +490,10 @@
 
         var n = opciok.szint || 0;
         var szint = vaz(n);
+
+        // A popup az ehhez az űrlapfajtához legutóbb beállított méretben nyílik.
+        szint.dialog.sdhModul = modul;
+        szint.dialog.sdhMeret = meretOlvas(modul);
 
         toltesKozben(szint);
 
@@ -2373,7 +2595,7 @@
 
     /** Új hibasor: a <template> sablont klónozza a következő indexszel. */
     function hibasorUj(gomb) {
-        var doboz = gomb.closest('.sdh-doboz');
+        var doboz = gomb.closest('[data-sdh-hibak], .sdh-doboz');
         var lista = doboz ? doboz.querySelector('[data-sdh-hibasorok]') : null;
         var sablon = doboz ? doboz.querySelector('[data-sdh-hibasor-sablon]') : null;
 
