@@ -57,6 +57,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.20.1
+- **Saját legördülő menü** a böngésző natív listája helyett (minden egysoros `select`,
+  popupban is): lekerekített panel, színpöttyös állapotok, pipa a kiválasztotton,
+  billentyűzet (↑ ↓ Enter Esc). Az érték és a `change` esemény a selecten marad.
+  Kikapcsolás egy selecten: `data-sdh-nativ`. A popup CSS zoomját követi.
+
 ### 0.20.0
 - **Munkalapok fejléc**: egységes, lekerekített keresősáv (mező, választó, gombok
   azonos 36 px magas, pill forma) – az Ügyfelek és Eszközök listán is.

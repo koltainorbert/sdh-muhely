@@ -2542,6 +2542,275 @@
     });
 
     /* ---------------------------------------------------------------- */
+    /* Saját legördülő menü (a böngésző natív listája helyett)          */
+    /* ---------------------------------------------------------------- */
+    /*
+     * Minden egysoros <select>-et lefed, felülről delegálva, ezért az
+     * AJAX-szal betöltött popupokra is érvényes. Az érték és a change
+     * esemény a selecten marad, így a meglévő kód nem változik.
+     * Kikapcsolás egy selecten: data-sdh-nativ.
+     */
+    var legordulo = null;
+
+    function legorduloZar() {
+        if (!legordulo) {
+            return;
+        }
+
+        var l = legordulo;
+
+        legordulo = null;
+        document.removeEventListener('mousedown', l.kinti, true);
+        document.removeEventListener('keydown', l.billentyu, true);
+        window.removeEventListener('resize', l.zar, true);
+        window.removeEventListener('scroll', l.gorget, true);
+
+        try {
+            if (l.menu.hidePopover) {
+                l.menu.hidePopover();
+            }
+        } catch (e) {
+            /* nem volt nyitva */
+        }
+
+        l.menu.remove();
+        l.select.classList.remove('sdh-legordulo--nyitva');
+    }
+
+    function legorduloKepes(select) {
+        return select
+            && select.tagName === 'SELECT'
+            && !select.multiple
+            && !(select.size > 1)
+            && !select.hasAttribute('data-sdh-nativ')
+            && !!select.closest('.sdh-app, .sdh-wrap, .sdh-modal');
+    }
+
+    function legorduloNyit(select) {
+        legorduloZar();
+
+        if (select.disabled || !select.options.length) {
+            return;
+        }
+
+        var tarolo = select.closest('dialog[open]') || document.body;
+        var menu = document.createElement('div');
+
+        menu.className = 'sdh-menu';
+        menu.setAttribute('role', 'listbox');
+
+        if (menu.showPopover) {
+            menu.setAttribute('popover', 'manual');
+        }
+
+        var elemek = [];
+
+        function elemKesz(opcio) {
+            var gomb = document.createElement('button');
+
+            gomb.type = 'button';
+            gomb.className = 'sdh-menu__elem';
+            gomb.setAttribute('role', 'option');
+            gomb.disabled = opcio.disabled;
+            gomb.sdhOpcio = opcio;
+
+            if (opcio.dataset.szin) {
+                var pont = document.createElement('span');
+
+                pont.className = 'sdh-allapot-pont sdh-allapot--' + opcio.dataset.szin;
+                gomb.appendChild(pont);
+            }
+
+            var szoveg = document.createElement('span');
+
+            szoveg.className = 'sdh-menu__szoveg';
+            szoveg.textContent = opcio.textContent.trim() || ' ';
+            gomb.appendChild(szoveg);
+
+            if (opcio.selected) {
+                gomb.classList.add('sdh-menu__elem--aktiv');
+                gomb.setAttribute('aria-selected', 'true');
+            }
+
+            menu.appendChild(gomb);
+            elemek.push(gomb);
+        }
+
+        Array.prototype.forEach.call(select.children, function (gyerek) {
+            if (gyerek.tagName === 'OPTGROUP') {
+                var cim = document.createElement('div');
+
+                cim.className = 'sdh-menu__csoport';
+                cim.textContent = gyerek.label;
+                menu.appendChild(cim);
+                Array.prototype.forEach.call(gyerek.children, elemKesz);
+            } else if (gyerek.tagName === 'OPTION') {
+                elemKesz(gyerek);
+            }
+        });
+
+        tarolo.appendChild(menu);
+
+        if (menu.showPopover) {
+            menu.showPopover();
+        }
+
+        /* A popup CSS zoomja a menüre is hat: a pozíciót vissza kell osztani. */
+        var zoom = parseFloat(window.getComputedStyle(menu).zoom) || 1;
+        var r = select.getBoundingClientRect();
+        var meret = window.innerHeight;
+        var szelesseg = Math.max(r.width, 180) / zoom;
+
+        menu.style.minWidth = szelesseg + 'px';
+        menu.style.left = (r.left / zoom) + 'px';
+        menu.style.top = ((r.bottom + 4) / zoom) + 'px';
+
+        var h = menu.getBoundingClientRect().height;
+        var lent = meret - r.bottom - 12;
+        var fent = r.top - 12;
+
+        if (h > lent && fent > lent) {
+            menu.style.top = (Math.max(8, r.top - 4 - Math.min(h, fent)) / zoom) + 'px';
+            menu.style.maxHeight = (Math.min(h, fent) / zoom) + 'px';
+        } else if (h > lent) {
+            menu.style.maxHeight = (lent / zoom) + 'px';
+        }
+
+        var jobb = menu.getBoundingClientRect().right;
+
+        if (jobb > window.innerWidth - 8) {
+            menu.style.left = (parseFloat(menu.style.left) - (jobb - window.innerWidth + 8) / zoom) + 'px';
+        }
+
+        var aktiv = menu.querySelector('.sdh-menu__elem--aktiv') || elemek[0];
+
+        function fokusz(gomb) {
+            if (gomb) {
+                gomb.focus({ preventScroll: false });
+            }
+        }
+
+        function lep(irany) {
+            var szabad = elemek.filter(function (e) {
+                return !e.disabled;
+            });
+            var i = szabad.indexOf(document.activeElement);
+
+            fokusz(szabad[Math.max(0, Math.min(szabad.length - 1, i + irany))]);
+        }
+
+        function valaszt(gomb) {
+            if (!gomb || gomb.disabled) {
+                return;
+            }
+
+            var opcio = gomb.sdhOpcio;
+
+            legorduloZar();
+            select.focus();
+
+            if (select.value !== opcio.value || !opcio.selected) {
+                select.value = opcio.value;
+                select.dispatchEvent(new Event('input', { bubbles: true }));
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+
+        legordulo = {
+            menu: menu,
+            select: select,
+            zar: function () {
+                legorduloZar();
+            },
+            gorget: function (esemeny) {
+                if (!menu.contains(esemeny.target)) {
+                    legorduloZar();
+                }
+            },
+            kinti: function (esemeny) {
+                if (!menu.contains(esemeny.target) && esemeny.target !== select) {
+                    legorduloZar();
+                }
+            },
+            billentyu: function (esemeny) {
+                var k = esemeny.key;
+
+                if (k === 'Escape' || k === 'Tab') {
+                    if (k === 'Escape') {
+                        esemeny.preventDefault();
+                        esemeny.stopPropagation();
+                    }
+
+                    legorduloZar();
+                    select.focus();
+
+                    return;
+                }
+
+                if (k === 'ArrowDown' || k === 'ArrowUp') {
+                    esemeny.preventDefault();
+                    lep(k === 'ArrowDown' ? 1 : -1);
+                } else if (k === 'Home' || k === 'End') {
+                    esemeny.preventDefault();
+                    var sz = elemek.filter(function (e) {
+                        return !e.disabled;
+                    });
+
+                    fokusz(k === 'Home' ? sz[0] : sz[sz.length - 1]);
+                } else if (k === 'Enter' || k === ' ') {
+                    esemeny.preventDefault();
+                    valaszt(document.activeElement.closest('.sdh-menu__elem'));
+                }
+            }
+        };
+
+        menu.addEventListener('click', function (esemeny) {
+            valaszt(esemeny.target.closest('.sdh-menu__elem'));
+        });
+
+        document.addEventListener('mousedown', legordulo.kinti, true);
+        document.addEventListener('keydown', legordulo.billentyu, true);
+        window.addEventListener('resize', legordulo.zar, true);
+        window.addEventListener('scroll', legordulo.gorget, true);
+
+        select.classList.add('sdh-legordulo--nyitva');
+        fokusz(aktiv);
+    }
+
+    document.addEventListener('mousedown', function (esemeny) {
+        var select = esemeny.target.closest ? esemeny.target.closest('select') : null;
+
+        if (!legorduloKepes(select) || esemeny.button !== 0) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        if (legordulo && legordulo.select === select) {
+            legorduloZar();
+
+            return;
+        }
+
+        select.focus();
+        legorduloNyit(select);
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        var select = esemeny.target;
+
+        if (!legorduloKepes(select) || legordulo) {
+            return;
+        }
+
+        if (esemeny.key === 'Enter' || esemeny.key === ' '
+            || (esemeny.altKey && esemeny.key === 'ArrowDown')) {
+            esemeny.preventDefault();
+            legorduloNyit(select);
+        }
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Indítás                                                          */
     /* ---------------------------------------------------------------- */
 

@@ -895,6 +895,7 @@ final class SDH_Muhely_Munkalap
                     <option value="mind" <?php selected($szuro, 'mind'); ?>>Mind</option>
                     <?php foreach ($allapotok as $kulcs => $allapot) : ?>
                         <option value="<?php echo esc_attr((string) $kulcs); ?>"
+                            data-szin="<?php echo esc_attr($allapot['szin']); ?>"
                             <?php selected($szuro, (string) $kulcs); ?>>
                             <?php echo esc_html($allapot['nev']); ?>
                         </option>
@@ -1067,6 +1068,7 @@ final class SDH_Muhely_Munkalap
                 <?php endif; ?>
                 <?php foreach ($allapotok as $k => $allapot) : ?>
                     <option value="<?php echo esc_attr((string) $k); ?>"
+                            data-szin="<?php echo esc_attr($allapot['szin']); ?>"
                             <?php selected($kulcs, (string) $k); ?>>
                         <?php echo esc_html($allapot['nev']); ?>
                     </option>
