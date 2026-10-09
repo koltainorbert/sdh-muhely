@@ -1115,7 +1115,10 @@
 
                 valasz.fulek.forEach(function (ful) {
                     fulHtml += '<button type="button" class="sdh-reszlet__ful" role="tab" data-ful="' + esc(ful.k) + '">' +
-                        (FUL_IKON[ful.k] || '') + '<span>' + esc(ful.cim) + '</span></button>';
+                        (FUL_IKON[ful.k] || '') + '<span>' + esc(ful.cim) + '</span>' +
+                        (ful.db ? '<b class="sdh-reszlet__db' + (ful.uj ? ' is-uj' : '') + '" data-sdh-db="' + esc(ful.k) + '">' +
+                            esc(String(ful.db)) + '</b>' : '') +
+                        '</button>';
 
                     // A lapfülek tartalma a szerveren készült, már szűrt HTML.
                     torzsHtml += '<div class="sdh-reszlet__panel" role="tabpanel" data-ful="' + esc(ful.k) + '" hidden>' +

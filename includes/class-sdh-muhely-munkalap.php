@@ -1733,12 +1733,15 @@ final class SDH_Muhely_Munkalap
                                id="ful_m_szolg">
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--4" name="_ful_munkalap"
                                id="ful_m_termek">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--5" name="_ful_munkalap"
+                               id="ful_m_rma" data-sdh-ful-kulcs="rma">
 
                         <div class="sdh-fulek__sav">
                             <label for="ful_m_eszkoz">Eszköz</label>
                             <label for="ful_m_hibak">Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
                             <label for="ful_m_szolg">Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
                             <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                            <label for="ful_m_rma" data-sdh-rma-ful>RMA <?php echo $munkalap ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-osszefoglalo>
@@ -1780,6 +1783,10 @@ final class SDH_Muhely_Munkalap
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--4">
                             <?php self::tetel_szerkeszto('termek', $termekek, $afakulcsok, $lap_afa); ?>
+                        </div>
+
+                        <div class="sdh-fulek__panel sdh-fulek__panel--5 sdh-fulek__panel--rma">
+                            <?php SDH_Muhely_Rma::munkalap_ful($munkalap); ?>
                         </div>
                     </div>
 

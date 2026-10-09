@@ -1262,175 +1262,23 @@
     font-size: 13px;
 }
 
-/* ---- RMA / Üzenetek lapfül (0.26) ---- */
+/* ---- Részletpanel lapfül-jelvény (0.27): RMA – üzenetek száma ---- */
 
-.sdh-rma-panel {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1.4fr) minmax(220px, 1fr);
-    gap: 1.2rem;
-    padding: .8rem;
-    align-items: start;
-}
-
-.sdh-rma-panel h4 {
-    margin: 0 0 .5rem;
-    font-size: 12px;
+.sdh-reszlet__db {
+    display: inline-block;
+    min-width: 1.35em;
+    margin-left: .35rem;
+    padding: 0 .38em;
+    border-radius: 999px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: 11px;
     font-weight: 600;
-    color: var(--sdh-halvany);
+    line-height: 1.55;
+    text-align: center;
 }
 
-.sdh-rma-panel__kodok {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-}
-
-.sdh-rma-panel__qr .sdh-qr {
-    display: block;
-    width: 150px;
-    height: 150px;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 6px;
-}
-
-.sdh-rma-panel__vonalkod .sdh-vonalkod {
-    display: block;
-    width: 100%;
-    max-width: 220px;
-    height: 56px;
-    border: 1px solid var(--sdh-keret);
-    border-radius: 6px;
-}
-
-.sdh-rma-panel__link {
-    display: flex;
-    gap: 4px;
-}
-
-.sdh-rma-panel__link input {
-    flex: 1 1 auto;
-    min-width: 0;
-    font-size: 12px;
-}
-
-.sdh-rma-panel__gombok {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.sdh-rma-panel__sugo {
-    margin: 0;
-    font-size: 12px;
-    color: var(--sdh-halvany);
-    line-height: 1.45;
-}
-
-.sdh-uz-szal {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.sdh-uz {
-    max-width: 92%;
-    padding: .45rem .65rem;
-    border-radius: 10px;
-    background: var(--sdh-felulet-2);
-    line-height: 1.45;
-}
-
-.sdh-uz--sajat {
-    align-self: flex-end;
-    background: color-mix(in srgb, var(--sdh-allapot-kek) 14%, var(--sdh-felulet));
-}
-
-.sdh-uz__fej {
-    font-size: 12px;
-    color: var(--sdh-halvany);
-}
-
-.sdh-uz__fej b {
-    color: var(--sdh-szoveg);
-}
-
-.sdh-uz-ures {
-    margin: 0;
-    color: var(--sdh-halvany);
-}
-
-.sdh-uz-urlap {
-    margin-bottom: .7rem;
-}
-
-.sdh-uz-urlap textarea {
-    display: block;
-    width: 100%;
-    min-height: 56px;
-    padding: .45rem .6rem;
-    border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
-    background: var(--sdh-felulet);
-    color: var(--sdh-szoveg);
-    font: inherit;
-    line-height: 1.45;
-    resize: vertical;
-}
-
-.sdh-uz-urlap textarea:focus {
-    outline: 2px solid color-mix(in srgb, var(--sdh-accent) 35%, transparent);
-    border-color: var(--sdh-accent);
-}
-
-.sdh-uz-urlap__lab {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .6rem;
-    margin-top: .35rem;
-}
-
-.sdh-uz-urlap__jelolo {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    font-size: 12px;
-    color: var(--sdh-szoveg-2);
-}
-
-.sdh-uz-urlap__hiba {
-    margin: .35rem 0 0;
-    color: var(--sdh-hiba);
-    font-size: 12px;
-}
-
-.sdh-rma-naplo {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.sdh-rma-naplo li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .5rem;
-}
-
-.sdh-rma-naplo li span {
-    font-size: 12px;
-    color: var(--sdh-halvany);
-}
-
-@media (max-width: 1100px) {
-    .sdh-rma-panel {
-        grid-template-columns: 200px minmax(0, 1fr);
-    }
-
-    .sdh-rma-panel__naplo {
-        grid-column: 1 / -1;
-    }
+/* Az RMA lapfül tartalma a részletpanelen (ha nem popupban nyílik). */
+.sdh-reszlet__panel .sdh-rma {
+    padding: .7rem .8rem;
 }

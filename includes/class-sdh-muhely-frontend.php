@@ -270,6 +270,7 @@ final class SDH_Muhely_Frontend
                 . '<path d="M13.2 5.1a2.4 2.4 0 0 1 0 4.3"/><path d="M14 11.9c1.8.4 3 1.9 3 4.1"/>',
             'eszkozok'     => '<rect x="6" y="2.5" width="8" height="15" rx="1.8"/><path d="M8.6 15.2h2.8"/>',
             'munkalapok'   => '<rect x="4" y="3" width="12" height="14" rx="1.8"/><path d="M7 7.5h6M7 10.5h6M7 13.5h3.5"/>',
+            'uzenetek'     => '<path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3a2 2 0 0 1-2-2z"/><path d="M7 7.6h6M7 10.2h4"/>',
             'szolgaltatasok' => '<path d="M12.9 3.1a3.7 3.7 0 0 0-4.5 4.8L3.5 12.8a1.7 1.7 0 0 0 2.4 2.4l4.9-4.9a3.7 3.7 0 0 0 4.8-4.5l-2.3 2.3-1.9-.5-.5-1.9z"/>',
             'tac'          => '<ellipse cx="10" cy="5.2" rx="6" ry="2.4"/>'
                 . '<path d="M4 5.2v9.6c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4V5.2"/><path d="M4 10c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4"/>',
@@ -368,10 +369,15 @@ final class SDH_Muhely_Frontend
                         <span class="sdh-sav__felirat"><?php echo esc_html($modul['cim']); ?></span>
                     </span>
                 <?php else : ?>
+                    <?php $sdh_jelveny = isset($modul['jelveny']) && is_callable($modul['jelveny']) ? (int) call_user_func($modul['jelveny']) : null; ?>
                     <a class="sdh-sav__link <?php echo $aktiv_kulcs === $kulcs ? 'sdh-sav__link--aktiv' : ''; ?>"
                        href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url((string) $kulcs)); ?>">
                         <?php echo self::ikon((string) $kulcs); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                         <span class="sdh-sav__felirat"><?php echo esc_html($modul['cim']); ?></span>
+                        <?php if ($sdh_jelveny !== null) : ?>
+                            <span class="sdh-sav__jelveny" data-sdh-jelveny="<?php echo esc_attr((string) $kulcs); ?>"
+                                  title="Olvasatlan"<?php echo $sdh_jelveny > 0 ? '' : ' hidden'; ?>><?php echo (int) $sdh_jelveny; ?></span>
+                        <?php endif; ?>
                     </a>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -453,8 +459,8 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'attekintes') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.js')); ?>"></script>
-            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
         <?php endif; ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
 
         </body>
         </html>

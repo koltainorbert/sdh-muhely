@@ -1,26 +1,23 @@
 <?php
 /**
- * RMA – az ügyfél saját munkalap-oldala, QR-kód, vonalkód és levelezés.
+ * RMA – QR-kód, ügyféloldal, levelezés, állapotnapló.
  *
- * Minden munkalap kap egy titkos, véletlen azonosítót (rma_token). A
- * QR-kód erre a címre mutat: /rma/<token>. Az oldal zárva nyílik meg;
- * az ügyfél a telefonszámával (06301234567) és a munkalap sorszámával
- * oldja fel. Utána látja:
- *  - a munkalap aktuális állapotát és az állapotváltások idejét,
- *  - az eszközt, a hibákat, a tételeket és a fizetendő összeget,
- *  - a szerviz üzeneteit, és válaszolni is tud.
+ * Minden sorszámos munkalap kap egy titkos, véletlen azonosítót (rma_token).
+ * A QR-kód erre a címre mutat: /rma/<token>/. Az oldal zárva nyílik meg;
+ * az ügyfél a telefonszámával (06301234567) és a munkalap sorszámával oldja
+ * fel. Az ügyféloldal megjelenítése az SDH_Muhely_Rma_Oldal osztályban van,
+ * ez az osztály az adatot, a biztonságot és a CRM-oldali részeket adja:
  *
- * Az ügyfél válasza bekerül a CRM-be (munkalap részletei → RMA /
- * Üzenetek lapfül), és e-mailben is megérkezik a beállított címre.
- * A CRM-ből írt üzenet kérésre e-mailben is elmegy az ügyfélnek.
+ *  - útvonal, feloldás (aláírt süti), próbálkozási korlát, POST-ok,
+ *  - állapotnapló (minden állapotváltás egy sor),
+ *  - üzenetek és e-mail értesítések,
+ *  - CRM: az „RMA" lapfül (munkalap-ablak és Áttekintés részletpanel ugyanazzal
+ *    a tartalommal), a címke, az Üzenetek postafiók, az olvasatlan-jelvények,
+ *  - a Beállítások „Ügyféloldal" dobozai.
  *
- * A vonalkód a munkalapszámot hordozza (Code 128), a nyomtatható
- * címkén a QR-kód mellett áll.
- *
- * Biztonság: a token 96 bites véletlen, kitalálni nem lehet; a feloldás
- * mellé a telefonszám és a sorszám is kell. A próbálkozás IP-nként és
- * munkalaponként korlátozott. A feloldott állapotot aláírt süti tartja,
- * ami a telefonszám megváltozásakor magától érvénytelenné válik.
+ * Biztonság: a token 96 bites véletlen; a feloldáshoz telefonszám és sorszám
+ * is kell; a próbálkozás IP-nként és munkalaponként korlátozott; a feloldott
+ * állapotot aláírt süti tartja, ami a telefonszám változásakor érvénytelen.
  *
  * @package SDH_Muhely
  */
@@ -40,33 +37,27 @@ final class SDH_Muhely_Rma
     /** A nyomtatható címke: /?sdh_muhely_cimke=<munkalap id>. */
     public const CIMKE_VAR = 'sdh_muhely_cimke';
 
+    /** A postafiók modulkulcsa (oldalmenü: Üzenetek). */
+    public const KULCS = 'uzenetek';
+
     /** Beállítások optionje. */
     private const OPT = 'sdh_muhely_rma';
 
     /** Feloldási próbák: ennyi / ablak / IP + munkalap. */
-    private const PROBA_MAX    = 8;
-    private const PROBA_ABLAK  = 15 * MINUTE_IN_SECONDS;
+    private const PROBA_MAX   = 8;
+    private const PROBA_ABLAK = 15 * MINUTE_IN_SECONDS;
 
     /** Ügyfélüzenetek: ennyi / óra / munkalap. */
     private const UZENET_MAX = 10;
 
     /** Üzenet leghosszabb hossza (karakter). */
-    private const UZENET_HOSSZ = 3000;
+    public const UZENET_HOSSZ = 3000;
 
     /** A süti élettartama. */
     private const SUTI_ELET = 90 * DAY_IN_SECONDS;
 
-    /** Az állapotszínek az ügyféloldalon (a CRM CSS-változói ott nincsenek). */
-    private const SZINEK = [
-        'sarga'    => '#c99400',
-        'zold'     => '#2e9d4f',
-        'szurke'   => '#6f757d',
-        'kek'      => '#2f6fd6',
-        'narancs'  => '#e2711d',
-        'olajzold' => '#6f7f22',
-        'lila'     => '#8a4fc7',
-        'piros'    => '#d33a3a',
-    ];
+    /** Postafiók: ennyi beszélgetés egy oldalon. */
+    private const POSTA_OLDAL = 50;
 
     public static function init(): void
     {
@@ -80,10 +71,23 @@ final class SDH_Muhely_Rma
 
         add_action('wp_ajax_sdh_muhely_uzenet_kuld', [self::class, 'ajax_uzenet_kuld']);
         add_action('wp_ajax_sdh_muhely_uzenet_olvasva', [self::class, 'ajax_olvasva']);
+        add_action('wp_ajax_sdh_muhely_uzenet_allapot', [self::class, 'ajax_allapot']);
+
+        add_action('admin_enqueue_scripts', [self::class, 'admin_eszkozok']);
+        // A wp-admin menüjében is látszódjon az olvasatlan üzenetek száma.
+        add_action('admin_menu', [self::class, 'admin_menu_jelveny'], 99);
+
+        SDH_Muhely_Modulok::regisztral([
+            'kulcs'   => self::KULCS,
+            'cim'     => 'Üzenetek',
+            'render'  => [self::class, 'posta_oldal'],
+            'sorrend' => 32,
+            'jelveny' => [self::class, 'olvasatlan_db'],
+        ]);
     }
 
     /* =================================================================
-     * Táblák, beállítások
+     * Táblák és adatok
      * ============================================================== */
 
     private static function munkalap_tabla(): string
@@ -101,71 +105,222 @@ final class SDH_Muhely_Rma
         return SDH_Muhely_Schema::tabla('uzenet');
     }
 
+    public static function munkalap(int $id): ?object
+    {
+        global $wpdb;
+
+        $sor = $id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::munkalap_tabla() . ' WHERE id = %d', $id))
+            : null;
+
+        return $sor ?: null;
+    }
+
+    public static function ugyfel(int $id): ?object
+    {
+        global $wpdb;
+
+        $sor = $id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id = %d', $id))
+            : null;
+
+        return $sor ?: null;
+    }
+
+    public static function eszkoz(int $id): ?object
+    {
+        global $wpdb;
+
+        $sor = $id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id = %d', $id))
+            : null;
+
+        return $sor ?: null;
+    }
+
+    private static function munkalap_tokennel(string $token): ?object
+    {
+        global $wpdb;
+
+        $sor = $wpdb->get_row(
+            $wpdb->prepare('SELECT * FROM ' . self::munkalap_tabla() . ' WHERE rma_token = %s AND rma_token <> %s LIMIT 1', $token, '')
+        );
+
+        return $sor ?: null;
+    }
+
+    /* =================================================================
+     * Beállítások
+     * ============================================================== */
+
+    /** A beállítások alapértékei. */
+    private static function alapok(): array
+    {
+        return [
+            // Cím és értesítés
+            'nyilvanos_cim'   => '',
+            'szerviz_nev'     => '',
+            'ertesites_email' => '',
+            'ugyfel_email'    => true,
+            // Megjelenés
+            'logo'            => '',
+            'hatter_tipus'    => 'alap',      // alap | szin | kep | video
+            'hatter_szin'     => '#1b1f24',
+            'hatter_kep'      => '',
+            'hatter_video'    => '',
+            'sotetites'       => 35,          // a háttér sötétítése, %
+            'uveg'            => true,        // áttetsző, elmosott ablak a háttér fölött
+            'kiemelo'         => '',          // üres = a CRM kiemelő színe
+            'tema'            => 'rendszer',  // rendszer | vilagos | sotet
+            'nyelv'           => 'auto',      // auto | hu | en | de
+            'nyelvek'         => ['hu', 'en', 'de'],
+            // Elérhetőség
+            'cim'             => '',
+            'telefon'         => '',
+            'email'           => '',
+            'nyitvatartas'    => '',
+            'weboldal'        => '',
+            'terkep'          => '',
+            'egyeb'           => '',
+        ];
+    }
+
     /**
-     * @return array{nyilvanos_cim: string, szerviz_nev: string, elerhetoseg: string, ertesites_email: string, ugyfel_email: bool}
+     * @return array<string, mixed>
      */
     public static function beallitas(): array
     {
         $m = get_option(self::OPT, []);
         $m = is_array($m) ? $m : [];
 
-        return [
-            'nyilvanos_cim'   => isset($m['nyilvanos_cim']) ? (string) $m['nyilvanos_cim'] : '',
-            'szerviz_nev'     => isset($m['szerviz_nev']) && $m['szerviz_nev'] !== '' ? (string) $m['szerviz_nev'] : (string) get_bloginfo('name'),
-            'elerhetoseg'     => isset($m['elerhetoseg']) ? (string) $m['elerhetoseg'] : '',
-            'ertesites_email' => isset($m['ertesites_email']) && $m['ertesites_email'] !== '' ? (string) $m['ertesites_email'] : (string) get_option('admin_email'),
-            'ugyfel_email'    => !isset($m['ugyfel_email']) || !empty($m['ugyfel_email']),
-        ];
+        // 0.26.0: egyetlen „elérhetőség" szövegmező volt – az „Egyéb" mezőbe költözik.
+        if (!isset($m['egyeb']) && !empty($m['elerhetoseg'])) {
+            $m['egyeb'] = (string) $m['elerhetoseg'];
+        }
+
+        $b = array_merge(self::alapok(), array_intersect_key($m, self::alapok()));
+
+        $b['szerviz_nev']     = (string) $b['szerviz_nev'] !== '' ? (string) $b['szerviz_nev'] : (string) get_bloginfo('name');
+        $b['ertesites_email'] = (string) $b['ertesites_email'] !== '' ? (string) $b['ertesites_email'] : (string) get_option('admin_email');
+        $b['ugyfel_email']    = (bool) $b['ugyfel_email'];
+        $b['uveg']            = (bool) $b['uveg'];
+        $b['sotetites']       = max(0, min(85, (int) $b['sotetites']));
+        $b['nyelvek']         = array_values(array_intersect(['hu', 'en', 'de'], (array) $b['nyelvek']));
+
+        if ($b['nyelvek'] === []) {
+            $b['nyelvek'] = ['hu'];
+        }
+
+        return $b;
     }
 
-    /** A beállítások doboza (a Beállítások képernyő hívja). */
+    /** Hexa színkód ellenőrzése (#abc vagy #aabbcc), különben üres. */
+    private static function szin(string $ertek): string
+    {
+        $ertek = trim($ertek);
+
+        return preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $ertek) === 1 ? strtolower($ertek) : '';
+    }
+
+    /** A wp-admin Beállítások oldalán: médiaválasztó és a hozzá tartozó szkript. */
+    public static function admin_eszkozok(): void
+    {
+        $oldal = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        if ($oldal !== SDH_Muhely_Admin_UI::FOMENU . '-' . SDH_Muhely_Beallitasok::KULCS) {
+            return;
+        }
+
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'sdh-muhely-rma-beallitas',
+            SDH_MUHELY_URL . 'assets/rma-beallitas.js',
+            ['jquery'],
+            SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma-beallitas.js'),
+            true
+        );
+    }
+
+    /** Médiamező: URL + Kiválasztás gomb + kis előnézet. */
+    private static function media_mezo(string $nev, string $cimke, string $ertek, string $tipus, string $sugo = ''): void
+    {
+        ?>
+        <div class="sdh-mezo sdh-mezo--szeles">
+            <label for="<?php echo esc_attr($nev); ?>"><?php echo esc_html($cimke); ?></label>
+            <div class="sdh-rma-media" data-sdh-media="<?php echo esc_attr($tipus); ?>">
+                <input type="text" name="<?php echo esc_attr($nev); ?>" id="<?php echo esc_attr($nev); ?>"
+                       value="<?php echo esc_attr($ertek); ?>" placeholder="https://…">
+                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Kiválasztás…</button>
+                <button type="button" class="sdh-gomb" data-sdh-media-torol<?php echo $ertek === '' ? ' hidden' : ''; ?>>Törlés</button>
+                <span class="sdh-rma-media__elo" data-sdh-media-elo>
+                    <?php if ($ertek !== '' && $tipus === 'image') : ?>
+                        <img src="<?php echo esc_url($ertek); ?>" alt="">
+                    <?php elseif ($ertek !== '' && $tipus === 'video') : ?>
+                        <video src="<?php echo esc_url($ertek); ?>" muted playsinline preload="metadata"></video>
+                    <?php endif; ?>
+                </span>
+            </div>
+            <?php if ($sugo !== '') : ?>
+                <span class="sdh-mezo__sugo"><?php echo esc_html($sugo); ?></span>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /** A beállítások dobozai (a Beállítások képernyő hívja). */
     public static function beallitas_doboz(): void
     {
-        $b = self::beallitas();
+        $b       = self::beallitas();
+        $elonezet = self::elonezet_cim();
 
         ?>
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Ügyféloldal (RMA, QR-kód)</h2>
+        <style>
+            .sdh-rma-media { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+            .sdh-rma-media input { flex: 1 1 320px; min-width: 0; }
+            .sdh-rma-media [hidden] { display: none; }
+            .sdh-rma-media__elo img, .sdh-rma-media__elo video { display: block; max-height: 44px; max-width: 120px; border-radius: 6px; border: 1px solid var(--sdh-keret); }
+            .sdh-rma-szin { display: flex; align-items: center; gap: 8px; }
+            .sdh-rma-szin input[type="color"] { width: 44px; height: 34px; padding: 2px; border: 1px solid var(--sdh-keret-eros); border-radius: 7px; background: var(--sdh-felulet); }
+            .sdh-rma-valaszto { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+            .sdh-rma-valaszto label { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid var(--sdh-keret-eros); border-radius: 7px; background: var(--sdh-felulet); cursor: pointer; font-weight: 500; }
+            .sdh-rma-valaszto input { margin: 0; }
+            .sdh-rma-valaszto label:has(input:checked) { border-color: var(--sdh-accent); box-shadow: inset 0 0 0 1px var(--sdh-accent); }
+            .sdh-rma-elonezet { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .6rem; }
+        </style>
+
+        <div class="sdh-doboz" id="ugyfeloldal">
+            <h2 class="sdh-doboz__cim">Ügyféloldal (RMA) – cím és értesítés</h2>
 
             <p class="sdh-sugo">
-                Minden munkalap kap egy QR-kódot. Az ügyfél a telefonjával beolvassa, a
-                telefonszámával és a munkalap sorszámával belép, és látja a javítás
-                állapotát, a fizetendő összeget és az üzeneteket – válaszolni is tud.
-                A QR-kód csak akkor működik az ügyfél telefonján, ha ez a rendszer
-                <strong>az internetről elérhető</strong>; ha nem, add meg alább azt a
-                nyilvános címet, ahol elérhető.
+                Minden munkalap kap egy QR-kódot. Az ügyfél a telefonjával beolvassa, a telefonszámával
+                és a munkalap sorszámával belép, és látja a javítás állapotát, a fizetendő összeget és az
+                üzeneteket – válaszolni is tud. A QR-kód csak akkor működik az ügyfél telefonján, ha ez a
+                rendszer <strong>az internetről elérhető</strong>; ha nem, add meg alább azt a nyilvános
+                címet, ahol elérhető.
             </p>
 
             <div class="sdh-mezok">
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="rma_nyilvanos_cim">Nyilvános cím</label>
                     <input type="text" name="rma_nyilvanos_cim" id="rma_nyilvanos_cim"
-                           value="<?php echo esc_attr($b['nyilvanos_cim']); ?>"
+                           value="<?php echo esc_attr((string) $b['nyilvanos_cim']); ?>"
                            placeholder="<?php echo esc_attr(self::alap_cim()); ?>">
                     <span class="sdh-mezo__sugo">
-                        Üresen hagyva: <code><?php echo esc_html(self::alap_cim()); ?></code>.
-                        A cím végére kerül az azonosító; ha máshová kell, írd a címbe a
-                        <code>{token}</code> jelölőt.
+                        Üresen hagyva: <code><?php echo esc_html(self::alap_cim()); ?></code>. A cím végére kerül az
+                        azonosító; ha máshová kell, írd a címbe a <code>{token}</code> jelölőt.
                     </span>
                 </div>
 
                 <div class="sdh-mezo">
-                    <label for="rma_szerviz_nev">Szerviz neve az ügyféloldalon</label>
+                    <label for="rma_szerviz_nev">Szerviz neve</label>
                     <input type="text" name="rma_szerviz_nev" id="rma_szerviz_nev"
-                           value="<?php echo esc_attr($b['szerviz_nev']); ?>">
+                           value="<?php echo esc_attr((string) $b['szerviz_nev']); ?>">
                 </div>
 
                 <div class="sdh-mezo">
                     <label for="rma_ertesites_email">Ügyfélüzenetek ide érkeznek (e-mail)</label>
                     <input type="email" name="rma_ertesites_email" id="rma_ertesites_email"
-                           value="<?php echo esc_attr($b['ertesites_email']); ?>">
-                </div>
-
-                <div class="sdh-mezo sdh-mezo--szeles">
-                    <label for="rma_elerhetoseg">Elérhetőség az ügyféloldal alján</label>
-                    <textarea name="rma_elerhetoseg" id="rma_elerhetoseg" rows="3"
-                    ><?php echo esc_textarea($b['elerhetoseg']); ?></textarea>
-                    <span class="sdh-mezo__sugo">Cím, telefon, nyitvatartás – ahogy az ügyfélnek mutatni akarod.</span>
+                           value="<?php echo esc_attr((string) $b['ertesites_email']); ?>">
                 </div>
             </div>
 
@@ -175,27 +330,192 @@ final class SDH_Muhely_Rma
                 <label for="rma_ugyfel_email">Új üzenetnél alapból e-mail értesítés az ügyfélnek (ha van e-mail címe)</label>
             </div>
         </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Ügyféloldal – megjelenés</h2>
+
+            <p class="sdh-sugo">
+                Az ügyféloldal a CRM formanyelvét használja: egy ablak a háttér fölött, bal oldalt az
+                állapot és az összeg, jobbra lapfülek. Itt adható meg a logó, a háttér (szín, kép vagy
+                videó), a kiemelő szín, az alapértelmezett világos/sötét mód és a nyelvek.
+            </p>
+
+            <div class="sdh-mezok">
+                <?php self::media_mezo('rma_logo', 'Logó', (string) $b['logo'], 'image', 'PNG vagy SVG, átlátszó háttérrel. Az ablak fejlécében jelenik meg, legfeljebb 40 px magasan.'); ?>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label>Háttér</label>
+                    <div class="sdh-rma-valaszto">
+                        <?php foreach (['alap' => 'Alap (a kiemelő színből)', 'szin' => 'Egyszínű', 'kep' => 'Kép', 'video' => 'Videó'] as $k => $f) : ?>
+                            <label><input type="radio" name="rma_hatter_tipus" value="<?php echo esc_attr($k); ?>" <?php checked($b['hatter_tipus'], $k); ?>> <?php echo esc_html($f); ?></label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="rma_hatter_szin">Háttérszín</label>
+                    <div class="sdh-rma-szin">
+                        <input type="color" id="rma_hatter_szin" name="rma_hatter_szin" value="<?php echo esc_attr(self::szin((string) $b['hatter_szin']) ?: '#1b1f24'); ?>">
+                        <span class="sdh-mezo__sugo">„Egyszínű" háttérnél, és amíg a kép vagy videó betölt.</span>
+                    </div>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="rma_sotetites">Háttér sötétítése: <output data-sdh-kimenet="rma_sotetites"><?php echo (int) $b['sotetites']; ?></output>%</label>
+                    <input type="range" id="rma_sotetites" name="rma_sotetites" min="0" max="85" step="5" value="<?php echo (int) $b['sotetites']; ?>">
+                </div>
+
+                <?php self::media_mezo('rma_hatter_kep', 'Háttérkép', (string) $b['hatter_kep'], 'image', 'Videós háttérnél ez a kép látszik, amíg a videó betölt (és ha az ügyfél kikapcsolta a mozgó tartalmat).'); ?>
+                <?php self::media_mezo('rma_hatter_video', 'Háttérvideó', (string) $b['hatter_video'], 'video', 'MP4 (H.264) vagy WebM, hang nélkül ismétlődik. Rövid, kis méretű (néhány MB) videót válassz – mobilon is ez töltődik le.'); ?>
+
+                <div class="sdh-mezo">
+                    <label for="rma_kiemelo">Kiemelő szín</label>
+                    <div class="sdh-rma-szin">
+                        <input type="color" id="rma_kiemelo_valaszto" value="<?php echo esc_attr(self::szin((string) $b['kiemelo']) ?: '#d4231d'); ?>" data-sdh-szin-cel="rma_kiemelo">
+                        <input type="text" id="rma_kiemelo" name="rma_kiemelo" value="<?php echo esc_attr((string) $b['kiemelo']); ?>" placeholder="a CRM színe" style="max-width:9rem">
+                    </div>
+                    <span class="sdh-mezo__sugo">Gombok, kiemelések. Üresen: a CRM Arculat színe.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label>Alapértelmezett mód</label>
+                    <div class="sdh-rma-valaszto">
+                        <?php foreach (['rendszer' => 'A telefon beállítása', 'vilagos' => 'Világos', 'sotet' => 'Sötét'] as $k => $f) : ?>
+                            <label><input type="radio" name="rma_tema" value="<?php echo esc_attr($k); ?>" <?php checked($b['tema'], $k); ?>> <?php echo esc_html($f); ?></label>
+                        <?php endforeach; ?>
+                    </div>
+                    <span class="sdh-mezo__sugo">Az ügyfél a fejlécben át tudja váltani.</span>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label>Nyelvek</label>
+                    <div class="sdh-rma-valaszto">
+                        <?php foreach (['hu' => 'Magyar', 'en' => 'English', 'de' => 'Deutsch'] as $k => $f) : ?>
+                            <label><input type="checkbox" name="rma_nyelvek[]" value="<?php echo esc_attr($k); ?>" <?php checked(in_array($k, $b['nyelvek'], true)); ?>> <?php echo esc_html($f); ?></label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div class="sdh-mezo">
+                    <label>Alapnyelv</label>
+                    <div class="sdh-rma-valaszto">
+                        <?php foreach (['auto' => 'A telefon nyelve', 'hu' => 'Magyar', 'en' => 'English', 'de' => 'Deutsch'] as $k => $f) : ?>
+                            <label><input type="radio" name="rma_nyelv" value="<?php echo esc_attr($k); ?>" <?php checked($b['nyelv'], $k); ?>> <?php echo esc_html($f); ?></label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sdh-mezo sdh-mezo--jelolo">
+                <input type="checkbox" name="rma_uveg" id="rma_uveg" value="1" <?php checked($b['uveg']); ?>>
+                <label for="rma_uveg">Áttetsző, elmosott ablak a háttér fölött (üveghatás)</label>
+            </div>
+
+            <div class="sdh-rma-elonezet">
+                <?php if ($elonezet !== '') : ?>
+                    <a class="sdh-gomb" href="<?php echo esc_url(add_query_arg('elonezet', 'zar', $elonezet)); ?>" target="_blank" rel="noopener">Előnézet: belépés</a>
+                    <a class="sdh-gomb" href="<?php echo esc_url(add_query_arg('elonezet', '1', $elonezet)); ?>" target="_blank" rel="noopener">Előnézet: munkalap</a>
+                    <span class="sdh-mezo__sugo">Mentés után a legutóbbi sorszámos munkalappal.</span>
+                <?php else : ?>
+                    <span class="sdh-mezo__sugo">Előnézet akkor érhető el, ha van legalább egy sorszámos munkalap.</span>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Ügyféloldal – elérhetőség</h2>
+
+            <p class="sdh-sugo">Az ügyféloldal „Elérhetőség" lapfülén és a gyorsgombokon (Hívás, E-mail, Útvonal) jelenik meg.</p>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="rma_cim">Cím</label>
+                    <input type="text" name="rma_cim" id="rma_cim" value="<?php echo esc_attr((string) $b['cim']); ?>" placeholder="8200 Veszprém, …">
+                </div>
+                <div class="sdh-mezo">
+                    <label for="rma_telefon">Telefon</label>
+                    <input type="tel" name="rma_telefon" id="rma_telefon" value="<?php echo esc_attr((string) $b['telefon']); ?>" placeholder="+36 …">
+                </div>
+                <div class="sdh-mezo">
+                    <label for="rma_email">E-mail</label>
+                    <input type="email" name="rma_email" id="rma_email" value="<?php echo esc_attr((string) $b['email']); ?>">
+                </div>
+                <div class="sdh-mezo">
+                    <label for="rma_weboldal">Weboldal</label>
+                    <input type="text" name="rma_weboldal" id="rma_weboldal" value="<?php echo esc_attr((string) $b['weboldal']); ?>" placeholder="https://…">
+                </div>
+                <div class="sdh-mezo">
+                    <label for="rma_terkep">Térkép link</label>
+                    <input type="text" name="rma_terkep" id="rma_terkep" value="<?php echo esc_attr((string) $b['terkep']); ?>" placeholder="üresen: a címből készül">
+                </div>
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="rma_nyitvatartas">Nyitvatartás</label>
+                    <textarea name="rma_nyitvatartas" id="rma_nyitvatartas" rows="3" placeholder="H–P: 9–17&#10;Szo: 9–12"><?php echo esc_textarea((string) $b['nyitvatartas']); ?></textarea>
+                </div>
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="rma_egyeb">Egyéb tudnivaló</label>
+                    <textarea name="rma_egyeb" id="rma_egyeb" rows="2"><?php echo esc_textarea((string) $b['egyeb']); ?></textarea>
+                </div>
+            </div>
+        </div>
         <?php
     }
 
-    /** A beállítások mentése (a Beállítások mentése hívja, a jog és a nonce már ellenőrzött). */
+    /** A beállítások mentése (a Beállítások mentése hívja; jog és nonce már ellenőrzött). */
     public static function beallitas_mentes(): void
     {
         // phpcs:disable WordPress.Security.NonceVerification.Missing
-        $cim = isset($_POST['rma_nyilvanos_cim']) ? trim(sanitize_text_field(wp_unslash($_POST['rma_nyilvanos_cim']))) : '';
+        $szoveg = static fn (string $k): string => isset($_POST[$k]) ? sanitize_text_field(wp_unslash($_POST[$k])) : '';
+        $hosszu = static fn (string $k): string => isset($_POST[$k]) ? sanitize_textarea_field(wp_unslash($_POST[$k])) : '';
+        $url    = static fn (string $k): string => isset($_POST[$k]) ? esc_url_raw(trim(wp_unslash($_POST[$k]))) : '';
+        $egyik  = static fn (string $k, array $lehet, string $alap): string => in_array($szoveg($k), $lehet, true) ? $szoveg($k) : $alap;
+
+        $cim = trim($szoveg('rma_nyilvanos_cim'));
 
         if ($cim !== '' && !preg_match('#^https?://#i', $cim)) {
             $cim = 'https://' . $cim;
         }
 
+        $nyelvek = isset($_POST['rma_nyelvek']) && is_array($_POST['rma_nyelvek'])
+            ? array_values(array_intersect(['hu', 'en', 'de'], array_map('sanitize_key', wp_unslash($_POST['rma_nyelvek']))))
+            : ['hu'];
+
         update_option(self::OPT, [
             'nyilvanos_cim'   => $cim,
-            'szerviz_nev'     => isset($_POST['rma_szerviz_nev']) ? sanitize_text_field(wp_unslash($_POST['rma_szerviz_nev'])) : '',
-            'elerhetoseg'     => isset($_POST['rma_elerhetoseg']) ? sanitize_textarea_field(wp_unslash($_POST['rma_elerhetoseg'])) : '',
+            'szerviz_nev'     => $szoveg('rma_szerviz_nev'),
             'ertesites_email' => isset($_POST['rma_ertesites_email']) ? sanitize_email(wp_unslash($_POST['rma_ertesites_email'])) : '',
             'ugyfel_email'    => !empty($_POST['rma_ugyfel_email']),
+            'logo'            => $url('rma_logo'),
+            'hatter_tipus'    => $egyik('rma_hatter_tipus', ['alap', 'szin', 'kep', 'video'], 'alap'),
+            'hatter_szin'     => self::szin($szoveg('rma_hatter_szin')) ?: '#1b1f24',
+            'hatter_kep'      => $url('rma_hatter_kep'),
+            'hatter_video'    => $url('rma_hatter_video'),
+            'sotetites'       => max(0, min(85, (int) $szoveg('rma_sotetites'))),
+            'uveg'            => !empty($_POST['rma_uveg']),
+            'kiemelo'         => self::szin($szoveg('rma_kiemelo')),
+            'tema'            => $egyik('rma_tema', ['rendszer', 'vilagos', 'sotet'], 'rendszer'),
+            'nyelv'           => $egyik('rma_nyelv', ['auto', 'hu', 'en', 'de'], 'auto'),
+            'nyelvek'         => $nyelvek !== [] ? $nyelvek : ['hu'],
+            'cim'             => $szoveg('rma_cim'),
+            'telefon'         => $szoveg('rma_telefon'),
+            'email'           => isset($_POST['rma_email']) ? sanitize_email(wp_unslash($_POST['rma_email'])) : '',
+            'nyitvatartas'    => $hosszu('rma_nyitvatartas'),
+            'weboldal'        => $url('rma_weboldal'),
+            'terkep'          => $url('rma_terkep'),
+            'egyeb'           => $hosszu('rma_egyeb'),
         ]);
         // phpcs:enable
+    }
+
+    /** A legutóbbi sorszámos munkalap helyi ügyféloldal-címe (előnézethez), vagy ''. */
+    private static function elonezet_cim(): string
+    {
+        global $wpdb;
+
+        $id = (int) $wpdb->get_var('SELECT id FROM ' . self::munkalap_tabla() . ' WHERE munkalap_szam > 0 ORDER BY id DESC LIMIT 1');
+        $ml = $id > 0 ? self::munkalap($id) : null;
+
+        return $ml ? self::helyi_url(self::token($ml)) : '';
     }
 
     /* =================================================================
@@ -208,9 +528,7 @@ final class SDH_Muhely_Rma
         return bin2hex(random_bytes(12));
     }
 
-    /**
-     * A munkalap tokenje; ha még nincs, most kap (és el is mentjük).
-     */
+    /** A munkalap tokenje; ha még nincs, most kap (és el is mentjük). */
     public static function token(object $munkalap): string
     {
         global $wpdb;
@@ -237,13 +555,19 @@ final class SDH_Muhely_Rma
             : home_url('/?' . self::QUERY_VAR . '=');
     }
 
-    /** Az ügyféloldal címe – ez kerül a QR-kódba. */
+    /** Az ügyféloldal címe a saját WordPress alatt (előnézet, munkatársi link). */
+    public static function helyi_url(string $token): string
+    {
+        return self::alap_cim() . $token . (get_option('permalink_structure') ? '/' : '');
+    }
+
+    /** Az ügyféloldal nyilvános címe – ez kerül a QR-kódba. */
     public static function url(string $token): string
     {
-        $alap = self::beallitas()['nyilvanos_cim'];
+        $alap = (string) self::beallitas()['nyilvanos_cim'];
 
         if ($alap === '') {
-            return self::alap_cim() . $token . (get_option('permalink_structure') ? '/' : '');
+            return self::helyi_url($token);
         }
 
         if (str_contains($alap, '{token}')) {
@@ -327,14 +651,21 @@ final class SDH_Muhely_Rma
         return $t[1];
     }
 
+    /** Munkatárs nézi-e (belépve, jogosultsággal). */
+    public static function munkatars(): bool
+    {
+        return is_user_logged_in() && current_user_can(SDH_Muhely_Admin_UI::jog());
+    }
+
     /** A kérés kezelése: ügyféloldal vagy nyomtatható címke. */
     public static function fogadas(): void
     {
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
         if (isset($_GET[self::CIMKE_VAR])) {
-            self::cimke_oldal((int) $_GET[self::CIMKE_VAR]); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            self::cimke_oldal((int) $_GET[self::CIMKE_VAR]);
             exit;
         }
+        // phpcs:enable
 
         $token = get_query_var(self::QUERY_VAR);
 
@@ -350,16 +681,15 @@ final class SDH_Muhely_Rma
         nocache_headers();
         header('X-Robots-Tag: noindex, nofollow', true);
         header('Referrer-Policy: no-referrer', true);
-        header('X-Frame-Options: DENY', true);
+        header('X-Frame-Options: SAMEORIGIN', true);
+
+        SDH_Muhely_Rma_Oldal::nyelv_beallit();
 
         $munkalap = $token !== '' ? self::munkalap_tokennel($token) : null;
 
         if ($munkalap === null || (int) $munkalap->munkalap_szam <= 0) {
             status_header(404);
-            self::ugyfel_keret('Ismeretlen munkalap', static function (): void {
-                echo '<section class="k"><h2>Ismeretlen munkalap</h2><p>Ez a hivatkozás nem érvényes, vagy a munkalap még nincs rögzítve. '
-                    . 'Kérjük, olvassa be újra a munkalapon lévő QR-kódot, vagy keresse a szervizt.</p></section>';
-            });
+            SDH_Muhely_Rma_Oldal::ismeretlen();
             exit;
         }
 
@@ -368,64 +698,25 @@ final class SDH_Muhely_Rma
         // phpcs:ignore WordPress.Security.NonceVerification.Missing
         $muvelet = isset($_POST['sdh_rma_muvelet']) ? sanitize_key(wp_unslash($_POST['sdh_rma_muvelet'])) : '';
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $muvelet !== '') {
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && $muvelet !== '') {
             self::post_kezeles($muvelet, $munkalap, $ugyfel);
             exit;
         }
 
         status_header(200);
 
-        if (!self::feloldva($munkalap, $ugyfel)) {
-            self::zar_oldal($munkalap);
+        // Munkatársi előnézet: a munkatárs belépés nélkül látja (vagy a zárt nézetet).
+        $elonezet = isset($_GET['elonezet']) && self::munkatars() // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            ? sanitize_key(wp_unslash($_GET['elonezet'])) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            : '';
+
+        if ($elonezet === 'zar' || ($elonezet === '' && !self::feloldva($munkalap, $ugyfel))) {
+            SDH_Muhely_Rma_Oldal::zar_oldal($munkalap, $elonezet !== '');
             exit;
         }
 
-        self::rma_oldal($munkalap, $ugyfel);
+        SDH_Muhely_Rma_Oldal::rma_oldal($munkalap, $ugyfel, $elonezet !== '');
         exit;
-    }
-
-    private static function munkalap_tokennel(string $token): ?object
-    {
-        global $wpdb;
-
-        $sor = $wpdb->get_row(
-            $wpdb->prepare('SELECT * FROM ' . self::munkalap_tabla() . ' WHERE rma_token = %s AND rma_token <> %s LIMIT 1', $token, '')
-        );
-
-        return $sor ?: null;
-    }
-
-    private static function munkalap(int $id): ?object
-    {
-        global $wpdb;
-
-        $sor = $id > 0
-            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::munkalap_tabla() . ' WHERE id = %d', $id))
-            : null;
-
-        return $sor ?: null;
-    }
-
-    private static function ugyfel(int $id): ?object
-    {
-        global $wpdb;
-
-        $sor = $id > 0
-            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id = %d', $id))
-            : null;
-
-        return $sor ?: null;
-    }
-
-    private static function eszkoz(int $id): ?object
-    {
-        global $wpdb;
-
-        $sor = $id > 0
-            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id = %d', $id))
-            : null;
-
-        return $sor ?: null;
     }
 
     /* =================================================================
@@ -449,9 +740,7 @@ final class SDH_Muhely_Rma
         return $d;
     }
 
-    /**
-     * Egyezik-e a beírt telefonszám és sorszám a munkalappal.
-     */
+    /** Egyezik-e a beírt telefonszám és sorszám a munkalappal. */
     public static function egyezik(object $munkalap, ?object $ugyfel, string $telefon, string $sorszam): bool
     {
         if ($ugyfel === null) {
@@ -513,8 +802,12 @@ final class SDH_Muhely_Rma
             && hash_equals(self::alairas($munkalap, $ugyfel), (string) wp_unslash($_COOKIE[$nev]));
     }
 
-    private static function suti_beallit(string $nev, string $ertek, int $lejar): void
+    public static function suti_beallit(string $nev, string $ertek, int $lejar): void
     {
+        if (headers_sent()) {
+            return;
+        }
+
         setcookie($nev, $ertek, [
             'expires'  => $lejar,
             'path'     => COOKIEPATH ?: '/',
@@ -533,22 +826,27 @@ final class SDH_Muhely_Rma
     }
 
     /** Az ügyfél űrlapjának aláírt jele (CSRF ellen). */
-    private static function urlap_jel(object $munkalap): string
+    public static function urlap_jel(object $munkalap): string
     {
         return hash_hmac('sha256', 'valasz|' . (string) $munkalap->rma_token, wp_salt('nonce'));
+    }
+
+    /** A visszairányítás célja: ugyanaz a cím, relatív útvonallal (proxy mögött is jó). */
+    public static function vissza_cim(object $munkalap): string
+    {
+        $ut = (string) strtok(isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/', '?');
+
+        if (self::token_a_cimbol($ut, (string) wp_parse_url(home_url('/'), PHP_URL_PATH)) === null) {
+            return add_query_arg(self::QUERY_VAR, (string) $munkalap->rma_token, $ut);
+        }
+
+        return $ut;
     }
 
     /** Az ügyfél POST-jai: belépés, válasz, kilépés. Mindig átirányít (PRG). */
     private static function post_kezeles(string $muvelet, object $munkalap, ?object $ugyfel): void
     {
-        // Ugyanarra a címre irányítunk vissza, ahonnan az ügyfél jött – relatív
-        // útvonallal, hogy nyilvános (proxyzott) címen is ott maradjon.
-        $ut     = (string) strtok(isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/', '?');
-        $vissza = $ut;
-
-        if (self::token_a_cimbol($ut, (string) wp_parse_url(home_url('/'), PHP_URL_PATH)) === null) {
-            $vissza = add_query_arg(self::QUERY_VAR, (string) $munkalap->rma_token, $ut);
-        }
+        $vissza = self::vissza_cim($munkalap);
 
         // phpcs:disable WordPress.Security.NonceVerification.Missing
         if ($muvelet === 'belep') {
@@ -590,7 +888,7 @@ final class SDH_Muhely_Rma
             $jel = isset($_POST['jel']) ? (string) wp_unslash($_POST['jel']) : '';
 
             if (!hash_equals(self::urlap_jel($munkalap), $jel)) {
-                wp_safe_redirect(add_query_arg('h', 'lejart', $vissza));
+                wp_safe_redirect(add_query_arg('h', 'lejart', $vissza) . '#uzenetek');
                 return;
             }
 
@@ -640,8 +938,7 @@ final class SDH_Muhely_Rma
 
     /**
      * Sémafrissítéskor: a napló nélküli munkalapok kapnak egy kezdősort
-     * (a mostani állapot, a létrehozás idejével), hogy az ügyféloldalon
-     * a régebbi lapoknál se legyen üres a történet.
+     * (a mostani állapot, a létrehozás idejével).
      */
     public static function naplo_potlas(): void
     {
@@ -663,7 +960,7 @@ final class SDH_Muhely_Rma
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, object> A legfrissebb elöl.
      */
     public static function naplo(int $munkalap_id): array
     {
@@ -679,7 +976,7 @@ final class SDH_Muhely_Rma
      * ============================================================== */
 
     /**
-     * @return array<int, object>
+     * @return array<int, object> Időrendben (a legrégebbi elöl).
      */
     public static function uzenetek(int $munkalap_id): array
     {
@@ -691,7 +988,7 @@ final class SDH_Muhely_Rma
     }
 
     /**
-     * Üzenetszámlálók a lapfül címéhez.
+     * Üzenetszámlálók egy munkalapra.
      *
      * @return array{osszes: int, uj: int}
      */
@@ -713,13 +1010,23 @@ final class SDH_Muhely_Rma
         ];
     }
 
+    /** Az összes olvasatlan ügyfélüzenet (az oldalmenü jelvénye). */
+    public static function olvasatlan_db(): int
+    {
+        global $wpdb;
+
+        return (int) $wpdb->get_var(
+            'SELECT COUNT(*) FROM ' . self::uzenet_tabla() . " WHERE irany = 'be' AND olvasva = 0"
+        );
+    }
+
     private static function friss_ugyfeluzenetek(int $munkalap_id): int
     {
         global $wpdb;
 
         return (int) $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM " . self::uzenet_tabla() . " WHERE munkalap_id = %d AND irany = 'be' AND letrehozva >= %s",
+                'SELECT COUNT(*) FROM ' . self::uzenet_tabla() . " WHERE munkalap_id = %d AND irany = 'be' AND letrehozva >= %s",
                 $munkalap_id,
                 gmdate('Y-m-d H:i:s', (int) current_time('timestamp') - HOUR_IN_SECONDS)
             )
@@ -729,8 +1036,8 @@ final class SDH_Muhely_Rma
     /**
      * Üzenet mentése és e-mail értesítés.
      *
-     * Bejövő (ügyfél) üzenetnél a szerviz kap e-mailt; kimenőnél az
-     * ügyfél, ha $email_ugyfelnek igaz és van érvényes e-mail címe.
+     * Bejövő (ügyfél) üzenetnél a szerviz kap e-mailt; kimenőnél az ügyfél,
+     * ha $email_ugyfelnek igaz és van érvényes e-mail címe.
      *
      * @return int Az új üzenet azonosítója (0 = hiba).
      */
@@ -741,15 +1048,15 @@ final class SDH_Muhely_Rma
         $irany = $irany === 'be' ? 'be' : 'ki';
 
         $ok = $wpdb->insert(self::uzenet_tabla(), [
-            'munkalap_id' => $munkalap_id,
-            'ugyfel_id'   => $ugyfel_id,
-            'irany'       => $irany,
-            'csatorna'    => $csatorna,
-            'szoveg'      => $szoveg,
-            'felhasznalo' => $felhasznalo,
-            'olvasva'     => $irany === 'ki' ? 1 : 0,
+            'munkalap_id'  => $munkalap_id,
+            'ugyfel_id'    => $ugyfel_id,
+            'irany'        => $irany,
+            'csatorna'     => $csatorna,
+            'szoveg'       => $szoveg,
+            'felhasznalo'  => $felhasznalo,
+            'olvasva'      => $irany === 'ki' ? 1 : 0,
             'email_kuldve' => 0,
-            'letrehozva'  => current_time('mysql'),
+            'letrehozva'   => current_time('mysql'),
         ]);
 
         if ($ok === false) {
@@ -776,8 +1083,8 @@ final class SDH_Muhely_Rma
 
     private static function email_szerviznek(object $munkalap, ?object $ugyfel, string $szoveg): bool
     {
-        $b  = self::beallitas();
-        $cel = sanitize_email($b['ertesites_email']);
+        $b   = self::beallitas();
+        $cel = sanitize_email((string) $b['ertesites_email']);
 
         if ($cel === '' || !is_email($cel)) {
             return false;
@@ -790,8 +1097,7 @@ final class SDH_Muhely_Rma
             . 'Munkalap: ' . $szam . "\n"
             . 'Ügyfél: ' . $nev . ($ugyfel && $ugyfel->telefon !== '' ? ' (' . $ugyfel->telefon . ')' : '') . "\n\n"
             . "Üzenet:\n" . $szoveg . "\n\n"
-            . 'A CRM-ben: ' . SDH_Muhely_Modulok::frontend_url() . "\n"
-            . '(Munkalap részletei → RMA / Üzenetek lapfül)';
+            . 'A CRM-ben: ' . SDH_Muhely_Modulok::frontend_url(self::KULCS) . "\n";
 
         $fejlec = [];
 
@@ -811,6 +1117,8 @@ final class SDH_Muhely_Rma
         $b    = self::beallitas();
         $szam = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
 
+        $elerhetoseg = array_filter([(string) $b['cim'], (string) $b['telefon'], (string) $b['email'], (string) $b['weboldal']]);
+
         $torzs = 'Kedves ' . (string) $ugyfel->nev . "!\n\n"
             . 'Üzenetet küldtünk a(z) ' . $szam . " számú munkalapjával kapcsolatban:\n\n"
             . $szoveg . "\n\n"
@@ -818,13 +1126,13 @@ final class SDH_Muhely_Rma
             . self::url(self::token($munkalap)) . "\n"
             . "(Belépés: telefonszám és munkalapszám.)\n\n"
             . $b['szerviz_nev']
-            . ($b['elerhetoseg'] !== '' ? "\n" . $b['elerhetoseg'] : '');
+            . ($elerhetoseg !== [] ? "\n" . implode("\n", $elerhetoseg) : '');
 
         $fejlec = [];
-        $valasz = sanitize_email($b['ertesites_email']);
+        $valasz = sanitize_email((string) $b['ertesites_email']);
 
         if ($valasz !== '' && is_email($valasz)) {
-            $fejlec[] = 'Reply-To: ' . self::fejlec_nev($b['szerviz_nev']) . ' <' . $valasz . '>';
+            $fejlec[] = 'Reply-To: ' . self::fejlec_nev((string) $b['szerviz_nev']) . ' <' . $valasz . '>';
         }
 
         return (bool) wp_mail((string) $ugyfel->email, $b['szerviz_nev'] . ' – üzenet a(z) ' . $szam . ' munkalaphoz', $torzs, $fejlec);
@@ -838,14 +1146,19 @@ final class SDH_Muhely_Rma
         return $nev === '' ? '' : '"' . $nev . '"';
     }
 
-    /** Üzenet küldése a CRM-ből (AJAX). */
-    public static function ajax_uzenet_kuld(): void
+    private static function ajax_jog(): void
     {
         check_ajax_referer('sdh_muhely_modal');
 
         if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
+    }
+
+    /** Üzenet küldése a CRM-ből (AJAX). */
+    public static function ajax_uzenet_kuld(): void
+    {
+        self::ajax_jog();
 
         $id       = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $szoveg   = isset($_POST['szoveg']) ? trim(sanitize_textarea_field(wp_unslash($_POST['szoveg']))) : '';
@@ -872,26 +1185,31 @@ final class SDH_Muhely_Rma
         $kuldve = (int) $wpdb->get_var($wpdb->prepare('SELECT email_kuldve FROM ' . self::uzenet_tabla() . ' WHERE id = %d', $uj)) === 1;
 
         wp_send_json_success([
-            'html'   => self::uzenetek_html((int) $munkalap->id, 'crm'),
-            'email'  => $kuldve,
-            'szamlalo' => self::szamlalo((int) $munkalap->id),
+            'html'      => self::uzenetek_html((int) $munkalap->id, 'crm'),
+            'email'     => $kuldve,
+            'szamlalo'  => self::szamlalo((int) $munkalap->id),
+            'olvasatlan' => self::olvasatlan_db(),
         ]);
     }
 
     /** A bejövő üzenetek olvasottra állítása (AJAX, a lapfül megnyitásakor). */
     public static function ajax_olvasva(): void
     {
-        check_ajax_referer('sdh_muhely_modal');
-
-        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
-            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
-        }
+        self::ajax_jog();
 
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
         self::olvasottra($id);
 
-        wp_send_json_success(['szamlalo' => self::szamlalo($id)]);
+        wp_send_json_success(['szamlalo' => self::szamlalo($id), 'olvasatlan' => self::olvasatlan_db()]);
+    }
+
+    /** Az olvasatlan üzenetek száma (AJAX, az oldalmenü jelvényének frissítéséhez). */
+    public static function ajax_allapot(): void
+    {
+        self::ajax_jog();
+
+        wp_send_json_success(['olvasatlan' => self::olvasatlan_db()]);
     }
 
     private static function olvasottra(int $munkalap_id): void
@@ -907,56 +1225,42 @@ final class SDH_Muhely_Rma
     }
 
     /**
-     * Az üzenetszál HTML-je. $nezet: crm (a dolgozónak) vagy ugyfel.
+     * Az üzenetszál HTML-je a CRM-ben (a legfrissebb elöl, lapozható).
      */
-    public static function uzenetek_html(int $munkalap_id, string $nezet): string
+    public static function uzenetek_html(int $munkalap_id, string $nezet = 'crm'): string
     {
-        $uzenetek = self::uzenetek($munkalap_id);
-        $b        = self::beallitas();
+        $uzenetek = array_reverse(self::uzenetek($munkalap_id));
 
         if ($uzenetek === []) {
-            return '<p class="sdh-uz-ures">' . esc_html(
-                $nezet === 'crm' ? 'Még nincs üzenet ehhez a munkalaphoz.' : 'Még nincs üzenet. Kérdését alább írhatja meg.'
-            ) . '</p>';
-        }
-
-        // A CRM-ben a legfrissebb van felül (az alsó panel alacsony), az
-        // ügyféloldalon időrendben, mint egy csevegés.
-        if ($nezet === 'crm') {
-            $uzenetek = array_reverse($uzenetek);
+            return '<p class="sdh-uz-ures">Még nincs üzenet ehhez a munkalaphoz.</p>';
         }
 
         $html = '';
 
         foreach ($uzenetek as $u) {
-            $sajat = $nezet === 'crm' ? $u->irany === 'ki' : $u->irany === 'be';
-
             if ($u->irany === 'ki') {
-                $ki = $nezet === 'crm'
-                    ? ((int) $u->felhasznalo > 0 && ($f = get_userdata((int) $u->felhasznalo)) ? (string) $f->display_name : 'Szerviz')
-                    : $b['szerviz_nev'];
+                $f  = (int) $u->felhasznalo > 0 ? get_userdata((int) $u->felhasznalo) : false;
+                $ki = $f ? (string) $f->display_name : 'Szerviz';
             } else {
-                $ki = $nezet === 'crm' ? 'Ügyfél' : 'Ön';
+                $ki = 'Ügyfél';
             }
 
             $jelek = [];
 
-            if ($nezet === 'crm') {
-                if ($u->irany === 'be' && (int) $u->olvasva === 0) {
-                    $jelek[] = 'új';
-                }
+            if ($u->irany === 'be' && (int) $u->olvasva === 0) {
+                $jelek[] = '<b class="sdh-uz__uj">új</b>';
+            }
 
-                if ((int) $u->email_kuldve === 1) {
-                    $jelek[] = 'e-mail elküldve';
-                }
+            if ((int) $u->email_kuldve === 1) {
+                $jelek[] = '<span>e-mail</span>';
             }
 
             $html .= sprintf(
-                '<div class="sdh-uz%s"><div class="sdh-uz__fej"><b>%s</b> <span>%s%s</span></div><div class="sdh-uz__szoveg">%s</div></div>',
-                $sajat ? ' sdh-uz--sajat' : '',
+                '<div class="sdh-uz%s"><div class="sdh-uz__fej"><b>%s</b> <span>%s</span>%s</div><div class="sdh-uz__szoveg">%s</div></div>',
+                $u->irany === 'ki' ? ' sdh-uz--sajat' : ' sdh-uz--ugyfel',
                 esc_html($ki),
                 esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $u->letrehozva)),
-                $jelek !== [] ? esc_html(' · ' . implode(' · ', $jelek)) : '',
+                $jelek !== [] ? ' ' . implode(' ', $jelek) : '',
                 nl2br(esc_html((string) $u->szoveg))
             );
         }
@@ -965,102 +1269,148 @@ final class SDH_Muhely_Rma
     }
 
     /* =================================================================
-     * CRM: a munkalap RMA / Üzenetek lapfüle
+     * CRM: címke-blokk és az RMA lapfül
      * ============================================================== */
 
-    /** A lapfül címe: „RMA / Üzenetek (3, 1 új)". */
-    public static function ful_cim(int $munkalap_id): string
+    /**
+     * A címke tartalma (QR + szerviz + sorszám + ügyfél + vonalkód) –
+     * ugyanaz a nyomtatott címkén, az Áttekintésben és a munkalap-ablakban.
+     */
+    public static function cimke_blokk(object $munkalap, ?object $ugyfel, ?object $eszkoz): string
+    {
+        $szam = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
+        $url  = self::url(self::token($munkalap));
+        $b    = self::beallitas();
+
+        $sorok = '';
+
+        if ($ugyfel) {
+            $sorok .= '<div class="sdh-cimke__sor">' . esc_html((string) $ugyfel->nev) . '</div>';
+        }
+
+        if ($eszkoz) {
+            $sorok .= '<div class="sdh-cimke__sor">' . esc_html(SDH_Muhely_Eszkoz::megnevezes($eszkoz)) . '</div>';
+        }
+
+        $atveve = SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->keszult);
+
+        if ($atveve !== '') {
+            $sorok .= '<div class="sdh-cimke__sor">Átvéve: ' . esc_html($atveve) . '</div>';
+        }
+
+        return '<div class="sdh-cimke">'
+            . '<div class="sdh-cimke__qr">' . SDH_Muhely_Kodok::qr_svg($url) . '</div>'
+            . '<div class="sdh-cimke__adat">'
+            . '<div class="sdh-cimke__ceg">' . esc_html((string) $b['szerviz_nev']) . '</div>'
+            . '<div class="sdh-cimke__szam">' . esc_html($szam) . '</div>'
+            . $sorok
+            . '</div>'
+            . '<div class="sdh-cimke__vk">' . SDH_Muhely_Kodok::vonalkod_svg($szam, false, 'sdh-vonalkod', true)
+            . '<div class="sdh-cimke__vkszam">' . esc_html($szam) . '</div></div>'
+            . '<div class="sdh-cimke__sugo">Javítás állapota: olvassa be a QR-kódot, és lépjen be a telefonszámával és a munkalap sorszámával.</div>'
+            . '</div>';
+    }
+
+    /** Az RMA lapfül jelvénye: üzenetszám, piros, ha van olvasatlan. */
+    public static function ful_jelveny(int $munkalap_id, string $osztaly = 'sdh-fulek__db'): string
     {
         $sz = self::szamlalo($munkalap_id);
 
-        if ($sz['osszes'] === 0) {
-            return 'RMA / Üzenetek';
-        }
-
-        return 'RMA / Üzenetek (' . $sz['osszes'] . ($sz['uj'] > 0 ? ', ' . $sz['uj'] . ' új' : '') . ')';
+        return sprintf(
+            '<span class="%s%s" data-sdh-db="rma"%s>%d</span>',
+            esc_attr($osztaly),
+            $sz['uj'] > 0 ? ' is-uj' : '',
+            $sz['osszes'] > 0 ? '' : ' hidden',
+            $sz['osszes']
+        );
     }
 
-    /** A lapfül tartalma a részletpanelen. */
-    public static function crm_panel(object $munkalap, ?object $ugyfel): void
+    /**
+     * Az RMA lapfül tartalma. Ugyanez a munkalap-ablakban (Termékek mellett)
+     * és az Áttekintés részletpanelén. Űrlapon belül is áll, ezért nincs
+     * benne <form>: a küldést az rma.js intézi gombnyomásra.
+     */
+    public static function munkalap_ful(?object $munkalap): void
     {
+        if ($munkalap === null || (int) $munkalap->id <= 0) {
+            echo '<p class="sdh-rma__ures">Az RMA (QR-kód, ügyféloldal, üzenetek) a munkalap mentése után érhető el.</p>';
+
+            return;
+        }
+
         $id        = (int) $munkalap->id;
         $szamozott = (int) $munkalap->munkalap_szam > 0;
+        $ugyfel    = self::ugyfel((int) $munkalap->ugyfel_id);
+        $eszkoz    = self::eszkoz((int) $munkalap->eszkoz_id);
         $allapotok = SDH_Muhely_Munkalap::allapotok();
         $b         = self::beallitas();
         $van_email = $ugyfel && is_email((string) $ugyfel->email);
 
-        echo '<div class="sdh-rma-panel" data-sdh-rma="' . $id . '">';
+        echo '<div class="sdh-rma" data-sdh-rma="' . $id . '">';
 
-        // --- Kódok --------------------------------------------------------
-        echo '<div class="sdh-rma-panel__kodok">';
+        // --- Címke ---------------------------------------------------------
+        echo '<div class="sdh-rma__kodok">';
 
         if ($szamozott) {
-            $url  = self::url(self::token($munkalap));
-            $szam = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
+            $token = self::token($munkalap);
 
-            echo '<div class="sdh-rma-panel__qr">' . SDH_Muhely_Kodok::qr_svg($url) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
-            echo '<div class="sdh-rma-panel__vonalkod">' . SDH_Muhely_Kodok::vonalkod_svg($szam) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+            echo self::cimke_blokk($munkalap, $ugyfel, $eszkoz); // phpcs:ignore WordPress.Security.EscapeOutput
             printf(
-                '<div class="sdh-rma-panel__link"><input type="text" readonly value="%s" aria-label="Az ügyféloldal címe">'
-                . '<button type="button" class="sdh-gomb" data-sdh-rma-masol>Másolás</button></div>',
-                esc_attr($url)
-            );
-            printf(
-                '<div class="sdh-rma-panel__gombok"><a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a>'
-                . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Ügyféloldal megnyitása</a></div>',
+                '<div class="sdh-rma__gombok">'
+                . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a>'
+                . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Ügyféloldal</a>'
+                . '<button type="button" class="sdh-gomb" data-sdh-rma-masol="%s">Link másolása</button>'
+                . '</div>',
                 esc_url(self::cimke_url($id)),
-                esc_url($url)
+                esc_url(add_query_arg('elonezet', '1', self::helyi_url($token))),
+                esc_attr(self::url($token))
             );
-            echo '<p class="sdh-rma-panel__sugo">Az ügyfél a <b>telefonszámával</b> (pl. 06304004636) és a <b>munkalap sorszámával</b> ('
-                . esc_html($szam) . ') lép be.</p>';
         } else {
-            echo '<p class="sdh-reszlet__ures">A QR-kód és a vonalkód akkor készül el, amikor a munkalap sorszámot kap (számozott állapotba kerül).</p>';
+            echo '<p class="sdh-rma__ures">A QR-kód és a vonalkód akkor készül el, amikor a munkalap sorszámot kap (számozott állapotba kerül).</p>';
         }
 
         echo '</div>';
 
-        // --- Üzenetek -----------------------------------------------------
-        echo '<div class="sdh-rma-panel__uzenetek">';
-        echo '<h4>Üzenetek az ügyféllel</h4>';
+        // --- Üzenetek ------------------------------------------------------
+        echo '<div class="sdh-rma__uzenetek"><div class="sdh-rma__cim">Üzenetek az ügyféllel</div>';
 
         if ($ugyfel !== null) {
             printf(
-                '<form class="sdh-uz-urlap" data-sdh-uzenet-urlap data-id="%d">'
-                . '<textarea name="szoveg" rows="3" placeholder="Üzenet az ügyfélnek (az ügyféloldalon látja, és válaszolhat rá)"></textarea>'
+                '<div class="sdh-uz-urlap" data-sdh-uzenet-urlap data-id="%d">'
+                . '<textarea rows="2" data-sdh-uzenet-szoveg aria-label="Üzenet az ügyfélnek" placeholder="Üzenet az ügyfélnek – az ügyféloldalon látja, és válaszolhat rá (Ctrl+Enter: küldés)"></textarea>'
                 . '<div class="sdh-uz-urlap__lab">'
-                . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" name="email" value="1"%s%s> E-mail értesítés is%s</label>'
-                . '<button type="submit" class="sdh-gomb sdh-gomb--elsodleges">Küldés</button></div>'
-                . '<p class="sdh-uz-urlap__hiba" data-sdh-uzenet-hiba hidden></p></form>',
+                . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-email value="1"%s%s> %s</label>'
+                . '<button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-uzenet-kuld>Küldés</button></div>'
+                . '<p class="sdh-uz-urlap__hiba" data-sdh-uzenet-hiba hidden></p></div>',
                 $id,
                 $van_email && $b['ugyfel_email'] ? ' checked' : '',
                 $van_email ? '' : ' disabled',
-                esc_html($van_email ? ' (' . $ugyfel->email . ')' : ' – az ügyfélnek nincs e-mail címe')
+                esc_html($van_email ? 'E-mail is: ' . $ugyfel->email : 'E-mail is – az ügyfélnek nincs e-mail címe')
             );
         } else {
-            echo '<p class="sdh-reszlet__ures">Üzenetet ügyfélhez rendelt munkalapon lehet küldeni.</p>';
+            echo '<p class="sdh-rma__ures">Üzenetet ügyfélhez rendelt munkalapon lehet küldeni.</p>';
         }
 
-        echo '<div class="sdh-uz-szal" data-sdh-uzenetek>' . self::uzenetek_html($id, 'crm') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
-
+        echo '<div class="sdh-uz-szal" data-sdh-uzenetek data-sdh-lapoz="3">' . self::uzenetek_html($id) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
         echo '</div>';
 
-        // --- Állapottörténet ----------------------------------------------
-        echo '<div class="sdh-rma-panel__naplo"><h4>Állapottörténet</h4>';
+        // --- Állapottörténet -----------------------------------------------
+        echo '<div class="sdh-rma__naplo"><div class="sdh-rma__cim">Állapottörténet</div>';
         $naplo = self::naplo($id);
 
         if ($naplo === []) {
-            echo '<p class="sdh-reszlet__ures">Még nincs bejegyzés.</p>';
+            echo '<p class="sdh-rma__ures">Még nincs bejegyzés.</p>';
         } else {
-            echo '<ol class="sdh-rma-naplo">';
+            echo '<ol class="sdh-rma-naplo" data-sdh-lapoz="6">';
 
             foreach ($naplo as $sor) {
-                $ki = (int) $sor->felhasznalo > 0 && ($f = get_userdata((int) $sor->felhasznalo)) ? (string) $f->display_name : '';
+                $f  = (int) $sor->felhasznalo > 0 ? get_userdata((int) $sor->felhasznalo) : false;
 
                 printf(
                     '<li>%s <span>%s%s</span></li>',
                     SDH_Muhely_Munkalap::jelveny((string) $sor->allapot, $allapotok), // phpcs:ignore WordPress.Security.EscapeOutput
                     esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $sor->letrehozva)),
-                    $ki !== '' ? esc_html(' · ' . $ki) : ''
+                    $f ? esc_html(' · ' . $f->display_name) : ''
                 );
             }
 
@@ -1068,6 +1418,187 @@ final class SDH_Muhely_Rma
         }
 
         echo '</div></div>';
+    }
+
+    /* =================================================================
+     * Olvasatlan-jelvény a wp-admin menüben
+     * ============================================================== */
+
+    public static function admin_menu_jelveny(): void
+    {
+        global $menu, $submenu;
+
+        $db = self::olvasatlan_db();
+
+        if ($db <= 0) {
+            return;
+        }
+
+        $jel = ' <span class="awaiting-mod count-' . $db . '"><span class="pending-count">' . $db . '</span></span>';
+
+        foreach ((array) $menu as $i => $elem) {
+            if (($elem[2] ?? '') === SDH_Muhely_Admin_UI::FOMENU) {
+                $menu[$i][0] .= $jel; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+            }
+        }
+
+        foreach ((array) ($submenu[SDH_Muhely_Admin_UI::FOMENU] ?? []) as $i => $elem) {
+            if (($elem[2] ?? '') === SDH_Muhely_Admin_UI::FOMENU . '-' . self::KULCS) {
+                $submenu[SDH_Muhely_Admin_UI::FOMENU][$i][0] .= $jel; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+            }
+        }
+    }
+
+    /* =================================================================
+     * Üzenetek – postafiók (oldalmenü)
+     * ============================================================== */
+
+    public static function posta_oldal(): void
+    {
+        global $wpdb;
+
+        $u        = self::uzenet_tabla();
+        $csak_uj  = !isset($_GET['mind']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $oldal    = isset($_GET['oldalszam']) ? max(1, (int) $_GET['oldalszam']) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $olvasatlan = self::olvasatlan_db();
+
+        // Olvasatlan nélkül az „Összes" nézet nyíljon.
+        if ($csak_uj && $olvasatlan === 0) {
+            $csak_uj = false;
+        }
+
+        $szuro = $csak_uj ? "HAVING SUM(CASE WHEN irany = 'be' AND olvasva = 0 THEN 1 ELSE 0 END) > 0" : '';
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $osszes = (int) $wpdb->get_var("SELECT COUNT(*) FROM (SELECT munkalap_id FROM {$u} GROUP BY munkalap_id {$szuro}) t");
+
+        $sorok = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT munkalap_id, COUNT(*) AS db, MAX(id) AS utolso_id, MAX(letrehozva) AS utolso,
+                        SUM(CASE WHEN irany = 'be' AND olvasva = 0 THEN 1 ELSE 0 END) AS uj
+                 FROM {$u} GROUP BY munkalap_id {$szuro}
+                 ORDER BY utolso DESC, utolso_id DESC LIMIT %d OFFSET %d",
+                self::POSTA_OLDAL,
+                ($oldal - 1) * self::POSTA_OLDAL
+            )
+        ) ?: [];
+        // phpcs:enable
+
+        $ml_idk   = array_map(static fn (object $s): int => (int) $s->munkalap_id, $sorok);
+        $utolsok  = [];
+        $lapok    = [];
+        $ugyfelek = [];
+        $eszkozok = [];
+
+        if ($sorok !== []) {
+            $idk = implode(',', array_map(static fn (object $s): int => (int) $s->utolso_id, $sorok));
+
+            foreach ($wpdb->get_results("SELECT * FROM {$u} WHERE id IN ({$idk})") ?: [] as $x) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $utolsok[(int) $x->munkalap_id] = $x;
+            }
+
+            $ml_lista = implode(',', $ml_idk);
+
+            foreach ($wpdb->get_results('SELECT * FROM ' . self::munkalap_tabla() . " WHERE id IN ({$ml_lista})") ?: [] as $x) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $lapok[(int) $x->id] = $x;
+            }
+
+            $u_idk = array_filter(array_map(static fn (object $m): int => (int) $m->ugyfel_id, $lapok));
+            $e_idk = array_filter(array_map(static fn (object $m): int => (int) $m->eszkoz_id, $lapok));
+
+            if ($u_idk !== []) {
+                foreach ($wpdb->get_results('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id IN (' . implode(',', $u_idk) . ')') ?: [] as $x) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                    $ugyfelek[(int) $x->id] = $x;
+                }
+            }
+
+            if ($e_idk !== []) {
+                foreach ($wpdb->get_results('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id IN (' . implode(',', $e_idk) . ')') ?: [] as $x) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                    $eszkozok[(int) $x->id] = $x;
+                }
+            }
+        }
+
+        $oldalak   = max(1, (int) ceil($osszes / self::POSTA_OLDAL));
+        $allapotok = SDH_Muhely_Munkalap::allapotok();
+        $url       = static fn (array $p = []): string => SDH_Muhely_Modulok::url(self::KULCS, $p);
+
+        ?>
+        <div class="sdh-wrap">
+            <?php
+            SDH_Muhely_Admin_UI::fejlec(
+                'Üzenetek',
+                'Az ügyfelek üzenetei munkalaponként. Sorra kattintva a munkalap RMA lapfüle nyílik meg – ott válaszolhatsz.'
+            );
+            ?>
+
+            <div class="sdh-kereso">
+                <a class="sdh-gomb<?php echo $csak_uj ? ' sdh-gomb--elsodleges' : ''; ?>" href="<?php echo esc_url($url()); ?>">
+                    Olvasatlan <span class="sdh-fulek__db<?php echo $olvasatlan > 0 ? ' is-uj' : ''; ?>"><?php echo (int) $olvasatlan; ?></span>
+                </a>
+                <a class="sdh-gomb<?php echo $csak_uj ? '' : ' sdh-gomb--elsodleges'; ?>" href="<?php echo esc_url($url(['mind' => 1])); ?>">Összes beszélgetés</a>
+                <span class="sdh-kereso__talalat"><?php echo esc_html(number_format_i18n($osszes)); ?> munkalap</span>
+            </div>
+
+            <table class="sdh-tabla sdh-posta">
+                <thead>
+                    <tr>
+                        <th>Munkalap</th>
+                        <th>Ügyfél</th>
+                        <th class="sdh-tabla__rejtheto">Eszköz</th>
+                        <th>Utolsó üzenet</th>
+                        <th>Időpont</th>
+                        <th class="sdh-tabla__szam">Üzenet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php if ($sorok === []) : ?>
+                    <tr><td colspan="6" class="sdh-tabla__ures"><?php echo esc_html($csak_uj ? 'Nincs olvasatlan üzenet.' : 'Még nincs üzenet.'); ?></td></tr>
+                <?php endif; ?>
+
+                <?php foreach ($sorok as $s) :
+                    $mid   = (int) $s->munkalap_id;
+                    $ml    = $lapok[$mid] ?? null;
+                    $ut    = $utolsok[$mid] ?? null;
+                    $ugy   = $ml ? ($ugyfelek[(int) $ml->ugyfel_id] ?? null) : null;
+                    $esz   = $ml ? ($eszkozok[(int) $ml->eszkoz_id] ?? null) : null;
+                    $uj    = (int) $s->uj;
+                    $szov  = $ut ? wp_html_excerpt((string) $ut->szoveg, 90, '…') : '';
+                    ?>
+                    <tr class="sdh-posta__sor<?php echo $uj > 0 ? ' is-uj' : ''; ?>"
+                        data-sdh-urlap="munkalapok" data-sdh-id="<?php echo $mid; ?>" data-sdh-ful="rma"
+                        data-sdh-posta="<?php echo $mid; ?>" tabindex="0">
+                        <td>
+                            <b><?php echo esc_html($ml ? SDH_Muhely_Munkalap::szam_formaz($ml->munkalap_szam) : '#' . $mid); ?></b>
+                            <?php if ($ml) { echo ' ' . SDH_Muhely_Munkalap::jelveny((string) $ml->allapot, $allapotok); } // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                        </td>
+                        <td><?php echo esc_html($ugy ? (string) $ugy->nev : '—'); ?></td>
+                        <td class="sdh-tabla__rejtheto sdh-tabla__halvany"><?php echo esc_html($esz ? SDH_Muhely_Eszkoz::megnevezes($esz) : '—'); ?></td>
+                        <td class="sdh-posta__szoveg">
+                            <span class="sdh-posta__ki"><?php echo esc_html($ut && $ut->irany === 'be' ? 'Ügyfél:' : 'Szerviz:'); ?></span>
+                            <?php echo esc_html($szov); ?>
+                        </td>
+                        <td class="sdh-tabla__halvany"><?php echo esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $s->utolso)); ?></td>
+                        <td class="sdh-tabla__szam">
+                            <span class="sdh-fulek__db<?php echo $uj > 0 ? ' is-uj' : ''; ?>" title="<?php echo esc_attr($uj > 0 ? $uj . ' olvasatlan' : 'nincs olvasatlan'); ?>">
+                                <?php echo $uj > 0 ? (int) $uj . ' új' : (int) $s->db; ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <?php if ($oldalak > 1) : ?>
+                <div class="sdh-lapozas">
+                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                        <a class="sdh-gomb<?php echo $i === $oldal ? ' sdh-gomb--elsodleges' : ''; ?>"
+                           href="<?php echo esc_url($url(array_filter(['mind' => $csak_uj ? null : 1, 'oldalszam' => $i]))); ?>"><?php echo (int) $i; ?></a>
+                    <?php endfor; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php
     }
 
     /* =================================================================
@@ -1096,8 +1627,6 @@ final class SDH_Muhely_Rma
         $ugyfel = self::ugyfel((int) $munkalap->ugyfel_id);
         $eszkoz = self::eszkoz((int) $munkalap->eszkoz_id);
         $szam   = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
-        $url    = self::url(self::token($munkalap));
-        $b      = self::beallitas();
 
         nocache_headers();
         status_header(200);
@@ -1109,21 +1638,14 @@ final class SDH_Muhely_Rma
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>Címke – <?php echo esc_html($szam); ?></title>
+<link rel="stylesheet" href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
 <style>
     @page { size: auto; margin: 8mm; }
-    * { box-sizing: border-box; }
     body { margin: 0; font: 13px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #000; background: #fff; }
     .eszkoztar { padding: 12px 16px; background: #f3f3f3; border-bottom: 1px solid #ddd; display: flex; gap: 8px; align-items: center; }
     .eszkoztar button { font: inherit; padding: 6px 14px; border: 1px solid #999; border-radius: 6px; background: #fff; cursor: pointer; }
-    .cimke { width: 92mm; margin: 12px; border: 1px dashed #999; padding: 4mm; display: grid; grid-template-columns: 30mm 1fr; gap: 3mm; }
-    .cimke .qr svg { width: 30mm; height: 30mm; display: block; }
-    .cimke h1 { font-size: 11px; margin: 0 0 1mm; font-weight: 600; }
-    .cimke .szam { font-size: 22px; font-weight: 700; letter-spacing: .02em; line-height: 1.1; }
-    .cimke .sor { font-size: 11px; }
-    .cimke .vk { grid-column: 1 / -1; }
-    .cimke .vk svg { width: 100%; height: 14mm; display: block; }
-    .cimke .sugo { grid-column: 1 / -1; font-size: 9.5px; color: #333; }
-    @media print { .eszkoztar { display: none; } .cimke { margin: 0; border: 0; } }
+    .sdh-cimke { width: 92mm; margin: 12px; border: 1px dashed #999; padding: 4mm; }
+    @media print { .eszkoztar { display: none; } .sdh-cimke { margin: 0; border: 0; } }
 </style>
 </head>
 <body>
@@ -1131,346 +1653,10 @@ final class SDH_Muhely_Rma
     <button type="button" onclick="window.print()">Nyomtatás</button>
     <span>Munkalap <?php echo esc_html($szam); ?> – címke (QR + vonalkód)</span>
 </div>
-<div class="cimke">
-    <div class="qr"><?php echo SDH_Muhely_Kodok::qr_svg($url); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
-    <div>
-        <h1><?php echo esc_html($b['szerviz_nev']); ?></h1>
-        <div class="szam"><?php echo esc_html($szam); ?></div>
-        <?php if ($ugyfel) : ?><div class="sor"><?php echo esc_html((string) $ugyfel->nev); ?></div><?php endif; ?>
-        <?php if ($eszkoz) : ?><div class="sor"><?php echo esc_html(SDH_Muhely_Eszkoz::megnevezes($eszkoz)); ?></div><?php endif; ?>
-        <div class="sor">Átvéve: <?php echo esc_html(SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->keszult)); ?></div>
-    </div>
-    <div class="vk"><?php echo SDH_Muhely_Kodok::vonalkod_svg($szam); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
-    <div class="sugo">Javítás állapota: olvassa be a QR-kódot, és lépjen be a telefonszámával és a munkalap sorszámával.</div>
-</div>
+<?php echo self::cimke_blokk($munkalap, $ugyfel, $eszkoz); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 <script>window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 250); });</script>
 </body>
 </html>
         <?php
-    }
-
-    /* =================================================================
-     * Ügyféloldal
-     * ============================================================== */
-
-    private static function penz(float $osszeg): string
-    {
-        return number_format($osszeg, 0, ',', "\u{00A0}") . "\u{00A0}Ft";
-    }
-
-    /** Az ügyféloldal kerete: önálló, mobilra tervezett lap. */
-    private static function ugyfel_keret(string $cim, callable $tartalom): void
-    {
-        $b = self::beallitas();
-
-        ?>
-<!doctype html>
-<html lang="hu">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
-<title><?php echo esc_html($cim . ' – ' . $b['szerviz_nev']); ?></title>
-<style>
-    :root {
-        --hatter: #f4f5f7; --lap: #fff; --szoveg: #1d2127; --halvany: #6a7079; --vonal: #e3e5e9;
-        --kiemel: #c8102e; --kiemel-hatter: #fdecef; --fo: #1f5fbf; --fo-szoveg: #fff; --ok: #2e9d4f;
-    }
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --hatter: #15171b; --lap: #1e2126; --szoveg: #e8eaed; --halvany: #9aa1ab; --vonal: #30343b;
-            --kiemel: #ff5c70; --kiemel-hatter: #3a1a20; --fo: #4d8be8; --fo-szoveg: #fff; --ok: #4fc274;
-        }
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--hatter); color: var(--szoveg); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-    header.fej { background: var(--lap); border-bottom: 1px solid var(--vonal); padding: 14px 16px; }
-    header.fej .nev { font-weight: 700; font-size: 17px; }
-    header.fej .al { color: var(--halvany); font-size: 13px; }
-    main { max-width: 680px; margin: 0 auto; padding: 16px; display: grid; gap: 12px; }
-    .k { background: var(--lap); border: 1px solid var(--vonal); border-radius: 12px; padding: 16px; }
-    .k h2 { margin: 0 0 10px; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; color: var(--halvany); font-weight: 600; }
-    .k p { margin: 0 0 8px; }
-    .szam { font-size: 26px; font-weight: 700; }
-    .allapot { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: 17px; color: #fff; margin: 8px 0 4px; }
-    .halvany { color: var(--halvany); font-size: 14px; }
-    dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; }
-    dt { color: var(--halvany); }
-    dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
-    .fizet { border: 2px solid var(--kiemel); background: var(--kiemel-hatter); }
-    .fizet .osszeg { font-size: 30px; font-weight: 800; color: var(--kiemel); }
-    .fizetve { border-left: 4px solid var(--ok); }
-    table { width: 100%; border-collapse: collapse; font-size: 15px; }
-    td, th { padding: 7px 0; border-bottom: 1px solid var(--vonal); text-align: left; vertical-align: top; }
-    td.j, th.j { text-align: right; white-space: nowrap; padding-left: 10px; }
-    tfoot td { font-weight: 700; border-bottom: 0; }
-    .brutto { color: var(--kiemel); font-weight: 700; }
-    ol.ido { list-style: none; margin: 0; padding: 0; }
-    ol.ido li { position: relative; padding: 0 0 12px 22px; }
-    ol.ido li::before { content: ""; position: absolute; left: 4px; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--pont, #999); }
-    ol.ido li::after { content: ""; position: absolute; left: 8px; top: 20px; bottom: 0; width: 2px; background: var(--vonal); }
-    ol.ido li:last-child::after { display: none; }
-    ol.ido b { display: block; }
-    .megj { border-left: 4px solid var(--fo); }
-    label { display: block; font-weight: 600; margin: 10px 0 4px; }
-    input, textarea { width: 100%; font: inherit; padding: 12px; border: 1px solid var(--vonal); border-radius: 10px; background: var(--lap); color: var(--szoveg); }
-    textarea { min-height: 100px; resize: vertical; }
-    button { font: inherit; font-weight: 600; padding: 12px 18px; border: 0; border-radius: 10px; background: var(--fo); color: var(--fo-szoveg); cursor: pointer; margin-top: 12px; width: 100%; }
-    button.masodlagos { background: transparent; color: var(--halvany); border: 1px solid var(--vonal); width: auto; padding: 8px 14px; font-weight: 500; }
-    .hiba { background: var(--kiemel-hatter); color: var(--kiemel); padding: 10px 12px; border-radius: 10px; margin: 0 0 10px; }
-    .siker { background: color-mix(in srgb, var(--ok) 15%, var(--lap)); color: var(--ok); padding: 10px 12px; border-radius: 10px; margin: 0 0 10px; }
-    footer { max-width: 680px; margin: 0 auto; padding: 8px 16px 32px; color: var(--halvany); font-size: 14px; }
-    footer form { margin-top: 10px; }
-    .sdh-uz-ures { color: var(--halvany); margin: 0 0 8px; }
-    .sdh-uz { padding: 10px 12px; border-radius: 10px; background: var(--hatter); margin: 0 0 8px; max-width: 90%; }
-    .sdh-uz--sajat { margin-left: auto; background: color-mix(in srgb, var(--fo) 14%, var(--lap)); }
-    .sdh-uz__fej { font-size: 13px; color: var(--halvany); margin-bottom: 2px; }
-    .sdh-uz__fej b { color: var(--szoveg); }
-</style>
-</head>
-<body>
-<header class="fej">
-    <div class="nev"><?php echo esc_html($b['szerviz_nev']); ?></div>
-    <div class="al">Javítás állapota</div>
-</header>
-<main>
-<?php call_user_func($tartalom); ?>
-</main>
-<footer>
-    <?php if ($b['elerhetoseg'] !== '') : ?>
-        <div><?php echo nl2br(esc_html($b['elerhetoseg'])); ?></div>
-    <?php endif; ?>
-</footer>
-</body>
-</html>
-        <?php
-    }
-
-    /** Hibaüzenet a ?h= paraméterből. */
-    private static function visszajelzes(): string
-    {
-        // phpcs:disable WordPress.Security.NonceVerification.Recommended
-        $h  = isset($_GET['h']) ? sanitize_key(wp_unslash($_GET['h'])) : '';
-        $ok = isset($_GET['ok']) ? sanitize_key(wp_unslash($_GET['ok'])) : '';
-        // phpcs:enable
-
-        $hibak = [
-            'rossz'     => 'A telefonszám vagy a munkalap sorszáma nem egyezik. Ellenőrizze, és próbálja újra.',
-            'sok'       => 'Túl sok sikertelen próbálkozás. Kérjük, próbálja újra 15 perc múlva.',
-            'lejart'    => 'Az űrlap lejárt. Kérjük, írja meg újra az üzenetet.',
-            'ures'      => 'Az üzenet üres volt.',
-            'sokuzenet' => 'Rövid időn belül sok üzenet érkezett. Kérjük, próbálja később, vagy hívjon minket.',
-        ];
-
-        if (isset($hibak[$h])) {
-            return '<p class="hiba" role="alert">' . esc_html($hibak[$h]) . '</p>';
-        }
-
-        if ($ok === 'kuldve') {
-            return '<p class="siker" role="status">Üzenetét megkaptuk, hamarosan válaszolunk.</p>';
-        }
-
-        return '';
-    }
-
-    /** A zárt oldal: telefonszám + sorszám. */
-    private static function zar_oldal(object $munkalap): void
-    {
-        self::ugyfel_keret('Belépés', static function () use ($munkalap): void {
-            ?>
-            <section class="k">
-                <h2>Munkalap megtekintése</h2>
-                <p>A javítás állapotának megtekintéséhez adja meg a telefonszámát és a munkalap sorszámát (a munkalapon / címkén találja).</p>
-                <?php echo self::visszajelzes(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                <form method="post" autocomplete="on">
-                    <input type="hidden" name="sdh_rma_muvelet" value="belep">
-                    <label for="telefon">Telefonszám</label>
-                    <input type="tel" id="telefon" name="telefon" inputmode="tel" autocomplete="tel" placeholder="06301234567" required>
-                    <label for="sorszam">Munkalap sorszáma</label>
-                    <input type="text" id="sorszam" name="sorszam" inputmode="numeric" autocomplete="off" placeholder="pl. <?php echo esc_attr(preg_replace('/\d/', '0', SDH_Muhely_Munkalap::szam_formaz(1)) ?: '1'); ?>" required>
-                    <button type="submit">Megnyitás</button>
-                </form>
-            </section>
-            <?php
-        });
-    }
-
-    /** A feloldott RMA-oldal. */
-    private static function rma_oldal(object $munkalap, ?object $ugyfel): void
-    {
-        self::ugyfel_keret('Munkalap ' . SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam), static function () use ($munkalap, $ugyfel): void {
-            $allapotok = SDH_Muhely_Munkalap::allapotok();
-            $kulcs     = (string) $munkalap->allapot;
-            $allapot   = $allapotok[$kulcs] ?? ['nev' => $kulcs, 'szin' => 'szurke'];
-            $szin      = self::SZINEK[$allapot['szin']] ?? self::SZINEK['szurke'];
-            $naplo     = self::naplo((int) $munkalap->id);
-            $utolso    = $naplo !== [] ? (string) $naplo[0]->letrehozva : (string) $munkalap->modositva;
-            $eszkoz    = self::eszkoz((int) $munkalap->eszkoz_id);
-            $hibak     = SDH_Muhely_Munkalap::hibasorok((int) $munkalap->id);
-            $hiba_all  = SDH_Muhely_Munkalap::hiba_allapotok();
-            $tetelek   = SDH_Muhely_Tetel::lista((int) $munkalap->id);
-
-            $brutto    = (float) $munkalap->brutto_ertek;
-            $fizetett  = (float) $munkalap->fizetett;
-            $fizetve   = (int) $munkalap->fizetve === 1;
-            $fizetendo = $fizetve ? 0.0 : $brutto - $fizetett;
-
-            echo self::visszajelzes(); // phpcs:ignore WordPress.Security.EscapeOutput
-
-            // --- Állapot ---------------------------------------------------
-            ?>
-            <section class="k">
-                <div class="halvany">Munkalap sorszáma</div>
-                <div class="szam"><?php echo esc_html(SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam)); ?></div>
-                <div class="allapot" style="background: <?php echo esc_attr($szin); ?>"><?php echo esc_html((string) $allapot['nev']); ?></div>
-                <div class="halvany">Utoljára módosult: <?php echo esc_html(SDH_Muhely_Munkalap::datumido_megjelenit($utolso)); ?></div>
-            </section>
-            <?php
-
-            // --- Fizetés ---------------------------------------------------
-            if ($brutto > 0 || $fizetett > 0) {
-                if ($fizetendo > 0) {
-                    ?>
-                    <section class="k fizet">
-                        <h2>Fizetendő</h2>
-                        <div class="osszeg"><?php echo esc_html(self::penz($fizetendo)); ?></div>
-                        <dl style="margin-top:10px">
-                            <dt>Bruttó végösszeg</dt><dd class="brutto"><?php echo esc_html(self::penz($brutto)); ?></dd>
-                            <?php if ($fizetett > 0) : ?>
-                                <dt>Befizetett előleg</dt><dd><?php echo esc_html(self::penz($fizetett)); ?></dd>
-                            <?php endif; ?>
-                        </dl>
-                    </section>
-                    <?php
-                } else {
-                    ?>
-                    <section class="k fizetve">
-                        <h2>Fizetés</h2>
-                        <dl>
-                            <dt>Bruttó végösszeg</dt><dd class="brutto"><?php echo esc_html(self::penz($brutto)); ?></dd>
-                            <dt>Állapot</dt><dd><?php echo esc_html($fizetve ? 'Kifizetve' . ($munkalap->fizetes_ideje ? ' (' . SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->fizetes_ideje) . ')' : '') : 'Nincs fizetendő'); ?></dd>
-                        </dl>
-                    </section>
-                    <?php
-                }
-            }
-
-            // --- Adatok ----------------------------------------------------
-            ?>
-            <section class="k">
-                <h2>Adatok</h2>
-                <dl>
-                    <?php if ($ugyfel) : ?><dt>Ügyfél</dt><dd><?php echo esc_html((string) $ugyfel->nev); ?></dd><?php endif; ?>
-                    <?php if ($eszkoz) : ?>
-                        <dt>Eszköz</dt><dd><?php echo esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz)); ?></dd>
-                        <?php
-                        $azon = (string) ($eszkoz->imei !== '' ? $eszkoz->imei : $eszkoz->sorozatszam);
-
-                        if ($azon !== '') :
-                            ?>
-                            <dt><?php echo esc_html($eszkoz->imei !== '' ? 'IMEI' : 'Sorozatszám'); ?></dt>
-                            <dd><?php echo esc_html(strlen($azon) > 5 ? str_repeat('•', strlen($azon) - 5) . substr($azon, -5) : $azon); ?></dd>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                    <dt>Átvétel</dt><dd><?php echo esc_html(SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->keszult) ?: '—'); ?></dd>
-                    <?php if (!empty($munkalap->hatarido)) : ?>
-                        <dt>Várható elkészülés</dt><dd><?php echo esc_html(SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->hatarido)); ?></dd>
-                    <?php endif; ?>
-                    <?php if (!empty($munkalap->lezarva)) : ?>
-                        <dt>Lezárva</dt><dd><?php echo esc_html(SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->lezarva)); ?></dd>
-                    <?php endif; ?>
-                </dl>
-            </section>
-            <?php
-
-            // --- Hibák -----------------------------------------------------
-            if ($hibak !== []) {
-                echo '<section class="k"><h2>Bejelentett hibák</h2><table><tbody>';
-
-                foreach ($hibak as $hiba) {
-                    $ha = $hiba_all[(string) $hiba->allapot] ?? null;
-
-                    printf(
-                        '<tr><td>%s</td><td class="j">%s</td></tr>',
-                        esc_html((string) $hiba->leiras),
-                        esc_html($ha ? (string) $ha['nev'] : '')
-                    );
-                }
-
-                echo '</tbody></table></section>';
-            }
-
-            // --- Tételek ---------------------------------------------------
-            if ($tetelek !== []) {
-                echo '<section class="k"><h2>Elvégzett munka és alkatrészek</h2><table><thead><tr><th>Megnevezés</th><th class="j">Menny.</th><th class="j">Bruttó</th></tr></thead><tbody>';
-                $ossz = 0.0;
-
-                foreach ($tetelek as $t) {
-                    $ossz += (float) $t->brutto_ertek;
-                    $menny = rtrim(rtrim(number_format((float) $t->mennyiseg, 3, ',', ''), '0'), ',');
-
-                    printf(
-                        '<tr><td>%s</td><td class="j">%s %s</td><td class="j">%s</td></tr>',
-                        esc_html((string) $t->megnevezes),
-                        esc_html($menny),
-                        esc_html((string) $t->me),
-                        esc_html(self::penz((float) $t->brutto_ertek))
-                    );
-                }
-
-                printf(
-                    '</tbody><tfoot><tr><td>Összesen</td><td></td><td class="j brutto">%s</td></tr></tfoot></table></section>',
-                    esc_html(self::penz($ossz))
-                );
-            }
-
-            // --- Állapottörténet -------------------------------------------
-            if ($naplo !== []) {
-                echo '<section class="k"><h2>Állapottörténet</h2><ol class="ido">';
-
-                foreach ($naplo as $sor) {
-                    $a  = $allapotok[(string) $sor->allapot] ?? ['nev' => (string) $sor->allapot, 'szin' => 'szurke'];
-                    $sz = self::SZINEK[$a['szin']] ?? self::SZINEK['szurke'];
-
-                    printf(
-                        '<li style="--pont: %s"><b>%s</b><span class="halvany">%s</span></li>',
-                        esc_attr($sz),
-                        esc_html((string) $a['nev']),
-                        esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $sor->letrehozva))
-                    );
-                }
-
-                echo '</ol></section>';
-            }
-
-            // --- Megjegyzés és üzenetek -----------------------------------
-            $megj = trim((string) ($munkalap->ugyfel_megjegyzes ?? ''));
-
-            if ($megj !== '') {
-                echo '<section class="k megj"><h2>Megjegyzés a szerviztől</h2><p>' . nl2br(esc_html($megj)) . '</p></section>';
-            }
-
-            ?>
-            <section class="k" id="uzenetek">
-                <h2>Üzenetek</h2>
-                <?php echo self::uzenetek_html((int) $munkalap->id, 'ugyfel'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                <form method="post">
-                    <input type="hidden" name="sdh_rma_muvelet" value="valasz">
-                    <input type="hidden" name="jel" value="<?php echo esc_attr(self::urlap_jel($munkalap)); ?>">
-                    <label for="szoveg">Üzenet a szerviznek</label>
-                    <textarea id="szoveg" name="szoveg" maxlength="<?php echo (int) self::UZENET_HOSSZ; ?>" required></textarea>
-                    <button type="submit">Küldés</button>
-                </form>
-            </section>
-
-            <section class="k">
-                <form method="post">
-                    <input type="hidden" name="sdh_rma_muvelet" value="kilep">
-                    <button type="submit" class="masodlagos">Kilépés ezen az eszközön</button>
-                </form>
-            </section>
-            <?php
-        });
     }
 }

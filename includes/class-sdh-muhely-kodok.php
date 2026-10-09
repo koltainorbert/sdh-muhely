@@ -37,6 +37,13 @@ final class SDH_Muhely_Kodok
         '114131', '311141', '411131', '211412', '211214', '211232', '2331112',
     ];
 
+    /**
+     * Inline stílus a kód-SVG-kre. A CRM felületein az ikon-SVG-k általános
+     * szabályt kapnak (fill: none; stroke: currentColor; stroke-width: 1.6),
+     * ami a QR-modulokat összemosta – az inline stílus ezt mindenhol felülírja.
+     */
+    private const VEDETT = 'fill:#000;stroke:none;stroke-width:0;flex:none;overflow:visible';
+
     private const START_B = 104;
     private const START_C = 105;
     private const STOP    = 106;
@@ -113,8 +120,9 @@ final class SDH_Muhely_Kodok
         }
 
         return sprintf(
-            '<svg class="%s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" shape-rendering="crispEdges" role="img" aria-label="QR-kód">'
-            . '<rect width="%d" height="%d" fill="#fff"/><path d="%s" fill="#000"/></svg>',
+            '<svg class="%s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" shape-rendering="crispEdges" role="img" aria-label="QR-kód"'
+            . ' style="' . self::VEDETT . '">'
+            . '<rect width="%d" height="%d" fill="#fff" style="fill:#fff;stroke:none"/><path d="%s" fill="#000" style="fill:#000;stroke:none"/></svg>',
             esc_attr($osztaly),
             $meret,
             $meret,
@@ -171,7 +179,7 @@ final class SDH_Muhely_Kodok
     /**
      * Code 128 vonalkód SVG-ben, alatta (kérésre) a szöveggel.
      */
-    public static function vonalkod_svg(string $szoveg, bool $felirat = true, string $osztaly = 'sdh-vonalkod'): string
+    public static function vonalkod_svg(string $szoveg, bool $felirat = true, string $osztaly = 'sdh-vonalkod', bool $nyujthato = false): string
     {
         $ertekek = self::code128_ertekek($szoveg);
 
@@ -199,11 +207,14 @@ final class SDH_Muhely_Kodok
         }
 
         $szeles = $x + $zona;
+        // Nyújtható változatnál (címke) a felirat HTML-ben áll alatta: a vonalak
+        // vízszintesen kitölthetik a helyet – a Code 128 arányai megmaradnak.
+        $felirat = $felirat && !$nyujthato;
         $teljes = $felirat ? $magas + 14 : $magas;
 
         $szoveg_elem = $felirat
             ? sprintf(
-                '<text x="%d" y="%d" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" fill="#000">%s</text>',
+                '<text x="%d" y="%d" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" fill="#000" style="fill:#000;stroke:none">%s</text>',
                 (int) round($szeles / 2),
                 $magas + 12,
                 esc_html($szoveg)
@@ -211,8 +222,10 @@ final class SDH_Muhely_Kodok
             : '';
 
         return sprintf(
-            '<svg class="%s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" shape-rendering="crispEdges" role="img" aria-label="%s">'
-            . '<rect width="%d" height="%d" fill="#fff"/><path d="%s" fill="#000"/>%s</svg>',
+            '<svg class="%s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" shape-rendering="crispEdges" role="img" aria-label="%s"'
+            . ($nyujthato ? ' preserveAspectRatio="none"' : '')
+            . ' style="' . self::VEDETT . '">'
+            . '<rect width="%d" height="%d" fill="#fff" style="fill:#fff;stroke:none"/><path d="%s" fill="#000" style="fill:#000;stroke:none"/>%s</svg>',
             esc_attr($osztaly),
             $szeles,
             $teljes,

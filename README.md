@@ -57,6 +57,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.27.0
+- **QR és vonalkód javítva az Áttekintésben**: a részletpanel ikon-szabálya (`stroke: currentColor`)
+  összefolyatta a QR-modulokat. A kód-SVG-k inline stílussal védettek; a címke-blokk
+  (`Rma::cimke_blokk`) ugyanaz a nyomtatáson, az Áttekintésben és a munkalap-ablakban.
+  A vonalkód a címkén kitölti a szélességet, a szám alatta áll.
+- **RMA lapfül a munkalap-ablakban** (a Termékek mellett): címke, üzenetküldés, állapottörténet;
+  lapozás görgetősáv helyett. Az Áttekintés „RMA / Üzenetek" füle a munkalap-ablakot nyitja
+  meg az RMA fülön (`data-sdh-ful`, `sdh:urlap-betoltve` esemény az app.js-ben).
+- **Olvasatlan-jelzés**: új „Üzenetek" menüpont (postafiók, munkalaponként), piros jelvény az
+  oldalmenüben (45 mp-enként frissül) és a wp-admin menüben; az RMA fül jelvénye piros, ha új
+  üzenet van. A fül megnyitásakor az üzenetek olvasottra állnak.
+- **Ügyféloldal újratervezve** (`SDH_Muhely_Rma_Oldal`, assets/rma-ugyfel.css/js): ablak a háttér
+  fölött a CRM formanyelvével – fejléc (logó, munkalapszám, állapot), bal oldalt állapot,
+  dátumok, bruttó (piros) és fizetendő, jobbra lapfülek (Eszköz, Hibák, Tételek, Történet,
+  Üzenetek, Elérhetőség). Mobilon teljes képernyő, „Összegzés" fül. Világos/sötét mód,
+  nyelvválasztás (magyar, angol, német). Munkatársi előnézet: `?elonezet=1` / `?elonezet=zar`.
+- **Beállítások → Ügyféloldal**: logó, háttér (alap / szín / kép / videó, sötétítés, üveghatás)
+  a médiatárból, kiemelő szín, alapmód, nyelvek, elérhetőség (cím, telefon, e-mail, weboldal,
+  térkép, nyitvatartás, egyéb).
+
 ### 0.26.0
 - **QR-kód és vonalkód minden munkalaphoz** (`SDH_Muhely_Kodok`, szerveroldali SVG, offline is):
   a QR az ügyfél saját oldalára mutat, a vonalkód (Code 128) a munkalapszámot hordozza.

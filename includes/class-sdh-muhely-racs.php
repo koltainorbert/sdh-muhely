@@ -1344,6 +1344,7 @@ final class SDH_Muhely_Racs
         $termekek = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'termek'));
 
         $szam      = (int) $munkalap->munkalap_szam > 0 ? SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam) : '';
+        $rma_szamlalo = SDH_Muhely_Rma::szamlalo((int) $munkalap->id);
         $szamlalo  = static fn (int $db): string => $db > 0 ? ' (' . $db . ')' : '';
         $ugyfelnev = $ugyfel ? (string) $ugyfel->nev : '';
 
@@ -1380,8 +1381,11 @@ final class SDH_Muhely_Racs
             ],
             [
                 'k'    => 'rma',
-                'cim'  => SDH_Muhely_Rma::ful_cim((int) $munkalap->id),
-                'html' => self::kepernyore([SDH_Muhely_Rma::class, 'crm_panel'], $munkalap, $ugyfel),
+                'cim'  => 'RMA / Üzenetek',
+                // Jelvény: az üzenetek száma, piros, ha van olvasatlan (racs.js).
+                'db'   => $rma_szamlalo['osszes'],
+                'uj'   => $rma_szamlalo['uj'] > 0,
+                'html' => self::kepernyore([SDH_Muhely_Rma::class, 'munkalap_ful'], $munkalap),
             ],
             [
                 'k'    => 'szamlak',

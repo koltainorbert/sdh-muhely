@@ -535,7 +535,25 @@
                 szamKeres(szint.torzs);
                 munkalapIndul(szint.torzs);
 
-                var elso = szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
+                // Kért lapfül (data-sdh-ful): a rádiógomb bejelölése váltja a fület.
+                var kertFul = opciok.ful
+                    ? szint.torzs.querySelector('.sdh-fulek__ful[data-sdh-ful-kulcs="' + String(opciok.ful).replace(/[^a-z0-9_-]/gi, '') + '"]')
+                    : null;
+
+                if (kertFul) {
+                    kertFul.checked = true;
+                    kertFul.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
+                // Más modulok (pl. rma.js) itt kapcsolódhatnak a betöltött űrlaphoz.
+                document.dispatchEvent(new CustomEvent('sdh:urlap-betoltve', {
+                    detail: { modul: modul, id: id, torzs: szint.torzs, ful: opciok.ful || '' }
+                }));
+
+                var kertSzam = kertFul ? (kertFul.className.match(/sdh-fulek__ful--(\d+)/) || [])[1] : '';
+                var elso = kertSzam
+                    ? kertFul.parentNode.querySelector(':scope > .sdh-fulek__panel--' + kertSzam + ' textarea')
+                    : szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
                 if (elso) {
                     elso.focus();
                 }
@@ -3494,7 +3512,8 @@
         }
 
         esemeny.preventDefault();
-        nyit(indito.dataset.sdhUrlap, indito.dataset.sdhId || '0');
+        // data-sdh-ful: a popup ezen a lapfülön nyíljon (pl. RMA).
+        nyit(indito.dataset.sdhUrlap, indito.dataset.sdhId || '0', indito.dataset.sdhFul ? { ful: indito.dataset.sdhFul } : undefined);
     });
 
     /* ---------------------------------------------------------------- */

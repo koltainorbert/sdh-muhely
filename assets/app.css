@@ -559,3 +559,65 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
         padding: 1rem .9rem 2.5rem;
     }
 }
+
+/* ================================================================== */
+/* Oldalmenü jelvény (0.27): olvasatlan ügyfélüzenetek                 */
+/* ================================================================== */
+
+.sdh-sav__link {
+    position: relative;
+}
+
+.sdh-sav__jelveny {
+    margin-left: auto;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 0 2px var(--sdh-felulet);
+}
+
+.sdh-sav__jelveny[hidden] {
+    display: none;
+}
+
+.sdh-sav__jelveny.is-friss {
+    animation: sdh-jelveny-pulzus 1.2s ease-out 2;
+}
+
+@keyframes sdh-jelveny-pulzus {
+    0% { box-shadow: 0 0 0 2px var(--sdh-felulet), 0 0 0 2px color-mix(in srgb, var(--sdh-allapot-piros) 60%, transparent); }
+    100% { box-shadow: 0 0 0 2px var(--sdh-felulet), 0 0 0 10px transparent; }
+}
+
+/* Összecsukott menüben (és keskeny képernyőn) az ikon sarkán ül. */
+body.sdh-app[data-sav="csukva"] .sdh-sav__jelveny {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    line-height: 16px;
+}
+
+@media (max-width: 860px) {
+    body.sdh-app .sdh-sav__jelveny {
+        position: absolute;
+        top: 2px;
+        right: 6px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        font-size: 10px;
+        line-height: 16px;
+    }
+}

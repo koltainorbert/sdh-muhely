@@ -1,0 +1,1044 @@
+/*
+ * SDH Műhely – ügyféloldal (RMA), 0.27.
+ *
+ * A CRM formanyelvére épül: a színváltozók, a jelvények (.sdh-allapot) és a
+ * gombok (.sdh-gomb) az admin.css-ből jönnek, így a világos/sötét mód és a
+ * kiemelő szín ugyanúgy működik, mint a CRM-ben. Ez a fájl az elrendezést
+ * adja: háttér (szín / kép / videó), fölötte egy ablak – fejléc, bal oldalt
+ * állapot és összeg, jobbra lapfülek. Nincs hosszú, görgetős oldal: a tartalom
+ * az ablak lapfülein belül marad. Mobilon az ablak kitölti a képernyőt.
+ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body.rma {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    margin: 0;
+    padding: 24px;
+    background: var(--sdh-vaszon);
+    color: var(--sdh-szoveg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* ================================================================== */
+/* Háttér                                                              */
+/* ================================================================== */
+
+.rma-hatter {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--rma-hatter-szin, #1b1f24);
+    background-position: center;
+    background-size: cover;
+}
+
+.rma-hatter--alap {
+    background:
+        radial-gradient(1100px 720px at 10% 6%, color-mix(in srgb, var(--sdh-accent) 52%, #0b0d10) 0%, transparent 62%),
+        radial-gradient(900px 720px at 94% 98%, color-mix(in srgb, var(--sdh-accent) 26%, #0b0d10) 0%, transparent 60%),
+        #0e1013;
+}
+
+:root[data-theme="light"] .rma-hatter--alap {
+    background:
+        radial-gradient(1100px 720px at 10% 6%, color-mix(in srgb, var(--sdh-accent) 26%, #fff) 0%, transparent 62%),
+        radial-gradient(900px 720px at 94% 98%, color-mix(in srgb, var(--sdh-accent) 14%, #fff) 0%, transparent 60%),
+        #e8ebf0;
+}
+
+.rma-hatter--kep::after,
+.rma-hatter--video::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 10, 13, var(--rma-sotetites, .35));
+}
+
+.rma-hatter__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rma-hatter__video {
+        display: none;
+    }
+}
+
+/* ================================================================== */
+/* Ablak                                                               */
+/* ================================================================== */
+
+.rma-ablak {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(1120px, 100%);
+    height: min(760px, calc(100vh - 48px));
+    height: min(760px, calc(100dvh - 48px));
+    overflow: hidden;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    background: var(--sdh-vaszon);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .35), var(--sdh-arnyek-emelt);
+}
+
+.rma--uveg .rma-ablak {
+    background: color-mix(in srgb, var(--sdh-vaszon) 84%, transparent);
+    border-color: color-mix(in srgb, var(--sdh-keret) 70%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(1.15);
+    backdrop-filter: blur(22px) saturate(1.15);
+}
+
+.rma-ablak--kicsi {
+    width: min(440px, 100%);
+    height: auto;
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+}
+
+.rma-ikon {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---- Fejléc ---- */
+
+.rma-fej {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: .65rem .9rem .65rem 1.1rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: var(--sdh-felulet);
+}
+
+.rma--uveg .rma-fej {
+    background: color-mix(in srgb, var(--sdh-felulet) 72%, transparent);
+}
+
+.rma-fej__marka {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    min-width: 0;
+}
+
+.rma-fej__logo {
+    display: block;
+    max-width: 170px;
+    max-height: 38px;
+    object-fit: contain;
+}
+
+.rma-fej__jel {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+
+.rma-fej__nev {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.rma-fej__nev b {
+    overflow: hidden;
+    font-size: 14.5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.rma-fej__nev span {
+    color: var(--sdh-halvany);
+    font-size: 12px;
+}
+
+.rma-fej__lap {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-left: auto;
+    padding: .25rem .35rem .25rem .8rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    white-space: nowrap;
+}
+
+.rma-fej__cimke {
+    color: var(--sdh-halvany);
+    font-size: 12px;
+}
+
+.rma-fej__szam {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+}
+
+.rma-fej__lap .sdh-allapot {
+    padding: .2rem .7rem .2rem .5rem;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.rma-fej__eszkozok {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-left: auto;
+}
+
+.rma-fej__lap + .rma-fej__eszkozok {
+    margin-left: .2rem;
+}
+
+.rma-nyelv {
+    display: inline-flex;
+    padding: 2px;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+}
+
+.rma-nyelv a {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: var(--sdh-szoveg-2);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.rma-nyelv a:hover {
+    color: var(--sdh-szoveg);
+}
+
+.rma-nyelv a.is-aktiv {
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.rma-ikongomb {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    cursor: pointer;
+}
+
+.rma-ikongomb:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.rma-ikongomb:focus-visible,
+.rma-nyelv a:focus-visible,
+.rma-ful:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+.rma-fej__kilep {
+    margin: 0;
+}
+
+.rma-csak-vilagos,
+.rma-csak-sotet {
+    display: contents;
+}
+
+:root[data-theme="dark"] .rma-csak-vilagos,
+:root:not([data-theme="dark"]) .rma-csak-sotet {
+    display: none;
+}
+
+/* ---- Előnézet, visszajelzés ---- */
+
+.rma-elonezet {
+    padding: .45rem 1.1rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: color-mix(in srgb, var(--sdh-figyelem) 18%, var(--sdh-felulet));
+    color: var(--sdh-szoveg);
+    font-size: 12.5px;
+}
+
+.rma-jelzes {
+    margin: .7rem 1.1rem 0;
+    padding: .55rem .8rem;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: opacity .4s ease;
+}
+
+.rma-jelzes--hiba {
+    border: 1px solid color-mix(in srgb, var(--sdh-hiba) 30%, transparent);
+    background: color-mix(in srgb, var(--sdh-hiba) 12%, var(--sdh-felulet));
+    color: var(--sdh-hiba);
+}
+
+.rma-jelzes--ok {
+    border: 1px solid color-mix(in srgb, var(--sdh-siker) 30%, transparent);
+    background: color-mix(in srgb, var(--sdh-siker) 12%, var(--sdh-felulet));
+    color: var(--sdh-siker);
+}
+
+.rma-jelzes.is-eltunik {
+    opacity: 0;
+}
+
+/* ================================================================== */
+/* Törzs: oldalsáv + lapfülek + panelek                                 */
+/* ================================================================== */
+
+.rma-test {
+    display: grid;
+    flex: 1 1 auto;
+    grid-template-columns: 290px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+}
+
+.rma-oldal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.05rem;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    min-height: 0;
+    padding: 1rem 1.1rem;
+    overflow-y: auto;
+    border-right: 1px solid var(--sdh-keret);
+}
+
+.rma-fulek {
+    display: flex;
+    gap: 2px;
+    grid-column: 2;
+    grid-row: 1;
+    padding: .7rem 1rem 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--sdh-keret-eros);
+    scrollbar-width: none;
+}
+
+.rma-fulek::-webkit-scrollbar {
+    display: none;
+}
+
+.rma-ful {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: -1px;
+    padding: .45rem .8rem;
+    border: 1px solid transparent;
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.rma-ful .rma-ikon {
+    width: 16px;
+    height: 16px;
+}
+
+.rma-ful:hover {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.rma-ful.is-aktiv {
+    border-color: var(--sdh-keret-eros);
+    border-bottom-color: var(--sdh-felulet);
+    background: var(--sdh-felulet);
+    box-shadow: inset 0 2px 0 var(--sdh-accent);
+    color: var(--sdh-szoveg);
+    font-weight: 600;
+}
+
+.rma-ful .sdh-fulek__db {
+    margin-left: 0;
+}
+
+.rma-csak-mobil {
+    display: none;
+}
+
+.rma-panelek {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--sdh-felulet);
+}
+
+.rma--uveg .rma-panelek {
+    background: color-mix(in srgb, var(--sdh-felulet) 88%, transparent);
+}
+
+.rma-panelek > .rma-panel {
+    height: 100%;
+    padding: 1.1rem 1.3rem;
+    overflow-y: auto;
+}
+
+html.js .rma-panelek > .rma-panel:not(.is-aktiv) {
+    display: none;
+}
+
+/* ---- Oldalsáv ---- */
+
+.rma-csoport {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.rma-csoport .sdh-ml__cim {
+    margin: 0 0 .1rem;
+}
+
+.rma-allapot.sdh-allapot {
+    align-self: flex-start;
+    padding: .32rem .95rem .32rem .65rem;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.rma-allapot.sdh-allapot::before {
+    width: 11px;
+    height: 11px;
+}
+
+.rma-halvany {
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+}
+
+.rma-sor {
+    display: flex;
+    justify-content: space-between;
+    gap: .6rem;
+    font-size: 13px;
+}
+
+.rma-sor span {
+    color: var(--sdh-szoveg-2);
+}
+
+.rma-sor b {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.rma-sor--brutto b {
+    color: var(--sdh-allapot-piros);
+}
+
+.rma-fizetendo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-top: .2rem;
+    padding: .55rem .75rem;
+    border-radius: 9px;
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+}
+
+.rma-fizetendo span {
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.rma-fizetendo b {
+    font-size: 20px;
+    font-variant-numeric: tabular-nums;
+}
+
+.rma-kifizetve {
+    padding: .45rem .7rem;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--sdh-siker) 14%, var(--sdh-felulet));
+    color: var(--sdh-siker);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.rma-gyors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.rma-gyors .sdh-gomb {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+.sdh-gomb .rma-ikon {
+    width: 16px;
+    height: 16px;
+}
+
+/* ---- Eszköz ---- */
+
+.rma-adat {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 0 2rem;
+    margin: 0;
+}
+
+.rma-adat__sor {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: .6rem;
+    padding: .5rem 0;
+    border-bottom: 1px solid var(--sdh-keret);
+}
+
+.rma-adat dt {
+    color: var(--sdh-halvany);
+}
+
+.rma-adat dd {
+    margin: 0;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.rma-megj {
+    margin-top: 1rem;
+    padding: .8rem 1rem;
+    border-left: 3px solid var(--sdh-accent);
+    border-radius: 0 8px 8px 0;
+    background: var(--sdh-felulet-2);
+}
+
+.rma-megj h3 {
+    margin: 0 0 .25rem;
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.rma-megj p {
+    margin: 0;
+}
+
+/* ---- Hibák ---- */
+
+.rma-lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rma-lista li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--sdh-keret);
+}
+
+.rma-lista__fo {
+    font-weight: 500;
+}
+
+/* ---- Tételek ---- */
+
+.rma-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.rma-tabla th {
+    padding: .45rem .55rem;
+    border-bottom: 1px solid var(--sdh-keret-eros);
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-halvany);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.rma-tabla td {
+    padding: .55rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    vertical-align: top;
+}
+
+.rma-tabla td small {
+    display: block;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+}
+
+.rma-tabla .j {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.rma-tabla tfoot td {
+    border-bottom: 0;
+    font-weight: 700;
+}
+
+.rma-brutto {
+    color: var(--sdh-allapot-piros);
+}
+
+/* ---- Történet ---- */
+
+.rma-ido {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rma-ido li {
+    position: relative;
+    padding: 0 0 1.05rem 1.7rem;
+}
+
+.rma-ido li::before {
+    content: "";
+    position: absolute;
+    top: 1.15rem;
+    bottom: 0;
+    left: calc(.25rem + 5px);
+    width: 2px;
+    background: var(--sdh-keret-eros);
+}
+
+.rma-ido li:last-child::before {
+    display: none;
+}
+
+.rma-ido__pont {
+    position: absolute;
+    top: .3rem;
+    left: .25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--allapot-szin, var(--sdh-allapot-szurke));
+    box-shadow: 0 0 0 3px var(--sdh-felulet);
+}
+
+.rma-ido li.is-friss .rma-ido__pont {
+    box-shadow: 0 0 0 3px var(--sdh-felulet), 0 0 0 6px color-mix(in srgb, var(--allapot-szin, #999) 30%, transparent);
+}
+
+.rma-ido b {
+    display: block;
+}
+
+/* ---- Üzenetek ---- */
+
+.rma-panelek > .rma-panel--uzenetek {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
+    display: none;
+}
+
+.rma-uz-szal {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 1rem 1.3rem;
+    overflow-y: auto;
+}
+
+.rma-uz {
+    max-width: 78%;
+    padding: .55rem .8rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 12px 12px 12px 4px;
+    background: var(--sdh-felulet-2);
+}
+
+.rma-uz--sajat {
+    align-self: flex-end;
+    border-color: color-mix(in srgb, var(--sdh-accent) 25%, transparent);
+    border-radius: 12px 12px 4px 12px;
+    background: var(--sdh-accent-halvany);
+}
+
+.rma-uz__fej {
+    margin-bottom: 2px;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+}
+
+.rma-uz__fej b {
+    color: var(--sdh-szoveg);
+}
+
+.rma-uz__szoveg {
+    overflow-wrap: anywhere;
+}
+
+.rma-uz-urlap {
+    display: flex;
+    align-items: flex-end;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    border-top: 1px solid var(--sdh-keret);
+    background: var(--sdh-vaszon);
+}
+
+.rma-uz-urlap textarea {
+    flex: 1 1 auto;
+    min-height: 42px;
+    max-height: 140px;
+    padding: .55rem .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 10px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 15px;
+    resize: none;
+}
+
+.rma-uz-urlap textarea:focus,
+.rma-mezo input:focus {
+    border-color: var(--sdh-accent);
+    outline: 2px solid color-mix(in srgb, var(--sdh-accent) 35%, transparent);
+}
+
+.rma-uz-urlap .sdh-gomb {
+    height: 42px;
+}
+
+/* ---- Elérhetőség ---- */
+
+.rma-kartyak {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .8rem;
+}
+
+.rma-kartya {
+    display: flex;
+    gap: .75rem;
+    padding: .9rem 1rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 10px;
+    background: var(--sdh-vaszon);
+}
+
+.rma-kartya__ikon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+.rma-kartya__test {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.rma-kartya__test h3 {
+    margin: 0 0 .2rem;
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.rma-kartya__test .sdh-gomb {
+    margin-top: .55rem;
+}
+
+.rma-kartya a:not(.sdh-gomb) {
+    color: var(--sdh-accent-szoveg);
+}
+
+.rma-ures {
+    margin: 0;
+    color: var(--sdh-halvany);
+}
+
+/* ================================================================== */
+/* Belépés (zárt nézet)                                                */
+/* ================================================================== */
+
+.rma-zar {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    padding: 1.6rem 1.6rem 1.4rem;
+    overflow-y: auto;
+}
+
+.rma-zar__ikon {
+    display: grid;
+    place-items: center;
+    align-self: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+.rma-zar__ikon .rma-ikon {
+    width: 26px;
+    height: 26px;
+}
+
+.rma-zar h1 {
+    margin: 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.rma-zar p {
+    margin: 0;
+    color: var(--sdh-szoveg-2);
+    text-align: center;
+}
+
+.rma-zar .rma-jelzes {
+    margin: 0;
+    text-align: left;
+}
+
+.rma-urlap {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    margin-top: .2rem;
+}
+
+.rma-mezo {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    color: var(--sdh-szoveg-2);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.rma-mezo input {
+    height: 44px;
+    padding: 0 .8rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 9px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 16px; /* 16 px alatt az iPhone ráközelít */
+    font-weight: 500;
+}
+
+.rma-gomb-nagy {
+    justify-content: center;
+    width: 100%;
+    height: 46px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.rma-zar .rma-gyors {
+    margin-top: .3rem;
+    padding-top: .9rem;
+    border-top: 1px solid var(--sdh-keret);
+}
+
+/* ================================================================== */
+/* Mobil: az ablak kitölti a képernyőt, az oldalsáv „Összegzés" fül     */
+/* ================================================================== */
+
+@media (max-width: 760px) {
+    body.rma {
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .rma-ablak,
+    .rma-ablak--kicsi {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .rma-ablak--kicsi .rma-zar {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 1.4rem 1.2rem calc(1.4rem + env(safe-area-inset-bottom));
+    }
+
+    .rma-fej {
+        flex-wrap: wrap;
+        gap: .5rem .6rem;
+        padding: .6rem .8rem;
+        padding-top: calc(.6rem + env(safe-area-inset-top));
+    }
+
+    .rma-fej__nev span {
+        display: none;
+    }
+
+    .rma-fej__lap {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+        border-radius: 9px;
+    }
+
+    .rma-fej__lap .sdh-allapot {
+        margin-left: auto;
+    }
+
+    .rma-fej__lap + .rma-fej__eszkozok,
+    .rma-fej__eszkozok {
+        margin-left: auto;
+    }
+
+    .rma-test {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rma-fulek {
+        grid-column: 1;
+        padding: .5rem .6rem 0;
+    }
+
+    .rma-csak-mobil {
+        display: inline-flex;
+    }
+
+    .rma-oldal {
+        display: none;
+        grid-column: 1;
+        grid-row: 2;
+        border-right: 0;
+        background: var(--sdh-felulet);
+    }
+
+    .rma-test[data-rma-aktiv="osszegzes"] .rma-oldal {
+        display: flex;
+    }
+
+    .rma-test[data-rma-aktiv="osszegzes"] .rma-panelek {
+        display: none;
+    }
+
+    .rma-panelek {
+        grid-column: 1;
+    }
+
+    .rma-panelek > .rma-panel {
+        padding: .9rem;
+    }
+
+    .rma-panelek > .rma-panel--uzenetek {
+        padding: 0;
+    }
+
+    .rma-uz-szal {
+        padding: .9rem;
+    }
+
+    .rma-uz {
+        max-width: 88%;
+    }
+
+    .rma-uz-urlap {
+        padding-bottom: calc(.75rem + env(safe-area-inset-bottom));
+    }
+
+    .rma-uz-urlap .sdh-gomb span {
+        display: none;
+    }
+
+    .rma-adat__sor {
+        grid-template-columns: 7.5rem minmax(0, 1fr);
+    }
+
+    .rma-jelzes {
+        margin: .6rem .8rem 0;
+    }
+}
+
+@media print {
+    .rma-hatter,
+    .rma-fej__eszkozok,
+    .rma-uz-urlap {
+        display: none;
+    }
+}
