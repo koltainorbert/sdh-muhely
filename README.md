@@ -57,6 +57,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.31.0
+- **A számla ablaka szerkeszthető** – mindhárom gombnál (Számlázz.hu számla, SDH számla, helyi nyomtatvány):
+  - **Tételek**: „+ Termék…" és „+ Szolgáltatás…" (kereshető, lapozható választó), „+ Kézi tétel" (üres sor);
+    az új sor neve, mennyisége, bruttó egységára és áfakulcsa átírható, a × törli. A munkalap tételei
+    továbbra is pipával vehetők ki. A számla kiállításakor az új tételek a munkalapra is rákerülnek
+    (a termék a készletből is fogy); a helyi nyomtatványnál csak a papírra.
+  - **Megjegyzés tételenként**: a „+ megjegyzés" a megnevezés alatt nyit mezőt; a számlán (és a helyi
+    PDF-en) a tétel alatt jelenik meg.
+  - **Adattörlő kód**: tételenként kapcsoló; a Számlázz.hu rendeli a kódot a tételhez (`torloKod`,
+    darabonként egy). A Beállításokban ki-/bekapcsolható („Adattörlő kód használata"), és a
+    Számlázz.hu-fiókban is be kell kapcsolni.
+  - **Vevő**: név, adószám, cím és e-mail átírható – az ügyfél adatlapja ettől nem változik.
+    „Listáról…": az ügyfelek és a korábbi számlák vevői. Adószámból (8 vagy 11 számjegy után magától,
+    vagy a „Cég keresése" gombbal) a név és a székhely a NAV-tól jön, a Számla Agenten keresztül.
+    Beírt cégnévre a saját listában keres: pontos egyezésnél kitölt, több találatnál a választó nyílik.
+    Külső cégadatbázis a `sdh_muhely_cegkereso` szűrővel köthető be.
+  - **E-mail az ügyfélnek**: a pipa már akkor is használható, ha az ügyfélnek nincs e-mail-címe –
+    ilyenkor bekéri; a beírt cím az ügyfélnél is megmarad.
+  - Az Enter a számla ablakának szövegmezőiben nem állít ki számlát.
+
 ### 0.30.0
 - **Helyi nyomtatvány (számla-előkészítő) – API nélkül**: a munkalap láblécének harmadik gombja
   helyben készít letölthető, nyomtatható PDF-et a kipipált tételekből, a szerviz logójával és

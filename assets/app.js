@@ -5579,13 +5579,20 @@
         });
     }
 
-    /** A kipipált tételek végösszege a számla ablakában. */
+    /**
+     * A számla ablakának végösszege: a munkalap kipipált tételei + az itt
+     * felvett új sorok. A kiállítás és az előnézet gombja csak akkor él, ha
+     * van tétel, és a vevő kötelező adatai megvannak.
+     */
     function szamlaOsszeg(urlap) {
         var netto = 0;
         var brutto = 0;
         var db = 0;
+        var sorokDb = 0;
 
         Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-tetel]'), function (pipa) {
+            sorokDb += 1;
+
             if (pipa.checked) {
                 netto += parseFloat(pipa.getAttribute('data-netto')) || 0;
                 brutto += parseFloat(pipa.getAttribute('data-brutto')) || 0;
@@ -5593,17 +5600,651 @@
             }
         });
 
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-ujtetel]'), function (sor) {
+            var sz = szamlaUjSorSzamol(sor);
+
+            sorokDb += 1;
+
+            if (sz.ervenyes) {
+                netto += sz.netto;
+                brutto += sz.brutto;
+                db += 1;
+            }
+        });
+
         mlIr(urlap.querySelector('[data-sdh-szamla-ossz="netto"]'), mlPenz(netto));
         mlIr(urlap.querySelector('[data-sdh-szamla-ossz="brutto"]'), mlPenz(brutto));
 
-        var kuldes = urlap.querySelector('[data-sdh-szamla-kuld]');
+        var ures = urlap.querySelector('[data-sdh-szamla-ures]');
 
-        if (kuldes && !kuldes.hasAttribute('data-sdh-tiltva')) {
-            kuldes.disabled = db === 0;
+        if (ures) {
+            ures.hidden = sorokDb > 0;
+        }
+
+        var hiany = szamlaVevoFrissit(urlap);
+        var mehet = db > 0 && hiany.length === 0;
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-kuld], [data-sdh-szamla-elonezet]'), function (gomb) {
+            if (!gomb.hasAttribute('data-sdh-tiltva')) {
+                gomb.disabled = !mehet;
+            }
+        });
+    }
+
+    /* ---- Új tétel a számla ablakában (választóból vagy kézzel) ---- */
+
+    function szamlaUjMezo(sor, nev) {
+        return sor.querySelector('[data-u="' + nev + '"]');
+    }
+
+    /** Ugyanaz a számolás, mint a szerveren (Szamla::tetel_sor): a nettó egységár két tizedesre kerekítve. */
+    function szamlaUjSorSzamol(sor) {
+        var afa = szamlaUjMezo(sor, 'afa_kulcs');
+        var valasztott = afa && afa.options[afa.selectedIndex];
+        var szazalek = valasztott ? parseFloat(valasztott.getAttribute('data-szazalek')) || 0 : 27;
+        var menny = mlSzam(szamlaUjMezo(sor, 'mennyiseg').value);
+        var ar = mlSzam(szamlaUjMezo(sor, 'brutto_ar').value);
+        var nev = szamlaUjMezo(sor, 'megnevezes').value.trim();
+        var egysegar = mlKerek(ar / (1 + szazalek / 100));
+        var netto = mlKerek(egysegar * (menny > 0 ? menny : 0));
+        var brutto = mlKerek(netto + mlKerek(netto * szazalek / 100));
+
+        mlIr(sor.querySelector('[data-u-ki="egysegar"]'), egysegar.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' '));
+        mlIr(sor.querySelector('[data-u-ki="netto"]'), mlPenz(netto));
+        mlIr(sor.querySelector('[data-u-ki="brutto"]'), mlPenz(brutto));
+
+        return { netto: netto, brutto: brutto, ervenyes: nev !== '' && menny > 0 && ar >= 0 };
+    }
+
+    /** Új tételsor a sablonból; `adat` (választóból): { tipus, termek_id, megnevezes, me, brutto_ar, afa_kulcs }. */
+    function szamlaSorUj(urlap, adat) {
+        var sablon = urlap.querySelector('template[data-sdh-szamla-ujsor]');
+        var sorok = urlap.querySelector('[data-sdh-szamla-sorok]');
+
+        if (!sablon || !sorok) {
+            return null;
+        }
+
+        var i = parseInt(urlap.getAttribute('data-sdh-szamla-ujdb'), 10) || 0;
+        var tar = document.createElement('tbody');
+
+        urlap.setAttribute('data-sdh-szamla-ujdb', String(i + 1));
+        tar.innerHTML = sablon.innerHTML.replace(/__I__/g, String(i));
+
+        var sor = tar.querySelector('tr');
+
+        if (!sor) {
+            return null;
+        }
+
+        sorok.appendChild(sor);
+
+        if (adat) {
+            szamlaUjMezo(sor, 'megnevezes').value = adat.megnevezes || '';
+            szamlaUjMezo(sor, 'me').value = adat.me || 'db';
+            szamlaUjMezo(sor, 'brutto_ar').value = adat.brutto_ar > 0 ? szolgAr(adat.brutto_ar) : '';
+            szamlaUjMezo(sor, 'termek_id').value = String(adat.termek_id || 0);
+
+            var afa = szamlaUjMezo(sor, 'afa_kulcs');
+
+            if (afa && adat.afa_kulcs !== undefined && afa.querySelector('option[value="' + String(adat.afa_kulcs).replace(/[^A-Za-z0-9]/g, '') + '"]')) {
+                afa.value = String(adat.afa_kulcs);
+            }
+
+            szamlaTipusBeallit(sor, adat.tipus === 'termek' ? 'termek' : 'szolgaltatas');
+        }
+
+        szamlaOsszeg(urlap);
+
+        return sor;
+    }
+
+    function szamlaTipusBeallit(sor, tipus) {
+        var gomb = sor.querySelector('[data-sdh-szamla-tipus]');
+
+        szamlaUjMezo(sor, 'tipus').value = tipus;
+
+        if (gomb) {
+            gomb.textContent = tipus === 'termek' ? 'Termék' : 'Szolgáltatás';
         }
     }
 
+    /** A „+ Termék…" / „+ Szolgáltatás…" / „+ Kézi tétel" gomb. */
+    function szamlaUjTetel(gomb) {
+        var urlap = gomb.closest('form');
+        var fajta = gomb.getAttribute('data-sdh-szamla-uj');
+        var kezi = function (tipus, nev) {
+            var sor = szamlaSorUj(urlap, { tipus: tipus, megnevezes: nev || '', me: 'db', brutto_ar: 0 });
+
+            if (sor) {
+                szamlaUjMezo(sor, 'megnevezes').focus();
+            }
+        };
+        var felvesz = function (tipus) {
+            return function (t) {
+                var sor = szamlaSorUj(urlap, {
+                    tipus: tipus,
+                    termek_id: tipus === 'termek' ? t.id : 0,
+                    megnevezes: t.nev,
+                    me: t.me,
+                    brutto_ar: t.ar,
+                    afa_kulcs: t.afa
+                });
+                var menny = sor ? szamlaUjMezo(sor, 'mennyiseg') : null;
+
+                if (menny) {
+                    menny.focus();
+                    menny.select();
+                }
+            };
+        };
+
+        if (fajta === 'kezi') {
+            kezi('szolgaltatas', '');
+
+            return;
+        }
+
+        if (fajta === 'termek') {
+            szValNyit(gomb, {
+                cim: 'Termék a számlára',
+                alcim: 'Kattints a sorra, vagy ↑ ↓ és Enter. Vonalkód, cikkszám és termékkód is kereshető.',
+                helyorzo: 'Megnevezés, cikkszám, termékkód, vonalkód…',
+                egyseg: 'termék',
+                oszlopok: [['Megnevezés', ''], ['Cikkszám', '10rem'], ['Készlet', '6.5rem', true], ['Bruttó ár', '7.5rem', true]],
+                forras: function (q) { return termBetolt().then(function (adat) { return termKeres(adat, q); }); },
+                cellak: function (t) {
+                    return [
+                        szovegBiztonsagos(t.nev) + (t.kategoria ? ' <span class="sdh-termval__kat">' + szovegBiztonsagos(t.kategoria) + '</span>' : ''),
+                        szovegBiztonsagos(t.cikkszam || ''),
+                        termKeszletSzoveg(t),
+                        t.ar > 0 ? mlPenz(t.ar) + ' Ft' : '—'
+                    ];
+                },
+                valaszt: felvesz('termek'),
+                kezi: function (q) { kezi('termek', q); }
+            });
+
+            return;
+        }
+
+        szValNyit(gomb, {
+            cim: 'Szolgáltatás a számlára',
+            alcim: 'Kattints a sorra, vagy ↑ ↓ és Enter.',
+            helyorzo: 'Szolgáltatás neve…',
+            egyseg: 'szolgáltatás',
+            oszlopok: [['Megnevezés', ''], ['Egység', '5rem'], ['Bruttó ár', '8rem', true]],
+            forras: function (q) { return szolgBetolt().then(function (adat) { return szolgKeres(adat, q); }); },
+            cellak: function (t) {
+                return [szovegBiztonsagos(t.nev), szovegBiztonsagos(t.me || ''), t.ar > 0 ? mlPenz(t.ar) + ' Ft' : '—'];
+            },
+            valaszt: felvesz('szolgaltatas'),
+            kezi: function (q) { kezi('szolgaltatas', q); }
+        });
+    }
+
+    /* ---- Általános választó a számla ablaka fölött (termék, szolgáltatás, vevő) ---- */
+
+    var SZVAL_OLDAL = 10;
+    var szVal = null;          // { n, o, kerdes, kijelolt, oldal, talalatok, kor }
+    var szValIdozito = null;
+
+    function szValTorzs() {
+        return szVal && szintek[szVal.n] ? szintek[szVal.n].torzs : null;
+    }
+
+    function szValNyitva() {
+        var torzs = szValTorzs();
+
+        return !!(torzs && szintek[szVal.n].dialog.open && torzs.querySelector('[data-sdh-szval]'));
+    }
+
     /**
+     * o: { cim, alcim, helyorzo, egyseg, oszlopok: [[cím, szélesség, jobbra]], forras(q) → Promise<tömb>,
+     *      cellak(t) → [html…], valaszt(t), kezi(q) | null, kezdo, kesleltet (ms, szerveroldali keresésnél) }
+     */
+    function szValNyit(elem, o) {
+        var n = Math.min(sajatSzint(elem) + 1, szintek.length - 1);
+        var szint = vaz(n);
+        var oszlopDb = o.oszlopok.length;
+        var ures = '';
+
+        szint.dialog.sdhModul = 'szamlavalaszto';
+        szint.dialog.sdhMeret = meretOlvas('szamlavalaszto');
+        szint.dialog.setAttribute('data-sdh-modul', 'szamlavalaszto');
+
+        for (var i = 0; i < SZVAL_OLDAL; i++) {
+            ures += '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '">&nbsp;</td></tr>';
+        }
+
+        szint.torzs.innerHTML =
+            '<h2 class="sdh-modal__cim">' + szovegBiztonsagos(o.cim) + '</h2>' +
+            '<p class="sdh-modal__alcim">' + szovegBiztonsagos(o.alcim || '') + '</p>' +
+            '<div class="sdh-szolgval" data-sdh-szval>' +
+            '  <div class="sdh-szolgval__fej">' +
+            '    <input type="search" autocomplete="off" data-sdh-szval-kereso aria-label="Keresés"' +
+            '           placeholder="' + szovegBiztonsagos(o.helyorzo || 'Keresés…') + '">' +
+            '  </div>' +
+            '  <table class="sdh-tabla sdh-szolgval__tabla sdh-szval__tabla">' +
+            '    <thead><tr>' + o.oszlopok.map(function (oszlop) {
+                return '<th' + (oszlop[2] ? ' class="is-jobb"' : '') + (oszlop[1] ? ' style="width:' + oszlop[1] + '"' : ' style="width:auto"') + '>' +
+                    szovegBiztonsagos(oszlop[0]) + '</th>';
+            }).join('') + '</tr></thead>' +
+            '    <tbody data-sdh-szval-sorok>' + ures + '</tbody>' +
+            '  </table>' +
+            '  <div class="sdh-szolgval__lab">' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szval-lap="-1" aria-label="Előző oldal">‹</button>' +
+            '    <span class="sdh-szolgval__oldal" data-sdh-szval-oldal></span>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szval-lap="1" aria-label="Következő oldal">›</button>' +
+            '    <span class="sdh-szolgval__db" data-sdh-szval-db></span>' +
+            (o.kezi ? '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra" data-sdh-szval-kezi' +
+                '            title="Nem a listából: kézzel írod be">Kézzel írom be</button>' : '') +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos' + (o.kezi ? '' : ' sdh-gomb--jobbra') + '" data-sdh-szval-megsem>Mégsem</button>' +
+            '  </div>' +
+            '</div>';
+
+        szVal = { n: n, o: o, kerdes: o.kezdo || '', kijelolt: 0, oldal: 0, talalatok: [], kor: 0, toltve: false };
+
+        if (!szint.dialog.open) {
+            szint.dialog.showModal();
+        }
+
+        var kereso = szint.torzs.querySelector('[data-sdh-szval-kereso]');
+
+        kereso.value = szVal.kerdes;
+        kereso.focus();
+
+        szValFrissit();
+    }
+
+    function szValFrissit() {
+        var allapot = szVal;
+        var kor = ++allapot.kor;
+
+        allapot.o.forras(allapot.kerdes).then(function (talalatok) {
+            if (szVal !== allapot || allapot.kor !== kor || !szValNyitva()) {
+                return;
+            }
+
+            allapot.talalatok = talalatok || [];
+            allapot.toltve = true;
+            allapot.kijelolt = 0;
+            szValRajzol();
+        }).catch(function () {
+            var torzs = szVal === allapot ? szValTorzs() : null;
+            var sorok = torzs ? torzs.querySelector('[data-sdh-szval-sorok]') : null;
+
+            if (sorok) {
+                sorok.innerHTML = '<tr><td colspan="' + allapot.o.oszlopok.length + '" class="sdh-tabla__ures">A lista nem töltődött be.</td></tr>';
+            }
+        });
+    }
+
+    function szValRajzol() {
+        var torzs = szValTorzs();
+
+        if (!torzs || !szVal) {
+            return;
+        }
+
+        var o = szVal.o;
+        var db = szVal.talalatok.length;
+        var oszlopDb = o.oszlopok.length;
+        var oldalak = Math.max(1, Math.ceil(db / SZVAL_OLDAL));
+
+        szVal.kijelolt = Math.max(0, Math.min(szVal.kijelolt, db - 1));
+        szVal.oldal = db > 0 ? Math.floor(szVal.kijelolt / SZVAL_OLDAL) : 0;
+
+        var kezdet = szVal.oldal * SZVAL_OLDAL;
+        var html = '';
+
+        // Mindig ugyanannyi sor: a popup magassága gépelés közben nem ugrál.
+        for (var i = kezdet; i < kezdet + SZVAL_OLDAL; i++) {
+            var t = szVal.talalatok[i];
+
+            if (!t) {
+                html += i === 0
+                    ? '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '" class="sdh-tabla__ures">' +
+                        (szVal.toltve ? 'Nincs találat.' + (o.kezi ? ' A „Kézzel írom be" gombbal így is felveheted.' : '') : 'Keresés…') + '</td></tr>'
+                    : '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '">&nbsp;</td></tr>';
+                continue;
+            }
+
+            html += '<tr data-sdh-szval-sor="' + i + '"' + (i === szVal.kijelolt ? ' class="is-kijelolt" aria-selected="true"' : '') + '>' +
+                o.cellak(t).map(function (cella, j) {
+                    return '<td class="' + (j === 0 ? 'sdh-szolgval__nev' : '') + (o.oszlopok[j] && o.oszlopok[j][2] ? ' is-jobb' : '') + '">' + cella + '</td>';
+                }).join('') + '</tr>';
+        }
+
+        torzs.querySelector('[data-sdh-szval-sorok]').innerHTML = html;
+        torzs.querySelector('[data-sdh-szval-oldal]').textContent = (szVal.oldal + 1) + ' / ' + oldalak;
+        torzs.querySelector('[data-sdh-szval-db]').textContent = db + ' ' + (o.egyseg || 'találat');
+        torzs.querySelector('[data-sdh-szval-lap="-1"]').disabled = szVal.oldal <= 0;
+        torzs.querySelector('[data-sdh-szval-lap="1"]').disabled = szVal.oldal >= oldalak - 1;
+    }
+
+    function szValZar() {
+        if (szVal) {
+            window.clearTimeout(szValIdozito);
+            bezar(szVal.n);
+            szVal = null;
+        }
+    }
+
+    function szValValaszt(t) {
+        if (!szVal || !t) {
+            return;
+        }
+
+        var valaszt = szVal.o.valaszt;
+
+        szValZar();
+        valaszt(t);
+    }
+
+    /* ---- A vevő a számla ablakában: listáról, adószámból, név alapján, kézzel ---- */
+
+    var VEVO_KOTELEZO = [['nev', 'név'], ['irsz', 'irányítószám'], ['telepules', 'település'], ['cim', 'utca, házszám']];
+    var vevoIdozito = null;
+
+    function szamlaVevoDoboz(urlap) {
+        return urlap ? urlap.querySelector('[data-sdh-szamla-vevo]') : null;
+    }
+
+    function szamlaVevoMezo(urlap, nev) {
+        var doboz = szamlaVevoDoboz(urlap);
+
+        return doboz ? doboz.querySelector('[data-v="' + nev + '"]') : null;
+    }
+
+    /** Üzenet a vevő doboza alatt. tipus: '' | 'jo' | 'hiba'. Üres szöveggel a hiányjelzés látszik (ha van). */
+    function szamlaVevoUzen(urlap, szoveg, tipus) {
+        var doboz = szamlaVevoDoboz(urlap);
+
+        if (!doboz) {
+            return;
+        }
+
+        doboz.sdhUzenet = szoveg ? { szoveg: szoveg, tipus: tipus || '' } : null;
+        szamlaVevoFrissit(urlap);
+    }
+
+    /** A hiányzó kötelező vevőadatok; közben frissíti az üzenetsort. Visszaadja a hiányzók listáját. */
+    function szamlaVevoFrissit(urlap) {
+        var doboz = szamlaVevoDoboz(urlap);
+        var hiany = [];
+
+        if (!doboz) {
+            return hiany;
+        }
+
+        var szamlahoz = doboz.getAttribute('data-kotelezo') === '1';
+
+        VEVO_KOTELEZO.forEach(function (par) {
+            var mezo = szamlaVevoMezo(urlap, par[0]);
+            var ures = !mezo || mezo.value.trim() === '';
+
+            // A helyi nyomtatványhoz elég a név; a számlához a teljes cím kell.
+            if (ures && (szamlahoz || par[0] === 'nev')) {
+                hiany.push(par[1]);
+            }
+
+            if (mezo) {
+                mezo.classList.toggle('is-hianyzik', ures && (szamlahoz || par[0] === 'nev'));
+            }
+        });
+
+        var sor = doboz.querySelector('[data-sdh-szamla-vevo-allapot]');
+
+        if (sor) {
+            if (!doboz.hasAttribute('data-sdh-alap')) {
+                doboz.setAttribute('data-sdh-alap', sor.textContent.trim());
+            }
+
+            var uzenet = doboz.sdhUzenet;
+
+            if (uzenet) {
+                sor.className = 'sdh-szamlaurlap__allapot' + (uzenet.tipus ? ' is-' + uzenet.tipus : '');
+                mlIr(sor, uzenet.szoveg);
+            } else if (hiany.length) {
+                sor.className = 'sdh-szamlaurlap__allapot is-hiba';
+                mlIr(sor, 'Hiányzik a vevő adataiból: ' + hiany.join(', ') + '.');
+            } else {
+                sor.className = 'sdh-szamlaurlap__allapot';
+                mlIr(sor, szamlaVevoUgyanaz(urlap) ? doboz.getAttribute('data-sdh-alap') : '');
+            }
+        }
+
+        return hiany;
+    }
+
+    function szamlaVevoUgyanaz(urlap) {
+        var doboz = szamlaVevoDoboz(urlap);
+        var nev = szamlaVevoMezo(urlap, 'nev');
+
+        return !!(doboz && nev && nev.value.trim().toLowerCase() === (doboz.getAttribute('data-eredeti-nev') || '').trim().toLowerCase());
+    }
+
+    function szamlaTorzsszam(szoveg) {
+        var szamok = String(szoveg || '').replace(/\D/g, '');
+
+        return szamok.length >= 8 ? szamok.slice(0, 8) : '';
+    }
+
+    /** A vevő mezőinek kitöltése egy találatból (lista, NAV). Az e-mailt csak akkor írja át, ha a találatban van. */
+    function szamlaVevoKitolt(urlap, adat, uzenet) {
+        var doboz = szamlaVevoDoboz(urlap);
+
+        if (!doboz || !adat) {
+            return;
+        }
+
+        ['nev', 'adoszam', 'irsz', 'telepules', 'cim'].forEach(function (nev) {
+            var mezo = szamlaVevoMezo(urlap, nev);
+
+            if (mezo && (adat[nev] || nev !== 'adoszam' || !adat.megtartAdoszam)) {
+                mezo.value = adat[nev] || '';
+            }
+        });
+
+        var email = szamlaVevoMezo(urlap, 'email');
+
+        if (email && adat.email) {
+            email.value = adat.email;
+        }
+
+        // Amit most írtunk be, arra nem indul újabb keresés.
+        doboz.sdhNev = (adat.nev || '').trim().toLowerCase();
+        doboz.sdhTorzs = szamlaTorzsszam(szamlaVevoMezo(urlap, 'adoszam').value);
+
+        szamlaEmailFrissit(urlap);
+        szamlaVevoUzen(urlap, uzenet || '', 'jo');
+        szamlaOsszeg(urlap);
+    }
+
+    /** Cégadatok az adószámból (NAV a Számlázz.hu-n át; ha az nem megy, a saját ügyfelek). */
+    function szamlaAdozo(urlap, csendben) {
+        var doboz = szamlaVevoDoboz(urlap);
+        var mezo = szamlaVevoMezo(urlap, 'adoszam');
+        var torzs = mezo ? szamlaTorzsszam(mezo.value) : '';
+
+        if (!doboz || !mezo) {
+            return;
+        }
+
+        if (torzs === '') {
+            if (!csendben) {
+                szamlaVevoUzen(urlap, 'A cég kereséséhez írd be az adószám első 8 számjegyét.', 'hiba');
+                mezo.focus();
+            }
+
+            return;
+        }
+
+        var adat = new FormData();
+        var keres = (doboz.sdhKeres = (doboz.sdhKeres || 0) + 1);
+
+        adat.append('action', 'sdh_muhely_szamla_adozo');
+        adat.append('_wpnonce', beallitas.nonce || '');
+        adat.append('adoszam', mezo.value);
+
+        doboz.sdhTorzs = torzs;
+        szamlaVevoUzen(urlap, 'Cég keresése az adószám alapján…', '');
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                if (!urlap.isConnected || doboz.sdhKeres !== keres) {
+                    return;
+                }
+
+                if (eredmeny && eredmeny.success && eredmeny.data && eredmeny.data.vevo) {
+                    var vevo = eredmeny.data.vevo;
+
+                    // Ha a válaszban nincs teljes adószám, a beírt marad.
+                    vevo.megtartAdoszam = !vevo.adoszam;
+                    szamlaVevoKitolt(urlap, vevo, eredmeny.data.uzenet || '');
+
+                    return;
+                }
+
+                szamlaVevoUzen(urlap, (eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'A cég keresése nem sikerült.', 'hiba');
+            })
+            .catch(function () {
+                if (urlap.isConnected && doboz.sdhKeres === keres) {
+                    szamlaVevoUzen(urlap, 'A cég keresése nem sikerült (nincs kapcsolat). Töltsd ki kézzel.', 'hiba');
+                }
+            });
+    }
+
+    function szamlaVevoKeres(q) {
+        var cim = new URL(beallitas.ajax, window.location.origin);
+
+        cim.searchParams.set('action', 'sdh_muhely_szamla_vevokereso');
+        cim.searchParams.set('q', q);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        return fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                if (!eredmeny || !eredmeny.success) {
+                    throw new Error('Üres válasz');
+                }
+
+                return eredmeny.data.sorok || [];
+            });
+    }
+
+    /** A kiválasztott vevő beírása; ha van adószáma, de címe nincs, a NAV-tól pótoljuk. */
+    function szamlaVevoValaszt(urlap, t) {
+        szamlaVevoKitolt(urlap, t, 'Kitöltve a listából: ' + t.nev + '.');
+
+        if (t.adoszam && (!t.irsz || !t.telepules || !t.cim)) {
+            szamlaAdozo(urlap, true);
+        }
+    }
+
+    function szamlaVevoLista(urlap, kezdo) {
+        var forrasNev = { ugyfel: 'Ügyfél', szamla: 'Korábbi számla', ceg: 'Cégadatbázis' };
+
+        szValNyit(urlap, {
+            cim: 'Vevő választása',
+            alcim: 'Az ügyfelek és a korábbi számlák vevői. Név, adószám, telefonszám vagy e-mail alapján kereshető.',
+            helyorzo: 'Név, cégnév, adószám, telefon…',
+            egyseg: 'találat',
+            kezdo: kezdo || '',
+            kesleltet: 220,
+            oszlopok: [['Név', ''], ['Adószám', '8.5rem'], ['Cím', '38%'], ['Forrás', '7.5rem']],
+            forras: szamlaVevoKeres,
+            cellak: function (t) {
+                return [
+                    szovegBiztonsagos(t.nev),
+                    szovegBiztonsagos(t.adoszam || ''),
+                    szovegBiztonsagos([t.irsz, t.telepules].filter(Boolean).join(' ') + (t.cim ? ', ' + t.cim : '')),
+                    szovegBiztonsagos(forrasNev[t.forras] || '')
+                ];
+            },
+            valaszt: function (t) { szamlaVevoValaszt(urlap, t); },
+            kezi: function (q) {
+                var nev = szamlaVevoMezo(urlap, 'nev');
+
+                if (nev) {
+                    if (q) {
+                        nev.value = q;
+                    }
+
+                    szamlaVevoDoboz(urlap).sdhNev = nev.value.trim().toLowerCase();
+                    nev.focus();
+                    szamlaOsszeg(urlap);
+                }
+            }
+        });
+    }
+
+    /**
+     * Beírt (cég)név: megkeressük a listában. Egyetlen pontos egyezésnél kitölt,
+     * több találatnál a választó nyílik, találat nélkül a kézi kitöltés marad.
+     */
+    function szamlaVevoNev(urlap) {
+        var doboz = szamlaVevoDoboz(urlap);
+        var mezo = szamlaVevoMezo(urlap, 'nev');
+        var q = mezo ? mezo.value.trim() : '';
+        var kulcs = q.toLowerCase();
+
+        if (!doboz || q.length < 3 || szamlaVevoUgyanaz(urlap) || doboz.sdhNev === kulcs) {
+            return;
+        }
+
+        var keres = (doboz.sdhKeres = (doboz.sdhKeres || 0) + 1);
+
+        doboz.sdhNev = kulcs;
+        szamlaVevoUzen(urlap, 'Keresés a listában: ' + q + '…', '');
+
+        szamlaVevoKeres(q).then(function (sorok) {
+            if (!urlap.isConnected || doboz.sdhKeres !== keres || szVal) {
+                return;
+            }
+
+            var pontos = sorok.filter(function (t) { return t.nev.trim().toLowerCase() === kulcs; });
+
+            if (pontos.length === 1) {
+                szamlaVevoValaszt(urlap, pontos[0]);
+            } else if (sorok.length) {
+                szamlaVevoUzen(urlap, '', '');
+                szamlaVevoLista(urlap, q);
+            } else {
+                szamlaVevoUzen(urlap, '„' + q + '" nincs a listában. Add meg az adószámát – abból a cím kitöltődik –, vagy írd be kézzel.', '');
+            }
+        }).catch(function () {
+            if (urlap.isConnected && doboz.sdhKeres === keres) {
+                szamlaVevoUzen(urlap, '', '');
+            }
+        });
+    }
+
+    /** „E-mail az ügyfélnek": pipánál az e-mail-cím kötelező – ha nincs, a mezőre ugrunk érte. */
+    function szamlaEmailFrissit(urlap, ugras) {
+        var pipa = urlap.querySelector('[data-sdh-szamla-email]');
+        var mezo = szamlaVevoMezo(urlap, 'email');
+
+        if (!pipa || !mezo) {
+            return;
+        }
+
+        var kell = pipa.checked && !pipa.closest('[hidden]');
+
+        mezo.required = kell;
+        mezo.classList.toggle('is-hianyzik', kell && mezo.value.trim() === '');
+
+        if (kell && ugras && mezo.value.trim() === '') {
+            szamlaVevoUzen(urlap, 'Írd be a vevő e-mail-címét – a Számlázz.hu erre küldi a számlát.', 'hiba');
+            mezo.focus();
+        } else if (szamlaVevoDoboz(urlap).sdhUzenet && /e-mail-címét/.test(szamlaVevoDoboz(urlap).sdhUzenet.szoveg) && (!kell || mezo.value.trim() !== '')) {
+            szamlaVevoUzen(urlap, '', '');
+        }
+    }
+
+        /**
      * PDF új lapon a számla ablakából:
      *   előnézet     – a Számlázz.hu PDF-je, számla nem készül;
      *   nyomtatvány  – a helyben készülő számla-előkészítő (API nélkül); ehhez
@@ -5705,6 +6346,101 @@
             return;
         }
 
+        // --- A számla ablakának választója (termék, szolgáltatás, vevő) ---
+        if (szVal && cel.closest('[data-sdh-szval]')) {
+            var szvSor = cel.closest('[data-sdh-szval-sor]');
+            var szvLap = cel.closest('[data-sdh-szval-lap]');
+
+            if (szvSor) {
+                szValValaszt(szVal.talalatok[parseInt(szvSor.getAttribute('data-sdh-szval-sor'), 10)]);
+            } else if (szvLap) {
+                szVal.kijelolt = (szVal.oldal + parseInt(szvLap.getAttribute('data-sdh-szval-lap'), 10)) * SZVAL_OLDAL;
+                szValRajzol();
+            } else if (cel.closest('[data-sdh-szval-kezi]')) {
+                var szvKezi = szVal.o.kezi;
+                var szvKerdes = szVal.kerdes.trim();
+
+                szValZar();
+                szvKezi(szvKerdes);
+            } else if (cel.closest('[data-sdh-szval-megsem]')) {
+                szValZar();
+            }
+
+            return;
+        }
+
+        var ujTetel = cel.closest('[data-sdh-szamla-uj]');
+
+        if (ujTetel) {
+            esemeny.preventDefault();
+            szamlaUjTetel(ujTetel);
+
+            return;
+        }
+
+        var sorTorol = cel.closest('[data-sdh-szamla-sortorol]');
+
+        if (sorTorol) {
+            var torlendo = sorTorol.closest('tr');
+            var torolUrlap = sorTorol.closest('form');
+
+            esemeny.preventDefault();
+            torlendo.remove();
+            szamlaOsszeg(torolUrlap);
+
+            return;
+        }
+
+        var tipusGomb = cel.closest('[data-sdh-szamla-tipus]');
+
+        if (tipusGomb) {
+            var tipusSor = tipusGomb.closest('tr');
+
+            esemeny.preventDefault();
+            // A típus váltásával a sor elengedi a terméktörzset (kézi tétel lesz).
+            szamlaUjMezo(tipusSor, 'termek_id').value = '0';
+            szamlaTipusBeallit(tipusSor, szamlaUjMezo(tipusSor, 'tipus').value === 'termek' ? 'szolgaltatas' : 'termek');
+
+            return;
+        }
+
+        var megjGomb = cel.closest('[data-sdh-szamla-megj]');
+
+        if (megjGomb) {
+            var megjMezo = megjGomb.closest('td').querySelector('[data-sdh-szamla-megjmezo]');
+
+            esemeny.preventDefault();
+
+            if (megjMezo) {
+                // A kitöltött megjegyzés nem tűnik el: csak az üres mező csukható vissza.
+                megjMezo.hidden = !megjMezo.hidden && megjMezo.value.trim() === '';
+
+                if (!megjMezo.hidden) {
+                    megjMezo.focus();
+                }
+            }
+
+            return;
+        }
+
+        var vevoLista = cel.closest('[data-sdh-szamla-vevo-lista]');
+
+        if (vevoLista) {
+            esemeny.preventDefault();
+            szamlaVevoLista(vevoLista.closest('form'), '');
+
+            return;
+        }
+
+        var adozoGomb = cel.closest('[data-sdh-szamla-adozo]');
+
+        if (adozoGomb) {
+            esemeny.preventDefault();
+            szamlaAdozo(adozoGomb.closest('form'), false);
+
+            return;
+        }
+
         var szamlaGomb = cel.closest('[data-sdh-szamla]');
 
         if (szamlaGomb) {
@@ -5741,12 +6477,137 @@
     });
 
     document.addEventListener('change', function (esemeny) {
-        var pipa = esemeny.target;
+        var mezo = esemeny.target;
+        var urlap = mezo && mezo.closest ? mezo.closest('[data-sdh-szamlaurlap]') : null;
 
-        if (pipa && pipa.matches && pipa.matches('[data-sdh-szamla-tetel]')) {
-            szamlaOsszeg(pipa.closest('form'));
+        if (!urlap) {
+            return;
         }
+
+        if (mezo.matches('[data-sdh-szamla-email]')) {
+            szamlaEmailFrissit(urlap, true);
+
+            return;
+        }
+
+        if (mezo.matches('[data-v="nev"]')) {
+            szamlaVevoNev(urlap);
+        } else if (mezo.matches('[data-v="adoszam"]')) {
+            // Kilépéskor egységes alak: 12345678-1-12.
+            var szamok = mezo.value.replace(/\D/g, '');
+
+            if (szamok.length === 11) {
+                mezo.value = szamok.slice(0, 8) + '-' + szamok.slice(8, 9) + '-' + szamok.slice(9);
+            }
+        }
+
+        szamlaOsszeg(urlap);
     });
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (!mezo || !mezo.matches) {
+            return;
+        }
+
+        // A választó keresője: helyi listánál azonnal, szerveroldali keresésnél rövid késleltetéssel.
+        if (szVal && mezo.matches('[data-sdh-szval-kereso]')) {
+            szVal.kerdes = mezo.value;
+            window.clearTimeout(szValIdozito);
+
+            if (szVal.o.kesleltet) {
+                szValIdozito = window.setTimeout(szValFrissit, szVal.o.kesleltet);
+            } else {
+                szValFrissit();
+            }
+
+            return;
+        }
+
+        var urlap = mezo.closest('[data-sdh-szamlaurlap]');
+
+        if (!urlap) {
+            return;
+        }
+
+        if (mezo.matches('[data-v]')) {
+            var doboz = szamlaVevoDoboz(urlap);
+
+            // Kézi átírásnál a korábbi üzenet (pl. „Kitöltve a NAV adataiból") már nem igaz.
+            doboz.sdhUzenet = null;
+
+            if (mezo.matches('[data-v="adoszam"]')) {
+                var torzs = szamlaTorzsszam(mezo.value);
+                var hossz = mezo.value.replace(/\D/g, '').length;
+
+                window.clearTimeout(vevoIdozito);
+
+                // Teljes törzsszám (8 jegy) vagy teljes adószám (11 jegy): magától megkeresi a céget.
+                if (torzs !== '' && torzs !== doboz.sdhTorzs && (hossz === 8 || hossz === 11)) {
+                    vevoIdozito = window.setTimeout(function () {
+                        szamlaAdozo(urlap, true);
+                    }, 450);
+                }
+            }
+
+            if (mezo.matches('[data-v="email"]')) {
+                szamlaEmailFrissit(urlap, false);
+            }
+        }
+
+        szamlaOsszeg(urlap);
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (!mezo || !mezo.matches) {
+            return;
+        }
+
+        if (szVal && mezo.matches('[data-sdh-szval-kereso]')) {
+            var db = szVal.talalatok.length;
+            var lepes = { ArrowDown: 1, ArrowUp: -1, PageDown: SZVAL_OLDAL, PageUp: -SZVAL_OLDAL }[esemeny.key];
+
+            if (lepes && db > 0) {
+                esemeny.preventDefault();
+                szVal.kijelolt = Math.max(0, Math.min(db - 1, szVal.kijelolt + lepes));
+                szValRajzol();
+            } else if (esemeny.key === 'Enter') {
+                esemeny.preventDefault();
+
+                if (db > 0) {
+                    szValValaszt(szVal.talalatok[szVal.kijelolt]);
+                }
+            }
+
+            return;
+        }
+
+        // A számla ablakában az Enter SOHA nem állít ki számlát egy szövegmezőből:
+        // a névnél és az adószámnál keres, máshol nem csinál semmit.
+        if (esemeny.key === 'Enter' && mezo.tagName === 'INPUT' && mezo.type !== 'checkbox' && mezo.closest('[data-sdh-szamlaurlap]')) {
+            var urlap = mezo.closest('[data-sdh-szamlaurlap]');
+
+            esemeny.preventDefault();
+
+            if (mezo.matches('[data-v="nev"]')) {
+                szamlaVevoNev(urlap);
+            } else if (mezo.matches('[data-v="adoszam"]')) {
+                window.clearTimeout(vevoIdozito);
+                szamlaAdozo(urlap, false);
+            }
+        }
+    }, true);
+
+    // Ha a választót a × gombbal vagy Esc-pel zárják be, az állapota is törlődik.
+    document.addEventListener('close', function (esemeny) {
+        if (szVal && szintek[szVal.n] && esemeny.target === szintek[szVal.n].dialog && !esemeny.target.open) {
+            window.clearTimeout(szValIdozito);
+            szVal = null;
+        }
+    }, true);
 
     document.addEventListener('sdh:urlap-betoltve', function (esemeny) {
         var reszlet = esemeny.detail || {};
@@ -5759,13 +6620,22 @@
         var szamlaUrlap = torzs.querySelector('[data-sdh-szamlaurlap]');
 
         if (szamlaUrlap) {
-            var kuldes = szamlaUrlap.querySelector('[data-sdh-szamla-kuld]');
+            // Amit a szerver tiltott le (nincs Agent kulcs), azt a kitöltés nem oldja fel.
+            Array.prototype.forEach.call(szamlaUrlap.querySelectorAll('[data-sdh-szamla-kuld], [data-sdh-szamla-elonezet]'), function (gomb) {
+                if (gomb.disabled) {
+                    gomb.setAttribute('data-sdh-tiltva', '');
+                }
+            });
 
-            // Amit a szerver tiltott le (nincs kulcs, hiányos vevő), azt a pipák nem oldják fel.
-            if (kuldes && kuldes.disabled) {
-                kuldes.setAttribute('data-sdh-tiltva', '');
+            var vevoDoboz = szamlaVevoDoboz(szamlaUrlap);
+
+            // A megnyitáskor beírt névre és adószámra nem indul keresés.
+            if (vevoDoboz) {
+                vevoDoboz.sdhNev = szamlaVevoMezo(szamlaUrlap, 'nev').value.trim().toLowerCase();
+                vevoDoboz.sdhTorzs = szamlaTorzsszam(szamlaVevoMezo(szamlaUrlap, 'adoszam').value);
             }
 
+            szamlaEmailFrissit(szamlaUrlap, false);
             szamlaOsszeg(szamlaUrlap);
 
             return;

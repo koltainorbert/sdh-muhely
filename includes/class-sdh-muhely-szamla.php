@@ -54,6 +54,15 @@ final class SDH_Muhely_Szamla
     /** A bevizsgálási díj tételsorának `forras` értéke. */
     public const BEVIZSGALAS = 'bevizsgalas';
 
+    /** A számla ablakában egyszerre felvehető új tételek száma. */
+    private const UJ_TETEL_MAX = 40;
+
+    /** Egy tétel megjegyzésének legnagyobb hossza. */
+    private const TETEL_MEGJ_HOSSZ = 200;
+
+    /** Egy tételhez legfeljebb ennyi adattörlő kód kérhető (a Számlázz.hu korlátja). */
+    private const TORLOKOD_MAX = 400;
+
     /** A Számla Agent címe (teszthez a SDH_MUHELY_SZAMLA_AGENT_URL állandóval átírható). */
     private const AGENT_URL = 'https://www.szamlazz.hu/szamla/';
 
@@ -67,6 +76,10 @@ final class SDH_Muhely_Szamla
 
         // Helyi nyomtatvány (számla-előkészítő): PDF a szerveren, API nélkül.
         add_action('wp_ajax_sdh_muhely_szamla_nyomtatvany', [self::class, 'ajax_nyomtatvany']);
+
+        // A számla ablaka: cég keresése adószámból (NAV), vevő a listáról / név alapján.
+        add_action('wp_ajax_sdh_muhely_szamla_adozo', [self::class, 'ajax_adozo']);
+        add_action('wp_ajax_sdh_muhely_szamla_vevokereso', [self::class, 'ajax_vevokereso']);
 
         // Beállítások: a kapcsolat ellenőrzése (számla nem készül).
         add_action('wp_ajax_sdh_muhely_szamla_kapcsolat', [self::class, 'ajax_kapcsolat']);
@@ -95,6 +108,7 @@ final class SDH_Muhely_Szamla
             'hatarido_nap'       => 8,
             'alap_fizmod'        => 'Készpénz',
             'email_kuldes'       => false,
+            'torlokod'           => false,
             'megjegyzes'         => 'Munkalap: {munkalap} · {eszkoz}',
             'bevizsgalas_sablon' => '{eszkoz} {fajta} bevizsgálási díj',
             // Helyi nyomtatvány
@@ -235,6 +249,15 @@ final class SDH_Muhely_Szamla
                     <label for="szamla_email_kuldes">A számla ablakában alapból legyen bepipálva az „E-mail az ügyfélnek" (a Számlázz.hu küldi el a számlát).</label>
                 </div>
 
+                <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
+                    <input type="checkbox" name="szamla_torlokod" id="szamla_torlokod" value="1" <?php checked(!empty($b['torlokod'])); ?>>
+                    <label for="szamla_torlokod">Adattörlő kód használata: a számla ablakában tételenként bekapcsolható, a Számlázz.hu rendeli a kódot a tételhez.</label>
+                    <span class="sdh-mezo__sugo">
+                        Csak akkor működik, ha a Számlázz.hu-fiókban is be van kapcsolva (Beállítások → Fiók beállításai → Számlázás beállítások),
+                        és a számlakép a Számlázz.hu ajánlott számlaképe. Tételenként annyi kód készül, ahány darab a mennyiség.
+                    </span>
+                </div>
+
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="szamla_megjegyzes">Megjegyzés a számlán</label>
                     <input type="text" name="szamla_megjegyzes" id="szamla_megjegyzes" maxlength="250"
@@ -366,6 +389,7 @@ final class SDH_Muhely_Szamla
         $b['hatarido_nap']       = isset($_POST['szamla_hatarido_nap']) ? min(365, max(0, (int) $_POST['szamla_hatarido_nap'])) : 8;
         $b['alap_fizmod']        = $szoveg('szamla_alap_fizmod', 40) !== '' ? $szoveg('szamla_alap_fizmod', 40) : 'Készpénz';
         $b['email_kuldes']       = !empty($_POST['szamla_email_kuldes']);
+        $b['torlokod']           = !empty($_POST['szamla_torlokod']);
         $b['megjegyzes']         = $szoveg('szamla_megjegyzes', 250);
         $b['bevizsgalas_sablon'] = $szoveg('szamla_bevizsgalas_sablon', 200) !== ''
             ? $szoveg('szamla_bevizsgalas_sablon', 200)
@@ -809,7 +833,7 @@ final class SDH_Muhely_Szamla
      *
      * @param array<string, mixed>             $fej     kelt, teljesites, hatarido, fizmod, fizetve, megjegyzes, email, elonezet, rendeles
      * @param array<string, mixed>             $vevo    a vevo() „adat" része
-     * @param array<int, array<string, mixed>> $sorok   tetel_sor() eredményei
+     * @param array<int, array<string, mixed>> $sorok   tetel_sor() eredményei (+ megjegyzes, torlokod)
      */
     public static function xml(string $sorozat, array $fej, array $vevo, array $sorok): string
     {
@@ -874,6 +898,9 @@ final class SDH_Muhely_Szamla
                 'nettoErtek'       => self::n((float) $s['netto']),
                 'afaErtek'         => self::n((float) $s['afa']),
                 'bruttoErtek'      => self::n((float) $s['brutto']),
+                'megjegyzes'       => (string) ($s['megjegyzes'] ?? '') !== '' ? (string) $s['megjegyzes'] : null,
+                // Adattörlő kód: a kért kódok darabszáma; a séma szerint a tétel utolsó eleme.
+                'torloKod'         => (int) ($s['torlokod'] ?? 0) > 0 ? (int) $s['torlokod'] : null,
             ], '      ') . "    </tetel>\n";
         }
 
@@ -1039,7 +1066,9 @@ final class SDH_Muhely_Szamla
         $cim     = $helyi ? self::nyomtatvany_cim() : ($sorozat === 'sdh' ? (string) $b['gomb_sdh'] : 'Számlázz.hu számla');
         $ugyfel  = self::ugyfel((int) $munkalap->ugyfel_id);
         $vevo    = self::vevo($ugyfel);
+        $v       = $vevo['adat'] !== [] ? $vevo['adat'] : self::vevo_ures();
         $tetelek = self::tetelek((int) $munkalap->id);
+        $torlo   = !$helyi && !empty($b['torlokod']);
         $szamlak = self::lista((int) $munkalap->id);
         $szam    = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
         $fizmod  = trim((string) $munkalap->fizetesi_mod) !== '' ? (string) $munkalap->fizetesi_mod : (string) $b['alap_fizmod'];
@@ -1065,7 +1094,7 @@ final class SDH_Muhely_Szamla
             <?php if ($helyi) : ?>
                 Letölthető, nyomtatható PDF a kipipált tételekből – helyben készül, internet nélkül is. Nem számla: ez a papír megy a kész termék mellé, a számla ebből készül.
             <?php else : ?>
-                Itt döntöd el, mi kerül a számlára. A számlát a Számlázz.hu állítja ki és jelenti a NAV felé – a kiállítás végleges, javítani sztornóval lehet.
+                Itt döntöd el, mi kerül a számlára és kinek a nevére: a vevő és a tételek átírhatók. A számlát a Számlázz.hu állítja ki és jelenti a NAV felé – a kiállítás végleges, javítani sztornóval lehet.
             <?php endif; ?>
         </p>
 
@@ -1083,44 +1112,62 @@ final class SDH_Muhely_Szamla
 
             <div class="sdh-ugyfelurlap sdh-szamlaurlap">
                 <div class="sdh-szamlaurlap__felso">
-                    <?php // --- Vevő ------------------------------------------------------- ?>
-                    <fieldset class="sdh-szamlaurlap__doboz">
+                    <?php // --- Vevő (átírható: listáról, adószámból vagy kézzel) -------------- ?>
+                    <fieldset class="sdh-szamlaurlap__doboz sdh-szamlaurlap__vevo" data-sdh-szamla-vevo
+                              data-eredeti-nev="<?php echo esc_attr((string) $v['nev']); ?>"
+                              data-kotelezo="<?php echo $helyi ? '0' : '1'; ?>">
                         <legend>Vevő</legend>
 
-                        <?php if ($ugyfel === null) : ?>
-                            <p class="sdh-szamlaurlap__hiany">A munkalapnak nincs ügyfele.</p>
-                        <?php else : ?>
-                            <?php $v = $vevo['adat']; ?>
-                            <p class="sdh-szamlaurlap__vevonev"><?php echo esc_html((string) $v['nev']); ?></p>
-                            <p>
-                                <?php echo esc_html(trim($v['irsz'] . ' ' . $v['telepules'] . ', ' . $v['cim'], ' ,')); ?>
-                                <?php if ((string) $v['orszag'] !== 'Magyarország') : ?>
-                                    · <?php echo esc_html((string) $v['orszag']); ?>
-                                <?php endif; ?>
-                            </p>
-                            <p class="sdh-tabla__halvany">
-                                <?php
-                                echo esc_html(implode(' · ', array_filter([
-                                    (string) $v['adoszam'] !== '' ? 'Adószám: ' . $v['adoszam'] : ((int) $v['adoalany'] === -1 ? 'Magánszemély' : 'Adószám nincs megadva'),
-                                    (string) $v['email'],
-                                    (string) $v['telefon'],
-                                ])));
-                                ?>
-                            </p>
+                        <input type="hidden" name="vevo[orszag]" value="<?php echo esc_attr((string) $v['orszag']); ?>" data-v="orszag">
 
-                            <?php if (isset($v['postazas'])) : ?>
-                                <p class="sdh-tabla__halvany">
-                                    Postázási cím: <?php echo esc_html($v['postazas']['irsz'] . ' ' . $v['postazas']['telepules'] . ', ' . $v['postazas']['cim']); ?>
-                                </p>
-                            <?php endif; ?>
+                        <div class="sdh-ig">
+                            <label for="szamla_vevo_nev">Név</label>
+                            <div class="sdh-szamlaurlap__sor">
+                                <input type="text" name="vevo[nev]" id="szamla_vevo_nev" maxlength="190" autocomplete="off" data-v="nev"
+                                       placeholder="Név vagy cégnév" value="<?php echo esc_attr((string) $v['nev']); ?>">
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-vevo-lista
+                                        title="Vevő választása az ügyfelek és a korábbi számlák vevői közül">Listáról…</button>
+                            </div>
+                        </div>
 
-                            <?php if ($vevo['hianyzik'] !== []) : ?>
-                                <p class="sdh-szamlaurlap__hiany">
-                                    Hiányzik a vevő adataiból: <?php echo esc_html(implode(', ', $vevo['hianyzik'])); ?>.
-                                    <?php echo $helyi ? 'A nyomtatvány így is elkészül; a számlához pótolni kell az ügyfél adatlapján.' : 'Pótold az ügyfél adatlapján (Ügyfelek menü), aztán nyisd meg újra a számlát.'; ?>
-                                </p>
-                            <?php endif; ?>
-                        <?php endif; ?>
+                        <div class="sdh-ig">
+                            <label for="szamla_vevo_adoszam">Adószám</label>
+                            <div class="sdh-szamlaurlap__sor">
+                                <input type="text" name="vevo[adoszam]" id="szamla_vevo_adoszam" maxlength="30" autocomplete="off" data-v="adoszam"
+                                       inputmode="numeric" placeholder="12345678-1-12 – céges számlához" value="<?php echo esc_attr((string) $v['adoszam']); ?>">
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-adozo
+                                        title="A cég neve és címe az adószámból (NAV, a Számlázz.hu-n keresztül)">Cég keresése</button>
+                            </div>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="szamla_vevo_irsz">Irsz., település</label>
+                            <div class="sdh-szamlaurlap__sor">
+                                <input type="text" name="vevo[irsz]" id="szamla_vevo_irsz" maxlength="10" autocomplete="off" data-v="irsz"
+                                       class="sdh-szamlaurlap__irsz" aria-label="Irányítószám" value="<?php echo esc_attr((string) $v['irsz']); ?>">
+                                <input type="text" name="vevo[telepules]" maxlength="120" autocomplete="off" data-v="telepules"
+                                       aria-label="Település" value="<?php echo esc_attr((string) $v['telepules']); ?>">
+                            </div>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="szamla_vevo_cim">Utca, házszám</label>
+                            <input type="text" name="vevo[cim]" id="szamla_vevo_cim" maxlength="190" autocomplete="off" data-v="cim"
+                                   value="<?php echo esc_attr((string) $v['cim']); ?>">
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="szamla_vevo_email">E-mail</label>
+                            <input type="email" name="vevo[email]" id="szamla_vevo_email" maxlength="190" autocomplete="off" data-v="email"
+                                   placeholder="ide küldi a Számlázz.hu a számlát" value="<?php echo esc_attr((string) $v['email']); ?>">
+                        </div>
+
+                        <?php // Egy sor, fix magassággal: az ablak nem ugrál, amikor üzenet jelenik meg. ?>
+                        <p class="sdh-szamlaurlap__allapot" data-sdh-szamla-vevo-allapot aria-live="polite"><?php
+                            if (isset($v['postazas'])) {
+                                echo esc_html('Postázási cím: ' . $v['postazas']['irsz'] . ' ' . $v['postazas']['telepules'] . ', ' . $v['postazas']['cim']);
+                            }
+                        ?></p>
                     </fieldset>
 
                     <?php // --- Fizetés és dátumok ------------------------------------------- ?>
@@ -1152,18 +1199,17 @@ final class SDH_Muhely_Szamla
                                 Fizetve
                             </label>
 
-                            <label class="sdh-jelolo" title="<?php echo esc_attr(($vevo['adat']['email'] ?? '') !== '' ? 'A Számlázz.hu elküldi a számlát az ügyfél e-mail-címére' : 'Az ügyfélnek nincs e-mail-címe'); ?>">
-                                <input type="checkbox" name="email" value="1"
-                                    <?php checked(!empty($b['email_kuldes']) && ($vevo['adat']['email'] ?? '') !== ''); ?>
-                                    <?php disabled(($vevo['adat']['email'] ?? '') === ''); ?>>
+                            <label class="sdh-jelolo" title="A Számlázz.hu elküldi a számlát a vevő e-mail-címére. Ha nincs megadva cím, a rendszer bekéri.">
+                                <input type="checkbox" name="email" value="1" data-sdh-szamla-email
+                                    <?php checked(!empty($b['email_kuldes']) && (string) $v['email'] !== ''); ?>>
                                 E-mail az ügyfélnek
                             </label>
                         </div>
                     </fieldset>
                 </div>
 
-                <?php // --- Tételek ------------------------------------------------------- ?>
-                <table class="sdh-tabla sdh-szamlaurlap__tetelek">
+                <?php // --- Tételek: a munkalapé pipával, az itt hozzáadottak szerkeszthetők ---- ?>
+                <table class="sdh-tabla sdh-szamlaurlap__tetelek<?php echo $torlo ? ' sdh-szamlaurlap__tetelek--torlo' : ''; ?>" data-sdh-szamla-tetelek>
                     <thead>
                         <tr>
                             <th></th>
@@ -1173,12 +1219,15 @@ final class SDH_Muhely_Szamla
                             <th>Áfa</th>
                             <th class="sdh-tabla__szam">Nettó</th>
                             <th class="sdh-tabla__szam">Bruttó</th>
+                            <?php if ($torlo) : ?>
+                                <th class="sdh-szamlaurlap__torlo" title="Adattörlő kód kérése a tételhez – a Számlázz.hu rendeli hozzá, mennyiségenként egyet">Adattörlő kód</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
-                    <tbody>
-                    <?php if ($tetelek === []) : ?>
-                        <tr><td colspan="7" class="sdh-tabla__ures">A munkalapon nincs tétel. Vegyél fel szolgáltatást, terméket vagy bevizsgálási díjat.</td></tr>
-                    <?php endif; ?>
+                    <tbody data-sdh-szamla-sorok>
+                        <tr data-sdh-szamla-ures<?php echo $tetelek === [] ? '' : ' hidden'; ?>>
+                            <td colspan="<?php echo $torlo ? 8 : 7; ?>" class="sdh-tabla__ures">Nincs tétel. Vegyél fel terméket, szolgáltatást vagy kézi tételt az alábbi gombokkal.</td>
+                        </tr>
 
                     <?php foreach ($tetelek as $t) : ?>
                         <?php
@@ -1186,37 +1235,114 @@ final class SDH_Muhely_Szamla
                         $szamlazva  = (string) $t->szamla !== '';
                         $fajta      = (string) $t->forras === self::BEVIZSGALAS ? 'Bevizsgálási díj' : ((string) $t->tipus === 'termek' ? 'Termék' : 'Szolgáltatás');
                         ?>
-                        <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>">
+                        <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>" data-sdh-szamla-sor>
                             <td>
                                 <input type="checkbox" name="tetel[]" value="<?php echo (int) $t->id; ?>" data-sdh-szamla-tetel
                                        data-netto="<?php echo esc_attr((string) $s['netto']); ?>" data-brutto="<?php echo esc_attr((string) $s['brutto']); ?>"
                                        aria-label="<?php echo esc_attr($s['megnevezes'] . ' a számlára'); ?>"
+                                       title="Pipa nélkül ez a tétel kimarad erről a számláról"
                                     <?php checked(!$szamlazva); ?>>
                             </td>
                             <td class="sdh-tabla__nev">
-                                <?php echo esc_html((string) $s['megnevezes']); ?>
-                                <span class="sdh-termval__kat"><?php echo esc_html($fajta); ?></span>
-                                <?php if ($szamlazva) : ?>
-                                    <span class="sdh-szamlajel" title="Ez a tétel már szerepel ezen a számlán"><?php echo esc_html((string) $t->szamla); ?></span>
-                                <?php endif; ?>
+                                <?php // A hosszú név rövidül (…), a megjegyzés gombja mindig látszik mellette. ?>
+                                <span class="sdh-szamlaurlap__nevsor">
+                                    <span class="sdh-szamlaurlap__nev" title="<?php echo esc_attr((string) $s['megnevezes']); ?>">
+                                        <?php echo esc_html((string) $s['megnevezes']); ?>
+                                        <span class="sdh-termval__kat"><?php echo esc_html($fajta); ?></span>
+                                        <?php if ($szamlazva) : ?>
+                                            <span class="sdh-szamlajel" title="Ez a tétel már szerepel ezen a számlán"><?php echo esc_html((string) $t->szamla); ?></span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <?php self::tetel_megjegyzes_gomb(); ?>
+                                </span>
+                                <?php self::tetel_megjegyzes_mezo('megj[' . (int) $t->id . ']'); ?>
                             </td>
                             <td class="sdh-tabla__szam"><?php echo esc_html(SDH_Muhely_Termek::menny((float) $s['mennyiseg']) . ' ' . $s['me']); ?></td>
                             <td class="sdh-tabla__szam"><?php echo esc_html(number_format((float) $s['netto_egysegar'], 2, ',', "\u{00a0}")); ?></td>
                             <td><?php echo esc_html(is_numeric($s['afakulcs']) ? $s['afakulcs'] . '%' : (string) $s['afakulcs']); ?></td>
                             <td class="sdh-tabla__szam"><?php echo esc_html(self::penz((float) $s['netto'])); ?></td>
                             <td class="sdh-tabla__szam"><strong><?php echo esc_html(self::penz((float) $s['brutto'])); ?></strong></td>
+                            <?php if ($torlo) : ?>
+                                <td class="sdh-szamlaurlap__torlo"><?php self::torlo_kapcsolo('torlo[' . (int) $t->id . ']'); ?></td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                     <tfoot>
+                        <tr class="sdh-szamlaurlap__ujgombok">
+                            <td></td>
+                            <td colspan="<?php echo $torlo ? 7 : 6; ?>">
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="termek"
+                                        title="Termék keresése és felvétele a számlára">+ Termék…</button>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="szolgaltatas"
+                                        title="Szolgáltatás keresése és felvétele a számlára">+ Szolgáltatás…</button>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="kezi"
+                                        title="Üres sor: a megnevezést és az árat kézzel írod be">+ Kézi tétel</button>
+                                <span class="sdh-szamlaurlap__ujsugo">
+                                    <?php echo $helyi
+                                        ? 'Az itt felvett tétel csak a nyomtatványra kerül; a munkalapra a Termékek / Szolgáltatások fülön vedd fel.'
+                                        : 'Az itt felvett tétel a számla kiállításakor a munkalapra is rákerül.'; ?>
+                                </span>
+                            </td>
+                        </tr>
                         <tr>
                             <td></td>
-                            <td class="sdh-tabla__szumma" colspan="4">Végösszeg (a kipipált tételek)</td>
+                            <td class="sdh-tabla__szumma" colspan="4">Végösszeg (a számlára kerülő tételek)</td>
                             <td class="sdh-tabla__szam"><output data-sdh-szamla-ossz="netto">0</output></td>
                             <td class="sdh-tabla__szam"><strong><output data-sdh-szamla-ossz="brutto">0</output> Ft</strong></td>
+                            <?php if ($torlo) : ?>
+                                <td></td>
+                            <?php endif; ?>
                         </tr>
                     </tfoot>
                 </table>
+
+                <?php // Az új tétel sora – az app.js ebből másol (az __I__ helyére a sor sorszáma kerül). ?>
+                <template data-sdh-szamla-ujsor>
+                    <tr data-sdh-szamla-sor data-sdh-szamla-ujtetel>
+                        <td>
+                            <button type="button" class="sdh-szamlaurlap__torol" data-sdh-szamla-sortorol
+                                    aria-label="Tétel törlése a számláról" title="Tétel törlése a számláról">&times;</button>
+                        </td>
+                        <td class="sdh-tabla__nev sdh-szamlaurlap__ujnev">
+                            <input type="hidden" name="uj[__I__][tipus]" value="szolgaltatas" data-u="tipus">
+                            <input type="hidden" name="uj[__I__][termek_id]" value="0" data-u="termek_id">
+                            <span class="sdh-szamlaurlap__sor">
+                                <input type="text" name="uj[__I__][megnevezes]" maxlength="255" autocomplete="off" data-u="megnevezes"
+                                       placeholder="Megnevezés" aria-label="Megnevezés">
+                                <button type="button" class="sdh-termval__kat sdh-szamlaurlap__tipus" data-sdh-szamla-tipus
+                                        title="Kattintásra vált: szolgáltatás / termék">Szolgáltatás</button>
+                            </span>
+                            <?php self::tetel_megjegyzes_gomb(); ?>
+                            <?php self::tetel_megjegyzes_mezo('uj[__I__][megjegyzes]'); ?>
+                        </td>
+                        <td class="sdh-tabla__szam">
+                            <input type="text" name="uj[__I__][mennyiseg]" value="1" inputmode="decimal" autocomplete="off" data-u="mennyiseg"
+                                   class="sdh-szamlaurlap__szam" aria-label="Mennyiség">
+                            <input type="text" name="uj[__I__][me]" value="db" maxlength="20" autocomplete="off" data-u="me"
+                                   class="sdh-szamlaurlap__me" aria-label="Mennyiségi egység">
+                        </td>
+                        <td class="sdh-tabla__szam">
+                            <input type="text" name="uj[__I__][brutto_ar]" inputmode="decimal" autocomplete="off" data-u="brutto_ar"
+                                   class="sdh-szamlaurlap__ar" placeholder="bruttó ár" aria-label="Bruttó egységár"
+                                   title="BRUTTÓ egységár forintban – a nettót a rendszer számolja belőle">
+                            <small class="sdh-szamlaurlap__netto">nettó <output data-u-ki="egysegar">0,00</output></small>
+                        </td>
+                        <td>
+                            <select name="uj[__I__][afa_kulcs]" data-u="afa_kulcs" aria-label="Áfakulcs">
+                                <?php foreach (SDH_Muhely_Tetel::afakulcsok() as $kulcs => $afa) : ?>
+                                    <option value="<?php echo esc_attr((string) $kulcs); ?>" data-szazalek="<?php echo esc_attr((string) $afa['szazalek']); ?>"
+                                        <?php selected((string) $kulcs, SDH_Muhely_Tetel::alap_afakulcs()); ?>><?php echo esc_html((string) $afa['nev']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td class="sdh-tabla__szam"><output data-u-ki="netto">0</output></td>
+                        <td class="sdh-tabla__szam"><strong><output data-u-ki="brutto">0</output></strong></td>
+                        <?php if ($torlo) : ?>
+                            <td class="sdh-szamlaurlap__torlo"><?php self::torlo_kapcsolo('uj[__I__][torlokod]'); ?></td>
+                        <?php endif; ?>
+                    </tr>
+                </template>
 
                 <div class="sdh-ig sdh-szamlaurlap__megj">
                     <label for="szamla_megjegyzes_mezo">Megjegyzés</label>
@@ -1238,18 +1364,18 @@ final class SDH_Muhely_Szamla
                         <?php // Nincs beküldés: a PDF a szerveren készül, és új lapon nyílik (app.js szamlaPdf). ?>
                         <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szamla-kuld data-sdh-szamla-nyomtat
                                 data-fajlnev="<?php echo esc_attr(self::nyomtatvany_szam($munkalap) . '.pdf'); ?>"
-                            <?php disabled($ugyfel === null || $tetelek === []); ?>>
+                            >
                             PDF megnyitása
                         </button>
                         <span class="sdh-szamlaurlap__letoltes" data-sdh-szamla-letoltes></span>
                     <?php else : ?>
                         <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szamla-kuld
-                            <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
+                            <?php disabled(!self::beallitva()); ?>>
                             Számla kiállítása
                         </button>
                         <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-elonezet
                                 title="PDF-előnézet a Számlázz.hu-tól – számla NEM készül"
-                            <?php disabled(!self::beallitva() || $vevo['hianyzik'] !== [] || $tetelek === []); ?>>
+                            <?php disabled(!self::beallitva()); ?>>
                             Előnézet (PDF)
                         </button>
                     <?php endif; ?>
@@ -1262,10 +1388,390 @@ final class SDH_Muhely_Szamla
         wp_die();
     }
 
+/** Üres vevő (ha a munkalapnak nincs ügyfele): a számla ablakában kézzel tölthető ki. */
+    private static function vevo_ures(): array
+    {
+        return ['nev' => '', 'orszag' => 'Magyarország', 'irsz' => '', 'telepules' => '', 'cim' => '', 'email' => '', 'adoalany' => -1, 'adoszam' => '', 'telefon' => ''];
+    }
+
+    /** Magyar adószám egységes alakban (12345678-1-12); ha nem az, üres. */
+    public static function adoszam_formaz(string $nyers): string
+    {
+        $szamok = (string) preg_replace('/\D/', '', $nyers);
+
+        return strlen($szamok) === 11
+            ? substr($szamok, 0, 8) . '-' . substr($szamok, 8, 1) . '-' . substr($szamok, 9, 2)
+            : '';
+    }
+
+    /** Ennyi adattörlő kódot kérünk egy tételhez: darabonként egyet. */
+    private static function torlokod_db(float $mennyiseg): int
+    {
+        return (int) min(self::TORLOKOD_MAX, max(1, (int) round($mennyiseg)));
+    }
+
+    /**
+     * A vevő a számla ablakából: az ügyfél adataiból indul, és amit az űrlap
+     * küld (`vevo[...]`), az felülírja – így kérhet az ügyfél más névre, cégre
+     * szóló számlát. Az ügyfél adatlapja ettől nem változik.
+     *
+     * @return array{adat: array<string, mixed>, hianyzik: array<int, string>, hiba: string, ugyanaz: bool}
+     */
+    private static function vevo_kert(?object $ugyfel): array
+    {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- a hívó ellenőrizte.
+        $alap = self::vevo($ugyfel);
+        $adat = $alap['adat'] !== [] ? $alap['adat'] : self::vevo_ures();
+
+        if (!isset($_POST['vevo']) || !is_array($_POST['vevo'])) {
+            return ['adat' => $adat, 'hianyzik' => $alap['hianyzik'], 'hiba' => '', 'ugyanaz' => true];
+        }
+
+        $kert   = $_POST['vevo'];
+        $szoveg = static fn (string $k, int $hossz): string => isset($kert[$k]) && is_scalar($kert[$k])
+            ? trim(mb_substr(sanitize_text_field(wp_unslash((string) $kert[$k])), 0, $hossz))
+            : '';
+        // phpcs:enable
+
+        $hiba        = '';
+        $eredeti     = (string) $adat['nev'];
+        $eredeti_ado = (int) $adat['adoalany'];
+        $nev         = $szoveg('nev', 190);
+        $ugyanaz     = $nev !== '' && mb_strtolower($nev, 'UTF-8') === mb_strtolower($eredeti, 'UTF-8');
+
+        $adat['nev']       = $nev;
+        $adat['irsz']      = $szoveg('irsz', 10);
+        $adat['telepules'] = $szoveg('telepules', 120);
+        $adat['cim']       = $szoveg('cim', 190);
+        $adat['orszag']    = $szoveg('orszag', 60) !== '' ? $szoveg('orszag', 60) : 'Magyarország';
+
+        $email = $szoveg('email', 190);
+
+        if ($email !== '' && !is_email($email)) {
+            $hiba  = 'A vevő e-mail-címe hibás.';
+            $email = '';
+        }
+
+        $adat['email'] = $email;
+
+        $nyers   = $szoveg('adoszam', 30);
+        $adoszam = self::adoszam_formaz($nyers);
+
+        if ($nyers !== '' && $adoszam === '') {
+            $hiba = 'Az adószám 11 számjegy, ebben az alakban: 12345678-1-12. Magánszemélynél hagyd üresen.';
+        }
+
+        $adat['adoszam']  = $adoszam;
+        // 1 = belföldi adószámmal, 0 = nem tudjuk (cég, adószám nélkül), -1 = nincs adószáma (magánszemély).
+        $adat['adoalany'] = $adoszam !== '' ? 1 : ($ugyanaz ? ($eredeti_ado === 1 ? 0 : $eredeti_ado) : -1);
+
+        // Más névre szóló számlán az ügyfél telefonja és postázási címe nem szerepel.
+        if (!$ugyanaz) {
+            $adat['telefon'] = '';
+            unset($adat['postazas']);
+        }
+
+        $hianyzik = [];
+
+        foreach (['nev' => 'név', 'irsz' => 'irányítószám', 'telepules' => 'település', 'cim' => 'utca, házszám'] as $mezo => $cimke) {
+            if ((string) $adat[$mezo] === '') {
+                $hianyzik[] = $cimke;
+            }
+        }
+
+        return ['adat' => $adat, 'hianyzik' => $hianyzik, 'hiba' => $hiba, 'ugyanaz' => $ugyanaz];
+    }
+
+    /** Egy tétel megjegyzése a számla ablakában: a gomb nyitja a megnevezés alatti mezőt. */
+    private static function tetel_megjegyzes_gomb(): void
+    {
+        ?>
+        <button type="button" class="sdh-szamlaurlap__megjgomb" data-sdh-szamla-megj
+                title="Megjegyzés ehhez a tételhez – a számlán a tétel alatt jelenik meg">+ megjegyzés</button>
+        <?php
+    }
+
+    private static function tetel_megjegyzes_mezo(string $nev): void
+    {
+        ?>
+        <input type="text" class="sdh-szamlaurlap__tetelmegj" name="<?php echo esc_attr($nev); ?>" maxlength="<?php echo (int) self::TETEL_MEGJ_HOSSZ; ?>"
+               autocomplete="off" data-sdh-szamla-megjmezo hidden
+               placeholder="Megjegyzés a tételhez (pl. IMEI, garancia, gyári szám)" aria-label="Megjegyzés a tételhez">
+        <?php
+    }
+
+    /** Az adattörlő kód kapcsolója egy tételsorban. */
+    private static function torlo_kapcsolo(string $nev): void
+    {
+        ?>
+        <label class="sdh-kapcsolo" title="Adattörlő kód kérése ehhez a tételhez (darabonként egy kód)">
+            <input type="checkbox" name="<?php echo esc_attr($nev); ?>" value="1" data-sdh-szamla-torlo>
+            <span class="sdh-kapcsolo__csuszka" aria-hidden="true"></span>
+            <span class="sdh-kapcsolo__felirat">Adattörlő kód</span>
+        </label>
+        <?php
+    }
+
+    /* =================================================================
+     * Cégkeresés: adószámból (NAV) és név alapján (saját lista)
+     * ============================================================== */
+
+    /**
+     * Adózó lekérdezése a Számla Agenten keresztül (a NAV Online Számla adata).
+     *
+     * @return array{ok: bool, uzenet: string, adat: array<string, string>}
+     */
+    public static function adozo_lekerdez(string $torzsszam): array
+    {
+        $ki = ['ok' => false, 'uzenet' => '', 'adat' => []];
+
+        if (preg_match('/^\d{8}$/', $torzsszam) !== 1) {
+            $ki['uzenet'] = 'A kereséshez az adószám első 8 számjegye kell.';
+
+            return $ki;
+        }
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+            . '<xmltaxpayer xmlns="http://www.szamlazz.hu/xmltaxpayer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+            . ' xsi:schemaLocation="http://www.szamlazz.hu/xmltaxpayer http://www.szamlazz.hu/docs/xsds/agent/xmltaxpayer.xsd">' . "\n"
+            . "  <beallitasok>\n" . self::elemek(['szamlaagentkulcs' => (string) self::beallitas()['kulcs']]) . "  </beallitasok>\n"
+            . self::elemek(['torzsszam' => $torzsszam], '  ')
+            . "</xmltaxpayer>\n";
+
+        $valasz = self::agent_kuld('action-szamla_agent_taxpayer', $xml);
+
+        if (!$valasz['ok']) {
+            $ki['uzenet'] = self::hiba_szoveg($valasz);
+
+            return $ki;
+        }
+
+        $test = (string) $valasz['torzs'];
+        // A válasz a NAV sémája, névtér-előtagokkal (ns2:…): az elem helyi neve alapján olvassuk.
+        $elem = static function (string $nev, string $honnan): string {
+            return preg_match('~<(?:[\w.-]+:)?' . $nev . '(?:\s[^>]*)?>([^<]*)</(?:[\w.-]+:)?' . $nev . '>~u', $honnan, $m) === 1
+                ? trim(html_entity_decode($m[1], ENT_QUOTES | ENT_XML1, 'UTF-8'))
+                : '';
+        };
+
+        if ($elem('funcCode', $test) === 'ERROR') {
+            $ki['uzenet'] = 'A NAV hibát jelzett: ' . ($elem('message', $test) !== '' ? $elem('message', $test) : $elem('errorCode', $test));
+
+            return $ki;
+        }
+
+        if ($elem('taxpayerValidity', $test) !== 'true' || $elem('taxpayerName', $test) === '') {
+            $ki['uzenet'] = 'Ehhez az adószámhoz a NAV nem ismer érvényes adózót.';
+
+            return $ki;
+        }
+
+        // Több cím is jöhet: a székhely (HQ) kell, annak híján az első.
+        $cimek = [];
+
+        if (preg_match_all('~<(?:[\w.-]+:)?taxpayerAddressItem(?:\s[^>]*)?>(.*?)</(?:[\w.-]+:)?taxpayerAddressItem>~su', $test, $m) > 0) {
+            $cimek = $m[1];
+        }
+
+        $cim = $cimek[0] ?? $test;
+
+        foreach ($cimek as $c) {
+            if ($elem('taxpayerAddressType', $c) === 'HQ') {
+                $cim = $c;
+                break;
+            }
+        }
+
+        $utca = trim(implode(' ', array_filter([
+            $elem('streetName', $cim),
+            $elem('publicPlaceCategory', $cim),
+            $elem('number', $cim),
+            $elem('building', $cim) !== '' ? $elem('building', $cim) . ' ép.' : '',
+            $elem('staircase', $cim) !== '' ? $elem('staircase', $cim) . ' lph.' : '',
+            $elem('floor', $cim) !== '' ? $elem('floor', $cim) . ' em.' : '',
+            $elem('door', $cim) !== '' ? $elem('door', $cim) . ' ajtó' : '',
+        ], static fn (string $r): bool => $r !== '')));
+
+        $reszek = array_filter([$elem('taxpayerId', $test), $elem('vatCode', $test), $elem('countyCode', $test)], static fn (string $r): bool => $r !== '');
+
+        $ki['ok']   = true;
+        $ki['adat'] = [
+            'nev'       => $elem('taxpayerName', $test),
+            'adoszam'   => count($reszek) === 3 ? implode('-', $reszek) : '',
+            'irsz'      => $elem('postalCode', $cim),
+            'telepules' => mb_convert_case(mb_strtolower($elem('city', $cim), 'UTF-8'), MB_CASE_TITLE, 'UTF-8'),
+            'cim'       => $utca,
+            'email'     => '',
+        ];
+
+        return $ki;
+    }
+
+    /** Egy vevő a keresők válaszában (csak a számlához kellő mezők). */
+    private static function vevo_talalat(array $adat, string $forras): array
+    {
+        return [
+            'nev'       => (string) ($adat['nev'] ?? ''),
+            'adoszam'   => self::adoszam_formaz((string) ($adat['adoszam'] ?? '')),
+            'irsz'      => (string) ($adat['irsz'] ?? ''),
+            'telepules' => (string) ($adat['telepules'] ?? ''),
+            'cim'       => (string) ($adat['cim'] ?? ''),
+            'email'     => is_email((string) ($adat['email'] ?? '')) ? (string) $adat['email'] : '',
+            'forras'    => $forras,
+        ];
+    }
+
+    /** A számla ablaka: cégadatok az adószámból. Előbb a NAV (ha van Agent kulcs), aztán a saját ügyfelek. */
+    public static function ajax_adozo(): void
+    {
+        global $wpdb;
+
+        self::jog_ellenorzes();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- jog_ellenorzes() ellenőrizte.
+        $nyers  = isset($_POST['adoszam']) && is_scalar($_POST['adoszam']) ? sanitize_text_field(wp_unslash((string) $_POST['adoszam'])) : '';
+        $szamok = (string) preg_replace('/\D/', '', $nyers);
+
+        if (strlen($szamok) < 8) {
+            wp_send_json_error(['uzenet' => 'A kereséshez az adószám első 8 számjegye kell.']);
+        }
+
+        $torzs = substr($szamok, 0, 8);
+
+        // Saját ügyfél ugyanezzel az adószámmal (kötőjellel vagy anélkül tárolva).
+        $sajat = $wpdb->get_row($wpdb->prepare(
+            'SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . " WHERE REPLACE(REPLACE(adoszam, '-', ''), ' ', '') LIKE %s ORDER BY aktiv DESC, id DESC LIMIT 1",
+            $wpdb->esc_like($torzs) . '%'
+        ));
+        $sajat = is_object($sajat) ? self::vevo_talalat(self::vevo($sajat)['adat'], 'ugyfel') : null;
+
+        $nav = self::beallitva()
+            ? self::adozo_lekerdez($torzs)
+            : ['ok' => false, 'uzenet' => 'Nincs megadva a Számla Agent kulcs, ezért a NAV-nál nem tudok keresni.', 'adat' => []];
+
+        if ($nav['ok']) {
+            $adat = self::vevo_talalat($nav['adat'], 'nav');
+
+            // A megyekódot a NAV nem mindig adja vissza: akkor a beírt vagy a nálunk tárolt teljes adószám marad.
+            if ($adat['adoszam'] === '') {
+                $adat['adoszam'] = strlen($szamok) === 11 ? self::adoszam_formaz($szamok) : ($sajat['adoszam'] ?? '');
+            }
+
+            if ($sajat !== null && $adat['email'] === '') {
+                $adat['email'] = $sajat['email'];
+            }
+
+            wp_send_json_success([
+                'vevo'   => $adat,
+                'uzenet' => 'Kitöltve a NAV adataiból: ' . $adat['nev'] . '.' . ($adat['adoszam'] === '' ? ' Az adószám végét (áfakód, megyekód) írd be kézzel.' : ''),
+            ]);
+        }
+
+        if ($sajat !== null && $sajat['nev'] !== '') {
+            wp_send_json_success([
+                'vevo'   => $sajat,
+                'uzenet' => 'Kitöltve a saját ügyfelek közül: ' . $sajat['nev'] . '. (' . $nav['uzenet'] . ')',
+            ]);
+        }
+
+        wp_send_json_error(['uzenet' => $nav['uzenet']]);
+    }
+
+    /**
+     * A számla ablaka: vevő keresése név (vagy adószám, telefon, e-mail) alapján
+     * a saját ügyfelek és a korábbi számlák vevői között. Külső cégadatbázis a
+     * `sdh_muhely_cegkereso` szűrővel köthető be.
+     */
+    public static function ajax_vevokereso(): void
+    {
+        global $wpdb;
+
+        self::jog_ellenorzes();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- jog_ellenorzes() ellenőrizte.
+        $q      = isset($_GET['q']) && is_scalar($_GET['q']) ? trim(mb_substr(sanitize_text_field(wp_unslash((string) $_GET['q'])), 0, 80)) : '';
+        $hatar  = 60;
+        $ugyfel = SDH_Muhely_Schema::tabla('ugyfel');
+        $sorok  = [];
+        $latott = [];
+
+        $felvesz = static function (array $t) use (&$sorok, &$latott): void {
+            $kulcs = mb_strtolower($t['nev'], 'UTF-8') . '|' . $t['adoszam'] . '|' . mb_strtolower($t['cim'], 'UTF-8');
+
+            if ($t['nev'] !== '' && !isset($latott[$kulcs])) {
+                $latott[$kulcs] = true;
+                $sorok[]        = $t;
+            }
+        };
+
+        if ($q === '') {
+            $talalatok = $wpdb->get_results("SELECT * FROM {$ugyfel} WHERE aktiv = 1 ORDER BY id DESC LIMIT {$hatar}");
+        } else {
+            $minta   = '%' . $wpdb->esc_like($q) . '%';
+            $kezdet  = $wpdb->esc_like($q) . '%';
+            $szamok  = (string) preg_replace('/\D/', '', $q);
+            $szamra  = strlen($szamok) >= 4 ? '%' . $wpdb->esc_like($szamok) . '%' : '%' . $wpdb->esc_like($q) . '%';
+
+            $talalatok = $wpdb->get_results($wpdb->prepare(
+                "SELECT * FROM {$ugyfel}
+                 WHERE nev LIKE %s OR kapcsolattarto LIKE %s OR email LIKE %s
+                    OR REPLACE(REPLACE(adoszam, '-', ''), ' ', '') LIKE %s
+                    OR REPLACE(REPLACE(telefon, ' ', ''), '-', '') LIKE %s
+                 ORDER BY (nev LIKE %s) DESC, aktiv DESC, nev ASC LIMIT {$hatar}",
+                $minta,
+                $minta,
+                $minta,
+                $szamra,
+                $szamra,
+                $kezdet
+            ));
+        }
+
+        foreach (is_array($talalatok) ? $talalatok : [] as $sor) {
+            $felvesz(self::vevo_talalat(self::vevo($sor)['adat'], 'ugyfel'));
+        }
+
+        // A korábbi számlák vevői: aki egyszer céges számlát kért, legközelebb listáról választható.
+        // A vevő JSON-ként van eltárolva (az ékezetek kódolva), ezért a szűrés itt történik, nem az SQL-ben.
+        $regi  = $wpdb->get_col('SELECT vevo FROM ' . self::tabla() . ' ORDER BY id DESC LIMIT ' . ($q === '' ? 40 : 500));
+        $kis_q = mb_strtolower($q, 'UTF-8');
+        $q_szam = (string) preg_replace('/\D/', '', $q);
+
+        foreach (is_array($regi) ? $regi : [] as $json) {
+            $adat = json_decode((string) $json, true);
+
+            if (!is_array($adat)) {
+                continue;
+            }
+
+            $nevben   = $q === '' || mb_strpos(mb_strtolower((string) ($adat['nev'] ?? ''), 'UTF-8'), $kis_q) !== false;
+            $szamban  = strlen($q_szam) >= 4 && strpos((string) preg_replace('/\D/', '', (string) ($adat['adoszam'] ?? '')), $q_szam) !== false;
+
+            if ($nevben || $szamban) {
+                $felvesz(self::vevo_talalat($adat, 'szamla'));
+            }
+        }
+
+        // Külső cégadatbázis (pl. előfizetett céginformációs szolgáltatás) itt csatlakozhat.
+        $kulso = apply_filters('sdh_muhely_cegkereso', [], $q);
+
+        foreach (is_array($kulso) ? $kulso : [] as $adat) {
+            if (is_array($adat)) {
+                $felvesz(self::vevo_talalat($adat, 'ceg'));
+            }
+        }
+
+        wp_send_json_success(['sorok' => array_slice($sorok, 0, 2 * $hatar)]);
+    }
+
     /**
      * A beküldött számlaűrlapból a kérés adatai – a kiállítás és az előnézet közös része.
      *
-     * @return array{munkalap: object, sorozat: string, fej: array<string, mixed>, vevo: array<string, mixed>, sorok: array<int, array<string, mixed>>, tetel_idk: array<int, int>}|string
+     * A vevő az űrlapról jön (az ügyfél adataiból indul, de átírható); a tételek:
+     * a munkalap kipipált sorai + az ablakban felvett újak (`uj`), ezek a számla
+     * kiállításakor kerülnek a munkalapra.
+     *
+     * @return array{munkalap: object, ugyfel: ?object, sorozat: string, fej: array<string, mixed>, vevo: array<string, mixed>, ugyanaz: bool, sorok: array<int, array<string, mixed>>, tetel_idk: array<int, int>, uj: array<int, array<string, mixed>>}|string
      */
     private static function kerelem(bool $agent = true)
     {
@@ -1280,27 +1786,102 @@ final class SDH_Muhely_Szamla
             return 'Számla csak sorszámot kapott munkalaphoz készíthető.';
         }
 
-        $vevo = self::vevo(self::ugyfel((int) $munkalap->ugyfel_id));
+        $ugyfel = self::ugyfel((int) $munkalap->ugyfel_id);
+        $vevo   = self::vevo_kert($ugyfel);
+
+        if ((string) $vevo['adat']['nev'] === '') {
+            return 'Add meg a vevő nevét.';
+        }
 
         // A helyi nyomtatvány hiányos címmel is elkészül (a helyszínen nincs mindig meg minden adat).
-        if ($agent ? $vevo['hianyzik'] !== [] : $vevo['adat'] === []) {
+        if ($agent && $vevo['hiba'] !== '') {
+            return $vevo['hiba'];
+        }
+
+        if ($agent && $vevo['hianyzik'] !== []) {
             return 'A vevő adatai hiányosak: ' . implode(', ', $vevo['hianyzik']) . '.';
         }
 
-        $kert = isset($_POST['tetel']) && is_array($_POST['tetel']) ? array_map('intval', $_POST['tetel']) : [];
-        $sorok = [];
-        $idk   = [];
+        $tiszta = static fn ($ertek, int $hossz): string => is_scalar($ertek)
+            ? mb_substr(sanitize_text_field(wp_unslash((string) $ertek)), 0, $hossz)
+            : '';
+        $tomb   = static fn (string $k): array => isset($_POST[$k]) && is_array($_POST[$k]) ? $_POST[$k] : [];
 
-        // Csak ennek a munkalapnak a tételei kerülhetnek a számlára.
+        $kert     = array_map('intval', $tomb('tetel'));
+        $megj     = $tomb('megj');
+        $torlo    = $tomb('torlo');
+        $torlo_be = $agent && !empty(self::beallitas()['torlokod']);
+        $sorok    = [];
+        $idk      = [];
+        $uj       = [];
+
+        // A munkalap tételei közül csak a sajátjai, és csak a kipipáltak kerülnek a számlára.
         foreach (self::tetelek((int) $munkalap->id) as $t) {
-            if (in_array((int) $t->id, $kert, true)) {
-                $sorok[] = self::tetel_sor($t) + ['brutto_egysegar' => (float) $t->brutto_ar * (1 - min(100.0, max(0.0, (float) $t->kedvezmeny)) / 100)];
-                $idk[]   = (int) $t->id;
+            $id = (int) $t->id;
+
+            if (!in_array($id, $kert, true)) {
+                continue;
             }
+
+            $s = self::tetel_sor($t) + ['brutto_egysegar' => (float) $t->brutto_ar * (1 - min(100.0, max(0.0, (float) $t->kedvezmeny)) / 100)];
+
+            $s['megjegyzes'] = $tiszta($megj[$id] ?? '', self::TETEL_MEGJ_HOSSZ);
+            $s['torlokod']   = $torlo_be && !empty($torlo[$id]) ? self::torlokod_db((float) $s['mennyiseg']) : 0;
+
+            $sorok[] = $s;
+            $idk[]   = $id;
+        }
+
+        // A számla ablakában felvett tételek (választóból vagy kézzel).
+        foreach (array_slice($tomb('uj'), 0, self::UJ_TETEL_MAX, true) as $u) {
+            if (!is_array($u)) {
+                continue;
+            }
+
+            $nev   = $tiszta($u['megnevezes'] ?? '', 255);
+            $ar    = SDH_Muhely_Tetel::szam($tiszta($u['brutto_ar'] ?? '', 30));
+            $menny = SDH_Muhely_Tetel::szam($tiszta($u['mennyiseg'] ?? '', 30));
+
+            // Az üresen hagyott sor nem tétel.
+            if ($nev === '' && $ar === 0.0) {
+                continue;
+            }
+
+            if ($nev === '') {
+                return 'Az egyik új tételnek nincs megnevezése.';
+            }
+
+            if ($menny <= 0) {
+                return '„' . $nev . '": a mennyiségnek nullánál nagyobbnak kell lennie.';
+            }
+
+            if ($ar < 0) {
+                return '„' . $nev . '": az ár nem lehet negatív.';
+            }
+
+            $tipus = $tiszta($u['tipus'] ?? '', 20) === 'termek' ? 'termek' : 'szolgaltatas';
+            $adat  = [
+                'tipus'      => $tipus,
+                'termek_id'  => $tipus === 'termek' ? max(0, (int) ($u['termek_id'] ?? 0)) : 0,
+                'megnevezes' => $nev,
+                'mennyiseg'  => $menny,
+                'me'         => $tiszta($u['me'] ?? '', 20) !== '' ? $tiszta($u['me'] ?? '', 20) : 'db',
+                'brutto_ar'  => round($ar, 2),
+                'afa_kulcs'  => SDH_Muhely_Tetel::afakulcs_ervenyes($tiszta($u['afa_kulcs'] ?? '', 12)),
+                'kedvezmeny' => 0.0,
+            ];
+
+            $s = self::tetel_sor((object) $adat) + ['brutto_egysegar' => (float) $adat['brutto_ar']];
+
+            $s['megjegyzes'] = $tiszta($u['megjegyzes'] ?? '', self::TETEL_MEGJ_HOSSZ);
+            $s['torlokod']   = $torlo_be && !empty($u['torlokod']) ? self::torlokod_db($menny) : 0;
+
+            $sorok[] = $s;
+            $uj[]    = $adat;
         }
 
         if ($sorok === []) {
-            return 'Pipálj ki legalább egy tételt.';
+            return 'Legalább egy tétel kell: pipálj ki egyet, vagy vegyél fel újat.';
         }
 
         $szoveg = static fn (string $k, int $hossz): string => isset($_POST[$k]) && is_scalar($_POST[$k])
@@ -1311,9 +1892,15 @@ final class SDH_Muhely_Szamla
         $ma     = current_time('Y-m-d');
         $fizmod = $szoveg('fizmod', 40) !== '' ? $szoveg('fizmod', 40) : (string) self::beallitas()['alap_fizmod'];
         $hatar  = $datum('hatarido', $ma);
+        $email  = !empty($_POST['email']);
+
+        if ($agent && $email && (string) $vevo['adat']['email'] === '') {
+            return 'Az „E-mail az ügyfélnek" be van pipálva, de nincs e-mail-cím. Írd be a vevő e-mail-címét, vagy vedd ki a pipát.';
+        }
 
         return [
             'munkalap'  => $munkalap,
+            'ugyfel'    => $ugyfel,
             'sorozat'   => in_array($szoveg('sorozat', 5), ['sdh', 'helyi'], true) ? $szoveg('sorozat', 5) : 'fo',
             'fej'       => [
                 'kelt'       => $ma,
@@ -1321,13 +1908,15 @@ final class SDH_Muhely_Szamla
                 'hatarido'   => $hatar < $ma ? $ma : $hatar,
                 'fizmod'     => $fizmod,
                 'fizetve'    => !empty($_POST['fizetve']),
-                'email'      => !empty($_POST['email']),
+                'email'      => $email,
                 'megjegyzes' => $szoveg('megjegyzes', 500),
                 'rendeles'   => SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam),
             ],
             'vevo'      => $vevo['adat'],
+            'ugyanaz'   => $vevo['ugyanaz'],
             'sorok'     => $sorok,
             'tetel_idk' => $idk,
+            'uj'        => $uj,
         ];
         // phpcs:enable
     }
@@ -1417,6 +2006,25 @@ final class SDH_Muhely_Szamla
             $wpdb->update(SDH_Muhely_Tetel::tabla(), ['szamla' => mb_substr($valasz['szamlaszam'], 0, 40)], ['id' => $tetel_id, 'munkalap_id' => (int) $munkalap->id]);
         }
 
+        // Az ablakban felvett tételek most kerülnek a munkalapra, a számla számával
+        // (a termék így a készletből is fogy, és a munkalap végösszege is követi).
+        foreach ($k['uj'] as $i => $adat) {
+            SDH_Muhely_Tetel::hozzaad((int) $munkalap->id, $adat + [
+                'szamla'  => mb_substr($valasz['szamlaszam'], 0, 40),
+                'forras'  => 'szamla',
+                'sorrend' => 1000 + $i,
+            ]);
+        }
+
+        // A most bekért e-mail-cím megmarad az ügyfélnél (ha ugyanarra a névre szól a számla, és eddig nem volt címe).
+        if ($k['ugyanaz'] && is_object($k['ugyfel']) && trim((string) $k['ugyfel']->email) === '' && (string) $k['vevo']['email'] !== '') {
+            $wpdb->update(
+                SDH_Muhely_Schema::tabla('ugyfel'),
+                ['email' => (string) $k['vevo']['email'], 'modositva' => current_time('mysql')],
+                ['id' => (int) $k['ugyfel']->id]
+            );
+        }
+
         do_action('sdh_muhely_szamla_kiallitva', $szamla_id, (int) $munkalap->id, $valasz['szamlaszam']);
 
         wp_send_json_success([
@@ -1486,6 +2094,7 @@ final class SDH_Muhely_Szamla
 
             $ki[] = [
                 'megnevezes' => (string) $s['megnevezes'],
+                'megjegyzes' => trim((string) ($s['megjegyzes'] ?? '')),
                 'mennyiseg'  => SDH_Muhely_Termek::menny($menny) . ' ' . $s['me'],
                 'egysegar'   => $menny > 0 ? round($netto / $menny) : $netto,
                 'netto'      => $netto,
@@ -1678,7 +2287,17 @@ final class SDH_Muhely_Szamla
 
             // A hosszú megnevezés több sorba törik; a sor magassága ehhez igazodik.
             $sorok_szama = max(1, count(self::tordel($pdf, (string) $s['megnevezes'], $oszlop[0] - 4)));
-            $magas       = 5.2 * $sorok_szama + 0.8;
+            // A tétel megjegyzése a megnevezés alatt, kisebb, szürke betűvel.
+            $megj        = (string) ($s['megjegyzes'] ?? '');
+            $megj_sorok  = 0;
+
+            if ($megj !== '') {
+                $pdf->SetFont('DejaVu', '', 8);
+                $megj_sorok = count(self::tordel($pdf, $megj, $oszlop[0] - 4));
+                $pdf->SetFont('DejaVu', '', 9);
+            }
+
+            $magas       = 5.2 * $sorok_szama + 4.2 * $megj_sorok + 0.8;
 
             if ($pdf->GetY() + $magas > 297 - 36) {
                 $pdf->AddPage();
@@ -1696,6 +2315,15 @@ final class SDH_Muhely_Szamla
 
             $pdf->SetXY($bal + 2, $y0 + 0.4);
             $pdf->MultiCell($oszlop[0] - 4, 5.2, (string) $s['megnevezes'], 0, 'L');
+
+            if ($megj_sorok > 0) {
+                $pdf->SetFont('DejaVu', '', 8);
+                $pdf->SetTextColor(95, 95, 95);
+                $pdf->SetXY($bal + 2, $y0 + 0.4 + 5.2 * $sorok_szama);
+                $pdf->MultiCell($oszlop[0] - 4, 4.2, $megj, 0, 'L');
+                $pdf->SetTextColor(20, 20, 20);
+                $pdf->SetFont('DejaVu', '', 9);
+            }
 
             $x = $bal + $oszlop[0];
 

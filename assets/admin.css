@@ -4477,6 +4477,292 @@ a.sdh-szamlajel:hover {
     color: var(--sdh-halvany);
 }
 
+/* ---- A számla ablaka: átírható vevő, új tételek, tételmegjegyzés, adattörlő kód ---- */
+
+.sdh-szamlaurlap__sor {
+    display: flex;
+    gap: .4rem;
+    align-items: center;
+    min-width: 0;
+}
+
+.sdh-szamlaurlap__sor > input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.sdh-szamlaurlap__sor > .sdh-gomb {
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 .7rem;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.sdh-szamlaurlap__sor > input.sdh-szamlaurlap__irsz {
+    flex: 0 0 5.2rem;
+}
+
+.sdh-szamlaurlap__doboz.sdh-szamlaurlap__vevo .sdh-ig {
+    grid-template-columns: 6.9rem minmax(0, 1fr);
+}
+
+.sdh-szamlaurlap__vevo input.is-hianyzik {
+    border-color: var(--sdh-hiba);
+    background: color-mix(in srgb, var(--sdh-allapot-piros) 7%, var(--sdh-felulet));
+}
+
+/* Egy sor, fix magassággal: az ablak nem ugrál, amikor üzenet jelenik meg. */
+.sdh-szamlaurlap__doboz p.sdh-szamlaurlap__allapot {
+    min-height: 1.5em;
+    overflow: hidden;
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sdh-szamlaurlap__allapot.is-hiba {
+    color: var(--sdh-hiba);
+    font-weight: 500;
+}
+
+.sdh-szamlaurlap__allapot.is-jo {
+    color: var(--sdh-siker);
+    font-weight: 500;
+}
+
+.sdh-szamlaurlap__tetelek input[type="text"] {
+    box-sizing: border-box;
+    height: 30px;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 .45rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 6px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    box-shadow: none;
+}
+
+.sdh-szamlaurlap__tetelek select {
+    width: 5.4rem;
+    height: 30px;
+    min-height: 30px;
+    line-height: 26px;
+}
+
+.sdh-szamlaurlap__ujnev .sdh-szamlaurlap__sor > input {
+    width: 100%;
+}
+
+.sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__szam {
+    width: 3.6rem;
+    text-align: right;
+}
+
+.sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__me {
+    width: 3rem;
+}
+
+.sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__ar {
+    width: 6.4rem;
+    text-align: right;
+}
+
+.sdh-szamlaurlap__netto {
+    display: block;
+    margin-top: .1rem;
+    color: var(--sdh-halvany);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-szamlaurlap__tipus {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: .15rem .5rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.sdh-szamlaurlap__tipus:hover,
+.sdh-szamlaurlap__tipus:focus-visible {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-szamlaurlap__nevsor {
+    display: flex;
+    gap: .5rem;
+    align-items: baseline;
+    min-width: 0;
+}
+
+.sdh-szamlaurlap__nev {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-szamlaurlap__megjgomb {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--sdh-accent);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11.5px;
+}
+
+.sdh-szamlaurlap__megjgomb:hover,
+.sdh-szamlaurlap__megjgomb:focus-visible {
+    text-decoration: underline;
+}
+
+.sdh-szamlaurlap__ujnev .sdh-szamlaurlap__megjgomb {
+    margin: .15rem 0 0;
+}
+
+.sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__tetelmegj {
+    display: block;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 12.5px;
+}
+
+.sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__tetelmegj[hidden] {
+    display: none;
+}
+
+.sdh-szamlaurlap__torol {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--sdh-halvany);
+    cursor: pointer;
+    font-size: 17px;
+    line-height: 1;
+}
+
+.sdh-szamlaurlap__torol:hover,
+.sdh-szamlaurlap__torol:focus-visible {
+    background: color-mix(in srgb, var(--sdh-allapot-piros) 14%, transparent);
+    color: var(--sdh-hiba);
+}
+
+.sdh-szamlaurlap__tetelek tfoot tr.sdh-szamlaurlap__ujgombok td {
+    border-top: 1px solid var(--sdh-keret);
+    background: none;
+    font-size: 12.5px;
+    white-space: normal;
+}
+
+.sdh-szamlaurlap__ujgombok .sdh-gomb {
+    height: 30px;
+    padding: 0 .7rem;
+    font-size: 12.5px;
+}
+
+.sdh-szamlaurlap__ujsugo {
+    margin-left: .6rem;
+    color: var(--sdh-halvany);
+    font-size: 12px;
+}
+
+.sdh-szamlaurlap__tetelek th.sdh-szamlaurlap__torlo,
+.sdh-szamlaurlap__tetelek td.sdh-szamlaurlap__torlo {
+    text-align: center;
+}
+
+/* Kapcsoló (ki / be) – jelölőnégyzet csúszkaként. */
+.sdh-kapcsolo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sdh-kapcsolo input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+}
+
+.sdh-kapcsolo__csuszka {
+    position: relative;
+    display: block;
+    width: 34px;
+    height: 19px;
+    border-radius: 999px;
+    background: var(--sdh-keret-eros);
+    transition: background-color .15s;
+}
+
+.sdh-kapcsolo__csuszka::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--sdh-felulet);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+    transition: transform .15s;
+}
+
+.sdh-kapcsolo input:checked + .sdh-kapcsolo__csuszka {
+    background: var(--sdh-accent);
+}
+
+.sdh-kapcsolo input:checked + .sdh-kapcsolo__csuszka::after {
+    transform: translateX(15px);
+}
+
+.sdh-kapcsolo input:focus-visible + .sdh-kapcsolo__csuszka {
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 2px;
+}
+
+.sdh-kapcsolo__felirat {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* A számla ablakának választója (termék, szolgáltatás, vevő). */
+.sdh-modal.sdh-modal[data-sdh-modul="szamlavalaszto"] {
+    width: min(900px, calc(100vw - 2rem));
+}
+
+.sdh-szolgval__tabla.sdh-szval__tabla tbody tr[data-sdh-szval-sor] {
+    cursor: pointer;
+}
+
+.sdh-szolgval__tabla.sdh-szval__tabla td:last-child {
+    padding-left: .6rem;
+    text-overflow: ellipsis;
+}
+
 /* Beállítások: a kapcsolat ellenőrzésének sora. */
 .sdh-szamla-kapcsolat {
     display: flex;
