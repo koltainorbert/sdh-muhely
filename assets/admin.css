@@ -2409,3 +2409,33 @@ a.sdh-kartya:focus-visible {
 .sdh-minta__lab {
     flex-wrap: wrap;
 }
+
+/* ------------------------------------------------------------------ */
+/* Készülékkép / fájlok lapfül: nincs üres jelölőkocka, tömör zóna      */
+/* ------------------------------------------------------------------ */
+
+/* A :empty nem működik, ha szóköz van a dobozban – ezért :has(img). */
+.sdh-kep:not(:has(img)) {
+    display: none;
+}
+
+.sdh-eszkozurlap .sdh-kep {
+    margin-top: 0;
+}
+
+.sdh-eszkozurlap .sdh-csat__zona {
+    min-height: 5.5rem;
+    max-height: none;
+    overflow: visible;
+}
+
+/* ------------------------------------------------------------------ */
+/* Popup: soha nincs görgetősáv – ha a képernyő alacsony, a popup       */
+/* arányosan kisebb lesz (app.js illesztPopup, CSS zoom).               */
+/* ------------------------------------------------------------------ */
+
+.sdh-modal--illeszt,
+.sdh-modal--illeszt .sdh-modal__doboz {
+    max-height: none;
+    overflow: visible;
+}

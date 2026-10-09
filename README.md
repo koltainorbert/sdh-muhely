@@ -57,6 +57,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.7
+- **Egyik popupban sincs görgetősáv**: ha a popup magasabb, mint a képernyő,
+  arányosan kisebb lesz (CSS zoom, legalább 55%) – app.js `illesztPopup`.
+  Újraszámolás: megnyitáskor, lapfülváltáskor, tartalom/mező változásakor, ablak-átméretezéskor.
+- Készülékkép / fájlok lapfül: az üres jelölőkocka (üres képdoboz) eltűnt
+  (`.sdh-kep:not(:has(img))`), tömörebb fájl-zóna.
+
 ### 0.19.6
 - Eszközűrlap: **az Azonosítók lapfül megszűnt**, minden az Eszköz lapfülön van
   (IMEI 2., Modellszám, Zárkód/PIN, Ellenőrzés, Gyári adatok a mezők alatt;

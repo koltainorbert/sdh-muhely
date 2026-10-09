@@ -112,6 +112,88 @@
     }
 
     /* ---------------------------------------------------------------- */
+    /* Popup képernyőhöz illesztése – soha nincs görgetősáv             */
+    /* ---------------------------------------------------------------- */
+
+    var ILLESZT_MIN = 0.55;
+
+    /**
+     * Ha a popup magasabb, mint a képernyő, nem görgetőssé tesszük, hanem
+     * arányosan kicsinyítjük (CSS zoom). Mérés közben a zoom nulla, így a
+     * természetes magasságot látjuk; a mérés és a beállítás egy lépésben fut.
+     */
+    function illesztPopup(dialog) {
+        if (!dialog || !dialog.open) {
+            return;
+        }
+
+        dialog.style.zoom = '';
+        dialog.classList.add('sdh-modal--illeszt');
+
+        var termeszetes = dialog.getBoundingClientRect().height;
+        var szabad = window.innerHeight - 24;
+
+        // A class marad: a popupnak nincs max-magassága és görgetése, csak zoomja.
+        if (termeszetes > szabad && termeszetes > 0) {
+            dialog.style.zoom = String(Math.max(ILLESZT_MIN, szabad / termeszetes));
+        }
+    }
+
+    function illesztMind() {
+        Array.prototype.forEach.call(document.querySelectorAll('dialog.sdh-modal[open]'), illesztPopup);
+    }
+
+    function illesztFigyel(dialog) {
+        if (dialog.dataset.sdhIllesztKesz) {
+            return;
+        }
+
+        dialog.dataset.sdhIllesztKesz = '1';
+
+        var ido = 0;
+        var kesleltet = function () {
+            window.cancelAnimationFrame(ido);
+            ido = window.requestAnimationFrame(function () {
+                illesztPopup(dialog);
+            });
+        };
+
+        new MutationObserver(kesleltet).observe(dialog, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['open', 'hidden']
+        });
+
+        // A lapfülek rádiógombjai és a mezők is változtatják a magasságot.
+        dialog.addEventListener('change', kesleltet);
+        dialog.addEventListener('input', kesleltet);
+        dialog.addEventListener('load', kesleltet, true);
+        kesleltet();
+    }
+
+    function illesztIndul() {
+        new MutationObserver(function (valtozasok) {
+            valtozasok.forEach(function (v) {
+                Array.prototype.forEach.call(v.addedNodes, function (csomopont) {
+                    if (csomopont.nodeType === 1 && csomopont.matches('dialog.sdh-modal')) {
+                        illesztFigyel(csomopont);
+                    }
+                });
+            });
+        }).observe(document.body, { childList: true });
+
+        Array.prototype.forEach.call(document.querySelectorAll('dialog.sdh-modal'), illesztFigyel);
+        window.addEventListener('resize', illesztMind);
+    }
+
+    if (document.body) {
+        illesztIndul();
+    } else {
+        document.addEventListener('DOMContentLoaded', illesztIndul);
+    }
+
+    /* ---------------------------------------------------------------- */
     /* Elavult CSS/JS felismerése                                       */
     /* ---------------------------------------------------------------- */
 
