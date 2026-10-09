@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.25.1
+- **Minden oldal teljes szélességű**: az Ügyfelek, Eszközök, Munkalapok, Szolgáltatások és a többi
+  oldal tartalma széltől szélig ér, ahogy az Áttekintés rácsa; az oldalsáv becsukásakor kitölti a
+  felszabaduló helyet. A `.sdh-wrap` alapból korlát nélküli – új modulnál nincs külön teendő.
+
 ### 0.25.0
 - **Szolgáltatások modul** az oldalsávban (az Ügyfelek, Eszközök, Munkalapok mellett): lista
   kereséssel (névsorban vagy a leggyakoribbak elöl), **új felvitel és szerkesztés popupban** –

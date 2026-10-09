@@ -172,14 +172,14 @@
     font-feature-settings: "tnum" 0;
 }
 
-.sdh-wrap {
-    max-width: 1320px;
-    color: var(--sdh-szoveg);
-}
-
-/* A kezdőképernyő rácsa a teljes szélességet használja. */
+/* MINDEN oldal a teljes szélességet használja, széltől szélig – ahogy a
+   kezdőképernyő rácsa. Az oldalsáv becsukásakor a tartalom kitölti a helyet.
+   Új modulnál sem kell külön osztály; szélességkorlátot ide NE tegyél.
+   (A .sdh-wrap--teljes a régi kód miatt maradt meg, már nincs hatása.) */
+.sdh-wrap,
 .sdh-wrap.sdh-wrap--teljes {
     max-width: none;
+    color: var(--sdh-szoveg);
 }
 
 /* ================================================================== */

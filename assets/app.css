@@ -476,8 +476,9 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
     min-width: 0;
 }
 
+/* A tartalom a szélekhez igazodik, nem középre. */
 .sdh-app .sdh-wrap {
-    margin: 0 auto;
+    margin: 0;
 }
 
 .sdh-app a {
