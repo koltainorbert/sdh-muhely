@@ -319,6 +319,12 @@ final class SDH_Muhely_Tetel
             return;
         }
 
+        // A bevizsgálási díj neve eszközönként más („Samsung … bevizsgálási díj"):
+        // a törzset teleírná, ezért nem tanuljuk meg.
+        if (($sor['forras'] ?? '') === 'bevizsgalas') {
+            return;
+        }
+
         SDH_Muhely_Szolgaltatas::megjegyez([
             'nev'       => (string) ($sor['megnevezes'] ?? ''),
             'me'        => (string) ($sor['me'] ?? ''),
@@ -431,7 +437,7 @@ final class SDH_Muhely_Tetel
         $regiek  = [];
 
         foreach ((array) $wpdb->get_results(
-            $wpdb->prepare("SELECT id, megnevezes, brutto_ar FROM {$tabla} WHERE munkalap_id = %d", $munkalap_id)
+            $wpdb->prepare("SELECT id, megnevezes, brutto_ar, forras, szamla FROM {$tabla} WHERE munkalap_id = %d", $munkalap_id)
         ) as $regi) {
             $regiek[(int) $regi->id] = $regi;
         }
@@ -484,7 +490,7 @@ final class SDH_Muhely_Tetel
 
                 if ((string) $regi->megnevezes !== (string) $sor['megnevezes']
                     || abs((float) $regi->brutto_ar - $brutto_ar) >= 0.005) {
-                    self::megjegyez($adat);
+                    self::megjegyez($adat + ['forras' => (string) $regi->forras]);
                 }
 
                 continue;
@@ -503,6 +509,11 @@ final class SDH_Muhely_Tetel
         }
 
         foreach (array_diff($letezok, $megmarad) as $torlendo) {
+            // A már számlázott tétel nem törölhető a lapról: a számlán szerepel.
+            if ((string) $regiek[$torlendo]->szamla !== '') {
+                continue;
+            }
+
             $wpdb->delete($tabla, ['id' => $torlendo, 'munkalap_id' => $munkalap_id]);
         }
 

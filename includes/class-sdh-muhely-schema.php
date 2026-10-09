@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.20.0';
+    public const DB_VERSION = '0.21.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -107,6 +107,7 @@ final class SDH_Muhely_Schema
         $uzenet       = self::tabla('uzenet');
         $termek       = self::tabla('termek');
         $termek_mozgas = self::tabla('termek_mozgas');
+        $szamla       = self::tabla('szamla');
 
         $definiciok = [];
 
@@ -283,6 +284,8 @@ final class SDH_Muhely_Schema
          * egyenlítve; a "fizetesi_mod" a beállításokban szerkeszthető lista
          * egy eleme (a neve tárolódik). A "kedvezmeny" és az "afakulcs" a
          * lap tételeinek alapértéke (új tételsor ezzel indul).
+         * A "bevizsgalasi_dij" jelzi, hogy az előleg bevizsgálási díj: ilyenkor
+         * külön tételsorként él a lapon (SDH_Muhely_Szamla::bevizsgalas_szinkron).
          * A "megjegyzes" belső (csak a CRM-ben látszik), az
          * "ugyfel_megjegyzes" az ügyfél felé is megjelenhet.
          * ---------------------------------------------------------- */
@@ -302,6 +305,7 @@ final class SDH_Muhely_Schema
             fizetes_ideje date NULL,
             fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
+            bevizsgalasi_dij tinyint(1) NOT NULL default 0,
             kedvezmeny decimal(5,2) NOT NULL default 0.00,
             afakulcs varchar(12) NOT NULL default '27',
             netto_ertek decimal(14,2) NOT NULL default 0.00,
@@ -553,6 +557,40 @@ final class SDH_Muhely_Schema
             key termek_id (termek_id),
             key munkalap_id (munkalap_id),
             key tetel_id (tetel_id)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Számlák
+         *
+         * A Számlázz.hu által kiállított számlák nyilvántartása: melyik
+         * munkalaphoz, milyen számon, mekkora összeggel készült. A számla
+         * maga a Számlázz.hu-nál él (ő állítja ki és jelenti a NAV felé);
+         * itt a száma, a PDF helyi másolatának neve és a beküldött tételek
+         * pillanatképe van. "sorozat": fo = a fiók alap számlatömbje,
+         * sdh = a beállított előtagú (SD-…) számlatömb.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$szamla} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            szamlaszam varchar(60) NOT NULL default '',
+            sorozat varchar(10) NOT NULL default 'fo',
+            netto decimal(14,2) NOT NULL default 0.00,
+            brutto decimal(14,2) NOT NULL default 0.00,
+            fizetve tinyint(1) NOT NULL default 0,
+            fizmod varchar(40) NOT NULL default '',
+            kelt date NULL,
+            teljesites date NULL,
+            hatarido date NULL,
+            pdf varchar(40) NOT NULL default '',
+            tetelek longtext NULL,
+            vevo text NULL,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id),
+            key ugyfel_id (ugyfel_id),
+            key szamlaszam (szamlaszam)
         ) {$charset};";
 
         return $definiciok;

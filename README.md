@@ -57,6 +57,29 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.29.0
+- **Számlázz.hu-összekötés** (`SDH_Muhely_Szamla`, Számla Agent): a munkalap-ablak láblécében
+  „Számlázz.hu számla" és „SDH számla" gomb. A gomb elmenti a munkalapot, és megnyitja a számla
+  ablakát – számla csak ott, a „Számla kiállítása" gombra készül. Az ablakban: a vevő (név, cím,
+  adószám az ügyfélből), tételenként kipipálható, mi kerüljön a számlára, fizetési mód, teljesítés,
+  határidő, „Fizetve", „E-mail az ügyfélnek", megjegyzés, és **Előnézet (PDF)** – előnézetnél számla
+  nem készül. A kiállított számla száma és PDF-je a munkalapon marad (jelvény a láblécben).
+- **Tételesen**: a számlára a munkalap szolgáltatásai, termékei és a bevizsgálási díj kerülnek, soronként.
+  A számlázott tétel megjegyzi a számla számát, a következő számlán alapból nincs kipipálva, és a
+  munkalapról nem törölhető – így a bevizsgálási díj átvételkor, a javítás a végén külön számlázható.
+- **Bevizsgálási díj** jelölő az előlegnél: bepipálva az előleg külön tételsor a munkalapon és a
+  számlán, a készülék típusával és fajtájával („Samsung SM-A175B mobiltelefon bevizsgálási díj").
+  A sort a rendszer tartja karban; a megnevezés sablonja beállítás.
+- **SDH számla**: ugyanaz a Számlázz.hu számla, a beállított előtaggal (alap: SD) – a Számlázz.hu
+  külön, folyamatos sorszámot vezet hozzá (SD-2026-1, -2…). Az előtagot a Számlázz.hu-n fel kell
+  venni (Beállítások → Előtagok). Saját, a Számlázz.hu-t megkerülő számlakészítés nincs.
+- **Beállítások → Számlázás – Számlázz.hu**: Agent kulcs (a HTML-be soha nem kerül vissza),
+  „Kapcsolat ellenőrzése" (számla nélkül), e-számla / papír, előtagok, fizetési mód, határidő,
+  e-mail, megjegyzés- és díjsablon.
+- Magánszemélynél az adóazonosító jel nem megy a számlára (csak a valódi, 8-1-2 alakú adószám).
+- Séma 0.21.0: `sdh_szamla`, `munkalap.bevizsgalasi_dij`. A PDF-ek védett mappában, kitalálhatatlan
+  néven; csak belépett, jogosult felhasználó nyithatja meg.
+
 ### 0.28.0
 - **Termékek modul** (`SDH_Muhely_Termek`, oldalsáv: Termékek) – a MunkaLap 3 „Tétel" ablakának megfelelője.
   Lista széltől szélig (kódok, készlet, beszerzési és eladási ár, készletérték Σ), kereső minden kódra,

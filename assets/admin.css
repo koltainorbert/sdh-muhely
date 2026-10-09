@@ -4288,3 +4288,219 @@ a.sdh-kartya:focus-visible {
         grid-column: 1 / -1;
     }
 }
+
+/* ================================================================== */
+/* Számlázás: gombok a munkalap láblécében, a számla ablaka            */
+/* ================================================================== */
+
+.sdh-szamlagombok {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    margin-left: auto;
+}
+
+.sdh-gomb.sdh-gomb--szamla {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+    font-weight: 600;
+}
+
+.sdh-gomb.sdh-gomb--szamla:hover {
+    background: var(--sdh-accent-halvany);
+}
+
+/* Számlaszám-jelvény: kattintva a PDF nyílik. */
+.sdh-szamlajel {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 .55rem;
+    border: 1px solid color-mix(in srgb, var(--sdh-allapot-zold) 45%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 12%, transparent);
+    color: var(--sdh-siker);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-modal a.sdh-szamlajel,
+.sdh-wrap a.sdh-szamlajel,
+.sdh-app a.sdh-szamlajel {
+    color: var(--sdh-siker);
+    text-decoration: none;
+}
+
+a.sdh-szamlajel:hover {
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 22%, transparent);
+}
+
+.sdh-szamla-kesz a {
+    font-weight: 600;
+}
+
+/* A munkalap tételsorai: számlázott sor, illetve mentéskor törlődő díjsor. */
+.sdh-tetelsor.is-szamlazva .sdh-tetelsor__sorszam {
+    color: var(--sdh-siker);
+    font-weight: 600;
+}
+
+.sdh-tetelsor.is-torlendo {
+    opacity: .4;
+}
+
+.sdh-tetelsor.is-torlendo input[type="text"] {
+    text-decoration: line-through;
+}
+
+/* ---- A számla ablaka ---- */
+
+.sdh-modal.sdh-modal[data-sdh-modul="szamla"] {
+    width: min(1040px, calc(100vw - 2rem));
+}
+
+.sdh-szamlaurlap__felso {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: .9rem 1.2rem;
+    align-items: stretch;
+}
+
+.sdh-szamlaurlap__doboz {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    min-width: 0;
+    margin: 0;
+    padding: .5rem .8rem .75rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-szamlaurlap__doboz legend {
+    padding: 0 .35rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-szamlaurlap__doboz p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.sdh-szamlaurlap__vevonev {
+    font-size: 15px !important;
+    font-weight: 700;
+}
+
+.sdh-szamlaurlap__hiany {
+    padding: .4rem .6rem;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--sdh-allapot-piros) 12%, transparent);
+    color: var(--sdh-hiba);
+    font-weight: 500;
+}
+
+.sdh-szamlaurlap__doboz .sdh-ig {
+    grid-template-columns: 6.2rem minmax(0, 1fr);
+}
+
+.sdh-szamlaurlap select {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 2rem 0 .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    line-height: 30px;
+    box-shadow: none;
+}
+
+.sdh-szamlaurlap__jelolok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.2rem;
+    margin-top: .15rem;
+}
+
+.sdh-szamlaurlap__tetelek th,
+.sdh-szamlaurlap__tetelek td {
+    padding: .32rem .6rem;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.sdh-szamlaurlap__tetelek th:first-child,
+.sdh-szamlaurlap__tetelek td:first-child {
+    width: 1.6rem;
+    padding-right: 0;
+}
+
+.sdh-szamlaurlap__tetelek td.sdh-tabla__nev {
+    width: 100%;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sdh-szamlaurlap__tetelek tfoot td {
+    border-top: 2px solid var(--sdh-keret-eros);
+    border-bottom: 0;
+    background: var(--sdh-felulet-2);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-szamlaurlap__megj {
+    grid-template-columns: 6.2rem minmax(0, 1fr);
+}
+
+.sdh-szamlaurlap__eddigi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+/* Beállítások: a kapcsolat ellenőrzésének sora. */
+.sdh-szamla-kapcsolat {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem .9rem;
+}
+
+.sdh-szamla-kapcsolat .is-jo {
+    color: var(--sdh-siker);
+    font-weight: 600;
+}
+
+.sdh-szamla-kapcsolat .is-hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+@media (max-width: 860px) {
+    .sdh-szamlaurlap__felso {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdh-szamlagombok {
+        margin-left: 0;
+    }
+}

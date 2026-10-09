@@ -2588,6 +2588,27 @@
         var osszNetto = 0;
         var osszBrutto = 0;
 
+        // Bevizsgálási díj: bepipálva az előleg külön tételsor (a szerver tartja
+        // karban mentéskor). Itt csak a kijelzés követi: a meglévő díjsor ára az
+        // előleg; ha a jelölő ki van kapcsolva, a sor mentéskor törlődik, ezért
+        // nem számít bele; ha még nincs díjsor, az előleg hozzáadódik az összeghez.
+        var bevPipa = gyoker.querySelector('[data-sdh-bevizsgalas]');
+        var bevElolegMezo = gyoker.querySelector('[data-sdh-fizetett]');
+        var bevEloleg = bevElolegMezo ? Math.max(0, mlSzam(bevElolegMezo.value)) : 0;
+        var bevBe = !!(bevPipa && bevPipa.checked && bevEloleg > 0);
+        var bevSor = gyoker.querySelector('[data-sdh-tetelsor][data-sdh-bev]');
+        var bevSzamlazva = !!(bevSor && bevSor.getAttribute('data-sdh-bev') === 'szamlazva');
+
+        if (bevSor && !bevSzamlazva) {
+            var bevAr = bevSor.querySelector('[data-sdh-tetel="ar"]');
+
+            if (bevBe && bevAr && document.activeElement !== bevAr && Math.abs(mlSzam(bevAr.value) - bevEloleg) >= 0.005) {
+                bevAr.value = String(bevEloleg).replace('.', ',');
+            }
+
+            bevSor.classList.toggle('is-torlendo', !bevBe);
+        }
+
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek]'), function (panel) {
             var menny = 0;
             var netto = 0;
@@ -2610,7 +2631,7 @@
                 }
 
                 // Az üres sor (se megnevezés, se ár) mentéskor eldobódik: nem számít bele.
-                var ures = (!nevMezo || nevMezo.value.trim() === '') && ar <= 0;
+                var ures = ((!nevMezo || nevMezo.value.trim() === '') && ar <= 0) || sor.classList.contains('is-torlendo');
                 var nettoAr = mlKerek(ar / (1 + afa / 100));
                 var sorNetto = ures ? 0 : mlKerek(nettoAr * m * (1 - kedv / 100));
                 var sorBrutto = ures ? 0 : mlKerek(ar * m * (1 - kedv / 100));
@@ -2634,6 +2655,16 @@
             osszNetto += netto;
             osszBrutto += brutto;
         });
+
+        // Még nincs díjsor (a mentés hozza létre): az előleg már most beleszámít.
+        if (bevBe && !bevSor) {
+            var bevLapAfa = gyoker.querySelector('[data-sdh-lap-afa]');
+            var bevOpcio = bevLapAfa ? bevLapAfa.options[bevLapAfa.selectedIndex] : null;
+            var bevSzazalek = bevOpcio ? parseFloat(bevOpcio.getAttribute('data-szazalek')) || 0 : 27;
+
+            osszBrutto += bevEloleg;
+            osszNetto += mlKerek(bevEloleg / (1 + bevSzazalek / 100));
+        }
 
         var hibaDb = 0;
 
@@ -5471,6 +5502,275 @@
 
     // Munkalap mentése után a készlet változhatott: a következő nyitáskor újra lekérjük.
     document.addEventListener('sdh:mentve', termElavult);
+
+    /* ---------------------------------------------------------------- */
+    /* Számlázás (Számlázz.hu) a munkalap-ablakból                      */
+    /* ---------------------------------------------------------------- */
+
+    /*
+     * A munkalap láblécének számlagombja ([data-sdh-szamla="fo|sdh"]):
+     *   1. elmenti a munkalapot (a számla a MENTETT tételekből készül),
+     *   2. újratölti a munkalap-ablakot (a tételsorok így a végleges
+     *      azonosítójukkal állnak az űrlapban),
+     *   3. fölé nyitja a számla ablakát (szerver: SDH_Muhely_Szamla).
+     * Számla csak ott, a „Számla kiállítása" gombra készül. Kiállítás után a
+     * munkalap-ablak újratölt, és a tetején megjelenik az elkészült számla.
+     */
+    var szamlaKesz = null;     // a frissen kiállított számla, amíg a munkalap-ablak újra nem tölt
+
+    function szamlaIndit(gomb) {
+        var urlap = gomb.closest('form');
+        var azonosito = urlap ? urlap.querySelector('input[name="id"]') : null;
+
+        if (!urlap || !azonosito || !(parseInt(azonosito.value, 10) > 0)) {
+            return;
+        }
+
+        var id = azonosito.value;
+        var n = sajatSzint(gomb);
+        var sorozat = gomb.getAttribute('data-sdh-szamla') === 'sdh' ? 'sdh' : 'fo';
+        var gombok = urlap.querySelectorAll('[data-sdh-szamla]');
+        var felirat = gomb.textContent;
+
+        if (!urlap.reportValidity || !urlap.reportValidity()) {
+            return;
+        }
+
+        Array.prototype.forEach.call(gombok, function (g) { g.disabled = true; });
+        gomb.textContent = 'Mentés…';
+
+        var adat = new FormData(urlap);
+
+        adat.set('action', urlap.dataset.sdhAjaxAction);
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                if (!eredmeny || !eredmeny.success) {
+                    throw new Error((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'A munkalap mentése nem sikerült.');
+                }
+
+                // A lista (rács) is értesül a mentésről; a popup nyitva marad.
+                document.dispatchEvent(new CustomEvent('sdh:mentve', {
+                    cancelable: true,
+                    detail: { action: urlap.dataset.sdhAjaxAction || '', adat: eredmeny.data || {} }
+                }));
+
+                nyit('munkalapok', id, { szint: n });
+                szamlaNyit(n, id, sorozat);
+            })
+            .catch(function (hiba) {
+                Array.prototype.forEach.call(gombok, function (g) { g.disabled = false; });
+                gomb.textContent = felirat;
+                mutatUrlapHiba(urlap, 'A számla előtt a munkalapot el kell menteni. ' + hiba.message);
+            });
+    }
+
+    function szamlaNyit(n, munkalapId, sorozat) {
+        nyit('szamla', munkalapId, {
+            szint: Math.min(n + 1, szintek.length - 1),
+            parameterek: { sorozat: sorozat },
+            siker: function (adat) {
+                szamlaKesz = adat || null;
+                nyit('munkalapok', munkalapId, { szint: n });
+            }
+        });
+    }
+
+    /** A kipipált tételek végösszege a számla ablakában. */
+    function szamlaOsszeg(urlap) {
+        var netto = 0;
+        var brutto = 0;
+        var db = 0;
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-tetel]'), function (pipa) {
+            if (pipa.checked) {
+                netto += parseFloat(pipa.getAttribute('data-netto')) || 0;
+                brutto += parseFloat(pipa.getAttribute('data-brutto')) || 0;
+                db += 1;
+            }
+        });
+
+        mlIr(urlap.querySelector('[data-sdh-szamla-ossz="netto"]'), mlPenz(netto));
+        mlIr(urlap.querySelector('[data-sdh-szamla-ossz="brutto"]'), mlPenz(brutto));
+
+        var kuldes = urlap.querySelector('button[type="submit"]');
+
+        if (kuldes && !kuldes.hasAttribute('data-sdh-tiltva')) {
+            kuldes.disabled = db === 0;
+        }
+    }
+
+    /** Előnézet: a Számlázz.hu PDF-je új lapon – számla nem készül. */
+    function szamlaElonezet(gomb) {
+        var urlap = gomb.closest('form');
+        var felirat = gomb.textContent;
+        // Az új lapot még a kattintásban kell megnyitni, különben a böngésző letiltja.
+        var ablak = window.open('', '_blank');
+        var adat = new FormData(urlap);
+
+        adat.set('action', 'sdh_muhely_szamla_elonezet');
+        gomb.disabled = true;
+        gomb.textContent = 'Előnézet készül…';
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) {
+                if ((valasz.headers.get('Content-Type') || '').indexOf('application/pdf') === 0) {
+                    return valasz.blob().then(function (pdf) {
+                        var cim = URL.createObjectURL(pdf);
+
+                        if (ablak) {
+                            ablak.location.href = cim;
+                        } else {
+                            window.open(cim, '_blank');
+                        }
+                    });
+                }
+
+                return valasz.json().then(function (eredmeny) {
+                    throw new Error((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'Az előnézet nem készült el.');
+                });
+            })
+            .catch(function (hiba) {
+                if (ablak) {
+                    ablak.close();
+                }
+
+                mutatUrlapHiba(urlap, hiba.message);
+            })
+            .then(function () {
+                gomb.disabled = false;
+                gomb.textContent = felirat;
+            });
+    }
+
+    /** Beállítások: a kapcsolat ellenőrzése (számla nem készül). */
+    function szamlaKapcsolat(gomb) {
+        var ki = gomb.parentNode.querySelector('[data-sdh-szamla-kapcsolat-ki]');
+        var adat = new FormData();
+
+        adat.append('action', 'sdh_muhely_szamla_kapcsolat');
+        adat.append('_wpnonce', beallitas.nonce || '');
+        gomb.disabled = true;
+
+        if (ki) {
+            ki.className = '';
+            ki.textContent = 'Ellenőrzés…';
+        }
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                if (ki) {
+                    ki.className = eredmeny && eredmeny.success ? 'is-jo' : 'is-hiba';
+                    ki.textContent = (eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'Ismeretlen válasz.';
+                }
+            })
+            .catch(function () {
+                if (ki) {
+                    ki.className = 'is-hiba';
+                    ki.textContent = 'A kérés nem ment el.';
+                }
+            })
+            .then(function () {
+                gomb.disabled = false;
+            });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+
+        if (!cel.closest) {
+            return;
+        }
+
+        var szamlaGomb = cel.closest('[data-sdh-szamla]');
+
+        if (szamlaGomb) {
+            esemeny.preventDefault();
+            szamlaIndit(szamlaGomb);
+
+            return;
+        }
+
+        var elonezet = cel.closest('[data-sdh-szamla-elonezet]');
+
+        if (elonezet) {
+            esemeny.preventDefault();
+            szamlaElonezet(elonezet);
+
+            return;
+        }
+
+        var kapcsolat = cel.closest('[data-sdh-szamla-kapcsolat]');
+
+        if (kapcsolat) {
+            esemeny.preventDefault();
+            szamlaKapcsolat(kapcsolat);
+        }
+    });
+
+    document.addEventListener('change', function (esemeny) {
+        var pipa = esemeny.target;
+
+        if (pipa && pipa.matches && pipa.matches('[data-sdh-szamla-tetel]')) {
+            szamlaOsszeg(pipa.closest('form'));
+        }
+    });
+
+    document.addEventListener('sdh:urlap-betoltve', function (esemeny) {
+        var reszlet = esemeny.detail || {};
+        var torzs = reszlet.torzs;
+
+        if (!torzs) {
+            return;
+        }
+
+        var szamlaUrlap = torzs.querySelector('[data-sdh-szamlaurlap]');
+
+        if (szamlaUrlap) {
+            var kuldes = szamlaUrlap.querySelector('button[type="submit"]');
+
+            // Amit a szerver tiltott le (nincs kulcs, hiányos vevő), azt a pipák nem oldják fel.
+            if (kuldes && kuldes.disabled) {
+                kuldes.setAttribute('data-sdh-tiltva', '');
+            }
+
+            szamlaOsszeg(szamlaUrlap);
+
+            return;
+        }
+
+        // Kiállítás után az újratöltött munkalap-ablak tetején: az elkészült számla.
+        if (szamlaKesz && reszlet.modul === 'munkalapok') {
+            var kesz = szamlaKesz;
+            var urlap = torzs.querySelector('form');
+
+            szamlaKesz = null;
+
+            if (urlap) {
+                var doboz = document.createElement('div');
+
+                doboz.className = 'sdh-uzenet sdh-uzenet--siker sdh-szamla-kesz';
+                doboz.setAttribute('data-sdh-szamla-kesz', kesz.szamlaszam || '');
+                doboz.textContent = 'Elkészült a számla: ' + (kesz.szamlaszam || '') +
+                    (kesz.brutto ? ' · ' + mlPenz(kesz.brutto) + ' Ft' : '') +
+                    (kesz.email ? ' · a Számlázz.hu e-mailben elküldi az ügyfélnek' : '') + ' · ';
+
+                if (kesz.pdf) {
+                    var link = document.createElement('a');
+
+                    link.href = kesz.pdf;
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                    link.textContent = 'PDF megnyitása';
+                    doboz.appendChild(link);
+                }
+
+                urlap.insertBefore(doboz, urlap.firstChild);
+            }
+        }
+    });
 
     /* ---------------------------------------------------------------- */
     /* Csatolt fájlok                                                   */

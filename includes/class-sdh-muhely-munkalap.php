@@ -1686,6 +1686,16 @@ final class SDH_Muhely_Munkalap
                             </span>
                         </div>
 
+                        <div class="sdh-ig">
+                            <span class="sdh-ig__cimke"></span>
+                            <label class="sdh-jelolo" for="bevizsgalasi_dij"
+                                   title="Bepipálva az előleg bevizsgálási díj: külön tételként kerül a munkalapra és a számlára (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”).">
+                                <input type="checkbox" name="bevizsgalasi_dij" id="bevizsgalasi_dij" value="1" data-sdh-bevizsgalas
+                                    <?php checked(!$uj && (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1); ?>>
+                                Bevizsgálási díj
+                            </label>
+                        </div>
+
                         <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
                         </div>
@@ -1840,6 +1850,11 @@ final class SDH_Muhely_Munkalap
                     <span class="sdh-mezo__sugo">
                         A munkalapszám az első számozott állapotba lépéskor generálódik; ahhoz ügyfél és eszköz kell.
                     </span>
+                <?php endif; ?>
+
+                <?php // Számlázás: csak mentett, sorszámot kapott lapnál (SDH_Muhely_Szamla). ?>
+                <?php if (!$uj && $modal && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Szamla')) : ?>
+                    <?php SDH_Muhely_Szamla::munkalap_gombok($munkalap); ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -2085,11 +2100,20 @@ final class SDH_Muhely_Munkalap
         $kedv   = $tetel !== null ? (float) $tetel->kedvezmeny : 0.0;
 
         ?>
-        <div class="sdh-tetelsor" data-sdh-tetelsor>
+        <?php
+        $bevizsgalas = $tetel !== null && (string) ($tetel->forras ?? '') === 'bevizsgalas';
+        $szamlazva   = $tetel !== null ? (string) ($tetel->szamla ?? '') : '';
+        ?>
+        <div class="sdh-tetelsor<?php echo $szamlazva !== '' ? ' is-szamlazva' : ''; ?>" data-sdh-tetelsor
+            <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>>
             <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"
                    value="<?php echo (int) ($tetel->id ?? 0); ?>">
 
-            <span class="sdh-tetelsor__sorszam"><?php echo $tetel !== null ? (int) $tetel->id : 'új'; ?></span>
+            <span class="sdh-tetelsor__sorszam"
+                <?php echo $szamlazva !== '' ? 'title="Számlázva: ' . esc_attr($szamlazva) . '"' : ($bevizsgalas ? 'title="Bevizsgálási díj – az előlegből (a „Bevizsgálási díj” jelölő tartja karban)"' : ''); ?>><?php
+                echo $tetel !== null ? (int) $tetel->id : 'új';
+                echo $szamlazva !== '' ? ' ✓' : '';
+            ?></span>
 
             <?php if ($termek) : ?>
                 <?php // A sor végi gomb a termékválasztó popupot nyitja (app.js termValasztoNyit). ?>
@@ -2308,6 +2332,7 @@ final class SDH_Muhely_Munkalap
             'fizetve'           => $fizetve ? 1 : 0,
             'fizetes_ideje'     => $fizetes_ideje,
             'fizetett'          => max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('fizetett')), 2)),
+            'bevizsgalasi_dij'  => !empty($_POST['bevizsgalasi_dij']) ? 1 : 0,
             'kedvezmeny'        => min(100.0, max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('lap_kedvezmeny')), 2))),
             'afakulcs'          => SDH_Muhely_Tetel::afakulcs_ervenyes($szoveg('lap_afakulcs')),
             'megjegyzes'        => isset($_POST['megjegyzes'])
@@ -2605,6 +2630,11 @@ final class SDH_Muhely_Munkalap
                 (int) $eredmeny[0],
                 SDH_Muhely_Tetel::bekuldott(isset($_POST['tetelek']) ? wp_unslash($_POST['tetelek']) : [])
             );
+        }
+
+        // A bevizsgálási díj tételsora a jelölőhöz és az előleghez igazodik.
+        if (is_array($eredmeny) && class_exists('SDH_Muhely_Szamla')) {
+            SDH_Muhely_Szamla::bevizsgalas_szinkron((int) $eredmeny[0]);
         }
 
         return $eredmeny;
