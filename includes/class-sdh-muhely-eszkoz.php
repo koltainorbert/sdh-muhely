@@ -563,113 +563,153 @@ final class SDH_Muhely_Eszkoz
                 <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_eszkoz"
                        id="ful_e_eszkoz" checked>
                 <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_eszkoz"
-                       id="ful_e_azonositok">
-                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--3" name="_ful_eszkoz"
                        id="ful_e_garancia">
 
                 <div class="sdh-fulek__sav">
                     <label for="ful_e_eszkoz">Eszköz</label>
-                    <label for="ful_e_azonositok">Azonosítók</label>
                     <label for="ful_e_garancia">Garancia és átvétel</label>
                 </div>
 
+
                 <div class="sdh-fulek__panel sdh-fulek__panel--1">
-                    <div class="sdh-sor">
-                        <div class="sdh-ig">
-                            <span class="sdh-ig__cimke">Ügyfél <span class="sdh-kotelezo">*</span></span>
-                            <div class="sdh-mezo__sor">
-                                <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
-                                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
-                                        data-sdh-uj-ugyfel
-                                        title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="kategoria">Kategória</label>
-                            <?php self::pop_mezo('kategoria', 'kategoria', $kategoria_cimke, 'Válassz kategóriát…', self::kategoria_csoportok_pop()); ?>
-                        </div>
-
-                        <div class="sdh-ig">
-                            <label for="gyarto">Gyártó</label>
-                            <?php self::pop_mezo('gyarto', 'gyarto', $ert('gyarto'), 'Válassz gyártót…', self::gyarto_csoportok()); ?>
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="tipus">Gyári szám <span class="sdh-kotelezo">*</span></label>
-                            <input type="text" name="tipus" id="tipus"
-                                   placeholder="Pl. SM-A505F/DS vagy A1660"
-                                   title="A gyártó modellkódja – ez az azonosító, nem a kereskedelmi név."
-                                   value="<?php echo esc_attr($ert('tipus')); ?>">
-                        </div>
-
-                        <div class="sdh-ig">
-                            <label for="megnevezes">Keresk. név</label>
-                            <input type="text" name="megnevezes" id="megnevezes"
-                                   placeholder="Pl. Galaxy A50, iPhone 7"
-                                   title="Amin az ügyfél keresi. Kereséshez jó, azonosításra nem."
-                                   value="<?php echo esc_attr($ert('megnevezes')); ?>">
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="imei">IMEI</label>
-                            <input type="text" name="imei" id="imei" inputmode="numeric" maxlength="15"
-                                   data-sdh-imei autocomplete="off" placeholder="15 számjegy"
-                                   title="15 számjegy után megnézem, járt-e már nálunk ez a készülék."
-                                   value="<?php echo esc_attr($ert('imei')); ?>">
-                        </div>
-
-                        <div class="sdh-ig">
-                            <label for="sorozatszam">Sorozatszám</label>
-                            <input type="text" name="sorozatszam" id="sorozatszam"
-                                   value="<?php echo esc_attr($ert('sorozatszam')); ?>">
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="szin">Szín</label>
-                            <?php self::pop_mezo('szin', 'szin', $ert('szin'), 'Válassz színt…', self::szinek()); ?>
-                        </div>
-
-                        <div class="sdh-ig">
-                            <label for="tartozekok">Tartozékok</label>
-                            <?php self::pop_mezo('tartozekok', 'tartozek', $ert('tartozekok'), 'Mit hozott magával…', self::tartozek_lista()); ?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sdh-fulek__panel sdh-fulek__panel--2">
                     <?php
-                    // Kompakt: balra a mezők egymás alatt, jobbra a kicsinyített minta.
-                    // Az IMEI és a sorozatszám az Eszköz lapfülön van.
+                    // Egy lapfül: balra az összes azonosító és mező, jobbra a feloldó minta
+                    // teljes magasságban. (Az Azonosítók külön lapfül megszűnt.)
                     ?>
                     <div class="sdh-azon">
                         <div class="sdh-azon__mezok">
-                            <div class="sdh-ig">
-                                <label for="imei2">IMEI 2.</label>
-                                <input type="text" name="imei2" id="imei2" inputmode="numeric" autocomplete="off"
-                                       value="<?php echo esc_attr($ert('imei2')); ?>">
+                            <div class="sdh-sor">
+                                <div class="sdh-ig">
+                                    <span class="sdh-ig__cimke">Ügyfél <span class="sdh-kotelezo">*</span></span>
+                                    <div class="sdh-mezo__sor">
+                                        <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
+                                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
+                                                data-sdh-uj-ugyfel
+                                                title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="sdh-ig">
-                                <label for="modell_szam">Modellszám</label>
-                                <input type="text" name="modell_szam" id="modell_szam"
-                                       title="A teljes gyári kód, pl. SM-A505FZBCAFG."
-                                       value="<?php echo esc_attr($ert('modell_szam')); ?>">
+                            <div class="sdh-sor sdh-sor--ketto">
+                                <div class="sdh-ig">
+                                    <label for="kategoria">Kategória</label>
+                                    <?php self::pop_mezo('kategoria', 'kategoria', $kategoria_cimke, 'Válassz kategóriát…', self::kategoria_csoportok_pop()); ?>
+                                </div>
+
+                                <div class="sdh-ig">
+                                    <label for="gyarto">Gyártó</label>
+                                    <?php self::pop_mezo('gyarto', 'gyarto', $ert('gyarto'), 'Válassz gyártót…', self::gyarto_csoportok()); ?>
+                                </div>
                             </div>
 
-                            <div class="sdh-ig">
-                                <label for="zarkod">Zárkód / PIN</label>
-                                <input type="text" name="zarkod" id="zarkod" autocomplete="off"
-                                       title="E nélkül a javítás nagy része nem tesztelhető."
-                                       value="<?php echo esc_attr($ert('zarkod')); ?>">
+                            <div class="sdh-sor sdh-sor--ketto">
+                                <div class="sdh-ig">
+                                    <label for="tipus">Gyári szám <span class="sdh-kotelezo">*</span></label>
+                                    <input type="text" name="tipus" id="tipus"
+                                           placeholder="Pl. SM-A505F/DS vagy A1660"
+                                           title="A gyártó modellkódja – ez az azonosító, nem a kereskedelmi név."
+                                           value="<?php echo esc_attr($ert('tipus')); ?>">
+                                </div>
+
+                                <div class="sdh-ig">
+                                    <label for="megnevezes">Keresk. név</label>
+                                    <input type="text" name="megnevezes" id="megnevezes"
+                                           placeholder="Pl. Galaxy A50, iPhone 7"
+                                           title="Amin az ügyfél keresi. Kereséshez jó, azonosításra nem."
+                                           value="<?php echo esc_attr($ert('megnevezes')); ?>">
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor sdh-sor--ketto">
+                                <div class="sdh-ig">
+                                    <label for="imei">IMEI</label>
+                                    <input type="text" name="imei" id="imei" inputmode="numeric" maxlength="15"
+                                           data-sdh-imei autocomplete="off" placeholder="15 számjegy"
+                                           title="15 számjegy után megnézem, járt-e már nálunk ez a készülék."
+                                           value="<?php echo esc_attr($ert('imei')); ?>">
+                                </div>
+
+                                <div class="sdh-ig">
+                                    <label for="sorozatszam">Sorozatszám</label>
+                                    <input type="text" name="sorozatszam" id="sorozatszam"
+                                           value="<?php echo esc_attr($ert('sorozatszam')); ?>">
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor sdh-sor--ketto">
+                                <div class="sdh-ig">
+                                    <label for="szin">Szín</label>
+                                    <?php self::pop_mezo('szin', 'szin', $ert('szin'), 'Válassz színt…', self::szinek()); ?>
+                                </div>
+
+                                <div class="sdh-ig">
+                                    <label for="tartozekok">Tartozékok</label>
+                                    <?php self::pop_mezo('tartozekok', 'tartozek', $ert('tartozekok'), 'Mit hozott magával…', self::tartozek_lista()); ?>
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor sdh-sor--ketto">
+                                <div class="sdh-ig">
+                                    <label for="imei2">IMEI 2.</label>
+                                    <input type="text" name="imei2" id="imei2" inputmode="numeric" autocomplete="off"
+                                           value="<?php echo esc_attr($ert('imei2')); ?>">
+                                </div>
+
+                                <div class="sdh-ig">
+                                    <label for="modell_szam">Modellszám</label>
+                                    <input type="text" name="modell_szam" id="modell_szam"
+                                           title="A teljes gyári kód, pl. SM-A505FZBCAFG."
+                                           value="<?php echo esc_attr($ert('modell_szam')); ?>">
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor">
+                                <div class="sdh-ig">
+                                    <label for="zarkod">Zárkód / PIN</label>
+                                    <input type="text" name="zarkod" id="zarkod" autocomplete="off"
+                                           title="E nélkül a javítás nagy része nem tesztelhető."
+                                           value="<?php echo esc_attr($ert('zarkod')); ?>">
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor">
+                                <div class="sdh-ig">
+                                    <span class="sdh-ig__cimke">Ellenőrzés</span>
+                                    <div class="sdh-ig__gombok">
+                                        <?php foreach (SDH_Muhely_Imei_Lekerdezes::ellenorzok() as $ellenorzo) : ?>
+                                            <?php
+                                            // Az {imei} helyőrzőt a böngésző nem szeretné a linkben:
+                                            // a href tiszta cím, a helyőrzős változatot a JS használja.
+                                            $tiszta_url = str_replace('{imei}', '', (string) $ellenorzo['url']);
+                                            ?>
+                                            <a class="sdh-gomb sdh-gomb--vilagos"
+                                               href="<?php echo esc_url($tiszta_url); ?>"
+                                               target="_blank" rel="noopener noreferrer"
+                                               data-sdh-ellenorzo="<?php echo esc_attr((string) $ellenorzo['url']); ?>">
+                                                <?php echo esc_html((string) $ellenorzo['nev']); ?> ↗
+                                            </a>
+                                        <?php endforeach; ?>
+
+                                        <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
+                                            <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-imei-lekerdez>
+                                                Lekérdezés a szolgáltatótól
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sdh-sor">
+                                <div class="sdh-ig sdh-ig--felso">
+                                    <label for="beillesztes">Gyári adatok</label>
+                                    <div class="sdh-ig__beillesztes">
+                                        <textarea id="beillesztes" data-sdh-beillesztes rows="2"
+                                                  placeholder="Az ellenőrző oldal eredményét másold ide – a mezőket kitöltöm (gyári szám, sorozatszám, garancia, kép…)"></textarea>
+                                        <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-beillesztes-feldolgoz>
+                                            Feldolgozás
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -678,49 +718,9 @@ final class SDH_Muhely_Eszkoz
                             <?php self::minta_mezo($ert('minta')); ?>
                         </div>
                     </div>
-
-                    <div class="sdh-sor">
-                        <div class="sdh-ig">
-                            <span class="sdh-ig__cimke">Ellenőrzés</span>
-                            <div class="sdh-ig__gombok">
-                                <?php foreach (SDH_Muhely_Imei_Lekerdezes::ellenorzok() as $ellenorzo) : ?>
-                                    <?php
-                                    // Az {imei} helyőrzőt a böngésző nem szeretné a linkben:
-                                    // a href tiszta cím, a helyőrzős változatot a JS használja.
-                                    $tiszta_url = str_replace('{imei}', '', (string) $ellenorzo['url']);
-                                    ?>
-                                    <a class="sdh-gomb sdh-gomb--vilagos"
-                                       href="<?php echo esc_url($tiszta_url); ?>"
-                                       target="_blank" rel="noopener noreferrer"
-                                       data-sdh-ellenorzo="<?php echo esc_attr((string) $ellenorzo['url']); ?>">
-                                        <?php echo esc_html((string) $ellenorzo['nev']); ?> ↗
-                                    </a>
-                                <?php endforeach; ?>
-
-                                <?php if (SDH_Muhely_Imei_Lekerdezes::beallitva()) : ?>
-                                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-imei-lekerdez>
-                                        Lekérdezés a szolgáltatótól
-                                    </button>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sdh-sor">
-                        <div class="sdh-ig sdh-ig--felso">
-                            <label for="beillesztes">Gyári adatok</label>
-                            <div class="sdh-ig__beillesztes">
-                                <textarea id="beillesztes" data-sdh-beillesztes rows="2"
-                                          placeholder="Az ellenőrző oldal eredményét másold ide – a mezőket kitöltöm (gyári szám, sorozatszám, garancia, kép…)"></textarea>
-                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-beillesztes-feldolgoz>
-                                    Feldolgozás
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="sdh-fulek__panel sdh-fulek__panel--3">
+                <div class="sdh-fulek__panel sdh-fulek__panel--2">
                     <label class="sdh-jelolo" for="garancias">
                         <input type="checkbox" name="garancias" id="garancias" value="1"
                             <?php checked($ert('garancias'), '1'); ?>>

@@ -57,6 +57,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.19.6
+- Eszközűrlap: **az Azonosítók lapfül megszűnt**, minden az Eszköz lapfülön van
+  (IMEI 2., Modellszám, Zárkód/PIN, Ellenőrzés, Gyári adatok a mezők alatt;
+  a feloldó minta jobbra, teljes magasságban). Lapfülek: Eszköz | Garancia és átvétel.
+
 ### 0.19.5
 - **Feloldó minta: keresztezés.** A vonalak metszhetik egymást, egy pötty
   többször is érinthető, és a köztes pötty kihagyható. A „Szabad rajz
