@@ -111,7 +111,8 @@
         szolgaltatasok: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.2 3.6a3.6 3.6 0 0 0-4.6 4.6L3.5 12.3v3.2h3.2l.9-.9v-1.4h1.4l1.1-1.1a3.6 3.6 0 0 0 4.9-4.3l-2.3 2.3-1.8-.5-.5-1.8z"/></svg>',
         termekek: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5L10 3l6.5 3.5v7L10 17l-6.5-3.5z"/><path d="M3.5 6.5L10 10l6.5-3.5M10 10v7"/></svg>',
         szamlak: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h10v14l-2.5-1.5L10 17l-2.5-1.5L5 17z"/><path d="M7.5 7h5M7.5 10h5"/></svg>',
-        penztar: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5" width="14" height="10" rx="1.8"/><circle cx="10" cy="10" r="2.2"/></svg>'
+        penztar: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5" width="14" height="10" rx="1.8"/><circle cx="10" cy="10" r="2.2"/></svg>',
+        rma: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx=".8"/><rect x="12" y="3" width="5" height="5" rx=".8"/><rect x="3" y="12" width="5" height="5" rx=".8"/><path d="M12 12h2v2h-2zM15 15h2v2h-2zM12 16v1M16.5 12v1.5"/></svg>'
     };
 
     /* ---------------------------------------------------------------- */

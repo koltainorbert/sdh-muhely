@@ -453,6 +453,7 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'attekintes') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.js')); ?>"></script>
+            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
         <?php endif; ?>
 
         </body>

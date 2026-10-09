@@ -1286,6 +1286,11 @@ final class SDH_Muhely_Munkalap
             }
         }
 
+        if ((string) $regi->allapot !== $kulcs) {
+            /** Állapotváltás: az RMA-modul naplózza (állapottörténet). */
+            do_action('sdh_muhely_munkalap_allapot', $id, (string) $regi->allapot, $kulcs);
+        }
+
         return [
             'id'   => $id,
             'szam' => self::szam_formaz($adatok['munkalap_szam'] ?? $regi->munkalap_szam),
@@ -2466,6 +2471,12 @@ final class SDH_Muhely_Munkalap
             if ($zar) {
                 $wpdb->query($wpdb->prepare('SELECT RELEASE_LOCK(%s)', self::ZAR_NEV));
             }
+        }
+
+        $regi_allapot = $regi !== null ? (string) $regi->allapot : '';
+
+        if (isset($adatok['allapot']) && $regi_allapot !== (string) $adatok['allapot']) {
+            do_action('sdh_muhely_munkalap_allapot', $id, $regi_allapot, (string) $adatok['allapot']);
         }
 
         $szam = $szamot_kap

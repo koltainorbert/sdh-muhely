@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.18.0';
+    public const DB_VERSION = '0.19.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -103,6 +103,8 @@ final class SDH_Muhely_Schema
         $tetel    = self::tabla('munkalap_tetel');
         $csatolmany = self::tabla('csatolmany');
         $szolgaltatas = self::tabla('szolgaltatas');
+        $naplo        = self::tabla('munkalap_naplo');
+        $uzenet       = self::tabla('uzenet');
 
         $definiciok = [];
 
@@ -309,8 +311,10 @@ final class SDH_Muhely_Schema
             letrehozva datetime NULL,
             modositva datetime NULL,
             letrehozo bigint(20) unsigned NOT NULL default 0,
+            rma_token varchar(40) NOT NULL default '',
             PRIMARY KEY  (id),
             unique key munkalap_szam (munkalap_szam),
+            key rma_token (rma_token),
             key allapot (allapot),
             key ugyfel_id (ugyfel_id),
             key eszkoz_id (eszkoz_id),
@@ -429,6 +433,48 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             UNIQUE KEY kulcs (kulcs),
             key hasznalat (hasznalat)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Munkalap – állapotnapló
+         *
+         * Minden állapotváltás egy sor: mikor, mire, ki váltotta. Az
+         * ügyfél az RMA-oldalon ebből látja a javítás menetét.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$naplo} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            allapot varchar(30) NOT NULL default '',
+            elozo varchar(30) NOT NULL default '',
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Üzenetek (levelezés az ügyféllel)
+         *
+         * Egy munkalaphoz tartozó üzenetváltás. "irany": ki = a szerviz
+         * írta az ügyfélnek, be = az ügyfél írta (RMA-oldalról, később
+         * e-mailből). "csatorna": rma / crm / email – honnan jött.
+         * "olvasva": a bejövő üzenetet a CRM-ben megnézték-e.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$uzenet} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            irany varchar(4) NOT NULL default 'ki',
+            csatorna varchar(20) NOT NULL default 'crm',
+            szoveg text NULL,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            olvasva tinyint(1) NOT NULL default 0,
+            email_kuldve tinyint(1) NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id),
+            key ugyfel_id (ugyfel_id),
+            key olvasva (olvasva)
         ) {$charset};";
 
         return $definiciok;

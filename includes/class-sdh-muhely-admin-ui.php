@@ -308,6 +308,14 @@ final class SDH_Muhely_Admin_UI
                 self::eszkoz_verzio('assets/racs.js'),
                 true
             );
+
+            wp_enqueue_script(
+                'sdh-muhely-rma',
+                SDH_MUHELY_URL . 'assets/rma.js',
+                ['sdh-muhely-app'],
+                self::eszkoz_verzio('assets/rma.js'),
+                true
+            );
         }
     }
 

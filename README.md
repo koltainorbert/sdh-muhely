@@ -57,6 +57,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.26.0
+- **QR-kód és vonalkód minden munkalaphoz** (`SDH_Muhely_Kodok`, szerveroldali SVG, offline is):
+  a QR az ügyfél saját oldalára mutat, a vonalkód (Code 128) a munkalapszámot hordozza.
+  Nyomtatható címke: `/?sdh_muhely_cimke=<id>` (belépéshez kötött).
+- **Ügyféloldal (RMA)**: `/rma/<token>/` (szép URL nélkül `/?sdh_rma=<token>`). Zárva nyílik,
+  telefonszám (06304004636 / +36… is jó) + munkalap sorszáma oldja fel; aláírt süti, 90 nap.
+  Próbálkozási korlát: 8 / 15 perc / IP + munkalap. Mutatja: állapot, utolsó módosítás,
+  fizetendő (kiemelve), adatok, hibák, tételek, állapottörténet, üzenetek; az ügyfél válaszolhat.
+- **Állapotnapló** (`sdh_munkalap_naplo`): minden állapotváltás egy sor (esemény:
+  `sdh_muhely_munkalap_allapot`). Sémafrissítéskor a régi lapok kezdősort kapnak.
+- **Üzenetek** (`sdh_uzenet`, irany ki/be, csatorna crm/rma): a munkalap részletein új
+  „RMA / Üzenetek" lapfül (QR, vonalkód, link, címke, üzenetküldés, állapottörténet).
+  Ügyfélválasz → e-mail a beállított címre (Reply-To: az ügyfél); CRM-üzenet → kérésre
+  e-mail az ügyfélnek a linkkel.
+- **Beállítások → Ügyféloldal**: nyilvános cím (ha a CRM nem érhető el az internetről),
+  szerviz neve, értesítési e-mail, elérhetőség.
+- **Áttekintés részletpanel**: a Munkalap lapfül bal sávjában a Megjegyzés alatt a bruttó
+  összeg pirossal, és ha fizetni kell, a fizetendő összeg kiemelve.
+- Séma 0.19.0: `munkalap.rma_token`, `sdh_munkalap_naplo`, `sdh_uzenet`.
+
 ### 0.25.1
 - **Minden oldal teljes szélességű**: az Ügyfelek, Eszközök, Munkalapok, Szolgáltatások és a többi
   oldal tartalma széltől szélig ér, ahogy az Áttekintés rácsa; az oldalsáv becsukásakor kitölti a

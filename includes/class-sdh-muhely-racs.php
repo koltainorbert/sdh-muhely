@@ -1379,6 +1379,11 @@ final class SDH_Muhely_Racs
                 'html' => self::kepernyore([self::class, 'ful_tetelek'], $termekek, $ugyfelnev, 'Ehhez a munkalaphoz még nincs termék.'),
             ],
             [
+                'k'    => 'rma',
+                'cim'  => SDH_Muhely_Rma::ful_cim((int) $munkalap->id),
+                'html' => self::kepernyore([SDH_Muhely_Rma::class, 'crm_panel'], $munkalap, $ugyfel),
+            ],
+            [
                 'k'    => 'szamlak',
                 'cim'  => 'Számlák',
                 'html' => self::kepernyore([self::class, 'ful_szamlak']),
@@ -1475,7 +1480,7 @@ final class SDH_Muhely_Racs
      *
      * @param array<string, array{cim: string, jel?: bool}> $alfulek
      */
-    private static function alful_sav(array $alfulek, string $modul, int $id): void
+    private static function alful_sav(array $alfulek, string $modul, int $id, string $also_html = ''): void
     {
         $ikonok = [
             'adatok'     => '<rect x="3.5" y="4" width="13" height="12" rx="1.6"/><path d="M3.5 8h13M8 8v8"/>',
@@ -1511,6 +1516,7 @@ final class SDH_Muhely_Racs
             $elso = false;
         }
 
+        echo $also_html; // phpcs:ignore WordPress.Security.EscapeOutput -- a hívó már szűrt HTML-t ad.
         echo '</div>';
     }
 
@@ -1557,7 +1563,8 @@ final class SDH_Muhely_Racs
                 'megjegyzes' => ['cim' => 'Megjegyzés', 'jel' => $megjegyzes !== '' || $kulso !== ''],
             ],
             SDH_Muhely_Munkalap::KULCS,
-            (int) $munkalap->id
+            (int) $munkalap->id,
+            self::fizetes_kiemeles($brutto, $fizetendo, $fizetve)
         );
 
         echo '<div class="sdh-reszlet__tartalom">';
@@ -1622,6 +1629,30 @@ final class SDH_Muhely_Racs
         }
 
         echo '</div></div></div>';
+    }
+
+    /**
+     * A munkalap-lapfül bal sávjának alja (a Megjegyzés alatt): a bruttó
+     * összeg pirossal, és ha fizetnie kell, a fizetendő összeg kiemelve.
+     */
+    private static function fizetes_kiemeles(float $brutto, float $fizetendo, bool $fizetve): string
+    {
+        if ($brutto <= 0 && $fizetendo <= 0) {
+            return '';
+        }
+
+        $html = '<div class="sdh-reszlet__penz">';
+        $html .= '<div class="sdh-reszlet__brutto"><span>Bruttó</span><b>' . esc_html(self::penz($brutto) . ' Ft') . '</b></div>';
+
+        if ($fizetendo > 0) {
+            $html .= '<div class="sdh-reszlet__fizetendo"><span>Fizetendő</span><b>' . esc_html(self::penz($fizetendo) . ' Ft') . '</b></div>';
+        } elseif ($fizetve) {
+            $html .= '<div class="sdh-reszlet__kifizetve">Kifizetve</div>';
+        } elseif ($fizetendo < 0) {
+            $html .= '<div class="sdh-reszlet__kifizetve">Túlfizetés: ' . esc_html(self::penz(-$fizetendo) . ' Ft') . '</div>';
+        }
+
+        return $html . '</div>';
     }
 
     /** Eszköz-lapfül. */
