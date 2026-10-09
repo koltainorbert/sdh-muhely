@@ -299,9 +299,30 @@ final class SDH_Muhely_Tetel
 
         $id = (int) $wpdb->insert_id;
 
+        self::megjegyez($sor);
         self::ujraszamol($munkalap_id);
 
         return $id;
+    }
+
+    /**
+     * A szolgáltatás-törzs megjegyzi a tételt (csak szolgáltatást, névvel).
+     * Egyforma nevű szolgáltatásból a törzsben mindig egy sor marad.
+     *
+     * @param array<string, mixed> $sor A tételsor (tipus, megnevezes, me, brutto_ar, afa_kulcs).
+     */
+    private static function megjegyez(array $sor): void
+    {
+        if (($sor['tipus'] ?? '') !== 'szolgaltatas' || !class_exists('SDH_Muhely_Szolgaltatas')) {
+            return;
+        }
+
+        SDH_Muhely_Szolgaltatas::megjegyez([
+            'nev'       => (string) ($sor['megnevezes'] ?? ''),
+            'me'        => (string) ($sor['me'] ?? ''),
+            'brutto_ar' => (float) ($sor['brutto_ar'] ?? 0),
+            'afa_kulcs' => (string) ($sor['afa_kulcs'] ?? ''),
+        ]);
     }
 
     /** Százalékból áfakulcs: a számos kulcsok közül az egyező, különben az alap. */
@@ -388,6 +409,9 @@ final class SDH_Muhely_Tetel
      * Azok a mezők, amelyeket az űrlap nem szerkeszt (mozgás, állapot,
      * időpont, számla, eladó, munkavégző), a meglévő soron érintetlenek.
      *
+     * Az új és a megváltozott szolgáltatássorokat a szolgáltatás-törzs
+     * megjegyzi (SDH_Muhely_Szolgaltatas) – egyforma névből ott egy sor van.
+     *
      * @param array<int, array<string, mixed>> $sorok A bekuldott() eredménye.
      */
     public static function mentes(int $munkalap_id, array $sorok): void
@@ -400,10 +424,15 @@ final class SDH_Muhely_Tetel
 
         $tabla   = self::tabla();
         $most    = current_time('mysql');
-        $letezok = array_map(
-            'intval',
-            (array) $wpdb->get_col($wpdb->prepare("SELECT id FROM {$tabla} WHERE munkalap_id = %d", $munkalap_id))
-        );
+        $regiek  = [];
+
+        foreach ((array) $wpdb->get_results(
+            $wpdb->prepare("SELECT id, megnevezes, brutto_ar FROM {$tabla} WHERE munkalap_id = %d", $munkalap_id)
+        ) as $regi) {
+            $regiek[(int) $regi->id] = $regi;
+        }
+
+        $letezok = array_keys($regiek);
 
         $megmarad = [];
         $sorrend  = ['szolgaltatas' => 0, 'termek' => 0];
@@ -444,6 +473,15 @@ final class SDH_Muhely_Tetel
                 $wpdb->update($tabla, $adat, ['id' => $sor['id']]);
                 $megmarad[] = $sor['id'];
 
+                // A törzs csak akkor tanul a meglévő sorból, ha a neve vagy az
+                // ára változott – egy régi lap újramentése ne írja vissza a régi árat.
+                $regi = $regiek[$sor['id']];
+
+                if ((string) $regi->megnevezes !== (string) $sor['megnevezes']
+                    || abs((float) $regi->brutto_ar - $brutto_ar) >= 0.005) {
+                    self::megjegyez($adat);
+                }
+
                 continue;
             }
 
@@ -455,6 +493,7 @@ final class SDH_Muhely_Tetel
 
             if ($wpdb->insert($tabla, $adat) !== false) {
                 $megmarad[] = (int) $wpdb->insert_id;
+                self::megjegyez($adat);
             }
         }
 

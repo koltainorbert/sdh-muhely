@@ -1674,7 +1674,7 @@ final class SDH_Muhely_Munkalap
                             <label for="fizetett" title="Előleg: a már befizetett összeg. Mindig levonódik a teljes összegből.">Fizetett (előleg)</label>
                             <span class="sdh-szam sdh-szam--utotag">
                                 <input type="number" name="fizetett" id="fizetett"
-                                       step="1000" min="0" data-sdh-fizetett
+                                       step="any" data-sdh-lepes="1000" min="0" data-sdh-fizetett
                                        title="Előleg: a már befizetett összeg (pl. bevizsgálási díj). Mindig levonódik a teljes összegből."
                                        value="<?php echo esc_attr(self::szam_mezobe($fizetett)); ?>">
                                 <span class="sdh-szam__utotag" aria-hidden="true">Ft</span>
@@ -2079,8 +2079,9 @@ final class SDH_Muhely_Munkalap
             <span class="sdh-tetelsor__sorszam"><?php echo $tetel !== null ? (int) $tetel->id : 'új'; ?></span>
 
             <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
-                   aria-label="Megnevezés"
-                   placeholder="<?php echo esc_attr($termek ? 'Pl. Samsung A54 USB panel' : 'Pl. Mobiltelefon munkadíj'); ?>"
+                   aria-label="Megnevezés" autocomplete="off"
+                   <?php echo $termek ? '' : 'data-sdh-szolg role="combobox" aria-autocomplete="list" aria-expanded="false"'; ?>
+                   placeholder="<?php echo esc_attr($termek ? 'Pl. Samsung A54 USB panel' : 'Keresés a meglévők között, vagy új szolgáltatás neve'); ?>"
                    value="<?php echo esc_attr($ert('megnevezes')); ?>">
 
             <?php if ($termek) : ?>
@@ -2097,7 +2098,7 @@ final class SDH_Muhely_Munkalap
                    value="<?php echo esc_attr($tetel !== null ? self::szam_mezobe((float) $tetel->mennyiseg) : '1'); ?>">
 
             <input type="text" name="<?php echo esc_attr($elotag); ?>[me]" maxlength="20"
-                   aria-label="Mennyiségi egység"
+                   aria-label="Mennyiségi egység" data-sdh-tetel="me"
                    value="<?php echo esc_attr($tetel !== null ? (string) $tetel->me : 'db'); ?>">
 
             <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="ar"

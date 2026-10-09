@@ -57,6 +57,22 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.24.0
+- **Szolgáltatás-törzs**: amit a munkalap Szolgáltatások lapfülén egyszer beírtak, azt a rendszer
+  megjegyzi (név, m.e., bruttó ár, áfakulcs) – külön felvinni nem kell, a munkalap mentése veszi
+  fel (`SDH_Muhely_Szolgaltatas`, tábla: `sdh_szolgaltatas`).
+- **Kereső a Megnevezés mezőben**: gépelésre a meglévő szolgáltatások listája nyílik a popupban
+  (ékezet és kis-/nagybetű nem számít, a gyakoribb elöl; üres mezőnél a leggyakoribbak). Választás:
+  kattintás vagy ↓ + Enter – kitölti a nevet, az egységet és az árat. A sor végi × elfelejti a
+  szolgáltatást (a munkalapok tételei maradnak).
+- **Egy név = egy sor**: az egyforma nevű szolgáltatás (kis-/nagybetű és szóközök nélkül nézve)
+  nem jön létre még egyszer – a meglévő kapja az új árat és nő a használat-számlálója. Egyedi index
+  védi; frissítéskor a meglévő tételekből nevenként egy sor kerül a törzsbe (`osszevon()`,
+  `tetelekbol()`).
+- **Javítás**: a „Fizetett (előleg)" mező nem kerek ezres összegnél (pl. 4 500 Ft) megfogta a
+  munkalap mentését; a léptető továbbra is 1000-esével lép (`data-sdh-lepes`).
+- **Séma 0.17.0**: új tábla `sdh_szolgaltatas`.
+
 ### 0.23.0
 - **Munkalap-ablak a MunkaLap 3 elrendezésében**: balra oldalsáv (Állapot, Dátumok, Összeg,
   Tételek, Fizetés), jobbra az Ügyfél és az Eszköz, alattuk lapfülek: **Eszköz** (az eszköz és az

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.16.0';
+    public const DB_VERSION = '0.17.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -102,6 +102,7 @@ final class SDH_Muhely_Schema
         $hiba     = self::tabla('munkalap_hiba');
         $tetel    = self::tabla('munkalap_tetel');
         $csatolmany = self::tabla('csatolmany');
+        $szolgaltatas = self::tabla('szolgaltatas');
 
         $definiciok = [];
 
@@ -402,6 +403,31 @@ final class SDH_Muhely_Schema
             feltolto bigint(20) unsigned NOT NULL default 0,
             PRIMARY KEY  (id),
             key gazda (tipus, ref_id)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Szolgáltatás-törzs
+         *
+         * A munkalapokon használt szolgáltatások, amelyeket a rendszer
+         * megjegyez és gépeléskor felkínál. Egy név = egy sor: a "kulcs"
+         * a név kisbetűs, szóköz-egységesített alakjának md5-je, egyedi
+         * indexszel – két egyforma nevű sor nem jöhet létre.
+         * A "hasznalat" azt számolja, hány tételsorban szerepelt; a lista
+         * e szerint rendez. Az ár az utoljára használt bruttó egységár.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$szolgaltatas} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            nev varchar(255) NOT NULL default '',
+            kulcs char(32) NOT NULL default '',
+            me varchar(20) NOT NULL default 'db',
+            brutto_ar decimal(14,2) NOT NULL default 0.00,
+            afa_kulcs varchar(12) NOT NULL default '27',
+            hasznalat int(11) NOT NULL default 0,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY kulcs (kulcs),
+            key hasznalat (hasznalat)
         ) {$charset};";
 
         return $definiciok;
