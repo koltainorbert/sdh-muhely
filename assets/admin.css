@@ -362,9 +362,46 @@ a.sdh-kartya:focus-visible {
     margin-bottom: .9rem;
 }
 
+/* Egységes, lekerekített fejléc: mező, választó és gombok azonos magas */
+.sdh-kereso {
+    padding: .5rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 12px;
+    background: var(--sdh-felulet);
+}
+
+.sdh-kereso input[type="search"],
+.sdh-kereso select,
+.sdh-kereso .sdh-gomb {
+    box-sizing: border-box;
+    height: 36px;
+    margin: 0;
+    border-radius: 999px;
+}
+
 .sdh-kereso input[type="search"] {
-    min-width: 300px;
-    height: 34px;
+    flex: 1 1 300px;
+    min-width: 200px;
+    padding: 0 1rem;
+}
+
+.sdh-kereso select {
+    flex: 0 0 auto;
+    min-width: 11rem;
+    padding: 0 2.1rem 0 1rem;
+    line-height: 34px;
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-kereso .sdh-gomb {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 1.1rem;
+}
+
+.sdh-kereso__talalat {
+    padding-right: .6rem;
 }
 
 .sdh-kereso__talalat {
@@ -515,6 +552,55 @@ a.sdh-kartya:focus-visible {
 
 .sdh-allapot::before {
     content: "";
+}
+
+/* A listában a jelvény maga a választó */
+.sdh-allapot--valaszthato {
+    position: relative;
+    padding: 0;
+}
+
+.sdh-allapot--valaszthato::before {
+    margin-left: .55rem;
+}
+
+.sdh-allapot--valaszthato select {
+    height: 24px;
+    min-width: 7.5rem;
+    margin: 0;
+    padding: 0 1.6rem 0 .1rem;
+    border: 0;
+    border-radius: 999px;
+    background-color: transparent;
+    background-position: right .45rem center;
+    background-size: 10px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sdh-szoveg);
+    box-shadow: none;
+}
+
+.sdh-allapot--valaszthato select:disabled {
+    opacity: .55;
+    cursor: progress;
+}
+
+.sdh-allapot--valaszthato:focus-within {
+    outline: 2px solid color-mix(in srgb, var(--allapot-szin) 60%, transparent);
+    outline-offset: 1px;
+}
+
+.sdh-tabla tbody tr.sdh-sor--zart td {
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 7%, var(--sdh-felulet));
+}
+
+.sdh-lista-jelzes {
+    margin-bottom: .6rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--sdh-hiba);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--sdh-hiba);
 }
 
 .sdh-allapot-valaszto {
@@ -1370,6 +1456,10 @@ a.sdh-kartya:focus-visible {
     .sdh-kereso input[type="search"] {
         min-width: 0;
         flex: 1 1 100%;
+    }
+
+    .sdh-kereso select {
+        flex: 1 1 auto;
     }
 
     .sdh-tabla__rejtheto {

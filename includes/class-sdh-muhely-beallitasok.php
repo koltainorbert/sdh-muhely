@@ -126,6 +126,8 @@ final class SDH_Muhely_Beallitasok
                 </div>
             </form>
 
+            <?php SDH_Muhely_Demo::doboz(); ?>
+
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Ami enélkül is megy</h2>
                 <p class="sdh-sugo sdh-sugo--utolso">

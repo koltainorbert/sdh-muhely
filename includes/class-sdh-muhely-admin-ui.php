@@ -390,6 +390,7 @@ final class SDH_Muhely_Admin_UI
             'hianyzo_ugyfel'    => ['hiba',  'Válassz ügyfelet a listából – eszköz ügyfél nélkül nem vihető fel.'],
             'nincs_ilyen'       => ['hiba',  'Nincs ilyen rekord. Lehet, hogy időközben törölték.'],
             'mentes_hiba'       => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
+            'demo_betoltve'     => ['siker', 'A demó adatok betöltve.'],
             'csatolmany_hiba'   => ['hiba',  'A csatolt fájl nem fogadható el (túl nagy, nem engedélyezett típus vagy sérült fájl). Semmi nem mentődött.'],
         ];
 
@@ -411,6 +412,14 @@ final class SDH_Muhely_Admin_UI
         }
 
         [$tipus, $szoveg] = $uzenetek[$kulcs];
+
+        if ($kulcs === 'demo_betoltve') {
+            $ugyfel = isset($_GET['ugyfel']) ? (int) $_GET['ugyfel'] : 0;
+            $eszkoz = isset($_GET['eszkoz']) ? (int) $_GET['eszkoz'] : 0;
+            $szoveg = ($ugyfel + $eszkoz) > 0
+                ? sprintf('Demó adatok betöltve: %d új ügyfél, %d új eszköz.', $ugyfel, $eszkoz)
+                : 'A demó adatok már mind megvannak, semmi nem jött létre újra.';
+        }
 
         // Új munkalapnál a kiosztott számot is kiírjuk – a pultnál erre van
         // szükség, hogy ráírják a készülék tasakjára.

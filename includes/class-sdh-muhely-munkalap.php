@@ -41,6 +41,9 @@ final class SDH_Muhely_Munkalap
     /** A számkiosztás zárjának neve (MySQL GET_LOCK). */
     private const ZAR_NEV = 'sdh_muhely_munkalap_szam';
 
+    /** Jelzi, hogy az új alapszínekre (Lezárt = zöld) az átállás megtörtént. */
+    private const OPT_SZIN_ATALLAS = 'sdh_muhely_allapot_szin_v2';
+
     /**
      * A feldolgozott állapotlisták gyorsítótára egy kérésen belül.
      *
@@ -63,6 +66,9 @@ final class SDH_Muhely_Munkalap
         // Popup: az űrlap lekérése és beküldése.
         add_action('wp_ajax_sdh_muhely_munkalapok_urlap', [self::class, 'ajax_urlap']);
         add_action('wp_ajax_sdh_muhely_munkalapok_ment', [self::class, 'ajax_mentes']);
+
+        // Állapotváltás közvetlenül a listából.
+        add_action('wp_ajax_sdh_muhely_munkalapok_allapot', [self::class, 'ajax_allapot']);
 
         // Az ügyfél kiválasztása után az eszközválasztó ebből töltődik.
         add_action('wp_ajax_sdh_muhely_munkalapok_eszkozok', [self::class, 'ajax_eszkozok']);
@@ -186,12 +192,12 @@ final class SDH_Muhely_Munkalap
     {
         return implode("\n", [
             'bejelentett | Bejelentett | sarga | szamozott',
-            'arajanlat | Árajánlat | zold |',
+            'arajanlat | Árajánlat | lila |',
             'sablon | Sablon | szurke |',
             'fuggo | Függő | kek | szamozott',
             'nyitott | Nyitott | narancs | szamozott, alap',
             'elkeszult | Elkészült | olajzold | szamozott',
-            'lezart | Lezárt | lila | szamozott, zart',
+            'lezart | Lezárt | zold | szamozott, zart',
             'ervenytelen | Érvénytelen | piros | szamozott, zart',
         ]);
     }
@@ -263,7 +269,7 @@ final class SDH_Muhely_Munkalap
     public static function allapotok(): array
     {
         if (!isset(self::$gyorsitotar['munkalap'])) {
-            $mentett = get_option(self::OPT_ALLAPOTOK, '');
+            $mentett = self::szin_atallas(get_option(self::OPT_ALLAPOTOK, ''));
             $alap    = self::alap_allapotok_szovegkent();
 
             self::$gyorsitotar['munkalap'] = self::allapotok_feldolgoz(
@@ -273,6 +279,50 @@ final class SDH_Muhely_Munkalap
         }
 
         return self::$gyorsitotar['munkalap'];
+    }
+
+    /**
+     * Egyszeri átállás az új alapszínekre: a Lezárt zöld, az Árajánlat lila.
+     *
+     * A korábbi alap a Lezárt = lila, Árajánlat = zöld volt. Ha a mentett
+     * beállítás még ezt tartalmazza (azaz senki nem szerkesztette a színeket
+     * ezekben a sorokban), átírjuk; más szín nem változik. Egyszer fut.
+     *
+     * @param mixed $mentett A mentett állapotlista szövege.
+     * @return mixed
+     */
+    private static function szin_atallas($mentett)
+    {
+        if (get_option(self::OPT_SZIN_ATALLAS) === '1') {
+            return $mentett;
+        }
+
+        if (is_string($mentett) && trim($mentett) !== '') {
+            $uj = preg_replace_callback(
+                '/^(\s*)(lezart|arajanlat)(\s*\|[^|\r\n]*\|\s*)(lila|zold)(\s*(?:\||$))/mu',
+                static function (array $m): string {
+                    $szin = $m[4];
+
+                    if ($m[2] === 'lezart' && $szin === 'lila') {
+                        $szin = 'zold';
+                    } elseif ($m[2] === 'arajanlat' && $szin === 'zold') {
+                        $szin = 'lila';
+                    }
+
+                    return $m[1] . $m[2] . $m[3] . $szin . $m[5];
+                },
+                $mentett
+            );
+
+            if (is_string($uj) && $uj !== $mentett) {
+                update_option(self::OPT_ALLAPOTOK, $uj);
+                $mentett = $uj;
+            }
+        }
+
+        update_option(self::OPT_SZIN_ATALLAS, '1');
+
+        return $mentett;
     }
 
     /**
@@ -906,15 +956,16 @@ final class SDH_Muhely_Munkalap
                         $eszkoz_nev    = trim($sor->e_gyarto . ' ' . ($sor->e_tipus !== '' ? $sor->e_tipus : $sor->e_megnevezes));
                         $hibak         = $hiba_szamlalo[(int) $sor->id] ?? ['osszes' => 0, 'kesz' => 0];
                         ?>
-                        <tr>
+                        <tr<?php echo $allapot !== null && $allapot['zart'] ? ' class="sdh-sor--zart"' : ''; ?>>
                             <td class="sdh-tabla__nev">
                                 <a href="<?php echo esc_url($szerkeszt_url); ?>"
                                    data-sdh-urlap="<?php echo esc_attr(self::KULCS); ?>"
-                                   data-sdh-id="<?php echo (int) $sor->id; ?>">
+                                   data-sdh-id="<?php echo (int) $sor->id; ?>"
+                                   data-sdh-munkalap-szam>
                                     <?php echo esc_html(self::szam_formaz($sor->munkalap_szam)); ?>
                                 </a>
                             </td>
-                            <td><?php echo self::jelveny((string) $sor->allapot, $allapotok); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+                            <td><?php self::allapot_valaszto((int) $sor->id, (string) $sor->allapot, $allapotok); ?></td>
                             <td>
                                 <?php if ((int) $sor->ugyfel_id > 0 && $sor->ugyfel_nev !== null) : ?>
                                     <?php echo esc_html($sor->ugyfel_nev); ?>
@@ -992,6 +1043,128 @@ final class SDH_Muhely_Munkalap
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    /**
+     * A lista állapot-oszlopa: a jelvény maga a választó, így a lista
+     * sorából azonnal állítható az állapot (data-sdh-lista-allapot, app.js).
+     *
+     * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $allapotok
+     */
+    private static function allapot_valaszto(int $id, string $kulcs, array $allapotok): void
+    {
+        $szin = $allapotok[$kulcs]['szin'] ?? 'szurke';
+
+        ?>
+        <span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--<?php echo esc_attr($szin); ?>"
+              data-sdh-allapot-hely>
+            <select data-sdh-lista-allapot
+                    data-id="<?php echo (int) $id; ?>"
+                    data-elozo="<?php echo esc_attr($kulcs); ?>"
+                    aria-label="Állapot módosítása">
+                <?php if (!isset($allapotok[$kulcs])) : ?>
+                    <option value="<?php echo esc_attr($kulcs); ?>" selected><?php echo esc_html($kulcs); ?></option>
+                <?php endif; ?>
+                <?php foreach ($allapotok as $k => $allapot) : ?>
+                    <option value="<?php echo esc_attr((string) $k); ?>"
+                            <?php selected($kulcs, (string) $k); ?>>
+                        <?php echo esc_html($allapot['nev']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </span>
+        <?php
+    }
+
+    /**
+     * Állapotváltás a listából. Ugyanazok a szabályok, mint az űrlapon:
+     * számozott állapothoz ügyfél és eszköz kell, és az első számozott
+     * állapotba lépéskor a lap munkalapszámot kap (zár alatt).
+     *
+     * @return array{szam: string, nev: string, szin: string, zart: bool}|string
+     */
+    private static function allapot_valt(int $id, string $kulcs)
+    {
+        global $wpdb;
+
+        $regi = $id > 0 ? self::egy($id) : null;
+
+        if ($regi === null) {
+            return 'Nincs ilyen munkalap. Lehet, hogy időközben törölték.';
+        }
+
+        $allapotok = self::allapotok();
+
+        if (!isset($allapotok[$kulcs])) {
+            return 'Ismeretlen állapot.';
+        }
+
+        $szamozott = (bool) $allapotok[$kulcs]['szamozott'];
+
+        if ($szamozott && (int) $regi->ugyfel_id <= 0) {
+            return 'Válassz ügyfelet a munkalaphoz – ügyfél nélkül nem adható munkalapszám.';
+        }
+
+        if ($szamozott && (int) $regi->eszkoz_id <= 0) {
+            return 'Válassz eszközt a munkalaphoz – a munkalap mindig egy eszközre vonatkozik.';
+        }
+
+        $szamot_kap = $szamozott && (int) $regi->munkalap_szam <= 0;
+        $zar        = false;
+
+        if ($szamot_kap) {
+            $zar = (int) $wpdb->get_var(
+                $wpdb->prepare('SELECT GET_LOCK(%s, 5)', self::ZAR_NEV)
+            ) === 1;
+
+            if (!$zar) {
+                return 'A számozás épp foglalt – próbáld újra egy pillanat múlva.';
+            }
+        }
+
+        $adatok = ['allapot' => $kulcs, 'modositva' => current_time('mysql')];
+
+        try {
+            if ($szamot_kap) {
+                $adatok['munkalap_szam'] = self::kovetkezo_szam();
+            }
+
+            if ($wpdb->update(self::tabla(), $adatok, ['id' => $id]) === false) {
+                return 'Az adatbázis visszautasította a módosítást.';
+            }
+        } finally {
+            if ($zar) {
+                $wpdb->query($wpdb->prepare('SELECT RELEASE_LOCK(%s)', self::ZAR_NEV));
+            }
+        }
+
+        return [
+            'szam' => self::szam_formaz($adatok['munkalap_szam'] ?? $regi->munkalap_szam),
+            'nev'  => $allapotok[$kulcs]['nev'],
+            'szin' => $allapotok[$kulcs]['szin'],
+            'zart' => (bool) $allapotok[$kulcs]['zart'],
+        ];
+    }
+
+    /** Állapotváltás a listából (AJAX). */
+    public static function ajax_allapot(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $id    = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $kulcs = isset($_POST['allapot']) ? sanitize_key(wp_unslash($_POST['allapot'])) : '';
+
+        $eredmeny = self::allapot_valt($id, $kulcs);
+
+        if (is_string($eredmeny)) {
+            wp_send_json_error(['uzenet' => $eredmeny]);
+        }
+
+        wp_send_json_success($eredmeny);
     }
 
     /**

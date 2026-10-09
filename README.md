@@ -57,6 +57,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.20.0
+- **Munkalapok fejléc**: egységes, lekerekített keresősáv (mező, választó, gombok
+  azonos 36 px magas, pill forma) – az Ügyfelek és Eszközök listán is.
+- **Állapot a listából**: a munkalap-lista állapot-jelvénye maga a választó
+  (AJAX, `sdh_muhely_munkalapok_allapot`). Ugyanazok a szabályok, mint az űrlapon:
+  számozott állapothoz ügyfél + eszköz kell, az első számozott állapotnál a lap
+  munkalapszámot kap (`GET_LOCK` alatt). Hibánál az előző állapot áll vissza + jelzés.
+- **Lezárt = zöld** (a sor halvány zöld hátteret kap), az Árajánlat lila. A korábban
+  mentett alap-beállítás egyszer átíródik (`sdh_muhely_allapot_szin_v2`); saját színt nem bántunk.
+- **Demó adatok** (Beállítások → Demó adatok betöltése): 10 magyar ügyfél minden mezővel,
+  mindegyikhez 1 eszköz (érvényes Luhn-IMEI, minta, garancia, belső megjegyzés), idempotens.
+- **Séma 0.14.0**: az `eszkoz` táblából hiányzó `belso_megjegyzes` oszlop pótlása
+  (a 0.19.0-ban tévedésből csak az `ugyfel` táblába került).
+
 ### 0.19.7
 - **Egyik popupban sincs görgetősáv**: ha a popup magasabb, mint a képernyő,
   arányosan kisebb lesz (CSS zoom, legalább 55%) – app.js `illesztPopup`.

@@ -2426,7 +2426,105 @@
         pont.classList.add('sdh-allapot--' + (kivalasztott.dataset.szin || 'szurke'));
     }
 
+    /** Kis üzenet a lista fölött (a lista nem űrlap, ezért külön jelzés kell). */
+    function listaJelzes(szoveg) {
+        var tabla = document.querySelector('.sdh-tabla');
+
+        if (!tabla) {
+            window.alert(szoveg);
+
+            return;
+        }
+
+        var doboz = document.querySelector('.sdh-lista-jelzes');
+
+        if (!doboz) {
+            doboz = document.createElement('div');
+            doboz.className = 'sdh-lista-jelzes';
+            doboz.setAttribute('role', 'alert');
+            tabla.parentNode.insertBefore(doboz, tabla);
+        }
+
+        doboz.textContent = szoveg;
+        window.clearTimeout(doboz.sdhIdo);
+        doboz.sdhIdo = window.setTimeout(function () {
+            doboz.remove();
+        }, 6000);
+    }
+
+    /** Állapotváltás közvetlenül a munkalap-listából. */
+    function listaAllapotValt(valaszto) {
+        var hely = valaszto.closest('[data-sdh-allapot-hely]');
+        var elozo = valaszto.dataset.elozo || '';
+        var adatok = new FormData();
+
+        adatok.set('action', 'sdh_muhely_munkalapok_allapot');
+        adatok.set('_wpnonce', beallitas.nonce || '');
+        adatok.set('id', valaszto.dataset.id || '0');
+        adatok.set('allapot', valaszto.value);
+
+        valaszto.disabled = true;
+
+        function vissza(uzenet) {
+            valaszto.value = elozo;
+            valaszto.disabled = false;
+            listaJelzes(uzenet);
+        }
+
+        fetch(new URL(beallitas.ajax, window.location.origin).toString(), {
+            method: 'POST',
+            body: adatok,
+            credentials: 'same-origin'
+        })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    vissza((valasz && valasz.data && valasz.data.uzenet) || 'Az állapot nem módosult.');
+
+                    return;
+                }
+
+                var adat = valasz.data;
+
+                Array.prototype.slice.call(hely.classList).forEach(function (nev) {
+                    if (nev.indexOf('sdh-allapot--') === 0 && nev !== 'sdh-allapot--valaszthato') {
+                        hely.classList.remove(nev);
+                    }
+                });
+
+                hely.classList.add('sdh-allapot--' + adat.szin);
+                valaszto.dataset.elozo = valaszto.value;
+                valaszto.disabled = false;
+
+                var sor = valaszto.closest('tr');
+
+                if (sor) {
+                    sor.classList.toggle('sdh-sor--zart', !!adat.zart);
+
+                    // Az első számozott állapotba lépéskor a lap számot kap.
+                    var szam = sor.querySelector('[data-sdh-munkalap-szam]');
+
+                    if (szam && adat.szam && szam.textContent.trim() !== adat.szam) {
+                        szam.textContent = adat.szam;
+                    }
+                }
+            })
+            .catch(function () {
+                vissza('Nem sikerült elérni a szervert, az állapot nem módosult.');
+            });
+    }
+
     document.addEventListener('change', function (esemeny) {
+        var listaAllapot = esemeny.target.closest('select[data-sdh-lista-allapot]');
+
+        if (listaAllapot) {
+            listaAllapotValt(listaAllapot);
+
+            return;
+        }
+
         var allapot = esemeny.target.closest('[data-sdh-allapot-valaszto]');
 
         if (allapot) {
