@@ -2033,7 +2033,8 @@ final class SDH_Muhely_Munkalap
             <div class="sdh-tetelsor sdh-tetelsor--ossz">
                 <span></span>
                 <span>
-                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj
+                            <?php echo $termek ? '' : 'title="Szolgáltatás választása a listából"'; ?>>
                         <?php echo $termek ? '+ Termék' : '+ Szolgáltatás'; ?>
                     </button>
                 </span>
@@ -2078,11 +2079,23 @@ final class SDH_Muhely_Munkalap
 
             <span class="sdh-tetelsor__sorszam"><?php echo $tetel !== null ? (int) $tetel->id : 'új'; ?></span>
 
-            <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
-                   aria-label="Megnevezés" autocomplete="off"
-                   <?php echo $termek ? '' : 'data-sdh-szolg role="combobox" aria-autocomplete="list" aria-expanded="false"'; ?>
-                   placeholder="<?php echo esc_attr($termek ? 'Pl. Samsung A54 USB panel' : 'Keresés a meglévők között, vagy új szolgáltatás neve'); ?>"
-                   value="<?php echo esc_attr($ert('megnevezes')); ?>">
+            <?php if ($termek) : ?>
+                <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
+                       aria-label="Megnevezés" autocomplete="off" placeholder="Pl. Samsung A54 USB panel"
+                       value="<?php echo esc_attr($ert('megnevezes')); ?>">
+            <?php else : ?>
+                <?php // A sor végi gomb a szolgáltatás-választó popupot nyitja (app.js szolgValasztoNyit). ?>
+                <span class="sdh-szolgmezo">
+                    <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
+                           aria-label="Megnevezés" autocomplete="off" data-sdh-szolg
+                           placeholder="Válassz a listából (jobbra), vagy írd be"
+                           value="<?php echo esc_attr($ert('megnevezes')); ?>">
+                    <button type="button" class="sdh-szolgmezo__gomb" data-sdh-szolg-valaszt
+                            title="Szolgáltatás választása a listából" aria-label="Szolgáltatás választása a listából">
+                        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+                    </button>
+                </span>
+            <?php endif; ?>
 
             <?php if ($termek) : ?>
                 <input type="text" name="<?php echo esc_attr($elotag); ?>[termekkod]" maxlength="60"

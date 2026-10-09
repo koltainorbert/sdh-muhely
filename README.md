@@ -57,14 +57,27 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.25.0
+- **Szolgáltatások modul** az oldalsávban (az Ügyfelek, Eszközök, Munkalapok mellett): lista
+  kereséssel (névsorban vagy a leggyakoribbak elöl), **új felvitel és szerkesztés popupban** –
+  megnevezés, bruttó ár (a nettó élőben látszik), áfakulcs, mennyiségi egység, belső megjegyzés –,
+  és törlés (két kattintás; a munkalapok tételei megmaradnak). `SDH_Muhely_Szolgaltatas`,
+  AJAX: `sdh_muhely_szolgaltatasok_urlap` / `_ment`.
+- **Választó popup a munkalapon** a lenyíló lista helyett: a „+ Szolgáltatás" gomb és a Megnevezés
+  mező végi gomb (vagy ↓) külön ablakot nyit – kereső, táblázat (megnevezés, m.e., bruttó ár,
+  használat), 10 soronként lapozva, görgetősáv nélkül. Sorra kattintás vagy ↑ ↓ + Enter választ;
+  a ceruza szerkeszt; „+ Új szolgáltatás" felveszi és rögtön a munkalapra teszi; „Kézzel írom be"
+  üres sort ad (app.js `szolgValaszto*`).
+- **Egy név = egy sor** az űrlapon is: létező névvel felvitt vagy létező névre átnevezett
+  szolgáltatás összeolvad a meglévővel (`torzsbe()`), a használat összeadódik.
+- **Javítás**: a listák keresője nem szabványos porton (Local „localhost" mód) rossz címre küldött.
+- **Séma 0.18.0**: `sdh_szolgaltatas` + `megjegyzes`.
+
 ### 0.24.0
 - **Szolgáltatás-törzs**: amit a munkalap Szolgáltatások lapfülén egyszer beírtak, azt a rendszer
   megjegyzi (név, m.e., bruttó ár, áfakulcs) – külön felvinni nem kell, a munkalap mentése veszi
   fel (`SDH_Muhely_Szolgaltatas`, tábla: `sdh_szolgaltatas`).
-- **Kereső a Megnevezés mezőben**: gépelésre a meglévő szolgáltatások listája nyílik a popupban
-  (ékezet és kis-/nagybetű nem számít, a gyakoribb elöl; üres mezőnél a leggyakoribbak). Választás:
-  kattintás vagy ↓ + Enter – kitölti a nevet, az egységet és az árat. A sor végi × elfelejti a
-  szolgáltatást (a munkalapok tételei maradnak).
+- **Kereső a Megnevezés mezőben** (lenyíló lista) – a 0.25.0 választó popupra cserélte.
 - **Egy név = egy sor**: az egyforma nevű szolgáltatás (kis-/nagybetű és szóközök nélkül nézve)
   nem jön létre még egyszer – a meglévő kapja az új árat és nő a használat-számlálója. Egyedi index
   védi; frissítéskor a meglévő tételekből nevenként egy sor kerül a törzsbe (`osszevon()`,

@@ -409,6 +409,11 @@ final class SDH_Muhely_Admin_UI
             'nincs_ilyen'       => ['hiba',  'Nincs ilyen rekord. Lehet, hogy időközben törölték.'],
             'mentes_hiba'       => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
             'demo_betoltve'     => ['siker', 'A demó adatok betöltve.'],
+            'szolg_mentve'      => ['siker', 'A szolgáltatás elmentve.'],
+            'szolg_letrehozva'  => ['siker', 'A szolgáltatás létrejött.'],
+            'szolg_osszevonva'  => ['siker', 'Ilyen nevű szolgáltatás már volt – a kettőt összevontam, egy maradt.'],
+            'szolg_torolve'     => ['siker', 'A szolgáltatás törölve a törzsből. A munkalapok tételei megmaradtak.'],
+            'szolg_hianyzo_nev' => ['hiba',  'A megnevezés kitöltése kötelező.'],
             'csatolmany_hiba'   => ['hiba',  'A csatolt fájl nem fogadható el (túl nagy, nem engedélyezett típus vagy sérült fájl). Semmi nem mentődött.'],
         ];
 

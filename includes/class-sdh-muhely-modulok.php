@@ -180,10 +180,13 @@ final class SDH_Muhely_Modulok
         $url   = self::url($kulcs);
         $reszek = wp_parse_url($url);
 
+        // A port is kell: a Local „localhost" módban (pl. localhost:10005)
+        // nélküle a kereső egy nem létező címre küldene.
         return sprintf(
-            '%s://%s%s',
+            '%s://%s%s%s',
             $reszek['scheme'] ?? 'http',
             $reszek['host'] ?? '',
+            isset($reszek['port']) ? ':' . (int) $reszek['port'] : '',
             $reszek['path'] ?? '/'
         );
     }

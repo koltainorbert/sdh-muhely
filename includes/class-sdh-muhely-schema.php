@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.17.0';
+    public const DB_VERSION = '0.18.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -423,6 +423,7 @@ final class SDH_Muhely_Schema
             brutto_ar decimal(14,2) NOT NULL default 0.00,
             afa_kulcs varchar(12) NOT NULL default '27',
             hasznalat int(11) NOT NULL default 0,
+            megjegyzes text NULL,
             letrehozva datetime NULL,
             modositva datetime NULL,
             PRIMARY KEY  (id),
