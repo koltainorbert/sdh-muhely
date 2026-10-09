@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.15.0';
+    public const DB_VERSION = '0.16.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -273,8 +273,13 @@ final class SDH_Muhely_Schema
          * a "brutto_ertek" a tételek összege, ide másolva: a kezdőképernyő
          * rácsa így 40 ezer lapnál is egy táblából rendez és szűr. Ezeket
          * mindig a SDH_Muhely_Tetel::ujraszamol() írja, kézzel soha.
-         * A "fizetett" a már befizetett összeg (előleg is), a "fizetve"
-         * jelzi, hogy a lap ki van egyenlítve.
+         * A "fizetett" a már befizetett összeg, azaz az előleg: ennyivel
+         * kevesebb a fizetendő. A "fizetve" jelzi, hogy a lap ki van
+         * egyenlítve; a "fizetesi_mod" a beállításokban szerkeszthető lista
+         * egy eleme (a neve tárolódik). A "kedvezmeny" és az "afakulcs" a
+         * lap tételeinek alapértéke (új tételsor ezzel indul).
+         * A "megjegyzes" belső (csak a CRM-ben látszik), az
+         * "ugyfel_megjegyzes" az ügyfél felé is megjelenhet.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$munkalap} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -290,10 +295,14 @@ final class SDH_Muhely_Schema
             lezarva date NULL,
             fizetve tinyint(1) NOT NULL default 0,
             fizetes_ideje date NULL,
+            fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
+            kedvezmeny decimal(5,2) NOT NULL default 0.00,
+            afakulcs varchar(12) NOT NULL default '27',
             netto_ertek decimal(14,2) NOT NULL default 0.00,
             brutto_ertek decimal(14,2) NOT NULL default 0.00,
             megjegyzes text NULL,
+            ugyfel_megjegyzes text NULL,
             forras varchar(30) NOT NULL default 'kezi',
             kulso_azonosito varchar(40) NOT NULL default '',
             letrehozva datetime NULL,
@@ -358,6 +367,7 @@ final class SDH_Muhely_Schema
             munkavegzo bigint(20) unsigned NOT NULL default 0,
             kedvezmeny decimal(5,2) NOT NULL default 0.00,
             afa decimal(5,2) NOT NULL default 27.00,
+            afa_kulcs varchar(12) NOT NULL default '27',
             netto_ar decimal(14,2) NOT NULL default 0.00,
             brutto_ar decimal(14,2) NOT NULL default 0.00,
             netto_ertek decimal(14,2) NOT NULL default 0.00,

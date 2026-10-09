@@ -37,6 +37,7 @@ final class SDH_Muhely_Munkalap
     private const OPT_ALLAPOTOK      = 'sdh_muhely_munkalap_allapotok';
     private const OPT_HIBA_ALLAPOTOK = 'sdh_muhely_munkalap_hiba_allapotok';
     private const OPT_SZAMOZAS       = 'sdh_muhely_munkalap_szamozas';
+    private const OPT_FIZMODOK       = 'sdh_muhely_fizetesi_modok';
 
     /** A számkiosztás zárjának neve (MySQL GET_LOCK). */
     private const ZAR_NEV = 'sdh_muhely_munkalap_szam';
@@ -72,6 +73,9 @@ final class SDH_Muhely_Munkalap
 
         // Az ügyfél kiválasztása után az eszközválasztó ebből töltődik.
         add_action('wp_ajax_sdh_muhely_munkalapok_eszkozok', [self::class, 'ajax_eszkozok']);
+
+        // Az űrlap Eszköz lapfüle (az eszköz és az ügyfél összefoglalója).
+        add_action('wp_ajax_sdh_muhely_munkalapok_osszefoglalo', [self::class, 'ajax_osszefoglalo']);
 
         // Sémafrissítés után: a régi lezárt lapok lezárási dátumának pótlása.
         add_action('sdh_muhely_sema_frissult', [self::class, 'lezarva_potlas']);
@@ -490,6 +494,55 @@ final class SDH_Muhely_Munkalap
     }
 
     /* =================================================================
+     * Fizetési módok (beállításból)
+     * ============================================================== */
+
+    /** A MunkaLap 3 fizetési módjai – ez az alap, a Beállításokban átírható. */
+    public static function alap_fizetesi_modok_szovegkent(): string
+    {
+        return implode("\n", [
+            'Átutalás',
+            'Bankkártya',
+            'Barion',
+            'Előre utalás',
+            'Halasztott KP',
+            'Készpénz',
+            'Kombinált',
+            'Kompenzáció szerint',
+            'PayPal',
+            'SZÉP Kártya',
+            'Utalvány',
+            'Utánvét',
+        ]);
+    }
+
+    /**
+     * A választható fizetési módok, a beállítás sorrendjében. A munkalapon a
+     * mód neve tárolódik, ezért egy átnevezés a régi lapokat nem írja át.
+     *
+     * @return array<int, string>
+     */
+    public static function fizetesi_modok(): array
+    {
+        $mentett = get_option(self::OPT_FIZMODOK, '');
+        $szoveg  = is_string($mentett) && trim($mentett) !== ''
+            ? $mentett
+            : self::alap_fizetesi_modok_szovegkent();
+
+        $lista = [];
+
+        foreach (preg_split('/\R/u', $szoveg) ?: [] as $sor) {
+            $nev = mb_substr(sanitize_text_field($sor), 0, 40);
+
+            if ($nev !== '' && !in_array($nev, $lista, true)) {
+                $lista[] = $nev;
+            }
+        }
+
+        return $lista;
+    }
+
+    /* =================================================================
      * Számozás
      * ============================================================== */
 
@@ -630,6 +683,30 @@ final class SDH_Muhely_Munkalap
         </div>
 
         <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Fizetési módok</h2>
+
+            <p class="sdh-sugo">
+                Soronként egy fizetési mód – ezek közül lehet választani a munkalapon
+                (a „Nincs” mindig választható). A munkalapon a mód neve tárolódik, ezért
+                egy átnevezés a régi lapokat nem írja át.
+            </p>
+
+            <div class="sdh-mezo sdh-mezo--szeles">
+                <label for="mu_fizetesi_modok">Fizetési módok</label>
+                <textarea name="mu_fizetesi_modok" id="mu_fizetesi_modok" rows="8"
+                          class="sdh-kod"><?php
+                    $fizmodok = get_option(self::OPT_FIZMODOK, '');
+                    echo esc_textarea(
+                        is_string($fizmodok) && trim($fizmodok) !== ''
+                            ? $fizmodok
+                            : self::alap_fizetesi_modok_szovegkent()
+                    );
+                ?></textarea>
+                <span class="sdh-mezo__sugo">Üresen hagyva a MunkaLap 3 listája jön vissza.</span>
+            </div>
+        </div>
+
+        <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Hibasor-állapotok</h2>
 
             <p class="sdh-sugo">
@@ -678,6 +755,13 @@ final class SDH_Muhely_Munkalap
             self::OPT_HIBA_ALLAPOTOK,
             isset($_POST['mu_hiba_allapotok'])
                 ? sanitize_textarea_field(wp_unslash($_POST['mu_hiba_allapotok']))
+                : ''
+        );
+
+        update_option(
+            self::OPT_FIZMODOK,
+            isset($_POST['mu_fizetesi_modok'])
+                ? sanitize_textarea_field(wp_unslash($_POST['mu_fizetesi_modok']))
                 : ''
         );
 
@@ -1314,7 +1398,7 @@ final class SDH_Muhely_Munkalap
             );
             ?>
 
-            <form class="sdh-urlap" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <form class="sdh-urlap sdh-urlap--szeles" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_munkalap_mentes">
                 <?php self::urlap_belso($munkalap, false); ?>
             </form>
@@ -1391,12 +1475,34 @@ final class SDH_Muhely_Munkalap
         $felelos  = $uj ? get_current_user_id() : (int) $munkalap->felelos;
         $keszult  = $uj ? current_time('Y-m-d') : self::datum_ertek((string) $munkalap->keszult);
         $hatarido = $uj ? '' : self::datum_ertek((string) $munkalap->hatarido);
+        $lezarva  = $uj ? '' : self::datum_ertek((string) ($munkalap->lezarva ?? ''));
 
-        $hibak    = $uj ? [] : self::hibasorok((int) $munkalap->id);
-        $hiba_db  = count($hibak);
-        $hibak    = $hibak === [] ? [null] : $hibak;
+        $hibak   = $uj ? [] : self::hibasorok((int) $munkalap->id);
+        $hibak   = $hibak === [] ? [null] : $hibak;
 
-        $megjegyzes = $uj ? '' : (string) $munkalap->megjegyzes;
+        $tetelek  = $uj ? [] : SDH_Muhely_Tetel::lista((int) $munkalap->id);
+        $szolg    = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'szolgaltatas'));
+        $termekek = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'termek'));
+
+        $megjegyzes        = $uj ? '' : (string) $munkalap->megjegyzes;
+        $ugyfel_megjegyzes = $uj ? '' : (string) ($munkalap->ugyfel_megjegyzes ?? '');
+
+        // Fizetés és a tételek alapértékei.
+        $afakulcsok  = SDH_Muhely_Tetel::afakulcsok();
+        $lap_afa     = $uj
+            ? SDH_Muhely_Tetel::alap_afakulcs()
+            : SDH_Muhely_Tetel::afakulcs_ervenyes((string) ($munkalap->afakulcs ?? ''));
+        $lap_kedv    = $uj ? 0.0 : (float) ($munkalap->kedvezmeny ?? 0);
+        $fizetve     = !$uj && (int) ($munkalap->fizetve ?? 0) === 1;
+        $fiz_ideje   = $uj ? '' : self::datum_ertek((string) ($munkalap->fizetes_ideje ?? ''));
+        $fizetett    = $uj ? 0.0 : (float) ($munkalap->fizetett ?? 0);
+        $fiz_mod     = $uj ? '' : (string) ($munkalap->fizetesi_mod ?? '');
+        $fiz_modok   = self::fizetesi_modok();
+
+        // Egy régi lap fizetési módja akkor is látszódjon, ha a listából már kikerült.
+        if ($fiz_mod !== '' && !in_array($fiz_mod, $fiz_modok, true)) {
+            $fiz_modok[] = $fiz_mod;
+        }
 
         $felelosok = self::felelosok();
 
@@ -1415,23 +1521,173 @@ final class SDH_Muhely_Munkalap
         <input type="hidden" name="id" value="<?php echo (int) ($munkalap->id ?? 0); ?>">
         <input type="hidden" name="kontextus"
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
+        <?php // Jelzi a mentésnek, hogy az űrlap a tételeket is hozza (lásd feldolgoz()). ?>
+        <input type="hidden" name="tetelek_jelen" value="1">
         <?php wp_nonce_field('sdh_muhely_munkalap_mentes', 'sdh_nonce'); ?>
 
         <?php
-        // Ugyanaz a kompakt, széles, lapfüles szerkezet, mint az ügyfél- és az
-        // eszközűrlapon: címke + mező egy sorban, két szimmetrikus oszlopban.
-        // Így a popup alacsony marad, és nem kell a képernyőhöz kicsinyíteni.
+        // A MunkaLap 3 „Munkalap szerkesztése" ablakának elrendezése: balra az
+        // állapot, a dátumok, az összeg és a fizetés; jobbra az ügyfél és az
+        // eszköz, alattuk lapfüleken az Eszköz, a Hibák, a Szolgáltatások és a
+        // Termékek, legalul a megjegyzések. Az összegeket az app.js számolja
+        // gépelés közben (munkalapSzamol); a mérvadó érték mentéskor a szerveré.
         ?>
-        <div class="sdh-ugyfelurlap sdh-munkalapurlap">
-            <div class="sdh-fulek">
-                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_munkalap"
-                       id="ful_m_alap" checked>
+        <div class="sdh-ugyfelurlap sdh-munkalapurlap" data-sdh-munkalap
+             data-ma="<?php echo esc_attr(current_time('Y-m-d')); ?>">
+            <div class="sdh-ml">
+                <div class="sdh-ml__oldal">
+                    <div class="sdh-ml__csoport">
+                        <h3 class="sdh-ml__cim">Állapot</h3>
 
-                <div class="sdh-fulek__sav">
-                    <label for="ful_m_alap">Munkalap</label>
+                        <div class="sdh-ig">
+                            <label for="allapot">Állapot</label>
+                            <div class="sdh-allapot-valaszto">
+                                <span class="sdh-allapot-pont sdh-allapot--<?php
+                                    echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
+                                ?>" data-sdh-allapot-pont></span>
+                                <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
+                                    <?php foreach ($allapotok as $kulcs => $a) : ?>
+                                        <option value="<?php echo esc_attr((string) $kulcs); ?>"
+                                                data-szin="<?php echo esc_attr($a['szin']); ?>"
+                                            <?php selected($allapot, (string) $kulcs); ?>>
+                                            <?php echo esc_html($a['nev']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                    <?php if (!isset($allapotok[$allapot])) : ?>
+                                        <option value="<?php echo esc_attr($allapot); ?>"
+                                                data-szin="szurke" selected>
+                                            <?php echo esc_html($allapot); ?> (törölt állapot)
+                                        </option>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="nev">Név</label>
+                            <input type="text" name="nev" id="nev" maxlength="190"
+                                   title="Rövid tárgy, pl. „kijelzőcsere” – nem kötelező"
+                                   value="<?php echo esc_attr($uj ? '' : (string) $munkalap->nev); ?>">
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="felelos">Felelős</label>
+                            <select name="felelos" id="felelos">
+                                <option value="0">Nincs</option>
+                                <?php foreach ($felelosok as $id => $nev) : ?>
+                                    <option value="<?php echo (int) $id; ?>" <?php selected($felelos, $id); ?>>
+                                        <?php echo esc_html($nev); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sdh-ml__csoport">
+                        <h3 class="sdh-ml__cim">Dátumok</h3>
+
+                        <div class="sdh-ig">
+                            <label for="keszult">Készült</label>
+                            <?php self::datum_mezo('keszult', $keszult); ?>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="hatarido">Határidő</label>
+                            <?php self::datum_mezo('hatarido', $hatarido); ?>
+                        </div>
+
+                        <?php if ($lezarva !== '') : ?>
+                            <div class="sdh-ig sdh-ml__olvas">
+                                <span class="sdh-ig__cimke">Lezárva</span>
+                                <span><?php echo esc_html(str_replace('-', '.', $lezarva)); ?></span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="sdh-ml__csoport">
+                        <h3 class="sdh-ml__cim">Összeg</h3>
+
+                        <div class="sdh-ml__osszeg">
+                            <span>Nettó</span><output data-sdh-ossz="netto">0</output><span>Ft</span>
+                        </div>
+                        <div class="sdh-ml__osszeg">
+                            <span>Áfa</span><output data-sdh-ossz="afa">0</output><span>Ft</span>
+                        </div>
+                        <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
+                            <span>Bruttó</span><output data-sdh-ossz="brutto">0</output><span>Ft</span>
+                        </div>
+                    </div>
+
+                    <div class="sdh-ml__csoport">
+                        <h3 class="sdh-ml__cim">Tételek</h3>
+
+                        <div class="sdh-ig">
+                            <label for="lap_kedvezmeny">Kedvezmény</label>
+                            <span class="sdh-szam sdh-szam--utotag">
+                                <input type="number" name="lap_kedvezmeny" id="lap_kedvezmeny"
+                                       step="1" min="0" max="100" data-sdh-lap-kedv
+                                       title="Minden tételsorra érvényes; az új sorok is ezzel indulnak."
+                                       value="<?php echo esc_attr(self::szam_mezobe($lap_kedv)); ?>">
+                                <span class="sdh-szam__utotag" aria-hidden="true">%</span>
+                            </span>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="lap_afakulcs">Áfakulcs</label>
+                            <select name="lap_afakulcs" id="lap_afakulcs" data-sdh-lap-afa
+                                    title="Minden tételsorra érvényes; az új sorok is ezzel indulnak.">
+                                <?php self::afa_opciok($afakulcsok, $lap_afa); ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sdh-ml__csoport">
+                        <h3 class="sdh-ml__cim">Fizetés</h3>
+
+                        <div class="sdh-ig">
+                            <label for="fizetesi_mod">Fizetési mód</label>
+                            <select name="fizetesi_mod" id="fizetesi_mod">
+                                <option value="">Nincs</option>
+                                <?php foreach ($fiz_modok as $mod) : ?>
+                                    <option value="<?php echo esc_attr($mod); ?>" <?php selected($fiz_mod, $mod); ?>>
+                                        <?php echo esc_html($mod); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <span class="sdh-ig__cimke"></span>
+                            <label class="sdh-jelolo" for="fizetve">
+                                <input type="checkbox" name="fizetve" id="fizetve" value="1" data-sdh-fizetve
+                                    <?php checked($fizetve); ?>>
+                                Fizetve
+                            </label>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="fizetes_ideje">Fizetés ideje</label>
+                            <?php self::datum_mezo('fizetes_ideje', $fiz_ideje); ?>
+                        </div>
+
+                        <div class="sdh-ig">
+                            <label for="fizetett" title="Előleg: a már befizetett összeg. Mindig levonódik a teljes összegből.">Fizetett (előleg)</label>
+                            <span class="sdh-szam sdh-szam--utotag">
+                                <input type="number" name="fizetett" id="fizetett"
+                                       step="1000" min="0" data-sdh-fizetett
+                                       title="Előleg: a már befizetett összeg (pl. bevizsgálási díj). Mindig levonódik a teljes összegből."
+                                       value="<?php echo esc_attr(self::szam_mezobe($fizetett)); ?>">
+                                <span class="sdh-szam__utotag" aria-hidden="true">Ft</span>
+                            </span>
+                        </div>
+
+                        <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
+                            <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="sdh-fulek__panel sdh-fulek__panel--1">
+                <div class="sdh-ml__fo">
                     <div class="sdh-sor sdh-sor--ketto">
                         <div class="sdh-ig">
                             <span class="sdh-ig__cimke">Ügyfél <span class="sdh-kotelezo">*</span></span>
@@ -1463,125 +1719,97 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="allapot">Állapot</label>
-                            <div class="sdh-allapot-valaszto">
-                                <span class="sdh-allapot-pont sdh-allapot--<?php
-                                    echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
-                                ?>" data-sdh-allapot-pont></span>
-                                <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
-                                    <?php foreach ($allapotok as $kulcs => $a) : ?>
-                                        <option value="<?php echo esc_attr((string) $kulcs); ?>"
-                                                data-szin="<?php echo esc_attr($a['szin']); ?>"
-                                            <?php selected($allapot, (string) $kulcs); ?>>
-                                            <?php echo esc_html($a['nev']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                    <?php if (!isset($allapotok[$allapot])) : ?>
-                                        <option value="<?php echo esc_attr($allapot); ?>"
-                                                data-szin="szurke" selected>
-                                            <?php echo esc_html($allapot); ?> (törölt állapot)
-                                        </option>
-                                    <?php endif; ?>
-                                </select>
+                    <div class="sdh-fulek sdh-ml__fulek">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_munkalap"
+                               id="ful_m_eszkoz" checked>
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_munkalap"
+                               id="ful_m_hibak">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--3" name="_ful_munkalap"
+                               id="ful_m_szolg">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--4" name="_ful_munkalap"
+                               id="ful_m_termek">
+
+                        <div class="sdh-fulek__sav">
+                            <label for="ful_m_eszkoz">Eszköz</label>
+                            <label for="ful_m_hibak">Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
+                            <label for="ful_m_szolg">Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
+                            <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                        </div>
+
+                        <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-osszefoglalo>
+                            <?php self::osszefoglalo($ugyfel_id, $eszkoz_id); ?>
+                        </div>
+
+                        <div class="sdh-fulek__panel sdh-fulek__panel--2" data-sdh-hibak>
+                            <div class="sdh-hibafej" aria-hidden="true">
+                                <span>Hiba</span>
+                                <span>Állapot</span>
+                                <span>Javítás / megjegyzés</span>
+                                <span></span>
+                            </div>
+
+                            <div class="sdh-hibasorok" data-sdh-hibasorok
+                                 data-kovetkezo="<?php echo (int) count($hibak); ?>">
+                                <?php foreach ($hibak as $i => $hiba) : ?>
+                                    <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok); ?>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <template data-sdh-hibasor-sablon>
+                                <?php self::hibasor_sor('__I__', null, $hiba_allapotok); ?>
+                            </template>
+
+                            <div class="sdh-hibalab">
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-hibasor-uj>
+                                    + Hiba
+                                </button>
+                                <span class="sdh-mezo__sugo">
+                                    Minden hibának saját állapota van. Az üresen hagyott sor mentéskor eldobódik.
+                                </span>
                             </div>
                         </div>
 
-                        <div class="sdh-ig">
-                            <label for="felelos">Felelős</label>
-                            <select name="felelos" id="felelos">
-                                <option value="0">— nincs —</option>
-                                <?php foreach ($felelosok as $id => $nev) : ?>
-                                    <option value="<?php echo (int) $id; ?>" <?php selected($felelos, $id); ?>>
-                                        <?php echo esc_html($nev); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="sdh-fulek__panel sdh-fulek__panel--3">
+                            <?php self::tetel_szerkeszto('szolgaltatas', $szolg, $afakulcsok, $lap_afa); ?>
+                        </div>
+
+                        <div class="sdh-fulek__panel sdh-fulek__panel--4">
+                            <?php self::tetel_szerkeszto('termek', $termekek, $afakulcsok, $lap_afa); ?>
                         </div>
                     </div>
 
-                    <div class="sdh-sor sdh-sor--ketto">
-                        <div class="sdh-ig">
-                            <label for="keszult">Készült</label>
-                            <?php self::datum_mezo('keszult', $keszult); ?>
+                    <div class="sdh-fulek sdh-fulek--also">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_also_m"
+                               id="ful_m_megjegyzes" checked>
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_also_m"
+                               id="ful_m_belso">
+
+                        <div class="sdh-fulek__sav">
+                            <label for="ful_m_megjegyzes">Megjegyzés<?php
+                                echo trim($ugyfel_megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
+                            ?></label>
+                            <label for="ful_m_belso">Belső megjegyzés<?php
+                                echo trim($megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
+                            ?></label>
                         </div>
 
-                        <div class="sdh-ig">
-                            <label for="hatarido">Határidő</label>
-                            <?php self::datum_mezo('hatarido', $hatarido); ?>
+                        <div class="sdh-fulek__panel sdh-fulek__panel--1">
+                            <textarea name="ugyfel_megjegyzes" id="ugyfel_megjegyzes" aria-label="Megjegyzés"
+                                      placeholder="Az ügyfél felé is megjelenhet (pl. nyomtatványon)."><?php
+                                echo esc_textarea($ugyfel_megjegyzes);
+                            ?></textarea>
+                        </div>
+
+                        <div class="sdh-fulek__panel sdh-fulek__panel--2">
+                            <textarea name="megjegyzes" id="megjegyzes" aria-label="Belső megjegyzés"
+                                      placeholder="Csak a CRM-ben látszik."><?php
+                                echo esc_textarea($megjegyzes);
+                            ?></textarea>
+                            <span class="sdh-zar">
+                                Belső: az ügyfél nem látja, nyomtatványra nem kerül ki.
+                            </span>
                         </div>
                     </div>
-
-                    <div class="sdh-sor">
-                        <div class="sdh-ig">
-                            <label for="nev">Név</label>
-                            <input type="text" name="nev" id="nev" maxlength="190"
-                                   placeholder="Rövid tárgy, pl. „kijelzőcsere” – nem kötelező"
-                                   value="<?php echo esc_attr($uj ? '' : (string) $munkalap->nev); ?>">
-                        </div>
-                    </div>
-
-                    <?php if ($uj) : ?>
-                        <span class="sdh-mezo__sugo">
-                            A munkalapszám az első számozott állapotba lépéskor generálódik; ahhoz ügyfél és eszköz kell.
-                        </span>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="sdh-fulek sdh-fulek--also">
-                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_also_m"
-                       id="ful_m_hibak" checked>
-                <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_also_m"
-                       id="ful_m_megjegyzes">
-
-                <div class="sdh-fulek__sav">
-                    <label for="ful_m_hibak">Hibasorok<?php
-                        echo $hiba_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $hiba_db . '</span>' : '';
-                    ?></label>
-                    <label for="ful_m_megjegyzes">Belső megjegyzés<?php
-                        echo trim($megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
-                    ?></label>
-                </div>
-
-                <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-hibak>
-                    <div class="sdh-hibafej" aria-hidden="true">
-                        <span>Hiba</span>
-                        <span>Állapot</span>
-                        <span>Javítás / megjegyzés</span>
-                        <span></span>
-                    </div>
-
-                    <div class="sdh-hibasorok" data-sdh-hibasorok
-                         data-kovetkezo="<?php echo (int) count($hibak); ?>">
-                        <?php foreach ($hibak as $i => $hiba) : ?>
-                            <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok); ?>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <template data-sdh-hibasor-sablon>
-                        <?php self::hibasor_sor('__I__', null, $hiba_allapotok); ?>
-                    </template>
-
-                    <div class="sdh-hibalab">
-                        <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-hibasor-uj>
-                            + Hibasor
-                        </button>
-                        <span class="sdh-mezo__sugo">
-                            Minden hibának saját állapota van. Az üresen hagyott sor mentéskor eldobódik.
-                        </span>
-                    </div>
-                </div>
-
-                <div class="sdh-fulek__panel sdh-fulek__panel--2">
-                    <textarea name="megjegyzes" id="megjegyzes" aria-label="Belső megjegyzés"
-                              placeholder="Csak a CRM-ben látszik."><?php
-                        echo esc_textarea($megjegyzes);
-                    ?></textarea>
-                    <span class="sdh-zar">
-                        Belső: az ügyfél nem látja, nyomtatványra nem kerül ki.
-                    </span>
                 </div>
             </div>
 
@@ -1594,6 +1822,12 @@ final class SDH_Muhely_Munkalap
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
                 <?php else : ?>
                     <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
+                <?php endif; ?>
+
+                <?php if ($uj) : ?>
+                    <span class="sdh-mezo__sugo">
+                        A munkalapszám az első számozott állapotba lépéskor generálódik; ahhoz ügyfél és eszköz kell.
+                    </span>
                 <?php endif; ?>
             </div>
         </div>
@@ -1613,6 +1847,280 @@ final class SDH_Muhely_Munkalap
                data-sdh-pop="datum" data-sdh-pop-adat="[]"
                placeholder="éééé-hh-nn"
                value="<?php echo esc_attr($ertek); ?>">
+        <?php
+    }
+
+    /** Szám az űrlapmezőbe: fölösleges tizedesek nélkül, ponttal (13000, 2.5). */
+    private static function szam_mezobe(float $ertek): string
+    {
+        $szoveg = rtrim(rtrim(number_format($ertek, 3, '.', ''), '0'), '.');
+
+        return $szoveg === '' ? '0' : $szoveg;
+    }
+
+    /**
+     * Az áfakulcs-választó elemei. A százalék data-attribútumban utazik,
+     * mert a böngészőoldali számolás (app.js) abból dolgozik.
+     *
+     * @param array<string, array{nev: string, szazalek: float}> $afakulcsok
+     */
+    private static function afa_opciok(array $afakulcsok, string $kivalasztott): void
+    {
+        foreach ($afakulcsok as $kulcs => $adat) {
+            printf(
+                '<option value="%s" data-szazalek="%s"%s>%s</option>',
+                esc_attr((string) $kulcs),
+                esc_attr((string) $adat['szazalek']),
+                selected($kivalasztott, (string) $kulcs, false),
+                esc_html($adat['nev'])
+            );
+        }
+    }
+
+    /* =================================================================
+     * Űrlap – Eszköz lapfül (az eszköz és az ügyfél összefoglalója)
+     * ============================================================== */
+
+    /**
+     * A kiválasztott eszköz és ügyfél adatai, ahogy a MunkaLap 3 „Eszköz"
+     * lapfüle mutatja. Csak olvasható: szerkeszteni a saját űrlapjukon lehet.
+     */
+    private static function osszefoglalo(int $ugyfel_id, int $eszkoz_id): void
+    {
+        global $wpdb;
+
+        $ugyfel = $ugyfel_id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id = %d', $ugyfel_id))
+            : null;
+        $eszkoz = $eszkoz_id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id = %d', $eszkoz_id))
+            : null;
+
+        $sor = static function (string $cimke, string $ertek): void {
+            printf(
+                '<div class="sdh-ml-adat__sor"><dt>%s:</dt><dd>%s</dd></div>',
+                esc_html($cimke),
+                $ertek !== '' ? esc_html($ertek) : '<span class="sdh-ml-adat__ures">—</span>'
+            );
+        };
+
+        echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>Eszköz</strong>';
+
+        if ($eszkoz) {
+            echo '<span>Sorszám: ' . (int) $eszkoz->id . '</span>';
+        }
+
+        echo '</div>';
+
+        if ($eszkoz) {
+            echo '<dl class="sdh-ml-adat">';
+            $sor('Azonosító', SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria));
+            $sor('Gyártó', (string) $eszkoz->gyarto);
+            $sor('Típus', (string) $eszkoz->tipus);
+            $sor('Megnevezés', (string) $eszkoz->megnevezes);
+            $sor('Készülék szín', (string) $eszkoz->szin);
+            $sor('Garancia', (int) $eszkoz->garancias === 1 ? 'Igen' : 'Nem');
+            $sor('IMEI szám', (string) $eszkoz->imei);
+            $sor('Sorozatszám', (string) $eszkoz->sorozatszam);
+            $sor('Tartozékok', (string) $eszkoz->tartozekok);
+            echo '</dl>';
+        } else {
+            echo '<p class="sdh-ml-kartya__ures">'
+                . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
+                . '</p>';
+        }
+
+        echo '</div><div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>Ügyfél</strong>';
+
+        if ($ugyfel) {
+            echo '<span>Sorszám: ' . esc_html((string) $ugyfel->ugyfel_szam !== '' ? (string) $ugyfel->ugyfel_szam : (string) (int) $ugyfel->id) . '</span>';
+        }
+
+        echo '</div>';
+
+        if ($ugyfel) {
+            $cim = trim(trim((string) $ugyfel->szamlazasi_iranyitoszam . ' ' . (string) $ugyfel->szamlazasi_telepules));
+            $cim = implode(', ', array_filter(
+                [(string) $ugyfel->nev, $cim, trim((string) $ugyfel->szamlazasi_cim)],
+                static fn (string $s): bool => $s !== ''
+            ));
+
+            echo '<dl class="sdh-ml-adat">';
+            $sor('Kategória', (string) $ugyfel->kategoria);
+            $sor('Központi cím', $cim);
+            $sor('Telefonszám', implode(', ', array_filter([(string) $ugyfel->telefon, (string) $ugyfel->telefon2])));
+            $sor('E-mail', (string) $ugyfel->email);
+
+            if ((float) $ugyfel->kedvezmeny > 0) {
+                $sor('Kedvezmény', rtrim(rtrim(number_format((float) $ugyfel->kedvezmeny, 2, ',', ''), '0'), ',') . '%');
+            }
+
+            echo '</dl>';
+        } else {
+            echo '<p class="sdh-ml-kartya__ures">Válassz ügyfelet a fenti mezőben – az adatai itt jelennek meg.</p>';
+        }
+
+        echo '</div>';
+    }
+
+    /** Az Eszköz lapfül tartalma az ügyfél vagy az eszköz megváltozása után (AJAX). */
+    public static function ajax_osszefoglalo(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            status_header(403);
+            wp_die();
+        }
+
+        self::osszefoglalo(
+            isset($_GET['ugyfel_id']) ? (int) $_GET['ugyfel_id'] : 0,
+            isset($_GET['eszkoz_id']) ? (int) $_GET['eszkoz_id'] : 0
+        );
+
+        wp_die();
+    }
+
+    /* =================================================================
+     * Űrlap – tételek (Szolgáltatások és Termékek lapfül)
+     * ============================================================== */
+
+    /**
+     * Egy tételtípus szerkesztője: oszlopfej, sorok, összesítő, új sor gomb.
+     * A termékeknél három azonosító oszlop is van (termékkód, cikkszám,
+     * gyári szám); a szolgáltatásoknál ezek hiányoznak.
+     *
+     * @param array<int, object>                                 $tetelek
+     * @param array<string, array{nev: string, szazalek: float}> $afakulcsok
+     */
+    private static function tetel_szerkeszto(string $tipus, array $tetelek, array $afakulcsok, string $lap_afa): void
+    {
+        $termek = $tipus === 'termek';
+        $sorok  = $tetelek === [] ? [null] : $tetelek;
+
+        ?>
+        <div class="sdh-tetelek sdh-tetelek--<?php echo esc_attr($tipus); ?>"
+             data-sdh-tetelek="<?php echo esc_attr($tipus); ?>"
+             data-kovetkezo="<?php echo (int) count($sorok); ?>">
+            <div class="sdh-tetelfej" aria-hidden="true">
+                <span>Sorszám</span>
+                <span>Megnevezés</span>
+                <?php if ($termek) : ?>
+                    <span>Termékkód</span>
+                    <span>Cikkszám</span>
+                    <span>Gyári szám</span>
+                <?php endif; ?>
+                <span class="is-jobb">Menny.</span>
+                <span>M.e.</span>
+                <span class="is-jobb">Bruttó ár</span>
+                <span class="is-jobb">Kedv. %</span>
+                <span>Áfak.</span>
+                <span class="is-jobb">Nettó é.</span>
+                <span class="is-jobb">Bruttó é.</span>
+                <span></span>
+            </div>
+
+            <div class="sdh-tetelsorok" data-sdh-tetelsorok>
+                <?php foreach ($sorok as $i => $tetel) : ?>
+                    <?php self::tetel_sor($tipus, (string) $i, $tetel, $afakulcsok, $lap_afa); ?>
+                <?php endforeach; ?>
+            </div>
+
+            <template data-sdh-tetel-sablon>
+                <?php self::tetel_sor($tipus, '__I__', null, $afakulcsok, $lap_afa); ?>
+            </template>
+
+            <div class="sdh-tetelsor sdh-tetelsor--ossz">
+                <span></span>
+                <span>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj>
+                        <?php echo $termek ? '+ Termék' : '+ Szolgáltatás'; ?>
+                    </button>
+                </span>
+                <?php if ($termek) : ?>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                <?php endif; ?>
+                <output class="is-jobb" data-sdh-tetel-ossz="menny" title="Mennyiség összesen">0</output>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span class="is-jobb sdh-tetelsor__szumma">Σ</span>
+                <output class="is-jobb" data-sdh-tetel-ossz="netto" title="Nettó érték összesen">0</output>
+                <output class="is-jobb" data-sdh-tetel-ossz="brutto" title="Bruttó érték összesen">0</output>
+                <span></span>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Egy tételsor. Az ár bruttó egységár; a nettó és a bruttó értéket az
+     * app.js írja ki gépelés közben, mentéskor a szerver számolja újra.
+     *
+     * @param array<string, array{nev: string, szazalek: float}> $afakulcsok
+     */
+    private static function tetel_sor(string $tipus, string $index, ?object $tetel, array $afakulcsok, string $lap_afa): void
+    {
+        $elotag = 'tetelek[' . $tipus . '][' . $index . ']';
+        $termek = $tipus === 'termek';
+        $ert    = static fn (string $mezo): string => $tetel !== null ? (string) ($tetel->{$mezo} ?? '') : '';
+        $afa    = $tetel !== null
+            ? SDH_Muhely_Tetel::afakulcs_ervenyes((string) ($tetel->afa_kulcs ?? ''))
+            : $lap_afa;
+        $kedv   = $tetel !== null ? (float) $tetel->kedvezmeny : 0.0;
+
+        ?>
+        <div class="sdh-tetelsor" data-sdh-tetelsor>
+            <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"
+                   value="<?php echo (int) ($tetel->id ?? 0); ?>">
+
+            <span class="sdh-tetelsor__sorszam"><?php echo $tetel !== null ? (int) $tetel->id : 'új'; ?></span>
+
+            <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
+                   aria-label="Megnevezés"
+                   placeholder="<?php echo esc_attr($termek ? 'Pl. Samsung A54 USB panel' : 'Pl. Mobiltelefon munkadíj'); ?>"
+                   value="<?php echo esc_attr($ert('megnevezes')); ?>">
+
+            <?php if ($termek) : ?>
+                <input type="text" name="<?php echo esc_attr($elotag); ?>[termekkod]" maxlength="60"
+                       aria-label="Termékkód" value="<?php echo esc_attr($ert('termekkod')); ?>">
+                <input type="text" name="<?php echo esc_attr($elotag); ?>[cikkszam]" maxlength="60"
+                       aria-label="Cikkszám" value="<?php echo esc_attr($ert('cikkszam')); ?>">
+                <input type="text" name="<?php echo esc_attr($elotag); ?>[gyari_szam]" maxlength="60"
+                       aria-label="Gyári szám" value="<?php echo esc_attr($ert('gyari_szam')); ?>">
+            <?php endif; ?>
+
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="menny"
+                   name="<?php echo esc_attr($elotag); ?>[mennyiseg]" aria-label="Mennyiség"
+                   value="<?php echo esc_attr($tetel !== null ? self::szam_mezobe((float) $tetel->mennyiseg) : '1'); ?>">
+
+            <input type="text" name="<?php echo esc_attr($elotag); ?>[me]" maxlength="20"
+                   aria-label="Mennyiségi egység"
+                   value="<?php echo esc_attr($tetel !== null ? (string) $tetel->me : 'db'); ?>">
+
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="ar"
+                   name="<?php echo esc_attr($elotag); ?>[brutto_ar]" aria-label="Bruttó egységár"
+                   placeholder="0"
+                   value="<?php echo esc_attr($tetel !== null ? self::szam_mezobe((float) $tetel->brutto_ar) : ''); ?>">
+
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="kedv"
+                   name="<?php echo esc_attr($elotag); ?>[kedvezmeny]" aria-label="Kedvezmény százalékban"
+                   placeholder="0"
+                   value="<?php echo esc_attr($kedv > 0 ? self::szam_mezobe($kedv) : ''); ?>">
+
+            <select name="<?php echo esc_attr($elotag); ?>[afa_kulcs]" data-sdh-tetel="afa" aria-label="Áfakulcs">
+                <?php self::afa_opciok($afakulcsok, $afa); ?>
+            </select>
+
+            <output class="is-jobb" data-sdh-tetel="netto">0</output>
+            <output class="is-jobb" data-sdh-tetel="brutto">0</output>
+
+            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-hibasor__torol"
+                    data-sdh-tetel-torol title="Tétel eltávolítása"
+                    aria-label="Tétel eltávolítása">&times;</button>
+        </div>
         <?php
     }
 
@@ -1732,18 +2240,47 @@ final class SDH_Muhely_Munkalap
 
         $keszult = self::datum_vagy_null($szoveg('keszult')) ?? current_time('Y-m-d');
 
+        // Fizetés. A „fizetett" az előleg: ennyivel kevesebb a fizetendő.
+        // A fizetési mód csak a lista eleme lehet – vagy az, ami a lapon már áll.
+        $fizetesi_mod = mb_substr($szoveg('fizetesi_mod'), 0, 40);
+
+        if (
+            $fizetesi_mod !== ''
+            && !in_array($fizetesi_mod, self::fizetesi_modok(), true)
+            && !($regi !== null && $fizetesi_mod === (string) ($regi->fizetesi_mod ?? ''))
+        ) {
+            $fizetesi_mod = '';
+        }
+
+        $fizetve       = !empty($_POST['fizetve']);
+        $fizetes_ideje = self::datum_vagy_null($szoveg('fizetes_ideje'));
+
+        // Kifizetett lapnál a fizetés napja nem maradhat üresen.
+        if ($fizetve && $fizetes_ideje === null) {
+            $fizetes_ideje = current_time('Y-m-d');
+        }
+
         return [
-            'allapot'    => $allapot,
-            'nev'        => mb_substr($szoveg('nev'), 0, 190),
-            'ugyfel_id'  => isset($_POST['ugyfel_id']) ? max(0, (int) $_POST['ugyfel_id']) : 0,
-            'eszkoz_id'  => isset($_POST['eszkoz_id']) ? max(0, (int) $_POST['eszkoz_id']) : 0,
-            'felelos'    => $felelos,
-            'keszult'    => $keszult,
-            'hatarido'   => self::datum_vagy_null($szoveg('hatarido')),
-            'megjegyzes' => isset($_POST['megjegyzes'])
+            'allapot'           => $allapot,
+            'nev'               => mb_substr($szoveg('nev'), 0, 190),
+            'ugyfel_id'         => isset($_POST['ugyfel_id']) ? max(0, (int) $_POST['ugyfel_id']) : 0,
+            'eszkoz_id'         => isset($_POST['eszkoz_id']) ? max(0, (int) $_POST['eszkoz_id']) : 0,
+            'felelos'           => $felelos,
+            'keszult'           => $keszult,
+            'hatarido'          => self::datum_vagy_null($szoveg('hatarido')),
+            'fizetesi_mod'      => $fizetesi_mod,
+            'fizetve'           => $fizetve ? 1 : 0,
+            'fizetes_ideje'     => $fizetes_ideje,
+            'fizetett'          => max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('fizetett')), 2)),
+            'kedvezmeny'        => min(100.0, max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('lap_kedvezmeny')), 2))),
+            'afakulcs'          => SDH_Muhely_Tetel::afakulcs_ervenyes($szoveg('lap_afakulcs')),
+            'megjegyzes'        => isset($_POST['megjegyzes'])
                 ? sanitize_textarea_field(wp_unslash($_POST['megjegyzes']))
                 : '',
-            'modositva'  => current_time('mysql'),
+            'ugyfel_megjegyzes' => isset($_POST['ugyfel_megjegyzes'])
+                ? sanitize_textarea_field(wp_unslash($_POST['ugyfel_megjegyzes']))
+                : '',
+            'modositva'         => current_time('mysql'),
         ];
     }
 
@@ -2017,7 +2554,18 @@ final class SDH_Muhely_Munkalap
             return $hiba;
         }
 
-        return self::adatbazisba($id, $adatok, $hibak, $regi);
+        $eredmeny = self::adatbazisba($id, $adatok, $hibak, $regi);
+
+        // A tételek csak akkor szinkronizálódnak, ha az űrlap hozta őket –
+        // egy tételek nélküli beküldés (régi oldal, más hívó) nem törölhet tételt.
+        if (is_array($eredmeny) && !empty($_POST['tetelek_jelen'])) {
+            SDH_Muhely_Tetel::mentes(
+                (int) $eredmeny[0],
+                SDH_Muhely_Tetel::bekuldott(isset($_POST['tetelek']) ? wp_unslash($_POST['tetelek']) : [])
+            );
+        }
+
+        return $eredmeny;
     }
 
     /** Teljes oldalas beküldés (JS nélküli tartalék). */

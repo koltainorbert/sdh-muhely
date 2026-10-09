@@ -494,6 +494,7 @@
         // A popup az ehhez az űrlapfajtához legutóbb beállított méretben nyílik.
         szint.dialog.sdhModul = modul;
         szint.dialog.sdhMeret = meretOlvas(modul);
+        szint.dialog.setAttribute('data-sdh-modul', modul);
 
         toltesKozben(szint);
 
@@ -532,6 +533,7 @@
                 mintaKeres(szint.torzs);
                 csatKeres(szint.torzs);
                 szamKeres(szint.torzs);
+                munkalapIndul(szint.torzs);
 
                 var elso = szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
                 if (elso) {
@@ -2444,6 +2446,7 @@
 
         if (!ugyfelId || ugyfelId === '0') {
             eloszor('— előbb válassz ügyfelet —');
+            munkalapOsszefoglalo(urlap);
 
             return;
         }
@@ -2462,6 +2465,7 @@
 
                 if (!eszkozok.length) {
                     eloszor('Ennek az ügyfélnek még nincs eszköze – a + gombbal vihetsz fel újat');
+                    munkalapOsszefoglalo(urlap);
 
                     return;
                 }
@@ -2484,10 +2488,347 @@
                 if (kivalasztando) {
                     valaszto.value = String(kivalasztando);
                 }
+
+                munkalapOsszefoglalo(urlap);
             })
             .catch(function () {
                 eloszor('Az eszközök nem töltődtek be');
             });
+    }
+
+    /* ---------------------------------------------------------------- */
+    /* Munkalap-űrlap: összegek, tételek, előleg                        */
+    /* ---------------------------------------------------------------- */
+    /*
+     * Az űrlap gépelés közben számol: tételsoronként a nettó és a bruttó
+     * érték, lapfülenként az összesítő, bal oldalt az Összeg (nettó, áfa,
+     * bruttó) és a Fizetendő. A számolás ugyanaz, mint a szerveren
+     * (SDH_Muhely_Tetel): a bruttó egységárból az áfakulccsal lesz nettó.
+     * Ez csak kijelzés – mentéskor a szerver számol újra, az a mérvadó.
+     */
+
+    /** Beírt szám: „13 000", „13000,5" és „13.000,50" is jó. Hibás érték: 0. */
+    function mlSzam(szoveg) {
+        var t = String(szoveg === null || szoveg === undefined ? '' : szoveg)
+            .replace(/[\s\u00a0\u202f]|Ft|%/gi, '');
+
+        if (t.indexOf(',') >= 0) {
+            t = t.replace(/\./g, '');
+        }
+
+        t = t.replace(',', '.');
+
+        var n = parseFloat(t);
+
+        return isFinite(n) && /^-?\d*\.?\d*$/.test(t) ? n : 0;
+    }
+
+    function mlKerek(n) {
+        return Math.round((n + Number.EPSILON) * 100) / 100;
+    }
+
+    /** Összeg kiírva: egész forint, ezres tagolással. */
+    function mlPenz(n) {
+        var e = Math.round(n);
+
+        return (e < 0 ? '-' : '') + String(Math.abs(e)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+    }
+
+    function mlMenny(n) {
+        return String(Math.round(n * 1000) / 1000).replace('.', ',');
+    }
+
+    function mlIr(elem, szoveg) {
+        if (elem && elem.textContent !== szoveg) {
+            elem.textContent = szoveg;
+        }
+    }
+
+    function mlDarab(gyoker, kulcs, db) {
+        var jel = gyoker.querySelector('[data-sdh-db="' + kulcs + '"]');
+
+        if (jel) {
+            jel.hidden = db === 0;
+            jel.textContent = String(db);
+        }
+    }
+
+    function munkalapSzamol(gyoker) {
+        if (!gyoker) {
+            return;
+        }
+
+        var osszNetto = 0;
+        var osszBrutto = 0;
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek]'), function (panel) {
+            var menny = 0;
+            var netto = 0;
+            var brutto = 0;
+            var db = 0;
+
+            Array.prototype.forEach.call(panel.querySelectorAll('[data-sdh-tetelsorok] [data-sdh-tetelsor]'), function (sor) {
+                var mezo = function (nev) {
+                    return sor.querySelector('[data-sdh-tetel="' + nev + '"]');
+                };
+                var nevMezo = sor.querySelector('input[name$="[megnevezes]"]');
+                var ar = Math.max(0, mlSzam(mezo('ar').value));
+                var m = mezo('menny').value.trim() === '' ? 1 : mlSzam(mezo('menny').value);
+                var kedv = Math.min(100, Math.max(0, mlSzam(mezo('kedv').value)));
+                var afaOpcio = mezo('afa').options[mezo('afa').selectedIndex];
+                var afa = afaOpcio ? parseFloat(afaOpcio.getAttribute('data-szazalek')) || 0 : 0;
+
+                if (m <= 0) {
+                    m = 1;
+                }
+
+                // Az üres sor (se megnevezés, se ár) mentéskor eldobódik: nem számít bele.
+                var ures = (!nevMezo || nevMezo.value.trim() === '') && ar <= 0;
+                var nettoAr = mlKerek(ar / (1 + afa / 100));
+                var sorNetto = ures ? 0 : mlKerek(nettoAr * m * (1 - kedv / 100));
+                var sorBrutto = ures ? 0 : mlKerek(ar * m * (1 - kedv / 100));
+
+                mlIr(mezo('netto'), mlPenz(sorNetto));
+                mlIr(mezo('brutto'), mlPenz(sorBrutto));
+
+                if (!ures) {
+                    db += 1;
+                    menny += m;
+                    netto += sorNetto;
+                    brutto += sorBrutto;
+                }
+            });
+
+            mlIr(panel.querySelector('[data-sdh-tetel-ossz="menny"]'), mlMenny(menny));
+            mlIr(panel.querySelector('[data-sdh-tetel-ossz="netto"]'), mlPenz(netto));
+            mlIr(panel.querySelector('[data-sdh-tetel-ossz="brutto"]'), mlPenz(brutto));
+            mlDarab(gyoker, panel.getAttribute('data-sdh-tetelek'), db);
+
+            osszNetto += netto;
+            osszBrutto += brutto;
+        });
+
+        var hibaDb = 0;
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-hibasorok] [data-sdh-hibasor]'), function (sor) {
+            var leiras = sor.querySelector('.sdh-hibasor__leiras');
+            var javitas = sor.querySelector('.sdh-hibasor__javitas');
+
+            if ((leiras && leiras.value.trim() !== '') || (javitas && javitas.value.trim() !== '')) {
+                hibaDb += 1;
+            }
+        });
+
+        mlDarab(gyoker, 'hibak', hibaDb);
+
+        // Az előleg (Fizetett) mindig levonódik a teljes összegből; a
+        // kiegyenlített lapon nincs fizetendő.
+        var fizetettMezo = gyoker.querySelector('[data-sdh-fizetett]');
+        var fizetveMezo = gyoker.querySelector('[data-sdh-fizetve]');
+        var fizetett = fizetettMezo ? Math.max(0, mlSzam(fizetettMezo.value)) : 0;
+        var fizetve = !!(fizetveMezo && fizetveMezo.checked);
+        var fizetendo = fizetve ? 0 : osszBrutto - fizetett;
+        var kiiras = function (nev) {
+            return gyoker.querySelector('[data-sdh-ossz="' + nev + '"]');
+        };
+
+        mlIr(kiiras('netto'), mlPenz(osszNetto));
+        mlIr(kiiras('afa'), mlPenz(osszBrutto - osszNetto));
+        mlIr(kiiras('brutto'), mlPenz(osszBrutto));
+        mlIr(kiiras('fizetendo'), mlPenz(fizetendo));
+
+        if (kiiras('fizetendo')) {
+            kiiras('fizetendo').classList.toggle('is-negativ', fizetendo < 0);
+        }
+    }
+
+    /** Új tételsor: a sablon klónja, a lap kedvezményével és áfakulcsával. */
+    function tetelUj(gomb) {
+        var panel = gomb.closest('[data-sdh-tetelek]');
+        var lista = panel ? panel.querySelector('[data-sdh-tetelsorok]') : null;
+        var sablon = panel ? panel.querySelector('[data-sdh-tetel-sablon]') : null;
+
+        if (!lista || !sablon) {
+            return;
+        }
+
+        var index = parseInt(panel.getAttribute('data-kovetkezo') || '0', 10);
+
+        panel.setAttribute('data-kovetkezo', String(index + 1));
+
+        var tarolo = document.createElement('div');
+
+        tarolo.innerHTML = sablon.innerHTML.split('__I__').join(String(index));
+
+        var sor = tarolo.querySelector('[data-sdh-tetelsor]');
+
+        if (!sor) {
+            return;
+        }
+
+        var gyoker = panel.closest('[data-sdh-munkalap]');
+        var lapKedv = gyoker ? gyoker.querySelector('[data-sdh-lap-kedv]') : null;
+        var lapAfa = gyoker ? gyoker.querySelector('[data-sdh-lap-afa]') : null;
+
+        if (lapKedv && mlSzam(lapKedv.value) > 0) {
+            sor.querySelector('[data-sdh-tetel="kedv"]').value = String(mlSzam(lapKedv.value)).replace('.', ',');
+        }
+
+        if (lapAfa) {
+            sor.querySelector('[data-sdh-tetel="afa"]').value = lapAfa.value;
+        }
+
+        lista.appendChild(sor);
+        munkalapSzamol(gyoker);
+
+        var elso = sor.querySelector('input[type="text"]');
+
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    /** Tételsor eltávolítása; az utolsó sort csak kiürítjük, hogy mindig legyen hová írni. */
+    function tetelTorol(gomb) {
+        var sor = gomb.closest('[data-sdh-tetelsor]');
+        var lista = gomb.closest('[data-sdh-tetelsorok]');
+
+        if (!sor || !lista) {
+            return;
+        }
+
+        var gyoker = sor.closest('[data-sdh-munkalap]');
+
+        if (lista.querySelectorAll('[data-sdh-tetelsor]').length <= 1) {
+            Array.prototype.forEach.call(sor.querySelectorAll('input[type="text"]'), function (mezo) {
+                mezo.value = mezo.name.slice(-11) === '[mennyiseg]' ? '1' : (mezo.name.slice(-4) === '[me]' ? 'db' : '');
+            });
+            // Az azonosító törlésével a mentés új sorként kezeli – a régi tétel törlődik.
+            sor.querySelector('input[type="hidden"]').value = '0';
+            sor.querySelector('.sdh-tetelsor__sorszam').textContent = 'új';
+        } else {
+            sor.remove();
+        }
+
+        munkalapSzamol(gyoker);
+    }
+
+    /** A lap kedvezménye vagy áfakulcsa megváltozott: minden tételsor követi. */
+    function tetelAlapertek(mezo) {
+        var gyoker = mezo.closest('[data-sdh-munkalap]');
+
+        if (!gyoker) {
+            return;
+        }
+
+        var kedv = mezo.hasAttribute('data-sdh-lap-kedv');
+        var ertek = kedv ? Math.min(100, Math.max(0, mlSzam(mezo.value))) : mezo.value;
+
+        Array.prototype.forEach.call(
+            gyoker.querySelectorAll('[data-sdh-tetelsorok] [data-sdh-tetel="' + (kedv ? 'kedv' : 'afa') + '"]'),
+            function (celmezo) {
+                celmezo.value = kedv ? (ertek > 0 ? String(ertek).replace('.', ',') : '') : ertek;
+            }
+        );
+
+        munkalapSzamol(gyoker);
+    }
+
+    /** Az Eszköz lapfül: a kiválasztott eszköz és ügyfél adatai a szerverről. */
+    function munkalapOsszefoglalo(urlap) {
+        var hely = urlap ? urlap.querySelector('[data-sdh-osszefoglalo]') : null;
+
+        if (!hely) {
+            return;
+        }
+
+        var ugyfel = urlap.querySelector('.sdh-valaszto input[type="hidden"]');
+        var eszkoz = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+        var cim = new URL(beallitas.ajax, window.location.origin);
+
+        cim.searchParams.set('action', 'sdh_muhely_munkalapok_osszefoglalo');
+        cim.searchParams.set('ugyfel_id', ugyfel ? ugyfel.value : '0');
+        cim.searchParams.set('eszkoz_id', eszkoz ? eszkoz.value : '0');
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        var sorszam = (hely.sdhKeres || 0) + 1;
+
+        hely.sdhKeres = sorszam;
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) {
+                if (!valasz.ok) {
+                    throw new Error(String(valasz.status));
+                }
+
+                return valasz.text();
+            })
+            .then(function (html) {
+                // Csak a legutóbbi kérés válasza kerül ki (gyors váltásnál se keveredjen).
+                if (hely.sdhKeres === sorszam) {
+                    hely.innerHTML = html;
+                }
+            })
+            .catch(function () { /* az összefoglaló csak tájékoztat: hiba esetén a régi marad */ });
+    }
+
+    /** Frissen betöltött munkalap-űrlap: első számolás. */
+    function munkalapIndul(gyoker) {
+        Array.prototype.forEach.call((gyoker || document).querySelectorAll('[data-sdh-munkalap]'), munkalapSzamol);
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var gyoker = esemeny.target.closest ? esemeny.target.closest('[data-sdh-munkalap]') : null;
+
+        if (!gyoker) {
+            return;
+        }
+
+        if (esemeny.target.hasAttribute('data-sdh-lap-kedv')) {
+            tetelAlapertek(esemeny.target);
+
+            return;
+        }
+
+        munkalapSzamol(gyoker);
+    });
+
+    document.addEventListener('change', function (esemeny) {
+        var cel = esemeny.target;
+        var gyoker = cel.closest ? cel.closest('[data-sdh-munkalap]') : null;
+
+        if (!gyoker) {
+            return;
+        }
+
+        if (cel.hasAttribute('data-sdh-lap-afa') || cel.hasAttribute('data-sdh-lap-kedv')) {
+            tetelAlapertek(cel);
+
+            return;
+        }
+
+        // Kifizetettre jelölve a fizetés napja a mai nap, ha még üres.
+        if (cel.hasAttribute('data-sdh-fizetve') && cel.checked) {
+            var nap = gyoker.querySelector('input[name="fizetes_ideje"]');
+
+            if (nap && nap.value === '') {
+                nap.value = gyoker.getAttribute('data-ma') || '';
+            }
+        }
+
+        if (cel.hasAttribute('data-sdh-eszkoz-valaszto')) {
+            munkalapOsszefoglalo(cel.closest('form'));
+        }
+
+        munkalapSzamol(gyoker);
+    });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            munkalapIndul(document);
+        });
+    } else {
+        munkalapIndul(document);
     }
 
     /**
@@ -2617,6 +2958,7 @@
         }
 
         lista.appendChild(sor);
+        munkalapSzamol(lista.closest('[data-sdh-munkalap]'));
 
         var elso = sor.querySelector('input[type="text"]');
         if (elso) {
@@ -2640,11 +2982,13 @@
             Array.prototype.forEach.call(sor.querySelectorAll('input[type="text"]'), function (mezo) {
                 mezo.value = '';
             });
+            munkalapSzamol(lista.closest('[data-sdh-munkalap]'));
 
             return;
         }
 
         sor.remove();
+        munkalapSzamol(lista.closest('[data-sdh-munkalap]'));
     }
 
     /** Az állapotválasztó melletti pötty színe követi a kiválasztott állapotot. */
@@ -3111,6 +3455,24 @@
         if (hibasorTorolGomb) {
             esemeny.preventDefault();
             hibasorTorol(hibasorTorolGomb);
+
+            return;
+        }
+
+        var tetelUjGomb = esemeny.target.closest('[data-sdh-tetel-uj]');
+
+        if (tetelUjGomb) {
+            esemeny.preventDefault();
+            tetelUj(tetelUjGomb);
+
+            return;
+        }
+
+        var tetelTorolGomb = esemeny.target.closest('[data-sdh-tetel-torol]');
+
+        if (tetelTorolGomb) {
+            esemeny.preventDefault();
+            tetelTorol(tetelTorolGomb);
 
             return;
         }

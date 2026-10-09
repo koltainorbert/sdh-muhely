@@ -290,6 +290,12 @@ final class SDH_Muhely_Demo
                 'fizetve'       => $m['fizetve'] !== null ? 1 : 0,
                 'fizetes_ideje' => $nap($m['fizetve']),
                 'fizetett'      => $m['fizetett'],
+                // Ahol volt befizetés, fizetési mód is legyen (a lista első eleme, ha a név ismeretlen).
+                'fizetesi_mod'  => (float) $m['fizetett'] > 0
+                    ? (in_array('Készpénz', SDH_Muhely_Munkalap::fizetesi_modok(), true)
+                        ? 'Készpénz'
+                        : (string) (SDH_Muhely_Munkalap::fizetesi_modok()[0] ?? ''))
+                    : '',
             ];
 
             if ($m['lezarva'] !== null) {

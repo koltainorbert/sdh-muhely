@@ -41,10 +41,10 @@ final class SDH_Muhely_Racs
 
     /**
      * A még fizetendő összeg: kiegyenlített lapnál nulla, egyébként a
-     * bruttó érték és a már befizetett összeg különbsége.
+     * bruttó érték mínusz a már befizetett összeg (az előleg). Negatív is
+     * lehet – ha az előleg több, mint a tételek értéke –, ahogy a MunkaLap 3-ban.
      */
-    private const FIZETENDO = '(CASE WHEN m.fizetve = 1 THEN 0'
-        . ' WHEN m.brutto_ertek > m.fizetett THEN m.brutto_ertek - m.fizetett ELSE 0 END)';
+    private const FIZETENDO = '(CASE WHEN m.fizetve = 1 THEN 0 ELSE m.brutto_ertek - m.fizetett END)';
 
     public static function init(): void
     {
@@ -198,6 +198,10 @@ final class SDH_Muhely_Racs
             'megjegyzes' => [
                 'cim' => 'Belső megjegyzés', 'tipus' => 'szoveg', 'sql' => "COALESCE(m.megjegyzes, '')",
                 'sz' => 230, 'alap' => true,
+            ],
+            'fizetesi_mod' => [
+                'cim' => 'Fizetési mód', 'tipus' => 'szoveg', 'sql' => "COALESCE(m.fizetesi_mod, '')",
+                'sz' => 130, 'alap' => false,
             ],
             'letrehozva' => [
                 'cim' => 'Létrehozva', 'tipus' => 'datum', 'sql' => 'm.letrehozva',
@@ -882,7 +886,8 @@ final class SDH_Muhely_Racs
             $wpdb->prepare(
                 "SELECT m.id, m.munkalap_szam, m.jelzes, m.allapot, m.nev, m.felelos, m.keszult,
                         m.hatarido, m.lezarva, m.fizetve, m.fizetes_ideje, m.brutto_ertek,
-                        m.fizetett, m.megjegyzes, m.letrehozva, m.modositva, m.ugyfel_id, m.eszkoz_id,
+                        m.fizetett, m.fizetesi_mod, m.megjegyzes, m.letrehozva, m.modositva,
+                        m.ugyfel_id, m.eszkoz_id,
                         {$fizetendo} AS fizetendo,
                         u.nev AS u_nev, u.telefon AS u_telefon,
                         e.kategoria AS e_kategoria, e.gyarto AS e_gyarto, e.tipus AS e_tipus,
@@ -978,6 +983,7 @@ final class SDH_Muhely_Racs
             'fizetett'      => (float) $sor->fizetett,
             'fizetendo'     => (float) $sor->fizetendo,
             'megjegyzes'    => mb_strlen($megjegyzes) > 140 ? mb_substr($megjegyzes, 0, 140) . '…' : $megjegyzes,
+            'fizetesi_mod'  => (string) ($sor->fizetesi_mod ?? ''),
             'letrehozva'    => self::datum($sor->letrehozva),
             'modositva'     => self::datum($sor->modositva),
             '_zart'         => $allapot !== null && !empty($allapot['zart']),
@@ -1523,11 +1529,14 @@ final class SDH_Muhely_Racs
     {
         $allapotok = SDH_Muhely_Munkalap::allapotok();
         $megjegyzes = trim((string) $munkalap->megjegyzes);
+        $kulso      = trim((string) ($munkalap->ugyfel_megjegyzes ?? ''));
 
         $brutto    = (float) $munkalap->brutto_ertek;
+        $netto     = (float) $munkalap->netto_ertek;
         $fizetett  = (float) $munkalap->fizetett;
         $fizetve   = (int) $munkalap->fizetve === 1;
-        $fizetendo = $fizetve ? 0.0 : max(0.0, $brutto - $fizetett);
+        // Az előleg mindig levonódik a teljes összegből.
+        $fizetendo = $fizetve ? 0.0 : $brutto - $fizetett;
 
         $kesz = 0;
         $zart = SDH_Muhely_Munkalap::zart_kulcsok(SDH_Muhely_Munkalap::hiba_allapotok());
@@ -1545,7 +1554,7 @@ final class SDH_Muhely_Racs
         self::alful_sav(
             [
                 'adatok'     => ['cim' => 'Adatok'],
-                'megjegyzes' => ['cim' => 'Belső megjegyzés', 'jel' => $megjegyzes !== ''],
+                'megjegyzes' => ['cim' => 'Megjegyzés', 'jel' => $megjegyzes !== '' || $kulso !== ''],
             ],
             SDH_Muhely_Munkalap::KULCS,
             (int) $munkalap->id
@@ -1584,8 +1593,11 @@ final class SDH_Muhely_Racs
                 ? esc_html(trim('Igen ' . self::datum($munkalap->fizetes_ideje)))
                 : esc_html('Nem')
         );
+        self::adatsor('Fizetési mód', esc_html((string) ($munkalap->fizetesi_mod ?? '')));
+        self::adatsor('Nettó érték', esc_html(self::penz($netto) . ' Ft'));
+        self::adatsor('Áfa', esc_html(self::penz($brutto - $netto) . ' Ft'));
         self::adatsor('Bruttó érték', esc_html(self::penz($brutto) . ' Ft'));
-        self::adatsor('Fizetett', esc_html(self::penz($fizetett) . ' Ft'));
+        self::adatsor('Fizetett (előleg)', esc_html(self::penz($fizetett) . ' Ft'));
         self::adatsor('Fizetendő', esc_html(self::penz($fizetendo) . ' Ft'));
         self::adatsor(
             'Hibák',
@@ -1597,10 +1609,16 @@ final class SDH_Muhely_Racs
 
         echo '<div class="sdh-reszlet__szoveg" data-sdh-alpanel="megjegyzes" hidden>';
 
+        if ($megjegyzes === '' && $kulso === '') {
+            self::ures('Ehhez a munkalaphoz nincs megjegyzés.');
+        }
+
+        if ($kulso !== '') {
+            echo '<h4>Megjegyzés</h4><p>' . self::szoveg($kulso) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        }
+
         if ($megjegyzes !== '') {
-            echo '<p>' . self::szoveg($megjegyzes) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput
-        } else {
-            self::ures('Ehhez a munkalaphoz nincs belső megjegyzés.');
+            echo '<h4>Belső megjegyzés</h4><p>' . self::szoveg($megjegyzes) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput
         }
 
         echo '</div></div></div>';
@@ -1969,7 +1987,12 @@ final class SDH_Muhely_Racs
                 'me'         => esc_html((string) $tetel->me),
                 'munkavegzo' => esc_html(SDH_Muhely_Munkalap::felelos_nev((int) $tetel->munkavegzo)),
                 'kedvezmeny' => (float) $tetel->kedvezmeny > 0 ? esc_html(self::szazalek((float) $tetel->kedvezmeny)) : '',
-                'afa'        => esc_html(self::szazalek((float) $tetel->afa)),
+                // Betűkódos kulcsnál (AAM, TAM…) a kód áll, nem a 0%.
+                'afa'        => esc_html(
+                    is_numeric((string) ($tetel->afa_kulcs ?? '')) || (string) ($tetel->afa_kulcs ?? '') === ''
+                        ? self::szazalek((float) $tetel->afa)
+                        : (string) $tetel->afa_kulcs
+                ),
                 'netto_ar'   => esc_html(self::penz((float) $tetel->netto_ar)),
                 'brutto_ar'  => esc_html(self::penz((float) $tetel->brutto_ar)),
                 'netto_e'    => esc_html(self::penz((float) $tetel->netto_ertek)),

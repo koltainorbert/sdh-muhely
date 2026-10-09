@@ -57,6 +57,27 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.23.0
+- **Munkalap-ablak a MunkaLap 3 elrendezésében**: balra oldalsáv (Állapot, Dátumok, Összeg,
+  Tételek, Fizetés), jobbra az Ügyfél és az Eszköz, alattuk lapfülek: **Eszköz** (az eszköz és az
+  ügyfél adatai, választáskor frissül), **Hibák**, **Szolgáltatások**, **Termékek**; legalul
+  Megjegyzés (ügyfél felé is mehet) és Belső megjegyzés. Az ablak alapszélessége 1480 px.
+- **Tételek szerkesztése**: szolgáltatás- és terméksorok (megnevezés, termékkód, cikkszám, gyári
+  szám, mennyiség, m.e., bruttó ár, kedvezmény %, áfakulcs), soronként nettó és bruttó érték,
+  lapfülenként Σ. Az ár **bruttó**; a nettót az áfakulcs adja. Gépelés közben számol (`app.js`
+  `munkalapSzamol`), mentéskor a szerver számol újra (`SDH_Muhely_Tetel::mentes`).
+- **Áfakulcs**: alapértelmezés mindig **27%**; a MunkaLap listája (5%, 18%, 27%, EAM, ATK, AAM,
+  NAM, FOA, HO, KBAET, KBAUK, KSZH, KSZM, KSZR, KSZU, EUFAD37, EUE, APP, TAM) –
+  `SDH_Muhely_Tetel::afakulcsok()`, szűrővel bővíthető. A lap kedvezménye és áfakulcsa minden
+  tételsorra érvényes, és az új sorok is ezzel indulnak.
+- **Előleg és fizetés**: a „Fizetett (előleg)" mezőbe írt összeg mindig levonódik a teljes
+  összegből: Fizetendő = Bruttó − Fizetett (negatív is lehet, ha az előleg több); kifizetett lapon 0.
+  „Fizetve" bejelölésekor a fizetés napja a mai nap. **Fizetési módok** a Beállításokban
+  szerkeszthetők (alap: Átutalás, Bankkártya, Barion, Előre utalás, Halasztott KP, Készpénz,
+  Kombinált, Kompenzáció szerint, PayPal, SZÉP Kártya, Utalvány, Utánvét).
+- **Séma 0.16.0**: `munkalap` + `fizetesi_mod`, `kedvezmeny`, `afakulcs`, `ugyfel_megjegyzes`;
+  `munkalap_tetel` + `afa_kulcs`. A rácsban új (alapból rejtett) oszlop: Fizetési mód.
+
 ### 0.22.0
 - **Munkalap-popup széles és alacsony**: az űrlap ugyanazt a kompakt, lapfüles szerkezetet kapta,
   mint az ügyfél és az eszköz (címke + mező egy sorban, két szimmetrikus oszlop; alul

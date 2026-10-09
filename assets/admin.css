@@ -2523,8 +2523,119 @@ a.sdh-kartya:focus-visible {
 }
 
 /* ------------------------------------------------------------------ */
-/* Munkalapűrlap – ugyanaz a kompakt, széles, lapfüles szerkezet        */
+/* Munkalapűrlap – a MunkaLap 3 „Munkalap szerkesztése" elrendezése:    */
+/* balra állapot, dátumok, összeg, tételek, fizetés; jobbra ügyfél,     */
+/* eszköz, lapfülek (Eszköz, Hibák, Szolgáltatások, Termékek),          */
+/* legalul a megjegyzések.                                              */
 /* ------------------------------------------------------------------ */
+
+/* A munkalap ablaka szélesebb az alapnál: elfér benne az oldalsáv és a
+   tételek táblázata. (A felhasználó által húzott méret ezt felülírja.) */
+.sdh-modal[data-sdh-modul="munkalapok"] {
+    width: min(1480px, calc(100vw - 2rem));
+}
+
+.sdh-urlap.sdh-urlap--szeles {
+    max-width: 1480px;
+}
+
+.sdh-modal__cim + form > .sdh-munkalapurlap {
+    margin-top: .7rem;
+}
+
+.sdh-ml {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 276px minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: stretch;
+    min-height: 0;
+}
+
+.sdh-ml__oldal {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    padding-right: 1.1rem;
+    border-right: 1px solid var(--sdh-keret);
+}
+
+.sdh-ml__csoport {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+/* Csoportcím vonallal – ahogy a MunkaLap oldalsávjában. */
+.sdh-ml__cim {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin: 0;
+    padding: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ml__cim::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--sdh-keret-eros);
+}
+
+.sdh-ml__oldal .sdh-ig {
+    grid-template-columns: 6.3rem minmax(0, 1fr);
+    gap: .4rem;
+}
+
+.sdh-ml__oldal input[type="text"],
+.sdh-ml__oldal input[type="number"],
+.sdh-ml__oldal select {
+    height: 32px;
+    min-height: 32px;
+}
+
+.sdh-ml__olvas,
+.sdh-ml__osszeg {
+    min-height: 22px;
+    font-size: 13px;
+}
+
+/* Kiszámolt összeg: címke, jobbra zárt érték, pénznem. */
+.sdh-ml__osszeg {
+    display: grid;
+    grid-template-columns: 6.3rem minmax(0, 1fr) 1.2rem;
+    align-items: baseline;
+    gap: .4rem;
+    color: var(--sdh-szoveg-2);
+    font-size: 12.5px;
+}
+
+.sdh-ml__osszeg output {
+    text-align: right;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ml__osszeg--fo output {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sdh-ml__osszeg output.is-negativ {
+    color: var(--sdh-hiba);
+}
+
+.sdh-ml__fo {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    min-width: 0;
+}
 
 .sdh-munkalapurlap select {
     box-sizing: border-box;
@@ -2539,7 +2650,8 @@ a.sdh-kartya:focus-visible {
     background-color: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font-size: 13px;
-    line-height: 32px;
+    line-height: 30px;
+    text-overflow: ellipsis;
     box-shadow: none;
 }
 
@@ -2558,34 +2670,53 @@ a.sdh-kartya:focus-visible {
     min-width: 0;
 }
 
-/* A munkalap első lapfüle a popup megnyitásakor mutatott cím alatt áll:
-   kicsit több hely kell a címnek. */
-.sdh-modal__cim + form > .sdh-munkalapurlap {
-    margin-top: .7rem;
+.sdh-munkalapurlap .sdh-szam {
+    width: 100%;
 }
 
-/* Az alsó lapfülek panelei egy cellában állnak, a magasabb méretével:
-   fülváltáskor a popup nem ugrál, és a megjegyzés kitölti a helyét. */
+/* A lapfülek panelei egy cellában állnak, a legmagasabb méretével:
+   fülváltáskor a popup nem ugrál. */
+.sdh-munkalapurlap .sdh-ml__fulek,
 .sdh-munkalapurlap .sdh-fulek--also {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
 }
 
+/* Az alsó lapfülsor (megjegyzések) kapja a maradék magasságot: ha az
+   oldalsáv a magasabb, vagy az ablakot megnövelték, ez nő meg. */
+.sdh-munkalapurlap .sdh-fulek--also {
+    flex: 1 1 auto;
+}
+
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__sav,
 .sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__sav {
     grid-row: 1;
     grid-column: 1;
 }
 
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__panel,
 .sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__panel {
     display: flex;
     grid-row: 2;
     grid-column: 1;
     box-sizing: border-box;
-    min-height: 152px;
+    min-width: 0;
     visibility: hidden;
 }
 
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__panel {
+    min-height: 236px;
+}
+
+.sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__panel {
+    min-height: 104px;
+}
+
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__ful--1:checked ~ .sdh-fulek__panel--1,
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2,
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__ful--3:checked ~ .sdh-fulek__panel--3,
+.sdh-munkalapurlap .sdh-ml__fulek > .sdh-fulek__ful--4:checked ~ .sdh-fulek__panel--4,
 .sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__ful--1:checked ~ .sdh-fulek__panel--1,
 .sdh-munkalapurlap .sdh-fulek--also > .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2 {
     visibility: visible;
@@ -2593,11 +2724,69 @@ a.sdh-kartya:focus-visible {
 
 .sdh-munkalapurlap .sdh-fulek--also textarea {
     flex: 1 1 auto;
-    min-height: 62px;
+    min-height: 56px;
     resize: none;
 }
 
-/* Hibasorok: oszlopfej + soronként hiba, állapot, javítás, törlés. */
+/* ---- Eszköz lapfül: az eszköz és az ügyfél összefoglalója ---- */
+
+.sdh-ml-kartya__fej {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .28rem .6rem;
+    border-radius: 6px;
+    background: var(--sdh-felulet-2);
+    font-size: 13px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-ml-kartya__fej strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ml-adat {
+    margin: .35rem 0 .2rem;
+    padding: 0 .6rem;
+    columns: 2 260px;
+    column-gap: 1.6rem;
+}
+
+.sdh-ml-adat__sor {
+    display: grid;
+    grid-template-columns: 6.6rem minmax(0, 1fr);
+    gap: .5rem;
+    padding: 2px 0;
+    break-inside: avoid;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.sdh-ml-adat dt {
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-ml-adat dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.sdh-ml-adat__ures,
+.sdh-ml-kartya__ures {
+    color: var(--sdh-halvany);
+}
+
+.sdh-ml-kartya__ures {
+    margin: .4rem .6rem .3rem;
+    font-size: 13px;
+}
+
+/* ---- Hibák lapfül: oszlopfej + soronként hiba, állapot, javítás ---- */
+
 .sdh-hibafej,
 .sdh-munkalapurlap .sdh-hibasor {
     display: grid;
@@ -2606,9 +2795,11 @@ a.sdh-kartya:focus-visible {
     align-items: center;
 }
 
-.sdh-hibafej {
+.sdh-hibafej,
+.sdh-tetelfej {
     padding: 0 .1rem;
-    font-size: 12.5px;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--sdh-szoveg-2);
 }
 
@@ -2633,13 +2824,114 @@ a.sdh-kartya:focus-visible {
     padding-top: .2rem;
 }
 
+/* ---- Szolgáltatások és Termékek lapfül: tételsorok ---- */
+
+.sdh-tetelek {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    min-width: 0;
+}
+
+.sdh-tetelsorok {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+/* Oszlopok: sorszám, megnevezés, [termékkód, cikkszám, gyári szám,]
+   mennyiség, m.e., bruttó ár, kedvezmény, áfakulcs, nettó é., bruttó é., törlés. */
+.sdh-tetelfej,
+.sdh-tetelsor {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) 50px 44px 84px 50px 92px 74px 80px 32px;
+    gap: 6px;
+    align-items: center;
+}
+
+.sdh-tetelek--termek .sdh-tetelfej,
+.sdh-tetelek--termek .sdh-tetelsor {
+    grid-template-columns:
+        58px minmax(0, 2.2fr) minmax(0, .8fr) minmax(0, .9fr) minmax(0, .8fr)
+        50px 44px 84px 50px 92px 74px 80px 32px;
+}
+
+.sdh-tetelfej .is-jobb,
+.sdh-tetelsor .is-jobb {
+    text-align: right;
+}
+
+.sdh-munkalapurlap .sdh-tetelsor input[type="text"],
+.sdh-munkalapurlap .sdh-tetelsor select {
+    min-width: 0;
+    height: 32px;
+    min-height: 32px;
+    padding-left: .45rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-munkalapurlap .sdh-tetelsor input[type="text"] {
+    padding-right: .45rem;
+}
+
+.sdh-munkalapurlap .sdh-tetelsor select {
+    padding-right: 1.5rem;
+    background-position: right .4rem center;
+}
+
+.sdh-tetelsor output {
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sdh-tetelsor__sorszam {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    color: var(--sdh-halvany);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-tetelsor .sdh-hibasor__torol {
+    width: 32px;
+    height: 32px;
+}
+
+/* Az összesítő sor a tételek alatt: bal oldalt az „új sor" gomb, jobbra a Σ. */
+.sdh-tetelsor--ossz {
+    margin-top: auto;
+    padding-top: .45rem;
+    border-top: 1px solid var(--sdh-keret);
+    font-weight: 600;
+}
+
+.sdh-tetelsor__szumma {
+    color: var(--sdh-halvany);
+}
+
+@media (max-width: 1100px) {
+    .sdh-ml {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdh-ml__oldal {
+        padding-right: 0;
+        border-right: 0;
+    }
+}
+
 @media (max-width: 760px) {
-    .sdh-hibafej {
+    .sdh-hibafej,
+    .sdh-tetelfej {
         display: none;
     }
 
-    .sdh-munkalapurlap .sdh-hibasor {
-        grid-template-columns: minmax(0, 1fr);
+    .sdh-munkalapurlap .sdh-hibasor,
+    .sdh-tetelsor,
+    .sdh-tetelek--termek .sdh-tetelsor {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 }
 
