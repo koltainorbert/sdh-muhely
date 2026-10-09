@@ -2,12 +2,17 @@
 /**
  * Demó adatok.
  *
- * 10 fiktív magyar ügyfél és hozzájuk rendelt 10 fiktív eszköz, minden mező
- * kitöltve – a felület kipróbálásához, bemutatóhoz. A Beállítások oldalon egy
- * gombbal tölthető be.
+ * 10 fiktív magyar ügyfél, hozzájuk rendelt 10 fiktív eszköz és mindegyik
+ * párhoz egy munkalap – minden mező kitöltve, a munkalapok a nyolc állapot
+ * mindegyikét használják, hibasorokkal, tételekkel és fizetési adatokkal.
+ * A felület kipróbálásához, bemutatóhoz. A Beállítások oldalon egy gombbal
+ * tölthető be.
  *
  * Biztonságos újrafuttatni: minden demó rekord `kulso_azonosito`-ja `demo-…`
  * kezdetű, és ami már megvan, azt nem hozza létre újra. Valódi adathoz nem nyúl.
+ *
+ * A számozott állapotú demó munkalapok valódi munkalapszámot kapnak a
+ * sorozatból – éles rendszerbe ezért ne tölts demó adatot.
  *
  * @package SDH_Muhely
  */
@@ -21,6 +26,10 @@ final class SDH_Muhely_Demo
     public static function init(): void
     {
         add_action('admin_post_sdh_muhely_demo_betoltes', [self::class, 'betoltes']);
+
+        // Ahol már vannak demó ügyfelek, a frissítés magától pótolja a
+        // hozzájuk tartozó demó munkalapokat – nem kell újra gombot nyomni.
+        add_action('sdh_muhely_sema_frissult', [self::class, 'munkalapok_potlasa']);
     }
 
     /* =================================================================
@@ -40,9 +49,11 @@ final class SDH_Muhely_Demo
             <h2 class="sdh-doboz__cim">Demó adatok</h2>
 
             <p class="sdh-sugo">
-                10 fiktív magyar ügyfél, mindegyikhez egy készülékkel – minden mező kitöltve
-                (címek, telefonszámok, IMEI, zárkód, minta, garancia, tartozékok, megjegyzések).
+                10 fiktív magyar ügyfél, mindegyikhez egy készülékkel és egy munkalappal – minden mező
+                kitöltve (címek, telefonszámok, IMEI, zárkód, minta, garancia, tartozékok, megjegyzések),
+                a munkalapok a nyolc állapot mindegyikét használják, hibasorokkal és tételekkel.
                 A rekordok „demo-” azonosítót kapnak, a gomb nem hoz létre kétszer ugyanazt.
+                A számozott demó munkalapok valódi munkalapszámot kapnak, ezért éles rendszerbe ne töltsd be.
                 <?php if ($db > 0) : ?>
                     Most <strong><?php echo (int) $db; ?></strong> demó ügyfél van a rendszerben.
                 <?php endif; ?>
@@ -71,6 +82,7 @@ final class SDH_Muhely_Demo
                     'uzenet' => 'demo_betoltve',
                     'ugyfel' => $eredmeny['ugyfel'],
                     'eszkoz' => $eredmeny['eszkoz'],
+                    'munkalap' => $eredmeny['munkalap'],
                 ]
             )
         );
@@ -82,7 +94,7 @@ final class SDH_Muhely_Demo
      * ============================================================== */
 
     /**
-     * @return array{ugyfel: int, eszkoz: int} Hány új rekord jött létre.
+     * @return array{ugyfel: int, eszkoz: int, munkalap: int} Hány új rekord jött létre.
      */
     public static function betolt(): array
     {
@@ -155,7 +167,292 @@ final class SDH_Muhely_Demo
             }
         }
 
-        return ['ugyfel' => $uj_ugyfel, 'eszkoz' => $uj_eszkoz];
+        return ['ugyfel' => $uj_ugyfel, 'eszkoz' => $uj_eszkoz, 'munkalap' => self::munkalapok_betolt()];
+    }
+
+    /* =================================================================
+     * Demó munkalapok
+     * ============================================================== */
+
+    /**
+     * Sémafrissítés után fut: ha a rendszerben vannak demó ügyfelek, a
+     * hiányzó demó munkalapokat létrehozza. Demó ügyfél nélkül nem tesz semmit.
+     */
+    public static function munkalapok_potlasa(): void
+    {
+        global $wpdb;
+
+        $van = (int) $wpdb->get_var(
+            'SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . " WHERE kulso_azonosito LIKE 'demo-u-%'"
+        );
+
+        if ($van > 0) {
+            self::munkalapok_betolt();
+        }
+    }
+
+    /**
+     * A demó ügyfél–eszköz párokhoz egy-egy munkalap, különböző állapotban.
+     *
+     * Csak ahhoz a párhoz készül lap, amelyiknek az ügyfele és az eszköze is
+     * megvan; ami már létezik (`demo-m-…`), azt nem hozza létre újra.
+     *
+     * @return int Hány új munkalap jött létre.
+     */
+    public static function munkalapok_betolt(): int
+    {
+        global $wpdb;
+
+        if (!class_exists('SDH_Muhely_Munkalap') || !class_exists('SDH_Muhely_Tetel')) {
+            return 0;
+        }
+
+        $ugyfel_tabla   = SDH_Muhely_Schema::tabla('ugyfel');
+        $eszkoz_tabla   = SDH_Muhely_Schema::tabla('eszkoz');
+        $munkalap_tabla = SDH_Muhely_Schema::tabla('munkalap');
+
+        $allapotok      = SDH_Muhely_Munkalap::allapotok();
+        $hiba_allapotok = SDH_Muhely_Munkalap::hiba_allapotok();
+        $alap_allapot   = SDH_Muhely_Munkalap::alap_kulcs($allapotok);
+        $alap_hiba      = (string) (array_key_first($hiba_allapotok) ?? 'uj');
+
+        // Ha a pótlás bejelentkezett felhasználó nélkül fut le, a felelős az
+        // első olyan felhasználó, aki a rendszert használhatja.
+        $felhasznalo = get_current_user_id()
+            ?: (int) (array_key_first(SDH_Muhely_Munkalap::felelosok()) ?? 0);
+        $ma          = current_time('Y-m-d');
+        $nap         = static fn (?int $eltolas): ?string => $eltolas === null
+            ? null
+            : gmdate('Y-m-d', strtotime($ma . ' ' . ($eltolas >= 0 ? '+' : '') . $eltolas . ' day'));
+
+        $uj = 0;
+
+        foreach (self::munkalapok() as $i => $m) {
+            $kulcs = sprintf('demo-m-%02d', $i + 1);
+
+            $van = (int) $wpdb->get_var(
+                $wpdb->prepare("SELECT id FROM {$munkalap_tabla} WHERE kulso_azonosito = %s", $kulcs)
+            );
+
+            if ($van > 0) {
+                continue;
+            }
+
+            $ugyfel_id = (int) $wpdb->get_var(
+                $wpdb->prepare("SELECT id FROM {$ugyfel_tabla} WHERE kulso_azonosito = %s", sprintf('demo-u-%02d', $i + 1))
+            );
+            $eszkoz_id = (int) $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT id FROM {$eszkoz_tabla} WHERE kulso_azonosito = %s AND ugyfel_id = %d",
+                    sprintf('demo-e-%02d', $i + 1),
+                    $ugyfel_id
+                )
+            );
+
+            if ($ugyfel_id <= 0 || $eszkoz_id <= 0) {
+                continue;
+            }
+
+            $hibak = [];
+
+            foreach ($m['hibak'] as $hiba) {
+                $hibak[] = [
+                    'id'      => 0,
+                    'leiras'  => $hiba[0],
+                    'allapot' => isset($hiba_allapotok[$hiba[1]]) ? $hiba[1] : $alap_hiba,
+                    'javitas' => $hiba[2],
+                ];
+            }
+
+            $id = SDH_Muhely_Munkalap::letrehoz(
+                [
+                    // Ha a szerviz átnevezte vagy törölte az állapotot, az alapállapot áll a helyére.
+                    'allapot'         => isset($allapotok[$m['allapot']]) ? $m['allapot'] : $alap_allapot,
+                    'nev'             => $m['nev'],
+                    'ugyfel_id'       => $ugyfel_id,
+                    'eszkoz_id'       => $eszkoz_id,
+                    'felelos'         => $m['felelos'] ? $felhasznalo : 0,
+                    'keszult'         => $nap($m['keszult']),
+                    'hatarido'        => $nap($m['hatarido']),
+                    'megjegyzes'      => $m['megjegyzes'],
+                    'forras'          => 'demo',
+                    'kulso_azonosito' => $kulcs,
+                ],
+                $hibak
+            );
+
+            if (!is_int($id) || $id <= 0) {
+                continue;
+            }
+
+            // A lezárás és a fizetés dátuma a múltba kerül, ahogy egy valódi lapon lenne.
+            $kiegeszites = [
+                'fizetve'       => $m['fizetve'] !== null ? 1 : 0,
+                'fizetes_ideje' => $nap($m['fizetve']),
+                'fizetett'      => $m['fizetett'],
+            ];
+
+            if ($m['lezarva'] !== null) {
+                $kiegeszites['lezarva'] = $nap($m['lezarva']);
+            }
+
+            $wpdb->update($munkalap_tabla, $kiegeszites, ['id' => $id]);
+
+            foreach ($m['tetelek'] as $sorrend => $t) {
+                SDH_Muhely_Tetel::hozzaad($id, [
+                    'sorrend'         => $sorrend,
+                    'tipus'           => $t[0],
+                    'megnevezes'      => $t[1],
+                    'termekkod'       => $t[2],
+                    'cikkszam'        => $t[3],
+                    'mennyiseg'       => $t[4],
+                    'brutto_ar'       => $t[5],
+                    'allapot'         => $t[6],
+                    'idopont'         => $nap($m['keszult']),
+                    'munkavegzo'      => $t[0] === 'szolgaltatas' && $m['felelos'] ? $felhasznalo : 0,
+                    'elado'           => $t[0] === 'termek' ? 'Demó Alkatrész Kft.' : '',
+                    'forras'          => 'demo',
+                    'kulso_azonosito' => $kulcs . '-' . ($sorrend + 1),
+                ]);
+            }
+
+            $uj++;
+        }
+
+        return $uj;
+    }
+
+    /**
+     * A tíz demó munkalap, az ügyfelek és az eszközök sorrendjében.
+     *
+     * A dátumok a mai naphoz viszonyított eltolások (napban), hogy a demó
+     * mindig „friss" legyen: lesz mai, lejárt határidejű és lezárt lap is.
+     * `fizetve`: a kiegyenlítés napja (eltolás) vagy null, ha nincs kifizetve.
+     * Hibasor: [leírás, állapot, javítás]. Tétel: [típus, megnevezés,
+     * termékkód, cikkszám, mennyiség, bruttó egységár, állapot].
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function munkalapok(): array
+    {
+        return [
+            [   // Kovács Péter – Samsung Galaxy S23
+                'allapot' => 'nyitott', 'nev' => 'Akkumulátorcsere', 'felelos' => true,
+                'keszult' => -2, 'hatarido' => 3, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Garanciális ügyintézés: a vásárlási számla másolatát kérni az ügyféltől.',
+                'hibak' => [
+                    ['Az akkumulátor gyorsan merül', 'folyamatban', 'Bevizsgálva: az akku kapacitása 71%.'],
+                    ['Töltés közben melegszik', 'uj', ''],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Mobiltelefon munkadíj – 2-es kategória', '', '', 1, 13000, 'tervezett'],
+                    ['termek', 'Samsung Galaxy S23 akkumulátor', 'D-10231', 'EB-BS912ABY', 1, 14900, 'tervezett'],
+                ],
+            ],
+            [   // Nagy Eszter – iPhone 14 Pro
+                'allapot' => 'elkeszult', 'nev' => 'Hátlapi kameraüveg cseréje', 'felelos' => true,
+                'keszult' => -4, 'hatarido' => 1, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Elkészült, e-mailben értesítve. Átvételkor számlát kér a cégére.',
+                'hibak' => [
+                    ['Eltört a hátlapi kamera üvege', 'kesz', 'Kameraüveg cserélve, a kamera képe éles.'],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Kameraüveg-csere munkadíj', '', '', 1, 9000, 'teljesitett'],
+                    ['termek', 'iPhone 14 Pro hátlapi kameraüveg', 'D-20418', 'A2890-CG', 1, 6500, 'teljesitett'],
+                ],
+            ],
+            [   // Szabó Gergely – Redmi Note 13 Pro
+                'allapot' => 'arajanlat', 'nev' => 'Kijelzőcsere – árajánlat', 'felelos' => false,
+                'keszult' => -1, 'hatarido' => 6, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Fizikai sérülés, garanciába nem vehető fel. Az ajánlatot SMS-ben kérte.',
+                'hibak' => [
+                    ['Repedt kijelző, az érintés a repedés mentén nem működik', 'uj', ''],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Kijelzőcsere munkadíj', '', '', 1, 12000, 'tervezett'],
+                    ['termek', 'Redmi Note 13 Pro kijelzőmodul (AMOLED)', 'D-30977', '5600030N6P00', 1, 38900, 'tervezett'],
+                ],
+            ],
+            [   // Tóth Katalin – Huawei P40
+                'allapot' => 'lezart', 'nev' => 'Töltőcsatlakozó cseréje', 'felelos' => true,
+                'keszult' => -9, 'hatarido' => -5, 'lezarva' => -6, 'fizetve' => -6, 'fizetett' => 17900,
+                'megjegyzes' => 'Személyesen átvette, készpénzzel fizetett.',
+                'hibak' => [
+                    ['Nem tölt, a töltőport laza', 'kesz', 'Töltőcsatlakozó panel cserélve, töltés rendben.'],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Mobiltelefon munkadíj – 1-es kategória', '', '', 1, 11000, 'teljesitett'],
+                    ['termek', 'Huawei P40 töltőcsatlakozó panel', 'D-40552', '02353MFC', 1, 6900, 'teljesitett'],
+                ],
+            ],
+            [   // Horváth Dávid – Motorola Moto G73
+                'allapot' => 'fuggo', 'nev' => 'Hangszórócsere', 'felelos' => true,
+                'keszult' => -3, 'hatarido' => 7, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 10000,
+                'megjegyzes' => 'Alkatrészre vár: a hangszórómodul megrendelve. 10 000 Ft előleget fizetett.',
+                'hibak' => [
+                    ['A hangszóró recseg', 'folyamatban', 'Hangszórómodul rendelés alatt.'],
+                    ['Hívásnál a másik fél alig hallható', 'uj', ''],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Mobiltelefon munkadíj – 1-es kategória', '', '', 1, 9500, 'tervezett'],
+                    ['termek', 'Moto G73 hangszórómodul', 'D-50133', 'SD18D48012', 1, 8500, 'tervezett'],
+                ],
+            ],
+            [   // Varga Zsuzsanna – iPad Air
+                'allapot' => 'bejelentett', 'nev' => 'Érintőképernyő bevizsgálása', 'felelos' => false,
+                'keszult' => 0, 'hatarido' => 5, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Telefonon bejelentve, a készüléket holnap hozzák. Betegadatok vannak rajta.',
+                'hibak' => [
+                    ['Az érintőképernyő időnként magától görget', 'uj', ''],
+                ],
+                'tetelek' => [],
+            ],
+            [   // Balaton Digital Kft. – Galaxy Tab S9
+                'allapot' => 'nyitott', 'nev' => 'Töltési hiba', 'felelos' => true,
+                'keszult' => -8, 'hatarido' => -2, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Céges eszköz, a javítást a kapcsolattartó hagyja jóvá. A határidő lejárt!',
+                'hibak' => [
+                    ['A töltés lassú, 30% fölött már nem tölt', 'folyamatban', 'Bevizsgálva: az akkumulátor hibás.'],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Bevizsgálási díj', '', '', 1, 5000, 'teljesitett'],
+                ],
+            ],
+            [   // Miskolci Építő Zrt. – Apple Watch Series 8
+                'allapot' => 'ervenytelen', 'nev' => 'Nem kapcsol be', 'felelos' => false,
+                'keszult' => -12, 'hatarido' => null, 'lezarva' => -11, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Tévesen felvett lap: a megrendelőszám hiányzott, az ügyfél visszavonta a megbízást.',
+                'hibak' => [
+                    ['Nem kapcsol be, töltőre sem reagál', 'nem_javithato', 'A javítás nem indult el.'],
+                ],
+                'tetelek' => [],
+            ],
+            [   // Tapolcai Fogászat Bt. – Galaxy Watch6 Classic
+                'allapot' => 'lezart', 'nev' => 'Pulzusmérő szenzor – garanciális', 'felelos' => true,
+                'keszult' => -15, 'hatarido' => -8, 'lezarva' => -10, 'fizetve' => -10, 'fizetett' => 4500,
+                'megjegyzes' => 'Garanciális szenzorcsere; a vízállósági tesztet külön kérték.',
+                'hibak' => [
+                    ['A pulzusmérő szenzor nem mér', 'kesz', 'Szenzormodul garanciában cserélve.'],
+                    ['A vízállóság bizonytalan', 'kesz', 'Vízállósági teszt rendben.'],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Garanciális javítás – szenzorcsere', '', '', 1, 0, 'teljesitett'],
+                    ['szolgaltatas', 'Vízállósági teszt', '', '', 1, 4500, 'teljesitett'],
+                    ['termek', 'Galaxy Watch6 pulzusmérő szenzormodul', 'D-90044', 'GH97-28917A', 1, 0, 'teljesitett'],
+                ],
+            ],
+            [   // Székesfehérvári Városi Könyvtár – Huawei 4G router
+                'allapot' => 'sablon', 'nev' => 'Router-karbantartás (sablon)', 'felelos' => false,
+                'keszult' => -20, 'hatarido' => null, 'lezarva' => null, 'fizetve' => null, 'fizetett' => 0,
+                'megjegyzes' => 'Negyedévente ismétlődő karbantartás sablonja. Megrendelőszám nélkül nem indítható.',
+                'hibak' => [
+                    ['Időnként elveszíti a mobilhálózatot', 'uj', ''],
+                ],
+                'tetelek' => [
+                    ['szolgaltatas', 'Firmware-frissítés és antennateszt', '', '', 1, 8000, 'tervezett'],
+                ],
+            ],
+        ];
     }
 
     /**

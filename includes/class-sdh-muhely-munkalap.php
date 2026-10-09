@@ -72,6 +72,64 @@ final class SDH_Muhely_Munkalap
 
         // Az ügyfél kiválasztása után az eszközválasztó ebből töltődik.
         add_action('wp_ajax_sdh_muhely_munkalapok_eszkozok', [self::class, 'ajax_eszkozok']);
+
+        // Sémafrissítés után: a régi lezárt lapok lezárási dátumának pótlása.
+        add_action('sdh_muhely_sema_frissult', [self::class, 'lezarva_potlas']);
+    }
+
+    /* =================================================================
+     * Lezárás dátuma
+     * ============================================================== */
+
+    /**
+     * A „Lezárva" oszlop értéke állapotváltáskor.
+     *
+     * Lezárt állapotba lépéskor a mai nap; ha a lap már lezárt volt (pl.
+     * Lezártból Érvénytelenbe kerül), az eredeti nap marad. Nem lezárt
+     * állapotban a mező üres – az újranyitott lap nem viseli a régi dátumot.
+     */
+    private static function lezarva_ertek(string $uj_allapot, ?object $regi): ?string
+    {
+        $allapotok = self::allapotok();
+
+        if (empty($allapotok[$uj_allapot]['zart'])) {
+            return null;
+        }
+
+        $regi_datum = $regi !== null ? self::datum_ertek((string) ($regi->lezarva ?? '')) : '';
+        $regi_zart  = $regi !== null && !empty($allapotok[(string) $regi->allapot]['zart']);
+
+        return $regi_zart && $regi_datum !== '' ? $regi_datum : current_time('Y-m-d');
+    }
+
+    /**
+     * A 0.15.0 előtti lezárt lapokon nincs lezárási dátum: az utolsó
+     * módosítás napját kapják. Újrafuttatható, kitöltött mezőhöz nem nyúl.
+     */
+    public static function lezarva_potlas(): void
+    {
+        global $wpdb;
+
+        $zart = self::zart_kulcsok(self::allapotok());
+
+        if ($zart === []) {
+            return;
+        }
+
+        $tabla = self::tabla();
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- csak helyőrzők kerülnek bele.
+        $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE {$tabla}
+                 SET lezarva = SUBSTRING(COALESCE(modositva, letrehozva), 1, 10)
+                 WHERE lezarva IS NULL
+                   AND COALESCE(modositva, letrehozva) IS NOT NULL
+                   AND allapot IN (" . self::in_helyorzo($zart) . ')',
+                $zart
+            )
+        );
+        // phpcs:enable
     }
 
     /* =================================================================
@@ -112,7 +170,7 @@ final class SDH_Muhely_Munkalap
      *
      * @return array<int, object>
      */
-    private static function hibasorok(int $munkalap_id): array
+    public static function hibasorok(int $munkalap_id): array
     {
         global $wpdb;
 
@@ -349,7 +407,7 @@ final class SDH_Muhely_Munkalap
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $lista
      * @return array<int, string>
      */
-    private static function zart_kulcsok(array $lista): array
+    public static function zart_kulcsok(array $lista): array
     {
         $kulcsok = [];
 
@@ -368,7 +426,7 @@ final class SDH_Muhely_Munkalap
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $lista
      * @return array<int, string>
      */
-    private static function nyitott_kulcsok(array $lista): array
+    public static function nyitott_kulcsok(array $lista): array
     {
         $kulcsok = [];
 
@@ -390,7 +448,7 @@ final class SDH_Muhely_Munkalap
      *
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $lista
      */
-    private static function alap_kulcs(array $lista): string
+    public static function alap_kulcs(array $lista): string
     {
         foreach ($lista as $kulcs => $allapot) {
             if (!empty($allapot['alap'])) {
@@ -635,7 +693,7 @@ final class SDH_Muhely_Munkalap
      *
      * @return array<int, string> azonosító => név
      */
-    private static function felelosok(): array
+    public static function felelosok(): array
     {
         $felhasznalok = get_users([
             'capability' => SDH_Muhely_Admin_UI::jog(),
@@ -653,7 +711,7 @@ final class SDH_Muhely_Munkalap
         return $lista;
     }
 
-    private static function felelos_nev(int $id): string
+    public static function felelos_nev(int $id): string
     {
         if ($id <= 0) {
             return '';
@@ -1083,7 +1141,7 @@ final class SDH_Muhely_Munkalap
      * számozott állapothoz ügyfél és eszköz kell, és az első számozott
      * állapotba lépéskor a lap munkalapszámot kap (zár alatt).
      *
-     * @return array{szam: string, nev: string, szin: string, zart: bool}|string
+     * @return array{id: int, szam: string, nev: string, szin: string, zart: bool}|string
      */
     private static function allapot_valt(int $id, string $kulcs)
     {
@@ -1124,7 +1182,11 @@ final class SDH_Muhely_Munkalap
             }
         }
 
-        $adatok = ['allapot' => $kulcs, 'modositva' => current_time('mysql')];
+        $adatok = [
+            'allapot'   => $kulcs,
+            'lezarva'   => self::lezarva_ertek($kulcs, $regi),
+            'modositva' => current_time('mysql'),
+        ];
 
         try {
             if ($szamot_kap) {
@@ -1141,6 +1203,7 @@ final class SDH_Muhely_Munkalap
         }
 
         return [
+            'id'   => $id,
             'szam' => self::szam_formaz($adatok['munkalap_szam'] ?? $regi->munkalap_szam),
             'nev'  => $allapotok[$kulcs]['nev'],
             'szin' => $allapotok[$kulcs]['szin'],
@@ -1773,6 +1836,8 @@ final class SDH_Muhely_Munkalap
             }
         }
 
+        $adatok['lezarva'] = self::lezarva_ertek((string) $adatok['allapot'], $regi);
+
         try {
             if ($szamot_kap) {
                 $adatok['munkalap_szam'] = self::kovetkezo_szam();
@@ -1784,7 +1849,7 @@ final class SDH_Muhely_Munkalap
             } else {
                 $adatok['letrehozva'] = current_time('mysql');
                 $adatok['letrehozo']  = get_current_user_id();
-                $adatok['forras']     = 'kezi';
+                $adatok['forras']     = $adatok['forras'] ?? 'kezi';
 
                 $eredmeny = $wpdb->insert(self::tabla(), $adatok);
                 $id       = (int) $wpdb->insert_id;
@@ -1807,6 +1872,27 @@ final class SDH_Muhely_Munkalap
             : ($regi !== null ? self::szam_formaz($regi->munkalap_szam) : '');
 
         return [$id, $uzenet, $szam];
+    }
+
+    /**
+     * Munkalap létrehozása kódból (demó adatok, később az átvétel).
+     *
+     * Ugyanazon az úton megy, mint az űrlap mentése: a számot zár alatt
+     * kapja, a lezárás dátuma is beáll. Az $adatok kulcsai a tábla oszlopai
+     * (allapot, nev, ugyfel_id, eszkoz_id, felelos, keszult, hatarido,
+     * megjegyzes…), a hibasoroké: id (0), leiras, javitas, allapot.
+     *
+     * @param array<string, mixed>                                                         $adatok
+     * @param array<int, array{id: int, leiras: string, javitas: string, allapot: string}> $hibak
+     * @return int|string Az új munkalap azonosítója, vagy hibaüzenet.
+     */
+    public static function letrehoz(array $adatok, array $hibak = [])
+    {
+        $adatok['modositva'] = $adatok['modositva'] ?? current_time('mysql');
+
+        $eredmeny = self::adatbazisba(0, $adatok, $hibak, null);
+
+        return is_string($eredmeny) ? $eredmeny : (int) $eredmeny[0];
     }
 
     /**
@@ -1967,14 +2053,14 @@ final class SDH_Muhely_Munkalap
         return preg_match('/^\d{4}-\d{2}-\d{2}$/', $ertek) === 1 ? $ertek : null;
     }
 
-    private static function datum_megjelenit(string $ertek): string
+    public static function datum_megjelenit(string $ertek): string
     {
         $ertek = self::datum_ertek($ertek);
 
         return $ertek === '' ? '—' : mysql2date('Y. m. d.', $ertek);
     }
 
-    private static function datumido_megjelenit(string $ertek): string
+    public static function datumido_megjelenit(string $ertek): string
     {
         return ($ertek === '' || str_starts_with($ertek, '0000'))
             ? '—'

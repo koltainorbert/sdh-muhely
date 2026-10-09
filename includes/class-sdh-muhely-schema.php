@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.14.0';
+    public const DB_VERSION = '0.15.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -82,6 +82,10 @@ final class SDH_Muhely_Schema
         }
 
         update_option(self::OPTION, self::DB_VERSION);
+
+        // A modulok itt pótolhatják, amit az új oszlopok megkívánnak
+        // (pl. a lezárás dátuma a régi lezárt lapokon, demó munkalapok).
+        do_action('sdh_muhely_sema_frissult', self::DB_VERSION);
     }
 
     /**
@@ -96,6 +100,7 @@ final class SDH_Muhely_Schema
         $tac    = self::tabla('tac');
         $munkalap = self::tabla('munkalap');
         $hiba     = self::tabla('munkalap_hiba');
+        $tetel    = self::tabla('munkalap_tetel');
         $csatolmany = self::tabla('csatolmany');
 
         $definiciok = [];
@@ -263,17 +268,31 @@ final class SDH_Muhely_Schema
          * sémát módosítani.
          *
          * A "kulso_azonosito" a MunkaLap 3 saját kulcsa az átvételhez.
+         *
+         * A "lezarva" a lezárt állapotba lépés napja. A "netto_ertek" és
+         * a "brutto_ertek" a tételek összege, ide másolva: a kezdőképernyő
+         * rácsa így 40 ezer lapnál is egy táblából rendez és szűr. Ezeket
+         * mindig a SDH_Muhely_Tetel::ujraszamol() írja, kézzel soha.
+         * A "fizetett" a már befizetett összeg (előleg is), a "fizetve"
+         * jelzi, hogy a lap ki van egyenlítve.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$munkalap} (
             id bigint(20) unsigned NOT NULL auto_increment,
             munkalap_szam bigint(20) unsigned NULL,
             allapot varchar(30) NOT NULL default 'bejelentett',
+            jelzes varchar(20) NOT NULL default '',
             nev varchar(190) NOT NULL default '',
             ugyfel_id bigint(20) unsigned NOT NULL default 0,
             eszkoz_id bigint(20) unsigned NOT NULL default 0,
             felelos bigint(20) unsigned NOT NULL default 0,
             keszult date NULL,
             hatarido date NULL,
+            lezarva date NULL,
+            fizetve tinyint(1) NOT NULL default 0,
+            fizetes_ideje date NULL,
+            fizetett decimal(14,2) NOT NULL default 0.00,
+            netto_ertek decimal(14,2) NOT NULL default 0.00,
+            brutto_ertek decimal(14,2) NOT NULL default 0.00,
             megjegyzes text NULL,
             forras varchar(30) NOT NULL default 'kezi',
             kulso_azonosito varchar(40) NOT NULL default '',
@@ -310,6 +329,48 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key munkalap_id (munkalap_id),
             key allapot (allapot)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Munkalap – tételek (szolgáltatások és termékek)
+         *
+         * A MunkaLap 3 „Szolgáltatások" és „Termékek" lapfülének sorai
+         * egy táblában: a kettőt a "tipus" különbözteti meg, minden más
+         * mezőjük közös. Az árak nettóban és bruttóban is tárolódnak,
+         * mert a pultnál bruttóval dolgoznak, a bizonylat nettót kér.
+         * Az "*_ertek" = egységár × mennyiség, kedvezménnyel csökkentve.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$tetel} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            sorrend int(11) NOT NULL default 0,
+            tipus varchar(20) NOT NULL default 'szolgaltatas',
+            mozgas varchar(20) NOT NULL default 'kimeno',
+            allapot varchar(30) NOT NULL default 'teljesitett',
+            idopont date NULL,
+            szamla varchar(40) NOT NULL default '',
+            megnevezes varchar(255) NOT NULL default '',
+            termekkod varchar(60) NOT NULL default '',
+            cikkszam varchar(60) NOT NULL default '',
+            gyari_szam varchar(60) NOT NULL default '',
+            mennyiseg decimal(12,3) NOT NULL default 1.000,
+            me varchar(20) NOT NULL default 'db',
+            munkavegzo bigint(20) unsigned NOT NULL default 0,
+            kedvezmeny decimal(5,2) NOT NULL default 0.00,
+            afa decimal(5,2) NOT NULL default 27.00,
+            netto_ar decimal(14,2) NOT NULL default 0.00,
+            brutto_ar decimal(14,2) NOT NULL default 0.00,
+            netto_ertek decimal(14,2) NOT NULL default 0.00,
+            brutto_ertek decimal(14,2) NOT NULL default 0.00,
+            elado varchar(190) NOT NULL default '',
+            forras varchar(30) NOT NULL default 'kezi',
+            kulso_azonosito varchar(40) NOT NULL default '',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id),
+            key tipus (tipus),
+            key kulso_azonosito (kulso_azonosito)
         ) {$charset};";
 
         /* ----------------------------------------------------------

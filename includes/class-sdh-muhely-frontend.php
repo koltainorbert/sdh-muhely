@@ -196,6 +196,11 @@ final class SDH_Muhely_Frontend
             exit;
         }
 
+        // A frontend nem jár az admin_init-en, ahol a sémafrissítés különben
+        // lefut: itt pótoljuk, még a tartalom előtt, hogy fájlcsere után az
+        // első megnyitott oldal már az új oszlopokkal dolgozzon.
+        SDH_Muhely_Schema::frissites_ha_kell();
+
         $modul = $kulcs === 'attekintes' ? null : SDH_Muhely_Modulok::egy($kulcs);
 
         // A csak adminos modulok (karbantartás, beállítás) nem részei a
@@ -332,6 +337,10 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.css')); ?>">
+            <?php if ($aktiv_kulcs === 'attekintes') : ?>
+                <link rel="stylesheet"
+                      href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
+            <?php endif; ?>
         </head>
         <body class="sdh-app">
 
@@ -441,6 +450,9 @@ final class SDH_Muhely_Frontend
             ?>;
         </script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')); ?>"></script>
+        <?php if ($aktiv_kulcs === 'attekintes') : ?>
+            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.js')); ?>"></script>
+        <?php endif; ?>
 
         </body>
         </html>

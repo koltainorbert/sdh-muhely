@@ -291,6 +291,24 @@ final class SDH_Muhely_Admin_UI
             'window.SDH_MUHELY = ' . wp_json_encode(self::js_beallitas('admin')) . ';',
             'before'
         );
+
+        // A munkalap-rács csak a kezdőképernyőn él.
+        if ($oldal === self::FOMENU) {
+            wp_enqueue_style(
+                'sdh-muhely-racs',
+                SDH_MUHELY_URL . 'assets/racs.css',
+                ['sdh-muhely-admin'],
+                self::eszkoz_verzio('assets/racs.css')
+            );
+
+            wp_enqueue_script(
+                'sdh-muhely-racs',
+                SDH_MUHELY_URL . 'assets/racs.js',
+                ['sdh-muhely-app'],
+                self::eszkoz_verzio('assets/racs.js'),
+                true
+            );
+        }
     }
 
     /**
@@ -414,10 +432,11 @@ final class SDH_Muhely_Admin_UI
         [$tipus, $szoveg] = $uzenetek[$kulcs];
 
         if ($kulcs === 'demo_betoltve') {
-            $ugyfel = isset($_GET['ugyfel']) ? (int) $_GET['ugyfel'] : 0;
-            $eszkoz = isset($_GET['eszkoz']) ? (int) $_GET['eszkoz'] : 0;
-            $szoveg = ($ugyfel + $eszkoz) > 0
-                ? sprintf('Demó adatok betöltve: %d új ügyfél, %d új eszköz.', $ugyfel, $eszkoz)
+            $ugyfel   = isset($_GET['ugyfel']) ? (int) $_GET['ugyfel'] : 0;
+            $eszkoz   = isset($_GET['eszkoz']) ? (int) $_GET['eszkoz'] : 0;
+            $munkalap = isset($_GET['munkalap']) ? (int) $_GET['munkalap'] : 0;
+            $szoveg   = ($ugyfel + $eszkoz + $munkalap) > 0
+                ? sprintf('Demó adatok betöltve: %d új ügyfél, %d új eszköz, %d új munkalap.', $ugyfel, $eszkoz, $munkalap)
                 : 'A demó adatok már mind megvannak, semmi nem jött létre újra.';
         }
 
@@ -492,7 +511,7 @@ final class SDH_Muhely_Admin_UI
         }
 
         ?>
-        <div class="sdh-wrap">
+        <div class="sdh-wrap sdh-wrap--teljes">
             <?php
             self::uzenet();
             self::fejlec(
@@ -518,6 +537,13 @@ final class SDH_Muhely_Admin_UI
                     <span class="sdh-kartya__cimke">nyitott munkalap</span>
                 </a>
             </div>
+
+            <?php
+            // Az összes munkalap rácsa és a kijelölt lap részletei (MunkaLap 3 főablak).
+            if (class_exists('SDH_Muhely_Racs')) {
+                SDH_Muhely_Racs::megjelenit();
+            }
+            ?>
 
             <?php if ($technikai) : ?>
                 <table class="sdh-tabla sdh-tabla--keskeny">

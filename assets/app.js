@@ -385,6 +385,23 @@
                             return;
                         }
 
+                        // Ahol a lista helyben frissíthető (a kezdőképernyő
+                        // munkalap-rácsa), ott a figyelő elfogja a mentést:
+                        // nincs oldalváltás, a popup bezárul, a rács újratölt.
+                        var mentve = new CustomEvent('sdh:mentve', {
+                            cancelable: true,
+                            detail: {
+                                action: urlap.dataset.sdhAjaxAction || '',
+                                adat: eredmeny.data || {}
+                            }
+                        });
+
+                        if (!document.dispatchEvent(mentve)) {
+                            bezar(n);
+
+                            return;
+                        }
+
                         // A lista így mutatja a változást, és az üzenet is
                         // megjelenik a megszokott helyen.
                         window.location.href = eredmeny.data.vissza;
@@ -2428,7 +2445,8 @@
 
     /** Kis üzenet a lista fölött (a lista nem űrlap, ezért külön jelzés kell). */
     function listaJelzes(szoveg) {
-        var tabla = document.querySelector('.sdh-tabla');
+        // A kezdőképernyő rácsa nem .sdh-tabla: ott a jelzés helyét külön jelöljük.
+        var tabla = document.querySelector('[data-sdh-jelzes-hely], .sdh-tabla');
 
         if (!tabla) {
             window.alert(szoveg);
@@ -2510,6 +2528,11 @@
                         szam.textContent = adat.szam;
                     }
                 }
+
+                // A rács és a részletpanel ebből tudja, hogy frissítenie kell.
+                document.dispatchEvent(new CustomEvent('sdh:allapot', {
+                    detail: { id: valaszto.dataset.id || '0', adat: adat }
+                }));
             })
             .catch(function () {
                 vissza('Nem sikerült elérni a szervert, az állapot nem módosult.');

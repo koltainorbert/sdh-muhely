@@ -25,6 +25,8 @@
     /* A kiemelő szín szövegként. Sötét módban világosabb változat áll
        a helyére, mert a telt szín sötét háttéren nem olvasható. */
     --sdh-accent-szoveg: var(--sdh-accent);
+    /* Felirat a kiemelő színnel kitöltött felületen (elsődleges gomb). */
+    --sdh-accent-felirat: #ffffff;
 
     --sdh-vaszon: #f6f7f9;
     --sdh-felulet: #ffffff;
@@ -54,6 +56,17 @@
     --sdh-allapot-olajzold: #7d7d14;
     --sdh-allapot-lila: #4f44a8;
     --sdh-allapot-piros: #e0302a;
+
+    /* Munkalap-rács (kezdőképernyő, assets/racs.css). A kijelölt sor a
+       kiemelő színt követi, ezért színváltáskor magától átszíneződik. */
+    --sdh-racs-fej: var(--sdh-felulet-2);
+    --sdh-racs-csik: color-mix(in srgb, var(--sdh-felulet-2) 55%, var(--sdh-felulet));
+    --sdh-racs-folotte: color-mix(in srgb, var(--sdh-accent) 7%, var(--sdh-felulet));
+    --sdh-racs-kijelolt: color-mix(in srgb, var(--sdh-accent) 22%, var(--sdh-felulet));
+    --sdh-racs-kijelolt-sav: var(--sdh-accent);
+    --sdh-racs-szuro-aktiv: color-mix(in srgb, var(--sdh-accent) 10%, var(--sdh-felulet));
+    --sdh-racs-jelzes: var(--sdh-allapot-piros);
+    --sdh-racs-pipa: var(--sdh-siker);
 
     --sdh-r: 8px;
     --sdh-r-nagy: 12px;
@@ -164,6 +177,11 @@
     color: var(--sdh-szoveg);
 }
 
+/* A kezdőképernyő rácsa a teljes szélességet használja. */
+.sdh-wrap.sdh-wrap--teljes {
+    max-width: none;
+}
+
 /* ================================================================== */
 /* Oldalfejléc                                                         */
 /* ================================================================== */
@@ -248,14 +266,25 @@
 .sdh-gomb--elsodleges {
     background: var(--sdh-accent);
     border-color: var(--sdh-accent);
-    color: #fff;
+    color: var(--sdh-accent-felirat);
 }
 
 .sdh-gomb--elsodleges:hover,
 .sdh-gomb--elsodleges:focus-visible {
     background: var(--sdh-accent-sotet);
     border-color: var(--sdh-accent-sotet);
-    color: #fff;
+    color: var(--sdh-accent-felirat);
+}
+
+/* A telt gomb felirata akkor is fehér, ha a gomb link (<a>): a felületek
+   általános linkszíne (.sdh-app a, a wp-admin linkjei) különben a gomb
+   saját színével azonos feliratot adna – a gomb „üresnek" látszana. */
+a.sdh-gomb.sdh-gomb--elsodleges,
+a.sdh-gomb.sdh-gomb--elsodleges:hover,
+a.sdh-gomb.sdh-gomb--elsodleges:focus,
+a.sdh-gomb.sdh-gomb--elsodleges:active,
+a.sdh-gomb.sdh-gomb--elsodleges:visited {
+    color: var(--sdh-accent-felirat);
 }
 
 /* Régi módosító – ma már ez az alap. */

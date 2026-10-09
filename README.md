@@ -57,6 +57,38 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.21.0
+- **Kezdőképernyő = munkalap-rács** (a MunkaLap 3 főablaka): az összes munkalap egy rácsban,
+  a MunkaLap oszlopaival (Sorszám, Jelzés, Állapot, Felelős, Azonosító, Gyártó, Típus, Garancia,
+  IMEI, Sorozatszám, Ügyfél, Telefonszám, Készült, Határidő, Lezárva, Fizetve, Fizetés ideje,
+  Bruttó é., Fizetett, Fizetendő, Belső megjegyzés; rejtve: Név, Megnevezés, Létrehozva, Módosítva).
+  Minden a szerveren szűr, rendez és lapoz (`SDH_Muhely_Racs`, `assets/racs.js`, `assets/racs.css`).
+- **Szűrők**: oszloponkénti szűrősor. Gépelve azonnal szűr; a ▾ gomb feltételt ad
+  (tartalmazza / nem tartalmazza / egyenlő / kezdődik / végződik / üres…, számnál és pénznél
+  `>`, `>=`, `<`, `<=`, `a..b`; dátumnál ma, tegnap, ezen a héten, ebben a hónapban, utolsó 7/30 nap,
+  ma előtt, között). Az állapot, felelős, azonosító, garancia, fizetve, jelzés többes választó,
+  kizárással. „Keresés a látható oszlopokban", „Szűrők törlése", összesítő (Σ) sor.
+- **Nézetek**: beépítettek (Minden munkalap, Nyitott, Elkészült – átvételre vár, Fizetendő,
+  Lejárt határidő, Ma készült, Árajánlatok és sablonok) és saját, névvel menthető nézetek
+  (szűrés + rendezés + oszlopok; felhasználónként, `sdh_muhely_racs_nezetek`).
+  Oszlopok: ki-be kapcsolás, sorrend a fejléc húzásával, szélesség a szélének húzásával.
+- **Kijelölt sor + részletek**: a kijelölt munkalap sora színes (kiemelő szín + sáv), alatta
+  lapfülek: Munkalap, Eszköz, Ügyfél (Adatok / Megjegyzés / Csatolt fájlok), Hibák,
+  Szolgáltatások, Termékek, Számlák, Pénztárbizonylatok. Dupla kattintás vagy Enter: szerkesztés
+  popupban; mentés és állapotváltás után a rács helyben frissül (`sdh:mentve`, `sdh:allapot`).
+- **Séma 0.15.0**: `munkalap` + `jelzes`, `lezarva`, `fizetve`, `fizetes_ideje`, `fizetett`,
+  `netto_ertek`, `brutto_ertek`; új `munkalap_tetel` tábla (szolgáltatások és termékek,
+  `SDH_Muhely_Tetel`). A `lezarva` lezárt állapotba lépéskor áll be; a régi lezárt lapok az utolsó
+  módosítás napját kapják. A frontend is ellenőrzi a sémát (nem csak az `admin_init`).
+- **Demó**: a 10 ügyfél–eszköz párhoz 10 munkalap, a nyolc állapot mindegyikével, hibasorokkal,
+  tételekkel, előleggel és kifizetéssel. Ahol már vannak demó ügyfelek, a frissítés magától pótolja.
+  A számozott demó lapok valódi munkalapszámot kapnak.
+- **Javítás**: a telt (elsődleges) gomb felirata linkként (`<a>`) a gomb színével egyezett
+  (`.sdh-app a` felülírta) – világos módban üres piros gombnak látszott. Új változó:
+  `--sdh-accent-felirat`.
+- Még nincs: tételek és fizetés szerkesztése az űrlapon, számla- és pénztármodul
+  (a két lapfül a MunkaLap oszlopaival, üresen jelenik meg), munkalaphoz csatolt fájl.
+
 ### 0.20.1
 - **Saját legördülő menü** a böngésző natív listája helyett (minden egysoros `select`,
   popupban is): lekerekített panel, színpöttyös állapotok, pipa a kiválasztotton,
