@@ -2201,14 +2201,24 @@
             });
         }
 
-        function lepes(token, tol, csere, db, beirva) {
-            sav(Math.min(1, tol / Math.max(1, db)));
-            allapot.textContent = 'Beírás: ' + szam(Math.min(tol, db)) + ' / ' + szam(db) + '…';
+        function lepes(token, tol, csere, db, beirva, zaras) {
+            if (!zaras) {
+                sav(Math.min(0.98, tol / Math.max(1, db)));
+                allapot.textContent = 'Beírás: ' + szam(Math.min(tol, db)) + ' / ' + szam(db) + '…';
+            }
 
             kuld('import_lepes', { token: token, tol: tol, csere: csere ? '1' : '' }).then(function (v) {
                 beirva += v.beirva;
 
                 if (!v.kesz) {
+                    if (v.fazis === 'zaras') {
+                        sav(0.99);
+                        allapot.textContent = 'A ' + szam(db) + ' sor bent van – a napok összesítése és lezárása…';
+                        lepes(token, v.kovetkezo, false, db, beirva, true);
+
+                        return;
+                    }
+
                     lepes(token, v.kovetkezo, false, db, beirva);
 
                     return;
@@ -2220,7 +2230,12 @@
                 hely.querySelector('.sdh-urlap__lablec').innerHTML = '<button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-pt-import-bezar>Bezárás</button>';
                 hely.querySelector('[data-pt-import-bezar]').addEventListener('click', function () { d.close(); });
             }).catch(function (h) {
-                allapot.innerHTML = '<span class="sdh-pt-hiba">' + e(h.message) + '</span>';
+                // Ugyanonnan folytatható: a már beírt sorok nem kerülnek be kétszer.
+                allapot.innerHTML = '<span class="sdh-pt-hiba">' + e(h.message) + '</span> ' +
+                    '<button type="button" class="sdh-gomb sdh-gomb--kicsi" data-pt-import-ujra>Folytatás innen</button>';
+                allapot.querySelector('[data-pt-import-ujra]').addEventListener('click', function () {
+                    lepes(token, tol, false, db, beirva, zaras);
+                });
             });
         }
 

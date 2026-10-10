@@ -642,6 +642,8 @@ final class SDH_Muhely_Penztar
         $datumok = array_unique(array_merge(array_keys($osszesitok), array_keys($napok)));
         sort($datumok);
 
+        $irando = [];
+
         foreach ($datumok as $datum) {
             $o = $osszesitok[$datum] ?? null;
             $n = $napok[$datum] ?? null;
@@ -672,27 +674,80 @@ final class SDH_Muhely_Penztar
                 'tetel_db'  => $o ? (int) $o->db : 0,
             ];
 
-            if ($n === null) {
-                // Új nap a tételekből: a múltbeli (pl. utólag beírt) nap nyitva marad, amíg valaki le nem zárja.
-                $wpdb->insert($nt, $uj + ['datum' => $datum, 'allapot' => 'nyitott']);
-            } else {
-                $valtozott = false;
+            $valtozott = $n === null;
 
-                foreach ($uj as $k => $v) {
-                    $regi = $n->$k;
+            foreach ($n !== null ? $uj : [] as $k => $v) {
+                $regi = $n->$k;
 
-                    if ($v === null ? $regi !== null : ($regi === null || abs((float) $regi - (float) $v) > 0.004)) {
-                        $valtozott = true;
-                        break;
-                    }
-                }
-
-                if ($valtozott) {
-                    $wpdb->update($nt, $uj, ['id' => (int) $n->id]);
+                if ($v === null ? $regi !== null : ($regi === null || abs((float) $regi - (float) $v) > 0.004)) {
+                    $valtozott = true;
+                    break;
                 }
             }
 
+            if ($valtozott) {
+                // Új nap a tételekből: a múltbeli (pl. utólag beírt) nap nyitva marad, amíg valaki le nem zárja.
+                $irando[] = ['datum' => $datum, 'allapot' => $n !== null ? (string) $n->allapot : 'nyitott'] + $uj;
+            }
+
             $nyito = $szamolt !== null ? $szamolt : $zaro;
+        }
+
+        self::napok_ir($irando);
+    }
+
+    /**
+     * A megváltozott napi összesítők kiírása. Kevés napnál soronként; sok napnál
+     * (import, régi tétel javítása) 300-as csomagokban, egyetlen
+     * INSERT … ON DUPLICATE KEY UPDATE-tel – így 2000+ nap is pár lekérdezés.
+     *
+     * @param array<int, array<string, mixed>> $sorok
+     */
+    private static function napok_ir(array $sorok): void
+    {
+        global $wpdb;
+
+        if ($sorok === []) {
+            return;
+        }
+
+        $nt = self::nap_tabla();
+
+        if (count($sorok) <= 10) {
+            foreach ($sorok as $sor) {
+                $datum = (string) $sor['datum'];
+                $van   = (int) $wpdb->get_var($wpdb->prepare("SELECT id FROM {$nt} WHERE datum = %s", $datum)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+                if ($van > 0) {
+                    unset($sor['datum'], $sor['allapot']);
+                    $wpdb->update($nt, $sor, ['id' => $van]);
+                } else {
+                    $wpdb->insert($nt, $sor);
+                }
+            }
+
+            return;
+        }
+
+        $oszlopok = ['datum', 'allapot', 'nyito', 'kp_be', 'kartya', 'utalas', 'kifizetes', 'kivet', 'befizetes', 'zaro', 'elteres', 'forgalom', 'halmozott', 'tetel_db'];
+        $frissul  = array_slice($oszlopok, 2);
+        $utotag   = ' ON DUPLICATE KEY UPDATE ' . implode(', ', array_map(static fn ($o) => "{$o} = VALUES({$o})", $frissul));
+
+        foreach (array_chunk($sorok, 300) as $csomag) {
+            $ertekek = [];
+
+            foreach ($csomag as $sor) {
+                $mezok = [$wpdb->prepare('%s', (string) $sor['datum']), $wpdb->prepare('%s', (string) $sor['allapot'])];
+
+                foreach ($frissul as $o) {
+                    $mezok[] = $sor[$o] === null ? 'NULL' : ($o === 'tetel_db' ? (string) (int) $sor[$o] : sprintf('%.2F', (float) $sor[$o]));
+                }
+
+                $ertekek[] = '(' . implode(', ', $mezok) . ')';
+            }
+
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->query("INSERT INTO {$nt} (" . implode(', ', $oszlopok) . ') VALUES ' . implode(', ', $ertekek) . $utotag);
         }
     }
 

@@ -58,6 +58,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.35.1
+- **Import javítás:** a 30 000. sor után „A szerver nem várt választ adott (500)" hibával megállt – a záró lépés
+  (~2400 nap összesítése, lezárása, záró összegei) napronként külön lekérdezéssel ment (~7000 lekérdezés), és
+  kifutott az időből. Most külön kérésben fut, csomagolt `INSERT … ON DUPLICATE KEY UPDATE`-tel (~22 lekérdezés).
+- `SDH_Muhely_Penztar::ujraszamol()` sok nap változásánál (import, régi tétel javítása) csomagokban ír (`napok_ir`).
+- Félbemaradt import folytatható: újrafeltöltés → „Importálás" csak a hiányzó sorokat és a zárást végzi el; a
+  korábbi félkész („nyitott") napokat is rendbe teszi. Hiba esetén „Folytatás innen" gomb, és végzetes PHP-hibánál
+  is olvasható üzenet jön (nem csak „500").
+
 ### 0.35.0
 - **Új modul: Házipénztár** (oldalmenü: Pénztár) – a régi „Zárás" Excel-tábla utódja. Lapfülek: **Ma**
   (KPI-csempék, gyorsbeviteli sor Enterre, a nap tételei az Excel oszlopaival), **Napló** (minden nap egyben,

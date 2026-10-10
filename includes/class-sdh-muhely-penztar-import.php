@@ -57,6 +57,29 @@ final class SDH_Muhely_Penztar_Import
         }
 
         wp_raise_memory_limit('admin');
+
+        // Végzetes hiba (időkorlát, memória) esetén is olvasható üzenet menjen a felületre, ne csak egy „500".
+        register_shutdown_function(static function (): void {
+            $h = error_get_last();
+
+            if (!is_array($h) || !in_array((int) $h['type'], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR], true)) {
+                return;
+            }
+
+            while (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+
+            if (!headers_sent()) {
+                status_header(200);
+                header('Content-Type: application/json; charset=utf-8');
+            }
+
+            echo wp_json_encode([
+                'success' => false,
+                'data'    => ['uzenet' => 'Szerverhiba az import közben: ' . wp_strip_all_tags((string) $h['message']) . ' – próbáld újra: a már bent lévő sorok nem kerülnek be kétszer.'],
+            ]);
+        });
     }
 
     /** A védett munkamappa (uploads alatt, kívülről nem olvasható). */
@@ -691,13 +714,18 @@ final class SDH_Muhely_Penztar_Import
             $wpdb->query("INSERT INTO {$t} (datum, ido, tipus, leiras, nev, szemely, kp, kartya, utalas, munkalap_szam, szamlaszam, vonalkod, megjegyzes, forras, kulso, sorrend, felhasznalo, letrehozva, modositva) VALUES " . implode(',', $ertek));
         }
 
-        $kovetkezo = $tol + self::ADAG;
-
-        if ($kovetkezo < count($sorok)) {
-            wp_send_json_success(['kesz' => false, 'kovetkezo' => $kovetkezo, 'db' => count($sorok), 'beirva' => $beirva]);
+        // A sorok után a zárás KÜLÖN kérésben fut (tol = sorok száma), hogy egyik kérés se fusson ki az időből.
+        if ($tol < count($sorok)) {
+            wp_send_json_success([
+                'kesz'      => false,
+                'kovetkezo' => min(count($sorok), $tol + self::ADAG),
+                'db'        => count($sorok),
+                'beirva'    => $beirva,
+                'fazis'     => $tol + self::ADAG >= count($sorok) ? 'zaras' : 'sorok',
+            ]);
         }
 
-        // Utolsó adag: kezdő egyenleg, napok lezárása, megszámolt zárások, újraszámolás.
+        // Utolsó lépés: kezdő egyenleg, napok lezárása, megszámolt zárások, újraszámolás.
         $elso = (string) $wpdb->get_var("SELECT MIN(datum) FROM {$t} WHERE forras = 'import'"); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         if ($elso !== '' && (float) ($adat['nyito'] ?? 0) != 0) {
@@ -736,30 +764,46 @@ final class SDH_Muhely_Penztar_Import
             return;
         }
 
-        $nt = SDH_Muhely_Penztar::nap_tabla();
-        $t  = SDH_Muhely_Penztar::tabla();
-        $ma = SDH_Muhely_Penztar::ma();
-
-        // A napok sorai (a tételekből) – az újraszámolás hozza létre a hiányzókat.
-        SDH_Muhely_Penztar::ujraszamol($elso);
+        $nt   = SDH_Muhely_Penztar::nap_tabla();
+        $t    = SDH_Muhely_Penztar::tabla();
+        $ma   = SDH_Muhely_Penztar::ma();
+        $megj = 'Záró összeg a régi táblából („KP a kasszában").';
 
         // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
-        $wpdb->query($wpdb->prepare(
-            "UPDATE {$nt} SET allapot = 'lezart', cimletek = 'import' WHERE datum >= %s AND datum < %s AND allapot <> 'lezart'
-             AND datum IN (SELECT DISTINCT datum FROM {$t} WHERE forras = 'import')",
-            $elso,
-            $ma
-        ));
-        // phpcs:enable
+        $datumok = $wpdb->get_col($wpdb->prepare("SELECT DISTINCT datum FROM {$t} WHERE forras = 'import' AND datum < %s", $ma));
 
-        foreach ($zarasok as $datum => $osszeg) {
-            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $datum) || (string) $datum >= $ma) {
+        // Amit a CRM-ben már kezeltek (megszámolták / lezárták), azt a napot az import nem írja felül.
+        $kezelt = array_flip(array_map('strval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT datum FROM {$nt} WHERE datum >= %s AND (lezarta > 0 OR szamolva IS NOT NULL OR (cimletek IS NOT NULL AND cimletek NOT IN ('', 'import')))",
+            $elso
+        ))));
+
+        // Egyetlen csomagos írás: a nap lezárt, importált, záró összege a régi tábla „KP a kasszában" értéke.
+        // (Egy félbemaradt korábbi import „nyitott" napjait is rendbe teszi.)
+        $ertekek = [];
+
+        foreach ((array) $datumok as $d) {
+            $d = (string) $d;
+
+            if (isset($kezelt[$d])) {
                 continue;
             }
 
-            $wpdb->update($nt, ['szamolt' => round((float) $osszeg, 2), 'megjegyzes' => 'Záró összeg a régi táblából („KP a kasszában").'], ['datum' => (string) $datum, 'cimletek' => 'import']);
+            $van       = isset($zarasok[$d]);
+            $ertekek[] = $wpdb->prepare('(%s, %s, %s, ', $d, 'lezart', 'import')
+                . ($van ? sprintf('%.2F', (float) $zarasok[$d]) : 'NULL')
+                . $wpdb->prepare(', %s)', $van ? $megj : '');
         }
 
+        foreach (array_chunk($ertekek, 400) as $csomag) {
+            $wpdb->query(
+                "INSERT INTO {$nt} (datum, allapot, cimletek, szamolt, megjegyzes) VALUES " . implode(', ', $csomag)
+                . ' ON DUPLICATE KEY UPDATE allapot = VALUES(allapot), cimletek = VALUES(cimletek), szamolt = VALUES(szamolt), megjegyzes = VALUES(megjegyzes)'
+            );
+        }
+        // phpcs:enable
+
+        // Egyetlen újraszámolás (csomagokban írja ki a napokat).
         SDH_Muhely_Penztar::ujraszamol($elso);
     }
 
