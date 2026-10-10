@@ -39,7 +39,12 @@
         adat.set('_wpnonce', B.nonce || '');
 
         Object.keys(mezok || {}).forEach(function (nev) {
-            adat.set(nev, mezok[nev]);
+            // Tömb: több érték ugyanazon a néven (nev[]).
+            if (Array.isArray(mezok[nev])) {
+                mezok[nev].forEach(function (ertek) { adat.append(nev + '[]', ertek); });
+            } else {
+                adat.set(nev, mezok[nev]);
+            }
         });
 
         return fetch(new URL(B.ajax, window.location.origin).toString(), { method: 'POST', body: adat, credentials: 'same-origin' })
@@ -85,6 +90,23 @@
     }
 
     function jelveny(db, azonnal) {
+        // Az Áttekintés csempéje is él: olvasatlan levelek és azonnali teendők.
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-kartya="levelezes"]'), function (kartya) {
+            var szam = kartya.querySelector('.sdh-kartya__szam');
+            var jel = kartya.querySelector('[data-sdh-kartya-azonnal]');
+
+            if (szam) {
+                szam.textContent = String(db);
+            }
+
+            if (jel) {
+                jel.textContent = azonnal + ' azonnali';
+                jel.hidden = !(azonnal > 0);
+            }
+
+            kartya.classList.toggle('sdh-kartya--jelez', azonnal > 0);
+        });
+
         Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-jelveny="levelezes"]'), function (jel) {
             var volt = parseInt(jel.textContent, 10) || 0;
 
@@ -127,6 +149,9 @@
         }
     }
 
+    var TOAST_MAX = 4;
+    var toastTobb = 0;         // ennyi jelzés nem fért ki (összesítve látszik)
+
     function toastTarto() {
         var tarto = document.querySelector('.sdh-level-toastok');
 
@@ -140,8 +165,54 @@
         return tarto;
     }
 
-    /** Felugró jelzés a jobb alsó sarokban. `maradjon`: nem tűnik el magától (azonnali teendő). */
+    /** Az összesítő sor: „+N további új levél". Egyszerre csak néhány jelzés látszik, a többi itt számolódik. */
+    function toastOsszesito() {
+        var tarto = toastTarto();
+        var sor = tarto.querySelector('[data-sdh-level-tobb]');
+
+        if (toastTobb <= 0) {
+            if (sor) {
+                sor.remove();
+            }
+
+            return;
+        }
+
+        if (!sor) {
+            sor = document.createElement('div');
+            sor.className = 'sdh-level-toast sdh-level-toast--tobb';
+            sor.setAttribute('data-sdh-level-tobb', '');
+            sor.addEventListener('click', function (esemeny) {
+                var mindet = !!esemeny.target.closest('[data-sdh-level-mindzar]');
+
+                toastTobb = 0;
+
+                if (mindet) {
+                    Array.prototype.forEach.call(tarto.querySelectorAll('.sdh-level-toast'), function (t) { t.remove(); });
+
+                    return;
+                }
+
+                sor.remove();
+                window.location.href = B.levelUrl || '';
+            });
+        }
+
+        sor.innerHTML = '<strong class="sdh-level-toast__cim">+' + toastTobb + ' további új levél</strong>' +
+            '<span class="sdh-level-toast__megj">Megnyitás a Levelezésben</span>' +
+            '<button type="button" class="sdh-level-toast__mind" data-sdh-level-mindzar>Összes bezárása</button>';
+
+        // Mindig legfelül áll, a jelzések alatta sorakoznak.
+        tarto.insertBefore(sor, tarto.firstChild);
+    }
+
+    /**
+     * Felugró jelzés a jobb alsó sarokban. `maradjon`: nem tűnik el magától (azonnali teendő).
+     * Egyszerre legfeljebb TOAST_MAX látszik: ha több jön, a legrégebbi nem azonnali kerül az összesítőbe,
+     * így a jelzések soha nem lógnak ki a képernyőről.
+     */
     function toast(o) {
+        var tarto = toastTarto();
         var doboz = document.createElement('div');
 
         doboz.className = 'sdh-level-toast' + (o.szint ? ' sdh-level-toast--' + o.szint : '');
@@ -162,7 +233,21 @@
             doboz.remove();
         });
 
-        toastTarto().appendChild(doboz);
+        tarto.appendChild(doboz);
+
+        var latszik = Array.prototype.slice.call(tarto.querySelectorAll('.sdh-level-toast:not([data-sdh-level-tobb])'));
+
+        while (latszik.length > TOAST_MAX) {
+            // Előbb a nem azonnali jelzések közül a legrégebbi megy az összesítőbe; ha mind azonnali, a legrégebbi.
+            var kieso = latszik.filter(function (t) { return !t.classList.contains('sdh-level-toast--azonnal') && t !== doboz; })[0] ||
+                latszik.filter(function (t) { return t !== doboz; })[0];
+
+            kieso.remove();
+            latszik.splice(latszik.indexOf(kieso), 1);
+            toastTobb += 1;
+        }
+
+        toastOsszesito();
 
         if (!o.maradjon) {
             window.setTimeout(function () { doboz.remove(); }, 12000);
@@ -364,6 +449,193 @@
         valaszto.sdhAlairas = uj;
     });
 
+    /* ---------------------------------------------------------------- */
+    /* Rendező ügynök: kérés → terv → jóváhagyás → eredmény             */
+    /* ---------------------------------------------------------------- */
+
+    var RENDEZO_LAP = 3;       // ennyi csoport látszik egyszerre a tervben (a popupban nincs görgetősáv)
+
+    function rendezoLepes(urlap, lepes) {
+        urlap.setAttribute('data-lepes', lepes);
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-rendezo-lepes]'), function (d) {
+            d.hidden = d.getAttribute('data-rendezo-lepes') !== lepes;
+        });
+
+        var gomb = urlap.querySelector('[data-rendezo-gomb]');
+        var vissza = urlap.querySelector('[data-rendezo-vissza]');
+        var megsem = urlap.querySelector('[data-sdh-megsem]');
+        var terv = urlap.sdhTerv ? urlap.sdhTerv.terv : null;
+
+        gomb.disabled = false;
+        gomb.textContent = lepes === 'keres' ? 'Terv készítése' : 'Végrehajtás';
+        gomb.hidden = lepes === 'eredmeny' || (lepes === 'terv' && !(terv && terv.csoportok.length));
+        vissza.hidden = lepes !== 'terv';
+        megsem.textContent = lepes === 'eredmeny' ? 'Bezárás' : 'Mégsem';
+    }
+
+    function rendezoLapoz(urlap, lap) {
+        var csoportok = urlap.querySelectorAll('[data-rendezo-csoportdoboz]');
+        var lapok = Math.max(1, Math.ceil(csoportok.length / RENDEZO_LAP));
+
+        lap = Math.max(0, Math.min(lapok - 1, lap));
+        urlap.sdhLap = lap;
+
+        Array.prototype.forEach.call(csoportok, function (d, i) {
+            d.hidden = Math.floor(i / RENDEZO_LAP) !== lap;
+        });
+
+        var jelzo = urlap.querySelector('[data-rendezo-lapjelzo]');
+
+        if (jelzo) {
+            jelzo.textContent = (lap + 1) + ' / ' + lapok;
+            urlap.querySelector('[data-rendezo-lap="-1"]').disabled = lap <= 0;
+            urlap.querySelector('[data-rendezo-lap="1"]').disabled = lap >= lapok - 1;
+        }
+    }
+
+    function rendezoSorok(sorok, osztaly) {
+        return (sorok || []).length
+            ? '<ul class="sdh-rendezo__lista ' + osztaly + '">' + sorok.map(function (sor) { return '<li>' + e(sor) + '</li>'; }).join('') + '</ul>'
+            : '';
+    }
+
+    /** A terv kirajzolása: mit tenne az ügynök. Az új mappa létrehozása külön, alapból be nem pipált engedély. */
+    function rendezoTerv(urlap, adat) {
+        var t = adat.terv;
+        var doboz = urlap.querySelector('[data-rendezo-lepes="terv"]');
+        var html = (t.uzenet ? '<p class="sdh-rendezo__uzenet" data-rendezo-uzenet>' + e(t.uzenet) + '</p>' : '') +
+            rendezoSorok(adat.eredmeny, 'is-kesz') + rendezoSorok(t.kihagyva, 'is-kihagyva');
+
+        if (t.uj_mappak.length) {
+            html += '<fieldset class="sdh-rendezo__engedely"><legend>Engedélyt kér: új mappa létrehozása</legend>' +
+                t.uj_mappak.map(function (nev) {
+                    return '<label class="sdh-jelolo"><input type="checkbox" data-rendezo-uj value="' + e(nev) + '"> Engedélyezem a(z) „' + e(nev) + '" mappa létrehozását</label>';
+                }).join('') + '</fieldset>';
+        }
+
+        if (!t.csoportok.length) {
+            html += '<p class="sdh-rendezo__megj" data-rendezo-ures>Nincs áthelyezendő levél.</p>';
+        }
+
+        t.csoportok.forEach(function (cs) {
+            html += '<div class="sdh-rendezo__csoport" data-rendezo-csoportdoboz>' +
+                '<label class="sdh-jelolo"><input type="checkbox" data-rendezo-csoport value="' + cs.i + '" checked> ' +
+                '<strong>' + cs.db + ' levél</strong> → ' + e(cs.cel) + (cs.uj ? ' <span class="sdh-level-jel sdh-level-jel--ma">új mappa</span>' : '') + '</label>' +
+                '<ul class="sdh-rendezo__minta">' + cs.minta.map(function (m) {
+                    return '<li><span>' + e(m.felado) + '</span> ' + e(m.targy) + '</li>';
+                }).join('') + (cs.db > cs.minta.length ? '<li class="sdh-rendezo__meg">… és még ' + (cs.db - cs.minta.length) + ' levél</li>' : '') + '</ul></div>';
+        });
+
+        if (t.csoportok.length > RENDEZO_LAP) {
+            html += '<div class="sdh-rendezo__lapozo"><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="-1" aria-label="Előző csoportok">‹</button>' +
+                '<span data-rendezo-lapjelzo></span>' +
+                '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="1" aria-label="További csoportok">›</button>' +
+                '<span class="sdh-rendezo__megj">' + t.csoportok.length + ' csoport, összesen ' + t.db + ' levél</span></div>';
+        }
+
+        doboz.innerHTML = html;
+        urlap.sdhTerv = adat;
+        rendezoLepes(urlap, 'terv');
+        rendezoLapoz(urlap, 0);
+    }
+
+    function rendezoEredmeny(urlap, sorok, fiokok) {
+        urlap.querySelector('[data-rendezo-lepes="eredmeny"]').innerHTML = '<p class="sdh-rendezo__uzenet">Kész:</p>' + rendezoSorok(sorok, 'is-kesz');
+        rendezoLepes(urlap, 'eredmeny');
+        document.dispatchEvent(new CustomEvent('sdh:level-rendezve', { detail: { fiokok: fiokok } }));
+    }
+
+    // Az app.js általános űrlapküldője helyett: az ablak több lépésből áll, és nem zárul be a terv után.
+    document.addEventListener('submit', function (esemeny) {
+        var urlap = esemeny.target;
+
+        if (!urlap.matches || !urlap.matches('[data-sdh-rendezo]')) {
+            return;
+        }
+
+        esemeny.preventDefault();
+        esemeny.stopPropagation();
+
+        var gomb = urlap.querySelector('[data-rendezo-gomb]');
+        var hiba = function (h) {
+            gomb.disabled = false;
+            rendezoLepes(urlap, urlap.getAttribute('data-lepes'));
+
+            if (app().hiba) {
+                app().hiba(urlap, h.message);
+            }
+        };
+        var regiHiba = urlap.querySelector('.sdh-modal__hiba');
+
+        if (regiHiba) {
+            regiHiba.remove();
+        }
+
+        gomb.disabled = true;
+
+        if (urlap.getAttribute('data-lepes') === 'keres') {
+            var mezok = {};
+
+            Array.prototype.forEach.call(urlap.querySelectorAll('input[name], textarea[name]'), function (m) {
+                if (m.name !== '_wpnonce') {
+                    mezok[m.name] = m.value;
+                }
+            });
+
+            gomb.textContent = 'Terv készül…';
+
+            kuld('rendezo_terv', mezok).then(function (adat) {
+                // Jóváhagyás nélküli módban, ha nem kell új mappa, a szerver már végre is hajtotta.
+                if (adat.eredmeny && !adat.terv.uj_mappak.length) {
+                    rendezoEredmeny(urlap, adat.eredmeny, adat.fiokok);
+
+                    return;
+                }
+
+                if (adat.eredmeny) {
+                    // Ami meglévő mappába ment, az kész; a tervben már csak az új mappára várók maradnak.
+                    adat.terv.csoportok = adat.terv.csoportok.filter(function (cs) { return cs.uj; });
+                    document.dispatchEvent(new CustomEvent('sdh:level-rendezve', { detail: { fiokok: adat.fiokok } }));
+                }
+
+                rendezoTerv(urlap, adat);
+            }).catch(hiba);
+
+            return;
+        }
+
+        var uj = Array.prototype.map.call(urlap.querySelectorAll('[data-rendezo-uj]:checked'), function (p) { return p.value; });
+        var csoport = Array.prototype.map.call(urlap.querySelectorAll('[data-rendezo-csoport]:checked'), function (p) { return p.value; });
+
+        if (!csoport.length) {
+            hiba(new Error('Jelölj be legalább egy áthelyezést, vagy zárd be az ablakot.'));
+
+            return;
+        }
+
+        gomb.textContent = 'Végrehajtás…';
+
+        kuld('rendezo_vegrehajt', { token: urlap.sdhTerv.token, uj: uj, csoport: csoport }).then(function (adat) {
+            rendezoEredmeny(urlap, adat.eredmeny, adat.fiokok);
+        }).catch(hiba);
+    }, true);
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+        var urlap = cel.closest ? cel.closest('[data-sdh-rendezo]') : null;
+
+        if (!urlap) {
+            return;
+        }
+
+        if (cel.closest('[data-rendezo-vissza]')) {
+            rendezoLepes(urlap, 'keres');
+        } else if (cel.closest('[data-rendezo-lap]')) {
+            rendezoLapoz(urlap, (urlap.sdhLap || 0) + parseInt(cel.closest('[data-rendezo-lap]').getAttribute('data-rendezo-lap'), 10));
+        }
+    });
+
     /* ================================================================ */
     /* 2. A levelező oldal                                              */
     /* ================================================================ */
@@ -407,6 +679,7 @@
         '    <button type="submit" class="sdh-gomb sdh-gomb--vilagos">Keresés</button>' +
         '  </form>' +
         '  <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l="frissit" title="Új levelek és mappák lekérése">Frissítés</button>' +
+        (B.levelRendezo ? '  <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l="rendezo" title="Leveleket rendez mappákba a kérésedre – csak azt, amit jóváhagysz">Rendező ügynök</button>' : '') +
         '  <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l="ertesites" hidden title="A böngésző akkor is szól, ha másik ablakban dolgozol">Értesítések bekapcsolása</button>' +
         '</div>' +
         '<div class="sdh-level__uzenet" data-l-uzenet hidden></div>' +
@@ -552,6 +825,8 @@
     }
 
     function rajzolLista() {
+        var regiSorok = elLista.querySelector('[data-l-sorok]');
+        var gorgetes = regiSorok ? regiSorok.scrollTop : 0;
         var m = mappa();
         var szerep = A.mappa === 'fontos' ? 'fontos' : (m ? m.szerep : '');
         var kuldott = szerep === 'sent' || szerep === 'drafts';
@@ -596,7 +871,7 @@
         }
 
         if (!A.sorok.length) {
-            html += '<p class="sdh-level__ures">' + (A.tolt ? 'Betöltés…' : (A.q ? 'Nincs találat.' : (A.mappa === 'fontos' ? 'Nincs teendő: az ügynök nem talált levelet, amire reagálni kell.' : 'Ez a mappa üres.'))) + '</p>';
+            html += '<p class="sdh-level__ures">' + (A.tolt && A.toltSzoveg !== 'Mentés…' ? 'Betöltés…' : (A.q ? 'Nincs találat.' : (A.mappa === 'fontos' ? 'Nincs teendő: az ügynök nem talált levelet, amire reagálni kell.' : 'Ez a mappa üres.'))) + '</p>';
         }
 
         A.sorok.forEach(function (s) {
@@ -626,9 +901,14 @@
             '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="-1" aria-label="Újabb levelek"' + (A.oldal <= 1 ? ' disabled' : '') + '>‹</button>' +
             '<span data-l-oldal>' + tol + '–' + ig + ' / ' + A.ossz + '</span>' +
             '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="1" aria-label="Régebbi levelek"' + (A.oldal >= A.oldalak ? ' disabled' : '') + '>›</button>' +
-            (A.tolt ? '<span class="sdh-level__tolt">Betöltés…</span>' : '') + '</div>';
+            (A.tolt ? '<span class="sdh-level__tolt">' + e(A.toltSzoveg || 'Betöltés…') + '</span>' : '') + '</div>';
 
         elLista.innerHTML = html;
+
+        // A háttérfrissítés nem ugrasztja a lista elejére azt, aki éppen lejjebb görgetett.
+        if (gorgetes > 0 && A.sorok.length) {
+            elLista.querySelector('[data-l-sorok]').scrollTop = gorgetes;
+        }
 
         var atnevez = elLista.querySelector('[data-l-atnevez] input');
 
@@ -638,44 +918,61 @@
         }
     }
 
-    function betolt(csendben) {
-        var keres = (A.keres = (A.keres || 0) + 1);
+    var listaTar = {};          // fiók|mappa|oldal → a legutóbbi válasz (azonnali rajzhoz mappaváltáskor)
+    var levelTar = {};          // levél-azonosító → a megnyitott levél (újranyitás várakozás nélkül)
 
-        if (!csendben) {
-            A.tolt = true;
+    /** A szerver válaszának átvétele és kirajzolása. */
+    function listaAlkalmaz(adat) {
+        A.sorok = adat.sorok || [];
+        A.ossz = adat.ossz || 0;
+        A.oldal = adat.oldal || 1;
+        A.oldalak = adat.oldalak || 1;
+        A.fiokok = adat.fiokok || A.fiokok;
+        A.hiba = adat.hiba || '';
+
+        if (adat.mappa && A.mappa !== 'fontos') {
+            A.mappa = String(adat.mappa);
+        }
+
+        // Ami már nincs a listában, az kijelölve sem maradhat.
+        var megvan = {};
+
+        A.sorok.forEach(function (s) {
+            if (A.kijelolt[s.id]) {
+                megvan[s.id] = true;
+            }
+        });
+
+        A.kijelolt = megvan;
+        rajzolMappak(true);
+        rajzolLista();
+    }
+
+    /**
+     * A lista betöltése két lépésben, hogy azonnal látsszon:
+     *   1. a szerver gyorsítótárából (a levelezőszerver megkérdezése nélkül) – ez tizedmásodpercek;
+     *   2. a háttérben frissítés a levelezőszerverről (új levelek, máshol történt változások).
+     * `csendben`: a lista nem ürül ki közben. `csakGyors`: a 2. lépés kimarad (művelet után, amikor a
+     * szerver éppen most igazította a gyorsítótárat).
+     */
+    function betolt(csendben, csakGyors) {
+        var keres = (A.keres = (A.keres || 0) + 1);
+        var kulcs = A.fiok + '|' + A.mappa + '|' + A.oldal;
+        var gyorsan = A.mappa !== 'fontos' && A.mappa !== '' && !A.q;
+        var mezok = { fiok: A.mappa === 'fontos' ? '' : A.fiok, mappa: A.mappa, oldal: A.oldal, q: A.q };
+
+        A.tolt = true;
+        A.toltSzoveg = csendben ? 'Frissítés…' : 'Betöltés…';
+
+        if (!csendben && gyorsan && listaTar[kulcs]) {
+            // Ebben a munkamenetben már láttuk: azonnal kirajzoljuk, a frissítés a háttérben megy.
+            A.toltSzoveg = 'Frissítés…';
+            listaAlkalmaz(listaTar[kulcs]);
+        } else {
             rajzolLista();
         }
 
-        return kuld('lista', { fiok: A.mappa === 'fontos' ? '' : A.fiok, mappa: A.mappa, oldal: A.oldal, q: A.q }).then(function (adat) {
-            if (keres !== A.keres) {
-                return;
-            }
-
-            A.tolt = false;
-            A.sorok = adat.sorok || [];
-            A.ossz = adat.ossz || 0;
-            A.oldal = adat.oldal || 1;
-            A.oldalak = adat.oldalak || 1;
-            A.fiokok = adat.fiokok || A.fiokok;
-            A.hiba = adat.hiba || '';
-
-            if (adat.mappa && A.mappa !== 'fontos') {
-                A.mappa = String(adat.mappa);
-            }
-
-            // Ami már nincs a listában, az kijelölve sem maradhat.
-            var megvan = {};
-
-            A.sorok.forEach(function (s) {
-                if (A.kijelolt[s.id]) {
-                    megvan[s.id] = true;
-                }
-            });
-
-            A.kijelolt = megvan;
-            rajzolMappak(true);
-            rajzolLista();
-        }).catch(function (hiba) {
+        function hibakezelo(hiba) {
             if (keres !== A.keres) {
                 return;
             }
@@ -686,10 +983,62 @@
                 return frissitFiokok();
             }
 
-            A.sorok = [];
+            // Ha a gyorsítótárból már van mit mutatni, az marad; csak a hibát írjuk fölé.
             A.hiba = hiba.message;
             rajzolLista();
-        });
+        }
+
+        function teljes() {
+            return kuld('lista', mezok).then(function (adat) {
+                if (keres !== A.keres) {
+                    return;
+                }
+
+                A.tolt = false;
+                listaTar[A.fiok + '|' + (adat.mappa || A.mappa) + '|' + (adat.oldal || A.oldal)] = adat;
+                listaAlkalmaz(adat);
+            });
+        }
+
+        if (!gyorsan) {
+            return teljes().catch(hibakezelo);
+        }
+
+        var gyorsMezok = { gyors: 1 };
+
+        Object.keys(mezok).forEach(function (k) { gyorsMezok[k] = mezok[k]; });
+
+        return kuld('lista', gyorsMezok).then(function (adat) {
+            if (keres !== A.keres) {
+                return;
+            }
+
+            if (!adat.gyors) {
+                // Ehhez a mappához még nem volt gyorsítótár: a szerver rögtön a teljes választ adta.
+                A.tolt = false;
+                listaTar[kulcs] = adat;
+                listaAlkalmaz(adat);
+
+                return;
+            }
+
+            A.toltSzoveg = 'Frissítés…';
+
+            if (csakGyors && !adat.hianyos) {
+                A.tolt = false;
+                listaTar[kulcs] = adat;
+                listaAlkalmaz(adat);
+
+                return;
+            }
+
+            // Ha az oldalhoz még nincs meg minden levél a gyorsítótárban, a meglévőket mutatjuk, a többi mindjárt jön.
+            if (!adat.hianyos || (adat.sorok || []).length) {
+                listaAlkalmaz(adat);
+            }
+
+            return teljes();
+        }).catch(hibakezelo);
     }
 
     function frissitFiokok() {
@@ -728,7 +1077,11 @@
         }
 
         if (l.tolt) {
-            elOlvaso.innerHTML = '<p class="sdh-level__ures sdh-level__ures--olvaso">A levél betöltése…</p>';
+            // A tárgy és a feladó a listából már megvan: azonnal látszik, a törzs érkezéséig is.
+            elOlvaso.innerHTML = (l.elozetes
+                ? '<div class="sdh-level__olvasofej"><h2>' + e(l.elozetes.targy) + '</h2></div>' +
+                    '<dl class="sdh-level__adatok"><dt>Feladó</dt><dd>' + e(l.elozetes.felado) + '</dd><dt>Dátum</dt><dd>' + e(l.elozetes.idopont || '') + '</dd></dl>'
+                : '') + '<p class="sdh-level__ures sdh-level__ures--olvaso" data-l-leveltolt>A levél betöltése…</p>';
 
             return;
         }
@@ -786,7 +1139,17 @@
 
     function olvas(id, kepek) {
         A.megerosit = '';
-        A.level = { id: id, tolt: true };
+
+        // Ebben a munkamenetben már megnyitott levél: várakozás nélkül, a szerver megkérdezése nélkül.
+        if (!kepek && levelTar[id]) {
+            A.level = levelTar[id];
+            rajzolLista();
+            rajzolOlvaso();
+
+            return Promise.resolve();
+        }
+
+        A.level = { id: id, tolt: true, elozetes: A.sorok.filter(function (s) { return s.id === id; })[0] || null };
         rajzolOlvaso();
         rajzolLista();
 
@@ -797,6 +1160,15 @@
         }
 
         return kuld('olvas', mezok).then(function (adat) {
+            // A gyorsítótárból jött levelet a szerveren külön, háttérben jelöljük olvasottnak – a megjelenítés nem vár rá.
+            if (adat.jelolendo) {
+                kuld('olvasva', { id: id }).catch(function () { /* a következő szinkron úgyis egyeztet */ });
+            }
+
+            if (!kepek) {
+                levelTar[id] = adat;
+            }
+
             if (!A.level || A.level.id !== id) {
                 return;
             }
@@ -851,42 +1223,72 @@
     /* Műveletek                                                        */
     /* ---------------------------------------------------------------- */
 
+    /**
+     * Művelet a leveleken. A lista AZONNAL a művelet utáni állapotot mutatja (a törölt levél eltűnik,
+     * a csillag átvált), a levelezőszerver a háttérben követi; ha ott nem sikerül, a lista visszaáll, és hibát jelez.
+     */
     function muvelet(nev, idk, cel) {
         if (!idk.length) {
             return Promise.resolve();
         }
 
         var mezok = { muvelet: nev, idk: idk.join(',') };
+        var erintett = {};
+        var eltunik = ['kuka', 'vegleg', 'archiv', 'spam', 'nem_spam', 'athelyez'].indexOf(nev) >= 0;
 
         if (cel) {
             mezok.cel = cel;
         }
 
+        idk.forEach(function (id) { erintett[String(id)] = true; });
+
         uzen('');
+        A.megerosit = '';
+        A.tolt = true;
+        A.toltSzoveg = 'Mentés…';
 
-        return kuld('muvelet', mezok).then(function (adat) {
-            var eltunik = ['kuka', 'vegleg', 'archiv', 'spam', 'nem_spam', 'athelyez'].indexOf(adat.muvelet) >= 0;
+        // --- azonnali rajz ---
+        if (eltunik) {
+            A.sorok = A.sorok.filter(function (s) { return !erintett[String(s.id)]; });
+            A.ossz = Math.max(0, A.ossz - idk.length);
+            A.kijelolt = {};
+            idk.forEach(function (id) { delete levelTar[id]; });
 
-            A.fiokok = adat.fiokok || A.fiokok;
-            A.megerosit = '';
+            if (A.level && erintett[String(A.level.id)]) {
+                A.level = null;
+            }
+        } else {
+            A.sorok.forEach(function (s) {
+                if (!erintett[String(s.id)]) {
+                    return;
+                }
 
-            if (A.level && idk.map(String).indexOf(String(A.level.id)) >= 0) {
-                if (eltunik || nev === 'olvasatlan') {
-                    A.level = null;
+                if (nev === 'olvasott' || nev === 'olvasatlan') {
+                    s.olvasott = nev === 'olvasott';
                 } else {
-                    A.level.csillag = nev === 'csillag' ? true : (nev === 'csillag_le' ? false : A.level.csillag);
+                    s.csillag = nev === 'csillag';
+                }
+            });
+
+            if (A.level && erintett[String(A.level.id)]) {
+                if (nev === 'olvasatlan') {
+                    A.level = null;
+                } else if (nev === 'csillag' || nev === 'csillag_le') {
+                    A.level.csillag = nev === 'csillag';
                 }
             }
+        }
 
-            if (eltunik) {
-                A.kijelolt = {};
-            }
+        listaTar = {};
+        rajzolLista();
+        rajzolOlvaso();
 
-            rajzolOlvaso();
+        return kuld('muvelet', mezok).then(function (adat) {
+            A.fiokok = adat.fiokok || A.fiokok;
 
-            return betolt(true);
+            // A helyére lépő levelek (a következő oldalról) a szerver gyorsítótárából jönnek, újabb szinkron nélkül.
+            return betolt(true, true);
         }).catch(function (hiba) {
-            A.megerosit = '';
             uzen(hiba.message, 'hiba');
 
             return betolt(true);
@@ -963,6 +1365,13 @@
 
                 return betolt();
             });
+        } else if (nev === 'rendezo') {
+            if (A.mappa === 'fontos' || !A.mappa) {
+                uzen('A rendező ügynökhöz előbb nyiss meg egy mappát.', 'hiba');
+            } else if (app().nyit) {
+                uzen('');
+                app().nyit('levelrendezo', 0, { parameterek: { fiok: A.fiok, mappa: A.mappa, idk: kijeloltIdk().join(',') } });
+            }
         } else if (nev === 'ertesites') {
             window.Notification.requestPermission().then(function () {
                 elErtesites.hidden = window.Notification.permission !== 'default';
@@ -1186,6 +1595,18 @@
         }
     });
 
+    // A rendező ügynök végzett: a mappák és a lista a szerver (most igazított) gyorsítótárából frissül.
+    document.addEventListener('sdh:level-rendezve', function (esemeny) {
+        A.fiokok = (esemeny.detail && esemeny.detail.fiokok) || A.fiokok;
+        A.kijelolt = {};
+        listaTar = {};
+        levelTar = {};
+        A.level = null;
+        rajzolOlvaso();
+        rajzolMappak();
+        betolt(true, true);
+    });
+
     // Új levél érkezett: ha épp egy Beérkezett mappa első oldalát nézed (kijelölés nélkül), a lista magától frissül.
     document.addEventListener('sdh:level-allapot', function (esemeny) {
         var adat = esemeny.detail || {};
@@ -1201,8 +1622,9 @@
             jel.classList.toggle('is-azonnal', A.azonnal > 0);
         }
 
+        // A szerver az imént szinkronizált: elég a gyorsítótárából újratölteni (újabb kapcsolódás nélkül).
         if ((adat.ujak || []).length && !A.tolt && A.oldal === 1 && !A.q && !kijeloltIdk().length && (A.mappa === 'fontos' || (m && m.szerep === 'inbox'))) {
-            betolt(true);
+            betolt(true, true);
         }
     });
 

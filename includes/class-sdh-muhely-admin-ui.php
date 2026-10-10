@@ -347,6 +347,7 @@ final class SDH_Muhely_Admin_UI
             // Levelezés: van-e bekötött fiók (csak akkor indul az új levelek figyelése), és hol a levelező.
             'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok(),
             'levelUrl'  => SDH_Muhely_Modulok::url('levelezes'),
+            'levelRendezo' => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::rendezo_be(),
         ];
     }
 
@@ -527,6 +528,13 @@ final class SDH_Muhely_Admin_UI
             ],
         ];
 
+        // A modulcsempék elrejtése / megjelenítése (app.js; a felirat is ott vált).
+        $gombok[] = [
+            'cimke'  => 'Csempék elrejtése',
+            'url'    => '#',
+            'adatok' => ['sdh-csempek-valt' => ''],
+        ];
+
         if ($technikai) {
             $gombok[] = [
                 'cimke' => 'Megnyitás a műhely-felületen ↗',
@@ -545,22 +553,39 @@ final class SDH_Muhely_Admin_UI
             );
             ?>
 
-            <div class="sdh-kartyak">
-                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('ugyfelek')); ?>">
-                    <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($ugyfel_db)); ?></span>
-                    <span class="sdh-kartya__cimke">aktív ügyfél</span>
-                </a>
-
-                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('eszkozok')); ?>">
-                    <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($eszkoz_db)); ?></span>
-                    <span class="sdh-kartya__cimke">nyilvántartott eszköz</span>
-                </a>
-
-                <a class="sdh-kartya" href="<?php echo esc_url(SDH_Muhely_Modulok::url('munkalapok')); ?>">
-                    <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n($munkalap_db)); ?></span>
-                    <span class="sdh-kartya__cimke">nyitott munkalap</span>
-                </a>
+            <?php // A modulcsempék: minden menüpont egy kattintásra, a legfontosabb számmal. A fejléc gombjával elrejthetők. ?>
+            <div class="sdh-kartyak sdh-kartyak--modulok" data-sdh-csempek>
+                <?php foreach (self::attekintes_kartyak($ugyfel_db, $eszkoz_db, $munkalap_db) as $kulcs => $k) : ?>
+                    <a class="sdh-kartya<?php echo !empty($k['jelez']) ? ' sdh-kartya--jelez' : ''; ?>" href="<?php echo esc_url($k['url']); ?>"
+                       data-sdh-kartya="<?php echo esc_attr((string) $kulcs); ?>" title="<?php echo esc_attr($k['modul']); ?>">
+                        <span class="sdh-kartya__fej">
+                            <?php echo SDH_Muhely_Frontend::ikon((string) $kulcs); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG. ?>
+                            <span class="sdh-kartya__modul"><?php echo esc_html($k['modul']); ?></span>
+                        </span>
+                        <?php if ($k['szam'] !== null) : ?>
+                            <span class="sdh-kartya__szam"><?php echo esc_html(number_format_i18n((int) $k['szam'])); ?></span>
+                            <span class="sdh-kartya__cimke">
+                                <?php echo esc_html($k['cimke']); ?>
+                                <?php if (isset($k['azonnal'])) : ?>
+                                    <strong class="sdh-kartya__azonnal" data-sdh-kartya-azonnal<?php echo (int) $k['azonnal'] > 0 ? '' : ' hidden'; ?>><?php echo (int) $k['azonnal']; ?> azonnali</strong>
+                                <?php endif; ?>
+                            </span>
+                        <?php else : ?>
+                            <span class="sdh-kartya__cimke sdh-kartya__cimke--csak"><?php echo esc_html($k['cimke']); ?></span>
+                        <?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
             </div>
+            <script>
+                /* A csempék elrejtése böngészőnként megmarad; még a kirajzolás előtt áll be, hogy ne villanjon. */
+                (function () {
+                    try {
+                        if (localStorage.getItem('sdh-csempek') === 'rejtve') {
+                            document.currentScript.previousElementSibling.hidden = true;
+                        }
+                    } catch (e) {}
+                }());
+            </script>
 
             <?php
             // Az összes munkalap rácsa és a kijelölt lap részletei (MunkaLap 3 főablak).
@@ -584,6 +609,65 @@ final class SDH_Muhely_Admin_UI
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    /**
+     * Az Áttekintés modulcsempéi: minden bejegyzett modul, a legfontosabb számával
+     * (ha van ilyen). A sorrend az oldalmenüé.
+     *
+     * @return array<string, array{modul: string, url: string, szam: ?int, cimke: string, azonnal?: int, jelez?: bool}>
+     */
+    private static function attekintes_kartyak(int $ugyfel_db, int $eszkoz_db, int $munkalap_db): array
+    {
+        $szamok = [
+            'ugyfelek'   => [$ugyfel_db, 'aktív ügyfél'],
+            'eszkozok'   => [$eszkoz_db, 'nyilvántartott eszköz'],
+            'munkalapok' => [$munkalap_db, 'nyitott munkalap'],
+        ];
+
+        if (class_exists('SDH_Muhely_Rma')) {
+            $szamok['uzenetek'] = [SDH_Muhely_Rma::olvasatlan_db(), 'olvasatlan üzenet'];
+        }
+
+        if (class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok()) {
+            $szamok['levelezes'] = [SDH_Muhely_Levelezes::olvasatlan_db(), 'olvasatlan levél'];
+        }
+
+        if (class_exists('SDH_Muhely_Szolgaltatas')) {
+            $szamok['szolgaltatasok'] = [SDH_Muhely_Szolgaltatas::darab(), 'szolgáltatás'];
+        }
+
+        if (class_exists('SDH_Muhely_Termek')) {
+            $szamok['termekek'] = [SDH_Muhely_Termek::darab(), 'termék'];
+        }
+
+        $ki = [];
+
+        foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
+            if (!empty($modul['keszul'])) {
+                continue;
+            }
+
+            $ki[$kulcs] = [
+                'modul' => (string) $modul['cim'],
+                'url'   => SDH_Muhely_Modulok::url((string) $kulcs),
+                'szam'  => isset($szamok[$kulcs]) ? (int) $szamok[$kulcs][0] : null,
+                'cimke' => isset($szamok[$kulcs]) ? $szamok[$kulcs][1] : 'megnyitás',
+            ];
+        }
+
+        if (isset($ki['levelezes']) && $ki['levelezes']['szam'] !== null) {
+            $azonnal = SDH_Muhely_Levelezes::azonnal_db();
+
+            $ki['levelezes']['azonnal'] = $azonnal;
+            $ki['levelezes']['jelez']   = $azonnal > 0;
+        }
+
+        if (isset($ki['uzenetek']) && (int) $ki['uzenetek']['szam'] > 0) {
+            $ki['uzenetek']['jelez'] = true;
+        }
+
+        return $ki;
     }
 
     /**

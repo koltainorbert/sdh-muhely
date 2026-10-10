@@ -99,7 +99,7 @@ final class SDH_Muhely_Imap
             }
         }
 
-        $this->kepessegek_olvas();
+        // A képességeket belépés után kérdezzük le (akkor teljes a lista) – egy körrel kevesebb.
     }
 
     public function belep(string $felhasznalo, string $jelszo): void
@@ -417,7 +417,8 @@ final class SDH_Muhely_Imap
                 } elseif ($kulcs === 'RFC822.SIZE') {
                     $elem['meret'] = (int) $ertek;
                 } elseif (preg_match('/^BODY\[(.*?)\](?:<\d+>)?$/', $kulcs, $m) === 1) {
-                    $elem['torzs'][$m[1]] = is_string($ertek) ? $ertek : '';
+                    // A „HEADER.FIELDS (FROM TO …)" válasza is egyszerűen HEADER néven érhető el.
+                    $elem['torzs'][strncmp($m[1], 'HEADER', 6) === 0 ? 'HEADER' : $m[1]] = is_string($ertek) ? $ertek : '';
                 }
             }
 
@@ -448,6 +449,29 @@ final class SDH_Muhely_Imap
         $sorok = $this->lekeres((string) $uid, 'UID BODY.PEEK[]');
 
         return $sorok !== [] ? (string) ($sorok[0]['torzs'][''] ?? '') : '';
+    }
+
+    /**
+     * Több levél nyersen, egyetlen kéréssel (előtöltés a gyorsítótárba).
+     *
+     * @param array<int, int> $uidk
+     * @return array<int, string> uid => nyers levél
+     */
+    public function nyers_levelek(array $uidk): array
+    {
+        $ki = [];
+
+        if ($uidk === []) {
+            return $ki;
+        }
+
+        foreach ($this->lekeres(self::halmaz($uidk), 'UID BODY.PEEK[]') as $e) {
+            if ((string) ($e['torzs'][''] ?? '') !== '') {
+                $ki[(int) $e['uid']] = (string) $e['torzs'][''];
+            }
+        }
+
+        return $ki;
     }
 
     /**

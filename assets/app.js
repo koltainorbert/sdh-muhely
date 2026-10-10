@@ -7080,6 +7080,44 @@
         );
     }
 
+    /* ---------------------------------------------------------------- */
+    /* Áttekintés: a modulcsempék elrejtése / megjelenítése             */
+    /* ---------------------------------------------------------------- */
+
+    function csempekAllapot() {
+        var csempek = document.querySelector('[data-sdh-csempek]');
+        var gomb = document.querySelector('[data-sdh-csempek-valt]');
+
+        if (csempek && gomb) {
+            gomb.textContent = csempek.hidden ? 'Csempék megjelenítése' : 'Csempék elrejtése';
+            gomb.setAttribute('aria-expanded', csempek.hidden ? 'false' : 'true');
+        }
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-csempek-valt]') : null;
+        var csempek = document.querySelector('[data-sdh-csempek]');
+
+        if (!gomb || !csempek) {
+            return;
+        }
+
+        esemeny.preventDefault();
+        csempek.hidden = !csempek.hidden;
+
+        try {
+            window.localStorage.setItem('sdh-csempek', csempek.hidden ? 'rejtve' : 'latszik');
+        } catch (hiba) {
+            /* privát módban a választás csak erre a betöltésre szól */
+        }
+
+        csempekAllapot();
+        // A munkalap-rács az így felszabaduló (vagy elfoglalt) helyhez igazodik.
+        window.dispatchEvent(new Event('resize'));
+    });
+
+    csempekAllapot();
+
     // Más fájlok (levelezes.js) ezeken keresztül nyitnak popupot és választót.
     window.SDH_MUHELY_APP = {
         nyit: nyit,

@@ -57,6 +57,28 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.33.0
+- **Gyors levélbetöltés.** A levelező eddig minden kattintásnál megvárta a levelezőszervert (kapcsolódás,
+  belépés, szinkron); most előbb a saját gyorsítótárából rajzol, és a háttérben frissít.
+  - A **lista** a gyorsítótárból jön azonnal, a szerverről a háttérben frissül (új levelek, máshol történt változások).
+  - A **levelek törzse** titkosított gyorsítótárba kerül (`uploads/sdh-muhely-levelek`, 30 napig); a megnyitott
+    oldal és az újonnan érkezett levelek törzsét a rendszer **előre letölti** (300 KB-ig levelenként), így a megnyitás
+    nem vár a szerverre. Az „olvasott" jelzés külön háttérkérésben megy a Gmailbe.
+  - A **műveletek** (törlés, áthelyezés, csillag, olvasott) azonnal látszanak; a szerver a háttérben követi.
+  - Kevesebb adat és kérés: a listához csak a szükséges fejlécmezők jönnek le, az első szinkron 50 levél (a többi lapozáskor).
+  - Mérés mesterséges hálózati késleltetéssel (0,7 mp kapcsolódás + belépés, 0,1 mp / parancs): oldal megnyitása
+    1,9 mp → 0,15 mp; mappaváltás 1,7 → 0,06; levél megnyitása 1,5 → 0,09; törlés 3,6 → 0,06. Valódi Gmailen nem mért.
+- **Rendező ügynök** (`SDH_Muhely_Level_Rendezo`): a Levelezés „Rendező ügynök" gombjával kérésre leveleket rendez
+  mappákba. **Két dolgot tehet: leveleket áthelyez, és – engedélykérés után – új mappát hoz létre. Semmi mást.**
+  Előbb tervet mutat (mely levelek hová), és csak a jóváhagyott részt hajtja végre. A jogai a Beállításokban
+  kapcsolhatók, csak ott: bekapcsolva-e, mozgathat-e, létrehozhat-e mappát, tehet-e a Kukába / Spambe (alapból nem),
+  kell-e jóváhagyás, hány levelet kérésenként, honnan, mely fiókokban. Alapból **ki van kapcsolva**. Szabad szavas
+  kéréshez Claude API-kulcs kell; anélkül szűrővel dolgozik (feladó / tárgy tartalmazza → mappa).
+- **Felugró jelzések**: egyszerre legfeljebb 4 látszik, a többi „+N további új levél" összesítőbe kerül – sok levélnél
+  sem lógnak ki a képernyőről. „Összes bezárása".
+- **Áttekintés**: minden menüpont csempe a tetején (Levelezés: olvasatlan levelek és azonnali teendők, élőben);
+  a fejléc „Csempék elrejtése / megjelenítése" gombjával eltüntethetők, a választás böngészőnként megmarad.
+
 ### 0.32.0
 - **Levelezés – a szerviz e-mail-fiókjai a CRM-ben** (új modul az oldalsávban). A fiókok IMAP-on és SMTP-n,
   **alkalmazásjelszóval** kapcsolódnak (Gmail: `imap.gmail.com:993`, `smtp.gmail.com:465`); a levelek a

@@ -748,6 +748,163 @@
     font-size: 13px;
 }
 
+/* ---- Rendező ügynök ablaka ---- */
+
+.sdh-modal.sdh-modal[data-sdh-modul="levelrendezo"] {
+    width: min(720px, calc(100vw - 2rem));
+}
+
+.sdh-rendezo {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.sdh-rendezo__jogok {
+    display: grid;
+    gap: .1rem;
+    margin: 0;
+    padding: .5rem .8rem;
+    border-radius: 8px;
+    background: var(--sdh-felulet-2);
+    font-size: 12.5px;
+    list-style: none;
+}
+
+.sdh-rendezo__jogok .is-szabad {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-rendezo__jogok .is-tilos {
+    color: var(--sdh-halvany);
+}
+
+.sdh-rendezo__keres {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: .6rem .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    box-shadow: none;
+}
+
+.sdh-rendezo .sdh-ig {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+}
+
+.sdh-rendezo__megj,
+.sdh-rendezo__naplo {
+    margin: .4rem 0 0;
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+}
+
+.sdh-rendezo__naplo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-rendezo__uzenet {
+    margin: 0 0 .4rem;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sdh-rendezo__lista {
+    margin: 0 0 .5rem;
+    padding: .45rem .8rem .45rem 1.8rem;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.sdh-rendezo__lista.is-kesz {
+    background: color-mix(in srgb, var(--sdh-siker) 12%, transparent);
+}
+
+.sdh-rendezo__lista.is-kihagyva {
+    background: color-mix(in srgb, var(--sdh-allapot-narancs) 14%, transparent);
+}
+
+.sdh-rendezo__engedely {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin: 0 0 .5rem;
+    padding: .4rem .8rem .6rem;
+    border: 1px solid var(--sdh-allapot-narancs);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.sdh-rendezo__engedely legend {
+    padding: 0 .35rem;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.sdh-rendezo__csoport {
+    margin-bottom: .4rem;
+    padding: .45rem .8rem .5rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.sdh-rendezo__csoport[hidden] {
+    display: none;
+}
+
+.sdh-rendezo__minta {
+    margin: .25rem 0 0;
+    padding: 0 0 0 1.6rem;
+    color: var(--sdh-halvany);
+    font-size: 12.5px;
+    list-style: none;
+}
+
+.sdh-rendezo__minta li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-rendezo__minta span {
+    color: var(--sdh-szoveg);
+    font-weight: 600;
+}
+
+.sdh-rendezo__lapozo {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    font-size: 12.5px;
+}
+
+.sdh-rendezo__lapozo .sdh-gomb {
+    width: 30px;
+    height: 28px;
+    padding: 0;
+}
+
+.sdh-rendezo__lapozo .sdh-rendezo__megj {
+    margin: 0;
+}
+
+.sdh-mezo__cimke {
+    display: block;
+    margin-bottom: .25rem;
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+}
+
 /* Beállítások: szerver, port, titkosítás egy sorban. */
 .sdh-level-szerver {
     display: grid;
@@ -766,6 +923,9 @@
     flex-direction: column;
     gap: .5rem;
     width: min(360px, calc(100vw - 36px));
+    /* Soha nem lóg ki a képernyőről: legfeljebb néhány jelzés látszik, a többi az összesítőben. */
+    max-height: calc(100vh - 36px);
+    overflow: hidden;
     pointer-events: none;
 }
 
@@ -810,6 +970,28 @@
 .sdh-level-toast__megj {
     color: var(--sdh-halvany, #5f6670);
     font-size: 12px;
+}
+
+/* Az összesítő sor (ha több jelzés jönne, mint amennyi kifér). */
+.sdh-level-toast--tobb {
+    border-left-color: var(--sdh-keret-eros, #cfd4dc);
+    background: var(--sdh-felulet-2, #f1f3f5);
+}
+
+.sdh-level-toast__mind {
+    margin: .2rem 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--sdh-accent, #d4231d);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.sdh-level-toast__mind:hover,
+.sdh-level-toast__mind:focus-visible {
+    text-decoration: underline;
 }
 
 .sdh-level-toast__bezar {

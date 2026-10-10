@@ -379,6 +379,76 @@ a.sdh-kartya:focus-visible {
     opacity: .5;
 }
 
+/* Az Áttekintés modulcsempéi: minden menüpont, tömören. */
+.sdh-kartyak--modulok {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: .6rem;
+    margin-bottom: 1rem;
+}
+
+.sdh-kartyak--modulok[hidden] {
+    display: none;
+}
+
+.sdh-kartyak--modulok .sdh-kartya {
+    padding: .65rem .8rem .7rem;
+}
+
+.sdh-kartya__fej {
+    display: flex;
+    gap: .4rem;
+    align-items: center;
+    color: var(--sdh-szoveg-2);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.sdh-kartya__fej .sdh-sav__ikon {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-kartya__modul {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-kartyak--modulok .sdh-kartya__szam {
+    margin-top: .15rem;
+    font-size: 22px;
+}
+
+.sdh-kartya__cimke--csak {
+    margin-top: .35rem;
+}
+
+.sdh-kartya--jelez {
+    border-color: color-mix(in srgb, var(--sdh-allapot-piros) 55%, var(--sdh-keret));
+}
+
+.sdh-kartya__azonnal {
+    display: inline-block;
+    white-space: nowrap;
+    margin-left: .3rem;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sdh-kartya__azonnal[hidden] {
+    display: none;
+}
+
 /* ================================================================== */
 /* Keresősáv a listák fölött                                           */
 /* ================================================================== */

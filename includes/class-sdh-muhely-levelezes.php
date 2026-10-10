@@ -36,14 +36,33 @@ final class SDH_Muhely_Levelezes
     /** Egy oldalon ennyi levél. */
     private const OLDAL = 25;
 
-    /** Az első szinkron ennyi (legújabb) levelet tölt le, és ekkora ablakban követi a máshol történt változásokat. */
-    private const ABLAK = 150;
+    /** Ekkora ablakban (a legújabb levelek) követi a máshol történt változásokat (olvasás, csillag, törlés). */
+    private const ABLAK = 100;
+
+    /** Az első szinkron ennyi (legújabb) levelet tölt le – két oldalnyit; a többi lapozáskor jön. */
+    private const ELSO = 50;
 
     /** Régebbi levelek lapozásakor egyszerre ennyit kér le. */
     private const ADAG = 50;
 
     /** A levéllistához levelenként letöltött adatok: fejléc + a törzs eleje (kivonat, ügynök). */
-    private const ELEMEK = 'UID FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.6144>';
+    // Nem a teljes fejléc (a Gmailé levelenként több kilobájt), csak ami a listához és az ügynöknek kell.
+    private const ELEMEK = 'UID FLAGS INTERNALDATE RFC822.SIZE'
+        . ' BODY.PEEK[HEADER.FIELDS (FROM TO CC SUBJECT DATE MESSAGE-ID REPLY-TO IN-REPLY-TO CONTENT-TYPE CONTENT-TRANSFER-ENCODING LIST-UNSUBSCRIBE LIST-ID PRECEDENCE AUTO-SUBMITTED)]'
+        . ' BODY.PEEK[TEXT]<0.4096>';
+
+    /** A levelek törzsének titkosított gyorsítótára (uploads alatt). */
+    private const TAR_MAPPA = 'sdh-muhely-levelek';
+
+    /** Ennél nagyobb levél nem kerül a gyorsítótárba (mindig a szerverről jön). */
+    private const TAR_MAX = 8 * 1024 * 1024;
+
+    /** Előtöltés: ennél kisebb leveleket tölt le előre a megnyitott oldalról, kérésenként legfeljebb ennyi bájtot. */
+    private const ELORE_LEVEL = 300 * 1024;
+    private const ELORE_OSSZ  = 3 * 1024 * 1024;
+
+    /** A gyorsítótárban ennyi napig marad egy levél. */
+    private const TAR_NAP = 30;
 
     /** Ennél nagyobb összes csatolmányt nem küldünk (a Gmail korlátja 25 MB). */
     private const CSATOLMANY_MAX = 24 * 1024 * 1024;
@@ -71,12 +90,18 @@ final class SDH_Muhely_Levelezes
             'muvelet'    => 'ajax_muvelet',
             'urlap'      => 'ajax_urlap',
             'kuld'       => 'ajax_kuld',
+            'olvasva'    => 'ajax_olvasva',
             'nyit'       => 'ajax_nyit',
             'zar'        => 'ajax_zar',
             'mappa'      => 'ajax_mappa',
             'elintezve'  => 'ajax_elintezve',
             'teszt'      => 'ajax_teszt',
+            'rendezo_terv'       => 'ajax_rendezo_terv',
+            'rendezo_vegrehajt'  => 'ajax_rendezo_vegrehajt',
         ];
+
+        // A rendező ügynök ablaka (az app.js popupja „sdh_muhely_<modul>_urlap" néven kéri).
+        add_action('wp_ajax_sdh_muhely_levelrendezo_urlap', [self::class, 'ajax_rendezo_urlap']);
 
         foreach ($muveletek as $nev => $fuggveny) {
             add_action('wp_ajax_sdh_muhely_level_' . $nev, [self::class, $fuggveny]);
@@ -108,6 +133,7 @@ final class SDH_Muhely_Levelezes
         require_once SDH_MUHELY_DIR . 'includes/lib/sdh-imap.php';
         require_once SDH_MUHELY_DIR . 'includes/lib/sdh-mime.php';
         require_once SDH_MUHELY_DIR . 'includes/class-sdh-muhely-level-ugynok.php';
+        require_once SDH_MUHELY_DIR . 'includes/class-sdh-muhely-level-rendezo.php';
     }
 
     /* =================================================================
@@ -126,7 +152,7 @@ final class SDH_Muhely_Levelezes
     }
 
     /**
-     * @return array{fiokok: array<string, array<string, mixed>>, ugynok: array<string, mixed>, frissites_mp: int, hang: bool, zar_perc: int}
+     * @return array{fiokok: array<string, array<string, mixed>>, ugynok: array<string, mixed>, frissites_mp: int, hang: bool, zar_perc: int, rendezo: array<string, mixed>}
      */
     public static function beallitas(): array
     {
@@ -136,7 +162,11 @@ final class SDH_Muhely_Levelezes
             'frissites_mp' => 60,
             'hang'         => true,
             'zar_perc'     => 480,
+            'rendezo'      => [],
         ];
+
+        require_once SDH_MUHELY_DIR . 'includes/class-sdh-muhely-level-rendezo.php';
+        $alap['rendezo'] = SDH_Muhely_Level_Rendezo::alap_jogok();
 
         for ($i = 1; $i <= self::FIOK_MAX; $i++) {
             $alap['fiokok']['f' . $i] = self::alap_fiok();
@@ -170,6 +200,12 @@ final class SDH_Muhely_Levelezes
                 $alap[$k] = $mentett[$k];
             }
         }
+
+        if (is_array($mentett['rendezo'] ?? null)) {
+            $alap['rendezo'] = array_merge($alap['rendezo'], array_intersect_key($mentett['rendezo'], $alap['rendezo']));
+        }
+
+        $alap['rendezo']['fiokok'] = is_array($alap['rendezo']['fiokok']) ? $alap['rendezo']['fiokok'] : [];
 
         return $alap;
     }
@@ -399,6 +435,64 @@ final class SDH_Muhely_Levelezes
                     <input type="text" name="level_ugynok[ai_modell]" id="level_ugynok_ai_modell" maxlength="80" value="<?php echo esc_attr((string) $u['ai_modell']); ?>">
                 </div>
 
+            </div>
+
+            <h3 class="sdh-doboz__alcim">Rendező ügynök</h3>
+
+            <p class="sdh-sugo">
+                A Levelezés „Rendező ügynök" gombjával kérhetsz tőle rendrakást (pl. „A beszállítói számlákat tedd a Számlák mappába").
+                <strong>Két dolgot tehet: leveleket áthelyez mappába, és – engedélykérés után – új mappát hoz létre. Semmi mást.</strong>
+                Nem töröl, nem küld, nem válaszol. Hogy a kettőből mit szabad, azt az alábbi kapcsolók döntik el – csak itt, kézzel állíthatók;
+                az ügynök a saját jogain nem változtathat. Szabad szavas kéréshez Claude API-kulcs kell (fent); anélkül szűrővel dolgozik
+                (feladó / tárgy tartalmazza → mappa).
+            </p>
+
+            <?php $r = $b['rendezo']; ?>
+            <div class="sdh-mezok">
+                <?php
+                $kapcsolok = [
+                    'be'         => 'A rendező ügynök be van kapcsolva.',
+                    'mozgathat'  => 'Leveleket áthelyezhet mappába.',
+                    'mappat'     => 'Új mappát létrehozhat (minden mappa előtt engedélyt kér).',
+                    'kukaba'     => 'A Kukába és a Spambe is tehet levelet. (Kikapcsolva oda soha nem mozgat.)',
+                    'jovahagyas' => 'Mozgatás előtt mindig megmutatja a tervet, és jóváhagyást kér. (Kikapcsolva a mozgatást rögtön végrehajtja.)',
+                ];
+                ?>
+                <?php foreach ($kapcsolok as $nev => $szoveg) : ?>
+                    <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
+                        <input type="checkbox" name="level_rendezo[<?php echo esc_attr($nev); ?>]" id="level_rendezo_<?php echo esc_attr($nev); ?>" value="1" <?php checked(!empty($r[$nev])); ?>>
+                        <label for="level_rendezo_<?php echo esc_attr($nev); ?>"><?php echo esc_html($szoveg); ?></label>
+                    </div>
+                <?php endforeach; ?>
+
+                <div class="sdh-mezo">
+                    <label for="level_rendezo_max">Egy kérésben legfeljebb ennyi levelet mozgathat</label>
+                    <input type="number" name="level_rendezo[max]" id="level_rendezo_max" min="1" max="300" value="<?php echo (int) $r['max']; ?>">
+                </div>
+
+                <div class="sdh-mezo">
+                    <label for="level_rendezo_forras">Honnan mozgathat</label>
+                    <select name="level_rendezo[forras]" id="level_rendezo_forras">
+                        <option value="barmely" <?php selected((string) $r['forras'], 'barmely'); ?>>Bármelyik megnyitott mappából</option>
+                        <option value="inbox" <?php selected((string) $r['forras'], 'inbox'); ?>>Csak a Beérkezett mappából</option>
+                    </select>
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <span class="sdh-mezo__cimke">Mely fiókokban dolgozhat</span>
+                    <?php foreach ($b['fiokok'] as $k => $f) : ?>
+                        <?php if (trim((string) $f['email']) === '') { continue; } ?>
+                        <label class="sdh-jelolo">
+                            <input type="checkbox" name="level_rendezo[fiokok][<?php echo esc_attr((string) $k); ?>]" value="1" <?php checked(!empty($r['fiokok'][$k])); ?>>
+                            <?php echo esc_html((string) $f['email']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <h3 class="sdh-doboz__alcim">Értesítések</h3>
+
+            <div class="sdh-mezok">
                 <div class="sdh-mezo">
                     <label for="level_frissites_mp">Új levelek keresése (másodpercenként)</label>
                     <input type="number" name="level_frissites_mp" id="level_frissites_mp" min="30" max="900" value="<?php echo (int) $b['frissites_mp']; ?>">
@@ -503,6 +597,21 @@ final class SDH_Muhely_Levelezes
         $b['frissites_mp']        = min(900, max(30, (int) ($_POST['level_frissites_mp'] ?? 60)));
         $b['zar_perc']            = min(1440, max(5, (int) ($_POST['level_zar_perc'] ?? 480)));
         $b['hang']                = !empty($_POST['level_hang']);
+
+        // A rendező ügynök jogai: csak innen, a Beállítások űrlapjáról állíthatók.
+        $rk = isset($_POST['level_rendezo']) && is_array($_POST['level_rendezo']) ? wp_unslash($_POST['level_rendezo']) : [];
+
+        foreach (['be', 'mozgathat', 'mappat', 'kukaba', 'jovahagyas'] as $nev) {
+            $b['rendezo'][$nev] = !empty($rk[$nev]);
+        }
+
+        $b['rendezo']['max']    = min(SDH_Muhely_Level_Rendezo::LEVEL_MAX, max(1, (int) ($rk['max'] ?? 100)));
+        $b['rendezo']['forras'] = ($rk['forras'] ?? '') === 'inbox' ? 'inbox' : 'barmely';
+        $b['rendezo']['fiokok'] = [];
+
+        foreach (array_keys($b['fiokok']) as $k) {
+            $b['rendezo']['fiokok'][$k] = !empty($rk['fiokok'][$k]);
+        }
         // phpcs:enable
 
         // Nem töltődik be minden oldalon (autoload = no): jelszavak vannak benne.
@@ -1082,7 +1191,7 @@ final class SDH_Muhely_Levelezes
         if ($allapot['exists'] > 0) {
             if ($max === 0) {
                 // Első alkalom: a legújabb levelek, sorszám szerint.
-                $tol    = max(1, $allapot['exists'] - self::ABLAK + 1);
+                $tol    = max(1, $allapot['exists'] - self::ELSO + 1);
                 $elemek = $imap->lekeres($tol . ':' . $allapot['exists'], self::ELEMEK, false);
 
                 if ($elemek !== []) {
@@ -1248,11 +1357,22 @@ final class SDH_Muhely_Levelezes
             }
 
             if ($be !== null) {
-                self::szinkron($fk, $fiok, $be, $imap);
+                $regi_max = (int) $be->max_uid;
+                $be       = self::szinkron($fk, $fiok, $be, $imap);
+
+                // A most érkezett levelek törzse rögtön a gyorsítótárba: az értesítésre kattintva azonnal megnyílnak.
+                if ($regi_max > 0 && (int) $be->max_uid > $regi_max) {
+                    global $wpdb;
+
+                    $ujak = $wpdb->get_results($wpdb->prepare('SELECT uid, meret FROM ' . self::tabla() . ' WHERE mappa_id = %d AND uid > %d ORDER BY uid DESC LIMIT 15', (int) $be->id, $regi_max));
+
+                    self::elore_tolt($be, $imap, is_array($ujak) ? $ujak : []);
+                }
             }
 
             $imap->kilep();
             delete_transient('sdh_level_hiba_' . $fk);
+            self::tar_takarit();
         } catch (\Throwable $hiba) {
             set_transient('sdh_level_hiba_' . $fk, $hiba->getMessage(), 10 * MINUTE_IN_SECONDS);
 
@@ -1277,6 +1397,19 @@ final class SDH_Muhely_Levelezes
 
         return (int) $wpdb->get_var(
             'SELECT COALESCE(SUM(olvasatlan), 0) FROM ' . self::mappa_tabla() . " WHERE szerep = 'inbox' AND fiok IN ('" . implode("','", array_map('esc_sql', $kulcsok)) . "')"
+        );
+    }
+
+    /** Az ügynök le nem zárt azonnali jelzései a nyitott fiókokban (Áttekintés csempe, „Teendők"). */
+    public static function azonnal_db(): int
+    {
+        global $wpdb;
+
+        $nyitott = self::nyitott_sql();
+
+        return $nyitott === '' ? 0 : (int) $wpdb->get_var(
+            'SELECT COUNT(*) FROM ' . self::tabla() . ' l INNER JOIN ' . self::mappa_tabla() . " mp ON mp.id = l.mappa_id
+             WHERE mp.szerep = 'inbox' AND l.fontossag = 'azonnal' AND l.elintezve = 0 AND l.fiok IN ({$nyitott})"
         );
     }
 
@@ -1337,10 +1470,7 @@ final class SDH_Muhely_Levelezes
             }
         }
 
-        $azonnal = $nyitott === '' ? 0 : (int) $wpdb->get_var(
-            "SELECT COUNT(*) FROM {$t} l INNER JOIN {$m} mp ON mp.id = l.mappa_id
-             WHERE mp.szerep = 'inbox' AND l.fontossag = 'azonnal' AND l.elintezve = 0 AND l.fiok IN ({$nyitott})"
-        );
+        $azonnal = self::azonnal_db();
 
         $fiokok = self::fiokok_kifele();
 
@@ -1426,6 +1556,9 @@ final class SDH_Muhely_Levelezes
         $oldal    = isset($_POST['oldal']) ? max(1, (int) $_POST['oldal']) : 1;
         $q        = isset($_POST['q']) && is_scalar($_POST['q']) ? trim(mb_substr(sanitize_text_field(wp_unslash((string) $_POST['q'])), 0, 120)) : '';
         // phpcs:enable
+        // Gyors mód: csak a gyorsítótárból, a levelezőszerver megkérdezése nélkül. A böngésző ezzel
+        // rajzol azonnal, majd egy második (háttér)kéréssel frissít a szerverről.
+        $gyors    = !empty($_POST['gyors']); // phpcs:ignore WordPress.Security.NonceVerification.Missing
         $t        = self::tabla();
         $m        = self::mappa_tabla();
         $eltolas  = ($oldal - 1) * self::OLDAL;
@@ -1476,6 +1609,31 @@ final class SDH_Muhely_Levelezes
         $hiba_szoveg = '';
         $kereses_uid = null;
 
+        if ($gyors && $q === '' && $mappa->szinkron !== null) {
+            $sorok = $wpdb->get_results($wpdb->prepare(
+                "SELECT * FROM {$t} WHERE mappa_id = %d AND uid >= %d ORDER BY uid DESC LIMIT %d OFFSET %d",
+                (int) $mappa->id,
+                (int) $mappa->min_uid,
+                self::OLDAL,
+                $eltolas
+            ));
+            $sorok = is_array($sorok) ? $sorok : [];
+            $ossz  = (int) $mappa->osszes;
+
+            wp_send_json_success([
+                'sorok'   => array_map([self::class, 'sor_kifele'], $sorok),
+                'ossz'    => $ossz,
+                'oldal'   => $oldal,
+                'oldalak' => max(1, (int) ceil($ossz / self::OLDAL)),
+                'mappa'   => (int) $mappa->id,
+                'fiokok'  => self::fiokok_kifele(),
+                'hiba'    => '',
+                'gyors'   => true,
+                // Ennyi levélnek kellene lennie az oldalon; ha kevesebb van a gyorsítótárban, a háttérkérés pótolja.
+                'hianyos' => count($sorok) < min(self::OLDAL, max(0, $ossz - $eltolas)),
+            ]);
+        }
+
         try {
             $imap  = self::imap($fiok);
             $mappa = self::szinkron($fk, $fiok, $mappa, $imap);
@@ -1509,6 +1667,13 @@ final class SDH_Muhely_Levelezes
 
                 if ($lap_uid !== [] && $oldal > 1) {
                     self::jelzok_frissit((int) $mappa->id, $imap, SDH_Muhely_Imap::halmaz($lap_uid), min($lap_uid), max($lap_uid));
+                }
+
+                // Előtöltés: az oldal leveleinek törzse a gyorsítótárba, hogy a megnyitás azonnali legyen.
+                if ($lap_uid !== []) {
+                    $lap_sorok = $wpdb->get_results("SELECT uid, meret FROM {$t} WHERE mappa_id = " . (int) $mappa->id . ' AND uid IN (' . implode(',', $lap_uid) . ') ORDER BY uid DESC');
+
+                    self::elore_tolt($mappa, $imap, is_array($lap_sorok) ? $lap_sorok : []);
                 }
             }
 
@@ -1572,19 +1737,153 @@ final class SDH_Muhely_Levelezes
         return [$sor, $mappa, self::fiok_kell((string) $sor->fiok)];
     }
 
-    /** A teljes levél a szerverről, feldolgozva. Ha már nincs ott, a gyorsítótárból is törlődik. */
-    private static function level_letolt(object $sor, object $mappa, SDH_Muhely_Imap $imap): array
+    /* ---- A levelek törzsének gyorsítótára: a megnyitás ne várjon a levelezőszerverre ---- */
+
+    private static function tar_mappa(): string
+    {
+        $feltoltes = wp_upload_dir();
+        $mappa     = trailingslashit($feltoltes['basedir']) . self::TAR_MAPPA;
+
+        if (!is_dir($mappa)) {
+            wp_mkdir_p($mappa);
+        }
+
+        $vedelem = [
+            'index.php' => "<?php\n// Csend az aranyat ér.\n",
+            '.htaccess' => "Options -Indexes\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n",
+        ];
+
+        foreach ($vedelem as $nev => $tartalom) {
+            if (!file_exists($mappa . '/' . $nev)) {
+                file_put_contents($mappa . '/' . $nev, $tartalom);
+            }
+        }
+
+        return $mappa;
+    }
+
+    /** A levél fájlja: a név titkos kulccsal képzett lenyomat (kitalálhatatlan), a tartalom titkosított. */
+    private static function tar_fajl(object $mappa, int $uid): string
+    {
+        $nev = hash_hmac('sha256', $mappa->fiok . '|' . (int) $mappa->id . '|' . (int) $mappa->uidvalidity . '|' . $uid, self::titok_kulcs());
+
+        return self::tar_mappa() . '/' . substr($nev, 0, 40) . '.bin';
+    }
+
+    private static function tar_olvas(object $mappa, int $uid): string
+    {
+        $fajl = self::tar_fajl($mappa, $uid);
+
+        if (!is_readable($fajl)) {
+            return '';
+        }
+
+        $nyers = (string) file_get_contents($fajl);
+
+        if (strlen($nyers) <= SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            return '';
+        }
+
+        $nyilt = sodium_crypto_secretbox_open(substr($nyers, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES), substr($nyers, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES), self::titok_kulcs());
+        $level = $nyilt === false ? false : @gzinflate($nyilt);
+
+        return is_string($level) ? $level : '';
+    }
+
+    private static function tar_ir(object $mappa, int $uid, string $nyers): void
+    {
+        if ($nyers === '' || strlen($nyers) > self::TAR_MAX) {
+            return;
+        }
+
+        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+
+        @file_put_contents(self::tar_fajl($mappa, $uid), $nonce . sodium_crypto_secretbox((string) gzdeflate($nyers, 4), $nonce, self::titok_kulcs()), LOCK_EX); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+    }
+
+    private static function tar_van(object $mappa, int $uid): bool
+    {
+        return is_file(self::tar_fajl($mappa, $uid));
+    }
+
+    /** Naponta egyszer: a régi gyorsítótár-fájlok törlése. */
+    private static function tar_takarit(): void
+    {
+        if (get_transient('sdh_level_takaritva')) {
+            return;
+        }
+
+        set_transient('sdh_level_takaritva', 1, DAY_IN_SECONDS);
+
+        $hatar = time() - self::TAR_NAP * DAY_IN_SECONDS;
+
+        foreach (glob(self::tar_mappa() . '/*.bin') ?: [] as $fajl) {
+            if ((int) @filemtime($fajl) < $hatar) {
+                @unlink($fajl); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+            }
+        }
+    }
+
+    /**
+     * Előtöltés: a megadott levelek törzse egyetlen kéréssel a gyorsítótárba, hogy a
+     * megnyitásuk azonnali legyen. Csak a kisebb leveleket, és korlátos összmérettel.
+     *
+     * @param array<int, object> $sorok A gyorsítótár sorai (uid, meret).
+     */
+    private static function elore_tolt(object $mappa, SDH_Muhely_Imap $imap, array $sorok): int
+    {
+        $kell  = [];
+        $ossz  = 0;
+
+        foreach ($sorok as $s) {
+            $meret = (int) $s->meret;
+
+            if ($meret <= 0 || $meret > self::ELORE_LEVEL || $ossz + $meret > self::ELORE_OSSZ || self::tar_van($mappa, (int) $s->uid)) {
+                continue;
+            }
+
+            $kell[] = (int) $s->uid;
+            $ossz  += $meret;
+        }
+
+        if ($kell === []) {
+            return 0;
+        }
+
+        $db = 0;
+
+        foreach ($imap->nyers_levelek($kell) as $uid => $nyers) {
+            self::tar_ir($mappa, (int) $uid, $nyers);
+            $db++;
+        }
+
+        return $db;
+    }
+
+    /**
+     * A teljes levél feldolgozva: a gyorsítótárból, ha megvan; különben a szerverről
+     * (és onnan a gyorsítótárba). Ha a szerveren már nincs meg, a listából is törlődik.
+     * A kapcsolat csak akkor épül fel, ha tényleg kell (`$imap` addig null).
+     */
+    private static function level_letolt(object $sor, object $mappa, array $fiok, ?SDH_Muhely_Imap &$imap = null): array
     {
         global $wpdb;
 
-        $imap->kivalaszt((string) $mappa->nyers);
-
-        $nyers = $imap->nyers_level((int) $sor->uid);
+        $nyers = self::tar_olvas($mappa, (int) $sor->uid);
 
         if ($nyers === '') {
-            $wpdb->delete(self::tabla(), ['id' => (int) $sor->id]);
+            $imap = $imap ?? self::imap($fiok);
+            $imap->kivalaszt((string) $mappa->nyers);
 
-            throw new SDH_Muhely_Imap_Hiba('Ez a levél már nincs meg ebben a mappában (máshol törölték vagy áthelyezték).');
+            $nyers = $imap->nyers_level((int) $sor->uid);
+
+            if ($nyers === '') {
+                $wpdb->delete(self::tabla(), ['id' => (int) $sor->id]);
+
+                throw new SDH_Muhely_Imap_Hiba('Ez a levél már nincs meg ebben a mappában (máshol törölték vagy áthelyezték).');
+            }
+
+            self::tar_ir($mappa, (int) $sor->uid, $nyers);
         }
 
         return SDH_Muhely_Mime::feldolgoz($nyers);
@@ -1645,18 +1944,29 @@ final class SDH_Muhely_Levelezes
 
         [$sor, $mappa, $fiok] = self::level_kell($id);
 
+        $imap      = null;
+        $jelolendo = false;
+
         try {
-            $imap  = self::imap($fiok);
-            $level = self::level_letolt($sor, $mappa, $imap);
+            // Gyorsítótárból a levél azonnal megvan: a szerverhez ilyenkor nem kapcsolódunk.
+            $level = self::level_letolt($sor, $mappa, $fiok, $imap);
 
             // Megnyitáskor olvasottá válik – a Gmailben is.
             if ((int) $sor->olvasott !== 1) {
-                $imap->jelzo((string) (int) $sor->uid, true, ['\\Seen']);
+                if ($imap !== null) {
+                    $imap->jelzo((string) (int) $sor->uid, true, ['\\Seen']);
+                } else {
+                    // A szerveren a böngésző külön, háttérben futó kérése jelöli meg (ajax_olvasva): a megjelenítés nem vár rá.
+                    $jelolendo = true;
+                }
+
                 $wpdb->update(self::tabla(), ['olvasott' => 1], ['id' => (int) $sor->id]);
                 $wpdb->query($wpdb->prepare('UPDATE ' . self::mappa_tabla() . ' SET olvasatlan = CASE WHEN olvasatlan > 0 THEN olvasatlan - 1 ELSE 0 END WHERE id = %d', (int) $mappa->id));
             }
 
-            $imap->kilep();
+            if ($imap !== null) {
+                $imap->kilep();
+            }
         } catch (\Throwable $hiba) {
             wp_send_json_error(['uzenet' => $hiba->getMessage(), 'eltunt' => strpos($hiba->getMessage(), 'már nincs meg') !== false]);
         }
@@ -1706,10 +2016,31 @@ final class SDH_Muhely_Levelezes
             'tavoli_kep'    => $tavoli && !$kepek,
             'csatolmanyok'  => $csat,
             'ugynok'        => (string) $sor->ugynok,
+            'jelolendo'     => $jelolendo,
             'szerep'        => (string) $mappa->szerep,
             'ugyfel'        => $ugyfel ? ['id' => (int) $ugyfel->id, 'nev' => (string) $ugyfel->nev] : null,
             'fiokok'        => self::fiokok_kifele(),
         ]);
+    }
+
+    /** A gyorsítótárból megnyitott levél megjelölése olvasottként a szerveren (háttérkérés). */
+    public static function ajax_olvasva(): void
+    {
+        self::jog_ellenorzes();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        [$sor, $mappa, $fiok] = self::level_kell(isset($_POST['id']) ? (int) $_POST['id'] : 0);
+
+        try {
+            $imap = self::imap($fiok);
+            $imap->kivalaszt((string) $mappa->nyers);
+            $imap->jelzo((string) (int) $sor->uid, true, ['\\Seen']);
+            $imap->kilep();
+        } catch (\Throwable $hiba) {
+            wp_send_json_error(['uzenet' => $hiba->getMessage()]);
+        }
+
+        wp_send_json_success(['id' => (int) $sor->id]);
     }
 
     /** Csatolmány letöltése. Mindig letöltésként megy ki (soha nem nyílik meg a böngészőben a CRM nevében). */
@@ -1725,9 +2056,12 @@ final class SDH_Muhely_Levelezes
         [$sor, $mappa, $fiok] = self::level_kell($id);
 
         try {
-            $imap  = self::imap($fiok);
-            $level = self::level_letolt($sor, $mappa, $imap);
-            $imap->kilep();
+            $imap  = null;
+            $level = self::level_letolt($sor, $mappa, $fiok, $imap);
+
+            if ($imap !== null) {
+                $imap->kilep();
+            }
         } catch (\Throwable $hiba) {
             wp_die(esc_html($hiba->getMessage()));
         }
@@ -1855,13 +2189,28 @@ final class SDH_Muhely_Levelezes
                     $wpdb->query('DELETE FROM ' . self::tabla() . " WHERE id IN ({$sor_id})");
             }
 
-            // A számlálók a szerver szerint.
-            $all = $imap->kivalaszt((string) $mappa->nyers);
-            $wpdb->update(self::mappa_tabla(), ['osszes' => $all['exists'], 'olvasatlan' => $all['exists'] > 0 ? count($imap->uid_keres('UNSEEN')) : 0], ['id' => (int) $mappa->id]);
+            // A számlálók helyben igazodnak (a következő szinkron a szerver szerint pontosítja): így a
+            // művelet nem vár három további kérésre.
+            $db_ossz  = count($sorok);
+            $db_olv   = count(array_filter($sorok, static fn (object $x): bool => (int) $x->olvasott !== 1));
+            $m_tabla  = self::mappa_tabla();
 
-            if ($cel !== null) {
-                $a = $imap->allapot((string) $cel->nyers);
-                $wpdb->update(self::mappa_tabla(), ['osszes' => $a['messages'], 'olvasatlan' => $a['unseen']], ['id' => (int) $cel->id]);
+            if ($muvelet === 'olvasott' || $muvelet === 'olvasatlan') {
+                $kul = $muvelet === 'olvasott' ? -$db_olv : $db_ossz - $db_olv;
+                $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET olvasatlan = CASE WHEN olvasatlan + %d < 0 THEN 0 ELSE olvasatlan + %d END WHERE id = %d", $kul, $kul, (int) $mappa->id));
+            } elseif ($muvelet !== 'csillag' && $muvelet !== 'csillag_le') {
+                $wpdb->query($wpdb->prepare(
+                    "UPDATE {$m_tabla} SET osszes = CASE WHEN osszes < %d THEN 0 ELSE osszes - %d END, olvasatlan = CASE WHEN olvasatlan < %d THEN 0 ELSE olvasatlan - %d END WHERE id = %d",
+                    $db_ossz,
+                    $db_ossz,
+                    $db_olv,
+                    $db_olv,
+                    (int) $mappa->id
+                ));
+
+                if ($cel !== null) {
+                    $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET osszes = osszes + %d, olvasatlan = olvasatlan + %d WHERE id = %d", $db_ossz, $db_olv, (int) $cel->id));
+                }
             }
 
             $imap->kilep();
@@ -1889,6 +2238,419 @@ final class SDH_Muhely_Levelezes
         $wpdb->update(self::tabla(), ['elintezve' => $be ? 1 : 0], ['id' => (int) $sor->id]);
 
         wp_send_json_success(['elintezve' => $be]);
+    }
+
+    /* =================================================================
+     * Rendező ügynök: terv → jóváhagyás → végrehajtás (csak mappa létrehozása és áthelyezés)
+     * ============================================================== */
+
+    /** Be van-e kapcsolva a rendező ügynök (a gombja csak akkor látszik). */
+    public static function rendezo_be(): bool
+    {
+        return !empty(self::beallitas()['rendezo']['be']);
+    }
+
+    /**
+     * A rendező ügynök jogai ehhez a fiókhoz és mappához – vagy a hiba szövege, ha itt nem dolgozhat.
+     *
+     * @return array<string, mixed>|string
+     */
+    private static function rendezo_jogok(string $fk, ?object $mappa)
+    {
+        $j = self::beallitas()['rendezo'];
+
+        if (empty($j['be'])) {
+            return 'A rendező ügynök ki van kapcsolva (Beállítások → Levelezés → Rendező ügynök).';
+        }
+
+        if (empty($j['fiokok'][$fk])) {
+            return 'A rendező ügynök ebben a fiókban nem dolgozhat (a Beállításokban nincs engedélyezve).';
+        }
+
+        if ($mappa === null || (string) $mappa->fiok !== $fk || (int) $mappa->valaszthato !== 1) {
+            return 'Előbb nyiss meg egy mappát.';
+        }
+
+        if ((string) $j['forras'] === 'inbox' && (string) $mappa->szerep !== 'inbox') {
+            return 'A rendező ügynök csak a Beérkezett mappából mozgathat (így van beállítva).';
+        }
+
+        return $j;
+    }
+
+    private static function rendezo_naplo(string $szoveg): void
+    {
+        $naplo   = get_option('sdh_muhely_level_naplo', []);
+        $naplo   = is_array($naplo) ? $naplo : [];
+        $naplo[] = ['ido' => current_time('mysql'), 'ki' => wp_get_current_user()->display_name, 'mit' => mb_substr($szoveg, 0, 300)];
+
+        update_option('sdh_muhely_level_naplo', array_slice($naplo, -100), false);
+    }
+
+    /** A rendező ügynök ablaka. */
+    public static function ajax_rendezo_urlap(): void
+    {
+        self::jog_ellenorzes(false);
+
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        $fk    = isset($_GET['fiok']) ? sanitize_key(wp_unslash($_GET['fiok'])) : '';
+        $mappa = self::mappa(isset($_GET['mappa']) ? (int) $_GET['mappa'] : 0);
+        $idk   = isset($_GET['idk']) ? array_values(array_filter(array_map('intval', explode(',', (string) wp_unslash($_GET['idk']))))) : [];
+        // phpcs:enable
+
+        $fiok = self::fiokok()[$fk] ?? null;
+        $j    = is_array($fiok) && !self::zarva($fk) ? self::rendezo_jogok($fk, $mappa) : 'Ez a fiók nincs megnyitva.';
+
+        echo '<h2 class="sdh-modal__cim">Rendező ügynök';
+
+        if (is_array($fiok) && $mappa !== null) {
+            echo ' <span class="sdh-modal__cim-megj">' . esc_html(self::fiok_nev($fiok) . ' · ' . self::mappa_nev($mappa)) . '</span>';
+        }
+
+        echo '</h2>';
+
+        if (!is_array($j)) {
+            echo '<div class="sdh-uzenet sdh-uzenet--hiba">' . esc_html($j) . '</div>';
+            wp_die();
+        }
+
+        $b      = self::beallitas();
+        $van_ai = self::visszafejt((string) $b['ugynok']['ai_kulcs']) !== '';
+        $naplo  = get_option('sdh_muhely_level_naplo', []);
+        $naplo  = array_reverse(array_slice(is_array($naplo) ? $naplo : [], -3));
+
+        ?>
+        <p class="sdh-modal__alcim">
+            Megmondod, mit rendezzen; megmutatja, mely leveleket hová tenné; és csak azt hajtja végre, amit jóváhagysz.
+            Leveleket áthelyezni és (engedéllyel) mappát létrehozni tud – semmi mást.
+        </p>
+
+        <form class="sdh-urlap sdh-rendezo" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+              data-sdh-ajax-action="sdh_muhely_level_rendezo_terv" data-sdh-rendezo data-lepes="keres">
+            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <input type="hidden" name="fiok" value="<?php echo esc_attr($fk); ?>">
+            <input type="hidden" name="mappa" value="<?php echo (int) $mappa->id; ?>">
+            <input type="hidden" name="idk" value="<?php echo esc_attr(implode(',', $idk)); ?>">
+
+            <ul class="sdh-rendezo__jogok" data-rendezo-jogok aria-label="Amit az ügynök tehet">
+                <?php foreach (SDH_Muhely_Level_Rendezo::jogok_szoveg($j) as [$szabad, $szoveg]) : ?>
+                    <li class="<?php echo $szabad ? 'is-szabad' : 'is-tilos'; ?>"><?php echo esc_html(($szabad ? '✓ ' : '✗ ') . $szoveg); ?></li>
+                <?php endforeach; ?>
+            </ul>
+
+            <div data-rendezo-lepes="keres">
+                <?php if ($van_ai) : ?>
+                    <textarea name="keres" class="sdh-rendezo__keres" rows="3" maxlength="1000" aria-label="Mit rendezzen az ügynök"
+                              placeholder="Pl. A hírleveleket és a reklámokat tedd a Hírlevelek mappába. A beszállítói számlákat a Számlák mappába."></textarea>
+                <?php else : ?>
+                    <p class="sdh-rendezo__megj">
+                        Szabad szavas kéréshez Claude API-kulcs kell (Beállítások → Levelezés). Kulcs nélkül szűrővel dolgozik:
+                    </p>
+                    <div class="sdh-ugyfelurlap">
+                        <div class="sdh-ig">
+                            <label for="rendezo_felado">A feladó tartalmazza</label>
+                            <input type="text" name="szuro_felado" id="rendezo_felado" maxlength="120" autocomplete="off" placeholder="pl. hirlevel@ vagy bolt.hu">
+                        </div>
+                        <div class="sdh-ig">
+                            <label for="rendezo_targy">A tárgy tartalmazza</label>
+                            <input type="text" name="szuro_targy" id="rendezo_targy" maxlength="120" autocomplete="off" placeholder="pl. számla">
+                        </div>
+                        <div class="sdh-ig">
+                            <label for="rendezo_cel">Ebbe a mappába</label>
+                            <input type="text" name="szuro_cel" id="rendezo_cel" maxlength="80" autocomplete="off" placeholder="meglévő vagy új mappa neve">
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <p class="sdh-rendezo__megj" data-rendezo-hatokor>
+                    <?php
+                    echo esc_html($idk !== []
+                        ? 'Hatókör: a kijelölt ' . count($idk) . ' levél.'
+                        : 'Hatókör: a megnyitott mappa (' . self::mappa_nev($mappa) . ') legújabb, legfeljebb ' . SDH_Muhely_Level_Rendezo::LEVEL_MAX . ' letöltött levele. Kevesebbhez jelöld ki a leveleket a listában.');
+                    ?>
+                </p>
+            </div>
+
+            <div data-rendezo-lepes="terv" hidden></div>
+            <div data-rendezo-lepes="eredmeny" hidden></div>
+
+            <?php if ($naplo !== []) : ?>
+                <p class="sdh-rendezo__naplo" data-rendezo-naplo>
+                    Legutóbb: <?php echo esc_html(implode(' · ', array_map(static fn (array $n): string => mysql2date('m. d. H:i', (string) $n['ido']) . ' ' . $n['mit'], $naplo))); ?>
+                </p>
+            <?php endif; ?>
+
+            <div class="sdh-urlap__lablec">
+                <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" data-rendezo-gomb>Terv készítése</button>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-vissza hidden>Vissza</button>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
+            </div>
+        </form>
+        <?php
+
+        wp_die();
+    }
+
+    /** A terv a böngészőnek: csoportonként a célmappa, a darabszám és néhány levél mintának. */
+    private static function rendezo_terv_kifele(array $terv, array $levelek): array
+    {
+        $szerint = [];
+
+        foreach ($levelek as $l) {
+            $szerint[(int) $l['id']] = $l;
+        }
+
+        $csoportok = [];
+
+        foreach ($terv['csoportok'] as $i => $cs) {
+            $csoportok[] = [
+                'i'     => $i,
+                'cel'   => $cs['cel_nev'],
+                'uj'    => $cs['uj'],
+                'db'    => count($cs['idk']),
+                'minta' => array_map(static fn (int $id): array => ['felado' => (string) $szerint[$id]['felado'], 'targy' => (string) $szerint[$id]['targy']], array_slice($cs['idk'], 0, 4)),
+            ];
+        }
+
+        return ['uzenet' => $terv['uzenet'], 'uj_mappak' => $terv['uj_mappak'], 'csoportok' => $csoportok, 'kihagyva' => $terv['kihagyva'], 'db' => $terv['db']];
+    }
+
+    /** Terv készítése a kérésből. Semmit nem hajt végre – kivéve, ha a jóváhagyás ki van kapcsolva, és nem kell új mappa. */
+    public static function ajax_rendezo_terv(): void
+    {
+        global $wpdb;
+
+        self::jog_ellenorzes();
+
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
+        $szoveg = static fn (string $k, int $h): string => isset($_POST[$k]) && is_scalar($_POST[$k]) ? trim(mb_substr(sanitize_textarea_field(wp_unslash((string) $_POST[$k])), 0, $h)) : '';
+        $fk     = isset($_POST['fiok']) ? sanitize_key(wp_unslash($_POST['fiok'])) : '';
+        $mappa  = self::mappa(isset($_POST['mappa']) ? (int) $_POST['mappa'] : 0);
+        $idk    = isset($_POST['idk']) ? array_values(array_unique(array_filter(array_map('intval', explode(',', (string) wp_unslash($_POST['idk'])))))) : [];
+        // phpcs:enable
+
+        $fiok = self::fiok_kell($fk);
+        $j    = self::rendezo_jogok($fk, $mappa);
+
+        if (!is_array($j)) {
+            wp_send_json_error(['uzenet' => $j]);
+        }
+
+        // Amit az ügynök láthat: a kijelölt levelek, vagy a mappa legújabb letöltött levelei.
+        $t     = self::tabla();
+        $sorok = $idk !== []
+            ? $wpdb->get_results($wpdb->prepare("SELECT * FROM {$t} WHERE mappa_id = %d AND id IN (" . implode(',', array_slice($idk, 0, SDH_Muhely_Level_Rendezo::LEVEL_MAX)) . ') ORDER BY uid DESC', (int) $mappa->id))
+            : $wpdb->get_results($wpdb->prepare("SELECT * FROM {$t} WHERE mappa_id = %d AND uid >= %d ORDER BY uid DESC LIMIT %d", (int) $mappa->id, (int) $mappa->min_uid, SDH_Muhely_Level_Rendezo::LEVEL_MAX));
+
+        $levelek = array_map([self::class, 'sor_kifele'], is_array($sorok) ? $sorok : []);
+
+        if ($levelek === []) {
+            wp_send_json_error(['uzenet' => 'Ebben a mappában nincs (letöltött) levél, amit rendezni lehetne.']);
+        }
+
+        $mappak = self::mappak_kifele($fk);
+        $b      = self::beallitas();
+        $kulcs  = self::visszafejt((string) $b['ugynok']['ai_kulcs']);
+        $keres  = $szoveg('keres', 1000);
+
+        @set_time_limit(120); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+        if ($kulcs !== '' && $szoveg('szuro_cel', 80) === '') {
+            $nyers = SDH_Muhely_Level_Rendezo::terv_ai(
+                $keres,
+                $levelek,
+                array_map(static fn (array $m): string => (string) $m['teljes'], array_filter($mappak, static fn (array $m): bool => !empty($m['valaszthato']))),
+                self::mappa_nev($mappa),
+                $j,
+                ['kulcs' => $kulcs, 'modell' => (string) $b['ugynok']['ai_modell']]
+            );
+        } else {
+            $keres = 'Szűrő: feladó „' . $szoveg('szuro_felado', 120) . '", tárgy „' . $szoveg('szuro_targy', 120) . '" → ' . $szoveg('szuro_cel', 80);
+            $nyers = SDH_Muhely_Level_Rendezo::terv_szuro(['felado' => $szoveg('szuro_felado', 120), 'targy' => $szoveg('szuro_targy', 120), 'cel' => $szoveg('szuro_cel', 80)], $levelek);
+        }
+
+        if (!is_array($nyers)) {
+            wp_send_json_error(['uzenet' => $nyers]);
+        }
+
+        // Bármit javasolt is a modell, innen csak az megy tovább, amit a beállított jogok megengednek.
+        $terv = SDH_Muhely_Level_Rendezo::ellenoriz($nyers, $levelek, $mappak, (int) $mappa->id, $j);
+
+        $token = wp_generate_password(32, false);
+
+        set_transient('sdh_level_terv_' . $token, [
+            'felhasznalo' => get_current_user_id(),
+            'fiok'        => $fk,
+            'mappa'       => (int) $mappa->id,
+            'keres'       => $keres,
+            'terv'        => $terv,
+        ], 20 * MINUTE_IN_SECONDS);
+
+        $ki = ['token' => $token, 'terv' => self::rendezo_terv_kifele($terv, $levelek), 'jovahagyas' => !empty($j['jovahagyas'])];
+
+        // Jóváhagyás nélküli mód: ami meglévő mappába megy, az rögtön végrehajtódik; az új mappához így is engedély kell.
+        if (empty($j['jovahagyas']) && $terv['csoportok'] !== []) {
+            $meglevo = array_keys(array_filter($terv['csoportok'], static fn (array $cs): bool => !$cs['uj']));
+
+            if ($meglevo !== []) {
+                $ki['eredmeny'] = self::rendezo_vegrehajt($token, [], $meglevo, $terv['uj_mappak'] === []);
+                $ki['fiokok']   = self::fiokok_kifele();
+            }
+        }
+
+        wp_send_json_success($ki);
+    }
+
+    public static function ajax_rendezo_vegrehajt(): void
+    {
+        self::jog_ellenorzes();
+
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
+        $token    = isset($_POST['token']) ? (string) preg_replace('/[^A-Za-z0-9]/', '', (string) wp_unslash($_POST['token'])) : '';
+        $uj       = isset($_POST['uj']) && is_array($_POST['uj']) ? array_map(static fn ($n): string => trim(sanitize_text_field(wp_unslash((string) $n))), $_POST['uj']) : [];
+        $csoport  = isset($_POST['csoport']) && is_array($_POST['csoport']) ? array_map('intval', $_POST['csoport']) : [];
+        // phpcs:enable
+
+        $eredmeny = self::rendezo_vegrehajt($token, $uj, $csoport, true);
+
+        wp_send_json_success(['eredmeny' => $eredmeny, 'fiokok' => self::fiokok_kifele()]);
+    }
+
+    /**
+     * A jóváhagyott terv végrehajtása. Ez a függvény a levelezőszerveren KIZÁRÓLAG két
+     * műveletet végez: mappát hoz létre (mappa_letrehoz) és levelet helyez át (athelyez).
+     *
+     * @param array<int, string> $engedelyezett_uj A felhasználó által engedélyezett új mappák neve.
+     * @param array<int, int>    $csoportok        A jóváhagyott csoportok sorszáma a tervben.
+     * @return array<int, string> Mi történt (a felhasználónak).
+     */
+    private static function rendezo_vegrehajt(string $token, array $engedelyezett_uj, array $csoportok, bool $lezar): array
+    {
+        global $wpdb;
+
+        $adat = $token !== '' ? get_transient('sdh_level_terv_' . $token) : false;
+
+        if (!is_array($adat) || (int) $adat['felhasznalo'] !== get_current_user_id()) {
+            wp_send_json_error(['uzenet' => 'Ez a terv lejárt vagy már végre lett hajtva. Készíts újat.']);
+        }
+
+        $fk    = (string) $adat['fiok'];
+        $fiok  = self::fiok_kell($fk);
+        $mappa = self::mappa((int) $adat['mappa']);
+        // A jogok a végrehajtás pillanatában is érvényesek kell legyenek (közben kikapcsolhatták).
+        $j     = self::rendezo_jogok($fk, $mappa);
+
+        if (!is_array($j) || empty($j['mozgathat'])) {
+            wp_send_json_error(['uzenet' => is_array($j) ? 'A levelek áthelyezése nincs engedélyezve.' : $j]);
+        }
+
+        $terv     = $adat['terv'];
+        $eredmeny = [];
+        $maradt   = $terv['csoportok'];
+
+        @set_time_limit(120); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+        try {
+            $imap = self::imap($fiok);
+
+            // 1. Új mappák – csak amit a terv tartalmaz ÉS a felhasználó most engedélyezett.
+            $letrejott = [];
+
+            foreach ($terv['uj_mappak'] as $nev) {
+                if (!in_array($nev, $engedelyezett_uj, true) || empty($j['mappat'])) {
+                    continue;
+                }
+
+                try {
+                    $imap->mappa_letrehoz($nev);
+                    $eredmeny[] = 'Új mappa létrehozva: ' . $nev . '.';
+                    self::rendezo_naplo('új mappa: ' . $nev);
+                } catch (SDH_Muhely_Imap_Hiba $hiba) {
+                    // Ha közben valaki már létrehozta, az nem hiba: a levelek mehetnek bele.
+                    if (stripos($hiba->getMessage(), 'exist') === false && stripos($hiba->getMessage(), 'duplicate') === false) {
+                        $eredmeny[] = '„' . $nev . '" mappát nem sikerült létrehozni: ' . $hiba->getMessage();
+
+                        continue;
+                    }
+                }
+
+                $letrejott[] = $nev;
+            }
+
+            if ($letrejott !== []) {
+                self::mappak_frissit($fk, $imap, false);
+            }
+
+            // 2. Áthelyezés – csoportonként egy kéréssel.
+            $imap->kivalaszt((string) $mappa->nyers);
+
+            foreach ($terv['csoportok'] as $i => $cs) {
+                if (!in_array((int) $i, $csoportok, true)) {
+                    continue;
+                }
+
+                $cel = null;
+
+                if ($cs['uj']) {
+                    if (!in_array($cs['cel_nev'], $letrejott, true)) {
+                        $eredmeny[] = '„' . $cs['cel_nev'] . '": a mappa létrehozása nem volt engedélyezve, a levelek a helyükön maradtak.';
+
+                        continue;
+                    }
+
+                    foreach (self::mappak($fk) as $m) {
+                        if ((string) $m->nev === $cs['cel_nev']) {
+                            $cel = $m;
+                        }
+                    }
+                } else {
+                    $cel = self::mappa((int) $cs['cel_id']);
+                }
+
+                // A célt végrehajtáskor újra ellenőrizzük (a terv és a végrehajtás között a mappák változhattak).
+                if ($cel === null || (string) $cel->fiok !== $fk || (int) $cel->valaszthato !== 1 || (int) $cel->id === (int) $mappa->id
+                    || in_array((string) $cel->szerep, ['drafts', 'sent', 'flagged', 'important'], true)
+                    || (in_array((string) $cel->szerep, ['trash', 'junk'], true) && empty($j['kukaba']))) {
+                    $eredmeny[] = '„' . $cs['cel_nev'] . '": ebbe a mappába most nem lehet áthelyezni.';
+
+                    continue;
+                }
+
+                $sorok = $wpdb->get_results('SELECT id, uid, olvasott FROM ' . self::tabla() . ' WHERE mappa_id = ' . (int) $mappa->id . ' AND id IN (' . implode(',', array_map('intval', $cs['idk'])) . ')');
+                $sorok = is_array($sorok) ? $sorok : [];
+
+                if ($sorok === []) {
+                    $eredmeny[] = '„' . $cs['cel_nev'] . '": a levelek már nincsenek ebben a mappában.';
+                    unset($maradt[$i]);
+
+                    continue;
+                }
+
+                $imap->athelyez(SDH_Muhely_Imap::halmaz(array_map(static fn (object $s): int => (int) $s->uid, $sorok)), (string) $cel->nyers);
+
+                $db      = count($sorok);
+                $db_olv  = count(array_filter($sorok, static fn (object $s): bool => (int) $s->olvasott !== 1));
+                $m_tabla = self::mappa_tabla();
+
+                $wpdb->query('DELETE FROM ' . self::tabla() . ' WHERE id IN (' . implode(',', array_map(static fn (object $s): int => (int) $s->id, $sorok)) . ')');
+                $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET osszes = CASE WHEN osszes < %d THEN 0 ELSE osszes - %d END, olvasatlan = CASE WHEN olvasatlan < %d THEN 0 ELSE olvasatlan - %d END WHERE id = %d", $db, $db, $db_olv, $db_olv, (int) $mappa->id));
+                $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET osszes = osszes + %d, olvasatlan = olvasatlan + %d WHERE id = %d", $db, $db_olv, (int) $cel->id));
+
+                $eredmeny[] = $db . ' levél áthelyezve ide: ' . self::mappa_nev($cel) . '.';
+                self::rendezo_naplo($db . ' levél → ' . self::mappa_nev($cel) . ' (' . mb_substr((string) $adat['keres'], 0, 120) . ')');
+                unset($maradt[$i]);
+            }
+
+            $imap->kilep();
+        } catch (\Throwable $hiba) {
+            $eredmeny[] = 'A végrehajtás megszakadt: ' . $hiba->getMessage();
+        }
+
+        if ($lezar) {
+            delete_transient('sdh_level_terv_' . $token);
+        }
+
+        return $eredmeny !== [] ? $eredmeny : ['Nem volt végrehajtandó lépés.'];
     }
 
     /* =================================================================
@@ -1968,9 +2730,12 @@ final class SDH_Muhely_Levelezes
             $fk = (string) $sor->fiok;
 
             try {
-                $imap  = self::imap($nyitott[$fk]);
-                $level = self::level_letolt($sor, $mappa, $imap);
-                $imap->kilep();
+                $imap  = null;
+                $level = self::level_letolt($sor, $mappa, $nyitott[$fk], $imap);
+
+                if ($imap !== null) {
+                    $imap->kilep();
+                }
             } catch (\Throwable $hiba) {
                 echo '<h2 class="sdh-modal__cim">Levél</h2><div class="sdh-uzenet sdh-uzenet--hiba">' . esc_html($hiba->getMessage()) . '</div>';
                 wp_die();
@@ -2197,8 +2962,7 @@ final class SDH_Muhely_Levelezes
             $imap = null;
 
             if (is_object($er_sor) && $er_mappa !== null) {
-                $imap    = self::imap($fiok);
-                $eredeti = self::level_letolt($er_sor, $er_mappa, $imap);
+                $eredeti = self::level_letolt($er_sor, $er_mappa, $fiok, $imap);
             }
 
             $m = self::levelkuldo($fiok);
