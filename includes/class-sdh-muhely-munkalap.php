@@ -1686,15 +1686,46 @@ final class SDH_Muhely_Munkalap
                             </span>
                         </div>
 
-                        <div class="sdh-ig">
+                        <?php
+                        $bev_be   = !$uj && (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1;
+                        $bev_mod  = (string) ($munkalap->bevizsgalas_mod ?? 'auto') === 'marad' ? 'marad' : 'levon';
+                        $bev_nev  = $uj ? '' : (string) ($munkalap->bevizsgalas_nev ?? '');
+                        $bev_szlg = $uj ? 0 : (int) ($munkalap->bevizsgalas_szolg ?? 0);
+                        ?>
+                        <div class="sdh-ig sdh-bev" data-sdh-bev-doboz>
                             <span class="sdh-ig__cimke"></span>
-                            <label class="sdh-jelolo" for="bevizsgalasi_dij"
-                                   title="Bepipálva az előleg bevizsgálási díj: külön tételként kerül a munkalapra és a számlára (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”).">
-                                <input type="checkbox" name="bevizsgalasi_dij" id="bevizsgalasi_dij" value="1" data-sdh-bevizsgalas
-                                    <?php checked(!$uj && (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1); ?>>
-                                Bevizsgálási díj
-                            </label>
+                            <div class="sdh-bev__sor">
+                                <label class="sdh-jelolo" for="bevizsgalasi_dij"
+                                       title="Bepipálva az előleg bevizsgálási díj: külön tételként kerül a munkalapra és a számlára (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”). Ha az ügyfél kéri a javítást, mínusz tételként levonódik a végösszegből; ha nem, munkadíjként marad.">
+                                    <input type="checkbox" name="bevizsgalasi_dij" id="bevizsgalasi_dij" value="1" data-sdh-bevizsgalas
+                                        <?php checked($bev_be); ?>>
+                                    Bevizsgálási díj
+                                </label>
+                                <button type="button" class="sdh-bev__lista" data-sdh-bev-lista
+                                        title="Díj választása a díjlistából" aria-label="Díj választása a díjlistából">
+                                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+                                    <span>Díjlista</span>
+                                </button>
+                            </div>
+                            <input type="hidden" name="bevizsgalas_nev" data-sdh-bev-nev value="<?php echo esc_attr($bev_nev); ?>">
+                            <input type="hidden" name="bevizsgalas_szolg" data-sdh-bev-szolg value="<?php echo (int) $bev_szlg; ?>">
                         </div>
+
+                        <div class="sdh-ig sdh-bev__mod" data-sdh-bev-mod-doboz>
+                            <span class="sdh-ig__cimke" title="Mi legyen a díjjal, ha az ügyfél kéri a javítást?">Ha javítás</span>
+                            <div class="sdh-szegmens sdh-szegmens--kicsi" role="radiogroup" aria-label="A bevizsgálási díj sorsa">
+                                <label class="sdh-szegmens__elem" title="Az ügyfél kéri a javítást: a díj mínusz tételként levonódik a végösszegből.">
+                                    <input type="radio" name="bevizsgalas_mod" value="levon" data-sdh-bev-mod <?php checked($bev_mod, 'levon'); ?>>
+                                    <span>Javítás: levonódik</span>
+                                </label>
+                                <label class="sdh-szegmens__elem" title="Az ügyfél nem kéri a javítást (vagy a díj nem számít be): a díj munkadíjként nálunk marad.">
+                                    <input type="radio" name="bevizsgalas_mod" value="marad" data-sdh-bev-mod <?php checked($bev_mod, 'marad'); ?>>
+                                    <span>Munkadíj marad</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <p class="sdh-bev__info" data-sdh-bev-info aria-live="polite"></p>
 
                         <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
@@ -2111,14 +2142,19 @@ final class SDH_Muhely_Munkalap
         <?php
         $bevizsgalas = $tetel !== null && (string) ($tetel->forras ?? '') === 'bevizsgalas';
         $szamlazva   = $tetel !== null ? (string) ($tetel->szamla ?? '') : '';
+        // A díj levonása (mínusz sor): csak olvasható, nem küldődik be – a
+        // bevizsgálási díj szinkronja tartja karban (SDH_Muhely_Szamla).
+        $levonas     = $tetel !== null && (string) ($tetel->forras ?? '') === 'bevizsgalas_le';
+        $csak_olvas  = $levonas ? ' disabled' : '';
         ?>
-        <div class="sdh-tetelsor<?php echo $szamlazva !== '' ? ' is-szamlazva' : ''; ?>" data-sdh-tetelsor
-            <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>>
-            <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"
+        <div class="sdh-tetelsor<?php echo $szamlazva !== '' ? ' is-szamlazva' : ''; ?><?php echo $levonas ? ' sdh-tetelsor--levonas' : ''; ?>" data-sdh-tetelsor
+            <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>
+            <?php echo $levonas ? 'data-sdh-bevle' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>>
+            <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"<?php echo $csak_olvas; ?>
                    value="<?php echo (int) ($tetel->id ?? 0); ?>">
 
             <span class="sdh-tetelsor__sorszam"
-                <?php echo $szamlazva !== '' ? 'title="Számlázva: ' . esc_attr($szamlazva) . '"' : ($bevizsgalas ? 'title="Bevizsgálási díj – az előlegből (a „Bevizsgálási díj” jelölő tartja karban)"' : ''); ?>><?php
+                <?php echo $szamlazva !== '' ? 'title="Számlázva: ' . esc_attr($szamlazva) . '"' : ($bevizsgalas ? 'title="Bevizsgálási díj – az előlegből (a „Bevizsgálási díj” jelölő tartja karban)"' : ($levonas ? 'title="A bevizsgálási díj levonása a végösszegből"' : '')); ?>><?php
                 echo $tetel !== null ? (int) $tetel->id : 'új';
                 echo $szamlazva !== '' ? ' ✓' : '';
             ?></span>
@@ -2141,10 +2177,10 @@ final class SDH_Muhely_Munkalap
                 <?php // A sor végi gomb a szolgáltatás-választó popupot nyitja (app.js szolgValasztoNyit). ?>
                 <span class="sdh-szolgmezo">
                     <input type="text" name="<?php echo esc_attr($elotag); ?>[megnevezes]" maxlength="255"
-                           aria-label="Megnevezés" autocomplete="off" data-sdh-szolg
+                           aria-label="Megnevezés" autocomplete="off" data-sdh-szolg<?php echo $csak_olvas; ?>
                            placeholder="Válassz a listából (jobbra), vagy írd be"
                            value="<?php echo esc_attr($ert('megnevezes')); ?>">
-                    <button type="button" class="sdh-szolgmezo__gomb" data-sdh-szolg-valaszt
+                    <button type="button" class="sdh-szolgmezo__gomb" data-sdh-szolg-valaszt<?php echo $csak_olvas; ?>
                             title="Szolgáltatás választása a listából" aria-label="Szolgáltatás választása a listából">
                         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
                     </button>
@@ -2160,34 +2196,40 @@ final class SDH_Muhely_Munkalap
                        aria-label="Gyári szám" value="<?php echo esc_attr($ert('gyari_szam')); ?>">
             <?php endif; ?>
 
-            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="menny"
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="menny"<?php echo $csak_olvas; ?>
                    name="<?php echo esc_attr($elotag); ?>[mennyiseg]" aria-label="Mennyiség"
                    value="<?php echo esc_attr($tetel !== null ? self::szam_mezobe((float) $tetel->mennyiseg) : '1'); ?>">
 
             <input type="text" name="<?php echo esc_attr($elotag); ?>[me]" maxlength="20"
-                   aria-label="Mennyiségi egység" data-sdh-tetel="me"
+                   aria-label="Mennyiségi egység" data-sdh-tetel="me"<?php echo $csak_olvas; ?>
                    value="<?php echo esc_attr($tetel !== null ? (string) $tetel->me : 'db'); ?>">
 
-            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="ar"
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="ar"<?php echo $csak_olvas; ?>
                    name="<?php echo esc_attr($elotag); ?>[brutto_ar]" aria-label="Bruttó egységár"
                    placeholder="0"
                    value="<?php echo esc_attr($tetel !== null ? self::szam_mezobe((float) $tetel->brutto_ar) : ''); ?>">
 
-            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="kedv"
+            <input type="text" inputmode="decimal" class="is-jobb" data-sdh-tetel="kedv"<?php echo $csak_olvas; ?>
                    name="<?php echo esc_attr($elotag); ?>[kedvezmeny]" aria-label="Kedvezmény százalékban"
                    placeholder="0"
                    value="<?php echo esc_attr($kedv > 0 ? self::szam_mezobe($kedv) : ''); ?>">
 
-            <select name="<?php echo esc_attr($elotag); ?>[afa_kulcs]" data-sdh-tetel="afa" aria-label="Áfakulcs">
+            <select name="<?php echo esc_attr($elotag); ?>[afa_kulcs]" data-sdh-tetel="afa" aria-label="Áfakulcs"<?php echo $csak_olvas; ?>>
                 <?php self::afa_opciok($afakulcsok, $afa); ?>
             </select>
 
             <output class="is-jobb" data-sdh-tetel="netto">0</output>
             <output class="is-jobb" data-sdh-tetel="brutto">0</output>
 
+            <?php if ($levonas) : ?>
+                <span class="sdh-tetelsor__zar" title="A bevizsgálási díj levonása – a „Bevizsgálási díj” jelölő és a „Ha javítás” választó tartja karban">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.2"/><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/></svg>
+                </span>
+            <?php else : ?>
             <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-hibasor__torol"
                     data-sdh-tetel-torol title="Tétel eltávolítása"
                     aria-label="Tétel eltávolítása">&times;</button>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -2341,6 +2383,16 @@ final class SDH_Muhely_Munkalap
             'fizetes_ideje'     => $fizetes_ideje,
             'fizetett'          => max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('fizetett')), 2)),
             'bevizsgalasi_dij'  => !empty($_POST['bevizsgalasi_dij']) ? 1 : 0,
+            // A díj módja és a díjlistából választott díj (ha az űrlap küldte).
+            'bevizsgalas_mod'   => isset($_POST['bevizsgalas_mod'])
+                ? (in_array($szoveg('bevizsgalas_mod'), ['levon', 'marad'], true) ? $szoveg('bevizsgalas_mod') : 'auto')
+                : (string) ($regi->bevizsgalas_mod ?? 'auto'),
+            'bevizsgalas_nev'   => isset($_POST['bevizsgalas_nev'])
+                ? mb_substr($szoveg('bevizsgalas_nev'), 0, 255)
+                : (string) ($regi->bevizsgalas_nev ?? ''),
+            'bevizsgalas_szolg' => isset($_POST['bevizsgalas_szolg'])
+                ? max(0, (int) $_POST['bevizsgalas_szolg'])
+                : (int) ($regi->bevizsgalas_szolg ?? 0),
             'kedvezmeny'        => min(100.0, max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('lap_kedvezmeny')), 2))),
             'afakulcs'          => SDH_Muhely_Tetel::afakulcs_ervenyes($szoveg('lap_afakulcs')),
             'megjegyzes'        => isset($_POST['megjegyzes'])

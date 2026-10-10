@@ -435,6 +435,8 @@ final class SDH_Muhely_Admin_UI
             'szolg_osszevonva'  => ['siker', 'Ilyen nevű szolgáltatás már volt – a kettőt összevontam, egy maradt.'],
             'szolg_torolve'     => ['siker', 'A szolgáltatás törölve a törzsből. A munkalapok tételei megmaradtak.'],
             'szolg_hianyzo_nev' => ['hiba',  'A megnevezés kitöltése kötelező.'],
+            'arlista_betoltve'  => ['siker', 'Az árlista betöltve: az új tételek létrejöttek, a meglévők ára frissült.'],
+            'arak_mentve'       => ['siker', 'Az árak elmentve.'],
             'termek_mentve'     => ['siker', 'A termék elmentve.'],
             'termek_letrehozva' => ['siker', 'A termék létrejött.'],
             'termek_torolve'    => ['siker', 'A termék törölve.'],

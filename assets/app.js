@@ -2670,6 +2670,36 @@
         }
     }
 
+    /** Egy tételsor kiszámolt értéke (az árat a hívó adhatja, pl. a levonás sorának). */
+    function mlSorErtek(sor, arFelulir) {
+        var mezo = function (nev) {
+            return sor.querySelector('[data-sdh-tetel="' + nev + '"]');
+        };
+        var nevMezo = sor.querySelector('input[name$="[megnevezes]"]');
+        // Csak a díj levonásának sora lehet negatív.
+        var ar = typeof arFelulir === 'number' ? arFelulir
+            : (sor.hasAttribute('data-sdh-bevle') ? mlSzam(mezo('ar').value) : Math.max(0, mlSzam(mezo('ar').value)));
+        var m = mezo('menny').value.trim() === '' ? 1 : mlSzam(mezo('menny').value);
+        var kedv = Math.min(100, Math.max(0, mlSzam(mezo('kedv').value)));
+        var afaOpcio = mezo('afa').options[mezo('afa').selectedIndex];
+        var afa = afaOpcio ? parseFloat(afaOpcio.getAttribute('data-szazalek')) || 0 : 0;
+
+        if (m <= 0) {
+            m = 1;
+        }
+
+        // Az üres sor (se megnevezés, se ár) mentéskor eldobódik: nem számít bele.
+        var ures = ((!nevMezo || nevMezo.value.trim() === '') && ar === 0) || sor.classList.contains('is-torlendo');
+        var nettoAr = mlKerek(ar / (1 + afa / 100));
+
+        return {
+            ures: ures,
+            m: m,
+            netto: ures ? 0 : mlKerek(nettoAr * m * (1 - kedv / 100)),
+            brutto: ures ? 0 : mlKerek(ar * m * (1 - kedv / 100))
+        };
+    }
+
     function munkalapSzamol(gyoker) {
         if (!gyoker) {
             return;
@@ -2678,16 +2708,21 @@
         var osszNetto = 0;
         var osszBrutto = 0;
 
-        // Bevizsgálási díj: bepipálva az előleg külön tételsor (a szerver tartja
-        // karban mentéskor). Itt csak a kijelzés követi: a meglévő díjsor ára az
-        // előleg; ha a jelölő ki van kapcsolva, a sor mentéskor törlődik, ezért
-        // nem számít bele; ha még nincs díjsor, az előleg hozzáadódik az összeghez.
+        // Bevizsgálási díj: bepipálva az előleg külön tételsor (+díj), és ha az
+        // ügyfél kéri a javítást („Levonódik"), egy mínusz sor vonja le a
+        // végösszegből – legfeljebb a többi tétel összegéig. A sorokat a
+        // szerver tartja karban mentéskor; itt a kijelzés követi őket, és ha
+        // még nincsenek meg, az összegekben már most számítanak.
         var bevPipa = gyoker.querySelector('[data-sdh-bevizsgalas]');
         var bevElolegMezo = gyoker.querySelector('[data-sdh-fizetett]');
         var bevEloleg = bevElolegMezo ? Math.max(0, mlSzam(bevElolegMezo.value)) : 0;
         var bevBe = !!(bevPipa && bevPipa.checked && bevEloleg > 0);
         var bevSor = gyoker.querySelector('[data-sdh-tetelsor][data-sdh-bev]');
         var bevSzamlazva = !!(bevSor && bevSor.getAttribute('data-sdh-bev') === 'szamlazva');
+        var leSor = gyoker.querySelector('[data-sdh-tetelsor][data-sdh-bevle]');
+        var leSzamlazva = !!(leSor && leSor.getAttribute('data-sdh-bevle') === 'szamlazva');
+        var modJelolt = gyoker.querySelector('[data-sdh-bev-mod]:checked');
+        var bevMod = modJelolt && modJelolt.value === 'marad' ? 'marad' : 'levon';
 
         if (bevSor && !bevSzamlazva) {
             var bevAr = bevSor.querySelector('[data-sdh-tetel="ar"]');
@@ -2699,6 +2734,27 @@
             bevSor.classList.toggle('is-torlendo', !bevBe);
         }
 
+        // A többi tétel (a díjsorok nélkül): ebből vonható le a díj.
+        var tobbi = 0;
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek] [data-sdh-tetelsorok] [data-sdh-tetelsor]'), function (sor) {
+            if (!sor.hasAttribute('data-sdh-bev') && !sor.hasAttribute('data-sdh-bevle')) {
+                tobbi += mlSorErtek(sor).brutto;
+            }
+        });
+
+        var levon = bevBe && bevMod === 'levon' ? Math.min(bevEloleg, Math.max(0, tobbi)) : 0;
+
+        if (leSor && !leSzamlazva) {
+            var leAr = leSor.querySelector('[data-sdh-tetel="ar"]');
+
+            if (leAr) {
+                leAr.value = levon > 0 ? String(-levon).replace('.', ',') : '0';
+            }
+
+            leSor.classList.toggle('is-torlendo', levon <= 0);
+        }
+
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek]'), function (panel) {
             var menny = 0;
             var netto = 0;
@@ -2706,34 +2762,16 @@
             var db = 0;
 
             Array.prototype.forEach.call(panel.querySelectorAll('[data-sdh-tetelsorok] [data-sdh-tetelsor]'), function (sor) {
-                var mezo = function (nev) {
-                    return sor.querySelector('[data-sdh-tetel="' + nev + '"]');
-                };
-                var nevMezo = sor.querySelector('input[name$="[megnevezes]"]');
-                var ar = Math.max(0, mlSzam(mezo('ar').value));
-                var m = mezo('menny').value.trim() === '' ? 1 : mlSzam(mezo('menny').value);
-                var kedv = Math.min(100, Math.max(0, mlSzam(mezo('kedv').value)));
-                var afaOpcio = mezo('afa').options[mezo('afa').selectedIndex];
-                var afa = afaOpcio ? parseFloat(afaOpcio.getAttribute('data-szazalek')) || 0 : 0;
+                var e = mlSorErtek(sor);
 
-                if (m <= 0) {
-                    m = 1;
-                }
+                mlIr(sor.querySelector('[data-sdh-tetel="netto"]'), mlPenz(e.netto));
+                mlIr(sor.querySelector('[data-sdh-tetel="brutto"]'), mlPenz(e.brutto));
 
-                // Az üres sor (se megnevezés, se ár) mentéskor eldobódik: nem számít bele.
-                var ures = ((!nevMezo || nevMezo.value.trim() === '') && ar <= 0) || sor.classList.contains('is-torlendo');
-                var nettoAr = mlKerek(ar / (1 + afa / 100));
-                var sorNetto = ures ? 0 : mlKerek(nettoAr * m * (1 - kedv / 100));
-                var sorBrutto = ures ? 0 : mlKerek(ar * m * (1 - kedv / 100));
-
-                mlIr(mezo('netto'), mlPenz(sorNetto));
-                mlIr(mezo('brutto'), mlPenz(sorBrutto));
-
-                if (!ures) {
+                if (!e.ures) {
                     db += 1;
-                    menny += m;
-                    netto += sorNetto;
-                    brutto += sorBrutto;
+                    menny += e.m;
+                    netto += e.netto;
+                    brutto += e.brutto;
                 }
             });
 
@@ -2746,15 +2784,22 @@
             osszBrutto += brutto;
         });
 
-        // Még nincs díjsor (a mentés hozza létre): az előleg már most beleszámít.
-        if (bevBe && !bevSor) {
-            var bevLapAfa = gyoker.querySelector('[data-sdh-lap-afa]');
-            var bevOpcio = bevLapAfa ? bevLapAfa.options[bevLapAfa.selectedIndex] : null;
-            var bevSzazalek = bevOpcio ? parseFloat(bevOpcio.getAttribute('data-szazalek')) || 0 : 27;
+        // Még nincs díjsor / levonássor (a mentés hozza létre): már most beleszámít.
+        var bevLapAfa = gyoker.querySelector('[data-sdh-lap-afa]');
+        var bevOpcio = bevLapAfa ? bevLapAfa.options[bevLapAfa.selectedIndex] : null;
+        var bevSzazalek = bevOpcio ? parseFloat(bevOpcio.getAttribute('data-szazalek')) || 0 : 27;
 
+        if (bevBe && !bevSor) {
             osszBrutto += bevEloleg;
             osszNetto += mlKerek(bevEloleg / (1 + bevSzazalek / 100));
         }
+
+        if (levon > 0 && !leSor) {
+            osszBrutto -= levon;
+            osszNetto -= mlKerek(levon / (1 + bevSzazalek / 100));
+        }
+
+        bevInfo(gyoker, bevPipa, bevEloleg, bevMod, levon, tobbi);
 
         var hibaDb = 0;
 
@@ -2789,6 +2834,149 @@
             kiiras('fizetendo').classList.toggle('is-negativ', fizetendo < 0);
         }
     }
+
+    /** A bevizsgálási díj sora alatti magyarázat, és a „Ha javítás" választó láthatósága. */
+    function bevInfo(gyoker, pipa, dij, mod, levon, tobbi) {
+        var info = gyoker.querySelector('[data-sdh-bev-info]');
+        var modDoboz = gyoker.querySelector('[data-sdh-bev-mod-doboz]');
+        var nevMezo = gyoker.querySelector('[data-sdh-bev-nev]');
+        var be = !!(pipa && pipa.checked);
+        var szoveg = '';
+
+        if (modDoboz) {
+            modDoboz.hidden = !be;
+        }
+
+        if (be) {
+            var nev = nevMezo && nevMezo.value ? nevMezo.value + ': ' : '';
+
+            if (dij <= 0) {
+                szoveg = 'Írd be a díjat a „Fizetett (előleg)” mezőbe, vagy válaszd a díjlistából.';
+            } else if (mod === 'marad') {
+                szoveg = nev + mlPenz(dij) + '\u00a0Ft – munkadíjként marad, nem vonódik le.';
+            } else if (levon > 0) {
+                szoveg = nev + mlPenz(dij) + '\u00a0Ft – levonódik a végösszegből: −' + mlPenz(levon) + '\u00a0Ft' +
+                    (levon < dij ? ' (a többi tétel összegéig)' : '') + '.';
+            } else {
+                szoveg = nev + mlPenz(dij) + '\u00a0Ft – ha lesz javítás, levonódik belőle; addig munkadíj.';
+            }
+        }
+
+        if (info) {
+            info.textContent = szoveg;
+            info.hidden = szoveg === '';
+        }
+    }
+
+    /** Díj választása a díjlistából: az előleg, a jelölő és a díj neve egyszerre töltődik. */
+    function bevListaNyit(gomb) {
+        var gyoker = gomb.closest('[data-sdh-munkalap]');
+
+        if (!gyoker) {
+            return;
+        }
+
+        var talal = function (t, q) {
+            if (!t.dij) {
+                return false;
+            }
+
+            if (q === '') {
+                return true;
+            }
+
+            var szoveg = iszNorm(t.kat + ' ' + t.nev + ' ' + t.kod);
+
+            return q.split(/\s+/).every(function (szo) {
+                return szoveg.indexOf(szo) !== -1;
+            });
+        };
+
+        szValNyit(gomb, {
+            cim: 'Bevizsgálási díj',
+            alcim: 'Válaszd ki az eszköz díját: az előlegbe kerül, és tételként a munkalapra. Az árakat a Szolgáltatások › Árlista oldalon írhatod át.',
+            helyorzo: 'Eszköz, díj vagy kód…',
+            egyseg: 'díj',
+            ures: 'Még nincs bevizsgálási díj. A Szolgáltatások › „Árlista beillesztése” gombbal viheted fel a díjlistát, vagy egy szolgáltatásnál bepipálhatod a „Bevizsgálási díj” jelölőt.',
+            oszlopok: [['Díj', ''], ['Kód', '4.5rem'], ['Ár', '8rem', true]],
+            forras: function (q) {
+                return szolgBetolt().then(function (adat) {
+                    var n = iszNorm(String(q || '').trim());
+
+                    return adat.filter(function (t) {
+                        return talal(t, n);
+                    });
+                });
+            },
+            cellak: function (t) {
+                var rovid = t.kat && t.nev.indexOf(t.kat + ' – ') === 0 ? t.nev.slice(t.kat.length + 3) : t.nev;
+
+                return [
+                    (t.kat ? '<span class="sdh-bevval__kat">' + szovegBiztonsagos(t.kat) + '</span> ' : '') + szovegBiztonsagos(rovid),
+                    '<span class="sdh-tabla__halvany">' + szovegBiztonsagos(t.kod || '') + '</span>',
+                    arSzoveg(t)
+                ];
+            },
+            valaszt: function (t) {
+                var eloleg = gyoker.querySelector('[data-sdh-fizetett]');
+                var pipa = gyoker.querySelector('[data-sdh-bevizsgalas]');
+                var nev = gyoker.querySelector('[data-sdh-bev-nev]');
+                var szolg = gyoker.querySelector('[data-sdh-bev-szolg]');
+
+                if (eloleg) {
+                    eloleg.value = String(t.ar || 0);
+                }
+
+                if (pipa) {
+                    pipa.checked = true;
+                }
+
+                if (nev) {
+                    nev.value = t.nev;
+                }
+
+                if (szolg) {
+                    szolg.value = String(t.id);
+                }
+
+                munkalapSzamol(gyoker);
+
+                if (eloleg) {
+                    eloleg.dispatchEvent(new Event('change', { bubbles: true }));
+                    eloleg.focus();
+                }
+            },
+            kezi: function () {
+                var eloleg = gyoker.querySelector('[data-sdh-fizetett]');
+                var pipa = gyoker.querySelector('[data-sdh-bevizsgalas]');
+                var nev = gyoker.querySelector('[data-sdh-bev-nev]');
+
+                if (pipa) {
+                    pipa.checked = true;
+                }
+
+                if (nev) {
+                    nev.value = '';
+                }
+
+                munkalapSzamol(gyoker);
+
+                if (eloleg) {
+                    eloleg.focus();
+                    eloleg.select();
+                }
+            }
+        });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-bev-lista]') : null;
+
+        if (gomb) {
+            esemeny.preventDefault();
+            bevListaNyit(gomb);
+        }
+    });
 
     /** Új tételsor: a sablon klónja, a lap kedvezményével és áfakulcsával. */
     function tetelUj(gomb) {
@@ -2884,6 +3072,11 @@
         Array.prototype.forEach.call(
             gyoker.querySelectorAll('[data-sdh-tetelsorok] [data-sdh-tetel="' + (kedv ? 'kedv' : 'afa') + '"]'),
             function (celmezo) {
+                // A díj levonásának sora csak olvasható: a szerver tartja karban.
+                if (celmezo.disabled) {
+                    return;
+                }
+
                 celmezo.value = kedv ? (ertek > 0 ? String(ertek).replace('.', ',') : '') : ertek;
             }
         );
@@ -4202,6 +4395,20 @@
     var szolgVal = null;       // a nyitott választó: { n, panel, sor, gomb, kerdes, oldal, kijelolt, talalatok }
 
     /** Ugyanaz az azonosság, mint a szerveren: kisbetű, egységes szóközök. */
+    var LAP_NYIL_BAL = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>';
+    var LAP_NYIL_JOBB = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg>';
+
+    /** Ár kiírva: fix ár, vagy sáv („12 000 – 18 000 Ft"). */
+    function arSzoveg(t) {
+        if (!(t.ar > 0) && !(t.max > 0)) {
+            return '—';
+        }
+
+        return t.max > t.ar
+            ? mlPenz(t.ar) + '\u00a0–\u00a0' + mlPenz(t.max) + '\u00a0Ft'
+            : mlPenz(t.ar) + '\u00a0Ft';
+    }
+
     function szolgKulcs(nev) {
         return String(nev || '').replace(/[\s  ]+/g, ' ').trim().toLowerCase();
     }
@@ -4245,6 +4452,10 @@
                         ar: s[3],
                         afa: s[4],
                         db: s[5],
+                        kat: s[6] || '',
+                        kod: s[7] || '',
+                        max: s[8] || 0,
+                        dij: s[9] === 1,
                         nk: iszNorm(s[1]),
                         kulcs: szolgKulcs(s[1])
                     };
@@ -4400,9 +4611,9 @@
             '    <tbody data-sdh-szolgval-sorok>' + fejSorok + '</tbody>' +
             '  </table>' +
             '  <div class="sdh-szolgval__lab">' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szolgval-lap="-1" aria-label="Előző oldal">‹</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-sdh-szolgval-lap="-1" aria-label="Előző oldal">' + LAP_NYIL_BAL + '</button>' +
             '    <span class="sdh-szolgval__oldal" data-sdh-szolgval-oldal></span>' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szolgval-lap="1" aria-label="Következő oldal">›</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-sdh-szolgval-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
             '    <span class="sdh-szolgval__db" data-sdh-szolgval-db></span>' +
             '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra" data-sdh-szolgval-kezi' +
             '            title="Üres sor a munkalapon: a nevet és az árat kézzel írod be">Kézzel írom be</button>' +
@@ -4482,7 +4693,7 @@
             html += '<tr data-sdh-szolgval-sor="' + i + '"' + (i === szolgVal.kijelolt ? ' class="is-kijelolt" aria-selected="true"' : '') + '>' +
                 '<td class="sdh-szolgval__nev">' + szovegBiztonsagos(t.nev) + '</td>' +
                 '<td>' + szovegBiztonsagos(t.me) + '</td>' +
-                '<td class="is-jobb">' + (t.ar > 0 ? mlPenz(t.ar) + ' Ft' : '—') + '</td>' +
+                '<td class="is-jobb">' + arSzoveg(t) + '</td>' +
                 '<td class="is-jobb sdh-tabla__halvany">' + t.db + '</td>' +
                 '<td class="is-jobb"><button type="button" class="sdh-szolgval__szerk" data-sdh-szolgval-szerk="' + t.id + '"' +
                 ' title="Szerkesztés" aria-label="' + szovegBiztonsagos(t.nev) + ' szerkesztése">' +
@@ -4689,6 +4900,128 @@
         if (urlap) {
             szolgUrlapNetto(urlap);
         }
+    });
+
+    /* ---- Árlista: beillesztés élő előnézettel, és az árak helyben mentése ---- */
+
+    var arlistaIdozito = null;
+    var arlistaKor = 0;
+
+    function arlistaElonezet(mezo) {
+        var urlap = mezo.closest('[data-sdh-arlista]');
+        var hely = urlap ? urlap.querySelector('[data-sdh-arlista-elonezet]') : null;
+
+        if (!hely) {
+            return;
+        }
+
+        var kor = ++arlistaKor;
+        var adat = new FormData();
+
+        adat.set('action', 'sdh_muhely_szolgaltatas_arlista_elonezet');
+        adat.set('_wpnonce', beallitas.nonce || '');
+        adat.set('szoveg', mezo.value);
+
+        hely.classList.add('is-tolt');
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (kor !== arlistaKor) {
+                    return;
+                }
+
+                hely.classList.remove('is-tolt');
+                hely.innerHTML = valasz && valasz.success
+                    ? valasz.data.html
+                    : '<p class="sdh-uzenet sdh-uzenet--hiba">Az előnézet nem készült el.</p>';
+            })
+            .catch(function () {
+                if (kor === arlistaKor) {
+                    hely.classList.remove('is-tolt');
+                    hely.innerHTML = '<p class="sdh-uzenet sdh-uzenet--hiba">Az előnézet nem készült el.</p>';
+                }
+            });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (mezo && mezo.matches && mezo.matches('[data-sdh-arlista-szoveg]')) {
+            window.clearTimeout(arlistaIdozito);
+            arlistaIdozito = window.setTimeout(function () {
+                arlistaElonezet(mezo);
+            }, 300);
+        }
+
+        // Árlista nézet: a módosított sor kiemelve, amíg nincs mentve.
+        var arSor = mezo && mezo.closest ? mezo.closest('[data-sdh-arak] tr') : null;
+
+        if (arSor) {
+            arSor.classList.add('is-modositva');
+        }
+    });
+
+    document.addEventListener('submit', function (esemeny) {
+        var urlap = esemeny.target;
+
+        if (!urlap.matches || !urlap.matches('[data-sdh-arak]')) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var gomb = urlap.querySelector('[data-sdh-arak-ment]');
+        var allapot = urlap.querySelector('[data-sdh-arak-allapot]');
+        var adat = new FormData(urlap);
+
+        adat.set('action', 'sdh_muhely_szolgaltatas_arak');
+
+        if (gomb) {
+            gomb.disabled = true;
+        }
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    throw new Error((valasz && valasz.data && valasz.data.uzenet) || 'A mentés nem sikerült.');
+                }
+
+                Array.prototype.forEach.call(urlap.querySelectorAll('tr.is-modositva'), function (sor) {
+                    var ar = sor.querySelector('input[name$="[ar]"]');
+                    var max = sor.querySelector('input[name$="[max]"]');
+                    var nyomtat = sor.querySelector('.sdh-arlista-tabla__nyomtat');
+
+                    if (nyomtat && ar) {
+                        nyomtat.textContent = arSzoveg({ ar: mlSzam(ar.value), max: max ? mlSzam(max.value) : 0 });
+                    }
+
+                    sor.classList.remove('is-modositva');
+                });
+
+                szolgElavult();
+
+                if (allapot) {
+                    allapot.textContent = valasz.data.db > 0 ? 'Elmentve – ' + valasz.data.db + ' tétel változott.' : 'Nem volt változás.';
+                    allapot.classList.remove('is-hiba');
+                }
+            })
+            .catch(function (hiba) {
+                if (allapot) {
+                    allapot.textContent = hiba.message;
+                    allapot.classList.add('is-hiba');
+                }
+            })
+            .then(function () {
+                if (gomb) {
+                    gomb.disabled = false;
+                }
+            });
     });
 
     document.addEventListener('keydown', function (esemeny) {
@@ -5928,9 +6261,9 @@
             '    <tbody data-sdh-szval-sorok>' + ures + '</tbody>' +
             '  </table>' +
             '  <div class="sdh-szolgval__lab">' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szval-lap="-1" aria-label="Előző oldal">‹</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-sdh-szval-lap="-1" aria-label="Előző oldal">' + LAP_NYIL_BAL + '</button>' +
             '    <span class="sdh-szolgval__oldal" data-sdh-szval-oldal></span>' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szval-lap="1" aria-label="Következő oldal">›</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-sdh-szval-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
             '    <span class="sdh-szolgval__db" data-sdh-szval-db></span>' +
             (o.kezi ? '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra" data-sdh-szval-kezi' +
                 '            title="Nem a listából: kézzel írod be">Kézzel írom be</button>' : '') +
@@ -6000,7 +6333,7 @@
             if (!t) {
                 html += i === 0
                     ? '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '" class="sdh-tabla__ures">' +
-                        (szVal.toltve ? 'Nincs találat.' + (o.kezi ? ' A „Kézzel írom be" gombbal így is felveheted.' : '') : 'Keresés…') + '</td></tr>'
+                        (szVal.toltve ? (o.ures && szVal.kerdes === '' ? o.ures : 'Nincs találat.' + (o.kezi ? ' A „Kézzel írom be" gombbal így is felveheted.' : '')) : 'Keresés…') + '</td></tr>'
                     : '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '">&nbsp;</td></tr>';
                 continue;
             }

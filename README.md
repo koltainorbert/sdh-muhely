@@ -58,6 +58,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.37.0
+- **Bevizsgálási díj – levonás mínusz tétellel.** A munkalapon a „Fizetett (előleg)" + „Bevizsgálási díj" jelölő
+  továbbra is +díj szolgáltatássort ad. Új „Ha javítás" választó: **Javítás: levonódik** (alap) – a díj mellé egy
+  `bevizsgalas_le` forrású **−díj** sor kerül (legfeljebb a többi tétel összegéig), így a végösszeg a javítás ára,
+  a fizetendő javítás − előleg; **Munkadíj marad** – nincs levonás, a díj munkadíjként marad. Nincs más tétel →
+  nincs levonás (a díj marad). A −sor csak olvasható, a szinkron tartja karban minden tételváltozás után
+  (`SDH_Muhely_Tetel::ujraszamol` → `SDH_Muhely_Szamla::bevizsgalas_szinkron`); a számlán negatív tételként megy.
+  Beállítás: a levonás sorának neve (`bevizsgalas_le_sablon`), a díj nevében új helyőrző: `{dij}`.
+- **Díj a listából:** a jelölő melletti „Díjlista" gomb választót nyit (kategória, kód, ár, keresés) – a választott
+  díj az előlegbe kerül, a jelölő bepipálódik, a díj neve a laphoz mentődik (`bevizsgalas_nev`, `bevizsgalas_szolg`,
+  `bevizsgalas_mod`; DB_VERSION 0.25.0).
+- **A díjak a Szolgáltatások között:** új mezők – kategória, kód, ár felső határa (sávos ár), „Bevizsgálási díj"
+  jelölő, sorrend. Nézetek: Mind / **Bevizsgálási díjak** / **Árlista** (kategóriánként, nyomtatható, az árak és a
+  díj-jelölő helyben írhatók, „Árak mentése"). Az árlistás sor árát a munkalap nem írja felül.
+- **Árlista beillesztése:** a saját díjlista szövegként bemásolható (weboldal, Word, Excel), élő előnézettel;
+  „Kategória: 100-" fejléc → bevizsgálási díjak, kód zárójelben, sávos ár, felár ≠ díj, ismételt beillesztés frissít.
+  **A plugin nem tartalmaz árat** – a díjlista a felhasználó adata.
+- **Cégadat nélkül:** a pénztár kivétre jogosultjai nincsenek beégetve; meglévő telepítésen a korábbi kivétek
+  neveiből töltődnek fel. Választók lapozója rajzolt nyíllal.
+
 ### 0.36.0
 - **Levelezés:** a fiókok különálló pillek a doboz fölött (nem rátapadó lapfülek), köztük hézaggal, a doboz minden
   sarka kerek – nem csúsznak össze. A lapozó nyilai rajzok (nem ‹ › betű), a gomb közepén ülnek, nagyobbak.
@@ -90,8 +110,8 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
   a tétel módosítása naplózódik, a nap eltérése újraszámolódik; újranyitás is van. Összesítők gyorsítótára:
   `sdh_penztar_nap`; tételek: `sdh_penztar` (a kivét / kifizetés a KP-oszlopban negatív); változásnapló:
   `sdh_penztar_naplo`. Törlés csak jelölés. DB_VERSION 0.23.0.
-- **Kivét:** mindig negatív, és csak a Beállításokban megadott személyek közül (alap: Koltai Norbert, Légman Péter;
-  becenevekkel, amelyekből az import is felismeri).
+- **Kivét:** mindig negatív, és csak a Beállításokban megadott személyek közül (becenevekkel, amelyekből az import
+  is felismeri). A plugin nem hoz magával nevet (0.37.0 óta).
 - **Munkalap:** új **Fizetés** gomb a láblécben (mentés → fizetés ablaka: teljes vagy előleg, mód, összeg,
   „kerüljön a házipénztárba"); a „Fizetve" pipa vagy a nőtt előleg mentése után ajánlat-ablak
   („Bekerüljön a házipénztárba?" – Beírás / Nem kell / Később). A „Nem kell" nyoma megmarad (`kihagyva`).

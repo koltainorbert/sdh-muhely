@@ -5036,3 +5036,456 @@ a.sdh-szamlajel:hover {
     font-weight: 600;
     color: var(--sdh-szoveg);
 }
+
+/* =================================================================
+ * Bevizsgálási díj és árlista (0.37)
+ * ============================================================== */
+
+/* Munkalap oldalsáv: a díj blokkja a teljes szélességet kapja (címkeoszlop nélkül). */
+.sdh-ml__oldal .sdh-ig.sdh-bev,
+.sdh-ml__oldal .sdh-ig.sdh-bev__mod {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.sdh-bev > .sdh-ig__cimke,
+.sdh-bev__mod > .sdh-ig__cimke {
+    display: none;
+}
+
+/* Jelölő + díjlista gomb egy sorban. */
+.sdh-bev__sor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+    min-width: 0;
+}
+
+.sdh-bev__lista {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    height: 26px;
+    padding: 0 .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.sdh-bev__lista:hover,
+.sdh-bev__lista:focus-visible {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+    background: var(--sdh-accent-halvany);
+}
+
+.sdh-bev__lista svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+}
+
+.sdh-bev__mod[hidden],
+.sdh-bev__info[hidden] {
+    display: none !important;
+}
+
+.sdh-szegmens--kicsi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .3rem;
+}
+
+.sdh-szegmens--kicsi .sdh-szegmens__elem span {
+    justify-content: center;
+    width: 100%;
+    height: 28px;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.sdh-bev__info {
+    margin: -.1rem 0 .1rem;
+    padding: .35rem .55rem;
+    border-left: 2px solid var(--sdh-accent);
+    border-radius: 0 6px 6px 0;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-szoveg);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* A díj levonásának (mínusz) tételsora: csak olvasható, piros összeg. */
+.sdh-tetelsor--levonas input:disabled,
+.sdh-tetelsor--levonas select:disabled {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+}
+
+.sdh-tetelsor--levonas [data-sdh-tetel="ar"],
+.sdh-tetelsor--levonas [data-sdh-tetel="netto"],
+.sdh-tetelsor--levonas [data-sdh-tetel="brutto"] {
+    color: var(--sdh-hiba);
+    -webkit-text-fill-color: var(--sdh-hiba);
+}
+
+.sdh-tetelsor--levonas .sdh-szolgmezo__gomb {
+    visibility: hidden;
+}
+
+.sdh-tetelsor__zar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-tetelsor__zar svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+/* A választók lapozója: rajzolt nyíl, pontosan középen. */
+.sdh-lapnyil {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    min-width: 34px;
+    padding: 0;
+}
+
+.sdh-lapnyil svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-bevval__kat {
+    display: inline-block;
+    margin-right: .35rem;
+    padding: 0 .45rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: 11.5px;
+    line-height: 1.6;
+}
+
+/* Szolgáltatások: nézetváltó pillek és a díj-jelvény. */
+.sdh-szolg-pillek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: 0 0 .8rem;
+}
+
+.sdh-szolg-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 .9rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.sdh-szolg-pill:hover {
+    border-color: var(--sdh-accent);
+}
+
+.sdh-szolg-pill.is-aktiv {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-weight: 600;
+}
+
+.sdh-szolg-dij {
+    display: inline-block;
+    margin-left: .35rem;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.6;
+    vertical-align: 1px;
+}
+
+.sdh-szolg-dij--uj {
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 18%, transparent);
+    color: var(--sdh-siker);
+}
+
+/* Árlista beillesztése (popup): bal oldalt a szöveg, jobbra az előnézet. */
+.sdh-modal[data-sdh-modul="szolgaltatasarlista"] {
+    width: min(1100px, calc(100vw - 2rem));
+}
+
+.sdh-arlista__racs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: .9rem;
+    margin-bottom: .7rem;
+}
+
+.sdh-arlista__racs textarea {
+    width: 100%;
+    min-height: 420px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    tab-size: 24;
+    resize: vertical;
+}
+
+.sdh-arlista__elonezet {
+    max-height: 420px;
+    overflow: auto;
+    padding: .2rem .1rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 8px;
+    transition: opacity .15s;
+}
+
+.sdh-arlista__elonezet.is-tolt {
+    opacity: .55;
+}
+
+.sdh-arlista__elonezet > p {
+    margin: .6rem .7rem;
+}
+
+.sdh-arlista__osszeg {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    margin: 0;
+    padding: .5rem .7rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: var(--sdh-felulet);
+    font-size: 12.5px;
+}
+
+.sdh-arlista__tabla {
+    border: 0;
+    font-size: 12.5px;
+}
+
+.sdh-arlista__tabla td,
+.sdh-arlista__tabla th {
+    padding: .3rem .55rem;
+}
+
+.sdh-arlista__tabla td:first-child,
+.sdh-arlista__tabla th:first-child {
+    width: 2.6rem;
+    text-align: center;
+}
+
+.sdh-arlista__tabla td:nth-child(3),
+.sdh-arlista__tabla td.is-jobb {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-arlista__kat td {
+    padding-top: .55rem !important;
+    text-align: left !important;
+    background: var(--sdh-felulet-2);
+    font-weight: 600;
+    color: var(--sdh-szoveg);
+}
+
+@media (max-width: 760px) {
+    .sdh-arlista__racs {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdh-arlista__racs textarea,
+    .sdh-arlista__elonezet {
+        min-height: 220px;
+        max-height: none;
+    }
+}
+
+/* Árlista nézet: kategóriánként, helyben írható árak. */
+.sdh-arlista-oldal__eszkozok .is-aktiv {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-arlista-csoport {
+    margin: 0 0 1.1rem;
+    break-inside: avoid;
+}
+
+.sdh-arlista-csoport__cim {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    margin: 0 0 .4rem;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sdh-arlista-csoport__kod {
+    padding: 0 .45rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: 11.5px;
+    font-weight: 500;
+}
+
+.sdh-arlista-tabla th:nth-child(2),
+.sdh-arlista-tabla td:nth-child(2) {
+    width: 5rem;
+}
+
+.sdh-arlista-tabla th:nth-child(3),
+.sdh-arlista-tabla td:nth-child(3),
+.sdh-arlista-tabla th:nth-child(4),
+.sdh-arlista-tabla td:nth-child(4) {
+    width: 8.5rem;
+}
+
+.sdh-arlista-tabla th:nth-child(5),
+.sdh-arlista-tabla td:nth-child(5) {
+    width: 3.5rem;
+    text-align: center;
+}
+
+.sdh-arlista-tabla__ar {
+    width: 100%;
+    max-width: 8rem;
+    height: 30px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-arlista-tabla__nyomtat {
+    display: none;
+}
+
+.sdh-arlista-tabla tr.is-modositva td {
+    background: color-mix(in srgb, var(--sdh-figyelem) 12%, transparent);
+}
+
+.sdh-arlista-urlap__lablec {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .7rem 0;
+    background: var(--sdh-vaszon);
+}
+
+.sdh-arlista-urlap__allapot {
+    color: var(--sdh-siker);
+    font-size: 13px;
+}
+
+.sdh-arlista-urlap__allapot.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+@media (max-width: 640px) {
+    .sdh-arlista-tabla {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .sdh-arlista-tabla th,
+    .sdh-arlista-tabla td {
+        padding-left: .4rem;
+        padding-right: .4rem;
+    }
+
+    .sdh-arlista-tabla th:nth-child(2),
+    .sdh-arlista-tabla td:nth-child(2) {
+        display: none;
+    }
+
+    .sdh-arlista-tabla th:nth-child(3),
+    .sdh-arlista-tabla td:nth-child(3),
+    .sdh-arlista-tabla th:nth-child(4),
+    .sdh-arlista-tabla td:nth-child(4) {
+        width: 5.2rem;
+    }
+
+    .sdh-arlista-tabla th:nth-child(5),
+    .sdh-arlista-tabla td:nth-child(5) {
+        width: 2.4rem;
+    }
+
+    .sdh-arlista-tabla__ar {
+        padding: 0 .35rem;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    .sdh-arlista-tabla__ar::-webkit-inner-spin-button,
+    .sdh-arlista-tabla__ar::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .sdh-arlista-tabla__nev {
+        overflow-wrap: anywhere;
+    }
+}
+
+@media print {
+    .sdh-arlista-oldal .sdh-fejlec__gombok,
+    .sdh-arlista-oldal .sdh-szolg-pillek,
+    .sdh-arlista-oldal .sdh-arlista-oldal__eszkozok,
+    .sdh-arlista-oldal .sdh-arlista-urlap__lablec,
+    .sdh-arlista-oldal .sdh-fejlec__kalap,
+    .sdh-arlista-tabla th:nth-child(4),
+    .sdh-arlista-tabla td:nth-child(4),
+    .sdh-arlista-tabla th:nth-child(5),
+    .sdh-arlista-tabla td:nth-child(5) {
+        display: none !important;
+    }
+
+    .sdh-arlista-tabla__ar {
+        display: none;
+    }
+
+    .sdh-arlista-tabla__nyomtat {
+        display: inline;
+    }
+
+    .sdh-arlista-tabla a {
+        color: inherit;
+        text-decoration: none;
+    }
+}

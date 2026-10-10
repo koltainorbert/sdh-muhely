@@ -75,6 +75,7 @@ final class SDH_Muhely_Penztar
 
         add_action('admin_enqueue_scripts', [self::class, 'admin_eszkozok'], 21);
         add_action('sdh_muhely_szamla_kiallitva', [self::class, 'szamla_kiallitva'], 10, 3);
+        add_action('sdh_muhely_sema_frissult', [self::class, 'szemelyek_potlasa']);
 
         SDH_Muhely_Modulok::regisztral([
             'kulcs'   => self::KULCS,
@@ -113,7 +114,7 @@ final class SDH_Muhely_Penztar
 
         $szemely_szoveg = isset($b['szemelyek']) && is_string($b['szemelyek']) && trim($b['szemelyek']) !== ''
             ? $b['szemelyek']
-            : "Koltai Norbert | Norbi, Norbert, Koltai\nLégman Péter | Peti, Péter, Légman";
+            : ''; // Nincs beégetett név: a kivétre jogosultakat a Beállításokban kell megadni.
 
         $szemelyek = [];
 
@@ -294,6 +295,42 @@ final class SDH_Muhely_Penztar
         }
 
         return 'utalas';
+    }
+
+    /**
+     * Sémafrissítéskor: ha a kivétre jogosultak még nincsenek beállítva, a
+     * pénztárban már szereplő kivétek neveiből töltődik fel (a név szavai a
+     * becenevek). A plugin így nem hoz magával nevet, a meglévő telepítés
+     * mégsem veszít semmit.
+     */
+    public static function szemelyek_potlasa(): void
+    {
+        global $wpdb;
+
+        $b = get_option(self::OPTION, []);
+        $b = is_array($b) ? $b : [];
+
+        if (isset($b['szemelyek']) && is_string($b['szemelyek']) && trim($b['szemelyek']) !== '') {
+            return;
+        }
+
+        $nevek = $wpdb->get_col(
+            'SELECT szemely FROM ' . self::tabla() . " WHERE tipus = 'kivet' AND szemely <> '' GROUP BY szemely ORDER BY COUNT(*) DESC LIMIT 6"
+        );
+
+        if (!is_array($nevek) || $nevek === []) {
+            return;
+        }
+
+        $sorok = [];
+
+        foreach ($nevek as $nev) {
+            $szavak  = preg_split('/\s+/u', trim((string) $nev)) ?: [];
+            $sorok[] = trim((string) $nev) . (count($szavak) > 1 ? ' | ' . implode(', ', array_reverse($szavak)) : '');
+        }
+
+        $b['szemelyek'] = implode("\n", $sorok);
+        update_option(self::OPTION, $b, false);
     }
 
     /** A szöveg melyik kivét-személyre utal (név vagy becenév), különben üres. */
@@ -1693,7 +1730,12 @@ final class SDH_Muhely_Penztar
 
                     <div class="sdh-ig" data-sdh-pt-csak="kivet">
                         <span class="sdh-ig__cimke">Ki vette ki <span class="sdh-kotelezo">*</span></span>
-                        <?php self::pillek('szemely', array_combine(array_column($b['szemelyek'], 'nev'), array_column($b['szemelyek'], 'nev')) ?: [], $szemely); ?>
+                        <?php if ($b['szemelyek'] !== []) : ?>
+                            <?php self::pillek('szemely', array_combine(array_column($b['szemelyek'], 'nev'), array_column($b['szemelyek'], 'nev')) ?: [], $szemely); ?>
+                        <?php else : ?>
+                            <input type="text" name="szemely" maxlength="80" autocomplete="off" placeholder="Név (a Beállításokban listát is megadhatsz)"
+                                   value="<?php echo esc_attr($szemely); ?>">
+                        <?php endif; ?>
                     </div>
 
                     <div class="sdh-ig" data-sdh-pt-csak="bevetel">

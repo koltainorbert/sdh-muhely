@@ -158,6 +158,9 @@ final class SDH_Muhely_Tetel
      *
      * @return array<int, object>
      */
+    /** A bevizsgálási díj és a levonása mindig a lista elején, egymás alatt. */
+    private const DIJ_ELOL = "CASE forras WHEN 'bevizsgalas' THEN 0 WHEN 'bevizsgalas_le' THEN 1 ELSE 2 END";
+
     public static function lista(int $munkalap_id, string $tipus = ''): array
     {
         global $wpdb;
@@ -171,7 +174,7 @@ final class SDH_Muhely_Tetel
         if ($tipus !== '' && isset(self::tipusok()[$tipus])) {
             $sorok = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM {$tabla} WHERE munkalap_id = %d AND tipus = %s ORDER BY sorrend ASC, id ASC",
+                    "SELECT * FROM {$tabla} WHERE munkalap_id = %d AND tipus = %s ORDER BY " . self::DIJ_ELOL . ", sorrend ASC, id ASC",
                     $munkalap_id,
                     $tipus
                 )
@@ -179,7 +182,7 @@ final class SDH_Muhely_Tetel
         } else {
             $sorok = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM {$tabla} WHERE munkalap_id = %d ORDER BY sorrend ASC, id ASC",
+                    "SELECT * FROM {$tabla} WHERE munkalap_id = %d ORDER BY " . self::DIJ_ELOL . ", sorrend ASC, id ASC",
                     $munkalap_id
                 )
             );
@@ -319,9 +322,9 @@ final class SDH_Muhely_Tetel
             return;
         }
 
-        // A bevizsgálási díj neve eszközönként más („Samsung … bevizsgálási díj"):
-        // a törzset teleírná, ezért nem tanuljuk meg.
-        if (($sor['forras'] ?? '') === 'bevizsgalas') {
+        // A bevizsgálási díj (és a levonása) neve eszközönként más („Samsung …
+        // bevizsgálási díj"): a törzset teleírná, ezért nem tanuljuk meg.
+        if (in_array((string) ($sor['forras'] ?? ''), ['bevizsgalas', 'bevizsgalas_le'], true)) {
             return;
         }
 
@@ -510,7 +513,9 @@ final class SDH_Muhely_Tetel
 
         foreach (array_diff($letezok, $megmarad) as $torlendo) {
             // A már számlázott tétel nem törölhető a lapról: a számlán szerepel.
-            if ((string) $regiek[$torlendo]->szamla !== '') {
+            // A díj levonásának sora nem jön az űrlapról (csak olvasható):
+            // azt a bevizsgálási díj szinkronja tartja karban.
+            if ((string) $regiek[$torlendo]->szamla !== '' || (string) $regiek[$torlendo]->forras === 'bevizsgalas_le') {
                 continue;
             }
 
@@ -543,6 +548,23 @@ final class SDH_Muhely_Tetel
         global $wpdb;
 
         if ($munkalap_id <= 0) {
+            return;
+        }
+
+        // A bevizsgálási díj levonása a többi tétel összegéhez igazodik: bármely
+        // tételváltozás (munkalap, számla ablaka, pénztár) után újra kell igazítani.
+        // A szinkron maga is ide hív vissza – akkor már csak összegzünk.
+        static $szinkronban = false;
+
+        if (!$szinkronban && class_exists('SDH_Muhely_Szamla')) {
+            $szinkronban = true;
+
+            try {
+                SDH_Muhely_Szamla::bevizsgalas_szinkron($munkalap_id);
+            } finally {
+                $szinkronban = false;
+            }
+
             return;
         }
 

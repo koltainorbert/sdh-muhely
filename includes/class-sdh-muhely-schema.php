@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.24.0';
+    public const DB_VERSION = '0.25.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -291,6 +291,10 @@ final class SDH_Muhely_Schema
          * lap tételeinek alapértéke (új tételsor ezzel indul).
          * A "bevizsgalasi_dij" jelzi, hogy az előleg bevizsgálási díj: ilyenkor
          * külön tételsorként él a lapon (SDH_Muhely_Szamla::bevizsgalas_szinkron).
+         * "bevizsgalas_mod": auto / levon (javítást kér: a díj levonódik a
+         * végösszegből, mínusz tételként) / marad (nem kér javítást: a díj
+         * munkadíjként marad). "bevizsgalas_nev" / "_szolg": a díjlistából
+         * választott díj neve és szolgáltatás-azonosítója.
          * A "megjegyzes" belső (csak a CRM-ben látszik), az
          * "ugyfel_megjegyzes" az ügyfél felé is megjelenhet.
          * ---------------------------------------------------------- */
@@ -311,6 +315,9 @@ final class SDH_Muhely_Schema
             fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
             bevizsgalasi_dij tinyint(1) NOT NULL default 0,
+            bevizsgalas_mod varchar(10) NOT NULL default 'auto',
+            bevizsgalas_nev varchar(255) NOT NULL default '',
+            bevizsgalas_szolg bigint(20) unsigned NOT NULL default 0,
             kedvezmeny decimal(5,2) NOT NULL default 0.00,
             afakulcs varchar(12) NOT NULL default '27',
             netto_ertek decimal(14,2) NOT NULL default 0.00,
@@ -431,6 +438,11 @@ final class SDH_Muhely_Schema
          * indexszel – két egyforma nevű sor nem jöhet létre.
          * A "hasznalat" azt számolja, hány tételsorban szerepelt; a lista
          * e szerint rendez. Az ár az utoljára használt bruttó egységár.
+         * Árlista (0.37): "kategoria" (csoport, pl. „Mobiltelefon"), "kod"
+         * (pl. 100, 000-2), "ar_max" (sávos árnál a felső határ; 0 = fix ár),
+         * "sorrend" (a beillesztett árlista sorrendje), "bevizsgalas" = a
+         * bevizsgálási díjak közül választható. A díjlista a felhasználó
+         * adata (beillesztéssel kerül be) – a plugin nem hoz magával árat.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$szolgaltatas} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -441,11 +453,17 @@ final class SDH_Muhely_Schema
             afa_kulcs varchar(12) NOT NULL default '27',
             hasznalat int(11) NOT NULL default 0,
             megjegyzes text NULL,
+            kategoria varchar(160) NOT NULL default '',
+            kod varchar(20) NOT NULL default '',
+            bevizsgalas tinyint(1) NOT NULL default 0,
+            ar_max decimal(14,2) NOT NULL default 0.00,
+            sorrend int(11) NOT NULL default 0,
             letrehozva datetime NULL,
             modositva datetime NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY kulcs (kulcs),
-            key hasznalat (hasznalat)
+            key hasznalat (hasznalat),
+            key bevizsgalas (bevizsgalas)
         ) {$charset};";
 
         /* -------------------------------------------------------------

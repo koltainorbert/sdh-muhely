@@ -54,6 +54,13 @@ final class SDH_Muhely_Szamla
     /** A bevizsgálási díj tételsorának `forras` értéke. */
     public const BEVIZSGALAS = 'bevizsgalas';
 
+    /**
+     * A bevizsgálási díj levonásának (mínusz) tételsora. Ha az ügyfél kéri a
+     * javítást, a díj levonódik a végösszegből: a lapon a +díj mellett egy
+     * ugyanekkora −díj sor áll (legfeljebb a többi tétel összegéig).
+     */
+    public const BEVIZSGALAS_LE = 'bevizsgalas_le';
+
     /** A számla ablakában egyszerre felvehető új tételek száma. */
     private const UJ_TETEL_MAX = 40;
 
@@ -111,6 +118,7 @@ final class SDH_Muhely_Szamla
             'torlokod'           => false,
             'megjegyzes'         => 'Munkalap: {munkalap} · {eszkoz}',
             'bevizsgalas_sablon' => '{eszkoz} {fajta} bevizsgálási díj',
+            'bevizsgalas_le_sablon' => 'Bevizsgálási díj levonása (javítás esetén)',
             // Helyi nyomtatvány
             'nyomt_cim'          => 'elokeszito',
             'nyomt_elotag'       => 'SDE',
@@ -270,8 +278,19 @@ final class SDH_Muhely_Szamla
                     <input type="text" name="szamla_bevizsgalas_sablon" id="szamla_bevizsgalas_sablon" maxlength="200"
                            value="<?php echo esc_attr((string) $b['bevizsgalas_sablon']); ?>">
                     <span class="sdh-mezo__sugo">
-                        Helyőrzők: <code>{eszkoz}</code> (gyártó és típus), <code>{fajta}</code> (pl. mobiltelefon).
+                        Helyőrzők: <code>{eszkoz}</code> (gyártó és típus), <code>{fajta}</code> (pl. mobiltelefon),
+                        <code>{dij}</code> (a díjlistából választott díj neve).
                         Példa: „Samsung SM-A175B mobiltelefon bevizsgálási díj".
+                    </span>
+                </div>
+
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="szamla_bevizsgalas_le_sablon">A díj levonásának (mínusz tétel) megnevezése</label>
+                    <input type="text" name="szamla_bevizsgalas_le_sablon" id="szamla_bevizsgalas_le_sablon" maxlength="200"
+                           value="<?php echo esc_attr((string) $b['bevizsgalas_le_sablon']); ?>">
+                    <span class="sdh-mezo__sugo">
+                        Ha az ügyfél kéri a javítást, a bevizsgálási díj ezzel a mínusz tétellel vonódik le a végösszegből.
+                        Ugyanazok a helyőrzők használhatók.
                     </span>
                 </div>
             </div>
@@ -391,6 +410,9 @@ final class SDH_Muhely_Szamla
         $b['email_kuldes']       = !empty($_POST['szamla_email_kuldes']);
         $b['torlokod']           = !empty($_POST['szamla_torlokod']);
         $b['megjegyzes']         = $szoveg('szamla_megjegyzes', 250);
+        $b['bevizsgalas_le_sablon'] = $szoveg('szamla_bevizsgalas_le_sablon', 200) !== ''
+            ? $szoveg('szamla_bevizsgalas_le_sablon', 200)
+            : 'Bevizsgálási díj levonása (javítás esetén)';
         $b['bevizsgalas_sablon'] = $szoveg('szamla_bevizsgalas_sablon', 200) !== ''
             ? $szoveg('szamla_bevizsgalas_sablon', 200)
             : '{eszkoz} {fajta} bevizsgálási díj';
@@ -434,8 +456,8 @@ final class SDH_Muhely_Szamla
         return (string) apply_filters('sdh_muhely_bevizsgalas_fajta', $nev, $kulcs, $eszkoz);
     }
 
-    /** A bevizsgálási díj tételének neve a munkalap eszközéből. */
-    public static function bevizsgalas_nev(object $munkalap): string
+    /** A bevizsgálási díj (vagy a levonás) tételének neve a munkalap eszközéből. */
+    public static function bevizsgalas_nev(object $munkalap, string $sablon_kulcs = 'bevizsgalas_sablon'): string
     {
         global $wpdb;
 
@@ -443,9 +465,11 @@ final class SDH_Muhely_Szamla
             ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id = %d', (int) $munkalap->eszkoz_id))
             : null;
 
-        $nev = strtr((string) self::beallitas()['bevizsgalas_sablon'], [
+        $b   = self::beallitas();
+        $nev = strtr((string) ($b[$sablon_kulcs] ?? $b['bevizsgalas_sablon']), [
             '{eszkoz}' => is_object($eszkoz) ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : '',
             '{fajta}'  => is_object($eszkoz) ? self::fajta($eszkoz) : '',
+            '{dij}'    => (string) ($munkalap->bevizsgalas_nev ?? ''),
         ]);
 
         $nev = trim((string) preg_replace('/\s+/u', ' ', $nev));
@@ -454,15 +478,31 @@ final class SDH_Muhely_Szamla
     }
 
     /**
-     * A munkalap bevizsgálásidíj-sora a jelölőhöz és az előleghez igazítva.
-     * A munkalap minden mentése után fut; idempotens.
+     * A díj módja: „levon" (javítást kér – a díj levonódik a végösszegből)
+     * vagy „marad" (nem kér javítást – a díj munkadíjként nálunk marad).
+     * Az „auto" (alapérték) a levonás: ha nincs más tétel, úgysincs mit levonni.
+     */
+    public static function bevizsgalas_mod(object $munkalap): string
+    {
+        return (string) ($munkalap->bevizsgalas_mod ?? 'auto') === 'marad' ? 'marad' : 'levon';
+    }
+
+    /**
+     * A munkalap bevizsgálásidíj-sorai a jelölőhöz, az előleghez és a
+     * módhoz igazítva. A munkalap minden mentése után fut; idempotens.
      *
-     *   jelölő be + előleg > 0  → van egy `bevizsgalas` forrású szolgáltatássor,
-     *                             az ára az előleg (a nevét csak létrehozáskor kapja,
-     *                             utána kézzel átírható);
-     *   egyébként               → a sor törlődik.
+     *   jelölő be + előleg > 0 → `bevizsgalas` sor (+díj, ára az előleg; a
+     *                            nevét csak létrehozáskor kapja, utána átírható);
+     *   + mód „levon" és van más tétel
+     *                          → `bevizsgalas_le` sor: −min(díj, a többi tétel),
+     *                            így a díj levonódik a végösszegből;
+     *   egyébként              → a sorok törlődnek.
      *
-     * A már számlázott díjsorhoz nem nyúl.
+     * A végösszeg így: javítással = a többi tétel (a díj beszámít),
+     * javítás nélkül = a díj (munkadíjként marad). A Fizetendő mindkét
+     * esetben végösszeg − előleg.
+     *
+     * A már számlázott sorokhoz nem nyúl.
      */
     public static function bevizsgalas_szinkron(int $munkalap_id): void
     {
@@ -481,22 +521,50 @@ final class SDH_Muhely_Szamla
             return;
         }
 
-        $sorok = (array) $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM {$tetel_tabla} WHERE munkalap_id = %d AND forras = %s ORDER BY id ASC", $munkalap_id, self::BEVIZSGALAS)
-        );
-
         $dij = round((float) $munkalap->fizetett, 2);
         $be  = (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1 && $dij > 0;
-        $sor = null;
 
-        // Egy díjsor lehet; a számlázott mindig megmarad.
+        // A többi kimenő tétel bruttó összege – ebből vonható le a díj.
+        $tobbi = (float) $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(SUM(brutto_ertek), 0) FROM {$tetel_tabla}
+             WHERE munkalap_id = %d AND mozgas = 'kimeno' AND forras NOT IN (%s, %s)",
+            $munkalap_id,
+            self::BEVIZSGALAS,
+            self::BEVIZSGALAS_LE
+        ));
+
+        $levon = $be && self::bevizsgalas_mod($munkalap) === 'levon' ? round(min($dij, max(0.0, $tobbi)), 2) : 0.0;
+
+        self::dijsor_igazit($munkalap, self::BEVIZSGALAS, $be ? $dij : 0.0, 'bevizsgalas_sablon', -2);
+        self::dijsor_igazit($munkalap, self::BEVIZSGALAS_LE, $levon > 0 ? -$levon : 0.0, 'bevizsgalas_le_sablon', -1);
+
+        SDH_Muhely_Tetel::ujraszamol($munkalap_id);
+    }
+
+    /**
+     * Egy rendszer által karbantartott díjsor: legyen pontosan egy, ezzel
+     * az árral – vagy (0 árnál) egy se. A számlázott sor megmarad.
+     */
+    private static function dijsor_igazit(object $munkalap, string $forras, float $ar, string $sablon, int $sorrend): void
+    {
+        global $wpdb;
+
+        $tetel_tabla = SDH_Muhely_Tetel::tabla();
+        $munkalap_id = (int) $munkalap->id;
+        $kell        = abs($ar) >= 0.005;
+        $sor         = null;
+
+        $sorok = (array) $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM {$tetel_tabla} WHERE munkalap_id = %d AND forras = %s ORDER BY id ASC", $munkalap_id, $forras)
+        );
+
         foreach ($sorok as $s) {
             if ((string) $s->szamla !== '') {
                 $sor = $sor ?? $s;
                 continue;
             }
 
-            if ($be && $sor === null) {
+            if ($kell && $sor === null) {
                 $sor = $s;
                 continue;
             }
@@ -504,38 +572,51 @@ final class SDH_Muhely_Szamla
             $wpdb->delete($tetel_tabla, ['id' => (int) $s->id]);
         }
 
-        if ($be && $sor === null) {
+        if (!$kell) {
+            return;
+        }
+
+        if ($sor === null) {
+            // A díjlistából választott díj használata: a választóban előrébb kerül.
+            if ($forras === self::BEVIZSGALAS && (int) ($munkalap->bevizsgalas_szolg ?? 0) > 0) {
+                $wpdb->query($wpdb->prepare(
+                    'UPDATE ' . SDH_Muhely_Szolgaltatas::tabla() . ' SET hasznalat = hasznalat + 1 WHERE id = %d',
+                    (int) $munkalap->bevizsgalas_szolg
+                ));
+            }
+
+            // A hozzaad() a negatív árat is elfogadja (a levonás sora).
             SDH_Muhely_Tetel::hozzaad($munkalap_id, [
                 'tipus'      => 'szolgaltatas',
-                'megnevezes' => self::bevizsgalas_nev($munkalap),
+                'megnevezes' => self::bevizsgalas_nev($munkalap, $sablon),
                 'mennyiseg'  => 1,
                 'me'         => 'db',
                 'afa_kulcs'  => (string) $munkalap->afakulcs,
-                'brutto_ar'  => $dij,
-                'sorrend'    => -1,
+                'brutto_ar'  => $ar,
+                'sorrend'    => $sorrend,
                 'idopont'    => current_time('Y-m-d'),
-                'forras'     => self::BEVIZSGALAS,
+                'forras'     => $forras,
             ]);
 
-            return; // a hozzaad() újraszámol
+            return;
         }
 
-        if ($be && $sor !== null && (string) $sor->szamla === '' && abs((float) $sor->brutto_ar - $dij) >= 0.005) {
-            $afa   = (float) $sor->afa;
-            $netto = SDH_Muhely_Tetel::bruttobol_netto($dij, $afa);
-            $menny = (float) $sor->mennyiseg > 0 ? (float) $sor->mennyiseg : 1.0;
-            $kedv  = (float) $sor->kedvezmeny;
-
-            $wpdb->update($tetel_tabla, [
-                'brutto_ar'    => $dij,
-                'netto_ar'     => $netto,
-                'netto_ertek'  => SDH_Muhely_Tetel::ertek($netto, $menny, $kedv),
-                'brutto_ertek' => SDH_Muhely_Tetel::ertek($dij, $menny, $kedv),
-                'modositva'    => current_time('mysql'),
-            ], ['id' => (int) $sor->id]);
+        if ((string) $sor->szamla !== '' || abs((float) $sor->brutto_ar - $ar) < 0.005) {
+            return;
         }
 
-        SDH_Muhely_Tetel::ujraszamol($munkalap_id);
+        $afa   = (float) $sor->afa;
+        $netto = SDH_Muhely_Tetel::bruttobol_netto($ar, $afa);
+        $menny = (float) $sor->mennyiseg > 0 ? (float) $sor->mennyiseg : 1.0;
+        $kedv  = (float) $sor->kedvezmeny;
+
+        $wpdb->update($tetel_tabla, [
+            'brutto_ar'    => $ar,
+            'netto_ar'     => $netto,
+            'netto_ertek'  => SDH_Muhely_Tetel::ertek($netto, $menny, $kedv),
+            'brutto_ertek' => SDH_Muhely_Tetel::ertek($ar, $menny, $kedv),
+            'modositva'    => current_time('mysql'),
+        ], ['id' => (int) $sor->id]);
     }
 
     /* =================================================================
@@ -739,7 +820,7 @@ final class SDH_Muhely_Szamla
             static fn (object $t): bool => (string) $t->mozgas === 'kimeno'
         ));
 
-        $rang = static fn (object $t): int => (string) $t->forras === self::BEVIZSGALAS ? 0 : ((string) $t->tipus === 'szolgaltatas' ? 1 : 2);
+        $rang = static fn (object $t): int => in_array((string) $t->forras, [self::BEVIZSGALAS, self::BEVIZSGALAS_LE], true) ? 0 : ((string) $t->tipus === 'szolgaltatas' ? 1 : 2);
 
         usort($tetelek, static fn (object $a, object $b): int => [$rang($a), (int) $a->sorrend, (int) $a->id] <=> [$rang($b), (int) $b->sorrend, (int) $b->id]);
 
@@ -1233,7 +1314,8 @@ final class SDH_Muhely_Szamla
                         <?php
                         $s          = self::tetel_sor($t);
                         $szamlazva  = (string) $t->szamla !== '';
-                        $fajta      = (string) $t->forras === self::BEVIZSGALAS ? 'Bevizsgálási díj' : ((string) $t->tipus === 'termek' ? 'Termék' : 'Szolgáltatás');
+                        $fajta      = (string) $t->forras === self::BEVIZSGALAS ? 'Bevizsgálási díj'
+                            : ((string) $t->forras === self::BEVIZSGALAS_LE ? 'Díj levonása' : ((string) $t->tipus === 'termek' ? 'Termék' : 'Szolgáltatás'));
                         ?>
                         <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>" data-sdh-szamla-sor>
                             <td>
