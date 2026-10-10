@@ -386,7 +386,14 @@ final class SDH_Muhely_Admin_UI
                                 printf(' data-%s="%s"', esc_attr($nev), esc_attr($ertek));
                             }
                            ?>>
-                            <?php echo esc_html($gomb['cimke']); ?>
+                            <?php
+                            // A „+ …" kezdetű felirat pluszjele rajzolt ikon (admin.css: .sdh-plusz), hogy pontosan középen üljön.
+                            if (strpos((string) $gomb['cimke'], '+ ') === 0) {
+                                echo '<span class="sdh-plusz" aria-hidden="true"></span>' . esc_html(substr((string) $gomb['cimke'], 2));
+                            } else {
+                                echo esc_html($gomb['cimke']);
+                            }
+                            ?>
                         </a>
                     <?php endforeach; ?>
                 </div>

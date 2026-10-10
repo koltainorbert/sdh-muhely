@@ -1273,11 +1273,11 @@ final class SDH_Muhely_Szamla
                             <td></td>
                             <td colspan="<?php echo $torlo ? 7 : 6; ?>">
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="termek"
-                                        title="Termék keresése és felvétele a számlára">+ Termék…</button>
+                                        title="Termék keresése és felvétele a számlára"><span class="sdh-plusz" aria-hidden="true"></span>Termék…</button>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="szolgaltatas"
-                                        title="Szolgáltatás keresése és felvétele a számlára">+ Szolgáltatás…</button>
+                                        title="Szolgáltatás keresése és felvétele a számlára"><span class="sdh-plusz" aria-hidden="true"></span>Szolgáltatás…</button>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="kezi"
-                                        title="Üres sor: a megnevezést és az árat kézzel írod be">+ Kézi tétel</button>
+                                        title="Üres sor: a megnevezést és az árat kézzel írod be"><span class="sdh-plusz" aria-hidden="true"></span>Kézi tétel</button>
                                 <span class="sdh-szamlaurlap__ujsugo">
                                     <?php echo $helyi
                                         ? 'Az itt felvett tétel csak a nyomtatványra kerül; a munkalapra a Termékek / Szolgáltatások fülön vedd fel.'
@@ -1487,7 +1487,7 @@ final class SDH_Muhely_Szamla
     {
         ?>
         <button type="button" class="sdh-szamlaurlap__megjgomb" data-sdh-szamla-megj
-                title="Megjegyzés ehhez a tételhez – a számlán a tétel alatt jelenik meg">+ megjegyzés</button>
+                title="Megjegyzés ehhez a tételhez – a számlán a tétel alatt jelenik meg"><span class="sdh-plusz sdh-plusz--kicsi" aria-hidden="true"></span>megjegyzés</button>
         <?php
     }
 

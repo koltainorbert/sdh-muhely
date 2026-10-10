@@ -948,7 +948,18 @@ final class SDH_Muhely_Levelezes
      */
     private static function fiokok_kifele(): array
     {
-        $ki = [];
+        global $wpdb;
+
+        $ki      = [];
+        $azonnal = [];
+
+        // Az ügynök le nem zárt azonnali jelzései fiókonként (a fiók lapfülén és a saját „Teendők" során).
+        foreach ((array) $wpdb->get_results(
+            'SELECT l.fiok AS fiok, COUNT(*) AS db FROM ' . self::tabla() . ' l INNER JOIN ' . self::mappa_tabla() . " mp ON mp.id = l.mappa_id
+             WHERE mp.szerep = 'inbox' AND l.fontossag = 'azonnal' AND l.elintezve = 0 GROUP BY l.fiok"
+        ) as $sor) {
+            $azonnal[(string) $sor->fiok] = (int) $sor->db;
+        }
 
         foreach (self::fiokok() as $fk => $fiok) {
             $zarva = self::zarva((string) $fk);
@@ -962,6 +973,8 @@ final class SDH_Muhely_Levelezes
                 'vedett'     => (string) $fiok['zar'] !== '',
                 'zarva'      => $zarva,
                 'olvasatlan' => $be ? (int) $be->olvasatlan : 0,
+                // Zárolt fiókból semmi nem megy ki, a teendők száma sem.
+                'azonnal'    => $zarva ? 0 : (int) ($azonnal[(string) $fk] ?? 0),
                 'mappak'     => $zarva ? [] : self::mappak_kifele((string) $fk),
                 'hiba'       => !$zarva && is_string($hiba) ? $hiba : '',
             ];
@@ -1565,9 +1578,16 @@ final class SDH_Muhely_Levelezes
 
         @set_time_limit(90); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
-        // --- „Teendők": az ügynök jelzései minden nyitott fiókból (a szerverhez nem kell kapcsolódni) ---
+        // --- „Teendők": az ügynök jelzései (a szerverhez nem kell kapcsolódni) ---
+        // A levelező fiókonként külön kéri: egy fiók teendői közé a másik fiók levele soha nem kerül.
         if ($mappa_k === 'fontos') {
-            $nyitott = self::nyitott_sql();
+            if ($fk !== '') {
+                self::fiok_kell($fk);
+                $nyitott = "'" . esc_sql($fk) . "'";
+            } else {
+                $nyitott = self::nyitott_sql();
+            }
+
             $szuro   = "mp.szerep = 'inbox' AND l.fontossag IN ('azonnal', 'ma') AND l.elintezve = 0 AND l.fiok IN (" . ($nyitott !== '' ? $nyitott : "''") . ')';
             $ossz    = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$t} l INNER JOIN {$m} mp ON mp.id = l.mappa_id WHERE {$szuro}");
             $sorok   = $wpdb->get_results($wpdb->prepare(
@@ -2811,17 +2831,42 @@ final class SDH_Muhely_Levelezes
             <input type="hidden" name="piszkozat" value="0" data-sdh-level-piszkozat-jel>
 
             <div class="sdh-ugyfelurlap sdh-leveliro__mezok">
+                <?php
+                // Feladó: nem natív legördülő, hanem „pill" – a választás felugró ablakban történik (app.js: pillNyit).
+                // Válasznál és piszkozatnál a levél a saját fiókjából megy, ott a feladó nem cserélhető.
+                $feladok = [];
+
+                foreach ($nyitott as $k => $f) {
+                    if ($mod !== 'uj' && $k !== $fk) {
+                        continue;
+                    }
+
+                    $feladok[] = [
+                        'ertek'   => (string) $k,
+                        'cimke'   => self::fiok_nev($f),
+                        'alcim'   => (string) $f['email'],
+                        'alairas' => (string) $alairasok[$k],
+                    ];
+                }
+
+                $valaszthato = $mod === 'uj' && count($feladok) > 1;
+                ?>
                 <div class="sdh-ig">
-                    <label for="level_fiok">Feladó</label>
-                    <select name="fiok" id="level_fiok" <?php echo $mod === 'uj' ? '' : 'data-sdh-rogzitett'; ?>>
-                        <?php foreach ($nyitott as $k => $f) : ?>
-                            <?php // Válasznál és piszkozatnál a levél a saját fiókjából megy. ?>
-                            <?php if ($mod !== 'uj' && $k !== $fk) { continue; } ?>
-                            <option value="<?php echo esc_attr((string) $k); ?>" <?php selected($fk, $k); ?> data-alairas="<?php echo esc_attr($alairasok[$k]); ?>">
-                                <?php echo esc_html(self::fiok_nev($f) . ' <' . $f['email'] . '>'); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <span class="sdh-ig__cimke" id="level_fiok_cimke">Feladó</span>
+                    <span class="sdh-leveliro__felado">
+                        <input type="hidden" name="fiok" value="<?php echo esc_attr($fk); ?>" data-sdh-level-felado
+                               data-fiokok="<?php echo esc_attr((string) wp_json_encode($feladok)); ?>">
+                        <button type="button" class="sdh-pill is-aktiv" data-sdh-level-felado-gomb aria-labelledby="level_fiok_cimke level_fiok_ertek"
+                                <?php echo $valaszthato ? 'title="Másik fiók választása"' : 'disabled'; ?>>
+                            <span id="level_fiok_ertek" class="sdh-leveliro__feladoertek">
+                                <span class="sdh-pill__cimke" data-sdh-level-felado-nev><?php echo esc_html(self::fiok_nev($nyitott[$fk])); ?></span>
+                                <span class="sdh-pill__alcim" data-sdh-level-felado-cim><?php echo esc_html((string) $nyitott[$fk]['email']); ?></span>
+                            </span>
+                            <?php if ($valaszthato) : ?>
+                                <span class="sdh-pill__nyil" aria-hidden="true"></span>
+                            <?php endif; ?>
+                        </button>
+                    </span>
                 </div>
 
                 <div class="sdh-ig">
@@ -2846,9 +2891,13 @@ final class SDH_Muhely_Levelezes
                 <textarea name="szoveg" class="sdh-leveliro__szoveg" aria-label="A levél szövege" rows="12"><?php echo esc_textarea($adat['szoveg']); ?></textarea>
 
                 <div class="sdh-ig">
-                    <label for="level_csatolmany">Csatolmány</label>
+                    <span class="sdh-ig__cimke">Csatolmány</span>
                     <span class="sdh-leveliro__csat">
-                        <input type="file" name="csatolmany[]" id="level_csatolmany" multiple>
+                        <label class="sdh-pill sdh-leveliro__fajl" title="Egy vagy több fájl kiválasztása a gépedről">
+                            <input type="file" name="csatolmany[]" id="level_csatolmany" multiple data-sdh-level-fajl>
+                            <span class="sdh-plusz" aria-hidden="true"></span>Fájl csatolása
+                        </label>
+                        <span class="sdh-leveliro__fajlok" data-sdh-level-fajlok aria-live="polite"></span>
                         <?php foreach ($adat['csatolmanyok'] as $n => $c) : ?>
                             <?php if (!empty($c['beagyazott'])) { continue; } ?>
                             <label class="sdh-jelolo" title="Az eredeti levél csatolmánya">

@@ -64,13 +64,115 @@
     font-weight: 500;
 }
 
+/* ---- Fiókok lapfülei: minden e-mail-cím külön lapon, a doboz tetejére ültetve ---- */
+
+.sdh-level__fulek {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 3px;
+    /* A lapfülsor ráül a doboz felső szegélyére (a .sdh-level hézagát és a szegélyt visszaveszi). */
+    margin-bottom: calc(-.6rem - 1px);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.sdh-level__fulek::-webkit-scrollbar {
+    display: none;
+}
+
+.sdh-level__ful {
+    flex: 0 1 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+    height: 38px;
+    margin: 0;
+    padding: 0 .95rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 9px 9px 0 0;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sdh-level__ful:hover {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-level__ful:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: -2px;
+}
+
+.sdh-level__ful.is-aktiv {
+    border-bottom-color: var(--sdh-felulet-2);
+    box-shadow: inset 0 2px 0 var(--sdh-accent);
+    color: var(--sdh-szoveg);
+    cursor: default;
+}
+
+.sdh-level__fulnev {
+    overflow: hidden;
+    line-height: 1.4;
+    font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+.sdh-level__fulcim {
+    overflow: hidden;
+    line-height: 1.4;
+    color: var(--sdh-halvany);
+    font-size: 12px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+}
+
+.sdh-level__fuldb,
+.sdh-level__fuljel {
+    flex: 0 0 auto;
+    min-width: 18px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sdh-szoveg) 12%, transparent);
+    color: var(--sdh-szoveg);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+}
+
+.sdh-level__fuljel {
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+}
+
+.sdh-level__lakat {
+    flex: 0 0 auto;
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .7;
+}
+
 .sdh-level__torzs {
     display: grid;
     grid-template-columns: 232px minmax(300px, 30%) minmax(0, 1fr);
     gap: 0;
     min-height: 360px;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: var(--sdh-r);
+    border-radius: 0 var(--sdh-r) var(--sdh-r) var(--sdh-r);
     background: var(--sdh-felulet);
     overflow: hidden;
 }
@@ -97,10 +199,7 @@
 .sdh-level__fiok {
     display: flex;
     flex-direction: column;
-    gap: .1rem;
-    margin-top: .7rem;
-    padding-top: .7rem;
-    border-top: 1px solid var(--sdh-keret);
+    gap: .15rem;
 }
 
 .sdh-level__fiokfej {
@@ -108,8 +207,8 @@
     gap: .4rem;
     align-items: baseline;
     justify-content: space-between;
-    padding: 0 .5rem;
-    font-size: 13.5px;
+    min-width: 0;
+    padding: .1rem .5rem .35rem .7rem;
 }
 
 .sdh-level__fiokfej strong {
@@ -119,7 +218,7 @@
 }
 
 .sdh-level__email {
-    padding: 0 .5rem .3rem;
+    min-width: 0;
     overflow: hidden;
     color: var(--sdh-halvany);
     font-size: 11.5px;
@@ -239,6 +338,8 @@
 }
 
 .sdh-level__kis--uj {
+    display: inline-flex;
+    align-items: center;
     align-self: flex-start;
     margin: .3rem .7rem 0;
 }
@@ -748,6 +849,50 @@
     font-size: 13px;
 }
 
+/* A feladó „pill"-je: a név és a cím egy lekerekített gombon; a választás felugró ablakban történik. */
+.sdh-leveliro__felado {
+    display: flex;
+    min-width: 0;
+}
+
+.sdh-leveliro__feladoertek {
+    display: inline-flex;
+    gap: .55rem;
+    align-items: baseline;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Csatolás: a böngésző saját fájlmezője rejtve marad, helyette a közös gombforma áll. */
+.sdh-leveliro__fajl {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.sdh-leveliro__fajl input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.sdh-leveliro__fajl:focus-within {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+.sdh-leveliro__fajlok {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--sdh-szoveg-2);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* ---- Rendező ügynök ablaka ---- */
 
 .sdh-modal.sdh-modal[data-sdh-modul="levelrendezo"] {
@@ -952,7 +1097,17 @@
     background: color-mix(in srgb, var(--sdh-allapot-piros, #e0302a) 7%, var(--sdh-felulet, #fff));
 }
 
+.sdh-level-toast__sor {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+}
+
 .sdh-level-toast__cim {
+    flex: 0 1 auto;
+    min-width: 0;
     max-width: 100%;
     overflow: hidden;
     font-size: 13.5px;
@@ -970,6 +1125,22 @@
 .sdh-level-toast__megj {
     color: var(--sdh-halvany, #5f6670);
     font-size: 12px;
+}
+
+/* Melyik fiókba (e-mail-címre) érkezett a levél. */
+.sdh-level-toast__fiok {
+    flex: 0 1 auto;
+    min-width: 3rem;
+    padding: 0 7px;
+    overflow: hidden;
+    border: 1px solid var(--sdh-keret-eros, #cfd4dc);
+    border-radius: 999px;
+    color: var(--sdh-szoveg-2, #3d444d);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Az összesítő sor (ha több jelzés jönne, mint amennyi kifér). */
@@ -1008,10 +1179,7 @@
     line-height: 1;
 }
 
-/* Az oldalmenü jelvénye lüktet, ha azonnali teendő van. */
-.sdh-sav__jelveny.is-azonnal {
-    animation: sdh-jelveny-pulzus 1.6s ease-out infinite;
-}
+/* Azonnali teendőnél az oldalmenü jelvénye nem villog: a jelzés a „Teendők" sor és a felugró értesítés dolga. */
 
 @media (max-width: 1100px) {
     .sdh-level__torzs {
@@ -1036,10 +1204,9 @@
     .sdh-level__keret {
         min-height: 60vh;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .sdh-sav__jelveny.is-azonnal {
-        animation: none;
+    /* Keskeny képernyőn a lapfülön csak a fiók neve áll (a cím a mappák fölött olvasható). */
+    .sdh-level__fulcim {
+        display: none;
     }
 }

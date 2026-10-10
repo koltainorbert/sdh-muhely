@@ -57,6 +57,24 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.34.0
+- **Levelezés: minden e-mail-cím külön lapfülön.** A fiókok eddig egymás alatt álltak egy görgethető hasábban;
+  most a doboz tetején lapfülek vannak (név, cím, olvasatlan és azonnali teendők száma, zárolt fióknál lakat).
+  Egyszerre egy fiók mappái és levelei látszanak. A legutóbb nézett lap megmarad (böngészőnként).
+- **A két cím levelei semmiben nem keverednek.** A „Teendők" eddig minden nyitott fiók jelzéseit egy listában
+  mutatta – most fiókonként külön van (a szerver is fiókra szűr). A felugró értesítés kiírja, melyik címre jött
+  a levél; rákattintva a levél saját fiókjának lapja nyílik meg. Lapfülváltáskor a megnyitott levél bezárul.
+- **Oldalmenü-jelvény:** kisebb (16 px), nincs körülötte kilógó gyűrű, és nem villog végtelenül – új levélnél
+  kétszer halványul el a saját helyén, azonnali teendőnél sem lüktet.
+- **Levélíró:** a feladó nem natív legördülő, hanem „pill"; a választás felugró ablakban történik
+  (`SDH_MUHELY_APP.pillek` – más modul is használhatja). A csatolás gombja is a közös formát kapta, a kiválasztott
+  fájlok neve mellette látszik.
+- **Ablakgombok macOS módra:** minden felugró ablak bal felső sarkában piros (bezárás) és zöld (teljes képernyő)
+  kör (`app.js: ablakGombok`); a jel rajz, ezért pontosan középen ül, és akkor látszik, ha az egér a gombokon jár.
+  Színek: `--sdh-ablak-piros`, `--sdh-ablak-zold`.
+- **Pluszjel:** a hozzáadó gombokon rajzolt ikon (`.sdh-plusz`) áll a betű helyett – a betűkészlet pluszjele a sor
+  közepe alatt ült. A fejléc „+ …" kezdetű gombjai maguktól ikont kapnak.
+
 ### 0.33.0
 - **Gyors levélbetöltés.** A levelező eddig minden kattintásnál megvárta a levelezőszervert (kapcsolódás,
   belépés, szinkron); most előbb a saját gyorsítótárából rajzol, és a háttérben frissít.

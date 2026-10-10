@@ -585,7 +585,7 @@ final class SDH_Muhely_Eszkoz
                                         <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
                                         <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                                 data-sdh-uj-ugyfel
-                                                title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                                                title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
                                     </div>
                                 </div>
                             </div>

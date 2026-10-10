@@ -569,32 +569,34 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
 }
 
 .sdh-sav__jelveny {
+    flex: 0 0 auto;
     margin-left: auto;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
     box-sizing: border-box;
     border-radius: 999px;
     background: var(--sdh-allapot-piros);
     color: #fff;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    line-height: 18px;
+    line-height: 16px;
     text-align: center;
-    box-shadow: 0 0 0 2px var(--sdh-felulet);
 }
 
 .sdh-sav__jelveny[hidden] {
     display: none;
 }
 
+/* Diszkrét jelzés: a jelvény a saját helyén halványul el kétszer, semmi nem lóg ki belőle,
+   és utána nyugton marad (nincs végtelen villogás). */
 .sdh-sav__jelveny.is-friss {
-    animation: sdh-jelveny-pulzus 1.2s ease-out 2;
+    animation: sdh-jelveny-halk 1.8s ease-in-out 2;
 }
 
-@keyframes sdh-jelveny-pulzus {
-    0% { box-shadow: 0 0 0 2px var(--sdh-felulet), 0 0 0 2px color-mix(in srgb, var(--sdh-allapot-piros) 60%, transparent); }
-    100% { box-shadow: 0 0 0 2px var(--sdh-felulet), 0 0 0 10px transparent; }
+@keyframes sdh-jelveny-halk {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .45; }
 }
 
 /* Összecsukott menüben (és keskeny képernyőn) az ikon sarkán ül. */

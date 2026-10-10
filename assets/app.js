@@ -32,6 +32,21 @@
     /* A popup váza – szintenként egyszer jön létre, utána újrahasznosul */
     /* ---------------------------------------------------------------- */
 
+    /**
+     * Az ablak gombjai a bal felső sarokban, macOS módra: piros = bezárás, zöld = teljes képernyő.
+     * A jel rajz (nem betű), ezért minden gépen pontosan a kör közepén ül. Minden felugró ablak ezt használja.
+     */
+    function ablakGombok(teljes) {
+        return '  <button type="button" class="sdh-modal__bezar" aria-label="Bezárás" title="Bezárás">' +
+            '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.6 3.6l4.8 4.8M8.4 3.6l-4.8 4.8"/></svg></button>' +
+            (teljes
+                ? '  <button type="button" class="sdh-modal__teljes" aria-label="Teljes képernyő" title="Teljes képernyő">' +
+                    '<svg class="sdh-modal__teljes-be" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 6.6V3.2h3.4zM8.8 5.4v3.4H5.4z"/></svg>' +
+                    '<svg class="sdh-modal__teljes-ki" viewBox="0 0 12 12" aria-hidden="true"><path d="M5.6 2.4v3.2H2.4zM6.4 9.6V6.4h3.2z"/></svg>' +
+                    '</button>'
+                : '');
+    }
+
     function vaz(n) {
         if (szintek[n]) {
             return szintek[n];
@@ -41,11 +56,7 @@
         dialog.className = 'sdh-modal' + (n > 0 ? ' sdh-modal--ralepo' : '');
         dialog.innerHTML =
             '<div class="sdh-modal__doboz">' +
-            '  <button type="button" class="sdh-modal__teljes" aria-label="Teljes képernyő" title="Teljes képernyő">' +
-            '    <svg class="sdh-modal__teljes-be" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"/></svg>' +
-            '    <svg class="sdh-modal__teljes-ki" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="5" width="8.5" height="8.5" rx="1.4"/><path d="M5.2 5V3.9c0-.8.6-1.4 1.4-1.4h5.5c.8 0 1.4.6 1.4 1.4v5.5c0 .8-.6 1.4-1.4 1.4H11"/></svg>' +
-            '  </button>' +
-            '  <button type="button" class="sdh-modal__bezar" aria-label="Bezárás">&times;</button>' +
+            ablakGombok(true) +
             '  <div class="sdh-modal__torzs"></div>' +
             // Méretező fogók a négy szélen és a négy sarkon (data-x / data-y: melyik irányba húz).
             '  <span class="sdh-modal__fogo sdh-modal__fogo--b" data-x="-1" data-y="0"></span>' +
@@ -2017,6 +2028,85 @@
         rajzol();
     }
 
+    /**
+     * Rövid, kötött lista választása felugró ablakban, „pill" gombokkal (a natív legördülő helyett).
+     * o: { cim, elemek: [{ ertek, cimke, alcim }], aktualis, valaszt(ertek, elem) }
+     * A horgony az az elem, amelyre a választás után a fókusz visszakerül.
+     */
+    function pillNyit(horgony, o) {
+        var dialog = document.createElement('dialog');
+
+        dialog.className = 'sdh-modal sdh-modal--pop sdh-modal--pop-pill';
+        dialog.innerHTML = '<div class="sdh-modal__doboz">' + ablakGombok(false) + '  <div class="sdh-modal__torzs"></div></div>';
+        document.body.appendChild(dialog);
+
+        var torzs = dialog.querySelector('.sdh-modal__torzs');
+        var lista = popElem('div', 'sdh-pillek sdh-pillek--oszlop');
+
+        torzs.appendChild(popElem('h2', 'sdh-modal__cim', o.cim || 'Választás'));
+        lista.setAttribute('role', 'listbox');
+
+        (o.elemek || []).forEach(function (elem) {
+            var gomb = popElem('button', 'sdh-pill' + (String(elem.ertek) === String(o.aktualis) ? ' is-aktiv' : ''));
+
+            gomb.type = 'button';
+            gomb.setAttribute('role', 'option');
+            gomb.setAttribute('aria-selected', String(elem.ertek) === String(o.aktualis) ? 'true' : 'false');
+            gomb.setAttribute('data-sdh-pill', String(elem.ertek));
+            gomb.appendChild(popElem('span', 'sdh-pill__cimke', elem.cimke));
+
+            if (elem.alcim) {
+                gomb.appendChild(popElem('span', 'sdh-pill__alcim', elem.alcim));
+            }
+
+            gomb.addEventListener('click', function () {
+                dialog.close();
+                o.valaszt(elem.ertek, elem);
+            });
+            lista.appendChild(gomb);
+        });
+
+        torzs.appendChild(lista);
+
+        dialog.querySelector('.sdh-modal__bezar').addEventListener('click', function () {
+            dialog.close();
+        });
+
+        dialog.addEventListener('click', function (esemeny) {
+            if (esemeny.target === dialog) {
+                dialog.close();
+            }
+        });
+
+        dialog.addEventListener('keydown', function (esemeny) {
+            if (esemeny.key !== 'ArrowDown' && esemeny.key !== 'ArrowUp') {
+                return;
+            }
+
+            var gombok = Array.prototype.slice.call(lista.querySelectorAll('.sdh-pill'));
+            var i = gombok.indexOf(document.activeElement);
+
+            esemeny.preventDefault();
+            gombok[(i + (esemeny.key === 'ArrowDown' ? 1 : gombok.length - 1)) % gombok.length].focus();
+        });
+
+        dialog.addEventListener('close', function () {
+            dialog.remove();
+
+            if (horgony && horgony.focus) {
+                horgony.focus();
+            }
+        });
+
+        dialog.showModal();
+
+        var aktiv = lista.querySelector('.sdh-pill.is-aktiv') || lista.querySelector('.sdh-pill');
+
+        if (aktiv) {
+            aktiv.focus();
+        }
+    }
+
     function popNyit(mezo) {
         var tipus = mezo.dataset.sdhPop;
         var adat;
@@ -2048,7 +2138,7 @@
         dialog.className = 'sdh-modal sdh-modal--pop sdh-modal--pop-' + tipus;
         dialog.innerHTML =
             '<div class="sdh-modal__doboz">' +
-            '  <button type="button" class="sdh-modal__bezar" aria-label="Bezárás">&times;</button>' +
+            ablakGombok(false) +
             '  <div class="sdh-modal__torzs"></div>' +
             '</div>';
 
@@ -4302,7 +4392,7 @@
             '  <div class="sdh-szolgval__fej">' +
             '    <input type="search" autocomplete="off" data-sdh-szolgval-kereso' +
             '           aria-label="Keresés a szolgáltatások között" placeholder="Keresés a megnevezésben…">' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szolgval-uj>+ Új szolgáltatás</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-szolgval-uj><span class="sdh-plusz" aria-hidden="true"></span>Új szolgáltatás</button>' +
             '  </div>' +
             '  <table class="sdh-tabla sdh-szolgval__tabla">' +
             '    <thead><tr><th>Megnevezés</th><th>M.e.</th><th class="is-jobb">Bruttó ár</th>' +
@@ -4962,7 +5052,7 @@
             '  <div class="sdh-szolgval__fej">' +
             '    <input type="search" autocomplete="off" data-sdh-termval-kereso' +
             '           aria-label="Keresés a termékek között" placeholder="Megnevezés, cikkszám, termékkód, vonalkód…">' +
-            '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-termval-uj>+ Új termék</button>' +
+            '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-termval-uj><span class="sdh-plusz" aria-hidden="true"></span>Új termék</button>' +
             '  </div>' +
             '  <table class="sdh-tabla sdh-szolgval__tabla sdh-termval__tabla">' +
             '    <thead><tr><th>Megnevezés</th><th>Cikkszám</th><th>Termékkód</th>' +
@@ -7123,6 +7213,7 @@
         nyit: nyit,
         bezar: bezar,
         valaszto: szValNyit,
+        pillek: pillNyit,
         hiba: mutatUrlapHiba
     };
 

@@ -221,7 +221,9 @@
         doboz.innerHTML =
             '<button type="button" class="sdh-level-toast__bezar" aria-label="Bezárás">&times;</button>' +
             (o.cimke ? '<span class="sdh-level-jel sdh-level-jel--' + e(o.szint || 'ma') + '">' + e(o.cimke) + '</span>' : '') +
-            '<strong class="sdh-level-toast__cim">' + e(o.cim) + '</strong>' +
+            // A fiók neve a feladó sorában áll (nem külön sorban), így a jelzés nem lesz magasabb.
+            '<span class="sdh-level-toast__sor"><strong class="sdh-level-toast__cim">' + e(o.cim) + '</strong>' +
+            (o.fiok ? '<span class="sdh-level-toast__fiok" title="Ebbe a fiókba érkezett">' + e(o.fiok) + '</span>' : '') + '</span>' +
             (o.szoveg ? '<span class="sdh-level-toast__szoveg">' + e(o.szoveg) + '</span>' : '') +
             (o.megj ? '<span class="sdh-level-toast__megj">' + e(o.megj) + '</span>' : '');
 
@@ -268,11 +270,15 @@
         window.location.href = (B.levelUrl || '') + '#level=' + id;
     }
 
+    var fiokNevek = {};     // fiókkulcs → név: az értesítés megmondja, melyik címre jött a levél
+
     function ertesit(level) {
         var azonnal = level.fontossag === 'azonnal';
+        var hova = Object.keys(fiokNevek).length > 1 ? (fiokNevek[level.fiok] || '') : '';
 
         toast({
             id: level.id,
+            fiok: hova,
             szint: azonnal ? 'azonnal' : (level.fontossag === 'ma' ? 'ma' : ''),
             cimke: azonnal ? 'Azonnal reagálj' : (level.fontossag === 'ma' ? 'Ma' : ''),
             cim: level.felado,
@@ -285,7 +291,7 @@
         if (window.Notification && window.Notification.permission === 'granted') {
             try {
                 var n = new window.Notification((azonnal ? 'AZONNAL: ' : 'Új levél: ') + level.felado, {
-                    body: level.targy + (level.ok ? '\n' + level.ok : ''),
+                    body: (hova ? hova + ' – ' : '') + level.targy + (level.ok ? '\n' + level.ok : ''),
                     tag: 'sdh-level-' + level.id,
                     requireInteraction: azonnal
                 });
@@ -312,6 +318,10 @@
         return kuld('allapot', mezok).then(function (adat) {
             jelveny(adat.olvasatlan, adat.azonnal);
             tarol(UTOLSO_KULCS, String(adat.utolso));
+
+            (adat.fiokok || []).forEach(function (f) {
+                fiokNevek[f.kulcs] = f.nev;
+            });
 
             (adat.ujak || []).forEach(ertesit);
 
@@ -420,33 +430,68 @@
         }
     }, true);
 
-    document.addEventListener('change', function (esemeny) {
-        var valaszto = esemeny.target;
+    /* ---- Levélíró: a feladó „pill"-je (választás felugró ablakban) ---- */
 
-        if (!valaszto.matches || !valaszto.matches('[data-sdh-leveliro] select[name="fiok"]')) {
-            return;
+    function feladok(mezo) {
+        try {
+            return JSON.parse(mezo.getAttribute('data-fiokok') || '[]');
+        } catch (hiba) {
+            return [];
         }
+    }
+
+    function feladoValt(mezo, elem) {
+        var urlap = mezo.form;
+        var szoveg = urlap.querySelector('[name="szoveg"]');
+        var regi = null;
+        var uj = elem.alairas || '';
 
         // Új levélnél a feladó váltásával az aláírás is cserélődik (ha a szöveg még csak az aláírás).
-        var szoveg = valaszto.form.querySelector('[name="szoveg"]');
-        var regi = valaszto.sdhAlairas === undefined ? null : valaszto.sdhAlairas;
-        var uj = valaszto.options[valaszto.selectedIndex].getAttribute('data-alairas') || '';
+        feladok(mezo).forEach(function (f) {
+            if (f.alairas && szoveg.value.trim() === String(f.alairas).trim()) {
+                regi = f.alairas;
+            }
+        });
 
-        if (regi === null) {
-            Array.prototype.forEach.call(valaszto.options, function (o) {
-                var a = o.getAttribute('data-alairas') || '';
-
-                if (a !== '' && szoveg.value.trim() === a.trim()) {
-                    regi = a;
-                }
-            });
-        }
-
-        if (szoveg.value.trim() === '' || (regi !== null && szoveg.value.trim() === regi.trim())) {
+        if (szoveg.value.trim() === '' || regi !== null) {
             szoveg.value = uj ? '\n\n' + uj : '';
         }
 
-        valaszto.sdhAlairas = uj;
+        mezo.value = elem.ertek;
+        urlap.querySelector('[data-sdh-level-felado-nev]').textContent = elem.cimke;
+        urlap.querySelector('[data-sdh-level-felado-cim]').textContent = elem.alcim;
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-level-felado-gomb]') : null;
+
+        if (!gomb || gomb.disabled || !app() || !app().pillek) {
+            return;
+        }
+
+        var mezo = gomb.parentNode.querySelector('[data-sdh-level-felado]');
+
+        app().pillek(gomb, {
+            cim: 'Melyik címről menjen a levél?',
+            elemek: feladok(mezo),
+            aktualis: mezo.value,
+            valaszt: function (ertek, elem) { feladoValt(mezo, elem); }
+        });
+    });
+
+    // A kiválasztott csatolmányok neve a gomb mellett (a böngésző saját fájlmezője rejtve van).
+    document.addEventListener('change', function (esemeny) {
+        var mezo = esemeny.target;
+
+        if (!mezo.matches || !mezo.matches('[data-sdh-level-fajl]')) {
+            return;
+        }
+
+        var nevek = Array.prototype.map.call(mezo.files || [], function (f) { return f.name; });
+        var hely = mezo.form.querySelector('[data-sdh-level-fajlok]');
+
+        hely.textContent = nevek.length ? (nevek.length > 1 ? nevek.length + ' fájl: ' : '') + nevek.join(', ') : '';
+        hely.title = nevek.join('\n');
     });
 
     /* ---------------------------------------------------------------- */
@@ -659,7 +704,6 @@
         level: null,        // a megnyitott levél
         tolt: false,
         hiba: '',
-        azonnal: 0,
         ujMappa: '',        // melyik fiókban van nyitva az „Új mappa" mező
         atnevez: false,
         megerosit: ''       // a kétlépéses törlés éppen megerősítésre váró művelete
@@ -683,12 +727,14 @@
         '  <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l="ertesites" hidden title="A böngésző akkor is szól, ha másik ablakban dolgozol">Értesítések bekapcsolása</button>' +
         '</div>' +
         '<div class="sdh-level__uzenet" data-l-uzenet hidden></div>' +
+        '<div class="sdh-level__fulek" data-l-fulek role="tablist" aria-label="E-mail-fiókok"></div>' +
         '<div class="sdh-level__torzs">' +
-        '  <nav class="sdh-level__mappak" data-l-mappak aria-label="Fiókok és mappák"></nav>' +
+        '  <nav class="sdh-level__mappak" data-l-mappak aria-label="A fiók mappái"></nav>' +
         '  <section class="sdh-level__lista" data-l-lista aria-label="Levelek"></section>' +
         '  <section class="sdh-level__olvaso" data-l-olvaso aria-label="A megnyitott levél"></section>' +
         '</div>';
 
+    var elFulek = gyoker.querySelector('[data-l-fulek]');
     var elMappak = gyoker.querySelector('[data-l-mappak]');
     var elLista = gyoker.querySelector('[data-l-lista]');
     var elOlvaso = gyoker.querySelector('[data-l-olvaso]');
@@ -734,69 +780,101 @@
      * `hatterbol`: háttérfrissítés (új levél, lista újratöltése) kérte. Ilyenkor nem
      * rajzolunk újra, ha valaki éppen ír a hasábban (jelszó, új mappa neve) – ne vesszen el, amit gépel.
      */
+    var LAKAT = '<svg class="sdh-level__lakat" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.5" y="5.4" width="7" height="5" rx="1.1"/><path d="M4.1 5.4V4a1.9 1.9 0 0 1 3.8 0v1.4"/></svg>';
+
+    /**
+     * A fiókok lapfülei. Minden e-mail-cím külön lapon van: egyszerre egy fiók mappái és levelei
+     * látszanak, a két postafiók semmiben nem keveredik.
+     */
+    function rajzolFulek() {
+        elFulek.innerHTML = A.fiokok.map(function (f) {
+            var aktiv = f.kulcs === A.fiok;
+
+            return '<button type="button" role="tab" class="sdh-level__ful' + (aktiv ? ' is-aktiv' : '') + (f.zarva ? ' is-zarva' : '') + '"' +
+                ' data-l-ful="' + e(f.kulcs) + '" aria-selected="' + (aktiv ? 'true' : 'false') + '" title="' + e(f.email) + (f.zarva ? ' – jelszóval védett' : '') + '">' +
+                '<span class="sdh-level__fulnev">' + e(f.nev) + '</span>' +
+                '<span class="sdh-level__fulcim">' + e(f.email) + '</span>' +
+                (f.zarva ? LAKAT : '') +
+                (!f.zarva && f.azonnal > 0 ? '<span class="sdh-level__fuljel" title="Azonnali teendő">' + f.azonnal + '</span>' : '') +
+                (!f.zarva && f.olvasatlan > 0 ? '<span class="sdh-level__fuldb" title="Olvasatlan a Beérkezettben">' + f.olvasatlan + '</span>' : '') +
+                '</button>';
+        }).join('');
+    }
+
     function rajzolMappak(hatterbol) {
         var aktiv = document.activeElement;
+
+        rajzolFulek();
 
         if (hatterbol && aktiv && aktiv.tagName === 'INPUT' && elMappak.contains(aktiv)) {
             return;
         }
 
-        var html =
-            '<button type="button" class="sdh-level__mappa sdh-level__mappa--teendo' + (A.mappa === 'fontos' ? ' is-aktiv' : '') + '" data-l-mappa="fontos">' +
+        var f = fiok();
+        var html = '';
+
+        if (!f) {
+            elMappak.innerHTML = '';
+
+            return;
+        }
+
+        html += '<div class="sdh-level__fiok" data-l-fiok="' + e(f.kulcs) + '">' +
+            '<div class="sdh-level__fiokfej"><span class="sdh-level__email" title="' + e(f.email) + '">' + e(f.email) + '</span>' +
+            (f.vedett && !f.zarva ? '<button type="button" class="sdh-level__kis" data-l="zar" data-fiok="' + e(f.kulcs) + '" title="A fiók újra jelszót kér">Zárás</button>' : '') +
+            '</div>';
+
+        if (f.zarva) {
+            html += '<form class="sdh-level__zar" data-l-nyit="' + e(f.kulcs) + '">' +
+                '<p>Ez a postafiók jelszóval védett.</p>' +
+                '<input type="password" autocomplete="off" placeholder="Jelszó" aria-label="' + e(f.nev) + ' jelszava" required>' +
+                '<button type="submit" class="sdh-gomb sdh-gomb--vilagos">Megnyitás</button>' +
+                '<span class="sdh-level__zarhiba" aria-live="polite"></span></form></div>';
+
+            elMappak.innerHTML = html;
+
+            return;
+        }
+
+        // A fiók saját teendői (az ügynök jelzései) – csak ennek a fióknak a leveleiből.
+        html += '<button type="button" class="sdh-level__mappa sdh-level__mappa--teendo' + (A.mappa === 'fontos' ? ' is-aktiv' : '') + '" data-l-mappa="fontos" data-fiok="' + e(f.kulcs) + '">' +
             '<span class="sdh-level__mappanev">Teendők</span>' +
-            '<span class="sdh-level__db' + (A.azonnal > 0 ? ' is-azonnal' : '') + '" title="Azonnali teendő"' + (A.azonnal > 0 ? '' : ' hidden') + '>' + A.azonnal + '</span></button>';
+            '<span class="sdh-level__db' + (f.azonnal > 0 ? ' is-azonnal' : '') + '" title="Azonnali teendő"' + (f.azonnal > 0 ? '' : ' hidden') + '>' + (f.azonnal || 0) + '</span></button>';
 
-        A.fiokok.forEach(function (f) {
-            html += '<div class="sdh-level__fiok" data-l-fiok="' + e(f.kulcs) + '">' +
-                '<div class="sdh-level__fiokfej"><strong title="' + e(f.email) + '">' + e(f.nev) + '</strong>' +
-                (f.vedett && !f.zarva ? '<button type="button" class="sdh-level__kis" data-l="zar" data-fiok="' + e(f.kulcs) + '" title="A fiók újra jelszót kér">Zárás</button>' : '') +
-                '</div><span class="sdh-level__email">' + e(f.email) + '</span>';
+        if (f.hiba) {
+            html += '<p class="sdh-level__fiokhiba" title="' + e(f.hiba) + '">Kapcsolati hiba – a legutóbbi állapot látszik.</p>';
+        }
 
-            if (f.zarva) {
-                html += '<form class="sdh-level__zar" data-l-nyit="' + e(f.kulcs) + '">' +
-                    '<p>Ez a postafiók jelszóval védett.</p>' +
-                    '<input type="password" autocomplete="off" placeholder="Jelszó" aria-label="' + e(f.nev) + ' jelszava" required>' +
-                    '<button type="submit" class="sdh-gomb sdh-gomb--vilagos">Megnyitás</button>' +
-                    '<span class="sdh-level__zarhiba" aria-live="polite"></span></form></div>';
+        var cimkek = false;
 
+        (f.mappak || []).forEach(function (m) {
+            // A „[Gmail]" csak tároló: nem mappa, nem mutatjuk.
+            if (!m.valaszthato && m.szerep === '' && /^\[(Gmail|Google Mail)\]$/.test(m.teljes)) {
                 return;
             }
 
-            if (f.hiba) {
-                html += '<p class="sdh-level__fiokhiba" title="' + e(f.hiba) + '">Kapcsolati hiba – a legutóbbi állapot látszik.</p>';
+            if (m.szerep === '' && !cimkek) {
+                cimkek = true;
+                html += '<p class="sdh-level__cimkefej">Címkék</p>';
             }
 
-            var cimkek = false;
+            var kivalasztva = String(A.mappa) === String(m.id);
 
-            (f.mappak || []).forEach(function (m) {
-                // A „[Gmail]" csak tároló: nem mappa, nem mutatjuk.
-                if (!m.valaszthato && m.szerep === '' && /^\[(Gmail|Google Mail)\]$/.test(m.teljes)) {
-                    return;
-                }
-
-                if (m.szerep === '' && !cimkek) {
-                    cimkek = true;
-                    html += '<p class="sdh-level__cimkefej">Címkék</p>';
-                }
-
-                var aktiv = A.fiok === f.kulcs && String(A.mappa) === String(m.id);
-
-                html += m.valaszthato
-                    ? '<button type="button" class="sdh-level__mappa' + (aktiv ? ' is-aktiv' : '') + (m.olvasatlan > 0 ? ' is-olvasatlan' : '') + '"' +
-                        ' data-l-mappa="' + m.id + '" data-fiok="' + e(f.kulcs) + '" data-szerep="' + e(m.szerep) + '" title="' + e(m.teljes) + ' – ' + m.osszes + ' levél"' +
-                        ' style="padding-left:' + (0.7 + m.szint * 0.9) + 'rem">' +
-                        '<span class="sdh-level__mappanev">' + e(m.nev) + '</span>' +
-                        (m.olvasatlan > 0 ? '<span class="sdh-level__db">' + m.olvasatlan + '</span>' : '') + '</button>'
-                    : '<span class="sdh-level__mappa sdh-level__mappa--tarolo" style="padding-left:' + (0.7 + m.szint * 0.9) + 'rem">' + e(m.nev) + '</span>';
-            });
-
-            html += A.ujMappa === f.kulcs
-                ? '<form class="sdh-level__ujmappa" data-l-ujmappa="' + e(f.kulcs) + '"><input type="text" maxlength="80" placeholder="Az új mappa neve" aria-label="Az új mappa neve" required>' +
-                    '<button type="submit" class="sdh-gomb sdh-gomb--vilagos">OK</button></form>'
-                : '<button type="button" class="sdh-level__kis sdh-level__kis--uj" data-l="ujmappa" data-fiok="' + e(f.kulcs) + '">+ Új mappa</button>';
-
-            html += '</div>';
+            html += m.valaszthato
+                ? '<button type="button" class="sdh-level__mappa' + (kivalasztva ? ' is-aktiv' : '') + (m.olvasatlan > 0 ? ' is-olvasatlan' : '') + '"' +
+                    ' data-l-mappa="' + m.id + '" data-fiok="' + e(f.kulcs) + '" data-szerep="' + e(m.szerep) + '" title="' + e(m.teljes) + ' – ' + m.osszes + ' levél"' +
+                    ' style="padding-left:' + (0.7 + m.szint * 0.9) + 'rem">' +
+                    '<span class="sdh-level__mappanev">' + e(m.nev) + '</span>' +
+                    (m.olvasatlan > 0 ? '<span class="sdh-level__db">' + m.olvasatlan + '</span>' : '') + '</button>'
+                : '<span class="sdh-level__mappa sdh-level__mappa--tarolo" style="padding-left:' + (0.7 + m.szint * 0.9) + 'rem">' + e(m.nev) + '</span>';
         });
+
+        html += A.ujMappa === f.kulcs
+            ? '<form class="sdh-level__ujmappa" data-l-ujmappa="' + e(f.kulcs) + '"><input type="text" maxlength="80" placeholder="Az új mappa neve" aria-label="Az új mappa neve" required>' +
+                '<button type="submit" class="sdh-gomb sdh-gomb--vilagos">OK</button></form>'
+            : '<button type="button" class="sdh-level__kis sdh-level__kis--uj" data-l="ujmappa" data-fiok="' + e(f.kulcs) + '"><span class="sdh-plusz sdh-plusz--kicsi" aria-hidden="true"></span>Új mappa</button>';
+
+        html += '</div>';
 
         elMappak.innerHTML = html;
 
@@ -825,6 +903,12 @@
     }
 
     function rajzolLista() {
+        if ((fiok() || {}).zarva) {
+            elLista.innerHTML = '<p class="sdh-level__ures">Ez a postafiók jelszóval védett. A bal oldalon add meg a jelszavát, és megnyílik.</p>';
+
+            return;
+        }
+
         var regiSorok = elLista.querySelector('[data-l-sorok]');
         var gorgetes = regiSorok ? regiSorok.scrollTop : 0;
         var m = mappa();
@@ -877,7 +961,6 @@
         A.sorok.forEach(function (s) {
             var nyitva = A.level && A.level.id === s.id;
             var ki = kuldott ? 'Címzett: ' + (s.cimzett || '—') : s.felado;
-            var f = A.mappa === 'fontos' ? fiok(s.fiok) : null;
 
             html += '<div class="sdh-level__sor' + (s.olvasott ? '' : ' is-olvasatlan') + (nyitva ? ' is-nyitva' : '') + (A.kijelolt[s.id] ? ' is-kijelolt' : '') +
                 (s.fontossag === 'azonnal' && !s.elintezve ? ' is-azonnal' : '') + '" data-l-sor="' + s.id + '" tabindex="0" role="button" aria-label="' + e(ki + ': ' + s.targy) + '">' +
@@ -888,7 +971,7 @@
                 '<span class="sdh-level__datum" title="' + e(s.idopont) + '">' + e(s.datum) + '</span>' +
                 '<span class="sdh-level__targy">' + jelHtml(s) + (s.valaszolt ? '<span class="sdh-level__valasz" title="Megválaszolva">↩</span>' : '') + e(s.targy) + '</span>' +
                 '<span class="sdh-level__ikonok">' + (s.csatolmany ? '<span title="Csatolmány" aria-label="Csatolmány">📎</span>' : '') + '</span>' +
-                '<span class="sdh-level__kivonat">' + (f ? '<em>' + e(f.nev) + '</em> · ' : '') + e(s.ok && A.mappa === 'fontos' ? s.ok + ' — ' : '') + e(s.kivonat) + '</span>' +
+                '<span class="sdh-level__kivonat">' + e(s.ok && A.mappa === 'fontos' ? s.ok + ' — ' : '') + e(s.kivonat) + '</span>' +
                 '</div>';
         });
 
@@ -959,7 +1042,8 @@
         var keres = (A.keres = (A.keres || 0) + 1);
         var kulcs = A.fiok + '|' + A.mappa + '|' + A.oldal;
         var gyorsan = A.mappa !== 'fontos' && A.mappa !== '' && !A.q;
-        var mezok = { fiok: A.mappa === 'fontos' ? '' : A.fiok, mappa: A.mappa, oldal: A.oldal, q: A.q };
+        var kertFiok = A.fiok;
+        var mezok = { fiok: A.fiok, mappa: A.mappa, oldal: A.oldal, q: A.q };
 
         A.tolt = true;
         A.toltSzoveg = csendben ? 'Frissítés…' : 'Betöltés…';
@@ -995,7 +1079,7 @@
                 }
 
                 A.tolt = false;
-                listaTar[A.fiok + '|' + (adat.mappa || A.mappa) + '|' + (adat.oldal || A.oldal)] = adat;
+                listaTar[kertFiok + '|' + (adat.mappa || A.mappa) + '|' + (adat.oldal || A.oldal)] = adat;
                 listaAlkalmaz(adat);
             });
         }
@@ -1061,6 +1145,47 @@
         rajzolMappak();
 
         return betolt();
+    }
+
+    /** Lapfül: másik fiók. A megnyitott levél bezárul, a fiók Beérkezett mappája (vagy a jelszókérő) jön. */
+    function fulre(kulcs) {
+        var f = fiok(kulcs);
+
+        if (!f) {
+            return;
+        }
+
+        tarol('sdh-level-fiok', kulcs);
+        A.level = null;
+        A.ujMappa = '';
+        rajzolOlvaso();
+
+        if (f.zarva) {
+            // A folyamatban lévő listakérés válasza már nem ide tartozik.
+            A.keres = (A.keres || 0) + 1;
+            A.fiok = kulcs;
+            A.mappa = '';
+            A.sorok = [];
+            A.ossz = 0;
+            A.oldal = 1;
+            A.oldalak = 1;
+            A.q = '';
+            A.kijelolt = {};
+            A.tolt = false;
+            A.hiba = '';
+            rajzolMappak();
+            rajzolLista();
+
+            var jelszo = elMappak.querySelector('[data-l-nyit] input');
+
+            if (jelszo) {
+                jelszo.focus();
+            }
+
+            return;
+        }
+
+        valt(kulcs, (szerepMappa('inbox', kulcs) || {}).id || '');
     }
 
     /* ---------------------------------------------------------------- */
@@ -1183,10 +1308,15 @@
                 }
             });
 
-            // Értesítésből érkezve: a levél mappája is megnyílik mellé.
-            if (!A.mappa) {
+            // Értesítésből érkezve (akár a másik fiók leveléhez): a levél saját fiókjának lapja és mappája nyílik meg mellé.
+            if (!A.mappa || adat.fiok !== A.fiok) {
                 A.fiok = adat.fiok;
                 A.mappa = String(adat.mappa);
+                A.oldal = 1;
+                A.q = '';
+                A.kijelolt = {};
+                A.sorok = [];
+                tarol('sdh-level-fiok', A.fiok);
                 betolt();
             }
 
@@ -1216,7 +1346,17 @@
     }
 
     gyoker.sdhMegnyit = function (id) {
-        olvas(parseInt(id, 10));
+        id = parseInt(id, 10);
+
+        // Ha a levél nincs a most látható listában, a saját fiókja és mappája töltődik mellé (lásd olvas()).
+        if (!A.sorok.some(function (s) { return s.id === id; })) {
+            A.keres = (A.keres || 0) + 1;
+            A.mappa = '';
+            A.sorok = [];
+            A.tolt = false;
+        }
+
+        olvas(id);
     };
 
     /* ---------------------------------------------------------------- */
@@ -1425,6 +1565,16 @@
             return;
         }
 
+        var ful = cel.closest('[data-l-ful]');
+
+        if (ful) {
+            if (ful.getAttribute('data-l-ful') !== A.fiok) {
+                fulre(ful.getAttribute('data-l-ful'));
+            }
+
+            return;
+        }
+
         var mappaGomb = cel.closest('[data-l-mappa]');
 
         if (mappaGomb) {
@@ -1612,18 +1762,32 @@
         var adat = esemeny.detail || {};
         var m = mappa();
 
-        A.azonnal = adat.azonnal || 0;
+        // Fiókonkénti számlálók (olvasatlan, azonnali teendő) a lapfülekre és a „Teendők" sorra.
+        (adat.fiokok || []).forEach(function (friss) {
+            var f = fiok(friss.kulcs);
+
+            if (f) {
+                f.olvasatlan = friss.olvasatlan || 0;
+                f.azonnal = friss.azonnal || 0;
+            }
+        });
+
+        rajzolFulek();
 
         var jel = elMappak.querySelector('.sdh-level__mappa--teendo .sdh-level__db');
+        var sajat = (fiok() || {}).azonnal || 0;
 
         if (jel) {
-            jel.textContent = String(A.azonnal);
-            jel.hidden = !(A.azonnal > 0);
-            jel.classList.toggle('is-azonnal', A.azonnal > 0);
+            jel.textContent = String(sajat);
+            jel.hidden = !(sajat > 0);
+            jel.classList.toggle('is-azonnal', sajat > 0);
         }
 
+        // Csak a most megnyitott fiók új levele frissíti a listát – a másik fióké a saját lapfülén jelez.
+        var ide = (adat.ujak || []).filter(function (u) { return u.fiok === A.fiok; });
+
         // A szerver az imént szinkronizált: elég a gyorsítótárából újratölteni (újabb kapcsolódás nélkül).
-        if ((adat.ujak || []).length && !A.tolt && A.oldal === 1 && !A.q && !kijeloltIdk().length && (A.mappa === 'fontos' || (m && m.szerep === 'inbox'))) {
+        if (ide.length && !A.tolt && A.oldal === 1 && !A.q && !kijeloltIdk().length && (A.mappa === 'fontos' || (m && m.szerep === 'inbox'))) {
             betolt(true, true);
         }
     });
@@ -1642,13 +1806,15 @@
     magassag();
 
     var kert = (window.location.hash.match(/level=(\d+)/) || [])[1];
-    var elso = A.fiokok.filter(function (f) { return !f.zarva; })[0];
+    // A legutóbb nézett fiók lapja nyílik meg (ha nincs zárolva); különben az első nyitott fiók.
+    var mentett = fiok(tarol('sdh-level-fiok') || '-');
+    var elso = (mentett && !mentett.zarva ? mentett : null) || A.fiokok.filter(function (f) { return !f.zarva; })[0] || A.fiokok[0];
 
     if (kert) {
         // Értesítésből érkezve: a levél nyílik meg, a mappája mellé töltődik.
         A.mappa = '';
         olvas(parseInt(kert, 10));
     } else if (elso) {
-        valt(elso.kulcs, (szerepMappa('inbox', elso.kulcs) || {}).id || '');
+        fulre(elso.kulcs);
     }
 }());

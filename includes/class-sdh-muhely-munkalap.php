@@ -1710,7 +1710,7 @@ final class SDH_Muhely_Munkalap
                                 <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                         data-sdh-uj-ugyfel
-                                        title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele">+</button>
+                                        title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
                             </div>
                         </div>
 
@@ -1729,7 +1729,7 @@ final class SDH_Muhely_Munkalap
                                 </select>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                         data-sdh-uj-eszkoz
-                                        title="Új eszköz felvétele" aria-label="Új eszköz felvétele">+</button>
+                                        title="Új eszköz felvétele" aria-label="Új eszköz felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
                             </div>
                         </div>
                     </div>
@@ -1779,7 +1779,7 @@ final class SDH_Muhely_Munkalap
 
                             <div class="sdh-hibalab">
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-hibasor-uj>
-                                    + Hiba
+                                    <span class="sdh-plusz" aria-hidden="true"></span>Hiba
                                 </button>
                                 <span class="sdh-mezo__sugo">
                                     Minden hibának saját állapota van. Az üresen hagyott sor mentéskor eldobódik.
@@ -2062,7 +2062,7 @@ final class SDH_Muhely_Munkalap
                 <span>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj
                             title="<?php echo $termek ? 'Termék választása a készletből' : 'Szolgáltatás választása a listából'; ?>">
-                        <?php echo $termek ? '+ Termék' : '+ Szolgáltatás'; ?>
+                        <span class="sdh-plusz" aria-hidden="true"></span><?php echo $termek ? 'Termék' : 'Szolgáltatás'; ?>
                     </button>
                 </span>
                 <?php if ($termek) : ?>
