@@ -383,7 +383,7 @@ final class SDH_Muhely_Frontend
                         <span class="sdh-sav__felirat"><?php echo esc_html($modul['cim']); ?></span>
                         <?php if ($sdh_jelveny !== null) : ?>
                             <span class="sdh-sav__jelveny" data-sdh-jelveny="<?php echo esc_attr((string) $kulcs); ?>"
-                                  title="Olvasatlan"<?php echo $sdh_jelveny > 0 ? '' : ' hidden'; ?>><?php echo (int) $sdh_jelveny; ?></span>
+                                  data-db="<?php echo (int) $sdh_jelveny; ?>" title="<?php echo esc_attr((string) (int) $sdh_jelveny); ?> olvasatlan"<?php echo $sdh_jelveny > 0 ? '' : ' hidden'; ?>><?php echo $sdh_jelveny > 999 ? '999+' : (int) $sdh_jelveny; ?></span>
                         <?php endif; ?>
                     </a>
                 <?php endif; ?>

@@ -68,6 +68,10 @@
 
     var SZINT = { azonnal: 'Azonnal', ma: 'Ma', raer: 'Ráér', zaj: 'Zaj' };
 
+    /** Lapozó nyilak: rajz, nem betű – így pontosan a gomb közepén ülnek. */
+    var NYIL_BAL = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>';
+    var NYIL_JOBB = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg>';
+
     /* ================================================================ */
     /* 1. Jelzés minden oldalon                                         */
     /* ================================================================ */
@@ -108,9 +112,12 @@
         });
 
         Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-jelveny="levelezes"]'), function (jel) {
-            var volt = parseInt(jel.textContent, 10) || 0;
+            var volt = parseInt(jel.getAttribute('data-db') || jel.textContent, 10) || 0;
 
-            jel.textContent = String(db);
+            jel.setAttribute('data-db', String(db));
+
+            // Nagy számnál rövid felirat (a pontos szám a súgóban): a jelvény ne nyomja szét a menüt.
+            jel.textContent = db > 999 ? '999+' : String(db);
             jel.hidden = !(db > 0);
             jel.title = db + ' olvasatlan levél' + (azonnal > 0 ? ' · ' + azonnal + ' azonnali teendő' : '');
             jel.classList.toggle('is-azonnal', azonnal > 0);
@@ -573,9 +580,9 @@
         });
 
         if (t.csoportok.length > RENDEZO_LAP) {
-            html += '<div class="sdh-rendezo__lapozo"><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="-1" aria-label="Előző csoportok">‹</button>' +
+            html += '<div class="sdh-rendezo__lapozo"><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="-1" aria-label="Előző csoportok">' + NYIL_BAL + '</button>' +
                 '<span data-rendezo-lapjelzo></span>' +
-                '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="1" aria-label="További csoportok">›</button>' +
+                '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-rendezo-lap="1" aria-label="További csoportok">' + NYIL_JOBB + '</button>' +
                 '<span class="sdh-rendezo__megj">' + t.csoportok.length + ' csoport, összesen ' + t.db + ' levél</span></div>';
         }
 
@@ -981,9 +988,9 @@
         var ig = Math.min(A.ossz, (A.oldal - 1) * 25 + A.sorok.length);
 
         html += '<div class="sdh-level__lapozo">' +
-            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="-1" aria-label="Újabb levelek"' + (A.oldal <= 1 ? ' disabled' : '') + '>‹</button>' +
+            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="-1" aria-label="Újabb levelek"' + (A.oldal <= 1 ? ' disabled' : '') + '>' + NYIL_BAL + '</button>' +
             '<span data-l-oldal>' + tol + '–' + ig + ' / ' + A.ossz + '</span>' +
-            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="1" aria-label="Régebbi levelek"' + (A.oldal >= A.oldalak ? ' disabled' : '') + '>›</button>' +
+            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-l-lap="1" aria-label="Régebbi levelek"' + (A.oldal >= A.oldalak ? ' disabled' : '') + '>' + NYIL_JOBB + '</button>' +
             (A.tolt ? '<span class="sdh-level__tolt">' + e(A.toltSzoveg || 'Betöltés…') + '</span>' : '') + '</div>';
 
         elLista.innerHTML = html;

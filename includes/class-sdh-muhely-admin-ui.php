@@ -542,6 +542,14 @@ final class SDH_Muhely_Admin_UI
             'adatok' => ['sdh-csempek-valt' => ''],
         ];
 
+        // A csempék szerkesztése (mi látszik, sorrend, felirat) – a Beállításokban.
+        if (current_user_can('manage_options')) {
+            $gombok[] = [
+                'cimke' => 'Csempék szerkesztése',
+                'url'   => SDH_Muhely_Modulok::admin_url('beallitasok') . '#csempek',
+            ];
+        }
+
         if ($technikai) {
             $gombok[] = [
                 'cimke' => 'Megnyitás a műhely-felületen ↗',
@@ -678,7 +686,208 @@ final class SDH_Muhely_Admin_UI
             $ki['uzenetek']['jelez'] = true;
         }
 
+        return self::csempek_alkalmaz($ki);
+    }
+
+    /* =================================================================
+     * Az Áttekintés csempéinek beállítása (Beállítások → Áttekintés csempéi)
+     * ============================================================== */
+
+    private const OPT_CSEMPEK = 'sdh_muhely_csempek';
+
+    /**
+     * A mentett csempe-beállítás modulonként: látszik, sorrend, saját cím és
+     * alsó felirat, látszik-e a szám. Ami nincs beállítva, az alapértéket kapja.
+     *
+     * @return array<string, array{latszik: bool, sorrend: int, cim: string, cimke: string, szam: bool}>
+     */
+    public static function csempe_beallitas(): array
+    {
+        $mentett = get_option(self::OPT_CSEMPEK, []);
+        $mentett = is_array($mentett) ? $mentett : [];
+        $ki      = [];
+        $i       = 0;
+
+        foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
+            if (!empty($modul['keszul'])) {
+                continue;
+            }
+
+            $i++;
+            $m = is_array($mentett[$kulcs] ?? null) ? $mentett[$kulcs] : [];
+
+            $ki[(string) $kulcs] = [
+                'latszik' => !isset($m['latszik']) || !empty($m['latszik']),
+                'sorrend' => isset($m['sorrend']) ? (int) $m['sorrend'] : $i * 10,
+                'cim'     => isset($m['cim']) ? (string) $m['cim'] : '',
+                'cimke'   => isset($m['cimke']) ? (string) $m['cimke'] : '',
+                'szam'    => !isset($m['szam']) || !empty($m['szam']),
+            ];
+        }
+
         return $ki;
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $kartyak
+     * @return array<string, array<string, mixed>>
+     */
+    private static function csempek_alkalmaz(array $kartyak): array
+    {
+        $b = self::csempe_beallitas();
+
+        foreach ($kartyak as $kulcs => $k) {
+            $c = $b[$kulcs] ?? null;
+
+            if ($c === null) {
+                continue;
+            }
+
+            if (!$c['latszik']) {
+                unset($kartyak[$kulcs]);
+                continue;
+            }
+
+            if ($c['cim'] !== '') {
+                $kartyak[$kulcs]['modul'] = $c['cim'];
+            }
+
+            if ($c['cimke'] !== '') {
+                $kartyak[$kulcs]['cimke'] = $c['cimke'];
+            }
+
+            if (!$c['szam']) {
+                $kartyak[$kulcs]['szam'] = null;
+                unset($kartyak[$kulcs]['azonnal']);
+            }
+        }
+
+        uksort($kartyak, static fn ($a, $c) => ($b[$a]['sorrend'] ?? 999) <=> ($b[$c]['sorrend'] ?? 999));
+
+        return $kartyak;
+    }
+
+    public static function csempek_doboz(): void
+    {
+        $b = self::csempe_beallitas();
+        $modulok = SDH_Muhely_Modulok::osszes();
+
+        uksort($b, static fn ($x, $y) => $b[$x]['sorrend'] <=> $b[$y]['sorrend']);
+
+        ?>
+        <div class="sdh-doboz" id="csempek">
+            <h2 class="sdh-doboz__cim">Áttekintés csempéi</h2>
+            <p class="sdh-sugo">
+                Melyik modul csempéje látszik az Áttekintés tetején, milyen sorrendben és milyen felirattal.
+                A sorrendet a nyilakkal állítod: a sor feljebb vagy lejjebb kerül.
+                Üresen hagyott cím vagy felirat = az alapértelmezett.
+            </p>
+
+            <table class="sdh-tabla sdh-csempe-tabla" data-sdh-csempe-tabla>
+                <thead>
+                    <tr>
+                        <th>Látszik</th>
+                        <th>Sorrend</th>
+                        <th>Modul</th>
+                        <th>Cím a csempén</th>
+                        <th>Alsó felirat</th>
+                        <th>Szám</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($b as $kulcs => $c) : ?>
+                        <?php $nev = 'csempek[' . $kulcs . ']'; ?>
+                        <tr data-sdh-csempe-sor>
+                            <td>
+                                <input type="hidden" name="<?php echo esc_attr($nev); ?>[latszik]" value="0">
+                                <input type="checkbox" name="<?php echo esc_attr($nev); ?>[latszik]" value="1" <?php checked($c['latszik']); ?>
+                                       aria-label="<?php echo esc_attr((string) ($modulok[$kulcs]['cim'] ?? $kulcs)); ?> látszik">
+                            </td>
+                            <td class="sdh-csempe-tabla__sorrend">
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-csempe-lep="-1" aria-label="Feljebb"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 12.5 10 7l5.5 5.5"/></svg></button>
+                                <input type="hidden" name="<?php echo esc_attr($nev); ?>[sorrend]" value="<?php echo (int) $c['sorrend']; ?>" data-sdh-csempe-sorrend>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-csempe-lep="1" aria-label="Lejjebb"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 7.5 10 13l5.5-5.5"/></svg></button>
+                            </td>
+                            <td><strong><?php echo esc_html((string) ($modulok[$kulcs]['cim'] ?? $kulcs)); ?></strong></td>
+                            <td><input type="text" name="<?php echo esc_attr($nev); ?>[cim]" value="<?php echo esc_attr($c['cim']); ?>" maxlength="40"
+                                       placeholder="<?php echo esc_attr((string) ($modulok[$kulcs]['cim'] ?? '')); ?>"></td>
+                            <td><input type="text" name="<?php echo esc_attr($nev); ?>[cimke]" value="<?php echo esc_attr($c['cimke']); ?>" maxlength="60"
+                                       placeholder="alapértelmezett"></td>
+                            <td>
+                                <input type="hidden" name="<?php echo esc_attr($nev); ?>[szam]" value="0">
+                                <input type="checkbox" name="<?php echo esc_attr($nev); ?>[szam]" value="1" <?php checked($c['szam']); ?> aria-label="Szám látszik">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <div class="sdh-mezo sdh-mezo--jelolo">
+                <input type="checkbox" name="csempek_alap" id="csempek_alap" value="1">
+                <label for="csempek_alap">Mindent vissza az alapértelmezésre</label>
+            </div>
+
+            <script>
+                /* A nyilak a sort mozgatják, és újraszámozzák a sorrendet (10, 20, 30…). */
+                (function () {
+                    var tabla = document.querySelector('[data-sdh-csempe-tabla]');
+
+                    if (!tabla) { return; }
+
+                    tabla.addEventListener('click', function (e) {
+                        var g = e.target.closest('[data-sdh-csempe-lep]');
+
+                        if (!g) { return; }
+
+                        var sor = g.closest('tr');
+                        var irany = parseInt(g.getAttribute('data-sdh-csempe-lep'), 10);
+                        var szomszed = irany < 0 ? sor.previousElementSibling : sor.nextElementSibling;
+
+                        if (szomszed) {
+                            sor.parentNode.insertBefore(sor, irany < 0 ? szomszed : szomszed.nextElementSibling);
+                        }
+
+                        Array.prototype.forEach.call(tabla.querySelectorAll('[data-sdh-csempe-sorrend]'), function (m, i) {
+                            m.value = (i + 1) * 10;
+                        });
+                    });
+                }());
+            </script>
+        </div>
+        <?php
+    }
+
+    public static function csempek_mentes(): void
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- a Beállítások mentése ellenőrizte.
+        if (!empty($_POST['csempek_alap'])) {
+            delete_option(self::OPT_CSEMPEK);
+
+            return;
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $be = isset($_POST['csempek']) && is_array($_POST['csempek']) ? wp_unslash($_POST['csempek']) : null;
+
+        if ($be === null) {
+            return;
+        }
+
+        $ki = [];
+
+        foreach (self::csempe_beallitas() as $kulcs => $alap) {
+            $m = is_array($be[$kulcs] ?? null) ? $be[$kulcs] : [];
+
+            $ki[$kulcs] = [
+                'latszik' => !empty($m['latszik']),
+                'sorrend' => isset($m['sorrend']) ? (int) $m['sorrend'] : $alap['sorrend'],
+                'cim'     => mb_substr(sanitize_text_field((string) ($m['cim'] ?? '')), 0, 40),
+                'cimke'   => mb_substr(sanitize_text_field((string) ($m['cimke'] ?? '')), 0, 60),
+                'szam'    => !empty($m['szam']),
+            ];
+        }
+
+        update_option(self::OPT_CSEMPEK, $ki, false);
     }
 
     /**

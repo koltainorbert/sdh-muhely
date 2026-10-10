@@ -64,35 +64,27 @@
     font-weight: 500;
 }
 
-/* ---- Fiókok lapfülei: minden e-mail-cím külön lapon, a doboz tetejére ültetve ---- */
+/* ---- Fiókok: különálló pillek a doboz fölött (nem rátapadó lapfülek) ---- */
 
 .sdh-level__fulek {
-    position: relative;
-    z-index: 1;
     display: flex;
-    gap: 3px;
-    /* A lapfülsor ráül a doboz felső szegélyére (a .sdh-level hézagát és a szegélyt visszaveszi). */
-    margin-bottom: calc(-.6rem - 1px);
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-
-.sdh-level__fulek::-webkit-scrollbar {
-    display: none;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0;
 }
 
 .sdh-level__ful {
     flex: 0 1 auto;
     display: inline-flex;
     align-items: center;
-    gap: .5rem;
+    gap: .55rem;
     min-width: 0;
-    height: 38px;
+    height: 40px;
     margin: 0;
-    padding: 0 .95rem;
+    padding: 0 .55rem 0 1rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 9px 9px 0 0;
-    background: var(--sdh-felulet-2);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
     color: var(--sdh-szoveg-2);
     font-family: inherit;
     font-size: 13px;
@@ -100,22 +92,35 @@
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;
+    box-shadow: var(--sdh-arnyek);
+    transition: border-color .12s ease, background .12s ease;
 }
 
 .sdh-level__ful:hover {
+    border-color: var(--sdh-accent);
     color: var(--sdh-szoveg);
 }
 
 .sdh-level__ful:focus-visible {
     outline: 2px solid var(--sdh-accent);
-    outline-offset: -2px;
+    outline-offset: 2px;
 }
 
 .sdh-level__ful.is-aktiv {
-    border-bottom-color: var(--sdh-felulet-2);
-    box-shadow: inset 0 2px 0 var(--sdh-accent);
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
     color: var(--sdh-szoveg);
+    box-shadow: 0 0 0 1px var(--sdh-accent) inset;
     cursor: default;
+}
+
+.sdh-level__ful.is-aktiv .sdh-level__fulnev {
+    color: var(--sdh-accent-szoveg);
+}
+
+/* Ha nincs számláló a végén, a pill jobb oldala is kerek maradjon. */
+.sdh-level__ful > :last-child:not(.sdh-level__fuldb):not(.sdh-level__fuljel) {
+    margin-right: .45rem;
 }
 
 .sdh-level__fulnev {
@@ -172,7 +177,7 @@
     gap: 0;
     min-height: 360px;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 0 var(--sdh-r) var(--sdh-r) var(--sdh-r);
+    border-radius: var(--sdh-r-nagy, 12px);
     background: var(--sdh-felulet);
     overflow: hidden;
 }
@@ -613,10 +618,30 @@
     font-variant-numeric: tabular-nums;
 }
 
-.sdh-level__lapozo .sdh-gomb {
-    width: 30px;
-    height: 28px;
+.sdh-level__lapozo .sdh-gomb,
+.sdh-rendezo__lapozo .sdh-gomb {
+    justify-content: center;
+    width: 32px;
+    height: 30px;
     padding: 0;
+}
+
+.sdh-level__lapozo .sdh-gomb svg,
+.sdh-rendezo__lapozo .sdh-gomb svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-level__lapozo [data-l-oldal] {
+    min-width: 7.5rem;
+    text-align: center;
+    color: var(--sdh-szoveg-2);
 }
 
 .sdh-level__tolt {

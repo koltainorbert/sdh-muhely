@@ -599,27 +599,40 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
     50% { opacity: .45; }
 }
 
-/* Összecsukott menüben (és keskeny képernyőn) az ikon sarkán ül. */
+/* Összecsukott menüben (és keskeny képernyőn) a szám nem fér el az ikon mellett:
+   csak egy kis pont jelzi az ikon jobb felső sarkán (a pontos szám a súgóban és kinyitva látszik). */
 body.sdh-app[data-sav="csukva"] .sdh-sav__jelveny {
     position: absolute;
-    top: 2px;
-    right: 6px;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
-    font-size: 10px;
-    line-height: 16px;
+    top: 6px;
+    left: calc(50% + 4px);
+    right: auto;
+    width: 9px;
+    min-width: 0;
+    height: 9px;
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--sdh-felulet);
+    font-size: 0;
+    line-height: 0;
+    overflow: hidden;
 }
 
 @media (max-width: 860px) {
     body.sdh-app .sdh-sav__jelveny {
         position: absolute;
-        top: 2px;
-        right: 6px;
-        min-width: 16px;
-        height: 16px;
-        padding: 0 4px;
-        font-size: 10px;
-        line-height: 16px;
+        top: 6px;
+        left: calc(50% + 4px);
+        right: auto;
+        width: 9px;
+        min-width: 0;
+        height: 9px;
+        margin: 0;
+        padding: 0;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px var(--sdh-felulet);
+        font-size: 0;
+        line-height: 0;
+        overflow: hidden;
     }
 }

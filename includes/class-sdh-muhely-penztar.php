@@ -62,6 +62,7 @@ final class SDH_Muhely_Penztar
             'ajanlat'    => 'ajax_ajanlat',
             'valtozasok' => 'ajax_valtozasok',
             'javit'      => 'ajax_javit',
+            'jelol'      => 'ajax_jelol',
         ];
 
         foreach ($muveletek as $nev => $fuggveny) {
@@ -387,6 +388,7 @@ final class SDH_Muhely_Penztar
             'vonalkod' => (string) $t->vonalkod,
             'megj'    => (string) $t->megjegyzes,
             'forras'  => (string) $t->forras,
+            'jelolt'  => (int) ($t->jelolt ?? 0) === 1,
             'torolve' => (int) $t->torolve === 1,
         ];
     }
@@ -1101,6 +1103,33 @@ final class SDH_Muhely_Penztar
         self::ujraszamol((string) $t->datum);
 
         wp_send_json_success(self::nap_csomag((string) $t->datum));
+    }
+
+    /**
+     * A napló pipája: kipipált (áthúzott) sor – pl. egyeztetéskor „ezt már
+     * megnéztem / megvan". Az összegekhez nem nyúl, ezért újraszámolás sincs.
+     */
+    public static function ajax_jelol(): void
+    {
+        global $wpdb;
+
+        self::jog();
+
+        $idk = self::post('idk', []);
+        $idk = is_array($idk) && $idk !== [] ? array_values(array_filter(array_map('intval', $idk))) : [(int) self::post('id', 0)];
+        $idk = array_slice(array_filter($idk), 0, 500);
+
+        if ($idk === []) {
+            wp_send_json_error(['uzenet' => 'Nincs kijelölt tétel.']);
+        }
+
+        $ertek = self::post('ertek', '1') === '1' ? 1 : 0;
+        $hely  = implode(',', array_fill(0, count($idk), '%d'));
+
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $wpdb->query($wpdb->prepare('UPDATE ' . self::tabla() . " SET jelolt = %d WHERE id IN ({$hely})", array_merge([$ertek], $idk)));
+
+        wp_send_json_success(['idk' => $idk, 'jelolt' => $ertek === 1]);
     }
 
     /**

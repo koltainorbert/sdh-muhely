@@ -58,6 +58,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.36.0
+- **Levelezés:** a fiókok különálló pillek a doboz fölött (nem rátapadó lapfülek), köztük hézaggal, a doboz minden
+  sarka kerek – nem csúsznak össze. A lapozó nyilai rajzok (nem ‹ › betű), a gomb közepén ülnek, nagyobbak.
+- **Oldalmenü:** összecsukva a jelvény csak egy kis pont az ikon sarkán (nem lóg az ikonba); kinyitva 999 fölött
+  „999+", a pontos szám a súgóban.
+- **Áttekintés csempéi szerkeszthetők** (Beállítások → Áttekintés csempéi, és az Áttekintés „Csempék szerkesztése"
+  gombja): látszik / rejtve, sorrend nyilakkal, saját cím és alsó felirat, a szám ki-be. Option `sdh_muhely_csempek`;
+  „Mindent vissza az alapértelmezésre".
+- **Pénztár-táblázatok Excel-szerű rácsa:** oszlopvonalak, sorszám (#), halványan színezett pénzoszlopok
+  (KP kék, kártya narancs, utalás zöld, kifizetés piros) és színes fejlécvonal, sorkiemelés rámutatásra.
+- **Kipipálható sorok:** minden sor elején pipa – kipipálva a sor áthúzva, halványítva (pl. egyeztetéskor „ezt már
+  megnéztem"); a fejléc pipája az egész napot váltja. A szerveren megmarad (`sdh_penztar.jelolt`, DB_VERSION 0.24.0),
+  az összegekre nincs hatása.
+
 ### 0.35.1
 - **Import javítás:** a 30 000. sor után „A szerver nem várt választ adott (500)" hibával megállt – a záró lépés
   (~2400 nap összesítése, lezárása, záró összegei) napronként külön lekérdezéssel ment (~7000 lekérdezés), és

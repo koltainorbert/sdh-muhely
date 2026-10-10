@@ -848,7 +848,10 @@
             ? '<button type="button" class="sdh-pt-link" data-pt-munkalap="' + opciok.mlCrm[t.ml] + '">' + e(t.ml) + '</button>'
             : e(t.ml)) : '';
 
-        return '<tr class="sdh-pt-sor sdh-pt-sor--' + e(t.tipus) + (opciok.kiemel === t.id ? ' is-kiemelt' : '') + '" data-pt-tetel="' + t.id + '" tabindex="0">' +
+        return '<tr class="sdh-pt-sor sdh-pt-sor--' + e(t.tipus) + (opciok.kiemel === t.id ? ' is-kiemelt' : '') + (t.jelolt ? ' is-jelolt' : '') + '" data-pt-tetel="' + t.id + '" tabindex="0">' +
+            '<td class="sdh-pt-c-pipa"><label class="sdh-pt-pipa" title="Kipipálás (áthúzás) – pl. egyeztetéskor: ezt már megnéztem">' +
+            '<input type="checkbox" data-pt-jelol="' + t.id + '"' + (t.jelolt ? ' checked' : '') + ' aria-label="Kipipálás"><span aria-hidden="true"></span></label></td>' +
+            '<td class="sdh-pt-c-ssz">' + (opciok.ssz || '') + '</td>' +
             (opciok.datum ? '<td class="sdh-pt-c-datum"><button type="button" class="sdh-pt-link" data-pt-naplo-ugras="' + e(t.datum) + '" data-pt-tetel-id="' + t.id + '">' + e(t.datum) + '</button></td>' : '') +
             (opciok.ido ? '<td class="sdh-pt-c-ido">' + e(t.ido) + '</td>' : '') +
             '<td class="sdh-pt-c-leiras"><span class="sdh-pt-leiras">' + kiemel(t.leiras, opciok.q) + '</span>' +
@@ -890,21 +893,24 @@
         opciok = opciok || {};
 
         return '<thead><tr>' +
+            '<th class="sdh-pt-c-pipa"><label class="sdh-pt-pipa" title="Az összes sor kipipálása / visszavonása">' +
+            '<input type="checkbox" data-pt-jelol-mind aria-label="Mind kipipálva"><span aria-hidden="true"></span></label></th>' +
+            '<th class="sdh-pt-c-ssz">#</th>' +
             (opciok.datum ? '<th class="sdh-pt-c-datum">Dátum</th>' : '') +
             (opciok.ido ? '<th class="sdh-pt-c-ido">Idő</th>' : '') +
             '<th class="sdh-pt-c-leiras">Cikkszám / munka</th>' +
-            '<th class="sdh-pt-c-szam">KP</th><th class="sdh-pt-c-szam">B.kártya</th><th class="sdh-pt-c-szam sdh-pt-c-utalas">Utalás</th>' +
-            '<th class="sdh-pt-c-szam">Kifizetés</th><th class="sdh-pt-c-ml">Munkalap</th><th class="sdh-pt-c-szamla">Számlaszám</th><th class="sdh-pt-c-vonal">Vonalkód</th>' +
+            '<th class="sdh-pt-c-szam sdh-pt-c-kp">KP</th><th class="sdh-pt-c-szam sdh-pt-c-kartya">B.kártya</th><th class="sdh-pt-c-szam sdh-pt-c-utalas">Utalás</th>' +
+            '<th class="sdh-pt-c-szam sdh-pt-c-ki">Kifizetés</th><th class="sdh-pt-c-ml">Munkalap</th><th class="sdh-pt-c-szamla">Számlaszám</th><th class="sdh-pt-c-vonal">Vonalkód</th>' +
             '</tr></thead>';
     }
 
     function tablaLab(n, ido) {
         return '<tfoot><tr>' +
-            '<th class="sdh-pt-c-leiras"' + (ido ? ' colspan="2"' : '') + '>Napi összesen · ' + n.db + ' tétel</th>' +
-            '<td class="sdh-pt-c-szam">' + e(szam0(n.kp_be)) + '</td>' +
-            '<td class="sdh-pt-c-szam">' + e(szam0(n.kartya)) + '</td>' +
+            '<th class="sdh-pt-c-leiras" colspan="' + (ido ? 4 : 3) + '">Napi összesen · ' + n.db + ' tétel</th>' +
+            '<td class="sdh-pt-c-szam sdh-pt-c-kp">' + e(szam0(n.kp_be)) + '</td>' +
+            '<td class="sdh-pt-c-szam sdh-pt-c-kartya">' + e(szam0(n.kartya)) + '</td>' +
             '<td class="sdh-pt-c-szam sdh-pt-c-utalas">' + e(szam0(n.utalas)) + '</td>' +
-            '<td class="sdh-pt-c-szam">' + e(szam0(n.kifizetes + n.kivet + n.befizetes)) + '</td>' +
+            '<td class="sdh-pt-c-szam sdh-pt-c-ki">' + e(szam0(n.kifizetes + n.kivet + n.befizetes)) + '</td>' +
             '<td colspan="3" class="sdh-pt-lab-osszeg">' +
             '<span>KP a kasszában <strong>' + e(penz(n.szamolt !== null ? n.szamolt : n.zaro)) + '</strong></span>' +
             '<span>KP+BK <strong>' + e(penz(n.forgalom)) + '</strong></span>' +
@@ -953,8 +959,8 @@
             '  <p class="sdh-pt-gyors__info" data-pt-gyors-info></p>' +
             '</form>' +
             '<div class="sdh-pt-tabla-keret"><table class="sdh-pt-tabla' + (utalasVan ? ' van-utalas' : '') + '">' + tablaFej({ ido: true }) +
-            '<tbody>' + (c.tetelek.length ? c.tetelek.map(function (t) { return tetelSor(t, { ido: true }); }).join('')
-                : '<tr class="sdh-pt-ures"><td colspan="9">Ma még nincs tétel. Írd be fent, vagy fizess egy munkalapot – a rendszer felajánlja a beírást.</td></tr>') +
+            '<tbody>' + (c.tetelek.length ? c.tetelek.map(function (t, i) { return tetelSor(t, { ido: true, ssz: i + 1 }); }).join('')
+                : '<tr class="sdh-pt-ures"><td colspan="12">Ma még nincs tétel. Írd be fent, vagy fizess egy munkalapot – a rendszer felajánlja a beírást.</td></tr>') +
             '</tbody>' + tablaLab(n, true) + '</table></div>' +
             '<div class="sdh-pt-lablec">' +
             '<button type="button" class="sdh-pt-link" data-pt-valtozasok="' + e(n.datum) + '">Változásnapló' + (c.torolt ? ' (' + c.torolt + ' törölt tétel)' : '') + '</button>' +
@@ -1173,7 +1179,7 @@
                 '<button type="button" class="sdh-pt-link" data-pt-uj-napra="' + e(n.datum) + '">+ tétel erre a napra</button>' +
                 '</span></header>' +
                 '<div class="sdh-pt-tabla-keret"><table class="sdh-pt-tabla' + (utalas ? ' van-utalas' : '') + '">' + tablaFej() + '<tbody>' +
-                (x.tetelek.length ? x.tetelek.map(function (t) { return tetelSor(t, { kiemel: S.naplo.kiemel }); }).join('') : '<tr class="sdh-pt-ures"><td colspan="8">Nincs tétel.</td></tr>') +
+                (x.tetelek.length ? x.tetelek.map(function (t, i) { return tetelSor(t, { kiemel: S.naplo.kiemel, ssz: i + 1 }); }).join('') : '<tr class="sdh-pt-ures"><td colspan="11">Nincs tétel.</td></tr>') +
                 '</tbody>' + tablaLab(n) + '</table></div>' +
                 (n.megj ? '<p class="sdh-pt-nap__megj">' + e(n.megj) + '</p>' : '') +
                 '</article>';
@@ -2010,7 +2016,7 @@
             (v.osszes ? '<span>KP ' + e(penz(v.osszeg.kp)) + ' · kártya ' + e(penz(v.osszeg.kartya)) + (v.osszeg.utalas ? ' · utalás ' + e(penz(v.osszeg.utalas)) : '') + (v.osszeg.ki ? ' · kiadás ' + e(penz(v.osszeg.ki)) : '') + '</span>' : '') +
             (v.oldalak > 1 ? '<span class="sdh-pt-lapozo">' + lapozo(v.oldal, v.oldalak, 'kereses', '') + '</span>' : '') + '</div>' +
             (v.tetelek.length ? '<div class="sdh-pt-tabla-keret"><table class="sdh-pt-tabla' + (utalas ? ' van-utalas' : '') + '">' + tablaFej({ datum: true }) + '<tbody>' +
-                v.tetelek.map(function (t) { return tetelSor(t, { datum: true, q: v.fajta === 'szoveg' || v.fajta === 'szamla' ? v.q : '', mlCrm: S.kereses.mlCrm }); }).join('') +
+                v.tetelek.map(function (t, i) { return tetelSor(t, { ssz: (v.oldal - 1) * 40 + i + 1, datum: true, q: v.fajta === 'szoveg' || v.fajta === 'szamla' ? v.q : '', mlCrm: S.kereses.mlCrm }); }).join('') +
                 '</tbody></table></div>'
                 : '<div class="sdh-pt-ures-doboz">Nincs találat a pénztárban.' + (v.fajta === 'szam' ? ' Ha ez munkalapszám, a fenti kártya mutatja, mi van róla a CRM-ben.' : '') +
                   '<br><button type="button" class="sdh-pt-link" data-pt-kerdes-ezt="' + e(v.q) + '">Kérdezd az ügynököt erről →</button></div>');
@@ -2340,7 +2346,7 @@
         }
 
         if ((g = cel.closest('[data-pt-tetel]'))) {
-            if (!cel.closest('button')) {
+            if (!cel.closest('button') && !cel.closest('.sdh-pt-c-pipa')) {
                 tetelNyit(g.getAttribute('data-pt-tetel'));
             }
 
@@ -2579,6 +2585,56 @@
             tetelNyit(esemeny.target.getAttribute('data-pt-tetel'));
         }
     });
+
+    // A sorok pipája: kipipálva = áthúzva (a szerveren is megmarad). A fejléc pipája a tábla összes sorát váltja.
+    function mindPipaFrissit(tabla) {
+        var mind = tabla && tabla.querySelector('[data-pt-jelol-mind]');
+        var pipak = tabla ? tabla.querySelectorAll('[data-pt-jelol]') : [];
+        var be = Array.prototype.filter.call(pipak, function (p) { return p.checked; }).length;
+
+        if (mind) {
+            mind.checked = pipak.length > 0 && be === pipak.length;
+            mind.indeterminate = be > 0 && be < pipak.length;
+        }
+    }
+
+    function jelol(pipak, ertek) {
+        var idk = Array.prototype.map.call(pipak, function (p) { return p.getAttribute('data-pt-jelol'); });
+
+        Array.prototype.forEach.call(pipak, function (p) {
+            p.checked = ertek;
+            p.closest('tr').classList.toggle('is-jelolt', ertek);
+        });
+
+        kuld('jelol', { idk: idk, ertek: ertek ? '1' : '0' }).catch(function (h) {
+            Array.prototype.forEach.call(pipak, function (p) {
+                p.checked = !ertek;
+                p.closest('tr').classList.toggle('is-jelolt', !ertek);
+            });
+            toast(h.message, 'hiba');
+        });
+    }
+
+    gyoker.addEventListener('change', function (esemeny) {
+        var m = esemeny.target;
+
+        if (m.matches('[data-pt-jelol]')) {
+            jelol([m], m.checked);
+            mindPipaFrissit(m.closest('table'));
+        } else if (m.matches('[data-pt-jelol-mind]')) {
+            jelol(m.closest('table').querySelectorAll('[data-pt-jelol]'), m.checked);
+            mindPipaFrissit(m.closest('table'));
+        }
+    });
+
+    // A táblák fejléc-pipájának állapota minden kirajzolás után.
+    new MutationObserver(function () {
+        Array.prototype.forEach.call(gyoker.querySelectorAll('table.sdh-pt-tabla'), function (t) {
+            if (t.querySelector('[data-pt-jelol-mind]')) {
+                mindPipaFrissit(t);
+            }
+        });
+    }).observe(gyoker, { childList: true, subtree: true });
 
     // A dátummezők (app.js naptára) változása.
     gyoker.addEventListener('change', function (esemeny) {

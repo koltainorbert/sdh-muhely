@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.23.0';
+    public const DB_VERSION = '0.24.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -679,6 +679,8 @@ final class SDH_Muhely_Schema
          * "munkalap_szam" szöveg, mert a régi táblában több szám is állhat
          * egy sorban; a munkalaphoz kötést a szám adja (az import után
          * átvett MunkaLap 3-lapokra is). Törlés csak jelölés ("torolve").
+         * "jelolt": a napló pipája (kipipálva = áthúzva, pl. egyeztetéskor
+         * „ezt már megnéztem") – az összegekre nincs hatása.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$penztar} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -700,6 +702,7 @@ final class SDH_Muhely_Schema
             forras varchar(12) NOT NULL default 'kezi',
             kulso varchar(40) NOT NULL default '',
             sorrend int(11) NOT NULL default 0,
+            jelolt tinyint(1) NOT NULL default 0,
             torolve tinyint(1) NOT NULL default 0,
             felhasznalo bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,

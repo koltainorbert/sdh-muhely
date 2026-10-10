@@ -2221,3 +2221,195 @@ input.sdh-pt-osszeg {
     font-weight: 700;
     text-align: right;
 }
+
+/* ------------------------------------------------------------------ */
+/* Táblázat – Excel-szerű rács (0.36): oszlopvonalak, színezett pénz-    */
+/* oszlopok, sorszám, kipipálható (áthúzható) sorok                     */
+/* ------------------------------------------------------------------ */
+
+.sdh-pt-tabla th,
+.sdh-pt-tabla td {
+    border-right: 1px solid var(--sdh-pt-racs);
+    border-bottom-color: var(--sdh-keret);
+}
+
+.sdh-pt-tabla tr > :last-child {
+    border-right: 0;
+}
+
+.sdh-pt-tabla tbody tr:nth-child(even) td {
+    background: none;
+}
+
+.sdh-pt-tabla tbody tr:nth-child(even) {
+    background: var(--sdh-pt-csik);
+}
+
+/* A pénzoszlopok halvány saját színt kapnak – mint az Excelben a színes oszlopok, így a sor könnyen követhető. */
+.sdh-pt-tabla tbody tr td.sdh-pt-c-kp,
+.sdh-pt-tabla tfoot tr td.sdh-pt-c-kp {
+    background-color: color-mix(in srgb, var(--sdh-pt-kp) 7%, transparent);
+}
+
+.sdh-pt-tabla tbody tr td.sdh-pt-c-kartya,
+.sdh-pt-tabla tfoot tr td.sdh-pt-c-kartya {
+    background-color: color-mix(in srgb, var(--sdh-pt-kartya) 7%, transparent);
+}
+
+.sdh-pt-tabla tbody tr td.sdh-pt-c-utalas,
+.sdh-pt-tabla tfoot tr td.sdh-pt-c-utalas {
+    background-color: color-mix(in srgb, var(--sdh-pt-utalas) 7%, transparent);
+}
+
+.sdh-pt-tabla tbody tr td.sdh-pt-c-ki,
+.sdh-pt-tabla tfoot tr td.sdh-pt-c-ki {
+    background-color: color-mix(in srgb, var(--sdh-pt-hiany) 5%, transparent);
+}
+
+.sdh-pt-tabla thead .sdh-pt-c-szam:nth-of-type(1) {
+    box-shadow: none;
+}
+
+.sdh-pt-tabla thead th.sdh-pt-c-kp { box-shadow: inset 0 -3px 0 var(--sdh-pt-kp); }
+.sdh-pt-tabla thead th.sdh-pt-c-kartya { box-shadow: inset 0 -3px 0 var(--sdh-pt-kartya); }
+.sdh-pt-tabla thead th.sdh-pt-c-utalas { box-shadow: inset 0 -3px 0 var(--sdh-pt-utalas); }
+.sdh-pt-tabla thead th.sdh-pt-c-ki { box-shadow: inset 0 -3px 0 var(--sdh-pt-hiany); }
+
+.sdh-pt-tabla tbody tr[data-pt-tetel]:hover td,
+.sdh-pt-tabla tbody tr[data-pt-tetel]:focus-within td,
+.sdh-pt-tabla tbody tr[data-pt-tetel]:hover td[class*="sdh-pt-c-"],
+.sdh-pt-tabla tbody tr[data-pt-tetel]:focus-within td[class*="sdh-pt-c-"] {
+    background-color: color-mix(in srgb, var(--sdh-accent) 8%, var(--sdh-felulet));
+}
+
+.sdh-pt-c-ssz {
+    width: 1%;
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+    color: var(--sdh-halvany);
+    font-size: 11.5px;
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+.sdh-pt-c-pipa {
+    width: 1%;
+    padding: .4rem .5rem !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Saját pipa (a natív négyzet helyett): nagy, jól kattintható. */
+.sdh-pt-pipa {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.sdh-pt-pipa input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.sdh-pt-pipa span {
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--sdh-keret-eros);
+    border-radius: 5px;
+    background: var(--sdh-felulet);
+    transition: background .12s ease, border-color .12s ease;
+}
+
+.sdh-pt-pipa:hover span {
+    border-color: var(--sdh-accent);
+}
+
+.sdh-pt-pipa input:focus-visible + span {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 2px;
+}
+
+.sdh-pt-pipa input:checked + span,
+.sdh-pt-pipa input:indeterminate + span {
+    border-color: var(--sdh-pt-ok);
+    background: var(--sdh-pt-ok);
+}
+
+.sdh-pt-pipa input:checked + span::after {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 9px;
+    margin: 2px auto 0;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.sdh-pt-pipa input:indeterminate + span::after {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 2px;
+    margin: 6.5px auto 0;
+    background: #fff;
+}
+
+/* Kipipált sor: áthúzva, halványítva – a pipa és a sorszám kivételével. */
+.sdh-pt-tabla tr.is-jelolt td:not(.sdh-pt-c-pipa) {
+    color: var(--sdh-halvany);
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: color-mix(in srgb, var(--sdh-szoveg) 55%, transparent);
+}
+
+.sdh-pt-tabla tr.is-jelolt td:not(.sdh-pt-c-pipa) > * {
+    opacity: .75;
+}
+
+.sdh-pt-tabla tr.is-jelolt .sdh-pt-cimke {
+    text-decoration: line-through;
+}
+
+/* ------------------------------------------------------------------ */
+/* Beállítások: az Áttekintés csempéinek táblája                         */
+/* ------------------------------------------------------------------ */
+
+.sdh-csempe-tabla input[type="text"] {
+    width: 100%;
+    min-width: 9rem;
+}
+
+.sdh-csempe-tabla__sorrend {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.sdh-csempe-tabla__sorrend .sdh-gomb ~ .sdh-gomb {
+    margin-left: .3rem;
+}
+
+.sdh-csempe-tabla__sorrend .sdh-gomb {
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+}
+
+.sdh-csempe-tabla__sorrend .sdh-gomb svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
