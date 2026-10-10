@@ -7080,6 +7080,14 @@
         );
     }
 
+    // Más fájlok (levelezes.js) ezeken keresztül nyitnak popupot és választót.
+    window.SDH_MUHELY_APP = {
+        nyit: nyit,
+        bezar: bezar,
+        valaszto: szValNyit,
+        hiba: mutatUrlapHiba
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
         szamKeres(document);
     });

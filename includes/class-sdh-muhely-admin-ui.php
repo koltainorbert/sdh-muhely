@@ -344,6 +344,9 @@ final class SDH_Muhely_Admin_UI
             // Az irányítószám-lista verziója: a böngésző egy napig tárolja a
             // listát, új adatfájlnál ettől kéri le azonnal az újat.
             'iszVerzio' => self::eszkoz_verzio('data/iranyitoszam.csv.gz'),
+            // Levelezés: van-e bekötött fiók (csak akkor indul az új levelek figyelése), és hol a levelező.
+            'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok(),
+            'levelUrl'  => SDH_Muhely_Modulok::url('levelezes'),
         ];
     }
 

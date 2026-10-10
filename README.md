@@ -57,6 +57,37 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.32.0
+- **Levelezés – a szerviz e-mail-fiókjai a CRM-ben** (új modul az oldalsávban). A fiókok IMAP-on és SMTP-n,
+  **alkalmazásjelszóval** kapcsolódnak (Gmail: `imap.gmail.com:993`, `smtp.gmail.com:465`); a levelek a
+  Gmailben maradnak, a CRM csak a fejadatok gyorsítótárát tartja (`sdh_level`, `sdh_level_mappa`).
+  Amit itt csinálsz, az a valódi postafiókban történik – a telefonon is úgy látszik.
+  - **Három hasáb**: fiókok és mappák – levéllista – olvasó. **Minden mappa** (Gmail-címke, almappával)
+    látszik; a szerepüket (Elküldött, Kuka…) a szerver jelzőiből tudja, nem a fiók nyelvétől függő névből.
+  - **Műveletek**: új levél, válasz, válasz mindenkinek, továbbítás (az eredeti csatolmányaival),
+    csatolmány fel- és letöltés, piszkozat, olvasott/olvasatlan, csillag, archiválás, áthelyezés,
+    spam / nem spam, törlés (Kuka), végleges törlés (rákérdez), keresés (Gmailnél a Gmail keresője),
+    mappa létrehozása, átnevezése, törlése.
+  - **Új levél jelzése minden CRM-oldalon**: felugró jelzés, hang, jelvény az oldalsávban, és (ha engedélyezed)
+    a böngésző értesítése. Ami máshol (telefonon) történt – olvasás, törlés –, azt a lista követi.
+  - **Jelszóval védett fiók**: a Beállításokban fiókonként külön CRM-jelszó adható; amíg valaki be nem írja,
+    annak a fióknak semmilyen adata nem megy ki a böngészőbe (a szerver ellenőrzi), értesítésben is csak annyi,
+    hogy levél érkezett. 5 hibás próba után 15 perc szünet.
+  - **Biztonság**: az alkalmazásjelszó titkosítva áll az adatbázisban, a HTML-be soha nem kerül vissza.
+    A levél HTML-je szkript nélküli, elzárt keretben jelenik meg; a távoli képek alapból tiltva (a feladó nem
+    látja, hogy megnyitottad); a csatolmány mindig letöltésként megy ki.
+- **Fontos-levél ügynök** (`SDH_Muhely_Level_Ugynok`): minden beérkező levelet besorol – **Azonnal** (1 órán
+  belül), **Ma**, **Ráér**, **Zaj** –, egymondatos indokkal, és szól az azonnaliakról („Teendők" nézet,
+  kiemelt jelzés, ami nem tűnik el magától). **Mást nem csinál és nem is tud**: a postafiókhoz nincs
+  hozzáférése, csak a levél szövegét kapja meg. A protokoll a hatás × sürgősség mátrix (P1–P4) szervizre
+  igazítva: azonnali a hatósági / jogi ügy, a fiókbiztonság, a gyártói partner teendővel, a fizetés vagy
+  szolgáltatás leállása, az ügyfélpanasz, a sürgősnek jelzett ügy és a kiemelt feladó. Saját listák a
+  Beállításokban (kiemelt feladók, partnerek, figyelt kifejezések, zajlista). Nem kötelezően Claude API-kulccsal
+  az AI finomíthat – de amit a szabályok azonnalinak ítélnek, azt nem minősítheti le. A megválaszolt levél
+  magától lekerül a teendők közül.
+- Saját IMAP-kliens és MIME-feldolgozó tiszta PHP-ben (`includes/lib/sdh-imap.php`, `sdh-mime.php`) – a
+  php-imap bővítmény nem kell. DB_VERSION 0.22.0 (két új tábla).
+
 ### 0.31.0
 - **A számla ablaka szerkeszthető** – mindhárom gombnál (Számlázz.hu számla, SDH számla, helyi nyomtatvány):
   - **Tételek**: „+ Termék…" és „+ Szolgáltatás…" (kereshető, lapozható választó), „+ Kézi tétel" (üres sor);

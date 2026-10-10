@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.21.0';
+    public const DB_VERSION = '0.22.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -108,6 +108,8 @@ final class SDH_Muhely_Schema
         $termek       = self::tabla('termek');
         $termek_mozgas = self::tabla('termek_mozgas');
         $szamla       = self::tabla('szamla');
+        $level        = self::tabla('level');
+        $level_mappa  = self::tabla('level_mappa');
 
         $definiciok = [];
 
@@ -591,6 +593,75 @@ final class SDH_Muhely_Schema
             key munkalap_id (munkalap_id),
             key ugyfel_id (ugyfel_id),
             key szamlaszam (szamlaszam)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Levelezés – a postafiókok mappái
+         *
+         * A levelek a levelezőszerveren (Gmail) élnek; itt csak a
+         * gyorsítótáruk van, hogy a lista azonnal megjelenjen. "nyers":
+         * a mappa neve a szerver kódolásában (módosított UTF-7) – ezzel
+         * szólítjuk meg; "nev": ugyanez olvashatóan. "szerep": inbox,
+         * sent, drafts, trash, junk, all, flagged, important vagy üres
+         * (saját címke). "min_uid"–"max_uid": eddig a tartományig van
+         * hiánytalanul letöltve a mappa; UIDVALIDITY-váltásnál ürül.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$level_mappa} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            fiok varchar(10) NOT NULL default '',
+            nyers varchar(255) NOT NULL default '',
+            nev varchar(255) NOT NULL default '',
+            szerep varchar(20) NOT NULL default '',
+            elvalaszto varchar(4) NOT NULL default '/',
+            valaszthato tinyint(1) NOT NULL default 1,
+            uidvalidity bigint(20) unsigned NOT NULL default 0,
+            min_uid bigint(20) unsigned NOT NULL default 0,
+            max_uid bigint(20) unsigned NOT NULL default 0,
+            osszes int(11) NOT NULL default 0,
+            olvasatlan int(11) NOT NULL default 0,
+            szinkron datetime NULL,
+            PRIMARY KEY  (id),
+            key fiok (fiok),
+            key szerep (szerep)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Levelezés – a levelek fejadatai (gyorsítótár)
+         *
+         * Egy sor = egy levél egy mappában (a Gmailnél ugyanaz a levél
+         * több címke alatt is megjelenik – az külön sor). A levél törzse
+         * és a csatolmányok NINCSENEK itt: megnyitáskor a szerverről
+         * jönnek. "fontossag" / "fontos_ok" / "ugynok": a fontos-levél
+         * ügynök besorolása (azonnal, ma, raer, zaj) és indoka;
+         * "elintezve": a CRM-ben lezárt jelzés (a postafiókot nem érinti).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$level} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            fiok varchar(10) NOT NULL default '',
+            mappa_id bigint(20) unsigned NOT NULL default 0,
+            uid bigint(20) unsigned NOT NULL default 0,
+            message_id varchar(255) NOT NULL default '',
+            felado_nev varchar(190) NOT NULL default '',
+            felado_email varchar(190) NOT NULL default '',
+            cimzettek text NULL,
+            targy varchar(255) NOT NULL default '',
+            kivonat varchar(400) NOT NULL default '',
+            datum datetime NULL,
+            meret int(11) NOT NULL default 0,
+            olvasott tinyint(1) NOT NULL default 0,
+            csillag tinyint(1) NOT NULL default 0,
+            valaszolt tinyint(1) NOT NULL default 0,
+            piszkozat tinyint(1) NOT NULL default 0,
+            csatolmany tinyint(1) NOT NULL default 0,
+            fontossag varchar(10) NOT NULL default '',
+            fontos_ok varchar(255) NOT NULL default '',
+            ugynok varchar(10) NOT NULL default '',
+            elintezve tinyint(1) NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            unique key mappa_uid (mappa_id,uid),
+            key fiok_fontossag (fiok,fontossag),
+            key felado_email (felado_email)
         ) {$charset};";
 
         return $definiciok;
