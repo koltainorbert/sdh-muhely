@@ -17,6 +17,8 @@ funkcionalitásának átültetése, modulonként:
 - **Hiba** – munkalaphoz kötött hibajegyek
 - **Tétel** – termék és szolgáltatás, beszerzési ár, haszonkulcs, készlet
 - **Házipénztár** – napi kassza, címletes zárás, napló, riport, statisztika, egyeztető ügynök, Excel-import
+- **Csapat** – belső üzenetek kollégának, csoportnak, mindenkinek; fontos üzenet felugró ablakban; kollégák, csoportok
+- **Asszisztens** – AI (Claude) segítő minden oldalon: kérdez-felel, vezet, tanul; csak jóváhagyással módosít, mentéssel
 - *(később)* raktár, határidő
 
 A meglévő **SDH Platform** plugin (beszállítói katalógus → rendelés) külön
@@ -57,6 +59,45 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.38.0
+- **Új modul: Csapat – belső üzenetek** (oldalmenü: Csapat). Üzenet egy kollégának, több kiválasztott kollégának
+  (közös beszélgetés, saját névvel), egy csoportnak vagy **mindenkinek**. Élő beszélgetés (3,5 mp-enként frissül),
+  **válasz idézettel** (a buborékon a Válasz gomb), „gépel…" jelzés, **„Látta"** a saját üzeneten, elérhető (zöld pont).
+  **Fontos üzenet:** felugró ablakban jelenik meg a címzetteknek, amíg „Elolvastam"-mal nyugtázzák (a küldő látja, ki
+  olvasta el). **Kitűzés:** az üzenet a beszélgetés tetején marad – üzenet hagyása a rendszerben. Saját üzenet
+  visszavonható (dupla kattintással megerősítve; a nyoma megmarad). Görgetősáv helyett „Korábbi üzenetek" és lapozó.
+- **Minden oldalon:** az új üzenet felugró kártyán jelenik meg a bal alsó sarokban, **gyors válasszal**; az oldalmenü
+  Csapat jelvénye az olvasatlanok száma; az Áttekintés Csapat-csempéje is mutatja. Egy közös „pulzus" kérés
+  (15 mp, háttérben 60 mp) szolgálja ki az üzeneteket és az asszisztenst.
+- **Kollégák** (Csapat › Kollégák, csak adminisztrátor): új kolléga felvétele popupban – név, e-mail, felhasználónév,
+  jelszó (üresen erőset generál; egyszer látszik), beosztás, szín, csoportok, szerep (Kolléga / Adminisztrátor),
+  letiltás (azonnal kilépteti; törlés nincs). **Csoportok** (Csapat › Csoportok): név, szín, tagok; saját beszélgetés.
+- **Jogosultság:** új „SDH kolléga" szerepkör a `sdh_muhely_hasznal` joggal – a CRM napi moduljait használja, a
+  WordPress-adminba nem jut be (belépés után a műhelybe kerül). A Beállítások, az Arculat, a TAC és a Karbantartás
+  csak adminisztrátornak látszik.
+- **Új modul: Asszisztens – AI (Claude, Anthropic).** Az „élő" figura (alapneve: Szikra) minden oldal jobb alsó
+  sarkában: lélegzik, pislog, követi az egeret, elalszik és felébred, buborékban szól. **F1** vagy kattintás nyitja a
+  beszélgetést. Kérdezni lehet tőle bármit a rendszerről; **belelát** a munkalapokba, ügyfelekbe, eszközökbe,
+  termékekbe, szolgáltatásokba, a pénztárba és a csapatüzenetekbe; **vezet**: a képernyőn neon kerettel megmutatja,
+  hova kell kattintani (odarepül egy képregénybuborékkal), és gombot ad a megfelelő oldalra / rekordra.
+- **Csak emberi jóváhagyással cselekszik:** minden módosítás javaslat-kártya (Engedélyezem / Elutasítom). Átírás és
+  törlés csak a felhasználó kifejezett kérésére, és a kártyán egy megerősítő kódot is be kell írni. Végrehajtás előtt
+  **mindig mentés**: a rekord teljes előtte-állapota a műveletnél, és naponta az első módosítás előtt teljes mentés
+  (Asszisztens › Mentések; az utolsó 20 marad, letölthető). Minden végrehajtott művelet **visszaállítható**
+  (a művelet számának beírásával). Ügyfelet és munkalapot elvből nem töröl.
+- **Tanul:** a tudását a rendszerből építi (modulok, ez a verziónapló, munkalap-állapotok, fizetési módok,
+  adatbázis-szerkezet); verzióváltáskor az újdonságokat megtanulja és szól („Frissültem, ezt tanultam"). Tudástár
+  (Asszisztens › Tudástár): kézzel tanítható, és egy jó válasznál a „Jegyezd meg" gomb jóváhagyással elmenti.
+  Hüvelykujj-értékelés a válaszokon.
+- **Magától szól** (API nélkül, helyben számolva): lejárt / ma lejáró határidejű munkalap, lezáratlan tegnapi kassza,
+  jóváhagyásra váró javaslat, űrlaphiba („Hibát látok – segítsek?"). Popup nyitva tartásakor is kéznél van.
+- **Beállítások** (Asszisztens › Beállítások, adminisztrátor): be/ki, név, modell (alap `claude-sonnet-5-5`, ha az API
+  nem ismeri: `claude-haiku-4-5-20251001`), API-kulcs (titkosítva; vagy `SDH_MUHELY_CLAUDE_KEY` a wp-config.php-ban,
+  végül a Levelezés kulcsa), napi kérdéskeret kollégánként, „magától szól", „olvasáshoz is engedélyt kér",
+  és eszközönként, mit tehet.
+- Új táblák: `sdh_csapat_*` (beszélgetés, tag, üzenet, nyugta, csoport, csoporttag), `sdh_ai_uzenet`,
+  `sdh_ai_muvelet`, `sdh_ai_tudas`. DB_VERSION 0.26.0.
 
 ### 0.37.0
 - **Bevizsgálási díj – levonás mínusz tétellel.** A munkalapon a „Fizetett (előleg)" + „Bevizsgálási díj" jelölő

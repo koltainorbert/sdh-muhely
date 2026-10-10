@@ -1227,7 +1227,7 @@ final class SDH_Muhely_Munkalap
      *
      * @return array{id: int, szam: string, nev: string, szin: string, zart: bool}|string
      */
-    private static function allapot_valt(int $id, string $kulcs)
+    public static function allapot_valt(int $id, string $kulcs)
     {
         global $wpdb;
 

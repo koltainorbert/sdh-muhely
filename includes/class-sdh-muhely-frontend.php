@@ -277,6 +277,10 @@ final class SDH_Muhely_Frontend
             'termekek'     => '<path d="M10 2.8 16.5 6v8L10 17.2 3.5 14V6z"/><path d="M3.5 6 10 9.2 16.5 6M10 9.2v8M6.7 4.4l6.6 3.2"/>',
             'tac'          => '<ellipse cx="10" cy="5.2" rx="6" ry="2.4"/>'
                 . '<path d="M4 5.2v9.6c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4V5.2"/><path d="M4 10c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4"/>',
+            'csapat'       => '<path d="M2.8 6.5a2 2 0 0 1 2-2h6.4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7.6L5 14.6v-2.1h-.2a2 2 0 0 1-2-2z"/>'
+                . '<path d="M13.2 8.2h2a2 2 0 0 1 2 2v3.6a2 2 0 0 1-2 2h-.2v2l-2.6-2h-2.6a2 2 0 0 1-1.6-.8"/>',
+            'asszisztens'  => '<path d="M10 3.2c3.6 0 6.3 2.4 6.3 5.9 0 3.6-2.7 6.2-6.3 6.2-1.1 0-2.1-.2-3-.6L3.8 16l.9-2.9C3.9 12 3.7 10.6 3.7 9.1c0-3.5 2.7-5.9 6.3-5.9z"/>'
+                . '<circle cx="7.8" cy="9" r=".9"/><circle cx="12.2" cy="9" r=".9"/><path d="M8.3 11.6c1 .7 2.4.7 3.4 0"/>',
             'beallitasok'  => '<circle cx="10" cy="10" r="2.5"/>'
                 . '<path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>',
         ];
@@ -346,12 +350,16 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
             <?php endif; ?>
         </head>
-        <body class="sdh-app">
+        <body class="sdh-app" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>">
 
         <aside class="sdh-sav">
             <a class="sdh-sav__fej" href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>">
@@ -389,12 +397,14 @@ final class SDH_Muhely_Frontend
                 <?php endif; ?>
             <?php endforeach; ?>
 
+            <?php if (SDH_Muhely_Admin_UI::admin_e()) : ?>
             <div class="sdh-sav__also">
                 <a class="sdh-sav__link" href="<?php echo esc_url(admin_url('admin.php?page=sdh-muhely')); ?>">
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     <span class="sdh-sav__felirat">Karbantartás</span>
                 </a>
             </div>
+            <?php endif; ?>
         </aside>
 
         <header class="sdh-fej">
@@ -470,6 +480,8 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.js')); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
 
         </body>
         </html>

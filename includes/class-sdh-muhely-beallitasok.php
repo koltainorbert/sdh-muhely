@@ -33,7 +33,7 @@ final class SDH_Muhely_Beallitasok
 
     public static function oldal(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
 
         $b = SDH_Muhely_Imei_Lekerdezes::beallitas();
 
@@ -154,7 +154,7 @@ final class SDH_Muhely_Beallitasok
 
     public static function mentes(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
         check_admin_referer('sdh_muhely_beallitasok', 'sdh_nonce');
 
         update_option(

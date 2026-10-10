@@ -22,6 +22,15 @@ final class SDH_Muhely_Admin_UI
     /** A főmenü slugja. Minden almenü ez alá kerül. */
     public const FOMENU = 'sdh-muhely';
 
+    /**
+     * A rendszer használatának joga (0.38). Az adminisztrátor szerepkör
+     * megkapja, és a „Kolléga" szerepkör (SDH_Muhely_Csapat) is ezt kapja.
+     */
+    public const JOG = 'sdh_muhely_hasznal';
+
+    /** Beállítások, karbantartás, kollégák kezelése: csak adminisztrátor. */
+    public const ADMIN_JOG = 'manage_options';
+
     public static function init(): void
     {
         // Későn fut, hogy addigra minden modul bejelentkezzen.
@@ -32,6 +41,53 @@ final class SDH_Muhely_Admin_UI
         // Minden saját AJAX-válasz megmondja, melyik CSS/JS verzió a friss, így a
         // már megnyitott oldal észreveszi, ha közben fájlcsere történt.
         add_action('admin_init', [self::class, 'verzio_fejlec'], 1);
+
+        // Aki adminisztrátor, az mindig használhatja a rendszert (akkor is,
+        // ha a szerepkörébe valamiért nem íródott be a jog); a letiltott
+        // kollégától a jog elvész.
+        add_filter('user_has_cap', [self::class, 'jog_szuro'], 10, 4);
+        add_action('init', [self::class, 'jog_telepit'], 5);
+    }
+
+    /**
+     * @param array<string, bool> $osszes
+     * @param array<int, string>  $kert
+     * @param array<int, mixed>   $args
+     * @return array<string, bool>
+     */
+    public static function jog_szuro(array $osszes, array $kert, array $args, $felhasznalo): array
+    {
+        if (!in_array(self::JOG, $kert, true)) {
+            return $osszes;
+        }
+
+        if (!empty($osszes[self::ADMIN_JOG])) {
+            $osszes[self::JOG] = true;
+        }
+
+        $id = is_object($felhasznalo) && isset($felhasznalo->ID) ? (int) $felhasznalo->ID : 0;
+
+        if ($id > 0 && get_user_meta($id, 'sdh_letiltva', true) === '1') {
+            $osszes[self::JOG] = false;
+        }
+
+        return $osszes;
+    }
+
+    /** Egyszer: az adminisztrátor szerepkör megkapja a használat jogát (a felhasználólisták miatt). */
+    public static function jog_telepit(): void
+    {
+        if (get_option('sdh_muhely_jog_telepitve') === self::JOG) {
+            return;
+        }
+
+        $szerep = get_role('administrator');
+
+        if ($szerep !== null && !$szerep->has_cap(self::JOG)) {
+            $szerep->add_cap(self::JOG);
+        }
+
+        update_option('sdh_muhely_jog_telepitve', self::JOG);
     }
 
     /**
@@ -174,20 +230,31 @@ final class SDH_Muhely_Admin_UI
     }
 
     /**
-     * Ki használhatja a rendszert.
-     *
-     * Egyelőre a WordPress adminja. Később saját szerepkör jön ide
-     * (szerelő, pultos, vezető) – ezért van egy helyen és szűrhető.
+     * Ki használhatja a rendszert: az adminisztrátor és a kolléga (0.38).
+     * Szűrhető, ha később finomabb szerepkörök jönnek.
      */
     public static function jog(): string
     {
-        return (string) apply_filters('sdh_muhely_jogosultsag', 'manage_options');
+        return (string) apply_filters('sdh_muhely_jogosultsag', self::JOG);
     }
 
     public static function jog_ellenoriz(): void
     {
         if (!current_user_can(self::jog())) {
             wp_die(esc_html__('Nincs jogosultságod ehhez az oldalhoz.', 'sdh-muhely'));
+        }
+    }
+
+    /** Beállítások és karbantartás: csak adminisztrátor. */
+    public static function admin_e(): bool
+    {
+        return current_user_can(self::ADMIN_JOG);
+    }
+
+    public static function admin_jog_ellenoriz(): void
+    {
+        if (!self::admin_e()) {
+            wp_die(esc_html__('Ehhez az oldalhoz adminisztrátori jog kell.', 'sdh-muhely'));
         }
     }
 
@@ -245,7 +312,7 @@ final class SDH_Muhely_Admin_UI
                 self::FOMENU,
                 (string) $modul['cim'],
                 (string) $modul['cim'],
-                $jog,
+                !empty($modul['csak_admin']) ? self::ADMIN_JOG : $jog,
                 self::FOMENU . '-' . $kulcs,
                 static function () use ($render): void {
                     self::jog_ellenoriz();
@@ -310,6 +377,12 @@ final class SDH_Muhely_Admin_UI
             );
         }
 
+        // Csapat (belső üzenetek, pulzus) és az AI-asszisztens: minden saját oldalon.
+        foreach (['csapat', 'asszisztens'] as $sdh_eszkoz) {
+            wp_enqueue_style('sdh-muhely-' . $sdh_eszkoz, SDH_MUHELY_URL . 'assets/' . $sdh_eszkoz . '.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/' . $sdh_eszkoz . '.css'));
+            wp_enqueue_script('sdh-muhely-' . $sdh_eszkoz, SDH_MUHELY_URL . 'assets/' . $sdh_eszkoz . '.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/' . $sdh_eszkoz . '.js'), true);
+        }
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(
@@ -348,6 +421,9 @@ final class SDH_Muhely_Admin_UI
             'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok(),
             'levelUrl'  => SDH_Muhely_Modulok::url('levelezes'),
             'levelRendezo' => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::rendezo_be(),
+            // Csapat (0.38): adminisztrátor-e (kitűzés másnak az üzenetén), AI-asszisztens adatai.
+            'admin'     => self::admin_e(),
+            'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
         ];
     }
 
@@ -662,10 +738,19 @@ final class SDH_Muhely_Admin_UI
             $szamok['termekek'] = [SDH_Muhely_Termek::darab(), 'termék'];
         }
 
+        if (class_exists('SDH_Muhely_Csapat')) {
+            $szamok['csapat'] = [SDH_Muhely_Csapat::olvasatlan_db(), 'olvasatlan csapatüzenet'];
+        }
+
+        if (class_exists('SDH_Muhely_Asszisztens')) {
+            $szamok['asszisztens'] = [SDH_Muhely_Asszisztens::fuggo_db(), 'jóváhagyásra váró javaslat'];
+        }
+
         $ki = [];
 
         foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
-            if (!empty($modul['keszul'])) {
+            // A csak adminisztrátornak szóló modul (beállítások, karbantartás) a kollégánál nem látszik.
+            if (!empty($modul['keszul']) || (!empty($modul['csak_admin']) && !self::admin_e())) {
                 continue;
             }
 
@@ -684,8 +769,10 @@ final class SDH_Muhely_Admin_UI
             $ki['levelezes']['jelez']   = $azonnal > 0;
         }
 
-        if (isset($ki['uzenetek']) && (int) $ki['uzenetek']['szam'] > 0) {
-            $ki['uzenetek']['jelez'] = true;
+        foreach (['uzenetek', 'csapat', 'asszisztens'] as $jelzo) {
+            if (isset($ki[$jelzo]) && (int) $ki[$jelzo]['szam'] > 0) {
+                $ki[$jelzo]['jelez'] = true;
+            }
         }
 
         return self::csempek_alkalmaz($ki);

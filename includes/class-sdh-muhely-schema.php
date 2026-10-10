@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.25.0';
+    public const DB_VERSION = '0.26.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -113,6 +113,15 @@ final class SDH_Muhely_Schema
         $penztar      = self::tabla('penztar');
         $penztar_nap  = self::tabla('penztar_nap');
         $penztar_naplo = self::tabla('penztar_naplo');
+        $cs_besz      = self::tabla('csapat_beszelgetes');
+        $cs_tag       = self::tabla('csapat_tag');
+        $cs_uzenet    = self::tabla('csapat_uzenet');
+        $cs_nyugta    = self::tabla('csapat_nyugta');
+        $cs_csoport   = self::tabla('csapat_csoport');
+        $cs_cstag     = self::tabla('csapat_csoport_tag');
+        $ai_uzenet    = self::tabla('ai_uzenet');
+        $ai_muvelet   = self::tabla('ai_muvelet');
+        $ai_tudas     = self::tabla('ai_tudas');
 
         $definiciok = [];
 
@@ -792,6 +801,158 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key tetel_id (tetel_id),
             key datum (datum)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Csapat – belső üzenetek (0.38)
+         *
+         * Beszélgetés: "tipus" = ketto (két kolléga), egyedi (több kiválasztott
+         * kolléga), csoport (egy csapat-csoport minden tagja: "csoport_id"),
+         * mindenki (minden aktív kolléga). A tagság és az olvasottság a
+         * csapat_tag táblában: "olvasott_id" = az utolsó látott üzenet.
+         * Üzenet: "valasz_id" = melyik üzenetre válaszol; "fontos" = felugró
+         * ablakban jelenik meg a címzetteknek, amíg nyugtázzák (csapat_nyugta);
+         * "kituzve" = a beszélgetés tetején marad („üzenet hagyása");
+         * "hivatkozas" = pl. munkalap:123. Törlés csak jelölés.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$cs_besz} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            tipus varchar(12) NOT NULL default 'ketto',
+            nev varchar(190) NOT NULL default '',
+            csoport_id bigint(20) unsigned NOT NULL default 0,
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            utolso_ido datetime NULL,
+            utolso_uzenet_id bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key tipus (tipus),
+            key csoport_id (csoport_id),
+            key utolso_ido (utolso_ido)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$cs_tag} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            beszelgetes_id bigint(20) unsigned NOT NULL default 0,
+            user_id bigint(20) unsigned NOT NULL default 0,
+            olvasott_id bigint(20) unsigned NOT NULL default 0,
+            nemitva tinyint(1) NOT NULL default 0,
+            csatlakozott datetime NULL,
+            PRIMARY KEY  (id),
+            unique key besz_user (beszelgetes_id,user_id),
+            key user_id (user_id)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$cs_uzenet} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            beszelgetes_id bigint(20) unsigned NOT NULL default 0,
+            felado_id bigint(20) unsigned NOT NULL default 0,
+            szoveg text NULL,
+            valasz_id bigint(20) unsigned NOT NULL default 0,
+            fontos tinyint(1) NOT NULL default 0,
+            kituzve tinyint(1) NOT NULL default 0,
+            hivatkozas varchar(60) NOT NULL default '',
+            forras varchar(20) NOT NULL default 'kezi',
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            torolve tinyint(1) NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key beszelgetes_id (beszelgetes_id),
+            key felado_id (felado_id),
+            key fontos (fontos)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$cs_nyugta} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            uzenet_id bigint(20) unsigned NOT NULL default 0,
+            user_id bigint(20) unsigned NOT NULL default 0,
+            ido datetime NULL,
+            PRIMARY KEY  (id),
+            unique key uzenet_user (uzenet_id,user_id),
+            key user_id (user_id)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$cs_csoport} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            nev varchar(120) NOT NULL default '',
+            szin varchar(20) NOT NULL default '',
+            leiras varchar(255) NOT NULL default '',
+            aktiv tinyint(1) NOT NULL default 1,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key aktiv (aktiv)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$cs_cstag} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            csoport_id bigint(20) unsigned NOT NULL default 0,
+            user_id bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            unique key csoport_user (csoport_id,user_id),
+            key user_id (user_id)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * AI-asszisztens (0.38)
+         *
+         * ai_uzenet: a beszélgetés felhasználónként ("szerep": user /
+         * assistant / esemeny), "ertekeles" = −1 / 0 / 1 (hüvelykujj).
+         * ai_muvelet: minden, amit az asszisztens tenni akar – javaslatként
+         * születik, csak emberi jóváhagyással fut le. "szint": hozzaad / atir
+         * / torol; az átírás és a törlés erős megerősítést ("kod") kér.
+         * "elotte" / "utana" = a rekord teljes másolata (JSON) – ebből lehet
+         * visszaállítani. ai_tudas: amit megtanult (kézzel, jóváhagyott
+         * javaslatból vagy a verziónaplóból).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$ai_uzenet} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            user_id bigint(20) unsigned NOT NULL default 0,
+            szerep varchar(12) NOT NULL default 'user',
+            szoveg text NULL,
+            oldal varchar(80) NOT NULL default '',
+            ertekeles tinyint(4) NOT NULL default 0,
+            be_token int(11) NOT NULL default 0,
+            ki_token int(11) NOT NULL default 0,
+            ido datetime NULL,
+            PRIMARY KEY  (id),
+            key user_id (user_id),
+            key ido (ido)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$ai_muvelet} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            user_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz varchar(40) NOT NULL default '',
+            szint varchar(12) NOT NULL default 'hozzaad',
+            leiras varchar(255) NOT NULL default '',
+            parameterek text NULL,
+            allapot varchar(20) NOT NULL default 'javaslat',
+            kod varchar(12) NOT NULL default '',
+            tabla varchar(60) NOT NULL default '',
+            rekord_id bigint(20) unsigned NOT NULL default 0,
+            elotte longtext NULL,
+            utana longtext NULL,
+            eredmeny text NULL,
+            letrehozva datetime NULL,
+            dontes_ido datetime NULL,
+            dontes_user bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key user_id (user_id),
+            key allapot (allapot)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$ai_tudas} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            cim varchar(190) NOT NULL default '',
+            szoveg text NULL,
+            kulcsszavak varchar(255) NOT NULL default '',
+            forras varchar(20) NOT NULL default 'kezi',
+            mindig tinyint(1) NOT NULL default 0,
+            aktiv tinyint(1) NOT NULL default 1,
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key aktiv (aktiv)
         ) {$charset};";
 
         return $definiciok;

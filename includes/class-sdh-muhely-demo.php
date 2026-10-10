@@ -71,7 +71,7 @@ final class SDH_Muhely_Demo
 
     public static function betoltes(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
         check_admin_referer('sdh_muhely_demo_betoltes', 'sdh_nonce');
 
         $eredmeny = self::betolt();

@@ -190,7 +190,7 @@ final class SDH_Muhely_Tac
 
     public static function oldal(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
 
         $darab    = self::darabszam();
         $sajat    = self::sajat_darabszam();
@@ -331,7 +331,7 @@ final class SDH_Muhely_Tac
     {
         check_ajax_referer('sdh_muhely_modal');
 
-        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+        if (!SDH_Muhely_Admin_UI::admin_e()) {
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
 

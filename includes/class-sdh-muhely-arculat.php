@@ -89,7 +89,7 @@ final class SDH_Muhely_Arculat
 
     public static function oldal(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
 
         $b = self::beallitas();
 
@@ -291,7 +291,7 @@ final class SDH_Muhely_Arculat
 
     public static function mentes(): void
     {
-        SDH_Muhely_Admin_UI::jog_ellenoriz();
+        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
         check_admin_referer('sdh_muhely_arculat', 'sdh_nonce');
 
         $tema = isset($_POST['tema']) ? sanitize_key(wp_unslash($_POST['tema'])) : 'rendszer';
