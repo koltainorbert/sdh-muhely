@@ -16,7 +16,8 @@ funkcionalitásának átültetése, modulonként:
 - **Munkalap** – állapot, felelős, határidő, fizetés
 - **Hiba** – munkalaphoz kötött hibajegyek
 - **Tétel** – termék és szolgáltatás, beszerzési ár, haszonkulcs, készlet
-- *(később)* raktár, számla, pénztár, határidő, statisztika
+- **Házipénztár** – napi kassza, címletes zárás, napló, riport, statisztika, egyeztető ügynök, Excel-import
+- *(később)* raktár, határidő
 
 A meglévő **SDH Platform** plugin (beszállítói katalógus → rendelés) külön
 fut; a kettő összekötése egy későbbi lépés.
@@ -56,6 +57,40 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.35.0
+- **Új modul: Házipénztár** (oldalmenü: Pénztár) – a régi „Zárás" Excel-tábla utódja. Lapfülek: **Ma**
+  (KPI-csempék, gyorsbeviteli sor Enterre, a nap tételei az Excel oszlopaival), **Napló** (minden nap egyben,
+  napi összesítővel, lapozva, dátumra ugrás, csak eltérés / lezáratlan szűrő), **KP – kassza** (címletenkénti
+  számolás, élő összevetés a várhatóval, zárás), **Riport**, **Statisztika**, **Ügynök**, **Keresés**.
+- **Napok:** minden nap magától nyílik; a nyitó a tegnapi záró (a megszámolt, ha volt számolás). Zárás után
+  a tétel módosítása naplózódik, a nap eltérése újraszámolódik; újranyitás is van. Összesítők gyorsítótára:
+  `sdh_penztar_nap`; tételek: `sdh_penztar` (a kivét / kifizetés a KP-oszlopban negatív); változásnapló:
+  `sdh_penztar_naplo`. Törlés csak jelölés. DB_VERSION 0.23.0.
+- **Kivét:** mindig negatív, és csak a Beállításokban megadott személyek közül (alap: Koltai Norbert, Légman Péter;
+  becenevekkel, amelyekből az import is felismeri).
+- **Munkalap:** új **Fizetés** gomb a láblécben (mentés → fizetés ablaka: teljes vagy előleg, mód, összeg,
+  „kerüljön a házipénztárba"); a „Fizetve" pipa vagy a nőtt előleg mentése után ajánlat-ablak
+  („Bekerüljön a házipénztárba?" – Beírás / Nem kell / Később). A „Nem kell" nyoma megmarad (`kihagyva`).
+- **Számla:** kiállítás után a munkalap számla nélküli pénztártételei megkapják a számlaszámot
+  (`sdh_muhely_szamla_kiallitva`); ha a pénz még nincs a pénztárban, ajánlat (app.js: `sdh:szamla-kesz` esemény).
+- **Keresés:** számlaszámra, munkalapszámra (a CRM munkalapja és számlái is megjelennek, jelezve, ha a pénz nincs
+  a pénztárban), összegre, vonalkódra, szavakra; szűrők: időszak, típus, mód, összeghatár, számla / munkalap nélkül,
+  törölt tételek.
+- **Ügynök** (`SDH_Muhely_Penztar_Ugynok`, csak javasol): a nap egyeztetése a munkalapokkal és a számlákkal
+  (fizetve, de nincs a pénztárban; KP ↔ kártya tévesen; kétszer rögzítve; elgépelés; törölt tétel; előző nap),
+  és kiszámolja, mely tételek adják ki pontosan az eltérést. Nyitott ügyek az utolsó 21 napból, „mind beírása"
+  a pótolható számlaszámokra. Kérdés szabad szöveggel: a Levelezésnél megadott Claude API-kulccsal AI válaszol
+  (csak olvas), kulcs nélkül a helyi nyomkövetés. Zárás eltéréssel → az ügynök azonnal lefut.
+- **Import** (`SDH_Muhely_Penztar_Import`): .xlsx (saját olvasó: ZipArchive + XMLReader, streamelve) vagy CSV;
+  előnézet, majd 2500 soros adagok folyamatjelzővel; tartalom alapú kulcs → újrafeltöltéskor csak az új sorok
+  kerülnek be; „korábbi import cseréje" és visszavonás. A régi tábla napi „KP a kasszában" összege a nap záró
+  összege lesz – így az utolsó nap pontosan a táblában lévő egyenleggel zár.
+- **Riport / statisztika:** időszakok (ma … mind, egyéni), CSV-export a régi tábla oszlopaival, nyomtatás;
+  halmozott oszlopdiagram (KP / kártya / utalás), a hét napjai, kategóriák (a leírás kulcsszavaiból, Beállításokban
+  szerkeszthető), bizonylatoltság, kivét személyenként, kifizetés partnerenként, évek × hónapok, eltérések.
+- Áttekintés: új „Pénztár" csempe (a kasszában várható összeg). `SDH_Muhely_Levelezes::ai_kulcs()` – a Claude-kulcs
+  más modulnak (csak szerveroldalon).
 
 ### 0.34.0
 - **Levelezés: minden e-mail-cím külön lapfülön.** A fiókok eddig egymás alatt álltak egy görgethető hasábban;

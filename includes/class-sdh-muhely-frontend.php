@@ -272,6 +272,7 @@ final class SDH_Muhely_Frontend
             'munkalapok'   => '<rect x="4" y="3" width="12" height="14" rx="1.8"/><path d="M7 7.5h6M7 10.5h6M7 13.5h3.5"/>',
             'uzenetek'     => '<path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3a2 2 0 0 1-2-2z"/><path d="M7 7.6h6M7 10.2h4"/>',
             'levelezes'    => '<rect x="2.8" y="4.5" width="14.4" height="11" rx="1.8"/><path d="M3.4 5.6 10 10.8l6.6-5.2"/>',
+            'penztar'      => '<rect x="2.5" y="5.5" width="15" height="9" rx="1.6"/><circle cx="10" cy="10" r="2.1"/><path d="M5.2 8.2v3.6M14.8 8.2v3.6"/>',
             'szolgaltatasok' => '<path d="M12.9 3.1a3.7 3.7 0 0 0-4.5 4.8L3.5 12.8a1.7 1.7 0 0 0 2.4 2.4l4.9-4.9a3.7 3.7 0 0 0 4.8-4.5l-2.3 2.3-1.9-.5-.5-1.9z"/>',
             'termekek'     => '<path d="M10 2.8 16.5 6v8L10 17.2 3.5 14V6z"/><path d="M3.5 6 10 9.2 16.5 6M10 9.2v8M6.7 4.4l6.6 3.2"/>',
             'tac'          => '<ellipse cx="10" cy="5.2" rx="6" ry="2.4"/>'
@@ -343,6 +344,8 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -466,6 +469,7 @@ final class SDH_Muhely_Frontend
         <?php endif; ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
 
         </body>
         </html>

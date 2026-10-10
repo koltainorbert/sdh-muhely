@@ -640,6 +640,10 @@ final class SDH_Muhely_Admin_UI
             $szamok['levelezes'] = [SDH_Muhely_Levelezes::olvasatlan_db(), 'olvasatlan levél'];
         }
 
+        if (class_exists('SDH_Muhely_Penztar')) {
+            $szamok['penztar'] = [SDH_Muhely_Penztar::kassza_most(), 'Ft a kasszában (várható)'];
+        }
+
         if (class_exists('SDH_Muhely_Szolgaltatas')) {
             $szamok['szolgaltatasok'] = [SDH_Muhely_Szolgaltatas::darab(), 'szolgáltatás'];
         }

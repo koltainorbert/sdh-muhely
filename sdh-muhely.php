@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.34.0
+ * Version:           0.35.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.34.0');
+define('SDH_MUHELY_VERSION', '0.35.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -55,6 +55,10 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-szolgaltatas.php' => 'SDH_Muhely_Szolgaltatas',
     'includes/class-sdh-muhely-termek.php'   => 'SDH_Muhely_Termek',
     'includes/class-sdh-muhely-szamla.php'   => 'SDH_Muhely_Szamla',
+    'includes/class-sdh-muhely-penztar.php'  => 'SDH_Muhely_Penztar',
+    'includes/class-sdh-muhely-penztar-elemzes.php' => 'SDH_Muhely_Penztar_Elemzes',
+    'includes/class-sdh-muhely-penztar-ugynok.php'  => 'SDH_Muhely_Penztar_Ugynok',
+    'includes/class-sdh-muhely-penztar-import.php'  => 'SDH_Muhely_Penztar_Import',
     'includes/class-sdh-muhely-racs.php'     => 'SDH_Muhely_Racs',
     'includes/class-sdh-muhely-kodok.php'    => 'SDH_Muhely_Kodok',
     'includes/class-sdh-muhely-rma.php'      => 'SDH_Muhely_Rma',

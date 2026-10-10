@@ -5643,9 +5643,10 @@
                 }
 
                 // A lista (rács) is értesül a mentésről; a popup nyitva marad.
+                // (forras: a pénztár ilyenkor nem kérdez – a számla után ajánl.)
                 document.dispatchEvent(new CustomEvent('sdh:mentve', {
                     cancelable: true,
-                    detail: { action: urlap.dataset.sdhAjaxAction || '', adat: eredmeny.data || {} }
+                    detail: { action: urlap.dataset.sdhAjaxAction || '', adat: eredmeny.data || {}, forras: 'szamla' }
                 }));
 
                 nyit('munkalapok', id, { szint: n });
@@ -5665,6 +5666,10 @@
             siker: function (adat) {
                 szamlaKesz = adat || null;
                 nyit('munkalapok', munkalapId, { szint: n });
+                // A pénztár (penztar.js) beírja / felajánlja a számla pénzét.
+                document.dispatchEvent(new CustomEvent('sdh:szamla-kesz', {
+                    detail: { munkalapId: munkalapId, sorozat: sorozat, adat: adat || {} }
+                }));
             }
         });
     }
@@ -7212,6 +7217,7 @@
     window.SDH_MUHELY_APP = {
         nyit: nyit,
         bezar: bezar,
+        sajatSzint: sajatSzint,
         valaszto: szValNyit,
         pillek: pillNyit,
         hiba: mutatUrlapHiba

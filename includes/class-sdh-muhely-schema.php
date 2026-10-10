@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.22.0';
+    public const DB_VERSION = '0.23.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -110,6 +110,9 @@ final class SDH_Muhely_Schema
         $szamla       = self::tabla('szamla');
         $level        = self::tabla('level');
         $level_mappa  = self::tabla('level_mappa');
+        $penztar      = self::tabla('penztar');
+        $penztar_nap  = self::tabla('penztar_nap');
+        $penztar_naplo = self::tabla('penztar_naplo');
 
         $definiciok = [];
 
@@ -662,6 +665,112 @@ final class SDH_Muhely_Schema
             unique key mappa_uid (mappa_id,uid),
             key fiok_fontossag (fiok,fontossag),
             key felado_email (felado_email)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Házipénztár – tételek
+         *
+         * Egy sor = egy pénzmozgás (a régi Excel egy sora). "kp" előjeles:
+         * a bevétel és a befizetés pozitív, a kivét és a kifizetés negatív –
+         * a kassza egyenlege így egyetlen SUM. "kartya" és "utalas" nem
+         * érinti a kasszát, csak a forgalmat. "tipus": bevetel, kivet,
+         * kifizetes, befizetes, kihagyva (= a munkalap fizetve lett, de
+         * kérésre nem került a kasszába – az egyeztetésnél ez is nyom).
+         * "munkalap_szam" szöveg, mert a régi táblában több szám is állhat
+         * egy sorban; a munkalaphoz kötést a szám adja (az import után
+         * átvett MunkaLap 3-lapokra is). Törlés csak jelölés ("torolve").
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$penztar} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            datum date NOT NULL,
+            ido datetime NULL,
+            tipus varchar(12) NOT NULL default 'bevetel',
+            leiras varchar(255) NOT NULL default '',
+            nev varchar(190) NOT NULL default '',
+            szemely varchar(80) NOT NULL default '',
+            kp decimal(14,2) NOT NULL default 0.00,
+            kartya decimal(14,2) NOT NULL default 0.00,
+            utalas decimal(14,2) NOT NULL default 0.00,
+            info_osszeg decimal(14,2) NOT NULL default 0.00,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            munkalap_szam varchar(40) NOT NULL default '',
+            szamlaszam varchar(60) NOT NULL default '',
+            vonalkod varchar(190) NOT NULL default '',
+            megjegyzes varchar(255) NOT NULL default '',
+            forras varchar(12) NOT NULL default 'kezi',
+            kulso varchar(40) NOT NULL default '',
+            sorrend int(11) NOT NULL default 0,
+            torolve tinyint(1) NOT NULL default 0,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key datum (datum),
+            key tipus (tipus),
+            key munkalap_szam (munkalap_szam),
+            key munkalap_id (munkalap_id),
+            key szamlaszam (szamlaszam),
+            key kulso (kulso)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Házipénztár – napok
+         *
+         * Napi összesítő és zárás. A számok a tételekből jönnek
+         * (SDH_Muhely_Penztar::ujraszamol), itt csak gyorsítótárként
+         * állnak, hogy a napló és a riport 30 ezer sor fölött is
+         * azonnali legyen. "nyito" = az előző nap záró készpénze (a
+         * számolt, ha volt számolás, különben a várható); "zaro" = a
+         * rendszer szerinti (várható) készpénz; "szamolt" = a kézzel
+         * megszámolt (címletenként: "cimletek" JSON); "elteres" =
+         * szamolt − zaro.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$penztar_nap} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            datum date NOT NULL,
+            allapot varchar(10) NOT NULL default 'nyitott',
+            nyito decimal(14,2) NOT NULL default 0.00,
+            kp_be decimal(14,2) NOT NULL default 0.00,
+            kartya decimal(14,2) NOT NULL default 0.00,
+            utalas decimal(14,2) NOT NULL default 0.00,
+            kifizetes decimal(14,2) NOT NULL default 0.00,
+            kivet decimal(14,2) NOT NULL default 0.00,
+            befizetes decimal(14,2) NOT NULL default 0.00,
+            zaro decimal(14,2) NOT NULL default 0.00,
+            szamolt decimal(14,2) NULL,
+            elteres decimal(14,2) NULL,
+            cimletek text NULL,
+            forgalom decimal(14,2) NOT NULL default 0.00,
+            halmozott decimal(16,2) NOT NULL default 0.00,
+            tetel_db int(11) NOT NULL default 0,
+            megjegyzes text NULL,
+            lezarta bigint(20) unsigned NOT NULL default 0,
+            lezarva datetime NULL,
+            szamolva datetime NULL,
+            PRIMARY KEY  (id),
+            unique key datum (datum),
+            key allapot (allapot)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Házipénztár – változásnapló
+         *
+         * Minden felvitel, módosítás, törlés, zárás és újranyitás nyoma
+         * (ki, mikor, mi volt előtte és utána) – hogy nap végén
+         * visszakereshető legyen, hová lett a pénz.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$penztar_naplo} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            tetel_id bigint(20) unsigned NOT NULL default 0,
+            datum date NULL,
+            muvelet varchar(20) NOT NULL default '',
+            regi text NULL,
+            uj text NULL,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            ido datetime NULL,
+            PRIMARY KEY  (id),
+            key tetel_id (tetel_id),
+            key datum (datum)
         ) {$charset};";
 
         return $definiciok;

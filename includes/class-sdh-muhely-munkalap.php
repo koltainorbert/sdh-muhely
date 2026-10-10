@@ -1852,6 +1852,14 @@ final class SDH_Muhely_Munkalap
                     </span>
                 <?php endif; ?>
 
+                <?php // Fizetés (és pénztárba írás): mentett lapnál (SDH_Muhely_Penztar, penztar.js). ?>
+                <?php if (!$uj && $modal && class_exists('SDH_Muhely_Penztar')) : ?>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-pt-fizetes-gomb<?php echo (int) ($munkalap->fizetve ?? 0) === 1 ? ' is-fizetve' : ''; ?>"
+                            data-sdh-penztar-fizetes title="Fizetés rögzítése, és (ha kéred) beírás a házipénztárba">
+                        <?php echo (int) ($munkalap->fizetve ?? 0) === 1 ? 'Fizetve ✓' : 'Fizetés'; ?>
+                    </button>
+                <?php endif; ?>
+
                 <?php // Számlázás: csak mentett, sorszámot kapott lapnál (SDH_Muhely_Szamla). ?>
                 <?php if (!$uj && $modal && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Szamla')) : ?>
                     <?php SDH_Muhely_Szamla::munkalap_gombok($munkalap); ?>
@@ -2688,6 +2696,8 @@ final class SDH_Muhely_Munkalap
         }
 
         $id       = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        // A mentés előtti állapot: a pénztár ebből látja, most lett-e fizetve / nőtt-e az előleg.
+        $elotte   = $id > 0 ? self::egy($id) : null;
         $eredmeny = self::feldolgoz($id);
 
         if (is_string($eredmeny)) {
@@ -2696,9 +2706,12 @@ final class SDH_Muhely_Munkalap
 
         [$uj_id, $uzenet, $szam] = $eredmeny;
 
+        $penztar = class_exists('SDH_Muhely_Penztar') ? SDH_Muhely_Penztar::munkalap_ajanlat((int) $uj_id, $elotte) : null;
+
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
         wp_send_json_success([
             'id'     => $uj_id,
+            'penztar' => $penztar,
             'vissza' => self::vissza(
                 array_filter([
                     'uzenet' => $uzenet,

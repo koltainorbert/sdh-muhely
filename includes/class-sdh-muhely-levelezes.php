@@ -267,6 +267,27 @@ final class SDH_Muhely_Levelezes
         return $nyilt === false ? '' : $nyilt;
     }
 
+    /**
+     * A Claude API kulcsa és modellje más moduloknak (pl. a pénztár-ügynöknek).
+     * A kulcs csak szerveroldali hívásra megy ki, a böngészőbe soha.
+     *
+     * @return array{kulcs: string, modell: string}|null
+     */
+    public static function ai_kulcs(): ?array
+    {
+        $u     = self::beallitas()['ugynok'];
+        $kulcs = self::visszafejt((string) ($u['ai_kulcs'] ?? ''));
+
+        if ($kulcs === '') {
+            return null;
+        }
+
+        return [
+            'kulcs'  => $kulcs,
+            'modell' => trim((string) ($u['ai_modell'] ?? '')) !== '' ? trim((string) $u['ai_modell']) : 'claude-haiku-4-5-20251001',
+        ];
+    }
+
     /** Helyi (teszt) szerver-e: csak ott engedünk titkosítatlan kapcsolatot. */
     private static function helyi_host(string $host): bool
     {
