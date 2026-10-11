@@ -1166,3 +1166,12 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     outline: 2px solid var(--sdh-accent);
     outline-offset: 2px;
 }
+
+/* 0.45.0 – külön Szolgáltatások és Termékek fül: alattuk a teljes lap végösszege. */
+.rma-tabla__veg td {
+    padding-top: .5rem;
+    border-top: 1px dashed var(--sdh-keret-eros);
+    font-size: .92em;
+    font-weight: 500;
+    opacity: .8;
+}

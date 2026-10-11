@@ -3,8 +3,10 @@
  *
  *  - Üzenet küldése az ügyfélnek a munkalap RMA lapfüléről (munkalap-ablak
  *    és Áttekintés). Űrlapon belül áll, ezért nincs <form>: gomb / Ctrl+Enter.
- *  - Lapozás görgetősáv helyett ([data-sdh-lapoz="N"]): a popupban nincs
- *    görgetősáv, a hosszú üzenetszál és történet lapozható.
+ *  - Az üzenetszál csevegő: időrendben, a legfrissebb alul, görgethető; az
+ *    Enter küld, a Shift+Enter új sor; nyitott ablaknál magától frissül.
+ *  - Lapozás görgetősáv helyett ([data-sdh-lapoz="N"]): a hosszú
+ *    állapottörténet lapozható.
  *  - Az Áttekintés részletpaneljén az „RMA / Üzenetek" fül a munkalap-ablakot
  *    nyitja meg az RMA lapfülön (popupban, mint a munkalap).
  *  - Olvasatlan-jelzés: az oldalmenü „Üzenetek" jelvénye percenként frissül;
@@ -220,6 +222,7 @@
                 Array.prototype.forEach.call(valtozas.addedNodes, function (elem) {
                     if (elem.nodeType === 1 && !elem.classList.contains('sdh-lapozo')) {
                         lapozIndit(elem);
+                        chatIndit(elem);
                     }
                 });
             });
@@ -227,6 +230,7 @@
     }
 
     lapozIndit(document);
+    document.addEventListener('DOMContentLoaded', function () { chatIndit(document); });
 
     /* ---------------------------------------------------------------- */
     /* Üzenet küldése                                                    */
@@ -258,16 +262,18 @@
             email: email && email.checked && !email.disabled ? '1' : ''
         })
             .then(function (adat) {
-                var rma = urlap.closest('[data-sdh-rma]');
-                var szal = rma && rma.querySelector('[data-sdh-uzenetek]');
+                var chat = urlap.closest('[data-sdh-chat]');
+                var szal = chat && chat.querySelector('[data-sdh-uzenetek]');
 
                 if (szal) {
                     szal.innerHTML = adat.html; // a szerveren szűrt HTML
-                    szal.setAttribute('data-sdh-lap', '0');
-                    lapoz(szal);
+                    chat.setAttribute('data-utolso', String(adat.utolso || 0));
+                    aljara(szal);
                 }
 
                 mezo.value = '';
+                magassag(mezo);
+                mezo.focus();
                 lapJelveny(id, adat.szamlalo);
                 menuJelveny(adat.olvasatlan);
 
@@ -282,21 +288,155 @@
             })
             .then(function () {
                 gomb.disabled = false;
+
+                // A hibasor megjelenése összébb nyomja a szálat: maradjon a legfrissebbnél.
+                var szalVeg = urlap.closest('[data-sdh-chat]');
+                szalVeg = szalVeg && szalVeg.querySelector('[data-sdh-uzenetek]');
+
+                if (szalVeg) {
+                    aljara(szalVeg);
+                }
             });
     }
 
+    /*
+     * Csevegő: az Enter küld, a Shift+Enter új sort kezd (a Ctrl+Enter is küld).
+     * Az Enter itt nem juthat el a munkalap űrlapjához – az a lapot mentené.
+     */
     document.addEventListener('keydown', function (esemeny) {
-        if (esemeny.key !== 'Enter' || !(esemeny.ctrlKey || esemeny.metaKey)) {
+        if (esemeny.key !== 'Enter' || esemeny.shiftKey || esemeny.isComposing) {
             return;
         }
 
-        var urlap = esemeny.target.closest && esemeny.target.closest('[data-sdh-uzenet-urlap]');
+        var mezo = esemeny.target.closest && esemeny.target.closest('[data-sdh-uzenet-szoveg]');
+        var urlap = mezo && mezo.closest('[data-sdh-uzenet-urlap]');
 
         if (urlap) {
             esemeny.preventDefault();
+            esemeny.stopPropagation();
             kuldes(urlap);
         }
+    }, true);
+
+    /** A beírómező a szöveggel együtt nő (legfeljebb öt sorig), görgetősáv nélkül. */
+    function magassag(mezo) {
+        mezo.style.height = 'auto';
+        mezo.style.height = Math.min(mezo.scrollHeight + 2, 120) + 'px';
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        if (esemeny.target.matches && esemeny.target.matches('[data-sdh-uzenet-szoveg]')) {
+            magassag(esemeny.target);
+        }
     });
+
+    /* ---------------------------------------------------------------- */
+    /* Csevegő: a szál az alján áll, és magától frissül                  */
+    /* ---------------------------------------------------------------- */
+
+    var CHAT_MS = 8000;
+
+    function aljara(szal) {
+        szal.scrollTop = szal.scrollHeight;
+    }
+
+    /** A szál aljánál áll-e az olvasó (akkor az új üzenet után is ott marad). */
+    function alulVan(szal) {
+        return szal.scrollHeight - szal.scrollTop - szal.clientHeight < 60;
+    }
+
+    function chatIndit(gyoker) {
+        var lista = gyoker.matches && gyoker.matches('[data-sdh-chat]') ? [gyoker] : minden('[data-sdh-chat]', gyoker);
+
+        lista.forEach(function (chat) {
+            var szal = chat.querySelector('[data-sdh-uzenetek]');
+
+            if (!szal || chat.sdhChat) {
+                return;
+            }
+
+            chat.sdhChat = true;
+
+            // A lapfül csak később válik láthatóvá: amikor először lesz mérete, az aljára ugrik.
+            if (window.ResizeObserver) {
+                var elso = true;
+
+                new ResizeObserver(function () {
+                    if (elso && szal.clientHeight > 0) {
+                        elso = false;
+                        aljara(szal);
+                    }
+                }).observe(szal);
+            }
+
+            aljara(szal);
+        });
+    }
+
+    function chatFrissit() {
+        if (document.visibilityState === 'hidden' || !B.ajax) {
+            return;
+        }
+
+        minden('[data-sdh-chat]').forEach(function (chat) {
+            var szal = chat.querySelector('[data-sdh-uzenetek]');
+            var id = chat.getAttribute('data-id');
+
+            if (!szal || !id || chat.sdhKer) {
+                return;
+            }
+
+            var latszik = szal.offsetParent !== null;
+
+            chat.sdhKer = true;
+
+            kuld('sdh_muhely_uzenet_szal', {
+                id: id,
+                utan: chat.getAttribute('data-utolso') || '0',
+                latszik: latszik ? '1' : ''
+            })
+                .then(function (adat) {
+                    if (!adat.valtozott) {
+                        return;
+                    }
+
+                    var alul = alulVan(szal);
+
+                    szal.innerHTML = adat.html; // a szerveren szűrt HTML
+                    chat.setAttribute('data-utolso', String(adat.utolso || 0));
+
+                    if (alul) {
+                        aljara(szal);
+                    } else {
+                        chat.classList.add('is-uj-lent');
+                    }
+
+                    lapJelveny(id, adat.szamlalo);
+                    menuJelveny(adat.olvasatlan);
+                })
+                .catch(function () {})
+                .then(function () { chat.sdhKer = false; });
+        });
+    }
+
+    if (B.ajax) {
+        setInterval(chatFrissit, CHAT_MS);
+    }
+
+    // Más modul üzenetet küldött a lapra (pl. a rendelés „megjött" értesítője): azonnal látszódjon.
+    document.addEventListener('sdh:uzenet-frissit', chatFrissit);
+
+    document.addEventListener('scroll', function (esemeny) {
+        var szal = esemeny.target;
+
+        if (szal && szal.matches && szal.matches('[data-sdh-uzenetek]') && alulVan(szal)) {
+            var chat = szal.closest('[data-sdh-chat]');
+
+            if (chat) {
+                chat.classList.remove('is-uj-lent');
+            }
+        }
+    }, true);
 
     /* ---------------------------------------------------------------- */
     /* Kattintások                                                       */
@@ -387,6 +527,15 @@
 
             if (rma) {
                 olvasottra(fulek, rma.getAttribute('data-sdh-rma'));
+
+                // A fül most válik láthatóvá: a szál a legfrissebb üzenetnél álljon.
+                setTimeout(function () {
+                    var szal = rma.querySelector('[data-sdh-uzenetek]');
+                    var mezo = rma.querySelector('[data-sdh-uzenet-szoveg]');
+
+                    if (szal) { aljara(szal); }
+                    if (mezo) { mezo.focus(); }
+                }, 30);
             }
         }
     });

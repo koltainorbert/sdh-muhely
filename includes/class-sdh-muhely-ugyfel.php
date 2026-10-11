@@ -72,7 +72,7 @@ final class SDH_Muhely_Ugyfel
      * ügyfél lesz: egy <select> ennyi elemmel használhatatlan, és a
      * böngészőt is megfogná.
      */
-    public static function valaszto_mezo(int $ugyfel_id = 0, string $mezo_nev = 'ugyfel_id'): void
+    public static function valaszto_mezo(int $ugyfel_id = 0, string $mezo_nev = 'ugyfel_id', string $helyorzo = ''): void
     {
         $ugyfel = $ugyfel_id > 0 ? self::egy($ugyfel_id) : null;
 
@@ -81,7 +81,7 @@ final class SDH_Muhely_Ugyfel
             <input type="hidden" name="<?php echo esc_attr($mezo_nev); ?>"
                    value="<?php echo (int) $ugyfel_id; ?>">
             <input type="text" class="sdh-valaszto__mezo" autocomplete="off"
-                   placeholder="Kezdd el írni a nevet, telefont, ügyfélszámot…"
+                   placeholder="<?php echo esc_attr($helyorzo !== '' ? $helyorzo : 'Kezdd el írni a nevet, telefont, ügyfélszámot…'); ?>"
                    title="<?php echo esc_attr($ugyfel !== null ? trim($ugyfel->nev . ' – ' . self::cim_szoveg($ugyfel), ' –') : ''); ?>"
                    value="<?php echo esc_attr($ugyfel !== null ? $ugyfel->nev : ''); ?>">
             <ul class="sdh-valaszto__lista" hidden></ul>

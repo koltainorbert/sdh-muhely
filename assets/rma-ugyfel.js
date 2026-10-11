@@ -38,18 +38,21 @@
         return !!(test && test.querySelector('[data-rma-ful="' + kulcs + '"]'));
     }
 
+    // Az első tartalmi fül: javításnál az Eszköz, árukiadásnál / rendelésnél a Termékek.
+    var elso = (test && test.getAttribute('data-rma-elso')) || 'eszkoz';
+
     function valt(kulcs, fokusz) {
         if (!test) {
             return;
         }
 
         if (!van(kulcs)) {
-            kulcs = mobil.matches ? 'osszegzes' : 'eszkoz';
+            kulcs = mobil.matches ? 'osszegzes' : elso;
         }
 
         // Asztali nézetben az összegzés az oldalsávban mindig látszik.
         if (kulcs === 'osszegzes' && !mobil.matches) {
-            kulcs = 'eszkoz';
+            kulcs = elso;
         }
 
         test.setAttribute('data-rma-aktiv', kulcs);
@@ -106,7 +109,7 @@
             }
         }
 
-        valt(van(kezdo) ? kezdo : (mobil.matches ? 'osszegzes' : 'eszkoz'));
+        valt(van(kezdo) ? kezdo : (mobil.matches ? 'osszegzes' : elso));
 
         test.addEventListener('click', function (esemeny) {
             var ful = esemeny.target.closest('[data-rma-ful]');
@@ -132,7 +135,7 @@
         });
 
         var meretValt = function () {
-            valt(test.getAttribute('data-rma-aktiv') || 'eszkoz');
+            valt(test.getAttribute('data-rma-aktiv') || elso);
         };
 
         if (mobil.addEventListener) {
@@ -156,7 +159,10 @@
         });
 
         mezo.addEventListener('keydown', function (esemeny) {
-            if (esemeny.key === 'Enter' && (esemeny.ctrlKey || esemeny.metaKey)) {
+            // Enter küld, Shift+Enter új sor – érintőképernyőn (nincs Shift) az Enter sort tör, a gomb küld.
+            var erinto = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+            if (esemeny.key === 'Enter' && !esemeny.isComposing && (esemeny.ctrlKey || esemeny.metaKey || (!esemeny.shiftKey && !erinto))) {
                 esemeny.preventDefault();
 
                 if (urlap.requestSubmit) {

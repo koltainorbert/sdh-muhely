@@ -74,6 +74,8 @@ final class SDH_Muhely_Rma
         add_action('wp_ajax_sdh_muhely_uzenet_kuld', [self::class, 'ajax_uzenet_kuld']);
         add_action('wp_ajax_sdh_muhely_uzenet_olvasva', [self::class, 'ajax_olvasva']);
         add_action('wp_ajax_sdh_muhely_uzenet_allapot', [self::class, 'ajax_allapot']);
+        // A csevegő frissítése: jött-e új üzenet, amíg az ablak nyitva van (rma.js).
+        add_action('wp_ajax_sdh_muhely_uzenet_szal', [self::class, 'ajax_szal']);
 
         add_action('admin_enqueue_scripts', [self::class, 'admin_eszkozok']);
         // A wp-admin menüjében is látszódjon az olvasatlan üzenetek száma.
@@ -1274,6 +1276,7 @@ final class SDH_Muhely_Rma
 
         wp_send_json_success([
             'html'      => self::uzenetek_html((int) $munkalap->id, 'crm'),
+            'utolso'    => self::utolso_uzenet_id((int) $munkalap->id),
             'email'     => $kuldve,
             'szamlalo'  => self::szamlalo((int) $munkalap->id),
             'olvasatlan' => self::olvasatlan_db(),
@@ -1312,36 +1315,115 @@ final class SDH_Muhely_Rma
         );
     }
 
+    /** A szál legutolsó üzenetének azonosítója (a csevegő ebből látja, jött-e új). */
+    public static function utolso_uzenet_id(int $munkalap_id): int
+    {
+        global $wpdb;
+
+        return (int) $wpdb->get_var(
+            $wpdb->prepare('SELECT MAX(id) FROM ' . self::uzenet_tabla() . ' WHERE munkalap_id = %d', $munkalap_id)
+        );
+    }
+
+    /** A csevegő frissítése (AJAX): csak akkor küld HTML-t, ha a szál változott. */
+    public static function ajax_szal(): void
+    {
+        self::ajax_jog();
+
+        $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $utan   = isset($_POST['utan']) ? (int) $_POST['utan'] : 0;
+        $utolso = self::utolso_uzenet_id($id);
+
+        if ($id <= 0 || self::munkalap($id) === null) {
+            wp_send_json_error(['uzenet' => 'Nincs ilyen munkalap.']);
+        }
+
+        // Ha a csevegő épp látszik, a most érkezett üzenet rögtön olvasott.
+        if ($utolso !== $utan && !empty($_POST['latszik'])) {
+            self::olvasottra($id);
+        }
+
+        wp_send_json_success([
+            'valtozott'  => $utolso !== $utan,
+            'utolso'     => $utolso,
+            'html'       => $utolso !== $utan ? self::uzenetek_html($id, 'crm') : '',
+            'szamlalo'   => self::szamlalo($id),
+            'olvasatlan' => self::olvasatlan_db(),
+        ]);
+    }
+
+    /** Napelválasztó felirata a csevegőben: Ma / Tegnap / dátum. */
+    private static function nap_felirat(string $nap): string
+    {
+        $ma = current_time('Y-m-d');
+
+        if ($nap === $ma) {
+            return 'Ma';
+        }
+
+        if ($nap === gmdate('Y-m-d', strtotime($ma . ' -1 day'))) {
+            return 'Tegnap';
+        }
+
+        return mysql2date('Y. m. d.', $nap . ' 00:00:00');
+    }
+
     /**
-     * Az üzenetszál HTML-je a CRM-ben (a legfrissebb elöl, lapozható).
+     * Az üzenetszál HTML-je a CRM-ben: csevegő, időrendben (a legrégebbi
+     * felül, a legfrissebb alul), napelválasztókkal. A szerviz üzenete jobbra,
+     * az ügyfélé balra áll; az egymást követő, azonos feladójú üzenetek egy
+     * csoportot alkotnak (rma.js görgeti az aljára).
      */
     public static function uzenetek_html(int $munkalap_id, string $nezet = 'crm'): string
     {
-        $uzenetek = array_reverse(self::uzenetek($munkalap_id));
+        $uzenetek = self::uzenetek($munkalap_id);
 
         if ($uzenetek === []) {
-            return '<p class="sdh-uz-ures">Még nincs üzenet ehhez a munkalaphoz.</p>';
+            return '<p class="sdh-uz-ures">Még nincs üzenet. Írj az ügyfélnek – az ügyféloldalon látja, és válaszolhat rá.</p>';
         }
 
-        $html  = '';
-        $nevek = self::eszkoz_nevek($munkalap_id);
+        $html      = '';
+        $nevek     = self::eszkoz_nevek($munkalap_id);
+        $elozo_nap = '';
+        $elozo_ki  = '';
+        $uj_jelzo  = false;
+        $nevtar    = [];
 
         foreach ($uzenetek as $u) {
-            if ($u->irany === 'ki') {
-                $f  = (int) $u->felhasznalo > 0 ? get_userdata((int) $u->felhasznalo) : false;
-                $ki = $f ? (string) $f->display_name : 'Szerviz';
+            $sajat = $u->irany === 'ki';
+            $fid   = (int) $u->felhasznalo;
+
+            if ($sajat) {
+                if (!isset($nevtar[$fid])) {
+                    $f            = $fid > 0 ? get_userdata($fid) : false;
+                    $nevtar[$fid] = $f ? (string) $f->display_name : 'Szerviz';
+                }
+
+                $ki = $nevtar[$fid];
             } else {
                 $ki = 'Ügyfél';
             }
 
-            $jelek = [];
+            $nap = substr((string) $u->letrehozva, 0, 10);
 
-            if ($u->irany === 'be' && (int) $u->olvasva === 0) {
-                $jelek[] = '<b class="sdh-uz__uj">új</b>';
+            if ($nap !== $elozo_nap) {
+                $html     .= '<div class="sdh-uz-nap"><span>' . esc_html(self::nap_felirat($nap)) . '</span></div>';
+                $elozo_nap = $nap;
+                $elozo_ki  = '';
             }
 
+            // Az első olvasatlan bejövő üzenet fölött egyszer: „Új üzenetek".
+            if (!$sajat && (int) $u->olvasva === 0 && !$uj_jelzo) {
+                $html    .= '<div class="sdh-uz-nap sdh-uz-nap--uj sdh-uz__uj"><span>Új üzenetek</span></div>';
+                $uj_jelzo = true;
+                $elozo_ki = '';
+            }
+
+            $kulcs = ($sajat ? 'ki:' . $fid : 'be');
+            $jelek = [];
+
             if ((int) $u->email_kuldve === 1) {
-                $jelek[] = '<span>e-mail</span>';
+                $jelek[] = '<span class="sdh-uz__jel" title="E-mailben is elment">e-mail ✓</span>';
             }
 
             // Melyik készülékről szól (több eszközös lap); a lapról már levett eszköznél nincs címke.
@@ -1350,13 +1432,18 @@ final class SDH_Muhely_Rma
             }
 
             $html .= sprintf(
-                '<div class="sdh-uz%s"><div class="sdh-uz__fej"><b>%s</b> <span>%s</span>%s</div><div class="sdh-uz__szoveg">%s</div></div>',
-                $u->irany === 'ki' ? ' sdh-uz--sajat' : ' sdh-uz--ugyfel',
-                esc_html($ki),
-                esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $u->letrehozva)),
-                $jelek !== [] ? ' ' . implode(' ', $jelek) : '',
-                nl2br(esc_html((string) $u->szoveg))
+                '<div class="sdh-uz%s%s" data-uz="%d">%s<div class="sdh-uz__buborek"><div class="sdh-uz__szoveg">%s</div></div><div class="sdh-uz__fej"><time title="%s">%s</time>%s</div></div>',
+                $sajat ? ' sdh-uz--sajat' : ' sdh-uz--ugyfel',
+                $kulcs === $elozo_ki ? ' sdh-uz--folytat' : '',
+                (int) $u->id,
+                $kulcs === $elozo_ki ? '' : '<div class="sdh-uz__ki">' . esc_html($ki) . '</div>',
+                nl2br(esc_html((string) $u->szoveg)),
+                esc_attr(SDH_Muhely_Munkalap::datumido_megjelenit((string) $u->letrehozva)),
+                esc_html(mysql2date('H:i', (string) $u->letrehozva)),
+                $jelek !== [] ? ' ' . implode(' ', $jelek) : ''
             );
+
+            $elozo_ki = $kulcs;
         }
 
         return $html;
@@ -1389,8 +1476,11 @@ final class SDH_Muhely_Rma
 
         $atveve = SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->keszult);
 
+        // Rendelésnél nincs átvett készülék: a rendelés felvételének napja áll a címkén.
+        $rendeles = (string) ($munkalap->fajta ?? '') === 'rendeles';
+
         if ($atveve !== '') {
-            $sorok .= '<div class="sdh-cimke__sor">Átvéve: ' . esc_html($atveve) . '</div>';
+            $sorok .= '<div class="sdh-cimke__sor">' . ($rendeles ? 'Felvéve: ' : 'Átvéve: ') . esc_html($atveve) . '</div>';
         }
 
         // sdh-cimke--rma: a nyomtatott címke; a sima .sdh-cimke a listák kis szövegcímkéje.
@@ -1405,7 +1495,9 @@ final class SDH_Muhely_Rma
             . '</div>'
             . '<div class="sdh-cimke__vk">' . SDH_Muhely_Kodok::vonalkod_svg($szam, false, 'sdh-vonalkod', true)
             . '<div class="sdh-cimke__vkszam">' . esc_html($szam) . '</div></div>'
-            . '<div class="sdh-cimke__sugo">Javítás állapota: olvassa be a QR-kódot, és lépjen be a telefonszámával és a munkalap sorszámával.</div>'
+            . '<div class="sdh-cimke__sugo">' . ($rendeles
+                ? 'Rendelés állapota: olvassa be a QR-kódot, és lépjen be a telefonszámával és a rendelés sorszámával.'
+                : 'Javítás állapota: olvassa be a QR-kódot, és lépjen be a telefonszámával és a munkalap sorszámával.') . '</div>'
             . '</div>';
     }
 
@@ -1479,8 +1571,25 @@ final class SDH_Muhely_Rma
 
         echo '</div>';
 
-        // --- Üzenetek ------------------------------------------------------
-        echo '<div class="sdh-rma__uzenetek"><div class="sdh-rma__cim">Üzenetek az ügyféllel</div>';
+        // --- Üzenetek: csevegő ---------------------------------------------
+        // Időrendben, a legfrissebb alul; a szál görgethető, a beírómező alul áll
+        // (Enter küld, Shift+Enter új sor). Nyitott ablaknál magától frissül (rma.js).
+        printf(
+            '<div class="sdh-rma__uzenetek sdh-chat" data-sdh-chat data-id="%d" data-utolso="%d">',
+            $id,
+            self::utolso_uzenet_id($id)
+        );
+
+        printf(
+            '<div class="sdh-chat__fej"><span class="sdh-chat__avatar" aria-hidden="true">%s</span>'
+            . '<span class="sdh-chat__kivel"><b>%s</b><small>%s</small></span></div>',
+            esc_html(mb_strtoupper(mb_substr($ugyfel ? trim((string) $ugyfel->nev) : '?', 0, 1))),
+            esc_html($ugyfel ? (string) $ugyfel->nev : 'Nincs ügyfél'),
+            esc_html($ugyfel ? 'Az ügyféloldalon látja, és ott válaszolhat' : 'Üzenetet ügyfélhez rendelt lapon lehet küldeni')
+        );
+
+        echo '<div class="sdh-chat__szal sdh-uz-szal" data-sdh-uzenetek tabindex="0" aria-label="Üzenetek az ügyféllel" aria-live="polite">'
+            . self::uzenetek_html($id) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
         if ($ugyfel !== null) {
             // Több eszköznél: melyik készülékről szól az üzenet (alapból az egész lapról).
@@ -1507,23 +1616,24 @@ final class SDH_Muhely_Rma
             }
 
             printf(
-                '<div class="sdh-uz-urlap" data-sdh-uzenet-urlap data-id="%d">'
+                '<div class="sdh-uz-urlap sdh-chat__also" data-sdh-uzenet-urlap data-id="%d">'
                 . str_replace('%', '%%', $uz_eszkozok) // a név a printf formátumába kerül
-                . '<textarea rows="2" data-sdh-uzenet-szoveg aria-label="Üzenet az ügyfélnek" placeholder="Üzenet az ügyfélnek – az ügyféloldalon látja, és válaszolhat rá (Ctrl+Enter: küldés)"></textarea>'
+                . '<div class="sdh-chat__beir">'
+                . '<textarea rows="1" data-sdh-uzenet-szoveg aria-label="Üzenet az ügyfélnek" placeholder="Írj üzenetet…"></textarea>'
+                . '<button type="button" class="sdh-chat__kuld" data-sdh-uzenet-kuld title="Küldés (Enter)" aria-label="Küldés">'
+                . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 17 3l-4.5 14-2.8-5.7L3 10Z"/></svg></button>'
+                . '</div>'
                 . '<div class="sdh-uz-urlap__lab">'
                 . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-email value="1"%s%s> %s</label>'
-                . '<button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-uzenet-kuld>Küldés</button></div>'
+                . '<span class="sdh-chat__sugo">Enter: küldés · Shift+Enter: új sor</span></div>'
                 . '<p class="sdh-uz-urlap__hiba" data-sdh-uzenet-hiba hidden></p></div>',
                 $id,
                 $van_email && $b['ugyfel_email'] ? ' checked' : '',
                 $van_email ? '' : ' disabled',
-                esc_html($van_email ? 'E-mail is: ' . $ugyfel->email : 'E-mail is – az ügyfélnek nincs e-mail címe')
+                esc_html($van_email ? 'E-mailben is: ' . $ugyfel->email : 'E-mail nem megy – az ügyfélnek nincs e-mail címe')
             );
-        } else {
-            echo '<p class="sdh-rma__ures">Üzenetet ügyfélhez rendelt munkalapon lehet küldeni.</p>';
         }
 
-        echo '<div class="sdh-uz-szal" data-sdh-uzenetek data-sdh-lapoz="3">' . self::uzenetek_html($id) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
         echo '</div>';
 
         // --- Állapottörténet -----------------------------------------------

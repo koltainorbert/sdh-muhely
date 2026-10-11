@@ -16,6 +16,7 @@ funkcionalitásának átültetése, modulonként:
 - **Munkalap** – állapot, felelős, határidő, fizetés
 - **Hiba** – munkalaphoz kötött hibajegyek
 - **Tétel** – termék és szolgáltatás, beszerzési ár, haszonkulcs, készlet
+- **Napi árukiadás** – pultos eladás javítás nélkül, helyszínenként; **Rendelések** – ügyfélnek rendelt áru, beszállítóval, értesítéssel
 - **Házipénztár** – napi kassza, címletes zárás, napló, riport, statisztika, egyeztető ügynök, Excel-import
 - **Csapat** – belső üzenetek kollégának, csoportnak, mindenkinek; fontos üzenet felugró ablakban; kollégák, csoportok
 - **Asszisztens** – AI (Claude) segítő minden oldalon: kérdez-felel, vezet, tanul; csak jóváhagyással módosít, mentéssel
@@ -59,6 +60,31 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.45.0
+- **Napi árukiadás.** Új menüpont, csempe és gomb az Áttekintésen: pultos eladás javítás nélkül – termék és / vagy
+  szolgáltatás, fizetéssel. Ugyanaz a lap, mint a munkalap (fizetés, előleg, számla, pénztár), csak eszköz, hibák
+  és bevizsgálási díj nélkül. A vevő alapból „Napi árukiadás"; választható meglévő ügyfél, vagy a + gombbal új
+  vehető fel. „Rögzítés és fizetés": mentés után rögtön a fizetés ablaka jön; a kifizetett eladás magától lezárul.
+- **Helyszínek.** A Beállításokban (és adminként a Napi árukiadás oldalán) felvehetők az üzletek. Több helyszínnél
+  az árukiadáson választani kell, és a lista helyszínre szűrhető; egy üzletnél a választó meg sem jelenik.
+- **Rendelések.** Új menüpont, csempe és gomb: az ügyfeleknek rendelt áru egy helyen. Mindig ügyfélhez kötve; a
+  forrás („Honnan") szerkeszthető listából, a + gombbal popupban bővíthető. A rendelés útja külön állapot: Felvéve →
+  Megrendelve → Megérkezett → Ügyfél értesítve → Átadva; beszállítói rendelésszám, várható érkezés. Ugyanúgy fizet
+  (előleggel is), és van RMA-ja.
+- **„Megjött – értesítés".** A rendelésen egy gomb: az átírható értesítő az ügyféloldalra kerül, és ha van e-mail
+  címe, e-mailben is elmegy. A menü jelzi, hány megérkezett rendelésről nem tud még az ügyfél.
+- **Csevegő a munkalap RMA-fülén.** Az üzenetek időrendben állnak, a legfrissebb alul; a szál görgethető, nincs
+  lapozás. A szerviz üzenete jobbra, az ügyfélé balra áll, napelválasztóval. Enter küld, Shift+Enter új sort kezd;
+  nyitott ablaknál az ügyfél válasza magától megjelenik.
+- **Ügyféloldal: külön Termékek fül.** A régi közös „Tételek" helyett Szolgáltatások és Termékek fül, ahogy a
+  munkalapon; mindkettő alatt ott a lap végösszege is.
+- **Áttekintés:** új gombok – „+ Új termék", „+ Új szolgáltatás" (mentés után az Áttekintésen maradsz), „Napi
+  árukiadás", „Rendelések". A csempék szerkesztése csak a Beállításokban van.
+- A munkalap-rács, a Munkalapok lista és a „nyitott munkalap" számláló csak a javítási lapokat mutatja; a sorszám
+  a háromféle lapnál közös.
+- Új tesztek: `t29-eladas`, `t30-rma-csevego`. Séma (DB_VERSION 0.34.0): `sdh_munkalap.fajta`, `helyszin_id`,
+  `beszallito_id`, `rend_allapot`, `rend_szam`, `rend_ertesitve`; új táblák: `sdh_helyszin`, `sdh_beszallito`.
 
 ### 0.44.0
 - **A „Fizetett" mindig az, ami ténylegesen befolyt.** Eddig teljes fizetés után is csak a díj és az előlegek

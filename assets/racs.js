@@ -2304,6 +2304,10 @@
     var MENTES_UZENET = {
         munkalap_mentve: 'A munkalap elmentve.',
         munkalap_letrehozva: 'A munkalap létrejött.',
+        arukiadas_mentve: 'Az árukiadás elmentve.',
+        arukiadas_letrehozva: 'Az árukiadás rögzítve.',
+        rendeles_mentve: 'A rendelés elmentve.',
+        rendeles_letrehozva: 'A rendelés rögzítve.',
         mentve: 'Elmentve.',
         letrehozva: 'Az ügyfél létrejött.',
         letrehozva_eszkoz: 'Az eszköz létrejött.'
@@ -2330,8 +2334,8 @@
 
             szoveg = MENTES_UZENET[kulcs] || szoveg;
 
-            if (kulcs === 'munkalap_letrehozva' && lapszam) {
-                szoveg = 'A munkalap létrejött. Száma: ' + lapszam;
+            if (/_letrehozva$/.test(kulcs) && MENTES_UZENET[kulcs] && lapszam) {
+                szoveg = MENTES_UZENET[kulcs] + ' Száma: ' + lapszam;
             }
         } catch (e) {
             /* a cím nem értelmezhető: marad az általános üzenet */

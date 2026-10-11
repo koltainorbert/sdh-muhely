@@ -378,6 +378,7 @@ final class SDH_Muhely_Admin_UI
             );
         }
 
+        // (Az eladas.js-t a SDH_Muhely_Eladas tölti be, ugyanezekre az oldalakra.)
         // Csapat (belső üzenetek, pulzus) és az AI-asszisztens: minden saját oldalon.
         foreach (['csapat', 'asszisztens'] as $sdh_eszkoz) {
             wp_enqueue_style('sdh-muhely-' . $sdh_eszkoz, SDH_MUHELY_URL . 'assets/' . $sdh_eszkoz . '.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/' . $sdh_eszkoz . '.css'));
@@ -536,6 +537,10 @@ final class SDH_Muhely_Admin_UI
             'munkalap_mentve'      => ['siker', 'A munkalap elmentve.'],
             'munkalap_letrehozva'  => ['siker', 'A munkalap létrejött.'],
             'munkalap_hiba'        => ['hiba',  'A munkalap nem menthető.'],
+            'arukiadas_mentve'     => ['siker', 'Az árukiadás elmentve.'],
+            'arukiadas_letrehozva' => ['siker', 'Az árukiadás rögzítve.'],
+            'rendeles_mentve'      => ['siker', 'A rendelés elmentve.'],
+            'rendeles_letrehozva'  => ['siker', 'A rendelés rögzítve.'],
             'inaktivalva'       => ['siker', 'Az ügyfél inaktívra állítva.'],
             'aktivalva'         => ['siker', 'Az ügyfél újra aktív.'],
             'hianyzo_nev'       => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
@@ -589,11 +594,11 @@ final class SDH_Muhely_Admin_UI
 
         // Új munkalapnál a kiosztott számot is kiírjuk – a pultnál erre van
         // szükség, hogy ráírják a készülék tasakjára.
-        if ($kulcs === 'munkalap_letrehozva' && isset($_GET['szam'])) {
+        if (in_array($kulcs, ['munkalap_letrehozva', 'arukiadas_letrehozva', 'rendeles_letrehozva'], true) && isset($_GET['szam'])) {
             $szam = sanitize_text_field(wp_unslash($_GET['szam']));
 
             if ($szam !== '') {
-                $szoveg = 'A munkalap létrejött. Száma: ' . $szam;
+                $szoveg = ($kulcs === 'munkalap_letrehozva' ? 'A munkalap létrejött.' : $szoveg) . ' Száma: ' . $szam;
             }
         }
 
@@ -650,20 +655,44 @@ final class SDH_Muhely_Admin_UI
             ],
         ];
 
+        // Új termék és új szolgáltatás a törzsbe – popupban, az Áttekintés elhagyása nélkül (eladas.js).
+        if (class_exists('SDH_Muhely_Termek')) {
+            $gombok[] = [
+                'cimke'  => '+ Új termék',
+                'url'    => SDH_Muhely_Modulok::url('termekek', ['nezet' => 'uj']),
+                'adatok' => ['sdh-urlap' => 'termekek', 'sdh-id' => '0', 'sdh-marad' => 'A termék létrejött.'],
+            ];
+        }
+
+        if (class_exists('SDH_Muhely_Szolgaltatas')) {
+            $gombok[] = [
+                'cimke'  => '+ Új szolgáltatás',
+                'url'    => SDH_Muhely_Modulok::url('szolgaltatasok', ['nezet' => 'uj']),
+                'adatok' => ['sdh-urlap' => 'szolgaltatasok', 'sdh-id' => '0', 'sdh-marad' => 'A szolgáltatás létrejött.'],
+            ];
+        }
+
+        // Napi árukiadás és rendelés: az új lap űrlapja egy kattintásra (a listájuk a menüben és a csempén).
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $gombok[] = [
+                'cimke'  => 'Napi árukiadás',
+                'url'    => SDH_Muhely_Modulok::url(SDH_Muhely_Eladas::KULCS_ARU),
+                'adatok' => ['sdh-urlap' => SDH_Muhely_Eladas::KULCS_ARU, 'sdh-id' => '0'],
+            ];
+            $gombok[] = [
+                'cimke'  => 'Rendelések',
+                'url'    => SDH_Muhely_Modulok::url(SDH_Muhely_Eladas::KULCS_REND),
+                'adatok' => ['sdh-urlap' => SDH_Muhely_Eladas::KULCS_REND, 'sdh-id' => '0'],
+            ];
+        }
+
         // A modulcsempék elrejtése / megjelenítése (app.js; a felirat is ott vált).
+        // A csempék szerkesztése (mi látszik, sorrend, felirat) adminfeladat: a Beállításokban van.
         $gombok[] = [
             'cimke'  => 'Csempék elrejtése',
             'url'    => '#',
             'adatok' => ['sdh-csempek-valt' => ''],
         ];
-
-        // A csempék szerkesztése (mi látszik, sorrend, felirat) – a Beállításokban.
-        if (current_user_can('manage_options')) {
-            $gombok[] = [
-                'cimke' => 'Csempék szerkesztése',
-                'url'   => SDH_Muhely_Modulok::admin_url('beallitasok') . '#csempek',
-            ];
-        }
 
         if ($technikai) {
             $gombok[] = [
@@ -779,6 +808,11 @@ final class SDH_Muhely_Admin_UI
             $szamok['csapat'] = [SDH_Muhely_Csapat::olvasatlan_db(), 'olvasatlan csapatüzenet'];
         }
 
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $szamok[SDH_Muhely_Eladas::KULCS_ARU]  = [SDH_Muhely_Eladas::mai_arukiadas_db(), 'mai árukiadás'];
+            $szamok[SDH_Muhely_Eladas::KULCS_REND] = [SDH_Muhely_Eladas::nyitott_rendeles_db(), 'folyamatban lévő rendelés'];
+        }
+
         if (class_exists('SDH_Muhely_Asszisztens')) {
             $szamok['asszisztens'] = [SDH_Muhely_Asszisztens::fuggo_db(), 'jóváhagyásra váró javaslat'];
         }
@@ -842,6 +876,11 @@ final class SDH_Muhely_Admin_UI
 
         if (class_exists('SDH_Muhely_Penztar')) {
             $szamok['penztar'] = (int) SDH_Muhely_Penztar::kassza_most();
+        }
+
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $szamok[SDH_Muhely_Eladas::KULCS_ARU]  = SDH_Muhely_Eladas::mai_arukiadas_db();
+            $szamok[SDH_Muhely_Eladas::KULCS_REND] = SDH_Muhely_Eladas::nyitott_rendeles_db();
         }
 
         wp_send_json_success(array_map(static fn (int $n): string => number_format_i18n($n), $szamok));

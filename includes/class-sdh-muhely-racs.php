@@ -790,8 +790,10 @@ final class SDH_Muhely_Racs
     private static function feltetelek(array $allapot): array
     {
         $oszlopok   = self::oszlopok();
-        $feltetelek = ['1 = %d'];
-        $ertekek    = [1];
+        // A rács a javítási munkalapoké: a napi árukiadás és a rendelés a saját
+        // menüpontjában áll (SDH_Muhely_Eladas).
+        $feltetelek = ['m.fajta = %s'];
+        $ertekek    = ['javitas'];
 
         foreach ($allapot['szurok'] as $k => $szuro) {
             $sql = self::szuro_sql($oszlopok[$k], $szuro, $ertekek);

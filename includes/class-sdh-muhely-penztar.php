@@ -1393,8 +1393,9 @@ final class SDH_Muhely_Penztar
         return [
             'id'        => (int) $m->id,
             'szam'      => $szam,
-            'nev'       => $ugyfel ? (string) $ugyfel->nev : '',
-            'leiras'    => mb_substr($leiras !== '' ? $leiras : 'Munkalap ' . $szam, 0, 255),
+            // Ügyfél nélküli napi árukiadásnál a vevő neve: „Napi árukiadás".
+            'nev'       => $ugyfel ? (string) $ugyfel->nev : ((string) ($m->fajta ?? '') === 'arukiadas' && class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::NEVTELEN : ''),
+            'leiras'    => mb_substr($leiras !== '' ? $leiras : SDH_Muhely_Munkalap::fajta_nev((string) ($m->fajta ?? '')) . ' ' . $szam, 0, 255),
             'brutto'    => $brutto,
             'eloleg'    => $fizetett,
             'fizetve'   => (int) $m->fizetve === 1,
@@ -2368,6 +2369,9 @@ final class SDH_Muhely_Penztar
                 $tetel_id = self::ment($adat, 0, 'munkalap');
             }
         }
+
+        // Más modulok itt kapcsolódhatnak (pl. a kifizetett napi árukiadás lezárása).
+        do_action('sdh_muhely_munkalap_fizetes', (int) $m->id, $fajta);
 
         wp_send_json_success([
             'munkalap_id' => (int) $m->id,

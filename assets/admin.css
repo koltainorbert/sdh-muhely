@@ -3004,7 +3004,9 @@ a.sdh-kartya:focus-visible {
 
 /* A munkalap ablaka szélesebb az alapnál: elfér benne az oldalsáv és a
    tételek táblázata. (A felhasználó által húzott méret ezt felülírja.) */
-.sdh-modal[data-sdh-modul="munkalapok"] {
+.sdh-modal[data-sdh-modul="munkalapok"],
+.sdh-modal[data-sdh-modul="arukiadas"],
+.sdh-modal[data-sdh-modul="rendelesek"] {
     width: min(1480px, calc(100vw - 2rem));
 }
 
@@ -3863,32 +3865,239 @@ a.sdh-kartya:focus-visible {
     font-size: 12.5px;
 }
 
-.sdh-uz-urlap {
-    display: flex;
-    flex-direction: column;
-    gap: .3rem;
+/*
+ * Csevegő az ügyféllel (rma.js): fejléc, görgethető szál (a legfrissebb alul),
+ * alul a beírómező. A szerviz üzenete jobbra áll kiemelő színnel, az ügyfélé balra.
+ */
+.sdh-chat {
+    gap: 0;
+    height: clamp(300px, 46vh, 460px);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 12px;
+    background: var(--sdh-felulet);
+    overflow: hidden;
 }
 
-.sdh-uz-urlap textarea {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 52px;
-    height: 52px;
-    padding: .4rem .55rem;
-    border: 1px solid var(--sdh-keret-eros);
-    border-radius: 7px;
+.sdh-chat__fej {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: .55rem;
+    padding: .45rem .7rem;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-chat__avatar {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.sdh-chat__kivel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.sdh-chat__kivel b {
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--sdh-szoveg);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-chat__kivel small {
+    font-size: 11px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-chat__szal {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: .6rem .7rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sdh-keret-eros) transparent;
+}
+
+.sdh-chat__szal:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--sdh-accent) 35%, transparent);
+    outline-offset: -2px;
+}
+
+.sdh-chat__szal > .sdh-uz-ures {
+    margin: auto;
+    max-width: 30ch;
+    text-align: center;
+}
+
+.sdh-uz-szal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sdh-uz-nap {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: .5rem 0 .3rem;
+    font-size: 11px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-uz-nap::before,
+.sdh-uz-nap::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--sdh-keret);
+}
+
+.sdh-uz-nap--uj {
+    color: var(--sdh-allapot-piros);
+    font-weight: 600;
+}
+
+.sdh-uz-nap--uj::before,
+.sdh-uz-nap--uj::after {
+    background: color-mix(in srgb, var(--sdh-allapot-piros) 45%, transparent);
+}
+
+.sdh-uz {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 78%;
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.sdh-uz--folytat {
+    margin-top: 0;
+}
+
+.sdh-uz--sajat {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.sdh-uz__ki {
+    padding: 0 .55rem 1px;
+    font-size: 11px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-uz__buborek {
+    padding: .4rem .7rem;
+    border-radius: 16px 16px 16px 5px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-uz--sajat .sdh-uz__buborek {
+    border-radius: 16px 16px 5px 16px;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.sdh-uz__szoveg {
+    overflow-wrap: anywhere;
+}
+
+.sdh-uz__fej {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    padding: 1px .55rem 0;
+    font-size: 10.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-chat__also {
+    flex: 0 0 auto;
+    gap: .3rem;
+    display: flex;
+    flex-direction: column;
+    padding: .5rem .6rem .45rem;
+    border-top: 1px solid var(--sdh-keret);
     background: var(--sdh-felulet);
+}
+
+.sdh-chat__beir {
+    display: flex;
+    align-items: flex-end;
+    gap: .4rem;
+}
+
+.sdh-chat__beir textarea {
+    display: block;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    min-width: 0;
+    height: 36px;
+    min-height: 36px;
+    max-height: 120px;
+    padding: .45rem .8rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 18px;
+    background: var(--sdh-felulet-2);
     color: var(--sdh-szoveg);
     font: inherit;
     font-size: 13px;
     line-height: 1.4;
     resize: none;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
-.sdh-uz-urlap textarea:focus {
+.sdh-chat__beir textarea:focus {
     outline: 2px solid color-mix(in srgb, var(--sdh-accent) 35%, transparent);
     border-color: var(--sdh-accent);
+}
+
+.sdh-chat__kuld {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    cursor: pointer;
+}
+
+.sdh-chat__kuld svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+
+.sdh-chat__kuld:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+.sdh-chat__kuld:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 2px;
 }
 
 .sdh-uz-urlap__lab {
@@ -3898,17 +4107,19 @@ a.sdh-kartya:focus-visible {
     gap: .6rem;
 }
 
-.sdh-uz-urlap__lab .sdh-gomb {
-    height: 30px;
-}
-
 .sdh-uz-urlap__jelolo {
     display: inline-flex;
     align-items: center;
     gap: .35rem;
     min-width: 0;
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--sdh-szoveg-2);
+}
+
+.sdh-chat__sugo {
+    flex: 0 0 auto;
+    font-size: 11px;
+    color: var(--sdh-halvany);
 }
 
 .sdh-uz-urlap__hiba {
@@ -3921,51 +4132,9 @@ a.sdh-kartya:focus-visible {
     display: none;
 }
 
-.sdh-uz-szal {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.sdh-uz {
-    max-width: 94%;
-    padding: .35rem .6rem;
-    border-radius: 9px;
-    background: var(--sdh-felulet-2);
-    font-size: 12.5px;
-    line-height: 1.4;
-}
-
-.sdh-uz--sajat {
-    align-self: flex-end;
-    background: color-mix(in srgb, var(--sdh-allapot-kek) 14%, var(--sdh-felulet));
-}
-
-.sdh-uz--ugyfel {
-    border-left: 3px solid var(--sdh-accent);
-}
-
-.sdh-uz__fej {
-    font-size: 11.5px;
-    color: var(--sdh-halvany);
-}
-
-.sdh-uz__fej b {
-    color: var(--sdh-szoveg);
-}
-
-.sdh-uz__uj {
-    display: inline-block;
-    padding: 0 .35rem;
-    border-radius: 999px;
-    background: var(--sdh-allapot-piros);
-    color: #fff;
-    font-size: 10.5px;
-    font-weight: 600;
-}
-
-.sdh-uz__szoveg {
-    overflow-wrap: anywhere;
+/* Új üzenet jött, de az olvasó feljebb görgetett: a szál alja jelez. */
+.sdh-chat.is-uj-lent .sdh-chat__szal {
+    box-shadow: inset 0 -3px 0 var(--sdh-allapot-piros);
 }
 
 .sdh-rma-naplo {
@@ -6399,4 +6568,178 @@ dd:hover > .sdh-masol {
     flex-wrap: wrap;
     gap: .35rem;
     margin-top: .45rem;
+}
+
+/* ================================================================== */
+/* 0.45.0 – Eladás: napi árukiadás és rendelések                       */
+/* ================================================================== */
+
+/* Az eladás űrlapja a munkalapé, eszköz / hiba / bevizsgálási díj nélkül:
+   ezek a mezők az űrlapon maradnak (az app.js számol velük), de nem látszanak. */
+.sdh-munkalapurlap--eladas [hidden],
+.sdh-eladas-rejt[hidden] {
+    display: none !important;
+}
+
+.sdh-eladas-rejt {
+    display: contents;
+}
+
+.sdh-eladas-ures {
+    display: block;
+    min-height: 0;
+}
+
+/* A rendelés saját sora: a rendelés útja, a beszállítói rendelésszám, az értesítés. */
+.sdh-eladas-rendeles {
+    margin-top: .5rem;
+}
+
+.sdh-eladas-ertesit {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.sdh-eladas-rendeles__info {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+/* Listaoldal: összegző sáv a szűrő fölött. */
+.sdh-eladas__osszegzo {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .6rem;
+    margin: 0 0 .9rem;
+}
+
+.sdh-eladas__osszegzo > div {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    padding: .6rem .8rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 10px;
+    background: var(--sdh-felulet);
+    box-shadow: var(--sdh-arnyek);
+}
+
+.sdh-eladas__osszegzo span {
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-eladas__osszegzo b {
+    font-size: 1.15rem;
+    font-weight: 650;
+    color: var(--sdh-szoveg);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-eladas__osszegzo .is-tartozas b {
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-tabla th.sdh-eladas__szam,
+.sdh-tabla td.sdh-eladas__szam {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-eladas__tetelek {
+    max-width: 34ch;
+}
+
+.sdh-eladas__fizetve {
+    font-weight: 600;
+    color: var(--sdh-siker);
+}
+
+.sdh-eladas__fizetendo {
+    font-weight: 600;
+    color: var(--sdh-accent-szoveg);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-eladas__uz {
+    margin-left: .3rem;
+}
+
+@media (max-width: 760px) {
+    .sdh-eladas__osszegzo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Törzs-szerkesztő popup (helyszínek, beszállítók): soronként egy tétel. */
+.sdh-torzs__tabla {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    margin-top: .6rem;
+}
+
+.sdh-torzs__fej,
+.sdh-torzs__sor {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1.3fr) repeat(calc(var(--sdh-torzs-oszlop, 4) - 1), minmax(0, 1fr)) repeat(auto-fit, 3.2rem);
+    grid-auto-flow: column;
+    grid-auto-columns: 3.2rem;
+    align-items: center;
+    gap: .4rem;
+}
+
+.sdh-torzs__fej {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+}
+
+.sdh-torzs__fej span:nth-child(n + 2):nth-last-child(-n + 2) {
+    text-align: center;
+}
+
+.sdh-torzs__sorok {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.sdh-torzs__sor input[type="text"] {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    height: 34px;
+    padding: 0 .6rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 13px;
+}
+
+.sdh-torzs__sor input[type="text"]:focus {
+    outline: 2px solid color-mix(in srgb, var(--sdh-accent) 35%, transparent);
+    border-color: var(--sdh-accent);
+}
+
+.sdh-torzs__sor.is-inaktiv input[type="text"] {
+    opacity: .55;
+}
+
+.sdh-torzs__jelolo {
+    display: flex;
+    justify-content: center;
+}
+
+.sdh-eladas-torzsgombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: .2rem 0 1rem;
 }

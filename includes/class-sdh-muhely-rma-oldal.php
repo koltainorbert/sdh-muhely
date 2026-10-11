@@ -33,6 +33,8 @@ final class SDH_Muhely_Rma_Oldal
     /** A felület szövegei: kulcs => [hu, en, de]. */
     private const SZOVEG = [
         'alcim'           => ['Javítás állapota', 'Repair status', 'Reparaturstatus'],
+        'alcim_rendeles'  => ['Rendelés állapota', 'Order status', 'Bestellstatus'],
+        'alcim_vasarlas'  => ['Vásárlás adatai', 'Purchase details', 'Kaufdetails'],
         'belep_cim'       => ['Munkalap megtekintése', 'View your repair', 'Reparatur ansehen'],
         'belep_szoveg'    => [
             'A javítás állapotához adja meg a telefonszámát és a munkalap sorszámát. A sorszámot a munkalapon vagy a címkén találja.',
@@ -60,6 +62,17 @@ final class SDH_Muhely_Rma_Oldal
         'f_eszkoz'        => ['Eszköz', 'Device', 'Gerät'],
         'f_hibak'         => ['Hibák', 'Faults', 'Fehler'],
         'f_tetelek'       => ['Tételek', 'Items', 'Positionen'],
+        'f_szolg'         => ['Szolgáltatások', 'Services', 'Leistungen'],
+        'f_termekek'      => ['Termékek', 'Products', 'Produkte'],
+        'f_rendeles'      => ['Rendelés', 'Order', 'Bestellung'],
+        'felveve'         => ['Felvéve', 'Recorded', 'Erfasst'],
+        'varhato_erk'     => ['Várható érkezés', 'Expected arrival', 'Voraussichtliche Ankunft'],
+        'vasarlas'        => ['Vásárlás', 'Purchase', 'Kauf'],
+        'vasarlas_datum'  => ['Vásárlás napja', 'Date of purchase', 'Kaufdatum'],
+        'nincs_szolg'     => ['Még nincs rögzített szolgáltatás.', 'No services yet.', 'Noch keine Leistungen.'],
+        'nincs_termek'    => ['Még nincs rögzített termék.', 'No products yet.', 'Noch keine Produkte.'],
+        'vegosszeg'       => ['A munkalap végösszege', 'Job total', 'Gesamtbetrag des Auftrags'],
+        'enter_kuld'      => ['Enter: küldés · Shift + Enter: új sor', 'Enter: send · Shift + Enter: new line', 'Enter: senden · Umschalt + Enter: neue Zeile'],
         'f_tortenet'      => ['Történet', 'History', 'Verlauf'],
         'f_uzenetek'      => ['Üzenetek', 'Messages', 'Nachrichten'],
         'f_elerhetoseg'   => ['Elérhetőség', 'Contact', 'Kontakt'],
@@ -74,8 +87,8 @@ final class SDH_Muhely_Rma_Oldal
         'megnevezes'      => ['Megnevezés', 'Description', 'Bezeichnung'],
         'menny'           => ['Menny.', 'Qty', 'Menge'],
         'osszesen'        => ['Összesen', 'Total', 'Summe'],
-        'szolgaltatas'    => ['Munka', 'Labour', 'Arbeit'],
-        'termek'          => ['Alkatrész', 'Part', 'Teil'],
+        'szolgaltatas'    => ['Szolgáltatás', 'Service', 'Leistung'],
+        'termek'          => ['Termék', 'Product', 'Produkt'],
         'nincs_tetel'     => ['Még nincs rögzített tétel.', 'No items yet.', 'Noch keine Positionen.'],
         'nincs_tortenet'  => ['Még nincs bejegyzés.', 'No entries yet.', 'Noch keine Einträge.'],
         'uz_ures'         => ['Még nincs üzenet. Kérdését alább írhatja meg.', 'No messages yet. You can write your question below.', 'Noch keine Nachrichten. Ihre Frage können Sie unten schreiben.'],
@@ -348,6 +361,8 @@ final class SDH_Muhely_Rma_Oldal
             'eszkoz'      => '<rect x="6" y="2.5" width="8" height="15" rx="1.8"/><path d="M8.6 15.2h2.8"/>',
             'hibak'       => '<circle cx="10" cy="10" r="7"/><path d="M10 6.2v4.6M10 13.6v.2"/>',
             'tetelek'     => '<path d="M5 3h10v14l-2.5-1.5L10 17l-2.5-1.5L5 17z"/><path d="M7.5 7h5M7.5 10h5"/>',
+            'szolg'       => '<path d="M12.4 3.2a3.8 3.8 0 0 0-4.6 4.9L3.4 12.5a1.5 1.5 0 0 0 0 2.1l2 2a1.5 1.5 0 0 0 2.1 0l4.4-4.4a3.8 3.8 0 0 0 4.9-4.6l-2.5 2.5-2.4-.6-.6-2.4z"/>',
+            'termekek'    => '<path d="M10 2.8 16.5 6v8L10 17.2 3.5 14V6z"/><path d="M3.5 6 10 9.2 16.5 6M10 9.2v8"/>',
             'tortenet'    => '<circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.6 1.6"/>',
             'uzenetek'    => '<path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3h0a2 2 0 0 1-2-2z"/>',
             'elerhetoseg' => '<path d="M10 17s5.5-4.6 5.5-9A5.5 5.5 0 0 0 4.5 8c0 4.4 5.5 9 5.5 9z"/><circle cx="10" cy="8" r="2"/>',
@@ -471,7 +486,7 @@ final class SDH_Muhely_Rma_Oldal
                 <?php endif; ?>
                 <span class="rma-fej__nev">
                     <b><?php echo esc_html((string) $b['szerviz_nev']); ?></b>
-                    <span><?php echo esc_html(self::t('alcim')); ?></span>
+                    <span><?php echo esc_html(self::t(['rendeles' => 'alcim_rendeles', 'arukiadas' => 'alcim_vasarlas'][(string) ($munkalap->fajta ?? '')] ?? 'alcim')); ?></span>
                 </span>
             </div>
 
@@ -481,7 +496,7 @@ final class SDH_Muhely_Rma_Oldal
                 $allapot   = $allapotok[$kulcs] ?? ['nev' => $kulcs, 'szin' => 'szurke'];
                 ?>
                 <div class="rma-fej__lap">
-                    <span class="rma-fej__cimke"><?php echo esc_html(self::t('munkalap')); ?></span>
+                    <span class="rma-fej__cimke"><?php echo esc_html(self::lap_nev($munkalap)); ?></span>
                     <b class="rma-fej__szam"><?php echo esc_html(SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam)); ?></b>
                     <span class="sdh-allapot sdh-allapot--<?php echo esc_attr((string) $allapot['szin']); ?>"><?php echo esc_html(self::allapot_nev($kulcs, $allapot)); ?></span>
                 </div>
@@ -648,10 +663,16 @@ final class SDH_Muhely_Rma_Oldal
         });
     }
 
+    /** Hogyan hívja az ügyféloldal a lapot: Munkalap, Rendelés vagy Vásárlás. */
+    private static function lap_nev(object $munkalap): string
+    {
+        return self::t(['rendeles' => 'f_rendeles', 'arukiadas' => 'vasarlas'][(string) ($munkalap->fajta ?? '')] ?? 'munkalap');
+    }
+
     /** A feloldott munkalap-ablak. */
     public static function rma_oldal(object $munkalap, ?object $ugyfel, bool $elonezet = false): void
     {
-        $cim = self::t('munkalap') . ' ' . SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
+        $cim = self::lap_nev($munkalap) . ' ' . SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
 
         self::keret($cim, 'rma--lap', static function () use ($munkalap, $ugyfel, $elonezet): void {
             $id        = (int) $munkalap->id;
@@ -665,7 +686,14 @@ final class SDH_Muhely_Rma_Oldal
             // A lapra csatolt további eszközök (a fő eszköz után).
             $tovabbi   = SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk($id));
             $tetelek   = SDH_Muhely_Tetel::lista($id);
+            $szolg     = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus !== 'termek'));
+            $termekek  = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'termek'));
             $uzenetek  = SDH_Muhely_Rma::uzenetek($id);
+            // Árukiadás és rendelés: nincs javítandó eszköz, a lap a termékekről szól.
+            $fajta      = (string) ($munkalap->fajta ?? 'javitas');
+            $rendeles   = $fajta === 'rendeles';
+            $van_eszkoz = $fajta === 'javitas' || $eszkoz !== null;
+            $elso_ful   = $van_eszkoz ? 'eszkoz' : 'termekek';
 
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $alap_ful = isset($_GET['ok']) || in_array($_GET['h'] ?? '', ['ures', 'sokuzenet', 'lejart'], true) ? 'uzenetek' : '';
@@ -675,14 +703,27 @@ final class SDH_Muhely_Rma_Oldal
                 <?php self::fejlec($munkalap, true, $elonezet); ?>
                 <?php echo self::visszajelzes(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
-                <div class="rma-test" data-rma-test data-rma-alap="<?php echo esc_attr($alap_ful); ?>">
+                <div class="rma-test" data-rma-test data-rma-alap="<?php echo esc_attr($alap_ful); ?>" data-rma-elso="<?php echo esc_attr($elso_ful); ?>">
                     <nav class="rma-fulek" role="tablist">
                         <?php
-                        $fulek = [
-                            'osszegzes'   => [self::t('f_osszegzes'), 0],
-                            'eszkoz'      => [self::t('f_eszkoz'), 0],
-                            'hibak'       => [self::t('f_hibak'), count($hibak)],
-                            'tetelek'     => [self::t('f_tetelek'), count($tetelek)],
+                        // Ugyanazok a fülek, mint a CRM munkalapján: a szolgáltatások és a
+                        // termékek külön fülön állnak. Eszköz nélküli lapon (árukiadás,
+                        // rendelés) nincs Eszköz és Hibák fül, és a Termékek áll elöl.
+                        $fulek = ['osszegzes' => [self::t('f_osszegzes'), 0]];
+
+                        if ($van_eszkoz) {
+                            $fulek['eszkoz'] = [self::t('f_eszkoz'), 0];
+                            $fulek['hibak']  = [self::t('f_hibak'), count($hibak)];
+                            $fulek['szolg']  = [self::t('f_szolg'), count($szolg)];
+                        }
+
+                        $fulek['termekek'] = [self::t($van_eszkoz ? 'f_termekek' : ($rendeles ? 'f_rendeles' : 'f_termekek')), count($termekek)];
+
+                        if (!$van_eszkoz && $szolg !== []) {
+                            $fulek['szolg'] = [self::t('f_szolg'), count($szolg)];
+                        }
+
+                        $fulek += [
                             'tortenet'    => [self::t('f_tortenet'), count($naplo)],
                             'uzenetek'    => [self::t('f_uzenetek'), count($uzenetek)],
                             'elerhetoseg' => [self::t('f_elerhetoseg'), 0],
@@ -708,26 +749,38 @@ final class SDH_Muhely_Rma_Oldal
                     </aside>
 
                     <div class="rma-panelek">
-                        <section class="rma-panel" data-rma-panel="eszkoz" id="rma-panel-eszkoz" role="tabpanel">
-                            <?php self::panel_eszkoz($munkalap, $ugyfel, $eszkoz, $tovabbi); ?>
-                        </section>
-                        <section class="rma-panel" data-rma-panel="hibak" id="rma-panel-hibak" role="tabpanel">
-                            <?php self::panel_hibak($hibak, $eszkoz, $tovabbi); ?>
-                        </section>
-                        <section class="rma-panel" data-rma-panel="tetelek" id="rma-panel-tetelek" role="tabpanel">
+                        <?php
+                        // Több eszköznél a tételek készülékenként csoportosítva, részösszeggel.
+                        $rma_nevek = [];
+
+                        if ($tovabbi !== []) {
+                            $rma_nevek[0] = $eszkoz ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : self::t('eszkoz');
+
+                            foreach ($tovabbi as $rma_e) {
+                                $rma_nevek[(int) $rma_e->id] = SDH_Muhely_Eszkoz::megnevezes($rma_e);
+                            }
+                        }
+                        ?>
+                        <?php if ($van_eszkoz) : ?>
+                            <section class="rma-panel" data-rma-panel="eszkoz" id="rma-panel-eszkoz" role="tabpanel">
+                                <?php self::panel_eszkoz($munkalap, $ugyfel, $eszkoz, $tovabbi); ?>
+                            </section>
+                            <section class="rma-panel" data-rma-panel="hibak" id="rma-panel-hibak" role="tabpanel">
+                                <?php self::panel_hibak($hibak, $eszkoz, $tovabbi); ?>
+                            </section>
+                        <?php endif; ?>
+                        <?php if ($van_eszkoz || $szolg !== []) : ?>
+                            <section class="rma-panel" data-rma-panel="szolg" id="rma-panel-szolg" role="tabpanel">
+                                <?php self::panel_tetelek($szolg, $munkalap, $rma_nevek, 'nincs_szolg', count($tetelek) > count($szolg)); ?>
+                            </section>
+                        <?php endif; ?>
+                        <section class="rma-panel" data-rma-panel="termekek" id="rma-panel-termekek" role="tabpanel">
                             <?php
-                            // Több eszköznél a tételek készülékenként csoportosítva, részösszeggel.
-                            $rma_nevek = [];
-
-                            if ($tovabbi !== []) {
-                                $rma_nevek[0] = $eszkoz ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : self::t('eszkoz');
-
-                                foreach ($tovabbi as $rma_e) {
-                                    $rma_nevek[(int) $rma_e->id] = SDH_Muhely_Eszkoz::megnevezes($rma_e);
-                                }
+                            if (!$van_eszkoz && class_exists('SDH_Muhely_Eladas')) {
+                                SDH_Muhely_Eladas::rma_fej($munkalap, $ugyfel);
                             }
 
-                            self::panel_tetelek($tetelek, $munkalap, $rma_nevek);
+                            self::panel_tetelek($termekek, $munkalap, $rma_nevek, 'nincs_termek', count($tetelek) > count($termekek));
                             ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="tortenet" id="rma-panel-tortenet" role="tabpanel">
@@ -803,8 +856,11 @@ final class SDH_Muhely_Rma_Oldal
         <div class="rma-csoport">
             <h3 class="sdh-ml__cim"><?php echo esc_html(self::t('datumok')); ?></h3>
             <?php
-            $sor(self::t('atvetel'), self::ido((string) $munkalap->keszult, false));
-            $sor(self::t('hatarido'), self::ido((string) $munkalap->hatarido, false));
+            // Rendelésnél és árukiadásnál nincs „átvett készülék": a felvétel / vásárlás napja áll itt.
+            $rma_fajta = (string) ($munkalap->fajta ?? 'javitas');
+
+            $sor(self::t(['rendeles' => 'felveve', 'arukiadas' => 'vasarlas_datum'][$rma_fajta] ?? 'atvetel'), self::ido((string) $munkalap->keszult, false));
+            $sor(self::t($rma_fajta === 'rendeles' ? 'varhato_erk' : 'hatarido'), self::ido((string) $munkalap->hatarido, false));
             $sor(self::t('lezarva'), self::ido((string) $munkalap->lezarva, false));
             ?>
         </div>
@@ -931,10 +987,10 @@ final class SDH_Muhely_Rma_Oldal
     /**
      * @param array<int, object> $tetelek
      */
-    private static function panel_tetelek(array $tetelek, object $munkalap, array $eszkoz_nevek = []): void
+    private static function panel_tetelek(array $tetelek, object $munkalap, array $eszkoz_nevek = [], string $ures = 'nincs_tetel', bool $van_mas = false): void
     {
         if ($tetelek === []) {
-            echo '<p class="rma-ures">' . esc_html(self::t('nincs_tetel')) . '</p>';
+            echo '<p class="rma-ures">' . esc_html(self::t($ures)) . '</p>';
 
             return;
         }
@@ -998,9 +1054,14 @@ final class SDH_Muhely_Rma_Oldal
         }
 
         printf(
-            '</tbody><tfoot><tr><td colspan="2">%s</td><td class="j rma-brutto">%s</td></tr></tfoot></table>',
+            '</tbody><tfoot><tr><td colspan="2">%s</td><td class="j rma-brutto">%s</td></tr>%s</tfoot></table>',
             esc_html(self::t('osszesen')),
-            esc_html(self::penz($ossz))
+            esc_html(self::penz($ossz)),
+            // A fül csak a szolgáltatásokat VAGY a termékeket mutatja: alatta a teljes lap összege is áll.
+            $van_mas
+                ? '<tr class="rma-tabla__veg"><td colspan="2">' . esc_html(self::t('vegosszeg')) . '</td><td class="j">'
+                    . esc_html(self::penz((float) $munkalap->brutto_ertek)) . '</td></tr>'
+                : ''
         );
     }
 
@@ -1089,7 +1150,7 @@ final class SDH_Muhely_Rma_Oldal
             <textarea name="szoveg" rows="2" maxlength="<?php echo (int) SDH_Muhely_Rma::UZENET_HOSSZ; ?>" required
                       placeholder="<?php echo esc_attr(self::t('uz_mezo')); ?>"
                       aria-label="<?php echo esc_attr(self::t('uz_mezo')); ?>"></textarea>
-            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" title="<?php echo esc_attr(self::t('ctrl_enter')); ?>">
+            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" title="<?php echo esc_attr(self::t('enter_kuld')); ?>">
                 <?php echo self::ikon('kuld'); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html(self::t('kuldes')); ?></span>
             </button>
         </form>

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.33.0';
+    public const DB_VERSION = '0.34.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -124,6 +124,8 @@ final class SDH_Muhely_Schema
         $ai_uzenet    = self::tabla('ai_uzenet');
         $ai_muvelet   = self::tabla('ai_muvelet');
         $ai_tudas     = self::tabla('ai_tudas');
+        $helyszin     = self::tabla('helyszin');
+        $beszallito   = self::tabla('beszallito');
 
         $definiciok = [];
 
@@ -329,6 +331,16 @@ final class SDH_Muhely_Schema
          * állapot, amely az eszközökéből adódik
          * (SDH_Muhely_Munkalap::kozos_allapot), a "fizetve" pedig akkor 1,
          * ha minden eszköz ki van fizetve. Egy eszközös lapon minden a régi.
+         *
+         * A "fajta" mondja meg, mi a lap: 'javitas' (a hagyományos munkalap –
+         * a régi sorok mind ilyenek), 'arukiadas' (napi árukiadás: pultos
+         * eladás javítás nélkül, eszköz és – ha nem kell – ügyfél nélkül) vagy
+         * 'rendeles' (az ügyfélnek rendelt áru). Mindhárom ugyanúgy fizet,
+         * számláz és kerül a pénztárba; a sorszámuk közös. Az árukiadás
+         * "helyszin_id"-je az üzlet (helyszin tábla), a rendelés
+         * "beszallito_id"-je a forrás (beszallito tábla), "rend_allapot"-a a
+         * rendelés útja (SDH_Muhely_Eladas::rend_allapotok), a "rend_szam" a
+         * beszállítói rendelésszám, a "rend_ertesitve" az ügyfél értesítésének ideje.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$munkalap} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -367,8 +379,15 @@ final class SDH_Muhely_Schema
             modositva datetime NULL,
             letrehozo bigint(20) unsigned NOT NULL default 0,
             rma_token varchar(40) NOT NULL default '',
+            fajta varchar(12) NOT NULL default 'javitas',
+            helyszin_id bigint(20) unsigned NOT NULL default 0,
+            beszallito_id bigint(20) unsigned NOT NULL default 0,
+            rend_allapot varchar(20) NOT NULL default '',
+            rend_szam varchar(60) NOT NULL default '',
+            rend_ertesitve datetime NULL,
             PRIMARY KEY  (id),
             unique key munkalap_szam (munkalap_szam),
+            key fajta (fajta),
             key rma_token (rma_token),
             key allapot (allapot),
             key ugyfel_id (ugyfel_id),
@@ -1067,6 +1086,43 @@ final class SDH_Muhely_Schema
             letrehozo bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key aktiv (aktiv)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Helyszínek (üzletek, boltok) – a napi árukiadás ezekhez kötődik.
+         * Egy üzletes cégnél elég egy sor (vagy egy sem): ilyenkor a
+         * helyszínválasztó meg sem jelenik.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$helyszin} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            nev varchar(120) NOT NULL default '',
+            cim varchar(255) NOT NULL default '',
+            telefon varchar(40) NOT NULL default '',
+            megjegyzes varchar(255) NOT NULL default '',
+            alap tinyint(1) NOT NULL default 0,
+            aktiv tinyint(1) NOT NULL default 1,
+            sorrend int(11) NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key aktiv (aktiv)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Beszállítók – honnan jön a rendelt áru. A rendelés űrlapjáról
+         * popupban szerkeszthető lista.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$beszallito} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            nev varchar(120) NOT NULL default '',
+            weboldal varchar(255) NOT NULL default '',
+            telefon varchar(40) NOT NULL default '',
+            email varchar(190) NOT NULL default '',
+            megjegyzes varchar(255) NOT NULL default '',
+            aktiv tinyint(1) NOT NULL default 1,
+            sorrend int(11) NOT NULL default 0,
+            letrehozva datetime NULL,
             PRIMARY KEY  (id),
             key aktiv (aktiv)
         ) {$charset};";

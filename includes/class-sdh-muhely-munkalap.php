@@ -660,7 +660,7 @@ final class SDH_Muhely_Munkalap
         }
 
         $tabla = self::tabla();
-        $sql   = "SELECT COUNT(*) FROM {$tabla} WHERE munkalap_szam IS NOT NULL AND allapot IN ("
+        $sql   = "SELECT COUNT(*) FROM {$tabla} WHERE fajta = 'javitas' AND munkalap_szam IS NOT NULL AND allapot IN ("
             . self::in_helyorzo($nyitott) . ')';
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- csak helyőrzők kerülnek bele.
@@ -1638,8 +1638,9 @@ final class SDH_Muhely_Munkalap
         $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
 
         // A feltételek és az értékek párhuzamosan épülnek, hogy a
-        // helyőrzők sorrendje biztosan egyezzen.
-        $feltetelek = ['1 = 1'];
+        // helyőrzők sorrendje biztosan egyezzen. A napi árukiadás és a
+        // rendelés a saját menüpontjában áll (SDH_Muhely_Eladas), itt nem.
+        $feltetelek = ["m.fajta = 'javitas'"];
         $ertekek    = [];
 
         if ($szuro === 'mind') {
@@ -1991,11 +1992,14 @@ final class SDH_Muhely_Munkalap
 
         $szamozott = (bool) $allapotok[$kulcs]['szamozott'];
 
-        if ($szamozott && (int) $regi->ugyfel_id <= 0) {
+        // Eladásnál (napi árukiadás, rendelés) nincs eszköz, árukiadásnál ügyfél sem kell.
+        $eladas = self::eladas_e($regi);
+
+        if ($szamozott && !$eladas && (int) $regi->ugyfel_id <= 0) {
             return 'Válassz ügyfelet a munkalaphoz – ügyfél nélkül nem adható munkalapszám.';
         }
 
-        if ($szamozott && (int) $regi->eszkoz_id <= 0) {
+        if ($szamozott && !$eladas && (int) $regi->eszkoz_id <= 0) {
             return 'Válassz eszközt a munkalaphoz – a munkalap mindig egy eszközre vonatkozik.';
         }
 
@@ -2887,6 +2891,92 @@ final class SDH_Muhely_Munkalap
     }
 
     /* =================================================================
+     * A lap fajtája: javítás, napi árukiadás, rendelés
+     * ============================================================== */
+
+    /** Új lapnál: milyen fajta űrlapot kértek (SDH_Muhely_Eladas állítja be). */
+    private static string $uj_fajta = 'javitas';
+
+    /**
+     * A lapfajták: kulcs => megnevezés. A javítás a hagyományos munkalap; az
+     * árukiadás és a rendelés ugyanaz a lap eszköz, hibák és bevizsgálási díj
+     * nélkül (a fizetés, a számla és a pénztár közös).
+     *
+     * @return array<string, string>
+     */
+    public static function fajtak(): array
+    {
+        return [
+            'javitas'   => 'Munkalap',
+            'arukiadas' => 'Napi árukiadás',
+            'rendeles'  => 'Rendelés',
+        ];
+    }
+
+    public static function fajta_ervenyes(string $fajta): string
+    {
+        return isset(self::fajtak()[$fajta]) ? $fajta : 'javitas';
+    }
+
+    public static function fajta_nev(string $fajta): string
+    {
+        return self::fajtak()[self::fajta_ervenyes($fajta)];
+    }
+
+    /** Eladás-e a lap (árukiadás vagy rendelés): nincs eszköze, hibája, bevizsgálási díja. */
+    public static function eladas_e(?object $munkalap): bool
+    {
+        return $munkalap !== null && self::fajta_ervenyes((string) ($munkalap->fajta ?? '')) !== 'javitas';
+    }
+
+    /** A lapfajta saját menüpontja (oda tér vissza a mentés). */
+    public static function fajta_modul(string $fajta): string
+    {
+        return ['arukiadas' => 'arukiadas', 'rendeles' => 'rendelesek'][$fajta] ?? self::KULCS;
+    }
+
+    /** Az új lap űrlapja a megadott fajtával (a Napi árukiadás és a Rendelések popupja). */
+    public static function ajax_urlap_fajta(string $fajta): void
+    {
+        self::$uj_fajta = self::fajta_ervenyes($fajta);
+        self::ajax_urlap();
+    }
+
+    /**
+     * Az eladás űrlapján választható állapotok: az új lap alapállapota, a
+     * lezártak (Lezárt, Érvénytelen), és ami a lapon épp áll. A javítás
+     * állapotai (Bejelentett, Árajánlat, Elkészült…) itt nem értelmesek.
+     *
+     * @param array<string, array<string, mixed>> $allapotok
+     * @return array<string, array<string, mixed>>
+     */
+    public static function eladas_allapotok(array $allapotok, string $jelenlegi = ''): array
+    {
+        $alap = self::alap_kulcs($allapotok);
+        $ki   = [];
+
+        foreach ($allapotok as $kulcs => $a) {
+            if ((string) $kulcs === $alap || (string) $kulcs === $jelenlegi || (!empty($a['zart']) && !empty($a['szamozott']))) {
+                $ki[(string) $kulcs] = $a;
+            }
+        }
+
+        return $ki;
+    }
+
+    /** Az első lezárt, nem érvénytelen állapot kulcsa (a kifizetett árukiadás ide kerül). */
+    public static function lezart_kulcs(): string
+    {
+        foreach (self::allapotok() as $kulcs => $a) {
+            if (!empty($a['zart']) && empty($a['ervenytelen'])) {
+                return (string) $kulcs;
+            }
+        }
+
+        return '';
+    }
+
+    /* =================================================================
      * Űrlap – popup változat
      * ============================================================== */
 
@@ -2910,9 +3000,14 @@ final class SDH_Muhely_Munkalap
 
         $uj = $munkalap === null;
 
+        // Mi a lap: meglévőnél a sora mondja meg, újnál az, honnan nyitották
+        // (Napi árukiadás / Rendelések: SDH_Muhely_Eladas::ajax_urlap).
+        $fajta = self::fajta_ervenyes($uj ? self::$uj_fajta : (string) ($munkalap->fajta ?? ''));
+        $fnev  = self::fajta_nev($fajta);
+
         ?>
         <h2 class="sdh-modal__cim">
-            <?php echo esc_html($uj ? 'Új munkalap' : 'Munkalap ' . self::szam_formaz($munkalap->munkalap_szam)); ?>
+            <?php echo esc_html($uj ? 'Új ' . mb_strtolower($fnev) : $fnev . ' ' . self::szam_formaz($munkalap->munkalap_szam)); ?>
             <?php if (!$uj) : ?>
                 <span class="sdh-modal__cim-megj">
                     módosítva: <?php echo esc_html(self::datumido_megjelenit((string) $munkalap->modositva)); ?>
@@ -2924,7 +3019,7 @@ final class SDH_Muhely_Munkalap
               action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
               data-sdh-ajax-action="sdh_muhely_munkalapok_ment">
             <input type="hidden" name="action" value="sdh_muhely_munkalap_mentes">
-            <?php self::urlap_belso($munkalap, true); ?>
+            <?php self::urlap_belso($munkalap, true, $fajta); ?>
         </form>
         <?php
 
@@ -2936,9 +3031,17 @@ final class SDH_Muhely_Munkalap
      *
      * Ugyanez megy a teljes oldalas és a popupos változatba.
      */
-    private static function urlap_belso(?object $munkalap, bool $modal): void
+    private static function urlap_belso(?object $munkalap, bool $modal, string $fajta = 'javitas'): void
     {
         $uj = $munkalap === null;
+
+        // Eladás (napi árukiadás, rendelés): nincs eszköz, hiba és bevizsgálási díj.
+        // Ezek a mezők az űrlapon maradnak (az app.js számol velük), csak nem látszanak.
+        $fajta     = self::fajta_ervenyes($uj ? $fajta : (string) ($munkalap->fajta ?? $fajta));
+        $eladas    = $fajta !== 'javitas';
+        $arukiadas = $fajta === 'arukiadas';
+        $rendeles  = $fajta === 'rendeles';
+        $rejt      = $eladas ? ' hidden' : '';
 
         $allapotok      = self::allapotok();
         $hiba_allapotok = self::hiba_allapotok();
@@ -3014,8 +3117,12 @@ final class SDH_Muhely_Munkalap
             $hiba_eszkozok[(int) $t_eszkoz->id] = ($i + 2) . '. ' . self::eszkoz_felirat($t_eszkoz);
         }
 
+        // Eladásnál csak az értelmes állapotok választhatók (a többi a javításé).
+        $valaszthato = $eladas ? self::eladas_allapotok($allapotok, $allapot) : $allapotok;
+
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($munkalap->id ?? 0); ?>">
+        <input type="hidden" name="fajta" value="<?php echo esc_attr($fajta); ?>">
         <input type="hidden" name="kontextus"
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php // Jelzi a mentésnek, hogy az űrlap a tételeket is hozza (lásd feldolgoz()). ?>
@@ -3032,7 +3139,8 @@ final class SDH_Muhely_Munkalap
         // gépelés közben (munkalapSzamol); a mérvadó érték mentéskor a szerveré.
         ?>
         <?php // data-fo-kulon: a fő eszközre a díján felül befizetett rész – a díj számításából kimarad (app.js: munkalapSzamol). ?>
-        <div class="sdh-ugyfelurlap sdh-munkalapurlap" data-sdh-munkalap
+        <div class="sdh-ugyfelurlap sdh-munkalapurlap<?php echo $eladas ? ' sdh-munkalapurlap--eladas' : ''; ?>" data-sdh-munkalap
+             data-sdh-fajta="<?php echo esc_attr($fajta); ?>"
              data-fo-kulon="<?php echo esc_attr((string) ($uj ? 0 : (float) ($munkalap->fo_kulon ?? 0))); ?>"
              data-eloleg-mentett="<?php echo esc_attr((string) $fizetett); ?>"
              data-veg-ossz="<?php
@@ -3066,7 +3174,7 @@ final class SDH_Muhely_Munkalap
                                     echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
                                 ?>" data-sdh-allapot-pont></span>
                                 <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
-                                    <?php foreach ($allapotok as $kulcs => $a) : ?>
+                                    <?php foreach ($valaszthato as $kulcs => $a) : ?>
                                         <?php
                                         // A „Részben elkészült" több eszköznél magától áll be – kézzel nem választható.
                                         if ($eszall !== '' && !empty($a['reszben']) && $allapot !== (string) $kulcs) {
@@ -3125,8 +3233,8 @@ final class SDH_Muhely_Munkalap
                             <?php self::datum_mezo('keszult', $keszult); ?>
                         </div>
 
-                        <div class="sdh-ig">
-                            <label for="hatarido">Határidő</label>
+                        <div class="sdh-ig"<?php echo $arukiadas ? ' hidden' : ''; ?>>
+                            <label for="hatarido"><?php echo $rendeles ? 'Várható érkezés' : 'Határidő'; ?></label>
                             <?php self::datum_mezo('hatarido', $hatarido); ?>
                         </div>
 
@@ -3220,6 +3328,8 @@ final class SDH_Muhely_Munkalap
                         $bev_nev  = $uj ? '' : (string) ($munkalap->bevizsgalas_nev ?? '');
                         $bev_szlg = $uj ? 0 : (int) ($munkalap->bevizsgalas_szolg ?? 0);
                         ?>
+                        <?php // Eladásnál nincs bevizsgálási díj: a mezők maradnak (üresen), de nem látszanak. ?>
+                        <div class="sdh-eladas-rejt"<?php echo $rejt; ?>>
                         <div class="sdh-ig sdh-bev" data-sdh-bev-doboz>
                             <span class="sdh-ig__cimke"></span>
                             <div class="sdh-bev__sor">
@@ -3254,6 +3364,7 @@ final class SDH_Muhely_Munkalap
                         </div>
 
                         <p class="sdh-bev__info" data-sdh-bev-info aria-live="polite"></p>
+                        </div>
 
                         <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
@@ -3267,16 +3378,30 @@ final class SDH_Muhely_Munkalap
                 <div class="sdh-ml__fo">
                     <div class="sdh-sor sdh-sor--ketto">
                         <div class="sdh-ig">
-                            <span class="sdh-ig__cimke">Ügyfél <span class="sdh-kotelezo">*</span></span>
+                            <span class="sdh-ig__cimke">Ügyfél<?php echo $arukiadas ? '' : ' <span class="sdh-kotelezo">*</span>'; ?></span>
                             <div class="sdh-mezo__sor">
-                                <?php SDH_Muhely_Ugyfel::valaszto_mezo($ugyfel_id); ?>
+                                <?php
+                                // Árukiadásnál nem kötelező: üresen hagyva a vevő „Napi árukiadás".
+                                SDH_Muhely_Ugyfel::valaszto_mezo(
+                                    $ugyfel_id,
+                                    'ugyfel_id',
+                                    $arukiadas ? SDH_Muhely_Eladas::NEVTELEN . ' – vagy válassz / vegyél fel ügyfelet' : ''
+                                );
+                                ?>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                         data-sdh-uj-ugyfel
                                         title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
                             </div>
                         </div>
 
-                        <div class="sdh-ig">
+                        <?php
+                        // Eladás: az eszköz helyén a helyszín (árukiadás) vagy a beszállító (rendelés) áll.
+                        if ($eladas) {
+                            SDH_Muhely_Eladas::urlap_mezok($munkalap, $fajta);
+                        }
+                        ?>
+
+                        <div class="sdh-ig"<?php echo $rejt; ?>>
                             <label for="eszkoz_id">Eszköz <span class="sdh-kotelezo">*</span></label>
                             <div class="sdh-mezo__sor">
                                 <select name="eszkoz_id" id="eszkoz_id" data-sdh-eszkoz-valaszto>
@@ -3300,8 +3425,14 @@ final class SDH_Muhely_Munkalap
                     // Egy munkalaphoz akárhány eszköz csatolható. A fő eszköz a fenti
                     // választó; a többi itt áll címkeként, sorrendben (app.js: tovabbi*).
                     ?>
-                    <div class="sdh-ml-eszkozok" data-sdh-tovabbi-eszkozok>
-                        <input type="hidden" name="eszkozok_jelen" value="1">
+                    <?php
+                    if ($rendeles) {
+                        SDH_Muhely_Eladas::urlap_rendeles_sor($munkalap);
+                    }
+                    ?>
+
+                    <div class="sdh-ml-eszkozok" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?>>
+                        <input type="hidden" name="eszkozok_jelen" value="<?php echo $eladas ? '' : '1'; ?>">
                         <span class="sdh-ml-eszkozok__cimke">További eszközök</span>
                         <div class="sdh-ml-eszkozok__lista" data-sdh-tovabbi-lista>
                             <?php foreach ($tovabbi as $t_eszkoz) : ?>
@@ -3320,22 +3451,32 @@ final class SDH_Muhely_Munkalap
 
                     <div class="sdh-fulek sdh-ml__fulek">
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--1" name="_ful_munkalap"
-                               id="ful_m_eszkoz" checked>
+                               id="ful_m_eszkoz"<?php echo $eladas ? '' : ' checked'; ?>>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_munkalap"
                                id="ful_m_hibak">
-                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--3" name="_ful_munkalap"
+                        <?php
+                        // Eladásnál a Termékek fül áll elöl (és az nyílik): a két fül sorszáma helyet cserél.
+                        $n_szolg  = $eladas ? 4 : 3;
+                        $n_termek = $eladas ? 3 : 4;
+                        ?>
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) $n_szolg; ?>" name="_ful_munkalap"
                                id="ful_m_szolg">
-                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--4" name="_ful_munkalap"
-                               id="ful_m_termek">
+                        <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) $n_termek; ?>" name="_ful_munkalap"
+                               id="ful_m_termek"<?php echo $eladas ? ' checked' : ''; ?>>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--5" name="_ful_munkalap"
                                id="ful_m_rma" data-sdh-ful-kulcs="rma">
 
                         <div class="sdh-fulek__sav">
-                            <label for="ful_m_eszkoz">Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
-                            <label for="ful_m_hibak">Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
+                            <label for="ful_m_eszkoz"<?php echo $rejt; ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
+                            <label for="ful_m_hibak"<?php echo $rejt; ?>>Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
+                            <?php if ($eladas) : ?>
+                                <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                            <?php endif; ?>
                             <label for="ful_m_szolg">Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
-                            <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
-                            <label for="ful_m_rma" data-sdh-rma-ful>RMA <?php echo $munkalap ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+                            <?php if (!$eladas) : ?>
+                                <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                            <?php endif; ?>
+                            <label for="ful_m_rma" data-sdh-rma-ful<?php echo $arukiadas ? ' hidden' : ''; ?>>RMA <?php echo $munkalap ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-osszefoglalo>
@@ -3377,11 +3518,11 @@ final class SDH_Muhely_Munkalap
                             </div>
                         </div>
 
-                        <div class="sdh-fulek__panel sdh-fulek__panel--3">
+                        <div class="sdh-fulek__panel sdh-fulek__panel--<?php echo (int) $n_szolg; ?>">
                             <?php self::tetel_szerkeszto('szolgaltatas', $szolg, $afakulcsok, $lap_afa, $hiba_eszkozok); ?>
                         </div>
 
-                        <div class="sdh-fulek__panel sdh-fulek__panel--4">
+                        <div class="sdh-fulek__panel sdh-fulek__panel--<?php echo (int) $n_termek; ?>">
                             <?php self::tetel_szerkeszto('termek', $termekek, $afakulcsok, $lap_afa, $hiba_eszkozok); ?>
                         </div>
 
@@ -3426,17 +3567,31 @@ final class SDH_Muhely_Munkalap
             </div>
 
             <div class="sdh-urlap__lablec">
-                <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
-                    <?php echo $uj ? 'Munkalap létrehozása' : 'Mentés'; ?>
-                </button>
+                <?php if ($uj && $eladas && $modal && class_exists('SDH_Muhely_Penztar')) : ?>
+                    <?php
+                    // Új eladás: rögzítés után rögtön a fizetés ablaka nyílik (eladas.js), vagy csak rögzít.
+                    // Árukiadásnál a fizetés az alap (Enter), rendelésnél a rögzítés.
+                    ?>
+                    <input type="hidden" name="utana_fizet" value="<?php echo $arukiadas ? '1' : ''; ?>" data-sdh-utana-fizet>
+                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-eladas-ment="<?php echo $arukiadas ? '1' : ''; ?>">
+                        <?php echo $arukiadas ? 'Rögzítés és fizetés' : 'Rendelés rögzítése'; ?>
+                    </button>
+                    <button type="submit" class="sdh-gomb sdh-gomb--vilagos" data-sdh-eladas-ment="<?php echo $arukiadas ? '' : '1'; ?>">
+                        <?php echo $arukiadas ? 'Csak rögzítés' : 'Rögzítés és fizetés'; ?>
+                    </button>
+                <?php else : ?>
+                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">
+                        <?php echo $uj ? ($eladas ? 'Rögzítés' : 'Munkalap létrehozása') : 'Mentés'; ?>
+                    </button>
+                <?php endif; ?>
 
                 <?php if ($modal) : ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
                 <?php else : ?>
-                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
+                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url($eladas ? SDH_Muhely_Modulok::url(self::fajta_modul($fajta)) : self::url()); ?>">Mégsem</a>
                 <?php endif; ?>
 
-                <?php if ($uj) : ?>
+                <?php if ($uj && !$eladas) : ?>
                     <span class="sdh-mezo__sugo">
                         A munkalapszám az első számozott állapotba lépéskor generálódik; ahhoz ügyfél és eszköz kell.
                     </span>
@@ -4014,8 +4169,17 @@ final class SDH_Muhely_Munkalap
             ? sanitize_text_field(wp_unslash($_POST[$mezo]))
             : '';
 
+        // A lap fajtája létrehozáskor dől el, később nem változik.
+        $fajta  = self::fajta_ervenyes($regi !== null ? (string) ($regi->fajta ?? '') : $szoveg('fajta'));
+        $eladas = $fajta !== 'javitas';
+
         $allapotok = self::allapotok();
         $allapot   = sanitize_key($szoveg('allapot'));
+
+        // Eladás mindig sorszámot kap: számozatlan állapot (Sablon, Árajánlat) helyett az alapállapot.
+        if ($eladas && isset($allapotok[$allapot]) && empty($allapotok[$allapot]['szamozott'])) {
+            $allapot = self::alap_kulcs($allapotok);
+        }
 
         // Ismeretlen kulcsot csak akkor fogadunk el, ha a lap már eleve
         // azt viseli (törölt állapot) – új, kitalált kulcsot nem.
@@ -4051,11 +4215,18 @@ final class SDH_Muhely_Munkalap
             $fizetes_ideje = current_time('Y-m-d');
         }
 
-        return [
+        // Az eladás saját mezői (helyszín, beszállító, a rendelés útja) – javításnál nincsenek.
+        $sajat = ['fajta' => $fajta];
+
+        if ($eladas && class_exists('SDH_Muhely_Eladas')) {
+            $sajat += SDH_Muhely_Eladas::bekuldott_mezok($fajta, $regi);
+        }
+
+        return $sajat + [
             'allapot'           => $allapot,
             'nev'               => mb_substr($szoveg('nev'), 0, 190),
             'ugyfel_id'         => isset($_POST['ugyfel_id']) ? max(0, (int) $_POST['ugyfel_id']) : 0,
-            'eszkoz_id'         => isset($_POST['eszkoz_id']) ? max(0, (int) $_POST['eszkoz_id']) : 0,
+            'eszkoz_id'         => $eladas ? 0 : (isset($_POST['eszkoz_id']) ? max(0, (int) $_POST['eszkoz_id']) : 0),
             'felelos'           => $felelos,
             'keszult'           => $keszult,
             'hatarido'          => self::datum_vagy_null($szoveg('hatarido')),
@@ -4063,7 +4234,7 @@ final class SDH_Muhely_Munkalap
             'fizetve'           => $fizetve ? 1 : 0,
             'fizetes_ideje'     => $fizetes_ideje,
             'fizetett'          => max(0.0, round(SDH_Muhely_Tetel::szam($szoveg('fizetett')), 2)),
-            'bevizsgalasi_dij'  => !empty($_POST['bevizsgalasi_dij']) ? 1 : 0,
+            'bevizsgalasi_dij'  => !$eladas && !empty($_POST['bevizsgalasi_dij']) ? 1 : 0,
             // A díj módja és a díjlistából választott díj (ha az űrlap küldte).
             'bevizsgalas_mod'   => isset($_POST['bevizsgalas_mod'])
                 ? (in_array($szoveg('bevizsgalas_mod'), ['levon', 'marad'], true) ? $szoveg('bevizsgalas_mod') : 'auto')
@@ -4162,9 +4333,22 @@ final class SDH_Muhely_Munkalap
 
         $ugyfel_id = (int) $adatok['ugyfel_id'];
         $eszkoz_id = (int) $adatok['eszkoz_id'];
+        $fajta     = self::fajta_ervenyes((string) ($adatok['fajta'] ?? ''));
 
         if ($ugyfel_id > 0 && SDH_Muhely_Ugyfel::nev($ugyfel_id) === '') {
             return 'Válassz ügyfelet a listából – gépelés önmagában nem elég.';
+        }
+
+        // Napi árukiadás: se ügyfél, se eszköz nem kell. Rendelés: ügyfél kell
+        // (őt értesítjük, ha megjött az áru), eszköz nem.
+        if ($fajta === 'arukiadas') {
+            return null;
+        }
+
+        if ($fajta === 'rendeles') {
+            return $ugyfel_id > 0
+                ? null
+                : 'Válassz vagy vegyél fel ügyfelet – a rendelés mindig valakié, őt értesítjük, ha megjött.';
         }
 
         if ($szamozott && $ugyfel_id <= 0) {
@@ -4360,7 +4544,8 @@ final class SDH_Muhely_Munkalap
         $hibak     = self::hibak_osszeallit();
 
         // További eszközök: csak ha az űrlap hozta őket (más hívó nem törölhet).
-        $eszkozok_jelen = !empty($_POST['eszkozok_jelen']);
+        // Eladásnál (árukiadás, rendelés) nincs eszköz, így csatolt sem.
+        $eszkozok_jelen = !empty($_POST['eszkozok_jelen']) && (string) $adatok['fajta'] === 'javitas';
 
         if ($eszkozok_jelen && (int) $adatok['eszkoz_id'] <= 0
             && isset($_POST['tovabbi_eszkoz']) && is_array($_POST['tovabbi_eszkoz'])) {
@@ -4470,6 +4655,9 @@ final class SDH_Muhely_Munkalap
         // Az eszközönkénti „fizetve" jelzők a lapéhoz igazodnak – a végleges összegek után.
         if (is_array($eredmeny)) {
             self::fizetve_szinkron((int) $eredmeny[0], $regi);
+
+            /** A lap elmentve (minden tétel és összeg a helyén): más modulok itt kapcsolódhatnak. */
+            do_action('sdh_muhely_munkalap_mentve', (int) $eredmeny[0], $regi);
         }
 
         return $eredmeny;
@@ -4534,16 +4722,32 @@ final class SDH_Muhely_Munkalap
         [$uj_id, $uzenet, $szam] = $eredmeny;
 
         $penztar = class_exists('SDH_Muhely_Penztar') ? SDH_Muhely_Penztar::munkalap_ajanlat((int) $uj_id, $elotte) : null;
+        $mentett = self::egy((int) $uj_id);
+        $fajta   = self::fajta_ervenyes((string) ($mentett->fajta ?? ''));
+
+        // Az eladásnak saját üzenete van („A rendelés létrejött"), és a saját listájára tér vissza.
+        if ($fajta !== 'javitas') {
+            $uzenet = $fajta . ($uzenet === 'munkalap_letrehozva' ? '_letrehozva' : '_mentve');
+        }
 
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
         wp_send_json_success([
             'id'     => $uj_id,
             'penztar' => $penztar,
-            'vissza' => self::vissza(
+            'fajta'  => $fajta,
+            'uj'     => $elotte === null,
+            // Új eladásnál a „Rögzítés és fizetés" gomb kérte-e a fizetés ablakát (eladas.js).
+            'utana_fizet' => $fajta !== 'javitas' && $elotte === null && !empty($_POST['utana_fizet']),
+            'fizetendo'   => $mentett !== null && (int) $mentett->fizetve !== 1
+                ? max(0.0, round((float) $mentett->brutto_ertek - (float) $mentett->fizetett, 2))
+                : 0.0,
+            'vissza' => SDH_Muhely_Modulok::visszateres(
+                self::fajta_modul($fajta),
                 array_filter([
                     'uzenet' => $uzenet,
                     'szam'   => $szam !== '' && $szam !== '—' ? $szam : null,
-                ])
+                ]),
+                self::bekuldes_kontextusa()
             ),
         ]);
     }

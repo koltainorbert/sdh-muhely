@@ -270,6 +270,8 @@ final class SDH_Muhely_Frontend
                 . '<path d="M13.2 5.1a2.4 2.4 0 0 1 0 4.3"/><path d="M14 11.9c1.8.4 3 1.9 3 4.1"/>',
             'eszkozok'     => '<rect x="6" y="2.5" width="8" height="15" rx="1.8"/><path d="M8.6 15.2h2.8"/>',
             'munkalapok'   => '<rect x="4" y="3" width="12" height="14" rx="1.8"/><path d="M7 7.5h6M7 10.5h6M7 13.5h3.5"/>',
+            'arukiadas'    => '<path d="M5.2 7h9.6l.9 9.2H4.3z"/><path d="M7.6 9.2V6.4a2.4 2.4 0 0 1 4.8 0v2.8"/>',
+            'rendelesek'   => '<path d="M2.5 5h8.8v8.4H2.5z"/><path d="M11.3 8h3.3l2.9 2.7v2.7h-6.2"/><circle cx="5.9" cy="14.4" r="1.6"/><circle cx="14.1" cy="14.4" r="1.6"/>',
             'uzenetek'     => '<path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3a2 2 0 0 1-2-2z"/><path d="M7 7.6h6M7 10.2h4"/>',
             'levelezes'    => '<rect x="2.8" y="4.5" width="14.4" height="11" rx="1.8"/><path d="M3.4 5.6 10 10.8l6.6-5.2"/>',
             'penztar'      => '<rect x="2.5" y="5.5" width="15" height="9" rx="1.6"/><circle cx="10" cy="10" r="2.1"/><path d="M5.2 8.2v3.6M14.8 8.2v3.6"/>',
@@ -497,6 +499,7 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/eladas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/eladas.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
 
