@@ -2243,9 +2243,13 @@ final class SDH_Muhely_Penztar
 
             $reszek = self::feloszt($osszeg, $igenyek);
 
-            // Részfizetésnél a csatolt eszközre jutó rész az ő külön befizetése lesz
-            // (a fő eszközé a lap előlegének maradéka – azt nem kell külön vezetni).
+            // Részfizetésnél az eszközre jutó rész az ő külön befizetése lesz – a fő
+            // eszközé is (munkalap.fo_kulon), különben a bevizsgálási díját növelné.
             if ($fajta === 'eloleg') {
+                if (($reszek[0] ?? 0) > 0) {
+                    $fo_kulon_no = (float) $reszek[0];
+                }
+
                 $kapcsolo = SDH_Muhely_Schema::tabla('munkalap_eszkoz');
 
                 foreach ($erintett as $e) {
@@ -2260,6 +2264,18 @@ final class SDH_Muhely_Penztar
                     }
                 }
             }
+        }
+
+        // Egy eszközös lap: az előleg / részfizetés egésze a (fő) eszköz külön befizetése.
+        if ($fajta === 'eloleg' && $erintett === [] && $osszeg > 0) {
+            $fo_kulon_no = $osszeg;
+        }
+
+        if (!empty($fo_kulon_no)) {
+            $munkalap_tabla = SDH_Muhely_Schema::tabla('munkalap');
+
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->query($wpdb->prepare("UPDATE {$munkalap_tabla} SET fo_kulon = fo_kulon + %f WHERE id = %d", (float) $fo_kulon_no, (int) $m->id));
         }
 
         // Eszközönkénti „fizetve": részfizetésnél az az eszköz lesz fizetve, amelyiknek

@@ -514,7 +514,10 @@ final class SDH_Muhely_Szamla
      *                            eszközt nem javítják, annak a díja munkadíjként
      *                            megmarad. A csatolt eszköz díja a
      *                            munkalap_eszkoz.bev_dij; a fő eszközé az előleg
-     *                            maradéka a csatoltak díjai és külön befizetései után;
+     *                            maradéka a csatoltak díjai és külön befizetései,
+     *                            valamint a fő eszköz saját külön befizetése
+     *                            (munkalap.fo_kulon) után – így a későbbi előleg
+     *                            vagy részfizetés nem növeli a díjat;
      *   + mód „levon" és van más tétel
      *                          → `bevizsgalas_le` sor: −min(díj, a többi tétel),
      *                            így a díj levonódik a végösszegből;
@@ -578,8 +581,18 @@ final class SDH_Muhely_Szamla
             $tobbi[$kie] = ($tobbi[$kie] ?? 0.0) + (float) $sor->ossz;
         }
 
+        // A fő eszközre a díján FELÜL befizetett rész (előleg / részfizetés a Fizetés
+        // ablakból): ez NEM díj. Ha az előleget időközben lejjebb írták, legfeljebb
+        // annyi maradhat, amennyi az előlegből a csatolt eszközök után jut.
+        $fo_keret = max(0.0, round((float) $munkalap->fizetett - $csatolt_dij - $csatolt_kulon, 2));
+        $fo_kulon = min($fo_keret, max(0.0, round((float) ($munkalap->fo_kulon ?? 0), 2)));
+
+        if (abs($fo_kulon - (float) ($munkalap->fo_kulon ?? 0)) >= 0.005) {
+            $wpdb->update(SDH_Muhely_Schema::tabla('munkalap'), ['fo_kulon' => $fo_kulon], ['id' => $munkalap_id]);
+        }
+
         // Eszközönként: [díj, kapcsolósor vagy null]. A fő eszköz kulcsa 0.
-        $dijak = [0 => [$jelolo ? round(max(0.0, (float) $munkalap->fizetett - $csatolt_dij - $csatolt_kulon), 2) : 0.0, null]];
+        $dijak = [0 => [$jelolo ? round($fo_keret - $fo_kulon, 2) : 0.0, null]];
 
         foreach ($csatolt as $kie => $r) {
             $dijak[$kie] = [$jelolo ? round((float) $r->bev_dij, 2) : 0.0, $r];

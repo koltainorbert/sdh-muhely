@@ -2838,7 +2838,9 @@ final class SDH_Muhely_Munkalap
         // Termékek, legalul a megjegyzések. Az összegeket az app.js számolja
         // gépelés közben (munkalapSzamol); a mérvadó érték mentéskor a szerveré.
         ?>
+        <?php // data-fo-kulon: a fő eszközre a díján felül befizetett rész – a díj számításából kimarad (app.js: munkalapSzamol). ?>
         <div class="sdh-ugyfelurlap sdh-munkalapurlap" data-sdh-munkalap
+             data-fo-kulon="<?php echo esc_attr((string) ($uj ? 0 : (float) ($munkalap->fo_kulon ?? 0))); ?>"
              data-ma="<?php echo esc_attr(current_time('Y-m-d')); ?>">
             <div class="sdh-ml">
                 <div class="sdh-ml__oldal">

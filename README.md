@@ -60,6 +60,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.43.1
+- **Javítás: a bevizsgálási díj nem nő a későbbi befizetéstől.** Eddig a fő (első) eszköz díja „az előleg
+  maradéka" volt, ezért ha a Fizetés ablakban előleget vagy részfizetést rögzítettél (pl. az egyik eszközt
+  kifizették), a díjsor és a levonása ennyivel megnőtt (1 000 Ft-ból 10 000 Ft lett). A végösszeg és a fizetendő
+  jó maradt, de a tételsorok és a számlára kerülő díj nem. Mostantól a díjon felül befizetett összeg külön
+  vezetődik (`sdh_munkalap.fo_kulon`), a díj változatlan marad – egy és több eszközös lapon is.
+- **Régi, már elromlott lapok:** utólag nem dönthető el, mennyi volt a díj és mennyi a befizetés, ezért ezek nem
+  javulnak meg maguktól. Javítás kézzel: a lapon a „Fizetett (előleg)" mezőbe a díjak összegét írd vissza, és ments.
+- Tudnivaló: bepipált „Bevizsgálási díj" mellett a „Fizetett (előleg)" mezőbe kézzel írt összeg díjnak számít.
+  További előleget a **Fizetés** gombbal („Előleg / részfizetés") rögzíts.
+- Új teszt: `t27-bevizsgalasi-dij` (a bejelentett eset lépésről lépésre). Séma: DB_VERSION 0.32.0.
+
 ### 0.43.0
 - **Eszközönként saját állapot.** Több eszközös munkalapon minden eszköznek külön állapota van: az egyik kész és
   elviszik, a másik még alkatrészre vár. Az űrlap bal oldalán és az Áttekintés részletpanelén eszközönként

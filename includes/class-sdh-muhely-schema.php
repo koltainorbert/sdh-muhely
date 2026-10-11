@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.31.0';
+    public const DB_VERSION = '0.32.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -309,6 +309,12 @@ final class SDH_Muhely_Schema
          * A "megjegyzes" belső (csak a CRM-ben látszik), az
          * "ugyfel_megjegyzes" az ügyfél felé is megjelenhet.
          *
+         * A "fo_kulon" az, amit a FŐ eszközre a bevizsgálási díján FELÜL
+         * befizettek (előleg / részfizetés a Fizetés ablakból) – ugyanaz, mint
+         * a csatolt eszköznél a munkalap_eszkoz.fizetett. Enélkül a későbbi
+         * befizetés a díjat növelné, mert a fő eszköz díja az előleg maradéka:
+         * fizetett − csatolt díjak − csatolt külön befizetések − fo_kulon.
+         *
          * Több eszközös lapon minden eszköznek SAJÁT állapota és saját
          * „fizetve" jelzője van. A fő eszközé itt áll ("fo_allapot",
          * "fo_fizetve", "fo_fizetes_ideje"), a csatoltaké a munkalap_eszkoz
@@ -334,6 +340,7 @@ final class SDH_Muhely_Schema
             fizetes_ideje date NULL,
             fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
+            fo_kulon decimal(14,2) NOT NULL default 0.00,
             fo_allapot varchar(30) NOT NULL default '',
             fo_fizetve tinyint(1) NOT NULL default 0,
             fo_fizetes_ideje date NULL,

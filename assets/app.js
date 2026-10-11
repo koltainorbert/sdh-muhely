@@ -2865,7 +2865,10 @@
             bevKulon += kulon;
         });
 
-        esz['0'].dij = bevJelolo ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon) : 0;
+        // A fő eszközre a díján felül befizetett rész (előleg / részfizetés a Fizetés ablakból) nem díj.
+        var foKulon = Math.max(0, parseFloat(gyoker.getAttribute('data-fo-kulon') || '0') || 0);
+
+        esz['0'].dij = bevJelolo ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon - foKulon) : 0;
 
         var bevFo = esz['0'].dij;
         // A díjak összege: ennyi számít díjként a végösszegbe.
@@ -3156,8 +3159,8 @@
                 }
 
                 if (eloleg) {
-                    // Az előleg az összes díj: a fő eszközé + a csatolt eszközöké.
-                    eloleg.value = String((t.ar || 0) + tovabbiDijOssz(gyoker));
+                    // Az előleg az összes díj (a fő eszközé + a csatoltaké) és ami a díjakon felül már befolyt.
+                    eloleg.value = String((t.ar || 0) + tovabbiDijOssz(gyoker) + kulonOssz(gyoker));
                 }
 
                 if (pipa) {
@@ -3406,6 +3409,17 @@
 
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tovabbi-lista] [data-sdh-tovabbi-dij]'), function (mezo) {
             ossz += Math.max(0, mlSzam(mezo.value));
+        });
+
+        return ossz;
+    }
+
+    /** A díjakon felül befizetett összeg: a fő eszközé (data-fo-kulon) + a csatolt eszközöké (data-kulon). */
+    function kulonOssz(gyoker) {
+        var ossz = Math.max(0, parseFloat(gyoker.getAttribute('data-fo-kulon') || '0') || 0);
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tovabbi-lista] [data-sdh-tovabbi]'), function (cimke) {
+            ossz += Math.max(0, parseFloat(cimke.getAttribute('data-kulon') || '0') || 0);
         });
 
         return ossz;
