@@ -28,6 +28,29 @@
      */
     var szintek = [null, null, null, null];
 
+    /*
+     * Popup bezárása a sötét háttérre kattintva: csak akkor, ha az egérgombot
+     * is a háttéren nyomták le. Ha a lenyomás a popupban volt (szövegkijelölés,
+     * legördülő lista, húzás), és csak a felengedés esett kívülre, a böngésző a
+     * kattintást a közös ősre – a <dialog>-ra – küldi, ami háttérkattintásnak
+     * látszana, és bezárná a félig kitöltött űrlapot. Minden popupra érvényes
+     * (a többi modulé is), mert még a saját figyelőjük előtt megfogjuk.
+     */
+    var egerLenyomva = null;
+
+    document.addEventListener('mousedown', function (esemeny) {
+        egerLenyomva = esemeny.target;
+    }, true);
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+
+        // detail === 0: billentyűzetről indított kattintás, annak nincs lenyomási helye.
+        if (cel && cel.tagName === 'DIALOG' && esemeny.detail > 0 && egerLenyomva !== cel) {
+            esemeny.stopPropagation();
+        }
+    }, true);
+
     /* ---------------------------------------------------------------- */
     /* A popup váza – szintenként egyszer jön létre, utána újrahasznosul */
     /* ---------------------------------------------------------------- */
@@ -2303,6 +2326,85 @@
         );
     }
 
+    /**
+     * A popupok neon kerete. Az érték a szín kulcsa (üres = nincs keret,
+     * `kiemelo` = a kiemelő szín, `egyeni` = az Arculatban megadott színkód);
+     * a színek maguk a CSS-ben vannak (admin.css: --sdh-popneon-*).
+     */
+    function neonAlkalmaz(ertek) {
+        var gyoker = document.documentElement;
+
+        if (ertek === 'egyeni' && !/^#[0-9a-f]{6}$/i.test(beallitas.neonEgyeni || '')) {
+            ertek = 'kiemelo';
+        }
+
+        if (ertek) {
+            gyoker.setAttribute('data-neon', ertek);
+        } else {
+            gyoker.removeAttribute('data-neon');
+        }
+
+        if (ertek === 'egyeni') {
+            gyoker.style.setProperty('--sdh-popneon-egyeni', beallitas.neonEgyeni);
+        } else {
+            gyoker.style.removeProperty('--sdh-popneon-egyeni');
+        }
+
+        gyoker.setAttribute('data-neon-ero', beallitas.neonEro || 'kozepes');
+
+        Array.prototype.forEach.call(
+            document.querySelectorAll('[data-sdh-neon] button'),
+            function (gomb) {
+                gomb.setAttribute('aria-pressed', gomb.dataset.ertek === ertek ? 'true' : 'false');
+            }
+        );
+    }
+
+    /** Arculat képernyő: a neon keret előnézete már mentés előtt követi a választást. */
+    function neonElonezet(esemeny) {
+        var cel = esemeny.target;
+
+        if (!cel.closest || !cel.closest('[data-sdh-neon-valaszto], [data-sdh-neon-egyeni], [data-sdh-neon-ero-valaszto]')) {
+            return;
+        }
+
+        var szin = document.querySelector('[data-sdh-neon-valaszto]');
+        var kod = document.querySelector('[data-sdh-neon-egyeni]');
+        var ero = document.querySelector('[data-sdh-neon-ero-valaszto]');
+        var hex = kod ? kod.value.trim() : '';
+
+        if (hex !== '' && hex.charAt(0) !== '#') {
+            hex = '#' + hex;
+        }
+
+        beallitas.neonEgyeni = /^#[0-9a-f]{6}$/i.test(hex) ? hex : '';
+        beallitas.neonEro = ero ? ero.value : 'kozepes';
+        neonAlkalmaz(szin ? szin.value : '');
+    }
+
+    document.addEventListener('input', neonElonezet);
+    document.addEventListener('change', neonElonezet);
+
+    /** A dolgozó saját választása ezen a gépen, különben a cég alapértelmezése. */
+    function neonErtek() {
+        // Az Arculat képernyőn az űrlap választása látszik, nem a gép saját beállítása.
+        var urlapon = document.querySelector('[data-sdh-neon-valaszto]');
+
+        if (urlapon) {
+            return urlapon.value;
+        }
+
+        var sajat = null;
+
+        try {
+            sajat = localStorage.getItem('sdh-neon');
+        } catch (e) {
+            sajat = null;
+        }
+
+        return sajat === null ? (typeof beallitas.alapNeon === 'string' ? beallitas.alapNeon : 'kiemelo') : sajat;
+    }
+
     function beallitasOlvas(kulcs, alap) {
         try {
             return localStorage.getItem(kulcs) || alap;
@@ -2333,6 +2435,7 @@
         }
 
         szinAlkalmaz(szin === null ? (beallitas.alapSzin || '') : szin);
+        neonAlkalmaz(neonErtek());
 
         if (document.body && beallitasOlvas('sdh-sav', '') === 'csukva') {
             document.body.dataset.sav = 'csukva';
@@ -2365,6 +2468,15 @@
         if (szin) {
             beallitasIr('sdh-szin', szin.dataset.ertek);
             szinAlkalmaz(szin.dataset.ertek);
+
+            return;
+        }
+
+        var neon = esemeny.target.closest('[data-sdh-neon] button');
+
+        if (neon) {
+            beallitasIr('sdh-neon', neon.dataset.ertek);
+            neonAlkalmaz(neon.dataset.ertek);
 
             return;
         }
@@ -2563,6 +2675,7 @@
 
         if (!ugyfelId || ugyfelId === '0') {
             eloszor('— előbb válassz ügyfelet —');
+            tovabbiSzur(urlap, []);
             munkalapOsszefoglalo(urlap);
 
             return;
@@ -2579,6 +2692,11 @@
             })
             .then(function (eredmeny) {
                 var eszkozok = (eredmeny && eredmeny.success && eredmeny.data) || [];
+
+                // Másik ügyfél készüléke nem maradhat csatolva.
+                tovabbiSzur(urlap, eszkozok.map(function (e) {
+                    return String(e.id);
+                }));
 
                 if (!eszkozok.length) {
                     eloszor('Ennek az ügyfélnek még nincs eszköze – a + gombbal vihetsz fel újat');
@@ -3099,7 +3217,10 @@
         cim.searchParams.set('action', 'sdh_muhely_munkalapok_osszefoglalo');
         cim.searchParams.set('ugyfel_id', ugyfel ? ugyfel.value : '0');
         cim.searchParams.set('eszkoz_id', eszkoz ? eszkoz.value : '0');
+        cim.searchParams.set('tovabbi', tovabbiIdk(urlap).join(','));
         cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        tovabbiSzamol(urlap);
 
         var sorszam = (hely.sdhKeres || 0) + 1;
 
@@ -3122,9 +3243,274 @@
             .catch(function () { /* az összefoglaló csak tájékoztat: hiba esetén a régi marad */ });
     }
 
+    /* ---- Több eszköz egy munkalapon: a csatolt (további) eszközök címkéi ---- */
+
+    function tovabbiLista(urlap) {
+        return urlap ? urlap.querySelector('[data-sdh-tovabbi-lista]') : null;
+    }
+
+    /** A csatolt eszközök azonosítói, sorrendben. */
+    function tovabbiIdk(urlap) {
+        var lista = tovabbiLista(urlap);
+
+        return lista
+            ? Array.prototype.map.call(lista.querySelectorAll('[data-sdh-tovabbi]'), function (cimke) {
+                return cimke.getAttribute('data-sdh-tovabbi');
+            })
+            : [];
+    }
+
+    /** A lapfül jelvénye (hány eszköz van a lapon) és az „üres" felirat. */
+    function tovabbiSzamol(urlap) {
+        var lista = tovabbiLista(urlap);
+
+        if (!lista) {
+            return;
+        }
+
+        var fo = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+        var db = tovabbiIdk(urlap).length;
+        var ures = lista.querySelector('[data-sdh-tovabbi-ures]');
+        var jel = urlap.querySelector('[data-sdh-db="eszkoz"]');
+        var ossz = db + (fo && fo.value && fo.value !== '0' ? 1 : 0);
+
+        if (ures) {
+            ures.hidden = db > 0;
+        }
+
+        if (jel) {
+            jel.hidden = ossz < 2;
+            jel.textContent = String(ossz);
+        }
+    }
+
+    function tovabbiTorol(urlap, id) {
+        var lista = tovabbiLista(urlap);
+        var cimke = lista && id && id !== '0'
+            ? lista.querySelector('[data-sdh-tovabbi="' + String(id).replace(/[^0-9]/g, '') + '"]')
+            : null;
+
+        if (cimke) {
+            cimke.remove();
+        }
+
+        tovabbiSzamol(urlap);
+    }
+
+    /** Csak a megadott azonosítójú csatolt eszközök maradnak (ügyfélváltás után). */
+    function tovabbiSzur(urlap, megmarad) {
+        var lista = tovabbiLista(urlap);
+
+        if (!lista) {
+            return;
+        }
+
+        Array.prototype.forEach.call(lista.querySelectorAll('[data-sdh-tovabbi]'), function (cimke) {
+            if (megmarad.indexOf(cimke.getAttribute('data-sdh-tovabbi')) === -1) {
+                cimke.remove();
+            }
+        });
+
+        tovabbiSzamol(urlap);
+    }
+
+    /**
+     * Eszköz a munkalapra. Ha a fő választó még üres, oda kerül; különben új
+     * címkeként a csatoltak közé. Ami már a lapon van, azt nem veszi fel újra.
+     */
+    function tovabbiHozzaad(urlap, id, nev) {
+        var lista = tovabbiLista(urlap);
+        var fo = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+
+        id = String(id);
+
+        if (!lista || !id || id === '0') {
+            return;
+        }
+
+        if (fo && (!fo.value || fo.value === '0')) {
+            if (!fo.querySelector('option[value="' + id + '"]')) {
+                var opcio = document.createElement('option');
+
+                opcio.value = id;
+                opcio.textContent = nev;
+                fo.appendChild(opcio);
+            }
+
+            fo.value = id;
+            fo.dispatchEvent(new Event('change', { bubbles: true }));
+
+            return;
+        }
+
+        if ((fo && fo.value === id) || tovabbiIdk(urlap).indexOf(id) !== -1) {
+            return;
+        }
+
+        var sablon = urlap.querySelector('[data-sdh-tovabbi-sablon]');
+        var tarolo = document.createElement('div');
+
+        tarolo.innerHTML = sablon ? sablon.innerHTML : '';
+
+        var cimke = tarolo.querySelector('[data-sdh-tovabbi]');
+
+        if (!cimke) {
+            return;
+        }
+
+        cimke.setAttribute('data-sdh-tovabbi', id);
+        cimke.querySelector('input[type="hidden"]').value = id;
+        cimke.querySelector('[data-sdh-tovabbi-nev]').textContent = nev;
+        cimke.title = nev;
+        lista.appendChild(cimke);
+
+        munkalapOsszefoglalo(urlap);
+    }
+
+    /** Az ügyfél eszközei a szerverről: [{ id, nev }]. */
+    function ugyfelEszkozei(ugyfelId) {
+        var cim = new URL(beallitas.ajax, window.location.origin);
+
+        cim.searchParams.set('action', 'sdh_muhely_munkalapok_eszkozok');
+        cim.searchParams.set('ugyfel_id', ugyfelId);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        return fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                return (eredmeny && eredmeny.success && eredmeny.data) || [];
+            });
+    }
+
+    /** „Eszköz csatolása": az ügyfél még fel nem vett készülékei választó popupban, vagy új felvitele. */
+    function tovabbiNyit(gomb) {
+        var urlap = gomb.closest('form');
+        var valaszto = urlap ? urlap.querySelector('.sdh-valaszto') : null;
+        var ugyfelId = valaszto ? valaszto.querySelector('input[type="hidden"]').value : '0';
+
+        if (!ugyfelId || ugyfelId === '0') {
+            mutatUrlapHiba(urlap, 'Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.');
+
+            return;
+        }
+
+        var betoltve = null;
+
+        function foglalt() {
+            var fo = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+
+            return tovabbiIdk(urlap).concat(fo && fo.value !== '0' ? [fo.value] : []);
+        }
+
+        function ujEszkoz() {
+            nyit('eszkozok', '0', {
+                szint: Math.min(sajatSzint(gomb) + 1, szintek.length - 1),
+                parameterek: { ugyfel_id: ugyfelId },
+                siker: function (adat) {
+                    if (String(adat.ugyfel_id) !== String(ugyfelId)) {
+                        mutatUrlapHiba(urlap, 'Az új eszköz másik ügyfélhez került, ezért erre a munkalapra nem csatolható.');
+
+                        return;
+                    }
+
+                    ugyfelEszkozei(ugyfelId).then(function (eszkozok) {
+                        var fo = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+                        var nev = 'Eszköz ' + adat.id;
+
+                        eszkozok.forEach(function (e) {
+                            if (String(e.id) === String(adat.id)) {
+                                nev = e.nev;
+                            }
+
+                            // A fő választó is ismerje meg az új készüléket.
+                            if (fo && !fo.querySelector('option[value="' + e.id + '"]')) {
+                                var opcio = document.createElement('option');
+
+                                opcio.value = String(e.id);
+                                opcio.textContent = e.nev;
+                                fo.appendChild(opcio);
+                            }
+                        });
+
+                        tovabbiHozzaad(urlap, adat.id, nev);
+                    });
+                }
+            });
+        }
+
+        szValNyit(gomb, {
+            cim: 'Eszköz csatolása',
+            alcim: 'Az ügyfél készülékei, amelyek még nincsenek ezen a munkalapon. Egy munkalapra akárhány eszköz felvehető.',
+            helyorzo: 'Típus, IMEI, sorozatszám…',
+            egyseg: 'eszköz',
+            ures: 'Az ügyfélnek nincs több felvitt eszköze. Az „Új eszköz felvitele” gombbal vihetsz fel újat.',
+            oszlopok: [['Eszköz', '']],
+            keziCimke: 'Új eszköz felvitele',
+            forras: function (q) {
+                betoltve = betoltve || ugyfelEszkozei(ugyfelId);
+
+                return betoltve.then(function (eszkozok) {
+                    var van = foglalt();
+                    var szavak = iszNorm(String(q || '').trim()).split(/\s+/).filter(Boolean);
+
+                    return eszkozok.filter(function (e) {
+                        var szoveg = iszNorm(e.nev);
+
+                        return van.indexOf(String(e.id)) === -1 && szavak.every(function (szo) {
+                            return szoveg.indexOf(szo) !== -1;
+                        });
+                    });
+                });
+            },
+            cellak: function (e) {
+                return [szovegBiztonsagos(e.nev)];
+            },
+            valaszt: function (e) {
+                tovabbiHozzaad(urlap, e.id, e.nev);
+            },
+            kezi: ujEszkoz
+        });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+
+        if (!cel.closest) {
+            return;
+        }
+
+        var csatol = cel.closest('[data-sdh-tovabbi-uj]');
+
+        if (csatol) {
+            esemeny.preventDefault();
+            tovabbiNyit(csatol);
+
+            return;
+        }
+
+        var levesz = cel.closest('[data-sdh-tovabbi-torol]');
+
+        if (levesz) {
+            var urlap = levesz.closest('form');
+
+            esemeny.preventDefault();
+            levesz.closest('[data-sdh-tovabbi]').remove();
+            munkalapOsszefoglalo(urlap);
+        }
+    });
+
     /** Frissen betöltött munkalap-űrlap: első számolás. */
     function munkalapIndul(gyoker) {
         Array.prototype.forEach.call((gyoker || document).querySelectorAll('[data-sdh-munkalap]'), munkalapSzamol);
+
+        Array.prototype.forEach.call((gyoker || document).querySelectorAll('[data-sdh-tovabbi-eszkozok]'), function (blokk) {
+            tovabbiSzamol(blokk.closest('form'));
+        });
+
+        // A mentett állapot: ehhez képest dől el, kell-e azonnal menteni (urlapAllapotMent).
+        Array.prototype.forEach.call((gyoker || document).querySelectorAll('[data-sdh-allapot-valaszto]'), function (valaszto) {
+            valaszto.dataset.elozo = valaszto.value;
+        });
     }
 
     document.addEventListener('input', function (esemeny) {
@@ -3167,6 +3553,8 @@
         }
 
         if (cel.hasAttribute('data-sdh-eszkoz-valaszto')) {
+            // A fő eszköznek választott készülék nem maradhat a csatoltak között is.
+            tovabbiTorol(cel.closest('form'), cel.value);
             munkalapOsszefoglalo(cel.closest('form'));
         }
 
@@ -3316,6 +3704,251 @@
         }
     }
 
+    /* ---- Gyakori hibák: egy kattintással a munkalapra (Hibák lapfül) ---- */
+
+    var GYH_OLDAL = 30;
+
+    /** A munkalapon most szereplő hibák (kisbetűsen), hogy a popup jelölni tudja őket. */
+    function gyhFelvettek(panel) {
+        var ki = {};
+
+        Array.prototype.forEach.call(panel.querySelectorAll('.sdh-hibasor__leiras'), function (mezo) {
+            var szoveg = mezo.value.trim().toLowerCase();
+
+            if (szoveg) {
+                ki[szoveg] = true;
+            }
+        });
+
+        return ki;
+    }
+
+    /** Hiba a munkalapra: az első üres sorba, különben új sorba kerül. */
+    function gyhSorba(panel, szoveg) {
+        var ures = null;
+
+        Array.prototype.forEach.call(panel.querySelectorAll('[data-sdh-hibasor]'), function (sor) {
+            var leiras = sor.querySelector('.sdh-hibasor__leiras');
+            var javitas = sor.querySelector('.sdh-hibasor__javitas');
+
+            if (!ures && leiras && leiras.value.trim() === '' && (!javitas || javitas.value.trim() === '')) {
+                ures = sor;
+            }
+        });
+
+        if (!ures) {
+            hibasorUj(panel.querySelector('[data-sdh-hibasor-uj]'));
+
+            var sorok = panel.querySelectorAll('[data-sdh-hibasor]');
+
+            ures = sorok[sorok.length - 1];
+        }
+
+        var mezo = ures ? ures.querySelector('.sdh-hibasor__leiras') : null;
+
+        if (mezo) {
+            mezo.value = szoveg;
+            mezo.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
+    function gyakoriHibakNyit(gomb) {
+        var panel = gomb.closest('[data-sdh-hibak]');
+
+        if (!panel) {
+            return;
+        }
+
+        var lista = [];
+
+        try {
+            lista = JSON.parse(panel.getAttribute('data-sdh-gyakori') || '[]') || [];
+        } catch (e) {
+            lista = [];
+        }
+
+        var oldal = 0;
+        var dialog = document.createElement('dialog');
+
+        dialog.className = 'sdh-modal sdh-modal--pop sdh-gyh';
+        dialog.innerHTML = '<div class="sdh-modal__doboz">' + ablakGombok(false) +
+            '  <div class="sdh-modal__torzs">' +
+            '    <h2 class="sdh-modal__cim">Gyakori hibák</h2>' +
+            '    <p class="sdh-modal__alcim">Kattints a hibára – felkerül a munkalapra. Egymás után többet is választhatsz.</p>' +
+            '    <div class="sdh-gyh__lista" data-gyh-lista role="listbox" aria-multiselectable="true"></div>' +
+            '    <div class="sdh-gyh__lapozo" data-gyh-lapozo hidden>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="-1" aria-label="Előző oldal">' + LAP_NYIL_BAL + '</button>' +
+            '      <span data-gyh-oldal></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
+            '    </div>' +
+            '    <form class="sdh-gyh__uj" data-gyh-uj>' +
+            '      <input type="text" maxlength="255" autocomplete="off" data-gyh-mezo aria-label="Más hiba" placeholder="Más hiba – írd be…">' +
+            '      <button type="submit" class="sdh-gomb sdh-gomb--vilagos"><span class="sdh-plusz" aria-hidden="true"></span>Felvétel</button>' +
+            '      <label class="sdh-jelolo" title="Bepipálva a beírt hiba a gyakori hibák listájára is felkerül, és legközelebb már innen választható.">' +
+            '        <input type="checkbox" data-gyh-listara checked> A gyakori hibák közé is</label>' +
+            '    </form>' +
+            '    <p class="sdh-gyh__uzenet" data-gyh-uzenet role="status"></p>' +
+            '    <div class="sdh-gyh__lab">' +
+            '      <span class="sdh-mezo__sugo" data-gyh-db></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-gyh-kesz>Kész</button>' +
+            '    </div>' +
+            '  </div>' +
+            '</div>';
+        document.body.appendChild(dialog);
+
+        var hely = dialog.querySelector('[data-gyh-lista]');
+        var uzenet = dialog.querySelector('[data-gyh-uzenet]');
+        var felveve = 0;
+
+        function rajzol() {
+            var van = gyhFelvettek(panel);
+            var oldalak = Math.max(1, Math.ceil(lista.length / GYH_OLDAL));
+
+            oldal = Math.max(0, Math.min(oldal, oldalak - 1));
+            hely.innerHTML = '';
+
+            if (!lista.length) {
+                hely.appendChild(popElem('p', 'sdh-gyh__ures', 'A lista még üres – írd be alul az első hibát.'));
+            }
+
+            lista.slice(oldal * GYH_OLDAL, (oldal + 1) * GYH_OLDAL).forEach(function (nev) {
+                var bent = !!van[nev.toLowerCase()];
+                var elem = popElem('button', 'sdh-pill sdh-gyh__elem' + (bent ? ' is-aktiv' : ''));
+
+                elem.type = 'button';
+                elem.setAttribute('role', 'option');
+                elem.setAttribute('aria-selected', bent ? 'true' : 'false');
+                elem.setAttribute('data-gyh-hiba', nev);
+                elem.title = bent ? nev + ' – már a munkalapon van' : nev;
+                elem.appendChild(popElem('span', 'sdh-pill__cimke', nev));
+                hely.appendChild(elem);
+            });
+
+            dialog.querySelector('[data-gyh-lapozo]').hidden = oldalak <= 1;
+            dialog.querySelector('[data-gyh-oldal]').textContent = (oldal + 1) + ' / ' + oldalak;
+            dialog.querySelector('[data-gyh-lap="-1"]').disabled = oldal <= 0;
+            dialog.querySelector('[data-gyh-lap="1"]').disabled = oldal >= oldalak - 1;
+            dialog.querySelector('[data-gyh-db]').textContent = felveve ? felveve + ' hiba felvéve a munkalapra' : '';
+        }
+
+        function felvesz(nev) {
+            if (gyhFelvettek(panel)[nev.toLowerCase()]) {
+                return;
+            }
+
+            gyhSorba(panel, nev);
+            felveve++;
+            rajzol();
+        }
+
+        dialog.addEventListener('click', function (esemeny) {
+            var cel = esemeny.target;
+
+            if (cel === dialog || cel.closest('.sdh-modal__bezar') || cel.closest('[data-gyh-kesz]')) {
+                dialog.close();
+
+                return;
+            }
+
+            var hiba = cel.closest('[data-gyh-hiba]');
+
+            if (hiba) {
+                felvesz(hiba.getAttribute('data-gyh-hiba'));
+
+                return;
+            }
+
+            var lap = cel.closest('[data-gyh-lap]');
+
+            if (lap) {
+                oldal += parseInt(lap.getAttribute('data-gyh-lap'), 10);
+                rajzol();
+            }
+        });
+
+        dialog.querySelector('[data-gyh-uj]').addEventListener('submit', function (esemeny) {
+            esemeny.preventDefault();
+            // A munkalap űrlapja ettől nem küldődhet be.
+            esemeny.stopPropagation();
+
+            var mezo = dialog.querySelector('[data-gyh-mezo]');
+            var nev = mezo.value.trim();
+
+            uzenet.textContent = '';
+            uzenet.className = 'sdh-gyh__uzenet';
+
+            if (!nev) {
+                mezo.focus();
+
+                return;
+            }
+
+            felvesz(nev);
+            mezo.value = '';
+            mezo.focus();
+
+            if (!dialog.querySelector('[data-gyh-listara]').checked) {
+                return;
+            }
+
+            var adatok = new FormData();
+
+            adatok.set('action', 'sdh_muhely_munkalapok_gyakori_hiba');
+            adatok.set('_wpnonce', beallitas.nonce || '');
+            adatok.set('nev', nev);
+
+            fetch(beallitas.ajax, { method: 'POST', body: adatok, credentials: 'same-origin' })
+                .then(function (valasz) { return valasz.json(); })
+                .then(function (valasz) {
+                    if (!valasz || !valasz.success) {
+                        throw new Error((valasz && valasz.data && valasz.data.uzenet) || 'A lista nem bővült.');
+                    }
+
+                    lista = valasz.data.lista || lista;
+
+                    // A még nyitott űrlapok is az új listát kapják.
+                    Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-gyakori]'), function (p) {
+                        p.setAttribute('data-sdh-gyakori', JSON.stringify(lista));
+                    });
+
+                    oldal = Math.floor(Math.max(0, lista.length - 1) / GYH_OLDAL);
+                    uzenet.textContent = '„' + nev + '” felkerült a gyakori hibák közé is.';
+                    uzenet.className = 'sdh-gyh__uzenet is-jo';
+                    rajzol();
+                })
+                .catch(function (ok) {
+                    uzenet.textContent = 'A munkalapra felkerült, de a listára nem: ' + ok.message;
+                    uzenet.className = 'sdh-gyh__uzenet is-hiba';
+                });
+        });
+
+        dialog.addEventListener('close', function () {
+            dialog.remove();
+
+            if (gomb.focus) {
+                gomb.focus();
+            }
+        });
+
+        rajzol();
+        dialog.showModal();
+
+        var elso = hely.querySelector('.sdh-gyh__elem:not(.is-aktiv)') || dialog.querySelector('[data-gyh-mezo]');
+
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-gyakori-hibak]') : null;
+
+        if (gomb) {
+            esemeny.preventDefault();
+            gyakoriHibakNyit(gomb);
+        }
+    });
+
     /**
      * Hibasor eltávolítása. Az utolsó sort nem töröljük, csak kiürítjük,
      * hogy az űrlap mindig mutasson legalább egy sort.
@@ -3455,6 +4088,110 @@
             });
     }
 
+    /** Rövid visszajelzés az űrlap állapotválasztója alatt (mentve / majd a Mentéssel). */
+    function urlapAllapotJelez(valaszto, szoveg, tipus) {
+        var doboz = valaszto.closest('.sdh-ig') || valaszto.parentNode;
+        var jel = doboz.querySelector('[data-sdh-allapot-jel]');
+
+        if (!jel) {
+            jel = document.createElement('span');
+            jel.setAttribute('data-sdh-allapot-jel', '');
+            jel.setAttribute('role', 'status');
+            doboz.appendChild(jel);
+        }
+
+        jel.className = 'sdh-allapot-jel sdh-allapot-jel--' + tipus;
+        jel.textContent = szoveg;
+        window.clearTimeout(jel.sdhIdo);
+
+        if (tipus === 'jo') {
+            jel.sdhIdo = window.setTimeout(function () {
+                jel.remove();
+            }, 3500);
+        }
+    }
+
+    /**
+     * Állapotváltás a munkalap űrlapján. Már mentett lapnál az új állapot
+     * azonnal mentődik (ugyanazon az úton, mint a listából), a popup nyitva
+     * marad, a mögötte lévő rács és a részletek pedig maguktól frissülnek –
+     * nem kell se Mentést nyomni, se újratölteni. Új (még nem mentett) lapnál
+     * az állapot a többi mezővel együtt, a Mentéssel megy.
+     */
+    function urlapAllapotMent(valaszto) {
+        var urlap = valaszto.closest('form');
+        var idMezo = urlap ? urlap.querySelector('input[name="id"]') : null;
+        var id = idMezo ? parseInt(idMezo.value, 10) || 0 : 0;
+
+        if (!id || valaszto.value === (valaszto.dataset.elozo || '')) {
+            return;
+        }
+
+        var kert = valaszto.value;
+        var adatok = new FormData();
+
+        adatok.set('action', 'sdh_muhely_munkalapok_allapot');
+        adatok.set('_wpnonce', beallitas.nonce || '');
+        adatok.set('id', String(id));
+        adatok.set('allapot', kert);
+
+        fetch(new URL(beallitas.ajax, window.location.origin).toString(), {
+            method: 'POST',
+            body: adatok,
+            credentials: 'same-origin'
+        })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                // Közben már mást választott: az a kérés a mérvadó.
+                if (valaszto.value !== kert) {
+                    return;
+                }
+
+                if (!valasz || !valasz.success) {
+                    // Pl. az űrlapon most kiválasztott ügyfél még nincs elmentve:
+                    // a választás az űrlapon marad, és a Mentéssel megy tovább.
+                    urlapAllapotJelez(
+                        valaszto,
+                        'A Mentéssel együtt mentődik. ' + ((valasz && valasz.data && valasz.data.uzenet) || ''),
+                        'var'
+                    );
+
+                    return;
+                }
+
+                var adat = valasz.data;
+
+                valaszto.dataset.elozo = kert;
+                urlapAllapotJelez(valaszto, 'Állapot elmentve', 'jo');
+
+                // Az első számozott állapotba lépéskor a lap számot kap: a cím is mutassa.
+                var cim = valaszto.closest('.sdh-modal__torzs');
+                var cimSor = cim ? cim.querySelector('.sdh-modal__cim') : null;
+
+                if (cimSor && adat.szam && adat.szam !== '—' && cimSor.firstChild
+                    && cimSor.firstChild.nodeType === 3 && cimSor.firstChild.textContent.indexOf(adat.szam) === -1) {
+                    cimSor.firstChild.textContent = 'Munkalap ' + adat.szam + ' ';
+                }
+
+                var lezarva = urlap.querySelector('[data-sdh-lezarva]');
+
+                if (lezarva) {
+                    lezarva.hidden = !adat.lezarva;
+                    lezarva.querySelector('[data-sdh-lezarva-ertek]').textContent = adat.lezarva || '';
+                }
+
+                // A rács, a részletpanel és a csempék ebből tudják, hogy frissíteniük kell.
+                document.dispatchEvent(new CustomEvent('sdh:allapot', {
+                    detail: { id: String(id), adat: adat, forras: 'urlap' }
+                }));
+            })
+            .catch(function () {
+                urlapAllapotJelez(valaszto, 'A szerver nem érhető el – az állapot a Mentéssel mentődik.', 'var');
+            });
+    }
+
     document.addEventListener('change', function (esemeny) {
         var listaAllapot = esemeny.target.closest('select[data-sdh-lista-allapot]');
 
@@ -3468,6 +4205,7 @@
 
         if (allapot) {
             allapotPontFrissit(allapot);
+            urlapAllapotMent(allapot);
 
             return;
         }
@@ -3594,8 +4332,16 @@
             menu.showPopover();
         }
 
-        /* A popup CSS zoomja a menüre is hat: a pozíciót vissza kell osztani. */
-        var zoom = parseFloat(window.getComputedStyle(menu).zoom) || 1;
+        /*
+         * A popup CSS zoomja a menüre is hat: a pozíciót vissza kell osztani.
+         * A zoom a popupon (a tárolón) áll, a menü csak örökli – a saját
+         * számított `zoom` értéke ezért mindig 1 volna. Rossz osztónál a menü
+         * a mező FÖLÉ csúszott, az egér felengedése már a menüre esett, és a
+         * kattintás a popup hátterének számított: a munkalap bezárult.
+         */
+        var zoom = typeof menu.currentCSSZoom === 'number' && menu.currentCSSZoom > 0
+            ? menu.currentCSSZoom
+            : (tarolo !== document.body ? parseFloat(window.getComputedStyle(tarolo).zoom) || 1 : 1);
         var r = select.getBoundingClientRect();
         var meret = window.innerHeight;
         var szelesseg = Math.max(r.width, 180) / zoom;
@@ -3662,7 +4408,12 @@
                 legorduloZar();
             },
             gorget: function (esemeny) {
-                if (!menu.contains(esemeny.target)) {
+                var cel = esemeny.target;
+
+                // Csak az a görgetés zár, ami a mezőt is elmozdítja: egy másik
+                // doboz görgetése (pl. a rács alatti részletpanel újratöltése a
+                // sor kijelölésekor) nem csukhatja be a frissen nyitott listát.
+                if (!menu.contains(cel) && (!cel || !cel.contains || cel === document || cel.contains(select))) {
                     legorduloZar();
                 }
             },
@@ -4173,10 +4924,12 @@
 
         var hely = mezo.getBoundingClientRect();
         var szuloHely = szulo === document.body ? { left: 0, top: 0 } : szulo.getBoundingClientRect();
+        // A kicsinyített (zoomolt) popupban a mért képpontokat vissza kell osztani.
+        var iszZoom = szulo === document.body ? 1 : (parseFloat(window.getComputedStyle(szulo).zoom) || 1);
 
-        iszLista.style.left = Math.round(hely.left - szuloHely.left) + 'px';
-        iszLista.style.top = Math.round(hely.bottom - szuloHely.top + 2) + 'px';
-        iszLista.style.minWidth = Math.max(240, Math.round(hely.width)) + 'px';
+        iszLista.style.left = Math.round((hely.left - szuloHely.left) / iszZoom) + 'px';
+        iszLista.style.top = Math.round((hely.bottom - szuloHely.top) / iszZoom + 2) + 'px';
+        iszLista.style.minWidth = Math.max(240, Math.round(hely.width / iszZoom)) + 'px';
         iszLista.hidden = false;
 
         var kijelolt = iszLista.querySelector('.is-kijelolt');
@@ -6266,7 +7019,8 @@
             '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-sdh-szval-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
             '    <span class="sdh-szolgval__db" data-sdh-szval-db></span>' +
             (o.kezi ? '    <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra" data-sdh-szval-kezi' +
-                '            title="Nem a listából: kézzel írod be">Kézzel írom be</button>' : '') +
+                '            title="' + szovegBiztonsagos(o.keziCimke ? o.keziCimke : 'Nem a listából: kézzel írod be') + '">' +
+                szovegBiztonsagos(o.keziCimke || 'Kézzel írom be') + '</button>' : '') +
             '    <button type="button" class="sdh-gomb sdh-gomb--vilagos' + (o.kezi ? '' : ' sdh-gomb--jobbra') + '" data-sdh-szval-megsem>Mégsem</button>' +
             '  </div>' +
             '</div>';
@@ -6333,7 +7087,7 @@
             if (!t) {
                 html += i === 0
                     ? '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '" class="sdh-tabla__ures">' +
-                        (szVal.toltve ? (o.ures && szVal.kerdes === '' ? o.ures : 'Nincs találat.' + (o.kezi ? ' A „Kézzel írom be" gombbal így is felveheted.' : '')) : 'Keresés…') + '</td></tr>'
+                        (szVal.toltve ? (o.ures && szVal.kerdes === '' ? o.ures : 'Nincs találat.' + (o.kezi ? (o.keziCimke ? ' Használd a(z) „' + szovegBiztonsagos(o.keziCimke) + '" gombot.' : ' A „Kézzel írom be" gombbal így is felveheted.') : '')) : 'Keresés…') + '</td></tr>'
                     : '<tr class="sdh-szolgval__ures"><td colspan="' + oszlopDb + '">&nbsp;</td></tr>';
                 continue;
             }
@@ -7509,6 +8263,90 @@
     }
 
     /* ---------------------------------------------------------------- */
+    /* Másoló gomb: bármely adat a vágólapra (data-sdh-masol)            */
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * Szöveg a vágólapra. A böngésző vágólap-API-ja csak biztonságos
+     * (https vagy localhost) oldalon él; a belső hálózati, http-s címen ezért
+     * a régi, kijelölésre épülő út megy. A segédmezőnek a nyitott popupon
+     * belül kell lennie, különben a popup mögött nem kaphat fókuszt.
+     */
+    function vagolapra(szoveg, horgony) {
+        if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(szoveg).catch(function () {
+                return vagolapraRegi(szoveg, horgony);
+            });
+        }
+
+        return vagolapraRegi(szoveg, horgony);
+    }
+
+    function vagolapraRegi(szoveg, horgony) {
+        return new Promise(function (kesz, hiba) {
+            var tarolo = (horgony && horgony.closest && horgony.closest('dialog[open]')) || document.body;
+            var mezo = document.createElement('textarea');
+            var siker = false;
+
+            mezo.value = szoveg;
+            mezo.setAttribute('readonly', '');
+            mezo.className = 'sdh-masol__seged';
+            tarolo.appendChild(mezo);
+            mezo.select();
+
+            try {
+                siker = document.execCommand('copy');
+            } catch (e) {
+                siker = false;
+            }
+
+            mezo.remove();
+
+            if (horgony && horgony.focus) {
+                horgony.focus({ preventScroll: true });
+            }
+
+            if (siker) {
+                kesz();
+            } else {
+                hiba(new Error('A böngésző nem engedte a másolást.'));
+            }
+        });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-masol]') : null;
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var eredeti = gomb.getAttribute('data-sdh-masol-cim') || gomb.title || 'Másolás';
+
+        gomb.setAttribute('data-sdh-masol-cim', eredeti);
+
+        vagolapra(gomb.getAttribute('data-sdh-masol') || '', gomb)
+            .then(function () {
+                gomb.classList.remove('is-hiba');
+                gomb.classList.add('is-kesz');
+                gomb.title = 'Kimásolva';
+            })
+            .catch(function () {
+                gomb.classList.add('is-hiba');
+                gomb.title = 'Nem sikerült kimásolni – jelöld ki, és Ctrl+C';
+            })
+            .then(function () {
+                window.clearTimeout(gomb.sdhIdo);
+                gomb.sdhIdo = window.setTimeout(function () {
+                    gomb.classList.remove('is-kesz', 'is-hiba');
+                    gomb.title = eredeti;
+                }, 1600);
+            });
+    });
+
+    /* ---------------------------------------------------------------- */
     /* Áttekintés: a modulcsempék elrejtése / megjelenítése             */
     /* ---------------------------------------------------------------- */
 
@@ -7545,6 +8383,44 @@
     });
 
     csempekAllapot();
+
+    /*
+     * A csempék számai (nyitott munkalap, ügyfél, eszköz, kassza) mentés és
+     * állapotváltás után maguktól frissülnek – nem kell újratölteni az oldalt.
+     */
+    var csempeIdo = 0;
+
+    function csempekFrissit() {
+        if (!document.querySelector('[data-sdh-csempek] [data-sdh-kartya]')) {
+            return;
+        }
+
+        window.clearTimeout(csempeIdo);
+        csempeIdo = window.setTimeout(function () {
+            var cim = new URL(beallitas.ajax, window.location.origin);
+
+            cim.searchParams.set('action', 'sdh_muhely_csempe_szamok');
+            cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+            fetch(cim.toString(), { credentials: 'same-origin' })
+                .then(function (valasz) { return valasz.json(); })
+                .then(function (valasz) {
+                    var szamok = (valasz && valasz.success && valasz.data) || {};
+
+                    Object.keys(szamok).forEach(function (kulcs) {
+                        var szam = document.querySelector('[data-sdh-kartya="' + kulcs + '"] .sdh-kartya__szam');
+
+                        if (szam && szam.textContent !== szamok[kulcs]) {
+                            szam.textContent = szamok[kulcs];
+                        }
+                    });
+                })
+                .catch(function () { /* a csempe csak tájékoztat: marad a régi szám */ });
+        }, 250);
+    }
+
+    document.addEventListener('sdh:allapot', csempekFrissit);
+    document.addEventListener('sdh:mentve', csempekFrissit);
 
     // Más fájlok (levelezes.js) ezeken keresztül nyitnak popupot és választót.
     window.SDH_MUHELY_APP = {

@@ -37,6 +37,7 @@ final class SDH_Muhely_Admin_UI
         add_action('admin_menu', [self::class, 'menu'], 20);
         add_action('admin_enqueue_scripts', [self::class, 'eszkozok']);
         add_action('wp_ajax_sdh_muhely_globalis_kereso', [self::class, 'ajax_kereso']);
+        add_action('wp_ajax_sdh_muhely_csempe_szamok', [self::class, 'ajax_csempe_szamok']);
 
         // Minden saját AJAX-válasz megmondja, melyik CSS/JS verzió a friss, így a
         // már megnyitott oldal észreveszi, ha közben fájlcsere történt.
@@ -151,7 +152,7 @@ final class SDH_Muhely_Admin_UI
 
         $ugyfelek = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT id, nev, telefon, szamlazasi_telepules, ugyfel_szam
+                "SELECT id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam
                  FROM {$ugyfel_tabla}
                  WHERE aktiv = 1
                    AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
@@ -194,7 +195,7 @@ final class SDH_Muhely_Admin_UI
                     'cim'     => $sor->nev,
                     'reszlet' => implode(
                         ' · ',
-                        array_filter([$sor->telefon, $sor->szamlazasi_telepules, $sor->ugyfel_szam])
+                        array_filter([$sor->telefon, SDH_Muhely_Ugyfel::cim_szoveg($sor), $sor->ugyfel_szam])
                     ),
                     'url'     => SDH_Muhely_Modulok::url(
                         SDH_Muhely_Ugyfel::KULCS,
@@ -414,6 +415,10 @@ final class SDH_Muhely_Admin_UI
             'kontextus' => $kontextus,
             'alapTema'  => $arculat['tema'],
             'alapSzin'  => $arculat['szin'],
+            // A popupok neon kerete (Arculat): szín, az egyéni színkód és a fényerő.
+            'alapNeon'  => (string) ($arculat['neon'] ?? 'kiemelo'),
+            'neonEgyeni' => (string) ($arculat['neon_egyeni'] ?? ''),
+            'neonEro'   => (string) ($arculat['neon_ero'] ?? 'kozepes'),
             // Az irányítószám-lista verziója: a böngésző egy napig tárolja a
             // listát, új adatfájlnál ettől kéri le azonnal az újat.
             'iszVerzio' => self::eszkoz_verzio('data/iranyitoszam.csv.gz'),
@@ -425,6 +430,38 @@ final class SDH_Muhely_Admin_UI
             'admin'     => self::admin_e(),
             'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
         ];
+    }
+
+    /* =================================================================
+     * Másoló gomb
+     * ============================================================== */
+
+    /**
+     * Kis „másolás" gomb egy adat mellé: kattintásra a szöveg a vágólapra
+     * kerül (app.js: data-sdh-masol). Üres szövegre nem ad gombot.
+     *
+     * Minden adatlista ezt használja (munkalap-összefoglaló, részletpanel),
+     * így az IMEI, a név, a cím, a telefonszám… egy kattintással kimásolható.
+     */
+    public static function masolo_gomb(string $szoveg, string $cimke = ''): string
+    {
+        $szoveg = trim($szoveg);
+
+        if ($szoveg === '' || $szoveg === '—') {
+            return '';
+        }
+
+        $felirat = $cimke !== '' ? $cimke . ' másolása' : 'Másolás';
+
+        return sprintf(
+            '<button type="button" class="sdh-masol" data-sdh-masol="%s" title="%s" aria-label="%s">'
+            . '<svg class="sdh-masol__ikon" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.6"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg>'
+            . '<svg class="sdh-masol__pipa" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>'
+            . '</button>',
+            esc_attr($szoveg),
+            esc_attr($felirat),
+            esc_attr($felirat)
+        );
     }
 
     /* =================================================================
@@ -756,7 +793,11 @@ final class SDH_Muhely_Admin_UI
 
             $ki[$kulcs] = [
                 'modul' => (string) $modul['cim'],
-                'url'   => SDH_Muhely_Modulok::url((string) $kulcs),
+                // A csak adminos modul (Arculat, Beállítások, TAC) a műhely-felületen
+                // nem fut: a csempéje az admin oldalára visz, különben holt link volna.
+                'url'   => !empty($modul['csak_admin'])
+                    ? SDH_Muhely_Modulok::admin_url((string) $kulcs)
+                    : SDH_Muhely_Modulok::url((string) $kulcs),
                 'szam'  => isset($szamok[$kulcs]) ? (int) $szamok[$kulcs][0] : null,
                 'cimke' => isset($szamok[$kulcs]) ? $szamok[$kulcs][1] : 'megnyitás',
             ];
@@ -776,6 +817,34 @@ final class SDH_Muhely_Admin_UI
         }
 
         return self::csempek_alkalmaz($ki);
+    }
+
+    /**
+     * A csempék friss számai (AJAX): mentés vagy állapotváltás után az
+     * Áttekintés ebből frissíti magát, oldal-újratöltés nélkül (app.js:
+     * csempekFrissit). Csak a helyben változó, olcsón számolható értékek.
+     */
+    public static function ajax_csempe_szamok(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(self::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        global $wpdb;
+
+        $szamok = [
+            'munkalapok' => SDH_Muhely_Munkalap::nyitott_db(),
+            'ugyfelek'   => (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE aktiv = 1'),
+            'eszkozok'   => (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE aktiv = 1'),
+        ];
+
+        if (class_exists('SDH_Muhely_Penztar')) {
+            $szamok['penztar'] = (int) SDH_Muhely_Penztar::kassza_most();
+        }
+
+        wp_send_json_success(array_map(static fn (int $n): string => number_format_i18n($n), $szamok));
     }
 
     /* =================================================================

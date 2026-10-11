@@ -41,16 +41,71 @@ final class SDH_Muhely_Arculat
      * ============================================================== */
 
     /**
-     * @return array{tema: string, szin: string}
+     * @return array{tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
      */
     public static function beallitas(): array
     {
         $mentett = get_option('sdh_muhely_arculat', []);
+        $mentett = is_array($mentett) ? $mentett : [];
+
+        $neon = (string) ($mentett['neon'] ?? 'kiemelo');
+        $ero  = (string) ($mentett['neon_ero'] ?? 'kozepes');
 
         return [
-            'tema' => (string) ($mentett['tema'] ?? 'rendszer'),
-            'szin' => (string) ($mentett['szin'] ?? ''),
+            'tema'        => (string) ($mentett['tema'] ?? 'rendszer'),
+            'szin'        => (string) ($mentett['szin'] ?? ''),
+            // A popupok neon kerete: melyik szín világít (üres = kikapcsolva).
+            'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
+            'neon_egyeni' => self::hex((string) ($mentett['neon_egyeni'] ?? '')),
+            'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
         ];
+    }
+
+    /**
+     * A popupok neon keretének választható színei. A színek maguk a CSS-ben
+     * vannak (`--sdh-popneon-<kulcs>` az assets/admin.css-ben); a PHP csak a
+     * nevüket ismeri. Az üres kulcs: nincs neon keret. A `kiemelo` a
+     * mindenkori kiemelő színt követi, az `egyeni` a megadott színkódot.
+     *
+     * @return array<string, string>
+     */
+    public static function neonok(): array
+    {
+        return [
+            ''        => 'Kikapcsolva',
+            'kiemelo' => 'A kiemelő szín',
+            'cian'    => 'Cián',
+            'kek'     => 'Elektromos kék',
+            'lila'    => 'Lila',
+            'magenta' => 'Magenta',
+            'narancs' => 'Narancs',
+            'lime'    => 'Lime',
+            'egyeni'  => 'Egyéni szín',
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function neon_erok(): array
+    {
+        return [
+            'finom'   => 'Finom',
+            'kozepes' => 'Közepes',
+            'eros'    => 'Erős',
+        ];
+    }
+
+    /** Érvényes #rrggbb színkód, vagy üres sztring. */
+    private static function hex(string $ertek): string
+    {
+        $ertek = strtolower(trim($ertek));
+
+        if ($ertek !== '' && $ertek[0] !== '#') {
+            $ertek = '#' . $ertek;
+        }
+
+        return preg_match('/^#[0-9a-f]{6}$/', $ertek) === 1 ? $ertek : '';
     }
 
     /**
@@ -146,6 +201,61 @@ final class SDH_Muhely_Arculat
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sdh-doboz">
+                    <h2 class="sdh-doboz__cim">Popupok – neon keret</h2>
+
+                    <p class="sdh-sugo">
+                        Minden felugró ablak (munkalap, ügyfél, eszköz, választók) körül világító
+                        keret: ebből látszik azonnal, melyik ablak az aktív. Itt állítod a cég
+                        alapértelmezését; a dolgozók a profilmenüben a saját gépükön mást is
+                        választhatnak. Az egyéni szín hatjegyű színkód, pl. <code>#00e5ff</code>.
+                    </p>
+
+                    <div class="sdh-mezok">
+                        <div class="sdh-mezo">
+                            <label for="neon">Kijelölő (neon) szín</label>
+                            <select name="neon" id="neon" data-sdh-neon-valaszto>
+                                <?php foreach (self::neonok() as $kulcs => $cimke) : ?>
+                                    <option value="<?php echo esc_attr($kulcs); ?>"
+                                        <?php selected($b['neon'], $kulcs); ?>>
+                                        <?php echo esc_html($cimke); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="neon_egyeni">Egyéni színkód</label>
+                            <input type="text" name="neon_egyeni" id="neon_egyeni" maxlength="7"
+                                   pattern="#?[0-9a-fA-F]{6}" placeholder="#00e5ff" autocomplete="off"
+                                   data-sdh-neon-egyeni
+                                   value="<?php echo esc_attr($b['neon_egyeni']); ?>">
+                            <span class="sdh-mezo__sugo">Csak az „Egyéni szín” választásnál számít.</span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="neon_ero">Fényerő</label>
+                            <select name="neon_ero" id="neon_ero" data-sdh-neon-ero-valaszto>
+                                <?php foreach (self::neon_erok() as $kulcs => $cimke) : ?>
+                                    <option value="<?php echo esc_attr($kulcs); ?>"
+                                        <?php selected($b['neon_ero'], $kulcs); ?>>
+                                        <?php echo esc_html($cimke); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sdh-neon-minta" aria-hidden="true">
+                        <div class="sdh-modal__doboz sdh-neon-minta__ablak">
+                            <span class="sdh-neon-minta__gomb sdh-neon-minta__gomb--piros"></span>
+                            <span class="sdh-neon-minta__gomb sdh-neon-minta__gomb--zold"></span>
+                            <strong>Így néz ki egy popup</strong>
+                            <span>A keret színe és fényereje mentés előtt is itt látszik.</span>
                         </div>
                     </div>
                 </div>
@@ -296,12 +406,23 @@ final class SDH_Muhely_Arculat
 
         $tema = isset($_POST['tema']) ? sanitize_key(wp_unslash($_POST['tema'])) : 'rendszer';
         $szin = isset($_POST['szin']) ? sanitize_key(wp_unslash($_POST['szin'])) : '';
+        $neon = isset($_POST['neon']) ? sanitize_key(wp_unslash($_POST['neon'])) : '';
+        $ero  = isset($_POST['neon_ero']) ? sanitize_key(wp_unslash($_POST['neon_ero'])) : 'kozepes';
+        $hex  = self::hex(isset($_POST['neon_egyeni']) ? sanitize_text_field(wp_unslash($_POST['neon_egyeni'])) : '');
+
+        // Egyéni szín érvényes színkód nélkül nem világíthat: akkor a kiemelő szín marad.
+        if ($neon === 'egyeni' && $hex === '') {
+            $neon = 'kiemelo';
+        }
 
         update_option(
             'sdh_muhely_arculat',
             [
-                'tema' => isset(self::temak()[$tema]) ? $tema : 'rendszer',
-                'szin' => isset(self::szinek()[$szin]) ? $szin : '',
+                'tema'        => isset(self::temak()[$tema]) ? $tema : 'rendszer',
+                'szin'        => isset(self::szinek()[$szin]) ? $szin : '',
+                'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
+                'neon_egyeni' => $hex,
+                'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
             ]
         );
 

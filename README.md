@@ -60,6 +60,32 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.40.0
+- **Több eszköz egy munkalapon:** a fő eszköz mellé akárhány további csatolható („Eszköz csatolása" a munkalapon:
+  az ügyfél meglévő készülékei választó popupban, vagy új felvitele). A csatoltak címkeként állnak, egy kattintással
+  levehetők. A kezdőképernyő rácsában „+2" jelzi, a részletek „Eszközök (3)" lapfüle mindet mutatja; a rács és a
+  Munkalapok keresője a csatolt eszköz IMEI-jére, sorozatszámára, típusára is talál. A számla, a címke és az
+  ügyféloldal továbbra is a fő eszközre épül. Új tábla: `sdh_munkalap_eszkoz` (DB_VERSION 0.28.0).
+- **Állapotváltás a munkalapon:** már mentett lapnál az új állapot azonnal mentődik, a popup nyitva marad, a rács,
+  a részletek és az Áttekintés csempéi (nyitott munkalap, ügyfél, eszköz, kassza) maguktól frissülnek.
+- **Javítás – a munkalap becsukódott az állapotra kattintva:** kicsinyített (alacsony képernyőn zoomolt) popupban
+  a legördülő lista a mező fölé csúszott, és az egér felengedése háttérkattintásnak számított. A lista most a
+  mező alatt nyílik; popupot a háttér csak akkor zár be, ha a gombot is ott nyomták le (kihúzott szövegkijelölés
+  sem zár be többé). Az irányítószám-lista helye is jó a kicsinyített popupban.
+- **Gyakori hibák:** a munkalap Hibák lapfülén „Gyakori hibák" popup a húsz leggyakoribb készülékhibával – kattintásra
+  felkerül a lapra, egymás után több is. Új hiba ott helyben felvehető (a listára is), a teljes lista a
+  Beállítások › Gyakori hibák dobozban szerkeszthető (legfeljebb 60).
+- **Másoló gomb minden adat mellett:** IMEI, sorozatszám, típus, név, cím, telefon, e-mail… a munkalap Eszköz
+  lapfülén, a kezdőképernyő részleteiben (Munkalap, Eszköz, Ügyfél) és a rács celláiban (a sorra állva). Belső
+  hálózati, http-s címen is működik.
+- **Teljes cím mindenhol:** az ügyféllistában, a Munkalapok listában, az ügyfélválasztóban és a globális keresőben
+  irányítószám + település + utca áll (nem csak a település); a rácsban új **Cím** oszlop, levágás („…") helyett
+  több sorba törve. Az ügyfél címére keresni és rendezni is lehet. Az ügyfélűrlapon az utca mezője szélesebb.
+- **Popupok neon kerete:** minden felugró ablak világító keretet kap. A szín és a fényerő az Arculat › „Popupok –
+  neon keret" dobozban állítható (kiemelő szín, cián, kék, lila, magenta, narancs, lime, egyéni színkód, vagy
+  kikapcsolva), élő előnézettel; a dolgozó a profilmenüben a saját gépén mást választhat.
+- Az Áttekintés adminos csempéi (Arculat, Beállítások, TAC) az admin oldalára visznek (eddig holt linkek voltak).
+
 ### 0.39.0
 - **Csapat: két mód** (Beállítások › Csapat – üzenetek). **Többfelhasználós csevegés** – a 0.38-as rendszer
   (saját fiók kollégánként, személyes / csoportos / mindenkinek szóló beszélgetések). **Üzenőfal** – ha a cég egy

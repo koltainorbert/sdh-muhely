@@ -636,3 +636,27 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__jelveny {
         overflow: hidden;
     }
 }
+
+
+/* ------------------------------------------------------------------ */
+/* 0.40.0 – profilmenü: a popupok neon keretének színe                 */
+/* ------------------------------------------------------------------ */
+
+.sdh-szin--neon-ki {
+    background:
+        linear-gradient(135deg, transparent 44%, var(--sdh-keret-eros) 44% 56%, transparent 56%),
+        var(--sdh-felulet-2);
+    border-color: var(--sdh-keret);
+}
+
+.sdh-szin--neon-kiemelo { background: var(--sdh-accent); }
+.sdh-szin--neon-cian { background: var(--sdh-popneon-cian); }
+.sdh-szin--neon-kek { background: var(--sdh-popneon-kek); }
+.sdh-szin--neon-lila { background: var(--sdh-popneon-lila); }
+.sdh-szin--neon-magenta { background: var(--sdh-popneon-magenta); }
+.sdh-szin--neon-narancs { background: var(--sdh-popneon-narancs); }
+.sdh-szin--neon-lime { background: var(--sdh-popneon-lime); }
+
+.sdh-szin--neon-egyeni {
+    background: conic-gradient(var(--sdh-popneon-cian), var(--sdh-popneon-magenta), var(--sdh-popneon-narancs), var(--sdh-popneon-lime), var(--sdh-popneon-cian));
+}

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.27.0';
+    public const DB_VERSION = '0.28.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -100,6 +100,7 @@ final class SDH_Muhely_Schema
         $tac    = self::tabla('tac');
         $munkalap = self::tabla('munkalap');
         $hiba     = self::tabla('munkalap_hiba');
+        $ml_eszkoz = self::tabla('munkalap_eszkoz');
         $tetel    = self::tabla('munkalap_tetel');
         $csatolmany = self::tabla('csatolmany');
         $szolgaltatas = self::tabla('szolgaltatas');
@@ -371,6 +372,27 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key munkalap_id (munkalap_id),
             key allapot (allapot)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Munkalap – további eszközök
+         *
+         * Egy munkalaphoz akárhány eszköz csatolható (pl. az ügyfél egyszerre
+         * három telefont hoz be). Az ELSŐ, fő eszköz továbbra is a munkalap
+         * "eszkoz_id" mezője – a rács, a számla, az RMA és a nyomtatványok
+         * erre épülnek, és változatlanul működnek. Ez a tábla csak a
+         * TOVÁBBI eszközöket tartja, sorrendben. Egy eszköz egy lapon
+         * egyszer szerepelhet (egyedi kulcs).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$ml_eszkoz} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
+            sorrend int(11) NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            unique key lap_eszkoz (munkalap_id,eszkoz_id),
+            key eszkoz_id (eszkoz_id)
         ) {$charset};";
 
         /* -------------------------------------------------------------

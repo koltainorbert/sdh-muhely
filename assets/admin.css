@@ -1184,11 +1184,11 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-sor--cim {
-    grid-template-columns: 5.2rem minmax(0, 1fr) minmax(0, 1.7fr) 9.5rem;
+    grid-template-columns: 4.6rem minmax(0, 1fr) minmax(0, 2.6fr) 7.6rem;
 }
 
 .sdh-sor--cim3 {
-    grid-template-columns: 5.2rem minmax(0, 1fr) minmax(0, 1.7fr);
+    grid-template-columns: 4.6rem minmax(0, 1fr) minmax(0, 2.6fr);
 }
 
 .sdh-sor--ketto {
@@ -5488,4 +5488,486 @@ a.sdh-szamlajel:hover {
         color: inherit;
         text-decoration: none;
     }
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – munkalap: azonnali állapotmentés jelzése                   */
+/* ================================================================== */
+
+.sdh-ml__olvas[hidden] {
+    display: none;
+}
+
+.sdh-allapot-jel {
+    grid-column: 1 / -1;
+    justify-self: end;
+    font-size: 11.5px;
+    line-height: 1.3;
+    text-align: right;
+}
+
+.sdh-allapot-jel--jo {
+    color: var(--sdh-siker);
+}
+
+.sdh-allapot-jel--var {
+    color: var(--sdh-figyelem);
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – teljes cím a listákban (nincs levágás)                     */
+/* ================================================================== */
+
+.sdh-tabla td.sdh-tabla__cim,
+.sdh-tabla .sdh-tabla__cim {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-width: 12rem;
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – popupok neon kerete (Arculat › Popupok – neon keret)        */
+/* ================================================================== */
+/*
+ * A szín a gyökér data-neon attribútumából jön (app.js: neonAlkalmaz); a
+ * dolgozó a profilmenüben, a cég az Arculat képernyőn választ. Minden szín
+ * itt van változóként – a PHP és a JavaScript csak a kulcsukat ismeri.
+ */
+
+:root {
+    --sdh-popneon-cian: #00e5ff;
+    --sdh-popneon-kek: #3d7bff;
+    --sdh-popneon-lila: #a45bff;
+    --sdh-popneon-magenta: #ff2bd6;
+    --sdh-popneon-narancs: #ff8a1f;
+    --sdh-popneon-lime: #7dff3a;
+    --sdh-popneon-ki: var(--sdh-keret-eros);
+
+    /* A fényudvar mérete és telítettsége (data-neon-ero írja felül). */
+    --sdh-popneon-kozel: 12px;
+    --sdh-popneon-tavol: 42px;
+    --sdh-popneon-kozel-ero: 62%;
+    --sdh-popneon-tavol-ero: 34%;
+}
+
+:root[data-neon="kiemelo"] { --sdh-popneon: var(--sdh-accent); }
+:root[data-neon="cian"] { --sdh-popneon: var(--sdh-popneon-cian); }
+:root[data-neon="kek"] { --sdh-popneon: var(--sdh-popneon-kek); }
+:root[data-neon="lila"] { --sdh-popneon: var(--sdh-popneon-lila); }
+:root[data-neon="magenta"] { --sdh-popneon: var(--sdh-popneon-magenta); }
+:root[data-neon="narancs"] { --sdh-popneon: var(--sdh-popneon-narancs); }
+:root[data-neon="lime"] { --sdh-popneon: var(--sdh-popneon-lime); }
+:root[data-neon="egyeni"] { --sdh-popneon: var(--sdh-popneon-egyeni, var(--sdh-accent)); }
+
+:root[data-neon-ero="finom"] {
+    --sdh-popneon-kozel: 7px;
+    --sdh-popneon-tavol: 24px;
+    --sdh-popneon-kozel-ero: 42%;
+    --sdh-popneon-tavol-ero: 20%;
+}
+
+:root[data-neon-ero="eros"] {
+    --sdh-popneon-kozel: 18px;
+    --sdh-popneon-tavol: 70px;
+    --sdh-popneon-kozel-ero: 82%;
+    --sdh-popneon-tavol-ero: 50%;
+}
+
+:root[data-neon] .sdh-modal__doboz {
+    border-color: var(--sdh-popneon);
+    box-shadow:
+        0 0 0 1px var(--sdh-popneon),
+        0 0 var(--sdh-popneon-kozel) color-mix(in srgb, var(--sdh-popneon) var(--sdh-popneon-kozel-ero), transparent),
+        0 0 var(--sdh-popneon-tavol) color-mix(in srgb, var(--sdh-popneon) var(--sdh-popneon-tavol-ero), transparent),
+        var(--sdh-arnyek-emelt);
+}
+
+/* Több egymásra nyílt popupnál csak a legfelső világít teljes erővel. */
+:root[data-neon] .sdh-modal:has(~ .sdh-modal[open]) .sdh-modal__doboz {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--sdh-popneon) 45%, var(--sdh-keret)), var(--sdh-arnyek-emelt);
+}
+
+/* Az Arculat képernyő előnézete. */
+.sdh-neon-minta {
+    display: grid;
+    place-items: center;
+    margin-top: 1.1rem;
+    padding: 2.4rem 1rem;
+    border-radius: var(--sdh-r-nagy);
+    background: color-mix(in srgb, var(--sdh-szoveg) 34%, var(--sdh-vaszon));
+}
+
+.sdh-neon-minta__ablak {
+    display: grid;
+    gap: .3rem;
+    width: min(24rem, 100%);
+    max-height: none;
+    padding: 2rem 1.3rem 1.2rem;
+    overflow: visible;
+    font-size: 13px;
+}
+
+.sdh-neon-minta__ablak > span:not(.sdh-neon-minta__gomb) {
+    color: var(--sdh-halvany);
+}
+
+.sdh-neon-minta__gomb {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--sdh-ablak-piros);
+}
+
+.sdh-neon-minta__gomb--zold {
+    left: 34px;
+    background: var(--sdh-ablak-zold);
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – gyakori hibák választója (app.js: gyakoriHibakNyit)         */
+/* ================================================================== */
+
+.sdh-modal.sdh-modal--pop.sdh-gyh {
+    width: min(760px, calc(100vw - 2rem));
+}
+
+.sdh-gyh__lista {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .45rem;
+    margin: .9rem 0 .8rem;
+}
+
+.sdh-gyh__elem {
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    min-height: 36px;
+    padding: .35rem .85rem;
+    white-space: normal;
+    text-align: left;
+}
+
+.sdh-gyh__elem .sdh-pill__cimke {
+    overflow: visible;
+    line-height: 1.25;
+    font-weight: 500;
+}
+
+.sdh-gyh__elem.is-aktiv::after {
+    content: "";
+    flex: 0 0 auto;
+    width: 9px;
+    height: 5px;
+    margin: -3px 0 0 auto;
+    border-left: 1.8px solid currentColor;
+    border-bottom: 1.8px solid currentColor;
+    transform: rotate(-45deg);
+}
+
+.sdh-gyh__ures {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--sdh-halvany);
+}
+
+.sdh-gyh__lapozo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    margin-bottom: .8rem;
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-gyh__lapozo[hidden] {
+    display: none;
+}
+
+.sdh-gyh__uj {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: .6rem;
+    padding-top: .8rem;
+    border-top: 1px solid var(--sdh-keret);
+}
+
+.sdh-gyh__uzenet {
+    min-height: 1.2em;
+    margin: .45rem 0 0;
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-gyh__uzenet.is-jo {
+    color: var(--sdh-siker);
+}
+
+.sdh-gyh__uzenet.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+.sdh-gyh__lab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+    margin-top: .4rem;
+}
+
+@media (max-width: 640px) {
+    .sdh-gyh__lista {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sdh-gyh__uj {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .sdh-gyh__uj .sdh-jelolo {
+        grid-column: 1 / -1;
+    }
+}
+
+.sdh-gyh__uj input[type="text"] {
+    box-sizing: border-box;
+    width: 100%;
+    height: 34px;
+    padding: 0 .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 13px;
+}
+
+.sdh-gyh__uj input[type="text"]:focus {
+    border-color: var(--sdh-accent);
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – másoló gomb az adatok mellett (app.js: data-sdh-masol)      */
+/* ================================================================== */
+
+.sdh-masol {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    margin: -2px 0 -2px .35rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sdh-halvany);
+    vertical-align: middle;
+    cursor: pointer;
+    opacity: .55;
+    transition: opacity .12s ease, background .12s ease, color .12s ease;
+}
+
+.sdh-masol svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-masol__pipa,
+.sdh-masol.is-kesz .sdh-masol__ikon {
+    display: none;
+}
+
+.sdh-masol.is-kesz .sdh-masol__pipa {
+    display: block;
+}
+
+.sdh-masol:hover,
+.sdh-masol:focus-visible,
+dd:hover > .sdh-masol {
+    opacity: 1;
+    border-color: var(--sdh-keret-eros);
+    background: var(--sdh-felulet);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-masol:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+.sdh-masol.is-kesz {
+    opacity: 1;
+    border-color: var(--sdh-siker);
+    color: var(--sdh-siker);
+}
+
+.sdh-masol.is-hiba {
+    opacity: 1;
+    border-color: var(--sdh-hiba);
+    color: var(--sdh-hiba);
+}
+
+/* A vágólapra másolás segédmezője (http-s címen): nem látszik, de kijelölhető. */
+.sdh-masol__seged {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* ================================================================== */
+/* 0.40.0 – több eszköz egy munkalapon: a csatolt eszközök címkéi       */
+/* ================================================================== */
+
+.sdh-ml-eszkozok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem .6rem;
+    margin: .1rem 0 .15rem;
+}
+
+.sdh-ml-eszkozok__cimke {
+    flex: 0 0 auto;
+    font-size: 13px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-ml-eszkozok__lista {
+    display: flex;
+    flex: 1 1 12rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    min-width: 0;
+}
+
+.sdh-ml-eszkozok__ures {
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ml-eszkozok__ures[hidden] {
+    display: none;
+}
+
+.sdh-ml-eszkozok__gomb {
+    flex: 0 0 auto;
+    height: 30px;
+    padding: 0 .75rem;
+    font-size: 12.5px;
+}
+
+.sdh-ml-eszkoz {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    max-width: 100%;
+    min-height: 28px;
+    padding: 0 .3rem 0 .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    font-size: 12.5px;
+    line-height: 1.25;
+}
+
+.sdh-ml-eszkoz__nev {
+    overflow-wrap: anywhere;
+}
+
+.sdh-ml-eszkoz__torol {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sdh-halvany);
+    font: inherit;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sdh-ml-eszkoz__torol:hover,
+.sdh-ml-eszkoz__torol:focus-visible {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+/* „+2": a lapon a fő eszközön kívül ennyi további eszköz van (lista és rács). */
+.sdh-tobb-eszkoz {
+    display: inline-block;
+    margin-left: .3rem;
+    padding: 0 .38rem;
+    border-radius: 999px;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+    vertical-align: 1px;
+}
+
+
+/* A csatolt eszközök tömör listája a munkalap Eszköz lapfülén. */
+.sdh-ml-tobbi {
+    margin: .35rem 0 .3rem;
+    padding: 0 .6rem 0 2rem;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.sdh-ml-tobbi li {
+    padding: 2px 0;
+    overflow-wrap: anywhere;
+}
+
+.sdh-ml-tobbi li + li {
+    border-top: 1px solid var(--sdh-keret);
+}
+
+.sdh-ml-tobbi__fajta {
+    margin-right: .5rem;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ml-tobbi__adat {
+    display: inline-block;
+    margin-right: .9rem;
+}
+
+.sdh-ml-tobbi__adat em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
 }

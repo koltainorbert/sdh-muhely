@@ -46,6 +46,9 @@ final class SDH_Muhely_Racs
      */
     private const FIZETENDO = '(CASE WHEN m.fizetve = 1 THEN 0 ELSE m.brutto_ertek - m.fizetett END)';
 
+    /** Az ügyfél teljes címe egy kifejezésben – erre szűr, keres és rendez a „Cím" oszlop. */
+    private const CIM_SQL = "TRIM(CONCAT(COALESCE(u.szamlazasi_iranyitoszam, ''), ' ', COALESCE(u.szamlazasi_telepules, ''), ' ', COALESCE(u.szamlazasi_cim, '')))";
+
     public static function init(): void
     {
         add_action('wp_ajax_sdh_muhely_racs_adat', [self::class, 'ajax_adat']);
@@ -162,6 +165,11 @@ final class SDH_Muhely_Racs
             'telefon' => [
                 'cim' => 'Telefonszám', 'tipus' => 'szoveg', 'sql' => "COALESCE(u.telefon, '')",
                 'sz' => 136, 'alap' => true,
+            ],
+            // Az ügyfél teljes (központi) címe: irányítószám, település, utca – nem csak a település.
+            'cim' => [
+                'cim' => 'Cím', 'tipus' => 'szoveg', 'sql' => self::CIM_SQL,
+                'sz' => 290, 'alap' => true,
             ],
             'keszult' => [
                 'cim' => 'Készült', 'tipus' => 'datum', 'sql' => 'm.keszult',
@@ -754,6 +762,18 @@ final class SDH_Muhely_Racs
             }
         }
 
+        // A lapra csatolt (további) eszközök is találatok, ha valamelyik
+        // eszközoszlop látszik: a rács soraiban csak a fő eszköz áll, de az
+        // IMEI-re, sorozatszámra, típusra keresve a csatolt készülék lapja is előjön.
+        if (array_intersect($lathato, ['imei', 'sorozatszam', 'tipus', 'megnevezes', 'gyarto']) !== []) {
+            $reszek[] = 'EXISTS (SELECT 1 FROM ' . SDH_Muhely_Schema::tabla('munkalap_eszkoz') . ' tk'
+                . ' INNER JOIN ' . SDH_Muhely_Schema::tabla('eszkoz') . ' te2 ON te2.id = tk.eszkoz_id'
+                . ' WHERE tk.munkalap_id = m.id AND (te2.imei LIKE %s OR te2.imei2 LIKE %s'
+                . ' OR te2.sorozatszam LIKE %s OR te2.tipus LIKE %s OR te2.megnevezes LIKE %s OR te2.gyarto LIKE %s))';
+
+            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta);
+        }
+
         // Ha a keresett szó egyik látható oszlopban sem értelmezhető, nincs találat.
         return $reszek === [] ? '1 = 0' : '(' . implode(' OR ', $reszek) . ')';
     }
@@ -890,6 +910,7 @@ final class SDH_Muhely_Racs
                         m.ugyfel_id, m.eszkoz_id,
                         {$fizetendo} AS fizetendo,
                         u.nev AS u_nev, u.telefon AS u_telefon,
+                        u.szamlazasi_iranyitoszam, u.szamlazasi_telepules, u.szamlazasi_cim,
                         e.kategoria AS e_kategoria, e.gyarto AS e_gyarto, e.tipus AS e_tipus,
                         e.megnevezes AS e_megnevezes, e.garancias AS e_garancias,
                         e.imei AS e_imei, e.sorozatszam AS e_sorozatszam,
@@ -904,8 +925,15 @@ final class SDH_Muhely_Racs
         $ma        = current_time('Y-m-d');
         $ki        = [];
 
+        // Hány további (csatolt) eszköz van az oldal lapjain – egy lekérdezéssel.
+        $tobbi_db = SDH_Muhely_Munkalap::tovabbi_eszkoz_db(
+            array_map(static fn (object $s): int => (int) $s->id, (array) $sorok)
+        );
+
         foreach ((array) $sorok as $sor) {
-            $ki[] = self::sor_formaz($sor, $allapotok, $ma);
+            $formazott          = self::sor_formaz($sor, $allapotok, $ma);
+            $formazott['_tobb'] = $tobbi_db[(int) $sor->id] ?? 0;
+            $ki[]               = $formazott;
         }
 
         return [
@@ -974,6 +1002,7 @@ final class SDH_Muhely_Racs
             'sorozatszam'   => (string) ($sor->e_sorozatszam ?? ''),
             'ugyfel'        => (string) ($sor->u_nev ?? ''),
             'telefon'       => (string) ($sor->u_telefon ?? ''),
+            'cim'           => SDH_Muhely_Ugyfel::cim_szoveg($sor),
             'keszult'       => self::datum($sor->keszult),
             'hatarido'      => $hatarido,
             'lezarva'       => self::datum($sor->lezarva),
@@ -1338,6 +1367,10 @@ final class SDH_Muhely_Racs
             )
             : null;
 
+        // A lap további (csatolt) eszközei – a fő eszköz után, sorrendben.
+        $tovabbi  = SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk((int) $munkalap->id));
+        $eszkozok = array_merge($eszkoz ? [$eszkoz] : [], $tovabbi);
+
         $hibak    = SDH_Muhely_Munkalap::hibasorok((int) $munkalap->id);
         $tetelek  = SDH_Muhely_Tetel::lista((int) $munkalap->id);
         $szolg    = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'szolgaltatas'));
@@ -1352,12 +1385,14 @@ final class SDH_Muhely_Racs
             [
                 'k'    => 'munkalap',
                 'cim'  => 'Munkalap' . ($szam !== '' ? ' ' . $szam : ''),
-                'html' => self::kepernyore([self::class, 'ful_munkalap'], $munkalap, $ugyfel, $eszkoz, $hibak),
+                'html' => self::kepernyore([self::class, 'ful_munkalap'], $munkalap, $ugyfel, $eszkoz, $hibak, $tovabbi),
             ],
             [
                 'k'    => 'eszkoz',
-                'cim'  => 'Eszköz' . ($eszkoz ? ' ' . (int) $eszkoz->id : ''),
-                'html' => self::kepernyore([self::class, 'ful_eszkoz'], $eszkoz),
+                'cim'  => count($eszkozok) > 1
+                    ? 'Eszközök (' . count($eszkozok) . ')'
+                    : 'Eszköz' . ($eszkoz ? ' ' . (int) $eszkoz->id : ''),
+                'html' => self::kepernyore([self::class, 'ful_eszkozok'], $eszkozok),
             ],
             [
                 'k'    => 'ugyfel',
@@ -1463,10 +1498,21 @@ final class SDH_Muhely_Racs
      */
     private static function adatsor(string $cimke, string $ertek_html): void
     {
+        // A másoló gomb a látható szöveget viszi a vágólapra (HTML nélkül,
+        // a sortörések megtartásával). Helyőrző szövegre („azonos a…") nem kell.
+        $masolhato = $ertek_html !== '' && strpos($ertek_html, 'sdh-adatlista__ures') === false
+            ? trim(html_entity_decode(
+                wp_strip_all_tags((string) preg_replace('/<br\s*\/?>/i', "\n", $ertek_html)),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            ))
+            : '';
+
         printf(
-            '<div class="sdh-adatlista__sor"><dt>%s:</dt><dd>%s</dd></div>',
+            '<div class="sdh-adatlista__sor"><dt>%s:</dt><dd>%s%s</dd></div>',
             esc_html($cimke),
-            $ertek_html !== '' ? $ertek_html : '<span class="sdh-adatlista__ures">—</span>' // phpcs:ignore WordPress.Security.EscapeOutput
+            $ertek_html !== '' ? $ertek_html : '<span class="sdh-adatlista__ures">—</span>', // phpcs:ignore WordPress.Security.EscapeOutput
+            SDH_Muhely_Admin_UI::masolo_gomb($masolhato, $cimke) // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb szűrt HTML.
         );
     }
 
@@ -1534,8 +1580,9 @@ final class SDH_Muhely_Racs
      * Munkalap-lapfül.
      *
      * @param array<int, object> $hibak
+     * @param array<int, object> $tovabbi A lap további (csatolt) eszközei.
      */
-    private static function ful_munkalap(object $munkalap, ?object $ugyfel, ?object $eszkoz, array $hibak): void
+    private static function ful_munkalap(object $munkalap, ?object $ugyfel, ?object $eszkoz, array $hibak, array $tovabbi = []): void
     {
         $allapotok = SDH_Muhely_Munkalap::allapotok();
         $megjegyzes = trim((string) $munkalap->megjegyzes);
@@ -1581,6 +1628,13 @@ final class SDH_Muhely_Racs
                 ? esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz))
                 : ''
         );
+
+        foreach ($tovabbi as $i => $egy) {
+            self::adatsor(
+                ($i + 2) . '. eszköz',
+                esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $egy->kategoria) . ' – ' . SDH_Muhely_Munkalap::eszkoz_felirat($egy))
+            );
+        }
         self::adatsor('Ügyfélnév', $ugyfel ? esc_html((string) $ugyfel->nev) : '');
         self::adatsor(
             'Cím',
@@ -1657,6 +1711,31 @@ final class SDH_Muhely_Racs
         }
 
         return $html . '</div>';
+    }
+
+    /**
+     * Eszköz-lapfül: a lap minden eszköze egymás alatt. Egy eszköznél
+     * ugyanaz, mint eddig; többnél mindegyik saját fejlécet kap.
+     *
+     * @param array<int, object> $eszkozok Elöl a fő eszköz.
+     */
+    private static function ful_eszkozok(array $eszkozok): void
+    {
+        if (count($eszkozok) <= 1) {
+            self::ful_eszkoz($eszkozok[0] ?? null);
+
+            return;
+        }
+
+        foreach ($eszkozok as $i => $eszkoz) {
+            printf(
+                '<h4 class="sdh-reszlet__eszkozfej">%d. eszköz <span>%s</span></h4>',
+                (int) ($i + 1),
+                esc_html(SDH_Muhely_Munkalap::eszkoz_felirat($eszkoz))
+            );
+
+            self::ful_eszkoz($eszkoz);
+        }
     }
 
     /** Eszköz-lapfül. */

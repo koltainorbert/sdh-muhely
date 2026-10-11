@@ -82,10 +82,38 @@ final class SDH_Muhely_Ugyfel
                    value="<?php echo (int) $ugyfel_id; ?>">
             <input type="text" class="sdh-valaszto__mezo" autocomplete="off"
                    placeholder="Kezdd el írni a nevet, telefont, ügyfélszámot…"
+                   title="<?php echo esc_attr($ugyfel !== null ? trim($ugyfel->nev . ' – ' . self::cim_szoveg($ugyfel), ' –') : ''); ?>"
                    value="<?php echo esc_attr($ugyfel !== null ? $ugyfel->nev : ''); ?>">
             <ul class="sdh-valaszto__lista" hidden></ul>
         </div>
         <?php
+    }
+
+    /**
+     * Az ügyfél teljes címe egy sorban: „8200 Veszprém, Kossuth utca 1.".
+     *
+     * Mindenhol ez megy ki, ahol az ügyfél címe látszik (ügyféllista,
+     * munkalaplista, rács, választók) – sehol nem csak a település. Az
+     * előtag a címfajta: szamlazasi (központi), levelezesi, szallitasi, telephely.
+     */
+    public static function cim_szoveg(?object $ugyfel, string $elotag = 'szamlazasi'): string
+    {
+        if ($ugyfel === null) {
+            return '';
+        }
+
+        $elso = trim(
+            trim((string) ($ugyfel->{$elotag . '_iranyitoszam'} ?? '')) . ' '
+            . trim((string) ($ugyfel->{$elotag . '_telepules'} ?? ''))
+        );
+
+        return implode(
+            ', ',
+            array_filter(
+                [$elso, trim((string) ($ugyfel->{$elotag . '_cim'} ?? ''))],
+                static fn (string $s): bool => $s !== ''
+            )
+        );
     }
 
     /**
@@ -116,13 +144,14 @@ final class SDH_Muhely_Ugyfel
 
         $sorok = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT id, nev, telefon, szamlazasi_telepules, ugyfel_szam
+                "SELECT id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam
                  FROM {$tabla}
                  WHERE aktiv = 1
                    AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
-                        OR email LIKE %s OR ugyfel_szam LIKE %s)
+                        OR email LIKE %s OR ugyfel_szam LIKE %s OR szamlazasi_cim LIKE %s)
                  ORDER BY nev ASC
                  LIMIT 10",
+                $minta,
                 $minta,
                 $minta,
                 $minta,
@@ -136,7 +165,7 @@ final class SDH_Muhely_Ugyfel
         foreach ($sorok as $sor) {
             $reszletek = array_filter([
                 $sor->telefon,
-                $sor->szamlazasi_telepules,
+                self::cim_szoveg($sor),
                 $sor->ugyfel_szam,
             ]);
 
@@ -144,6 +173,7 @@ final class SDH_Muhely_Ugyfel
                 'id'       => (int) $sor->id,
                 'nev'      => $sor->nev,
                 'reszlet'  => implode(' · ', $reszletek),
+                'cim'      => self::cim_szoveg($sor),
             ];
         }
 
@@ -237,9 +267,10 @@ final class SDH_Muhely_Ugyfel
             $minta = '%' . $wpdb->esc_like($kereses) . '%';
 
             $feltetelek[] = '(nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s OR email LIKE %s '
-                . 'OR ugyfel_szam LIKE %s OR szamlazasi_telepules LIKE %s)';
+                . 'OR ugyfel_szam LIKE %s OR szamlazasi_telepules LIKE %s OR szamlazasi_cim LIKE %s '
+                . 'OR szamlazasi_iranyitoszam LIKE %s)';
 
-            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta);
+            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta, $minta, $minta);
         }
 
         $hol = 'WHERE ' . implode(' AND ', $feltetelek);
@@ -288,7 +319,7 @@ final class SDH_Muhely_Ugyfel
                 <input type="search"
                        name="k"
                        value="<?php echo esc_attr($kereses); ?>"
-                       placeholder="Név, telefon, e-mail, ügyfélszám, település…">
+                       placeholder="Név, telefon, e-mail, ügyfélszám, cím…">
 
                 <button type="submit" class="sdh-gomb sdh-gomb--vilagos">Keresés</button>
 
@@ -316,7 +347,7 @@ final class SDH_Muhely_Ugyfel
                         <th>Típus</th>
                         <th>Telefon</th>
                         <th class="sdh-tabla__rejtheto">E-mail</th>
-                        <th class="sdh-tabla__rejtheto">Település</th>
+                        <th>Cím</th>
                         <th>Ügyfélszám</th>
                         <th></th>
                     </tr>
@@ -361,9 +392,7 @@ final class SDH_Muhely_Ugyfel
                             </td>
                             <td><?php echo esc_html($sor->telefon); ?></td>
                             <td class="sdh-tabla__rejtheto"><?php echo esc_html($sor->email); ?></td>
-                            <td class="sdh-tabla__rejtheto">
-                                <?php echo esc_html($sor->szamlazasi_telepules); ?>
-                            </td>
+                            <td class="sdh-tabla__cim"><?php echo esc_html(self::cim_szoveg($sor)); ?></td>
                             <td class="sdh-tabla__halvany"><?php echo esc_html($sor->ugyfel_szam); ?></td>
                             <td>
                                 <a class="sdh-gomb sdh-gomb--vilagos"

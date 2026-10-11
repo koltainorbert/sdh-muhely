@@ -457,6 +457,23 @@ final class SDH_Muhely_Frontend
                             <button type="button" class="sdh-szin sdh-szin--palaszurke" data-ertek="palaszurke" aria-label="Palaszürke"></button>
                         </div>
 
+                        <p class="sdh-profil__cim">Popup neon keret</p>
+                        <div class="sdh-szinek" data-sdh-neon>
+                            <?php foreach (SDH_Muhely_Arculat::neonok() as $sdh_neon_kulcs => $sdh_neon_nev) : ?>
+                                <?php
+                                // Az egyéni szín csak akkor választható, ha az Arculatban megadták a kódját.
+                                if ($sdh_neon_kulcs === 'egyeni' && SDH_Muhely_Arculat::beallitas()['neon_egyeni'] === '') {
+                                    continue;
+                                }
+                                ?>
+                                <button type="button"
+                                        class="sdh-szin sdh-szin--neon sdh-szin--neon-<?php echo esc_attr($sdh_neon_kulcs !== '' ? $sdh_neon_kulcs : 'ki'); ?>"
+                                        data-ertek="<?php echo esc_attr($sdh_neon_kulcs); ?>"
+                                        title="<?php echo esc_attr($sdh_neon_nev); ?>"
+                                        aria-label="<?php echo esc_attr($sdh_neon_nev); ?>"></button>
+                            <?php endforeach; ?>
+                        </div>
+
                         <a class="sdh-profil__kilep"
                            href="<?php echo esc_url(wp_logout_url(home_url('/'))); ?>">Kijelentkezés</a>
                     </div>

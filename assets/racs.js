@@ -704,6 +704,21 @@
             ' aria-label="Állapot módosítása">' + opciok + '</select></span>';
     }
 
+    /* A sorban ezek mellé kerül (ráálláskor) másoló gomb – a kattintást az app.js intézi. */
+    var MASOLHATO = { imei: 1, sorozatszam: 1, tipus: 1, megnevezes: 1, ugyfel: 1, telefon: 1, nev: 1 };
+
+    function masoloGomb(o, ertek) {
+        if (!ertek) {
+            return '';
+        }
+
+        return '<button type="button" class="sdh-masol sdh-masol--cella" data-sdh-masol="' + esc(ertek) + '"' +
+            ' title="' + esc(o.cim) + ' másolása" aria-label="' + esc(o.cim) + ' másolása">' +
+            '<svg class="sdh-masol__ikon" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.6"/>' +
+            '<path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg>' +
+            '<svg class="sdh-masol__pipa" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></button>';
+    }
+
     function cella(o, sor) {
         var ertek = sor[o.k];
 
@@ -725,6 +740,20 @@
 
             case 'hatarido':
                 return '<td' + (sor._lejart ? ' class="is-lejart" title="Lejárt határidő"' : '') + '>' + esc(ertek) + '</td>';
+
+            case 'cim':
+                // A cím nem vágódik le „…"-tal: ha nem fér ki, a cellában több sorba törik.
+                return '<td class="is-tordel is-masolhato">' + esc(ertek) + masoloGomb(o, ertek) + '</td>';
+        }
+
+        // A fő eszköz típusa mellett: hány további eszköz van a lapon.
+        if (o.k === 'tipus' && sor._tobb > 0) {
+            return '<td class="is-masolhato" title="' + esc(ertek) + ' – további ' + sor._tobb + ' eszköz ezen a munkalapon">' +
+                esc(ertek) + '<span class="sdh-tobb-eszkoz">+' + sor._tobb + '</span>' + masoloGomb(o, ertek) + '</td>';
+        }
+
+        if (MASOLHATO[o.k] && ertek) {
+            return '<td class="is-masolhato" title="' + esc(ertek) + '">' + esc(ertek) + masoloGomb(o, ertek) + '</td>';
         }
 
         if (o.tipus === 'penz') {

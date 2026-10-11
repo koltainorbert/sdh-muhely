@@ -1282,3 +1282,67 @@
 .sdh-reszlet__panel .sdh-rma {
     padding: .7rem .8rem;
 }
+
+
+/* ------------------------------------------------------------------ */
+/* 0.40.0 – a Cím oszlop teljes szöveggel (nincs „…"): több sorba törik */
+/* ------------------------------------------------------------------ */
+
+.sdh-racs__tabla td.is-tordel {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    line-height: 1.25;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* 0.40.0 – másoló gomb a rács celláiban: a sorra állva jelenik meg     */
+/* ------------------------------------------------------------------ */
+
+.sdh-racs__tabla td.is-masolhato {
+    position: relative;
+}
+
+.sdh-racs__tabla .sdh-masol--cella {
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    margin: 0;
+    transform: translateY(-50%);
+    background: var(--sdh-felulet);
+    border-color: var(--sdh-keret-eros);
+    opacity: 0;
+}
+
+.sdh-racs__tabla td.is-masolhato:hover .sdh-masol--cella,
+.sdh-racs__tabla .sdh-masol--cella:focus-visible,
+.sdh-racs__tabla .sdh-masol--cella.is-kesz {
+    opacity: 1;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* 0.40.0 – több eszköz egy munkalapon: az Eszközök lapfül fejlécei     */
+/* ------------------------------------------------------------------ */
+
+.sdh-reszlet__eszkozfej {
+    margin: 0 0 .5rem;
+    padding: .3rem .6rem;
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sdh-reszlet__eszkozfej span {
+    margin-left: .4rem;
+    color: var(--sdh-halvany);
+    font-weight: 400;
+}
+
+.sdh-reszlet__eszkozfej ~ .sdh-reszlet__eszkozfej {
+    margin-top: 1rem;
+}

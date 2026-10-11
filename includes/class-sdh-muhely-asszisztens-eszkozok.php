@@ -451,6 +451,14 @@ final class SDH_Muhely_Asszisztens_Eszkozok
             'ugyfel_megjegyzes' => $ml->ugyfel_megjegyzes,
             'ugyfel'      => $ugyfel,
             'eszkoz'      => $eszkoz,
+            // A lapra csatolt további eszközök (a fő eszközön kívül), sorrendben.
+            'tovabbi_eszkozok' => array_map(
+                static fn (object $e): array => [
+                    'id' => (int) $e->id, 'gyarto' => $e->gyarto, 'tipus' => $e->tipus, 'megnevezes' => $e->megnevezes,
+                    'imei' => $e->imei, 'sorozatszam' => $e->sorozatszam,
+                ],
+                SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk($id))
+            ),
             'hibak'       => $hibak,
             'tetelek'     => $tetelek,
             'szamlak'     => $szamlak,
