@@ -2071,9 +2071,11 @@ final class SDH_Muhely_Munkalap
      * A lista állapot-oszlopa: a jelvény maga a választó, így a lista
      * sorából azonnal állítható az állapot (data-sdh-lista-allapot, app.js).
      *
+     * Az eladások listája (SDH_Muhely_Eladas) is ezt használja, a saját szűkített állapotlistájával.
+     *
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $allapotok
      */
-    private static function allapot_valaszto(int $id, string $kulcs, array $allapotok): void
+    public static function allapot_valaszto(int $id, string $kulcs, array $allapotok): void
     {
         $szin = $allapotok[$kulcs]['szin'] ?? 'szurke';
 
@@ -3520,6 +3522,12 @@ final class SDH_Muhely_Munkalap
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                         data-sdh-uj-ugyfel
                                         title="Új ügyfél felvétele" aria-label="Új ügyfél felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
+                                <?php // A betöltött ügyfél szerkesztése a lap fölött nyíló ablakban (app.js: munkalapUgyfelSzerk). ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz sdh-gomb--ikonos"
+                                        data-sdh-ugyfel-szerk<?php echo $ugyfel_id > 0 ? '' : ' disabled'; ?>
+                                        title="A kiválasztott ügyfél adatainak szerkesztése" aria-label="A kiválasztott ügyfél adatainak szerkesztése"><?php
+                                            echo SDH_Muhely_Admin_UI::gomb_ikon('ceruza'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
+                                        ?></button>
                             </div>
                         </div>
 
@@ -3559,6 +3567,16 @@ final class SDH_Muhely_Munkalap
                         SDH_Muhely_Eladas::urlap_rendeles_sor($munkalap);
                     }
                     ?>
+
+                    <?php
+                    // Eladásnál (napi árukiadás, rendelés) nincs Eszköz lapfül: az ügyfél adatai
+                    // itt állnak, mindig láthatóan – ugyanaz a kártya, mint a munkalapon.
+                    ?>
+                    <?php if ($eladas) : ?>
+                        <div class="sdh-ml-ugyfel" data-sdh-osszefoglalo>
+                            <?php self::osszefoglalo($ugyfel_id, 0, [], $fajta); ?>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="sdh-ml-eszkozok" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?>>
                         <input type="hidden" name="eszkozok_jelen" value="<?php echo $eladas ? '' : '1'; ?>">
@@ -3608,9 +3626,14 @@ final class SDH_Muhely_Munkalap
                             <label for="ful_m_rma" data-sdh-rma-ful<?php echo $arukiadas ? ' hidden' : ''; ?>>RMA <?php echo $munkalap ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                         </div>
 
-                        <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-osszefoglalo>
-                            <?php self::osszefoglalo($ugyfel_id, $eszkoz_id, array_map(static fn (object $e): int => (int) $e->id, $tovabbi)); ?>
-                        </div>
+                        <?php if ($eladas) : ?>
+                            <?php // Eladásnál az Eszköz lapfül nem látszik; az ügyfél kártyája a lapfülek fölött áll. ?>
+                            <div class="sdh-fulek__panel sdh-fulek__panel--1"></div>
+                        <?php else : ?>
+                            <div class="sdh-fulek__panel sdh-fulek__panel--1" data-sdh-osszefoglalo>
+                                <?php self::osszefoglalo($ugyfel_id, $eszkoz_id, array_map(static fn (object $e): int => (int) $e->id, $tovabbi)); ?>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--2" data-sdh-hibak
                              data-sdh-gyakori="<?php echo esc_attr((string) wp_json_encode(self::gyakori_hibak(), JSON_UNESCAPED_UNICODE)); ?>">
@@ -3798,15 +3821,26 @@ final class SDH_Muhely_Munkalap
 
     /**
      * A kiválasztott eszköz és ügyfél adatai, ahogy a MunkaLap 3 „Eszköz"
-     * lapfüle mutatja. Csak olvasható: szerkeszteni a saját űrlapjukon lehet.
+     * lapfüle mutatja. Csak olvasható; az ügyfél a kártyája „Szerkesztés"
+     * gombjával a lap fölött nyíló ablakban szerkeszthető.
+     *
+     * Eladásnál (napi árukiadás, rendelés) nincs eszköz: csak az ügyfél kártyája jön.
      */
-    private static function osszefoglalo(int $ugyfel_id, int $eszkoz_id, array $tovabbi_idk = []): void
+    private static function osszefoglalo(int $ugyfel_id, int $eszkoz_id, array $tovabbi_idk = [], string $fajta = 'javitas'): void
     {
         global $wpdb;
+
+        $fajta  = self::fajta_ervenyes($fajta);
+        $eladas = $fajta !== 'javitas';
 
         $ugyfel = $ugyfel_id > 0
             ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id = %d', $ugyfel_id))
             : null;
+
+        if ($eladas) {
+            $eszkoz_id   = 0;
+            $tovabbi_idk = [];
+        }
 
         // Elöl a fő eszköz, utána a csatoltak – mindegyik saját kártyát kap.
         $mind    = self::eszkoz_sorok(array_merge([$eszkoz_id], $tovabbi_idk));
@@ -3846,23 +3880,25 @@ final class SDH_Muhely_Munkalap
 
         $tobb = $tovabbi !== [];
 
-        echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>' . ($tobb ? '1. eszköz' : 'Eszköz') . '</strong>';
+        if (!$eladas) {
+            echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>' . ($tobb ? '1. eszköz' : 'Eszköz') . '</strong>';
 
-        if ($eszkoz) {
-            echo '<span>Sorszám: ' . (int) $eszkoz->id . '</span>';
+            if ($eszkoz) {
+                echo '<span>Sorszám: ' . (int) $eszkoz->id . '</span>';
+            }
+
+            echo '</div>';
+
+            if ($eszkoz) {
+                $eszkoz_adatok($eszkoz);
+            } else {
+                echo '<p class="sdh-ml-kartya__ures">'
+                    . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
+                    . '</p>';
+            }
+
+            echo '</div>';
         }
-
-        echo '</div>';
-
-        if ($eszkoz) {
-            $eszkoz_adatok($eszkoz);
-        } else {
-            echo '<p class="sdh-ml-kartya__ures">'
-                . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
-                . '</p>';
-        }
-
-        echo '</div>';
 
         // A csatolt eszközök tömören, soronként egy: akárhány lehet, a popup
         // ettől ne nőjön a képernyő fölé. A részletes adatlap a kezdőképernyő
@@ -3896,10 +3932,14 @@ final class SDH_Muhely_Munkalap
             echo '</ol></div>';
         }
 
-        echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>Ügyfél</strong>';
+        echo '<div class="sdh-ml-kartya sdh-ml-kartya--ugyfel" data-sdh-ugyfel-kartya="' . (int) ($ugyfel->id ?? 0) . '">'
+            . '<div class="sdh-ml-kartya__fej"><strong>' . ($fajta === 'arukiadas' ? 'Vevő' : 'Ügyfél') . '</strong>';
 
         if ($ugyfel) {
-            echo '<span>Sorszám: ' . esc_html((string) $ugyfel->ugyfel_szam !== '' ? (string) $ugyfel->ugyfel_szam : (string) (int) $ugyfel->id) . '</span>';
+            echo '<span class="sdh-ml-kartya__jobb"><span>Sorszám: ' . esc_html((string) $ugyfel->ugyfel_szam !== '' ? (string) $ugyfel->ugyfel_szam : (string) (int) $ugyfel->id) . '</span>'
+                // A betöltött ügyfél szerkesztése a lap fölött (app.js: munkalapUgyfelSzerk).
+                . '<button type="button" class="sdh-ml-kartya__szerk" data-sdh-ugyfel-szerk title="Az ügyfél adatainak szerkesztése">'
+                . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></span>'; // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
         }
 
         echo '</div>';
@@ -3919,6 +3959,8 @@ final class SDH_Muhely_Munkalap
             }
 
             echo '</dl>';
+        } elseif ($fajta === 'arukiadas') {
+            echo '<p class="sdh-ml-kartya__ures">' . esc_html(SDH_Muhely_Eladas::NEVTELEN) . ' – nincs ügyfél kiválasztva. Nem kötelező: ha választasz vagy felveszel egyet, az adatai itt jelennek meg.</p>';
         } else {
             echo '<p class="sdh-ml-kartya__ures">Válassz ügyfelet a fenti mezőben – az adatai itt jelennek meg.</p>';
         }
@@ -3942,7 +3984,9 @@ final class SDH_Muhely_Munkalap
             // A csatolt eszközök azonosítói vesszővel (app.js: munkalapOsszefoglalo).
             isset($_GET['tovabbi'])
                 ? array_filter(array_map('intval', explode(',', sanitize_text_field(wp_unslash($_GET['tovabbi'])))))
-                : []
+                : [],
+            // Eladásnál (árukiadás, rendelés) csak az ügyfél kártyája kell.
+            isset($_GET['fajta']) ? sanitize_key(wp_unslash($_GET['fajta'])) : 'javitas'
         );
 
         wp_die();

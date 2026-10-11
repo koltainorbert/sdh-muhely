@@ -179,6 +179,87 @@
         }
     });
 
+    /* ---------------------------------------------------------------- */
+    /* Rendelések listája: a rendelés útja a sorból állítható            */
+    /* ---------------------------------------------------------------- */
+
+    document.addEventListener('change', function (esemeny) {
+        var valaszto = esemeny.target && esemeny.target.closest ? esemeny.target.closest('select[data-sdh-rend-allapot]') : null;
+
+        if (!valaszto) {
+            return;
+        }
+
+        var B = window.SDH_MUHELY || {};
+        var hely = valaszto.closest('[data-sdh-allapot-hely]');
+        var elozo = valaszto.getAttribute('data-elozo') || '';
+        var adatok = new FormData();
+
+        adatok.set('action', 'sdh_muhely_rendelesek_allapot');
+        adatok.set('_wpnonce', B.nonce || '');
+        adatok.set('id', valaszto.getAttribute('data-id') || '0');
+        adatok.set('allapot', valaszto.value);
+
+        valaszto.disabled = true;
+
+        function vissza(uzenet) {
+            valaszto.value = elozo;
+            valaszto.disabled = false;
+            toast(uzenet, 'hiba');
+        }
+
+        fetch(new URL(B.ajax, window.location.origin).toString(), { method: 'POST', body: adatok, credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    vissza((valasz && valasz.data && valasz.data.uzenet) || 'A rendelés állapota nem módosult.');
+
+                    return;
+                }
+
+                var adat = valasz.data;
+
+                if (hely) {
+                    Array.prototype.slice.call(hely.classList).forEach(function (nev) {
+                        if (nev.indexOf('sdh-allapot--') === 0 && nev !== 'sdh-allapot--valaszthato') {
+                            hely.classList.remove(nev);
+                        }
+                    });
+
+                    hely.classList.add('sdh-allapot--' + adat.szin);
+                }
+
+                valaszto.setAttribute('data-elozo', adat.kulcs);
+                valaszto.disabled = false;
+
+                // Az átadott és kifizetett rendelés magától lezárul: a sor ezt is mutassa.
+                var sor = valaszto.closest('tr');
+                var lap = sor && sor.querySelector('[data-sdh-lap-allapot]');
+
+                if (sor) {
+                    sor.classList.toggle('sdh-sor--zart', !!adat.zart);
+                }
+
+                if (lap) {
+                    lap.textContent = adat.lap_allapot || '';
+                    lap.hidden = !adat.lap_allapot;
+                }
+
+                // A menü jelvénye: megérkezett, de az ügyfél még nem tud róla.
+                Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-jelveny="rendelesek"]'), function (jel) {
+                    jel.setAttribute('data-db', String(adat.erkezett));
+                    jel.textContent = adat.erkezett > 999 ? '999+' : String(adat.erkezett);
+                    jel.hidden = !(adat.erkezett > 0);
+                });
+
+                toast('A rendelés állapota: ' + adat.nev + (adat.most_zart ? ' – a rendelés lezárult.' : '.'), 'siker');
+                document.dispatchEvent(new CustomEvent('sdh:allapot', { detail: { id: String(adat.id), adat: adat } }));
+            })
+            .catch(function () {
+                vissza('Nem sikerült elérni a szervert, a rendelés állapota nem módosult.');
+            });
+    });
+
     /** A beszállító-választó újraépítése a mentett listából; a választás megmarad. */
     function beszallitoFrissit(valaszto, lista) {
         if (!valaszto) {

@@ -62,6 +62,11 @@
                     throw hiba;
                 }
 
+                // Minden válasz, amelyik a fiókokat hozza, az oldalmenü „új levél" jelzését is frissíti.
+                if (json.data && Array.isArray(json.data.fiokok)) {
+                    ujJelzes(json.data.fiokok);
+                }
+
                 return json.data;
             });
     }
@@ -111,22 +116,61 @@
             kartya.classList.toggle('sdh-kartya--jelez', azonnal > 0);
         });
 
+    }
+
+    function ujSzoveg(db) {
+        return (db > 99 ? '99+' : String(db)) + ' új';
+    }
+
+    /**
+     * Az oldalmenü Levelezés pontja: nem az olvasatlan levelek számát mutatja,
+     * hanem azt, hogy jött-e új levél a legutóbbi megnézés óta – és több
+     * postafióknál azt is, melyikbe (fiókonként egy sor a menüpont alatt).
+     * A fiókok `uj` mezőjéből dolgozik (a szerver számolja, felhasználónként).
+     */
+    function ujJelzes(fiokok) {
+        var ossz = 0;
+        var ujak = [];
+
+        (fiokok || []).forEach(function (f) {
+            var db = parseInt(f.uj, 10) || 0;
+
+            ossz += db;
+
+            if (db > 0) {
+                ujak.push({ kulcs: f.kulcs, nev: f.nev || f.email || f.kulcs, db: db });
+            }
+        });
+
         Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-jelveny="levelezes"]'), function (jel) {
-            var volt = parseInt(jel.getAttribute('data-db') || jel.textContent, 10) || 0;
+            var volt = parseInt(jel.getAttribute('data-db'), 10) || 0;
 
-            jel.setAttribute('data-db', String(db));
+            jel.setAttribute('data-db', String(ossz));
+            jel.textContent = ujSzoveg(ossz);
+            jel.hidden = !(ossz > 0);
+            jel.title = ossz > 0
+                ? 'Új levél: ' + ujak.map(function (u) { return u.nev + ' (' + u.db + ')'; }).join(', ')
+                : 'Nincs új levél';
 
-            // Nagy számnál rövid felirat (a pontos szám a súgóban): a jelvény ne nyomja szét a menüt.
-            jel.textContent = db > 999 ? '999+' : String(db);
-            jel.hidden = !(db > 0);
-            jel.title = db + ' olvasatlan levél' + (azonnal > 0 ? ' · ' + azonnal + ' azonnali teendő' : '');
-            jel.classList.toggle('is-azonnal', azonnal > 0);
-
-            if (db > volt) {
+            if (ossz > volt) {
                 jel.classList.remove('is-friss');
                 void jel.offsetWidth;
                 jel.classList.add('is-friss');
             }
+        });
+
+        // Több fióknál: melyikbe jött. Egy fióknál elég a jelvény.
+        var tobb = (fiokok || []).length > 1;
+        var alap = B.levelUrl || '';
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-alsorok="levelezes"]'), function (doboz) {
+            doboz.innerHTML = tobb ? ujak.map(function (u) {
+                return '<a class="sdh-sav__alsor" href="' + e(alap + (alap.indexOf('?') === -1 ? '?' : '&') + 'fiok=' + encodeURIComponent(u.kulcs)) + '"' +
+                    ' title="' + e(u.nev + ': ' + u.db + ' új levél') + '">' +
+                    '<span class="sdh-sav__alsor-nev">' + e(u.nev) + '</span>' +
+                    '<b class="sdh-sav__alsor-db">' + e(ujSzoveg(u.db)) + '</b></a>';
+            }).join('') : '';
+            doboz.hidden = !(tobb && ujak.length);
         });
     }
 
@@ -1813,9 +1857,18 @@
     magassag();
 
     var kert = (window.location.hash.match(/level=(\d+)/) || [])[1];
-    // A legutóbb nézett fiók lapja nyílik meg (ha nincs zárolva); különben az első nyitott fiók.
+    // Az oldalmenü „új levél" soráról érkezve (?fiok=…) az a fiók nyílik meg – ha zárolt, a jelszókérője.
+    var cimFiok = null;
+
+    try {
+        cimFiok = fiok(new URL(window.location.href).searchParams.get('fiok') || '-');
+    } catch (hiba) {
+        cimFiok = null;
+    }
+
+    // Különben a legutóbb nézett fiók lapja (ha nincs zárolva), vagy az első nyitott fiók.
     var mentett = fiok(tarol('sdh-level-fiok') || '-');
-    var elso = (mentett && !mentett.zarva ? mentett : null) || A.fiokok.filter(function (f) { return !f.zarva; })[0] || A.fiokok[0];
+    var elso = cimFiok || (mentett && !mentett.zarva ? mentett : null) || A.fiokok.filter(function (f) { return !f.zarva; })[0] || A.fiokok[0];
 
     if (kert) {
         // Értesítésből érkezve: a levél nyílik meg, a mappája mellé töltődik.

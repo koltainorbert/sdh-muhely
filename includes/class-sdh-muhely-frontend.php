@@ -264,6 +264,16 @@ final class SDH_Muhely_Frontend
      */
     public static function ikon(string $nev): string
     {
+        return '<svg class="sdh-sav__ikon" viewBox="0 0 20 20" aria-hidden="true">' . self::ikon_rajz($nev) . '</svg>';
+    }
+
+    /**
+     * Egy ikon rajza (az <svg> belseje, 20×20-as vásznon). A menü, a csempék és
+     * a gombok (SDH_Muhely_Admin_UI::gomb_ikon) ugyanabból a készletből rajzolnak.
+     * Ismeretlen névre – ha nincs megadva tartalék – a munkalap ikonja jön.
+     */
+    public static function ikon_rajz(string $nev, ?string $tartalek = 'munkalapok'): string
+    {
         $rajzok = [
             'attekintes'   => '<path d="M3 10.5 10 4l7 6.5"/><path d="M5 9.5V16h10V9.5"/>',
             'ugyfelek'     => '<circle cx="7.5" cy="7" r="2.6"/><path d="M3 16c0-2.5 2-4.2 4.5-4.2S12 13.5 12 16"/>'
@@ -285,11 +295,28 @@ final class SDH_Muhely_Frontend
                 . '<circle cx="7.8" cy="9" r=".9"/><circle cx="12.2" cy="9" r=".9"/><path d="M8.3 11.6c1 .7 2.4.7 3.4 0"/>',
             'beallitasok'  => '<circle cx="10" cy="10" r="2.5"/>'
                 . '<path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>',
+
+            // --- Gombok (nem modulok) ---
+            'plusz'        => '<path d="M10 4.2v11.6M4.2 10h11.6"/>',
+            'uj-munkalap'  => '<path d="M14.5 8.6V4.8A1.8 1.8 0 0 0 12.7 3H5.8A1.8 1.8 0 0 0 4 4.8v10.4A1.8 1.8 0 0 0 5.8 17h3.4"/>'
+                . '<path d="M7 7h4.6M7 10h2.6"/><path d="M14.4 11.4v6M11.4 14.4h6"/>',
+            'uj-ugyfel'    => '<circle cx="8" cy="6.8" r="2.9"/><path d="M2.8 16.4c0-2.8 2.3-4.8 5.2-4.8 1 0 1.9.2 2.7.6"/>'
+                . '<path d="M14.8 11.4v6M11.8 14.4h6"/>',
+            'csempek'      => '<rect x="3.4" y="3.4" width="5.6" height="5.6" rx="1.4"/><rect x="11" y="3.4" width="5.6" height="5.6" rx="1.4"/>'
+                . '<rect x="3.4" y="11" width="5.6" height="5.6" rx="1.4"/><rect x="11" y="11" width="5.6" height="5.6" rx="1.4"/>',
+            'ceruza'       => '<path d="M3.8 16.2l.8-3.4 8.3-8.3a1.7 1.7 0 0 1 2.4 0l.2.2a1.7 1.7 0 0 1 0 2.4l-8.3 8.3z"/><path d="M11.6 5.8l2.6 2.6"/>',
+            'ora'          => '<circle cx="10" cy="10" r="6.8"/><path d="M10 6.2V10l2.6 1.7"/>',
+            'kulso'        => '<path d="M8.2 4.6H5.4a1.8 1.8 0 0 0-1.8 1.8v8.2a1.8 1.8 0 0 0 1.8 1.8h8.2a1.8 1.8 0 0 0 1.8-1.8v-2.8"/><path d="M11.4 3.6h5v5M16.2 3.8 9.6 10.4"/>',
+            'kereses'      => '<circle cx="9" cy="9" r="5.2"/><path d="M13 13l3.6 3.6"/>',
+            'lista'        => '<path d="M6.8 5.5h9.4M6.8 10h9.4M6.8 14.5h9.4"/><circle cx="3.9" cy="5.5" r=".7"/><circle cx="3.9" cy="10" r=".7"/><circle cx="3.9" cy="14.5" r=".7"/>',
+            'helyszin'     => '<path d="M10 17.2s5.2-4.7 5.2-8.7a5.2 5.2 0 0 0-10.4 0c0 4 5.2 8.7 5.2 8.7z"/><circle cx="10" cy="8.4" r="1.9"/>',
         ];
 
-        $rajz = $rajzok[$nev] ?? $rajzok['munkalapok'];
+        if (isset($rajzok[$nev])) {
+            return $rajzok[$nev];
+        }
 
-        return '<svg class="sdh-sav__ikon" viewBox="0 0 20 20" aria-hidden="true">' . $rajz . '</svg>';
+        return $tartalek !== null && isset($rajzok[$tartalek]) ? $rajzok[$tartalek] : '';
     }
 
     /* =================================================================
@@ -398,23 +425,43 @@ final class SDH_Muhely_Frontend
                         <span class="sdh-sav__felirat"><?php echo esc_html($modul['cim']); ?></span>
                     </span>
                 <?php else : ?>
-                    <?php $sdh_jelveny = isset($modul['jelveny']) && is_callable($modul['jelveny']) ? (int) call_user_func($modul['jelveny']) : null; ?>
+                    <?php
+                    $sdh_jelveny = isset($modul['jelveny']) && is_callable($modul['jelveny']) ? (int) call_user_func($modul['jelveny']) : null;
+                    // „Új" jelzés (pl. Levelezés): nem darabszámot mutat arról, mi van bent, hanem azt,
+                    // hogy érkezett valami – és több forrásnál (postafióknál) azt is, hová.
+                    $sdh_jelzes  = isset($modul['menu_jelzes']) && is_callable($modul['menu_jelzes']) ? (array) call_user_func($modul['menu_jelzes']) : null;
+                    ?>
                     <a class="sdh-sav__link <?php echo $aktiv_kulcs === $kulcs ? 'sdh-sav__link--aktiv' : ''; ?>"
                        href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url((string) $kulcs)); ?>">
                         <?php echo self::ikon((string) $kulcs); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                         <span class="sdh-sav__felirat"><?php echo esc_html($modul['cim']); ?></span>
-                        <?php if ($sdh_jelveny !== null) : ?>
+                        <?php if ($sdh_jelzes !== null) : ?>
+                            <span class="sdh-sav__jelveny sdh-sav__jelveny--uj" data-sdh-jelveny="<?php echo esc_attr((string) $kulcs); ?>" data-sdh-jelveny-mod="uj"
+                                  data-db="<?php echo (int) $sdh_jelzes['db']; ?>" title="<?php echo esc_attr((string) $sdh_jelzes['cim']); ?>"<?php echo (int) $sdh_jelzes['db'] > 0 ? '' : ' hidden'; ?>><?php echo esc_html((string) $sdh_jelzes['szoveg']); ?></span>
+                        <?php elseif ($sdh_jelveny !== null) : ?>
                             <span class="sdh-sav__jelveny" data-sdh-jelveny="<?php echo esc_attr((string) $kulcs); ?>"
                                   data-db="<?php echo (int) $sdh_jelveny; ?>" title="<?php echo esc_attr((string) (int) $sdh_jelveny); ?> olvasatlan"<?php echo $sdh_jelveny > 0 ? '' : ' hidden'; ?>><?php echo $sdh_jelveny > 999 ? '999+' : (int) $sdh_jelveny; ?></span>
                         <?php endif; ?>
                     </a>
+                    <?php if ($sdh_jelzes !== null) : ?>
+                        <?php // Forrásonként (postafiókonként) egy sor – csak ott, ahol van új. A levelezes.js helyben frissíti. ?>
+                        <div class="sdh-sav__alsorok" data-sdh-alsorok="<?php echo esc_attr((string) $kulcs); ?>"<?php echo $sdh_jelzes['alsorok'] === [] ? ' hidden' : ''; ?>>
+                            <?php foreach ((array) $sdh_jelzes['alsorok'] as $sdh_alsor) : ?>
+                                <a class="sdh-sav__alsor" href="<?php echo esc_url((string) $sdh_alsor['url']); ?>" title="<?php echo esc_attr((string) $sdh_alsor['cim']); ?>">
+                                    <span class="sdh-sav__alsor-nev"><?php echo esc_html((string) $sdh_alsor['nev']); ?></span>
+                                    <b class="sdh-sav__alsor-db"><?php echo esc_html((string) $sdh_alsor['szoveg']); ?></b>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
 
             <?php // A Beállítások (adminisztrátornak) a műhely-felületen nyílik: innen semmi nem visz a wp-adminba. ?>
             <?php if (SDH_Muhely_Admin_UI::admin_e() && class_exists('SDH_Muhely_Beallitasok')) : ?>
             <div class="sdh-sav__also">
-                <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Beallitasok::KULCS ? 'sdh-sav__link--aktiv' : ''; ?>"
+                <?php $sdh_aktiv_modul = SDH_Muhely_Modulok::egy($aktiv_kulcs); ?>
+                <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Beallitasok::KULCS || ($sdh_aktiv_modul !== null && !empty($sdh_aktiv_modul['rejtett'])) ? 'sdh-sav__link--aktiv' : ''; ?>"
                    href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Beallitasok::KULCS)); ?>">
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     <span class="sdh-sav__felirat">Beállítások</span>

@@ -75,6 +75,9 @@ final class SDH_Muhely_Eladas
             });
         }
 
+        // A rendelés útja (hol tart) a lista sorából is állítható.
+        add_action('wp_ajax_sdh_muhely_' . self::KULCS_REND . '_allapot', [self::class, 'ajax_rend_allapot']);
+
         // Rendelés: „megérkezett" értesítés az ügyfélnek.
         add_action('wp_ajax_sdh_muhely_rendelesertesit_urlap', [self::class, 'ajax_ertesit_urlap']);
         add_action('wp_ajax_sdh_muhely_rendelesertesit_ment', [self::class, 'ajax_ertesit_ment']);
@@ -549,6 +552,110 @@ final class SDH_Muhely_Eladas
         $a = self::rend_allapotok()[$kulcs] ?? ['nev' => $kulcs !== '' ? $kulcs : '—', 'szin' => 'szurke'];
 
         return '<span class="sdh-allapot sdh-allapot--' . esc_attr($a['szin']) . '">' . esc_html($a['nev']) . '</span>';
+    }
+
+    /**
+     * A lista „Rendelés" oszlopa: a jelvény maga a választó, így a rendelés útja
+     * a lista sorából azonnal állítható (eladas.js: data-sdh-rend-allapot).
+     */
+    public static function rend_valaszto(int $id, string $kulcs): void
+    {
+        $lista = self::rend_allapotok();
+        $szin  = $lista[$kulcs]['szin'] ?? 'szurke';
+
+        ?>
+        <span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--<?php echo esc_attr($szin); ?>" data-sdh-allapot-hely>
+            <select data-sdh-rend-allapot data-id="<?php echo (int) $id; ?>" data-elozo="<?php echo esc_attr($kulcs); ?>"
+                    aria-label="A rendelés állapotának módosítása">
+                <?php if (!isset($lista[$kulcs])) : ?>
+                    <option value="<?php echo esc_attr($kulcs); ?>" selected><?php echo esc_html($kulcs !== '' ? $kulcs : '—'); ?></option>
+                <?php endif; ?>
+                <?php foreach ($lista as $k => $a) : ?>
+                    <option value="<?php echo esc_attr((string) $k); ?>" data-szin="<?php echo esc_attr($a['szin']); ?>" <?php selected($kulcs, (string) $k); ?>><?php echo esc_html($a['nev']); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </span>
+        <?php
+    }
+
+    /**
+     * A rendelés útjának átállítása (a listából). Az átadott ÉS kifizetett
+     * rendelés ettől magától lezárul, ahogy az űrlap mentésekor is.
+     *
+     * @return array{id: int, kulcs: string, nev: string, szin: string, zart: bool, most_zart: bool, lap_allapot: string, erkezett: int}|string
+     */
+    public static function rend_allapot_valt(int $id, string $kulcs)
+    {
+        global $wpdb;
+
+        $m     = self::rendeles($id);
+        $lista = self::rend_allapotok();
+
+        if ($m === null) {
+            return 'Nincs ilyen rendelés. Lehet, hogy időközben megváltozott – frissítsd az oldalt.';
+        }
+
+        if (!isset($lista[$kulcs])) {
+            return 'Ismeretlen rendelés-állapot.';
+        }
+
+        $regi      = (string) $m->rend_allapot;
+        $allapotok = SDH_Muhely_Munkalap::allapotok();
+        $volt_zart = !empty($allapotok[(string) $m->allapot]['zart']);
+
+        if ($regi !== $kulcs) {
+            if ($wpdb->update(SDH_Muhely_Schema::tabla('munkalap'), [
+                'rend_allapot' => $kulcs,
+                'modositva'    => current_time('mysql'),
+            ], ['id' => $id]) === false) {
+                return 'Az adatbázis visszautasította a módosítást.';
+            }
+
+            /** A rendelés útja megváltozott (régi, új kulcs). */
+            do_action('sdh_muhely_rendeles_allapot', $id, $regi, $kulcs);
+
+            self::lezar_ha_kesz($id);
+        }
+
+        $friss     = self::rendeles($id);
+        $lap       = $friss !== null ? ($allapotok[(string) $friss->allapot] ?? null) : null;
+        $zart      = $lap !== null && !empty($lap['zart']);
+
+        return [
+            'id'          => $id,
+            'kulcs'       => $kulcs,
+            'nev'         => (string) $lista[$kulcs]['nev'],
+            'szin'        => (string) $lista[$kulcs]['szin'],
+            // A lap maga lezárult-e (átadva és kifizetve): a sor ettől halványul el.
+            'zart'        => $zart,
+            // Ezzel a váltással zárult-e le (az üzenet csak ekkor szól róla).
+            'most_zart'   => $zart && !$volt_zart,
+            'lap_allapot' => $zart ? (string) $lap['nev'] : '',
+            // A menü jelvénye: megérkezett, de az ügyfél még nem tud róla.
+            'erkezett'    => self::erkezett_db(),
+        ];
+    }
+
+    public static function ajax_rend_allapot(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- fent ellenőrizve.
+        $eredmeny = self::rend_allapot_valt(
+            isset($_POST['id']) ? (int) $_POST['id'] : 0,
+            isset($_POST['allapot']) ? sanitize_key(wp_unslash($_POST['allapot'])) : ''
+        );
+        // phpcs:enable
+
+        if (is_string($eredmeny)) {
+            wp_send_json_error(['uzenet' => $eredmeny]);
+        }
+
+        wp_send_json_success($eredmeny);
     }
 
     /** Hány rendelés érkezett meg úgy, hogy az ügyfél még nem tud róla (a menü jelvénye). */
@@ -1133,10 +1240,12 @@ final class SDH_Muhely_Eladas
     /**
      * A tételek rövid felsorolása laponként, egy lekérdezéssel.
      *
+     * A munkalapok rácsa (SDH_Muhely_Racs) is ezt használja az árukiadás soraihoz.
+     *
      * @param array<int, int> $idk
      * @return array<int, string>
      */
-    private static function tetel_osszefoglalok(array $idk): array
+    public static function tetel_osszefoglalok(array $idk): array
     {
         global $wpdb;
 
@@ -1311,15 +1420,16 @@ final class SDH_Muhely_Eladas
 
         $gombok = [[
             'cimke'      => $aru ? '+ Új árukiadás' : '+ Új rendelés',
+            'ikon'       => $aru ? 'arukiadas' : 'rendelesek',
             'url'        => '#',
             'elsodleges' => true,
             'adatok'     => ['sdh-urlap' => $modul, 'sdh-id' => '0'],
         ]];
 
         if (!$aru) {
-            $gombok[] = ['cimke' => 'Beszállítók', 'url' => '#', 'adatok' => ['sdh-urlap' => 'beszallitok', 'sdh-id' => '0']];
+            $gombok[] = ['cimke' => 'Beszállítók', 'ikon' => 'lista', 'url' => '#', 'adatok' => ['sdh-urlap' => 'beszallitok', 'sdh-id' => '0']];
         } elseif (SDH_Muhely_Admin_UI::admin_e()) {
-            $gombok[] = ['cimke' => 'Helyszínek', 'url' => '#', 'adatok' => ['sdh-urlap' => 'helyszinek', 'sdh-id' => '0']];
+            $gombok[] = ['cimke' => 'Helyszínek', 'ikon' => 'helyszin', 'url' => '#', 'adatok' => ['sdh-urlap' => 'helyszinek', 'sdh-id' => '0']];
         }
 
         $szurt = $kereses !== '' || $szuro !== '' || $torzs > 0;
@@ -1392,7 +1502,7 @@ final class SDH_Muhely_Eladas
                         <th class="sdh-eladas__szam">Bruttó</th>
                         <th>Fizetés</th>
                         <?php if ($aru) : ?>
-                            <th class="sdh-tabla__rejtheto">Állapot</th>
+                            <th>Állapot</th>
                         <?php endif; ?>
                         <th></th>
                     </tr>
@@ -1458,11 +1568,10 @@ final class SDH_Muhely_Eladas
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php echo self::rend_jelveny((string) $sor->rend_allapot); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                                    <?php // A rendelés útja itt, a sorban is állítható (nem csak az űrlapon). ?>
+                                    <?php self::rend_valaszto($id, (string) $sor->rend_allapot); ?>
                                     <?php echo SDH_Muhely_Rma::ful_jelveny($id, 'sdh-fulek__db sdh-eladas__uz'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                                    <?php if ($allapot !== null && !empty($allapot['zart'])) : ?>
-                                        <div class="sdh-tabla__halvany"><?php echo esc_html((string) $allapot['nev']); ?></div>
-                                    <?php endif; ?>
+                                    <div class="sdh-tabla__halvany" data-sdh-lap-allapot<?php echo $allapot !== null && !empty($allapot['zart']) ? '' : ' hidden'; ?>><?php echo esc_html($allapot !== null && !empty($allapot['zart']) ? (string) $allapot['nev'] : ''); ?></div>
                                 </td>
                             <?php endif; ?>
                             <td class="sdh-eladas__szam"><?php echo esc_html(self::penz((float) $sor->brutto_ertek)); ?></td>
@@ -1480,7 +1589,8 @@ final class SDH_Muhely_Eladas
                                 <?php endif; ?>
                             </td>
                             <?php if ($aru) : ?>
-                                <td class="sdh-tabla__rejtheto"><?php echo SDH_Muhely_Munkalap::jelveny((string) $sor->allapot, $allapotok); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+                                <?php // Az árukiadás állapota itt, a sorban is állítható – csak az eladásnál értelmes állapotokkal. ?>
+                                <td><?php SDH_Muhely_Munkalap::allapot_valaszto($id, (string) $sor->allapot, SDH_Muhely_Munkalap::eladas_allapotok($allapotok, (string) $sor->allapot)); ?></td>
                             <?php endif; ?>
                             <td>
                                 <a class="sdh-gomb sdh-gomb--vilagos" href="#" data-sdh-urlap="<?php echo esc_attr(SDH_Muhely_Munkalap::KULCS); ?>" data-sdh-id="<?php echo $id; ?>">Megnyit</a>

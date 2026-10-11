@@ -3379,18 +3379,24 @@
     function munkalapOsszefoglalo(urlap) {
         var hely = urlap ? urlap.querySelector('[data-sdh-osszefoglalo]') : null;
 
+        // Az ügyfél szerkesztőgombja csak kiválasztott ügyfélnél él.
+        ugyfelSzerkAllapot(urlap);
+
         if (!hely) {
             return;
         }
 
         var ugyfel = urlap.querySelector('.sdh-valaszto input[type="hidden"]');
         var eszkoz = urlap.querySelector('[data-sdh-eszkoz-valaszto]');
+        var lap = urlap.querySelector('[data-sdh-munkalap]');
         var cim = new URL(beallitas.ajax, window.location.origin);
 
         cim.searchParams.set('action', 'sdh_muhely_munkalapok_osszefoglalo');
         cim.searchParams.set('ugyfel_id', ugyfel ? ugyfel.value : '0');
         cim.searchParams.set('eszkoz_id', eszkoz ? eszkoz.value : '0');
         cim.searchParams.set('tovabbi', tovabbiIdk(urlap).join(','));
+        // Eladásnál (árukiadás, rendelés) nincs eszköz: csak az ügyfél kártyája jön.
+        cim.searchParams.set('fajta', (lap && lap.getAttribute('data-sdh-fajta')) || 'javitas');
         cim.searchParams.set('_wpnonce', beallitas.nonce || '');
 
         tovabbiSzamol(urlap);
@@ -3937,6 +3943,59 @@
                 if (eszkoz) {
                     eszkoz.focus();
                 }
+            }
+        });
+    }
+
+    /** A kiválasztott ügyfél azonosítója az űrlapon ('0', ha nincs). */
+    function munkalapUgyfelId(urlap) {
+        var rejtett = urlap ? urlap.querySelector('.sdh-valaszto input[type="hidden"]') : null;
+
+        return rejtett && rejtett.value ? String(rejtett.value) : '0';
+    }
+
+    /** Az ügyfélmező melletti szerkesztőgomb csak kiválasztott ügyfélnél kattintható. */
+    function ugyfelSzerkAllapot(urlap) {
+        if (!urlap) {
+            return;
+        }
+
+        var nincs = munkalapUgyfelId(urlap) === '0';
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('.sdh-mezo__sor [data-sdh-ugyfel-szerk]'), function (gomb) {
+            gomb.disabled = nincs;
+        });
+    }
+
+    /**
+     * Ceruza az ügyfélmező mellett (és „Szerkesztés" az ügyfél kártyáján): a
+     * betöltött ügyfél űrlapja a munkalap / árukiadás / rendelés fölött nyílik.
+     * Mentés után a lap megmarad, a név és az adatok helyben frissülnek.
+     */
+    function munkalapUgyfelSzerk(gomb) {
+        var urlap = gomb.closest('form');
+        var id = munkalapUgyfelId(urlap);
+
+        if (id === '0') {
+            var mezo = urlap ? urlap.querySelector('.sdh-valaszto__mezo') : null;
+
+            if (mezo) {
+                mezo.focus();
+            }
+
+            return;
+        }
+
+        nyit('ugyfelek', id, {
+            szint: Math.min(sajatSzint(gomb) + 1, szintek.length - 1),
+            siker: function (adat) {
+                // Közben másik ügyfelet választottak? Akkor a lapot nem írjuk felül.
+                if (munkalapUgyfelId(urlap) === String(adat.id)) {
+                    munkalapUgyfelBeallit(urlap, adat.id, adat.nev);
+                }
+
+                munkalapOsszefoglalo(urlap);
+                document.dispatchEvent(new CustomEvent('sdh:ugyfel-mentve', { detail: { id: String(adat.id), nev: adat.nev } }));
             }
         });
     }
@@ -5495,6 +5554,15 @@
                 }
             }
         );
+
+        var ugyfelSzerkGomb = esemeny.target.closest('[data-sdh-ugyfel-szerk]');
+
+        if (ugyfelSzerkGomb) {
+            esemeny.preventDefault();
+            munkalapUgyfelSzerk(ugyfelSzerkGomb);
+
+            return;
+        }
 
         var ujUgyfelGomb = esemeny.target.closest('[data-sdh-uj-ugyfel]');
 
@@ -9392,8 +9460,12 @@
         var gomb = document.querySelector('[data-sdh-csempek-valt]');
 
         if (csempek && gomb) {
-            gomb.textContent = csempek.hidden ? 'Csempék megjelenítése' : 'Csempék elrejtése';
+            // A gombon ikon is van: csak a felirat cserélődik.
+            var felirat = gomb.querySelector('.sdh-gomb__felirat') || gomb;
+
+            felirat.textContent = csempek.hidden ? 'Csempék megjelenítése' : 'Csempék elrejtése';
             gomb.setAttribute('aria-expanded', csempek.hidden ? 'false' : 'true');
+            gomb.classList.toggle('is-aktiv', !csempek.hidden);
         }
     }
 
@@ -9458,6 +9530,154 @@
 
     document.addEventListener('sdh:allapot', csempekFrissit);
     document.addEventListener('sdh:mentve', csempekFrissit);
+
+    /* ---------------------------------------------------------------- */
+    /* Áttekintés: óra és a zárásig hátralévő idő                       */
+    /* ---------------------------------------------------------------- */
+
+    var ORA_NAPOK = ['', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+    var ORA_HONAPOK = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december'];
+
+    function oraKet(n) {
+        return (n < 10 ? '0' : '') + n;
+    }
+
+    function oraPerc(ido) {
+        var r = String(ido || '').split(':');
+
+        return (parseInt(r[0], 10) || 0) * 60 + (parseInt(r[1], 10) || 0);
+    }
+
+    /** „2 óra 14 perc", „14 perc", „kevesebb mint 1 perc". */
+    function oraTartam(perc) {
+        if (perc < 1) {
+            return 'kevesebb mint 1 perc';
+        }
+
+        var ora = Math.floor(perc / 60);
+        var p = perc % 60;
+
+        return ((ora > 0 ? ora + ' óra ' : '') + (p > 0 || ora === 0 ? p + ' perc' : '')).trim();
+    }
+
+    /**
+     * Hol tart a nap: ugyanaz a számítás, mint a szerveren
+     * (SDH_Muhely_Nyitvatartas::allapot). `d` a szerver helyi ideje, UTC-ként tárolva.
+     */
+    function oraAllapot(d, het, figy) {
+        var nap = d.getUTCDay() === 0 ? 7 : d.getUTCDay();
+        var mp = d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds();
+        var ma = het[String(nap)] || null;
+
+        if (!Object.keys(het).length) {
+            return { allapot: 'nincs', szoveg: '', arany: 0 };
+        }
+
+        if (ma) {
+            var nyit = oraPerc(ma[0]) * 60;
+            var zar = oraPerc(ma[1]) * 60;
+
+            if (mp < nyit) {
+                return { allapot: 'elott', szoveg: 'Nyitásig ' + oraTartam(Math.ceil((nyit - mp) / 60)), arany: 0 };
+            }
+
+            if (mp < zar) {
+                var perc = Math.ceil((zar - mp) / 60);
+
+                return {
+                    allapot: figy > 0 && perc <= figy ? 'hamar' : 'nyitva',
+                    szoveg: 'Zárásig ' + oraTartam(perc),
+                    arany: (mp - nyit) / Math.max(1, zar - nyit)
+                };
+            }
+        }
+
+        for (var i = 1; i <= 7; i++) {
+            var kov = ((nap - 1 + i) % 7) + 1;
+
+            if (het[String(kov)]) {
+                return {
+                    allapot: 'zarva',
+                    szoveg: (ma ? 'Zárva' : 'Ma zárva') + ' · nyitás: ' + (i === 1 ? 'holnap' : ORA_NAPOK[kov]) + ' ' + het[String(kov)][0],
+                    arany: 0
+                };
+            }
+        }
+
+        return { allapot: 'zarva', szoveg: 'Zárva', arany: 0 };
+    }
+
+    function oraIndul() {
+        var doboz = document.querySelector('[data-sdh-ora]');
+
+        if (!doboz) {
+            return;
+        }
+
+        // A szerver helyi ideje (a rendszer időzónájában), UTC-ként értelmezve: a
+        // böngésző órája és időzónája nem számít, csak az eltelt időt adja hozzá.
+        var r = String(doboz.getAttribute('data-most') || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
+
+        if (!r) {
+            return;
+        }
+
+        var szerver0 = Date.UTC(+r[1], +r[2] - 1, +r[3], +r[4], +r[5], +r[6]);
+        var gep0 = Date.now();
+        var het = {};
+        var figy = parseInt(doboz.getAttribute('data-figy') || '0', 10) || 0;
+
+        try {
+            het = JSON.parse(doboz.getAttribute('data-het') || '{}') || {};
+        } catch (hiba) {
+            het = {};
+        }
+
+        var elIdo = doboz.querySelector('[data-sdh-ora-ido]');
+        var elMp = doboz.querySelector('[data-sdh-ora-mp]');
+        var elDatum = doboz.querySelector('[data-sdh-ora-datum]');
+        var elZaras = doboz.querySelector('[data-sdh-ora-zaras]');
+        var elSav = doboz.querySelector('[data-sdh-ora-sav]');
+
+        function leptet() {
+            var d = new Date(szerver0 + (Date.now() - gep0));
+            var a = oraAllapot(d, het, figy);
+            var nap = d.getUTCDay() === 0 ? 7 : d.getUTCDay();
+
+            if (elIdo) {
+                elIdo.textContent = oraKet(d.getUTCHours()) + ':' + oraKet(d.getUTCMinutes());
+            }
+
+            if (elMp) {
+                elMp.textContent = ':' + oraKet(d.getUTCSeconds());
+            }
+
+            if (elDatum) {
+                elDatum.textContent = ORA_HONAPOK[d.getUTCMonth()] + ' ' + d.getUTCDate() + '., ' + ORA_NAPOK[nap];
+            }
+
+            if (elZaras && a.allapot !== 'nincs' && elZaras.textContent !== a.szoveg) {
+                elZaras.textContent = a.szoveg;
+            }
+
+            if (elSav) {
+                elSav.style.width = (Math.round(a.arany * 1000) / 10) + '%';
+            }
+
+            if (doboz.getAttribute('data-allapot') !== a.allapot) {
+                doboz.setAttribute('data-allapot', a.allapot);
+            }
+        }
+
+        leptet();
+        // A másodperc elejéhez igazítva lép, hogy ne „ugorjon" a kijelzés.
+        window.setTimeout(function ciklus() {
+            leptet();
+            window.setTimeout(ciklus, 1000 - ((szerver0 + (Date.now() - gep0)) % 1000) + 5);
+        }, 1000 - ((szerver0 + (Date.now() - gep0)) % 1000) + 5);
+    }
+
+    oraIndul();
 
     // Más fájlok (levelezes.js) ezeken keresztül nyitnak popupot és választót.
     window.SDH_MUHELY_APP = {

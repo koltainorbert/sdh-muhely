@@ -722,3 +722,90 @@ body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav__jelveny {
     background: var(--sdh-accent-felirat);
     color: var(--sdh-accent);
 }
+
+/* ================================================================== */
+/* Oldalmenü (0.48): „új" jelzés és forrásonkénti alsorok               */
+/* A Levelezés nem az olvasatlan levelek számát mutatja, hanem azt,     */
+/* hogy jött-e új levél – és több postafióknál azt is, melyikbe.        */
+/* ================================================================== */
+
+.sdh-sav__jelveny--uj {
+    padding: 0 6px;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    letter-spacing: .01em;
+}
+
+.sdh-sav__alsorok {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0 0 3px 1.45rem;
+    padding-left: .55rem;
+    border-left: 1px solid var(--sdh-keret);
+}
+
+.sdh-sav__alsorok[hidden] {
+    display: none;
+}
+
+.sdh-sav__alsor {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    min-width: 0;
+    height: 24px;
+    padding: 0 .45rem;
+    border-radius: 6px;
+    color: var(--sdh-szoveg-2);
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.sdh-app a.sdh-sav__alsor {
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-sav__alsor::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sdh-accent);
+}
+
+.sdh-sav__alsor:hover {
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-sav__alsor-nev {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-sav__alsor-db {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sdh-accent-szoveg);
+}
+
+/* Összecsukott menüben és keskeny képernyőn nincs hely a fióknevekre: marad a pont az ikonon. */
+body.sdh-app[data-sav="csukva"] .sdh-sav__alsorok {
+    display: none;
+}
+
+@media (max-width: 860px) {
+    body.sdh-app .sdh-sav__alsorok {
+        display: none;
+    }
+}
+
+/* Színes sávon a pont fordított színű, különben eltűnne a háttérben. */
+body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav__alsor::before {
+    background: var(--sdh-accent-felirat);
+}

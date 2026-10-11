@@ -7053,3 +7053,312 @@ dd:hover > .sdh-masol {
 .sdh-beall .sdh-mezok + .sdh-mezo--szeles {
     margin-top: .9rem;
 }
+
+/* ================================================================== */
+/* 0.48 – Fejlécgombok: lekerekített „pill", SVG ikonnal               */
+/* ================================================================== */
+
+.sdh-fejlec__gombok {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.sdh-gomb__ikon {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform .16s ease, color .16s ease;
+}
+
+.sdh-gomb--pill {
+    gap: .5rem;
+    height: 36px;
+    padding: 0 1.05rem 0 .85rem;
+    border-radius: 999px;
+    box-shadow: var(--sdh-arnyek);
+    transition: background .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+/* A felületek általános linkszíne (.sdh-app a) helyett a gomb saját színe;
+   a kiemelő színt az ikon viszi, a felirat rámutatáskor veszi át. */
+.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges),
+a.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges) {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-gomb--pill:not(.sdh-gomb--elsodleges) .sdh-gomb__ikon {
+    color: var(--sdh-accent-szoveg);
+}
+
+/* Rámutatás / billentyűzet-fókusz: kiemelő keret és háttér, halvány fény, az ikon megnő. */
+.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges):hover,
+.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges):focus-visible,
+a.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges):hover,
+a.sdh-gomb.sdh-gomb--pill:not(.sdh-gomb--elsodleges):focus-visible {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    box-shadow: 0 0 0 3px var(--sdh-accent-halvany), 0 6px 16px -8px var(--sdh-accent);
+    transform: translateY(-1px);
+}
+
+.sdh-gomb.sdh-gomb--pill.sdh-gomb--elsodleges:hover,
+.sdh-gomb.sdh-gomb--pill.sdh-gomb--elsodleges:focus-visible {
+    box-shadow: 0 0 0 3px var(--sdh-accent-halvany), 0 8px 18px -8px var(--sdh-accent);
+    transform: translateY(-1px);
+}
+
+.sdh-gomb--pill:hover .sdh-gomb__ikon,
+.sdh-gomb--pill:focus-visible .sdh-gomb__ikon {
+    transform: scale(1.14);
+}
+
+/* Lenyomva: a gomb visszaül a helyére. */
+.sdh-gomb.sdh-gomb--pill:active {
+    transform: translateY(0) scale(.97);
+    box-shadow: 0 0 0 2px var(--sdh-accent-halvany);
+}
+
+/* Bekapcsolt állapot (pl. „Csempék elrejtése": a csempék látszanak). */
+.sdh-gomb.sdh-gomb--pill.is-aktiv:not(.sdh-gomb--elsodleges),
+a.sdh-gomb.sdh-gomb--pill.is-aktiv:not(.sdh-gomb--elsodleges) {
+    border-color: color-mix(in srgb, var(--sdh-accent) 45%, var(--sdh-keret-eros));
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-gomb--pill,
+    .sdh-gomb__ikon {
+        transition: none;
+    }
+
+    .sdh-gomb.sdh-gomb--pill:hover,
+    .sdh-gomb.sdh-gomb--pill:active,
+    .sdh-gomb--pill:hover .sdh-gomb__ikon {
+        transform: none;
+    }
+}
+
+/* Csak ikonból álló kis gomb (pl. az ügyfél szerkesztése az ügyfélmező mellett). */
+.sdh-gomb--ikonos .sdh-gomb__ikon {
+    width: 16px;
+    height: 16px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-gomb--ikonos:hover:not([disabled]) .sdh-gomb__ikon {
+    color: var(--sdh-accent-szoveg);
+}
+
+/* ================================================================== */
+/* 0.48 – Áttekintés: óra és a zárásig hátralévő idő                   */
+/* ================================================================== */
+
+.sdh-fejlec--kozeppel {
+    align-items: center;
+}
+
+.sdh-fejlec__kozep {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.sdh-fejlec--kozeppel .sdh-fejlec__gombok {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+}
+
+.sdh-ora {
+    --sdh-ora-szin: var(--sdh-accent-szoveg);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .5rem 1.1rem .6rem .9rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    box-shadow: var(--sdh-arnyek);
+    overflow: hidden;
+}
+
+.sdh-ora[data-allapot="nyitva"] { --sdh-ora-szin: var(--sdh-siker); }
+.sdh-ora[data-allapot="hamar"]  { --sdh-ora-szin: var(--sdh-figyelem); }
+.sdh-ora[data-allapot="elott"]  { --sdh-ora-szin: var(--sdh-allapot-kek); }
+.sdh-ora[data-allapot="zarva"]  { --sdh-ora-szin: var(--sdh-halvany); }
+
+.sdh-ora > .sdh-gomb__ikon {
+    width: 20px;
+    height: 20px;
+    color: var(--sdh-ora-szin);
+}
+
+.sdh-ora__ido {
+    display: flex;
+    align-items: baseline;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ora__ido b {
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -.01em;
+}
+
+.sdh-ora__ido span {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ora__resz {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-left: .7rem;
+    border-left: 1px solid var(--sdh-keret);
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.sdh-ora__datum {
+    font-size: 11.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ora__zaras {
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--sdh-ora-szin);
+}
+
+a.sdh-ora__zaras--nincs {
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* A nyitvatartási nap eltelt része: vékony sáv az óra alján. */
+.sdh-ora__sav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: color-mix(in srgb, var(--sdh-ora-szin) 14%, transparent);
+}
+
+.sdh-ora__sav i {
+    display: block;
+    height: 100%;
+    background: var(--sdh-ora-szin);
+    transition: width 1s linear;
+}
+
+.sdh-ora[data-allapot="hamar"] .sdh-ora__zaras {
+    animation: sdh-ora-figy 1.6s ease-in-out infinite;
+}
+
+@keyframes sdh-ora-figy {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ora[data-allapot="hamar"] .sdh-ora__zaras {
+        animation: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .sdh-fejlec__kozep {
+        margin-left: 0;
+    }
+}
+
+/* Beállítások › Nyitvatartás */
+.sdh-nyitva-tabla td {
+    vertical-align: middle;
+}
+
+.sdh-nyitva-tabla .sdh-nyitva-ido {
+    width: 5.2rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ================================================================== */
+/* 0.48 – Az ügyfél kártyája: szerkesztés; eladásnál mindig látszik    */
+/* ================================================================== */
+
+.sdh-ml-kartya__jobb {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    white-space: nowrap;
+}
+
+.sdh-ml-kartya__szerk {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    height: 24px;
+    padding: 0 .6rem 0 .45rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+
+.sdh-ml-kartya__szerk .sdh-gomb__ikon {
+    width: 13px;
+    height: 13px;
+}
+
+.sdh-ml-kartya__szerk:hover,
+.sdh-ml-kartya__szerk:focus-visible {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-ml-kartya__szerk:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+/* Napi árukiadás és rendelés: az ügyfél adatai a lapfülek fölött, mindig láthatóan. */
+.sdh-ml-ugyfel {
+    flex: 0 0 auto;
+    padding: .3rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 9px;
+    background: var(--sdh-felulet);
+}
+
+.sdh-ml-ugyfel .sdh-ml-adat {
+    margin-bottom: .1rem;
+}
+
+.sdh-ml-ugyfel .sdh-ml-kartya__ures {
+    margin: .35rem .6rem .25rem;
+}
+
+/* Az eladások listájában az állapot a sorból állítható: a választó ne törje a sort. */
+.sdh-eladas__tabla .sdh-allapot--valaszthato {
+    vertical-align: middle;
+}

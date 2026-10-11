@@ -313,7 +313,8 @@ final class SDH_Muhely_Admin_UI
             $render = $modul['render'];
 
             add_submenu_page(
-                self::FOMENU,
+                // A rejtett modul oldala létezik (a Beállításokból nyílik), de nincs menüpontja.
+                !empty($modul['rejtett']) ? '' : self::FOMENU,
                 (string) $modul['cim'],
                 (string) $modul['cim'],
                 !empty($modul['csak_admin']) ? self::ADMIN_JOG : $jog,
@@ -486,12 +487,17 @@ final class SDH_Muhely_Admin_UI
      * lesznek. Így tud egy gomb popupot nyitni, miközben a href-je
      * JavaScript nélkül is működő oldalra mutat.
      *
-     * @param array<int, array{cimke: string, url: string, elsodleges?: bool, adatok?: array<string, string>}> $gombok
+     * A gombok lekerekített „pillek", SVG ikonnal: az ikon neve az `ikon` kulcsban
+     * áll (SDH_Muhely_Frontend::ikon_rajz készlete); ha nincs megadva, a „+ …"
+     * kezdetű felirat pluszjelet kap, a többi ikon nélkül marad.
+     *
+     * @param array<int, array{cimke: string, url: string, elsodleges?: bool, ikon?: string, adatok?: array<string, string>}> $gombok
+     * @param string $kozep A cím és a gombok közé kerülő, már szűrt HTML (pl. az Áttekintés órája).
      */
-    public static function fejlec(string $cim, string $alcim = '', array $gombok = []): void
+    public static function fejlec(string $cim, string $alcim = '', array $gombok = [], string $kozep = ''): void
     {
         ?>
-        <div class="sdh-fejlec">
+        <div class="sdh-fejlec<?php echo $kozep !== '' ? ' sdh-fejlec--kozeppel' : ''; ?>">
             <div class="sdh-fejlec__szoveg">
                 <p class="sdh-fejlec__kalap"><?php echo esc_html(class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : 'Műhely'); ?></p>
                 <h1 class="sdh-fejlec__cim"><?php echo esc_html($cim); ?></h1>
@@ -500,30 +506,44 @@ final class SDH_Muhely_Admin_UI
                 <?php endif; ?>
             </div>
 
+            <?php if ($kozep !== '') : ?>
+                <div class="sdh-fejlec__kozep"><?php echo $kozep; // phpcs:ignore WordPress.Security.EscapeOutput -- a hívó szűrt HTML-t ad. ?></div>
+            <?php endif; ?>
+
             <?php if ($gombok !== []) : ?>
                 <div class="sdh-fejlec__gombok">
                     <?php foreach ($gombok as $gomb) : ?>
+                        <?php
+                        $cimke = (string) $gomb['cimke'];
+                        $plusz = strpos($cimke, '+ ') === 0;
+                        $ikon  = (string) ($gomb['ikon'] ?? ($plusz ? 'plusz' : ''));
+                        ?>
                         <a href="<?php echo esc_url($gomb['url']); ?>"
-                           class="sdh-gomb <?php echo !empty($gomb['elsodleges']) ? 'sdh-gomb--elsodleges' : ''; ?>"
+                           class="sdh-gomb sdh-gomb--pill<?php echo !empty($gomb['elsodleges']) ? ' sdh-gomb--elsodleges' : ''; ?>"
                            <?php
                             foreach ($gomb['adatok'] ?? [] as $nev => $ertek) {
                                 printf(' data-%s="%s"', esc_attr($nev), esc_attr($ertek));
                             }
                            ?>>
-                            <?php
-                            // A „+ …" kezdetű felirat pluszjele rajzolt ikon (admin.css: .sdh-plusz), hogy pontosan középen üljön.
-                            if (strpos((string) $gomb['cimke'], '+ ') === 0) {
-                                echo '<span class="sdh-plusz" aria-hidden="true"></span>' . esc_html(substr((string) $gomb['cimke'], 2));
-                            } else {
-                                echo esc_html($gomb['cimke']);
-                            }
-                            ?>
+                            <?php echo self::gomb_ikon($ikon); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG. ?>
+                            <span class="sdh-gomb__felirat"><?php echo esc_html($plusz ? substr($cimke, 2) : $cimke); ?></span>
                         </a>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    /**
+     * Egy gomb SVG ikonja (vonalas, a menü ikonjaival egy készletből). Ismeretlen
+     * vagy üres névre üres szöveg: a gomb ikon nélkül marad.
+     */
+    public static function gomb_ikon(string $nev): string
+    {
+        $rajz = $nev !== '' && class_exists('SDH_Muhely_Frontend') ? SDH_Muhely_Frontend::ikon_rajz($nev, null) : '';
+
+        return $rajz === '' ? '' : '<svg class="sdh-gomb__ikon" viewBox="0 0 20 20" aria-hidden="true">' . $rajz . '</svg>';
     }
 
     /**
@@ -654,12 +674,14 @@ final class SDH_Muhely_Admin_UI
         $gombok = [
             [
                 'cimke'      => '+ Új munkalap',
+                'ikon'       => 'uj-munkalap',
                 'url'        => SDH_Muhely_Modulok::url('munkalapok', ['nezet' => 'uj']),
                 'elsodleges' => true,
                 'adatok'     => ['sdh-urlap' => 'munkalapok', 'sdh-id' => '0'],
             ],
             [
                 'cimke'  => '+ Új ügyfél',
+                'ikon'   => 'uj-ugyfel',
                 'url'    => SDH_Muhely_Modulok::url('ugyfelek', ['nezet' => 'uj']),
                 'adatok' => ['sdh-urlap' => 'ugyfelek', 'sdh-id' => '0'],
             ],
@@ -669,6 +691,7 @@ final class SDH_Muhely_Admin_UI
         if (class_exists('SDH_Muhely_Termek')) {
             $gombok[] = [
                 'cimke'  => '+ Új termék',
+                'ikon'   => 'termekek',
                 'url'    => SDH_Muhely_Modulok::url('termekek', ['nezet' => 'uj']),
                 'adatok' => ['sdh-urlap' => 'termekek', 'sdh-id' => '0', 'sdh-marad' => 'A termék létrejött.'],
             ];
@@ -677,6 +700,7 @@ final class SDH_Muhely_Admin_UI
         if (class_exists('SDH_Muhely_Szolgaltatas')) {
             $gombok[] = [
                 'cimke'  => '+ Új szolgáltatás',
+                'ikon'   => 'szolgaltatasok',
                 'url'    => SDH_Muhely_Modulok::url('szolgaltatasok', ['nezet' => 'uj']),
                 'adatok' => ['sdh-urlap' => 'szolgaltatasok', 'sdh-id' => '0', 'sdh-marad' => 'A szolgáltatás létrejött.'],
             ];
@@ -686,11 +710,13 @@ final class SDH_Muhely_Admin_UI
         if (class_exists('SDH_Muhely_Eladas')) {
             $gombok[] = [
                 'cimke'  => 'Napi árukiadás',
+                'ikon'   => 'arukiadas',
                 'url'    => SDH_Muhely_Modulok::url(SDH_Muhely_Eladas::KULCS_ARU),
                 'adatok' => ['sdh-urlap' => SDH_Muhely_Eladas::KULCS_ARU, 'sdh-id' => '0'],
             ];
             $gombok[] = [
                 'cimke'  => 'Rendelések',
+                'ikon'   => 'rendelesek',
                 'url'    => SDH_Muhely_Modulok::url(SDH_Muhely_Eladas::KULCS_REND),
                 'adatok' => ['sdh-urlap' => SDH_Muhely_Eladas::KULCS_REND, 'sdh-id' => '0'],
             ];
@@ -700,13 +726,15 @@ final class SDH_Muhely_Admin_UI
         // A csempék szerkesztése (mi látszik, sorrend, felirat) adminfeladat: a Beállításokban van.
         $gombok[] = [
             'cimke'  => 'Csempék elrejtése',
+            'ikon'   => 'csempek',
             'url'    => '#',
             'adatok' => ['sdh-csempek-valt' => ''],
         ];
 
         if ($technikai) {
             $gombok[] = [
-                'cimke' => 'Megnyitás a műhely-felületen ↗',
+                'cimke' => 'Megnyitás a műhely-felületen',
+                'ikon'  => 'kulso',
                 'url'   => SDH_Muhely_Modulok::frontend_url(),
             ];
         }
@@ -718,7 +746,9 @@ final class SDH_Muhely_Admin_UI
             self::fejlec(
                 'Áttekintés',
                 'A belső műhely- és ügyfélkezelő rendszer. Innen érhető el minden modul.',
-                $gombok
+                $gombok,
+                // Az óra és a zárásig hátralévő idő (Beállítások › Nyitvatartás és óra).
+                class_exists('SDH_Muhely_Nyitvatartas') ? SDH_Muhely_Nyitvatartas::ora_html() : ''
             );
             ?>
 
@@ -823,15 +853,11 @@ final class SDH_Muhely_Admin_UI
             $szamok[SDH_Muhely_Eladas::KULCS_REND] = [SDH_Muhely_Eladas::nyitott_rendeles_db(), 'folyamatban lévő rendelés'];
         }
 
-        if (class_exists('SDH_Muhely_Asszisztens')) {
-            $szamok['asszisztens'] = [SDH_Muhely_Asszisztens::fuggo_db(), 'jóváhagyásra váró javaslat'];
-        }
-
         $ki = [];
 
         foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
             // A csak adminisztrátornak szóló modul (beállítások, karbantartás) a kollégánál nem látszik.
-            if (!empty($modul['keszul']) || (!empty($modul['csak_admin']) && !self::admin_e())) {
+            if (!empty($modul['keszul']) || !empty($modul['rejtett']) || (!empty($modul['csak_admin']) && !self::admin_e())) {
                 continue;
             }
 
@@ -852,7 +878,7 @@ final class SDH_Muhely_Admin_UI
             $ki['levelezes']['jelez']   = $azonnal > 0;
         }
 
-        foreach (['uzenetek', 'csapat', 'asszisztens'] as $jelzo) {
+        foreach (['uzenetek', 'csapat'] as $jelzo) {
             if (isset($ki[$jelzo]) && (int) $ki[$jelzo]['szam'] > 0) {
                 $ki[$jelzo]['jelez'] = true;
             }
@@ -914,7 +940,8 @@ final class SDH_Muhely_Admin_UI
         $i       = 0;
 
         foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
-            if (!empty($modul['keszul'])) {
+            // A rejtett modulnak (pl. Asszisztens: a Beállításokból nyílik) nincs csempéje.
+            if (!empty($modul['keszul']) || !empty($modul['rejtett'])) {
                 continue;
             }
 

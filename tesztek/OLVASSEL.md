@@ -25,6 +25,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t29-eladas` | napi árukiadás és rendelés: mentés ügyfél / eszköz nélkül, fizetés és pénztár, lezárás, helyszínek, beszállítók, értesítés |
 | `t30-rma-csevego` | a munkalap RMA-csevegője (időrend, frissítő végpont), az ügyféloldal Szolgáltatások és Termékek füle |
 | `t31-megjegyzes-ugyfel-arculat` | gyakori megjegyzések, az ügyfél adatlapjának Munkalapok / Rendelések / Vásárlások füle, az Arculat logója és egyéni színe |
+| `t33-ugyfel-lista-ora-level` | ügyfélkártya és szerkesztés az eladásokon, árukiadás a rácsban, állapot a listából, pill-gombok, nyitvatartás és óra, új levél fiókonként, Asszisztens a Beállításokban |
 | `t32-beallitasok` | a Beállítások lapfülei, lapfülenkénti mentés, jogosultság, nincs wp-adminba mutató link, az új paraméterek |
 | `t26-fust` | füstteszt: űrlap, rács, részletpanel, beállítások, asszisztens – PHP-figyelmeztetés nélkül |
 

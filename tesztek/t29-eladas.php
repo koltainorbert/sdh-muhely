@@ -261,7 +261,9 @@ T::egyezik($nyitott_elotte, $M::nyitott_db(), 'a nyitott munkalapok számlálój
 
 $racs = SDH_Muhely_Racs::adat(SDH_Muhely_Racs::allapot_tisztit(['meret' => 200]));
 $racs_idk = array_map(static fn (array $s): int => (int) ($s['id'] ?? 0), $racs['sorok']);
-T::igaz(!in_array($aid, $racs_idk, true) && !in_array($rid, $racs_idk, true), 'a rácsban nincs árukiadás és rendelés');
+// 0.48: a napi árukiadás lapjai a munkalapok rácsában is ott állnak; a rendelés nem.
+T::igaz(in_array($aid, $racs_idk, true), 'a rácsban ott van az árukiadás');
+T::igaz(!in_array($rid, $racs_idk, true), 'a rácsban nincs rendelés');
 T::igaz($racs['sorok'] !== [], 'a rácsban ott vannak a javítási munkalapok');
 
 T::igaz($E::mai_arukiadas_db() >= 5, 'a mai árukiadások számlálója');

@@ -114,7 +114,9 @@ final class SDH_Muhely_Levelezes
             'cim'     => 'Levelezés',
             'render'  => [self::class, 'oldal'],
             'sorrend' => 33,
-            'jelveny' => [self::class, 'olvasatlan_db'],
+            // Az oldalmenü nem az olvasatlan levelek számát mutatja, hanem azt, hogy érkezett-e
+            // új levél a legutóbbi megnézés óta – több fióknál azt is, melyikbe.
+            'menu_jelzes' => [self::class, 'menu_jelzes'],
         ]);
     }
 
@@ -994,6 +996,9 @@ final class SDH_Muhely_Levelezes
                 'vedett'     => (string) $fiok['zar'] !== '',
                 'zarva'      => $zarva,
                 'olvasatlan' => $be ? (int) $be->olvasatlan : 0,
+                // Új levél a legutóbbi megnézés óta (az oldalmenü jelzése). Zárolt fióknál is
+                // kimegy: csak annyit árul el, hogy érkezett valami.
+                'uj'         => (int) (self::uj_fiokonkent()[(string) $fk] ?? 0),
                 // Zárolt fiókból semmi nem megy ki, a teendők száma sem.
                 'azonnal'    => $zarva ? 0 : (int) ($azonnal[(string) $fk] ?? 0),
                 'mappak'     => $zarva ? [] : self::mappak_kifele((string) $fk),
@@ -1418,7 +1423,191 @@ final class SDH_Muhely_Levelezes
         delete_transient('sdh_level_fut_' . $fk);
     }
 
-    /** Az oldalmenü jelvénye: az olvasatlan levelek a fiókok Beérkezett mappáiban. */
+    /* =================================================================
+     * Új levél a legutóbbi megnézés óta (az oldalmenü jelzése)
+     * ============================================================== */
+
+    /** Felhasználónként: fiók => a Beérkezett legnagyobb levélazonosítója, amit már látott. */
+    private const META_LATTA = 'sdh_muhely_level_latta';
+
+    /** @var array<string, int>|null Kérésen belüli gyorsítótár (a menü és a fióklista is kéri). */
+    private static ?array $uj_tar = null;
+
+    /** @return array<string, int> */
+    private static function latta(): array
+    {
+        $m  = get_user_meta(get_current_user_id(), self::META_LATTA, true);
+        $ki = [];
+
+        foreach (is_array($m) ? $m : [] as $fk => $id) {
+            $ki[(string) $fk] = max(0, (int) $id);
+        }
+
+        return $ki;
+    }
+
+    /**
+     * Fiókonként a Beérkezett legnagyobb levélazonosítója.
+     *
+     * @return array<string, int>
+     */
+    private static function inbox_maxok(): array
+    {
+        global $wpdb;
+
+        $ki = [];
+
+        foreach ((array) $wpdb->get_results(
+            'SELECT l.fiok AS fiok, MAX(l.id) AS legnagyobb FROM ' . self::tabla() . ' l INNER JOIN ' . self::mappa_tabla() . " mp ON mp.id = l.mappa_id
+             WHERE mp.szerep = 'inbox' GROUP BY l.fiok"
+        ) as $sor) {
+            $ki[(string) $sor->fiok] = (int) $sor->legnagyobb;
+        }
+
+        return $ki;
+    }
+
+    /**
+     * A belépett felhasználó megnézte a fiók Beérkezett mappáját: ami eddig
+     * érkezett, az neki már nem „új". (A levelek olvasatlansága ettől nem változik.)
+     */
+    public static function latta_jelol(string $fk): void
+    {
+        $user = get_current_user_id();
+
+        if ($user <= 0 || $fk === '') {
+            return;
+        }
+
+        $latta = self::latta();
+        $max   = (int) (self::inbox_maxok()[$fk] ?? 0);
+
+        if (!isset($latta[$fk]) || $latta[$fk] !== $max) {
+            $latta[$fk] = $max;
+            update_user_meta($user, self::META_LATTA, $latta);
+        }
+
+        self::$uj_tar = null;
+    }
+
+    /**
+     * Hány új levél jött fiókonként, mióta a belépett felhasználó utoljára
+     * megnézte a fiók Beérkezett mappáját. Új = azóta érkezett, még olvasatlan,
+     * és a levélszűrő nem jelölte zajnak. Az első alkalom csak a kiindulópontot
+     * rögzíti: a régóta bent álló olvasatlan levelekről nem szól.
+     *
+     * @return array<string, int> fiókkulcs => darab (a 0 is benne van)
+     */
+    public static function uj_fiokonkent(): array
+    {
+        global $wpdb;
+
+        if (self::$uj_tar !== null) {
+            return self::$uj_tar;
+        }
+
+        $kulcsok = array_map('strval', array_keys(self::fiokok()));
+        $user    = get_current_user_id();
+
+        if ($kulcsok === [] || $user <= 0) {
+            return self::$uj_tar = [];
+        }
+
+        $latta = self::latta();
+        $maxok = null;
+        $uj    = false;
+
+        foreach ($kulcsok as $fk) {
+            if (!isset($latta[$fk])) {
+                $maxok      = $maxok ?? self::inbox_maxok();
+                $latta[$fk] = (int) ($maxok[$fk] ?? 0);
+                $uj         = true;
+            }
+        }
+
+        if ($uj) {
+            update_user_meta($user, self::META_LATTA, $latta);
+        }
+
+        $reszek  = [];
+        $ertekek = [];
+
+        foreach ($kulcsok as $fk) {
+            $reszek[]  = '(l.fiok = %s AND l.id > %d)';
+            $ertekek[] = $fk;
+            $ertekek[] = $latta[$fk];
+        }
+
+        $ki = array_fill_keys($kulcsok, 0);
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- csak helyőrzők és saját táblanevek.
+        foreach ((array) $wpdb->get_results($wpdb->prepare(
+            'SELECT l.fiok AS fiok, COUNT(*) AS db FROM ' . self::tabla() . ' l INNER JOIN ' . self::mappa_tabla() . " mp ON mp.id = l.mappa_id
+             WHERE mp.szerep = 'inbox' AND l.olvasott = 0 AND l.fontossag <> 'zaj' AND (" . implode(' OR ', $reszek) . ') GROUP BY l.fiok',
+            $ertekek
+        )) as $sor) {
+            $ki[(string) $sor->fiok] = (int) $sor->db;
+        }
+        // phpcs:enable
+
+        return self::$uj_tar = $ki;
+    }
+
+    /** Az új levelek száma összesen (minden fiókban). */
+    public static function uj_db(): int
+    {
+        return (int) array_sum(self::uj_fiokonkent());
+    }
+
+    /** Az „N új" felirat (nagy számnál rövidítve, hogy a menüt ne nyomja szét). */
+    private static function uj_szoveg(int $db): string
+    {
+        return ($db > 99 ? '99+' : (string) $db) . ' új';
+    }
+
+    /**
+     * Az oldalmenü jelzése: van-e új levél, és több fióknál melyikben.
+     *
+     * @return array{db: int, szoveg: string, cim: string, alsorok: array<int, array{kulcs: string, nev: string, db: int, szoveg: string, cim: string, url: string}>}
+     */
+    public static function menu_jelzes(): array
+    {
+        $fiokok  = self::fiokok();
+        $uj      = self::uj_fiokonkent();
+        $ossz    = (int) array_sum($uj);
+        $alsorok = [];
+        $reszek  = [];
+
+        foreach ($uj as $fk => $db) {
+            if ($db <= 0 || !isset($fiokok[$fk])) {
+                continue;
+            }
+
+            $nev      = self::fiok_nev($fiokok[$fk]);
+            $reszek[] = $nev . ' (' . $db . ')';
+
+            // Egy fióknál nincs mit megkülönböztetni: elég a jelvény.
+            if (count($fiokok) > 1) {
+                $alsorok[] = [
+                    'kulcs'  => (string) $fk,
+                    'nev'    => $nev,
+                    'db'     => $db,
+                    'szoveg' => self::uj_szoveg($db),
+                    'cim'    => $nev . ': ' . $db . ' új levél',
+                    'url'    => SDH_Muhely_Modulok::url(self::KULCS, ['fiok' => (string) $fk]),
+                ];
+            }
+        }
+
+        return [
+            'db'      => $ossz,
+            'szoveg'  => self::uj_szoveg($ossz),
+            'cim'     => $ossz > 0 ? 'Új levél: ' . implode(', ', $reszek) : 'Nincs új levél',
+            'alsorok' => $alsorok,
+        ];
+    }
+
+    /** Az olvasatlan levelek a fiókok Beérkezett mappáiban (az Áttekintés csempéje). */
     public static function olvasatlan_db(): int
     {
         global $wpdb;
@@ -1661,6 +1850,10 @@ final class SDH_Muhely_Levelezes
             $sorok = is_array($sorok) ? $sorok : [];
             $ossz  = (int) $mappa->osszes;
 
+            if ((string) $mappa->szerep === 'inbox') {
+                self::latta_jelol($fk);
+            }
+
             wp_send_json_success([
                 'sorok'   => array_map([self::class, 'sor_kifele'], $sorok),
                 'ossz'    => $ossz,
@@ -1742,6 +1935,11 @@ final class SDH_Muhely_Levelezes
                 self::OLDAL,
                 $eltolas
             ));
+        }
+
+        // A felhasználó a fiók Beérkezett mappáját nézi (keresés nélkül): az eddig érkezett levél már nem „új".
+        if ((string) $mappa->szerep === 'inbox' && $q === '') {
+            self::latta_jelol($fk);
         }
 
         wp_send_json_success([

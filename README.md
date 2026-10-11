@@ -61,6 +61,24 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.48.0
+- **Az ügyfél látszik a napi árukiadáson és a rendelésen is.** Ugyanaz az ügyfélkártya, mint a munkalapon (név, cím,
+  telefon, e-mail, másoló gombokkal) – eladásnál a lapfülek fölött áll, mindig láthatóan.
+- **A betöltött ügyfél szerkeszthető a lapról.** Ceruza az ügyfélmező mellett és „Szerkesztés" az ügyfél kártyáján, a
+  munkalapon, az árukiadáson és a rendelésen is: az ügyfél ablaka a lap fölött nyílik, mentés után a lap megmarad.
+- **A napi árukiadás a munkalapok rácsában is ott áll.** Az Azonosító oszlopban „Napi árukiadás", a Típusban az eladott
+  tételek; új nézetek: „Napi árukiadás" és „Csak javítás". A rendelés a saját menüpontjában marad.
+- **Állapotváltás a listából.** A rendelés útja (felvéve … átadva) és az árukiadás állapota a lista sorában is
+  állítható, nem csak az űrlapon; az átadott és kifizetett rendelés így is magától lezárul.
+- **Szebb gombok.** A fejlécek gombjai lekerekített pillek SVG ikonnal, rámutatásra kiemelő színnel és halvány fénnyel.
+- **Óra az Áttekintésen, a zárásig hátralévő idővel.** A nyitvatartás naponként állítható (Beállítások › Nyitvatartás
+  és óra); nyitás előtt a nyitásig, zárás után a következő nyitásig számol.
+- **A Levelezés menüpontja az új levelet jelzi**, nem az olvasatlanok számát: mennyi jött a legutóbbi megnézés óta, és
+  több postafióknál fiókonként külön sorban, hogy melyikbe.
+- **Az Asszisztens kikerült a menüből és a csempék közül:** a Beállítások › Asszisztens lapfülről nyílik (javaslatok
+  és napló, tudástár, mentések). A beszélgető figura marad.
+- Új teszt: `t33-ugyfel-lista-ora-level`. Séma nem változott.
+
 ### 0.47.0
 - **A műhely-felületről semmi nem visz át a WordPress-adminba.** A Beállítások a műhely-felületen nyílik (az
   oldalmenü alján és a csempén is); a wp-adminba vivő „Karbantartás" link megszűnt. Kolléga nem nyithatja meg.

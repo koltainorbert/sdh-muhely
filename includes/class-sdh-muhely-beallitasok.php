@@ -109,6 +109,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'Melyik modul csempéje látszik az Áttekintés tetején, milyen sorrendben és felirattal.',
                 'rajz' => [SDH_Muhely_Admin_UI::class, 'csempek_doboz'], 'ment' => [SDH_Muhely_Admin_UI::class, 'csempek_mentes'],
             ],
+            'nyitvatartas' => [
+                'cim' => 'Nyitvatartás és óra', 'csoport' => 'megjelenes',
+                'leiras' => 'Az üzlet nyitvatartása naponként, és az Áttekintés órája a zárásig hátralévő idővel.',
+                'rajz' => [SDH_Muhely_Nyitvatartas::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Nyitvatartas::class, 'beallitas_mentes'],
+            ],
             'ugyfeloldal' => [
                 'cim' => 'Ügyféloldal (RMA)', 'csoport' => 'megjelenes',
                 'leiras' => 'Amit az ügyfél a QR-kód beolvasása után lát: cím, értesítés, megjelenés, nyelvek, elérhetőség.',
@@ -531,13 +536,15 @@ final class SDH_Muhely_Beallitasok
         echo preg_replace('/(<form\b[^>]*data-sdh-ai-beallitas[^>]*>)/', '$1<input type="hidden" name="honnan" value="beallitasok">', $urlap, 1); // phpcs:ignore WordPress.Security.EscapeOutput -- a saját, már szűrt kimenetünk.
 
         ?>
-        <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Tudástár és mentések</h2>
+        <div class="sdh-doboz" data-sdh-asszisztens-oldalak>
+            <h2 class="sdh-doboz__cim">Javaslatok, tudástár és mentések</h2>
             <p class="sdh-sugo">
-                Amit az asszisztens a cégről tud (tudástár), és a módosítások előtt készült mentések az
-                Asszisztens menüpontban vannak.
+                Az asszisztensnek nincs külön menüpontja: innen nyílik a jóváhagyásra váró javaslatok és a napló,
+                a tudástár (amit a cégről tud) és a módosítások előtt készült mentések oldala.
             </p>
             <div class="sdh-beall__gombok">
+                <?php $sdh_fuggo = SDH_Muhely_Asszisztens::fuggo_db(); ?>
+                <a class="sdh-gomb" href="<?php echo esc_url(SDH_Muhely_Modulok::url(SDH_Muhely_Asszisztens::KULCS)); ?>">Javaslatok és napló<?php echo $sdh_fuggo > 0 ? ' (' . (int) $sdh_fuggo . ' vár jóváhagyásra)' : ''; ?></a>
                 <a class="sdh-gomb" href="<?php echo esc_url(SDH_Muhely_Modulok::url(SDH_Muhely_Asszisztens::KULCS, ['nezet' => 'tudastar'])); ?>">Tudástár</a>
                 <a class="sdh-gomb" href="<?php echo esc_url(SDH_Muhely_Modulok::url(SDH_Muhely_Asszisztens::KULCS, ['nezet' => 'mentesek'])); ?>">Mentések</a>
             </div>

@@ -2351,6 +2351,11 @@
         leker();
     });
 
+    // A munkalapról szerkesztett ügyfél neve, telefonja, címe a rácsban és a részletpanelen is frissüljön.
+    document.addEventListener('sdh:ugyfel-mentve', function () {
+        leker();
+    });
+
     /* ---------------------------------------------------------------- */
     /* Indulás                                                          */
     /* ---------------------------------------------------------------- */

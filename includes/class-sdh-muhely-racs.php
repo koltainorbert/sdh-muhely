@@ -77,6 +77,13 @@ final class SDH_Muhely_Racs
      *
      * @return array<string, array<string, mixed>>
      */
+    /**
+     * A napi árukiadás lapjai is ott állnak a munkalapok rácsában. Eszközük
+     * nincs: az „Azonosító" oszlopban ez a kulcs jelöli őket („Napi árukiadás"),
+     * így ugyanazzal a szűrővel külön is választhatók, mint az eszközfajták.
+     */
+    public const ARU_KATEGORIA = '__arukiadas';
+
     public static function oszlopok(): array
     {
         static $oszlopok = null;
@@ -131,7 +138,8 @@ final class SDH_Muhely_Racs
                 'sz' => 170, 'alap' => false,
             ],
             'azonosito' => [
-                'cim' => 'Azonosító', 'tipus' => 'halmaz', 'sql' => "COALESCE(e.kategoria, '')",
+                'cim' => 'Azonosító', 'tipus' => 'halmaz',
+                'sql' => "CASE WHEN m.fajta = 'arukiadas' THEN '" . self::ARU_KATEGORIA . "' ELSE COALESCE(e.kategoria, '') END",
                 'sz' => 122, 'alap' => true, 'ertekek' => self::kategoria_ertekek(),
             ],
             'gyarto' => [
@@ -267,6 +275,10 @@ final class SDH_Muhely_Racs
             if ($kulcs !== '' && !isset($ertekek[$kulcs])) {
                 $ertekek[$kulcs] = ['nev' => SDH_Muhely_Eszkoz::kategoria_cimke($kulcs)];
             }
+        }
+
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $ertekek[self::ARU_KATEGORIA] = ['nev' => SDH_Muhely_Eladas::NEVTELEN];
         }
 
         $ertekek[''] = ['nev' => '(nincs eszköz)'];
@@ -790,10 +802,11 @@ final class SDH_Muhely_Racs
     private static function feltetelek(array $allapot): array
     {
         $oszlopok   = self::oszlopok();
-        // A rács a javítási munkalapoké: a napi árukiadás és a rendelés a saját
-        // menüpontjában áll (SDH_Muhely_Eladas).
-        $feltetelek = ['m.fajta = %s'];
-        $ertekek    = ['javitas'];
+        // A rácsban a javítási munkalapok és a napi árukiadás lapjai állnak (az
+        // utóbbi az „Azonosító" oszlopban „Napi árukiadás"); a rendelés a saját
+        // menüpontjában marad (SDH_Muhely_Eladas).
+        $feltetelek = ['m.fajta IN (%s, %s)'];
+        $ertekek    = ['javitas', 'arukiadas'];
 
         foreach ($allapot['szurok'] as $k => $szuro) {
             $sql = self::szuro_sql($oszlopok[$k], $szuro, $ertekek);
@@ -909,7 +922,7 @@ final class SDH_Muhely_Racs
                 "SELECT m.id, m.munkalap_szam, m.jelzes, m.allapot, m.nev, m.felelos, m.keszult,
                         m.hatarido, m.lezarva, m.fizetve, m.fizetes_ideje, m.brutto_ertek,
                         m.fizetett, m.fizetesi_mod, m.megjegyzes, m.letrehozva, m.modositva,
-                        m.ugyfel_id, m.eszkoz_id, m.bevizsgalasi_dij,
+                        m.ugyfel_id, m.eszkoz_id, m.bevizsgalasi_dij, m.fajta,
                         m.fo_allapot, m.fo_fizetve, m.fo_fizetes_ideje,
                         {$fizetendo} AS fizetendo,
                         u.nev AS u_nev, u.telefon AS u_telefon,
@@ -933,9 +946,24 @@ final class SDH_Muhely_Racs
             array_map(static fn (object $s): int => (int) $s->id, (array) $sorok)
         );
 
+        // A napi árukiadás lapjainak nincs eszköze: a „Típus" oszlopban az áll, amit eladtak (egy lekérdezéssel).
+        $aru_idk = [];
+
+        foreach ((array) $sorok as $sor) {
+            if ((string) ($sor->fajta ?? '') === 'arukiadas') {
+                $aru_idk[] = (int) $sor->id;
+            }
+        }
+
+        $aru_tetelek = $aru_idk !== [] && class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::tetel_osszefoglalok($aru_idk) : [];
+
         foreach ((array) $sorok as $sor) {
             $formazott          = self::sor_formaz($sor, $allapotok, $ma);
             $formazott['_tobb'] = $tobbi_db[(int) $sor->id] ?? 0;
+
+            if ($formazott['_fajta'] === 'arukiadas') {
+                $formazott['tipus'] = (string) ($aru_tetelek[(int) $sor->id] ?? '');
+            }
 
             // Több eszközös lap: hány eszköz kész, és melyik (az állapot mellett látszik).
             if ($formazott['_tobb'] > 0) {
@@ -997,22 +1025,25 @@ final class SDH_Muhely_Racs
         $van_eszkoz = (int) $sor->eszkoz_id > 0 && $sor->e_kategoria !== null;
         $megjegyzes = trim((string) preg_replace('/\s+/u', ' ', (string) $sor->megjegyzes));
         $hatarido   = self::datum($sor->hatarido);
+        // Napi árukiadás: nincs eszköz, a vevő lehet névtelen („Napi árukiadás").
+        $arukiadas  = (string) ($sor->fajta ?? '') === 'arukiadas' && class_exists('SDH_Muhely_Eladas');
 
         return [
+            '_fajta'        => $arukiadas ? 'arukiadas' : 'javitas',
             'id'            => (int) $sor->id,
             'szam'          => (int) $sor->munkalap_szam > 0 ? SDH_Muhely_Munkalap::szam_formaz($sor->munkalap_szam) : '',
             'jelzes'        => (string) $sor->jelzes,
             'allapot'       => (string) $sor->allapot,
             'felelos'       => (string) ($sor->f_nev ?? ''),
             'nev'           => (string) $sor->nev,
-            'azonosito'     => $van_eszkoz ? SDH_Muhely_Eszkoz::kategoria_cimke((string) $sor->e_kategoria) : '',
+            'azonosito'     => $arukiadas ? SDH_Muhely_Eladas::NEVTELEN : ($van_eszkoz ? SDH_Muhely_Eszkoz::kategoria_cimke((string) $sor->e_kategoria) : ''),
             'gyarto'        => (string) ($sor->e_gyarto ?? ''),
             'tipus'         => (string) ($sor->e_tipus ?? ''),
             'megnevezes'    => (string) ($sor->e_megnevezes ?? ''),
             'garancia'      => $van_eszkoz ? ((int) $sor->e_garancias === 1 ? 'Igen' : 'Nem') : '',
             'imei'          => (string) ($sor->e_imei ?? ''),
             'sorozatszam'   => (string) ($sor->e_sorozatszam ?? ''),
-            'ugyfel'        => (string) ($sor->u_nev ?? ''),
+            'ugyfel'        => (string) ($sor->u_nev ?? '') !== '' ? (string) $sor->u_nev : ($arukiadas ? SDH_Muhely_Eladas::NEVTELEN : ''),
             'telefon'       => (string) ($sor->u_telefon ?? ''),
             'cim'           => SDH_Muhely_Ugyfel::cim_szoveg($sor),
             'keszult'       => self::datum($sor->keszult),
@@ -1084,6 +1115,18 @@ final class SDH_Muhely_Racs
             $nezetek[] = [
                 'id' => 'elkeszult', 'nev' => $allapotok[$kesz_kulcsok[0]]['nev'] . ' – átvételre vár', 'rendezes' => $szam_le,
                 'szurok' => ['allapot' => ['op' => 'egyike', 'l' => array_merge($kesz_kulcsok, [SDH_Muhely_Munkalap::reszben_kulcs()])]],
+            ];
+        }
+
+        // A napi árukiadás lapjai a munkalapok között állnak; külön is, és nélkülük is megnézhetők.
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $nezetek[] = [
+                'id' => 'arukiadas', 'nev' => SDH_Muhely_Eladas::NEVTELEN, 'rendezes' => $szam_le,
+                'szurok' => ['azonosito' => ['op' => 'egyike', 'l' => [self::ARU_KATEGORIA]]],
+            ];
+            $nezetek[] = [
+                'id' => 'javitas', 'nev' => 'Csak javítás (árukiadás nélkül)', 'rendezes' => $szam_le,
+                'szurok' => ['azonosito' => ['op' => 'nem_egyike', 'l' => [self::ARU_KATEGORIA]]],
             ];
         }
 

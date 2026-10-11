@@ -82,7 +82,9 @@ final class SDH_Muhely_Asszisztens
             'cim'     => 'Asszisztens',
             'render'  => [self::class, 'oldal'],
             'sorrend' => 90,
-            'jelveny' => [self::class, 'fuggo_db'],
+            // Adminfeladat: nincs az oldalmenüben és a csempék között – a Beállítások › Asszisztens lapfülről nyílik.
+            'csak_admin' => true,
+            'rejtett'    => true,
         ]);
     }
 
@@ -1281,6 +1283,11 @@ final class SDH_Muhely_Asszisztens
 
             if ($admin && $nezet === 'tudastar') {
                 $gombok[] = ['cimke' => '+ Új tudás', 'url' => '#', 'adatok' => ['sdh-urlap' => 'aitudas', 'sdh-id' => '0']];
+            }
+
+            // Az oldal a Beállításokból nyílik (nincs saját menüpontja): oda vezet vissza.
+            if ($admin && class_exists('SDH_Muhely_Beallitasok')) {
+                $gombok[] = ['cimke' => 'Vissza a Beállításokhoz', 'url' => SDH_Muhely_Beallitasok::url('asszisztens'), 'ikon' => 'beallitasok'];
             }
 
             SDH_Muhely_Admin_UI::fejlec(
