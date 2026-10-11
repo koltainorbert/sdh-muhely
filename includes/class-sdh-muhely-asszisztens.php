@@ -396,6 +396,7 @@ final class SDH_Muhely_Asszisztens
         $b = self::beallitas();
         $t = 'MOST: ' . wp_date('Y. F j., l H:i') . "\n"
             . 'FELHASZNÁLÓ: ' . ($f->display_name ?: $f->user_login) . (SDH_Muhely_Admin_UI::admin_e() ? ' (adminisztrátor)' : ' (kolléga)') . "\n"
+            . 'CSAPAT MÓD: ' . (SDH_Muhely_Csapat::egyszeru() ? 'üzenőfal („' . SDH_Muhely_Csapat::beallitas()['fal_nev'] . '", közös fiók; cetlik a falon; nevek: ' . implode(', ', SDH_Muhely_Csapat::fal_nevek()) . ')' : 'többfelhasználós csevegés') . "\n"
             . 'OLVASÁSHOZ IS ENGEDÉLY KELL: ' . ($b['olvasas_engedely'] ? 'igen (az olvasó eszköz is javaslatot hoz létre)' : 'nem') . "\n";
 
         $mk = (string) ($oldal['kulcs'] ?? '');
@@ -1074,6 +1075,7 @@ final class SDH_Muhely_Asszisztens
     public static function ajax_beallit(): void
     {
         self::admin_jog();
+        SDH_Muhely_Csapat::kontextus_be();
 
         $b = self::beallitas();
         $regi = get_option(self::OPTION, []);
@@ -1184,6 +1186,7 @@ final class SDH_Muhely_Asszisztens
         ?>
         <form class="sdh-urlap sdh-cs-urlap" data-sdh-ajax-action="sdh_muhely_aitudas_ment" novalidate>
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php SDH_Muhely_Csapat::kontextus_mezo(); ?>
             <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
             <h2 class="sdh-modal__cim"><?php echo $r ? 'Tudás szerkesztése' : 'Új tudás az asszisztensnek'; ?></h2>
 
@@ -1216,6 +1219,7 @@ final class SDH_Muhely_Asszisztens
     public static function ajax_tudas_ment(): void
     {
         self::admin_jog();
+        SDH_Muhely_Csapat::kontextus_be();
 
         global $wpdb;
 
@@ -1467,6 +1471,7 @@ final class SDH_Muhely_Asszisztens
         ?>
         <form class="sdh-urlap sdh-cs-urlap" data-sdh-ai-beallitas>
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php SDH_Muhely_Csapat::kontextus_mezo(); ?>
 
             <div class="sdh-doboz">
                 <h2 class="sdh-doboz__cim">Alapok</h2>

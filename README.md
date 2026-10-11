@@ -60,6 +60,21 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.39.0
+- **Csapat: két mód** (Beállítások › Csapat – üzenetek). **Többfelhasználós csevegés** – a 0.38-as rendszer
+  (saját fiók kollégánként, személyes / csoportos / mindenkinek szóló beszélgetések). **Üzenőfal** – ha a cég egy
+  közös fiókkal használja a CRM-et (ott a csevegésben mindenki mindent látna): a Csapat menüpont helyén egy
+  elnevezhető fal (alap: „Üzenőfal") cetlikkel, mint a Windows Öntapadó jegyzetei.
+- **Cetli:** „+ Új cetli" popup – üzenet, **kinek szól** (egy kolléga vagy Mindenkinek), **ki írta**, szín (sárga,
+  rózsaszín, zöld, kék, lila, narancs). A fejlécénél fogva szabadon áthúzható (a helye mentődik, a fal méretéhez
+  arányosan), „Elintézve" pipa (áthúzott szöveg), szerkesztés, levétel a falról (második kattintásra; a „Levett
+  cetlik" lapon visszatehető – semmi nem törlődik). Szűrés kinek szól (egy kolléga szűrője a mindenkinek szólókat is
+  mutatja), „Rendezés" rácsba állítja a cetliket. A kollégák nevei a Beállításokban (fiók nélkül), üresen a fiókok
+  nevei. Új tábla: `sdh_csapat_cetli` (DB_VERSION 0.27.0).
+- Az **AI-asszisztens** üzenőfal módban a csapatüzenet helyett cetlit javasol a falra (jóváhagyással, visszavonható).
+- **Pénztár-táblázatok:** minden cella függőlegesen középre igazítva (a kétsoros leírás mellett sem csúsznak el a
+  számok), az összegek és a sorszám balra igazítva, a fejlécükkel együtt.
+
 ### 0.38.0
 - **Új modul: Csapat – belső üzenetek** (oldalmenü: Csapat). Üzenet egy kollégának, több kiválasztott kollégának
   (közös beszélgetés, saját névvel), egy csoportnak vagy **mindenkinek**. Élő beszélgetés (3,5 mp-enként frissül),

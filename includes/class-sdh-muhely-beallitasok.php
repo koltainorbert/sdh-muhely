@@ -68,6 +68,8 @@ final class SDH_Muhely_Beallitasok
 
                 <?php SDH_Muhely_Penztar::beallitas_doboz(); ?>
 
+                <?php SDH_Muhely_Csapat::beallitas_doboz(); ?>
+
                 <?php SDH_Muhely_Admin_UI::csempek_doboz(); ?>
 
                 <div class="sdh-doboz">
@@ -178,6 +180,7 @@ final class SDH_Muhely_Beallitasok
         SDH_Muhely_Szamla::beallitas_mentes();
         SDH_Muhely_Levelezes::beallitas_mentes();
         SDH_Muhely_Penztar::beallitas_mentes();
+        SDH_Muhely_Csapat::beallitas_mentes();
         SDH_Muhely_Admin_UI::csempek_mentes();
 
         wp_safe_redirect(SDH_Muhely_Modulok::admin_url(self::KULCS, ['uzenet' => 'mentve']));

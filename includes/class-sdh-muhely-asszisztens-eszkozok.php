@@ -170,7 +170,7 @@ final class SDH_Muhely_Asszisztens_Eszkozok
             ],
             'csapat_uzenet' => [
                 'szint' => 'hozzaad', 'cim' => 'Csapatüzenet küldése',
-                'leiras' => 'Belső üzenetet küld a felhasználó nevében (jelölve, hogy AI-val írták) kollégának, csoportnak vagy mindenkinek. Jóváhagyás kell.',
+                'leiras' => 'Belső üzenetet küld a felhasználó nevében (jelölve, hogy AI-val írták) kollégának, csoportnak vagy mindenkinek. Ha a Csapat üzenőfal módban van, cetlit tesz a falra (egy címzett név vagy „mindenki"). Jóváhagyás kell.',
                 'schema' => $obj([
                     'cimzettek' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'Kollégák neve, „csoport:Név", vagy „mindenki".'],
                     'szoveg'    => $sz('Az üzenet.'),
@@ -804,8 +804,29 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 ];
 
             case 'csapat_uzenet':
-                $cimzettek = self::cimzettek((array) ($p['cimzettek'] ?? []));
                 $szoveg = trim(sanitize_textarea_field((string) ($p['szoveg'] ?? '')));
+
+                // Üzenőfal módban cetli kerül a falra (kinek szól: egy név vagy mindenki).
+                if (SDH_Muhely_Csapat::egyszeru()) {
+                    if ($szoveg === '') {
+                        return 'Üres az üzenet.';
+                    }
+
+                    $kinek = self::fal_cimzett((array) ($p['cimzettek'] ?? []));
+
+                    if ($kinek === null) {
+                        return 'Nincs ilyen név a fal névlistájában: ' . implode(', ', array_map('strval', (array) ($p['cimzettek'] ?? []))) . ' (nevek: ' . implode(', ', SDH_Muhely_Csapat::fal_nevek()) . ')';
+                    }
+
+                    return [
+                        'leiras'     => 'Cetli a falra: ' . SDH_Muhely_Csapat::beallitas()['fal_nev'],
+                        'valtozasok' => [['mezo' => 'Kinek', 'regi' => '', 'uj' => $kinek !== '' ? $kinek : 'Mindenkinek'], ['mezo' => 'Üzenet', 'regi' => '', 'uj' => $szoveg]],
+                        'tabla'      => 'csapat_cetli', 'rekord_id' => 0,
+                        'parameterek' => ['fal' => 1, 'kinek' => $kinek, 'szoveg' => mb_substr($szoveg, 0, 2000)],
+                    ];
+                }
+
+                $cimzettek = self::cimzettek((array) ($p['cimzettek'] ?? []));
 
                 if (is_string($cimzettek)) {
                     return $cimzettek;
@@ -938,6 +959,35 @@ final class SDH_Muhely_Asszisztens_Eszkozok
     }
 
     /**
+     * Üzenőfal: a címzett neve a fal névlistájából ('' = mindenkinek, null = nincs ilyen).
+     *
+     * @param array<int, mixed> $nevek
+     */
+    private static function fal_cimzett(array $nevek): ?string
+    {
+        $norm = static fn (string $s): string => strtolower(remove_accents(trim($s)));
+        $n = $norm((string) ($nevek[0] ?? 'mindenki'));
+
+        if ($n === '' || in_array($n, ['mindenki', 'mindenkinek', 'all'], true)) {
+            return '';
+        }
+
+        $talalt = [];
+
+        foreach (SDH_Muhely_Csapat::fal_nevek() as $nev) {
+            if ($norm($nev) === $n) {
+                return $nev;
+            }
+
+            if (strpos($norm($nev), $n) !== false) {
+                $talalt[] = $nev;
+            }
+        }
+
+        return count($talalt) === 1 ? $talalt[0] : null;
+    }
+
+    /**
      * Végrehajtás (a jóváhagyás után). Az előtte-mentést a hívó készíti.
      *
      * @param array<string, mixed> $p A javaslat parameterek mezője.
@@ -998,6 +1048,12 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 return ['eredmeny' => 'Az ár átírva: ' . self::penz($p['ar']) . '.', 'rekord_id' => (int) $p['id'], 'tabla' => 'szolgaltatas'];
 
             case 'csapat_uzenet':
+                if (!empty($p['fal'])) {
+                    $id = SDH_Muhely_Csapat::cetli_letrehoz(['szoveg' => (string) $p['szoveg'], 'kinek' => (string) $p['kinek'], 'forras' => 'ai']);
+
+                    return $id > 0 ? ['eredmeny' => 'A cetli felkerült a falra.', 'rekord_id' => $id, 'tabla' => 'csapat_cetli'] : 'A cetli mentése nem sikerült.';
+                }
+
                 $besz = SDH_Muhely_Csapat::besz_cimzettekbol((array) $p['cimzett'], $felhasznalo);
 
                 if (is_string($besz)) {
@@ -1054,6 +1110,12 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 $wpdb->update(self::tabla('csapat_uzenet'), ['torolve' => 1, 'kituzve' => 0, 'modositva' => current_time('mysql')], ['id' => $id]);
 
                 return 'Az üzenet visszavonva.';
+            }
+
+            if ($tabla === 'csapat_cetli') {
+                $wpdb->update(self::tabla('csapat_cetli'), ['torolve' => 1, 'modositva' => current_time('mysql')], ['id' => $id]);
+
+                return 'A cetli lekerült a falról.';
             }
 
             if ($tabla === 'ai_tudas') {

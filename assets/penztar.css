@@ -2413,3 +2413,16 @@ input.sdh-pt-osszeg {
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+
+/* 0.39: minden cella függőlegesen középre, a számok (összegek, sorszám) balra
+   igazítva, a fejlécük is – így az oszlop minden sora egy vonalban kezdődik,
+   a kétsoros leírás mellett sem csúszik el semmi. */
+.sdh-pt-tabla th,
+.sdh-pt-tabla td {
+    vertical-align: middle;
+}
+
+.sdh-pt-tabla .sdh-pt-c-szam,
+.sdh-pt-tabla .sdh-pt-c-ssz {
+    text-align: left !important;
+}

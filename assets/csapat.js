@@ -1021,6 +1021,166 @@
     }
 
     /* ================================================================ */
+    /* 3. Üzenőfal (egyfelhasználós mód): cetlik áthúzása, szűrés        */
+    /* ================================================================ */
+
+    var fal = document.querySelector('[data-sdh-fal]');
+
+    if (fal) {
+        uzenofal(fal);
+    }
+
+    function uzenofal(f) {
+        var archiv = f.classList.contains('sdh-fal-archiv');
+        var maxZ = 0;
+
+        Array.prototype.forEach.call(f.querySelectorAll('.sdh-cetli'), function (c) {
+            maxZ = Math.max(maxZ, parseInt(c.style.zIndex, 10) || 0);
+        });
+
+        function helyMent(cetlik) {
+            var adat = {};
+
+            cetlik.forEach(function (c) {
+                adat['hely[' + c.getAttribute('data-cetli') + ']'] =
+                    parseFloat(c.style.left).toFixed(2) + ',' + parseFloat(c.style.top).toFixed(2) + ',' + (parseInt(c.style.zIndex, 10) || 0);
+            });
+
+            return kerdes('cetli_hely', adat, true).catch(function () {});
+        }
+
+        /* Áthúzás a fejlécnél fogva (egérrel és érintéssel is). */
+        if (!archiv) {
+            f.addEventListener('pointerdown', function (ev) {
+                var fogo = ev.target.closest('[data-cetli-fogo]');
+
+                if (!fogo || ev.target.closest('button') || ev.button > 0) {
+                    return;
+                }
+
+                var c = fogo.closest('.sdh-cetli');
+                var r = f.getBoundingClientRect();
+                var cr = c.getBoundingClientRect();
+                var dx = ev.clientX - cr.left;
+                var dy = ev.clientY - cr.top;
+                var mozdult = false;
+
+                ev.preventDefault();
+                maxZ += 1;
+                c.style.zIndex = String(maxZ);
+                c.classList.add('is-huzva');
+                fogo.setPointerCapture(ev.pointerId);
+
+                function mozog(e) {
+                    mozdult = true;
+
+                    var x = (e.clientX - r.left - dx) / r.width * 100;
+                    var y = (e.clientY - r.top - dy) / r.height * 100;
+                    var maxX = 100 - cr.width / r.width * 100;
+                    var maxY = 100 - cr.height / r.height * 100;
+
+                    c.style.left = Math.max(0, Math.min(maxX, x)).toFixed(2) + '%';
+                    c.style.top = Math.max(0, Math.min(maxY, y)).toFixed(2) + '%';
+                }
+
+                function vege() {
+                    fogo.removeEventListener('pointermove', mozog);
+                    fogo.removeEventListener('pointerup', vege);
+                    fogo.removeEventListener('pointercancel', vege);
+                    c.classList.remove('is-huzva');
+                    helyMent([c]);
+
+                    if (!mozdult) {
+                        return;
+                    }
+                }
+
+                fogo.addEventListener('pointermove', mozog);
+                fogo.addEventListener('pointerup', vege);
+                fogo.addEventListener('pointercancel', vege);
+            });
+        }
+
+        /* Kész / levétel / visszatevés. */
+        f.addEventListener('click', function (ev) {
+            var g = ev.target.closest('[data-cetli-muvelet]');
+
+            if (!g) {
+                return;
+            }
+
+            var c = g.closest('.sdh-cetli');
+            var id = c.getAttribute('data-cetli');
+            var m = g.getAttribute('data-cetli-muvelet');
+
+            if (m === 'kesz') {
+                kerdes('cetli_kesz', { id: id }, true).then(function (d) {
+                    c.classList.toggle('is-kesz', !!d.kesz);
+                }).catch(function (h) { window.alert(h.message); });
+
+                return;
+            }
+
+            // Levétel: második kattintásra (a gomb pirosra vált).
+            if (m === 'levesz' && !g.classList.contains('is-biztos')) {
+                g.classList.add('is-biztos');
+                g.title = 'Még egy kattintás: levétel a falról';
+                window.setTimeout(function () { g.classList.remove('is-biztos'); }, 3500);
+
+                return;
+            }
+
+            kerdes('cetli_levesz', { id: id, vissza: m === 'vissza' ? '1' : '0' }, true).then(function () {
+                c.classList.add('is-eltunik');
+                window.setTimeout(function () { c.remove(); }, 260);
+            }).catch(function (h) { window.alert(h.message); });
+        });
+
+        /* Szűrés: kinek szól. */
+        var szuro = document.querySelector('[data-sdh-fal-szuro]');
+
+        if (szuro) {
+            szuro.addEventListener('click', function (ev) {
+                var p = ev.target.closest('[data-szuro]');
+
+                if (!p) {
+                    return;
+                }
+
+                var ki = p.getAttribute('data-szuro');
+
+                Array.prototype.forEach.call(szuro.querySelectorAll('[data-szuro]'), function (x) { x.classList.toggle('is-aktiv', x === p); });
+                Array.prototype.forEach.call(f.querySelectorAll('.sdh-cetli'), function (c) {
+                    var kinek = c.getAttribute('data-kinek');
+                    // Egy kolléga szűrője a neki szólókat és a mindenkinek szólókat mutatja.
+                    c.hidden = !(ki === '' || (ki === '__mindenki' ? kinek === '' : (kinek === ki || kinek === '')));
+                });
+            });
+        }
+
+        /* Rendezés: a látható cetlik rácsba állnak (öt oszlop), és mentődnek. */
+        var rendez = document.querySelector('[data-sdh-fal-rendez]');
+
+        if (rendez) {
+            rendez.addEventListener('click', function () {
+                var lathato = Array.prototype.filter.call(f.querySelectorAll('.sdh-cetli'), function (c) { return !c.hidden; });
+                var r = f.getBoundingClientRect();
+                var oszlop = Math.max(1, Math.floor(r.width / 236));
+                var szel = 100 / oszlop;
+                var sorMag = lathato.length ? (lathato[0].offsetHeight + 16) / r.height * 100 : 30;
+
+                lathato.forEach(function (c, i) {
+                    c.style.left = (0.6 + (i % oszlop) * szel).toFixed(2) + '%';
+                    c.style.top = Math.min(90, 1 + Math.floor(i / oszlop) * sorMag).toFixed(2) + '%';
+                    c.style.zIndex = String(i + 1);
+                });
+                maxZ = lathato.length;
+                helyMent(lathato);
+            });
+        }
+    }
+
+    /* ================================================================ */
     /* Indulás                                                           */
     /* ================================================================ */
 

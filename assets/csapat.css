@@ -1408,3 +1408,249 @@ dialog.sdh-cs-fontos::backdrop {
         display: none !important;
     }
 }
+
+/* ================================================================== */
+/* Üzenőfal (0.39) – cetlik, mint a Windows Öntapadó jegyzetei         */
+/* ================================================================== */
+
+:root {
+    --sdh-cetli-sarga: #fff3a3;
+    --sdh-cetli-rozsa: #ffd1e3;
+    --sdh-cetli-zold: #c9f2c7;
+    --sdh-cetli-kek: #cde6ff;
+    --sdh-cetli-lila: #e2d4ff;
+    --sdh-cetli-narancs: #ffdcb5;
+    --sdh-cetli-szoveg: #1d2127;
+    --sdh-cetli-halvany: rgba(29, 33, 39, .58);
+    --sdh-fal-pont: color-mix(in srgb, var(--sdh-szoveg) 9%, transparent);
+}
+
+:root[data-theme="dark"] {
+    --sdh-cetli-sarga: #5b5320;
+    --sdh-cetli-rozsa: #5c2c41;
+    --sdh-cetli-zold: #2a4d2c;
+    --sdh-cetli-kek: #233f5e;
+    --sdh-cetli-lila: #3d2f62;
+    --sdh-cetli-narancs: #5e3b1c;
+    --sdh-cetli-szoveg: #f1f2f4;
+    --sdh-cetli-halvany: rgba(241, 242, 244, .6);
+}
+
+.sdh-fal-sav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 12px;
+}
+
+.sdh-fal-sav button.sdh-cs-pill {
+    padding-left: 12px;
+    font: inherit;
+    font-size: 13px;
+}
+
+.sdh-fal {
+    position: relative;
+    isolation: isolate;
+    height: calc(100vh - 320px);
+    min-height: 480px;
+    overflow: hidden;
+    border: 1px solid var(--sdh-uveg-keret);
+    border-radius: 20px;
+    background-color: var(--sdh-uveg);
+    background-image: radial-gradient(var(--sdh-fal-pont) 1.2px, transparent 1.4px);
+    background-size: 22px 22px;
+    backdrop-filter: blur(16px);
+    box-shadow: var(--sdh-uveg-arnyek), inset 0 0 60px color-mix(in srgb, var(--sdh-neon) 6%, transparent);
+}
+
+.sdh-fal__ures {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    color: var(--sdh-halvany);
+}
+
+.sdh-cetli {
+    --c: var(--sdh-cetli-sarga);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    min-height: 150px;
+    max-height: 46%;
+    overflow: hidden;
+    border-radius: 4px 4px 14px 4px;
+    background: var(--c);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .08), 0 10px 24px rgba(16, 19, 23, .16), 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 8%);
+    color: var(--sdh-cetli-szoveg);
+    transition: box-shadow .2s ease, transform .2s ease, opacity .25s ease;
+}
+
+.sdh-cetli:nth-child(3n + 1) { transform: rotate(-.8deg); }
+.sdh-cetli:nth-child(3n + 2) { transform: rotate(.6deg); }
+
+.sdh-cetli:hover,
+.sdh-cetli.is-huzva {
+    transform: none;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .08), 0 18px 40px rgba(16, 19, 23, .22), 0 0 0 1px color-mix(in srgb, var(--sdh-neon) 50%, transparent), 0 0 24px color-mix(in srgb, var(--sdh-neon) 25%, transparent);
+}
+
+.sdh-cetli.is-huzva {
+    opacity: .92;
+    cursor: grabbing;
+}
+
+.sdh-cetli.is-eltunik {
+    opacity: 0;
+    transform: scale(.9);
+}
+
+.sdh-cetli[hidden] {
+    display: none;
+}
+
+.sdh-cetli--sarga { --c: var(--sdh-cetli-sarga); }
+.sdh-cetli--rozsa { --c: var(--sdh-cetli-rozsa); }
+.sdh-cetli--zold { --c: var(--sdh-cetli-zold); }
+.sdh-cetli--kek { --c: var(--sdh-cetli-kek); }
+.sdh-cetli--lila { --c: var(--sdh-cetli-lila); }
+.sdh-cetli--narancs { --c: var(--sdh-cetli-narancs); }
+
+.sdh-cetli__fej {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 6px 6px 10px;
+    background: color-mix(in srgb, var(--c) 82%, #000 8%);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.sdh-cetli__kinek {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sdh-cetli__gombok {
+    display: flex;
+    gap: 2px;
+    opacity: .55;
+    transition: opacity .15s ease;
+}
+
+.sdh-cetli:hover .sdh-cetli__gombok,
+.sdh-cetli:focus-within .sdh-cetli__gombok {
+    opacity: 1;
+}
+
+.sdh-cetli__gombok button {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sdh-cetli-szoveg);
+    cursor: pointer;
+}
+
+.sdh-cetli__gombok button:hover {
+    background: color-mix(in srgb, var(--sdh-cetli-szoveg) 12%, transparent);
+}
+
+.sdh-cetli__gombok button.is-biztos {
+    background: var(--sdh-hiba);
+    color: #fff;
+}
+
+.sdh-cetli__gombok svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-cetli__szoveg {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    padding: 10px 12px 6px;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.sdh-cetli.is-kesz .sdh-cetli__szoveg {
+    color: var(--sdh-cetli-halvany);
+    text-decoration: line-through;
+}
+
+.sdh-cetli__lab {
+    padding: 0 12px 9px;
+    color: var(--sdh-cetli-halvany);
+    font-size: 11.5px;
+}
+
+/* Levett cetlik: rács, nem szabad elhelyezés. */
+.sdh-fal-archiv {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.sdh-fal-archiv .sdh-cetli {
+    position: relative;
+    width: auto;
+    max-height: none;
+    opacity: .85;
+}
+
+.sdh-fal-archiv .sdh-cetli__fej {
+    cursor: default;
+}
+
+/* Színminta a cetli-popup pilljében. */
+.sdh-cetli-minta {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: var(--c);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 12%);
+}
+
+@media (max-width: 900px) {
+    .sdh-fal {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .sdh-fal .sdh-cetli {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        width: auto;
+        max-height: none;
+    }
+}

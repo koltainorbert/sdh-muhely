@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.26.0';
+    public const DB_VERSION = '0.27.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -119,6 +119,7 @@ final class SDH_Muhely_Schema
         $cs_nyugta    = self::tabla('csapat_nyugta');
         $cs_csoport   = self::tabla('csapat_csoport');
         $cs_cstag     = self::tabla('csapat_csoport_tag');
+        $cs_cetli     = self::tabla('csapat_cetli');
         $ai_uzenet    = self::tabla('ai_uzenet');
         $ai_muvelet   = self::tabla('ai_muvelet');
         $ai_tudas     = self::tabla('ai_tudas');
@@ -889,6 +890,35 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             unique key csoport_user (csoport_id,user_id),
             key user_id (user_id)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Csapat – üzenőfal (0.39, egyfelhasználós mód)
+         *
+         * Cetlik a falon (mint a Windows Öntapadó jegyzetei): "kinek" a
+         * kolléga neve (a Beállításokban megadott névlistából), üres =
+         * mindenkinek; "kitol" ki írta; "x" / "y" a helye a fal szélességének
+         * / magasságának százalékában, "z" a rétegsorrend. "kesz" = elintézve
+         * (áthúzva), "torolve" = levéve a falról (archívum, visszatehető).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$cs_cetli} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            szoveg text NULL,
+            kinek varchar(120) NOT NULL default '',
+            kitol varchar(120) NOT NULL default '',
+            szin varchar(20) NOT NULL default 'sarga',
+            x decimal(6,2) NOT NULL default 0.00,
+            y decimal(6,2) NOT NULL default 0.00,
+            z int(11) NOT NULL default 0,
+            kesz tinyint(1) NOT NULL default 0,
+            torolve tinyint(1) NOT NULL default 0,
+            forras varchar(20) NOT NULL default 'kezi',
+            letrehozo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            PRIMARY KEY  (id),
+            key torolve (torolve),
+            key kinek (kinek)
         ) {$charset};";
 
         /* ----------------------------------------------------------

@@ -39,6 +39,19 @@ final class SDH_Muhely_Csapat
     /** A kollégák és csoportok listájának egy oldala. */
     private const LISTA_OLDAL = 12;
 
+    /** A Csapat beállításai (mód, a fal neve, a névlista). */
+    private const OPTION = 'sdh_muhely_csapat';
+
+    /** A cetlik színei (a CSS-ben: .sdh-cetli--<név>). */
+    public const CETLI_SZINEK = [
+        'sarga'   => 'Sárga',
+        'rozsa'   => 'Rózsaszín',
+        'zold'    => 'Zöld',
+        'kek'     => 'Kék',
+        'lila'    => 'Lila',
+        'narancs' => 'Narancs',
+    ];
+
     /** A kolléga színei (a CSS-ben: --sdh-cs-av-<név>). */
     public const SZINEK = [
         'kek'     => 'Kék',
@@ -73,6 +86,12 @@ final class SDH_Muhely_Csapat
             'csapatkollega_ment'  => 'ajax_kollega_ment',
             'csapatcsoport_urlap' => 'ajax_csoport_urlap',
             'csapatcsoport_ment'  => 'ajax_csoport_ment',
+            // Üzenőfal (egyfelhasználós mód).
+            'csapatcetli_urlap'   => 'ajax_cetli_urlap',
+            'csapatcetli_ment'    => 'ajax_cetli_ment',
+            'cetli_hely'          => 'ajax_cetli_hely',
+            'cetli_kesz'          => 'ajax_cetli_kesz',
+            'cetli_levesz'        => 'ajax_cetli_levesz',
         ];
 
         foreach ($muveletek as $nev => $fuggveny) {
@@ -89,11 +108,119 @@ final class SDH_Muhely_Csapat
 
         SDH_Muhely_Modulok::regisztral([
             'kulcs'   => self::KULCS,
-            'cim'     => 'Csapat',
+            'cim'     => self::egyszeru() ? self::beallitas()['fal_nev'] : 'Csapat',
             'render'  => [self::class, 'oldal'],
             'sorrend' => 34,
             'jelveny' => [self::class, 'olvasatlan_db'],
         ]);
+    }
+
+    /* =================================================================
+     * Beállítás: többfelhasználós csevegés vagy üzenőfal
+     * ============================================================== */
+
+    /**
+     * mod: multi = minden kollégának saját fiókja van, személyes és csoportos
+     * beszélgetésekkel; single = egy közös fiókot használ a cég, ezért nincs
+     * „ki kinek írt" titok: a Csapat egy üzenőfal cetlikkel (kinek szól,
+     * ki írta). A névlista a single mód kollégái (fiók nélkül).
+     *
+     * @return array{mod: string, fal_nev: string, nevek: array<int, string>}
+     */
+    public static function beallitas(): array
+    {
+        $b = get_option(self::OPTION, []);
+        $b = is_array($b) ? $b : [];
+        $nevek = [];
+
+        foreach (preg_split('/\R/u', (string) ($b['nevek'] ?? '')) ?: [] as $n) {
+            $n = mb_substr(trim(sanitize_text_field($n)), 0, 60);
+
+            if ($n !== '' && !in_array($n, $nevek, true)) {
+                $nevek[] = $n;
+            }
+        }
+
+        return [
+            'mod'     => ($b['mod'] ?? 'multi') === 'single' ? 'single' : 'multi',
+            'fal_nev' => trim((string) ($b['fal_nev'] ?? '')) !== '' ? mb_substr((string) $b['fal_nev'], 0, 40) : 'Üzenőfal',
+            'nevek'   => $nevek,
+        ];
+    }
+
+    /** Egyfelhasználós (üzenőfal) mód-e. */
+    public static function egyszeru(): bool
+    {
+        return self::beallitas()['mod'] === 'single';
+    }
+
+    /**
+     * A fal kollégái: a megadott névlista, ha üres, a fiókok nevei.
+     *
+     * @return array<int, string>
+     */
+    public static function fal_nevek(): array
+    {
+        $nevek = self::beallitas()['nevek'];
+
+        if ($nevek === []) {
+            foreach (self::kollegak() as $k) {
+                $nevek[] = $k['nev'];
+            }
+        }
+
+        return $nevek;
+    }
+
+    /** Doboz a Beállítások oldalra. */
+    public static function beallitas_doboz(): void
+    {
+        $b = self::beallitas();
+
+        ?>
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Csapat – üzenetek</h2>
+            <p class="sdh-sugo">
+                <strong>Többfelhasználós csevegés:</strong> minden kollégának saját belépése van; személyes, csoportos és
+                mindenkinek szóló beszélgetések, fontos üzenet felugró ablakban. <strong>Üzenőfal:</strong> ha a cég egy
+                közös fiókkal használja a rendszert, a csevegés értelmetlen (mindenki mindent lát) – helyette egy fal
+                cetlikkel, mint a Windows Öntapadó jegyzetei: minden cetlin ott áll, kinek szól és ki írta.
+            </p>
+            <div class="sdh-cs-pillek" style="margin-bottom:1rem">
+                <?php foreach (['multi' => 'Többfelhasználós csevegés', 'single' => 'Üzenőfal (egy közös fiók)'] as $k => $c) : ?>
+                    <label class="sdh-cs-pill<?php echo $b['mod'] === $k ? ' is-aktiv' : ''; ?>">
+                        <input type="radio" name="csapat_mod" value="<?php echo esc_attr($k); ?>"<?php checked($b['mod'], $k); ?>><span><?php echo esc_html($c); ?></span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="csapat_fal_nev">Az üzenőfal neve (ez látszik a menüben)</label>
+                    <input type="text" name="csapat_fal_nev" id="csapat_fal_nev" maxlength="40" value="<?php echo esc_attr($b['fal_nev']); ?>" autocomplete="off">
+                </div>
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="csapat_nevek">Kollégák az üzenőfalhoz (soronként egy név)</label>
+                    <textarea name="csapat_nevek" id="csapat_nevek" rows="4" class="sdh-kod"><?php echo esc_textarea(implode("\n", $b['nevek'])); ?></textarea>
+                    <span class="sdh-mezo__sugo">Belépés nélküli nevek: ezek közül választod, kinek szól a cetli és ki írta. Üresen a felhasználói fiókok nevei jelennek meg.</span>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    public static function beallitas_mentes(): void
+    {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- a Beállítások mentése ellenőrzi.
+        if (!isset($_POST['csapat_mod'])) {
+            return;
+        }
+
+        update_option(self::OPTION, [
+            'mod'     => sanitize_key(wp_unslash((string) $_POST['csapat_mod'])) === 'single' ? 'single' : 'multi',
+            'fal_nev' => isset($_POST['csapat_fal_nev']) ? mb_substr(sanitize_text_field(wp_unslash((string) $_POST['csapat_fal_nev'])), 0, 40) : '',
+            'nevek'   => isset($_POST['csapat_nevek']) ? sanitize_textarea_field(wp_unslash((string) $_POST['csapat_nevek'])) : '',
+        ]);
+        // phpcs:enable
     }
 
     /* =================================================================
@@ -181,6 +308,28 @@ final class SDH_Muhely_Csapat
         if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
+    }
+
+    /**
+     * Melyik felületről jött a kérés (frontend / admin) – a mentés utáni
+     * „vissza" cím ehhez igazodik. A popup-űrlap rejtett mezőben hozza.
+     */
+    public static function kontextus_be(): void
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification -- csak a visszatérési címet választja.
+        $k = isset($_REQUEST['kontextus']) ? sanitize_key(wp_unslash((string) $_REQUEST['kontextus'])) : 'frontend';
+        SDH_Muhely_Modulok::kontextus_beallit($k === 'admin' ? 'admin' : 'frontend');
+    }
+
+    /** Rejtett mező az űrlapba: honnan nyílt a popup. */
+    public static function kontextus_mezo(): void
+    {
+        // Popupban (AJAX) a kérés hozza a felületet; oldalba ágyazva a futó kontextus a jó.
+        if (wp_doing_ajax()) {
+            self::kontextus_be();
+        }
+
+        printf('<input type="hidden" name="kontextus" value="%s">', esc_attr(SDH_Muhely_Modulok::kontextus()));
     }
 
     private static function admin_jog(): void
@@ -838,6 +987,10 @@ final class SDH_Muhely_Csapat
     /** Az oldalmenü jelvénye: a felhasználó összes olvasatlan üzenete. */
     public static function olvasatlan_db(): int
     {
+        if (self::egyszeru()) {
+            return 0;
+        }
+
         $en = get_current_user_id();
 
         return $en > 0 ? array_sum(self::olvasatlanok($en, self::elerheto($en))) : 0;
@@ -1212,6 +1365,7 @@ final class SDH_Muhely_Csapat
     public static function ajax_kuld(): void
     {
         self::jog();
+        self::kontextus_be();
 
         $en     = get_current_user_id();
         $szoveg = self::szoveg_be('szoveg');
@@ -1374,6 +1528,12 @@ final class SDH_Muhely_Csapat
 
         $en    = get_current_user_id();
         $utana = (int) self::g('utana', 20);
+
+        // Üzenőfal módban nincs csevegés: csak a többi modul (asszisztens) adata megy.
+        if (self::egyszeru()) {
+            wp_send_json_success(apply_filters('sdh_muhely_pulzus', ['olvasatlan' => 0, 'max' => 0, 'uj' => [], 'fontos' => [], 'csapatUrl' => SDH_Muhely_Modulok::url(self::KULCS)], $en));
+        }
+
         $idk   = self::elerheto($en);
 
         // Jelenlét: legfeljebb percenként írunk.
@@ -1458,6 +1618,12 @@ final class SDH_Muhely_Csapat
     public static function oldal(): void
     {
         SDH_Muhely_Admin_UI::jog_ellenoriz();
+
+        if (self::egyszeru()) {
+            self::fal_oldal();
+
+            return;
+        }
 
         $admin = SDH_Muhely_Admin_UI::admin_e();
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -1728,6 +1894,7 @@ final class SDH_Muhely_Csapat
         ?>
         <form class="sdh-urlap sdh-cs-urlap" data-sdh-ajax-action="sdh_muhely_csapat_kuld" novalidate>
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php self::kontextus_mezo(); ?>
             <h2 class="sdh-modal__cim">Új üzenet</h2>
 
             <div class="sdh-ig">
@@ -1789,6 +1956,7 @@ final class SDH_Muhely_Csapat
         ?>
         <form class="sdh-urlap sdh-cs-urlap" data-sdh-ajax-action="sdh_muhely_csapatkollega_ment" novalidate>
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php self::kontextus_mezo(); ?>
             <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
             <h2 class="sdh-modal__cim"><?php echo $k ? esc_html($k['nev']) : 'Új kolléga'; ?></h2>
 
@@ -1859,6 +2027,7 @@ final class SDH_Muhely_Csapat
     public static function ajax_kollega_ment(): void
     {
         self::admin_jog();
+        self::kontextus_be();
 
         global $wpdb;
 
@@ -2024,6 +2193,7 @@ final class SDH_Muhely_Csapat
         ?>
         <form class="sdh-urlap sdh-cs-urlap" data-sdh-ajax-action="sdh_muhely_csapatcsoport_ment" novalidate>
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php self::kontextus_mezo(); ?>
             <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
             <h2 class="sdh-modal__cim"><?php echo $cs ? esc_html((string) $cs->nev) : 'Új csoport'; ?></h2>
 
@@ -2068,6 +2238,7 @@ final class SDH_Muhely_Csapat
     public static function ajax_csoport_ment(): void
     {
         self::admin_jog();
+        self::kontextus_be();
 
         global $wpdb;
 
@@ -2119,5 +2290,308 @@ final class SDH_Muhely_Csapat
             'id'     => $id,
             'vissza' => SDH_Muhely_Modulok::url(self::KULCS, ['nezet' => 'csoportok', 'uzenet' => 'mentve']),
         ]);
+    }
+
+    /* =================================================================
+     * Üzenőfal (egyfelhasználós mód)
+     * ============================================================== */
+
+    private static function cetli(int $id): ?object
+    {
+        global $wpdb;
+
+        return $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::t('cetli') . ' WHERE id = %d', $id)) ?: null;
+    }
+
+    /**
+     * Új cetli (a felületről és az AI-asszisztensből).
+     *
+     * @param array{szoveg: string, kinek?: string, kitol?: string, szin?: string, forras?: string} $adat
+     */
+    public static function cetli_letrehoz(array $adat): int
+    {
+        global $wpdb;
+
+        $t  = self::t('cetli');
+        $db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$t} WHERE torolve = 0"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $z  = (int) $wpdb->get_var("SELECT MAX(z) FROM {$t}"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $szin = (string) ($adat['szin'] ?? 'sarga');
+
+        // Az új cetli a következő szabad rácshelyre kerül (öt oszlop).
+        $wpdb->insert($t, [
+            'szoveg'     => mb_substr(trim((string) $adat['szoveg']), 0, 2000),
+            'kinek'      => mb_substr((string) ($adat['kinek'] ?? ''), 0, 120),
+            'kitol'      => mb_substr((string) ($adat['kitol'] ?? ''), 0, 120),
+            'szin'       => isset(self::CETLI_SZINEK[$szin]) ? $szin : 'sarga',
+            'x'          => 1 + ($db % 5) * 19.6,
+            'y'          => 2 + (int) floor(($db % 15) / 5) * 31,
+            'z'          => $z + 1,
+            'forras'     => sanitize_key((string) ($adat['forras'] ?? 'kezi')),
+            'letrehozo'  => get_current_user_id(),
+            'letrehozva' => self::most(),
+            'modositva'  => self::most(),
+        ]);
+
+        return (int) $wpdb->insert_id;
+    }
+
+    private static function cetli_html(object $c, bool $archiv = false): string
+    {
+        $kinek = (string) $c->kinek;
+        $ikon  = static fn (string $d): string => '<svg viewBox="0 0 20 20" aria-hidden="true">' . $d . '</svg>';
+
+        ob_start();
+        ?>
+        <article class="sdh-cetli sdh-cetli--<?php echo esc_attr((string) $c->szin); ?><?php echo (int) $c->kesz ? ' is-kesz' : ''; ?>"
+                 data-cetli="<?php echo (int) $c->id; ?>" data-kinek="<?php echo esc_attr($kinek); ?>"
+                 <?php if (!$archiv) : ?>style="left:<?php echo esc_attr((string) (float) $c->x); ?>%;top:<?php echo esc_attr((string) (float) $c->y); ?>%;z-index:<?php echo (int) $c->z + 1; ?>"<?php endif; ?>>
+            <header class="sdh-cetli__fej" data-cetli-fogo>
+                <span class="sdh-cetli__kinek"><?php echo $kinek !== '' ? '→ ' . esc_html($kinek) : 'Mindenkinek'; ?></span>
+                <span class="sdh-cetli__gombok">
+                    <?php if ($archiv) : ?>
+                        <button type="button" data-cetli-muvelet="vissza" title="Visszatesz a falra" aria-label="Visszatesz a falra"><?php echo $ikon('<path d="M6 6h6.5a4 4 0 0 1 0 8H8"/><path d="M8.5 3.5 6 6l2.5 2.5"/>'); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+                    <?php else : ?>
+                        <button type="button" data-cetli-muvelet="kesz" title="<?php echo (int) $c->kesz ? 'Mégsincs kész' : 'Elintézve'; ?>" aria-label="Elintézve"><?php echo $ikon('<path d="m4.5 10.5 3.5 3.5 7.5-8"/>'); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+                        <button type="button" data-sdh-urlap="csapatcetli" data-sdh-id="<?php echo (int) $c->id; ?>" title="Szerkesztés" aria-label="Szerkesztés"><?php echo $ikon('<path d="M13.5 3.8 16.2 6.5 7.6 15.1 4.3 15.7 4.9 12.4z"/>'); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+                        <button type="button" data-cetli-muvelet="levesz" title="Levétel a falról" aria-label="Levétel a falról"><?php echo $ikon('<path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/>'); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+                    <?php endif; ?>
+                </span>
+            </header>
+            <div class="sdh-cetli__szoveg"><?php echo nl2br(esc_html((string) $c->szoveg)); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+            <footer class="sdh-cetli__lab">
+                <?php echo (string) $c->kitol !== '' ? esc_html((string) $c->kitol) . ' · ' : ''; ?><?php echo esc_html(self::ido_szoveg((string) $c->letrehozva)); ?><?php echo (string) $c->forras === 'ai' ? ' · AI' : ''; ?>
+            </footer>
+        </article>
+        <?php
+
+        return (string) ob_get_clean();
+    }
+
+    private static function fal_oldal(): void
+    {
+        global $wpdb;
+
+        $b      = self::beallitas();
+        $t      = self::t('cetli');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $archiv = isset($_GET['nezet']) && sanitize_key(wp_unslash($_GET['nezet'])) === 'archiv';
+        $nevek  = self::fal_nevek();
+
+        ?>
+        <div class="sdh-wrap sdh-cs sdh-fal-oldal" data-sdh-fal-oldal>
+            <?php
+            SDH_Muhely_Admin_UI::uzenet();
+
+            $gombok = [['cimke' => '+ Új cetli', 'url' => '#', 'elsodleges' => true, 'adatok' => ['sdh-urlap' => 'csapatcetli', 'sdh-id' => '0']]];
+
+            SDH_Muhely_Admin_UI::fejlec(
+                $b['fal_nev'],
+                'Hagyj üzenetet a falon – mint egy öntapadó cetlit. Minden cetlin ott áll, kinek szól és ki írta; a cetlik szabadon áthúzhatók.',
+                $gombok
+            );
+            ?>
+
+            <nav class="sdh-cs-fulek" aria-label="Üzenőfal nézetek">
+                <a class="sdh-cs-ful<?php echo $archiv ? '' : ' is-aktiv'; ?>" href="<?php echo esc_url(SDH_Muhely_Modulok::url(self::KULCS)); ?>">A fal</a>
+                <a class="sdh-cs-ful<?php echo $archiv ? ' is-aktiv' : ''; ?>" href="<?php echo esc_url(SDH_Muhely_Modulok::url(self::KULCS, ['nezet' => 'archiv'])); ?>">Levett cetlik</a>
+            </nav>
+
+            <?php if ($archiv) : ?>
+                <?php
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $sorok = $wpdb->get_results("SELECT * FROM {$t} WHERE torolve = 1 ORDER BY modositva DESC LIMIT 60");
+                ?>
+                <?php if (!$sorok) : ?>
+                    <div class="sdh-doboz"><p class="sdh-sugo sdh-sugo--utolso">Nincs levett cetli.</p></div>
+                <?php else : ?>
+                    <div class="sdh-fal-archiv" data-sdh-fal>
+                        <?php foreach ($sorok as $c) { echo self::cetli_html($c, true); } // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                    </div>
+                <?php endif; ?>
+            <?php else : ?>
+                <?php
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $sorok = $wpdb->get_results("SELECT * FROM {$t} WHERE torolve = 0 ORDER BY z ASC, id ASC");
+                ?>
+                <div class="sdh-fal-sav">
+                    <div class="sdh-cs-pillek" data-sdh-fal-szuro role="radiogroup" aria-label="Kinek szól">
+                        <button type="button" class="sdh-cs-pill is-aktiv" data-szuro="">Mind (<?php echo count((array) $sorok); ?>)</button>
+                        <button type="button" class="sdh-cs-pill" data-szuro="__mindenki">Mindenkinek</button>
+                        <?php foreach ($nevek as $n) : ?>
+                            <button type="button" class="sdh-cs-pill" data-szuro="<?php echo esc_attr($n); ?>"><?php echo esc_html($n); ?></button>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-fal-rendez>Rendezés</button>
+                </div>
+                <div class="sdh-fal" data-sdh-fal>
+                    <?php foreach ((array) $sorok as $c) { echo self::cetli_html($c); } // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                    <?php if (!$sorok) : ?>
+                        <p class="sdh-fal__ures">Üres a fal. Hagyj üzenetet a „+ Új cetli" gombbal.</p>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /** Cetli popup: szöveg, kinek, ki írta, szín. */
+    public static function ajax_cetli_urlap(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            echo '<div class="sdh-uzenet sdh-uzenet--hiba">Nincs jogosultságod ehhez.</div>';
+            wp_die();
+        }
+
+        $id = (int) self::g('id', 20);
+        $c  = $id > 0 ? self::cetli($id) : null;
+        $nevek = self::fal_nevek();
+
+        $kinek = ['' => 'Mindenkinek'];
+        $kitol = ['' => '—'];
+
+        foreach ($nevek as $n) {
+            $kinek[$n] = $n;
+            $kitol[$n] = $n;
+        }
+
+        $szinek = [];
+
+        foreach (self::CETLI_SZINEK as $k => $nev) {
+            $szinek[$k] = ['cimke' => $nev, 'elo' => '<span class="sdh-cetli-minta sdh-cetli--' . esc_attr($k) . '"></span>'];
+        }
+
+        ?>
+        <form class="sdh-urlap sdh-cs-urlap" data-sdh-ajax-action="sdh_muhely_csapatcetli_ment" novalidate>
+            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
+            <?php self::kontextus_mezo(); ?>
+            <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
+            <h2 class="sdh-modal__cim"><?php echo $c ? 'Cetli szerkesztése' : 'Új cetli a falra'; ?></h2>
+
+            <div class="sdh-ig">
+                <label for="ct_szoveg">Üzenet <span class="sdh-kotelezo">*</span></label>
+                <textarea name="szoveg" id="ct_szoveg" rows="6" maxlength="2000" placeholder="pl. Hívd vissza Kovács urat a kijelző miatt!"><?php echo esc_textarea($c ? (string) $c->szoveg : ''); ?></textarea>
+            </div>
+            <div class="sdh-ig">
+                <span class="sdh-ig__cimke">Kinek szól</span>
+                <?php self::pillek('kinek', $kinek, [$c ? (string) $c->kinek : '']); ?>
+            </div>
+            <div class="sdh-ig">
+                <span class="sdh-ig__cimke">Ki írta</span>
+                <?php self::pillek('kitol', $kitol, [$c ? (string) $c->kitol : '']); ?>
+                <?php if ($nevek === []) : ?>
+                    <span class="sdh-mezo__sugo">A nevek listáját a Beállítások › Csapat – üzenetek alatt adhatod meg.</span>
+                <?php endif; ?>
+            </div>
+            <div class="sdh-ig">
+                <span class="sdh-ig__cimke">Szín</span>
+                <?php self::pillek('szin', $szinek, [$c ? (string) $c->szin : 'sarga']); ?>
+            </div>
+
+            <div class="sdh-urlap__lablec">
+                <button type="submit" class="sdh-gomb sdh-gomb--elsodleges"><?php echo $c ? 'Mentés' : 'Felteszem a falra'; ?></button>
+                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
+            </div>
+        </form>
+        <?php
+        wp_die();
+    }
+
+    public static function ajax_cetli_ment(): void
+    {
+        self::jog();
+        self::kontextus_be();
+
+        global $wpdb;
+
+        $id     = (int) self::g('id', 20);
+        $szoveg = self::szoveg_be('szoveg', 2000);
+        $nevek  = self::fal_nevek();
+        $kinek  = self::g('kinek', 120);
+        $kitol  = self::g('kitol', 120);
+        $szin   = self::g('szin', 20);
+
+        if ($szoveg === '') {
+            wp_send_json_error(['uzenet' => 'Írj valamit a cetlire.']);
+        }
+
+        $adat = [
+            'szoveg' => $szoveg,
+            'kinek'  => in_array($kinek, $nevek, true) ? $kinek : '',
+            'kitol'  => in_array($kitol, $nevek, true) ? $kitol : '',
+            'szin'   => isset(self::CETLI_SZINEK[$szin]) ? $szin : 'sarga',
+        ];
+
+        if ($id > 0) {
+            if (self::cetli($id) === null) {
+                wp_send_json_error(['uzenet' => 'Ez a cetli már nincs meg.']);
+            }
+
+            $wpdb->update(self::t('cetli'), $adat + ['modositva' => self::most()], ['id' => $id]);
+        } else {
+            $id = self::cetli_letrehoz($adat);
+        }
+
+        wp_send_json_success(['id' => $id, 'vissza' => SDH_Muhely_Modulok::url(self::KULCS)]);
+    }
+
+    /** Helyek mentése (áthúzás, rendezés): hely[id] = "x,y,z". */
+    public static function ajax_cetli_hely(): void
+    {
+        self::jog();
+
+        global $wpdb;
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $helyek = isset($_POST['hely']) && is_array($_POST['hely']) ? wp_unslash($_POST['hely']) : [];
+
+        foreach (array_slice($helyek, 0, 300, true) as $id => $h) {
+            $r = array_map('floatval', explode(',', (string) $h));
+
+            $wpdb->update(self::t('cetli'), [
+                'x' => max(0, min(96, $r[0] ?? 0)),
+                'y' => max(0, min(96, $r[1] ?? 0)),
+                'z' => max(0, (int) ($r[2] ?? 0)),
+            ], ['id' => (int) $id]);
+        }
+
+        wp_send_json_success([]);
+    }
+
+    public static function ajax_cetli_kesz(): void
+    {
+        self::jog();
+
+        global $wpdb;
+
+        $c = self::cetli((int) self::g('id', 20));
+
+        if ($c === null) {
+            wp_send_json_error(['uzenet' => 'Ez a cetli már nincs meg.']);
+        }
+
+        $wpdb->update(self::t('cetli'), ['kesz' => (int) $c->kesz ? 0 : 1, 'modositva' => self::most()], ['id' => (int) $c->id]);
+
+        wp_send_json_success(['kesz' => !(int) $c->kesz]);
+    }
+
+    /** Levétel a falról (vissza = visszatesz). Semmi nem törlődik végleg. */
+    public static function ajax_cetli_levesz(): void
+    {
+        self::jog();
+
+        global $wpdb;
+
+        $c = self::cetli((int) self::g('id', 20));
+
+        if ($c === null) {
+            wp_send_json_error(['uzenet' => 'Ez a cetli már nincs meg.']);
+        }
+
+        $vissza = self::g('vissza', 2) === '1';
+        $wpdb->update(self::t('cetli'), ['torolve' => $vissza ? 0 : 1, 'modositva' => self::most()], ['id' => (int) $c->id]);
+
+        wp_send_json_success([]);
     }
 }
