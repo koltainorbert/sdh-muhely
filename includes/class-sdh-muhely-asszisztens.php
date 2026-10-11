@@ -297,7 +297,8 @@ final class SDH_Muhely_Asszisztens
         $test = [
             'model'       => $modell,
             'max_tokens'  => 1600,
-            'temperature' => 0.4,
+            // `temperature` szándékosan nincs: az újabb modellek elavultként
+            // elutasítják, és a kérés 400-as hibával meghiúsul.
             'system'      => $system,
             'messages'    => $uzenetek,
         ];

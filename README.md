@@ -60,6 +60,10 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.40.1
+- **Javítás – az AI-asszisztens nem válaszolt** („`temperature` is deprecated for this model"): az újabb Claude-modellek
+  elutasítják ezt a paramétert, ezért kikerült a kérésből.
+
 ### 0.40.0
 - **Több eszköz egy munkalapon:** a fő eszköz mellé akárhány további csatolható („Eszköz csatolása" a munkalapon:
   az ügyfél meglévő készülékei választó popupban, vagy új felvitele). A csatoltak címkeként állnak, egy kattintással
