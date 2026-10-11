@@ -334,7 +334,8 @@
     /* Csevegő: a szál az alján áll, és magától frissül                  */
     /* ---------------------------------------------------------------- */
 
-    var CHAT_MS = 8000;
+    // A frissítés ideje beállítás (Beállítások › Ügyféloldal), alapból 8 mp.
+    var CHAT_MS = Math.max(3000, parseInt(B.chatMs, 10) || 8000);
 
     function aljara(szal) {
         szal.scrollTop = szal.scrollHeight;

@@ -3194,7 +3194,7 @@ final class SDH_Muhely_Levelezes
                 <?php SDH_Muhely_Admin_UI::fejlec('Levelezés', 'A szerviz e-mail-fiókjai egy helyen.'); ?>
                 <div class="sdh-doboz">
                     <p>Még nincs bekötve e-mail-fiók. A fiókok címét és alkalmazásjelszavát itt add meg:
-                        <a href="<?php echo esc_url(SDH_Muhely_Modulok::admin_url('beallitasok') . '#levelezes'); ?>">Beállítások → Levelezés – e-mail-fiókok</a>.</p>
+                        <a href="<?php echo esc_url(SDH_Muhely_Modulok::url('beallitasok', ['ful' => 'levelezes'])); ?>">Beállítások → Levelezés</a>.</p>
                 </div>
             <?php else : ?>
                 <div class="sdh-level" data-sdh-level

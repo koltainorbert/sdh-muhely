@@ -25,15 +25,8 @@ final class SDH_Muhely_Arculat
 
     public static function init(): void
     {
-        SDH_Muhely_Modulok::regisztral([
-            'kulcs'      => self::KULCS,
-            'cim'        => 'Arculat',
-            'render'     => [self::class, 'oldal'],
-            'sorrend'    => 92,
-            'csak_admin' => true,
-        ]);
-
-        add_action('admin_post_sdh_muhely_arculat', [self::class, 'mentes']);
+        // Nincs saját menüpontja: a Beállítások „Logó és megjelenés" lapfüle
+        // (SDH_Muhely_Beallitasok) rajzolja és menti.
     }
 
     /* =================================================================
@@ -246,33 +239,12 @@ final class SDH_Muhely_Arculat
      * Képernyő
      * ============================================================== */
 
-    public static function oldal(): void
+    /** Az arculat dobozai a Beállítások „Logó és megjelenés" lapfülén (űrlap nélkül: azt a Beállítások adja). */
+    public static function beallitas_doboz(): void
     {
-        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
-
         $b = self::beallitas();
 
         ?>
-        <div class="sdh-wrap">
-            <?php
-            SDH_Muhely_Admin_UI::uzenet();
-            SDH_Muhely_Admin_UI::fejlec(
-                'Arculat',
-                'A rendszer színei és komponensei egy helyen. Itt látszik először, ha valami elromlik.',
-                [
-                    [
-                        'cimke' => 'Megnyitás a műhely-felületen ↗',
-                        'url'   => SDH_Muhely_Modulok::frontend_url(),
-                    ],
-                ]
-            );
-            ?>
-
-            <form class="sdh-urlap" method="post"
-                  action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <input type="hidden" name="action" value="sdh_muhely_arculat">
-                <?php wp_nonce_field('sdh_muhely_arculat', 'sdh_nonce'); ?>
-
                 <div class="sdh-doboz" id="logo">
                     <h2 class="sdh-doboz__cim">Logó és név</h2>
 
@@ -287,8 +259,8 @@ final class SDH_Muhely_Arculat
                             <label for="arculat_logo">Logó</label>
                             <div class="sdh-rma-media" data-sdh-media="image">
                                 <input type="text" name="arculat_logo" id="arculat_logo"
-                                       value="<?php echo esc_attr($b['logo']); ?>" placeholder="https://… – vagy válassz a médiatárból">
-                                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Kiválasztás…</button>
+                                       value="<?php echo esc_attr($b['logo']); ?>" placeholder="https://… – vagy töltsd fel a gombbal">
+                                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Feltöltés…</button>
                                 <button type="button" class="sdh-gomb" data-sdh-media-torol<?php echo $b['logo'] === '' ? ' hidden' : ''; ?>>Törlés</button>
                                 <span class="sdh-rma-media__elo sdh-arculat-logo__elo" data-sdh-media-elo>
                                     <?php if ($b['logo'] !== '') : ?>
@@ -437,13 +409,6 @@ final class SDH_Muhely_Arculat
                     </div>
                 </div>
 
-                <div class="sdh-urlap__lablec">
-                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges">Mentés</button>
-                </div>
-            </form>
-
-            <?php self::kalauz(); ?>
-        </div>
         <?php
     }
 
@@ -451,7 +416,7 @@ final class SDH_Muhely_Arculat
      * Stíluskalauz
      * ============================================================== */
 
-    private static function kalauz(): void
+    public static function kalauz(): void
     {
         ?>
         <div class="sdh-doboz">
@@ -576,10 +541,12 @@ final class SDH_Muhely_Arculat
      * Mentés
      * ============================================================== */
 
-    public static function mentes(): void
+    public static function beallitas_mentes(): void
     {
-        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
-        check_admin_referer('sdh_muhely_arculat', 'sdh_nonce');
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- a Beállítások mentése ellenőrizte.
+        if (!isset($_POST['tema'])) {
+            return;
+        }
 
         $tema = isset($_POST['tema']) ? sanitize_key(wp_unslash($_POST['tema'])) : 'rendszer';
         $szin = isset($_POST['szin']) ? sanitize_key(wp_unslash($_POST['szin'])) : '';
@@ -617,8 +584,6 @@ final class SDH_Muhely_Arculat
                 'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
             ]
         );
-
-        wp_safe_redirect(SDH_Muhely_Modulok::admin_url(self::KULCS, ['uzenet' => 'mentve']));
-        exit;
+        // phpcs:enable
     }
 }

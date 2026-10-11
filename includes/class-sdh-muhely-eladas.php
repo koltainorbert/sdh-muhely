@@ -109,7 +109,7 @@ final class SDH_Muhely_Eladas
      * ============================================================== */
 
     /**
-     * @return array{ertesito: string, auto_lezar: bool}
+     * @return array{ertesito: string, auto_lezar: bool, oldal_meret: int, rend_nevek: array<string, string>}
      */
     public static function beallitas(): array
     {
@@ -118,9 +118,21 @@ final class SDH_Muhely_Eladas
 
         $ertesito = isset($m['ertesito']) ? trim((string) $m['ertesito']) : '';
 
+        $nevek = [];
+
+        foreach ((array) ($m['rend_nevek'] ?? []) as $kulcs => $nev) {
+            if (is_string($nev) && trim($nev) !== '') {
+                $nevek[(string) $kulcs] = trim($nev);
+            }
+        }
+
         return [
-            'ertesito'   => $ertesito !== '' ? $ertesito : self::alap_ertesito(),
-            'auto_lezar' => !isset($m['auto_lezar']) || !empty($m['auto_lezar']),
+            'ertesito'    => $ertesito !== '' ? $ertesito : self::alap_ertesito(),
+            'auto_lezar'  => !isset($m['auto_lezar']) || !empty($m['auto_lezar']),
+            // Hány sor fér egy oldalra az árukiadás és a rendelések listájában.
+            'oldal_meret' => max(10, min(200, (int) ($m['oldal_meret'] ?? self::OLDAL_MERET))),
+            // A rendelés állapotainak saját neve (kulcs => név); ami nincs megadva, az alapnevet viseli.
+            'rend_nevek'  => $nevek,
         ];
     }
 
@@ -144,7 +156,7 @@ final class SDH_Muhely_Eladas
             </p>
 
             <div class="sdh-eladas-torzsgombok">
-                <a class="sdh-gomb" href="#" data-sdh-urlap="helyszinek" data-sdh-id="0">Helyszínek szerkesztése (<?php echo (int) count(self::torzs_sorok('helyszinek', true)); ?>)</a>
+                <a class="sdh-gomb" href="#" data-sdh-urlap="helyszinek" data-sdh-id="0" data-sdh-marad="Helyszínek elmentve.">Helyszínek szerkesztése (<?php echo (int) count(self::torzs_sorok('helyszinek', true)); ?>)</a>
                 <a class="sdh-gomb" href="#" data-sdh-urlap="beszallitok" data-sdh-id="0">Beszállítók szerkesztése (<?php echo (int) count(self::torzs_sorok('beszallitok', true)); ?>)</a>
             </div>
 
@@ -152,6 +164,30 @@ final class SDH_Muhely_Eladas
                 <input type="hidden" name="eladas_jelen" value="1">
                 <input type="checkbox" name="eladas_auto_lezar" id="eladas_auto_lezar" value="1" <?php checked($b['auto_lezar']); ?>>
                 <label for="eladas_auto_lezar">A kifizetett napi árukiadás és az átadott, kifizetett rendelés magától lezárul</label>
+            </div>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="eladas_oldal_meret">Sorok egy oldalon (árukiadás, rendelések listája)</label>
+                    <input type="number" name="eladas_oldal_meret" id="eladas_oldal_meret" min="10" max="200" step="5"
+                           value="<?php echo (int) $b['oldal_meret']; ?>">
+                </div>
+            </div>
+
+            <h3 class="sdh-doboz__alcim">A rendelés állapotainak neve</h3>
+            <p class="sdh-sugo">
+                A rendelés útja öt lépés; a sorrendjük adott, a nevük átírható (ez látszik a listában és a rendelésen).
+                Üresen hagyva az alapnév marad.
+            </p>
+            <div class="sdh-mezok">
+                <?php foreach (self::alap_rend_allapotok() as $kulcs => $a) : ?>
+                    <div class="sdh-mezo">
+                        <label for="eladas_rend_<?php echo esc_attr($kulcs); ?>"><?php echo esc_html($a['nev']); ?></label>
+                        <input type="text" name="eladas_rend_nevek[<?php echo esc_attr($kulcs); ?>]" id="eladas_rend_<?php echo esc_attr($kulcs); ?>"
+                               maxlength="30" autocomplete="off" placeholder="<?php echo esc_attr($a['nev']); ?>"
+                               value="<?php echo esc_attr((string) ($b['rend_nevek'][$kulcs] ?? '')); ?>">
+                    </div>
+                <?php endforeach; ?>
             </div>
 
             <div class="sdh-mezo sdh-mezo--szeles">
@@ -173,9 +209,21 @@ final class SDH_Muhely_Eladas
             return;
         }
 
+        $nevek = [];
+
+        foreach (isset($_POST['eladas_rend_nevek']) && is_array($_POST['eladas_rend_nevek']) ? wp_unslash($_POST['eladas_rend_nevek']) : [] as $kulcs => $nev) {
+            $nev = mb_substr(sanitize_text_field((string) $nev), 0, 30);
+
+            if ($nev !== '' && isset(self::alap_rend_allapotok()[(string) $kulcs])) {
+                $nevek[(string) $kulcs] = $nev;
+            }
+        }
+
         update_option(self::OPT, [
-            'ertesito'   => isset($_POST['eladas_ertesito']) ? mb_substr(sanitize_textarea_field(wp_unslash($_POST['eladas_ertesito'])), 0, 1500) : '',
-            'auto_lezar' => !empty($_POST['eladas_auto_lezar']),
+            'ertesito'    => isset($_POST['eladas_ertesito']) ? mb_substr(sanitize_textarea_field(wp_unslash($_POST['eladas_ertesito'])), 0, 1500) : '',
+            'auto_lezar'  => !empty($_POST['eladas_auto_lezar']),
+            'oldal_meret' => isset($_POST['eladas_oldal_meret']) ? max(10, min(200, (int) $_POST['eladas_oldal_meret'])) : self::OLDAL_MERET,
+            'rend_nevek'  => $nevek,
         ], false);
         // phpcs:enable
     }
@@ -467,6 +515,25 @@ final class SDH_Muhely_Eladas
      * @return array<string, array{nev: string, szin: string}>
      */
     public static function rend_allapotok(): array
+    {
+        $lista = self::alap_rend_allapotok();
+
+        // A nevek a Beállításokban átírhatók; a kulcsok és a sorrend adott.
+        foreach (self::beallitas()['rend_nevek'] as $kulcs => $nev) {
+            if (isset($lista[$kulcs])) {
+                $lista[$kulcs]['nev'] = $nev;
+            }
+        }
+
+        return $lista;
+    }
+
+    /**
+     * A rendelés útjának lépései az alapnevekkel.
+     *
+     * @return array<string, array{nev: string, szin: string}>
+     */
+    public static function alap_rend_allapotok(): array
     {
         return [
             'felveve'     => ['nev' => 'Felvéve', 'szin' => 'sarga'],
@@ -1223,8 +1290,9 @@ final class SDH_Muhely_Eladas
             $ertekek
         ));
 
+        $meret    = self::beallitas()['oldal_meret'];
         $osszesen = $ossz ? (int) $ossz->db : 0;
-        $oldalak  = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
+        $oldalak  = max(1, (int) ceil($osszesen / $meret));
         $oldal    = min($oldal, $oldalak);
 
         $sorok = $wpdb->get_results($wpdb->prepare(
@@ -1232,7 +1300,7 @@ final class SDH_Muhely_Eladas
              {$tobb} {$hol}
              ORDER BY m.keszult DESC, m.munkalap_szam DESC, m.id DESC
              LIMIT %d OFFSET %d",
-            array_merge($ertekek, [self::OLDAL_MERET, ($oldal - 1) * self::OLDAL_MERET])
+            array_merge($ertekek, [$meret, ($oldal - 1) * $meret])
         ));
         // phpcs:enable
 

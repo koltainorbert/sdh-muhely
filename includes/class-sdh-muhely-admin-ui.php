@@ -437,6 +437,8 @@ final class SDH_Muhely_Admin_UI
             'levelRendezo' => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::rendezo_be(),
             // Csapat (0.38): adminisztrátor-e (kitűzés másnak az üzenetén), AI-asszisztens adatai.
             'admin'     => self::admin_e(),
+            // A munkalap csevegőjének frissítési ideje (Beállítások › Ügyféloldal).
+            'chatMs'    => class_exists('SDH_Muhely_Rma') ? 1000 * (int) SDH_Muhely_Rma::beallitas()['chat_mp'] : 8000,
             'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
         ];
     }
@@ -835,11 +837,9 @@ final class SDH_Muhely_Admin_UI
 
             $ki[$kulcs] = [
                 'modul' => (string) $modul['cim'],
-                // A csak adminos modul (Arculat, Beállítások, TAC) a műhely-felületen
-                // nem fut: a csempéje az admin oldalára visz, különben holt link volna.
-                'url'   => !empty($modul['csak_admin'])
-                    ? SDH_Muhely_Modulok::admin_url((string) $kulcs)
-                    : SDH_Muhely_Modulok::url((string) $kulcs),
+                // Minden csempe a futó felületen marad: a műhely-felületről a
+                // Beállítások csempéje sem visz át a wp-adminba.
+                'url'   => SDH_Muhely_Modulok::url((string) $kulcs),
                 'szam'  => isset($szamok[$kulcs]) ? (int) $szamok[$kulcs][0] : null,
                 'cimke' => isset($szamok[$kulcs]) ? $szamok[$kulcs][1] : 'megnyitás',
             ];

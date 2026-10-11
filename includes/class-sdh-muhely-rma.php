@@ -77,7 +77,6 @@ final class SDH_Muhely_Rma
         // A csevegő frissítése: jött-e új üzenet, amíg az ablak nyitva van (rma.js).
         add_action('wp_ajax_sdh_muhely_uzenet_szal', [self::class, 'ajax_szal']);
 
-        add_action('admin_enqueue_scripts', [self::class, 'admin_eszkozok']);
         // A wp-admin menüjében is látszódjon az olvasatlan üzenetek száma.
         add_action('admin_menu', [self::class, 'admin_menu_jelveny'], 99);
 
@@ -166,6 +165,7 @@ final class SDH_Muhely_Rma
             'szerviz_nev'     => '',
             'ertesites_email' => '',
             'ugyfel_email'    => true,
+            'chat_mp'         => 8,           // a munkalap csevegője ennyi másodpercenként néz új üzenetet
             // Megjelenés
             'logo'            => '',
             'hatter_tipus'    => 'alap',      // alap | szin | kep | video
@@ -209,6 +209,7 @@ final class SDH_Muhely_Rma
         $b['ugyfel_email']    = (bool) $b['ugyfel_email'];
         $b['uveg']            = (bool) $b['uveg'];
         $b['sotetites']       = max(0, min(85, (int) $b['sotetites']));
+        $b['chat_mp']         = max(3, min(120, (int) $b['chat_mp']));
         $b['nyelvek']         = array_values(array_intersect(['hu', 'en', 'de'], (array) $b['nyelvek']));
 
         if ($b['nyelvek'] === []) {
@@ -226,26 +227,6 @@ final class SDH_Muhely_Rma
         return preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $ertek) === 1 ? strtolower($ertek) : '';
     }
 
-    /** A wp-admin Beállítások oldalán: médiaválasztó és a hozzá tartozó szkript. */
-    public static function admin_eszkozok(): void
-    {
-        $oldal = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-        // A Beállítások és az Arculat (logó, egyéni szín) oldalán kell.
-        if (!in_array($oldal, [SDH_Muhely_Admin_UI::FOMENU . '-' . SDH_Muhely_Beallitasok::KULCS, SDH_Muhely_Admin_UI::FOMENU . '-arculat'], true)) {
-            return;
-        }
-
-        wp_enqueue_media();
-        wp_enqueue_script(
-            'sdh-muhely-rma-beallitas',
-            SDH_MUHELY_URL . 'assets/rma-beallitas.js',
-            ['jquery'],
-            SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma-beallitas.js'),
-            true
-        );
-    }
-
     /** Médiamező: URL + Kiválasztás gomb + kis előnézet. */
     private static function media_mezo(string $nev, string $cimke, string $ertek, string $tipus, string $sugo = ''): void
     {
@@ -255,7 +236,7 @@ final class SDH_Muhely_Rma
             <div class="sdh-rma-media" data-sdh-media="<?php echo esc_attr($tipus); ?>">
                 <input type="text" name="<?php echo esc_attr($nev); ?>" id="<?php echo esc_attr($nev); ?>"
                        value="<?php echo esc_attr($ertek); ?>" placeholder="https://…">
-                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Kiválasztás…</button>
+                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Feltöltés…</button>
                 <button type="button" class="sdh-gomb" data-sdh-media-torol<?php echo $ertek === '' ? ' hidden' : ''; ?>>Törlés</button>
                 <span class="sdh-rma-media__elo" data-sdh-media-elo>
                     <?php if ($ertek !== '' && $tipus === 'image') : ?>
@@ -333,6 +314,15 @@ final class SDH_Muhely_Rma
                 <input type="checkbox" name="rma_ugyfel_email" id="rma_ugyfel_email" value="1"
                     <?php checked($b['ugyfel_email']); ?>>
                 <label for="rma_ugyfel_email">Új üzenetnél alapból e-mail értesítés az ügyfélnek (ha van e-mail címe)</label>
+            </div>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="rma_chat_mp">A munkalap csevegője ennyi másodpercenként frissül</label>
+                    <input type="number" name="rma_chat_mp" id="rma_chat_mp" min="3" max="120" step="1"
+                           value="<?php echo (int) $b['chat_mp']; ?>">
+                    <span class="sdh-mezo__sugo">Ennyi időn belül jelenik meg az ügyfél válasza a nyitott munkalapon (3–120 mp).</span>
+                </div>
             </div>
         </div>
 
@@ -490,6 +480,7 @@ final class SDH_Muhely_Rma
             'szerviz_nev'     => $szoveg('rma_szerviz_nev'),
             'ertesites_email' => isset($_POST['rma_ertesites_email']) ? sanitize_email(wp_unslash($_POST['rma_ertesites_email'])) : '',
             'ugyfel_email'    => !empty($_POST['rma_ugyfel_email']),
+            'chat_mp'         => max(3, min(120, (int) ($szoveg('rma_chat_mp') !== '' ? $szoveg('rma_chat_mp') : 8))),
             'logo'            => $url('rma_logo'),
             'hatter_tipus'    => $egyik('rma_hatter_tipus', ['alap', 'szin', 'kep', 'video'], 'alap'),
             'hatter_szin'     => self::szin($szoveg('rma_hatter_szin')) ?: '#1b1f24',

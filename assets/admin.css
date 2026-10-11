@@ -6873,3 +6873,183 @@ dd:hover > .sdh-masol {
     border-radius: 7px;
     background: var(--sdh-felulet);
 }
+
+/* ================================================================== */
+/* 0.47.0 – Beállítások: egy oldal, témánként külön lapfül (pill)      */
+/* ================================================================== */
+
+.sdh-beall__menu {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 0 0 1rem;
+    padding: .8rem .9rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    background: var(--sdh-felulet);
+    box-shadow: var(--sdh-arnyek);
+}
+
+.sdh-beall__sor {
+    display: grid;
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: .8rem;
+}
+
+.sdh-beall__csoport {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-halvany);
+}
+
+.sdh-beall__pillek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+.sdh-beall__menu a.sdh-pill {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sdh-beall__menu a.sdh-pill:not(.is-aktiv) {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-beall__menu a.sdh-pill.is-aktiv {
+    font-weight: 600;
+}
+
+.sdh-beall__fej {
+    margin: 0 0 .8rem;
+}
+
+.sdh-beall__cim {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 650;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-beall__leiras {
+    margin: .15rem 0 0;
+    font-size: 13px;
+    color: var(--sdh-halvany);
+}
+
+/* A lapfül űrlapja teljes szélességű; a Mentés sávja a képernyő alján ragad. */
+.sdh-beall .sdh-beall__urlap,
+.sdh-beall .sdh-beall__sajat .sdh-urlap {
+    max-width: none;
+}
+
+.sdh-beall__lablec {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin-top: 1rem;
+    padding: .7rem .9rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    background: color-mix(in srgb, var(--sdh-felulet) 92%, transparent);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+.sdh-beall__allapot {
+    font-size: 13px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-beall__allapot.is-jo {
+    color: var(--sdh-siker);
+}
+
+.sdh-beall__allapot.is-hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-beall__allapot.is-figyelem {
+    color: var(--sdh-figyelem);
+    font-weight: 600;
+}
+
+.sdh-beall__kerdes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin: -.4rem 0 1rem;
+    padding: .6rem .9rem;
+    border: 1px solid var(--sdh-figyelem);
+    border-radius: var(--sdh-r-nagy);
+    background: color-mix(in srgb, var(--sdh-figyelem) 9%, var(--sdh-felulet));
+    font-size: 13px;
+}
+
+.sdh-beall__kerdes span {
+    flex: 1 1 16rem;
+    font-weight: 600;
+}
+
+.sdh-beall__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+/* A beágyazott modul-oldal (TAC) saját fejléce és kerete itt fölösleges. */
+.sdh-beall__sajat > .sdh-wrap {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+}
+
+.sdh-beall__sajat > .sdh-wrap > .sdh-fejlec {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .sdh-beall__sor {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .3rem;
+    }
+}
+
+/* Kép / videó mező (logó, háttér): cím + Feltöltés + Törlés + kis előnézet – minden lapfülön. */
+.sdh-rma-media {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.sdh-rma-media input[type="text"] {
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.sdh-rma-media [hidden] {
+    display: none;
+}
+
+.sdh-rma-media__elo img,
+.sdh-rma-media__elo video {
+    display: block;
+    max-height: 44px;
+    max-width: 160px;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 6px;
+}
+
+.sdh-beall .sdh-mezo--jelolo + .sdh-mezok,
+.sdh-beall .sdh-mezok + .sdh-doboz__alcim,
+.sdh-beall .sdh-mezok + .sdh-mezo--szeles {
+    margin-top: .9rem;
+}

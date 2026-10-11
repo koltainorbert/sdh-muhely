@@ -61,6 +61,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.47.0
+- **A műhely-felületről semmi nem visz át a WordPress-adminba.** A Beállítások a műhely-felületen nyílik (az
+  oldalmenü alján és a csempén is); a wp-adminba vivő „Karbantartás" link megszűnt. Kolléga nem nyithatja meg.
+- **Új Beállítások: egy oldal, témánként külön lapfül.** Az eddigi egyetlen hosszú oldal és a külön Arculat / TAC
+  menüpont helyett húsz lapfül (pill), hat csoportban: Cég és megjelenés, Munkalap, Pénz és eladás, Kapcsolat és
+  csapat, Készülékadatok, Rendszer. Minden lapfül külön ment – egy lapfül mentése a többihez nem nyúl.
+- **Mentés helyben.** A Mentés sávja a képernyő alján marad; hiba esetén az üzenet a gomb mellett áll. Nem mentett
+  módosításnál a lapfülváltás rákérdez (Mentés és tovább / Elvetés / Maradok). Ctrl+S is ment.
+- **Kép feltöltése a műhely-felületről is** (logó, ügyféloldal-logó, háttérkép, háttérvideó): saját feltöltő gomb,
+  kis előnézettel.
+- **Új állítható adatok:** a rendelés öt állapotának neve, az árukiadás- és rendeléslista oldalmérete, a munkalap
+  csevegőjének frissítési ideje.
+- A wp-adminból megnyitva a Beállítások ugyanez a felület. Új teszt: `t32-beallitasok`. Séma nem változott.
+
 ### 0.46.0
 - **Az ügyfél adatlapján látszanak a rendelései és a vásárlásai.** Három új lapfül az ügyfél ablakának alján:
   Munkalapok, Rendelések, Vásárlások – darabszámmal, összeggel, tartozással. Egy sorra kattintva a lap az ügyfél

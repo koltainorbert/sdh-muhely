@@ -63,6 +63,7 @@ final class SDH_Muhely_Demo
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sdh_muhely_demo_betoltes">
                 <?php wp_nonce_field('sdh_muhely_demo_betoltes', 'sdh_nonce'); ?>
+                <input type="hidden" name="kontextus" value="<?php echo esc_attr(SDH_Muhely_Modulok::kontextus()); ?>">
                 <button type="submit" class="sdh-gomb sdh-gomb--vilagos">Demó adatok betöltése</button>
             </form>
         </div>
@@ -76,15 +77,20 @@ final class SDH_Muhely_Demo
 
         $eredmeny = self::betolt();
 
+        // Oda térünk vissza, ahonnan indították: a műhely-felületről nem lépünk át a wp-adminba.
+        $kontextus = isset($_POST['kontextus']) && sanitize_key(wp_unslash($_POST['kontextus'])) === 'frontend' ? 'frontend' : 'admin';
+
         wp_safe_redirect(
-            SDH_Muhely_Modulok::admin_url(
+            SDH_Muhely_Modulok::visszateres(
                 SDH_Muhely_Beallitasok::KULCS,
                 [
+                    'ful'    => 'demo',
                     'uzenet' => 'demo_betoltve',
                     'ugyfel' => $eredmeny['ugyfel'],
                     'eszkoz' => $eredmeny['eszkoz'],
                     'munkalap' => $eredmeny['munkalap'],
-                ]
+                ],
+                $kontextus
             )
         );
         exit;

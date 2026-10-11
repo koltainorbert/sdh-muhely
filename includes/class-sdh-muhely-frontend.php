@@ -203,11 +203,11 @@ final class SDH_Muhely_Frontend
 
         $modul = $kulcs === 'attekintes' ? null : SDH_Muhely_Modulok::egy($kulcs);
 
-        // A csak adminos modulok (karbantartás, beállítás) nem részei a
-        // napi felületnek.
-        if ($modul !== null && !empty($modul['csak_admin'])) {
-            $modul = null;
-            $kulcs = 'ismeretlen';
+        // A csak adminisztrátornak szóló modul (Beállítások) is a műhely-felületen
+        // fut – a wp-adminba innen semmi nem visz át –, de kolléga nem nyithatja meg.
+        if ($modul !== null && !empty($modul['csak_admin']) && !SDH_Muhely_Admin_UI::admin_e()) {
+            self::tiltott_oldal();
+            exit;
         }
 
         if ($kulcs !== 'attekintes' && $modul === null) {
@@ -411,11 +411,13 @@ final class SDH_Muhely_Frontend
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <?php if (SDH_Muhely_Admin_UI::admin_e()) : ?>
+            <?php // A Beállítások (adminisztrátornak) a műhely-felületen nyílik: innen semmi nem visz a wp-adminba. ?>
+            <?php if (SDH_Muhely_Admin_UI::admin_e() && class_exists('SDH_Muhely_Beallitasok')) : ?>
             <div class="sdh-sav__also">
-                <a class="sdh-sav__link" href="<?php echo esc_url(admin_url('admin.php?page=sdh-muhely')); ?>">
+                <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Beallitasok::KULCS ? 'sdh-sav__link--aktiv' : ''; ?>"
+                   href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Beallitasok::KULCS)); ?>">
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                    <span class="sdh-sav__felirat">Karbantartás</span>
+                    <span class="sdh-sav__felirat">Beállítások</span>
                 </a>
             </div>
             <?php endif; ?>
@@ -517,6 +519,9 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/eladas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/eladas.js')); ?>"></script>
+        <?php if ($aktiv_kulcs === 'beallitasok') : ?>
+            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
+        <?php endif; ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
 

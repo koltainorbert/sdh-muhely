@@ -1114,7 +1114,10 @@ final class SDH_Muhely_Asszisztens
         delete_transient('sdh_muhely_ai_statikus');
         unset($b);
 
-        wp_send_json_success(['vissza' => SDH_Muhely_Modulok::url(self::KULCS, ['nezet' => 'beallitasok', 'uzenet' => 'mentve'])]);
+        // A Beállítások lapfüléről mentve oda térünk vissza, különben az asszisztens saját lapjára.
+        wp_send_json_success(['vissza' => self::p('honnan', 20) === 'beallitasok' && class_exists('SDH_Muhely_Beallitasok')
+            ? SDH_Muhely_Beallitasok::url('asszisztens', ['uzenet' => 'mentve'])
+            : SDH_Muhely_Modulok::url(self::KULCS, ['nezet' => 'beallitasok', 'uzenet' => 'mentve'])]);
     }
 
     public static function ajax_teszt(): void
@@ -1263,6 +1266,7 @@ final class SDH_Muhely_Asszisztens
 
         if ($admin) {
             $fulek += ['mentesek' => 'Mentések', 'beallitasok' => 'Beállítások'];
+            // (Ugyanez a beállítás-űrlap a Beállítások › Asszisztens lapfülön is ott van.)
         }
 
         $nezet = isset($fulek[$nezet]) ? $nezet : 'muveletek';
@@ -1464,7 +1468,7 @@ final class SDH_Muhely_Asszisztens
         <?php
     }
 
-    private static function beallitas_nezet(): void
+    public static function beallitas_nezet(): void
     {
         $b = self::beallitas();
         $k = self::kulcs();

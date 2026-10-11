@@ -172,7 +172,7 @@ final class SDH_Muhely_Asszisztens_Tudas
         $t .= "A RENDSZER MODULJAI (oldalmenü; kulcs – cím)\n- attekintes – Áttekintés (kezdőképernyő: munkalap-rács, csempék)\n";
 
         foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) {
-            $t .= '- ' . $kulcs . ' – ' . (string) $modul['cim'] . (!empty($modul['csak_admin']) ? ' (csak adminisztrátor, a WordPress-adminban)' : '') . (!empty($modul['keszul']) ? ' (készül)' : '') . "\n";
+            $t .= '- ' . $kulcs . ' – ' . (string) $modul['cim'] . (!empty($modul['csak_admin']) ? ' (csak adminisztrátor; minden beállítás itt van, témánként külön lapfülön)' : '') . (!empty($modul['keszul']) ? ' (készül)' : '') . "\n";
         }
 
         if (class_exists('SDH_Muhely_Munkalap')) {

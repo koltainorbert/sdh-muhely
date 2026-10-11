@@ -1396,6 +1396,30 @@ final class SDH_Muhely_Munkalap
     /**
      * A munkalap-beállítások dobozai a Beállítások űrlapjában.
      */
+    /**
+     * A munkalap-beállítások EGY doboza (a Beállítások lapfülei): szamozas,
+     * allapotok, fizmodok, gyakori-hibak, gyakori-megjegyzesek, hiba-allapotok.
+     */
+    public static function beallitas_doboz(string $melyik): void
+    {
+        $sorrend = ['szamozas', 'allapotok', 'fizmodok', 'gyakori-hibak', 'gyakori-megjegyzesek', 'hiba-allapotok'];
+        $hanyadik = array_search($melyik, $sorrend, true);
+
+        if ($hanyadik === false) {
+            return;
+        }
+
+        ob_start();
+        self::beallitas_dobozok();
+        $mind = (string) ob_get_clean();
+
+        // A dobozok a függvényben azonos behúzással, egymás után állnak.
+        $dobozok = preg_split('/\n(?= {8}<div class="sdh-doboz")/', "\n" . ltrim($mind, "\r\n")) ?: [];
+        $dobozok = array_values(array_filter($dobozok, static fn (string $d): bool => strpos($d, 'sdh-doboz') !== false));
+
+        echo $dobozok[$hanyadik] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a saját, már szűrt kimenetünk.
+    }
+
     public static function beallitas_dobozok(): void
     {
         $b = self::szamozas();
@@ -1561,41 +1585,34 @@ final class SDH_Muhely_Munkalap
      */
     public static function beallitas_mentes(): void
     {
+        // A Beállítások lapfülenként ment: csak az íródik felül, amit az űrlap hozott
+        // (egy másik lapfül mentése nem nullázhatja pl. az állapotlistát).
         $szam = static fn (string $mezo, int $alap): int => isset($_POST[$mezo])
             ? (int) wp_unslash($_POST[$mezo])
             : $alap;
 
-        update_option(
-            self::OPT_SZAMOZAS,
-            [
-                'kovetkezo' => max(1, $szam('mu_kovetkezo', 1)),
-                'elotag'    => isset($_POST['mu_elotag'])
-                    ? mb_substr(sanitize_text_field(wp_unslash($_POST['mu_elotag'])), 0, 10)
-                    : '',
-                'szamjegy'  => min(10, max(0, $szam('mu_szamjegy', 0))),
-            ]
-        );
+        if (isset($_POST['mu_kovetkezo'])) {
+            update_option(
+                self::OPT_SZAMOZAS,
+                [
+                    'kovetkezo' => max(1, $szam('mu_kovetkezo', 1)),
+                    'elotag'    => isset($_POST['mu_elotag'])
+                        ? mb_substr(sanitize_text_field(wp_unslash($_POST['mu_elotag'])), 0, 10)
+                        : '',
+                    'szamjegy'  => min(10, max(0, $szam('mu_szamjegy', 0))),
+                ]
+            );
+        }
 
-        update_option(
-            self::OPT_ALLAPOTOK,
-            isset($_POST['mu_allapotok'])
-                ? sanitize_textarea_field(wp_unslash($_POST['mu_allapotok']))
-                : ''
-        );
-
-        update_option(
-            self::OPT_HIBA_ALLAPOTOK,
-            isset($_POST['mu_hiba_allapotok'])
-                ? sanitize_textarea_field(wp_unslash($_POST['mu_hiba_allapotok']))
-                : ''
-        );
-
-        update_option(
-            self::OPT_FIZMODOK,
-            isset($_POST['mu_fizetesi_modok'])
-                ? sanitize_textarea_field(wp_unslash($_POST['mu_fizetesi_modok']))
-                : ''
-        );
+        foreach ([
+            'mu_allapotok'      => self::OPT_ALLAPOTOK,
+            'mu_hiba_allapotok' => self::OPT_HIBA_ALLAPOTOK,
+            'mu_fizetesi_modok' => self::OPT_FIZMODOK,
+        ] as $mezo => $opcio) {
+            if (isset($_POST[$mezo])) {
+                update_option($opcio, sanitize_textarea_field(wp_unslash($_POST[$mezo])));
+            }
+        }
 
         if (isset($_POST['mu_gyakori_hibak'])) {
             update_option(

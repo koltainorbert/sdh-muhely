@@ -35,14 +35,7 @@ final class SDH_Muhely_Tac
 
     public static function init(): void
     {
-        SDH_Muhely_Modulok::regisztral([
-            'kulcs'      => self::KULCS,
-            'cim'        => 'TAC adatbázis',
-            'render'     => [self::class, 'oldal'],
-            'sorrend'    => 90,
-            'csak_admin' => true,
-        ]);
-
+        // Nincs saját menüpontja: a Beállítások „TAC adatbázis" lapfüle mutatja (SDH_Muhely_Beallitasok).
         add_action('wp_ajax_sdh_muhely_tac_import', [self::class, 'ajax_import']);
     }
 
