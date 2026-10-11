@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.34.0';
+    public const DB_VERSION = '0.35.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -126,6 +126,9 @@ final class SDH_Muhely_Schema
         $ai_tudas     = self::tabla('ai_tudas');
         $helyszin     = self::tabla('helyszin');
         $beszallito   = self::tabla('beszallito');
+        $np_szemely   = self::tabla('naptar_szemely');
+        $np_esemeny   = self::tabla('naptar_esemeny');
+        $np_jelzes    = self::tabla('naptar_jelzes');
 
         $definiciok = [];
 
@@ -1125,6 +1128,101 @@ final class SDH_Muhely_Schema
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             key aktiv (aktiv)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Naptár (0.50) – személyek
+         *
+         * Minden névhez saját naptár tartozik. Többfelhasználós módban a
+         * fiókok (profilok) maguktól kapnak egy-egy sort ("user_id"); közös
+         * fióknál (egyfelhasználós mód) a nevek kézzel vehetők fel, fiók
+         * nélkül ("user_id" = 0). Az "email" az e-mail-értesítések címe.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$np_szemely} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            nev varchar(80) NOT NULL default '',
+            szin varchar(20) NOT NULL default 'kek',
+            email varchar(190) NOT NULL default '',
+            user_id bigint(20) unsigned NOT NULL default 0,
+            aktiv tinyint(1) NOT NULL default 1,
+            sorrend int(11) NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key user_id (user_id),
+            key aktiv (aktiv)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Naptár – események
+         *
+         * Egy sor = egy esemény vagy egy ismétlődő sorozat. Az időpontok
+         * helyi idő szerintiek (a WordPress időzónája). "szemely_id" a
+         * naptár gazdája, "resztvevok" a többi érintett személy
+         * azonosítója vesszővel. Ismétlődés: "ismetles" (napi, heti, havi,
+         * eves), "ism_koz" (hányadonként), "ism_napok" (heti: a hét napjai,
+         * 1 = hétfő), "ism_veg" (meddig) vagy "ism_db" (hány alkalom),
+         * "kivetelek" (kihagyott alkalmak napjai vesszővel).
+         * "emlekeztetok": percek a kezdés előtt, vesszővel (0 = kezdéskor).
+         * Törlés csak jelölés ("torolve").
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$np_esemeny} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            szemely_id bigint(20) unsigned NOT NULL default 0,
+            cim varchar(190) NOT NULL default '',
+            leiras text NULL,
+            hely varchar(190) NOT NULL default '',
+            kezdet datetime NULL,
+            veg datetime NULL,
+            egesz_nap tinyint(1) NOT NULL default 0,
+            kategoria varchar(40) NOT NULL default '',
+            szin varchar(20) NOT NULL default '',
+            prioritas varchar(10) NOT NULL default 'normal',
+            allapot varchar(12) NOT NULL default 'tervezett',
+            ismetles varchar(10) NOT NULL default '',
+            ism_koz int(11) NOT NULL default 1,
+            ism_napok varchar(20) NOT NULL default '',
+            ism_veg date NULL,
+            ism_db int(11) NOT NULL default 0,
+            kivetelek text NULL,
+            emlekeztetok varchar(120) NOT NULL default '',
+            ertesites tinyint(1) NOT NULL default 1,
+            email tinyint(1) NOT NULL default 0,
+            resztvevok varchar(255) NOT NULL default '',
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            munkalap_szam varchar(20) NOT NULL default '',
+            link varchar(255) NOT NULL default '',
+            privat tinyint(1) NOT NULL default 0,
+            letrehozta bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            torolve tinyint(1) NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key szemely_kezdet (szemely_id,kezdet),
+            key kezdet (kezdet),
+            key ismetles (ismetles)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Naptár – jelzések
+         *
+         * Egy sor = egy esedékessé vált értesítés egy személynek egy
+         * alkalomról. "tipus": app (kártya a rendszerben – addig marad,
+         * amíg kézzel ki nem nyomják: "kinyomva") vagy email ("kuldve").
+         * "perc": hány perccel a kezdés előtt esedékes (0 = kezdéskor).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$np_jelzes} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            esemeny_id bigint(20) unsigned NOT NULL default 0,
+            szemely_id bigint(20) unsigned NOT NULL default 0,
+            alkalom datetime NULL,
+            tipus varchar(10) NOT NULL default 'app',
+            perc int(11) NOT NULL default 0,
+            esedekes datetime NULL,
+            kuldve datetime NULL,
+            kinyomva datetime NULL,
+            PRIMARY KEY  (id),
+            key esemeny (esemeny_id,szemely_id,alkalom),
+            key nyitott (tipus,kinyomva)
         ) {$charset};";
 
         return $definiciok;

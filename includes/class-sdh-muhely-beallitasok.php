@@ -180,6 +180,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'Többfelhasználós csevegés vagy üzenőfal, a fal neve, a kollégák névsora.',
                 'rajz' => [self::class, 'csapat_doboz'], 'ment' => [SDH_Muhely_Csapat::class, 'beallitas_mentes'],
             ],
+            'naptar' => [
+                'cim' => 'Naptár', 'csoport' => 'kapcsolat',
+                'leiras' => 'A naptár alapnézete és órasávja, a kategóriák, az emlékeztetők, az e-mail értesítések és a napi összefoglaló.',
+                'rajz' => [SDH_Muhely_Naptar::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Naptar::class, 'beallitas_mentes'],
+            ],
             'asszisztens' => [
                 'cim' => 'Asszisztens', 'csoport' => 'kapcsolat',
                 'leiras' => 'Az AI-asszisztens: be- és kikapcsolás, neve, kérdéskeret, API-kulcs, engedélyek.',

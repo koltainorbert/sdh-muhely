@@ -855,6 +855,10 @@ final class SDH_Muhely_Admin_UI
             $szamok['csapat'] = [SDH_Muhely_Csapat::olvasatlan_db(), 'olvasatlan csapatüzenet'];
         }
 
+        if (class_exists('SDH_Muhely_Naptar')) {
+            $szamok[SDH_Muhely_Naptar::KULCS] = [SDH_Muhely_Naptar::mai_db(), 'mai esemény'];
+        }
+
         if (class_exists('SDH_Muhely_Eladas')) {
             $szamok[SDH_Muhely_Eladas::KULCS_ARU]  = [SDH_Muhely_Eladas::mai_arukiadas_db(), 'mai árukiadás'];
             $szamok[SDH_Muhely_Eladas::KULCS_REND] = [SDH_Muhely_Eladas::nyitott_rendeles_db(), 'folyamatban lévő rendelés'];
@@ -883,6 +887,11 @@ final class SDH_Muhely_Admin_UI
 
             $ki['levelezes']['azonnal'] = $azonnal;
             $ki['levelezes']['jelez']   = $azonnal > 0;
+        }
+
+        // Naptár: ha esedékes esemény kártyája vár kinyomásra, a csempe is jelez.
+        if (isset($ki['naptar']) && class_exists('SDH_Muhely_Naptar') && SDH_Muhely_Naptar::nyitott_jelzes_db() > 0) {
+            $ki['naptar']['jelez'] = true;
         }
 
         foreach (['uzenetek', 'csapat'] as $jelzo) {

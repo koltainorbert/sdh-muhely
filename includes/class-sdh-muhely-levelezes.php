@@ -1636,6 +1636,33 @@ final class SDH_Muhely_Levelezes
         );
     }
 
+    /**
+     * Az ügynök le nem zárt fontos levelei (előbb az azonnaliak, aztán a maiak) a nyitott
+     * fiókokból – a Naptár „Ma" nézete és a napi összefoglaló levél ebből dolgozik.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function fontos_lista(int $limit = 5, bool $csak_azonnal = false): array
+    {
+        global $wpdb;
+
+        $nyitott = self::nyitott_sql();
+
+        if ($nyitott === '') {
+            return [];
+        }
+
+        $szint = $csak_azonnal ? "l.fontossag = 'azonnal'" : "l.fontossag IN ('azonnal', 'ma')";
+        $sorok = $wpdb->get_results($wpdb->prepare(
+            'SELECT l.* FROM ' . self::tabla() . ' l INNER JOIN ' . self::mappa_tabla() . " mp ON mp.id = l.mappa_id
+             WHERE mp.szerep = 'inbox' AND {$szint} AND l.elintezve = 0 AND l.fiok IN ({$nyitott})
+             ORDER BY CASE WHEN l.fontossag = 'azonnal' THEN 0 ELSE 1 END, l.datum DESC, l.id DESC LIMIT %d",
+            max(1, min(50, $limit))
+        )); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- a táblanevek és a fióklista a rendszeré.
+
+        return array_map([self::class, 'sor_kifele'], is_array($sorok) ? $sorok : []);
+    }
+
     /** A nyitott (nem zárolt) fiókok kulcsai SQL-listaként, vagy üres szöveg. */
     private static function nyitott_sql(): string
     {

@@ -61,6 +61,31 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.50.0
+- **Új modul: Naptár.** Minden névhez saját naptár tartozik. Közös fióknál (Csapat: Üzenőfal mód) a nevek kézzel
+  vehetők fel – belépés nem kell hozzájuk; többfelhasználós módban minden fiók (profil) magától kap egyet, és
+  mindkét módban felvehető további név (pl. „Műhely", „Kiszállás"). A nevek ki-be kapcsolva egymás mellé tehetők.
+- **Tizenkét nézet:** Ma (a nap idővonala, a hátralévő szabad idő, a lejárt teendők és a fontos levelek), Nap,
+  3 nap, Munkahét, Hét, Hónap, Negyedév, Év (hőtérkép), Napirend, Idővonal (nevenként, a nap óráira vagy a hét
+  napjaira bontva), Személyek (nevenként egy oszlop) és Tábla (állapot szerint). Görgetősáv nincs: ami nem fér ki,
+  lapozható vagy „+N" mögött áll.
+- **Az esemény mindent tud:** időpont vagy egész nap, több nap, helyszín, leírás, kategória és szín, fontosság,
+  állapot, résztvevők, ismétlődés (napi, heti a hét napjaival, havi, éves; végdátumig vagy alkalomszámig; egy
+  alkalom külön törölhető), több emlékeztető, ügyfél, munkalap száma, hivatkozás, privát jelző.
+- **Visszaszámlálás:** minden eseménynél élőben látszik, mennyi idő van még hátra, hogy éppen zajlik-e, vagy
+  mikor ért véget; az oldalsávon a következő események.
+- **Értesítés a rendszerben, amely nem tűnik el magától.** Amikor az esemény (vagy az emlékeztetője) esedékes,
+  kártya jelenik meg minden oldalon, és ott marad – oldalváltás után is –, amíg kézzel ki nem nyomják. Kis
+  jelzővé összecsukható, hogy ne takarjon; a menü jelvénye mutatja, hány vár.
+- **E-mail értesítés:** a megjelölt és a „Nagyon fontos" eseményekről levél megy a naptár gazdájának és a
+  résztvevőknek az első emlékeztető idején. Kapcsolható napi összefoglaló levél is: a nap eseményei és a levelező
+  ügynöke szerint nagyon fontos levelek.
+- **Húzással:** az időrácsban az esemény áthelyezhető és átméretezhető (15 perces lépés), a hónapban másik napra,
+  a Táblán másik állapotba, a Személyek nézetben másik név naptárába húzható. Üres helyre kattintva új esemény
+  nyílik arra a napra, időpontra és névre.
+- Beállítások › Naptár: alapnézet, a nap látható órasávja, kategóriák, alap emlékeztetők, e-mail, közös értesítő
+  cím, napi összefoglaló. Új táblák: `naptar_szemely`, `naptar_esemeny`, `naptar_jelzes` (séma 0.35.0). Új teszt: `t35-naptar`.
+
 ### 0.49.0
 - **A betöltött eszköz szerkeszthető a munkalapról.** Ceruza az eszközmező mellett, „Szerkesztés" az eszköz kártyáján,
   és a csatolt eszközökön is (a címkén és a További eszközök listáján): az eszköz ablaka a lap fölött nyílik, mentés
