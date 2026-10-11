@@ -202,6 +202,63 @@ final class SDH_Muhely_Munkalap
     }
 
     /**
+     * A munkalap további eszközeinek kapcsolósorai (eszkoz_id, bev_dij,
+     * bev_nev, bev_szolg), sorrendben – az eszközönkénti bevizsgálási díjhoz.
+     *
+     * @return array<int, object>
+     */
+    public static function tovabbi_reszletek(int $munkalap_id): array
+    {
+        global $wpdb;
+
+        if ($munkalap_id <= 0) {
+            return [];
+        }
+
+        $sorok = $wpdb->get_results(
+            $wpdb->prepare(
+                'SELECT eszkoz_id, bev_dij, bev_nev, bev_szolg FROM ' . self::tobbi_eszkoz_tabla()
+                . ' WHERE munkalap_id = %d ORDER BY sorrend ASC, id ASC',
+                $munkalap_id
+            )
+        );
+
+        return is_array($sorok) ? $sorok : [];
+    }
+
+    /**
+     * A beküldött eszközönkénti bevizsgálási díjak a megadott (már
+     * ellenőrzött) csatolt eszközökhöz.
+     *
+     * @param array<int, int> $idk
+     * @return array<int, array{dij: float, nev: string, szolg: int}> eszköz-azonosító => díj
+     */
+    private static function tovabbi_dijak_osszeallit(array $idk): array
+    {
+        $tomb = static fn (string $mezo): array => isset($_POST[$mezo]) && is_array($_POST[$mezo])
+            ? wp_unslash($_POST[$mezo])
+            : [];
+
+        $dij   = $tomb('tovabbi_dij');
+        $nev   = $tomb('tovabbi_dij_nev');
+        $szolg = $tomb('tovabbi_dij_szolg');
+        $ki    = [];
+
+        foreach ($idk as $id) {
+            $osszeg = max(0.0, round(SDH_Muhely_Tetel::szam((string) ($dij[$id] ?? '0')), 2));
+
+            $ki[$id] = [
+                'dij'   => $osszeg,
+                // Díj nélkül a díjlistából választott név sem marad meg.
+                'nev'   => $osszeg > 0 ? mb_substr(sanitize_text_field((string) ($nev[$id] ?? '')), 0, 255) : '',
+                'szolg' => $osszeg > 0 ? max(0, (int) ($szolg[$id] ?? 0)) : 0,
+            ];
+        }
+
+        return $ki;
+    }
+
+    /**
      * Eszközsorok a megadott azonosítókhoz, a megadott sorrendben.
      *
      * @param array<int, int> $idk
@@ -352,8 +409,10 @@ final class SDH_Muhely_Munkalap
      * ami új, bekerül; ami hiányzik, lekerül; a sorrend a listáé.
      *
      * @param array<int, int> $idk
+     * @param array<int, array{dij: float, nev: string, szolg: int}>|null $dijak
+     *        Eszközönkénti bevizsgálási díj; null = a díjakhoz nem nyúlunk.
      */
-    public static function tovabbi_ment(int $munkalap_id, array $idk): void
+    public static function tovabbi_ment(int $munkalap_id, array $idk, ?array $dijak = null): void
     {
         global $wpdb;
 
@@ -369,16 +428,23 @@ final class SDH_Muhely_Munkalap
         }
 
         foreach (array_values($idk) as $sorrend => $eszkoz_id) {
+            $sor = ['sorrend' => $sorrend];
+
+            if ($dijak !== null) {
+                $sor['bev_dij']   = (float) ($dijak[$eszkoz_id]['dij'] ?? 0);
+                $sor['bev_nev']   = (string) ($dijak[$eszkoz_id]['nev'] ?? '');
+                $sor['bev_szolg'] = (int) ($dijak[$eszkoz_id]['szolg'] ?? 0);
+            }
+
             if (in_array($eszkoz_id, $regi, true)) {
-                $wpdb->update($tabla, ['sorrend' => $sorrend], ['munkalap_id' => $munkalap_id, 'eszkoz_id' => $eszkoz_id]);
+                $wpdb->update($tabla, $sor, ['munkalap_id' => $munkalap_id, 'eszkoz_id' => $eszkoz_id]);
 
                 continue;
             }
 
-            $wpdb->insert($tabla, [
+            $wpdb->insert($tabla, $sor + [
                 'munkalap_id' => $munkalap_id,
                 'eszkoz_id'   => $eszkoz_id,
-                'sorrend'     => $sorrend,
                 'letrehozva'  => current_time('mysql'),
             ]);
         }
@@ -1918,6 +1984,20 @@ final class SDH_Muhely_Munkalap
         // A lap további (csatolt) eszközei – a fő eszköz a fenti választóban áll.
         $tovabbi = $uj ? [] : self::eszkoz_sorok(self::tovabbi_eszkoz_idk((int) $munkalap->id));
 
+        // Az eszközönkénti bevizsgálási díjak (eszköz-azonosító => kapcsolósor).
+        $tovabbi_dij = [];
+
+        foreach ($uj ? [] : self::tovabbi_reszletek((int) $munkalap->id) as $reszlet) {
+            $tovabbi_dij[(int) $reszlet->eszkoz_id] = $reszlet;
+        }
+
+        // A hibasorok eszközválasztója: 0 = a fő eszköz, utána a csatoltak.
+        $hiba_eszkozok = [0 => '1. ' . ($eszkozok[$eszkoz_id] ?? 'fő eszköz')];
+
+        foreach ($tovabbi as $i => $t_eszkoz) {
+            $hiba_eszkozok[(int) $t_eszkoz->id] = ($i + 2) . '. ' . self::eszkoz_felirat($t_eszkoz);
+        }
+
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($munkalap->id ?? 0); ?>">
         <input type="hidden" name="kontextus"
@@ -2169,13 +2249,13 @@ final class SDH_Muhely_Munkalap
                         <span class="sdh-ml-eszkozok__cimke">További eszközök</span>
                         <div class="sdh-ml-eszkozok__lista" data-sdh-tovabbi-lista>
                             <?php foreach ($tovabbi as $t_eszkoz) : ?>
-                                <?php self::tovabbi_cimke((int) $t_eszkoz->id, self::eszkoz_felirat($t_eszkoz)); ?>
+                                <?php self::tovabbi_cimke((string) (int) $t_eszkoz->id, self::eszkoz_felirat($t_eszkoz), $tovabbi_dij[(int) $t_eszkoz->id] ?? null); ?>
                             <?php endforeach; ?>
                             <span class="sdh-ml-eszkozok__ures" data-sdh-tovabbi-ures<?php echo $tovabbi !== [] ? ' hidden' : ''; ?>>
                                 nincs – egy munkalapra akárhány eszköz felvehető
                             </span>
                         </div>
-                        <template data-sdh-tovabbi-sablon><?php self::tovabbi_cimke(0, ''); ?></template>
+                        <template data-sdh-tovabbi-sablon><?php self::tovabbi_cimke('__ID__', '', null); ?></template>
                         <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ml-eszkozok__gomb" data-sdh-tovabbi-uj
                                 title="Még egy eszköz erre a munkalapra: az ügyfél meglévő készülékei közül, vagy új felvitelével">
                             <span class="sdh-plusz" aria-hidden="true"></span>Eszköz csatolása
@@ -2209,6 +2289,7 @@ final class SDH_Muhely_Munkalap
                         <div class="sdh-fulek__panel sdh-fulek__panel--2" data-sdh-hibak
                              data-sdh-gyakori="<?php echo esc_attr((string) wp_json_encode(self::gyakori_hibak(), JSON_UNESCAPED_UNICODE)); ?>">
                             <div class="sdh-hibafej" aria-hidden="true">
+                                <span class="sdh-hibafej__eszkoz">Eszköz</span>
                                 <span>Hiba</span>
                                 <span>Állapot</span>
                                 <span>Javítás / megjegyzés</span>
@@ -2218,12 +2299,12 @@ final class SDH_Muhely_Munkalap
                             <div class="sdh-hibasorok" data-sdh-hibasorok
                                  data-kovetkezo="<?php echo (int) count($hibak); ?>">
                                 <?php foreach ($hibak as $i => $hiba) : ?>
-                                    <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok); ?>
+                                    <?php self::hibasor_sor((string) $i, $hiba, $hiba_allapotok, $hiba_eszkozok); ?>
                                 <?php endforeach; ?>
                             </div>
 
                             <template data-sdh-hibasor-sablon>
-                                <?php self::hibasor_sor('__I__', null, $hiba_allapotok); ?>
+                                <?php self::hibasor_sor('__I__', null, $hiba_allapotok, $hiba_eszkozok); ?>
                             </template>
 
                             <div class="sdh-hibalab">
@@ -2622,7 +2703,7 @@ final class SDH_Muhely_Munkalap
         $csak_olvas  = $levonas ? ' disabled' : '';
         ?>
         <div class="sdh-tetelsor<?php echo $szamlazva !== '' ? ' is-szamlazva' : ''; ?><?php echo $levonas ? ' sdh-tetelsor--levonas' : ''; ?>" data-sdh-tetelsor
-            <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>
+            <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') . ' data-sdh-bev-eszkoz="' . (int) ($tetel->eszkoz_id ?? 0) . '"' : ''; ?>
             <?php echo $levonas ? 'data-sdh-bevle' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>>
             <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"<?php echo $csak_olvas; ?>
                    value="<?php echo (int) ($tetel->id ?? 0); ?>">
@@ -2716,16 +2797,29 @@ final class SDH_Muhely_Munkalap
      * klónozott sablont (az indexe ott `__I__`), hogy a kettő ne csússzon szét.
      *
      * @param array<string, array{nev: string, szin: string, szamozott: bool, zart: bool}> $allapotok
+     * @param array<int, string> $eszkozok A lap eszközei a választóhoz (0 = a fő eszköz).
      */
-    private static function hibasor_sor(string $index, ?object $hiba, array $allapotok): void
+    private static function hibasor_sor(string $index, ?object $hiba, array $allapotok, array $eszkozok = [0 => '1. fő eszköz']): void
     {
         $nev_elotag = 'hibak[' . $index . ']';
         $allapot    = $hiba !== null ? (string) $hiba->allapot : (string) (array_key_first($allapotok) ?? 'uj');
+        // Melyik eszköz hibája: 0 = a fő eszközé; ami már nincs a lapon, az is a fő eszközhöz kerül.
+        $hiba_eszkoz = $hiba !== null && isset($eszkozok[(int) ($hiba->eszkoz_id ?? 0)]) ? (int) $hiba->eszkoz_id : 0;
 
         ?>
         <div class="sdh-hibasor" data-sdh-hibasor>
             <input type="hidden" name="<?php echo esc_attr($nev_elotag); ?>[id]"
                    value="<?php echo (int) ($hiba->id ?? 0); ?>">
+
+            <?php // Csak több eszköznél látszik (CSS: .is-tobb-eszkoz); a listáját az app.js tartja frissen. ?>
+            <select name="<?php echo esc_attr($nev_elotag); ?>[eszkoz_id]" class="sdh-hibasor__eszkoz"
+                    data-sdh-hiba-eszkoz aria-label="Melyik eszköz hibája">
+                <?php foreach ($eszkozok as $e_id => $e_nev) : ?>
+                    <option value="<?php echo (int) $e_id; ?>" <?php selected($hiba_eszkoz, (int) $e_id); ?>>
+                        <?php echo esc_html($e_nev); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
             <input type="text" name="<?php echo esc_attr($nev_elotag); ?>[leiras]" maxlength="255"
                    class="sdh-hibasor__leiras" aria-label="Hiba" placeholder="Pl. törött kijelző"
@@ -2764,12 +2858,32 @@ final class SDH_Muhely_Munkalap
      * felirat, levétel gomb. Ugyanez rajzolja a meglévőket és a JavaScript
      * által klónozott sablont (azonosító 0, üres felirat).
      */
-    private static function tovabbi_cimke(int $eszkoz_id, string $felirat): void
+    private static function tovabbi_cimke(string $eszkoz_id, string $felirat, ?object $reszlet): void
     {
+        // A sablonban az azonosító helyén `__ID__` áll: a JavaScript írja be klónozáskor.
+        $dij = $reszlet !== null ? (float) $reszlet->bev_dij : 0.0;
+
         ?>
-        <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo (int) $eszkoz_id; ?>">
-            <input type="hidden" name="tovabbi_eszkoz[]" value="<?php echo (int) $eszkoz_id; ?>">
+        <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>">
+            <input type="hidden" name="tovabbi_eszkoz[]" value="<?php echo esc_attr($eszkoz_id); ?>">
             <span class="sdh-ml-eszkoz__nev" data-sdh-tovabbi-nev><?php echo esc_html($felirat); ?></span>
+            <span class="sdh-ml-eszkoz__dij"
+                  title="Ennek az eszköznek a bevizsgálási díja. Külön tételként kerül a munkalapra és a számlára, és beleszámít az előlegbe.">
+                <label>díj
+                    <input type="text" inputmode="decimal" autocomplete="off" data-sdh-tovabbi-dij
+                           name="tovabbi_dij[<?php echo esc_attr($eszkoz_id); ?>]" placeholder="0"
+                           aria-label="Az eszköz bevizsgálási díja (Ft)"
+                           value="<?php echo $dij > 0 ? esc_attr(self::szam_mezobe($dij)) : ''; ?>"></label>
+                <span aria-hidden="true">Ft</span>
+                <button type="button" class="sdh-ml-eszkoz__lista" data-sdh-tovabbi-dijlista
+                        title="Díj választása a díjlistából" aria-label="Díj választása a díjlistából">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+                </button>
+            </span>
+            <input type="hidden" name="tovabbi_dij_nev[<?php echo esc_attr($eszkoz_id); ?>]" data-sdh-tovabbi-dijnev
+                   value="<?php echo esc_attr($reszlet !== null ? (string) $reszlet->bev_nev : ''); ?>">
+            <input type="hidden" name="tovabbi_dij_szolg[<?php echo esc_attr($eszkoz_id); ?>]" data-sdh-tovabbi-dijszolg
+                   value="<?php echo (int) ($reszlet !== null ? $reszlet->bev_szolg : 0); ?>">
             <button type="button" class="sdh-ml-eszkoz__torol" data-sdh-tovabbi-torol
                     title="Levétel a munkalapról (az eszköz megmarad az ügyfélnél)"
                     aria-label="Eszköz levétele a munkalapról">&times;</button>
@@ -2932,6 +3046,8 @@ final class SDH_Muhely_Munkalap
 
             $hibak[] = [
                 'id'      => isset($sor['id']) ? (int) $sor['id'] : 0,
+                // Melyik eszköz hibája (0 = a fő eszközé); a feldolgoz() a lap eszközeihez köti.
+                'eszkoz_id' => isset($sor['eszkoz_id']) ? max(0, (int) $sor['eszkoz_id']) : 0,
                 'leiras'  => $leiras,
                 'javitas' => $javitas,
                 // A törölt állapotú régi sor megtartja a kulcsát; újat csak a lista adhat.
@@ -3129,6 +3245,7 @@ final class SDH_Muhely_Munkalap
                 'leiras'      => $hiba['leiras'],
                 'javitas'     => $hiba['javitas'],
                 'allapot'     => $hiba['allapot'],
+                'eszkoz_id'   => (int) ($hiba['eszkoz_id'] ?? 0),
                 'modositva'   => $most,
             ];
 
@@ -3184,6 +3301,16 @@ final class SDH_Muhely_Munkalap
         $tovabbi   = $eszkozok_jelen
             ? self::tovabbi_osszeallit((int) $adatok['ugyfel_id'], (int) $adatok['eszkoz_id'])
             : null;
+
+        // Hiba csak a lap eszközéhez köthető: ami nem (vagy már nem) a lap csatolt
+        // eszköze, az a fő eszközhöz (0) kerül.
+        $lap_eszkozei = $tovabbi ?? self::tovabbi_eszkoz_idk($id);
+
+        foreach ($hibak as $i => $egy_hiba) {
+            if (!in_array((int) $egy_hiba['eszkoz_id'], $lap_eszkozei, true)) {
+                $hibak[$i]['eszkoz_id'] = 0;
+            }
+        }
         $szamozott = self::allapotok()[$adatok['allapot']]['szamozott'] ?? false;
         $hiba      = self::ervenyesit($adatok, $szamozott);
 
@@ -3194,7 +3321,7 @@ final class SDH_Muhely_Munkalap
         $eredmeny = self::adatbazisba($id, $adatok, $hibak, $regi);
 
         if (is_array($eredmeny) && $tovabbi !== null) {
-            self::tovabbi_ment((int) $eredmeny[0], $tovabbi);
+            self::tovabbi_ment((int) $eredmeny[0], $tovabbi, self::tovabbi_dijak_osszeallit($tovabbi));
         }
 
         // A tételek csak akkor szinkronizálódnak, ha az űrlap hozta őket –

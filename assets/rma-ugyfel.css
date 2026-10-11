@@ -1042,3 +1042,11 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
         display: none;
     }
 }
+
+/* 0.41.0 – több eszköz: a hiba fölött, melyik készüléké. */
+.rma-lista__eszkoz {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: .7;
+}

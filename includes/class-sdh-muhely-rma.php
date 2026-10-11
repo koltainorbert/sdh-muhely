@@ -1282,7 +1282,7 @@ final class SDH_Muhely_Rma
      * A címke tartalma (QR + szerviz + sorszám + ügyfél + vonalkód) –
      * ugyanaz a nyomtatott címkén, az Áttekintésben és a munkalap-ablakban.
      */
-    public static function cimke_blokk(object $munkalap, ?object $ugyfel, ?object $eszkoz): string
+    public static function cimke_blokk(object $munkalap, ?object $ugyfel, ?object $eszkoz, string $darab = ''): string
     {
         $szam = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
         $url  = self::url(self::token($munkalap));
@@ -1295,7 +1295,8 @@ final class SDH_Muhely_Rma
         }
 
         if ($eszkoz) {
-            $sorok .= '<div class="sdh-cimke__sor">' . esc_html(SDH_Muhely_Eszkoz::megnevezes($eszkoz)) . '</div>';
+            // data-cimke-eszkoz: a nyomtatóoldalon ez a sor átírható (cimke_oldal).
+            $sorok .= '<div class="sdh-cimke__sor" data-cimke-eszkoz>' . esc_html(SDH_Muhely_Eszkoz::megnevezes($eszkoz)) . '</div>';
         }
 
         $atveve = SDH_Muhely_Munkalap::datum_megjelenit((string) $munkalap->keszult);
@@ -1304,11 +1305,14 @@ final class SDH_Muhely_Rma
             $sorok .= '<div class="sdh-cimke__sor">Átvéve: ' . esc_html($atveve) . '</div>';
         }
 
-        return '<div class="sdh-cimke">'
+        // sdh-cimke--rma: a nyomtatott címke; a sima .sdh-cimke a listák kis szövegcímkéje.
+        return '<div class="sdh-cimke sdh-cimke--rma">'
             . '<div class="sdh-cimke__qr">' . SDH_Muhely_Kodok::qr_svg($url) . '</div>'
             . '<div class="sdh-cimke__adat">'
             . '<div class="sdh-cimke__ceg">' . esc_html((string) $b['szerviz_nev']) . '</div>'
-            . '<div class="sdh-cimke__szam">' . esc_html($szam) . '</div>'
+            . '<div class="sdh-cimke__szam">' . esc_html($szam)
+            // Több eszköznél: hányadik címke a hányból (pl. 2/3).
+            . ($darab !== '' ? ' <span class="sdh-cimke__darab">' . esc_html($darab) . '</span>' : '') . '</div>'
             . $sorok
             . '</div>'
             . '<div class="sdh-cimke__vk">' . SDH_Muhely_Kodok::vonalkod_svg($szam, false, 'sdh-vonalkod', true)
@@ -1360,7 +1364,17 @@ final class SDH_Muhely_Rma
         if ($szamozott) {
             $token = self::token($munkalap);
 
-            echo self::cimke_blokk($munkalap, $ugyfel, $eszkoz); // phpcs:ignore WordPress.Security.EscapeOutput
+            $cimke_db = 1 + count(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk($id));
+
+            echo self::cimke_blokk($munkalap, $ugyfel, $eszkoz, $cimke_db > 1 ? '1/' . $cimke_db : ''); // phpcs:ignore WordPress.Security.EscapeOutput
+
+            if ($cimke_db > 1) {
+                printf(
+                    '<p class="sdh-rma__cimkedb">%d címke készül – eszközönként egy. Nyomtatás előtt bármelyik kihagyható, és az eszköz sora átírható.</p>',
+                    (int) $cimke_db
+                );
+            }
+
             printf(
                 '<div class="sdh-rma__gombok">'
                 . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a>'
@@ -1631,8 +1645,11 @@ final class SDH_Muhely_Rma
         }
 
         $ugyfel = self::ugyfel((int) $munkalap->ugyfel_id);
-        $eszkoz = self::eszkoz((int) $munkalap->eszkoz_id);
         $szam   = SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam);
+
+        // Eszközönként egy címke: a fő eszközé és minden csatolt eszközé.
+        $eszkozok = SDH_Muhely_Munkalap::eszkozok($munkalap);
+        $db       = max(1, count($eszkozok));
 
         nocache_headers();
         status_header(200);
@@ -1650,17 +1667,85 @@ final class SDH_Muhely_Rma
     body { margin: 0; font: 13px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #000; background: #fff; }
     .eszkoztar { padding: 12px 16px; background: #f3f3f3; border-bottom: 1px solid #ddd; display: flex; gap: 8px; align-items: center; }
     .eszkoztar button { font: inherit; padding: 6px 14px; border: 1px solid #999; border-radius: 6px; background: #fff; cursor: pointer; }
-    .sdh-cimke { width: 92mm; margin: 12px; border: 1px dashed #999; padding: 4mm; }
-    @media print { .eszkoztar { display: none; } .sdh-cimke { margin: 0; border: 0; } }
+    .sdh-cimke--rma { width: 92mm; max-width: none; margin: 0; border: 1px dashed #999; border-radius: 0; padding: 4mm; }
+    .sdh-cimke__darab { font-size: 12px; font-weight: 600; letter-spacing: 0; }
+    .cimke-tarto { margin: 12px; }
+    .cimke-tarto.kihagyva .sdh-cimke--rma { opacity: .3; }
+    .cimke-vezerlo { display: flex; gap: 10px; align-items: center; width: 92mm; margin-bottom: 4px; font-size: 12px; }
+    .cimke-vezerlo label { display: flex; gap: 5px; align-items: center; white-space: nowrap; }
+    .cimke-vezerlo input[type="text"] { flex: 1 1 auto; min-width: 0; font: inherit; padding: 4px 7px; border: 1px solid #999; border-radius: 5px; }
+    @media print {
+        .eszkoztar, .cimke-vezerlo, .cimke-tarto.kihagyva { display: none; }
+        .cimke-tarto { margin: 0; break-after: page; page-break-after: always; }
+        .cimke-tarto.utolso { break-after: auto; page-break-after: auto; }
+        .sdh-cimke--rma { border: 0; }
+    }
 </style>
 </head>
 <body>
 <div class="eszkoztar">
     <button type="button" onclick="window.print()">Nyomtatás</button>
-    <span>Munkalap <?php echo esc_html($szam); ?> – címke (QR + vonalkód)</span>
+    <span>Munkalap <?php echo esc_html($szam); ?> – <?php
+        echo $db > 1
+            ? esc_html($db . ' címke, eszközönként egy. Amelyik nem kell, annál vedd ki a pipát; az eszköz sora átírható.')
+            : 'címke (QR + vonalkód). Az eszköz sora átírható.';
+    ?></span>
 </div>
-<?php echo self::cimke_blokk($munkalap, $ugyfel, $eszkoz); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-<script>window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 250); });</script>
+<?php foreach ($eszkozok === [] ? [null] : $eszkozok as $n => $egy_eszkoz) : ?>
+<div class="cimke-tarto" data-cimke>
+    <div class="cimke-vezerlo">
+        <label><input type="checkbox" data-cimke-kell checked> <?php echo $db > 1 ? esc_html(($n + 1) . '. címke') : 'Nyomtatás'; ?></label>
+        <?php if ($egy_eszkoz) : ?>
+            <input type="text" data-cimke-szoveg maxlength="80" aria-label="Az eszköz sora a címkén"
+                   value="<?php echo esc_attr(SDH_Muhely_Eszkoz::megnevezes($egy_eszkoz)); ?>">
+        <?php endif; ?>
+    </div>
+    <?php echo self::cimke_blokk($munkalap, $ugyfel, $egy_eszkoz, $db > 1 ? ($n + 1) . '/' . $db : ''); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+</div>
+<?php endforeach; ?>
+<script>
+(function () {
+    var tartok = Array.prototype.slice.call(document.querySelectorAll('[data-cimke]'));
+
+    /* A nyomtatásra kerülő címkék újraszámozása (1/2, 2/2…) és az utolsó jelölése (utána nincs lapdobás). */
+    function frissit() {
+        var kell = tartok.filter(function (t) { return t.querySelector('[data-cimke-kell]').checked; });
+
+        tartok.forEach(function (t) {
+            var i = kell.indexOf(t);
+            var darab = t.querySelector('.sdh-cimke__darab');
+
+            t.classList.toggle('kihagyva', i === -1);
+            t.classList.toggle('utolso', i === kell.length - 1);
+
+            if (darab) {
+                darab.textContent = i === -1 || kell.length < 2 ? '' : (i + 1) + '/' + kell.length;
+            }
+        });
+    }
+
+    tartok.forEach(function (t) {
+        t.querySelector('[data-cimke-kell]').addEventListener('change', frissit);
+
+        var mezo = t.querySelector('[data-cimke-szoveg]');
+        var sor = t.querySelector('[data-cimke-eszkoz]');
+
+        if (mezo && sor) {
+            mezo.addEventListener('input', function () {
+                sor.textContent = mezo.value;
+                sor.style.display = mezo.value.trim() === '' ? 'none' : '';
+            });
+        }
+    });
+
+    frissit();
+
+    /* Egy címkénél a nyomtatás rögtön indul, ahogy eddig; többnél előbb választhatsz. */
+    if (tartok.length === 1) {
+        window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 250); });
+    }
+}());
+</script>
 </body>
 </html>
         <?php

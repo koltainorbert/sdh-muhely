@@ -1402,7 +1402,7 @@ final class SDH_Muhely_Racs
             [
                 'k'    => 'hibak',
                 'cim'  => 'Hibák' . $szamlalo(count($hibak)),
-                'html' => self::kepernyore([self::class, 'ful_hibak'], $hibak),
+                'html' => self::kepernyore([self::class, 'ful_hibak'], $hibak, $eszkozok),
             ],
             [
                 'k'    => 'szolgaltatasok',
@@ -2022,16 +2022,33 @@ final class SDH_Muhely_Racs
      * Hibák-lapfül.
      *
      * @param array<int, object> $hibak
+     * @param array<int, object> $eszkozok A lap eszközei, elöl a fő eszköz.
      */
-    private static function ful_hibak(array $hibak): void
+    private static function ful_hibak(array $hibak, array $eszkozok = []): void
     {
         $allapotok = SDH_Muhely_Munkalap::hiba_allapotok();
         $zart      = SDH_Muhely_Munkalap::zart_kulcsok($allapotok);
         $sorok     = [];
 
+        // Több eszköznél látszik, melyik eszköz hibája (0 = a fő, azaz az első eszköz).
+        $tobb     = count($eszkozok) > 1;
+        $nevek    = [];
+        $fo_nev   = '';
+
+        foreach (array_values($eszkozok) as $n => $e) {
+            $nev = ($n + 1) . '. ' . SDH_Muhely_Eszkoz::megnevezes($e);
+
+            if ($n === 0) {
+                $fo_nev = $nev;
+            } else {
+                $nevek[(int) $e->id] = $nev;
+            }
+        }
+
         foreach ($hibak as $i => $hiba) {
             $sorok[] = [
                 'sorszam'    => (string) (int) $hiba->id,
+                'eszkoz'     => esc_html($nevek[(int) ($hiba->eszkoz_id ?? 0)] ?? $fo_nev),
                 'lista'      => (string) ($i + 1),
                 'tipus'      => SDH_Muhely_Munkalap::jelveny((string) $hiba->allapot, $allapotok),
                 'javitva'    => in_array((string) $hiba->allapot, $zart, true) ? esc_html(self::datum($hiba->modositva)) : '',
@@ -2040,15 +2057,22 @@ final class SDH_Muhely_Racs
             ];
         }
 
+        $fejlec = [
+            'sorszam'    => ['cim' => 'Sorszám', 'igazit' => 'jobb'],
+            'lista'      => ['cim' => 'Listasorsz.', 'igazit' => 'jobb'],
+            'eszkoz'     => ['cim' => 'Eszköz'],
+            'tipus'      => ['cim' => 'Típus'],
+            'javitva'    => ['cim' => 'Javítva'],
+            'megnevezes' => ['cim' => 'Megnevezés'],
+            'leiras'     => ['cim' => 'Leírás'],
+        ];
+
+        if (!$tobb) {
+            unset($fejlec['eszkoz']);
+        }
+
         self::tabla(
-            [
-                'sorszam'    => ['cim' => 'Sorszám', 'igazit' => 'jobb'],
-                'lista'      => ['cim' => 'Listasorsz.', 'igazit' => 'jobb'],
-                'tipus'      => ['cim' => 'Típus'],
-                'javitva'    => ['cim' => 'Javítva'],
-                'megnevezes' => ['cim' => 'Megnevezés'],
-                'leiras'     => ['cim' => 'Leírás'],
-            ],
+            $fejlec,
             $sorok,
             null,
             'Ehhez a munkalaphoz még nincs hibasor.'

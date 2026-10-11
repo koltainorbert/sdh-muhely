@@ -60,6 +60,24 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.41.0
+- **Hiba eszközhöz kötve:** több eszközös munkalapon minden hibasor elején választó áll, melyik eszköz hibája
+  (alapból az első, azaz a fő eszközé). A „Gyakori hibák" popupban előbb az eszköz választható, utána a hibák –
+  ugyanaz a hiba több eszközre külön felvehető. A részletek Hibák lapfülén és az ügyféloldalon is látszik, melyik
+  készüléké. Ha egy eszköz lekerül a lapról, a hibái a fő eszközhöz kerülnek (nem vesznek el).
+- **Bevizsgálási díj eszközönként:** a csatolt eszköz címkéjén saját díjmező van (kézzel vagy a díjlistából). Minden
+  eszköz díja külön tételsor a munkalapon és a számlán, az eszköz nevével. Az előleg a díjak összege: a csatolt
+  eszköz díjának beírásakor magától nő, levételekor csökken; a fő eszköz díja az előleg maradéka. „Javítás:
+  levonódik" módban az összes díj levonódik a végösszegből. Egy eszközös lapon minden a régi.
+- **Címke eszközönként:** a címkenyomtató oldalon minden eszköz saját címkét kap (1/3, 2/3…). Nyomtatás előtt
+  bármelyik kihagyható (pipa), és az eszköz sora átírható. Több címkénél a nyomtatás nem indul magától.
+- **Számla-előkészítő és számla:** a megjegyzés `{eszkoz}` és `{imei}` helyőrzője a lap minden eszközét felsorolja;
+  a számla ablakában a megjegyzés és a díjtételek ugyanúgy átírhatók, törölhetők, mint eddig.
+- **Javítás:** a listák típus-címkéi (Cég, Magánszemély, garanciális) széles dobozként jelentek meg, mert az
+  osztálynevük ütközött a nyomtatott RMA-címkéével; a nyomtatott címke külön osztályt kapott.
+- Séma (DB_VERSION 0.29.0): `sdh_munkalap_hiba.eszkoz_id`, `sdh_munkalap_tetel.eszkoz_id`,
+  `sdh_munkalap_eszkoz.bev_dij / bev_nev / bev_szolg`.
+
 ### 0.40.1
 - **Javítás – az AI-asszisztens nem válaszolt** („`temperature` is deprecated for this model"): az újabb Claude-modellek
   elutasítják ezt a paramétert, ezért kikerült a kérésből.

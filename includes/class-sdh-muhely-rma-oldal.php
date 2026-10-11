@@ -658,6 +658,8 @@ final class SDH_Muhely_Rma_Oldal
             $utolso    = $naplo !== [] ? (string) $naplo[0]->letrehozva : (string) $munkalap->modositva;
             $eszkoz    = SDH_Muhely_Rma::eszkoz((int) $munkalap->eszkoz_id);
             $hibak     = SDH_Muhely_Munkalap::hibasorok($id);
+            // A lapra csatolt további eszközök (a fő eszköz után).
+            $tovabbi   = SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk($id));
             $tetelek   = SDH_Muhely_Tetel::lista($id);
             $uzenetek  = SDH_Muhely_Rma::uzenetek($id);
 
@@ -703,10 +705,10 @@ final class SDH_Muhely_Rma_Oldal
 
                     <div class="rma-panelek">
                         <section class="rma-panel" data-rma-panel="eszkoz" id="rma-panel-eszkoz" role="tabpanel">
-                            <?php self::panel_eszkoz($munkalap, $ugyfel, $eszkoz); ?>
+                            <?php self::panel_eszkoz($munkalap, $ugyfel, $eszkoz, $tovabbi); ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="hibak" id="rma-panel-hibak" role="tabpanel">
-                            <?php self::panel_hibak($hibak); ?>
+                            <?php self::panel_hibak($hibak, $eszkoz, $tovabbi); ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="tetelek" id="rma-panel-tetelek" role="tabpanel">
                             <?php self::panel_tetelek($tetelek, $munkalap); ?>
@@ -804,7 +806,7 @@ final class SDH_Muhely_Rma_Oldal
         printf('<div class="rma-adat__sor"><dt>%s</dt><dd>%s</dd></div>', esc_html($cimke), nl2br(esc_html($ertek)));
     }
 
-    private static function panel_eszkoz(object $munkalap, ?object $ugyfel, ?object $eszkoz): void
+    private static function panel_eszkoz(object $munkalap, ?object $ugyfel, ?object $eszkoz, array $tovabbi = []): void
     {
         echo '<dl class="rma-adat">';
 
@@ -812,8 +814,11 @@ final class SDH_Muhely_Rma_Oldal
             self::adat(self::t('ugyfel'), (string) $ugyfel->nev);
         }
 
-        if ($eszkoz) {
-            self::adat(self::t('eszkoz'), self::kategoria((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz));
+        $eszkozok = array_merge($eszkoz ? [$eszkoz] : [], $tovabbi);
+
+        foreach ($eszkozok as $n => $eszkoz) {
+            // Több eszköznél sorszámozva: „1. Eszköz", „2. Eszköz"…
+            self::adat((count($eszkozok) > 1 ? ($n + 1) . '. ' : '') . self::t('eszkoz'), self::kategoria((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz));
 
             $azon = (string) ($eszkoz->imei !== '' ? $eszkoz->imei : $eszkoz->sorozatszam);
 
@@ -846,8 +851,17 @@ final class SDH_Muhely_Rma_Oldal
     /**
      * @param array<int, object> $hibak
      */
-    private static function panel_hibak(array $hibak): void
+    private static function panel_hibak(array $hibak, ?object $fo_eszkoz = null, array $tovabbi = []): void
     {
+        // Több eszköznél a hiba mellett áll, melyik készüléké (0 = a fő eszközé).
+        $nevek = [];
+
+        foreach ($tovabbi as $e) {
+            $nevek[(int) $e->id] = SDH_Muhely_Eszkoz::megnevezes($e);
+        }
+
+        $fo_nev = $tovabbi !== [] && $fo_eszkoz ? SDH_Muhely_Eszkoz::megnevezes($fo_eszkoz) : '';
+
         if ($hibak === []) {
             echo '<p class="rma-ures">' . esc_html(self::t('nincs_hiba')) . '</p>';
 
@@ -862,8 +876,11 @@ final class SDH_Muhely_Rma_Oldal
             $k  = (string) $hiba->allapot;
             $ha = $allapotok[$k] ?? null;
 
+            $kie = $tovabbi !== [] ? ($nevek[(int) ($hiba->eszkoz_id ?? 0)] ?? $fo_nev) : '';
+
             printf(
-                '<li><span class="rma-lista__fo">%s</span>%s</li>',
+                '<li><span class="rma-lista__fo">%s%s</span>%s</li>',
+                $kie !== '' ? '<small class="rma-lista__eszkoz">' . esc_html($kie) . '</small> ' : '',
                 esc_html((string) $hiba->leiras),
                 $ha ? '<span class="sdh-allapot sdh-allapot--' . esc_attr((string) $ha['szin']) . '">' . esc_html(self::hiba_allapot_nev($k, $ha)) . '</span>' : ''
             );

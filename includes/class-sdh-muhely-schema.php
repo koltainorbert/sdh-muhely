@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.28.0';
+    public const DB_VERSION = '0.29.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -359,6 +359,10 @@ final class SDH_Muhely_Schema
          * gyenge akku), és mindegyiknek külön haladása van: az egyik
          * már kész, a másik alkatrészre vár. Ezért külön tábla, saját
          * állapottal – a munkalap állapota ettől független.
+         *
+         * Az "eszkoz_id" mondja meg, a lap melyik eszközének a hibája:
+         * 0 = a fő eszközé (a régi sorok mind ilyenek), különben a lapra
+         * csatolt további eszköz azonosítója.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$hiba} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -367,6 +371,7 @@ final class SDH_Muhely_Schema
             leiras varchar(255) NOT NULL default '',
             javitas text NULL,
             allapot varchar(30) NOT NULL default 'uj',
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             modositva datetime NULL,
             PRIMARY KEY  (id),
@@ -383,12 +388,21 @@ final class SDH_Muhely_Schema
          * erre épülnek, és változatlanul működnek. Ez a tábla csak a
          * TOVÁBBI eszközöket tartja, sorrendben. Egy eszköz egy lapon
          * egyszer szerepelhet (egyedi kulcs).
+         *
+         * Minden eszköznek saját bevizsgálási díja van: a csatolt eszközé
+         * itt áll ("bev_dij", a díjlistából választott díj neve és
+         * szolgáltatás-azonosítója: "bev_nev" / "bev_szolg"). A fő eszköz
+         * díja a munkalap előlegének (fizetett) maradéka a csatoltak díjai
+         * után – egy eszköznél így minden a régi.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$ml_eszkoz} (
             id bigint(20) unsigned NOT NULL auto_increment,
             munkalap_id bigint(20) unsigned NOT NULL default 0,
             eszkoz_id bigint(20) unsigned NOT NULL default 0,
             sorrend int(11) NOT NULL default 0,
+            bev_dij decimal(14,2) NOT NULL default 0.00,
+            bev_nev varchar(255) NOT NULL default '',
+            bev_szolg bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             unique key lap_eszkoz (munkalap_id,eszkoz_id),
@@ -403,6 +417,8 @@ final class SDH_Muhely_Schema
          * mezőjük közös. Az árak nettóban és bruttóban is tárolódnak,
          * mert a pultnál bruttóval dolgoznak, a bizonylat nettót kér.
          * Az "*_ertek" = egységár × mennyiség, kedvezménnyel csökkentve.
+         * Az "eszkoz_id" a bevizsgálási díj soránál mondja meg, melyik
+         * eszköz díja (0 = a fő eszközé); más tételnél 0.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$tetel} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -414,6 +430,7 @@ final class SDH_Muhely_Schema
             idopont date NULL,
             szamla varchar(40) NOT NULL default '',
             megnevezes varchar(255) NOT NULL default '',
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             termek_id bigint(20) unsigned NOT NULL default 0,
             termekkod varchar(60) NOT NULL default '',
             cikkszam varchar(60) NOT NULL default '',

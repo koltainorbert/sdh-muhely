@@ -3705,8 +3705,10 @@ a.sdh-kartya:focus-visible {
 /* ================================================================== */
 
 /* ---- Címke: QR + sorszám + vonalkód – papírszerű, mindig fekete-fehér ---- */
+/* A nyomtatott címke gyökere .sdh-cimke--rma: a sima .sdh-cimke a listák kis
+   szövegcímkéje (Cég, Magánszemély…), arra ezek a szabályok nem vonatkozhatnak. */
 
-.sdh-cimke {
+.sdh-cimke--rma {
     --cimke-qr: 104px;
     --cimke-vk: 40px;
     display: grid;
@@ -5970,4 +5972,122 @@ dd:hover > .sdh-masol {
     font-style: normal;
     font-weight: 600;
     color: var(--sdh-szoveg-2);
+}
+
+
+/* ================================================================== */
+/* 0.41.0 – eszközönkénti hiba és bevizsgálási díj a munkalapon         */
+/* ================================================================== */
+
+/* A hibasor eszközválasztója csak több eszköznél látszik. */
+.sdh-hibafej__eszkoz,
+.sdh-hibasor__eszkoz {
+    display: none;
+}
+
+.is-tobb-eszkoz .sdh-hibafej__eszkoz,
+.is-tobb-eszkoz .sdh-hibasor__eszkoz {
+    display: block;
+}
+
+.is-tobb-eszkoz > .sdh-hibafej,
+.sdh-munkalapurlap .is-tobb-eszkoz .sdh-hibasor {
+    grid-template-columns: minmax(8rem, 1fr) minmax(0, 1.4fr) 10rem minmax(0, 1.2fr) 34px;
+}
+
+/* A csatolt eszköz címkéjén: a saját bevizsgálási díja. */
+.sdh-ml-eszkoz__dij {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    margin-left: .25rem;
+    padding-left: .5rem;
+    border-left: 1px solid var(--sdh-keret);
+    color: var(--sdh-szoveg-2);
+    white-space: nowrap;
+}
+
+.sdh-ml-eszkoz__dij label {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.sdh-ml-eszkoz .sdh-ml-eszkoz__dij input[type="text"] {
+    box-sizing: border-box;
+    width: 4.6rem;
+    height: 22px;
+    min-height: 0;
+    padding: 0 .35rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 6px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    text-align: right;
+}
+
+.sdh-ml-eszkoz .sdh-ml-eszkoz__dij input[type="text"]:focus {
+    border-color: var(--sdh-accent);
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+}
+
+.sdh-ml-eszkoz__lista {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 6px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    cursor: pointer;
+}
+
+.sdh-ml-eszkoz__lista:hover,
+.sdh-ml-eszkoz__lista:focus-visible {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-ml-eszkoz__lista svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+/* A gyakori hibák popupja: melyik eszköz hibáját vesszük fel. */
+.sdh-gyh__eszkozok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .8rem;
+}
+
+.sdh-gyh__eszkozok > span {
+    font-size: 12.5px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-gyh__eszkozok .sdh-pill {
+    height: 30px;
+    font-size: 12.5px;
+}
+
+.sdh-rma__cimkedb {
+    margin: .4rem 0 0;
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-cimke__darab {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
 }

@@ -276,6 +276,8 @@ final class SDH_Muhely_Tetel
                 : null,
             'szamla'          => mb_substr((string) ($adat['szamla'] ?? ''), 0, 40),
             'megnevezes'      => mb_substr((string) ($adat['megnevezes'] ?? ''), 0, 255),
+            // A bevizsgálási díj soránál: melyik eszköz díja (0 = a fő eszközé).
+            'eszkoz_id'       => max(0, (int) ($adat['eszkoz_id'] ?? 0)),
             'termek_id'       => $tipus === 'termek' ? max(0, (int) ($adat['termek_id'] ?? 0)) : 0,
             'termekkod'       => mb_substr((string) ($adat['termekkod'] ?? ''), 0, 60),
             'cikkszam'        => mb_substr((string) ($adat['cikkszam'] ?? ''), 0, 60),
