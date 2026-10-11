@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.51.0
+ * Version:           0.52.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.51.0');
+define('SDH_MUHELY_VERSION', '0.52.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -44,6 +44,8 @@ define('SDH_MUHELY_BASENAME', plugin_basename(__FILE__));
 $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-schema.php'   => 'SDH_Muhely_Schema',
     'includes/class-sdh-muhely-modulok.php'  => 'SDH_Muhely_Modulok',
+    // Titkok (kulcsok) titkosított tárolása – a kulcsot használó modulok előtt.
+    'includes/class-sdh-muhely-titok.php'    => 'SDH_Muhely_Titok',
     'includes/class-sdh-muhely-admin-ui.php' => 'SDH_Muhely_Admin_UI',
     'includes/class-sdh-muhely-frontend.php' => 'SDH_Muhely_Frontend',
     'includes/class-sdh-muhely-iranyitoszam.php' => 'SDH_Muhely_Iranyitoszam',
@@ -76,6 +78,11 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-asszisztens-tudas.php'    => 'SDH_Muhely_Asszisztens_Tudas',
     'includes/class-sdh-muhely-asszisztens-eszkozok.php' => 'SDH_Muhely_Asszisztens_Eszkozok',
     'includes/class-sdh-muhely-asszisztens.php'     => 'SDH_Muhely_Asszisztens',
+    // Nyomtatás (0.52): nyomtatványok PDF-ben – előnézet, nyomtatás, mentés, e-mail; sablonok a Beállításokban.
+    'includes/class-sdh-muhely-nyomtatvany.php'     => 'SDH_Muhely_Nyomtatvany',
+    'includes/class-sdh-muhely-nyomtatas.php'       => 'SDH_Muhely_Nyomtatas',
+    // Független napi mentés (az asszisztenstől függetlenül).
+    'includes/class-sdh-muhely-mentes.php'          => 'SDH_Muhely_Mentes',
     // Súgó: bemutató, dokumentáció, kérdés–válasz, túrák – a sugo/ mappa fejezeteiből.
     'includes/class-sdh-muhely-sugo.php'            => 'SDH_Muhely_Sugo',
 ];

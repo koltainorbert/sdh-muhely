@@ -163,7 +163,7 @@ A Beállítások **Pénz és eladás** csoportjában találod a **Számlázás**
 
 **A Számlázz.hu-kapcsolat**
 
-- **Számla Agent kulcs** – a Számlázz.hu-fiókod kulcsa; a fiók beállításai között, a Számla Agent kulcsoknál találod. A beírt kulcs mentés után nem jelenik meg újra a mezőben. Csak akkor írj bele, ha cserélni akarod.
+- **Számla Agent kulcs** – a Számlázz.hu-fiókod kulcsa; a fiók beállításai között, a Számla Agent kulcsoknál találod. A beírt kulcs mentés után nem jelenik meg újra a mezőben, és az adatbázisban (így a mentésfájlban is) **titkosítva** áll. Csak akkor írj bele, ha cserélni akarod.
 - **Kapcsolat ellenőrzése** – mentett kulcsnál megnézi, elfogadja-e a Számlázz.hu a kulcsot. Számla nem készül.
 - **Kulcs törlése** – bepipálva és mentve a kulcs törlődik.
 - **E-számla (elektronikus)** – kikapcsolva papír alapú, nyomtatandó számla készül.

@@ -164,6 +164,20 @@ A jobb alsó sarokban élő asszisztens üzenetei.
 - **„Ez a javaslat lejárt – kérd újra az asszisztenstől."** – *Ok:* hat óránál régebbi javaslat.
 - **„A rekord a művelet óta megváltozott – a visszaállítás azt is felülírná."** – *Ok:* a visszaállítandó adatot azóta más is módosította. *Megoldás:* nézd meg kézzel; ha biztos vagy benne, a **Mégis visszaállítom** gombbal megy.
 
+## Nyomtatás, PDF és e-mail
+
+A nyomtatványok (átvételi, munkalap, árajánlat, szállítólevél, pénztárzárás, listák) elakadásai. A részletek: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
+
+- **Az előnézet üres vagy szürke.** – *Ok:* a böngésző nem jelenít meg PDF-et keretben (telefonon gyakori). *Megoldás:* az előnézet sarkában **Megnyitás új lapon**, vagy **Mentés PDF-be**.
+- **A Nyomtatás gombra nem jön fel a nyomtatás-ablak.** – *Ok:* a böngésző nem enged a háttérből nyomtatni. *Megoldás:* az ablak néhány másodperc múlva hivatkozást ad (**Nyisd meg a PDF-et új lapon**); onnan nyomtass.
+- **„Ezen a nyomtatványon belső megjegyzés vagy zárkód van, ezért az ügyfél címére nem küldhető.”** – *Ok:* belső papírt próbáltál az ügyfélnek küldeni. *Megoldás:* a **Munkalapot** vagy az **Átvételi elismervényt** küldd.
+- **Kétszer annyi példány jött ki.** – *Ok:* a **Példányszám** mezőben és a böngésző nyomtatás-ablakában is több példány volt. *Megoldás:* a böngészőben maradjon 1.
+- **„A levél nem ment el: …”** – *Ok:* a szerver levélküldője nincs beállítva, vagy a kiválasztott postafiók nem érhető el. *Megoldás:* kösd be a postafiókot a **Beállítások › Levelezés** lapfülön, és azt válaszd **Feladónak**.
+- **„A próbanyomat nem küldhető el…”** – *Ok:* a próbanyomat kitalált adatokkal készül. *Megoldás:* valódi lapról küldj.
+- **Nincs Nyomtatás gomb a munkalapon.** – *Ok:* a lap még nincs elmentve. *Megoldás:* mentsd el; utána a rendszer felajánlja az átvételi elismervényt.
+- **Nem jelenik meg a felajánlás új lapnál vagy lezáráskor.** – *Ok:* ki van kapcsolva. *Megoldás:* **Beállítások › Nyomtatványok**, **Felajánlás és e-mail** doboz.
+- **„A mentett kulcs ezen a telepítésen nem olvasható…”** (Számlázás, IMEI-lekérdezés) – *Ok:* a rendszer másik gépre költözött, vagy megváltoztak a `wp-config.php` titkos kulcsai. *Megoldás:* írd be újra a kulcsot.
+
 ## Beállítások, mentés, frissítés
 
 A **Beállítások** menüpont, a teljes mentés és a frissítés elakadásai – ezek az adminisztrátort érintik.
@@ -183,7 +197,7 @@ Ezek nem hibák, hanem a rendszer mostani működésének határai:
 - **A Számla ablak fejléce eladásnál is „Munkalap".** Napi árukiadásról vagy rendelésről nyitva is „Munkalap" és a sorszám áll a címben. Csak a felirat ilyen, a számla jó.
 - **A popup bezárása nem kérdez rá a mentésre.**
 - **A fejléc keresője munkalapszámra nem keres** – csak ügyfélre és eszközre.
-- **A mentésből nincs visszatöltő felület,** és automatikus mentés csak az asszisztens módosítása előtt készül. Lásd: [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag).
+- **A mentésből nincs visszatöltő felület.** (Napi mentés magától készül.) Lásd: [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag).
 - **A másoló gomb nem biztonságos (`http://`) címen egyes böngészőkben nem működik.** Ilyenkor ezt írja: *Nem sikerült kimásolni – jelöld ki, és Ctrl+C*.
 
 ## GYIK

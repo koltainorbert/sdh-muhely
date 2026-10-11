@@ -138,8 +138,12 @@ final class SDH_Muhely_Szamla
         $kezdo  = is_readable($fajl) ? json_decode((string) file_get_contents($fajl), true) : [];
         $alap   = array_merge($alap, is_array($kezdo) ? array_intersect_key(array_map('strval', $kezdo), $alap) : []);
         $mentett = get_option(self::OPTION, []);
+        $b       = array_merge($alap, is_array($mentett) ? array_intersect_key($mentett, $alap) : []);
 
-        return array_merge($alap, is_array($mentett) ? array_intersect_key($mentett, $alap) : []);
+        // A kulcs az adatbázisban titkosítva áll (SDH_Muhely_Titok); itt a nyílt alak megy tovább.
+        $b['kulcs'] = class_exists('SDH_Muhely_Titok') ? SDH_Muhely_Titok::visszafejt((string) $b['kulcs']) : (string) $b['kulcs'];
+
+        return $b;
     }
 
     /**
@@ -197,6 +201,12 @@ final class SDH_Muhely_Szamla
                 magától semmi nem megy ki, csak amikor a számla ablakában a „Számla kiállítása" gombra kattintasz.
             </p>
 
+            <?php
+            if (class_exists('SDH_Muhely_Titok')) {
+                SDH_Muhely_Titok::figyelmeztetes(self::OPTION);
+            }
+            ?>
+
             <div class="sdh-mezok">
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="szamla_kulcs">Számla Agent kulcs</label>
@@ -209,7 +219,7 @@ final class SDH_Muhely_Szamla
                             <span data-sdh-szamla-kapcsolat-ki aria-live="polite"></span>
                         </span>
                     <?php else : ?>
-                        <span class="sdh-mezo__sugo">Mentés után itt ellenőrizhető a kapcsolat – számla készítése nélkül.</span>
+                        <span class="sdh-mezo__sugo">Mentés után itt ellenőrizhető a kapcsolat – számla készítése nélkül. A kulcs titkosítva tárolódik.</span>
                     <?php endif; ?>
                 </div>
 
@@ -382,11 +392,10 @@ final class SDH_Muhely_Szamla
             ? trim(sanitize_text_field(wp_unslash((string) $_POST['szamla_kulcs'])))
             : '';
 
-        if (!empty($_POST['szamla_kulcs_torol'])) {
-            $b['kulcs'] = '';
-        } elseif ($uj_kulcs !== '') {
-            $b['kulcs'] = $uj_kulcs;
-        }
+        // A kulcs tárolt (titkosított) alakja: új kulcs, törlés, vagy a mostani marad érintetlenül.
+        $tarolt_kulcs = class_exists('SDH_Muhely_Titok')
+            ? SDH_Muhely_Titok::mentendo(self::OPTION, $uj_kulcs, !empty($_POST['szamla_kulcs_torol']))
+            : (!empty($_POST['szamla_kulcs_torol']) ? '' : ($uj_kulcs !== '' ? $uj_kulcs : (string) $b['kulcs']));
 
         $b['eszamla']            = !empty($_POST['szamla_eszamla']);
         $b['elotag_fo']          = $elotag('szamla_elotag_fo');
@@ -424,6 +433,9 @@ final class SDH_Muhely_Szamla
         // phpcs:enable
 
         // Nem töltődik be minden oldalon (autoload = no): a kulcs csak számlázáskor kell.
+        // A kulcs soha nem kerül nyíltan az adatbázisba (így a mentésfájlba sem).
+        $b['kulcs'] = $tarolt_kulcs;
+
         update_option(self::OPTION, $b, false);
     }
 
@@ -2290,9 +2302,10 @@ final class SDH_Muhely_Szamla
      * ============================================================== */
 
     /** A logó helyi fájlja: a beállított médiafájl, különben a pluginnal szállított. */
-    private static function logo_fajl(): string
+    public static function logo_fajl(string $sajat = ''): string
     {
-        $url = trim((string) self::beallitas()['logo']);
+        // A nyomtatványok saját logója (Beállítások › Nyomtatványok) megelőzi a számlázásét.
+        $url = trim($sajat) !== '' ? trim($sajat) : trim((string) self::beallitas()['logo']);
 
         if ($url !== '') {
             $feltoltes = wp_upload_dir();

@@ -211,10 +211,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
             ],
             'megnyit' => [
                 'szint' => 'felulet', 'cim' => 'Megnyitás',
-                'leiras' => 'Gombot ad a felhasználónak, amivel egy oldalra ugrik vagy egy rekordot megnyit (munkalap, ügyfél, eszköz popupja).',
+                'leiras' => 'Gombot ad a felhasználónak, amivel egy oldalra ugrik vagy egy rekordot megnyit (munkalap, ügyfél, eszköz popupja), vagy megnyitja egy lap Nyomtatás ablakát (cel: nyomtatas) – ott választható az átvételi elismervény, a munkalap, a belső munkalap, az árajánlat, a szállítólevél; nyomtatható, PDF-be menthető, e-mailben küldhető. Te magad nem nyomtatsz és nem küldesz levelet: a gombot adod, a felhasználó dönt.',
                 'schema' => $obj([
-                    'cel'     => $sz('Modulkulcs (pl. penztar, csapat, szolgaltatasok, attekintes) vagy rekordtípus: munkalap, ugyfel, eszkoz.'),
-                    'id'      => $eg('Rekord azonosítója (munkalap/ugyfel/eszkoz esetén).'),
+                    'cel'     => $sz('Modulkulcs (pl. penztar, csapat, szolgaltatasok, attekintes) vagy rekordtípus: munkalap, ugyfel, eszkoz; nyomtatas = a lap Nyomtatás ablaka.'),
+                    'id'      => $eg('Rekord azonosítója (munkalap/ugyfel/eszkoz esetén; nyomtatas esetén a munkalap #azonosítója).'),
                     'felirat' => $sz('A gomb felirata.'),
                 ], ['cel']),
             ],

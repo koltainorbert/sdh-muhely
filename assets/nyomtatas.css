@@ -1,0 +1,547 @@
+/**
+ * SDH Műhely – Nyomtatás (0.52).
+ *
+ * A Nyomtatás ablak (előnézet + beállítás), a felajánlás kártyája, a
+ * Beállítások › Nyomtatványok lista és a sablonszerkesztő. Minden szín
+ * változóból jön; a méretek a betűnagyítással (--sdh-n) együtt nőnek
+ * (tools/css_nagyitas.py).
+ */
+
+/* ================================================================== */
+/* Gomb, ikon                                                          */
+/* ================================================================== */
+
+.sdh-ny-ikon {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-ny-gomb {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(6px * var(--sdh-n));
+}
+
+/* A rejtett keret, amelyből a böngésző nyomtat: a lapon kívül, de megjelenítve. */
+.sdh-ny-nyomtato {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: calc(1px * var(--sdh-n));
+    height: calc(1px * var(--sdh-n));
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ================================================================== */
+/* A Nyomtatás ablak                                                   */
+/* ================================================================== */
+
+dialog.sdh-modal[data-sdh-modul="nyomtatas"],
+dialog.sdh-modal[data-sdh-modul="nyomtsablon"] {
+    width: min(calc(1180px * var(--sdh-n)), 96vw);
+}
+
+.sdh-ny {
+    display: grid;
+    grid-template-columns: minmax(calc(280px * var(--sdh-n)), calc(360px * var(--sdh-n))) minmax(0, 1fr);
+    gap: calc(18px * var(--sdh-n));
+    align-items: stretch;
+    min-height: min(calc(640px * var(--sdh-n)), 68vh);
+}
+
+.sdh-ny__bal {
+    display: flex;
+    flex-direction: column;
+    gap: calc(12px * var(--sdh-n));
+    min-width: 0;
+}
+
+.sdh-ny__tipusok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6px * var(--sdh-n));
+}
+
+.sdh-ny__csoport {
+    flex: 1 0 100%;
+    margin-top: calc(4px * var(--sdh-n));
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny__tipus {
+    padding: calc(7px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.sdh-ny__tipus:hover {
+    border-color: var(--sdh-accent);
+}
+
+.sdh-ny__tipus.is-aktiv {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    font-weight: 600;
+}
+
+.sdh-ny__opciok {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-ny__opciok [hidden],
+.sdh-ny__email[hidden] {
+    display: none;
+}
+
+.sdh-ny__ketto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-ny .sdh-ny__peldany {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(12px * var(--sdh-n));
+}
+
+.sdh-ny__peldany > label {
+    margin: 0;
+}
+
+.sdh-ny__leptet {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(6px * var(--sdh-n));
+}
+
+.sdh-ny__leptet .sdh-gomb {
+    min-width: calc(36px * var(--sdh-n));
+    padding-inline: 0;
+    justify-content: center;
+    font-size: calc(17px * var(--sdh-n));
+    line-height: 1;
+}
+
+.sdh-ny .sdh-ny__leptet input[type="text"] {
+    width: calc(48px * var(--sdh-n));
+    padding: 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: calc(16px * var(--sdh-n));
+}
+
+.sdh-ny__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+}
+
+.sdh-ny__gombok .sdh-gomb--elsodleges {
+    flex: 1 1 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(8px * var(--sdh-n));
+    padding-block: calc(11px * var(--sdh-n));
+    font-size: calc(15px * var(--sdh-n));
+}
+
+.sdh-ny__gombok .sdh-gomb--vilagos {
+    flex: 1 1 0;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.sdh-ny__email {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10px * var(--sdh-n));
+    padding: calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy, calc(14px * var(--sdh-n)));
+    background: var(--sdh-felulet-2, var(--sdh-felulet));
+}
+
+.sdh-ny__email textarea {
+    resize: vertical;
+}
+
+.sdh-ny__uzenet {
+    min-height: 1.3em;
+    margin: 0;
+    font-size: calc(13px * var(--sdh-n));
+    color: var(--sdh-szoveg-2, var(--sdh-halvany));
+}
+
+.sdh-ny__uzenet.is-siker {
+    color: var(--sdh-allapot-zold);
+}
+
+.sdh-ny__uzenet.is-hiba {
+    color: var(--sdh-allapot-piros);
+    font-weight: 600;
+}
+
+.sdh-ny__megj {
+    margin: auto 0 0;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ny__megj.is-figyelem {
+    padding: calc(8px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-allapot-narancs);
+    border-radius: calc(10px * var(--sdh-n));
+    color: var(--sdh-szoveg);
+}
+
+/* Az előnézet: a PDF a böngésző saját nézőjében. */
+.sdh-ny__elonezet {
+    position: relative;
+    min-height: calc(420px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy, calc(14px * var(--sdh-n)));
+    background: var(--sdh-felulet-2, var(--sdh-felulet));
+    overflow: hidden;
+}
+
+.sdh-ny__elonezet iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--sdh-felulet-2, var(--sdh-felulet));
+}
+
+.sdh-ny__elonezet iframe[hidden] {
+    display: none;
+}
+
+.sdh-ny__toltes {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: calc(24px * var(--sdh-n));
+    text-align: center;
+    font-size: calc(14px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny__toltes[hidden] {
+    display: none;
+}
+
+.sdh-ny__toltes.is-hiba {
+    color: var(--sdh-allapot-piros);
+    font-weight: 600;
+}
+
+.sdh-ny__ujlap {
+    position: absolute;
+    right: calc(10px * var(--sdh-n));
+    bottom: calc(8px * var(--sdh-n));
+    padding: calc(4px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2, var(--sdh-halvany));
+    font-size: calc(12px * var(--sdh-n));
+    text-decoration: none;
+    opacity: .85;
+}
+
+.sdh-ny__ujlap:hover {
+    opacity: 1;
+    color: var(--sdh-accent-szoveg);
+}
+
+@media (max-width: 860px) {
+    .sdh-ny {
+        grid-template-columns: 1fr;
+    }
+
+    .sdh-ny__elonezet {
+        min-height: 60vh;
+    }
+}
+
+/* ================================================================== */
+/* Felajánlás (új lap, lezárás)                                        */
+/* ================================================================== */
+
+dialog.sdh-ny-ajanlat {
+    width: min(calc(460px * var(--sdh-n)), 92vw);
+    padding: calc(20px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros, var(--sdh-keret));
+    border-radius: var(--sdh-r-nagy, calc(16px * var(--sdh-n)));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+dialog.sdh-ny-ajanlat[open] {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: calc(14px * var(--sdh-n)) calc(14px * var(--sdh-n));
+    align-items: start;
+}
+
+dialog.sdh-ny-ajanlat::backdrop {
+    background: rgba(12, 14, 18, .45);
+}
+
+.sdh-ny-ajanlat__ikon {
+    display: grid;
+    place-items: center;
+    width: calc(44px * var(--sdh-n));
+    height: calc(44px * var(--sdh-n));
+    border-radius: 50%;
+    background: var(--sdh-accent-halvany, var(--sdh-felulet-2));
+    color: var(--sdh-accent);
+}
+
+.sdh-ny-ajanlat__ikon svg {
+    width: calc(24px * var(--sdh-n));
+    height: calc(24px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-ny-ajanlat__szoveg {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4px * var(--sdh-n));
+    min-width: 0;
+}
+
+.sdh-ny-ajanlat__szoveg strong {
+    font-size: calc(16px * var(--sdh-n));
+}
+
+.sdh-ny-ajanlat__szoveg span {
+    font-size: calc(13.5px * var(--sdh-n));
+    color: var(--sdh-szoveg-2, var(--sdh-halvany));
+}
+
+.sdh-ny-ajanlat__szoveg .sdh-ny-ajanlat__hiba {
+    color: var(--sdh-allapot-piros);
+    font-weight: 600;
+}
+
+.sdh-ny-ajanlat__hiba:empty {
+    display: none;
+}
+
+.sdh-ny-ajanlat__gombok {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+}
+
+.sdh-ny-ajanlat__gombok .sdh-gomb--elsodleges {
+    flex: 1 1 100%;
+    justify-content: center;
+    padding-block: calc(11px * var(--sdh-n));
+    font-size: calc(15px * var(--sdh-n));
+}
+
+.sdh-ny-ajanlat__gombok .sdh-gomb--vilagos {
+    flex: 1 1 0;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* ================================================================== */
+/* Beállítások › Nyomtatványok                                         */
+/* ================================================================== */
+
+.sdh-ny-beall__csoport {
+    margin: calc(18px * var(--sdh-n)) 0 calc(8px * var(--sdh-n));
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny-beall__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(340px * var(--sdh-n)), 1fr));
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-ny-beall__elem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: calc(10px * var(--sdh-n));
+    padding: calc(14px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy, calc(14px * var(--sdh-n)));
+    background: var(--sdh-felulet);
+}
+
+.sdh-ny-beall__elem > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: calc(4px * var(--sdh-n)) calc(8px * var(--sdh-n));
+}
+
+.sdh-ny-beall__elem strong {
+    font-size: calc(15px * var(--sdh-n));
+}
+
+.sdh-ny-beall__elem small {
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny-beall__elem span {
+    flex: 1 0 100%;
+    font-size: calc(13px * var(--sdh-n));
+    color: var(--sdh-szoveg-2, var(--sdh-halvany));
+}
+
+.sdh-ny-beall__elem em {
+    flex: 1 0 100%;
+    font-size: calc(12px * var(--sdh-n));
+    font-style: normal;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny-beall__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+}
+
+/* ================================================================== */
+/* Sablonszerkesztő                                                    */
+/* ================================================================== */
+
+.sdh-ny-szerk__torzs {
+    display: grid;
+    grid-template-columns: minmax(calc(340px * var(--sdh-n)), calc(460px * var(--sdh-n))) minmax(0, 1fr);
+    gap: calc(18px * var(--sdh-n));
+    min-height: min(calc(620px * var(--sdh-n)), 66vh);
+}
+
+.sdh-ny-szerk[data-elonezet="0"] .sdh-ny-szerk__torzs {
+    grid-template-columns: 1fr;
+    min-height: 0;
+}
+
+.sdh-ny-szerk__mezok {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10px * var(--sdh-n));
+    min-width: 0;
+}
+
+.sdh-ny-szerk__mezok code {
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ny-szerk__csoport {
+    flex-direction: column;
+    gap: calc(8px * var(--sdh-n));
+}
+
+.sdh-ny-szerk__csoport .sdh-cs-kapcs small {
+    color: var(--sdh-halvany);
+}
+
+.sdh-ny-szerk__csoport textarea {
+    resize: vertical;
+}
+
+.sdh-ny-szerk__alap {
+    margin-left: auto;
+}
+
+.sdh-ny-szerk__alap.is-veszely {
+    border-color: var(--sdh-allapot-piros);
+    color: var(--sdh-allapot-piros);
+}
+
+@media (max-width: 900px) {
+    .sdh-ny-szerk__torzs {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================================================================== */
+/* Mentés most (Beállítások › Mentés)                                  */
+/* ================================================================== */
+
+[data-sdh-mentes-uzenet] {
+    margin-left: calc(10px * var(--sdh-n));
+}
+
+/* A több soros mezők a felület betűjével (ne írógépbetűvel) jelenjenek meg. */
+.sdh-ny textarea,
+.sdh-ny-szerk textarea {
+    font-family: inherit;
+}
+
+
+/* ================================================================== */
+/* A képernyő nyomtatása („ahogy látszik"): menü, fejléc, figura nélkül */
+/* ================================================================== */
+
+@media print {
+    .sdh-sav,
+    .sdh-fej,
+    .sdh-ny-nyomtato,
+    dialog.sdh-ny-ajanlat,
+    .sdh-beall__menu,
+    .sdh-beall__lablec {
+        display: none !important;
+    }
+
+    .sdh-app__torzs {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* A kékfény-szűrő és a háttér a papírra nem kell. */
+    :root[data-kekfeny] {
+        filter: none !important;
+    }
+
+    /* A felület rácsa (menü + fejléc + törzs) helyett egyszerű folyó oldal. */
+    body.sdh-app {
+        display: block !important;
+        background: none !important;
+    }
+}

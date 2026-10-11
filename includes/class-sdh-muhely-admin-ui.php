@@ -448,6 +448,8 @@ final class SDH_Muhely_Admin_UI
             // A munkalap csevegőjének frissítési ideje (Beállítások › Ügyféloldal).
             'chatMs'    => class_exists('SDH_Muhely_Rma') ? 1000 * (int) SDH_Muhely_Rma::beallitas()['chat_mp'] : 8000,
             'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
+            // Nyomtatás: vár-e felajánlás (új lap / lezárás után), amit az oldal betöltésekor meg kell mutatni.
+            'nyomtat'   => class_exists('SDH_Muhely_Nyomtatas') ? SDH_Muhely_Nyomtatas::js_adat() : ['ajanlat' => false],
         ];
     }
 

@@ -442,11 +442,22 @@ final class SDH_Muhely_Penztar_Elemzes
 
     public static function ajax_riport(): void
     {
-        global $wpdb;
-
         self::jog();
 
         [$tol, $ig] = self::idoszak();
+
+        wp_send_json_success(self::riport_adat($tol, $ig));
+    }
+
+    /**
+     * Az időszaki riport adatai – a Riport lapfül és a nyomtatható
+     * pénztárjelentés (SDH_Muhely_Nyomtatvany) közös forrása.
+     *
+     * @return array<string, mixed>
+     */
+    public static function riport_adat(string $tol, string $ig): array
+    {
+        global $wpdb;
 
         $napok = self::napok($tol, $ig);
         $t     = SDH_Muhely_Penztar::tabla();
@@ -462,7 +473,7 @@ final class SDH_Muhely_Penztar_Elemzes
             $ig
         ));
 
-        wp_send_json_success([
+        return [
             'tol'      => $tol,
             'ig'       => $ig,
             'osszesen' => self::osszesit($napok),
@@ -474,7 +485,7 @@ final class SDH_Muhely_Penztar_Elemzes
                 'szamla_nelkul'    => round((float) ($bizonylat->szamla_nelkul ?? 0), 2),
                 'ml_nelkul_db'     => (int) ($bizonylat->ml_nelkul_db ?? 0),
             ],
-        ]);
+        ];
     }
 
     /* =================================================================

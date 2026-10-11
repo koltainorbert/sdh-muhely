@@ -56,7 +56,8 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **Gyakori megjegyzések** | A munkalap **Megjegyzés** lapfülén popupból választható, előre megírt megjegyzések. | [Munkalapok](sugo:munkalapok) |
 | **Fizetési módok** | A munkalapon, az árukiadáson és a rendelésen választható fizetési módok. | [Pénztár](sugo:penztar) |
 | **Számlázás** | A Számlázz.hu-kapcsolat, a számlatömbök, a helyi nyomtatvány és a kiállító adatai, a bevizsgálási díj szövege. | [Számlázás](sugo:szamlazas) |
-| **Házipénztár** | Személyek, címletek, a fizetési módok besorolása, kategóriák, a pénztár-ajánlat. | [Pénztár](sugo:penztar) |
+| **Nyomtatványok** | Minden nyomtatható papír: átvételi, munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – logó, betű, méret, szövegek, példányszám, felajánlás. | [Nyomtatás, PDF és e-mail](sugo:nyomtatas) |
+| **Házipénztár** | Személyek, címletek, a fizetési módok besorolása, kategóriák, a pénztár-ajánlat, a zárás utáni emlékeztető. | [Pénztár](sugo:penztar) |
 | **Árukiadás és rendelések** | Helyszínek (üzletek), beszállítók, a rendelés állapotainak neve, az értesítő szövege, a listák mérete. | [Napi árukiadás](sugo:arukiadas) |
 | **Levelezés** | E-mail-fiókok (IMAP / SMTP), aláírás, jelszavas zár, a levélszűrő és a rendező ügynök. | [Levelezés](sugo:levelezes) |
 | **Csapat** | Többfelhasználós csevegés vagy üzenőfal, a fal neve, a kollégák névsora; innen nyílik a kollégák és a csoportok kezelése. | [Csapat](sugo:csapat) |
@@ -64,6 +65,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **Asszisztens** | Az AI-asszisztens: be- és kikapcsolás, neve, kérdéskeret, API-kulcs, engedélyek; innen nyílnak a javaslatok, a tudástár és a mentések. | [Asszisztens](sugo:asszisztens) |
 | **IMEI-lekérdezés** | A fizetős IMEI-szolgáltató végpontja és kulcsa, és az ingyenes ellenőrző oldalak gombjai. | [Eszközök](sugo:eszkozok) |
 | **TAC adatbázis** | Az IMEI elejéből ez mondja meg a gyártót és a típust: állapot, betöltés. | [Eszközök](sugo:eszkozok) |
+| **Mentés** | A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés. | [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag) |
 | **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |
 | **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |
 | **Névjegy** | Verziók, címek, és ami internet nélkül is működik. | ez a fejezet |

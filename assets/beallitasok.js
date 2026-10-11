@@ -359,6 +359,44 @@
         });
     });
 
+    // Beállítások › Mentés: „Mentés most" (a napi mentéstől függetlenül).
+    gyoker.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-mentes-most]') : null;
+
+        if (!gomb) {
+            return;
+        }
+
+        var hely = gyoker.querySelector('[data-sdh-mentes-uzenet]');
+        var adat = new FormData();
+
+        adat.set('action', 'sdh_muhely_mentes_most');
+        adat.set('_wpnonce', gomb.getAttribute('data-nonce') || '');
+        gomb.disabled = true;
+
+        if (hely) {
+            hely.textContent = 'Mentés készül…';
+        }
+
+        fetch(ajaxCim(), { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                if (hely) {
+                    hely.textContent = (v && v.data && v.data.uzenet) || (v && v.success ? 'Kész.' : 'A mentés nem sikerült.');
+                }
+
+                if (v && v.success) {
+                    window.setTimeout(function () { window.location.reload(); }, 1400);
+                }
+            })
+            .catch(function () {
+                if (hely) {
+                    hely.textContent = 'Nem sikerült elérni a szervert.';
+                }
+            })
+            .then(function () { gomb.disabled = false; });
+    });
+
     Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-kimenet]'), function (kimenet) {
         var mezo = document.getElementById(kimenet.getAttribute('data-sdh-kimenet'));
 

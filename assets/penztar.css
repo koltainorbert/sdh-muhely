@@ -2478,3 +2478,15 @@ input.sdh-pt-osszeg {
 .sdh-pt-eszkozok tr.is-fizetve strong {
     color: var(--sdh-siker);
 }
+
+
+/* ================================================================== */
+/* 0.52 – zárás utáni emlékeztető (ha az asszisztens ki van kapcsolva) */
+/* ================================================================== */
+
+.sdh-pt-terminal {
+    margin: 0 0 calc(16px * var(--sdh-n));
+    font-size: calc(16px * var(--sdh-n));
+    font-weight: 600;
+    line-height: 1.45;
+}

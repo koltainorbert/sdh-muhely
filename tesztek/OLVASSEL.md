@@ -29,6 +29,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t35-naptar` | naptár: nevek (közös fiók és profilonként egy), esemény mentése, ismétlődés, a nézetek adatai, áthelyezés, törlés, a ki nem nyomott kártyák, e-mail értesítés (a levelek nem mennek ki), napi összefoglaló, privát esemény, beállítások |
 | `t34-szerkesztes-betu-szin` | eszköz szerkesztése a munkalapról, csak két számlagomb, csempe-szám entitás nélkül, két hasábos oldalsáv több eszköznél, betűnagyítás és betűtípus, megjelenés és üvegszín |
 | `t36-sugo` | súgó: minden menüpontnak, Beállítások-lapfülnek és asszisztens-eszköznek van leírása; a súgó verziója egyezik; fejezetformátum, jelölésnyelv, keresés, kérdés–válasz, oldaltúrák, az asszisztens tudása és új eszközei, Papír megjelenés, kékfény-szűrő |
+| `t37-nyomtatas` | nyomtatványok (PDF): minden típus, példányszám, egy eszköz a több eszközös lapról, sablon és közös megjelenés, próbanyomat; Nyomtatás ablak; e-mail csatolmánnyal; felajánlás új lapnál és lezáráskor; a Számla Agent és az IMEI-kulcs titkosított tárolása; független napi mentés; zárás utáni emlékeztető |
 | `t32-beallitasok` | a Beállítások lapfülei, lapfülenkénti mentés, jogosultság, nincs wp-adminba mutató link, az új paraméterek |
 | `t26-fust` | füstteszt: űrlap, rács, részletpanel, beállítások, asszisztens – PHP-figyelmeztetés nélkül |
 

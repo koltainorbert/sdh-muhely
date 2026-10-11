@@ -1106,8 +1106,13 @@
 
         // Végigvezetés közben a figura a túra buborékjánál áll: a sarokban nem szólal meg
         // (kivéve, amikor a túra egy felugró ablak miatt várakozik).
+        // opciok.mindig: fontos figyelmeztetés (pl. zárás utáni emlékeztető) – ilyenkor a túra áll le, nem a szöveg marad el.
         if (tura && !tura.szunet) {
-            return;
+            if (!opciok.mindig) {
+                return false;
+            }
+
+            turaVege(true);
         }
 
         var sz = buborek.querySelector('.sdh-ai__buborek-szoveg');
@@ -1139,6 +1144,8 @@
         if (opciok.ms !== 0) {
             buborekIdo = window.setTimeout(buborekZar, opciok.ms || 16000);
         }
+
+        return true;
     }
 
     function buborekZar() {

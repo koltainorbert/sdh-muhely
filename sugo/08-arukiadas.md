@@ -165,6 +165,7 @@ A **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállító
 ## Tippek
 
 - A rácsban két kész nézet van: a **Napi árukiadás** csak az eladásokat, a **Csak javítás (árukiadás nélkül)** csak a munkalapokat mutatja.
+- **Papír a vevőnek:** az árukiadás ablakának alján a **Nyomtatás** gomb **Átadási bizonylatot** (tételek, végösszeg, aláírás), árajánlatot vagy szállítólevelet ad – nyomtatva, PDF-ben vagy e-mailben. Lezáráskor a rendszer fel is ajánlja. Nem számla. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
 - Visszatérő vevőt válassz ki ügyfélként: az adatlapján a **Vásárlások** lapfülön látod, mit vitt, mennyiért, és van-e tartozása.
 
 ## Ha valami nem megy
@@ -175,6 +176,10 @@ A **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállító
 - **Beírtam a vevő nevét, mégsem került az ügyfélhez az eladás.** Az ügyfelet a legördülő listából kell kiválasztani; a begépelt név önmagában nem ügyfél. Nyisd meg az eladást, válaszd ki az ügyfelet a listából, és mentsd el.
 
 ## GYIK
+
+### Tudok papírt adni a vevőnek a napi árukiadásról?
+
+Igen. Az árukiadás ablakának alján a **Nyomtatás** gombbal **Átadási bizonylatot** nyomtathatsz a tételekkel és a végösszeggel; a lap lezárásakor a rendszer magától is felajánlja. Ez nem számla – számlát a **Számlázz.hu számla** gombbal állítasz ki.
 
 ### Kell ügyfelet megadnom az árukiadáshoz?
 

@@ -123,7 +123,10 @@ final class SDH_Muhely_Imei_Lekerdezes
 
         return [
             'url'   => (string) ($mentett['url'] ?? ''),
-            'kulcs' => (string) ($mentett['kulcs'] ?? ''),
+            // Az adatbázisban titkosítva áll (SDH_Muhely_Titok); itt a nyílt alak megy tovább.
+            'kulcs' => class_exists('SDH_Muhely_Titok')
+                ? SDH_Muhely_Titok::visszafejt((string) ($mentett['kulcs'] ?? ''))
+                : (string) ($mentett['kulcs'] ?? ''),
             'aktiv' => !empty($mentett['aktiv']),
         ];
     }

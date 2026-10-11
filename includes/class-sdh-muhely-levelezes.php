@@ -230,6 +230,68 @@ final class SDH_Muhely_Levelezes
         return trim((string) $fiok['nev']) !== '' ? (string) $fiok['nev'] : (string) $fiok['email'];
     }
 
+    /**
+     * A küldésre most használható fiókok (bekötve, és nincs jelszóval lezárva):
+     * kulcs => „Név <cím>". A nyomtatványok e-mailje (SDH_Muhely_Nyomtatas) ebből választ feladót.
+     *
+     * @return array<string, string>
+     */
+    public static function kuldo_fiokok(): array
+    {
+        $ki = [];
+
+        foreach (self::fiokok() as $k => $f) {
+            if (!self::zarva((string) $k)) {
+                $ki[(string) $k] = self::fiok_nev($f) . ' <' . $f['email'] . '>';
+            }
+        }
+
+        return $ki;
+    }
+
+    /**
+     * Egyszerű szöveges levél csatolmánnyal a megadott fiókból (SMTP) – a
+     * levelező felülete nélkül, más modulok számára (pl. nyomtatvány küldése).
+     *
+     * @param array<int, string> $cimek
+     * @param array<int, array{nev: string, tartalom: string, tipus: string}> $csatolmanyok
+     * @return true|string  hiba esetén az oka
+     */
+    public static function egyszeru_kuldes(string $fk, array $cimek, string $targy, string $szoveg, array $csatolmanyok = [], string $titkos = '')
+    {
+        $fiok = self::fiokok()[$fk] ?? null;
+
+        if (!is_array($fiok) || self::zarva($fk)) {
+            return 'a kiválasztott e-mail-fiók nem érhető el (nincs bekötve, vagy jelszóval le van zárva).';
+        }
+
+        try {
+            $m = self::levelkuldo($fiok);
+
+            foreach ($cimek as $c) {
+                $m->addAddress((string) $c);
+            }
+
+            if ($titkos !== '') {
+                $m->addBCC($titkos);
+            }
+
+            $m->Subject = $targy;
+            $m->isHTML(false);
+            $m->Body = $szoveg !== '' ? $szoveg : ' ';
+
+            foreach ($csatolmanyok as $c) {
+                $m->addStringAttachment((string) $c['tartalom'], (string) $c['nev'], 'base64', (string) $c['tipus']);
+            }
+
+            $m->send();
+        } catch (\Throwable $hiba) {
+            return $hiba->getMessage();
+        }
+
+        return true;
+    }
+
     /* ---- Titkosítás: az alkalmazásjelszó és az AI-kulcs nem áll nyíltan az adatbázisban ---- */
 
     private static function titok_kulcs(): string

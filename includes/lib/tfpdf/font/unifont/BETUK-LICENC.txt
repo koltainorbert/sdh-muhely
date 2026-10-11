@@ -1,0 +1,18 @@
+A nyomtatványokhoz csomagolt betűkészletek és licencük
+=======================================================
+
+DejaVuSansCondensed.ttf, DejaVuSansCondensed-Bold.ttf
+    DejaVu Fonts – a Bitstream Vera licence alapján szabadon terjeszthető.
+    https://dejavu-fonts.github.io/License.html
+
+LiberationSans-Regular.ttf, LiberationSans-Bold.ttf,
+LiberationSerif-Regular.ttf, LiberationSerif-Bold.ttf
+    Liberation Fonts 2.x – SIL Open Font License 1.1.
+    https://github.com/liberationfonts/liberation-fonts
+
+Carlito-Regular.ttf, Carlito-Bold.ttf
+    Carlito (a Lato alapján) – SIL Open Font License 1.1.
+    https://fonts.google.com/specimen/Carlito/about
+
+Az SIL OFL szerint a betűkészletek szoftverrel együtt szabadon terjeszthetők
+és beágyazhatók; önmagukban nem árulhatók.

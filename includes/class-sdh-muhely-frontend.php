@@ -414,6 +414,8 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -549,6 +551,12 @@ final class SDH_Muhely_Frontend
                     echo SDH_Muhely_Nyitvatartas::ora_html('fej'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
                 }
 
+                // Nyomtatás: bianko munkalap, pénztárzárás, pénztárjelentés, listák – egy helyről.
+                if (class_exists('SDH_Muhely_Nyomtatas')) {
+                    echo '<button type="button" class="sdh-fej__ikongomb sdh-fej__nyomtat" data-sdh-nyomtat="0" title="Nyomtatás: üres munkalap, pénztárzárás, listák" aria-label="Nyomtatás">'
+                        . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7V3h9v4"/><rect x="3" y="7" width="14" height="7" rx="1.6"/><path d="M5.5 12h9v5h-9z"/></svg></button>';
+                }
+
                 // Súgó ehhez az oldalhoz: az oldalt leíró fejezet (ha nincs ilyen, a Súgó kezdőlapja).
                 if (class_exists('SDH_Muhely_Sugo') && $aktiv_kulcs !== SDH_Muhely_Sugo::KULCS) {
                     $sdh_sugo_fejezet = SDH_Muhely_Sugo::modul_fejezet((string) $aktiv_kulcs);
@@ -620,6 +628,8 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/eladas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/eladas.js')); ?>"></script>
+        <?php // Nyomtatás: a Nyomtatás ablak és a felajánlás bármelyik oldalon megjelenhet. ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'beallitasok') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
         <?php endif; ?>

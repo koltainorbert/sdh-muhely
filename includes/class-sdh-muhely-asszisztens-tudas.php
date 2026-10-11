@@ -492,7 +492,10 @@ final class SDH_Muhely_Asszisztens_Tudas
 
         $mappa = self::mentes_mappa();
         $nev   = 'sdh-mentes-' . current_time('Ymd-His') . '-' . sanitize_key($ok) . '-' . wp_generate_password(6, false) . '.jsonl.gz';
-        $gz    = gzopen($mappa . $nev, 'wb6');
+        // Ideiglenes néven készül, és csak a hibátlanul kiírt fájl kapja meg a végleges nevét: a félbemaradt
+        // (megtelt lemez, időtúllépés) mentés így nem számít mentésnek, és nem szorít ki egy jót.
+        $ideiglenes = $mappa . $nev . '.tmp';
+        $gz         = gzopen($ideiglenes, 'wb6');
 
         if ($gz === false) {
             return 'A mentési mappa nem írható: ' . $mappa;
@@ -501,7 +504,16 @@ final class SDH_Muhely_Asszisztens_Tudas
         @set_time_limit(300); // phpcs:ignore WordPress.PHP.NoSilencedErrors
 
         $sorok = 0;
-        gzwrite($gz, (string) wp_json_encode(['mentes' => SDH_MUHELY_VERSION, 'db' => SDH_Muhely_Schema::DB_VERSION, 'ido' => current_time('mysql'), 'ok' => $ok], JSON_UNESCAPED_UNICODE) . "\n");
+        $hibas = false;
+        $ir    = static function (array $adat) use ($gz, &$hibas): void {
+            $sor = (string) wp_json_encode($adat, JSON_UNESCAPED_UNICODE) . "\n";
+
+            if (gzwrite($gz, $sor) !== strlen($sor)) {
+                $hibas = true;
+            }
+        };
+
+        $ir(['mentes' => SDH_MUHELY_VERSION, 'db' => SDH_Muhely_Schema::DB_VERSION, 'ido' => current_time('mysql'), 'ok' => $ok]);
 
         foreach (self::mentendo_tablak() as $tabla) {
             $utolso = 0;
@@ -512,25 +524,37 @@ final class SDH_Muhely_Asszisztens_Tudas
                 // phpcs:enable
 
                 foreach ((array) $adag as $s) {
-                    gzwrite($gz, (string) wp_json_encode(['t' => str_replace($wpdb->prefix, '', $tabla), 's' => $s], JSON_UNESCAPED_UNICODE) . "\n");
+                    $ir(['t' => str_replace($wpdb->prefix, '', $tabla), 's' => $s]);
                     $utolso = (int) $s['id'];
                     $sorok++;
                 }
-            } while (is_array($adag) && count($adag) === 1000);
+            } while (!$hibas && is_array($adag) && count($adag) === 1000);
         }
 
         $opciok = $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE 'sdh\\_muhely\\_%' AND option_name NOT LIKE '%transient%'", ARRAY_A); // phpcs:ignore
 
         foreach ((array) $opciok as $o) {
-            gzwrite($gz, (string) wp_json_encode(['o' => $o['option_name'], 'v' => $o['option_value']], JSON_UNESCAPED_UNICODE) . "\n");
+            $ir(['o' => $o['option_name'], 'v' => $o['option_value']]);
         }
 
-        gzclose($gz);
+        if (!gzclose($gz)) {
+            $hibas = true;
+        }
+
+        if ($hibas || !@rename($ideiglenes, $mappa . $nev)) { // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            @unlink($ideiglenes); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+            return 'A mentés nem írható ki teljesen (megtelt a lemez, vagy a mappa nem írható): ' . $mappa;
+        }
 
         update_option('sdh_muhely_ai_utolso_mentes', current_time('Y-m-d'), false);
-        self::mentes_takarit();
 
-        return ['fajl' => $nev, 'meret' => (int) filesize($mappa . $nev), 'sorok' => $sorok];
+        $meret = (int) filesize($mappa . $nev);
+
+        // A most készült mentés soha nem eshet áldozatul a takarításnak.
+        self::mentes_takarit($nev);
+
+        return ['fajl' => $nev, 'meret' => $meret, 'sorok' => $sorok];
     }
 
     /** Naponta az első módosítás előtt teljes mentés. */
@@ -546,12 +570,20 @@ final class SDH_Muhely_Asszisztens_Tudas
         self::teljes_mentes('napi');
     }
 
-    private static function mentes_takarit(): void
+    private static function mentes_takarit(string $megtart = ''): void
     {
-        $lista = self::mentesek();
+        $lista = array_values(array_filter(self::mentesek(), static fn (array $m): bool => $m['fajl'] !== $megtart));
+        $db    = class_exists('SDH_Muhely_Mentes') ? SDH_Muhely_Mentes::megtartas() : self::MENTES_DB;
 
-        foreach (array_slice($lista, self::MENTES_DB) as $m) {
+        foreach (array_slice($lista, max(0, $db - ($megtart !== '' ? 1 : 0))) as $m) {
             @unlink(self::mentes_mappa() . $m['fajl']); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        }
+
+        // Egy korábbi, félbeszakadt mentés maradéka (egy óránál régebbi ideiglenes fájl).
+        foreach (glob(self::mentes_mappa() . 'sdh-mentes-*.jsonl.gz.tmp') ?: [] as $f) {
+            if ((int) filemtime($f) < time() - HOUR_IN_SECONDS) {
+                @unlink($f); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            }
         }
     }
 
@@ -565,7 +597,8 @@ final class SDH_Muhely_Asszisztens_Tudas
             $ki[] = ['fajl' => basename($f), 'meret' => (int) filesize($f), 'ido' => (int) filemtime($f)];
         }
 
-        usort($ki, static fn ($a, $b) => $b['ido'] <=> $a['ido']);
+        // A legújabb elöl; azonos másodpercben készülteknél a név dönt (az időbélyeg a névben is benne van).
+        usort($ki, static fn ($a, $b) => [$b['ido'], $b['fajl']] <=> [$a['ido'], $a['fajl']]);
 
         return $ki;
     }

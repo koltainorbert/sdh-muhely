@@ -21,6 +21,7 @@ funkcionalitásának átültetése, modulonként:
 - **Csapat** – belső üzenetek kollégának, csoportnak, mindenkinek; fontos üzenet felugró ablakban; kollégák, csoportok
 - **Asszisztens** – AI (Claude) segítő minden oldalon: kérdez-felel, vezet, tanul; csak jóváhagyással módosít, mentéssel
 - **Súgó** – bemutató, részletes dokumentáció, kérdés–válasz, oldaltúrák; a `sugo/` mappa fejezeteiből épül, és az asszisztens is ebből tanul. **Ha a rendszer változik, a fejezet vele változik** (szabályok: `sugo/OLVASSEL.md`, őre: `tesztek/t36-sugo.php`)
+- **Nyomtatás** – átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák: előnézet, példányszám, PDF, e-mail; minden nyomtatvány szerkeszthető a Beállításokban
 - *(később)* raktár, határidő
 
 A meglévő **SDH Platform** plugin (beszállítói katalógus → rendelés) külön
@@ -61,6 +62,47 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.52.0
+- **Minden nyomtatható – egy ablakból.** Új **Nyomtatás** gomb (nyomtató ikon) a munkalap, az árukiadás és a
+  rendelés ablakában, az Áttekintés részletpaneljén, a Pénztárban és a felső fejlécben. Az ablak megmutatja az
+  **előnézetet**, kinyomtatja a kért **példányszámban** (1–9), **elmenti PDF-be**, és **elküldi e-mailben** –
+  ugyanaz a PDF megy mind a négy helyre.
+- **Nyomtatványok:** Átvételi elismervény, Munkalap, Belső munkalap (ár nélkül, belső megjegyzéssel és zárkóddal),
+  Árajánlat (érvényességi idővel), Szállítólevél, Átadási bizonylat (árukiadás, rendelés), Megrendelés,
+  **Bianko munkalap** (üres, kézzel kitölthető), Pénztárzárás, Pénztárjelentés, Pénztártétel-igazolás, Lapok
+  listája (nyitott / lezárt / fizetetlen / időszak), Készletlista, Számlák listája. Több eszközös lapról egyetlen
+  eszköz is nyomtatható. Egyik sem számla.
+- **Felajánlás.** Új munkalap mentése után a rendszer magától felajánlja az **átvételi elismervény**, a lap
+  lezárásakor a **munkalap** nyomtatását (árukiadásnál az átadási bizonylatot, új rendelésnél a megrendelést) –
+  akárhonnan történik a lezárás: az ablakból, a listából vagy a fizetésből. Oldalváltás után is megjelenik;
+  külön-külön kikapcsolható.
+- **E-mail.** A nyomtatvány PDF csatolmányként megy az ügyfél címére, a bekötött postafiókból (Levelezés) vagy a
+  rendszer levélküldőjével; a tárgy és a szöveg nyomtatványonként sablonból jön. Ami az ügyfélnek ment, az a lap
+  üzenetei között is megjelenik.
+- **Beállítások › Nyomtatványok: minden szerkeszthető.** Nyomtatványonként: cím, alap példányszám, papírméret
+  (A4 / A5), hogy mi látszik rajta (ügyfél, eszköz, tartozékok, hibák, elvégzett javítás, tételek, árak,
+  összesítő, előleg, megjegyzés, belső megjegyzés, zárkód, határidő, állapot, felelős, QR-kód az ügyféloldalhoz),
+  bevezető, apró betűs (jogi) és záró szöveg jelölőkkel, aláírások, igazolványszám sor, bélyegző helye, a kísérő
+  e-mail. A szerkesztőben **élő előnézet**, a listában **Próbanyomat** kitalált adatokkal, és gyári
+  visszaállítás. Közösen: **logó** (feltöltés, szélesség, hely), **betűtípus** (négy csomagolt készlet),
+  **betűméret**, margó, kiemelő szín, a fejléc és a lábléc szövege, a „Kelt” település.
+- **Zárás utáni emlékeztető.** Amikor valaki lezárja a pénztárban a napot, az asszisztens figurája mindig szól,
+  hogy a **bankkártya-terminált is le kell zárni** – a buborék nem tűnik el, amíg vissza nem igazolják, és innen
+  a zárás is nyomtatható. A szöveg átírható (Beállítások › Házipénztár); kikapcsolt asszisztensnél felugró ablak.
+- **Független napi mentés.** Mostantól minden nap készül teljes mentés, az asszisztens használatától
+  függetlenül: időzítve, vagy – ha a gép éjjel ki volt kapcsolva – a nap első bejelentkezése után, a háttérben.
+  Új **Beállítások › Mentés** lapfül: be- és kikapcsolás, a megőrzött mentések száma, Mentés most, letöltés.
+- **Titkosított kulcsok.** A Számla Agent kulcs és a fizetős IMEI-szolgáltató kulcsa az adatbázisban – így a
+  mentésfájlban is – titkosítva áll (a korábban eltárolt kulcs a frissítéskor magától átáll). Az IMEI-kulcs
+  mezője többé nem mutatja vissza a kulcsot. **Költöztetéskor** (más `wp-config.php` sók) a kulcsokat újra be
+  kell írni; erre a lapfül figyelmeztet.
+- Az asszisztens meg tudja nyitni egy lap Nyomtatás ablakát („nyomtasd ki az 1234-es átvételijét”) – nyomtatni
+  és levelet küldeni a felhasználó fog. A súgó új fejezete: **Nyomtatás, PDF és e-mail**.
+- A belső papír (belső megjegyzés, zárkód) nem küldhető az ügyfél saját címére. A mentés ideiglenes néven készül,
+  így a félbeszakadt mentés nem számít mentésnek.
+- Javítás: azonos másodpercben készült mentések közül a takarítás a frisset is törölhette.
+- Új tesztek: `tesztek/t37-nyomtatas.php`.
 
 ### 0.51.0
 - **Súgó menüpont: bemutató, dokumentáció, kérdés–válasz.** Új menüpont, négy lapfüllel. A **Bemutató** megmutatja,

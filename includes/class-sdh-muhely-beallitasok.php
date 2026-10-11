@@ -158,6 +158,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'Számlázz.hu-kapcsolat, számlatömbök, a helyi nyomtatvány és a kiállító adatai, a bevizsgálási díj szövege.',
                 'rajz' => [SDH_Muhely_Szamla::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Szamla::class, 'beallitas_mentes'],
             ],
+            'nyomtatvanyok' => [
+                'cim' => 'Nyomtatványok', 'csoport' => 'penz',
+                'leiras' => 'Minden nyomtatható papír: átvételi, munkalap, árajánlat, szállítólevél, bianko, pénztárzárás, listák – logó, betű, méret, szövegek, példányszám.',
+                'rajz' => [SDH_Muhely_Nyomtatas::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Nyomtatas::class, 'beallitas_mentes'],
+            ],
             'penztar' => [
                 'cim' => 'Házipénztár', 'csoport' => 'penz',
                 'leiras' => 'Személyek, címletek, fizetési módok besorolása, kategóriák, a pénztár-ajánlat.',
@@ -204,6 +209,11 @@ final class SDH_Muhely_Beallitasok
             ],
 
             // --- Rendszer ----------------------------------------------------
+            'mentes' => [
+                'cim' => 'Mentés', 'csoport' => 'rendszer',
+                'leiras' => 'A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés.',
+                'rajz' => [SDH_Muhely_Mentes::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Mentes::class, 'beallitas_mentes'],
+            ],
             'demo' => [
                 'cim' => 'Demó adatok', 'csoport' => 'rendszer',
                 'leiras' => 'Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz.',
@@ -446,6 +456,12 @@ final class SDH_Muhely_Beallitasok
                 azt is elküldjük <code>Authorization: Bearer</code> formában.
             </p>
 
+            <?php
+            if (class_exists('SDH_Muhely_Titok')) {
+                SDH_Muhely_Titok::figyelmeztetes('sdh_muhely_imei_szolgaltato');
+            }
+            ?>
+
             <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
                 <input type="hidden" name="imei_jelen" value="1">
                 <input type="checkbox" name="aktiv" id="aktiv" value="1" <?php checked($b['aktiv']); ?>>
@@ -465,7 +481,17 @@ final class SDH_Muhely_Beallitasok
 
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="kulcs">API-kulcs</label>
-                    <input type="text" name="kulcs" id="kulcs" value="<?php echo esc_attr($b['kulcs']); ?>" autocomplete="off">
+                    <?php // A kulcs soha nem kerül vissza a HTML-be: titkosítva tárolódik. ?>
+                    <input type="password" name="kulcs" id="kulcs" value="" autocomplete="new-password"
+                           placeholder="<?php echo esc_attr($b['kulcs'] !== '' ? '•••••••• (mentve – csak akkor írd be, ha cserélnéd)' : 'Ide másold be a kulcsot'); ?>">
+                    <?php if ($b['kulcs'] !== '') : ?>
+                        <span class="sdh-mezo__sugo">
+                            <label class="sdh-jelolo"><input type="checkbox" name="kulcs_torol" value="1"> Kulcs törlése</label>
+                            Titkosítva tárolva – a mentésfájlba is így kerül.
+                        </span>
+                    <?php else : ?>
+                        <span class="sdh-mezo__sugo">Titkosítva tárolódik; mentés után nem jelenik meg újra.</span>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -497,9 +523,17 @@ final class SDH_Muhely_Beallitasok
             return;
         }
 
+        // Üres mező = a mentett kulcs marad (a tárolt, titkosított alakjában); csak a beírt új érték
+        // vagy a „Kulcs törlése" változtat.
+        $uj    = isset($_POST['kulcs']) && is_scalar($_POST['kulcs']) ? trim(sanitize_text_field(wp_unslash((string) $_POST['kulcs']))) : '';
+        $torol = !empty($_POST['kulcs_torol']);
+        $kulcs = class_exists('SDH_Muhely_Titok')
+            ? SDH_Muhely_Titok::mentendo('sdh_muhely_imei_szolgaltato', $uj, $torol)
+            : ($torol ? '' : ($uj !== '' ? $uj : SDH_Muhely_Imei_Lekerdezes::beallitas()['kulcs']));
+
         update_option('sdh_muhely_imei_szolgaltato', [
             'url'   => isset($_POST['url']) ? esc_url_raw(wp_unslash($_POST['url'])) : '',
-            'kulcs' => isset($_POST['kulcs']) ? sanitize_text_field(wp_unslash($_POST['kulcs'])) : '',
+            'kulcs' => $kulcs,
             'aktiv' => !empty($_POST['aktiv']),
         ]);
 

@@ -3769,6 +3769,11 @@ final class SDH_Muhely_Munkalap
                     </button>
                 <?php endif; ?>
 
+                <?php // Nyomtatás, PDF, e-mail: mentett lapnál (SDH_Muhely_Nyomtatas, nyomtatas.js) – az ablak a lap fölé nyílik. ?>
+                <?php if (!$uj && $modal && class_exists('SDH_Muhely_Nyomtatas')) : ?>
+                    <?php echo SDH_Muhely_Nyomtatas::gomb((int) $munkalap->id, [], 'Nyomtatás'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
+
                 <?php // Számlázás: csak mentett, sorszámot kapott lapnál (SDH_Muhely_Szamla). ?>
                 <?php if (!$uj && $modal && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Szamla')) : ?>
                     <?php SDH_Muhely_Szamla::munkalap_gombok($munkalap); ?>

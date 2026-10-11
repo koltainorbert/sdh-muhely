@@ -178,10 +178,20 @@ final class SDH_Muhely_Penztar
             'kp_modok'     => $lista($b['kp_modok'] ?? '', "Készpénz\nHalasztott KP"),
             'kartya_modok' => $lista($b['kartya_modok'] ?? '', "Bankkártya\nSZÉP Kártya"),
             'ajanlat'      => !isset($b['ajanlat']) || !empty($b['ajanlat']),
+            // Zárás utáni emlékeztető (pl. a bankkártya-terminál napi zárása): az asszisztens mondja el.
+            'terminal'     => !isset($b['terminal']) || !empty($b['terminal']),
+            'terminal_szoveg' => isset($b['terminal_szoveg']) && trim((string) $b['terminal_szoveg']) !== ''
+                ? mb_substr(sanitize_text_field((string) $b['terminal_szoveg']), 0, 300)
+                : self::alap_terminal_szoveg(),
             'kategoriak'   => isset($b['kategoriak']) && is_string($b['kategoriak']) && trim($b['kategoriak']) !== ''
                 ? $b['kategoriak']
                 : self::alap_kategoriak(),
         ];
+    }
+
+    public static function alap_terminal_szoveg(): string
+    {
+        return 'A kassza lezárva. Ne felejtsd el a bankkártya-terminált is lezárni (napi zárás a terminálon)!';
     }
 
     /** A statisztika bevételi kategóriái: „Név: kulcsszó, kulcsszó" – az első egyező nyer. */
@@ -891,6 +901,8 @@ final class SDH_Muhely_Penztar
             'tipusok'   => self::TIPUSOK,
             'van_adat'  => self::van_adat(),
             'ai'        => self::ai_beallitas() !== null,
+            // Zárás utáni emlékeztető (penztar.js: terminalSzol).
+            'terminal'  => ['be' => (bool) $b['terminal'], 'szoveg' => (string) $b['terminal_szoveg']],
         ];
     }
 
@@ -2018,6 +2030,12 @@ final class SDH_Muhely_Penztar
                 <button type="submit" class="sdh-gomb sdh-gomb--elsodleges"><?php echo $t ? 'Mentés' : 'Rögzítés'; ?></button>
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
                 <?php if ($t) : ?>
+                    <?php
+                    // A tétel aláírható igazolása (pl. kivétnél, kifizetésnél) – a MENTETT adatokból.
+                    if (class_exists('SDH_Muhely_Nyomtatas')) {
+                        echo SDH_Muhely_Nyomtatas::gomb((int) $t->id, ['tipus' => 'penztar_tetel'], 'Igazolás', 'sdh-gomb sdh-gomb--vilagos', 'A tétel aláírható igazolása: nyomtatás, PDF, e-mail'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel.
+                    }
+                    ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-pt-veszely" data-sdh-pt-torol="<?php echo (int) $t->id; ?>">Törlés</button>
                     <span class="sdh-mezo__sugo">Rögzítette: <?php echo esc_html(self::felhasznalo_nev((int) $t->felhasznalo) ?: ((string) $t->forras === 'import' ? 'import' : '—')); ?><?php echo $t->ido ? ', ' . esc_html((string) $t->ido) : ''; ?></span>
                 <?php endif; ?>
@@ -2435,6 +2453,26 @@ final class SDH_Muhely_Penztar
                 <label for="penztar_ajanlat">Munkalap fizetésekor ajánlja fel a pénztárba írást</label>
             </div>
         </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Emlékeztető a nap zárásakor</h2>
+            <p class="sdh-sugo">Amikor valaki lezárja a napot, az asszisztens figurája rögtön szól – és addig nem tűnik el, amíg a kolléga vissza nem igazolja. Ha az asszisztens ki van kapcsolva, ugyanez felugró ablakban jelenik meg.</p>
+
+            <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
+                <input type="hidden" name="penztar[terminal]" value="0">
+                <input type="checkbox" name="penztar[terminal]" id="penztar_terminal" value="1" <?php checked($b['terminal']); ?>>
+                <label for="penztar_terminal">Záráskor mindig figyelmeztessen</label>
+            </div>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="penztar_terminal_szoveg">Az emlékeztető szövege</label>
+                    <input type="text" name="penztar[terminal_szoveg]" id="penztar_terminal_szoveg" maxlength="300"
+                           value="<?php echo esc_attr((string) ($mentett['terminal_szoveg'] ?? '')); ?>" placeholder="<?php echo esc_attr(self::alap_terminal_szoveg()); ?>">
+                    <span class="sdh-mezo__sugo">Üresen az alap szöveg (a bankkártya-terminál napi zárása). Ide írhatsz mást is: riasztó, lámpák, kulcs.</span>
+                </div>
+            </div>
+        </div>
         <?php
     }
 
@@ -2456,6 +2494,8 @@ final class SDH_Muhely_Penztar
             'kartya_modok' => $szoveg('kartya_modok'),
             'kategoriak'   => trim($szoveg('kategoriak')) === trim(self::alap_kategoriak()) ? '' : $szoveg('kategoriak'),
             'ajanlat'      => !empty($be['ajanlat']),
+            'terminal'     => !empty($be['terminal']),
+            'terminal_szoveg' => mb_substr(sanitize_text_field((string) ($be['terminal_szoveg'] ?? '')), 0, 300),
         ], false);
     }
 

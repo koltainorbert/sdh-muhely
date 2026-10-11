@@ -154,7 +154,7 @@ A keresőmező felirata: `Gyári szám, kereskedelmi név, IMEI, sorozatszám, �
 ### Az alsó lapfülek
 
 - **Megjegyzés** – az ügyfél felé is megjelenhet, például nyomtatványon.
-- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja, munkalapra és nyomtatványra nem kerül ki.
+- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja; az ügyfélnek szóló nyomtatványokra nem kerül ki, csak a műhelynek készülő **Belső munkalapra**.
 - **Átvételkori állapot** – karcok, törött üveg, hiányzó alkatrész.
 
 ## Beállítások: IMEI-lekérdezés lapfül
@@ -271,7 +271,7 @@ Az eszköz adatlapján a **Zárkód / PIN** mezőben és a mintarácson. Az Átt
 
 ### Látja az ügyfél a belső megjegyzést?
 
-Nem. A **Belső megjegyzés** csak a rendszerben látszik, nyomtatványra és az ügyfélnek szóló üzenetbe nem kerül. A sima **Megjegyzés** megjelenhet az ügyfél felé is.
+Nem. A **Belső megjegyzés** csak a rendszerben látszik; az ügyfélnek szóló nyomtatványra és üzenetbe nem kerül. Egyedül a műhelynek készülő **Belső munkalapon** szerepel (a zárkóddal együtt). A sima **Megjegyzés** megjelenhet az ügyfél felé is.
 
 ### Át tudom tenni az eszközt másik ügyfélhez?
 

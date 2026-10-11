@@ -249,7 +249,7 @@ Több eszköznél az eszköz **Fizetve** jelzője külön levehető (az eszköz 
 A munkalap alján két megjegyzés van:
 
 - **Megjegyzés** – az ügyfél felé is megjelenhet (például nyomtatványon, az ügyféloldalon).
-- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja, nyomtatványra nem kerül ki.
+- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja; az ügyfélnek szóló nyomtatványokra nem kerül ki, csak a **Belső munkalapra**.
 
 A **Gyakori megjegyzések** gomb előre megírt szövegeket kínál. Kattints egyre – a **Megjegyzés** új soraként a lapra kerül. Többet is választhatsz; újra kattintva lekerül. A kézzel írt sorokhoz nem nyúl. Bármelyik állapotú lapon használható.
 
@@ -268,6 +268,17 @@ A munkalap **RMA** lapfülén áll a címke: QR-kód, vonalkód, munkalapszám, 
 Több eszköznél eszközönként egy címke készül; amelyik nem kell, annál vedd ki a pipát.
 
 A címke csak akkor készül el, amikor a lap **munkalapszámot kapott**. Az RMA lapfül új lapnál a mentés után érhető el. Ugyanitt írhatsz üzenetet az ügyfélnek, és látod az **Állapottörténetet**.
+
+## Nyomtatás, PDF és e-mail a munkalapról
+
+A munkalap ablakának alján a **Nyomtatás** gomb (nyomtató ikon) megnyitja a lap nyomtatványait: **Átvételi elismervény**, **Munkalap**, **Belső munkalap**, **Árajánlat**, **Szállítólevél**. Mindegyik megnézhető előnézetben, kinyomtatható a kért példányszámban, elmenthető PDF-be és elküldhető e-mailben az ügyfélnek. Az Áttekintésen a kijelölt lap részletpaneljén is ott a gomb.
+
+A rendszer magától is rákérdez:
+
+- **új munkalap mentése után** az **átvételi elismervény** nyomtatására,
+- **a lap lezárásakor** a **munkalap** nyomtatására.
+
+A gomb csak mentett lapnál jelenik meg, és a nyomtatvány a lap **elmentett** adataiból készül. A részleteket – a példányszámot, a több eszközös lapot, az e-mailt és a nyomtatványok szerkesztését – a [Nyomtatás, PDF és e-mail](sugo:nyomtatas) fejezet írja le.
 
 ## Számlagombok a munkalapon
 
@@ -485,6 +496,14 @@ Vedd ki a **Fizetve** pipát, és válaszd a **Fizetés visszavonása** gombot, 
 ### Mi a különbség a „Fizetés visszavonása” és a „Csak a pipát veszem ki” között?
 
 A visszavonás a lezáró fizetést is leveszi, így a fizetendő visszajön. A másik csak a jelzőt veszi le, az összeg a Fizetett mezőben marad.
+
+### Hol nyomtatom ki az átvételi elismervényt és a munkalapot?
+
+A munkalap ablakának alján, a **Nyomtatás** gombbal. Új lap mentése után és a lap lezárásakor a rendszer magától is felajánlja. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
+
+### El tudom küldeni az ügyfélnek a munkalapot vagy az árajánlatot e-mailben?
+
+Igen. A lap **Nyomtatás** ablakában válaszd ki a nyomtatványt, majd a **Küldés e-mailben** gombot. A nyomtatvány PDF csatolmányként megy az ügyfél címére.
 
 ### Hol nyomtatok címkét?
 

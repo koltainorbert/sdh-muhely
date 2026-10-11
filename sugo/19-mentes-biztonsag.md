@@ -3,8 +3,8 @@ kulcs: mentes-biztonsag
 cim: Mentés, jogosultság, biztonság
 csoport: Rendszer
 modul:
-szakaszok:
-kulcsszavak: mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
+szakaszok: mentes
+kulcsszavak: napi mentés, automatikus mentés, mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
 osszefoglalo: Ki mit lát a rendszerben, hogyan és mikor készül mentés, mit lehet visszaállítani, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.
 ---
 
@@ -16,7 +16,7 @@ Röviden:
 
 - Két szerep van: **adminisztrátor** és **kolléga**.
 - A rendszer **ügyfelet és munkalapot nem töröl**.
-- **Teljes mentés** kézzel bármikor indítható; magától csak azokon a napokon készül, amikor az asszisztens adatot módosít.
+- **Teljes mentés** minden nap magától készül, és kézzel is bármikor indítható (**Beállítások › Mentés**).
 - Az asszisztens minden módosítása előtt **pillanatkép** készül, és a művelet visszaállítható.
 - A mentésből **visszatöltésnek nincs felülete**, ezért a szerver saját, teljes mentése továbbra is kell.
 
@@ -68,10 +68,11 @@ A teljes mentés a rendszer összes saját adatáról készült másolat, egyetl
 
 **Mikor készül:**
 
+- **Magától, minden nap egyszer.** Ha a szerver éjjel is megy, az időzítő indítja. Ha a gép éjjel ki van kapcsolva, a nap **első bejelentkezése után** készül el, a háttérben – a munkát nem lassítja.
 - **Kézzel:** bármikor, a **Mentés most** gombbal.
-- **Magától:** minden nap az asszisztens első módosítása előtt. Ha aznap még nem készült mentés, a rendszer előbb ment, és csak utána hajtja végre a jóváhagyott javaslatot vagy a visszaállítást.
+- **Az asszisztens első módosítása előtt** is ellenőrzi a rendszer, hogy megvan-e az aznapi mentés; ha valamiért nincs, előbb ment.
 
-> **Fontos:** Az automatikus mentést az asszisztens módosítása indítja, nem a napi munka. Amelyik napon az asszisztens semmit nem módosít, aznap magától nem készül mentés. Rendszeres mentéshez nyomd meg a **Mentés most** gombot, és legyen a szervernek saját, ütemezett mentése is.
+A napi mentés nem függ az asszisztenstől: akkor is elkészül, ha az asszisztens ki van kapcsolva. A mentés ideiglenes néven íródik, és csak a hibátlanul elkészült fájl kerül a listába – a félbeszakadt (megtelt lemez) mentés nem szorít ki egy jót.
 
 **Mit tartalmaz:**
 
@@ -87,18 +88,30 @@ A teljes mentés a rendszer összes saját adatáról készült másolat, egyetl
 
 **Hol tárolódik:** a szerveren, a `wp-content/uploads/sdh-muhely-mentes/` mappában. A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.
 
-**Hány marad meg:** az utolsó 20. A huszonegyedik mentés elkészültekor a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak.
+**Hány marad meg:** alapból az utolsó 20; a szám a **Beállítások › Mentés** lapfülön állítható (3 és 365 között). Amikor eggyel több készül, a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak.
 
 ## Lépésről lépésre: kézi mentés és letöltés
 
 A mentésekhez adminisztrátori jog kell.
 
-1. Nyisd meg a **Beállítások › Asszisztens** lapfület.
-2. A **Javaslatok, tudástár és mentések** dobozban nyomd meg a **Mentések** gombot.
-3. A megnyíló oldalon nyomd meg a **Mentés most** gombot. A gomb mellett megjelenik az eredmény, például: *Mentés kész: sdh-mentes-….jsonl.gz (1 MB, 5200 sor).*
-4. A listában minden mentés mellett ott a dátuma, a fájl neve és a mérete. A **Letöltés** gombbal a saját gépedre mented.
+1. Nyisd meg a **Beállítások › Mentés** lapfület (a **Rendszer** csoportban).
+2. A **Mentések** dobozban nyomd meg a **Mentés most** gombot. A gomb mellett megjelenik az eredmény, például: *Mentés kész: sdh-mentes-….jsonl.gz (1 MB, 5200 sor).*
+3. A listában minden mentés mellett ott a dátuma, a fájl neve és a mérete. A **Letöltés** gombbal a saját gépedre mented.
 
-> **Figyelem:** Időnként tölts le egy mentést, és tedd el a szerveren kívül. A fájl minden ügyféladatot és beállítást tartalmaz, ezért kezeld bizalmasan.
+Ugyanez a lista a **Beállítások › Asszisztens** lapfül **Mentések** gombja mögött is megvan.
+
+> **Figyelem:** A mentések a szerveren maradnak: ha a gép lemeze meghibásodik, velük együtt vesznek el. Időnként tölts le egyet, és tedd el a szerveren kívül (pendrive, felhő). A fájl minden ügyféladatot és beállítást tartalmaz, ezért kezeld bizalmasan.
+
+## A Beállítások „Mentés" lapfüle
+
+A Beállítások **Rendszer** csoportjában van; csak adminisztrátor látja.
+
+- **Napi mentés bekapcsolva** – alapból be van kapcsolva. Kikapcsolva magától nem készül mentés; a **Mentés most** gomb akkor is működik.
+- **Megőrzött mentések száma** – ennyi marad meg (alapból 20). Napi egy mentésnél a 20 nagyjából három hét.
+- **Mentés most** – azonnal készít egy teljes mentést.
+- A lista a legutóbbi mentéseket mutatja, **Letöltés** gombbal.
+
+Ha a legutóbbi mentés nem sikerült (például megtelt a lemez, vagy a mappa nem írható), a lapfül tetején piros sáv írja ki az okát.
 
 ## Az asszisztens módosításai: pillanatkép és visszaállítás
 
@@ -144,12 +157,14 @@ A rendszer a külső szolgáltatások jelszavait nem tárolja olvasható formáb
 | Az asszisztens Claude API-kulcsa (**Beállítások › Asszisztens**) | Titkosítva. A legbiztonságosabb, ha a `wp-config.php` fájlban adod meg – akkor az adatbázisba be sem kerül. |
 | A postafiók külön jelszava (**Külön jelszó a CRM-ben**) | Lenyomatként: maga a jelszó nem olvasható vissza. |
 | A letöltött levelek gyorsítótára | Titkosított fájlokban. |
-| A Számla Agent kulcs (**Beállítások › Számlázás**) | A képernyőre nem kerül vissza; az adatbázisban a beállítások között áll. |
-| A fizetős IMEI-szolgáltató kulcsa (**Beállítások › IMEI-lekérdezés**) | A beállítások között, a mezőjében olvasható. |
+| A Számla Agent kulcs (**Beállítások › Számlázás**) | Titkosítva. A képernyőre nem kerül vissza. |
+| A fizetős IMEI-szolgáltató kulcsa (**Beállítások › IMEI-lekérdezés**) | Titkosítva. A mezője mentés után üres marad; törölni a **Kulcs törlése** pipával lehet. |
 
-A titkosítás kulcsa a WordPress saját titkos kulcsaiból (a `wp-config.php` *salt* értékeiből) képződik.
+A titkosítás kulcsa a WordPress saját titkos kulcsaiból (a `wp-config.php` *salt* értékeiből) képződik. A kulcsok a **mentésfájlba is titkosítva** kerülnek: aki csak a mentést vagy az adatbázist szerzi meg, nem tudja kiolvasni őket.
 
-> **Figyelem:** Ha ezek megváltoznak – például költözéskor –, a titkosítva tárolt jelszavak nem fejthetők vissza. Ilyenkor az alkalmazásjelszót és az API-kulcsokat újra be kell írni.
+A korábbi verzióban titkosítatlanul eltárolt Számla Agent kulcsot és IMEI-kulcsot a rendszer a frissítés után magától titkosítja – nem kell újra beírni.
+
+> **Figyelem:** Ha ezek megváltoznak – például költözéskor –, a titkosítva tárolt jelszavak és kulcsok nem fejthetők vissza. Ilyenkor az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot újra be kell írni; a Számlázás és az IMEI-lekérdezés lapfülén piros sáv figyelmeztet rá.
 
 ### A postafiók külön jelszava
 
@@ -180,11 +195,23 @@ További elakadások: [Hibaelhárítás](sugo:hibaelharitas).
 
 ### Készül magától mentés minden nap?
 
-Nem feltétlenül. Magától csak azon a napon készül, amikor az asszisztens adatot módosít. A biztos megoldás a **Mentés most** gomb és a szerver saját napi mentése.
+Igen. Naponta egy teljes mentés készül – ha a gép éjjel ki van kapcsolva, akkor a nap első bejelentkezése után, a háttérben. Az asszisztens használatától nem függ. A beállítása: **Beállítások › Mentés**.
+
+### Hány mentés marad meg, és hol állítom?
+
+Alapból az utolsó 20. A **Beállítások › Mentés** lapfülön, a **Megőrzött mentések száma** mezőben állíthatod.
+
+### Benne van a mentésben a Számla Agent kulcs?
+
+Igen, de titkosítva – ugyanúgy, ahogy az adatbázisban áll. Aki csak a mentésfájlt szerzi meg, nem tudja kiolvasni.
+
+### Ki tudom kapcsolni a napi mentést?
+
+Igen, a **Beállítások › Mentés** lapfülön – de nem ajánlott. Kikapcsolva csak a **Mentés most** gombra készül mentés.
 
 ### Hol találom a mentéseket?
 
-A **Beállítások › Asszisztens** lapfülön a **Mentések** gomb mögött. Csak adminisztrátor látja.
+A **Beállítások › Mentés** lapfülön. Csak adminisztrátor látja.
 
 ### Hogyan állítok vissza egy mentésből?
 
@@ -232,7 +259,7 @@ Nem. Titkosítva tárolódik, és soha nem kerül vissza a képernyőre. A mező
 
 ### Költöztettük a szervert, és nem megy a levelezés. Miért?
 
-Ha a `wp-config.php` titkos kulcsai megváltoztak, a titkosított jelszavak nem fejthetők vissza. Írd be újra az alkalmazásjelszót és az API-kulcsokat a Beállításokban.
+Ha a `wp-config.php` titkos kulcsai megváltoztak, a titkosított jelszavak és kulcsok nem fejthetők vissza. Írd be újra az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot a Beállításokban.
 
 ### Elég a rendszer saját mentése?
 

@@ -32,7 +32,7 @@ Egy dolgot soha nem tesz: a jóváhagyásod nélkül nem módosít adatot.
 1. Kattints a figurára, vagy nyomd meg az [[F1]]-et.
 2. Írd be a kérdésed a **Kérdezz bármit, vagy kérd a segítségem…** mezőbe. Az [[Enter]] küldi, a [[Shift]] + [[Enter]] új sort kezd.
 3. A mező fölött az oldalhoz illő javasolt kérdések állnak – egy kattintás, és már kérdeztél is.
-4. A válasz alatt gombot kaphatsz, amely megnyit egy oldalt vagy egy rekordot (munkalapot, ügyfelet, eszközt).
+4. A válasz alatt gombot kaphatsz, amely megnyit egy oldalt, egy rekordot (munkalapot, ügyfelet, eszközt) vagy egy lap **Nyomtatás** ablakát.
 
 Úgy kérdezz, ahogy egy kollégától kérdeznél:
 
@@ -137,7 +137,7 @@ Az eszközei, amelyekkel dolgozik:
 | Megmutatom | kiemel egy elemet a képernyőn | megmutat |
 | Végigvezetem | több lépésben vezet végig egy feladaton | megmutat |
 | Oldaltúra | elindítja az oldal kész túráját | megmutat |
-| Megnyitás | gombot ad egy oldal vagy rekord megnyitásához | megmutat |
+| Megnyitás | gombot ad egy oldal vagy rekord megnyitásához, vagy egy lap **Nyomtatás** ablakához (átvételi, munkalap, árajánlat, szállítólevél – nyomtatás, PDF, e-mail) | megmutat |
 | Megjegyzés a munkalapra | belső megjegyzést fűz a munkalaphoz | hozzáad – jóváhagyással |
 | Csapatüzenet küldése | belső üzenetet küld a nevedben, vagy cetlit tesz a falra | hozzáad – jóváhagyással |
 | Megtanulom | új tudást ment a tudástárába | hozzáad – jóváhagyással |
@@ -175,7 +175,7 @@ Minden végrehajtott módosítás előtt a rendszer elmenti az érintett rekord 
 2. Írd be a művelet számát (a kártya alján, a kettőskereszt után áll).
 3. Kattints a **Visszaállítom** gombra.
 
-Ezen felül minden nap, az asszisztens aznapi első módosítása előtt teljes mentés készül a rendszer saját adatairól. A részleteket a [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag) fejezet írja le.
+Ezen felül minden nap teljes mentés készül a rendszer saját adatairól – az asszisztens használatától függetlenül (**Beállítások › Mentés**); az asszisztens az első módosítása előtt ellenőrzi, hogy az aznapi megvan-e. A részleteket a [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag) fejezet írja le.
 
 ## Tanítás: a tudástár
 

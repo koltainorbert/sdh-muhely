@@ -804,7 +804,8 @@ final class SDH_Muhely_Asszisztens
         $id  = (int) ($p['id'] ?? 0);
         $felirat = mb_substr(sanitize_text_field((string) ($p['felirat'] ?? '')), 0, 60);
 
-        $popupok = ['munkalap' => 'munkalapok', 'ugyfel' => 'ugyfelek', 'eszkoz' => 'eszkozok'];
+        // nyomtatas: a munkalap (árukiadás, rendelés) Nyomtatás ablaka – előnézet, nyomtatás, PDF, e-mail.
+        $popupok = ['munkalap' => 'munkalapok', 'ugyfel' => 'ugyfelek', 'eszkoz' => 'eszkozok', 'nyomtatas' => 'nyomtatas'];
 
         if (isset($popupok[$cel]) && $id > 0) {
             return ['popup' => $popupok[$cel], 'id' => $id, 'felirat' => $felirat !== '' ? $felirat : 'Megnyitás'];
@@ -1544,7 +1545,7 @@ final class SDH_Muhely_Asszisztens
         ?>
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Teljes mentések</h2>
-            <p class="sdh-sugo">Minden nap az asszisztens első módosítása előtt automatikusan teljes mentés készül a CRM összes saját táblájáról és beállításáról (a TAC-adatbázis és a levél-gyorsítótár kivételével – azok újra előállíthatók). Ezen felül minden egyes módosított rekord előtte-állapota a műveletnél tárolódik, onnan egy gombbal visszaállítható. Az utolsó 20 teljes mentés marad meg. A mappa kívülről nem olvasható.</p>
+            <p class="sdh-sugo">Minden nap automatikusan teljes mentés készül a CRM összes saját táblájáról és beállításáról (a TAC-adatbázis és a levél-gyorsítótár kivételével – azok újra előállíthatók) – az asszisztens használatától függetlenül; a beállítása: Beállítások › Mentés. Ezen felül az asszisztens minden egyes módosított rekord előtte-állapotát a műveletnél tárolja, onnan egy gombbal visszaállítható. A mappa kívülről nem olvasható.</p>
             <p><button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-ai-mentes>Mentés most</button> <span class="sdh-sugo" data-sdh-ai-mentes-uzenet></span></p>
 
             <?php if ($lista === []) : ?>

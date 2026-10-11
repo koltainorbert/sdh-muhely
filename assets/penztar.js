@@ -764,6 +764,7 @@
         lezaratlan: indulo.lezaratlan || [],
         szemelyek: indulo.szemelyek || [],
         cimletek: indulo.cimletek || [],
+        terminal: indulo.terminal || { be: false, szoveg: '' },
         ai: !!indulo.ai,
         naplo: { oldal: 1, szuro: '', adat: null, kiemel: 0 },
         kp: { datum: indulo.ma, csomag: null, db: {} },
@@ -1342,6 +1343,7 @@
             '    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-pt-zar="1">' + (lezart ? 'Újraszámolás mentése' : 'Nap zárása') + '</button>' +
             (lezart ? '' : '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-pt-zar="0">Csak számolás mentése</button>') +
             (lezart ? '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-pt-ujranyit="' + e(n.datum) + '">Újranyitás</button>' : '') +
+            '    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-nyomtat="0" data-ny-tipus="penztar_zaras" data-ny-datum="' + e(n.datum) + '">Zárás nyomtatása</button>' +
             '  </div>' +
             (lezart ? '<p class="sdh-mezo__sugo">Lezárva ' + e(n.lezarva || '') + (n.lezarta ? ' · ' + e(n.lezarta) : '') + (n.import ? ' · a régi táblából' : '') + '</p>' : '') +
             '  <div data-pt-kp-egyeztetes></div>' +
@@ -1438,6 +1440,56 @@
         }
     });
 
+    /**
+     * Zárás utáni emlékeztető (Beállítások › Házipénztár). Az asszisztens buborékja mondja el,
+     * és addig marad, amíg vissza nem igazolják; ha az asszisztens nincs bekapcsolva, saját ablak.
+     */
+    function terminalSzol(datum) {
+        var t = S.terminal || {};
+
+        if (!t.be || !t.szoveg) {
+            return;
+        }
+
+        function nyomtat() {
+            if (window.SDH_NYOMTATAS) {
+                window.SDH_NYOMTATAS.nyit(0, { tipus: 'penztar_zaras', datum: datum }, null);
+            }
+        }
+
+        var api = window.SDH_AI_API;
+        var mutatva = false;
+
+        if (api && typeof api.buborek === 'function') {
+            mutatva = api.buborek('**' + t.szoveg + '**', [
+                { felirat: 'Megvan ✓', fo: true, tesz: function () { toast('Rendben – szép estét!', 'siker'); } },
+                { felirat: 'Zárás nyomtatása', tesz: nyomtat }
+            ], { ms: 0, allapot: 'jelez', mindig: true }) !== false;
+        }
+
+        if (mutatva) {
+            return;
+        }
+
+        var d = ablak('Zárás utáni teendő', '<p class="sdh-pt-terminal">' + e(t.szoveg) + '</p>' +
+            '<div class="sdh-urlap__lablec"><button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-pt-term="ok">Megvan ✓</button>' +
+            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-pt-term="nyomtat">Zárás nyomtatása</button></div>', 'sdh-pt-ablak--ajanlat');
+
+        d.addEventListener('click', function (esemeny) {
+            var g = esemeny.target.closest ? esemeny.target.closest('[data-pt-term]') : null;
+
+            if (!g) {
+                return;
+            }
+
+            d.close();
+
+            if (g.getAttribute('data-pt-term') === 'nyomtat') {
+                nyomtat();
+            }
+        });
+    }
+
     function kpMent(lezar, gomb) {
         var n = S.kp.csomag.nap;
         var db = {};
@@ -1465,6 +1517,11 @@
             var elteres = v.nap.elteres;
 
             toast(lezar ? 'A nap lezárva' + (elteres !== null && Math.abs(elteres) >= 1 ? ' – eltérés: ' + elojeles(elteres) : ' – a kassza egyezik.') : 'A számolás elmentve.', elteres !== null && Math.abs(elteres) >= 1 ? 'figyelem' : 'siker');
+
+            // A nap lezárva: az asszisztens mindig szól a zárás utáni teendőről (pl. a bankkártya-terminál zárása).
+            if (lezar) {
+                terminalSzol(n.datum);
+            }
 
             if (v.egyeztetes) {
                 var hely = lapElem('kp').querySelector('[data-pt-kp-egyeztetes]');
@@ -1552,7 +1609,7 @@
         hely.innerHTML =
             '<div class="sdh-pt-riport__fej"><h2>' + e(v.tol.replace(/-/g, '.')) + '. – ' + e(v.ig.replace(/-/g, '.')) + '.</h2>' +
             '<span><button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--kicsi" data-pt-export="' + e(v.tol) + '|' + e(v.ig) + '">Excel (CSV) letöltés</button>' +
-            '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--kicsi" data-pt-nyomtat>Nyomtatás</button></span></div>' +
+            '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--kicsi" data-sdh-nyomtat="0" data-ny-tipus="penztar_riport" data-ny-tol="' + e(v.tol) + '" data-ny-ig="' + e(v.ig) + '">Nyomtatás / PDF</button></span></div>' +
             '<div class="sdh-pt-kpik">' +
             kpi('Forgalom', penz(o.forgalom), o.napok + ' nyitvatartási nap · napi átlag ' + penz(o.atlag), 'fo') +
             kpi('KP bevétel', penz(o.kp_be), arany(o.kp_be, o.forgalom) + ' a forgalomból', 'kp') +

@@ -99,6 +99,10 @@ Ha a munkalapon kézzel pipálod be a **Fizetve** jelölőt, vagy megnöveled az
 
 Ha még nem akarsz zárni, a **Csak számolás mentése** gomb elmenti a darabszámokat, a nap nyitva marad.
 
+**Zárás után az asszisztens szól.** Amint a nap lezárult, az asszisztens figurája figyelmeztet a zárás utáni teendőre – alapból arra, hogy a **bankkártya-terminált is le kell zárni** (napi zárás a terminálon). A buborék nem tűnik el magától: a **Megvan ✓** gombbal igazolod vissza. Ugyanitt a **Zárás nyomtatása** gomb megnyitja a nap zárólapját. Ha az asszisztens ki van kapcsolva, ugyanez felugró ablakban jelenik meg. A szöveg és a kapcsoló a **Beállítások › Házipénztár** lapfülön van.
+
+**A zárás kinyomtatható.** A **Zárás nyomtatása** gomb megnyitja a **Pénztárzárás** nyomtatványt: összesítő, megszámolt készpénz, eltérés, címletek, a nap tételei, aláírás. Nyomtatható, PDF-be menthető, e-mailben küldhető – lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
+
 Ha a zárás eltéréssel ment, az egyeztető ügynök rögtön megnézi a napot, és a gombok alatt megjelenik, mit talált. Eltérésnél az **Ügynök: miért?** hivatkozással zárás előtt is megkérdezheted.
 
 > **Tipp:** A lapfül tetején a nyilakkal vagy a dátummezővel korábbi napot is megnyithatsz. Ha egy múltbeli nap lezáratlan maradt, az oldal tetején figyelmeztető sáv jelzi, a **Megszámolom és lezárom** gombbal.
@@ -132,7 +136,7 @@ A sorok elején álló pipa nem törlés: a kipipált sor áthúzva látszik. Ar
 
 **Keresés.** A fejléc keresőmezőjébe írhatsz számlaszámot, munkalap sorszámot, nevet vagy összeget. A **Keresés** lapfülön tovább szűkíthetsz: időszak (**Tól**, **Ig**), **Összeg (min)** és **Összeg (max)**, típus, fizetési mód, **Számla nélkül**, **Munkalap nélkül**, **Törölt tételek**. Ha munkalapszámra keresel, a találatok fölött kártya mutatja a munkalap értékét és azt, mennyi van belőle a pénztárban. Ha fizetve van, de hiányzik a pénz, a **Beírás a pénztárba** gomb egy kattintással pótolja.
 
-**Riport.** Válassz időszakot a gombsorból (**Ma**, **Tegnap**, **Ez a hét**, **Előző hét**, **Ez a hónap**, **Előző hónap**, **Negyedév**, **Idén**, **Tavaly**, **Utolsó 12 hónap**, **Mind**, **Egyéni**). A riport mutatja a forgalmat, a készpénzes és kártyás bevételt, a kivéteket személyenként, a kifizetéseket partnerenként, a számla és munkalap nélküli tételek számát, valamint a napokat egyenként. Egy nap sorára kattintva a naplóban arra a napra ugrasz. A **Nyomtatás** gomb kinyomtatja.
+**Riport.** Válassz időszakot a gombsorból (**Ma**, **Tegnap**, **Ez a hét**, **Előző hét**, **Ez a hónap**, **Előző hónap**, **Negyedév**, **Idén**, **Tavaly**, **Utolsó 12 hónap**, **Mind**, **Egyéni**). A riport mutatja a forgalmat, a készpénzes és kártyás bevételt, a kivéteket személyenként, a kifizetéseket partnerenként, a számla és munkalap nélküli tételek számát, valamint a napokat egyenként. Egy nap sorára kattintva a naplóban arra a napra ugrasz. A **Nyomtatás / PDF** gomb megnyitja az időszak **Pénztárjelentés** nyomtatványát (nyomtatás, mentés PDF-be, küldés e-mailben).
 
 **Statisztika.** Ugyanazokkal az időszakokkal dolgozik, és a bontás is választható: **Automatikus**, **Napi**, **Heti**, **Havi**, **Éves**. Látod a forgalom alakulását, a hét napjainak átlagát, a bevételt kategóriánként, a legnagyobb tételeket és eltéréseket, több évnél az évek összevetését. Az óránkénti forgalom csak a rendszerben rögzített tételekből számol, mert az importált sorok időpontja nem ismert.
 
@@ -200,6 +204,7 @@ A Beállítások menüpont **Pénz és eladás** csoportjában találod a **Ház
 - **Kártyás fizetési módok** – melyek számítanak kártyásnak. A munkalap minden más fizetési módja az utalás oszlopba kerül, és nem érinti a kasszát.
 - **Statisztikai kategóriák** – soronként `Kategória: kulcsszó, kulcsszó`. A statisztika a bevétel leírásában keresi a kulcsszavakat; az első egyező sor nyer. Üresen hagyva az alap lista jön vissza.
 - **Munkalap fizetésekor ajánlja fel a pénztárba írást** – ha be van pipálva, a kézzel fizetettre állított munkalap és a számla után megjelenik a **Bekerüljön a házipénztárba?** kérdés.
+- **Záráskor mindig figyelmeztessen** és **Az emlékeztető szövege** (az **Emlékeztető a nap zárásakor** dobozban) – a nap lezárása után az asszisztens ezt a szöveget mondja el. Üresen az alap szöveg: a bankkártya-terminál napi zárása. Ide írhatsz mást is (riasztó, lámpák, kulcs).
 
 ## A Beállítások „Fizetési módok" lapfüle
 
@@ -235,6 +240,18 @@ A Beállítások **Pénz és eladás** csoportjában a **Fizetési módok** lapf
 - **Rossz napra került a tétel.** Nyisd meg, állítsd át a **Nap** mezőt, és mentsd. Mindkét nap összege újraszámolódik.
 
 ## GYIK
+
+### Miért szól az asszisztens a bankkártya-terminálról, amikor lezárom a napot?
+
+Hogy ne maradjon el a terminál napi zárása. A figyelmeztetés minden zárás után megjelenik, és addig marad, amíg a **Megvan ✓** gombbal vissza nem igazolod. A szövege átírható, a figyelmeztetés kikapcsolható a **Beállítások › Házipénztár** lapfülön.
+
+### Ki tudom nyomtatni a napi zárást?
+
+Igen. A **KP – kassza** lapfülön a **Zárás nyomtatása** gombbal, vagy a zárás után az asszisztens buborékjából. Korábbi nap zárása is nyomtatható: lépj a napra a nyilakkal, vagy a felső fejléc nyomtató ikonjánál válaszd a **Pénztárzárás** nyomtatványt és a napot.
+
+### Tudok papírt adni egy kivétről vagy kifizetésről?
+
+Igen. Nyisd meg a tételt, és kattints az **Igazolás** gombra: megnyílik a **Pénztártétel-igazolás** nyomtatvány, két aláírással. Ez belső nyilvántartás, nem szigorú számadású bizonylat.
 
 ### Mi a különbség a kivét és a kifizetés között?
 

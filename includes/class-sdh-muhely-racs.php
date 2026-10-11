@@ -1624,6 +1624,11 @@ final class SDH_Muhely_Racs
                 esc_attr($modul),
                 (int) $id
             );
+
+            // Nyomtatás (átvételi, munkalap, árajánlat, szállítólevél…): csak lapoknál.
+            if (class_exists('SDH_Muhely_Nyomtatas') && in_array($modul, ['munkalapok', 'arukiadas', 'rendelesek'], true)) {
+                echo SDH_Muhely_Nyomtatas::gomb((int) $id, [], 'Nyomtatás', 'sdh-reszlet__szerkeszt sdh-reszlet__nyomtat'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel.
+            }
         }
 
         $elso = true;
