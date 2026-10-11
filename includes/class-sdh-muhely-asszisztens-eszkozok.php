@@ -463,6 +463,9 @@ final class SDH_Muhely_Asszisztens_Eszkozok
             'eszkozonkent' => array_map(
                 static fn (array $b): array => [
                     'eszkoz'    => $b['felirat'],
+                    // Az eszköz saját állapota és kiegyenlítése (a lapé a közös állapot).
+                    'allapot'   => self::allapot_nev((string) $b['allapot']),
+                    'fizetve'   => (bool) $b['fizetve'],
                     'hibak'     => array_map(static fn (object $h): string => (string) $h->leiras, $b['hibak']),
                     'tetelek'   => array_map(static fn (object $t): string => (string) $t->megnevezes, $b['tetelek']),
                     'brutto'    => self::penz($b['brutto']),

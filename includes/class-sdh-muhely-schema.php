@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.30.0';
+    public const DB_VERSION = '0.31.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -308,6 +308,15 @@ final class SDH_Muhely_Schema
          * választott díj neve és szolgáltatás-azonosítója.
          * A "megjegyzes" belső (csak a CRM-ben látszik), az
          * "ugyfel_megjegyzes" az ügyfél felé is megjelenhet.
+         *
+         * Több eszközös lapon minden eszköznek SAJÁT állapota és saját
+         * „fizetve" jelzője van. A fő eszközé itt áll ("fo_allapot",
+         * "fo_fizetve", "fo_fizetes_ideje"), a csatoltaké a munkalap_eszkoz
+         * táblában. Az üres "fo_allapot" azt jelenti: a lap állapotát
+         * követi (a régi lapok mind ilyenek). Az "allapot" ilyenkor a KÖZÖS
+         * állapot, amely az eszközökéből adódik
+         * (SDH_Muhely_Munkalap::kozos_allapot), a "fizetve" pedig akkor 1,
+         * ha minden eszköz ki van fizetve. Egy eszközös lapon minden a régi.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$munkalap} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -325,6 +334,9 @@ final class SDH_Muhely_Schema
             fizetes_ideje date NULL,
             fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
+            fo_allapot varchar(30) NOT NULL default '',
+            fo_fizetve tinyint(1) NOT NULL default 0,
+            fo_fizetes_ideje date NULL,
             bevizsgalasi_dij tinyint(1) NOT NULL default 0,
             bevizsgalas_mod varchar(10) NOT NULL default 'auto',
             bevizsgalas_nev varchar(255) NOT NULL default '',
@@ -398,6 +410,10 @@ final class SDH_Muhely_Schema
          * A "fizetett" az, amit erre az eszközre a díján FELÜL külön
          * befizettek (részfizetés a Fizetés ablakból). A lap előlege
          * (munkalap.fizetett) a teljes összeg; a fő eszközre a maradék jut.
+         *
+         * Az "allapot" az eszköz saját állapota (üres = a lapét követi),
+         * a "fizetve" / "fizetes_ideje" a saját kiegyenlítése – így az egyik
+         * készülék elvihető és kifizethető, amíg a másik alkatrészre vár.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$ml_eszkoz} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -408,6 +424,9 @@ final class SDH_Muhely_Schema
             bev_nev varchar(255) NOT NULL default '',
             bev_szolg bigint(20) unsigned NOT NULL default 0,
             fizetett decimal(14,2) NOT NULL default 0.00,
+            allapot varchar(30) NOT NULL default '',
+            fizetve tinyint(1) NOT NULL default 0,
+            fizetes_ideje date NULL,
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             unique key lap_eszkoz (munkalap_id,eszkoz_id),
@@ -525,12 +544,15 @@ final class SDH_Muhely_Schema
          *
          * Minden állapotváltás egy sor: mikor, mire, ki váltotta. Az
          * ügyfél az RMA-oldalon ebből látja a javítás menetét.
+         * Az "eszkoz_id" a VALÓDI eszköz-azonosító, ha a sor egy eszköz
+         * saját állapotváltása (több eszközös lap); 0 = a lap közös állapota.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$naplo} (
             id bigint(20) unsigned NOT NULL auto_increment,
             munkalap_id bigint(20) unsigned NOT NULL default 0,
             allapot varchar(30) NOT NULL default '',
             elozo varchar(30) NOT NULL default '',
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             felhasznalo bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
@@ -544,11 +566,14 @@ final class SDH_Muhely_Schema
          * írta az ügyfélnek, be = az ügyfél írta (RMA-oldalról, később
          * e-mailből). "csatorna": rma / crm / email – honnan jött.
          * "olvasva": a bejövő üzenetet a CRM-ben megnézték-e.
+         * "eszkoz_id": a VALÓDI eszköz-azonosító, ha az üzenet a lap egy
+         * eszközéről szól; 0 = az egész munkalapról.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$uzenet} (
             id bigint(20) unsigned NOT NULL auto_increment,
             munkalap_id bigint(20) unsigned NOT NULL default 0,
             ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             irany varchar(4) NOT NULL default 'ki',
             csatorna varchar(20) NOT NULL default 'crm',
             szoveg text NULL,
@@ -650,6 +675,7 @@ final class SDH_Muhely_Schema
             id bigint(20) unsigned NOT NULL auto_increment,
             munkalap_id bigint(20) unsigned NOT NULL default 0,
             ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             szamlaszam varchar(60) NOT NULL default '',
             sorozat varchar(10) NOT NULL default 'fo',
             netto decimal(14,2) NOT NULL default 0.00,

@@ -1414,7 +1414,8 @@ final class SDH_Muhely_Penztar
      *
      * Elemenként: `kulcs` (0 = a fő eszköz; a munkalap tételei így hivatkoznak
      * rá), `eszkoz_id` (a valódi azonosító – a pénztártétel ezt tárolja),
-     * `nev`, `leiras`, `brutto`, `eloleg`, `fizetendo`, `kasszaban`.
+     * `nev`, `leiras`, `brutto`, `eloleg`, `fizetendo`, `kasszaban`,
+     * `fizetve`, `fizetes_ideje`.
      *
      * @return array<int, array<string, mixed>>
      */
@@ -1467,6 +1468,9 @@ final class SDH_Muhely_Penztar
                 'eloleg'    => (float) $b['eloleg'],
                 'fizetendo' => (float) $b['fizetendo'],
                 'kasszaban' => $van,
+                // Az eszköz külön ki van-e fizetve (vagy a lap egésze).
+                'fizetve'   => (bool) $b['fizetve'],
+                'fizetes_ideje' => (string) $b['fizetes_ideje'],
             ];
         }
 
@@ -1538,7 +1542,8 @@ final class SDH_Muhely_Penztar
 
             $adat = $kozos + ['kp' => 0, 'kartya' => 0, 'utalas' => 0, 'info_osszeg' => 0];
 
-            $adat['leiras']    = mb_substr($elotag . (string) $e['leiras'], 0, 255);
+            // Az eszköz saját előtagja felülírja a közöset (pl. a teljesen kifizetett eszköz nem „Előleg").
+            $adat['leiras']    = mb_substr((string) ($e['elotag'] ?? $elotag) . (string) $e['leiras'], 0, 255);
             $adat['eszkoz_id'] = (int) $e['eszkoz_id'];
 
             if ((string) $adat['tipus'] === 'bevetel') {
@@ -2064,22 +2069,29 @@ final class SDH_Muhely_Penztar
                     </thead>
                     <tbody>
                         <?php foreach ($info['eszkozok'] as $pe) : ?>
-                            <?php $pe_hatra = $info['fizetve'] ? 0.0 : (float) $pe['fizetendo']; ?>
-                            <tr>
+                            <?php
+                            $pe_hatra = $info['fizetve'] ? 0.0 : (float) $pe['fizetendo'];
+                            // A külön már kifizetett eszköz nem fizethető újra (a lap egésze még nincs fizetve).
+                            $pe_kesz  = !$info['fizetve'] && !empty($pe['fizetve']);
+                            ?>
+                            <tr<?php echo $pe_kesz ? ' class="is-fizetve"' : ''; ?>>
                                 <td><input type="checkbox" name="eszkoz[]" value="<?php echo (int) $pe['kulcs']; ?>" data-sdh-pt-eszkoz
-                                           data-fizetendo="<?php echo esc_attr((string) max(0.0, $pe_hatra)); ?>" checked
+                                           data-fizetendo="<?php echo esc_attr((string) max(0.0, $pe_hatra)); ?>"
+                                           <?php echo $pe_kesz ? 'disabled' : 'checked'; ?>
                                            aria-label="<?php echo esc_attr($pe['nev'] . ' fizetése'); ?>"></td>
                                 <td><?php echo esc_html($pe['nev']); ?></td>
                                 <td class="is-jobb"><?php echo esc_html(self::penz((float) $pe['brutto'])); ?></td>
                                 <td class="is-jobb"><?php echo esc_html(self::penz((float) $pe['eloleg'])); ?></td>
-                                <td class="is-jobb"><strong><?php echo esc_html(self::penz($pe_hatra)); ?></strong></td>
+                                <td class="is-jobb"><strong><?php echo $pe_kesz
+                                    ? esc_html('Fizetve' . ((string) $pe['fizetes_ideje'] !== '' ? ' · ' . str_replace('-', '.', (string) $pe['fizetes_ideje']) : ''))
+                                    : esc_html(self::penz($pe_hatra)); ?></strong></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
                 <p class="sdh-mezo__sugo sdh-pt-eszkozok__sugo">
                     Minden eszköz külön tételként kerül a pénztárba. Ha csak az egyiket fizetik ki, vedd ki a pipát a többinél –
-                    az részfizetésként rögzül, a munkalap nyitva marad.
+                    az az eszköz „Fizetve” lesz, a munkalap pedig nyitva marad, amíg a többi nincs kifizetve.
                 </p>
             <?php endif; ?>
 
@@ -2181,7 +2193,8 @@ final class SDH_Muhely_Penztar
             $kert = array_map('intval', (array) self::post('eszkoz', []));
 
             foreach ($info['eszkozok'] as $e) {
-                if (in_array((int) $e['kulcs'], $kert, true)) {
+                // A külön már kifizetett eszköz nem fizethető újra.
+                if (in_array((int) $e['kulcs'], $kert, true) && ($info['fizetve'] || empty($e['fizetve']))) {
                     $erintett[] = $e;
                 }
             }
@@ -2249,6 +2262,24 @@ final class SDH_Muhely_Penztar
             }
         }
 
+        // Eszközönkénti „fizetve": részfizetésnél az az eszköz lesz fizetve, amelyiknek
+        // a rá jutó rész a teljes fizetendőjét fedezi (ha így mind ki van fizetve, a lap is).
+        // Teljes fizetésnél a lap – és vele minden eszköz – fizetve.
+        $kifizetett = [];
+
+        if ($fajta === 'eloleg') {
+            foreach ($erintett as $i => $e) {
+                if ((float) ($reszek[(int) $e['kulcs']] ?? 0) + 0.5 >= (float) $e['fizetendo']
+                    && SDH_Muhely_Munkalap::eszkoz_fizetve_ir((int) $m->id, (int) $e['kulcs'], true) === true) {
+                    $kifizetett[] = (string) $e['nev'];
+                    // A pénztárban ez az eszköz teljes fizetés, nem előleg.
+                    $erintett[$i]['elotag'] = '';
+                }
+            }
+        }
+
+        SDH_Muhely_Munkalap::fizetve_szinkron((int) $m->id);
+
         if (class_exists('SDH_Muhely_Szamla') && method_exists('SDH_Muhely_Szamla', 'bevizsgalas_szinkron')) {
             SDH_Muhely_Szamla::bevizsgalas_szinkron((int) $m->id);
         }
@@ -2307,8 +2338,9 @@ final class SDH_Muhely_Penztar
             'munkalap_id' => (int) $m->id,
             'tetel_id'    => $tetel_id,
             'uzenet'      => $osszeg > 0
-                ? ($fajta === 'eloleg' ? 'Előleg rögzítve: ' : 'Fizetve: ') . self::penz($osszeg)
+                ? ($fajta === 'eloleg' ? ($kifizetett !== [] ? 'Részfizetés rögzítve: ' : 'Előleg rögzítve: ') : 'Fizetve: ') . self::penz($osszeg)
                     . (self::post('kasszaba', '') === '1' ? ' – a pénztárba is bekerült' . (count($erintett) > 1 ? ', eszközönként külön (' . count($erintett) . ' tétel).' : '.') : '.')
+                    . ($kifizetett !== [] ? ' Fizetve: ' . implode(', ', $kifizetett) . '.' : '')
                 : 'A munkalap fizetettre állítva.',
         ]);
     }

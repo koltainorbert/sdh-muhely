@@ -165,10 +165,15 @@ final class SDH_Muhely_Szamla
         return $cimek[(string) self::beallitas()['nyomt_cim']] ?? $cimek['elokeszito'];
     }
 
-    /** A helyi nyomtatvány sorszáma: előtag-év-munkalapszám. */
-    public static function nyomtatvany_szam(object $munkalap): string
+    /**
+     * A helyi nyomtatvány sorszáma: előtag-év-munkalapszám. Ha a nyomtatvány
+     * a lap egyetlen eszközéről szól (több eszközös lap), az eszköz sorszáma
+     * utótagként áll a végén (…-2), hogy a két papír ne viselje ugyanazt a számot.
+     */
+    public static function nyomtatvany_szam(object $munkalap, int $eszkoz_sorszam = 0): string
     {
-        return self::beallitas()['nyomt_elotag'] . '-' . current_time('Y') . '-' . (int) $munkalap->munkalap_szam;
+        return self::beallitas()['nyomt_elotag'] . '-' . current_time('Y') . '-' . (int) $munkalap->munkalap_szam
+            . ($eszkoz_sorszam > 0 ? '-' . $eszkoz_sorszam : '');
     }
 
     public static function beallitva(): bool
@@ -967,13 +972,12 @@ final class SDH_Muhely_Szamla
     }
 
     /** A számla megjegyzése a beállított sablonból. */
-    private static function megjegyzes(object $munkalap): string
+    private static function megjegyzes(object $munkalap, ?object $csak_eszkoz = null): string
     {
-        global $wpdb;
-
         // A lap MINDEN eszköze (a fő és a csatoltak) bekerül; a számla ablakában
-        // a megjegyzés szabadon átírható, onnan bármelyik kivehető.
-        $eszkozok = SDH_Muhely_Munkalap::eszkozok($munkalap);
+        // a megjegyzés szabadon átírható, onnan bármelyik kivehető. Eszközönkénti
+        // számlánál csak az az egy eszköz.
+        $eszkozok = $csak_eszkoz !== null ? [$csak_eszkoz] : SDH_Muhely_Munkalap::eszkozok($munkalap);
 
         $szoveg = strtr((string) self::beallitas()['megjegyzes'], [
             '{munkalap}' => SDH_Muhely_Munkalap::szam_formaz($munkalap->munkalap_szam),
@@ -1238,11 +1242,18 @@ final class SDH_Muhely_Szamla
         $tetel_eszkoz = [];
         $szamla_bontas = SDH_Muhely_Munkalap::eszkoz_bontas($munkalap);
 
+        // Melyik tétel melyik eszközé (0 = a fő eszköz) – az eszközönkénti számlához.
+        $tetel_kulcs = [];
+
         if (count($szamla_bontas) > 1) {
             foreach ($szamla_bontas as $sb) {
                 $azon = $sb['eszkoz'] ? (string) ((string) $sb['eszkoz']->imei !== '' ? 'IMEI: ' . $sb['eszkoz']->imei : ((string) $sb['eszkoz']->sorozatszam !== '' ? 'Gy.sz.: ' . $sb['eszkoz']->sorozatszam : '')) : '';
 
                 $tetel_eszkoz[(int) $sb['eszkoz_id']] = trim($sb['nev'] . ($azon !== '' ? ' · ' . $azon : ''));
+
+                foreach ($sb['tetelek'] as $sb_tetel) {
+                    $tetel_kulcs[(int) $sb_tetel->id] = (int) $sb['eszkoz_id'];
+                }
             }
         }
         $torlo   = !$helyi && !empty($b['torlokod']);
@@ -1260,7 +1271,8 @@ final class SDH_Muhely_Szamla
                 Munkalap <?php echo esc_html($szam); ?> ·
                 <?php
                 if ($helyi) {
-                    echo 'sorszám: ' . esc_html(self::nyomtatvany_szam($munkalap));
+                    // Eszközt választva az eszköz saját sorszáma áll itt (app.js: szamlaEszkozValt).
+                    echo 'sorszám: <span data-sdh-szamla-sorszam>' . esc_html(self::nyomtatvany_szam($munkalap)) . '</span>';
                 } else {
                     echo $elotag !== '' ? esc_html($elotag) . ' előtagú számlatömb' : 'a fiók alap számlatömbje';
                 }
@@ -1385,6 +1397,33 @@ final class SDH_Muhely_Szamla
                     </fieldset>
                 </div>
 
+                <?php if (count($szamla_bontas) > 1) : ?>
+                    <?php
+                    // Több eszköz: választható, hogy egy közös bizonylat készül-e, vagy csak az egyik
+                    // eszközé (így készülékenként külön számla állítható ki). app.js: szamlaEszkozValt.
+                    ?>
+                    <div class="sdh-szamlaurlap__eszkoz" data-sdh-szamla-eszkozok
+                         data-megj-mind="<?php echo esc_attr(self::megjegyzes($munkalap)); ?>"
+                         data-fajl-mind="<?php echo esc_attr(self::nyomtatvany_szam($munkalap) . '.pdf'); ?>">
+                        <span class="sdh-szamlaurlap__eszkoz-cim"><?php echo $helyi ? 'Mi kerül a nyomtatványra' : 'Mi kerül erre a számlára'; ?></span>
+                        <div class="sdh-szegmens sdh-szegmens--kicsi" role="radiogroup" aria-label="Melyik eszköz tételei">
+                            <label class="sdh-szegmens__elem" title="Egy közös bizonylat a lap minden eszközéről">
+                                <input type="radio" name="eszkoz" value="mind" data-sdh-szamla-eszkoz checked>
+                                <span>Minden eszköz együtt</span>
+                            </label>
+                            <?php foreach ($szamla_bontas as $sb) : ?>
+                                <label class="sdh-szegmens__elem" title="Csak ennek az eszköznek a tételei – külön bizonylat">
+                                    <input type="radio" name="eszkoz" value="<?php echo (int) $sb['eszkoz_id']; ?>" data-sdh-szamla-eszkoz
+                                           data-megj="<?php echo esc_attr($sb['eszkoz'] ? self::megjegyzes($munkalap, $sb['eszkoz']) : self::megjegyzes($munkalap)); ?>"
+                                           data-fajl="<?php echo esc_attr(self::nyomtatvany_szam($munkalap, (int) $sb['sorszam']) . '.pdf'); ?>">
+                                    <span><?php echo esc_html((string) $sb['felirat']); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <span class="sdh-mezo__sugo">Eszközt választva csak annak a tételei maradnak kipipálva – így készülékenként külön <?php echo $helyi ? 'nyomtatvány' : 'számla'; ?> készíthető. A pipák utána is átállíthatók.</span>
+                    </div>
+                <?php endif; ?>
+
                 <?php // --- Tételek: a munkalapé pipával, az itt hozzáadottak szerkeszthetők ---- ?>
                 <table class="sdh-tabla sdh-szamlaurlap__tetelek<?php echo $torlo ? ' sdh-szamlaurlap__tetelek--torlo' : ''; ?>" data-sdh-szamla-tetelek>
                     <thead>
@@ -1416,6 +1455,8 @@ final class SDH_Muhely_Szamla
                         <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>" data-sdh-szamla-sor>
                             <td>
                                 <input type="checkbox" name="tetel[]" value="<?php echo (int) $t->id; ?>" data-sdh-szamla-tetel
+                                       data-eszkoz="<?php echo (int) ($tetel_kulcs[(int) $t->id] ?? 0); ?>"
+                                       data-szamlazva="<?php echo $szamlazva ? '1' : '0'; ?>"
                                        data-netto="<?php echo esc_attr((string) $s['netto']); ?>" data-brutto="<?php echo esc_attr((string) $s['brutto']); ?>"
                                        aria-label="<?php echo esc_attr($s['megnevezes'] . ' a számlára'); ?>"
                                        title="Pipa nélkül ez a tétel kimarad erről a számláról"
@@ -1960,7 +2001,10 @@ final class SDH_Muhely_Szamla
      * a munkalap kipipált sorai + az ablakban felvett újak (`uj`), ezek a számla
      * kiállításakor kerülnek a munkalapra.
      *
-     * @return array{munkalap: object, ugyfel: ?object, sorozat: string, fej: array<string, mixed>, vevo: array<string, mixed>, ugyanaz: bool, sorok: array<int, array<string, mixed>>, tetel_idk: array<int, int>, uj: array<int, array<string, mixed>>}|string
+     * `eszkoz`: a választott eszköz (kulcs, valodi_id, sorszam, nev), ha a bizonylat
+     * a több eszközös lap egyetlen eszközéről szól; különben null.
+     *
+     * @return array{munkalap: object, ugyfel: ?object, sorozat: string, fej: array<string, mixed>, vevo: array<string, mixed>, ugyanaz: bool, sorok: array<int, array<string, mixed>>, tetel_idk: array<int, int>, uj: array<int, array<string, mixed>>, eszkoz: ?array<string, mixed>}|string
      */
     private static function kerelem(bool $agent = true)
     {
@@ -2073,6 +2117,32 @@ final class SDH_Muhely_Szamla
             return 'Legalább egy tétel kell: pipálj ki egyet, vagy vegyél fel újat.';
         }
 
+        // Eszközönkénti bizonylat (több eszközös lap): a választott eszköz; null = minden eszköz együtt.
+        $szamla_eszkoz = null;
+
+        if (isset($_POST['eszkoz']) && is_scalar($_POST['eszkoz']) && (string) $_POST['eszkoz'] !== 'mind') {
+            $kert_kulcs = max(0, (int) $_POST['eszkoz']);
+            $bontas     = SDH_Muhely_Munkalap::eszkoz_bontas($munkalap);
+
+            foreach (count($bontas) > 1 ? $bontas : [] as $b) {
+                if ((int) $b['eszkoz_id'] === $kert_kulcs) {
+                    $szamla_eszkoz = [
+                        'kulcs'     => (int) $b['eszkoz_id'],
+                        'valodi_id' => (int) $b['valodi_id'],
+                        'sorszam'   => (int) $b['sorszam'],
+                        'nev'       => (string) $b['felirat'],
+                    ];
+                }
+            }
+        }
+
+        // Az ablakban felvett új tétel a választott eszközé lesz a munkalapon.
+        if ($szamla_eszkoz !== null) {
+            foreach ($uj as $i => $adat) {
+                $uj[$i]['eszkoz_id'] = $szamla_eszkoz['kulcs'];
+            }
+        }
+
         $szoveg = static fn (string $k, int $hossz): string => isset($_POST[$k]) && is_scalar($_POST[$k])
             ? mb_substr(sanitize_text_field(wp_unslash((string) $_POST[$k])), 0, $hossz)
             : '';
@@ -2106,6 +2176,7 @@ final class SDH_Muhely_Szamla
             'sorok'     => $sorok,
             'tetel_idk' => $idk,
             'uj'        => $uj,
+            'eszkoz'    => $szamla_eszkoz,
         ];
         // phpcs:enable
     }
@@ -2172,6 +2243,8 @@ final class SDH_Muhely_Szamla
         $wpdb->insert(self::tabla(), [
             'munkalap_id' => (int) $munkalap->id,
             'ugyfel_id'   => (int) $munkalap->ugyfel_id,
+            // Eszközönkénti számlánál a VALÓDI eszköz-azonosító; 0 = az egész lapról szól.
+            'eszkoz_id'   => $k['eszkoz'] !== null ? (int) $k['eszkoz']['valodi_id'] : 0,
             'szamlaszam'  => mb_substr($valasz['szamlaszam'], 0, 60),
             'sorozat'     => $k['sorozat'],
             'netto'       => round((float) $netto, 2),
@@ -2218,6 +2291,7 @@ final class SDH_Muhely_Szamla
 
         wp_send_json_success([
             'id'         => $szamla_id,
+            'eszkoz'     => $k['eszkoz'] !== null ? (string) $k['eszkoz']['nev'] : '',
             'szamlaszam' => $valasz['szamlaszam'],
             'brutto'     => round((float) $brutto, 2),
             'pdf'        => $szamla_id > 0 ? self::pdf_url($szamla_id) : '',
@@ -2314,7 +2388,7 @@ final class SDH_Muhely_Szamla
 
         $b       = self::beallitas();
         $cim     = self::nyomtatvany_cim();
-        $szam    = self::nyomtatvany_szam($k['munkalap']);
+        $szam    = self::nyomtatvany_szam($k['munkalap'], $k['eszkoz'] !== null ? (int) $k['eszkoz']['sorszam'] : 0);
         $t       = self::nyomtatvany_sorok($k['sorok']);
         $vevo    = $k['vevo'];
         $fej     = $k['fej'];
@@ -2624,7 +2698,7 @@ final class SDH_Muhely_Szamla
 
         nocache_headers();
         header('Content-Type: application/pdf');
-        header('Content-Disposition: inline; filename="' . sanitize_file_name(self::nyomtatvany_szam($k['munkalap'])) . '.pdf"');
+        header('Content-Disposition: inline; filename="' . sanitize_file_name(self::nyomtatvany_szam($k['munkalap'], $k['eszkoz'] !== null ? (int) $k['eszkoz']['sorszam'] : 0)) . '.pdf"');
         header('Content-Length: ' . strlen($pdf));
         echo $pdf; // phpcs:ignore WordPress.Security.EscapeOutput -- PDF.
         exit;

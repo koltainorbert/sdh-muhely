@@ -4387,6 +4387,9 @@
                     }
                 }
 
+                // Több eszközös lap: a lap állapota minden eszközé lett – a blokkok is kövessék.
+                eszkozBlokkCsere(valaszto.dataset.id || '0', adat);
+
                 // A rács és a részletpanel ebből tudja, hogy frissítenie kell.
                 document.dispatchEvent(new CustomEvent('sdh:allapot', {
                     detail: { id: valaszto.dataset.id || '0', adat: adat }
@@ -4491,6 +4494,9 @@
                     lezarva.querySelector('[data-sdh-lezarva-ertek]').textContent = adat.lezarva || '';
                 }
 
+                // Több eszközös lap: a lap állapota minden eszközé lett – a blokk is kövesse.
+                eszkozBlokkCsere(String(id), adat);
+
                 // A rács, a részletpanel és a csempék ebből tudják, hogy frissíteniük kell.
                 document.dispatchEvent(new CustomEvent('sdh:allapot', {
                     detail: { id: String(id), adat: adat, forras: 'urlap' }
@@ -4501,11 +4507,206 @@
             });
     }
 
+    /* ----------------------------------------------------------------
+     * Több eszközös munkalap: eszközönként saját állapot és „fizetve"
+     *
+     * A blokkot a szerver rajzolja (SDH_Muhely_Munkalap::eszkoz_allapot_blokk),
+     * az űrlap bal oldalán és az Áttekintés részletpanelén is ott van. A váltás
+     * azonnal mentődik; a válasz hozza a frissített blokkot és a lap közös
+     * állapotát, amely az eszközökéből adódik.
+     * ---------------------------------------------------------------- */
+
+    /** A munkalap minden látható eszköz-blokkjának cseréje a szerver válaszára. */
+    function eszkozBlokkCsere(id, adat) {
+        if (!adat || typeof adat.blokk !== 'string') {
+            return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-eszkoz-allapotok="' + String(id) + '"]'), function (regi) {
+            if (adat.blokk === '') {
+                regi.remove();
+
+                return;
+            }
+
+            var tarto = document.createElement('div');
+
+            tarto.innerHTML = adat.blokk;
+
+            if (tarto.firstElementChild) {
+                regi.parentNode.replaceChild(tarto.firstElementChild, regi);
+            }
+        });
+    }
+
+    /** Rövid visszajelzés az eszköz-blokk alján (mentve / hiba). */
+    function eszkozBlokkJelez(id, szoveg, tipus) {
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-eszkoz-allapotok="' + String(id) + '"]'), function (blokk) {
+            var jel = blokk.querySelector('[data-sdh-eszall-jel]');
+
+            if (!jel) {
+                jel = document.createElement('p');
+                jel.setAttribute('data-sdh-eszall-jel', '');
+                jel.setAttribute('role', 'status');
+                blokk.appendChild(jel);
+            }
+
+            jel.className = 'sdh-allapot-jel sdh-allapot-jel--' + tipus;
+            jel.textContent = szoveg;
+            window.clearTimeout(jel.sdhIdo);
+
+            if (tipus === 'jo') {
+                jel.sdhIdo = window.setTimeout(function () {
+                    jel.remove();
+                }, 3500);
+            }
+        });
+    }
+
+    /** A lap közös állapota megváltozott: a nyitott űrlap választója is kövesse. */
+    function kozosAllapotAzUrlapon(id, adat) {
+        if (!adat || !adat.kulcs) {
+            return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-munkalap]'), function (gyoker) {
+            var urlap = gyoker.closest('form');
+            var idMezo = urlap ? urlap.querySelector('input[name="id"]') : null;
+            var valaszto = urlap ? urlap.querySelector('[data-sdh-allapot-valaszto]') : null;
+
+            if (!idMezo || !valaszto || String(parseInt(idMezo.value, 10) || 0) !== String(id)) {
+                return;
+            }
+
+            var van = Array.prototype.some.call(valaszto.options, function (o) {
+                return o.value === adat.kulcs;
+            });
+
+            // A „Részben elkészült" nincs a választható állapotok közt: most kerül be.
+            if (!van) {
+                var uj = document.createElement('option');
+
+                uj.value = adat.kulcs;
+                uj.textContent = adat.nev || adat.kulcs;
+                uj.dataset.szin = adat.szin || 'szurke';
+                valaszto.appendChild(uj);
+            }
+
+            valaszto.value = adat.kulcs;
+            valaszto.dataset.elozo = adat.kulcs;
+            allapotPontFrissit(valaszto);
+
+            var lezarva = urlap.querySelector('[data-sdh-lezarva]');
+
+            if (lezarva) {
+                lezarva.hidden = !adat.lezarva;
+                lezarva.querySelector('[data-sdh-lezarva-ertek]').textContent = adat.lezarva || '';
+            }
+        });
+    }
+
+    /** Egy eszköz műveletének elküldése (állapot vagy a „fizetve" levétele). */
+    function eszkozMuvelet(action, mezok, siker, hiba) {
+        var adatok = new FormData();
+
+        adatok.set('action', action);
+        adatok.set('_wpnonce', beallitas.nonce || '');
+
+        Object.keys(mezok).forEach(function (k) {
+            adatok.set(k, mezok[k]);
+        });
+
+        fetch(new URL(beallitas.ajax, window.location.origin).toString(), {
+            method: 'POST',
+            body: adatok,
+            credentials: 'same-origin'
+        })
+            .then(function (valasz) {
+                return valasz.json();
+            })
+            .then(function (valasz) {
+                if (!valasz || !valasz.success) {
+                    hiba((valasz && valasz.data && valasz.data.uzenet) || 'A módosítás nem sikerült.');
+
+                    return;
+                }
+
+                siker(valasz.data);
+            })
+            .catch(function () {
+                hiba('Nem sikerült elérni a szervert, semmi nem módosult.');
+            });
+    }
+
+    /** Egy eszköz saját állapotának váltása – azonnal mentődik. */
+    function eszkozAllapotValt(valaszto) {
+        var id = valaszto.dataset.id || '0';
+        var elozo = valaszto.dataset.elozo || '';
+
+        if (valaszto.value === elozo) {
+            return;
+        }
+
+        valaszto.disabled = true;
+
+        eszkozMuvelet('sdh_muhely_munkalapok_eszkoz_allapot', {
+            id: id,
+            kulcs: valaszto.dataset.kulcs || '0',
+            allapot: valaszto.value
+        }, function (adat) {
+            eszkozBlokkCsere(id, adat);
+            eszkozBlokkJelez(id, 'Elmentve – közös állapot: ' + (adat.nev || ''), 'jo');
+            kozosAllapotAzUrlapon(id, adat);
+
+            // A rács, a részletpanel és a csempék ebből tudják, hogy frissíteniük kell.
+            document.dispatchEvent(new CustomEvent('sdh:allapot', {
+                detail: { id: id, adat: adat, forras: 'eszkoz' }
+            }));
+        }, function (uzenet) {
+            valaszto.value = elozo;
+            valaszto.disabled = false;
+            eszkozBlokkJelez(id, uzenet, 'var');
+        });
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-eszkoz-fizetve-vissza]') : null;
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var id = gomb.dataset.id || '0';
+
+        gomb.disabled = true;
+
+        eszkozMuvelet('sdh_muhely_munkalapok_eszkoz_fizetve', { id: id, kulcs: gomb.dataset.kulcs || '0' }, function (adat) {
+            eszkozBlokkCsere(id, adat);
+            eszkozBlokkJelez(id, 'A „Fizetve” jelző lekerült az eszközről.', 'jo');
+            document.dispatchEvent(new CustomEvent('sdh:allapot', {
+                detail: { id: id, adat: adat, forras: 'eszkoz' }
+            }));
+        }, function (uzenet) {
+            gomb.disabled = false;
+            eszkozBlokkJelez(id, uzenet, 'var');
+        });
+    });
+
     document.addEventListener('change', function (esemeny) {
         var listaAllapot = esemeny.target.closest('select[data-sdh-lista-allapot]');
 
         if (listaAllapot) {
             listaAllapotValt(listaAllapot);
+
+            return;
+        }
+
+        var eszkozAllapot = esemeny.target.closest('select[data-sdh-eszkoz-allapot]');
+
+        if (eszkozAllapot) {
+            eszkozAllapotValt(eszkozAllapot);
 
             return;
         }
@@ -7068,6 +7269,71 @@
             }
         });
     }
+
+    /**
+     * Több eszközös lap számlája: az eszközválasztó csak a kiválasztott eszköz
+     * tételeit hagyja kipipálva (így készülékenként külön számla készíthető),
+     * a megjegyzésbe az az egy eszköz kerül, a helyi nyomtatvány pedig saját
+     * sorszámot kap. „Minden eszköz együtt": minden (még nem számlázott) tétel.
+     * A pipák utána kézzel is átállíthatók – a szerver azt számlázza, ami ki van pipálva.
+     */
+    function szamlaEszkozValt(radio) {
+        var urlap = radio.closest('form');
+        var doboz = radio.closest('[data-sdh-szamla-eszkozok]');
+
+        if (!urlap || !doboz) {
+            return;
+        }
+
+        var mind = radio.value === 'mind';
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-tetel]'), function (pipa) {
+            var szamlazva = pipa.getAttribute('data-szamlazva') === '1';
+
+            pipa.checked = !szamlazva && (mind || pipa.getAttribute('data-eszkoz') === radio.value);
+        });
+
+        // A megjegyzés csak akkor cserélődik, ha még a gép által kitöltött szöveg áll benne.
+        var megj = urlap.querySelector('input[name="megjegyzes"]');
+        var ujMegj = mind ? doboz.getAttribute('data-megj-mind') : radio.getAttribute('data-megj');
+
+        if (megj && ujMegj !== null) {
+            var gepi = [doboz.getAttribute('data-megj-mind')];
+
+            Array.prototype.forEach.call(doboz.querySelectorAll('[data-sdh-szamla-eszkoz][data-megj]'), function (r) {
+                gepi.push(r.getAttribute('data-megj'));
+            });
+
+            if (gepi.indexOf(megj.value) !== -1) {
+                megj.value = ujMegj;
+            }
+        }
+
+        var nyomtat = urlap.querySelector('[data-sdh-szamla-nyomtat]');
+        var fajl = mind ? doboz.getAttribute('data-fajl-mind') : radio.getAttribute('data-fajl');
+
+        if (nyomtat && fajl) {
+            nyomtat.setAttribute('data-fajlnev', fajl);
+
+            // A cím sorszáma is kövesse: az eszköz nyomtatványa saját számot visel.
+            var modal = urlap.closest('.sdh-modal__torzs') || urlap.parentNode;
+            var sorszam = modal ? modal.querySelector('[data-sdh-szamla-sorszam]') : null;
+
+            if (sorszam) {
+                sorszam.textContent = fajl.replace(/\.pdf$/, '');
+            }
+        }
+
+        szamlaOsszeg(urlap);
+    }
+
+    document.addEventListener('change', function (esemeny) {
+        var radio = esemeny.target.closest ? esemeny.target.closest('[data-sdh-szamla-eszkoz]') : null;
+
+        if (radio && radio.checked) {
+            szamlaEszkozValt(radio);
+        }
+    });
 
     /**
      * A számla ablakának végösszege: a munkalap kipipált tételei + az itt

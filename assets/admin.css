@@ -6180,3 +6180,199 @@ dd:hover > .sdh-masol {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 }
+
+
+/* ================================================================== */
+/* 0.43.0 – több eszköz: eszközönként saját állapot és „fizetve"       */
+/* ================================================================== */
+
+/* A blokk az űrlap bal oldalán és az Áttekintés részletpanelén. */
+.sdh-eszall {
+    display: grid;
+    gap: .35rem;
+    min-width: 0;
+}
+
+.sdh-eszall__sor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem .5rem;
+    align-items: center;
+    padding: .35rem .45rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+}
+
+.sdh-eszall__sor.is-kesz {
+    border-color: color-mix(in srgb, var(--sdh-allapot-olajzold) 45%, var(--sdh-keret));
+    background: color-mix(in srgb, var(--sdh-allapot-olajzold) 6%, var(--sdh-felulet));
+}
+
+/* A név saját sort kap, hogy a keskeny oldalsávban se vágódjon le. */
+.sdh-eszall__nev {
+    flex: 1 1 100%;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.sdh-eszall__sor .sdh-allapot--valaszthato select {
+    min-width: 6.5rem;
+}
+
+.sdh-eszall__penz {
+    margin-left: auto;
+    font-size: 11.5px;
+    line-height: 1.3;
+    color: var(--sdh-halvany);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-eszall__penz.is-fizetve {
+    color: var(--sdh-siker);
+    font-weight: 600;
+}
+
+.sdh-eszall__vissza {
+    margin-left: .25rem;
+    padding: 0 .3rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--sdh-halvany);
+    font-size: 13px;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.sdh-eszall__vissza:hover,
+.sdh-eszall__vissza:focus-visible {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-hiba);
+}
+
+.sdh-eszall__ossz {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.35;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-eszall .sdh-allapot-jel {
+    margin: 0;
+    justify-self: start;
+    text-align: left;
+}
+
+/* Az űrlapon: a közös állapot alatt, teljes szélességben. */
+.sdh-ml__eszall {
+    display: grid;
+    gap: .3rem;
+    margin: .1rem 0 .5rem;
+}
+
+.sdh-ml__eszall-cim {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+/* A részletpanelen ne nyúljon szét a teljes sorban. */
+.sdh-adatlista__sor--eszall dd {
+    max-width: 26rem;
+}
+
+/* A rácsban a közös állapot mellett: hány eszköz kész (pl. 1/2). */
+.sdh-allapot__resz {
+    display: inline-block;
+    margin-left: .3rem;
+    padding: 0 .38rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    vertical-align: 1px;
+}
+
+/* Üzenet: melyik eszközről szól (RMA lapfül), és az eszköz címkéje a szálban. */
+.sdh-uz-urlap__eszkoz {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .3rem .5rem;
+    margin-bottom: .4rem;
+}
+
+.sdh-uz-urlap__eszkoz-cim {
+    font-size: 12px;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-uz-urlap__eszkoz .sdh-szegmens {
+    flex-wrap: wrap;
+}
+
+.sdh-uz__eszkoz,
+.sdh-rma-naplo__eszkoz {
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-uz__eszkoz {
+    display: inline-block;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-rma-naplo__eszkoz {
+    font-size: 12px;
+}
+
+/* Számla ablak: melyik eszköz tételei kerüljenek a bizonylatra. */
+.sdh-szamlaurlap__eszkoz {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .3rem .6rem;
+    margin: .2rem 0 .6rem;
+}
+
+.sdh-szamlaurlap__eszkoz-cim {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-szamlaurlap__eszkoz .sdh-szegmens {
+    flex-wrap: wrap;
+}
+
+.sdh-szamlaurlap__eszkoz .sdh-mezo__sugo {
+    flex: 1 1 100%;
+    margin: 0;
+}
+
+/* Az eszközválasztók (számla, üzenet) tetszőleges számú elemet tördelnek – nem kétoszlopos rács. */
+.sdh-szamlaurlap__eszkoz .sdh-szegmens--kicsi,
+.sdh-uz-urlap__eszkoz .sdh-szegmens--kicsi {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sdh-szamlaurlap__eszkoz .sdh-szegmens--kicsi .sdh-szegmens__elem span,
+.sdh-uz-urlap__eszkoz .sdh-szegmens--kicsi .sdh-szegmens__elem span {
+    display: inline-block;
+    width: auto;
+    max-width: 16rem;
+    padding: 0 .7rem;
+    overflow: hidden;
+    line-height: 28px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

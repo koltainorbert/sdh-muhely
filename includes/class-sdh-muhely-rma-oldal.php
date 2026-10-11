@@ -112,6 +112,9 @@ final class SDH_Muhely_Rma_Oldal
             'Mitarbeiter-Vorschau – genau das sieht der Kunde nach der Anmeldung mit Telefon- und Auftragsnummer. Eine von hier gesendete Nachricht wird dem Auftrag im Namen des Kunden hinzugefügt.',
         ],
         'pelda'           => ['pl.', 'e.g.', 'z. B.'],
+        'eszkozonkent'    => ['Eszközönként', 'Per device', 'Pro Gerät'],
+        'uz_mirol'        => ['Melyik készülékről ír?', 'Which device is it about?', 'Um welches Gerät geht es?'],
+        'uz_mind'         => ['Általános / mindegyik', 'General / all', 'Allgemein / alle'],
         'ctrl_enter'      => ['Ctrl + Enter: küldés', 'Ctrl + Enter: send', 'Strg + Enter: senden'],
     ];
 
@@ -123,6 +126,7 @@ final class SDH_Muhely_Rma_Oldal
         'fuggo'       => ['Függő', 'On hold', 'Ausstehend'],
         'nyitott'     => ['Nyitott', 'In progress', 'In Bearbeitung'],
         'elkeszult'   => ['Elkészült', 'Ready', 'Fertig'],
+        'reszben'     => ['Részben elkészült', 'Partly ready', 'Teilweise fertig'],
         'lezart'      => ['Lezárt', 'Completed', 'Abgeschlossen'],
         'ervenytelen' => ['Érvénytelen', 'Cancelled', 'Storniert'],
     ];
@@ -727,7 +731,7 @@ final class SDH_Muhely_Rma_Oldal
                             ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="tortenet" id="rma-panel-tortenet" role="tabpanel">
-                            <?php self::panel_tortenet($naplo, $allapotok); ?>
+                            <?php self::panel_tortenet($naplo, $allapotok, SDH_Muhely_Rma::eszkoz_nevek($id)); ?>
                         </section>
                         <section class="rma-panel rma-panel--uzenetek" data-rma-panel="uzenetek" id="rma-panel-uzenetek" role="tabpanel">
                             <?php self::panel_uzenetek($munkalap, $uzenetek, $elonezet); ?>
@@ -772,6 +776,28 @@ final class SDH_Muhely_Rma_Oldal
             <h3 class="sdh-ml__cim"><?php echo esc_html(self::t('allapot')); ?></h3>
             <div class="rma-allapot sdh-allapot sdh-allapot--<?php echo esc_attr((string) $allapot['szin']); ?>"><?php echo esc_html(self::allapot_nev($kulcs, $allapot)); ?></div>
             <div class="rma-halvany"><?php echo esc_html(self::t('utoljara') . ': ' . self::ido($utolso)); ?></div>
+
+            <?php
+            // Több eszköz: készülékenként a saját állapot, és hogy ki van-e fizetve.
+            $rma_bontas    = SDH_Muhely_Munkalap::eszkoz_bontas($munkalap);
+            $rma_allapotok = SDH_Muhely_Munkalap::allapotok();
+            ?>
+            <?php if (count($rma_bontas) > 1) : ?>
+                <ul class="rma-eszall" aria-label="<?php echo esc_attr(self::t('eszkozonkent')); ?>">
+                    <?php foreach ($rma_bontas as $rb) : ?>
+                        <?php $ra = $rma_allapotok[(string) $rb['allapot']] ?? ['nev' => (string) $rb['allapot'], 'szin' => 'szurke']; ?>
+                        <li>
+                            <span class="rma-eszall__nev"><?php echo esc_html((string) $rb['felirat']); ?></span>
+                            <span class="sdh-allapot sdh-allapot--<?php echo esc_attr((string) $ra['szin']); ?>"><?php echo esc_html(self::allapot_nev((string) $rb['allapot'], $ra)); ?></span>
+                            <?php if ($rb['fizetve'] && (float) $rb['brutto'] > 0) : ?>
+                                <span class="rma-eszall__fizetve"><?php echo esc_html(self::t('kifizetve')); ?></span>
+                            <?php elseif ((float) $rb['fizetendo'] > 0.5) : ?>
+                                <span class="rma-eszall__fizetendo"><?php echo esc_html(self::t('fizetendo') . ': ' . self::penz((float) $rb['fizetendo'])); ?></span>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
 
         <div class="rma-csoport">
@@ -981,7 +1007,7 @@ final class SDH_Muhely_Rma_Oldal
     /**
      * @param array<int, object> $naplo
      */
-    private static function panel_tortenet(array $naplo, array $allapotok): void
+    private static function panel_tortenet(array $naplo, array $allapotok, array $eszkoz_nevek = []): void
     {
         if ($naplo === []) {
             echo '<p class="rma-ures">' . esc_html(self::t('nincs_tortenet')) . '</p>';
@@ -995,10 +1021,15 @@ final class SDH_Muhely_Rma_Oldal
             $k = (string) $sor->allapot;
             $a = $allapotok[$k] ?? ['nev' => $k, 'szin' => 'szurke'];
 
+            // Egy eszköz saját állapotváltása: előtte áll, melyik készüléké.
+            $ne  = (int) ($sor->eszkoz_id ?? 0);
+            $kie = $ne > 0 ? (string) ($eszkoz_nevek[$ne] ?? self::t('eszkoz')) : '';
+
             printf(
-                '<li class="sdh-allapot--%s%s"><span class="rma-ido__pont"></span><b>%s</b><span class="rma-halvany">%s</span></li>',
+                '<li class="sdh-allapot--%s%s"><span class="rma-ido__pont"></span><b>%s%s</b><span class="rma-halvany">%s</span></li>',
                 esc_attr((string) $a['szin']),
                 $i === 0 ? ' is-friss' : '',
+                $kie !== '' ? '<small class="rma-lista__eszkoz">' . esc_html($kie) . '</small> ' : '',
                 esc_html(self::allapot_nev($k, $a)),
                 esc_html(self::ido((string) $sor->letrehozva))
             );
@@ -1013,6 +1044,8 @@ final class SDH_Muhely_Rma_Oldal
     private static function panel_uzenetek(object $munkalap, array $uzenetek, bool $elonezet): void
     {
         $b = SDH_Muhely_Rma::beallitas();
+        // Több eszköznél: az üzenet melyik készülékről szól (valódi eszköz-azonosító => név).
+        $nevek = SDH_Muhely_Rma::eszkoz_nevek((int) $munkalap->id);
 
         echo '<div class="rma-uz-szal" data-rma-szal>';
 
@@ -1023,11 +1056,14 @@ final class SDH_Muhely_Rma_Oldal
         foreach ($uzenetek as $u) {
             $sajat = $u->irany === 'be';
 
+            $kie = (string) ($nevek[(int) ($u->eszkoz_id ?? 0)] ?? '');
+
             printf(
-                '<div class="rma-uz%s"><div class="rma-uz__fej"><b>%s</b> <span>%s</span></div><div class="rma-uz__szoveg">%s</div></div>',
+                '<div class="rma-uz%s"><div class="rma-uz__fej"><b>%s</b> <span>%s</span>%s</div><div class="rma-uz__szoveg">%s</div></div>',
                 $sajat ? ' rma-uz--sajat' : '',
                 esc_html($sajat ? self::t('on') : (string) $b['szerviz_nev']),
                 esc_html(self::ido((string) $u->letrehozva)),
+                $kie !== '' ? ' <small class="rma-lista__eszkoz">' . esc_html($kie) . '</small>' : '',
                 nl2br(esc_html((string) $u->szoveg))
             );
         }
@@ -1040,6 +1076,15 @@ final class SDH_Muhely_Rma_Oldal
             <input type="hidden" name="jel" value="<?php echo esc_attr(SDH_Muhely_Rma::urlap_jel($munkalap)); ?>">
             <?php if ($elonezet) : ?>
                 <input type="hidden" name="elonezet" value="1">
+            <?php endif; ?>
+            <?php if ($nevek !== []) : ?>
+                <?php // Több eszköz: az ügyfél megjelölheti, melyik készülékről ír (nem kötelező). ?>
+                <fieldset class="rma-uz-eszkoz">
+                    <legend><?php echo esc_html(self::t('uz_mirol')); ?></legend>
+                    <?php foreach ([0 => self::t('uz_mind')] + $nevek as $uz_id => $uz_nev) : ?>
+                        <label><input type="radio" name="eszkoz" value="<?php echo (int) $uz_id; ?>" <?php checked($uz_id, 0); ?>><span><?php echo esc_html((string) $uz_nev); ?></span></label>
+                    <?php endforeach; ?>
+                </fieldset>
             <?php endif; ?>
             <textarea name="szoveg" rows="2" maxlength="<?php echo (int) SDH_Muhely_Rma::UZENET_HOSSZ; ?>" required
                       placeholder="<?php echo esc_attr(self::t('uz_mezo')); ?>"

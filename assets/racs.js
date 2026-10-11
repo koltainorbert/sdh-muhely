@@ -691,6 +691,11 @@
                 szin = a.szin;
             }
 
+            // A „Részben elkészült" több eszköznél magától áll be – kézzel nem választható.
+            if (a.reszben && sor._tobb > 0 && a.k !== sor.allapot) {
+                return;
+            }
+
             opciok += '<option value="' + esc(a.k) + '" data-szin="' + esc(a.szin) + '"' +
                 (a.k === sor.allapot ? ' selected' : '') + '>' + esc(a.nev) + '</option>';
         });
@@ -699,9 +704,15 @@
             opciok = '<option value="' + esc(sor.allapot) + '" selected>' + esc(sor.allapot) + '</option>' + opciok;
         }
 
-        return '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--' + esc(szin) + '" data-sdh-allapot-hely>' +
+        // Több eszköz: a közös állapot mellett, hány eszköz kész (ráállva: melyik).
+        var resz = sor._tobb > 0 && sor._kesz
+            ? '<span class="sdh-allapot__resz" title="' + esc(sor._kesz_szoveg || '') + '">' + esc(sor._kesz) + '</span>'
+            : '';
+
+        return '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--' + esc(szin) + '" data-sdh-allapot-hely' +
+            (resz ? ' title="' + esc('Közös állapot – itt átírva minden eszköz ezt kapja. ' + (sor._kesz_szoveg || '')) + '"' : '') + '>' +
             '<select data-sdh-lista-allapot data-id="' + sor.id + '" data-elozo="' + esc(sor.allapot) + '"' +
-            ' aria-label="Állapot módosítása">' + opciok + '</select></span>';
+            ' aria-label="Állapot módosítása">' + opciok + '</select></span>' + resz;
     }
 
     /* A sorban ezek mellé kerül (ráálláskor) másoló gomb – a kattintást az app.js intézi. */

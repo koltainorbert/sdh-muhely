@@ -60,6 +60,31 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.43.0
+- **Eszközönként saját állapot.** Több eszközös munkalapon minden eszköznek külön állapota van: az egyik kész és
+  elviszik, a másik még alkatrészre vár. Az űrlap bal oldalán és az Áttekintés részletpanelén eszközönként
+  állítható, azonnal mentődik. Egy eszközös lapon minden a régi.
+- **Közös állapot: „Részben elkészült".** A lap állapota az eszközökéből adódik: ha mind ugyanaz, az; ha az egyik
+  már kész (elkészült vagy lezárt), a másik még nem, akkor „Részben elkészült" – és kiírja, melyik eszköz kész
+  (pl. „1 / 2 kész: 2. Samsung Galaxy A54"; a rácsban „1/2" jelzés). A lap csak akkor zárul le, ha minden eszköz
+  lezárt. A lap állapotát átírva minden eszköz megkapja. Új jelzők az állapotlistában: `kesz`, `reszben`,
+  `ervenytelen` (Beállítások › Munkalap-állapotok); a „Részben elkészült" átnevezhető, átszínezhető.
+- **Eszközönként „Fizetve".** Ha a Fizetés ablakban csak az egyik eszközt fizetik ki, az az eszköz „Fizetve" lesz
+  (a napjával), a lap nyitva marad; ha így minden eszköz ki van fizetve, a lap is fizetve lesz. A kifizetett eszköz
+  nem fizethető újra, a pénztárban teljes fizetésként (nem előlegként) szerepel. A jelző az eszközről levehető.
+- **RMA-üzenet eszközhöz kötve.** Az üzenet írásakor választható, melyik eszközről szól (alapból az egész
+  munkalapról); a szálban és az e-mailben ott az eszköz neve. Az ügyfél is megjelölheti, melyik készülékről ír.
+  Az ügyféloldalon eszközönként látszik az állapot és a fizetés, a történetben az eszköz saját állapotváltásai.
+- **Eszközönként külön számla – választható.** A számla ablakában (Számlázz.hu számla, SDH számla,
+  számla-előkészítő) megadható, hogy minden eszköz egy bizonylatra kerül, vagy csak az egyik: ilyenkor csak annak
+  a tételei maradnak kipipálva, a megjegyzésbe az az egy eszköz kerül, a helyi nyomtatvány saját sorszámot kap
+  (…-2). A számla megjegyzi, melyik eszközé; az ablakban felvett új tétel is ahhoz az eszközhöz kerül.
+- **Tesztek a repóban** (`tesztek/`, a telepítő zipbe nem kerülnek be): `SDH_TESZT_ADATBAZIS=1 php tesztek/futtat.php`
+  – csak külön tesztoldalon futtasd, mert adatot ír az adatbázisba.
+- Séma (DB_VERSION 0.31.0): `sdh_munkalap.fo_allapot / fo_fizetve / fo_fizetes_ideje`,
+  `sdh_munkalap_eszkoz.allapot / fizetve / fizetes_ideje`, `eszkoz_id` az `sdh_munkalap_naplo`, `sdh_uzenet` és
+  `sdh_szamla` táblában (a valódi eszköz-azonosító; 0 = az egész lap).
+
 ### 0.42.0
 - **Minden eszköz önálló ügy a munkalapon belül.** Ha egy ügyfél egyszerre több készüléket ad le, egy munkalapon
   mennek, de eszközönként külön kezelve: saját hibák (0.41), saját **szolgáltatások és termékek**, saját pénzügy.

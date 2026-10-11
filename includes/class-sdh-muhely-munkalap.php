@@ -75,6 +75,10 @@ final class SDH_Muhely_Munkalap
         // Állapotváltás közvetlenül a listából.
         add_action('wp_ajax_sdh_muhely_munkalapok_allapot', [self::class, 'ajax_allapot']);
 
+        // Több eszközös lap: egy eszköz saját állapota, és a „fizetve" jelzőjének visszavonása.
+        add_action('wp_ajax_sdh_muhely_munkalapok_eszkoz_allapot', [self::class, 'ajax_eszkoz_allapot']);
+        add_action('wp_ajax_sdh_muhely_munkalapok_eszkoz_fizetve', [self::class, 'ajax_eszkoz_fizetve']);
+
         // Az ügyfél kiválasztása után az eszközválasztó ebből töltődik.
         add_action('wp_ajax_sdh_muhely_munkalapok_eszkozok', [self::class, 'ajax_eszkozok']);
 
@@ -86,6 +90,9 @@ final class SDH_Muhely_Munkalap
 
         // Sémafrissítés után: a régi lezárt lapok lezárási dátumának pótlása.
         add_action('sdh_muhely_sema_frissult', [self::class, 'lezarva_potlas']);
+
+        // …és a „Részben elkészült" közös állapot a mentett állapotlistába.
+        add_action('sdh_muhely_sema_frissult', [self::class, 'reszben_potlas'], 5);
     }
 
     /* =================================================================
@@ -203,8 +210,9 @@ final class SDH_Muhely_Munkalap
 
     /**
      * A munkalap további eszközeinek kapcsolósorai (eszkoz_id, bev_dij,
-     * bev_nev, bev_szolg, fizetett), sorrendben – az eszközönkénti
-     * bevizsgálási díjhoz és a külön befizetéshez.
+     * bev_nev, bev_szolg, fizetett, allapot, fizetve, fizetes_ideje),
+     * sorrendben – az eszközönkénti bevizsgálási díjhoz, a külön
+     * befizetéshez, a saját állapothoz és a saját „fizetve" jelzőhöz.
      *
      * @return array<int, object>
      */
@@ -218,7 +226,9 @@ final class SDH_Muhely_Munkalap
 
         $sorok = $wpdb->get_results(
             $wpdb->prepare(
-                'SELECT eszkoz_id, bev_dij, bev_nev, bev_szolg, fizetett FROM ' . self::tobbi_eszkoz_tabla()
+                // Minden oszlop: így frissítés után, a sémafrissítés előtti első kérésnél sem hibázik
+                // (az új oszlopokat a hívók `?? ''` / `?? 0` alapértékkel olvassák).
+                'SELECT * FROM ' . self::tobbi_eszkoz_tabla()
                 . ' WHERE munkalap_id = %d ORDER BY sorrend ASC, id ASC',
                 $munkalap_id
             )
@@ -323,11 +333,13 @@ final class SDH_Muhely_Munkalap
      * hivatkoznak rá), `valodi_id`, `eszkoz` (sor vagy null), `sorszam`,
      * `nev` (megnevezés), `felirat` („2. Apple A1660"), `hibak`, `tetelek`,
      * `netto`, `brutto` (a kimenő tételek összege), `dij` (bevizsgálási díj),
-     * `eloleg` (az eszközre már befizetett rész), `fizetendo`.
+     * `eloleg` (az eszközre már befizetett rész), `fizetendo`, `allapot`
+     * (az eszköz saját állapotának kulcsa), `kesz` (elkészült vagy lezárt),
+     * `fizetve`, `fizetes_ideje`.
      *
      * Az előleg felosztása: a csatolt eszközé a díja + amit külön befizettek
-     * rá; a fő eszközé a lap előlegének maradéka. Kifizetett lapon a
-     * fizetendő mindenhol nulla.
+     * rá; a fő eszközé a lap előlegének maradéka. Kifizetett lapon – és a
+     * külön kifizetett eszköznél – a fizetendő nulla.
      *
      * @return array<int, array<string, mixed>>
      */
@@ -378,7 +390,33 @@ final class SDH_Muhely_Munkalap
                 'dij'       => 0.0,
                 'eloleg'    => 0.0,
                 'fizetendo' => 0.0,
+                'allapot'   => (string) $munkalap->allapot,
+                'kesz'      => false,
+                'fizetve'   => $fizetve,
+                'fizetes_ideje' => $fizetve ? self::datum_ertek((string) ($munkalap->fizetes_ideje ?? '')) : '',
             ];
+        }
+
+        // Saját állapot és saját „fizetve" eszközönként (egy eszköznél a lapé).
+        $allapotok   = self::allapotok();
+        $sajat       = self::eszkoz_allapotok($munkalap, array_values($reszletek));
+        $tobb_eszkoz = $reszletek !== [];
+
+        foreach ($bontas as $kulcs => $b) {
+            $a = (string) ($sajat[$kulcs] ?? $munkalap->allapot);
+
+            $bontas[$kulcs]['allapot'] = $a;
+            $bontas[$kulcs]['kesz']    = !empty($allapotok[$a]['kesz']) || (!empty($allapotok[$a]['zart']) && empty($allapotok[$a]['ervenytelen']));
+
+            if ($fizetve || !$tobb_eszkoz) {
+                continue;
+            }
+
+            $jel = $kulcs === 0 ? (int) ($munkalap->fo_fizetve ?? 0) === 1 : (int) ($reszletek[$kulcs]->fizetve ?? 0) === 1;
+            $nap = $kulcs === 0 ? (string) ($munkalap->fo_fizetes_ideje ?? '') : (string) ($reszletek[$kulcs]->fizetes_ideje ?? '');
+
+            $bontas[$kulcs]['fizetve']       = $jel;
+            $bontas[$kulcs]['fizetes_ideje'] = $jel ? self::datum_ertek($nap) : '';
         }
 
         // Ami olyan eszközre mutat, amely már nincs a lapon, az a fő eszközé.
@@ -419,7 +457,7 @@ final class SDH_Muhely_Munkalap
         foreach ($bontas as $kulcs => $b) {
             $bontas[$kulcs]['netto']     = round($b['netto'], 2);
             $bontas[$kulcs]['brutto']    = round($b['brutto'], 2);
-            $bontas[$kulcs]['fizetendo'] = $fizetve ? 0.0 : round($b['brutto'] - $bontas[$kulcs]['eloleg'], 2);
+            $bontas[$kulcs]['fizetendo'] = $b['fizetve'] ? 0.0 : round($b['brutto'] - $bontas[$kulcs]['eloleg'], 2);
         }
 
         return array_values($bontas);
@@ -663,9 +701,10 @@ final class SDH_Muhely_Munkalap
             'sablon | Sablon | szurke |',
             'fuggo | Függő | kek | szamozott',
             'nyitott | Nyitott | narancs | szamozott, alap',
-            'elkeszult | Elkészült | olajzold | szamozott',
+            'elkeszult | Elkészült | olajzold | szamozott, kesz',
+            'reszben | Részben elkészült | olajzold | szamozott, reszben',
             'lezart | Lezárt | zold | szamozott, zart',
-            'ervenytelen | Érvénytelen | piros | szamozott, zart',
+            'ervenytelen | Érvénytelen | piros | szamozott, zart, ervenytelen',
         ]);
     }
 
@@ -684,7 +723,11 @@ final class SDH_Muhely_Munkalap
      *
      * Soronként egy állapot: `kulcs | Név | szín | jelzők`. A jelzők
      * (vesszővel elválasztva): `szamozott` – a lap munkalapszámot kap;
-     * `zart` – a lap lezárt, nem számít nyitottnak.
+     * `zart` – a lap lezárt, nem számít nyitottnak; `alap` – az új lap
+     * ezzel indul; `kesz` – az eszköz elkészült (átvehető); `reszben` – a
+     * több eszközös lap közös állapota, amikor az egyik eszköz kész, a
+     * másik még nem; `ervenytelen` – az ilyen eszköz nem számít bele a
+     * közös állapotba.
      *
      * Hibás vagy üres bemenetnél a megadott alapértelmezés jön vissza,
      * hogy elgépelt beállítás ne tegye használhatatlanná a modult.
@@ -718,6 +761,9 @@ final class SDH_Muhely_Munkalap
                 'szamozott' => in_array('szamozott', $jelzok, true),
                 'zart'      => in_array('zart', $jelzok, true),
                 'alap'      => in_array('alap', $jelzok, true),
+                'kesz'      => in_array('kesz', $jelzok, true),
+                'reszben'   => in_array('reszben', $jelzok, true),
+                'ervenytelen' => in_array('ervenytelen', $jelzok, true),
             ];
         }
 
@@ -739,13 +785,135 @@ final class SDH_Muhely_Munkalap
             $mentett = self::szin_atallas(get_option(self::OPT_ALLAPOTOK, ''));
             $alap    = self::alap_allapotok_szovegkent();
 
-            self::$gyorsitotar['munkalap'] = self::allapotok_feldolgoz(
+            self::$gyorsitotar['munkalap'] = self::allapotok_kiegeszit(self::allapotok_feldolgoz(
                 is_string($mentett) && trim($mentett) !== '' ? $mentett : $alap,
                 $alap
-            );
+            ));
         }
 
         return self::$gyorsitotar['munkalap'];
+    }
+
+    /**
+     * A több eszközös laphoz kellő jelzők pótlása a régebben mentett
+     * állapotlistában: ha nincs `kesz` jelzős állapot, az `elkeszult` kulcsú
+     * az; ha nincs `ervenytelen` jelzős, az `ervenytelen` kulcsú; ha nincs
+     * `reszben` jelzős, a `reszben` kulcsú – és ha az sincs, bekerül a
+     * „Részben elkészült" (a kész állapot után), hogy a közös állapotnak
+     * mindig legyen neve.
+     *
+     * @param array<string, array<string, mixed>> $lista
+     * @return array<string, array<string, mixed>>
+     */
+    private static function allapotok_kiegeszit(array $lista): array
+    {
+        $van = static function (string $jelzo) use (&$lista): bool {
+            foreach ($lista as $a) {
+                if (!empty($a[$jelzo])) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        if (!$van('kesz') && isset($lista['elkeszult'])) {
+            $lista['elkeszult']['kesz'] = true;
+        }
+
+        if (!$van('ervenytelen') && isset($lista['ervenytelen'])) {
+            $lista['ervenytelen']['ervenytelen'] = true;
+        }
+
+        if ($van('reszben')) {
+            return $lista;
+        }
+
+        if (isset($lista['reszben'])) {
+            $lista['reszben']['reszben'] = true;
+
+            return $lista;
+        }
+
+        $uj = [
+            'nev' => 'Részben elkészült', 'szin' => 'olajzold', 'szamozott' => true, 'zart' => false,
+            'alap' => false, 'kesz' => false, 'reszben' => true, 'ervenytelen' => false,
+        ];
+        $ki      = [];
+        $betette = false;
+
+        foreach ($lista as $kulcs => $a) {
+            $ki[$kulcs] = $a;
+
+            if (!$betette && !empty($a['kesz'])) {
+                $ki['reszben'] = $uj;
+                $betette       = true;
+            }
+        }
+
+        if (!$betette) {
+            $ki['reszben'] = $uj;
+        }
+
+        return $ki;
+    }
+
+    /** A „Részben elkészült" (a több eszközös lap közös állapota) kulcsa. */
+    public static function reszben_kulcs(): string
+    {
+        foreach (self::allapotok() as $kulcs => $a) {
+            if (!empty($a['reszben'])) {
+                return (string) $kulcs;
+            }
+        }
+
+        return 'reszben';
+    }
+
+    /**
+     * Sémafrissítéskor: a mentett (szerkesztett) állapotlistába bekerül a
+     * „Részben elkészült" sora, hogy a Beállításokban átnevezhető és
+     * átszínezhető legyen. Újrafuttatható; az alaplistához nem nyúl.
+     */
+    public static function reszben_potlas(): void
+    {
+        $mentett = get_option(self::OPT_ALLAPOTOK, '');
+
+        if (!is_string($mentett) || trim($mentett) === '') {
+            return;
+        }
+
+        $lista = self::allapotok_feldolgoz($mentett, self::alap_allapotok_szovegkent());
+
+        foreach ($lista as $kulcs => $a) {
+            if (!empty($a['reszben']) || (string) $kulcs === 'reszben') {
+                return;
+            }
+        }
+
+        $sor   = 'reszben | Részben elkészült | olajzold | szamozott, reszben';
+        $sorok = preg_split('/\R/u', trim($mentett)) ?: [];
+        $ki    = [];
+        $kesz  = false;
+
+        foreach ($sorok as $egy) {
+            $ki[] = $egy;
+
+            $reszek = array_map('trim', explode('|', $egy));
+            $jelzok = array_map('trim', explode(',', strtolower($reszek[3] ?? '')));
+
+            if (!$kesz && (sanitize_key($reszek[0] ?? '') === 'elkeszult' || in_array('kesz', $jelzok, true))) {
+                $ki[] = $sor;
+                $kesz = true;
+            }
+        }
+
+        if (!$kesz) {
+            $ki[] = $sor;
+        }
+
+        update_option(self::OPT_ALLAPOTOK, implode("\n", $ki));
+        unset(self::$gyorsitotar['munkalap']);
     }
 
     /**
@@ -1200,6 +1368,14 @@ final class SDH_Muhely_Munkalap
                 <code>zart</code> – a lap lezárt, nem számít nyitottnak;
                 <code>alap</code> – új munkalapnál ez az állapot van előre kiválasztva
                 (több <code>alap</code> esetén az első). A sorrend a lista sorrendje.
+            </p>
+
+            <p class="sdh-sugo">
+                Több eszközös munkalaphoz: <code>kesz</code> – az eszköz elkészült, átvehető;
+                <code>reszben</code> – a lap közös állapota, amikor az egyik eszköz már kész, a másik
+                még nem (magától áll be, kézzel nem választható); <code>ervenytelen</code> – az ilyen
+                állapotú eszköz nem számít bele a közös állapotba. Ha a közös állapot nem
+                egyértelmű, a listában előrébb álló állapot érvényesül.
             </p>
 
             <div class="sdh-mezo sdh-mezo--szeles">
@@ -1791,22 +1967,19 @@ final class SDH_Muhely_Munkalap
     }
 
     /**
-     * Állapotváltás a listából. Ugyanazok a szabályok, mint az űrlapon:
+     * A lap közös állapotának írása. Ugyanazok a szabályok, mint az űrlapon:
      * számozott állapothoz ügyfél és eszköz kell, és az első számozott
-     * állapotba lépéskor a lap munkalapszámot kap (zár alatt).
+     * állapotba lépéskor a lap munkalapszámot kap (zár alatt). Beáll a
+     * lezárás napja, és megy a napló-esemény.
      *
-     * @return array{id: int, szam: string, nev: string, szin: string, zart: bool, lezarva: string}|string
+     * @param array<string, mixed> $tovabbi_mezok A munkalap-sor további mezői ugyanabban az írásban.
+     * @return array{id: int, szam: string, kulcs: string, nev: string, szin: string, zart: bool, lezarva: string}|string
      */
-    public static function allapot_valt(int $id, string $kulcs)
+    private static function lap_allapot_ir(object $regi, string $kulcs, array $tovabbi_mezok = [])
     {
         global $wpdb;
 
-        $regi = $id > 0 ? self::egy($id) : null;
-
-        if ($regi === null) {
-            return 'Nincs ilyen munkalap. Lehet, hogy időközben törölték.';
-        }
-
+        $id        = (int) $regi->id;
         $allapotok = self::allapotok();
 
         if (!isset($allapotok[$kulcs])) {
@@ -1836,7 +2009,7 @@ final class SDH_Muhely_Munkalap
             }
         }
 
-        $adatok = [
+        $adatok = $tovabbi_mezok + [
             'allapot'   => $kulcs,
             'lezarva'   => self::lezarva_ertek($kulcs, $regi),
             'modositva' => current_time('mysql'),
@@ -1862,14 +2035,553 @@ final class SDH_Muhely_Munkalap
         }
 
         return [
-            'id'   => $id,
-            'szam' => self::szam_formaz($adatok['munkalap_szam'] ?? $regi->munkalap_szam),
-            'nev'  => $allapotok[$kulcs]['nev'],
-            'szin' => $allapotok[$kulcs]['szin'],
-            'zart' => (bool) $allapotok[$kulcs]['zart'],
+            'id'    => $id,
+            'szam'  => self::szam_formaz($adatok['munkalap_szam'] ?? $regi->munkalap_szam),
+            'kulcs' => $kulcs,
+            'nev'   => $allapotok[$kulcs]['nev'],
+            'szin'  => $allapotok[$kulcs]['szin'],
+            'zart'  => (bool) $allapotok[$kulcs]['zart'],
             // Az űrlap „Lezárva" sora ebből frissül (üres, ha a lap nem lezárt).
             'lezarva' => $adatok['lezarva'] !== null ? str_replace('-', '.', (string) $adatok['lezarva']) : '',
         ];
+    }
+
+    /**
+     * Állapotváltás a listából vagy az űrlapról: a LAP állapota. Több
+     * eszközös lapon ez minden eszközre érvényes (mind ezt az állapotot
+     * kapja) – egy eszközt külön az eszkoz_allapot_valt() állít.
+     *
+     * @return array<string, mixed>|string
+     */
+    public static function allapot_valt(int $id, string $kulcs)
+    {
+        global $wpdb;
+
+        $regi = $id > 0 ? self::egy($id) : null;
+
+        if ($regi === null) {
+            return 'Nincs ilyen munkalap. Lehet, hogy időközben törölték.';
+        }
+
+        $allapotok = self::allapotok();
+
+        if (!isset($allapotok[$kulcs])) {
+            return 'Ismeretlen állapot.';
+        }
+
+        $tobb = self::tovabbi_eszkoz_idk($id) !== [];
+
+        if ($tobb && !empty($allapotok[$kulcs]['reszben']) && (string) $regi->allapot !== $kulcs) {
+            return 'A „' . $allapotok[$kulcs]['nev'] . '” a több eszközös lap közös állapota: magától áll be, amikor az egyik eszköz kész, a másik még nem. Az eszközök állapotát külön állítsd.';
+        }
+
+        // Ugyanaz a (közös) állapot újra: nincs mit szétosztani az eszközökre.
+        $szetoszt = $tobb && empty($allapotok[$kulcs]['reszben']);
+
+        $eredmeny = self::lap_allapot_ir($regi, $kulcs, $szetoszt ? ['fo_allapot' => $kulcs] : ($tobb ? [] : ['fo_allapot' => '']));
+
+        if (is_string($eredmeny)) {
+            return $eredmeny;
+        }
+
+        if ($szetoszt) {
+            $wpdb->update(self::tobbi_eszkoz_tabla(), ['allapot' => $kulcs], ['munkalap_id' => $id]);
+        }
+
+        return $eredmeny + self::eszkoz_valasz($id);
+    }
+
+    /* =================================================================
+     * Több eszköz: eszközönként saját állapot és saját „fizetve"
+     *
+     * Egy eszközös lapon minden a régi: a lap állapota az eszközé. Több
+     * eszköznél minden eszköznek saját állapota van (az egyik kész és
+     * elviszik, a másik alkatrészre vár), a lap állapota pedig a KÖZÖS
+     * állapot, amely ezekből adódik – lásd kozos_allapot().
+     * ============================================================== */
+
+    /**
+     * A lap eszközeinek állapota: kulcs (0 = a fő eszköz, különben a csatolt
+     * eszköz azonosítója) => állapotkulcs. Amelyik eszköznek még nincs saját
+     * állapota, az a lapét követi.
+     *
+     * @param array<int, object>|null $reszletek A kapcsolósorok, ha a hívónál már megvannak.
+     * @return array<int, string>
+     */
+    public static function eszkoz_allapotok(object $munkalap, ?array $reszletek = null): array
+    {
+        $allapotok = self::allapotok();
+        $lap       = (string) $munkalap->allapot;
+        $reszletek = $reszletek ?? self::tovabbi_reszletek((int) $munkalap->id);
+
+        if ($reszletek === []) {
+            return [0 => $lap];
+        }
+
+        // A közös „részben" állapot nem lehet egy eszközé: helyette az alapállapot.
+        $alap     = !empty($allapotok[$lap]['reszben']) ? self::alap_kulcs($allapotok) : $lap;
+        $ervenyes = static fn (string $k): bool => $k !== '' && isset($allapotok[$k]) && empty($allapotok[$k]['reszben']);
+        $fo       = (string) ($munkalap->fo_allapot ?? '');
+        $ki       = [0 => $ervenyes($fo) ? $fo : $alap];
+
+        foreach ($reszletek as $r) {
+            $sajat = (string) ($r->allapot ?? '');
+
+            $ki[(int) $r->eszkoz_id] = $ervenyes($sajat) ? $sajat : $alap;
+        }
+
+        return $ki;
+    }
+
+    /**
+     * A több eszközös lap közös állapota az eszközök állapotából:
+     *   - az érvénytelen eszköz nem számít, amíg van másik;
+     *   - ha mind ugyanaz, az;
+     *   - ha van kész (elkészült vagy lezárt) és van, ami még nem az:
+     *     „Részben elkészült";
+     *   - különben az állapotlista sorrendjében a legkorábbi (pl. Elkészült +
+     *     Lezárt = Elkészült: a lap nem zárul le, amíg van át nem adott eszköz).
+     *
+     * @param array<int, string> $eszkoz_allapotok kulcs => állapotkulcs
+     */
+    public static function kozos_allapot(array $eszkoz_allapotok): string
+    {
+        $allapotok = self::allapotok();
+        $ertekek   = array_values(array_map('strval', $eszkoz_allapotok));
+
+        if ($ertekek === []) {
+            return self::alap_kulcs($allapotok);
+        }
+
+        if (count($ertekek) === 1) {
+            return $ertekek[0];
+        }
+
+        $elo = array_values(array_filter($ertekek, static fn (string $k): bool => empty($allapotok[$k]['ervenytelen'])));
+
+        if ($elo === []) {
+            return $ertekek[0];
+        }
+
+        if (count(array_unique($elo)) === 1) {
+            return $elo[0];
+        }
+
+        $kesz = array_filter($elo, static fn (string $k): bool => !empty($allapotok[$k]['kesz']) || !empty($allapotok[$k]['zart']));
+
+        if ($kesz !== [] && count($kesz) < count($elo)) {
+            return self::reszben_kulcs();
+        }
+
+        $sorrend = array_flip(array_keys($allapotok));
+
+        usort($elo, static fn (string $a, string $b): int => ($sorrend[$a] ?? PHP_INT_MAX) <=> ($sorrend[$b] ?? PHP_INT_MAX));
+
+        return $elo[0];
+    }
+
+    /**
+     * Egy eszköz saját állapotának váltása. A lap közös állapota ebből
+     * újraszámolódik (és ha kell, a lap számot kap, lezárul vagy újranyílik).
+     * Egy eszközös lapon ez a lap állapotváltása.
+     *
+     * @param int $kulcs 0 = a fő eszköz, különben a csatolt eszköz azonosítója.
+     * @return array<string, mixed>|string
+     */
+    public static function eszkoz_allapot_valt(int $id, int $kulcs, string $allapot)
+    {
+        global $wpdb;
+
+        $regi = $id > 0 ? self::egy($id) : null;
+
+        if ($regi === null) {
+            return 'Nincs ilyen munkalap. Lehet, hogy időközben törölték.';
+        }
+
+        $allapotok = self::allapotok();
+
+        if (!isset($allapotok[$allapot]) || !empty($allapotok[$allapot]['reszben'])) {
+            return 'Ismeretlen állapot.';
+        }
+
+        $mostani = self::eszkoz_allapotok($regi);
+
+        if (count($mostani) < 2) {
+            return self::allapot_valt($id, $allapot);
+        }
+
+        if (!isset($mostani[$kulcs])) {
+            return 'Ez az eszköz már nincs a munkalapon. Nyisd meg újra a lapot.';
+        }
+
+        $elozo           = $mostani[$kulcs];
+        $mostani[$kulcs] = $allapot;
+
+        // A fő eszköz állapota a munkalap-sorban áll: egy írásban megy a közös állapottal.
+        $eredmeny = self::lap_allapot_ir($regi, self::kozos_allapot($mostani), ['fo_allapot' => $mostani[0]]);
+
+        if (is_string($eredmeny)) {
+            return $eredmeny;
+        }
+
+        // Innentől minden eszköz állapota ki van írva (eddig a lapét követhették).
+        foreach ($mostani as $k => $a) {
+            if ($k > 0) {
+                $wpdb->update(self::tobbi_eszkoz_tabla(), ['allapot' => $a], ['munkalap_id' => $id, 'eszkoz_id' => $k]);
+            }
+        }
+
+        if ($elozo !== $allapot) {
+            /** Egy eszköz állapotváltása: az RMA-modul naplózza az eszköz nevével. */
+            do_action('sdh_muhely_munkalap_eszkoz_allapot', $id, $kulcs > 0 ? $kulcs : (int) $regi->eszkoz_id, $elozo, $allapot);
+        }
+
+        return $eredmeny + self::eszkoz_valasz($id);
+    }
+
+    /**
+     * A lap közös állapotának újraszámolása az eszközökéből – mentés után,
+     * amikor eszköz került a lapra vagy le róla.
+     */
+    public static function allapot_szinkron(int $id): void
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null) {
+            return;
+        }
+
+        $allapotok = self::allapotok();
+        $reszletek = self::tovabbi_reszletek($id);
+
+        if ($reszletek !== []) {
+            $kozos = self::kozos_allapot(self::eszkoz_allapotok($lap, $reszletek));
+
+            if ($kozos !== (string) $lap->allapot) {
+                self::lap_allapot_ir($lap, $kozos);
+            }
+
+            return;
+        }
+
+        // Egy eszköz maradt: az ő állapota a lapé, a külön tárolt érték kiürül.
+        $fo  = (string) ($lap->fo_allapot ?? '');
+        $cel = (string) $lap->allapot;
+
+        if ($fo !== '' && isset($allapotok[$fo]) && empty($allapotok[$fo]['reszben'])) {
+            $cel = $fo;
+        } elseif (!empty($allapotok[$cel]['reszben']) && $fo !== '') {
+            $cel = self::alap_kulcs($allapotok);
+        }
+
+        if ($cel !== (string) $lap->allapot) {
+            self::lap_allapot_ir($lap, $cel, ['fo_allapot' => '']);
+        } elseif ($fo !== '') {
+            $wpdb->update(self::tabla(), ['fo_allapot' => ''], ['id' => $id]);
+        }
+    }
+
+    /**
+     * A lap állapotának szétosztása minden eszközre (az űrlapon a lap
+     * állapotát írták át): több eszköznél mind ezt kapja.
+     */
+    private static function allapot_szetoszt(int $id, string $kulcs): void
+    {
+        global $wpdb;
+
+        $tobb = self::tovabbi_eszkoz_idk($id) !== [];
+
+        $wpdb->update(self::tabla(), ['fo_allapot' => $tobb ? $kulcs : ''], ['id' => $id]);
+
+        if ($tobb) {
+            $wpdb->update(self::tobbi_eszkoz_tabla(), ['allapot' => $kulcs], ['munkalap_id' => $id]);
+        }
+    }
+
+    /**
+     * A lap és az eszközök „fizetve" jelzőinek összehangolása mentés és
+     * fizetés után:
+     *   - kifizetett lapon minden eszköz fizetve (a lap fizetési napjával);
+     *   - ha a lapról most került le a „Fizetve" ($regi még fizetve volt),
+     *     az eszközökről is lekerül;
+     *   - ha minden eszköz külön ki lett fizetve, a lap is fizetve lesz.
+     */
+    public static function fizetve_szinkron(int $id, ?object $regi = null): void
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null) {
+            return;
+        }
+
+        $kapcsolo = self::tobbi_eszkoz_tabla();
+        $ma       = current_time('Y-m-d');
+
+        if ((int) $lap->fizetve === 1) {
+            $nap = self::datum_ertek((string) ($lap->fizetes_ideje ?? '')) ?: $ma;
+
+            if ((int) ($lap->fo_fizetve ?? 0) !== 1) {
+                $wpdb->update(self::tabla(), ['fo_fizetve' => 1, 'fo_fizetes_ideje' => $nap], ['id' => $id]);
+            }
+
+            $wpdb->update($kapcsolo, ['fizetve' => 1, 'fizetes_ideje' => $nap], ['munkalap_id' => $id, 'fizetve' => 0]);
+
+            return;
+        }
+
+        if ($regi !== null && (int) $regi->fizetve === 1) {
+            $wpdb->update(self::tabla(), ['fo_fizetve' => 0, 'fo_fizetes_ideje' => null], ['id' => $id]);
+            $wpdb->update($kapcsolo, ['fizetve' => 0, 'fizetes_ideje' => null], ['munkalap_id' => $id]);
+
+            return;
+        }
+
+        $reszletek = self::tovabbi_reszletek($id);
+
+        // Egy eszközös lapon csak a lap „Fizetve" jelzője él: a korábbi (több eszközös
+        // időből maradt) eszköz-jelző kiürül – a levett eszköz tételei a megmaradtra
+        // szálltak, azokat a régi jelző nem fedezi.
+        if ($reszletek === []) {
+            if ((int) ($lap->fo_fizetve ?? 0) === 1) {
+                $wpdb->update(self::tabla(), ['fo_fizetve' => 0, 'fo_fizetes_ideje' => null], ['id' => $id]);
+            }
+
+            return;
+        }
+
+        if ((int) ($lap->fo_fizetve ?? 0) !== 1) {
+            return;
+        }
+
+        $nap = self::datum_ertek((string) ($lap->fo_fizetes_ideje ?? '')) ?: $ma;
+
+        foreach ($reszletek as $r) {
+            if ((int) ($r->fizetve ?? 0) !== 1) {
+                return;
+            }
+
+            $nap = max($nap, self::datum_ertek((string) ($r->fizetes_ideje ?? '')) ?: $nap);
+        }
+
+        $wpdb->update(self::tabla(), ['fizetve' => 1, 'fizetes_ideje' => $nap, 'modositva' => current_time('mysql')], ['id' => $id]);
+    }
+
+    /**
+     * Egy eszköz „fizetve" jelzője. Bejelölni a Fizetés ablak szokta
+     * (részfizetés, amely az eszköz teljes fizetendőjét fedezi); kézzel
+     * levenni akkor lehet, ha a lap egésze nincs fizetve.
+     *
+     * @param int $kulcs 0 = a fő eszköz, különben a csatolt eszköz azonosítója.
+     * @return true|string Igaz, vagy hibaüzenet.
+     */
+    public static function eszkoz_fizetve_ir(int $id, int $kulcs, bool $fizetve)
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null) {
+            return 'Nincs ilyen munkalap.';
+        }
+
+        $csatolt = self::tovabbi_eszkoz_idk($id);
+
+        if ($csatolt === []) {
+            return 'Egy eszközös lapon a „Fizetve” a munkalapé – ott állítsd.';
+        }
+
+        if ($kulcs !== 0 && !in_array($kulcs, $csatolt, true)) {
+            return 'Ez az eszköz már nincs a munkalapon. Nyisd meg újra a lapot.';
+        }
+
+        if (!$fizetve && (int) $lap->fizetve === 1) {
+            return 'A munkalap egészben ki van fizetve. Előbb a lapon vedd le a „Fizetve” pipát.';
+        }
+
+        $nap = $fizetve ? current_time('Y-m-d') : null;
+
+        if ($kulcs === 0) {
+            $wpdb->update(self::tabla(), ['fo_fizetve' => $fizetve ? 1 : 0, 'fo_fizetes_ideje' => $nap, 'modositva' => current_time('mysql')], ['id' => $id]);
+        } else {
+            $wpdb->update(self::tobbi_eszkoz_tabla(), ['fizetve' => $fizetve ? 1 : 0, 'fizetes_ideje' => $nap], ['munkalap_id' => $id, 'eszkoz_id' => $kulcs]);
+        }
+
+        if ($fizetve) {
+            self::fizetve_szinkron($id);
+        }
+
+        return true;
+    }
+
+    /**
+     * Az eszközönkénti állapot blokkja (űrlap bal oldala, Áttekintés
+     * részletpanel): eszközönként név, állapotválasztó és a fizetés állása.
+     * Egy eszközös lapnál üres – ott a lap állapota az eszközé.
+     */
+    public static function eszkoz_allapot_blokk(object $munkalap): string
+    {
+        $bontas = self::eszkoz_bontas($munkalap);
+
+        if (count($bontas) < 2) {
+            return '';
+        }
+
+        $allapotok = self::allapotok();
+        $id        = (int) $munkalap->id;
+        $kesz_db   = count(array_filter($bontas, static fn (array $b): bool => (bool) $b['kesz']));
+        $html      = '<div class="sdh-eszall" data-sdh-eszkoz-allapotok="' . $id . '">';
+
+        foreach ($bontas as $b) {
+            $kulcs = (string) $b['allapot'];
+            $szin  = $allapotok[$kulcs]['szin'] ?? 'szurke';
+            $opciok = '';
+
+            if (!isset($allapotok[$kulcs])) {
+                $opciok .= '<option value="' . esc_attr($kulcs) . '" selected>' . esc_html($kulcs) . '</option>';
+            }
+
+            foreach ($allapotok as $k => $a) {
+                // A „Részben elkészült" a lap közös állapota, eszköznek nem adható.
+                if (!empty($a['reszben'])) {
+                    continue;
+                }
+
+                $opciok .= sprintf(
+                    '<option value="%s" data-szin="%s"%s>%s</option>',
+                    esc_attr((string) $k),
+                    esc_attr((string) $a['szin']),
+                    selected($kulcs, (string) $k, false),
+                    esc_html((string) $a['nev'])
+                );
+            }
+
+            if ($b['fizetve']) {
+                $penz = '<span class="sdh-eszall__penz is-fizetve">Fizetve'
+                    . ($b['fizetes_ideje'] !== '' ? ' · ' . esc_html(str_replace('-', '.', (string) $b['fizetes_ideje'])) : '')
+                    . ((int) $munkalap->fizetve === 1 ? '' : sprintf(
+                        ' <button type="button" class="sdh-eszall__vissza" data-sdh-eszkoz-fizetve-vissza data-id="%d" data-kulcs="%d"'
+                        . ' title="A „Fizetve” jelző levétele erről az eszközről. A befizetett összeghez és a pénztárhoz nem nyúl." aria-label="A fizetve jelző levétele: %s">&times;</button>',
+                        $id,
+                        (int) $b['eszkoz_id'],
+                        esc_attr((string) $b['felirat'])
+                    ))
+                    . '</span>';
+            } elseif ((float) $b['fizetendo'] > 0.5) {
+                $penz = '<span class="sdh-eszall__penz">fizetendő ' . esc_html(number_format((float) $b['fizetendo'], 0, ',', "\u{00a0}")) . "\u{00a0}Ft</span>";
+            } else {
+                $penz = '<span class="sdh-eszall__penz">nincs fizetendő</span>';
+            }
+
+            $html .= sprintf(
+                '<div class="sdh-eszall__sor%s" data-kulcs="%d"><span class="sdh-eszall__nev" title="%s">%s</span>'
+                . '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--%s" data-sdh-allapot-hely>'
+                . '<select data-sdh-eszkoz-allapot data-id="%d" data-kulcs="%d" data-elozo="%s" aria-label="%s">%s</select></span>%s</div>',
+                $b['kesz'] ? ' is-kesz' : '',
+                (int) $b['eszkoz_id'],
+                esc_attr((string) $b['felirat']),
+                esc_html((string) $b['felirat']),
+                esc_attr((string) $szin),
+                $id,
+                (int) $b['eszkoz_id'],
+                esc_attr($kulcs),
+                esc_attr($b['felirat'] . ' állapota'),
+                $opciok,
+                $penz
+            );
+        }
+
+        return $html . '<p class="sdh-eszall__ossz">' . esc_html(self::kesz_szoveg($bontas, $kesz_db)) . '</p></div>';
+    }
+
+    /**
+     * Rövid összegzés a több eszközös lapról: melyik eszköz kész.
+     * Pl. „1 / 2 kész: 2. Samsung Galaxy A54".
+     *
+     * @param array<int, array<string, mixed>> $bontas
+     */
+    public static function kesz_szoveg(array $bontas, ?int $kesz_db = null): string
+    {
+        $keszek = array_values(array_filter($bontas, static fn (array $b): bool => (bool) $b['kesz']));
+        $db     = $kesz_db ?? count($keszek);
+
+        if (count($bontas) < 2) {
+            return '';
+        }
+
+        if ($db === 0) {
+            return 'Még egyik eszköz sincs kész.';
+        }
+
+        if ($db === count($bontas)) {
+            return 'Minden eszköz kész (' . $db . ' / ' . count($bontas) . ').';
+        }
+
+        return $db . ' / ' . count($bontas) . ' kész: ' . implode(', ', array_map(static fn (array $b): string => (string) $b['felirat'], $keszek));
+    }
+
+    /**
+     * Az állapotváltás válaszának eszközönkénti része: a frissített blokk
+     * és a „melyik kész" szöveg (egy eszközös lapnál üresek).
+     *
+     * @return array{blokk: string, kesz_szoveg: string}
+     */
+    private static function eszkoz_valasz(int $id): array
+    {
+        $lap = self::egy($id);
+
+        if ($lap === null) {
+            return ['blokk' => '', 'kesz_szoveg' => ''];
+        }
+
+        return [
+            'blokk'       => self::eszkoz_allapot_blokk($lap),
+            'kesz_szoveg' => self::kesz_szoveg(self::eszkoz_bontas($lap)),
+        ];
+    }
+
+    /** Egy eszköz állapotváltása (AJAX). */
+    public static function ajax_eszkoz_allapot(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $eredmeny = self::eszkoz_allapot_valt(
+            isset($_POST['id']) ? (int) $_POST['id'] : 0,
+            isset($_POST['kulcs']) ? max(0, (int) $_POST['kulcs']) : 0,
+            isset($_POST['allapot']) ? sanitize_key(wp_unslash($_POST['allapot'])) : ''
+        );
+
+        if (is_string($eredmeny)) {
+            wp_send_json_error(['uzenet' => $eredmeny]);
+        }
+
+        wp_send_json_success($eredmeny);
+    }
+
+    /** Egy eszköz „fizetve" jelzőjének levétele (AJAX). */
+    public static function ajax_eszkoz_fizetve(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $id       = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $eredmeny = self::eszkoz_fizetve_ir($id, isset($_POST['kulcs']) ? max(0, (int) $_POST['kulcs']) : 0, false);
+
+        if (is_string($eredmeny)) {
+            wp_send_json_error(['uzenet' => $eredmeny]);
+        }
+
+        wp_send_json_success(['id' => $id] + self::eszkoz_valasz($id));
     }
 
     /** Állapotváltás a listából (AJAX). */
@@ -2133,14 +2845,25 @@ final class SDH_Muhely_Munkalap
                     <div class="sdh-ml__csoport">
                         <h3 class="sdh-ml__cim">Állapot</h3>
 
+                        <?php
+                        // Több eszköznél a lap állapota a KÖZÖS állapot: az eszközökéből adódik,
+                        // itt átírva pedig minden eszköz megkapja.
+                        $eszall = $uj ? '' : self::eszkoz_allapot_blokk($munkalap);
+                        ?>
                         <div class="sdh-ig">
-                            <label for="allapot">Állapot</label>
+                            <label for="allapot"<?php echo $eszall !== '' ? ' title="A lap közös állapota: az eszközök állapotából adódik. Ha itt írod át, minden eszköz ezt kapja."' : ''; ?>><?php echo $eszall !== '' ? 'Közös állapot' : 'Állapot'; ?></label>
                             <div class="sdh-allapot-valaszto">
                                 <span class="sdh-allapot-pont sdh-allapot--<?php
                                     echo esc_attr($allapotok[$allapot]['szin'] ?? 'szurke');
                                 ?>" data-sdh-allapot-pont></span>
                                 <select name="allapot" id="allapot" data-sdh-allapot-valaszto>
                                     <?php foreach ($allapotok as $kulcs => $a) : ?>
+                                        <?php
+                                        // A „Részben elkészült" több eszköznél magától áll be – kézzel nem választható.
+                                        if ($eszall !== '' && !empty($a['reszben']) && $allapot !== (string) $kulcs) {
+                                            continue;
+                                        }
+                                        ?>
                                         <option value="<?php echo esc_attr((string) $kulcs); ?>"
                                                 data-szin="<?php echo esc_attr($a['szin']); ?>"
                                             <?php selected($allapot, (string) $kulcs); ?>>
@@ -2156,6 +2879,14 @@ final class SDH_Muhely_Munkalap
                                 </select>
                             </div>
                         </div>
+
+                        <?php if ($eszall !== '') : ?>
+                            <?php // Eszközönként saját állapot és a fizetés állása; a váltás azonnal mentődik (app.js: eszkozAllapotValt). ?>
+                            <div class="sdh-ml__eszall">
+                                <span class="sdh-ml__eszall-cim">Eszközönként</span>
+                                <?php echo $eszall; // phpcs:ignore WordPress.Security.EscapeOutput -- a blokk már szűrt HTML. ?>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="sdh-ig">
                             <label for="nev">Név</label>
@@ -3445,7 +4176,21 @@ final class SDH_Muhely_Munkalap
                 $hibak[$i]['eszkoz_id'] = 0;
             }
         }
-        $szamozott = self::allapotok()[$adatok['allapot']]['szamozott'] ?? false;
+
+        // A „Részben elkészült" a több eszközös lap közös állapota: az eszközökéből
+        // adódik, kézzel nem választható – ilyenkor az eddigi állapot marad.
+        $allapot_lista = self::allapotok();
+        $tobb_lesz     = $tovabbi !== null ? $tovabbi !== [] : $lap_eszkozei !== [];
+
+        if ($tobb_lesz && !empty($allapot_lista[$adatok['allapot']]['reszben'])
+            && ($regi === null || (string) $regi->allapot !== (string) $adatok['allapot'])) {
+            $adatok['allapot'] = $regi !== null ? (string) $regi->allapot : self::alap_kulcs($allapot_lista);
+        }
+
+        // Az űrlapon a LAP állapotát írták-e át (akkor minden eszköz ezt kapja).
+        $allapot_valtott = $regi === null || (string) $regi->allapot !== (string) $adatok['allapot'];
+
+        $szamozott = $allapot_lista[$adatok['allapot']]['szamozott'] ?? false;
         $hiba      = self::ervenyesit($adatok, $szamozott);
 
         if ($hiba !== null) {
@@ -3456,6 +4201,19 @@ final class SDH_Muhely_Munkalap
 
         if (is_array($eredmeny) && $tovabbi !== null) {
             self::tovabbi_ment((int) $eredmeny[0], $tovabbi, self::tovabbi_dijak_osszeallit($tovabbi));
+        }
+
+        // Eszközönkénti állapot és „fizetve": a lapon átírt állapot minden eszközé
+        // lesz; különben a közös állapot az eszközökéből számolódik újra (eszköz
+        // került a lapra vagy le róla). A „fizetve" jelzők a lapéhoz igazodnak.
+        if (is_array($eredmeny)) {
+            if ($allapot_valtott) {
+                self::allapot_szetoszt((int) $eredmeny[0], (string) $adatok['allapot']);
+            } else {
+                self::allapot_szinkron((int) $eredmeny[0]);
+            }
+
+            self::fizetve_szinkron((int) $eredmeny[0], $regi);
         }
 
         // A tételek csak akkor szinkronizálódnak, ha az űrlap hozta őket –

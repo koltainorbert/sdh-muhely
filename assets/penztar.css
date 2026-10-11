@@ -2469,3 +2469,12 @@ input.sdh-pt-osszeg {
     gap: .7rem;
     font-size: 13px;
 }
+
+/* 0.43.0 – a Fizetés ablakban a külön már kifizetett eszköz sora halvány. */
+.sdh-pt-eszkozok tr.is-fizetve td {
+    color: var(--sdh-halvany);
+}
+
+.sdh-pt-eszkozok tr.is-fizetve strong {
+    color: var(--sdh-siker);
+}

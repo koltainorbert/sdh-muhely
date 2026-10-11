@@ -1,0 +1,3 @@
+# A telepítő zipbe (git archive) nem kerülnek be a tesztek – csak a fejlesztéshez kellenek.
+/tesztek        export-ignore
+/.gitattributes export-ignore

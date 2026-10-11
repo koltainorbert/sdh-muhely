@@ -248,9 +248,13 @@
         gomb.disabled = true;
         hiba.hidden = true;
 
+        // Több eszköznél: melyik készülékről szól (0 = az egész munkalap).
+        var eszkoz = urlap.querySelector('[data-sdh-uzenet-eszkoz]:checked');
+
         kuld('sdh_muhely_uzenet_kuld', {
             id: id,
             szoveg: szoveg,
+            eszkoz: eszkoz ? eszkoz.value : '0',
             email: email && email.checked && !email.disabled ? '1' : ''
         })
             .then(function (adat) {

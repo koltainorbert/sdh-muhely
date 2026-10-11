@@ -907,7 +907,8 @@ final class SDH_Muhely_Racs
                 "SELECT m.id, m.munkalap_szam, m.jelzes, m.allapot, m.nev, m.felelos, m.keszult,
                         m.hatarido, m.lezarva, m.fizetve, m.fizetes_ideje, m.brutto_ertek,
                         m.fizetett, m.fizetesi_mod, m.megjegyzes, m.letrehozva, m.modositva,
-                        m.ugyfel_id, m.eszkoz_id,
+                        m.ugyfel_id, m.eszkoz_id, m.bevizsgalasi_dij,
+                        m.fo_allapot, m.fo_fizetve, m.fo_fizetes_ideje,
                         {$fizetendo} AS fizetendo,
                         u.nev AS u_nev, u.telefon AS u_telefon,
                         u.szamlazasi_iranyitoszam, u.szamlazasi_telepules, u.szamlazasi_cim,
@@ -933,6 +934,15 @@ final class SDH_Muhely_Racs
         foreach ((array) $sorok as $sor) {
             $formazott          = self::sor_formaz($sor, $allapotok, $ma);
             $formazott['_tobb'] = $tobbi_db[(int) $sor->id] ?? 0;
+
+            // Több eszközös lap: hány eszköz kész, és melyik (az állapot mellett látszik).
+            if ($formazott['_tobb'] > 0) {
+                $bontas = SDH_Muhely_Munkalap::eszkoz_bontas($sor);
+
+                $formazott['_kesz']        = count(array_filter($bontas, static fn (array $b): bool => (bool) $b['kesz'])) . '/' . count($bontas);
+                $formazott['_kesz_szoveg'] = SDH_Muhely_Munkalap::kesz_szoveg($bontas);
+            }
+
             $ki[]               = $formazott;
         }
 
@@ -1059,10 +1069,19 @@ final class SDH_Muhely_Racs
             ];
         }
 
-        if (isset($allapotok['elkeszult'])) {
+        // Kész, átvételre vár: az elkészült lapok, és a több eszközös lapok, ahol már van kész eszköz.
+        $kesz_kulcsok = [];
+
+        foreach ($allapotok as $kulcs => $allapot) {
+            if (!empty($allapot['kesz'])) {
+                $kesz_kulcsok[] = (string) $kulcs;
+            }
+        }
+
+        if ($kesz_kulcsok !== []) {
             $nezetek[] = [
-                'id' => 'elkeszult', 'nev' => $allapotok['elkeszult']['nev'] . ' – átvételre vár', 'rendezes' => $szam_le,
-                'szurok' => ['allapot' => ['op' => 'egyike', 'l' => ['elkeszult']]],
+                'id' => 'elkeszult', 'nev' => $allapotok[$kesz_kulcsok[0]]['nev'] . ' – átvételre vár', 'rendezes' => $szam_le,
+                'szurok' => ['allapot' => ['op' => 'egyike', 'l' => array_merge($kesz_kulcsok, [SDH_Muhely_Munkalap::reszben_kulcs()])]],
             ];
         }
 
@@ -1297,6 +1316,8 @@ final class SDH_Muhely_Racs
         foreach (SDH_Muhely_Munkalap::allapotok() as $kulcs => $allapot) {
             $allapotok[] = [
                 'k'    => (string) $kulcs,
+                // A több eszközös lap közös állapota: kézzel nem választható (racs.js: allapotCella).
+                'reszben' => !empty($allapot['reszben']),
                 'nev'  => $allapot['nev'],
                 'szin' => $allapot['szin'],
                 'zart' => !empty($allapot['zart']),
@@ -1632,6 +1653,16 @@ final class SDH_Muhely_Racs
         echo '<dl class="sdh-adatlista" data-sdh-alpanel="adatok">';
 
         self::adatsor('Állapot', SDH_Muhely_Munkalap::jelveny((string) $munkalap->allapot, $allapotok));
+
+        // Több eszköznél: eszközönként saját állapot (itt is állítható) és a fizetés állása.
+        if (count($bontas) > 1) {
+            // Nem adatsor(): ide nem kell másoló gomb, a blokk maga a kezelő.
+            printf(
+                '<div class="sdh-adatlista__sor sdh-adatlista__sor--eszall"><dt>Eszközönként:</dt><dd>%s</dd></div>',
+                SDH_Muhely_Munkalap::eszkoz_allapot_blokk($munkalap) // phpcs:ignore WordPress.Security.EscapeOutput -- a blokk már szűrt HTML.
+            );
+        }
+
         self::adatsor(
             'Eszköz',
             $eszkoz

@@ -67,6 +67,8 @@ final class SDH_Muhely_Rma
         add_action('template_redirect', [self::class, 'fogadas'], 0);
 
         add_action('sdh_muhely_munkalap_allapot', [self::class, 'naplo_ir'], 10, 3);
+        // Több eszközös lap: egy eszköz saját állapotváltása is a történetbe kerül.
+        add_action('sdh_muhely_munkalap_eszkoz_allapot', [self::class, 'eszkoz_naplo_ir'], 10, 4);
         add_action('sdh_muhely_sema_frissult', [self::class, 'naplo_potlas']);
 
         add_action('wp_ajax_sdh_muhely_uzenet_kuld', [self::class, 'ajax_uzenet_kuld']);
@@ -911,7 +913,16 @@ final class SDH_Muhely_Rma
                 return;
             }
 
-            self::uzenet_ment((int) $munkalap->id, (int) $munkalap->ugyfel_id, 'be', 'rma', $szoveg, 0);
+            self::uzenet_ment(
+                (int) $munkalap->id,
+                (int) $munkalap->ugyfel_id,
+                'be',
+                'rma',
+                $szoveg,
+                0,
+                false,
+                isset($_POST['eszkoz']) ? max(0, (int) $_POST['eszkoz']) : 0
+            );
             wp_safe_redirect(add_query_arg('ok', 'kuldve', $vissza) . '#uzenetek');
             return;
         }
@@ -940,6 +951,55 @@ final class SDH_Muhely_Rma
             'felhasznalo' => get_current_user_id(),
             'letrehozva'  => current_time('mysql'),
         ]);
+    }
+
+    /** Egy eszköz állapotváltásának naplózása (több eszközös lap). */
+    public static function eszkoz_naplo_ir(int $munkalap_id, int $eszkoz_id, string $elozo, string $uj): void
+    {
+        global $wpdb;
+
+        if ($munkalap_id <= 0 || $eszkoz_id <= 0 || $uj === '') {
+            return;
+        }
+
+        $wpdb->insert(self::naplo_tabla(), [
+            'munkalap_id' => $munkalap_id,
+            'allapot'     => $uj,
+            'elozo'       => $elozo,
+            'eszkoz_id'   => $eszkoz_id,
+            'felhasznalo' => get_current_user_id(),
+            'letrehozva'  => current_time('mysql'),
+        ]);
+    }
+
+    /**
+     * A lap eszközeinek neve a VALÓDI eszköz-azonosító szerint, sorszámozva
+     * („2. Samsung Galaxy A54") – az üzenetek és a történet eszközcímkéjéhez.
+     * Egy eszközös lapnál üres: ott nincs mit megkülönböztetni.
+     *
+     * @return array<int, string>
+     */
+    public static function eszkoz_nevek(int $munkalap_id): array
+    {
+        $munkalap = self::munkalap($munkalap_id);
+
+        if ($munkalap === null) {
+            return [];
+        }
+
+        $eszkozok = SDH_Muhely_Munkalap::eszkozok($munkalap);
+
+        if (count($eszkozok) < 2) {
+            return [];
+        }
+
+        $ki = [];
+
+        foreach ($eszkozok as $i => $e) {
+            $ki[(int) $e->id] = ($i + 1) . '. ' . SDH_Muhely_Eszkoz::megnevezes($e);
+        }
+
+        return $ki;
     }
 
     /**
@@ -1045,17 +1105,27 @@ final class SDH_Muhely_Rma
      * Bejövő (ügyfél) üzenetnél a szerviz kap e-mailt; kimenőnél az ügyfél,
      * ha $email_ugyfelnek igaz és van érvényes e-mail címe.
      *
+     * Az $eszkoz_id a lap egyik eszközének VALÓDI azonosítója, ha az üzenet
+     * arról a készülékről szól (több eszközös lap); 0 = az egész munkalapról.
+     * Ami nem a lap eszköze, az 0-ra áll.
+     *
      * @return int Az új üzenet azonosítója (0 = hiba).
      */
-    public static function uzenet_ment(int $munkalap_id, int $ugyfel_id, string $irany, string $csatorna, string $szoveg, int $felhasznalo, bool $email_ugyfelnek = false): int
+    public static function uzenet_ment(int $munkalap_id, int $ugyfel_id, string $irany, string $csatorna, string $szoveg, int $felhasznalo, bool $email_ugyfelnek = false, int $eszkoz_id = 0): int
     {
         global $wpdb;
 
         $irany = $irany === 'be' ? 'be' : 'ki';
+        $nevek = $eszkoz_id > 0 ? self::eszkoz_nevek($munkalap_id) : [];
+
+        if (!isset($nevek[$eszkoz_id])) {
+            $eszkoz_id = 0;
+        }
 
         $ok = $wpdb->insert(self::uzenet_tabla(), [
             'munkalap_id'  => $munkalap_id,
             'ugyfel_id'    => $ugyfel_id,
+            'eszkoz_id'    => $eszkoz_id,
             'irany'        => $irany,
             'csatorna'     => $csatorna,
             'szoveg'       => $szoveg,
@@ -1075,9 +1145,12 @@ final class SDH_Muhely_Rma
         $kuldve   = false;
 
         if ($munkalap !== null) {
+            // Az e-mailben is álljon ott, melyik készülékről szól az üzenet.
+            $level = $eszkoz_id > 0 ? 'Eszköz: ' . $nevek[$eszkoz_id] . "\n\n" . $szoveg : $szoveg;
+
             $kuldve = $irany === 'be'
-                ? self::email_szerviznek($munkalap, $ugyfel, $szoveg)
-                : ($email_ugyfelnek && self::email_ugyfelnek($munkalap, $ugyfel, $szoveg));
+                ? self::email_szerviznek($munkalap, $ugyfel, $level)
+                : ($email_ugyfelnek && self::email_ugyfelnek($munkalap, $ugyfel, $level));
         }
 
         if ($kuldve) {
@@ -1179,7 +1252,16 @@ final class SDH_Muhely_Rma
             wp_send_json_error(['uzenet' => 'Írd be az üzenetet.']);
         }
 
-        $uj = self::uzenet_ment($id, (int) $munkalap->ugyfel_id, 'ki', 'crm', mb_substr($szoveg, 0, self::UZENET_HOSSZ * 3), get_current_user_id(), $email);
+        $uj = self::uzenet_ment(
+            $id,
+            (int) $munkalap->ugyfel_id,
+            'ki',
+            'crm',
+            mb_substr($szoveg, 0, self::UZENET_HOSSZ * 3),
+            get_current_user_id(),
+            $email,
+            isset($_POST['eszkoz']) ? max(0, (int) $_POST['eszkoz']) : 0
+        );
 
         if ($uj <= 0) {
             wp_send_json_error(['uzenet' => 'Az adatbázis visszautasította az üzenetet.']);
@@ -1241,7 +1323,8 @@ final class SDH_Muhely_Rma
             return '<p class="sdh-uz-ures">Még nincs üzenet ehhez a munkalaphoz.</p>';
         }
 
-        $html = '';
+        $html  = '';
+        $nevek = self::eszkoz_nevek($munkalap_id);
 
         foreach ($uzenetek as $u) {
             if ($u->irany === 'ki') {
@@ -1259,6 +1342,11 @@ final class SDH_Muhely_Rma
 
             if ((int) $u->email_kuldve === 1) {
                 $jelek[] = '<span>e-mail</span>';
+            }
+
+            // Melyik készülékről szól (több eszközös lap); a lapról már levett eszköznél nincs címke.
+            if (isset($nevek[(int) ($u->eszkoz_id ?? 0)])) {
+                $jelek[] = '<span class="sdh-uz__eszkoz">' . esc_html($nevek[(int) $u->eszkoz_id]) . '</span>';
             }
 
             $html .= sprintf(
@@ -1395,8 +1483,32 @@ final class SDH_Muhely_Rma
         echo '<div class="sdh-rma__uzenetek"><div class="sdh-rma__cim">Üzenetek az ügyféllel</div>';
 
         if ($ugyfel !== null) {
+            // Több eszköznél: melyik készülékről szól az üzenet (alapból az egész lapról).
+            $uz_eszkozok = '';
+            $uz_nevek    = self::eszkoz_nevek($id);
+
+            if ($uz_nevek !== []) {
+                $uz_eszkozok = '<div class="sdh-uz-urlap__eszkoz"><span class="sdh-uz-urlap__eszkoz-cim">Miről szól:</span>'
+                    . '<div class="sdh-szegmens sdh-szegmens--kicsi" role="radiogroup" aria-label="Melyik eszközről szól az üzenet">';
+
+                foreach ([0 => 'Az egész munkalap'] + $uz_nevek as $uz_id => $uz_nev) {
+                    // A név nem ütközik a munkalap mezőivel: az RMA lapfül az űrlapon belül áll.
+                    $uz_eszkozok .= sprintf(
+                        '<label class="sdh-szegmens__elem" title="%s"><input type="radio" name="_uz_eszkoz_%d" value="%d" data-sdh-uzenet-eszkoz%s><span>%s</span></label>',
+                        esc_attr($uz_nev),
+                        $id,
+                        (int) $uz_id,
+                        $uz_id === 0 ? ' checked' : '',
+                        esc_html($uz_nev)
+                    );
+                }
+
+                $uz_eszkozok .= '</div></div>';
+            }
+
             printf(
                 '<div class="sdh-uz-urlap" data-sdh-uzenet-urlap data-id="%d">'
+                . str_replace('%', '%%', $uz_eszkozok) // a név a printf formátumába kerül
                 . '<textarea rows="2" data-sdh-uzenet-szoveg aria-label="Üzenet az ügyfélnek" placeholder="Üzenet az ügyfélnek – az ügyféloldalon látja, és válaszolhat rá (Ctrl+Enter: küldés)"></textarea>'
                 . '<div class="sdh-uz-urlap__lab">'
                 . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-email value="1"%s%s> %s</label>'
@@ -1423,11 +1535,16 @@ final class SDH_Muhely_Rma
         } else {
             echo '<ol class="sdh-rma-naplo" data-sdh-lapoz="6">';
 
+            $naplo_nevek = self::eszkoz_nevek($id);
+
             foreach ($naplo as $sor) {
                 $f  = (int) $sor->felhasznalo > 0 ? get_userdata((int) $sor->felhasznalo) : false;
+                // Eszköz saját állapotváltása: a jelvény előtt áll, melyik készüléké.
+                $ne = (int) ($sor->eszkoz_id ?? 0);
 
                 printf(
-                    '<li>%s <span>%s%s</span></li>',
+                    '<li>%s%s <span>%s%s</span></li>',
+                    $ne > 0 ? '<b class="sdh-rma-naplo__eszkoz">' . esc_html($naplo_nevek[$ne] ?? 'Eszköz') . ':</b> ' : '',
                     SDH_Muhely_Munkalap::jelveny((string) $sor->allapot, $allapotok), // phpcs:ignore WordPress.Security.EscapeOutput
                     esc_html(SDH_Muhely_Munkalap::datumido_megjelenit((string) $sor->letrehozva)),
                     $f ? esc_html(' · ' . $f->display_name) : ''
