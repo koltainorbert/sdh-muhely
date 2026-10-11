@@ -2426,3 +2426,46 @@ input.sdh-pt-osszeg {
 .sdh-pt-tabla .sdh-pt-c-ssz {
     text-align: left !important;
 }
+
+
+/* ------------------------------------------------------------------ */
+/* 0.42.0 – több eszközös munkalap: fizetés és ajánlat készülékenként   */
+/* ------------------------------------------------------------------ */
+
+.sdh-pt-eszkozok {
+    margin: .2rem 0 .3rem;
+}
+
+.sdh-pt-eszkozok td,
+.sdh-pt-eszkozok th {
+    padding-top: .35rem;
+    padding-bottom: .35rem;
+}
+
+.sdh-pt-eszkozok .is-jobb {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sdh-pt-eszkozok__sugo {
+    margin: 0 0 .7rem;
+}
+
+.sdh-pt-ajanlat__eszkozok {
+    display: grid;
+    gap: .45rem;
+    margin: .5rem 0 .7rem;
+}
+
+.sdh-pt-ajanlat__eszkozok > p {
+    margin: 0;
+}
+
+.sdh-pt-ajanlat__eszkozok label {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 9rem;
+    align-items: center;
+    gap: .7rem;
+    font-size: 13px;
+}

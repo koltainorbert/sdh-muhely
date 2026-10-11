@@ -711,7 +711,20 @@ final class SDH_Muhely_Rma_Oldal
                             <?php self::panel_hibak($hibak, $eszkoz, $tovabbi); ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="tetelek" id="rma-panel-tetelek" role="tabpanel">
-                            <?php self::panel_tetelek($tetelek, $munkalap); ?>
+                            <?php
+                            // Több eszköznél a tételek készülékenként csoportosítva, részösszeggel.
+                            $rma_nevek = [];
+
+                            if ($tovabbi !== []) {
+                                $rma_nevek[0] = $eszkoz ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : self::t('eszkoz');
+
+                                foreach ($tovabbi as $rma_e) {
+                                    $rma_nevek[(int) $rma_e->id] = SDH_Muhely_Eszkoz::megnevezes($rma_e);
+                                }
+                            }
+
+                            self::panel_tetelek($tetelek, $munkalap, $rma_nevek);
+                            ?>
                         </section>
                         <section class="rma-panel" data-rma-panel="tortenet" id="rma-panel-tortenet" role="tabpanel">
                             <?php self::panel_tortenet($naplo, $allapotok); ?>
@@ -892,7 +905,7 @@ final class SDH_Muhely_Rma_Oldal
     /**
      * @param array<int, object> $tetelek
      */
-    private static function panel_tetelek(array $tetelek, object $munkalap): void
+    private static function panel_tetelek(array $tetelek, object $munkalap, array $eszkoz_nevek = []): void
     {
         if ($tetelek === []) {
             echo '<p class="rma-ures">' . esc_html(self::t('nincs_tetel')) . '</p>';
@@ -905,18 +918,57 @@ final class SDH_Muhely_Rma_Oldal
         echo '<table class="rma-tabla"><thead><tr><th>' . esc_html(self::t('megnevezes')) . '</th><th class="j">'
             . esc_html(self::t('menny')) . '</th><th class="j">' . esc_html(self::t('brutto')) . '</th></tr></thead><tbody>';
 
-        foreach ($tetelek as $t) {
-            $ossz += (float) $t->brutto_ertek;
-            $menny = rtrim(rtrim(number_format((float) $t->mennyiseg, 3, self::$nyelv === 'en' ? '.' : ',', ''), '0'), ',.');
+        // Egy eszköznél egyetlen csoport, fejléc nélkül; többnél készülékenként
+        // (ami már nincs a lapon lévő eszközre mutat, az a fő eszközé).
+        $csoportok = [];
 
-            printf(
-                '<tr><td>%s<small>%s</small></td><td class="j">%s %s</td><td class="j">%s</td></tr>',
-                esc_html((string) $t->megnevezes),
-                esc_html(self::t($t->tipus === 'termek' ? 'termek' : 'szolgaltatas')),
-                esc_html($menny),
-                esc_html(self::me((string) $t->me)),
-                esc_html(self::penz((float) $t->brutto_ertek))
-            );
+        foreach ($tetelek as $t) {
+            $kulcs = $eszkoz_nevek !== [] && isset($eszkoz_nevek[(int) ($t->eszkoz_id ?? 0)]) ? (int) $t->eszkoz_id : 0;
+
+            $csoportok[$kulcs][] = $t;
+        }
+
+        if ($eszkoz_nevek !== []) {
+            $rendezve = [];
+
+            foreach (array_keys($eszkoz_nevek) as $kulcs) {
+                if (isset($csoportok[$kulcs])) {
+                    $rendezve[$kulcs] = $csoportok[$kulcs];
+                }
+            }
+
+            $csoportok = $rendezve;
+        }
+
+        foreach ($csoportok as $kulcs => $csoport) {
+            $resz = 0.0;
+
+            if ($eszkoz_nevek !== []) {
+                printf('<tr class="rma-tabla__eszkoz"><th colspan="3">%s</th></tr>', esc_html((string) $eszkoz_nevek[$kulcs]));
+            }
+
+            foreach ($csoport as $t) {
+                $ossz += (float) $t->brutto_ertek;
+                $resz += (float) $t->brutto_ertek;
+                $menny = rtrim(rtrim(number_format((float) $t->mennyiseg, 3, self::$nyelv === 'en' ? '.' : ',', ''), '0'), ',.');
+
+                printf(
+                    '<tr><td>%s<small>%s</small></td><td class="j">%s %s</td><td class="j">%s</td></tr>',
+                    esc_html((string) $t->megnevezes),
+                    esc_html(self::t($t->tipus === 'termek' ? 'termek' : 'szolgaltatas')),
+                    esc_html($menny),
+                    esc_html(self::me((string) $t->me)),
+                    esc_html(self::penz((float) $t->brutto_ertek))
+                );
+            }
+
+            if ($eszkoz_nevek !== []) {
+                printf(
+                    '<tr class="rma-tabla__resz"><td colspan="2">%s</td><td class="j">%s</td></tr>',
+                    esc_html((string) $eszkoz_nevek[$kulcs]),
+                    esc_html(self::penz($resz))
+                );
+            }
         }
 
         printf(

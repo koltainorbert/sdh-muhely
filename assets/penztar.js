@@ -288,6 +288,47 @@
         }
     }
 
+    /**
+     * Fizetés több eszközös munkalapon: a kipipált készülékek fizetendője adja
+     * az összeget. Ha nem minden készüléket fizetnek, az részfizetés – a
+     * munkalap nyitva marad, a pénztárba a fizetett készülék kerül.
+     */
+    document.addEventListener('change', function (esemeny) {
+        var pipa = esemeny.target.closest && esemeny.target.closest('[data-sdh-pt-eszkoz]');
+        var urlap = pipa ? pipa.closest('[data-sdh-pt-urlap]') : null;
+
+        if (!urlap) {
+            return;
+        }
+
+        var pipak = Array.prototype.slice.call(urlap.querySelectorAll('[data-sdh-pt-eszkoz]'));
+        var ossz = 0;
+        var mind = true;
+
+        pipak.forEach(function (p) {
+            var hatra = parseFloat(p.getAttribute('data-fizetendo') || '0') || 0;
+
+            if (p.checked) {
+                ossz += hatra;
+            } else if (hatra > 0.5) {
+                mind = false;
+            }
+        });
+
+        var osszeg = urlap.querySelector('input[name="osszeg"]');
+
+        if (osszeg) {
+            osszeg.value = String(Math.round(ossz));
+        }
+
+        var fajta = urlap.querySelector('input[name="fajta"][value="' + (mind ? 'teljes' : 'eloleg') + '"]');
+
+        if (fajta && !fajta.checked) {
+            fajta.checked = true;
+            fajta.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
     var mlIdozito = null;
 
     function mlKeres(urlap, mezo, azonnal) {
@@ -534,6 +575,7 @@
      */
     function ajanlatAblak(a, cim, utana) {
         var modok = { kp: 'Készpénz', kartya: 'Bankkártya', utalas: 'Utalás' };
+        var tobb = Array.isArray(a.eszkozok) && a.eszkozok.length > 1;
         var html =
             '<p class="sdh-pt-ajanlat__fo">' + e((a.szam ? 'ML ' + a.szam + ' · ' : '') + (a.nev || 'névtelen ügyfél')) +
             '<strong>' + e(penz(a.osszeg)) + '</strong></p>' +
@@ -543,10 +585,17 @@
             Object.keys(modok).map(function (k) {
                 return '<label class="sdh-pt-pill' + (k === (a.mod || 'kp') ? ' is-aktiv' : '') + '"><input type="radio" name="mod" value="' + k + '"' + (k === (a.mod || 'kp') ? ' checked' : '') + '><span>' + modok[k] + '</span></label>';
             }).join('') + '</div>' +
+            // Több eszközös lap: készülékenként külön összeg – és külön tétel a pénztárban.
+            (tobb ? '<div class="sdh-pt-ajanlat__eszkozok" data-pt-eszkozok>' +
+                '<p class="sdh-mezo__sugo">Minden eszköz külön tételként kerül a pénztárba. Amelyik nem kell, annál írj 0-t.</p>' +
+                a.eszkozok.map(function (x) {
+                    return '<label>' + e(x.nev) +
+                        '<span class="sdh-szam sdh-szam--utotag"><input type="text" inputmode="decimal" data-pt-eszkoz="' + e(x.kulcs) + '" value="' + e(Math.round(x.osszeg || 0)) + '"><span class="sdh-szam__utotag">Ft</span></span></label>';
+                }).join('') + '</div>' : '') +
             '<div class="sdh-pt-ajanlat__mezok">' +
-            '<label>Összeg<span class="sdh-szam sdh-szam--utotag"><input type="text" inputmode="decimal" name="osszeg" value="' + e(Math.round(a.osszeg)) + '"><span class="sdh-szam__utotag">Ft</span></span></label>' +
+            (tobb ? '' : '<label>Összeg<span class="sdh-szam sdh-szam--utotag"><input type="text" inputmode="decimal" name="osszeg" value="' + e(Math.round(a.osszeg)) + '"><span class="sdh-szam__utotag">Ft</span></span></label>') +
             '<label>Név<input type="text" name="nev" maxlength="190" value="' + e(a.nev || '') + '"></label>' +
-            '<label class="sdh-pt-ajanlat__szeles">Mi történt<input type="text" name="leiras" maxlength="255" value="' + e((a.eloleg_mod ? 'Előleg – ' : '') + (a.leiras || '')) + '"></label>' +
+            (tobb ? '' : '<label class="sdh-pt-ajanlat__szeles">Mi történt<input type="text" name="leiras" maxlength="255" value="' + e((a.eloleg_mod ? 'Előleg – ' : '') + (a.leiras || '')) + '"></label>') +
             '<label>Számlaszám<input type="text" name="szamla" maxlength="60" value="' + e(a.szamla || '') + '"></label>' +
             '</div>' +
             '<div class="sdh-urlap__lablec">' +
@@ -569,10 +618,38 @@
             ev.preventDefault();
 
             var mod = pillErtek(urlap, 'mod') || 'kp';
-            var osszeg = urlap.querySelector('[name="osszeg"]').value;
             var gomb = urlap.querySelector('button[type="submit"]');
 
             gomb.disabled = true;
+
+            if (tobb) {
+                var osszegek = {};
+
+                Array.prototype.forEach.call(urlap.querySelectorAll('[data-pt-eszkoz]'), function (m) {
+                    osszegek[m.getAttribute('data-pt-eszkoz')] = m.value;
+                });
+
+                kuld('eszkozonkent', {
+                    munkalap_id: a.id,
+                    mod: mod,
+                    nev: urlap.querySelector('[name="nev"]').value,
+                    szamla: urlap.querySelector('[name="szamla"]').value,
+                    eloleg: a.eloleg_mod ? '1' : '0',
+                    osszegek: JSON.stringify(osszegek)
+                }).then(function (v) {
+                    kesz = true;
+                    toast('Beírva a pénztárba: ' + penz(v.osszeg) + ' – eszközönként külön (' + v.db + ' tétel).', 'siker');
+                    document.dispatchEvent(new CustomEvent('sdh:penztar-valtozott'));
+                    d.close();
+                }).catch(function (h) {
+                    gomb.disabled = false;
+                    toast(h.message, 'hiba');
+                });
+
+                return;
+            }
+
+            var osszeg = urlap.querySelector('[name="osszeg"]').value;
 
             kuld('gyors', {
                 tipus: 'bevetel',
@@ -596,7 +673,15 @@
         });
 
         urlap.querySelector('[data-pt-kihagy]').addEventListener('click', function () {
-            kuld('kihagy', { munkalap_id: a.id, osszeg: urlap.querySelector('[name="osszeg"]').value }).then(function () {
+            var kihagyott = 0;
+
+            if (tobb) {
+                Array.prototype.forEach.call(urlap.querySelectorAll('[data-pt-eszkoz]'), function (m) {
+                    kihagyott += parseFloat(String(m.value).replace(/[^0-9.,-]/g, '').replace(',', '.')) || 0;
+                });
+            }
+
+            kuld('kihagy', { munkalap_id: a.id, osszeg: tobb ? String(kihagyott) : urlap.querySelector('[name="osszeg"]').value }).then(function () {
                 kesz = true;
                 toast('Rendben, nem került a kasszába (az egyeztetéshez nyoma maradt).');
                 d.close();
@@ -607,7 +692,7 @@
             d.close();
         });
 
-        urlap.querySelector('[name="osszeg"]').focus();
+        (urlap.querySelector('[name="osszeg"]') || urlap.querySelector('[data-pt-eszkoz]')).focus();
     }
 
     // Munkalap mentése után: ha most lett fizetve / nőtt az előleg, ajánlat.

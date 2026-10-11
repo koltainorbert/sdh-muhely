@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.29.0';
+    public const DB_VERSION = '0.30.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -394,6 +394,10 @@ final class SDH_Muhely_Schema
          * szolgáltatás-azonosítója: "bev_nev" / "bev_szolg"). A fő eszköz
          * díja a munkalap előlegének (fizetett) maradéka a csatoltak díjai
          * után – egy eszköznél így minden a régi.
+         *
+         * A "fizetett" az, amit erre az eszközre a díján FELÜL külön
+         * befizettek (részfizetés a Fizetés ablakból). A lap előlege
+         * (munkalap.fizetett) a teljes összeg; a fő eszközre a maradék jut.
          * ---------------------------------------------------------- */
         $definiciok[] = "CREATE TABLE {$ml_eszkoz} (
             id bigint(20) unsigned NOT NULL auto_increment,
@@ -403,6 +407,7 @@ final class SDH_Muhely_Schema
             bev_dij decimal(14,2) NOT NULL default 0.00,
             bev_nev varchar(255) NOT NULL default '',
             bev_szolg bigint(20) unsigned NOT NULL default 0,
+            fizetett decimal(14,2) NOT NULL default 0.00,
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             unique key lap_eszkoz (munkalap_id,eszkoz_id),
@@ -762,6 +767,7 @@ final class SDH_Muhely_Schema
             utalas decimal(14,2) NOT NULL default 0.00,
             info_osszeg decimal(14,2) NOT NULL default 0.00,
             munkalap_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
             munkalap_szam varchar(40) NOT NULL default '',
             szamlaszam varchar(60) NOT NULL default '',
             vonalkod varchar(190) NOT NULL default '',

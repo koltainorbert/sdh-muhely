@@ -395,6 +395,8 @@ final class SDH_Muhely_Tetel
 
                 $sorok[] = [
                     'id'         => isset($sor['id']) ? max(0, (int) $sor['id']) : 0,
+                    // Melyik eszköz tétele (0 = a fő eszközé); null = az űrlap nem küldte.
+                    'eszkoz_id'  => isset($sor['eszkoz_id']) ? max(0, (int) $sor['eszkoz_id']) : null,
                     'tipus'      => $tipus,
                     'megnevezes' => $megnevezes,
                     // A terméktörzs sora, amelyből a tétel készült (0 = kézzel beírt).
@@ -481,6 +483,15 @@ final class SDH_Muhely_Tetel
                 if ($sor[$mezo] !== null) {
                     $adat[$mezo] = $sor[$mezo];
                 }
+            }
+
+            // A tétel eszköze. A bevizsgálási díj (és a levonása) sorát a díj
+            // szinkronja köti eszközhöz – azét az űrlap nem írhatja át.
+            $dijsor = $sor['id'] > 0 && isset($regiek[$sor['id']])
+                && in_array((string) $regiek[$sor['id']]->forras, ['bevizsgalas', 'bevizsgalas_le'], true);
+
+            if (($sor['eszkoz_id'] ?? null) !== null && !$dijsor) {
+                $adat['eszkoz_id'] = (int) $sor['eszkoz_id'];
             }
 
             // Csak ehhez a munkalaphoz tartozó sort írhatunk felül – egy

@@ -2832,40 +2832,83 @@
         // szerver tartja karban mentéskor; itt a kijelzés követi őket, és ha
         // még nincsenek meg, az összegekben már most számítanak.
         //
-        // Minden eszköznek saját díja van: a csatolt eszközöké a címkéjükön áll,
-        // a fő eszközé az előleg maradéka a csatoltak díjai után. Minden eszköz
-        // díja külön tételsor (data-sdh-bev-eszkoz: az eszköz, 0 = a fő).
+        // Minden eszköz önálló ügy a lapon: saját díj, saját tételek, és a díja
+        // a SAJÁT tételeiből vonódik le. A csatolt eszköz díja a címkéjén áll,
+        // a fő eszközé az előleg maradéka. Az eszköz kulcsa: 0 = a fő eszköz.
         var bevPipa = gyoker.querySelector('[data-sdh-bevizsgalas]');
         var bevElolegMezo = gyoker.querySelector('[data-sdh-fizetett]');
         var bevElolegOssz = bevElolegMezo ? Math.max(0, mlSzam(bevElolegMezo.value)) : 0;
         var bevJelolo = !!(bevPipa && bevPipa.checked);
-        var bevDijak = {};
+        var modJelolt = gyoker.querySelector('[data-sdh-bev-mod]:checked');
+        var bevMod = modJelolt && modJelolt.value === 'marad' ? 'marad' : 'levon';
+        // Eszközönként: díj, külön befizetés, a többi tétel összege, levonás.
+        var esz = { '0': { nev: '', dij: 0, kulon: 0, tobbi: 0, levon: 0, vanDij: false, vanLe: false } };
+        var eszSor = ['0'];
         var bevCsatolt = 0;
+        var bevKulon = 0;
+        var foValaszto = gyoker.querySelector('[data-sdh-eszkoz-valaszto]');
+
+        esz['0'].nev = foValaszto && foValaszto.value !== '0' && foValaszto.options[foValaszto.selectedIndex]
+            ? foValaszto.options[foValaszto.selectedIndex].textContent.trim()
+            : 'fő eszköz';
 
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tovabbi-lista] [data-sdh-tovabbi]'), function (cimke) {
             var mezo = cimke.querySelector('[data-sdh-tovabbi-dij]');
             var dij = bevJelolo && mezo ? Math.max(0, mlSzam(mezo.value)) : 0;
+            var kulon = parseFloat(cimke.getAttribute('data-kulon') || '0') || 0;
+            var kulcs = cimke.getAttribute('data-sdh-tovabbi');
+            var nevElem = cimke.querySelector('[data-sdh-tovabbi-nev]');
 
-            bevDijak[cimke.getAttribute('data-sdh-tovabbi')] = dij;
+            esz[kulcs] = { nev: nevElem ? nevElem.textContent.trim() : '', dij: dij, kulon: kulon, tobbi: 0, levon: 0, vanDij: false, vanLe: false };
+            eszSor.push(kulcs);
             bevCsatolt += dij;
+            bevKulon += kulon;
         });
 
-        var bevFo = bevJelolo ? Math.max(0, bevElolegOssz - bevCsatolt) : 0;
-        // A díjak összege: ebből vonható le, és ennyi számít a végösszegbe.
+        esz['0'].dij = bevJelolo ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon) : 0;
+
+        var bevFo = esz['0'].dij;
+        // A díjak összege: ennyi számít díjként a végösszegbe.
         var bevEloleg = bevFo + bevCsatolt;
-        var bevBe = bevJelolo && bevEloleg > 0;
-        var bevSorok = Array.prototype.slice.call(gyoker.querySelectorAll('[data-sdh-tetelsor][data-sdh-bev]'));
-        var bevVanSor = {};
-        var leSor = gyoker.querySelector('[data-sdh-tetelsor][data-sdh-bevle]');
-        var leSzamlazva = !!(leSor && leSor.getAttribute('data-sdh-bevle') === 'szamlazva');
-        var modJelolt = gyoker.querySelector('[data-sdh-bev-mod]:checked');
-        var bevMod = modJelolt && modJelolt.value === 'marad' ? 'marad' : 'levon';
 
-        bevSorok.forEach(function (bevSor) {
-            var eszkoz = bevSor.getAttribute('data-sdh-bev-eszkoz') || '0';
-            var cel = eszkoz === '0' ? bevFo : (bevDijak[eszkoz] || 0);
+        /** Egy sor eszköze: a saját választója, díjsornál a hozzá kötött eszköz; ami nincs a lapon, az a fő eszközé. */
+        function sorEszkoz(sor) {
+            var kulcs = sor.hasAttribute('data-sdh-bev-eszkoz')
+                ? sor.getAttribute('data-sdh-bev-eszkoz')
+                : ((sor.querySelector('[data-sdh-tetel-eszkoz]') || {}).value || '0');
 
-            bevVanSor[eszkoz] = true;
+            return esz[kulcs] ? kulcs : '0';
+        }
+
+        // A többi tétel (a díjsorok nélkül), eszközönként: ebből vonható le a díj.
+        var tobbi = 0;
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek] [data-sdh-tetelsorok] [data-sdh-tetelsor]'), function (sor) {
+            if (!sor.hasAttribute('data-sdh-bev') && !sor.hasAttribute('data-sdh-bevle')) {
+                var ertek = mlSorErtek(sor).brutto;
+
+                esz[sorEszkoz(sor)].tobbi += ertek;
+                tobbi += ertek;
+            }
+        });
+
+        var levon = 0;
+
+        eszSor.forEach(function (kulcs) {
+            var e = esz[kulcs];
+
+            e.levon = e.dij > 0 && bevMod === 'levon' ? Math.min(e.dij, Math.max(0, e.tobbi)) : 0;
+            levon += e.levon;
+        });
+
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelsor][data-sdh-bev]'), function (bevSor) {
+            var nyers = bevSor.getAttribute('data-sdh-bev-eszkoz') || '0';
+            var e = esz[nyers];
+            var cel = e ? e.dij : 0;
+
+            if (e) {
+                e.vanDij = true;
+            }
 
             if (bevSor.getAttribute('data-sdh-bev') === 'szamlazva') {
                 return;
@@ -2880,26 +2923,27 @@
             bevSor.classList.toggle('is-torlendo', cel <= 0);
         });
 
-        // A többi tétel (a díjsorok nélkül): ebből vonható le a díj.
-        var tobbi = 0;
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelsor][data-sdh-bevle]'), function (leSor) {
+            var nyers = leSor.getAttribute('data-sdh-bev-eszkoz') || '0';
+            var e = esz[nyers];
+            var cel = e ? e.levon : 0;
 
-        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek] [data-sdh-tetelsorok] [data-sdh-tetelsor]'), function (sor) {
-            if (!sor.hasAttribute('data-sdh-bev') && !sor.hasAttribute('data-sdh-bevle')) {
-                tobbi += mlSorErtek(sor).brutto;
+            if (e) {
+                e.vanLe = true;
             }
-        });
 
-        var levon = bevBe && bevMod === 'levon' ? Math.min(bevEloleg, Math.max(0, tobbi)) : 0;
+            if (leSor.getAttribute('data-sdh-bevle') === 'szamlazva') {
+                return;
+            }
 
-        if (leSor && !leSzamlazva) {
             var leAr = leSor.querySelector('[data-sdh-tetel="ar"]');
 
             if (leAr) {
-                leAr.value = levon > 0 ? String(-levon).replace('.', ',') : '0';
+                leAr.value = cel > 0 ? String(-cel).replace('.', ',') : '0';
             }
 
-            leSor.classList.toggle('is-torlendo', levon <= 0);
-        }
+            leSor.classList.toggle('is-torlendo', cel <= 0);
+        });
 
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek]'), function (panel) {
             var menny = 0;
@@ -2934,24 +2978,37 @@
         var bevLapAfa = gyoker.querySelector('[data-sdh-lap-afa]');
         var bevOpcio = bevLapAfa ? bevLapAfa.options[bevLapAfa.selectedIndex] : null;
         var bevSzazalek = bevOpcio ? parseFloat(bevOpcio.getAttribute('data-szazalek')) || 0 : 27;
+        var bevHianyzo = 0;
 
-        // Aminek még nincs díjsora (a mentés hozza létre), az is beleszámít.
-        var bevHianyzo = bevVanSor['0'] ? 0 : bevFo;
+        eszSor.forEach(function (kulcs) {
+            var e = esz[kulcs];
 
-        Object.keys(bevDijak).forEach(function (eszkoz) {
-            if (!bevVanSor[eszkoz]) {
-                bevHianyzo += bevDijak[eszkoz];
-            }
+            bevHianyzo += (e.vanDij ? 0 : e.dij) - (e.vanLe ? 0 : e.levon);
         });
 
-        if (bevHianyzo > 0) {
+        if (Math.abs(bevHianyzo) >= 0.005) {
             osszBrutto += bevHianyzo;
             osszNetto += mlKerek(bevHianyzo / (1 + bevSzazalek / 100));
         }
 
-        if (levon > 0 && !leSor) {
-            osszBrutto -= levon;
-            osszNetto -= mlKerek(levon / (1 + bevSzazalek / 100));
+        // Eszközönkénti bontás a bal oldalon: végösszeg és fizetendő készülékenként.
+        var bontasHely = gyoker.querySelector('[data-sdh-eszkoz-bontas]');
+        var bontasFizetve = !!(gyoker.querySelector('[data-sdh-fizetve]') || {}).checked;
+
+        if (bontasHely) {
+            bontasHely.hidden = eszSor.length < 2;
+            bontasHely.innerHTML = eszSor.length < 2 ? '' : '<h4>Eszközönként</h4>' + eszSor.map(function (kulcs, i) {
+                var e = esz[kulcs];
+                var brutto = e.tobbi + e.dij - e.levon;
+                // A csatolt eszközre jutó előleg: a díja + amit külön befizettek rá; a fő eszközé a maradék.
+                var eloleg = kulcs === '0' ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon) : e.dij + e.kulon;
+                var fizetendo = bontasFizetve ? 0 : brutto - eloleg;
+
+                return '<div class="sdh-ml__bontas-sor" data-sdh-bontas="' + szovegBiztonsagos(kulcs) + '" title="' + szovegBiztonsagos(e.nev) + '">' +
+                    '<span class="sdh-ml__bontas-nev">' + (i + 1) + '. ' + szovegBiztonsagos(e.nev) + '</span>' +
+                    '<span class="sdh-ml__bontas-szam"><b>' + mlPenz(brutto) + '\u00a0Ft</b>' +
+                    '<i' + (fizetendo < 0 ? ' class="is-negativ"' : '') + '>fizetendő ' + mlPenz(fizetendo) + '\u00a0Ft</i></span></div>';
+            }).join('');
         }
 
         bevInfo(gyoker, bevPipa, bevEloleg, bevMod, levon, tobbi, bevFo, bevCsatolt);
@@ -3201,7 +3258,21 @@
             sor.querySelector('[data-sdh-tetel="afa"]').value = lapAfa.value;
         }
 
+        // Több eszköznél az új sor az előző (nem díj-) sor eszközét örökli: jellemzően
+        // egymás után ugyanannak a készüléknek a tételeit viszik fel.
+        var elozoSorok = lista.querySelectorAll('[data-sdh-tetelsor]:not([data-sdh-bev]):not([data-sdh-bevle]) [data-sdh-tetel-eszkoz]');
+        var orokolt = elozoSorok.length ? elozoSorok[elozoSorok.length - 1].value : '0';
+
         lista.appendChild(sor);
+        hibaEszkozFrissit(lista.closest('form'));
+
+        var ujEszkoz = sor.querySelector('[data-sdh-tetel-eszkoz]');
+
+        if (ujEszkoz && ujEszkoz.querySelector('option[value="' + orokolt + '"]')) {
+            ujEszkoz.value = orokolt;
+            ujEszkoz.title = ujEszkoz.options[ujEszkoz.selectedIndex].textContent;
+        }
+
         munkalapSzamol(gyoker);
 
         var elso = sor.querySelector('input[type="text"]');
@@ -3385,11 +3456,20 @@
             elemek.push([cimke.getAttribute('data-sdh-tovabbi'), (i + 2) + '. ' + cimke.querySelector('[data-sdh-tovabbi-nev]').textContent.trim()]);
         });
 
+        var lapGyoker = urlap.querySelector('[data-sdh-munkalap]');
+
         panel.classList.toggle('is-tobb-eszkoz', elemek.length > 1);
         panel.sdhEszkozok = elemek;
 
-        Array.prototype.forEach.call(panel.querySelectorAll('[data-sdh-hibasorok] [data-sdh-hiba-eszkoz]'), function (valaszto) {
-            var most = valaszto.value;
+        // A tételsorok (szolgáltatás, termék) eszközválasztója ugyanebből a listából él.
+        if (lapGyoker) {
+            lapGyoker.classList.toggle('is-tobb-eszkoz', elemek.length > 1);
+        }
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-hibasorok] [data-sdh-hiba-eszkoz], [data-sdh-tetelsorok] [data-sdh-tetel-eszkoz]'), function (valaszto) {
+            var sor = valaszto.closest('[data-sdh-tetelsor]');
+            // A díj és a levonás sora az eszközéhez kötött: a választója azt mutatja.
+            var most = sor && sor.hasAttribute('data-sdh-bev-eszkoz') ? sor.getAttribute('data-sdh-bev-eszkoz') : valaszto.value;
 
             valaszto.innerHTML = '';
 
@@ -3402,6 +3482,7 @@
             });
 
             valaszto.value = elemek.some(function (e) { return e[0] === most; }) ? most : '0';
+            valaszto.title = valaszto.options[valaszto.selectedIndex] ? valaszto.options[valaszto.selectedIndex].textContent : '';
         });
     }
 

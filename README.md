@@ -60,6 +60,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.42.0
+- **Minden eszköz önálló ügy a munkalapon belül.** Ha egy ügyfél egyszerre több készüléket ad le, egy munkalapon
+  mennek, de eszközönként külön kezelve: saját hibák (0.41), saját **szolgáltatások és termékek**, saját pénzügy.
+- **Tételek eszközönként:** több eszközös lapon a Szolgáltatások és a Termékek minden sorában választó áll, melyik
+  eszköz tétele (az új sor az előző sor eszközét örökli). A bal oldalon „Eszközönként" bontás: készülékenként a
+  végösszeg és a fizetendő. A részletek Szolgáltatások / Termékek lapfülén Eszköz oszlop, a Munkalap lapfülön
+  eszközönkénti összeg.
+- **Bevizsgálási díj eszközönként, a saját tételekből levonva:** minden eszköznek saját díj- és saját levonássora
+  van. A díj az eszköz SAJÁT javítási tételeiből vonódik le – amelyik eszközt nem javítják, annak a díja
+  munkadíjként megmarad (nem kell külön állítani).
+- **Pénztár eszközönként:** a Fizetés ablakban minden eszköz külön sor (összeg, előleg, fizetendő) pipával. A
+  fizetés készülékenként KÜLÖN pénztártétel lesz, a készülék nevével és tételeivel. Ha csak az egyik eszközt
+  fizetik ki, az részfizetésként rögzül arra az eszközre, a munkalap nyitva marad. A mentés utáni „Bekerüljön a
+  pénztárba?" ajánlat is készülékenként kér összeget.
+- **RMA / ügyféloldal:** a tételek készülékenként csoportosítva, részösszeggel; a hibáknál a készülék neve; minden
+  eszköz adatai az Eszköz lapon. **Számla:** a tételek megjegyzése előre kitöltve a készülékkel (név + IMEI),
+  átírható vagy törölhető; a díj- és levonássorok nevében a készülék.
+- Séma (DB_VERSION 0.30.0): `sdh_penztar.eszkoz_id`, `sdh_munkalap_eszkoz.fizetett` (az eszközre külön befizetett
+  összeg); a tételek eszközét a 0.41-ben bevezetett `sdh_munkalap_tetel.eszkoz_id` tárolja (0 = a fő eszköz).
+
 ### 0.41.0
 - **Hiba eszközhöz kötve:** több eszközös munkalapon minden hibasor elején választó áll, melyik eszköz hibája
   (alapból az első, azaz a fő eszközé). A „Gyakori hibák" popupban előbb az eszköz választható, utána a hibák –

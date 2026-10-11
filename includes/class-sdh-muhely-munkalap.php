@@ -203,7 +203,8 @@ final class SDH_Muhely_Munkalap
 
     /**
      * A munkalap további eszközeinek kapcsolósorai (eszkoz_id, bev_dij,
-     * bev_nev, bev_szolg), sorrendben – az eszközönkénti bevizsgálási díjhoz.
+     * bev_nev, bev_szolg, fizetett), sorrendben – az eszközönkénti
+     * bevizsgálási díjhoz és a külön befizetéshez.
      *
      * @return array<int, object>
      */
@@ -217,7 +218,7 @@ final class SDH_Muhely_Munkalap
 
         $sorok = $wpdb->get_results(
             $wpdb->prepare(
-                'SELECT eszkoz_id, bev_dij, bev_nev, bev_szolg FROM ' . self::tobbi_eszkoz_tabla()
+                'SELECT eszkoz_id, bev_dij, bev_nev, bev_szolg, fizetett FROM ' . self::tobbi_eszkoz_tabla()
                 . ' WHERE munkalap_id = %d ORDER BY sorrend ASC, id ASC',
                 $munkalap_id
             )
@@ -310,6 +311,118 @@ final class SDH_Muhely_Munkalap
         return self::eszkoz_sorok(
             array_merge([(int) $munkalap->eszkoz_id], self::tovabbi_eszkoz_idk((int) $munkalap->id))
         );
+    }
+
+    /**
+     * A munkalap eszközönkénti bontása: minden eszköz önálló ügy a lapon
+     * belül – saját hibák, saját tételek (szolgáltatás, termék, díj), saját
+     * pénzügy. Ebből él a részletpanel, az ügyféloldal (RMA), a számla és a
+     * pénztár.
+     *
+     * Elemenként: `eszkoz_id` (0 = a fő eszköz; a hibák és tételek ezzel
+     * hivatkoznak rá), `valodi_id`, `eszkoz` (sor vagy null), `sorszam`,
+     * `nev` (megnevezés), `felirat` („2. Apple A1660"), `hibak`, `tetelek`,
+     * `netto`, `brutto` (a kimenő tételek összege), `dij` (bevizsgálási díj),
+     * `eloleg` (az eszközre már befizetett rész), `fizetendo`.
+     *
+     * Az előleg felosztása: a csatolt eszközé a díja + amit külön befizettek
+     * rá; a fő eszközé a lap előlegének maradéka. Kifizetett lapon a
+     * fizetendő mindenhol nulla.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function eszkoz_bontas(object $munkalap): array
+    {
+        $id        = (int) $munkalap->id;
+        $jelolo    = (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1;
+        $fizetve   = (int) ($munkalap->fizetve ?? 0) === 1;
+        $reszletek = [];
+
+        foreach (self::tovabbi_reszletek($id) as $r) {
+            $reszletek[(int) $r->eszkoz_id] = $r;
+        }
+
+        $eszkozok = self::eszkoz_sorok(array_merge([(int) $munkalap->eszkoz_id], array_keys($reszletek)));
+        $bontas   = [];
+        $n        = 0;
+
+        // A fő eszköz mindig az első elem – akkor is, ha a lapon még nincs eszköz.
+        $fo = null;
+
+        foreach ($eszkozok as $e) {
+            if ((int) $e->id === (int) $munkalap->eszkoz_id) {
+                $fo = $e;
+            }
+        }
+
+        $sorrend = array_merge([[0, $fo]], array_map(
+            static fn (object $e): array => [(int) $e->id, $e],
+            array_values(array_filter($eszkozok, static fn (object $e): bool => isset($reszletek[(int) $e->id])))
+        ));
+
+        foreach ($sorrend as [$kulcs, $e]) {
+            $n++;
+            $nev = $e ? SDH_Muhely_Eszkoz::megnevezes($e) : 'Eszköz nélkül';
+
+            $bontas[$kulcs] = [
+                'eszkoz_id' => $kulcs,
+                'valodi_id' => $e ? (int) $e->id : 0,
+                'eszkoz'    => $e,
+                'sorszam'   => $n,
+                'nev'       => $nev,
+                'felirat'   => $n . '. ' . $nev,
+                'hibak'     => [],
+                'tetelek'   => [],
+                'netto'     => 0.0,
+                'brutto'    => 0.0,
+                'dij'       => 0.0,
+                'eloleg'    => 0.0,
+                'fizetendo' => 0.0,
+            ];
+        }
+
+        // Ami olyan eszközre mutat, amely már nincs a lapon, az a fő eszközé.
+        foreach (self::hibasorok($id) as $hiba) {
+            $kulcs = isset($bontas[(int) ($hiba->eszkoz_id ?? 0)]) ? (int) $hiba->eszkoz_id : 0;
+
+            $bontas[$kulcs]['hibak'][] = $hiba;
+        }
+
+        foreach (SDH_Muhely_Tetel::lista($id) as $tetel) {
+            $kulcs = isset($bontas[(int) ($tetel->eszkoz_id ?? 0)]) ? (int) $tetel->eszkoz_id : 0;
+
+            $bontas[$kulcs]['tetelek'][] = $tetel;
+
+            if ((string) $tetel->mozgas === 'kimeno') {
+                $bontas[$kulcs]['netto']  += (float) $tetel->netto_ertek;
+                $bontas[$kulcs]['brutto'] += (float) $tetel->brutto_ertek;
+            }
+
+            if ((string) $tetel->forras === 'bevizsgalas') {
+                $bontas[$kulcs]['dij'] += (float) $tetel->brutto_ertek;
+            }
+        }
+
+        $csatolt_eloleg = 0.0;
+
+        foreach ($reszletek as $kulcs => $r) {
+            if (!isset($bontas[$kulcs])) {
+                continue;
+            }
+
+            $bontas[$kulcs]['eloleg'] = round(($jelolo ? (float) $r->bev_dij : 0.0) + (float) ($r->fizetett ?? 0), 2);
+            $csatolt_eloleg          += $bontas[$kulcs]['eloleg'];
+        }
+
+        $bontas[0]['eloleg'] = round(max(0.0, (float) $munkalap->fizetett - $csatolt_eloleg), 2);
+
+        foreach ($bontas as $kulcs => $b) {
+            $bontas[$kulcs]['netto']     = round($b['netto'], 2);
+            $bontas[$kulcs]['brutto']    = round($b['brutto'], 2);
+            $bontas[$kulcs]['fizetendo'] = $fizetve ? 0.0 : round($b['brutto'] - $bontas[$kulcs]['eloleg'], 2);
+        }
+
+        return array_values($bontas);
     }
 
     /**
@@ -2205,6 +2318,9 @@ final class SDH_Muhely_Munkalap
                         <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
                         </div>
+
+                        <?php // Több eszköznél: eszközönként a végösszeg és a fizetendő (app.js: munkalapSzamol). ?>
+                        <div class="sdh-ml__bontas" data-sdh-eszkoz-bontas aria-live="polite" hidden></div>
                     </div>
                 </div>
 
@@ -2322,11 +2438,11 @@ final class SDH_Muhely_Munkalap
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--3">
-                            <?php self::tetel_szerkeszto('szolgaltatas', $szolg, $afakulcsok, $lap_afa); ?>
+                            <?php self::tetel_szerkeszto('szolgaltatas', $szolg, $afakulcsok, $lap_afa, $hiba_eszkozok); ?>
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--4">
-                            <?php self::tetel_szerkeszto('termek', $termekek, $afakulcsok, $lap_afa); ?>
+                            <?php self::tetel_szerkeszto('termek', $termekek, $afakulcsok, $lap_afa, $hiba_eszkozok); ?>
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--5 sdh-fulek__panel--rma">
@@ -2614,7 +2730,7 @@ final class SDH_Muhely_Munkalap
      * @param array<int, object>                                 $tetelek
      * @param array<string, array{nev: string, szazalek: float}> $afakulcsok
      */
-    private static function tetel_szerkeszto(string $tipus, array $tetelek, array $afakulcsok, string $lap_afa): void
+    private static function tetel_szerkeszto(string $tipus, array $tetelek, array $afakulcsok, string $lap_afa, array $eszkozok = [0 => '1. fő eszköz']): void
     {
         $termek = $tipus === 'termek';
         $sorok  = $tetelek === [] ? [null] : $tetelek;
@@ -2625,6 +2741,7 @@ final class SDH_Muhely_Munkalap
              data-kovetkezo="<?php echo (int) count($sorok); ?>">
             <div class="sdh-tetelfej" aria-hidden="true">
                 <span>Sorszám</span>
+                <span class="sdh-tetelfej__eszkoz">Eszköz</span>
                 <span>Megnevezés</span>
                 <?php if ($termek) : ?>
                     <span>Termékkód</span>
@@ -2643,16 +2760,17 @@ final class SDH_Muhely_Munkalap
 
             <div class="sdh-tetelsorok" data-sdh-tetelsorok>
                 <?php foreach ($sorok as $i => $tetel) : ?>
-                    <?php self::tetel_sor($tipus, (string) $i, $tetel, $afakulcsok, $lap_afa); ?>
+                    <?php self::tetel_sor($tipus, (string) $i, $tetel, $afakulcsok, $lap_afa, $eszkozok); ?>
                 <?php endforeach; ?>
             </div>
 
             <template data-sdh-tetel-sablon>
-                <?php self::tetel_sor($tipus, '__I__', null, $afakulcsok, $lap_afa); ?>
+                <?php self::tetel_sor($tipus, '__I__', null, $afakulcsok, $lap_afa, $eszkozok); ?>
             </template>
 
             <div class="sdh-tetelsor sdh-tetelsor--ossz">
                 <span></span>
+                <span class="sdh-tetelfej__eszkoz"></span>
                 <span>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-tetel-uj
                             title="<?php echo $termek ? 'Termék választása a készletből' : 'Szolgáltatás választása a listából'; ?>">
@@ -2683,7 +2801,7 @@ final class SDH_Muhely_Munkalap
      *
      * @param array<string, array{nev: string, szazalek: float}> $afakulcsok
      */
-    private static function tetel_sor(string $tipus, string $index, ?object $tetel, array $afakulcsok, string $lap_afa): void
+    private static function tetel_sor(string $tipus, string $index, ?object $tetel, array $afakulcsok, string $lap_afa, array $eszkozok = [0 => '1. fő eszköz']): void
     {
         $elotag = 'tetelek[' . $tipus . '][' . $index . ']';
         $termek = $tipus === 'termek';
@@ -2701,10 +2819,12 @@ final class SDH_Muhely_Munkalap
         // bevizsgálási díj szinkronja tartja karban (SDH_Muhely_Szamla).
         $levonas     = $tetel !== null && (string) ($tetel->forras ?? '') === 'bevizsgalas_le';
         $csak_olvas  = $levonas ? ' disabled' : '';
+        // Melyik eszköz tétele (0 = a fő eszközé); ami már nincs a lapon, az a fő eszközé.
+        $tetel_eszkoz = $tetel !== null && isset($eszkozok[(int) ($tetel->eszkoz_id ?? 0)]) ? (int) $tetel->eszkoz_id : 0;
         ?>
         <div class="sdh-tetelsor<?php echo $szamlazva !== '' ? ' is-szamlazva' : ''; ?><?php echo $levonas ? ' sdh-tetelsor--levonas' : ''; ?>" data-sdh-tetelsor
             <?php echo $bevizsgalas ? 'data-sdh-bev' . ($szamlazva !== '' ? '="szamlazva"' : '') . ' data-sdh-bev-eszkoz="' . (int) ($tetel->eszkoz_id ?? 0) . '"' : ''; ?>
-            <?php echo $levonas ? 'data-sdh-bevle' . ($szamlazva !== '' ? '="szamlazva"' : '') : ''; ?>>
+            <?php echo $levonas ? 'data-sdh-bevle' . ($szamlazva !== '' ? '="szamlazva"' : '') . ' data-sdh-bev-eszkoz="' . (int) ($tetel->eszkoz_id ?? 0) . '"' : ''; ?>>
             <input type="hidden" name="<?php echo esc_attr($elotag); ?>[id]"<?php echo $csak_olvas; ?>
                    value="<?php echo (int) ($tetel->id ?? 0); ?>">
 
@@ -2713,6 +2833,19 @@ final class SDH_Muhely_Munkalap
                 echo $tetel !== null ? (int) $tetel->id : 'új';
                 echo $szamlazva !== '' ? ' ✓' : '';
             ?></span>
+
+            <?php
+            // Csak több eszköznél látszik; a listáját az app.js tartja frissen. A díj és a
+            // levonás sora az eszközéhez kötött: ott a választó csak mutatja, nem küldődik be.
+            ?>
+            <select name="<?php echo esc_attr($elotag); ?>[eszkoz_id]" class="sdh-tetelsor__eszkoz"
+                    data-sdh-tetel-eszkoz aria-label="Melyik eszköz tétele"<?php echo ($bevizsgalas || $levonas) ? ' disabled' : ''; ?>>
+                <?php foreach ($eszkozok as $e_id => $e_nev) : ?>
+                    <option value="<?php echo (int) $e_id; ?>" <?php selected($tetel_eszkoz, (int) $e_id); ?>>
+                        <?php echo esc_html($e_nev); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
             <?php if ($termek) : ?>
                 <?php // A sor végi gomb a termékválasztó popupot nyitja (app.js termValasztoNyit). ?>
@@ -2864,7 +2997,8 @@ final class SDH_Muhely_Munkalap
         $dij = $reszlet !== null ? (float) $reszlet->bev_dij : 0.0;
 
         ?>
-        <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>">
+        <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>"
+              data-kulon="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->fizetett ?? 0) : 0)); ?>">
             <input type="hidden" name="tovabbi_eszkoz[]" value="<?php echo esc_attr($eszkoz_id); ?>">
             <span class="sdh-ml-eszkoz__nev" data-sdh-tovabbi-nev><?php echo esc_html($felirat); ?></span>
             <span class="sdh-ml-eszkoz__dij"
@@ -3327,10 +3461,17 @@ final class SDH_Muhely_Munkalap
         // A tételek csak akkor szinkronizálódnak, ha az űrlap hozta őket –
         // egy tételek nélküli beküldés (régi oldal, más hívó) nem törölhet tételt.
         if (is_array($eredmeny) && !empty($_POST['tetelek_jelen'])) {
-            SDH_Muhely_Tetel::mentes(
-                (int) $eredmeny[0],
-                SDH_Muhely_Tetel::bekuldott(isset($_POST['tetelek']) ? wp_unslash($_POST['tetelek']) : [])
-            );
+            $bekuldott_tetelek = SDH_Muhely_Tetel::bekuldott(isset($_POST['tetelek']) ? wp_unslash($_POST['tetelek']) : []);
+
+            // Tétel csak a lap eszközéhez köthető: ami nem (vagy már nem) a lap
+            // csatolt eszköze, az a fő eszközhöz (0) kerül.
+            foreach ($bekuldott_tetelek as $i => $egy_tetel) {
+                if (($egy_tetel['eszkoz_id'] ?? null) !== null && !in_array((int) $egy_tetel['eszkoz_id'], $lap_eszkozei, true)) {
+                    $bekuldott_tetelek[$i]['eszkoz_id'] = 0;
+                }
+            }
+
+            SDH_Muhely_Tetel::mentes((int) $eredmeny[0], $bekuldott_tetelek);
         }
 
         // A bevizsgálási díj tételsora a jelölőhöz és az előleghez igazodik.

@@ -60,6 +60,7 @@ final class SDH_Muhely_Penztar
             'fizet'      => 'ajax_fizet',
             'kihagy'     => 'ajax_kihagy',
             'ajanlat'    => 'ajax_ajanlat',
+            'eszkozonkent' => 'ajax_eszkozonkent',
             'valtozasok' => 'ajax_valtozasok',
             'javit'      => 'ajax_javit',
             'jelol'      => 'ajax_jelol',
@@ -1402,7 +1403,166 @@ final class SDH_Muhely_Penztar
             'fizetesi_mod' => (string) $m->fizetesi_mod,
             'szamla'    => is_string($szamla) ? $szamla : '',
             'kasszaban' => $kassza,
+            // Több eszközös lapon: készülékenként külön (üres, ha csak egy eszköz van).
+            'eszkozok'  => self::munkalap_eszkozei($m, $kassza),
         ];
+    }
+
+    /**
+     * Több eszközös munkalap pénzügye készülékenként: minden eszköz külön
+     * tétel a pénztárban. Egy eszközös lapnál üres tömb (ott minden a régi).
+     *
+     * Elemenként: `kulcs` (0 = a fő eszköz; a munkalap tételei így hivatkoznak
+     * rá), `eszkoz_id` (a valódi azonosító – a pénztártétel ezt tárolja),
+     * `nev`, `leiras`, `brutto`, `eloleg`, `fizetendo`, `kasszaban`.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function munkalap_eszkozei(object $m, ?float $kassza_ossz = null): array
+    {
+        global $wpdb;
+
+        $bontas = SDH_Muhely_Munkalap::eszkoz_bontas($m);
+
+        if (count($bontas) < 2) {
+            return [];
+        }
+
+        // Amennyi a pénztárban van készülékenként (a pénztártétel a valódi eszköz-azonosítót tárolja).
+        $t      = self::tabla();
+        $kassza = [];
+
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        foreach ((array) $wpdb->get_results($wpdb->prepare(
+            "SELECT eszkoz_id, COALESCE(SUM(CASE WHEN tipus = 'kihagyva' THEN info_osszeg ELSE kp + kartya + utalas END), 0) AS ossz
+             FROM {$t} WHERE torolve = 0 AND tipus IN ('bevetel', 'kihagyva') AND munkalap_id = %d AND eszkoz_id > 0 GROUP BY eszkoz_id",
+            (int) $m->id
+        )) as $sor) {
+            $kassza[(int) $sor->eszkoz_id] = round((float) $sor->ossz, 2);
+        }
+
+        $szam        = (int) $m->munkalap_szam > 0 ? (string) (int) $m->munkalap_szam : '';
+        $kassza_ossz = $kassza_ossz ?? self::munkalap_kasszaban((int) $m->id, $szam, (string) ($m->letrehozva ?? ''));
+        $ki          = [];
+        $csatolt     = 0.0;
+
+        foreach ($bontas as $b) {
+            $munka = [];
+
+            foreach ($b['tetelek'] as $tetel) {
+                if ((string) $tetel->megnevezes !== '' && (string) $tetel->forras !== 'bevizsgalas_le' && count($munka) < 3) {
+                    $munka[] = (string) $tetel->megnevezes;
+                }
+            }
+
+            $van = (int) $b['eszkoz_id'] > 0 ? (float) ($kassza[(int) $b['valodi_id']] ?? 0) : 0.0;
+            $csatolt += $van;
+
+            $ki[] = [
+                'kulcs'     => (int) $b['eszkoz_id'],
+                'eszkoz_id' => (int) $b['valodi_id'],
+                'nev'       => (string) $b['felirat'],
+                'leiras'    => mb_substr(trim($b['nev'] . ($munka !== [] ? ' – ' . implode(', ', $munka) : ''), ' –'), 0, 240),
+                'brutto'    => (float) $b['brutto'],
+                'eloleg'    => (float) $b['eloleg'],
+                'fizetendo' => (float) $b['fizetendo'],
+                'kasszaban' => $van,
+            ];
+        }
+
+        // Ami nincs csatolt eszközhöz kötve (régi vagy kézzel felvitt tétel), az a fő eszközé.
+        $ki[0]['kasszaban'] = round(max(0.0, $kassza_ossz - $csatolt), 2);
+
+        return $ki;
+    }
+
+    /**
+     * Egy összeg felosztása készülékekre: mindegyik az igénye arányában kap, az
+     * utolsó a kerekítés maradékát. Ha senkinek nincs igénye, az első kap mindent.
+     *
+     * @param array<int|string, float> $igenyek kulcs => igény (Ft)
+     * @return array<int|string, float>
+     */
+    public static function feloszt(float $osszeg, array $igenyek): array
+    {
+        $igenyek = array_map(static fn ($x): float => max(0.0, (float) $x), $igenyek);
+        $ossz    = array_sum($igenyek);
+        $ki      = [];
+
+        if ($igenyek === [] || $osszeg <= 0) {
+            return array_map(static fn (): float => 0.0, $igenyek);
+        }
+
+        if ($ossz <= 0) {
+            $elso = array_key_first($igenyek);
+
+            foreach ($igenyek as $k => $x) {
+                $ki[$k] = $k === $elso ? round($osszeg, 2) : 0.0;
+            }
+
+            return $ki;
+        }
+
+        $maradek = round($osszeg, 2);
+        $utolso  = array_key_last($igenyek);
+
+        foreach ($igenyek as $k => $x) {
+            $resz    = $k === $utolso ? $maradek : min($maradek, (float) round($osszeg * $x / $ossz));
+            $ki[$k]  = round($resz, 2);
+            $maradek = round($maradek - $resz, 2);
+        }
+
+        return $ki;
+    }
+
+    /**
+     * Készülékenként külön pénztártétel ugyanabból a fizetésből. A fizetési
+     * módok kerete (KP, kártya, utalás) sorban fogy el a készülékeken.
+     *
+     * @param array<int, array<string, mixed>> $eszkozok  A munkalap_eszkozei() elemei közül az érintettek.
+     * @param array<int, float>                $osszegek  kulcs => összeg
+     * @param array<string, mixed>             $kozos     A tétel közös mezői (datum, tipus, nev, munkalap…).
+     * @return array<int, int> A létrejött pénztártételek azonosítói.
+     */
+    private static function eszkozonkent_ment(array $eszkozok, array $osszegek, array $kozos, float $kp, float $kartya, float $utalas, string $elotag = ''): array
+    {
+        $keret = ['kp' => $kp, 'kartya' => $kartya, 'utalas' => $utalas];
+        $idk   = [];
+
+        foreach ($eszkozok as $e) {
+            $kell = round((float) ($osszegek[(int) $e['kulcs']] ?? 0), 2);
+
+            if ($kell <= 0) {
+                continue;
+            }
+
+            $adat = $kozos + ['kp' => 0, 'kartya' => 0, 'utalas' => 0, 'info_osszeg' => 0];
+
+            $adat['leiras']    = mb_substr($elotag . (string) $e['leiras'], 0, 255);
+            $adat['eszkoz_id'] = (int) $e['eszkoz_id'];
+
+            if ((string) $adat['tipus'] === 'bevetel') {
+                $hatra = $kell;
+
+                foreach (['kp', 'kartya', 'utalas'] as $mod) {
+                    $resz         = round(min($hatra, max(0.0, $keret[$mod])), 2);
+                    $adat[$mod]   = $resz;
+                    $keret[$mod] -= $resz;
+                    $hatra        = round($hatra - $resz, 2);
+                }
+
+                // Ha a keret kerekítés miatt nem fedné, a maradék készpénz.
+                if ($hatra > 0) {
+                    $adat['kp'] = round($adat['kp'] + $hatra, 2);
+                }
+            } else {
+                $adat['info_osszeg'] = $kell;
+            }
+
+            $idk[] = self::ment($adat, 0, 'munkalap');
+        }
+
+        return $idk;
     }
 
     /** Ennyi van már a pénztárban erre a munkalapra (a „nem került kasszába" jelölésekkel együtt). */
@@ -1476,10 +1636,70 @@ final class SDH_Muhely_Penztar
             return null;
         }
 
+        // Több eszköznél készülékenként: mennyi hiányzik még a pénztárból.
+        foreach ($info['eszkozok'] as $i => $e) {
+            $info['eszkozok'][$i]['osszeg'] = max(0.0, round(($most_fizetve ? $e['brutto'] : $e['eloleg']) - $e['kasszaban'], 2));
+        }
+
         return $info + [
             'osszeg' => $hianyz,
             'eloleg_mod' => !$most_fizetve,
         ];
+    }
+
+    /**
+     * Az ajánlat elfogadása több eszközös lapnál: készülékenként külön
+     * pénztártétel, a megadott összegekkel (app.js → penztar.js ajanlatAblak).
+     */
+    public static function ajax_eszkozonkent(): void
+    {
+        self::jog();
+
+        $m = self::munkalap((int) self::post('munkalap_id', 0));
+
+        if ($m === null) {
+            wp_send_json_error(['uzenet' => 'Nincs ilyen munkalap.']);
+        }
+
+        $info     = self::munkalap_info($m);
+        $nyers    = json_decode((string) self::post('osszegek', '{}'), true);
+        $nyers    = is_array($nyers) ? $nyers : [];
+        $osszegek = [];
+
+        foreach ($info['eszkozok'] as $e) {
+            $osszegek[(int) $e['kulcs']] = round(abs(self::szam($nyers[(string) $e['kulcs']] ?? 0)), 2);
+        }
+
+        $ossz = round(array_sum($osszegek), 2);
+
+        if ($info['eszkozok'] === [] || $ossz <= 0) {
+            wp_send_json_error(['uzenet' => 'Add meg legalább egy eszköz összegét.']);
+        }
+
+        $mod = self::post_szoveg('mod', 10);
+        $mod = in_array($mod, ['kp', 'kartya', 'utalas'], true) ? $mod : 'kp';
+
+        $idk = self::eszkozonkent_ment(
+            $info['eszkozok'],
+            $osszegek,
+            [
+                'datum'         => self::ma(),
+                'tipus'         => 'bevetel',
+                'nev'           => self::post_szoveg('nev', 190) !== '' ? self::post_szoveg('nev', 190) : $info['nev'],
+                'szemely'       => '',
+                'munkalap_szam' => $info['szam'],
+                'munkalap_id'   => $info['id'],
+                'szamlaszam'    => self::post_szoveg('szamla', 60),
+                'vonalkod'      => '',
+                'megjegyzes'    => '',
+            ],
+            $mod === 'kp' ? $ossz : 0.0,
+            $mod === 'kartya' ? $ossz : 0.0,
+            $mod === 'utalas' ? $ossz : 0.0,
+            self::post('eloleg', '') === '1' ? 'Előleg – ' : ''
+        );
+
+        wp_send_json_success(['tetelek' => $idk, 'osszeg' => $ossz, 'db' => count($idk)]);
     }
 
     /** A számla kiállítása után: a munkalap számla nélküli pénztártételei megkapják a számát. */
@@ -1544,6 +1764,10 @@ final class SDH_Muhely_Penztar
 
         if (!self::beallitas()['ajanlat'] || $mod === 'utalas') {
             wp_send_json_success(['ajanlat' => null]);
+        }
+
+        foreach ($info['eszkozok'] as $i => $e) {
+            $info['eszkozok'][$i]['osszeg'] = max(0.0, round($e['brutto'] - $e['kasszaban'], 2));
         }
 
         wp_send_json_success(['ajanlat' => array_merge($info, [
@@ -1832,6 +2056,33 @@ final class SDH_Muhely_Penztar
                 <div class="sdh-pt-fizetes__fo"><span><?php echo $info['fizetve'] ? 'Fizetve' : 'Fizetendő'; ?></span><strong><?php echo esc_html(self::penz($info['fizetve'] ? 0 : $hatra)); ?></strong></div>
             </div>
 
+            <?php if ($info['eszkozok'] !== []) : ?>
+                <?php // Több eszköz: készülékenként külön fizethető, és külön tétel lesz a pénztárban. ?>
+                <table class="sdh-tabla sdh-pt-eszkozok" data-sdh-pt-eszkozok>
+                    <thead>
+                        <tr><th></th><th>Eszköz</th><th class="is-jobb">Összeg</th><th class="is-jobb">Előleg</th><th class="is-jobb">Fizetendő</th></tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($info['eszkozok'] as $pe) : ?>
+                            <?php $pe_hatra = $info['fizetve'] ? 0.0 : (float) $pe['fizetendo']; ?>
+                            <tr>
+                                <td><input type="checkbox" name="eszkoz[]" value="<?php echo (int) $pe['kulcs']; ?>" data-sdh-pt-eszkoz
+                                           data-fizetendo="<?php echo esc_attr((string) max(0.0, $pe_hatra)); ?>" checked
+                                           aria-label="<?php echo esc_attr($pe['nev'] . ' fizetése'); ?>"></td>
+                                <td><?php echo esc_html($pe['nev']); ?></td>
+                                <td class="is-jobb"><?php echo esc_html(self::penz((float) $pe['brutto'])); ?></td>
+                                <td class="is-jobb"><?php echo esc_html(self::penz((float) $pe['eloleg'])); ?></td>
+                                <td class="is-jobb"><strong><?php echo esc_html(self::penz($pe_hatra)); ?></strong></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <p class="sdh-mezo__sugo sdh-pt-eszkozok__sugo">
+                    Minden eszköz külön tételként kerül a pénztárba. Ha csak az egyiket fizetik ki, vedd ki a pipát a többinél –
+                    az részfizetésként rögzül, a munkalap nyitva marad.
+                </p>
+            <?php endif; ?>
+
             <?php self::pillek('fajta', ['teljes' => 'Teljes fizetés – lezárom', 'eloleg' => 'Előleg / részfizetés'], 'teljes'); ?>
 
             <div class="sdh-pt-urlap__racs">
@@ -1860,10 +2111,18 @@ final class SDH_Muhely_Penztar
                         <label for="ptf_nev">Név</label>
                         <input type="text" name="nev" id="ptf_nev" maxlength="190" value="<?php echo esc_attr($info['nev']); ?>" autocomplete="off">
                     </div>
-                    <div class="sdh-ig">
-                        <label for="ptf_leiras">Mi történt</label>
-                        <input type="text" name="leiras" id="ptf_leiras" maxlength="255" value="<?php echo esc_attr($info['leiras']); ?>" autocomplete="off">
-                    </div>
+                    <?php if ($info['eszkozok'] !== []) : ?>
+                        <?php // Több eszköz: minden pénztártétel a saját készüléke nevét és tételeit kapja leírásnak. ?>
+                        <div class="sdh-ig">
+                            <span class="sdh-ig__cimke">Mi történt</span>
+                            <span class="sdh-mezo__sugo">Eszközönként külön tétel, a készülék nevével és tételeivel.</span>
+                        </div>
+                    <?php else : ?>
+                        <div class="sdh-ig">
+                            <label for="ptf_leiras">Mi történt</label>
+                            <input type="text" name="leiras" id="ptf_leiras" maxlength="255" value="<?php echo esc_attr($info['leiras']); ?>" autocomplete="off">
+                        </div>
+                    <?php endif; ?>
                     <div class="sdh-ig">
                         <label for="ptf_szamla">Számlaszám</label>
                         <input type="text" name="szamla" id="ptf_szamla" maxlength="60" value="<?php echo esc_attr($info['szamla']); ?>" autocomplete="off" placeholder="A számla kiállítása után magától beíródik">
@@ -1914,6 +2173,30 @@ final class SDH_Muhely_Penztar
 
         $osszeg = round($kp + $kartya + $utalas, 2);
 
+        // Több eszköz: melyik készülékeket fizetik most. Ha nem mindet, az részfizetés –
+        // a munkalap nem zárható le, amíg valamelyik eszköz nincs kifizetve.
+        $erintett = [];
+
+        if ($info['eszkozok'] !== []) {
+            $kert = array_map('intval', (array) self::post('eszkoz', []));
+
+            foreach ($info['eszkozok'] as $e) {
+                if (in_array((int) $e['kulcs'], $kert, true)) {
+                    $erintett[] = $e;
+                }
+            }
+
+            if ($erintett === []) {
+                wp_send_json_error(['uzenet' => 'Jelöld be, melyik eszközt fizetik.']);
+            }
+
+            foreach ($info['eszkozok'] as $e) {
+                if (!in_array((int) $e['kulcs'], $kert, true) && (float) $e['fizetendo'] > 0.5) {
+                    $fajta = 'eloleg';
+                }
+            }
+        }
+
         if ($osszeg <= 0 && !($fajta === 'teljes' && $info['fizetendo'] <= 0)) {
             wp_send_json_error(['uzenet' => 'Add meg a kapott összeget.']);
         }
@@ -1934,6 +2217,37 @@ final class SDH_Muhely_Penztar
         }
 
         $wpdb->update(SDH_Muhely_Schema::tabla('munkalap'), $frissit, ['id' => (int) $m->id]);
+
+        // A kapott összeg felosztása az érintett készülékekre (a fizetendőjük arányában).
+        $reszek = [];
+
+        if ($erintett !== []) {
+            $igenyek = [];
+
+            foreach ($erintett as $e) {
+                $igenyek[(int) $e['kulcs']] = (float) $e['fizetendo'];
+            }
+
+            $reszek = self::feloszt($osszeg, $igenyek);
+
+            // Részfizetésnél a csatolt eszközre jutó rész az ő külön befizetése lesz
+            // (a fő eszközé a lap előlegének maradéka – azt nem kell külön vezetni).
+            if ($fajta === 'eloleg') {
+                $kapcsolo = SDH_Muhely_Schema::tabla('munkalap_eszkoz');
+
+                foreach ($erintett as $e) {
+                    if ((int) $e['kulcs'] > 0 && ($reszek[(int) $e['kulcs']] ?? 0) > 0) {
+                        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                        $wpdb->query($wpdb->prepare(
+                            "UPDATE {$kapcsolo} SET fizetett = fizetett + %f WHERE munkalap_id = %d AND eszkoz_id = %d",
+                            (float) $reszek[(int) $e['kulcs']],
+                            (int) $m->id,
+                            (int) $e['kulcs']
+                        ));
+                    }
+                }
+            }
+        }
 
         if (class_exists('SDH_Muhely_Szamla') && method_exists('SDH_Muhely_Szamla', 'bevizsgalas_szinkron')) {
             SDH_Muhely_Szamla::bevizsgalas_szinkron((int) $m->id);
@@ -1966,23 +2280,35 @@ final class SDH_Muhely_Penztar
                 'megjegyzes'    => '',
             ];
 
-            if ($adat['tipus'] === 'bevetel') {
-                $adat['kp'] = $kp;
-                $adat['kartya'] = $kartya;
-                $adat['utalas'] = $utalas;
-            } else {
-                $adat['info_osszeg'] = $osszeg;
-                $adat['megjegyzes']  = 'Fizetéskor kérésre nem került a kasszába.';
+            if ($adat['tipus'] !== 'bevetel') {
+                $adat['megjegyzes'] = 'Fizetéskor kérésre nem került a kasszába.';
             }
 
-            $tetel_id = self::ment($adat, 0, 'munkalap');
+            if ($erintett !== []) {
+                // Több eszköz: készülékenként külön pénztártétel, a saját leírásával.
+                unset($adat['leiras'], $adat['kp'], $adat['kartya'], $adat['utalas'], $adat['info_osszeg']);
+
+                $tetelek  = self::eszkozonkent_ment($erintett, $reszek, $adat, $kp, $kartya, $utalas, $fajta === 'eloleg' ? 'Előleg – ' : '');
+                $tetel_id = (int) ($tetelek[0] ?? 0);
+            } else {
+                if ($adat['tipus'] === 'bevetel') {
+                    $adat['kp'] = $kp;
+                    $adat['kartya'] = $kartya;
+                    $adat['utalas'] = $utalas;
+                } else {
+                    $adat['info_osszeg'] = $osszeg;
+                }
+
+                $tetel_id = self::ment($adat, 0, 'munkalap');
+            }
         }
 
         wp_send_json_success([
             'munkalap_id' => (int) $m->id,
             'tetel_id'    => $tetel_id,
             'uzenet'      => $osszeg > 0
-                ? ($fajta === 'eloleg' ? 'Előleg rögzítve: ' : 'Fizetve: ') . self::penz($osszeg) . (self::post('kasszaba', '') === '1' ? ' – a pénztárba is bekerült.' : '.')
+                ? ($fajta === 'eloleg' ? 'Előleg rögzítve: ' : 'Fizetve: ') . self::penz($osszeg)
+                    . (self::post('kasszaba', '') === '1' ? ' – a pénztárba is bekerült' . (count($erintett) > 1 ? ', eszközönként külön (' . count($erintett) . ' tétel).' : '.') : '.')
                 : 'A munkalap fizetettre állítva.',
         ]);
     }

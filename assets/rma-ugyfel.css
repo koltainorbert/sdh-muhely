@@ -1050,3 +1050,17 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     font-weight: 400;
     opacity: .7;
 }
+
+
+/* 0.42.0 – több eszköz: a tételek készülékenként, részösszeggel. */
+.rma-tabla__eszkoz th {
+    padding-top: .9rem;
+    text-align: left;
+    font-weight: 700;
+}
+
+.rma-tabla__resz td {
+    font-weight: 600;
+    opacity: .85;
+    border-bottom-width: 2px;
+}

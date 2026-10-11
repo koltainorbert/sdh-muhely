@@ -459,6 +459,18 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 ],
                 SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk($id))
             ),
+            // Több eszköznél minden eszköz önálló ügy: saját hibák, tételek, pénzügy.
+            'eszkozonkent' => array_map(
+                static fn (array $b): array => [
+                    'eszkoz'    => $b['felirat'],
+                    'hibak'     => array_map(static fn (object $h): string => (string) $h->leiras, $b['hibak']),
+                    'tetelek'   => array_map(static fn (object $t): string => (string) $t->megnevezes, $b['tetelek']),
+                    'brutto'    => self::penz($b['brutto']),
+                    'eloleg'    => self::penz($b['eloleg']),
+                    'fizetendo' => self::penz($b['fizetendo']),
+                ],
+                count($bontas = SDH_Muhely_Munkalap::eszkoz_bontas($ml)) > 1 ? $bontas : []
+            ),
             'hibak'       => $hibak,
             'tetelek'     => $tetelek,
             'szamlak'     => $szamlak,

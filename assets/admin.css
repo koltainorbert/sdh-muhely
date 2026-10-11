@@ -6091,3 +6091,92 @@ dd:hover > .sdh-masol {
     font-weight: 600;
     letter-spacing: 0;
 }
+
+
+/* ================================================================== */
+/* 0.42.0 – minden eszköz önálló ügy: tételek és pénzügy eszközönként   */
+/* ================================================================== */
+
+/* A tételsor eszközválasztója csak több eszköznél látszik. */
+.sdh-tetelfej__eszkoz,
+.sdh-tetelsor__eszkoz {
+    display: none;
+}
+
+.is-tobb-eszkoz .sdh-tetelfej__eszkoz,
+.is-tobb-eszkoz .sdh-tetelsor__eszkoz {
+    display: block;
+}
+
+.is-tobb-eszkoz .sdh-tetelfej,
+.is-tobb-eszkoz .sdh-tetelsor {
+    grid-template-columns: 58px 6.2rem minmax(0, 1fr) 50px 44px 84px 50px 92px 74px 80px 32px;
+}
+
+.is-tobb-eszkoz .sdh-tetelek--termek .sdh-tetelfej,
+.is-tobb-eszkoz .sdh-tetelek--termek .sdh-tetelsor {
+    grid-template-columns:
+        58px 6.2rem minmax(0, 2.2fr) minmax(0, .8fr) minmax(0, .9fr) minmax(0, .8fr)
+        50px 44px 84px 50px 92px 74px 80px 32px;
+}
+
+.sdh-tetelsor__eszkoz[disabled] {
+    opacity: .75;
+}
+
+/* Bal oldal: eszközönként a végösszeg és a fizetendő. */
+.sdh-ml__bontas {
+    margin-top: .6rem;
+    padding-top: .5rem;
+    border-top: 1px solid var(--sdh-keret);
+}
+
+.sdh-ml__bontas[hidden] {
+    display: none;
+}
+
+.sdh-ml__bontas h4 {
+    margin: 0 0 .3rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-ml__bontas-sor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .5rem;
+    align-items: start;
+    padding: 2px 0;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.sdh-ml__bontas-nev {
+    overflow-wrap: anywhere;
+}
+
+.sdh-ml__bontas-szam {
+    display: grid;
+    justify-items: end;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-ml__bontas-szam i {
+    font-style: normal;
+    font-size: 11px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ml__bontas-szam i.is-negativ {
+    color: var(--sdh-hiba);
+}
+
+@media (max-width: 760px) {
+    .is-tobb-eszkoz .sdh-tetelsor,
+    .is-tobb-eszkoz .sdh-tetelek--termek .sdh-tetelsor,
+    .sdh-munkalapurlap .is-tobb-eszkoz .sdh-hibasor {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+}

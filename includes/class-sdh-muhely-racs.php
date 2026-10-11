@@ -1371,6 +1371,16 @@ final class SDH_Muhely_Racs
         $tovabbi  = SDH_Muhely_Munkalap::eszkoz_sorok(SDH_Muhely_Munkalap::tovabbi_eszkoz_idk((int) $munkalap->id));
         $eszkozok = array_merge($eszkoz ? [$eszkoz] : [], $tovabbi);
 
+        // Eszközönkénti bontás (hibák, tételek, pénzügy) és a tételek eszközneve.
+        $bontas       = SDH_Muhely_Munkalap::eszkoz_bontas($munkalap);
+        $eszkoz_nevek = [];
+
+        if (count($bontas) > 1) {
+            foreach ($bontas as $b) {
+                $eszkoz_nevek[(int) $b['eszkoz_id']] = (string) $b['felirat'];
+            }
+        }
+
         $hibak    = SDH_Muhely_Munkalap::hibasorok((int) $munkalap->id);
         $tetelek  = SDH_Muhely_Tetel::lista((int) $munkalap->id);
         $szolg    = array_values(array_filter($tetelek, static fn (object $t): bool => $t->tipus === 'szolgaltatas'));
@@ -1385,7 +1395,7 @@ final class SDH_Muhely_Racs
             [
                 'k'    => 'munkalap',
                 'cim'  => 'Munkalap' . ($szam !== '' ? ' ' . $szam : ''),
-                'html' => self::kepernyore([self::class, 'ful_munkalap'], $munkalap, $ugyfel, $eszkoz, $hibak, $tovabbi),
+                'html' => self::kepernyore([self::class, 'ful_munkalap'], $munkalap, $ugyfel, $eszkoz, $hibak, $tovabbi, $bontas),
             ],
             [
                 'k'    => 'eszkoz',
@@ -1407,12 +1417,12 @@ final class SDH_Muhely_Racs
             [
                 'k'    => 'szolgaltatasok',
                 'cim'  => 'Szolgáltatások' . $szamlalo(count($szolg)),
-                'html' => self::kepernyore([self::class, 'ful_tetelek'], $szolg, $ugyfelnev, 'Ehhez a munkalaphoz még nincs szolgáltatás.'),
+                'html' => self::kepernyore([self::class, 'ful_tetelek'], $szolg, $ugyfelnev, 'Ehhez a munkalaphoz még nincs szolgáltatás.', $eszkoz_nevek),
             ],
             [
                 'k'    => 'termekek',
                 'cim'  => 'Termékek' . $szamlalo(count($termekek)),
-                'html' => self::kepernyore([self::class, 'ful_tetelek'], $termekek, $ugyfelnev, 'Ehhez a munkalaphoz még nincs termék.'),
+                'html' => self::kepernyore([self::class, 'ful_tetelek'], $termekek, $ugyfelnev, 'Ehhez a munkalaphoz még nincs termék.', $eszkoz_nevek),
             ],
             [
                 'k'    => 'rma',
@@ -1582,7 +1592,7 @@ final class SDH_Muhely_Racs
      * @param array<int, object> $hibak
      * @param array<int, object> $tovabbi A lap további (csatolt) eszközei.
      */
-    private static function ful_munkalap(object $munkalap, ?object $ugyfel, ?object $eszkoz, array $hibak, array $tovabbi = []): void
+    private static function ful_munkalap(object $munkalap, ?object $ugyfel, ?object $eszkoz, array $hibak, array $tovabbi = [], array $bontas = []): void
     {
         $allapotok = SDH_Muhely_Munkalap::allapotok();
         $megjegyzes = trim((string) $munkalap->megjegyzes);
@@ -1664,6 +1674,20 @@ final class SDH_Muhely_Racs
         self::adatsor('Bruttó érték', esc_html(self::penz($brutto) . ' Ft'));
         self::adatsor('Fizetett (előleg)', esc_html(self::penz($fizetett) . ' Ft'));
         self::adatsor('Fizetendő', esc_html(self::penz($fizetendo) . ' Ft'));
+
+        // Több eszköznél: készülékenként külön a végösszeg, az előleg és a fizetendő.
+        if (count($bontas) > 1) {
+            foreach ($bontas as $b) {
+                self::adatsor(
+                    $b['sorszam'] . '. eszköz összege',
+                    esc_html(
+                        $b['nev'] . ': ' . self::penz((float) $b['brutto']) . ' Ft'
+                        . ((float) $b['eloleg'] > 0 ? ' · előleg ' . self::penz((float) $b['eloleg']) . ' Ft' : '')
+                        . ' · fizetendő ' . self::penz((float) $b['fizetendo']) . ' Ft'
+                    )
+                );
+            }
+        }
         self::adatsor(
             'Hibák',
             $hibak !== [] ? esc_html($kesz . ' / ' . count($hibak) . ' kész') : ''
@@ -2084,7 +2108,7 @@ final class SDH_Muhely_Racs
      *
      * @param array<int, object> $tetelek
      */
-    private static function ful_tetelek(array $tetelek, string $vevo, string $ures_szoveg): void
+    private static function ful_tetelek(array $tetelek, string $vevo, string $ures_szoveg, array $eszkoz_nevek = []): void
     {
         $tipusok   = SDH_Muhely_Tetel::tipusok();
         $mozgasok  = SDH_Muhely_Tetel::mozgasok();
@@ -2104,6 +2128,8 @@ final class SDH_Muhely_Racs
 
             $sorok[] = [
                 'sorszam'    => (string) (int) $tetel->id,
+                // Több eszköznél: melyik készülék tétele (ami már nincs a lapon, az a fő eszközé).
+                'eszkoz'     => esc_html($eszkoz_nevek[(int) ($tetel->eszkoz_id ?? 0)] ?? ($eszkoz_nevek[0] ?? '')),
                 'tipus'      => esc_html($tipusok[(string) $tetel->tipus] ?? (string) $tetel->tipus),
                 'mozgas'     => sprintf(
                     '<span class="sdh-mozgas sdh-mozgas--%s">%s</span>',
@@ -2141,8 +2167,9 @@ final class SDH_Muhely_Racs
         }
 
         self::tabla(
-            [
-                'sorszam'    => ['cim' => 'Sorszám', 'igazit' => 'jobb'],
+            ['sorszam' => ['cim' => 'Sorszám', 'igazit' => 'jobb']]
+            + (count($eszkoz_nevek) > 1 ? ['eszkoz' => ['cim' => 'Eszköz']] : [])
+            + [
                 'tipus'      => ['cim' => 'Típus'],
                 'mozgas'     => ['cim' => 'Mozgás'],
                 'allapot'    => ['cim' => 'Állapot'],
