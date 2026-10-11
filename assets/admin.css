@@ -6743,3 +6743,133 @@ dd:hover > .sdh-masol {
     gap: .5rem;
     margin: .2rem 0 1rem;
 }
+
+/* ================================================================== */
+/* 0.46.0 – gyakori megjegyzések, az ügyfél lapjai                     */
+/* ================================================================== */
+
+/* A „Gyakori megjegyzések" gomb a munkalap Megjegyzés fülsávjának jobb szélén. */
+.sdh-megj-gomb {
+    align-self: center;
+    flex: 0 0 auto;
+    height: 28px;
+    margin-left: auto;
+    padding: 0 .7rem;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* A megjegyzések hosszabbak a hibaneveknél: két oszlop. */
+.sdh-gym .sdh-gyh__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Az ügyfél adatlapja: Munkalapok / Rendelések / Vásárlások lapfül. */
+.sdh-fulek__panel--lapok {
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.sdh-ugyfel-lapok__ures,
+.sdh-ugyfel-lapok__ossz {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ugyfel-lapok__ossz b {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ugyfel-lapok {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sdh-ugyfel-lapok a.sdh-ugyfel-lapok__sor {
+    display: grid;
+    grid-template-columns: 4.2rem 6.4rem minmax(0, 1fr) 9rem 10.5rem;
+    align-items: center;
+    gap: .7rem;
+    padding: .3rem .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 12.5px;
+    line-height: 1.25;
+    text-decoration: none;
+}
+
+.sdh-ugyfel-lapok a.sdh-ugyfel-lapok__sor:hover,
+.sdh-ugyfel-lapok a.sdh-ugyfel-lapok__sor:focus-visible {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ugyfel-lapok__szam {
+    color: var(--sdh-accent-szoveg);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-ugyfel-lapok__mi,
+.sdh-ugyfel-lapok__penz {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sdh-ugyfel-lapok__mi,
+.sdh-ugyfel-lapok__mi small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-ugyfel-lapok__mi {
+    display: block;
+}
+
+.sdh-ugyfel-lapok__mi small {
+    display: block;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ugyfel-lapok__penz {
+    align-items: flex-end;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-ugyfel-lapok__sor small {
+    font-size: 11px;
+}
+
+.sdh-ugyfel-lapok__all {
+    justify-self: end;
+}
+
+/* Arculat: a logó előnézete és az egyéni kiemelő szín mezője. */
+.sdh-arculat-logo__elo img {
+    max-height: 44px;
+    max-width: 220px;
+    object-fit: contain;
+}
+
+.sdh-arculat-szin {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.sdh-arculat-szin input[type="color"] {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 34px;
+    padding: 2px;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 7px;
+    background: var(--sdh-felulet);
+}

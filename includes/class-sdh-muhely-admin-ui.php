@@ -283,9 +283,12 @@ final class SDH_Muhely_Admin_UI
     {
         $jog = self::jog();
 
+        // A rendszer neve az Arculatból jön (cégenként más).
+        $rendszer = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : 'Műhely';
+
         add_menu_page(
-            'SDH Műhely',
-            'SDH Műhely',
+            $rendszer,
+            $rendszer,
             $jog,
             self::FOMENU,
             [self::class, 'admin_attekintes'],
@@ -359,6 +362,11 @@ final class SDH_Muhely_Admin_UI
             'window.SDH_MUHELY = ' . wp_json_encode(self::js_beallitas('admin')) . ';',
             'before'
         );
+
+        // Az Arculat beállításából adódó stílus (egyéni kiemelő szín, lekerekítés).
+        if (class_exists('SDH_Muhely_Arculat') && SDH_Muhely_Arculat::stilus_css() !== '') {
+            wp_add_inline_style('sdh-muhely-admin', SDH_Muhely_Arculat::stilus_css());
+        }
 
         // A munkalap-rács csak a kezdőképernyőn él.
         if ($oldal === self::FOMENU) {
@@ -483,7 +491,7 @@ final class SDH_Muhely_Admin_UI
         ?>
         <div class="sdh-fejlec">
             <div class="sdh-fejlec__szoveg">
-                <p class="sdh-fejlec__kalap">SDH Műhely</p>
+                <p class="sdh-fejlec__kalap"><?php echo esc_html(class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : 'Műhely'); ?></p>
                 <h1 class="sdh-fejlec__cim"><?php echo esc_html($cim); ?></h1>
                 <?php if ($alcim !== '') : ?>
                     <p class="sdh-fejlec__alcim"><?php echo esc_html($alcim); ?></p>

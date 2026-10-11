@@ -82,6 +82,18 @@
             maradUzenet = '';
         }
 
+        // Az ügyfél adatlapján egy munkalap / rendelés / vásárlás sora: az ügyfél ablaka fölött nyílik.
+        var lapNyit = cel.closest('[data-sdh-lap-nyit]');
+
+        if (lapNyit && app()) {
+            esemeny.preventDefault();
+            app().nyit('munkalapok', lapNyit.getAttribute('data-sdh-lap-nyit'), {
+                szint: Math.min(Math.max(0, app().sajatSzint(lapNyit)) + 1, 3)
+            });
+
+            return;
+        }
+
         // Új eladás lábléce: melyik gombbal mentik (fizetéssel vagy anélkül).
         var ment = cel.closest('[data-sdh-eladas-ment]');
 

@@ -689,12 +689,29 @@ final class SDH_Muhely_Ugyfel
                 <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--2" name="_ful_also"
                        id="ful_csatolt">
 
+                <?php
+                // Az ügyfél munkalapjai, rendelései és vásárlásai – meglévő ügyfélnél, lapfülenként.
+                $ugyfel_lapok = !$uj && class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::ugyfel_lapok((int) $ugyfel->id) : [];
+                $lap_fulek    = ['javitas' => 'Munkalapok', 'rendeles' => 'Rendelések', 'arukiadas' => 'Vásárlások'];
+                $lap_n        = 2;
+                ?>
+                <?php foreach ($ugyfel_lapok as $lap_fajta => $lap_sorok) : ?>
+                    <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) ++$lap_n; ?>" name="_ful_also"
+                           id="ful_lapok_<?php echo esc_attr($lap_fajta); ?>">
+                <?php endforeach; ?>
+
                 <div class="sdh-fulek__sav">
                     <label for="ful_megjegyzes">Megjegyzés</label>
                     <label for="ful_csatolt">Csatolt fájlok<?php
                         $csat_db = $uj ? 0 : SDH_Muhely_Csatolmany::darab('ugyfel', (int) $ugyfel->id);
                         echo $csat_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $csat_db . '</span>' : '';
                     ?></label>
+                    <?php foreach ($ugyfel_lapok as $lap_fajta => $lap_sorok) : ?>
+                        <label for="ful_lapok_<?php echo esc_attr($lap_fajta); ?>"><?php
+                            echo esc_html($lap_fulek[$lap_fajta]);
+                            echo $lap_sorok !== [] ? ' <span class="sdh-fulek__db">' . (int) count($lap_sorok) . '</span>' : '';
+                        ?></label>
+                    <?php endforeach; ?>
                 </div>
 
                 <div class="sdh-fulek__panel sdh-fulek__panel--1">
@@ -706,6 +723,13 @@ final class SDH_Muhely_Ugyfel
                 <div class="sdh-fulek__panel sdh-fulek__panel--2">
                     <?php SDH_Muhely_Csatolmany::panel('ugyfel', $uj ? 0 : (int) $ugyfel->id); ?>
                 </div>
+
+                <?php $lap_n = 2; ?>
+                <?php foreach ($ugyfel_lapok as $lap_fajta => $lap_sorok) : ?>
+                    <div class="sdh-fulek__panel sdh-fulek__panel--<?php echo (int) ++$lap_n; ?> sdh-fulek__panel--lapok">
+                        <?php SDH_Muhely_Eladas::ugyfel_ful($lap_sorok, (string) $lap_fajta); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
         <div class="sdh-urlap__lablec">

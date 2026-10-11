@@ -39,6 +39,7 @@ final class SDH_Muhely_Munkalap
     private const OPT_SZAMOZAS       = 'sdh_muhely_munkalap_szamozas';
     private const OPT_FIZMODOK       = 'sdh_muhely_fizetesi_modok';
     private const OPT_GYAKORI_HIBAK  = 'sdh_muhely_gyakori_hibak';
+    private const OPT_GYAKORI_MEGJ   = 'sdh_muhely_gyakori_megjegyzesek';
 
     /** Legfeljebb ennyi gyakori hiba tárolódik (a választó popup lapozás nélkül mutatja). */
     private const GYAKORI_HIBA_MAX = 60;
@@ -84,6 +85,9 @@ final class SDH_Muhely_Munkalap
 
         // Új gyakori hiba felvétele a munkalap Hibák lapfüléről.
         add_action('wp_ajax_sdh_muhely_munkalapok_gyakori_hiba', [self::class, 'ajax_gyakori_hiba']);
+
+        // Új gyakori megjegyzés felvétele a munkalap Megjegyzés lapfüléről.
+        add_action('wp_ajax_sdh_muhely_munkalapok_gyakori_megjegyzes', [self::class, 'ajax_gyakori_megjegyzes']);
 
         // Az űrlap Eszköz lapfüle (az eszköz és az ügyfél összefoglalója).
         add_action('wp_ajax_sdh_muhely_munkalapok_osszefoglalo', [self::class, 'ajax_osszefoglalo']);
@@ -1223,6 +1227,90 @@ final class SDH_Muhely_Munkalap
         return $lista;
     }
 
+    /* =================================================================
+     * Gyakori megjegyzések (beállításból)
+     *
+     * A munkalap „Megjegyzés" lapfülén popupból választható, előre megírt
+     * megjegyzések: egy kattintás, és a szöveg a megjegyzés új sora lesz.
+     * Bármelyik állapotban felvehetők, egyszerre több is.
+     * ============================================================== */
+
+    /** A lista alapja – a Beállításokban és a munkalapról is bővíthető. */
+    public static function alap_gyakori_megjegyzesek_szovegkent(): string
+    {
+        return implode("\n", [
+            'Az ügyfél a készülékét időpontra hozza',
+            'Az ügyfél telefonos értesítést kér',
+            'Az ügyfél a javítás előtt árajánlatot kér',
+            'Az ügyfél adatmentést kér',
+            'Sürgős javítás',
+            'A készülék tartozékok nélkül érkezett',
+        ]);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function gyakori_megjegyzesek(): array
+    {
+        $mentett = get_option(self::OPT_GYAKORI_MEGJ, '');
+
+        return self::gyakori_hibak_feldolgoz(
+            is_string($mentett) && trim($mentett) !== '' ? $mentett : self::alap_gyakori_megjegyzesek_szovegkent()
+        );
+    }
+
+    /**
+     * Új gyakori megjegyzés a lista végére. Visszaadja a teljes listát, vagy hibaüzenetet.
+     *
+     * @return array<int, string>|string
+     */
+    public static function gyakori_megjegyzes_felvesz(string $szoveg)
+    {
+        $szoveg = mb_substr(sanitize_text_field($szoveg), 0, 255);
+
+        if ($szoveg === '') {
+            return 'Írd be a megjegyzést.';
+        }
+
+        $lista = self::gyakori_megjegyzesek();
+
+        foreach ($lista as $van) {
+            if (mb_strtolower($van) === mb_strtolower($szoveg)) {
+                return $lista; // Már szerepel: nincs teendő.
+            }
+        }
+
+        if (count($lista) >= self::GYAKORI_HIBA_MAX) {
+            return 'A gyakori megjegyzések listája betelt (' . self::GYAKORI_HIBA_MAX . ' db). A Beállításokban törölhetsz belőle.';
+        }
+
+        $lista[] = $szoveg;
+        update_option(self::OPT_GYAKORI_MEGJ, implode("\n", $lista));
+
+        return $lista;
+    }
+
+    /** Új gyakori megjegyzés felvétele a munkalap Megjegyzés lapfüléről (AJAX). */
+    public static function ajax_gyakori_megjegyzes(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $eredmeny = self::gyakori_megjegyzes_felvesz(
+            isset($_POST['nev']) ? (string) wp_unslash($_POST['nev']) : ''
+        );
+
+        if (is_string($eredmeny)) {
+            wp_send_json_error(['uzenet' => $eredmeny]);
+        }
+
+        wp_send_json_success(['lista' => $eredmeny]);
+    }
+
     /** Új gyakori hiba felvétele a munkalap Hibák lapfüléről (AJAX). */
     public static function ajax_gyakori_hiba(): void
     {
@@ -1433,6 +1521,23 @@ final class SDH_Muhely_Munkalap
             </div>
         </div>
 
+        <div class="sdh-doboz" id="gyakori-megjegyzesek">
+            <h2 class="sdh-doboz__cim">Gyakori megjegyzések</h2>
+
+            <p class="sdh-sugo">
+                Soronként egy megjegyzés – a munkalap Megjegyzés lapfülén a „Gyakori megjegyzések”
+                gombbal egy kattintással felvehetők (egyszerre több is, bármelyik állapotban). Az
+                ügyfél felé is megjelenő megjegyzésbe kerülnek. A kollégák a munkalapról is bővíthetik.
+            </p>
+
+            <div class="sdh-mezo sdh-mezo--szeles">
+                <label for="mu_gyakori_megjegyzesek">Gyakori megjegyzések</label>
+                <textarea name="mu_gyakori_megjegyzesek" id="mu_gyakori_megjegyzesek" rows="8"
+                          class="sdh-kod"><?php echo esc_textarea(implode("\n", self::gyakori_megjegyzesek())); ?></textarea>
+                <span class="sdh-mezo__sugo">Üresen hagyva az alaplista jön vissza.</span>
+            </div>
+        </div>
+
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Hibasor-állapotok</h2>
 
@@ -1496,6 +1601,13 @@ final class SDH_Muhely_Munkalap
             update_option(
                 self::OPT_GYAKORI_HIBAK,
                 implode("\n", self::gyakori_hibak_feldolgoz(sanitize_textarea_field(wp_unslash($_POST['mu_gyakori_hibak']))))
+            );
+        }
+
+        if (isset($_POST['mu_gyakori_megjegyzesek'])) {
+            update_option(
+                self::OPT_GYAKORI_MEGJ,
+                implode("\n", self::gyakori_hibak_feldolgoz(sanitize_textarea_field(wp_unslash($_POST['mu_gyakori_megjegyzesek']))))
             );
         }
 
@@ -3544,6 +3656,12 @@ final class SDH_Muhely_Munkalap
                             <label for="ful_m_belso">Belső megjegyzés<?php
                                 echo trim($megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
                             ?></label>
+                            <?php // Előre megírt megjegyzések popupból (app.js: gyakoriMegjegyzesNyit) – a „Megjegyzés" mezőbe kerülnek. ?>
+                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-megj-gomb" data-sdh-gyakori-megj
+                                    data-sdh-lista="<?php echo esc_attr((string) wp_json_encode(self::gyakori_megjegyzesek(), JSON_UNESCAPED_UNICODE)); ?>"
+                                    title="Előre megírt megjegyzések: egy kattintással a Megjegyzésbe kerülnek, egyszerre több is">
+                                <span class="sdh-plusz" aria-hidden="true"></span>Gyakori megjegyzések
+                            </button>
                         </div>
 
                         <div class="sdh-fulek__panel sdh-fulek__panel--1">

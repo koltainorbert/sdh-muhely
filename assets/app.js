@@ -4302,6 +4302,238 @@
         }
     });
 
+    /* ---- Gyakori megjegyzések: popupból a munkalap „Megjegyzés" mezőjébe ---- */
+
+    /** A megjegyzés sorai (üres sorok nélkül). */
+    function megjSorok(mezo) {
+        return (mezo.value || '').split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+    }
+
+    /**
+     * Előre megírt megjegyzések választója. Kattintásra a szöveg a megjegyzés
+     * új sora lesz; újra kattintva lekerül. Egyszerre több is választható, és
+     * a lista innen is bővíthető. Bármelyik állapotú lapon működik.
+     */
+    function gyakoriMegjegyzesNyit(gomb) {
+        var fulek = gomb.closest('.sdh-fulek');
+        var mezo = fulek ? fulek.querySelector('textarea[name="ugyfel_megjegyzes"]') : null;
+
+        if (!mezo) {
+            return;
+        }
+
+        // A „Megjegyzés" fül kerül elő (a gomb a Belső megjegyzés fülről is elérhető).
+        var megjFul = fulek.querySelector(':scope > .sdh-fulek__ful--1');
+
+        if (megjFul && !megjFul.checked) {
+            megjFul.checked = true;
+            megjFul.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        var lista = [];
+
+        try {
+            lista = JSON.parse(gomb.getAttribute('data-sdh-lista') || '[]') || [];
+        } catch (e) {
+            lista = [];
+        }
+
+        var oldal = 0;
+        var dialog = document.createElement('dialog');
+
+        dialog.className = 'sdh-modal sdh-modal--pop sdh-gyh sdh-gym';
+        dialog.innerHTML = '<div class="sdh-modal__doboz">' + ablakGombok(false) +
+            '  <div class="sdh-modal__torzs">' +
+            '    <h2 class="sdh-modal__cim">Gyakori megjegyzések</h2>' +
+            '    <p class="sdh-modal__alcim">Kattints a megjegyzésre – a munkalap Megjegyzésébe kerül (az ügyfél is látja). Többet is választhatsz; újra kattintva lekerül.</p>' +
+            '    <div class="sdh-gyh__lista" data-gyh-lista role="listbox" aria-multiselectable="true"></div>' +
+            '    <div class="sdh-gyh__lapozo" data-gyh-lapozo hidden>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="-1" aria-label="Előző oldal">' + LAP_NYIL_BAL + '</button>' +
+            '      <span data-gyh-oldal></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
+            '    </div>' +
+            '    <form class="sdh-gyh__uj" data-gyh-uj>' +
+            '      <input type="text" maxlength="255" autocomplete="off" data-gyh-mezo aria-label="Más megjegyzés" placeholder="Más megjegyzés – írd be…">' +
+            '      <button type="submit" class="sdh-gomb sdh-gomb--vilagos"><span class="sdh-plusz" aria-hidden="true"></span>Felvétel</button>' +
+            '      <label class="sdh-jelolo" title="Bepipálva a beírt megjegyzés a gyakori megjegyzések listájára is felkerül, és legközelebb már innen választható.">' +
+            '        <input type="checkbox" data-gyh-listara checked> A gyakori megjegyzések közé is</label>' +
+            '    </form>' +
+            '    <p class="sdh-gyh__uzenet" data-gyh-uzenet role="status"></p>' +
+            '    <div class="sdh-gyh__lab">' +
+            '      <span class="sdh-mezo__sugo" data-gyh-db></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-gyh-kesz>Kész</button>' +
+            '    </div>' +
+            '  </div>' +
+            '</div>';
+        document.body.appendChild(dialog);
+
+        var hely = dialog.querySelector('[data-gyh-lista]');
+        var uzenet = dialog.querySelector('[data-gyh-uzenet]');
+        var MEGJ_OLDAL = 12;
+
+        function bent(szoveg) {
+            var kis = szoveg.toLowerCase();
+
+            return megjSorok(mezo).some(function (s) { return s.toLowerCase() === kis; });
+        }
+
+        function rajzol() {
+            var oldalak = Math.max(1, Math.ceil(lista.length / MEGJ_OLDAL));
+            var db = lista.filter(bent).length;
+
+            oldal = Math.max(0, Math.min(oldal, oldalak - 1));
+            hely.innerHTML = '';
+
+            if (!lista.length) {
+                hely.appendChild(popElem('p', 'sdh-gyh__ures', 'A lista még üres – írd be alul az első megjegyzést.'));
+            }
+
+            lista.slice(oldal * MEGJ_OLDAL, (oldal + 1) * MEGJ_OLDAL).forEach(function (szoveg) {
+                var van = bent(szoveg);
+                var elem = popElem('button', 'sdh-pill sdh-gyh__elem' + (van ? ' is-aktiv' : ''));
+
+                elem.type = 'button';
+                elem.setAttribute('role', 'option');
+                elem.setAttribute('aria-selected', van ? 'true' : 'false');
+                elem.setAttribute('data-gym-szoveg', szoveg);
+                elem.title = van ? szoveg + ' – a megjegyzésben van (kattintásra lekerül)' : szoveg;
+                elem.appendChild(popElem('span', 'sdh-pill__cimke', szoveg));
+                hely.appendChild(elem);
+            });
+
+            dialog.querySelector('[data-gyh-lapozo]').hidden = oldalak <= 1;
+            dialog.querySelector('[data-gyh-oldal]').textContent = (oldal + 1) + ' / ' + oldalak;
+            dialog.querySelector('[data-gyh-lap="-1"]').disabled = oldal <= 0;
+            dialog.querySelector('[data-gyh-lap="1"]').disabled = oldal >= oldalak - 1;
+            dialog.querySelector('[data-gyh-db]').textContent = db ? db + ' gyakori megjegyzés a munkalapon' : '';
+        }
+
+        /** A szöveg sora be a megjegyzésbe / ki belőle; a kézzel írt többi sor érintetlen. */
+        function valt(szoveg, csakBe) {
+            var kis = szoveg.toLowerCase();
+
+            if (bent(szoveg)) {
+                if (csakBe) {
+                    return;
+                }
+
+                mezo.value = (mezo.value || '').split(/\r?\n/).filter(function (s) {
+                    return s.trim().toLowerCase() !== kis;
+                }).join('\n').replace(/^\n+|\n+$/g, '');
+            } else {
+                mezo.value = (mezo.value || '').replace(/\s+$/, '');
+                mezo.value += (mezo.value ? '\n' : '') + szoveg;
+            }
+
+            mezo.dispatchEvent(new Event('input', { bubbles: true }));
+            rajzol();
+        }
+
+        dialog.addEventListener('click', function (esemeny) {
+            var cel = esemeny.target;
+
+            if (cel === dialog || cel.closest('.sdh-modal__bezar') || cel.closest('[data-gyh-kesz]')) {
+                dialog.close();
+
+                return;
+            }
+
+            var elem = cel.closest('[data-gym-szoveg]');
+
+            if (elem) {
+                valt(elem.getAttribute('data-gym-szoveg'), false);
+
+                return;
+            }
+
+            var lap = cel.closest('[data-gyh-lap]');
+
+            if (lap) {
+                oldal += parseInt(lap.getAttribute('data-gyh-lap'), 10);
+                rajzol();
+            }
+        });
+
+        dialog.querySelector('[data-gyh-uj]').addEventListener('submit', function (esemeny) {
+            esemeny.preventDefault();
+            // A munkalap űrlapja ettől nem küldődhet be.
+            esemeny.stopPropagation();
+
+            var beMezo = dialog.querySelector('[data-gyh-mezo]');
+            var szoveg = beMezo.value.trim();
+
+            uzenet.textContent = '';
+            uzenet.className = 'sdh-gyh__uzenet';
+
+            if (!szoveg) {
+                beMezo.focus();
+
+                return;
+            }
+
+            valt(szoveg, true);
+            beMezo.value = '';
+            beMezo.focus();
+
+            if (!dialog.querySelector('[data-gyh-listara]').checked) {
+                return;
+            }
+
+            var adatok = new FormData();
+
+            adatok.set('action', 'sdh_muhely_munkalapok_gyakori_megjegyzes');
+            adatok.set('_wpnonce', beallitas.nonce || '');
+            adatok.set('nev', szoveg);
+
+            fetch(beallitas.ajax, { method: 'POST', body: adatok, credentials: 'same-origin' })
+                .then(function (valasz) { return valasz.json(); })
+                .then(function (valasz) {
+                    if (!valasz || !valasz.success) {
+                        throw new Error((valasz && valasz.data && valasz.data.uzenet) || 'A lista nem bővült.');
+                    }
+
+                    lista = valasz.data.lista || lista;
+
+                    // A még nyitott űrlapok gombjai is az új listát kapják.
+                    Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-gyakori-megj]'), function (g) {
+                        g.setAttribute('data-sdh-lista', JSON.stringify(lista));
+                    });
+
+                    oldal = Math.floor(Math.max(0, lista.length - 1) / MEGJ_OLDAL);
+                    uzenet.textContent = '„' + szoveg + '” felkerült a gyakori megjegyzések közé is.';
+                    uzenet.className = 'sdh-gyh__uzenet is-jo';
+                    rajzol();
+                })
+                .catch(function (ok) {
+                    uzenet.textContent = 'A munkalapra felkerült, de a listára nem: ' + ok.message;
+                    uzenet.className = 'sdh-gyh__uzenet is-hiba';
+                });
+        });
+
+        dialog.addEventListener('close', function () {
+            dialog.remove();
+            mezo.focus();
+        });
+
+        rajzol();
+        dialog.showModal();
+
+        var elso = hely.querySelector('.sdh-gyh__elem') || dialog.querySelector('[data-gyh-mezo]');
+
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-gyakori-megj]') : null;
+
+        if (gomb) {
+            esemeny.preventDefault();
+            gyakoriMegjegyzesNyit(gomb);
+        }
+    });
+
     /**
      * Hibasor eltávolítása. Az utolsó sort nem töröljük, csak kiürítjük,
      * hogy az űrlap mindig mutasson legalább egy sort.

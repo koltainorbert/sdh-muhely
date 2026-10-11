@@ -41,7 +41,7 @@ final class SDH_Muhely_Arculat
      * ============================================================== */
 
     /**
-     * @return array{tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
+     * @return array{logo: string, jel: string, nev: string, szin_egyeni: string, sarok: string, sav: string, tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
      */
     public static function beallitas(): array
     {
@@ -51,9 +51,26 @@ final class SDH_Muhely_Arculat
         $neon = (string) ($mentett['neon'] ?? 'kiemelo');
         $ero  = (string) ($mentett['neon_ero'] ?? 'kozepes');
 
+        $sarok = (string) ($mentett['sarok'] ?? 'normal');
+        $sav   = (string) ($mentett['sav'] ?? 'vilagos');
+        $egyeni = self::hex((string) ($mentett['szin_egyeni'] ?? ''));
+        $szin   = (string) ($mentett['szin'] ?? '');
+
+        // Egyéni kiemelő szín csak érvényes színkóddal él; különben az alapszín.
+        if ($szin === 'egyeni' && $egyeni === '') {
+            $szin = '';
+        }
+
         return [
+            // A rendszer jele és neve (oldalsáv, címsor) és a logó – cégenként más, ezért beállítás.
+            'logo'        => esc_url_raw((string) ($mentett['logo'] ?? '')),
+            'jel'         => isset($mentett['jel']) ? (string) $mentett['jel'] : 'SDH',
+            'nev'         => isset($mentett['nev']) ? (string) $mentett['nev'] : 'Műhely',
+            'szin_egyeni' => $egyeni,
+            'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
+            'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',
             'tema'        => (string) ($mentett['tema'] ?? 'rendszer'),
-            'szin'        => (string) ($mentett['szin'] ?? ''),
+            'szin'        => $szin,
             // A popupok neon kerete: melyik szín világít (üres = kikapcsolva).
             'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
             'neon_egyeni' => self::hex((string) ($mentett['neon_egyeni'] ?? '')),
@@ -96,6 +113,91 @@ final class SDH_Muhely_Arculat
         ];
     }
 
+    /**
+     * A lekerekítés fokozatai: kulcs => [név, kis sugár, nagy sugár].
+     *
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function sarkok(): array
+    {
+        return [
+            'szogletes' => ['Szögletes', '3px', '4px'],
+            'normal'    => ['Normál', '8px', '12px'],
+            'kerek'     => ['Kerek', '13px', '20px'],
+        ];
+    }
+
+    /**
+     * Az oldalsáv (műhely-felület) stílusai.
+     *
+     * @return array<string, string>
+     */
+    public static function savok(): array
+    {
+        return [
+            'vilagos' => 'Világos (a felület színe)',
+            'sotet'   => 'Sötét',
+            'szines'  => 'A kiemelő színnel kitöltve',
+        ];
+    }
+
+    /** A rendszer teljes neve: jel + név (pl. „SDH Műhely") – címsor, morzsa, menü. */
+    public static function rendszer_nev(): string
+    {
+        $b   = self::beallitas();
+        $nev = trim($b['jel'] . ' ' . $b['nev']);
+
+        return $nev !== '' ? $nev : 'Műhely';
+    }
+
+    /** A színkód három összetevője (0–255). */
+    private static function rgb(string $hex): array
+    {
+        return [hexdec(substr($hex, 1, 2)), hexdec(substr($hex, 3, 2)), hexdec(substr($hex, 5, 2))];
+    }
+
+    /** A szín keverése feketével (negatív arány) vagy fehérrel (pozitív), -1…1. */
+    private static function arnyalat(string $hex, float $arany): string
+    {
+        $cel = $arany < 0 ? 0 : 255;
+        $a   = min(1.0, abs($arany));
+
+        return sprintf('#%02x%02x%02x', ...array_map(static fn (int $c): int => (int) round($c + ($cel - $c) * $a), self::rgb($hex)));
+    }
+
+    /**
+     * A beállításból adódó stílus: az egyéni kiemelő szín változói és a
+     * lekerekítés. Mindkét felület (műhely és wp-admin) a saját stíluslapja
+     * után kapja meg. Üres, ha minden az alapértelmezés.
+     */
+    public static function stilus_css(): string
+    {
+        $b   = self::beallitas();
+        $css = '';
+
+        if ($b['szin_egyeni'] !== '') {
+            $hex       = $b['szin_egyeni'];
+            [$r, $g, $k] = self::rgb($hex);
+            // Világos kiemelő színen a fehér felirat olvashatatlan: ott sötét a felirat.
+            $vilagos   = (0.299 * $r + 0.587 * $g + 0.114 * $k) > 160;
+
+            $css .= ':root[data-accent="egyeni"]{--sdh-accent:' . $hex
+                . ';--sdh-accent-sotet:' . self::arnyalat($hex, -0.18)
+                . ';--sdh-accent-halvany:rgba(' . $r . ',' . $g . ',' . $k . ',.1)'
+                . ';--sdh-accent-felirat:' . ($vilagos ? '#16191d' : '#ffffff')
+                // Világos kiemelő szín szövegként fehér háttéren halvány volna: sötétebb árnyalat áll a helyén.
+                . ($vilagos ? ';--sdh-accent-szoveg:' . self::arnyalat($hex, -0.45) : '') . '}'
+                . ':root[data-theme="dark"][data-accent="egyeni"]{--sdh-accent-szoveg:' . self::arnyalat($hex, $vilagos ? 0.1 : 0.4) . '}';
+        }
+
+        if ($b['sarok'] !== 'normal') {
+            $s    = self::sarkok()[$b['sarok']];
+            $css .= ':root{--sdh-r:' . $s[1] . ';--sdh-r-nagy:' . $s[2] . '}';
+        }
+
+        return $css;
+    }
+
     /** Érvényes #rrggbb színkód, vagy üres sztring. */
     private static function hex(string $ertek): string
     {
@@ -117,12 +219,14 @@ final class SDH_Muhely_Arculat
     public static function szinek(): array
     {
         return [
-            ''            => ['nev' => 'SDH piros', 'hex' => '#d4231d'],
+            ''            => ['nev' => 'Piros (alap)', 'hex' => '#d4231d'],
             'kek'         => ['nev' => 'Kék', 'hex' => '#2563eb'],
             'smaragd'     => ['nev' => 'Smaragd', 'hex' => '#047857'],
             'ibolya'      => ['nev' => 'Ibolya', 'hex' => '#6d28d9'],
             'borostyan'   => ['nev' => 'Borostyán', 'hex' => '#b45309'],
             'palaszurke'  => ['nev' => 'Palaszürke', 'hex' => '#475569'],
+            // A cég saját színe: a színkódja az Arculat képernyőn adható meg.
+            'egyeni'      => ['nev' => 'Egyéni szín', 'hex' => ''],
         ];
     }
 
@@ -169,6 +273,48 @@ final class SDH_Muhely_Arculat
                 <input type="hidden" name="action" value="sdh_muhely_arculat">
                 <?php wp_nonce_field('sdh_muhely_arculat', 'sdh_nonce'); ?>
 
+                <div class="sdh-doboz" id="logo">
+                    <h2 class="sdh-doboz__cim">Logó és név</h2>
+
+                    <p class="sdh-sugo">
+                        Ez látszik a műhely-felület bal felső sarkában, a böngészőfül címében és a menüben.
+                        Ha töltesz fel logót, az áll a színes jel helyén; logó nélkül a jel (néhány betű) látszik.
+                        A név a logó / jel mellett áll – üresen hagyva csak a logó marad.
+                    </p>
+
+                    <div class="sdh-mezok">
+                        <div class="sdh-mezo sdh-mezo--szeles">
+                            <label for="arculat_logo">Logó</label>
+                            <div class="sdh-rma-media" data-sdh-media="image">
+                                <input type="text" name="arculat_logo" id="arculat_logo"
+                                       value="<?php echo esc_attr($b['logo']); ?>" placeholder="https://… – vagy válassz a médiatárból">
+                                <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Kiválasztás…</button>
+                                <button type="button" class="sdh-gomb" data-sdh-media-torol<?php echo $b['logo'] === '' ? ' hidden' : ''; ?>>Törlés</button>
+                                <span class="sdh-rma-media__elo sdh-arculat-logo__elo" data-sdh-media-elo>
+                                    <?php if ($b['logo'] !== '') : ?>
+                                        <img src="<?php echo esc_url($b['logo']); ?>" alt="">
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                            <span class="sdh-mezo__sugo">Átlátszó hátterű PNG vagy SVG a legjobb; 28 képpont magasan jelenik meg, a szélessége legfeljebb 150 képpont.</span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_jel">Jel (logó nélkül ez látszik)</label>
+                            <input type="text" name="arculat_jel" id="arculat_jel" maxlength="4" autocomplete="off"
+                                   value="<?php echo esc_attr($b['jel']); ?>">
+                            <span class="sdh-mezo__sugo">Legfeljebb 4 betű.</span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_nev">Név</label>
+                            <input type="text" name="arculat_nev" id="arculat_nev" maxlength="30" autocomplete="off"
+                                   value="<?php echo esc_attr($b['nev']); ?>">
+                            <span class="sdh-mezo__sugo">A rendszer neve most: <strong><?php echo esc_html(self::rendszer_nev()); ?></strong></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">Alapértelmezett megjelenés</h2>
 
@@ -199,6 +345,37 @@ final class SDH_Muhely_Arculat
                                         <?php selected($b['szin'], $kulcs); ?>>
                                         <?php echo esc_html($szin['nev']); ?>
                                     </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_szin_egyeni">Egyéni kiemelő szín</label>
+                            <div class="sdh-rma-szin sdh-arculat-szin">
+                                <input type="color" id="arculat_szin_valaszto" aria-label="Színválasztó"
+                                       value="<?php echo esc_attr($b['szin_egyeni'] !== '' ? $b['szin_egyeni'] : '#d4231d'); ?>"
+                                       data-sdh-szin-cel="arculat_szin_egyeni">
+                                <input type="text" name="arculat_szin_egyeni" id="arculat_szin_egyeni" maxlength="7"
+                                       pattern="#?[0-9a-fA-F]{6}" placeholder="#0a84ff" autocomplete="off"
+                                       value="<?php echo esc_attr($b['szin_egyeni']); ?>">
+                            </div>
+                            <span class="sdh-mezo__sugo">A cég saját színe. A fenti listában az „Egyéni szín”-t választva lesz ez a kiemelő szín.</span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_sarok">Sarkok lekerekítése</label>
+                            <select name="arculat_sarok" id="arculat_sarok">
+                                <?php foreach (self::sarkok() as $kulcs => $s) : ?>
+                                    <option value="<?php echo esc_attr($kulcs); ?>" <?php selected($b['sarok'], $kulcs); ?>><?php echo esc_html($s[0]); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_sav">Oldalsáv (menü) a műhely-felületen</label>
+                            <select name="arculat_sav" id="arculat_sav">
+                                <?php foreach (self::savok() as $kulcs => $cimke) : ?>
+                                    <option value="<?php echo esc_attr($kulcs); ?>" <?php selected($b['sav'], $kulcs); ?>><?php echo esc_html($cimke); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -415,9 +592,24 @@ final class SDH_Muhely_Arculat
             $neon = 'kiemelo';
         }
 
+        $szin_egyeni = self::hex(isset($_POST['arculat_szin_egyeni']) ? sanitize_text_field(wp_unslash($_POST['arculat_szin_egyeni'])) : '');
+        $sarok       = isset($_POST['arculat_sarok']) ? sanitize_key(wp_unslash($_POST['arculat_sarok'])) : 'normal';
+        $sav         = isset($_POST['arculat_sav']) ? sanitize_key(wp_unslash($_POST['arculat_sav'])) : 'vilagos';
+
+        // Egyéni kiemelő szín csak érvényes színkóddal választható.
+        if ($szin === 'egyeni' && $szin_egyeni === '') {
+            $szin = '';
+        }
+
         update_option(
             'sdh_muhely_arculat',
             [
+                'logo'        => isset($_POST['arculat_logo']) ? esc_url_raw(trim((string) wp_unslash($_POST['arculat_logo']))) : '',
+                'jel'         => mb_substr(sanitize_text_field(isset($_POST['arculat_jel']) ? wp_unslash($_POST['arculat_jel']) : ''), 0, 4),
+                'nev'         => mb_substr(sanitize_text_field(isset($_POST['arculat_nev']) ? wp_unslash($_POST['arculat_nev']) : ''), 0, 30),
+                'szin_egyeni' => $szin_egyeni,
+                'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
+                'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',
                 'tema'        => isset(self::temak()[$tema]) ? $tema : 'rendszer',
                 'szin'        => isset(self::szinek()[$szin]) ? $szin : '',
                 'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',

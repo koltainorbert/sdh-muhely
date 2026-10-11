@@ -660,3 +660,65 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__jelveny {
 .sdh-szin--neon-egyeni {
     background: conic-gradient(var(--sdh-popneon-cian), var(--sdh-popneon-magenta), var(--sdh-popneon-narancs), var(--sdh-popneon-lime), var(--sdh-popneon-cian));
 }
+
+/* ================================================================== */
+/* 0.46.0 – Arculat: logó, sötét / színes oldalsáv                     */
+/* ================================================================== */
+
+/* A feltöltött logó a színes jel helyén: 28 képpont magas, arányosan. */
+.sdh-sav__logo {
+    flex: 0 1 auto;
+    display: block;
+    height: 28px;
+    width: auto;
+    max-width: 150px;
+    min-width: 0;
+    object-fit: contain;
+    object-position: left center;
+}
+
+body.sdh-app[data-sav="csukva"] .sdh-sav__logo {
+    max-width: 34px;
+    object-position: center;
+}
+
+@media (max-width: 760px) {
+    body.sdh-app .sdh-sav__logo {
+        max-width: 34px;
+        object-position: center;
+    }
+}
+
+/*
+ * Sötét, illetve a kiemelő színnel kitöltött oldalsáv: a sávon belül a
+ * felület színváltozói kapnak új értéket, így a menü minden eleme (linkek,
+ * ikonok, kijelölés) magától igazodik.
+ */
+body.sdh-app[data-sdh-sav-stilus="sotet"] .sdh-sav {
+    --sdh-felulet: #15181c;
+    --sdh-felulet-2: #23272d;
+    --sdh-keret: #2b3036;
+    --sdh-szoveg: #f1f3f5;
+    --sdh-szoveg-2: #c3c9d1;
+    --sdh-halvany: #8d95a0;
+    --sdh-accent-halvany: color-mix(in srgb, var(--sdh-accent) 34%, transparent);
+    --sdh-accent-szoveg: #ffffff;
+}
+
+body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav {
+    --sdh-felulet: var(--sdh-accent);
+    --sdh-felulet-2: color-mix(in srgb, var(--sdh-accent-felirat) 14%, transparent);
+    --sdh-keret: transparent;
+    --sdh-szoveg: var(--sdh-accent-felirat);
+    --sdh-szoveg-2: color-mix(in srgb, var(--sdh-accent-felirat) 88%, transparent);
+    --sdh-halvany: color-mix(in srgb, var(--sdh-accent-felirat) 68%, transparent);
+    --sdh-accent-halvany: color-mix(in srgb, var(--sdh-accent-felirat) 22%, transparent);
+    --sdh-accent-szoveg: var(--sdh-accent-felirat);
+}
+
+/* Színes sávon a jel és az olvasatlan-jelvény fordított színű, különben eltűnne. */
+body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav__jel,
+body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav__jelveny {
+    background: var(--sdh-accent-felirat);
+    color: var(--sdh-accent);
+}

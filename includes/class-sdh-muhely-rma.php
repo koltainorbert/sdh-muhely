@@ -231,7 +231,8 @@ final class SDH_Muhely_Rma
     {
         $oldal = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        if ($oldal !== SDH_Muhely_Admin_UI::FOMENU . '-' . SDH_Muhely_Beallitasok::KULCS) {
+        // A Beállítások és az Arculat (logó, egyéni szín) oldalán kell.
+        if (!in_array($oldal, [SDH_Muhely_Admin_UI::FOMENU . '-' . SDH_Muhely_Beallitasok::KULCS, SDH_Muhely_Admin_UI::FOMENU . '-arculat'], true)) {
             return;
         }
 

@@ -61,6 +61,19 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.46.0
+- **Az ügyfél adatlapján látszanak a rendelései és a vásárlásai.** Három új lapfül az ügyfél ablakának alján:
+  Munkalapok, Rendelések, Vásárlások – darabszámmal, összeggel, tartozással. Egy sorra kattintva a lap az ügyfél
+  ablaka fölött nyílik meg.
+- **Gyakori megjegyzések.** A munkalap (és az árukiadás, rendelés) Megjegyzés fülén új gomb: popupból, egy
+  kattintással kerül a megjegyzésbe az előre megírt szöveg – egyszerre több is, bármelyik állapotban; újra kattintva
+  lekerül. Az első: „Az ügyfél a készülékét időpontra hozza". A lista a popupból és a Beállításokban is bővíthető.
+- **Arculat: logó és design az adminból.** Feltölthető logó (a színes jel helyére), átírható a jel és a név – ez
+  jelenik meg az oldalsávban, a böngészőfül címében és a menüben. Egyéni kiemelő szín színkóddal (a cég saját
+  színe), a sarkok lekerekítése (szögletes / normál / kerek), és az oldalsáv stílusa (világos / sötét / a kiemelő
+  színnel kitöltve).
+- Új teszt: `t31-megjegyzes-ugyfel-arculat`. Séma nem változott.
+
 ### 0.45.0
 - **Napi árukiadás.** Új menüpont, csempe és gomb az Áttekintésen: pultos eladás javítás nélkül – termék és / vagy
   szolgáltatás, fizetéssel. Ugyanaz a lap, mint a munkalap (fizetés, előleg, számla, pénztár), csak eszköz, hibák

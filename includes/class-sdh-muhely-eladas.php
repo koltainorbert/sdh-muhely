@@ -922,6 +922,129 @@ final class SDH_Muhely_Eladas
     }
 
     /* =================================================================
+     * Az ügyfél adatlapja: munkalapjai, rendelései, vásárlásai
+     * ============================================================== */
+
+    /**
+     * Az ügyfél lapjai fajtánként (javitas / rendeles / arukiadas), a legfrissebb elöl.
+     *
+     * @return array<string, array<int, object>>
+     */
+    public static function ugyfel_lapok(int $ugyfel_id): array
+    {
+        global $wpdb;
+
+        $ki = ['javitas' => [], 'rendeles' => [], 'arukiadas' => []];
+
+        if ($ugyfel_id <= 0) {
+            return $ki;
+        }
+
+        $sorok = $wpdb->get_results($wpdb->prepare(
+            'SELECT m.*, e.gyarto AS e_gyarto, e.tipus AS e_tipus, e.megnevezes AS e_megnevezes
+             FROM ' . SDH_Muhely_Schema::tabla('munkalap') . ' m
+             LEFT JOIN ' . SDH_Muhely_Schema::tabla('eszkoz') . ' e ON e.id = m.eszkoz_id
+             WHERE m.ugyfel_id = %d
+             ORDER BY (m.munkalap_szam IS NULL) ASC, m.munkalap_szam DESC, m.id DESC
+             LIMIT 300',
+            $ugyfel_id
+        ));
+
+        foreach ((array) $sorok as $sor) {
+            $ki[SDH_Muhely_Munkalap::fajta_ervenyes((string) ($sor->fajta ?? ''))][] = $sor;
+        }
+
+        return $ki;
+    }
+
+    /**
+     * Az ügyfél-adatlap egy lapfülének tartalma: az adott fajta lapjai. Egy sor =
+     * egy lap; kattintásra az ügyfél ablaka fölött nyílik meg (eladas.js:
+     * data-sdh-lap-nyit). Görgetősáv helyett lapoz (rma.js: data-sdh-lapoz).
+     *
+     * @param array<int, object> $sorok
+     */
+    public static function ugyfel_ful(array $sorok, string $fajta): void
+    {
+        if ($sorok === []) {
+            echo '<p class="sdh-ugyfel-lapok__ures">' . esc_html([
+                'javitas'   => 'Ennek az ügyfélnek még nincs munkalapja.',
+                'rendeles'  => 'Ennek az ügyfélnek még nincs rendelése.',
+                'arukiadas' => 'Ennek az ügyfélnek még nincs vásárlása (napi árukiadás a nevére).',
+            ][$fajta]) . '</p>';
+
+            return;
+        }
+
+        $allapotok = SDH_Muhely_Munkalap::allapotok();
+        $tetelek   = self::tetel_osszefoglalok(array_map(static fn (object $s): int => (int) $s->id, $sorok));
+        $beszallitok = $fajta === 'rendeles' ? self::torzs_nevek('beszallitok') : [];
+        $brutto    = 0.0;
+        $tartozas  = 0.0;
+
+        foreach ($sorok as $sor) {
+            // Az érvénytelen lap nem számít bele az összegekbe.
+            if (!empty($allapotok[(string) $sor->allapot]['ervenytelen'])) {
+                continue;
+            }
+
+            $brutto   += (float) $sor->brutto_ertek;
+            $tartozas += (int) $sor->fizetve === 1 ? 0.0 : max(0.0, (float) $sor->brutto_ertek - (float) $sor->fizetett);
+        }
+
+        printf(
+            '<p class="sdh-ugyfel-lapok__ossz">%d db · összesen <b>%s</b>%s</p>',
+            count($sorok),
+            esc_html(self::penz($brutto)),
+            $tartozas > 0.5 ? ' · <span class="sdh-eladas__fizetendo">még fizetendő: ' . esc_html(self::penz($tartozas)) . '</span>' : ''
+        );
+
+        echo '<div class="sdh-ugyfel-lapok" data-sdh-lapoz="4">';
+
+        foreach ($sorok as $sor) {
+            $id      = (int) $sor->id;
+            $fizetve = (int) $sor->fizetve === 1;
+            $hatra   = $fizetve ? 0.0 : (float) $sor->brutto_ertek - (float) $sor->fizetett;
+
+            if ($fajta === 'javitas') {
+                $eszkoz = trim((string) $sor->e_gyarto . ' ' . ((string) $sor->e_tipus !== '' ? (string) $sor->e_tipus : (string) $sor->e_megnevezes));
+                $mi     = $eszkoz !== '' ? $eszkoz : '—';
+                $resz   = $tetelek[$id] ?? (string) $sor->nev;
+            } else {
+                $mi   = $tetelek[$id] ?? '—';
+                $resz = $fajta === 'rendeles'
+                    ? trim(($beszallitok[(int) $sor->beszallito_id] ?? '') . ((string) $sor->rend_szam !== '' ? ' · ' . $sor->rend_szam : ''), ' ·')
+                    : (string) $sor->nev;
+            }
+
+            printf(
+                '<a href="#" class="sdh-ugyfel-lapok__sor" data-sdh-lap-nyit="%d" title="Megnyitás">'
+                . '<b class="sdh-ugyfel-lapok__szam">%s</b>'
+                . '<span class="sdh-ugyfel-lapok__datum">%s</span>'
+                . '<span class="sdh-ugyfel-lapok__mi">%s%s</span>'
+                . '<span class="sdh-ugyfel-lapok__penz">%s%s</span>'
+                . '<span class="sdh-ugyfel-lapok__all">%s</span>'
+                . '</a>',
+                $id,
+                esc_html(SDH_Muhely_Munkalap::szam_formaz($sor->munkalap_szam)),
+                esc_html(SDH_Muhely_Munkalap::datum_megjelenit((string) $sor->keszult)),
+                esc_html($mi),
+                $resz !== '' ? '<small>' . esc_html($resz) . '</small>' : '',
+                esc_html(self::penz((float) $sor->brutto_ertek)),
+                $fizetve
+                    ? '<small class="sdh-eladas__fizetve">fizetve</small>'
+                    : ($hatra > 0.5 ? '<small class="sdh-eladas__fizetendo">fizetendő: ' . esc_html(self::penz($hatra)) . '</small>' : ''),
+                // Rendelésnél a rendelés útja a lényeg, a többinél a lap állapota.
+                $fajta === 'rendeles' && empty($allapotok[(string) $sor->allapot]['zart'])
+                    ? self::rend_jelveny((string) $sor->rend_allapot)
+                    : SDH_Muhely_Munkalap::jelveny((string) $sor->allapot, $allapotok)
+            );
+        }
+
+        echo '</div>';
+    }
+
+    /* =================================================================
      * Listák
      * ============================================================== */
 

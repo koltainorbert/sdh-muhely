@@ -314,7 +314,7 @@ final class SDH_Muhely_Frontend
             <meta charset="<?php bloginfo('charset'); ?>">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="robots" content="noindex, nofollow">
-            <title><?php echo esc_html($cim); ?> – SDH Műhely</title>
+            <title><?php echo esc_html($cim . ' – ' . SDH_Muhely_Arculat::rendszer_nev()); ?></title>
 
             <script>
                 /* A mentett megjelenés még a stílusok előtt beáll, hogy
@@ -360,13 +360,25 @@ final class SDH_Muhely_Frontend
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
             <?php endif; ?>
+            <?php // Az Arculat beállításából adódó stílus (egyéni kiemelő szín, lekerekítés) – a stíluslapok után. ?>
+            <?php if (SDH_Muhely_Arculat::stilus_css() !== '') : ?>
+                <style id="sdh-arculat"><?php echo SDH_Muhely_Arculat::stilus_css(); // phpcs:ignore WordPress.Security.EscapeOutput -- csak ellenőrzött színkódok és rögzített értékek. ?></style>
+            <?php endif; ?>
         </head>
-        <body class="sdh-app" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>">
+        <?php $sdh_arc = SDH_Muhely_Arculat::beallitas(); ?>
+        <body class="sdh-app" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>" data-sdh-sav-stilus="<?php echo esc_attr($sdh_arc['sav']); ?>">
 
         <aside class="sdh-sav">
-            <a class="sdh-sav__fej" href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>">
-                <span class="sdh-sav__jel">SDH</span>
-                <span class="sdh-sav__nev">Műhely</span>
+            <a class="sdh-sav__fej" href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>" title="<?php echo esc_attr(SDH_Muhely_Arculat::rendszer_nev()); ?>">
+                <?php // Logó (Arculat), enélkül a színes jel néhány betűvel; mellette a név. ?>
+                <?php if ($sdh_arc['logo'] !== '') : ?>
+                    <img class="sdh-sav__logo" src="<?php echo esc_url($sdh_arc['logo']); ?>" alt="<?php echo esc_attr(SDH_Muhely_Arculat::rendszer_nev()); ?>">
+                <?php elseif ($sdh_arc['jel'] !== '') : ?>
+                    <span class="sdh-sav__jel"><?php echo esc_html($sdh_arc['jel']); ?></span>
+                <?php endif; ?>
+                <?php if ($sdh_arc['nev'] !== '') : ?>
+                    <span class="sdh-sav__nev"><?php echo esc_html($sdh_arc['nev']); ?></span>
+                <?php endif; ?>
             </a>
 
             <a class="sdh-sav__link <?php echo $aktiv_kulcs === 'attekintes' ? 'sdh-sav__link--aktiv' : ''; ?>"
@@ -416,7 +428,7 @@ final class SDH_Muhely_Frontend
             </button>
 
             <nav class="sdh-fej__morzsa" aria-label="Hol vagyok">
-                <a href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>">SDH Műhely</a>
+                <a href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>"><?php echo esc_html(SDH_Muhely_Arculat::rendszer_nev()); ?></a>
                 <span>/</span>
                 <strong><?php echo esc_html($cim); ?></strong>
             </nav>
@@ -457,6 +469,11 @@ final class SDH_Muhely_Frontend
                             <button type="button" class="sdh-szin sdh-szin--ibolya" data-ertek="ibolya" aria-label="Ibolya"></button>
                             <button type="button" class="sdh-szin sdh-szin--borostyan" data-ertek="borostyan" aria-label="Borostyán"></button>
                             <button type="button" class="sdh-szin sdh-szin--palaszurke" data-ertek="palaszurke" aria-label="Palaszürke"></button>
+                            <?php // A cég egyéni színe csak akkor választható, ha az Arculatban megadták. ?>
+                            <?php if ($sdh_arc['szin_egyeni'] !== '') : ?>
+                                <button type="button" class="sdh-szin sdh-szin--egyeni" data-ertek="egyeni" aria-label="A cég egyéni színe"
+                                        style="background: <?php echo esc_attr($sdh_arc['szin_egyeni']); ?>"></button>
+                            <?php endif; ?>
                         </div>
 
                         <p class="sdh-profil__cim">Popup neon keret</p>
@@ -523,7 +540,7 @@ final class SDH_Muhely_Frontend
             <meta charset="<?php bloginfo('charset'); ?>">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="robots" content="noindex, nofollow">
-            <title>Nincs jogosultság – SDH Műhely</title>
+            <title><?php echo esc_html("Nincs jogosultság – " . SDH_Muhely_Arculat::rendszer_nev()); ?></title>
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
             <link rel="stylesheet"
