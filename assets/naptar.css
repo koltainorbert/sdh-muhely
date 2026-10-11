@@ -592,38 +592,51 @@
 
 /* ---- Jelek, pöttyök, avatar ---- */
 
+/*
+ * Az esemény címe utáni kis jelek (fontos, ismétlődő, e-mail, privát). A
+ * méretük a szöveg betűméretéhez igazodik (em), és a sor közepére ülnek –
+ * így nem csúsznak a szöveg alá, akármekkora a betű.
+ */
 .sdh-np-jel {
-    display: inline-grid;
-    place-items: center;
-    margin-left: calc(3px * var(--sdh-n));
+    position: relative;
+    top: -.06em;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 1.2em;
+    margin-left: .35em;
     font-style: normal;
-    vertical-align: calc(-2px * var(--sdh-n));
+    line-height: 1;
+    vertical-align: middle;
     opacity: .75;
 }
 
 .sdh-np-jel svg {
-    width: calc(11px * var(--sdh-n));
-    height: calc(11px * var(--sdh-n));
+    width: .95em;
+    height: .95em;
 }
 
+/* Fontos (!) és nagyon fontos (!!): tömör, telt színű pötty – fényudvar nélkül. */
 .sdh-np-jel--fontos,
 .sdh-np-jel--kritikus {
-    min-width: calc(13px * var(--sdh-n));
-    height: calc(13px * var(--sdh-n));
-    padding: 0 calc(2px * var(--sdh-n));
+    min-width: 1.2em;
+    padding: 0 .32em;
     border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-neon-fontos, var(--sdh-figyelem));
-    color: #1b1300;
-    font-size: calc(9px * var(--sdh-n));
+    color: #ffffff;
+    font-size: .68em;
     font-weight: 800;
-    line-height: calc(13px * var(--sdh-n));
+    letter-spacing: .04em;
+    font-variant-numeric: normal;
+    text-indent: .04em;
     opacity: 1;
 }
 
 .sdh-np-jel--kritikus {
     background: var(--np-most);
     color: #ffffff;
-    box-shadow: 0 0 8px var(--np-most);
 }
 
 .sdh-np-potty {

@@ -243,7 +243,13 @@ T::tartalmaz($ora, 'data-het="{&quot;1&quot;:[&quot;09:00&quot;,&quot;17:00&quot
 T::tartalmaz($ora, 'data-most="' . substr(current_time('mysql'), 0, 10) . 'T', 'az óra megkapja a szerver idejét');
 T::tartalmaz($ora, 'data-sdh-ora-zaras', 'az órán ott a visszaszámláló helye');
 T::tartalmaz($ora, 'data-sdh-ora-mp', 'másodperc is látszik');
-T::tartalmaz($att !== '' ? (static function (): string { ob_start(); SDH_Muhely_Admin_UI::attekintes_tartalom(false); return (string) ob_get_clean(); })() : '', 'data-sdh-ora', 'az óra az Áttekintés fejlécében van');
+// 0.51: a műhely-felületen az óra a felső fejlécben áll (minden oldalon), nem az Áttekintés állapotsorában.
+$att_fe = (static function (): string { ob_start(); SDH_Muhely_Admin_UI::attekintes_tartalom(false); return (string) ob_get_clean(); })();
+$att_wp = (static function (): string { ob_start(); SDH_Muhely_Admin_UI::attekintes_tartalom(true); return (string) ob_get_clean(); })();
+T::nem_tartalmaz($att_fe, 'data-sdh-ora', 'a műhely-felület Áttekintésén nincs óra (a fejlécben van)');
+T::tartalmaz($att_wp, 'data-sdh-ora', 'a wp-adminban (nincs saját fejléc) az óra az Áttekintésen marad');
+T::tartalmaz($NY::ora_html('fej'), 'class="sdh-ora sdh-ora--fej"', 'a fejléc órája a tömör változat');
+T::tartalmaz($NY::ora_html('fej'), 'data-sdh-ora-zaras', 'a fejléc óráján is ott a visszaszámláló');
 
 // Kikapcsolható; a másodperc is.
 $bment(['ful' => 'nyitvatartas', 'nyitva_jelen' => '1', 'nyitva' => $nyitva, 'nyitva_ora' => '1', 'nyitva_figyelmeztet' => '0']);

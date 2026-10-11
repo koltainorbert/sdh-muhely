@@ -1220,7 +1220,9 @@ final class SDH_Muhely_Szolgaltatas
 
             // Tétel: a sor végén ár (vagy ársáv), utána Ft / HUF / ,- .
             if (preg_match('/^(.*?\S)\s*:?\s+(' . $am . ')(?:\s*(?:Ft|HUF))?(?:\s*[–—-]\s*(' . $am . '))?\s*(Ft|HUF|,-|\.-)?\.?\s*$/u', $sor, $m)
-                && (($m[4] ?? '') !== '' || preg_match('/\D/', $m[2]) || self::ar_szam($m[2]) >= 1000)) {
+                // Ár-e a sor végi szám: ha pénznem áll utána (akár ezer forint alatt is: „Fóliázás 500 Ft"),
+                // ha tagolt (8.000), vagy ha legalább ezer. A puszta kis szám („Mobiltelefon 100") nem ár.
+                && (($m[4] ?? '') !== '' || preg_match('/(?:Ft|HUF|,-|\.-)\.?\s*$/u', $sor) === 1 || preg_match('/\D/', $m[2]) || self::ar_szam($m[2]) >= 1000)) {
                 $nev   = trim($m[1], " :");
                 $ar    = self::ar_szam($m[2]);
                 $max   = isset($m[3]) && $m[3] !== '' ? self::ar_szam($m[3]) : 0.0;

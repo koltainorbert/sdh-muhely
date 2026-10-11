@@ -7886,3 +7886,276 @@ a.sdh-ora__zaras--nincs {
 :where(.sdh-app, .sdh-wrap, .sdh-modal, .sdh-menu) :where(input, select, button, optgroup) {
     font-family: inherit;
 }
+
+
+/* ================================================================== */
+/* 0.51 – óra a fejlécben, nyugodtabb betűnagyító, Papír megjelenés,    */
+/*        kékfény-szűrő                                                */
+/* ================================================================== */
+
+/* ---- Az óra tömör változata a műhely-felület felső fejlécében ---- */
+
+.sdh-ora--fej {
+    flex: 0 0 auto;
+    gap: .5rem;
+    height: calc(36px * var(--sdh-n));
+    margin-right: .35rem;
+    padding: 0 .8rem 0 .6rem;
+    border-color: transparent;
+    background: var(--sdh-felulet-2);
+    box-shadow: none;
+}
+
+.sdh-ora--fej > .sdh-gomb__ikon {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+}
+
+.sdh-ora--fej .sdh-ora__ido b {
+    font-size: calc(17px * var(--sdh-n));
+}
+
+.sdh-ora--fej .sdh-ora__ido span {
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+.sdh-ora--fej .sdh-ora__resz {
+    gap: 0;
+    padding-left: .5rem;
+    line-height: 1.2;
+}
+
+.sdh-ora--fej .sdh-ora__datum {
+    font-size: calc(10.5px * var(--sdh-n));
+}
+
+.sdh-ora--fej .sdh-ora__zaras {
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+.sdh-ora--fej .sdh-ora__sav {
+    height: calc(2px * var(--sdh-n));
+}
+
+@media (max-width: 1180px) {
+    .sdh-ora--fej .sdh-ora__datum {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .sdh-ora--fej .sdh-ora__resz,
+    .sdh-ora--fej > .sdh-gomb__ikon {
+        display: none;
+    }
+
+    .sdh-ora--fej {
+        padding: 0 .6rem;
+    }
+}
+
+/* ---- Betűnagyító: húzás közben csak a minta és a százalék változik ---- */
+
+.sdh-nagyito {
+    position: relative;
+}
+
+/* A minta a csúszka fölött lebeg, és pontosan akkora, amekkora a betű lesz
+   (a rem a mostani nagyítással nő, ezért osztunk vele). */
+.sdh-nagyito__minta {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + .5rem);
+    z-index: 5;
+    padding: .3rem .8rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    box-shadow: var(--sdh-arnyek-emelt);
+    color: var(--sdh-szoveg);
+    font-size: calc(1rem * var(--m, 1) / var(--sdh-n));
+    font-weight: 650;
+    line-height: 1.2;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, .25rem);
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+}
+
+.sdh-nagyito.is-huz .sdh-nagyito__minta {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.sdh-nagyito.is-huz .sdh-nagyito__ertek {
+    color: var(--sdh-accent-szoveg);
+}
+
+/* ---- Megjelenés: négy mód (Rendszer, Világos, Sötét, Papír) ---- */
+
+.sdh-megj__tema {
+    grid-template-columns: repeat(auto-fit, minmax(5.4rem, 1fr));
+}
+
+/* ---- Kékfény-szűrő ---- */
+
+.sdh-kekfeny-szuro {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* A szűrő a gyökérelemen ül: az egész felületre hat, a felugró ablakokra is.
+   (A gyökérre tett szűrő nem mozdítja el a rögzített elemeket.) */
+:root[data-kekfeny] {
+    filter: url("#sdh-kekfeny-szuro");
+}
+
+.sdh-kekfeny-allito {
+    --p: 0%;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    height: calc(38px * var(--sdh-n));
+    padding: 0 .6rem 0 .7rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-felulet) 86%, transparent);
+}
+
+.sdh-kekfeny-allito__ikon {
+    flex: 0 0 auto;
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+    fill: none;
+    stroke: #d98324;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-kekfeny-allito__csuszka::-webkit-slider-runnable-track {
+    background: linear-gradient(90deg, #ffd9a0 0%, #ff9a3c var(--p), var(--sdh-keret-eros) var(--p), var(--sdh-keret-eros) 100%);
+}
+
+.sdh-kekfeny-allito__csuszka::-moz-range-track {
+    background: linear-gradient(90deg, #ffd9a0 0%, #ff9a3c var(--p), var(--sdh-keret-eros) var(--p), var(--sdh-keret-eros) 100%);
+}
+
+.sdh-kekfeny-allito__csuszka::-webkit-slider-thumb {
+    border-color: #e08a2c;
+}
+
+.sdh-kekfeny-allito__csuszka::-moz-range-thumb {
+    border-color: #e08a2c;
+}
+
+.sdh-mezo .sdh-kekfeny-allito {
+    align-self: flex-start;
+    min-width: min(22rem, 100%);
+}
+
+/* ---- Papír megjelenés: e-könyv-olvasó-szerű, nyugodt felület ---- */
+/*
+ * Meleg papírszín, tintaszínű betű, olvasásra való betűtípus. Nincs üveg,
+ * elmosás, fényudvar és neon: minden felület lapos, a tagolást hajszálvonal
+ * adja. A kiemelő szín megmarad (gombok, kijelölés).
+ */
+:root[data-papir] {
+    --sdh-vaszon: #ece2c9;
+    --sdh-felulet: #f8f1df;
+    --sdh-felulet-2: #f0e7d0;
+    --sdh-keret: #dccfb1;
+    --sdh-keret-eros: #c2b28c;
+
+    --sdh-szoveg: #29241d;
+    --sdh-szoveg-2: #4a4237;
+    --sdh-halvany: #685e4f;
+
+    --sdh-siker: #2d6a3b;
+    --sdh-hiba: #9b2c22;
+    --sdh-figyelem: #875600;
+
+    --sdh-arnyek: none;
+    --sdh-arnyek-emelt: 0 0 0 1px var(--sdh-keret-eros), 0 12px 28px rgba(70, 52, 20, .16);
+
+    --sdh-accent-halvany: color-mix(in srgb, var(--sdh-accent) 11%, transparent);
+    --sdh-sotet: #3a3226;
+    --sdh-sotet-vilagos: #4a4133;
+
+    --sdh-betutipus: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "Sitka Text", Cambria, Georgia, serif;
+}
+
+:root[data-papir] *,
+:root[data-papir] *::before,
+:root[data-papir] *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+}
+
+/* A papír rostja: nagyon halvány szemcse az egész oldal fölött. */
+:root[data-papir] body.sdh-app::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2147482000;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32  0 0 0 0 .25  0 0 0 0 .14  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23p)'/%3E%3C/svg%3E");
+    opacity: .16;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+/* A felugró ablak is lapos papírlap: nincs neon keret és fényudvar. */
+:root[data-papir] .sdh-modal__doboz,
+:root[data-papir][data-neon] .sdh-modal__doboz {
+    border-color: var(--sdh-keret-eros);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+:root[data-papir] .sdh-modal::backdrop {
+    background: rgba(74, 62, 40, .38);
+}
+
+/* Az oldalmenü papír módban mindig papírszínű (a sötét / színes sáv beállítása itt nem érvényes). */
+:root[data-papir] body.sdh-app .sdh-sav,
+:root[data-papir] body.sdh-app[data-sdh-sav-stilus] .sdh-sav {
+    --sdh-felulet: #f0e7d0;
+    --sdh-felulet-2: #e6dbc0;
+    --sdh-keret: #dccfb1;
+    --sdh-szoveg: #29241d;
+    --sdh-szoveg-2: #4a4237;
+    --sdh-halvany: #685e4f;
+    --sdh-accent-halvany: color-mix(in srgb, var(--sdh-accent) 13%, transparent);
+    --sdh-accent-szoveg: var(--sdh-accent);
+    background: var(--sdh-felulet);
+}
+
+:root[data-papir] .sdh-fej {
+    background: var(--sdh-felulet);
+}
+
+/* Olvashatóság: kicsit lazább sorok a hosszabb szövegekben. */
+:root[data-papir] .sdh-sugo-torzs,
+:root[data-papir] .sdh-ai-panel__uzenetek {
+    line-height: 1.65;
+}
+
+/* Négy mód egy sorban: ikon felül, alatta a név (a profilmenü keskeny). */
+.sdh-megj__tema {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sdh-megj__tema button {
+    flex-direction: column;
+    gap: .15rem;
+    height: calc(50px * var(--sdh-n));
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+:root[data-papir] dialog::backdrop {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}

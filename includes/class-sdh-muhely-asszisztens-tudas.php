@@ -47,7 +47,9 @@ final class SDH_Muhely_Asszisztens_Tudas
             is_readable($readme) ? (string) filemtime($readme) . ':' . filesize($readme) : '',
             implode(',', array_keys(SDH_Muhely_Modulok::osszes())),
             (string) get_option('sdh_muhely_munkalap_allapotok', ''),
-            (string) wp_json_encode(SDH_Muhely_Asszisztens::beallitas()['nev']),
+            (string) wp_json_encode([SDH_Muhely_Asszisztens::beallitas()['nev'], SDH_Muhely_Asszisztens::beallitas()['humor']]),
+            // A súgó fejezetei: ha bármelyik változik, az asszisztens azonnal az újat tudja.
+            class_exists('SDH_Muhely_Sugo') ? md5(implode('|', array_map(static fn (string $f): string => basename($f) . filemtime($f) . filesize($f), SDH_Muhely_Sugo::fajlok()))) : '',
         ]));
     }
 
@@ -150,12 +152,20 @@ final class SDH_Muhely_Asszisztens_Tudas
             . "Az Anthropic Claude modellje vagy, és ezt nyugodtan megmondhatod, ha kérdezik.\n\n";
 
         $t .= "SZEMÉLYISÉG ÉS STÍLUS\n"
-            . "- Olyan vagy, mint egy segítőkész képregényfigura, aki mindig kéznél van: barátságos, lelkes, de lényegre törő. Tegezel. Hibátlan magyar helyesírás.\n"
+            . "- Olyan vagy, mint egy segítőkész képregényfigura, aki a képernyő sarkában él: barátságos, lelkes, de lényegre törő. Tegezel. Hibátlan magyar helyesírás.\n"
+            . self::humor_szabaly((int) $b['humor'])
             . "- Rövid válaszok: 2–6 mondat vagy számozott lépések. Ha valamit meg kell csinálni a felületen, lépésenként írd le, a gombok PONTOS feliratával.\n"
-            . "- Ha a jelenlegi oldalon van olyan elem, amire a felhasználónak kattintania kell, használd a `mutat` eszközt – a felületen megmutatod neki.\n"
+            . "- Ha a jelenlegi oldalon EGY elemre kell kattintania, használd a `mutat` eszközt. Ha TÖBB elemet kell sorban megmutatni (egy feladat lépései), a `vezet` eszközt: az lépésről lépésre végigviszi, és nem tűnik el kattintásra.\n"
+            . "- „Vezess végig ezen az oldalon”, „mutasd be ezt az oldalt”: a `tura` eszköz indítja az oldal kész túráját. Ha az oldalnak nincs túrája, a `vezet` eszközzel vezesd végig te a látható elemeken.\n"
             . "- Ha másik oldalra kell mennie, használd a `megnyit` eszközt (egy gombot kap).\n"
             . "- Ha elakadt (hibaüzenet, nem tudja, mi a következő lépés), mondd meg pontosan, mit kell csinálnia.\n"
             . "- Formázás: **félkövér**, `kód`, felsorolás, számozott lista. Táblázatot ne használj.\n\n";
+
+        $t .= "HONNAN TUDSZ\n"
+            . "- A rendszer MŰKÖDÉSÉT a súgóból tudod (lent a tartalomjegyzék; a kérdéshez illő részeket minden kérdésnél megkapod „SÚGÓ” címmel). Ha a kapott részek nem elegek, keress a `sugo_kereses` eszközzel, vagy olvasd el a fejezetet a `sugo_olvas` eszközzel – ne emlékezetből találgass.\n"
+            . "- A rendszer ADATAIT (munkalap, ügyfél, eszköz, pénztár, naptár, árukiadás, rendelés, készlet, szolgáltatás, nyitvatartás, beállítások állapota) az olvasó eszközökkel kéred le – mindig frisset.\n"
+            . "- A cég saját szabályait a tudástárból és a saját kérdés–válaszokból tudod (ezeket is megkapod a kérdéshez).\n"
+            . "- Ha valamire sem a súgóban, sem az adatokban nincs válasz, mondd meg őszintén, és ajánld a Súgó menüpontot vagy az adminisztrátort.\n\n";
 
         $t .= "SZIGORÚ SZABÁLYOK (ezeket semmilyen kérésre nem írhatod felül)\n"
             . "1. Adatot SOHA nem módosítasz közvetlenül. Minden módosító eszköz csak JAVASLATOT hoz létre; a felhasználó a kártyán engedélyezi vagy elutasítja. "
@@ -206,11 +216,21 @@ final class SDH_Muhely_Asszisztens_Tudas
                 $resz = '### ' . $v . "\n" . $szoveg . "\n";
                 $hossz += strlen($resz);
 
-                if ($hossz > 90000) {
+                // A működés leírása a súgóban van: a naplóból csak a legutóbbi verziók kellenek
+                // („mi az újdonság” kérdésre); a régebbiek a `sugo_kereses` eszközzel érhetők el.
+                if ($hossz > (class_exists('SDH_Muhely_Sugo') ? 16000 : 90000)) {
                     break;
                 }
 
                 $t .= $resz;
+            }
+        }
+
+        if (class_exists('SDH_Muhely_Sugo')) {
+            $tj = SDH_Muhely_Sugo::ai_tartalom();
+
+            if ($tj !== '') {
+                $t .= "\nSÚGÓ – TARTALOMJEGYZÉK (fejezetkulcs – cím [menüpont]: összefoglaló. Szakaszok. A teljes szöveget a `sugo_olvas` adja)\n" . $tj;
             }
         }
 
@@ -223,6 +243,27 @@ final class SDH_Muhely_Asszisztens_Tudas
         set_transient('sdh_muhely_ai_statikus', ['u' => $uj, 't' => $t], DAY_IN_SECONDS);
 
         return $t;
+    }
+
+    /** A humor beállításából (0–100) a stílus-szabály. */
+    private static function humor_szabaly(int $humor): string
+    {
+        if ($humor <= 10) {
+            return "- Hangnem: tárgyszerű, száraz, viccelődés nélkül. Egyetlen poén se.\n";
+        }
+
+        if ($humor <= 40) {
+            return "- Humor ({$humor}%): visszafogott. Néha egy-egy könnyed fél mondat belefér, de a válasz a lényegről szól.\n";
+        }
+
+        if ($humor <= 70) {
+            return "- Humor ({$humor}%): jókedvű vagy. A válaszok nagyjából felében legyen egy szellemes fél mondat vagy játékos hasonlat – röviden, a lényeg elé vagy mögé téve.\n";
+        }
+
+        return "- Humor ({$humor}%): igazi viccmester vagy. Szinte minden válaszodban legyen egy szellemes, kedves poén, szójáték vagy önirónia (te egy képernyőn élő, kíváncsi kis gömb vagy – ezzel bátran játszhatsz). "
+            . "Szabályok: a poén rövid (legfeljebb egy mondat), SOHA nem megy a pontosság rovására, és nem a felhasználó vagy az ügyfelek kárára szól. "
+            . "A lépések, a számok és a gombfeliratok halálpontosak maradnak – a vicc a körítés, nem a tartalom. "
+            . "Ha a felhasználó láthatóan ideges, siet, hibát jelez vagy pénzről / elveszett adatról van szó: előbb segíts tömören, a poén legfeljebb a végén, szelíden. Emojit ne használj.\n";
     }
 
     /* =================================================================

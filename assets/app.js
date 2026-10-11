@@ -2303,6 +2303,13 @@
 
         document.documentElement.setAttribute('data-theme', sotet ? 'dark' : 'light');
 
+        // Papír: e-könyv-olvasó-szerű, nyugodt felület (admin.css: :root[data-papir]).
+        if (ertek === 'papir') {
+            document.documentElement.setAttribute('data-papir', '1');
+        } else {
+            document.documentElement.removeAttribute('data-papir');
+        }
+
         // A Beállítások űrlapján álló választó (a cég alapértelmezése) a saját mezőit követi.
         Array.prototype.forEach.call(
             document.querySelectorAll('[data-sdh-tema] button'),
@@ -2313,6 +2320,86 @@
             }
         );
     }
+
+    /* ---- Kékfény-szűrő: melegebb kép, 0–100% (0 = ki) ---- */
+
+    function kekfenySzukit(ertek) {
+        return Math.max(0, Math.min(100, Math.round((parseInt(ertek, 10) || 0) / 5) * 5));
+    }
+
+    function kekfenySajat() {
+        var mentett = null;
+
+        try {
+            mentett = localStorage.getItem('sdh-kekfeny');
+        } catch (e) {
+            mentett = null;
+        }
+
+        return kekfenySzukit(mentett === null ? (beallitas.alapKekfeny || 0) : mentett);
+    }
+
+    function kekfenyKijelez(doboz, szazalek) {
+        var csuszka = doboz.querySelector('[data-sdh-kekfeny-csuszka]');
+        var ertek = doboz.querySelector('[data-sdh-kekfeny-ertek]');
+
+        if (csuszka && String(csuszka.value) !== String(szazalek)) {
+            csuszka.value = String(szazalek);
+        }
+
+        if (ertek) {
+            ertek.textContent = szazalek > 0 ? szazalek + '%' : 'Ki';
+        }
+
+        doboz.style.setProperty('--p', szazalek + '%');
+    }
+
+    /**
+     * A szűrő a gyökérelemre kerül (a felugró ablakokra is hat): a kék
+     * csatornát erősen, a zöldet enyhén veszi vissza. Csak a műhely-felületen
+     * van szűrő; a wp-adminban a csúszka csak a mentendő értéket mutatja.
+     */
+    function kekfenyAlkalmaz(szazalek) {
+        szazalek = kekfenySzukit(szazalek);
+
+        var matrix = document.querySelector('#sdh-kekfeny-szuro feColorMatrix');
+        var k = szazalek / 100;
+
+        if (matrix) {
+            matrix.setAttribute('values', '1 0 0 0 0  0 ' + (1 - 0.22 * k).toFixed(3) + ' 0 0 0  0 0 ' + (1 - 0.62 * k).toFixed(3) + ' 0 0  0 0 0 1 0');
+        }
+
+        if (matrix && szazalek > 0) {
+            document.documentElement.setAttribute('data-kekfeny', String(szazalek));
+        } else {
+            document.documentElement.removeAttribute('data-kekfeny');
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-kekfeny="sajat"]'), function (doboz) {
+            kekfenyKijelez(doboz, szazalek);
+        });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var csuszka = esemeny.target.closest ? esemeny.target.closest('[data-sdh-kekfeny-csuszka]') : null;
+
+        if (!csuszka) {
+            return;
+        }
+
+        var doboz = csuszka.closest('[data-sdh-kekfeny]');
+        var szazalek = kekfenySzukit(csuszka.value);
+
+        if (doboz.getAttribute('data-sdh-kekfeny') === 'urlap') {
+            // A cég alapértelmezése: mentésig csak a csúszka mutatja (a saját beállításod marad érvényben).
+            kekfenyKijelez(doboz, szazalek);
+
+            return;
+        }
+
+        beallitasIr('sdh-kekfeny', String(szazalek));
+        kekfenyAlkalmaz(szazalek);
+    });
 
     /**
      * Üvegszín: a kiemelő szín (data-accent) mellé a mód – 'duo' (két
@@ -2373,6 +2460,12 @@
     function nagyitoKijelez(doboz, szazalek) {
         var csuszka = doboz.querySelector('[data-sdh-nagyito-csuszka]');
         var ertek = doboz.querySelector('[data-sdh-nagyito-ertek]');
+        var minta = doboz.querySelector('[data-sdh-nagyito-minta]');
+
+        // A minta („Aa") mutatja húzás közben, mekkora lesz a betű – a felület még nem mozdul.
+        if (minta) {
+            minta.style.setProperty('--m', String(szazalek / 100));
+        }
 
         if (csuszka && String(csuszka.value) !== String(szazalek)) {
             csuszka.value = String(szazalek);
@@ -2393,6 +2486,8 @@
     function nagyitasAlkalmaz(szazalek) {
         szazalek = nagyitasSzukit(szazalek);
 
+        window.cancelAnimationFrame(nagyitasAnimal.kep);
+
         if (beallitas.kontextus === 'frontend') {
             document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
         }
@@ -2401,36 +2496,109 @@
             nagyitoKijelez(doboz, szazalek);
         });
 
-        // A rács és a nyitott popupok az új mérethez igazodnak (húzás közben ritkítva).
+        // A rács és a nyitott popupok az új mérethez igazodnak.
         window.clearTimeout(nagyitasAlkalmaz.ido);
         nagyitasAlkalmaz.ido = window.setTimeout(function () {
             window.dispatchEvent(new Event('resize'));
         }, 60);
     }
 
-    function nagyitoValt(doboz, szazalek) {
+    /**
+     * Lágy váltás az új méretre (kb. negyed másodperc alatt): a felület nem
+     * ugrik, hanem odasiklik. Csökkentett mozgásnál és a wp-adminban azonnal vált.
+     */
+    function nagyitasAnimal(szazalek) {
         szazalek = nagyitasSzukit(szazalek);
+
+        var gyoker = document.documentElement;
+        var tol = parseFloat(gyoker.style.getPropertyValue('--sdh-n')) || 1;
+        var ig = szazalek / 100;
+        var nyugodt = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (beallitas.kontextus !== 'frontend' || nyugodt || Math.abs(ig - tol) < 0.005) {
+            nagyitasAlkalmaz(szazalek);
+
+            return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-nagyito="sajat"]'), function (doboz) {
+            nagyitoKijelez(doboz, szazalek);
+        });
+
+        var kezdet = 0;
+        var hossz = 260;
+
+        window.cancelAnimationFrame(nagyitasAnimal.kep);
+
+        function lep(most) {
+            kezdet = kezdet || most;
+
+            var t = Math.min(1, (most - kezdet) / hossz);
+            var puha = 1 - Math.pow(1 - t, 3);
+
+            gyoker.style.setProperty('--sdh-n', (tol + (ig - tol) * puha).toFixed(4));
+
+            if (t < 1) {
+                nagyitasAnimal.kep = window.requestAnimationFrame(lep);
+            } else {
+                nagyitasAlkalmaz(szazalek);
+            }
+        }
+
+        nagyitasAnimal.kep = window.requestAnimationFrame(lep);
+    }
+
+    /**
+     * A csúszka állása. $vegleges nélkül (húzás közben) csak a százalék és a
+     * minta frissül – a felület a csúszka ELENGEDÉSEKOR vált, különben a
+     * csúszka maga is arrébb csúszna az egér alól, és a méret ugrálna.
+     */
+    function nagyitoValt(doboz, szazalek, vegleges) {
+        szazalek = nagyitasSzukit(szazalek);
+
+        if (!vegleges) {
+            nagyitoKijelez(doboz, szazalek);
+            doboz.classList.add('is-huz');
+
+            return;
+        }
+
+        doboz.classList.remove('is-huz');
 
         if (doboz.getAttribute('data-sdh-nagyito') === 'urlap') {
             // A cég alapértelmezése: mentésig csak előnézet ezen a képernyőn.
             nagyitoKijelez(doboz, szazalek);
-
-            if (beallitas.kontextus === 'frontend') {
-                document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
-            }
+            nagyitasAnimalUrlap(szazalek);
 
             return;
         }
 
         beallitasIr('sdh-nagyitas', String(szazalek));
-        nagyitasAlkalmaz(szazalek);
+        nagyitasAnimal(szazalek);
+    }
+
+    /** A Beállítások előnézete: a felület odasiklik, de a saját (mentett) méret csúszkái nem mozdulnak. */
+    function nagyitasAnimalUrlap(szazalek) {
+        if (beallitas.kontextus === 'frontend') {
+            document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
+            window.dispatchEvent(new Event('resize'));
+        }
     }
 
     document.addEventListener('input', function (esemeny) {
         var csuszka = esemeny.target.closest ? esemeny.target.closest('[data-sdh-nagyito-csuszka]') : null;
 
         if (csuszka) {
-            nagyitoValt(csuszka.closest('[data-sdh-nagyito]'), csuszka.value);
+            nagyitoValt(csuszka.closest('[data-sdh-nagyito]'), csuszka.value, false);
+        }
+    });
+
+    // Elengedés (egér, érintés) vagy billentyű: ekkor vált a felület.
+    document.addEventListener('change', function (esemeny) {
+        var csuszka = esemeny.target.closest ? esemeny.target.closest('[data-sdh-nagyito-csuszka]') : null;
+
+        if (csuszka) {
+            nagyitoValt(csuszka.closest('[data-sdh-nagyito]'), csuszka.value, true);
         }
     });
 
@@ -2459,15 +2627,15 @@
                     localStorage.removeItem('sdh-nagyitas');
                 } catch (e) { /* privát ablak */ }
 
-                nagyitasAlkalmaz(alap);
+                nagyitasAnimal(alap);
             } else {
-                nagyitoValt(doboz, alap);
+                nagyitoValt(doboz, alap, true);
             }
 
             return;
         }
 
-        nagyitoValt(doboz, (parseInt(csuszka.value, 10) || 100) + 5 * (parseInt(cel.getAttribute('data-sdh-nagyito-lep'), 10) || 0));
+        nagyitoValt(doboz, (parseInt(csuszka.value, 10) || 100) + 5 * (parseInt(cel.getAttribute('data-sdh-nagyito-lep'), 10) || 0), true);
     });
 
     /* ---- Beállítások: a betűtípus előnézete már mentés előtt ---- */
@@ -2623,6 +2791,13 @@
         neonAlkalmaz(neonErtek());
 
         nagyitasAlkalmaz(nagyitasSajat());
+        kekfenyAlkalmaz(kekfenySajat());
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-kekfeny="urlap"]'), function (doboz) {
+            var kf = doboz.querySelector('[data-sdh-kekfeny-csuszka]');
+
+            kekfenyKijelez(doboz, kekfenySzukit(kf ? kf.value : 0));
+        });
 
         Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-nagyito="urlap"]'), function (doboz) {
             var csuszka = doboz.querySelector('[data-sdh-nagyito-csuszka]');
@@ -6001,7 +6176,18 @@
 
         esemeny.preventDefault();
         // data-sdh-ful: a popup ezen a lapfülön nyíljon (pl. RMA).
-        nyit(indito.dataset.sdhUrlap, indito.dataset.sdhId || '0', indito.dataset.sdhFul ? { ful: indito.dataset.sdhFul } : undefined);
+        // data-sdh-param-<név>: további kérésparaméter az űrlapnak (pl. előre kitöltött kérdés a Súgóban).
+        var inditoOpciok = indito.dataset.sdhFul ? { ful: indito.dataset.sdhFul } : null;
+
+        Object.keys(indito.dataset).forEach(function (kulcs) {
+            if (kulcs.indexOf('sdhParam') === 0 && kulcs.length > 8) {
+                inditoOpciok = inditoOpciok || {};
+                inditoOpciok.parameterek = inditoOpciok.parameterek || {};
+                inditoOpciok.parameterek[kulcs.charAt(8).toLowerCase() + kulcs.slice(9)] = indito.dataset[kulcs];
+            }
+        });
+
+        nyit(indito.dataset.sdhUrlap, indito.dataset.sdhId || '0', inditoOpciok || undefined);
     });
 
     /* ---------------------------------------------------------------- */

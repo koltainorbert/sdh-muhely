@@ -20,6 +20,7 @@ funkcionalitásának átültetése, modulonként:
 - **Házipénztár** – napi kassza, címletes zárás, napló, riport, statisztika, egyeztető ügynök, Excel-import
 - **Csapat** – belső üzenetek kollégának, csoportnak, mindenkinek; fontos üzenet felugró ablakban; kollégák, csoportok
 - **Asszisztens** – AI (Claude) segítő minden oldalon: kérdez-felel, vezet, tanul; csak jóváhagyással módosít, mentéssel
+- **Súgó** – bemutató, részletes dokumentáció, kérdés–válasz, oldaltúrák; a `sugo/` mappa fejezeteiből épül, és az asszisztens is ebből tanul. **Ha a rendszer változik, a fejezet vele változik** (szabályok: `sugo/OLVASSEL.md`, őre: `tesztek/t36-sugo.php`)
 - *(később)* raktár, határidő
 
 A meglévő **SDH Platform** plugin (beszállítói katalógus → rendelés) külön
@@ -60,6 +61,45 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.51.0
+- **Súgó menüpont: bemutató, dokumentáció, kérdés–válasz.** Új menüpont, négy lapfüllel. A **Bemutató** megmutatja,
+  milyen sorrendben érdemes ismerkedni, és a teljes rendszer térképét adja. A **Dokumentáció** 22 fejezetben írja le
+  minden menüpont és minden Beállítások-lapfül működését (mire való, lépésről lépésre, mezők és gombok, szabályok,
+  hibaelhárítás). A **Kérdés–válasz** több száz hétköznapi kérdést tartalmaz fejezetenként szűrve, „Segített?"
+  értékeléssel. Az **Újdonságok** a verziónapló. Fölöttük kereső: gépelés közben ad találatot, érti a toldalékos
+  és a köznyelvi szavakat (kassza → pénztár, telefon → eszköz).
+- **Saját kérdés–válasz.** Az adminisztrátor a cég saját szabályait is felveheti (Súgó › Kérdés–válasz › „Saját
+  kérdés–válasz"); a Súgóban és az asszisztensnél is azonnal él. Az „Amire nem volt találat" doboz mutatja, mire
+  kerestek a kollégák eredmény nélkül.
+- **Az asszisztens végigvezet az oldalakon.** A „Vezess végig ezen az oldalon" mostantól valódi, többlépcsős túra:
+  Előző / Következő gombbal vagy a nyilakkal lépked, és **nem tűnik el, ha közben máshova kattintasz** – ha felugró
+  ablakot nyitsz, megvár. Minden oldalnak kész túrája van, API-kulcs nélkül is működik. Az asszisztens egy feladat
+  lépésein is végig tud vezetni (nem csak egy elemet mutat meg).
+- **Az asszisztens a teljes súgóból felel.** A dokumentáció, a kérdés–válaszok és a túrák egy forrásból élnek (a
+  bővítmény `sugo/` mappája): minden kérdésnél megkapja a hozzá illő részeket, és maga is keres, olvas a súgóban.
+  Új eszközei: naptár, árukiadások és rendelések, készlet, szolgáltatások és árak, eszköz előélete, nyitvatartás,
+  és hogy mi van beállítva.
+- **Élő figura: több mimika, mozgás, humor.** Kezet, lábat, antennát, szemöldököt kapott. Nevet, kacsint, megijed,
+  elszédül, ásít; integet, táncol, nyújtózik, kávézik, olvas, elsétál a képernyő alján – és abbahagyja, amint
+  dolgozni kezdesz. Mentésnél konfettit szór. Időnként megszólal egy vicces mondattal (a napszakhoz igazodva).
+  A Beállítások › Asszisztens lapfülön két új csúszka: **Humorérzék** (alap 90%) és **Élénkség**.
+- **Papír megjelenés.** Új, negyedik megjelenés a profilmenüben: e-könyv-olvasó-szerű, nyugodt felület – meleg
+  papírszín, tintaszínű, könyvszerű betű, üveghatás, fényudvar és neon keret nélkül.
+- **Kékfény-szűrő.** Csúszka a profilmenüben (0–100%): melegebb, a szemnek nyugodtabb kép, a felugró ablakokra is
+  hat. A cég alapértelmezése a Beállítások › Logó és megjelenés lapfülön állítható.
+- **Az óra a fejlécben.** Az óra és a zárásig hátralévő idő a felső fejlécbe került: minden oldalon látszik, nem
+  csak az Áttekintésen.
+- **Nyugodtabb betűméret-csúszka.** Húzás közben csak a csúszka fölötti minta és a százalék változik; a felület az
+  elengedéskor, lágy átmenettel vált méretet (eddig húzás közben ugrált). A csúszka lekerült az Áttekintésről: a
+  profilmenüben és a Beállításokban van.
+- **Naptár: a „fontos" jelek a helyükön.** A felkiáltójeles jel a szöveg közepére ül, bármekkora a betű, és nincs
+  körülötte fényudvar.
+- A fejlécben új „?" gomb: súgó az éppen nyitott oldalhoz. A mezők tartalma nem megy az asszisztenshez (csak a
+  feliratuk).
+- **A dokumentáció a rendszerrel együtt frissül** – ez mostantól szabály: az új `t36-sugo` teszt elbukik, ha egy
+  menüpontnak, egy Beállítások-lapfülnek vagy az asszisztens egy eszközének nincs leírása, vagy ha a súgó verziója
+  lemaradt (az írási szabályok: `sugo/OLVASSEL.md`).
 
 ### 0.50.0
 - **Új modul: Naptár.** Minden névhez saját naptár tartozik. Közös fióknál (Csapat: Üzenőfal mód) a nevek kézzel

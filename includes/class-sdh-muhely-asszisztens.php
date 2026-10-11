@@ -67,6 +67,7 @@ final class SDH_Muhely_Asszisztens
             'ai_teszt'       => 'ajax_teszt',
             'ai_mentes'      => 'ajax_mentes',
             'ai_mentes_le'   => 'ajax_mentes_le',
+            'ai_tura'        => 'ajax_tura',
             'aitudas_urlap'  => 'ajax_tudas_urlap',
             'aitudas_ment'   => 'ajax_tudas_ment',
         ];
@@ -93,7 +94,7 @@ final class SDH_Muhely_Asszisztens
      * ============================================================== */
 
     /**
-     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, eszkozok: array<string, bool>}
+     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, eszkozok: array<string, bool>}
      */
     public static function beallitas(): array
     {
@@ -108,6 +109,10 @@ final class SDH_Muhely_Asszisztens
             'olvasas_engedely' => !empty($b['olvasas_engedely']),
             'proaktiv'         => !isset($b['proaktiv']) || (bool) $b['proaktiv'],
             'napi_max'         => max(10, (int) ($b['napi_max'] ?? 300)),
+            // Személyiség: mennyire viccelődik (0 = tárgyszerű, 100 = minden mondatában ott a poén),
+            // és mennyit mozog magától a képernyőn (0 = nyugodt, 100 = igazi izgő-mozgó).
+            'humor'            => max(0, min(100, (int) ($b['humor'] ?? 90))),
+            'elenkseg'         => max(0, min(100, (int) ($b['elenkseg'] ?? 80))),
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
         ];
     }
@@ -192,7 +197,43 @@ final class SDH_Muhely_Asszisztens
             'kulcs'   => self::kulcs()['kulcs'] !== '',
             'proaktiv' => $b['proaktiv'],
             'oldal'   => SDH_Muhely_Modulok::url(self::KULCS),
+            // Személyiség (asszisztens.js: mimika, önálló mozgás, beszólások).
+            'humor'    => $b['humor'],
+            'elenkseg' => $b['elenkseg'],
+            // A Súgó címe: a túra végén és a „nem találom" válaszoknál ide vezet.
+            'sugo'     => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS) : '',
         ];
+    }
+
+    /**
+     * Az oldal kész túrája (a súgófejezet `## Túra: <modul>` szakasza) – API-hívás
+     * nélkül, azonnal. A „Vezess végig ezen az oldalon" gomb és a ?tura=1 cím kéri.
+     */
+    public static function ajax_tura(): void
+    {
+        self::jog();
+
+        $modul = sanitize_key(self::p('modul', 40));
+        $modul = $modul === '' ? 'attekintes' : $modul;
+
+        if (!class_exists('SDH_Muhely_Sugo')) {
+            wp_send_json_error(['uzenet' => 'A súgó nem érhető el.']);
+        }
+
+        if (class_exists('SDH_Muhely_Csapat')) {
+            SDH_Muhely_Csapat::kontextus_be();
+        }
+
+        $fejezet = SDH_Muhely_Sugo::modul_fejezet($modul);
+        $f       = $fejezet !== '' ? SDH_Muhely_Sugo::fejezet($fejezet) : null;
+
+        wp_send_json_success([
+            'modul'   => $modul,
+            'cim'     => $f !== null ? (string) $f['cim'] : '',
+            'osszefoglalo' => $f !== null ? (string) $f['osszefoglalo'] : '',
+            'lepesek' => SDH_Muhely_Sugo::tura($modul),
+            'leiras'  => $fejezet !== '' ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS, ['nezet' => 'dokumentacio', 'fejezet' => $fejezet]) : '',
+        ]);
     }
 
     /* =================================================================
@@ -421,6 +462,15 @@ final class SDH_Muhely_Asszisztens
             }
         }
 
+        // A súgó a kérdéshez illő részei (dokumentáció + kérdés–válasz); az oldal saját fejezete előnyt kap.
+        if (class_exists('SDH_Muhely_Sugo')) {
+            $sugo = SDH_Muhely_Sugo::ai_reszek($kerdes, $mk);
+
+            if ($sugo !== '') {
+                $t .= "\n\nSÚGÓ (a rendszer hivatalos leírása – a kérdéshez illő részek; ha a válasz ebből megvan, ebből felelj, a gombok feliratát pontosan idézve)\n" . $sugo . "\n";
+            }
+        }
+
         $tudas = SDH_Muhely_Asszisztens_Tudas::keres($kerdes, 8);
 
         if ($tudas !== []) {
@@ -641,8 +691,19 @@ final class SDH_Muhely_Asszisztens
                     $res = 'Ez az eszköz nem elérhető (a Beállításokban kikapcsolták).';
                     $hiba = true;
                 } elseif ($szint === 'felulet') {
-                    $ui[] = ['tipus' => $nev, 'adat' => self::ui_adat($nev, $param)];
-                    $res = 'Megjelenítve a felhasználónak.';
+                    $ui_adat = self::ui_adat($nev, $param + ['_oldal' => (string) ($oldal['kulcs'] ?? '')]);
+
+                    if (in_array($nev, ['tura', 'vezet'], true) && empty($ui_adat['lepesek'])) {
+                        $res  = $nev === 'tura'
+                            ? 'Ennek az oldalnak nincs kész túrája. Vezesd végig te a `vezet` eszközzel, a LÁTHATÓ ELEMEK közül a legfontosabb 4–7 elemmel.'
+                            : 'Egyik megadott elem sincs a látható elemek között – csak a listában szereplő azonosítókat (e1, e2…) használd.';
+                        $hiba = true;
+                    } else {
+                        $ui[] = ['tipus' => $nev, 'adat' => $ui_adat];
+                        $res  = in_array($nev, ['tura', 'vezet'], true)
+                            ? 'A végigvezetés elindult (' . count($ui_adat['lepesek']) . ' lépés): a felhasználó az „Előző / Következő" gombokkal lépked. Egy rövid, kedves mondattal indítsd útjára – a lépéseket ne ismételd el szövegben.'
+                            : 'Megjelenítve a felhasználónak.';
+                    }
                 } elseif ($szint === 'olvas' && !$b['olvasas_engedely']) {
                     $res = SDH_Muhely_Asszisztens_Eszkozok::olvas($nev, $param);
                 } elseif ($szint === 'olvas') {
@@ -713,6 +774,30 @@ final class SDH_Muhely_Asszisztens
     {
         if ($nev === 'mutat') {
             return ['elem' => sanitize_key((string) ($p['elem'] ?? '')), 'szoveg' => mb_substr(sanitize_text_field((string) ($p['szoveg'] ?? '')), 0, 240)];
+        }
+
+        // Az oldal kész túrája a súgóból (szelektorokkal).
+        if ($nev === 'tura') {
+            $modul = sanitize_key((string) ($p['_oldal'] ?? ''));
+
+            return ['cim' => '', 'lepesek' => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Sugo::tura($modul !== '' ? $modul : 'attekintes') : []];
+        }
+
+        // Az asszisztens saját, több lépéses végigvezetése (a látható elemek azonosítóival).
+        if ($nev === 'vezet') {
+            $lepesek = [];
+
+            foreach (array_slice(is_array($p['lepesek'] ?? null) ? $p['lepesek'] : [], 0, 10) as $l) {
+                if (is_array($l) && preg_match('/^e\d{1,4}$/', (string) ($l['elem'] ?? '')) === 1) {
+                    $lepesek[] = [
+                        'elem'   => (string) $l['elem'],
+                        'cim'    => mb_substr(sanitize_text_field((string) ($l['cim'] ?? '')), 0, 60),
+                        'szoveg' => mb_substr(sanitize_text_field((string) ($l['szoveg'] ?? '')), 0, 280),
+                    ];
+                }
+            }
+
+            return ['cim' => mb_substr(sanitize_text_field((string) ($p['cim'] ?? '')), 0, 70), 'lepesek' => $lepesek];
         }
 
         $cel = sanitize_key((string) ($p['cel'] ?? ''));
@@ -1092,6 +1177,11 @@ final class SDH_Muhely_Asszisztens
             'olvasas_engedely' => self::p('olvasas_engedely', 2) === '1',
             'proaktiv'         => self::p('proaktiv', 2) === '1',
             'napi_max'         => max(10, min(5000, (int) self::p('napi_max', 6))),
+            // Régebbi űrlapról (ahol még nincs csúszka) mentve a korábbi érték marad.
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- az admin_jog() ellenőrizte.
+            'humor'            => isset($_POST['humor']) ? max(0, min(100, (int) self::p('humor', 4))) : $b['humor'],
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'elenkseg'         => isset($_POST['elenkseg']) ? max(0, min(100, (int) self::p('elenkseg', 4))) : $b['elenkseg'],
             'eszkozok'         => [],
         ];
 
@@ -1515,6 +1605,32 @@ final class SDH_Muhely_Asszisztens
                             <label class="sdh-cs-kapcs"><input type="checkbox" name="kulcs_torol" value="1"><span class="sdh-cs-kapcs__sin"></span><span>Mentett kulcs törlése</span></label>
                         <?php endif; ?>
                         <span class="sdh-mezo__sugo">Most használt: <?php echo $k['kulcs'] !== '' ? esc_html($k['forras']) : '<strong>nincs kulcs</strong>'; ?>. A wp-config.php-ban: <code>define( 'SDH_MUHELY_CLAUDE_KEY', 'sk-ant-…' );</code></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sdh-doboz">
+                <h2 class="sdh-doboz__cim">Személyiség</h2>
+                <p class="sdh-sugo">Milyen legyen <?php echo esc_html($b['nev']); ?>? A humor a válaszai hangját és a magától mondott beszólásait állítja, az élénkség azt, mennyit mozog és játszik magától a képernyőn. A pontosságon egyik sem változtat: számot, árat, nevet viccből sem talál ki.</p>
+                <div class="sdh-cs-racs">
+                    <div class="sdh-ig">
+                        <label for="ai_humor">Humorérzék</label>
+                        <div class="sdh-ai-csuszka" data-sdh-ai-csuszka style="--p: <?php echo (int) $b['humor']; ?>%">
+                            <span>komoly</span>
+                            <input type="range" class="sdh-nagyito__csuszka" name="humor" id="ai_humor" min="0" max="100" step="5" value="<?php echo (int) $b['humor']; ?>">
+                            <span>vicces</span>
+                            <output><?php echo (int) $b['humor']; ?>%</output>
+                        </div>
+                    </div>
+                    <div class="sdh-ig">
+                        <label for="ai_elenkseg">Élénkség</label>
+                        <div class="sdh-ai-csuszka" data-sdh-ai-csuszka style="--p: <?php echo (int) $b['elenkseg']; ?>%">
+                            <span>nyugodt</span>
+                            <input type="range" class="sdh-nagyito__csuszka" name="elenkseg" id="ai_elenkseg" min="0" max="100" step="5" value="<?php echo (int) $b['elenkseg']; ?>">
+                            <span>izgő-mozgó</span>
+                            <output><?php echo (int) $b['elenkseg']; ?>%</output>
+                        </div>
+                        <span class="sdh-mezo__sugo">Ha a gépen be van állítva a „kevesebb mozgás", a figura akkor is nyugton marad.</span>
                     </div>
                 </div>
             </div>

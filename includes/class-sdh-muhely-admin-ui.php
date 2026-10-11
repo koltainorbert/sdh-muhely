@@ -427,6 +427,8 @@ final class SDH_Muhely_Admin_UI
             'alapSzin'  => $arculat['szin'],
             // Üvegszín (duo / mono) és az alap betűnagyítás (%), a csúszka határaival.
             'alapUveg'  => (string) ($arculat['uveg'] ?? 'mono'),
+            // Kékfény-szűrő: a cég alap erőssége (0 = ki); a dolgozó a profilmenüben átállíthatja.
+            'alapKekfeny' => (int) ($arculat['kekfeny'] ?? 0),
             'alapNagyitas' => (int) ($arculat['nagyitas'] ?? 100),
             'nagyitasMin'  => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::NAGYITAS_MIN : 80,
             'nagyitasMax'  => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::NAGYITAS_MAX : 160,
@@ -752,10 +754,9 @@ final class SDH_Muhely_Admin_UI
                 'Áttekintés',
                 'A belső műhely- és ügyfélkezelő rendszer. Innen érhető el minden modul.',
                 $gombok,
-                // Az óra és a zárásig hátralévő idő (Beállítások › Nyitvatartás és óra), mellette a
-                // betűnagyító csúszka (csak a műhely-felületen: a wp-admin a saját méretében marad).
-                (class_exists('SDH_Muhely_Nyitvatartas') ? SDH_Muhely_Nyitvatartas::ora_html() : '')
-                    . (!$technikai && class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::nagyito('sajat') : '')
+                // A műhely-felületen az óra a felső fejlécben áll (minden oldalon), a betűméret a
+                // profilmenüben. A wp-adminban nincs saját fejléc: ott az óra itt marad.
+                $technikai && class_exists('SDH_Muhely_Nyitvatartas') ? SDH_Muhely_Nyitvatartas::ora_html() : ''
             );
             ?>
 

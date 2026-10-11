@@ -298,6 +298,8 @@ final class SDH_Muhely_Frontend
             'beallitasok'  => '<circle cx="10" cy="10" r="2.5"/>'
                 . '<path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>',
 
+            'sugo'         => '<circle cx="10" cy="10" r="6.8"/><path d="M8 8.1a2.1 2.1 0 1 1 2.9 1.9c-.6.3-.9.7-.9 1.3"/><path d="M10 13.8v.1"/>',
+
             // --- Gombok (nem modulok) ---
             'plusz'        => '<path d="M10 4.2v11.6M4.2 10h11.6"/>',
             'uj-munkalap'  => '<path d="M14.5 8.6V4.8A1.8 1.8 0 0 0 12.7 3H5.8A1.8 1.8 0 0 0 4 4.8v10.4A1.8 1.8 0 0 0 5.8 17h3.4"/>'
@@ -354,8 +356,9 @@ final class SDH_Muhely_Frontend
                     <?php
                     $sdh_arculat = class_exists('SDH_Muhely_Arculat')
                         ? SDH_Muhely_Arculat::beallitas()
-                        : ['tema' => 'rendszer', 'szin' => '', 'uveg' => 'mono', 'nagyitas' => 100];
+                        : ['tema' => 'rendszer', 'szin' => '', 'uveg' => 'mono', 'nagyitas' => 100, 'kekfeny' => 0];
                     ?>
+                    var alapKek = <?php echo (int) ($sdh_arculat['kekfeny'] ?? 0); ?>;
                     var alapTema = <?php echo wp_json_encode($sdh_arculat['tema']); ?>;
                     var alapSzin = <?php echo wp_json_encode($sdh_arculat['szin']); ?>;
                     var alapUveg = <?php echo wp_json_encode((string) ($sdh_arculat['uveg'] ?? 'mono')); ?>;
@@ -367,6 +370,13 @@ final class SDH_Muhely_Frontend
                             (t === 'rendszer' &&
                              window.matchMedia('(prefers-color-scheme: dark)').matches);
                         document.documentElement.setAttribute('data-theme', sotet ? 'dark' : 'light');
+
+                        // Papír megjelenés (e-könyv-szerű) és a kékfény-szűrő: szintén a festés előtt.
+                        if (t === 'papir') { document.documentElement.setAttribute('data-papir', '1'); }
+
+                        var kf = localStorage.getItem('sdh-kekfeny');
+                        kf = kf === null ? alapKek : (parseInt(kf, 10) || 0);
+                        if (kf > 0) { document.documentElement.setAttribute('data-kekfeny', String(Math.min(100, kf))); }
 
                         var sz = localStorage.getItem('sdh-szin');
                         sz = sz === null ? alapSzin : sz;
@@ -380,6 +390,8 @@ final class SDH_Muhely_Frontend
                         n = Math.max(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MIN; ?>, Math.min(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MAX; ?>, n));
                         document.documentElement.style.setProperty('--sdh-n', String(n / 100));
                     } catch (e) {
+                        if (alapTema === 'papir') { document.documentElement.setAttribute('data-papir', '1'); }
+                        if (alapKek > 0) { document.documentElement.setAttribute('data-kekfeny', String(alapKek)); }
                         document.documentElement.setAttribute('data-uveg', alapUveg === 'duo' ? 'duo' : 'mono');
                         document.documentElement.style.setProperty('--sdh-n', String(alapNagy / 100));
                     }
@@ -400,6 +412,8 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naptar.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naptar.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -411,6 +425,27 @@ final class SDH_Muhely_Frontend
         </head>
         <?php $sdh_arc = SDH_Muhely_Arculat::beallitas(); ?>
         <body class="sdh-app" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>" data-sdh-sav-stilus="<?php echo esc_attr($sdh_arc['sav']); ?>">
+
+        <?php
+        // Kékfény-szűrő: a gyökérelem ezt a színszűrőt kapja (admin.css: :root[data-kekfeny]). A kék
+        // csatornát erősen, a zöldet enyhén veszi vissza; az erősséget az app.js (kekfenyAlkalmaz) írja be.
+        ?>
+        <svg class="sdh-kekfeny-szuro" width="0" height="0" aria-hidden="true" focusable="false">
+            <filter id="sdh-kekfeny-szuro" color-interpolation-filters="sRGB">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+            </filter>
+        </svg>
+        <script>
+            /* A szűrő erőssége még a kirajzolás előtt beáll, hogy az oldal ne villanjon fel hidegen. */
+            (function () {
+                var k = (parseInt(document.documentElement.getAttribute('data-kekfeny'), 10) || 0) / 100;
+                var m = document.querySelector('#sdh-kekfeny-szuro feColorMatrix');
+
+                if (m && k > 0) {
+                    m.setAttribute('values', '1 0 0 0 0  0 ' + (1 - .22 * k).toFixed(3) + ' 0 0 0  0 0 ' + (1 - .62 * k).toFixed(3) + ' 0 0  0 0 0 1 0');
+                }
+            }());
+        </script>
 
         <aside class="sdh-sav">
             <a class="sdh-sav__fej" href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url()); ?>" title="<?php echo esc_attr(SDH_Muhely_Arculat::rendszer_nev()); ?>">
@@ -508,6 +543,24 @@ final class SDH_Muhely_Frontend
             </div>
 
             <div class="sdh-fej__jobb">
+                <?php
+                // Az óra és a zárásig hátralévő idő minden oldalon a fejlécben áll (Beállítások › Nyitvatartás és óra).
+                if (class_exists('SDH_Muhely_Nyitvatartas')) {
+                    echo SDH_Muhely_Nyitvatartas::ora_html('fej'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
+                }
+
+                // Súgó ehhez az oldalhoz: az oldalt leíró fejezet (ha nincs ilyen, a Súgó kezdőlapja).
+                if (class_exists('SDH_Muhely_Sugo') && $aktiv_kulcs !== SDH_Muhely_Sugo::KULCS) {
+                    $sdh_sugo_fejezet = SDH_Muhely_Sugo::modul_fejezet((string) $aktiv_kulcs);
+                    printf(
+                        '<a class="sdh-fej__ikongomb sdh-fej__sugo" href="%s" title="%s" aria-label="%s">%s</a>',
+                        esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Sugo::KULCS, $sdh_sugo_fejezet !== '' ? ['nezet' => 'dokumentacio', 'fejezet' => $sdh_sugo_fejezet] : [])),
+                        esc_attr($sdh_sugo_fejezet !== '' ? 'Súgó ehhez az oldalhoz' : 'Súgó'),
+                        esc_attr($sdh_sugo_fejezet !== '' ? 'Súgó ehhez az oldalhoz' : 'Súgó'),
+                        '<svg viewBox="0 0 20 20" aria-hidden="true">' . self::ikon_rajz('sugo', null) . '</svg>' // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
+                    );
+                }
+                ?>
                 <div class="sdh-profil" data-sdh-profil>
                     <button type="button" class="sdh-profil__gomb" aria-expanded="false">
                         <span class="sdh-profil__kezdo"><?php echo esc_html($kezdo); ?></span>
@@ -574,6 +627,9 @@ final class SDH_Muhely_Frontend
         <?php // Naptár: az esedékes események kártyái minden oldalon megjelennek (a pulzusból), ezért mindenhol betölt. ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naptar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naptar.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
+        <?php if ($aktiv_kulcs === 'sugo') : ?>
+            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.js')); ?>"></script>
+        <?php endif; ?>
 
         </body>
         </html>

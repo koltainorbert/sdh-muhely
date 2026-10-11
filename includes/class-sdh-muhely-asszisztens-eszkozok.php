@@ -111,6 +111,72 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 'leiras' => 'Keresés a tudástárban (amit tanítottak neked, és amit a verziókból tanultál).',
                 'schema' => $obj(['kifejezes' => $sz('Mit keresel.')], ['kifejezes']),
             ],
+            'sugo_kereses' => [
+                'szint' => 'olvas', 'cim' => 'Keresés a súgóban',
+                'leiras' => 'Keresés a rendszer dokumentációjában és a kérdés–válaszok között (a Súgó menüpont teljes tartalma + a cég saját kérdés–válaszai). MINDIG ezt használd, ha „hogyan", „hol találom", „mit jelent", „miért nem megy" típusú a kérdés, és a kapott súgórészek nem elegek.',
+                'schema' => $obj(['kifejezes' => $sz('Mit keresel – a lényeg néhány szóban (pl. „kassza zárás címlet", „bevizsgálási díj több eszköz").')], ['kifejezes']),
+            ],
+            'sugo_olvas' => [
+                'szint' => 'olvas', 'cim' => 'Súgófejezet elolvasása',
+                'leiras' => 'Egy súgófejezet vagy egy szakaszának teljes szövege. A fejezetek kulcsát a „SÚGÓ – TARTALOMJEGYZÉK" adja; szakasz megadásával csak azt a szakaszt kapod (a találatok azonosítója: fejezet#szakasz).',
+                'schema' => $obj([
+                    'fejezet' => $sz('A fejezet kulcsa (pl. penztar, munkalapok) vagy egy találat azonosítója (pl. penztar#lepesrol-lepesre-a-nap-zarasa).'),
+                    'szakasz' => $sz('A szakasz horgonya vagy címének része (nem kötelező).'),
+                ], ['fejezet']),
+            ],
+            'naptar_esemenyek' => [
+                'szint' => 'olvas', 'cim' => 'Naptár eseményei',
+                'leiras' => 'A naptár eseményei egy időszakban (ismétlődők alkalmanként): cím, kezdet, vég, kié, hely, kategória, fontosság, állapot. Mások privát eseménye „Foglalt"-ként jön.',
+                'schema' => $obj([
+                    'tol'     => $sz('Kezdőnap ÉÉÉÉ-HH-NN; üresen: ma.'),
+                    'ig'      => $sz('Zárónap ÉÉÉÉ-HH-NN (ez a nap még benne van); üresen: a kezdőnap + 7 nap. Legfeljebb 62 nap.'),
+                    'szemely' => $sz('Csak ennek a névnek a naptára (a név vagy része; nem kötelező).'),
+                ]),
+            ],
+            'eladasok_listaja' => [
+                'szint' => 'olvas', 'cim' => 'Árukiadások és rendelések',
+                'leiras' => 'A napi árukiadások (pultos eladások) vagy az ügyfeleknek rendelt áruk listája: szám, dátum, vevő, tételek, összeg, fizetés; rendelésnél a beszállító, a rendelés útja (Felvéve … Átadva) és a várható érkezés.',
+                'schema' => $obj([
+                    'fajta'        => ['type' => 'string', 'enum' => ['arukiadas', 'rendeles'], 'description' => 'Melyik lista.'],
+                    'napok'        => $eg('Az utolsó ennyi nap (alap: árukiadásnál 1 = ma, rendelésnél 60).'),
+                    'rend_allapot' => ['type' => 'string', 'enum' => ['felveve', 'megrendelve', 'megerkezett', 'ertesitve', 'atadva'], 'description' => 'Rendelésnél: csak ez az állapot.'],
+                    'fizetetlen'   => $lo('Csak a ki nem fizetettek.'),
+                    'limit'        => $eg('Legfeljebb ennyi sor (alap 25, max 100).'),
+                ], ['fajta']),
+            ],
+            'keszlet' => [
+                'szint' => 'olvas', 'cim' => 'Termékek és készlet',
+                'leiras' => 'A terméktörzs és a készlet: megnevezés, cikkszám, készlet, minimum, ár. Szűrhető névre, kategóriára, és arra, ami a minimum alá fogyott vagy elfogyott.',
+                'schema' => $obj([
+                    'kifejezes'  => $sz('Név, cikkszám, vonalkód vagy kategória része (nem kötelező).'),
+                    'fogyoban'   => $lo('Csak a készletkezelt termékek, amelyek a minimum alatt vannak vagy elfogytak.'),
+                    'limit'      => $eg('Legfeljebb ennyi sor (alap 30, max 100).'),
+                ]),
+            ],
+            'szolgaltatasok_listaja' => [
+                'szint' => 'olvas', 'cim' => 'Szolgáltatások és árak',
+                'leiras' => 'A szolgáltatástörzs: név, kategória, bruttó ár (és felső ár, ha sávos), bevizsgálási díj-e, hányszor használták. Szűrhető névre vagy kategóriára.',
+                'schema' => $obj([
+                    'kifejezes'    => $sz('Név, kód vagy kategória része (nem kötelező).'),
+                    'bevizsgalas'  => $lo('Csak a bevizsgálási díjak.'),
+                    'limit'        => $eg('Legfeljebb ennyi sor (alap 40, max 150).'),
+                ]),
+            ],
+            'eszkoz_adatok' => [
+                'szint' => 'olvas', 'cim' => 'Eszköz adatai',
+                'leiras' => 'Egy eszköz adatai (típus, IMEI, gyári szám, garancia, tartozékok, átvételi állapot), a gazdája és az eszköz eddigi munkalapjai – az „előélete". A zárkód és a feloldó minta nem jön.',
+                'schema' => $obj(['eszkoz_id' => $eg('Az eszköz azonosítója (a keresésből).')], ['eszkoz_id']),
+            ],
+            'nyitvatartas' => [
+                'szint' => 'olvas', 'cim' => 'Nyitvatartás',
+                'leiras' => 'A beállított nyitvatartás naponként, és hogy most nyitva van-e, mennyi idő van zárásig.',
+                'schema' => $obj([]),
+            ],
+            'beallitasok_allapota' => [
+                'szint' => 'olvas', 'cim' => 'Mi van beállítva',
+                'leiras' => 'A rendszer beállításainak állapota titkok nélkül: mi van bekötve és mi hiányzik (számlázás, levelezés, asszisztens, IMEI-lekérdezés), a Csapat módja, a helyszínek és beszállítók száma, a megjelenés alapjai. Akkor használd, ha „miért nem megy" vagy „be van-e állítva" a kérdés.',
+                'schema' => $obj([]),
+            ],
             'muveletnaplo' => [
                 'szint' => 'olvas', 'cim' => 'Műveletnapló',
                 'leiras' => 'A te (az asszisztens) javaslataid és műveleteid naplója: mit javasoltál, mit hagytak jóvá, mi futott le, mi lett visszavonva.',
@@ -125,6 +191,23 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                     'elem'   => $sz('Az elem azonosítója a látható elemek listájából (pl. e12).'),
                     'szoveg' => $sz('Rövid magyarázat a buborékba (mit csináljon vele).'),
                 ], ['elem', 'szoveg']),
+            ],
+            'vezet' => [
+                'szint' => 'felulet', 'cim' => 'Végigvezetem',
+                'leiras' => 'Több lépésben vezeti végig a felhasználót a képernyőn: minden lépés egy látható elemet emel ki magyarázattal, „Előző / Következő" gombokkal. A túra NEM tűnik el kattintásra – a felhasználó közben dolgozhat. Használd, ha egy feladathoz 2–8 elemet kell sorban megmutatni; az elemeket a „LÁTHATÓ ELEMEK" listából vedd.',
+                'schema' => $obj([
+                    'cim'     => $sz('A végigvezetés rövid címe (pl. „Új munkalap felvétele").'),
+                    'lepesek' => ['type' => 'array', 'minItems' => 1, 'maxItems' => 10, 'description' => 'A lépések sorrendben.', 'items' => $obj([
+                        'elem'   => $sz('Az elem azonosítója a látható elemek listájából (pl. e12).'),
+                        'cim'    => $sz('A lépés rövid címe.'),
+                        'szoveg' => $sz('Mit lát itt és mit csináljon – 1–2 mondat.'),
+                    ], ['elem', 'szoveg'])],
+                ], ['lepesek']),
+            ],
+            'tura' => [
+                'szint' => 'felulet', 'cim' => 'Oldaltúra',
+                'leiras' => 'Elindítja az éppen nyitott oldal kész, a dokumentációból jövő bemutató túráját (ha az oldalnak van ilyen – ezt az „EZ AZ OLDAL A SÚGÓBAN" sor mondja meg). Ezt használd a „vezess végig ezen az oldalon", „mutasd be ezt az oldalt" kérésre.',
+                'schema' => $obj([]),
             ],
             'megnyit' => [
                 'szint' => 'felulet', 'cim' => 'Megnyitás',
@@ -329,6 +412,24 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                     return self::json(array_map(static fn ($r) => ['id' => (int) $r->id, 'cim' => $r->cim, 'szoveg' => $r->szoveg, 'forras' => $r->forras], SDH_Muhely_Asszisztens_Tudas::keres((string) ($p['kifejezes'] ?? ''), 10)));
                 case 'muveletnaplo':
                     return self::json(self::naplo(min(50, max(1, (int) ($p['limit'] ?? 15)))));
+                case 'sugo_kereses':
+                    return self::json(self::sugo_kereses((string) ($p['kifejezes'] ?? '')));
+                case 'sugo_olvas':
+                    return self::json(self::sugo_olvas((string) ($p['fejezet'] ?? ''), (string) ($p['szakasz'] ?? '')));
+                case 'naptar_esemenyek':
+                    return self::json(self::naptar_esemenyek((string) ($p['tol'] ?? ''), (string) ($p['ig'] ?? ''), (string) ($p['szemely'] ?? '')));
+                case 'eladasok_listaja':
+                    return self::json(self::eladasok($p));
+                case 'keszlet':
+                    return self::json(self::keszlet($p));
+                case 'szolgaltatasok_listaja':
+                    return self::json(self::szolgaltatasok($p));
+                case 'eszkoz_adatok':
+                    return self::json(self::eszkoz_adatok((int) ($p['eszkoz_id'] ?? 0)));
+                case 'nyitvatartas':
+                    return self::json(self::nyitvatartas());
+                case 'beallitasok_allapota':
+                    return self::json(self::beallitasok_allapota());
             }
         } catch (Throwable $h) {
             return self::json(['hiba' => 'Az adat nem olvasható: ' . $h->getMessage()]);
@@ -637,6 +738,439 @@ final class SDH_Muhely_Asszisztens_Eszkozok
             $nap = SDH_Muhely_Penztar::nap($ma);
             $ki['penztar_ma'] = $nap ? array_intersect_key((array) $nap, array_flip(['allapot', 'nyito', 'kp_be', 'kartya', 'utalas', 'zaro', 'forgalom', 'tetel_db'])) : 'Ma még nincs tétel.';
         }
+
+        return $ki;
+    }
+
+    /* ---- Súgó ---- */
+
+    /** @return array<string, mixed> */
+    private static function sugo_kereses(string $q): array
+    {
+        if (!class_exists('SDH_Muhely_Sugo')) {
+            return ['hiba' => 'A súgó nem érhető el.'];
+        }
+
+        $ki = [];
+
+        foreach (SDH_Muhely_Sugo::keres($q, 7) as $t) {
+            $ki[] = [
+                'azonosito' => (string) $t['id'],
+                'fajta'     => $t['tipus'] === 'gyik' ? 'kérdés–válasz' : 'dokumentáció',
+                'fejezet'   => (string) $t['fejezet_cim'],
+                'cim'       => (string) $t['cim'],
+                'szoveg'    => mb_substr(SDH_Muhely_Sugo::sima((string) $t['torzs']), 0, $t['tipus'] === 'gyik' ? 1400 : 2400),
+            ];
+        }
+
+        return $ki !== [] ? ['talalatok' => $ki] : ['talalatok' => [], 'megjegyzes' => 'Erre nincs találat a súgóban. Ne találj ki választ: mondd meg, hogy erről nincs leírás, és ha tudsz, az adatokból segíts.'];
+    }
+
+    /** @return array<string, mixed> */
+    private static function sugo_olvas(string $fejezet, string $szakasz): array
+    {
+        if (!class_exists('SDH_Muhely_Sugo')) {
+            return ['hiba' => 'A súgó nem érhető el.'];
+        }
+
+        // Találat-azonosító is jöhet: fejezet#horgony.
+        if (strpos($fejezet, '#') !== false) {
+            [$fejezet, $h] = explode('#', $fejezet, 2);
+            $szakasz = $szakasz !== '' ? $szakasz : $h;
+        }
+
+        $f = SDH_Muhely_Sugo::fejezet(sanitize_key($fejezet));
+
+        if ($f === null) {
+            return ['hiba' => 'Nincs ilyen fejezet. A fejezetek: ' . implode(', ', array_keys(SDH_Muhely_Sugo::fejezetek()))];
+        }
+
+        $szakaszok = (array) $f['szakaszok'];
+
+        if ($szakasz !== '') {
+            $keresett  = SDH_Muhely_Sugo::horgony($szakasz);
+            $szakaszok = array_values(array_filter($szakaszok, static fn (array $s): bool => (string) $s['horgony'] === $keresett || strpos((string) $s['horgony'], $keresett) !== false));
+
+            if ($szakaszok === []) {
+                return ['hiba' => 'Nincs ilyen szakasz ebben a fejezetben. A szakaszok: ' . implode('; ', array_map(static fn (array $s): string => (string) $s['cim'], (array) $f['szakaszok']))];
+            }
+        }
+
+        $ki    = ['fejezet' => (string) $f['cim'], 'osszefoglalo' => (string) $f['osszefoglalo'], 'szakaszok' => []];
+        $hossz = 0;
+
+        foreach ($szakaszok as $s) {
+            $szoveg = SDH_Muhely_Sugo::sima((string) $s['torzs']);
+            $hossz += mb_strlen($szoveg);
+
+            // Egy válaszban legfeljebb kb. 14 ezer karakter: a többi szakasz címe jön, külön kérhető.
+            if ($hossz > 14000 && $ki['szakaszok'] !== []) {
+                $ki['tovabbi_szakaszok'][] = (string) $s['cim'];
+                continue;
+            }
+
+            $ki['szakaszok'][] = ['cim' => (string) $s['cim'], 'szoveg' => $szoveg];
+        }
+
+        if ($szakasz === '') {
+            $ki['kerdesek'] = array_map(static fn (array $g): string => (string) $g['kerdes'], (array) $f['gyik']);
+        }
+
+        return $ki;
+    }
+
+    /* ---- Naptár, eladások, készlet, szolgáltatások, eszköz, nyitvatartás, beállítások ---- */
+
+    /** @return array<string, mixed> */
+    private static function naptar_esemenyek(string $tol, string $ig, string $szemely): array
+    {
+        if (!class_exists('SDH_Muhely_Naptar')) {
+            return ['hiba' => 'A naptár nem érhető el.'];
+        }
+
+        $ma  = current_time('Y-m-d');
+        $tol = self::datum_ok($tol) ? $tol : $ma;
+        $ig  = self::datum_ok($ig) && $ig >= $tol ? $ig : gmdate('Y-m-d', (int) strtotime($tol . ' +7 days UTC'));
+        $max = gmdate('Y-m-d', (int) strtotime($tol . ' +62 days UTC'));
+        $ig  = min($ig, $max);
+
+        $szemelyek = SDH_Muhely_Naptar::szemelyek();
+        $nevek     = [];
+        $szurt     = [];
+
+        foreach ($szemelyek as $sz) {
+            $id         = (int) (is_array($sz) ? ($sz['id'] ?? 0) : ($sz->id ?? 0));
+            $nev        = (string) (is_array($sz) ? ($sz['nev'] ?? '') : ($sz->nev ?? ''));
+            $nevek[$id] = $nev;
+
+            if ($szemely !== '' && mb_stripos(remove_accents($nev), remove_accents($szemely)) !== false) {
+                $szurt[] = $id;
+            }
+        }
+
+        if ($szemely !== '' && $szurt === []) {
+            return ['hiba' => 'Nincs ilyen nevű naptár. A nevek: ' . implode(', ', array_filter($nevek))];
+        }
+
+        // A zárónap is benne van: a naptár lekérdezése a felső határt kizárja.
+        $adat = SDH_Muhely_Naptar::adat($tol, gmdate('Y-m-d', (int) strtotime($ig . ' +1 day UTC')), $szurt);
+        $pri  = ['normal' => '', 'fontos' => 'fontos', 'kritikus' => 'nagyon fontos'];
+        $ki   = [];
+
+        foreach (array_slice((array) $adat['esemenyek'], 0, 120) as $e) {
+            $ki[] = array_filter([
+                'cim'      => (string) $e['cim'],
+                'kezdet'   => str_replace('T', ' ', (string) $e['k']),
+                'veg'      => str_replace('T', ' ', (string) $e['v']),
+                'egesz_nap' => !empty($e['en']),
+                'kie'      => $nevek[(int) $e['sz']] ?? '',
+                'hely'     => (string) $e['hely'],
+                'kategoria' => (string) $e['kat'],
+                'fontossag' => $pri[(string) $e['pri']] ?? '',
+                'allapot'  => (string) $e['all'],
+                'ismetlodo' => !empty($e['ism']),
+                'ugyfel'   => (string) $e['ugyfel'],
+                'munkalap' => (string) $e['ml'],
+                'leiras'   => (string) $e['leiras'],
+            ], static fn ($v): bool => $v !== '' && $v !== false);
+        }
+
+        return ['idoszak' => $tol . ' – ' . $ig, 'naptarak' => array_values(array_filter($nevek)), 'esemeny_db' => count((array) $adat['esemenyek']), 'esemenyek' => $ki];
+    }
+
+    /** @param array<string, mixed> $p */
+    private static function eladasok(array $p): array
+    {
+        global $wpdb;
+
+        $fajta = (string) ($p['fajta'] ?? '') === 'rendeles' ? 'rendeles' : 'arukiadas';
+        $t     = self::tabla('munkalap');
+        $u     = self::tabla('ugyfel');
+        $tt    = self::tabla('munkalap_tetel');
+        $napok = max(1, min(730, (int) ($p['napok'] ?? ($fajta === 'rendeles' ? 60 : 1))));
+        $hol   = ['m.fajta = %s', 'm.keszult >= %s'];
+        $ertek = [$fajta, wp_date('Y-m-d', time() - ($napok - 1) * DAY_IN_SECONDS)];
+
+        $rend = class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::rend_allapotok() : [];
+
+        if ($fajta === 'rendeles' && isset($rend[(string) ($p['rend_allapot'] ?? '')])) {
+            $hol[]   = 'm.rend_allapot = %s';
+            $ertek[] = (string) $p['rend_allapot'];
+        }
+
+        if (!empty($p['fizetetlen'])) {
+            $hol[] = 'm.fizetve = 0 AND m.brutto_ertek - m.fizetett > 0.5';
+        }
+
+        $limit = min(100, max(1, (int) ($p['limit'] ?? 25)));
+        $where = implode(' AND ', $hol);
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+        $sorok = (array) $wpdb->get_results($wpdb->prepare(
+            "SELECT m.id, m.munkalap_szam, m.keszult, m.hatarido, m.allapot, m.brutto_ertek, m.fizetett, m.fizetve, m.fizetesi_mod, m.helyszin_id, m.beszallito_id, m.rend_allapot, m.rend_szam, m.rend_ertesitve, u.nev AS ugyfel
+             FROM {$t} m LEFT JOIN {$u} u ON u.id = m.ugyfel_id WHERE {$where} ORDER BY m.id DESC LIMIT {$limit}",
+            $ertek
+        ));
+        $ossz = $wpdb->get_row($wpdb->prepare("SELECT COUNT(*) AS db, COALESCE(SUM(m.brutto_ertek), 0) AS brutto, COALESCE(SUM(m.fizetett), 0) AS fizetett FROM {$t} m WHERE {$where}", $ertek));
+
+        $tetelek = [];
+
+        if ($sorok !== []) {
+            $idk = implode(',', array_map(static fn ($s): int => (int) $s->id, $sorok));
+
+            foreach ((array) $wpdb->get_results("SELECT munkalap_id, megnevezes, mennyiseg FROM {$tt} WHERE munkalap_id IN ({$idk}) AND megnevezes <> '' ORDER BY munkalap_id, sorrend, id") as $x) {
+                $tetelek[(int) $x->munkalap_id][] = ((float) $x->mennyiseg > 1.0001 ? rtrim(rtrim(number_format((float) $x->mennyiseg, 2, ',', ''), '0'), ',') . '× ' : '') . (string) $x->megnevezes;
+            }
+        }
+        // phpcs:enable
+
+        $helyszinek  = class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::torzs_nevek('helyszinek') : [];
+        $beszallitok = class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::torzs_nevek('beszallitok') : [];
+
+        return [
+            'fajta'    => $fajta === 'rendeles' ? 'rendelések' : 'napi árukiadás',
+            'idoszak'  => 'az utolsó ' . $napok . ' nap',
+            'osszesen' => (int) ($ossz->db ?? 0),
+            'brutto_osszesen'  => self::penz($ossz->brutto ?? 0),
+            'befolyt_osszesen' => self::penz($ossz->fizetett ?? 0),
+            'lista'    => array_map(static function ($s) use ($fajta, $tetelek, $helyszinek, $beszallitok, $rend): array {
+                $sor = [
+                    'id'      => (int) $s->id,
+                    'szam'    => SDH_Muhely_Munkalap::szam_formaz($s->munkalap_szam),
+                    'datum'   => (string) $s->keszult,
+                    'vevo'    => $s->ugyfel !== null && (string) $s->ugyfel !== '' ? (string) $s->ugyfel : 'Napi árukiadás (ügyfél nélkül)',
+                    'tetelek' => implode(', ', array_slice($tetelek[(int) $s->id] ?? [], 0, 6)),
+                    'brutto'  => self::penz($s->brutto_ertek),
+                    'fizetve' => (bool) $s->fizetve,
+                    'befolyt' => self::penz($s->fizetett),
+                    'allapot' => self::allapot_nev((string) $s->allapot),
+                ];
+
+                if ($fajta === 'rendeles') {
+                    $sor += [
+                        'honnan'          => $beszallitok[(int) $s->beszallito_id] ?? '',
+                        'rendeles_utja'   => (string) ($rend[(string) $s->rend_allapot]['nev'] ?? $s->rend_allapot),
+                        'rendelesszam'    => (string) $s->rend_szam,
+                        'varhato_erkezes' => (string) $s->hatarido,
+                        'ugyfel_ertesitve' => (string) $s->rend_ertesitve,
+                    ];
+                } elseif (isset($helyszinek[(int) $s->helyszin_id])) {
+                    $sor['helyszin'] = $helyszinek[(int) $s->helyszin_id];
+                }
+
+                return $sor;
+            }, $sorok),
+        ];
+    }
+
+    /** @param array<string, mixed> $p */
+    private static function keszlet(array $p): array
+    {
+        global $wpdb;
+
+        $t     = self::tabla('termek');
+        $hol   = ['aktiv = 1'];
+        $ertek = [];
+        $q     = trim((string) ($p['kifejezes'] ?? ''));
+
+        if ($q !== '') {
+            $m       = '%' . $wpdb->esc_like($q) . '%';
+            $hol[]   = '(megnevezes LIKE %s OR cikkszam LIKE %s OR termekkod LIKE %s OR vonalkod LIKE %s OR kategoria LIKE %s)';
+            $ertek   = [$m, $m, $m, $m, $m];
+        }
+
+        if (!empty($p['fogyoban'])) {
+            $hol[] = 'keszletkezeles = 1 AND keszlet <= min_keszlet';
+        }
+
+        $limit = min(100, max(1, (int) ($p['limit'] ?? 30)));
+        $where = implode(' AND ', $hol);
+        $sql   = "SELECT id, megnevezes, kategoria, cikkszam, keszletkezeles, keszlet, min_keszlet, me, brutto_ar FROM {$t} WHERE {$where} ORDER BY " . (!empty($p['fogyoban']) ? 'keszlet ASC, megnevezes' : 'megnevezes') . " LIMIT {$limit}";
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $sorok = (array) ($ertek !== [] ? $wpdb->get_results($wpdb->prepare($sql, $ertek)) : $wpdb->get_results($sql));
+        $db    = (int) ($ertek !== [] ? $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$t} WHERE {$where}", $ertek)) : $wpdb->get_var("SELECT COUNT(*) FROM {$t} WHERE {$where}"));
+        // phpcs:enable
+
+        return [
+            'osszesen' => $db,
+            'lista'    => array_map(static fn ($s): array => [
+                'id' => (int) $s->id, 'megnevezes' => (string) $s->megnevezes, 'kategoria' => (string) $s->kategoria, 'cikkszam' => (string) $s->cikkszam,
+                'keszlet' => (int) $s->keszletkezeles === 1 ? rtrim(rtrim(number_format((float) $s->keszlet, 2, ',', ''), '0'), ',') . ' ' . ((string) $s->me !== '' ? (string) $s->me : 'db') : 'nincs készletkezelés',
+                'minimum' => (int) $s->keszletkezeles === 1 ? (float) $s->min_keszlet : null,
+                'brutto_ar' => self::penz($s->brutto_ar),
+            ], $sorok),
+        ];
+    }
+
+    /** @param array<string, mixed> $p */
+    private static function szolgaltatasok(array $p): array
+    {
+        global $wpdb;
+
+        $t     = self::tabla('szolgaltatas');
+        $hol   = ['1=1'];
+        $ertek = [];
+        $q     = trim((string) ($p['kifejezes'] ?? ''));
+
+        if ($q !== '') {
+            $m     = '%' . $wpdb->esc_like($q) . '%';
+            $hol[] = '(nev LIKE %s OR kod LIKE %s OR kategoria LIKE %s)';
+            $ertek = [$m, $m, $m];
+        }
+
+        if (!empty($p['bevizsgalas'])) {
+            $hol[] = 'bevizsgalas = 1';
+        }
+
+        $limit = min(150, max(1, (int) ($p['limit'] ?? 40)));
+        $where = implode(' AND ', $hol);
+        $sql   = "SELECT id, nev, kategoria, kod, brutto_ar, ar_max, bevizsgalas, hasznalat FROM {$t} WHERE {$where} ORDER BY kategoria, sorrend, nev LIMIT {$limit}";
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $sorok = (array) ($ertek !== [] ? $wpdb->get_results($wpdb->prepare($sql, $ertek)) : $wpdb->get_results($sql));
+        $db    = (int) ($ertek !== [] ? $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$t} WHERE {$where}", $ertek)) : $wpdb->get_var("SELECT COUNT(*) FROM {$t} WHERE {$where}"));
+        // phpcs:enable
+
+        return [
+            'osszesen' => $db,
+            'lista'    => array_map(static fn ($s): array => array_filter([
+                'id' => (int) $s->id, 'nev' => (string) $s->nev, 'kategoria' => (string) $s->kategoria, 'kod' => (string) $s->kod,
+                'brutto_ar' => self::penz($s->brutto_ar) . ((float) $s->ar_max > (float) $s->brutto_ar ? ' – ' . self::penz($s->ar_max) : ''),
+                'bevizsgalasi_dij' => (int) $s->bevizsgalas === 1, 'hasznalat' => (int) $s->hasznalat,
+            ], static fn ($v): bool => $v !== '' && $v !== false), $sorok),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private static function eszkoz_adatok(int $id): array
+    {
+        global $wpdb;
+
+        $e = self::sor('eszkoz', $id);
+
+        if ($e === null) {
+            return ['hiba' => 'Nincs ilyen eszköz.'];
+        }
+
+        // A zárkód és a feloldó minta érzékeny adat: az asszisztenshez nem kerül.
+        unset($e['zarkod'], $e['minta'], $e['kulso_azonosito'], $e['forras'], $e['letrehozo'], $e['kep_url']);
+
+        $t  = self::tabla('munkalap');
+        $me = self::tabla('munkalap_eszkoz');
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $lapok = (array) $wpdb->get_results($wpdb->prepare(
+            "SELECT m.id, m.munkalap_szam, m.allapot, m.keszult, m.lezarva, m.brutto_ertek, m.nev FROM {$t} m
+             WHERE m.eszkoz_id = %d OR m.id IN (SELECT munkalap_id FROM {$me} WHERE eszkoz_id = %d) ORDER BY m.id DESC LIMIT 15",
+            $id,
+            $id
+        ));
+        // phpcs:enable
+
+        $u = (int) $e['ugyfel_id'] > 0 ? self::sor('ugyfel', (int) $e['ugyfel_id']) : null;
+
+        return [
+            'eszkoz'     => array_filter($e, static fn ($v): bool => $v !== null && $v !== ''),
+            'gazdaja'    => $u ? ['id' => (int) $u['id'], 'nev' => (string) $u['nev'], 'telefon' => (string) $u['telefon']] : null,
+            'munkalapok' => array_map(static fn ($s): array => [
+                'id' => (int) $s->id, 'szam' => SDH_Muhely_Munkalap::szam_formaz($s->munkalap_szam), 'allapot' => self::allapot_nev((string) $s->allapot),
+                'keszult' => (string) $s->keszult, 'lezarva' => (string) $s->lezarva, 'brutto' => self::penz($s->brutto_ertek), 'nev' => (string) $s->nev,
+            ], $lapok),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private static function nyitvatartas(): array
+    {
+        if (!class_exists('SDH_Muhely_Nyitvatartas')) {
+            return ['hiba' => 'A nyitvatartás nem érhető el.'];
+        }
+
+        $b     = SDH_Muhely_Nyitvatartas::beallitas();
+        $napok = SDH_Muhely_Nyitvatartas::napok();
+        $het   = [];
+
+        foreach ($napok as $n => $nev) {
+            $het[(string) $nev] = isset($b['napok'][$n]) ? $b['napok'][$n][0] . '–' . $b['napok'][$n][1] : 'zárva';
+        }
+
+        $a = SDH_Muhely_Nyitvatartas::allapot();
+
+        return [
+            'most'      => current_time('Y-m-d H:i'),
+            'megadva'   => $b['napok'] !== [],
+            'het'       => $het,
+            'allapot'   => $a['allapot'] === 'nincs' ? 'nincs megadva nyitvatartás (Beállítások › Nyitvatartás és óra)' : (string) $a['szoveg'],
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private static function beallitasok_allapota(): array
+    {
+        $ki = ['verzio' => SDH_MUHELY_VERSION];
+
+        $proba = static function (callable $f) {
+            try {
+                return $f();
+            } catch (Throwable $h) {
+                return 'nem olvasható';
+            }
+        };
+
+        if (class_exists('SDH_Muhely_Arculat')) {
+            $a = SDH_Muhely_Arculat::beallitas();
+            $ki['megjelenes'] = [
+                'rendszer_neve' => SDH_Muhely_Arculat::rendszer_nev(),
+                'alap_megjelenes' => (string) (SDH_Muhely_Arculat::temak()[$a['tema']] ?? $a['tema']),
+                'alap_betumeret' => (int) $a['nagyitas'] . '%',
+                'kekfeny_szuro' => (int) $a['kekfeny'] > 0 ? (int) $a['kekfeny'] . '%' : 'kikapcsolva',
+                'van_logo' => $a['logo'] !== '',
+            ];
+        }
+
+        if (class_exists('SDH_Muhely_Nyitvatartas')) {
+            $ki['nyitvatartas_megadva'] = SDH_Muhely_Nyitvatartas::beallitas()['napok'] !== [];
+        }
+
+        if (class_exists('SDH_Muhely_Csapat')) {
+            $ki['csapat_mod'] = SDH_Muhely_Csapat::egyszeru() ? 'közös fiókos üzenőfal' : 'többfelhasználós csevegés';
+        }
+
+        if (class_exists('SDH_Muhely_Levelezes')) {
+            $ki['levelezes_bekotve'] = $proba(static fn () => SDH_Muhely_Levelezes::van_fiok());
+        }
+
+        if (class_exists('SDH_Muhely_Szamla') && method_exists('SDH_Muhely_Szamla', 'beallitva')) {
+            $ki['szamlazz_hu_bekotve'] = $proba(static fn () => (bool) SDH_Muhely_Szamla::beallitva());
+        }
+
+        $ki['asszisztens'] = [
+            'bekapcsolva'   => SDH_Muhely_Asszisztens::beallitas()['be'],
+            'van_api_kulcs' => SDH_Muhely_Asszisztens::kulcs()['kulcs'] !== '',
+            'magatol_szol'  => SDH_Muhely_Asszisztens::beallitas()['proaktiv'],
+        ];
+
+        if (class_exists('SDH_Muhely_Eladas')) {
+            $ki['helyszinek']  = array_values(SDH_Muhely_Eladas::torzs_nevek('helyszinek', true));
+            $ki['beszallitok_szama'] = count(SDH_Muhely_Eladas::torzs_nevek('beszallitok', true));
+        }
+
+        if (class_exists('SDH_Muhely_Naptar')) {
+            $ki['naptarak'] = $proba(static function (): array {
+                $nevek = [];
+
+                foreach (SDH_Muhely_Naptar::szemelyek() as $sz) {
+                    $nevek[] = (string) (is_array($sz) ? ($sz['nev'] ?? '') : ($sz->nev ?? ''));
+                }
+
+                return array_values(array_filter($nevek));
+            });
+        }
+
+        $ki['munkalap_allapotok'] = array_map(static fn (array $a): string => (string) $a['nev'], SDH_Muhely_Munkalap::allapotok());
+        $ki['fizetesi_modok']     = array_values(array_map('strval', SDH_Muhely_Munkalap::fizetesi_modok()));
+        $ki['wp_idozona']         = wp_timezone_string();
 
         return $ki;
     }

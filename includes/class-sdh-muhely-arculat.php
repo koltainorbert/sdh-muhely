@@ -71,7 +71,9 @@ final class SDH_Muhely_Arculat
             'szin_egyeni' => $egyeni,
             'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
             'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',
-            'tema'        => (string) ($mentett['tema'] ?? 'rendszer'),
+            'tema'        => isset(self::temak()[(string) ($mentett['tema'] ?? '')]) ? (string) $mentett['tema'] : 'rendszer',
+            // Kékfény-szűrő: a cég alapértelmezése (a dolgozó a profilmenüben a saját gépére átállíthatja).
+            'kekfeny'     => self::kekfeny_szukit((int) ($mentett['kekfeny'] ?? 0)),
             'szin'        => $szin,
             // A popupok neon kerete: melyik szín világít (üres = kikapcsolva).
             'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
@@ -342,7 +344,15 @@ final class SDH_Muhely_Arculat
             'rendszer' => 'A gép beállítása szerint',
             'vilagos'  => 'Mindig világos',
             'sotet'    => 'Mindig sötét',
+            // Papír: nyugodt, e-könyv-olvasó-szerű felület – meleg papírszín, tintaszínű betű, fények és üveg nélkül.
+            'papir'    => 'Papír (e-könyv)',
         ];
+    }
+
+    /** A kékfény-szűrő erőssége 0–100 között, ötösével (0 = kikapcsolva). */
+    public static function kekfeny_szukit(int $ertek): int
+    {
+        return max(0, min(100, (int) (round($ertek / 5) * 5)));
     }
 
     /* =================================================================
@@ -377,8 +387,9 @@ final class SDH_Muhely_Arculat
             'rendszer' => '<rect x="2.5" y="4" width="15" height="10" rx="1.6"/><path d="M7 17h6M10 14v3"/><path d="M10 6.5v5M10 6.5a2.5 2.5 0 0 0 0 5z" />',
             'vilagos'  => '<circle cx="10" cy="10" r="3.2"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/>',
             'sotet'    => '<path d="M16 11.6A6.5 6.5 0 0 1 8.4 4a6.5 6.5 0 1 0 7.6 7.6z"/>',
+            'papir'    => '<path d="M10 5.2C8.4 4 6.2 3.6 3.5 4v11c2.7-.4 4.9 0 6.5 1.2 1.6-1.2 3.8-1.6 6.5-1.2V4c-2.7-.4-4.9 0-6.5 1.2z"/><path d="M10 5.2v11"/>',
         ];
-        $temak = ['rendszer' => 'Rendszer', 'vilagos' => 'Világos', 'sotet' => 'Sötét'];
+        $temak = ['rendszer' => 'Rendszer', 'vilagos' => 'Világos', 'sotet' => 'Sötét', 'papir' => 'Papír'];
 
         $html = '<div class="sdh-megj" data-sdh-megj="' . esc_attr($urlap ? 'urlap' : 'profil') . '">';
 
@@ -388,14 +399,25 @@ final class SDH_Muhely_Arculat
                 . '<input type="hidden" name="arculat_uveg" value="' . esc_attr($b['uveg']) . '" data-sdh-megj-mezo="uveg">';
         }
 
-        $html .= '<p class="sdh-megj__cim">Megjelenés</p><div class="sdh-megj__tema" data-sdh-tema role="group" aria-label="Világos vagy sötét megjelenés">';
+        $html .= '<p class="sdh-megj__cim">Megjelenés</p><div class="sdh-megj__tema" data-sdh-tema role="group" aria-label="Világos, sötét vagy papír megjelenés">';
 
         foreach ($temak as $kulcs => $nev) {
             $html .= '<button type="button" data-ertek="' . esc_attr($kulcs) . '" aria-pressed="' . ($urlap && $b['tema'] === $kulcs ? 'true' : 'false') . '">'
                 . '<svg viewBox="0 0 20 20" aria-hidden="true">' . $ikonok[$kulcs] . '</svg><span>' . esc_html($nev) . '</span></button>';
         }
 
-        $html .= '</div><p class="sdh-megj__cim">Üvegszín</p>';
+        // Kékfény-szűrő: melegebb, a szemnek nyugodtabb kép (0 = ki). A profilmenüben a dolgozó
+        // saját gépére szól, a Beállításokban a cég alapértelmezése (name="arculat_kekfeny").
+        $html .= '</div><p class="sdh-megj__cim">Kékfény-szűrő</p>'
+            . '<div class="sdh-kekfeny-allito" data-sdh-kekfeny="' . esc_attr($urlap ? 'urlap' : 'sajat') . '">'
+            . '<svg class="sdh-kekfeny-allito__ikon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16 11.6A6.5 6.5 0 0 1 8.4 4a6.5 6.5 0 1 0 7.6 7.6z"/><path d="M14.5 3.2v2.6M13.2 4.5h2.6"/></svg>'
+            . '<input type="range" class="sdh-nagyito__csuszka sdh-kekfeny-allito__csuszka"' . ($urlap ? ' name="arculat_kekfeny"' : '')
+            . ' min="0" max="100" step="5" value="' . (int) $b['kekfeny'] . '" data-alap="' . (int) $b['kekfeny'] . '" data-sdh-kekfeny-csuszka'
+            . ' aria-label="' . esc_attr($urlap ? 'A kékfény-szűrő alap erőssége (százalék)' : 'A kékfény-szűrő erőssége (százalék)') . '">'
+            . '<output class="sdh-nagyito__ertek" data-sdh-kekfeny-ertek>' . ((int) $b['kekfeny'] > 0 ? (int) $b['kekfeny'] . '%' : 'Ki') . '</output>'
+            . '</div>';
+
+        $html .= '<p class="sdh-megj__cim">Üvegszín</p>';
 
         foreach (self::uvegek() as $uveg => $u) {
             $html .= '<div class="sdh-megj__sorfej"><strong>' . esc_html($u['nev']) . '</strong><span>' . esc_html($u['alcim']) . '</span>'
@@ -420,8 +442,9 @@ final class SDH_Muhely_Arculat
     }
 
     /**
-     * Betűnagyító csúszka: húzás közben azonnal nő / csökken a felület (app.js:
-     * nagyitasAlkalmaz). $mod 'sajat': a dolgozó saját gépére szól; 'urlap': a
+     * Betűnagyító csúszka: húzás közben csak a százalék és a minta változik, a
+     * felület a csúszka elengedésekor, lágy átmenettel vált méretet (app.js:
+     * nagyitasAnimal) – így a csúszka nem „szalad ki" az egér alól. $mod 'sajat': a dolgozó saját gépére szól; 'urlap': a
      * Beállítások űrlapja, a cég alapértelmezése (name="arculat_nagyitas").
      */
     public static function nagyito(string $mod = 'sajat'): string
@@ -436,6 +459,7 @@ final class SDH_Muhely_Arculat
             . ' value="' . (int) $b['nagyitas'] . '" data-alap="' . (int) ($urlap ? 100 : $b['nagyitas']) . '" data-sdh-nagyito-csuszka'
             . ' aria-label="' . esc_attr($urlap ? 'Alap betűméret (százalék)' : 'Betűméret (százalék)') . '">'
             . '<button type="button" class="sdh-nagyito__a sdh-nagyito__a--nagy" data-sdh-nagyito-lep="1" title="Nagyobb betű" aria-label="Nagyobb betű">A</button>'
+            . '<span class="sdh-nagyito__minta" data-sdh-nagyito-minta aria-hidden="true">Aa</span>'
             . '<output class="sdh-nagyito__ertek" data-sdh-nagyito-ertek>' . (int) $b['nagyitas'] . '%</output>'
             . '<button type="button" class="sdh-nagyito__alap" data-sdh-nagyito-alap title="Vissza az alapméretre" aria-label="Vissza az alapméretre">'
             . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.7-4"/><path d="M4 3.5v3h3"/></svg></button>'
@@ -572,7 +596,7 @@ final class SDH_Muhely_Arculat
                         <div class="sdh-mezo sdh-mezo--szeles">
                             <label>Alap betűméret</label>
                             <?php echo self::nagyito('urlap'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
-                            <span class="sdh-mezo__sugo">100% a rendes méret. Húzás közben ez a képernyő is átméreteződik – mentés után lesz a cég alapértelmezése.</span>
+                            <span class="sdh-mezo__sugo">100% a rendes méret. Húzás közben a csúszka fölötti minta mutatja a méretet; elengedéskor ez a képernyő is átméreteződik – mentés után lesz a cég alapértelmezése.</span>
                         </div>
                     </div>
 
@@ -819,6 +843,7 @@ final class SDH_Muhely_Arculat
                 'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
                 'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',
                 'tema'        => isset(self::temak()[$tema]) ? $tema : 'rendszer',
+                'kekfeny'     => isset($_POST['arculat_kekfeny']) ? self::kekfeny_szukit((int) $_POST['arculat_kekfeny']) : $regi['kekfeny'],
                 'szin'        => isset(self::szinek()[$szin]) ? $szin : '',
                 'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
                 'neon_egyeni' => $hex,

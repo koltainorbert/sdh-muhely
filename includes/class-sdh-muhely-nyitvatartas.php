@@ -2,7 +2,7 @@
 /**
  * Nyitvatartás és az Áttekintés órája.
  *
- * Az Áttekintés fejlécében élő óra áll, mellette az, hogy mennyi idő van még
+ * A műhely-felület felső fejlécében (minden oldalon) élő óra áll, mellette az, hogy mennyi idő van még
  * zárásig (nyitás előtt: nyitásig; zárás után: mikor nyit legközelebb). A
  * nyitvatartás naponként állítható a Beállításokban – a kódban semmilyen
  * cégadat nincs: amíg nincs megadva, csak az óra látszik.
@@ -102,7 +102,7 @@ final class SDH_Muhely_Nyitvatartas
         <div class="sdh-doboz" id="nyitvatartas">
             <h2 class="sdh-doboz__cim">Nyitvatartás</h2>
             <p class="sdh-sugo">
-                Ebből számol az Áttekintés órája: nyitva tartás alatt azt mutatja, mennyi idő van még zárásig,
+                Ebből számol a fejléc órája: nyitva tartás alatt azt mutatja, mennyi idő van még zárásig,
                 előtte azt, mennyi van nyitásig, utána azt, mikor nyit legközelebb az üzlet. A nap, amelyiknél
                 nincs pipa (vagy hiányzik az időpont), zárva van. Az időpont <code>óó:pp</code> alakú, pl. <code>09:00</code>.
             </p>
@@ -139,11 +139,11 @@ final class SDH_Muhely_Nyitvatartas
         </div>
 
         <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">Óra az Áttekintésen</h2>
+            <h2 class="sdh-doboz__cim">Óra a fejlécben</h2>
 
             <div class="sdh-mezo sdh-mezo--jelolo">
                 <input type="checkbox" name="nyitva_ora" id="nyitva_ora" value="1" <?php checked($b['ora']); ?>>
-                <label for="nyitva_ora">Az Áttekintés fejlécében látszik az óra és a zárásig hátralévő idő</label>
+                <label for="nyitva_ora">A felső fejlécben, minden oldalon látszik az óra és a zárásig hátralévő idő</label>
             </div>
 
             <div class="sdh-mezo sdh-mezo--jelolo">
@@ -289,10 +289,11 @@ final class SDH_Muhely_Nyitvatartas
      * ============================================================== */
 
     /**
-     * Az Áttekintés órája (szűrt HTML), vagy üres szöveg, ha ki van kapcsolva.
-     * A böngésző az itt kapott szerveridőt lépteti (app.js: oraIndul).
+     * Az óra (szűrt HTML), vagy üres szöveg, ha ki van kapcsolva. A böngésző az
+     * itt kapott szerveridőt lépteti (app.js: oraIndul). $hely 'fej': a
+     * műhely-felület felső fejlécének tömör változata (minden oldalon ott áll).
      */
-    public static function ora_html(): string
+    public static function ora_html(string $hely = ''): string
     {
         $b = self::beallitas();
 
@@ -315,7 +316,7 @@ final class SDH_Muhely_Nyitvatartas
         ob_start();
 
         ?>
-        <div class="sdh-ora" data-sdh-ora
+        <div class="sdh-ora<?php echo $hely === 'fej' ? ' sdh-ora--fej' : ''; ?>" data-sdh-ora
              data-most="<?php echo esc_attr(str_replace(' ', 'T', $most)); ?>"
              data-het="<?php echo esc_attr((string) wp_json_encode((object) $het)); ?>"
              data-figy="<?php echo (int) $b['figyelmeztet']; ?>"

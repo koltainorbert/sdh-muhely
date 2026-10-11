@@ -359,6 +359,16 @@
         } catch (x) { /* hibás adat */ }
     });
 
+    /* Személyiség-csúszkák (humor, élénkség): a kijelzés húzás közben frissül. */
+    document.addEventListener('input', function (ev) {
+        var doboz = ev.target.closest && ev.target.closest('[data-sdh-ai-csuszka]');
+
+        if (doboz && ev.target.type === 'range') {
+            doboz.style.setProperty('--p', ev.target.value + '%');
+            doboz.querySelector('output').textContent = ev.target.value + '%';
+        }
+    });
+
     var beallUrlap = document.querySelector('[data-sdh-ai-beallitas]');
 
     if (beallUrlap) {
@@ -444,11 +454,20 @@
             '<div class="sdh-ai__buborek-szoveg"></div><div class="sdh-ai__buborek-gombok"></div></div>' +
             '<button type="button" class="sdh-ai__leny" aria-label="' + e(NEV) + ' – AI-asszisztens (F1)" title="' + e(NEV) + ' – kérdezz bátran! (F1)">' +
             '<span class="sdh-ai__aura" aria-hidden="true"></span>' +
+            // Kezek, lábak, antenna: ettől tud integetni, sétálni, táncolni.
+            '<span class="sdh-ai__lab sdh-ai__lab--b" aria-hidden="true"></span><span class="sdh-ai__lab sdh-ai__lab--j" aria-hidden="true"></span>' +
+            '<span class="sdh-ai__kar sdh-ai__kar--b" aria-hidden="true"></span><span class="sdh-ai__kar sdh-ai__kar--j" aria-hidden="true"></span>' +
+            '<span class="sdh-ai__csap" aria-hidden="true"><i></i></span>' +
             '<span class="sdh-ai__test" aria-hidden="true"><span class="sdh-ai__mag"></span><span class="sdh-ai__fenyfolt"></span>' +
-            '<span class="sdh-ai__arc"><span class="sdh-ai__szem sdh-ai__szem--b"><span class="sdh-ai__pupilla"></span></span>' +
+            '<span class="sdh-ai__arc">' +
+            '<span class="sdh-ai__szemoldok sdh-ai__szemoldok--b"></span><span class="sdh-ai__szemoldok sdh-ai__szemoldok--j"></span>' +
+            '<span class="sdh-ai__szem sdh-ai__szem--b"><span class="sdh-ai__pupilla"></span></span>' +
             '<span class="sdh-ai__szem sdh-ai__szem--j"><span class="sdh-ai__pupilla"></span></span>' +
             '<span class="sdh-ai__pir sdh-ai__pir--b"></span><span class="sdh-ai__pir sdh-ai__pir--j"></span>' +
-            '<span class="sdh-ai__szaj"></span></span></span>' +
+            '<span class="sdh-ai__szaj"></span><span class="sdh-ai__csepp"></span></span></span>' +
+            // Kellék (kávé, könyv, napszemüveg…) és a szikrák / konfetti helye.
+            '<span class="sdh-ai__kellek" aria-hidden="true"></span>' +
+            '<span class="sdh-ai__szikrak" aria-hidden="true"></span>' +
             '<span class="sdh-ai__zzz" aria-hidden="true">z<span>z</span><span>z</span></span>' +
             '<span class="sdh-ai__jelveny" hidden></span></button>' +
             '<section class="sdh-ai-panel" role="dialog" aria-label="' + e(NEV) + ' – AI-asszisztens" hidden>' +
@@ -476,8 +495,33 @@
         document.body.appendChild(gyoker);
 
         leny.addEventListener('click', function () {
+            // Túra közben a figura a buborék mellett áll: rákattintva nem történik semmi (a gombok vezetnek).
+            if (tura) {
+                gesztus('bolint', 500);
+
+                return;
+            }
+
             if (gyoker.classList.contains('is-repul')) {
                 visszaRepul();
+
+                return;
+            }
+
+            setalVege();
+
+            // Négy gyors kattintás: elszédül (és inkább nem nyit-zár tovább).
+            var most = Date.now();
+
+            kattintasok = kattintasok.filter(function (t) { return most - t < 1600; });
+            kattintasok.push(most);
+
+            if (kattintasok.length >= 4) {
+                kattintasok = [];
+                zar();
+                allapot('szedul', 2800);
+                gesztus('porog', 900);
+                beszol('csiklandoz', true);
 
                 return;
             }
@@ -488,6 +532,20 @@
                 zar();
             }
         });
+
+        // Ha sokáig rajta tartod az egeret: elpirul, szívecskék.
+        var simiIdo = 0;
+
+        leny.addEventListener('mouseenter', function () {
+            window.clearTimeout(simiIdo);
+            simiIdo = window.setTimeout(function () {
+                if (szabad()) {
+                    allapot('orul', 1600);
+                    szikrak(5, 'sziv');
+                }
+            }, 1300);
+        });
+        leny.addEventListener('mouseleave', function () { window.clearTimeout(simiIdo); });
 
         gyoker.querySelector('[data-ai-zar]').addEventListener('click', zar);
         gyoker.querySelector('[data-ai-teljes]').addEventListener('click', function () {
@@ -539,6 +597,11 @@
 
     /* ---- Hangulatok ---- */
 
+    /*
+     * Hangulatok (data-allapot, a rajz az asszisztens.css-ben): nyugi, figyel,
+     * gondolkodik, beszel, orul, nevet, szomoru, jelez, mutat, alszik, kacsint,
+     * meglepett, ijedt, szedul, asit, buszke, kivancsi, kave, olvas.
+     */
     function allapot(nev, visszaMs) {
         if (!gyoker) {
             return;
@@ -548,11 +611,287 @@
         gyoker.setAttribute('data-allapot', nev);
 
         if (visszaMs) {
-            allapotIdo = window.setTimeout(function () { gyoker.setAttribute('data-allapot', fut ? 'gondolkodik' : 'nyugi'); }, visszaMs);
+            allapotIdo = window.setTimeout(function () { gyoker.setAttribute('data-allapot', fut ? 'gondolkodik' : (tura ? 'mutat' : 'nyugi')); }, visszaMs);
         }
     }
 
-    /* ---- Élet: pislogás, szemmozgás, alvás ---- */
+    function hangulat() {
+        return gyoker ? gyoker.getAttribute('data-allapot') : '';
+    }
+
+    /* ---- Gesztusok, kellékek, szikrák ---- */
+
+    var gesztusIdo = 0;
+    var kellekIdo = 0;
+    var kattintasok = [];
+
+    // A kellékek rajza (vonalas SVG, a figura elé kerül).
+    var KELLEK = {
+        napszemuveg: '<svg viewBox="0 0 64 64"><path d="M9 25h46" stroke="#0b1020" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M12 25h16v6a8 8 0 0 1-16 0zM36 25h16v6a8 8 0 0 1-16 0z" fill="#0b1020"/><path d="M15 28l5-2M39 28l5-2" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/></svg>',
+        kave: '<svg viewBox="0 0 64 64"><path d="M38 38h16v9a8 8 0 0 1-16 0z" fill="#fff" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><path d="M54 40h3a4 4 0 0 1 0 8h-3" fill="none" stroke="#0b1020" stroke-width="2.5"/><path class="sdh-ai__goz" d="M43 33c-2-3 2-4 0-7M49 33c-2-3 2-4 0-7" fill="none" stroke="#0b1020" stroke-width="2" stroke-linecap="round" opacity=".55"/></svg>',
+        konyv: '<svg viewBox="0 0 64 64"><path d="M32 40c-5-4-12-5-19-4v16c7-1 14 0 19 4 5-4 12-5 19-4V36c-7-1-14 0-19 4z" fill="#fff" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 40v16M18 42c4-.4 7 0 10 1.5M18 47c4-.4 7 0 10 1.5M46 42c-4-.4-7 0-10 1.5" fill="none" stroke="#0b1020" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg>',
+        parti: '<svg viewBox="0 0 64 64"><path d="M32 -6 44 14H20z" fill="#ff5fa2" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6l12 4M23 11l18 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="-7" r="4" fill="#ffd23f" stroke="#0b1020" stroke-width="2"/></svg>',
+        halo: '<svg viewBox="0 0 64 64"><path d="M16 14C22 0 44 0 50 12l8 12-6 1-4-7c-10-3-22-3-32-4z" fill="#6c8cff" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><circle cx="57" cy="26" r="4.5" fill="#fff" stroke="#0b1020" stroke-width="2"/></svg>',
+        nagyito: '<svg viewBox="0 0 64 64"><circle cx="46" cy="40" r="9" fill="rgba(255,255,255,.55)" stroke="#0b1020" stroke-width="3"/><path d="m53 47 7 7" stroke="#0b1020" stroke-width="4" stroke-linecap="round"/></svg>'
+    };
+
+    /** Rövid testmozdulat (ugrás, pörgés, integetés, tánc…): is-g-<név> osztály a megadott ideig. */
+    function gesztus(nev, ms) {
+        if (!gyoker || nyugodtMozgas) {
+            return;
+        }
+
+        window.clearTimeout(gesztusIdo);
+        Array.prototype.slice.call(gyoker.classList).forEach(function (o) {
+            if (o.indexOf('is-g-') === 0) {
+                gyoker.classList.remove(o);
+            }
+        });
+        void gyoker.offsetWidth;
+        gyoker.classList.add('is-g-' + nev);
+        gesztusIdo = window.setTimeout(function () { gyoker.classList.remove('is-g-' + nev); }, ms || 900);
+    }
+
+    /** Kellék a figurára (üres név: leveszi). */
+    function kellek(nev, ms) {
+        var hely = gyoker.querySelector('.sdh-ai__kellek');
+
+        window.clearTimeout(kellekIdo);
+        hely.innerHTML = nev && KELLEK[nev] ? KELLEK[nev] : '';
+        hely.setAttribute('data-kellek', nev || '');
+
+        if (nev && ms) {
+            kellekIdo = window.setTimeout(function () { kellek(''); }, ms);
+        }
+    }
+
+    /** Szikrák, szívecskék vagy konfetti a figura körül. */
+    function szikrak(db, fajta) {
+        if (nyugodtMozgas) {
+            return;
+        }
+
+        var hely = gyoker.querySelector('.sdh-ai__szikrak');
+        var i;
+
+        for (i = 0; i < db; i++) {
+            (function (n) {
+                var sz = document.createElement('i');
+                var szog = (-160 + Math.random() * 140) * Math.PI / 180;
+                var tav = 34 + Math.random() * 46;
+
+                sz.className = 'sdh-ai__szikra sdh-ai__szikra--' + (fajta || 'csillag');
+                sz.style.setProperty('--x', (Math.cos(szog) * tav).toFixed(0) + 'px');
+                sz.style.setProperty('--y', (Math.sin(szog) * tav).toFixed(0) + 'px');
+                sz.style.setProperty('--f', (Math.random() * 360).toFixed(0) + 'deg');
+                sz.style.setProperty('--s', String(n % 5));
+                sz.style.animationDelay = (n * 45) + 'ms';
+                hely.appendChild(sz);
+                window.setTimeout(function () { sz.remove(); }, 1300 + n * 45);
+            }(i));
+        }
+    }
+
+    /* ---- Beszólások (helyben, API nélkül) ---- */
+
+    var HUMOR = isNaN(parseInt(A.humor, 10)) ? 90 : Math.max(0, Math.min(100, parseInt(A.humor, 10)));
+    var ELENK = isNaN(parseInt(A.elenkseg, 10)) ? 80 : Math.max(0, Math.min(100, parseInt(A.elenkseg, 10)));
+    var nyugodtMozgas = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    var utolsoBeszolas = Date.now() - 5 * 60000 + 90000; // az első legkorábban másfél perc múlva
+    var mondott = {};
+
+    var SZOVEG = {
+        ures: [
+            'Én itt lent ülök, és figyelem a pixeleket. Mind megvan.',
+            'Megszámoltam a munkalapokat. Aztán még egyszer. Unatkozó gömb vagyok.',
+            'Ha valamit nem találsz, szólj – én ezen a képernyőn lakom, ismerem a környéket.',
+            'Tudtad? A **/** billentyűvel bárhonnan a keresőbe ugrasz. Én ugrani csak így tudok.',
+            'Csavarhúzóm nincs, de kereséshez, számoláshoz, magyarázáshoz elég jó vagyok.',
+            'Nem iszom kávét. A te kávédra viszont nagyon vigyázok – ne a billentyűzet fölött!',
+            'Ha elakadtál, nyomd meg az **F1**-et. Az a csengőm.',
+            'Azt álmodtam, hogy minden munkalap határidőre elkészült. Aztán felébredtem… de dolgozunk rajta!',
+            'Kerek vagyok, mint egy jó zárás. Erre büszke is vagyok.',
+            'Egy jó szerviz titka: türelem, forrasztópáka, és valaki, aki megjegyzi a határidőket. Az utóbbi vagyok én.',
+            'Ha gyorsan négyszer rám kattintasz, elszédülök. Ezt nem javaslatnak szántam.',
+            'A legjobb hibaüzenet az, amelyik meg sem jelenik. A második legjobbat elmagyarázom.',
+            'Kérdezz bátran! A legrosszabb, ami történhet, hogy elgondolkodom.',
+            'Súgó, túra, kérdés–válasz: mindhárom én vagyok, csak más kalapban.',
+            'Csendben vagyok, mert dolgozol. Látod, milyen jól nevelt gömb vagyok?',
+            'Ha a „Vezess végig ezen az oldalon” gombra nyomsz, idegenvezető leszek. Zászlóm sajnos nincs.'
+        ],
+        reggel: [
+            'Jó reggelt! Én már bemelegítettem: háromszor körbepörögtem.',
+            'Reggel van, a kassza friss, a nap hosszú. Kezdhetjük!',
+            'Jó reggelt! Megnézzük, mi vár ma? Kérdezd meg: „Mi a mai helyzet?”'
+        ],
+        del: [
+            'Ebédidő! Én fényt eszem, de neked valami rendeset ajánlok.',
+            'Dél van. A munkalapok megvárnak, az ebéd kihűl.'
+        ],
+        zaras: [
+            'Mindjárt zárunk! A kasszát ne felejtsd – én nem tudom megszámolni, nincsenek ujjaim.',
+            'Közeleg a zárás. Aki ma elkészült, annak szólt már valaki?',
+            'Zárás előtt: kassza, nyitott lapok, lámpa. Engem nem kell lekapcsolni, alszom magamtól.'
+        ],
+        pentek: [
+            'Péntek van! A munkalapok is érzik.',
+            'Péntek délután: a hét utolsó határidői most a legbátrabbak.'
+        ],
+        hetfo: [
+            'Hétfő. Semmi baj, együtt csináljuk végig.',
+            'Új hét, tiszta lap. Illetve munkalap.'
+        ],
+        mentes: [
+            'Mentve! Én is megjegyeztem – jó, én mindent megjegyzek.',
+            'Elmentve. Szépen dolgozol!',
+            'Megvan, biztonságban van. Pacsi! (Képzeletben, a kezem rövid.)',
+            'Mentve. Egy gonddal kevesebb.'
+        ],
+        csiklandoz: [
+            'Hé, ez csikis! Forog velem a képernyő…',
+            'Juj, elszédültem! Most két egeret látok.',
+            'Jó, jó, megadom magam! Miben segíthetek?'
+        ],
+        ebredes: [
+            'Ásít… Nem aludtam, csak pihentettem a pupilláimat.',
+            'Itt vagyok! Miről maradtam le?',
+            'Hú, de jót szundítottam. Mehet a munka!'
+        ],
+        turaVege: [
+            'Ennyi volt a körút! Borravaló helyett elfogadok egy kérdést.',
+            'Végigjártuk! Ha valami kimaradt, kérdezz – vagy nézd meg a leírást.',
+            'Kész a túra! Te figyeltél, én mutogattam. Jó csapat vagyunk.'
+        ],
+        turaKezdes: [
+            'Idegenvezető üzemmód bekapcsolva. Kérem, kövessenek!',
+            'Indulunk! Tartsd a kezed-lábad a képernyőn belül.',
+            'Na, megmutatom, mi hol lakik ezen az oldalon.'
+        ],
+        hiba: [
+            'Ajjaj, ezt nem szeretem látni. De megoldjuk!',
+            'Hoppá. Semmi pánik, nézzük meg együtt.'
+        ]
+    };
+
+    /** Egy mondat a megadott témából (ami ebben a munkamenetben még nem hangzott el). */
+    function mondat(tema) {
+        var lista = SZOVEG[tema] || [];
+        var uj = lista.filter(function (m) { return !mondott[m]; });
+
+        if (!uj.length) {
+            lista.forEach(function (m) { delete mondott[m]; });
+            uj = lista;
+        }
+
+        var m = uj[Math.floor(Math.random() * uj.length)] || '';
+
+        mondott[m] = true;
+
+        return m;
+    }
+
+    /**
+     * Beszólás buborékban. Kötelező (rögtön jön) vagy alkalmi: az utóbbi csak
+     * ha a humor engedi, eltelt elég idő, és épp nem zavar (nincs nyitva panel,
+     * buborék, túra; a felhasználó nem gépel).
+     */
+    function beszol(tema, kotelezo) {
+        if (HUMOR < 15 || !gyoker) {
+            return false;
+        }
+
+        var koz = (4 + (100 - HUMOR) / 8) * 60000;
+
+        if (!kotelezo && (!A.proaktiv || Date.now() - utolsoBeszolas < koz || !szabad() || Date.now() - utolsoBillentyu < 8000)) {
+            return false;
+        }
+
+        if (kotelezo && (!panel.hidden || tura)) {
+            return false;
+        }
+
+        var m = mondat(tema);
+
+        if (!m) {
+            return false;
+        }
+
+        utolsoBeszolas = Date.now();
+        buborekMutat(m, [], { ms: 7000, allapot: tema === 'hiba' ? 'ijedt' : (tema === 'csiklandoz' ? 'szedul' : 'nevet') });
+
+        return true;
+    }
+
+    /** A napszakhoz, naphoz illő téma (vagy az általános). */
+    function napszakTema() {
+        var d = new Date();
+        var ora = d.getHours() + d.getMinutes() / 60;
+        var oraDoboz = document.querySelector('[data-sdh-ora]');
+
+        if (oraDoboz && oraDoboz.getAttribute('data-allapot') === 'hamar') {
+            return 'zaras';
+        }
+
+        if (ora < 10 && Math.random() < .5) {
+            return d.getDay() === 1 && Math.random() < .5 ? 'hetfo' : 'reggel';
+        }
+
+        if (ora >= 11.5 && ora < 13.5 && Math.random() < .35) {
+            return 'del';
+        }
+
+        if (d.getDay() === 5 && ora >= 13 && Math.random() < .4) {
+            return 'pentek';
+        }
+
+        return 'ures';
+    }
+
+    /* ---- Élet: pislogás, szemmozgás, alvás, önálló mozgás ---- */
+
+    var utolsoBillentyu = 0;
+    var szemZar = 0;
+    var setalIdo = 0;
+
+    /** Szabad-e magától mozognia: nincs nyitva semmi, nem vezet, nem alszik, látszik az oldal. */
+    function szabad() {
+        return !!gyoker && panel.hidden && buborek.hidden && !tura && !fut &&
+            !gyoker.classList.contains('is-repul') && !gyoker.classList.contains('is-setal') &&
+            hangulat() === 'nyugi' && document.visibilityState !== 'hidden';
+    }
+
+    /** Séta a képernyő alján: elballag balra, körülnéz, visszajön. */
+    function setal() {
+        var tav = Math.round(Math.min(320, window.innerWidth * .28) * (.45 + Math.random() * .55));
+        var ido = Math.round(tav * 16);
+
+        gyoker.classList.add('is-setal');
+        leny.style.transition = 'transform ' + ido + 'ms linear';
+        leny.style.transform = 'translateX(' + (-tav) + 'px)';
+
+        setalIdo = window.setTimeout(function () {
+            gyoker.classList.add('is-all');
+            allapot('kivancsi', 1400);
+
+            setalIdo = window.setTimeout(function () {
+                gyoker.classList.remove('is-all');
+                gyoker.classList.add('is-vissza');
+                leny.style.transform = 'translateX(0)';
+                setalIdo = window.setTimeout(setalVege, ido + 80);
+            }, 1500);
+        }, ido + 60);
+    }
+
+    function setalVege() {
+        if (!gyoker || !gyoker.classList.contains('is-setal')) {
+            return;
+        }
+
+        window.clearTimeout(setalIdo);
+        gyoker.classList.remove('is-setal', 'is-all', 'is-vissza');
+        leny.style.transition = '';
+        leny.style.transform = '';
+    }
 
     function elet() {
         var szemek = gyoker.querySelectorAll('.sdh-ai__szem');
@@ -560,8 +899,14 @@
         var kep = 0;
         var cel = { x: 0, y: 0 };
 
+        function pupilla(x, y) {
+            Array.prototype.forEach.call(pupillak, function (p) {
+                p.style.transform = 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px)';
+            });
+        }
+
         function pislog() {
-            if (gyoker.getAttribute('data-allapot') !== 'alszik') {
+            if (hangulat() !== 'alszik') {
                 Array.prototype.forEach.call(szemek, function (s) {
                     s.classList.remove('is-pislog');
                     void s.offsetWidth;
@@ -577,14 +922,14 @@
         document.addEventListener('mousemove', function (ev) {
             utolsoMozgas = Date.now();
 
-            if (gyoker.getAttribute('data-allapot') === 'alszik') {
-                allapot('orul', 1400);
+            if (hangulat() === 'alszik') {
+                ebred();
             }
 
             cel.x = ev.clientX;
             cel.y = ev.clientY;
 
-            if (kep) {
+            if (kep || Date.now() < szemZar) {
                 return;
             }
 
@@ -597,29 +942,114 @@
                 var tav = Math.sqrt(dx * dx + dy * dy) || 1;
                 var m = Math.min(1, tav / 260) * 3.2;
 
-                Array.prototype.forEach.call(pupillak, function (p) {
-                    p.style.transform = 'translate(' + (dx / tav * m).toFixed(2) + 'px,' + (dy / tav * m).toFixed(2) + 'px)';
-                });
+                pupilla(dx / tav * m, dy / tav * m);
             });
         }, { passive: true });
 
         ['keydown', 'click', 'scroll'].forEach(function (es) {
-            document.addEventListener(es, function () {
+            document.addEventListener(es, function (ev) {
                 utolsoMozgas = Date.now();
 
-                if (gyoker.getAttribute('data-allapot') === 'alszik') {
-                    allapot('nyugi');
+                if (es === 'keydown') {
+                    utolsoBillentyu = Date.now();
+                }
+
+                if (hangulat() === 'alszik') {
+                    ebred();
+                }
+
+                // Ha a felhasználó dolgozni kezd, a séta félbemarad: nem lábatlankodik.
+                if (es !== 'scroll' && !(ev.target.closest && ev.target.closest('.sdh-ai'))) {
+                    setalVege();
                 }
             }, { passive: true, capture: true });
         });
 
-        window.setInterval(function () {
-            var all = gyoker.getAttribute('data-allapot');
+        function ebred() {
+            kellek('');
+            allapot('asit', 1500);
+            gesztus('nyujt', 1300);
 
-            if (Date.now() - utolsoMozgas > 4 * 60000 && all === 'nyugi' && panel.hidden) {
+            if (Math.random() * 100 < HUMOR * .5) {
+                window.setTimeout(function () { beszol('ebredes', true); }, 1400);
+            }
+        }
+
+        window.setInterval(function () {
+            if (Date.now() - utolsoMozgas > 4 * 60000 && hangulat() === 'nyugi' && panel.hidden && !tura) {
+                setalVege();
                 allapot('alszik');
+                kellek('halo');
             }
         }, 15000);
+
+        /* Önálló élet: időnként magától csinál valamit. Az élénkség adja a ritmust. */
+        var CSELEKVES = [
+            [4, function () { // körülnéz
+                szemZar = Date.now() + 1900;
+                pupilla(-3, 0);
+                window.setTimeout(function () { pupilla(3, -1); }, 600);
+                window.setTimeout(function () { pupilla(0, -3); }, 1200);
+                window.setTimeout(function () { pupilla(0, 0); }, 1800);
+            }],
+            [3, function () { allapot('kacsint', 800); }],
+            [2, function () { allapot('asit', 1900); gesztus('nyujt', 1700); }],
+            [3, function () { gesztus('ugral', 950); allapot('orul', 950); }],
+            [2, function () { gesztus('porog', 900); allapot('meglepett', 900); }],
+            [3, function () { gesztus('integet', 1700); allapot('orul', 1700); }],
+            [2, function () { gesztus('tancol', 2600); allapot('nevet', 2600); }],
+            [2, function () { kellek('kave', 3600); allapot('kave', 3600); }],
+            [2, function () { kellek('konyv', 4200); allapot('olvas', 4200); }],
+            [1, function () { kellek('napszemuveg', 3400); allapot('buszke', 3400); }],
+            [1, function () { kellek('nagyito', 3000); allapot('kivancsi', 3000); gesztus('bolint', 700); }],
+            [2, function () { gesztus('kukucs', 2800); }],
+            [2, function () { szikrak(6, 'csillag'); allapot('meglepett', 1000); }],
+            [3, setal],
+            [3, function () { beszol(napszakTema(), false); }]
+        ];
+        var osszSuly = CSELEKVES.reduce(function (o, c) { return o + c[0]; }, 0);
+
+        function eletLep() {
+            if (ELENK > 0 && !nyugodtMozgas && szabad()) {
+                var r = Math.random() * osszSuly;
+                var i;
+
+                for (i = 0; i < CSELEKVES.length; i++) {
+                    r -= CSELEKVES[i][0];
+
+                    if (r <= 0) {
+                        CSELEKVES[i][1]();
+                        break;
+                    }
+                }
+            } else if (nyugodtMozgas && szabad()) {
+                // Kevesebb mozgásnál sem néma: a beszólás megmarad.
+                beszol(napszakTema(), false);
+            }
+
+            // 100% élénkségnél 7–14 mp, 50%-nál 20–40 mp, 10%-nál kb. 35–70 mp között jön a következő.
+            var alap = 7000 + (100 - ELENK) * 300;
+
+            window.setTimeout(eletLep, alap * (1 + Math.random()));
+        }
+
+        window.setTimeout(eletLep, 9000);
+
+        // Sikeres mentés bárhol a rendszerben: örül, konfetti, néha egy jó szó.
+        document.addEventListener('sdh:mentve', function () {
+            if (tura || !panel.hidden) {
+                return;
+            }
+
+            setalVege();
+            allapot('orul', 1500);
+            gesztus('ugral', 900);
+            szikrak(9, 'konfetti');
+
+            if (Math.random() * 100 < HUMOR * .3 && buborek.hidden) {
+                window.setTimeout(function () { beszol('mentes', true); }, 500);
+            }
+        });
     }
 
     /* ---- Költözés a nyitott popupba (a modális ablak mögött inert lenne) ---- */
@@ -673,6 +1103,12 @@
 
     function buborekMutat(szoveg, gombok, opciok) {
         opciok = opciok || {};
+
+        // Végigvezetés közben a figura a túra buborékjánál áll: a sarokban nem szólal meg
+        // (kivéve, amikor a túra egy felugró ablak miatt várakozik).
+        if (tura && !tura.szunet) {
+            return;
+        }
 
         var sz = buborek.querySelector('.sdh-ai__buborek-szoveg');
         var g = buborek.querySelector('.sdh-ai__buborek-gombok');
@@ -893,6 +1329,12 @@
             termekek: ['Hogyan kezelem a készletet?'],
             levelezes: ['Hogyan kötöm be a Gmailt?', 'Mit csinál a rendező ügynök?'],
             csapat: ['Hogyan küldök fontos üzenetet mindenkinek?', 'Hogyan veszek fel kollégát?'],
+            arukiadas: ['Hogyan adok el valamit a pultnál?', 'Mennyi volt a mai árukiadás?'],
+            rendelesek: ['Hogyan veszek fel rendelést?', 'Mi érkezett meg, amiről még nem szóltunk?'],
+            naptar: ['Mi lesz ma a naptárban?', 'Hogyan állítok be ismétlődő eseményt?'],
+            uzenetek: ['Hogyan lép be az ügyfél az ügyféloldalra?', 'Hol találom a QR-kódot?'],
+            sugo: ['Hol kezdjem az ismerkedést?', 'Mi az újdonság a rendszerben?'],
+            beallitasok: ['Mi nincs még beállítva?', 'Hogyan állítom be a nyitvatartást?'],
             asszisztens: ['Mit tudsz csinálni?', 'Hogyan állítok vissza egy műveletet?']
         }[m] || [];
 
@@ -930,7 +1372,8 @@
             t = el.closest('label').textContent;
         }
 
-        t = t || el.textContent || el.getAttribute('placeholder') || el.getAttribute('title') || '';
+        // A mezők TARTALMA nem megy az asszisztenshez: szövegmezőnél és választónál csak a felirat számít.
+        t = t || (/^(TEXTAREA|SELECT|INPUT)$/.test(el.tagName) ? '' : el.textContent) || el.getAttribute('placeholder') || el.getAttribute('title') || '';
 
         return t.replace(/\s+/g, ' ').trim().slice(0, 70);
     }
@@ -1019,6 +1462,19 @@
             return;
         }
 
+        // „Vezess végig ezen az oldalon": az oldal kész túrája azonnal indul, API-hívás nélkül.
+        if (szoveg && szoveg.length < 70 && /vezess\s+v[ée]gig|mutasd\s+be\s+(ezt\s+)?az?\s+oldal|oldalt[uú]r|k[öo]rbevezet/i.test(szoveg)) {
+            mezo.value = '';
+            mezo.style.height = 'auto';
+            turaOldal().then(function (ment) {
+                if (!ment && !tura) {
+                    buborekMutat('Ezen az oldalon most nincs mit körbemutatnom. Kérdezz bátran – szóban is elmondom.', [], { ms: 6000 });
+                }
+            });
+
+            return;
+        }
+
         if (panel.hidden) {
             nyit();
         }
@@ -1057,9 +1513,19 @@
             gorgetLe();
             allapot((d.kartyak || []).length ? 'jelez' : 'beszel', 1800);
 
+            // Végigvezetés: az asszisztens saját lépései (vezet), az oldal kész túrája (tura), vagy egyetlen megmutatás.
+            var vezetes = (d.ui || []).filter(function (u) { return (u.tipus === 'vezet' || u.tipus === 'tura') && u.adat && (u.adat.lepesek || []).length; })[0];
             var mutatasok = (d.ui || []).filter(function (u) { return u.tipus === 'mutat'; });
 
-            if (mutatasok.length) {
+            if (vezetes) {
+                window.setTimeout(function () {
+                    if (vezetes.tipus === 'tura') {
+                        turaOldal();
+                    } else if (!turaIndit(vezetes.adat.lepesek, { cim: vezetes.adat.cim || 'Végigvezetlek' })) {
+                        uzenetRajzol({ szerep: 'hiba', szoveg: 'A lépések elemeit már nem látom a képernyőn – lehet, hogy közben bezárult egy ablak. Kérd újra, és megmutatom.' });
+                    }
+                }, 650);
+            } else if (mutatasok.length) {
                 window.setTimeout(function () { mutat(mutatasok[0].adat); }, 450);
             }
         }).catch(function (h) {
@@ -1077,121 +1543,461 @@
     }
 
     /* ================================================================ */
-    /* Megmutatás: kiemelés + a figura odarepül                           */
+    /* Végigvezetés (túra): lépésenként kiemel, a figura odarepül         */
     /* ================================================================ */
 
-    var reflektor = null;
-    var reflektorKep = 0;
-    var reflektorElem = null;
+    /*
+     * Egy túra lépések sora. Egy lépés vagy egy elemre mutat (szel: CSS-szelektor
+     * a súgóból; elem: a látható elemek azonosítója, amit az asszisztens kapott),
+     * vagy „szabad" (bevezető, zárás: csak buborék). A túra NEM tűnik el
+     * kattintásra – a felhasználó közben dolgozhat; csak a Kilépés (vagy az Esc)
+     * zárja be, illetve az utolsó lépés „Kész" gombja. Ha közben felugró ablak
+     * nyílik, a túra megvárja, és onnan folytatja.
+     */
+    var tura = null;
+    var turaDoboz = null;
+    var turaKep = 0;
 
-    function mutat(adat) {
-        var el = document.querySelector('[data-sdh-ai="' + String(adat.elem || '').replace(/[^a-z0-9]/gi, '') + '"]');
+    function turaElem(l) {
+        var el = null;
 
-        if (!el || !lathato(el)) {
-            uzenetRajzol({ szerep: 'hiba', szoveg: 'Ezt az elemet már nem látom a képernyőn – lehet, hogy közben bezárult egy ablak.' });
+        if (l.elem) {
+            el = document.querySelector('[data-sdh-ai="' + String(l.elem).replace(/[^a-z0-9]/gi, '') + '"]');
+        } else if (l.szel) {
+            try {
+                Array.prototype.some.call(document.querySelectorAll(l.szel), function (x) {
+                    if (!x.closest('.sdh-ai') && lathato(x)) {
+                        el = x;
 
-            return;
+                        return true;
+                    }
+
+                    return false;
+                });
+            } catch (x) {
+                el = null; // hibás szelektor a fejezetben: a lépés kimarad
+            }
         }
 
-        reflektorZar();
-        reflektorElem = el;
-        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return el && lathato(el) ? el : null;
+    }
+
+    /**
+     * @param {Array}  lepesek [{szel|elem|szabad, cim, szoveg}]
+     * @param {Object} o       cim (a túra neve), leiras (a súgófejezet címe), egy (egyetlen megmutatás), csendes
+     * @returns {boolean} elindult-e (hamis, ha egyetlen lépés eleme sincs a képernyőn)
+     */
+    function turaIndit(lepesek, o) {
+        o = o || {};
+
+        var lista = (lepesek || []).filter(function (l) { return l && (l.szabad || turaElem(l)); });
+
+        if (!lista.some(function (l) { return !l.szabad; }) && !o.szabadIs) {
+            return false;
+        }
+
+        turaVege(true);
+        setalVege();
+        buborekZar();
+        kellek('');
 
         panel.classList.remove('is-latszik');
         panel.hidden = true;
+        gyoker.classList.remove('is-nyitva');
 
-        reflektor = document.createElement('div');
-        reflektor.className = 'sdh-ai-reflektor';
-        reflektor.innerHTML = '<div class="sdh-ai-reflektor__gyuru"></div>' +
-            '<div class="sdh-ai-reflektor__buborek"><p>' + md(adat.szoveg || 'Ide kattints!') + '</p>' +
-            '<div><button type="button" class="sdh-ai__buborek-gomb is-fo" data-ai-ertem>Értem</button>' +
-            '<button type="button" class="sdh-ai__buborek-gomb" data-ai-vissza-besz>Vissza a beszélgetéshez</button></div></div>';
-        gyoker.appendChild(reflektor);
+        tura = { lepesek: lista, i: -1, cim: o.cim || '', leiras: o.leiras || '', egy: !!o.egy, szunet: false, el: null };
 
-        reflektor.querySelector('[data-ai-ertem]').addEventListener('click', function () {
-            reflektorZar();
-            visszaRepul();
+        turaDoboz = document.createElement('div');
+        turaDoboz.className = 'sdh-ai-reflektor sdh-ai-tura';
+        turaDoboz.setAttribute('role', 'dialog');
+        turaDoboz.setAttribute('aria-label', 'Végigvezetés');
+        turaDoboz.innerHTML = '<div class="sdh-ai-reflektor__gyuru"></div>' +
+            '<div class="sdh-ai-reflektor__buborek" aria-live="polite">' +
+            '<button type="button" class="sdh-ai__buborek-x" data-tura-ki aria-label="Kilépés a végigvezetésből" title="Kilépés (Esc)">' + IKON.x + '</button>' +
+            '<p class="sdh-ai-tura__kalap"></p><h3 class="sdh-ai-tura__cim"></h3><div class="sdh-ai-tura__szoveg"></div>' +
+            '<div class="sdh-ai-tura__pottyok" aria-hidden="true"></div>' +
+            '<div class="sdh-ai-tura__gombok"></div></div>';
+        gyoker.appendChild(turaDoboz);
+
+        turaDoboz.addEventListener('click', function (ev) {
+            var g = ev.target.closest && ev.target.closest('button, a');
+
+            if (!g || !tura) {
+                return;
+            }
+
+            if (g.hasAttribute('data-tura-ki')) {
+                turaVege(false, false);
+            } else if (g.hasAttribute('data-tura-elozo')) {
+                turaLep(tura.i - 1, -1);
+            } else if (g.hasAttribute('data-tura-kov')) {
+                turaLep(tura.i + 1, 1);
+            } else if (g.hasAttribute('data-tura-besz')) {
+                turaVege(true);
+                nyit();
+            }
         });
-        reflektor.querySelector('[data-ai-vissza-besz]').addEventListener('click', function () {
-            reflektorZar();
-            visszaRepul();
-            nyit();
-        });
 
-        // A kiemelt elemre kattintva is elengedi.
-        el.addEventListener('click', kiemeltKatt, { once: true });
+        gyoker.classList.add('is-repul', 'is-tura');
+        turaLep(0, 1);
 
-        gyoker.classList.add('is-repul');
-        allapot('mutat');
-        reflektorKovet();
+        if (!o.egy && !o.csendes) {
+            gesztus('integet', 1300);
+        }
+
+        return true;
     }
 
-    function kiemeltKatt() {
-        reflektorZar();
-        visszaRepul();
-        allapot('orul', 1500);
-    }
-
-    function reflektorKovet() {
-        if (!reflektor || !reflektorElem) {
+    /** Lépés a megadott sorszámra; ha az eleme közben eltűnt, továbblép az irányban. */
+    function turaLep(i, irany) {
+        if (!tura) {
             return;
         }
 
-        var r = reflektorElem.getBoundingClientRect();
-        var gy = reflektor.querySelector('.sdh-ai-reflektor__gyuru');
-        var bub = reflektor.querySelector('.sdh-ai-reflektor__buborek');
-        var pad = 6;
+        var n = tura.lepesek.length;
 
-        gy.style.left = (r.left - pad) + 'px';
-        gy.style.top = (r.top - pad) + 'px';
-        gy.style.width = (r.width + pad * 2) + 'px';
-        gy.style.height = (r.height + pad * 2) + 'px';
+        while (i >= 0 && i < n && !tura.lepesek[i].szabad && !turaElem(tura.lepesek[i])) {
+            i += irany || 1;
+        }
 
-        // A buborék az elem alá (ha nem fér, fölé), a figura a buborék mellé.
-        var bw = Math.min(320, window.innerWidth - 32);
-        var lent = r.bottom + 150 < window.innerHeight;
-        var bx = Math.max(16, Math.min(window.innerWidth - bw - 90, r.left));
-        var by = lent ? r.bottom + 18 : Math.max(16, r.top - 18 - bub.offsetHeight);
+        if (i >= n) {
+            turaVege(false, true);
+
+            return;
+        }
+
+        if (i < 0) {
+            return;
+        }
+
+        var l = tura.lepesek[i];
+        var el = l.szabad ? null : turaElem(l);
+        var utolso = i === n - 1;
+
+        tura.i = i;
+        tura.el = el;
+
+        turaDoboz.classList.toggle('is-szabad', !el);
+        turaDoboz.querySelector('.sdh-ai-tura__kalap').textContent = (tura.cim ? tura.cim + ' · ' : '') + (tura.egy ? 'megmutatom' : (i + 1) + ' / ' + n);
+        turaDoboz.querySelector('.sdh-ai-tura__cim').textContent = l.cim || '';
+        turaDoboz.querySelector('.sdh-ai-tura__cim').hidden = !l.cim;
+        turaDoboz.querySelector('.sdh-ai-tura__szoveg').innerHTML = md(l.szoveg || 'Ide kattints!');
+
+        var pottyok = '';
+        var p;
+
+        for (p = 0; p < n && n > 1 && n <= 16; p++) {
+            pottyok += '<i class="' + (p < i ? 'is-kesz' : (p === i ? 'is-most' : '')) + '"></i>';
+        }
+
+        turaDoboz.querySelector('.sdh-ai-tura__pottyok').innerHTML = pottyok;
+
+        var gombok = '';
+
+        if (tura.egy) {
+            gombok = '<button type="button" class="sdh-ai__buborek-gomb is-fo" data-tura-ki>Értem</button>' +
+                '<button type="button" class="sdh-ai__buborek-gomb" data-tura-besz>Vissza a beszélgetéshez</button>';
+        } else {
+            gombok = (i > 0 ? '<button type="button" class="sdh-ai__buborek-gomb" data-tura-elozo>Előző</button>' : '') +
+                '<button type="button" class="sdh-ai__buborek-gomb is-fo" data-tura-kov>' + (utolso ? 'Kész' : (i === 0 ? 'Mehet!' : 'Következő')) + '</button>' +
+                (utolso && tura.leiras ? '<a class="sdh-ai__buborek-gomb" href="' + e(tura.leiras) + '">Részletes leírás</a>' : '');
+        }
+
+        turaDoboz.querySelector('.sdh-ai-tura__gombok').innerHTML = gombok;
+
+        var bub = turaDoboz.querySelector('.sdh-ai-reflektor__buborek');
+
+        bub.classList.remove('is-uj');
+        void bub.offsetWidth;
+        bub.classList.add('is-uj');
+
+        if (el) {
+            el.scrollIntoView({ block: 'center', behavior: nyugodtMozgas ? 'auto' : 'smooth' });
+            allapot('mutat');
+        } else {
+            allapot(utolso ? 'orul' : 'beszel', 2200);
+        }
+
+        gesztus('bolint', 600);
+
+        var fo = turaDoboz.querySelector('.sdh-ai__buborek-gomb.is-fo');
+
+        if (fo && !tura.egy) {
+            fo.focus({ preventScroll: true });
+        }
+
+        window.cancelAnimationFrame(turaKep);
+        turaKovet();
+    }
+
+    /** A gyűrű, a buborék és a figura a kiemelt elemet követi (görgetés, átméretezés közben is). */
+    function turaKovet() {
+        if (!tura || !turaDoboz) {
+            return;
+        }
+
+        var l = tura.lepesek[tura.i];
+        var el = tura.el;
+        var gy = turaDoboz.querySelector('.sdh-ai-reflektor__gyuru');
+        var bub = turaDoboz.querySelector('.sdh-ai-reflektor__buborek');
+        var modal = legfelsoModal();
+
+        // Felugró ablak nyílt a kiemelt elem fölé: megvárjuk.
+        if (el && modal && !modal.contains(el)) {
+            if (!tura.szunet) {
+                tura.szunet = true;
+                turaDoboz.hidden = true;
+                leny.style.transform = '';
+                allapot('figyel');
+                buborekMutat('Megvárlak! Ha bezártad az ablakot, onnan folytatjuk, ahol abbahagytuk.', [
+                    { felirat: 'Kilépés a túrából', tesz: function () { turaVege(true); } }
+                ], { ms: 0, allapot: 'figyel' });
+            }
+
+            turaKep = window.requestAnimationFrame(turaKovet);
+
+            return;
+        }
+
+        if (tura.szunet) {
+            tura.szunet = false;
+            turaDoboz.hidden = false;
+            buborekZar();
+            allapot('mutat');
+        }
+
+        // Az elem közben eltűnt (pl. lapfülváltás): megpróbáljuk újra megkeresni, különben szabad lépésként áll.
+        if (el && !lathato(el)) {
+            el = tura.el = turaElem(l);
+            turaDoboz.classList.toggle('is-szabad', !el);
+        }
+
+        var bw = Math.min(360, window.innerWidth - 32);
+        var bx;
+        var by;
 
         bub.style.width = bw + 'px';
+
+        if (el) {
+            var r = el.getBoundingClientRect();
+            var pad = 6;
+            // Nagy elemnél (pl. egy egész táblázat) a gyűrű a látható részére szorítkozik.
+            var fent = Math.max(4, r.top - pad);
+            var lent = Math.min(window.innerHeight - 4, r.bottom + pad);
+            var bal = Math.max(4, r.left - pad);
+            var jobb = Math.min(window.innerWidth - 4, r.right + pad);
+
+            gy.style.left = bal + 'px';
+            gy.style.top = fent + 'px';
+            gy.style.width = Math.max(0, jobb - bal) + 'px';
+            gy.style.height = Math.max(0, lent - fent) + 'px';
+
+            var bh = bub.offsetHeight;
+            var alatta = lent + 18 + bh < window.innerHeight - 8;
+            var folotte = fent - 18 - bh > 8;
+
+            bx = Math.max(16, Math.min(window.innerWidth - bw - 96, bal));
+
+            if (alatta) {
+                by = lent + 18;
+            } else if (folotte) {
+                by = fent - 18 - bh;
+            } else {
+                // Sem alatta, sem fölötte nincs hely (nagy elem): a buborék az elemen belül, alul áll.
+                by = Math.max(8, window.innerHeight - bh - 24);
+            }
+
+            bub.classList.toggle('is-folotte', !alatta && folotte);
+            bub.classList.toggle('is-benne', !alatta && !folotte);
+        } else {
+            // Szabad lépés: a buborék a képernyő közepén, a figura mellette.
+            bx = Math.max(16, (window.innerWidth - bw) / 2 - 40);
+            by = Math.max(16, (window.innerHeight - bub.offsetHeight) / 2);
+            bub.classList.remove('is-folotte', 'is-benne');
+        }
+
         bub.style.left = bx + 'px';
         bub.style.top = by + 'px';
-        bub.classList.toggle('is-folotte', !lent);
 
         var lr = leny.getBoundingClientRect();
-        var alapX = gyoker.dataset.alapX ? parseFloat(gyoker.dataset.alapX) : lr.left;
-        var alapY = gyoker.dataset.alapY ? parseFloat(gyoker.dataset.alapY) : lr.top;
 
         if (!gyoker.dataset.alapX) {
-            gyoker.dataset.alapX = String(lr.left);
-            gyoker.dataset.alapY = String(lr.top);
+            // A figura „otthona": innen számoljuk, hová kell repülnie.
+            var mostani = new DOMMatrixReadOnly(window.getComputedStyle(leny).transform);
+
+            gyoker.dataset.alapX = String(lr.left - mostani.m41);
+            gyoker.dataset.alapY = String(lr.top - mostani.m42);
         }
 
-        var cx = Math.min(window.innerWidth - 80, bx + bw + 12);
-        var cy = Math.max(10, Math.min(window.innerHeight - 80, by - 10));
+        var cx = Math.min(window.innerWidth - lr.width - 12, bx + bw + 12);
+        var cy = Math.max(10, Math.min(window.innerHeight - lr.height - 12, by - 6));
 
-        leny.style.transform = 'translate(' + (cx - alapX).toFixed(0) + 'px,' + (cy - alapY).toFixed(0) + 'px)';
+        leny.style.transform = 'translate(' + (cx - parseFloat(gyoker.dataset.alapX)).toFixed(0) + 'px,' + (cy - parseFloat(gyoker.dataset.alapY)).toFixed(0) + 'px)';
 
-        reflektorKep = window.requestAnimationFrame(reflektorKovet);
+        turaKep = window.requestAnimationFrame(turaKovet);
     }
 
-    function reflektorZar() {
-        window.cancelAnimationFrame(reflektorKep);
-
-        if (reflektorElem) {
-            reflektorElem.removeEventListener('click', kiemeltKatt);
+    /**
+     * @param {boolean} csendes    ne ünnepeljen, ne szóljon (pl. másik túra indul)
+     * @param {boolean} befejezve  végigért-e (igaz) vagy kilépett (hamis)
+     */
+    function turaVege(csendes, befejezve) {
+        if (!tura) {
+            return;
         }
 
-        if (reflektor) {
-            reflektor.remove();
+        var volt = tura;
+
+        window.cancelAnimationFrame(turaKep);
+
+        if (turaDoboz) {
+            turaDoboz.remove();
         }
 
-        reflektor = null;
-        reflektorElem = null;
+        tura = null;
+        turaDoboz = null;
+        leny.style.transform = '';
+        gyoker.classList.remove('is-repul', 'is-tura');
+        delete gyoker.dataset.alapX;
+        delete gyoker.dataset.alapY;
+        allapot('nyugi');
+
+        if (volt.szunet) {
+            buborekZar();
+        }
+
+        if (csendes || volt.egy) {
+            if (volt.egy && !csendes) {
+                allapot('orul', 1200);
+            }
+
+            return;
+        }
+
+        if (befejezve) {
+            window.setTimeout(function () {
+                allapot('orul', 1800);
+                gesztus('tancol', 1800);
+                szikrak(12, 'konfetti');
+                kellek('parti', 2600);
+
+                if (HUMOR >= 15) {
+                    beszol('turaVege', true);
+                }
+            }, 350);
+        } else {
+            window.setTimeout(function () {
+                buborekMutat('Rendben, abbahagytam. Ha folytatnád, kérd bármikor: „Vezess végig ezen az oldalon”.', [], { ms: 6000 });
+            }, 300);
+        }
     }
 
+    /* A túra billentyűi: jobbra / balra nyíl lépked, az Esc kilép (gépelés közben nem zavar). */
+    document.addEventListener('keydown', function (ev) {
+        if (!tura || tura.szunet) {
+            return;
+        }
+
+        var cel = ev.target;
+        var gepel = cel && (/^(INPUT|TEXTAREA|SELECT)$/.test(cel.tagName) || cel.isContentEditable);
+
+        if (ev.key === 'Escape') {
+            turaVege(false, false);
+        } else if (!gepel && !tura.egy && ev.key === 'ArrowRight') {
+            ev.preventDefault();
+            turaLep(tura.i + 1, 1);
+        } else if (!gepel && !tura.egy && ev.key === 'ArrowLeft') {
+            ev.preventDefault();
+            turaLep(tura.i - 1, -1);
+        }
+    });
+
+    /** Egyetlen elem megmutatása (az asszisztens `mutat` eszköze). */
+    function mutat(adat) {
+        if (!turaIndit([{ elem: adat.elem, cim: '', szoveg: adat.szoveg || 'Ide kattints!' }], { egy: true })) {
+            uzenetRajzol({ szerep: 'hiba', szoveg: 'Ezt az elemet már nem látom a képernyőn – lehet, hogy közben bezárult egy ablak.' });
+        }
+    }
+
+    /* Az oldal általános részei – ezeket minden túra magától hozzáteszi (a fejezetnek nem kell leírnia). */
+    var TURA_KERET = {
+        menu: { szel: '.sdh-sav', cim: 'Az oldalmenü', szoveg: 'Innen érsz el mindent. A piros pötty és a szám azt jelzi, hol vár rád valami. A bal felső **≡** gombbal összecsukható, hogy több hely jusson a munkának.' },
+        kereso: { szel: '.sdh-fej [data-sdh-kutat]', cim: 'Kereső – mindenhonnan', szoveg: 'Ügyfél, telefonszám, IMEI vagy gyári szám: kezdd el írni, és jön a találat. A **/** billentyűvel bárhonnan ide ugrasz.' },
+        ora: { szel: '.sdh-fej [data-sdh-ora]', cim: 'Óra és zárásig hátralévő idő', szoveg: 'A pontos idő, alatta az, hogy mennyi van még zárásig. Zárás előtt színt vált, hogy ne érjen meglepetés.' },
+        sugo: { szel: '.sdh-fej__sugo', cim: 'Súgó ehhez az oldalhoz', szoveg: 'Egy kattintás, és annak az oldalnak a részletes leírását kapod, ahol éppen állsz – kérdés–válaszokkal együtt.' },
+        profil: { szel: '.sdh-profil__gomb', cim: 'A saját beállításaid', szoveg: 'Megjelenés (világos, sötét, **papír**), **kékfény-szűrő**, betűméret, a felugró ablakok kerete – mind csak a te gépedre szól. Itt tudsz kijelentkezni is.' }
+    };
+    var TURA_ALTALANOS = [
+        { szel: '.sdh-fejlec__cim', cim: 'Hol vagy', szoveg: 'Az oldal neve – alatta egy mondat arról, mire való.' },
+        { szel: '.sdh-fejlec__gombok', cim: 'A legfontosabb műveletek', szoveg: 'Az oldal fő gombjai. Ami adatot vesz fel, az felugró ablakban nyílik – az oldalt nem kell elhagynod.' },
+        { szel: '.sdh-kereso', cim: 'Keresés és szűrés', szoveg: 'Itt szűkítheted a listát: írj be egy részletet, vagy válassz a szűrőkből.' },
+        { szel: '.sdh-tabla', cim: 'A lista', szoveg: 'Egy sor egy tétel. A névre vagy a sor gombjára kattintva megnyílik a részletes ablak.' },
+        { szel: '.sdh-lapozo, .sdh-cs-lapozo', cim: 'Lapozás', szoveg: 'Hosszú listánál nem görgetősáv van, hanem lapozó: a nyilakkal lépkedhetsz.' }
+    ];
+    var turaTolt = false;
+
+    /**
+     * Az éppen nyitott oldal túrája: a súgófejezet lépései, köré téve a bevezetőt,
+     * az általános részeket és a zárást. API-kulcs nélkül is működik.
+     */
+    function turaOldal() {
+        if (turaTolt || tura) {
+            return Promise.resolve(false);
+        }
+
+        var m = modulKulcs();
+
+        turaTolt = true;
+        allapot('gondolkodik');
+
+        return kerdes('ai_tura', { modul: m }, true).then(function (d) {
+            var sajat = (d.lepesek || []).filter(function (l) { return turaElem(l); });
+            var kozep = sajat.length ? d.lepesek : TURA_ALTALANOS;
+            var nev = d.cim || (document.querySelector('.sdh-fejlec__cim') || {}).textContent || 'Ez az oldal';
+            var lepesek = [{
+                szabad: true,
+                cim: nev,
+                szoveg: (d.osszefoglalo ? d.osszefoglalo + ' ' : '') + 'Megmutatom, mi hol van. Lépkedj a **Következő** gombbal vagy a nyilakkal – közben nyugodtan kattints bármire, megvárlak. Kilépni az Esc-kel tudsz.'
+            }];
+
+            if (m === 'attekintes') {
+                lepesek.push(TURA_KERET.menu);
+            }
+
+            lepesek = lepesek.concat(kozep);
+            lepesek.push(TURA_KERET.kereso);
+
+            if (m === 'attekintes') {
+                lepesek.push(TURA_KERET.ora, TURA_KERET.profil);
+            }
+
+            lepesek.push(TURA_KERET.sugo, {
+                szabad: true,
+                cim: 'Ennyi volt!',
+                szoveg: 'Most már ismered ezt az oldalt. Ha elakadsz, kattints rám, vagy nyomd meg az **F1**-et – a teljes leírásból és a rendszer mostani adataiból felelek.'
+            });
+
+            turaTolt = false;
+
+            if (!turaIndit(lepesek, { cim: nev, leiras: d.leiras, szabadIs: true })) {
+                allapot('nyugi');
+
+                return false;
+            }
+
+            return true;
+        }).catch(function (h) {
+            turaTolt = false;
+            allapot('szomoru', 2000);
+            buborekMutat('A túrát most nem tudtam betölteni: ' + h.message, [], { ms: 7000 });
+
+            return false;
+        });
+    }
+
+    /** Régi név (más fájlok és az `is-repul` állapot kezelői hívják): mindent visszaállít. */
     function visszaRepul() {
-        reflektorZar();
+        turaVege(true);
         leny.style.transform = '';
         gyoker.classList.remove('is-repul');
         delete gyoker.dataset.alapX;
@@ -1227,9 +2033,11 @@
             j.hidden = !ai.fuggo;
         });
 
-        if (!panel.hidden || !buborek.hidden || gyoker.classList.contains('is-repul')) {
+        if (!panel.hidden || !buborek.hidden || gyoker.classList.contains('is-repul') || tura) {
             return;
         }
+
+        setalVege();
 
         if (ai.ujdonsag && ai.ujdonsag.pontok && ai.ujdonsag.pontok.length) {
             var v = ai.ujdonsag.verzio;
@@ -1307,7 +2115,14 @@
                 }
 
                 hibaLatott[szoveg] = true;
+                setalVege();
+                allapot('ijedt', 1400);
+                gesztus('razkodik', 600);
                 window.setTimeout(function () {
+                    if (tura) {
+                        return;
+                    }
+
                     buborekMutat('Hibát látok: „' + szoveg.slice(0, 140) + '”. Segítsek megoldani?', [
                         { felirat: 'Segíts', fo: true, tesz: function () { nyit('Ezt a hibaüzenetet kaptam: „' + szoveg.slice(0, 300) + '”. Mit csináljak?'); } },
                         { felirat: 'Megoldom', tesz: function () {} }
@@ -1329,7 +2144,7 @@
             }
         }
 
-        if (ev.key === 'Escape' && gyoker && gyoker.classList.contains('is-repul')) {
+        if (ev.key === 'Escape' && gyoker && gyoker.classList.contains('is-repul') && !tura) {
             visszaRepul();
         }
     });
@@ -1362,8 +2177,31 @@
             }, 2200);
         }
 
+        // A Súgó „Vezess végig" gombja és a bemutató útvonala ?tura=1 címmel nyitja az oldalt: indul a túra.
+        if (/[?&]tura=1(&|$)/.test(window.location.search)) {
+            try {
+                var tiszta = new URL(window.location.href);
+
+                tiszta.searchParams.delete('tura');
+                window.history.replaceState(null, '', tiszta.toString());
+            } catch (x) { /* régi böngésző: a cím marad */ }
+
+            window.setTimeout(function () {
+                if (!buborek.hidden) {
+                    buborekZar();
+                }
+
+                turaOldal();
+            }, 900);
+        }
+
         // buborek: rövid figyelmeztetés gombokkal (pl. a munkalap pipáinak levételekor – app.js: pipaSugo).
-        window.SDH_AI_API = { nyit: nyit, kerdez: function (k) { nyit(k); }, mutat: mutat, buborek: buborekMutat };
+        // tura / vezet: az oldal kész túrája, illetve tetszőleges lépéssor (más modulok is hívhatják).
+        window.SDH_AI_API = {
+            nyit: nyit, kerdez: function (k) { nyit(k); }, mutat: mutat, buborek: buborekMutat,
+            tura: turaOldal, vezet: turaIndit, turaVege: function () { turaVege(true); },
+            hangulat: allapot, gesztus: gesztus, kellek: kellek, szikrak: szikrak
+        };
     }
 
     if (document.readyState === 'loading') {

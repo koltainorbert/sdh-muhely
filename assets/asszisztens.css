@@ -1300,3 +1300,705 @@
         display: none !important;
     }
 }
+
+/* ================================================================== */
+/* 0.51 – több mimika, kéz, láb, antenna, kellékek, önálló mozgás       */
+/* ================================================================== */
+
+/* ---- Karok: alapból a test mellett pihennek, integetésnél, táncnál mozdulnak ---- */
+
+.sdh-ai__kar {
+    position: absolute;
+    top: 50%;
+    width: 25%;
+    height: 19%;
+    border-radius: 50%;
+    background: linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, .22), 0 0 0 1px rgba(255, 255, 255, .25);
+    transition: rotate .3s ease, translate .3s ease;
+}
+
+.sdh-ai__kar--b {
+    left: -10%;
+    transform-origin: 90% 50%;
+    rotate: 28deg;
+}
+
+.sdh-ai__kar--j {
+    right: -10%;
+    transform-origin: 10% 50%;
+    rotate: -28deg;
+}
+
+/* ---- Lábak: csak sétánál és táncnál bújnak elő ---- */
+
+.sdh-ai__lab {
+    position: absolute;
+    bottom: -8%;
+    width: 23%;
+    height: 14%;
+    border-radius: 50% 50% 46% 46%;
+    background: color-mix(in srgb, var(--sdh-ai-b) 78%, #000);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .2);
+    opacity: 0;
+    translate: 0 -55%;
+    transition: opacity .2s ease, translate .25s ease;
+}
+
+.sdh-ai__lab--b { left: 21%; }
+.sdh-ai__lab--j { right: 21%; }
+
+/* ---- Antenna: a hegyén kis szikra, lassan billeg ---- */
+
+.sdh-ai__csap {
+    position: absolute;
+    left: 50%;
+    top: -15%;
+    width: calc(2.5px * var(--sdh-n));
+    height: 19%;
+    margin-left: calc(-1px * var(--sdh-n));
+    border-radius: calc(2px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-ai-a) 65%, #000);
+    transform-origin: 50% 100%;
+    animation: sdh-ai-csap 3.6s ease-in-out infinite;
+}
+
+.sdh-ai__csap i {
+    position: absolute;
+    left: 50%;
+    top: calc(-6px * var(--sdh-n));
+    width: calc(9px * var(--sdh-n));
+    height: calc(9px * var(--sdh-n));
+    margin-left: calc(-4.5px * var(--sdh-n));
+    border-radius: 50%;
+    background: var(--sdh-ai-c);
+    box-shadow: 0 0 9px var(--sdh-ai-c);
+}
+
+@keyframes sdh-ai-csap {
+    0%, 100% { rotate: 9deg; }
+    50% { rotate: -9deg; }
+}
+
+/* ---- Szemöldök, verejtékcsepp ---- */
+
+.sdh-ai__szemoldok {
+    position: absolute;
+    top: 25%;
+    width: 17%;
+    height: 0;
+    border-top: 2.6px solid rgba(10, 16, 32, .82);
+    border-radius: calc(2px * var(--sdh-n));
+    opacity: 0;
+    transition: opacity .2s ease, rotate .2s ease, translate .2s ease;
+}
+
+.sdh-ai__szemoldok--b { left: 27%; }
+.sdh-ai__szemoldok--j { right: 27%; }
+
+.sdh-ai__csepp {
+    position: absolute;
+    top: 20%;
+    right: 12%;
+    width: 9%;
+    height: 14%;
+    border-radius: 50% 50% 50% 50% / 62% 62% 40% 40%;
+    background: linear-gradient(180deg, #ffffff, #8fd3ff);
+    opacity: 0;
+}
+
+/* ---- Kellék és szikrák ---- */
+
+.sdh-ai__kellek {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.sdh-ai__kellek svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: sdh-ai-kellek .35s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+@keyframes sdh-ai-kellek {
+    from { opacity: 0; scale: .6; }
+    to { opacity: 1; scale: 1; }
+}
+
+.sdh-ai__goz {
+    animation: sdh-ai-goz 1.6s ease-in-out infinite;
+}
+
+@keyframes sdh-ai-goz {
+    0%, 100% { opacity: .2; translate: 0 calc(2px * var(--sdh-n)); }
+    50% { opacity: .7; translate: 0 calc(-2px * var(--sdh-n)); }
+}
+
+.sdh-ai__szikrak {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.sdh-ai__szikra {
+    position: absolute;
+    left: calc(-5px * var(--sdh-n));
+    top: calc(-5px * var(--sdh-n));
+    width: calc(10px * var(--sdh-n));
+    height: calc(10px * var(--sdh-n));
+    opacity: 0;
+    animation: sdh-ai-szikra 1.15s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+.sdh-ai__szikra--csillag {
+    background: #ffd23f;
+    clip-path: polygon(50% 0, 62% 36%, 100% 38%, 70% 60%, 80% 100%, 50% 76%, 20% 100%, 30% 60%, 0 38%, 38% 36%);
+}
+
+.sdh-ai__szikra--sziv {
+    background: #ff5f8f;
+    clip-path: polygon(50% 100%, 6% 52%, 0 28%, 12% 8%, 32% 4%, 50% 22%, 68% 4%, 88% 8%, 100% 28%, 94% 52%);
+}
+
+.sdh-ai__szikra--konfetti {
+    width: calc(7px * var(--sdh-n));
+    height: calc(11px * var(--sdh-n));
+    border-radius: calc(2px * var(--sdh-n));
+    background: hsl(calc(var(--s, 0) * 72deg + 10deg) 88% 58%);
+}
+
+@keyframes sdh-ai-szikra {
+    0% { opacity: 0; translate: 0 0; rotate: 0deg; scale: .4; }
+    15% { opacity: 1; scale: 1; }
+    100% { opacity: 0; translate: var(--x, 0) calc(var(--y, calc(-40px * var(--sdh-n))) + calc(26px * var(--sdh-n))); rotate: var(--f, 180deg); scale: .7; }
+}
+
+/* ---- Új hangulatok ---- */
+
+/* Nevet: csukott, boldog szem, tátott száj, rázkódik a nevetéstől. */
+.sdh-ai[data-allapot="nevet"] .sdh-ai__szem {
+    height: 10%;
+    top: 37%;
+    border-radius: 50% 50% 0 0;
+    background: transparent;
+    box-shadow: none;
+    border-top: 2.6px solid rgba(10, 16, 32, .82);
+}
+
+.sdh-ai[data-allapot="nevet"] .sdh-ai__pupilla {
+    display: none;
+}
+
+.sdh-ai[data-allapot="nevet"] .sdh-ai__pir {
+    opacity: 1;
+}
+
+.sdh-ai[data-allapot="nevet"] .sdh-ai__szaj {
+    width: 30%;
+    margin-left: -15%;
+    height: 17%;
+    background: rgba(10, 16, 32, .68);
+}
+
+.sdh-ai[data-allapot="nevet"] .sdh-ai__arc {
+    animation: sdh-ai-nevet .16s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-ai-nevet {
+    from { translate: 0 calc(-1px * var(--sdh-n)); }
+    to { translate: 0 calc(2px * var(--sdh-n)); }
+}
+
+/* Kacsint: az egyik szem csukva, széles mosoly. */
+.sdh-ai[data-allapot="kacsint"] .sdh-ai__szem--j {
+    transform: scaleY(.1);
+}
+
+.sdh-ai[data-allapot="kacsint"] .sdh-ai__szaj {
+    width: 26%;
+    margin-left: -13%;
+}
+
+.sdh-ai[data-allapot="kacsint"] .sdh-ai__pir {
+    opacity: .8;
+}
+
+/* Meglepett: nagy szem, kerek száj, felhúzott szemöldök. */
+.sdh-ai[data-allapot="meglepett"] .sdh-ai__szem {
+    transform: scale(1.28);
+}
+
+.sdh-ai[data-allapot="meglepett"] .sdh-ai__szaj,
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__szaj {
+    width: 12%;
+    margin-left: -6%;
+    height: 12%;
+    border: 2.4px solid rgba(10, 16, 32, .78);
+    border-radius: 50%;
+    background: rgba(10, 16, 32, .5);
+}
+
+.sdh-ai[data-allapot="meglepett"] .sdh-ai__szemoldok,
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__szemoldok {
+    opacity: 1;
+    translate: 0 -55%;
+}
+
+/* Ijedt: apró pupilla, remegés, verejtékcsepp. */
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__szem {
+    transform: scale(1.22);
+}
+
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__pupilla {
+    scale: .6;
+}
+
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__szemoldok--b { rotate: -16deg; }
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__szemoldok--j { rotate: 16deg; }
+
+.sdh-ai[data-allapot="ijedt"] .sdh-ai__csepp {
+    animation: sdh-ai-csepp 1.2s ease-in infinite;
+}
+
+@keyframes sdh-ai-csepp {
+    0% { opacity: 0; translate: 0 -30%; }
+    25% { opacity: 1; }
+    100% { opacity: 0; translate: 0 160%; }
+}
+
+/* Szédül: forgó pupillák, hullámos száj, billegő test. */
+.sdh-ai[data-allapot="szedul"] .sdh-ai__pupilla {
+    transform-origin: 50% 82%;
+    animation: sdh-ai-szedul-szem .5s linear infinite;
+    transform: none !important;
+}
+
+.sdh-ai[data-allapot="szedul"] .sdh-ai__szaj {
+    width: 24%;
+    margin-left: -12%;
+    height: 6%;
+    border: 2.4px solid rgba(10, 16, 32, .78);
+    border-left: 0;
+    border-right: 0;
+    border-radius: 50%;
+}
+
+.sdh-ai[data-allapot="szedul"] .sdh-ai__test {
+    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-ai-szedul 1s ease-in-out infinite;
+}
+
+@keyframes sdh-ai-szedul-szem {
+    to { rotate: 360deg; }
+}
+
+@keyframes sdh-ai-szedul {
+    0%, 100% { rotate: -9deg; }
+    50% { rotate: 9deg; }
+}
+
+/* Ásít: csukott szem, nagyra nyíló száj. */
+.sdh-ai[data-allapot="asit"] .sdh-ai__szem {
+    transform: scaleY(.14);
+}
+
+.sdh-ai[data-allapot="asit"] .sdh-ai__szaj {
+    width: 16%;
+    margin-left: -8%;
+    border: 2.4px solid rgba(10, 16, 32, .78);
+    border-radius: 50%;
+    background: rgba(10, 16, 32, .6);
+    animation: sdh-ai-asit 1.6s ease-in-out 1;
+}
+
+@keyframes sdh-ai-asit {
+    0%, 100% { height: 5%; top: 63%; }
+    40%, 70% { height: 22%; top: 58%; }
+}
+
+/* Büszke (napszemüvegben): félmosoly, a szem a szemüveg mögött. */
+.sdh-ai[data-allapot="buszke"] .sdh-ai__szaj {
+    width: 18%;
+    margin-left: -4%;
+    rotate: -12deg;
+}
+
+.sdh-ai[data-allapot="buszke"] .sdh-ai__test {
+    rotate: -6deg;
+}
+
+/* Kíváncsi: félrebillent fej, az egyik szemöldök felhúzva. */
+.sdh-ai[data-allapot="kivancsi"] .sdh-ai__test {
+    rotate: 9deg;
+}
+
+.sdh-ai[data-allapot="kivancsi"] .sdh-ai__szem {
+    transform: scale(1.14);
+}
+
+.sdh-ai[data-allapot="kivancsi"] .sdh-ai__szemoldok--b {
+    opacity: 1;
+    translate: 0 -70%;
+    rotate: -10deg;
+}
+
+.sdh-ai[data-allapot="kivancsi"] .sdh-ai__szemoldok--j {
+    opacity: 1;
+}
+
+.sdh-ai[data-allapot="kivancsi"] .sdh-ai__szaj {
+    width: 10%;
+    margin-left: -5%;
+}
+
+/* Kávézik, olvas: lefelé néz, elégedett kis mosoly. */
+.sdh-ai[data-allapot="kave"] .sdh-ai__pupilla,
+.sdh-ai[data-allapot="olvas"] .sdh-ai__pupilla {
+    transform: translate(calc(1px * var(--sdh-n)), calc(3px * var(--sdh-n))) !important;
+}
+
+.sdh-ai[data-allapot="kave"] .sdh-ai__szaj,
+.sdh-ai[data-allapot="olvas"] .sdh-ai__szaj {
+    width: 14%;
+    margin-left: -7%;
+}
+
+.sdh-ai[data-allapot="kave"] .sdh-ai__pir {
+    opacity: .7;
+}
+
+.sdh-ai[data-allapot="kave"] .sdh-ai__kar--j {
+    rotate: -62deg;
+    translate: -10% 22%;
+}
+
+.sdh-ai[data-allapot="olvas"] .sdh-ai__kar--b {
+    rotate: 62deg;
+    translate: 12% 26%;
+}
+
+.sdh-ai[data-allapot="olvas"] .sdh-ai__kar--j {
+    rotate: -62deg;
+    translate: -12% 26%;
+}
+
+/* A szomorú és a gondolkodó arcnak is jár szemöldök. */
+.sdh-ai[data-allapot="szomoru"] .sdh-ai__szemoldok {
+    opacity: 1;
+}
+
+.sdh-ai[data-allapot="szomoru"] .sdh-ai__szemoldok--b { rotate: -18deg; }
+.sdh-ai[data-allapot="szomoru"] .sdh-ai__szemoldok--j { rotate: 18deg; }
+
+.sdh-ai[data-allapot="gondolkodik"] .sdh-ai__szemoldok--j {
+    opacity: 1;
+    translate: 0 -60%;
+    rotate: 8deg;
+}
+
+.sdh-ai[data-allapot="gondolkodik"] .sdh-ai__csap {
+    animation-duration: .7s;
+}
+
+.sdh-ai[data-allapot="mutat"] .sdh-ai__kar--b {
+    rotate: -30deg;
+    translate: -18% -40%;
+}
+
+.sdh-ai[data-allapot="alszik"] .sdh-ai__csap {
+    animation: none;
+    rotate: 34deg;
+}
+
+/* ---- Gesztusok (rövid testmozdulatok; a repülés a transform-ot használja, ezek külön tulajdonságot) ---- */
+
+.sdh-ai.is-g-ugral .sdh-ai__leny {
+    animation: sdh-ai-g-ugral .95s cubic-bezier(.3, 1.5, .5, 1) 1;
+}
+
+@keyframes sdh-ai-g-ugral {
+    0%, 100% { translate: 0 0; scale: 1 1; }
+    12% { scale: 1.1 .88; }
+    35% { translate: 0 calc(-18px * var(--sdh-n)); scale: .94 1.08; }
+    55% { translate: 0 0; scale: 1.08 .92; }
+    75% { translate: 0 calc(-8px * var(--sdh-n)); scale: 1 1; }
+}
+
+.sdh-ai.is-g-porog .sdh-ai__leny {
+    animation: sdh-ai-g-porog .9s cubic-bezier(.5, 0, .3, 1) 1;
+}
+
+@keyframes sdh-ai-g-porog {
+    0% { rotate: 0deg; }
+    60% { translate: 0 calc(-10px * var(--sdh-n)); }
+    100% { rotate: 360deg; }
+}
+
+.sdh-ai.is-g-nyujt .sdh-ai__leny {
+    animation: sdh-ai-g-nyujt 1.5s ease-in-out 1;
+}
+
+.sdh-ai.is-g-nyujt .sdh-ai__kar--b { rotate: -55deg; translate: -10% -70%; }
+.sdh-ai.is-g-nyujt .sdh-ai__kar--j { rotate: 55deg; translate: 10% -70%; }
+
+@keyframes sdh-ai-g-nyujt {
+    0%, 100% { scale: 1 1; }
+    45%, 65% { scale: .9 1.16; translate: 0 calc(-5px * var(--sdh-n)); }
+}
+
+.sdh-ai.is-g-integet .sdh-ai__kar--j {
+    translate: 6% -85%;
+    animation: sdh-ai-g-integet .32s ease-in-out infinite alternate;
+}
+
+.sdh-ai.is-g-integet .sdh-ai__test {
+    rotate: -6deg;
+}
+
+@keyframes sdh-ai-g-integet {
+    from { rotate: 40deg; }
+    to { rotate: 82deg; }
+}
+
+.sdh-ai.is-g-tancol .sdh-ai__leny {
+    animation: sdh-ai-g-tancol .52s ease-in-out infinite alternate;
+}
+
+.sdh-ai.is-g-tancol .sdh-ai__lab,
+.sdh-ai.is-setal .sdh-ai__lab {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.sdh-ai.is-g-tancol .sdh-ai__kar--b { animation: sdh-ai-g-kar-b .52s ease-in-out infinite alternate; }
+.sdh-ai.is-g-tancol .sdh-ai__kar--j { animation: sdh-ai-g-kar-j .52s ease-in-out infinite alternate; }
+.sdh-ai.is-g-tancol .sdh-ai__lab--b { animation: sdh-ai-lab .26s ease-in-out infinite alternate; }
+.sdh-ai.is-g-tancol .sdh-ai__lab--j { animation: sdh-ai-lab .26s ease-in-out infinite alternate-reverse; }
+
+@keyframes sdh-ai-g-tancol {
+    from { rotate: -10deg; translate: calc(-5px * var(--sdh-n)) 0; }
+    50% { translate: 0 calc(-7px * var(--sdh-n)); }
+    to { rotate: 10deg; translate: calc(5px * var(--sdh-n)) 0; }
+}
+
+@keyframes sdh-ai-g-kar-b {
+    from { rotate: 70deg; translate: 0 30%; }
+    to { rotate: -50deg; translate: -10% -70%; }
+}
+
+@keyframes sdh-ai-g-kar-j {
+    from { rotate: 50deg; translate: 10% -70%; }
+    to { rotate: -70deg; translate: 0 30%; }
+}
+
+.sdh-ai.is-g-kukucs .sdh-ai__leny {
+    animation: sdh-ai-g-kukucs 2.8s ease-in-out 1;
+}
+
+@keyframes sdh-ai-g-kukucs {
+    0%, 100% { translate: 0 0; }
+    18% { translate: 0 calc(var(--sdh-ai-meret) * .95); }
+    38%, 62% { translate: 0 calc(var(--sdh-ai-meret) * .52); }
+    48% { translate: 0 calc(var(--sdh-ai-meret) * .46); rotate: 6deg; }
+    80% { translate: 0 calc(var(--sdh-ai-meret) * .95); }
+}
+
+.sdh-ai.is-g-bolint .sdh-ai__leny {
+    animation: sdh-ai-g-bolint .55s ease-in-out 1;
+}
+
+@keyframes sdh-ai-g-bolint {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    30% { translate: 0 calc(4px * var(--sdh-n)); rotate: 5deg; }
+    65% { translate: 0 calc(2px * var(--sdh-n)); rotate: 3deg; }
+}
+
+.sdh-ai.is-g-razkodik .sdh-ai__leny {
+    animation: sdh-ai-g-razkodik .1s linear 6;
+}
+
+@keyframes sdh-ai-g-razkodik {
+    0%, 100% { translate: calc(-2px * var(--sdh-n)) 0; }
+    50% { translate: calc(2px * var(--sdh-n)) 0; }
+}
+
+/* ---- Séta a képernyő alján ---- */
+
+.sdh-ai.is-setal .sdh-ai__test {
+    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-ai-totyog .42s ease-in-out infinite alternate;
+}
+
+.sdh-ai.is-setal .sdh-ai__lab--b { animation: sdh-ai-lab .21s ease-in-out infinite alternate; }
+.sdh-ai.is-setal .sdh-ai__lab--j { animation: sdh-ai-lab .21s ease-in-out infinite alternate-reverse; }
+.sdh-ai.is-setal .sdh-ai__kar--b { animation: sdh-ai-g-kar-b .84s ease-in-out infinite alternate; }
+
+.sdh-ai.is-setal.is-all .sdh-ai__test,
+.sdh-ai.is-setal.is-all .sdh-ai__lab,
+.sdh-ai.is-setal.is-all .sdh-ai__kar {
+    animation-play-state: paused;
+}
+
+@keyframes sdh-ai-totyog {
+    from { rotate: -6deg; }
+    to { rotate: 6deg; }
+}
+
+@keyframes sdh-ai-lab {
+    from { translate: 0 0; }
+    to { translate: 0 -45%; }
+}
+
+/* ---- Végigvezetés (túra) ---- */
+
+.sdh-ai-tura[hidden] {
+    display: none;
+}
+
+.sdh-ai-tura .sdh-ai-reflektor__gyuru {
+    transition: left .28s ease, top .28s ease, width .28s ease, height .28s ease;
+    box-shadow: 0 0 0 4000px rgba(8, 10, 14, .3), 0 0 0 4px color-mix(in srgb, var(--sdh-neon) 30%, transparent), 0 0 26px var(--sdh-neon);
+}
+
+.sdh-ai-tura.is-szabad .sdh-ai-reflektor__gyuru,
+.sdh-ai-tura.is-szabad .sdh-ai-reflektor__buborek::before,
+.sdh-ai-reflektor__buborek.is-benne::before {
+    display: none;
+}
+
+.sdh-ai-tura .sdh-ai-reflektor__buborek {
+    padding-right: calc(38px * var(--sdh-n));
+    animation: none;
+    transition: left .28s ease, top .28s ease;
+}
+
+.sdh-ai-tura .sdh-ai-reflektor__buborek.is-uj {
+    animation: sdh-ai-pop .3s cubic-bezier(.3, 1.6, .45, 1);
+}
+
+.sdh-ai-tura .sdh-ai__buborek-x {
+    position: absolute;
+    top: calc(8px * var(--sdh-n));
+    right: calc(8px * var(--sdh-n));
+}
+
+.sdh-ai-tura__kalap {
+    margin: 0 0 calc(2px * var(--sdh-n));
+    font-size: calc(10.5px * var(--sdh-n));
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+}
+
+.sdh-ai-reflektor__buborek .sdh-ai-tura__cim {
+    margin: 0 0 calc(4px * var(--sdh-n));
+    font-size: calc(16px * var(--sdh-n));
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-ai-reflektor__buborek > .sdh-ai-tura__szoveg {
+    display: block;
+}
+
+.sdh-ai-tura__szoveg p {
+    margin: 0 0 calc(8px * var(--sdh-n));
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.sdh-ai-reflektor__buborek > .sdh-ai-tura__pottyok {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: calc(4px * var(--sdh-n));
+    margin: calc(2px * var(--sdh-n)) 0 calc(10px * var(--sdh-n));
+}
+
+.sdh-ai-tura__pottyok:empty {
+    display: none;
+}
+
+.sdh-ai-tura__pottyok i {
+    width: calc(12px * var(--sdh-n));
+    height: calc(4px * var(--sdh-n));
+    border-radius: calc(2px * var(--sdh-n));
+    background: var(--sdh-keret-eros);
+    transition: width .2s ease, background .2s ease;
+}
+
+.sdh-ai-tura__pottyok i.is-kesz {
+    background: color-mix(in srgb, var(--sdh-neon) 55%, var(--sdh-keret-eros));
+}
+
+.sdh-ai-tura__pottyok i.is-most {
+    width: calc(22px * var(--sdh-n));
+    background: var(--sdh-neon);
+}
+
+a.sdh-ai__buborek-gomb {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* A túra alatt a figura a buborék mellett áll, és nem takarja ki a gombokat. */
+.sdh-ai.is-tura .sdh-ai__leny {
+    cursor: default;
+}
+
+/* ---- Beállítások: személyiség-csúszkák ---- */
+
+.sdh-ai-csuszka {
+    --p: 50%;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    min-height: calc(38px * var(--sdh-n));
+}
+
+.sdh-ai-csuszka > span {
+    flex: 0 0 auto;
+    font-size: calc(12px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-ai-csuszka output {
+    flex: 0 0 auto;
+    min-width: 3rem;
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Kevesebb mozgás: a figura nyugton marad ---- */
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ai__csap,
+    .sdh-ai__kellek svg,
+    .sdh-ai__goz,
+    .sdh-ai__arc,
+    .sdh-ai__szaj,
+    .sdh-ai__kar,
+    .sdh-ai__lab,
+    .sdh-ai[class*="is-g-"] .sdh-ai__leny,
+    .sdh-ai-tura .sdh-ai-reflektor__buborek {
+        animation: none !important;
+    }
+
+    .sdh-ai-tura .sdh-ai-reflektor__gyuru,
+    .sdh-ai-tura .sdh-ai-reflektor__buborek {
+        transition: none;
+    }
+}
+
+/* Papír megjelenésnél a figura körül nincs fényudvar. */
+:root[data-papir] .sdh-ai__aura {
+    opacity: .35;
+}

@@ -163,7 +163,9 @@ T::tartalmaz($A::nagyito('urlap'), 'name="arculat_nagyitas"', 'a Beállítások 
 ob_start();
 SDH_Muhely_Admin_UI::attekintes_tartalom(false);
 $attekintes = (string) ob_get_clean();
-T::tartalmaz($attekintes, 'data-sdh-nagyito="sajat"', 'az Áttekintés fejlécében ott a betűnagyító csúszka');
+// 0.51: a betűméret a profilmenüben állítható, az Áttekintés állapotsorában nincs csúszka.
+T::nem_tartalmaz($attekintes, 'data-sdh-nagyito', 'az Áttekintésen nincs betűnagyító csúszka (a profilmenüben van)');
+T::tartalmaz($csuszka, 'data-sdh-nagyito-minta', 'a csúszkán ott a minta, amely húzás közben mutatja a méretet');
 
 ob_start();
 SDH_Muhely_Admin_UI::attekintes_tartalom(true);
@@ -214,7 +216,9 @@ T::egyezik(8, count($A::valaszto_szinek()), 'a választóban nyolc szín áll, a
 
 $v = $A::megjelenes_valaszto('urlap');
 T::tartalmaz($v, 'data-sdh-megj="urlap"', 'választó a Beállítások űrlapján');
-T::egyezik(3, substr_count($v, '<button type="button" data-ertek='), 'Rendszer / Világos / Sötét');
+T::egyezik(4, substr_count($v, '<button type="button" data-ertek='), 'Rendszer / Világos / Sötét / Papír');
+T::tartalmaz($v, '>Papír<', 'Papír gomb (0.51)');
+T::tartalmaz($v, 'name="arculat_kekfeny"', 'a Beállítások kékfény-csúszkája űrlapmező (0.51)');
 T::tartalmaz($v, '>Rendszer<', 'Rendszer gomb');
 T::tartalmaz($v, 'data-sdh-uvegszin="duo"', 'Duó sor');
 T::tartalmaz($v, 'data-sdh-uvegszin="mono"', 'Egyszínű sor');
@@ -230,7 +234,8 @@ T::igaz(preg_match('/data-sdh-uvegszin="duo".*?data-ertek="turkiz" aria-pressed=
 
 $vp = $A::megjelenes_valaszto('profil');
 T::tartalmaz($vp, 'data-sdh-megj="profil"', 'választó a profilmenüben');
-T::nem_tartalmaz($vp, '<input', 'a profilmenü választója nem űrlap (a böngésző jegyzi meg)');
+T::nem_tartalmaz($vp, 'name=', 'a profilmenü választója nem űrlap (a böngésző jegyzi meg)');
+T::tartalmaz($vp, 'data-sdh-kekfeny="sajat"', 'a profilmenüben ott a kékfény-szűrő csúszkája (0.51)');
 T::nem_tartalmaz($vp, 'aria-pressed="true"', 'a profilmenüben a kijelölést a böngésző állítja be');
 
 $ment(['szin' => 'egyeni', 'arculat_szin_egyeni' => ''] + $alap_mezo);
