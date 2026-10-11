@@ -129,6 +129,9 @@ $d   = $dijsorok($id);
 $lap = t_lap($id);
 
 T::egyezik(1, (int) $lap->fizetve, 'mindkét eszköz kifizetve: a lap fizetve');
+T::egyezik(20000.0, (float) $lap->fizetett, 'A KÉRÉS: a végén a Fizetett 20 000 Ft (nem 11 000)');
+T::egyezik(10000.0, t_bontas($id)[0]['eloleg'], 'a Lenovóra befizetve összesen 10 000 Ft');
+T::egyezik(10000.0, t_bontas($id)[$e2]['eloleg'], 'az iPhone-ra befizetve összesen 10 000 Ft');
 T::egyezik(1000.0, $d[0]['bevizsgalas'], 'a végén is 1 000 Ft a Lenovo díja');
 T::egyezik(1000.0, $d[$e2]['bevizsgalas'], 'a végén is 1 000 Ft az iPhone díja');
 T::egyezik(20000.0, (float) $lap->brutto_ertek, 'a végén is 20 000 Ft a végösszeg');
@@ -203,12 +206,17 @@ T::egyezik(0.0, t_bontas($id4)[0]['fizetendo'], 'javítás nélkül nincs több 
 $ment($id4, ['fizetett' => '2500']);
 T::egyezik(2500.0, $dijsorok($id4)[0]['bevizsgalas'], 'a díj az űrlapon átírható');
 
-// Külön befizetés után az előleget a külön befizetés alá írva a díj nulla lesz, nem negatív.
+// Külön befizetés után az előleget lejjebb írva előbb a külön befizetés fogy, a díj marad.
 t_tetel($id4, 'Javítás', 20000, 0);
 t_ajax('sdh_muhely_penztar_fizet', ['munkalap_id' => $id4, 'mod' => 'kp', 'fajta' => 'eloleg', 'osszeg' => '6000', 'kasszaba' => '1']);
 T::egyezik(2500.0, $dijsorok($id4)[0]['bevizsgalas'], 'külön befizetés után a díj 2 500 Ft');
 $ment($id4, ['fizetett' => '3000']);
-T::egyezik(3000.0, (float) t_lap($id4)->fo_kulon, 'a külön befizetés nem lehet több az előlegnél');
-T::igaz(!isset($dijsorok($id4)[0]['bevizsgalas']), 'ha az előleg nem fedezi, nincs díjsor (nem lesz negatív)');
+T::egyezik(500.0, (float) t_lap($id4)->fo_kulon, 'a lejjebb írt előleg a külön befizetésből fogy');
+T::egyezik(2500.0, $dijsorok($id4)[0]['bevizsgalas'], 'a lejjebb írt előleg a díjat nem bántja, amíg van külön befizetés');
+$ment($id4, ['fizetett' => '1000']);
+T::egyezik(0.0, (float) t_lap($id4)->fo_kulon, 'a külön befizetés elfogyott');
+T::egyezik(1000.0, $dijsorok($id4)[0]['bevizsgalas'], 'ezután már a díj csökken');
+$ment($id4, ['fizetett' => '0']);
+T::igaz(!isset($dijsorok($id4)[0]['bevizsgalas']), 'előleg nélkül nincs díjsor (nem lesz negatív)');
 
 T::vege('t27 bevizsgálási díj');

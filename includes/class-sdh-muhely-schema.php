@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.32.0';
+    public const DB_VERSION = '0.33.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -315,6 +315,12 @@ final class SDH_Muhely_Schema
          * befizetés a díjat növelné, mert a fő eszköz díja az előleg maradéka:
          * fizetett − csatolt díjak − csatolt külön befizetések − fo_kulon.
          *
+         * A "fizetett" mindig a ténylegesen befolyt összeg (díjak + előlegek +
+         * végfizetés): kifizetett lapon a kifizetett végösszeg. A "fo_veg"
+         * (csatolt eszköznél munkalap_eszkoz.veg) az, amit az eszközre a lapot
+         * LEZÁRÓ fizetés könyvelt – ebből vonható vissza pontosan a fizetés,
+         * ha a „Fizetve" pipát leveszik (SDH_Muhely_Munkalap::vegfizetes_visszavon).
+         *
          * Több eszközös lapon minden eszköznek SAJÁT állapota és saját
          * „fizetve" jelzője van. A fő eszközé itt áll ("fo_allapot",
          * "fo_fizetve", "fo_fizetes_ideje"), a csatoltaké a munkalap_eszkoz
@@ -341,6 +347,7 @@ final class SDH_Muhely_Schema
             fizetesi_mod varchar(40) NOT NULL default '',
             fizetett decimal(14,2) NOT NULL default 0.00,
             fo_kulon decimal(14,2) NOT NULL default 0.00,
+            fo_veg decimal(14,2) NOT NULL default 0.00,
             fo_allapot varchar(30) NOT NULL default '',
             fo_fizetve tinyint(1) NOT NULL default 0,
             fo_fizetes_ideje date NULL,
@@ -431,6 +438,7 @@ final class SDH_Muhely_Schema
             bev_nev varchar(255) NOT NULL default '',
             bev_szolg bigint(20) unsigned NOT NULL default 0,
             fizetett decimal(14,2) NOT NULL default 0.00,
+            veg decimal(14,2) NOT NULL default 0.00,
             allapot varchar(30) NOT NULL default '',
             fizetve tinyint(1) NOT NULL default 0,
             fizetes_ideje date NULL,

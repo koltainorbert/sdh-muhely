@@ -2223,10 +2223,20 @@ final class SDH_Muhely_Penztar
 
         $frissit = ['modositva' => current_time('mysql')];
 
+        // A „Fizetett" mindig az, ami ténylegesen befolyt: a most kapott összeg teljes
+        // fizetésnél is hozzáadódik (díj + előlegek + végfizetés = a kifizetett végösszeg).
+        // Ha a lap már fizetve volt (csak utólag kerül a pénztárba), nem számoljuk kétszer.
+        $mar_fizetve = (int) $m->fizetve === 1;
+        $konyvel     = !$mar_fizetve && $osszeg > 0;
+
+        if ($konyvel) {
+            $frissit['fizetett'] = round((float) $m->fizetett + $osszeg, 2);
+        }
+
         if ($fajta === 'teljes') {
             $frissit += ['fizetve' => 1, 'fizetes_ideje' => self::ma(), 'fizetesi_mod' => mb_substr($mod_nev, 0, 40)];
         } else {
-            $frissit += ['fizetett' => round((float) $m->fizetett + $osszeg, 2), 'fizetesi_mod' => (string) $m->fizetesi_mod !== '' ? (string) $m->fizetesi_mod : mb_substr($mod_nev, 0, 40)];
+            $frissit += ['fizetesi_mod' => (string) $m->fizetesi_mod !== '' ? (string) $m->fizetesi_mod : mb_substr($mod_nev, 0, 40)];
         }
 
         $wpdb->update(SDH_Muhely_Schema::tabla('munkalap'), $frissit, ['id' => (int) $m->id]);
@@ -2243,11 +2253,16 @@ final class SDH_Muhely_Penztar
 
             $reszek = self::feloszt($osszeg, $igenyek);
 
-            // Részfizetésnél az eszközre jutó rész az ő külön befizetése lesz – a fő
+            // Az eszközre jutó rész az ő külön (a díján felüli) befizetése lesz – a fő
             // eszközé is (munkalap.fo_kulon), különben a bevizsgálási díját növelné.
-            if ($fajta === 'eloleg') {
+            if ($konyvel) {
                 if (($reszek[0] ?? 0) > 0) {
                     $fo_kulon_no = (float) $reszek[0];
+                }
+
+                // A lapot lezáró fizetés eszközönkénti része: ebből vonható vissza pontosan.
+                if ($fajta === 'teljes') {
+                    SDH_Muhely_Munkalap::vegfizetes_jegyez((int) $m->id, $reszek);
                 }
 
                 $kapcsolo = SDH_Muhely_Schema::tabla('munkalap_eszkoz');
@@ -2266,9 +2281,13 @@ final class SDH_Muhely_Penztar
             }
         }
 
-        // Egy eszközös lap: az előleg / részfizetés egésze a (fő) eszköz külön befizetése.
-        if ($fajta === 'eloleg' && $erintett === [] && $osszeg > 0) {
+        // Egy eszközös lap: a befizetés egésze a (fő) eszköz külön befizetése.
+        if ($konyvel && $erintett === []) {
             $fo_kulon_no = $osszeg;
+
+            if ($fajta === 'teljes') {
+                SDH_Muhely_Munkalap::vegfizetes_jegyez((int) $m->id, [0 => $osszeg]);
+            }
         }
 
         if (!empty($fo_kulon_no)) {

@@ -93,6 +93,9 @@ final class SDH_Muhely_Munkalap
 
         // …és a „Részben elkészült" közös állapot a mentett állapotlistába.
         add_action('sdh_muhely_sema_frissult', [self::class, 'reszben_potlas'], 5);
+
+        // …és a régi kifizetett lapokon a „Fizetett" a teljes összeg legyen (egyszer fut).
+        add_action('sdh_muhely_sema_frissult', [self::class, 'fizetett_potlas'], 40);
     }
 
     /* =================================================================
@@ -2301,6 +2304,175 @@ final class SDH_Muhely_Munkalap
     }
 
     /**
+     * A lapot kézzel „Fizetve"-re állították (nem a Fizetés ablakból): ami még
+     * hátravolt, az most befizetettnek számít. A „Fizetett" így a teljes
+     * kifizetett összeg lesz – nem marad ott a puszta előleg –, eszközönként
+     * a hátralék az eszköz külön befizetéséhez adódik (a díjak nem változnak).
+     *
+     * @return float Ennyivel nőtt a „Fizetett".
+     */
+    public static function teljes_kifizetes_konyvel(int $id): float
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null) {
+            return 0.0;
+        }
+
+        $ossz   = 0.0;
+        $reszek = [];
+
+        foreach (self::eszkoz_bontas($lap) as $b) {
+            $hatra = round((float) $b['brutto'] - (float) $b['eloleg'], 2);
+
+            if ($hatra <= 0) {
+                continue;
+            }
+
+            $ossz                           += $hatra;
+            $reszek[(int) $b['eszkoz_id']]   = $hatra;
+
+            if ((int) $b['eszkoz_id'] > 0) {
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                $wpdb->query($wpdb->prepare(
+                    'UPDATE ' . self::tobbi_eszkoz_tabla() . ' SET fizetett = fizetett + %f WHERE munkalap_id = %d AND eszkoz_id = %d',
+                    $hatra,
+                    $id,
+                    (int) $b['eszkoz_id']
+                ));
+            } else {
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                $wpdb->query($wpdb->prepare('UPDATE ' . self::tabla() . ' SET fo_kulon = fo_kulon + %f WHERE id = %d', $hatra, $id));
+            }
+        }
+
+        if ($ossz > 0) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+            $wpdb->query($wpdb->prepare('UPDATE ' . self::tabla() . ' SET fizetett = fizetett + %f WHERE id = %d', $ossz, $id));
+        }
+
+        self::vegfizetes_jegyez($id, $reszek);
+
+        return round($ossz, 2);
+    }
+
+    /**
+     * A lapot lezáró fizetés eszközönkénti részének feljegyzése (kulcs => összeg;
+     * 0 = a fő eszköz). Amelyik eszköz nincs benne, annál nulla lesz.
+     *
+     * @param array<int, float> $reszek
+     */
+    public static function vegfizetes_jegyez(int $id, array $reszek): void
+    {
+        global $wpdb;
+
+        $wpdb->update(self::tabla(), ['fo_veg' => round(max(0.0, (float) ($reszek[0] ?? 0)), 2)], ['id' => $id]);
+
+        foreach (self::tovabbi_eszkoz_idk($id) as $kulcs) {
+            $wpdb->update(self::tobbi_eszkoz_tabla(), ['veg' => round(max(0.0, (float) ($reszek[$kulcs] ?? 0)), 2)], ['munkalap_id' => $id, 'eszkoz_id' => $kulcs]);
+        }
+    }
+
+    /**
+     * A lapot lezáró fizetés visszavonása (a „Fizetve" pipa levételekor, ha a
+     * fizetés nem történt meg): eszközönként pontosan az megy vissza, amit a
+     * lezáró fizetés könyvelt. A díjak és a korábbi előlegek megmaradnak.
+     *
+     * @return float Ennyivel csökkent a „Fizetett".
+     */
+    public static function vegfizetes_visszavon(int $id): float
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null) {
+            return 0.0;
+        }
+
+        $fo   = min(max(0.0, (float) ($lap->fo_veg ?? 0)), max(0.0, (float) ($lap->fo_kulon ?? 0)));
+        $ossz = $fo;
+
+        foreach (self::tovabbi_reszletek($id) as $r) {
+            $le = min(max(0.0, (float) ($r->veg ?? 0)), max(0.0, (float) ($r->fizetett ?? 0)));
+
+            $wpdb->update(self::tobbi_eszkoz_tabla(), ['fizetett' => round((float) $r->fizetett - $le, 2), 'veg' => 0], ['munkalap_id' => $id, 'eszkoz_id' => (int) $r->eszkoz_id]);
+            $ossz += $le;
+        }
+
+        $wpdb->update(self::tabla(), [
+            'fo_kulon' => round((float) ($lap->fo_kulon ?? 0) - $fo, 2),
+            'fo_veg'   => 0,
+            'fizetett' => round(max(0.0, (float) $lap->fizetett - $ossz), 2),
+        ], ['id' => $id]);
+
+        return round($ossz, 2);
+    }
+
+    /**
+     * Az űrlapon lejjebb írták a „Fizetett (előleg)" mezőt: a csökkenés előbb a
+     * díjakon FELÜLI befizetéseket viszi el (a fő eszközét, aztán a csatoltakét
+     * sorban) – így egy visszavont fizetés után a bevizsgálási díjak épek
+     * maradnak. Csak ami ezen túl is hiányzik, az csökkenti a fő eszköz díját.
+     */
+    public static function kulon_csokkent(int $id, float $mennyivel): void
+    {
+        global $wpdb;
+
+        $lap = $id > 0 ? self::egy($id) : null;
+
+        if ($lap === null || $mennyivel <= 0.005) {
+            return;
+        }
+
+        $fo  = max(0.0, (float) ($lap->fo_kulon ?? 0));
+        $le  = min($fo, $mennyivel);
+
+        if ($le > 0) {
+            $wpdb->update(self::tabla(), ['fo_kulon' => round($fo - $le, 2)], ['id' => $id]);
+            $mennyivel -= $le;
+        }
+
+        foreach (self::tovabbi_reszletek($id) as $r) {
+            if ($mennyivel <= 0.005) {
+                break;
+            }
+
+            $kulon = max(0.0, (float) ($r->fizetett ?? 0));
+            $le    = min($kulon, $mennyivel);
+
+            if ($le > 0) {
+                $wpdb->update(self::tobbi_eszkoz_tabla(), ['fizetett' => round($kulon - $le, 2)], ['munkalap_id' => $id, 'eszkoz_id' => (int) $r->eszkoz_id]);
+                $mennyivel -= $le;
+            }
+        }
+    }
+
+    /**
+     * Egyszeri pótlás: a korábban kifizetett lapokon a „Fizetett" csak az
+     * előleget mutatta. Ezeken a hátralék most befizetettnek könyvelődik,
+     * hogy a „Fizetett" a kifizetett végösszeg legyen. Egyszer fut.
+     */
+    public static function fizetett_potlas(): void
+    {
+        global $wpdb;
+
+        if (get_option('sdh_muhely_fizetett_potlas') === '1') {
+            return;
+        }
+
+        update_option('sdh_muhely_fizetett_potlas', '1');
+
+        $idk = (array) $wpdb->get_col('SELECT id FROM ' . self::tabla() . ' WHERE fizetve = 1 AND brutto_ertek - fizetett > 0.5');
+
+        foreach ($idk as $id) {
+            self::teljes_kifizetes_konyvel((int) $id);
+        }
+    }
+
+    /**
      * A lap és az eszközök „fizetve" jelzőinek összehangolása mentés és
      * fizetés után:
      *   - kifizetett lapon minden eszköz fizetve (a lap fizetési napjával);
@@ -2336,6 +2508,21 @@ final class SDH_Muhely_Munkalap
         if ($regi !== null && (int) $regi->fizetve === 1) {
             $wpdb->update(self::tabla(), ['fo_fizetve' => 0, 'fo_fizetes_ideje' => null], ['id' => $id]);
             $wpdb->update($kapcsolo, ['fizetve' => 0, 'fizetes_ideje' => null], ['munkalap_id' => $id]);
+
+            // Amelyik eszköz a befizetések alapján továbbra is ki van fizetve, az fizetve
+            // marad – de csak ha van, amelyik nincs (különben a lap rögtön újra fizetve lenne).
+            $bontas = self::eszkoz_bontas(self::egy($id) ?? $lap);
+            $kesz   = array_filter($bontas, static fn (array $b): bool => (float) $b['brutto'] > 0.5 && (float) $b['brutto'] - (float) $b['eloleg'] <= 0.5);
+
+            if (count($bontas) > 1 && $kesz !== [] && count($kesz) < count($bontas)) {
+                foreach ($kesz as $b) {
+                    if ((int) $b['eszkoz_id'] === 0) {
+                        $wpdb->update(self::tabla(), ['fo_fizetve' => 1, 'fo_fizetes_ideje' => $ma], ['id' => $id]);
+                    } else {
+                        $wpdb->update($kapcsolo, ['fizetve' => 1, 'fizetes_ideje' => $ma], ['munkalap_id' => $id, 'eszkoz_id' => (int) $b['eszkoz_id']]);
+                    }
+                }
+            }
 
             return;
         }
@@ -2459,11 +2646,15 @@ final class SDH_Muhely_Munkalap
                 );
             }
 
+            $ft       = static fn (float $o): string => esc_html(number_format($o, 0, ',', "\u{00a0}")) . "\u{00a0}Ft";
+            $befolyt = (float) $b['eloleg'] > 0.5 ? 'befizetve ' . $ft((float) $b['eloleg']) . ' · ' : '';
+
             if ($b['fizetve']) {
                 $penz = '<span class="sdh-eszall__penz is-fizetve">Fizetve'
+                    . ((float) $b['eloleg'] > 0.5 ? ' ' . $ft((float) $b['eloleg']) : '')
                     . ($b['fizetes_ideje'] !== '' ? ' · ' . esc_html(str_replace('-', '.', (string) $b['fizetes_ideje'])) : '')
                     . ((int) $munkalap->fizetve === 1 ? '' : sprintf(
-                        ' <button type="button" class="sdh-eszall__vissza" data-sdh-eszkoz-fizetve-vissza data-id="%d" data-kulcs="%d"'
+                        ' <button type="button" class="sdh-eszall__vissza" data-sdh-eszkoz-fizetve-vissza data-id="%d" data-kulcs="%d" data-nev="' . str_replace('%', '%%', esc_attr((string) $b['felirat'])) . '" data-befizetve="' . esc_attr((string) (float) $b['eloleg']) . '"'
                         . ' title="A „Fizetve” jelző levétele erről az eszközről. A befizetett összeghez és a pénztárhoz nem nyúl." aria-label="A fizetve jelző levétele: %s">&times;</button>',
                         $id,
                         (int) $b['eszkoz_id'],
@@ -2471,9 +2662,9 @@ final class SDH_Muhely_Munkalap
                     ))
                     . '</span>';
             } elseif ((float) $b['fizetendo'] > 0.5) {
-                $penz = '<span class="sdh-eszall__penz">fizetendő ' . esc_html(number_format((float) $b['fizetendo'], 0, ',', "\u{00a0}")) . "\u{00a0}Ft</span>";
+                $penz = '<span class="sdh-eszall__penz">' . $befolyt . 'fizetendő ' . $ft((float) $b['fizetendo']) . '</span>';
             } else {
-                $penz = '<span class="sdh-eszall__penz">nincs fizetendő</span>';
+                $penz = '<span class="sdh-eszall__penz">' . $befolyt . 'nincs fizetendő</span>';
             }
 
             $html .= sprintf(
@@ -2829,6 +3020,8 @@ final class SDH_Muhely_Munkalap
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php // Jelzi a mentésnek, hogy az űrlap a tételeket is hozza (lásd feldolgoz()). ?>
         <input type="hidden" name="tetelek_jelen" value="1">
+        <?php // 1, ha a „Fizetve" pipát a fizetés visszavonásával vették le (app.js: fizetveLevetel). ?>
+        <input type="hidden" name="fizetes_vissza" value="" data-sdh-fizetes-vissza>
         <?php wp_nonce_field('sdh_muhely_munkalap_mentes', 'sdh_nonce'); ?>
 
         <?php
@@ -2841,6 +3034,20 @@ final class SDH_Muhely_Munkalap
         <?php // data-fo-kulon: a fő eszközre a díján felül befizetett rész – a díj számításából kimarad (app.js: munkalapSzamol). ?>
         <div class="sdh-ugyfelurlap sdh-munkalapurlap" data-sdh-munkalap
              data-fo-kulon="<?php echo esc_attr((string) ($uj ? 0 : (float) ($munkalap->fo_kulon ?? 0))); ?>"
+             data-eloleg-mentett="<?php echo esc_attr((string) $fizetett); ?>"
+             data-veg-ossz="<?php
+                $veg_ossz = $uj ? 0.0 : (float) ($munkalap->fo_veg ?? 0);
+
+                foreach ($tovabbi_dij as $veg_sor) {
+                    $veg_ossz += (float) ($veg_sor->veg ?? 0);
+                }
+
+                echo esc_attr((string) $veg_ossz);
+             ?>"
+             data-fo-veg="<?php echo esc_attr((string) ($uj ? 0 : (float) ($munkalap->fo_veg ?? 0))); ?>"
+             data-fizetve-mentett="<?php echo $fizetve ? '1' : '0'; ?>"
+             data-bev-mentett="<?php echo !$uj && (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1 ? '1' : '0'; ?>"
+             data-kasszaban="<?php echo esc_attr((string) (!$uj && class_exists('SDH_Muhely_Penztar') ? SDH_Muhely_Penztar::munkalap_kasszaban((int) $munkalap->id, (int) $munkalap->munkalap_szam > 0 ? (string) (int) $munkalap->munkalap_szam : '', (string) ($munkalap->letrehozva ?? '')) : 0)); ?>"
              data-ma="<?php echo esc_attr(current_time('Y-m-d')); ?>">
             <div class="sdh-ml">
                 <div class="sdh-ml__oldal">
@@ -3731,6 +3938,7 @@ final class SDH_Muhely_Munkalap
 
         ?>
         <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>"
+              data-veg="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->veg ?? 0) : 0)); ?>"
               data-kulon="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->fizetett ?? 0) : 0)); ?>">
             <input type="hidden" name="tovabbi_eszkoz[]" value="<?php echo esc_attr($eszkoz_id); ?>">
             <span class="sdh-ml-eszkoz__nev" data-sdh-tovabbi-nev><?php echo esc_html($felirat); ?></span>
@@ -4214,8 +4422,22 @@ final class SDH_Muhely_Munkalap
             } else {
                 self::allapot_szinkron((int) $eredmeny[0]);
             }
+        }
 
-            self::fizetve_szinkron((int) $eredmeny[0], $regi);
+        // A „Fizetve" pipa levétele a fizetés visszavonásával (az űrlap kérte): a lapot
+        // lezáró fizetés eszközönként pontosan visszamegy; a „Fizetett" ebből adódik,
+        // nem az űrlap mezőjéből.
+        $visszavonas = is_array($eredmeny) && $regi !== null && (int) $regi->fizetve === 1
+            && (int) $adatok['fizetve'] !== 1 && !empty($_POST['fizetes_vissza']);
+
+        if ($visszavonas) {
+            global $wpdb;
+
+            $wpdb->update(self::tabla(), ['fizetett' => (float) $regi->fizetett], ['id' => (int) $eredmeny[0]]);
+            self::vegfizetes_visszavon((int) $eredmeny[0]);
+        } elseif (is_array($eredmeny) && $regi !== null && (float) $adatok['fizetett'] < (float) $regi->fizetett - 0.005) {
+            // Lejjebb írt előleg: előbb a díjakon felüli befizetéseket viszi el (a díj marad).
+            self::kulon_csokkent((int) $eredmeny[0], (float) $regi->fizetett - (float) $adatok['fizetett']);
         }
 
         // A tételek csak akkor szinkronizálódnak, ha az űrlap hozta őket –
@@ -4237,6 +4459,17 @@ final class SDH_Muhely_Munkalap
         // A bevizsgálási díj tételsora a jelölőhöz és az előleghez igazodik.
         if (is_array($eredmeny) && class_exists('SDH_Muhely_Szamla')) {
             SDH_Muhely_Szamla::bevizsgalas_szinkron((int) $eredmeny[0]);
+        }
+
+        // Most pipálták be a „Fizetve"-t: a hátralék befizetettnek számít, a „Fizetett"
+        // a teljes kifizetett összeg lesz (a végleges tételek és díjsorok után számolva).
+        if (is_array($eredmeny) && (int) $adatok['fizetve'] === 1 && ($regi === null || (int) $regi->fizetve !== 1)) {
+            self::teljes_kifizetes_konyvel((int) $eredmeny[0]);
+        }
+
+        // Az eszközönkénti „fizetve" jelzők a lapéhoz igazodnak – a végleges összegek után.
+        if (is_array($eredmeny)) {
+            self::fizetve_szinkron((int) $eredmeny[0], $regi);
         }
 
         return $eredmeny;

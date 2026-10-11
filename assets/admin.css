@@ -6376,3 +6376,27 @@ dd:hover > .sdh-masol {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* 0.44.0 – pipa levétele előtti figyelmeztetés, ha az AI-asszisztens nincs bekapcsolva (app.js: pipaSugo). */
+.sdh-pipa-sugo {
+    grid-column: 1 / -1;
+    margin: .3rem 0 .5rem;
+    padding: .55rem .65rem;
+    border: 1px solid color-mix(in srgb, var(--sdh-figyelem) 45%, var(--sdh-keret));
+    border-left-width: 3px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--sdh-figyelem) 7%, var(--sdh-felulet));
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.sdh-pipa-sugo p {
+    margin: 0 0 .3rem;
+}
+
+.sdh-pipa-sugo__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin-top: .45rem;
+}

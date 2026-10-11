@@ -1362,7 +1362,8 @@
             }, 2200);
         }
 
-        window.SDH_AI_API = { nyit: nyit, kerdez: function (k) { nyit(k); }, mutat: mutat };
+        // buborek: rövid figyelmeztetés gombokkal (pl. a munkalap pipáinak levételekor – app.js: pipaSugo).
+        window.SDH_AI_API = { nyit: nyit, kerdez: function (k) { nyit(k); }, mutat: mutat, buborek: buborekMutat };
     }
 
     if (document.readyState === 'loading') {

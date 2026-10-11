@@ -60,6 +60,23 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.44.0
+- **A „Fizetett" mindig az, ami ténylegesen befolyt.** Eddig teljes fizetés után is csak a díj és az előlegek
+  álltak ott (pl. 20 000 Ft-os kifizetett lapon 11 000 Ft). Mostantól a lezáró fizetés is hozzáadódik: kifizetett
+  lapon Fizetett = a kifizetett végösszeg. Eszközönként is látszik, mennyi folyt be („Fizetve 10 000 Ft",
+  illetve „befizetve 1 000 Ft · fizetendő 9 000 Ft"). A korábban kifizetett lapok frissítéskor egyszer rendbe jönnek.
+- **Pipa levétele előtt az asszisztens elmondja, mi történik.** Ha egy kifizetett lapon kiveszed a „Fizetve"
+  pipát, a „Bevizsgálási díj" pipát, vagy egy eszközről leveszed a „Fizetve" jelzőt, a buborék konkrét számokkal
+  megmondja a következményt és a teendőt, és gombot ad: „Mégsem", „Fizetés visszavonása", „Csak a pipát veszem
+  ki". Ha az asszisztens ki van kapcsolva, ugyanez a mező alatt jelenik meg.
+- **Fizetés visszavonása.** A lapot lezáró fizetés eszközönként pontosan visszavonható: a díjak, a korábbi előlegek
+  és a korábban külön kifizetett eszköz érintetlen marad, a fizetendő visszajön. A pénztártételt a
+  Házipénztárban kézzel kell törölni – a buborék szól róla, és kiírja az összeget.
+- **Lejjebb írt előleg:** a „Fizetett (előleg)" csökkentése előbb a díjakon felüli befizetéseket viszi el, a
+  bevizsgálási díj csak ezután csökken.
+- Új teszt: `t28-fizetett-osszeg`. Séma (DB_VERSION 0.33.0): `sdh_munkalap.fo_veg`, `sdh_munkalap_eszkoz.veg`
+  (a lapot lezáró fizetés eszközönkénti része).
+
 ### 0.43.1
 - **Javítás: a bevizsgálási díj nem nő a későbbi befizetéstől.** Eddig a fő (első) eszköz díja „az előleg
   maradéka" volt, ezért ha a Fizetés ablakban előleget vagy részfizetést rögzítettél (pl. az egyik eszközt

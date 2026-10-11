@@ -2847,6 +2847,23 @@
         var bevCsatolt = 0;
         var bevKulon = 0;
         var foValaszto = gyoker.querySelector('[data-sdh-eszkoz-valaszto]');
+        // A fő eszközre a díján felül befizetett rész (előleg / részfizetés / végfizetés) nem díj.
+        var foKulon = Math.max(0, parseFloat(gyoker.getAttribute('data-fo-kulon') || '0') || 0);
+        // A fizetés visszavonása: eszközönként pontosan a lapot lezáró fizetés megy vissza.
+        var visszaMezo = (gyoker.closest('form') || gyoker).querySelector('[data-sdh-fizetes-vissza]');
+        var vissza = !!(visszaMezo && visszaMezo.value === '1');
+        // Lejjebb írt előleg: a hiány előbb a díjakon felüli befizetéseket viszi el (a fő
+        // eszközét, aztán a csatoltakét sorban) – ugyanúgy, mint a szerver mentéskor.
+        var elolegHiany = vissza ? 0 : Math.max(0, (parseFloat(gyoker.getAttribute('data-eloleg-mentett') || '0') || 0) - bevElolegOssz);
+
+        if (vissza) {
+            foKulon = Math.max(0, foKulon - (parseFloat(gyoker.getAttribute('data-fo-veg') || '0') || 0));
+        } else {
+            var foLe = Math.min(foKulon, elolegHiany);
+
+            foKulon -= foLe;
+            elolegHiany -= foLe;
+        }
 
         esz['0'].nev = foValaszto && foValaszto.value !== '0' && foValaszto.options[foValaszto.selectedIndex]
             ? foValaszto.options[foValaszto.selectedIndex].textContent.trim()
@@ -2857,6 +2874,15 @@
             var dij = bevJelolo && mezo ? Math.max(0, mlSzam(mezo.value)) : 0;
             var kulon = parseFloat(cimke.getAttribute('data-kulon') || '0') || 0;
             var kulcs = cimke.getAttribute('data-sdh-tovabbi');
+
+            if (vissza) {
+                kulon = Math.max(0, kulon - (parseFloat(cimke.getAttribute('data-veg') || '0') || 0));
+            } else {
+                var le = Math.min(kulon, elolegHiany);
+
+                kulon -= le;
+                elolegHiany -= le;
+            }
             var nevElem = cimke.querySelector('[data-sdh-tovabbi-nev]');
 
             esz[kulcs] = { nev: nevElem ? nevElem.textContent.trim() : '', dij: dij, kulon: kulon, tobbi: 0, levon: 0, vanDij: false, vanLe: false };
@@ -2864,9 +2890,6 @@
             bevCsatolt += dij;
             bevKulon += kulon;
         });
-
-        // A fő eszközre a díján felül befizetett rész (előleg / részfizetés a Fizetés ablakból) nem díj.
-        var foKulon = Math.max(0, parseFloat(gyoker.getAttribute('data-fo-kulon') || '0') || 0);
 
         esz['0'].dij = bevJelolo ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon - foKulon) : 0;
 
@@ -3039,6 +3062,13 @@
         var kiiras = function (nev) {
             return gyoker.querySelector('[data-sdh-ossz="' + nev + '"]');
         };
+
+        // A pipák figyelmeztetései (pipaSugo) ebből veszik a számokat.
+        gyoker.sdhSzamok = { dijak: bevEloleg, brutto: osszBrutto, fizetett: fizetett, fizetendo: fizetendo };
+
+        if (bevEloleg > 0) {
+            gyoker.sdhDijak = bevEloleg;
+        }
 
         mlIr(kiiras('netto'), mlPenz(osszNetto));
         mlIr(kiiras('afa'), mlPenz(osszBrutto - osszNetto));
@@ -4693,19 +4723,205 @@
         esemeny.preventDefault();
 
         var id = gomb.dataset.id || '0';
+        var befizetve = parseFloat(gomb.dataset.befizetve || '0') || 0;
 
-        gomb.disabled = true;
+        function levesz() {
+            gomb.disabled = true;
 
-        eszkozMuvelet('sdh_muhely_munkalapok_eszkoz_fizetve', { id: id, kulcs: gomb.dataset.kulcs || '0' }, function (adat) {
-            eszkozBlokkCsere(id, adat);
-            eszkozBlokkJelez(id, 'A „Fizetve” jelző lekerült az eszközről.', 'jo');
-            document.dispatchEvent(new CustomEvent('sdh:allapot', {
-                detail: { id: id, adat: adat, forras: 'eszkoz' }
-            }));
-        }, function (uzenet) {
-            gomb.disabled = false;
-            eszkozBlokkJelez(id, uzenet, 'var');
+            eszkozMuvelet('sdh_muhely_munkalapok_eszkoz_fizetve', { id: id, kulcs: gomb.dataset.kulcs || '0' }, function (adat) {
+                eszkozBlokkCsere(id, adat);
+                eszkozBlokkJelez(id, 'A „Fizetve” jelző lekerült az eszközről.', 'jo');
+                document.dispatchEvent(new CustomEvent('sdh:allapot', {
+                    detail: { id: id, adat: adat, forras: 'eszkoz' }
+                }));
+            }, function (uzenet) {
+                gomb.disabled = false;
+                eszkozBlokkJelez(id, uzenet, 'var');
+            });
+        }
+
+        pipaSugo(
+            gomb.closest('.sdh-eszall') || gomb,
+            '**Ha leveszed a „Fizetve” jelzőt erről az eszközről** (' + (gomb.dataset.nev || '') + '):\n\n' +
+            '- csak a jelző kerül le, az eszköz újra „nincs kifizetve” lesz;\n' +
+            '- a rá befizetett **' + mlPenz(befizetve) + ' Ft megmarad**, ezért a fizetendője 0 Ft marad;\n' +
+            '- a házipénztárból semmi nem törlődik.\n\n' +
+            '**Mit tegyél?** Ha a fizetés tényleg megtörtént, ne vedd le. Ha tévedés volt: vedd le, utána a lapon a „Fizetett (előleg)” mezőt csökkentsd ' + mlPenz(befizetve) + ' Ft-tal (a díj marad), ments, és a Házipénztárban töröld a tételt.',
+            [
+                { felirat: 'Mégsem – maradjon fizetve', fo: true, tesz: function () {} },
+                { felirat: 'Leveszem a jelzőt', tesz: levesz }
+            ]
+        );
+    });
+
+    /* ----------------------------------------------------------------
+     * A munkalap pipáinak levétele: mielőtt bármi megváltozna, a rendszer
+     * elmondja, mi történik és mit érdemes tenni. Ha az AI-asszisztens be van
+     * kapcsolva, az ő buboréka szól; különben ugyanaz a szöveg a mező alatt.
+     * ---------------------------------------------------------------- */
+
+    /** Figyelmeztetés gombokkal: az asszisztens buborékában, vagy (ha nincs) a mező alatt. */
+    function pipaSugo(horgony, szoveg, gombok) {
+        if (window.SDH_AI_API && typeof window.SDH_AI_API.buborek === 'function') {
+            window.SDH_AI_API.buborek(szoveg, gombok, { ms: 0, allapot: 'beszel' });
+
+            return;
+        }
+
+        var hely = (horgony.closest && horgony.closest('.sdh-ig')) || horgony;
+        var regi = hely.parentNode.querySelector('[data-sdh-pipa-sugo]');
+
+        if (regi) {
+            regi.remove();
+        }
+
+        var doboz = document.createElement('div');
+
+        doboz.className = 'sdh-pipa-sugo';
+        doboz.setAttribute('data-sdh-pipa-sugo', '');
+        doboz.setAttribute('role', 'alert');
+
+        szoveg.replace(/\*\*/g, '').split('\n').forEach(function (sor) {
+            if (sor.trim() === '') {
+                return;
+            }
+
+            var p = document.createElement('p');
+
+            p.textContent = sor.replace(/^- /, '• ');
+            doboz.appendChild(p);
         });
+
+        var sav = document.createElement('div');
+
+        sav.className = 'sdh-pipa-sugo__gombok';
+
+        gombok.forEach(function (gomb) {
+            var b = document.createElement('button');
+
+            b.type = 'button';
+            b.className = 'sdh-gomb ' + (gomb.fo ? 'sdh-gomb--elsodleges' : 'sdh-gomb--vilagos');
+            b.textContent = gomb.felirat;
+            b.addEventListener('click', function () {
+                doboz.remove();
+                gomb.tesz();
+            });
+            sav.appendChild(b);
+        });
+
+        doboz.appendChild(sav);
+        hely.parentNode.insertBefore(doboz, hely.nextSibling);
+    }
+
+    /** A lap „Fizetve” pipájának levétele egy már kifizetett (mentett) lapon. */
+    function fizetveLevetel(pipa) {
+        var gyoker = pipa.closest('[data-sdh-munkalap]');
+        var sz = gyoker.sdhSzamok || {};
+        var eloleg = gyoker.querySelector('[data-sdh-fizetett]');
+        var visszaMezo = (gyoker.closest('form') || gyoker).querySelector('[data-sdh-fizetes-vissza]');
+        var mentett = parseFloat(gyoker.getAttribute('data-eloleg-mentett') || '0') || 0;
+        var veg = Math.min(mentett, parseFloat(gyoker.getAttribute('data-veg-ossz') || '0') || 0);
+        var kassza = parseFloat(gyoker.getAttribute('data-kasszaban') || '0') || 0;
+
+        var szoveg = '**Ha kiveszed a „Fizetve” pipát:**\n\n' +
+            '- a munkalap újra „nincs kifizetve” lesz;\n' +
+            '- a befizetett **' + mlPenz(mentett) + ' Ft a „Fizetett” mezőben marad**, ezért a fizetendő ettől még nem jön vissza;\n' +
+            (kassza > 0 ? '- a házipénztárban **' + mlPenz(kassza) + ' Ft** szerepel erre a lapra – az sem törlődik magától.\n' : '') +
+            '\n**Mit tegyél?**\n\n' +
+            '- Ha az ügyfél tényleg fizetett: **ne vedd ki** a pipát.\n' +
+            (veg > 0
+                ? '- Ha a fizetés nem történt meg: válaszd a **„Fizetés visszavonása”** gombot. A lezáró ' + mlPenz(veg) + ' Ft lekerül, a „Fizetett” ' + mlPenz(mentett - veg) + ' Ft lesz (a díjak és a korábbi előlegek megmaradnak), a fizetendő visszajön. Utána **Mentés**' + (kassza > 0 ? ', és a Házipénztárban töröld a hozzá tartozó tételt.' : '.') + '\n'
+                : '- Ha a fizetés nem történt meg: vedd ki a pipát, a „Fizetett (előleg)” mezőbe írd be, amennyit valóban fizetett, és ments' + (kassza > 0 ? '; a Házipénztárban töröld a téves tételt.' : '.') + '\n');
+
+        var gombok = [
+            { felirat: 'Mégsem – maradjon fizetve', fo: true, tesz: function () {
+                pipa.checked = true;
+                munkalapSzamol(gyoker);
+            } }
+        ];
+
+        if (veg > 0) {
+            gombok.push({ felirat: 'Fizetés visszavonása', tesz: function () {
+                if (visszaMezo) {
+                    visszaMezo.value = '1';
+                }
+
+                if (eloleg) {
+                    eloleg.value = String(Math.max(0, mentett - veg)).replace('.', ',');
+                }
+
+                munkalapSzamol(gyoker);
+            } });
+        }
+
+        gombok.push({ felirat: 'Csak a pipát veszem ki', tesz: function () {
+            munkalapSzamol(gyoker);
+        } });
+
+        pipaSugo(pipa, szoveg, gombok);
+
+        return sz;
+    }
+
+    /** A „Bevizsgálási díj” pipa levétele egy olyan lapon, amelyen már van mentett díj. */
+    function bevizsgalasLevetel(pipa) {
+        var gyoker = pipa.closest('[data-sdh-munkalap]');
+        var dijak = 0;
+
+        // A pipa már ki van véve (a díj most 0): az utolsó, még bepipált állapot díjösszege kell.
+        dijak = gyoker.sdhDijak || 0;
+
+        pipaSugo(
+            pipa,
+            '**Ha kiveszed a „Bevizsgálási díj” pipát:**\n\n' +
+            '- mentéskor **törlődnek a bevizsgálási díj sorai és a levonásuk** minden eszközről' + (dijak > 0 ? ' (most ' + mlPenz(dijak) + ' Ft díj)' : '') + ';\n' +
+            '- a már befizetett összeg nem vész el: sima előlegként a „Fizetett” mezőben marad, és levonódik a végösszegből;\n' +
+            '- ha nincs javítás, a díj nem számlázódik ki – a befizetett díj visszajár az ügyfélnek.\n\n' +
+            '**Mit tegyél?** Csak akkor vedd ki, ha tévedésből lett díj a lapon. Ha az ügyfél díjat fizetett, hagyd bepipálva: javításnál magától levonódik, javítás nélkül munkadíjként marad.',
+            [
+                { felirat: 'Mégsem – maradjon a díj', fo: true, tesz: function () {
+                    pipa.checked = true;
+                    munkalapSzamol(gyoker);
+                } },
+                { felirat: 'Kiveszem a pipát', tesz: function () {} }
+            ]
+        );
+    }
+
+    document.addEventListener('change', function (esemeny) {
+        var cel = esemeny.target;
+        var gyoker = cel.closest ? cel.closest('[data-sdh-munkalap]') : null;
+
+        if (!gyoker) {
+            return;
+        }
+
+        if (cel.hasAttribute('data-sdh-fizetve')) {
+            var visszaMezo = (gyoker.closest('form') || gyoker).querySelector('[data-sdh-fizetes-vissza]');
+
+            // Visszapipálva a visszavonás is érvényét veszti.
+            if (cel.checked && visszaMezo && visszaMezo.value === '1') {
+                var eloleg = gyoker.querySelector('[data-sdh-fizetett]');
+
+                visszaMezo.value = '';
+
+                if (eloleg) {
+                    eloleg.value = String(parseFloat(gyoker.getAttribute('data-eloleg-mentett') || '0') || 0).replace('.', ',');
+                }
+
+                munkalapSzamol(gyoker);
+            }
+
+            if (!cel.checked && gyoker.getAttribute('data-fizetve-mentett') === '1') {
+                fizetveLevetel(cel);
+            }
+
+            return;
+        }
+
+        if (cel.hasAttribute('data-sdh-bevizsgalas') && !cel.checked && gyoker.getAttribute('data-bev-mentett') === '1') {
+            bevizsgalasLevetel(cel);
+        }
     });
 
     document.addEventListener('change', function (esemeny) {
