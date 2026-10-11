@@ -36,22 +36,22 @@
     flex: 1 1 auto;
     box-sizing: border-box;
     min-width: 0;
-    height: 36px;
+    height: calc(36px * var(--sdh-n));
     margin: 0;
     padding: 0 .8rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     box-shadow: none;
 }
 
 .sdh-level__uzenet {
     padding: .5rem .8rem;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet-2);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-level__uzenet[hidden] {
@@ -79,15 +79,15 @@
     align-items: center;
     gap: .55rem;
     min-width: 0;
-    height: 40px;
+    height: calc(40px * var(--sdh-n));
     margin: 0;
     padding: 0 .55rem 0 1rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg-2);
     font-family: inherit;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
@@ -134,7 +134,7 @@
     overflow: hidden;
     line-height: 1.4;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 400;
     text-overflow: ellipsis;
 }
@@ -142,15 +142,15 @@
 .sdh-level__fuldb,
 .sdh-level__fuljel {
     flex: 0 0 auto;
-    min-width: 18px;
-    padding: 0 5px;
+    min-width: calc(18px * var(--sdh-n));
+    padding: 0 calc(5px * var(--sdh-n));
     box-sizing: border-box;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: color-mix(in srgb, var(--sdh-szoveg) 12%, transparent);
     color: var(--sdh-szoveg);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 700;
-    line-height: 18px;
+    line-height: calc(18px * var(--sdh-n));
     text-align: center;
 }
 
@@ -161,8 +161,8 @@
 
 .sdh-level__lakat {
     flex: 0 0 auto;
-    width: 13px;
-    height: 13px;
+    width: calc(13px * var(--sdh-n));
+    height: calc(13px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.2;
@@ -173,11 +173,11 @@
 
 .sdh-level__torzs {
     display: grid;
-    grid-template-columns: 232px minmax(300px, 30%) minmax(0, 1fr);
+    grid-template-columns: calc(232px * var(--sdh-n)) minmax(calc(300px * var(--sdh-n)), 30%) minmax(0, 1fr);
     gap: 0;
-    min-height: 360px;
+    min-height: calc(360px * var(--sdh-n));
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: var(--sdh-r-nagy, 12px);
+    border-radius: var(--sdh-r-nagy, calc(12px * var(--sdh-n)));
     background: var(--sdh-felulet);
     overflow: hidden;
 }
@@ -226,7 +226,7 @@
     min-width: 0;
     overflow: hidden;
     color: var(--sdh-halvany);
-    font-size: 11.5px;
+    font-size: calc(11.5px * var(--sdh-n));
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -234,13 +234,13 @@
 .sdh-level__fiokhiba {
     margin: 0 .5rem .3rem;
     color: var(--sdh-hiba);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-level__cimkefej {
     margin: .6rem .5rem .15rem;
     color: var(--sdh-halvany);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 600;
     letter-spacing: .04em;
     text-transform: uppercase;
@@ -252,16 +252,16 @@
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    min-height: 30px;
+    min-height: calc(30px * var(--sdh-n));
     margin: 0;
     padding: .2rem .55rem .2rem .7rem;
     border: 0;
-    border-radius: 7px;
+    border-radius: calc(7px * var(--sdh-n));
     background: none;
     color: var(--sdh-szoveg);
     cursor: pointer;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: calc(13.5px * var(--sdh-n));
     text-align: left;
 }
 
@@ -302,13 +302,13 @@
 
 .sdh-level__db {
     flex: 0 0 auto;
-    min-width: 18px;
-    padding: 0 5px;
-    border-radius: 999px;
+    min-width: calc(18px * var(--sdh-n));
+    padding: 0 calc(5px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
     background: color-mix(in srgb, var(--sdh-szoveg) 12%, transparent);
-    font-size: 11.5px;
+    font-size: calc(11.5px * var(--sdh-n));
     font-weight: 700;
-    line-height: 18px;
+    line-height: calc(18px * var(--sdh-n));
     text-align: center;
 }
 
@@ -329,7 +329,7 @@
     color: var(--sdh-accent);
     cursor: pointer;
     font-family: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-level__kis:hover,
@@ -360,22 +360,22 @@
     flex: 1 1 auto;
     box-sizing: border-box;
     min-width: 0;
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     margin: 0;
     padding: 0 .5rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 6px;
+    border-radius: calc(6px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     box-shadow: none;
 }
 
 .sdh-level__ujmappa .sdh-gomb,
 .sdh-level__zar .sdh-gomb {
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     padding: 0 .6rem;
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-level__zar {
@@ -389,13 +389,13 @@
 .sdh-level__zar p {
     margin: 0;
     color: var(--sdh-halvany);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-level__zarhiba {
     min-height: 1.3em;
     color: var(--sdh-hiba);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     font-weight: 500;
 }
 
@@ -418,7 +418,7 @@
 .sdh-level__listafej h2 {
     margin: 0;
     overflow: hidden;
-    font-size: 15px;
+    font-size: calc(15px * var(--sdh-n));
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -426,7 +426,7 @@
 
 .sdh-level__listafej small {
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 400;
 }
 
@@ -446,9 +446,9 @@
 }
 
 .sdh-level__eszkozok .sdh-gomb {
-    height: 28px;
+    height: calc(28px * var(--sdh-n));
     padding: 0 .55rem;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-level__mind {
@@ -460,7 +460,7 @@
 .sdh-level__kijdb {
     margin-left: .3rem;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-gomb.sdh-level__torles.is-megerosit {
@@ -488,7 +488,7 @@
     border-bottom: 1px solid var(--sdh-keret);
     border-left: 3px solid transparent;
     cursor: pointer;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-level__sor:hover {
@@ -529,7 +529,7 @@
     background: none;
     color: var(--sdh-halvany);
     cursor: pointer;
-    font-size: 15px;
+    font-size: calc(15px * var(--sdh-n));
     line-height: 1;
 }
 
@@ -547,7 +547,7 @@
 .sdh-level__datum {
     grid-area: datum;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
@@ -561,7 +561,7 @@
 
 .sdh-level__ikonok {
     grid-area: ikonok;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     text-align: right;
 }
 
@@ -569,7 +569,7 @@
     grid-area: kivonat;
     overflow: hidden;
     color: var(--sdh-halvany);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -594,7 +594,7 @@
     margin: 0;
     padding: 1.2rem .9rem;
     color: var(--sdh-halvany);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-level__listahiba,
@@ -614,23 +614,23 @@
     align-items: center;
     padding: .4rem .8rem;
     border-top: 1px solid var(--sdh-keret);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     font-variant-numeric: tabular-nums;
 }
 
 .sdh-level__lapozo .sdh-gomb,
 .sdh-rendezo__lapozo .sdh-gomb {
     justify-content: center;
-    width: 32px;
-    height: 30px;
+    width: calc(32px * var(--sdh-n));
+    height: calc(30px * var(--sdh-n));
     padding: 0;
 }
 
 .sdh-level__lapozo .sdh-gomb svg,
 .sdh-rendezo__lapozo .sdh-gomb svg {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.9;
@@ -655,11 +655,11 @@
     display: inline-block;
     margin-right: .4rem;
     padding: 0 .45rem;
-    border-radius: 999px;
-    font-size: 11px;
+    border-radius: calc(999px * var(--sdh-n));
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 700;
-    line-height: 17px;
-    vertical-align: 1px;
+    line-height: calc(17px * var(--sdh-n));
+    vertical-align: calc(1px * var(--sdh-n));
     white-space: nowrap;
 }
 
@@ -695,7 +695,7 @@
 
 .sdh-level__olvasofej h2 {
     margin: 0;
-    font-size: 17px;
+    font-size: calc(17px * var(--sdh-n));
     font-weight: 700;
     line-height: 1.3;
     overflow-wrap: anywhere;
@@ -708,9 +708,9 @@
 }
 
 .sdh-level__gombok .sdh-gomb {
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     padding: 0 .65rem;
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-level__ugynok {
@@ -719,8 +719,8 @@
     align-items: center;
     margin: 0 1rem .4rem;
     padding: .45rem .7rem;
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: calc(8px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-level__ugynok--azonnal {
@@ -747,9 +747,9 @@
 
 .sdh-level__ugynok .sdh-gomb {
     flex: 0 0 auto;
-    height: 28px;
+    height: calc(28px * var(--sdh-n));
     padding: 0 .6rem;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-level__adatok {
@@ -758,7 +758,7 @@
     gap: .1rem .6rem;
     margin: 0;
     padding: 0 1rem .5rem;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-level__adatok dt {
@@ -774,10 +774,10 @@
     display: inline-block;
     margin-left: .4rem;
     padding: 0 .5rem;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-accent-halvany);
     color: var(--sdh-szoveg);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
     text-decoration: none;
 }
@@ -785,10 +785,10 @@
 .sdh-level__kepek {
     margin: 0 1rem .4rem;
     padding: .35rem .7rem;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet-2);
     color: var(--sdh-halvany);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-level__csatolmanyok {
@@ -801,9 +801,9 @@
 .sdh-level__csat {
     padding: .2rem .6rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     color: var(--sdh-szoveg);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     text-decoration: none;
 }
 
@@ -829,7 +829,7 @@
 /* ---- Levélíró ablak ---- */
 
 .sdh-modal.sdh-modal[data-sdh-modul="level"] {
-    width: min(860px, calc(100vw - 2rem));
+    width: min(calc(860px * var(--sdh-n)), calc(100vw - 2rem));
 }
 
 .sdh-leveliro__mezok {
@@ -855,11 +855,11 @@
     margin: 0;
     padding: .6rem .7rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font-family: inherit;
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     line-height: 1.5;
     resize: none;
     box-shadow: none;
@@ -871,7 +871,7 @@
     gap: .4rem 1rem;
     align-items: center;
     min-width: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 /* A feladó „pill"-je: a név és a cím egy lekerekített gombon; a választás felugró ablakban történik. */
@@ -921,7 +921,7 @@
 /* ---- Rendező ügynök ablaka ---- */
 
 .sdh-modal.sdh-modal[data-sdh-modul="levelrendezo"] {
-    width: min(720px, calc(100vw - 2rem));
+    width: min(calc(720px * var(--sdh-n)), calc(100vw - 2rem));
 }
 
 .sdh-rendezo {
@@ -935,9 +935,9 @@
     gap: .1rem;
     margin: 0;
     padding: .5rem .8rem;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet-2);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     list-style: none;
 }
 
@@ -955,11 +955,11 @@
     margin: 0;
     padding: .6rem .7rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font-family: inherit;
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     line-height: 1.5;
     resize: none;
     box-shadow: none;
@@ -973,7 +973,7 @@
 .sdh-rendezo__naplo {
     margin: .4rem 0 0;
     color: var(--sdh-halvany);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-rendezo__naplo {
@@ -984,15 +984,15 @@
 
 .sdh-rendezo__uzenet {
     margin: 0 0 .4rem;
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     font-weight: 600;
 }
 
 .sdh-rendezo__lista {
     margin: 0 0 .5rem;
     padding: .45rem .8rem .45rem 1.8rem;
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: calc(8px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-rendezo__lista.is-kesz {
@@ -1010,13 +1010,13 @@
     margin: 0 0 .5rem;
     padding: .4rem .8rem .6rem;
     border: 1px solid var(--sdh-allapot-narancs);
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: calc(8px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-rendezo__engedely legend {
     padding: 0 .35rem;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 700;
 }
 
@@ -1024,8 +1024,8 @@
     margin-bottom: .4rem;
     padding: .45rem .8rem .5rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: calc(8px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-rendezo__csoport[hidden] {
@@ -1036,7 +1036,7 @@
     margin: .25rem 0 0;
     padding: 0 0 0 1.6rem;
     color: var(--sdh-halvany);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     list-style: none;
 }
 
@@ -1055,12 +1055,12 @@
     display: flex;
     gap: .5rem;
     align-items: center;
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-rendezo__lapozo .sdh-gomb {
-    width: 30px;
-    height: 28px;
+    width: calc(30px * var(--sdh-n));
+    height: calc(28px * var(--sdh-n));
     padding: 0;
 }
 
@@ -1071,7 +1071,7 @@
 .sdh-mezo__cimke {
     display: block;
     margin-bottom: .25rem;
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
     color: var(--sdh-szoveg-2);
 }
 
@@ -1086,15 +1086,15 @@
 
 .sdh-level-toastok {
     position: fixed;
-    right: 18px;
-    bottom: 18px;
+    right: calc(18px * var(--sdh-n));
+    bottom: calc(18px * var(--sdh-n));
     z-index: 100000;
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    width: min(360px, calc(100vw - 36px));
+    width: min(calc(360px * var(--sdh-n)), calc(100vw - calc(36px * var(--sdh-n))));
     /* Soha nem lóg ki a képernyőről: legfeljebb néhány jelzés látszik, a többi az összesítőben. */
-    max-height: calc(100vh - 36px);
+    max-height: calc(100vh - calc(36px * var(--sdh-n)));
     overflow: hidden;
     pointer-events: none;
 }
@@ -1108,12 +1108,12 @@
     padding: .65rem 2rem .7rem .85rem;
     border: 1px solid var(--sdh-keret-eros, #cfd4dc);
     border-left: 4px solid var(--sdh-accent, #d4231d);
-    border-radius: 10px;
+    border-radius: calc(10px * var(--sdh-n));
     background: var(--sdh-felulet, #fff);
     color: var(--sdh-szoveg, #1c1c1e);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
     cursor: pointer;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     pointer-events: auto;
 }
 
@@ -1135,7 +1135,7 @@
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
-    font-size: 13.5px;
+    font-size: calc(13.5px * var(--sdh-n));
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1149,19 +1149,19 @@
 
 .sdh-level-toast__megj {
     color: var(--sdh-halvany, #5f6670);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 /* Melyik fiókba (e-mail-címre) érkezett a levél. */
 .sdh-level-toast__fiok {
     flex: 0 1 auto;
     min-width: 3rem;
-    padding: 0 7px;
+    padding: 0 calc(7px * var(--sdh-n));
     overflow: hidden;
     border: 1px solid var(--sdh-keret-eros, #cfd4dc);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     color: var(--sdh-szoveg-2, #3d444d);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 600;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -1182,7 +1182,7 @@
     color: var(--sdh-accent, #d4231d);
     cursor: pointer;
     font-family: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-level-toast__mind:hover,
@@ -1200,7 +1200,7 @@
     background: none;
     color: var(--sdh-halvany, #5f6670);
     cursor: pointer;
-    font-size: 17px;
+    font-size: calc(17px * var(--sdh-n));
     line-height: 1;
 }
 
@@ -1208,7 +1208,7 @@
 
 @media (max-width: 1100px) {
     .sdh-level__torzs {
-        grid-template-columns: 190px minmax(260px, 36%) minmax(0, 1fr);
+        grid-template-columns: calc(190px * var(--sdh-n)) minmax(calc(260px * var(--sdh-n)), 36%) minmax(0, 1fr);
     }
 }
 

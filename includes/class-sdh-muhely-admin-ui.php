@@ -425,6 +425,11 @@ final class SDH_Muhely_Admin_UI
             'kontextus' => $kontextus,
             'alapTema'  => $arculat['tema'],
             'alapSzin'  => $arculat['szin'],
+            // Üvegszín (duo / mono) és az alap betűnagyítás (%), a csúszka határaival.
+            'alapUveg'  => (string) ($arculat['uveg'] ?? 'mono'),
+            'alapNagyitas' => (int) ($arculat['nagyitas'] ?? 100),
+            'nagyitasMin'  => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::NAGYITAS_MIN : 80,
+            'nagyitasMax'  => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::NAGYITAS_MAX : 160,
             // A popupok neon kerete (Arculat): szín, az egyéni színkód és a fényerő.
             'alapNeon'  => (string) ($arculat['neon'] ?? 'kiemelo'),
             'neonEgyeni' => (string) ($arculat['neon_egyeni'] ?? ''),
@@ -747,8 +752,10 @@ final class SDH_Muhely_Admin_UI
                 'Áttekintés',
                 'A belső műhely- és ügyfélkezelő rendszer. Innen érhető el minden modul.',
                 $gombok,
-                // Az óra és a zárásig hátralévő idő (Beállítások › Nyitvatartás és óra).
-                class_exists('SDH_Muhely_Nyitvatartas') ? SDH_Muhely_Nyitvatartas::ora_html() : ''
+                // Az óra és a zárásig hátralévő idő (Beállítások › Nyitvatartás és óra), mellette a
+                // betűnagyító csúszka (csak a műhely-felületen: a wp-admin a saját méretében marad).
+                (class_exists('SDH_Muhely_Nyitvatartas') ? SDH_Muhely_Nyitvatartas::ora_html() : '')
+                    . (!$technikai && class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::nagyito('sajat') : '')
             );
             ?>
 
@@ -917,7 +924,17 @@ final class SDH_Muhely_Admin_UI
             $szamok[SDH_Muhely_Eladas::KULCS_REND] = SDH_Muhely_Eladas::nyitott_rendeles_db();
         }
 
-        wp_send_json_success(array_map(static fn (int $n): string => number_format_i18n($n), $szamok));
+        wp_send_json_success(array_map([self::class, 'szam_szoveg'], $szamok));
+    }
+
+    /**
+     * Ezres tagolású szám SIMA SZÖVEGKÉNT (JSON-ba, textContent-be). A WordPress
+     * magyar nyelvi csomagjának ezres elválasztója az „&nbsp;" HTML-entitás: ez
+     * HTML-be írva jó, de szövegként betűre kiírva jelenne meg („157&nbsp;700").
+     */
+    public static function szam_szoveg(int $n): string
+    {
+        return html_entity_decode(number_format_i18n($n), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /* =================================================================

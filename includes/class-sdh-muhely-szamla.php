@@ -2,11 +2,11 @@
 /**
  * Számlázás a Számlázz.hu Számla Agenten keresztül.
  *
- * A munkalap-ablak lábléce két gombot kap: „Számlázz.hu számla" (a fiók
- * alapértelmezett számlatömbje) és „SDH számla" (ugyanaz a Számla Agent, de
- * a beállított előtaggal – alapból SD –, így a Számlázz.hu külön, folyamatos
- * sorszámozást vezet: SD-2026-1, SD-2026-2…). Mindkét számlát a Számlázz.hu
- * állítja ki: az ő sablonjával készül, és ő jelenti a NAV felé.
+ * A munkalap-ablak lábléce két gombot kap: „Számlázz.hu számla" (valódi
+ * számla, a Számlázz.hu állítja ki és jelenti a NAV felé) és a helyi
+ * nyomtatvány („Számla-előkészítő (PDF)"). A korábbi második számlagomb
+ * („SDH számla", külön előtagú sorozat) a 0.49-ben megszűnt; a vele korábban
+ * kiállított számlák a listában megmaradnak.
  *
  * SEMMI nem megy ki magától. A gomb csak a számla ablakát nyitja meg: ott
  * látszik a vevő, tételenként kipipálható, mi kerüljön a számlára, megnézhető
@@ -226,24 +226,6 @@ final class SDH_Muhely_Szamla
                 </div>
 
                 <div class="sdh-mezo">
-                    <label for="szamla_elotag_sdh">Előtag – második gomb</label>
-                    <input type="text" name="szamla_elotag_sdh" id="szamla_elotag_sdh" maxlength="10"
-                           value="<?php echo esc_attr((string) $b['elotag_sdh']); ?>">
-                    <span class="sdh-mezo__sugo">
-                        Ezzel az előtaggal a Számlázz.hu külön, folyamatos sorszámot vezet
-                        (pl. <?php echo esc_html(((string) $b['elotag_sdh'] !== '' ? (string) $b['elotag_sdh'] : 'SD') . '-' . current_time('Y')); ?>-1, -2…).
-                        Az előtagot előbb a Számlázz.hu-n is fel kell venni (Beállítások → Előtagok), különben
-                        a számlát elutasítja. Üresen a második gomb nem jelenik meg.
-                    </span>
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="szamla_gomb_sdh">A második gomb felirata</label>
-                    <input type="text" name="szamla_gomb_sdh" id="szamla_gomb_sdh" maxlength="30"
-                           value="<?php echo esc_attr((string) $b['gomb_sdh']); ?>">
-                </div>
-
-                <div class="sdh-mezo">
                     <label for="szamla_alap_fizmod">Alap fizetési mód</label>
                     <input type="text" name="szamla_alap_fizmod" id="szamla_alap_fizmod" maxlength="40"
                            value="<?php echo esc_attr((string) $b['alap_fizmod']); ?>">
@@ -408,8 +390,6 @@ final class SDH_Muhely_Szamla
 
         $b['eszamla']            = !empty($_POST['szamla_eszamla']);
         $b['elotag_fo']          = $elotag('szamla_elotag_fo');
-        $b['elotag_sdh']         = $elotag('szamla_elotag_sdh');
-        $b['gomb_sdh']           = $szoveg('szamla_gomb_sdh', 30) !== '' ? $szoveg('szamla_gomb_sdh', 30) : 'SDH számla';
         $b['hatarido_nap']       = isset($_POST['szamla_hatarido_nap']) ? min(365, max(0, (int) $_POST['szamla_hatarido_nap'])) : 8;
         $b['alap_fizmod']        = $szoveg('szamla_alap_fizmod', 40) !== '' ? $szoveg('szamla_alap_fizmod', 40) : 'Készpénz';
         $b['email_kuldes']       = !empty($_POST['szamla_email_kuldes']);
@@ -1141,13 +1121,6 @@ final class SDH_Muhely_Szamla
                 Számlázz.hu számla
             </button>
 
-            <?php if ((string) $b['elotag_sdh'] !== '') : ?>
-                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--szamla" data-sdh-szamla="sdh"
-                        title="Ugyanaz a Számlázz.hu számla, <?php echo esc_attr((string) $b['elotag_sdh']); ?> előtagú, külön sorszámozással.">
-                    <?php echo esc_html((string) $b['gomb_sdh']); ?>
-                </button>
-            <?php endif; ?>
-
             <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla="helyi"
                     title="Letölthető, nyomtatható PDF a tételekből – helyben készül, internet és Számlázz.hu nélkül. Nem számla.">
                 <?php echo esc_html(self::nyomtatvany_cim()); ?> (PDF)
@@ -1233,7 +1206,7 @@ final class SDH_Muhely_Szamla
 
         $munkalap = self::munkalap(isset($_GET['id']) ? (int) $_GET['id'] : 0);
         $kert     = isset($_GET['sorozat']) ? sanitize_key(wp_unslash($_GET['sorozat'])) : 'fo';
-        $sorozat  = in_array($kert, ['sdh', 'helyi'], true) ? $kert : 'fo';
+        $sorozat  = $kert === 'helyi' ? 'helyi' : 'fo';
         $helyi    = $sorozat === 'helyi';
 
         if ($munkalap === null || (int) $munkalap->munkalap_szam <= 0) {
@@ -1244,7 +1217,7 @@ final class SDH_Muhely_Szamla
 
         $b       = self::beallitas();
         $elotag  = self::elotag($sorozat);
-        $cim     = $helyi ? self::nyomtatvany_cim() : ($sorozat === 'sdh' ? (string) $b['gomb_sdh'] : 'Számlázz.hu számla');
+        $cim     = $helyi ? self::nyomtatvany_cim() : 'Számlázz.hu számla';
         $ugyfel  = self::ugyfel((int) $munkalap->ugyfel_id);
         $vevo    = self::vevo($ugyfel);
         $v       = $vevo['adat'] !== [] ? $vevo['adat'] : self::vevo_ures();
@@ -2173,7 +2146,7 @@ final class SDH_Muhely_Szamla
         return [
             'munkalap'  => $munkalap,
             'ugyfel'    => $ugyfel,
-            'sorozat'   => in_array($szoveg('sorozat', 5), ['sdh', 'helyi'], true) ? $szoveg('sorozat', 5) : 'fo',
+            'sorozat'   => $szoveg('sorozat', 5) === 'helyi' ? 'helyi' : 'fo',
             'fej'       => [
                 'kelt'       => $ma,
                 'teljesites' => $datum('teljesites', $ma),

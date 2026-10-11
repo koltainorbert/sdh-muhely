@@ -352,10 +352,12 @@ final class SDH_Muhely_Frontend
                     <?php
                     $sdh_arculat = class_exists('SDH_Muhely_Arculat')
                         ? SDH_Muhely_Arculat::beallitas()
-                        : ['tema' => 'rendszer', 'szin' => ''];
+                        : ['tema' => 'rendszer', 'szin' => '', 'uveg' => 'mono', 'nagyitas' => 100];
                     ?>
                     var alapTema = <?php echo wp_json_encode($sdh_arculat['tema']); ?>;
                     var alapSzin = <?php echo wp_json_encode($sdh_arculat['szin']); ?>;
+                    var alapUveg = <?php echo wp_json_encode((string) ($sdh_arculat['uveg'] ?? 'mono')); ?>;
+                    var alapNagy = <?php echo (int) ($sdh_arculat['nagyitas'] ?? 100); ?>;
 
                     try {
                         var t = localStorage.getItem('sdh-tema') || alapTema;
@@ -367,7 +369,18 @@ final class SDH_Muhely_Frontend
                         var sz = localStorage.getItem('sdh-szin');
                         sz = sz === null ? alapSzin : sz;
                         if (sz) { document.documentElement.setAttribute('data-accent', sz); }
-                    } catch (e) {}
+
+                        // Üvegszín (duó / egyszínű) és a betűnagyítás: szintén a festés előtt.
+                        var uv = localStorage.getItem('sdh-uveg') || alapUveg;
+                        document.documentElement.setAttribute('data-uveg', uv === 'duo' ? 'duo' : 'mono');
+
+                        var n = parseInt(localStorage.getItem('sdh-nagyitas'), 10) || alapNagy;
+                        n = Math.max(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MIN; ?>, Math.min(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MAX; ?>, n));
+                        document.documentElement.style.setProperty('--sdh-n', String(n / 100));
+                    } catch (e) {
+                        document.documentElement.setAttribute('data-uveg', alapUveg === 'duo' ? 'duo' : 'mono');
+                        document.documentElement.style.setProperty('--sdh-n', String(alapNagy / 100));
+                    }
                 }());
             </script>
 
@@ -503,27 +516,11 @@ final class SDH_Muhely_Frontend
                             <span><?php echo esc_html($felhasznalo->user_email); ?></span>
                         </p>
 
-                        <p class="sdh-profil__cim">Megjelenés</p>
-                        <div class="sdh-valto" data-sdh-tema>
-                            <button type="button" data-ertek="rendszer">Rendszer</button>
-                            <button type="button" data-ertek="vilagos">Világos</button>
-                            <button type="button" data-ertek="sotet">Sötét</button>
-                        </div>
+                        <?php // Megjelenés (Rendszer / Világos / Sötét) és Üvegszín (Duó, Egyszínű) – a dolgozó saját gépére szól. ?>
+                        <?php echo SDH_Muhely_Arculat::megjelenes_valaszto('profil'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
 
-                        <p class="sdh-profil__cim">Kiemelő szín</p>
-                        <div class="sdh-szinek" data-sdh-szin>
-                            <button type="button" class="sdh-szin sdh-szin--alap" data-ertek="" aria-label="SDH piros"></button>
-                            <button type="button" class="sdh-szin sdh-szin--kek" data-ertek="kek" aria-label="Kék"></button>
-                            <button type="button" class="sdh-szin sdh-szin--smaragd" data-ertek="smaragd" aria-label="Smaragd"></button>
-                            <button type="button" class="sdh-szin sdh-szin--ibolya" data-ertek="ibolya" aria-label="Ibolya"></button>
-                            <button type="button" class="sdh-szin sdh-szin--borostyan" data-ertek="borostyan" aria-label="Borostyán"></button>
-                            <button type="button" class="sdh-szin sdh-szin--palaszurke" data-ertek="palaszurke" aria-label="Palaszürke"></button>
-                            <?php // A cég egyéni színe csak akkor választható, ha az Arculatban megadták. ?>
-                            <?php if ($sdh_arc['szin_egyeni'] !== '') : ?>
-                                <button type="button" class="sdh-szin sdh-szin--egyeni" data-ertek="egyeni" aria-label="A cég egyéni színe"
-                                        style="background: <?php echo esc_attr($sdh_arc['szin_egyeni']); ?>"></button>
-                            <?php endif; ?>
-                        </div>
+                        <p class="sdh-profil__cim">Betűméret</p>
+                        <?php echo SDH_Muhely_Arculat::nagyito('sajat'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
 
                         <p class="sdh-profil__cim">Popup neon keret</p>
                         <div class="sdh-szinek" data-sdh-neon>

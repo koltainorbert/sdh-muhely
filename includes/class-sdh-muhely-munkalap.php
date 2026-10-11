@@ -3270,7 +3270,7 @@ final class SDH_Muhely_Munkalap
         // gépelés közben (munkalapSzamol); a mérvadó érték mentéskor a szerveré.
         ?>
         <?php // data-fo-kulon: a fő eszközre a díján felül befizetett rész – a díj számításából kimarad (app.js: munkalapSzamol). ?>
-        <div class="sdh-ugyfelurlap sdh-munkalapurlap<?php echo $eladas ? ' sdh-munkalapurlap--eladas' : ''; ?>" data-sdh-munkalap
+        <div class="sdh-ugyfelurlap sdh-munkalapurlap<?php echo $eladas ? ' sdh-munkalapurlap--eladas' : ''; ?><?php echo $tovabbi !== [] ? ' is-tobb-eszkoz' : ''; // több eszköznél a bal oldal két hasábos (admin.css), még a popup méretezése előtt ?>" data-sdh-munkalap
              data-sdh-fajta="<?php echo esc_attr($fajta); ?>"
              data-fo-kulon="<?php echo esc_attr((string) ($uj ? 0 : (float) ($munkalap->fo_kulon ?? 0))); ?>"
              data-eloleg-mentett="<?php echo esc_attr((string) $fizetett); ?>"
@@ -3554,6 +3554,12 @@ final class SDH_Muhely_Munkalap
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz"
                                         data-sdh-uj-eszkoz
                                         title="Új eszköz felvétele" aria-label="Új eszköz felvétele"><span class="sdh-plusz" aria-hidden="true"></span></button>
+                                <?php // A betöltött eszköz szerkesztése a lap fölött nyíló ablakban (app.js: munkalapEszkozSzerk). ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--plusz sdh-gomb--ikonos"
+                                        data-sdh-eszkoz-szerk<?php echo $eszkoz_id > 0 ? '' : ' disabled'; ?>
+                                        title="A kiválasztott eszköz adatainak szerkesztése" aria-label="A kiválasztott eszköz adatainak szerkesztése"><?php
+                                            echo SDH_Muhely_Admin_UI::gomb_ikon('ceruza'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
+                                        ?></button>
                             </div>
                         </div>
                     </div>
@@ -3884,7 +3890,10 @@ final class SDH_Muhely_Munkalap
             echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>' . ($tobb ? '1. eszköz' : 'Eszköz') . '</strong>';
 
             if ($eszkoz) {
-                echo '<span>Sorszám: ' . (int) $eszkoz->id . '</span>';
+                echo '<span class="sdh-ml-kartya__jobb"><span>Sorszám: ' . (int) $eszkoz->id . '</span>'
+                    // A betöltött eszköz szerkesztése a lap fölött (app.js: munkalapEszkozSzerk).
+                    . '<button type="button" class="sdh-ml-kartya__szerk" data-sdh-eszkoz-szerk="' . (int) $eszkoz->id . '" title="Az eszköz adatainak szerkesztése">'
+                    . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></span>'; // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
             }
 
             echo '</div>';
@@ -3926,7 +3935,9 @@ final class SDH_Muhely_Munkalap
 
                 echo '<li><strong>' . esc_html($nev) . '</strong>' . SDH_Muhely_Admin_UI::masolo_gomb($nev, 'Típus') // phpcs:ignore WordPress.Security.EscapeOutput
                     . ' <span class="sdh-ml-tobbi__fajta">' . esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $egy->kategoria)) . '</span>'
-                    . implode('', $reszek) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- a részek szűrt HTML.
+                    . implode('', $reszek)
+                    . ' <button type="button" class="sdh-ml-kartya__szerk sdh-ml-tobbi__szerk" data-sdh-eszkoz-szerk="' . (int) $egy->id . '" title="Az eszköz adatainak szerkesztése">'
+                    . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- a részek szűrt HTML.
             }
 
             echo '</ol></div>';
@@ -4293,6 +4304,10 @@ final class SDH_Muhely_Munkalap
                    value="<?php echo esc_attr($reszlet !== null ? (string) $reszlet->bev_nev : ''); ?>">
             <input type="hidden" name="tovabbi_dij_szolg[<?php echo esc_attr($eszkoz_id); ?>]" data-sdh-tovabbi-dijszolg
                    value="<?php echo (int) ($reszlet !== null ? $reszlet->bev_szolg : 0); ?>">
+            <button type="button" class="sdh-ml-eszkoz__lista sdh-ml-eszkoz__szerk" data-sdh-eszkoz-szerk="<?php echo esc_attr($eszkoz_id); ?>"
+                    title="Az eszköz adatainak szerkesztése" aria-label="Az eszköz adatainak szerkesztése"><?php
+                        echo SDH_Muhely_Admin_UI::gomb_ikon('ceruza'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
+                    ?></button>
             <button type="button" class="sdh-ml-eszkoz__torol" data-sdh-tovabbi-torol
                     title="Levétel a munkalapról (az eszköz megmarad az ügyfélnél)"
                     aria-label="Eszköz levétele a munkalapról">&times;</button>

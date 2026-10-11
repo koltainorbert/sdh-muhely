@@ -18,9 +18,9 @@
 .sdh-munkater {
     display: flex;
     flex-direction: column;
-    min-height: 460px;
+    min-height: calc(460px * var(--sdh-n));
     min-width: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     color: var(--sdh-szoveg);
 }
 
@@ -56,12 +56,12 @@
     align-items: center;
     justify-content: center;
     gap: .4rem;
-    height: 32px;
-    min-width: 32px;
+    height: calc(32px * var(--sdh-n));
+    min-width: calc(32px * var(--sdh-n));
     margin: 0;
     padding: 0 .55rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
@@ -94,8 +94,8 @@
 .sdh-reszlet svg,
 .sdh-racs__felugro svg {
     flex: 0 0 auto;
-    width: 16px;
-    height: 16px;
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
@@ -104,7 +104,7 @@
 }
 
 .sdh-racs__gomb--ikon {
-    width: 32px;
+    width: calc(32px * var(--sdh-n));
     padding: 0;
 }
 
@@ -143,7 +143,7 @@
 .sdh-racs__talalat {
     padding: 0 .35rem;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
@@ -151,13 +151,13 @@
 .sdh-racs__jelveny {
     display: inline-grid;
     place-items: center;
-    min-width: 17px;
-    height: 17px;
+    min-width: calc(17px * var(--sdh-n));
+    height: calc(17px * var(--sdh-n));
     padding: 0 .3rem;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-accent);
     color: var(--sdh-accent-felirat);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
@@ -171,10 +171,10 @@
     padding: .25rem .65rem;
     border: 1px solid var(--sdh-keret);
     border-left: 3px solid var(--sdh-siker);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg-2);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-racs__uzenet--hiba {
@@ -188,16 +188,16 @@
 
 .sdh-racs__kereso {
     position: relative;
-    flex: 0 1 300px;
-    min-width: 180px;
+    flex: 0 1 calc(300px * var(--sdh-n));
+    min-width: calc(180px * var(--sdh-n));
 }
 
 .sdh-racs__kereso svg {
     position: absolute;
-    top: 8px;
-    left: 11px;
-    width: 16px;
-    height: 16px;
+    top: calc(8px * var(--sdh-n));
+    left: calc(11px * var(--sdh-n));
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     fill: none;
     stroke: var(--sdh-halvany);
     stroke-width: 1.6;
@@ -207,11 +207,11 @@
 
 .sdh-racs__kereso input {
     width: 100%;
-    height: 32px;
+    height: calc(32px * var(--sdh-n));
     margin: 0;
     padding: 0 .9rem 0 2.1rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
@@ -219,16 +219,16 @@
 }
 
 .sdh-racs__eszkoztar select.sdh-racs__meret {
-    height: 32px;
-    min-height: 32px;
+    height: calc(32px * var(--sdh-n));
+    min-height: calc(32px * var(--sdh-n));
     margin: 0;
     padding: 0 1.9rem 0 .8rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background-color: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
-    line-height: 30px;
+    line-height: calc(30px * var(--sdh-n));
     box-shadow: none;
 }
 
@@ -239,7 +239,7 @@
 .sdh-racs__keret {
     position: relative;
     flex: 1 1 0;
-    min-height: 150px;
+    min-height: calc(150px * var(--sdh-n));
     border: 1px solid var(--sdh-keret);
     background: var(--sdh-felulet);
     overflow: hidden;
@@ -253,7 +253,7 @@
     top: 0;
     left: 0;
     width: 35%;
-    height: 2px;
+    height: calc(2px * var(--sdh-n));
     background: var(--sdh-accent);
     opacity: 0;
     pointer-events: none;
@@ -291,13 +291,13 @@
     border-collapse: separate;
     border-spacing: 0;
     background: var(--sdh-felulet);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     color: var(--sdh-szoveg);
 }
 
 .sdh-racs__tabla th,
 .sdh-racs__tabla td {
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     padding: 0 .55rem;
     border: 0;
     border-right: 1px solid var(--sdh-keret);
@@ -326,10 +326,10 @@
 
 .sdh-racs__fejsor th {
     top: 0;
-    height: 32px;
+    height: calc(32px * var(--sdh-n));
     padding-right: .9rem;
     color: var(--sdh-szoveg-2);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
     cursor: pointer;
     user-select: none;
@@ -358,7 +358,7 @@
 
 .sdh-racs__sorrendszam {
     margin-left: .15rem;
-    font-size: 10px;
+    font-size: calc(10px * var(--sdh-n));
     font-weight: 600;
     vertical-align: super;
 }
@@ -369,7 +369,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 7px;
+    width: calc(7px * var(--sdh-n));
     cursor: col-resize;
 }
 
@@ -384,9 +384,9 @@
 .sdh-racs__fejsor th.is-huzott { opacity: .45; }
 
 .sdh-racs__szurosor th {
-    top: 32px;
-    height: 32px;
-    padding: 3px;
+    top: calc(32px * var(--sdh-n));
+    height: calc(32px * var(--sdh-n));
+    padding: calc(3px * var(--sdh-n));
     overflow: visible;
 }
 
@@ -394,9 +394,9 @@
     position: relative;
     display: flex;
     align-items: stretch;
-    height: 25px;
+    height: calc(25px * var(--sdh-n));
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 7px;
+    border-radius: calc(7px * var(--sdh-n));
     background: var(--sdh-felulet);
     overflow: hidden;
 }
@@ -419,7 +419,7 @@
     background: transparent;
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     line-height: 1;
     box-shadow: none;
 }
@@ -441,7 +441,7 @@
 }
 
 .sdh-racs__szurogomb {
-    flex: 0 0 20px;
+    flex: 0 0 calc(20px * var(--sdh-n));
     display: grid;
     place-items: center;
     border-left: 1px solid var(--sdh-keret);
@@ -468,7 +468,7 @@
     min-width: 0;
     padding: 0 0 0 .35rem;
     color: var(--sdh-szoveg);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
     text-align: left;
 }
@@ -482,7 +482,7 @@
 .sdh-racs__szurohalmaz::after {
     content: "";
     flex: 0 0 auto;
-    margin: 0 6px;
+    margin: 0 calc(6px * var(--sdh-n));
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     border-top: 5px solid var(--sdh-halvany);
@@ -543,17 +543,17 @@
 
 .sdh-racs__tabla .sdh-allapot--valaszthato select {
     min-width: 0;
-    height: 22px;
-    min-height: 22px;
-    line-height: 22px;
+    height: calc(22px * var(--sdh-n));
+    min-height: calc(22px * var(--sdh-n));
+    line-height: calc(22px * var(--sdh-n));
     font-weight: 500;
 }
 
 .sdh-racs__pipa {
     display: inline-block;
-    width: 13px;
-    height: 7px;
-    margin-bottom: 3px;
+    width: calc(13px * var(--sdh-n));
+    height: calc(7px * var(--sdh-n));
+    margin-bottom: calc(3px * var(--sdh-n));
     border-left: 2.5px solid var(--sdh-racs-pipa);
     border-bottom: 2.5px solid var(--sdh-racs-pipa);
     transform: rotate(-45deg);
@@ -562,20 +562,20 @@
 .sdh-racs__zaszlo {
     display: inline-grid;
     place-items: center;
-    width: 24px;
-    height: 24px;
+    width: calc(24px * var(--sdh-n));
+    height: calc(24px * var(--sdh-n));
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: 6px;
+    border-radius: calc(6px * var(--sdh-n));
     background: transparent;
     color: var(--sdh-keret-eros);
     cursor: pointer;
 }
 
 .sdh-racs__zaszlo svg {
-    width: 15px;
-    height: 15px;
+    width: calc(15px * var(--sdh-n));
+    height: calc(15px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.7;
@@ -597,7 +597,7 @@
 }
 
 .sdh-racs__tabla td.sdh-racs__ures {
-    height: 96px;
+    height: calc(96px * var(--sdh-n));
     border-right: 0;
     text-align: center;
     color: var(--sdh-halvany);
@@ -621,7 +621,7 @@
     position: sticky;
     z-index: 3;
     bottom: 0;
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     border-top: 1px solid var(--sdh-keret-eros);
     border-bottom: 0;
     background: var(--sdh-racs-fej);
@@ -638,14 +638,14 @@
     align-items: center;
     justify-content: space-between;
     gap: .5rem;
-    height: 24px;
+    height: calc(24px * var(--sdh-n));
     padding: 0 .5rem;
     border: 1px solid var(--sdh-keret);
     border-top: 0;
     border-bottom: 0;
     background: var(--sdh-felulet-2);
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     cursor: row-resize;
     user-select: none;
 }
@@ -662,9 +662,9 @@
 }
 
 .sdh-racs__fogantyu {
-    flex: 0 0 44px;
-    height: 4px;
-    border-radius: 999px;
+    flex: 0 0 calc(44px * var(--sdh-n));
+    height: calc(4px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-keret-eros);
 }
 
@@ -711,7 +711,7 @@
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
-    height: 264px;
+    height: calc(264px * var(--sdh-n));
     min-height: 0;
     border: 1px solid var(--sdh-keret);
     border-radius: 0 0 var(--sdh-r-nagy) var(--sdh-r-nagy);
@@ -727,7 +727,7 @@
     flex: 0 0 auto;
     display: flex;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: calc(2px * var(--sdh-n));
     padding: .35rem .4rem 0;
     border-bottom: 1px solid var(--sdh-keret);
     background: var(--sdh-felulet-2);
@@ -737,12 +737,12 @@
     display: inline-flex;
     align-items: center;
     gap: .4rem;
-    height: 30px;
-    margin: 0 0 -1px;
+    height: calc(30px * var(--sdh-n));
+    margin: 0 0 calc(-1px * var(--sdh-n));
     padding: 0 .7rem;
     border: 1px solid transparent;
     border-bottom: 0;
-    border-radius: 8px 8px 0 0;
+    border-radius: calc(8px * var(--sdh-n)) calc(8px * var(--sdh-n)) 0 0;
     background: transparent;
     color: var(--sdh-szoveg-2);
     font: inherit;
@@ -782,7 +782,7 @@
     border-top: 1px solid var(--sdh-keret);
     background: var(--sdh-felulet-2);
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -804,10 +804,10 @@
 }
 
 .sdh-reszlet__oldal {
-    flex: 0 0 186px;
+    flex: 0 0 calc(186px * var(--sdh-n));
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: calc(3px * var(--sdh-n));
 }
 
 .sdh-reszlet__alful,
@@ -816,11 +816,11 @@
     align-items: center;
     gap: .5rem;
     width: 100%;
-    min-height: 30px;
+    min-height: calc(30px * var(--sdh-n));
     margin: 0;
     padding: 0 .6rem;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: transparent;
     color: var(--sdh-szoveg-2);
     font: inherit;
@@ -862,7 +862,7 @@
 
 .sdh-adatlista {
     margin: 0;
-    columns: 3 320px;
+    columns: 3 calc(320px * var(--sdh-n));
     column-gap: 2rem;
 }
 
@@ -873,10 +873,10 @@
 
 .sdh-adatlista__sor {
     display: grid;
-    grid-template-columns: 122px minmax(0, 1fr);
+    grid-template-columns: calc(122px * var(--sdh-n)) minmax(0, 1fr);
     gap: .6rem;
-    min-height: 26px;
-    padding: 3px 0;
+    min-height: calc(26px * var(--sdh-n));
+    padding: calc(3px * var(--sdh-n)) 0;
     break-inside: avoid;
     line-height: 1.45;
 }
@@ -901,7 +901,7 @@
 
 .sdh-reszlet__szoveg h4 {
     margin: 0 0 .2rem;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
     color: var(--sdh-halvany);
 }
@@ -921,13 +921,13 @@
 }
 
 .sdh-reszlet__fajlok li {
-    padding: 3px 0;
+    padding: calc(3px * var(--sdh-n)) 0;
 }
 
 .sdh-reszlet__fajlok span {
     margin-left: .5rem;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 /* ---- Táblázatos lapfülek (Hibák, tételek, bizonylatok) ---- */
@@ -942,12 +942,12 @@
     margin: 0;
     border-collapse: separate;
     border-spacing: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-reszlet__tabla th,
 .sdh-reszlet__tabla td {
-    height: 30px;
+    height: calc(30px * var(--sdh-n));
     padding: 0 .65rem;
     border-right: 1px solid var(--sdh-keret);
     border-bottom: 1px solid var(--sdh-keret);
@@ -962,7 +962,7 @@
     top: 0;
     background: var(--sdh-racs-fej);
     color: var(--sdh-szoveg-2);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
 }
 
@@ -981,7 +981,7 @@
 }
 
 .sdh-reszlet__tabla td.sdh-reszlet__tabla-ures {
-    height: 64px;
+    height: calc(64px * var(--sdh-n));
     border-right: 0;
     color: var(--sdh-halvany);
 }
@@ -1009,30 +1009,30 @@
 .sdh-racs__felugro {
     position: fixed;
     z-index: 100000;
-    min-width: 220px;
-    max-width: min(34rem, calc(100vw - 16px));
+    min-width: calc(220px * var(--sdh-n));
+    max-width: min(34rem, calc(100vw - calc(16px * var(--sdh-n))));
     padding: .5rem;
     border: 1px solid var(--sdh-keret);
-    border-radius: 12px;
+    border-radius: calc(12px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     box-shadow: var(--sdh-arnyek-emelt);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     line-height: 1.3;
 }
 
 .sdh-racs__felugro h3 {
     margin: .1rem .35rem .45rem;
     padding: 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
     color: var(--sdh-halvany);
 }
 
 .sdh-racs__lista {
     display: grid;
-    gap: 1px;
+    gap: calc(1px * var(--sdh-n));
 }
 
 .sdh-racs__lista--ket {
@@ -1050,11 +1050,11 @@
     align-items: center;
     gap: .5rem;
     width: 100%;
-    min-height: 30px;
+    min-height: calc(30px * var(--sdh-n));
     margin: 0;
     padding: 0 .6rem;
     border: 0;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: transparent;
     color: inherit;
     font: inherit;
@@ -1085,10 +1085,10 @@
     flex: 0 0 auto;
     display: grid;
     place-items: center;
-    width: 16px;
-    height: 16px;
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     border: 1.5px solid var(--sdh-keret-eros);
-    border-radius: 4px;
+    border-radius: calc(4px * var(--sdh-n));
     background: var(--sdh-felulet);
 }
 
@@ -1099,9 +1099,9 @@
 
 .is-jelolt > .sdh-racs__negyzet::after {
     content: "";
-    width: 8px;
-    height: 4px;
-    margin-bottom: 2px;
+    width: calc(8px * var(--sdh-n));
+    height: calc(4px * var(--sdh-n));
+    margin-bottom: calc(2px * var(--sdh-n));
     border-left: 2px solid var(--sdh-accent-felirat);
     border-bottom: 2px solid var(--sdh-accent-felirat);
     transform: rotate(-45deg);
@@ -1111,15 +1111,15 @@
     flex: 0 0 auto;
     display: grid;
     place-items: center;
-    width: 22px;
-    height: 22px;
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
     margin: 0 -.3rem 0 0;
     padding: 0;
     border: 0;
-    border-radius: 6px;
+    border-radius: calc(6px * var(--sdh-n));
     background: transparent;
     color: var(--sdh-halvany);
-    font-size: 16px;
+    font-size: calc(16px * var(--sdh-n));
     line-height: 1;
     cursor: pointer;
 }
@@ -1130,7 +1130,7 @@
 }
 
 .sdh-racs__vonal {
-    height: 1px;
+    height: calc(1px * var(--sdh-n));
     margin: .4rem 0;
     background: var(--sdh-keret);
 }
@@ -1146,11 +1146,11 @@
     flex: 1 1 auto;
     min-width: 0;
     width: 100%;
-    height: 32px;
+    height: calc(32px * var(--sdh-n));
     margin: 0;
     padding: 0 .65rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
@@ -1163,20 +1163,20 @@
 }
 
 .sdh-racs__felugro .sdh-gomb {
-    height: 32px;
+    height: calc(32px * var(--sdh-n));
 }
 
 .sdh-racs__sugo {
     margin: .45rem .35rem .1rem;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     line-height: 1.45;
 }
 
 .sdh-racs__hiba {
     margin: .4rem .35rem 0;
     color: var(--sdh-hiba);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 /* ================================================================== */
@@ -1211,7 +1211,7 @@
 .sdh-reszlet__penz {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: calc(4px * var(--sdh-n));
     margin-top: .45rem;
 }
 
@@ -1222,7 +1222,7 @@
     justify-content: space-between;
     gap: .5rem;
     padding: .3rem .6rem;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     white-space: nowrap;
 }
 
@@ -1234,12 +1234,12 @@
 
 .sdh-reszlet__brutto span,
 .sdh-reszlet__fizetendo span {
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
 }
 
 .sdh-reszlet__brutto b {
-    font-size: 15px;
+    font-size: calc(15px * var(--sdh-n));
 }
 
 .sdh-reszlet__fizetendo {
@@ -1249,17 +1249,17 @@
 }
 
 .sdh-reszlet__fizetendo b {
-    font-size: 17px;
+    font-size: calc(17px * var(--sdh-n));
     line-height: 1.2;
 }
 
 .sdh-reszlet__kifizetve {
     padding: .4rem .6rem;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: color-mix(in srgb, var(--sdh-siker) 12%, var(--sdh-felulet));
     color: var(--sdh-siker);
     font-weight: 600;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 /* ---- Részletpanel lapfül-jelvény (0.27): RMA – üzenetek száma ---- */
@@ -1269,10 +1269,10 @@
     min-width: 1.35em;
     margin-left: .35rem;
     padding: 0 .38em;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-accent-halvany);
     color: var(--sdh-accent-szoveg);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 600;
     line-height: 1.55;
     text-align: center;
@@ -1309,7 +1309,7 @@
 .sdh-racs__tabla .sdh-masol--cella {
     position: absolute;
     top: 50%;
-    right: 3px;
+    right: calc(3px * var(--sdh-n));
     margin: 0;
     transform: translateY(-50%);
     background: var(--sdh-felulet);
@@ -1333,7 +1333,7 @@
     padding: .3rem .6rem;
     border-radius: var(--sdh-r);
     background: var(--sdh-felulet-2);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     font-weight: 600;
 }
 

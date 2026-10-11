@@ -424,6 +424,16 @@
     gorgeto.setAttribute('aria-label', 'Munkalapok');
 
     var tabla = elem('table', 'sdh-racs__tabla');
+    var tablaSz = 0;        // a táblázat teljes szélessége 100%-os nagyításnál (képpont)
+
+    /** Képpontméret, amely a betűnagyítással (--sdh-n) együtt nő. */
+    function nagyPx(px) {
+        return 'calc(' + px + 'px * var(--sdh-n, 1))';
+    }
+
+    function nagyitas() {
+        return parseFloat(window.getComputedStyle(document.documentElement).getPropertyValue('--sdh-n')) || 1;
+    }
     var colgroup = elem('colgroup');
     var thead = elem('thead');
     var tbody = elem('tbody');
@@ -626,7 +636,7 @@
             var rend = rendIndex >= 0 ? A.rendezes[rendIndex] : null;
 
             szelesseg += lo.sz;
-            cols += '<col data-k="' + esc(lo.k) + '" style="width:' + lo.sz + 'px">';
+            cols += '<col data-k="' + esc(lo.k) + '" style="width:' + nagyPx(lo.sz) + '">';
 
             fej += '<th scope="col" draggable="true" data-k="' + esc(lo.k) + '" title="' + esc(o.cim) + '" class="' +
                 (o.igazit === 'jobb' ? 'is-jobb ' : '') +
@@ -658,7 +668,8 @@
 
         colgroup.innerHTML = cols;
         thead.innerHTML = '<tr class="sdh-racs__fejsor">' + fej + '</tr><tr class="sdh-racs__szurosor">' + szuro + '</tr>';
-        tabla.style.width = szelesseg + 'px';
+        tablaSz = szelesseg;
+        tabla.style.width = nagyPx(tablaSz);
     }
 
     /** Csak a szűrősor jelzéseit frissíti – gépelés közben a mező nem épül újra. */
@@ -1975,6 +1986,11 @@
     });
 
     /* ---- Oszlopszélesség húzással ---- */
+    /*
+     * Az oszlopok szélessége együtt nő a betűnagyítással (admin.css: --sdh-n),
+     * különben nagyobb betűnél a szöveg nem férne ki. A mentett szélesség
+     * mindig a 100%-os érték.
+     */
 
     thead.addEventListener('mousedown', function (esemeny) {
         var fogo = esemeny.target.closest('[data-fogo]');
@@ -2007,11 +2023,13 @@
         document.body.style.cursor = 'col-resize';
 
         function mozog(e) {
-            var uj = Math.min(800, Math.max(40, kezdoSz + e.clientX - kezdoX));
+            // Az egér képernyő-képpontban mozog, az oszlop mérete a nagyítás előtti érték.
+            var uj = Math.round(Math.min(800, Math.max(40, kezdoSz + (e.clientX - kezdoX) / nagyitas())));
 
-            tabla.style.width = (parseFloat(tabla.style.width) + uj - oszlop.sz) + 'px';
+            tablaSz += uj - oszlop.sz;
+            tabla.style.width = nagyPx(tablaSz);
             oszlop.sz = uj;
-            col.style.width = uj + 'px';
+            col.style.width = nagyPx(uj);
         }
 
         function vege() {

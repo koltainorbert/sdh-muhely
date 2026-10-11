@@ -34,7 +34,7 @@ final class SDH_Muhely_Arculat
      * ============================================================== */
 
     /**
-     * @return array{logo: string, jel: string, nev: string, szin_egyeni: string, sarok: string, sav: string, tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
+     * @return array{uveg: string, betutipus: string, betutipus_egyeni: string, nagyitas: int, logo: string, jel: string, nev: string, szin_egyeni: string, sarok: string, sav: string, tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
      */
     public static function beallitas(): array
     {
@@ -54,7 +54,16 @@ final class SDH_Muhely_Arculat
             $szin = '';
         }
 
+        $uveg      = (string) ($mentett['uveg'] ?? 'mono');
+        $betutipus = (string) ($mentett['betutipus'] ?? '');
+
         return [
+            // Üvegszín: 'duo' = két kontrasztos szín, 'mono' = egy színcsalád.
+            'uveg'             => isset(self::uvegek()[$uveg]) ? $uveg : 'mono',
+            // Betű: betűtípus (kulcs a betutipusok() listából), egyéni betűnév, alap nagyítás (%).
+            'betutipus'        => isset(self::betutipusok()[$betutipus]) ? $betutipus : '',
+            'betutipus_egyeni' => self::betunev((string) ($mentett['betutipus_egyeni'] ?? '')),
+            'nagyitas'         => self::nagyitas_szukit((int) ($mentett['nagyitas'] ?? 100)),
             // A rendszer jele és neve (oldalsáv, címsor) és a logó – cégenként más, ezért beállítás.
             'logo'        => esc_url_raw((string) ($mentett['logo'] ?? '')),
             'jel'         => isset($mentett['jel']) ? (string) $mentett['jel'] : 'SDH',
@@ -69,6 +78,91 @@ final class SDH_Muhely_Arculat
             'neon_egyeni' => self::hex((string) ($mentett['neon_egyeni'] ?? '')),
             'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
         ];
+    }
+
+    /** A betűnagyítás határai (%), a csúszka lépése. */
+    public const NAGYITAS_MIN   = 80;
+    public const NAGYITAS_MAX   = 160;
+    public const NAGYITAS_LEPES = 5;
+
+    public static function nagyitas_szukit(int $szazalek): int
+    {
+        $szazalek = (int) (round($szazalek / self::NAGYITAS_LEPES) * self::NAGYITAS_LEPES);
+
+        return max(self::NAGYITAS_MIN, min(self::NAGYITAS_MAX, $szazalek));
+    }
+
+    /**
+     * Az üvegszín két módja.
+     *
+     * @return array<string, array{nev: string, alcim: string}>
+     */
+    public static function uvegek(): array
+    {
+        return [
+            'duo'  => ['nev' => 'Duó', 'alcim' => 'Kontrasztos színek'],
+            'mono' => ['nev' => 'Egyszínű', 'alcim' => 'Egy színcsalád'],
+        ];
+    }
+
+    /**
+     * A színválasztóban kínált színek, a minta sorrendjében (a kulcs a
+     * data-accent értéke). A `palaszurke` régi választás: érvényes marad, de
+     * a választóban már nem szerepel.
+     *
+     * @return array<int, string>
+     */
+    public static function valaszto_szinek(): array
+    {
+        return ['', 'kek', 'smaragd', 'ibolya', 'rozsa', 'borostyan', 'turkiz', 'rubin'];
+    }
+
+    /**
+     * Választható betűtípusok. Mind a gépen lévő (rendszer-) betűkből áll:
+     * a rendszer nem tölt le betűt külső kiszolgálóról. A kulcs kerül a
+     * beállításba, a `csalad` a CSS font-family értéke.
+     *
+     * @return array<string, array{nev: string, csalad: string}>
+     */
+    public static function betutipusok(): array
+    {
+        $rendszer = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+
+        return [
+            ''          => ['nev' => 'A gép betűtípusa (alap)', 'csalad' => $rendszer],
+            'segoe'     => ['nev' => 'Segoe UI', 'csalad' => '"Segoe UI", "Segoe UI Variable", Tahoma, sans-serif'],
+            'roboto'    => ['nev' => 'Roboto', 'csalad' => 'Roboto, "Noto Sans", "Segoe UI", Arial, sans-serif'],
+            'inter'     => ['nev' => 'Inter', 'csalad' => 'Inter, "Segoe UI", Roboto, Arial, sans-serif'],
+            'arial'     => ['nev' => 'Arial / Helvetica', 'csalad' => 'Arial, "Helvetica Neue", Helvetica, sans-serif'],
+            'verdana'   => ['nev' => 'Verdana', 'csalad' => 'Verdana, Geneva, "DejaVu Sans", sans-serif'],
+            'tahoma'    => ['nev' => 'Tahoma', 'csalad' => 'Tahoma, Geneva, Verdana, sans-serif'],
+            'trebuchet' => ['nev' => 'Trebuchet MS', 'csalad' => '"Trebuchet MS", "Lucida Grande", Tahoma, sans-serif'],
+            'calibri'   => ['nev' => 'Calibri', 'csalad' => 'Calibri, Carlito, Candara, "Segoe UI", sans-serif'],
+            'gill'      => ['nev' => 'Gill Sans', 'csalad' => '"Gill Sans", "Gill Sans MT", Calibri, sans-serif'],
+            'georgia'   => ['nev' => 'Georgia (talpas)', 'csalad' => 'Georgia, "Times New Roman", serif'],
+            'times'     => ['nev' => 'Times New Roman (talpas)', 'csalad' => '"Times New Roman", Times, serif'],
+            'mono'      => ['nev' => 'Írógépbetű (Consolas / Menlo)', 'csalad' => 'Consolas, Menlo, "DejaVu Sans Mono", monospace'],
+            'egyeni'    => ['nev' => 'Egyéni – a gépre telepített betű neve', 'csalad' => $rendszer],
+        ];
+    }
+
+    /** Betűnév a CSS-be: csak betű, szám, szóköz és kötőjel maradhat (legfeljebb 60 karakter). */
+    private static function betunev(string $nev): string
+    {
+        return trim(mb_substr((string) preg_replace('/[^\p{L}\p{N} \-]/u', '', $nev), 0, 60));
+    }
+
+    /** A beállított betűtípus CSS font-family értéke. */
+    public static function betucsalad(): string
+    {
+        $b     = self::beallitas();
+        $lista = self::betutipusok();
+
+        if ($b['betutipus'] === 'egyeni') {
+            return $b['betutipus_egyeni'] !== '' ? '"' . $b['betutipus_egyeni'] . '", ' . $lista['']['csalad'] : $lista['']['csalad'];
+        }
+
+        return $lista[$b['betutipus']]['csalad'];
     }
 
     /**
@@ -183,9 +277,20 @@ final class SDH_Muhely_Arculat
                 . ':root[data-theme="dark"][data-accent="egyeni"]{--sdh-accent-szoveg:' . self::arnyalat($hex, $vilagos ? 0.1 : 0.4) . '}';
         }
 
+        if ($b['szin_egyeni'] !== '') {
+            // Az egyéni szín párja a Duó üvegszínhez: a kiegészítő (szemközti) színe.
+            [$r, $g, $k] = self::rgb($b['szin_egyeni']);
+            $css .= ':root[data-accent="egyeni"][data-uveg="duo"]{--sdh-accent-2:' . sprintf('#%02x%02x%02x', 255 - $r, 255 - $g, 255 - $k) . '}';
+        }
+
         if ($b['sarok'] !== 'normal') {
             $s    = self::sarkok()[$b['sarok']];
-            $css .= ':root{--sdh-r:' . $s[1] . ';--sdh-r-nagy:' . $s[2] . '}';
+            // A lekerekítés is nő a betűnagyítással (--sdh-n), ahogy a stíluslap többi mérete.
+            $css .= ':root{--sdh-r:calc(' . $s[1] . ' * var(--sdh-n));--sdh-r-nagy:calc(' . $s[2] . ' * var(--sdh-n))}';
+        }
+
+        if ($b['betutipus'] !== '') {
+            $css .= ':root{--sdh-betutipus:' . self::betucsalad() . '}';
         }
 
         return $css;
@@ -207,19 +312,24 @@ final class SDH_Muhely_Arculat
      * A választható kiemelő színek. A kulcs a data-accent értéke;
      * az üres kulcs az alapértelmezett SDH piros.
      *
-     * @return array<string, array{nev: string, hex: string}>
+     * @return array<string, array{nev: string, hex: string, hex2: string}>
      */
     public static function szinek(): array
     {
         return [
-            ''            => ['nev' => 'Piros (alap)', 'hex' => '#d4231d'],
-            'kek'         => ['nev' => 'Kék', 'hex' => '#2563eb'],
-            'smaragd'     => ['nev' => 'Smaragd', 'hex' => '#047857'],
-            'ibolya'      => ['nev' => 'Ibolya', 'hex' => '#6d28d9'],
-            'borostyan'   => ['nev' => 'Borostyán', 'hex' => '#b45309'],
-            'palaszurke'  => ['nev' => 'Palaszürke', 'hex' => '#475569'],
+            // hex = a szín a választó korongján; hex2 = a Duó párja. A felület
+            // színei a CSS-ben vannak (admin.css: :root[data-accent=…]).
+            ''            => ['nev' => 'Alapértelmezett', 'hex' => '#d4231d', 'hex2' => '#64748b'],
+            'kek'         => ['nev' => 'Kék', 'hex' => '#2563eb', 'hex2' => '#f5b942'],
+            'smaragd'     => ['nev' => 'Smaragdzöld', 'hex' => '#047857', 'hex2' => '#c084fc'],
+            'ibolya'      => ['nev' => 'Ibolya', 'hex' => '#6d28d9', 'hex2' => '#a3e635'],
+            'rozsa'       => ['nev' => 'Rózsaszín', 'hex' => '#db2777', 'hex2' => '#2dd4bf'],
+            'borostyan'   => ['nev' => 'Borostyán', 'hex' => '#b45309', 'hex2' => '#38bdf8'],
+            'turkiz'      => ['nev' => 'Türkiz', 'hex' => '#0e7490', 'hex2' => '#fb7185'],
+            'rubin'       => ['nev' => 'Rubin', 'hex' => '#be123c', 'hex2' => '#22d3ee'],
+            'palaszurke'  => ['nev' => 'Palaszürke', 'hex' => '#475569', 'hex2' => '#f59e0b'],
             // A cég saját színe: a színkódja az Arculat képernyőn adható meg.
-            'egyeni'      => ['nev' => 'Egyéni szín', 'hex' => ''],
+            'egyeni'      => ['nev' => 'Egyéni szín', 'hex' => '', 'hex2' => ''],
         ];
     }
 
@@ -233,6 +343,103 @@ final class SDH_Muhely_Arculat
             'vilagos'  => 'Mindig világos',
             'sotet'    => 'Mindig sötét',
         ];
+    }
+
+    /* =================================================================
+     * Megjelenés-választó és betűnagyító (profilmenü, Beállítások, Áttekintés)
+     * ============================================================== */
+
+    /**
+     * A megjelenés választója a minta szerint: Rendszer / Világos / Sötét, alatta
+     * az Üvegszín két sora (Duó – kontrasztos színek, Egyszínű – egy színcsalád).
+     *
+     * $mod 'profil': a dolgozó saját gépére szól (app.js a böngészőben jegyzi meg);
+     * $mod 'urlap':  a Beállítások űrlapja – a választás rejtett mezőkbe kerül
+     *                (tema, szin, uveg), és a cég alapértelmezése lesz.
+     */
+    public static function megjelenes_valaszto(string $mod = 'profil'): string
+    {
+        $b      = self::beallitas();
+        $urlap  = $mod === 'urlap';
+        $szinek = self::szinek();
+        $kulcsok = self::valaszto_szinek();
+
+        // A cég egyéni színe csak akkor választható, ha megadták a színkódját.
+        if ($b['szin_egyeni'] !== '') {
+            [$r, $g, $k]            = self::rgb($b['szin_egyeni']);
+            $szinek['egyeni']['hex']  = $b['szin_egyeni'];
+            $szinek['egyeni']['hex2'] = sprintf('#%02x%02x%02x', 255 - $r, 255 - $g, 255 - $k);
+            $szinek['egyeni']['nev']  = 'A cég színe';
+            $kulcsok[]                = 'egyeni';
+        }
+
+        $ikonok = [
+            'rendszer' => '<rect x="2.5" y="4" width="15" height="10" rx="1.6"/><path d="M7 17h6M10 14v3"/><path d="M10 6.5v5M10 6.5a2.5 2.5 0 0 0 0 5z" />',
+            'vilagos'  => '<circle cx="10" cy="10" r="3.2"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/>',
+            'sotet'    => '<path d="M16 11.6A6.5 6.5 0 0 1 8.4 4a6.5 6.5 0 1 0 7.6 7.6z"/>',
+        ];
+        $temak = ['rendszer' => 'Rendszer', 'vilagos' => 'Világos', 'sotet' => 'Sötét'];
+
+        $html = '<div class="sdh-megj" data-sdh-megj="' . esc_attr($urlap ? 'urlap' : 'profil') . '">';
+
+        if ($urlap) {
+            $html .= '<input type="hidden" name="tema" value="' . esc_attr($b['tema']) . '" data-sdh-megj-mezo="tema">'
+                . '<input type="hidden" name="szin" value="' . esc_attr($b['szin']) . '" data-sdh-megj-mezo="szin">'
+                . '<input type="hidden" name="arculat_uveg" value="' . esc_attr($b['uveg']) . '" data-sdh-megj-mezo="uveg">';
+        }
+
+        $html .= '<p class="sdh-megj__cim">Megjelenés</p><div class="sdh-megj__tema" data-sdh-tema role="group" aria-label="Világos vagy sötét megjelenés">';
+
+        foreach ($temak as $kulcs => $nev) {
+            $html .= '<button type="button" data-ertek="' . esc_attr($kulcs) . '" aria-pressed="' . ($urlap && $b['tema'] === $kulcs ? 'true' : 'false') . '">'
+                . '<svg viewBox="0 0 20 20" aria-hidden="true">' . $ikonok[$kulcs] . '</svg><span>' . esc_html($nev) . '</span></button>';
+        }
+
+        $html .= '</div><p class="sdh-megj__cim">Üvegszín</p>';
+
+        foreach (self::uvegek() as $uveg => $u) {
+            $html .= '<div class="sdh-megj__sorfej"><strong>' . esc_html($u['nev']) . '</strong><span>' . esc_html($u['alcim']) . '</span>'
+                . '<em>' . count($kulcsok) . '</em></div>'
+                . '<div class="sdh-megj__racs" data-sdh-uvegszin="' . esc_attr($uveg) . '" role="group" aria-label="' . esc_attr($u['nev'] . ' – ' . $u['alcim']) . '">';
+
+            foreach ($kulcsok as $kulcs) {
+                $sz    = $szinek[$kulcs];
+                $aktiv = $urlap && $b['szin'] === $kulcs && $b['uveg'] === $uveg;
+
+                $html .= '<button type="button" class="sdh-megj__szin" data-ertek="' . esc_attr($kulcs) . '" aria-pressed="' . ($aktiv ? 'true' : 'false') . '"'
+                    . ' title="' . esc_attr($sz['nev'] . ' – ' . $u['nev']) . '">'
+                    . '<span class="sdh-megj__korong sdh-megj__korong--' . esc_attr($uveg) . '" style="--k1:' . esc_attr($sz['hex']) . ';--k2:' . esc_attr($sz['hex2']) . '" aria-hidden="true">'
+                    . '<i class="sdh-megj__pipa"><svg viewBox="0 0 12 12"><path d="M2.6 6.3l2.3 2.3 4.5-5"/></svg></i></span>'
+                    . '<span class="sdh-megj__nev">' . esc_html($sz['nev']) . '</span></button>';
+            }
+
+            $html .= '</div>';
+        }
+
+        return $html . '</div>';
+    }
+
+    /**
+     * Betűnagyító csúszka: húzás közben azonnal nő / csökken a felület (app.js:
+     * nagyitasAlkalmaz). $mod 'sajat': a dolgozó saját gépére szól; 'urlap': a
+     * Beállítások űrlapja, a cég alapértelmezése (name="arculat_nagyitas").
+     */
+    public static function nagyito(string $mod = 'sajat'): string
+    {
+        $b     = self::beallitas();
+        $urlap = $mod === 'urlap';
+
+        return '<div class="sdh-nagyito" data-sdh-nagyito="' . esc_attr($urlap ? 'urlap' : 'sajat') . '">'
+            . '<button type="button" class="sdh-nagyito__a sdh-nagyito__a--kis" data-sdh-nagyito-lep="-1" title="Kisebb betű" aria-label="Kisebb betű">A</button>'
+            . '<input type="range" class="sdh-nagyito__csuszka"' . ($urlap ? ' name="arculat_nagyitas"' : '')
+            . ' min="' . self::NAGYITAS_MIN . '" max="' . self::NAGYITAS_MAX . '" step="' . self::NAGYITAS_LEPES . '"'
+            . ' value="' . (int) $b['nagyitas'] . '" data-alap="' . (int) ($urlap ? 100 : $b['nagyitas']) . '" data-sdh-nagyito-csuszka'
+            . ' aria-label="' . esc_attr($urlap ? 'Alap betűméret (százalék)' : 'Betűméret (százalék)') . '">'
+            . '<button type="button" class="sdh-nagyito__a sdh-nagyito__a--nagy" data-sdh-nagyito-lep="1" title="Nagyobb betű" aria-label="Nagyobb betű">A</button>'
+            . '<output class="sdh-nagyito__ertek" data-sdh-nagyito-ertek>' . (int) $b['nagyitas'] . '%</output>'
+            . '<button type="button" class="sdh-nagyito__alap" data-sdh-nagyito-alap title="Vissza az alapméretre" aria-label="Vissza az alapméretre">'
+            . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.7-4"/><path d="M4 3.5v3h3"/></svg></button>'
+            . '</div>';
     }
 
     /* =================================================================
@@ -296,31 +503,10 @@ final class SDH_Muhely_Arculat
                         marad, és ez nem írja felül.
                     </p>
 
+                    <?php // Rendszer / Világos / Sötét és az Üvegszín (Duó, Egyszínű) – ugyanaz a választó, mint a profilmenüben. ?>
+                    <?php echo self::megjelenes_valaszto('urlap'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+
                     <div class="sdh-mezok">
-                        <div class="sdh-mezo">
-                            <label for="tema">Világos vagy sötét</label>
-                            <select name="tema" id="tema">
-                                <?php foreach (self::temak() as $kulcs => $cimke) : ?>
-                                    <option value="<?php echo esc_attr($kulcs); ?>"
-                                        <?php selected($b['tema'], $kulcs); ?>>
-                                        <?php echo esc_html($cimke); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="sdh-mezo">
-                            <label for="szin">Kiemelő szín</label>
-                            <select name="szin" id="szin">
-                                <?php foreach (self::szinek() as $kulcs => $szin) : ?>
-                                    <option value="<?php echo esc_attr($kulcs); ?>"
-                                        <?php selected($b['szin'], $kulcs); ?>>
-                                        <?php echo esc_html($szin['nev']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
                         <div class="sdh-mezo">
                             <label for="arculat_szin_egyeni">Egyéni kiemelő szín</label>
                             <div class="sdh-rma-szin sdh-arculat-szin">
@@ -331,7 +517,7 @@ final class SDH_Muhely_Arculat
                                        pattern="#?[0-9a-fA-F]{6}" placeholder="#0a84ff" autocomplete="off"
                                        value="<?php echo esc_attr($b['szin_egyeni']); ?>">
                             </div>
-                            <span class="sdh-mezo__sugo">A cég saját színe. A fenti listában az „Egyéni szín”-t választva lesz ez a kiemelő szín.</span>
+                            <span class="sdh-mezo__sugo">A cég saját színe. Mentés után a fenti választóban „A cég színe” néven jelenik meg.</span>
                         </div>
 
                         <div class="sdh-mezo">
@@ -352,6 +538,45 @@ final class SDH_Muhely_Arculat
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div class="sdh-doboz" id="betu">
+                    <h2 class="sdh-doboz__cim">Betűtípus és betűméret</h2>
+
+                    <p class="sdh-sugo">
+                        A betűtípus az egész rendszerre szól. A betűméret a cég alapértelmezése: a dolgozók az
+                        Áttekintés csúszkájával (és a profilmenüben) a saját gépükön nagyobbra vagy kisebbre húzhatják.
+                        A rendszer nem tölt le betűt az internetről: a listában a gépeken általában meglévő betűk
+                        állnak – ha egy gépen a választott betű nincs telepítve, ott a gép saját betűje látszik.
+                    </p>
+
+                    <div class="sdh-mezok">
+                        <div class="sdh-mezo">
+                            <label for="arculat_betutipus">Betűtípus</label>
+                            <select name="arculat_betutipus" id="arculat_betutipus" data-sdh-betutipus>
+                                <?php foreach (self::betutipusok() as $kulcs => $bt) : ?>
+                                    <option value="<?php echo esc_attr($kulcs); ?>" data-csalad="<?php echo esc_attr($bt['csalad']); ?>"
+                                        <?php selected($b['betutipus'], $kulcs); ?>><?php echo esc_html($bt['nev']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_betutipus_egyeni">Egyéni betű neve</label>
+                            <input type="text" name="arculat_betutipus_egyeni" id="arculat_betutipus_egyeni" maxlength="60" autocomplete="off"
+                                   placeholder="pl. Montserrat" data-sdh-betutipus-egyeni
+                                   value="<?php echo esc_attr($b['betutipus_egyeni']); ?>">
+                            <span class="sdh-mezo__sugo">Csak az „Egyéni” választásnál számít. A betűnek telepítve kell lennie a gépen.</span>
+                        </div>
+
+                        <div class="sdh-mezo sdh-mezo--szeles">
+                            <label>Alap betűméret</label>
+                            <?php echo self::nagyito('urlap'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+                            <span class="sdh-mezo__sugo">100% a rendes méret. Húzás közben ez a képernyő is átméreteződik – mentés után lesz a cég alapértelmezése.</span>
+                        </div>
+                    </div>
+
+                    <p class="sdh-betuminta" data-sdh-betuminta>Árvíztűrő tükörfúrógép – 0123456789 – Munkalap 2026/15, fizetendő 157 700 Ft</p>
                 </div>
 
                 <div class="sdh-doboz">
@@ -559,6 +784,18 @@ final class SDH_Muhely_Arculat
             $neon = 'kiemelo';
         }
 
+        $regi      = self::beallitas();
+        $uveg      = isset($_POST['arculat_uveg']) ? sanitize_key(wp_unslash($_POST['arculat_uveg'])) : $regi['uveg'];
+        $betutipus = isset($_POST['arculat_betutipus']) ? sanitize_key(wp_unslash($_POST['arculat_betutipus'])) : $regi['betutipus'];
+        $betu_egy  = isset($_POST['arculat_betutipus_egyeni'])
+            ? self::betunev(sanitize_text_field(wp_unslash($_POST['arculat_betutipus_egyeni'])))
+            : $regi['betutipus_egyeni'];
+
+        // Egyéni betűtípus csak megadott névvel választható.
+        if ($betutipus === 'egyeni' && $betu_egy === '') {
+            $betutipus = '';
+        }
+
         $szin_egyeni = self::hex(isset($_POST['arculat_szin_egyeni']) ? sanitize_text_field(wp_unslash($_POST['arculat_szin_egyeni'])) : '');
         $sarok       = isset($_POST['arculat_sarok']) ? sanitize_key(wp_unslash($_POST['arculat_sarok'])) : 'normal';
         $sav         = isset($_POST['arculat_sav']) ? sanitize_key(wp_unslash($_POST['arculat_sav'])) : 'vilagos';
@@ -571,6 +808,10 @@ final class SDH_Muhely_Arculat
         update_option(
             'sdh_muhely_arculat',
             [
+                'uveg'             => isset(self::uvegek()[$uveg]) ? $uveg : 'mono',
+                'betutipus'        => isset(self::betutipusok()[$betutipus]) ? $betutipus : '',
+                'betutipus_egyeni' => $betu_egy,
+                'nagyitas'         => isset($_POST['arculat_nagyitas']) ? self::nagyitas_szukit((int) $_POST['arculat_nagyitas']) : $regi['nagyitas'],
                 'logo'        => isset($_POST['arculat_logo']) ? esc_url_raw(trim((string) wp_unslash($_POST['arculat_logo']))) : '',
                 'jel'         => mb_substr(sanitize_text_field(isset($_POST['arculat_jel']) ? wp_unslash($_POST['arculat_jel']) : ''), 0, 4),
                 'nev'         => mb_substr(sanitize_text_field(isset($_POST['arculat_nev']) ? wp_unslash($_POST['arculat_nev']) : ''), 0, 30),

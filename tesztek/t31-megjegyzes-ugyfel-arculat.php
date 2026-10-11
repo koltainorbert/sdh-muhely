@@ -127,7 +127,7 @@ T::egyezik('egyeni', $b['szin'], 'az egyéni szín a kiemelő szín');
 T::tartalmaz($css, ':root[data-accent="egyeni"]{--sdh-accent:#0a84ff', 'az egyéni kiemelő szín változója');
 T::tartalmaz($css, '--sdh-accent-halvany:rgba(10,132,255,.1)', 'a halvány változat');
 T::tartalmaz($css, '--sdh-accent-felirat:#ffffff', 'sötét színen fehér a felirat');
-T::tartalmaz($css, '--sdh-r:13px', 'a kerek lekerekítés');
+T::tartalmaz($css, '--sdh-r:calc(13px * var(--sdh-n))', 'a kerek lekerekítés');
 
 update_option('sdh_muhely_arculat', ['szin' => 'egyeni', 'szin_egyeni' => '#ffe14d']);
 T::tartalmaz($A::stilus_css(), '--sdh-accent-felirat:#16191d', 'világos színen sötét a felirat');

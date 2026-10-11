@@ -2303,13 +2303,205 @@
 
         document.documentElement.setAttribute('data-theme', sotet ? 'dark' : 'light');
 
+        // A Beállítások űrlapján álló választó (a cég alapértelmezése) a saját mezőit követi.
         Array.prototype.forEach.call(
             document.querySelectorAll('[data-sdh-tema] button'),
             function (gomb) {
-                gomb.setAttribute('aria-pressed', gomb.dataset.ertek === ertek ? 'true' : 'false');
+                if (!gomb.closest('[data-sdh-megj="urlap"]')) {
+                    gomb.setAttribute('aria-pressed', gomb.dataset.ertek === ertek ? 'true' : 'false');
+                }
             }
         );
     }
+
+    /**
+     * Üvegszín: a kiemelő szín (data-accent) mellé a mód – 'duo' (két
+     * kontrasztos szín) vagy 'mono' (egy színcsalád). A színek a CSS-ben vannak.
+     */
+    function uvegAlkalmaz(szin, uveg) {
+        uveg = uveg === 'duo' ? 'duo' : 'mono';
+        document.documentElement.setAttribute('data-uveg', uveg);
+
+        Array.prototype.forEach.call(
+            document.querySelectorAll('[data-sdh-megj="profil"] [data-sdh-uvegszin] button'),
+            function (gomb) {
+                var sor = gomb.closest('[data-sdh-uvegszin]');
+                var aktiv = sor.getAttribute('data-sdh-uvegszin') === uveg && gomb.dataset.ertek === (szin || '');
+
+                gomb.setAttribute('aria-pressed', aktiv ? 'true' : 'false');
+            }
+        );
+    }
+
+    function sajatSzin() {
+        var szin = null;
+
+        try {
+            szin = localStorage.getItem('sdh-szin');
+        } catch (e) {
+            szin = null;
+        }
+
+        return szin === null ? (beallitas.alapSzin || '') : szin;
+    }
+
+    /* ---- Betűnagyítás: a csúszka húzás közben azonnal méretez ---- */
+
+    // Függvények (nem változók): a megjelenés már a fájl elején beáll, mielőtt ide érne a futás.
+    function nagyMin() { return parseInt(beallitas.nagyitasMin, 10) || 80; }
+    function nagyMax() { return parseInt(beallitas.nagyitasMax, 10) || 160; }
+
+    function nagyitasSzukit(szazalek) {
+        var n = Math.round((parseInt(szazalek, 10) || 100) / 5) * 5;
+
+        return Math.max(nagyMin(), Math.min(nagyMax(), n));
+    }
+
+    /** A dolgozó saját mérete ezen a gépen, különben a cég alapértelmezése. */
+    function nagyitasSajat() {
+        var sajat = 0;
+
+        try {
+            sajat = parseInt(localStorage.getItem('sdh-nagyitas'), 10) || 0;
+        } catch (e) {
+            sajat = 0;
+        }
+
+        return nagyitasSzukit(sajat || beallitas.alapNagyitas || 100);
+    }
+
+    function nagyitoKijelez(doboz, szazalek) {
+        var csuszka = doboz.querySelector('[data-sdh-nagyito-csuszka]');
+        var ertek = doboz.querySelector('[data-sdh-nagyito-ertek]');
+
+        if (csuszka && String(csuszka.value) !== String(szazalek)) {
+            csuszka.value = String(szazalek);
+        }
+
+        if (ertek) {
+            ertek.textContent = szazalek + '%';
+        }
+
+        doboz.style.setProperty('--p', ((szazalek - nagyMin()) / (nagyMax() - nagyMin()) * 100) + '%');
+    }
+
+    /**
+     * A felület méretezése: a --sdh-n változó szorozza a stíluslapok méreteit
+     * (a rem a gyökér betűméretén át követi). A wp-adminban a felület a
+     * WordPress saját méretében marad – ott csak a csúszka kijelzése frissül.
+     */
+    function nagyitasAlkalmaz(szazalek) {
+        szazalek = nagyitasSzukit(szazalek);
+
+        if (beallitas.kontextus === 'frontend') {
+            document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-nagyito="sajat"]'), function (doboz) {
+            nagyitoKijelez(doboz, szazalek);
+        });
+
+        // A rács és a nyitott popupok az új mérethez igazodnak (húzás közben ritkítva).
+        window.clearTimeout(nagyitasAlkalmaz.ido);
+        nagyitasAlkalmaz.ido = window.setTimeout(function () {
+            window.dispatchEvent(new Event('resize'));
+        }, 60);
+    }
+
+    function nagyitoValt(doboz, szazalek) {
+        szazalek = nagyitasSzukit(szazalek);
+
+        if (doboz.getAttribute('data-sdh-nagyito') === 'urlap') {
+            // A cég alapértelmezése: mentésig csak előnézet ezen a képernyőn.
+            nagyitoKijelez(doboz, szazalek);
+
+            if (beallitas.kontextus === 'frontend') {
+                document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
+            }
+
+            return;
+        }
+
+        beallitasIr('sdh-nagyitas', String(szazalek));
+        nagyitasAlkalmaz(szazalek);
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var csuszka = esemeny.target.closest ? esemeny.target.closest('[data-sdh-nagyito-csuszka]') : null;
+
+        if (csuszka) {
+            nagyitoValt(csuszka.closest('[data-sdh-nagyito]'), csuszka.value);
+        }
+    });
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target.closest ? esemeny.target.closest('[data-sdh-nagyito-lep], [data-sdh-nagyito-alap]') : null;
+
+        if (!cel) {
+            return;
+        }
+
+        var doboz = cel.closest('[data-sdh-nagyito]');
+        var csuszka = doboz ? doboz.querySelector('[data-sdh-nagyito-csuszka]') : null;
+
+        if (!csuszka) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        if (cel.hasAttribute('data-sdh-nagyito-alap')) {
+            var alap = parseInt(csuszka.getAttribute('data-alap'), 10) || 100;
+
+            if (doboz.getAttribute('data-sdh-nagyito') === 'sajat') {
+                // Vissza a cég alapértelmezésére: a saját beállítás törlődik.
+                try {
+                    localStorage.removeItem('sdh-nagyitas');
+                } catch (e) { /* privát ablak */ }
+
+                nagyitasAlkalmaz(alap);
+            } else {
+                nagyitoValt(doboz, alap);
+            }
+
+            return;
+        }
+
+        nagyitoValt(doboz, (parseInt(csuszka.value, 10) || 100) + 5 * (parseInt(cel.getAttribute('data-sdh-nagyito-lep'), 10) || 0));
+    });
+
+    /* ---- Beállítások: a betűtípus előnézete már mentés előtt ---- */
+
+    function betutipusElonezet() {
+        var lista = document.querySelector('[data-sdh-betutipus]');
+
+        if (!lista) {
+            return;
+        }
+
+        var opcio = lista.options[lista.selectedIndex];
+        var csalad = opcio ? opcio.getAttribute('data-csalad') || '' : '';
+        var egyeni = document.querySelector('[data-sdh-betutipus-egyeni]');
+        var nev = egyeni ? egyeni.value.replace(/[^\p{L}\p{N} \-]/gu, '').trim() : '';
+
+        if (lista.value === 'egyeni' && nev !== '') {
+            csalad = '"' + nev + '", ' + csalad;
+        }
+
+        document.documentElement.style.setProperty('--sdh-betutipus', csalad);
+    }
+
+    document.addEventListener('change', function (esemeny) {
+        if (esemeny.target.closest && esemeny.target.closest('[data-sdh-betutipus]')) {
+            betutipusElonezet();
+        }
+    });
+
+    document.addEventListener('input', function (esemeny) {
+        if (esemeny.target.closest && esemeny.target.closest('[data-sdh-betutipus-egyeni]')) {
+            betutipusElonezet();
+        }
+    });
 
     function szinAlkalmaz(ertek) {
         if (ertek) {
@@ -2426,16 +2618,17 @@
         // alapértelmezése az Arculat képernyőről.
         temaAlkalmaz(beallitasOlvas('sdh-tema', beallitas.alapTema || 'rendszer'));
 
-        var szin = null;
-
-        try {
-            szin = localStorage.getItem('sdh-szin');
-        } catch (e) {
-            szin = null;
-        }
-
-        szinAlkalmaz(szin === null ? (beallitas.alapSzin || '') : szin);
+        szinAlkalmaz(sajatSzin());
+        uvegAlkalmaz(sajatSzin(), beallitasOlvas('sdh-uveg', beallitas.alapUveg || 'mono'));
         neonAlkalmaz(neonErtek());
+
+        nagyitasAlkalmaz(nagyitasSajat());
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-nagyito="urlap"]'), function (doboz) {
+            var csuszka = doboz.querySelector('[data-sdh-nagyito-csuszka]');
+
+            nagyitoKijelez(doboz, nagyitasSzukit(csuszka ? csuszka.value : 100));
+        });
 
         if (document.body && beallitasOlvas('sdh-sav', '') === 'csukva') {
             document.body.dataset.sav = 'csukva';
@@ -2455,10 +2648,55 @@
 
     document.addEventListener('click', function (esemeny) {
         var tema = esemeny.target.closest('[data-sdh-tema] button');
+        var megjUrlap = esemeny.target.closest('[data-sdh-megj="urlap"]');
+
+        // A Beállítások űrlapján a választás a rejtett mezőkbe kerül: mentéskor lesz a cég alapértelmezése.
+        function megjMezo(nev, ertek) {
+            var mezo = megjUrlap.querySelector('[data-sdh-megj-mezo="' + nev + '"]');
+
+            if (mezo) {
+                mezo.value = ertek;
+                mezo.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+
+        if (tema && megjUrlap) {
+            megjMezo('tema', tema.dataset.ertek);
+
+            Array.prototype.forEach.call(megjUrlap.querySelectorAll('[data-sdh-tema] button'), function (gomb) {
+                gomb.setAttribute('aria-pressed', gomb === tema ? 'true' : 'false');
+            });
+
+            return;
+        }
 
         if (tema) {
             beallitasIr('sdh-tema', tema.dataset.ertek);
             temaAlkalmaz(tema.dataset.ertek);
+
+            return;
+        }
+
+        var uvegSzin = esemeny.target.closest('[data-sdh-uvegszin] button');
+
+        if (uvegSzin) {
+            var uvegMod = uvegSzin.closest('[data-sdh-uvegszin]').getAttribute('data-sdh-uvegszin');
+
+            if (megjUrlap) {
+                megjMezo('szin', uvegSzin.dataset.ertek);
+                megjMezo('uveg', uvegMod);
+
+                Array.prototype.forEach.call(megjUrlap.querySelectorAll('[data-sdh-uvegszin] button'), function (gomb) {
+                    gomb.setAttribute('aria-pressed', gomb === uvegSzin ? 'true' : 'false');
+                });
+
+                return;
+            }
+
+            beallitasIr('sdh-szin', uvegSzin.dataset.ertek);
+            beallitasIr('sdh-uveg', uvegMod);
+            szinAlkalmaz(uvegSzin.dataset.ertek);
+            uvegAlkalmaz(uvegSzin.dataset.ertek, uvegMod);
 
             return;
         }
@@ -3379,8 +3617,9 @@
     function munkalapOsszefoglalo(urlap) {
         var hely = urlap ? urlap.querySelector('[data-sdh-osszefoglalo]') : null;
 
-        // Az ügyfél szerkesztőgombja csak kiválasztott ügyfélnél él.
+        // Az ügyfél és az eszköz szerkesztőgombja csak kiválasztott ügyfélnél / eszköznél él.
         ugyfelSzerkAllapot(urlap);
+        eszkozSzerkAllapot(urlap);
 
         if (!hely) {
             return;
@@ -3996,6 +4235,123 @@
 
                 munkalapOsszefoglalo(urlap);
                 document.dispatchEvent(new CustomEvent('sdh:ugyfel-mentve', { detail: { id: String(adat.id), nev: adat.nev } }));
+            }
+        });
+    }
+
+    /** A fő eszköz ceruzája csak kiválasztott eszköznél kattintható. */
+    function eszkozSzerkAllapot(urlap) {
+        var fo = urlap ? urlap.querySelector('[data-sdh-eszkoz-valaszto]') : null;
+
+        if (!fo) {
+            return;
+        }
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('.sdh-mezo__sor [data-sdh-eszkoz-szerk]'), function (gomb) {
+            gomb.disabled = !fo.value || fo.value === '0';
+        });
+    }
+
+    /**
+     * Szerkesztés után az eszközök neve helyben frissül: a fő választóban és
+     * a csatolt eszközök címkéin is. Ha az eszköz közben másik ügyfélhez
+     * került, lekerül a lapról (más ügyfél készüléke nem maradhat rajta).
+     */
+    function munkalapEszkozNevek(urlap) {
+        var ugyfelId = munkalapUgyfelId(urlap);
+        var fo = urlap ? urlap.querySelector('[data-sdh-eszkoz-valaszto]') : null;
+
+        if (!fo || ugyfelId === '0') {
+            munkalapOsszefoglalo(urlap);
+
+            return;
+        }
+
+        var cim = new URL(beallitas.ajax, window.location.origin);
+
+        cim.searchParams.set('action', 'sdh_muhely_munkalapok_eszkozok');
+        cim.searchParams.set('ugyfel_id', ugyfelId);
+        cim.searchParams.set('_wpnonce', beallitas.nonce || '');
+
+        fetch(cim.toString(), { credentials: 'same-origin' })
+            .then(function (valasz) { return valasz.json(); })
+            .then(function (eredmeny) {
+                var eszkozok = (eredmeny && eredmeny.success && eredmeny.data) || [];
+                var nevek = {};
+
+                eszkozok.forEach(function (e) { nevek[String(e.id)] = e.nev; });
+
+                Array.prototype.slice.call(fo.options).forEach(function (opcio) {
+                    if (opcio.value === '0') {
+                        return;
+                    }
+
+                    if (nevek[opcio.value] === undefined) {
+                        if (opcio.selected) {
+                            fo.value = '0';
+                        }
+
+                        fo.removeChild(opcio);
+                    } else {
+                        opcio.textContent = nevek[opcio.value];
+                    }
+                });
+
+                // Az ügyfél új (itt még nem látott) eszközei is választhatók legyenek.
+                eszkozok.forEach(function (e) {
+                    if (!fo.querySelector('option[value="' + String(e.id) + '"]')) {
+                        var elem = document.createElement('option');
+
+                        elem.value = String(e.id);
+                        elem.textContent = e.nev;
+                        fo.appendChild(elem);
+                    }
+                });
+
+                tovabbiSzur(urlap, Object.keys(nevek));
+
+                var lista = tovabbiLista(urlap);
+
+                Array.prototype.forEach.call(lista ? lista.querySelectorAll('[data-sdh-tovabbi]') : [], function (cimke) {
+                    var nev = cimke.querySelector('[data-sdh-tovabbi-nev]');
+                    var uj = nevek[cimke.getAttribute('data-sdh-tovabbi')];
+
+                    if (nev && uj !== undefined) {
+                        nev.textContent = uj;
+                    }
+                });
+
+                munkalapOsszefoglalo(urlap);
+                munkalapSzamol(urlap.querySelector('[data-sdh-munkalap]') || urlap);
+            })
+            .catch(function () {
+                munkalapOsszefoglalo(urlap);
+            });
+    }
+
+    /**
+     * Ceruza az eszközmező mellett, „Szerkesztés" az eszköz kártyáján és a
+     * csatolt eszközökön: a betöltött eszköz űrlapja a munkalap fölött nyílik.
+     * Mentés után a lap megmarad, a név és az adatok helyben frissülnek.
+     */
+    function munkalapEszkozSzerk(gomb) {
+        var urlap = gomb.closest('form');
+        var fo = urlap ? urlap.querySelector('[data-sdh-eszkoz-valaszto]') : null;
+        var id = gomb.getAttribute('data-sdh-eszkoz-szerk') || (fo ? fo.value : '0');
+
+        if (!id || id === '0' || !/^\d+$/.test(id)) {
+            if (fo) {
+                fo.focus();
+            }
+
+            return;
+        }
+
+        nyit('eszkozok', id, {
+            szint: Math.min(sajatSzint(gomb) + 1, szintek.length - 1),
+            siker: function (adat) {
+                munkalapEszkozNevek(urlap);
+                document.dispatchEvent(new CustomEvent('sdh:eszkoz-mentve', { detail: { id: String(adat && adat.id ? adat.id : id) } }));
             }
         });
     }
@@ -5554,6 +5910,15 @@
                 }
             }
         );
+
+        var eszkozSzerkGomb = esemeny.target.closest('[data-sdh-eszkoz-szerk]');
+
+        if (eszkozSzerkGomb) {
+            esemeny.preventDefault();
+            munkalapEszkozSzerk(eszkozSzerkGomb);
+
+            return;
+        }
 
         var ugyfelSzerkGomb = esemeny.target.closest('[data-sdh-ugyfel-szerk]');
 
@@ -7724,7 +8089,7 @@
     /* ---------------------------------------------------------------- */
 
     /*
-     * A munkalap láblécének számlagombja ([data-sdh-szamla="fo|sdh"]):
+     * A munkalap láblécének számlagombja ([data-sdh-szamla="fo|helyi"]):
      *   1. elmenti a munkalapot (a számla a MENTETT tételekből készül),
      *   2. újratölti a munkalap-ablakot (a tételsorok így a végleges
      *      azonosítójukkal állnak az űrlapban),
@@ -7745,8 +8110,8 @@
         var id = azonosito.value;
         var n = sajatSzint(gomb);
         var kert = gomb.getAttribute('data-sdh-szamla');
-        // fo / sdh = Számlázz.hu számla; helyi = helyben készülő nyomtatvány (nem számla).
-        var sorozat = kert === 'sdh' || kert === 'helyi' ? kert : 'fo';
+        // fo = Számlázz.hu számla; helyi = helyben készülő nyomtatvány (nem számla).
+        var sorozat = kert === 'helyi' ? 'helyi' : 'fo';
         var gombok = urlap.querySelectorAll('[data-sdh-szamla]');
         var felirat = gomb.textContent;
 

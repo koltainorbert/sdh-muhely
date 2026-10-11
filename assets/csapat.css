@@ -56,13 +56,13 @@
     flex: 0 0 auto;
     display: inline-grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    width: calc(38px * var(--sdh-n));
+    height: calc(38px * var(--sdh-n));
     border-radius: 50%;
     background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--av) 55%, #fff), var(--av) 62%, color-mix(in srgb, var(--av) 70%, #000));
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--av) 25%, transparent), 0 0 14px color-mix(in srgb, var(--av) 35%, transparent);
     color: #fff;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     font-weight: 700;
     letter-spacing: .02em;
     text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
@@ -80,19 +80,19 @@
 .sdh-cs-av.is-online::after {
     content: "";
     position: absolute;
-    right: -1px;
-    bottom: -1px;
-    width: 10px;
-    height: 10px;
+    right: calc(-1px * var(--sdh-n));
+    bottom: calc(-1px * var(--sdh-n));
+    width: calc(10px * var(--sdh-n));
+    height: calc(10px * var(--sdh-n));
     border-radius: 50%;
     background: var(--sdh-cs-online);
     box-shadow: 0 0 0 2px var(--sdh-felulet), 0 0 8px var(--sdh-cs-online);
 }
 
 .sdh-cs-av--kicsi {
-    width: 26px;
-    height: 26px;
-    font-size: 10px;
+    width: calc(26px * var(--sdh-n));
+    height: calc(26px * var(--sdh-n));
+    font-size: calc(10px * var(--sdh-n));
 }
 
 .sdh-cs-avcsoport {
@@ -101,14 +101,14 @@
 }
 
 .sdh-cs-avcsoport .sdh-cs-av {
-    width: 30px;
-    height: 30px;
-    font-size: 10.5px;
+    width: calc(30px * var(--sdh-n));
+    height: calc(30px * var(--sdh-n));
+    font-size: calc(10.5px * var(--sdh-n));
     box-shadow: 0 0 0 2px var(--sdh-felulet);
 }
 
 .sdh-cs-avcsoport .sdh-cs-av + .sdh-cs-av {
-    margin-left: -12px;
+    margin-left: calc(-12px * var(--sdh-n));
 }
 
 /* ---- Lapfülek (admin) ---- */
@@ -122,12 +122,12 @@
 .sdh-cs-ful {
     padding: .45rem .95rem;
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-uveg);
     backdrop-filter: blur(10px);
     color: var(--sdh-szoveg);
     font-weight: 600;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     text-decoration: none;
     transition: box-shadow .2s ease, border-color .2s ease;
 }
@@ -148,21 +148,21 @@
     position: relative;
     isolation: isolate;
     display: grid;
-    grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
-    gap: 14px;
-    height: calc(100vh - 200px);
-    min-height: 480px;
+    grid-template-columns: minmax(calc(260px * var(--sdh-n)), calc(330px * var(--sdh-n))) minmax(0, 1fr);
+    gap: calc(14px * var(--sdh-n));
+    height: calc(100vh - calc(200px * var(--sdh-n)));
+    min-height: calc(480px * var(--sdh-n));
 }
 
 .sdh-cs-fulek + .sdh-cs-app {
-    height: calc(100vh - 262px);
+    height: calc(100vh - calc(262px * var(--sdh-n)));
 }
 
 /* „Aurora": lassan úszó neon foltok a panelek mögött – ettől él az üveg. */
 .sdh-cs-app::before {
     content: "";
     position: absolute;
-    inset: -30px;
+    inset: calc(-30px * var(--sdh-n));
     z-index: -1;
     background:
         radial-gradient(40% 50% at 12% 20%, var(--sdh-cs-aurora-1), transparent 70%),
@@ -184,7 +184,7 @@
     flex-direction: column;
     min-height: 0;
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 18px;
+    border-radius: calc(18px * var(--sdh-n));
     background: var(--sdh-uveg);
     backdrop-filter: blur(18px) saturate(1.4);
     -webkit-backdrop-filter: blur(18px) saturate(1.4);
@@ -193,7 +193,7 @@
 }
 
 .sdh-cs-kereso {
-    padding: 12px;
+    padding: calc(12px * var(--sdh-n));
     border-bottom: 1px solid var(--sdh-uveg-keret);
 }
 
@@ -202,11 +202,11 @@
     box-sizing: border-box;
     padding: .55rem .8rem;
     border: 1px solid var(--sdh-keret);
-    border-radius: 12px;
+    border-radius: calc(12px * var(--sdh-n));
     background: var(--sdh-uveg-eros);
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-cs-kereso input:focus {
@@ -218,7 +218,7 @@
 .sdh-cs-lista {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 6px;
+    padding: calc(6px * var(--sdh-n));
     overflow: hidden;
 }
 
@@ -226,11 +226,11 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: calc(10px * var(--sdh-n));
     width: 100%;
-    padding: 9px 10px;
+    padding: calc(9px * var(--sdh-n)) calc(10px * var(--sdh-n));
     border: 1px solid transparent;
-    border-radius: 14px;
+    border-radius: calc(14px * var(--sdh-n));
     background: transparent;
     color: var(--sdh-szoveg);
     font: inherit;
@@ -263,12 +263,12 @@
 .sdh-cs-elem__sor {
     display: flex;
     align-items: baseline;
-    gap: 6px;
+    gap: calc(6px * var(--sdh-n));
 }
 
 .sdh-cs-elem__sor strong {
     overflow: hidden;
-    font-size: 13.5px;
+    font-size: calc(13.5px * var(--sdh-n));
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -276,14 +276,14 @@
 .sdh-cs-elem__sor small {
     margin-left: auto;
     color: var(--sdh-halvany);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     white-space: nowrap;
 }
 
 .sdh-cs-elem__elo {
     overflow: hidden;
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -295,17 +295,17 @@
 
 .sdh-cs-elem__db {
     flex: 0 0 auto;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
+    min-width: calc(20px * var(--sdh-n));
+    height: calc(20px * var(--sdh-n));
+    padding: 0 calc(6px * var(--sdh-n));
     box-sizing: border-box;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-neon);
     box-shadow: 0 0 12px color-mix(in srgb, var(--sdh-neon) 60%, transparent);
     color: var(--sdh-accent-felirat, #fff);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
     font-weight: 700;
-    line-height: 20px;
+    line-height: calc(20px * var(--sdh-n));
     text-align: center;
 }
 
@@ -314,10 +314,10 @@
     align-items: center;
     justify-content: center;
     gap: .6rem;
-    padding: 8px;
+    padding: calc(8px * var(--sdh-n));
     border-top: 1px solid var(--sdh-uveg-keret);
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-lapozo[hidden] {
@@ -332,7 +332,7 @@
 .sdh-cs-halvany {
     margin: 1rem;
     color: var(--sdh-halvany);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-cs-halvany--kozep {
@@ -343,7 +343,7 @@
 .sdh-cs-toltes {
     margin: 1.5rem;
     color: var(--sdh-halvany);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 /* ---- Szál ---- */
@@ -360,9 +360,9 @@
 }
 
 .sdh-cs-ures__jel {
-    width: 74px;
-    height: 74px;
-    border-radius: 24px;
+    width: calc(74px * var(--sdh-n));
+    height: calc(74px * var(--sdh-n));
+    border-radius: calc(24px * var(--sdh-n));
     background: var(--sdh-cs-sajat);
     box-shadow: var(--sdh-neon-izzas);
     -webkit-mask: radial-gradient(circle at 50% 50%, #000 0 62%, transparent 63%);
@@ -378,8 +378,8 @@
 .sdh-cs-szal__fej {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: calc(12px * var(--sdh-n));
+    padding: calc(12px * var(--sdh-n)) calc(16px * var(--sdh-n));
     border-bottom: 1px solid var(--sdh-uveg-keret);
     background: var(--sdh-uveg-eros);
 }
@@ -391,17 +391,17 @@
 }
 
 .sdh-cs-szal__cim strong {
-    font-size: 15px;
+    font-size: calc(15px * var(--sdh-n));
 }
 
 .sdh-cs-szal__cim span {
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-szal__tagok {
     display: flex;
-    gap: 4px;
+    gap: calc(4px * var(--sdh-n));
     margin-left: auto;
 }
 
@@ -409,11 +409,11 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
+    gap: calc(6px * var(--sdh-n));
+    padding: calc(8px * var(--sdh-n)) calc(14px * var(--sdh-n));
     border-bottom: 1px solid var(--sdh-uveg-keret);
     background: color-mix(in srgb, var(--sdh-neon-fontos) 8%, transparent);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-kituzott[hidden] {
@@ -423,15 +423,15 @@
 .sdh-cs-kituzott__cim {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: calc(4px * var(--sdh-n));
     color: color-mix(in srgb, var(--sdh-neon-fontos) 80%, var(--sdh-szoveg));
     font-weight: 700;
 }
 
 .sdh-cs-kituzott svg,
 .sdh-cs-mini svg {
-    width: 14px;
-    height: 14px;
+    width: calc(14px * var(--sdh-n));
+    height: calc(14px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
@@ -440,15 +440,15 @@
 }
 
 .sdh-cs-kituzott button {
-    max-width: 320px;
+    max-width: calc(320px * var(--sdh-n));
     overflow: hidden;
-    padding: 3px 9px;
+    padding: calc(3px * var(--sdh-n)) calc(9px * var(--sdh-n));
     border: 1px solid color-mix(in srgb, var(--sdh-neon-fontos) 35%, transparent);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-uveg-eros);
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
@@ -459,8 +459,8 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 16px 16px 8px;
+    gap: calc(4px * var(--sdh-n));
+    padding: calc(16px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(8px * var(--sdh-n));
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: none; /* nincs görgetősáv: a régebbi üzenetek a „Korábbi üzenetek" gombbal jönnek */
@@ -472,14 +472,14 @@
 
 .sdh-cs-korabbi {
     align-self: center;
-    margin: 0 0 10px;
+    margin: 0 0 calc(10px * var(--sdh-n));
     padding: .35rem .9rem;
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-uveg-eros);
     color: var(--sdh-halvany);
     font: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     cursor: pointer;
 }
 
@@ -487,9 +487,9 @@
     position: relative;
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: calc(8px * var(--sdh-n));
     max-width: 78%;
-    margin-top: 10px;
+    margin-top: calc(10px * var(--sdh-n));
 }
 
 .sdh-cs-uz.is-folytatas {
@@ -502,7 +502,7 @@
 }
 
 .sdh-cs-uz__hely {
-    flex: 0 0 38px;
+    flex: 0 0 calc(38px * var(--sdh-n));
 }
 
 .sdh-cs-uz__oszlop {
@@ -516,37 +516,37 @@
 }
 
 .sdh-cs-uz__nev {
-    margin: 0 0 3px 4px;
+    margin: 0 0 calc(3px * var(--sdh-n)) calc(4px * var(--sdh-n));
     color: var(--sdh-halvany);
-    font-size: 11.5px;
+    font-size: calc(11.5px * var(--sdh-n));
     font-weight: 600;
 }
 
 .sdh-cs-uz__nev em {
-    padding: 0 5px;
-    border-radius: 6px;
+    padding: 0 calc(5px * var(--sdh-n));
+    border-radius: calc(6px * var(--sdh-n));
     background: var(--sdh-neon-3);
     color: #fff;
-    font-size: 10px;
+    font-size: calc(10px * var(--sdh-n));
     font-style: normal;
 }
 
 .sdh-cs-uz__buborek {
     position: relative;
-    padding: 9px 13px;
+    padding: calc(9px * var(--sdh-n)) calc(13px * var(--sdh-n));
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 16px 16px 16px 6px;
+    border-radius: calc(16px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(6px * var(--sdh-n));
     background: var(--sdh-cs-mas);
     backdrop-filter: blur(10px);
     color: var(--sdh-szoveg);
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     line-height: 1.45;
     overflow-wrap: anywhere;
 }
 
 .sdh-cs-uz.is-sajat .sdh-cs-uz__buborek {
     border-color: transparent;
-    border-radius: 16px 16px 6px 16px;
+    border-radius: calc(16px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(6px * var(--sdh-n)) calc(16px * var(--sdh-n));
     background: var(--sdh-cs-sajat);
     box-shadow: 0 6px 22px color-mix(in srgb, var(--sdh-neon) 30%, transparent);
     color: var(--sdh-cs-sajat-szoveg);
@@ -583,11 +583,11 @@
 
 .sdh-cs-uz__jel {
     display: inline-block;
-    margin: 0 6px 4px 0;
-    padding: 0 7px;
-    border-radius: 999px;
+    margin: 0 calc(6px * var(--sdh-n)) calc(4px * var(--sdh-n)) 0;
+    padding: 0 calc(7px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
     background: color-mix(in srgb, currentColor 14%, transparent);
-    font-size: 10.5px;
+    font-size: calc(10.5px * var(--sdh-n));
     font-weight: 700;
     letter-spacing: .03em;
     text-transform: uppercase;
@@ -601,15 +601,15 @@
 .sdh-cs-uz__idezet {
     display: block;
     width: 100%;
-    margin: 0 0 6px;
-    padding: 5px 9px;
+    margin: 0 0 calc(6px * var(--sdh-n));
+    padding: calc(5px * var(--sdh-n)) calc(9px * var(--sdh-n));
     border: 0;
     border-left: 3px solid currentColor;
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: color-mix(in srgb, currentColor 10%, transparent);
     color: inherit;
     font: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     text-align: left;
     opacity: .85;
     cursor: pointer;
@@ -620,26 +620,26 @@
 }
 
 .sdh-cs-uz__hiv {
-    margin-top: 6px;
-    padding: 3px 10px;
+    margin-top: calc(6px * var(--sdh-n));
+    padding: calc(3px * var(--sdh-n)) calc(10px * var(--sdh-n));
     border: 1px solid currentColor;
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: transparent;
     color: inherit;
     font: inherit;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     cursor: pointer;
 }
 
 .sdh-cs-uz__meta {
-    margin: 3px 6px 0;
+    margin: calc(3px * var(--sdh-n)) calc(6px * var(--sdh-n)) 0;
     color: var(--sdh-halvany);
-    font-size: 11px;
+    font-size: calc(11px * var(--sdh-n));
 }
 
 .sdh-cs-uz__muveletek {
     display: flex;
-    gap: 2px;
+    gap: calc(2px * var(--sdh-n));
     align-self: center;
     opacity: 0;
     transition: opacity .15s ease;
@@ -653,8 +653,8 @@
 .sdh-cs-uz__muveletek button {
     display: grid;
     place-items: center;
-    width: 28px;
-    height: 28px;
+    width: calc(28px * var(--sdh-n));
+    height: calc(28px * var(--sdh-n));
     padding: 0;
     border: 1px solid var(--sdh-uveg-keret);
     border-radius: 50%;
@@ -677,8 +677,8 @@
 
 .sdh-cs-uz__muveletek svg,
 .sdh-cs-iro__valasz svg {
-    width: 15px;
-    height: 15px;
+    width: calc(15px * var(--sdh-n));
+    height: calc(15px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
@@ -690,10 +690,10 @@
 .sdh-cs-gepel {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 0 18px 6px;
+    gap: calc(4px * var(--sdh-n));
+    padding: 0 calc(18px * var(--sdh-n)) calc(6px * var(--sdh-n));
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-gepel[hidden] {
@@ -701,8 +701,8 @@
 }
 
 .sdh-cs-gepel span {
-    width: 6px;
-    height: 6px;
+    width: calc(6px * var(--sdh-n));
+    height: calc(6px * var(--sdh-n));
     border-radius: 50%;
     background: var(--sdh-neon);
     box-shadow: 0 0 8px var(--sdh-neon);
@@ -713,18 +713,18 @@
 .sdh-cs-gepel span:nth-child(3) { animation-delay: .3s; }
 
 .sdh-cs-gepel em {
-    margin-left: 4px;
+    margin-left: calc(4px * var(--sdh-n));
     font-style: normal;
 }
 
 @keyframes sdh-cs-pont {
     0%, 60%, 100% { transform: translateY(0); opacity: .45; }
-    30% { transform: translateY(-4px); opacity: 1; }
+    30% { transform: translateY(calc(-4px * var(--sdh-n))); opacity: 1; }
 }
 
 /* Író sáv */
 .sdh-cs-iro {
-    padding: 10px 14px 12px;
+    padding: calc(10px * var(--sdh-n)) calc(14px * var(--sdh-n)) calc(12px * var(--sdh-n));
     border-top: 1px solid var(--sdh-uveg-keret);
     background: var(--sdh-uveg-eros);
 }
@@ -732,13 +732,13 @@
 .sdh-cs-iro__valasz {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 0 0 8px;
-    padding: 6px 10px;
+    gap: calc(8px * var(--sdh-n));
+    margin: 0 0 calc(8px * var(--sdh-n));
+    padding: calc(6px * var(--sdh-n)) calc(10px * var(--sdh-n));
     border-left: 3px solid var(--sdh-neon);
-    border-radius: 8px;
+    border-radius: calc(8px * var(--sdh-n));
     background: color-mix(in srgb, var(--sdh-neon) 8%, transparent);
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--sdh-n));
 }
 
 .sdh-cs-iro__valasz[hidden] {
@@ -755,8 +755,8 @@
 .sdh-cs-iro__valasz button {
     display: grid;
     place-items: center;
-    width: 22px;
-    height: 22px;
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -766,28 +766,28 @@
 }
 
 .sdh-cs-iro__valasz button svg {
-    width: 12px;
-    height: 12px;
+    width: calc(12px * var(--sdh-n));
+    height: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-iro__sor {
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: calc(10px * var(--sdh-n));
 }
 
 .sdh-cs-iro textarea {
     flex: 1 1 auto;
-    min-height: 44px;
-    max-height: 160px;
+    min-height: calc(44px * var(--sdh-n));
+    max-height: calc(160px * var(--sdh-n));
     box-sizing: border-box;
-    padding: 11px 14px;
+    padding: calc(11px * var(--sdh-n)) calc(14px * var(--sdh-n));
     border: 1px solid var(--sdh-keret);
-    border-radius: 14px;
+    border-radius: calc(14px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 14px;
+    font-size: calc(14px * var(--sdh-n));
     line-height: 1.4;
     resize: none;
     scrollbar-width: none;
@@ -803,8 +803,8 @@
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    width: 34px;
-    height: 34px;
+    width: calc(34px * var(--sdh-n));
+    height: calc(34px * var(--sdh-n));
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -816,12 +816,12 @@
 }
 
 .sdh-cs-kuldgomb--nagy {
-    width: 44px;
-    height: 44px;
+    width: calc(44px * var(--sdh-n));
+    height: calc(44px * var(--sdh-n));
 }
 
 .sdh-cs-kuldgomb:hover {
-    transform: translateY(-1px) scale(1.04);
+    transform: translateY(calc(-1px * var(--sdh-n))) scale(1.04);
     box-shadow: var(--sdh-neon-izzas);
 }
 
@@ -831,8 +831,8 @@
 }
 
 .sdh-cs-kuldgomb svg {
-    width: 18px;
-    height: 18px;
+    width: calc(18px * var(--sdh-n));
+    height: calc(18px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 2.2;
@@ -842,8 +842,8 @@
 
 .sdh-cs-iro__kapcsolok {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    gap: calc(8px * var(--sdh-n));
+    margin-top: calc(8px * var(--sdh-n));
 }
 
 .sdh-cs-mini {
@@ -860,12 +860,12 @@
 .sdh-cs-mini span {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
+    gap: calc(4px * var(--sdh-n));
+    padding: calc(3px * var(--sdh-n)) calc(10px * var(--sdh-n));
     border: 1px solid var(--sdh-keret);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     transition: all .15s ease;
 }
 
@@ -885,17 +885,17 @@
 
 .sdh-cs-kartyak {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(calc(320px * var(--sdh-n)), 1fr));
+    gap: calc(14px * var(--sdh-n));
 }
 
 .sdh-cs-kartya {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    padding: 16px;
+    gap: calc(14px * var(--sdh-n));
+    padding: calc(16px * var(--sdh-n));
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 18px;
+    border-radius: calc(18px * var(--sdh-n));
     background: var(--sdh-uveg);
     backdrop-filter: blur(14px);
     box-shadow: var(--sdh-uveg-arnyek);
@@ -904,13 +904,13 @@
 
 .sdh-cs-kartya:hover {
     box-shadow: var(--sdh-uveg-arnyek), var(--sdh-neon-izzas-gyenge);
-    transform: translateY(-1px);
+    transform: translateY(calc(-1px * var(--sdh-n)));
 }
 
 .sdh-cs-kartya .sdh-cs-av {
-    width: 48px;
-    height: 48px;
-    font-size: 16px;
+    width: calc(48px * var(--sdh-n));
+    height: calc(48px * var(--sdh-n));
+    font-size: calc(16px * var(--sdh-n));
 }
 
 .sdh-cs-kartya.is-letiltva {
@@ -923,8 +923,8 @@
 }
 
 .sdh-cs-kartya h3 {
-    margin: 0 0 2px;
-    font-size: 15px;
+    margin: 0 0 calc(2px * var(--sdh-n));
+    font-size: calc(15px * var(--sdh-n));
 }
 
 .sdh-cs-kartya h3 small {
@@ -933,14 +933,14 @@
 }
 
 .sdh-cs-kartya p {
-    margin: 0 0 4px;
-    font-size: 13px;
+    margin: 0 0 calc(4px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-cs-kartya__halvany {
     overflow: hidden;
     color: var(--sdh-halvany);
-    font-size: 12px !important;
+    font-size: calc(12px * var(--sdh-n)) !important;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -948,14 +948,14 @@
 .sdh-cs-kartya__cimkek {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: calc(4px * var(--sdh-n));
 }
 
 .sdh-cs-cimke {
-    padding: 1px 8px;
+    padding: calc(1px * var(--sdh-n)) calc(8px * var(--sdh-n));
     border: 1px solid var(--sdh-keret);
-    border-radius: 999px;
-    font-size: 11px;
+    border-radius: calc(999px * var(--sdh-n));
+    font-size: calc(11px * var(--sdh-n));
 }
 
 .sdh-cs-cimke--admin {
@@ -971,13 +971,13 @@
 
 .sdh-cs-avsor {
     display: flex;
-    gap: 4px;
+    gap: calc(4px * var(--sdh-n));
 }
 
 .sdh-cs-avsor .sdh-cs-av {
-    width: 26px;
-    height: 26px;
-    font-size: 10px;
+    width: calc(26px * var(--sdh-n));
+    height: calc(26px * var(--sdh-n));
+    font-size: calc(10px * var(--sdh-n));
 }
 
 .sdh-cs-jelszo {
@@ -985,12 +985,12 @@
     flex-wrap: wrap;
     gap: .4rem 1.2rem;
     margin: 0 0 1rem;
-    padding: 14px 16px;
+    padding: calc(14px * var(--sdh-n)) calc(16px * var(--sdh-n));
     border: 1px solid var(--sdh-neon-fontos);
-    border-radius: 14px;
+    border-radius: calc(14px * var(--sdh-n));
     background: color-mix(in srgb, var(--sdh-neon-fontos) 10%, var(--sdh-felulet));
     box-shadow: 0 0 22px color-mix(in srgb, var(--sdh-neon-fontos) 30%, transparent);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-cs-jelszo strong {
@@ -998,10 +998,10 @@
 }
 
 .sdh-cs-jelszo code {
-    padding: 1px 6px;
-    border-radius: 6px;
+    padding: calc(1px * var(--sdh-n)) calc(6px * var(--sdh-n));
+    border-radius: calc(6px * var(--sdh-n));
     background: var(--sdh-felulet);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     user-select: all;
 }
 
@@ -1010,38 +1010,38 @@
 .sdh-cs-racs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 24px;
+    gap: 0 calc(24px * var(--sdh-n));
 }
 
 .sdh-cs-pillek {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: calc(6px * var(--sdh-n));
 }
 
 .sdh-cs-pillek[data-sdh-cs-oszlop] {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(170px * var(--sdh-n)), 1fr));
 }
 
 .sdh-cs-pill {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 5px 12px 5px 6px;
+    gap: calc(7px * var(--sdh-n));
+    padding: calc(5px * var(--sdh-n)) calc(12px * var(--sdh-n)) calc(5px * var(--sdh-n)) calc(6px * var(--sdh-n));
     border: 1px solid var(--sdh-keret);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     cursor: pointer;
     user-select: none;
     transition: border-color .15s ease, box-shadow .2s ease, background .15s ease;
 }
 
 .sdh-cs-pill:not(:has(.sdh-cs-av)) {
-    padding-left: 12px;
+    padding-left: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-pill input {
@@ -1051,9 +1051,9 @@
 }
 
 .sdh-cs-pill .sdh-cs-av {
-    width: 24px;
-    height: 24px;
-    font-size: 9.5px;
+    width: calc(24px * var(--sdh-n));
+    height: calc(24px * var(--sdh-n));
+    font-size: calc(9.5px * var(--sdh-n));
     box-shadow: none;
 }
 
@@ -1076,15 +1076,15 @@
 .sdh-cs-kapcsolok {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin: 6px 0 4px;
+    gap: calc(8px * var(--sdh-n));
+    margin: calc(6px * var(--sdh-n)) 0 calc(4px * var(--sdh-n));
 }
 
 .sdh-cs-kapcs {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
+    gap: calc(10px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
     cursor: pointer;
 }
 
@@ -1097,9 +1097,9 @@
 .sdh-cs-kapcs__sin {
     position: relative;
     flex: 0 0 auto;
-    width: 38px;
-    height: 22px;
-    border-radius: 999px;
+    width: calc(38px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-keret-eros);
     transition: background .2s ease, box-shadow .2s ease;
 }
@@ -1107,10 +1107,10 @@
 .sdh-cs-kapcs__sin::after {
     content: "";
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 16px;
-    height: 16px;
+    top: calc(3px * var(--sdh-n));
+    left: calc(3px * var(--sdh-n));
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
@@ -1123,7 +1123,7 @@
 }
 
 .sdh-cs-kapcs input:checked + .sdh-cs-kapcs__sin::after {
-    transform: translateX(16px);
+    transform: translateX(calc(16px * var(--sdh-n)));
 }
 
 .sdh-cs-kapcs input:focus-visible + .sdh-cs-kapcs__sin {
@@ -1132,7 +1132,7 @@
 }
 
 .sdh-cs-urlap .sdh-ig {
-    margin-bottom: 14px;
+    margin-bottom: calc(14px * var(--sdh-n));
 }
 
 .sdh-cs-urlap textarea {
@@ -1144,28 +1144,28 @@
 
 .sdh-cs-toastok {
     position: fixed;
-    left: 18px;
-    bottom: 18px;
+    left: calc(18px * var(--sdh-n));
+    bottom: calc(18px * var(--sdh-n));
     z-index: 100050;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: min(360px, calc(100vw - 36px));
+    gap: calc(10px * var(--sdh-n));
+    width: min(calc(360px * var(--sdh-n)), calc(100vw - calc(36px * var(--sdh-n))));
     pointer-events: none;
 }
 
 .sdh-cs-toast {
     position: relative;
-    padding: 14px 16px 12px;
+    padding: calc(14px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(12px * var(--sdh-n));
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 18px;
+    border-radius: calc(18px * var(--sdh-n));
     background: var(--sdh-uveg-eros);
     backdrop-filter: blur(20px) saturate(1.5);
     -webkit-backdrop-filter: blur(20px) saturate(1.5);
     box-shadow: var(--sdh-uveg-arnyek), var(--sdh-neon-izzas-gyenge);
     color: var(--sdh-szoveg);
     opacity: 0;
-    transform: translateY(14px) scale(.97);
+    transform: translateY(calc(14px * var(--sdh-n))) scale(.97);
     transition: opacity .28s ease, transform .28s cubic-bezier(.2, .9, .3, 1.3);
     pointer-events: auto;
 }
@@ -1177,12 +1177,12 @@
 
 .sdh-cs-toast__x {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: calc(10px * var(--sdh-n));
+    right: calc(10px * var(--sdh-n));
     display: grid;
     place-items: center;
-    width: 22px;
-    height: 22px;
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -1192,8 +1192,8 @@
 }
 
 .sdh-cs-toast__x svg {
-    width: 12px;
-    height: 12px;
+    width: calc(12px * var(--sdh-n));
+    height: calc(12px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
@@ -1203,8 +1203,8 @@
 .sdh-cs-toast__fej {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-right: 20px;
+    gap: calc(10px * var(--sdh-n));
+    padding-right: calc(20px * var(--sdh-n));
 }
 
 .sdh-cs-toast__fej div {
@@ -1215,22 +1215,22 @@
 
 .sdh-cs-toast__fej span {
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-toast__szoveg {
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
-    margin: 8px 0;
+    margin: calc(8px * var(--sdh-n)) 0;
     overflow: hidden;
-    font-size: 13.5px;
+    font-size: calc(13.5px * var(--sdh-n));
     line-height: 1.4;
 }
 
 .sdh-cs-toast__valasz {
     display: flex;
-    gap: 6px;
+    gap: calc(6px * var(--sdh-n));
 }
 
 .sdh-cs-toast__valasz input {
@@ -1238,11 +1238,11 @@
     min-width: 0;
     padding: .45rem .7rem;
     border: 1px solid var(--sdh-keret);
-    border-radius: 999px;
+    border-radius: calc(999px * var(--sdh-n));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-cs-toast__valasz input:focus {
@@ -1252,23 +1252,23 @@
 
 .sdh-cs-toast__link {
     display: inline-block;
-    margin-top: 8px;
+    margin-top: calc(8px * var(--sdh-n));
     color: var(--sdh-accent-szoveg);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 600;
 }
 
 .sdh-cs-toast__kesz {
     margin: 0;
     color: var(--sdh-siker);
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
     font-weight: 600;
 }
 
 /* ---- Fontos üzenet ablaka ---- */
 
 dialog.sdh-cs-fontos {
-    width: min(560px, calc(100vw - 32px));
+    width: min(calc(560px * var(--sdh-n)), calc(100vw - calc(32px * var(--sdh-n))));
     padding: 0;
     border: 0;
     background: transparent;
@@ -1283,9 +1283,9 @@ dialog.sdh-cs-fontos::backdrop {
 
 .sdh-cs-fontos__doboz {
     position: relative;
-    padding: 34px 26px 22px;
+    padding: calc(34px * var(--sdh-n)) calc(26px * var(--sdh-n)) calc(22px * var(--sdh-n));
     border: 1px solid var(--sdh-neon-fontos);
-    border-radius: 22px;
+    border-radius: calc(22px * var(--sdh-n));
     background: var(--sdh-uveg-eros);
     backdrop-filter: blur(24px) saturate(1.5);
     -webkit-backdrop-filter: blur(24px) saturate(1.5);
@@ -1294,17 +1294,17 @@ dialog.sdh-cs-fontos::backdrop {
 }
 
 @keyframes sdh-cs-fontos-be {
-    from { opacity: 0; transform: translateY(16px) scale(.96); }
+    from { opacity: 0; transform: translateY(calc(16px * var(--sdh-n))) scale(.96); }
     to { opacity: 1; transform: none; }
 }
 
 .sdh-cs-fontos__kalap {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 0 0 14px;
+    gap: calc(8px * var(--sdh-n));
+    margin: 0 0 calc(14px * var(--sdh-n));
     color: color-mix(in srgb, var(--sdh-neon-fontos) 85%, var(--sdh-szoveg));
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 800;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -1313,8 +1313,8 @@ dialog.sdh-cs-fontos::backdrop {
 .sdh-cs-fontos__jel {
     display: grid;
     place-items: center;
-    width: 24px;
-    height: 24px;
+    width: calc(24px * var(--sdh-n));
+    height: calc(24px * var(--sdh-n));
     border-radius: 50%;
     background: var(--sdh-neon-fontos);
     box-shadow: 0 0 14px var(--sdh-neon-fontos);
@@ -1323,8 +1323,8 @@ dialog.sdh-cs-fontos::backdrop {
 }
 
 .sdh-cs-fontos__jel svg {
-    width: 16px;
-    height: 16px;
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 2.6;
@@ -1334,7 +1334,7 @@ dialog.sdh-cs-fontos::backdrop {
 .sdh-cs-fontos__fej {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-fontos__fej div {
@@ -1344,12 +1344,12 @@ dialog.sdh-cs-fontos::backdrop {
 
 .sdh-cs-fontos__fej span {
     color: var(--sdh-halvany);
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
 }
 
 .sdh-cs-fontos__szoveg {
-    margin: 16px 0 20px;
-    font-size: 15.5px;
+    margin: calc(16px * var(--sdh-n)) 0 calc(20px * var(--sdh-n));
+    font-size: calc(15.5px * var(--sdh-n));
     line-height: 1.5;
     overflow-wrap: anywhere;
 }
@@ -1357,7 +1357,7 @@ dialog.sdh-cs-fontos::backdrop {
 .sdh-cs-fontos__gombok {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: calc(8px * var(--sdh-n));
 }
 
 /* ---- Keskeny képernyő ---- */
@@ -1365,7 +1365,7 @@ dialog.sdh-cs-fontos::backdrop {
 @media (max-width: 900px) {
     .sdh-cs-app {
         grid-template-columns: 1fr;
-        height: calc(100vh - 170px);
+        height: calc(100vh - calc(170px * var(--sdh-n)));
     }
 
     .sdh-cs-app .sdh-cs-szal {
@@ -1441,27 +1441,27 @@ dialog.sdh-cs-fontos::backdrop {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin: 0 0 12px;
+    gap: calc(10px * var(--sdh-n));
+    margin: 0 0 calc(12px * var(--sdh-n));
 }
 
 .sdh-fal-sav button.sdh-cs-pill {
-    padding-left: 12px;
+    padding-left: calc(12px * var(--sdh-n));
     font: inherit;
-    font-size: 13px;
+    font-size: calc(13px * var(--sdh-n));
 }
 
 .sdh-fal {
     position: relative;
     isolation: isolate;
-    height: calc(100vh - 320px);
-    min-height: 480px;
+    height: calc(100vh - calc(320px * var(--sdh-n)));
+    min-height: calc(480px * var(--sdh-n));
     overflow: hidden;
     border: 1px solid var(--sdh-uveg-keret);
-    border-radius: 20px;
+    border-radius: calc(20px * var(--sdh-n));
     background-color: var(--sdh-uveg);
-    background-image: radial-gradient(var(--sdh-fal-pont) 1.2px, transparent 1.4px);
-    background-size: 22px 22px;
+    background-image: radial-gradient(var(--sdh-fal-pont) calc(1.2px * var(--sdh-n)), transparent calc(1.4px * var(--sdh-n)));
+    background-size: calc(22px * var(--sdh-n)) calc(22px * var(--sdh-n));
     backdrop-filter: blur(16px);
     box-shadow: var(--sdh-uveg-arnyek), inset 0 0 60px color-mix(in srgb, var(--sdh-neon) 6%, transparent);
 }
@@ -1480,11 +1480,11 @@ dialog.sdh-cs-fontos::backdrop {
     position: absolute;
     display: flex;
     flex-direction: column;
-    width: 220px;
-    min-height: 150px;
+    width: calc(220px * var(--sdh-n));
+    min-height: calc(150px * var(--sdh-n));
     max-height: 46%;
     overflow: hidden;
-    border-radius: 4px 4px 14px 4px;
+    border-radius: calc(4px * var(--sdh-n)) calc(4px * var(--sdh-n)) calc(14px * var(--sdh-n)) calc(4px * var(--sdh-n));
     background: var(--c);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .08), 0 10px 24px rgba(16, 19, 23, .16), 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 8%);
     color: var(--sdh-cetli-szoveg);
@@ -1524,8 +1524,8 @@ dialog.sdh-cs-fontos::backdrop {
 .sdh-cetli__fej {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 6px 6px 10px;
+    gap: calc(6px * var(--sdh-n));
+    padding: calc(6px * var(--sdh-n)) calc(6px * var(--sdh-n)) calc(6px * var(--sdh-n)) calc(10px * var(--sdh-n));
     background: color-mix(in srgb, var(--c) 82%, #000 8%);
     cursor: grab;
     touch-action: none;
@@ -1536,7 +1536,7 @@ dialog.sdh-cs-fontos::backdrop {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
-    font-size: 12px;
+    font-size: calc(12px * var(--sdh-n));
     font-weight: 800;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1544,7 +1544,7 @@ dialog.sdh-cs-fontos::backdrop {
 
 .sdh-cetli__gombok {
     display: flex;
-    gap: 2px;
+    gap: calc(2px * var(--sdh-n));
     opacity: .55;
     transition: opacity .15s ease;
 }
@@ -1557,11 +1557,11 @@ dialog.sdh-cs-fontos::backdrop {
 .sdh-cetli__gombok button {
     display: grid;
     place-items: center;
-    width: 24px;
-    height: 24px;
+    width: calc(24px * var(--sdh-n));
+    height: calc(24px * var(--sdh-n));
     padding: 0;
     border: 0;
-    border-radius: 6px;
+    border-radius: calc(6px * var(--sdh-n));
     background: transparent;
     color: var(--sdh-cetli-szoveg);
     cursor: pointer;
@@ -1577,8 +1577,8 @@ dialog.sdh-cs-fontos::backdrop {
 }
 
 .sdh-cetli__gombok svg {
-    width: 15px;
-    height: 15px;
+    width: calc(15px * var(--sdh-n));
+    height: calc(15px * var(--sdh-n));
     fill: none;
     stroke: currentColor;
     stroke-width: 1.8;
@@ -1590,8 +1590,8 @@ dialog.sdh-cs-fontos::backdrop {
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
-    padding: 10px 12px 6px;
-    font-size: 14px;
+    padding: calc(10px * var(--sdh-n)) calc(12px * var(--sdh-n)) calc(6px * var(--sdh-n));
+    font-size: calc(14px * var(--sdh-n));
     line-height: 1.45;
     overflow-wrap: anywhere;
 }
@@ -1602,16 +1602,16 @@ dialog.sdh-cs-fontos::backdrop {
 }
 
 .sdh-cetli__lab {
-    padding: 0 12px 9px;
+    padding: 0 calc(12px * var(--sdh-n)) calc(9px * var(--sdh-n));
     color: var(--sdh-cetli-halvany);
-    font-size: 11.5px;
+    font-size: calc(11.5px * var(--sdh-n));
 }
 
 /* Levett cetlik: rács, nem szabad elhelyezés. */
 .sdh-fal-archiv {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(calc(220px * var(--sdh-n)), 1fr));
+    gap: calc(14px * var(--sdh-n));
 }
 
 .sdh-fal-archiv .sdh-cetli {
@@ -1628,9 +1628,9 @@ dialog.sdh-cs-fontos::backdrop {
 /* Színminta a cetli-popup pilljében. */
 .sdh-cetli-minta {
     display: inline-block;
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    width: calc(18px * var(--sdh-n));
+    height: calc(18px * var(--sdh-n));
+    border-radius: calc(4px * var(--sdh-n));
     background: var(--c);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 12%);
 }
@@ -1641,9 +1641,9 @@ dialog.sdh-cs-fontos::backdrop {
         min-height: 0;
         overflow: visible;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
-        padding: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(calc(200px * var(--sdh-n)), 1fr));
+        gap: calc(12px * var(--sdh-n));
+        padding: calc(12px * var(--sdh-n));
     }
 
     .sdh-fal .sdh-cetli {

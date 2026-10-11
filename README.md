@@ -61,6 +61,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.49.0
+- **A betöltött eszköz szerkeszthető a munkalapról.** Ceruza az eszközmező mellett, „Szerkesztés" az eszköz kártyáján,
+  és a csatolt eszközökön is (a címkén és a További eszközök listáján): az eszköz ablaka a lap fölött nyílik, mentés
+  után a lap megmarad, a név és az adatok helyben frissülnek.
+- **Csak két számlagomb maradt:** „Számlázz.hu számla" és „Számla-előkészítő (PDF)". Az „SDH számla" gomb és a
+  beállításai megszűntek; a vele korábban kiállított számlák megmaradnak.
+- **A Pénztár csempéje nem ír ki többé „157&nbsp;700"-at.** A csempék frissülő száma sima szövegként érkezik (a magyar
+  WordPress ezres elválasztója HTML-entitás volt).
+- **Több eszközös munkalap rendes betűmérettel.** A bal oldal (eszközönkénti állapot és bontás) széles képernyőn két
+  hasábra törik, így a lap nem lesz magasabb a képernyőnél, és nem kicsinyíti le magát apró betűsre.
+- **Betűnagyító csúszka az Áttekintésen** (és a profilmenüben): húzás közben azonnal nő vagy csökken minden betű és
+  vele a felület, 80–160% között. A saját gépen megmarad; a körkörös nyíl visszaáll a cég alapméretére.
+- **Betűtípus és alap betűméret a Beállításokban** (Logó és megjelenés): tizenkét betűtípus vagy egyéni, a gépre
+  telepített betű neve; a rendszer nem tölt le betűt az internetről.
+- **Új színválasztó a minta szerint:** Megjelenés (Rendszer / Világos / Sötét) és Üvegszín két sorban – Duó
+  (kontrasztos színpár) és Egyszínű (egy színcsalád) –, nyolc színnel: Alapértelmezett, Kék, Smaragdzöld, Ibolya,
+  Rózsaszín, Borostyán, Türkiz, Rubin. A profilmenüben a saját gépre, a Beállításokban a cég alapértelmezésére szól.
+- Fejlesztőknek: a stíluslapok képpontméretei a `--sdh-n` változóval szorzódnak. Új CSS után futtasd:
+  `python3 tools/css_nagyitas.py` (a `t34` teszt bukik, ha kimaradt). Új teszt: `t34-szerkesztes-betu-szin`. Séma nem változott.
+
 ### 0.48.0
 - **Az ügyfél látszik a napi árukiadáson és a rendelésen is.** Ugyanaz az ügyfélkártya, mint a munkalapon (név, cím,
   telefon, e-mail, másoló gombokkal) – eladásnál a lapfülek fölött áll, mindig láthatóan.
