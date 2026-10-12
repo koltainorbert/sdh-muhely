@@ -1491,8 +1491,11 @@ dialog.sdh-cs-fontos::backdrop {
     transition: box-shadow .2s ease, transform .2s ease, opacity .25s ease;
 }
 
-.sdh-cetli:nth-child(3n + 1) { transform: rotate(-.8deg); }
-.sdh-cetli:nth-child(3n + 2) { transform: rotate(.6deg); }
+/* 0.54.1: a cetlik NEM dőlnek meg – az elforgatott szöveget a böngésző átmintázza, ettől homályos
+   (csak húzás közben volt éles, amikor a dőlés kikapcsolt). A „kézzel felragasztott” hatást a
+   cetlinként kicsit eltérő árnyék adja. */
+.sdh-cetli:nth-child(3n + 1) { box-shadow: 0 1px 1px rgba(0, 0, 0, .08), -3px 10px 22px rgba(16, 19, 23, .15), 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 8%); }
+.sdh-cetli:nth-child(3n + 2) { box-shadow: 0 1px 1px rgba(0, 0, 0, .08), 3px 11px 24px rgba(16, 19, 23, .16), 0 0 0 1px color-mix(in srgb, var(--c) 70%, #000 8%); }
 
 .sdh-cetli:hover,
 .sdh-cetli.is-huzva {

@@ -63,6 +63,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.54.1
+- **Javítás: éles a szöveg az üzenőfal cetlijein.** A cetlik eddig enyhén meg voltak döntve, ettől a böngésző
+  homályosan rajzolta a feliratukat (csak húzás közben volt éles). Most egyenesen állnak; a kézzel felragasztott
+  hatást a cetlinként kicsit eltérő árnyék adja.
+
 ### 0.54.0
 - **A levél-jelzéseket nem takarja a figura.** Ha az asszisztens be van kapcsolva, az új levelek felugró jelzései
   a figura bal oldalán sorakoznak (telefonon a figura fölött). Ha a figura épp megszólal, a buborékja a jelzések
