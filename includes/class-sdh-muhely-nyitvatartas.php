@@ -321,8 +321,9 @@ final class SDH_Muhely_Nyitvatartas
              data-het="<?php echo esc_attr((string) wp_json_encode((object) $het)); ?>"
              data-figy="<?php echo (int) $b['figyelmeztet']; ?>"
              data-allapot="<?php echo esc_attr($allapot['allapot']); ?>"
+             style="--sdh-ora-arany: <?php echo esc_attr((string) round($allapot['arany'], 4)); ?>"
              role="timer" aria-label="Pontos idő és a zárásig hátralévő idő">
-            <?php echo SDH_Muhely_Admin_UI::gomb_ikon('ora'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG. ?>
+            <span class="sdh-ora__gyuru" aria-hidden="true"><?php echo SDH_Muhely_Admin_UI::gomb_ikon('ora'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG. ?></span>
             <div class="sdh-ora__ido">
                 <b data-sdh-ora-ido><?php echo esc_html(gmdate('H:i', $t)); ?></b><?php if ($b['masodperc']) : ?><span data-sdh-ora-mp><?php echo esc_html(gmdate(':s', $t)); ?></span><?php endif; ?>
             </div>
@@ -335,9 +336,6 @@ final class SDH_Muhely_Nyitvatartas
                        title="Add meg a nyitvatartást, és az óra mutatja, mennyi idő van még zárásig">Nyitvatartás megadása</a>
                 <?php endif; ?>
             </div>
-            <?php if ($allapot['allapot'] !== 'nincs') : ?>
-                <span class="sdh-ora__sav" aria-hidden="true"><i data-sdh-ora-sav style="width: <?php echo esc_attr((string) round($allapot['arany'] * 100, 1)); ?>%"></i></span>
-            <?php endif; ?>
         </div>
         <?php
 

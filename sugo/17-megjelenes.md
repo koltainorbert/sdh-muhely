@@ -108,7 +108,7 @@ A felső fejlécben, minden oldalon ott az óra: a pontos idő, mellette a dátu
 | Nyitásig hátralévő idő | Nyitás előtt. |
 | **Zárva · nyitás: …** | Zárás után, illetve szünnapon: mikor nyit legközelebb. |
 
-Az óra alján egy vékony sáv mutatja, a nyitvatartási nap mekkora része telt el.
+Az óra neon üveg-hatású, a színe az állapotot követi: zöld nyitvatartáskor, borostyán zárás előtt (ilyenkor lassan lüktet), kék nyitás előtt, szürke zárva. Az óra ikonját gyűrű veszi körül: fent kezdődik, óramutató irányban telik, a végén fénylő pont jelzi, a nyitvatartási nap mekkora része telt el. A **Papír** megjelenésben az óra lapos, üveg- és fényhatás nélkül; a gyűrű ott is látszik.
 
 Az óra a szerver idejét mutatja, nem a gépedét – ezért mindenkinél ugyanazt, akkor is, ha valakinek rosszul jár a gépe órája. Ha nem a helyi időt mutatja, a webhely időzónája nincs jól beállítva (lásd a [Telepítés és frissítés](sugo:telepites) fejezetet).
 

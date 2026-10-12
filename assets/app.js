@@ -10600,7 +10600,6 @@
         var elMp = doboz.querySelector('[data-sdh-ora-mp]');
         var elDatum = doboz.querySelector('[data-sdh-ora-datum]');
         var elZaras = doboz.querySelector('[data-sdh-ora-zaras]');
-        var elSav = doboz.querySelector('[data-sdh-ora-sav]');
 
         function leptet() {
             var d = new Date(szerver0 + (Date.now() - gep0));
@@ -10623,9 +10622,8 @@
                 elZaras.textContent = a.szoveg;
             }
 
-            if (elSav) {
-                elSav.style.width = (Math.round(a.arany * 1000) / 10) + '%';
-            }
+            // A gyűrű (CSS: --sdh-ora-arany) a nyitvatartási nap eltelt részét mutatja.
+            doboz.style.setProperty('--sdh-ora-arany', String(Math.round(a.arany * 10000) / 10000));
 
             if (doboz.getAttribute('data-allapot') !== a.allapot) {
                 doboz.setAttribute('data-allapot', a.allapot);

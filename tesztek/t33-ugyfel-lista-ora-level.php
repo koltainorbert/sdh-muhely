@@ -250,6 +250,14 @@ T::nem_tartalmaz($att_fe, 'data-sdh-ora', 'a műhely-felület Áttekintésén ni
 T::tartalmaz($att_wp, 'data-sdh-ora', 'a wp-adminban (nincs saját fejléc) az óra az Áttekintésen marad');
 T::tartalmaz($NY::ora_html('fej'), 'class="sdh-ora sdh-ora--fej"', 'a fejléc órája a tömör változat');
 T::tartalmaz($NY::ora_html('fej'), 'data-sdh-ora-zaras', 'a fejléc óráján is ott a visszaszámláló');
+// 0.55.0: neon üveg óra – a haladást gyűrű mutatja (nincs régi csík), az érték CSS-változóban érkezik.
+T::tartalmaz($NY::ora_html('fej'), 'sdh-ora__gyuru', 'az óra ikonját gyűrű veszi körül');
+T::tartalmaz($NY::ora_html('fej'), '--sdh-ora-arany:', 'a gyűrű értéke (a nap eltelt része) a markupban van');
+T::nem_tartalmaz($NY::ora_html('fej'), 'data-sdh-ora-sav', 'a régi, semmibe induló csík megszűnt');
+$ora_css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css');
+T::tartalmaz($ora_css, '.sdh-ora__gyuru::before', 'admin.css: a gyűrű stílusa megvan');
+T::tartalmaz($ora_css, ':root[data-papir] .sdh-ora', 'admin.css: Papír megjelenésben az óra lapos');
+T::nem_tartalmaz($ora_css, '.sdh-ora__sav', 'admin.css: nincs régi csík-szabály');
 
 // Kikapcsolható; a másodperc is.
 $bment(['ful' => 'nyitvatartas', 'nyitva_jelen' => '1', 'nyitva' => $nyitva, 'nyitva_ora' => '1', 'nyitva_figyelmeztet' => '0']);

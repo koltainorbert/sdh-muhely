@@ -63,6 +63,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.55.0
+- **Új megjelenés: az óra neon üveg.** Matt üvegtábla állapotszínű fénnyel (nyitva: zöld, zárás előtt: borostyán és
+  lüktet, nyitás előtt: kék, zárva: szürke), átmenetes neon kerettel és lassan átfutó fényvisszaverődéssel. A
+  haladásjelző vékony csík helyett gyűrű lett az ikon körül: fent kezdődik, óramutató irányban telik, a végén
+  fénylő pont. Papír megjelenésben, csökkentett mozgásnál és átlátszóság-csökkentésnél lapos marad.
+
 ### 0.54.1
 - **Javítás: éles a szöveg az üzenőfal cetlijein.** A cetlik eddig enyhén meg voltak döntve, ettől a böngésző
   homályosan rajzolta a feliratukat (csak húzás közben volt éles). Most egyenesen állnak; a kézzel felragasztott

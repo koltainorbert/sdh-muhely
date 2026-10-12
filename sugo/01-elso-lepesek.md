@@ -55,7 +55,7 @@ A fejléc minden oldalon ugyanaz. Balról jobbra:
 - **Menügomb** – a bal oldali menü összecsukása és kinyitása.
 - **Morzsa** – megmutatja, hol vagy: a rendszer neve, utána az aktuális oldal. A rendszer nevére kattintva az Áttekintésre jutsz.
 - **Mindenhol-kereső** – az **Ügyfél, telefon, IMEI, gyári szám…** feliratú mező. Lásd lejjebb.
-- **Óra** – a pontos idő, a mai dátum, és hogy mennyi idő van zárásig (például *Zárásig 2 óra 14 perc*). Nyitás előtt *Nyitásig …*, zárás után *Zárva · nyitás: …* áll ott. Ha még nincs megadva nyitvatartás, a **Nyitvatartás megadása** hivatkozás látszik. A nyitvatartást az adminisztrátor állítja be: [Megjelenés](sugo:megjelenes).
+- **Óra** – neon üveg-hatású; a pontos idő, a mai dátum, és hogy mennyi idő van zárásig (például *Zárásig 2 óra 14 perc*). Nyitás előtt *Nyitásig …*, zárás után *Zárva · nyitás: …* áll ott. Ha még nincs megadva nyitvatartás, a **Nyitvatartás megadása** hivatkozás látszik. Az ikon körüli gyűrű mutatja, mennyi telt el a nyitvatartási napból. A nyitvatartást az adminisztrátor állítja be: [Megjelenés](sugo:megjelenes).
 - **Profilmenü** – a neved a jobb szélen.
 
 ### A mindenhol-kereső

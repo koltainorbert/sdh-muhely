@@ -7194,9 +7194,9 @@ a.sdh-gomb.sdh-gomb--pill.is-aktiv:not(.sdh-gomb--elsodleges) {
 .sdh-ora[data-allapot="elott"]  { --sdh-ora-szin: var(--sdh-allapot-kek); }
 .sdh-ora[data-allapot="zarva"]  { --sdh-ora-szin: var(--sdh-halvany); }
 
-.sdh-ora > .sdh-gomb__ikon {
-    width: calc(20px * var(--sdh-n));
-    height: calc(20px * var(--sdh-n));
+.sdh-ora__gyuru > .sdh-gomb__ikon {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
     color: var(--sdh-ora-szin);
 }
 
@@ -7246,23 +7246,6 @@ a.sdh-ora__zaras--nincs {
     font-weight: 500;
     text-decoration: underline;
     text-underline-offset: calc(2px * var(--sdh-n));
-}
-
-/* A nyitvatartási nap eltelt része: vékony sáv az óra alján. */
-.sdh-ora__sav {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: calc(3px * var(--sdh-n));
-    background: color-mix(in srgb, var(--sdh-ora-szin) 14%, transparent);
-}
-
-.sdh-ora__sav i {
-    display: block;
-    height: 100%;
-    background: var(--sdh-ora-szin);
-    transition: width 1s linear;
 }
 
 .sdh-ora[data-allapot="hamar"] .sdh-ora__zaras {
@@ -7906,11 +7889,6 @@ a.sdh-ora__zaras--nincs {
     box-shadow: none;
 }
 
-.sdh-ora--fej > .sdh-gomb__ikon {
-    width: calc(16px * var(--sdh-n));
-    height: calc(16px * var(--sdh-n));
-}
-
 .sdh-ora--fej .sdh-ora__ido b {
     font-size: calc(17px * var(--sdh-n));
 }
@@ -7933,10 +7911,6 @@ a.sdh-ora__zaras--nincs {
     font-size: calc(11.5px * var(--sdh-n));
 }
 
-.sdh-ora--fej .sdh-ora__sav {
-    height: calc(2px * var(--sdh-n));
-}
-
 @media (max-width: 1180px) {
     .sdh-ora--fej .sdh-ora__datum {
         display: none;
@@ -7945,7 +7919,7 @@ a.sdh-ora__zaras--nincs {
 
 @media (max-width: 900px) {
     .sdh-ora--fej .sdh-ora__resz,
-    .sdh-ora--fej > .sdh-gomb__ikon {
+    .sdh-ora--fej .sdh-ora__gyuru {
         display: none;
     }
 
@@ -8283,4 +8257,201 @@ a.sdh-ora__zaras--nincs {
     .sdh-gysz__elem {
         flex-basis: 100%;
     }
+}
+
+
+/* ================================================================== */
+/* 0.55.0 – Óra: neon üveg (php: Nyitvatartas::ora_html)                */
+/* ================================================================== */
+
+/*
+ * Matt üvegtábla halvány színes fénnyel; a szín az állapoté (nyitva: zöld,
+ * mindjárt zárás: borostyán, nyitás előtt: kék, zárva: szürke). A haladást
+ * a pillanatnyi időt jelző gyűrű mutatja az ikon körül: fent kezdődik, óramutató
+ * irányban telik, a végén fénylő pont. A gyűrű értéke: --sdh-ora-arany (0–1).
+ */
+.sdh-ora {
+    --sdh-ora-neon: #5b8def;
+    --sdh-ora-arany: 0;
+    --sdh-ora-gy: calc(34px * var(--sdh-n));
+    --sdh-ora-vast: calc(3px * var(--sdh-n));
+    isolation: isolate;
+    border-color: transparent;
+    background:
+        radial-gradient(130% 190% at 0% 0%, color-mix(in srgb, var(--sdh-ora-neon) 24%, transparent), transparent 62%),
+        radial-gradient(90% 150% at 100% 125%, color-mix(in srgb, var(--sdh-ora-neon) 13%, transparent), transparent 60%),
+        color-mix(in srgb, var(--sdh-felulet) 58%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.7);
+    backdrop-filter: blur(16px) saturate(1.7);
+    box-shadow:
+        0 0 22px -7px color-mix(in srgb, var(--sdh-ora-neon) 75%, transparent),
+        0 8px 20px -12px rgba(0, 0, 0, .45),
+        inset 0 1px 0 rgba(255, 255, 255, .3);
+    transition: box-shadow .6s ease;
+}
+
+.sdh-ora[data-allapot="nyitva"] { --sdh-ora-neon: #1fe08a; }
+.sdh-ora[data-allapot="hamar"]  { --sdh-ora-neon: #ffae2b; }
+.sdh-ora[data-allapot="elott"]  { --sdh-ora-neon: #4aa8ff; }
+.sdh-ora[data-allapot="zarva"]  { --sdh-ora-neon: #8b94a8; }
+
+/* Átmenetes neon keret (a közepén elhalványul, mint az üveg pereme). */
+.sdh-ora::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: calc(1px * var(--sdh-n));
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--sdh-ora-neon) 85%, #fff),
+        color-mix(in srgb, var(--sdh-ora-neon) 14%, transparent) 45%,
+        color-mix(in srgb, var(--sdh-ora-neon) 55%, transparent));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+
+/* Lassan átfutó fényvisszaverődés. */
+.sdh-ora::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, .16) 50%, transparent 62%);
+    transform: translateX(-130%);
+    animation: sdh-ora-fenyes 9s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes sdh-ora-fenyes {
+    0%, 62% { transform: translateX(-130%); }
+    100% { transform: translateX(130%); }
+}
+
+/* Gyűrű az ikon körül: kitöltött rész + halvány pálya + fénylő végpont. */
+.sdh-ora__gyuru {
+    position: relative;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: var(--sdh-ora-gy);
+    height: var(--sdh-ora-gy);
+    border-radius: 50%;
+    color: var(--sdh-ora-neon);
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--sdh-ora-neon) 70%, transparent));
+}
+
+.sdh-ora__gyuru::before,
+.sdh-ora__gyuru::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+}
+
+.sdh-ora__gyuru::before {
+    background: conic-gradient(from 0deg,
+        color-mix(in srgb, var(--sdh-ora-neon) 45%, #fff) 0deg,
+        var(--sdh-ora-neon) calc(var(--sdh-ora-arany) * 360deg),
+        color-mix(in srgb, var(--sdh-ora-neon) 18%, transparent) calc(var(--sdh-ora-arany) * 360deg));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--sdh-ora-vast)), #000 calc(100% - var(--sdh-ora-vast) + calc(.5px * var(--sdh-n))));
+    mask: radial-gradient(farthest-side, transparent calc(100% - var(--sdh-ora-vast)), #000 calc(100% - var(--sdh-ora-vast) + calc(.5px * var(--sdh-n))));
+}
+
+.sdh-ora__gyuru::after {
+    transform: rotate(calc(var(--sdh-ora-arany) * 360deg));
+    background: radial-gradient(circle at 50% calc(var(--sdh-ora-vast) / 2),
+        #fff 0, #fff calc(var(--sdh-ora-vast) * .42),
+        color-mix(in srgb, var(--sdh-ora-neon) 70%, transparent) calc(var(--sdh-ora-vast) * .75),
+        transparent calc(var(--sdh-ora-vast) * 1.7));
+}
+
+.sdh-ora:not([data-allapot="nyitva"]):not([data-allapot="hamar"]) .sdh-ora__gyuru::after {
+    display: none;
+}
+
+.sdh-ora__resz {
+    border-left-color: color-mix(in srgb, var(--sdh-ora-neon) 28%, var(--sdh-keret));
+}
+
+.sdh-ora--fej {
+    --sdh-ora-gy: calc(26px * var(--sdh-n));
+    --sdh-ora-vast: calc(2.5px * var(--sdh-n));
+    border-color: transparent;
+    background:
+        radial-gradient(130% 190% at 0% 0%, color-mix(in srgb, var(--sdh-ora-neon) 24%, transparent), transparent 62%),
+        radial-gradient(90% 150% at 100% 125%, color-mix(in srgb, var(--sdh-ora-neon) 13%, transparent), transparent 60%),
+        color-mix(in srgb, var(--sdh-felulet-2) 58%, transparent);
+    box-shadow:
+        0 0 18px -7px color-mix(in srgb, var(--sdh-ora-neon) 75%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+
+.sdh-ora--fej > .sdh-ora__gyuru {
+    margin-left: -.1rem;
+}
+
+:root[data-theme="dark"] .sdh-ora__zaras,
+:root[data-theme="dark"] .sdh-ora__ido b {
+    text-shadow: 0 0 14px color-mix(in srgb, var(--sdh-ora-neon) 55%, transparent);
+}
+
+/* Mindjárt zárás: az egész tábla lüktet. */
+.sdh-ora[data-allapot="hamar"] {
+    animation: sdh-ora-luktet 2.2s ease-in-out infinite;
+}
+
+@keyframes sdh-ora-luktet {
+    0%, 100% { box-shadow: 0 0 18px -7px color-mix(in srgb, var(--sdh-ora-neon) 70%, transparent), inset 0 1px 0 rgba(255, 255, 255, .3); }
+    50%      { box-shadow: 0 0 30px -3px color-mix(in srgb, var(--sdh-ora-neon) 95%, transparent), inset 0 1px 0 rgba(255, 255, 255, .3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ora::after,
+    .sdh-ora[data-allapot="hamar"] {
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .sdh-ora {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background-color: var(--sdh-felulet);
+    }
+}
+
+/* Papír megjelenés: nincs üveg, fényudvar és neon – lapos, hajszálvonalas óra. */
+:root[data-papir] .sdh-ora {
+    border-color: var(--sdh-keret);
+    background: var(--sdh-felulet-2);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    animation: none;
+}
+
+:root[data-papir] .sdh-ora--fej {
+    border-color: transparent;
+}
+
+:root[data-papir] .sdh-ora::before,
+:root[data-papir] .sdh-ora::after {
+    display: none;
+}
+
+:root[data-papir] .sdh-ora__gyuru {
+    filter: none;
+    color: var(--sdh-ora-szin);
+}
+
+:root[data-papir] .sdh-ora__resz {
+    border-left-color: var(--sdh-keret);
+}
+
+:root[data-papir] .sdh-ora__zaras,
+:root[data-papir] .sdh-ora__ido b {
+    text-shadow: none;
 }
