@@ -5125,6 +5125,418 @@
     });
 
     /**
+     * Gyors szövegek az RMA csevegőjéhez: előre megírt üzenetek. Kattintásra a
+     * beírómezőbe kerülnek (el nem mennek – a küldés gombnyomás marad). A lista
+     * itt szerkeszthető: felvétel, átírás, sorrend, kétlépcsős törlés; minden
+     * változás azonnal mentődik (rma: ajax_gyors_ment), a teljes listával.
+     */
+    function gyorsSzovegNyit(gomb) {
+        var urlap = gomb.closest('[data-sdh-uzenet-urlap]');
+        var mezo = urlap ? urlap.querySelector('[data-sdh-uzenet-szoveg]') : null;
+
+        if (!mezo) {
+            return;
+        }
+
+        var lista = [];
+
+        try {
+            lista = JSON.parse(gomb.getAttribute('data-sdh-lista') || '[]') || [];
+        } catch (e) {
+            lista = [];
+        }
+
+        var GYSZ_OLDAL = 6;
+        var GYSZ_MAX = 40;
+        var oldal = 0;
+        var szerkesztett = -1;     // a most átírt sor indexe (-1: egyik sem)
+        var torlendo = -1;         // a kétlépcsős törlés első lépése után
+        var torlesIdo = 0;
+        var dialog = document.createElement('dialog');
+
+        dialog.className = 'sdh-modal sdh-modal--pop sdh-gyh sdh-gysz';
+        dialog.innerHTML = '<div class="sdh-modal__doboz">' + ablakGombok(false) +
+            '  <div class="sdh-modal__torzs">' +
+            '    <h2 class="sdh-modal__cim">Gyors szövegek</h2>' +
+            '    <p class="sdh-modal__alcim">Kattints a szövegre – a csevegő beírómezőjébe kerül, ott még átírhatod, és a Küldés gombbal megy el. A ceruzával átírod, a nyilakkal sorba rakod, a kukával törlöd.</p>' +
+            '    <div class="sdh-gysz__lista" data-gysz-lista></div>' +
+            '    <div class="sdh-gyh__lapozo" data-gyh-lapozo hidden>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="-1" aria-label="Előző oldal">' + LAP_NYIL_BAL + '</button>' +
+            '      <span data-gyh-oldal></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-lapnyil" data-gyh-lap="1" aria-label="Következő oldal">' + LAP_NYIL_JOBB + '</button>' +
+            '    </div>' +
+            '    <form class="sdh-gyh__uj sdh-gysz__uj" data-gysz-uj>' +
+            '      <input type="text" maxlength="500" autocomplete="off" data-gysz-mezo aria-label="Új gyors szöveg" placeholder="Új gyors szöveg – írd be…">' +
+            '      <button type="submit" class="sdh-gomb sdh-gomb--vilagos"><span class="sdh-plusz" aria-hidden="true"></span>Felvétel</button>' +
+            '    </form>' +
+            '    <p class="sdh-gyh__uzenet" data-gyh-uzenet role="status"></p>' +
+            '    <div class="sdh-gyh__lab">' +
+            '      <span class="sdh-mezo__sugo" data-gysz-db></span>' +
+            '      <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-gyh-kesz>Kész</button>' +
+            '    </div>' +
+            '  </div>' +
+            '</div>';
+        document.body.appendChild(dialog);
+
+        var hely = dialog.querySelector('[data-gysz-lista]');
+        var uzenet = dialog.querySelector('[data-gyh-uzenet]');
+        var IKON_CERUZA = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5l3 3L7 16H4v-3z"/></svg>';
+        var IKON_KUKA = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 6h11M8 6V4.5h4V6M6 6l.7 9.5h6.6L14 6"/></svg>';
+        var IKON_FEL = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 12 10 7.5l4.5 4.5"/></svg>';
+        var IKON_LE = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 8 10 12.5 14.5 8"/></svg>';
+
+        function jelez(szoveg, fajta) {
+            uzenet.textContent = szoveg || '';
+            uzenet.className = 'sdh-gyh__uzenet' + (fajta ? ' is-' + fajta : '');
+        }
+
+        function ikonGomb(adat, i, ikon, cim, extra) {
+            var g = popElem('button', 'sdh-gysz__ikon' + (extra || ''));
+
+            g.type = 'button';
+            g.setAttribute(adat, String(i));
+            g.setAttribute('aria-label', cim);
+            g.title = cim;
+            g.innerHTML = ikon;
+
+            return g;
+        }
+
+        function rajzol() {
+            var oldalak = Math.max(1, Math.ceil(lista.length / GYSZ_OLDAL));
+
+            oldal = Math.max(0, Math.min(oldal, oldalak - 1));
+            hely.innerHTML = '';
+
+            if (!lista.length) {
+                hely.appendChild(popElem('p', 'sdh-gyh__ures', 'A lista üres – írd be alul az első gyors szöveget.'));
+            }
+
+            lista.slice(oldal * GYSZ_OLDAL, (oldal + 1) * GYSZ_OLDAL).forEach(function (szoveg, k) {
+                var i = oldal * GYSZ_OLDAL + k;
+                var sor = popElem('div', 'sdh-gysz__sor');
+
+                if (i === szerkesztett) {
+                    var be = popElem('input', 'sdh-gysz__szerk');
+
+                    be.type = 'text';
+                    be.maxLength = 500;
+                    be.value = szoveg;
+                    be.setAttribute('data-gysz-szerkmezo', String(i));
+                    be.setAttribute('aria-label', 'A gyors szöveg átírása');
+                    sor.appendChild(be);
+
+                    var ment = popElem('button', 'sdh-gomb sdh-gomb--elsodleges sdh-gysz__ment', 'Mentés');
+
+                    ment.type = 'button';
+                    ment.setAttribute('data-gysz-ment', String(i));
+                    sor.appendChild(ment);
+
+                    var megse = popElem('button', 'sdh-gomb sdh-gomb--vilagos', 'Mégse');
+
+                    megse.type = 'button';
+                    megse.setAttribute('data-gysz-megse', '1');
+                    sor.appendChild(megse);
+                    hely.appendChild(sor);
+
+                    return;
+                }
+
+                var elem = popElem('button', 'sdh-pill sdh-gysz__elem');
+
+                elem.type = 'button';
+                elem.setAttribute('data-gysz-be', String(i));
+                elem.title = 'Beillesztés a beírómezőbe';
+                elem.appendChild(popElem('span', 'sdh-pill__cimke', szoveg));
+                sor.appendChild(elem);
+
+                var fel = ikonGomb('data-gysz-fel', i, IKON_FEL, 'Feljebb');
+                var le = ikonGomb('data-gysz-le', i, IKON_LE, 'Lejjebb');
+
+                fel.disabled = i === 0;
+                le.disabled = i === lista.length - 1;
+                sor.appendChild(fel);
+                sor.appendChild(le);
+                sor.appendChild(ikonGomb('data-gysz-szerk', i, IKON_CERUZA, 'Átírás'));
+
+                var torol = ikonGomb('data-gysz-torol', i, IKON_KUKA,
+                    i === torlendo ? 'Biztosan törlöd? Kattints újra' : 'Törlés', ' sdh-gysz__ikon--torol');
+
+                if (i === torlendo) {
+                    torol.classList.add('is-biztos');
+                    torol.innerHTML = '<span>Biztosan?</span>';
+                }
+
+                sor.appendChild(torol);
+                hely.appendChild(sor);
+            });
+
+            dialog.querySelector('[data-gyh-lapozo]').hidden = oldalak <= 1;
+            dialog.querySelector('[data-gyh-oldal]').textContent = (oldal + 1) + ' / ' + oldalak;
+            dialog.querySelector('[data-gyh-lap="-1"]').disabled = oldal <= 0;
+            dialog.querySelector('[data-gyh-lap="1"]').disabled = oldal >= oldalak - 1;
+            dialog.querySelector('[data-gysz-db]').textContent = lista.length + ' / ' + GYSZ_MAX + ' gyors szöveg';
+
+            var szerkMezo = hely.querySelector('[data-gysz-szerkmezo]');
+
+            if (szerkMezo) {
+                szerkMezo.focus();
+                szerkMezo.setSelectionRange(szerkMezo.value.length, szerkMezo.value.length);
+            }
+        }
+
+        /** A teljes lista mentése; hiba esetén a korábbi lista áll vissza. */
+        function ment(uj, siker) {
+            var elozo = lista.slice();
+            var adatok = new FormData();
+
+            lista = uj;
+            rajzol();
+            adatok.set('action', 'sdh_muhely_rma_gyors_ment');
+            adatok.set('_wpnonce', beallitas.nonce || '');
+            adatok.set('lista', JSON.stringify(uj));
+
+            fetch(beallitas.ajax, { method: 'POST', body: adatok, credentials: 'same-origin' })
+                .then(function (valasz) { return valasz.json(); })
+                .then(function (valasz) {
+                    if (!valasz || !valasz.success) {
+                        throw new Error((valasz && valasz.data && valasz.data.uzenet) || 'A lista nem mentődött.');
+                    }
+
+                    lista = valasz.data.lista || uj;
+
+                    // A többi nyitott csevegő gombja is az új listát kapja.
+                    Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-gyors-szoveg]'), function (g) {
+                        g.setAttribute('data-sdh-lista', JSON.stringify(lista));
+                    });
+
+                    jelez(siker, 'jo');
+                    rajzol();
+                })
+                .catch(function (ok) {
+                    lista = elozo;
+                    jelez('Nem mentődött: ' + ok.message, 'hiba');
+                    rajzol();
+                });
+        }
+
+        /** Beillesztés: üres mezőbe a szöveg, különben új sorba a meglévő után; a kurzor a végére áll. */
+        function beilleszt(szoveg) {
+            var regi = (mezo.value || '').replace(/\s+$/, '');
+
+            mezo.value = regi ? regi + '\n' + szoveg : szoveg;
+            mezo.dispatchEvent(new Event('input', { bubbles: true }));
+            dialog.close();
+            mezo.focus();
+            mezo.setSelectionRange(mezo.value.length, mezo.value.length);
+        }
+
+        function szerkMentes() {
+            var be = hely.querySelector('[data-gysz-szerkmezo]');
+
+            if (!be) {
+                return;
+            }
+
+            var i = parseInt(be.getAttribute('data-gysz-szerkmezo'), 10);
+            var szoveg = be.value.trim();
+
+            if (!szoveg) {
+                jelez('Üres szöveg nem menthető – a törléshez használd a kukát.', 'hiba');
+                be.focus();
+
+                return;
+            }
+
+            var kis = szoveg.toLowerCase();
+
+            if (lista.some(function (s, j) { return j !== i && s.toLowerCase() === kis; })) {
+                jelez('Ez a szöveg már szerepel a listában.', 'hiba');
+                be.focus();
+
+                return;
+            }
+
+            var uj = lista.slice();
+
+            uj[i] = szoveg;
+            szerkesztett = -1;
+            ment(uj, 'Átírva.');
+        }
+
+        dialog.addEventListener('click', function (esemeny) {
+            var cel = esemeny.target;
+
+            if (cel === dialog || cel.closest('.sdh-modal__bezar') || cel.closest('[data-gyh-kesz]')) {
+                dialog.close();
+
+                return;
+            }
+
+            var el;
+
+            if ((el = cel.closest('[data-gysz-be]'))) {
+                beilleszt(lista[parseInt(el.getAttribute('data-gysz-be'), 10)] || '');
+
+                return;
+            }
+
+            if ((el = cel.closest('[data-gysz-szerk]'))) {
+                szerkesztett = parseInt(el.getAttribute('data-gysz-szerk'), 10);
+                torlendo = -1;
+                jelez('');
+                rajzol();
+
+                return;
+            }
+
+            if (cel.closest('[data-gysz-ment]')) {
+                szerkMentes();
+
+                return;
+            }
+
+            if (cel.closest('[data-gysz-megse]')) {
+                szerkesztett = -1;
+                jelez('');
+                rajzol();
+
+                return;
+            }
+
+            if ((el = cel.closest('[data-gysz-fel], [data-gysz-le]'))) {
+                var fel = el.hasAttribute('data-gysz-fel');
+                var i = parseInt(el.getAttribute(fel ? 'data-gysz-fel' : 'data-gysz-le'), 10);
+                var j = fel ? i - 1 : i + 1;
+
+                if (j < 0 || j >= lista.length) {
+                    return;
+                }
+
+                var uj = lista.slice();
+                var cs = uj[i];
+
+                uj[i] = uj[j];
+                uj[j] = cs;
+                torlendo = -1;
+                oldal = Math.floor(j / GYSZ_OLDAL);
+                ment(uj, 'Sorrend mentve.');
+
+                return;
+            }
+
+            if ((el = cel.closest('[data-gysz-torol]'))) {
+                var t = parseInt(el.getAttribute('data-gysz-torol'), 10);
+
+                // Kétlépcsős törlés: az első kattintás csak élesít, 4 mp-ig.
+                if (torlendo !== t) {
+                    torlendo = t;
+                    clearTimeout(torlesIdo);
+                    torlesIdo = setTimeout(function () {
+                        if (dialog.isConnected && torlendo === t) {
+                            torlendo = -1;
+                            rajzol();
+                        }
+                    }, 4000);
+                    rajzol();
+
+                    return;
+                }
+
+                var maradek = lista.filter(function (s, k) { return k !== t; });
+
+                torlendo = -1;
+                ment(maradek, 'Törölve.');
+
+                return;
+            }
+
+            var lap = cel.closest('[data-gyh-lap]');
+
+            if (lap) {
+                oldal += parseInt(lap.getAttribute('data-gyh-lap'), 10);
+                szerkesztett = -1;
+                torlendo = -1;
+                rajzol();
+            }
+        });
+
+        dialog.addEventListener('keydown', function (esemeny) {
+            if (esemeny.target.matches && esemeny.target.matches('[data-gysz-szerkmezo]') && esemeny.key === 'Enter') {
+                esemeny.preventDefault();
+                szerkMentes();
+            }
+        });
+
+        // Esc átírás közben csak az átírást vonja vissza, az ablak nyitva marad.
+        dialog.addEventListener('cancel', function (esemeny) {
+            if (szerkesztett >= 0) {
+                esemeny.preventDefault();
+                szerkesztett = -1;
+                rajzol();
+            }
+        });
+
+        dialog.querySelector('[data-gysz-uj]').addEventListener('submit', function (esemeny) {
+            esemeny.preventDefault();
+            // A munkalap űrlapja ettől nem küldődhet be.
+            esemeny.stopPropagation();
+
+            var beMezo = dialog.querySelector('[data-gysz-mezo]');
+            var szoveg = beMezo.value.trim();
+            var kis = szoveg.toLowerCase();
+
+            jelez('');
+
+            if (!szoveg) {
+                beMezo.focus();
+
+                return;
+            }
+
+            if (lista.some(function (s) { return s.toLowerCase() === kis; })) {
+                jelez('Ez a szöveg már szerepel a listában.', 'hiba');
+
+                return;
+            }
+
+            if (lista.length >= GYSZ_MAX) {
+                jelez('A lista betelt (' + GYSZ_MAX + ' db) – törölj belőle.', 'hiba');
+
+                return;
+            }
+
+            beMezo.value = '';
+            oldal = Math.floor(lista.length / GYSZ_OLDAL);
+            ment(lista.concat([szoveg]), '„' + szoveg + '” felkerült a listára.');
+            beMezo.focus();
+        });
+
+        dialog.addEventListener('close', function () {
+            clearTimeout(torlesIdo);
+            dialog.remove();
+        });
+
+        rajzol();
+        dialog.showModal();
+
+        var elso = hely.querySelector('.sdh-gysz__elem') || dialog.querySelector('[data-gysz-mezo]');
+
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-gyors-szoveg]') : null;
+
+        if (gomb) {
+            esemeny.preventDefault();
+            gyorsSzovegNyit(gomb);
+        }
+    });
+
+    /**
      * Hibasor eltávolítása. Az utolsó sort nem töröljük, csak kiürítjük,
      * hogy az űrlap mindig mutasson legalább egy sort.
      */

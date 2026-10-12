@@ -59,6 +59,13 @@ final class SDH_Muhely_Rma
     /** Postafiók: ennyi beszélgetés egy oldalon. */
     private const POSTA_OLDAL = 50;
 
+    /** Gyors szövegek (a csevegőbe illeszthető előre megírt üzenetek) optionje: egy sor = egy szöveg. */
+    private const OPT_GYORS = 'sdh_muhely_rma_gyors_szovegek';
+
+    /** Gyors szövegek: legfeljebb ennyi darab, egyenként legfeljebb ennyi karakter. */
+    public const GYORS_MAX   = 40;
+    public const GYORS_HOSSZ = 500;
+
     public static function init(): void
     {
         add_action('init', [self::class, 'szabalyok']);
@@ -76,6 +83,7 @@ final class SDH_Muhely_Rma
         add_action('wp_ajax_sdh_muhely_uzenet_allapot', [self::class, 'ajax_allapot']);
         // A csevegő frissítése: jött-e új üzenet, amíg az ablak nyitva van (rma.js).
         add_action('wp_ajax_sdh_muhely_uzenet_szal', [self::class, 'ajax_szal']);
+        add_action('wp_ajax_sdh_muhely_rma_gyors_ment', [self::class, 'ajax_gyors_ment']);
 
         // A wp-admin menüjében is látszódjon az olvasatlan üzenetek száma.
         add_action('admin_menu', [self::class, 'admin_menu_jelveny'], 99);
@@ -324,6 +332,18 @@ final class SDH_Muhely_Rma
                     <span class="sdh-mezo__sugo">Ennyi időn belül jelenik meg az ügyfél válasza a nyitott munkalapon (3–120 mp).</span>
                 </div>
             </div>
+
+            <div class="sdh-mezok">
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="rma_gyors_szovegek">Gyors szövegek a csevegőhöz</label>
+                    <textarea name="rma_gyors_szovegek" id="rma_gyors_szovegek" rows="6"
+                              class="sdh-kod"><?php echo esc_textarea(implode("\n", self::gyors_szovegek())); ?></textarea>
+                    <span class="sdh-mezo__sugo">
+                        Egy sor = egy előre megírt üzenet (legfeljebb <?php echo (int) self::GYORS_MAX; ?> db). A munkalap RMA lapfülén
+                        a „Gyors szövegek” gombbal egy kattintással a beírómezőbe kerülnek; ott is bővíthetők, átírhatók, törölhetők.
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="sdh-doboz">
@@ -500,7 +520,107 @@ final class SDH_Muhely_Rma
             'terkep'          => $url('rma_terkep'),
             'egyeb'           => $hosszu('rma_egyeb'),
         ]);
+
+        if (isset($_POST['rma_gyors_szovegek'])) {
+            self::gyors_szovegek_ment(preg_split('/\R/u', $hosszu('rma_gyors_szovegek')) ?: []);
+        }
         // phpcs:enable
+    }
+
+    /* =================================================================
+     * Gyors szövegek – előre megírt üzenetek a munkalap csevegőjéhez
+     *
+     * Az RMA lapfülön popupból választhatók: kattintásra a beírómezőbe
+     * kerülnek (nem mennek el maguktól). A lista a popupból és a
+     * Beállítások › Ügyféloldal (RMA) dobozból is szerkeszthető.
+     * Cégadat nincs benne: a gyári lista általános szöveg.
+     * ============================================================== */
+
+    /** @return array<int, string> A gyári lista (amíg nincs mentett). */
+    public static function alap_gyors_szovegek(): array
+    {
+        return [
+            'Kedves Ügyfelünk! Megrendelése megérkezett, mai naptól átvehető üzletünkben, nyitvatartási időben.',
+            'Kedves Ügyfelünk! Készüléke elkészült, nyitvatartási időben átvehető üzletünkben.',
+            'Kedves Ügyfelünk! Elkészült a javítás árajánlata – kérjük, jelezze, kéri-e a javítást.',
+            'Kedves Ügyfelünk! A javításhoz szükséges alkatrészt megrendeltük, megérkezése után azonnal értesítjük.',
+            'Kedves Ügyfelünk! Kérjük, hívjon vissza minket nyitvatartási időben.',
+        ];
+    }
+
+    /** @return array<int, string> A gyors szövegek (mentett, vagy a gyári lista). Kiürítve üres marad. */
+    public static function gyors_szovegek(): array
+    {
+        $mentett = get_option(self::OPT_GYORS, null);
+
+        if (!is_string($mentett)) {
+            return self::alap_gyors_szovegek();
+        }
+
+        return self::gyors_tisztit(preg_split('/\R/u', $mentett) ?: []);
+    }
+
+    /**
+     * Tisztítás: egysoros, levágott, legfeljebb GYORS_HOSSZ karakter; az azonos
+     * szöveg (kis- és nagybetűtől függetlenül) csak egyszer; legfeljebb GYORS_MAX db.
+     *
+     * @param array<int|string, mixed> $lista
+     * @return array<int, string>
+     */
+    public static function gyors_tisztit(array $lista): array
+    {
+        $ki   = [];
+        $volt = [];
+
+        foreach ($lista as $sor) {
+            $sor = mb_substr(trim(sanitize_text_field((string) $sor)), 0, self::GYORS_HOSSZ);
+            $kis = mb_strtolower($sor);
+
+            if ($sor === '' || isset($volt[$kis])) {
+                continue;
+            }
+
+            $volt[$kis] = true;
+            $ki[]       = $sor;
+
+            if (count($ki) >= self::GYORS_MAX) {
+                break;
+            }
+        }
+
+        return $ki;
+    }
+
+    /**
+     * A teljes lista mentése (a sorrend is). Visszaadja a mentett listát.
+     *
+     * @param array<int|string, mixed> $lista
+     * @return array<int, string>
+     */
+    public static function gyors_szovegek_ment(array $lista): array
+    {
+        $tiszta = self::gyors_tisztit($lista);
+        update_option(self::OPT_GYORS, implode("\n", $tiszta), false);
+
+        return $tiszta;
+    }
+
+    /** A gyors szövegek mentése a csevegő popupjából (AJAX): a teljes lista jön JSON-ként. */
+    public static function ajax_gyors_ment(): void
+    {
+        self::ajax_jog();
+
+        $nyers = isset($_POST['lista']) ? json_decode((string) wp_unslash($_POST['lista']), true) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- gyors_tisztit tisztít
+
+        if (!is_array($nyers)) {
+            wp_send_json_error(['uzenet' => 'A lista nem érkezett meg.'], 400);
+        }
+
+        if (count($nyers) > self::GYORS_MAX) {
+            wp_send_json_error(['uzenet' => 'Legfeljebb ' . self::GYORS_MAX . ' gyors szöveg lehet – törölj a listából.'], 400);
+        }
+
+        wp_send_json_success(['lista' => self::gyors_szovegek_ment($nyers)]);
     }
 
     /** A legutóbbi sorszámos munkalap helyi ügyféloldal-címe (előnézethez), vagy ''. */
@@ -1616,6 +1736,11 @@ final class SDH_Muhely_Rma
                 . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 17 3l-4.5 14-2.8-5.7L3 10Z"/></svg></button>'
                 . '</div>'
                 . '<div class="sdh-uz-urlap__lab">'
+                // Előre megírt üzenetek popupból (app.js: gyorsSzovegNyit) – a beírómezőbe kerülnek, nem mennek el maguktól.
+                . '<button type="button" class="sdh-gomb sdh-gomb--pill sdh-gyorsszoveg-gomb" data-sdh-gyors-szoveg data-sdh-lista="'
+                . str_replace('%', '%%', esc_attr((string) wp_json_encode(self::gyors_szovegek(), JSON_UNESCAPED_UNICODE)))
+                . '" title="Előre megírt üzenetek: kattintásra a beírómezőbe kerülnek">'
+                . '<svg class="sdh-gomb__ikon" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5.5h12M4 10h12M4 14.5h6.5"/></svg>Gyors szövegek</button>'
                 . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-email value="1"%s%s> %s</label>'
                 . '<span class="sdh-chat__sugo">Enter: küldés · Shift+Enter: új sor</span></div>'
                 . '<p class="sdh-uz-urlap__hiba" data-sdh-uzenet-hiba hidden></p></div>',

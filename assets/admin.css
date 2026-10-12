@@ -8159,3 +8159,128 @@ a.sdh-ora__zaras--nincs {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
 }
+
+
+/* ================================================================== */
+/* 0.53.0 – RMA csevegő: gyors szövegek (app.js: gyorsSzovegNyit)       */
+/* ================================================================== */
+
+.sdh-uz-urlap__lab {
+    flex-wrap: wrap;
+}
+
+.sdh-gyorsszoveg-gomb.sdh-gomb--pill {
+    height: calc(30px * var(--sdh-n));
+    padding: 0 .8rem 0 .65rem;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-gysz__lista {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    margin: .9rem 0 .8rem;
+}
+
+.sdh-gysz__sor {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.sdh-gysz__elem {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    min-width: 0;
+    height: auto;
+    min-height: calc(38px * var(--sdh-n));
+    padding: .4rem .85rem;
+    white-space: normal;
+    text-align: left;
+}
+
+.sdh-gysz__elem .sdh-pill__cimke {
+    overflow: visible;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+.sdh-gysz__ikon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: calc(32px * var(--sdh-n));
+    height: calc(32px * var(--sdh-n));
+    padding: 0;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    cursor: pointer;
+    transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+
+.sdh-gysz__ikon svg {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-gysz__ikon:hover:not([disabled]),
+.sdh-gysz__ikon:focus-visible {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-gysz__ikon[disabled] {
+    opacity: .35;
+    cursor: default;
+}
+
+.sdh-gysz__ikon--torol:hover:not([disabled]),
+.sdh-gysz__ikon--torol.is-biztos {
+    border-color: var(--sdh-hiba);
+    color: var(--sdh-hiba);
+}
+
+.sdh-gysz__ikon--torol.is-biztos {
+    width: auto;
+    padding: 0 .7rem;
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+}
+
+.sdh-gysz__szerk {
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    min-width: 0;
+    height: calc(36px * var(--sdh-n));
+    padding: 0 .7rem;
+    border: 1px solid var(--sdh-accent);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 0;
+}
+
+.sdh-gysz__uj {
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+@media (max-width: 640px) {
+    .sdh-gysz__sor {
+        flex-wrap: wrap;
+    }
+
+    .sdh-gysz__elem {
+        flex-basis: 100%;
+    }
+}

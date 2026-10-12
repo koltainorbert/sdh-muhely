@@ -488,6 +488,10 @@ function AddFont($family, $style='', $file='', $uni=false)
 		$ttfstat = stat($ttffilename);
 		if (file_exists($unifilename.'.mtx.php')) {
 			include($unifilename.'.mtx.php');
+			// SDH Műhely javítás: a gyorsítótár annak a kulcsát és fájlútját tárolja, aki először
+			// regisztrálta a fájlt (pl. 'fB'); ugyanaz a TTF más családnévvel ne kerüljön idegen kulcsra.
+			$fontkey = $family.$style;
+			$ttffile = $ttffilename;
 		}
 		if (!isset($type) ||  !isset($name) || $originalsize != $ttfstat['size']) {
 			$ttffile = $ttffilename;

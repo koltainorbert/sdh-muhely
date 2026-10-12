@@ -4,7 +4,7 @@ cim: Üzenetek és ügyféloldal (RMA)
 csoport: Kapcsolat
 modul: uzenetek
 szakaszok: ugyfeloldal
-kulcsszavak: üzenet, ügyféloldal, RMA, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
+kulcsszavak: üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
 osszefoglalo: Az ügyfél a QR-kóddal vagy linkkel megnyitott oldalon látja a javítás állapotát és üzenhet; te a munkalap RMA-fülén válaszolsz, az olvasatlan üzeneteket az Üzenetek menüpont gyűjti össze.
 ---
 
@@ -142,6 +142,25 @@ A beírómező alatt egy jelölő áll:
 
 Ha az üzenet elmentődött, de a levél nem ment el, ezt a figyelmeztetést kapod: „Az üzenet elmentve, de az e-mail nem ment el (ellenőrizd a levelezés beállítását).” Az ügyfél az ügyféloldalon ekkor is látja az üzenetet.
 
+### Gyors szövegek: előre megírt üzenetek
+
+A beírómező alatt, balra áll a **Gyors szövegek** gomb. Egy popup nyílik az előre megírt üzenetekkel – például „Kedves Ügyfelünk! Megrendelése megérkezett, mai naptól átvehető üzletünkben, nyitvatartási időben.”
+
+1. Kattints a **Gyors szövegek** gombra.
+2. Kattints a kívánt szövegre. A popup bezárul, a szöveg a beírómezőbe kerül. Ha már volt benne valami, a szöveg új sorba kerül utána.
+3. Ha kell, írd át, majd küldd el [[Enter]]-rel vagy a küldés gombbal.
+
+> **Fontos:** a gyors szöveg magától nem megy el. Csak a beírómezőbe kerül; elküldeni te küldöd.
+
+A lista ugyanebben a popupban szerkeszthető, minden változás azonnal mentődik, és minden munkalapon érvényes:
+
+- **Új szöveg:** írd be alul az **Új gyors szöveg** mezőbe, és kattints a **Felvétel** gombra.
+- **Átírás:** a ceruza ikon. A szöveg mezővé válik; [[Enter]] vagy **Mentés** menti, **Mégse** vagy [[Esc]] visszavonja.
+- **Sorrend:** a fel és le nyíl. A gyakran használt szöveget vidd előre.
+- **Törlés:** a kuka ikon kétlépcsős: az első kattintásra „Biztosan?” lesz belőle, a második töröl. Ha 4 másodpercig nem kattintasz újra, visszaáll.
+
+Legfeljebb 40 szöveg lehet, egyenként legfeljebb 500 karakter, és ugyanaz a szöveg csak egyszer. Hat szöveg fér egy oldalra; a többihez lapozz. A listát a Beállításokban is szerkesztheted (lásd lent).
+
 ### Több eszköznél: „Miről szól”
 
 Ha a munkalapon több eszköz van, a beírómező fölött megjelenik a **Miről szól:** választó. Alapból **Az egész munkalap** van kijelölve; mellette ott a lap minden eszköze. Válaszd ki, melyikről írsz – az üzenet mellett ott lesz az eszköz neve, az e-mailben is.
@@ -220,6 +239,7 @@ A Beállítások → **Ügyféloldal (RMA)** lapfülön három doboz van. A lap 
 | **Ügyfélüzenetek ide érkeznek (e-mail)** | Erre a címre megy értesítés minden új ügyfélüzenetről. Üresen a webhely adminisztrátori címe. Az ügyfélnek küldött levélre adott válasz is ide érkezik. |
 | **Új üzenetnél alapból e-mail értesítés az ügyfélnek (ha van e-mail címe)** | Ha be van pipálva, a csevegő **E-mailben is** jelölője alapból be van kapcsolva. Üzenetenként így is ki tudod venni. |
 | **A munkalap csevegője ennyi másodpercenként frissül** | Ennyi időn belül jelenik meg az ügyfél válasza a nyitott munkalapon. 3 és 120 másodperc között állítható. |
+| **Gyors szövegek a csevegőhöz** | Az RMA csevegő **Gyors szövegek** popupjának listája: egy sor = egy szöveg, legfeljebb 40. Ugyanez a lista a popupban is szerkeszthető. Ha az egészet kitörlöd, a lista üres marad. |
 
 > **Fontos:** a QR-kód csak akkor működik az ügyfél telefonján, ha a rendszer az internetről elérhető. Ha nem az, a **Nyilvános cím** mezőben add meg azt a címet, ahol elérhető.
 
@@ -332,6 +352,14 @@ Ha a munkalap RMA füle nyitva van, alapból nagyjából 8 másodpercen belül. 
 ### Az ügyfél is azonnal látja, amit írok?
 
 Csak ha újra megnyitja vagy frissíti az oldalt – az ő oldala nem frissül magától. Ha fontos, pipáld be az **E-mailben is** jelölőt, vagy hívd fel.
+
+### Hogyan szúrok be előre megírt üzenetet a csevegőbe?
+
+Az RMA fülön a beírómező alatt kattints a **Gyors szövegek** gombra, majd a kívánt szövegre. A beírómezőbe kerül; átírhatod, és [[Enter]]-rel küldöd. Magától nem megy el.
+
+### Hogyan veszek fel új gyors szöveget, vagy írok át egy meglévőt?
+
+A **Gyors szövegek** popupban: alul az **Új gyors szöveg** mező és a **Felvétel** gomb; a meglévő mellett a ceruza (átírás), a nyilak (sorrend) és a kuka (törlés, két kattintással). Minden azonnal mentődik. A Beállítások → **Ügyféloldal (RMA)** lapfülön a **Gyors szövegek a csevegőhöz** mezőben is szerkesztheted.
 
 ### Miért szürke az „E-mailben is” pipa?
 

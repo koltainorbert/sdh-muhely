@@ -63,6 +63,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.53.0
+- **Gyors szövegek az RMA csevegőben.** A munkalap RMA fülén a beírómező alatt új **Gyors szövegek** gomb: popupból
+  egy kattintással a beírómezőbe kerül egy előre megírt üzenet (pl. „Kedves Ügyfelünk! Megrendelése megérkezett, mai
+  naptól átvehető üzletünkben, nyitvatartási időben.”). Magától nem megy el. A lista a popupban szerkeszthető
+  (felvétel, átírás, sorrend, kétlépcsős törlés, azonnali mentés) és a Beállítások › Ügyféloldal (RMA) lapfülön is.
+- **Javítás: Számla-előkészítő PDF.** A „tFPDF error: Undefined font: dejavu B” hiba megszűnt. Oka: a betűk
+  gyorsítótára annak a nevét őrizte meg, aki először használta a betűfájlt (a 0.52 nyomtatványai), és a
+  Számla-előkészítő félkövér betűje így idegen néven került be. Mostantól minden PDF a saját betűnevét használja,
+  bármelyik készül előbb.
+
 ### 0.52.0
 - **Minden nyomtatható – egy ablakból.** Új **Nyomtatás** gomb (nyomtató ikon) a munkalap, az árukiadás és a
   rendelés ablakában, az Áttekintés részletpaneljén, a Pénztárban és a felső fejlécben. Az ablak megmutatja az
