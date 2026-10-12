@@ -632,8 +632,31 @@
         konyv: '<svg viewBox="0 0 64 64"><path d="M32 40c-5-4-12-5-19-4v16c7-1 14 0 19 4 5-4 12-5 19-4V36c-7-1-14 0-19 4z" fill="#fff" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 40v16M18 42c4-.4 7 0 10 1.5M18 47c4-.4 7 0 10 1.5M46 42c-4-.4-7 0-10 1.5" fill="none" stroke="#0b1020" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg>',
         parti: '<svg viewBox="0 0 64 64"><path d="M32 -6 44 14H20z" fill="#ff5fa2" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6l12 4M23 11l18 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="-7" r="4" fill="#ffd23f" stroke="#0b1020" stroke-width="2"/></svg>',
         halo: '<svg viewBox="0 0 64 64"><path d="M16 14C22 0 44 0 50 12l8 12-6 1-4-7c-10-3-22-3-32-4z" fill="#6c8cff" stroke="#0b1020" stroke-width="2.5" stroke-linejoin="round"/><circle cx="57" cy="26" r="4.5" fill="#fff" stroke="#0b1020" stroke-width="2"/></svg>',
-        nagyito: '<svg viewBox="0 0 64 64"><circle cx="46" cy="40" r="9" fill="rgba(255,255,255,.55)" stroke="#0b1020" stroke-width="3"/><path d="m53 47 7 7" stroke="#0b1020" stroke-width="4" stroke-linecap="round"/></svg>'
+        nagyito: '<svg viewBox="0 0 64 64"><circle cx="46" cy="40" r="9" fill="rgba(255,255,255,.55)" stroke="#0b1020" stroke-width="3"/><path d="m53 47 7 7" stroke="#0b1020" stroke-width="4" stroke-linecap="round"/></svg>',
+        // Fénypenge a bal kézben (párbaj): a penge a kiemelő színnel izzik, a markolat sötét.
+        penge: '<svg viewBox="0 0 64 64"><g class="sdh-ai__penge"><path class="sdh-ai__penge-fenye" d="M7 39-12 8" pathLength="1"/><path class="sdh-ai__penge-mag" d="M7 39-12 8" pathLength="1"/><path d="m4.5 35.5 5 7" stroke="#0b1020" stroke-width="4.5" stroke-linecap="round"/><path d="m3.5 38.5 4-2.6" stroke="#9aa3b5" stroke-width="1.6" stroke-linecap="round"/></g></svg>'
     };
+
+    /*
+     * A Hiba-bogár: saját, morcos kis bogár (a „bug”), aki néha előmászik a képernyő alján.
+     * Jobbra néz, a figura felé; a borostyánszín penge a jobb ollójában.
+     */
+    var BOGAR = '<svg viewBox="0 0 64 64">' +
+        '<g class="sdh-ai-parbaj__labak" stroke="#0b1020" stroke-width="2.4" stroke-linecap="round" fill="none">' +
+        '<path class="sdh-ai-parbaj__lab" d="M20 49l-5 7"/><path class="sdh-ai-parbaj__lab sdh-ai-parbaj__lab--2" d="M30 52l-2 8"/><path class="sdh-ai-parbaj__lab" d="M40 51l3 8"/></g>' +
+        '<path d="M44 21c-1-6-4-9-8-10M50 21c2-6 5-8 9-8" stroke="#0b1020" stroke-width="2.2" stroke-linecap="round" fill="none"/>' +
+        '<circle cx="35.5" cy="10.5" r="2.6" fill="#ffb02e" stroke="#0b1020" stroke-width="1.6"/><circle cx="59.5" cy="12.5" r="2.6" fill="#ffb02e" stroke="#0b1020" stroke-width="1.6"/>' +
+        '<ellipse cx="29" cy="40" rx="18" ry="13" fill="#5a4f7c" stroke="#0b1020" stroke-width="2.5"/>' +
+        '<path d="M29 27.5v25" stroke="#0b1020" stroke-width="2"/><circle cx="21" cy="36" r="2.4" fill="#ffb02e" opacity=".85"/><circle cx="36" cy="44" r="2" fill="#ffb02e" opacity=".85"/>' +
+        '<circle cx="47" cy="31" r="10" fill="#433a60" stroke="#0b1020" stroke-width="2.5"/>' +
+        '<circle cx="44" cy="30" r="3.4" fill="#fff" stroke="#0b1020" stroke-width="1.3"/><circle cx="51.5" cy="30" r="3.4" fill="#fff" stroke="#0b1020" stroke-width="1.3"/>' +
+        '<circle class="sdh-ai-parbaj__pupilla" cx="45" cy="30.6" r="1.5" fill="#0b1020"/><circle class="sdh-ai-parbaj__pupilla" cx="52.5" cy="30.6" r="1.5" fill="#0b1020"/>' +
+        '<path d="M40.5 25.5l6 2.2M55.5 25.5l-5.6 2.2" stroke="#0b1020" stroke-width="2.2" stroke-linecap="round"/>' +
+        '<path class="sdh-ai-parbaj__szaj" d="M45 36.5q3-2 6 0" stroke="#0b1020" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+        '<g class="sdh-ai-parbaj__penge"><path class="sdh-ai-parbaj__penge-fenye" d="M55 42 74 12" pathLength="1"/><path class="sdh-ai-parbaj__penge-mag" d="M55 42 74 12" pathLength="1"/>' +
+        '<path d="m52.5 45.5 4.5-6.5" stroke="#0b1020" stroke-width="4.5" stroke-linecap="round"/></g>' +
+        '<path class="sdh-ai-parbaj__csepp" d="M37 22c-1.6 2.4-2.4 3.8-2.4 5a2.4 2.4 0 0 0 4.8 0c0-1.2-.8-2.6-2.4-5z" fill="#8fd3ff" stroke="#0b1020" stroke-width="1.2"/>' +
+        '</svg>';
 
     /** Rövid testmozdulat (ugrás, pörgés, integetés, tánc…): is-g-<név> osztály a megadott ideig. */
     function gesztus(nev, ms) {
@@ -857,6 +880,7 @@
     function szabad() {
         return !!gyoker && panel.hidden && buborek.hidden && !tura && !fut &&
             !gyoker.classList.contains('is-repul') && !gyoker.classList.contains('is-setal') &&
+            !gyoker.classList.contains('is-parbaj') &&
             hangulat() === 'nyugi' && document.visibilityState !== 'hidden';
     }
 
@@ -881,6 +905,136 @@
             }, 1500);
         }, ido + 60);
     }
+
+    /*
+     * Párbaj a Hiba-bogárral (Beállítások › Asszisztens: „Párbaj a Hiba-bogárral”).
+     * A bogár balról bemászik a figura mellé, pár csapás fénypengével, aztán
+     * vagy elszalad (többnyire), vagy a figura pengéje merül le, és a bogár
+     * vidáman elballag. Kb. 6 mp; kattintás, gépelés vagy új levél-jelzés
+     * azonnal leállítja. Levél-jelzés látszása közben el sem kezdődik.
+     */
+    var parbajIdok = [];
+    var PARBAJ = A.parbaj !== false;
+
+    function parbajUtan(ms, tesz) {
+        parbajIdok.push(window.setTimeout(tesz, ms));
+    }
+
+    function parbaj() {
+        if (document.querySelector('.sdh-level-toast')) {
+            gesztus('integet', 1700);
+            allapot('orul', 1700);
+
+            return;
+        }
+
+        var jelenet = document.createElement('div');
+        var gyoz = Math.random() >= .25;
+
+        jelenet.className = 'sdh-ai-parbaj';
+        jelenet.setAttribute('aria-hidden', 'true');
+        jelenet.innerHTML = '<div class="sdh-ai-parbaj__bogar">' + BOGAR + '</div><i class="sdh-ai-parbaj__szikra"></i>';
+        gyoker.appendChild(jelenet);
+        gyoker.classList.add('is-parbaj');
+        void jelenet.offsetWidth;
+
+        // 1. Bemászik; a figura észreveszi.
+        jelenet.classList.add('is-jon');
+        szemZar = Date.now() + 6500;
+        allapot('kivancsi', 1300);
+
+        // 2. Mindkét penge felizzik.
+        parbajUtan(1250, function () {
+            jelenet.classList.add('is-penge');
+            kellek('penge', 6000);
+            allapot('buszke', 2600);
+        });
+
+        // 3. Csapások, szikrák.
+        parbajUtan(1650, function () {
+            gyoker.classList.add('is-parbaj-viv');
+        });
+
+        // 4. Vége: ki győz.
+        parbajUtan(3900, function () {
+            gyoker.classList.remove('is-parbaj-viv');
+
+            if (gyoz) {
+                jelenet.classList.add('is-fut');
+                allapot('orul', 1700);
+                gesztus('ugral', 950);
+                szikrak(7, 'csillag');
+                parbajUtan(700, function () { kellek(''); });
+            } else {
+                gyoker.classList.add('is-parbaj-lemerul');
+                allapot('meglepett', 1300);
+                parbajUtan(650, function () {
+                    kellek('');
+                    jelenet.classList.add('is-orul');
+                });
+                parbajUtan(1400, function () {
+                    jelenet.classList.add('is-elmegy');
+                    allapot('szomoru', 1400);
+
+                    if (Math.random() * 100 < HUMOR && buborek.hidden) {
+                        buborekMutat('Lemerült a pengém… Legközelebb elkapom azt a bogarat!', [], { ms: 3800, allapot: 'szomoru' });
+                    }
+                });
+            }
+        });
+
+        parbajUtan(gyoz ? 5000 : 5600, parbajVege);
+    }
+
+    function parbajVege() {
+        if (!gyoker || !gyoker.classList.contains('is-parbaj')) {
+            return;
+        }
+
+        parbajIdok.forEach(function (t) { window.clearTimeout(t); });
+        parbajIdok = [];
+        gyoker.classList.remove('is-parbaj', 'is-parbaj-viv', 'is-parbaj-lemerul');
+        Array.prototype.forEach.call(gyoker.querySelectorAll('.sdh-ai-parbaj'), function (j) { j.remove(); });
+
+        if (gyoker.querySelector('.sdh-ai__kellek').getAttribute('data-kellek') === 'penge') {
+            kellek('');
+        }
+
+        szemZar = 0;
+    }
+
+    /*
+     * A buborék ne takarja a levél-jelzéseket: ha a jelzések felnyúlnak a buborék
+     * aljáig, a buborék fölébük emelkedik. A levelezes.js minden új jelzésnél szól.
+     */
+    function buborekIgazit() {
+        if (!buborek) {
+            return;
+        }
+
+        buborek.style.bottom = '';
+
+        var tarto = document.querySelector('.sdh-level-toastok');
+
+        if (buborek.hidden || !tarto || !tarto.querySelector('.sdh-level-toast')) {
+            return;
+        }
+
+        var t = tarto.getBoundingClientRect();
+        var b = buborek.getBoundingClientRect();
+        var fedik = b.left < t.right && b.right > t.left && b.bottom > t.top - 8;
+
+        if (fedik) {
+            var alap = parseFloat(window.getComputedStyle(buborek).bottom) || 0;
+
+            buborek.style.bottom = Math.round(alap + (b.bottom - t.top) + 10) + 'px';
+        }
+    }
+
+    document.addEventListener('sdh:level-toast', function () {
+        parbajVege();
+        window.requestAnimationFrame(buborekIgazit);
+    });
 
     function setalVege() {
         if (!gyoker || !gyoker.classList.contains('is-setal')) {
@@ -962,6 +1116,11 @@
                 if (es !== 'scroll' && !(ev.target.closest && ev.target.closest('.sdh-ai'))) {
                     setalVege();
                 }
+
+                // A párbaj bármilyen kattintásra vagy gépelésre azonnal abbamarad (a figurára kattintva is).
+                if (es !== 'scroll') {
+                    parbajVege();
+                }
             }, { passive: true, capture: true });
         });
 
@@ -1007,6 +1166,10 @@
             [3, setal],
             [3, function () { beszol(napszakTema(), false); }]
         ];
+
+        if (PARBAJ) {
+            CSELEKVES.push([2, parbaj]);
+        }
         var osszSuly = CSELEKVES.reduce(function (o, c) { return o + c[0]; }, 0);
 
         function eletLep() {
@@ -1042,6 +1205,7 @@
             }
 
             setalVege();
+            parbajVege();
             allapot('orul', 1500);
             gesztus('ugral', 900);
             szikrak(9, 'konfetti');
@@ -1137,6 +1301,7 @@
         buborek.classList.remove('is-latszik');
         void buborek.offsetWidth;
         buborek.classList.add('is-latszik');
+        buborekIgazit();
         allapot(opciok.allapot || 'beszel', 2600);
 
         window.clearTimeout(buborekIdo);

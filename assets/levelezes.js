@@ -302,6 +302,9 @@
 
         toastOsszesito();
 
+        // Az asszisztens figurája ebből tudja, hogy a buborékját fölébe kell emelnie, és a párbajt abbahagyja.
+        document.dispatchEvent(new CustomEvent('sdh:level-toast'));
+
         if (!o.maradjon) {
             window.setTimeout(function () { doboz.remove(); }, 12000);
         }

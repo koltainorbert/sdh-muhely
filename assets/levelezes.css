@@ -1099,6 +1099,22 @@
     pointer-events: none;
 }
 
+/* 0.54.0 – Ha ott az asszisztens figurája, a jelzések a figura BAL oldalán sorakoznak, nem alatta.
+   Keskeny képernyőn a figura fölé kerülnek. */
+:root:has(.sdh-ai) .sdh-level-toastok {
+    right: calc(var(--sdh-ai-meret, calc(66px * var(--sdh-n))) + calc(46px * var(--sdh-n)));
+    width: min(calc(360px * var(--sdh-n)), calc(100vw - var(--sdh-ai-meret, calc(66px * var(--sdh-n))) - calc(64px * var(--sdh-n))));
+}
+
+@media (max-width: 640px) {
+    :root:has(.sdh-ai) .sdh-level-toastok {
+        right: calc(18px * var(--sdh-n));
+        bottom: calc(var(--sdh-ai-meret, calc(66px * var(--sdh-n))) + calc(44px * var(--sdh-n)));
+        width: calc(100vw - calc(36px * var(--sdh-n)));
+        max-height: calc(100vh - var(--sdh-ai-meret, calc(66px * var(--sdh-n))) - calc(70px * var(--sdh-n)));
+    }
+}
+
 .sdh-level-toast {
     position: relative;
     display: flex;

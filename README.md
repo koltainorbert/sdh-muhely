@@ -63,6 +63,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.54.0
+- **A levél-jelzéseket nem takarja a figura.** Ha az asszisztens be van kapcsolva, az új levelek felugró jelzései
+  a figura bal oldalán sorakoznak (telefonon a figura fölött). Ha a figura épp megszólal, a buborékja a jelzések
+  fölé emelkedik.
+- **Párbaj a Hiba-bogárral.** Az asszisztens figurája időnként pár másodperces fénypenge-párbajt vív egy morcos
+  kis bogárral a képernyő alján – többnyire a bogár szalad el, néha a figura pengéje merül le. Kattintásra,
+  gépelésre vagy új levél jelzésekor azonnal abbamarad; levél-jelzés látszása közben el sem kezdődik. Az élénkség
+  adja a gyakoriságát; Beállítások › Asszisztens › **Párbaj a Hiba-bogárral** kapcsolóval kikapcsolható.
+
 ### 0.53.0
 - **Gyors szövegek az RMA csevegőben.** A munkalap RMA fülén a beírómező alatt új **Gyors szövegek** gomb: popupból
   egy kattintással a beírómezőbe kerül egy előre megírt üzenet (pl. „Kedves Ügyfelünk! Megrendelése megérkezett, mai

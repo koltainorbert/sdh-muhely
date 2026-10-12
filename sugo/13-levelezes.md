@@ -158,7 +158,7 @@ Az új levelekről a rendszer **minden oldalon** szól, nem csak a Levelezésben
 
 - **Az oldalmenüben** a Levelezés mellett „N új” jelenik meg. Ez nem az olvasatlan levelek száma: azt mutatja, mennyi levél jött, mióta utoljára megnézted a Beérkezett mappát.
 - **Több fióknál** a menüpont alatt fiókonként külön sor áll, így látod, melyik címre jött a levél. Rákattintva az a fiók nyílik meg.
-- **Felugró jelzés** a jobb alsó sarokban: a feladó, a tárgy, és több fióknál a fiók neve. Rákattintva megnyílik a levél. Egyszerre legfeljebb négy látszik; a többit a „+N további új levél” sor gyűjti össze.
+- **Felugró jelzés** a jobb alsó sarokban: a feladó, a tárgy, és több fióknál a fiók neve. Rákattintva megnyílik a levél. Egyszerre legfeljebb négy látszik; a többit a „+N további új levél” sor gyűjti össze. Ha az asszisztens figurája be van kapcsolva, a jelzések a figura **bal oldalán** sorakoznak, így a figura nem takarja ki őket; ha a figura épp megszólal, a buborékja a jelzések fölé emelkedik. Keskeny képernyőn (telefonon) a jelzések a figura fölé kerülnek.
 - **Hangjelzés**, ha a Beállításokban be van kapcsolva.
 - **A böngésző értesítése:** a Levelezés fejlécében megjelenő **Értesítések bekapcsolása** gombbal engedélyezheted. Így akkor is kapsz jelzést, ha másik ablakban dolgozol.
 

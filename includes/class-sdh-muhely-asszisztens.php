@@ -94,7 +94,7 @@ final class SDH_Muhely_Asszisztens
      * ============================================================== */
 
     /**
-     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, eszkozok: array<string, bool>}
+     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, parbaj: bool, eszkozok: array<string, bool>}
      */
     public static function beallitas(): array
     {
@@ -113,6 +113,8 @@ final class SDH_Muhely_Asszisztens
             // és mennyit mozog magától a képernyőn (0 = nyugodt, 100 = igazi izgő-mozgó).
             'humor'            => max(0, min(100, (int) ($b['humor'] ?? 90))),
             'elenkseg'         => max(0, min(100, (int) ($b['elenkseg'] ?? 80))),
+            // Időnként kis fénypenge-párbajt vív a Hiba-bogárral a képernyő alján (az élénkség adja a gyakoriságát).
+            'parbaj'           => !isset($b['parbaj']) || (bool) $b['parbaj'],
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
         ];
     }
@@ -200,6 +202,7 @@ final class SDH_Muhely_Asszisztens
             // Személyiség (asszisztens.js: mimika, önálló mozgás, beszólások).
             'humor'    => $b['humor'],
             'elenkseg' => $b['elenkseg'],
+            'parbaj'   => $b['parbaj'],
             // A Súgó címe: a túra végén és a „nem találom" válaszoknál ide vezet.
             'sugo'     => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS) : '',
         ];
@@ -1183,6 +1186,9 @@ final class SDH_Muhely_Asszisztens
             'humor'            => isset($_POST['humor']) ? max(0, min(100, (int) self::p('humor', 4))) : $b['humor'],
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
             'elenkseg'         => isset($_POST['elenkseg']) ? max(0, min(100, (int) self::p('elenkseg', 4))) : $b['elenkseg'],
+            // A jelölő kipipálatlanul nem jön: a rejtett jelzőmező mondja meg, hogy az űrlapon ott volt.
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'parbaj'           => isset($_POST['parbaj_jelen']) ? self::p('parbaj', 2) === '1' : $b['parbaj'],
             'eszkozok'         => [],
         ];
 
@@ -1633,6 +1639,10 @@ final class SDH_Muhely_Asszisztens
                         </div>
                         <span class="sdh-mezo__sugo">Ha a gépen be van állítva a „kevesebb mozgás", a figura akkor is nyugton marad.</span>
                     </div>
+                </div>
+                <div class="sdh-cs-kapcsolok">
+                    <input type="hidden" name="parbaj_jelen" value="1">
+                    <label class="sdh-cs-kapcs"><input type="checkbox" name="parbaj" value="1"<?php checked($b['parbaj']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong>Párbaj a Hiba-bogárral</strong> – időnként egy kis bogár mászik elő a képernyő alján, és <?php echo esc_html($b['nev']); ?> fénypengével elkergeti (néha ő marad alul). Pár másodperc, kattintásra vagy gépelésre azonnal abbamarad.</span></label>
                 </div>
             </div>
 

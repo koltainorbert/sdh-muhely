@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
+kulcsszavak: párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -90,6 +90,15 @@ A figura nem csak ikon. Pislog, követi a szemével az egeret, és látszik rajt
 | Elpirul, szívecskéket szór | ha rajta tartod az egeret |
 
 Amikor nincs dolga, magától is elfoglalja magát: körülnéz, integet, nyújtózik, táncol, kávézik, olvas, napszemüveget vesz, elsétál a képernyő alján és visszajön. Amint dolgozni kezdesz, abbahagyja – nem lábatlankodik.
+
+### Párbaj a Hiba-bogárral
+
+Néha egy morcos kis lila bogár – a **Hiba-bogár** – mászik elő a képernyő alján, a figura bal oldalán. Mindkettőjük kezében felizzik egy fénypenge, pár csapást váltanak, szikrák pattognak, aztán:
+
+- többnyire a bogár elejti a pengéjét, és elinal – a figura büszkén ugrál;
+- néha a figura pengéje merül le, a bogár örömében ugrál egyet, és elballag.
+
+Az egész néhány másodperc. Bármilyen kattintásra vagy gépelésre azonnal abbamarad, új levél jelzésekor is. Amíg levél-jelzés látszik, el sem kezdődik. Hogy milyen gyakran jön, azt az **Élénkség** adja; a **Párbaj a Hiba-bogárral** kapcsolóval ki is kapcsolható (Beállítások › Asszisztens › Személyiség).
 
 Időnként megszólal egy rövid, vicces mondattal. Ezeket nem az AI találja ki helyben, hanem a rendszerbe épített mondatok közül választ, a napszakhoz igazodva (reggel, ebédidő, zárás előtt, péntek délután). Gépelés közben nem szól közbe, és a buborék pár másodperc múlva magától eltűnik.
 
@@ -237,6 +246,7 @@ A kulcs a webhely beállítófájljában is megadható – az a legbiztonságosa
 |---|---|
 | **Humorérzék** | A csúszka a „komoly" és a „vicces" között állítja, mennyit tréfál a válaszaiban és a magától mondott beszólásaiban. Alap: 90%. 15% alatt nincs beszólás, 10% alatt a válaszai is teljesen tárgyszerűek. |
 | **Élénkség** | A „nyugodt" és az „izgő-mozgó" között állítja, milyen gyakran mozog magától. Alap: 80%. Nullán nem mozog magától. |
+| **Párbaj a Hiba-bogárral** | Bekapcsolva a figura időnként fénypenge-párbajt vív egy kis bogárral a képernyő alján. Alap: bekapcsolva. Az élénkség nullán, vagy a gépen beállított „kevesebb mozgás” mellett nincs párbaj. |
 
 ### Mit tehet az asszisztens
 
@@ -341,6 +351,10 @@ Igen. Beállítások › Asszisztens › **Személyiség** › **Humorérzék**.
 ### Zavar, hogy mozog. Ki lehet kapcsolni?
 
 Igen. Az **Élénkség** csúszkát nullára állítva magától nem mozog. Ha a gépeden be van kapcsolva a „kevesebb mozgás", akkor sem.
+
+### Mi az a bogár, akivel a figura néha vív?
+
+A **Hiba-bogár** – a figura játékos ellenfele. Pár másodpercig fénypengével vívnak a képernyő alján, aztán a bogár elszalad (vagy ritkán a figura pengéje merül le). Kattintásra vagy gépelésre azonnal abbahagyják. Kikapcsolni a Beállítások › Asszisztens › **Párbaj a Hiba-bogárral** kapcsolóval lehet.
 
 ### Mit jelent a szám a figura sarkában?
 

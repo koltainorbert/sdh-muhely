@@ -2002,3 +2002,234 @@ a.sdh-ai__buborek-gomb {
 :root[data-papir] .sdh-ai__aura {
     opacity: .35;
 }
+
+
+/* ================================================================== */
+/* 0.54.0 – Párbaj a Hiba-bogárral (asszisztens.js: parbaj)             */
+/* ================================================================== */
+
+/* A figura pengéje (kellék): a markolatnál forog. */
+.sdh-ai__penge {
+    transform-box: view-box;
+    transform-origin: calc(7px * var(--sdh-n)) calc(39px * var(--sdh-n));
+}
+
+.sdh-ai__penge-fenye,
+.sdh-ai__penge-mag,
+.sdh-ai-parbaj__penge-fenye,
+.sdh-ai-parbaj__penge-mag {
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: sdh-ai-penge-be .28s ease-out .05s forwards;
+}
+
+.sdh-ai__penge-fenye {
+    stroke: var(--sdh-ai-a);
+    stroke-width: 6;
+    opacity: .55;
+    filter: drop-shadow(0 0 3px var(--sdh-ai-a));
+}
+
+.sdh-ai__penge-mag {
+    stroke: #fff;
+    stroke-width: 2.2;
+}
+
+@keyframes sdh-ai-penge-be {
+    to { stroke-dashoffset: 0; }
+}
+
+/* A jelenet: a figura bal oldalán, a képernyő alján. */
+.sdh-ai .sdh-ai-parbaj {
+    position: absolute;
+    right: calc(var(--sdh-ai-meret) + calc(6px * var(--sdh-n)));
+    bottom: calc(-4px * var(--sdh-n));
+    width: calc(50px * var(--sdh-n));
+    height: calc(50px * var(--sdh-n));
+    pointer-events: none;
+}
+
+.sdh-ai-parbaj__bogar {
+    width: 100%;
+    height: 100%;
+    transform: translateX(calc(-190px * var(--sdh-n)));
+}
+
+.sdh-ai-parbaj__bogar svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.sdh-ai-parbaj.is-jon .sdh-ai-parbaj__bogar {
+    transform: translateX(0);
+    transition: transform 1.15s linear;
+}
+
+/* Lábak: menet közben szaporáznak. */
+.sdh-ai-parbaj__lab {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    animation: sdh-ai-bogar-lab .16s ease-in-out infinite alternate;
+}
+
+.sdh-ai-parbaj__lab--2 {
+    animation-direction: alternate-reverse;
+}
+
+@keyframes sdh-ai-bogar-lab {
+    from { transform: rotate(-22deg); }
+    to { transform: rotate(22deg); }
+}
+
+.sdh-ai-parbaj.is-penge:not(.is-fut):not(.is-elmegy) .sdh-ai-parbaj__lab {
+    animation-play-state: paused;
+}
+
+/* A bogár pengéje: csak a „penge” lépéstől látszik. */
+.sdh-ai-parbaj__penge {
+    transform-box: view-box;
+    transform-origin: calc(55px * var(--sdh-n)) calc(42px * var(--sdh-n));
+    opacity: 0;
+}
+
+.sdh-ai-parbaj.is-penge .sdh-ai-parbaj__penge {
+    opacity: 1;
+}
+
+.sdh-ai-parbaj:not(.is-penge) .sdh-ai-parbaj__penge-fenye,
+.sdh-ai-parbaj:not(.is-penge) .sdh-ai-parbaj__penge-mag {
+    animation: none;
+}
+
+.sdh-ai-parbaj__penge-fenye {
+    stroke: #ffb02e;
+    stroke-width: 6;
+    opacity: .55;
+    filter: drop-shadow(0 0 3px #ffb02e);
+}
+
+.sdh-ai-parbaj__penge-mag {
+    stroke: #fff8e6;
+    stroke-width: 2.2;
+}
+
+.sdh-ai-parbaj__csepp {
+    opacity: 0;
+}
+
+/* Vívás: a két penge egymásnak csap, a találkozásnál szikra villan. */
+.sdh-ai.is-parbaj-viv .sdh-ai__penge {
+    animation: sdh-ai-penge-vag .36s ease-in-out infinite alternate;
+}
+
+.sdh-ai.is-parbaj-viv .sdh-ai-parbaj__penge {
+    animation: sdh-ai-bogar-vag .36s ease-in-out infinite alternate;
+}
+
+.sdh-ai.is-parbaj-viv .sdh-ai-parbaj__bogar svg {
+    animation: sdh-ai-bogar-ugral .36s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-ai-penge-vag {
+    from { transform: rotate(-16deg); }
+    to { transform: rotate(18deg); }
+}
+
+@keyframes sdh-ai-bogar-vag {
+    from { transform: rotate(16deg); }
+    to { transform: rotate(-20deg); }
+}
+
+@keyframes sdh-ai-bogar-ugral {
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(-3px * var(--sdh-n))); }
+}
+
+.sdh-ai-parbaj__szikra {
+    position: absolute;
+    top: calc(-6px * var(--sdh-n));
+    right: calc(-14px * var(--sdh-n));
+    width: calc(14px * var(--sdh-n));
+    height: calc(14px * var(--sdh-n));
+    background: radial-gradient(circle, #fff 0 22%, #ffe07a 30%, color-mix(in srgb, var(--sdh-ai-a) 70%, transparent) 55%, transparent 72%);
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+    opacity: 0;
+}
+
+.sdh-ai.is-parbaj-viv .sdh-ai-parbaj__szikra {
+    animation: sdh-ai-parbaj-szikra .36s steps(1) infinite;
+}
+
+@keyframes sdh-ai-parbaj-szikra {
+    0% { opacity: 0; }
+    45% { opacity: 1; transform: scale(1.25) rotate(20deg); }
+    70% { opacity: .6; transform: scale(.8) rotate(-15deg); }
+}
+
+/* A bogár kikap: megfordul, elejti a pengét, és elinal. */
+.sdh-ai-parbaj.is-fut .sdh-ai-parbaj__penge {
+    opacity: 0;
+    transition: opacity .15s ease;
+}
+
+.sdh-ai-parbaj.is-fut .sdh-ai-parbaj__bogar,
+.sdh-ai-parbaj.is-elmegy .sdh-ai-parbaj__bogar {
+    transform: translateX(calc(-230px * var(--sdh-n))) scaleX(-1);
+    transition: transform .85s cubic-bezier(.5, 0, .9, .6);
+}
+
+.sdh-ai-parbaj.is-elmegy .sdh-ai-parbaj__bogar {
+    transition-duration: 1.6s;
+    transition-timing-function: linear;
+}
+
+.sdh-ai-parbaj.is-fut .sdh-ai-parbaj__csepp {
+    opacity: 1;
+    transition: opacity .1s ease;
+}
+
+.sdh-ai-parbaj.is-fut .sdh-ai-parbaj__szaj {
+    d: path("M45 37.5q3 2 6 0");
+}
+
+/* A figura pengéje lemerül: pislákol, kialszik; a bogár örömében ugrál. */
+.sdh-ai.is-parbaj-lemerul .sdh-ai__penge-fenye,
+.sdh-ai.is-parbaj-lemerul .sdh-ai__penge-mag {
+    animation: sdh-ai-penge-lemerul .6s steps(2) forwards;
+}
+
+@keyframes sdh-ai-penge-lemerul {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    30% { opacity: .15; }
+    55% { opacity: .9; }
+    80% { stroke-dashoffset: .55; opacity: .3; }
+    100% { stroke-dashoffset: 1; opacity: 0; }
+}
+
+.sdh-ai-parbaj.is-orul .sdh-ai-parbaj__bogar svg {
+    animation: sdh-ai-bogar-orul .3s ease-in-out 3 alternate;
+}
+
+@keyframes sdh-ai-bogar-orul {
+    from { transform: translateY(0) rotate(0); }
+    to { transform: translateY(calc(-9px * var(--sdh-n))) rotate(-8deg); }
+}
+
+.sdh-ai-parbaj.is-orul .sdh-ai-parbaj__szaj {
+    d: path("M44.5 35.5q3.5 3.2 7 0");
+}
+
+.sdh-ai-parbaj.is-elmegy .sdh-ai-parbaj__penge {
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ai-parbaj {
+        display: none;
+    }
+}
