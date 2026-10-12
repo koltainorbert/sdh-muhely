@@ -58,14 +58,16 @@ $app_js = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.js');
 T::tartalmaz($app_js, 'function munkalapEszkozSzerk', 'app.js: megvan az eszközszerkesztő');
 T::tartalmaz($app_js, "nyit('eszkozok', id", 'app.js: az eszköz űrlapja a lap fölött nyílik');
 
-/* ---- 4. Több eszköz: a bal oldal két hasábos, nem kicsinyít ----------- */
+/* ---- 4. Több eszköz: jelölő osztály; az oldalsáv (0.59.1 óta) egy hasábos, kártyás ---- */
 
 $urlap1 = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $egy])['nyers'];
 T::igaz(preg_match('/class="sdh-ugyfelurlap sdh-munkalapurlap is-tobb-eszkoz"/', $urlap) === 1, 'több eszköznél a lap már a szerverről megkapja a jelölő osztályt');
 T::igaz(preg_match('/class="sdh-ugyfelurlap sdh-munkalapurlap"\s+data-sdh-munkalap/', $urlap1) === 1, 'egy eszköznél nincs jelölő osztály');
 
 $admin_css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css');
-T::igaz(preg_match('/\.sdh-munkalapurlap\.is-tobb-eszkoz > \.sdh-ml > \.sdh-ml__oldal \{[^}]*columns: 2/', $admin_css) === 1, 'admin.css: több eszköznél két hasáb');
+T::igaz(preg_match('/\.sdh-munkalapurlap\.is-tobb-eszkoz > \.sdh-ml > \.sdh-ml__oldal \{[^}]*columns: 2/', $admin_css) === 0, 'admin.css: az oldalsáv több eszköznél sem törik két hasábra');
+T::tartalmaz($admin_css, '.sdh-munkalapurlap .sdh-ml__csoport--racs {', 'admin.css: a rokon mezők egy sorban (kártyás oldalsáv)');
+T::tartalmaz($urlap, 'sdh-ml__csoport sdh-ml__csoport--fizetes', 'a Fizetés csoport jelölve (díjkártya)');
 
 /* ---- 2. Csak a Számlázz.hu számla és a számla-előkészítő --------------- */
 

@@ -3560,7 +3560,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--racs">
                         <h3 class="sdh-ml__cim">Dátumok</h3>
 
                         <div class="sdh-ig">
@@ -3580,7 +3580,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--osszeg">
                         <h3 class="sdh-ml__cim">Összeg</h3>
 
                         <div class="sdh-ml__osszeg">
@@ -3594,7 +3594,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--racs">
                         <h3 class="sdh-ml__cim">Tételek</h3>
 
                         <div class="sdh-ig">
@@ -3617,7 +3617,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--fizetes">
                         <h3 class="sdh-ml__cim">Fizetés</h3>
 
                         <div class="sdh-ig">
@@ -3685,11 +3685,11 @@ final class SDH_Muhely_Munkalap
                         </div>
 
                         <div class="sdh-ig sdh-bev__mod" data-sdh-bev-mod-doboz>
-                            <span class="sdh-ig__cimke" title="Mi legyen a díjjal, ha az ügyfél kéri a javítást?">Ha javítás</span>
+                            <span class="sdh-ig__cimke" title="Mi legyen a díjjal, ha az ügyfél kéri a javítást?">Ha az ügyfél kéri a javítást</span>
                             <div class="sdh-szegmens sdh-szegmens--kicsi" role="radiogroup" aria-label="A bevizsgálási díj sorsa">
                                 <label class="sdh-szegmens__elem" title="Az ügyfél kéri a javítást: a díj mínusz tételként levonódik a végösszegből.">
                                     <input type="radio" name="bevizsgalas_mod" value="levon" data-sdh-bev-mod <?php checked($bev_mod, 'levon'); ?>>
-                                    <span>Javítás: levonódik</span>
+                                    <span>Levonódik</span>
                                 </label>
                                 <label class="sdh-szegmens__elem" title="Az ügyfél nem kéri a javítást (vagy a díj nem számít be): a díj munkadíjként nálunk marad.">
                                     <input type="radio" name="bevizsgalas_mod" value="marad" data-sdh-bev-mod <?php checked($bev_mod, 'marad'); ?>>
@@ -3698,10 +3698,10 @@ final class SDH_Muhely_Munkalap
                             </div>
                         </div>
 
-                        <p class="sdh-bev__info" data-sdh-bev-info aria-live="polite"></p>
+                        <div class="sdh-bev__info" data-sdh-bev-info aria-live="polite" hidden></div>
                         </div>
 
-                        <div class="sdh-ml__osszeg sdh-ml__osszeg--fo">
+                        <div class="sdh-ml__osszeg sdh-ml__osszeg--fo sdh-ml__osszeg--fizetendo">
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
                         </div>
 
@@ -4419,7 +4419,7 @@ final class SDH_Muhely_Munkalap
             <output class="is-jobb" data-sdh-tetel="brutto">0</output>
 
             <?php if ($levonas) : ?>
-                <span class="sdh-tetelsor__zar" title="A bevizsgálási díj levonása – a „Bevizsgálási díj” jelölő és a „Ha javítás” választó tartja karban">
+                <span class="sdh-tetelsor__zar" title="A bevizsgálási díj levonása – a „Bevizsgálási díj” jelölő és a „Ha az ügyfél kéri a javítást” kapcsoló tartja karban">
                     <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.2"/><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/></svg>
                 </span>
             <?php else : ?>
@@ -4545,7 +4545,7 @@ final class SDH_Muhely_Munkalap
                     <?php echo self::kartya_allapot($munkalap_id, $b, $tobb); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
                     <span class="sdh-ml-eszkoz__dij sdh-eszk__dij"
                           title="Ennek az eszköznek a bevizsgálási díja. Külön tételként kerül a munkalapra és a számlára, és beleszámít az előlegbe.">
-                        <label>díj
+                        <label><span class="sdh-eszk__dijcimke">Díj</span>
                             <input type="text" inputmode="decimal" autocomplete="off" data-sdh-tovabbi-dij
                                    name="tovabbi_dij[<?php echo esc_attr($eszkoz_id); ?>]" placeholder="0"
                                    aria-label="Az eszköz bevizsgálási díja (Ft)"

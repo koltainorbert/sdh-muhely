@@ -3471,11 +3471,16 @@
             var kifizetve = bontasFizetve || !!(kartya && kartya.getAttribute('data-fizetve') === '1');
             var hatra = kifizetve ? 0 : brutto - eloleg;
 
+            // Három adat egymás mellett (felirat fölül, összeg alul); kifizetve egy zöld sáv.
+            var stat = function (cimke, osszeg, osztaly) {
+                return '<span class="sdh-eszk__stat' + (osztaly ? ' ' + osztaly : '') + '"><i>' + cimke + '</i><b>' + mlPenz(osszeg) + '\u00a0Ft</b></span>';
+            };
+
             penzHely.innerHTML = kifizetve
-                ? '<span class="sdh-eszk__fizetve">\u2713 Fizetve' + (eloleg > 0.5 ? ' <b>' + mlPenz(eloleg) + '\u00a0Ft</b>' : '') + '</span>'
-                : '<span>végösszeg <b>' + mlPenz(brutto) + '\u00a0Ft</b></span>' +
-                  (eloleg > 0.5 ? '<span>befizetve <b>' + mlPenz(eloleg) + '\u00a0Ft</b></span>' : '') +
-                  '<span class="' + (hatra > 0.5 ? 'is-hatra' : (hatra < -0.5 ? 'is-negativ' : 'is-nulla')) + '">fizetendő <b>' + mlPenz(hatra) + '\u00a0Ft</b></span>';
+                ? '<span class="sdh-eszk__fizetve"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l3 3 6-6.4"/></svg>Fizetve' + (eloleg > 0.5 ? '<b>' + mlPenz(eloleg) + '\u00a0Ft</b>' : '') + '</span>'
+                : stat('Végösszeg', brutto, '') +
+                  stat('Befizetve', eloleg, eloleg > 0.5 ? '' : 'is-nulla') +
+                  stat('Fizetendő', hatra, hatra > 0.5 ? 'is-hatra' : (hatra < -0.5 ? 'is-negativ' : 'is-nulla'));
         });
 
         // A fő eszköz díja: az előlegből adódik (nincs saját mezője).
@@ -3483,7 +3488,7 @@
 
         if (foDijHely) {
             foDijHely.hidden = !bevJelolo || eszSor.length < 2;
-            foDijHely.innerHTML = 'díj <b>' + mlPenz(esz['0'].dij) + '\u00a0Ft</b> <i>(az előlegből)</i>';
+            foDijHely.innerHTML = '<span class="sdh-eszk__dijcimke">Díj</span><b>' + mlPenz(esz['0'].dij) + '\u00a0Ft</b><i>az előlegből</i>';
         }
 
         bevInfo(gyoker, bevPipa, bevEloleg, bevMod, levon, tobbi, bevFo, bevCsatolt);
@@ -3541,33 +3546,47 @@
             modDoboz.hidden = !be;
         }
 
-        if (be) {
-            var nev = nevMezo && nevMezo.value ? nevMezo.value + ': ' : '';
+        // Áttekinthető kártya: a díj, mi lesz vele (összeg), és egy rövid megjegyzés.
+        var sor = function (cimke, ertek, osztaly) {
+            return '<div class="sdh-bev__tetel' + (osztaly ? ' ' + osztaly : '') + '"><span>' + cimke + '</span><b>' + ertek + '</b></div>';
+        };
+        var html = '';
 
-            // Több díjas eszköznél: az eszközönkénti díj a kártyákon látszik, itt csak az összeg.
-            if (csatoltDij > 0) {
-                nev = 'Díjak összesen: ';
-            }
+        if (be) {
+            var nev = nevMezo && nevMezo.value ? nevMezo.value : '';
 
             if (dij <= 0) {
-                szoveg = 'Írd be a díjat a „Fizetett (előleg)” mezőbe, vagy válaszd a díjlistából.';
-            } else if (mod === 'marad') {
-                szoveg = nev + mlPenz(dij) + '\u00a0Ft – munkadíjként marad, nem vonódik le.';
-            } else if (levon > 0) {
-                szoveg = nev + mlPenz(dij) + '\u00a0Ft – levonódik a végösszegből: −' + mlPenz(levon) + '\u00a0Ft' +
-                    (levon < dij ? ' (a többi tétel összegéig)' : '') + '.';
+                html = '<p class="sdh-bev__megj">Írd be a díjat a <b>Fizetett (előleg)</b> mezőbe, vagy válaszd a díjlistából.</p>';
             } else {
-                szoveg = nev + mlPenz(dij) + '\u00a0Ft – javításnál levonódik, addig munkadíj.';
-            }
+                html = sor(csatoltDij > 0 ? 'Díjak összesen' : 'Bevizsgálási díj', mlPenz(dij) + '\u00a0Ft', '');
 
-            if (csatoltDij > 0) {
-                szoveg += ' Eszközönként: lásd az Eszközök panel kártyáit.';
+                if (mod === 'marad') {
+                    html += sor('Munkadíjként marad', 'nem vonódik le', 'is-marad');
+                } else if (levon > 0) {
+                    html += sor('Levonódik a végösszegből', '\u2212' + mlPenz(levon) + '\u00a0Ft', 'is-levon');
+
+                    if (levon < dij) {
+                        html += '<p class="sdh-bev__megj">Csak a többi tétel összegéig vonódik le.</p>';
+                    }
+                } else {
+                    html += sor('Javításnál levonódik', 'addig munkadíj', 'is-marad');
+                }
+
+                if (nev !== '' && csatoltDij <= 0) {
+                    html += '<p class="sdh-bev__megj">' + szovegBiztonsagos(nev) + '</p>';
+                }
+
+                if (csatoltDij > 0) {
+                    html += '<p class="sdh-bev__megj">Eszközönként az Eszközök panel kártyáin.</p>';
+                }
             }
         }
 
+        szoveg = html;
+
         if (info) {
-            info.textContent = szoveg;
-            info.hidden = szoveg === '';
+            info.innerHTML = html;
+            info.hidden = html === '';
         }
     }
 

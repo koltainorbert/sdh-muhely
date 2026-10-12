@@ -145,7 +145,7 @@ Amikor kiválasztasz egy díjat:
 - a **Bevizsgálási díj** jelölő bepipálódik,
 - a díj külön tételként megjelenik a munkalapon.
 
-A **Ha javítás** választóval döntöd el a díj sorsát: **Javítás: levonódik** – a díj levonódik a végösszegből; vagy **Munkadíj marad** – a díj megmarad munkadíjként. Erről részletesen a [Munkalapok](sugo:munkalapok) fejezet ír.
+A **Ha az ügyfél kéri a javítást** kapcsolóval döntöd el a díj sorsát: **Levonódik** – a díj levonódik a végösszegből; vagy **Munkadíj marad** – a díj megmarad munkadíjként. Erről részletesen a [Munkalapok](sugo:munkalapok) fejezet ír.
 
 A díjak árát a Szolgáltatások **Árlista** nézetében írod át. A munkalap a díjat mindig innen veszi.
 

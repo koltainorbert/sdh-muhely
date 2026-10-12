@@ -7362,34 +7362,6 @@ a.sdh-ora__zaras--nincs {
 }
 
 /* ================================================================== */
-/* 0.49 – több eszköz: a bal oldal két hasábban                        */
-/* ================================================================== */
-/*
- * Több eszköznél a bal oldalsáv (eszközönkénti állapot + eszközönkénti
- * bontás) annyival magasabb lett, hogy a popup nem fért a képernyőre, és
- * az illesztés (app.js illesztPopup, CSS zoom) az egész lapot apró betűsre
- * kicsinyítette. Széles képernyőn ezért az oldalsáv két hasábra törik: a
- * lap magassága nem nő, a betű marad a rendes méretében.
- */
-@media (min-width: 1280px) {
-    .sdh-munkalapurlap.is-tobb-eszkoz > .sdh-ml {
-        grid-template-columns: calc(560px * var(--sdh-n)) minmax(0, 1fr);
-    }
-
-    .sdh-munkalapurlap.is-tobb-eszkoz > .sdh-ml > .sdh-ml__oldal {
-        display: block;
-        columns: 2;
-        column-gap: 1.1rem;
-        column-fill: balance;
-    }
-
-    .sdh-munkalapurlap.is-tobb-eszkoz > .sdh-ml > .sdh-ml__oldal > .sdh-ml__csoport {
-        break-inside: avoid;
-        margin-bottom: .55rem;
-    }
-}
-
-/* ================================================================== */
 /* 0.49 – betűnagyítás, üvegszín (Duó / Egyszínű), új kiemelő színek   */
 /* ================================================================== */
 
@@ -9223,4 +9195,673 @@ a.sdh-ora__zaras--nincs {
 /* Címke QR-kód nélkül (kikapcsolt Ügyfélüzenetek és RMA-oldal modul). */
 .sdh-cimke--rma.sdh-cimke--qr-nelkul {
     grid-template-columns: minmax(0, 1fr);
+}
+
+/* ================================================================== */
+/* 0.59.1 – munkalap: oldalsáv kártyákban, bevizsgálási díj, eszközkártyák */
+/* ================================================================== */
+/*
+ * Az oldalsáv egy hasábos (a két hasábos törés átláthatatlan volt): a
+ * csoportok puha kártyák, a rokon mezők (dátumok, kedvezmény + áfa) egy
+ * sorban, felirattal fölöttük – így egy hasábban is elfér. Az összeg és a
+ * fizetendő kiemelt összesítő. A bevizsgálási díj saját kártyája szegmens-
+ * választóval és tételes összesítővel; az eszközkártyák képpel, pill
+ * állapotválasztóval és háromoszlopos pénzsávval.
+ */
+
+.sdh-munkalapurlap > .sdh-ml {
+    grid-template-columns: calc(304px * var(--sdh-n)) minmax(0, 1fr);
+    gap: 1rem;
+}
+
+.sdh-munkalapurlap .sdh-ml__oldal {
+    gap: .6rem;
+    padding-right: 0;
+    border-right: 0;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport {
+    gap: .4rem;
+    padding: .6rem .7rem .7rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(14px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-felulet-2) 45%, var(--sdh-felulet));
+}
+
+.sdh-munkalapurlap .sdh-ml__cim {
+    margin: 0 0 .1rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.sdh-munkalapurlap .sdh-ml__cim::after {
+    display: none;
+}
+
+.sdh-munkalapurlap .sdh-ml__oldal .sdh-ig {
+    grid-template-columns: 6.6rem minmax(0, 1fr);
+}
+
+.sdh-munkalapurlap .sdh-ml__oldal [hidden] {
+    display: none !important;
+}
+
+/* Rokon mezők egy sorban, felirattal fölöttük (Dátumok, Tételek). */
+.sdh-munkalapurlap .sdh-ml__csoport--racs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: .35rem .5rem;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--racs > .sdh-ml__cim,
+.sdh-munkalapurlap .sdh-ml__csoport--racs > .sdh-ml__olvas {
+    grid-column: 1 / -1;
+}
+
+.sdh-munkalapurlap .sdh-ml__oldal .sdh-ml__csoport--racs > .sdh-ig {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .2rem;
+    min-width: 0;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--racs > .sdh-ig > label {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+/* Lezárva: kis zöld címke a dátumok alatt (felirat balra, dátum jobbra). */
+.sdh-munkalapurlap .sdh-ml__oldal .sdh-ml__csoport--racs > .sdh-ig.sdh-ml__olvas {
+    flex-direction: row;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--racs > .sdh-ml__olvas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 0;
+    margin-top: .1rem;
+    padding: .25rem .55rem;
+    border-radius: calc(8px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 12%, var(--sdh-felulet));
+    color: var(--sdh-szoveg);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--racs > .sdh-ml__olvas .sdh-ig__cimke {
+    color: var(--sdh-szoveg-2);
+}
+
+/* Összeg: nettó és áfa kicsiben egymás mellett, alatta nagyban a bruttó. */
+.sdh-munkalapurlap .sdh-ml__csoport--osszeg {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: .3rem .5rem;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--osszeg > .sdh-ml__cim {
+    grid-column: 1 / -1;
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--osszeg > .sdh-ml__osszeg:not(.sdh-ml__osszeg--fo) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 .25rem;
+    min-height: 0;
+    padding: .35rem .5rem;
+    border-radius: calc(9px * var(--sdh-n));
+    background: var(--sdh-felulet);
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--osszeg > .sdh-ml__osszeg:not(.sdh-ml__osszeg--fo) > span:first-child {
+    flex: 1 0 100%;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11px * var(--sdh-n));
+}
+
+.sdh-munkalapurlap .sdh-ml__csoport--osszeg > .sdh-ml__osszeg:not(.sdh-ml__osszeg--fo) output {
+    text-align: left;
+    font-weight: 600;
+}
+
+.sdh-munkalapurlap .sdh-ml__osszeg--fo {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: baseline;
+    min-height: 0;
+    margin-top: .1rem;
+    padding: .45rem .6rem;
+    border-radius: calc(10px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-weight: 600;
+}
+
+.sdh-munkalapurlap .sdh-ml__osszeg--fo output {
+    font-size: calc(18px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: -.01em;
+}
+
+/* Fizetendő: a Fizetés kártya alján, kiemelő színű sáv. */
+.sdh-munkalapurlap .sdh-ml__osszeg--fizetendo {
+    margin-top: .3rem;
+    border: 1px solid color-mix(in srgb, var(--sdh-accent) 35%, var(--sdh-keret));
+    background: color-mix(in srgb, var(--sdh-accent) 8%, var(--sdh-felulet));
+}
+
+.sdh-munkalapurlap .sdh-ml__osszeg--fizetendo output.is-negativ {
+    color: var(--sdh-hiba);
+}
+
+/* ---- Bevizsgálási díj: saját kártya ---- */
+
+.sdh-munkalapurlap .sdh-ml__csoport--fizetes > .sdh-eladas-rejt {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    margin-top: .15rem;
+    padding: .55rem .6rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(12px * var(--sdh-n));
+    background: var(--sdh-felulet);
+}
+
+.sdh-munkalapurlap .sdh-ml__oldal .sdh-ig.sdh-bev,
+.sdh-munkalapurlap .sdh-ml__oldal .sdh-ig.sdh-bev__mod {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .3rem;
+    margin: 0;
+}
+
+.sdh-munkalapurlap .sdh-bev > .sdh-ig__cimke:empty {
+    display: none;
+}
+
+.sdh-munkalapurlap .sdh-bev__sor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.sdh-munkalapurlap .sdh-bev__sor .sdh-jelolo {
+    font-weight: 600;
+}
+
+.sdh-munkalapurlap .sdh-bev__mod > .sdh-ig__cimke {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+/* Szegmensválasztó: sín, benne két egyforma gomb; a választott „felemelkedik”. */
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(3px * var(--sdh-n));
+    width: 100%;
+    padding: calc(3px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem {
+    position: relative;
+    display: block;
+    min-width: 0;
+    margin: 0;
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    appearance: none;
+    cursor: pointer;
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(28px * var(--sdh-n));
+    padding: 0 .5rem;
+    border: 0;
+    border-radius: calc(999px * var(--sdh-n));
+    background: transparent;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background .15s, color .15s, box-shadow .15s;
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem:hover span {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem input:checked + span {
+    border: 0;
+    background: var(--sdh-felulet);
+    color: var(--sdh-accent-szoveg);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .14), 0 0 0 1px color-mix(in srgb, var(--sdh-accent) 30%, transparent);
+}
+
+.sdh-munkalapurlap .sdh-bev__mod .sdh-szegmens__elem input:focus-visible + span {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+/* A díj összesítője: tételesen, jobbra zárt összegekkel – nem figyelmeztető doboz. */
+.sdh-munkalapurlap .sdh-bev__info {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    margin: 0;
+    padding: .45rem .55rem;
+    border: 0;
+    border-radius: calc(9px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    font-size: calc(12.5px * var(--sdh-n));
+    line-height: 1.4;
+}
+
+.sdh-munkalapurlap .sdh-bev__tetel {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .6rem;
+}
+
+.sdh-munkalapurlap .sdh-bev__tetel span {
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-munkalapurlap .sdh-bev__tetel b {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sdh-munkalapurlap .sdh-bev__tetel.is-levon b {
+    color: var(--sdh-siker);
+}
+
+.sdh-munkalapurlap .sdh-bev__tetel.is-marad b {
+    color: var(--sdh-szoveg-2);
+    font-weight: 600;
+}
+
+.sdh-munkalapurlap .sdh-bev__megj {
+    margin: .1rem 0 0;
+    color: var(--sdh-halvany);
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+/* ---- Eszközkártyák (Eszközök a lapon) ---- */
+
+.sdh-eszp .sdh-eszp__racs {
+    grid-template-columns: repeat(auto-fit, minmax(calc(320px * var(--sdh-n)), 1fr));
+    gap: .7rem;
+}
+
+.sdh-eszk,
+.sdh-eszp .sdh-ml-eszkoz.sdh-eszk {
+    gap: .85rem;
+    padding: .8rem .85rem .85rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(16px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .05), 0 4px 14px rgba(15, 23, 42, .04);
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.sdh-eszk:hover,
+.sdh-eszp .sdh-ml-eszkoz.sdh-eszk:hover {
+    border-color: var(--sdh-keret-eros);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, .06), 0 8px 22px rgba(15, 23, 42, .07);
+}
+
+/* A fő eszköz: kiemelő színű csík a bal szélen (nem színezett háttér). */
+.sdh-eszk--fo {
+    overflow: hidden;
+}
+
+.sdh-eszk--fo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(4px * var(--sdh-n));
+    background: var(--sdh-accent);
+}
+
+/* Kész / lezárt eszköz: zöld keret és pipa a kép sarkában, a háttér marad. */
+.sdh-eszk.is-kesz,
+.sdh-eszp .sdh-ml-eszkoz.sdh-eszk.is-kesz {
+    border-color: color-mix(in srgb, var(--sdh-siker) 40%, var(--sdh-keret));
+    background: var(--sdh-felulet);
+}
+
+.sdh-eszk__kep {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: calc(76px * var(--sdh-n));
+    height: calc(76px * var(--sdh-n));
+    padding: calc(6px * var(--sdh-n));
+    border-radius: calc(14px * var(--sdh-n));
+    background: radial-gradient(circle at 50% 35%, var(--sdh-felulet) 0%, var(--sdh-felulet-2) 75%);
+    box-sizing: border-box;
+}
+
+.sdh-eszk__kep img,
+.sdh-eszk__kep svg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.sdh-eszk__kep > * {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.sdh-eszk.is-kesz .sdh-eszk__kep::after {
+    content: "";
+    position: absolute;
+    right: calc(-5px * var(--sdh-n));
+    bottom: calc(-5px * var(--sdh-n));
+    width: calc(20px * var(--sdh-n));
+    height: calc(20px * var(--sdh-n));
+    border: 2px solid var(--sdh-felulet);
+    border-radius: 50%;
+    background: var(--sdh-siker) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4l3 3 6-6.4' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 70% no-repeat;
+}
+
+.sdh-eszk__test {
+    gap: .45rem;
+}
+
+.sdh-eszk__fej {
+    gap: .5rem;
+}
+
+.sdh-eszk__sorszam {
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    background: var(--sdh-accent);
+    color: #fff;
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+.sdh-eszk__nev,
+.sdh-eszp .sdh-ml-eszkoz__nev.sdh-eszk__nev {
+    font-size: calc(14.5px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: -.005em;
+}
+
+.sdh-eszk__jel {
+    padding: .15rem .55rem;
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: calc(10px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: .06em;
+}
+
+.sdh-eszk__gombok .sdh-ml-eszkoz__lista,
+.sdh-eszk__gombok .sdh-ml-eszkoz__torol {
+    display: inline-grid;
+    place-items: center;
+    width: calc(28px * var(--sdh-n));
+    height: calc(28px * var(--sdh-n));
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sdh-szoveg-2);
+    cursor: pointer;
+}
+
+.sdh-eszk__gombok .sdh-ml-eszkoz__lista:hover,
+.sdh-eszk__gombok .sdh-ml-eszkoz__torol:hover {
+    border-color: var(--sdh-keret);
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+.sdh-eszk__gombok .sdh-ml-eszkoz__torol:hover {
+    color: var(--sdh-hiba);
+}
+
+.sdh-eszk__al {
+    margin-top: -.15rem;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-eszk__sor {
+    gap: .45rem;
+}
+
+/* Állapot: pill alakú választó a színes pöttyel. */
+.sdh-eszk .sdh-allapot--valaszthato {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: calc(150px * var(--sdh-n));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.sdh-eszk .sdh-allapot--valaszthato::before {
+    position: absolute;
+    left: calc(11px * var(--sdh-n));
+    z-index: 1;
+    margin: 0;
+    pointer-events: none;
+}
+
+.sdh-eszk .sdh-allapot--valaszthato select {
+    width: 100%;
+    height: calc(32px * var(--sdh-n));
+    min-height: calc(32px * var(--sdh-n));
+    padding: 0 calc(30px * var(--sdh-n)) 0 calc(26px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(999px * var(--sdh-n));
+    background-color: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.sdh-eszk .sdh-allapot--valaszthato:focus-within select {
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sdh-accent) 18%, transparent);
+}
+
+/* Díj: egyetlen keretes mező (felirat · összeg · Ft · díjlista). */
+.sdh-eszp .sdh-ml-eszkoz__dij.sdh-eszk__dij {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    height: calc(32px * var(--sdh-n));
+    padding: 0 .25rem 0 .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-eszp .sdh-ml-eszkoz__dij.sdh-eszk__dij:focus-within {
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sdh-accent) 18%, transparent);
+}
+
+.sdh-eszp .sdh-ml-eszkoz__dij.sdh-eszk__dij label {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin: 0;
+}
+
+.sdh-eszp .sdh-ml-eszkoz__dij.sdh-eszk__dij input {
+    width: calc(64px * var(--sdh-n));
+    height: calc(26px * var(--sdh-n));
+    min-height: 0;
+    padding: 0 .2rem;
+    border: 0;
+    background: transparent;
+    color: var(--sdh-szoveg);
+    font-weight: 700;
+    text-align: right;
+    box-shadow: none;
+    outline: 0;
+}
+
+.sdh-eszp .sdh-ml-eszkoz__dij.sdh-eszk__dij .sdh-ml-eszkoz__lista {
+    display: inline-grid;
+    place-items: center;
+    width: calc(26px * var(--sdh-n));
+    height: calc(26px * var(--sdh-n));
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-eszk__dijcimke {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+/* A fő eszköz díja (az előlegből): ugyanolyan pill, csak olvasható. */
+.sdh-eszk__dij--fo {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    height: calc(32px * var(--sdh-n));
+    padding: 0 .75rem;
+    border: 1px dashed var(--sdh-keret-eros);
+    border-radius: calc(999px * var(--sdh-n));
+    color: var(--sdh-szoveg);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-eszk__dij--fo b {
+    font-weight: 700;
+}
+
+.sdh-eszk__dij--fo i {
+    color: var(--sdh-halvany);
+    font-size: calc(11.5px * var(--sdh-n));
+    font-style: normal;
+}
+
+/* Pénz: három egyforma cella (felirat fölül, összeg alul). */
+.sdh-eszk__penz {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .35rem;
+    margin-top: .1rem;
+}
+
+.sdh-eszk__penz > .sdh-eszk__stat {
+    display: flex;
+    flex-direction: column;
+    gap: .05rem;
+    min-width: 0;
+    padding: .35rem .5rem;
+    border-radius: calc(10px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-eszk__stat i {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(10.5px * var(--sdh-n));
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.sdh-eszk__stat b {
+    color: var(--sdh-szoveg);
+    font-size: calc(13.5px * var(--sdh-n));
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sdh-eszk__stat.is-nulla b {
+    color: var(--sdh-halvany);
+    font-weight: 600;
+}
+
+.sdh-eszk__penz > .sdh-eszk__stat.is-hatra {
+    background: color-mix(in srgb, var(--sdh-figyelem) 15%, var(--sdh-felulet));
+}
+
+.sdh-eszk__stat.is-hatra b {
+    color: color-mix(in srgb, var(--sdh-figyelem) 75%, var(--sdh-szoveg));
+}
+
+.sdh-eszk__stat.is-negativ b {
+    color: var(--sdh-hiba);
+}
+
+.sdh-eszk__penz > .sdh-eszk__fizetve {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .4rem .65rem;
+    border-radius: calc(10px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-siker) 12%, var(--sdh-felulet));
+    color: var(--sdh-siker);
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 700;
+}
+
+.sdh-eszk__fizetve svg {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-eszk__penz > .sdh-eszk__fizetve b {
+    margin-left: auto;
+    color: var(--sdh-siker);
+}
+
+@media (max-width: 1100px) {
+    .sdh-munkalapurlap > .sdh-ml {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

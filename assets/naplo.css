@@ -272,7 +272,7 @@ form.is-zarolt textarea[data-sdh-zar-tiltva] {
 .sdh-naplo__forras--ai,
 .sdh-naplo__forras--ai-visszaallitas {
     background: var(--sdh-accent-halvany);
-    color: var(--sdh-accent-felirat);
+    color: var(--sdh-accent-szoveg);
 }
 
 .sdh-naplo__rekord {
@@ -357,7 +357,7 @@ form.is-zarolt textarea[data-sdh-zar-tiltva] {
 
 .sdh-naplo__reszlet summary {
     margin-top: .2rem;
-    color: var(--sdh-accent-felirat);
+    color: var(--sdh-accent-szoveg);
     font-size: calc(12px * var(--sdh-n));
     cursor: pointer;
 }

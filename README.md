@@ -64,6 +64,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.1
+- **A munkalap új dizájnja.** Az oldalsáv több eszköznél sem törik két hasábra: egy hasáb, csoportonként puha
+  kártyában (Állapot, Dátumok, Összeg, Tételek, Fizetés); a rokon mezők egy sorban, felirattal fölöttük (Készült +
+  Határidő, Kedvezmény + Áfakulcs); a Lezárva zöld címke; az Összegben a nettó és az áfa kis cellában, a bruttó
+  nagyban; a Fizetendő kiemelt sáv.
+- **Bevizsgálási díj:** saját kártya; a „Ha az ügyfél kéri a javítást” kétállású kapcsoló (**Levonódik** /
+  **Munkadíj marad**); a figyelmeztető doboz helyett tételes összesítő (díj, levonás jobbra zárt összeggel).
+- **Eszközkártyák (Eszközök a lapon):** nagyobb kép keretben, a fő eszköznél kiemelő csík, a kész eszköznél zöld
+  pipa a kép sarkában (színezett háttér helyett), pill alakú állapotválasztó és díjmező, a pénz három egyforma
+  cellában (végösszeg, befizetve, fizetendő), kifizetve zöld sáv; a kártyák kitöltik a sort.
+
 ### 0.59.0
 - **Lezárt lap zárolása.** A lezárt állapotú lap (Lezárt, Érvénytelen – minden `zart` jelzős állapot) csak
   olvasható: a munkalap / árukiadás / rendelés ablakának tetején zöld sáv, a mezők és a szerkesztő gombok letiltva,

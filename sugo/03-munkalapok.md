@@ -220,7 +220,7 @@ Mentéskor a díj külön tételsorként megjelenik a Szolgáltatások között.
 
 **A díj beszámít a javításba.** Ha az eszközre javítási tétel kerül, a díj mínusz tételként levonódik a végösszegből – legfeljebb a többi tétel összegéig. Amíg nincs javítási tétel, a díj munkadíjként áll a lapon. A jelölő alatt a rendszer mindig kiírja, éppen mi történik a díjjal.
 
-A bepipált jelölő alatt két gomb jelenik meg: az alap a **Javítás: levonódik**. A **Munkadíj marad** akkor kell, ha a díj kivételesen nem számít be a javításba.
+A bepipált jelölő alatt egy kétállású kapcsoló jelenik meg (**Ha az ügyfél kéri a javítást**): az alap a **Levonódik**. A **Munkadíj marad** akkor kell, ha a díj kivételesen nem számít be a javításba.
 
 - A díj- és a levonássort a rendszer tartja karban, a levonás sora nem szerkeszthető.
 - Több eszköznél minden eszköznek saját díja van (a címkéjén), és a saját tételeiből vonódik le. Amelyik eszközt nem javítjátok, annak a díja munkadíjként megmarad.
