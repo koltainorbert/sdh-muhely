@@ -503,6 +503,11 @@ final class SDH_Muhely_Nyomtatas
     /** Új lap mentése után (a régi állapot null). */
     public static function mentve($id, $regi): void
     {
+        // Kikapcsolt Nyomtatványok modul (Modulok): nincs nyomtatási felajánlás.
+        if (SDH_Muhely_Modulok::ki('nyomtatas')) {
+            return;
+        }
+
         if ($regi === null) {
             self::ajanlat_jegyez((int) $id, 'uj');
         }
@@ -511,6 +516,10 @@ final class SDH_Muhely_Nyomtatas
     /** Állapotváltás: ha a lap most lett lezárva (és nem érvénytelen / törölt állapotba került). */
     public static function allapot_valtott($id, $regi, $uj): void
     {
+        if (SDH_Muhely_Modulok::ki('nyomtatas')) {
+            return;
+        }
+
         $allapotok = SDH_Muhely_Munkalap::allapotok();
         $uj        = (string) $uj;
         $regi      = (string) $regi;
@@ -571,7 +580,7 @@ final class SDH_Muhely_Nyomtatas
     /** A böngészőnek (SDH_MUHELY.nyomtat). */
     public static function js_adat(): array
     {
-        return ['ajanlat' => is_user_logged_in() && self::van_ajanlat()];
+        return ['ajanlat' => is_user_logged_in() && SDH_Muhely_Modulok::be('nyomtatas') && self::van_ajanlat()];
     }
 
     /* =================================================================
@@ -591,6 +600,11 @@ final class SDH_Muhely_Nyomtatas
      */
     public static function gomb(int $id, array $param = [], string $felirat = 'Nyomtatás', string $osztaly = 'sdh-gomb sdh-gomb--vilagos', string $cimke = ''): string
     {
+        // Kikapcsolt Nyomtatványok modul (Modulok): sehol nincs nyomtatógomb.
+        if (SDH_Muhely_Modulok::ki('nyomtatas')) {
+            return '';
+        }
+
         $attr = '';
 
         foreach ($param as $k => $v) {
@@ -748,7 +762,7 @@ final class SDH_Muhely_Nyomtatas
             ];
         }
 
-        $fiokok = class_exists('SDH_Muhely_Levelezes') ? SDH_Muhely_Levelezes::kuldo_fiokok() : [];
+        $fiokok = class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') ? SDH_Muhely_Levelezes::kuldo_fiokok() : [];
         $ma     = current_time('Y-m-d');
 
         ?>
@@ -1065,7 +1079,7 @@ final class SDH_Muhely_Nyomtatas
      */
     public static function level_kuld(string $fiok, array $cimek, string $targy, string $szoveg, string $fajlnev, string $pdf, string $masolat = '')
     {
-        if ($fiok !== '' && class_exists('SDH_Muhely_Levelezes')) {
+        if ($fiok !== '' && class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes')) {
             return SDH_Muhely_Levelezes::egyszeru_kuldes($fiok, $cimek, $targy, $szoveg, [['nev' => $fajlnev, 'tartalom' => $pdf, 'tipus' => 'application/pdf']], $masolat);
         }
 
@@ -1116,7 +1130,7 @@ final class SDH_Muhely_Nyomtatas
         $a       = self::altalanos();
         $nyers   = self::nyers()['altalanos'] ?? [];
         $tipusok = self::tipusok();
-        $fiokok  = class_exists('SDH_Muhely_Levelezes') ? SDH_Muhely_Levelezes::kuldo_fiokok() : [];
+        $fiokok  = class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') ? SDH_Muhely_Levelezes::kuldo_fiokok() : [];
         $sajat_szin = is_array($nyers) && preg_match('/^#[0-9a-f]{6}$/i', (string) ($nyers['szin'] ?? '')) === 1;
 
         require_once SDH_MUHELY_DIR . 'includes/lib/sdh-nyomtatvany-pdf.php';

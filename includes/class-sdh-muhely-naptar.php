@@ -1083,7 +1083,7 @@ final class SDH_Muhely_Naptar
      */
     private static function fontos_levelek(int $limit, bool $csak_azonnal = false): array
     {
-        if (!class_exists('SDH_Muhely_Levelezes') || !SDH_Muhely_Levelezes::van_fiok()) {
+        if (!class_exists('SDH_Muhely_Levelezes') || SDH_Muhely_Modulok::ki('levelezes') || !SDH_Muhely_Levelezes::van_fiok()) {
             return [];
         }
 
@@ -1171,7 +1171,7 @@ final class SDH_Muhely_Naptar
             'szemelySzerk' => self::szemely_szerkesztheto(),
             'datum'       => self::datum_e($datum) ? $datum : '',
             'esemeny'     => $esemeny,
-            'levelUrl'    => class_exists('SDH_Muhely_Levelezes') ? SDH_Muhely_Modulok::url('levelezes') : '',
+            'levelUrl'    => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') ? SDH_Muhely_Modulok::url('levelezes') : '',
             'beallitasUrl' => SDH_Muhely_Admin_UI::admin_e() && class_exists('SDH_Muhely_Beallitasok') ? SDH_Muhely_Beallitasok::url('naptar') : '',
         ];
 
@@ -2295,6 +2295,10 @@ final class SDH_Muhely_Naptar
     /** A pulzus válaszába: a nyitott kártyák (naptar.js rajzolja minden oldalon). */
     public static function pulzus(array $valasz, int $user_id = 0): array
     {
+        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+            return $valasz;
+        }
+
         if (get_option('sdh_muhely_db_version') === false || version_compare((string) get_option('sdh_muhely_db_version'), '0.35.0', '<')) {
             return $valasz;
         }
@@ -2334,6 +2338,11 @@ final class SDH_Muhely_Naptar
 
     public static function idozitett(): void
     {
+        // Kikapcsolt Naptár modul (Modulok): nincs emlékeztető, e-mail, napi összefoglaló.
+        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+            return;
+        }
+
         if (get_option('sdh_muhely_db_version') !== false && version_compare((string) get_option('sdh_muhely_db_version'), '0.35.0', '>=')) {
             self::esedekes_feldolgoz(true);
         }

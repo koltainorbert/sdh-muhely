@@ -1128,10 +1128,13 @@ final class SDH_Muhely_Szamla
 
         ?>
         <span class="sdh-szamlagombok" data-sdh-szamlagombok>
+            <?php // Kikapcsolt Számlázz.hu számlázás modul (Modulok): csak a helyi számla-előkészítő marad. ?>
+            <?php if (SDH_Muhely_Modulok::be('szamlazas')) : ?>
             <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--szamla" data-sdh-szamla="fo"
                     title="A munkalap elmentődik, majd megnyílik a számla ablaka. Számla csak a kiállítás gombjára készül.">
                 Számlázz.hu számla
             </button>
+            <?php endif; ?>
 
             <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla="helyi"
                     title="Letölthető, nyomtatható PDF a tételekből – helyben készül, internet és Számlázz.hu nélkül. Nem számla.">
@@ -1220,6 +1223,13 @@ final class SDH_Muhely_Szamla
         $kert     = isset($_GET['sorozat']) ? sanitize_key(wp_unslash($_GET['sorozat'])) : 'fo';
         $sorozat  = $kert === 'helyi' ? 'helyi' : 'fo';
         $helyi    = $sorozat === 'helyi';
+
+        if (!$helyi && SDH_Muhely_Modulok::ki('szamlazas')) {
+            echo '<h2 class="sdh-modal__cim">Számla</h2><div class="sdh-uzenet sdh-uzenet--hiba">'
+                . esc_html(class_exists('SDH_Muhely_Modul_Kapcsolo') ? SDH_Muhely_Modul_Kapcsolo::ki_szoveg('szamlazas') : 'A számlázás ki van kapcsolva.')
+                . '</div>';
+            wp_die();
+        }
 
         if ($munkalap === null || (int) $munkalap->munkalap_szam <= 0) {
             echo '<h2 class="sdh-modal__cim">Számla</h2>'

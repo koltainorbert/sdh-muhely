@@ -778,7 +778,8 @@ final class SDH_Muhely_Nyomtatvany
 
     private static function qr_blokk(SDH_Muhely_Nyomtatvany_Pdf $pdf, array $d, string $szoveg): void
     {
-        if (!class_exists('SDH_Muhely_Rma') || !class_exists('SDH_Muhely_Kodok')) {
+        // Kikapcsolt Ügyfélüzenetek és RMA-oldal modulnál (Modulok) nincs ügyféloldal, így QR-kód sem.
+        if (!class_exists('SDH_Muhely_Rma') || !class_exists('SDH_Muhely_Kodok') || SDH_Muhely_Modulok::ki('uzenetek')) {
             return;
         }
 

@@ -2136,9 +2136,12 @@ final class SDH_Muhely_Penztar
                         <?php self::osszeg_mezo('kartya', 'ptf_kartya', 0, 'Bankkártya'); ?>
                     </div>
 
+                    <?php // Kikapcsolt Házipénztár modul (Modulok): a fizetés rögzül, de a pénztárba nem kerül. ?>
+                    <?php if (SDH_Muhely_Modulok::be(self::KULCS)) : ?>
                     <label class="sdh-jelolo sdh-pt-fizetes__pipa">
                         <input type="checkbox" name="kasszaba" value="1" checked> Kerüljön be a házipénztárba
                     </label>
+                    <?php endif; ?>
                 </div>
 
                 <div class="sdh-pt-urlap__oszlop">
@@ -2194,6 +2197,8 @@ final class SDH_Muhely_Penztar
         $mod   = self::post_szoveg('mod', 10);
         $mod   = in_array($mod, ['kp', 'kartya', 'utalas', 'vegyes'], true) ? $mod : 'kp';
         $fajta = self::post_szoveg('fajta', 10) === 'eloleg' ? 'eloleg' : 'teljes';
+        // A Modulok menüpontban kikapcsolt Házipénztár modulnál semmi nem kerül a kasszába.
+        $kasszaba = self::post('kasszaba', '') === '1' && SDH_Muhely_Modulok::be(self::KULCS);
 
         if ($mod === 'vegyes') {
             $kp     = abs(self::szam(self::post('kp', '0')));
@@ -2354,7 +2359,7 @@ final class SDH_Muhely_Penztar
         if ($osszeg > 0) {
             $adat = [
                 'datum'         => self::ma(),
-                'tipus'         => self::post('kasszaba', '') === '1' ? 'bevetel' : 'kihagyva',
+                'tipus'         => $kasszaba ? 'bevetel' : 'kihagyva',
                 'leiras'        => mb_substr($leiras, 0, 255),
                 'nev'           => self::post_szoveg('nev', 190),
                 'szemely'       => '',
@@ -2370,7 +2375,9 @@ final class SDH_Muhely_Penztar
             ];
 
             if ($adat['tipus'] !== 'bevetel') {
-                $adat['megjegyzes'] = 'Fizetéskor kérésre nem került a kasszába.';
+                $adat['megjegyzes'] = SDH_Muhely_Modulok::be(self::KULCS)
+                    ? 'Fizetéskor kérésre nem került a kasszába.'
+                    : 'A Házipénztár modul ki volt kapcsolva: nem került a kasszába.';
             }
 
             if ($erintett !== []) {
@@ -2400,7 +2407,7 @@ final class SDH_Muhely_Penztar
             'tetel_id'    => $tetel_id,
             'uzenet'      => $osszeg > 0
                 ? ($fajta === 'eloleg' ? ($kifizetett !== [] ? 'Részfizetés rögzítve: ' : 'Előleg rögzítve: ') : 'Fizetve: ') . self::penz($osszeg)
-                    . (self::post('kasszaba', '') === '1' ? ' – a pénztárba is bekerült' . (count($erintett) > 1 ? ', eszközönként külön (' . count($erintett) . ' tétel).' : '.') : '.')
+                    . ($kasszaba ? ' – a pénztárba is bekerült' . (count($erintett) > 1 ? ', eszközönként külön (' . count($erintett) . ' tétel).' : '.') : '.')
                     . ($kifizetett !== [] ? ' Fizetve: ' . implode(', ', $kifizetett) . '.' : '')
                 : 'A munkalap fizetettre állítva.',
         ]);

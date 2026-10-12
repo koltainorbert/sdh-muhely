@@ -279,13 +279,42 @@ final class SDH_Muhely_Asszisztens_Eszkozok
      *
      * @return array<int, array<string, mixed>>
      */
+    /**
+     * Elérhető-e az eszköz: a kikapcsolt modulhoz (Modulok menüpont) tartozó
+     * eszközt az asszisztens nem kapja meg, és nem is futtathatja.
+     */
+    public static function elerheto(string $nev): bool
+    {
+        $modulok = [
+            'penztar_nap'       => ['penztar'],
+            'csapat_olvasatlan' => ['csapat'],
+            'csapat_uzenet'     => ['csapat'],
+            'naptar_esemenyek'  => ['naptar'],
+            'keszlet'           => ['termekek'],
+            // Elég, ha a kettő közül az egyik fut.
+            'eladasok_listaja'  => ['arukiadas', 'rendelesek'],
+        ];
+
+        if (!isset($modulok[$nev])) {
+            return true;
+        }
+
+        foreach ($modulok[$nev] as $modul) {
+            if (SDH_Muhely_Modulok::be($modul)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function api_lista(): array
     {
         $engedett = SDH_Muhely_Asszisztens::beallitas()['eszkozok'];
         $ki = [];
 
         foreach (self::definiciok() as $nev => $d) {
-            if (isset($engedett[$nev]) && !$engedett[$nev]) {
+            if ((isset($engedett[$nev]) && !$engedett[$nev]) || !self::elerheto((string) $nev)) {
                 continue;
             }
 
@@ -392,6 +421,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
      */
     public static function olvas(string $nev, array $p): string
     {
+        if (!self::elerheto($nev)) {
+            return self::json(['hiba' => 'Ez az eszköz nem érhető el: a hozzá tartozó modul ki van kapcsolva (Modulok menüpont).']);
+        }
+
         try {
             switch ($nev) {
                 case 'kereses':
@@ -1231,6 +1264,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
     public static function elokeszit(string $nev, array $p)
     {
         global $wpdb;
+
+        if (!self::elerheto($nev)) {
+            return 'Ez a művelet nem érhető el: a hozzá tartozó modul ki van kapcsolva (Modulok menüpont).';
+        }
 
         switch ($nev) {
             case 'munkalap_megjegyzes':

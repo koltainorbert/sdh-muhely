@@ -116,7 +116,8 @@ final class SDH_Muhely_Sms
 
     public static function bekapcsolva(): bool
     {
-        return (bool) self::beallitas()['be'];
+        // A Modulok menüpontban kikapcsolt SMS modul felülír mindent: semmi nem megy ki, a sor sem fut.
+        return SDH_Muhely_Modulok::be('sms') && (bool) self::beallitas()['be'];
     }
 
     /** A kapcsolat jelszava nyíltan – csak a kérés idejére, kliensnek, naplónak soha. */

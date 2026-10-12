@@ -37,6 +37,8 @@ Az oldal tetején a **Beállítások** cím áll, alatta a lapfülek hat sorban,
 - **Készülékadatok**
 - **Rendszer**
 
+A kikapcsolt modul lapfüle nem látszik (például kikapcsolt SMS-értesítéseknél nincs **SMS-értesítések** lapfül). A modulokat a **Modulok** menüpontban kapcsolod ki és be: [Modulok](sugo:modulok).
+
 Az éppen nyitott lapfül kiemelve látszik. Ha az egeret egy lapfül fölé viszed, rövid leírás jelenik meg róla. A lapfülek alatt a kiválasztott lapfül tartalma áll: felül a neve és egy mondat arról, mire való, alatta a dobozok a mezőkkel, legalul a **Mentés** gomb.
 
 ## Az összes lapfül

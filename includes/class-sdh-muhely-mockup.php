@@ -202,7 +202,8 @@ final class SDH_Muhely_Mockup
      */
     public static function kep(?object $eszkoz): string
     {
-        if ($eszkoz === null) {
+        // Kikapcsolt Eszköz-mockupok modul (Modulok): nincs termékkép.
+        if ($eszkoz === null || SDH_Muhely_Modulok::ki('mockup')) {
             return '';
         }
 
@@ -277,6 +278,10 @@ final class SDH_Muhely_Mockup
      */
     public static function html(?object $eszkoz, string $meret = 'm', string $tovabbi_osztaly = ''): string
     {
+        if (SDH_Muhely_Modulok::ki('mockup')) {
+            return '';
+        }
+
         $meret = in_array($meret, ['s', 'm', 'l'], true) ? $meret : 'm';
         $kep   = self::kep($eszkoz);
         $nev   = $eszkoz !== null && class_exists('SDH_Muhely_Eszkoz') ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : '';

@@ -55,13 +55,37 @@ final class SDH_Muhely_Modulok
     }
 
     /**
+     * A bejegyzett modul úgy, ahogy most látszik: a kikapcsolt fő modul
+     * (Modulok oldal) nincs – nincs menüpontja, csempéje, oldala. A `ki_rejtve`
+     * modul kikapcsolva is megvan, csak menüpont nélkül (pl. a Csapat oldalán a
+     * kollégák kezelése a csevegés nélkül is kell).
+     *
+     * @param array<string, mixed> $modul
+     * @return array<string, mixed>|null
+     */
+    private static function lathato(array $modul): ?array
+    {
+        if (self::be((string) $modul['kulcs'])) {
+            return $modul;
+        }
+
+        if (empty($modul['ki_rejtve'])) {
+            return null;
+        }
+
+        $modul['rejtett'] = true;
+
+        return $modul;
+    }
+
+    /**
      * Minden bejegyzett modul, sorrendben.
      *
      * @return array<string, array<string, mixed>>
      */
     public static function osszes(): array
     {
-        $modulok = self::$modulok;
+        $modulok = array_filter(array_map([self::class, 'lathato'], self::$modulok));
 
         uasort(
             $modulok,
@@ -76,7 +100,307 @@ final class SDH_Muhely_Modulok
      */
     public static function egy(string $kulcs): ?array
     {
-        return self::$modulok[$kulcs] ?? null;
+        return isset(self::$modulok[$kulcs]) ? self::lathato(self::$modulok[$kulcs]) : null;
+    }
+
+    /* =================================================================
+     * Ki- és bekapcsolható fő modulok (Modulok oldal, 0.58)
+     *
+     * Az alaprendszer (Áttekintés, Munkalapok, Ügyfelek, Eszközök,
+     * Szolgáltatások, Beállítások, Súgó, Mentés) mindig fut. A többi fő
+     * funkció modulonként kikapcsolható – így külön is értékesíthető.
+     *
+     * Kikapcsolt modulnál: nincs menüpont, csempe, oldal és beállítás-lapfül;
+     * az AJAX-végpontjai elutasítanak (SDH_Muhely_Modul_Kapcsolo::ajax_or);
+     * az időzített munkái és a más modulokban lévő gombjai nem futnak / nem
+     * látszanak. Az adatai megmaradnak: visszakapcsolva minden ott folytatódik,
+     * ahol abbamaradt.
+     * ============================================================== */
+
+    /** A kikapcsolt modulok kulcsai (option). Ami nincs benne, az be van kapcsolva. */
+    public const OPT_KI = 'sdh_muhely_modulok_ki';
+
+    /** @var array<int, string>|null */
+    private static ?array $ki_gyorsitotar = null;
+
+    /**
+     * Az alaprendszer részei – ezek nem kapcsolhatók ki (a Modulok oldalon
+     * tájékoztatásul szerepelnek).
+     *
+     * @return array<string, array{cim: string, leiras: string}>
+     */
+    public static function alapreszek(): array
+    {
+        return [
+            'attekintes'     => ['cim' => 'Áttekintés', 'leiras' => 'A kezdőképernyő: munkalapok rácsa, nézetek, szűrők, csempék.'],
+            'munkalapok'     => ['cim' => 'Munkalapok', 'leiras' => 'Felvétel, állapotok, több eszköz, hibák, tételek, fizetés.'],
+            'ugyfelek'       => ['cim' => 'Ügyfelek', 'leiras' => 'Ügyféltörzs, adatlap, előzmények.'],
+            'eszkozok'       => ['cim' => 'Eszközök', 'leiras' => 'Készüléktörzs: IMEI, sorozatszám, zárkód, minta.'],
+            'szolgaltatasok' => ['cim' => 'Szolgáltatások', 'leiras' => 'Szolgáltatás-törzs és árak, bevizsgálási díj.'],
+            'beallitasok'    => ['cim' => 'Beállítások', 'leiras' => 'Minden paraméter, lapfülenként.'],
+            'sugo'           => ['cim' => 'Súgó', 'leiras' => 'Bemutató, dokumentáció, kérdés–válasz.'],
+            'mentes'         => ['cim' => 'Mentés', 'leiras' => 'Független napi mentés és visszaállítás.'],
+        ];
+    }
+
+    /**
+     * A ki- és bekapcsolható fő modulok, csoportonként sorrendben.
+     *
+     * - `ajax`: az AJAX-műveletek (sdh_muhely_ után) elejei, amelyek a modulé –
+     *   kikapcsolva ezek elutasítanak; `kivetel`: ami mégis mehet (pl. a munkalap
+     *   Fizetés ablaka akkor is kell, ha nincs Házipénztár modul).
+     * - `post`: admin-post.php műveletek elejei.
+     * - `fugg`: a modulok, amelyek nélkül ez nem működik.
+     * - `szakaszok`: a Beállítások lapfülei, amelyek kikapcsolva eltűnnek.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public static function katalogus(): array
+    {
+        static $katalogus = null;
+
+        if ($katalogus !== null) {
+            return $katalogus;
+        }
+
+        return $katalogus = [
+            // --- Értékesítés -------------------------------------------------
+            'termekek' => [
+                'cim' => 'Termékek és készlet', 'csoport' => 'Értékesítés', 'ikon' => 'termekek',
+                'leiras' => 'Termékkatalógus, készlet, vonalkód; termék-tételek a munkalapon, az árukiadáson és a rendelésen.',
+                'ajax' => ['termekek', 'termek_'], 'post' => ['termek_'],
+                'szakaszok' => [],
+            ],
+            'arukiadas' => [
+                'cim' => 'Napi árukiadás', 'csoport' => 'Értékesítés', 'ikon' => 'arukiadas',
+                'leiras' => 'Eladás javítás nélkül (termék vagy szolgáltatás), fizetéssel, előleggel, több helyszínnel.',
+                'ajax' => ['arukiadas_'],
+                'szakaszok' => [],
+            ],
+            'rendelesek' => [
+                'cim' => 'Rendelések', 'csoport' => 'Értékesítés', 'ikon' => 'rendelesek',
+                'leiras' => 'Beszállítói rendelések ügyfélhez kötve, állapotokkal, fizetéssel és értesítéssel az áru megérkezéséről.',
+                'ajax' => ['rendelesek_', 'rendelesertesit_'], 'fugg' => ['uzenetek'],
+                'szakaszok' => [],
+            ],
+
+            // --- Pénzügy -----------------------------------------------------
+            'penztar' => [
+                'cim' => 'Házipénztár', 'csoport' => 'Pénzügy', 'ikon' => 'penztar',
+                'leiras' => 'Napi kassza, címletes zárás, riport, statisztika, Excel-import és egyeztető ügynök. Kikapcsolva a munkalap Fizetés ablaka megmarad, csak nem ír a pénztárba.',
+                'ajax' => ['penztar_', 'penztarfizetes_'], 'kivetel' => ['penztarfizetes_urlap', 'penztar_fizet'],
+                'szakaszok' => ['penztar'],
+            ],
+            'szamlazas' => [
+                'cim' => 'Számlázz.hu számlázás', 'csoport' => 'Pénzügy', 'ikon' => 'szamlazas',
+                'leiras' => 'Valódi számla a munkalapról gombnyomásra, tételesen, adattörlő kóddal, eszközönként is. A helyi számla-előkészítő (PDF) kikapcsolva is megmarad.',
+                'ajax' => ['szamla_ment', 'szamla_elonezet', 'szamla_kapcsolat'],
+                'szakaszok' => [],
+            ],
+
+            // --- Ügyfélkapcsolat ---------------------------------------------
+            'uzenetek' => [
+                'cim' => 'Ügyfélüzenetek és RMA-oldal', 'csoport' => 'Ügyfélkapcsolat', 'ikon' => 'uzenetek',
+                'leiras' => 'Az ügyfél QR-kóddal követi a javítást; csevegő a munkalapon, üzenetek menü, gyors szövegek.',
+                'ajax' => ['uzenet_', 'rma_'],
+                'szakaszok' => ['ugyfeloldal'],
+            ],
+            'sms' => [
+                'cim' => 'SMS-értesítések', 'csoport' => 'Ügyfélkapcsolat', 'ikon' => 'sms',
+                'leiras' => 'SMS a bolti androidos telefonról: sablonok, szabályok, döntési popup, bejövő SMS, napló.',
+                'ajax' => ['sms'], 'fugg' => ['uzenetek'],
+                'szakaszok' => ['sms'],
+            ],
+            'levelezes' => [
+                'cim' => 'Levelezés', 'csoport' => 'Ügyfélkapcsolat', 'ikon' => 'levelezes',
+                'leiras' => 'A cég e-mail-fiókjai a rendszerben (IMAP / SMTP), fontos levelek szűrése, rendező ügynök.',
+                'ajax' => ['level_', 'levelrendezo_'],
+                'szakaszok' => ['levelezes'],
+            ],
+
+            // --- Csapat és idő -----------------------------------------------
+            'csapat' => [
+                'cim' => 'Csapat-üzenetek', 'csoport' => 'Csapat és idő', 'ikon' => 'csapat',
+                'leiras' => 'Belső csevegés vagy üzenőfal (cetlik). A kollégák felvétele kikapcsolva is elérhető.',
+                'ajax' => ['csapat_', 'csapatuj_', 'csapatcetli_', 'cetli_'],
+                'szakaszok' => [],
+            ],
+            'naptar' => [
+                'cim' => 'Naptár', 'csoport' => 'Csapat és idő', 'ikon' => 'naptar',
+                'leiras' => 'Naptár névenként, minden nézettel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.',
+                'ajax' => ['naptar'],
+                'szakaszok' => ['naptar'],
+            ],
+
+            // --- Mesterséges intelligencia -------------------------------------
+            'asszisztens' => [
+                'cim' => 'AI-asszisztens', 'csoport' => 'Mesterséges intelligencia', 'ikon' => 'asszisztens',
+                'leiras' => 'A figura és a chat: mindenbe belelát, végigvezet, és csak jóváhagyással módosít.',
+                'ajax' => ['ai_', 'aitudas_'],
+                'szakaszok' => ['asszisztens'],
+            ],
+
+            // --- Dokumentumok és készülékadatok -------------------------------
+            'nyomtatas' => [
+                'cim' => 'Nyomtatványok', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'nyomtatas',
+                'leiras' => 'Átvételi elismervény, munkalap, árajánlat, szállítólevél, bianko, riportok – PDF, nyomtatás, e-mail.',
+                'ajax' => ['nyomtatas_', 'nyomtsablon_'],
+                'szakaszok' => ['nyomtatvanyok'],
+            ],
+            'imei' => [
+                'cim' => 'IMEI-lekérdezés', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'imei',
+                'leiras' => 'Fizetős IMEI-szolgáltató, ingyenes ellenőrző oldalak, a gyári adatok beillesztése.',
+                'ajax' => ['imei_'],
+                'szakaszok' => ['imei'],
+            ],
+            'tac' => [
+                'cim' => 'TAC-adatbázis', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'tac',
+                'leiras' => 'Az IMEI elejéből felismeri a gyártót és a típust, és tanul a felvitt készülékekből.',
+                'ajax' => ['tac_'],
+                'szakaszok' => ['tac'],
+            ],
+            'mockup' => [
+                'cim' => 'Eszköz-mockupok', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'mockup',
+                'leiras' => 'Termékkép minden eszköz mellett (kategória, gyártó, típus szerint), saját képekkel.',
+                'szakaszok' => ['mockupok'],
+            ],
+        ];
+    }
+
+    /** @return array<int, string> A kikapcsolt modulok kulcsai. */
+    public static function kikapcsoltak(): array
+    {
+        if (self::$ki_gyorsitotar === null) {
+            $ki = function_exists('get_option') ? get_option(self::OPT_KI, []) : [];
+            $ki = is_array($ki) ? array_values(array_intersect(array_map('strval', $ki), array_keys(self::katalogus()))) : [];
+
+            self::$ki_gyorsitotar = $ki;
+        }
+
+        return self::$ki_gyorsitotar;
+    }
+
+    /**
+     * Be van-e kapcsolva a modul. Az alaprendszer és az ismeretlen kulcs mindig „be".
+     * Függő modul csak akkor fut, ha amire épül, az is be van kapcsolva.
+     */
+    public static function be(string $kulcs): bool
+    {
+        $katalogus = self::katalogus();
+
+        if (!isset($katalogus[$kulcs])) {
+            return true;
+        }
+
+        if (in_array($kulcs, self::kikapcsoltak(), true)) {
+            return false;
+        }
+
+        foreach ((array) ($katalogus[$kulcs]['fugg'] ?? []) as $alap) {
+            if (in_array((string) $alap, self::kikapcsoltak(), true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** Ki van-e kapcsolva (a be() tagadása, az olvashatóság kedvéért). */
+    public static function ki(string $kulcs): bool
+    {
+        return !self::be($kulcs);
+    }
+
+    /**
+     * A kikapcsolt modulok mentése. A függőségeket rendbe teszi: ha egy modul
+     * ki van kapcsolva, az is kikapcsol, ami rá épül.
+     *
+     * @param array<int, string> $ki
+     * @return array<int, string> Ami a függőség miatt kapcsolt még ki (a kérésen felül).
+     */
+    public static function kikapcsoltak_ment(array $ki): array
+    {
+        $katalogus = self::katalogus();
+        $ki        = array_values(array_unique(array_intersect(array_map('strval', $ki), array_keys($katalogus))));
+        $plusz     = [];
+
+        do {
+            $valtozott = false;
+
+            foreach ($katalogus as $kulcs => $m) {
+                if (in_array($kulcs, $ki, true)) {
+                    continue;
+                }
+
+                foreach ((array) ($m['fugg'] ?? []) as $alap) {
+                    if (in_array((string) $alap, $ki, true)) {
+                        $ki[]      = $kulcs;
+                        $plusz[]   = $kulcs;
+                        $valtozott = true;
+                        break;
+                    }
+                }
+            }
+        } while ($valtozott);
+
+        sort($ki);
+        update_option(self::OPT_KI, $ki, true);
+        self::$ki_gyorsitotar = null;
+
+        return $plusz;
+    }
+
+    /** Teszthez és mentés után: a gyorsítótár ürítése. */
+    public static function kapcsolok_urit(): void
+    {
+        self::$ki_gyorsitotar = null;
+    }
+
+    /**
+     * Melyik kikapcsolható modulhoz tartozik egy AJAX-művelet (az `sdh_muhely_`
+     * előtag nélkül). Üres = egyikhez sem (vagy kivétel).
+     */
+    public static function ajax_modulja(string $muvelet): string
+    {
+        foreach (self::katalogus() as $kulcs => $m) {
+            if (in_array($muvelet, (array) ($m['kivetel'] ?? []), true)) {
+                return '';
+            }
+
+            foreach ((array) ($m['ajax'] ?? []) as $eleje) {
+                if ($eleje !== '' && strpos($muvelet, (string) $eleje) === 0) {
+                    return $kulcs;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /** Ugyanez admin-post.php műveletekre. */
+    public static function post_modulja(string $muvelet): string
+    {
+        foreach (self::katalogus() as $kulcs => $m) {
+            foreach ((array) ($m['post'] ?? []) as $eleje) {
+                if ($eleje !== '' && strpos($muvelet, (string) $eleje) === 0) {
+                    return $kulcs;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /** Melyik modul írja le a Beállítások egy lapfülét (üres = az alaprendszer). */
+    public static function szakasz_modulja(string $ful): string
+    {
+        foreach (self::katalogus() as $kulcs => $m) {
+            if (in_array($ful, (array) ($m['szakaszok'] ?? []), true)) {
+                return $kulcs;
+            }
+        }
+
+        return '';
     }
 
     /* =================================================================

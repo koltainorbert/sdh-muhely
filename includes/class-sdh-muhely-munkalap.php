@@ -3604,11 +3604,16 @@ final class SDH_Muhely_Munkalap
                         // Eladásnál a Termékek fül áll elöl (és az nyílik): a két fül sorszáma helyet cserél.
                         $n_szolg  = $eladas ? 4 : 3;
                         $n_termek = $eladas ? 3 : 4;
+                        // Kikapcsolt Termékek modul (Modulok): a Termékek fül nem látszik – kivéve, ha a lapon már van termék.
+                        $termek_rejt = SDH_Muhely_Modulok::ki('termekek') && $termekek === [];
+                        // Kikapcsolt Ügyfélüzenetek és RMA-oldal modulnál az RMA fülből „Címke” lesz (csak a címke és a nyomtatása).
+                        $rma_rejt    = $arukiadas;
+                        $rma_felirat = SDH_Muhely_Modulok::ki('uzenetek') ? 'Címke' : 'RMA';
                         ?>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) $n_szolg; ?>" name="_ful_munkalap"
-                               id="ful_m_szolg">
+                               id="ful_m_szolg"<?php echo $eladas && $termek_rejt ? ' checked' : ''; ?>>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) $n_termek; ?>" name="_ful_munkalap"
-                               id="ful_m_termek"<?php echo $eladas ? ' checked' : ''; ?>>
+                               id="ful_m_termek"<?php echo $eladas && !$termek_rejt ? ' checked' : ''; ?>>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--5" name="_ful_munkalap"
                                id="ful_m_rma" data-sdh-ful-kulcs="rma">
 
@@ -3616,13 +3621,13 @@ final class SDH_Muhely_Munkalap
                             <label for="ful_m_eszkoz"<?php echo $rejt; ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
                             <label for="ful_m_hibak"<?php echo $rejt; ?>>Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
                             <?php if ($eladas) : ?>
-                                <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
                             <?php endif; ?>
                             <label for="ful_m_szolg">Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
                             <?php if (!$eladas) : ?>
-                                <label for="ful_m_termek">Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
                             <?php endif; ?>
-                            <label for="ful_m_rma" data-sdh-rma-ful<?php echo $arukiadas ? ' hidden' : ''; ?>>RMA <?php echo $munkalap ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+                            <label for="ful_m_rma" data-sdh-rma-ful<?php echo $rma_rejt ? ' hidden' : ''; ?>><?php echo esc_html($rma_felirat); ?> <?php echo $munkalap && $rma_felirat === 'RMA' ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                         </div>
 
                         <?php if ($eladas) : ?>
@@ -5066,7 +5071,8 @@ final class SDH_Muhely_Munkalap
 
         [$uj_id, $uzenet, $szam] = $eredmeny;
 
-        $penztar = class_exists('SDH_Muhely_Penztar') ? SDH_Muhely_Penztar::munkalap_ajanlat((int) $uj_id, $elotte) : null;
+        // Pénztár-ajánlat („Bekerüljön a házipénztárba?”) csak bekapcsolt Házipénztár modulnál (Modulok).
+        $penztar = class_exists('SDH_Muhely_Penztar') && SDH_Muhely_Modulok::be('penztar') ? SDH_Muhely_Penztar::munkalap_ajanlat((int) $uj_id, $elotte) : null;
         $mentett = self::egy((int) $uj_id);
         $fajta   = self::fajta_ervenyes((string) ($mentett->fajta ?? ''));
 

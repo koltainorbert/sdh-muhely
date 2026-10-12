@@ -112,6 +112,8 @@ final class SDH_Muhely_Csapat
             'render'  => [self::class, 'oldal'],
             'sorrend' => 34,
             'jelveny' => [self::class, 'olvasatlan_db'],
+            // Kikapcsolt Csapat modulnál (Modulok) az oldal menüpont nélkül megmarad: a kollégák kezelése kell.
+            'ki_rejtve' => true,
         ]);
     }
 
@@ -1529,8 +1531,8 @@ final class SDH_Muhely_Csapat
         $en    = get_current_user_id();
         $utana = (int) self::g('utana', 20);
 
-        // Üzenőfal módban nincs csevegés: csak a többi modul (asszisztens) adata megy.
-        if (self::egyszeru()) {
+        // Üzenőfal módban – és kikapcsolt Csapat modulnál – nincs csevegés: csak a többi modul (asszisztens, naptár) adata megy.
+        if (self::egyszeru() || SDH_Muhely_Modulok::ki(self::KULCS)) {
             wp_send_json_success(apply_filters('sdh_muhely_pulzus', ['olvasatlan' => 0, 'max' => 0, 'uj' => [], 'fontos' => [], 'csapatUrl' => SDH_Muhely_Modulok::url(self::KULCS)], $en));
         }
 
@@ -1619,7 +1621,18 @@ final class SDH_Muhely_Csapat
     {
         SDH_Muhely_Admin_UI::jog_ellenoriz();
 
-        if (self::egyszeru()) {
+        // Kikapcsolt Csapat modul (Modulok): csevegés és fal nincs, csak a kollégák és a csoportok kezelése (adminisztrátornak).
+        $kikapcsolva = SDH_Muhely_Modulok::ki(self::KULCS);
+
+        if ($kikapcsolva && !SDH_Muhely_Admin_UI::admin_e()) {
+            echo '<div class="sdh-wrap"><div class="sdh-uzenet sdh-uzenet--hiba">'
+                . esc_html(class_exists('SDH_Muhely_Modul_Kapcsolo') ? SDH_Muhely_Modul_Kapcsolo::ki_szoveg(self::KULCS) : 'A Csapat modul ki van kapcsolva.')
+                . '</div></div>';
+
+            return;
+        }
+
+        if (self::egyszeru() && !$kikapcsolva) {
             self::fal_oldal();
 
             return;
@@ -1628,7 +1641,7 @@ final class SDH_Muhely_Csapat
         $admin = SDH_Muhely_Admin_UI::admin_e();
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $nezet = isset($_GET['nezet']) ? sanitize_key(wp_unslash($_GET['nezet'])) : '';
-        $nezet = $admin && in_array($nezet, ['kollegak', 'csoportok'], true) ? $nezet : 'uzenetek';
+        $nezet = $admin && in_array($nezet, ['kollegak', 'csoportok'], true) ? $nezet : ($kikapcsolva ? 'kollegak' : 'uzenetek');
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $besz  = isset($_GET['besz']) ? (int) $_GET['besz'] : 0;
 
@@ -1660,7 +1673,7 @@ final class SDH_Muhely_Csapat
             <?php if ($admin) : ?>
                 <nav class="sdh-cs-fulek" aria-label="Csapat nézetek">
                     <?php
-                    foreach (['uzenetek' => 'Beszélgetések', 'kollegak' => 'Kollégák', 'csoportok' => 'Csoportok'] as $k => $c) {
+                    foreach (($kikapcsolva ? [] : ['uzenetek' => 'Beszélgetések']) + ['kollegak' => 'Kollégák', 'csoportok' => 'Csoportok'] as $k => $c) {
                         printf(
                             '<a class="sdh-cs-ful%s" href="%s">%s</a>',
                             $k === $nezet ? ' is-aktiv' : '',

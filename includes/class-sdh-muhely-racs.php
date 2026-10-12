@@ -806,7 +806,8 @@ final class SDH_Muhely_Racs
         // utóbbi az „Azonosító" oszlopban „Napi árukiadás"); a rendelés a saját
         // menüpontjában marad (SDH_Muhely_Eladas).
         $feltetelek = ['m.fajta IN (%s, %s)'];
-        $ertekek    = ['javitas', 'arukiadas'];
+        // Kikapcsolt Napi árukiadás modulnál (Modulok) csak a javítási munkalapok állnak a rácsban.
+        $ertekek    = ['javitas', SDH_Muhely_Modulok::be('arukiadas') ? 'arukiadas' : 'javitas'];
 
         foreach ($allapot['szurok'] as $k => $szuro) {
             $sql = self::szuro_sql($oszlopok[$k], $szuro, $ertekek);
@@ -1119,7 +1120,7 @@ final class SDH_Muhely_Racs
         }
 
         // A napi árukiadás lapjai a munkalapok között állnak; külön is, és nélkülük is megnézhetők.
-        if (class_exists('SDH_Muhely_Eladas')) {
+        if (class_exists('SDH_Muhely_Eladas') && SDH_Muhely_Modulok::be('arukiadas')) {
             $nezetek[] = [
                 'id' => 'arukiadas', 'nev' => SDH_Muhely_Eladas::NEVTELEN, 'rendezes' => $szam_le,
                 'szurok' => ['azonosito' => ['op' => 'egyike', 'l' => [self::ARU_KATEGORIA]]],

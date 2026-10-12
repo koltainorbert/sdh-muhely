@@ -62,6 +62,11 @@ final class SDH_Muhely_Tac
     {
         global $wpdb;
 
+        // Kikapcsolt TAC-adatbázis modul (Modulok): nincs felismerés.
+        if (SDH_Muhely_Modulok::ki('tac')) {
+            return null;
+        }
+
         $tac = substr(preg_replace('/\D/', '', $imei_vagy_tac) ?? '', 0, 8);
 
         if (strlen($tac) !== 8) {
@@ -130,6 +135,11 @@ final class SDH_Muhely_Tac
     ): void
     {
         global $wpdb;
+
+        // Kikapcsolt TAC-adatbázis modul (Modulok): nem tanul.
+        if (SDH_Muhely_Modulok::ki('tac')) {
+            return;
+        }
 
         $tac = substr(preg_replace('/\\D/', '', $imei) ?? '', 0, 8);
 

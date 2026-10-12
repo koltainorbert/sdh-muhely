@@ -102,7 +102,8 @@ final class SDH_Muhely_Asszisztens
         $b = is_array($b) ? $b : [];
 
         return [
-            'be'               => !isset($b['be']) || (bool) $b['be'],
+            // A Modulok menüpontban kikapcsolt asszisztens modul felülírja a saját kapcsolóját.
+            'be'               => SDH_Muhely_Modulok::be(self::KULCS) && (!isset($b['be']) || (bool) $b['be']),
             'nev'              => isset($b['nev']) && trim((string) $b['nev']) !== '' ? mb_substr((string) $b['nev'], 0, 40) : 'Szikra',
             'modell'           => isset($b['modell']) && trim((string) $b['modell']) !== '' ? (string) $b['modell'] : self::ALAP_MODELL,
             'kulcs'            => (string) ($b['kulcs'] ?? ''),

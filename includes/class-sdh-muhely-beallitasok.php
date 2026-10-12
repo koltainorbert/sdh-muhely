@@ -241,12 +241,22 @@ final class SDH_Muhely_Beallitasok
             ],
         ];
 
-        // Csak az marad, aminek a modulja be van töltve.
-        return array_filter($lista, static function (array $sz): bool {
-            $rajz = $sz['rajz'];
+        // Az árukiadás és a rendelés közös lapfüle: akkor tűnik el, ha mindkettő ki van kapcsolva.
+        if (SDH_Muhely_Modulok::ki('arukiadas') && SDH_Muhely_Modulok::ki('rendelesek')) {
+            unset($lista['eladas']);
+        }
+
+        // Csak az marad, aminek a modulja be van töltve – és be van kapcsolva (Modulok menüpont).
+        return array_filter($lista, static function (array $sz, string $ful): bool {
+            $rajz  = $sz['rajz'];
+            $modul = SDH_Muhely_Modulok::szakasz_modulja($ful);
+
+            if ($modul !== '' && SDH_Muhely_Modulok::ki($modul)) {
+                return false;
+            }
 
             return !is_array($rajz) || !is_string($rajz[0]) || class_exists($rajz[0]);
-        });
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     /** Egy lapfül címe a futó felületen. */

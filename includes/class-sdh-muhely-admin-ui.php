@@ -444,20 +444,22 @@ final class SDH_Muhely_Admin_UI
             // listát, új adatfájlnál ettől kéri le azonnal az újat.
             'iszVerzio' => self::eszkoz_verzio('data/iranyitoszam.csv.gz'),
             // Levelezés: van-e bekötött fiók (csak akkor indul az új levelek figyelése), és hol a levelező.
-            'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok(),
+            'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') && SDH_Muhely_Levelezes::van_fiok(),
             'levelUrl'  => SDH_Muhely_Modulok::url('levelezes'),
-            'levelRendezo' => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::rendezo_be(),
+            'levelRendezo' => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') && SDH_Muhely_Levelezes::rendezo_be(),
             // Csapat (0.38): adminisztrátor-e (kitűzés másnak az üzenetén), AI-asszisztens adatai.
             'admin'     => self::admin_e(),
             // A munkalap csevegőjének frissítési ideje (Beállítások › Ügyféloldal).
             'chatMs'    => class_exists('SDH_Muhely_Rma') ? 1000 * (int) SDH_Muhely_Rma::beallitas()['chat_mp'] : 8000,
-            'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
+            'ai'        => class_exists('SDH_Muhely_Asszisztens') && SDH_Muhely_Modulok::be('asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
             // Nyomtatás: vár-e felajánlás (új lap / lezárás után), amit az oldal betöltésekor meg kell mutatni.
-            'nyomtat'   => class_exists('SDH_Muhely_Nyomtatas') ? SDH_Muhely_Nyomtatas::js_adat() : ['ajanlat' => false],
+            'nyomtat'   => class_exists('SDH_Muhely_Nyomtatas') && SDH_Muhely_Modulok::be('nyomtatas') ? SDH_Muhely_Nyomtatas::js_adat() : ['ajanlat' => false],
             // SMS (0.57): be van-e kapcsolva (csak akkor kérdez rá a státuszváltás után), van-e függő döntés.
             'sms'       => class_exists('SDH_Muhely_Sms') && is_user_logged_in()
                 ? ['be' => SDH_Muhely_Sms::bekapcsolva(), 'fuggo' => SDH_Muhely_Sms::bekapcsolva() && class_exists('SDH_Muhely_Sms_Szabaly') ? SDH_Muhely_Sms_Szabaly::fuggo_db() : 0]
                 : ['be' => false, 'fuggo' => 0],
+            // Modulok (0.58): a kikapcsolt fő modulok kulcsai – a szkriptek ebből tudják, mit ne kínáljanak fel.
+            'modulokKi' => array_values(array_filter(array_keys(SDH_Muhely_Modulok::katalogus()), [SDH_Muhely_Modulok::class, 'ki'])),
         ];
     }
 
@@ -706,7 +708,7 @@ final class SDH_Muhely_Admin_UI
         ];
 
         // Új termék és új szolgáltatás a törzsbe – popupban, az Áttekintés elhagyása nélkül (eladas.js).
-        if (class_exists('SDH_Muhely_Termek')) {
+        if (class_exists('SDH_Muhely_Termek') && SDH_Muhely_Modulok::be('termekek')) {
             $gombok[] = [
                 'cimke'  => '+ Új termék',
                 'ikon'   => 'termekek',
@@ -725,13 +727,16 @@ final class SDH_Muhely_Admin_UI
         }
 
         // Napi árukiadás és rendelés: az új lap űrlapja egy kattintásra (a listájuk a menüben és a csempén).
-        if (class_exists('SDH_Muhely_Eladas')) {
+        if (class_exists('SDH_Muhely_Eladas') && SDH_Muhely_Modulok::be('arukiadas')) {
             $gombok[] = [
                 'cimke'  => 'Napi árukiadás',
                 'ikon'   => 'arukiadas',
                 'url'    => SDH_Muhely_Modulok::url(SDH_Muhely_Eladas::KULCS_ARU),
                 'adatok' => ['sdh-urlap' => SDH_Muhely_Eladas::KULCS_ARU, 'sdh-id' => '0'],
             ];
+        }
+
+        if (class_exists('SDH_Muhely_Eladas') && SDH_Muhely_Modulok::be('rendelesek')) {
             $gombok[] = [
                 'cimke'  => 'Rendelések',
                 'ikon'   => 'rendelesek',
@@ -847,7 +852,7 @@ final class SDH_Muhely_Admin_UI
             $szamok['uzenetek'] = [SDH_Muhely_Rma::olvasatlan_db(), 'olvasatlan üzenet'];
         }
 
-        if (class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Levelezes::van_fiok()) {
+        if (class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') && SDH_Muhely_Levelezes::van_fiok()) {
             $szamok['levelezes'] = [SDH_Muhely_Levelezes::olvasatlan_db(), 'olvasatlan levél'];
         }
 

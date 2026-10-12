@@ -259,12 +259,33 @@ final class SDH_Muhely_Sugo
         foreach (self::fajlok() as $ut) {
             $f = self::fajl_olvas($ut);
 
-            if ($f !== null) {
+            if ($f !== null && self::fejezet_el((array) $f['modulok'])) {
                 self::$fejezetek[(string) $f['kulcs']] = $f;
             }
         }
 
         return self::$fejezetek;
+    }
+
+    /**
+     * Látszik-e a fejezet: a kikapcsolt modul (Modulok menüpont) fejezete eltűnik
+     * a súgóból és az asszisztens tudásából – ha minden menüpontja kikapcsolt modulé.
+     *
+     * @param array<int, mixed> $modulok A fejezet fejlécének `modul:` sora.
+     */
+    private static function fejezet_el(array $modulok): bool
+    {
+        if ($modulok === []) {
+            return true;
+        }
+
+        foreach ($modulok as $modul) {
+            if (SDH_Muhely_Modulok::be((string) $modul)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** @return array<string, mixed>|null */
@@ -303,7 +324,8 @@ final class SDH_Muhely_Sugo
             $ujj .= basename($ut) . ':' . (int) @filemtime($ut) . ':' . (int) @filesize($ut) . '|'; // phpcs:ignore WordPress.PHP.NoSilencedErrors
         }
 
-        $ujj = md5($ujj . SDH_MUHELY_VERSION);
+        // A kikapcsolt modulok is benne vannak: átkapcsolás után a tartalomjegyzék újraépül.
+        $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()));
         $c   = get_transient('sdh_muhely_sugo_index');
 
         if (is_array($c) && ($c['u'] ?? '') === $ujj && is_array($c['i'] ?? null)) {

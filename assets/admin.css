@@ -9043,3 +9043,184 @@ a.sdh-ora__zaras--nincs {
 .sdh-eszall .sdh-allapot-jel {
     grid-column: 1 / -1;
 }
+
+/* ================================================================== */
+/* Modulok (0.58): a fő funkciók ki- és bekapcsolása                    */
+/* ================================================================== */
+
+.sdh-modulok__osszegzo {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+    margin: 0 0 1.1rem;
+}
+
+.sdh-modulok__szam {
+    font-size: calc(22px * var(--sdh-n));
+    color: var(--sdh-halvany);
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-modulok__szam strong {
+    font-size: calc(30px * var(--sdh-n));
+    font-weight: 600;
+    color: var(--sdh-szoveg);
+}
+
+.sdh-modulok__szam-cimke {
+    font-size: calc(13px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-modulok__csoport {
+    margin: 0 0 1.4rem;
+}
+
+.sdh-modulok__csoportcim {
+    margin: 0 0 .6rem;
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--sdh-halvany);
+}
+
+.sdh-modulok__racs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(270px * var(--sdh-n)), 1fr));
+    gap: calc(12px * var(--sdh-n));
+}
+
+.sdh-modulkartya {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    padding: 1rem 1.1rem;
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek);
+    color: var(--sdh-szoveg);
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+.sdh-modulkartya:hover {
+    border-color: var(--sdh-accent);
+}
+
+.sdh-modulkartya:not(.is-be) {
+    opacity: .72;
+}
+
+.sdh-modulkartya.is-be {
+    border-color: var(--sdh-accent-halvany, var(--sdh-keret));
+    box-shadow: var(--sdh-arnyek), 0 0 0 1px var(--sdh-accent-halvany, transparent);
+}
+
+.sdh-modulkartya.is-var {
+    border-style: dashed;
+}
+
+.sdh-modulkartya--alap {
+    cursor: default;
+}
+
+.sdh-modulkartya--alap:hover {
+    border-color: var(--sdh-accent-halvany, var(--sdh-keret));
+}
+
+.sdh-modulkartya__fej {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.sdh-modulkartya__ikon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: calc(34px * var(--sdh-n));
+    height: calc(34px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    background: var(--sdh-accent-halvany, var(--sdh-felulet-2));
+    color: var(--sdh-accent);
+}
+
+.sdh-modulkartya__ikon .sdh-sav__ikon {
+    width: calc(19px * var(--sdh-n));
+    height: calc(19px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-modulkartya__cim {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: calc(15px * var(--sdh-n));
+    font-weight: 600;
+}
+
+.sdh-modulkartya__leiras {
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.45;
+    color: var(--sdh-szoveg-2, var(--sdh-szoveg));
+}
+
+.sdh-modulkartya__lab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem .8rem;
+    margin-top: auto;
+    font-size: calc(12px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-modulkartya__allapot {
+    font-weight: 600;
+}
+
+.sdh-modulkartya.is-be .sdh-modulkartya__allapot {
+    color: var(--sdh-siker);
+}
+
+.sdh-modulkartya.is-var .sdh-modulkartya__allapot {
+    color: var(--sdh-figyelem);
+}
+
+.sdh-modulok__lablec {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: .8rem;
+    padding: .8rem 0;
+    background: var(--sdh-vaszon);
+}
+
+.sdh-modulok__kod {
+    max-width: calc(220px * var(--sdh-n));
+}
+
+.sdh-modulok__zar {
+    margin-top: 1.4rem;
+    max-width: calc(760px * var(--sdh-n));
+}
+
+/* Kikapcsolt modul: a szkriptből rajzolt gombjai sem látszanak (body osztály: sdh-ki-<modul>). */
+.sdh-ki-nyomtatas [data-sdh-nyomtat],
+.sdh-ki-nyomtatas .sdh-ny-gomb {
+    display: none !important;
+}
+
+/* Címke QR-kód nélkül (kikapcsolt Ügyfélüzenetek és RMA-oldal modul). */
+.sdh-cimke--rma.sdh-cimke--qr-nelkul {
+    grid-template-columns: minmax(0, 1fr);
+}

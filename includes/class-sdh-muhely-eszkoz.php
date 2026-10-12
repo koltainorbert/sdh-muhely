@@ -670,6 +670,8 @@ final class SDH_Muhely_Eszkoz
                                 </div>
                             </div>
 
+                            <?php // IMEI-lekérdezés modul (Modulok): ellenőrző oldalak, szolgáltató, gyári adatok beillesztése. ?>
+                            <?php if (SDH_Muhely_Modulok::be('imei')) : ?>
                             <div class="sdh-sor">
                                 <div class="sdh-ig">
                                     <span class="sdh-ig__cimke">Ellenőrzés</span>
@@ -709,6 +711,7 @@ final class SDH_Muhely_Eszkoz
                                     </div>
                                 </div>
                             </div>
+                            <?php endif; ?>
                         </div>
 
                         <div class="sdh-azon__minta">

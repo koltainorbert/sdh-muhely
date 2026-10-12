@@ -211,14 +211,19 @@ final class SDH_Muhely_Frontend
         }
 
         if ($kulcs !== 'attekintes' && $modul === null) {
+            // Kikapcsolt modul (Modulok menüpont): nem „nincs ilyen", hanem ki van kapcsolva.
+            $ki_szoveg = SDH_Muhely_Modulok::ki($kulcs) && class_exists('SDH_Muhely_Modul_Kapcsolo')
+                ? SDH_Muhely_Modul_Kapcsolo::ki_szoveg($kulcs)
+                : '';
+
             status_header(404);
             self::keret(
-                'Nincs ilyen oldal',
+                $ki_szoveg !== '' ? 'Kikapcsolt modul' : 'Nincs ilyen oldal',
                 '',
-                static function (): void {
+                static function () use ($ki_szoveg): void {
                     echo '<div class="sdh-wrap"><div class="sdh-doboz"><p class="sdh-sugo sdh-sugo--utolso">'
-                        . 'Ez a modul nem létezik. Nézd meg az URL-t, vagy válassz '
-                        . 'a bal oldali menüből.</p></div></div>';
+                        . ($ki_szoveg !== '' ? esc_html($ki_szoveg) : 'Ez a modul nem létezik. Nézd meg az URL-t, vagy válassz '
+                        . 'a bal oldali menüből.') . '</p></div></div>';
                 }
             );
             exit;
@@ -299,6 +304,15 @@ final class SDH_Muhely_Frontend
                 . '<path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>',
 
             'sugo'         => '<circle cx="10" cy="10" r="6.8"/><path d="M8 8.1a2.1 2.1 0 1 1 2.9 1.9c-.6.3-.9.7-.9 1.3"/><path d="M10 13.8v.1"/>',
+            // Modulok (0.58): a menüpont és a kikapcsolható modulok kártyái.
+            'modulok'      => '<rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/>'
+                . '<rect x="3" y="11" width="6" height="6" rx="1.5"/><path d="M14 11v6M11 14h6"/>',
+            'sms'          => '<rect x="5.5" y="2.5" width="9" height="15" rx="1.8"/><path d="M8 6.5h4M8 9h4M8 11.5h2.5"/><path d="M9 15.2h2"/>',
+            'szamlazas'    => '<path d="M5 2.8h10v14.4l-2-1.3-1.7 1.3-1.6-1.3-1.7 1.3L5 15.9z"/><path d="M7.6 6.8h4.8M7.6 9.6h4.8M7.6 12.4h2.8"/>',
+            'nyomtatas'    => '<path d="M5.5 7V3h9v4"/><rect x="3" y="7" width="14" height="7" rx="1.6"/><path d="M5.5 12h9v5h-9z"/>',
+            'imei'         => '<rect x="5.5" y="2.5" width="9" height="15" rx="1.8"/><path d="M7.8 6.5v4.5M9.4 6.5v4.5M11 6.5v4.5M12.4 6.5v4.5"/><path d="M9 15.2h2"/>',
+            'mockup'       => '<rect x="3" y="4" width="14" height="12" rx="1.8"/><circle cx="7.4" cy="8.2" r="1.4"/><path d="M3.6 14.4 8 10.6l3 2.6 2.2-1.8 3.2 2.8"/>',
+            'mentes'       => '<path d="M4 4.8A1.8 1.8 0 0 1 5.8 3h7.4L16 5.8v9.4a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 15.2z"/><path d="M7 3v4h5.5V3M7 17v-5h6v5"/>',
 
             // --- Gombok (nem modulok) ---
             'plusz'        => '<path d="M10 4.2v11.6M4.2 10h11.6"/>',
@@ -428,7 +442,7 @@ final class SDH_Muhely_Frontend
             <?php endif; ?>
         </head>
         <?php $sdh_arc = SDH_Muhely_Arculat::beallitas(); ?>
-        <body class="sdh-app" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>" data-sdh-sav-stilus="<?php echo esc_attr($sdh_arc['sav']); ?>">
+        <body class="sdh-app<?php echo esc_attr(class_exists('SDH_Muhely_Modul_Kapcsolo') ? SDH_Muhely_Modul_Kapcsolo::body_osztalyok() : ''); ?>" data-sdh-modul="<?php echo esc_attr($aktiv_kulcs); ?>" data-sdh-sav-stilus="<?php echo esc_attr($sdh_arc['sav']); ?>">
 
         <?php
         // Kékfény-szűrő: a gyökérelem ezt a színszűrőt kapja (admin.css: :root[data-kekfeny]). A kék
@@ -473,7 +487,7 @@ final class SDH_Muhely_Frontend
             <p class="sdh-sav__cim">Nyilvántartás</p>
 
             <?php foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) : ?>
-                <?php if (!empty($modul['csak_admin'])) { continue; } ?>
+                <?php if (!empty($modul['csak_admin']) || !empty($modul['rejtett'])) { continue; } ?>
 
                 <?php if (!empty($modul['keszul'])) : ?>
                     <span class="sdh-sav__link sdh-sav__link--keszul" title="Készül">
@@ -522,6 +536,14 @@ final class SDH_Muhely_Frontend
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     <span class="sdh-sav__felirat">Beállítások</span>
                 </a>
+                <?php // Modulok (0.58): a fő funkciók ki- és bekapcsolása – csak adminisztrátornak. ?>
+                <?php if (class_exists('SDH_Muhely_Modul_Kapcsolo')) : ?>
+                    <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Modul_Kapcsolo::KULCS ? 'sdh-sav__link--aktiv' : ''; ?>"
+                       href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Modul_Kapcsolo::KULCS)); ?>">
+                        <?php echo self::ikon('modulok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                        <span class="sdh-sav__felirat">Modulok</span>
+                    </a>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
         </aside>
@@ -554,7 +576,7 @@ final class SDH_Muhely_Frontend
                 }
 
                 // Nyomtatás: bianko munkalap, pénztárzárás, pénztárjelentés, listák – egy helyről.
-                if (class_exists('SDH_Muhely_Nyomtatas')) {
+                if (class_exists('SDH_Muhely_Nyomtatas') && SDH_Muhely_Modulok::be('nyomtatas')) {
                     echo '<button type="button" class="sdh-fej__ikongomb sdh-fej__nyomtat" data-sdh-nyomtat="0" title="Nyomtatás: üres munkalap, pénztárzárás, listák" aria-label="Nyomtatás">'
                         . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7V3h9v4"/><rect x="3" y="7" width="14" height="7" rx="1.6"/><path d="M5.5 12h9v5h-9z"/></svg></button>';
                 }

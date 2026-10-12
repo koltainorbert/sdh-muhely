@@ -133,6 +133,11 @@ final class SDH_Muhely_Imei_Lekerdezes
 
     public static function beallitva(): bool
     {
+        // Kikapcsolt IMEI-lekérdezés modul (Modulok): nincs lekérdezőgomb.
+        if (SDH_Muhely_Modulok::ki('imei')) {
+            return false;
+        }
+
         $b = self::beallitas();
 
         return $b['aktiv'] && $b['url'] !== '';
@@ -157,6 +162,10 @@ final class SDH_Muhely_Imei_Lekerdezes
      */
     public static function ellenorzok(): array
     {
+        if (SDH_Muhely_Modulok::ki('imei')) {
+            return [];
+        }
+
         $mentett = get_option('sdh_muhely_imei_ellenorzok', null);
 
         if (!is_string($mentett) || trim($mentett) === '') {

@@ -36,6 +36,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t40-ai-ures-bemenet` | az AI-hívás az üres eszköz-bemenetet objektumként ({}) küldi vissza (hamis AI-szerverrel, két körben): nincs „Input should be an object” hiba |
 | `t39-parbaj-jelzes` | a levél-jelzések a figura mellé kerülnek, a buborék fölébük emelkedik; párbaj a Hiba-bogárral: kapcsoló, mentés, kliensadat, leállítás, „kevesebb mozgás” |
 | `t32-beallitasok` | a Beállítások lapfülei, lapfülenkénti mentés, jogosultság, nincs wp-adminba mutató link, az új paraméterek |
+| `t47-modulok` | Modulok: a 15 fő modul ki- és bekapcsolása, mentés és függőség, a menü / csempék / Beállítások / súgó / AI-eszközök, az AJAX- és admin-post-őr (kivétel: Fizetés ablak), pénztár nélküli fizetés, Számlázz.hu nélkül a helyi előkészítő, RMA nélkül a „Címke” lapfül, Csapat nélkül a kollégák kezelése, telepítői zár; a végén minden visszakapcsol |
 | `t26-fust` | füstteszt: űrlap, rács, részletpanel, beállítások, asszisztens – PHP-figyelmeztetés nélkül |
 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.

@@ -22,6 +22,7 @@ funkcionalitásának átültetése, modulonként:
 - **Asszisztens** – AI (Claude) segítő minden oldalon: kérdez-felel, vezet, tanul; csak jóváhagyással módosít, mentéssel
 - **Súgó** – bemutató, részletes dokumentáció, kérdés–válasz, oldaltúrák; a `sugo/` mappa fejezeteiből épül, és az asszisztens is ebből tanul. **Ha a rendszer változik, a fejezet vele változik** (szabályok: `sugo/OLVASSEL.md`, őre: `tesztek/t36-sugo.php`)
 - **Nyomtatás** – átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák: előnézet, példányszám, PDF, e-mail; minden nyomtatvány szerkeszthető a Beállításokban
+- **Modulok** – a fő funkciók modulonként ki- és bekapcsolhatók (külön értékesíthetők); telepítői zár kóddal. Az alaprendszer (Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés) mindig fut
 - *(később)* raktár, határidő
 
 A meglévő **SDH Platform** plugin (beszállítói katalógus → rendelés) külön
@@ -62,6 +63,25 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.58.0
+- **Modulok (új admin-menüpont, a Beállítások alatt).** A rendszer 15 fő funkciója modulonként ki- és
+  bekapcsolható: Termékek és készlet, Napi árukiadás, Rendelések, Házipénztár, Számlázz.hu számlázás,
+  Ügyfélüzenetek és RMA-oldal, SMS-értesítések, Levelezés, Csapat-üzenetek, Naptár, AI-asszisztens,
+  Nyomtatványok, IMEI-lekérdezés, TAC-adatbázis, Eszköz-mockupok. Az alaprendszer mindig fut. Alapból minden be
+  van kapcsolva.
+- **A kikapcsolt modul** eltűnik a menüből, az Áttekintés csempéi és gyorsgombjai közül, a Beállítások
+  lapfülei közül, a súgóból és az asszisztens tudásából; a más oldalakon lévő gombjai sem látszanak; az
+  időzített munkái (SMS-sor, naptár-emlékeztető, nyomtatási felajánlás) nem futnak; az AJAX-végpontjai egy
+  központi őrön elutasítanak. **Az adatai megmaradnak**, visszakapcsolva minden folytatódik.
+- **Függőség:** az SMS és a Rendelések az Ügyfélüzenetek és RMA-oldal modulra épül – azzal együtt kikapcsolnak.
+- **Különleges esetek:** kikapcsolt Házipénztárnál a munkalap Fizetés ablaka megmarad, csak nem ír a pénztárba;
+  kikapcsolt Számlázz.hu-nál a helyi számla-előkészítő (PDF) megmarad; kikapcsolt RMA-nál a munkalap RMA
+  lapfüléből „Címke” lesz (QR-kód nélküli címke és nyomtatása); kikapcsolt Csapatnál a kollégák kezelése
+  megmarad.
+- **Telepítői zár:** kóddal lezárható a modulok átkapcsolása (más cégnél telepítve az ügyfél adminisztrátora
+  sem kapcsol be magának meg nem rendelt modult). Szervezési zár, nem kódvédelem.
+- Új súgófejezet: **Modulok** (`sugo/24-modulok.md`); új teszt: `t47-modulok`.
 
 ### 0.57.0
 - **SMS-értesítések (új SMS menüpont és Beállítások › SMS-értesítések).** Az SMS a céges Android-telefonon futó

@@ -791,6 +791,14 @@ final class SDH_Muhely_Rma
 
         $token = preg_replace('/[^A-Za-z0-9]/', '', (string) $token) ?? '';
 
+        // Kikapcsolt Ügyfélüzenetek és RMA-oldal modul (Modulok): az ügyféloldal nem érhető el.
+        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+            status_header(404);
+            nocache_headers();
+            SDH_Muhely_Rma_Oldal::ismeretlen();
+            exit;
+        }
+
         // A frontend nem jár az admin_init-en: a sémafrissítés itt is fusson.
         SDH_Muhely_Schema::frissites_ha_kell();
 
@@ -1641,6 +1649,20 @@ final class SDH_Muhely_Rma
             $sorok .= '<div class="sdh-cimke__sor">' . ($rendeles ? 'Felvéve: ' : 'Átvéve: ') . esc_html($atveve) . '</div>';
         }
 
+        // Kikapcsolt Ügyfélüzenetek és RMA-oldal modul (Modulok): nincs ügyféloldal, így a címkén sincs QR-kód és útmutató.
+        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+            return '<div class="sdh-cimke sdh-cimke--rma sdh-cimke--qr-nelkul">'
+                . '<div class="sdh-cimke__adat">'
+                . '<div class="sdh-cimke__ceg">' . esc_html((string) $b['szerviz_nev']) . '</div>'
+                . '<div class="sdh-cimke__szam">' . esc_html($szam)
+                . ($darab !== '' ? ' <span class="sdh-cimke__darab">' . esc_html($darab) . '</span>' : '') . '</div>'
+                . $sorok
+                . '</div>'
+                . '<div class="sdh-cimke__vk">' . SDH_Muhely_Kodok::vonalkod_svg($szam, false, 'sdh-vonalkod', true)
+                . '<div class="sdh-cimke__vkszam">' . esc_html($szam) . '</div></div>'
+                . '</div>';
+        }
+
         // sdh-cimke--rma: a nyomtatott címke; a sima .sdh-cimke a listák kis szövegcímkéje.
         return '<div class="sdh-cimke sdh-cimke--rma">'
             . '<div class="sdh-cimke__qr">' . SDH_Muhely_Kodok::qr_svg($url) . '</div>'
@@ -1680,6 +1702,9 @@ final class SDH_Muhely_Rma
      */
     public static function munkalap_ful(?object $munkalap): void
     {
+        // Kikapcsolt modul (Modulok): a lapfül „Címke” lesz – csak a címke (QR nélkül) és a nyomtatása marad.
+        $csak_cimke = SDH_Muhely_Modulok::ki(self::KULCS);
+
         if ($munkalap === null || (int) $munkalap->id <= 0) {
             echo '<p class="sdh-rma__ures">Az RMA (QR-kód, ügyféloldal, üzenetek) a munkalap mentése után érhető el.</p>';
 
@@ -1713,21 +1738,36 @@ final class SDH_Muhely_Rma
                 );
             }
 
-            printf(
-                '<div class="sdh-rma__gombok">'
-                . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a>'
-                . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Ügyféloldal</a>'
-                . '<button type="button" class="sdh-gomb" data-sdh-rma-masol="%s">Link másolása</button>'
-                . '</div>',
-                esc_url(self::cimke_url($id)),
-                esc_url(add_query_arg('elonezet', '1', self::helyi_url($token))),
-                esc_attr(self::url($token))
-            );
+            if ($csak_cimke) {
+                printf(
+                    '<div class="sdh-rma__gombok"><a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a></div>',
+                    esc_url(self::cimke_url($id))
+                );
+            } else {
+                printf(
+                    '<div class="sdh-rma__gombok">'
+                    . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Címke nyomtatása</a>'
+                    . '<a class="sdh-gomb" href="%s" target="_blank" rel="noopener">Ügyféloldal</a>'
+                    . '<button type="button" class="sdh-gomb" data-sdh-rma-masol="%s">Link másolása</button>'
+                    . '</div>',
+                    esc_url(self::cimke_url($id)),
+                    esc_url(add_query_arg('elonezet', '1', self::helyi_url($token))),
+                    esc_attr(self::url($token))
+                );
+            }
         } else {
-            echo '<p class="sdh-rma__ures">A QR-kód és a vonalkód akkor készül el, amikor a munkalap sorszámot kap (számozott állapotba kerül).</p>';
+            echo '<p class="sdh-rma__ures">' . ($csak_cimke
+                ? 'A címke (vonalkóddal) akkor készül el, amikor a munkalap sorszámot kap (számozott állapotba kerül).'
+                : 'A QR-kód és a vonalkód akkor készül el, amikor a munkalap sorszámot kap (számozott állapotba kerül).') . '</p>';
         }
 
         echo '</div>';
+
+        if ($csak_cimke) {
+            echo '</div>';
+
+            return;
+        }
 
         // --- Üzenetek: csevegő ---------------------------------------------
         // Időrendben, a legfrissebb alul; a szál görgethető, a beírómező alul áll
@@ -1838,6 +1878,10 @@ final class SDH_Muhely_Rma
     public static function admin_menu_jelveny(): void
     {
         global $menu, $submenu;
+
+        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+            return;
+        }
 
         $db = self::olvasatlan_db();
 
