@@ -146,6 +146,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A Megjegyzés lapfülön popupból választható, előre megírt megjegyzések.',
                 'rajz' => $munkalap('gyakori-megjegyzesek'), 'ment' => [SDH_Muhely_Munkalap::class, 'beallitas_mentes'],
             ],
+            'zarolas' => [
+                'cim' => 'Lezárt lapok', 'csoport' => 'munkalap',
+                'leiras' => 'A lezárt lap csak újranyitás után szerkeszthető; kötelező-e megadni az újranyitás okát.',
+                'rajz' => [SDH_Muhely_Naplo_Felulet::class, 'zarolas_doboz'], 'ment' => [SDH_Muhely_Naplo_Felulet::class, 'zarolas_mentes'],
+            ],
 
             // --- Pénz és eladás ----------------------------------------------
             'fizmodok' => [
@@ -157,6 +162,11 @@ final class SDH_Muhely_Beallitasok
                 'cim' => 'Számlázás', 'csoport' => 'penz',
                 'leiras' => 'Számlázz.hu-kapcsolat, számlatömbök, a helyi nyomtatvány és a kiállító adatai, a bevizsgálási díj szövege.',
                 'rajz' => [SDH_Muhely_Szamla::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Szamla::class, 'beallitas_mentes'],
+            ],
+            'matrica' => [
+                'cim' => 'RMA-matrica', 'csoport' => 'penz',
+                'leiras' => 'Brother címkenyomtató: típus, nyomtatási mód (böngésző vagy hálózat), címke mérete, mi kerüljön a matricára és milyen sorrendben.',
+                'rajz' => [SDH_Muhely_Matrica::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Matrica::class, 'beallitas_mentes'],
             ],
             'nyomtatvanyok' => [
                 'cim' => 'Nyomtatványok', 'csoport' => 'penz',
@@ -223,6 +233,11 @@ final class SDH_Muhely_Beallitasok
                 'cim' => 'Mentés', 'csoport' => 'rendszer',
                 'leiras' => 'A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés.',
                 'rajz' => [SDH_Muhely_Mentes::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Mentes::class, 'beallitas_mentes'],
+            ],
+            'naplo' => [
+                'cim' => 'Változásnapló', 'csoport' => 'rendszer',
+                'leiras' => 'Mit naplóz a rendszer, a beállítások és az IP naplózása, a Napló menüpont lapmérete, a napló épsége.',
+                'rajz' => [SDH_Muhely_Naplo_Felulet::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Naplo_Felulet::class, 'beallitas_mentes'],
             ],
             'demo' => [
                 'cim' => 'Demó adatok', 'csoport' => 'rendszer',

@@ -1597,12 +1597,15 @@
         var ablakCim = modal ? modal.querySelector('.sdh-modal__cim, h2') : null;
         var hiba = (modal || document).querySelector('.sdh-modal__hiba, .sdh-uzenet--hiba');
         var cim = document.querySelector('.sdh-fejlec__cim, .sdh-fej__morzsa strong');
+        // A nyitott rekord (munkalap, Napló ablak, Napló oldal): a szerver ebből adja a történetét (0.59).
+        var rekordElem = (modal || document).querySelector('[data-sdh-naplo-rekord]');
 
         return {
             kulcs: modulKulcs(),
             cim: cim ? cim.textContent.trim() : document.title.replace(/\s+–\s+SDH Műhely$/, ''),
             ablak: ablakCim ? ablakCim.textContent.trim() : '',
-            hiba: hiba && lathato(hiba) ? hiba.textContent.trim().slice(0, 300) : ''
+            hiba: hiba && lathato(hiba) ? hiba.textContent.trim().slice(0, 300) : '',
+            rekord: rekordElem ? String(rekordElem.getAttribute('data-sdh-naplo-rekord') || '').replace(/[^a-z_:0-9]/g, '') : ''
         };
     }
 

@@ -1,0 +1,384 @@
+/*
+ * SDH Műhely – Napló (változásnapló) és a lezárt lap (0.59).
+ * Színek: a rendszer CSS-változói (admin.css :root), így a téma és a Papír
+ * megjelenés is követi.
+ */
+
+/* ---------- Lezárt lap: a zárolás-sáv ---------- */
+
+.sdh-zarsav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .55rem .85rem;
+    margin: 0 0 .6rem;
+    padding: .6rem .8rem;
+    border: 1px solid color-mix(in srgb, var(--sdh-allapot-zold) 55%, var(--sdh-keret-eros));
+    border-left-width: 4px;
+    border-radius: var(--sdh-r);
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 9%, var(--sdh-felulet));
+    color: var(--sdh-szoveg);
+}
+
+.sdh-zarsav__ikon svg {
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sdh-zarsav__szoveg {
+    flex: 1 1 calc(320px * var(--sdh-n));
+    min-width: 0;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.45;
+}
+
+.sdh-zarsav__urlap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem;
+}
+
+.sdh-zarsav__urlap select,
+.sdh-zarsav__urlap input[type="text"] {
+    min-width: calc(150px * var(--sdh-n));
+}
+
+.sdh-zarsav__urlap input.is-hibas {
+    border-color: var(--sdh-hiba);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sdh-hiba) 25%, transparent);
+}
+
+.sdh-zarsav [data-sdh-ujranyit].is-elesitve {
+    background: var(--sdh-figyelem);
+    border-color: var(--sdh-figyelem);
+    color: #111;
+}
+
+.sdh-zarsav__hiba {
+    flex: 1 0 100%;
+    color: var(--sdh-hiba);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+/* A zárolt űrlap: a letiltott mezők olvashatók maradnak, csak halványabbak. */
+form.is-zarolt [data-sdh-zar-tiltva] {
+    opacity: .78;
+    cursor: not-allowed;
+}
+
+form.is-zarolt button[data-sdh-zar-tiltva] {
+    opacity: .42;
+}
+
+form.is-zarolt input[data-sdh-zar-tiltva],
+form.is-zarolt select[data-sdh-zar-tiltva],
+form.is-zarolt textarea[data-sdh-zar-tiltva] {
+    color: var(--sdh-szoveg);
+    background: var(--sdh-felulet-2);
+}
+
+/* ---------- A Napló (oldal és ablak) ---------- */
+
+.sdh-naplo-gomb .sdh-gomb__ikon {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+}
+
+.sdh-naplo__sav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .6rem;
+}
+
+.sdh-naplo__sav-ter {
+    flex: 1 1 auto;
+}
+
+.sdh-naplo__db {
+    margin: .3rem 0 .6rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-naplo__statok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: .6rem;
+    margin-bottom: .8rem;
+}
+
+.sdh-naplo__stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: calc(130px * var(--sdh-n));
+    padding: .55rem .85rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-naplo__stat strong {
+    font-size: calc(20px * var(--sdh-n));
+    line-height: 1.15;
+}
+
+.sdh-naplo__stat span {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-naplo__stat--epseg.is-ok strong {
+    color: var(--sdh-siker);
+}
+
+.sdh-naplo__stat--epseg.is-hiba {
+    border-color: var(--sdh-hiba);
+}
+
+.sdh-naplo__stat--epseg.is-hiba strong {
+    color: var(--sdh-hiba);
+}
+
+.sdh-naplo__stat-gombok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem;
+    margin-left: auto;
+}
+
+.sdh-naplo__epseg-reszlet {
+    margin-bottom: .8rem;
+}
+
+.sdh-naplo__szuro {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(160px * var(--sdh-n)), 1fr));
+    align-items: end;
+    gap: .55rem .7rem;
+    margin-bottom: .4rem;
+    padding: .7rem .8rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-naplo__szuro .sdh-mezo {
+    margin: 0;
+}
+
+.sdh-naplo__kereso {
+    grid-column: span 2;
+}
+
+.sdh-naplo__szuro-gombok {
+    display: flex;
+    gap: .45rem;
+}
+
+.sdh-naplo__lista {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+}
+
+.sdh-naplo__nap {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    margin-top: .5rem;
+    padding: .2rem 0;
+    background: var(--sdh-vaszon);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+}
+
+.sdh-naplo--ablak .sdh-naplo__nap {
+    background: var(--sdh-felulet);
+}
+
+.sdh-naplo__ures {
+    padding: 1rem;
+    color: var(--sdh-szoveg-2);
+    text-align: center;
+}
+
+.sdh-naplo__kartya {
+    position: relative;
+    padding: .55rem .8rem .6rem 1.15rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+/* Az idővonal pöttye és csíkja a kártya bal szélén: a művelet színe. */
+.sdh-naplo__kartya::before {
+    content: "";
+    position: absolute;
+    top: .55rem;
+    bottom: .55rem;
+    left: .45rem;
+    width: calc(3px * var(--sdh-n));
+    border-radius: calc(3px * var(--sdh-n));
+    background: var(--sdh-allapot-kek);
+}
+
+.sdh-naplo__kartya--letrehozas::before { background: var(--sdh-allapot-zold); }
+.sdh-naplo__kartya--torles::before { background: var(--sdh-allapot-piros); }
+.sdh-naplo__kartya--elutasitva::before,
+.sdh-naplo__kartya--vedelem::before { background: var(--sdh-figyelem); }
+.sdh-naplo__kartya--beallitas::before { background: var(--sdh-allapot-lila); }
+.sdh-naplo__kartya--nyomtatas::before,
+.sdh-naplo__kartya--esemeny::before { background: var(--sdh-allapot-szurke); }
+
+.sdh-naplo__fej {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .2rem .6rem;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-naplo__ido {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+.sdh-naplo__ki {
+    font-weight: 600;
+}
+
+.sdh-naplo__forras {
+    padding: .05rem .5rem;
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+.sdh-naplo__forras--ai,
+.sdh-naplo__forras--ai-visszaallitas {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-felirat);
+}
+
+.sdh-naplo__rekord {
+    margin-left: auto;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-naplo__megj {
+    margin: .25rem 0 0;
+    font-style: italic;
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-naplo__valtozasok {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin: .4rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sdh-naplo__v {
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-naplo__muv {
+    display: inline-block;
+    min-width: calc(86px * var(--sdh-n));
+    margin-right: .35rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11.5px * var(--sdh-n));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+.sdh-naplo__v--torles .sdh-naplo__muv { color: var(--sdh-allapot-piros); }
+.sdh-naplo__v--letrehozas .sdh-naplo__muv { color: var(--sdh-allapot-zold); }
+.sdh-naplo__v--elutasitva .sdh-naplo__muv,
+.sdh-naplo__v--vedelem .sdh-naplo__muv { color: var(--sdh-figyelem); }
+
+.sdh-naplo__mezok {
+    display: grid;
+    gap: .15rem;
+    margin: .25rem 0 0 calc(4px * var(--sdh-n));
+}
+
+.sdh-naplo__mezo {
+    display: grid;
+    grid-template-columns: minmax(calc(110px * var(--sdh-n)), max-content) 1fr;
+    gap: .6rem;
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-naplo__mezo dt {
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-naplo__mezo dd {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.sdh-naplo__mezo del {
+    color: var(--sdh-szoveg-2);
+    text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--sdh-allapot-piros) 70%, transparent);
+}
+
+.sdh-naplo__mezo ins {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.sdh-naplo__nyil {
+    margin: 0 .4rem;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-naplo__reszlet summary {
+    margin-top: .2rem;
+    color: var(--sdh-accent-felirat);
+    font-size: calc(12px * var(--sdh-n));
+    cursor: pointer;
+}
+
+.sdh-naplo__tobb {
+    margin: .7rem 0 0;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .sdh-naplo__kereso {
+        grid-column: auto;
+    }
+
+    .sdh-naplo__rekord {
+        flex: 1 0 100%;
+        margin-left: 0;
+    }
+
+    .sdh-naplo__mezo {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

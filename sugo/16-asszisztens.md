@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
+kulcsszavak: napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -143,6 +143,10 @@ Az eszközei, amelyekkel dolgozik:
 | Súgófejezet elolvasása | egy fejezet vagy szakasz teljes szövege | olvas |
 | Tudástár | keresés abban, amit tanítottak neki | olvas |
 | Műveletnapló | a saját javaslatai és műveletei | olvas |
+| Egy rekord története (Napló) | egy munkalap, árukiadás, rendelés vagy más rekord teljes története a változásnaplóból: ki, mikor, honnan, mit (régi → új) | olvas |
+| Keresés a Naplóban | keresés a teljes változásnaplóban: mi, ki, honnan, milyen művelet, időszak, szöveg, munkalapszám | olvas |
+| Napló-összesítés | a módosítások száma kollégánként, fajtánként, naponként egy időszakra | olvas |
+| A napló épsége | ellenőrzi, hogy a naplót nem írták-e át, és nem hiányzik-e belőle | olvas |
 | Megmutatom | kiemel egy elemet a képernyőn | megmutat |
 | Végigvezetem | több lépésben vezet végig egy feladaton | megmutat |
 | Oldaltúra | elindítja az oldal kész túráját | megmutat |
@@ -159,6 +163,10 @@ Az eszközei, amelyekkel dolgozik:
 Az adminisztrátor bármelyik eszközt kikapcsolhatja (lásd a beállításoknál).
 
 Amit **nem** lát: a zárkódot, a feloldó mintát, a jelszavakat és az API-kulcsokat.
+
+### A Napló és az asszisztens
+
+Az asszisztens a teljes [változásnaplót](sugo:naplo) olvassa. Ha egy munkalap vagy egy Napló ablak nyitva van, a rekord története **magától** megy hozzá – kérdezd meg: `Mi történt ezzel a lappal?`, `Ki írta át a határidőt?`, `Mikor lett lezárva, és ki nyitotta újra?`, és azonnal, idővonalszerűen felel. A Napló ablak megnyitásakor maga is felajánlja, hogy elmondja, mi történt. A teljes naplóban is keres (`Mit csinált ma Minta Márta?`, `Mi változott tegnap a termékeknél?`). A naplót csak olvassa; a beállítások naplóját csak adminisztrátornak mutatja. A lezárt munkalapra nem javasol megjegyzést vagy határidőt – előbb az újranyitást (állapotváltás) kell kérni.
 
 ## Javaslat, jóváhagyás, megerősítő kód
 

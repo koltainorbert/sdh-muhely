@@ -177,6 +177,32 @@ final class SDH_Muhely_Kodok
     }
 
     /**
+     * Code 128 vonalkód elemei: a vonalak és közök szélessége modulban,
+     * felváltva (vonal, köz, vonal…), csendes zóna nélkül – a matrica
+     * rajzolójához (PDF és nyomtatóraszter). Null, ha nem kódolható.
+     *
+     * @return array<int, int>|null
+     */
+    public static function code128_modulok(string $szoveg): ?array
+    {
+        $ertekek = self::code128_ertekek($szoveg);
+
+        if ($ertekek === null) {
+            return null;
+        }
+
+        $ki = [];
+
+        foreach ($ertekek as $ertek) {
+            foreach (str_split(self::C128[$ertek]) as $szel) {
+                $ki[] = (int) $szel;
+            }
+        }
+
+        return $ki;
+    }
+
+    /**
      * Code 128 vonalkód SVG-ben, alatta (kérésre) a szöveggel.
      */
     public static function vonalkod_svg(string $szoveg, bool $felirat = true, string $osztaly = 'sdh-vonalkod', bool $nyujthato = false): string

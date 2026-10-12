@@ -177,6 +177,47 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 'leiras' => 'A rendszer beállításainak állapota titkok nélkül: mi van bekötve és mi hiányzik (számlázás, levelezés, asszisztens, IMEI-lekérdezés), a Csapat módja, a helyszínek és beszállítók száma, a megjelenés alapjai. Akkor használd, ha „miért nem megy" vagy „be van-e állítva" a kérdés.',
                 'schema' => $obj([]),
             ],
+            'naplo_idovonal' => [
+                'szint' => 'olvas', 'cim' => 'Egy rekord története (Napló)',
+                'leiras' => 'A változásnaplóból egy rekord teljes története időrendben: ki, mikor, honnan (felület, AI, időzített, ügyféloldal), mit módosított – mezőnként a régi és az új érték; újranyitás, elutasított szerkesztés, nyomtatás is. Munkalapnál (árukiadás, rendelés is) a tételek, hibák, eszközök, fizetés, üzenetek, SMS változásai is benne vannak. Ezt használd, ha azt kérdezik: „mi történt ezzel?”, „ki írta át?”, „mikor lett lezárva?”, „mi volt előtte?”.',
+                'schema' => $obj([
+                    'munkalap'    => $sz('Munkalap / árukiadás / rendelés: a szám (pl. 1234) vagy #azonosító. Ha ezt adod, a többi rekord-mező nem kell.'),
+                    'rekord_tipus' => ['type' => 'string', 'enum' => ['munkalap', 'termek', 'ugyfel', 'eszkoz', 'szolgaltatas', 'naptar_esemeny', 'csapat_cetli', 'csapat_beszelgetes', 'penztar', 'penztar_nap', 'szamla', 'helyszin', 'beszallito', 'sms_sablon', 'sms_szabaly', 'beallitas'], 'description' => 'A rekord fajtája (ha nem munkalap).'],
+                    'rekord_id'   => $eg('A rekord azonosítója (a keresésből); 0 = a fajta összes rekordja (pl. az egész üzenőfal).'),
+                    'tol'         => $sz('Ettől a naptól, ÉÉÉÉ-HH-NN (nem kötelező).'),
+                    'ig'          => $sz('Eddig a napig, ÉÉÉÉ-HH-NN (nem kötelező).'),
+                    'limit'       => $eg('Legfeljebb ennyi bejegyzés (alap 60, max 200) – a legutóbbiak.'),
+                ]),
+            ],
+            'naplo_kereses' => [
+                'szint' => 'olvas', 'cim' => 'Keresés a Naplóban',
+                'leiras' => 'Keresés a teljes változásnaplóban szűrőkkel: mi (kategória), ki (név), honnan, milyen művelet, időszak, szöveg (név, érték, megjegyzés), munkalapszám. Rekordonként csoportosítva adja vissza a változásokat. Ezt használd: „mit csinált ma X?”, „mi változott tegnap a termékeknél?”, „ki törölt naptáreseményt?”, „mikor írták át a 25 000 Ft-os árat?”.',
+                'schema' => $obj([
+                    'kategoria'   => ['type' => 'string', 'enum' => array_keys(SDH_Muhely_Valtozasnaplo::kategoriak()), 'description' => 'Mire szűkítsen (nem kötelező).'],
+                    'felhasznalo' => $sz('Ki módosított – a felhasználó neve vagy része (nem kötelező).'),
+                    'forras'      => ['type' => 'string', 'enum' => ['felulet', 'ai', 'ai-visszaallitas', 'idozitett', 'ugyfeloldal', 'webhook', 'cli'], 'description' => 'Honnan jött a módosítás.'],
+                    'muvelet'     => ['type' => 'string', 'enum' => ['letrehozas', 'modositas', 'torles', 'beallitas', 'esemeny', 'nyomtatas', 'elutasitva', 'tomeges', 'vedelem'], 'description' => 'A művelet fajtája.'],
+                    'tol'         => $sz('Ettől a naptól, ÉÉÉÉ-HH-NN; üresen: 7 nappal ezelőttől.'),
+                    'ig'          => $sz('Eddig a napig, ÉÉÉÉ-HH-NN; üresen: ma.'),
+                    'kifejezes'   => $sz('Szöveg a változásokban (név, érték, megjegyzés).'),
+                    'munkalap'    => $sz('Csak ennek a munkalapnak a bejegyzései (szám).'),
+                    'limit'       => $eg('Legfeljebb ennyi bejegyzés (alap 80, max 250).'),
+                ]),
+            ],
+            'naplo_osszesites' => [
+                'szint' => 'olvas', 'cim' => 'Napló-összesítés',
+                'leiras' => 'A változásnapló számokban egy időszakra: hány módosítás felhasználónként, fajtánként, naponként, műveletenként, forrásonként. „Ki mennyit dolgozott a rendszerben?”, „mikor volt a legtöbb módosítás?”.',
+                'schema' => $obj([
+                    'tol'       => $sz('ÉÉÉÉ-HH-NN; üresen: 30 nappal ezelőttől.'),
+                    'ig'        => $sz('ÉÉÉÉ-HH-NN; üresen: ma.'),
+                    'kategoria' => ['type' => 'string', 'enum' => array_keys(SDH_Muhely_Valtozasnaplo::kategoriak()), 'description' => 'Csak erre (nem kötelező).'],
+                ]),
+            ],
+            'naplo_epseg' => [
+                'szint' => 'olvas', 'cim' => 'A napló épsége',
+                'leiras' => 'Ellenőrzi, hogy a változásnaplót nem írták-e át és nem töröltek-e belőle (aláírások, hézagok). „Biztos, hogy nem nyúltak a naplóhoz?”.',
+                'schema' => $obj([]),
+            ],
             'muveletnaplo' => [
                 'szint' => 'olvas', 'cim' => 'Műveletnapló',
                 'leiras' => 'A te (az asszisztens) javaslataid és műveleteid naplója: mit javasoltál, mit hagytak jóvá, mi futott le, mi lett visszavonva.',
@@ -445,6 +486,14 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                     return self::json(array_map(static fn ($r) => ['id' => (int) $r->id, 'cim' => $r->cim, 'szoveg' => $r->szoveg, 'forras' => $r->forras], SDH_Muhely_Asszisztens_Tudas::keres((string) ($p['kifejezes'] ?? ''), 10)));
                 case 'muveletnaplo':
                     return self::json(self::naplo(min(50, max(1, (int) ($p['limit'] ?? 15)))));
+                case 'naplo_idovonal':
+                    return self::json(self::naplo_idovonal($p));
+                case 'naplo_kereses':
+                    return self::json(self::naplo_kereses($p));
+                case 'naplo_osszesites':
+                    return self::json(self::naplo_osszesites($p));
+                case 'naplo_epseg':
+                    return self::json(self::naplo_epseg());
                 case 'sugo_kereses':
                     return self::json(self::sugo_kereses((string) ($p['kifejezes'] ?? '')));
                 case 'sugo_olvas':
@@ -1252,6 +1301,180 @@ final class SDH_Muhely_Asszisztens_Eszkozok
     }
 
     /* =================================================================
+     * Változásnapló (0.59) – csak olvasás
+     * ============================================================== */
+
+    /**
+     * A naplósorok az asszisztensnek: rekordonként csoportosítva, a zárkód és a
+     * feloldó minta nélkül.
+     *
+     * @param array<int, object> $sorok
+     * @return array<int, array<string, mixed>>
+     */
+    private static function naplo_csoportok(array $sorok, bool $rekorddal): array
+    {
+        $V  = 'SDH_Muhely_Valtozasnaplo';
+        $ki = [];
+
+        foreach ($V::csoportosit($sorok) as $cs) {
+            $f = $cs['fej'];
+            $c = [
+                'ido'    => substr((string) $f->ido, 0, 16),
+                'ki'     => (string) $f->felhasznalo_nev,
+                'honnan' => $V::forras_nev((string) $f->forras),
+            ];
+
+            if ($rekorddal) {
+                $c['rekord'] = $V::rekord_cimke((string) $f->fo_tipus, (int) $f->fo_id);
+            }
+
+            if ((string) $f->megjegyzes !== '') {
+                $c['megjegyzes'] = (string) $f->megjegyzes;
+            }
+
+            $c['valtozasok'] = [];
+
+            foreach ($cs['sorok'] as $s) {
+                $v = ['muvelet' => $V::muvelet_nev((string) $s->muvelet), 'mi' => $V::tabla_nev((string) $s->tabla)];
+
+                if (in_array($s->muvelet, ['modositas', 'beallitas'], true)) {
+                    $v['mezok'] = array_map(static fn ($x) => $x['mezo'] . ': ' . mb_substr($x['regi'], 0, 120) . ' → ' . mb_substr($x['uj'], 0, 120), array_slice($V::reszletek($s, true), 0, 15));
+                } else {
+                    $v['osszegzes'] = (string) $s->osszegzes;
+                }
+
+                $c['valtozasok'][] = $v;
+            }
+
+            $ki[] = $c;
+        }
+
+        return $ki;
+    }
+
+    /** A nem adminisztrátor a beállítások és a napló védelmi bejegyzéseit nem látja. @param array<string, mixed> $sz @return array<string, mixed> */
+    private static function naplo_korlat(array $sz): array
+    {
+        if (!SDH_Muhely_Admin_UI::admin_e()) {
+            $sz['_korlat'] = 1;
+        }
+
+        return $sz;
+    }
+
+    /** @param array<string, mixed> $p @return array<string, mixed> */
+    private static function naplo_idovonal(array $p): array
+    {
+        $V     = 'SDH_Muhely_Valtozasnaplo';
+        $limit = min(200, max(5, (int) ($p['limit'] ?? 60)));
+
+        if (trim((string) ($p['munkalap'] ?? '')) !== '') {
+            $ml = self::munkalap_keres((string) $p['munkalap']);
+
+            if ($ml === null) {
+                return ['hiba' => 'Nincs ilyen munkalap.'];
+            }
+
+            $tipus = 'munkalap';
+            $id    = (int) $ml->id;
+        } else {
+            $tipus = sanitize_key((string) ($p['rekord_tipus'] ?? ''));
+            $id    = max(0, (int) ($p['rekord_id'] ?? 0));
+
+            if ($tipus === '') {
+                return ['hiba' => 'Add meg a munkalapot, vagy a rekord fajtáját és azonosítóját.'];
+            }
+        }
+
+        if (in_array($tipus, ['beallitas', 'valtozasnaplo', 'naplo'], true) && !SDH_Muhely_Admin_UI::admin_e()) {
+            return ['hiba' => 'A beállítások naplóját csak adminisztrátor láthatja.'];
+        }
+
+        $sz = self::naplo_korlat(array_filter([
+            'rekord' => $tipus . ':' . $id,
+            'tol'    => self::datum_ok((string) ($p['tol'] ?? '')) ? (string) $p['tol'] : '',
+            'ig'     => self::datum_ok((string) ($p['ig'] ?? '')) ? (string) $p['ig'] : '',
+        ]));
+
+        $l = $V::lista($sz, 1, $limit);
+
+        return [
+            'rekord'     => $id > 0 ? $V::rekord_cimke($tipus, $id) : $V::tabla_nev($tipus) . ' (mind)',
+            'osszes'     => $l['osszes'],
+            'mutatott'   => count($l['sorok']),
+            'sorrend'    => 'időrendben (a legrégebbi elöl)',
+            'tortenet'   => self::naplo_csoportok(array_reverse($l['sorok']), $id <= 0),
+        ];
+    }
+
+    /** @param array<string, mixed> $p @return array<string, mixed> */
+    private static function naplo_szuro(array $p, int $alap_nap): array
+    {
+        $sz = [
+            'tipus'    => sanitize_key((string) ($p['kategoria'] ?? '')),
+            'forras'   => sanitize_key((string) ($p['forras'] ?? '')),
+            'muvelet'  => sanitize_key((string) ($p['muvelet'] ?? '')),
+            'tol'      => self::datum_ok((string) ($p['tol'] ?? '')) ? (string) $p['tol'] : wp_date('Y-m-d', time() - $alap_nap * DAY_IN_SECONDS),
+            'ig'       => self::datum_ok((string) ($p['ig'] ?? '')) ? (string) $p['ig'] : '',
+            'kereses'  => mb_substr(sanitize_text_field((string) ($p['kifejezes'] ?? '')), 0, 100),
+            'munkalap' => sanitize_text_field((string) ($p['munkalap'] ?? '')),
+        ];
+
+        $nev = trim(sanitize_text_field((string) ($p['felhasznalo'] ?? '')));
+
+        if ($nev !== '') {
+            $talalt = get_users(['search' => '*' . $nev . '*', 'search_columns' => ['display_name', 'user_login', 'user_nicename'], 'number' => 1, 'fields' => 'ID']);
+            $sz['felhasznalo'] = (int) ($talalt[0] ?? -1);
+        }
+
+        return self::naplo_korlat(array_filter($sz));
+    }
+
+    /** @param array<string, mixed> $p @return array<string, mixed> */
+    private static function naplo_kereses(array $p): array
+    {
+        $V  = 'SDH_Muhely_Valtozasnaplo';
+        $sz = self::naplo_szuro($p, 7);
+
+        if (($sz['felhasznalo'] ?? 0) === -1) {
+            return ['hiba' => 'Nincs ilyen nevű felhasználó: ' . (string) $p['felhasznalo']];
+        }
+
+        $l = $V::lista($sz, 1, min(250, max(5, (int) ($p['limit'] ?? 80))));
+
+        return [
+            'szuro'    => array_diff_key($sz, ['_korlat' => 1]),
+            'osszes'   => $l['osszes'],
+            'mutatott' => count($l['sorok']),
+            'sorrend'  => 'időrendben (a legrégebbi elöl)',
+            'talalatok' => self::naplo_csoportok(array_reverse($l['sorok']), true),
+        ];
+    }
+
+    /** @param array<string, mixed> $p @return array<string, mixed> */
+    private static function naplo_osszesites(array $p): array
+    {
+        $sz = self::naplo_szuro($p, 30);
+
+        return ['szuro' => array_diff_key($sz, ['_korlat' => 1])] + SDH_Muhely_Valtozasnaplo::osszesites($sz);
+    }
+
+    /** @return array<string, mixed> */
+    private static function naplo_epseg(): array
+    {
+        $e = SDH_Muhely_Valtozasnaplo::ellenoriz();
+
+        return [
+            'ep'                => $e['ok'],
+            'bejegyzes'         => $e['db'],
+            'atirt_bejegyzes'   => $e['hibas_db'],
+            'atirt_azonositok'  => array_slice($e['hibas'], 0, 20),
+            'hianyzo_szakaszok' => array_map(static fn ($h) => '#' . $h[0] . ($h[1] !== $h[0] ? '–#' . $h[1] : ''), array_slice($e['hezagok'], 0, 20)),
+            'ellenorizve'       => $e['ido'],
+        ];
+    }
+
+    /* =================================================================
      * Módosítás: javaslat (előkészítés) és végrehajtás
      * ============================================================== */
 
@@ -1276,6 +1499,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
 
                 if ($ml === null) {
                     return 'Nincs ilyen munkalap.';
+                }
+
+                if (SDH_Muhely_Munkalap::zarolva($ml)) {
+                    return 'A lap lezárt: szerkeszteni (megjegyzést írni) csak újranyitás után lehet. Javasolhatod az állapot átírását (újranyitást), ha a felhasználó kéri.';
                 }
 
                 if ($szoveg === '') {
@@ -1318,6 +1545,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
 
                 if ($ml === null) {
                     return 'Nincs ilyen munkalap.';
+                }
+
+                if (SDH_Muhely_Munkalap::zarolva($ml)) {
+                    return 'A lap lezárt: a határidő csak újranyitás után írható át.';
                 }
 
                 if ($d !== '' && !self::datum_ok($d)) {
@@ -1601,6 +1832,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                     return 'A munkalap már nem létezik.';
                 }
 
+                if (SDH_Muhely_Munkalap::zarolva((int) $p['id'])) {
+                    return 'A lapot közben lezárták – a megjegyzés csak újranyitás után írható rá.';
+                }
+
                 $nev_ki = SDH_Muhely_Munkalap::felelos_nev($felhasznalo);
                 $uj = trim((string) $s['megjegyzes'] . "\n[" . wp_date('Y.m.d H:i') . ' – ' . $nev_ki . ', AI-asszisztenssel] ' . (string) $p['szoveg']);
 
@@ -1618,6 +1853,10 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 return ['eredmeny' => 'A(z) ' . $r['szam'] . ' munkalap új állapota: ' . $r['nev'] . '.', 'rekord_id' => (int) $p['id'], 'tabla' => 'munkalap'];
 
             case 'munkalap_hatarido':
+                if (SDH_Muhely_Munkalap::zarolva((int) $p['id'])) {
+                    return 'A lapot közben lezárták – a határidő csak újranyitás után írható át.';
+                }
+
                 $wpdb->update(self::tabla('munkalap'), ['hatarido' => $p['datum'] !== '' ? (string) $p['datum'] : null, 'modositva' => $most], ['id' => (int) $p['id']]);
 
                 return ['eredmeny' => 'A határidő átírva: ' . ($p['datum'] !== '' ? $p['datum'] : 'nincs határidő') . '.', 'rekord_id' => (int) $p['id'], 'tabla' => 'munkalap'];

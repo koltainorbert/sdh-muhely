@@ -953,6 +953,26 @@ final class SDH_Muhely_Nyomtatas
             $p['_sablon'] = self::bekuldott_sablon($tipus);
         }
 
+        // A lap Naplójába (0.59): nyomtatásra küldve vagy letöltve – az előnézet nem számít.
+        $naplo_mod = self::p('mod', 10);
+        $naplo_kell = empty($p['minta']) && (int) ($p['id'] ?? 0) > 0 && (string) (self::tipusok()[$tipus]['adat'] ?? '') === 'lap'
+            && (self::p('nyomtat', 2) === '1' || $naplo_mod === 'letolt') && class_exists('SDH_Muhely_Valtozasnaplo');
+
+        if ($naplo_kell) {
+            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', (int) $p['id'], sprintf(
+                '%s: %s',
+                (string) (self::tipusok()[$tipus]['nev'] ?? $tipus),
+                $naplo_mod === 'letolt' ? 'PDF letöltve' : 'nyomtatásra küldve (' . $peldany . ' példány)'
+            ), [], 'nyomtatas');
+        }
+
+        // Csak a Napló-jelzés kellett (az előnézet már a böngészőben van).
+        if ($naplo_mod === 'naplo') {
+            nocache_headers();
+            status_header(204);
+            exit;
+        }
+
         $r = SDH_Muhely_Nyomtatvany::keszit($tipus, $p, $peldany);
 
         if (is_string($r)) {
@@ -1055,6 +1075,10 @@ final class SDH_Muhely_Nyomtatas
 
         if ($eredmeny !== true) {
             wp_send_json_error(['uzenet' => 'A levél nem ment el: ' . $eredmeny]);
+        }
+
+        if ((int) ($p['id'] ?? 0) > 0 && (string) (self::tipusok()[$tipus]['adat'] ?? '') === 'lap' && class_exists('SDH_Muhely_Valtozasnaplo')) {
+            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', (int) $p['id'], (string) (self::tipusok()[$tipus]['nev'] ?? $tipus) . ': e-mailben elküldve', ['Címzett' => implode(', ', $cimek), 'Tárgy' => $targy], 'nyomtatas');
         }
 
         // Ha az ügyfél kapta, a munkalap üzenetei közé is bekerül, hogy később látszódjon, mi ment ki neki.

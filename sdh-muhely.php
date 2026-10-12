@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.58.0');
+define('SDH_MUHELY_VERSION', '0.59.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -44,6 +44,8 @@ define('SDH_MUHELY_BASENAME', plugin_basename(__FILE__));
 $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-schema.php'   => 'SDH_Muhely_Schema',
     'includes/class-sdh-muhely-modulok.php'  => 'SDH_Muhely_Modulok',
+    // Változásnapló (0.59): minden módosítás mezőszinten – a többi modul ELŐTT, hogy semmi ne maradjon ki.
+    'includes/class-sdh-muhely-valtozasnaplo.php' => 'SDH_Muhely_Valtozasnaplo',
     // Titkok (kulcsok) titkosított tárolása – a kulcsot használó modulok előtt.
     'includes/class-sdh-muhely-titok.php'    => 'SDH_Muhely_Titok',
     'includes/class-sdh-muhely-admin-ui.php' => 'SDH_Muhely_Admin_UI',
@@ -78,6 +80,10 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-imei-lekerdezes.php' => 'SDH_Muhely_Imei_Lekerdezes',
     'includes/class-sdh-muhely-nyitvatartas.php'    => 'SDH_Muhely_Nyitvatartas',
     'includes/class-sdh-muhely-beallitasok.php'     => 'SDH_Muhely_Beallitasok',
+    // Napló menüpont, a rekordok Napló ablaka, Beállítások › Változásnapló / Lezárt lapok (0.59).
+    'includes/class-sdh-muhely-naplo-felulet.php'   => 'SDH_Muhely_Naplo_Felulet',
+    // Brother RMA-matrica (0.59): címkenyomtató, böngészőből (PDF) vagy közvetlenül hálózaton.
+    'includes/class-sdh-muhely-matrica.php'         => 'SDH_Muhely_Matrica',
     // Modulok (0.58): a fő funkciók ki- és bekapcsolása, telepítői zár; az AJAX-őr.
     'includes/class-sdh-muhely-modul-kapcsolo.php'  => 'SDH_Muhely_Modul_Kapcsolo',
     'includes/class-sdh-muhely-demo.php'            => 'SDH_Muhely_Demo',

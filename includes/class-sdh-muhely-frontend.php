@@ -312,6 +312,10 @@ final class SDH_Muhely_Frontend
             'nyomtatas'    => '<path d="M5.5 7V3h9v4"/><rect x="3" y="7" width="14" height="7" rx="1.6"/><path d="M5.5 12h9v5h-9z"/>',
             'imei'         => '<rect x="5.5" y="2.5" width="9" height="15" rx="1.8"/><path d="M7.8 6.5v4.5M9.4 6.5v4.5M11 6.5v4.5M12.4 6.5v4.5"/><path d="M9 15.2h2"/>',
             'mockup'       => '<rect x="3" y="4" width="14" height="12" rx="1.8"/><circle cx="7.4" cy="8.2" r="1.4"/><path d="M3.6 14.4 8 10.6l3 2.6 2.2-1.8 3.2 2.8"/>',
+            // Napló (0.59): óra visszaforgató nyíllal.
+            'naplo'        => '<path d="M3.6 10a6.4 6.4 0 1 0 1.9-4.5"/><path d="M3.2 3.6v2.6h2.6"/><path d="M10 6.4V10l2.4 1.6"/>',
+            // RMA-matrica (0.59): címke lyukkal.
+            'matrica'      => '<path d="M3 5.2A1.7 1.7 0 0 1 4.7 3.5h6.6l5.7 5.7-6.5 6.5L3 9.9z"/><circle cx="7" cy="7.4" r="1.3"/><path d="M8.6 11.4l2.6-2.6"/>',
             'mentes'       => '<path d="M4 4.8A1.8 1.8 0 0 1 5.8 3h7.4L16 5.8v9.4a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 15.2z"/><path d="M7 3v4h5.5V3M7 17v-5h6v5"/>',
 
             // --- Gombok (nem modulok) ---
@@ -432,6 +436,11 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.css')); ?>">
+            <?php // Napló, lezárt lap, RMA-matrica (0.59): a munkalap popupja bárhol megnyílhat. ?>
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -656,6 +665,9 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.js')); ?>"></script>
         <?php // SMS: a „Küldjek SMS-t?” popup státuszváltás után, bármelyik oldalon. ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.js')); ?>"></script>
+        <?php // Napló ablak, lezárt lap zárolása, RMA-matrica (0.59): bármelyik oldalon. ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.js')); ?>"></script>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'beallitasok') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
         <?php endif; ?>

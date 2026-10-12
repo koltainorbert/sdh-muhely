@@ -149,7 +149,8 @@
 
     /** Nyomtatás ablak nélkül (a felajánlás gombja). Az ígéret értéke, mint a nyomtatBlob-nál. */
     function nyomtatKozvetlen(tipus, param, peldany) {
-        return pdfBlob(pdfCim(tipus, param, peldany)).then(nyomtatBlob);
+        // nyomtat=1: a szerver a lap Naplójába írja, hogy nyomtatásra ment (0.59).
+        return pdfBlob(pdfCim(tipus, param, peldany) + '&nyomtat=1').then(nyomtatBlob);
     }
 
     /* ---------------------------------------------------------------- */
@@ -389,7 +390,12 @@
                 g.disabled = true;
                 jelez('A nyomtatvány készül…');
 
-                (n === 1 && elonezetBlob ? Promise.resolve(elonezetBlob) : pdfBlob(pdfCim(tipus, param(), n, '', nonce)))
+                // A már betöltött előnézetnél külön jelezzük a nyomtatást a Naplónak (0.59).
+                if (n === 1 && elonezetBlob) {
+                    fetch(pdfCim(tipus, param(), 1, 'naplo', nonce) + '&nyomtat=1', { credentials: 'same-origin' }).catch(function () {});
+                }
+
+                (n === 1 && elonezetBlob ? Promise.resolve(elonezetBlob) : pdfBlob(pdfCim(tipus, param(), n, '', nonce) + '&nyomtat=1'))
                     .then(nyomtatBlob)
                     .then(function (megnyilt) {
                         if (megnyilt) {

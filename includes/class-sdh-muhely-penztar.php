@@ -2193,6 +2193,16 @@ final class SDH_Muhely_Penztar
             wp_send_json_error(['uzenet' => 'Nincs ilyen munkalap.']);
         }
 
+        // Lezárt, ki nem fizetett lapra fizetés csak újranyitás után (0.59); a már kifizetett lap
+        // utólagos pénztárba írása mehet (az a pénztárat érinti, nem a lapot).
+        if ((int) $m->fizetve !== 1) {
+            $zar = SDH_Muhely_Munkalap::zar_ellenoriz((int) $m->id, 'fizetés');
+
+            if ($zar !== null) {
+                wp_send_json_error(['uzenet' => $zar, 'zarolt' => true]);
+            }
+        }
+
         $info  = self::munkalap_info($m);
         $mod   = self::post_szoveg('mod', 10);
         $mod   = in_array($mod, ['kp', 'kartya', 'utalas', 'vegyes'], true) ? $mod : 'kp';

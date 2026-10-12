@@ -1,0 +1,182 @@
+/*
+ * SDH Műhely – RMA-matrica (0.59): a Matrica ablak és a Beállítások lapfül.
+ */
+
+.sdh-matrica-gomb .sdh-gomb__ikon {
+    width: calc(16px * var(--sdh-n));
+    height: calc(16px * var(--sdh-n));
+}
+
+/* ---------- A Matrica ablak ---------- */
+
+.sdh-matrica__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(260px * var(--sdh-n)), 1fr));
+    gap: .7rem;
+    margin: .6rem 0;
+}
+
+.sdh-matrica__elem {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    padding: .55rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    cursor: pointer;
+}
+
+.sdh-matrica__elem:has(input:not(:checked)) .sdh-matrica__kep {
+    opacity: .35;
+}
+
+.sdh-matrica__fej {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 600;
+}
+
+.sdh-matrica__kep {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px dashed var(--sdh-keret-eros);
+    border-radius: calc(4px * var(--sdh-n));
+    background: #fff;
+    image-rendering: auto;
+}
+
+.sdh-matrica__lab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.sdh-matrica__peldany {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-matrica__peldany input {
+    width: calc(64px * var(--sdh-n));
+}
+
+.sdh-matrica__allapot {
+    font-size: calc(12.5px * var(--sdh-n));
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-matrica__allapot.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+/* ---------- Beállítások › RMA-matrica ---------- */
+
+.sdh-matrica-mezok {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+.sdh-matrica-mezo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) calc(110px * var(--sdh-n)) calc(100px * var(--sdh-n)) auto auto;
+    align-items: center;
+    gap: .5rem;
+    padding: .35rem .55rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+    opacity: .72;
+}
+
+.sdh-matrica-mezo.is-be {
+    background: var(--sdh-felulet);
+    border-color: var(--sdh-keret-eros);
+    opacity: 1;
+}
+
+.sdh-matrica-mezo__be {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    min-width: 0;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-matrica-mezo__be span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-matrica-mezo input[type="text"],
+.sdh-matrica-mezo select {
+    min-width: 0;
+    width: 100%;
+}
+
+.sdh-matrica-mezo__fk {
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+    font-weight: 700;
+}
+
+.sdh-matrica-mezo__nyilak {
+    display: inline-flex;
+    gap: .25rem;
+}
+
+.sdh-matrica-mezo__nyilak .sdh-gomb {
+    min-width: calc(30px * var(--sdh-n));
+    padding: 0 .4rem;
+}
+
+.sdh-matrica-elonezet__keret {
+    display: inline-block;
+    max-width: 100%;
+    padding: .6rem;
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-matrica-elonezet__keret img {
+    display: block;
+    max-width: min(100%, calc(640px * var(--sdh-n)));
+    height: auto;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+}
+
+.sdh-matrica-elonezet__meret {
+    margin-left: .4rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 400;
+}
+
+.sdh-matrica-elonezet__jel {
+    min-height: 1.2em;
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-matrica-elonezet__jel.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+@media (max-width: 720px) {
+    .sdh-matrica-mezo {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sdh-matrica-mezo__be {
+        grid-column: 1 / -1;
+    }
+}

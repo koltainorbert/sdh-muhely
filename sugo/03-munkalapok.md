@@ -3,8 +3,8 @@ kulcs: munkalapok
 cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
-szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas
-kulcsszavak: munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon
+szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas
+kulcsszavak: munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -55,6 +55,8 @@ Az ablak alján:
 - **Munkalap létrehozása** (új lapnál) vagy **Mentés**, és **Mégsem**.
 - **Fizetés** – mentett lapnál; kifizetett lapon a felirata **Fizetve ✓**.
 - **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – csak olyan lapnál, amelynek már van munkalapszáma.
+- **Matrica** – a készülékre ragasztható RMA-matrica Brother címkenyomtatóra (munkalapszámmal rendelkező javítási lapnál). Lásd: [RMA-matrica](sugo:matrica).
+- **Napló** – a lap teljes története: ki, mikor, mit módosított. Lásd: [Napló](sugo:naplo).
 
 ## Ügyfél és eszköz a munkalapon
 
@@ -280,6 +282,32 @@ Több eszköznél eszközönként egy címke készül; amelyik nem kell, annál 
 
 A címke csak akkor készül el, amikor a lap **munkalapszámot kapott**. Az RMA lapfül új lapnál a mentés után érhető el. Ugyanitt írhatsz üzenetet az ügyfélnek, és látod az **Állapottörténetet**.
 
+## Lezárt lap zárolása
+
+A lezárt állapotú lap (**Lezárt**, **Érvénytelen** – minden, ami a **Beállítások › Állapotok** listájában `zart` jelzős) **csak olvasható**:
+
+- a lap tetején zöld sáv jelzi: **Lezárt lap – csak olvasható.**, mellette a lezárás napja,
+- a mezők és a szerkesztő gombok le vannak tiltva, a **Mentés** gomb nem látszik,
+- a szerver is elutasít minden módosítást: mentést, az eszköz állapotát és „fizetve” jelzőjét, fizetést (kivéve a már kifizetett lap utólagos pénztárba írását), a rendelés útját és az asszisztens javaslatát (megjegyzés, határidő),
+- ami nem a lap tartalma, az így is megy: **Nyomtatás**, **Matrica**, számla, ügyfélüzenet az RMA lapfülön, az ügyfél és az eszköz adatlapja, **Napló**.
+
+### Lépésről lépésre: lezárt lap újranyitása
+
+1. Nyisd meg a lezárt lapot.
+2. A lap tetején álló sávban válaszd ki, milyen állapotba kerüljön (alapból **Nyitott**).
+3. Írd be, **miért** nyitod újra (ha a Beállításokban kötelező, enélkül nem megy).
+4. Kattints az **Újranyitás** gombra, majd még egyszer (**Biztosan? Kattints újra**).
+5. Az ablak újratölt, a lap szerkeszthető. Az újranyitás, az új állapot és az ok a lap **Naplójába** kerül.
+
+A listában (Áttekintés) az állapot átírásával is újranyitható a lap – kivéve, ha az újranyitás oka kötelező: akkor csak a lapon, az okkal.
+
+## Lezárt lapok (Beállítások)
+
+A **Beállítások › Lezárt lapok** lapfülön (a **Munkalap** sorban):
+
+- **A lezárt lap csak újranyitás után szerkeszthető** – alapból be van kapcsolva. Kikapcsolva a lezárt lap is szerkeszthető (minden módosítás akkor is a Naplóba kerül).
+- **Az újranyitás oka kötelező** – bekapcsolva a lezárt lap csak a lap **Újranyitás** gombjával, kitöltött okkal nyitható újra.
+
 ## Nyomtatás, PDF és e-mail a munkalapról
 
 A munkalap ablakának alján a **Nyomtatás** gomb (nyomtató ikon) megnyitja a lap nyomtatványait: **Átvételi elismervény**, **Munkalap**, **Belső munkalap**, **Árajánlat**, **Szállítólevél**. Mindegyik megnézhető előnézetben, kinyomtatható a kért példányszámban, elmenthető PDF-be és elküldhető e-mailben az ügyfélnek. Az Áttekintésen a kijelölt lap részletpaneljén is ott a gomb.
@@ -385,6 +413,8 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - A **Fizetett** a ténylegesen befolyt összeg.
 - A tételek ára bruttó; a mérvadó összeget mentéskor a rendszer számolja újra.
 - A számlagombok és a címke csak munkalapszámmal rendelkező lapnál érhetők el.
+- **A lezárt lap csak újranyitás után szerkeszthető**, és az újranyitás a Naplóba kerül (lásd: Lezárt lap zárolása).
+- A lap minden változása – mezők, tételek, hibák, eszközök, fizetés, üzenetek – a lap **Naplójába** kerül, és onnan nem törölhető.
 - Ha egy fizetési mód vagy egy felelős már nincs a listán, a régi lapon akkor is látszik.
 
 ## Ha valami nem megy
@@ -396,9 +426,23 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - **„A Mentéssel együtt mentődik.”** az állapot alatt – az állapot még nem menthető azonnal (például az ügyfél még nincs elmentve a lapon). Kattints a **Mentés** gombra.
 - **„A számozás épp foglalt – próbáld újra egy pillanat múlva.”** – Egy kolléga ugyanakkor ment. Kattints újra a mentésre.
 - **Nincs számlagomb.** – A lapnak még nincs munkalapszáma, vagy még nincs elmentve.
+- **„Ez a lap lezárt – szerkeszteni csak újranyitás után lehet”** – a lap lezárt állapotban van. Nyisd újra a lap tetején az **Újranyitás** gombbal.
+- **„A lezárt lap újranyitásához ok kell”** – a Beállításokban kötelező az újranyitás oka: nyisd meg a lapot, és a tetején írd be az okot.
 - **„Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.”** – Eszközt csak kiválasztott ügyfél mellé lehet csatolni.
 
 ## GYIK
+
+### Miért nem tudom szerkeszteni a lezárt lapot?
+
+Mert a lezárt lap csak olvasható – így nem változhat meg utólag észrevétlenül. A lap tetején az **Újranyitás** gombbal nyisd újra; az újranyitás és az oka a Naplóba kerül.
+
+### Lezárt lapról is nyomtathatok és számlázhatok?
+
+Igen. A nyomtatás, a matrica, a számla és az ügyfélüzenet nem módosítja a lapot, ezért zárolva is megy.
+
+### Hol látom, ki módosított egy munkalapot?
+
+A lap ablakának alján a **Napló** gombbal: időrendben minden változás, a régi és az új értékkel, a kolléga nevével.
 
 ### Miért nem kap munkalapszámot a lap?
 

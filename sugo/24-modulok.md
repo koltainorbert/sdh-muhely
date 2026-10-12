@@ -58,8 +58,9 @@ A bal oldali menü legalján, a **Beállítások** alatt áll a **Modulok** men�
 | IMEI-lekérdezés | szolgáltató, ellenőrző oldalak, beillesztés | eltűnik az eszköz űrlapjáról az Ellenőrzés és a Gyári adatok sor |
 | TAC-adatbázis | gyártó és típus felismerése az IMEI-ből | nincs felismerés, és nem tanul |
 | Eszköz-mockupok | termékkép az eszközök mellett | nincs termékkép |
+| RMA-matrica (Brother) | azonosító matrica a készülékre Brother címkenyomtatóval | eltűnik a munkalap **Matrica** gombja és a **Beállítások › RMA-matrica** lapfül |
 
-Az **Alaprendszer** – Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés – mindig fut, nem kapcsolható ki. Az oldal alján tájékoztatásul ezek is látszanak.
+Az **Alaprendszer** – Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés, Napló – mindig fut, nem kapcsolható ki. Az oldal alján tájékoztatásul ezek is látszanak.
 
 ## Szabályok, amiket a rendszer betart
 
@@ -121,6 +122,10 @@ Igen. A munkalapon a helyi számla-előkészítő (PDF) gombja megmarad, csak a 
 ### Kikapcsoltam a Csapat modult. Hogyan veszek fel új kollégát?
 
 A **Beállítások › Csapat** lapfülön a **Kollégák kezelése** gombbal. A csevegés és az üzenőfal nem látszik, a kollégák és a csoportok kezelése megmarad.
+
+### Kikapcsolható a Napló?
+
+Nem. A változásnapló az alaprendszer része: minden módosítást rögzít, és nem kapcsolható ki – így visszamenőleg mindig látszik, mi történt.
 
 ### Elfelejtettem a telepítői kódot. Mit tegyek?
 

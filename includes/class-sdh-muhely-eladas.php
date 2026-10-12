@@ -644,6 +644,13 @@ final class SDH_Muhely_Eladas
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
 
+        // Lezárt rendelés útja csak újranyitás után írható át (0.59).
+        $zar = SDH_Muhely_Munkalap::zar_ellenoriz(isset($_POST['id']) ? (int) $_POST['id'] : 0, 'a rendelés útja'); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+        if ($zar !== null) {
+            wp_send_json_error(['uzenet' => $zar, 'zarolt' => true]);
+        }
+
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- fent ellenőrizve.
         $eredmeny = self::rend_allapot_valt(
             isset($_POST['id']) ? (int) $_POST['id'] : 0,

@@ -484,6 +484,10 @@ final class SDH_Muhely_Asszisztens
             $t .= "\nLÁTHATÓ HIBAÜZENET: " . mb_substr((string) $oldal['hiba'], 0, 300);
         }
 
+        // A nyitott rekord (munkalap, Napló ablak…) története a változásnaplóból – így
+        // azonnal el tudja mondani, mi történt vele, eszközhívás nélkül (0.59).
+        $t .= self::rekord_tortenet((string) ($oldal['rekord'] ?? ''));
+
         if ($elemek !== []) {
             $t .= "\nLÁTHATÓ ELEMEK (azonosító – felirat [fajta]; a `mutat` eszközzel ezekre mutathatsz):\n";
 
@@ -529,6 +533,44 @@ final class SDH_Muhely_Asszisztens
         }
 
         return $t;
+    }
+
+    /**
+     * A nyitott rekord változásnaplója a rendszerüzenetbe (legutóbbi 25 csoport).
+     * „naplo:0" = a Napló menüpont: a legutóbbi bejegyzések.
+     */
+    private static function rekord_tortenet(string $rekord): string
+    {
+        if (!class_exists('SDH_Muhely_Valtozasnaplo') || preg_match('/^([a-z_]+):(\d+)$/', $rekord, $m) !== 1) {
+            return '';
+        }
+
+        $admin = SDH_Muhely_Admin_UI::admin_e();
+
+        if ($m[1] === 'naplo') {
+            if (!$admin) {
+                return '';
+            }
+
+            return "\n\nA FELHASZNÁLÓ A NAPLÓ OLDALON VAN. A legutóbbi bejegyzések (a régebbiek elöl; részletekért és szűréshez: naplo_kereses):\n"
+                . SDH_Muhely_Valtozasnaplo::idovonal_szoveg([], 25) . "\n";
+        }
+
+        if (in_array($m[1], ['beallitas', 'valtozasnaplo'], true) && !$admin) {
+            return '';
+        }
+
+        $sz = ['rekord' => $m[1] . ':' . (int) $m[2]];
+
+        if (!$admin) {
+            $sz['_korlat'] = 1;
+        }
+
+        $cimke = SDH_Muhely_Valtozasnaplo::rekord_cimke($m[1], (int) $m[2]);
+
+        return "\n\nNYITOTT REKORD: " . $cimke . ' (' . $rekord . ")\n"
+            . "A TÖRTÉNETE A VÁLTOZÁSNAPLÓBÓL (időrendben, a legrégebbi elöl; ha ennél régebbi vagy részletesebb kell: naplo_idovonal). Ha azt kérdezik, mi történt, ebből felelj idővonalszerűen, név és időpont szerint:\n"
+            . SDH_Muhely_Valtozasnaplo::idovonal_szoveg($sz, 25) . "\n";
     }
 
     /** Kifejezetten módosítást / törlést kért-e a felhasználó. */
@@ -963,7 +1005,16 @@ final class SDH_Muhely_Asszisztens
             'elotte'  => $elotte !== null ? (string) wp_json_encode($elotte, JSON_UNESCAPED_UNICODE) : null,
         ], ['id' => $id]);
 
-        $r = SDH_Muhely_Asszisztens_Eszkozok::vegrehajt((string) $m->eszkoz, $p, $user);
+        // A változásnaplóban ez „AI-asszisztens" forrású, a javaslat számával (0.59).
+        $naplo_elozo = class_exists('SDH_Muhely_Valtozasnaplo') ? SDH_Muhely_Valtozasnaplo::kontextus('ai', 'AI-javaslat #' . $id . ': ' . $m->leiras) : null;
+
+        try {
+            $r = SDH_Muhely_Asszisztens_Eszkozok::vegrehajt((string) $m->eszkoz, $p, $user);
+        } finally {
+            if ($naplo_elozo !== null) {
+                SDH_Muhely_Valtozasnaplo::kontextus_vissza($naplo_elozo);
+            }
+        }
 
         if (is_string($r)) {
             $wpdb->update(self::t('muvelet'), ['allapot' => 'hiba', 'eredmeny' => mb_substr($r, 0, 500)], ['id' => $id]);
@@ -1030,7 +1081,15 @@ final class SDH_Muhely_Asszisztens
 
         SDH_Muhely_Asszisztens_Tudas::napi_mentes_ha_kell();
 
-        $uz = SDH_Muhely_Asszisztens_Eszkozok::visszaallit((string) $m->eszkoz, (string) $m->tabla, (int) $m->rekord_id, is_array($elotte) ? $elotte : null);
+        $naplo_elozo = class_exists('SDH_Muhely_Valtozasnaplo') ? SDH_Muhely_Valtozasnaplo::kontextus('ai-visszaallitas', 'AI-művelet #' . $id . ' visszaállítva') : null;
+
+        try {
+            $uz = SDH_Muhely_Asszisztens_Eszkozok::visszaallit((string) $m->eszkoz, (string) $m->tabla, (int) $m->rekord_id, is_array($elotte) ? $elotte : null);
+        } finally {
+            if ($naplo_elozo !== null) {
+                SDH_Muhely_Valtozasnaplo::kontextus_vissza($naplo_elozo);
+            }
+        }
 
         $wpdb->update(self::t('muvelet'), ['allapot' => 'visszavonva', 'eredmeny' => mb_substr((string) $m->eredmeny . ' → ' . $uz, 0, 500)], ['id' => $id]);
         self::uzenet_ment((int) $m->user_id, 'esemeny', '#' . $id . ' műveletet a felhasználó VISSZAÁLLÍTOTTA: ' . $uz);

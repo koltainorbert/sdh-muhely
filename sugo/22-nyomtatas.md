@@ -179,7 +179,8 @@ A dobozok alján a **Mentés** gomb ment; a nyomtatványok szerkesztője külön
 - **A példányok külön számozódnak.** Minden példány „Oldal 1/…”-gyel indul.
 - **Belső papír nem megy az ügyfélnek.** Amelyik nyomtatványon belső megjegyzés vagy zárkód van (alapból a **Belső munkalap**), annál a címzett mező üresen indul, és a rendszer nem engedi az ügyfél saját címére elküldeni.
 - **A próbanyomat nem küldhető el** – kitalált adatokkal készül.
-- **A nyomtatás nem ír a lapra.** Sem állapotot, sem pénzt nem változtat; számlát nem állít ki.
+- **A nyomtatás nem ír a lapra.** Sem állapotot, sem pénzt nem változtat; számlát nem állít ki. Ezért **lezárt lapról is** nyomtathatsz.
+- **A Naplóba kerül.** A lap nyomtatványának nyomtatása, PDF-letöltése és e-mailje a lap [Naplójába](sugo:naplo) kerül (ki, mikor, mit, kinek) – az előnézet nem.
 - **Internet nélkül is megy.** A PDF a szerveren készül, külső szolgáltatás nélkül. E-mailhez internet kell.
 
 ## Tippek
@@ -188,6 +189,7 @@ A dobozok alján a **Mentés** gomb ment; a nyomtatványok szerkesztője külön
 - **Két példány az átvételiből:** az alap példányszám 2 – egy az ügyfélnek, egy aláírva marad nálatok. Ha nem kell, írd át 1-re.
 - **Kisebb papír:** ha A5-re nyomtattok, a **Papírméret** legyen A5 – a betűméret és az elrendezés magától igazodik.
 - **QR-kód:** az átvételi elismervényen alapból rajta van. Az ügyfél beolvassa, és az ügyféloldalon követi a javítást – kevesebb telefon.
+- **Matrica a készülékre:** az azonosító matricát nem itt, hanem a munkalap **Matrica** gombjával nyomtatod Brother címkenyomtatóra – lásd: [RMA-matrica](sugo:matrica).
 - **Telefonon** az előnézet nem mindig jelenik meg a keretben. Ilyenkor az előnézet sarkában a **Megnyitás új lapon** hivatkozás nyitja meg a PDF-et.
 
 ## Ha valami nem megy

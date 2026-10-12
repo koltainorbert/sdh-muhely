@@ -86,8 +86,8 @@ try {
 
     $kat = $Mo::katalogus();
 
-    T::egyezik(15, count($kat), '15 kikapcsolható fő modul');
-    T::egyezik(8, count($Mo::alapreszek()), '8 alaprész (mindig fut)');
+    T::egyezik(16, count($kat), '16 kikapcsolható fő modul (0.59: RMA-matrica)');
+    T::egyezik(9, count($Mo::alapreszek()), '9 alaprész (mindig fut; 0.59: Napló)');
     T::egyezik([], array_intersect(array_keys($kat), array_keys($Mo::alapreszek())), 'alaprész nem kapcsolható ki');
 
     foreach ($kat as $kulcs => $m) {
@@ -140,10 +140,10 @@ try {
     $oldal = (string) ob_get_clean();
 
     T::tartalmaz($oldal, 'data-sdh-modulok', 'a Modulok oldal kirajzolódik');
-    T::egyezik(15, substr_count($oldal, 'name="be[]"'), '15 kapcsoló');
-    T::egyezik(15, substr_count($oldal, 'name="be[]" id="sdh-modul-') , 'minden kapcsolónak saját azonosítója');
-    T::egyezik(15, preg_match_all('/name="be\[\]" id="[^"]+" value="[a-z]+"\s+checked/', $oldal), 'alapból mind bekapcsolva');
-    T::egyezik(8, substr_count($oldal, 'sdh-modulkartya--alap'), 'az alaprendszer 8 kártyája');
+    T::egyezik(16, substr_count($oldal, 'name="be[]"'), '16 kapcsoló');
+    T::egyezik(16, substr_count($oldal, 'name="be[]" id="sdh-modul-') , 'minden kapcsolónak saját azonosítója');
+    T::egyezik(16, preg_match_all('/name="be\[\]" id="[^"]+" value="[a-z]+"\s+checked/', $oldal), 'alapból mind bekapcsolva');
+    T::egyezik(9, substr_count($oldal, 'sdh-modulkartya--alap'), 'az alaprendszer 9 kártyája');
     T::tartalmaz($oldal, 'Ehhez kell: Ügyfélüzenetek és RMA-oldal', 'a függőség kiírva');
     T::tartalmaz($oldal, 'value="sdh_muhely_modulok"', 'az űrlap a mentésre küld');
     T::tartalmaz($oldal, 'Telepítői zár', 'a telepítői zár doboza');
@@ -160,7 +160,7 @@ try {
     $e = $ment(['naptar', 'sms', 'nyomtatas', 'mockup', 'imei', 'tac', 'asszisztens']);
     T::igaz($e['ok'], 'mentés: ok');
     T::egyezik(['asszisztens', 'imei', 'mockup', 'naptar', 'nyomtatas', 'sms', 'tac'], $Mo::kikapcsoltak(), 'a kikapcsoltak listája');
-    T::tartalmaz($e['uzenet'], '8 modul bekapcsolva, 7 kikapcsolva', 'az üzenet a darabszámokkal');
+    T::tartalmaz($e['uzenet'], '9 modul bekapcsolva, 7 kikapcsolva', 'az üzenet a darabszámokkal');
 
     T::igaz($Mo::egy('naptar') === null && $Mo::egy('sms') === null, 'a kikapcsolt modul nincs bejegyezve');
     T::igaz(!isset($Mo::osszes()['naptar']), 'az összes modul között sincs');

@@ -53,7 +53,7 @@ $mock('/_reset');
 
 /* --- Séma ----------------------------------------------------------------- */
 
-T::egyezik('0.36.0', SDH_Muhely_Schema::DB_VERSION, 'sémaverzió 0.36.0');
+T::igaz(version_compare(SDH_Muhely_Schema::DB_VERSION, '0.36.0', '>='), 'sémaverzió legalább 0.36.0');
 
 foreach (['sablon', 'sablon_verzio', 'szabaly', 'uzenet', 'esemeny', 'dontes', 'onteszt', 'link_esemeny', 'leiratkozas'] as $t) {
     $n = SDH_Muhely_Schema::tabla('sms_' . $t);

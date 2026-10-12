@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.36.0';
+    public const DB_VERSION = '0.37.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -49,6 +49,12 @@ final class SDH_Muhely_Schema
         global $wpdb;
 
         return $wpdb->prefix . 'sdh_' . $nev;
+    }
+
+    /** A telepített séma a mostani-e (a változásnapló csak ekkor ír – a táblája ekkor létezik). */
+    public static function naprakesz(): bool
+    {
+        return get_option(self::OPTION) === self::DB_VERSION;
     }
 
     /**
@@ -138,6 +144,7 @@ final class SDH_Muhely_Schema
         $sms_onteszt  = self::tabla('sms_onteszt');
         $sms_link     = self::tabla('sms_link_esemeny');
         $sms_leir     = self::tabla('sms_leiratkozas');
+        $naplo_v      = self::tabla('valtozasnaplo');
 
         $definiciok = [];
 
@@ -1415,6 +1422,46 @@ final class SDH_Muhely_Schema
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             key ugyfel_id (ugyfel_id)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Változásnapló (0.59) – csak hozzáfűzés
+         *
+         * Minden módosítás egy sor: melyik tábla melyik sora (tabla, sor_id),
+         * melyik rekordhoz tartozik (fo_tipus / fo_id – pl. a tétel a
+         * munkalapjához), a kapcsolt munkalap (ml_id), a mezőnkénti régi és
+         * új érték (valtozas, JSON), ki (felhasznalo + a neve akkor), honnan
+         * (forras: felulet / ai / idozitett / ugyfeloldal…), melyik művelettel
+         * (akcio), és a sor HMAC-aláírása (hash). Egy kérés sorai ugyanazt a
+         * "keres" azonosítót kapják. A sorokat a rendszer soha nem írja át és
+         * nem törli (SDH_Muhely_Valtozasnaplo).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$naplo_v} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            ido datetime NULL,
+            keres varchar(16) NOT NULL default '',
+            muvelet varchar(12) NOT NULL default '',
+            tabla varchar(40) NOT NULL default '',
+            sor_id bigint(20) unsigned NOT NULL default 0,
+            fo_tipus varchar(30) NOT NULL default '',
+            fo_id bigint(20) unsigned NOT NULL default 0,
+            ml_id bigint(20) unsigned NOT NULL default 0,
+            valtozas longtext NULL,
+            osszegzes varchar(255) NOT NULL default '',
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            felhasznalo_nev varchar(190) NOT NULL default '',
+            forras varchar(20) NOT NULL default '',
+            akcio varchar(80) NOT NULL default '',
+            megjegyzes varchar(255) NOT NULL default '',
+            ip varchar(45) NOT NULL default '',
+            hash char(64) NOT NULL default '',
+            PRIMARY KEY  (id),
+            key fo (fo_tipus,fo_id),
+            key ml_id (ml_id),
+            key tabla_sor (tabla,sor_id),
+            key ido (ido),
+            key keres (keres),
+            key felhasznalo (felhasznalo)
         ) {$charset};";
 
         return $definiciok;

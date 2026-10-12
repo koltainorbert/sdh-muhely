@@ -140,6 +140,7 @@ final class SDH_Muhely_Modulok
             'beallitasok'    => ['cim' => 'Beállítások', 'leiras' => 'Minden paraméter, lapfülenként.'],
             'sugo'           => ['cim' => 'Súgó', 'leiras' => 'Bemutató, dokumentáció, kérdés–válasz.'],
             'mentes'         => ['cim' => 'Mentés', 'leiras' => 'Független napi mentés és visszaállítás.'],
+            'naplo'          => ['cim' => 'Napló', 'leiras' => 'Minden módosítás mezőszinten, visszakereshetően; lezárt lap zárolása.'],
         ];
     }
 
@@ -258,6 +259,12 @@ final class SDH_Muhely_Modulok
                 'leiras' => 'Az IMEI elejéből felismeri a gyártót és a típust, és tanul a felvitt készülékekből.',
                 'ajax' => ['tac_'],
                 'szakaszok' => ['tac'],
+            ],
+            'matrica' => [
+                'cim' => 'RMA-matrica (Brother)', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'matrica',
+                'leiras' => 'Azonosító matrica a készülékre Brother címkenyomtatóval: böngészőből vagy közvetlenül hálózaton, állítható tartalommal.',
+                'ajax' => ['matrica_'],
+                'szakaszok' => ['matrica'],
             ],
             'mockup' => [
                 'cim' => 'Eszköz-mockupok', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'mockup',

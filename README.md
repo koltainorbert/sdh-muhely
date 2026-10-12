@@ -64,6 +64,44 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.0
+- **Lezárt lap zárolása.** A lezárt állapotú lap (Lezárt, Érvénytelen – minden `zart` jelzős állapot) csak
+  olvasható: a munkalap / árukiadás / rendelés ablakának tetején zöld sáv, a mezők és a szerkesztő gombok letiltva,
+  a Mentés rejtve. A szerver is elutasít minden módosítást (mentés, eszköz állapota és „fizetve”, fizetés – kivéve
+  a már kifizetett lap utólagos pénztárba írását –, rendelés útja, AI-javaslat: megjegyzés, határidő). Ami nem a
+  lap tartalma, zárolva is megy: nyomtatás, matrica, számla, ügyfélüzenet, ügyfél / eszköz adatlapja, Napló.
+  **Újranyitás** a sávból (állapot + ok, kétlépcsős gomb). Új lapfül: **Beállítások › Lezárt lapok** (zárolás
+  be/ki, kötelező újranyitási ok).
+- **Változásnapló (új alaprész, Napló menüpont).** Minden módosítás mezőszinten: munkalap, árukiadás, rendelés
+  (tételek, hibák, eszközök, fizetés, állapot), ügyfélüzenetek, SMS és döntések, csapatüzenetek, üzenőfal
+  (cetlik), naptár, termékek és készletmozgás, ügyfelek, eszközök, szolgáltatások, pénztár, számlák, helyszínek,
+  beszállítók, SMS-sablonok / -szabályok, a Beállítások (titkok értéke nélkül), és események (újranyitás okkal,
+  elutasított szerkesztés, nyomtatvány nyomtatása / letöltése / e-mailje, matrica). Ki, mikor, honnan (felület,
+  AI-asszisztens a javaslat számával, időzített, ügyféloldal, SMS-átjáró), régi → új érték.
+  Az adatbázis-réteg `query` szűrőjén figyel, így nincs kerülőút; csak hozzáfűzés (a napló táblájára irányuló
+  UPDATE / DELETE / TRUNCATE / DROP nem fut le, a kísérlet is naplózódik), soronkénti HMAC-aláírás, épség-
+  ellenőrzés (átírt sorok, hézagok). **Napló menüpont** (admin): idővonal, szűrők (mi, ki, honnan, művelet,
+  időszak, munkalapszám, szöveg), lapozás, CSV, épség. **Napló gomb** a munkalap / árukiadás / rendelés
+  ablakán: a rekord története popupban. Új lapfül: **Beállítások › Változásnapló**. DB_VERSION 0.37.0
+  (új tábla: `sdh_valtozasnaplo`).
+- **AI-asszisztens és a Napló.** A nyitott rekord (munkalap, Napló ablak, Napló oldal) története magától
+  bekerül a kérdés mellé – azonnal, idővonalszerűen elmondja, mi történt; a Napló ablak megnyitásakor fel is
+  ajánlja. Négy új olvasó eszköz: **Egy rekord története (Napló)**, **Keresés a Naplóban**,
+  **Napló-összesítés**, **A napló épsége**. A zárkód és a minta a naplóból sem megy hozzá; a beállítások
+  naplóját csak adminisztrátornak mutatja. Az AI-végrehajtás és -visszaállítás forrása a naplóban látszik.
+- **RMA-matrica Brother címkenyomtatóra (új modul, Modulok: RMA-matrica (Brother)).** A munkalap **Matrica**
+  gombja: eszközönként egy matrica előnézettel, példányszám. Alaptartalom: név, munkalapszám, eszköz típusa +
+  modellszám, RMA-kód + QR, hiba, feloldó minta (rajz + számok) + kód, IMEI + sorozatszám, dátum; bekapcsolható:
+  telefon, szerviz, határidő, tartozékok, szín, átvételi állapot, megjegyzés, sorszám, vonalkód, külön QR.
+  **Beállítások › RMA-matrica:** nyomtató (QL / QL széles / PT / TD), mód: **böngésző** (pontos méretű PDF,
+  Brother illesztőprogram) vagy **hálózat** (QL raszterparancsok közvetlenül a 9100-as portra – QL-580N, 710W,
+  720NW, 810W, 820NWB, 1060N, 1110NWB, 1115NWB), DK-tekercsek és TZe-szalagok, egyedi méret, tájolás, margó,
+  betű, mezőnként be/ki, felirat, méret, félkövér, sorrend, élő előnézet (300 dpi), próbanyomat. Ami nem fér ki,
+  arányosan kisebb betűvel. A közvetlen hálózati nyomtatás valódi nyomtatón **még nincs kipróbálva**.
+- Új súgófejezetek: **Napló** (`sugo/25-naplo.md`), **RMA-matrica** (`sugo/26-matrica.md`); frissült:
+  Munkalapok (zárolás, újranyitás), Asszisztens, Modulok, Nyomtatás. Új tesztek: `t48-zarolt-lap`,
+  `t49-valtozasnaplo`, `t50-matrica`.
+
 ### 0.58.0
 - **Modulok (új admin-menüpont, a Beállítások alatt).** A rendszer 15 fő funkciója modulonként ki- és
   bekapcsolható: Termékek és készlet, Napi árukiadás, Rendelések, Házipénztár, Számlázz.hu számlázás,

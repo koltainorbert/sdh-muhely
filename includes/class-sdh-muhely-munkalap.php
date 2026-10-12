@@ -92,6 +92,9 @@ final class SDH_Muhely_Munkalap
         // Az űrlap Eszköz lapfüle (az eszköz és az ügyfél összefoglalója).
         add_action('wp_ajax_sdh_muhely_munkalapok_osszefoglalo', [self::class, 'ajax_osszefoglalo']);
 
+        // Lezárt lap újranyitása (0.59): a lezárt lap csak ezután szerkeszthető.
+        add_action('wp_ajax_sdh_muhely_munkalapok_ujranyit', [self::class, 'ajax_ujranyit']);
+
         // Sémafrissítés után: a régi lezárt lapok lezárási dátumának pótlása.
         add_action('sdh_muhely_sema_frissult', [self::class, 'lezarva_potlas']);
 
@@ -100,6 +103,208 @@ final class SDH_Muhely_Munkalap
 
         // …és a régi kifizetett lapokon a „Fizetett" a teljes összeg legyen (egyszer fut).
         add_action('sdh_muhely_sema_frissult', [self::class, 'fizetett_potlas'], 40);
+    }
+
+    /* =================================================================
+     * Lezárt lap zárolása (0.59)
+     *
+     * A lezárt (`zart` jelzős állapotú: Lezárt, Érvénytelen) lap nem
+     * szerkeszthető: az űrlap csak olvasható, és a szerver is elutasít minden
+     * módosítást (mentés, eszköz állapota / „fizetve”, fizetés, rendelés
+     * útja, AI-javaslat). Szerkeszteni az újranyitás után lehet – az
+     * újranyitás (és az oka) a változásnaplóba kerül. Ami nem a lap
+     * tartalma, az zárolva is megy: nyomtatás, matrica, számla, ügyfélüzenet.
+     * ============================================================== */
+
+    /** A zárolás beállítása (Beállítások › Lezárt lapok). */
+    public const OPT_ZAROLAS = 'sdh_muhely_zarolas';
+
+    /** Az újranyitás indoka (ajax_ujranyit állítja; az allapot_valt ezzel engedi a kötelező indokot). */
+    private static ?string $ujranyitas_indok = null;
+
+    /** @return array{be: bool, indok: bool} */
+    public static function zar_beallitas(): array
+    {
+        $b = get_option(self::OPT_ZAROLAS, []);
+        $b = is_array($b) ? $b : [];
+
+        return [
+            'be'    => !isset($b['be']) || !empty($b['be']),
+            'indok' => !empty($b['indok']),
+        ];
+    }
+
+    /** Zárolt-e a lap: lezárt állapotban van, és a zárolás be van kapcsolva. */
+    public static function zarolva($munkalap): bool
+    {
+        if (!self::zar_beallitas()['be']) {
+            return false;
+        }
+
+        $sor = is_object($munkalap) ? $munkalap : self::egy((int) $munkalap);
+
+        return $sor !== null && !empty(self::allapotok()[(string) $sor->allapot]['zart']);
+    }
+
+    /**
+     * Ha a lap zárolt: az elutasítás szövege (és naplóbejegyzés), különben null.
+     * A hívó (AJAX-végpont) ezzel utasítja el a módosítást.
+     */
+    public static function zar_ellenoriz(int $id, string $mit = 'módosítás'): ?string
+    {
+        $sor = $id > 0 ? self::egy($id) : null;
+
+        if ($sor === null || !self::zarolva($sor)) {
+            return null;
+        }
+
+        $nev = self::allapotok()[(string) $sor->allapot]['nev'] ?? (string) $sor->allapot;
+
+        if (class_exists('SDH_Muhely_Valtozasnaplo')) {
+            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', $id, 'Elutasítva (' . $mit . '): a lap ' . mb_strtolower($nev) . ', előbb újra kell nyitni.', [], 'elutasitva');
+        }
+
+        return 'Ez a lap ' . mb_strtolower($nev) . ' – szerkeszteni csak újranyitás után lehet (a lap tetején: Újranyitás).';
+    }
+
+    /**
+     * Lezárt lap újranyitása: a megadott (nem lezárt) állapotba, vagy az
+     * alapállapotba. Az ok a változásnaplóba kerül.
+     *
+     * @return array<string, mixed>|string
+     */
+    public static function ujranyit(int $id, string $kulcs = '', string $indok = '')
+    {
+        $sor = $id > 0 ? self::egy($id) : null;
+
+        if ($sor === null) {
+            return 'Nincs ilyen munkalap.';
+        }
+
+        $allapotok = self::allapotok();
+
+        if (empty($allapotok[(string) $sor->allapot]['zart'])) {
+            return 'Ez a lap nincs lezárva – nem kell újranyitni.';
+        }
+
+        $indok = trim(mb_substr(sanitize_text_field($indok), 0, 200));
+
+        if ($indok === '' && self::zar_beallitas()['indok']) {
+            return 'Írd be, miért nyitod újra a lapot – az újranyitás oka kötelező (Beállítások › Lezárt lapok).';
+        }
+
+        if ($kulcs === '' || !isset($allapotok[$kulcs]) || !empty($allapotok[$kulcs]['zart'])) {
+            $kulcs = '';
+
+            foreach ($allapotok as $k => $a) {
+                if (!empty($a['alap']) && empty($a['zart'])) {
+                    $kulcs = (string) $k;
+                    break;
+                }
+            }
+
+            if ($kulcs === '') {
+                foreach ($allapotok as $k => $a) {
+                    if (empty($a['zart']) && !empty($a['szamozott']) && empty($a['reszben'])) {
+                        $kulcs = (string) $k;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($kulcs === '') {
+            return 'Nincs olyan állapot, amely nem lezárt – nézd meg a Beállítások › Állapotok listáját.';
+        }
+
+        // Több eszközös lapon a „Részben elkészült” nem választható kézzel.
+        if (!empty($allapotok[$kulcs]['reszben'])) {
+            return 'A „' . $allapotok[$kulcs]['nev'] . '” magától áll be – válassz másik állapotot az újranyitáshoz.';
+        }
+
+        $elozo = class_exists('SDH_Muhely_Valtozasnaplo')
+            ? SDH_Muhely_Valtozasnaplo::kontextus('', 'Újranyitás' . ($indok !== '' ? ': ' . $indok : ''))
+            : null;
+
+        self::$ujranyitas_indok = $indok !== '' ? $indok : '-';
+
+        try {
+            $r = self::allapot_valt($id, $kulcs);
+        } finally {
+            self::$ujranyitas_indok = null;
+
+            if ($elozo !== null) {
+                SDH_Muhely_Valtozasnaplo::kontextus_vissza($elozo);
+            }
+        }
+
+        if (is_array($r) && class_exists('SDH_Muhely_Valtozasnaplo')) {
+            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', $id, 'Újranyitva' . ($indok !== '' ? ': ' . $indok : ' (ok nélkül)'), ['Új állapot' => $allapotok[$kulcs]['nev']]);
+        }
+
+        return $r;
+    }
+
+    /** Újranyitás (AJAX): a lap tetején álló zárolás-sáv gombja. */
+    public static function ajax_ujranyit(): void
+    {
+        check_ajax_referer('sdh_muhely_modal');
+
+        if (!current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
+        }
+
+        $r = self::ujranyit(
+            isset($_POST['id']) ? (int) $_POST['id'] : 0,
+            isset($_POST['allapot']) ? sanitize_key(wp_unslash($_POST['allapot'])) : '',
+            isset($_POST['indok']) ? (string) wp_unslash($_POST['indok']) : ''
+        );
+
+        if (is_string($r)) {
+            wp_send_json_error(['uzenet' => $r]);
+        }
+
+        wp_send_json_success($r);
+    }
+
+    /** A zárolás-sáv a lezárt lap űrlapjának tetején. */
+    private static function zar_sav(object $munkalap): void
+    {
+        $allapotok = self::allapotok();
+        $nev       = $allapotok[(string) $munkalap->allapot]['nev'] ?? (string) $munkalap->allapot;
+        $lezarva   = self::datum_ertek((string) ($munkalap->lezarva ?? ''));
+        $alap      = '';
+        $kotelezo  = self::zar_beallitas()['indok'];
+
+        foreach ($allapotok as $k => $a) {
+            if (!empty($a['alap']) && empty($a['zart'])) {
+                $alap = (string) $k;
+                break;
+            }
+        }
+
+        ?>
+        <div class="sdh-zarsav" data-sdh-zarsav role="status">
+            <span class="sdh-zarsav__ikon" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4.5" y="9" width="11" height="8" rx="1.8"/><path d="M7 9V6.6a3 3 0 0 1 6 0V9"/></svg></span>
+            <div class="sdh-zarsav__szoveg">
+                <strong><?php echo esc_html($nev); ?> lap – csak olvasható.</strong>
+                <?php echo $lezarva !== '' ? 'Lezárva: ' . esc_html(str_replace('-', '.', $lezarva)) . '. ' : ''; ?>
+                Szerkeszteni csak újranyitás után lehet. A nyomtatás, a matrica, a számla és az ügyfélüzenetek így is mennek; minden lépés a Naplóba kerül.
+            </div>
+            <div class="sdh-zarsav__urlap">
+                <select data-sdh-ujranyit-allapot aria-label="Az újranyitott lap állapota">
+                    <?php foreach ($allapotok as $k => $a) : ?>
+                        <?php if (!empty($a['zart']) || !empty($a['reszben'])) { continue; } ?>
+                        <option value="<?php echo esc_attr((string) $k); ?>" <?php selected($alap, (string) $k); ?>><?php echo esc_html($a['nev']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="text" data-sdh-ujranyit-indok maxlength="200" autocomplete="off"
+                       placeholder="<?php echo esc_attr($kotelezo ? 'Az újranyitás oka (kötelező)' : 'Az újranyitás oka (nem kötelező)'); ?>"
+                       aria-label="Az újranyitás oka"<?php echo $kotelezo ? ' data-kotelezo="1"' : ''; ?>>
+                <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-ujranyit data-id="<?php echo (int) $munkalap->id; ?>">Újranyitás</button>
+            </div>
+        </div>
+        <?php
     }
 
     /* =================================================================
@@ -2207,6 +2412,11 @@ final class SDH_Muhely_Munkalap
             return 'Ismeretlen állapot.';
         }
 
+        // Kötelező újranyitási oknál a lezárt lap csak a lap Újranyitás gombjával nyitható (ott van mező az oknak).
+        if (self::$ujranyitas_indok === null && self::zarolva($regi) && empty($allapotok[$kulcs]['zart']) && self::zar_beallitas()['indok']) {
+            return 'A lezárt lap újranyitásához ok kell: nyisd meg a lapot, és a tetején írd be, miért nyitod újra.';
+        }
+
         $tobb = self::tovabbi_eszkoz_idk($id) !== [];
 
         if ($tobb && !empty($allapotok[$kulcs]['reszben']) && (string) $regi->allapot !== $kulcs) {
@@ -2851,6 +3061,12 @@ final class SDH_Muhely_Munkalap
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
 
+        $zar = self::zar_ellenoriz(isset($_POST['id']) ? (int) $_POST['id'] : 0, 'eszköz állapota');
+
+        if ($zar !== null) {
+            wp_send_json_error(['uzenet' => $zar, 'zarolt' => true]);
+        }
+
         $eredmeny = self::eszkoz_allapot_valt(
             isset($_POST['id']) ? (int) $_POST['id'] : 0,
             isset($_POST['kulcs']) ? max(0, (int) $_POST['kulcs']) : 0,
@@ -2874,6 +3090,12 @@ final class SDH_Muhely_Munkalap
         }
 
         $id       = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $zar      = self::zar_ellenoriz($id, 'eszköz „fizetve” jelzője');
+
+        if ($zar !== null) {
+            wp_send_json_error(['uzenet' => $zar, 'zarolt' => true]);
+        }
+
         $eredmeny = self::eszkoz_fizetve_ir($id, isset($_POST['kulcs']) ? max(0, (int) $_POST['kulcs']) : 0, false);
 
         if (is_string($eredmeny)) {
@@ -3270,7 +3492,12 @@ final class SDH_Muhely_Munkalap
              data-fizetve-mentett="<?php echo $fizetve ? '1' : '0'; ?>"
              data-bev-mentett="<?php echo !$uj && (int) ($munkalap->bevizsgalasi_dij ?? 0) === 1 ? '1' : '0'; ?>"
              data-kasszaban="<?php echo esc_attr((string) (!$uj && class_exists('SDH_Muhely_Penztar') ? SDH_Muhely_Penztar::munkalap_kasszaban((int) $munkalap->id, (int) $munkalap->munkalap_szam > 0 ? (string) (int) $munkalap->munkalap_szam : '', (string) ($munkalap->letrehozva ?? '')) : 0)); ?>"
-             data-ma="<?php echo esc_attr(current_time('Y-m-d')); ?>">
+             data-ma="<?php echo esc_attr(current_time('Y-m-d')); ?>"<?php
+             // A Napló és az AI-asszisztens ebből tudja, melyik rekord van nyitva; a lezárt lap zárolt (app/naplo.js).
+             echo $uj ? '' : ' data-sdh-naplo-rekord="munkalap:' . (int) $munkalap->id . '"';
+             echo !$uj && self::zarolva($munkalap) ? ' data-sdh-zarolt="1"' : '';
+             ?>>
+            <?php if (!$uj && self::zarolva($munkalap)) { self::zar_sav($munkalap); } ?>
             <div class="sdh-ml">
                 <div class="sdh-ml__oldal">
                     <div class="sdh-ml__csoport">
@@ -3770,6 +3997,16 @@ final class SDH_Muhely_Munkalap
                 <?php // Nyomtatás, PDF, e-mail: mentett lapnál (SDH_Muhely_Nyomtatas, nyomtatas.js) – az ablak a lap fölé nyílik. ?>
                 <?php if (!$uj && $modal && class_exists('SDH_Muhely_Nyomtatas')) : ?>
                     <?php echo SDH_Muhely_Nyomtatas::gomb((int) $munkalap->id, [], 'Nyomtatás'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
+
+                <?php // Brother RMA-matrica (0.59): mentett, sorszámos javítási lapnál (SDH_Muhely_Matrica, matrica.js). ?>
+                <?php if (!$uj && $modal && !$eladas && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) : ?>
+                    <?php echo SDH_Muhely_Matrica::gomb((int) $munkalap->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
+
+                <?php // A lap változásnaplója (0.59): ki, mikor, mit módosított (SDH_Muhely_Naplo_Felulet, naplo.js). ?>
+                <?php if (!$uj && $modal && class_exists('SDH_Muhely_Naplo_Felulet')) : ?>
+                    <?php echo SDH_Muhely_Naplo_Felulet::gomb('munkalap', (int) $munkalap->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
 
                 <?php // Számlázás: csak mentett, sorszámot kapott lapnál (SDH_Muhely_Szamla). ?>
@@ -4888,6 +5125,11 @@ final class SDH_Muhely_Munkalap
 
         if ($id > 0 && $regi === null) {
             return 'Nincs ilyen munkalap. Lehet, hogy időközben törölték.';
+        }
+
+        // Lezárt lap: szerkeszteni csak újranyitás után (0.59).
+        if ($regi !== null && self::zarolva($regi)) {
+            return (string) self::zar_ellenoriz((int) $regi->id, 'mentés');
         }
 
         $adatok    = self::adatok_osszeallit($regi);
