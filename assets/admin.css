@@ -8295,6 +8295,13 @@ a.sdh-ora__zaras--nincs {
 .sdh-ora[data-allapot="elott"]  { --sdh-ora-neon: #4aa8ff; }
 .sdh-ora[data-allapot="zarva"]  { --sdh-ora-neon: #8b94a8; }
 
+/* Alapból az óra a stílus (Megjelenés) kiemelő színét viseli; csak a zárás előtti
+   figyelmeztetés (borostyán) és a zárva (szürke) marad külön színű. */
+.sdh-ora:not([data-szin="allapot"]):not([data-allapot="hamar"]):not([data-allapot="zarva"]) {
+    --sdh-ora-neon: color-mix(in srgb, var(--sdh-accent) 78%, #fff);
+    --sdh-ora-szin: var(--sdh-accent-szoveg);
+}
+
 /* Átmenetes neon keret (a közepén elhalványul, mint az üveg pereme). */
 .sdh-ora::before {
     content: "";

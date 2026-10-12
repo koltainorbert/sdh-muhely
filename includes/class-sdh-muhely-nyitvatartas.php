@@ -60,6 +60,8 @@ final class SDH_Muhely_Nyitvatartas
             'masodperc'    => !isset($m['masodperc']) || !empty($m['masodperc']),
             // Ennyi perccel zárás előtt vált figyelmeztető színre a visszaszámláló.
             'figyelmeztet' => max(0, min(240, (int) ($m['figyelmeztet'] ?? 30))),
+            // Az óra színe: 'stilus' = a Megjelenés kiemelő színe (alap), 'allapot' = zöld / borostyán / kék.
+            'szin'         => ($m['szin'] ?? 'stilus') === 'allapot' ? 'allapot' : 'stilus',
             'napok'        => $napok,
         ];
     }
@@ -160,6 +162,17 @@ final class SDH_Muhely_Nyitvatartas
                 </div>
             </div>
 
+            <div class="sdh-mezok">
+                <div class="sdh-mezo">
+                    <label for="nyitva_szin">Az óra színe</label>
+                    <select name="nyitva_szin" id="nyitva_szin">
+                        <option value="stilus" <?php selected($b['szin'], 'stilus'); ?>>A stílus színe (a Megjelenés kiemelő színe)</option>
+                        <option value="allapot" <?php selected($b['szin'], 'allapot'); ?>>Állapot szerint (zöld, borostyán, kék)</option>
+                    </select>
+                    <span class="sdh-mezo__sugo">Zárás előtt (borostyán) és zárva (szürke) mindkét módban a saját színét kapja, hogy ne lehessen eltéveszteni.</span>
+                </div>
+            </div>
+
             <p class="sdh-sugo sdh-sugo--utolso">
                 Az óra a rendszer időzónája szerint jár (most: <strong><?php echo esc_html(wp_date('Y. m. d. H:i')); ?></strong>,
                 <?php echo esc_html(wp_timezone_string()); ?>).
@@ -193,6 +206,7 @@ final class SDH_Muhely_Nyitvatartas
             'ora'          => !empty($_POST['nyitva_ora']),
             'masodperc'    => !empty($_POST['nyitva_masodperc']),
             'figyelmeztet' => isset($_POST['nyitva_figyelmeztet']) ? max(0, min(240, (int) $_POST['nyitva_figyelmeztet'])) : 30,
+            'szin'         => ($_POST['nyitva_szin'] ?? 'stilus') === 'allapot' ? 'allapot' : 'stilus',
             'napok'        => $napok,
         ], false);
         // phpcs:enable
@@ -321,6 +335,7 @@ final class SDH_Muhely_Nyitvatartas
              data-het="<?php echo esc_attr((string) wp_json_encode((object) $het)); ?>"
              data-figy="<?php echo (int) $b['figyelmeztet']; ?>"
              data-allapot="<?php echo esc_attr($allapot['allapot']); ?>"
+             data-szin="<?php echo esc_attr($b['szin']); ?>"
              style="--sdh-ora-arany: <?php echo esc_attr((string) round($allapot['arany'], 4)); ?>"
              role="timer" aria-label="Pontos idő és a zárásig hátralévő idő">
             <span class="sdh-ora__gyuru" aria-hidden="true"><?php echo SDH_Muhely_Admin_UI::gomb_ikon('ora'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG. ?></span>

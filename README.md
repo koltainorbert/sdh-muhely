@@ -63,6 +63,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.55.1
+- **Az óra felveszi a stílus színét.** Alapból a Megjelenés kiemelő színét viseli (eddig fix zöld / kék volt).
+  Zárás előtt (borostyán) és zárva (szürke) külön színű marad. Beállítások › Nyitvatartás › **Az óra színe**:
+  „A stílus színe” (alap) vagy „Állapot szerint” (zöld, borostyán, kék).
+
 ### 0.55.0
 - **Új megjelenés: az óra neon üveg.** Matt üvegtábla állapotszínű fénnyel (nyitva: zöld, zárás előtt: borostyán és
   lüktet, nyitás előtt: kék, zárva: szürke), átmenetes neon kerettel és lassan átfutó fényvisszaverődéssel. A

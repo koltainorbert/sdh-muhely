@@ -258,6 +258,13 @@ $ora_css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css');
 T::tartalmaz($ora_css, '.sdh-ora__gyuru::before', 'admin.css: a gyűrű stílusa megvan');
 T::tartalmaz($ora_css, ':root[data-papir] .sdh-ora', 'admin.css: Papír megjelenésben az óra lapos');
 T::nem_tartalmaz($ora_css, '.sdh-ora__sav', 'admin.css: nincs régi csík-szabály');
+// 0.55.1: az óra alapból a stílus színét viseli; beállítható az állapot szerinti szín.
+T::tartalmaz($NY::ora_html('fej'), 'data-szin="stilus"', 'az óra alapból a stílus színét viseli');
+$bment(['ful' => 'nyitvatartas', 'nyitva_jelen' => '1', 'nyitva' => $nyitva, 'nyitva_ora' => '1', 'nyitva_szin' => 'allapot']);
+T::tartalmaz($NY::ora_html('fej'), 'data-szin="allapot"', 'az óra színe átállítható állapot szerintire');
+$bment(['ful' => 'nyitvatartas', 'nyitva_jelen' => '1', 'nyitva' => $nyitva, 'nyitva_ora' => '1', 'nyitva_szin' => 'bármi']);
+T::tartalmaz($NY::ora_html('fej'), 'data-szin="stilus"', 'ismeretlen színmód a stílus színére esik vissza');
+T::tartalmaz($ora_css, ':not([data-szin="allapot"])', 'admin.css: a stílusszín-szabály az állapotszín módot nem érinti');
 
 // Kikapcsolható; a másodperc is.
 $bment(['ful' => 'nyitvatartas', 'nyitva_jelen' => '1', 'nyitva' => $nyitva, 'nyitva_ora' => '1', 'nyitva_figyelmeztet' => '0']);
