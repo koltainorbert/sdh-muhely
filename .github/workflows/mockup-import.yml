@@ -1,0 +1,29 @@
+name: mockup-import
+on:
+  push:
+    branches: [mockup-import]
+    paths: [tools/mockup_letolt.json]
+permissions:
+  contents: write
+jobs:
+  letolt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Letöltés
+        run: |
+          mkdir -p mockup-nyers
+          python3 - <<'PY'
+          import json, urllib.request
+          for nev, url in json.load(open('tools/mockup_letolt.json')).items():
+              urllib.request.urlretrieve(url, f'mockup-nyers/{nev}.png')
+              print(nev)
+          PY
+          ls -la mockup-nyers
+      - name: Visszaírás
+        run: |
+          git config user.name "mockup-import"
+          git config user.email "mockup-import@users.noreply.github.com"
+          git add mockup-nyers
+          git commit -m "mockup-import: nyers képek" || echo "nincs változás"
+          git push
