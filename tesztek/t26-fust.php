@@ -14,6 +14,9 @@ global $wpdb;
 // PHP-figyelmeztetés sem lehet: minden notice/warning hibának számít.
 $php_hibak = [];
 set_error_handler(static function (int $szint, string $uzenet, string $fajl, int $sor) use (&$php_hibak): bool {
+    if (!(error_reporting() & $szint)) {
+        return true; // @-tal elnémított hiba (pl. gyorsítótár törlése): nem számít
+    }
     if (strpos($fajl, 'sdh-muhely') !== false) {
         $php_hibak[] = basename($fajl) . ':' . $sor . ' ' . $uzenet;
     }

@@ -416,6 +416,8 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.css')); ?>">
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -630,6 +632,8 @@ final class SDH_Muhely_Frontend
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/eladas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/eladas.js')); ?>"></script>
         <?php // Nyomtatás: a Nyomtatás ablak és a felajánlás bármelyik oldalon megjelenhet. ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.js')); ?>"></script>
+        <?php // SMS: a „Küldjek SMS-t?” popup státuszváltás után, bármelyik oldalon. ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'beallitasok') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
         <?php endif; ?>

@@ -239,6 +239,7 @@
     function kuldes(urlap) {
         var mezo = urlap.querySelector('[data-sdh-uzenet-szoveg]');
         var email = urlap.querySelector('[data-sdh-uzenet-email]');
+        var smsJelolo = urlap.querySelector('[data-sdh-uzenet-sms]');
         var gomb = urlap.querySelector('[data-sdh-uzenet-kuld]');
         var hiba = urlap.querySelector('[data-sdh-uzenet-hiba]');
         var szoveg = (mezo.value || '').trim();
@@ -259,7 +260,8 @@
             id: id,
             szoveg: szoveg,
             eszkoz: eszkoz ? eszkoz.value : '0',
-            email: email && email.checked && !email.disabled ? '1' : ''
+            email: email && email.checked && !email.disabled ? '1' : '',
+            sms: smsJelolo && smsJelolo.checked && !smsJelolo.disabled ? '1' : ''
         })
             .then(function (adat) {
                 var chat = urlap.closest('[data-sdh-chat]');
@@ -280,6 +282,14 @@
                 if (email && email.checked && !email.disabled && !adat.email) {
                     hiba.textContent = 'Az üzenet elmentve, de az e-mail nem ment el (ellenőrizd a levelezés beállítását).';
                     hiba.hidden = false;
+                }
+
+                // SMS-ben is: ha az SMS nem került sorba, az üzenet akkor is elmentve – ezt mondjuk meg.
+                if (adat.sms && !adat.sms.ok) {
+                    hiba.textContent = 'Az üzenet elmentve, de az SMS nem ment ki: ' + adat.sms.uzenet;
+                    hiba.hidden = false;
+                } else if (smsJelolo && smsJelolo.checked && adat.sms && adat.sms.ok) {
+                    smsJelolo.checked = false; // minden SMS tudatos döntés
                 }
             })
             .catch(function (ok) {

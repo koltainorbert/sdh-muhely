@@ -1,0 +1,172 @@
+/* SMS (0.57): menüpont, popupok, értesítés. A színek a közös változókból jönnek. */
+
+.sdh-sms-db {
+    display: inline-block;
+    min-width: 1.3em;
+    margin-left: .25rem;
+    padding: 0 .35em;
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    font-size: calc(11px * var(--sdh-n));
+    line-height: 1.5;
+    text-align: center;
+}
+
+.sdh-sms-cim {
+    margin: 1.4rem 0 .5rem;
+    font-size: calc(17px * var(--sdh-n));
+}
+
+.sdh-sms-alcim {
+    margin: 1rem 0 .4rem;
+    font-size: calc(14px * var(--sdh-n));
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-sms-sugo {
+    margin: 0 0 .8rem;
+    color: var(--sdh-halvany);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-sms-szoveg {
+    max-width: 38rem;
+    word-break: break-word;
+}
+
+.sdh-sms-uj td {
+    font-weight: 600;
+}
+
+.sdh-sms-szabalyok select,
+.sdh-sms-szabalyok input[type="number"] {
+    max-width: 100%;
+}
+
+.sdh-sms-szabalyok input[type="number"] {
+    width: 6rem;
+}
+
+.sdh-sms-uzenet {
+    margin-left: .8rem;
+    color: var(--sdh-siker);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-sms-uzenet.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+/* A számok blokkja a popupban */
+.sdh-sms-szamok {
+    margin: 0 0 .9rem;
+    padding: .6rem .8rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-sms-szamlista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: calc(14px * var(--sdh-n));
+}
+
+.sdh-sms-szamlista li small {
+    margin-left: .4rem;
+    color: var(--sdh-halvany);
+}
+
+.sdh-sms-szamlista li.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+.sdh-sms-figy {
+    margin: .3rem 0 0;
+    color: var(--sdh-figyelem);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-sms-szaml {
+    margin-top: .25rem;
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-sms-szaml.is-sok {
+    color: var(--sdh-figyelem);
+}
+
+.sdh-sms-valtozok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+}
+
+.sdh-sms-valtozok .sdh-ig__cimke {
+    flex-basis: 100%;
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-sms-verziok {
+    margin: .6rem 0;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-sms-verzio {
+    padding: .4rem 0;
+    border-top: 1px solid var(--sdh-keret);
+}
+
+/* Kis értesítés a képernyő alján */
+.sdh-sms-toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 100000;
+    max-width: 22rem;
+    padding: .7rem 1rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    box-shadow: var(--sdh-arnyek-emelt);
+    font-size: calc(14px * var(--sdh-n));
+    transition: opacity .5s ease;
+}
+
+.sdh-sms-toast.is-hiba {
+    border-color: var(--sdh-hiba);
+}
+
+.sdh-sms-toast.is-el {
+    opacity: 0;
+}
+
+/* Az üzenetszálban az SMS-jelzés */
+.sdh-uz__jel--sms.is-hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-sms-webhook {
+	margin: 0 0 calc(14px * var(--sdh-n));
+}
+
+.sdh-sms-webhook input[type="text"] {
+	width: 100%;
+	margin-top: calc(4px * var(--sdh-n));
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-sms-parosit {
+	display: flex;
+	gap: calc(6px * var(--sdh-n));
+	margin-top: calc(6px * var(--sdh-n));
+	align-items: center;
+}

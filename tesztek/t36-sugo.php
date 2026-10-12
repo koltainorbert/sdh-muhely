@@ -20,6 +20,9 @@ global $wpdb;
 
 $figy = [];
 set_error_handler(static function (int $szint, string $szoveg, string $fajl, int $sor) use (&$figy): bool {
+    if (!(error_reporting() & $szint)) {
+        return true; // @-tal elnémított hiba (pl. gyorsítótár törlése): nem számít
+    }
     if (strpos($fajl, 'sdh-muhely') !== false) {
         $figy[] = basename($fajl) . ':' . $sor . ' ' . $szoveg;
     }

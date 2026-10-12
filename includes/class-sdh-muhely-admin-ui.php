@@ -394,6 +394,10 @@ final class SDH_Muhely_Admin_UI
             wp_enqueue_script('sdh-muhely-' . $sdh_eszkoz, SDH_MUHELY_URL . 'assets/' . $sdh_eszkoz . '.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/' . $sdh_eszkoz . '.js'), true);
         }
 
+        // SMS (0.57): a „Küldjek SMS-t?” popup bármelyik oldalon megjelenhet státuszváltás után.
+        wp_enqueue_style('sdh-muhely-sms', SDH_MUHELY_URL . 'assets/sms.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/sms.css'));
+        wp_enqueue_script('sdh-muhely-sms', SDH_MUHELY_URL . 'assets/sms.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/sms.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(
@@ -450,6 +454,10 @@ final class SDH_Muhely_Admin_UI
             'ai'        => class_exists('SDH_Muhely_Asszisztens') ? SDH_Muhely_Asszisztens::js_adat() : ['be' => false],
             // Nyomtatás: vár-e felajánlás (új lap / lezárás után), amit az oldal betöltésekor meg kell mutatni.
             'nyomtat'   => class_exists('SDH_Muhely_Nyomtatas') ? SDH_Muhely_Nyomtatas::js_adat() : ['ajanlat' => false],
+            // SMS (0.57): be van-e kapcsolva (csak akkor kérdez rá a státuszváltás után), van-e függő döntés.
+            'sms'       => class_exists('SDH_Muhely_Sms') && is_user_logged_in()
+                ? ['be' => SDH_Muhely_Sms::bekapcsolva(), 'fuggo' => SDH_Muhely_Sms::bekapcsolva() && class_exists('SDH_Muhely_Sms_Szabaly') ? SDH_Muhely_Sms_Szabaly::fuggo_db() : 0]
+                : ['be' => false, 'fuggo' => 0],
         ];
     }
 
@@ -585,6 +593,7 @@ final class SDH_Muhely_Admin_UI
             'hianyzo_nev'       => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
             'hianyzo_ugyfel'    => ['hiba',  'Válassz ügyfelet a listából – eszköz ügyfél nélkül nem vihető fel.'],
             'nincs_ilyen'       => ['hiba',  'Nincs ilyen rekord. Lehet, hogy időközben törölték.'],
+            'sms_sablon_mentve' => ['siker', 'Az SMS-sablon elmentve.'],
             'mentes_hiba'       => ['hiba',  'A mentés nem sikerült. Az adatbázis visszautasította a műveletet.'],
             'demo_betoltve'     => ['siker', 'A demó adatok betöltve.'],
             'szolg_mentve'      => ['siker', 'A szolgáltatás elmentve.'],

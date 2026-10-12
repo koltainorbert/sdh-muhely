@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.56.0
+ * Version:           0.57.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.56.0');
+define('SDH_MUHELY_VERSION', '0.57.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -67,6 +67,11 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-rma-oldal.php' => 'SDH_Muhely_Rma_Oldal',
     'includes/class-sdh-muhely-eladas.php'   => 'SDH_Muhely_Eladas',
     'includes/class-sdh-muhely-levelezes.php' => 'SDH_Muhely_Levelezes',
+    // SMS-értesítések (0.57): Android SMS Gateway, sor, napló, sablonok, popup, bejövő SMS.
+    'includes/class-sdh-muhely-sms.php'      => 'SDH_Muhely_Sms',
+    'includes/class-sdh-muhely-sms-szabaly.php' => 'SDH_Muhely_Sms_Szabaly',
+    'includes/class-sdh-muhely-sms-felulet.php' => 'SDH_Muhely_Sms_Felulet',
+    'includes/class-sdh-muhely-sms-bejovo.php' => 'SDH_Muhely_Sms_Bejovo',
     'includes/class-sdh-muhely-tac.php'      => 'SDH_Muhely_Tac',
     // Eszköz-mockupok (0.56): termékkép minden eszköz mellett; Beállítások › Mockupok.
     'includes/class-sdh-muhely-mockup.php'   => 'SDH_Muhely_Mockup',

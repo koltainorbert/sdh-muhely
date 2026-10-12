@@ -4786,6 +4786,13 @@ final class SDH_Muhely_Munkalap
             do_action('sdh_muhely_munkalap_allapot', $id, $regi_allapot, (string) $adatok['allapot']);
         }
 
+        // A rendelés útja (rend_allapot) az űrlapról is változhat – ugyanaz az esemény, mint a listából.
+        $regi_rend = $regi !== null ? (string) ($regi->rend_allapot ?? '') : '';
+
+        if (isset($adatok['rend_allapot']) && $regi_rend !== (string) $adatok['rend_allapot']) {
+            do_action('sdh_muhely_rendeles_allapot', $id, $regi_rend, (string) $adatok['rend_allapot']);
+        }
+
         $szam = $szamot_kap
             ? self::szam_formaz($adatok['munkalap_szam'])
             : ($regi !== null ? self::szam_formaz($regi->munkalap_szam) : '');

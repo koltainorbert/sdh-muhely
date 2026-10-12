@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.35.0';
+    public const DB_VERSION = '0.36.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -129,6 +129,15 @@ final class SDH_Muhely_Schema
         $np_szemely   = self::tabla('naptar_szemely');
         $np_esemeny   = self::tabla('naptar_esemeny');
         $np_jelzes    = self::tabla('naptar_jelzes');
+        $sms_sablon   = self::tabla('sms_sablon');
+        $sms_verzio   = self::tabla('sms_sablon_verzio');
+        $sms_szabaly  = self::tabla('sms_szabaly');
+        $sms_uzenet   = self::tabla('sms_uzenet');
+        $sms_esemeny  = self::tabla('sms_esemeny');
+        $sms_dontes   = self::tabla('sms_dontes');
+        $sms_onteszt  = self::tabla('sms_onteszt');
+        $sms_link     = self::tabla('sms_link_esemeny');
+        $sms_leir     = self::tabla('sms_leiratkozas');
 
         $definiciok = [];
 
@@ -176,6 +185,7 @@ final class SDH_Muhely_Schema
             megjegyzes text NULL,
             belso_megjegyzes text NULL,
             aktiv tinyint(1) NOT NULL default 1,
+            sms_tilt tinyint(1) NOT NULL default 0,
             forras varchar(30) NOT NULL default 'kezi',
             kulso_azonosito varchar(40) NOT NULL default '',
             letrehozva datetime NULL,
@@ -617,11 +627,13 @@ final class SDH_Muhely_Schema
             felhasznalo bigint(20) unsigned NOT NULL default 0,
             olvasva tinyint(1) NOT NULL default 0,
             email_kuldve tinyint(1) NOT NULL default 0,
+            sms_id bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             PRIMARY KEY  (id),
             key munkalap_id (munkalap_id),
             key ugyfel_id (ugyfel_id),
-            key olvasva (olvasva)
+            key olvasva (olvasva),
+            key sms_id (sms_id)
         ) {$charset};";
 
         /* -------------------------------------------------------------
@@ -1223,6 +1235,186 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key esemeny (esemeny_id,szemely_id,alkalom),
             key nyitott (tipus,kinyomva)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * SMS (0.57) – sablonok
+         *
+         * "pelda" = a gyári mintasablon (jóváhagyásra vár, inaktív). Egy
+         * szerkesztés új verziót ad (sms_sablon_verzio, csak hozzáfűzés); az
+         * elküldött üzenet a küldéskori pontos szöveget a sms_uzenet-ben őrzi.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$sms_sablon} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            kulcs varchar(60) NOT NULL default '',
+            nev varchar(120) NOT NULL default '',
+            szoveg text NULL,
+            aktiv tinyint(1) NOT NULL default 0,
+            pelda tinyint(1) NOT NULL default 0,
+            verzio int(11) NOT NULL default 1,
+            letrehozva datetime NULL,
+            modositva datetime NULL,
+            modosito bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key kulcs (kulcs),
+            key aktiv (aktiv)
+        ) {$charset};";
+
+        $definiciok[] = "CREATE TABLE {$sms_verzio} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            sablon_id bigint(20) unsigned NOT NULL default 0,
+            verzio int(11) NOT NULL default 1,
+            nev varchar(120) NOT NULL default '',
+            szoveg text NULL,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key sablon_id (sablon_id,verzio)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * SMS – státusz → sablon szabályok
+         *
+         * "terulet": lap (a munkalap / eszköz állapota) vagy rendeles
+         * (a rendelés útja). "mukodes": ki / kerdez (popup) / auto. Egy
+         * állapothoz több sablon is tartozhat, de csak egy "alap".
+         * "fajta": javitas / arukiadas / rendeles / mind. "feltetel": üres
+         * vagy ar_megadva, alkatresz_hianyzik.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$sms_szabaly} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            terulet varchar(12) NOT NULL default 'lap',
+            allapot varchar(30) NOT NULL default '',
+            sablon_id bigint(20) unsigned NOT NULL default 0,
+            alap tinyint(1) NOT NULL default 0,
+            mukodes varchar(10) NOT NULL default 'kerdez',
+            kesleltetes int(11) NOT NULL default 0,
+            fajta varchar(12) NOT NULL default 'mind',
+            feltetel varchar(30) NOT NULL default '',
+            PRIMARY KEY  (id),
+            key allapot (terulet,allapot),
+            key sablon_id (sablon_id)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * SMS – üzenetek (kimenő ÉS bejövő), a teljes napló
+         *
+         * Sor nem törlődik, a küldött szöveg nem íródik felül. "irany": ki/be.
+         * "tipus": ugyfel vagy onteszt (külön, hogy ne keveredjen). "kivalto":
+         * auto / popup / kezi / onteszt / bejovo. "allapot": varakozik, kuldve_atjarora,
+         * pending, processed, sent, delivered, failed, manualis (minden próba
+         * elbukott), nincs_szam, kihagyva, fuggo, szimulalt, letiltva.
+         * "kulcs": a bejövő webhook-esemény azonosítója (kétszer nem rögzül).
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$sms_uzenet} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            irany varchar(4) NOT NULL default 'ki',
+            tipus varchar(10) NOT NULL default 'ugyfel',
+            kivalto varchar(12) NOT NULL default 'kezi',
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            felhasznalo_nev varchar(120) NOT NULL default '',
+            szam varchar(24) NOT NULL default '',
+            szam_eredeti varchar(60) NOT NULL default '',
+            szam_forras varchar(12) NOT NULL default '',
+            sablon_id bigint(20) unsigned NOT NULL default 0,
+            sablon_verzio int(11) NOT NULL default 0,
+            szoveg text NULL,
+            szegmens int(11) NOT NULL default 0,
+            allapot varchar(20) NOT NULL default 'varakozik',
+            hiba varchar(255) NOT NULL default '',
+            atjaro_id varchar(80) NOT NULL default '',
+            proba int(11) NOT NULL default 0,
+            utolso_proba datetime NULL,
+            kovetkezo datetime NULL,
+            elkuldve datetime NULL,
+            kezbesitve datetime NULL,
+            kulcs varchar(100) NULL,
+            olvasva tinyint(1) NOT NULL default 1,
+            parositva tinyint(1) NOT NULL default 1,
+            hivott datetime NULL,
+            hivo bigint(20) unsigned NOT NULL default 0,
+            kovetes_token varchar(24) NOT NULL default '',
+            megnyitva datetime NULL,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            unique key kulcs (kulcs),
+            key allapot (allapot,kovetkezo),
+            key munkalap_id (munkalap_id),
+            key ugyfel_id (ugyfel_id),
+            key atjaro_id (atjaro_id),
+            key szam (szam),
+            key irany (irany,olvasva)
+        ) {$charset};";
+
+        /* SMS – állapotátmenetek és események: csak hozzáfűzés. */
+        $definiciok[] = "CREATE TABLE {$sms_esemeny} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            sms_id bigint(20) unsigned NOT NULL default 0,
+            tipus varchar(12) NOT NULL default 'allapot',
+            allapot varchar(20) NOT NULL default '',
+            reszlet varchar(255) NOT NULL default '',
+            kulcs varchar(100) NULL,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            unique key kulcs (kulcs),
+            key sms_id (sms_id)
+        ) {$charset};";
+
+        /* SMS – függő és lezárt döntések (státuszváltás után: küldök / nem küldök / később). */
+        $definiciok[] = "CREATE TABLE {$sms_dontes} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            munkalap_id bigint(20) unsigned NOT NULL default 0,
+            eszkoz_id bigint(20) unsigned NOT NULL default 0,
+            terulet varchar(12) NOT NULL default 'lap',
+            allapot varchar(30) NOT NULL default '',
+            elozo varchar(30) NOT NULL default '',
+            sablon_id bigint(20) unsigned NOT NULL default 0,
+            dontes varchar(12) NOT NULL default 'fuggo',
+            ok varchar(255) NOT NULL default '',
+            sms_id bigint(20) unsigned NOT NULL default 0,
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            lezarva datetime NULL,
+            PRIMARY KEY  (id),
+            key munkalap_id (munkalap_id),
+            key nyitott (lezarva)
+        ) {$charset};";
+
+        /* SMS – önteszt (külön a vevő-SMS-ektől). */
+        $definiciok[] = "CREATE TABLE {$sms_onteszt} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            tipus varchar(12) NOT NULL default 'atjaro',
+            eredmeny varchar(8) NOT NULL default 'ok',
+            reszlet varchar(255) NOT NULL default '',
+            sms_id bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key tipus (tipus,letrehozva)
+        ) {$charset};";
+
+        /* SMS – követő link megnyitásai (nincs IP, nincs eszközadat). */
+        $definiciok[] = "CREATE TABLE {$sms_link} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            sms_id bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key sms_id (sms_id)
+        ) {$charset};";
+
+        /* SMS – a leiratkozás / tiltás naplója (az aktuális állapot: ugyfel.sms_tilt). */
+        $definiciok[] = "CREATE TABLE {$sms_leir} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            tiltva tinyint(1) NOT NULL default 1,
+            ok varchar(255) NOT NULL default '',
+            felhasznalo bigint(20) unsigned NOT NULL default 0,
+            letrehozva datetime NULL,
+            PRIMARY KEY  (id),
+            key ugyfel_id (ugyfel_id)
         ) {$charset};";
 
         return $definiciok;

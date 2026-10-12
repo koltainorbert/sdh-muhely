@@ -272,6 +272,9 @@ T::igaz($E::mai_arukiadas_db() >= 5, 'a mai árukiadások számlálója');
 
 $figy = [];
 set_error_handler(static function (int $szint, string $szoveg) use (&$figy): bool {
+    if (!(error_reporting() & $szint)) {
+        return true; // @-tal elnémított hiba (pl. gyorsítótár törlése): nem számít
+    }
     $figy[] = $szoveg;
 
     return true;

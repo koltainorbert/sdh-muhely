@@ -14,6 +14,9 @@ global $wpdb;
 
 $figy = [];
 set_error_handler(static function (int $szint, string $szoveg, string $fajl, int $sor) use (&$figy): bool {
+    if (!(error_reporting() & $szint)) {
+        return true; // @-tal elnémított hiba (pl. gyorsítótár törlése): nem számít
+    }
     if (strpos($fajl, 'sdh-muhely') !== false) {
         $figy[] = basename($fajl) . ':' . $sor . ' ' . $szoveg;
     }
@@ -57,7 +60,7 @@ $esemeny_sor = static fn (int $id): object => $wpdb->get_row($wpdb->prepare('SEL
 /* 1. Séma, modul, oldal                                                     */
 /* ======================================================================== */
 
-T::egyezik('0.35.0', SDH_Muhely_Schema::DB_VERSION, 'sémaverzió 0.35.0');
+T::egyezik('0.36.0', SDH_Muhely_Schema::DB_VERSION, 'sémaverzió 0.36.0');
 
 foreach (['szemely', 'esemeny', 'jelzes'] as $t) {
     $tabla = SDH_Muhely_Schema::tabla('naptar_' . $t);

@@ -359,6 +359,48 @@
         });
     });
 
+    // Beállítások › SMS: kapcsolat-teszt és teszt SMS (0.57).
+    gyoker.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-sms-akcio]') : null;
+
+        if (!gomb) {
+            return;
+        }
+
+        var akcio = gomb.getAttribute('data-sdh-sms-akcio') || '';
+        var hely = gomb.parentNode ? gomb.parentNode.querySelector('[data-sdh-sms-uzenet]') : null;
+        var adat = new FormData();
+        var szamMezo = document.getElementById(gomb.getAttribute('data-sdh-sms-szam') || '');
+
+        adat.set('action', akcio);
+        adat.set('_wpnonce', gomb.getAttribute('data-nonce') || '');
+
+        if (szamMezo) {
+            adat.set('szam', szamMezo.value);
+        }
+
+        gomb.disabled = true;
+
+        if (hely) {
+            hely.textContent = 'Egy pillanat…';
+        }
+
+        fetch(ajaxCim(), { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                if (hely) {
+                    hely.textContent = (v && v.data && v.data.uzenet) || (v && v.success ? 'Kész.' : 'Nem sikerült.');
+                    hely.style.color = v && v.success ? '' : 'var(--sdh-hiba, #be2f2f)';
+                }
+            })
+            .catch(function () {
+                if (hely) {
+                    hely.textContent = 'Nem sikerült elérni a szervert.';
+                }
+            })
+            .then(function () { gomb.disabled = false; });
+    });
+
     // Beállítások › Mentés: „Mentés most" (a napi mentéstől függetlenül).
     gyoker.addEventListener('click', function (esemeny) {
         var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-mentes-most]') : null;

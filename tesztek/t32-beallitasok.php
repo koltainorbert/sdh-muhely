@@ -28,6 +28,9 @@ SDH_Muhely_Modulok::kontextus_beallit('frontend');
 
 $figy = [];
 set_error_handler(static function (int $szint, string $szoveg, string $fajl, int $sor) use (&$figy): bool {
+    if (!(error_reporting() & $szint)) {
+        return true; // @-tal elnémított hiba (pl. gyorsítótár törlése): nem számít
+    }
     $figy[] = basename($fajl) . ':' . $sor . ' ' . $szoveg;
 
     return true;

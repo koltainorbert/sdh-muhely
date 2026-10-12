@@ -175,6 +175,11 @@ final class SDH_Muhely_Beallitasok
             ],
 
             // --- Kapcsolat és csapat -----------------------------------------
+            'sms' => [
+                'cim' => 'SMS-értesítések', 'csoport' => 'kapcsolat',
+                'leiras' => 'Az SMS-átjáró (Android telefon), újrapróbálás, csendes órák, aláírás, önteszt és riasztás.',
+                'rajz' => [SDH_Muhely_Sms::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Sms::class, 'beallitas_mentes'],
+            ],
             'levelezes' => [
                 'cim' => 'Levelezés', 'csoport' => 'kapcsolat',
                 'leiras' => 'E-mail-fiókok (IMAP / SMTP), aláírás, jelszavas zár, a levélszűrő és a rendező ügynök.',

@@ -63,6 +63,27 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.57.0
+- **SMS-értesítések (új SMS menüpont és Beállítások › SMS-értesítések).** Az SMS a céges Android-telefonon futó
+  SMS-átjárón át megy (helyi, felhős vagy saját szerveres mód). Új telepítésnél minden ki van kapcsolva.
+- **Mindig sorból, soha nem blokkol:** idempotens küldés (kétszer nem megy ki), újrapróbálás növekvő várakozással,
+  időtúllépésnél nincs automatikus újraküldés (a sor a **Hívandók** közé kerül), csendes idő és tiltólista az
+  automatikus SMS-ekre, az 1. telefonmező hibájánál a 2. mezőre esik vissza, hibánál e-mail értesítés. Az SMS-napló
+  csak bővül.
+- **Állapotváltáskor „Küldjek SMS-t az ügyfélnek?” ablak** javítás és rendelés esetén, eszközönként is
+  (Küldés / Nem küldök / Később döntök); a döntések az adatbázisban maradnak, a **Függő döntések** nézetben
+  később is meghozhatók. Állapotonként beállítható az automatikus küldés.
+- **Verziózott sablonok** változókkal (`{ugyfel}`, `{szam}`, `{eszkoz}`, `{allapot}`, `{szerviz}`, `{link}`,
+  `{hatarido}`, `{osszeg}`); négy kikapcsolt „PÉLDA – jóváhagyásra vár” minta. Az elküldött SMS megőrzi a sablon
+  verzióját és a pontos szöveget.
+- **Kézi SMS** a munkalapról, az ügyféltől vagy önállóan; az RMA-csevegőben **SMS-ben is** jelölő.
+- **Bejövő SMS webhookon át:** titkos kulcsos cím, az ügyfél legutóbbi nyitott munkalapjára párosul, a
+  párosítatlanok kézzel rendelhetők hozzá; STOP = leiratkozás az automatikus SMS-ekről; a kimenő SMS állapotát
+  (elküldve / kézbesítve) a webhook is gyorsítja.
+- **Javítás:** a rendelés állapotváltása az űrlapról mentve is jelez a kapcsolódó funkcióknak (eddig csak az
+  állapotgombok jeleztek).
+- A webhook adatmezői és az átjáró health-végpontja az app dokumentációja (swagger.json) alapján véglegesítendők.
+
 ### 0.56.0
 - **Eszközök a lapon: áttekinthető, több eszközös munkalap.** A munkalap jobb oldalán minden eszköz egy kártya:
   termékkép, név, kategória / IMEI / szín, saját állapot (azonnal mentődik), díj, és az eszköz saját

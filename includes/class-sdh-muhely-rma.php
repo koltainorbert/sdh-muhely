@@ -1383,6 +1383,17 @@ final class SDH_Muhely_Rma
 
         self::olvasottra((int) $munkalap->id);
 
+        // „SMS-ben is”: ugyanaz a szöveg SMS-ként is megy (sorba kerül, a szálban a kapott sorhoz kötődik).
+        $sms = null;
+
+        if (!empty($_POST['sms']) && class_exists('SDH_Muhely_Sms')) {
+            $v   = SDH_Muhely_Sms::sor_be([
+                'ugyfel_id' => (int) $munkalap->ugyfel_id, 'munkalap_id' => $id, 'eszkoz_id' => isset($_POST['eszkoz']) ? max(0, (int) $_POST['eszkoz']) : 0,
+                'szoveg' => $szoveg, 'kivalto' => 'kezi', 'uzenet_id' => $uj,
+            ]);
+            $sms = ['ok' => $v['ok'], 'uzenet' => $v['uzenet']];
+        }
+
         global $wpdb;
         $kuldve = (int) $wpdb->get_var($wpdb->prepare('SELECT email_kuldve FROM ' . self::uzenet_tabla() . ' WHERE id = %d', $uj)) === 1;
 
@@ -1390,6 +1401,7 @@ final class SDH_Muhely_Rma
             'html'      => self::uzenetek_html((int) $munkalap->id, 'crm'),
             'utolso'    => self::utolso_uzenet_id((int) $munkalap->id),
             'email'     => $kuldve,
+            'sms'       => $sms,
             'szamlalo'  => self::szamlalo((int) $munkalap->id),
             'olvasatlan' => self::olvasatlan_db(),
         ]);
@@ -1464,6 +1476,35 @@ final class SDH_Muhely_Rma
         ]);
     }
 
+    /**
+     * „SMS-ben is” jelölő a csevegő beírója alatt. Alapból nincs bejelölve: az SMS pénzbe kerül és
+     * azonnal kimegy, ezért mindig tudatos döntés. Ha az SMS ki van kapcsolva vagy az ügyfélnek nincs
+     * használható száma, a jelölő le van tiltva, és megmondja, miért.
+     */
+    private static function sms_jelolo(?object $ugyfel): string
+    {
+        if (!class_exists('SDH_Muhely_Sms') || $ugyfel === null) {
+            return '';
+        }
+
+        if (!SDH_Muhely_Sms::bekapcsolva()) {
+            return '';
+        }
+
+        $jo = '';
+
+        foreach (SDH_Muhely_Sms::ugyfel_szamai((int) $ugyfel->id)['szamok'] as $n) {
+            if (!empty($n['ok'])) {
+                $jo = (string) $n['szam'];
+                break;
+            }
+        }
+
+        return '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-sms value="1"' . ($jo === '' ? ' disabled' : '') . '> '
+            . esc_html($jo !== '' ? 'SMS-ben is: ' . SDH_Muhely_Sms_Felulet::szam_szep($jo) : 'SMS nem megy – az ügyfélnek nincs használható száma')
+            . '</label>';
+    }
+
     /** Napelválasztó felirata a csevegőben: Ma / Tegnap / dátum. */
     private static function nap_felirat(string $nap): string
     {
@@ -1536,6 +1577,11 @@ final class SDH_Muhely_Rma
 
             if ((int) $u->email_kuldve === 1) {
                 $jelek[] = '<span class="sdh-uz__jel" title="E-mailben is elment">e-mail ✓</span>';
+            }
+
+            if ((int) ($u->sms_id ?? 0) > 0 && class_exists('SDH_Muhely_Sms')) {
+                [$sms_felirat, $sms_hiba] = SDH_Muhely_Sms::szal_jelzo((int) $u->sms_id);
+                $jelek[] = '<span class="sdh-uz__jel sdh-uz__jel--sms' . ($sms_hiba ? ' is-hiba' : '') . '" title="SMS-ben is elküldve">' . esc_html($sms_felirat) . '</span>';
             }
 
             // Melyik készülékről szól (több eszközös lap); a lapról már levett eszköznél nincs címke.
@@ -1742,6 +1788,7 @@ final class SDH_Muhely_Rma
                 . '" title="Előre megírt üzenetek: kattintásra a beírómezőbe kerülnek">'
                 . '<svg class="sdh-gomb__ikon" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5.5h12M4 10h12M4 14.5h6.5"/></svg>Gyors szövegek</button>'
                 . '<label class="sdh-uz-urlap__jelolo"><input type="checkbox" data-sdh-uzenet-email value="1"%s%s> %s</label>'
+                . str_replace('%', '%%', self::sms_jelolo($ugyfel))
                 . '<span class="sdh-chat__sugo">Enter: küldés · Shift+Enter: új sor</span></div>'
                 . '<p class="sdh-uz-urlap__hiba" data-sdh-uzenet-hiba hidden></p></div>',
                 $id,
