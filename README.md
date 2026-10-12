@@ -63,6 +63,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.55.2
+- **Javítás: az AI „messages.1.content.3.tool_use.input: Input should be an object” hibát adott.** Ha az AI
+  paraméter nélküli eszközt hívott, a rendszer a második körben az üres bemenetet üres tömbként (`[]`) küldte
+  vissza, az API viszont objektumot (`{}`) vár. Most mindig objektum megy.
+
 ### 0.55.1
 - **Az óra felveszi a stílus színét.** Alapból a Megjelenés kiemelő színét viseli (eddig fix zöld / kék volt).
   Zárás előtt (borostyán) és zárva (szürke) külön színű marad. Beállítások › Nyitvatartás › **Az óra színe**:

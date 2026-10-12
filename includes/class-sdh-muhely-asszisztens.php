@@ -331,6 +331,32 @@ final class SDH_Muhely_Asszisztens
      * @param array<int, array<string, mixed>> $eszkozok
      * @return array<string, mixed>|string A válasz, vagy hibaszöveg.
      */
+    /**
+     * Az AI csak objektumot fogad el a `tool_use` blokk `input` mezőjében. A válasz
+     * tömbbé (assoc) olvasva az üres `{}` üres tömbbé válik, és visszaküldve `[]` lenne –
+     * az API ilyenkor „messages.N.content.M.tool_use.input: Input should be an object”
+     * hibát ad. Ezért az üres bemenetet itt újra objektummá tesszük.
+     *
+     * @param array<int, array<string, mixed>> $uzenetek
+     * @return array<int, array<string, mixed>>
+     */
+    private static function uzenetek_tisztit(array $uzenetek): array
+    {
+        foreach ($uzenetek as $i => $uzenet) {
+            if (!is_array($uzenet['content'] ?? null)) {
+                continue;
+            }
+
+            foreach ($uzenet['content'] as $j => $blokk) {
+                if (is_array($blokk) && ($blokk['type'] ?? '') === 'tool_use' && (!isset($blokk['input']) || $blokk['input'] === [])) {
+                    $uzenetek[$i]['content'][$j]['input'] = new \stdClass();
+                }
+            }
+        }
+
+        return $uzenetek;
+    }
+
     private static function api(array $system, array $uzenetek, array $eszkozok, ?string $modell = null)
     {
         $k = self::kulcs()['kulcs'];
@@ -346,7 +372,7 @@ final class SDH_Muhely_Asszisztens
             // `temperature` szándékosan nincs: az újabb modellek elavultként
             // elutasítják, és a kérés 400-as hibával meghiúsul.
             'system'      => $system,
-            'messages'    => $uzenetek,
+            'messages'    => self::uzenetek_tisztit($uzenetek),
         ];
 
         if ($eszkozok !== []) {

@@ -344,6 +344,10 @@ Nem. A zárkód, a feloldó minta, a jelszavak és az API-kulcsok nem kerülnek 
 
 Nem a tartalmukat. Azt látja, milyen gombok, mezők és lapfülek vannak a képernyőn (a feliratukat), mi a nyitott ablak címe, és van-e látható hibaüzenet – ebből tudja megmutatni, mire kattints.
 
+### Az asszisztens ezt írta: „Input should be an object”. Mi ez?
+
+Ez egy régi hiba volt (0.55.1-ig): amikor az asszisztens paraméter nélküli eszközt használt (például megmutatott valamit a képernyőn), a következő lépésben a rendszer rossz alakban küldte vissza a kérést, és az AI elutasította. A 0.55.2-től nem fordulhat elő. Ha mégis megjelenik, írd le, mit kérdeztél.
+
 ### Túl sokat viccel. Lehet rajta állítani?
 
 Igen. Beállítások › Asszisztens › **Személyiség** › **Humorérzék**. Alacsonyra állítva tárgyszerű, beszólások nélkül.
