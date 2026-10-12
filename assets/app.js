@@ -3450,6 +3450,42 @@
             }).join('');
         }
 
+        // Az Eszközök panel kártyái: eszközönként végösszeg, befizetve, fizetendő (vagy „Fizetve").
+        eszSor.forEach(function (kulcs) {
+            var penzHely = gyoker.querySelector('[data-sdh-eszk-penz="' + kulcs + '"]');
+
+            if (!penzHely) {
+                return;
+            }
+
+            if (eszSor.length < 2) {
+                penzHely.innerHTML = '';
+
+                return;
+            }
+
+            var e = esz[kulcs];
+            var kartya = penzHely.closest('[data-sdh-eszk], [data-sdh-tovabbi]');
+            var brutto = e.tobbi + e.dij - e.levon;
+            var eloleg = kulcs === '0' ? Math.max(0, bevElolegOssz - bevCsatolt - bevKulon) : e.dij + e.kulon;
+            var kifizetve = bontasFizetve || !!(kartya && kartya.getAttribute('data-fizetve') === '1');
+            var hatra = kifizetve ? 0 : brutto - eloleg;
+
+            penzHely.innerHTML = kifizetve
+                ? '<span class="sdh-eszk__fizetve">\u2713 Fizetve' + (eloleg > 0.5 ? ' <b>' + mlPenz(eloleg) + '\u00a0Ft</b>' : '') + '</span>'
+                : '<span>végösszeg <b>' + mlPenz(brutto) + '\u00a0Ft</b></span>' +
+                  (eloleg > 0.5 ? '<span>befizetve <b>' + mlPenz(eloleg) + '\u00a0Ft</b></span>' : '') +
+                  '<span class="' + (hatra > 0.5 ? 'is-hatra' : (hatra < -0.5 ? 'is-negativ' : 'is-nulla')) + '">fizetendő <b>' + mlPenz(hatra) + '\u00a0Ft</b></span>';
+        });
+
+        // A fő eszköz díja: az előlegből adódik (nincs saját mezője).
+        var foDijHely = gyoker.querySelector('[data-sdh-eszk-dij="0"]');
+
+        if (foDijHely) {
+            foDijHely.hidden = !bevJelolo || eszSor.length < 2;
+            foDijHely.innerHTML = 'díj <b>' + mlPenz(esz['0'].dij) + '\u00a0Ft</b> <i>(az előlegből)</i>';
+        }
+
         bevInfo(gyoker, bevPipa, bevEloleg, bevMod, levon, tobbi, bevFo, bevCsatolt);
 
         var hibaDb = 0;
@@ -3508,9 +3544,9 @@
         if (be) {
             var nev = nevMezo && nevMezo.value ? nevMezo.value + ': ' : '';
 
-            // Több díjas eszköznél a bontás: a fő eszköz díja + a csatoltaké.
+            // Több díjas eszköznél: az eszközönkénti díj a kártyákon látszik, itt csak az összeg.
             if (csatoltDij > 0) {
-                nev = 'Díjak összesen (1. eszköz ' + mlPenz(foDij || 0) + '\u00a0Ft + csatolt eszközök ' + mlPenz(csatoltDij) + '\u00a0Ft): ';
+                nev = 'Díjak összesen: ';
             }
 
             if (dij <= 0) {
@@ -3521,7 +3557,11 @@
                 szoveg = nev + mlPenz(dij) + '\u00a0Ft – levonódik a végösszegből: −' + mlPenz(levon) + '\u00a0Ft' +
                     (levon < dij ? ' (a többi tétel összegéig)' : '') + '.';
             } else {
-                szoveg = nev + mlPenz(dij) + '\u00a0Ft – ha lesz javítás, levonódik belőle; addig munkadíj.';
+                szoveg = nev + mlPenz(dij) + '\u00a0Ft – javításnál levonódik, addig munkadíj.';
+            }
+
+            if (csatoltDij > 0) {
+                szoveg += ' Eszközönként: lásd az Eszközök panel kártyáit.';
             }
         }
 
@@ -3831,6 +3871,7 @@
                 // Csak a legutóbbi kérés válasza kerül ki (gyors váltásnál se keveredjen).
                 if (hely.sdhKeres === sorszam) {
                     hely.innerHTML = html;
+                    eszkKartyaFrissit(urlap, hely);
                 }
             })
             .catch(function () { /* az összefoglaló csak tájékoztat: hiba esetén a régi marad */ });
@@ -3947,6 +3988,60 @@
 
             valaszto.value = elemek.some(function (e) { return e[0] === most; }) ? most : '0';
             valaszto.title = valaszto.options[valaszto.selectedIndex] ? valaszto.options[valaszto.selectedIndex].textContent : '';
+        });
+    }
+
+    /**
+     * Az Eszközök panel kártyáinak képe, neve és alcíme az Eszköz lapfül
+     * friss összefoglalójából (data-sdh-eszk-info): eszközcsere és új eszköz után.
+     */
+    function eszkKartyaFrissit(urlap, hely) {
+        var forras = hely ? hely.querySelector('[data-sdh-eszk-info]') : null;
+        var info = {};
+
+        try {
+            info = forras ? JSON.parse(forras.textContent || '{}') || {} : {};
+        } catch (hiba) {
+            info = {};
+        }
+
+        Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-fo-kartya], [data-sdh-tovabbi-lista] [data-sdh-tovabbi]'), function (kartya) {
+            var kulcs = kartya.hasAttribute('data-sdh-fo-kartya') ? '0' : kartya.getAttribute('data-sdh-tovabbi');
+            var adat = info[kulcs];
+            var kepHely = kartya.querySelector('[data-sdh-eszk-kep]');
+            var al = kartya.querySelector('[data-sdh-eszk-al]');
+            var foNev = kartya.querySelector('[data-sdh-fo-nev]');
+
+            if (kulcs === '0') {
+                kartya.classList.toggle('is-ures', !adat);
+
+                if (foNev) {
+                    foNev.textContent = adat ? adat.nev : 'Válassz eszközt a fenti mezőben';
+                }
+            }
+
+            if (al) {
+                al.textContent = adat ? adat.al || '' : '';
+            }
+
+            // A csatolt eszköz neve is a tömör megnevezés legyen (az IMEI az alcímben áll).
+            var tNev = kulcs !== '0' ? kartya.querySelector('[data-sdh-tovabbi-nev]') : null;
+
+            if (tNev && adat && adat.nev) {
+                tNev.textContent = adat.nev;
+            }
+
+            if (kepHely) {
+                var kep = kepHely.querySelector('img');
+                var cim = adat && adat.kep ? adat.kep : '';
+
+                if (!cim) {
+                    kepHely.innerHTML = '<span class="sdh-mockup sdh-mockup--m sdh-mockup--ures" aria-hidden="true"></span>';
+                } else if (!kep || kep.getAttribute('src') !== cim) {
+                    kepHely.innerHTML = '<span class="sdh-mockup sdh-mockup--m"><img alt="" loading="lazy" decoding="async"></span>';
+                    kepHely.querySelector('img').src = cim;
+                }
+            }
         });
     }
 
@@ -5935,6 +6030,7 @@
             eszkozBlokkCsere(id, adat);
             eszkozBlokkJelez(id, 'Elmentve – közös állapot: ' + (adat.nev || ''), 'jo');
             kozosAllapotAzUrlapon(id, adat);
+            kartyaAllapotKesz(valaszto, 'Elmentve – közös állapot: ' + (adat.nev || ''), 'jo');
 
             // A rács, a részletpanel és a csempék ebből tudják, hogy frissíteniük kell.
             document.dispatchEvent(new CustomEvent('sdh:allapot', {
@@ -5944,7 +6040,52 @@
             valaszto.value = elozo;
             valaszto.disabled = false;
             eszkozBlokkJelez(id, uzenet, 'var');
+            kartyaAllapotKesz(valaszto, uzenet, 'var');
         });
+    }
+
+    /**
+     * Az űrlap eszközkártyáján álló választó (azt a szerver válasza nem cseréli):
+     * újra élő, a színe követi az állapotot, és rövid jelzés kerül a kártyára.
+     */
+    function kartyaAllapotKesz(valaszto, szoveg, tipus) {
+        var kartya = valaszto.closest('.sdh-eszk');
+
+        if (!kartya || !document.body.contains(valaszto)) {
+            return;
+        }
+
+        valaszto.disabled = false;
+
+        if (tipus === 'jo') {
+            valaszto.dataset.elozo = valaszto.value;
+
+            var opcio = valaszto.options[valaszto.selectedIndex];
+            var hely = valaszto.closest('[data-sdh-allapot-hely]');
+
+            if (hely && opcio) {
+                hely.className = hely.className.replace(/\bsdh-allapot--(?!valaszthato\b)[a-z0-9_-]+/g, '').trim() + ' sdh-allapot--' + (opcio.getAttribute('data-szin') || 'szurke');
+            }
+        }
+
+        var jel = kartya.querySelector('[data-sdh-eszk-jel]');
+
+        if (!jel) {
+            jel = document.createElement('p');
+            jel.setAttribute('data-sdh-eszk-jel', '');
+            jel.setAttribute('role', 'status');
+            kartya.querySelector('.sdh-eszk__test').appendChild(jel);
+        }
+
+        jel.className = 'sdh-allapot-jel sdh-allapot-jel--' + tipus;
+        jel.textContent = szoveg;
+        window.clearTimeout(jel.sdhIdo);
+
+        if (tipus === 'jo') {
+            jel.sdhIdo = window.setTimeout(function () {
+                jel.remove();
+            }, 3500);
+        }
     }
 
     document.addEventListener('click', function (esemeny) {
@@ -5963,6 +6104,20 @@
             gomb.disabled = true;
 
             eszkozMuvelet('sdh_muhely_munkalapok_eszkoz_fizetve', { id: id, kulcs: gomb.dataset.kulcs || '0' }, function (adat) {
+                // Az űrlap kártyáján: a jelző lekerül, a pénzsor újraszámolódik.
+                var kartya = gomb.closest('.sdh-eszk');
+
+                if (kartya) {
+                    var lapGyoker = kartya.closest('[data-sdh-munkalap]');
+
+                    kartya.setAttribute('data-fizetve', '0');
+                    (gomb.closest('.sdh-eszk__vissza-hely') || gomb).remove();
+
+                    if (lapGyoker) {
+                        munkalapSzamol(lapGyoker);
+                    }
+                }
+
                 eszkozBlokkCsere(id, adat);
                 eszkozBlokkJelez(id, 'A „Fizetve” jelző lekerült az eszközről.', 'jo');
                 document.dispatchEvent(new CustomEvent('sdh:allapot', {

@@ -63,6 +63,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.56.0
+- **Eszközök a lapon: áttekinthető, több eszközös munkalap.** A munkalap jobb oldalán minden eszköz egy kártya:
+  termékkép, név, kategória / IMEI / szín, saját állapot (azonnal mentődik), díj, és az eszköz saját
+  végösszege, befizetett része és fizetendője (vagy „✓ Fizetve”). A bal oldali külön „Eszközönként” blokk, a
+  Fizetés alatti külön bontás és a „További eszközök” címkesor megszűnt – minden egy helyen van.
+- **A 2. (3., …) eszköz is teljes adatlapot kap** az Eszköz lapfülön, képpel – eddig csak egy tömör sor volt.
+- **Termékkép (mockup) minden eszköz mellett:** munkalap, Áttekintés részletpanel (az eszközök kártyasorban az
+  adatok fölött), Eszközök lista. 20 gyári, márkajel nélküli termékfotó (Magnific-kal készült), kategória szerint.
+- **Beállítások › Mockupok:** képek cseréje, feltöltése, törlése, új mockup; szabály gyártóra / típusra
+  (pl. Apple + iPhone); minden képhez generáló szöveg (prompt) másolás gombbal és „Megnyitás a Magnificben”;
+  a beillesztett külső képcím mentéskor a médiatárba töltődik; gyári készlet visszaállítása.
+
 ### 0.55.3
 - **A „Bekerüljön a házipénztárba?” ablak kiírja, mennyi van már a pénztárban.** Eddig csak a hiányzó összeget
   ajánlotta, magyarázat nélkül: két eszköz 10 000 + 10 000 Ft díjánál 12 000 Ft-ot (2 000 + 10 000), mert a fő

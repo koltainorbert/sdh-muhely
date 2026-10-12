@@ -113,7 +113,7 @@ t_ajax('sdh_muhely_penztar_fizet', ['munkalap_id' => $id, 'mod' => 'kp', 'fajta'
 T::egyezik(11000.0, (float) t_lap($id)->fizetett, 'az első eszköz után befolyt: 2 000 díj + 9 000');
 T::egyezik(10000.0, t_bontas($id)[0]['eloleg'], 'ebből a Lenovóra 10 000 Ft');
 T::egyezik(1000.0, t_bontas($id)[$e2]['eloleg'], 'és az iPhone-ra 1 000 Ft (a díja)');
-T::tartalmaz($M::eszkoz_allapot_blokk(t_lap($id)), "befizetve 1\u{00a0}000\u{00a0}Ft · fizetendő 9\u{00a0}000\u{00a0}Ft", 'a blokk mutatja, mennyi folyt be a még nyitott eszközre');
+T::tartalmaz($M::eszkoz_allapot_blokk(t_lap($id)), "befizetve <b>1\u{00a0}000\u{00a0}Ft</b></span><span class=\"is-hatra\">fizetendő <b>9\u{00a0}000\u{00a0}Ft</b>", 'a blokk mutatja, mennyi folyt be a még nyitott eszközre');
 
 t_ajax('sdh_muhely_penztar_fizet', ['munkalap_id' => $id, 'mod' => 'kp', 'fajta' => 'teljes', 'osszeg' => '9000', 'eszkoz' => [$e2], 'kasszaba' => '1']);
 T::egyezik(20000.0, (float) t_lap($id)->fizetett, 'a második eszköz után a Fizetett 20 000 Ft');

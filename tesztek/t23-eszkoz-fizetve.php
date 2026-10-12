@@ -69,7 +69,7 @@ T::igaz(stripos((string) $sor->leiras, 'előleg') === false, 'a teljesen kifizet
 $blokk = $M::eszkoz_allapot_blokk(t_lap($id));
 T::tartalmaz($blokk, 'is-fizetve', 'a blokk jelzi a kifizetett eszközt');
 T::tartalmaz($blokk, 'data-sdh-eszkoz-fizetve-vissza', 'a jelző levehető, amíg a lap nincs egészben fizetve');
-T::tartalmaz($blokk, 'fizetendő 30', 'a blokk mutatja a másik eszköz fizetendőjét');
+T::tartalmaz($blokk, 'fizetendő <b>30', 'a blokk mutatja a másik eszköz fizetendőjét');
 
 $urlap = t_ajax('sdh_muhely_penztarfizetes_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $id])['nyers'];
 T::tartalmaz($urlap, 'class="is-fizetve"', 'a Fizetés ablak jelzi a kifizetett eszközt');

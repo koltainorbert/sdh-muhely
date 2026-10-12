@@ -351,10 +351,8 @@ final class SDH_Muhely_Eszkoz
                         <?php $szerkeszt_url = self::url(['nezet' => 'szerkeszt', 'id' => (int) $sor->id]); ?>
                         <tr>
                             <td>
-                                <?php if ($sor->kep_url !== '') : ?>
-                                    <img class="sdh-tabla__kep"
-                                         src="<?php echo esc_url($sor->kep_url); ?>" alt="" loading="lazy">
-                                <?php endif; ?>
+                                <?php // A sor képe: a mockup (Beállítások › Mockupok), vagy az eszköz saját fényképe. ?>
+                                <?php echo class_exists('SDH_Muhely_Mockup') ? SDH_Muhely_Mockup::html($sor, 's') : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
                             </td>
                             <td class="sdh-tabla__nev">
                                 <a href="<?php echo esc_url($szerkeszt_url); ?>"

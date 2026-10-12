@@ -67,7 +67,7 @@ Tudnivalók:
 
 - Az ügyfelet a listából kell kiválasztani – a begépelt név önmagában nem elég.
 - Az eszközlista csak a kiválasztott ügyfél készülékeit mutatja. Előbb ügyfelet válassz.
-- Az **Eszköz** lapfülön kártyán látod az eszköz adatait (azonosító, gyártó, típus, szín, garancia, IMEI szám, sorozatszám, tartozékok) és az ügyfél adatait (név, cím, telefonszám, e-mail). Minden adat mellett másoló gomb van, a kártyák fejlécében **Szerkesztés**.
+- Az **Eszköz** lapfülön minden eszköz saját adatlapot kap, a termékképével: azonosító, gyártó, típus, szín, garancia, IMEI szám, sorozatszám, tartozékok. A második, harmadik eszköz is ugyanilyen teljes adatlapot kap. Alattuk az ügyfél adatai (név, cím, telefonszám, e-mail). Minden adat mellett másoló gomb van, a kártyák fejlécében **Szerkesztés**.
 
 ## Állapotok és a munkalapszám
 
@@ -164,20 +164,31 @@ Ha az ügyfél egyszerre több készüléket ad le, nem kell külön munkalap. A
 
 ### Lépésről lépésre: második eszköz felvétele
 
-1. A munkalapon, a **További eszközök** sorban kattints az **Eszköz csatolása** gombra.
+1. A munkalapon, az **Eszközök a lapon** panel jobb felső sarkában kattints az **Eszköz csatolása** gombra.
 2. Válassz az ügyfél készülékei közül. Ha a készülék még nincs felvéve: **Új eszköz felvitele**.
-3. Az eszköz címkeként megjelenik a További eszközök sorban.
+3. Az eszköz új kártyaként megjelenik a panelen, a fő eszköz mellett.
 
-A címkén: az eszköz neve, a **díj** mező (az eszköz saját bevizsgálási díja), a **ceruza** (szerkesztés) és az **×** (levétel a munkalapról – az eszköz az ügyfélnél megmarad).
+### Az Eszközök a lapon panel
+
+A munkalap jobb oldalán, az Ügyfél és az Eszköz mező alatt áll. Minden eszköz egy kártya, sorszámmal (1, 2, 3…); az első mindig a **fő eszköz**. Egy kártyán minden ott van, ami ahhoz az eszközhöz tartozik:
+
+- **Kép** – a készülék termékképe (mockup) a kategóriája szerint; lásd [Mockupok](sugo:eszkozok).
+- **Név és alcím** – gyártó, típus; alatta a kategória, az IMEI (vagy a sorozatszám) és a szín.
+- **Állapot** – az eszköz saját állapotválasztója; a váltás azonnal mentődik. Új, még nem mentett eszköznél: *állapot: mentés után*.
+- **díj** – a csatolt eszköz saját bevizsgálási díja (a mellette lévő gombbal a díjlistából is választható). A fő eszköz díja az előlegből adódik: *díj … Ft (az előlegből)*.
+- **végösszeg · befizetve · fizetendő** – az eszköz saját összegei. Ha az eszköz ki van fizetve: *✓ Fizetve*.
+- **Ceruza** és **×** – szerkesztés, illetve levétel a munkalapról (az eszköz az ügyfélnél megmarad).
+
+A panel fejléce kiírja, melyik eszköz kész, például: *1 / 2 kész: 2. …*
 
 ### Mi külön eszközönként?
 
 - **Hibák** – minden hibasorban megadod, melyik eszközé.
 - **Tételek** – minden szolgáltatás- és terméksorban megadod, melyik eszközé. Az új sor az előző sor eszközét örökli.
-- **Állapot** – a bal oldali **Eszközönként** részben minden eszköznek saját állapotválasztója van; a váltás azonnal mentődik.
+- **Állapot** – minden eszköz kártyáján saját állapotválasztó van; a váltás azonnal mentődik.
 - **Fizetve** – ha a Fizetés ablakban csak az egyik eszközt fizetik ki, az az eszköz *Fizetve* lesz, a lap nyitva marad.
 - **Bevizsgálási díj** – eszközönként külön díj, a saját tételeiből levonva.
-- **Összeg** – a bal oldalon eszközönként látod a végösszeget és a fizetendőt.
+- **Összeg** – az eszköz kártyáján látod a végösszeget, a befizetett részt és a fizetendőt.
 - **Címke** – eszközönként egy készül (1/2, 2/2).
 
 ### A közös állapot

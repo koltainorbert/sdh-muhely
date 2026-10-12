@@ -3,8 +3,8 @@ kulcs: eszkozok
 cim: Eszközök
 csoport: Napi munka
 modul: eszkozok
-szakaszok: imei, tac
-kulcsszavak: eszköz, készülék, telefon, tablet, laptop, IMEI, gyári szám, sorozatszám, típus, gyártó, TAC, típusfelismerés, IMEI-lekérdezés, zárkód, PIN, feloldó minta, tartozék, garancia, készülékkép, átvételkori állapot, előélet
+szakaszok: imei, mockupok, tac
+kulcsszavak: eszköz, készülék, mockup, termékkép, készülékkép, kép, Magnific, prompt, telefon, tablet, laptop, IMEI, gyári szám, sorozatszám, típus, gyártó, TAC, típusfelismerés, IMEI-lekérdezés, zárkód, PIN, feloldó minta, tartozék, garancia, készülékkép, átvételkori állapot, előélet
 osszefoglalo: Az Eszközök menüpontban az ügyfelek készülékeit tartod nyilván IMEI-vel, gyári számmal, zárkóddal és átvételi állapottal; a munkalap mindig egy eszközre hivatkozik.
 ---
 
@@ -131,7 +131,7 @@ Ide érdemes feltölteni az átvételkor készült fotókat. A lapfülön szám 
 
 | Oszlop | Mit mutat |
 |---|---|
-| (kép) | A készülék kis képe, ha van |
+| (kép) | A készülék termékképe (mockup) – lásd a Mockupok lapfület |
 | Készülék (gyári szám) | Gyártó és gyári szám; alatta halványan a kereskedelmi név és a szín |
 | Ügyfél | A tulajdonos; a névre kattintva az ügyfél adatlapja nyílik |
 | IMEI / sorozatszám | Az IMEI; ha nincs, a sorozatszám |
@@ -179,6 +179,51 @@ Az **Oldalak** mezőben soronként egy ellenőrző oldal áll, ebben a formában
 
 A lapfül alján a **Mentés** gombbal mentesz; ez csak ennek a lapfülnek az adatait menti.
 
+## Mockupok: termékkép minden eszköz mellett
+
+Minden eszköz mellett termékkép (mockup) áll: a munkalap **Eszközök a lapon** paneljén és **Eszköz** lapfülén, az Áttekintés részletpanelén és az **Eszközök** listában. A kép a készülék **kategóriájából** adódik (telefon, tablet, laptop, okosóra…). A rendszer 20 gyári, márkajel nélküli termékfotóval érkezik, egységes stúdióstílusban.
+
+Melyik kép jelenik meg:
+
+1. Ha egy mockupnál megadtál **gyártót** vagy **típusrészletet**, és az eszköz illik rá, az nyer (például gyártó *Apple*, típus *iPhone* → saját iPhone-kép).
+2. Különben az eszköz saját fényképe, ha van (IMEI-lekérdezésből vagy feltöltve).
+3. Különben a kategória mockupja.
+4. Ha egyik sincs: a tartalék kép (az *Egyéb eszköz* – amelyiknek se kategóriája, se szabálya nincs).
+
+## Beállítások: Mockupok lapfül
+
+A Beállítások *Készülékadatok* csoportjában a **Mockupok** lapfülön szerkeszted a termékképeket. Csak adminisztrátor látja.
+
+### Generáló szöveg (prompt) sablonja doboz
+
+A **Sablon** mező adja az egységes stílust (fehér háttér, stúdiófény, márkajel nélkül). A `{eszkoz}` helyére kerül a mockup leírása. Üresen hagyva a gyári sablon áll vissza.
+
+### Mockupok doboz
+
+Minden mockup egy sor:
+
+| Mező | Mire való |
+|---|---|
+| **Kép** | Az előnézet alatt a kép címe. **Feltöltés…** – kép a gépről; **Kép törlése** – kép nélkül a sor nem jelenik meg az eszközöknél. Ide beilleszthetsz külső képcímet is (például a Magnificből kimásolt linket): mentéskor a rendszer letölti a saját médiatárába, így akkor is megmarad, ha a külső link lejár. |
+| **Név** | A mockup neve, például *Telefon*. |
+| **Gyártó (nem kötelező)** | Csak ennek a gyártónak az eszközeire illik. |
+| **Típus tartalmazza (nem kötelező)** | Vesszővel több részlet is megadható, például *iPhone, Galaxy S*. |
+| **Kategóriák** | Mely kategóriák eszközeinél jelenjen meg. Ctrl / Cmd lenyomva több is választható. |
+| **Leírás a generáló szöveghez (angolul)** | A kép tárgya angolul, például *modern smartphone with thin bezels*. |
+| **Generáló szöveg (prompt)** | Lenyitva a kész szöveg. **Másolás** – a vágólapra; **Megnyitás a Magnificben** – új lapon nyílik. |
+| **×** | A sor törlése (két kattintás: *Biztosan?*). A mentéskor kerül le. |
+
+Az **Új mockup** gombbal új sor kerül a lista végére. A **Gyári készlet visszaállítása mentéskor** pipával a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek a médiatárban maradnak).
+
+### Lépésről lépésre: új mockup a Magnific segítségével
+
+1. A Mockupok lapfülön kattints az **Új mockup** gombra, és írd be a **Nevet**, a **Kategóriát** (vagy a gyártót / típust) és az angol **Leírást**.
+2. Nyisd le a **Generáló szöveget**, és kattints a **Másolás** gombra.
+3. A **Megnyitás a Magnificben** gombbal nyisd meg a Magnificet, és generálj képet a szöveggel.
+4. A kész képen használd a háttér eltávolítását (*Remove background*), hogy átlátszó legyen.
+5. Töltsd le, és a sorban a **Feltöltés…** gombbal töltsd fel – vagy másold be a kép címét a képmezőbe.
+6. Kattints a **Mentés** gombra.
+
 ## Beállítások: TAC adatbázis lapfül
 
 A Beállítások *Készülékadatok* csoportjának másik lapfüle a **TAC adatbázis**. Ez a típusfelismerés háttere: az IMEI első nyolc számjegyéből mondja meg a gyártót és a típust.
@@ -224,6 +269,18 @@ Az újabb készülékeket a rendszer magától tanulja meg: amikor egy ismeretle
 - **A ceruza szürke a munkalapon.** Nincs kiválasztott eszköz. Előbb válassz ügyfelet, utána eszközt.
 
 ## GYIK
+
+### Honnan jön a kép az eszköz mellett?
+
+A Beállítások **Mockupok** lapfüléről: a rendszer a készülék kategóriája (vagy egy gyártó / típus szabály) szerint választ termékképet. Ha az eszköznek saját fényképe van, a kategóriaképnél az áll előrébb.
+
+### Hogyan cserélem le egy kategória képét?
+
+Beállítások › **Mockupok**: a kategória sorában **Feltöltés…**, majd **Mentés**. Ugyanilyen stílusú képhez másold ki a sor generáló szövegét, és készítsd el a Magnificben.
+
+### Miért nem látszik kép egy eszköz mellett?
+
+Nincs a kategóriájához mockup, és tartalék kép sincs (törölted az *Egyéb eszköz* sort vagy a képét). Vegyél fel egy mockupot kategória nélkül, vagy állítsd vissza a gyári készletet.
 
 ### Hogyan veszek fel új készüléket?
 

@@ -406,4 +406,117 @@
             });
         }
     });
+    /* ---------------------------------------------------------------- */
+    /* Mockupok: új sor, törlés, generáló szöveg (0.56.0)               */
+    /* ---------------------------------------------------------------- */
+
+    var mockupLista = gyoker.querySelector('[data-sdh-mockup-lista]');
+
+    if (mockupLista) {
+        var mockupSablonMezo = gyoker.querySelector('[data-sdh-mockup-sablon]');
+        var mockupSorSablon = gyoker.querySelector('[data-sdh-mockup-sablon-sor]');
+        var mockupSzam = mockupLista.querySelectorAll('[data-sdh-mockup-sor]').length + 1000;
+
+        var mockupPrompt = function (sor) {
+            var leiras = sor.querySelector('[data-sdh-mockup-leiras]');
+            var nev = sor.querySelector('input[name$="[nev]"]');
+            var cel = sor.querySelector('[data-sdh-mockup-prompt]');
+            var targy = (leiras && leiras.value.trim()) || (nev && nev.value.trim().toLowerCase()) || 'device';
+            var sablon = (mockupSablonMezo && mockupSablonMezo.value.trim()) || '{eszkoz}';
+
+            if (cel) {
+                cel.value = sablon.split('{eszkoz}').join(targy);
+            }
+        };
+
+        var mockupValtozott = function () {
+            piszkos = true;
+        };
+
+        gyoker.addEventListener('click', function (esemeny) {
+            var cel = esemeny.target;
+            var uj = cel.closest ? cel.closest('[data-sdh-mockup-uj]') : null;
+            var torol = cel.closest ? cel.closest('[data-sdh-mockup-torol]') : null;
+            var masol = cel.closest ? cel.closest('[data-sdh-mockup-masol]') : null;
+
+            if (uj && mockupSorSablon) {
+                esemeny.preventDefault();
+                mockupSzam += 1;
+
+                var tarto = document.createElement('div');
+
+                tarto.innerHTML = mockupSorSablon.innerHTML.split('__I__').join(String(mockupSzam));
+
+                var sor = tarto.querySelector('[data-sdh-mockup-sor]');
+
+                if (sor) {
+                    mockupLista.appendChild(sor);
+                    sor.querySelector('input[name$="[nev]"]').focus();
+                    mockupValtozott();
+                }
+
+                return;
+            }
+
+            if (torol) {
+                esemeny.preventDefault();
+
+                // Kétlépcsős: az első kattintás megerősítést kér, a második töröl.
+                if (!torol.classList.contains('is-biztos')) {
+                    torol.classList.add('is-biztos');
+                    torol.textContent = 'Biztosan?';
+                    window.setTimeout(function () {
+                        torol.classList.remove('is-biztos');
+                        torol.innerHTML = '&times;';
+                    }, 4000);
+
+                    return;
+                }
+
+                torol.closest('[data-sdh-mockup-sor]').remove();
+                mockupValtozott();
+                jelez('A mockup lekerül a listáról, ha mented a lapfület.', 'info');
+
+                return;
+            }
+
+            if (masol) {
+                esemeny.preventDefault();
+
+                var mezo = masol.closest('[data-sdh-mockup-sor]').querySelector('[data-sdh-mockup-prompt]');
+                var kesz = function () {
+                    masol.textContent = 'Kimásolva ✓';
+                    window.setTimeout(function () { masol.textContent = 'Másolás'; }, 2000);
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(mezo.value).then(kesz, function () {
+                        mezo.select();
+                        document.execCommand('copy');
+                        kesz();
+                    });
+                } else {
+                    mezo.select();
+                    document.execCommand('copy');
+                    kesz();
+                }
+            }
+        });
+
+        gyoker.addEventListener('input', function (esemeny) {
+            var mezo = esemeny.target;
+
+            if (mezo === mockupSablonMezo) {
+                Array.prototype.forEach.call(mockupLista.querySelectorAll('[data-sdh-mockup-sor]'), mockupPrompt);
+
+                return;
+            }
+
+            var sor = mezo.closest ? mezo.closest('[data-sdh-mockup-sor]') : null;
+
+            if (sor && (mezo.hasAttribute('data-sdh-mockup-leiras') || /\[nev\]$/.test(mezo.name || ''))) {
+                mockupPrompt(sor);
+            }
+        });
+    }
 }());

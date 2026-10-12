@@ -1700,30 +1700,27 @@ final class SDH_Muhely_Racs
         );
 
         echo '<div class="sdh-reszlet__tartalom">';
-        echo '<dl class="sdh-adatlista" data-sdh-alpanel="adatok">';
 
-        self::adatsor('Állapot', SDH_Muhely_Munkalap::jelveny((string) $munkalap->allapot, $allapotok));
-
-        // Több eszköznél: eszközönként saját állapot (itt is állítható) és a fizetés állása.
+        // Több eszköznél: az eszközök kártyasorban, az adatok fölött – képpel, saját állapottal
+        // (itt is állítható) és eszközönkénti összeggel.
         if (count($bontas) > 1) {
-            // Nem adatsor(): ide nem kell másoló gomb, a blokk maga a kezelő.
             printf(
-                '<div class="sdh-adatlista__sor sdh-adatlista__sor--eszall"><dt>Eszközönként:</dt><dd>%s</dd></div>',
+                '<div class="sdh-reszlet__eszkozok" data-sdh-alpanel="adatok">%s</div>',
                 SDH_Muhely_Munkalap::eszkoz_allapot_blokk($munkalap) // phpcs:ignore WordPress.Security.EscapeOutput -- a blokk már szűrt HTML.
             );
         }
 
-        self::adatsor(
-            'Eszköz',
-            $eszkoz
-                ? esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz))
-                : ''
-        );
+        echo '<dl class="sdh-adatlista" data-sdh-alpanel="adatok">';
 
-        foreach ($tovabbi as $i => $egy) {
+        self::adatsor('Állapot', SDH_Muhely_Munkalap::jelveny((string) $munkalap->allapot, $allapotok));
+
+        // Egy eszköznél: kép + név; többnél a fenti blokk mutatja az eszközöket (képpel, állapottal, összeggel).
+        if (count($bontas) <= 1) {
             self::adatsor(
-                ($i + 2) . '. eszköz',
-                esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $egy->kategoria) . ' – ' . SDH_Muhely_Munkalap::eszkoz_felirat($egy))
+                'Eszköz',
+                $eszkoz
+                    ? SDH_Muhely_Mockup::html($eszkoz, 's', 'sdh-adatlista__kep') . esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria) . ' – ' . SDH_Muhely_Eszkoz::megnevezes($eszkoz))
+                    : ''
             );
         }
         self::adatsor('Ügyfélnév', $ugyfel ? esc_html((string) $ugyfel->nev) : '');
@@ -1756,19 +1753,7 @@ final class SDH_Muhely_Racs
         self::adatsor('Fizetett (előleg)', esc_html(self::penz($fizetett) . ' Ft'));
         self::adatsor('Fizetendő', esc_html(self::penz($fizetendo) . ' Ft'));
 
-        // Több eszköznél: készülékenként külön a végösszeg, az előleg és a fizetendő.
-        if (count($bontas) > 1) {
-            foreach ($bontas as $b) {
-                self::adatsor(
-                    $b['sorszam'] . '. eszköz összege',
-                    esc_html(
-                        $b['nev'] . ': ' . self::penz((float) $b['brutto']) . ' Ft'
-                        . ((float) $b['eloleg'] > 0 ? ' · előleg ' . self::penz((float) $b['eloleg']) . ' Ft' : '')
-                        . ' · fizetendő ' . self::penz((float) $b['fizetendo']) . ' Ft'
-                    )
-                );
-            }
-        }
+        // Több eszköznél az eszközönkénti összeg a fenti Eszközönként blokkban áll.
         self::adatsor(
             'Hibák',
             $hibak !== [] ? esc_html($kesz . ' / ' . count($hibak) . ' kész') : ''
@@ -1834,7 +1819,8 @@ final class SDH_Muhely_Racs
 
         foreach ($eszkozok as $i => $eszkoz) {
             printf(
-                '<h4 class="sdh-reszlet__eszkozfej">%d. eszköz <span>%s</span></h4>',
+                '<h4 class="sdh-reszlet__eszkozfej">%s%d. eszköz <span>%s</span></h4>',
+                SDH_Muhely_Mockup::html($eszkoz, 's'), // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
                 (int) ($i + 1),
                 esc_html(SDH_Muhely_Munkalap::eszkoz_felirat($eszkoz))
             );
@@ -1875,6 +1861,7 @@ final class SDH_Muhely_Racs
         );
 
         echo '<div class="sdh-reszlet__tartalom">';
+        echo '<div class="sdh-reszlet__eszkozkep" data-sdh-alpanel="adatok">' . SDH_Muhely_Mockup::html($eszkoz, 'l') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
         echo '<dl class="sdh-adatlista" data-sdh-alpanel="adatok">';
 
         self::adatsor('Azonosító', esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria)));

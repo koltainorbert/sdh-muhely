@@ -202,6 +202,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A fizetős IMEI-szolgáltató végpontja és kulcsa, és az ingyenes ellenőrző oldalak gombjai.',
                 'rajz' => [self::class, 'imei_doboz'], 'ment' => [self::class, 'imei_mentes'],
             ],
+            'mockupok' => [
+                'cim' => 'Mockupok', 'csoport' => 'eszkozok',
+                'leiras' => 'Az eszközök mellett álló termékképek: kategória, gyártó és típus szerint; feltöltés, csere, törlés, generáló szöveg.',
+                'rajz' => [SDH_Muhely_Mockup::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Mockup::class, 'beallitas_mentes'],
+            ],
             'tac' => [
                 'cim' => 'TAC adatbázis', 'csoport' => 'eszkozok',
                 'leiras' => 'Az IMEI elejéből ez mondja meg a gyártót és a típust: állapot, betöltés.',

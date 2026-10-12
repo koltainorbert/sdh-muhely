@@ -41,7 +41,8 @@ $urlap = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal
 
 T::igaz(strlen($urlap) > 5000, 'a több eszközös űrlap kirajzolódik');
 T::tartalmaz($urlap, 'Közös állapot', 'több eszköznél a lap állapota „Közös állapot”');
-T::tartalmaz($urlap, 'data-sdh-eszkoz-allapotok="' . $id . '"', 'az űrlapon ott az eszközönkénti blokk');
+// 0.56.0: az űrlapon az eszközönkénti állapot az Eszközök panel kártyáin áll (egy választó eszközönként).
+T::egyezik(2, substr_count($urlap, 'data-sdh-eszkoz-allapot data-id="' . $id . '"'), 'az űrlapon minden eszköz kártyáján ott az állapotválasztó');
 T::egyezik(2, substr_count($urlap, 'data-sdh-eszkoz-allapot '), 'eszközönként egy állapotválasztó');
 T::igaz(preg_match('/<select name="allapot".*?<\/select>/s', $urlap, $m) === 1, 'megvan a lap állapotválasztója');
 T::nem_tartalmaz($m[0] ?? '', 'value="' . $reszben . '"', 'a részben nem választható kézzel, amíg nem az a lap állapota');
@@ -54,14 +55,14 @@ T::tartalmaz($urlap, '1 / 2 kész: 2. Huawei P30', 'az űrlapon látszik, melyik
 
 $urlap1 = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $egy])['nyers'];
 T::igaz(strlen($urlap1) > 5000, 'az egy eszközös űrlap kirajzolódik');
-T::nem_tartalmaz($urlap1, 'data-sdh-eszkoz-allapotok', 'egy eszköznél nincs eszközönkénti blokk');
+T::nem_tartalmaz($urlap1, 'data-sdh-eszkoz-allapot ', 'egy eszköznél nincs eszközönkénti állapotválasztó');
 T::nem_tartalmaz($urlap1, 'Közös állapot', 'egy eszköznél a felirat „Állapot”');
 preg_match('/<select name="allapot".*?<\/select>/s', $urlap1, $m1);
 T::tartalmaz($m1[0] ?? '', 'value="' . $reszben . '"', 'egy eszköznél a részben kézzel választható');
 
 $uj = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', [])['nyers'];
 T::igaz(strlen($uj) > 5000, 'az új munkalap űrlapja kirajzolódik');
-T::nem_tartalmaz($uj, 'data-sdh-eszkoz-allapotok', 'új lapon nincs eszközönkénti blokk');
+T::nem_tartalmaz($uj, 'data-sdh-eszkoz-allapot ', 'új lapon nincs eszközönkénti állapotválasztó');
 
 /* --- Rács ---------------------------------------------------------------- */
 
@@ -90,7 +91,7 @@ T::igaz(in_array($id, array_map(static fn ($s) => (int) $s['id'], (array) ($r['d
 $r = t_ajax('sdh_muhely_racs_reszlet', ['id' => $id]);
 $panel = wp_json_encode($r['data'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 T::igaz(!empty($r['success']), 'a részletpanel betölt');
-T::tartalmaz((string) $panel, 'sdh-adatlista__sor--eszall', 'a részletpanelen ott az eszközönkénti blokk');
+T::tartalmaz((string) $panel, 'sdh-reszlet__eszkozok', 'a részletpanelen ott az eszközönkénti blokk (kártyasor az adatok fölött)');
 T::tartalmaz((string) $panel, 'data-sdh-eszkoz-allapot ', 'a részletpanelről is állítható az eszköz állapota');
 
 $r = t_ajax('sdh_muhely_racs_reszlet', ['id' => $egy]);

@@ -2758,31 +2758,7 @@ final class SDH_Muhely_Munkalap
         $html      = '<div class="sdh-eszall" data-sdh-eszkoz-allapotok="' . $id . '">';
 
         foreach ($bontas as $b) {
-            $kulcs = (string) $b['allapot'];
-            $szin  = $allapotok[$kulcs]['szin'] ?? 'szurke';
-            $opciok = '';
-
-            if (!isset($allapotok[$kulcs])) {
-                $opciok .= '<option value="' . esc_attr($kulcs) . '" selected>' . esc_html($kulcs) . '</option>';
-            }
-
-            foreach ($allapotok as $k => $a) {
-                // A „Részben elkészült" a lap közös állapota, eszköznek nem adható.
-                if (!empty($a['reszben'])) {
-                    continue;
-                }
-
-                $opciok .= sprintf(
-                    '<option value="%s" data-szin="%s"%s>%s</option>',
-                    esc_attr((string) $k),
-                    esc_attr((string) $a['szin']),
-                    selected($kulcs, (string) $k, false),
-                    esc_html((string) $a['nev'])
-                );
-            }
-
-            $ft       = static fn (float $o): string => esc_html(number_format($o, 0, ',', "\u{00a0}")) . "\u{00a0}Ft";
-            $befolyt = (float) $b['eloleg'] > 0.5 ? 'befizetve ' . $ft((float) $b['eloleg']) . ' · ' : '';
+            $ft = static fn (float $o): string => esc_html(number_format($o, 0, ',', "\u{00a0}")) . "\u{00a0}Ft";
 
             if ($b['fizetve']) {
                 $penz = '<span class="sdh-eszall__penz is-fizetve">Fizetve'
@@ -2796,26 +2772,23 @@ final class SDH_Muhely_Munkalap
                         esc_attr((string) $b['felirat'])
                     ))
                     . '</span>';
-            } elseif ((float) $b['fizetendo'] > 0.5) {
-                $penz = '<span class="sdh-eszall__penz">' . $befolyt . 'fizetendő ' . $ft((float) $b['fizetendo']) . '</span>';
             } else {
-                $penz = '<span class="sdh-eszall__penz">' . $befolyt . 'nincs fizetendő</span>';
+                // Végösszeg, ami befolyt, és ami még hátravan – egy sorban, tagolva.
+                $penz = '<span class="sdh-eszall__penz"><span>végösszeg <b>' . $ft((float) $b['brutto']) . '</b></span>'
+                    . ((float) $b['eloleg'] > 0.5 ? '<span>befizetve <b>' . $ft((float) $b['eloleg']) . '</b></span>' : '')
+                    . '<span' . ((float) $b['fizetendo'] > 0.5 ? ' class="is-hatra"' : '') . '>fizetendő <b>' . $ft(max(0.0, (float) $b['fizetendo'])) . '</b></span></span>';
             }
 
             $html .= sprintf(
-                '<div class="sdh-eszall__sor%s" data-kulcs="%d"><span class="sdh-eszall__nev" title="%s">%s</span>'
-                . '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--%s" data-sdh-allapot-hely>'
-                . '<select data-sdh-eszkoz-allapot data-id="%d" data-kulcs="%d" data-elozo="%s" aria-label="%s">%s</select></span>%s</div>',
+                '<div class="sdh-eszall__sor%s" data-kulcs="%d">%s<span class="sdh-eszall__szoveg"><span class="sdh-eszall__nev" title="%s">%s</span>'
+                . '<span class="sdh-eszall__al">%s</span></span>%s%s</div>',
                 $b['kesz'] ? ' is-kesz' : '',
                 (int) $b['eszkoz_id'],
+                SDH_Muhely_Mockup::html($b['eszkoz'], 's', 'sdh-eszall__kep'),
                 esc_attr((string) $b['felirat']),
                 esc_html((string) $b['felirat']),
-                esc_attr((string) $szin),
-                $id,
-                (int) $b['eszkoz_id'],
-                esc_attr($kulcs),
-                esc_attr($b['felirat'] . ' állapota'),
-                $opciok,
+                esc_html(self::kartya_alcim($b['eszkoz'])),
+                self::eszkoz_allapot_valaszto($id, $b, $allapotok),
                 $penz
             );
         }
@@ -3241,6 +3214,16 @@ final class SDH_Muhely_Munkalap
             $tovabbi_dij[(int) $reszlet->eszkoz_id] = $reszlet;
         }
 
+        // Eszközönkénti állapot, előleg, „fizetve" (kulcs: 0 = fő eszköz) – az eszközkártyákhoz.
+        $kartya_bontas = [];
+
+        foreach ($uj ? [] : self::eszkoz_bontas($munkalap) as $kb) {
+            $kartya_bontas[(int) $kb['eszkoz_id']] = $kb;
+        }
+
+        $kartya_tobb = count($kartya_bontas) > 1;
+        $fo_eszkoz   = $eszkoz_id > 0 ? (self::eszkoz_sorok([$eszkoz_id])[0] ?? null) : null;
+
         // A hibasorok eszközválasztója: 0 = a fő eszköz, utána a csatoltak.
         $hiba_eszkozok = [0 => '1. ' . ($eszkozok[$eszkoz_id] ?? 'fő eszköz')];
 
@@ -3328,13 +3311,7 @@ final class SDH_Muhely_Munkalap
                             </div>
                         </div>
 
-                        <?php if ($eszall !== '') : ?>
-                            <?php // Eszközönként saját állapot és a fizetés állása; a váltás azonnal mentődik (app.js: eszkozAllapotValt). ?>
-                            <div class="sdh-ml__eszall">
-                                <span class="sdh-ml__eszall-cim">Eszközönként</span>
-                                <?php echo $eszall; // phpcs:ignore WordPress.Security.EscapeOutput -- a blokk már szűrt HTML. ?>
-                            </div>
-                        <?php endif; ?>
+                        <?php // Több eszköznél az eszközönkénti állapot az Eszközök panel kártyáin áll (jobbra fent). ?>
 
                         <div class="sdh-ig">
                             <label for="nev">Név</label>
@@ -3501,8 +3478,7 @@ final class SDH_Muhely_Munkalap
                             <span>Fizetendő</span><output data-sdh-ossz="fizetendo">0</output><span>Ft</span>
                         </div>
 
-                        <?php // Több eszköznél: eszközönként a végösszeg és a fizetendő (app.js: munkalapSzamol). ?>
-                        <div class="sdh-ml__bontas" data-sdh-eszkoz-bontas aria-live="polite" hidden></div>
+                        <?php // Több eszköznél az eszközönkénti végösszeg és fizetendő az eszközkártyákon áll (app.js: munkalapSzamol). ?>
                     </div>
                 </div>
 
@@ -3584,22 +3560,39 @@ final class SDH_Muhely_Munkalap
                         </div>
                     <?php endif; ?>
 
-                    <div class="sdh-ml-eszkozok" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?>>
+                    <?php
+                    // Eszközök panel: minden eszköz egy kártya – kép, név, saját állapot, díj és pénz.
+                    // A csatolt eszközök kártyái a régi címkék helyén élnek (app.js: tovabbi*),
+                    // így a díjmezők, a levétel és az új eszköz felvétele változatlanul működik.
+                    ?>
+                    <div class="sdh-ml-eszkozok sdh-eszp" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?>>
                         <input type="hidden" name="eszkozok_jelen" value="<?php echo $eladas ? '' : '1'; ?>">
-                        <span class="sdh-ml-eszkozok__cimke">További eszközök</span>
-                        <div class="sdh-ml-eszkozok__lista" data-sdh-tovabbi-lista>
-                            <?php foreach ($tovabbi as $t_eszkoz) : ?>
-                                <?php self::tovabbi_cimke((string) (int) $t_eszkoz->id, self::eszkoz_felirat($t_eszkoz), $tovabbi_dij[(int) $t_eszkoz->id] ?? null); ?>
-                            <?php endforeach; ?>
-                            <span class="sdh-ml-eszkozok__ures" data-sdh-tovabbi-ures<?php echo $tovabbi !== [] ? ' hidden' : ''; ?>>
-                                nincs – egy munkalapra akárhány eszköz felvehető
-                            </span>
+                        <div class="sdh-eszp__fej">
+                            <span class="sdh-eszp__cim">Eszközök a lapon</span>
+                            <?php if ($kartya_tobb) : ?>
+                                <span class="sdh-eszp__kesz"><?php echo esc_html(self::kesz_szoveg(array_values($kartya_bontas))); ?></span>
+                            <?php endif; ?>
+                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ml-eszkozok__gomb" data-sdh-tovabbi-uj
+                                    title="Még egy eszköz erre a munkalapra: az ügyfél meglévő készülékei közül, vagy új felvitelével">
+                                <span class="sdh-plusz" aria-hidden="true"></span>Eszköz csatolása
+                            </button>
+                        </div>
+                        <div class="sdh-eszp__racs">
+                            <?php
+                            if (!$eladas) {
+                                self::fo_kartya($uj ? 0 : (int) $munkalap->id, $fo_eszkoz, $kartya_bontas[0] ?? null, $kartya_tobb, $uj ? false : (int) $munkalap->fizetve === 1);
+                            }
+                            ?>
+                            <div class="sdh-ml-eszkozok__lista sdh-eszp__lista" data-sdh-tovabbi-lista>
+                                <?php foreach ($tovabbi as $t_eszkoz) : ?>
+                                    <?php self::tovabbi_cimke((string) (int) $t_eszkoz->id, self::eszkoz_felirat($t_eszkoz), $tovabbi_dij[(int) $t_eszkoz->id] ?? null, $t_eszkoz, $kartya_bontas[(int) $t_eszkoz->id] ?? null, $uj ? 0 : (int) $munkalap->id, $kartya_tobb, $uj ? false : (int) $munkalap->fizetve === 1); ?>
+                                <?php endforeach; ?>
+                                <span class="sdh-ml-eszkozok__ures" data-sdh-tovabbi-ures<?php echo $tovabbi !== [] ? ' hidden' : ''; ?>>
+                                    Egy munkalapra akárhány eszköz felvehető – a további eszközök itt jelennek meg.
+                                </span>
+                            </div>
                         </div>
                         <template data-sdh-tovabbi-sablon><?php self::tovabbi_cimke('__ID__', '', null); ?></template>
-                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ml-eszkozok__gomb" data-sdh-tovabbi-uj
-                                title="Még egy eszköz erre a munkalapra: az ügyfél meglévő készülékei közül, vagy új felvitelével">
-                            <span class="sdh-plusz" aria-hidden="true"></span>Eszköz csatolása
-                        </button>
                     </div>
 
                     <div class="sdh-fulek sdh-ml__fulek">
@@ -3892,60 +3885,44 @@ final class SDH_Muhely_Munkalap
         $tobb = $tovabbi !== [];
 
         if (!$eladas) {
-            echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>' . ($tobb ? '1. eszköz' : 'Eszköz') . '</strong>';
+            // Minden eszköz ugyanolyan teljes adatlapot kap, képpel: elöl a fő eszköz, utána a csatoltak.
+            $sorrend = array_merge([$eszkoz], $tovabbi);
+            $info    = [];
 
-            if ($eszkoz) {
-                echo '<span class="sdh-ml-kartya__jobb"><span>Sorszám: ' . (int) $eszkoz->id . '</span>'
-                    // A betöltött eszköz szerkesztése a lap fölött (app.js: munkalapEszkozSzerk).
-                    . '<button type="button" class="sdh-ml-kartya__szerk" data-sdh-eszkoz-szerk="' . (int) $eszkoz->id . '" title="Az eszköz adatainak szerkesztése">'
-                    . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></span>'; // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
-            }
+            foreach ($sorrend as $i => $egy) {
+                echo '<div class="sdh-ml-kartya sdh-ml-kartya--eszkoz"><div class="sdh-ml-kartya__fej"><strong>'
+                    . esc_html($tobb ? ($i + 1) . '. eszköz' . ($egy ? ' – ' . SDH_Muhely_Eszkoz::megnevezes($egy) : '') : 'Eszköz') . '</strong>';
 
-            echo '</div>';
+                if ($egy) {
+                    echo '<span class="sdh-ml-kartya__jobb"><span>Sorszám: ' . (int) $egy->id . '</span>'
+                        // Az eszköz szerkesztése a lap fölött (app.js: munkalapEszkozSzerk).
+                        . '<button type="button" class="sdh-ml-kartya__szerk" data-sdh-eszkoz-szerk="' . (int) $egy->id . '" title="Az eszköz adatainak szerkesztése">'
+                        . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></span>'; // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
 
-            if ($eszkoz) {
-                $eszkoz_adatok($eszkoz);
-            } else {
-                echo '<p class="sdh-ml-kartya__ures">'
-                    . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
-                    . '</p>';
-            }
-
-            echo '</div>';
-        }
-
-        // A csatolt eszközök tömören, soronként egy: akárhány lehet, a popup
-        // ettől ne nőjön a képernyő fölé. A részletes adatlap a kezdőképernyő
-        // Eszközök lapfülén és az eszköz saját űrlapján van.
-        if ($tobb) {
-            echo '<div class="sdh-ml-kartya"><div class="sdh-ml-kartya__fej"><strong>További eszközök</strong>'
-                . '<span>' . count($tovabbi) . ' db</span></div><ol class="sdh-ml-tobbi" start="2">';
-
-            foreach ($tovabbi as $egy) {
-                $reszek = [];
-
-                foreach ([
-                    'IMEI'        => (string) $egy->imei,
-                    'Sorozatszám' => (string) $egy->sorozatszam,
-                    'Szín'        => (string) $egy->szin,
-                    'Tartozékok'  => (string) $egy->tartozekok,
-                ] as $cimke => $ertek) {
-                    if (trim($ertek) !== '') {
-                        $reszek[] = '<span class="sdh-ml-tobbi__adat"><em>' . esc_html($cimke) . ':</em> ' . esc_html($ertek)
-                            . SDH_Muhely_Admin_UI::masolo_gomb($ertek, $cimke) . '</span>';
-                    }
+                    // Az Eszközök panel kártyái ebből frissítik a képet és az alcímet (app.js: eszkKartyaFrissit).
+                    $info[$i === 0 ? '0' : (string) (int) $egy->id] = [
+                        'kep' => SDH_Muhely_Mockup::kep($egy),
+                        'al'  => self::kartya_alcim($egy),
+                        'nev' => SDH_Muhely_Eszkoz::megnevezes($egy),
+                    ];
                 }
 
-                $nev = SDH_Muhely_Eszkoz::megnevezes($egy);
+                echo '</div>';
 
-                echo '<li><strong>' . esc_html($nev) . '</strong>' . SDH_Muhely_Admin_UI::masolo_gomb($nev, 'Típus') // phpcs:ignore WordPress.Security.EscapeOutput
-                    . ' <span class="sdh-ml-tobbi__fajta">' . esc_html(SDH_Muhely_Eszkoz::kategoria_cimke((string) $egy->kategoria)) . '</span>'
-                    . implode('', $reszek)
-                    . ' <button type="button" class="sdh-ml-kartya__szerk sdh-ml-tobbi__szerk" data-sdh-eszkoz-szerk="' . (int) $egy->id . '" title="Az eszköz adatainak szerkesztése">'
-                    . SDH_Muhely_Admin_UI::gomb_ikon('ceruza') . '<span>Szerkesztés</span></button></li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- a részek szűrt HTML.
+                if ($egy) {
+                    echo '<div class="sdh-ml-kartya__torzs">' . SDH_Muhely_Mockup::html($egy, 'l', 'sdh-ml-kartya__kep'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
+                    $eszkoz_adatok($egy);
+                    echo '</div>';
+                } else {
+                    echo '<p class="sdh-ml-kartya__ures">'
+                        . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
+                        . '</p>';
+                }
+
+                echo '</div>';
             }
 
-            echo '</ol></div>';
+            echo '<script type="application/json" data-sdh-eszk-info>' . wp_json_encode((object) $info) . '</script>';
         }
 
         echo '<div class="sdh-ml-kartya sdh-ml-kartya--ugyfel" data-sdh-ugyfel-kartya="' . (int) ($ugyfel->id ?? 0) . '">'
@@ -4281,43 +4258,205 @@ final class SDH_Muhely_Munkalap
      * felirat, levétel gomb. Ugyanez rajzolja a meglévőket és a JavaScript
      * által klónozott sablont (azonosító 0, üres felirat).
      */
-    private static function tovabbi_cimke(string $eszkoz_id, string $felirat, ?object $reszlet): void
+    /**
+     * Egy csatolt eszköz kártyája az Eszközök panelen (a régi címke helyén:
+     * ugyanazok a mezők és data-attribútumok, az app.js tovabbi* függvényei
+     * változatlanul kezelik). A sablonban az azonosító helyén `__ID__` áll.
+     *
+     * @param array<string, mixed>|null $b Az eszköz bontása (állapot, fizetve), ha a lap már mentve.
+     */
+    private static function tovabbi_cimke(string $eszkoz_id, string $felirat, ?object $reszlet, ?object $eszkoz = null, ?array $b = null, int $munkalap_id = 0, bool $tobb = false, bool $lap_fizetve = false): void
     {
-        // A sablonban az azonosító helyén `__ID__` áll: a JavaScript írja be klónozáskor.
         $dij = $reszlet !== null ? (float) $reszlet->bev_dij : 0.0;
 
         ?>
-        <span class="sdh-ml-eszkoz" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>"
+        <article class="sdh-ml-eszkoz sdh-eszk<?php echo !empty($b['kesz']) ? ' is-kesz' : ''; ?>" data-sdh-tovabbi="<?php echo esc_attr($eszkoz_id); ?>"
               data-veg="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->veg ?? 0) : 0)); ?>"
-              data-kulon="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->fizetett ?? 0) : 0)); ?>">
+              data-kulon="<?php echo esc_attr((string) ($reszlet !== null ? (float) ($reszlet->fizetett ?? 0) : 0)); ?>"
+              data-fizetve="<?php echo !empty($b['fizetve']) ? '1' : '0'; ?>"
+              title="<?php echo esc_attr($felirat); ?>">
             <input type="hidden" name="tovabbi_eszkoz[]" value="<?php echo esc_attr($eszkoz_id); ?>">
-            <span class="sdh-ml-eszkoz__nev" data-sdh-tovabbi-nev><?php echo esc_html($felirat); ?></span>
-            <span class="sdh-ml-eszkoz__dij"
-                  title="Ennek az eszköznek a bevizsgálási díja. Külön tételként kerül a munkalapra és a számlára, és beleszámít az előlegbe.">
-                <label>díj
-                    <input type="text" inputmode="decimal" autocomplete="off" data-sdh-tovabbi-dij
-                           name="tovabbi_dij[<?php echo esc_attr($eszkoz_id); ?>]" placeholder="0"
-                           aria-label="Az eszköz bevizsgálási díja (Ft)"
-                           value="<?php echo $dij > 0 ? esc_attr(self::szam_mezobe($dij)) : ''; ?>"></label>
-                <span aria-hidden="true">Ft</span>
-                <button type="button" class="sdh-ml-eszkoz__lista" data-sdh-tovabbi-dijlista
-                        title="Díj választása a díjlistából" aria-label="Díj választása a díjlistából">
-                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
-                </button>
-            </span>
             <input type="hidden" name="tovabbi_dij_nev[<?php echo esc_attr($eszkoz_id); ?>]" data-sdh-tovabbi-dijnev
                    value="<?php echo esc_attr($reszlet !== null ? (string) $reszlet->bev_nev : ''); ?>">
             <input type="hidden" name="tovabbi_dij_szolg[<?php echo esc_attr($eszkoz_id); ?>]" data-sdh-tovabbi-dijszolg
                    value="<?php echo (int) ($reszlet !== null ? $reszlet->bev_szolg : 0); ?>">
-            <button type="button" class="sdh-ml-eszkoz__lista sdh-ml-eszkoz__szerk" data-sdh-eszkoz-szerk="<?php echo esc_attr($eszkoz_id); ?>"
-                    title="Az eszköz adatainak szerkesztése" aria-label="Az eszköz adatainak szerkesztése"><?php
-                        echo SDH_Muhely_Admin_UI::gomb_ikon('ceruza'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
-                    ?></button>
-            <button type="button" class="sdh-ml-eszkoz__torol" data-sdh-tovabbi-torol
-                    title="Levétel a munkalapról (az eszköz megmarad az ügyfélnél)"
-                    aria-label="Eszköz levétele a munkalapról">&times;</button>
-        </span>
+
+            <span class="sdh-eszk__kep" data-sdh-eszk-kep><?php echo SDH_Muhely_Mockup::html($eszkoz, 'm'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?></span>
+
+            <div class="sdh-eszk__test">
+                <div class="sdh-eszk__fej">
+                    <span class="sdh-eszk__sorszam" aria-hidden="true"></span>
+                    <span class="sdh-ml-eszkoz__nev sdh-eszk__nev" data-sdh-tovabbi-nev><?php echo esc_html($eszkoz ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : $felirat); ?></span>
+                    <span class="sdh-eszk__gombok">
+                        <button type="button" class="sdh-ml-eszkoz__lista sdh-ml-eszkoz__szerk" data-sdh-eszkoz-szerk="<?php echo esc_attr($eszkoz_id); ?>"
+                                title="Az eszköz adatainak szerkesztése" aria-label="Az eszköz adatainak szerkesztése"><?php
+                                    echo SDH_Muhely_Admin_UI::gomb_ikon('ceruza'); // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
+                                ?></button>
+                        <button type="button" class="sdh-ml-eszkoz__torol" data-sdh-tovabbi-torol
+                                title="Levétel a munkalapról (az eszköz megmarad az ügyfélnél)"
+                                aria-label="Eszköz levétele a munkalapról">&times;</button>
+                    </span>
+                </div>
+                <div class="sdh-eszk__al" data-sdh-eszk-al><?php echo esc_html(self::kartya_alcim($eszkoz)); ?></div>
+
+                <div class="sdh-eszk__sor">
+                    <?php echo self::kartya_allapot($munkalap_id, $b, $tobb); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+                    <span class="sdh-ml-eszkoz__dij sdh-eszk__dij"
+                          title="Ennek az eszköznek a bevizsgálási díja. Külön tételként kerül a munkalapra és a számlára, és beleszámít az előlegbe.">
+                        <label>díj
+                            <input type="text" inputmode="decimal" autocomplete="off" data-sdh-tovabbi-dij
+                                   name="tovabbi_dij[<?php echo esc_attr($eszkoz_id); ?>]" placeholder="0"
+                                   aria-label="Az eszköz bevizsgálási díja (Ft)"
+                                   value="<?php echo $dij > 0 ? esc_attr(self::szam_mezobe($dij)) : ''; ?>"></label>
+                        <span aria-hidden="true">Ft</span>
+                        <button type="button" class="sdh-ml-eszkoz__lista" data-sdh-tovabbi-dijlista
+                                title="Díj választása a díjlistából" aria-label="Díj választása a díjlistából">
+                            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+                        </button>
+                    </span>
+                </div>
+
+                <div class="sdh-eszk__penz" data-sdh-eszk-penz="<?php echo esc_attr($eszkoz_id); ?>" aria-live="polite"></div>
+                <?php echo self::kartya_vissza($munkalap_id, $b, $lap_fizetve); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+            </div>
+        </article>
         <?php
+    }
+
+    /**
+     * A fő eszköz kártyája (mindig az első). A díja az előlegből adódik
+     * (app.js írja ki), ezért itt nincs díjmező.
+     *
+     * @param array<string, mixed>|null $b
+     */
+    private static function fo_kartya(int $munkalap_id, ?object $eszkoz, ?array $b, bool $tobb, bool $lap_fizetve): void
+    {
+        $nev = $eszkoz ? SDH_Muhely_Eszkoz::megnevezes($eszkoz) : 'Válassz eszközt a fenti mezőben';
+
+        ?>
+        <article class="sdh-eszk sdh-eszk--fo<?php echo !empty($b['kesz']) ? ' is-kesz' : ''; ?><?php echo $eszkoz ? '' : ' is-ures'; ?>" data-sdh-eszk="0" data-sdh-fo-kartya
+                 data-fizetve="<?php echo !empty($b['fizetve']) ? '1' : '0'; ?>">
+            <span class="sdh-eszk__kep" data-sdh-eszk-kep><?php echo SDH_Muhely_Mockup::html($eszkoz, 'm'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?></span>
+            <div class="sdh-eszk__test">
+                <div class="sdh-eszk__fej">
+                    <span class="sdh-eszk__sorszam" aria-hidden="true"></span>
+                    <span class="sdh-eszk__nev" data-sdh-fo-nev><?php echo esc_html($nev); ?></span>
+                    <span class="sdh-eszk__jel">fő eszköz</span>
+                </div>
+                <div class="sdh-eszk__al" data-sdh-eszk-al><?php echo esc_html(self::kartya_alcim($eszkoz)); ?></div>
+                <div class="sdh-eszk__sor">
+                    <?php echo self::kartya_allapot($munkalap_id, $b, $tobb); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+                    <span class="sdh-eszk__dij sdh-eszk__dij--fo" data-sdh-eszk-dij="0" hidden
+                          title="A fő eszköz díja: a Fizetett (előleg) mező, mínusz a többi eszköz díja."></span>
+                </div>
+                <div class="sdh-eszk__penz" data-sdh-eszk-penz="0" aria-live="polite"></div>
+                <?php echo self::kartya_vissza($munkalap_id, $b, $lap_fizetve); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+            </div>
+        </article>
+        <?php
+    }
+
+    /** A kártya második sora: kategória, IMEI / sorozatszám, szín. */
+    public static function kartya_alcim(?object $eszkoz): string
+    {
+        if ($eszkoz === null) {
+            return '';
+        }
+
+        $reszek = [SDH_Muhely_Eszkoz::kategoria_cimke((string) $eszkoz->kategoria)];
+
+        if (trim((string) $eszkoz->imei) !== '') {
+            $reszek[] = 'IMEI ' . trim((string) $eszkoz->imei);
+        } elseif (trim((string) $eszkoz->sorozatszam) !== '') {
+            $reszek[] = 'S/N ' . trim((string) $eszkoz->sorozatszam);
+        }
+
+        if (trim((string) $eszkoz->szin) !== '') {
+            $reszek[] = trim((string) $eszkoz->szin);
+        }
+
+        return implode(' · ', array_filter($reszek));
+    }
+
+    /**
+     * Az eszköz saját állapotának választója (több eszköznél, mentett lapon);
+     * a váltás azonnal mentődik (app.js: eszkozAllapotValt).
+     *
+     * @param array<string, mixed>|null $b
+     */
+    private static function kartya_allapot(int $munkalap_id, ?array $b, bool $tobb): string
+    {
+        if (!$tobb || $b === null || $munkalap_id <= 0) {
+            return $tobb || $munkalap_id <= 0 ? '<span class="sdh-eszk__allapot-ures">állapot: mentés után</span>' : '';
+        }
+
+        return self::eszkoz_allapot_valaszto($munkalap_id, $b, self::allapotok());
+    }
+
+    /**
+     * A „Fizetve" jelző levétele egy eszközről (csak ha az eszköz külön ki van
+     * fizetve, és nem a lap egésze).
+     *
+     * @param array<string, mixed>|null $b
+     */
+    private static function kartya_vissza(int $munkalap_id, ?array $b, bool $lap_fizetve): string
+    {
+        if ($b === null || empty($b['fizetve']) || $lap_fizetve || $munkalap_id <= 0) {
+            return '';
+        }
+
+        return sprintf(
+            '<span class="sdh-eszk__vissza-hely"><button type="button" class="sdh-eszall__vissza" data-sdh-eszkoz-fizetve-vissza data-id="%d" data-kulcs="%d" data-nev="%s" data-befizetve="%s"'
+            . ' title="A „Fizetve” jelző levétele erről az eszközről. A befizetett összeghez és a pénztárhoz nem nyúl.">a „Fizetve” jelző levétele &times;</button></span>',
+            $munkalap_id,
+            (int) $b['eszkoz_id'],
+            esc_attr((string) $b['felirat']),
+            esc_attr((string) (float) $b['eloleg'])
+        );
+    }
+
+    /**
+     * Egy eszköz állapotválasztója (színes ponttal). Az űrlap kártyáin és a
+     * részletpanel eszközsoraiban is ez áll.
+     *
+     * @param array<string, mixed>               $b
+     * @param array<string, array<string, mixed>> $allapotok
+     */
+    public static function eszkoz_allapot_valaszto(int $munkalap_id, array $b, array $allapotok): string
+    {
+        $kulcs  = (string) $b['allapot'];
+        $szin   = $allapotok[$kulcs]['szin'] ?? 'szurke';
+        $opciok = '';
+
+        if (!isset($allapotok[$kulcs])) {
+            $opciok .= '<option value="' . esc_attr($kulcs) . '" selected>' . esc_html($kulcs) . '</option>';
+        }
+
+        foreach ($allapotok as $k => $a) {
+            // A „Részben elkészült" a lap közös állapota, eszköznek nem adható.
+            if (!empty($a['reszben'])) {
+                continue;
+            }
+
+            $opciok .= sprintf(
+                '<option value="%s" data-szin="%s"%s>%s</option>',
+                esc_attr((string) $k),
+                esc_attr((string) $a['szin']),
+                selected($kulcs, (string) $k, false),
+                esc_html((string) $a['nev'])
+            );
+        }
+
+        return sprintf(
+            '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--%s" data-sdh-allapot-hely>'
+            . '<select data-sdh-eszkoz-allapot data-id="%d" data-kulcs="%d" data-elozo="%s" aria-label="%s">%s</select></span>',
+            esc_attr((string) $szin),
+            $munkalap_id,
+            (int) $b['eszkoz_id'],
+            esc_attr($kulcs),
+            esc_attr($b['felirat'] . ' állapota'),
+            $opciok
+        );
     }
 
     /**

@@ -43,7 +43,7 @@ $urlap = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal
 
 T::igaz(preg_match('/data-sdh-eszkoz-szerk\s+title="A kiválasztott eszköz/', $urlap) === 1, 'ceruza a fő eszköz mezője mellett, kattintható');
 T::tartalmaz($urlap, 'class="sdh-ml-kartya__szerk" data-sdh-eszkoz-szerk="' . $e1 . '"', 'Szerkesztés gomb a fő eszköz kártyáján');
-T::tartalmaz($urlap, 'sdh-ml-tobbi__szerk" data-sdh-eszkoz-szerk="' . $e2 . '"', 'Szerkesztés gomb a csatolt eszköz során');
+T::tartalmaz($urlap, 'class="sdh-ml-kartya__szerk" data-sdh-eszkoz-szerk="' . $e2 . '"', 'Szerkesztés gomb a csatolt eszköz adatlapján');
 T::tartalmaz($urlap, 'sdh-ml-eszkoz__szerk" data-sdh-eszkoz-szerk="' . $e2 . '"', 'ceruza a csatolt eszköz címkéjén');
 T::tartalmaz($urlap, 'data-sdh-eszkoz-szerk="__ID__"', 'a csatolás sablonjában is ott a ceruza');
 T::egyezik(2, substr_count($urlap, 'data-sdh-ugyfel-szerk'), 'az ügyfél szerkesztőgombjai megmaradtak');
