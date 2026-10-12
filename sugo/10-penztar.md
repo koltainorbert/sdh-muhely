@@ -82,6 +82,8 @@ A fizetés a mai napra kerül a pénztárba, a munkalap sorszámával. Előlegn�
 
 Ha a munkalapon kézzel pipálod be a **Fizetve** jelölőt, vagy megnöveled az előleget, mentés után a rendszer megkérdezi: **Bekerüljön a házipénztárba?** Három válasz van: **Beírás a pénztárba**, **Nem kell** (nyoma marad), **Később**.
 
+Az ablak mindig csak azt ajánlja, ami **még hiányzik** a pénztárból. Ha az előleg egy része korábban már bekerült (vagy **Nem kell**-lel jelölted), az ablak tetején kiírja: *Előleg a lapon: 20 000 Ft · már a pénztárban: 8 000 Ft · hiányzik: 12 000 Ft*. Több eszköznél az eszköz neve alatt is látszik, mennyi járna rá és mennyi van már bent. Hogy mi került be korábban, azt a munkalap **Pénztárbizonylatok** lapfülén látod.
+
 ## Lépésről lépésre: a kassza megszámolása és a nap zárása
 
 1. Nyisd meg a **KP – kassza** lapfület. (A **Ma** lapfül alján a **Kassza megszámolása és zárás** hivatkozás is ide visz.)

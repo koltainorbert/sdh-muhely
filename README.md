@@ -63,6 +63,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.55.3
+- **A „Bekerüljön a házipénztárba?” ablak kiírja, mennyi van már a pénztárban.** Eddig csak a hiányzó összeget
+  ajánlotta, magyarázat nélkül: két eszköz 10 000 + 10 000 Ft díjánál 12 000 Ft-ot (2 000 + 10 000), mert a fő
+  eszköz korábbi 8 000 Ft-os díja már a pénztárban volt. A számítás helyes volt, de nem látszott, miért kevesebb.
+  Most az ablak tetején: „Előleg a lapon · már a pénztárban · hiányzik”, és eszközönként: „járna …, már a
+  pénztárban …”.
+
 ### 0.55.2
 - **Javítás: az AI „messages.1.content.3.tool_use.input: Input should be an object” hibát adott.** Ha az AI
   paraméter nélküli eszközt hívott, a rendszer a második körben az üres bemenetet üres tömbként (`[]`) küldte

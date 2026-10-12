@@ -1654,13 +1654,17 @@ final class SDH_Muhely_Penztar
             return null;
         }
 
-        // Több eszköznél készülékenként: mennyi hiányzik még a pénztárból.
+        // Több eszköznél készülékenként: mennyi járna, és mennyi hiányzik még a pénztárból.
+        // A `vart` és a `kasszaban` a popupban látszik, hogy kiderüljön, miért kevesebb
+        // az ajánlott összeg (pl. az előleg egy része korábban már bekerült).
         foreach ($info['eszkozok'] as $i => $e) {
-            $info['eszkozok'][$i]['osszeg'] = max(0.0, round(($most_fizetve ? $e['brutto'] : $e['eloleg']) - $e['kasszaban'], 2));
+            $info['eszkozok'][$i]['vart']   = round((float) ($most_fizetve ? $e['brutto'] : $e['eloleg']), 2);
+            $info['eszkozok'][$i]['osszeg'] = max(0.0, round($info['eszkozok'][$i]['vart'] - $e['kasszaban'], 2));
         }
 
         return $info + [
-            'osszeg' => $hianyz,
+            'osszeg'     => $hianyz,
+            'vart'       => round((float) $vart, 2),
             'eloleg_mod' => !$most_fizetve,
         ];
     }

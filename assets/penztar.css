@@ -2490,3 +2490,25 @@ input.sdh-pt-osszeg {
     font-weight: 600;
     line-height: 1.45;
 }
+
+
+/* ================================================================== */
+/* 0.55.3 – „Bekerüljön a házipénztárba?”: ami már a pénztárban van     */
+/* ================================================================== */
+
+.sdh-pt-ajanlat__bent {
+    margin: -.5rem 0 .9rem;
+    padding: .45rem .7rem;
+    border-radius: var(--sdh-r);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-pt-ajanlat__eszkoz-bent {
+    display: block;
+    color: var(--sdh-halvany);
+    font-size: calc(11.5px * var(--sdh-n));
+    font-variant-numeric: tabular-nums;
+}

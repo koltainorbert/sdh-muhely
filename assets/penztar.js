@@ -580,6 +580,11 @@
             '<p class="sdh-pt-ajanlat__fo">' + e((a.szam ? 'ML ' + a.szam + ' · ' : '') + (a.nev || 'névtelen ügyfél')) +
             '<strong>' + e(penz(a.osszeg)) + '</strong></p>' +
             '<p class="sdh-pt-ajanlat__al">' + e(a.eloleg_mod ? 'Előleg érkezett a munkalapra.' : (a.szamla ? 'Számla: ' + a.szamla : 'A munkalap most lett fizetve.')) + '</p>' +
+            // Ha egy rész már a pénztárban van (korábban beírták, vagy „Nem kell"-lel jelölték),
+            // csak a különbözet hiányzik – ez itt látszik, hogy ne legyen rejtély.
+            ((a.kasszaban || 0) >= 1 && (a.vart || 0) > 0
+                ? '<p class="sdh-pt-ajanlat__bent">' + e((a.eloleg_mod ? 'Előleg a lapon: ' : 'Fizetendő a lapon: ') + penz(a.vart) + ' · már a pénztárban: ' + penz(a.kasszaban) + ' · hiányzik: ' + penz(a.osszeg)) + '</p>'
+                : '') +
             '<form class="sdh-pt-ajanlat" data-sdh-pt-urlap data-tipus="bevetel" novalidate>' +
             '<div class="sdh-pt-pillek" data-sdh-pt-pillek="mod">' +
             Object.keys(modok).map(function (k) {
@@ -589,7 +594,11 @@
             (tobb ? '<div class="sdh-pt-ajanlat__eszkozok" data-pt-eszkozok>' +
                 '<p class="sdh-mezo__sugo">Minden eszköz külön tételként kerül a pénztárba. Amelyik nem kell, annál írj 0-t.</p>' +
                 a.eszkozok.map(function (x) {
-                    return '<label>' + e(x.nev) +
+                    var bent = (x.kasszaban || 0) >= 1
+                        ? '<small class="sdh-pt-ajanlat__eszkoz-bent">' + e('járna ' + penz(x.vart || 0) + ', már a pénztárban ' + penz(x.kasszaban)) + '</small>'
+                        : '';
+
+                    return '<label><span>' + e(x.nev) + bent + '</span>' +
                         '<span class="sdh-szam sdh-szam--utotag"><input type="text" inputmode="decimal" data-pt-eszkoz="' + e(x.kulcs) + '" value="' + e(Math.round(x.osszeg || 0)) + '"><span class="sdh-szam__utotag">Ft</span></span></label>';
                 }).join('') + '</div>' : '') +
             '<div class="sdh-pt-ajanlat__mezok">' +
