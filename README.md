@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.6
+- **Automatikus mentés** a rekord-ablakokban (munkalap, rendelés, árukiadás, ügyfél, eszköz, termék, szolgáltatás):
+  tétel/hibasor, választó, pipa azonnal; beírt mező elhagyáskor; megjegyzés a gépelés megállása után. Az ablak nyitva
+  marad, bezáráskor a lista frissül (nem vált az Áttekintésre). Új (még nem mentett) és zárolt lapon nincs; számla,
+  fizetés, küldés soha. A szerver visszaadja az új sorok azonosítóját (`uj_sorok`), így nincs duplázás. Mentett lapon a
+  „Mégsem" felirata „Bezárás".
+- **Számla ablaka gyorsabban**: mentett lapnál egyetlen kérés (nincs mentés + újratöltés); mentetlen változásnál előbb a
+  számla nyílik, a munkalap a háttérben, „Betöltés…" nélkül frissül (`csendesFrissit`). A nagy ablakok betöltés közben
+  is a végleges méretükben állnak.
+- **Lezáráskor** a nyomtatási ajánlatban **Számlázz.hu számla** és **Számla-előkészítő (PDF)** gomb.
+- **Sebesség 40 000 munkalapnál**: új indexek (`fajta_szam`, `fajta_keszult`, DB_VERSION 0.38.0), a lista rendezése
+  indexből, a darabszám keresés nélkül összekapcsolás nélkül. Mérve (SQLite, helyi gép): munkalap-lista 139–172 ms → 71–90 ms.
+- A munkalap Eszköz fülén a mockup nem lóg a fejlécbe.
+
 ### 0.59.5
 - **Záró számla bevizsgálási díj után**: ha a díj levonódik (javítás), a számla ablakában és a kiállított számlán sem
   a díj, sem a levonás nem szerepel – a díjat az ügyfél már kifizette és számlát kapott róla. A javítás tétele a saját

@@ -4,7 +4,7 @@ cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
 szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas
-kulcsszavak: munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+kulcsszavak: automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -52,11 +52,27 @@ A munkalap ablakának bal oldalán a lap adatai, jobb oldalán az ügyfél, az e
 
 Az ablak alján:
 
-- **Munkalap létrehozása** (új lapnál) vagy **Mentés**, és **Mégsem**.
+- **Munkalap létrehozása** (új lapnál) vagy **Mentés**, és **Mégsem** – mentett lapnál a felirata **Bezárás**, mert a változások már maguktól mentődtek (lásd: Automatikus mentés).
+- Az alsó sor jobb szélén a mentés jelzője: **Mentés…**, **Mentve 14:32**, vagy pirossal, ha valami nem menthető (például hiányzik egy kötelező mező).
 - **Fizetés** – mentett lapnál; kifizetett lapon a felirata **Fizetve ✓**.
 - **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – csak olyan lapnál, amelynek már van munkalapszáma.
 - **Matrica** – a készülékre ragasztható RMA-matrica Brother címkenyomtatóra (munkalapszámmal rendelkező javítási lapnál). Lásd: [RMA-matrica](sugo:matrica).
 - **Napló** – a lap teljes története: ki, mikor, mit módosított. Lásd: [Napló](sugo:naplo).
+
+## Automatikus mentés
+
+Egy már elmentett lapon minden változás magától mentődik – nem kell a **Mentés** gombot nyomni, és a lap nyitva marad:
+
+- **azonnal**: tétel vagy hibasor felvétele és törlése, választómező, pipa, áfakulcs, kedvezmény;
+- **a mező elhagyásakor**: a beírt név, ár, mennyiség, előleg (így az előleg beírása közben nem jön félkész összegre pénztár-ajánlat);
+- **a gépelés megállása után**: a megjegyzés;
+- az **Állapot** és az eszköz állapota eddig is azonnal mentődött; lezáráskor a lap zárolt nézetre vált.
+
+A **Fizetve** és a **Bevizsgálási díj** pipa levétele előtt a rendszer figyelmeztet; ha a pipa lent marad, a következő változással vagy a bezáráskor mentődik. Bezáráskor (×, **Bezárás**, Esc) ami még nem ment el, elmegy, és a mögötte lévő lista frissül – az oldal nem vált át az Áttekintésre.
+
+Nem mentődik magától: az **új, még soha el nem mentett** lap (különben minden félbehagyott felvitel munkalapszámot kapna) – ezt egyszer a **Munkalap létrehozása** gombbal mentsd –, a **lezárt (zárolt)** lap, és soha a számla, a fizetés vagy az üzenetküldés: ezek csak a saját gombjukra történnek.
+
+Ugyanígy működik az ügyfél, az eszköz, a termék és a szolgáltatás ablaka, valamint a rendelés és a napi árukiadás.
 
 ## Ügyfél és eszköz a munkalapon
 
@@ -323,7 +339,7 @@ A gomb csak mentett lapnál jelenik meg, és a nyomtatvány a lap **elmentett** 
 
 A munkalap ablakának alján két számlagomb van. Csak mentett, munkalapszámmal rendelkező lapnál jelennek meg.
 
-- **Számlázz.hu számla** – a munkalap elmentődik, majd megnyílik a számla ablaka. Számla csak a kiállítás gombjára készül.
+- **Számlázz.hu számla** – megnyílik a számla ablaka. Ha minden mentve van (automatikus mentés), rögtön; ha van még mentetlen változás, előbb az mentődik, a munkalap pedig a háttérben, a számla ablaka mögött frissül. Számla csak a kiállítás gombjára készül.
 - **Számla-előkészítő (PDF)** – letölthető, nyomtatható PDF a tételekből. Helyben készül; **nem számla**. A gomb felirata a Számlázás beállításában választott nyomtatványnév szerint más is lehet.
 
 A gombok mellett a lap már kiállított számláinak sorszáma áll; kattintásra megnyílik a PDF.

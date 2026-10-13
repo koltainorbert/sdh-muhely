@@ -2037,7 +2037,9 @@ final class SDH_Muhely_Munkalap
                   LEFT JOIN {$eszkoz_tabla} e ON e.id = m.eszkoz_id";
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        $szam_sql = "SELECT COUNT(*) {$tobb} {$hol}";
+        // A darabszámhoz keresés nélkül nem kell az ügyfél és az eszköz (a kapcsolat 1:1):
+        // a csak munkalapos számolás 40 000 lapnál is az indexből fut.
+        $szam_sql = $kereses === '' ? "SELECT COUNT(*) FROM {$tabla} m {$hol}" : "SELECT COUNT(*) {$tobb} {$hol}";
         $osszesen = (int) $wpdb->get_var(
             $ertekek === [] ? $szam_sql : $wpdb->prepare($szam_sql, $ertekek)
         );
@@ -2047,7 +2049,7 @@ final class SDH_Muhely_Munkalap
                            e.gyarto AS e_gyarto, e.tipus AS e_tipus,
                            e.megnevezes AS e_megnevezes, e.imei AS e_imei
                     {$tobb} {$hol}
-                    ORDER BY (m.munkalap_szam IS NULL) ASC, m.munkalap_szam DESC, m.id DESC
+                    ORDER BY m.munkalap_szam DESC, m.id DESC
                     LIMIT %d OFFSET %d";
 
         $sorok = $wpdb->get_results(
@@ -4856,7 +4858,7 @@ final class SDH_Muhely_Munkalap
         $nyers     = wp_unslash($_POST['hibak']);
         $hibak     = [];
 
-        foreach ($nyers as $sor) {
+        foreach ($nyers as $kulcs_nyers => $sor) {
             if (!is_array($sor)) {
                 continue;
             }
@@ -4871,6 +4873,7 @@ final class SDH_Muhely_Munkalap
             $allapot = isset($sor['allapot']) ? sanitize_key((string) $sor['allapot']) : '';
 
             $hibak[] = [
+                'kulcs'   => 'hiba:' . preg_replace('/[^A-Za-z0-9_-]/', '', (string) $kulcs_nyers),
                 'id'      => isset($sor['id']) ? (int) $sor['id'] : 0,
                 // Melyik eszköz hibája (0 = a fő eszközé); a feldolgoz() a lap eszközeihez köti.
                 'eszkoz_id' => isset($sor['eszkoz_id']) ? max(0, (int) $sor['eszkoz_id']) : 0,
@@ -5107,6 +5110,10 @@ final class SDH_Muhely_Munkalap
             $sor['letrehozva'] = $most;
             $wpdb->insert($tabla, $sor);
             $megmarad[] = (int) $wpdb->insert_id;
+
+            if (!empty($hiba['kulcs'])) {
+                SDH_Muhely_Tetel::$uj_azonositok[(string) $hiba['kulcs']] = (int) $wpdb->insert_id;
+            }
         }
 
         foreach (array_diff($leteze, $megmarad) as $torlendo) {
@@ -5121,6 +5128,9 @@ final class SDH_Muhely_Munkalap
      */
     private static function feldolgoz(int $id)
     {
+        // Az új sorok azonosítói csak erre a mentésre vonatkoznak.
+        SDH_Muhely_Tetel::$uj_azonositok = [];
+
         $regi = $id > 0 ? self::egy($id) : null;
 
         if ($id > 0 && $regi === null) {
@@ -5308,7 +5318,8 @@ final class SDH_Muhely_Munkalap
         $eredmeny = self::feldolgoz($id);
 
         if (is_string($eredmeny)) {
-            wp_send_json_error(['uzenet' => $eredmeny]);
+            // A lezárt (zárolt) lapot a böngésző a zárolt nézetre frissíti (automatikus mentés).
+            wp_send_json_error(['uzenet' => $eredmeny, 'zarolt' => $elotte !== null && self::zarolva($elotte)]);
         }
 
         [$uj_id, $uzenet, $szam] = $eredmeny;
@@ -5326,6 +5337,10 @@ final class SDH_Muhely_Munkalap
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
         wp_send_json_success([
             'id'     => $uj_id,
+            // Az új tétel- és hibasorok azonosítója (űrlapkulcs => id) – az automatikus mentés visszaírja.
+            'uj_sorok' => (object) SDH_Muhely_Tetel::$uj_azonositok,
+            // Van-e most keletkezett nyomtatási ajánlat (új lap, lezárás): a böngésző csak ekkor kérdez rá.
+            'nyomtatas_ajanlat' => class_exists('SDH_Muhely_Nyomtatas') && SDH_Muhely_Modulok::be('nyomtatas') && SDH_Muhely_Nyomtatas::van_ajanlat(),
             'penztar' => $penztar,
             'fajta'  => $fajta,
             'uj'     => $elotte === null,

@@ -528,9 +528,15 @@
         // A popup az ehhez az űrlapfajtához legutóbb beállított méretben nyílik.
         szint.dialog.sdhModul = modul;
         szint.dialog.sdhMeret = meretOlvas(modul);
+        szint.modul = modul;
+        szint.id = id;
+        szint.opciok = opciok;
         szint.dialog.setAttribute('data-sdh-modul', modul);
 
-        toltesKozben(szint);
+        // Csendes frissítés (automatikus mentés, számla után): a tartalom a helyén marad, amíg az új meg nem jön.
+        if (!opciok.csendes) {
+            toltesKozben(szint);
+        }
 
         if (!szint.dialog.open) {
             szint.dialog.showModal();
@@ -557,44 +563,121 @@
                 return valasz.text();
             })
             .then(function (html) {
-                szint.torzs.innerHTML = html;
-
-                if (n > 0) {
-                    idElotag(szint.torzs, 'sz' + n + '-');
+                if (opciok.csendes && typeof opciok.elotte === 'function' && !opciok.elotte()) {
+                    return;
                 }
 
-                bekotUrlap(szint, n, opciok);
-                mintaKeres(szint.torzs);
-                csatKeres(szint.torzs);
-                szamKeres(szint.torzs);
-                munkalapIndul(szint.torzs);
-
-                // Kért lapfül (data-sdh-ful): a rádiógomb bejelölése váltja a fület.
-                var kertFul = opciok.ful
-                    ? szint.torzs.querySelector('.sdh-fulek__ful[data-sdh-ful-kulcs="' + String(opciok.ful).replace(/[^a-z0-9_-]/gi, '') + '"]')
-                    : null;
-
-                if (kertFul) {
-                    kertFul.checked = true;
-                    kertFul.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-
-                // Más modulok (pl. rma.js) itt kapcsolódhatnak a betöltött űrlaphoz.
-                document.dispatchEvent(new CustomEvent('sdh:urlap-betoltve', {
-                    detail: { modul: modul, id: id, torzs: szint.torzs, ful: opciok.ful || '' }
-                }));
-
-                var kertSzam = kertFul ? (kertFul.className.match(/sdh-fulek__ful--(\d+)/) || [])[1] : '';
-                var elso = kertSzam
-                    ? kertFul.parentNode.querySelector(':scope > .sdh-fulek__panel--' + kertSzam + ' textarea')
-                    : szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
-                if (elso) {
-                    elso.focus();
-                }
+                beilleszt(szint, n, modul, id, opciok, html);
             })
             .catch(function (ok) {
+                if (opciok.csendes) {
+                    return;
+                }
+
                 hiba(szint, 'Az űrlap nem töltődött be. ' + ok.message);
             });
+    }
+
+    /**
+     * A betöltött űrlap beillesztése és bekötése. Csendes frissítésnél megmarad
+     * a nyitott lapfül, a fókusz (a kurzor helyével) és a görgetés – a felhasználó
+     * nem veszi észre, hogy a tartalom kicserélődött.
+     */
+    function beilleszt(szint, n, modul, id, opciok, html) {
+        var allas = opciok.csendes ? urlapAllas(szint) : null;
+
+        szint.torzs.innerHTML = html;
+
+        if (n > 0) {
+            idElotag(szint.torzs, 'sz' + n + '-');
+        }
+
+        bekotUrlap(szint, n, opciok);
+        mintaKeres(szint.torzs);
+        csatKeres(szint.torzs);
+        szamKeres(szint.torzs);
+        munkalapIndul(szint.torzs);
+
+        // Kért lapfül (data-sdh-ful): a rádiógomb bejelölése váltja a fület.
+        var kertFul = opciok.ful
+            ? szint.torzs.querySelector('.sdh-fulek__ful[data-sdh-ful-kulcs="' + String(opciok.ful).replace(/[^a-z0-9_-]/gi, '') + '"]')
+            : null;
+
+        if (kertFul) {
+            kertFul.checked = true;
+            kertFul.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Más modulok (pl. rma.js) itt kapcsolódhatnak a betöltött űrlaphoz.
+        document.dispatchEvent(new CustomEvent('sdh:urlap-betoltve', {
+            detail: { modul: modul, id: id, torzs: szint.torzs, ful: opciok.ful || '', csendes: !!opciok.csendes }
+        }));
+
+        if (allas) {
+            urlapAllasVissza(szint, allas);
+
+            return;
+        }
+
+        var kertSzam = kertFul ? (kertFul.className.match(/sdh-fulek__ful--(\d+)/) || [])[1] : '';
+        var elso = kertSzam
+            ? kertFul.parentNode.querySelector(':scope > .sdh-fulek__panel--' + kertSzam + ' textarea')
+            : szint.torzs.querySelector('input:not([type="hidden"]), select, textarea');
+        if (elso) {
+            elso.focus();
+        }
+    }
+
+    /** A nyitott lapfülek, a fókuszban lévő mező és a görgetések – a csendes frissítés előtt. */
+    function urlapAllas(szint) {
+        var akt = document.activeElement;
+        var gorgetes = [];
+
+        Array.prototype.forEach.call(szint.torzs.querySelectorAll('*'), function (el, i) {
+            if (el.scrollTop > 0) {
+                gorgetes.push([i, el.scrollTop]);
+            }
+        });
+
+        return {
+            fulek: Array.prototype.map.call(szint.torzs.querySelectorAll('input.sdh-fulek__ful:checked'), function (f) { return f.id; }),
+            fokusz: akt && szint.torzs.contains(akt) ? (akt.id || akt.getAttribute('name') || '') : '',
+            kurzor: akt && typeof akt.selectionStart === 'number' ? [akt.selectionStart, akt.selectionEnd] : null,
+            torzs: szint.torzs.scrollTop,
+            gorgetes: gorgetes
+        };
+    }
+
+    function urlapAllasVissza(szint, a) {
+        a.fulek.forEach(function (fulId) {
+            var f = fulId ? szint.torzs.querySelector('#' + CSS.escape(fulId)) : null;
+
+            if (f && !f.checked) {
+                f.checked = true;
+                f.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+
+        var elemek = szint.torzs.querySelectorAll('*');
+
+        a.gorgetes.forEach(function (g) {
+            if (elemek[g[0]]) {
+                elemek[g[0]].scrollTop = g[1];
+            }
+        });
+        szint.torzs.scrollTop = a.torzs;
+
+        if (a.fokusz) {
+            var mezo = szint.torzs.querySelector('#' + CSS.escape(a.fokusz)) || szint.torzs.querySelector('[name="' + a.fokusz.replace(/"/g, '') + '"]');
+
+            if (mezo) {
+                mezo.focus({ preventScroll: true });
+
+                if (a.kurzor && typeof mezo.setSelectionRange === 'function') {
+                    try { mezo.setSelectionRange(a.kurzor[0], a.kurzor[1]); } catch (x) { /* nem szövegmező */ }
+                }
+            }
+        }
     }
 
     /* ---------------------------------------------------------------- */
@@ -616,8 +699,11 @@
             });
         }
 
+        automentesBekot(szint, n, urlap);
+
         urlap.addEventListener('submit', function (esemeny) {
             esemeny.preventDefault();
+            automentesAll(szint);
 
             var gomb = urlap.querySelector('button[type="submit"]');
             var eredetiFelirat = gomb ? gomb.textContent : '';
@@ -651,6 +737,9 @@
                 })
                 .then(function (eredmeny) {
                     if (eredmeny && eredmeny.success) {
+                        // A Mentés gomb maga is értesít: a bezáráskor nem kell még egyszer.
+                        szint.automentve = false;
+
                         // Ráépülő popupnál (pl. új ügyfél a munkalapról) nincs
                         // oldalfrissítés: a hívó megkapja az új rekordot, a fő
                         // popup és a benne félig kitöltött űrlap érintetlen marad.
@@ -704,6 +793,333 @@
                     mutatUrlapHiba(urlap, 'A mentés nem sikerült. ' + ok.message);
                 });
         });
+    }
+
+    /* ---------------------------------------------------------------- */
+    /* Automatikus mentés (0.59.6)                                       */
+    /* ---------------------------------------------------------------- */
+
+    /*
+     * Meglévő rekord űrlapján (munkalap, rendelés, árukiadás, ügyfél, eszköz,
+     * termék, szolgáltatás) minden változás magától mentődik: tétel felvétele
+     * vagy törlése, állapot, pipa, választó azonnal; a beírt mező az elhagyásakor,
+     * a hosszú szöveg (megjegyzés) a gépelés megállása után kb. 2,5 másodperccel. Az ablak nyitva marad, a lapfül, a fókusz és a
+     * görgetés is. A még el nem mentett új rekordot NEM menti magától (különben
+     * minden félbehagyott felvitel munkalapszámot kapna); a lezárt, zárolt lapot sem.
+     * A számlát, fizetést, üzenetküldést soha – azok csak gombra történnek.
+     *
+     * Mentés után az új tétel- és hibasorok visszakapják a végleges azonosítójukat
+     * (uj_sorok), így a következő mentés nem veszi fel őket újra. Ha a szerver
+     * díjsort hozott létre, a munkalap csendben újratölt – de csak ha közben nem
+     * írtál bele. A bezáráskor a lista frissül (sdh:mentve).
+     */
+    var AUTOMENTES = /^sdh_muhely_(munkalapok|ugyfelek|eszkozok|termekek|szolgaltatasok)_ment$/;
+    var AUTO_FRISSIT = /^sdh_muhely_munkalapok_ment$/;
+
+    /** Az űrlap pillanatképe: ebből látszik, változott-e valami a legutóbbi mentés óta. */
+    function urlapKep(urlap) {
+        var reszek = [];
+
+        new FormData(urlap).forEach(function (ertek, nev) {
+            reszek.push(nev + '=' + (typeof ertek === 'string' ? ertek : (ertek && ertek.name ? 'F:' + ertek.name + ':' + ertek.size : '')));
+        });
+
+        return reszek.join('&');
+    }
+
+    function automentesJelzo(urlap, szoveg, allapot) {
+        var lab = urlap.querySelector('.sdh-urlap__lablec') || urlap;
+        var j = lab.querySelector('[data-sdh-automentes]');
+
+        if (!j) {
+            j = document.createElement('span');
+            j.className = 'sdh-automentes';
+            j.setAttribute('data-sdh-automentes', '');
+            j.setAttribute('role', 'status');
+            j.setAttribute('aria-live', 'polite');
+            lab.appendChild(j);
+        }
+
+        j.textContent = szoveg;
+        j.setAttribute('data-allapot', allapot || '');
+    }
+
+    function automentesBekot(szint, n, urlap) {
+        var akcio = urlap.dataset.sdhAjaxAction || '';
+        var idMezo = urlap.querySelector('input[name="id"]');
+        var zarolt = !!(urlap.querySelector('[data-sdh-zarolt="1"]') || urlap.closest('[data-sdh-zarolt="1"]'));
+
+        szint.auto = null;
+
+        if (!AUTOMENTES.test(akcio) || !idMezo || !(parseInt(idMezo.value, 10) > 0) || zarolt || (szint.opciok && typeof szint.opciok.siker === 'function')) {
+            return;
+        }
+
+        var a = {
+            urlap: urlap,
+            akcio: akcio,
+            id: idMezo.value,
+            kep: urlapKep(urlap),
+            allapot: (urlap.querySelector('[name="allapot"]') || {}).value || '',
+            ido: 0,
+            fut: false,
+            ujra: false
+        };
+
+        szint.auto = a;
+        automentesJelzo(urlap, 'Automatikus mentés bekapcsolva', 'be');
+
+        // A Mégsem gomb ilyenkor csak bezár (a változások már mentve vannak).
+        var megsem = urlap.querySelector('[data-sdh-megsem]');
+
+        if (megsem) {
+            megsem.textContent = 'Bezárás';
+        }
+
+        function utemez(ms) {
+            window.clearTimeout(a.ido);
+            a.ido = window.setTimeout(function () { automentesFut(szint, n, a); }, ms);
+        }
+
+        a.utemez = utemez;
+
+        urlap.addEventListener('input', function (ev) {
+            // Hosszú szöveg (megjegyzés, leírás): a gépelés megállása után is ment. A rövid mezők
+            // (ár, előleg, név) a mező elhagyásakor – így az előleg beírása közben nem jön félkész
+            // összegre pénztár-ajánlat. A keresőmezők (választók) nem számítanak.
+            if (!ev.target || ev.target.tagName !== 'TEXTAREA' || (ev.target.closest && ev.target.closest('.sdh-valaszto, [data-sdh-nem-ment]'))) {
+                return;
+            }
+
+            utemez(2500);
+        });
+        urlap.addEventListener('change', function (ev) {
+            var c = ev.target;
+
+            // Saját, azonnali mentése van (a lap és az eszköz állapota): az után jön a frissítés (sdh:allapot).
+            if (c && c.closest && c.closest('[data-sdh-allapot-valaszto], select[data-sdh-eszkoz-allapot], select[data-sdh-lista-allapot]')) {
+                return;
+            }
+
+            // A „Fizetve" és a „Bevizsgálási díj" pipa levétele előtt a rendszer figyelmeztet: a döntés előtt
+            // nem mentünk. Ha a pipa lent marad, a következő változással vagy a bezáráskor mentődik.
+            if (c && c.type === 'checkbox' && !c.checked && (c.hasAttribute('data-sdh-fizetve') || c.hasAttribute('data-sdh-bevizsgalas'))) {
+                return;
+            }
+
+            utemez(350);
+        });
+
+        // Tételsor, hibasor felvétele vagy törlése (gombbal, választóból): rögtön.
+        if (window.MutationObserver) {
+            var figyelo = new MutationObserver(function (valtozasok) {
+                var szamit = valtozasok.some(function (v) {
+                    return Array.prototype.some.call(v.addedNodes, function (el) { return el.nodeType === 1 && !el.hasAttribute('data-sdh-bev-elonezet') && !el.classList.contains('sdh-modal__hiba'); }) ||
+                        Array.prototype.some.call(v.removedNodes, function (el) { return el.nodeType === 1 && !el.hasAttribute('data-sdh-bev-elonezet') && !el.classList.contains('sdh-modal__hiba'); });
+                });
+
+                if (szamit) {
+                    utemez(500);
+                }
+            });
+
+            Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-tetelsorok], [data-sdh-hibasorok]'), function (lista) {
+                figyelo.observe(lista, { childList: true });
+            });
+            a.figyelo = figyelo;
+        }
+
+        if (!szint.autoZarFigyel) {
+            szint.autoZarFigyel = true;
+            szint.dialog.addEventListener('close', function () { automentesZaras(szint); });
+        }
+    }
+
+    // Az állapot azonnali mentése után a lap is mentődik / frissül: lezárásnál a zárolt nézet töltődik be.
+    document.addEventListener('sdh:allapot', function (ev) {
+        var d = ev.detail || {};
+
+        szintek.forEach(function (szint) {
+            if (szint && szint.auto && String(szint.auto.id) === String(d.id || '')) {
+                szint.auto.utemez(150);
+            }
+        });
+    });
+
+    function automentesAll(szint) {
+        if (szint.auto) {
+            window.clearTimeout(szint.auto.ido);
+
+            if (szint.auto.figyelo) {
+                szint.auto.figyelo.disconnect();
+            }
+        }
+
+        szint.auto = null;
+    }
+
+    function automentesFut(szint, n, a) {
+        if (szint.auto !== a || !document.body.contains(a.urlap)) {
+            return;
+        }
+
+        var kep = urlapKep(a.urlap);
+
+        if (kep === a.kep) {
+            return;
+        }
+
+        if (a.fut) {
+            a.ujra = true;
+
+            return;
+        }
+
+        // A böngésző saját ellenőrzése (kötelező mező): hibás állapotot nem mentünk.
+        if (a.urlap.checkValidity && !a.urlap.checkValidity()) {
+            automentesJelzo(a.urlap, 'Nincs mentve – hiányzik egy kötelező mező', 'hiba');
+
+            return;
+        }
+
+        a.fut = true;
+        automentesJelzo(a.urlap, 'Mentés…', 'fut');
+
+        var adat = new FormData(a.urlap);
+
+        adat.set('action', a.akcio);
+        adat.set('automentes', '1');
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (eredmeny) {
+                a.fut = false;
+
+                if (!eredmeny || !eredmeny.success) {
+                    // A lap közben lezárult (zárolt): a zárolt nézet töltődik be, nincs több automatikus mentés.
+                    if (eredmeny && eredmeny.data && eredmeny.data.zarolt) {
+                        automentesAll(szint);
+                        csendesFrissit(n, true);
+
+                        return;
+                    }
+
+                    automentesJelzo(a.urlap, 'Nincs mentve: ' + ((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'hiba'), 'hiba');
+
+                    return;
+                }
+
+                // Az új sorok azonosítója vissza az űrlapba: a következő mentés már frissíti őket, nem veszi fel újra.
+                var valtozatlan = urlapKep(a.urlap) === kep;
+                var ujSorok = (eredmeny.data && eredmeny.data.uj_sorok) || {};
+
+                Object.keys(ujSorok).forEach(function (kulcs) {
+                    var r = kulcs.split(':');
+                    var nev = r[0] === 'hiba' ? 'hibak[' + r[1] + '][id]' : 'tetelek[' + r[0] + '][' + r[1] + '][id]';
+                    var mezo = a.urlap.querySelector('input[name="' + nev + '"]');
+
+                    if (mezo && !(parseInt(mezo.value, 10) > 0)) {
+                        mezo.value = String(ujSorok[kulcs]);
+                    }
+                });
+
+                a.kep = valtozatlan ? urlapKep(a.urlap) : kep;
+                kep = a.kep;
+                szint.automentve = true;
+
+                var regiHiba = a.urlap.querySelector('.sdh-modal__hiba');
+
+                if (regiHiba) {
+                    regiHiba.remove();
+                }
+
+                var most = new Date();
+
+                automentesJelzo(a.urlap, 'Mentve ' + ('0' + most.getHours()).slice(-2) + ':' + ('0' + most.getMinutes()).slice(-2), 'kesz');
+
+                document.dispatchEvent(new CustomEvent('sdh:automentve', {
+                    detail: { action: a.akcio, adat: eredmeny.data || {}, id: a.id }
+                }));
+
+                // Közben újra változott: előbb az is mentődjön, a frissítés utána jön.
+                if (a.ujra || urlapKep(a.urlap) !== kep) {
+                    a.ujra = false;
+                    a.utemez(300);
+
+                    return;
+                }
+
+                // Újratöltés csak ha kell: a szerver olyat hozott létre, ami az űrlapon még csak előnézet
+                // (a bevizsgálási díj és levonása), vagy állapotot váltott (a lezárt lap zárolt nézetre vált).
+                var ujAllapot = (a.urlap.querySelector('[name="allapot"]') || {}).value || '';
+                var allapotValtott = ujAllapot !== a.allapot;
+
+                a.allapot = ujAllapot;
+
+                if (AUTO_FRISSIT.test(a.akcio) && (allapotValtott || a.urlap.querySelector('[data-sdh-bev-elonezet]'))) {
+                    csendesFrissit(n);
+                }
+            })
+            .catch(function (hiba) {
+                a.fut = false;
+                automentesJelzo(a.urlap, 'Nincs mentve: ' + hiba.message, 'hiba');
+            });
+    }
+
+    /** A nyitott űrlap újratöltése „Betöltés…" nélkül – ha közben nem változott. */
+    function csendesFrissit(n, kotelezo) {
+        var szint = szintek[n];
+
+        if (!szint || !szint.dialog.open || !szint.modul) {
+            return;
+        }
+
+        var a = szint.auto;
+        var kep = a ? urlapKep(a.urlap) : '';
+
+        // Csak akkor cseréljük, ha a betöltés közben sem írtak bele (különben elveszne).
+        var opciok = Object.assign({}, szint.opciok || {}, { csendes: true, szint: n, ful: '' });
+
+        opciok.elotte = function () {
+            return kotelezo || !a || !document.body.contains(a.urlap) || urlapKep(a.urlap) === kep;
+        };
+
+        nyit(szint.modul, szint.id, opciok);
+    }
+
+    /** Bezáráskor: ami még nincs mentve, elmegy; ha volt automatikus mentés, a lista frissül. */
+    function automentesZaras(szint) {
+        var a = szint.auto;
+
+        if (a && document.body.contains(a.urlap) && urlapKep(a.urlap) !== a.kep && !a.fut) {
+            var adat = new FormData(a.urlap);
+
+            adat.set('action', a.akcio);
+            adat.set('automentes', '1');
+            szint.automentve = true;
+
+            try {
+                fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin', keepalive: true }).catch(function () {});
+            } catch (x) { /* túl nagy a keepalive-hoz: a normál mentés gombbal menthető */ }
+        }
+
+        automentesAll(szint);
+
+        if (!szint.automentve) {
+            return;
+        }
+
+        szint.automentve = false;
+
+        var ev = new CustomEvent('sdh:mentve', {
+            cancelable: true,
+            detail: { action: a ? a.akcio : '', adat: {}, forras: 'automentes' }
+        });
+
+        // A rács (kezdőképernyő) helyben frissül; máshol az aktuális oldal tölt újra – nem visz el innen.
+        if (document.dispatchEvent(ev)) {
+            window.setTimeout(function () { window.location.reload(); }, 250);
+        }
     }
 
     function mutatUrlapHiba(urlap, szoveg) {
@@ -8986,6 +9402,17 @@
             return;
         }
 
+        // Automatikus mentésnél, ha minden mentve van: a számla rögtön nyílik (nincs mentés, nincs újratöltés).
+        var szint = szintek[n];
+        var auto = szint && szint.auto;
+
+        if (auto && !auto.fut && urlapKep(urlap) === auto.kep) {
+            window.clearTimeout(auto.ido);
+            szamlaNyit(n, id, sorozat);
+
+            return;
+        }
+
         Array.prototype.forEach.call(gombok, function (g) { g.disabled = true; });
         gomb.textContent = 'Mentés…';
 
@@ -9007,8 +9434,16 @@
                     detail: { action: urlap.dataset.sdhAjaxAction || '', adat: eredmeny.data || {}, forras: 'szamla' }
                 }));
 
-                nyit('munkalapok', id, { szint: n });
+                // Előbb a számla nyílik; a munkalap a háttérben, „Betöltés…" nélkül frissül.
+                Array.prototype.forEach.call(gombok, function (g) { g.disabled = false; });
+                gomb.textContent = felirat;
+
+                if (szint && szint.auto) {
+                    szint.auto.kep = urlapKep(urlap);
+                }
+
                 szamlaNyit(n, id, sorozat);
+                csendesFrissit(n);
             })
             .catch(function (hiba) {
                 Array.prototype.forEach.call(gombok, function (g) { g.disabled = false; });
@@ -9023,7 +9458,13 @@
             parameterek: { sorozat: sorozat },
             siker: function (adat) {
                 szamlaKesz = adat || null;
-                nyit('munkalapok', munkalapId, { szint: n });
+
+                // A munkalap a helyén frissül (a kiállított számla jelölése, a tételek számlaszáma).
+                if (szintek[n] && szintek[n].dialog.open && szintek[n].modul === 'munkalapok') {
+                    csendesFrissit(n);
+                } else {
+                    nyit('munkalapok', munkalapId, { szint: n });
+                }
                 // A pénztár (penztar.js) beírja / felajánlja a számla pénzét.
                 document.dispatchEvent(new CustomEvent('sdh:szamla-kesz', {
                     detail: { munkalapId: munkalapId, sorozat: sorozat, adat: adat || {} }
@@ -10910,7 +11351,38 @@
     oraIndul();
 
     // Más fájlok (levelezes.js) ezeken keresztül nyitnak popupot és választót.
+    /**
+     * Számla ablaka kívülről (a lezáráskor felugró nyomtatási ajánlatból): ha a munkalap nyitva
+     * van, fölé nyílik, és utána a munkalap a helyén frissül; ha nincs, önállóan nyílik.
+     */
+    function szamlaKivulrol(munkalapId, sorozat) {
+        var n = -1;
+
+        szintek.forEach(function (sz, i) {
+            if (sz && sz.dialog.open && sz.modul === 'munkalapok' && String(sz.id) === String(munkalapId)) {
+                n = i;
+            }
+        });
+
+        if (n >= 0) {
+            szamlaNyit(n, munkalapId, sorozat);
+
+            return;
+        }
+
+        nyit('szamla', munkalapId, {
+            szint: 0,
+            parameterek: { sorozat: sorozat },
+            siker: function (adat) {
+                document.dispatchEvent(new CustomEvent('sdh:szamla-kesz', {
+                    detail: { munkalapId: munkalapId, sorozat: sorozat, adat: adat || {} }
+                }));
+            }
+        });
+    }
+
     window.SDH_MUHELY_APP = {
+        szamla: szamlaKivulrol,
         nyit: nyit,
         bezar: bezar,
         sajatSzint: sajatSzint,

@@ -372,7 +372,7 @@ final class SDH_Muhely_Tetel
                 continue;
             }
 
-            foreach ($nyers[$tipus] as $sor) {
+            foreach ($nyers[$tipus] as $kulcs_nyers => $sor) {
                 if (!is_array($sor)) {
                     continue;
                 }
@@ -394,6 +394,8 @@ final class SDH_Muhely_Tetel
                 $mennyiseg = $szam('mennyiseg', 1.0);
 
                 $sorok[] = [
+                    // Az űrlap sorkulcsa (tetelek[tipus][kulcs]): az új sor ebből kapja vissza az azonosítóját.
+                    'kulcs'      => $tipus . ':' . preg_replace('/[^A-Za-z0-9_-]/', '', (string) $kulcs_nyers),
                     'id'         => isset($sor['id']) ? max(0, (int) $sor['id']) : 0,
                     // Melyik eszköz tétele (0 = a fő eszközé); null = az űrlap nem küldte.
                     'eszkoz_id'  => isset($sor['eszkoz_id']) ? max(0, (int) $sor['eszkoz_id']) : null,
@@ -431,6 +433,14 @@ final class SDH_Muhely_Tetel
      *
      * @param array<int, array<string, mixed>> $sorok A bekuldott() eredménye.
      */
+    /**
+     * Az utolsó mentés új sorai: űrlapkulcs => új azonosító. Az automatikus mentés
+     * ebből írja vissza az azonosítót, így a következő mentés nem veszi fel újra a sort.
+     *
+     * @var array<string, int>
+     */
+    public static $uj_azonositok = [];
+
     public static function mentes(int $munkalap_id, array $sorok): void
     {
         global $wpdb;
@@ -520,6 +530,11 @@ final class SDH_Muhely_Tetel
 
             if ($wpdb->insert($tabla, $adat) !== false) {
                 $megmarad[] = (int) $wpdb->insert_id;
+
+                if (!empty($sor['kulcs'])) {
+                    self::$uj_azonositok[(string) $sor['kulcs']] = (int) $wpdb->insert_id;
+                }
+
                 self::megjegyez($adat);
             }
         }

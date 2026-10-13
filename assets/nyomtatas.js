@@ -680,6 +680,10 @@
         } catch (hiba) { /* privát ablak: az ajánlat akkor csak oldalváltásig él */ }
     }
 
+    function szamlaElerheto() {
+        return !!(window.SDH_MUHELY_APP && typeof window.SDH_MUHELY_APP.szamla === 'function');
+    }
+
     function ajanlatMutat(a) {
         if (ajanlatAblak || !a) {
             return;
@@ -703,6 +707,9 @@
             '<div class="sdh-ny-ajanlat__gombok">' +
             '<button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-nya="nyomtat">Nyomtatás' + (a.peldany > 1 ? ' (' + a.peldany + ' példány)' : '') + '</button>' +
             '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-nya="megnyit">Előnézet, e-mail…</button>' +
+            // Lezáráskor a számla is innen indul (Számlázz.hu és a helyi Számla-előkészítő).
+            (a.szamla && a.szamla.fo && szamlaElerheto() ? '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ny-ajanlat__szamla" data-nya="szamla-fo">Számlázz.hu számla</button>' : '') +
+            (a.szamla && a.szamla.helyi && szamlaElerheto() ? '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ny-ajanlat__szamla" data-nya="szamla-helyi">Számla-előkészítő (PDF)</button>' : '') +
             '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-nya="nem">Most nem</button>' +
             '</div>';
 
@@ -736,6 +743,9 @@
 
             if (mit === 'nem') {
                 zar();
+            } else if (mit === 'szamla-fo' || mit === 'szamla-helyi') {
+                zar();
+                window.SDH_MUHELY_APP.szamla(a.id, mit === 'szamla-fo' ? 'fo' : 'helyi');
             } else if (mit === 'megnyit') {
                 zar();
                 ablakNyit(a.id, { tipus: a.tipus }, null);
@@ -807,6 +817,13 @@
     }
 
     // Mentés, állapotváltás, fizetés után: lehet, hogy most keletkezett ajánlat.
+    // Automatikus mentés után csak akkor, ha a szerver jelzi, hogy most keletkezett ajánlat (pl. lezárás).
+    document.addEventListener('sdh:automentve', function (ev) {
+        if (ev.detail && ev.detail.adat && ev.detail.adat.nyomtatas_ajanlat) {
+            window.setTimeout(ajanlatKer, 150);
+        }
+    });
+
     ['sdh:mentve', 'sdh:allapot', 'sdh:penztar-valtozott'].forEach(function (nev) {
         document.addEventListener(nev, function () {
             window.setTimeout(ajanlatKer, 150);

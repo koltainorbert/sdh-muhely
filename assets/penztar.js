@@ -729,6 +729,17 @@
         }, 120);
     });
 
+    // Automatikus mentés után (az ablak nyitva marad): ha most lett fizetve / nőtt az előleg, ajánlat.
+    document.addEventListener('sdh:automentve', function (esemeny) {
+        var d = esemeny.detail || {};
+
+        if (!/_munkalapok_ment$/.test(d.action || '') || !d.adat || !d.adat.penztar) {
+            return;
+        }
+
+        window.setTimeout(function () { ajanlatAblak(d.adat.penztar, null, null); }, 120);
+    });
+
     // Számla után: a szám már beíródott (szerver), vagy ajánlat, ha a pénz még nincs a pénztárban.
     document.addEventListener('sdh:szamla-kesz', function (esemeny) {
         var d = esemeny.detail || {};

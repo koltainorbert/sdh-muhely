@@ -1720,6 +1720,62 @@ a.sdh-kartya:focus-visible {
     font-size: calc(13px * var(--sdh-n));
 }
 
+/* A nagy ablakok (munkalap, számla) már betöltés közben a végleges méretükben állnak: nem „nyílnak ki" a tartalommal. */
+.sdh-modal[data-sdh-modul="szamla"] .sdh-modal__toltes,
+.sdh-modal[data-sdh-modul="munkalapok"] .sdh-modal__toltes {
+    display: grid;
+    place-items: center;
+    min-height: min(70vh, calc(560px * var(--sdh-n)));
+    min-width: min(88vw, calc(900px * var(--sdh-n)));
+}
+
+/* Automatikus mentés jelzője a popup láblécében (app.js automentesJelzo). */
+.sdh-automentes {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-left: auto;
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+    white-space: nowrap;
+}
+
+.sdh-automentes::before {
+    content: "";
+    width: calc(8px * var(--sdh-n));
+    height: calc(8px * var(--sdh-n));
+    border-radius: 50%;
+    background: var(--sdh-keret);
+}
+
+.sdh-automentes[data-allapot="fut"]::before {
+    background: var(--sdh-accent);
+    animation: sdh-automentes-pulzal .8s ease-in-out infinite alternate;
+}
+
+.sdh-automentes[data-allapot="kesz"]::before {
+    background: var(--sdh-siker);
+}
+
+.sdh-automentes[data-allapot="hiba"] {
+    color: var(--sdh-hiba);
+}
+
+.sdh-automentes[data-allapot="hiba"]::before {
+    background: var(--sdh-hiba);
+}
+
+@keyframes sdh-automentes-pulzal {
+    from { opacity: .35; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-automentes[data-allapot="fut"]::before {
+        animation: none;
+    }
+}
+
 .sdh-modal__cim {
     margin: 0 0 .2rem;
     font-size: calc(19px * var(--sdh-n));
@@ -8858,6 +8914,18 @@ a.sdh-ora__zaras--nincs {
     grid-template-columns: auto minmax(0, 1fr);
     gap: .9rem;
     align-items: start;
+    /* A kép ne érjen a fejléc sávjához (0.59.6): a kártya törzse a fejléc alatt kezdődik. */
+    margin-top: .55rem;
+    padding: 0 .6rem;
+}
+
+.sdh-ml-kartya__torzs > .sdh-mockup {
+    margin-top: .1rem;
+}
+
+.sdh-ml-kartya__torzs > .sdh-ml-adat {
+    margin-top: 0;
+    padding: 0;
 }
 
 .sdh-ml-kartya--eszkoz + .sdh-ml-kartya--eszkoz {

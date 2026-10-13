@@ -564,6 +564,14 @@ final class SDH_Muhely_Nyomtatas
         $tipus = (string) $a['tipus'];
         $s     = self::sablon($tipus);
 
+        // Lezáráskor a számla is innen indítható (0.59.6): Számlázz.hu (ha a Számlázás modul be van
+        // kapcsolva) és a helyi Számla-előkészítő – csak sorszámot kapott lapra.
+        $szamla = ['fo' => false, 'helyi' => false];
+
+        if ((string) $a['esemeny'] === 'zaras' && class_exists('SDH_Muhely_Szamla') && (string) $a['szam'] !== '') {
+            $szamla = ['fo' => SDH_Muhely_Modulok::be('szamlazas'), 'helyi' => true];
+        }
+
         wp_send_json_success(['ajanlat' => [
             'id'      => (int) $a['id'],
             'tipus'   => $tipus,
@@ -571,6 +579,7 @@ final class SDH_Muhely_Nyomtatas
             'szam'    => (string) $a['szam'],
             'esemeny' => (string) $a['esemeny'],
             'peldany' => (int) $s['peldany'],
+            'szamla'  => $szamla,
             'szoveg'  => (string) $a['esemeny'] === 'uj'
                 ? 'A lap elkészült' . ((string) $a['szam'] !== '' ? ' (' . $a['szam'] . ')' : '') . '. Kinyomtatod: ' . $s['cim'] . '?'
                 : 'A lap lezárva' . ((string) $a['szam'] !== '' ? ' (' . $a['szam'] . ')' : '') . '. Kinyomtatod: ' . $s['cim'] . '?',

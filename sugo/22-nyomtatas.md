@@ -4,7 +4,7 @@ cim: Nyomtatás, PDF és e-mail
 csoport: Napi munka
 modul:
 szakaszok: nyomtatvanyok
-kulcsszavak: nyomtatás, nyomtat, nyomtatvány, papír, PDF, mentés PDF-be, letöltés, e-mail, levél, küldés, csatolmány, átvételi, átvételi elismervény, munkalap nyomtatása, belső munkalap, árajánlat, ajánlat, szállítólevél, szállító, átadási bizonylat, megrendelés, bianko, üres munkalap, példány, példányszám, másolat, előnézet, próbanyomat, sablon, logó, betűtípus, betűméret, fejléc, lábléc, margó, A4, A5, aláírás, igazolvány, QR-kód, jogi szöveg, garanciális feltételek, pénztárzárás nyomtatása, pénztárjelentés, lista, készletlista, leltár, felajánlás
+kulcsszavak: nyomtatás, nyomtat, nyomtatvány, papír, PDF, mentés PDF-be, letöltés, e-mail, levél, küldés, csatolmány, átvételi, átvételi elismervény, munkalap nyomtatása, belső munkalap, árajánlat, ajánlat, szállítólevél, szállító, átadási bizonylat, megrendelés, bianko, üres munkalap, példány, példányszám, másolat, előnézet, próbanyomat, sablon, logó, betűtípus, betűméret, fejléc, lábléc, margó, A4, A5, aláírás, igazolvány, QR-kód, jogi szöveg, garanciális feltételek, pénztárzárás nyomtatása, pénztárjelentés, lista, készletlista, leltár, felajánlás, számla lezáráskor
 osszefoglalo: Minden papír egy helyről – átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – előnézettel, példányszámmal, PDF-be mentve és e-mailben is; a nyomtatványok a Beállításokban szerkeszthetők.
 ---
 
@@ -90,11 +90,12 @@ A rendszer két pillanatban magától rákérdez, hogy nyomtass-e:
 - **Új munkalap mentése után** az **átvételi elismervényt** ajánlja – ezt kapja az ügyfél, amikor leadja a készüléket.
 - **Munkalap lezárásakor** a **munkalapot** ajánlja – ezt kapja, amikor elviszi.
 
-A felajánló ablakban három gomb van:
+A felajánló ablak gombjai:
 
 - **Nyomtatás** – azonnal nyomtat, a nyomtatvány alap példányszámával.
 - **Előnézet, e-mail…** – megnyitja a Nyomtatás ablakot, ahol más nyomtatványt is választhatsz, vagy elküldheted levélben.
-- **Most nem** – bezárja; a lap később is kinyomtatható.
+- **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – csak **lezáráskor**: innen rögtön a számla ablaka nyílik (a munkalap fölött, ha az nyitva van). A Számlázz.hu gomb csak bekapcsolt Számlázás modulnál látszik.
+- **Most nem** – bezárja; a lap később is kinyomtatható és számlázható.
 
 A lezárást a rendszer bárhonnan észreveszi: a lap ablakából, a lista állapotválasztójából és a fizetés rögzítéséből is. Árukiadásnál és rendelésnél a lezáráskor az **átadási bizonylatot**, új rendelésnél a **megrendelést** ajánlja.
 
