@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.5
+- **Záró számla bevizsgálási díj után**: ha a díj levonódik (javítás), a számla ablakában és a kiállított számlán sem
+  a díj, sem a levonás nem szerepel – a díjat az ügyfél már kifizette és számlát kapott róla. A javítás tétele a saját
+  nevén, a még fizetendő összeggel áll (10 000 Ft termék − 8 000 Ft díj → 2 000 Ft); több tételnél a legnagyobb
+  értékűből vonódik le. A helyi Számla-előkészítő PDF is így készül. A munkalap tételei nem változnak (`Szamla::dij_beszamit`).
+- A beírt bevizsgálási díj **azonnal** megjelenik a Szolgáltatások között (előnézeti sor, mentés nélkül; `bevElonezet`).
+
 ### 0.59.4
 - **Szikra élete**: a figura lélegzik, 441 arckifejezése van (50 alap-érzelem árnyalatokkal), szükségletei nőnek
   (éhség, pisi, WC, fáradtság, büdösség, magány, kalandvágy), és 21 rövid jelenetet játszik a képernyő alján:

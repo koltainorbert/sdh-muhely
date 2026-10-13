@@ -53,12 +53,12 @@
 }
 
 @keyframes sdh-sz-lebeg {
-    from { transform: translateY(2px); }
-    to { transform: translateY(-4px); }
+    from { transform: translateY(calc(2px * var(--sdh-n))); }
+    to { transform: translateY(calc(-4px * var(--sdh-n))); }
 }
 
 .sdh-ai .sdh-sz-kering {
-    transform-origin: 50px 30px;
+    transform-origin: calc(50px * var(--sdh-n)) calc(30px * var(--sdh-n));
     animation: sdh-ai-forog 1.4s linear infinite;
 }
 
@@ -68,11 +68,11 @@
 
 @keyframes sdh-sz-goz {
     from { opacity: .55; transform: translateY(0) scale(.9); }
-    to { opacity: 1; transform: translateY(-4px) scale(1.08); }
+    to { opacity: 1; transform: translateY(calc(-4px * var(--sdh-n))) scale(1.08); }
 }
 
 .sdh-ai .sdh-sz-takony {
-    transform-origin: 52px 56px;
+    transform-origin: calc(52px * var(--sdh-n)) calc(56px * var(--sdh-n));
     animation: sdh-sz-takony 1.4s ease-in-out infinite;
 }
 
@@ -123,8 +123,8 @@
 }
 
 @keyframes sdh-sz-lepes {
-    from { transform: translateX(-1.5px); }
-    to { transform: translateX(1.5px); }
+    from { transform: translateX(calc(-1.5px * var(--sdh-n))); }
+    to { transform: translateX(calc(1.5px * var(--sdh-n))); }
 }
 
 .sdh-ai .sdh-sz-szereplo.is-csipked > svg {
@@ -142,7 +142,7 @@
 }
 
 .sdh-ai .sdh-sz-szereplo.is-repul .sdh-sz-szarny {
-    transform-origin: 26px 30px;
+    transform-origin: calc(26px * var(--sdh-n)) calc(30px * var(--sdh-n));
     animation: sdh-sz-csapkod .18s ease-in-out infinite alternate;
 }
 
@@ -156,7 +156,7 @@
 }
 
 .sdh-ai .sdh-sz-szereplo.is-lebeg .sdh-sz-bot {
-    transform-origin: 63px 28px;
+    transform-origin: calc(63px * var(--sdh-n)) calc(28px * var(--sdh-n));
     animation: sdh-sz-csipked .5s ease-in-out infinite alternate;
 }
 

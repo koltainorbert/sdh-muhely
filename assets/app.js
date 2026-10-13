@@ -3384,6 +3384,8 @@
             leSor.classList.toggle('is-torlendo', cel <= 0);
         });
 
+        bevElonezet(gyoker, esz, eszSor);
+
         Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-tetelek]'), function (panel) {
             var menny = 0;
             var netto = 0;
@@ -3407,7 +3409,7 @@
             mlIr(panel.querySelector('[data-sdh-tetel-ossz="menny"]'), mlMenny(menny));
             mlIr(panel.querySelector('[data-sdh-tetel-ossz="netto"]'), mlPenz(netto));
             mlIr(panel.querySelector('[data-sdh-tetel-ossz="brutto"]'), mlPenz(brutto));
-            mlDarab(gyoker, panel.getAttribute('data-sdh-tetelek'), db);
+            mlDarab(gyoker, panel.getAttribute('data-sdh-tetelek'), db + panel.querySelectorAll('[data-sdh-bev-elonezet]').length);
 
             osszNetto += netto;
             osszBrutto += brutto;
@@ -3532,6 +3534,99 @@
         if (kiiras('fizetendo')) {
             kiiras('fizetendo').classList.toggle('is-negativ', fizetendo < 0);
         }
+    }
+
+    /**
+     * A még el nem mentett bevizsgálási díj (és levonása) azonnal látszik a
+     * Szolgáltatások között – nem kell menteni és újranyitni a lapot. Ezek csak
+     * előnézeti sorok (szürke, szaggatott keret, nem küldődnek be, és nem számítanak
+     * kétszer a végösszegbe): a valódi sort a mentés hozza létre, ugyanezzel az
+     * összeggel. Eszközönként egy díjsor és – javításnál – egy levonássor.
+     */
+    function bevElonezet(gyoker, esz, eszSor) {
+        var panel = gyoker.querySelector('[data-sdh-tetelek="szolgaltatas"]');
+        var sorok = panel ? panel.querySelector('[data-sdh-tetelsorok]') : null;
+        var sablon = panel ? panel.querySelector('template[data-sdh-tetel-sablon]') : null;
+
+        if (!sorok) {
+            return;
+        }
+
+        Array.prototype.forEach.call(sorok.querySelectorAll('[data-sdh-bev-elonezet]'), function (s) { s.remove(); });
+
+        if (!sablon || !sablon.content) {
+            return;
+        }
+
+        var afaMezo = gyoker.querySelector('[data-sdh-lap-afa]');
+        var afaOpcio = afaMezo ? afaMezo.options[afaMezo.selectedIndex] : null;
+        var szazalek = afaOpcio ? parseFloat(afaOpcio.getAttribute('data-szazalek')) || 0 : 27;
+        var tobbEszkoz = eszSor.length > 1;
+
+        function sor(nev, ar, levonas, kulcs) {
+            var minta = sablon.content.querySelector('[data-sdh-tetelsor]');
+
+            if (!minta) {
+                return;
+            }
+
+            var s = minta.cloneNode(true);
+            var nevMezo = s.querySelector('input[name$="[megnevezes]"]');
+            var arMezo = s.querySelector('[data-sdh-tetel="ar"]');
+            var eszkMezo = s.querySelector('[data-sdh-tetel-eszkoz]');
+
+            if (nevMezo) {
+                nevMezo.value = nev;
+            }
+
+            if (arMezo) {
+                arMezo.value = String(ar).replace('.', ',');
+            }
+
+            if (eszkMezo) {
+                eszkMezo.value = kulcs;
+            }
+
+            mlIr(s.querySelector('[data-sdh-tetel="netto"]'), mlPenz(mlKerek(ar / (1 + szazalek / 100))));
+            mlIr(s.querySelector('[data-sdh-tetel="brutto"]'), mlPenz(ar));
+
+            // Csak kijelzés: semmi nem küldődik be belőle, és a gombjai nem élnek.
+            Array.prototype.forEach.call(s.querySelectorAll('input, select, button, textarea'), function (el) {
+                el.disabled = true;
+                el.removeAttribute('name');
+            });
+            Array.prototype.forEach.call(s.querySelectorAll('*'), function (el) {
+                Array.prototype.slice.call(el.attributes).forEach(function (a) {
+                    if (a.name.indexOf('data-') === 0 && a.name !== 'data-sdh-tetel') {
+                        el.removeAttribute(a.name);
+                    }
+                });
+            });
+            s.removeAttribute('data-sdh-tetelsor');
+            s.setAttribute('data-sdh-bev-elonezet', levonas ? 'le' : 'dij');
+            s.classList.add('sdh-tetelsor--elonezet');
+
+            if (levonas) {
+                s.classList.add('sdh-tetelsor--levonas');
+            }
+
+            s.title = 'Mentéskor kerül a munkalapra – addig előnézet';
+            sorok.insertBefore(s, sorok.firstChild);
+        }
+
+        // Fordított sorrendben szúrjuk be: a lap tetején díj, alatta a levonás, eszközönként.
+        eszSor.slice().reverse().forEach(function (kulcs) {
+            var e = esz[kulcs];
+            var elotag = tobbEszkoz && e.nev ? e.nev + ' – ' : '';
+
+            if (e.levon > 0 && !e.vanLe) {
+                sor(elotag + 'Bevizsgálási díj levonása (javítás esetén)', -e.levon, true, kulcs);
+            }
+
+            if (e.dij > 0 && !e.vanDij) {
+                sor(elotag ? elotag + 'bevizsgálási díj' : 'Bevizsgálási díj', e.dij, false, kulcs);
+            }
+        });
     }
 
     /** A bevizsgálási díj sora alatti magyarázat, és a „Ha javítás" választó láthatósága. */

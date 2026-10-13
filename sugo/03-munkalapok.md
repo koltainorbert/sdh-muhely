@@ -216,7 +216,7 @@ A bevizsgálási díj az átvételkor fizetett összeg, amely a munkalapon és a
 2. Díjlista nélkül: pipáld be a **Bevizsgálási díj** jelölőt, és írd az összeget a **Fizetett (előleg)** mezőbe.
 3. Ments.
 
-Mentéskor a díj külön tételsorként megjelenik a Szolgáltatások között.
+A díj a beírás után azonnal megjelenik a Szolgáltatások között – szaggatott keretes előnézeti sorként, javításnál a levonással együtt. Mentéskor ebből lesz a valódi tételsor, ugyanazzal az összeggel; addig nem kell menteni és újranyitni a lapot.
 
 **A díj beszámít a javításba.** Ha az eszközre javítási tétel kerül, a díj mínusz tételként levonódik a végösszegből – legfeljebb a többi tétel összegéig. Amíg nincs javítási tétel, a díj munkadíjként áll a lapon. A jelölő alatt a rendszer mindig kiírja, éppen mi történik a díjjal.
 

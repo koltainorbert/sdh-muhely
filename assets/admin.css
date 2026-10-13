@@ -5317,6 +5317,27 @@ a.sdh-szamlajel:hover {
     visibility: hidden;
 }
 
+/* A még el nem mentett bevizsgálási díj előnézeti sora (app.js bevElonezet): szaggatott keret, halvány. */
+.sdh-tetelsor--elonezet {
+    border-radius: calc(8px * var(--sdh-n));
+    outline: 1.5px dashed color-mix(in srgb, var(--sdh-accent) 55%, transparent);
+    outline-offset: -2px;
+    opacity: .82;
+}
+
+.sdh-tetelsor--elonezet input:disabled,
+.sdh-tetelsor--elonezet select:disabled {
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+}
+
+.sdh-tetelsor--elonezet .sdh-szolgmezo__gomb,
+.sdh-tetelsor--elonezet button {
+    visibility: hidden;
+}
+
 .sdh-tetelsor__zar {
     display: inline-flex;
     align-items: center;

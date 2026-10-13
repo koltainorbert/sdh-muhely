@@ -109,10 +109,11 @@ A már kiszámlázott tétel megjegyzi a számla számát. Ha később újabb sz
 
 Ha a munkalapon be van pipálva a **Bevizsgálási díj**, az előleg összege külön tételsorként áll a munkalapon és a számlán is. A neve a készülék típusából áll össze, például: „Minta X1 mobiltelefon bevizsgálási díj".
 
-- Ha az ügyfél kéri a javítást, a díj mínusz tételként levonódik a végösszegből. A számlán ilyenkor a díj és a levonása is szerepel.
+- Átvételkor, amíg nincs javítás, a díj sora maga a számlázható tétel: erről kap számlát az ügyfél (eszközönként külön is).
+- Ha az ügyfél kéri a javítást, a díj levonódik. A **záró számlán** ilyenkor sem a díj, sem a levonás nem szerepel – a díjat már kifizette, és számlát is kapott róla. A számlára csak a javítás tétele kerül, a saját nevén, a még fizetendő összeggel. Például 10 000 Ft-os akkumulátor és 8 000 Ft díj esetén a záró számlán: „Huawei P30 Lite akkumulátor – 2 000 Ft". Ha az eszköznek több tétele van, a díj a legnagyobb értékűből vonódik le; ami így 0 Ft-ra fogy, kimarad. A munkalapon a tételek eredeti ára megmarad.
 - Ha nem kéri a javítást, a díj munkadíjként megmarad.
 
-Így a bevizsgálási díj az átvételkor, a javítás pedig a végén külön is számlázható: a második számlánál a már kiszámlázott díj nincs bepipálva. A díj és a levonás megnevezése a Beállítások **Számlázás** lapfülén írható át.
+Így a bevizsgálási díj az átvételkor, a javítás pedig a végén külön számlázható, és a két számla együtt adja ki a teljes összeget. A díj és a levonás megnevezése a Beállítások **Számlázás** lapfülén írható át.
 
 **Eszközönkénti számla**
 
@@ -247,11 +248,11 @@ A tétel megnevezése melletti **megjegyzés** gombbal nyiss mezőt, és írd od
 
 ### Hogyan kerül a bevizsgálási díj a számlára?
 
-Ha a munkalapon be van pipálva a **Bevizsgálási díj**, a díj külön tételként szerepel, a készülék típusával a nevében. Javítás esetén a levonása is külön, mínusz tételként látszik.
+Átvételkor a díj külön tételként szerepel, a készülék típusával a nevében – erről kap számlát az ügyfél. Javítás esetén a záró számlán már nem szerepel sem a díj, sem a levonása: csak a javítás tétele, a saját nevén, a még fizetendő összeggel (a teljes ár mínusz a már kifizetett díj).
 
 ### Számlázhatom külön a bevizsgálási díjat és később a javítást?
 
-Igen. Az első számlán csak a díjat hagyd bepipálva. A második számlánál a már kiszámlázott díj alapból nincs bepipálva, így csak a többi tétel kerül rá.
+Igen, és ez a megszokott menet. Átvételkor a számlán csak a díj áll. A záró számlán a díj és a levonása már meg sem jelenik: a javítás tétele a még fizetendő összeggel kerül rá (10 000 Ft-os termék, 8 000 Ft díj → 2 000 Ft).
 
 ### Több eszköz van a munkalapon. Kaphat mindegyik külön számlát?
 

@@ -18,9 +18,11 @@ add_filter('option_sdh_muhely_szamla', static fn ($ertek) => ['kulcs' => 'teszt-
 add_filter('default_option_sdh_muhely_szamla', static fn () => ['kulcs' => 'teszt-kulcs']);
 
 $sorszam = 0;
+$kuldott = [];
 
-add_filter('pre_http_request', static function ($elozo, $argumentumok, $cim) use (&$sorszam) {
+add_filter('pre_http_request', static function ($elozo, $argumentumok, $cim) use (&$sorszam, &$kuldott) {
     $sorszam++;
+    $kuldott[] = (string) ($argumentumok['body'] ?? '');
 
     return [
         'headers'  => ['szlahu_szamlaszam' => 'TESZT-2026-' . $sorszam, 'szlahu_nettovegosszeg' => '0', 'szlahu_bruttovegosszeg' => '0'],
@@ -130,17 +132,17 @@ foreach ($m as $x) {
     $ablak[(int) $x[2]][] = ['id' => (int) $x[1], 'szamlazva' => $x[3] === '1', 'brutto' => (float) $x[5]];
 }
 
+$nevek = [0 => 'Kijelző', $e2 => 'Akkumulátor'];
+
 foreach ($kulcsok as $k) {
-    $osszeg = 0.0;
+    $szabad = array_values(array_filter($ablak[$k] ?? [], static fn ($s) => !$s['szamlazva']));
 
-    foreach ($ablak[$k] ?? [] as $s) {
-        if (!$s['szamlazva']) {
-            $osszeg += $s['brutto'];
-        }
-    }
-
-    T::egyezik(2000.0, round($osszeg), 'a záró számla ablakában a ' . $k . '. kulcsú eszköz kipipált összege 2 000');
+    T::egyezik(1, count($szabad), 'a záró számla ablakában a ' . $k . '. kulcsú eszköznek egyetlen tétele van (díj és levonás nélkül)');
+    T::egyezik(2000.0, round((float) ($szabad[0]['brutto'] ?? 0)), 'és az 2 000 Ft (a termék − a már kifizetett díj)');
+    T::igaz(preg_match('/value="' . (int) ($szabad[0]['id'] ?? 0) . '"[^>]*>.*?title="' . $nevek[$k] . '"/s', $urlap) === 1, 'a tétel a termék saját nevén áll: ' . $nevek[$k]);
 }
+
+T::nem_tartalmaz($urlap, 'Díj levonása', 'a záró számla ablakában nincs levonás-sor');
 
 // 6) A záró számla kiállítása eszközönként, a pipák szerint.
 foreach ($kulcsok as $k) {
@@ -155,12 +157,48 @@ foreach ($kulcsok as $k) {
     $r = t_ajax('sdh_muhely_szamla_ment', ['munkalap_id' => $id, 'eszkoz' => (string) $k, 'tetel' => $tetelek] + $fej);
     T::igaz(!empty($r['success']), 'a záró számla kiállítható (' . $k . ')');
     T::egyezik(2000.0, round((float) ($r['data']['brutto'] ?? 0)), 'a záró számla összege 2 000 (' . $k . ')');
+
+    $xml = (string) end($kuldott);
+    T::tartalmaz($xml, '<megnevezes>' . $nevek[$k] . '</megnevezes>', 'a Számlázz.hu-nak a termék neve ment (' . $k . ')');
+    T::egyezik(1, substr_count($xml, '<tetel>'), 'egyetlen tétel a számlán (' . $k . ')');
+    T::nem_tartalmaz($xml, 'bevizsgálási díj', 'a díj nem került a záró számlára (' . $k . ')');
+    T::nem_tartalmaz($xml, 'különbözet', 'nincs „különbözet” felirat (' . $k . ')');
 }
+
+// A munkalap tételei nem változtak: a termék ára továbbra is 10 000, a levonás −8 000.
+$d = $dij();
+T::egyezik(-8000.0, (float) $d[0]['bevizsgalas_le']->brutto_ertek, 'a munkalapon a levonás sora megmaradt');
+T::egyezik(10000.0, (float) $wpdb->get_var($wpdb->prepare("SELECT brutto_ertek FROM {$tt} WHERE munkalap_id = %d AND megnevezes = 'Kijelző'", $id)), 'a munkalapon a termék ára 10 000 maradt');
+
+/* --- Egy eszköz, javítás nélkül: a díj munkadíjként a számlára kerül ---------- */
+
+$id9 = t_munkalap($u, [$e1]);
+$ment($id9, ['fizetett' => '8000', 'bevizsgalasi_dij' => '1']);
+$urlap9 = t_ajax('sdh_muhely_szamla_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $id9, 'sorozat' => 'fo'])['nyers'];
+T::tartalmaz($urlap9, 'bevizsgálási díj', 'javítás nélkül a díj sora a számlán marad');
+T::igaz(preg_match('/data-szamlazva="0"\s+data-netto="[^"]*" data-brutto="8000(\.0+)?"/', $urlap9) === 1, 'a díj 8 000 Ft-tal számlázható');
+
+/* --- Egy eszköz, több tétel: a díj a legnagyobb tételből vonódik le ----------- */
+
+$id8 = t_munkalap($u, [$e1]);
+$ment($id8, ['fizetett' => '8000', 'bevizsgalasi_dij' => '1']);
+t_tetel($id8, 'Fólia', 3000, 0, 'termek');
+t_tetel($id8, 'Kijelzőcsere', 12000, 0);
+$ment($id8);
+$sorok8 = array_map(static fn ($t) => [(string) $t->megnevezes, round((float) $t->brutto_ertek)], SDH_Muhely_Szamla::tetelek($id8));
+T::egyezik([['Kijelzőcsere', 4000.0], ['Fólia', 3000.0]], $sorok8, 'két tétel: 12 000 − 8 000 = 4 000 a kijelzőcserén, a fólia marad 3 000');
 
 // 7) A pénztár: a záráskor ajánlott összeg eszközönként 2 000.
 $lap = t_lap($id);
 $r   = t_ajax('sdh_muhely_penztar_ajanlat', ['munkalap_id' => $id]);
 $aj  = $r['data']['ajanlat'] ?? null;
 T::egyezik(null, $aj, 'a pénztár magától nem ajánl újabb tételt: a díj már bent van (a Fizetés ablak 2 000 Ft-ot javasol)');
+
+/* --- A díj azonnal látszik a Szolgáltatások között (mentés nélkül) ------------ */
+
+$app = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.js');
+T::tartalmaz($app, 'bevElonezet(gyoker, esz, eszSor);', 'a számolás minden változásnál frissíti az előnézeti sorokat');
+T::tartalmaz($app, "s.removeAttribute('data-sdh-tetelsor');", 'az előnézeti sor nem számít bele kétszer az összegbe');
+T::tartalmaz($app, "el.removeAttribute('name');", 'és nem küldődik be');
 
 T::vege('t51 bevizsgálás után a záró számla és a pénztár');

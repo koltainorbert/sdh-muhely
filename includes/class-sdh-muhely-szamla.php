@@ -901,6 +901,87 @@ final class SDH_Muhely_Szamla
     }
 
     /**
+     * A záró számla: ha az eszköznél a bevizsgálási díj levonódik (van
+     * `bevizsgalas_le` sora), a díjat az ügyfél már kifizette és számlát is kapott
+     * róla. Ezért a számlára sem a díj, sem a levonás sora nem kerül: a díj az
+     * eszköz többi (még nem számlázott) tételéből vonódik le, a legnagyobb értékűvel
+     * kezdve, és a tétel a saját nevén, a még fizetendő összeggel szerepel.
+     * Pl. 10 000 Ft-os termék − 8 000 Ft díj → „Huawei P30 Lite akkumulátor" 2 000 Ft.
+     * A 0 Ft-ra fogyó tétel kimarad. A munkalap tételei nem változnak.
+     *
+     * Levonás nélkül (nincs javítás, a díj munkadíjként marad) minden a régi:
+     * a díj sora maga a számlázható tétel.
+     *
+     * @param array<int, object> $tetelek
+     * @return array<int, object>
+     */
+    private static function dij_beszamit(array $tetelek): array
+    {
+        $levonas = [];
+
+        foreach ($tetelek as $t) {
+            if ((string) $t->forras === self::BEVIZSGALAS_LE && (float) $t->brutto_ertek < 0) {
+                $k            = (int) ($t->eszkoz_id ?? 0);
+                $levonas[$k]  = ($levonas[$k] ?? 0.0) + abs((float) $t->brutto_ertek);
+            }
+        }
+
+        if ($levonas === []) {
+            return $tetelek;
+        }
+
+        $ki = [];
+
+        foreach ($tetelek as $t) {
+            $k = (int) ($t->eszkoz_id ?? 0);
+
+            // Levont díjú eszköznél a díj és a levonás sora nem számlázandó.
+            if (isset($levonas[$k]) && in_array((string) $t->forras, [self::BEVIZSGALAS, self::BEVIZSGALAS_LE], true)) {
+                continue;
+            }
+
+            $ki[] = $t;
+        }
+
+        foreach ($levonas as $k => $osszeg) {
+            $maradek = round($osszeg, 2);
+
+            // Az eszköz még nem számlázott, pozitív tételei, a legnagyobb értékűvel kezdve.
+            $sajat = array_keys(array_filter($ki, static fn (object $t): bool => (int) ($t->eszkoz_id ?? 0) === $k
+                && (string) $t->szamla === '' && (float) $t->brutto_ertek > 0));
+
+            usort($sajat, static fn (int $a, int $b): int => (float) $ki[$b]->brutto_ertek <=> (float) $ki[$a]->brutto_ertek);
+
+            foreach ($sajat as $i) {
+                if ($maradek < 0.005) {
+                    break;
+                }
+
+                $t     = clone $ki[$i];
+                $ertek = (float) $t->brutto_ertek;
+                $le    = min($ertek, $maradek);
+                $uj    = round($ertek - $le, 2);
+                $menny = (float) $t->mennyiseg > 0 ? (float) $t->mennyiseg : 1.0;
+
+                $maradek = round($maradek - $le, 2);
+
+                if ($uj < 0.005) {
+                    unset($ki[$i]);
+                    continue;
+                }
+
+                // A kedvezmény már benne van az értékben: a sor a még fizetendő összeggel áll.
+                $t->kedvezmeny   = 0;
+                $t->brutto_ar    = round($uj / $menny, 2);
+                $t->brutto_ertek = $uj;
+                $ki[$i]          = $t;
+            }
+        }
+
+        return array_values($ki);
+    }
+
+    /**
      * A munkalap számlázható tételei: a bevizsgálási díj elöl, aztán a
      * szolgáltatások, végül a termékek.
      *
@@ -908,10 +989,10 @@ final class SDH_Muhely_Szamla
      */
     public static function tetelek(int $munkalap_id): array
     {
-        $tetelek = array_values(array_filter(
+        $tetelek = self::dij_beszamit(array_values(array_filter(
             SDH_Muhely_Tetel::lista($munkalap_id),
             static fn (object $t): bool => (string) $t->mozgas === 'kimeno'
-        ));
+        )));
 
         $rang = static fn (object $t): int => in_array((string) $t->forras, [self::BEVIZSGALAS, self::BEVIZSGALAS_LE], true) ? 0 : ((string) $t->tipus === 'szolgaltatas' ? 1 : 2);
 
