@@ -594,7 +594,101 @@ final class SDH_Muhely_Levelezes
                     <label for="level_hang">Hangjelzés új levélnél.</label>
                 </div>
             </div>
+
+            <?php if (class_exists('SDH_Muhely_Level_Feladat')) : ?>
+                <?php self::feladat_doboz(); ?>
+            <?php endif; ?>
         </div>
+        <?php
+    }
+
+    /**
+     * Beállítások › Levelezés › Levél-feladat ügynök (0.61.0).
+     *
+     * Soronként egy szabály: mikor illik rá (feladó, tárgy, melléklet), és mit
+     * tegyen (mappa, emlékeztető, melléklet nyomtatása, tételolvasó). Az üres
+     * sor az új szabályé – név nélkül nem jön létre.
+     */
+    private static function feladat_doboz(): void
+    {
+        $szabalyok = SDH_Muhely_Level_Feladat::szabalyok();
+        $olvasok   = SDH_Muhely_Level_Feladat::olvasok();
+        $sorok     = $szabalyok + ['' => SDH_Muhely_Level_Feladat::szabaly_szukit([])];
+        $i         = 0;
+
+        ?>
+        <h3 class="sdh-doboz__alcim">Levél-feladat ügynök</h3>
+
+        <p class="sdh-sugo">
+            A visszatérő levelekhez (beszállítói számla, webáruházi visszaigazolás) teendőt nyit, mappába teszi
+            őket, és felkínálja a melléklet nyomtatását meg a címkéket. A szabály a <strong>feladótól és a
+            tárgytól</strong> függ – a levél szövegétől soha. Feltétel nélküli szabály nem fut.
+            A nyitott teendők a Levelezés oldal <strong>Feladatok</strong> gombjánál vannak.
+        </p>
+
+        <input type="hidden" name="level_feladat_jelen" value="1">
+
+        <div class="sdh-lf-szabalyok">
+            <?php foreach ($sorok as $kulcs => $sz) : ?>
+                <?php $uj = (string) $kulcs === ''; ?>
+                <div class="sdh-lf-szabaly<?php echo $uj ? ' is-uj' : ''; ?>">
+                    <input type="hidden" name="level_feladat[<?php echo (int) $i; ?>][kulcs]" value="<?php echo esc_attr((string) $kulcs); ?>">
+
+                    <div class="sdh-mezo">
+                        <label for="lf_nev_<?php echo (int) $i; ?>"><?php echo $uj ? 'Új szabály neve' : 'Név'; ?></label>
+                        <input type="text" id="lf_nev_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][nev]"
+                               maxlength="60" autocomplete="off" value="<?php echo esc_attr((string) $sz['nev']); ?>"
+                               placeholder="<?php echo $uj ? 'pl. Beszállítói számla' : ''; ?>">
+                    </div>
+
+                    <div class="sdh-mezo">
+                        <label for="lf_felado_<?php echo (int) $i; ?>">A feladó tartalmazza</label>
+                        <input type="text" id="lf_felado_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][ha][felado]"
+                               maxlength="190" autocomplete="off" value="<?php echo esc_attr((string) $sz['ha']['felado']); ?>">
+                    </div>
+
+                    <div class="sdh-mezo">
+                        <label for="lf_targy_<?php echo (int) $i; ?>">A tárgy tartalmazza</label>
+                        <input type="text" id="lf_targy_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][ha][targy]"
+                               maxlength="190" autocomplete="off" value="<?php echo esc_attr((string) $sz['ha']['targy']); ?>">
+                    </div>
+
+                    <div class="sdh-mezo">
+                        <label for="lf_mappa_<?php echo (int) $i; ?>">Ebbe a mappába</label>
+                        <input type="text" id="lf_mappa_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][tesz][mappa]"
+                               maxlength="120" autocomplete="off" value="<?php echo esc_attr((string) $sz['tesz']['mappa']); ?>">
+                    </div>
+
+                    <div class="sdh-mezo">
+                        <label for="lf_olvaso_<?php echo (int) $i; ?>">Tételolvasó (címkékhez)</label>
+                        <select id="lf_olvaso_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][tesz][olvaso]">
+                            <option value="">Nincs</option>
+                            <?php foreach ($olvasok as $ok => $o) : ?>
+                                <option value="<?php echo esc_attr($ok); ?>" <?php selected((string) $sz['tesz']['olvaso'], $ok); ?>><?php echo esc_html((string) $o['cim']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="sdh-lf-szabaly__kapcsok">
+                        <label class="sdh-jelolo">
+                            <input type="checkbox" name="level_feladat[<?php echo (int) $i; ?>][aktiv]" value="1" <?php checked((bool) $sz['aktiv']); ?>> Fusson
+                        </label>
+                        <label class="sdh-jelolo">
+                            <input type="checkbox" name="level_feladat[<?php echo (int) $i; ?>][ha][csatolmany]" value="pdf" <?php checked((string) $sz['ha']['csatolmany'], 'pdf'); ?>> Csak melléklettel
+                        </label>
+                        <label class="sdh-jelolo">
+                            <input type="checkbox" name="level_feladat[<?php echo (int) $i; ?>][tesz][nyomtat]" value="csatolmany" <?php checked((string) $sz['tesz']['nyomtat'], 'csatolmany'); ?>> Melléklet nyomtatása
+                        </label>
+                        <label class="sdh-jelolo">
+                            <input type="checkbox" name="level_feladat[<?php echo (int) $i; ?>][tesz][ertesit]" value="1" <?php checked((bool) $sz['tesz']['ertesit']); ?>> Emlékeztessen
+                        </label>
+                    </div>
+                </div>
+                <?php $i++; ?>
+            <?php endforeach; ?>
+        </div>
+
+        <p class="sdh-sugo">A szabály törléséhez ürítsd ki a nevét, és ments.</p>
         <?php
     }
 
@@ -658,6 +752,32 @@ final class SDH_Muhely_Levelezes
             }
 
             $b['fiokok'][$k] = $f;
+        }
+
+        // Levél-feladat ügynök szabályai (0.61.0): a név adja a kulcsot; név nélkül a sor kimarad (törlés).
+        if (!empty($_POST['level_feladat_jelen']) && class_exists('SDH_Muhely_Level_Feladat')) {
+            $nyers = isset($_POST['level_feladat']) && is_array($_POST['level_feladat']) ? wp_unslash($_POST['level_feladat']) : [];
+            $uj_szabalyok = [];
+
+            foreach ($nyers as $sor) {
+                if (!is_array($sor)) {
+                    continue;
+                }
+
+                $nev = trim(sanitize_text_field((string) ($sor['nev'] ?? '')));
+
+                if ($nev === '') {
+                    continue;
+                }
+
+                $kulcs = sanitize_key((string) ($sor['kulcs'] ?? ''));
+                $kulcs = $kulcs !== '' ? $kulcs : sanitize_key(mb_substr(remove_accents($nev), 0, 30));
+                $kulcs = $kulcs !== '' ? $kulcs : 'szabaly' . (count($uj_szabalyok) + 1);
+
+                $uj_szabalyok[$kulcs] = $sor;
+            }
+
+            SDH_Muhely_Level_Feladat::ment($uj_szabalyok);
         }
 
         $u = isset($_POST['level_ugynok']) && is_array($_POST['level_ugynok']) ? wp_unslash($_POST['level_ugynok']) : [];
@@ -1248,11 +1368,105 @@ final class SDH_Muhely_Levelezes
             }
 
             $wpdb->suppress_errors(true);
-            $db += $wpdb->insert(self::tabla(), $sor) ? 1 : 0;
+            $uj_sor = $wpdb->insert(self::tabla(), $sor) ? 1 : 0;
             $wpdb->suppress_errors(false);
+            $db += $uj_sor;
+
+            // Levél-feladat ügynök (0.61.0): a visszatérő levelekre teendőt nyit,
+            // és megjegyzi, melyiket kell mappába tenni. A postafiókhoz nem nyúl.
+            if ($uj_sor === 1 && class_exists('SDH_Muhely_Level_Feladat')
+                && !in_array((string) $mappa->szerep, ['trash', 'junk', 'drafts', 'sent'], true)) {
+                SDH_Muhely_Level_Feladat::uj_level((int) $wpdb->insert_id, (int) $mappa->id, $sor + ['uid' => (int) $e['uid']], $szoveg, $level);
+            }
         }
 
         return $db;
+    }
+
+    /**
+     * A levél-feladat ügynök áthelyezései egy mappa szinkronja után (0.61.0).
+     * A mappát létrehozza, ha még nincs. Ez az EGYETLEN hely, ahol az ügynök
+     * kérésére levél mozdul – és csak áthelyezés történik, törlés soha.
+     */
+    private static function feladat_mozgatasok(string $fk, object $mappa, SDH_Muhely_Imap $imap): bool
+    {
+        global $wpdb;
+
+        if (!class_exists('SDH_Muhely_Level_Feladat')) {
+            return false;
+        }
+
+        $csoportok = SDH_Muhely_Level_Feladat::mozgatando($fk, (int) $mappa->id);
+
+        if ($csoportok === []) {
+            return false;
+        }
+
+        $tortent = false;
+
+        foreach ($csoportok as $cel_nev => $idk) {
+            try {
+                $cel = null;
+
+                foreach (self::mappak($fk) as $m) {
+                    if (mb_strtolower((string) $m->nev) === mb_strtolower((string) $cel_nev)) {
+                        $cel = $m;
+                    }
+                }
+
+                if ($cel === null) {
+                    try {
+                        $imap->mappa_letrehoz((string) $cel_nev);
+                    } catch (SDH_Muhely_Imap_Hiba $hiba) {
+                        if (stripos($hiba->getMessage(), 'exist') === false && stripos($hiba->getMessage(), 'duplicate') === false) {
+                            throw $hiba;
+                        }
+                    }
+
+                    self::mappak_frissit($fk, $imap, false);
+
+                    foreach (self::mappak($fk) as $m) {
+                        if (mb_strtolower((string) $m->nev) === mb_strtolower((string) $cel_nev)) {
+                            $cel = $m;
+                        }
+                    }
+                }
+
+                // A célmappa nem lehet a Kuka, a Spam vagy a Piszkozatok – és nem lehet maga a forrás.
+                if ($cel === null || (int) $cel->id === (int) $mappa->id || in_array((string) $cel->szerep, ['trash', 'junk', 'drafts', 'sent'], true)) {
+                    continue;
+                }
+
+                $sorok = $wpdb->get_results('SELECT id, uid, olvasott FROM ' . self::tabla() . ' WHERE mappa_id = ' . (int) $mappa->id . ' AND id IN (' . implode(',', array_map('intval', $idk)) . ')');
+                $sorok = is_array($sorok) ? $sorok : [];
+
+                if ($sorok === []) {
+                    continue;
+                }
+
+                $imap->kivalaszt((string) $mappa->nyers);
+                $imap->athelyez(SDH_Muhely_Imap::halmaz(array_map(static fn (object $x): int => (int) $x->uid, $sorok)), (string) $cel->nyers);
+
+                $db      = count($sorok);
+                $db_olv  = count(array_filter($sorok, static fn (object $x): bool => (int) $x->olvasott !== 1));
+                $m_tabla = self::mappa_tabla();
+
+                $wpdb->query('DELETE FROM ' . self::tabla() . ' WHERE id IN (' . implode(',', array_map(static fn (object $x): int => (int) $x->id, $sorok)) . ')');
+                $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET osszes = CASE WHEN osszes < %d THEN 0 ELSE osszes - %d END, olvasatlan = CASE WHEN olvasatlan < %d THEN 0 ELSE olvasatlan - %d END WHERE id = %d", $db, $db, $db_olv, $db_olv, (int) $mappa->id));
+                $wpdb->query($wpdb->prepare("UPDATE {$m_tabla} SET osszes = osszes + %d, olvasatlan = olvasatlan + %d WHERE id = %d", $db, $db_olv, (int) $cel->id));
+
+                $tortent = true;
+
+                if (class_exists('SDH_Muhely_Valtozasnaplo')) {
+                    SDH_Muhely_Valtozasnaplo::esemeny('level', 0, 'Levél-feladat ügynök: ' . $db . ' levél → ' . (string) $cel->nev, [], 'esemeny');
+                }
+            } catch (\Throwable $hiba) {
+                // Az áthelyezés kényelmi lépés: ha nem megy, a levél a helyén marad, a feladat él.
+                continue;
+            }
+        }
+
+        return $tortent;
     }
 
     /** A feladó e-mail-címe alapján az ügyfél (ha van ilyen a CRM-ben). */
@@ -1308,6 +1522,11 @@ final class SDH_Muhely_Levelezes
             }
 
             self::sorok_ment($fk, $fiok, $mappa, $elemek);
+
+            // Ha az ügynök elvitt leveleket, a mappa darabszáma is változott: újra megnézzük.
+            if (self::feladat_mozgatasok($fk, $mappa, $imap)) {
+                $allapot = $imap->kivalaszt((string) $mappa->nyers);
+            }
 
             foreach ($elemek as $e) {
                 $max = max($max, (int) $e['uid']);
@@ -1796,6 +2015,8 @@ final class SDH_Muhely_Levelezes
             'utolso'     => $max,
             'olvasatlan' => self::olvasatlan_db(),
             'azonnal'    => $azonnal,
+            // Levél-feladat ügynök (0.61.0): hány teendő vár még – addig emlékeztet, amíg el nem intézed.
+            'feladat'    => class_exists('SDH_Muhely_Level_Feladat') ? SDH_Muhely_Level_Feladat::nyitott_db() : 0,
             'ujak'       => array_reverse($ujak),
             'fiokok'     => $fiokok,
             'hang'       => !empty($b['hang']),
@@ -3559,6 +3780,18 @@ final class SDH_Muhely_Levelezes
                         <a href="<?php echo esc_url(SDH_Muhely_Modulok::url('beallitasok', ['ful' => 'levelezes'])); ?>">Beállítások → Levelezés</a>.</p>
                 </div>
             <?php else : ?>
+                <?php // Levél-feladat ügynök (0.61.0): a nyitott teendők egy gombnyomásra. ?>
+                <?php if (class_exists('SDH_Muhely_Level_Feladat')) : ?>
+                    <p class="sdh-level-oldal__feladat">
+                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--pill" data-sdh-lf-nyit>
+                            Feladatok
+                            <span class="sdh-level-oldal__db" data-sdh-lf-db<?php echo SDH_Muhely_Level_Feladat::nyitott_db() > 0 ? '' : ' hidden'; ?>><?php
+                                echo SDH_Muhely_Level_Feladat::nyitott_db() > 0 ? (int) SDH_Muhely_Level_Feladat::nyitott_db() : '';
+                            ?></span>
+                        </button>
+                    </p>
+                <?php endif; ?>
+
                 <div class="sdh-level" data-sdh-level
                      data-fiokok="<?php echo esc_attr((string) wp_json_encode(self::fiokok_kifele())); ?>"
                      data-ugyfel-url="<?php echo esc_attr(SDH_Muhely_Modulok::url('ugyfelek')); ?>">

@@ -64,6 +64,22 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.0
+- **Levél-feladat ügynök** (Levelezés): a visszatérő levelekből teendő lesz. Szabály (feladó + tárgy + melléklet) →
+  feladat, a levél mappába kerül (létre is hozza), a melléklet PDF-je egy gombbal nyomtatható, a levél tételeiből
+  címke készül. A feladat addig nyitott, amíg el nem intézed – közben tízpercenként emlékeztet. Nem töröl, nem
+  válaszol, nem küld; a levél szövegére SOHA nem illeszt (az csak adat). Szabályok: Beállítások › Levelezés.
+  Új tábla: `sdh_level_feladat` (DB_VERSION 0.39.0).
+- **SDH – belső modulok** (`includes/sdh/`): az SDH saját, eladáskor ki nem menő része, saját beállítás-sorral
+  (Beállítások › SDH – belső). Egy mappa törlésével nyomtalanul eltűnik; általános képesség nem kerülhet bele.
+- **Gigatel** (belső): a napi beszállítói levél felismerése, a „Gigatel számla" mappa, a PDF számla nyomtatása és a
+  **telefonszámos tételek** kiszedése (0620/0630/0670/0687/+36…) – ezekre kell címke.
+- **Beszállítói tétel címke**: készülék, megnevezés, azonosító, garancia, cikkszám, megjegyzés – pontosan annyi, amennyi
+  a levélben áll. **Ár nem kerül rá.** A címkeablakban kipipálod, melyik tétel kell, és nyomtatod (böngészőből vagy
+  közvetlenül a Brotherre).
+- **Tíz választható figura** az asszisztensnek: Szikra, Láng, Csepp, Moha, Kobold, Bigyó, Felhő, Zümi, Pára, Csillag –
+  mind saját színnel és alakkal, a meglévő mimikával és jelenetekkel. Beállítások › Asszisztens.
+
 ### 0.60.1
 - **Vissza a popup-rendszerhez: nincs görgetés.** A 0.60.0 görgethető ablakai visszaállítva – a popup, ha a tartalma
   magasabb a képernyőnél, megint arányosan kicsinyít, és minden egy képernyőn marad (`illesztPopup`, `--illeszt`).

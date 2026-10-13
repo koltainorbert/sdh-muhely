@@ -2233,3 +2233,229 @@ a.sdh-ai__buborek-gomb {
         display: none;
     }
 }
+
+/* ================================================================== */
+/* Tíz választható figura (0.61.0)                                     */
+/* ================================================================== */
+/*
+ * Mind ugyanaz a lény: a test, a szem és a száj szabálya közös, csak a
+ * színek, az alak lekerekítése és egy-egy apró jel (fül, antenna, csík)
+ * tér el. Jogvédett figurát nem rajzolunk, hasonmást sem – mindegyik
+ * saját, egyszerű alakzat.
+ */
+
+.sdh-ai[data-figura="lang"] {
+    --sdh-ai-a: #ff7a18;
+    --sdh-ai-b: #ffcb3d;
+    --sdh-ai-c: #ff3d3d;
+}
+
+.sdh-ai[data-figura="lang"] .sdh-ai__test {
+    border-radius: 54% 46% 48% 52% / 72% 68% 36% 32%;
+}
+
+.sdh-ai[data-figura="csepp"] {
+    --sdh-ai-a: #17c3e6;
+    --sdh-ai-b: #7af0ff;
+    --sdh-ai-c: #0a7ea4;
+}
+
+.sdh-ai[data-figura="csepp"] .sdh-ai__test {
+    border-radius: 50% 50% 50% 50% / 68% 68% 38% 38%;
+}
+
+.sdh-ai[data-figura="moha"] {
+    --sdh-ai-a: #3fa34d;
+    --sdh-ai-b: #a7e06b;
+    --sdh-ai-c: #1f6f3b;
+}
+
+.sdh-ai[data-figura="moha"] .sdh-ai__test {
+    border-radius: 50%;
+}
+
+.sdh-ai[data-figura="kobold"] {
+    --sdh-ai-a: #8b5cf6;
+    --sdh-ai-b: #d8b4fe;
+    --sdh-ai-c: #5b21b6;
+}
+
+/* Hegyes fülek: a test két felső sarkából nőnek ki. */
+.sdh-ai[data-figura="kobold"] .sdh-ai__leny::before,
+.sdh-ai[data-figura="kobold"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -12%;
+    width: 26%;
+    height: 34%;
+    background: linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
+    border-radius: 60% 8% 60% 8%;
+}
+
+.sdh-ai[data-figura="kobold"] .sdh-ai__leny::before { left: 4%; transform: rotate(-18deg); }
+.sdh-ai[data-figura="kobold"] .sdh-ai__leny::after { right: 4%; transform: rotate(18deg) scaleX(-1); }
+
+.sdh-ai[data-figura="robot"] {
+    --sdh-ai-a: #7b8794;
+    --sdh-ai-b: #cbd5e1;
+    --sdh-ai-c: #38bdf8;
+    --sdh-ai-szem: #9bf6ff;
+}
+
+.sdh-ai[data-figura="robot"] .sdh-ai__test {
+    border-radius: calc(16px * var(--sdh-n));
+    animation: sdh-ai-legzes 4.2s ease-in-out infinite;
+}
+
+/* Antenna a fej tetején. */
+.sdh-ai[data-figura="robot"] .sdh-ai__leny::before {
+    content: "";
+    position: absolute;
+    top: -22%;
+    left: 50%;
+    width: calc(3px * var(--sdh-n));
+    height: 24%;
+    background: var(--sdh-ai-a);
+    transform: translateX(-50%);
+}
+
+.sdh-ai[data-figura="robot"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    width: 16%;
+    height: 16%;
+    border-radius: 50%;
+    background: var(--sdh-ai-c);
+    box-shadow: 0 0 calc(10px * var(--sdh-n)) var(--sdh-ai-c);
+    transform: translateX(-50%);
+}
+
+.sdh-ai[data-figura="felho"] {
+    --sdh-ai-a: #e8f0ff;
+    --sdh-ai-b: #ffffff;
+    --sdh-ai-c: #9ec5ff;
+    --sdh-ai-szem: #2b3a55;
+}
+
+.sdh-ai[data-figura="felho"] .sdh-ai__test {
+    border-radius: 60% 60% 46% 46% / 70% 70% 40% 40%;
+}
+
+.sdh-ai[data-figura="meh"] {
+    --sdh-ai-a: #f7c948;
+    --sdh-ai-b: #ffe9a8;
+    --sdh-ai-c: #3b3b3b;
+    --sdh-ai-szem: #2b2b2b;
+}
+
+/* Csíkok: a testen belül, ferdén. */
+.sdh-ai[data-figura="meh"] .sdh-ai__test {
+    background:
+        repeating-linear-gradient(118deg, transparent 0 14%, color-mix(in srgb, var(--sdh-ai-c) 80%, transparent) 14% 22%),
+        radial-gradient(circle at 32% 26%, rgba(255, 255, 255, .8) 0 6%, transparent 30%),
+        linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
+}
+
+.sdh-ai[data-figura="szellem"] {
+    --sdh-ai-a: #cfd9ff;
+    --sdh-ai-b: #f3f6ff;
+    --sdh-ai-c: #8fa3d8;
+    --sdh-ai-szem: #2b3a55;
+}
+
+.sdh-ai[data-figura="szellem"] .sdh-ai__test {
+    border-radius: 50% 50% 18% 18% / 62% 62% 26% 26%;
+    opacity: .9;
+}
+
+.sdh-ai[data-figura="szellem"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    bottom: -6%;
+    left: 8%;
+    width: 84%;
+    height: 18%;
+    background:
+        radial-gradient(circle at 16% 0, transparent 0 48%, var(--sdh-ai-b) 48%),
+        radial-gradient(circle at 50% 0, transparent 0 48%, var(--sdh-ai-b) 48%),
+        radial-gradient(circle at 84% 0, transparent 0 48%, var(--sdh-ai-b) 48%);
+    background-size: 34% 100%;
+    background-repeat: repeat-x;
+    opacity: .9;
+}
+
+.sdh-ai[data-figura="csillag"] {
+    --sdh-ai-a: #ffb703;
+    --sdh-ai-b: #ffe9a8;
+    --sdh-ai-c: #fb8500;
+}
+
+.sdh-ai[data-figura="csillag"] .sdh-ai__test {
+    border-radius: 42% 58% 44% 56% / 48% 42% 58% 52%;
+    clip-path: polygon(50% 0, 62% 35%, 100% 38%, 70% 60%, 82% 100%, 50% 76%, 18% 100%, 30% 60%, 0 38%, 38% 35%);
+    animation: sdh-ai-legzes 4.2s ease-in-out infinite;
+}
+
+/* ---------- A választó a Beállításokban ---------- */
+
+.sdh-ai-figurak {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(150px * var(--sdh-n)), 1fr));
+    gap: calc(10px * var(--sdh-n));
+    margin-bottom: calc(14px * var(--sdh-n));
+}
+
+.sdh-ai-figura {
+    display: grid;
+    justify-items: center;
+    gap: calc(3px * var(--sdh-n));
+    padding: calc(10px * var(--sdh-n)) calc(8px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    text-align: center;
+    cursor: pointer;
+}
+
+.sdh-ai-figura:hover {
+    border-color: var(--sdh-accent);
+}
+
+.sdh-ai-figura:has(input:checked) {
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sdh-accent) 35%, transparent);
+}
+
+.sdh-ai-figura input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* A minta figura: a sarokban élő lény kicsinyített mása, mozgás nélkül. */
+.sdh-ai-figura__kep {
+    position: static;
+    display: block;
+    width: calc(58px * var(--sdh-n));
+    height: calc(58px * var(--sdh-n));
+    --sdh-ai-meret: calc(58px * var(--sdh-n));
+}
+
+.sdh-ai-figura__kep .sdh-ai__leny {
+    margin: 0;
+    cursor: inherit;
+}
+
+.sdh-ai-figura__nev {
+    font-weight: 600;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-ai-figura__alcim {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11.5px * var(--sdh-n));
+    line-height: 1.3;
+}

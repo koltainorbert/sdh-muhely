@@ -122,6 +122,32 @@ final class SDH_Muhely_Asszisztens
             'elet'             => !isset($b['elet']) || (bool) $b['elet'],
             'altesti'          => !isset($b['altesti']) || (bool) $b['altesti'],
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
+            // Melyik figura (0.61.0): tíz választható alak, mind saját színnel és arccal.
+            'figura'           => isset(self::figurak()[(string) ($b['figura'] ?? '')]) ? (string) $b['figura'] : 'szikra',
+        ];
+    }
+
+    /**
+     * A választható figurák (0.61.0). Mind ugyanaz az asszisztens – csak más
+     * alakot ölt: más színt, más szemet, más apró jelet visel. A rajz a
+     * stíluslapé (asszisztens.css: .sdh-ai[data-figura="…"]); itt a nevük és
+     * az ajánlott nevük áll. Jogvédett figurát nem rajzolunk, hasonmást sem.
+     *
+     * @return array<string, array{nev: string, alcim: string, nevjavaslat: string}>
+     */
+    public static function figurak(): array
+    {
+        return [
+            'szikra'  => ['nev' => 'Szikra', 'alcim' => 'A klasszikus: eleven, kékes-lila fénygombóc.', 'nevjavaslat' => 'Szikra'],
+            'lang'    => ['nev' => 'Láng', 'alcim' => 'Narancs-vörös lobogás, hegyes csúccsal.', 'nevjavaslat' => 'Láng'],
+            'csepp'   => ['nev' => 'Csepp', 'alcim' => 'Hűvös türkiz vízcsepp, csillogó szemmel.', 'nevjavaslat' => 'Csepp'],
+            'moha'    => ['nev' => 'Moha', 'alcim' => 'Zöld, nyugodt, kerek – a türelmes fajta.', 'nevjavaslat' => 'Moha'],
+            'kobold'  => ['nev' => 'Kobold', 'alcim' => 'Lila, hegyes fülekkel; szeret ugratni.', 'nevjavaslat' => 'Kobold'],
+            'robot'   => ['nev' => 'Bigyó', 'alcim' => 'Szögletes acélszürke fej, antennával.', 'nevjavaslat' => 'Bigyó'],
+            'felho'   => ['nev' => 'Felhő', 'alcim' => 'Lágy fehér-kék pamacs, álmos tekintettel.', 'nevjavaslat' => 'Felhő'],
+            'meh'     => ['nev' => 'Zümi', 'alcim' => 'Sárga-fekete csíkos, szorgos.', 'nevjavaslat' => 'Zümi'],
+            'szellem' => ['nev' => 'Pára', 'alcim' => 'Halvány, áttetsző, hullámos aljjal.', 'nevjavaslat' => 'Pára'],
+            'csillag' => ['nev' => 'Csillag', 'alcim' => 'Aranyszínű, saját fénnyel.', 'nevjavaslat' => 'Csillag'],
         ];
     }
 
@@ -211,6 +237,7 @@ final class SDH_Muhely_Asszisztens
             'parbaj'   => $b['parbaj'],
             'elet'     => $b['elet'],
             'altesti'  => $b['altesti'],
+            'figura'   => $b['figura'],
             // A Súgó címe: a túra végén és a „nem találom" válaszoknál ide vezet.
             'sugo'     => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS) : '',
         ];
@@ -1286,6 +1313,10 @@ final class SDH_Muhely_Asszisztens
             'elet'             => isset($_POST['elet_jelen']) ? self::p('elet', 2) === '1' : $b['elet'],
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
             'altesti'          => isset($_POST['elet_jelen']) ? self::p('altesti', 2) === '1' : $b['altesti'],
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'figura'           => isset($_POST['figura']) && isset(self::figurak()[sanitize_key(wp_unslash((string) $_POST['figura']))])
+                ? sanitize_key(wp_unslash((string) $_POST['figura']))
+                : $b['figura'],
             'eszkozok'         => [],
         ];
 
@@ -1714,6 +1745,34 @@ final class SDH_Muhely_Asszisztens
             </div>
 
             <div class="sdh-doboz">
+                <h2 class="sdh-doboz__cim">Melyik figura?</h2>
+                <p class="sdh-sugo">
+                    Ugyanaz az asszisztens – csak más alakot ölt. A választott figura a képernyő sarkában él,
+                    és minden tud, amit eddig: mimika, jelenetek, párbaj. A nevét alább írod át.
+                </p>
+
+                <div class="sdh-ai-figurak">
+                    <?php foreach (self::figurak() as $fk => $fg) : ?>
+                        <label class="sdh-ai-figura">
+                            <input type="radio" name="figura" value="<?php echo esc_attr($fk); ?>" <?php checked($b['figura'], $fk); ?>>
+                            <span class="sdh-ai-figura__kep sdh-ai" data-figura="<?php echo esc_attr($fk); ?>" aria-hidden="true">
+                                <span class="sdh-ai__leny">
+                                    <span class="sdh-ai__test"></span>
+                                    <span class="sdh-ai__mag"></span>
+                                    <span class="sdh-ai__fenyfolt"></span>
+                                    <span class="sdh-ai__arc">
+                                        <span class="sdh-ai__szem sdh-ai__szem--b"></span>
+                                        <span class="sdh-ai__szem sdh-ai__szem--j"></span>
+                                        <span class="sdh-ai__szaj"></span>
+                                    </span>
+                                </span>
+                            </span>
+                            <span class="sdh-ai-figura__nev"><?php echo esc_html($fg['nev']); ?></span>
+                            <span class="sdh-ai-figura__alcim"><?php echo esc_html($fg['alcim']); ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+
                 <h2 class="sdh-doboz__cim">Személyiség</h2>
                 <p class="sdh-sugo">Milyen legyen <?php echo esc_html($b['nev']); ?>? A humor a válaszai hangját és a magától mondott beszólásait állítja, az élénkség azt, mennyit mozog és játszik magától a képernyőn. A pontosságon egyik sem változtat: számot, árat, nevet viccből sem talál ki.</p>
                 <div class="sdh-cs-racs">

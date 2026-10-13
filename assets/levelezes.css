@@ -1335,3 +1335,135 @@
         gap: .1rem;
     }
 }
+
+/* ================================================================== */
+/* Levél-feladat ügynök (0.61.0)                                       */
+/* ================================================================== */
+
+.sdh-level-oldal__feladat {
+    margin: 0 0 calc(8px * var(--sdh-n));
+}
+
+.sdh-level-oldal__db {
+    min-width: calc(20px * var(--sdh-n));
+    margin-left: calc(6px * var(--sdh-n));
+    padding: 0 calc(6px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-allapot-piros);
+    color: #fff;
+    font-size: calc(11.5px * var(--sdh-n));
+    font-weight: 700;
+}
+
+.sdh-lf__lista {
+    display: flex;
+    flex-direction: column;
+    gap: calc(8px * var(--sdh-n));
+}
+
+.sdh-lf__kartya {
+    padding: calc(10px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-left: calc(4px * var(--sdh-n)) solid var(--sdh-allapot-piros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-lf__kartya.is-kesz {
+    border-left-color: var(--sdh-allapot-zold);
+    opacity: .75;
+}
+
+.sdh-lf__fej {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .2rem .7rem;
+}
+
+.sdh-lf__fej strong {
+    font-size: calc(14px * var(--sdh-n));
+}
+
+.sdh-lf__felado,
+.sdh-lf__ido {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-lf__ido {
+    margin-left: auto;
+}
+
+.sdh-lf__targy {
+    margin: calc(2px * var(--sdh-n)) 0 0;
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-lf__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6px * var(--sdh-n));
+    margin-top: calc(8px * var(--sdh-n));
+}
+
+.sdh-lf__tetelek {
+    margin: calc(8px * var(--sdh-n)) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(230px * var(--sdh-n)), 1fr));
+    gap: calc(2px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-lf__tetelek li {
+    display: flex;
+    gap: .4rem;
+    justify-content: space-between;
+}
+
+.sdh-lf__tetelek strong {
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-lf__tobb,
+.sdh-lf__ures {
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-lf__lab {
+    margin: calc(10px * var(--sdh-n)) 0 0;
+}
+
+/* A levél-feladat ügynök szabályai a Beállításokban. */
+.sdh-lf-szabalyok {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-lf-szabaly {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(165px * var(--sdh-n)), 1fr));
+    gap: calc(6px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    padding: calc(10px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-lf-szabaly.is-uj {
+    border-style: dashed;
+}
+
+.sdh-lf-szabaly .sdh-mezo {
+    margin: 0;
+}
+
+.sdh-lf-szabaly__kapcsok {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(4px * var(--sdh-n)) calc(14px * var(--sdh-n));
+}

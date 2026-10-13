@@ -80,7 +80,24 @@ final class SDH_Muhely_Beallitasok
             'kapcsolat'  => 'Kapcsolat és csapat',
             'eszkozok'   => 'Készülékadatok',
             'rendszer'   => 'Rendszer',
+            // Csak akkor jelenik meg, ha van benne lapfül (az SDH belső modulja adja; eladáskor nincs).
+            'sdh'        => 'SDH – belső',
         ];
+    }
+
+    /**
+     * Kívülről bejelentett lapfül (0.61.0). Az SDH belső modulkerete ezzel teszi
+     * be a saját lapjait, anélkül hogy ebbe a fájlba kellene írni – így a belső
+     * rész egyetlen mappa törlésével eltűnik.
+     *
+     * @var array<string, array<string, mixed>>
+     */
+    private static array $extra = [];
+
+    /** @param array<string, mixed> $szakasz cim, csoport, leiras, rajz, ment… */
+    public static function regisztral(string $kulcs, array $szakasz): void
+    {
+        self::$extra[sanitize_key($kulcs)] = $szakasz;
     }
 
     /**
@@ -260,6 +277,9 @@ final class SDH_Muhely_Beallitasok
                 'rajz' => [self::class, 'rendszer_doboz'],
             ],
         ];
+
+        // Kívülről bejelentett lapfülek (SDH – belső).
+        $lista += self::$extra;
 
         // Az árukiadás és a rendelés közös lapfüle: akkor tűnik el, ha mindkettő ki van kapcsolva.
         if (SDH_Muhely_Modulok::ki('arukiadas') && SDH_Muhely_Modulok::ki('rendelesek')) {

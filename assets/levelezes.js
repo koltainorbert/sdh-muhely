@@ -361,6 +361,143 @@
         }
     }
 
+    /* ---------------------------------------------------------------- */
+    /* Levél-feladat ügynök: emlékeztet, amíg el nem intézed (0.61.0)     */
+    /* ---------------------------------------------------------------- */
+
+    var feladatVolt = -1;
+    var feladatJelzve = 0;
+
+    function feladatNyit() {
+        var a = app();
+
+        if (a && typeof a.nyit === 'function') {
+            a.nyit('levelfeladat', '0', {});
+        }
+    }
+
+    function feladatJelez(db) {
+        db = parseInt(db, 10) || 0;
+
+        // A levelező „Feladatok" gombján a szám mindig látszik.
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-lf-db]'), function (el) {
+            el.textContent = db > 0 ? String(db) : '';
+            el.hidden = db < 1;
+        });
+
+        // Emlékeztető: új feladatnál azonnal, utána tízpercenként – amíg van nyitott.
+        var most = Date.now();
+
+        if (db > 0 && (db > feladatVolt || most - feladatJelzve > 600000)) {
+            feladatJelzve = most;
+
+            toast({
+                szint: 'azonnal',
+                cimke: 'Teendő',
+                cim: db === 1 ? 'Egy levélfeladat vár' : db + ' levélfeladat vár',
+                szoveg: 'Beszállítói levél érkezett: a számla nyomtatása és a címkék még nincsenek kész.',
+                megj: 'Kattints ide a feladatokhoz.',
+                maradjon: true,
+                kattintas: feladatNyit
+            });
+        }
+
+        feladatVolt = db;
+    }
+
+    document.addEventListener('click', function (esemeny) {
+        var cel = esemeny.target;
+
+        if (!cel.closest) {
+            return;
+        }
+
+        if (cel.closest('[data-sdh-lf-nyit]')) {
+            esemeny.preventDefault();
+            feladatNyit();
+
+            return;
+        }
+
+        var ablak = cel.closest('[data-sdh-lf-ablak]');
+
+        if (!ablak) {
+            return;
+        }
+
+        var elintez = cel.closest('[data-sdh-lf-elintez]');
+        var ujranyit = cel.closest('[data-sdh-lf-ujranyit]');
+        var level = cel.closest('[data-sdh-lf-level]');
+        var mind = cel.closest('[data-sdh-lf-mind]');
+
+        if (elintez || ujranyit) {
+            esemeny.preventDefault();
+
+            var gomb = elintez || ujranyit;
+            var id = gomb.getAttribute(elintez ? 'data-sdh-lf-elintez' : 'data-sdh-lf-ujranyit');
+
+            gomb.disabled = true;
+
+            var fd = new FormData();
+
+            fd.set('id', id);
+
+            kuldPost(elintez ? 'levelfeladat_elintez' : 'levelfeladat_ujranyit', fd).then(function (d) {
+                feladatJelez(d.db || 0);
+                feladatUjratolt(ablak);
+            }).catch(function (h) {
+                gomb.disabled = false;
+                window.alert(h.message);
+            });
+
+            return;
+        }
+
+        if (level) {
+            esemeny.preventDefault();
+            levelhez(parseInt(level.getAttribute('data-sdh-lf-level'), 10) || 0);
+
+            return;
+        }
+
+        if (mind) {
+            esemeny.preventDefault();
+
+            var a = app();
+
+            if (a && typeof a.nyit === 'function') {
+                a.nyit('levelfeladat', '0', { parameterek: { mind: mind.getAttribute('data-sdh-lf-mind') } });
+            }
+        }
+    });
+
+    /** Az ablak tartalmának újratöltése (a lista állapota változott). */
+    function feladatUjratolt(ablak) {
+        var a = app();
+        var mind = ablak.querySelector('[data-sdh-lf-mind]');
+        var most = mind && mind.getAttribute('data-sdh-lf-mind') === '0' ? '1' : '0';
+
+        if (a && typeof a.nyit === 'function') {
+            a.nyit('levelfeladat', '0', { parameterek: { mind: most } });
+        }
+    }
+
+    /** POST a saját végpontokhoz (a kuld() a level_* végpontokra szól). */
+    function kuldPost(akcio, fd) {
+        fd.set('action', 'sdh_muhely_' + akcio);
+        fd.set('_wpnonce', B.nonce || '');
+
+        return fetch(B.ajax, { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (j) {
+                if (!j || !j.success) {
+                    throw new Error((j && j.data && j.data.uzenet) || 'A művelet nem sikerült.');
+                }
+
+                return j.data;
+            });
+    }
+
     function allapot() {
         var utolso = tarol(UTOLSO_KULCS);
         var mezok = {};
@@ -371,6 +508,7 @@
 
         return kuld('allapot', mezok).then(function (adat) {
             jelveny(adat.olvasatlan, adat.azonnal);
+            feladatJelez(adat.feladat || 0);
             tarol(UTOLSO_KULCS, String(adat.utolso));
 
             (adat.fiokok || []).forEach(function (f) {

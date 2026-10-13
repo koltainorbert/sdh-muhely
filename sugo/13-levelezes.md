@@ -4,7 +4,7 @@ cim: Levelezés
 csoport: Kapcsolat
 modul: levelezes
 szakaszok: levelezes
-kulcsszavak: levelezés, e-mail, levél, Gmail, postafiók, fiók, IMAP, SMTP, alkalmazásjelszó, mappa, címke, csatolmány, válasz, továbbítás, piszkozat, törlés, kuka, spam, archiválás, áthelyezés, új levél, értesítés, fontos levél, teendők, ügynök, rendező ügynök, jelszóval védett fiók, aláírás
+kulcsszavak: levél-feladat, feladat, teendő, beszállítói számla, Gigatel, levelezés, e-mail, levél, Gmail, postafiók, fiók, IMAP, SMTP, alkalmazásjelszó, mappa, címke, csatolmány, válasz, továbbítás, piszkozat, törlés, kuka, spam, archiválás, áthelyezés, új levél, értesítés, fontos levél, teendők, ügynök, rendező ügynök, jelszóval védett fiók, aláírás
 osszefoglalo: A szerviz e-mail-fiókjai a rendszeren belül: olvasás, írás, válasz, csatolmány, mappák, új levél jelzése minden oldalon, és két ügynök – az egyik a fontos leveleket jelzi, a másik kérésre mappákba rendez.
 ---
 
@@ -201,6 +201,41 @@ Hol látod:
 Ha végeztél a levéllel, kattints az **Elintézve** gombra a jelzősávban. A levél kikerül a teendők közül. Tévedés esetén a **Mégsem elintézett** gombbal visszateheted. Ha válaszolsz a levélre, az is elintézettnek számít.
 
 Az ügynök szabályok alapján dolgozik; hogy mely feladók és kifejezések számítanak kiemeltnek, azt a Beállításokban adod meg.
+
+## A levél-feladat ügynök
+
+A harmadik ügynök azokkal a levelekkel foglalkozik, amelyek **minden nap megjönnek, és mindig ugyanaz a dolgunk velük**: a beszállító számlája, a webáruház visszaigazolása. Eddig ez kézi munka volt – és el is úszott: a levél elkeveredett, a számla nem lett kinyomtatva.
+
+Mit csinál, ha egy levélre ráillik egy szabály:
+
+1. **feladatot nyit** rá, és addig emlékeztet, amíg el nem intézed,
+2. **mappába teszi** a levelet (ha nincs ilyen mappa, létrehozza),
+3. **felkínálja a mellékelt PDF nyomtatását** (a számlát),
+4. **kiolvassa a levél tételeit**, és amelyikhez telefonszám tartozik, arra **címkét** kínál.
+
+Amit SOHA nem csinál: nem töröl levelet, nem válaszol, nem küld semmit, nem nyúl munkalaphoz, ügyfélhez, pénztárhoz. Nyomtatni is csak gombnyomásra nyomtat. A levél szövege adat: a benne álló „utasításoknak" nem engedelmeskedik – a szabály a **feladótól és a tárgytól** függ, nem attól, amit a levél kér.
+
+### A feladatok
+
+A Levelezés oldal tetején a **Feladatok** gomb mutatja, hány teendő van nyitva. Az ablakban feladatonként ott áll:
+
+| Gomb | Mit csinál |
+|---|---|
+| **Levél megnyitása** | A levelezőben megnyitja magát a levelet. |
+| **Számla nyomtatása (fájlnév)** | Új lapon megnyitja a mellékelt PDF-et – onnan nyomtatod. |
+| **Címkék (n tétel)** | A címkenyomtató ablaka nyílik meg a tételekkel: kipipálod, melyikre kell, és nyomtatod. |
+| **Elintézve** | Lezárja a feladatot. Ettől szűnik meg az emlékeztető. |
+
+Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért, hogy a számla kinyomtatása ne maradjon el. Az **Elintézve** után nem szól többet; a lezárt feladat az **Az elintézettek is** gombbal nézhető vissza, és újranyitható.
+
+### Szabályok
+
+**Beállítások › Levelezés › Levél-feladat ügynök**. Egy szabály két részből áll:
+
+- **Mikor:** a feladó tartalmazza…, a tárgy tartalmazza…, és (ha kell) legyen melléklet. Feltétel nélküli szabály nem fut – nehogy mindenre ráugorjon.
+- **Mit:** melyik mappába kerüljön, emlékeztessen-e, ajánlja-e a melléklet nyomtatását, és melyik **tételolvasó** nézze át a levelet.
+
+A tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ami csak az SDH-é (például a Gigatel), az a **Beállítások › SDH – belső** sorban van, és eladáskor nem megy ki.
 
 ## A rendező ügynök
 

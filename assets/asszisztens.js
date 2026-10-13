@@ -449,6 +449,8 @@
         gyoker = document.createElement('div');
         gyoker.className = 'sdh-ai';
         gyoker.setAttribute('data-allapot', 'nyugi');
+        // Melyik figura (0.61.0): a rajzot a stíluslap adja a data-figura szerint.
+        gyoker.setAttribute('data-figura', A.figura || 'szikra');
         gyoker.innerHTML =
             '<div class="sdh-ai__buborek" role="status" hidden><button type="button" class="sdh-ai__buborek-x" aria-label="Bezárás">' + IKON.x + '</button>' +
             '<div class="sdh-ai__buborek-szoveg"></div><div class="sdh-ai__buborek-gombok"></div></div>' +

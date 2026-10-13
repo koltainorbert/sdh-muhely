@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.38.0';
+    public const DB_VERSION = '0.39.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -117,6 +117,7 @@ final class SDH_Muhely_Schema
         $szamla       = self::tabla('szamla');
         $level        = self::tabla('level');
         $level_mappa  = self::tabla('level_mappa');
+        $level_feladat = self::tabla('level_feladat');
         $penztar      = self::tabla('penztar');
         $penztar_nap  = self::tabla('penztar_nap');
         $penztar_naplo = self::tabla('penztar_naplo');
@@ -782,6 +783,40 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key fiok (fiok),
             key szerep (szerep)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Levelezés – a levél-feladat ügynök feladatai (0.61.0)
+         *
+         * Egy sor = egy levél, amire egy szabály ráillett, és amivel
+         * teendő van (kinyomtatni a számlát, címkét nyomtatni…).
+         * "szabaly": a szabály kulcsa; "adat": a szabály által kinyert
+         * adatok JSON-ban (tételek, csatolmány sorszáma…); "allapot":
+         * nyitott vagy elintezve. A levél maga a levelezőszerveren
+         * marad – itt csak a teendő van nyilvántartva. Az "azonosito"
+         * a message_id és a szabály lenyomata: a levél mappák között
+         * mozoghat (ilyenkor új level_id-t kap), a feladat ugyanaz marad,
+         * és ugyanarra a levélre nem keletkezik második feladat.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$level_feladat} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            azonosito char(32) NOT NULL default '',
+            level_id bigint(20) unsigned NOT NULL default 0,
+            message_id varchar(255) NOT NULL default '',
+            fiok varchar(10) NOT NULL default '',
+            szabaly varchar(40) NOT NULL default '',
+            cim varchar(255) NOT NULL default '',
+            felado varchar(190) NOT NULL default '',
+            allapot varchar(20) NOT NULL default 'nyitott',
+            adat longtext NULL,
+            letrehozva datetime NULL,
+            elintezve datetime NULL,
+            elintezte bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            unique key azonosito (azonosito),
+            key allapot (allapot),
+            key szabaly (szabaly),
+            key level_id (level_id)
         ) {$charset};";
 
         /* ----------------------------------------------------------

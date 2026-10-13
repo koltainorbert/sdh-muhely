@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.60.1
+ * Version:           0.61.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.60.1');
+define('SDH_MUHELY_VERSION', '0.61.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -100,8 +100,18 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-mentes.php'          => 'SDH_Muhely_Mentes',
     // Súgó: bemutató, dokumentáció, kérdés–válasz, túrák – a sugo/ mappa fejezeteiből.
     'includes/class-sdh-muhely-sugo.php'            => 'SDH_Muhely_Sugo',
+    // Levél-feladat ügynök (0.61.0): visszatérő levelekből teendő – mappa, nyomtatás, címke.
+    'includes/class-sdh-muhely-level-feladat.php'   => 'SDH_Muhely_Level_Feladat',
     // Eszközcsomag (0.60.0): a plugin CSS/JS fájljai egy kérésben – a sor végén, mindenki után.
     'includes/class-sdh-muhely-csomag.php'          => 'SDH_Muhely_Csomag',
+
+    /* -----------------------------------------------------------------
+     * SDH – belső modulok. CSAK az SDH Szervizé: eladáskor az
+     * `includes/sdh/` mappa törlésével nyomtalanul eltűnik (a betöltő a
+     * hiányzó fájlt átlépi). Ide SEMMI általános képesség nem kerülhet.
+     * -------------------------------------------------------------- */
+    'includes/sdh/class-sdh-muhely-sdh.php'         => 'SDH_Muhely_Sdh',
+    'includes/sdh/class-sdh-muhely-sdh-gigatel.php' => 'SDH_Muhely_Sdh_Gigatel',
 ];
 
 foreach ($sdh_muhely_modulok as $sdh_muhely_fajl => $sdh_muhely_osztaly) {
