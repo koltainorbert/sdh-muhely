@@ -299,6 +299,58 @@ $holnap = gmdate('Y-m-d', (int) strtotime(current_time('Y-m-d') . ' +1 day'));
 T::igaz($LF::takarit($G::SZABALY, $holnap) >= 1, 'a kezdőnap előrehozása kitakarítja a régebbi nyitott feladatokat');
 T::egyezik(0, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $LF::tabla() . " WHERE message_id = '<t55-takarit@g.hu>'"), 'a feladat eltűnt');
 
+/* --- 14b. Tételek kézzel, beillesztett szövegből (0.61.4) -------------------- */
+
+$kezi = "Samsung Galaxy Tab A11 WIFI (SM-X130)\n"
+    . "Tok álló, bőr hatású PIROS\nAzonosító: GP-177299\nGarancia: Szavatosság\nCikkszám: 177299\n"
+    . "Megjegyzés: 8000Fizetve, 06302121235\n1 db Készleten\nNettó egységár: 3 999 Ft\n\n"
+    . "Apple iPhone 13\nKijelző (OLED)\nAzonosító: AP-88112\nGarancia: 6 hónap\nCikkszám: 149559\n"
+    . "Megjegyzés: Rendelte: +36 70 123 4567\n2 db Készleten\n\n"
+    . "Xiaomi Redmi Note 12\nAkkumulátor\nCikkszám: 149560\n1 db Készleten\n";
+
+$kt = $LF::altalanos_tetelek($kezi);
+
+T::egyezik(2, count($kt), 'a beillesztett szövegből csak a telefonszámos tételek jönnek');
+T::egyezik('06302121235', (string) $kt[0]['telefon'], 'a telefonszám a megjegyzésből');
+T::egyezik('177299', (string) $kt[0]['cikkszam'], 'a cikkszám a tétel soraiból');
+T::egyezik('Szavatosság', (string) $kt[0]['garancia'], 'a garancia is');
+T::egyezik('Samsung Galaxy Tab A11 WIFI (SM-X130)', (string) $kt[0]['keszulek'], 'és a készülék sora');
+T::egyezik('Apple iPhone 13', (string) $kt[1]['keszulek'], 'a második tétel nem keveredik az elsővel');
+
+foreach ($kt as $t) {
+    T::igaz(strpos(implode(' ', $t), ' Ft') === false, 'ár nem kerül a kézi tételre sem (' . $t['telefon'] . ')');
+}
+
+// Ismeretlen formátum: ott is legyen címke – a telefonszám körüli sorokból.
+$mas = "Cikk: Kijelzőfólia Samsung A54\nMennyiség: 2 db  Egységár: 1 290 Ft\nÁtvevő: Kovács Béla 06 30 555 1234\n";
+$mt  = $LF::altalanos_tetelek($mas);
+
+T::egyezik(1, count($mt), 'ismeretlen formátumból is lesz tétel');
+T::egyezik('06305551234', (string) $mt[0]['telefon'], 'a szóközös szám is');
+
+T::egyezik('', $LF::telefonszam('ESB201907960'), 'a számlaszám nem telefonszám');
+T::egyezik('', $LF::telefonszam('2019. 05. 28.'), 'a dátum sem');
+T::egyezik('+36701234567', $LF::telefonszam('Rendelte: +36 70 123 4567'), 'a +36-os alak igen');
+
+$lf_php = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-level-feladat.php');
+T::tartalmaz($lf_php, "'beilleszt'", 'a beillesztés AJAX-művelete be van kötve');
+
+// A 13. pont takarítása után üres a lista: egy friss feladattal nézzük a kártyát.
+$kezi_sor = array_merge($regi_sor, ['message_id' => '<t55-kezi@g.hu>', 'datum' => current_time('mysql')]);
+$wpdb->query('DELETE FROM ' . $LF::tabla() . " WHERE message_id = '<t55-kezi@g.hu>'");
+$LF::szabaly_ir($G::SZABALY, array_merge($LF::szabalyok()[$G::SZABALY], ['tol' => $LF::tegnap()]));
+$LF::uj_level(5104, 7, $kezi_sor, $szoveg, $level);
+
+ob_start();
+$LF::ablak(true); // az elintézetteket is mutatva biztosan van kártya
+$ablak2 = (string) ob_get_clean();
+
+T::tartalmaz($ablak2, 'data-sdh-lf-beilleszt', 'a kártyán ott a „Tételek beillesztése" gomb');
+T::tartalmaz($ablak2, 'data-sdh-lf-feldolgoz', 'és a feldolgozás gombja');
+
+$ljs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/levelezes.js');
+T::tartalmaz($ljs, "kuldPost('levelfeladat_beilleszt'", 'a beillesztett szöveg a szerverre megy');
+
 /* --- 14. Az eszközcsomag a módosított fájlt is kiszolgálja (0.61.2) ----------- */
 
 $csomag = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-csomag.php');

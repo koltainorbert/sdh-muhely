@@ -4,7 +4,7 @@ cim: A súgó használata
 csoport: Kezdés
 modul: sugo
 szakaszok:
-verzio: 0.61.3
+verzio: 0.61.4
 kulcsszavak: súgó, segítség, dokumentáció, leírás, bemutató, gyik, kérdés, válasz, túra, végigvezetés, keresés, újdonság, kézikönyv, használati útmutató
 osszefoglalo: A Súgó menüpontban egy helyen van a bemutató, a részletes dokumentáció, a kérdés–válaszok és az újdonságok – és ebből tanul az asszisztens is.
 ---

@@ -1417,6 +1417,52 @@ body:has(.sdh-fej) .sdh-level-toastok {
     margin-top: calc(8px * var(--sdh-n));
 }
 
+/* Tételek kézzel: a számlából kimásolt szöveg beillesztése (0.61.4). */
+.sdh-lf__beilleszt {
+    margin-top: calc(8px * var(--sdh-n));
+    padding: calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-mezo-r, calc(12px * var(--sdh-n)));
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-lf__beilleszt[hidden] {
+    display: none;
+}
+
+.sdh-lf__beilleszt label {
+    display: block;
+    margin-bottom: calc(6px * var(--sdh-n));
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-lf__beilleszt textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: calc(8px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(10px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(12.5px * var(--sdh-n));
+    resize: vertical;
+}
+
+.sdh-lf__beilleszt-gombok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n));
+    margin-top: calc(8px * var(--sdh-n));
+}
+
+.sdh-lf__allapot {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+}
+
 .sdh-lf__tetelek {
     margin: calc(8px * var(--sdh-n)) 0 0;
     padding: 0;

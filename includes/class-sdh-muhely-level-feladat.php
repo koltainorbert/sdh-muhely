@@ -57,7 +57,7 @@ final class SDH_Muhely_Level_Feladat
 
     public static function init(): void
     {
-        foreach (['lista', 'elintez', 'ujranyit', 'cimke', 'ujra'] as $m) {
+        foreach (['lista', 'elintez', 'ujranyit', 'cimke', 'ujra', 'beilleszt'] as $m) {
             add_action('wp_ajax_sdh_muhely_levelfeladat_' . $m, [self::class, 'ajax_' . $m]);
         }
 
@@ -719,6 +719,170 @@ final class SDH_Muhely_Level_Feladat
         ]);
     }
 
+    /**
+     * Tételek kézzel: a beillesztett szövegből (0.61.4).
+     *
+     * Van beszállító, aki se nem csatolja, se nem írja ki a tételeket a levélbe
+     * – csak egy linket küld a számlára. Ilyenkor a számlából (vagy a weboldalról)
+     * kimásolt szöveget ide beillesztve ugyanaz a tételolvasó dolgozik, és
+     * ugyanúgy nyomtathatók a címkék. A beillesztett szöveg ADAT: a szabály
+     * ettől nem változik, és a rendszer semmi mást nem csinál vele.
+     */
+    public static function ajax_beilleszt(): void
+    {
+        self::jog();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $f = self::feladat(isset($_POST['id']) ? (int) $_POST['id'] : 0);
+
+        if ($f === null) {
+            wp_send_json_error(['uzenet' => 'Nincs ilyen feladat.']);
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $szoveg = isset($_POST['szoveg']) ? (string) wp_unslash($_POST['szoveg']) : '';
+        $szoveg = mb_substr(trim(wp_strip_all_tags($szoveg)), 0, 200000);
+
+        if ($szoveg === '') {
+            wp_send_json_error(['uzenet' => 'Üres a beillesztett szöveg.']);
+        }
+
+        $a      = self::adat($f);
+        $olvaso = (string) ($a['olvaso'] ?? '');
+
+        if ($olvaso === '' || !isset(self::$olvasok[$olvaso])) {
+            // Nincs a szabályhoz kötött olvasó: a sorokból általános tételeket szedünk.
+            $tetelek = self::altalanos_tetelek($szoveg);
+        } else {
+            $tetelek = self::tetelek_olvas($olvaso, $szoveg, []);
+
+            if ($tetelek === []) {
+                // A beszállító formátuma más, mint a levélben: az általános olvasó próbálkozik.
+                $tetelek = self::altalanos_tetelek($szoveg);
+            }
+        }
+
+        if ($tetelek === []) {
+            wp_send_json_error(['uzenet' => 'Ebben a szövegben nem találtam telefonszámos tételt.']);
+        }
+
+        global $wpdb;
+
+        $a['tetelek'] = $tetelek;
+        $a['kezi']    = true;
+
+        $wpdb->update(self::tabla(), ['adat' => wp_json_encode($a)], ['id' => (int) $f->id]);
+
+        if (class_exists('SDH_Muhely_Valtozasnaplo')) {
+            SDH_Muhely_Valtozasnaplo::esemeny('level', (int) $f->level_id, sprintf('Levél-feladat: %d tétel kézzel beillesztve', count($tetelek)), [], 'esemeny');
+        }
+
+        wp_send_json_success(['tetel' => count($tetelek), 'uzenet' => sprintf('%d tétel – mehet a címke.', count($tetelek))]);
+    }
+
+    /**
+     * Általános tételolvasó a beillesztett szöveghez (0.61.4).
+     *
+     * Nem ismer egyetlen beszállítót sem: a telefonszámot keresi, és ami a
+     * sorában (vagy az előtte álló sorokban) van, abból rakja össze a címkét.
+     * Így akkor is van címke, ha a beszállító formátuma változik.
+     *
+     * @return array<int, array<string, string>>
+     */
+    public static function altalanos_tetelek(string $szoveg): array
+    {
+        $sorok = preg_split('/\R/u', (string) preg_replace('/[ \t]+/u', ' ', $szoveg)) ?: [];
+        $sorok = array_values(array_filter(array_map('trim', $sorok), static fn (string $s): bool => $s !== ''));
+
+        $ki   = [];
+        $cimk = '~^(Azonosító|Garancia|Cikkszám|Megjegyzés|Nettó egységár|Bruttó|Mennyiség|Egységár)\s*:~ui';
+
+        foreach ($sorok as $i => $sor) {
+            $tel = self::telefonszam($sor);
+
+            if ($tel === '' || count($ki) >= self::MAX_TETEL) {
+                continue;
+            }
+
+            $t = ['telefon' => $tel, 'megjegyzes' => mb_substr($sor, 0, 190)];
+
+            // Visszafelé olvasva: a címkés sorok a tétel adatai, az első címke
+            // nélküli sor a megnevezés, az előtte álló a készülék.
+            $nevek = [];
+
+            for ($j = $i - 1; $j >= 0 && $i - $j <= 8; $j--) {
+                $elozo = $sorok[$j];
+
+                // Másik telefonszám: ott már az előző tétel áll, nem megyünk tovább.
+                if (self::telefonszam($elozo) !== '') {
+                    break;
+                }
+
+                if (preg_match($cimk, $elozo, $m) === 1) {
+                    $kulcs = mb_strtolower((string) $m[1]);
+                    $ertek = trim((string) preg_replace('~^[^:]*:~u', '', $elozo));
+
+                    if (str_starts_with($kulcs, 'azonos') && !isset($t['azonosito'])) {
+                        $t['azonosito'] = $ertek;
+                    } elseif (str_starts_with($kulcs, 'garan') && !isset($t['garancia'])) {
+                        $t['garancia'] = $ertek;
+                    } elseif (str_starts_with($kulcs, 'cikk') && !isset($t['cikkszam'])) {
+                        $t['cikkszam'] = $ertek;
+                    }
+
+                    continue;
+                }
+
+                // Árat és készletsort nem viszünk a címkére.
+                if (preg_match('~(\d[\d\s]*(Ft|HUF)|db\s+Készleten)~ui', $elozo) === 1) {
+                    continue;
+                }
+
+                $nevek[] = $elozo;
+
+                if (count($nevek) >= 2) {
+                    break;
+                }
+            }
+
+            if (isset($nevek[0])) {
+                $t['megnevezes'] = mb_substr($nevek[0], 0, 190);
+            }
+
+            if (isset($nevek[1])) {
+                $t['keszulek'] = mb_substr($nevek[1], 0, 190);
+            }
+
+            $ki[] = array_map(
+                static fn ($ertek): string => mb_substr(sanitize_text_field((string) $ertek), 0, 190),
+                $t
+            );
+        }
+
+        return $ki;
+    }
+
+    /** Magyar mobil- és vezetékes szám a szövegből (üres, ha nincs). */
+    public static function telefonszam(string $szoveg): string
+    {
+        $jeloltek = [];
+
+        if (preg_match_all('~(?:\+36|0036|06)[\s\-\/]?\d{1,2}[\s\-\/]?\d{3}[\s\-\/]?\d{3,4}~u', $szoveg, $t) !== false) {
+            $jeloltek = (array) $t[0];
+        }
+
+        foreach ($jeloltek as $j) {
+            $szam = (string) preg_replace('/\D+/', '', (string) $j);
+
+            // 06 + körzet + 6-7 jegy, vagy +36/0036 ugyanaz.
+            if (preg_match('~^(?:36|06|0036)?\d{8,9}$~', $szam) === 1 && mb_strlen($szam) >= 10) {
+                return str_starts_with($szam, '36') ? '+' . $szam : $szam;
+            }
+        }
+
+        return '';
+    }
+
     /** Egy feladat tételei a címkenyomtatónak (a Matrica ablak ezt kéri). */
     public static function ajax_cimke(): void
     {
@@ -824,10 +988,29 @@ final class SDH_Muhely_Level_Feladat
                                     </button>
                                 <?php endif; ?>
 
+                                <?php // Ha a levélben nincs tétel (csak link a számlára): a számlából kimásolt szöveg is jó. ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-beilleszt="<?php echo (int) $f->id; ?>"
+                                        title="A számlából vagy a weboldalról kimásolt tételsorokból címke lesz.">
+                                    <?php echo $tetelek === [] ? 'Tételek beillesztése' : 'Tételek cseréje'; ?>
+                                </button>
+
                                 <button type="button" class="sdh-gomb <?php echo $kesz ? 'sdh-gomb--vilagos' : 'sdh-gomb--elsodleges'; ?>"
                                         data-sdh-lf-<?php echo $kesz ? 'ujranyit' : 'elintez'; ?>="<?php echo (int) $f->id; ?>">
                                     <?php echo $kesz ? 'Újranyitás' : 'Elintézve'; ?>
                                 </button>
+                            </div>
+
+                            <div class="sdh-lf__beilleszt" data-sdh-lf-mezo="<?php echo (int) $f->id; ?>" hidden>
+                                <label for="sdh-lf-szoveg-<?php echo (int) $f->id; ?>">
+                                    Másold ide a számla tételsorait (a PDF-ből vagy a webáruházból) – a telefonszámos tételekre címke készül.
+                                </label>
+                                <textarea id="sdh-lf-szoveg-<?php echo (int) $f->id; ?>" rows="6" spellcheck="false"
+                                          placeholder="Készülék&#10;Megnevezés&#10;Azonosító: …&#10;Garancia: …&#10;Cikkszám: …&#10;Megjegyzés: … 06301234567"></textarea>
+                                <div class="sdh-lf__beilleszt-gombok">
+                                    <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-lf-feldolgoz="<?php echo (int) $f->id; ?>">Feldolgozás</button>
+                                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-megse="<?php echo (int) $f->id; ?>">Mégse</button>
+                                    <span class="sdh-lf__allapot" role="status" aria-live="polite"></span>
+                                </div>
                             </div>
 
                             <?php if ($tetelek !== []) : ?>

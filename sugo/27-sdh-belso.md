@@ -80,6 +80,7 @@ A címke tartalmát a **Beállítások › Címkenyomtatás › Beszállítói t
 - **Nem jön létre feladat.** Nézd meg, hogy a feladó és a tárgy tényleg tartalmazza-e a beállított szöveget, és hogy a **Beállítások › SDH – belső › SDH-modulok** kapcsoló be van-e kapcsolva.
 - **A levél nem került a mappába.** Lehet, hogy a postafiók nem engedte létrehozni a mappát. Hozd létre kézzel ugyanazzal a névvel – a következő levél már oda kerül. A feladat ettől függetlenül él.
 - **Nincs címke egy tételhez.** Akkor nincs a megjegyzésében felismerhető telefonszám. Ilyenkor az **Egyedi címke** gombbal írhatsz kézzel címkét.
+- **A levélben csak értesítő van, tételek nincsenek.** A Gigatel számlaértesítő levele néha csak egy linket tartalmaz. Nyisd meg vele a számlát, másold ki a tételsorokat, és a feladatnál a **Tételek beillesztése** gombbal illeszd be – a címkék ugyanúgy elkészülnek.
 
 ## GYIK
 

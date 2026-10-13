@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.4
+- **Tételek beillesztése** a levél-feladatnál: ha a tételek nem a levélben, hanem a számlában vannak (a Gigatel
+  számlaértesítője csak egy linket küld), a számlából kimásolt szöveget a kártyán beillesztve ugyanúgy elkészülnek a
+  címkék. Új, **általános tételolvasó**: a telefonszámot keresi, és a körülötte álló sorokból rakja össze a címkét
+  (készülék, megnevezés, azonosító, garancia, cikkszám, megjegyzés) – **ár soha nem kerül rá**, telefonszám nélküli
+  tételből pedig nincs címke. Akkor is működik, ha a beszállító megváltoztatja a levele formáját.
+
 ### 0.61.3
 - **Az asszisztens buboréka nem csúszik ki a képernyő tetején.** Amióta a jelzések a jobb felső sarokban állnak,
   az ütközés-kerülő kód ennyivel tolta feljebb a buborékot – egy hosszú szöveg (például a frissítés újdonságai) így

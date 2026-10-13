@@ -451,6 +451,76 @@
             return;
         }
 
+        // Tételek kézzel: a számlából kimásolt szöveg beillesztése.
+        var nyitMezo = cel.closest('[data-sdh-lf-beilleszt]');
+        var megse = cel.closest('[data-sdh-lf-megse]');
+        var feldolgoz = cel.closest('[data-sdh-lf-feldolgoz]');
+
+        if (nyitMezo || megse) {
+            esemeny.preventDefault();
+
+            var mid = (nyitMezo || megse).getAttribute(nyitMezo ? 'data-sdh-lf-beilleszt' : 'data-sdh-lf-megse');
+            var mezo = ablak.querySelector('[data-sdh-lf-mezo="' + mid + '"]');
+
+            if (mezo) {
+                mezo.hidden = !nyitMezo;
+
+                if (nyitMezo) {
+                    var ta = mezo.querySelector('textarea');
+
+                    if (ta) {
+                        ta.focus();
+                    }
+                }
+            }
+
+            return;
+        }
+
+        if (feldolgoz) {
+            esemeny.preventDefault();
+
+            var fid = feldolgoz.getAttribute('data-sdh-lf-feldolgoz');
+            var doboz = ablak.querySelector('[data-sdh-lf-mezo="' + fid + '"]');
+            var szovegMezo = doboz ? doboz.querySelector('textarea') : null;
+            var allapot = doboz ? doboz.querySelector('.sdh-lf__allapot') : null;
+
+            if (!szovegMezo || szovegMezo.value.trim() === '') {
+                if (allapot) {
+                    allapot.textContent = 'Előbb illeszd be a szöveget.';
+                }
+
+                return;
+            }
+
+            feldolgoz.disabled = true;
+
+            if (allapot) {
+                allapot.textContent = 'Feldolgozás…';
+            }
+
+            var fdb = new FormData();
+
+            fdb.set('id', fid);
+            fdb.set('szoveg', szovegMezo.value);
+
+            kuldPost('levelfeladat_beilleszt', fdb).then(function (d) {
+                if (allapot) {
+                    allapot.textContent = d.uzenet || '';
+                }
+
+                feladatUjratolt(ablak);
+            }).catch(function (h) {
+                feldolgoz.disabled = false;
+
+                if (allapot) {
+                    allapot.textContent = h.message;
+                }
+            });
+
+            return;
+        }
+
         var elintez = cel.closest('[data-sdh-lf-elintez]');
         var ujranyit = cel.closest('[data-sdh-lf-ujranyit]');
         var level = cel.closest('[data-sdh-lf-level]');

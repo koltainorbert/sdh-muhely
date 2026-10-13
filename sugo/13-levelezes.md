@@ -225,12 +225,26 @@ A Levelezés oldal tetején a **Feladatok** gomb mutatja, hány teendő van nyit
 | **Számla nyomtatása (fájlnév)** | Új lapon megnyitja a mellékelt PDF-et – onnan nyomtatod. |
 | **Számla megnyitása** | Ha a számla nem melléklet, hanem **link** a levélben, ez a gomb nyitja meg a beszállító oldalán. |
 | **Számla keresése** | Csak akkor látszik, ha sem melléklet, sem link nem került elő. Újraolvassa a levelet a postafiókról. |
+| **Tételek beillesztése** | Ha a tételek nem a levélben, hanem a számlában vannak: másold ide a számla tételsorait, és a rendszer ugyanúgy legyártja a címkéket. |
 | **Címkék (n tétel)** | A címkenyomtató ablaka nyílik meg a tételekkel: kipipálod, melyikre kell, és nyomtatod. |
 | **Elintézve** | Lezárja a feladatot. Ettől szűnik meg az emlékeztető. |
 
 A melléklet, a számla linkje és a tételek a feladat **első megnyitásakor** jönnek elő: a rendszer a levélnek előbb csak az elejét tölti le (abban a PDF még nincs benne), és csak akkor olvassa végig, amikor ránézel. Ezért az első megnyitás egy pillanattal tovább tart.
 
 Nem minden beszállító csatolja a számlát: van, amelyik csak egy **letöltési linket** küld. Ilyenkor a melléklet helyén a **Számla megnyitása** gomb áll, és az a beszállító oldalára visz.
+
+### Ha a tételek nem a levélben vannak
+
+Van beszállító, aki a levélbe csak egy értesítőt és egy linket tesz – a tételek a számlában állnak. Ilyenkor a címke így készül:
+
+1. Nyisd meg a számlát (**Számla nyomtatása** vagy **Számla megnyitása**).
+2. Jelöld ki a tételeket, és másold ki ([[Ctrl]] + [[C]]).
+3. A feladatnál kattints a **Tételek beillesztése** gombra, illeszd be a szöveget ([[Ctrl]] + [[V]]), és nyomj **Feldolgozás**-t.
+4. Megjelenik a **Címkék (n tétel)** gomb – onnan ugyanúgy nyomtatsz.
+
+A rendszer a **telefonszámot** keresi, és ami a sorában (vagy fölötte) áll, abból rakja össze a címkét: készülék, megnevezés, azonosító, garancia, cikkszám, megjegyzés. **Ár soha nem kerül rá.** Telefonszám nélküli tételből nem lesz címke – azokat senki nem rendelte.
+
+Ez akkor is működik, ha a beszállító megváltoztatja a levele vagy a számlája formáját: a beillesztett szöveg mindig feldolgozható.
 
 Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért, hogy a számla kinyomtatása ne maradjon el. Az **Elintézve** után nem szól többet; a lezárt feladat az **Az elintézettek is** gombbal nézhető vissza, és újranyitható.
 
@@ -401,6 +415,10 @@ Nyisd meg, és kattints az **Elintézve** gombra. Ha válaszolsz rá, az is elin
 ### Az ügynök tévesen sorolt be egy levelet. Mit tehetek?
 
 Ha fontosat hagyott ki, vedd fel a feladót a **Kiemelt feladók** közé. Ha feleslegesen szólt, tedd a **Zajlistára**. Mindkettő a Beállítások → Levelezés lapfülön van.
+
+### A levélben nincsenek tételek. Hogyan lesz mégis címke?
+
+A feladatnál a **Tételek beillesztése** gombbal: másold be a számla tételsorait, nyomj **Feldolgozás**-t, és kész a **Címkék** gomb. A rendszer a telefonszámos tételekből készít címkét, ár nélkül.
 
 ### A feladatnál nincs melléklet. Hol a számla?
 
