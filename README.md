@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.3
+- **Termék- és szolgáltatás-címke** Brother címkenyomtatóra: a termék és a szolgáltatás ablakának alján **Címke** gomb
+  (előnézet, példányszám legfeljebb 50, böngészős vagy hálózati nyomtatás, naplózva a tételhez). Termékcímke alapból:
+  megnevezés, bruttó ár, cikkszám, vonalkód középen a kóddal (a termék vonalkódja, ha nincs: a cikkszám); szolgáltatás:
+  megnevezés, ár vagy ársáv, kategória. Minden további adat bekapcsolható, sorrend, felirat, betűméret állítható.
+- **Beállítások › Címkenyomtatás** (eddig RMA-matrica): felül a közös nyomtató és tekercs, alatta fülek – RMA-matrica /
+  Termékcímke / Szolgáltatás-címke – saját hosszal, tájolással, betűvel, tartalommal, élő előnézettel és próbanyomattal.
+  A modul neve: Címkenyomtatás (Brother).
+
 ### 0.59.2
 - **RMA-matrica, böngészős nyomtatás:** a Matrica ablak kiírja, milyen tekercsnek kell a nyomtatóban lennie, és
   mit kell a nyomtatás-ablakban választani (Papírméret a Brother-név szerint, pl. „62mm” vagy „29mm x 90mm”;

@@ -261,8 +261,8 @@ final class SDH_Muhely_Modulok
                 'szakaszok' => ['tac'],
             ],
             'matrica' => [
-                'cim' => 'RMA-matrica (Brother)', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'matrica',
-                'leiras' => 'Azonosító matrica a készülékre Brother címkenyomtatóval: böngészőből vagy közvetlenül hálózaton, állítható tartalommal.',
+                'cim' => 'Címkenyomtatás (Brother)', 'csoport' => 'Dokumentumok és készülékadatok', 'ikon' => 'matrica',
+                'leiras' => 'Brother címkenyomtató: RMA-matrica a készülékre, termék- és szolgáltatás-címke (ár, cikkszám, vonalkód) – böngészőből vagy közvetlenül hálózaton, állítható tartalommal.',
                 'ajax' => ['matrica_'],
                 'szakaszok' => ['matrica'],
             ],

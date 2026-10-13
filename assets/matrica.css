@@ -96,7 +96,47 @@
     color: var(--sdh-hiba);
 }
 
-/* ---------- Beállítások › RMA-matrica ---------- */
+/* ---------- Beállítások › Címkenyomtatás ---------- */
+
+/* Sablonválasztó (RMA / termék / szolgáltatás): pill alakú fülsor. */
+.sdh-matrica-sablonok {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: calc(4px * var(--sdh-n));
+    margin: calc(4px * var(--sdh-n)) 0 calc(14px * var(--sdh-n));
+    padding: calc(4px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-matrica-sablonok__gomb {
+    min-height: calc(34px * var(--sdh-n));
+    padding: 0 calc(16px * var(--sdh-n));
+    border: 0;
+    border-radius: calc(999px * var(--sdh-n));
+    background: transparent;
+    color: var(--sdh-szoveg-2);
+    font: inherit;
+    font-size: calc(13.5px * var(--sdh-n));
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sdh-matrica-sablonok__gomb:hover {
+    color: var(--sdh-szoveg);
+}
+
+.sdh-matrica-sablonok__gomb.is-aktiv {
+    background: var(--sdh-felulet);
+    color: var(--sdh-accent-szoveg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+}
+
+.sdh-matrica-sablonok__gomb:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
 
 .sdh-matrica-mezok {
     display: flex;
@@ -106,7 +146,7 @@
 
 .sdh-matrica-mezo {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) calc(110px * var(--sdh-n)) calc(100px * var(--sdh-n)) auto auto;
+    grid-template-columns: minmax(0, 1fr) calc(110px * var(--sdh-n)) calc(132px * var(--sdh-n)) auto auto;
     align-items: center;
     gap: .5rem;
     padding: .35rem .55rem;

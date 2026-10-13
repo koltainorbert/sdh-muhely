@@ -204,6 +204,7 @@ A díjak árát a Szolgáltatások **Árlista** nézetében írod át. A munkala
 - Az árlistát beillesztés előtt nézd át az előnézetben. Ami ott rossz, azt a szövegdobozban javítsd ki – az előnézet azonnal frissül.
 - Áremelésnél nem kell egyenként megnyitni a tételeket: az **Árlista** nézetben egy oldalon átírod mindet, és egyszer mentesz.
 - A **Leggyakoribbak elöl** rendezés megmutatja, mely szolgáltatásokból él a műhely.
+- Árcímke a pultra: a szolgáltatás ablakának alján a **Címke** gomb Brother címkenyomtatóra nyomtat (név, ár vagy ársáv, kategória) – lásd a **Címkenyomtatás (Brother)** fejezetet.
 
 ## Ha valami nem megy
 

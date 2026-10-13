@@ -6,7 +6,8 @@
  * (kicsinyítés, ha nem fér ki), PDF (oldalak = matricák × példány), előnézeti
  * kép, Brother QL raszter (parancsok, sorhossz, szélesség), közvetlen
  * nyomtatás egy helyi „nyomtatóra" (TCP), a Matrica ablak és gomb, az
- * előnézet a Beállításokban, a modul ki- és bekapcsolása, a Napló.
+ * előnézet a Beállításokban, a modul ki- és bekapcsolása, a Napló;
+ * 0.59.3: termék- és szolgáltatás-címke (közös nyomtató és tekercs).
  */
 
 require __DIR__ . '/_keret.php';
@@ -207,7 +208,9 @@ T::igaz(isset(SDH_Muhely_Beallitasok::szakaszok()['matrica']), 'van RMA-matrica 
 ob_start();
 $M::beallitas_doboz();
 $doboz = (string) ob_get_clean();
-T::egyezik(count($M::mezok()), substr_count($doboz, 'data-sdh-matrica-mezo='), 'minden adatnak saját sora');
+T::egyezik(count($M::mezok()) + count($M::mezok('termek')) + count($M::mezok('szolgaltatas')), substr_count($doboz, 'data-sdh-matrica-mezo='), 'minden sablon minden adatának saját sora');
+T::egyezik(3, substr_count($doboz, 'data-sdh-matrica-sablon-gomb='), 'sablonválasztó: RMA, termék, szolgáltatás');
+T::egyezik(1, substr_count($doboz, 'id="matrica_cimke"'), 'a tekercs egyszer, közösen');
 T::tartalmaz($doboz, 'data-sdh-matrica-fel', 'sorrend: nyilak');
 T::tartalmaz($doboz, 'data-sdh-matrica-proba', 'Próbanyomat gomb');
 T::nem_tartalmaz($doboz, 'type="date"', 'nincs natív dátummező');
@@ -221,6 +224,89 @@ T::egyezik('datum', array_key_first($m['mezok']), 'mentés: sorrend');
 T::egyezik('Felvéve', $m['mezok']['datum']['felirat'], 'mentés: felirat');
 T::igaz(!$m['mezok']['hiba']['be'] && !$m['vagas'], 'mentés: a nem pipált kikapcsol');
 delete_option($M::OPT);
+
+
+/* --- Termék- és szolgáltatás-címke (0.59.3) ------------------------------------- */
+
+delete_option($M::opt('termek'));
+delete_option($M::opt('szolgaltatas'));
+T::egyezik('sdh_muhely_matrica_termek', $M::opt('termek'), 'termékcímke: saját opció');
+T::egyezik('rma', $M::sablon('nincsilyen'), 'ismeretlen sablon: rma');
+$bt = $M::beallitas('termek');
+T::egyezik(['megnevezes', 'ar', 'cikkszam', 'vonalkod'], array_keys(array_filter($bt['mezok'], static fn ($m) => $m['be'])), 'termékcímke alapból: név, ár, cikkszám, vonalkód');
+T::egyezik(['nev', 'ar', 'kategoria'], array_keys(array_filter($M::beallitas('szolgaltatas')['mezok'], static fn ($m) => $m['be'])), 'szolgáltatás-címke alapból: név, ár, kategória');
+update_option($M::OPT, $M::tisztit(['nyomtato' => 'QL-700', 'cimke' => '29x90']));
+T::igaz($M::beallitas('termek')['nyomtato'] === 'QL-700' && $M::beallitas('termek')['cimke'] === '29x90', 'a nyomtató és a tekercs közös (az RMA-matricáé)');
+update_option($M::opt('termek'), ['cimke' => '62', 'nyomtato' => 'QL-810W', 'hossz' => 25]);
+T::igaz($M::beallitas('termek')['cimke'] === '29x90' && (int) $M::beallitas('termek')['hossz'] === 25, 'a sablon saját tekercse nem érvényes, a hossza igen');
+delete_option($M::OPT);
+delete_option($M::opt('termek'));
+
+$wpdb->insert(SDH_Muhely_Schema::tabla('termek'), ['megnevezes' => 'Teszt akkumulátor', 'cikkszam' => 'AK-77', 'vonalkod' => '5990000000017', 'brutto_ar' => 12700, 'afa_kulcs' => '27', 'me' => 'db', 'aktiv' => 1]);
+$tid = (int) $wpdb->insert_id;
+$wpdb->insert(SDH_Muhely_Schema::tabla('termek'), ['megnevezes' => 'Kód nélküli', 'cikkszam' => 'CSAK-CIKK', 'vonalkod' => '', 'brutto_ar' => 0, 'aktiv' => 1]);
+$tid2 = (int) $wpdb->insert_id;
+$wpdb->insert(SDH_Muhely_Schema::tabla('szolgaltatas'), ['nev' => 'Teszt kijelzőcsere', 'kulcs' => md5('t50-szolg-' . microtime()), 'brutto_ar' => 12000, 'ar_max' => 18000, 'afa_kulcs' => '27', 'kod' => 'TKC', 'kategoria' => 'Javítás']);
+$sid = (int) $wpdb->insert_id;
+
+$ta = $M::termek_adat($tid);
+T::egyezik('12 700 Ft', $ta['ar'], 'termék: bruttó ár');
+T::egyezik('10 000 Ft', $ta['netto'], 'termék: nettó ár (27%)');
+T::egyezik('5990000000017', $ta['vonalkod_ertek'], 'termék: a vonalkód a termék vonalkódja');
+T::egyezik('CSAK-CIKK', $M::termek_adat($tid2)['vonalkod_ertek'], 'vonalkód nélkül: a cikkszám');
+T::egyezik('', $M::termek_adat($tid2)['ar'], 'ár nélkül nincs ársor');
+T::egyezik(null, $M::termek_adat(999999), 'nincs ilyen termék');
+$sa = $M::szolgaltatas_adat($sid);
+T::egyezik('12 000 – 18 000 Ft', $sa['ar'], 'szolgáltatás: ársáv');
+T::egyezik('TKC', $sa['vonalkod_ertek'], 'szolgáltatás: a kód');
+T::egyezik(1, count($M::lista('termek', $tid)), 'termékcímke: egy címke');
+T::egyezik([], $M::lista('szolgaltatas', 999999), 'nincs ilyen szolgáltatás: üres');
+
+$bt = $M::beallitas('termek');
+$d  = (function () use ($M, $bt) { return (new ReflectionMethod($M, 'doboz'))->invoke(null, $bt, false); })();
+$r  = $M::elrendez($ta, $bt, $d['cw'], $d['ch']);
+$tipusok = array_column($r['elemek'], 't');
+T::igaz(in_array('vonalkod', $tipusok, true), 'termékcímke: van vonalkód');
+$vk = array_values(array_filter($r['elemek'], static fn ($e) => $e['t'] === 'vonalkod'))[0];
+T::igaz(abs(($vk['x'] * 2 + $vk['w']) - $d['cw']) < 0.01, 'a vonalkód középen');
+$szovegek = implode(' | ', array_map(static fn ($e) => implode('', array_column($e['futasok'], 0)), array_filter($r['elemek'], static fn ($e) => $e['t'] === 'szoveg')));
+T::tartalmaz($szovegek, '12 700 Ft', 'a címkén az ár');
+T::tartalmaz($szovegek, 'Teszt akkumulátor', 'a címkén a név');
+T::tartalmaz($szovegek, '5990000000017', 'a vonalkód alatt olvashatóan a kód');
+T::igaz(!$r['levagva'], 'a termékcímke kifér');
+
+$pdf = $M::pdf([$ta], $bt, 3);
+T::egyezik(3, preg_match_all('/\/Type\s*\/Page\b/', $pdf), 'termékcímke PDF: 3 példány = 3 oldal');
+T::tartalmaz($M::gomb($tid, 'termek'), 'data-sdh-matrica-tipus="termek"', 'a termék űrlapjának Címke gombja');
+T::tartalmaz($M::gomb($sid, 'szolgaltatas'), '<span>Címke</span>', 'a szolgáltatás űrlapjának Címke gombja');
+T::nem_tartalmaz($M::gomb($id), 'data-sdh-matrica-tipus', 'a munkalap gombja változatlan');
+
+$h = t_ajax('sdh_muhely_matrica_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $tid, 'tipus' => 'termek'])['nyers'];
+T::tartalmaz($h, 'data-tipus="termek"', 'termékcímke ablak');
+T::tartalmaz($h, 'Teszt akkumulátor', 'az ablakban a termék neve');
+T::egyezik(1, substr_count($h, 'data:image/png;base64,'), 'egy előnézet');
+$h = t_ajax('sdh_muhely_matrica_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => 999999, 'tipus' => 'szolgaltatas'])['nyers'];
+T::tartalmaz($h, 'Nincs ilyen szolgáltatás', 'nem létező szolgáltatás: hibaüzenet');
+
+$r = t_ajax('sdh_muhely_matrica_elonezet', ['sablon' => 'szolgaltatas', 'matrica' => ['cimke' => '62', 'hossz' => '40'], 'matrica_szolgaltatas' => ['hossz' => '28', 'sorrend' => array_keys($M::mezok('szolgaltatas')), 'mezok' => ['nev' => ['be' => '1', 'meret' => '1.15'], 'ar' => ['be' => '1', 'meret' => '1.9']]]]);
+T::igaz(!empty($r['success']) && $r['data']['png'] !== '', 'szolgáltatás-címke élő előnézet');
+T::tartalmaz((string) $r['data']['meret'], '× 28 mm', 'az előnézet a sablon saját hosszával');
+
+$_POST = ['matrica_jelen' => '1', 'matrica' => ['nyomtato' => 'QL-700', 'cimke' => '62', 'hossz' => '45', 'sorrend' => array_keys($M::mezok())],
+    'matrica_termek_jelen' => '1', 'matrica_termek' => ['hossz' => '22', 'cimke' => '29x90', 'sorrend' => ['ar', 'megnevezes'], 'mezok' => ['ar' => ['be' => '1', 'meret' => '1.9'], 'megnevezes' => ['be' => '1', 'meret' => '1']]]];
+$M::beallitas_mentes();
+$_POST = [];
+$bt = $M::beallitas('termek');
+T::igaz((int) $bt['hossz'] === 22 && $bt['cimke'] === '62', 'mentés: a termékcímke hossza saját, a tekercs közös');
+T::egyezik('ar', array_key_first($bt['mezok']), 'mentés: a termékcímke sorrendje');
+T::igaz(!$bt['mezok']['cikkszam']['be'], 'mentés: a nem pipált kikapcsol');
+T::igaz(!array_key_exists('nyomtato', (array) get_option($M::opt('termek'))), 'a közös részt a sablon nem tárolja');
+delete_option($M::OPT);
+delete_option($M::opt('termek'));
+
+$wpdb->delete(SDH_Muhely_Schema::tabla('termek'), ['id' => $tid]);
+$wpdb->delete(SDH_Muhely_Schema::tabla('termek'), ['id' => $tid2]);
+$wpdb->delete(SDH_Muhely_Schema::tabla('szolgaltatas'), ['id' => $sid]);
 
 /* --- Modul ki / be ----------------------------------------------------------- */
 

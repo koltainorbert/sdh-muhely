@@ -5,7 +5,7 @@
  * Azonosító matrica a leadott készülékre: név, munkalapszám, eszköz típusa
  * és azonosítója, RMA-kód (és QR), hiba, feloldó minta és kód, IMEI,
  * dátum – és amit még bekapcsolnak. Mi kerül rá, milyen sorrendben,
- * felirattal, mekkora betűvel: mind a Beállítások › RMA-matrica lapfülön.
+ * felirattal, mekkora betűvel: mind a Beállítások › Címkenyomtatás lapfülön.
  *
  * Két nyomtatási mód:
  *  - **Böngésző** (bármelyik Brother: QL, PT, TD): a rendszer pontos
@@ -20,6 +20,11 @@
  * A rajzolás egy helyen dől el (elrendez): ugyanaz az elrendezés megy a
  * PDF-be, a nyomtatóraszterbe és a Beállítások élő előnézetébe (PNG).
  *
+ * Sablonok (0.59.3): **rma** (munkalap), **termek** (termékcímke: név, ár,
+ * cikkszám, vonalkód…), **szolgaltatas** (szolgáltatás-címke). A nyomtató és
+ * a betett tekercs KÖZÖS (az RMA-matrica opciójában), a hossz, tájolás,
+ * betű és az adatok sablononként állíthatók.
+ *
  * @package SDH_Muhely
  */
 
@@ -32,6 +37,12 @@ final class SDH_Muhely_Matrica
     public const KULCS = 'matrica';
 
     public const OPT = 'sdh_muhely_matrica';
+
+    /** A címkesablonok. */
+    public const SABLONOK = ['rma' => 'RMA-matrica', 'termek' => 'Termékcímke', 'szolgaltatas' => 'Szolgáltatás-címke'];
+
+    /** A közös beállítások (nyomtató és a betett tekercs): mindig az RMA-matrica opciójából. */
+    public const KOZOS = ['nyomtato', 'mod', 'ip', 'port', 'cimke', 'egyedi_sz', 'egyedi_h', 'vagas'];
 
     /** A nyomtató felbontása (pont / hüvelyk). */
     private const DPI = 300;
@@ -141,15 +152,66 @@ final class SDH_Muhely_Matrica
         ];
     }
 
+    /** Ismert sablon kulcsa (ismeretlenre: rma). */
+    public static function sablon($s): string
+    {
+        $s = is_string($s) ? sanitize_key($s) : '';
+
+        return isset(self::SABLONOK[$s]) ? $s : 'rma';
+    }
+
+    /** A sablon saját opciója. */
+    public static function opt(string $sablon): string
+    {
+        $sablon = self::sablon($sablon);
+
+        return $sablon === 'rma' ? self::OPT : self::OPT . '_' . $sablon;
+    }
+
     /**
-     * A matricára tehető adatok. Az első nyolc az alapértelmezett, ebben a
-     * sorrendben; a többi bekapcsolható.
+     * A címkére tehető adatok. RMA-matricán az első nyolc az alapértelmezett,
+     * ebben a sorrendben; a többi bekapcsolható. A `vonalkod` és a `qr` rajz.
      *
      * @return array<string, array{cim: string, felirat: string, be: bool, meret: float, felkover: bool, sorok: int}>
      */
-    public static function mezok(): array
+    public static function mezok(string $sablon = 'rma'): array
     {
         $m = static fn (string $cim, string $felirat, bool $be, float $meret = 1.0, bool $felkover = false, int $sorok = 1): array => compact('cim', 'felirat', 'be', 'meret', 'felkover', 'sorok');
+
+        if (self::sablon($sablon) === 'termek') {
+            return [
+                'megnevezes' => $m('Megnevezés', '', true, 1.15, true, 2),
+                'ar'         => $m('Bruttó ár', '', true, 1.9, true),
+                'cikkszam'   => $m('Cikkszám', 'Cikksz.', true, 0.9),
+                'vonalkod'   => $m('Vonalkód (a termék vonalkódja; ha nincs, a cikkszám)', '', true),
+                'termekkod'  => $m('Termékkód', 'Kód', false, 0.9),
+                'gyari_szam' => $m('Gyári szám', 'Gyári sz.', false, 0.9),
+                'kategoria'  => $m('Kategória', '', false, 0.85),
+                'netto'      => $m('Nettó ár', 'Nettó', false, 0.9),
+                'me'         => $m('Mennyiségi egység', 'Egység', false, 0.85),
+                'beszallito' => $m('Beszállító', 'Besz.', false, 0.85),
+                'leiras'     => $m('Leírás', '', false, 0.85, false, 2),
+                'szerviz'    => $m('A szerviz neve', '', false, 0.85, true),
+                'datum'      => $m('Dátum (a nyomtatás napja)', '', false, 0.8),
+                'qr'         => $m('QR-kód (a vonalkód / cikkszám értékével)', '', false),
+            ];
+        }
+
+        if (self::sablon($sablon) === 'szolgaltatas') {
+            return [
+                'nev'        => $m('Megnevezés', '', true, 1.15, true, 2),
+                'ar'         => $m('Bruttó ár (ársávnál: tól–ig)', '', true, 1.9, true),
+                'kategoria'  => $m('Kategória', '', true, 0.85),
+                'kod'        => $m('Kód', 'Kód', false, 0.9),
+                'netto'      => $m('Nettó ár', 'Nettó', false, 0.9),
+                'me'         => $m('Mennyiségi egység', 'Egység', false, 0.85),
+                'megjegyzes' => $m('Megjegyzés', '', false, 0.85, false, 2),
+                'szerviz'    => $m('A szerviz neve', '', false, 0.85, true),
+                'datum'      => $m('Dátum (a nyomtatás napja)', '', false, 0.8),
+                'vonalkod'   => $m('Vonalkód (a kódból; ha nincs, az azonosítóból)', '', false),
+                'qr'         => $m('QR-kód (a kód értékével)', '', false),
+            ];
+        }
 
         return [
             'nev'          => $m('Név (az ügyfélé)', '', true, 1.15, true),
@@ -174,11 +236,12 @@ final class SDH_Muhely_Matrica
     }
 
     /** @return array<string, mixed> */
-    public static function alapok(): array
+    public static function alapok(string $sablon = 'rma'): array
     {
-        $mezok = [];
+        $sablon = self::sablon($sablon);
+        $mezok  = [];
 
-        foreach (self::mezok() as $k => $m) {
+        foreach (self::mezok($sablon) as $k => $m) {
             $mezok[$k] = ['be' => $m['be'], 'felirat' => $m['felirat'], 'meret' => $m['meret'], 'felkover' => $m['felkover']];
         }
 
@@ -190,7 +253,7 @@ final class SDH_Muhely_Matrica
             'cimke'        => '62',
             'egyedi_sz'    => 62,
             'egyedi_h'     => 40,
-            'hossz'        => 45,
+            'hossz'        => $sablon === 'rma' ? 45 : 30,
             'tajolas'      => 'allo',
             'margo'        => 1.5,
             'betu'         => 'dejavu',
@@ -201,15 +264,31 @@ final class SDH_Muhely_Matrica
             'keret'        => false,
             'rma_mod'      => 'mindketto',
             'mezok'        => $mezok,
+            'sablon'       => $sablon,
         ];
     }
 
-    /** @return array<string, mixed> A mentett beállítás az alapértékekkel kiegészítve. */
-    public static function beallitas(): array
+    /**
+     * A mentett beállítás az alapértékekkel kiegészítve. Termék- és
+     * szolgáltatás-címkénél a nyomtató és a tekercs az RMA-matricáé.
+     *
+     * @return array<string, mixed>
+     */
+    public static function beallitas(string $sablon = 'rma'): array
     {
-        $m = get_option(self::OPT, []);
+        $sablon = self::sablon($sablon);
+        $m = get_option(self::opt($sablon), []);
+        $b = self::tisztit(is_array($m) ? $m : [], $sablon);
 
-        return self::tisztit(is_array($m) ? $m : []);
+        if ($sablon !== 'rma') {
+            $kozos = self::beallitas('rma');
+
+            foreach (self::KOZOS as $k) {
+                $b[$k] = $kozos[$k];
+            }
+        }
+
+        return $b;
     }
 
     /**
@@ -218,9 +297,9 @@ final class SDH_Muhely_Matrica
      * @param array<string, mixed> $m
      * @return array<string, mixed>
      */
-    public static function tisztit(array $m): array
+    public static function tisztit(array $m, string $sablon = 'rma'): array
     {
-        $a = self::alapok();
+        $a = self::alapok($sablon);
         $b = $a;
 
         $b['nyomtato']  = isset(self::nyomtatok()[(string) ($m['nyomtato'] ?? '')]) ? (string) $m['nyomtato'] : $a['nyomtato'];
@@ -236,7 +315,7 @@ final class SDH_Muhely_Matrica
         $b['margo']     = min(8, max(0, (float) ($m['margo'] ?? $a['margo'])));
         $b['betu']      = class_exists('SDH_Muhely_Nyomtatvany_Pdf') && isset(SDH_Muhely_Nyomtatvany_Pdf::BETUK[(string) ($m['betu'] ?? '')]) ? (string) $m['betu'] : (in_array((string) ($m['betu'] ?? ''), ['dejavu', 'liberation-sans', 'carlito', 'liberation-serif'], true) ? (string) $m['betu'] : 'dejavu');
         $b['meret']     = min(16, max(5, (float) ($m['meret'] ?? $a['meret'])));
-        $b['peldany']   = min(10, max(1, (int) ($m['peldany'] ?? 1)));
+        $b['peldany']   = min(50, max(1, (int) ($m['peldany'] ?? 1)));
         $b['rma_mod']   = in_array((string) ($m['rma_mod'] ?? ''), ['kod', 'qr', 'mindketto'], true) ? (string) $m['rma_mod'] : $a['rma_mod'];
 
         foreach (['eszkozonkent', 'vagas', 'keret'] as $k) {
@@ -331,7 +410,7 @@ final class SDH_Muhely_Matrica
         }
 
         if ((string) $b['ip'] === '') {
-            return 'Add meg a nyomtató hálózati címét (IP) a Beállítások › RMA-matrica lapfülön.';
+            return 'Add meg a nyomtató hálózati címét (IP) a Beállítások › Címkenyomtatás lapfülön.';
         }
 
         if (!function_exists('imagecreatetruecolor') || !function_exists('imagettftext')) {
@@ -368,7 +447,7 @@ final class SDH_Muhely_Matrica
         $rma_be = class_exists('SDH_Muhely_Rma') && SDH_Muhely_Modulok::be('uzenetek');
         $token  = $rma_be ? SDH_Muhely_Rma::token($ml) : '';
         $url    = $token !== '' ? SDH_Muhely_Rma::url($token) : '';
-        $szerviz = class_exists('SDH_Muhely_Rma') ? (string) SDH_Muhely_Rma::beallitas()['szerviz_nev'] : (string) get_bloginfo('name');
+        $szerviz = self::szerviz_nev();
 
         $bontas = SDH_Muhely_Munkalap::eszkoz_bontas($ml);
 
@@ -415,9 +494,150 @@ final class SDH_Muhely_Matrica
         return $ki;
     }
 
-    /** Kitalált adatok az előnézethez és a próbanyomathoz. @return array<string, mixed> */
-    public static function minta_adat(): array
+    private static function szerviz_nev(): string
     {
+        return class_exists('SDH_Muhely_Rma') ? (string) SDH_Muhely_Rma::beallitas()['szerviz_nev'] : (string) get_bloginfo('name');
+    }
+
+    private static function ma(): string
+    {
+        return class_exists('SDH_Muhely_Munkalap') ? SDH_Muhely_Munkalap::datum_megjelenit(current_time('Y-m-d')) : current_time('Y. m. d.');
+    }
+
+    /** Nettó ár a bruttóból (az áfakulcs lehet szöveg is, pl. AAM: akkor 0%). */
+    private static function netto(float $brutto, string $afa): float
+    {
+        $k = is_numeric(str_replace(',', '.', $afa)) ? (float) str_replace(',', '.', $afa) : 0.0;
+
+        return $brutto / (1 + max(0.0, $k) / 100);
+    }
+
+    private static function ft(float $osszeg): string
+    {
+        return number_format(round($osszeg), 0, ',', ' ') . ' Ft';
+    }
+
+    /**
+     * A sablon címkéinek adatai: RMA-matricánál a lap eszközei, termék- és
+     * szolgáltatás-címkénél egyetlen címke (kulcs 0). Üres, ha nincs ilyen.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function lista(string $sablon, int $id): array
+    {
+        $sablon = self::sablon($sablon);
+
+        if ($sablon === 'termek') {
+            $a = self::termek_adat($id);
+
+            return $a === null ? [] : [0 => $a];
+        }
+
+        if ($sablon === 'szolgaltatas') {
+            $a = self::szolgaltatas_adat($id);
+
+            return $a === null ? [] : [0 => $a];
+        }
+
+        return self::adatok($id);
+    }
+
+    /** Egy termék címkéjének adatai. @return array<string, mixed>|null */
+    public static function termek_adat(int $id): ?array
+    {
+        global $wpdb;
+
+        $t = $id > 0 ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('termek') . ' WHERE id = %d', $id)) : null; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        if (!$t) {
+            return null;
+        }
+
+        $kod = trim((string) $t->vonalkod) !== '' ? trim((string) $t->vonalkod) : trim((string) $t->cikkszam);
+        $br  = (float) $t->brutto_ar;
+
+        return [
+            'cim'            => (string) $t->megnevezes,
+            'megnevezes'     => (string) $t->megnevezes,
+            'ar'             => $br > 0 ? self::ft($br) : '',
+            'cikkszam'       => (string) $t->cikkszam,
+            'termekkod'      => (string) $t->termekkod,
+            'gyari_szam'     => (string) $t->gyari_szam,
+            'kategoria'      => (string) $t->kategoria,
+            'netto'          => $br > 0 ? self::ft(self::netto($br, (string) $t->afa_kulcs)) : '',
+            'me'             => (string) $t->me,
+            'beszallito'     => (string) $t->beszallito,
+            'leiras'         => trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $t->leiras)) ?? ''),
+            'szerviz'        => self::szerviz_nev(),
+            'datum'          => self::ma(),
+            'vonalkod_ertek' => $kod,
+            'url'            => $kod,
+            'szam_nyers'     => (string) (int) $t->id,
+            'darab'          => '',
+        ];
+    }
+
+    /** Egy szolgáltatás címkéjének adatai. @return array<string, mixed>|null */
+    public static function szolgaltatas_adat(int $id): ?array
+    {
+        global $wpdb;
+
+        $sz = $id > 0 ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('szolgaltatas') . ' WHERE id = %d', $id)) : null; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        if (!$sz) {
+            return null;
+        }
+
+        $br  = (float) $sz->brutto_ar;
+        $max = (float) $sz->ar_max;
+        $kod = trim((string) $sz->kod) !== '' ? trim((string) $sz->kod) : 'SZ' . (int) $sz->id;
+
+        if ($max > $br && $br > 0) {
+            $ar = number_format(round($br), 0, ',', ' ') . ' – ' . self::ft($max);
+        } else {
+            $ar = $br > 0 ? self::ft($br) : '';
+        }
+
+        return [
+            'cim'            => (string) $sz->nev,
+            'nev'            => (string) $sz->nev,
+            'ar'             => $ar,
+            'kategoria'      => (string) $sz->kategoria,
+            'kod'            => (string) $sz->kod,
+            'netto'          => $br > 0 ? self::ft(self::netto($br, (string) $sz->afa_kulcs)) : '',
+            'me'             => (string) $sz->me,
+            'megjegyzes'     => trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) ($sz->megjegyzes ?? ''))) ?? ''),
+            'szerviz'        => self::szerviz_nev(),
+            'datum'          => self::ma(),
+            'vonalkod_ertek' => $kod,
+            'url'            => $kod,
+            'szam_nyers'     => (string) (int) $sz->id,
+            'darab'          => '',
+        ];
+    }
+
+    /** Kitalált adatok az előnézethez és a próbanyomathoz. @return array<string, mixed> */
+    public static function minta_adat(string $sablon = 'rma'): array
+    {
+        $sablon = self::sablon($sablon);
+
+        if ($sablon === 'termek') {
+            return [
+                'cim' => 'Minta kijelző', 'megnevezes' => 'Minta kijelző, fekete (OLED)', 'ar' => '24 990 Ft', 'cikkszam' => 'MK-1234',
+                'termekkod' => 'K-5678', 'gyari_szam' => 'GY-0001', 'kategoria' => 'Kijelzők', 'netto' => '19 677 Ft', 'me' => 'db',
+                'beszallito' => 'Minta Kft.', 'leiras' => 'Gyári minőségű csere-kijelző kerettel', 'szerviz' => 'Minta Szerviz',
+                'datum' => self::ma(), 'vonalkod_ertek' => '5998877665544', 'url' => '5998877665544', 'szam_nyers' => '1', 'darab' => '',
+            ];
+        }
+
+        if ($sablon === 'szolgaltatas') {
+            return [
+                'cim' => 'Minta szolgáltatás', 'nev' => 'Kijelzőcsere (minta)', 'ar' => '12 000 – 18 000 Ft', 'kategoria' => 'Javítás',
+                'kod' => 'KCS', 'netto' => '9 449 Ft', 'me' => 'db', 'megjegyzes' => 'Az ár a készüléktől függ', 'szerviz' => 'Minta Szerviz',
+                'datum' => self::ma(), 'vonalkod_ertek' => 'KCS', 'url' => 'KCS', 'szam_nyers' => '1', 'darab' => '',
+            ];
+        }
+
         return [
             'nev' => 'Minta Márta', 'munkalapszam' => '000123', 'szam_nyers' => '123', 'eszkoz' => 'Samsung Galaxy A17 · SM-A175B',
             'rma' => '3F9A-12C4', 'url' => home_url('/rma/3f9a12c4minta/'), 'hiba' => 'Törött kijelző, nem töltődik',
@@ -568,14 +788,18 @@ final class SDH_Muhely_Matrica
      */
     public static function elrendez(array $a, array $b, float $cw, float $ch): array
     {
-        $mezok = self::mezok();
-        $betu  = (string) $b['betu'];
-        $be    = static fn (string $k): bool => !empty($b['mezok'][$k]['be']);
+        $sablon = self::sablon($b['sablon'] ?? 'rma');
+        $mezok  = self::mezok($sablon);
+        $betu   = (string) $b['betu'];
+        $be     = static fn (string $k): bool => !empty($b['mezok'][$k]['be']);
 
-        $qr_kell = ($be('qr') || ($be('rma') && in_array($b['rma_mod'], ['qr', 'mindketto'], true))) && (string) ($a['url'] ?? '') !== '';
+        $qr_kell = ($be('qr') || ($sablon === 'rma' && $be('rma') && in_array($b['rma_mod'], ['qr', 'mindketto'], true))) && (string) ($a['url'] ?? '') !== '';
         $qr_m    = $qr_kell ? SDH_Muhely_Kodok::qr_matrix((string) $a['url']) : null;
         $qr_kell = $qr_m !== null;
-        $vk      = $be('vonalkod') ? SDH_Muhely_Kodok::code128_modulok((string) ($a['szam_nyers'] ?? '')) : null;
+        $vk_ertek = (string) ($a['vonalkod_ertek'] ?? $a['szam_nyers'] ?? '');
+        $vk       = $be('vonalkod') && $vk_ertek !== '' ? SDH_Muhely_Kodok::code128_modulok($vk_ertek) : null;
+        // Termék- és szolgáltatás-címkén a vonalkód középen, alatta a kód olvashatóan.
+        $vk_alatt = $sablon !== 'rma' && $vk !== null;
 
         $skala   = 1.0;
         $legjobb = null;
@@ -585,7 +809,9 @@ final class SDH_Muhely_Matrica
             $qs     = $qr_kell ? min($ch * 0.62, $cw * 0.34, 22.0) : 0.0;
             $tw     = $cw - ($qr_kell ? $qs + 1.2 : 0.0);
             $bh     = $vk !== null ? min(8.0, max(4.0, $ch * 0.18)) : 0.0;
-            $mag    = $ch - ($vk !== null ? $bh + 0.6 : 0.0);
+            $vpt    = max(5.0, (float) $b['meret'] * 0.8 * $skala);
+            $vlh    = $vk_alatt ? $vpt * 0.3528 * 1.13 : 0.0;
+            $mag    = $ch - ($vk !== null ? $bh + 0.6 + $vlh : 0.0);
             $y      = 0.0;
             $levagva = false;
             $csonka  = false;
@@ -603,7 +829,7 @@ final class SDH_Muhely_Matrica
                 // A QR mellett keskenyebb a hasáb; alatta (ha a QR véget ért) teljes szélesség.
                 $w = $qr_kell && $y < $qs + 0.6 ? $tw : $cw;
 
-                if ($k === 'feloldas') {
+                if ($sablon === 'rma' && $k === 'feloldas') {
                     $kod   = (string) ($a['kod'] ?? '');
                     $minta = (string) ($a['minta'] ?? '');
 
@@ -646,7 +872,7 @@ final class SDH_Muhely_Matrica
 
                 $ertek = (string) ($a[$k] ?? '');
 
-                if ($k === 'rma' && $b['rma_mod'] === 'qr') {
+                if ($sablon === 'rma' && $k === 'rma' && $b['rma_mod'] === 'qr') {
                     continue;
                 }
 
@@ -676,7 +902,14 @@ final class SDH_Muhely_Matrica
 
             if ($vk !== null) {
                 // Egy modul legfeljebb 0,5 mm: a rövid kód ne nyúljon szét az egész matricán.
-                $elemek[] = ['t' => 'vonalkod', 'x' => 0.0, 'y' => $ch - $bh, 'w' => min($cw, array_sum($vk) * 0.5), 'h' => $bh, 'modulok' => $vk];
+                $vw = min($cw, array_sum($vk) * 0.5);
+                $elemek[] = ['t' => 'vonalkod', 'x' => $vk_alatt ? ($cw - $vw) / 2 : 0.0, 'y' => $ch - $bh - $vlh, 'w' => $vw, 'h' => $bh, 'modulok' => $vk];
+
+                if ($vk_alatt) {
+                    $sor = self::tordel('', $vk_ertek, $cw, $vpt, false, 1, $betu)[0] ?? [];
+                    $sw  = self::szel($vk_ertek, $vpt, false, $betu);
+                    $elemek[] = ['t' => 'szoveg', 'x' => max(0.0, ($cw - $sw) / 2), 'y' => $ch - $vlh, 'pt' => $vpt, 'futasok' => $sor];
+                }
             }
 
             // A csonkolt (…-tal végződő) sor is kisebb betűt kér – de ha a legkisebben sem fér ki, marad.
@@ -739,7 +972,7 @@ final class SDH_Muhely_Matrica
         $pdf->SetMargins(0, 0, 0);
         $pdf->SetCompression(true);
         $pdf->SetCreator('SDH Műhely', true);
-        $pdf->SetTitle('RMA-matrica', true);
+        $pdf->SetTitle(self::SABLONOK[self::sablon($b['sablon'] ?? 'rma')], true);
         $pdf->AddFont('F', '', $f[0], true);
         $pdf->AddFont('F', 'B', $f[1], true);
 
@@ -1176,15 +1409,42 @@ final class SDH_Muhely_Matrica
      * A munkalap „Matrica" gombja és a Matrica ablak
      * ============================================================== */
 
-    public static function gomb(int $munkalap_id): string
+    /**
+     * A „Matrica" / „Címke" gomb: munkalapon (rma), a termék és a
+     * szolgáltatás űrlapján (termek / szolgaltatas).
+     */
+    public static function gomb(int $id, string $sablon = 'rma'): string
     {
-        if (SDH_Muhely_Modulok::ki(self::KULCS)) {
+        if (SDH_Muhely_Modulok::ki(self::KULCS) || $id <= 0) {
             return '';
         }
 
-        return '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-matrica-gomb" data-sdh-matrica="' . (int) $munkalap_id . '"'
-            . ' title="RMA-matrica a készülékre (Brother címkenyomtató)">'
-            . SDH_Muhely_Admin_UI::gomb_ikon('matrica') . '<span>Matrica</span></button>';
+        $sablon = self::sablon($sablon);
+        $cim    = [
+            'rma'          => 'RMA-matrica a készülékre (Brother címkenyomtató)',
+            'termek'       => 'Termékcímke nyomtatása (Brother címkenyomtató)',
+            'szolgaltatas' => 'Szolgáltatás-címke nyomtatása (Brother címkenyomtató)',
+        ][$sablon];
+
+        return '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-matrica-gomb" data-sdh-matrica="' . (int) $id . '"'
+            . ($sablon !== 'rma' ? ' data-sdh-matrica-tipus="' . esc_attr($sablon) . '"' : '')
+            . ' title="' . esc_attr($cim) . '">'
+            . SDH_Muhely_Admin_UI::gomb_ikon('matrica') . '<span>' . ($sablon === 'rma' ? 'Matrica' : 'Címke') . '</span></button>';
+    }
+
+    /** A kérés sablonja (tipus paraméter). */
+    private static function kert_sablon(): string
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a hívó ellenőrizte.
+        return self::sablon(isset($_REQUEST['tipus']) ? wp_unslash((string) $_REQUEST['tipus']) : 'rma');
+    }
+
+    /** Naplóbejegyzés a nyomtatásról: a munkalapra, a termékre vagy a szolgáltatásra. */
+    private static function naploz(string $sablon, int $id, string $leiras, array $adat): void
+    {
+        if (class_exists('SDH_Muhely_Valtozasnaplo')) {
+            SDH_Muhely_Valtozasnaplo::esemeny($sablon === 'rma' ? 'munkalap' : $sablon, $id, $leiras, $adat, 'nyomtatas');
+        }
     }
 
     private static function jog(): void
@@ -1218,23 +1478,27 @@ final class SDH_Muhely_Matrica
             wp_die();
         }
 
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        $adatok = self::adatok($id);
-        $b = self::beallitas();
+        $id     = isset($_GET['id']) ? (int) $_GET['id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $sablon = self::kert_sablon();
+        $adatok = self::lista($sablon, $id);
+        $b      = self::beallitas($sablon);
+        $nev    = self::SABLONOK[$sablon];
 
         if ($adatok === []) {
-            echo '<h2 class="sdh-modal__cim">RMA-matrica</h2><div class="sdh-uzenet sdh-uzenet--hiba">Nincs ilyen munkalap.</div>';
+            echo '<h2 class="sdh-modal__cim">' . esc_html($nev) . '</h2><div class="sdh-uzenet sdh-uzenet--hiba">'
+                . esc_html(['rma' => 'Nincs ilyen munkalap.', 'termek' => 'Nincs ilyen termék.', 'szolgaltatas' => 'Nincs ilyen szolgáltatás.'][$sablon]) . '</div>';
             wp_die();
         }
 
         $elso = reset($adatok);
         $kozvetlen = $b['mod'] === 'halozat' ? self::kozvetlen_hiba($b) : null;
         $c = self::meret($b);
+        $megj = $sablon === 'rma' ? 'Munkalap ' . $elso['munkalapszam'] : (string) ($elso['cim'] ?? '');
 
         ?>
-        <h2 class="sdh-modal__cim">RMA-matrica <span class="sdh-modal__cim-megj"><?php echo esc_html('Munkalap ' . $elso['munkalapszam']); ?></span></h2>
+        <h2 class="sdh-modal__cim"><?php echo esc_html($nev); ?> <span class="sdh-modal__cim-megj"><?php echo esc_html($megj); ?></span></h2>
 
-        <div class="sdh-matrica" data-sdh-matrica-ablak data-id="<?php echo (int) $id; ?>" data-mod="<?php echo esc_attr($b['mod']); ?>">
+        <div class="sdh-matrica" data-sdh-matrica-ablak data-id="<?php echo (int) $id; ?>" data-tipus="<?php echo esc_attr($sablon); ?>" data-mod="<?php echo esc_attr($b['mod']); ?>">
             <p class="sdh-sugo">
                 <?php echo esc_html((self::nyomtatok()[$b['nyomtato']]['nev'] ?? $b['nyomtato']) . ' · ' . $c['nev'] . ($c['tipus'] === 'folyamatos' ? ', ' . (int) $b['hossz'] . ' mm hosszú' : '') . ' · ' . ($b['tajolas'] === 'fekvo' ? 'fekvő' : 'álló')); ?>
                 · <?php echo esc_html($b['mod'] === 'halozat' ? 'közvetlenül hálózaton (' . ($b['ip'] !== '' ? $b['ip'] : 'nincs IP') . ')' : 'böngészőből, a Brother illesztőprogrammal'); ?>
@@ -1247,7 +1511,7 @@ final class SDH_Muhely_Matrica
             <?php if ($b['mod'] !== 'halozat') : ?>
                 <div class="sdh-matrica__tipp">
                     <p>A nyomtatóban ennek kell lennie: <strong><?php echo esc_html($c['nev']); ?></strong>. A nyomtatás-ablakban: Papírméret <strong><?php echo esc_html(self::papir_nev($b)); ?></strong>, Margók <strong>Nincs</strong>, Méret <strong>100%</strong>, Fejlécek és láblécek <strong>ki</strong>.</p>
-                    <p>Ha a Brother azt írja, hogy a címke „nem egyezik”: a Beállítások › RMA-matrica <em>Címke / szalag</em> mezőjében azt válaszd, amit a Brother ablak kiír (például „62mm Folyamatos szalag” → DK-22205 – 62 mm folyamatos).</p>
+                    <p>Ha a Brother azt írja, hogy a címke „nem egyezik”: a Beállítások › Címkenyomtatás <em>Címke / szalag</em> mezőjében azt válaszd, amit a Brother ablak kiír (például „62mm Folyamatos szalag” → DK-22205 – 62 mm folyamatos).</p>
                 </div>
             <?php endif; ?>
 
@@ -1257,10 +1521,16 @@ final class SDH_Muhely_Matrica
                     <label class="sdh-matrica__elem">
                         <span class="sdh-matrica__fej">
                             <input type="checkbox" data-sdh-matrica-eszkoz value="<?php echo (int) $kulcs; ?>" checked>
-                            <span><?php echo esc_html(($a['darab'] !== '' ? $a['darab'] . ' · ' : '') . ($a['eszkoz'] !== '' ? $a['eszkoz'] : 'Eszköz nélkül')); ?></span>
+                            <span><?php
+                                if ($sablon === 'rma') {
+                                    echo esc_html(($a['darab'] !== '' ? $a['darab'] . ' · ' : '') . ($a['eszkoz'] !== '' ? $a['eszkoz'] : 'Eszköz nélkül'));
+                                } else {
+                                    echo esc_html((string) $a['cim']);
+                                }
+                            ?></span>
                         </span>
                         <?php if ($png !== '') : ?>
-                            <img class="sdh-matrica__kep" alt="A matrica előnézete" src="data:image/png;base64,<?php echo esc_attr(base64_encode($png)); ?>">
+                            <img class="sdh-matrica__kep" alt="A címke előnézete" src="data:image/png;base64,<?php echo esc_attr(base64_encode($png)); ?>">
                         <?php endif; ?>
                     </label>
                 <?php endforeach; ?>
@@ -1268,12 +1538,12 @@ final class SDH_Muhely_Matrica
 
             <div class="sdh-matrica__lab">
                 <label class="sdh-matrica__peldany">Példány
-                    <input type="number" min="1" max="10" step="1" value="<?php echo (int) $b['peldany']; ?>" data-sdh-matrica-peldany>
+                    <input type="number" min="1" max="50" step="1" value="<?php echo (int) $b['peldany']; ?>" data-sdh-matrica-peldany>
                 </label>
                 <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-matrica-nyomtat<?php echo $kozvetlen !== null ? ' disabled' : ''; ?>>Nyomtatás</button>
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-matrica-pdf>PDF megnyitása</button>
                 <?php if (SDH_Muhely_Admin_UI::admin_e()) : ?>
-                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(SDH_Muhely_Beallitasok::url('matrica')); ?>">Beállítások</a>
+                    <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(add_query_arg('matrica_sablon', $sablon, SDH_Muhely_Beallitasok::url('matrica'))); ?>">Beállítások</a>
                 <?php endif; ?>
                 <span class="sdh-matrica__allapot" data-sdh-matrica-allapot role="status" aria-live="polite"></span>
             </div>
@@ -1290,25 +1560,26 @@ final class SDH_Muhely_Matrica
 
         // phpcs:disable WordPress.Security.NonceVerification.Recommended -- a jog() ellenőrizte.
         $id      = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-        $peldany = isset($_REQUEST['peldany']) ? min(10, max(1, (int) $_REQUEST['peldany'])) : 1;
-        $lista   = self::valogat(self::adatok($id), $_REQUEST['eszkoz'] ?? []);
+        $peldany = isset($_REQUEST['peldany']) ? min(50, max(1, (int) $_REQUEST['peldany'])) : 1;
+        $sablon  = self::kert_sablon();
+        $lista   = self::valogat(self::lista($sablon, $id), $_REQUEST['eszkoz'] ?? []);
         $nyomtat = !empty($_REQUEST['nyomtat']);
         // phpcs:enable
 
         if ($lista === []) {
-            wp_die('Nincs ilyen munkalap vagy eszköz.', '', ['response' => 404]);
+            wp_die('Nincs ilyen tétel vagy eszköz.', '', ['response' => 404]);
         }
 
-        $b   = self::beallitas();
+        $b   = self::beallitas($sablon);
         $pdf = self::pdf(array_values($lista), $b, $peldany);
 
-        if ($nyomtat && class_exists('SDH_Muhely_Valtozasnaplo')) {
-            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', $id, sprintf('RMA-matrica nyomtatásra küldve (böngészőből, %d db)', count($lista) * $peldany), ['Címke' => self::meret($b)['nev'], 'Nyomtató' => (string) $b['nyomtato']], 'nyomtatas');
+        if ($nyomtat) {
+            self::naploz($sablon, $id, sprintf('%s nyomtatásra küldve (böngészőből, %d db)', self::SABLONOK[$sablon], count($lista) * $peldany), ['Címke' => self::meret($b)['nev'], 'Nyomtató' => (string) $b['nyomtato']]);
         }
 
         nocache_headers();
         header('Content-Type: application/pdf');
-        header('Content-Disposition: inline; filename="matrica-' . sanitize_file_name((string) reset($lista)['szam_nyers']) . '.pdf"');
+        header('Content-Disposition: inline; filename="' . ($sablon === 'rma' ? 'matrica' : 'cimke-' . $sablon) . '-' . sanitize_file_name((string) reset($lista)['szam_nyers']) . '.pdf"');
         header('Content-Length: ' . strlen($pdf));
         echo $pdf; // phpcs:ignore WordPress.Security.EscapeOutput -- PDF.
         exit;
@@ -1321,13 +1592,14 @@ final class SDH_Muhely_Matrica
 
         $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
         $kulcs  = isset($_POST['kulcs']) ? (int) $_POST['kulcs'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-        $adatok = self::adatok($id);
+        $sablon = self::kert_sablon();
+        $adatok = self::lista($sablon, $id);
 
         if (!isset($adatok[$kulcs])) {
-            wp_send_json_error(['uzenet' => 'Nincs ilyen eszköz a lapon.']);
+            wp_send_json_error(['uzenet' => $sablon === 'rma' ? 'Nincs ilyen eszköz a lapon.' : 'Nincs ilyen tétel.']);
         }
 
-        wp_send_json_success(['png' => base64_encode(self::png($adatok[$kulcs], self::beallitas(), 520))]);
+        wp_send_json_success(['png' => base64_encode(self::png($adatok[$kulcs], self::beallitas($sablon), 520))]);
     }
 
     /** Közvetlen nyomtatás hálózaton (QL raszter a 9100-as portra). */
@@ -1337,15 +1609,16 @@ final class SDH_Muhely_Matrica
 
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- a jog() ellenőrizte.
         $id      = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-        $peldany = isset($_POST['peldany']) ? min(10, max(1, (int) $_POST['peldany'])) : 1;
-        $lista   = self::valogat(self::adatok($id), $_POST['eszkoz'] ?? []);
+        $peldany = isset($_POST['peldany']) ? min(50, max(1, (int) $_POST['peldany'])) : 1;
+        $sablon  = self::kert_sablon();
+        $lista   = self::valogat(self::lista($sablon, $id), $_POST['eszkoz'] ?? []);
         // phpcs:enable
 
         if ($lista === []) {
-            wp_send_json_error(['uzenet' => 'Jelölj be legalább egy matricát.']);
+            wp_send_json_error(['uzenet' => 'Jelölj be legalább egy címkét.']);
         }
 
-        $b = self::beallitas();
+        $b = self::beallitas($sablon);
         $h = self::kozvetlen_hiba($b);
 
         if ($h !== null) {
@@ -1354,36 +1627,59 @@ final class SDH_Muhely_Matrica
 
         $h = self::kuld(self::raszter(array_values($lista), $b, $peldany), (string) $b['ip'], (int) $b['port']);
 
-        if (class_exists('SDH_Muhely_Valtozasnaplo')) {
-            SDH_Muhely_Valtozasnaplo::esemeny('munkalap', $id, $h === null
-                ? sprintf('RMA-matrica kinyomtatva (hálózaton, %d db)', count($lista) * $peldany)
-                : 'RMA-matrica nyomtatása nem sikerült: ' . $h, ['Nyomtató' => (string) $b['nyomtato'] . ' – ' . $b['ip']], 'nyomtatas');
-        }
+        self::naploz($sablon, $id, $h === null
+            ? sprintf('%s kinyomtatva (hálózaton, %d db)', self::SABLONOK[$sablon], count($lista) * $peldany)
+            : self::SABLONOK[$sablon] . ' nyomtatása nem sikerült: ' . $h, ['Nyomtató' => (string) $b['nyomtato'] . ' – ' . $b['ip']]);
 
         if ($h !== null) {
             wp_send_json_error(['uzenet' => $h]);
         }
 
-        wp_send_json_success(['uzenet' => sprintf('Elküldve a nyomtatóra: %d matrica.', count($lista) * $peldany)]);
+        wp_send_json_success(['uzenet' => sprintf('Elküldve a nyomtatóra: %d címke.', count($lista) * $peldany)]);
     }
 
     /* =================================================================
-     * Beállítások › RMA-matrica
+     * Beállítások › Címkenyomtatás
      * ============================================================== */
+
+    /**
+     * Egy sablon beküldött beállítása a Beállítások űrlapjáról: a közös rész
+     * (nyomtató, tekercs) mindig a matrica[...] mezőkből, a többi a sablon
+     * saját mezőiből (rma: matrica[...], a többi: matrica_<sablon>[...]).
+     *
+     * @return array<string, mixed>
+     */
+    private static function urlap_beallitas(string $sablon): array
+    {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- a hívó ellenőrizte.
+        $kozos = isset($_POST['matrica']) && is_array($_POST['matrica']) ? wp_unslash($_POST['matrica']) : [];
+        $kozos = is_array($kozos) ? $kozos : [];
+        $kulcs = 'matrica_' . $sablon;
+        $m     = $sablon === 'rma' ? $kozos : (isset($_POST[$kulcs]) && is_array($_POST[$kulcs]) ? wp_unslash($_POST[$kulcs]) : []);
+        // phpcs:enable
+        $m = is_array($m) ? $m : [];
+
+        // A be nem pipált jelölők nem jönnek el: hiánya = kikapcsolva.
+        foreach ($sablon === 'rma' ? ['eszkozonkent', 'vagas', 'keret'] : ['keret'] as $k) {
+            $m[$k] = !empty($m[$k]);
+        }
+
+        if ($sablon !== 'rma') {
+            foreach (self::KOZOS as $k) {
+                $m[$k] = $k === 'vagas' ? !empty($kozos[$k]) : ($kozos[$k] ?? null);
+            }
+
+            $m = array_filter($m, static fn ($v) => $v !== null);
+        }
+
+        return self::tisztit($m, $sablon);
+    }
 
     /** A Beállítások űrlapjáról beküldött (még nem mentett) beállítás. @return array<string, mixed> */
     private static function bekuldott(): array
     {
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- a hívó ellenőrizte.
-        $m = isset($_POST['matrica']) && is_array($_POST['matrica']) ? wp_unslash($_POST['matrica']) : [];
-        $m = is_array($m) ? $m : [];
-
-        // A be nem pipált jelölők nem jönnek el: hiánya = kikapcsolva.
-        foreach (['eszkozonkent', 'vagas', 'keret'] as $k) {
-            $m[$k] = !empty($m[$k]);
-        }
-
-        return self::tisztit($m);
+        return self::urlap_beallitas(self::sablon(isset($_POST['sablon']) ? wp_unslash((string) $_POST['sablon']) : 'rma'));
     }
 
     /** Élő előnézet a Beállításokban (a még el nem mentett értékekkel, kitalált adattal). */
@@ -1396,9 +1692,10 @@ final class SDH_Muhely_Matrica
         }
 
         $b   = self::bekuldott();
+        $ma  = self::minta_adat((string) $b['sablon']);
         $d   = self::doboz($b, false);
-        $r   = self::elrendez(self::minta_adat(), $b, $d['cw'], $d['ch']);
-        $png = self::png(self::minta_adat(), $b, 640);
+        $r   = self::elrendez($ma, $b, $d['cw'], $d['ch']);
+        $png = self::png($ma, $b, 640);
 
         wp_send_json_success([
             'png'     => base64_encode($png),
@@ -1421,16 +1718,16 @@ final class SDH_Muhely_Matrica
         $b = self::bekuldott();
 
         if ($b['mod'] === 'halozat') {
-            $h = self::kozvetlen_hiba($b) ?? self::kuld(self::raszter([self::minta_adat()], $b, 1), (string) $b['ip'], (int) $b['port']);
+            $h = self::kozvetlen_hiba($b) ?? self::kuld(self::raszter([self::minta_adat((string) $b['sablon'])], $b, 1), (string) $b['ip'], (int) $b['port']);
 
             if ($h !== null) {
                 wp_send_json_error(['uzenet' => $h]);
             }
 
-            wp_send_json_success(['uzenet' => 'A próbamatrica elment a nyomtatóra.']);
+            wp_send_json_success(['uzenet' => 'A próbacímke elment a nyomtatóra.']);
         }
 
-        wp_send_json_success(['pdf' => base64_encode(self::pdf([self::minta_adat()], $b, 1))]);
+        wp_send_json_success(['pdf' => base64_encode(self::pdf([self::minta_adat((string) $b['sablon'])], $b, 1))]);
     }
 
     public static function beallitas_doboz(): void
@@ -1438,18 +1735,18 @@ final class SDH_Muhely_Matrica
         $b  = self::beallitas();
         $ny = self::nyomtatok();
         $ck = self::cimkek();
-        $mz = self::mezok();
-        $meretek = ['0.75' => 'kicsi', '0.9' => 'kisebb', '0.95' => 'kicsit kisebb', '1' => 'normál', '1.15' => 'nagyobb', '1.45' => 'nagy', '1.8' => 'óriás'];
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- csak a megnyitott lapfület választja.
+        $aktiv = self::sablon(isset($_GET['matrica_sablon']) ? wp_unslash((string) $_GET['matrica_sablon']) : 'rma');
 
         ?>
-        <div class="sdh-matrica-beall" data-sdh-matrica-beall>
-            <div class="sdh-doboz">
-                <h2 class="sdh-doboz__cim">Nyomtató</h2>
+        <div class="sdh-matrica-beallitas" data-sdh-matrica-beallitas>
+            <div class="sdh-doboz" data-sdh-matrica-kozos>
+                <h2 class="sdh-doboz__cim">Nyomtató és címke</h2>
                 <p class="sdh-sugo">
                     <strong>Böngésző</strong>: minden Brother címkenyomtatóval megy (QL, PT, TD) – a rendszer pontos méretű PDF-et ad, és a böngésző
-                    nyomtatás-ablakában a Brother nyomtatót kell választani (a nyomtató beállításaiban egyszer a címke méretét is). <strong>Hálózat</strong>:
-                    a hálózatos QL nyomtatóknak a szerver közvetlenül küldi a matricát (nincs ablak, nincs illesztőprogram) – ehhez a szervernek el kell
-                    érnie a nyomtatót, és a nyomtatónak állandó IP-cím kell (a routerben).
+                    nyomtatás-ablakában a Brother nyomtatót kell választani. <strong>Hálózat</strong>: a hálózatos QL nyomtatóknak a szerver közvetlenül
+                    küldi a címkét (nincs ablak, nincs illesztőprogram) – ehhez a szervernek el kell érnie a nyomtatót, és a nyomtatónak állandó IP-cím kell.
+                    A nyomtató és a betett tekercs <strong>közös</strong>: az RMA-matrica, a termék- és a szolgáltatás-címke is ezt használja.
                 </p>
                 <input type="hidden" name="matrica_jelen" value="1">
                 <div class="sdh-mezok">
@@ -1476,24 +1773,14 @@ final class SDH_Muhely_Matrica
                         <label for="matrica_port">Port</label>
                         <input type="number" name="matrica[port]" id="matrica_port" min="1" max="65535" value="<?php echo (int) $b['port']; ?>">
                     </div>
-                </div>
-            </div>
-
-            <div class="sdh-doboz">
-                <h2 class="sdh-doboz__cim">Címke</h2>
-                <div class="sdh-mezok">
                     <div class="sdh-mezo">
-                        <label for="matrica_cimke">Címke / szalag</label>
+                        <label for="matrica_cimke">Címke / szalag (a betett tekercs)</label>
                         <select name="matrica[cimke]" id="matrica_cimke" data-sdh-matrica-figyel>
                             <?php foreach ($ck as $k => $c) : ?>
                                 <option value="<?php echo esc_attr($k); ?>" data-tipus="<?php echo esc_attr($c['tipus']); ?>" <?php selected($b['cimke'], $k); ?>><?php echo esc_html($c['nev']); ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <p class="sdh-sugo">A betett tekercs: a Brother nyomtatás-ablaka kiírja (például „62mm Folyamatos szalag”). Ha nem egyezik, a nyomtató nem nyomtat.</p>
-                    </div>
-                    <div class="sdh-mezo" data-sdh-matrica-folyamatos>
-                        <label for="matrica_hossz">A matrica hossza (folyamatos szalagon, mm)</label>
-                        <input type="number" name="matrica[hossz]" id="matrica_hossz" min="15" max="300" step="1" value="<?php echo esc_attr((string) $b['hossz']); ?>" data-sdh-matrica-figyel>
+                        <p class="sdh-sugo">A Brother nyomtatás-ablaka kiírja (például „62mm Folyamatos szalag”). Ha nem egyezik, a nyomtató nem nyomtat.</p>
                     </div>
                     <div class="sdh-mezo" data-sdh-matrica-egyedi>
                         <label for="matrica_egyedi_sz">Szélesség (mm)</label>
@@ -1503,79 +1790,127 @@ final class SDH_Muhely_Matrica
                         <label for="matrica_egyedi_h">Magasság (mm)</label>
                         <input type="number" name="matrica[egyedi_h]" id="matrica_egyedi_h" min="10" max="300" step="0.5" value="<?php echo esc_attr((string) $b['egyedi_h']); ?>" data-sdh-matrica-figyel>
                     </div>
+                </div>
+                <div class="sdh-mezo sdh-mezo--jelolo">
+                    <input type="checkbox" name="matrica[vagas]" id="matrica_vagas" value="1" <?php checked($b['vagas']); ?>>
+                    <label for="matrica_vagas">Automatikus vágás címkénként (hálózati nyomtatásnál)</label>
+                </div>
+            </div>
+
+            <div class="sdh-matrica-sablonok" role="tablist" aria-label="Címkesablon">
+                <?php foreach (self::SABLONOK as $s => $nev) : ?>
+                    <button type="button" class="sdh-matrica-sablonok__gomb<?php echo $s === $aktiv ? ' is-aktiv' : ''; ?>" role="tab"
+                            aria-selected="<?php echo $s === $aktiv ? 'true' : 'false'; ?>" data-sdh-matrica-sablon-gomb="<?php echo esc_attr($s); ?>"><?php echo esc_html($nev); ?></button>
+                <?php endforeach; ?>
+            </div>
+
+            <?php foreach (array_keys(self::SABLONOK) as $s) : ?>
+                <?php self::sablon_panel($s, $s === $aktiv); ?>
+            <?php endforeach; ?>
+        </div>
+        <?php
+    }
+
+    /** Egy sablon beállításai: elrendezés, a címke adatai, élő előnézet. */
+    private static function sablon_panel(string $sablon, bool $latszik): void
+    {
+        $b   = self::beallitas($sablon);
+        $mz  = self::mezok($sablon);
+        $nev = $sablon === 'rma' ? 'matrica' : 'matrica_' . $sablon;
+        $idp = $nev;
+        $meretek = ['0.75' => 'kicsi', '0.85' => 'kisebb', '0.9' => 'kicsit kisebb', '0.95' => 'alig kisebb', '1' => 'normál', '1.15' => 'nagyobb', '1.45' => 'nagy', '1.9' => 'óriás'];
+        $cimke = ['rma' => 'matrica', 'termek' => 'címke', 'szolgaltatas' => 'címke'][$sablon];
+
+        ?>
+        <div class="sdh-matrica-beall" data-sdh-matrica-beall data-sablon="<?php echo esc_attr($sablon); ?>" role="tabpanel"<?php echo $latszik ? '' : ' style="display:none"'; ?>>
+            <?php if ($sablon !== 'rma') : ?>
+                <input type="hidden" name="<?php echo esc_attr($nev); ?>_jelen" value="1">
+            <?php endif; ?>
+            <div class="sdh-doboz">
+                <h2 class="sdh-doboz__cim">Elrendezés – <?php echo esc_html(self::SABLONOK[$sablon]); ?></h2>
+                <?php if ($sablon === 'termek') : ?>
+                    <p class="sdh-sugo">A termék űrlapjának <strong>Címke</strong> gombja ezzel nyomtat (árcímke, polccímke, alkatrész-azonosító).</p>
+                <?php elseif ($sablon === 'szolgaltatas') : ?>
+                    <p class="sdh-sugo">A szolgáltatás űrlapjának <strong>Címke</strong> gombja ezzel nyomtat (árcímke a pultra, kirakatba).</p>
+                <?php endif; ?>
+                <div class="sdh-mezok">
+                    <div class="sdh-mezo" data-sdh-matrica-folyamatos>
+                        <label for="<?php echo esc_attr($idp); ?>_hossz">A <?php echo esc_html($cimke); ?> hossza (folyamatos szalagon, mm)</label>
+                        <input type="number" name="<?php echo esc_attr($nev); ?>[hossz]" id="<?php echo esc_attr($idp); ?>_hossz" min="15" max="300" step="1" value="<?php echo esc_attr((string) $b['hossz']); ?>" data-sdh-matrica-figyel>
+                    </div>
                     <div class="sdh-mezo">
-                        <label for="matrica_tajolas">Tájolás</label>
-                        <select name="matrica[tajolas]" id="matrica_tajolas" data-sdh-matrica-figyel>
+                        <label for="<?php echo esc_attr($idp); ?>_tajolas">Tájolás</label>
+                        <select name="<?php echo esc_attr($nev); ?>[tajolas]" id="<?php echo esc_attr($idp); ?>_tajolas" data-sdh-matrica-figyel>
                             <option value="allo" <?php selected($b['tajolas'], 'allo'); ?>>Álló – a sorok a szalagon keresztben</option>
                             <option value="fekvo" <?php selected($b['tajolas'], 'fekvo'); ?>>Fekvő – a sorok a szalag hosszában</option>
                         </select>
                     </div>
                     <div class="sdh-mezo">
-                        <label for="matrica_margo">Margó (mm)</label>
-                        <input type="number" name="matrica[margo]" id="matrica_margo" min="0" max="8" step="0.5" value="<?php echo esc_attr((string) $b['margo']); ?>" data-sdh-matrica-figyel>
+                        <label for="<?php echo esc_attr($idp); ?>_margo">Margó (mm)</label>
+                        <input type="number" name="<?php echo esc_attr($nev); ?>[margo]" id="<?php echo esc_attr($idp); ?>_margo" min="0" max="8" step="0.5" value="<?php echo esc_attr((string) $b['margo']); ?>" data-sdh-matrica-figyel>
                     </div>
                     <div class="sdh-mezo">
-                        <label for="matrica_betu">Betűtípus</label>
-                        <select name="matrica[betu]" id="matrica_betu" data-sdh-matrica-figyel>
+                        <label for="<?php echo esc_attr($idp); ?>_betu">Betűtípus</label>
+                        <select name="<?php echo esc_attr($nev); ?>[betu]" id="<?php echo esc_attr($idp); ?>_betu" data-sdh-matrica-figyel>
                             <?php foreach (['dejavu' => 'DejaVu Sans keskeny', 'liberation-sans' => 'Liberation Sans (Arial-szerű)', 'carlito' => 'Carlito (Calibri-szerű)', 'liberation-serif' => 'Liberation Serif (Times-szerű)'] as $k => $n) : ?>
                                 <option value="<?php echo esc_attr($k); ?>" <?php selected($b['betu'], $k); ?>><?php echo esc_html($n); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="sdh-mezo">
-                        <label for="matrica_meret">Alap betűméret (pont)</label>
-                        <input type="number" name="matrica[meret]" id="matrica_meret" min="5" max="16" step="0.5" value="<?php echo esc_attr((string) $b['meret']); ?>" data-sdh-matrica-figyel>
+                        <label for="<?php echo esc_attr($idp); ?>_meret">Alap betűméret (pont)</label>
+                        <input type="number" name="<?php echo esc_attr($nev); ?>[meret]" id="<?php echo esc_attr($idp); ?>_meret" min="5" max="16" step="0.5" value="<?php echo esc_attr((string) $b['meret']); ?>" data-sdh-matrica-figyel>
                     </div>
                     <div class="sdh-mezo">
-                        <label for="matrica_peldany">Példányszám (alapérték)</label>
-                        <input type="number" name="matrica[peldany]" id="matrica_peldany" min="1" max="10" step="1" value="<?php echo (int) $b['peldany']; ?>">
+                        <label for="<?php echo esc_attr($idp); ?>_peldany">Példányszám (alapérték)</label>
+                        <input type="number" name="<?php echo esc_attr($nev); ?>[peldany]" id="<?php echo esc_attr($idp); ?>_peldany" min="1" max="50" step="1" value="<?php echo (int) $b['peldany']; ?>">
                     </div>
-                    <div class="sdh-mezo">
-                        <label for="matrica_rma_mod">Az RMA a matricán</label>
-                        <select name="matrica[rma_mod]" id="matrica_rma_mod" data-sdh-matrica-figyel>
-                            <option value="mindketto" <?php selected($b['rma_mod'], 'mindketto'); ?>>RMA-kód és QR-kód</option>
-                            <option value="kod" <?php selected($b['rma_mod'], 'kod'); ?>>Csak az RMA-kód</option>
-                            <option value="qr" <?php selected($b['rma_mod'], 'qr'); ?>>Csak a QR-kód</option>
-                        </select>
+                    <?php if ($sablon === 'rma') : ?>
+                        <div class="sdh-mezo">
+                            <label for="matrica_rma_mod">Az RMA a matricán</label>
+                            <select name="matrica[rma_mod]" id="matrica_rma_mod" data-sdh-matrica-figyel>
+                                <option value="mindketto" <?php selected($b['rma_mod'], 'mindketto'); ?>>RMA-kód és QR-kód</option>
+                                <option value="kod" <?php selected($b['rma_mod'], 'kod'); ?>>Csak az RMA-kód</option>
+                                <option value="qr" <?php selected($b['rma_mod'], 'qr'); ?>>Csak a QR-kód</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <?php if ($sablon === 'rma') : ?>
+                    <div class="sdh-mezo sdh-mezo--jelolo">
+                        <input type="checkbox" name="matrica[eszkozonkent]" id="matrica_eszkozonkent" value="1" <?php checked($b['eszkozonkent']); ?>>
+                        <label for="matrica_eszkozonkent">Több eszközös lapon eszközönként külön matrica</label>
                     </div>
-                </div>
+                <?php endif; ?>
                 <div class="sdh-mezo sdh-mezo--jelolo">
-                    <input type="checkbox" name="matrica[eszkozonkent]" id="matrica_eszkozonkent" value="1" <?php checked($b['eszkozonkent']); ?>>
-                    <label for="matrica_eszkozonkent">Több eszközös lapon eszközönként külön matrica</label>
-                </div>
-                <div class="sdh-mezo sdh-mezo--jelolo">
-                    <input type="checkbox" name="matrica[vagas]" id="matrica_vagas" value="1" <?php checked($b['vagas']); ?>>
-                    <label for="matrica_vagas">Automatikus vágás matricánként (hálózati nyomtatásnál)</label>
-                </div>
-                <div class="sdh-mezo sdh-mezo--jelolo">
-                    <input type="checkbox" name="matrica[keret]" id="matrica_keret" value="1" <?php checked($b['keret']); ?> data-sdh-matrica-figyel>
-                    <label for="matrica_keret">Vékony keret a matrica szélén</label>
+                    <input type="checkbox" name="<?php echo esc_attr($nev); ?>[keret]" id="<?php echo esc_attr($idp); ?>_keret" value="1" <?php checked($b['keret']); ?> data-sdh-matrica-figyel>
+                    <label for="<?php echo esc_attr($idp); ?>_keret">Vékony keret a <?php echo esc_html($cimke); ?> szélén</label>
                 </div>
             </div>
 
             <div class="sdh-doboz">
-                <h2 class="sdh-doboz__cim">Mi kerüljön a matricára</h2>
-                <p class="sdh-sugo">Pipáld be, ami kell, a nyilakkal állítsd a sorrendet. A felirat a sor elején áll (pl. „IMEI: …”); üresen csak az érték látszik. Ha nem fér ki, a rendszer arányosan kisebb betűvel írja.</p>
+                <h2 class="sdh-doboz__cim"><?php echo esc_html($sablon === 'rma' ? 'Mi kerüljön a matricára' : 'Mi kerüljön a címkére'); ?></h2>
+                <p class="sdh-sugo">Pipáld be, ami kell, a nyilakkal állítsd a sorrendet. A felirat a sor elején áll (pl. „Cikksz.: …”); üresen csak az érték látszik. Ha nem fér ki, a rendszer arányosan kisebb betűvel írja.</p>
                 <div class="sdh-matrica-mezok" data-sdh-matrica-mezok>
                     <?php foreach ($b['mezok'] as $k => $m) : ?>
                         <?php if (!isset($mz[$k])) { continue; } ?>
                         <div class="sdh-matrica-mezo<?php echo $m['be'] ? ' is-be' : ''; ?>" data-sdh-matrica-mezo="<?php echo esc_attr($k); ?>">
-                            <input type="hidden" name="matrica[sorrend][]" value="<?php echo esc_attr($k); ?>">
+                            <input type="hidden" name="<?php echo esc_attr($nev); ?>[sorrend][]" value="<?php echo esc_attr($k); ?>">
                             <label class="sdh-matrica-mezo__be">
-                                <input type="checkbox" name="matrica[mezok][<?php echo esc_attr($k); ?>][be]" value="1" <?php checked($m['be']); ?> data-sdh-matrica-figyel>
+                                <input type="checkbox" name="<?php echo esc_attr($nev); ?>[mezok][<?php echo esc_attr($k); ?>][be]" value="1" <?php checked($m['be']); ?> data-sdh-matrica-figyel>
                                 <span><?php echo esc_html($mz[$k]['cim']); ?></span>
                             </label>
-                            <input type="text" class="sdh-matrica-mezo__felirat" name="matrica[mezok][<?php echo esc_attr($k); ?>][felirat]" maxlength="20" placeholder="felirat" aria-label="Felirat" value="<?php echo esc_attr($m['felirat']); ?>" data-sdh-matrica-figyel>
-                            <select name="matrica[mezok][<?php echo esc_attr($k); ?>][meret]" aria-label="Betűméret" data-sdh-matrica-figyel>
-                                <?php foreach ($meretek as $sz => $nev) : ?>
-                                    <option value="<?php echo esc_attr($sz); ?>" <?php selected(abs((float) $sz - (float) $m['meret']) < 0.01); ?>><?php echo esc_html($nev); ?></option>
+                            <input type="text" class="sdh-matrica-mezo__felirat" name="<?php echo esc_attr($nev); ?>[mezok][<?php echo esc_attr($k); ?>][felirat]" maxlength="20" placeholder="felirat" aria-label="Felirat" value="<?php echo esc_attr($m['felirat']); ?>" data-sdh-matrica-figyel>
+                            <select name="<?php echo esc_attr($nev); ?>[mezok][<?php echo esc_attr($k); ?>][meret]" aria-label="Betűméret" data-sdh-matrica-figyel>
+                                <?php foreach ($meretek as $sz => $mn) : ?>
+                                    <option value="<?php echo esc_attr($sz); ?>" <?php selected(abs((float) $sz - (float) $m['meret']) < 0.01); ?>><?php echo esc_html($mn); ?></option>
                                 <?php endforeach; ?>
                                 <?php if (!array_filter(array_keys($meretek), static fn ($sz) => abs((float) $sz - (float) $m['meret']) < 0.01)) : ?>
                                     <option value="<?php echo esc_attr((string) $m['meret']); ?>" selected><?php echo esc_html((string) $m['meret'] . '×'); ?></option>
                                 <?php endif; ?>
                             </select>
                             <label class="sdh-matrica-mezo__fk" title="Félkövér">
-                                <input type="checkbox" name="matrica[mezok][<?php echo esc_attr($k); ?>][felkover]" value="1" <?php checked($m['felkover']); ?> data-sdh-matrica-figyel><span>F</span>
+                                <input type="checkbox" name="<?php echo esc_attr($nev); ?>[mezok][<?php echo esc_attr($k); ?>][felkover]" value="1" <?php checked($m['felkover']); ?> data-sdh-matrica-figyel><span>F</span>
                             </label>
                             <span class="sdh-matrica-mezo__nyilak">
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-matrica-fel aria-label="Feljebb">▲</button>
@@ -1589,7 +1924,7 @@ final class SDH_Muhely_Matrica
             <div class="sdh-doboz sdh-matrica-elonezet">
                 <h2 class="sdh-doboz__cim">Előnézet <span class="sdh-matrica-elonezet__meret" data-sdh-matrica-meret></span></h2>
                 <p class="sdh-sugo">Kitalált adatokkal, a még el nem mentett beállításokkal. Így néz ki a nyomtató felbontásában (300 dpi, fekete-fehér).</p>
-                <div class="sdh-matrica-elonezet__keret"><img alt="A matrica előnézete" data-sdh-matrica-kep hidden></div>
+                <div class="sdh-matrica-elonezet__keret"><img alt="A címke előnézete" data-sdh-matrica-kep hidden></div>
                 <p class="sdh-matrica-elonezet__jel" data-sdh-matrica-jel role="status" aria-live="polite"></p>
                 <p><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-matrica-proba>Próbanyomat</button></p>
             </div>
@@ -1604,14 +1939,14 @@ final class SDH_Muhely_Matrica
             return;
         }
 
-        $m = isset($_POST['matrica']) && is_array($_POST['matrica']) ? wp_unslash($_POST['matrica']) : [];
-        // phpcs:enable
+        update_option(self::OPT, self::urlap_beallitas('rma'), false);
 
-        // A be nem pipált jelölők nem jönnek el: hiánya = kikapcsolva.
-        foreach (['eszkozonkent', 'vagas', 'keret'] as $k) {
-            $m[$k] = !empty($m[$k]);
+        foreach (array_keys(self::SABLONOK) as $s) {
+            if ($s !== 'rma' && !empty($_POST['matrica_' . $s . '_jelen'])) {
+                // A közös részt (nyomtató, tekercs) nem tároljuk kétszer: mindig az RMA-matricáé.
+                update_option(self::opt($s), array_diff_key(self::urlap_beallitas($s), array_flip(self::KOZOS)), false);
+            }
         }
-
-        update_option(self::OPT, self::tisztit(is_array($m) ? $m : []), false);
+        // phpcs:enable
     }
 }

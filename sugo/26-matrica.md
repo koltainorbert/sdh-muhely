@@ -1,11 +1,11 @@
 ---
 kulcs: matrica
-cim: RMA-matrica (Brother)
+cim: Címkenyomtatás (Brother) – RMA-matrica, termék- és szolgáltatás-címke
 csoport: Napi munka
 modul:
 szakaszok: matrica
-kulcsszavak: matrica, címke, etikett, rma, rma matrica, brother, ql, ql-820nwb, ql-800, ql-700, p-touch, címkenyomtató, dk, dk-22205, dk-11209, 62 mm, 29x90, azonosító, készülék matrica, feloldó minta, zárkód, imei, nyomtatás, hálózat, ip-cím, 9100
-osszefoglalo: Az RMA-matrica a leadott készülékre kerülő azonosító címke Brother címkenyomtatóra – a munkalap Matrica gombjával nyomtatod, és a Beállításokban állítod, mi kerüljön rá.
+kulcsszavak: matrica, címke, etikett, árcímke, polccímke, termékcímke, szolgáltatás címke, vonalkód címke, cikkszám, rma, rma matrica, brother, ql, ql-820nwb, ql-800, ql-700, p-touch, címkenyomtató, dk, dk-22205, dk-11209, 62 mm, 29x90, azonosító, készülék matrica, feloldó minta, zárkód, imei, nyomtatás, hálózat, ip-cím, 9100
+osszefoglalo: Brother címkenyomtatóra nyomtatsz RMA-matricát a leadott készülékre (munkalap › Matrica), valamint termék- és szolgáltatás-címkét (az űrlapjuk Címke gombjával); a Beállításokban állítod, mi kerüljön rájuk.
 ---
 ## Mire való
 
@@ -27,8 +27,28 @@ Bekapcsolható még: telefonszám, a szerviz neve, határidő, tartozékok, szí
 ## Hol találod
 
 - **Nyomtatás:** a munkalap ablakának alján a **Matrica** gomb (mentett, munkalapszámot kapott javítási lapon).
-- **Beállítás:** **Beállítások › RMA-matrica** (a **Pénz és eladás** sorban) – nyomtató, címke, tartalom, előnézet, próbanyomat.
-- A modul a **Modulok** menüpontban kikapcsolható (**RMA-matrica (Brother)**); kikapcsolva nincs Matrica gomb.
+- **Beállítás:** **Beállítások › Címkenyomtatás** (a **Pénz és eladás** sorban) – nyomtató, címke, tartalom, előnézet, próbanyomat.
+- **Termékcímke:** a termék ablakának alján a **Címke** gomb (mentett terméknél).
+- **Szolgáltatás-címke:** a szolgáltatás ablakának alján a **Címke** gomb (mentett szolgáltatásnál).
+- A modul a **Modulok** menüpontban kikapcsolható (**Címkenyomtatás (Brother)**); kikapcsolva nincs Matrica és Címke gomb.
+
+## Termék- és szolgáltatás-címke
+
+Ugyanazzal a Brother nyomtatóval és tekerccsel árcímkét, polccímkét vagy alkatrész-azonosítót is nyomtathatsz.
+
+- **Termékcímke** – alapból: **megnevezés**, **bruttó ár** (nagy, félkövér), **cikkszám** és **vonalkód** középen, alatta a kód olvashatóan. A vonalkód a termék **Vonalkód** mezője; ha az üres, a **Cikkszám**. Bekapcsolható még: termékkód, gyári szám, kategória, nettó ár, mennyiségi egység, beszállító, leírás, a szerviz neve, dátum, QR-kód.
+- **Szolgáltatás-címke** – alapból: **megnevezés**, **bruttó ár** (ha a szolgáltatásnak van felső ára, „tól–ig”, például `12 000 – 18 000 Ft`) és **kategória**. Bekapcsolható még: kód, nettó ár, mennyiségi egység, megjegyzés, a szerviz neve, dátum, vonalkód és QR-kód (a kódból).
+
+Nyomtatás:
+
+1. Nyisd meg a terméket vagy a szolgáltatást.
+2. Kattints az ablak alján a **Címke** gombra. Megnyílik a címke előnézete.
+3. Írd be a **Példány** számát (legfeljebb 50 – például a polcon lévő darabszám).
+4. Kattints a **Nyomtatás** gombra (böngészős módban a nyomtatás-ablakban válaszd a Brother nyomtatót).
+
+Beállítás: **Beállítások › Címkenyomtatás**, felül a **Nyomtató és címke** doboz (közös), alatta a **RMA-matrica / Termékcímke / Szolgáltatás-címke** fülek. Fülenként külön állítod a címke hosszát (folyamatos szalagon), a tájolást, a margót, a betűt, a példányszámot és hogy mi kerüljön rá – mindegyiknek saját élő előnézete és próbanyomata van. A nyomtató és a betett tekercs mindháromnál ugyanaz, hiszen egy nyomtatóban egyszerre egy tekercs van.
+
+A címke nyomtatása a termék, illetve a szolgáltatás **Naplójába** kerül.
 
 ## Lépésről lépésre: matrica nyomtatása
 
@@ -45,7 +65,7 @@ A nyomtatás a lap **Naplójába** is bekerül.
 
 ## Lépésről lépésre: a nyomtató beállítása
 
-1. Nyisd meg a **Beállítások › RMA-matrica** lapfület.
+1. Nyisd meg a **Beállítások › Címkenyomtatás** lapfület.
 2. **Nyomtató típusa:** válaszd ki a Brother nyomtatót.
 3. **Nyomtatási mód:**
    - **Böngésző (Brother illesztőprogram, PDF)** – minden Brother címkenyomtatóval megy (QL, PT, TD). A gépre telepítsd a Brother illesztőprogramot, és a nyomtató beállításaiban egyszer állítsd be a címke méretét (például 62 mm folyamatos).
@@ -54,6 +74,8 @@ A nyomtatás a lap **Naplójába** is bekerül.
 5. **Tájolás:** **Álló** – a sorok a szalagon keresztben; **Fekvő** – a sorok a szalag hosszában.
 6. Állítsd a **Margó**, a **Betűtípus** és az **Alap betűméret** mezőt; jobb oldalt az előnézet azonnal mutatja az eredményt.
 7. Kattints a **Próbanyomat** gombra (kitalált adatokkal nyomtat), majd a **Mentés** gombra.
+
+A **Nyomtató típusa**, a **Nyomtatási mód** és a **Címke / szalag** felül, a közös **Nyomtató és címke** dobozban van – ez a termék- és a szolgáltatás-címkére is érvényes. A hossz, a tájolás, a betű és a tartalom a fülek alatt, sablononként állítható.
 
 ## Lépésről lépésre: mi kerüljön a matricára
 
@@ -101,7 +123,7 @@ A nyomtatás a lap **Naplójába** is bekerül.
 
 - **„A nyomtató nem érhető el”** (hálózati mód): be van kapcsolva? ugyanazon a hálózaton van, mint a szerver? jó az IP-cím? A nyomtató menüjében vagy a beállítási lapján nézd meg a címét.
 - **A matrica üres vagy el van csúszva** (hálózati mód): a **Címke / szalag** egyezzen a betett tekerccsel. Ha mást teszel be, itt is írd át.
-- **A Brother ablak: „A készülékben levő címke- vagy szalagtekercs nem egyezik az alkalmazásban kiválasztottal”** (böngészős mód): a beállított címke más, mint ami a nyomtatóban van. A Brother ablak kiírja a betett tekercset (például „62mm Folyamatos szalag”). Nyomj **Mégse**-t, a **Beállítások › RMA-matrica** lapon a **Címke / szalag** mezőben válaszd ugyanazt (a példában **DK-22205 – 62 mm folyamatos**), mentsd, és nyomtass újra. A nyomtatás-ablakban a **Papírméret** is ez legyen (a példában **62mm**) – a Matrica ablak kiírja, mit válassz.
+- **A Brother ablak: „A készülékben levő címke- vagy szalagtekercs nem egyezik az alkalmazásban kiválasztottal”** (böngészős mód): a beállított címke más, mint ami a nyomtatóban van. A Brother ablak kiírja a betett tekercset (például „62mm Folyamatos szalag”). Nyomj **Mégse**-t, a **Beállítások › Címkenyomtatás** lapon a **Címke / szalag** mezőben válaszd ugyanazt (a példában **DK-22205 – 62 mm folyamatos**), mentsd, és nyomtass újra. A nyomtatás-ablakban a **Papírméret** is ez legyen (a példában **62mm**) – a Matrica ablak kiírja, mit válassz.
 - **A böngésző nem nyitja meg a nyomtatást:** a rendszer ilyenkor új lapon megnyitja a PDF-et – onnan nyomtass.
 - **A PDF jó, de a nyomtató kicsinyíti** (böngészős mód): a Brother illesztőprogramban állítsd be ugyanazt a címkeméretet, és a nyomtatás-ablakban a 100%-os méretet.
 - **Nincs Matrica gomb:** a lapnak még nincs munkalapszáma, vagy a lap árukiadás vagy rendelés, vagy a modul ki van kapcsolva.
@@ -138,11 +160,19 @@ Mert különben nem férne ki minden. A rendszer arányosan kicsinyít (legfelje
 
 ### Hogyan változtatom meg, mi álljon a sor elején?
 
-A **Beállítások › RMA-matrica** › **Mi kerüljön a matricára** dobozban a sor **felirat** mezőjében. Üresen csak az érték látszik.
+A **Beállítások › Címkenyomtatás** › **Mi kerüljön a matricára** dobozban a sor **felirat** mezőjében. Üresen csak az érték látszik.
 
 ### Hol látom, mikor nyomtattak matricát egy laphoz?
 
 A lap **Napló** gombjával: minden nyomtatás ott áll, időponttal és a kolléga nevével.
+
+### Nyomtathatok árcímkét a termékekre?
+
+Igen: nyisd meg a terméket, és kattints a **Címke** gombra. Mi kerüljön rá (ár, cikkszám, vonalkód…), azt a **Beállítások › Címkenyomtatás › Termékcímke** fülön állítod.
+
+### Lehet más hosszú a termékcímke, mint az RMA-matrica?
+
+Igen. Folyamatos szalagon a hossz, a tájolás és a betű fülenként külön állítható. A tekercs viszont közös: ha 62 mm-es szalag van a nyomtatóban, mindhárom címke 62 mm széles.
 
 ### Hogyan nyomtatok a P-touch szalagos nyomtatóra?
 

@@ -6,8 +6,11 @@
  * - Nyomtatás: böngészős módban a PDF rejtett keretben nyílik, és a böngésző
  *   nyomtatás-ablaka jön (ott a Brother nyomtatót kell választani);
  *   hálózati módban a szerver közvetlenül a nyomtatóra küldi.
- * - Beállítások › RMA-matrica: élő előnézet a még el nem mentett értékekkel,
- *   a mezők sorrendje nyilakkal, próbanyomat.
+ * - Termék- és szolgáltatás-címke (0.59.3): ugyanez a gomb az űrlapjukon
+ *   (data-sdh-matrica-tipus="termek" / "szolgaltatas").
+ * - Beállítások › Címkenyomtatás: közös nyomtató és tekercs, sablononként
+ *   (RMA / termék / szolgáltatás) élő előnézet a még el nem mentett
+ *   értékekkel, a mezők sorrendje nyilakkal, próbanyomat.
  */
 (function () {
     'use strict';
@@ -125,7 +128,10 @@
             if (a) {
                 var szint = typeof a.sajatSzint === 'function' ? a.sajatSzint(gomb) : -1;
 
-                a.nyit('matrica', gomb.getAttribute('data-sdh-matrica') || '0', { szint: Math.min(szint + 1, 3) });
+                a.nyit('matrica', gomb.getAttribute('data-sdh-matrica') || '0', {
+                    szint: Math.min(szint + 1, 3),
+                    parameterek: { tipus: gomb.getAttribute('data-sdh-matrica-tipus') || 'rma' }
+                });
             }
 
             return;
@@ -152,8 +158,9 @@
 
         return {
             id: ablak.getAttribute('data-id') || '0',
+            tipus: ablak.getAttribute('data-tipus') || 'rma',
             eszkoz: eszk,
-            peldany: pld ? String(Math.max(1, Math.min(10, parseInt(pld.value, 10) || 1))) : '1'
+            peldany: pld ? String(Math.max(1, Math.min(50, parseInt(pld.value, 10) || 1))) : '1'
         };
     }
 
@@ -170,7 +177,7 @@
         var d = adatok(ablak);
 
         if (!d.eszkoz.length) {
-            jelez(ablak, 'Jelölj be legalább egy matricát.', true);
+            jelez(ablak, 'Jelölj be legalább egy címkét.', true);
 
             return;
         }
@@ -183,6 +190,7 @@
             var fd = new FormData();
 
             fd.set('id', d.id);
+            fd.set('tipus', d.tipus);
             fd.set('peldany', d.peldany);
             d.eszkoz.forEach(function (k) { fd.append('eszkoz[]', k); });
 
@@ -197,12 +205,12 @@
             return;
         }
 
-        jelez(ablak, 'A matrica készül…');
+        jelez(ablak, 'A címke készül…');
 
         fetch(cim('matrica_pdf', Object.assign({ nyomtat: '1' }, d)), { credentials: 'same-origin' })
             .then(function (v) {
                 if (!v.ok) {
-                    throw new Error('A matrica nem készült el (' + v.status + ').');
+                    throw new Error('A címke nem készült el (' + v.status + ').');
                 }
 
                 return v.blob();
@@ -225,32 +233,38 @@
     }
 
     /* ---------------------------------------------------------------- */
-    /* Beállítások › RMA-matrica                                          */
+    /* Beállítások › Címkenyomtatás                                       */
     /* ---------------------------------------------------------------- */
 
-    function beallitasIndul(gyoker) {
-        var urlap = gyoker.closest('form');
+    // style.display: a mező saját display-szabálya a [hidden]-t felülírná.
+    function mutat(el, igen) {
+        el.hidden = !igen;
+        el.style.display = igen ? '' : 'none';
+    }
+
+    /** A közös (nyomtató, tekercs) mezőktől függő láthatóság az egész űrlapon. */
+    function lathatosag(urlap) {
+        var mod = urlap.querySelector('#matrica_mod');
+        var ck = urlap.querySelector('#matrica_cimke');
+        var tipus = ck && ck.selectedOptions[0] ? ck.selectedOptions[0].getAttribute('data-tipus') : '';
+
+        urlap.querySelectorAll('[data-sdh-matrica-halozat]').forEach(function (el) { mutat(el, !!mod && mod.value === 'halozat'); });
+        urlap.querySelectorAll('[data-sdh-matrica-folyamatos]').forEach(function (el) { mutat(el, tipus === 'folyamatos'); });
+        urlap.querySelectorAll('[data-sdh-matrica-egyedi]').forEach(function (el) { mutat(el, tipus === 'egyedi'); });
+    }
+
+    /** Egy sablon panelje: élő előnézet, sorrend, próbanyomat. Visszaadja a frissítőt. */
+    function panelIndul(gyoker, urlap) {
         var idozito = null;
         var sorszam = 0;
+        var sablon = gyoker.getAttribute('data-sablon') || 'rma';
 
-        if (!urlap) {
-            return;
-        }
+        function adat() {
+            var fd = new FormData(urlap);
 
-        function lathatosag() {
-            var mod = urlap.querySelector('#matrica_mod');
-            var ck = urlap.querySelector('#matrica_cimke');
-            var tipus = ck && ck.selectedOptions[0] ? ck.selectedOptions[0].getAttribute('data-tipus') : '';
+            fd.set('sablon', sablon);
 
-            // style.display: a mező saját display-szabálya a [hidden]-t felülírná.
-            function mutat(el, igen) {
-                el.hidden = !igen;
-                el.style.display = igen ? '' : 'none';
-            }
-
-            gyoker.querySelectorAll('[data-sdh-matrica-halozat]').forEach(function (el) { mutat(el, !!mod && mod.value === 'halozat'); });
-            gyoker.querySelectorAll('[data-sdh-matrica-folyamatos]').forEach(function (el) { mutat(el, tipus === 'folyamatos'); });
-            gyoker.querySelectorAll('[data-sdh-matrica-egyedi]').forEach(function (el) { mutat(el, tipus === 'egyedi'); });
+            return fd;
         }
 
         function elonezet() {
@@ -259,7 +273,7 @@
             var meret = gyoker.querySelector('[data-sdh-matrica-meret]');
             var en = ++sorszam;
 
-            post('matrica_elonezet', new FormData(urlap)).then(function (d) {
+            post('matrica_elonezet', adat()).then(function (d) {
                 if (en !== sorszam) {
                     return;
                 }
@@ -307,7 +321,6 @@
                 sor.classList.toggle('is-be', esemeny.target.checked);
             }
 
-            lathatosag();
             kesleltet();
         });
 
@@ -347,7 +360,7 @@
 
                 proba.disabled = true;
 
-                post('matrica_proba', new FormData(urlap)).then(function (d) {
+                post('matrica_proba', adat()).then(function (d) {
                     proba.disabled = false;
 
                     if (d.pdf) {
@@ -356,7 +369,7 @@
                                 window.open(r.url, '_blank', 'noopener');
                             }
                         });
-                        jel.textContent = 'A próbamatrica PDF-je megnyílt – a nyomtatás-ablakban válaszd a Brother nyomtatót.';
+                        jel.textContent = 'A próbacímke PDF-je megnyílt – a nyomtatás-ablakban válaszd a Brother nyomtatót.';
                     } else {
                         jel.textContent = d.uzenet || 'Elküldve.';
                     }
@@ -370,12 +383,71 @@
             }
         });
 
-        lathatosag();
         elonezet();
+
+        return kesleltet;
+    }
+
+    function beallitasIndul(keret) {
+        var urlap = keret.closest('form');
+
+        if (!urlap) {
+            return;
+        }
+
+        var frissitok = [];
+
+        keret.querySelectorAll('[data-sdh-matrica-beall]').forEach(function (gyoker) {
+            frissitok.push(panelIndul(gyoker, urlap));
+        });
+
+        // A közös mezők (nyomtató, tekercs) mindegyik sablon előnézetét érintik.
+        var kozos = keret.querySelector('[data-sdh-matrica-kozos]');
+
+        if (kozos) {
+            ['change', 'input'].forEach(function (tipus) {
+                kozos.addEventListener(tipus, function (esemeny) {
+                    if (tipus === 'input' && !esemeny.target.matches('input[type="text"], input[type="number"]')) {
+                        return;
+                    }
+
+                    lathatosag(urlap);
+                    frissitok.forEach(function (f) { f(); });
+                });
+            });
+        }
+
+        // Sablonválasztó fülek.
+        keret.addEventListener('click', function (esemeny) {
+            var gomb = esemeny.target.closest('[data-sdh-matrica-sablon-gomb]');
+
+            if (!gomb) {
+                return;
+            }
+
+            esemeny.preventDefault();
+
+            var s = gomb.getAttribute('data-sdh-matrica-sablon-gomb');
+
+            keret.querySelectorAll('[data-sdh-matrica-sablon-gomb]').forEach(function (g) {
+                var be = g === gomb;
+
+                g.classList.toggle('is-aktiv', be);
+                g.setAttribute('aria-selected', be ? 'true' : 'false');
+            });
+
+            keret.querySelectorAll('[data-sdh-matrica-beall]').forEach(function (p) {
+                mutat(p, p.getAttribute('data-sablon') === s);
+            });
+
+            lathatosag(urlap);
+        });
+
+        lathatosag(urlap);
     }
 
     function indul() {
-        document.querySelectorAll('[data-sdh-matrica-beall]').forEach(beallitasIndul);
+        document.querySelectorAll('[data-sdh-matrica-beallitas]').forEach(beallitasIndul);
     }
 
     if (document.readyState === 'loading') {

@@ -164,7 +164,7 @@ final class SDH_Muhely_Beallitasok
                 'rajz' => [SDH_Muhely_Szamla::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Szamla::class, 'beallitas_mentes'],
             ],
             'matrica' => [
-                'cim' => 'RMA-matrica', 'csoport' => 'penz',
+                'cim' => 'Címkenyomtatás', 'csoport' => 'penz',
                 'leiras' => 'Brother címkenyomtató: típus, nyomtatási mód (böngésző vagy hálózat), címke mérete, mi kerüljön a matricára és milyen sorrendben.',
                 'rajz' => [SDH_Muhely_Matrica::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Matrica::class, 'beallitas_mentes'],
             ],

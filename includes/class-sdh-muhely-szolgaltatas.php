@@ -1091,6 +1091,11 @@ final class SDH_Muhely_Szolgaltatas
                     <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
                 <?php endif; ?>
 
+                <?php // Címke Brother címkenyomtatóra (0.59.3): SDH_Muhely_Matrica, matrica.js. ?>
+                <?php if (!$uj && $modal && class_exists('SDH_Muhely_Matrica')) : ?>
+                    <?php echo SDH_Muhely_Matrica::gomb((int) $sz->id, 'szolgaltatas'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
+
                 <?php if (!$uj && $modal) : ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra"
                             data-sdh-szolg-torol="<?php echo (int) $sz->id; ?>"

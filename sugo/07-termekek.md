@@ -202,6 +202,7 @@ Az ablak tetején látod a termék sorszámát, és hogy hány munkalap-tételbe
 - A teljes dokumentációt és a gyakori kérdéseket a **Súgó** menüpontban találod.
 - Reggel nézd meg a **Rendelni kell** fület: egy pillantással látod, miből kell utánrendelni.
 - Add meg a vonalkódot a terméknél. Utána a munkalapon és az árukiadáson elég beolvasni.
+- Árcímke vagy polccímke kell? A termék ablakának alján a **Címke** gomb Brother címkenyomtatóra nyomtat (név, ár, cikkszám, vonalkód) – lásd a **Címkenyomtatás (Brother)** fejezetet.
 - A **Min. készlet** értékét a gyorsan fogyó alkatrészeknél állítsd be. Enélkül a termék csak akkor kerül a **Rendelni kell** nézetbe, amikor teljesen elfogyott.
 - **A változás oka** mezőt mindig töltsd ki. Fél év múlva ebből derül ki, miért lett kevesebb a készlet.
 - A lista alján az összesítő sor megmutatja, mennyi pénz áll a készletben. Kategóriára szűrve kategóriánként is látod.
