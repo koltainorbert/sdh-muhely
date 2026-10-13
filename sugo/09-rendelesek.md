@@ -163,7 +163,7 @@ A lista telepítés után néhány mintasorral indulhat; ezek átírhatók.
 
 ## Tippek
 
-- **Papír a megrendelőnek:** a rendelés ablakának alján a **Nyomtatás** gomb **Megrendelést** (a felvett rendelés visszaigazolása az előleggel), átadáskor **Átadási bizonylatot** ad – nyomtatva, PDF-ben vagy e-mailben. Új rendelés mentése után és lezáráskor a rendszer fel is ajánlja. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
+- **Papír a megrendelőnek:** a rendelés ablakának alján a **Nyomtatás** gomb **Megrendelést** (a felvett rendelés visszaigazolása az előleggel), átadáskor **Átadási bizonylatot** ad – nyomtatva, PDF-ben vagy e-mailben. Új rendelés mentése után és lezáráskor a rendszer fel is ajánlja, és ugyanabban az ablakban ott a másik papír meg a **Számla-előkészítő (PDF)** és a **Számlázz.hu számla** gombja is. Az ablak nyitva marad, amíg be nem zárod. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
 - Reggel nézz rá a menüpont jelvényére: ha szám áll mellette, van megérkezett áru, amiről az ügyfél nem tud.
 - A **Várható érkezés** kitöltésével a késő rendelések maguktól kitűnnek a listában.
 - Az ügyfél adatlapján a **Rendelések** lapfül az összes rendelését mutatja darabszámmal, összeggel és a még fizetendő résszel. Egy sorra kattintva a rendelés az ügyfél ablaka fölött nyílik meg.
@@ -181,7 +181,7 @@ A lista telepítés után néhány mintasorral indulhat; ezek átírhatók.
 
 ### Kap az ügyfél papírt a rendeléséről?
 
-Igen. Új rendelés mentése után a rendszer felajánlja a **Megrendelés** nyomtatását (mit rendelt, mennyi előleget fizetett); átadáskor az **Átadási bizonylatot**. Mindkettő a rendelés ablakának **Nyomtatás** gombjával később is elérhető, és e-mailben is elküldhető.
+Igen. Új rendelés mentése után a rendszer felajánlja a **Megrendelés** nyomtatását (mit rendelt, mennyi előleget fizetett); átadáskor az **Átadási bizonylatot**. A felajánló ablakban mindkettő ott van saját gombbal a számla mellett, és nyitva marad, amíg be nem zárod. Mindkét papír a rendelés ablakának **Nyomtatás** gombjával később is elérhető, és e-mailben is elküldhető.
 
 ### Miért kötelező ügyfelet megadni a rendeléshez?
 

@@ -36,8 +36,8 @@ Minden bejegyzésben benne van, **honnan** jött a módosítás: a felületről,
 
 1. Nyisd meg a munkalapot (vagy az árukiadást, rendelést).
 2. Kattints az ablak alján a **Napló** gombra.
-3. Az ablakban napokra bontva, a legújabb elöl látod a történetet. Egy kártya egy mentés: fent az időpont, ki csinálta és honnan (például **Felület** vagy **AI-asszisztens**), alatta a változások.
-4. A módosított mezőknél áthúzva a régi, félkövérrel az új érték áll: `Állapot: Nyitott → Lezárt`.
+3. Az ablakban napokra bontva, a legújabb elöl látod a történetet. Egy kártya egy mentés: fent az időpont, ki csinálta és honnan (például **Felület** vagy **AI-asszisztens**), alatta a változások. Az ablak mérete állandó – akár hét, akár hetven bejegyzés van benne –, a lista belül görget, a nap felirata pedig görgetés közben is a lista tetején marad.
+4. A módosított mezőknél áthúzva a régi, félkövérrel az új érték áll: `Állapot: Nyitott → Lezárt`. Széles ablakban a megváltozott mezők egymás mellett, több oszlopban állnak, hogy egy mentés egy pillantással átlátható legyen.
 5. Új tételnél vagy törlésnél a **Minden adata** sorra kattintva látod a teljes sort.
 6. Ha több bejegyzés van, a **Régebbiek** gomb tölti be a többit.
 7. A **Mi történt? – kérdezd az asszisztenst** gomb megkéri a figurát, hogy mondja el időrendben, mi történt a lappal.

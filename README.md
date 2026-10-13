@@ -64,6 +64,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.60.0
+- **A popup többé nem zsugorodik.** Eddig a sok adattal teli munkalap CSS-zoommal ment össze (akár 55%-ra), ezért nagy
+  monitoron is alig lehetett olvasni, és a lap minden leütésre megugrott. Mostantól a betűméret marad, a tartalom pedig
+  az ablakon belül görget. Ezzel együtt eltűnt az a figyelő is, amelyik minden DOM-változásnál újraméretezte az ablakot
+  – gépelés közben ez volt a felület legdrágább munkája.
+- **Eszközcsomag: 37 kérés helyett 15.** A plugin 25 saját CSS/JS fájlja egyetlen stíluslapba és egyetlen szkriptbe
+  fűzve töltődik be (ugyanaz a kód, változatlan sorrendben; `SDH_Muhely_Csomag`, a feltöltési mappába írva, verzióhoz
+  kötött névvel, magától takarítva). Kapcsoló: Beállítások › Rendszer › Sebesség. Mérve (helyi szerver, Munkalapok
+  oldal): 37 → 15 kérés, ebből a plugin sajátja 25 → 2.
+- **A nyomtatási felajánlás nyitva marad**, amíg be nem zárod. Egymás után kinyomtatható a lap papírja ÉS elindítható a
+  számla; a lefutott gomb „Kész –" jelet kap, a „Most nem" felirata „Bezárás" lesz.
+- **Számla a felajánlásból felvételkor is**: a Számlázz.hu és a helyi Számla-előkészítő gomb már nemcsak lezáráskor
+  jelenik meg, hanem minden sorszámot kapott lapnál – így a bevizsgálási díjról rögtön adható számla.
+- **Napi árukiadás és rendelés**: új lap mentése után is jön a felajánlás (árukiadás: átadási bizonylat, rendelés:
+  megrendelés), és a lap többi papírja is egy kattintással nyomtatható ugyanabból az ablakból.
+- **Napló ablak**: fix méretű, saját görgetésű lista (eddig annyival nyúlt, ahány bejegyzés volt), szélesebb ablak,
+  a megváltozott mezők egymás mellett. 7 bejegyzésnél 729 px → 624 px, húsz bejegyzésnél sem lesz hosszabb.
+- **Levélíró: ismert címek felajánlása.** A Címzett, Másolat és Titkos másolat mezőben legördülnek az ügyfelek címei és
+  a postafiók eddigi feladói (név, cím, forrás); gépelve szűr, több cím vesszővel, billentyűvel is választható.
+
 ### 0.59.6
 - **Automatikus mentés** a rekord-ablakokban (munkalap, rendelés, árukiadás, ügyfél, eszköz, termék, szolgáltatás):
   tétel/hibasor, választó, pipa azonnal; beírt mező elhagyáskor; megjegyzés a gépelés megállása után. Az ablak nyitva

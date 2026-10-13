@@ -735,6 +735,141 @@
         }
     });
 
+    /* ---------------------------------------------------------------- */
+    /* Levélíró: ismert címek felajánlása (0.60.0)                       */
+    /* ---------------------------------------------------------------- */
+    /*
+     * A Címzett, a Másolat és a Titkos másolat mezőben gépelve (vagy a mezőbe
+     * állva) legördül, kinek szoktunk írni: az ügyfelek e-mail-címei és a
+     * postafiók feladói. Több cím vesszővel: mindig az utolsó darabot
+     * egészíti ki. Billentyűvel is megy (le/fel, Enter, Esc).
+     */
+
+    var CIM_MEZOK = '[data-sdh-leveliro] input[name="cimzett"], [data-sdh-leveliro] input[name="masolat"], [data-sdh-leveliro] input[name="titkos"]';
+    var cimLista = null;
+    var cimMezo = null;
+    var cimIdo = 0;
+    var cimKert = '';
+
+    function cimZar() {
+        if (cimLista) {
+            cimLista.remove();
+        }
+
+        cimLista = null;
+        cimMezo = null;
+        window.clearTimeout(cimIdo);
+    }
+
+    /** A mező utolsó (épp szerkesztett) címdarabja. */
+    function cimUtolso(mezo) {
+        var reszek = String(mezo.value || '').split(',');
+
+        return reszek[reszek.length - 1].trim();
+    }
+
+    function cimBeir(mezo, email) {
+        var reszek = String(mezo.value || '').split(',');
+
+        reszek[reszek.length - 1] = ' ' + email;
+        mezo.value = reszek.join(',').replace(/^\s+/, '');
+        mezo.focus();
+        mezo.dispatchEvent(new Event('input', { bubbles: true }));
+        cimZar();
+    }
+
+    function cimRajzol(mezo, cimek) {
+        if (cimMezo !== mezo || !document.body.contains(mezo)) {
+            return;
+        }
+
+        if (!cimek.length) {
+            cimZar();
+
+            return;
+        }
+
+        if (!cimLista) {
+            cimLista = document.createElement('div');
+            cimLista.className = 'sdh-cimjavaslat';
+            cimLista.setAttribute('role', 'listbox');
+            (mezo.closest('.sdh-ig') || mezo.parentNode).appendChild(cimLista);
+        }
+
+        cimLista.innerHTML = cimek.map(function (c, i) {
+            return '<button type="button" role="option" class="sdh-cimjavaslat__sor' + (i === 0 ? ' is-kijelolt' : '') + '" data-cim="' + e(c.email) + '">' +
+                '<span class="sdh-cimjavaslat__nev">' + e(c.nev || c.email) + '</span>' +
+                '<span class="sdh-cimjavaslat__email">' + e(c.email) + '</span>' +
+                '<span class="sdh-cimjavaslat__honnan">' + e(c.honnan) + '</span></button>';
+        }).join('');
+    }
+
+    function cimKer(mezo) {
+        var q = cimUtolso(mezo);
+
+        cimMezo = mezo;
+        window.clearTimeout(cimIdo);
+
+        cimIdo = window.setTimeout(function () {
+            cimKert = q;
+
+            kuld('cimek', { q: q }).then(function (adat) {
+                if (cimKert === q) {
+                    cimRajzol(mezo, (adat && adat.cimek) || []);
+                }
+            }).catch(function () { /* a felajánlás kényelmi szolgáltatás: hiba esetén kimarad */ });
+        }, 160);
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        if (esemeny.target.matches && esemeny.target.matches(CIM_MEZOK)) {
+            cimKer(esemeny.target);
+        }
+    });
+
+    document.addEventListener('focusin', function (esemeny) {
+        if (esemeny.target.matches && esemeny.target.matches(CIM_MEZOK)) {
+            cimKer(esemeny.target);
+        } else if (!esemeny.target.closest || !esemeny.target.closest('.sdh-cimjavaslat')) {
+            cimZar();
+        }
+    });
+
+    document.addEventListener('mousedown', function (esemeny) {
+        var sor = esemeny.target.closest ? esemeny.target.closest('.sdh-cimjavaslat__sor') : null;
+
+        if (sor && cimMezo) {
+            esemeny.preventDefault();
+            cimBeir(cimMezo, sor.getAttribute('data-cim') || '');
+        } else if (!esemeny.target.closest || !esemeny.target.closest('.sdh-cimjavaslat')) {
+            cimZar();
+        }
+    });
+
+    document.addEventListener('keydown', function (esemeny) {
+        if (!cimLista || !cimMezo || esemeny.target !== cimMezo) {
+            return;
+        }
+
+        var sorok = Array.prototype.slice.call(cimLista.querySelectorAll('.sdh-cimjavaslat__sor'));
+        var most = sorok.findIndex(function (s) { return s.classList.contains('is-kijelolt'); });
+
+        if (esemeny.key === 'ArrowDown' || esemeny.key === 'ArrowUp') {
+            esemeny.preventDefault();
+
+            var uj = Math.min(sorok.length - 1, Math.max(0, most + (esemeny.key === 'ArrowDown' ? 1 : -1)));
+
+            sorok.forEach(function (s, i) { s.classList.toggle('is-kijelolt', i === uj); });
+            sorok[uj].scrollIntoView({ block: 'nearest' });
+        } else if (esemeny.key === 'Enter' && most >= 0) {
+            esemeny.preventDefault();
+            cimBeir(cimMezo, sorok[most].getAttribute('data-cim') || '');
+        } else if (esemeny.key === 'Escape') {
+            esemeny.stopPropagation();
+            cimZar();
+        }
+    });
+
     /* ================================================================ */
     /* 2. A levelező oldal                                              */
     /* ================================================================ */

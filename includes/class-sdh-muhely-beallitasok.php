@@ -229,6 +229,11 @@ final class SDH_Muhely_Beallitasok
             ],
 
             // --- Rendszer ----------------------------------------------------
+            'sebesseg' => [
+                'cim' => 'Sebesség', 'csoport' => 'rendszer', 'ujratolt' => true,
+                'leiras' => 'A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás.',
+                'rajz' => [SDH_Muhely_Csomag::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Csomag::class, 'beallitas_mentes'],
+            ],
             'mentes' => [
                 'cim' => 'Mentés', 'csoport' => 'rendszer',
                 'leiras' => 'A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés.',

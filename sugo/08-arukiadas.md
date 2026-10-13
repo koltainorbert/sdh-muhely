@@ -165,7 +165,7 @@ A **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállító
 ## Tippek
 
 - A rácsban két kész nézet van: a **Napi árukiadás** csak az eladásokat, a **Csak javítás (árukiadás nélkül)** csak a munkalapokat mutatja.
-- **Papír a vevőnek:** az árukiadás ablakának alján a **Nyomtatás** gomb **Átadási bizonylatot** (tételek, végösszeg, aláírás), árajánlatot vagy szállítólevelet ad – nyomtatva, PDF-ben vagy e-mailben. Lezáráskor a rendszer fel is ajánlja. Nem számla. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
+- **Papír a vevőnek:** az árukiadás ablakának alján a **Nyomtatás** gomb **Átadási bizonylatot** (tételek, végösszeg, aláírás), árajánlatot vagy szállítólevelet ad – nyomtatva, PDF-ben vagy e-mailben. A rendszer **mentés után és lezáráskor is** felajánlja, ugyanabban az ablakban a **Számlázz.hu számla** és a **Számla-előkészítő (PDF)** gombbal. Az ablak nyitva marad, amíg be nem zárod, így a bizonylat és a számla egymás után kiadható. A bizonylat nem számla. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
 - Visszatérő vevőt válassz ki ügyfélként: az adatlapján a **Vásárlások** lapfülön látod, mit vitt, mennyiért, és van-e tartozása.
 
 ## Ha valami nem megy
@@ -179,7 +179,7 @@ A **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállító
 
 ### Tudok papírt adni a vevőnek a napi árukiadásról?
 
-Igen. Az árukiadás ablakának alján a **Nyomtatás** gombbal **Átadási bizonylatot** nyomtathatsz a tételekkel és a végösszeggel; a lap lezárásakor a rendszer magától is felajánlja. Ez nem számla – számlát a **Számlázz.hu számla** gombbal állítasz ki.
+Igen. Az árukiadás ablakának alján a **Nyomtatás** gombbal **Átadási bizonylatot** nyomtathatsz a tételekkel és a végösszeggel; a rendszer mentés után és lezáráskor magától is felajánlja – ugyanabból az ablakból a számla is elindítható. Ez nem számla – számlát a **Számlázz.hu számla** gombbal állítasz ki.
 
 ### Kell ügyfelet megadnom az árukiadáshoz?
 

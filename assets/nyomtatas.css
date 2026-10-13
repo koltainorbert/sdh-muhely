@@ -296,7 +296,7 @@ dialog.sdh-modal[data-sdh-modul="nyomtsablon"] {
 /* ================================================================== */
 
 dialog.sdh-ny-ajanlat {
-    width: min(calc(460px * var(--sdh-n)), 92vw);
+    width: min(calc(560px * var(--sdh-n)), 92vw);
     padding: calc(20px * var(--sdh-n));
     border: 1px solid var(--sdh-keret-eros, var(--sdh-keret));
     border-radius: var(--sdh-r-nagy, calc(16px * var(--sdh-n)));
@@ -361,24 +361,33 @@ dialog.sdh-ny-ajanlat::backdrop {
     display: none;
 }
 
+/* Az ablak nyitva marad, ezért több gomb is van benne (papírok + számla):
+   rácsba állnak, hogy egy pillantásra látszódjon, mi nyomtatható (0.60.0). */
 .sdh-ny-ajanlat__gombok {
     grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(200px * var(--sdh-n)), 1fr));
     gap: calc(8px * var(--sdh-n));
 }
 
-.sdh-ny-ajanlat__gombok .sdh-gomb--elsodleges {
-    flex: 1 1 100%;
+.sdh-ny-ajanlat__gombok .sdh-gomb {
     justify-content: center;
+    text-align: center;
+}
+
+.sdh-ny-ajanlat__gombok .sdh-gomb--elsodleges,
+.sdh-ny-ajanlat__gombok .sdh-ny-ajanlat__kesz {
+    grid-column: 1 / -1;
     padding-block: calc(11px * var(--sdh-n));
     font-size: calc(15px * var(--sdh-n));
 }
 
-.sdh-ny-ajanlat__gombok .sdh-gomb--vilagos {
-    flex: 1 1 0;
-    justify-content: center;
-    white-space: nowrap;
+/* Lefutott gomb: megmarad, hogy látszódjon, mi ment már ki. */
+.sdh-ny-ajanlat__gombok .sdh-gomb.is-kesz {
+    border-color: var(--sdh-allapot-zold);
+    background: color-mix(in srgb, var(--sdh-allapot-zold) 14%, var(--sdh-felulet));
+    color: var(--sdh-szoveg);
+    font-weight: 600;
 }
 
 /* ================================================================== */

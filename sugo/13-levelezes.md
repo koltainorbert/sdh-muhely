@@ -98,8 +98,8 @@ A fejlécben a **Keresés a megnyitott mappában…** mezőbe írd be a keresett
 
 1. Kattints az **Új levél** gombra. Felugró ablak nyílik.
 2. **Feladó:** több fióknál kattints rá, és válaszd ki, melyik címről menjen a levél.
-3. **Címzett:** írd be a címet. Több címet vesszővel válassz el.
-4. **Másolat:** két mező – másolat (Cc) és titkos másolat (Bcc). Nem kötelező.
+3. **Címzett:** írd be a címet. Ahogy a mezőbe állsz, legördül, kinek szoktál írni: az **ügyfelek** e-mail-címei és a postafiók eddigi **feladói** – mindegyiknél a név, a cím és az, honnan való. Gépelve szűkül a lista (a névre és a címre is illeszkedik); a sorra kattintva vagy le-föl nyíllal és **Enterrel** választhatsz. Több címet vesszővel válassz el – a felajánlás mindig az utolsó, épp írt címre vonatkozik. Az **Esc** bezárja a listát; a cím kézzel is beírható.
+4. **Másolat:** két mező – másolat (Cc) és titkos másolat (Bcc). Nem kötelező. Ezekben is legördülnek az ismert címek.
 5. **Tárgy** és a levél szövege. A fiók aláírása magától bekerül.
 6. Kattints a **Küldés** gombra. Siker esetén: „A levél elment.”
 

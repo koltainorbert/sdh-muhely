@@ -87,17 +87,19 @@ A **Belső munkalap** kollégának elküldhető, az ügyfél címére nem: ha m�
 
 A rendszer két pillanatban magától rákérdez, hogy nyomtass-e:
 
-- **Új munkalap mentése után** az **átvételi elismervényt** ajánlja – ezt kapja az ügyfél, amikor leadja a készüléket.
-- **Munkalap lezárásakor** a **munkalapot** ajánlja – ezt kapja, amikor elviszi.
+- **Új lap mentése után** – javításnál az **átvételi elismervényt**, napi árukiadásnál az **átadási bizonylatot**, új rendelésnél a **megrendelést** ajánlja.
+- **A lap lezárásakor** – javításnál a **munkalapot**, árukiadásnál és rendelésnél az **átadási bizonylatot**.
+
+**Az ablak addig marad nyitva, amíg be nem zárod.** Egy lezárás után rendszerint több papír is kell: a munkalap az ügyfélnek, és számla is. Ezért a gombok nem zárják be az ablakot – a lefutott gomb **Kész –** jelet kap, a **Most nem** felirata pedig **Bezárás** lesz. Nyomtathatsz egymás után kettőt, vagy nyomtatás után kérhetsz számlát.
 
 A felajánló ablak gombjai:
 
-- **Nyomtatás** – azonnal nyomtat, a nyomtatvány alap példányszámával.
-- **Előnézet, e-mail…** – megnyitja a Nyomtatás ablakot, ahol más nyomtatványt is választhatsz, vagy elküldheted levélben.
-- **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – csak **lezáráskor**: innen rögtön a számla ablaka nyílik (a munkalap fölött, ha az nyitva van). A Számlázz.hu gomb csak bekapcsolt Számlázás modulnál látszik.
-- **Most nem** – bezárja; a lap később is kinyomtatható és számlázható.
+- **Nyomtatás: <nyomtatvány>** – azonnal nyomtat, a nyomtatvány alap példányszámával. A lap többi papírja is itt van saját gombbal (javításnál az átvételi mellett a munkalap, rendelésnél a megrendelés mellett az átadási bizonylat), így nem kell a Nyomtatás ablakot megnyitni hozzá.
+- **Előnézet, e-mail…** – megnyitja a Nyomtatás ablakot, ahol bármelyik nyomtatványt választhatod, vagy elküldheted levélben.
+- **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – minden sorszámot kapott lapnál (felvételkor és lezáráskor is): innen rögtön a számla ablaka nyílik, a felajánlás fölött. Így a bevizsgálási díjról már átvételkor adható számla. A Számlázz.hu gomb csak bekapcsolt Számlázás modulnál látszik.
+- **Bezárás** (eleinte **Most nem**) – bezárja; a lap később is kinyomtatható és számlázható.
 
-A lezárást a rendszer bárhonnan észreveszi: a lap ablakából, a lista állapotválasztójából és a fizetés rögzítéséből is. Árukiadásnál és rendelésnél a lezáráskor az **átadási bizonylatot**, új rendelésnél a **megrendelést** ajánlja.
+A lezárást a rendszer bárhonnan észreveszi: a lap ablakából, a lista állapotválasztójából és a fizetés rögzítéséből is.
 
 A három felajánlás külön-külön kikapcsolható a **Beállítások › Nyomtatványok** lapfülön, a **Felajánlás és e-mail** dobozban.
 
@@ -211,7 +213,7 @@ A dobozok alján a **Mentés** gomb ment; a nyomtatványok szerkesztője külön
 
 ### Hogyan nyomtatom ki a munkalapot, amikor az ügyfél elviszi a készüléket?
 
-Amikor a lapot lezárod, a rendszer felajánlja a **Munkalap** nyomtatását. Ha a felajánlást bezártad, a lap **Nyomtatás** gombjával bármikor előveheted.
+Amikor a lapot lezárod, a rendszer felajánlja a **Munkalap** nyomtatását – és ugyanabban az ablakban az átvételi elismervényt meg a számlát is. Az ablak nyitva marad, amíg be nem zárod. Ha már bezártad, a lap **Nyomtatás** gombjával bármikor előveheted.
 
 ### Hogyan küldök árajánlatot e-mailben?
 

@@ -3,7 +3,7 @@ kulcs: beallitasok
 cim: Beállítások
 csoport: Rendszer
 modul: beallitasok
-szakaszok: demo, kalauz, rendszer
+szakaszok: demo, kalauz, rendszer, sebesseg
 kulcsszavak: beállítások, beállítás, lapfül, fül, mentés, adminisztrátor, admin, demó, demo, próbaadat, mintaadat, tesztadat, stíluskalauz, színek, névjegy, verzió, verziószám, séma, internet nélkül, offline, ctrl s
 osszefoglalo: A Beállítások egyetlen oldal, ahol témánként külön lapfülön áll minden állítható adat; itt van a demó adatok betöltése, a stíluskalauz és a névjegy is.
 ---
@@ -68,6 +68,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **IMEI-lekérdezés** | A fizetős IMEI-szolgáltató végpontja és kulcsa, és az ingyenes ellenőrző oldalak gombjai. | [Eszközök](sugo:eszkozok) |
 | **TAC adatbázis** | Az IMEI elejéből ez mondja meg a gyártót és a típust: állapot, betöltés. | [Eszközök](sugo:eszkozok) |
 | **Mentés** | A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés. | [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag) |
+| **Sebesség** | A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás. | ez a fejezet |
 | **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |
 | **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |
 | **Névjegy** | Verziók, címek, és ami internet nélkül is működik. | ez a fejezet |
@@ -110,6 +111,26 @@ Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TA
 - **A kulcsok és jelszavak nem jelennek meg újra.** A mentett jelszó vagy kulcs mezője üres marad, helyőrző jelzi, hogy van mentett érték. Újat csak akkor írj be, ha cserélni akarod. A fizetős IMEI-szolgáltató kulcsa kivétel: az a mezőjében olvasható.
 - **A változás azonnal él.** A kollégák a következő oldalbetöltéskor látják.
 - **Nincs átjárás a wp-adminba.** A Beállítások, a mentés és a feltöltés is a műhely-felületen marad; mentés után ugyanarra a lapfülre térsz vissza.
+
+## Sebesség
+
+A **Beállítások › Sebesség** lapfülön egyetlen kapcsoló van: **a felület CSS- és JS-fájljai egy kérésben töltődjenek be**. Alapból be van kapcsolva.
+
+Miért van rá szükség: a műhely-felület több mint húsz stíluslapot és szkriptet használ, és mindegyik kell minden oldalon, mert a popupok (munkalap, pénztár, nyomtatás, napló, levélíró) bárhol megnyílhatnak. Ez önmagában nem sok adat, de **sok kérés** – és egy helyi szerveren (LocalWP) minden egyes kérés sokat tart, akkor is, ha a fájl pici.
+
+Bekapcsolva a rendszer ezeket a fájlokat egyetlen stíluslapba és egyetlen szkriptbe fűzi össze:
+
+- a kód **karakterre ugyanaz**, és ugyanabban a sorrendben fut – nincs tömörítés, nincs átírás,
+- a csomag a **feltöltési mappába** kerül (`wp-content/uploads/sdh-muhely-csomag/`), nem a bővítmény mappájába,
+- a fájl neve a verzióból képződik, így **frissítés után magától új csomag készül** – nincs mit üríteni, és a böngésző sem tölt be régit,
+- a régi csomagokat a rendszer magától törli,
+- csak a **saját** fájljaihoz nyúl: a WordPress és a többi bővítmény eszközeihez nem.
+
+Ha a feltöltési mappa nem írható, a lapfül ezt kiírja, és a felület – észrevétlenül – a régi módon, külön fájlokból töltődik be. A kapcsoló ilyenkor is bekapcsolva maradhat: amint a mappa írhatóvá válik, magától működni kezd.
+
+**Mikor kapcsold ki?** Ha a felület fejlesztésén dolgozol, és azt szeretnéd, hogy a böngésző fejlesztői eszközeiben külön fájlonként lásd a stílusokat és a szkripteket. A napi munkához hagyd bekapcsolva.
+
+Mit NEM gyorsít ez: az adatbázis-lekérdezéseket és a munkalapok mennyiségét. Ha a lista lassú, a [Hibaelhárítás](sugo:hibaelharitas) fejezet szól róla.
 
 ## Demó adatok
 

@@ -3647,14 +3647,13 @@ a.sdh-kartya:focus-visible {
 }
 
 /* ------------------------------------------------------------------ */
-/* Popup: soha nincs görgetősáv – ha a képernyő alacsony, a popup       */
-/* arányosan kisebb lesz (app.js illesztPopup, CSS zoom).               */
+/* Popup: a betűméret soha nem csökken (0.60.0). Ha a tartalom magasabb a    */
+/* képernyőnél, a doboz belül görget – régen a popup CSS-zoommal ment össze. */
 /* ------------------------------------------------------------------ */
 
-.sdh-modal--illeszt,
-.sdh-modal--illeszt .sdh-modal__doboz {
-    max-height: none;
-    overflow: visible;
+.sdh-modal__doboz {
+    scrollbar-width: thin;
+    overscroll-behavior: contain;
 }
 
 

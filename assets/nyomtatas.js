@@ -697,6 +697,14 @@
         }
 
         var d = document.createElement('dialog');
+        var tarsak = (a.tarsak || []).slice(0, 3);
+
+        function nyomtatGomb(tipus, cim, peldany, fo) {
+            return '<button type="button" class="sdh-gomb ' + (fo ? 'sdh-gomb--elsodleges' : 'sdh-gomb--vilagos') + '"' +
+                ' data-nya="nyomtat" data-tipus="' + e(tipus) + '" data-peldany="' + (peldany || 1) + '"' +
+                ' data-felirat="' + e(cim) + (peldany > 1 ? ' (' + peldany + ' példány)' : '') + '">' +
+                e(cim) + (peldany > 1 ? ' (' + peldany + ' példány)' : '') + '</button>';
+        }
 
         d.className = 'sdh-ny-ajanlat';
         d.setAttribute('aria-label', 'Nyomtatás felajánlása');
@@ -705,12 +713,15 @@
             '<div class="sdh-ny-ajanlat__szoveg"><strong>' + e(a.cim) + (a.szam ? ' – ' + e(a.szam) : '') + '</strong><span>' + e(a.szoveg) + '</span>' +
             '<span class="sdh-ny-ajanlat__hiba" data-nya-hiba aria-live="polite"></span></div>' +
             '<div class="sdh-ny-ajanlat__gombok">' +
-            '<button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-nya="nyomtat">Nyomtatás' + (a.peldany > 1 ? ' (' + a.peldany + ' példány)' : '') + '</button>' +
+            // A lap ajánlott papírja, utána a többi (munkalap, átadási bizonylat…): az ablak
+            // nyitva marad, így egymás után több is nyomtatható (0.60.0).
+            nyomtatGomb(a.tipus, 'Nyomtatás: ' + a.cim, a.peldany || 1, true) +
+            tarsak.map(function (t) { return nyomtatGomb(t.tipus, 'Nyomtatás: ' + t.cim, t.peldany || 1, false); }).join('') +
             '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-nya="megnyit">Előnézet, e-mail…</button>' +
-            // Lezáráskor a számla is innen indul (Számlázz.hu és a helyi Számla-előkészítő).
+            // A számla is innen indul (Számlázz.hu és a helyi Számla-előkészítő).
             (a.szamla && a.szamla.fo && szamlaElerheto() ? '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ny-ajanlat__szamla" data-nya="szamla-fo">Számlázz.hu számla</button>' : '') +
             (a.szamla && a.szamla.helyi && szamlaElerheto() ? '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ny-ajanlat__szamla" data-nya="szamla-helyi">Számla-előkészítő (PDF)</button>' : '') +
-            '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-nya="nem">Most nem</button>' +
+            '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ny-ajanlat__kesz" data-nya="nem">Most nem</button>' +
             '</div>';
 
         document.body.appendChild(d);
@@ -727,6 +738,20 @@
             d.remove();
         }
 
+        /** Egy gomb lefutott: megjelöljük, de az ablak marad – jöhet a következő papír. */
+        function kesz(g) {
+            g.classList.add('is-kesz');
+            g.disabled = false;
+            g.textContent = (g.getAttribute('data-felirat') || g.textContent).replace(/^(Kész – )?/, 'Kész – ');
+
+            var bezaro = d.querySelector('.sdh-ny-ajanlat__kesz');
+
+            if (bezaro) {
+                bezaro.textContent = 'Bezárás';
+                bezaro.classList.add('sdh-gomb--elsodleges');
+            }
+        }
+
         d.addEventListener('cancel', function (esemeny) {
             esemeny.preventDefault();
             zar();
@@ -741,28 +766,33 @@
 
             var mit = g.getAttribute('data-nya');
 
+            // Csak a „Most nem" / „Bezárás" zárja be az ablakot: a lezárás után
+            // munkalap és számla is kellhet, ezért a felajánlás nyitva marad (0.60.0).
             if (mit === 'nem') {
                 zar();
             } else if (mit === 'szamla-fo' || mit === 'szamla-helyi') {
-                zar();
+                kesz(g);
                 window.SDH_MUHELY_APP.szamla(a.id, mit === 'szamla-fo' ? 'fo' : 'helyi');
             } else if (mit === 'megnyit') {
-                zar();
                 ablakNyit(a.id, { tipus: a.tipus }, null);
             } else {
+                var tipus = g.getAttribute('data-tipus') || a.tipus;
+                var peldany = parseInt(g.getAttribute('data-peldany'), 10) || 1;
+                var felirat = g.getAttribute('data-felirat') || g.textContent;
+
                 g.disabled = true;
                 g.textContent = 'Készül…';
 
-                nyomtatKozvetlen(a.tipus, { id: a.id }, a.peldany || 1).then(function (megnyilt) {
-                    zar();
+                nyomtatKozvetlen(tipus, { id: a.id }, peldany).then(function (megnyilt) {
+                    kesz(g);
 
                     // Ha a böngésző innen nem tud nyomtatni, a Nyomtatás ablak nyílik meg (előnézet, mentés, új lap).
                     if (!megnyilt) {
-                        ablakNyit(a.id, { tipus: a.tipus }, null);
+                        ablakNyit(a.id, { tipus: tipus }, null);
                     }
                 }).catch(function (hiba) {
                     g.disabled = false;
-                    g.textContent = 'Nyomtatás';
+                    g.textContent = felirat;
                     d.querySelector('[data-nya-hiba]').textContent = hiba.message;
                 });
             }

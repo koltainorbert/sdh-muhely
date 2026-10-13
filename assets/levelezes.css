@@ -1251,3 +1251,87 @@
         display: none;
     }
 }
+
+/* ================================================================== */
+/* Levélíró: ismert címek felajánlása (0.60.0)                         */
+/* ================================================================== */
+
+.sdh-leveliro .sdh-ig {
+    position: relative;
+}
+
+.sdh-cimjavaslat {
+    position: absolute;
+    z-index: 30;
+    top: 100%;
+    left: 5.4rem;
+    right: 0;
+    max-height: calc(260px * var(--sdh-n));
+    margin-top: calc(3px * var(--sdh-n));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(10px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    box-shadow: var(--sdh-arnyek-emelt);
+}
+
+.sdh-cimjavaslat__sor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+    gap: .6rem;
+    align-items: baseline;
+    width: 100%;
+    padding: calc(7px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border: 0;
+    border-bottom: 1px solid var(--sdh-keret);
+    background: transparent;
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+    text-align: left;
+    cursor: pointer;
+}
+
+.sdh-cimjavaslat__sor:last-child {
+    border-bottom: 0;
+}
+
+.sdh-cimjavaslat__sor:hover,
+.sdh-cimjavaslat__sor.is-kijelolt {
+    background: var(--sdh-accent-halvany, var(--sdh-felulet-2));
+}
+
+.sdh-cimjavaslat__nev {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-cimjavaslat__email {
+    overflow: hidden;
+    color: var(--sdh-szoveg-2);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-cimjavaslat__honnan {
+    padding: calc(1px * var(--sdh-n)) calc(7px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(11px * var(--sdh-n));
+}
+
+@media (max-width: 760px) {
+    .sdh-cimjavaslat {
+        left: 0;
+    }
+
+    .sdh-cimjavaslat__sor {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .1rem;
+    }
+}

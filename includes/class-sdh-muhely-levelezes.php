@@ -96,6 +96,7 @@ final class SDH_Muhely_Levelezes
             'mappa'      => 'ajax_mappa',
             'elintezve'  => 'ajax_elintezve',
             'teszt'      => 'ajax_teszt',
+            'cimek'      => 'ajax_cimek',
             'rendezo_terv'       => 'ajax_rendezo_terv',
             'rendezo_vegrehajt'  => 'ajax_rendezo_vegrehajt',
         ];
@@ -2369,6 +2370,80 @@ final class SDH_Muhely_Levelezes
         }
 
         wp_send_json_success(['id' => (int) $sor->id]);
+    }
+
+    /**
+     * Ismert e-mail-címek a levélíró Címzett / Másolat mezőjéhez (0.60.0).
+     *
+     * Két forrásból: az ügyfelek címei (a név is látszik, hogy ne kelljen
+     * fejből tudni, kié a cím) és a postafiókban már szerepelt feladók. A
+     * keresés a cím és a név elejére és belsejébe is illeszkedik; a találatok
+     * egyediek, az ügyfél megy elöl.
+     */
+    public static function ajax_cimek(): void
+    {
+        self::jog_ellenorzes();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a jog_ellenorzes ellenőrizte.
+        $keres = isset($_REQUEST['q']) ? mb_substr(sanitize_text_field(wp_unslash((string) $_REQUEST['q'])), 0, 80) : '';
+
+        wp_send_json_success(['cimek' => self::cimjavaslatok($keres)]);
+    }
+
+    /**
+     * @return array<int, array<string, string>>
+     */
+    public static function cimjavaslatok(string $keres, int $darab = 12): array
+    {
+        global $wpdb;
+
+        $keres = trim($keres);
+        $ki    = [];
+        $volt  = [];
+
+        $hozzaad = static function (string $email, string $nev, string $honnan) use (&$ki, &$volt, $darab): void {
+            $email = trim($email);
+            $kulcs = mb_strtolower($email);
+
+            if ($email === '' || isset($volt[$kulcs]) || !is_email($email) || count($ki) >= $darab) {
+                return;
+            }
+
+            $volt[$kulcs] = true;
+            $ki[]         = ['email' => $email, 'nev' => trim($nev), 'honnan' => $honnan];
+        };
+
+        $ugyfel = SDH_Muhely_Schema::tabla('ugyfel');
+        $level  = SDH_Muhely_Schema::tabla('level');
+        $minta  = '%' . $wpdb->esc_like($keres) . '%';
+
+        // 1. Ügyfelek (a legutóbb módosítottak elöl).
+        $sql = "SELECT email, nev FROM {$ugyfel} WHERE email <> ''";
+        $sor = $keres === ''
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            ? $wpdb->get_results($wpdb->prepare($sql . ' ORDER BY modositva DESC LIMIT %d', $darab))
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            : $wpdb->get_results($wpdb->prepare($sql . ' AND (email LIKE %s OR nev LIKE %s) ORDER BY modositva DESC LIMIT %d', $minta, $minta, $darab));
+
+        foreach ((array) $sor as $u) {
+            $hozzaad((string) $u->email, (string) $u->nev, 'ügyfél');
+        }
+
+        // 2. Akitől már jött levél (a postafiók feladói).
+        if (count($ki) < $darab) {
+            $sql = "SELECT felado_email AS email, MAX(felado_nev) AS nev FROM {$level} WHERE felado_email <> ''";
+            $sor = $keres === ''
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                ? $wpdb->get_results($wpdb->prepare($sql . ' GROUP BY felado_email ORDER BY MAX(datum) DESC LIMIT %d', $darab))
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                : $wpdb->get_results($wpdb->prepare($sql . ' AND (felado_email LIKE %s OR felado_nev LIKE %s) GROUP BY felado_email ORDER BY MAX(datum) DESC LIMIT %d', $minta, $minta, $darab));
+
+            foreach ((array) $sor as $l) {
+                $hozzaad((string) $l->email, (string) $l->nev, 'levelezés');
+            }
+        }
+
+        return $ki;
     }
 
     /** Csatolmány letöltése. Mindig letöltésként megy ki (soha nem nyílik meg a böngészőben a CRM nevében). */

@@ -458,7 +458,13 @@ final class SDH_Muhely_Nyomtatas
                 return !empty($a['ajanl_uj']) ? 'atveteli' : '';
             }
 
-            return $fajta === 'rendeles' && !empty($a['ajanl_eladas']) ? 'rendeles' : '';
+            // Napi árukiadás és rendelés felvételekor is jár a felajánlás (0.60.0):
+            // a rendelésé a megrendelés, az árukiadásé az átadási bizonylat.
+            if (empty($a['ajanl_eladas'])) {
+                return '';
+            }
+
+            return $fajta === 'rendeles' ? 'rendeles' : 'eladas';
         }
 
         if ($fajta === 'javitas') {
@@ -495,9 +501,44 @@ final class SDH_Muhely_Nyomtatas
             'id'      => $id,
             'tipus'   => $tipus,
             'esemeny' => $esemeny,
+            'fajta'   => $fajta,
             'szam'    => $szam === '—' ? '' : $szam,
             'ido'     => time(),
         ]);
+    }
+
+    /**
+     * A felajánlás további nyomtatványai (0.60.0): az ablak egyszerre kínálja a
+     * lap minden papírját, hogy a munkalap és a számla egy helyről menjen.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function ajanlat_tarsak(string $fajta, string $fo): array
+    {
+        $sorrend = [
+            'javitas'   => ['atveteli', 'munkalap'],
+            'arukiadas' => ['eladas'],
+            'rendeles'  => ['rendeles', 'eladas'],
+        ][$fajta] ?? [];
+
+        $tipusok = self::tipusok();
+        $ki      = [];
+
+        foreach ($sorrend as $t) {
+            if ($t === $fo || !isset($tipusok[$t])) {
+                continue;
+            }
+
+            $s = self::sablon($t);
+
+            if (empty($s['peldany'])) {
+                continue;
+            }
+
+            $ki[] = ['tipus' => $t, 'cim' => (string) $s['cim'], 'peldany' => (int) $s['peldany']];
+        }
+
+        return $ki;
     }
 
     /** Új lap mentése után (a régi állapot null). */
@@ -564,11 +605,12 @@ final class SDH_Muhely_Nyomtatas
         $tipus = (string) $a['tipus'];
         $s     = self::sablon($tipus);
 
-        // Lezáráskor a számla is innen indítható (0.59.6): Számlázz.hu (ha a Számlázás modul be van
-        // kapcsolva) és a helyi Számla-előkészítő – csak sorszámot kapott lapra.
+        // A számla is innen indítható: Számlázz.hu (ha a Számlázás modul be van kapcsolva) és a
+        // helyi Számla-előkészítő – minden sorszámot kapott lapra (0.60.0: már felvételkor is,
+        // a bevizsgálási díjhoz és a napi árukiadáshoz / rendeléshez).
         $szamla = ['fo' => false, 'helyi' => false];
 
-        if ((string) $a['esemeny'] === 'zaras' && class_exists('SDH_Muhely_Szamla') && (string) $a['szam'] !== '') {
+        if (class_exists('SDH_Muhely_Szamla') && (string) $a['szam'] !== '') {
             $szamla = ['fo' => SDH_Muhely_Modulok::be('szamlazas'), 'helyi' => true];
         }
 
@@ -580,6 +622,7 @@ final class SDH_Muhely_Nyomtatas
             'esemeny' => (string) $a['esemeny'],
             'peldany' => (int) $s['peldany'],
             'szamla'  => $szamla,
+            'tarsak'  => self::ajanlat_tarsak((string) ($a['fajta'] ?? ''), $tipus),
             'szoveg'  => (string) $a['esemeny'] === 'uj'
                 ? 'A lap elkészült' . ((string) $a['szam'] !== '' ? ' (' . $a['szam'] . ')' : '') . '. Kinyomtatod: ' . $s['cim'] . '?'
                 : 'A lap lezárva' . ((string) $a['szam'] !== '' ? ' (' . $a['szam'] . ')' : '') . '. Kinyomtatod: ' . $s['cim'] . '?',
@@ -1318,7 +1361,7 @@ final class SDH_Muhely_Nyomtatas
                 </div>
                 <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
                     <input type="checkbox" name="ny_ajanl_eladas" id="ny_ajanl_eladas" value="1" <?php checked(!empty($a['ajanl_eladas'])); ?>>
-                    <label for="ny_ajanl_eladas">Árukiadásnál és rendelésnél is ajánljon (új rendelés: megrendelés; lezárás: átadási bizonylat)</label>
+                    <label for="ny_ajanl_eladas">Árukiadásnál és rendelésnél is ajánljon (új árukiadás: átadási bizonylat; új rendelés: megrendelés; lezárás: átadási bizonylat)</label>
                 </div>
                 <div class="sdh-mezo">
                     <label for="ny_email_fiok">Alap feladó az e-mailhez</label>

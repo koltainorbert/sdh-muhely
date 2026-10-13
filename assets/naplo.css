@@ -192,6 +192,58 @@ form.is-zarolt textarea[data-sdh-zar-tiltva] {
     gap: .45rem;
 }
 
+/* ---------- A Napló ABLAK (0.60.0): tömör, fix magasságú, saját görgetésű ----------
+   Régen az ablak annyival lett hosszabb, ahány bejegyzés volt: húsz tételnél már
+   végeláthatatlan csík lett belőle. Most a lista görget, az ablak mérete marad. */
+
+.sdh-modal:has(.sdh-naplo--ablak) {
+    width: min(calc(1040px * var(--sdh-n)), calc(100vw - 2rem));
+}
+
+.sdh-naplo--ablak .sdh-naplo__lista {
+    gap: .4rem;
+    max-height: min(calc(62vh), calc(560px * var(--sdh-n)));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: .1rem .5rem .1rem .1rem;
+    border-block: 1px solid var(--sdh-keret);
+}
+
+/* A bejegyzés fejléce egy sor, a változások szorosan alatta. */
+.sdh-naplo--ablak .sdh-naplo__kartya {
+    padding: .4rem .65rem .45rem 1rem;
+}
+
+.sdh-naplo--ablak .sdh-naplo__valtozasok {
+    gap: .15rem;
+    margin-top: .25rem;
+}
+
+.sdh-naplo--ablak .sdh-naplo__megj {
+    margin-top: .15rem;
+}
+
+/* A megváltozott mezők egymás mellé állnak, nem egymás alá. */
+.sdh-naplo--ablak .sdh-naplo__mezok {
+    grid-template-columns: repeat(auto-fill, minmax(calc(250px * var(--sdh-n)), 1fr));
+    gap: .1rem .9rem;
+}
+
+.sdh-naplo--ablak .sdh-naplo__mezo {
+    grid-template-columns: minmax(calc(84px * var(--sdh-n)), max-content) 1fr;
+    gap: .4rem;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-naplo--ablak .sdh-naplo__reszlet summary {
+    font-size: calc(11.5px * var(--sdh-n));
+}
+
+.sdh-naplo--ablak .sdh-naplo__tobb {
+    margin-top: .5rem;
+}
+
 .sdh-naplo__nap {
     position: sticky;
     top: 0;
