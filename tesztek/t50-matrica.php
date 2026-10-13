@@ -187,6 +187,10 @@ T::tartalmaz($h, 'data-sdh-matrica-ablak', 'a Matrica ablak');
 T::egyezik(2, substr_count($h, 'data-sdh-matrica-eszkoz'), 'eszközönként egy választó');
 T::egyezik(2, substr_count($h, 'data:image/png;base64,'), 'eszközönként egy előnézet');
 T::tartalmaz($h, 'data-sdh-matrica-nyomtat', 'Nyomtatás gomb');
+T::tartalmaz($h, 'sdh-matrica__tipp', 'böngészős módban tipp: tekercs és papírméret');
+T::egyezik('62mm', $M::papir_nev($M::tisztit(['cimke' => '62'])), 'papírméret: 62 mm folyamatos');
+T::egyezik('29mm x 90mm', $M::papir_nev($M::tisztit(['cimke' => '29x90'])), 'papírméret: 29 × 90 mm stancolt');
+T::egyezik('62.5mm x 40mm', $M::papir_nev($M::tisztit(['cimke' => 'egyedi', 'egyedi_sz' => '62.5', 'egyedi_h' => '40'])), 'papírméret: egyedi');
 T::tartalmaz($M::gomb($id), 'data-sdh-matrica="' . $id . '"', 'a munkalap Matrica gombja');
 
 $r = t_ajax('sdh_muhely_matrica_kep', ['id' => $id, 'kulcs' => $e2]);

@@ -64,6 +64,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.2
+- **RMA-matrica, böngészős nyomtatás:** a Matrica ablak kiírja, milyen tekercsnek kell a nyomtatóban lennie, és
+  mit kell a nyomtatás-ablakban választani (Papírméret a Brother-név szerint, pl. „62mm” vagy „29mm x 90mm”;
+  Margók: Nincs; 100%; fejléc/lábléc ki). A „címke nem egyezik” Brother-hibához súgó és tipp a Beállításokban.
+- A plugin fejlécének `Version:` sora is a valódi verziót mutatja (eddig 0.58.0-n ragadt).
+
 ### 0.59.1
 - **A munkalap új dizájnja.** Az oldalsáv több eszköznél sem törik két hasábra: egy hasáb, csoportonként puha
   kártyában (Állapot, Dátumok, Összeg, Tételek, Fizetés); a rokon mezők egy sorban, felirattal fölöttük (Készült +

@@ -296,6 +296,22 @@ final class SDH_Muhely_Matrica
         return $c;
     }
 
+    /**
+     * A címke neve a Brother illesztőprogram papírméret-listájában
+     * (pl. „62mm”, „29mm x 90mm”) – ezt kell választani a nyomtatás-ablakban.
+     */
+    public static function papir_nev(array $b): string
+    {
+        $c = self::meret($b);
+        $mm = static fn (float $v): string => rtrim(rtrim(number_format($v, 1, '.', ''), '0'), '.') . 'mm';
+
+        if ($c['tipus'] === 'stancolt' || $c['tipus'] === 'egyedi') {
+            return $mm((float) $c['szel']) . ' x ' . $mm((float) $c['hossz']);
+        }
+
+        return $mm((float) $c['szel']);
+    }
+
     /** Közvetlenül (hálózaton) nyomtatható-e ezzel a beállítással; ha nem, az ok. */
     public static function kozvetlen_hiba(array $b): ?string
     {
@@ -1228,6 +1244,13 @@ final class SDH_Muhely_Matrica
                 <div class="sdh-uzenet sdh-uzenet--hiba"><?php echo esc_html($kozvetlen); ?></div>
             <?php endif; ?>
 
+            <?php if ($b['mod'] !== 'halozat') : ?>
+                <div class="sdh-matrica__tipp">
+                    <p>A nyomtatóban ennek kell lennie: <strong><?php echo esc_html($c['nev']); ?></strong>. A nyomtatás-ablakban: Papírméret <strong><?php echo esc_html(self::papir_nev($b)); ?></strong>, Margók <strong>Nincs</strong>, Méret <strong>100%</strong>, Fejlécek és láblécek <strong>ki</strong>.</p>
+                    <p>Ha a Brother azt írja, hogy a címke „nem egyezik”: a Beállítások › RMA-matrica <em>Címke / szalag</em> mezőjében azt válaszd, amit a Brother ablak kiír (például „62mm Folyamatos szalag” → DK-22205 – 62 mm folyamatos).</p>
+                </div>
+            <?php endif; ?>
+
             <div class="sdh-matrica__lista">
                 <?php foreach ($adatok as $kulcs => $a) : ?>
                     <?php $png = self::png($a, $b, 520); ?>
@@ -1466,6 +1489,7 @@ final class SDH_Muhely_Matrica
                                 <option value="<?php echo esc_attr($k); ?>" data-tipus="<?php echo esc_attr($c['tipus']); ?>" <?php selected($b['cimke'], $k); ?>><?php echo esc_html($c['nev']); ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <p class="sdh-sugo">A betett tekercs: a Brother nyomtatás-ablaka kiírja (például „62mm Folyamatos szalag”). Ha nem egyezik, a nyomtató nem nyomtat.</p>
                     </div>
                     <div class="sdh-mezo" data-sdh-matrica-folyamatos>
                         <label for="matrica_hossz">A matrica hossza (folyamatos szalagon, mm)</label>

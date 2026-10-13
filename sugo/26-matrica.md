@@ -37,7 +37,7 @@ Bekapcsolható még: telefonszám, a szerviz neve, határidő, tartozékok, szí
 3. Több eszközös lapon pipáld ki, melyik eszköz matricája kell (alapból mind).
 4. Írd be a **Példány** számát, ha több kell ugyanabból.
 5. Kattints a **Nyomtatás** gombra:
-   - **Böngészős módban** megnyílik a böngésző nyomtatás-ablaka – válaszd a Brother nyomtatót, és nyomtass.
+   - **Böngészős módban** megnyílik a böngésző nyomtatás-ablaka – válaszd a Brother nyomtatót, és nyomtass. A Matrica ablak tetején álló tipp megmondja, mit válassz: **Papírméret** (a címke Brother-neve, például „62mm” vagy „29mm x 90mm”), **Margók: Nincs**, **Méret: 100%**, a fejléc és lábléc **ki**.
    - **Hálózati módban** a matrica azonnal a nyomtatóra megy, ablak nélkül.
 6. A **PDF megnyitása** gomb új lapon nyitja meg a matricát (mentéshez vagy kézi nyomtatáshoz).
 
@@ -101,6 +101,7 @@ A nyomtatás a lap **Naplójába** is bekerül.
 
 - **„A nyomtató nem érhető el”** (hálózati mód): be van kapcsolva? ugyanazon a hálózaton van, mint a szerver? jó az IP-cím? A nyomtató menüjében vagy a beállítási lapján nézd meg a címét.
 - **A matrica üres vagy el van csúszva** (hálózati mód): a **Címke / szalag** egyezzen a betett tekerccsel. Ha mást teszel be, itt is írd át.
+- **A Brother ablak: „A készülékben levő címke- vagy szalagtekercs nem egyezik az alkalmazásban kiválasztottal”** (böngészős mód): a beállított címke más, mint ami a nyomtatóban van. A Brother ablak kiírja a betett tekercset (például „62mm Folyamatos szalag”). Nyomj **Mégse**-t, a **Beállítások › RMA-matrica** lapon a **Címke / szalag** mezőben válaszd ugyanazt (a példában **DK-22205 – 62 mm folyamatos**), mentsd, és nyomtass újra. A nyomtatás-ablakban a **Papírméret** is ez legyen (a példában **62mm**) – a Matrica ablak kiírja, mit válassz.
 - **A böngésző nem nyitja meg a nyomtatást:** a rendszer ilyenkor új lapon megnyitja a PDF-et – onnan nyomtass.
 - **A PDF jó, de a nyomtató kicsinyíti** (böngészős mód): a Brother illesztőprogramban állítsd be ugyanazt a címkeméretet, és a nyomtatás-ablakban a 100%-os méretet.
 - **Nincs Matrica gomb:** a lapnak még nincs munkalapszáma, vagy a lap árukiadás vagy rendelés, vagy a modul ki van kapcsolva.

@@ -49,6 +49,26 @@
     image-rendering: auto;
 }
 
+.sdh-matrica__tipp {
+    margin: .2rem 0 .6rem;
+    padding: .55rem .8rem;
+    border: 1px solid color-mix(in srgb, var(--sdh-accent) 30%, var(--sdh-keret));
+    border-radius: var(--sdh-r);
+    background: color-mix(in srgb, var(--sdh-accent) 6%, var(--sdh-felulet));
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.45;
+}
+
+.sdh-matrica__tipp p {
+    margin: 0;
+}
+
+.sdh-matrica__tipp p + p {
+    margin-top: .3rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
 .sdh-matrica__lab {
     display: flex;
     flex-wrap: wrap;
