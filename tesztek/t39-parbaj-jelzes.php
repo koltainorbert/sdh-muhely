@@ -50,6 +50,15 @@ T::tartalmaz($lev, "new CustomEvent('sdh:level-toast')", 'a levél-jelzés szól
 // 0.61.1: a jelzések a jobb FELSŐ sarokba kerültek – a figura mellől, mert ott a lap aljára csúsztak.
 T::tartalmaz($lcs, '--sdh-felso-sav', 'a jelzések a fejléc alatt, a jobb felső sarokban állnak');
 T::nem_tartalmaz($lcs, ':root:has(.sdh-ai) .sdh-level-toastok', 'nincs külön szabály a figura mellé');
+// 0.61.3: a buborék SOHA nem csúszhat ki a képernyő tetején – a jelzés alatt
+// a magassága szűkül, és csak a szöveg görög (a gombok és az X marad).
+T::nem_tartalmaz($js, "buborek.style.bottom = Math", 'a buborék nem tolódik feljebb a jelzés elől');
+T::tartalmaz($js, 'buborek.style.maxHeight = Math.round(hely)', 'helyette a magassága szűkül');
+T::tartalmaz($js, 'felso = Math.max(felso, t.bottom + 10)', 'a jelzés alja a felső korlát');
+T::tartalmaz($css, 'max-height: calc(100vh - var(--sdh-ai-meret)', 'a stíluslapban is van felső korlát');
+T::tartalmaz($css, 'box-sizing: border-box', 'a korlát a keretet és a belső térközt is magában foglalja');
+T::tartalmaz($css, "overflow-y: auto", 'a hosszú szöveg a buborékon belül görög');
+
 T::tartalmaz($css, '.sdh-ai .sdh-ai-parbaj', 'a jelenet stílusa megvan');
 T::tartalmaz($css, "@media (prefers-reduced-motion: reduce) {\n    .sdh-ai-parbaj", '„kevesebb mozgás” mellett nincs párbaj');
 

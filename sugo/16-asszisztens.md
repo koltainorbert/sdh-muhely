@@ -427,6 +427,10 @@ A beszélgetés felhasználónként külön van. Közös fiók használatánál 
 
 Az adminisztrátor, az Asszisztens oldalon. A kolléga a saját beszélgetésében dönt a javaslatokról.
 
+### A buborék hosszú szövegénél mit látok?
+
+A buborék a figura fölött nő, de soha nem lóg ki a képernyő tetején, és a jobb felső sarokban álló jelzések alá sem. Ha a szöveg hosszabb a helynél, a buborékon belül görgethető – a gombok és a bezáró X mindig látszik.
+
 ## Túra: asszisztens
 
 - `.sdh-ai-oldal .sdh-fejlec__gombok` | Beszélgetés és vissza | Innen nyitod meg a beszélgetést, és innen jutsz vissza a Beállításokhoz.

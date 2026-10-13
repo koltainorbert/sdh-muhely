@@ -1009,27 +1009,48 @@
      * A buborék ne takarja a levél-jelzéseket: ha a jelzések felnyúlnak a buborék
      * aljáig, a buborék fölébük emelkedik. A levelezes.js minden új jelzésnél szól.
      */
+    /**
+     * A buborék a figura fölött nő felfelé. SOHA nem csúszhat ki a képernyő
+     * tetején (és a jobb felső sarokban álló jelzések alá sem): ha a szöveg
+     * hosszabb a helynél, a buborék magassága korlátozódik, és csak a szöveg
+     * görög – a gombok és a bezáró X mindig látszanak.
+     */
     function buborekIgazit() {
         if (!buborek) {
             return;
         }
 
-        buborek.style.bottom = '';
+        var sz = buborek.querySelector('.sdh-ai__buborek-szoveg');
 
-        var tarto = document.querySelector('.sdh-level-toastok');
+        buborek.style.maxHeight = '';
 
-        if (buborek.hidden || !tarto || !tarto.querySelector('.sdh-level-toast')) {
+        if (sz) {
+            sz.style.maxHeight = '';
+        }
+
+        if (buborek.hidden) {
             return;
         }
 
-        var t = tarto.getBoundingClientRect();
-        var b = buborek.getBoundingClientRect();
-        var fedik = b.left < t.right && b.right > t.left && b.bottom > t.top - 8;
+        // Meddig nőhet felfelé: a képernyő teteje, vagy – ha egy magasságban
+        // állnak – a jelzések alja; amelyik lejjebb van.
+        var felso = 12;
+        var tarto = document.querySelector('.sdh-level-toastok');
+        var b     = buborek.getBoundingClientRect();
 
-        if (fedik) {
-            var alap = parseFloat(window.getComputedStyle(buborek).bottom) || 0;
+        if (tarto && tarto.querySelector('.sdh-level-toast')) {
+            var t = tarto.getBoundingClientRect();
 
-            buborek.style.bottom = Math.round(alap + (b.bottom - t.top) + 10) + 'px';
+            if (b.left < t.right && b.right > t.left) {
+                felso = Math.max(felso, t.bottom + 10);
+            }
+        }
+
+        // A kis elforgatás miatt a befoglaló téglalap pár képponttal nagyobb: hagyunk rá.
+        var hely = Math.max(160, b.bottom - felso - 8);
+
+        if (b.height > hely) {
+            buborek.style.maxHeight = Math.round(hely) + 'px';
         }
     }
 

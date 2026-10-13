@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.3
+- **Az asszisztens buboréka nem csúszik ki a képernyő tetején.** Amióta a jelzések a jobb felső sarokban állnak,
+  az ütközés-kerülő kód ennyivel tolta feljebb a buborékot – egy hosszú szöveg (például a frissítés újdonságai) így
+  a képernyő fölé került. Mostantól a buborék a helyén marad, a magassága szűkül (a jelzés aljáig), és csak a szöveg
+  görög: a gombok és a bezáró X mindig látszik. A `box-sizing: border-box` miatt a keret és a belső térköz is
+  belefér a korlátba.
+
 ### 0.61.2
 - **Pill (ovális) gombok mindenhol**, választhatóan **üveghatással** és **fénykerettel** – Beállítások › Logó és
   megjelenés › **Gombok és mezők** (Forma: Pill / Lekerekített / Szögletes). A beállítás a teljes rendszerre hat:

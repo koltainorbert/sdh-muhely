@@ -424,7 +424,13 @@
     position: absolute;
     right: calc(8px * var(--sdh-n));
     bottom: calc(var(--sdh-ai-meret) + calc(18px * var(--sdh-n)));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     width: min(calc(310px * var(--sdh-n)), calc(100vw - calc(40px * var(--sdh-n))));
+    /* Soha nem lóghat ki a képernyő tetején: a magasságát a JS szűkíti, ez a
+       biztonsági háló (figura + térköz + egy kis levegő). */
+    max-height: calc(100vh - var(--sdh-ai-meret) - calc(56px * var(--sdh-n)));
     padding: calc(14px * var(--sdh-n)) calc(16px * var(--sdh-n)) calc(12px * var(--sdh-n));
     border: 2.5px solid var(--sdh-ai-tinta);
     border-radius: calc(20px * var(--sdh-n)) calc(20px * var(--sdh-n)) calc(6px * var(--sdh-n)) calc(20px * var(--sdh-n));
@@ -464,6 +470,18 @@
     border-bottom: 2.5px solid var(--sdh-ai-tinta);
     clip-path: polygon(0 0, 100% 0, 100% 100%);
     transform: skewX(-22deg);
+}
+
+/* Ha a szöveg hosszabb a helynél, csak ez görög – a gombok és az X marad. */
+.sdh-ai__buborek-szoveg {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.sdh-ai__buborek-gombok,
+.sdh-ai__buborek-x {
+    flex: 0 0 auto;
 }
 
 .sdh-ai__buborek-szoveg p {
