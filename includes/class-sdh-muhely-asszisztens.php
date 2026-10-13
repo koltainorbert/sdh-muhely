@@ -94,7 +94,7 @@ final class SDH_Muhely_Asszisztens
      * ============================================================== */
 
     /**
-     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, parbaj: bool, eszkozok: array<string, bool>}
+     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, parbaj: bool, elet: bool, altesti: bool, eszkozok: array<string, bool>}
      */
     public static function beallitas(): array
     {
@@ -116,6 +116,11 @@ final class SDH_Muhely_Asszisztens
             'elenkseg'         => max(0, min(100, (int) ($b['elenkseg'] ?? 80))),
             // Időnként kis fénypenge-párbajt vív a Hiba-bogárral a képernyő alján (az élénkség adja a gyakoriságát).
             'parbaj'           => !isset($b['parbaj']) || (bool) $b['parbaj'],
+            // Szikra élete (szikra-elet.js): szükségletek, 300+ mimika, jelenetek (csirke, egér, madár,
+            // Pechás Pityu, Ködbáró, barátnő, motor, autó…). Az altesti humor (pisi, kaki, fing,
+            // büdösség) külön kapcsolható.
+            'elet'             => !isset($b['elet']) || (bool) $b['elet'],
+            'altesti'          => !isset($b['altesti']) || (bool) $b['altesti'],
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
         ];
     }
@@ -204,6 +209,8 @@ final class SDH_Muhely_Asszisztens
             'humor'    => $b['humor'],
             'elenkseg' => $b['elenkseg'],
             'parbaj'   => $b['parbaj'],
+            'elet'     => $b['elet'],
+            'altesti'  => $b['altesti'],
             // A Súgó címe: a túra végén és a „nem találom" válaszoknál ide vezet.
             'sugo'     => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS) : '',
         ];
@@ -1275,6 +1282,10 @@ final class SDH_Muhely_Asszisztens
             // A jelölő kipipálatlanul nem jön: a rejtett jelzőmező mondja meg, hogy az űrlapon ott volt.
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
             'parbaj'           => isset($_POST['parbaj_jelen']) ? self::p('parbaj', 2) === '1' : $b['parbaj'],
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'elet'             => isset($_POST['elet_jelen']) ? self::p('elet', 2) === '1' : $b['elet'],
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'altesti'          => isset($_POST['elet_jelen']) ? self::p('altesti', 2) === '1' : $b['altesti'],
             'eszkozok'         => [],
         ];
 
@@ -1729,6 +1740,9 @@ final class SDH_Muhely_Asszisztens
                 <div class="sdh-cs-kapcsolok">
                     <input type="hidden" name="parbaj_jelen" value="1">
                     <label class="sdh-cs-kapcs"><input type="checkbox" name="parbaj" value="1"<?php checked($b['parbaj']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong>Párbaj a Hiba-bogárral</strong> – időnként egy kis bogár mászik elő a képernyő alján, és <?php echo esc_html($b['nev']); ?> fénypengével elkergeti (néha ő marad alul). Pár másodperc, kattintásra vagy gépelésre azonnal abbamarad.</span></label>
+                    <input type="hidden" name="elet_jelen" value="1">
+                    <label class="sdh-cs-kapcs"><input type="checkbox" name="elet" value="1"<?php checked($b['elet']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong><?php echo esc_html($b['nev']); ?> élete</strong> – éhes lesz, elfárad, lélegzik, több mint 300 arckifejezése van, és rövid jeleneteket játszik a képernyő alján: csirkével és egérrel hadakozik, madár támad rá, motorozik, autózik, csajozni megy, meglátogatja a barátnője, és Pechás Pityunak mindig rossz napja van. Kattintásra vagy gépelésre azonnal abbahagyja.</span></label>
+                    <label class="sdh-cs-kapcs"><input type="checkbox" name="altesti" value="1"<?php checked($b['altesti']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong>Altesti humor</strong> – pisilés a bokorba, kakilás újsággal, fing, büdösség és zuhany. Ügyfél előtt érdemes kikapcsolni.</span></label>
                 </div>
             </div>
 

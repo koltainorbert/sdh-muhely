@@ -431,6 +431,8 @@ final class SDH_Muhely_Frontend
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.css')); ?>">
             <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/szikra-elet.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/szikra-elet.css')); ?>">
+            <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.css')); ?>">
@@ -675,6 +677,8 @@ final class SDH_Muhely_Frontend
         <?php // Naptár: az esedékes események kártyái minden oldalon megjelennek (a pulzusból), ezért mindenhol betölt. ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naptar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naptar.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
+        <?php // Szikra élete (0.59.4): mimikák, szükségletek, jelenetek – az asszisztens.js SDH_SZIKRA felületére épül. ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/szikra-elet.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/szikra-elet.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'sugo') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.js')); ?>"></script>
         <?php endif; ?>

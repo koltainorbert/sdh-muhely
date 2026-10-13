@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.59.4
+- **Szikra élete**: a figura lélegzik, 441 arckifejezése van (50 alap-érzelem árnyalatokkal), szükségletei nőnek
+  (éhség, pisi, WC, fáradtság, büdösség, magány, kalandvágy), és 21 rövid jelenetet játszik a képernyő alján:
+  csirke, egér, támadó madár, Pechás Pityu, Ködbáró, csajozás, a barátnő (Csilla) látogatása, motor, autó, evés, ivás,
+  tüsszentés, csuklás, edzés, zene, telefon, vakarózás, valamint pisilés, kakilás, fing és zuhany. Saját rajzok
+  (`assets/szikra-elet.js`, `.css`, az asszisztens.js `window.SDH_SZIKRA` felületére épül).
+- Beállítások › Asszisztens: **Szikra élete** és **Altesti humor** kapcsoló. Kattintás vagy gépelés azonnal leállítja
+  a jelenetet; „kevesebb mozgás” mellett csak a mimika marad.
+
 ### 0.59.3
 - **Termék- és szolgáltatás-címke** Brother címkenyomtatóra: a termék és a szolgáltatás ablakának alján **Címke** gomb
   (előnézet, példányszám legfeljebb 50, böngészős vagy hálózati nyomtatás, naplózva a tételhez). Termékcímke alapból:

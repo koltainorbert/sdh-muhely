@@ -1,0 +1,242 @@
+/*
+ * SDH Műhely – Szikra élete (0.59.4): mimikák, kellékek, színpad és szereplők.
+ * A figura alapja az asszisztens.css-ben van; ez csak ráépül.
+ */
+
+/* ---- Mimika: a saját SVG-arc a megszokott arc helyén ---- */
+
+.sdh-ai .sdh-sz-arc,
+.sdh-ai .sdh-sz-kellek {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.sdh-ai .sdh-sz-arc {
+    opacity: 0;
+    transition: opacity .12s ease;
+    animation: sdh-sz-legzes 3.6s ease-in-out infinite;
+}
+
+.sdh-ai.is-mimika .sdh-sz-arc {
+    opacity: 1;
+}
+
+.sdh-ai.is-mimika .sdh-ai__arc {
+    opacity: 0;
+}
+
+.sdh-ai .sdh-sz-kellek {
+    z-index: 2;
+}
+
+.sdh-ai .sdh-sz-kellek:not(:empty) {
+    animation: sdh-ai-kellek .35s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+/* Erősebb, látható légzés: a test és az arc együtt emelkedik-süllyed. */
+.sdh-ai .sdh-ai__test {
+    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-sz-legzes 3.6s ease-in-out infinite;
+}
+
+@keyframes sdh-sz-legzes {
+    0%, 100% { transform: scale(1, 1) translateY(0); }
+    40% { transform: scale(1.055, .955) translateY(calc(1.5px * var(--sdh-n))); }
+    55% { transform: scale(1.06, .95) translateY(calc(1.5px * var(--sdh-n))); }
+}
+
+.sdh-ai .sdh-sz-lebeg {
+    animation: sdh-sz-lebeg 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-sz-lebeg {
+    from { transform: translateY(2px); }
+    to { transform: translateY(-4px); }
+}
+
+.sdh-ai .sdh-sz-kering {
+    transform-origin: 50px 30px;
+    animation: sdh-ai-forog 1.4s linear infinite;
+}
+
+.sdh-ai .sdh-sz-goz {
+    animation: sdh-sz-goz .5s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-sz-goz {
+    from { opacity: .55; transform: translateY(0) scale(.9); }
+    to { opacity: 1; transform: translateY(-4px) scale(1.08); }
+}
+
+.sdh-ai .sdh-sz-takony {
+    transform-origin: 52px 56px;
+    animation: sdh-sz-takony 1.4s ease-in-out infinite;
+}
+
+@keyframes sdh-sz-takony {
+    0%, 100% { transform: scale(.6); }
+    60% { transform: scale(1.35); }
+}
+
+/* ---- Színpad és szereplők ---- */
+
+.sdh-ai .sdh-sz-szinpad {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.sdh-ai .sdh-sz-szereplo {
+    position: absolute;
+    pointer-events: none;
+    filter: drop-shadow(0 calc(3px * var(--sdh-n)) calc(4px * var(--sdh-n)) rgba(0, 0, 0, .18));
+}
+
+.sdh-ai .sdh-sz-szereplo > svg {
+    display: block;
+    overflow: visible;
+}
+
+/* Járás: a szereplő kicsit billeg, a lábak mozognak. */
+.sdh-ai .sdh-sz-szereplo.is-jar > svg {
+    animation: sdh-sz-billeg .32s ease-in-out infinite alternate;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-fordul > svg {
+    scale: -1 1;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-jar .sdh-sz-labak {
+    animation: sdh-sz-lepes .16s linear infinite alternate;
+}
+
+@keyframes sdh-sz-billeg {
+    from { rotate: -3deg; translate: 0 0; }
+    to { rotate: 3deg; translate: 0 calc(-2px * var(--sdh-n)); }
+}
+
+@keyframes sdh-sz-lepes {
+    from { transform: translateX(-1.5px); }
+    to { transform: translateX(1.5px); }
+}
+
+.sdh-ai .sdh-sz-szereplo.is-csipked > svg {
+    transform-origin: 50% 90%;
+    animation: sdh-sz-csipked .22s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-sz-csipked {
+    from { rotate: 0deg; }
+    to { rotate: 16deg; }
+}
+
+.sdh-ai .sdh-sz-szereplo.is-szimatol > svg {
+    animation: sdh-sz-billeg .12s ease-in-out infinite alternate;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-repul .sdh-sz-szarny {
+    transform-origin: 26px 30px;
+    animation: sdh-sz-csapkod .18s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-sz-csapkod {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(-.6); }
+}
+
+.sdh-ai .sdh-sz-szereplo.is-lebeg > svg {
+    animation: sdh-sz-lebeg 1.2s ease-in-out infinite alternate;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-lebeg .sdh-sz-bot {
+    transform-origin: 63px 28px;
+    animation: sdh-sz-csipked .5s ease-in-out infinite alternate;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-lapos > svg {
+    transform-origin: 50% 100%;
+    transform: scale(1.5, .12);
+    transition: transform .08s ease-in;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-egett > svg {
+    filter: brightness(.25) saturate(0);
+    transition: filter .1s linear;
+}
+
+.sdh-ai .sdh-sz-szereplo.is-villan {
+    filter: drop-shadow(0 0 calc(8px * var(--sdh-n)) #ffd23f);
+}
+
+.sdh-ai .sdh-sz-szereplo.is-megy .sdh-sz-kerek {
+    stroke-dasharray: 6 5;
+    animation: sdh-sz-kerek .3s linear infinite;
+}
+
+@keyframes sdh-sz-kerek {
+    to { stroke-dashoffset: -22; }
+}
+
+.sdh-ai .sdh-sz-szereplo--szaglofelho .sdh-sz-buz,
+.sdh-ai .sdh-sz-szereplo--zuhany .sdh-sz-viz {
+    animation: sdh-sz-lebeg .5s ease-in-out infinite alternate;
+}
+
+/* ---- Rövid szövegbuborék ---- */
+
+.sdh-ai .sdh-sz-mond {
+    position: absolute;
+    right: 0;
+    bottom: calc(var(--sdh-ai-meret) + calc(14px * var(--sdh-n)));
+    max-width: calc(220px * var(--sdh-n));
+    padding: calc(5px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border: 2px solid var(--sdh-ai-tinta);
+    border-radius: calc(12px * var(--sdh-n));
+    background: var(--sdh-ai-papir);
+    box-shadow: calc(3px * var(--sdh-n)) calc(3px * var(--sdh-n)) 0 var(--sdh-ai-tinta);
+    color: var(--sdh-ai-tinta);
+    font-size: calc(12.5px * var(--sdh-n));
+    font-weight: 800;
+    line-height: 1.25;
+    white-space: normal;
+    width: max-content;
+    pointer-events: none;
+    animation: sdh-sz-mond .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+.sdh-ai .sdh-sz-mond--mas {
+    transform: translateX(50%);
+    border-color: var(--sdh-ai-tinta);
+    background: color-mix(in srgb, var(--sdh-ai-papir) 85%, #ffd23f);
+}
+
+@keyframes sdh-sz-mond {
+    from { opacity: 0; scale: .5; }
+    to { opacity: 1; scale: 1; }
+}
+
+/* Jelenet közben a megszokott beszédbuborék és a zzz nem tolakszik. */
+.sdh-ai.is-jelenet .sdh-ai__zzz {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ai .sdh-sz-szinpad {
+        display: none;
+    }
+
+    .sdh-ai .sdh-sz-arc,
+    .sdh-ai .sdh-sz-lebeg,
+    .sdh-ai .sdh-sz-kering,
+    .sdh-ai .sdh-sz-goz,
+    .sdh-ai .sdh-sz-takony {
+        animation: none;
+    }
+}

@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
+kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -99,6 +99,31 @@ Néha egy morcos kis lila bogár – a **Hiba-bogár** – mászik elő a képer
 - néha a figura pengéje merül le, a bogár örömében ugrál egyet, és elballag.
 
 Az egész néhány másodperc. Bármilyen kattintásra vagy gépelésre azonnal abbamarad, új levél jelzésekor is. Amíg levél-jelzés látszik, el sem kezdődik. Hogy milyen gyakran jön, azt az **Élénkség** adja; a **Párbaj a Hiba-bogárral** kapcsolóval ki is kapcsolható (Beállítások › Asszisztens › Személyiség).
+
+### Szikra élete
+
+A figura nem csak ül a sarokban, hanem él. Lélegzik, és **több mint 400 arckifejezése** van (boldog, kacsintó, gyanakvó, rémült, szerelmes, büdös, szédült és még sok más, mindegyik több árnyalatban). Időnként magától grimaszol.
+
+Szükségletei is vannak, amelyek az idővel nőnek: **éhes** lesz, **pisilnie** és **WC-re** kell mennie, **elfárad**, **büdös** lesz, **hiányzik neki a barátnője**, és **kalandra vágyik**. Ha valami sürgőssé válik, és épp ráér, elintézi. Hogy éppen mire van szüksége, azt akkor látod, ha az egeret a figura fölé viszed: a felugró címke kiírja.
+
+Rövid jelenetek a képernyő alján, a figura bal oldalán:
+
+| Jelenet | Mi történik |
+|---|---|
+| Csirke | Egy tyúk odasétál és megcsípi. Hadakoznak; többnyire a tyúk menekül, néha a figura adja fel. |
+| Egér | Egér szalad be, a figura ijedtében felugrik, aztán elkergeti. |
+| Madár | Egy madár lecsap és fejbe csípi; másodszorra a figura elhajol. |
+| Pechás Pityu | Zöld sapkás, szemüveges kis szerencsétlen, akinek mindig rossz napja van: üllő esik rá, villám csap belé, vagy elcsúszik egy banánhéjon. Szellemként száll el, a figura pedig fütyörészve úgy tesz, mintha ott sem lett volna. |
+| Ködbáró | Lila ködfelhő cilinderrel és villámpálcával. Villám és fénypenge csap össze; többnyire a báró párolog el. |
+| Csajozás | Csilla sétál el mellette. A figura napszemüveget vesz, virágot ad; a végén vagy szívecskék jönnek, vagy egy pofon. |
+| A barátnő látogatása | Csilla meglátogatja: ölelés, puszi, randiterv. |
+| Motor, autó | Motorra pattan bukósisakkal, vagy beül a kis piros autójába, végigmegy a képernyő alján és vissza. |
+| Evés, ivás | Hamburger, böfögés, üdítő. |
+| Tüsszentés, csuklás, vakarózás | „Ha… haaa… HAPCI!”, „hukk!”, és valami csíp. |
+| Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |
+| Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |
+
+Minden szereplő saját rajz. Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.
 
 Időnként megszólal egy rövid, vicces mondattal. Ezeket nem az AI találja ki helyben, hanem a rendszerbe épített mondatok közül választ, a napszakhoz igazodva (reggel, ebédidő, zárás előtt, péntek délután). Gépelés közben nem szól közbe, és a buborék pár másodperc múlva magától eltűnik.
 
@@ -255,6 +280,8 @@ A kulcs a webhely beállítófájljában is megadható – az a legbiztonságosa
 | **Humorérzék** | A csúszka a „komoly" és a „vicces" között állítja, mennyit tréfál a válaszaiban és a magától mondott beszólásaiban. Alap: 90%. 15% alatt nincs beszólás, 10% alatt a válaszai is teljesen tárgyszerűek. |
 | **Élénkség** | A „nyugodt" és az „izgő-mozgó" között állítja, milyen gyakran mozog magától. Alap: 80%. Nullán nem mozog magától. |
 | **Párbaj a Hiba-bogárral** | Bekapcsolva a figura időnként fénypenge-párbajt vív egy kis bogárral a képernyő alján. Alap: bekapcsolva. Az élénkség nullán, vagy a gépen beállított „kevesebb mozgás” mellett nincs párbaj. |
+| **Szikra élete** | Bekapcsolva a figura lélegzik, több száz arckifejezést vált, szükségletei vannak, és rövid jeleneteket játszik a képernyő alján (lásd: Szikra élete). Alap: bekapcsolva. |
+| **Altesti humor** | A pisilés, kakilás, fing és büdösség jelenetei. Kikapcsolva ezek nem jönnek, a többi marad. Alap: bekapcsolva. |
 
 ### Mit tehet az asszisztens
 
@@ -367,6 +394,14 @@ Igen. Az **Élénkség** csúszkát nullára állítva magától nem mozog. Ha a
 ### Mi az a bogár, akivel a figura néha vív?
 
 A **Hiba-bogár** – a figura játékos ellenfele. Pár másodpercig fénypengével vívnak a képernyő alján, aztán a bogár elszalad (vagy ritkán a figura pengéje merül le). Kattintásra vagy gépelésre azonnal abbahagyják. Kikapcsolni a Beállítások › Asszisztens › **Párbaj a Hiba-bogárral** kapcsolóval lehet.
+
+### Ki az a zöld sapkás fiú, és miért hal meg mindig?
+
+**Pechás Pityu**, a figura szerencsétlen ismerőse: neki mindig rossz napja van. Rajzfilmes baleset éri, szellemként elszáll, és legközelebb ugyanúgy visszajön. A jelenetek a **Szikra élete** kapcsolóval kapcsolhatók ki.
+
+### Kikapcsolható a pisilés és a kakilás?
+
+Igen, külön is: Beállítások › Asszisztens › **Altesti humor**. A többi jelenet (csirke, egér, motor, barátnő…) megmarad.
 
 ### Mit jelent a szám a figura sarkában?
 

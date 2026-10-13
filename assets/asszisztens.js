@@ -880,7 +880,7 @@
     function szabad() {
         return !!gyoker && panel.hidden && buborek.hidden && !tura && !fut &&
             !gyoker.classList.contains('is-repul') && !gyoker.classList.contains('is-setal') &&
-            !gyoker.classList.contains('is-parbaj') &&
+            !gyoker.classList.contains('is-parbaj') && !gyoker.classList.contains('is-jelenet') &&
             hangulat() === 'nyugi' && document.visibilityState !== 'hidden';
     }
 
@@ -1171,6 +1171,22 @@
             CSELEKVES.push([2, parbaj]);
         }
         var osszSuly = CSELEKVES.reduce(function (o, c) { return o + c[0]; }, 0);
+
+        /*
+         * A figura belső felülete a szikra-elet.js-nek (mimikák, szükségletek, jelenetek).
+         * Új magától végzett cselekvés a `cselekves(suly, fn)`-nel vehető fel.
+         */
+        window.SDH_SZIKRA = {
+            gyoker: gyoker, leny: leny, nev: NEV, humor: HUMOR, elenk: ELENK, nyugodt: nyugodtMozgas,
+            allapot: allapot, gesztus: gesztus, kellek: kellek, szikrak: szikrak, szabad: szabad,
+            setalVege: setalVege, parbajVege: parbajVege,
+            szemZar: function (ms) { szemZar = Date.now() + ms; },
+            cselekves: function (suly, fn) {
+                CSELEKVES.push([suly, fn]);
+                osszSuly += suly;
+            }
+        };
+        document.dispatchEvent(new CustomEvent('sdh:szikra-kesz'));
 
         function eletLep() {
             if (ELENK > 0 && !nyugodtMozgas && szabad()) {
