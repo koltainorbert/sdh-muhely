@@ -143,6 +143,20 @@
             return;
         }
 
+        var lep = esemeny.target.closest('[data-sdh-matrica-lep]');
+
+        if (lep) {
+            esemeny.preventDefault();
+
+            var mezo = ablak.querySelector('[data-sdh-matrica-peldany]');
+
+            if (mezo) {
+                mezo.value = String(Math.max(1, Math.min(50, (parseInt(mezo.value, 10) || 1) + (parseInt(lep.getAttribute('data-sdh-matrica-lep'), 10) || 0))));
+            }
+
+            return;
+        }
+
         if (esemeny.target.closest('[data-sdh-matrica-nyomtat]')) {
             esemeny.preventDefault();
             nyomtat(ablak, esemeny.target.closest('[data-sdh-matrica-nyomtat]'));

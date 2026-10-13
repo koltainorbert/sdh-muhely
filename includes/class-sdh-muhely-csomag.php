@@ -166,14 +166,20 @@ class SDH_Muhely_Csomag
         }
     }
 
-    /** A csomag kulcsa: a fájlok nevéből és verziójából – új verziónál új fájl. */
+    /**
+     * A csomag kulcsa: a fájlok nevéből, verziójából és módosítási idejéből.
+     *
+     * A módosítási idő azért kell, mert frissítéskor nem mindig emelkedik a
+     * verzió (javítás, kézi másolás): e nélkül a böngésző a régi csomagot kapná.
+     */
     private static function kulcs(WP_Dependencies $sor, array $handlek, string $fajta): string
     {
         $reszek = [SDH_MUHELY_VERSION, $fajta];
 
         foreach ($handlek as $handle) {
             $elem     = $sor->registered[$handle];
-            $reszek[] = $handle . '|' . (string) $elem->ver;
+            $fajl     = self::fajl((string) $elem->src);
+            $reszek[] = $handle . '|' . (string) $elem->ver . '|' . ($fajl !== '' ? (string) filemtime($fajl) : '');
         }
 
         return substr(md5(implode("\n", $reszek)), 0, 16);

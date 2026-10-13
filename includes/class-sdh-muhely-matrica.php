@@ -1804,8 +1804,11 @@ final class SDH_Muhely_Matrica
             </div>
 
             <div class="sdh-matrica__lab">
+                <?php // Példányszám: saját léptető gombok (a böngésző apró nyilai helyett). ?>
                 <label class="sdh-matrica__peldany">Példány
-                    <input type="number" min="1" max="50" step="1" value="<?php echo (int) $b['peldany']; ?>" data-sdh-matrica-peldany>
+                    <button type="button" class="sdh-matrica__lep" data-sdh-matrica-lep="-1" aria-label="Eggyel kevesebb">−</button>
+                    <input type="number" min="1" max="50" step="1" value="<?php echo (int) $b['peldany']; ?>" data-sdh-matrica-peldany data-sdh-szam-nincs aria-label="Példányszám">
+                    <button type="button" class="sdh-matrica__lep" data-sdh-matrica-lep="1" aria-label="Eggyel több">+</button>
                 </label>
                 <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-matrica-nyomtat<?php echo $kozvetlen !== null ? ' disabled' : ''; ?>>Nyomtatás</button>
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-matrica-pdf>PDF megnyitása</button>

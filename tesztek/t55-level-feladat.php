@@ -219,4 +219,89 @@ $rcss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/rma-ugyfel.css');
 T::tartalmaz($rcss, 'border-radius: 999px', 'az ügyféloldali fülek pillek');
 T::nem_tartalmaz($rcss, 'border-radius: 8px 8px 0 0', 'a régi lapfül-forma eltűnt');
 
-T::vege('t55 levél-feladat ügynök, SDH-belső, címkék, ügyféloldal');
+/* --- 10. Globális gombforma: pill, üveg, fénykeret (0.61.2) ------------------ */
+
+$A = 'SDH_Muhely_Arculat';
+
+T::egyezik('pill', (string) $A::beallitas()['gombforma'], 'a gombok alapból pillek (oválisak)');
+T::igaz(isset($A::gombformak()['lagy'], $A::gombformak()['szogletes']), 'a régi formák is választhatók');
+T::igaz($A::beallitas()['uveghatas'], 'az üveghatás alapból be van kapcsolva');
+T::igaz(isset($A::gombfenyek()[(string) $A::beallitas()['gombfeny']]), 'és van érvényes fénykeret-fokozat');
+
+// Az alapállapot a stíluslapban áll, ezért nem kerül inline CSS-be; csak az
+// attól való eltérés megy ki.
+$arculat_regi = get_option('sdh_muhely_arculat');
+
+update_option('sdh_muhely_arculat', ['gombforma' => 'szogletes', 'uveghatas' => 0, 'gombfeny' => '']);
+$acss = $A::stilus_css();
+
+T::tartalmaz($acss, '--sdh-gomb-r:calc(2px', 'a szögletes forma CSS-változóban megy ki');
+T::tartalmaz($acss, '--sdh-uvegero:0', 'a kikapcsolt üveghatás is');
+T::tartalmaz($acss, '--sdh-gombfeny:0', 'és a kikapcsolt fénykeret');
+
+update_option('sdh_muhely_arculat', is_array($arculat_regi) ? $arculat_regi : []);
+T::nem_tartalmaz($A::stilus_css(), '--sdh-gomb-r', 'alapállapotban nincs felesleges inline CSS');
+
+$admincss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css');
+T::tartalmaz($admincss, 'border-radius: var(--sdh-gomb-r', 'a gombok a változóból veszik a kerekítést');
+T::tartalmaz($admincss, 'backdrop-filter', 'van üveghatás (elmosott háttér)');
+
+ob_start();
+$A::beallitas_doboz();
+$doboz = (string) ob_get_clean();
+
+T::tartalmaz($doboz, 'arculat_gombforma', 'a Beállításokban állítható a forma');
+T::tartalmaz($doboz, 'arculat_uveghatas', 'az üveghatás');
+T::tartalmaz($doboz, 'arculat_gombfeny', 'és a fénykeret');
+T::tartalmaz($doboz, 'sdh-gombminta', 'mintasor mutatja, mi lesz belőle');
+
+/* --- 11. Címkeablak: saját léptető a példányszámnál (0.61.2) ------------------ */
+
+$mcss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/matrica.css');
+T::tartalmaz($mcss, '.sdh-matrica__lep', 'a példányszámnak saját −/+ gombja van');
+
+$mphp = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-matrica.php');
+T::tartalmaz($mphp, 'data-sdh-szam-nincs', 'és a mező kimarad az automata kis nyilakból');
+
+$appjs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.js');
+T::tartalmaz($appjs, "hasAttribute('data-sdh-szam-nincs')", 'a szám-mező bekötője tiszteletben tartja a jelzőt');
+$mjs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/matrica.js');
+T::tartalmaz($mjs, 'data-sdh-matrica-lep', 'a léptető gombok be vannak kötve');
+
+/* --- 12. Ügyféloldal: piros számok, teljes képernyő, fordítás (0.61.2) -------- */
+
+T::tartalmaz($rcss, '.sdh-fulek__db', 'a pilleken számjelvény áll');
+T::tartalmaz($rcss, '--rma-n', 'nagy monitoron magától nagyobb lesz');
+T::tartalmaz($rcss, 'is-teljes', 'és van teljes képernyős mód');
+T::tartalmaz($rcss, '@media (max-width: 420px)', 'keskeny telefonra külön szabály');
+
+$rphp = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-rma-oldal.php');
+T::tartalmaz($rphp, 'data-rma-teljes', 'a fejlécben ott a teljes képernyő gomb');
+T::tartalmaz($rphp, 'function tetel_nev', 'a rendszer készítette tételnevek fordítva mennek ki');
+
+/* --- 13. Számla linkből, és a kezdőnap takarítása (0.61.2) -------------------- */
+
+$linkes = ['html' => '<p>Számlája elkészült. <a href="https://szamla.gigatel.hu/e/ESB202626208">Számla letöltése</a>'
+    . ' <a href="https://mas.hu/hirlevel">Leiratkozás</a></p>'];
+
+$lk = $LF::linkek($linkes, 'gigatel.hu');
+T::egyezik(1, count($lk), 'a levélből kijön a számla linkje (a más oldalra mutató nem)');
+T::tartalmaz((string) $lk[0]['url'], 'szamla.gigatel.hu', 'a beszállító saját címére mutat');
+T::egyezik([], $LF::linkek($linkes, ''), 'minta nélkül nem szed ki linket');
+
+$wpdb->query('DELETE FROM ' . $LF::tabla() . " WHERE message_id = '<t55-takarit@g.hu>'");
+
+$takarit_sor = array_merge($regi_sor, ['message_id' => '<t55-takarit@g.hu>', 'datum' => current_time('mysql')]);
+$LF::uj_level(5103, 7, $takarit_sor, $szoveg, $level);
+T::egyezik(1, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $LF::tabla() . " WHERE message_id = '<t55-takarit@g.hu>'"), 'a mai levélre feladat nyílt');
+
+$holnap = gmdate('Y-m-d', (int) strtotime(current_time('Y-m-d') . ' +1 day'));
+T::igaz($LF::takarit($G::SZABALY, $holnap) >= 1, 'a kezdőnap előrehozása kitakarítja a régebbi nyitott feladatokat');
+T::egyezik(0, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $LF::tabla() . " WHERE message_id = '<t55-takarit@g.hu>'"), 'a feladat eltűnt');
+
+/* --- 14. Az eszközcsomag a módosított fájlt is kiszolgálja (0.61.2) ----------- */
+
+$csomag = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-csomag.php');
+T::tartalmaz($csomag, 'filemtime($fajl)', 'a csomag kulcsa a fájlok módosítási idejét is nézi (nem ragad be régi CSS)');
+
+T::vege('t55 levél-feladat ügynök, SDH-belső, címkék, ügyféloldal, gombok');

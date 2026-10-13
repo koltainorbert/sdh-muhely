@@ -204,3 +204,40 @@
         history.replaceState(null, '', cim.pathname + (cim.search ? cim.search : '') + location.hash);
     }
 }());
+
+/* ------------------------------------------------------------------ */
+/* Teljes képernyő (0.61.2)                                            */
+/* ------------------------------------------------------------------ */
+/*
+ * Nagy monitoron az ügyféloldal ablaka kitöltheti a képernyőt. A böngésző
+ * saját teljes képernyőjét használjuk (Fullscreen API); ha a böngésző nem
+ * engedi, a gomb egyszerűen nem csinál semmit, és a felület marad.
+ */
+(function () {
+    'use strict';
+
+    var gomb = document.querySelector('[data-rma-teljes]');
+
+    if (!gomb || !document.documentElement.requestFullscreen) {
+        if (gomb) {
+            gomb.hidden = true;
+        }
+
+        return;
+    }
+
+    function allapot() {
+        document.documentElement.classList.toggle('is-teljes', !!document.fullscreenElement);
+    }
+
+    gomb.addEventListener('click', function () {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            document.documentElement.requestFullscreen().catch(function () { /* a böngésző nem engedte */ });
+        }
+    });
+
+    document.addEventListener('fullscreenchange', allapot);
+    allapot();
+}());

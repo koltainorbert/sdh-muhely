@@ -94,9 +94,11 @@ body.rma {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    width: min(1120px, 100%);
-    height: min(760px, calc(100vh - 48px));
-    height: min(760px, calc(100dvh - 48px));
+    /* Nagy monitoron az ablak nagyobbra nő (0.61.2): eddig 1120×760-ban állt
+       meg, és egy 27"-os képernyő közepén elveszett. */
+    width: min(calc(1180px * var(--rma-n, 1)), 100%);
+    height: min(calc(790px * var(--rma-n, 1)), calc(100vh - 48px));
+    height: min(calc(790px * var(--rma-n, 1)), calc(100dvh - 48px));
     overflow: hidden;
     border: 1px solid var(--sdh-keret);
     border-radius: var(--sdh-r-nagy);
@@ -409,19 +411,24 @@ body.rma {
     font-weight: 600;
 }
 
+/* A darabszám MINDIG kiemelt (0.61.2): ettől látszik azonnal, hol van tartalom
+   – nem csak akkor, ha az egér fölötte van vagy a pill aktív. */
 .rma-ful .sdh-fulek__db {
+    min-width: 1.25em;
     margin-left: .1rem;
     padding: 0 .4rem;
     border-radius: 999px;
-    background: var(--sdh-felulet-2);
-    color: var(--sdh-szoveg-2);
+    background: var(--sdh-accent);
+    color: #fff;
     font-size: 11px;
     font-weight: 700;
+    text-align: center;
 }
 
 .rma-ful.is-aktiv .sdh-fulek__db {
     background: var(--sdh-accent);
     color: #fff;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sdh-accent) 28%, transparent);
 }
 
 
@@ -1189,4 +1196,143 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     font-size: .92em;
     font-weight: 500;
     opacity: .8;
+}
+
+
+/* ================================================================== */
+/* Nagyítás, teljes képernyő, mobil (0.61.2)                           */
+/* ================================================================== */
+/*
+ * A felület mérete a képernyőhöz igazodik: nagy monitoron minden nagyobb,
+ * telefonon kisebb. Egyetlen szorzó (--rma-n) mozgat mindent, a CRM saját
+ * nagyításától függetlenül. A betűk és a térközök együtt nőnek, semmi nem
+ * esik szét.
+ */
+:root {
+    --rma-n: 1;
+}
+
+@media (min-width: 1500px) {
+    :root { --rma-n: 1.1; }
+}
+
+@media (min-width: 1900px) {
+    :root { --rma-n: 1.22; }
+}
+
+@media (min-width: 2400px) {
+    :root { --rma-n: 1.35; }
+}
+
+.rma-ablak {
+    font-size: calc(15px * var(--rma-n));
+}
+
+.rma-ful {
+    height: calc(34px * var(--rma-n));
+    padding-inline: calc(.85rem * var(--rma-n));
+    font-size: calc(13px * var(--rma-n));
+}
+
+.rma-ful .rma-ikon {
+    width: calc(16px * var(--rma-n));
+    height: calc(16px * var(--rma-n));
+}
+
+.rma-tabla th,
+.rma-tabla td {
+    font-size: calc(13.5px * var(--rma-n));
+}
+
+/* Teljes képernyőn az ablak kitölti a kijelzőt, keret és árnyék nélkül. */
+:root.is-teljes .rma-ablak {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+:root.is-teljes body.rma {
+    padding: 0;
+}
+
+.rma-teljes-ki,
+:root.is-teljes .rma-teljes-be {
+    display: none;
+}
+
+:root.is-teljes .rma-teljes-ki {
+    display: inline-flex;
+}
+
+/* Telefonon a teljes képernyő gomb felesleges (ott úgyis az egész kijelző az). */
+@media (max-width: 760px) {
+    .rma-csak-nagy {
+        display: none;
+    }
+}
+
+/* ---------- Telefon: az ablak a teljes kijelző, görgetés a tartalomban ---------- */
+@media (max-width: 760px) {
+    body.rma {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .rma-ablak {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .rma-fulek {
+        /* Vízszintesen görgethető pill-sor: minden fül elérhető, nem tördel. */
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .rma-fulek::-webkit-scrollbar {
+        display: none;
+    }
+
+    .rma-ful {
+        flex: 0 0 auto;
+    }
+}
+
+/* Keskeny telefon: a pilleken csak az ikon és a szám marad. */
+@media (max-width: 420px) {
+    .rma-ful span:not(.sdh-fulek__db) {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .rma-ful {
+        padding-inline: calc(.6rem * var(--rma-n));
+    }
+
+    .rma-ful.is-aktiv span:not(.sdh-fulek__db) {
+        position: static;
+        width: auto;
+        height: auto;
+        clip-path: none;
+    }
+
+    .rma-tabla th,
+    .rma-tabla td {
+        font-size: calc(12.5px * var(--rma-n));
+        padding-inline: .35rem;
+    }
 }

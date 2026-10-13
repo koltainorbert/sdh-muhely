@@ -223,11 +223,14 @@ A Levelezés oldal tetején a **Feladatok** gomb mutatja, hány teendő van nyit
 |---|---|
 | **Levél megnyitása** | A levelezőben megnyitja magát a levelet. |
 | **Számla nyomtatása (fájlnév)** | Új lapon megnyitja a mellékelt PDF-et – onnan nyomtatod. |
-| **Melléklet keresése** | Csak akkor látszik, ha a melléklet még nem került elő. Újraolvassa a levelet a postafiókról. |
+| **Számla megnyitása** | Ha a számla nem melléklet, hanem **link** a levélben, ez a gomb nyitja meg a beszállító oldalán. |
+| **Számla keresése** | Csak akkor látszik, ha sem melléklet, sem link nem került elő. Újraolvassa a levelet a postafiókról. |
 | **Címkék (n tétel)** | A címkenyomtató ablaka nyílik meg a tételekkel: kipipálod, melyikre kell, és nyomtatod. |
 | **Elintézve** | Lezárja a feladatot. Ettől szűnik meg az emlékeztető. |
 
-A melléklet és a tételek a feladat **első megnyitásakor** jönnek elő: a rendszer a levélnek előbb csak az elejét tölti le (abban a PDF még nincs benne), és csak akkor olvassa végig, amikor ránézel. Ezért az első megnyitás egy pillanattal tovább tart.
+A melléklet, a számla linkje és a tételek a feladat **első megnyitásakor** jönnek elő: a rendszer a levélnek előbb csak az elejét tölti le (abban a PDF még nincs benne), és csak akkor olvassa végig, amikor ránézel. Ezért az első megnyitás egy pillanattal tovább tart.
+
+Nem minden beszállító csatolja a számlát: van, amelyik csak egy **letöltési linket** küld. Ilyenkor a melléklet helyén a **Számla megnyitása** gomb áll, és az a beszállító oldalára visz.
 
 Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért, hogy a számla kinyomtatása ne maradjon el. Az **Elintézve** után nem szól többet; a lezárt feladat az **Az elintézettek is** gombbal nézhető vissza, és újranyitható.
 
@@ -236,7 +239,7 @@ Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért,
 **Beállítások › Levelezés › Levél-feladat ügynök**. Egy szabály két részből áll:
 
 - **Mikor:** a feladó tartalmazza…, a tárgy tartalmazza…, és (ha kell) legyen melléklet. Feltétel nélküli szabály nem fut – nehogy mindenre ráugorjon.
-- **Ettől a naptól:** a szabály csak az ennél újabb levelekkel foglalkozik. Új szabály a bekapcsolás előtti naptól figyel, így a régi postafiókra nem nyit visszamenőleg több száz feladatot.
+- **Ettől a naptól:** a szabály csak az ennél újabb levelekkel foglalkozik. Új szabály a bekapcsolás előtti naptól figyel, így a régi postafiókra nem nyit visszamenőleg több száz feladatot. Ha utólag állítod át a napot, a rendszer a nála régebbi **nyitott** feladatokat magától kitakarítja – a lezártakat meghagyja, azok a napló részei.
 - **Mit:** melyik mappába kerüljön, emlékeztessen-e, ajánlja-e a melléklet nyomtatását, és melyik **tételolvasó** nézze át a levelet.
 
 A tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ami csak az SDH-é (például a Gigatel), az a **Beállítások › SDH – belső** sorban van, és eladáskor nem megy ki.
@@ -398,6 +401,14 @@ Nyisd meg, és kattints az **Elintézve** gombra. Ha válaszolsz rá, az is elin
 ### Az ügynök tévesen sorolt be egy levelet. Mit tehetek?
 
 Ha fontosat hagyott ki, vedd fel a feladót a **Kiemelt feladók** közé. Ha feleslegesen szólt, tedd a **Zajlistára**. Mindkettő a Beállítások → Levelezés lapfülön van.
+
+### A feladatnál nincs melléklet. Hol a számla?
+
+Valószínűleg link a levélben: ilyenkor a **Számla megnyitása** gomb visz a beszállító oldalára. Ha egyik sem látszik, a **Számla keresése** gombbal olvastasd újra a levelet.
+
+### A levél-feladat ügynök régi leveleket szedett elő. Hogyan szabadulok meg tőlük?
+
+Állítsd át a szabály **Ettől a naptól** mezőjét, és mentsd. A nála régebbi nyitott feladatok maguktól eltűnnek.
 
 ### Hogyan kapcsolom be a rendező ügynököt?
 

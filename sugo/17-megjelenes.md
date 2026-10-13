@@ -168,6 +168,24 @@ Jó tudni:
 - A popup akkor is lekicsinyíti magát, ha a tartalma nem fér ki a képernyőn (lásd [Első lépések](sugo:elso-lepesek)). Ha az űrlapok betűjét feljebb viszed, egy hosszú munkalap hamarabb ér a képernyő aljáig. Ilyenkor segít a teljes képernyő (zöld ablakgomb), vagy ha csak a **Címsorok** és a **Gombok** méretét növeled, az űrlapmezőkét nem.
 - Ha valami félresikerült, állíts minden sort „Mint az alap" + 100% értékre: ezzel visszaáll a gyári állapot.
 
+### Gombok és mezők
+
+Itt dől el, milyen formájúak a gombok és a beviteli mezők az **egész** rendszerben: a műhelyfelületen, a beállításokban és az ügyfél felé mutatott RMA-oldalon is.
+
+| Mező | Mire való |
+|---|---|
+| **Forma** | **Pill (ovális)** – teljesen lekerekített, modern felület (ez az alap). **Lekerekített** – enyhén lekerekített sarkok (a korábbi megjelenés). **Szögletes** – éles sarkok, a legtömörebb felület. |
+| **Fénykeret** | Nincs, Finom, Közepes vagy Erős. A gomb felső élén világos csík, alatta lágy fény a kiemelő színben. |
+| **Üveghatás** | Áttetsző, enyhén elmosott gombháttér (glassmorphism). |
+
+A doboz alján egy **mintasor** mutatja az aktuális beállítást: egy elsődleges gomb, egy világos gomb és egy pill. Mentés után az egész felület átveszi.
+
+Jó tudni:
+
+- A **Papír** megjelenés nyomtatáshoz készült: ott az üveghatás és a fénykeret nem jelenik meg, hogy a nyomat tiszta maradjon.
+- Az üveghatás csak olyan böngészőben látszik, amelyik ismeri az elmosást (minden mai Chrome, Edge, Safari, Firefox). Ahol nem, ott a gomb sima színű marad – semmi nem romlik el.
+- A forma a mezőkre is hat (keresőmező, legördülők, számmezők), hogy a felület egységes maradjon.
+
 ### Popupok – neon keret
 
 | Mező | Mire való |
@@ -309,4 +327,20 @@ Nem. A nyomtatás független a megjelenéstől, a betűmérettől és a kékfén
 
 ### Az ügyfél is ezt a megjelenést látja az ügyféloldalon?
 
-Nem. Az ügyféloldal külön megjelenésű; annak a beállításai a Beállítások › Ügyféloldal (RMA) lapfülön vannak.
+Nem. Az ügyféloldal külön megjelenésű; annak a beállításai a Beállítások › Ügyféloldal (RMA) lapfülön vannak. A gombok formája viszont ott is érvényes: ha pillre állítod, az ügyfél is ovális gombokat lát.
+
+### Hogyan lesznek ováliasak (pillek) a gombok?
+
+Beállítások › Logó és megjelenés › **Gombok és mezők** › Forma › **Pill (ovális)**. Ez az alapbeállítás; a teljes rendszerre hat.
+
+### Mi az az üveghatás?
+
+Áttetsző, enyhén elmosott gombháttér – a mai felületeken „glassmorphism" néven ismert. Beállítások › Logó és megjelenés › Gombok és mezők › **Üveghatás a gombokon**.
+
+### Visszakaphatom a régi, szögletes gombokat?
+
+Igen: Gombok és mezők › Forma › **Lekerekített** (a korábbi megjelenés) vagy **Szögletes**.
+
+### Miért nem látom az üveghatást vagy a fénykeretet?
+
+Papír megjelenésben szándékosan nincs, mert nyomtatáshoz készült. Ellenőrizd a profilmenüben, melyik megjelenés aktív.

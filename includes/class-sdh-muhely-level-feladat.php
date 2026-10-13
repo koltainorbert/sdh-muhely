@@ -144,6 +144,9 @@ final class SDH_Muhely_Level_Feladat
                 'mappa'   => $szo($t['mappa'] ?? '', 120),
                 'ertesit' => !empty($t['ertesit']),
                 'nyomtat' => ($t['nyomtat'] ?? '') === 'csatolmany' ? 'csatolmany' : '',
+                // Ha a számla nem melléklet, hanem LINK a levélben: ez a minta keresi meg
+                // (az URL-ben vagy a link szövegében). Pl. „szamla" vagy „gigatel.hu".
+                'link'    => mb_strtolower($szo($t['link'] ?? '', 120)),
                 'olvaso'  => $olv !== '' && isset(self::$olvasok[$olv]) ? $olv : '',
             ],
         ];
@@ -166,10 +169,54 @@ final class SDH_Muhely_Level_Feladat
 
             // Új szabály: a tegnapi naptól figyel (a régi leveleket nem bányássza elő).
             // A meglévőé megmarad, hogy a dátum ne csússzon minden mentésnél.
-            $ki[$kulcs] = ['tol' => $sor['tol'] !== '' ? $sor['tol'] : (string) ($regi[$kulcs]['tol'] ?? self::tegnap())] + $sor;
+            $sor['tol'] = $sor['tol'] !== '' ? $sor['tol'] : (string) ($regi[$kulcs]['tol'] ?? self::tegnap());
+            $ki[$kulcs] = $sor;
+
+            // A kezdőnap előtti, még nyitott feladatok maguktól eltűnnek (0.61.2).
+            self::takarit($kulcs, (string) $sor['tol']);
         }
 
         update_option(self::OPT, $ki, false);
+    }
+
+    /**
+     * A kezdőnap előtti feladatok takarítása (0.61.2).
+     *
+     * Ha a kezdőnapot később állítod be (vagy feljebb viszed), az addig
+     * összegyűlt régi feladatok maguktól eltűnnek – nem kell egyenként
+     * elintézni őket. Csak a NYITOTT, saját levélhez tartozó feladatokat
+     * törli; a levelekhez nem nyúl.
+     */
+    public static function takarit(string $szabaly, string $tol): int
+    {
+        global $wpdb;
+
+        if ($tol === '' || !SDH_Muhely_Schema::naprakesz()) {
+            return 0;
+        }
+
+        $t = self::tabla();
+        $l = SDH_Muhely_Schema::tabla('level');
+
+        // Soronként: a többtáblás DELETE nem minden adatbázison megy (SQLite-on
+        // csendben nem csinál semmit), és a feladatokból úgysem lesz sok.
+        $sorok = $wpdb->get_results($wpdb->prepare(
+            "SELECT f.id, v.datum, f.letrehozva FROM {$t} f LEFT JOIN {$l} v ON v.id = f.level_id
+             WHERE f.szabaly = %s AND f.allapot = 'nyitott'",
+            $szabaly
+        )); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        $db = 0;
+
+        foreach ((array) $sorok as $sor) {
+            $datum = (string) ($sor->datum ?? '') !== '' ? (string) $sor->datum : (string) $sor->letrehozva;
+
+            if (substr($datum, 0, 10) < $tol) {
+                $db += (int) $wpdb->delete($t, ['id' => (int) $sor->id]);
+            }
+        }
+
+        return $db;
     }
 
     /** A tegnapi nap (az új szabály innentől figyel). */
@@ -192,6 +239,7 @@ final class SDH_Muhely_Level_Feladat
         $mind[$kulcs] = $uj;
 
         update_option(self::OPT, $mind, false);
+        self::takarit($kulcs, (string) $uj['tol']);
     }
 
     /* =================================================================
@@ -267,6 +315,8 @@ final class SDH_Muhely_Level_Feladat
                 // ezért a melléklet és a tételek a feladat ELSŐ MEGNYITÁSAKOR jönnek
                 // (betolt()) – akkor már a teljes levél a kezünkben van.
                 'betoltve' => false,
+                'link'     => (string) $sz['tesz']['link'],
+                'linkek'   => self::linkek($level, (string) $sz['tesz']['link']),
                 'csatolmanyok' => self::pdf_csatolmanyok($level),
                 'tetelek'  => [],
                 'targy'    => (string) ($sor['targy'] ?? ''),
@@ -307,6 +357,46 @@ final class SDH_Muhely_Level_Feladat
             }
 
             $ki[] = ['n' => (int) $n, 'nev' => mb_substr($nev, 0, 190), 'meret' => (int) ($c['meret'] ?? 0)];
+        }
+
+        return $ki;
+    }
+
+    /**
+     * A levélben álló linkek (0.61.2). Sok beszállító nem mellékeli a számlát,
+     * hanem LINKET küld rá – ilyenkor ezt kínáljuk fel megnyitásra. Csak http(s)
+     * linkeket tartunk meg, és csak azokat, amelyekre a szabály mintája illik.
+     *
+     * @return array<int, array<string, string>>
+     */
+    public static function linkek(array $level, string $minta): array
+    {
+        $minta = trim(mb_strtolower($minta));
+
+        if ($minta === '') {
+            return [];
+        }
+
+        $html = (string) ($level['html'] ?? '');
+        $ki   = [];
+        $volt = [];
+
+        if (preg_match_all('~<a\b[^>]*href\s*=\s*["\']([^"\']+)["\'][^>]*>(.*?)</a>~is', $html, $talalat, PREG_SET_ORDER) !== false) {
+            foreach ($talalat as $t) {
+                $url = html_entity_decode(trim((string) $t[1]), ENT_QUOTES, 'UTF-8');
+                $cim = trim((string) preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $t[2])));
+
+                if (!preg_match('~^https?://~i', $url) || isset($volt[$url]) || count($ki) >= 6) {
+                    continue;
+                }
+
+                if (mb_strpos(mb_strtolower($url . ' ' . $cim), $minta) === false) {
+                    continue;
+                }
+
+                $volt[$url] = true;
+                $ki[] = ['url' => esc_url_raw($url), 'cim' => mb_substr($cim !== '' ? $cim : $url, 0, 120)];
+            }
         }
 
         return $ki;
@@ -497,6 +587,7 @@ final class SDH_Muhely_Level_Feladat
 
         $a['betoltve']     = true;
         $a['csatolmanyok'] = self::pdf_csatolmanyok($teljes['level']);
+        $a['linkek']       = self::linkek($teljes['level'], (string) ($a['link'] ?? ''));
 
         if ((string) ($a['olvaso'] ?? '') !== '') {
             $a['tetelek'] = self::tetelek_olvas((string) $a['olvaso'], (string) $teljes['szoveg'], $teljes['level']);
@@ -618,12 +709,13 @@ final class SDH_Muhely_Level_Feladat
         $f = self::betolt($f, true);
         $a = self::adat($f);
 
+        $pdf  = count((array) ($a['csatolmanyok'] ?? []));
+        $link = count((array) ($a['linkek'] ?? []));
+
         wp_send_json_success([
-            'pdf'    => count((array) ($a['csatolmanyok'] ?? [])),
+            'pdf'    => $pdf + $link,
             'tetel'  => count((array) ($a['tetelek'] ?? [])),
-            'uzenet' => count((array) ($a['csatolmanyok'] ?? [])) > 0
-                ? 'Megvan a melléklet.'
-                : 'Ebben a levélben nincs PDF melléklet.',
+            'uzenet' => $pdf > 0 ? 'Megvan a melléklet.' : ($link > 0 ? 'A számla linkje megvan.' : 'Ebben a levélben nincs melléklet és számlalink sem.'),
         ]);
     }
 
@@ -703,9 +795,15 @@ final class SDH_Muhely_Level_Feladat
                                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-level="<?php echo (int) $f->level_id; ?>">Levél megnyitása</button>
                                 <?php endif; ?>
 
-                                <?php if ($pdf === [] && (string) ($a['nyomtat'] ?? '') !== '') : ?>
+                                <?php foreach ((array) ($a['linkek'] ?? []) as $l) : ?>
+                                    <a class="sdh-gomb sdh-gomb--elsodleges" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url((string) $l['url']); ?>">
+                                        Számla megnyitása<?php echo (string) $l['cim'] !== '' ? ' (' . esc_html((string) $l['cim']) . ')' : ''; ?>
+                                    </a>
+                                <?php endforeach; ?>
+
+                                <?php if ($pdf === [] && (array) ($a['linkek'] ?? []) === [] && (string) ($a['nyomtat'] ?? '') !== '') : ?>
                                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-ujra="<?php echo (int) $f->id; ?>"
-                                            title="A levél melléklete még nincs letöltve – a gomb újra megnézi a levelet.">Melléklet keresése</button>
+                                            title="A levél melléklete vagy számlalinkje még nincs meg – a gomb újra megnézi a levelet.">Számla keresése</button>
                                 <?php endif; ?>
 
                                 <?php foreach ($pdf as $c) : ?>

@@ -84,7 +84,9 @@ final class SDH_Muhely_Sdh_Gigatel
             'fiok'  => '',
             'tol'   => $b['tol'],
             'ha'    => ['felado' => $b['felado'], 'targy' => $b['targy'], 'csatolmany' => ''],
-            'tesz'  => ['mappa' => $b['mappa'], 'ertesit' => true, 'nyomtat' => 'csatolmany', 'olvaso' => 'gigatel'],
+            // A Gigatel a számlát sokszor nem mellékeli, hanem LINKET küld rá:
+            // a gigatel.hu-ra mutató linket kínáljuk fel megnyitásra (0.61.2).
+            'tesz'  => ['mappa' => $b['mappa'], 'ertesit' => true, 'nyomtat' => 'csatolmany', 'link' => 'gigatel.hu', 'olvaso' => 'gigatel'],
         ]);
     }
 

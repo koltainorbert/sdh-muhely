@@ -80,7 +80,17 @@ Felül a fejléc, bal oldalt az összegzés, jobbra a tartalom – amit **ikonos
 
 ### Fejléc
 
-A szerviz logója vagy neve, a munkalap sorszáma és állapota, a nyelvváltó (ha több nyelv is engedélyezve van), a világos / sötét mód váltója és a kilépés.
+A szerviz logója vagy neve, a munkalap sorszáma és állapota, a nyelvváltó (ha több nyelv is engedélyezve van), a **teljes képernyő** gombja, a világos / sötét mód váltója és a kilépés.
+
+A teljes képernyő gomb nagy monitoron hasznos: az oldal kitölti a képernyőt, és az ablak is szélesebb lesz. Ugyanez a gomb (vagy az **Esc**) lép ki belőle. Telefonon nem jelenik meg.
+
+### Méret és készülékek
+
+Az oldal mindenhol használható marad:
+
+- **Telefonon** az összegzés külön pillre kerül, a pillek sora vízszintesen húzható, keskeny képernyőn pedig csak az ikon és a szám marad rajtuk. Az oldal 100%-ban reszponzív; semmit nem kell nagyítani.
+- **Nagy monitoron** az oldal magától nagyobb betűvel és szélesebb ablakkal jelenik meg (nagyjából 1500, 1900 és 2400 képpont fölött egy-egy fokozattal), hogy 24–27 colos kijelzőn se kelljen hunyorítani.
+- A böngésző saját nagyítása (**Ctrl +** / **Ctrl −**) ezen felül bármikor használható.
 
 ### Összegzés
 
@@ -101,6 +111,8 @@ A szerviz logója vagy neve, a munkalap sorszáma és állapota, a nyelvváltó 
 | **Üzenetek** | A beszélgetés a szervizzel, alul beírómezővel. |
 | **Elérhetőség** | Cím, telefonszám, e-mail, nyitvatartás, weboldal, egyéb tudnivaló. |
 
+A fülek **pill (ovális) gombok**, mindegyiken egy ikon és a neve. Ahol van mondanivaló – olvasatlan üzenet, nyitott hiba –, ott egy piros, jól látható szám áll a fül nevén; nem kell fölé vinni az egeret, hogy észrevedd.
+
 Néhány részlet:
 
 - Az IMEI-ből és a sorozatszámból csak az utolsó öt karakter látszik, a többi helyén pont áll.
@@ -112,7 +124,9 @@ Néhány részlet:
 
 Az ügyféloldal magyarul, angolul és németül tud megjelenni. Az ügyfél a fejlécben vált, és a böngészője megjegyzi a választását.
 
-A felület szövegei és a gyári állapotnevek le vannak fordítva. Amit te írtál be – saját állapotnév, hibaleírás, tétel neve, megjegyzés, üzenet –, az úgy jelenik meg, ahogy beírtad.
+A felület szövegei és a gyári állapotnevek le vannak fordítva, és a fülek nevei, az ikonok melletti feliratok, a lábléc és az üres listák szövegei is. A rendszer által készített tételnevek – a **bevizsgálási díj** és annak **levonása** – szintén lefordítva jelennek meg.
+
+Amit te írtál be – saját állapotnév, hibaleírás, saját tételnév, megjegyzés, üzenet –, az úgy jelenik meg, ahogy beírtad. Ezt szándékosan nem fordítja senki: a saját szövegeidet nem írja át a rendszer.
 
 ## Lépésről lépésre: üzenet az ügyfélnek a munkalapról
 
@@ -388,6 +402,26 @@ A rendelésen kattints a **Megjött – értesítés** gombra, nézd át a szöv
 ### Mikor tűnik el a szám az Üzenetek mellől?
 
 Amikor megnyitod az érintett munkalap RMA fülét. Ekkor az ügyfél üzenetei olvasottra állnak.
+
+### Mit jelentenek a piros számok az ügyféloldal fülein?
+
+Azt, hogy azon a fülön van tennivaló: olvasatlan üzenet vagy nyitott hiba. Ezek mindig pirosak, hogy azonnal feltűnjenek – nem csak akkor, ha ráviszed az egeret.
+
+### Használható az ügyféloldal telefonon?
+
+Igen, teljesen. Az összegzés külön pillre kerül, a pillek sora húzható, keskeny képernyőn pedig csak az ikon és a szám marad rajtuk. Nagyítani nem kell.
+
+### Hogyan lehet teljes képernyőn nézni az ügyféloldalt?
+
+A fejléc teljes képernyő gombjával. Ugyanaz a gomb vagy az [[Esc]] lép ki belőle. Telefonon a gomb nem jelenik meg.
+
+### Nagy monitoron miért nagyobbak a betűk az ügyféloldalon?
+
+Mert az oldal a képernyő szélességéhez igazodik: nagyjából 1500, 1900 és 2400 képpont fölött egy-egy fokozattal nagyobb lesz, hogy 24–27 colos kijelzőn is kényelmes legyen. A böngésző [[Ctrl]] + [[+]] nagyítása ezen felül is működik.
+
+### Miért magyarul látszik egy-egy tétel neve idegen nyelven is?
+
+Mert azt te írtad be. A rendszer a saját szövegeit fordítja – köztük a bevizsgálási díjat és annak levonását –, a kézzel beírt tételneveket, hibaleírásokat és üzeneteket viszont változatlanul mutatja.
 
 ## Túra: uzenetek
 

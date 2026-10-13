@@ -39,7 +39,7 @@ Amit a modul csinál:
 1. felismeri ezeket a leveleket (a **feladó** és a **tárgy** alapján),
 2. a **Gigatel számla** mappába teszi őket – ha nincs ilyen mappa a postafiókban, létrehozza,
 3. **feladatot** nyit rájuk, és addig emlékeztet, amíg el nem intézed,
-4. a mellékelt **PDF számlát** egy gombbal megnyitja nyomtatásra,
+4. a **számlát** egy gombbal megnyitja nyomtatásra – mellékletből, vagy ha a levél csak linket küld, a **Számla megnyitása** gombbal a Gigatel oldalán,
 5. a tételek közül kiválasztja azokat, amelyek **megjegyzésében telefonszám** áll, és **címkét** kínál rájuk.
 
 ### Beállítások
@@ -49,7 +49,7 @@ Amit a modul csinál:
 | **A Gigatel-levelek feldolgozása fusson** | Ki- és bekapcsolja ezt az egy modult. |
 | **A feladó tartalmazza** | Alapból `gigatel`. A feladó nevére és címére is illeszkedik. |
 | **A tárgy tartalmazza** | Alapból `számlája elkészült` – így a számlaszám mindegy. |
-| **Ettől a naptól figyelje** | A régebbi leveleket nem dolgozza fel – felesleges visszamenőleg feladatot nyitni rájuk. Alapból a bekapcsolás előtti nap. |
+| **Ettől a naptól figyelje** | A régebbi leveleket nem dolgozza fel – felesleges visszamenőleg feladatot nyitni rájuk. Alapból a bekapcsolás előtti nap. Ha átállítod, a nála régebbi **nyitott** feladatok maguktól eltűnnek; a lezártak megmaradnak. |
 | **Melyik mappába kerüljön** | Alapból `Gigatel számla`. Üresen hagyva a levél a helyén marad. |
 
 ### Mi kerül a címkére
@@ -62,7 +62,7 @@ Címke csak azokra a tételekre kell, amelyekhez telefonszám tartozik: azokat v
 
 1. A levél megérkezik, a rendszer a **Gigatel számla** mappába teszi, és szól, hogy van teendő.
 2. Nyisd meg a **Levelezés › Feladatok** gombot.
-3. **Számla nyomtatása** – új lapon megnyílik a PDF, onnan nyomtatod.
+3. **Számla nyomtatása** – új lapon megnyílik a PDF, onnan nyomtatod. Ha a levélben nem melléklet, hanem link a számla, a **Számla megnyitása** gomb áll itt, és a Gigatel oldalára visz.
 4. **Címkék (n tétel)** – a címkenyomtató ablaka nyílik: pipáld ki, melyikre kell, add meg a példányszámot, és **Nyomtatás**. (Hálózati módban a Brother magától nyomtat; böngészős módban a nyomtatás-ablakban válaszd a Brothert.)
 5. **Elintézve** – ettől szűnik meg az emlékeztető.
 
@@ -106,6 +106,14 @@ Amíg rá nem nyomod az **Elintézve** gombot. Magától nem záródik le – po
 ### A bekapcsolás előtti leveleket feldolgozza?
 
 Nem. Minden szabálynak van kezdőnapja, és alapból a bekapcsolás előtti naptól figyel. Ha mégis kell egy régebbi levél, írd át az **Ettől a naptól figyelje** mezőt – a következő szinkronnál az addigi levelek is sorra kerülnek.
+
+### Régi, több éves levelekre nyílt feladat. Mit tegyek?
+
+Írd a kezdőnapot a mai (vagy tegnapi) dátumra, és mentsd. A nála régebbi nyitott feladatok ettől maguktól eltűnnek – semmit nem kell egyesével lezárni.
+
+### A feladatban nincs melléklet. Hol a számla?
+
+A Gigatel nem mindig csatolja: ilyenkor **link** áll a levélben, és a **Számla megnyitása** gomb visz rá. Ha egyik sem jelenik meg, a **Számla keresése** gombbal olvastasd újra a levelet.
 
 ### Két Gigatel-levél jött egy nap. Mi lesz?
 

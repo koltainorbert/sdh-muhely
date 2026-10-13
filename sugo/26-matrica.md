@@ -45,7 +45,7 @@ Nyomtatás:
 
 1. Nyisd meg a terméket vagy a szolgáltatást.
 2. Kattints az ablak alján a **Címke** gombra. Megnyílik a címke előnézete.
-3. Írd be a **Példány** számát (legfeljebb 50 – például a polcon lévő darabszám).
+3. Állítsd be a **Példány** számát a mellette lévő **−** és **+** gombbal, vagy írd be (legfeljebb 50 – például a polcon lévő darabszám).
 4. Kattints a **Nyomtatás** gombra (böngészős módban a nyomtatás-ablakban válaszd a Brother nyomtatót).
 
 Beállítás: **Beállítások › Címkenyomtatás**, felül a **Nyomtató és címke** doboz (közös), alatta a **RMA-matrica / Rendelés-címke / Termékcímke / Szolgáltatás-címke / Beszállítói tétel / Egyedi címke** fülek. Fülenként külön állítod a címke hosszát (folyamatos szalagon), a tájolást, a margót, a betűt, a példányszámot és hogy mi kerüljön rá – mindegyiknek saját élő előnézete és próbanyomata van. A nyomtató és a betett tekercs mindháromnál ugyanaz, hiszen egy nyomtatóban egyszerre egy tekercs van.
@@ -200,6 +200,10 @@ Igen. Folyamatos szalagon a hossz, a tájolás és a betű fülenként külön �
 ### Hogyan nyomtatok a P-touch szalagos nyomtatóra?
 
 Válaszd a **Címke / szalag** mezőben a szalag szélességét (TZe 12–36 mm), és a böngészős módot. A Brother illesztőprogramban ugyanazt a szalagszélességet állítsd be.
+
+### Hogyan állítom a példányszámot a címkeablakban?
+
+A **Példány** melletti **−** és **+** gombbal, vagy írd be a számot. 1 és 50 között lehet. Az alapértéket címketípusonként a Beállítások › Címkenyomtatás lapon adod meg.
 
 ## Túra: matrica
 

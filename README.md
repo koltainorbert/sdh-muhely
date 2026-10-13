@@ -64,6 +64,23 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.2
+- **Pill (ovális) gombok mindenhol**, választhatóan **üveghatással** és **fénykerettel** – Beállítások › Logó és
+  megjelenés › **Gombok és mezők** (Forma: Pill / Lekerekített / Szögletes). A beállítás a teljes rendszerre hat:
+  műhelyfelület, admin, ügyféloldal. A Papír megjelenés tiszta marad (nyomtatáshoz nincs üveg és fény).
+- **Címkeablak példányszáma**: pill-alakú mezőcsoport saját, nagy **−/+** gombokkal; a böngésző apró pörgetőnyilai
+  eltűntek (új `data-sdh-szam-nincs` jelző a számmezőknek).
+- **Rendelés-címke választó**: pillek a korábbi szögletes gombok helyett.
+- **Ügyféloldal (RMA)**: a pillek számai **mindig pirosak** (nem csak egérrel fölé állva); **teljes képernyő** gomb a
+  fejlécben; nagy monitoron magától nagyobb betű és szélesebb ablak (1500/1900/2400 képpont felett); telefonon
+  húzható pill-sor, keskeny kijelzőn csak ikon + szám. A rendszer készítette tételnevek (bevizsgálási díj és
+  levonása) is lefordítva jelennek meg.
+- **Chat buborék**: a jelzések a fejléc alá kerültek, nem csúsznak az asszisztens buborékjába.
+- **Levél-feladat**: ha a számla nem melléklet, hanem **link** a levélben, a **Számla megnyitása** gomb nyitja meg
+  (Gigatelnél is). A kezdőnap átállítása a nála régebbi **nyitott** feladatokat kitakarítja.
+- **Eszközcsomag**: a csomag kulcsába bekerült a fájlok módosítási ideje, így javítás után sosem marad be régi
+  CSS vagy JS a böngészőben.
+
 ### 0.61.1
 - **Címkék menüpont** (az oldalmenüben): innen indul az **Egyedi címke** (eltűnt az Áttekintés fejlécéből), és egy
   táblázat mutatja, melyik címke hol érhető el és mi áll rajta – a tartalom beállítása egy kattintás.

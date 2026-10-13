@@ -56,6 +56,7 @@ final class SDH_Muhely_Arculat
 
         $uveg      = (string) ($mentett['uveg'] ?? 'mono');
         $betutipus = (string) ($mentett['betutipus'] ?? '');
+        $forma     = (string) ($mentett['gombforma'] ?? 'pill');
 
         return [
             // Üvegszín: 'duo' = két kontrasztos szín, 'mono' = egy színcsalád.
@@ -81,6 +82,38 @@ final class SDH_Muhely_Arculat
             'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
             // Területenkénti betű (0.60.1): űrlap, táblázat, rács, címsor, gomb, menü.
             'teruletek'   => self::teruletek_szukit(is_array($mentett['teruletek'] ?? null) ? $mentett['teruletek'] : []),
+            // Gombok és mezők formája (0.61.2): szögletes, lekerekített vagy pill.
+            'gombforma'   => isset(self::gombformak()[$forma]) ? $forma : 'pill',
+            // Üveghatás (áttetsző, elmosott háttér) és finom fénykeret a gombokon.
+            'uveghatas'   => !isset($mentett['uveghatas']) || !empty($mentett['uveghatas']),
+            // A „Nincs" fokozat kulcsa üres szöveg, ezért itt kell az alapérték.
+            'gombfeny'    => isset($mentett['gombfeny']) && isset(self::gombfenyek()[(string) $mentett['gombfeny']]) ? (string) $mentett['gombfeny'] : 'finom',
+        ];
+    }
+
+    /**
+     * A gombok és mezők formája (0.61.2). A rajz a stíluslapé
+     * (admin.css: :root[data-gomb="…"]); itt csak a nevük áll.
+     *
+     * @return array<string, array{nev: string, alcim: string}>
+     */
+    public static function gombformak(): array
+    {
+        return [
+            'pill'    => ['nev' => 'Pill (ovális)', 'alcim' => 'Teljesen lekerekített gombok és mezők – modern, lágy felület.'],
+            'lagy'    => ['nev' => 'Lekerekített', 'alcim' => 'Enyhén lekerekített sarkok (a korábbi megjelenés).'],
+            'szogletes' => ['nev' => 'Szögletes', 'alcim' => 'Éles sarkok – a legtömörebb, legsűrűbb felület.'],
+        ];
+    }
+
+    /** @return array<string, array{nev: string, ero: string}> */
+    public static function gombfenyek(): array
+    {
+        return [
+            ''       => ['nev' => 'Nincs', 'ero' => '0'],
+            'finom'  => ['nev' => 'Finom', 'ero' => '.22'],
+            'kozep'  => ['nev' => 'Közepes', 'ero' => '.38'],
+            'eros'   => ['nev' => 'Erős', 'ero' => '.55'],
         ];
     }
 
@@ -408,6 +441,31 @@ final class SDH_Muhely_Arculat
 
         if ($b['betutipus'] !== '') {
             $css .= ':root{--sdh-betutipus:' . self::betucsalad() . '}';
+        }
+
+        // Gombok és mezők formája, üveghatás, fénykeret (0.61.2).
+        // A :root-ra tett attribútumok helyett CSS-változók: így a műhely-felületen
+        // és a wp-adminban is ugyanaz, és nem kell JavaScript hozzá.
+        // Az alapállapot (pill, üveg be, finom fény) már a stíluslapban áll –
+        // ide csak az attól való eltérés kerül, hogy a felület ne kapjon
+        // felesleges inline CSS-t.
+        if ($b['gombforma'] !== 'pill') {
+            $forma = [
+                'lagy'      => ['calc(10px * var(--sdh-n))', 'calc(14px * var(--sdh-n))'],
+                'szogletes' => ['calc(2px * var(--sdh-n))', 'calc(3px * var(--sdh-n))'],
+            ][$b['gombforma']] ?? ['999px', '999px'];
+
+            $css .= ':root{--sdh-gomb-r:' . $forma[0] . ';--sdh-mezo-r:' . $forma[1] . '}';
+        }
+
+        if (empty($b['uveghatas'])) {
+            $css .= ':root{--sdh-uvegero:0}';
+        }
+
+        $ero = (string) (self::gombfenyek()[$b['gombfeny']]['ero'] ?? '.22');
+
+        if ($ero !== '.22') {
+            $css .= ':root{--sdh-gombfeny:' . $ero . '}';
         }
 
         // Területenkénti betű és méret (0.60.1). A méret a --sdh-n változót
@@ -807,6 +865,55 @@ final class SDH_Muhely_Arculat
                     </p>
                 </div>
 
+                <div class="sdh-doboz" id="gombok">
+                    <h2 class="sdh-doboz__cim">Gombok és mezők</h2>
+
+                    <p class="sdh-sugo">
+                        A felület gombjainak és mezőinek formája. A <strong>pill</strong> teljesen lekerekített,
+                        modern megjelenést ad; az <strong>üveghatás</strong> áttetszővé és enyhén elmosottá teszi a
+                        gombok hátterét, a <strong>fénykeret</strong> pedig finoman kiemeli őket. Mindhárom az egész
+                        rendszerre vonatkozik – a munkalaptól az ügyféloldalig.
+                    </p>
+
+                    <input type="hidden" name="arculat_gomb_jelen" value="1">
+
+                    <div class="sdh-mezok">
+                        <div class="sdh-mezo">
+                            <label for="arculat_gombforma">Forma</label>
+                            <select name="arculat_gombforma" id="arculat_gombforma">
+                                <?php foreach (self::gombformak() as $gk => $gf) : ?>
+                                    <option value="<?php echo esc_attr($gk); ?>" <?php selected($b['gombforma'], $gk); ?>><?php echo esc_html($gf['nev']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="sdh-mezo__sugo"><?php echo esc_html((string) (self::gombformak()[$b['gombforma']]['alcim'] ?? '')); ?></span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_gombfeny">Fénykeret</label>
+                            <select name="arculat_gombfeny" id="arculat_gombfeny">
+                                <?php foreach (self::gombfenyek() as $fk => $fy) : ?>
+                                    <option value="<?php echo esc_attr($fk); ?>" <?php selected($b['gombfeny'], $fk); ?>><?php echo esc_html($fy['nev']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="sdh-mezo__sugo">A gomb felső élén világos csík, alatta lágy fény a kiemelő színben.</span>
+                        </div>
+
+                        <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
+                            <input type="checkbox" name="arculat_uveghatas" id="arculat_uveghatas" value="1" <?php checked((bool) $b['uveghatas']); ?>>
+                            <label for="arculat_uveghatas">Üveghatás a gombokon (áttetsző, enyhén elmosott háttér)</label>
+                        </div>
+                    </div>
+
+                    <p class="sdh-gombminta">
+                        <span class="sdh-gomb sdh-gomb--elsodleges">Mentés</span>
+                        <span class="sdh-gomb sdh-gomb--vilagos">Mégsem</span>
+                        <span class="sdh-pill">Pill</span>
+                        <span class="sdh-pill is-aktiv">Kiválasztva</span>
+                    </p>
+
+                    <p class="sdh-sugo sdh-sugo--utolso">A minta a mentés után lévő állapotot mutatja (a felület a mentéssel vált).</p>
+                </div>
+
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">Popupok – neon keret</h2>
 
@@ -1013,6 +1120,7 @@ final class SDH_Muhely_Arculat
         }
 
         $regi      = self::beallitas();
+        $regi_b    = $regi;
         $uveg      = isset($_POST['arculat_uveg']) ? sanitize_key(wp_unslash($_POST['arculat_uveg'])) : $regi['uveg'];
         $betutipus = isset($_POST['arculat_betutipus']) ? sanitize_key(wp_unslash($_POST['arculat_betutipus'])) : $regi['betutipus'];
         $betu_egy  = isset($_POST['arculat_betutipus_egyeni'])
@@ -1052,6 +1160,14 @@ final class SDH_Muhely_Arculat
                 'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
                 'neon_egyeni' => $hex,
                 'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
+                // Gombok és mezők (0.61.2).
+                'gombforma'   => isset($_POST['arculat_gombforma']) && isset(self::gombformak()[sanitize_key(wp_unslash((string) $_POST['arculat_gombforma']))])
+                    ? sanitize_key(wp_unslash((string) $_POST['arculat_gombforma']))
+                    : $regi_b['gombforma'],
+                'uveghatas'   => isset($_POST['arculat_gomb_jelen']) ? !empty($_POST['arculat_uveghatas']) : $regi_b['uveghatas'],
+                'gombfeny'    => isset($_POST['arculat_gombfeny']) && isset(self::gombfenyek()[sanitize_key(wp_unslash((string) $_POST['arculat_gombfeny']))])
+                    ? sanitize_key(wp_unslash((string) $_POST['arculat_gombfeny']))
+                    : $regi_b['gombfeny'],
                 // Betű területenként (0.60.1): a tisztítás a teruletek_szukit dolga.
                 'teruletek'   => self::teruletek_szukit(
                     isset($_POST['arculat_terulet']) && is_array($_POST['arculat_terulet'])

@@ -88,6 +88,11 @@ final class SDH_Muhely_Rma_Oldal
         'menny'           => ['Menny.', 'Qty', 'Menge'],
         'osszesen'        => ['Összesen', 'Total', 'Summe'],
         'szolgaltatas'    => ['Szolgáltatás', 'Service', 'Leistung'],
+        // A rendszer saját tételnevei (bevizsgálási díj): ezek nem az ügyfél
+        // adatai, hanem a mi szövegeink – ezért fordíthatók (0.61.2).
+        'teljes'          => ['Teljes képernyő', 'Full screen', 'Vollbild'],
+        'bev_dij'         => ['bevizsgálási díj', 'inspection fee', 'Prüfgebühr'],
+        'bev_le'          => ['Bevizsgálási díj levonása (javítás esetén)', 'Inspection fee deducted (if repaired)', 'Prüfgebühr abgezogen (bei Reparatur)'],
         'termek'          => ['Termék', 'Product', 'Produkt'],
         'nincs_tetel'     => ['Még nincs rögzített tétel.', 'No items yet.', 'Noch keine Positionen.'],
         'nincs_tortenet'  => ['Még nincs bejegyzés.', 'No entries yet.', 'Noch keine Einträge.'],
@@ -261,6 +266,42 @@ final class SDH_Muhely_Rma_Oldal
     }
 
     /** Egy felületi szöveg az aktuális nyelven. */
+    /**
+     * Tételnév az ügyfél nyelvén (0.61.2).
+     *
+     * A tételek nevei általában az ügyfél adatai (alkatrész, munka megnevezése) –
+     * azokat nem fordítjuk, és nem is lehet. A RENDSZER saját szövegei viszont a
+     * mieink: a bevizsgálási díj sora és a levonása a Beállításokból jön, magyarul.
+     * Ezeket idegen nyelven a saját fordításunkra cseréljük, hogy az ügyfél ne
+     * magyar mondatot lásson az angol oldalon.
+     */
+    public static function tetel_nev(string $nev): string
+    {
+        if (self::$nyelv === 'hu' || trim($nev) === '' || !class_exists('SDH_Muhely_Szamla')) {
+            return $nev;
+        }
+
+        $b = SDH_Muhely_Szamla::beallitas();
+
+        // 1. A levonás sora: teljes egyezés a sablonnal.
+        $le = trim((string) ($b['bevizsgalas_le_sablon'] ?? ''));
+
+        if ($le !== '' && mb_strtolower(trim($nev)) === mb_strtolower($le)) {
+            return self::t('bev_le');
+        }
+
+        // 2. A díj sora: a sablon állandó része („… bevizsgálási díj”) – a díj
+        //    neve elején az eszköz és a fajta az ügyfél adata, az marad.
+        $dij = trim((string) ($b['bevizsgalas_sablon'] ?? ''));
+        $allando = trim((string) preg_replace('/\{[a-z_]+\}/u', '', $dij));
+
+        if ($allando !== '' && mb_stripos($nev, $allando) !== false) {
+            return trim((string) str_ireplace($allando, self::t('bev_dij'), $nev));
+        }
+
+        return $nev;
+    }
+
     public static function t(string $kulcs): string
     {
         $sor = self::SZOVEG[$kulcs] ?? null;
@@ -373,6 +414,8 @@ final class SDH_Muhely_Rma_Oldal
             'info'        => '<circle cx="10" cy="10" r="7"/><path d="M10 9v4.6M10 6.4v.2"/>',
             'nap'         => '<circle cx="10" cy="10" r="3.2"/><path d="M10 2.5v2M10 15.5v2M17.5 10h-2M4.5 10h-2M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4M15.3 15.3l-1.4-1.4M6.1 6.1 4.7 4.7"/>',
             'hold'        => '<path d="M15.5 12.4A6.5 6.5 0 0 1 7.6 4.5a6.5 6.5 0 1 0 7.9 7.9z"/>',
+            'teljes'      => '<path d="M7.5 3.5h-4v4M12.5 3.5h4v4M16.5 12.5v4h-4M3.5 12.5v4h4"/>',
+            'teljes_ki'   => '<path d="M3.5 7.5h4v-4M16.5 7.5h-4v-4M12.5 16.5v-4h4M7.5 16.5v-4h-4"/>',
             'kilep'       => '<path d="M8 4H5.5A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/><path d="M12 6.5 15.5 10 12 13.5M15.5 10H8"/>',
             'lakat'       => '<rect x="4.5" y="9" width="11" height="8" rx="1.6"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/>',
             'kuld'        => '<path d="M3.5 10 16.5 4l-4 12-2.6-5.4z"/><path d="m9.9 10.6 6.6-6.6"/>',
@@ -512,6 +555,12 @@ final class SDH_Muhely_Rma_Oldal
                         <?php endforeach; ?>
                     </nav>
                 <?php endif; ?>
+
+                <?php // Teljes képernyő (0.61.2): nagy monitoron az ablak kitölti a képernyőt. Telefonon nincs értelme, ott rejtve. ?>
+                <button type="button" class="rma-ikongomb rma-csak-nagy" data-rma-teljes title="<?php echo esc_attr(self::t('teljes')); ?>" aria-label="<?php echo esc_attr(self::t('teljes')); ?>">
+                    <span class="rma-teljes-be"><?php echo self::ikon('teljes'); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+                    <span class="rma-teljes-ki"><?php echo self::ikon('teljes_ki'); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+                </button>
 
                 <button type="button" class="rma-ikongomb" data-rma-tema title="<?php echo esc_attr(self::t('tema')); ?>" aria-label="<?php echo esc_attr(self::t('tema')); ?>">
                     <span class="rma-csak-vilagos"><?php echo self::ikon('hold'); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
@@ -1036,7 +1085,7 @@ final class SDH_Muhely_Rma_Oldal
 
                 printf(
                     '<tr><td>%s<small>%s</small></td><td class="j">%s %s</td><td class="j">%s</td></tr>',
-                    esc_html((string) $t->megnevezes),
+                    esc_html(self::tetel_nev((string) $t->megnevezes)),
                     esc_html(self::t($t->tipus === 'termek' ? 'termek' : 'szolgaltatas')),
                     esc_html($menny),
                     esc_html(self::me((string) $t->me)),

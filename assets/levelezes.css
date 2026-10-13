@@ -1109,6 +1109,12 @@ body.wp-admin .sdh-level-toastok {
     --sdh-felso-sav: calc(32px * var(--sdh-n));
 }
 
+/* A műhely-felületen a saját fejléc (52 px) alá: eddig rácsúszott az órára
+   és a fejléc gombjaira, és a teteje le is lógott a képernyőről (0.61.2). */
+body:has(.sdh-fej) .sdh-level-toastok {
+    --sdh-felso-sav: calc(56px * var(--sdh-n));
+}
+
 @media (max-width: 782px) {
     body.wp-admin .sdh-level-toastok {
         --sdh-felso-sav: calc(46px * var(--sdh-n));

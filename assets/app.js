@@ -11025,6 +11025,15 @@
             return;
         }
 
+        // Ahol saját, nagyobb léptetőgombok állnak a mező mellett (pl. a címke
+        // példányszáma), ott nem kérünk a kis nyilakból: a data-sdh-szam-nincs
+        // jelzi, hogy ezt a mezőt hagyjuk békén.
+        if (input.hasAttribute('data-sdh-szam-nincs')) {
+            input.dataset.sdhSzamKesz = '1';
+
+            return;
+        }
+
         input.dataset.sdhSzamKesz = '1';
 
         var doboz = input.parentElement && input.parentElement.classList.contains('sdh-szam')

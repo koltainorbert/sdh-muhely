@@ -10036,3 +10036,156 @@ a.sdh-ora__zaras--nincs {
         grid-column: 1 / -1;
     }
 }
+
+/* ================================================================== */
+/* Gombok és mezők formája, üveghatás, fénykeret (0.61.2)              */
+/* ================================================================== */
+/*
+ * MIÉRT: a felület gombjai és mezői eddig egységesen enyhén lekerekített
+ * téglalapok voltak. Az alakot mostantól a Beállítások › Logó és megjelenés
+ * adja, három CSS-változón keresztül (Arculat::stilus_css):
+ *
+ *   --sdh-gomb-r   a gombok lekerekítése (pill = 999px)
+ *   --sdh-mezo-r   a mezők, választók, dobozok lekerekítése
+ *   --sdh-uvegero  1, ha az üveghatás be van kapcsolva (0 = nincs)
+ *   --sdh-gombfeny a fénykeret erőssége (0 = nincs)
+ *
+ * Alapértelmezés (beállítás nélkül): pill alak, üveghatás be, finom fény.
+ * A szabályok a meglévő szabályok UTÁN állnak, ezért felülírják azokat.
+ */
+
+:root {
+    --sdh-gomb-r: calc(999px * var(--sdh-n));
+    --sdh-mezo-r: calc(999px * var(--sdh-n));
+    --sdh-uvegero: 1;
+    --sdh-gombfeny: .22;
+}
+
+.sdh-gomb,
+.sdh-pill,
+.sdh-fej__ikongomb,
+.sdh-racs__gomb,
+.sdh-racs__szurogomb,
+button.sdh-allapot,
+.sdh-matrica-gomb,
+.sdh-naplo-gomb {
+    border-radius: var(--sdh-gomb-r);
+}
+
+/* Mezők, választók: ugyanaz az alak, csak enyhébben – a szöveg ne érjen a szélhez. */
+.sdh-mezo input[type="text"],
+.sdh-mezo input[type="email"],
+.sdh-mezo input[type="tel"],
+.sdh-mezo input[type="number"],
+.sdh-mezo input[type="search"],
+.sdh-mezo select,
+.sdh-valaszto__mezo,
+.sdh-ig input[type="text"],
+.sdh-ig input[type="email"],
+.sdh-ig input[type="tel"],
+.sdh-ig input[type="number"],
+.sdh-ig select,
+.sdh-kereso__mezo,
+.sdh-racs__szuromezo {
+    border-radius: var(--sdh-mezo-r);
+}
+
+/* Pill alaknál a mezőknek több oldalsó levegő kell, hogy ne tapadjon a szöveg az ívre. */
+:root[style*="--sdh-gomb-r: 999px"] .sdh-mezo input[type="text"],
+:root[style*="--sdh-gomb-r: 999px"] .sdh-mezo select {
+    padding-inline: .85rem;
+}
+
+/* ---------- Üveghatás ---------- */
+/*
+ * Áttetsző, enyhén elmosott háttér + finom belső fénycsík. Csak ott, ahol a
+ * felület alatt van mit átengedni: gombok, pillek, dobozfejlécek.
+ * A szöveg kontrasztja nem változik (a háttér 82–90%-ban átlátszatlan marad).
+ */
+@supports (backdrop-filter: blur(6px)) {
+    .sdh-gomb:not(.sdh-gomb--elsodleges),
+    .sdh-pill:not(.is-aktiv),
+    .sdh-fej__ikongomb {
+        background: color-mix(in srgb, var(--sdh-felulet) 82%, transparent);
+        backdrop-filter: blur(calc(8px * var(--sdh-uvegero, 0)));
+        -webkit-backdrop-filter: blur(calc(8px * var(--sdh-uvegero, 0)));
+    }
+}
+
+/* Finom fénykeret: a gomb felső élén világos csík, alatta lágy árnyék.
+   Ettől „emelkedik ki" a felületből, anélkül hogy rikító lenne. */
+.sdh-gomb,
+.sdh-pill {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, calc(.5 * var(--sdh-gombfeny, 0) / .22)),
+        0 1px 2px rgba(10, 14, 20, calc(.12 * var(--sdh-gombfeny, 0) / .22));
+}
+
+.sdh-gomb--elsodleges {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .18),
+        0 2px calc(10px * var(--sdh-gombfeny, 0) / .22) color-mix(in srgb, var(--sdh-accent) calc(var(--sdh-gombfeny, 0) * 100%), transparent);
+}
+
+.sdh-gomb:hover,
+.sdh-pill:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, calc(.6 * var(--sdh-gombfeny, 0) / .22)),
+        0 2px calc(8px * var(--sdh-gombfeny, 0) / .22) color-mix(in srgb, var(--sdh-accent) calc(var(--sdh-gombfeny, 0) * 60%), transparent);
+}
+
+.sdh-gomb--elsodleges:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        0 3px calc(16px * var(--sdh-gombfeny, 0) / .22) color-mix(in srgb, var(--sdh-accent) calc(var(--sdh-gombfeny, 0) * 130%), transparent);
+}
+
+/* Sötét módban a felső fénycsík halványabb, különben szürkés fátylat húz. */
+:root[data-theme="dark"] .sdh-gomb,
+:root[data-theme="dark"] .sdh-pill {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, calc(.14 * var(--sdh-gombfeny, 0) / .22)),
+        0 1px 3px rgba(0, 0, 0, calc(.4 * var(--sdh-gombfeny, 0) / .22));
+}
+
+/* „Kevesebb mozgás” és a Papír megjelenés: se üveg, se fény – ott a tisztaság a fontos. */
+:root[data-papir] .sdh-gomb,
+:root[data-papir] .sdh-pill {
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+/* ---------- Számmező (példányszám, darab): nyilak helyett tiszta léptető ---------- */
+/*
+ * A böngésző alapértelmezett pörgetőnyilai aprók és csúnyák. Itt a mező maga
+ * középre igazított, a nyilak pedig egy keskeny, finom oszlopban állnak.
+ */
+.sdh-mezo input[type="number"],
+.sdh-ig input[type="number"],
+.sdh-matrica__peldany input[type="number"] {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-matrica__peldany input[type="number"] {
+    width: calc(74px * var(--sdh-n));
+    height: calc(34px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-gomb-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-matrica__peldany input[type="number"]:focus {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+/* A gombforma mintasora a Beállításokban. */
+.sdh-gombminta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+    margin: calc(10px * var(--sdh-n)) 0 calc(16px * var(--sdh-n));
+}

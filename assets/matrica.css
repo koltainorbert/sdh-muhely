@@ -263,3 +263,79 @@
 .sdh-matrica__egyedi .sdh-mezo__sugo {
     grid-column: 1 / -1;
 }
+
+/* ================================================================== */
+/* A címkeablak lábléce: pillek és tiszta példányszám (0.61.2)          */
+/* ================================================================== */
+
+.sdh-matrica__lab {
+    gap: calc(8px * var(--sdh-n));
+    padding-top: calc(10px * var(--sdh-n));
+    border-top: 1px solid var(--sdh-keret);
+}
+
+/* A példányszám egy pill-alakú mezőcsoport: felirat + mező egy keretben,
+   a böngésző apró pörgetőnyilai helyett saját, nagy léptető gombokkal. */
+.sdh-matrica__peldany {
+    gap: calc(2px * var(--sdh-n));
+    height: calc(34px * var(--sdh-n));
+    padding: 0 calc(4px * var(--sdh-n)) 0 calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-gomb-r, calc(999px * var(--sdh-n)));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-matrica__peldany input[type="number"] {
+    width: calc(46px * var(--sdh-n));
+    height: calc(28px * var(--sdh-n));
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sdh-szoveg);
+    font-size: calc(14px * var(--sdh-n));
+    font-weight: 600;
+    text-align: center;
+    /* A böngésző saját nyilai helyett a saját gombjaink állnak mellette. */
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.sdh-matrica__peldany input[type="number"]::-webkit-outer-spin-button,
+.sdh-matrica__peldany input[type="number"]::-webkit-inner-spin-button {
+    display: none;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sdh-matrica__peldany input[type="number"]:focus {
+    outline: none;
+}
+
+.sdh-matrica__peldany:focus-within {
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sdh-accent) 25%, transparent);
+}
+
+.sdh-matrica__lep {
+    display: grid;
+    place-items: center;
+    width: calc(26px * var(--sdh-n));
+    height: calc(26px * var(--sdh-n));
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    font-size: calc(15px * var(--sdh-n));
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sdh-matrica__lep:hover {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
