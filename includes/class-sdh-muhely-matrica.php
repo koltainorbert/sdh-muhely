@@ -39,7 +39,7 @@ final class SDH_Muhely_Matrica
     public const OPT = 'sdh_muhely_matrica';
 
     /** A címkesablonok. */
-    public const SABLONOK = ['rma' => 'RMA-matrica', 'termek' => 'Termékcímke', 'szolgaltatas' => 'Szolgáltatás-címke'];
+    public const SABLONOK = ['rma' => 'RMA-matrica', 'termek' => 'Termékcímke', 'szolgaltatas' => 'Szolgáltatás-címke', 'egyedi' => 'Egyedi címke'];
 
     /** A közös beállítások (nyomtató és a betett tekercs): mindig az RMA-matrica opciójából. */
     public const KOZOS = ['nyomtato', 'mod', 'ip', 'port', 'cimke', 'egyedi_sz', 'egyedi_h', 'vagas'];
@@ -194,6 +194,20 @@ final class SDH_Muhely_Matrica
                 'szerviz'    => $m('A szerviz neve', '', false, 0.85, true),
                 'datum'      => $m('Dátum (a nyomtatás napja)', '', false, 0.8),
                 'qr'         => $m('QR-kód (a vonalkód / cikkszám értékével)', '', false),
+            ];
+        }
+
+        if (self::sablon($sablon) === 'egyedi') {
+            // Egyedi címke: a szöveget a nyomtatás ablakában írod be, nem rekordból jön.
+            return [
+                'sor1'     => $m('1. sor (nagy)', '', true, 1.6, true, 2),
+                'sor2'     => $m('2. sor', '', true, 1.1, false, 2),
+                'sor3'     => $m('3. sor', '', true, 1.0, false, 2),
+                'sor4'     => $m('4. sor (apró)', '', true, 0.85, false, 2),
+                'datum'    => $m('Dátum (a nyomtatás napja)', '', false, 0.8),
+                'szerviz'  => $m('A szerviz neve', '', false, 0.85, true),
+                'vonalkod' => $m('Vonalkód (az 1. sor értékéből)', '', false),
+                'qr'       => $m('QR-kód (az 1. sor értékéből)', '', false),
             ];
         }
 
@@ -539,6 +553,10 @@ final class SDH_Muhely_Matrica
             return $a === null ? [] : [0 => $a];
         }
 
+        if ($sablon === 'egyedi') {
+            return [0 => self::egyedi_adat()];
+        }
+
         return self::adatok($id);
     }
 
@@ -578,6 +596,36 @@ final class SDH_Muhely_Matrica
     }
 
     /** Egy szolgáltatás címkéjének adatai. @return array<string, mixed>|null */
+    /**
+     * Egyedi címke adatai: a szöveget a nyomtatás ablakában írod be (nem rekordból jön).
+     * Négy sor, soronként legfeljebb 120 karakter – ennél hosszabbat a címke úgysem bír el.
+     *
+     * @return array<string, mixed>
+     */
+    public static function egyedi_adat(): array
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a hívó ellenőrizte.
+        $nyers = isset($_REQUEST['sor']) && is_array($_REQUEST['sor']) ? array_values(wp_unslash($_REQUEST['sor'])) : [];
+        $sorok = [];
+
+        for ($i = 1; $i <= 4; $i++) {
+            $ertek = sanitize_text_field((string) ($nyers[$i - 1] ?? ''));
+            $sorok['sor' . $i] = mb_substr(trim(preg_replace('/\s+/u', ' ', $ertek) ?? ''), 0, 120);
+        }
+
+        $elso = $sorok['sor1'] !== '' ? $sorok['sor1'] : 'Címke';
+
+        return $sorok + [
+            'cim'            => $elso,
+            'szerviz'        => self::szerviz_nev(),
+            'datum'          => self::ma(),
+            'vonalkod_ertek' => $elso,
+            'url'            => $elso,
+            'szam_nyers'     => 'egyedi',
+            'darab'          => '',
+        ];
+    }
+
     public static function szolgaltatas_adat(int $id): ?array
     {
         global $wpdb;
@@ -627,6 +675,15 @@ final class SDH_Muhely_Matrica
                 'termekkod' => 'K-5678', 'gyari_szam' => 'GY-0001', 'kategoria' => 'Kijelzők', 'netto' => '19 677 Ft', 'me' => 'db',
                 'beszallito' => 'Minta Kft.', 'leiras' => 'Gyári minőségű csere-kijelző kerettel', 'szerviz' => 'Minta Szerviz',
                 'datum' => self::ma(), 'vonalkod_ertek' => '5998877665544', 'url' => '5998877665544', 'szam_nyers' => '1', 'darab' => '',
+            ];
+        }
+
+        if ($sablon === 'egyedi') {
+            return [
+                'cim' => 'Egyedi címke', 'sor1' => 'Bontott alkatrész', 'sor2' => 'Samsung A50 – alaplap',
+                'sor3' => 'Ügyfél: Minta Márta', 'sor4' => 'Nem adható ki!', 'szerviz' => 'Minta Szerviz',
+                'datum' => self::ma(), 'vonalkod_ertek' => 'Bontott alkatresz', 'url' => 'Bontott alkatresz',
+                'szam_nyers' => 'egyedi', 'darab' => '',
             ];
         }
 
@@ -1486,14 +1543,14 @@ final class SDH_Muhely_Matrica
 
         if ($adatok === []) {
             echo '<h2 class="sdh-modal__cim">' . esc_html($nev) . '</h2><div class="sdh-uzenet sdh-uzenet--hiba">'
-                . esc_html(['rma' => 'Nincs ilyen munkalap.', 'termek' => 'Nincs ilyen termék.', 'szolgaltatas' => 'Nincs ilyen szolgáltatás.'][$sablon]) . '</div>';
+                . esc_html(['rma' => 'Nincs ilyen munkalap.', 'termek' => 'Nincs ilyen termék.', 'szolgaltatas' => 'Nincs ilyen szolgáltatás.', 'egyedi' => 'A címke nem készült el.'][$sablon]) . '</div>';
             wp_die();
         }
 
         $elso = reset($adatok);
         $kozvetlen = $b['mod'] === 'halozat' ? self::kozvetlen_hiba($b) : null;
         $c = self::meret($b);
-        $megj = $sablon === 'rma' ? 'Munkalap ' . $elso['munkalapszam'] : (string) ($elso['cim'] ?? '');
+        $megj = $sablon === 'rma' ? 'Munkalap ' . $elso['munkalapszam'] : ($sablon === 'egyedi' ? 'amit beírsz' : (string) ($elso['cim'] ?? ''));
 
         ?>
         <h2 class="sdh-modal__cim"><?php echo esc_html($nev); ?> <span class="sdh-modal__cim-megj"><?php echo esc_html($megj); ?></span></h2>
@@ -1515,6 +1572,24 @@ final class SDH_Muhely_Matrica
                 </div>
             <?php endif; ?>
 
+            <?php if ($sablon === 'egyedi') : ?>
+                <?php // Egyedi címke: ide írod, ami a címkére kerül; az előnézet gépelés közben követi. ?>
+                <div class="sdh-matrica__egyedi" data-sdh-matrica-egyedi>
+                    <?php for ($sor = 1; $sor <= 4; $sor++) : ?>
+                        <div class="sdh-mezo">
+                            <label for="sdh_matrica_sor<?php echo (int) $sor; ?>"><?php
+                                echo esc_html([1 => '1. sor (nagy)', 2 => '2. sor', 3 => '3. sor', 4 => '4. sor (apró)'][$sor]);
+                            ?></label>
+                            <input type="text" id="sdh_matrica_sor<?php echo (int) $sor; ?>" maxlength="120" autocomplete="off"
+                                   data-sdh-matrica-sor="<?php echo (int) $sor; ?>"
+                                   value="<?php echo esc_attr((string) ($elso['sor' . $sor] ?? '')); ?>"
+                                   placeholder="<?php echo esc_attr([1 => 'pl. Bontott alkatrész', 2 => 'pl. Samsung A50 – alaplap', 3 => 'pl. Ügyfél: Kovács Béla', 4 => 'pl. Nem adható ki!'][$sor]); ?>">
+                        </div>
+                    <?php endfor; ?>
+                    <p class="sdh-mezo__sugo">Az üres sor lemarad a címkéről. Melyik sor mekkora betűvel megy, azt a Beállítások › Címkenyomtatás › Egyedi címke lapon állítod.</p>
+                </div>
+            <?php endif; ?>
+
             <div class="sdh-matrica__lista">
                 <?php foreach ($adatok as $kulcs => $a) : ?>
                     <?php $png = self::png($a, $b, 520); ?>
@@ -1524,6 +1599,8 @@ final class SDH_Muhely_Matrica
                             <span><?php
                                 if ($sablon === 'rma') {
                                     echo esc_html(($a['darab'] !== '' ? $a['darab'] . ' · ' : '') . ($a['eszkoz'] !== '' ? $a['eszkoz'] : 'Eszköz nélkül'));
+                                } elseif ($sablon === 'egyedi') {
+                                    echo 'Előnézet';
                                 } else {
                                     echo esc_html((string) $a['cim']);
                                 }
@@ -1819,7 +1896,7 @@ final class SDH_Muhely_Matrica
         $nev = $sablon === 'rma' ? 'matrica' : 'matrica_' . $sablon;
         $idp = $nev;
         $meretek = ['0.75' => 'kicsi', '0.85' => 'kisebb', '0.9' => 'kicsit kisebb', '0.95' => 'alig kisebb', '1' => 'normál', '1.15' => 'nagyobb', '1.45' => 'nagy', '1.9' => 'óriás'];
-        $cimke = ['rma' => 'matrica', 'termek' => 'címke', 'szolgaltatas' => 'címke'][$sablon];
+        $cimke = ['rma' => 'matrica', 'termek' => 'címke', 'szolgaltatas' => 'címke', 'egyedi' => 'címke'][$sablon];
 
         ?>
         <div class="sdh-matrica-beall" data-sdh-matrica-beall data-sablon="<?php echo esc_attr($sablon); ?>" role="tabpanel"<?php echo $latszik ? '' : ' style="display:none"'; ?>>
@@ -1830,6 +1907,8 @@ final class SDH_Muhely_Matrica
                 <h2 class="sdh-doboz__cim">Elrendezés – <?php echo esc_html(self::SABLONOK[$sablon]); ?></h2>
                 <?php if ($sablon === 'termek') : ?>
                     <p class="sdh-sugo">A termék űrlapjának <strong>Címke</strong> gombja ezzel nyomtat (árcímke, polccímke, alkatrész-azonosító).</p>
+                <?php elseif ($sablon === 'egyedi') : ?>
+                    <p class="sdh-sugo">Az <strong>Áttekintés</strong> fejlécének <strong>Egyedi címke</strong> gombja ezzel nyomtat: a szöveget a nyomtatás ablakában írod be, itt csak azt állítod, hogy melyik sor mekkora betűvel menjen, és mi kerüljön még rá (dátum, szerviz neve, vonalkód).</p>
                 <?php elseif ($sablon === 'szolgaltatas') : ?>
                     <p class="sdh-sugo">A szolgáltatás űrlapjának <strong>Címke</strong> gombja ezzel nyomtat (árcímke a pultra, kirakatba).</p>
                 <?php endif; ?>

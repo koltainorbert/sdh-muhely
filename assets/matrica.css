@@ -240,3 +240,26 @@
         grid-column: 1 / -1;
     }
 }
+
+/* ================================================================== */
+/* Egyedi címke: a beírható sorok a nyomtatás ablakában (0.60.1)        */
+/* ================================================================== */
+
+.sdh-matrica__egyedi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(220px * var(--sdh-n)), 1fr));
+    gap: calc(8px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    margin-bottom: calc(10px * var(--sdh-n));
+    padding: calc(10px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-matrica__egyedi .sdh-mezo {
+    margin: 0;
+}
+
+.sdh-matrica__egyedi .sdh-mezo__sugo {
+    grid-column: 1 / -1;
+}

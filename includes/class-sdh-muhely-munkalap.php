@@ -4001,8 +4001,10 @@ final class SDH_Muhely_Munkalap
                     <?php echo SDH_Muhely_Nyomtatas::gomb((int) $munkalap->id, [], 'Nyomtatás'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
 
-                <?php // Brother RMA-matrica (0.59): mentett, sorszámos javítási lapnál (SDH_Muhely_Matrica, matrica.js). ?>
-                <?php if (!$uj && $modal && !$eladas && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) : ?>
+                <?php // Brother-matrica (0.59): mentett, sorszámos javítási lapnál – és a rendelésen is (0.60.1),
+                      // hogy a megérkezett árura rá lehessen ragasztani, kinek jött. Napi árukiadásnál nincs:
+                      // azt az ügyfél rögtön viszi. ?>
+                <?php if (!$uj && $modal && $fajta !== 'arukiadas' && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) : ?>
                     <?php echo SDH_Muhely_Matrica::gomb((int) $munkalap->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
 

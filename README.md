@@ -64,11 +64,22 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.60.1
+- **Vissza a popup-rendszerhez: nincs görgetés.** A 0.60.0 görgethető ablakai visszaállítva – a popup, ha a tartalma
+  magasabb a képernyőnél, megint arányosan kicsinyít, és minden egy képernyőn marad (`illesztPopup`, `--illeszt`).
+  A Napló ablak listája sem görget: egyszerre 12 bejegyzés látszik, a többit a **Régebbiek** gomb hozza.
+- **Betű területenként** (Beállítások › Logó és megjelenés): hat területnek – űrlapok és popup ablakok, listák és
+  táblázatok, Áttekintés rácsa, címsorok, gombok, oldalmenü – külön betűtípusa és külön mérete (70–180%) lehet. A méret
+  az alap betűméretet szorozza, és nemcsak a betűt, hanem a vele növő mezőket és térközöket is mozgatja (`--sdh-n` az
+  adott részfán, `--sdh-n-alap` a gyökéren). Soronként élő mintasor.
+- **Címke a rendelésen is**: a rendelés ablakának alján ott a **Matrica** gomb (a napi árukiadáson nincs).
+- **Hiba javítva:** a hosszú súgófejezetek (Megjelenés, Pénztár) csonkolt, értelmezhetetlen JSON-ként mentek az
+  asszisztensnek – a szakaszhatár mostantól bájtban mér, a kimaradó szakaszok címe a válaszban áll.
+- **Egyedi címke**: az Áttekintés fejlécében új gomb. Négy sor, amit beírsz (nagy felirat, két rendes sor, egy apró),
+  élő előnézettel – nem kell hozzá se munkalap, se termék. Saját lapja a Beállítások › Címkenyomtatás alatt.
+
 ### 0.60.0
-- **A popup többé nem zsugorodik.** Eddig a sok adattal teli munkalap CSS-zoommal ment össze (akár 55%-ra), ezért nagy
-  monitoron is alig lehetett olvasni, és a lap minden leütésre megugrott. Mostantól a betűméret marad, a tartalom pedig
-  az ablakon belül görget. Ezzel együtt eltűnt az a figyelő is, amelyik minden DOM-változásnál újraméretezte az ablakot
-  – gépelés közben ez volt a felület legdrágább munkája.
+- *(0.60.1-ben visszavonva: a popup megint kicsinyít, nem görget.)* A popup zsugorodása helyett görgetés.
 - **Eszközcsomag: 37 kérés helyett 15.** A plugin 25 saját CSS/JS fájlja egyetlen stíluslapba és egyetlen szkriptbe
   fűzve töltődik be (ugyanaz a kód, változatlan sorrendben; `SDH_Muhely_Csomag`, a feltöltési mappába írva, verzióhoz
   kötött névvel, magától takarítva). Kapcsoló: Beállítások › Rendszer › Sebesség. Mérve (helyi szerver, Munkalapok
@@ -79,8 +90,8 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
   jelenik meg, hanem minden sorszámot kapott lapnál – így a bevizsgálási díjról rögtön adható számla.
 - **Napi árukiadás és rendelés**: új lap mentése után is jön a felajánlás (árukiadás: átadási bizonylat, rendelés:
   megrendelés), és a lap többi papírja is egy kattintással nyomtatható ugyanabból az ablakból.
-- **Napló ablak**: fix méretű, saját görgetésű lista (eddig annyival nyúlt, ahány bejegyzés volt), szélesebb ablak,
-  a megváltozott mezők egymás mellett. 7 bejegyzésnél 729 px → 624 px, húsz bejegyzésnél sem lesz hosszabb.
+- **Napló ablak**: szélesebb ablak, tömörebb kártyák, a megváltozott mezők egymás mellett. 7 bejegyzésnél 729 px →
+  624 px. *(A 0.60.1 a lista saját görgetését visszavonta: helyette 12 bejegyzés látszik, a többi a Régebbiek gombbal.)*
 - **Levélíró: ismert címek felajánlása.** A Címzett, Másolat és Titkos másolat mezőben legördülnek az ügyfelek címei és
   a postafiók eddigi feladói (név, cím, forrás); gépelve szűr, több cím vesszővel, billentyűvel is választható.
 

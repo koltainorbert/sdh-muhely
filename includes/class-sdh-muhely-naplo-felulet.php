@@ -25,7 +25,7 @@ final class SDH_Muhely_Naplo_Felulet
     public const KULCS = 'naplo';
 
     /** A Napló ablakban egyszerre ennyi bejegyzés töltődik (a „Régebbiek" gomb hozza a többit). */
-    private const ABLAK_LAP = 60;
+    private const ABLAK_LAP = 12;
 
     public static function init(): void
     {

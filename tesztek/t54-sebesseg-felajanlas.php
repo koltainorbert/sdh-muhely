@@ -17,17 +17,13 @@ $js  = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.js');
 $ny  = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/nyomtatas.js');
 $css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css');
 
-/* --- 1. A popup betűmérete nem csökken --------------------------------------- */
+/* --- 1. A popup a régi módon illeszkedik: kicsinyít, nem görget (0.60.1) ----- */
 
-T::nem_tartalmaz($js, 'ILLESZT_MIN', 'nincs kicsinyítési alsó határ (a popup nem zsugorodik)');
-T::nem_tartalmaz($js, "classList.add('sdh-modal--illeszt')", 'a popup nem kapja meg a görgetést kikapcsoló osztályt');
-T::nem_tartalmaz($css, '.sdh-modal--illeszt', 'és a hozzá tartozó szabály sincs meg');
-T::tartalmaz($js, "dialog.style.zoom = '';", 'a korábbi nagyítás törlődik a régi munkamenetekből');
-T::tartalmaz($css, 'overflow-y: auto;', 'a popup doboza görget');
-
-// A tartalmat figyelő (minden leütésnél újraméretező) figyelő megszűnt.
-T::nem_tartalmaz($js, "attributeFilter: ['open', 'hidden']", 'a popup nem figyeli a teljes tartalmát');
-T::tartalmaz($js, "attributeFilter: ['open']", 'csak a nyitás/zárás számít');
+T::tartalmaz($js, 'ILLESZT_MIN', 'a popup a képernyőhöz illeszkedik (kicsinyítés)');
+T::tartalmaz($js, "classList.add('sdh-modal--illeszt')", 'és közben nincs görgetése');
+T::tartalmaz($css, '.sdh-modal--illeszt', 'a hozzá tartozó szabály megvan');
+T::nem_tartalmaz($css, "\n.sdh-modal__doboz {\n    scrollbar-width: thin;", 'a popup doboza nem kapott görgetősávot');
+T::nem_tartalmaz((string) file_get_contents(SDH_MUHELY_DIR . 'assets/naplo.css'), 'overflow-y: auto', 'a Napló ablak listája sem görget');
 
 /* --- 2. Eszközcsomag --------------------------------------------------------- */
 
@@ -92,7 +88,7 @@ T::egyezik('eladas', (string) ($t->invoke(null, 'rendeles', 'rendeles')[0]['tipu
 
 $ncss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/naplo.css');
 T::tartalmaz($ncss, '.sdh-naplo--ablak .sdh-naplo__lista', 'a Napló ablak listájának saját szabálya van');
-T::tartalmaz($ncss, 'max-height: min(calc(62vh)', 'a lista magassága korlátos (nem nyúlik a bejegyzésekkel)');
+T::egyezik(12, (int) (new ReflectionClassConstant('SDH_Muhely_Naplo_Felulet', 'ABLAK_LAP'))->getValue(), 'egyszerre 12 bejegyzés (a többi: Régebbiek)');
 T::tartalmaz($ncss, '.sdh-modal:has(.sdh-naplo--ablak)', 'és az ablak szélesebb');
 
 /* --- 7. Levélíró: ismert címek ---------------------------------------------- */
@@ -112,4 +108,46 @@ T::tartalmaz($lev, 'input[name="cimzett"]', 'a Címzett mezőn él a felajánlá
 T::tartalmaz($lev, 'input[name="titkos"]', 'a titkos másolaton is');
 T::tartalmaz($lev, 'function cimUtolso', 'több címnél az utolsó darabot egészíti ki');
 
-T::vege('t54 sebesség, nyitva maradó felajánlás, napló-ablak, levélcímek');
+/* --- 8. Betű területenként (0.60.1) ----------------------------------------- */
+
+$ter = SDH_Muhely_Arculat::teruletek();
+T::igaz(isset($ter['urlap'], $ter['tabla'], $ter['racs'], $ter['cimsor'], $ter['gomb'], $ter['menu']), 'hat terület állítható');
+
+$sz = SDH_Muhely_Arculat::teruletek_szukit(['urlap' => ['tipus' => 'verdana', 'meret' => 130], 'tabla' => ['tipus' => 'nincsilyen', 'meret' => 9999]]);
+T::egyezik('verdana', $sz['urlap']['tipus'], 'a választott betűtípus megmarad');
+T::egyezik(130, $sz['urlap']['meret'], 'a méret megmarad');
+T::egyezik('', $sz['tabla']['tipus'], 'ismeretlen betűtípus helyett az alap');
+T::egyezik(SDH_Muhely_Arculat::TERULET_MAX, $sz['tabla']['meret'], 'a méret a határra szorul');
+T::egyezik('', SDH_Muhely_Arculat::teruletek_szukit(['urlap' => ['tipus' => 'egyeni', 'egyeni' => '']])['urlap']['tipus'], 'egyéni betű név nélkül nem él');
+
+$regi = get_option('sdh_muhely_arculat', []);
+update_option('sdh_muhely_arculat', array_merge(is_array($regi) ? $regi : [], ['teruletek' => ['urlap' => ['tipus' => 'verdana', 'egyeni' => '', 'meret' => 130]]]));
+$stilus = SDH_Muhely_Arculat::stilus_css();
+T::tartalmaz($stilus, '.sdh-modal__doboz, .sdh-urlap{', 'az űrlapok saját szabályt kapnak');
+T::tartalmaz($stilus, 'Verdana', 'a választott betűvel');
+T::tartalmaz($stilus, '--sdh-n:calc(var(--sdh-n-alap, 1) * 1.30)', 'és a méret az alapot szorozza');
+update_option('sdh_muhely_arculat', $regi);
+
+$appjs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.js');
+T::tartalmaz($appjs, "setProperty('--sdh-n-alap'", 'az alap nagyítás külön változóba is kerül');
+
+/* --- 9. Címke: rendelés és egyedi (0.60.1) ---------------------------------- */
+
+T::igaz(isset(SDH_Muhely_Matrica::SABLONOK['egyedi']), 'van Egyedi címke sablon');
+T::egyezik(4, count(array_filter(array_keys(SDH_Muhely_Matrica::mezok('egyedi')), static fn (string $k): bool => str_starts_with($k, 'sor'))), 'négy beírható sor');
+
+$_REQUEST['sor'] = ['Bontott alaplap', 'Samsung A50', '', '  Nem   adható ki! '];
+$e = SDH_Muhely_Matrica::egyedi_adat();
+unset($_REQUEST['sor']);
+T::egyezik('Bontott alaplap', (string) $e['sor1'], 'az 1. sor a beírt szöveg');
+T::egyezik('', (string) $e['sor3'], 'az üres sor üres marad');
+T::egyezik('Nem adható ki!', (string) $e['sor4'], 'a fölös szóközök eltűnnek');
+T::egyezik('Bontott alaplap', (string) $e['vonalkod_ertek'], 'a vonalkód az 1. sorból');
+
+$ml = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-munkalap.php');
+T::tartalmaz($ml, "\$fajta !== 'arukiadas' && (int) \$munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica')", 'a Matrica gomb a rendelésen is ott van, az árukiadáson nem');
+
+$ui = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-admin-ui.php');
+T::tartalmaz($ui, "'sdh-matrica-tipus' => 'egyedi'", 'az Áttekintés fejlécében ott az Egyedi címke gomb');
+
+T::vege('t54 sebesség, felajánlás, betű területenként, címkék');

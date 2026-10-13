@@ -79,7 +79,122 @@ final class SDH_Muhely_Arculat
             'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
             'neon_egyeni' => self::hex((string) ($mentett['neon_egyeni'] ?? '')),
             'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
+            // Területenkénti betű (0.60.1): űrlap, táblázat, rács, címsor, gomb, menü.
+            'teruletek'   => self::teruletek_szukit(is_array($mentett['teruletek'] ?? null) ? $mentett['teruletek'] : []),
         ];
+    }
+
+    /* =================================================================
+     * Területenkénti betűtípus és betűméret (0.60.1)
+     *
+     * A felület minden része a saját betűjét és méretét kaphatja. A méret a
+     * `--sdh-n` változót szorozza az adott részfán belül – ez minden képpont-
+     * méretet (betű, mezőmagasság, térköz) együtt mozgat, ahogy az alap
+     * nagyítás is. A betűtípus a `--sdh-betutipus` változót írja felül.
+     * Így NEM kell új szabály a stíluslapokba: a meglévő calc(...) kifejezések
+     * magukkal viszik a változást.
+     * ============================================================== */
+
+    /**
+     * A beállítható területek: kulcs => név, mire vonatkozik, CSS-választó.
+     *
+     * @return array<string, array{nev: string, leiras: string, valaszto: string}>
+     */
+    public static function teruletek(): array
+    {
+        return [
+            'urlap' => [
+                'nev'      => 'Űrlapok és popup ablakok',
+                'leiras'   => 'A munkalap, az ügyfél, az eszköz és minden más felviteli ablak: mezők, címkék, lapfülek. Ezt állítsd, ha az ablakban kicsi a betű.',
+                'valaszto' => '.sdh-modal__doboz, .sdh-urlap',
+            ],
+            'tabla' => [
+                'nev'      => 'Listák és táblázatok',
+                'leiras'   => 'A munkalapok, ügyfelek, termékek listája, a pénztár és a számlák táblázatai.',
+                'valaszto' => '.sdh-tabla, .sdh-eladas__tabla',
+            ],
+            'racs' => [
+                'nev'      => 'Áttekintés rácsa',
+                'leiras'   => 'A kezdőképernyő munkalap-rácsa: a sorok, az oszlopfejlécek és a szűrők.',
+                'valaszto' => '[data-sdh-racs]',
+            ],
+            'cimsor' => [
+                'nev'      => 'Címsorok',
+                'leiras'   => 'Az oldalak és az ablakok címe, a dobozok fejléce.',
+                'valaszto' => '.sdh-fejlec__cim, .sdh-modal__cim, .sdh-doboz__cim',
+            ],
+            'gomb' => [
+                'nev'      => 'Gombok',
+                'leiras'   => 'Minden gomb felirata – a mentéstől a lapfülekig.',
+                'valaszto' => '.sdh-gomb',
+            ],
+            'menu' => [
+                'nev'      => 'Oldalmenü',
+                'leiras'   => 'A bal oldali menüsáv menüpontjai.',
+                'valaszto' => '#adminmenu',
+            ],
+        ];
+    }
+
+    /**
+     * A területek beállításának megtisztítása.
+     *
+     * @param array<string, mixed> $nyers
+     * @return array<string, array{tipus: string, egyeni: string, meret: int}>
+     */
+    public static function teruletek_szukit(array $nyers): array
+    {
+        $ki = [];
+
+        foreach (self::teruletek() as $kulcs => $t) {
+            $sor    = is_array($nyers[$kulcs] ?? null) ? $nyers[$kulcs] : [];
+            $tipus  = (string) ($sor['tipus'] ?? '');
+            $egyeni = self::betunev((string) ($sor['egyeni'] ?? ''));
+
+            // 'egyeni' betűnév nélkül nem jelent semmit: ilyenkor marad az alap.
+            if ($tipus === 'egyeni' && $egyeni === '') {
+                $tipus = '';
+            }
+
+            $ki[$kulcs] = [
+                // Üres = az alap betűtípust örökli (Betű doboz).
+                'tipus'  => $tipus !== '' && isset(self::betutipusok()[$tipus]) ? $tipus : '',
+                'egyeni' => $egyeni,
+                'meret'  => self::terulet_meret_szukit((int) ($sor['meret'] ?? 100)),
+            ];
+        }
+
+        return $ki;
+    }
+
+    /** A területi méret határai (%), ami az alap nagyítást szorozza. */
+    public const TERULET_MIN   = 70;
+    public const TERULET_MAX   = 180;
+    public const TERULET_LEPES = 5;
+
+    public static function terulet_meret_szukit(int $szazalek): int
+    {
+        $szazalek = (int) (round($szazalek / self::TERULET_LEPES) * self::TERULET_LEPES);
+
+        return max(self::TERULET_MIN, min(self::TERULET_MAX, $szazalek));
+    }
+
+    /** Egy terület betűcsaládja CSS-be, vagy '' ha az alapot örökli. */
+    public static function terulet_betucsalad(string $kulcs): string
+    {
+        $t = self::beallitas()['teruletek'][$kulcs] ?? null;
+
+        if ($t === null || $t['tipus'] === '') {
+            return '';
+        }
+
+        $lista = self::betutipusok();
+
+        if ($t['tipus'] === 'egyeni') {
+            return $t['egyeni'] !== '' ? '"' . $t['egyeni'] . '", ' . $lista['']['csalad'] : '';
+        }
+
+        return $lista[$t['tipus']]['csalad'] ?? '';
     }
 
     /** A betűnagyítás határai (%), a csúszka lépése. */
@@ -293,6 +408,34 @@ final class SDH_Muhely_Arculat
 
         if ($b['betutipus'] !== '') {
             $css .= ':root{--sdh-betutipus:' . self::betucsalad() . '}';
+        }
+
+        // Területenkénti betű és méret (0.60.1). A méret a --sdh-n változót
+        // szorozza az adott részfán belül: a betű és a vele növő mezők,
+        // térközök együtt mozdulnak. A popup a <body> alatt van, ezért a
+        // változó oda is leöröklődik.
+        foreach (self::teruletek() as $kulcs => $t) {
+            $sor = $b['teruletek'][$kulcs] ?? null;
+
+            if ($sor === null) {
+                continue;
+            }
+
+            $darab  = [];
+            $csalad = self::terulet_betucsalad($kulcs);
+
+            if ($csalad !== '') {
+                $darab[] = '--sdh-betutipus:' . $csalad;
+                $darab[] = 'font-family:' . $csalad;
+            }
+
+            if ((int) $sor['meret'] !== 100) {
+                $darab[] = '--sdh-n:calc(var(--sdh-n-alap, 1) * ' . number_format($sor['meret'] / 100, 2, '.', '') . ')';
+            }
+
+            if ($darab !== []) {
+                $css .= $t['valaszto'] . '{' . implode(';', $darab) . '}';
+            }
         }
 
         return $css;
@@ -603,6 +746,67 @@ final class SDH_Muhely_Arculat
                     <p class="sdh-betuminta" data-sdh-betuminta>Árvíztűrő tükörfúrógép – 0123456789 – Munkalap 2026/15, fizetendő 157 700 Ft</p>
                 </div>
 
+                <div class="sdh-doboz" id="betu-teruletek">
+                    <h2 class="sdh-doboz__cim">Betű területenként</h2>
+
+                    <p class="sdh-sugo">
+                        A felület részei külön betűtípust és külön méretet kaphatnak. Ez a fenti alapra épül:
+                        a <strong>méret az alap betűméretet szorozza</strong> (100% = pont akkora, mint az alap),
+                        a betűtípus pedig csak akkor változik, ha nem a „Mint az alap” áll benne. A méret nemcsak
+                        a betűt, hanem a vele növő mezőket és térközöket is mozgatja – így a popup sem esik szét.
+                        Ha egy ablakban kicsi a betű, az <strong>Űrlapok és popup ablakok</strong> sorát állítsd.
+                    </p>
+
+                    <div class="sdh-betuter">
+                        <?php foreach (self::teruletek() as $kulcs => $t) : ?>
+                            <?php $sor = $b['teruletek'][$kulcs]; ?>
+                            <div class="sdh-betuter__sor" data-sdh-betuter="<?php echo esc_attr($kulcs); ?>">
+                                <div class="sdh-betuter__nev">
+                                    <strong><?php echo esc_html($t['nev']); ?></strong>
+                                    <span><?php echo esc_html($t['leiras']); ?></span>
+                                </div>
+
+                                <div class="sdh-mezo">
+                                    <label for="arculat_ter_<?php echo esc_attr($kulcs); ?>_tipus">Betűtípus</label>
+                                    <select name="arculat_terulet[<?php echo esc_attr($kulcs); ?>][tipus]"
+                                            id="arculat_ter_<?php echo esc_attr($kulcs); ?>_tipus" data-sdh-betuter-tipus>
+                                        <option value="" data-csalad="" <?php selected($sor['tipus'], ''); ?>>Mint az alap</option>
+                                        <?php foreach (self::betutipusok() as $bk => $bt) : ?>
+                                            <?php if ($bk === '') { continue; } ?>
+                                            <option value="<?php echo esc_attr($bk); ?>" data-csalad="<?php echo esc_attr($bt['csalad']); ?>"
+                                                <?php selected($sor['tipus'], $bk); ?>><?php echo esc_html($bt['nev']); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="sdh-mezo">
+                                    <label for="arculat_ter_<?php echo esc_attr($kulcs); ?>_egyeni">Egyéni betű neve</label>
+                                    <input type="text" name="arculat_terulet[<?php echo esc_attr($kulcs); ?>][egyeni]"
+                                           id="arculat_ter_<?php echo esc_attr($kulcs); ?>_egyeni" maxlength="60" autocomplete="off"
+                                           placeholder="csak az „Egyéni” választásnál" data-sdh-betuter-egyeni
+                                           value="<?php echo esc_attr($sor['egyeni']); ?>">
+                                </div>
+
+                                <div class="sdh-mezo sdh-betuter__meret">
+                                    <label for="arculat_ter_<?php echo esc_attr($kulcs); ?>_meret">Méret az alaphoz képest</label>
+                                    <input type="range" name="arculat_terulet[<?php echo esc_attr($kulcs); ?>][meret]"
+                                           id="arculat_ter_<?php echo esc_attr($kulcs); ?>_meret" data-sdh-betuter-meret
+                                           min="<?php echo (int) self::TERULET_MIN; ?>" max="<?php echo (int) self::TERULET_MAX; ?>"
+                                           step="<?php echo (int) self::TERULET_LEPES; ?>" value="<?php echo (int) $sor['meret']; ?>">
+                                    <output data-sdh-betuter-ertek><?php echo (int) $sor['meret']; ?>%</output>
+                                </div>
+
+                                <p class="sdh-betuter__minta" data-sdh-betuter-minta>Munkalap 2026/15 – Samsung A50 – 157 700 Ft</p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <p class="sdh-sugo sdh-sugo--utolso">
+                        A minta sor azonnal mutatja a választást; a felület a <strong>Mentés</strong> után veszi fel.
+                        Ha valami félresikerült, állítsd minden sort „Mint az alap” + 100% értékre.
+                    </p>
+                </div>
+
                 <div class="sdh-doboz">
                     <h2 class="sdh-doboz__cim">Popupok – neon keret</h2>
 
@@ -848,6 +1052,12 @@ final class SDH_Muhely_Arculat
                 'neon'        => isset(self::neonok()[$neon]) ? $neon : 'kiemelo',
                 'neon_egyeni' => $hex,
                 'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
+                // Betű területenként (0.60.1): a tisztítás a teruletek_szukit dolga.
+                'teruletek'   => self::teruletek_szukit(
+                    isset($_POST['arculat_terulet']) && is_array($_POST['arculat_terulet'])
+                        ? map_deep(wp_unslash($_POST['arculat_terulet']), 'sanitize_text_field')
+                        : $regi['teruletek']
+                ),
             ]
         );
         // phpcs:enable

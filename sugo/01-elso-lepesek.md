@@ -108,9 +108,9 @@ A popup bal felső sarkában két kerek gomb áll, ahogy egy asztali ablakon:
 
 A méretet a böngésző ablakfajtánként megjegyzi: ha a munkalap ablakát nagyobbra húzod, legközelebb is úgy nyílik, az ügyfélé pedig marad, amilyen volt.
 
-### Ha a tartalom magasabb a képernyőnél
+### Görgetősáv helyett kicsinyítés
 
-A betűméret ilyenkor sem változik: az ablak marad a maga méretén, a tartalma pedig belül görget. (Korábban a rendszer lekicsinyítette az egész ablakot – sok adatnál ettől lett apró a betű, és ugrott meg a lap gépelés közben. Ez megszűnt.) Ha egyszerre többet akarsz látni, tedd teljes képernyőre a zöld ablakgombbal, vagy húzd nagyobbra az ablakot.
+A popupban nincs görgetősáv: a felvitel mindig egy képernyőn van, nem kell keresgélni, hol a mentés gomb. Ha a tartalom magasabb, mint a képernyő, az ablak arányosan kisebb lesz, hogy minden egyszerre látszódjon. Ha így túl apró a betű: tedd teljes képernyőre a zöld ablakgombbal, vagy állítsd az ablakok betűjét a **Beállítások › Logó és megjelenés › Betű területenként** dobozban – ott az „Űrlapok és popup ablakok" sora szól erről.
 
 ### Ablak az ablak fölött
 
@@ -267,7 +267,7 @@ Húzd a szélét vagy a sarkát, vagy nyomd meg a bal felső sarokban a zöld go
 
 ### Miért lett apró betűs az ablak?
 
-Már nem lesz: a betűméret az ablakban állandó. Ha sok az adat, az ablak tartalma görget. A betű nagyságát a profilmenü **Betűméret** csúszkája állítja.
+Mert a tartalom nem fért ki a képernyőn, és a rendszer görgetés helyett lekicsinyítette – így nem kell görgetned a mentés gombig. Tedd teljes képernyőre, vagy a **Beállítások › Logó és megjelenés › Betű területenként** dobozban add nagyobbra az „Űrlapok és popup ablakok" betűjét (a többi rész mérete változatlan marad).
 
 ### Hogyan állítom vissza az ablak eredeti méretét?
 

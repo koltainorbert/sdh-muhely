@@ -163,6 +163,7 @@ A lista telepítés után néhány mintasorral indulhat; ezek átírhatók.
 
 ## Tippek
 
+- **Címke az árura:** a rendelés ablakának alján a **Matrica** gomb a Brother címkenyomtatóra küld egy címkét (ügyfél neve, lapszám, dátum) – a megérkezett árura ragasztva látszik, kinek jött. Lásd: [Címkenyomtatás](sugo:matrica).
 - **Papír a megrendelőnek:** a rendelés ablakának alján a **Nyomtatás** gomb **Megrendelést** (a felvett rendelés visszaigazolása az előleggel), átadáskor **Átadási bizonylatot** ad – nyomtatva, PDF-ben vagy e-mailben. Új rendelés mentése után és lezáráskor a rendszer fel is ajánlja, és ugyanabban az ablakban ott a másik papír meg a **Számla-előkészítő (PDF)** és a **Számlázz.hu számla** gombja is. Az ablak nyitva marad, amíg be nem zárod. Lásd: [Nyomtatás, PDF és e-mail](sugo:nyomtatas).
 - Reggel nézz rá a menüpont jelvényére: ha szám áll mellette, van megérkezett áru, amiről az ügyfél nem tud.
 - A **Várható érkezés** kitöltésével a késő rendelések maguktól kitűnnek a listában.

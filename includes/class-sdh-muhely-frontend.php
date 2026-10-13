@@ -407,11 +407,13 @@ final class SDH_Muhely_Frontend
                         var n = parseInt(localStorage.getItem('sdh-nagyitas'), 10) || alapNagy;
                         n = Math.max(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MIN; ?>, Math.min(<?php echo (int) SDH_Muhely_Arculat::NAGYITAS_MAX; ?>, n));
                         document.documentElement.style.setProperty('--sdh-n', String(n / 100));
+                        document.documentElement.style.setProperty('--sdh-n-alap', String(n / 100));
                     } catch (e) {
                         if (alapTema === 'papir') { document.documentElement.setAttribute('data-papir', '1'); }
                         if (alapKek > 0) { document.documentElement.setAttribute('data-kekfeny', String(alapKek)); }
                         document.documentElement.setAttribute('data-uveg', alapUveg === 'duo' ? 'duo' : 'mono');
                         document.documentElement.style.setProperty('--sdh-n', String(alapNagy / 100));
+                        document.documentElement.style.setProperty('--sdh-n-alap', String(alapNagy / 100));
                     }
                 }());
             </script>

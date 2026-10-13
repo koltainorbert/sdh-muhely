@@ -881,12 +881,17 @@ final class SDH_Muhely_Asszisztens_Eszkozok
         $ki    = ['fejezet' => (string) $f['cim'], 'osszefoglalo' => (string) $f['osszefoglalo'], 'szakaszok' => []];
         $hossz = 0;
 
+        // A válasz a json() méretkorlátjába kell férjen, KÜLÖNBEN a végén csonkul,
+        // és már nem értelmezhető JSON (0.60.1). Ezért bájtban mérünk, és hagyunk
+        // helyet a címeknek, az összefoglalónak és a kérdéseknek is.
+        $keret = self::MAX_VALASZ - 2500;
+
         foreach ($szakaszok as $s) {
             $szoveg = SDH_Muhely_Sugo::sima((string) $s['torzs']);
-            $hossz += mb_strlen($szoveg);
+            $hossz += strlen($szoveg);
 
-            // Egy válaszban legfeljebb kb. 14 ezer karakter: a többi szakasz címe jön, külön kérhető.
-            if ($hossz > 14000 && $ki['szakaszok'] !== []) {
+            // Ami nem fér bele: a szakasz címe jön, a szövege külön kérhető.
+            if ($hossz > $keret && $ki['szakaszok'] !== []) {
                 $ki['tovabbi_szakaszok'][] = (string) $s['cim'];
                 continue;
             }

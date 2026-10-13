@@ -192,9 +192,11 @@ form.is-zarolt textarea[data-sdh-zar-tiltva] {
     gap: .45rem;
 }
 
-/* ---------- A Napló ABLAK (0.60.0): tömör, fix magasságú, saját görgetésű ----------
-   Régen az ablak annyival lett hosszabb, ahány bejegyzés volt: húsz tételnél már
-   végeláthatatlan csík lett belőle. Most a lista görget, az ablak mérete marad. */
+/* ---------- A Napló ABLAK (0.60.0): tömör, széles, görgetés NÉLKÜL ----------
+   Régen az ablak annyival lett hosszabb, ahány bejegyzés volt. Görgetősáv itt
+   sincs (az a rendszer szabálya): a kártyák tömörebbek, a mezők egymás mellett
+   állnak, és a „Régebbiek" gomb lapoz – így fér el több bejegyzés ugyanakkora
+   ablakban. */
 
 .sdh-modal:has(.sdh-naplo--ablak) {
     width: min(calc(1040px * var(--sdh-n)), calc(100vw - 2rem));
@@ -202,12 +204,6 @@ form.is-zarolt textarea[data-sdh-zar-tiltva] {
 
 .sdh-naplo--ablak .sdh-naplo__lista {
     gap: .4rem;
-    max-height: min(calc(62vh), calc(560px * var(--sdh-n)));
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-    padding: .1rem .5rem .1rem .1rem;
-    border-block: 1px solid var(--sdh-keret);
 }
 
 /* A bejegyzés fejléce egy sor, a változások szorosan alatta. */

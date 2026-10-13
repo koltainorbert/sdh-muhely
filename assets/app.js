@@ -161,25 +161,42 @@
     }
 
     /* ---------------------------------------------------------------- */
-    /* Popup méretezése (0.60.0: nincs kicsinyítés)                      */
+    /* Popup képernyőhöz illesztése – soha nincs görgetősáv             */
     /* ---------------------------------------------------------------- */
 
+    var ILLESZT_MIN = 0.55;
+
     /**
-     * A popup a saját méretén áll. Ha a tartalom magasabb a képernyőnél, a
-     * doboz belül görget – a betűméret SOHA nem csökken (0.60.0 előtt a popup
-     * CSS-zoommal összement, ezért sok adatnál alig lehetett olvasni, és a
-     * lap minden gépelésre megugrott).
+     * Ha a popup magasabb, mint a képernyő, nem görgetőssé tesszük, hanem
+     * arányosan kicsinyítjük (CSS zoom). Mérés közben a zoom nulla, így a
+     * természetes magasságot látjuk; a mérés és a beállítás egy lépésben fut.
      */
     function illesztPopup(dialog) {
         if (!dialog || !dialog.open) {
             return;
         }
 
-        if (dialog.style.zoom) {
-            dialog.style.zoom = '';
-        }
-
+        dialog.style.zoom = '';
+        dialog.classList.add('sdh-modal--illeszt');
         meretBeallit(dialog, 1);
+
+        var termeszetes = dialog.getBoundingClientRect().height;
+        var szabad = window.innerHeight - MERET_SZEL;
+
+        // A class marad: a popupnak nincs max-magassága és görgetése, csak zoomja.
+        if (termeszetes > szabad + 0.5 && termeszetes > 0) {
+            var zoom = Math.max(ILLESZT_MIN, szabad / termeszetes);
+
+            // A kért (vagy teljes képernyős) méret a kicsinyítés UTÁNI méret:
+            // a popupot annyival szélesebbre vesszük, amennyivel a zoom összehúzza.
+            if (dialog.sdhMeret) {
+                meretBeallit(dialog, zoom);
+                termeszetes = dialog.getBoundingClientRect().height;
+                zoom = Math.max(ILLESZT_MIN, Math.min(zoom, szabad / termeszetes));
+            }
+
+            dialog.style.zoom = String(zoom);
+        }
     }
 
     /* ---------------------------------------------------------------- */
@@ -243,8 +260,7 @@
         var doboz = dialog.querySelector('.sdh-modal__doboz');
         var teljes = !!(m && m.teljes);
         var maxSz = window.innerWidth - MERET_SZEL;
-        // A doboz max-magassága a CSS-ben 100vh - 3rem: ennél magasabbra nem kérjük.
-        var maxM = window.innerHeight - 48;
+        var maxM = window.innerHeight - MERET_SZEL;
         var w = 0;
         var h = 0;
 
@@ -345,7 +361,7 @@
 
                 if (iy) {
                     m.h = Math.round(Math.min(
-                        window.innerHeight - 48,
+                        window.innerHeight - MERET_SZEL,
                         Math.max(120, 2 * (Math.abs(e.clientY - kozepY) + eltY))
                     ));
                 }
@@ -394,14 +410,17 @@
             });
         };
 
-        // 0.60.0: csak a megnyitás és a nyitás/zárás számít. A tartalom
-        // változását NEM figyeljük (a régi subtree-figyelő minden leütésre
-        // újramérte az ablakot – ettől volt lassú és ugrált a lap).
         new MutationObserver(kesleltet).observe(dialog, {
+            childList: true,
+            subtree: true,
             attributes: true,
-            attributeFilter: ['open']
+            attributeFilter: ['open', 'hidden']
         });
 
+        // A lapfülek rádiógombjai és a mezők is változtatják a magasságot.
+        dialog.addEventListener('change', kesleltet);
+        dialog.addEventListener('input', kesleltet);
+        dialog.addEventListener('load', kesleltet, true);
         kesleltet();
     }
 
@@ -2887,6 +2906,7 @@
 
         if (beallitas.kontextus === 'frontend') {
             document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
+            document.documentElement.style.setProperty('--sdh-n-alap', String(szazalek / 100));
         }
 
         Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-nagyito="sajat"]'), function (doboz) {
@@ -2934,6 +2954,7 @@
             var puha = 1 - Math.pow(1 - t, 3);
 
             gyoker.style.setProperty('--sdh-n', (tol + (ig - tol) * puha).toFixed(4));
+            gyoker.style.setProperty('--sdh-n-alap', (tol + (ig - tol) * puha).toFixed(4));
 
             if (t < 1) {
                 nagyitasAnimal.kep = window.requestAnimationFrame(lep);
@@ -2978,6 +2999,7 @@
     function nagyitasAnimalUrlap(szazalek) {
         if (beallitas.kontextus === 'frontend') {
             document.documentElement.style.setProperty('--sdh-n', String(szazalek / 100));
+            document.documentElement.style.setProperty('--sdh-n-alap', String(szazalek / 100));
             window.dispatchEvent(new Event('resize'));
         }
     }
@@ -3067,6 +3089,67 @@
             betutipusElonezet();
         }
     });
+
+    /* ---- Beállítások: betű területenként – a mintasor azonnal mutatja (0.60.1) ---- */
+
+    function betuTeruletMinta(sor) {
+        if (!sor) {
+            return;
+        }
+
+        var lista = sor.querySelector('[data-sdh-betuter-tipus]');
+        var egyeni = sor.querySelector('[data-sdh-betuter-egyeni]');
+        var csuszka = sor.querySelector('[data-sdh-betuter-meret]');
+        var ertek = sor.querySelector('[data-sdh-betuter-ertek]');
+        var minta = sor.querySelector('[data-sdh-betuter-minta]');
+
+        if (!minta) {
+            return;
+        }
+
+        var opcio = lista ? lista.options[lista.selectedIndex] : null;
+        var csalad = opcio ? opcio.getAttribute('data-csalad') || '' : '';
+        var nev = egyeni ? egyeni.value.replace(/[^\p{L}\p{N} \-]/gu, '').trim() : '';
+
+        if (lista && lista.value === 'egyeni' && nev !== '') {
+            csalad = '"' + nev + '", ' + csalad;
+        }
+
+        // Üres családnál a minta az alap betűt mutatja (azt örökli).
+        minta.style.fontFamily = csalad;
+
+        var szazalek = csuszka ? parseInt(csuszka.value, 10) || 100 : 100;
+
+        if (ertek) {
+            ertek.textContent = szazalek + '%';
+        }
+
+        // A minta a saját --sdh-n értékét kapja: ugyanúgy nő, ahogy majd a felület.
+        minta.style.setProperty('--sdh-n', String((parseFloat(
+            document.documentElement.style.getPropertyValue('--sdh-n-alap')
+        ) || 1) * szazalek / 100));
+        minta.style.fontSize = 'calc(14px * var(--sdh-n))';
+    }
+
+    function betuTeruletMind() {
+        Array.prototype.forEach.call(document.querySelectorAll('[data-sdh-betuter]'), betuTeruletMinta);
+    }
+
+    ['change', 'input'].forEach(function (nev) {
+        document.addEventListener(nev, function (esemeny) {
+            var sor = esemeny.target.closest ? esemeny.target.closest('[data-sdh-betuter]') : null;
+
+            if (sor) {
+                betuTeruletMinta(sor);
+            }
+        });
+    });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', betuTeruletMind);
+    } else {
+        betuTeruletMind();
+    }
 
     function szinAlkalmaz(ertek) {
         if (ertek) {

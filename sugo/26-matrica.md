@@ -26,10 +26,11 @@ Bekapcsolható még: telefonszám, a szerviz neve, határidő, tartozékok, szí
 
 ## Hol találod
 
-- **Nyomtatás:** a munkalap ablakának alján a **Matrica** gomb (mentett, munkalapszámot kapott javítási lapon).
+- **Nyomtatás:** a munkalap ablakának alján a **Matrica** gomb (mentett, munkalapszámot kapott javítási lapon). Ugyanez a gomb ott van a **rendelés** ablakában is: a megérkezett árura ráragasztva látszik, kinek jött és melyik lapra.
 - **Beállítás:** **Beállítások › Címkenyomtatás** (a **Pénz és eladás** sorban) – nyomtató, címke, tartalom, előnézet, próbanyomat.
 - **Termékcímke:** a termék ablakának alján a **Címke** gomb (mentett terméknél).
 - **Szolgáltatás-címke:** a szolgáltatás ablakának alján a **Címke** gomb (mentett szolgáltatásnál).
+- **Egyedi címke:** az **Áttekintés** fejlécében az **Egyedi címke** gomb – ide bármit beírhatsz, nem kell hozzá se munkalap, se termék.
 - A modul a **Modulok** menüpontban kikapcsolható (**Címkenyomtatás (Brother)**); kikapcsolva nincs Matrica és Címke gomb.
 
 ## Termék- és szolgáltatás-címke
@@ -46,9 +47,22 @@ Nyomtatás:
 3. Írd be a **Példány** számát (legfeljebb 50 – például a polcon lévő darabszám).
 4. Kattints a **Nyomtatás** gombra (böngészős módban a nyomtatás-ablakban válaszd a Brother nyomtatót).
 
-Beállítás: **Beállítások › Címkenyomtatás**, felül a **Nyomtató és címke** doboz (közös), alatta a **RMA-matrica / Termékcímke / Szolgáltatás-címke** fülek. Fülenként külön állítod a címke hosszát (folyamatos szalagon), a tájolást, a margót, a betűt, a példányszámot és hogy mi kerüljön rá – mindegyiknek saját élő előnézete és próbanyomata van. A nyomtató és a betett tekercs mindháromnál ugyanaz, hiszen egy nyomtatóban egyszerre egy tekercs van.
+Beállítás: **Beállítások › Címkenyomtatás**, felül a **Nyomtató és címke** doboz (közös), alatta a **RMA-matrica / Termékcímke / Szolgáltatás-címke / Egyedi címke** fülek. Fülenként külön állítod a címke hosszát (folyamatos szalagon), a tájolást, a margót, a betűt, a példányszámot és hogy mi kerüljön rá – mindegyiknek saját élő előnézete és próbanyomata van. A nyomtató és a betett tekercs mindháromnál ugyanaz, hiszen egy nyomtatóban egyszerre egy tekercs van.
 
 A címke nyomtatása a termék, illetve a szolgáltatás **Naplójába** kerül.
+
+## Egyedi címke – amire hirtelen kell valamit ráírni
+
+Nem minden címke tartozik rekordhoz: néha csak rá kell írni valamit egy dobozra, egy zacskóra vagy egy félretett alkatrészre, és kinyomtatni. Erre való az **Egyedi címke**.
+
+1. Az **Áttekintés** fejlécében kattints az **Egyedi címke** gombra.
+2. Írd be a szöveget. Négy sor van: az **1. sor** a nagy, félkövér felirat, a **2.** és a **3.** rendes méretű, a **4.** apró (ide való a figyelmeztetés, például „Nem adható ki!”). Az üres sor lemarad a címkéről.
+3. Az előnézet gépelés közben követi, amit írsz.
+4. Add meg a **Példány** számát, és kattints a **Nyomtatás** gombra.
+
+Mi kerüljön rá azon felül, amit beírsz (a szerviz neve, a mai dátum, vonalkód vagy QR-kód az 1. sor értékéből), és melyik sor mekkora betűvel menjen: **Beállítások › Címkenyomtatás › Egyedi címke**. A nyomtató és a tekercs itt is ugyanaz, mint a többi címkénél.
+
+Az egyedi címke **nem kerül naplóba**: nincs rekord, amihez tartozna.
 
 ## Lépésről lépésre: matrica nyomtatása
 

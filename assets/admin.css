@@ -3647,13 +3647,14 @@ a.sdh-kartya:focus-visible {
 }
 
 /* ------------------------------------------------------------------ */
-/* Popup: a betűméret soha nem csökken (0.60.0). Ha a tartalom magasabb a    */
-/* képernyőnél, a doboz belül görget – régen a popup CSS-zoommal ment össze. */
+/* Popup: soha nincs görgetősáv – ha a képernyő alacsony, a popup       */
+/* arányosan kisebb lesz (app.js illesztPopup, CSS zoom).               */
 /* ------------------------------------------------------------------ */
 
-.sdh-modal__doboz {
-    scrollbar-width: thin;
-    overscroll-behavior: contain;
+.sdh-modal--illeszt,
+.sdh-modal--illeszt .sdh-modal__doboz {
+    max-height: none;
+    overflow: visible;
 }
 
 
@@ -7446,6 +7447,10 @@ a.sdh-ora__zaras--nincs {
        képpontméretek ezzel szorzódnak (tools/css_nagyitas.py), a rem / em
        értékek a gyökér betűméretén át követik (app.css). */
     --sdh-n: 1;
+    /* Az alap nagyítás ugyanaz a szám, külön néven: a területenkénti betűméret
+       (Arculat › Betű területenként) ezt szorozza, és a saját --sdh-n értékét
+       ebből számolja. Minden hely, ami --sdh-n-t ír, ezt is írja. */
+    --sdh-n-alap: 1;
     /* A kiemelő szín párja. Egyszínű módban a kiemelő szín világosabb
        árnyalata, Duó módban egy vele kontrasztos szín (lejjebb). */
     --sdh-accent-2: color-mix(in srgb, var(--sdh-accent) 55%, #ffffff);
@@ -9951,5 +9956,83 @@ a.sdh-ora__zaras--nincs {
 @media (max-width: 1100px) {
     .sdh-munkalapurlap > .sdh-ml {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ================================================================== */
+/* Beállítások › Megjelenés › Betű területenként (0.60.1)              */
+/* ================================================================== */
+
+.sdh-betuter {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-betuter__sor {
+    display: grid;
+    grid-template-columns: minmax(calc(190px * var(--sdh-n)), 1.3fr) minmax(calc(150px * var(--sdh-n)), 1fr) minmax(calc(130px * var(--sdh-n)), 1fr) minmax(calc(170px * var(--sdh-n)), 1fr);
+    gap: calc(8px * var(--sdh-n)) calc(14px * var(--sdh-n));
+    align-items: end;
+    padding: calc(10px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-betuter__nev {
+    display: flex;
+    flex-direction: column;
+    gap: calc(2px * var(--sdh-n));
+    align-self: start;
+}
+
+.sdh-betuter__nev strong {
+    font-size: calc(13.5px * var(--sdh-n));
+}
+
+.sdh-betuter__nev span {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+    line-height: 1.35;
+}
+
+.sdh-betuter__sor .sdh-mezo {
+    margin: 0;
+}
+
+.sdh-betuter__meret {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: calc(4px * var(--sdh-n)) calc(8px * var(--sdh-n));
+    align-items: center;
+}
+
+.sdh-betuter__meret label {
+    grid-column: 1 / -1;
+}
+
+.sdh-betuter__meret output {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+/* A minta sor a teljes szélességen áll: itt látszik a választott betű és méret. */
+.sdh-betuter__minta {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: calc(6px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+}
+
+@media (max-width: 1100px) {
+    .sdh-betuter__sor {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .sdh-betuter__nev {
+        grid-column: 1 / -1;
     }
 }

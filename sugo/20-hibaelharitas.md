@@ -41,7 +41,7 @@ Bármelyik menüpont felugró ablakára (popupjára) és a mentésre érvényes 
 - **„Az adatbázis visszautasította a mentést."** – *Ok:* az adatbázis nem fogadta el a műveletet. Előfordulhat például frissítés után, amíg az adatbázis nem igazodott az új verzióhoz. *Megoldás:* töltsd újra az oldalt, és mentsd újra. Ha megmarad, az adminisztrátor nézze meg a **Beállítások › Névjegy** lapfülön a verziókat.
 - **„Nincs ilyen rekord. Lehet, hogy időközben törölték."** – *Ok:* a megnyitott elem már nincs meg, vagy régi hivatkozásról jöttél. *Megoldás:* frissítsd a listát.
 - **Bezárult az ablak, és elveszett, amit beírtam.** – *Ok:* a bezárás ([[Esc]], piros gomb, kattintás a sötét háttérre) nem kérdez rá a mentésre. *Megoldás:* mindig a mentés gombbal zárd le a munkát.
-- **Az ablak apró betűs lett.** – *Ok:* régi verzió. A rendszer a képernyőnél magasabb ablakot lekicsinyítette; ez megszűnt, a betűméret állandó, a tartalom görget. *Megoldás:* frissítsd a bővítményt, és töltsd újra az oldalt (Ctrl+F5).
+- **Az ablak apró betűs lett.** – *Ok:* a tartalom magasabb volt a képernyőnél, és a rendszer görgetés helyett lekicsinyítette. *Megoldás:* tedd teljes képernyőre a zöld ablakgombbal, vagy a **Beállítások › Logó és megjelenés › Betű területenként** dobozban vedd nagyobbra az „Űrlapok és popup ablakok" betűjét.
 - **Az ablak furcsa méretben nyílik.** – *Ok:* a böngésző megjegyezte a legutóbbi méretet. *Megoldás:* kattints duplán az ablak szélére – visszaáll az alapméretre.
 
 ## Ügyfelek és eszközök
@@ -192,7 +192,7 @@ A **Beállítások** menüpont, a teljes mentés és a frissítés elakadásai �
 
 Ezek nem hibák, hanem a rendszer mostani működésének határai:
 
-- **Nagyított betűméretnél a magas ablak görget.** Ha a **Betűméret** csúszkát feljebb húztad, egy magas ablak (például egy több eszközös munkalap) nem fér ki egészben: a tartalma görgethető lesz. A betű ettől nem lesz kisebb. Ha egyben akarod látni, tedd teljes képernyőre.
+- **Nagyított betűméretnél a popup visszakicsinyíthet.** Ha a **Betűméret** csúszkát feljebb húztad, egy magas ablak (például egy több eszközös munkalap) már nem fér ki, ezért a rendszer lekicsinyíti – így a betű végül nem lesz nagyobb. Segít a teljes képernyő, vagy ha csak az ablakok betűjét növeled a **Betű területenként** dobozban, a listákét pedig nem.
 - **Kifizetett lapra felvett új eszköz „fizetve" lesz.** Ha egy már teljesen kifizetett munkalapra utólag új eszközt veszel fel, az is kifizetettként jelenik meg. Vedd le a lap **Fizetve** pipáját, és állítsd be eszközönként.
 - **A Számla ablak fejléce eladásnál is „Munkalap".** Napi árukiadásról vagy rendelésről nyitva is „Munkalap" és a sorszám áll a címben. Csak a felirat ilyen, a számla jó.
 - **A popup bezárása nem kérdez rá a mentésre.**

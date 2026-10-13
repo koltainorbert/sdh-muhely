@@ -4,7 +4,7 @@ cim: Megjelenés, óra, nyitvatartás
 csoport: Rendszer
 modul:
 szakaszok: arculat, nyitvatartas
-kulcsszavak: megjelenés, téma, világos, sötét, papír, e-könyv, e-ink, olvasó, kékfény, kék fény, szűrő, éjszakai mód, szem, szín, kiemelő szín, üvegszín, duó, egyszínű, betűméret, nagyítás, betűtípus, neon, keret, logó, jel, név, arculat, lekerekítés, oldalsáv, óra, nyitvatartás, zárás, visszaszámláló
+kulcsszavak: betű területenként, területenkénti betű, űrlap betűmérete, popup betűmérete, táblázat betűje, megjelenés, téma, világos, sötét, papír, e-könyv, e-ink, olvasó, kékfény, kék fény, szűrő, éjszakai mód, szem, szín, kiemelő szín, üvegszín, duó, egyszínű, betűméret, nagyítás, betűtípus, neon, keret, logó, jel, név, arculat, lekerekítés, oldalsáv, óra, nyitvatartás, zárás, visszaszámláló
 osszefoglalo: Itt állítod, hogyan nézzen ki a rendszer – világos, sötét vagy papír megjelenés, kékfény-szűrő, betűméret, színek, logó –, és a fejléc órájához a nyitvatartást.
 ---
 ## Mire való
@@ -147,6 +147,26 @@ Ugyanaz a választó, mint a profilmenüben – **Megjelenés**, **Kékfény-sz�
 | **Betűtípus** | A gép betűtípusa (alap), vagy egy a listából. Csak olyan betű választható, amely a gépeken megvan – a rendszer nem tölt le betűt az internetről. |
 | **Egyéni betű neve** | Csak az „Egyéni" választásnál számít. A betűnek telepítve kell lennie a gépen. |
 | **Alap betűméret** | A cég alapértelmezett nagyítása. Húzás közben a minta mutatja a méretet; elengedéskor ez a képernyő is átméreteződik, de csak mentés után lesz alapértelmezés. |
+
+### Betű területenként
+
+A felület részei külön betűtípust és külön méretet kaphatnak. Ez a fenti alapra épül: a **méret az alap betűméretet szorozza** (100% = pont akkora, mint az alap), a betűtípus pedig csak akkor változik, ha nem a „Mint az alap" áll benne. A méret nemcsak a betűt mozgatja, hanem a vele növő mezőket és térközöket is – így az ablak nem esik szét.
+
+| Terület | Mire vonatkozik |
+|---|---|
+| **Űrlapok és popup ablakok** | A munkalap, az ügyfél, az eszköz és minden más felviteli ablak: mezők, címkék, lapfülek. **Ezt állítsd, ha az ablakban kicsi a betű.** |
+| **Listák és táblázatok** | A munkalapok, ügyfelek, termékek listája, a pénztár és a számlák táblázatai. |
+| **Áttekintés rácsa** | A kezdőképernyő munkalap-rácsa: sorok, oszlopfejlécek, szűrők. |
+| **Címsorok** | Az oldalak és az ablakok címe, a dobozok fejléce. |
+| **Gombok** | Minden gomb felirata – a mentéstől a lapfülekig. |
+| **Oldalmenü** | A bal oldali menüsáv menüpontjai. |
+
+Soronként három dolgot állíthatsz: **Betűtípus** (vagy „Mint az alap"), **Egyéni betű neve** (csak az „Egyéni" választásnál) és **Méret az alaphoz képest** (70–180%). A sor alatti minta azonnal mutatja a választást; a felület a **Mentés** után veszi fel.
+
+Jó tudni:
+
+- A popup akkor is lekicsinyíti magát, ha a tartalma nem fér ki a képernyőn (lásd [Első lépések](sugo:elso-lepesek)). Ha az űrlapok betűjét feljebb viszed, egy hosszú munkalap hamarabb ér a képernyő aljáig. Ilyenkor segít a teljes képernyő (zöld ablakgomb), vagy ha csak a **Címsorok** és a **Gombok** méretét növeled, az űrlapmezőkét nem.
+- Ha valami félresikerült, állíts minden sort „Mint az alap" + 100% értékre: ezzel visszaáll a gyári állapot.
 
 ### Popupok – neon keret
 

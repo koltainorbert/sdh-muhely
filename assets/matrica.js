@@ -152,17 +152,70 @@
         }
     });
 
+    /** Az egyedi címke négy sora, ahogy a mezőkben áll (üres sor is megy: a helye így marad). */
+    function egyediSorok(ablak) {
+        var mezok = ablak.querySelectorAll('[data-sdh-matrica-sor]');
+
+        return mezok.length ? Array.prototype.map.call(mezok, function (m) { return m.value || ''; }) : null;
+    }
+
     function adatok(ablak) {
         var eszk = Array.prototype.slice.call(ablak.querySelectorAll('[data-sdh-matrica-eszkoz]:checked')).map(function (c) { return c.value; });
         var pld = ablak.querySelector('[data-sdh-matrica-peldany]');
-
-        return {
+        var d = {
             id: ablak.getAttribute('data-id') || '0',
             tipus: ablak.getAttribute('data-tipus') || 'rma',
             eszkoz: eszk,
             peldany: pld ? String(Math.max(1, Math.min(50, parseInt(pld.value, 10) || 1))) : '1'
         };
+
+        var sorok = egyediSorok(ablak);
+
+        if (sorok) {
+            d.sor = sorok;
+        }
+
+        return d;
     }
+
+    /* ---- Egyedi címke: az előnézet gépelés közben követi a szöveget ---- */
+
+    var egyediIdo = 0;
+
+    function egyediElonezet(ablak) {
+        var sorok = egyediSorok(ablak);
+        var kep = ablak.querySelector('.sdh-matrica__kep');
+
+        if (!sorok || !kep) {
+            return;
+        }
+
+        var fd = new FormData();
+
+        fd.set('id', '0');
+        fd.set('tipus', 'egyedi');
+        fd.set('kulcs', '0');
+        sorok.forEach(function (x) { fd.append('sor[]', x); });
+
+        post('matrica_kep', fd).then(function (d) {
+            if (d && d.png) {
+                kep.src = 'data:image/png;base64,' + d.png;
+            }
+        }).catch(function () { /* az előnézet kényelmi szolgáltatás: hiba esetén a régi kép marad */ });
+    }
+
+    document.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target.closest ? esemeny.target.closest('[data-sdh-matrica-sor]') : null;
+
+        if (!mezo) {
+            return;
+        }
+
+        var ablak = mezo.closest('[data-sdh-matrica-ablak]');
+
+        window.clearTimeout(egyediIdo);
+        egyediIdo = window.setTimeout(function () { egyediElonezet(ablak); }, 350);
+    });
 
     function jelez(ablak, szoveg, hiba) {
         var hely = ablak.querySelector('[data-sdh-matrica-allapot]');
@@ -193,6 +246,7 @@
             fd.set('tipus', d.tipus);
             fd.set('peldany', d.peldany);
             d.eszkoz.forEach(function (k) { fd.append('eszkoz[]', k); });
+            (d.sor || []).forEach(function (x) { fd.append('sor[]', x); });
 
             post('matrica_nyomtat', fd).then(function (v) {
                 gomb.disabled = false;
