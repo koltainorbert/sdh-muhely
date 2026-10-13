@@ -108,7 +108,9 @@ final class SDH_Muhely_Sdh_Gigatel
             $szam = (string) preg_replace('/[^\d+]/', '', (string) $nyers);
 
             if (mb_strlen((string) preg_replace('/\D/', '', $szam)) >= 10) {
-                return $szam;
+                // A nemzetközi alak egységesen +36…, hogy a címkén mindig
+                // ugyanúgy nézzen ki (0036… és 36… is ide fut be).
+                return (string) preg_replace('/^(?:00)?36/', '+36', $szam);
             }
         }
 

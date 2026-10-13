@@ -351,6 +351,43 @@ T::tartalmaz($ablak2, 'data-sdh-lf-feldolgoz', 'és a feldolgozás gombja');
 $ljs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/levelezes.js');
 T::tartalmaz($ljs, "kuldPost('levelfeladat_beilleszt'", 'a beillesztett szöveg a szerverre megy');
 
+/* --- 14c. Tételek magából a számla PDF-jéből, automatikusan (0.61.5) --------- */
+
+require_once SDH_MUHELY_DIR . 'includes/lib/sdh-pdf-szoveg.php';
+
+$P = 'SDH_Muhely_Pdf_Szoveg';
+
+T::igaz(!$P::pdf_e('<html>Bejelentkezés</html>'), 'a HTML-oldal nem PDF (nem is próbálja olvasni)');
+T::egyezik('', $P::olvas('nem pdf'), 'nem PDF-ből nincs szöveg');
+
+// Minta-PDF a tesztanyagok közül: szöveges számla két telefonszámos tétellel.
+$minta = SDH_MUHELY_DIR . 'tesztek/anyag/szamla-minta.pdf';
+
+if (is_readable($minta)) {
+    $pdf_szoveg = $P::olvas((string) file_get_contents($minta));
+
+    T::igaz(mb_strlen($pdf_szoveg) > 200, 'a PDF-ből kijön a szöveg (' . mb_strlen($pdf_szoveg) . ' karakter)');
+    T::tartalmaz($pdf_szoveg, 'Cikkszám', 'ékezetesen is (ToUnicode CMap)');
+
+    $pdf_tetelek = $LF::altalanos_tetelek($pdf_szoveg);
+
+    T::egyezik(2, count($pdf_tetelek), 'a számlából két telefonszámos tétel jön');
+    T::egyezik('Samsung Galaxy S23 Ultra', (string) $pdf_tetelek[0]['keszulek'], 'a készülékkel');
+    T::egyezik('998877', (string) $pdf_tetelek[0]['cikkszam'], 'és a cikkszámmal');
+
+    foreach ($pdf_tetelek as $t) {
+        T::igaz(strpos(implode(' ', $t), ' Ft') === false, 'a számlából sem kerül ár a címkére');
+    }
+} else {
+    T::igaz(false, 'hiányzik a minta-PDF: tesztek/anyag/szamla-minta.pdf');
+}
+
+T::tartalmaz($lf_php, 'tetelek_szamlabol', 'a feladat a számlából is kiolvassa a tételeket');
+T::tartalmaz($lf_php, 'wp_safe_remote_get', 'a linkes számlát biztonságos letöltéssel nézi meg');
+T::tartalmaz($lf_php, 'empty($a[\'kezi\'])', 'a kézzel beillesztett tételeket nem írja felül');
+
+T::egyezik('+36303334455', $G::telefon('Szűcs Győző 0036303334455'), 'a 0036-os alak is egységesen +36…');
+
 /* --- 14. Az eszközcsomag a módosított fájlt is kiszolgálja (0.61.2) ----------- */
 
 $csomag = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-csomag.php');

@@ -589,8 +589,16 @@ final class SDH_Muhely_Level_Feladat
         $a['csatolmanyok'] = self::pdf_csatolmanyok($teljes['level']);
         $a['linkek']       = self::linkek($teljes['level'], (string) ($a['link'] ?? ''));
 
-        if ((string) ($a['olvaso'] ?? '') !== '') {
-            $a['tetelek'] = self::tetelek_olvas((string) $a['olvaso'], (string) $teljes['szoveg'], $teljes['level']);
+        if (empty($a['kezi'])) {
+            if ((string) ($a['olvaso'] ?? '') !== '') {
+                $a['tetelek'] = self::tetelek_olvas((string) $a['olvaso'], (string) $teljes['szoveg'], $teljes['level']);
+            }
+
+            // Ha a levélben nincs tétel (csak értesítő és link), a SZÁMLÁBÓL
+            // szedjük ki: előbb a mellékletből, utána a link mögötti PDF-ből.
+            if ((array) ($a['tetelek'] ?? []) === []) {
+                $a['tetelek'] = self::tetelek_szamlabol($teljes['level'], $a);
+            }
         }
 
         $wpdb->update(self::tabla(), [
@@ -602,6 +610,96 @@ final class SDH_Muhely_Level_Feladat
         $f->adat     = (string) wp_json_encode($a);
 
         return $f;
+    }
+
+    /**
+     * Tételek magából a SZÁMLÁBÓL (0.61.5).
+     *
+     * Van beszállító, aki a levélbe csak egy értesítőt tesz, a tételek a
+     * számlában vannak. Sorrend: a PDF melléklet, utána – ha nincs – a levélben
+     * álló számlalink mögötti PDF. A letöltés csak olvasás, csak a szabályban
+     * megadott mintára illeszkedő címről, és csak akkor, ha tényleg PDF jön.
+     * Ha nem sikerül, marad a kézi beillesztés – semmi nem romlik el.
+     *
+     * @param array<string, mixed> $level a teljes levél
+     * @param array<string, mixed> $a     a feladat adatai
+     * @return array<int, array<string, string>>
+     */
+    private static function tetelek_szamlabol(array $level, array $a): array
+    {
+        require_once SDH_MUHELY_DIR . 'includes/lib/sdh-pdf-szoveg.php';
+
+        foreach ((array) ($level['csatolmanyok'] ?? []) as $c) {
+            if (!is_array($c) || !empty($c['beagyazott'])) {
+                continue;
+            }
+
+            $tartalom = (string) ($c['tartalom'] ?? '');
+
+            if ($tartalom === '' || !SDH_Muhely_Pdf_Szoveg::pdf_e($tartalom)) {
+                continue;
+            }
+
+            $tetelek = self::pdf_tetelek($tartalom, $a);
+
+            if ($tetelek !== []) {
+                return $tetelek;
+            }
+        }
+
+        foreach ((array) ($a['linkek'] ?? []) as $l) {
+            $url = (string) ($l['url'] ?? '');
+
+            if ($url === '' || !str_starts_with($url, 'https://')) {
+                continue;
+            }
+
+            $valasz = wp_safe_remote_get($url, [
+                'timeout'     => 12,
+                'redirection' => 3,
+                'user-agent'  => 'SDH Muhely/' . SDH_MUHELY_VERSION,
+            ]);
+
+            if (is_wp_error($valasz) || (int) wp_remote_retrieve_response_code($valasz) !== 200) {
+                continue;
+            }
+
+            $test = (string) wp_remote_retrieve_body($valasz);
+
+            if ($test === '' || !SDH_Muhely_Pdf_Szoveg::pdf_e($test)) {
+                // Bejelentkezést kérő oldal vagy HTML: nem erőltetjük.
+                continue;
+            }
+
+            $tetelek = self::pdf_tetelek($test, $a);
+
+            if ($tetelek !== []) {
+                return $tetelek;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Egy PDF szövegéből a tételek: előbb a szabály saját olvasójával, utána
+     * az általánossal (a számla elrendezése más lehet, mint a levélé).
+     *
+     * @param array<string, mixed> $a
+     * @return array<int, array<string, string>>
+     */
+    private static function pdf_tetelek(string $pdf, array $a): array
+    {
+        $szoveg = SDH_Muhely_Pdf_Szoveg::olvas($pdf);
+
+        if (trim($szoveg) === '') {
+            return [];
+        }
+
+        $olvaso  = (string) ($a['olvaso'] ?? '');
+        $tetelek = $olvaso !== '' ? self::tetelek_olvas($olvaso, $szoveg, []) : [];
+
+        return $tetelek !== [] ? $tetelek : self::altalanos_tetelek($szoveg);
     }
 
     public static function allapot_ir(int $id, string $allapot): bool

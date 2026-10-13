@@ -235,7 +235,9 @@ Nem minden beszállító csatolja a számlát: van, amelyik csak egy **letölté
 
 ### Ha a tételek nem a levélben vannak
 
-Van beszállító, aki a levélbe csak egy értesítőt és egy linket tesz – a tételek a számlában állnak. Ilyenkor a címke így készül:
+Van beszállító, aki a levélbe csak egy értesítőt és egy linket tesz – a tételek a számlában állnak. A rendszer ilyenkor **magától megnézi a számlát**: előbb a mellékelt PDF-et, utána – ha nincs melléklet – a levélben álló számlalink mögötti PDF-et. Amit talál, abból ugyanúgy elkészülnek a tételek, és megjelenik a **Címkék (n tétel)** gomb. Semmit nem kell csinálnod.
+
+Ez akkor nem megy, ha a számla csak bejelentkezés után tölthető le, vagy ha a PDF szkennelt kép (nincs benne szöveg). Ilyenkor jön a kézi út:
 
 1. Nyisd meg a számlát (**Számla nyomtatása** vagy **Számla megnyitása**).
 2. Jelöld ki a tételeket, és másold ki ([[Ctrl]] + [[C]]).
@@ -418,7 +420,11 @@ Ha fontosat hagyott ki, vedd fel a feladót a **Kiemelt feladók** közé. Ha fe
 
 ### A levélben nincsenek tételek. Hogyan lesz mégis címke?
 
-A feladatnál a **Tételek beillesztése** gombbal: másold be a számla tételsorait, nyomj **Feldolgozás**-t, és kész a **Címkék** gomb. A rendszer a telefonszámos tételekből készít címkét, ár nélkül.
+A rendszer magától kiolvassa a számla PDF-jéből – a mellékletből, vagy a számlalink mögül letöltve. Ha ez nem megy (bejelentkezés kell hozzá, vagy a PDF szkennelt kép), a feladatnál a **Tételek beillesztése** gombbal másold be a tételsorokat, nyomj **Feldolgozás**-t, és kész a **Címkék** gomb.
+
+### Letölti a rendszer magától a számlát?
+
+Csak megnézi: a levélben álló linkre küld egy olvasó kérést, és ha PDF jön vissza, abból kiszedi a tételeket. Semmit nem ment el és nem küld sehova. Ha az oldal bejelentkezést kér, nem erőlteti.
 
 ### A feladatnál nincs melléklet. Hol a számla?
 

@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.5
+- **A tételek magából a számlából** – kézi munka nélkül. Ha a levélben nincs tételsor (a Gigatel számlaértesítője
+  csak egy linket küld), a rendszer megnézi a **mellékelt PDF-et**, és ha nincs, a **számlalink mögötti PDF-et** is
+  (`wp_safe_remote_get`, csak olvasás, csak ha tényleg PDF jön vissza). Amit talál, azon ugyanaz a tételolvasó fut,
+  és kész a **Címkék (n tétel)** gomb.
+- Új, **saját PDF-szövegolvasó** (`includes/lib/sdh-pdf-szoveg.php`): Flate / ASCII85 / ASCIIHex szűrőlánc, Tj / TJ /
+  ' / " operátorok, Tm–Td–T* alapján sortörés, és **/ToUnicode CMap** fontonként – e nélkül a beágyazott betűs
+  (Identity-H) számlák szövege olvashatatlan volna. Szkennelt vagy titkosított PDF-nél üres szöveget ad, és a
+  feldolgozás a kézi beillesztésre marad – semmi nem romlik el.
+- A kézzel beillesztett tételeket az automatika **nem írja felül**.
+- A `0036…` kezdetű telefonszám is egységesen `+36…` alakban kerül a címkére.
+
 ### 0.61.4
 - **Tételek beillesztése** a levél-feladatnál: ha a tételek nem a levélben, hanem a számlában vannak (a Gigatel
   számlaértesítője csak egy linket küld), a számlából kimásolt szöveget a kártyán beillesztve ugyanúgy elkészülnek a
