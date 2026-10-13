@@ -1084,34 +1084,38 @@
 
 /* ---- Felugró jelzések (minden CRM-oldalon) ---- */
 
+/* A jelzések a jobb FELSŐ sarokban állnak (0.61.1).
+   Korábban a jobb alsó sarokban voltak: ott a lap aljára, a részletpanel
+   „lábába" csúsztak, és az asszisztens figurája meg a buboréka takarta őket.
+   Fent semmi nem fedi el, és a lapot sem takarják el ott, ahol dolgozol. */
 .sdh-level-toastok {
     position: fixed;
     right: calc(18px * var(--sdh-n));
-    bottom: calc(18px * var(--sdh-n));
+    /* A wp-admin fekete sávja alatt kezdődik (a műhely-felületen 0 a sáv). */
+    top: calc(var(--sdh-felso-sav, 0px) + calc(16px * var(--sdh-n)));
     z-index: 100000;
     display: flex;
     flex-direction: column;
     gap: .5rem;
     width: min(calc(360px * var(--sdh-n)), calc(100vw - calc(36px * var(--sdh-n))));
     /* Soha nem lóg ki a képernyőről: legfeljebb néhány jelzés látszik, a többi az összesítőben. */
-    max-height: calc(100vh - calc(36px * var(--sdh-n)));
+    max-height: calc(100vh - var(--sdh-felso-sav, 0px) - calc(34px * var(--sdh-n)));
     overflow: hidden;
     pointer-events: none;
 }
 
-/* 0.54.0 – Ha ott az asszisztens figurája, a jelzések a figura BAL oldalán sorakoznak, nem alatta.
-   Keskeny képernyőn a figura fölé kerülnek. */
-:root:has(.sdh-ai) .sdh-level-toastok {
-    right: calc(var(--sdh-ai-meret, calc(66px * var(--sdh-n))) + calc(46px * var(--sdh-n)));
-    width: min(calc(360px * var(--sdh-n)), calc(100vw - var(--sdh-ai-meret, calc(66px * var(--sdh-n))) - calc(64px * var(--sdh-n))));
+/* A wp-admin fejlécsávja (32 px, keskeny képernyőn 46 px) alá csúsztat. */
+body.wp-admin .sdh-level-toastok {
+    --sdh-felso-sav: calc(32px * var(--sdh-n));
 }
 
-@media (max-width: 640px) {
-    :root:has(.sdh-ai) .sdh-level-toastok {
-        right: calc(18px * var(--sdh-n));
-        bottom: calc(var(--sdh-ai-meret, calc(66px * var(--sdh-n))) + calc(44px * var(--sdh-n)));
+@media (max-width: 782px) {
+    body.wp-admin .sdh-level-toastok {
+        --sdh-felso-sav: calc(46px * var(--sdh-n));
+    }
+
+    .sdh-level-toastok {
         width: calc(100vw - calc(36px * var(--sdh-n)));
-        max-height: calc(100vh - var(--sdh-ai-meret, calc(66px * var(--sdh-n))) - calc(70px * var(--sdh-n)));
     }
 }
 

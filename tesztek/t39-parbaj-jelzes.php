@@ -1,6 +1,6 @@
 <?php
 /**
- * t39 – 0.54.0: a levél-jelzések a figura mellé kerülnek (nem alá), a buborék
+ * t39 – 0.54.0 / 0.61.1: a levél-jelzések a jobb felső sarokban állnak, a buborék
  * fölébük emelkedik; párbaj a Hiba-bogárral (beállítás, mentés, kliensadat, rajz).
  */
 
@@ -47,10 +47,12 @@ T::tartalmaz($js, "document.querySelector('.sdh-level-toast')", 'levél-jelzés 
 T::tartalmaz($js, "addEventListener('sdh:level-toast'", 'új levél-jelzésre leáll és a buborék igazodik');
 T::tartalmaz($js, 'parbajVege();', 'kattintás / gépelés / mentés leállítja');
 T::tartalmaz($lev, "new CustomEvent('sdh:level-toast')", 'a levél-jelzés szól az asszisztensnek');
-T::tartalmaz($lcs, ':root:has(.sdh-ai) .sdh-level-toastok', 'figurával a jelzések a figura mellé kerülnek');
+// 0.61.1: a jelzések a jobb FELSŐ sarokba kerültek – a figura mellől, mert ott a lap aljára csúsztak.
+T::tartalmaz($lcs, '--sdh-felso-sav', 'a jelzések a fejléc alatt, a jobb felső sarokban állnak');
+T::nem_tartalmaz($lcs, ':root:has(.sdh-ai) .sdh-level-toastok', 'nincs külön szabály a figura mellé');
 T::tartalmaz($css, '.sdh-ai .sdh-ai-parbaj', 'a jelenet stílusa megvan');
 T::tartalmaz($css, "@media (prefers-reduced-motion: reduce) {\n    .sdh-ai-parbaj", '„kevesebb mozgás” mellett nincs párbaj');
 
 delete_option('sdh_muhely_asszisztens');
 
-T::vege('t39 levél-jelzés a figura mellett, párbaj a Hiba-bogárral');
+T::vege('t39 levél-jelzés helye, párbaj a Hiba-bogárral');

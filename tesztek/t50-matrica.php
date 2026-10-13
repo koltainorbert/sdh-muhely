@@ -208,8 +208,8 @@ T::igaz(isset(SDH_Muhely_Beallitasok::szakaszok()['matrica']), 'van RMA-matrica 
 ob_start();
 $M::beallitas_doboz();
 $doboz = (string) ob_get_clean();
-T::egyezik(count($M::mezok()) + count($M::mezok('termek')) + count($M::mezok('szolgaltatas')) + count($M::mezok('tetel')) + count($M::mezok('egyedi')), substr_count($doboz, 'data-sdh-matrica-mezo='), 'minden sablon minden adatának saját sora');
-T::egyezik(5, substr_count($doboz, 'data-sdh-matrica-sablon-gomb='), 'sablonválasztó: RMA, termék, szolgáltatás, tétel, egyedi');
+T::egyezik(count($M::mezok()) + count($M::mezok('termek')) + count($M::mezok('rendeles')) + count($M::mezok('szolgaltatas')) + count($M::mezok('tetel')) + count($M::mezok('egyedi')), substr_count($doboz, 'data-sdh-matrica-mezo='), 'minden sablon minden adatának saját sora');
+T::egyezik(6, substr_count($doboz, 'data-sdh-matrica-sablon-gomb='), 'sablonválasztó: RMA, rendelés, termék, szolgáltatás, tétel, egyedi');
 T::egyezik(1, substr_count($doboz, 'id="matrica_cimke"'), 'a tekercs egyszer, közösen');
 T::tartalmaz($doboz, 'data-sdh-matrica-fel', 'sorrend: nyilak');
 T::tartalmaz($doboz, 'data-sdh-matrica-proba', 'Próbanyomat gomb');

@@ -624,6 +624,8 @@ final class SDH_Muhely_Levelezes
             őket, és felkínálja a melléklet nyomtatását meg a címkéket. A szabály a <strong>feladótól és a
             tárgytól</strong> függ – a levél szövegétől soha. Feltétel nélküli szabály nem fut.
             A nyitott teendők a Levelezés oldal <strong>Feladatok</strong> gombjánál vannak.
+            Az <strong>Ettől a naptól</strong> mező miatt a régi leveleket nem dolgozza fel visszamenőleg: új szabály
+            a bekapcsolás előtti naptól figyel.
         </p>
 
         <input type="hidden" name="level_feladat_jelen" value="1">
@@ -657,6 +659,13 @@ final class SDH_Muhely_Levelezes
                         <label for="lf_mappa_<?php echo (int) $i; ?>">Ebbe a mappába</label>
                         <input type="text" id="lf_mappa_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][tesz][mappa]"
                                maxlength="120" autocomplete="off" value="<?php echo esc_attr((string) $sz['tesz']['mappa']); ?>">
+                    </div>
+
+                    <div class="sdh-mezo">
+                        <label for="lf_tol_<?php echo (int) $i; ?>">Ettől a naptól</label>
+                        <input type="text" id="lf_tol_<?php echo (int) $i; ?>" name="level_feladat[<?php echo (int) $i; ?>][tol]"
+                               maxlength="10" autocomplete="off" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}"
+                               placeholder="<?php echo esc_attr(SDH_Muhely_Level_Feladat::tegnap()); ?>" value="<?php echo esc_attr((string) $sz['tol']); ?>">
                     </div>
 
                     <div class="sdh-mezo">
@@ -1381,6 +1390,60 @@ final class SDH_Muhely_Levelezes
         }
 
         return $db;
+    }
+
+    /**
+     * Egy levél-feladathoz a TELJES levél (0.61.1).
+     *
+     * A levelet a message_id alapján keressük meg: a levél mappát válthatott
+     * (az ügynök maga is átteszi), ilyenkor új sorazonosítót kap. Visszaadja a
+     * megtalált sor azonosítóját, a levél olvasható szövegét és a feldolgozott
+     * levelet (ebben vannak a csatolmányok).
+     *
+     * @return array{level_id: int, szoveg: string, level: array<string, mixed>}|null
+     */
+    public static function feladat_level(string $message_id, int $level_id): ?array
+    {
+        global $wpdb;
+
+        $t = self::tabla();
+        $sor = null;
+
+        if (trim($message_id) !== '') {
+            $sor = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE message_id = %s ORDER BY id DESC LIMIT 1", $message_id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        }
+
+        if (!is_object($sor) && $level_id > 0) {
+            $sor = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE id = %d", $level_id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        }
+
+        if (!is_object($sor)) {
+            return null;
+        }
+
+        $mappa = self::mappa((int) $sor->mappa_id);
+        $fiok  = self::fiokok()[(string) $sor->fiok] ?? null;
+
+        if ($mappa === null || !is_array($fiok)) {
+            return null;
+        }
+
+        try {
+            $imap  = null;
+            $level = self::level_letolt($sor, $mappa, $fiok, $imap);
+
+            if ($imap !== null) {
+                $imap->kilep();
+            }
+        } catch (\Throwable $hiba) {
+            return null;
+        }
+
+        return [
+            'level_id' => (int) $sor->id,
+            'szoveg'   => SDH_Muhely_Mime::olvashato($level),
+            'level'    => $level,
+        ];
     }
 
     /**

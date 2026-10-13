@@ -49,6 +49,7 @@ Amit a modul csinál:
 | **A Gigatel-levelek feldolgozása fusson** | Ki- és bekapcsolja ezt az egy modult. |
 | **A feladó tartalmazza** | Alapból `gigatel`. A feladó nevére és címére is illeszkedik. |
 | **A tárgy tartalmazza** | Alapból `számlája elkészült` – így a számlaszám mindegy. |
+| **Ettől a naptól figyelje** | A régebbi leveleket nem dolgozza fel – felesleges visszamenőleg feladatot nyitni rájuk. Alapból a bekapcsolás előtti nap. |
 | **Melyik mappába kerüljön** | Alapból `Gigatel számla`. Üresen hagyva a levél a helyén marad. |
 
 ### Mi kerül a címkére
@@ -101,6 +102,10 @@ A feladat ablakában: ott van a levél megnyitása, a számla és a címkék. Az
 ### Mennyi ideig marad nyitva a feladat?
 
 Amíg rá nem nyomod az **Elintézve** gombot. Magától nem záródik le – pont ez a lényeg: a számla kinyomtatása ne maradjon el.
+
+### A bekapcsolás előtti leveleket feldolgozza?
+
+Nem. Minden szabálynak van kezdőnapja, és alapból a bekapcsolás előtti naptól figyel. Ha mégis kell egy régebbi levél, írd át az **Ettől a naptól figyelje** mezőt – a következő szinkronnál az addigi levelek is sorra kerülnek.
 
 ### Két Gigatel-levél jött egy nap. Mi lesz?
 

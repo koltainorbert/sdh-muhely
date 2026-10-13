@@ -425,6 +425,32 @@
             return;
         }
 
+        var ujra = cel.closest('[data-sdh-lf-ujra]');
+
+        if (ujra) {
+            esemeny.preventDefault();
+            ujra.disabled = true;
+            ujra.textContent = 'Keresés…';
+
+            var fdu = new FormData();
+
+            fdu.set('id', ujra.getAttribute('data-sdh-lf-ujra'));
+
+            kuldPost('levelfeladat_ujra', fdu).then(function (d) {
+                if ((d.pdf || 0) > 0 || (d.tetel || 0) > 0) {
+                    feladatUjratolt(ablak);
+                } else {
+                    ujra.disabled = false;
+                    ujra.textContent = d.uzenet || 'Nincs melléklet';
+                }
+            }).catch(function (h) {
+                ujra.disabled = false;
+                ujra.textContent = h.message;
+            });
+
+            return;
+        }
+
         var elintez = cel.closest('[data-sdh-lf-elintez]');
         var ujranyit = cel.closest('[data-sdh-lf-ujranyit]');
         var level = cel.closest('[data-sdh-lf-level]');
@@ -455,7 +481,23 @@
 
         if (level) {
             esemeny.preventDefault();
-            levelhez(parseInt(level.getAttribute('data-sdh-lf-level'), 10) || 0);
+
+            // A feladatablakot bezárjuk, különben a levél a popup MÖGÖTT nyílna meg (0.61.1).
+            var a = app();
+            var id = parseInt(level.getAttribute('data-sdh-lf-level'), 10) || 0;
+
+            if (a && typeof a.bezar === 'function') {
+                a.bezar(0);
+            }
+
+            window.setTimeout(function () {
+                if (document.querySelector('[data-sdh-level]')) {
+                    levelhez(id);
+                } else {
+                    // Másik oldalról: a levelezőben nyílik meg.
+                    window.location.href = (B.levelUrl || '') + '#level=' + id;
+                }
+            }, 120);
 
             return;
         }

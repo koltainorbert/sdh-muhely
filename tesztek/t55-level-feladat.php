@@ -161,4 +161,62 @@ foreach (array_keys($figurak) as $fk) {
 $ajs = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/asszisztens.js');
 T::tartalmaz($ajs, "setAttribute('data-figura'", 'a választott figura a felületre is kikerül');
 
-T::vege('t55 levél-feladat ügynök, SDH-belső keret, tételcímke, figurák');
+/* --- 7. Nem megy vissza az időben (0.61.1) ----------------------------------- */
+
+T::egyezik(gmdate('Y-m-d', (int) strtotime(current_time('Y-m-d') . ' -1 day')), $LF::tegnap(), 'az új szabály a tegnapi naptól figyel');
+
+$sz_tol = $LF::szabalyok()[$G::SZABALY];
+T::igaz((string) $sz_tol['tol'] !== '', 'a Gigatel-szabálynak van kezdőnapja');
+
+$wpdb->query('DELETE FROM ' . $LF::tabla() . " WHERE message_id IN ('<t55-regi@g.hu>','<t55-mai@g.hu>')");
+
+$regi_sor = ['fiok' => 'f1', 'felado_email' => 'web@gigatel.hu', 'felado_nev' => 'Gigatel', 'targy' => 'ESB1 elektronikus számlája elkészült',
+    'csatolmany' => 1, 'message_id' => '<t55-regi@g.hu>', 'uid' => 1, 'datum' => '2020-01-01 10:00:00'];
+
+$LF::uj_level(5101, 7, $regi_sor, $szoveg, $level);
+T::egyezik(0, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $LF::tabla() . " WHERE message_id = '<t55-regi@g.hu>'"), 'a kezdőnap előtti levélre NEM nyit feladatot');
+
+$mai_sor = array_merge($regi_sor, ['message_id' => '<t55-mai@g.hu>', 'datum' => current_time('mysql')]);
+$LF::uj_level(5102, 7, $mai_sor, $szoveg, $level);
+T::egyezik(1, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $LF::tabla() . " WHERE message_id = '<t55-mai@g.hu>'"), 'a mai levélre igen');
+$LF::mozgatando('f1', 7);
+
+/* --- 8. A tételolvasó HTML-levélből is dolgozik ------------------------------- */
+
+require_once SDH_MUHELY_DIR . 'includes/lib/sdh-mime.php';
+
+$html = '<table><tr><td><div>Samsung Galaxy Tab A11 WIFI (SM-X130)</div><strong>Tok álló PIROS</strong>'
+    . '<div>Azonosító: GP-177299</div><div>Garancia: Szavatosság</div><div>Cikkszám: 177299</div>'
+    . '<div>Megjegyzés: 8000Fizetve, 06302121235</div></td><td>1 db Készleten<br>Nettó egységár: 3 999 Ft<br>3 999 Ft</td></tr></table>';
+
+$html_tetelek = $G::tetelek(SDH_Muhely_Mime::html_szoveg($html));
+
+T::egyezik(1, count($html_tetelek), 'HTML-levélből is kijön a tétel');
+T::egyezik('177299', (string) $html_tetelek[0]['cikkszam'], 'a cikkszámmal');
+T::egyezik('Tok álló PIROS', (string) $html_tetelek[0]['megnevezes'], 'és a megnevezéssel (az ár nem lóg bele)');
+T::igaz(strpos(implode(' ', $html_tetelek[0]), 'Ft') === false, 'ár sehol a tételben');
+
+/* --- 9. Rendelés-címke, Címkék menüpont, toast helye (0.61.1) ----------------- */
+
+T::igaz(isset($M::SABLONOK['rendeles']), 'van Rendelés-címke sablon');
+$rm = $M::mezok('rendeles');
+T::igaz(!empty($rm['nev']['be']) && !empty($rm['munkalapszam']['be']) && !empty($rm['telefon']['be']), 'alapból a név, a lapszám és a telefon van rajta');
+T::igaz(empty($rm['brutto']['be']) && empty($rm['elolog']['be']), 'ár alapból nincs rajta (de bekapcsolható)');
+
+$ml = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-munkalap.php');
+T::tartalmaz($ml, "\$fajta === 'rendeles' ? 'rendeles' : 'rma'", 'a rendelés a saját címkesablonjával nyomtat');
+
+T::igaz(isset(SDH_Muhely_Modulok::osszes()['matrica']), 'a Címkék külön menüpont');
+
+$aui = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-admin-ui.php');
+T::nem_tartalmaz($aui, "sdh-matrica-tipus' => 'egyedi'", 'az Áttekintés fejlécéből eltűnt az Egyedi címke');
+
+$lcss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/levelezes.css');
+T::tartalmaz($lcss, '--sdh-felso-sav', 'a jelzések a jobb felső sarokban állnak (nem csúsznak a lap aljára)');
+T::nem_tartalmaz($lcss, ':root:has(.sdh-ai) .sdh-level-toastok', 'és nincs külön szabály a figura mellé');
+
+$rcss = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/rma-ugyfel.css');
+T::tartalmaz($rcss, 'border-radius: 999px', 'az ügyféloldali fülek pillek');
+T::nem_tartalmaz($rcss, 'border-radius: 8px 8px 0 0', 'a régi lapfül-forma eltűnt');
+
+T::vege('t55 levél-feladat ügynök, SDH-belső, címkék, ügyféloldal');

@@ -39,7 +39,7 @@ final class SDH_Muhely_Matrica
     public const OPT = 'sdh_muhely_matrica';
 
     /** A címkesablonok. */
-    public const SABLONOK = ['rma' => 'RMA-matrica', 'termek' => 'Termékcímke', 'szolgaltatas' => 'Szolgáltatás-címke', 'tetel' => 'Beszállítói tétel', 'egyedi' => 'Egyedi címke'];
+    public const SABLONOK = ['rma' => 'RMA-matrica', 'rendeles' => 'Rendelés-címke', 'termek' => 'Termékcímke', 'szolgaltatas' => 'Szolgáltatás-címke', 'tetel' => 'Beszállítói tétel', 'egyedi' => 'Egyedi címke'];
 
     /** A közös beállítások (nyomtató és a betett tekercs): mindig az RMA-matrica opciójából. */
     public const KOZOS = ['nyomtato', 'mod', 'ip', 'port', 'cimke', 'egyedi_sz', 'egyedi_h', 'vagas'];
@@ -60,6 +60,15 @@ final class SDH_Muhely_Matrica
         add_action('wp_ajax_sdh_muhely_matrica_nyomtat', [self::class, 'ajax_nyomtat']);
         add_action('wp_ajax_sdh_muhely_matrica_elonezet', [self::class, 'ajax_elonezet']);
         add_action('wp_ajax_sdh_muhely_matrica_proba', [self::class, 'ajax_proba']);
+
+        // Címkék menüpont (0.61.1): innen nyílik az egyedi címke, és innen érhető el,
+        // mit tartalmaznak a címkék – a nyomtató beállítása marad a Beállításokban.
+        SDH_Muhely_Modulok::regisztral([
+            'kulcs'   => self::KULCS,
+            'cim'     => 'Címkék',
+            'render'  => [self::class, 'oldal'],
+            'sorrend' => 86,
+        ]);
 
         add_action('admin_enqueue_scripts', static function (): void {
             $oldal = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -194,6 +203,28 @@ final class SDH_Muhely_Matrica
                 'szerviz'    => $m('A szerviz neve', '', false, 0.85, true),
                 'datum'      => $m('Dátum (a nyomtatás napja)', '', false, 0.8),
                 'qr'         => $m('QR-kód (a vonalkód / cikkszám értékével)', '', false),
+            ];
+        }
+
+        if (self::sablon($sablon) === 'rendeles') {
+            // Rendelés-címke (0.61.1): a megérkezett árura ragasztva látszik, kié és melyik lapra.
+            // Ár alapból nincs rajta (az ügyfél árát a bizonylat viszi), de bekapcsolható.
+            return [
+                'nev'          => $m('Az ügyfél neve', '', true, 1.3, true),
+                'munkalapszam' => $m('Lapszám', 'Rend.', true, 1.45, true),
+                'telefon'      => $m('Az ügyfél telefonszáma', 'Tel', true, 1.0),
+                'eszkoz'       => $m('Eszköz / termék megnevezése', '', true, 1.0, false, 2),
+                'tetelek'      => $m('A rendelés tételei', '', true, 0.9, false, 3),
+                'datum'        => $m('Dátum (felvétel napja)', '', true, 0.85),
+                'hatarido'     => $m('Várható érkezés', 'Várható', false),
+                'beszallito'   => $m('Beszállító', 'Beszállító', false, 0.9),
+                'rend_szam'    => $m('A beszállítói rendelés száma', 'Rend.sz.', false, 0.9),
+                'elolog'       => $m('Fizetett előleg', 'Előleg', false, 0.9),
+                'brutto'       => $m('Bruttó végösszeg', 'Összesen', false, 1.0, true),
+                'megjegyzes'   => $m('Megjegyzés (a lapról)', 'Megj', false, 0.9, false, 2),
+                'szerviz'      => $m('A szerviz neve', '', false, 0.85, true),
+                'vonalkod'     => $m('Vonalkód (lapszám)', '', false),
+                'qr'           => $m('QR-kód az ügyféloldalra', '', false),
             ];
         }
 
@@ -575,6 +606,12 @@ final class SDH_Muhely_Matrica
             return [0 => self::egyedi_adat()];
         }
 
+        if ($sablon === 'rendeles') {
+            $a = self::rendeles_adat($id);
+
+            return $a === null ? [] : [0 => $a];
+        }
+
         if ($sablon === 'tetel') {
             return self::tetel_adatok($id);
         }
@@ -645,6 +682,64 @@ final class SDH_Muhely_Matrica
             'url'            => $elso,
             'szam_nyers'     => 'egyedi',
             'darab'          => '',
+        ];
+    }
+
+    /**
+     * Egy rendelés címkéjének adatai (0.61.1). A megérkezett árura ragasztva
+     * ettől látszik, kinek jött és melyik lapra tartozik.
+     *
+     * @return array<string, mixed>|null
+     */
+    public static function rendeles_adat(int $id): ?array
+    {
+        global $wpdb;
+
+        $m = $id > 0 ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('munkalap') . ' WHERE id = %d', $id)) : null; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        if (!$m) {
+            return null;
+        }
+
+        $ugyfel = (int) $m->ugyfel_id > 0
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE id = %d', (int) $m->ugyfel_id)) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            : null;
+
+        $eszkoz = (int) $m->eszkoz_id > 0 && class_exists('SDH_Muhely_Eszkoz')
+            ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE id = %d', (int) $m->eszkoz_id)) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            : null;
+
+        $szam   = SDH_Muhely_Munkalap::szam_formaz($m->munkalap_szam);
+        $elolog = (float) $m->fizetett;
+        $brutto = (float) $m->brutto_ertek;
+
+        $besz = (int) $m->beszallito_id > 0 && class_exists('SDH_Muhely_Eladas')
+            ? (string) (SDH_Muhely_Eladas::torzs_nevek('beszallitok')[(int) $m->beszallito_id] ?? '')
+            : '';
+
+        $token = class_exists('SDH_Muhely_Rma') && SDH_Muhely_Modulok::be('uzenetek') ? SDH_Muhely_Rma::token($m) : '';
+
+        return [
+            'cim'          => $ugyfel ? (string) $ugyfel->nev : (string) $m->nev,
+            'nev'          => $ugyfel ? (string) $ugyfel->nev : (string) $m->nev,
+            'munkalapszam' => $szam === '—' ? '' : $szam,
+            'szam_nyers'   => (string) (int) $m->munkalap_szam,
+            'telefon'      => $ugyfel ? (string) $ugyfel->telefon : '',
+            'eszkoz'       => $eszkoz ? trim(SDH_Muhely_Eszkoz::megnevezes($eszkoz)) : (string) $m->nev,
+            'tetelek'      => class_exists('SDH_Muhely_Eladas') ? SDH_Muhely_Eladas::tetel_szoveg($id, 4) : '',
+            'datum'        => SDH_Muhely_Munkalap::datum_megjelenit((string) $m->keszult),
+            'hatarido'     => (string) $m->hatarido !== '' && !str_starts_with((string) $m->hatarido, '0000')
+                ? SDH_Muhely_Munkalap::datum_megjelenit((string) $m->hatarido)
+                : '',
+            'beszallito'   => $besz,
+            'rend_szam'    => (string) $m->rend_szam,
+            'elolog'       => $elolog > 0.5 ? self::ft($elolog) : '',
+            'brutto'       => $brutto > 0.5 ? self::ft($brutto) : '',
+            'megjegyzes'   => trim((string) preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) ($m->megjegyzes ?? '')))),
+            'szerviz'      => self::szerviz_nev(),
+            'vonalkod_ertek' => (string) (int) $m->munkalap_szam,
+            'url'          => $token !== '' && class_exists('SDH_Muhely_Rma') ? SDH_Muhely_Rma::url($token) : '',
+            'darab'        => '',
         ];
     }
 
@@ -743,6 +838,17 @@ final class SDH_Muhely_Matrica
                 'termekkod' => 'K-5678', 'gyari_szam' => 'GY-0001', 'kategoria' => 'Kijelzők', 'netto' => '19 677 Ft', 'me' => 'db',
                 'beszallito' => 'Minta Kft.', 'leiras' => 'Gyári minőségű csere-kijelző kerettel', 'szerviz' => 'Minta Szerviz',
                 'datum' => self::ma(), 'vonalkod_ertek' => '5998877665544', 'url' => '5998877665544', 'szam_nyers' => '1', 'darab' => '',
+            ];
+        }
+
+        if ($sablon === 'rendeles') {
+            return [
+                'cim' => 'Minta Márta', 'nev' => 'Minta Márta', 'munkalapszam' => '000123', 'szam_nyers' => '123',
+                'telefon' => '+36 30 123 4567', 'eszkoz' => 'Samsung Galaxy A17 · SM-A175B',
+                'tetelek' => 'Kijelző (1 db), Akkumulátor (1 db)', 'datum' => self::ma(),
+                'hatarido' => '2026. 10. 20.', 'beszallito' => 'Minta Kft.', 'rend_szam' => 'R-2026-0042',
+                'elolog' => '5 000 Ft', 'brutto' => '24 990 Ft', 'megjegyzes' => 'Telefonon értesíteni',
+                'szerviz' => 'Minta Szerviz', 'vonalkod_ertek' => '123', 'url' => home_url('/rma/3f9a12c4minta/'), 'darab' => '',
             ];
         }
 
@@ -1558,14 +1664,17 @@ final class SDH_Muhely_Matrica
         $sablon = self::sablon($sablon);
         $cim    = [
             'rma'          => 'RMA-matrica a készülékre (Brother címkenyomtató)',
+            'rendeles'     => 'Címke a megérkezett árura: kinek jött, melyik lapra (Brother címkenyomtató)',
             'termek'       => 'Termékcímke nyomtatása (Brother címkenyomtató)',
             'szolgaltatas' => 'Szolgáltatás-címke nyomtatása (Brother címkenyomtató)',
-        ][$sablon];
+            'tetel'        => 'Címkék a beszállítói levél tételeire (Brother címkenyomtató)',
+            'egyedi'       => 'Egyedi címke: amit beírsz (Brother címkenyomtató)',
+        ][$sablon] ?? 'Címke nyomtatása (Brother címkenyomtató)';
 
         return '<button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-matrica-gomb" data-sdh-matrica="' . (int) $id . '"'
             . ($sablon !== 'rma' ? ' data-sdh-matrica-tipus="' . esc_attr($sablon) . '"' : '')
             . ' title="' . esc_attr($cim) . '">'
-            . SDH_Muhely_Admin_UI::gomb_ikon('matrica') . '<span>' . ($sablon === 'rma' ? 'Matrica' : 'Címke') . '</span></button>';
+            . SDH_Muhely_Admin_UI::gomb_ikon('matrica') . '<span>' . (in_array($sablon, ['rma', 'rendeles'], true) ? 'Matrica' : 'Címke') . '</span></button>';
     }
 
     /** A kérés sablonja (tipus paraméter). */
@@ -1622,7 +1731,7 @@ final class SDH_Muhely_Matrica
 
         if ($adatok === []) {
             echo '<h2 class="sdh-modal__cim">' . esc_html($nev) . '</h2><div class="sdh-uzenet sdh-uzenet--hiba">'
-                . esc_html(['rma' => 'Nincs ilyen munkalap.', 'termek' => 'Nincs ilyen termék.', 'szolgaltatas' => 'Nincs ilyen szolgáltatás.', 'egyedi' => 'A címke nem készült el.', 'tetel' => 'Ehhez a feladathoz nincs címkézhető tétel.'][$sablon]) . '</div>';
+                . esc_html(['rma' => 'Nincs ilyen munkalap.', 'rendeles' => 'Nincs ilyen rendelés.', 'termek' => 'Nincs ilyen termék.', 'szolgaltatas' => 'Nincs ilyen szolgáltatás.', 'egyedi' => 'A címke nem készült el.', 'tetel' => 'Ehhez a feladathoz nincs címkézhető tétel.'][$sablon]) . '</div>';
             wp_die();
         }
 
@@ -1888,6 +1997,77 @@ final class SDH_Muhely_Matrica
         wp_send_json_success(['pdf' => base64_encode(self::pdf([self::minta_adat((string) $b['sablon'])], $b, 1))]);
     }
 
+    /* =================================================================
+     * Címkék menüpont (0.61.1)
+     * ============================================================== */
+
+    /**
+     * A Címkék oldal: innen indul az egyedi címke, és itt látszik egy helyen,
+     * melyik címke hol érhető el, és mi áll rajta. A nyomtató és a tartalom
+     * beállítása a Beállítások › Címkenyomtatás lapon marad (egy helyen).
+     */
+    public static function oldal(): void
+    {
+        $b = self::beallitas();
+        $c = self::meret($b);
+
+        SDH_Muhely_Admin_UI::fejlec(
+            'Címkék',
+            'Brother címkenyomtató: egyedi címke, és ami a munkalapról, termékről, rendelésről megy.',
+            [[
+                'cimke'  => 'Egyedi címke',
+                'ikon'   => 'matrica',
+                'url'    => '#',
+                'elsodleges' => true,
+                'adatok' => ['sdh-matrica' => '0', 'sdh-matrica-tipus' => 'egyedi'],
+            ]]
+        );
+
+        $honnan = [
+            'rma'          => ['Munkalap és rendelés ablakának alján a <strong>Matrica</strong> gomb.', 'A leadott készülékre: ügyfél, lapszám, eszköz, hiba, RMA-kód.'],
+            'termek'       => ['A termék ablakának alján a <strong>Címke</strong> gomb.', 'Árcímke, polccímke: megnevezés, ár, cikkszám, vonalkód.'],
+            'szolgaltatas' => ['A szolgáltatás ablakának alján a <strong>Címke</strong> gomb.', 'Megnevezés, ár (ársávnál tól–ig), kategória.'],
+            'tetel'        => ['Levelezés › <strong>Feladatok</strong> › Címkék.', 'A beszállítói levél tétele – ár nélkül, telefonszámmal.'],
+            'egyedi'       => ['Ezen az oldalon a fenti <strong>Egyedi címke</strong> gomb.', 'Négy sor, amit beírsz. Nem kell hozzá se munkalap, se termék.'],
+        ];
+
+        ?>
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">A nyomtató</h2>
+
+            <p class="sdh-sugo">
+                <strong><?php echo esc_html((string) (self::nyomtatok()[$b['nyomtato']]['nev'] ?? $b['nyomtato'])); ?></strong>
+                · <?php echo esc_html((string) $c['nev']); ?>
+                · <?php echo esc_html($b['mod'] === 'halozat' ? 'közvetlenül hálózaton (' . ($b['ip'] !== '' ? $b['ip'] : 'nincs IP') . ')' : 'böngészőből, a Brother illesztőprogrammal'); ?>.
+                A nyomtató, a tekercs és az, hogy mi kerüljön az egyes címkékre:
+                <a href="<?php echo esc_url(SDH_Muhely_Modulok::url('beallitasok', ['ful' => self::KULCS])); ?>">Beállítások › Címkenyomtatás</a>.
+            </p>
+        </div>
+
+        <div class="sdh-doboz">
+            <h2 class="sdh-doboz__cim">Milyen címkék vannak</h2>
+
+            <table class="sdh-tabla">
+                <thead>
+                    <tr><th>Címke</th><th>Honnan nyomtatod</th><th>Mi van rajta</th><th>Beállítás</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach (self::SABLONOK as $kulcs => $nev) : ?>
+                        <tr>
+                            <td class="sdh-tabla__nev"><?php echo esc_html($nev); ?></td>
+                            <td><?php echo wp_kses_post((string) ($honnan[$kulcs][0] ?? '')); ?></td>
+                            <td><?php echo esc_html((string) ($honnan[$kulcs][1] ?? '')); ?></td>
+                            <td>
+                                <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(SDH_Muhely_Modulok::url('beallitasok', ['ful' => self::KULCS, 'sablon' => $kulcs])); ?>">Mi legyen rajta</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
+
     public static function beallitas_doboz(): void
     {
         $b  = self::beallitas();
@@ -1977,7 +2157,7 @@ final class SDH_Muhely_Matrica
         $nev = $sablon === 'rma' ? 'matrica' : 'matrica_' . $sablon;
         $idp = $nev;
         $meretek = ['0.75' => 'kicsi', '0.85' => 'kisebb', '0.9' => 'kicsit kisebb', '0.95' => 'alig kisebb', '1' => 'normál', '1.15' => 'nagyobb', '1.45' => 'nagy', '1.9' => 'óriás'];
-        $cimke = ['rma' => 'matrica', 'termek' => 'címke', 'szolgaltatas' => 'címke', 'egyedi' => 'címke', 'tetel' => 'címke'][$sablon];
+        $cimke = ['rma' => 'matrica', 'rendeles' => 'címke', 'termek' => 'címke', 'szolgaltatas' => 'címke', 'egyedi' => 'címke', 'tetel' => 'címke'][$sablon];
 
         ?>
         <div class="sdh-matrica-beall" data-sdh-matrica-beall data-sablon="<?php echo esc_attr($sablon); ?>" role="tabpanel"<?php echo $latszik ? '' : ' style="display:none"'; ?>>
@@ -1988,6 +2168,8 @@ final class SDH_Muhely_Matrica
                 <h2 class="sdh-doboz__cim">Elrendezés – <?php echo esc_html(self::SABLONOK[$sablon]); ?></h2>
                 <?php if ($sablon === 'termek') : ?>
                     <p class="sdh-sugo">A termék űrlapjának <strong>Címke</strong> gombja ezzel nyomtat (árcímke, polccímke, alkatrész-azonosító).</p>
+                <?php elseif ($sablon === 'rendeles') : ?>
+                    <p class="sdh-sugo">A rendelés ablakának <strong>Matrica</strong> gombja ezzel nyomtat: a megérkezett árura ragasztva látszik, kinek jött és melyik lapra. Ár alapból nincs rajta, de bekapcsolható.</p>
                 <?php elseif ($sablon === 'tetel') : ?>
                     <p class="sdh-sugo">A beszállítói levél tételeinek címkéje (Levelezés › Feladatok › <strong>Címkék</strong>): a készülék, a megnevezés, az azonosító, a garancia, a cikkszám és a megjegyzés kerül rá. <strong>Ár nem</strong> – az nem az ügyfélre tartozik.</p>
                 <?php elseif ($sablon === 'egyedi') : ?>

@@ -57,7 +57,7 @@ final class SDH_Muhely_Level_Feladat
 
     public static function init(): void
     {
-        foreach (['lista', 'elintez', 'ujranyit', 'cimke'] as $m) {
+        foreach (['lista', 'elintez', 'ujranyit', 'cimke', 'ujra'] as $m) {
             add_action('wp_ajax_sdh_muhely_levelfeladat_' . $m, [self::class, 'ajax_' . $m]);
         }
 
@@ -125,10 +125,16 @@ final class SDH_Muhely_Level_Feladat
         $t   = is_array($sz['tesz'] ?? null) ? $sz['tesz'] : [];
         $olv = sanitize_key((string) ($t['olvaso'] ?? ''));
 
+        $tol = (string) ($sz['tol'] ?? '');
+        $tol = preg_match('/^\d{4}-\d{2}-\d{2}$/', $tol) === 1 ? $tol : '';
+
         return [
             'nev'   => $szo($sz['nev'] ?? '', 60),
             'aktiv' => !empty($sz['aktiv']),
             'fiok'  => $szo($sz['fiok'] ?? '', 10),
+            // Innentől figyeli a leveleket (alapból a bekapcsolás előtti nap):
+            // a régi postafiókot nem dolgozzuk fel visszamenőleg.
+            'tol'   => $tol,
             'ha'    => [
                 'felado'     => mb_strtolower($szo($ha['felado'] ?? '')),
                 'targy'      => mb_strtolower($szo($ha['targy'] ?? '')),
@@ -146,7 +152,8 @@ final class SDH_Muhely_Level_Feladat
     /** @param array<string, array<string, mixed>> $szabalyok */
     public static function ment(array $szabalyok): void
     {
-        $ki = [];
+        $ki   = [];
+        $regi = self::szabalyok();
 
         foreach ($szabalyok as $kulcs => $sz) {
             $kulcs = sanitize_key((string) $kulcs);
@@ -155,17 +162,34 @@ final class SDH_Muhely_Level_Feladat
                 continue;
             }
 
-            $ki[$kulcs] = self::szabaly_szukit($sz);
+            $sor = self::szabaly_szukit($sz);
+
+            // Új szabály: a tegnapi naptól figyel (a régi leveleket nem bányássza elő).
+            // A meglévőé megmarad, hogy a dátum ne csússzon minden mentésnél.
+            $ki[$kulcs] = ['tol' => $sor['tol'] !== '' ? $sor['tol'] : (string) ($regi[$kulcs]['tol'] ?? self::tegnap())] + $sor;
         }
 
         update_option(self::OPT, $ki, false);
     }
 
+    /** A tegnapi nap (az új szabály innentől figyel). */
+    public static function tegnap(): string
+    {
+        return gmdate('Y-m-d', (int) strtotime(current_time('Y-m-d') . ' -1 day'));
+    }
+
     /** Egy szabály beírása / felülírása (az SDH belső modulja ezzel teszi be a sajátját). */
     public static function szabaly_ir(string $kulcs, array $szabaly): void
     {
-        $mind = self::szabalyok();
-        $mind[sanitize_key($kulcs)] = self::szabaly_szukit($szabaly);
+        $kulcs = sanitize_key($kulcs);
+        $mind  = self::szabalyok();
+        $uj    = self::szabaly_szukit($szabaly);
+
+        if ($uj['tol'] === '') {
+            $uj['tol'] = (string) ($mind[$kulcs]['tol'] ?? self::tegnap());
+        }
+
+        $mind[$kulcs] = $uj;
 
         update_option(self::OPT, $mind, false);
     }
@@ -223,13 +247,26 @@ final class SDH_Muhely_Level_Feladat
             return;
         }
 
+        $datum = (string) ($sor['datum'] ?? '');
+
         foreach (self::szabalyok() as $kulcs => $sz) {
             if (!self::illik($sz, $sor)) {
                 continue;
             }
 
+            // A szabály bekapcsolása előtti levelekkel már nincs dolgunk: a régi
+            // postafiókot nem dolgozzuk fel visszamenőleg (0.61.1).
+            if ((string) $sz['tol'] !== '' && $datum !== '' && substr($datum, 0, 10) < (string) $sz['tol']) {
+                continue;
+            }
+
             $adat = [
                 'nyomtat'  => (string) $sz['tesz']['nyomtat'],
+                'olvaso'   => (string) $sz['tesz']['olvaso'],
+                // A szinkron a levélnek csak az elejét tölti le (csatolmány nincs benne),
+                // ezért a melléklet és a tételek a feladat ELSŐ MEGNYITÁSAKOR jönnek
+                // (betolt()) – akkor már a teljes levél a kezünkben van.
+                'betoltve' => false,
                 'csatolmanyok' => self::pdf_csatolmanyok($level),
                 'tetelek'  => [],
                 'targy'    => (string) ($sor['targy'] ?? ''),
@@ -429,6 +466,53 @@ final class SDH_Muhely_Level_Feladat
         return is_array($t) ? array_values(array_filter($t, 'is_array')) : [];
     }
 
+    /**
+     * A feladat kiegészítése a TELJES levélből (0.61.1).
+     *
+     * A szinkron a levélnek csak az elejét tölti le, abban a csatolmány és a
+     * tételek java még nincs benne. Az első megnyitáskor (vagy ha a levél
+     * időközben mappát váltott) letöltjük az egészet, és eltesszük, amit
+     * találtunk: a PDF mellékletek listáját és a tételeket. A levél tartalma
+     * ADAT – a szabály ettől nem változik.
+     */
+    public static function betolt(object $f, bool $kenyszer = false): object
+    {
+        $a = self::adat($f);
+
+        if (!$kenyszer && !empty($a['betoltve']) && (int) $f->level_id > 0) {
+            return $f;
+        }
+
+        if (!class_exists('SDH_Muhely_Levelezes') || !method_exists('SDH_Muhely_Levelezes', 'feladat_level')) {
+            return $f;
+        }
+
+        $teljes = SDH_Muhely_Levelezes::feladat_level((string) $f->message_id, (int) $f->level_id);
+
+        if ($teljes === null) {
+            return $f;
+        }
+
+        global $wpdb;
+
+        $a['betoltve']     = true;
+        $a['csatolmanyok'] = self::pdf_csatolmanyok($teljes['level']);
+
+        if ((string) ($a['olvaso'] ?? '') !== '') {
+            $a['tetelek'] = self::tetelek_olvas((string) $a['olvaso'], (string) $teljes['szoveg'], $teljes['level']);
+        }
+
+        $wpdb->update(self::tabla(), [
+            'level_id' => (int) $teljes['level_id'],
+            'adat'     => wp_json_encode($a),
+        ], ['id' => (int) $f->id]);
+
+        $f->level_id = (int) $teljes['level_id'];
+        $f->adat     = (string) wp_json_encode($a);
+
+        return $f;
+    }
+
     public static function allapot_ir(int $id, string $allapot): bool
     {
         global $wpdb;
@@ -519,6 +603,30 @@ final class SDH_Muhely_Level_Feladat
         wp_send_json_success(['db' => self::nyitott_db(), 'uzenet' => 'Újranyitva.']);
     }
 
+    /** A feladat újraolvasása a levélből (ha a melléklet vagy a tétel hiányzik). */
+    public static function ajax_ujra(): void
+    {
+        self::jog();
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $f = self::feladat(isset($_POST['id']) ? (int) $_POST['id'] : 0);
+
+        if ($f === null) {
+            wp_send_json_error(['uzenet' => 'Nincs ilyen feladat.']);
+        }
+
+        $f = self::betolt($f, true);
+        $a = self::adat($f);
+
+        wp_send_json_success([
+            'pdf'    => count((array) ($a['csatolmanyok'] ?? [])),
+            'tetel'  => count((array) ($a['tetelek'] ?? [])),
+            'uzenet' => count((array) ($a['csatolmanyok'] ?? [])) > 0
+                ? 'Megvan a melléklet.'
+                : 'Ebben a levélben nincs PDF melléklet.',
+        ]);
+    }
+
     /** Egy feladat tételei a címkenyomtatónak (a Matrica ablak ezt kéri). */
     public static function ajax_cimke(): void
     {
@@ -532,7 +640,7 @@ final class SDH_Muhely_Level_Feladat
             wp_send_json_error(['uzenet' => 'Nincs ilyen feladat.']);
         }
 
-        wp_send_json_success(['tetelek' => self::tetelek($f)]);
+        wp_send_json_success(['tetelek' => self::tetelek(self::betolt($f))]);
     }
 
     /** A feladatok ablaka (popup; app.js nyitja „levelfeladat" modulként). */
@@ -572,6 +680,8 @@ final class SDH_Muhely_Level_Feladat
                 <div class="sdh-lf__lista">
                     <?php foreach ($sorok as $f) : ?>
                         <?php
+                        // Első megnyitáskor a teljes levélből egészül ki (melléklet, tételek).
+                        $f       = self::betolt($f);
                         $a       = self::adat($f);
                         $tetelek = self::tetelek($f);
                         $pdf     = (array) ($a['csatolmanyok'] ?? []);
@@ -591,6 +701,11 @@ final class SDH_Muhely_Level_Feladat
                             <div class="sdh-lf__gombok">
                                 <?php if ((int) $f->level_id > 0) : ?>
                                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-level="<?php echo (int) $f->level_id; ?>">Levél megnyitása</button>
+                                <?php endif; ?>
+
+                                <?php if ($pdf === [] && (string) ($a['nyomtat'] ?? '') !== '') : ?>
+                                    <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-lf-ujra="<?php echo (int) $f->id; ?>"
+                                            title="A levél melléklete még nincs letöltve – a gomb újra megnézi a levelet.">Melléklet keresése</button>
                                 <?php endif; ?>
 
                                 <?php foreach ($pdf as $c) : ?>

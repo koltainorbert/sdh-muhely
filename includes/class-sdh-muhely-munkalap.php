@@ -4005,7 +4005,8 @@ final class SDH_Muhely_Munkalap
                       // hogy a megérkezett árura rá lehessen ragasztani, kinek jött. Napi árukiadásnál nincs:
                       // azt az ügyfél rögtön viszi. ?>
                 <?php if (!$uj && $modal && $fajta !== 'arukiadas' && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) : ?>
-                    <?php echo SDH_Muhely_Matrica::gomb((int) $munkalap->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                    <?php // Rendelésnek saját címkesablonja van (0.61.1): a Beállítások › Címkenyomtatás › Rendelés-címke lapon állítható. ?>
+                    <?php echo SDH_Muhely_Matrica::gomb((int) $munkalap->id, $fajta === 'rendeles' ? 'rendeles' : 'rma'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
 
                 <?php // A lap változásnaplója (0.59): ki, mikor, mit módosított (SDH_Muhely_Naplo_Felulet, naplo.js). ?>

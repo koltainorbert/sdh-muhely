@@ -64,6 +64,23 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.61.1
+- **Címkék menüpont** (az oldalmenüben): innen indul az **Egyedi címke** (eltűnt az Áttekintés fejlécéből), és egy
+  táblázat mutatja, melyik címke hol érhető el és mi áll rajta – a tartalom beállítása egy kattintás.
+- **Rendelés-címke**: a rendelés saját címkesablont kapott (ügyfél neve, lapszám, telefon, eszköz, tételek, dátum;
+  ár alapból nincs rajta, de bekapcsolható) – eddig az RMA-matricát használta.
+- **A levél-feladat nem megy vissza az időben**: minden szabálynak van kezdőnapja (új szabálynál a bekapcsolás előtti
+  nap), a régebbi leveleket nem dolgozza fel. Állítható a Gigatel lapon és a szabályszerkesztőben.
+- **A melléklet és a tételek a feladat megnyitásakor töltődnek be** a teljes levélből: a szinkron a levélnek csak az
+  elejét tölti le, abban a PDF még nincs benne – ezért hiányzott a „Számla nyomtatása" és a „Címkék" gomb. A levél
+  megnyitása a feladatból előbb bezárja az ablakot (eddig a popup mögött nyílt meg). Ha mégsem jön a melléklet,
+  a **Melléklet keresése** gomb újraolvassa a levelet.
+- **A tételolvasó HTML-levélből is dolgozik** (a Gigatel levele táblázatos): a címkék és az árat jelző sorok
+  felismerése a sortörésektől függetlenül megy.
+- **A jelzések a jobb felső sarokba kerültek**: eddig a lap aljára, a részletpanel „lábába" csúsztak, és az
+  asszisztens figurája takarta őket.
+- **Ügyféloldal (RMA)**: a lapfülek helyett ikonos **pillek**, a számláló jelvénnyel.
+
 ### 0.61.0
 - **Levél-feladat ügynök** (Levelezés): a visszatérő levelekből teendő lesz. Szabály (feladó + tárgy + melléklet) →
   feladat, a levél mappába kerül (létre is hozza), a melléklet PDF-je egy gombbal nyomtatható, a levél tételeiből

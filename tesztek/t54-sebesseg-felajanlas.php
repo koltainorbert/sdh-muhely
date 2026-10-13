@@ -148,6 +148,9 @@ $ml = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-mun
 T::tartalmaz($ml, "\$fajta !== 'arukiadas' && (int) \$munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica')", 'a Matrica gomb a rendelésen is ott van, az árukiadáson nem');
 
 $ui = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-admin-ui.php');
-T::tartalmaz($ui, "'sdh-matrica-tipus' => 'egyedi'", 'az Áttekintés fejlécében ott az Egyedi címke gomb');
+// 0.61.1: az Egyedi címke az Áttekintésről a Címkék menüpontba került.
+$mat = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-matrica.php');
+T::tartalmaz($mat, "'sdh-matrica-tipus' => 'egyedi'", 'az Egyedi címke gomb a Címkék oldalon van');
+T::nem_tartalmaz($ui, "'sdh-matrica-tipus' => 'egyedi'", 'az Áttekintés fejlécében már nincs');
 
 T::vege('t54 sebesség, felajánlás, betű területenként, címkék');

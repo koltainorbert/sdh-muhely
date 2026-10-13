@@ -76,7 +76,7 @@ Amit érdemes tudnod:
 
 ## Amit az ügyfél az ügyféloldalon lát
 
-Felül a fejléc, bal oldalt az összegzés, jobbra a lapfülek. Telefonon az összegzés külön **Összegzés** fül lesz.
+Felül a fejléc, bal oldalt az összegzés, jobbra a tartalom – amit **ikonos pillek** sora kapcsol (Eszköz, Hibák, Szolgáltatások, Termékek, Történet, Üzenetek, Elérhetőség). A pillen szám jelzi, hány tétel van rajta, az aktív pill kiemelt színű. Telefonon az összegzés külön **Összegzés** pill lesz.
 
 ### Fejléc
 

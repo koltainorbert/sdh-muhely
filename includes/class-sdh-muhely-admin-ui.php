@@ -745,17 +745,6 @@ final class SDH_Muhely_Admin_UI
             ];
         }
 
-        // Egyedi címke (0.60.1): amire hirtelen kell valamit ráírni és kinyomtatni –
-        // nem kell hozzá se munkalap, se termék, csak a szöveg.
-        if (class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) {
-            $gombok[] = [
-                'cimke'  => 'Egyedi címke',
-                'ikon'   => 'matrica',
-                'url'    => '#',
-                'adatok' => ['sdh-matrica' => '0', 'sdh-matrica-tipus' => 'egyedi'],
-            ];
-        }
-
         // A modulcsempék elrejtése / megjelenítése (app.js; a felirat is ott vált).
         // A csempék szerkesztése (mi látszik, sorrend, felirat) adminfeladat: a Beállításokban van.
         $gombok[] = [

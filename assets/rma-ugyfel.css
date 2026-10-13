@@ -354,42 +354,42 @@ body.rma {
     border-right: 1px solid var(--sdh-keret);
 }
 
+/* A fülek pillek (0.61.1): lekerekített, ikonos gombok – a CRM felületének
+   megszokott eleme. Nem „bordás" lapfülsor: külön álló, kattintható pillek. */
 .rma-fulek {
     display: flex;
-    gap: 2px;
+    flex-wrap: wrap;
+    gap: .4rem;
     grid-column: 2;
     grid-row: 1;
-    padding: .7rem 1rem 0;
-    overflow-x: auto;
-    border-bottom: 1px solid var(--sdh-keret-eros);
-    scrollbar-width: none;
-}
-
-.rma-fulek::-webkit-scrollbar {
-    display: none;
+    padding: .7rem 1rem;
+    border-bottom: 1px solid var(--sdh-keret);
 }
 
 .rma-ful {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-    gap: .4rem;
-    margin-bottom: -1px;
-    padding: .45rem .8rem;
-    border: 1px solid transparent;
-    border-radius: 8px 8px 0 0;
-    background: transparent;
+    gap: .45rem;
+    height: 34px;
+    padding: 0 .85rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 999px;
+    background: var(--sdh-felulet);
     color: var(--sdh-szoveg-2);
     font: inherit;
     font-size: 13px;
     font-weight: 500;
+    line-height: 1;
     white-space: nowrap;
     cursor: pointer;
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
 }
 
 .rma-ful .rma-ikon {
     width: 16px;
     height: 16px;
+    flex: 0 0 auto;
 }
 
 .rma-ful:hover {
@@ -397,18 +397,33 @@ body.rma {
     color: var(--sdh-szoveg);
 }
 
+.rma-ful:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
 .rma-ful.is-aktiv {
-    border-color: var(--sdh-keret-eros);
-    border-bottom-color: var(--sdh-felulet);
-    background: var(--sdh-felulet);
-    box-shadow: inset 0 2px 0 var(--sdh-accent);
-    color: var(--sdh-szoveg);
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
     font-weight: 600;
 }
 
 .rma-ful .sdh-fulek__db {
-    margin-left: 0;
+    margin-left: .1rem;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg-2);
+    font-size: 11px;
+    font-weight: 700;
 }
+
+.rma-ful.is-aktiv .sdh-fulek__db {
+    background: var(--sdh-accent);
+    color: #fff;
+}
+
 
 .rma-csak-mobil {
     display: none;
@@ -975,7 +990,7 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 
     .rma-fulek {
         grid-column: 1;
-        padding: .5rem .6rem 0;
+        padding: .5rem .6rem;
     }
 
     .rma-csak-mobil {

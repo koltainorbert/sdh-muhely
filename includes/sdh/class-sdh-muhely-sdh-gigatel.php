@@ -65,6 +65,11 @@ final class SDH_Muhely_Sdh_Gigatel
             'felado' => isset($b['felado']) ? (string) $b['felado'] : 'gigatel',
             'targy'  => isset($b['targy']) ? (string) $b['targy'] : 'számlája elkészült',
             'mappa'  => isset($b['mappa']) ? (string) $b['mappa'] : 'Gigatel számla',
+            // Innentől figyeli a leveleket: alapból a bekapcsolás előtti nap.
+            // A régi postafiókot nem bányásszuk elő visszamenőleg (0.61.1).
+            'tol'    => isset($b['tol']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $b['tol']) === 1
+                ? (string) $b['tol']
+                : SDH_Muhely_Level_Feladat::tegnap(),
         ];
     }
 
@@ -77,6 +82,7 @@ final class SDH_Muhely_Sdh_Gigatel
             'nev'   => 'Gigatel számla',
             'aktiv' => $b['aktiv'] && SDH_Muhely_Sdh::be(),
             'fiok'  => '',
+            'tol'   => $b['tol'],
             'ha'    => ['felado' => $b['felado'], 'targy' => $b['targy'], 'csatolmany' => ''],
             'tesz'  => ['mappa' => $b['mappa'], 'ertesit' => true, 'nyomtat' => 'csatolmany', 'olvaso' => 'gigatel'],
         ]);
@@ -125,7 +131,16 @@ final class SDH_Muhely_Sdh_Gigatel
      */
     public static function tetelek(string $szoveg, array $level = []): array
     {
-        $sorok = preg_split('/\R/u', (string) $szoveg) ?: [];
+        // A levél HTML-ből is jöhet: ott a címkék egy sorba csúszhatnak. Minden
+        // ismert címke és a tételt záró sorok elé sortörést teszünk, hogy a
+        // feldolgozás ugyanúgy menjen, mint a szöveges változatnál (0.61.1).
+        $nyers = (string) preg_replace(
+            '/\s*(Azonosító\s*:|Garancia\s*:|Cikkszám\s*:|Megjegyzés\s*:|Nettó egységár\s*:|\d+\s*db\s+Készleten)/ui',
+            "\n$1",
+            (string) $szoveg
+        );
+
+        $sorok = preg_split('/\R/u', $nyers) ?: [];
         $sorok = array_map(static fn (string $s): string => trim(preg_replace('/\s+/u', ' ', $s) ?? ''), $sorok);
 
         $cimkek = [
@@ -153,6 +168,18 @@ final class SDH_Muhely_Sdh_Gigatel
                     $ertek = trim((string) $m[1]);
                     break;
                 }
+            }
+
+            // Ár és készlet: ezek a tétel VÉGÉT jelzik, és soha nem kerülnek a címkére.
+            if (preg_match('/^(Nettó egységár\s*:|Bruttó\s*:|\d+\s*db\s+Készleten|[\d\s]+Ft$)/ui', $sor) === 1) {
+                if ($most !== null) {
+                    $tetelek[] = $most;
+                    $most = null;
+                }
+
+                $elozo = [];
+
+                continue;
             }
 
             if ($mezo === '') {
@@ -262,6 +289,13 @@ final class SDH_Muhely_Sdh_Gigatel
                 </div>
 
                 <div class="sdh-mezo">
+                    <label for="sdh_gigatel_tol">Ettől a naptól figyelje</label>
+                    <input type="text" name="sdh_gigatel_tol" id="sdh_gigatel_tol" maxlength="10" autocomplete="off"
+                           inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="ÉÉÉÉ-HH-NN" value="<?php echo esc_attr($b['tol']); ?>">
+                    <span class="sdh-mezo__sugo">A régebbi leveleket nem dolgozza fel – felesleges visszamenőleg feladatot nyitni rájuk. Alapból a bekapcsolás előtti nap.</span>
+                </div>
+
+                <div class="sdh-mezo">
                     <label for="sdh_gigatel_mappa">Melyik mappába kerüljön</label>
                     <input type="text" name="sdh_gigatel_mappa" id="sdh_gigatel_mappa" maxlength="120" autocomplete="off" value="<?php echo esc_attr($b['mappa']); ?>">
                     <span class="sdh-mezo__sugo">Ha nincs ilyen mappa a postafiókban, a rendszer létrehozza. Üresen hagyva a levél a helyén marad.</span>
@@ -293,11 +327,15 @@ final class SDH_Muhely_Sdh_Gigatel
             ? mb_substr(sanitize_text_field(wp_unslash((string) $_POST[$nev])), 0, 190)
             : $alap;
 
+        $regi = self::beallitas();
+        $tol  = $szo('sdh_gigatel_tol', '');
+
         update_option(self::OPT, [
             'aktiv'  => !empty($_POST['sdh_gigatel_aktiv']),
             'felado' => $szo('sdh_gigatel_felado', 'gigatel'),
             'targy'  => $szo('sdh_gigatel_targy', 'számlája elkészült'),
             'mappa'  => $szo('sdh_gigatel_mappa', 'Gigatel számla'),
+            'tol'    => preg_match('/^\d{4}-\d{2}-\d{2}$/', $tol) === 1 ? $tol : $regi['tol'],
         ], false);
         // phpcs:enable
 

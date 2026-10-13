@@ -223,8 +223,11 @@ A Levelezés oldal tetején a **Feladatok** gomb mutatja, hány teendő van nyit
 |---|---|
 | **Levél megnyitása** | A levelezőben megnyitja magát a levelet. |
 | **Számla nyomtatása (fájlnév)** | Új lapon megnyitja a mellékelt PDF-et – onnan nyomtatod. |
+| **Melléklet keresése** | Csak akkor látszik, ha a melléklet még nem került elő. Újraolvassa a levelet a postafiókról. |
 | **Címkék (n tétel)** | A címkenyomtató ablaka nyílik meg a tételekkel: kipipálod, melyikre kell, és nyomtatod. |
 | **Elintézve** | Lezárja a feladatot. Ettől szűnik meg az emlékeztető. |
+
+A melléklet és a tételek a feladat **első megnyitásakor** jönnek elő: a rendszer a levélnek előbb csak az elejét tölti le (abban a PDF még nincs benne), és csak akkor olvassa végig, amikor ránézel. Ezért az első megnyitás egy pillanattal tovább tart.
 
 Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért, hogy a számla kinyomtatása ne maradjon el. Az **Elintézve** után nem szól többet; a lezárt feladat az **Az elintézettek is** gombbal nézhető vissza, és újranyitható.
 
@@ -233,6 +236,7 @@ Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért,
 **Beállítások › Levelezés › Levél-feladat ügynök**. Egy szabály két részből áll:
 
 - **Mikor:** a feladó tartalmazza…, a tárgy tartalmazza…, és (ha kell) legyen melléklet. Feltétel nélküli szabály nem fut – nehogy mindenre ráugorjon.
+- **Ettől a naptól:** a szabály csak az ennél újabb levelekkel foglalkozik. Új szabály a bekapcsolás előtti naptól figyel, így a régi postafiókra nem nyit visszamenőleg több száz feladatot.
 - **Mit:** melyik mappába kerüljön, emlékeztessen-e, ajánlja-e a melléklet nyomtatását, és melyik **tételolvasó** nézze át a levelet.
 
 A tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ami csak az SDH-é (például a Gigatel), az a **Beállítások › SDH – belső** sorban van, és eladáskor nem megy ki.
