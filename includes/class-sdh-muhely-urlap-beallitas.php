@@ -89,6 +89,7 @@ final class SDH_Muhely_Urlap_Beallitas
                 'rendeles_sor' => ['Hol tart / Rendelésszám', 'A rendelés útja és a beszállító rendelésszáma.'],
                 'ugyfelkartya' => ['Ügyfélkártya', 'Az ügyfél adatai a lapfülek fölött.'],
                 'eszkozpanel'  => ['Eszközök a lapon', 'Az eszközkártyák és az Eszköz csatolása gomb.'],
+                'eszkoz_csatolas' => ['+ Eszköz csatolása gomb', 'Még egy eszköz erre a munkalapra. Kikapcsolva egy lapon egy eszköz marad (a már csatoltak látszanak).'],
                 'ful_eszkoz'   => ['Eszköz lapfül', 'Az ügyfél és a készülék összefoglalója.'],
                 'ful_hibak'    => ['Hibák lapfül', 'A hibasorok.'],
                 'ful_szolg'    => ['Szolgáltatások lapfül', 'A szolgáltatás-tételek.'],
@@ -102,7 +103,7 @@ final class SDH_Muhely_Urlap_Beallitas
             if ($javitas) {
                 unset($fo['eladas_mezok'], $fo['rendeles_sor'], $fo['ugyfelkartya']);
             } else {
-                unset($fo['eszkozpanel'], $fo['ful_eszkoz'], $fo['ful_hibak']);
+                unset($fo['eszkozpanel'], $fo['eszkoz_csatolas'], $fo['ful_eszkoz'], $fo['ful_hibak']);
             }
 
             if ($fajta === 'arukiadas') {

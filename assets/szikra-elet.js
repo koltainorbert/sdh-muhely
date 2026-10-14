@@ -26,6 +26,8 @@
     window.SDH_SZIKRA_ELET = true;
 
     var ALTESTI = A.altesti !== false;
+    // Bulis jelenetek (0.62.1): sörözés és tántorgás, füves cigi. Alapból KI – Beállítások › Asszisztens.
+    var BULIS = A.bulis === true;
     var TINTA = '#0b1020';
     var S = null;          // az asszisztens.js felülete
     var n = 1;             // a felület nagyítása (--sdh-n)
@@ -396,7 +398,12 @@
         fingfelho: [44, 34, g('<path d="M8 30C0 30 0 20 8 18 8 8 20 6 24 12c4-6 16-4 14 6 6 2 6 12-2 12z" fill="rgba(134,239,172,.85)"/>')],
         kotel: [20, 140, g('<path d="M10 0v120" stroke="#a16207" stroke-width="3"/><circle cx="10" cy="126" r="7" fill="#ef4444"/>')],
         gomb: [40, 30, g('<rect x="2" y="16" width="36" height="12" rx="3" fill="#4b5563"/><path d="M8 16a12 9 0 0 1 24 0z" fill="#ef4444"/>')],
-        pocsolya: [40, 10, '<ellipse cx="20" cy="5" rx="18" ry="4" fill="rgba(250,204,21,.55)"/>']
+        pocsolya: [40, 10, '<ellipse cx="20" cy="5" rx="18" ry="4" fill="rgba(250,204,21,.55)"/>'],
+        // Bulis kellékek (0.62.1).
+        sor: [34, 42, g('<path d="M26 14h4a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-4" fill="none" stroke-width="2.6"/>' +
+            '<rect x="3" y="10" width="24" height="30" rx="3" fill="#f59e0b"/><path d="M9 16v18M15 16v18M21 16v18" stroke="#fde68a" stroke-width="1.6"/>' +
+            '<path d="M2 12c0-6 4-8 7-7 2-4 8-4 10 0 3-2 9 0 8 7z" fill="#fff"/>')],
+        fustkarika: [30, 30, '<g fill="none" stroke="rgba(203,213,225,.9)" stroke-width="3"><circle cx="15" cy="15" r="9"/></g>']
     };
 
     function svg(nev) {
@@ -418,7 +425,12 @@
         napszemuveg: '<path d="M18 40h64" stroke="#0b1020" stroke-width="3.4" stroke-linecap="round"/><path d="M22 40h22v8a11 11 0 0 1-22 0zM56 40h22v8a11 11 0 0 1-22 0z" fill="#0b1020"/>',
         fejhallgato: '<path d="M14 50C14 10 86 10 86 50" fill="none" stroke="#0b1020" stroke-width="5"/><rect x="6" y="42" width="14" height="22" rx="5" fill="#6366f1" stroke="#0b1020" stroke-width="2.6"/><rect x="80" y="42" width="14" height="22" rx="5" fill="#6366f1" stroke="#0b1020" stroke-width="2.6"/>',
         habok: '<g fill="rgba(255,255,255,.85)" stroke="#8fd3ff" stroke-width="1.6"><circle cx="20" cy="18" r="8"/><circle cx="34" cy="10" r="6"/><circle cx="78" cy="20" r="9"/><circle cx="64" cy="10" r="5"/><circle cx="12" cy="70" r="6"/><circle cx="90" cy="64" r="6"/></g>',
-        kolomp: '<path d="M50 -8v8" stroke="#0b1020" stroke-width="2"/>'
+        kolomp: '<path d="M50 -8v8" stroke="#0b1020" stroke-width="2"/>',
+        sor: '<g transform="translate(64 44) scale(.95)">' + RAJZ.sor[2] + '</g>',
+        // Cigi a szájsarokban: parázs a végén, fölötte gomolygó füst.
+        cigi: '<g transform="translate(58 64) rotate(-14)"><rect x="0" y="-2.4" width="26" height="4.8" rx="2" fill="#f8fafc" stroke="#0b1020" stroke-width="1.6"/>' +
+            '<circle cx="26.5" cy="0" r="3" fill="#f97316" stroke="#0b1020" stroke-width="1.4"/></g>' +
+            '<g class="sdh-sz-lebeg" fill="none" stroke="rgba(203,213,225,.95)" stroke-width="3" stroke-linecap="round"><path d="M86 52c-5-5 5-8 0-13s5-8 0-13"/><path d="M93 46c-4-4 4-7 0-11"/></g>'
     };
 
     function kellek(nev) {
@@ -1105,6 +1117,68 @@
             c.vege(4200);
         },
 
+        /* --- Bulis: sörözés, egyre jobban tántorog (0.62.1) --- */
+        pia: function (c) {
+            c.kellek('sor');
+            c.mim('boldog');
+            c.mond(veletlen(['Egészségünkre!', 'Csak egy pohárral…', 'Munka után jár egy sör!']), 1500);
+            c.figura([T(0), T(0, 0, 'rotate(-12deg)'), T(0)], 900);
+            c.ido(1100, function () { c.mond('Glugy-glugy-glugy…', 1300); });
+            c.ido(2600, function () {
+                c.mim('szédült');
+                c.mond('Hukk!', 800);
+                // Tántorgás: jobbra-balra dülöngél, egyre nagyobbat.
+                c.figura([T(0), T(10, 2, 'rotate(9deg)'), T(-8, 0, 'rotate(-11deg)'), T(14, 3, 'rotate(13deg)'), T(-12, 0, 'rotate(-14deg)'), T(0)], 2600, { easing: 'ease-in-out' });
+            });
+            c.ido(4000, function () { c.mond(veletlen(['Nem vagyok részeg… csak a padló mozog.', 'Ki tette ide ezt a… képernyőt?', 'Én vagyok a legjobb Szikra a világon! Hukk!']), 2000); });
+            c.ido(5400, function () {
+                if (Math.random() < .5) {
+                    c.figura([T(0), T(-6, 0, 'rotate(-75deg)')], 500, { easing: 'ease-in' });
+                    c.mim('alvó');
+                    c.kellek('');
+                    c.mond('Zzz…', 1400);
+                    c.ido(1800, function () { c.figura([T(-6, 0, 'rotate(-75deg)'), T(0)], 600); c.mim('kiütött', 1200); c.mond('Mi történt?', 1000); });
+                } else {
+                    c.figura([T(0), T(8, 0, 'rotate(10deg)'), T(-6, 0, 'rotate(-8deg)'), T(0)], 1200);
+                    c.mim('vigyorgó');
+                    c.mond('Még egyet! …Holnap.', 1400);
+                    c.kellek('');
+                }
+            });
+            c.vege(8200);
+        },
+
+        /* --- Bulis: füves cigi, füstkarikák, vihogás, végén éhes (0.62.1) --- */
+        fu: function (c) {
+            c.kellek('cigi');
+            c.mim('laza');
+            c.mond(veletlen(['Csak egy slukk…', 'Ez itt… gyógynövény.', 'Relaxáció, kollégák.']), 1500);
+            c.ido(1500, function () {
+                [0, 500, 1000].forEach(function (ms, i) {
+                    c.ido(ms, function () {
+                        var k = c.szereplo('fustkarika', -20 - i * 6, 70, .8 + i * .2);
+
+                        c.mozgat(k, [Object.assign({ opacity: .95 }, { transform: T(0) }), { opacity: 0, transform: T(-10 - i * 8, 60) }], 2200, { easing: 'ease-out' });
+                    });
+                });
+                c.mim('álmos');
+                c.figura([T(0), T(0, 0, 'rotate(-4deg)'), T(0, 0, 'rotate(4deg)'), T(0)], 1800, { iterations: 2 });
+            });
+            c.ido(3600, function () {
+                c.mim('röhögő');
+                c.mond(veletlen(['Hihihi… a kurzor… hullámzik…', 'Hé… a munkalapok… beszélnek hozzám…', 'Miért ilyen vicces ez az IMEI-szám? Hihihi!']), 2000);
+                c.figura([T(0), T(0, 3), T(0), T(0, 3), T(0)], 700, { iterations: 2 });
+            });
+            c.ido(6000, function () {
+                c.kellek('burger');
+                c.mim('éhes');
+                c.mond('Most… megennék egy egész pizzériát.', 1800);
+                igeny.ehseg = Math.min(130, (igeny.ehseg || 0) + 40);
+            });
+            c.ido(7800, function () { c.kellek(''); c.mim('jóllakott', 1200); });
+            c.vege(9000);
+        },
+
         /* --- Vakarózik --- */
         vakarozik: function (c) {
             c.mim('gyanakvó');
@@ -1118,6 +1192,7 @@
     // Melyik jelenet melyik szükségletet csillapítja.
     var IGENY_JELENET = {
         ehseg: ['eves', 'ivas'],
+        buli: BULIS ? ['pia', 'fu'] : [],
         pisi: ['pisi'],
         kaki: ['kaki'],
         budos: ['budos'],
@@ -1126,21 +1201,24 @@
     };
 
     var ALTESTI_JELENETEK = ['pisi', 'kaki', 'fing', 'budos'];
+    var BULIS_JELENETEK = ['pia', 'fu'];
 
     // Alkalmi jelenetek súlya (a szükségletektől függetlenül is előfordulnak).
     var ALKALMI = [
         ['csirke', 3], ['eger', 3], ['madar', 3], ['pityu', 3], ['kodbaro', 2], ['tusszent', 3], ['csuklik', 2],
         ['csajozas', 2], ['baratno', 1], ['motor', 2], ['auto', 2], ['edzes', 2], ['telefon', 2], ['zene', 2],
-        ['vakarozik', 2], ['fing', 2], ['ivas', 1]
-    ].filter(function (j) { return ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1; });
+        ['vakarozik', 2], ['fing', 2], ['ivas', 1], ['pia', 4], ['fu', 4]
+    ].filter(function (j) {
+        return (ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1) && (BULIS || BULIS_JELENETEK.indexOf(j[0]) === -1);
+    });
 
     /* ================================================================ */
     /* Szükségletek                                                       */
     /* ================================================================ */
 
     // Percenkénti növekedés (100-nál „sürgős").
-    var NOVEKEDES = { ehseg: 1.1, pisi: 1.5, kaki: .6, faradt: .8, budos: .45, magany: .7, kaland: 1 };
-    var IGENY_NEV = { ehseg: 'éhes', pisi: 'pisilnie kell', kaki: 'WC-re kell mennie', faradt: 'fáradt', budos: 'büdös', magany: 'hiányzik neki Csilla', kaland: 'kalandra vágyik' };
+    var NOVEKEDES = { ehseg: 1.1, pisi: 1.5, kaki: .6, faradt: .8, budos: .45, magany: .7, kaland: 1, buli: 1.3 };
+    var IGENY_NEV = { ehseg: 'éhes', pisi: 'pisilnie kell', kaki: 'WC-re kell mennie', faradt: 'fáradt', budos: 'büdös', magany: 'hiányzik neki Csilla', kaland: 'kalandra vágyik', buli: 'bulizni akar' };
     var igeny = {};
     var TAR = 'sdh-szikra-igeny';
 
@@ -1165,6 +1243,10 @@
         if (!ALTESTI) {
             igeny.pisi = igeny.kaki = igeny.budos = 0;
         }
+
+        if (!BULIS) {
+            igeny.buli = 0;
+        }
     }
 
     function igenyMent() {
@@ -1180,6 +1262,10 @@
 
         if (!ALTESTI) {
             igeny.pisi = igeny.kaki = igeny.budos = 0;
+        }
+
+        if (!BULIS) {
+            igeny.buli = 0;
         }
     }
 

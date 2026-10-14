@@ -122,6 +122,7 @@ Rövid jelenetek a képernyő alján, a figura bal oldalán:
 | Tüsszentés, csuklás, vakarózás | „Ha… haaa… HAPCI!”, „hukk!”, és valami csíp. |
 | Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |
 | Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |
+| Sörözés, füves cigi | Csak bekapcsolt **Bulis jelenetek** mellett: sört iszik, csuklik és tántorog (néha elalszik), füves cigiből füstkarikákat fúj, vihog, utána farkaséhes. |
 
 Minden szereplő saját rajz. Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.
 
@@ -282,6 +283,7 @@ A kulcs a webhely beállítófájljában is megadható – az a legbiztonságosa
 | **Párbaj a Hiba-bogárral** | Bekapcsolva a figura időnként fénypenge-párbajt vív egy kis bogárral a képernyő alján. Alap: bekapcsolva. Az élénkség nullán, vagy a gépen beállított „kevesebb mozgás” mellett nincs párbaj. |
 | **Szikra élete** | Bekapcsolva a figura lélegzik, több száz arckifejezést vált, szükségletei vannak, és rövid jeleneteket játszik a képernyő alján (lásd: Szikra élete). Alap: bekapcsolva. |
 | **Altesti humor** | A pisilés, kakilás, fing és büdösség jelenetei. Kikapcsolva ezek nem jönnek, a többi marad. Alap: bekapcsolva. |
+| **Bulis jelenetek** | Sörözés tántorgással és füves cigi (rajzfilmes poén). Bekapcsolva rendszeresen előjönnek. Alap: kikapcsolva – ügyfél előtt ne legyen bekapcsolva. |
 
 ### Mit tehet az asszisztens
 
@@ -410,6 +412,10 @@ Ennyi javaslata vár jóváhagyásra. Kattints rá, és a beszélgetésben megta
 ### Miért alszik?
 
 Négy perc tétlenség után elalszik. Az első egérmozdulatra vagy billentyűre felébred.
+
+### Hogyan kapcsolom be, hogy Szikra sörözzön és füvezzen?
+
+Beállítások › Asszisztens › **Bulis jelenetek**. Alapból ki van kapcsolva; bekapcsolva rendszeresen sörözik (csuklik, tántorog, néha elalszik), és füves cigit szív (füstkarikák, vihogás, utána éhes). Kattintásra vagy gépelésre azonnal abbahagyja.
 
 ### Át lehet nevezni?
 

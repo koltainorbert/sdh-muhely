@@ -40,6 +40,7 @@ T::nem_tartalmaz($h, 'data-sdh-ub-ki', 'alapból semmi nincs elrejtve');
 T::tartalmaz($h, 'data-sdh-ub="bevizsgalas"', 'a bevizsgálási díj kapcsolható');
 T::tartalmaz($h, 'data-sdh-ub="ful_hibak"', 'a Hibák lapfül kapcsolható');
 T::tartalmaz($h, 'data-sdh-ub="gomb_szamlazz"', 'a Számlázz.hu gomb kapcsolható');
+T::tartalmaz($h, 'data-sdh-tovabbi-uj data-sdh-ub="eszkoz_csatolas"', 'az Eszköz csatolása gomb kapcsolható (0.62.1)');
 
 $ark = t_ajax('sdh_muhely_arukiadas_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => 0])['nyers'];
 T::tartalmaz($ark, 'data-sdh-ub-nyit="arukiadas"', 'a napi árukiadáson saját fogaskerék');
@@ -48,6 +49,7 @@ T::nem_tartalmaz($ark, 'data-sdh-ub="bevizsgalas"', 'árukiadásnál nincs beviz
 $ren = t_ajax('sdh_muhely_rendelesek_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => 0])['nyers'];
 T::tartalmaz($ren, 'data-sdh-ub-nyit="rendeles"', 'a rendelésen saját fogaskerék');
 T::tartalmaz($ren, 'data-sdh-ub="rendeles_sor"', 'a „Hol tart" sor kapcsolható');
+T::nem_tartalmaz($ren, 'data-sdh-ub="eszkoz_csatolas"', 'eladásnál nincs eszközcsatolás-kapcsoló');
 
 $sz = $szaml($id, 'fo');
 T::tartalmaz($sz, 'data-sdh-ub-nyit="szamla"', 'a Számlázz.hu ablakban ott a fogaskerék');

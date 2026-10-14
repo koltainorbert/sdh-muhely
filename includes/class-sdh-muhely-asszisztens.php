@@ -94,7 +94,7 @@ final class SDH_Muhely_Asszisztens
      * ============================================================== */
 
     /**
-     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, parbaj: bool, elet: bool, altesti: bool, eszkozok: array<string, bool>}
+     * @return array{be: bool, nev: string, modell: string, kulcs: string, olvasas_engedely: bool, proaktiv: bool, napi_max: int, humor: int, elenkseg: int, parbaj: bool, elet: bool, altesti: bool, bulis: bool, eszkozok: array<string, bool>}
      */
     public static function beallitas(): array
     {
@@ -121,6 +121,8 @@ final class SDH_Muhely_Asszisztens
             // büdösség) külön kapcsolható.
             'elet'             => !isset($b['elet']) || (bool) $b['elet'],
             'altesti'          => !isset($b['altesti']) || (bool) $b['altesti'],
+            // Bulis jelenetek (0.62.1): sörözés, tántorgás, füves cigi – alapból KI (ügyfél előtt, eladásnál).
+            'bulis'            => !empty($b['bulis']),
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
             // Melyik figura (0.61.0): tíz választható alak, mind saját színnel és arccal.
             'figura'           => isset(self::figurak()[(string) ($b['figura'] ?? '')]) ? (string) $b['figura'] : 'szikra',
@@ -237,6 +239,7 @@ final class SDH_Muhely_Asszisztens
             'parbaj'   => $b['parbaj'],
             'elet'     => $b['elet'],
             'altesti'  => $b['altesti'],
+            'bulis'    => $b['bulis'],
             'figura'   => $b['figura'],
             // A Súgó címe: a túra végén és a „nem találom" válaszoknál ide vezet.
             'sugo'     => class_exists('SDH_Muhely_Sugo') ? SDH_Muhely_Modulok::url(SDH_Muhely_Sugo::KULCS) : '',
@@ -1314,6 +1317,8 @@ final class SDH_Muhely_Asszisztens
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
             'altesti'          => isset($_POST['elet_jelen']) ? self::p('altesti', 2) === '1' : $b['altesti'],
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            'bulis'            => isset($_POST['elet_jelen']) ? self::p('bulis', 2) === '1' : $b['bulis'],
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
             'figura'           => isset($_POST['figura']) && isset(self::figurak()[sanitize_key(wp_unslash((string) $_POST['figura']))])
                 ? sanitize_key(wp_unslash((string) $_POST['figura']))
                 : $b['figura'],
@@ -1802,6 +1807,7 @@ final class SDH_Muhely_Asszisztens
                     <input type="hidden" name="elet_jelen" value="1">
                     <label class="sdh-cs-kapcs"><input type="checkbox" name="elet" value="1"<?php checked($b['elet']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong><?php echo esc_html($b['nev']); ?> élete</strong> – éhes lesz, elfárad, lélegzik, több mint 300 arckifejezése van, és rövid jeleneteket játszik a képernyő alján: csirkével és egérrel hadakozik, madár támad rá, motorozik, autózik, csajozni megy, meglátogatja a barátnője, és Pechás Pityunak mindig rossz napja van. Kattintásra vagy gépelésre azonnal abbahagyja.</span></label>
                     <label class="sdh-cs-kapcs"><input type="checkbox" name="altesti" value="1"<?php checked($b['altesti']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong>Altesti humor</strong> – pisilés a bokorba, kakilás újsággal, fing, büdösség és zuhany. Ügyfél előtt érdemes kikapcsolni.</span></label>
+                    <label class="sdh-cs-kapcs"><input type="checkbox" name="bulis" value="1"<?php checked($b['bulis']); ?>><span class="sdh-cs-kapcs__sin"></span><span><strong>Bulis jelenetek</strong> – <?php echo esc_html($b['nev']); ?> rendszeresen sörözik és tántorogva bepiál (csuklik, néha elalszik), és füves cigit szív (füstkarikák, vihogás, utána farkaséhes). Rajzfilmes poén; alapból ki van kapcsolva – ügyfél előtt ne legyen bekapcsolva.</span></label>
                 </div>
             </div>
 

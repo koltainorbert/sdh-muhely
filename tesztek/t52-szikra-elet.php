@@ -73,7 +73,18 @@ foreach (['csirke', 'eger', 'madar', 'pityu', 'kodbaro', 'pisi', 'kaki', 'fing',
 }
 
 T::tartalmaz($js, "var ALTESTI_JELENETEK = ['pisi', 'kaki', 'fing', 'budos'];", 'az altesti jelenetek külön kapcsolhatók');
-T::tartalmaz($js, 'return ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1;', 'kikapcsolva nem kerülnek a sorba');
+T::tartalmaz($js, '(ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1)', 'kikapcsolva nem kerülnek a sorba');
+
+// Bulis jelenetek (0.62.1): alapból ki, külön kapcsoló, kikapcsolva nincsenek a sorban.
+T::tartalmaz($js, "var BULIS = A.bulis === true;", 'a bulis jelenetek csak kifejezett bekapcsolásra élnek');
+T::tartalmaz($js, "var BULIS_JELENETEK = ['pia', 'fu'];", 'a bulis jelenetek listája');
+T::tartalmaz($js, '(BULIS || BULIS_JELENETEK.indexOf(j[0]) === -1)', 'kikapcsolva a bulis jelenetek nem kerülnek a sorba');
+$sdh_ai_regi = get_option('sdh_muhely_ai', []);
+$sdh_ai_nelkul = is_array($sdh_ai_regi) ? $sdh_ai_regi : [];
+unset($sdh_ai_nelkul['bulis']);
+update_option('sdh_muhely_ai', $sdh_ai_nelkul);
+T::egyezik(false, SDH_Muhely_Asszisztens::beallitas()['bulis'], 'a bulis jelenetek alapból ki vannak kapcsolva');
+update_option('sdh_muhely_ai', $sdh_ai_regi);
 T::tartalmaz($js, 'var NOVEKEDES = { ehseg:', 'szükségletek');
 T::tartalmaz($js, "window.localStorage.setItem(TAR", 'a szükségletek megmaradnak oldalváltáskor');
 T::tartalmaz($js, "['keydown', 'click', 'pointerdown'].forEach", 'kattintás / gépelés leállítja a jelenetet');

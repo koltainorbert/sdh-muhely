@@ -3817,7 +3817,7 @@ final class SDH_Muhely_Munkalap
                             <?php if ($kartya_tobb) : ?>
                                 <span class="sdh-eszp__kesz"><?php echo esc_html(self::kesz_szoveg(array_values($kartya_bontas))); ?></span>
                             <?php endif; ?>
-                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ml-eszkozok__gomb" data-sdh-tovabbi-uj
+                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-ml-eszkozok__gomb" data-sdh-tovabbi-uj<?php echo $eladas ? '' : $ub('eszkoz_csatolas'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                                     title="Még egy eszköz erre a munkalapra: az ügyfél meglévő készülékei közül, vagy új felvitelével">
                                 <span class="sdh-plusz" aria-hidden="true"></span>Eszköz csatolása
                             </button>

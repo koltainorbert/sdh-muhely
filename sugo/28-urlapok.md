@@ -13,6 +13,7 @@ A **fogaskerék** minden nagy űrlap jobb felső sarkában áll: a **Munkalap**,
 
 - **blokkok és mezők** – állapot, név, felelős, dátumok, összeg, kedvezmény és áfa, fizetés, előleg, bevizsgálási díj;
 - **lapfülek** – Eszköz, Hibák, Szolgáltatások, Termékek, RMA / Címke, Megjegyzés, Belső megjegyzés;
+- **+ Eszköz csatolása** – kikapcsolva a munkalapra nem csatolható újabb eszköz (a már csatoltak látszanak);
 - **gombok** – Fizetés, Nyomtatás, Címke, Számlázz.hu számla, Számla-előkészítő;
 - **választható állapotok** – melyik állapot jelenjen meg az állapotválasztóban;
 - a két számlánál: **magától kerüljenek-e rá a munkalap tételei**, a tétel-megjegyzések (eszköz neve, IMEI) és a **Megjegyzés**.
@@ -146,6 +147,10 @@ Nem, mindhárom lapfajtának (munkalap, rendelés, napi árukiadás) saját beá
 ### Hol látom egyszerre az összes űrlap beállítását?
 
 A [Beállítások](modul:beallitasok) › Munkalap sor › **Űrlapok** lapfülén, egymás alatt mind az öttel.
+
+### Ki tudom kapcsolni az „Eszköz csatolása" gombot?
+
+Igen: a munkalap fogaskerekében (vagy Beállítások › Űrlapok › Munkalap) kapcsold ki a **+ Eszköz csatolása gomb** kapcsolót, és ments. A már csatolt eszközök továbbra is látszanak.
 
 ### Vissza tudom állítani az eredeti állapotot?
 

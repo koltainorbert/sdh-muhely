@@ -2534,13 +2534,19 @@ a.sdh-kartya:focus-visible {
 .sdh-csat[data-nezet="tomor"] .sdh-csat__nev { grid-area: nev; }
 
 /* ================================================================== */
-/* Számmezők: saját fel/le léptető (a böngésző nyilai helyett)         */
+/* Számmezők: egységes léptető (0.62.1) – minden számmező így néz ki     */
 /* ================================================================== */
 
 /*
- * Az app.js minden számmezőt .sdh-szam dobozba tesz, és jobb oldalra két
- * kis, lekerekített chevron-gombot rak. Nyomva tartva folyamatosan léptet.
- * Mértékegység (pl. %) a mezőn belül, a gombok előtt: .sdh-szam__utotag.
+ * Az app.js (szamBekot) minden számmezőt .sdh-szam dobozba tesz. Kész
+ * állapotban (.sdh-szam--kesz) a DOBOZ a látható mező: keret, háttér,
+ * lekerekítés, fókuszgyűrű. Benne balról jobbra: a szám (jobbra zárva),
+ * a mértékegység (Ft, %), és a jobb szélen egy elválasztott léptető-sáv
+ * két, teljes magasságú fél-gombbal.
+ *
+ * A doboz a tartalmához igazodik: a mező szélessége a beírt szám hosszát
+ * követi, de legalább 5 számjegynyi (app.js: szamSzelesseg, ch egységben).
+ * Nyomva tartott gomb folyamatosan léptet.
  */
 .sdh-szam {
     position: relative;
@@ -2550,19 +2556,8 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-szam > input[type="number"] {
-    width: 100%;
-    max-width: none;
     -moz-appearance: textfield;
     appearance: textfield;
-}
-
-.sdh-szam--kesz > input[type="number"] {
-    padding-right: 2.2rem;
-}
-
-.sdh-szam--kesz.sdh-szam--utotag > input[type="number"],
-.sdh-szam--utotag > input[type="number"] {
-    padding-right: 3.3rem;
 }
 
 .sdh-szam > input[type="number"]::-webkit-inner-spin-button,
@@ -2571,6 +2566,76 @@ a.sdh-kartya:focus-visible {
     margin: 0;
 }
 
+.sdh-szam.sdh-szam--kesz {
+    --sdh-szam-m: calc(34px * var(--sdh-n));
+    display: inline-flex;
+    align-items: stretch;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 100%;
+    height: var(--sdh-szam-m);
+    vertical-align: middle;
+    /* Rácsban és oszlopos flexben se nyúljon ki: a tartalmához igazodik. */
+    justify-self: start;
+    align-self: flex-start;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-mezo-r);
+    background: var(--sdh-felulet);
+    overflow: hidden;
+    transition: border-color .12s ease, box-shadow .12s ease;
+}
+
+.sdh-ml__oldal .sdh-szam.sdh-szam--kesz {
+    --sdh-szam-m: calc(32px * var(--sdh-n));
+}
+
+/* Címke–mező rácsban (.sdh-ig) a sor közepén álljon. */
+.sdh-ig > .sdh-szam.sdh-szam--kesz {
+    align-self: center;
+}
+
+.sdh-szam.sdh-szam--kesz:hover {
+    border-color: var(--sdh-halvany);
+}
+
+.sdh-szam.sdh-szam--kesz:focus-within {
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 3px var(--sdh-accent-halvany);
+}
+
+/* A belső mező keret és háttér nélkül – a doboz a mező. */
+.sdh-szam.sdh-szam--kesz > input[type="number"] {
+    flex: 0 0 auto;
+    box-sizing: content-box;
+    width: 5.6ch;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0 .3rem 0 .85rem;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--sdh-szoveg);
+    font-size: calc(13px * var(--sdh-n));
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.sdh-szam.sdh-szam--kesz > input[type="number"]:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.sdh-szam.sdh-szam--kesz > input[type="number"]:disabled,
+.sdh-szam.sdh-szam--kesz > input[type="number"][readonly] {
+    color: var(--sdh-halvany);
+}
+
+/* Mértékegység: a szám után, a léptető előtt. */
 .sdh-szam__utotag {
     position: absolute;
     top: 50%;
@@ -2581,19 +2646,30 @@ a.sdh-kartya:focus-visible {
     pointer-events: none;
 }
 
-.sdh-szam--kesz .sdh-szam__utotag {
-    right: 2.2rem;
+.sdh-szam.sdh-szam--kesz > .sdh-szam__utotag {
+    position: static;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0 .55rem 0 .1rem;
+    transform: none;
 }
 
+/* Mértékegység nélkül is maradjon levegő a szám és a léptető között. */
+.sdh-szam.sdh-szam--kesz:not(.sdh-szam--utotag) > input[type="number"] {
+    padding-right: .55rem;
+}
+
+/* A léptető: a mezőbe illesztett, lekerekített sáv két fél-gombbal (pill alaknál is a íven belül marad). */
 .sdh-szam__gombok {
-    position: absolute;
-    top: calc(4px * var(--sdh-n));
-    right: calc(4px * var(--sdh-n));
-    bottom: calc(4px * var(--sdh-n));
     display: flex;
+    flex: 0 0 auto;
     flex-direction: column;
-    gap: calc(2px * var(--sdh-n));
-    width: 1.45rem;
+    width: calc(24px * var(--sdh-n));
+    margin: calc(3px * var(--sdh-n)) calc(3px * var(--sdh-n)) calc(3px * var(--sdh-n)) 0;
+    border-radius: calc(4px * var(--sdh-n)) max(calc(4px * var(--sdh-n)), calc(var(--sdh-mezo-r) - calc(3px * var(--sdh-n)))) max(calc(4px * var(--sdh-n)), calc(var(--sdh-mezo-r) - calc(3px * var(--sdh-n)))) calc(4px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    overflow: hidden;
 }
 
 .sdh-szam__gombok button {
@@ -2602,14 +2678,19 @@ a.sdh-kartya:focus-visible {
     align-items: center;
     justify-content: center;
     min-height: 0;
+    margin: 0;
     padding: 0;
     border: 0;
-    border-radius: calc(4px * var(--sdh-n));
-    background: var(--sdh-felulet-2);
+    border-radius: 0;
+    background: transparent;
     color: var(--sdh-szoveg-2);
     line-height: 1;
     cursor: pointer;
     transition: background-color .12s, color .12s;
+}
+
+.sdh-szam__gombok button + button {
+    border-top: 1px solid var(--sdh-felulet);
 }
 
 .sdh-szam__gombok button:hover {
@@ -2623,16 +2704,16 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-szam__gombok button:disabled {
-    opacity: .35;
+    opacity: .3;
     cursor: default;
-    background: var(--sdh-felulet-2);
+    background: transparent;
     color: var(--sdh-szoveg-2);
 }
 
 .sdh-szam__gombok svg {
     display: block;
-    width: calc(10px * var(--sdh-n));
-    height: calc(10px * var(--sdh-n));
+    width: calc(11px * var(--sdh-n));
+    height: calc(11px * var(--sdh-n));
 }
 
 /* ================================================================== */
@@ -3200,10 +3281,6 @@ a.sdh-kartya:focus-visible {
 
 .sdh-munkalapurlap .sdh-allapot-valaszto {
     min-width: 0;
-}
-
-.sdh-munkalapurlap .sdh-szam {
-    width: 100%;
 }
 
 /* A lapfülek panelei egy cellában állnak, a legmagasabb méretével:

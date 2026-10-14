@@ -91,6 +91,12 @@ A nagyítás csak a műhely-felületen érvényes; a nyomtatott címke és bizon
 
 > **Tipp:** billentyűzetről is állítható: kattints a csúszkára, és a [[←]] [[→]] billentyűkkel lépkedj.
 
+## Számmezők
+
+Minden számmező (előleg, kedvezmény, díj, példányszám, beállítások) egyformán néz ki: a szám jobbra zárva áll, mellette a mértékegység (**Ft**, **%**), a mező jobb szélén pedig egy beépített, lekerekített léptető a fel–le nyilakkal. A nyíl nyomva tartva folyamatosan léptet; a határon (pl. 0 alatt) szürkére vált.
+
+A mező szélessége a beírt számhoz igazodik, de legalább ötjegyű számnyi helyet foglal: így a 0 és a 99 999 ugyanott áll, és a hosszabb összeg sem lóg ki. A mező bármely pontjára kattintva a kurzor a számba kerül.
+
 ## Popup neon keret
 
 A felugró ablakok körül világító keret színe. A profilmenü alján a színes körök közül választasz; az áthúzott kör kikapcsolja.
@@ -244,6 +250,10 @@ Ebből számol a fejléc órája.
 - **Az óra nem írja ki a zárásig hátralévő időt.** Nincs megadva nyitvatartás ugyanott.
 
 ## GYIK
+
+### Miért ilyen keskenyek a számmezők?
+
+Mert a beírt számhoz igazodnak: legalább ötjegyű számnyi helyük van, és hosszabb számnál maguktól szélesednek. Így minden számmező egyforma, és a szám mindig jobbra zárva, a mértékegység mellett áll.
 
 ### Hogyan váltok sötét módra?
 

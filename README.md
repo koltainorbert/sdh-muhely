@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.62.1
+- **Egységes számmezők mindenhol.** A szám jobbra zárva, mellette a mértékegység, a jobb szélen beépített,
+  lekerekített léptető (pill alaknál is az íven belül). A doboz a mező: keret, fókuszgyűrű; a szélesség a beírt
+  számot követi, de legalább 5 számjegynyi (a kódból írt értékre is igazodik – saját `value`-setter).
+- **A munkalap betűmérete nem „mozog" Szikrával.** Szikra a nyitott popupba költözik, és minden mozdulata
+  (jelenet, buborék, jelvény) újraindította a popup illesztését (zoom újramérése) – mérve 16 jelenet alatt 110
+  stílusváltás, most 0. Az illesztés a `.sdh-ai` és a fogaskerék változásait kihagyja; fél százalék alatti
+  eltérésre nem vált; Szikra ellen-zoomját is az illesztés állítja.
+- **+ Eszköz csatolása** a munkalap fogaskerekében (és Beállítások › Űrlapok) kapcsolható.
+- **Bulis jelenetek** (Beállítások › Asszisztens, alapból KI): Szikra sörözik és tántorog, füves cigiből
+  füstkarikákat fúj, utána éhes; bekapcsolva rendszeresen jönnek, és saját szükséglet („bulizni akar") is hajtja.
+
 ### 0.62.0
 - **Fogaskerék minden űrlapon** – a munkalap, a rendelés, a napi árukiadás, a Számlázz.hu számla és a
   számla-előkészítő ablakának jobb felső sarkában. Kapcsolókkal állítható, mi látszódjon: blokkok (állapot,

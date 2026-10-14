@@ -176,16 +176,19 @@
             return;
         }
 
+        var elozo = dialog.style.zoom;
+
         dialog.style.zoom = '';
         dialog.classList.add('sdh-modal--illeszt');
         meretBeallit(dialog, 1);
 
         var termeszetes = dialog.getBoundingClientRect().height;
         var szabad = window.innerHeight - MERET_SZEL;
+        var zoom = 1;
 
         // A class marad: a popupnak nincs max-magassága és görgetése, csak zoomja.
         if (termeszetes > szabad + 0.5 && termeszetes > 0) {
-            var zoom = Math.max(ILLESZT_MIN, szabad / termeszetes);
+            zoom = Math.max(ILLESZT_MIN, szabad / termeszetes);
 
             // A kért (vagy teljes képernyős) méret a kicsinyítés UTÁNI méret:
             // a popupot annyival szélesebbre vesszük, amennyivel a zoom összehúzza.
@@ -195,8 +198,56 @@
                 zoom = Math.max(ILLESZT_MIN, Math.min(zoom, szabad / termeszetes));
             }
 
+            // Apró eltérésre (fél százalék alatt) nem változik a betűméret: ne „lélegezzen" a lap.
+            var regi = parseFloat(elozo || '1') || 1;
+
+            if (elozo && Math.abs(regi - zoom) < 0.005) {
+                zoom = regi;
+            }
+
             dialog.style.zoom = String(zoom);
+
+            if (dialog.sdhMeret && zoom === regi) {
+                meretBeallit(dialog, zoom);
+            }
         }
+
+        // Az AI-figura (Szikra) a popupba költözik: a zoom őt ne kicsinyítse (asszisztens.js helyez()).
+        Array.prototype.forEach.call(dialog.querySelectorAll(':scope > .sdh-ai'), function (figura) {
+            figura.style.zoom = zoom !== 1 ? String(1 / zoom) : '';
+        });
+    }
+
+    /**
+     * Ami a popup magasságát nem befolyásolja, az ne indítsa újra az
+     * illesztést: az AI-figura (Szikra) mozgása, jelenetei, buborékja és a
+     * fogaskerék lenyílója. Különben Szikra minden mozdulatára újramérődne
+     * az ablak, és vele „mozogna" a munkalap betűmérete (0.62.1).
+     */
+    var ILLESZT_KIHAGY = '.sdh-ai, .sdh-ub';
+
+    function illesztKihagy(csomopont) {
+        var elem = csomopont && csomopont.nodeType === 1 ? csomopont : (csomopont ? csomopont.parentElement : null);
+
+        return !!(elem && elem.closest && elem.closest(ILLESZT_KIHAGY));
+    }
+
+    function illesztSzamit(valtozasok) {
+        return valtozasok.some(function (v) {
+            if (illesztKihagy(v.target)) {
+                return false;
+            }
+
+            if (v.type !== 'childList') {
+                return true;
+            }
+
+            var mind = Array.prototype.slice.call(v.addedNodes).concat(Array.prototype.slice.call(v.removedNodes));
+
+            return mind.length === 0 || mind.some(function (cs) {
+                return !illesztKihagy(cs) && !(cs.nodeType === 1 && cs.matches && cs.matches(ILLESZT_KIHAGY));
+            });
+        });
     }
 
     /* ---------------------------------------------------------------- */
@@ -410,16 +461,26 @@
             });
         };
 
-        new MutationObserver(kesleltet).observe(dialog, {
+        new MutationObserver(function (valtozasok) {
+            if (illesztSzamit(valtozasok)) {
+                kesleltet();
+            }
+        }).observe(dialog, {
             childList: true,
             subtree: true,
             attributes: true,
             attributeFilter: ['open', 'hidden']
         });
 
-        // A lapfülek rádiógombjai és a mezők is változtatják a magasságot.
-        dialog.addEventListener('change', kesleltet);
-        dialog.addEventListener('input', kesleltet);
+        // A lapfülek rádiógombjai és a mezők is változtatják a magasságot (a fogaskerék kapcsolói élőben rejtenek: azok is).
+        var esemenyre = function (esemeny) {
+            if (!illesztKihagy(esemeny.target) || (esemeny.target.closest && esemeny.target.closest('.sdh-ub-panel'))) {
+                kesleltet();
+            }
+        };
+
+        dialog.addEventListener('change', esemenyre);
+        dialog.addEventListener('input', esemenyre);
         dialog.addEventListener('load', kesleltet, true);
         kesleltet();
     }
@@ -10980,6 +11041,48 @@
         }
     }
 
+    /**
+     * A számmező szélessége a beírt szám hosszát követi, de legalább 5
+     * számjegynyi (0.62.1). ch egységben: a betűmérettel együtt nő.
+     */
+    var SZAM_MIN_JEGY = 5;
+
+    function szamSzelesseg(input) {
+        var szoveg = String(input.value || input.placeholder || '');
+        var jegy = Math.max(SZAM_MIN_JEGY, szoveg.length);
+
+        // Tizedesjel / mínuszjel keskenyebb egy számjegynél.
+        var keskeny = (szoveg.match(/[.,\-]/g) || []).length * 0.55;
+
+        input.style.width = (jegy - (szoveg.length > SZAM_MIN_JEGY ? keskeny : 0) + 0.6).toFixed(2) + 'ch';
+    }
+
+    /**
+     * A kódból írt érték (input.value = …) nem küld eseményt: a mező saját
+     * value-tulajdonsága ezért a szélességet is igazítja.
+     */
+    function szamErtekFigyel(input, doboz) {
+        var leiro = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+
+        if (!leiro || !leiro.set || Object.prototype.hasOwnProperty.call(input, 'value')) {
+            return;
+        }
+
+        try {
+            Object.defineProperty(input, 'value', {
+                configurable: true,
+                get: function () {
+                    return leiro.get.call(this);
+                },
+                set: function (v) {
+                    leiro.set.call(this, v);
+                    szamSzelesseg(this);
+                    szamHatar(this, doboz);
+                }
+            });
+        } catch (e) { /* régi böngésző: csak eseményre igazodik */ }
+    }
+
     function szamLep(input, irany) {
         // Saját lépésköz (data-sdh-lepes): a gomb ennyit lép, de a mező bármilyen
         // értéket elfogad – a step attribútum a közbenső értéket (pl. 4500 Ft
@@ -11101,8 +11204,23 @@
 
         input.addEventListener('input', function () {
             szamHatar(input, doboz);
+            szamSzelesseg(input);
         });
 
+        input.addEventListener('change', function () {
+            szamSzelesseg(input);
+        });
+
+        // A doboz bármely pontjára kattintva a mezőbe kerül a kurzor.
+        doboz.addEventListener('mousedown', function (esemeny) {
+            if (esemeny.target === doboz || esemeny.target.classList.contains('sdh-szam__utotag')) {
+                esemeny.preventDefault();
+                input.focus();
+            }
+        });
+
+        szamErtekFigyel(input, doboz);
+        szamSzelesseg(input);
         szamHatar(input, doboz);
     }
 
