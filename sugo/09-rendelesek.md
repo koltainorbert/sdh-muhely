@@ -149,6 +149,10 @@ A lista telepítés után néhány mintasorral indulhat; ezek átírhatók.
 - **Rögzítés és fizetés** – új rendelésnél: ment, majd megnyitja a fizetés ablakát.
 - **Mentés**, **Fizetés**, **Számlázz.hu számla** és a számla-előkészítő gombja – már rögzített rendelésen, ugyanúgy, mint a munkalapon. Kifizetett rendelésen a **Fizetés** gomb felirata **Fizetve ✓**.
 
+## Mi látszódjon az űrlapon (fogaskerék)
+
+A rendelés ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami ezen az űrlapon nem kell – mezők, lapfülek, gombok, választható állapotok. A beállítás külön él a munkalapétól, és frissítés után is megmarad. Részletesen: [Űrlapok beállítása](sugo:urlapok).
+
 ## Szabályok, amiket a rendszer betart
 
 - **Ügyfél nélkül nincs rendelés.** A rendelés mindig valakié, és őt kell értesíteni, ha megjött az áru. Ügyfél nélkül a rendelés nem menthető.

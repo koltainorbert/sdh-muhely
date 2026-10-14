@@ -56,6 +56,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **Hibasor-állapotok** | A munkalap hibasorainak saját állapotlistája. | [Munkalapok](sugo:munkalapok) |
 | **Gyakori hibák** | A munkalap **Hibák** lapfülén egy kattintással felvehető hibák listája. | [Munkalapok](sugo:munkalapok) |
 | **Gyakori megjegyzések** | A munkalap **Megjegyzés** lapfülén popupból választható, előre megírt megjegyzések. | [Munkalapok](sugo:munkalapok) |
+| **Űrlapok** | Mi látszódjon a munkalap, a rendelés, a napi árukiadás és a két számla ablakában; a számlára magától kerüljenek-e a tételek. Ugyanez az űrlapok fogaskerekével. | [Űrlapok beállítása](sugo:urlapok) |
 | **Fizetési módok** | A munkalapon, az árukiadáson és a rendelésen választható fizetési módok. | [Pénztár](sugo:penztar) |
 | **Számlázás** | A Számlázz.hu-kapcsolat, a számlatömbök, a helyi nyomtatvány és a kiállító adatai, a bevizsgálási díj szövege. | [Számlázás](sugo:szamlazas) |
 | **Nyomtatványok** | Minden nyomtatható papír: átvételi, munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – logó, betű, méret, szövegek, példányszám, felajánlás. | [Nyomtatás, PDF és e-mail](sugo:nyomtatas) |

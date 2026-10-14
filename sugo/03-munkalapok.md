@@ -130,6 +130,10 @@ A lapfülek nevén szám mutatja, hány hiba, illetve tétel van rajta.
 
 Alul két további lapfül: **Megjegyzés** és **Belső megjegyzés**. Felkiáltójel jelzi, ha van bennük szöveg.
 
+## Mi látszódjon a munkalapon (fogaskerék)
+
+A munkalap ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami nem kell: blokkok (állapot, dátumok, összeg, fizetés, bevizsgálási díj), mezők (név, felelős, előleg), lapfülek (Eszköz, Hibák, Szolgáltatások, Termékek, RMA), gombok, és hogy mely **állapotok** legyenek választhatók. Élőben látszik, a **Mentés** után minden megnyitáskor és minden kollégánál így marad – a rendszer frissítése után is. Az elrejtett mező értéke nem vész el. Részletesen: [Űrlapok beállítása](sugo:urlapok).
+
 ## Hibák és gyakori hibák
 
 A munkalap **Hibák** lapfülén minden hiba egy sor: **Hiba**, **Állapot**, **Javítás / megjegyzés**. Több eszköznél a sor elején azt is megadod, melyik **Eszköz** hibája.

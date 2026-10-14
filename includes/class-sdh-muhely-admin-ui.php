@@ -398,6 +398,10 @@ final class SDH_Muhely_Admin_UI
         wp_enqueue_style('sdh-muhely-sms', SDH_MUHELY_URL . 'assets/sms.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/sms.css'));
         wp_enqueue_script('sdh-muhely-sms', SDH_MUHELY_URL . 'assets/sms.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/sms.js'), true);
 
+        // Űrlap-beállítások (0.62.0): a fogaskerék lenyílója és az élő kapcsolás minden űrlapon.
+        wp_enqueue_style('sdh-muhely-urlap-beallitas', SDH_MUHELY_URL . 'assets/urlap-beallitas.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/urlap-beallitas.css'));
+        wp_enqueue_script('sdh-muhely-urlap-beallitas', SDH_MUHELY_URL . 'assets/urlap-beallitas.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/urlap-beallitas.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(

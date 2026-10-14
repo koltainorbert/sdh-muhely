@@ -248,7 +248,7 @@ try {
     $id = t_munkalap($u, [$e1]);
     $lap = t_lap($id);
     $ml = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $id])['nyers'];
-    T::igaz(preg_match('~<label for="ful_m_rma" data-sdh-rma-ful>Címke~', $ml) === 1, 'RMA ki: a lapfül neve „Címke”');
+    T::igaz(preg_match('~<label for="ful_m_rma" data-sdh-rma-ful(?: data-sdh-ub="ful_rma")?>Címke~', $ml) === 1, 'RMA ki: a lapfül neve „Címke”');
     T::nem_tartalmaz($ml, 'data-sdh-chat ', 'RMA ki: nincs csevegő');
     T::nem_tartalmaz($ml, 'data-sdh-rma-masol', 'RMA ki: nincs ügyféloldal-link');
 
@@ -264,7 +264,7 @@ try {
 
     $ment([]);
     $ml = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $id])['nyers'];
-    T::igaz(preg_match('~<label for="ful_m_rma" data-sdh-rma-ful>RMA~', $ml) === 1, 'RMA be: a lapfül neve újra „RMA”');
+    T::igaz(preg_match('~<label for="ful_m_rma" data-sdh-rma-ful(?: data-sdh-ub="ful_rma")?>RMA~', $ml) === 1, 'RMA be: a lapfül neve újra „RMA”');
     T::tartalmaz($ml, 'data-sdh-chat ', 'RMA be: a csevegő visszajött');
 
     /* --- Pénztár, Számlázz.hu, Termékek, árukiadás/rendelés, Csapat ------ */
@@ -302,7 +302,7 @@ try {
 
     // Termékek ki: a munkalapon nincs Termékek lapfül (a lapon nincs termék).
     $ml = t_ajax('sdh_muhely_munkalapok_urlap', [], '_wpnonce', 'sdh_muhely_modal', ['id' => $id])['nyers'];
-    T::tartalmaz($ml, '<label for="ful_m_termek" hidden>', 'termékek ki: a Termékek lapfül rejtve');
+    T::igaz(preg_match('~<label for="ful_m_termek" hidden[ >]~', $ml) === 1, 'termékek ki: a Termékek lapfül rejtve');
     T::tartalmaz($ml, 'data-sdh-penztar-fizetes', 'a Fizetés gomb a munkalapon megmarad');
 
     // Árukiadás + rendelés ki: a közös Beállítások-lapfül is eltűnik; a rácsnézetek között sincs árukiadás.

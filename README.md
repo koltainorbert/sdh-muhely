@@ -64,6 +64,22 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.62.0
+- **Fogaskerék minden űrlapon** – a munkalap, a rendelés, a napi árukiadás, a Számlázz.hu számla és a
+  számla-előkészítő ablakának jobb felső sarkában. Kapcsolókkal állítható, mi látszódjon: blokkok (állapot,
+  dátumok, összeg, fizetés, bevizsgálási díj), mezők (név, felelős, előleg, fizetés ideje), lapfülek, gombok, és
+  a **választható állapotok** (az alapállapot és a lapon álló állapot mindig marad). Élőben látszik, a Mentés után
+  minden megnyitáskor és minden kollégánál így nyílik. Csak admin állíthatja.
+- **Számla: a tételek magától vagy kézzel.** Kikapcsolva a munkalap tételei pipa nélkül nyílnak (kézi kitöltés,
+  nincs tévesztés a pipálgatásnál); külön kapcsolható a tétel-megjegyzés (eszköz, IMEI) és a Megjegyzés mező.
+  A két számlaablak külön állítható. Az ablakban a **„A munkalap tételei a számlán"** kapcsoló egy kattintással
+  mindet be- vagy kipipálja – csak abban az ablakban.
+- **Tartós tárolás:** egy opció (`sdh_muhely_urlap_beallitas`), csak a kikapcsolt elemek listája – a frissítés nem
+  nyúl hozzá, egy későbbi verzió új eleme alapból látszik; a napi mentés is menti. Az elrejtett mező értéke
+  benne marad az űrlapban és mentődik.
+- Új: Beállítások › Munkalap › **Űrlapok** lapfül (mind az öt űrlap egy helyen), súgófejezet (`28-urlapok`),
+  teszt (`t56`).
+
 ### 0.61.5
 - **A tételek magából a számlából** – kézi munka nélkül. Ha a levélben nincs tételsor (a Gigatel számlaértesítője
   csak egy linket küld), a rendszer megnézi a **mellékelt PDF-et**, és ha nincs, a **számlalink mögötti PDF-et** is

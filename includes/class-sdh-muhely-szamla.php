@@ -1207,17 +1207,21 @@ final class SDH_Muhely_Szamla
         $b       = self::beallitas();
         $szamlak = self::lista((int) $munkalap->id);
 
+        // Fogaskerék (0.62.0): a két gomb a lapfajta űrlap-beállítása szerint rejthető.
+        $fajta = SDH_Muhely_Munkalap::fajta_ervenyes((string) ($munkalap->fajta ?? 'javitas'));
+        $ub    = static fn (string $elem): string => class_exists('SDH_Muhely_Urlap_Beallitas') ? SDH_Muhely_Urlap_Beallitas::jel($fajta, $elem) : '';
+
         ?>
         <span class="sdh-szamlagombok" data-sdh-szamlagombok>
             <?php // Kikapcsolt Számlázz.hu számlázás modul (Modulok): csak a helyi számla-előkészítő marad. ?>
             <?php if (SDH_Muhely_Modulok::be('szamlazas')) : ?>
-            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--szamla" data-sdh-szamla="fo"
+            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--szamla" data-sdh-szamla="fo"<?php echo $ub('gomb_szamlazz'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     title="A munkalap elmentődik, majd megnyílik a számla ablaka. Számla csak a kiállítás gombjára készül.">
                 Számlázz.hu számla
             </button>
             <?php endif; ?>
 
-            <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla="helyi"
+            <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla="helyi"<?php echo $ub('gomb_elokeszito'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     title="Letölthető, nyomtatható PDF a tételekből – helyben készül, internet és Számlázz.hu nélkül. Nem számla.">
                 <?php echo esc_html(self::nyomtatvany_cim()); ?> (PDF)
             </button>
@@ -1353,6 +1357,19 @@ final class SDH_Muhely_Szamla
         $ma      = current_time('Y-m-d');
         $hatar   = self::azonnali($fizmod) ? $ma : wp_date('Y-m-d', strtotime($ma . ' +' . (int) $b['hatarido_nap'] . ' days'));
 
+        // Űrlap-beállítás (fogaskerék, 0.62.0): magától kerüljenek-e a munkalap tételei,
+        // a tétel-megjegyzések és a megjegyzés a bizonylatra – külön a két ablakra.
+        $ub_kulcs  = $helyi ? 'elokeszito' : 'szamla';
+        $ub_van    = class_exists('SDH_Muhely_Urlap_Beallitas');
+        $ub_be     = static fn (string $elem): bool => !$ub_van || SDH_Muhely_Urlap_Beallitas::be($ub_kulcs, $elem);
+        $ub        = static fn (string $elem): string => $ub_van ? SDH_Muhely_Urlap_Beallitas::jel($ub_kulcs, $elem) : '';
+        $auto      = $ub_be('auto_tetelek');
+        $auto_megj = $ub_be('auto_tetel_megj');
+
+        if ($ub_van) {
+            echo SDH_Muhely_Urlap_Beallitas::gomb($ub_kulcs); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel.
+        }
+
         ?>
         <h2 class="sdh-modal__cim">
             <?php echo esc_html($cim); ?>
@@ -1383,7 +1400,7 @@ final class SDH_Muhely_Szamla
         <?php endif; ?>
 
         <form class="sdh-urlap" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
-              data-sdh-ajax-action="sdh_muhely_szamla_ment" data-sdh-szamlaurlap>
+              data-sdh-ajax-action="sdh_muhely_szamla_ment" data-sdh-szamlaurlap data-sdh-ub-auto="<?php echo $auto ? '1' : '0'; ?>">
             <input type="hidden" name="munkalap_id" value="<?php echo (int) $munkalap->id; ?>">
             <input type="hidden" name="sorozat" value="<?php echo esc_attr($sorozat); ?>">
             <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('sdh_muhely_modal')); ?>">
@@ -1491,7 +1508,7 @@ final class SDH_Muhely_Szamla
                     // Több eszköz: választható, hogy egy közös bizonylat készül-e, vagy csak az egyik
                     // eszközé (így készülékenként külön számla állítható ki). app.js: szamlaEszkozValt.
                     ?>
-                    <div class="sdh-szamlaurlap__eszkoz" data-sdh-szamla-eszkozok
+                    <div class="sdh-szamlaurlap__eszkoz" data-sdh-szamla-eszkozok<?php echo $ub('eszkozvalaszto'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                          data-megj-mind="<?php echo esc_attr(self::megjegyzes($munkalap)); ?>"
                          data-fajl-mind="<?php echo esc_attr(self::nyomtatvany_szam($munkalap) . '.pdf'); ?>">
                         <span class="sdh-szamlaurlap__eszkoz-cim"><?php echo $helyi ? 'Mi kerül a nyomtatványra' : 'Mi kerül erre a számlára'; ?></span>
@@ -1512,6 +1529,19 @@ final class SDH_Muhely_Szamla
                         <span class="sdh-mezo__sugo">Eszközt választva csak annak a tételei maradnak kipipálva – így készülékenként külön <?php echo $helyi ? 'nyomtatvány' : 'számla'; ?> készíthető. A pipák utána is átállíthatók.</span>
                     </div>
                 <?php endif; ?>
+
+                <?php
+                // Egy kapcsoló, ami EBBEN az ablakban mind be- vagy kipipálja a munkalap tételeit
+                // (app.js: szamlaAutoKapcsol). Az alapállást a fogaskerék adja, és az marad.
+                ?>
+                <div class="sdh-szamlaurlap__auto"<?php echo $ub('gyorskapcsolo'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
+                    <label class="sdh-kapcsolo sdh-ub-kapcs" title="Bekapcsolva a munkalap minden (még nem számlázott) tétele ki van pipálva; kikapcsolva egy sem – akkor te pipálod be, vagy Kézi tétellel írod. Csak erre az ablakra érvényes; az alapállás a fogaskerékkel állítható.">
+                        <input type="checkbox" data-sdh-szamla-auto <?php checked($auto); ?>>
+                        <span class="sdh-kapcsolo__csuszka" aria-hidden="true"></span>
+                        <span class="sdh-kapcsolo__felirat">A munkalap tételei a <?php echo $helyi ? 'nyomtatványon' : 'számlán'; ?></span>
+                    </label>
+                    <span class="sdh-mezo__sugo"><?php echo $auto ? 'Alapból mind rajta van.' : 'Alapból egyik sincs rajta – kézzel töltöd ki.'; ?></span>
+                </div>
 
                 <?php // --- Tételek: a munkalapé pipával, az itt hozzáadottak szerkeszthetők ---- ?>
                 <table class="sdh-tabla sdh-szamlaurlap__tetelek<?php echo $torlo ? ' sdh-szamlaurlap__tetelek--torlo' : ''; ?>" data-sdh-szamla-tetelek>
@@ -1549,7 +1579,7 @@ final class SDH_Muhely_Szamla
                                        data-netto="<?php echo esc_attr((string) $s['netto']); ?>" data-brutto="<?php echo esc_attr((string) $s['brutto']); ?>"
                                        aria-label="<?php echo esc_attr($s['megnevezes'] . ' a számlára'); ?>"
                                        title="Pipa nélkül ez a tétel kimarad erről a számláról"
-                                    <?php checked(!$szamlazva); ?>>
+                                    <?php checked(!$szamlazva && $auto); ?>>
                             </td>
                             <td class="sdh-tabla__nev">
                                 <?php // A hosszú név rövidül (…), a megjegyzés gombja mindig látszik mellette. ?>
@@ -1569,7 +1599,7 @@ final class SDH_Muhely_Szamla
 
                                 self::tetel_megjegyzes_mezo(
                                     'megj[' . (int) $t->id . ']',
-                                    !$dijsor_e && !$szamlazva ? (string) ($tetel_eszkoz[(int) ($t->eszkoz_id ?? 0)] ?? ($tetel_eszkoz[0] ?? '')) : ''
+                                    $auto_megj && !$dijsor_e && !$szamlazva ? (string) ($tetel_eszkoz[(int) ($t->eszkoz_id ?? 0)] ?? ($tetel_eszkoz[0] ?? '')) : ''
                                 );
                                 ?>
                             </td>
@@ -1585,7 +1615,7 @@ final class SDH_Muhely_Szamla
                     <?php endforeach; ?>
                     </tbody>
                     <tfoot>
-                        <tr class="sdh-szamlaurlap__ujgombok">
+                        <tr class="sdh-szamlaurlap__ujgombok"<?php echo $ub('uj_tetel'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <td></td>
                             <td colspan="<?php echo $torlo ? 7 : 6; ?>">
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="termek"
@@ -1663,7 +1693,7 @@ final class SDH_Muhely_Szamla
                 <div class="sdh-ig sdh-szamlaurlap__megj">
                     <label for="szamla_megjegyzes_mezo">Megjegyzés</label>
                     <input type="text" name="megjegyzes" id="szamla_megjegyzes_mezo" maxlength="500"
-                           value="<?php echo esc_attr(self::megjegyzes($munkalap)); ?>">
+                           value="<?php echo esc_attr($ub_be('auto_megjegyzes') ? self::megjegyzes($munkalap) : ''); ?>">
                 </div>
 
                 <?php if ($szamlak !== []) : ?>

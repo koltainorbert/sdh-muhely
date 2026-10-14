@@ -1,0 +1,207 @@
+/* ==================================================================
+ * Űrlap-beállítások (0.62.0) – a fogaskerék minden űrlapon
+ * (SDH_Muhely_Urlap_Beallitas, urlap-beallitas.js)
+ * ================================================================== */
+
+/* A fogaskerékkel kikapcsolt elem nem látszik – az értéke mentődik. */
+[data-sdh-ub-ki] {
+    display: none !important;
+}
+
+/* Csomagoló, ami a rácsban és a láblécben nem foglal helyet (a gyerekei a szülő elemei). */
+.sdh-ub-atlatszo {
+    display: contents;
+}
+
+/* A fogaskerék: az ablak jobb felső sarka (a bal felsőben az ablakgombok állnak). */
+.sdh-ub {
+    position: absolute;
+    z-index: 6;
+    top: calc(6px * var(--sdh-n));
+    right: calc(10px * var(--sdh-n));
+}
+
+.sdh-ub-gomb {
+    display: grid;
+    place-items: center;
+    width: calc(30px * var(--sdh-n));
+    height: calc(30px * var(--sdh-n));
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--sdh-keret);
+    border-radius: 50%;
+    background: var(--sdh-felulet);
+    color: var(--sdh-halvany);
+    cursor: pointer;
+    transition: color .15s, border-color .15s, box-shadow .15s, transform .3s;
+}
+
+.sdh-ub-gomb svg {
+    width: calc(17px * var(--sdh-n));
+    height: calc(17px * var(--sdh-n));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+}
+
+.sdh-ub-gomb:hover,
+.sdh-ub-gomb[aria-expanded="true"] {
+    color: var(--sdh-accent);
+    border-color: var(--sdh-accent);
+    box-shadow: 0 0 0 3px var(--sdh-accent-halvany);
+}
+
+.sdh-ub-gomb[aria-expanded="true"] {
+    transform: rotate(60deg);
+}
+
+.sdh-ub-gomb:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-ub-gomb {
+        transition: none;
+    }
+}
+
+/* A lenyíló: széles és alacsony, több hasábban – görgetés nélkül. */
+.sdh-ub-panel--lebego {
+    position: absolute;
+    top: calc(38px * var(--sdh-n));
+    right: 0;
+    box-sizing: border-box;
+    width: min(calc(980px * var(--sdh-n)), calc(100vw - 3rem));
+    padding: .9rem 1rem .8rem;
+    background: var(--sdh-vaszon);
+    border: 1px solid var(--sdh-accent);
+    border-radius: var(--sdh-r-nagy);
+    box-shadow: var(--sdh-arnyek-emelt), 0 0 0 3px var(--sdh-accent-halvany);
+}
+
+.sdh-ub-panel[hidden] {
+    display: none;
+}
+
+.sdh-ub-panel__fej {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .2rem .7rem;
+    margin-bottom: .6rem;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-ub-panel__fej span {
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ub-panel__racs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(205px * var(--sdh-n)), 1fr));
+    gap: .6rem;
+    align-items: start;
+}
+
+.sdh-ub-panel__csoport {
+    display: grid;
+    gap: .3rem;
+    margin: 0;
+    padding: .5rem .6rem .55rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+}
+
+.sdh-ub-panel__csoport legend {
+    padding: 0 .3rem;
+    color: var(--sdh-halvany);
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+/* A kapcsoló felirata itt látszik (az alap .sdh-kapcsolo elrejti). */
+.sdh-ub-kapcs {
+    gap: .5rem;
+    font-size: calc(12.5px * var(--sdh-n));
+    line-height: 1.25;
+}
+
+.sdh-ub-kapcs .sdh-kapcsolo__csuszka {
+    flex: 0 0 auto;
+}
+
+.sdh-ub-kapcs .sdh-kapcsolo__felirat {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+}
+
+.sdh-ub-kapcs input:disabled + .sdh-kapcsolo__csuszka {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.sdh-ub-panel__lab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .7rem;
+}
+
+.sdh-ub-panel__allapot {
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ub-panel__allapot[data-tipus="siker"] {
+    color: var(--sdh-siker);
+}
+
+.sdh-ub-panel__allapot[data-tipus="hiba"] {
+    color: var(--sdh-hiba);
+}
+
+/* Beállítások › Űrlapok: az öt űrlap egymás alatt, nyitható dobozban. */
+.sdh-ub-lapok {
+    display: grid;
+    gap: .7rem;
+}
+
+.sdh-ub-lap {
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    background: var(--sdh-vaszon);
+}
+
+.sdh-ub-lap > summary {
+    padding: .6rem .9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sdh-ub-lap > .sdh-ub-panel {
+    padding: 0 .9rem .9rem;
+}
+
+/* A számla ablaka: a „munkalap tételei rajta" kapcsoló egy sorban, a tétellista fölött. */
+.sdh-szamlaurlap__auto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .3rem 1rem;
+    margin: 0 0 .45rem;
+}
+
+.sdh-szamlaurlap__auto .sdh-mezo__sugo {
+    margin: 0;
+}

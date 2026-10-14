@@ -103,6 +103,12 @@ Az új sorban megadható a megnevezés, a mennyiség, a mennyiségi egység, a *
 
 A már kiszámlázott tétel megjegyzi a számla számát. Ha később újabb számlát készítesz ugyanarról a lapról, ez a tétel halványan látszik, a számla számával, és alapból nincs bepipálva.
 
+## A számla tételei magától vagy kézzel (fogaskerék)
+
+A számla ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) állítod, hogy a munkalap tételei **magától kipipálva** nyíljanak-e. Kikapcsolva egy tétel sincs kipipálva: te pipálod be, ami kell, vagy **Kézi tétel**lel írod – így a kollégák nem tévesztenek a pipálgatásnál. Ugyanitt kapcsolható a tétel-megjegyzés (eszköz neve, IMEI) és a **Megjegyzés** mező automatikus kitöltése. A Számlázz.hu számla és a számla-előkészítő **külön** állítható, és a beállítás frissítés után is megmarad.
+
+A tétellista fölötti **A munkalap tételei a számlán** kapcsoló egy kattintással mindet be- vagy kipipálja – csak abban az ablakban, az alapállás marad. Részletesen: [Űrlapok beállítása](sugo:urlapok).
+
 ## Lépésről lépésre: bevizsgálási díj és több eszköz a számlán
 
 **Bevizsgálási díj külön tételként**

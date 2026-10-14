@@ -445,6 +445,9 @@ final class SDH_Muhely_Frontend
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.css')); ?>">
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.css')); ?>">
+            <?php // Űrlap-beállítások (0.62.0): a fogaskerék a munkalap / eladás / számla ablakában, bármelyik oldalon. ?>
+            <link rel="stylesheet"
+                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/urlap-beallitas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/urlap-beallitas.css')); ?>">
             <?php if ($aktiv_kulcs === 'attekintes') : ?>
                 <link rel="stylesheet"
                       href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
@@ -672,6 +675,8 @@ final class SDH_Muhely_Frontend
         <?php // Napló ablak, lezárt lap zárolása, RMA-matrica (0.59): bármelyik oldalon. ?>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.js')); ?>"></script>
         <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.js')); ?>"></script>
+        <?php // Űrlap-beállítások (0.62.0): fogaskerék, élő kapcsolás, a számla „tételei rajta" kapcsolója. ?>
+        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/urlap-beallitas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/urlap-beallitas.js')); ?>"></script>
         <?php if ($aktiv_kulcs === 'beallitasok') : ?>
             <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
         <?php endif; ?>

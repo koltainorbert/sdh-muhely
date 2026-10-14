@@ -3333,6 +3333,11 @@ final class SDH_Muhely_Munkalap
         $fajta = self::fajta_ervenyes($uj ? self::$uj_fajta : (string) ($munkalap->fajta ?? ''));
         $fnev  = self::fajta_nev($fajta);
 
+        // Fogaskerék (0.62.0): mi látszódjon ezen az űrlapfajtán – a címsor előtt, az űrlapon kívül.
+        if (class_exists('SDH_Muhely_Urlap_Beallitas')) {
+            echo SDH_Muhely_Urlap_Beallitas::gomb($fajta); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel.
+        }
+
         ?>
         <h2 class="sdh-modal__cim">
             <?php echo esc_html($uj ? 'Új ' . mb_strtolower($fnev) : $fnev . ' ' . self::szam_formaz($munkalap->munkalap_szam)); ?>
@@ -3458,6 +3463,9 @@ final class SDH_Muhely_Munkalap
         // Eladásnál csak az értelmes állapotok választhatók (a többi a javításé).
         $valaszthato = $eladas ? self::eladas_allapotok($allapotok, $allapot) : $allapotok;
 
+        // Űrlap-beállítás (fogaskerék, 0.62.0): az elem jelölője; kikapcsolva rejtett, de az értéke mentődik.
+        $ub = static fn (string $elem): string => class_exists('SDH_Muhely_Urlap_Beallitas') ? SDH_Muhely_Urlap_Beallitas::jel($fajta, $elem) : '';
+
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($munkalap->id ?? 0); ?>">
         <input type="hidden" name="fajta" value="<?php echo esc_attr($fajta); ?>">
@@ -3510,7 +3518,7 @@ final class SDH_Muhely_Munkalap
                         // itt átírva pedig minden eszköz megkapja.
                         $eszall = $uj ? '' : self::eszkoz_allapot_blokk($munkalap);
                         ?>
-                        <div class="sdh-ig">
+                        <div class="sdh-ig"<?php echo $ub('allapot'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="allapot"<?php echo $eszall !== '' ? ' title="A lap közös állapota: az eszközök állapotából adódik. Ha itt írod át, minden eszköz ezt kapja."' : ''; ?>><?php echo $eszall !== '' ? 'Közös állapot' : 'Állapot'; ?></label>
                             <div class="sdh-allapot-valaszto">
                                 <span class="sdh-allapot-pont sdh-allapot--<?php
@@ -3523,8 +3531,12 @@ final class SDH_Muhely_Munkalap
                                         if ($eszall !== '' && !empty($a['reszben']) && $allapot !== (string) $kulcs) {
                                             continue;
                                         }
+
+                                        // A fogaskerékkel kikapcsolt állapot itt nem választható (ami épp áll, az igen).
+                                        $all_ki = class_exists('SDH_Muhely_Urlap_Beallitas') && !SDH_Muhely_Urlap_Beallitas::allapot_be($fajta, (string) $kulcs, $allapot);
                                         ?>
                                         <option value="<?php echo esc_attr((string) $kulcs); ?>"
+                                                data-sdh-ub-allapot="<?php echo esc_attr((string) $kulcs); ?>"<?php echo $all_ki ? ' hidden disabled' : ''; ?>
                                                 data-szin="<?php echo esc_attr($a['szin']); ?>"
                                             <?php selected($allapot, (string) $kulcs); ?>>
                                             <?php echo esc_html($a['nev']); ?>
@@ -3542,14 +3554,14 @@ final class SDH_Muhely_Munkalap
 
                         <?php // Több eszköznél az eszközönkénti állapot az Eszközök panel kártyáin áll (jobbra fent). ?>
 
-                        <div class="sdh-ig">
+                        <div class="sdh-ig"<?php echo $ub('nev'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="nev">Név</label>
                             <input type="text" name="nev" id="nev" maxlength="190"
                                    title="Rövid tárgy, pl. „kijelzőcsere” – nem kötelező"
                                    value="<?php echo esc_attr($uj ? '' : (string) $munkalap->nev); ?>">
                         </div>
 
-                        <div class="sdh-ig">
+                        <div class="sdh-ig"<?php echo $ub('felelos'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="felelos">Felelős</label>
                             <select name="felelos" id="felelos">
                                 <option value="0">Nincs</option>
@@ -3562,7 +3574,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport sdh-ml__csoport--racs">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--racs"<?php echo $ub('datumok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Dátumok</h3>
 
                         <div class="sdh-ig">
@@ -3570,7 +3582,7 @@ final class SDH_Muhely_Munkalap
                             <?php self::datum_mezo('keszult', $keszult); ?>
                         </div>
 
-                        <div class="sdh-ig"<?php echo $arukiadas ? ' hidden' : ''; ?>>
+                        <div class="sdh-ig"<?php echo $arukiadas ? ' hidden' : ''; ?><?php echo $ub('hatarido'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="hatarido"><?php echo $rendeles ? 'Várható érkezés' : 'Határidő'; ?></label>
                             <?php self::datum_mezo('hatarido', $hatarido); ?>
                         </div>
@@ -3582,7 +3594,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport sdh-ml__csoport--osszeg">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--osszeg"<?php echo $ub('osszeg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Összeg</h3>
 
                         <div class="sdh-ml__osszeg">
@@ -3596,7 +3608,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport sdh-ml__csoport--racs">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--racs"<?php echo $ub('tetel_beall'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Tételek</h3>
 
                         <div class="sdh-ig">
@@ -3619,7 +3631,7 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <div class="sdh-ml__csoport sdh-ml__csoport--fizetes">
+                    <div class="sdh-ml__csoport sdh-ml__csoport--fizetes"<?php echo $ub('fizetes'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Fizetés</h3>
 
                         <div class="sdh-ig">
@@ -3643,12 +3655,12 @@ final class SDH_Muhely_Munkalap
                             </label>
                         </div>
 
-                        <div class="sdh-ig">
+                        <div class="sdh-ig"<?php echo $ub('fizetes_ideje'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="fizetes_ideje">Fizetés ideje</label>
                             <?php self::datum_mezo('fizetes_ideje', $fiz_ideje); ?>
                         </div>
 
-                        <div class="sdh-ig">
+                        <div class="sdh-ig"<?php echo $ub('eloleg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <label for="fizetett" title="Előleg: a már befizetett összeg. Mindig levonódik a teljes összegből.">Fizetett (előleg)</label>
                             <span class="sdh-szam sdh-szam--utotag">
                                 <input type="number" name="fizetett" id="fizetett"
@@ -3666,7 +3678,7 @@ final class SDH_Muhely_Munkalap
                         $bev_szlg = $uj ? 0 : (int) ($munkalap->bevizsgalas_szolg ?? 0);
                         ?>
                         <?php // Eladásnál nincs bevizsgálási díj: a mezők maradnak (üresen), de nem látszanak. ?>
-                        <div class="sdh-eladas-rejt"<?php echo $rejt; ?>>
+                        <div class="sdh-eladas-rejt"<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('bevizsgalas'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <div class="sdh-ig sdh-bev" data-sdh-bev-doboz>
                             <span class="sdh-ig__cimke"></span>
                             <div class="sdh-bev__sor">
@@ -3739,7 +3751,9 @@ final class SDH_Muhely_Munkalap
                         <?php
                         // Eladás: az eszköz helyén a helyszín (árukiadás) vagy a beszállító (rendelés) áll.
                         if ($eladas) {
+                            echo '<div class="sdh-ub-atlatszo"' . $ub('eladas_mezok') . '>'; // phpcs:ignore WordPress.Security.EscapeOutput
                             SDH_Muhely_Eladas::urlap_mezok($munkalap, $fajta);
+                            echo '</div>';
                         }
                         ?>
 
@@ -3775,7 +3789,9 @@ final class SDH_Muhely_Munkalap
                     ?>
                     <?php
                     if ($rendeles) {
+                        echo '<div class="sdh-ub-atlatszo"' . $ub('rendeles_sor') . '>'; // phpcs:ignore WordPress.Security.EscapeOutput
                         SDH_Muhely_Eladas::urlap_rendeles_sor($munkalap);
+                        echo '</div>';
                     }
                     ?>
 
@@ -3784,7 +3800,7 @@ final class SDH_Muhely_Munkalap
                     // itt állnak, mindig láthatóan – ugyanaz a kártya, mint a munkalapon.
                     ?>
                     <?php if ($eladas) : ?>
-                        <div class="sdh-ml-ugyfel" data-sdh-osszefoglalo>
+                        <div class="sdh-ml-ugyfel" data-sdh-osszefoglalo<?php echo $ub('ugyfelkartya'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                             <?php self::osszefoglalo($ugyfel_id, 0, [], $fajta); ?>
                         </div>
                     <?php endif; ?>
@@ -3794,7 +3810,7 @@ final class SDH_Muhely_Munkalap
                     // A csatolt eszközök kártyái a régi címkék helyén élnek (app.js: tovabbi*),
                     // így a díjmezők, a levétel és az új eszköz felvétele változatlanul működik.
                     ?>
-                    <div class="sdh-ml-eszkozok sdh-eszp" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?>>
+                    <div class="sdh-ml-eszkozok sdh-eszp" data-sdh-tovabbi-eszkozok<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('eszkozpanel'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <input type="hidden" name="eszkozok_jelen" value="<?php echo $eladas ? '' : '1'; ?>">
                         <div class="sdh-eszp__fej">
                             <span class="sdh-eszp__cim">Eszközök a lapon</span>
@@ -3847,16 +3863,16 @@ final class SDH_Muhely_Munkalap
                                id="ful_m_rma" data-sdh-ful-kulcs="rma">
 
                         <div class="sdh-fulek__sav">
-                            <label for="ful_m_eszkoz"<?php echo $rejt; ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
-                            <label for="ful_m_hibak"<?php echo $rejt; ?>>Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
+                            <label for="ful_m_eszkoz"<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('ful_eszkoz'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
+                            <label for="ful_m_hibak"<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('ful_hibak'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Hibák <span class="sdh-fulek__db" data-sdh-db="hibak" hidden></span></label>
                             <?php if ($eladas) : ?>
-                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?><?php echo $ub('ful_termek'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
                             <?php endif; ?>
-                            <label for="ful_m_szolg">Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
+                            <label for="ful_m_szolg"<?php echo $ub('ful_szolg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Szolgáltatások <span class="sdh-fulek__db" data-sdh-db="szolgaltatas" hidden></span></label>
                             <?php if (!$eladas) : ?>
-                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
+                                <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?><?php echo $ub('ful_termek'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
                             <?php endif; ?>
-                            <label for="ful_m_rma" data-sdh-rma-ful<?php echo $rma_rejt ? ' hidden' : ''; ?>><?php echo esc_html($rma_felirat); ?> <?php echo $munkalap && $rma_felirat === 'RMA' ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+                            <label for="ful_m_rma" data-sdh-rma-ful<?php echo $rma_rejt ? ' hidden' : $ub('ful_rma'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html($rma_felirat); ?> <?php echo $munkalap && $rma_felirat === 'RMA' ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                         </div>
 
                         <?php if ($eladas) : ?>
@@ -3923,14 +3939,14 @@ final class SDH_Muhely_Munkalap
                                id="ful_m_belso">
 
                         <div class="sdh-fulek__sav">
-                            <label for="ful_m_megjegyzes">Megjegyzés<?php
+                            <label for="ful_m_megjegyzes"<?php echo $ub('megjegyzes'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Megjegyzés<?php
                                 echo trim($ugyfel_megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
                             ?></label>
-                            <label for="ful_m_belso">Belső megjegyzés<?php
+                            <label for="ful_m_belso"<?php echo $ub('belso'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Belső megjegyzés<?php
                                 echo trim($megjegyzes) !== '' ? ' <span class="sdh-fulek__db">!</span>' : '';
                             ?></label>
                             <?php // Előre megírt megjegyzések popupból (app.js: gyakoriMegjegyzesNyit) – a „Megjegyzés" mezőbe kerülnek. ?>
-                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-megj-gomb" data-sdh-gyakori-megj
+                            <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-megj-gomb" data-sdh-gyakori-megj<?php echo $ub('gyakori_megj'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                                     data-sdh-lista="<?php echo esc_attr((string) wp_json_encode(self::gyakori_megjegyzesek(), JSON_UNESCAPED_UNICODE)); ?>"
                                     title="Előre megírt megjegyzések: egy kattintással a Megjegyzésbe kerülnek, egyszerre több is">
                                 <span class="sdh-plusz" aria-hidden="true"></span>Gyakori megjegyzések
@@ -3991,14 +4007,14 @@ final class SDH_Muhely_Munkalap
                 <?php // Fizetés (és pénztárba írás): mentett lapnál (SDH_Muhely_Penztar, penztar.js). ?>
                 <?php if (!$uj && $modal && class_exists('SDH_Muhely_Penztar')) : ?>
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-pt-fizetes-gomb<?php echo (int) ($munkalap->fizetve ?? 0) === 1 ? ' is-fizetve' : ''; ?>"
-                            data-sdh-penztar-fizetes title="Fizetés rögzítése, és (ha kéred) beírás a házipénztárba">
+                            data-sdh-penztar-fizetes<?php echo $ub('gomb_fizetes'); // phpcs:ignore WordPress.Security.EscapeOutput ?> title="Fizetés rögzítése, és (ha kéred) beírás a házipénztárba">
                         <?php echo (int) ($munkalap->fizetve ?? 0) === 1 ? 'Fizetve ✓' : 'Fizetés'; ?>
                     </button>
                 <?php endif; ?>
 
                 <?php // Nyomtatás, PDF, e-mail: mentett lapnál (SDH_Muhely_Nyomtatas, nyomtatas.js) – az ablak a lap fölé nyílik. ?>
                 <?php if (!$uj && $modal && class_exists('SDH_Muhely_Nyomtatas')) : ?>
-                    <?php echo SDH_Muhely_Nyomtatas::gomb((int) $munkalap->id, [], 'Nyomtatás'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                    <?php echo (string) preg_replace('/<(button|a)\\b/', '<$1' . $ub('gomb_nyomtatas'), SDH_Muhely_Nyomtatas::gomb((int) $munkalap->id, [], 'Nyomtatás'), 1); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel; a jelölő a fogaskeréké. ?>
                 <?php endif; ?>
 
                 <?php // Brother-matrica (0.59): mentett, sorszámos javítási lapnál – és a rendelésen is (0.60.1),
@@ -4006,7 +4022,7 @@ final class SDH_Muhely_Munkalap
                       // azt az ügyfél rögtön viszi. ?>
                 <?php if (!$uj && $modal && $fajta !== 'arukiadas' && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Matrica') && SDH_Muhely_Modulok::be('matrica')) : ?>
                     <?php // Rendelésnek saját címkesablonja van (0.61.1): a Beállítások › Címkenyomtatás › Rendelés-címke lapon állítható. ?>
-                    <?php echo SDH_Muhely_Matrica::gomb((int) $munkalap->id, $fajta === 'rendeles' ? 'rendeles' : 'rma'); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                    <?php echo (string) preg_replace('/<(button|a)\\b/', '<$1' . $ub('gomb_matrica'), SDH_Muhely_Matrica::gomb((int) $munkalap->id, $fajta === 'rendeles' ? 'rendeles' : 'rma'), 1); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel; a jelölő a fogaskeréké. ?>
                 <?php endif; ?>
 
                 <?php // A lap változásnaplója (0.59): ki, mikor, mit módosított (SDH_Muhely_Naplo_Felulet, naplo.js). ?>

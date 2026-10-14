@@ -151,6 +151,10 @@ A Beállítások menüpontban, a **Pénz és eladás** csoportban találod az **
 
 A **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállítók listája a saját ablakában, külön mentődik.
 
+## Mi látszódjon az űrlapon (fogaskerék)
+
+A napi árukiadás ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami ezen az űrlapon nem kell – mezők, lapfülek, gombok, választható állapotok. A beállítás külön él a munkalapétól, és frissítés után is megmarad. Részletesen: [Űrlapok beállítása](sugo:urlapok).
+
 ## Szabályok, amiket a rendszer betart
 
 - **A sorszám közös.** Az árukiadás, a rendelés és a munkalap ugyanabból a számsorból kap sorszámot.

@@ -170,7 +170,7 @@ T::tartalmaz($urlap, 'name="beszallito_id"', 'van beszállító-választó');
 T::tartalmaz($urlap, 'data-sdh-beszallitok', 'a beszállítók az űrlapról szerkeszthetők');
 T::tartalmaz($urlap, 'name="rend_allapot"', 'van rendelés-állapot');
 T::tartalmaz($urlap, 'Várható érkezés', 'a határidő itt várható érkezés');
-T::igaz(preg_match('/<label for="ful_m_rma" data-sdh-rma-ful>/', $urlap) === 1, 'rendelésnél van RMA fül');
+T::igaz(preg_match('/<label for="ful_m_rma" data-sdh-rma-ful(?: data-sdh-ub="ful_rma")?>/', $urlap) === 1, 'rendelésnél van RMA fül (a fogaskerékkel kapcsolható, alapból látszik)');
 
 $r = $ment(['fajta' => 'rendeles', 'beszallito_id' => $b1, 'tetelek' => ['termek' => [$termek('Tok', 4990)]]]);
 T::igaz(empty($r['success']) && strpos((string) ($r['data']['uzenet'] ?? ''), 'ügyfelet') !== false, 'rendelés ügyfél nélkül nem menthető');
