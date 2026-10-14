@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.62.1
+ * Version:           0.63.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.62.1');
+define('SDH_MUHELY_VERSION', '0.63.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -82,6 +82,8 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-beallitasok.php'     => 'SDH_Muhely_Beallitasok',
     // Űrlap-beállítások (0.62.0): fogaskerék minden űrlapon – mi látszódjon, magától kerüljenek-e a tételek a számlára.
     'includes/class-sdh-muhely-urlap-beallitas.php' => 'SDH_Muhely_Urlap_Beallitas',
+    // Mezőmemória és a Leggyakoribb Számla tételek listája (0.63.0).
+    'includes/class-sdh-muhely-emlek.php'           => 'SDH_Muhely_Emlek',
     // Napló menüpont, a rekordok Napló ablaka, Beállítások › Változásnapló / Lezárt lapok (0.59).
     'includes/class-sdh-muhely-naplo-felulet.php'   => 'SDH_Muhely_Naplo_Felulet',
     // Brother RMA-matrica (0.59): címkenyomtató, böngészőből (PDF) vagy közvetlenül hálózaton.

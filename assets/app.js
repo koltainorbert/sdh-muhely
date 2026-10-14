@@ -224,7 +224,7 @@
      * fogaskerék lenyílója. Különben Szikra minden mozdulatára újramérődne
      * az ablak, és vele „mozogna" a munkalap betűmérete (0.62.1).
      */
-    var ILLESZT_KIHAGY = '.sdh-ai, .sdh-ub';
+    var ILLESZT_KIHAGY = '.sdh-ai, .sdh-ub, .sdh-emlek-lista';
 
     function illesztKihagy(csomopont) {
         var elem = csomopont && csomopont.nodeType === 1 ? csomopont : (csomopont ? csomopont.parentElement : null);
@@ -9618,7 +9618,7 @@
         Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-tetel]'), function (pipa) {
             var szamlazva = pipa.getAttribute('data-szamlazva') === '1';
 
-            pipa.checked = !szamlazva && (mind || pipa.getAttribute('data-eszkoz') === radio.value);
+            pipa.checked = !szamlazva && !pipa.closest('[data-sdh-ub-ki]') && (mind || pipa.getAttribute('data-eszkoz') === radio.value);
         });
 
         // A megjegyzés csak akkor cserélődik, ha még a gép által kitöltött szöveg áll benne.
@@ -9675,6 +9675,13 @@
         var sorokDb = 0;
 
         Array.prototype.forEach.call(urlap.querySelectorAll('[data-sdh-szamla-tetel]'), function (pipa) {
+            // A fogaskerékkel elrejtett munkalap-tétel (0.63.0) nem számít: se sornak, se összegnek.
+            if (pipa.closest('[data-sdh-ub-ki]')) {
+                pipa.checked = false;
+
+                return;
+            }
+
             sorokDb += 1;
 
             if (pipa.checked) {
@@ -11574,6 +11581,9 @@
 
     window.SDH_MUHELY_APP = {
         szamla: szamlaKivulrol,
+        // Új tétel a számla ablakában kívülről (emlek.js: Gyakori tételek).
+        szamlaSor: function (urlap, adat) { return szamlaSorUj(urlap, adat); },
+        szamlaUjMezo: szamlaUjMezo,
         nyit: nyit,
         bezar: bezar,
         sajatSzint: sajatSzint,

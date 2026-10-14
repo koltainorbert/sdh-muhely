@@ -52,7 +52,7 @@ final class SDH_Muhely_Valtozasnaplo
     private const KIHAGYOTT = [
         'valtozasnaplo', 'tac', 'level', 'level_mappa', 'ai_uzenet', 'ai_muvelet', 'ai_tudas',
         'munkalap_naplo', 'penztar_naplo', 'csapat_tag', 'csapat_nyugta', 'naptar_jelzes',
-        'sms_esemeny', 'sms_onteszt', 'sms_link_esemeny', 'sms_sablon_verzio',
+        'sms_esemeny', 'sms_onteszt', 'sms_link_esemeny', 'sms_sablon_verzio', 'mezo_emlek',
     ];
 
     /** Mezők, amelyek változása önmagában nem napló-esemény (minden mentéskor változnak). */

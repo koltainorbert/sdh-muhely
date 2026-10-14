@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.39.0';
+    public const DB_VERSION = '0.40.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -146,6 +146,7 @@ final class SDH_Muhely_Schema
         $sms_link     = self::tabla('sms_link_esemeny');
         $sms_leir     = self::tabla('sms_leiratkozas');
         $naplo_v      = self::tabla('valtozasnaplo');
+        $mezo_emlek   = self::tabla('mezo_emlek');
 
         $definiciok = [];
 
@@ -1499,6 +1500,27 @@ final class SDH_Muhely_Schema
             key ido (ido),
             key keres (keres),
             key felhasznalo (felhasznalo)
+        ) {$charset};";
+
+        /* ----------------------------------------------------------
+         * Mezőmemória (0.63.0)
+         *
+         * Amit valaki egy mezőbe beírt vagy keresett, azt a rendszer
+         * megjegyzi, és legközelebb gépelés közben felajánlja. "kulcs" =
+         * melyik mező (pl. „szamla:vevo[cim]", „tetelnev"); "lenyomat" a
+         * kisbetűs érték md5-je (ugyanaz az érték egyszer szerepel, a "db"
+         * nő). Jelszó, kulcs, kód, kártyaszám soha nem kerül ide.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$mezo_emlek} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            kulcs varchar(120) NOT NULL default '',
+            lenyomat char(32) NOT NULL default '',
+            ertek varchar(190) NOT NULL default '',
+            db int(10) unsigned NOT NULL default 1,
+            utolso datetime NULL,
+            PRIMARY KEY  (id),
+            unique key kulcs_ertek (kulcs,lenyomat),
+            key kulcs_db (kulcs,db)
         ) {$charset};";
 
         return $definiciok;

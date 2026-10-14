@@ -3832,7 +3832,7 @@ final class SDH_Muhely_Munkalap
                                 <?php foreach ($tovabbi as $t_eszkoz) : ?>
                                     <?php self::tovabbi_cimke((string) (int) $t_eszkoz->id, self::eszkoz_felirat($t_eszkoz), $tovabbi_dij[(int) $t_eszkoz->id] ?? null, $t_eszkoz, $kartya_bontas[(int) $t_eszkoz->id] ?? null, $uj ? 0 : (int) $munkalap->id, $kartya_tobb, $uj ? false : (int) $munkalap->fizetve === 1); ?>
                                 <?php endforeach; ?>
-                                <span class="sdh-ml-eszkozok__ures" data-sdh-tovabbi-ures<?php echo $tovabbi !== [] ? ' hidden' : ''; ?>>
+                                <span class="sdh-ml-eszkozok__ures" data-sdh-tovabbi-ures<?php echo $tovabbi !== [] ? ' hidden' : ''; ?><?php echo $eladas ? '' : $ub('eszkoz_csatolas'); // phpcs:ignore WordPress.Security.EscapeOutput -- kikapcsolt csatolásnál a „további eszközök itt" doboz sem kell ?>>
                                     Egy munkalapra akárhány eszköz felvehető – a további eszközök itt jelennek meg.
                                 </span>
                             </div>

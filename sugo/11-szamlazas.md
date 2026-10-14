@@ -105,6 +105,9 @@ A már kiszámlázott tétel megjegyzi a számla számát. Ha később újabb sz
 
 ## A számla tételei magától vagy kézzel (fogaskerék)
 
+A fogaskerékkel a munkalap tételei el is tüntethetők az ablakból (**A munkalap tételei a listában** ki): ekkor csak a kézzel felvett tétel kerül a számlára. A **★ Gyakori tételek…** gomb a Leggyakoribb Számla tételek listáját nyitja (Telefon / TV / Számítógép szerviz szolgáltatás, Számítógép alaplapi javítás…): kattintásra kézi tételként felkerül, és ugyanott szerkeszthető. A Kézi tétel megnevezésénél gépelés közben a korábban beírt tételnevek is felkínálkoznak. Részletesen: [Űrlapok beállítása](sugo:urlapok).
+
+
 A számla ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) állítod, hogy a munkalap tételei **magától kipipálva** nyíljanak-e. Kikapcsolva egy tétel sincs kipipálva: te pipálod be, ami kell, vagy **Kézi tétel**lel írod – így a kollégák nem tévesztenek a pipálgatásnál. Ugyanitt kapcsolható a tétel-megjegyzés (eszköz neve, IMEI) és a **Megjegyzés** mező automatikus kitöltése. A Számlázz.hu számla és a számla-előkészítő **külön** állítható, és a beállítás frissítés után is megmarad.
 
 A tétellista fölötti **A munkalap tételei a számlán** kapcsoló egy kattintással mindet be- vagy kipipálja – csak abban az ablakban, az alapállás marad. Részletesen: [Űrlapok beállítása](sugo:urlapok).

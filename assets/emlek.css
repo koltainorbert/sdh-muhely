@@ -1,0 +1,182 @@
+/* ==================================================================
+ * Mezőmemória és Gyakori tételek (0.63.0) – emlek.js
+ * ================================================================== */
+
+/* ---- A felajánló lista a mező alatt (fixen; a popup zoomját az emlek.js követi) ---- */
+.sdh-emlek-lista {
+    position: fixed;
+    z-index: 1000;
+    box-sizing: border-box;
+    max-width: min(calc(520px * var(--sdh-n)), calc(100vw - 1rem));
+    margin: 0;
+    padding: .25rem;
+    background: var(--sdh-felulet);
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    box-shadow: var(--sdh-arnyek-emelt);
+    font-size: calc(13px * var(--sdh-n));
+    color: var(--sdh-szoveg);
+}
+
+.sdh-emlek-lista__sor {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: calc(30px * var(--sdh-n));
+    padding: .25rem .3rem .25rem .55rem;
+    border-radius: calc(6px * var(--sdh-n));
+    cursor: pointer;
+}
+
+.sdh-emlek-lista__sor:hover {
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-emlek-lista__sor.is-kijelolt {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-emlek-lista__szoveg {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-emlek-lista__szoveg mark {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-weight: 700;
+}
+
+.sdh-emlek-lista__csillag {
+    flex: 0 0 auto;
+    color: #f59e0b;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-emlek-lista__torol {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sdh-halvany);
+    font-size: calc(15px * var(--sdh-n));
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .12s, background-color .12s, color .12s;
+}
+
+.sdh-emlek-lista__sor:hover .sdh-emlek-lista__torol,
+.sdh-emlek-lista__sor.is-kijelolt .sdh-emlek-lista__torol {
+    opacity: 1;
+}
+
+.sdh-emlek-lista__torol:hover {
+    background: var(--sdh-hiba);
+    color: #fff;
+}
+
+/* ---- A számla ablaka: a Gyakori tételek gomb csillaga ---- */
+.sdh-csillag {
+    margin-right: .35rem;
+    color: #f59e0b;
+}
+
+/* ---- Leggyakoribb Számla tételek listája (popup) ---- */
+.sdh-modal.sdh-modal--pop.sdh-gyt {
+    width: min(calc(680px * var(--sdh-n)), calc(100vw - 2rem));
+}
+
+.sdh-gyt__lista {
+    display: grid;
+    gap: .35rem;
+    margin: .9rem 0 .8rem;
+}
+
+.sdh-gyt__sor {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.sdh-gyt__nev {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    min-width: 0;
+    height: auto;
+    min-height: calc(34px * var(--sdh-n));
+    padding: .3rem .9rem;
+    text-align: left;
+}
+
+.sdh-gyt__nev .sdh-pill__cimke {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.sdh-gyt__ikon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    min-width: calc(30px * var(--sdh-n));
+    height: calc(30px * var(--sdh-n));
+    margin: 0;
+    padding: 0 .35rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-gomb-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .12s, color .12s, border-color .12s;
+}
+
+.sdh-gyt__ikon:hover {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+}
+
+.sdh-gyt__ikon--torol:hover,
+.sdh-gyt__ikon.is-biztos {
+    border-color: var(--sdh-hiba);
+    background: var(--sdh-hiba);
+    color: #fff;
+}
+
+.sdh-gyt__szerk {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: calc(34px * var(--sdh-n));
+    padding: 0 .85rem;
+    border: 1px solid var(--sdh-accent);
+    border-radius: var(--sdh-mezo-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-gyt__kicsi {
+    height: calc(32px * var(--sdh-n));
+    padding: 0 .9rem;
+}
+
+/* Beállítások › Űrlapok: a lista szövegmezője. */
+.sdh-ub-gyakori {
+    width: 100%;
+    max-width: calc(560px * var(--sdh-n));
+    min-height: calc(120px * var(--sdh-n));
+}

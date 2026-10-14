@@ -122,6 +122,7 @@ Rövid jelenetek a képernyő alján, a figura bal oldalán:
 | Tüsszentés, csuklás, vakarózás | „Ha… haaa… HAPCI!”, „hukk!”, és valami csíp. |
 | Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |
 | Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |
+| Bollywood-szám Táncos Tónival | Tóni flitteres zakóban betáncol, együtt pörögnek, aztán Tóni minden számban máshogy hal meg (üllő, zongora, villám, banánhéj, motor, tűzijáték) – Szikra drámaian megsiratja, Tóni szellemként felszáll, és megígéri, hogy visszajön. |
 | Sörözés, füves cigi | Csak bekapcsolt **Bulis jelenetek** mellett: sört iszik, csuklik és tántorog (néha elalszik), füves cigiből füstkarikákat fúj, vihog, utána farkaséhes. |
 
 Minden szereplő saját rajz. Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.

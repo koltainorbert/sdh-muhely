@@ -402,6 +402,10 @@ final class SDH_Muhely_Admin_UI
         wp_enqueue_style('sdh-muhely-urlap-beallitas', SDH_MUHELY_URL . 'assets/urlap-beallitas.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/urlap-beallitas.css'));
         wp_enqueue_script('sdh-muhely-urlap-beallitas', SDH_MUHELY_URL . 'assets/urlap-beallitas.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/urlap-beallitas.js'), true);
 
+        // Mezőmemória és Gyakori tételek (0.63.0): minden oldalon.
+        wp_enqueue_style('sdh-muhely-emlek', SDH_MUHELY_URL . 'assets/emlek.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/emlek.css'));
+        wp_enqueue_script('sdh-muhely-emlek', SDH_MUHELY_URL . 'assets/emlek.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/emlek.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(
@@ -431,6 +435,8 @@ final class SDH_Muhely_Admin_UI
             'ajax'      => admin_url('admin-ajax.php'),
             'nonce'     => wp_create_nonce('sdh_muhely_modal'),
             'kontextus' => $kontextus,
+            // Mezőmemória (0.63.0): be van-e kapcsolva, és a titkos mezők szűrője (emlek.js).
+            'emlek'     => class_exists('SDH_Muhely_Emlek') ? SDH_Muhely_Emlek::js() : ['be' => false],
             'alapTema'  => $arculat['tema'],
             'alapSzin'  => $arculat['szin'],
             // Üvegszín (duo / mono) és az alap betűnagyítás (%), a csúszka határaival.

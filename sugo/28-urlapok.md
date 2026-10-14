@@ -4,7 +4,7 @@ cim: Űrlapok beállítása – a fogaskerék
 csoport: Rendszer
 modul:
 szakaszok: urlapok
-kulcsszavak: fogaskerék, fogaskerek, beállítás az űrlapon, űrlap, űrlapok, mi látszódjon, elrejt, elrejtés, kikapcsol, bekapcsol, mező elrejtése, lapfül elrejtése, gomb elrejtése, állapotok kikapcsolása, választható állapot, bevizsgálás kikapcsolása, munkalap testreszabása, rendelés testreszabása, árukiadás testreszabása, számla tételei, tételek automatikusan, ne tegye rá a tételeket, kézi kitöltés, üres számla, pipálgatás, kipipálva, megjegyzés automatikusan, számla-előkészítő, számlázz.hu, marad frissítés után
+kulcsszavak: mezőmemória, memória, felajánlás, automatikus kiegészítés, korábban beírt, előzmény, gyakori tételek, leggyakoribb számla tételek, kézi tétel, tétel eltüntetése, munkalap tételei, fogaskerék, fogaskerek, beállítás az űrlapon, űrlap, űrlapok, mi látszódjon, elrejt, elrejtés, kikapcsol, bekapcsol, mező elrejtése, lapfül elrejtése, gomb elrejtése, állapotok kikapcsolása, választható állapot, bevizsgálás kikapcsolása, munkalap testreszabása, rendelés testreszabása, árukiadás testreszabása, számla tételei, tételek automatikusan, ne tegye rá a tételeket, kézi kitöltés, üres számla, pipálgatás, kipipálva, megjegyzés automatikusan, számla-előkészítő, számlázz.hu, marad frissítés után
 osszefoglalo: A munkalap, a rendelés, a napi árukiadás és a két számla ablakának jobb felső sarkában álló fogaskerékkel állítod, mi látszódjon az űrlapon, és hogy a számlára magától kerüljenek-e a tételek; a beállítás frissítés után is megmarad.
 ---
 ## Mire való
@@ -13,7 +13,7 @@ A **fogaskerék** minden nagy űrlap jobb felső sarkában áll: a **Munkalap**,
 
 - **blokkok és mezők** – állapot, név, felelős, dátumok, összeg, kedvezmény és áfa, fizetés, előleg, bevizsgálási díj;
 - **lapfülek** – Eszköz, Hibák, Szolgáltatások, Termékek, RMA / Címke, Megjegyzés, Belső megjegyzés;
-- **+ Eszköz csatolása** – kikapcsolva a munkalapra nem csatolható újabb eszköz (a már csatoltak látszanak);
+- **+ Eszköz csatolása** – kikapcsolva a munkalapra nem csatolható újabb eszköz, és a „további eszközök itt jelennek meg" üres doboz sem látszik (a már csatoltak látszanak);
 - **gombok** – Fizetés, Nyomtatás, Címke, Számlázz.hu számla, Számla-előkészítő;
 - **választható állapotok** – melyik állapot jelenjen meg az állapotválasztóban;
 - a két számlánál: **magától kerüljenek-e rá a munkalap tételei**, a tétel-megjegyzések (eszköz neve, IMEI) és a **Megjegyzés**.
@@ -57,6 +57,30 @@ A számla ablakában a tétellista fölött egy kapcsoló áll: **A munkalap té
 - Ha a több eszközös lapon egy eszközt választottál a **Mi kerül a számlára** sorban, a kapcsoló csak annak az eszköznek a tételeit pipálja.
 
 Ez a kapcsoló **csak az épp nyitott ablakra** hat – az alapállást a fogaskerék adja, és az nem változik tőle. Így egy kattintással rá tudod tenni az összes tételt, ha egyszer mégis kell, anélkül hogy a beállítás elállítódna.
+
+## A munkalap tételei el is tüntethetők a számláról
+
+Ha a számlát mindig magad töltöd ki, a fogaskerékben kapcsold ki: **A munkalap tételei a listában**. Ekkor a munkalap tételei meg sem jelennek a számla (vagy a számla-előkészítő) ablakában, és nem is kerülnek rá – a számlán csak az lesz, amit kézzel veszel fel: **Kézi tétel**, **Gyakori tételek…**, **Termék…**, **Szolgáltatás…**. A Számlázz.hu számla és a számla-előkészítő külön állítható.
+
+## Leggyakoribb Számla tételek listája
+
+A számla ablakában a **★ Gyakori tételek…** gomb egy popupot nyit a **Leggyakoribb Számla tételek listájával**. Alapból benne van: *Telefon szerviz szolgáltatás*, *TV szerviz szolgáltatás*, *Számítógép szerviz szolgáltatás*, *Számítógép alaplapi javítás*.
+
+- Egy tételre kattintva kézi tételként a számlára kerül, és a kurzor rögtön az árába ugrik.
+- A popupban ugyanott **szerkeszthető**: ✎ átírja, × törli (kétlépcsős: „Törlöd?"), a ▲ ▼ sorrendezi, alul új tétel vehető fel – minden azonnal mentődik.
+- A **Kézi tétel** megnevezésébe kattintva ezek a tételek rögtön felkínálkoznak (★ jellel), gépelés közben pedig a korábban kézzel beírt és a munkalapokon már szerepelt tételnevek is.
+- A lista a Beállítások › **Űrlapok** lapfülön is szerkeszthető, soronként egy tétel.
+
+## Mezőmemória: amit egyszer beírtál, felajánlja
+
+A rendszer minden szövegmezője (vevő neve és címe, keresők, megnevezések, beállítások…) megjegyzi, mit írtatok bele vagy mire kerestetek, és legközelebb **gépelés közben felajánlja** – ugyanúgy, ahogy a munkalap az ügyfél nevét.
+
+- **Nyíl le / fel:** választás a listából, **Enter:** beírás, **Esc:** a lista bezárása. Üres mezőben a lefelé nyíl az összes korábbi értéket mutatja.
+- A sor végi **×** kiveszi az értéket a felajánlásból (pl. elgépelt szó).
+- A memória közös: amit egy kolléga beírt, azt a többiek is megkapják. A leggyakrabban és legutóbb használt áll elöl.
+- **Soha nem jegyez meg:** jelszót, kulcsot, kódot (feloldó kód, zárkód, minta), kártya- és bankszámlaszámot.
+- Ahol már saját felajánló lista van (ügyfél-, szolgáltatás-, termékválasztó, irányítószám, levél címzettje, IMEI), ott az marad.
+- Ki- és bekapcsolni, illetve teljesen kiüríteni a Beállítások › **Űrlapok** lapfül **Mezőmemória** dobozában lehet.
 
 ## Az állapotok kapcsolása
 
@@ -151,6 +175,26 @@ A [Beállítások](modul:beallitasok) › Munkalap sor › **Űrlapok** lapfül�
 ### Ki tudom kapcsolni az „Eszköz csatolása" gombot?
 
 Igen: a munkalap fogaskerekében (vagy Beállítások › Űrlapok › Munkalap) kapcsold ki a **+ Eszköz csatolása gomb** kapcsolót, és ments. A már csatolt eszközök továbbra is látszanak.
+
+### Hogyan tüntetem el a munkalap tételeit a számla ablakából?
+
+A számla ablakának fogaskerekében kapcsold ki **A munkalap tételei a listában**, és ments. Utána csak a kézzel felvett tételek kerülnek a számlára.
+
+### Hol szerkesztem a Leggyakoribb Számla tételek listáját?
+
+A számla ablakában a **★ Gyakori tételek…** popupban (átírás, törlés, sorrend, új tétel), vagy a Beállítások › Űrlapok lapfülön soronként.
+
+### Miért ajánl fel a mező korábban beírt szöveget?
+
+Ez a mezőmemória: amit egyszer beírtatok, legközelebb gépelés közben felajánlja. Enterrel vagy kattintással beírja; a × kiveszi a felajánlásból.
+
+### Megjegyzi a jelszavakat is?
+
+Nem. Jelszó, kulcs, kód, zárkód, feloldó minta, kártya- és bankszámlaszám soha nem kerül a memóriába – ezt a böngésző és a szerver is szűri.
+
+### Ki tudom kapcsolni vagy törölni a mezőmemóriát?
+
+Igen: Beállítások › Űrlapok › **Mezőmemória**. A kapcsolóval kikapcsolod; a „Mentéskor töröld a teljes mezőmemóriát" pipa és a Mentés kiüríti.
 
 ### Vissza tudom állítani az eredeti állapotot?
 

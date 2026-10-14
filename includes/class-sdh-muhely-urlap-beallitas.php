@@ -139,9 +139,11 @@ final class SDH_Muhely_Urlap_Beallitas
                     'auto_megjegyzes' => ['A Megjegyzés mező magától', 'pl. „Munkalap: 26 · Samsung …" – kikapcsolva üresen nyílik.'],
                 ],
                 'Látszik' => [
+                    'munkalap_tetelek' => ['A munkalap tételei a listában', 'Kikapcsolva a munkalap tételei nem is látszanak az ablakban: a ' . $hova . ' csak az kerül, amit kézzel (Kézi tétel, Gyakori tételek, Termék…, Szolgáltatás…) veszel fel.'],
                     'gyorskapcsolo' => ['„Tételek automatikusan" kapcsoló az ablakban', 'Egy kattintással mind be- vagy kipipálva – csak abban az ablakban, a beállítás marad.'],
                     'eszkozvalaszto' => ['„Mi kerül a ' . $hova . '" eszközválasztó', 'Több eszközös lapon: közös vagy eszközönkénti bizonylat.'],
                     'uj_tetel'       => ['Termék… / Szolgáltatás… / Kézi tétel gombok', 'Új tétel felvétele az ablakban.'],
+                    'gyakori_tetelek' => ['Gyakori tételek gomb', 'A Leggyakoribb Számla tételek listája: egy kattintással felvehető tételnevek.'],
                 ],
             ];
         };
@@ -459,6 +461,11 @@ final class SDH_Muhely_Urlap_Beallitas
         </div>
         </div>
         <?php
+
+        // Mezőmemória és a Leggyakoribb Számla tételek listája (0.63.0) – ugyanezen a lapfülön.
+        if (class_exists('SDH_Muhely_Emlek')) {
+            SDH_Muhely_Emlek::beallitas_doboz();
+        }
     }
 
     public static function beallitas_mentes(): void
@@ -472,6 +479,10 @@ final class SDH_Muhely_Urlap_Beallitas
             }
 
             self::ment($urlap, self::feldolgoz($urlap, $ub[$urlap]['be'] ?? [], $ub[$urlap]['allapot_be'] ?? []));
+        }
+
+        if (class_exists('SDH_Muhely_Emlek')) {
+            SDH_Muhely_Emlek::beallitas_mentes();
         }
     }
 

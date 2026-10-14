@@ -64,6 +64,23 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.63.0
+- **Mezőmemória** (új tábla: `sdh_mezo_emlek`, séma 0.40.0): minden szövegmező megjegyzi, amit beírtak / amire
+  kerestek, és gépelés közben felajánlja (`assets/emlek.js`, `SDH_Muhely_Emlek`). Nyíl + Enter, Esc, a × kivesz.
+  Közös memória, mezőkulcsonként (`modul:név`), leggyakoribb elöl, mezőnként max. 300 érték. Saját listás mezőkbe
+  (ügyfél-, szolgáltatás-, termékválasztó, irányítószám, címzett, IMEI) nem lép be. Jelszó, kulcs, kód, minta,
+  kártya- és bankszámlaszám soha (böngésző + szerver szűr). Nem kerül a változásnaplóba. Ki/be és ürítés:
+  Beállítások › Űrlapok.
+- **Leggyakoribb Számla tételek listája**: a számla ablakában ★ Gyakori tételek… popup – kattintásra kézi tétel,
+  ugyanott szerkeszthető (átírás, kétlépcsős törlés, sorrend, új). Alap: Telefon / TV / Számítógép szerviz
+  szolgáltatás, Számítógép alaplapi javítás. A Kézi tétel neve (`data-sdh-emlek="tetelnev"`) ezeket, a kézzel írt
+  és a munkalapokon szerepelt tételneveket ajánlja.
+- **Fogaskerék, számla:** „A munkalap tételei a listában" – kikapcsolva a munkalap tételei nem is látszanak, és
+  pipa nélkül maradnak (csak a kézzel felvett megy a számlára). „Gyakori tételek gomb" is kapcsolható.
+- **Fogaskerék, munkalap:** kikapcsolt „+ Eszköz csatolása" mellett a „további eszközök itt jelennek meg" doboz is eltűnik.
+- **Szikra: Bollywood-szám Táncos Tónival** (saját szereplő): betáncol, együtt pörögnek, Tóni hatféleképp hal meg
+  (üllő, zongora, villám, banánhéj, motor, tűzijáték), szellemként felszáll, és visszaígéri magát.
+
 ### 0.62.1
 - **Egységes számmezők mindenhol.** A szám jobbra zárva, mellette a mértékegység, a jobb szélen beépített,
   lekerekített léptető (pill alaknál is az íven belül). A doboz a mező: keret, fókuszgyűrű; a szélesség a beírt

@@ -87,13 +87,29 @@
     /* ---- Élő kapcsolás ----------------------------------------------- */
 
     function elemKapcsol(gyoker, elem, be) {
+        var utolso = null;
+
         minden(gyoker, '[data-sdh-ub="' + elem.replace(/[^a-z0-9_]/gi, '') + '"]').forEach(function (cel) {
             if (be) {
                 cel.removeAttribute('data-sdh-ub-ki');
             } else {
                 cel.setAttribute('data-sdh-ub-ki', '');
+
+                // Az elrejtett számlatétel (0.63.0) nem maradhat kipipálva: ami nem látszik, az nem megy a számlára.
+                minden(cel, '[data-sdh-szamla-tetel]').concat(cel.matches('[data-sdh-szamla-tetel]') ? [cel] : []).forEach(function (pipa) {
+                    pipa.checked = false;
+                    utolso = pipa;
+                });
             }
         });
+
+        // A számla ablaka újraszámol (végösszeg, „nincs tétel" sor).
+        var urlap = gyoker.querySelector ? gyoker.querySelector('[data-sdh-szamlaurlap]') : null;
+        var jelzo = utolso || (urlap ? urlap.querySelector('[data-sdh-szamla-tetel]') : null);
+
+        if (jelzo) {
+            jelzo.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     }
 
     function allapotKapcsol(gyoker, kulcs, be) {
@@ -219,7 +235,7 @@
         var utolso = null;
 
         minden(urlap, '[data-sdh-szamla-tetel]').forEach(function (pipa) {
-            if (pipa.getAttribute('data-szamlazva') === '1') {
+            if (pipa.getAttribute('data-szamlazva') === '1' || pipa.closest('[data-sdh-ub-ki]')) {
                 return;
             }
 

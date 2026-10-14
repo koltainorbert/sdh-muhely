@@ -1363,7 +1363,9 @@ final class SDH_Muhely_Szamla
         $ub_van    = class_exists('SDH_Muhely_Urlap_Beallitas');
         $ub_be     = static fn (string $elem): bool => !$ub_van || SDH_Muhely_Urlap_Beallitas::be($ub_kulcs, $elem);
         $ub        = static fn (string $elem): string => $ub_van ? SDH_Muhely_Urlap_Beallitas::jel($ub_kulcs, $elem) : '';
-        $auto      = $ub_be('auto_tetelek');
+        $ml_tetel  = $ub_be('munkalap_tetelek');
+        // Kikapcsolt „munkalap tételei a listában": a tételek nem látszanak, és pipa nélkül maradnak.
+        $auto      = $ml_tetel && $ub_be('auto_tetelek');
         $auto_megj = $ub_be('auto_tetel_megj');
 
         if ($ub_van) {
@@ -1534,6 +1536,7 @@ final class SDH_Muhely_Szamla
                 // Egy kapcsoló, ami EBBEN az ablakban mind be- vagy kipipálja a munkalap tételeit
                 // (app.js: szamlaAutoKapcsol). Az alapállást a fogaskerék adja, és az marad.
                 ?>
+                <div class="sdh-ub-atlatszo"<?php echo $ub('munkalap_tetelek'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                 <div class="sdh-szamlaurlap__auto"<?php echo $ub('gyorskapcsolo'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                     <label class="sdh-kapcsolo sdh-ub-kapcs" title="Bekapcsolva a munkalap minden (még nem számlázott) tétele ki van pipálva; kikapcsolva egy sem – akkor te pipálod be, vagy Kézi tétellel írod. Csak erre az ablakra érvényes; az alapállás a fogaskerékkel állítható.">
                         <input type="checkbox" data-sdh-szamla-auto <?php checked($auto); ?>>
@@ -1541,6 +1544,7 @@ final class SDH_Muhely_Szamla
                         <span class="sdh-kapcsolo__felirat">A munkalap tételei a <?php echo $helyi ? 'nyomtatványon' : 'számlán'; ?></span>
                     </label>
                     <span class="sdh-mezo__sugo"><?php echo $auto ? 'Alapból mind rajta van.' : 'Alapból egyik sincs rajta – kézzel töltöd ki.'; ?></span>
+                </div>
                 </div>
 
                 <?php // --- Tételek: a munkalapé pipával, az itt hozzáadottak szerkeszthetők ---- ?>
@@ -1560,7 +1564,7 @@ final class SDH_Muhely_Szamla
                         </tr>
                     </thead>
                     <tbody data-sdh-szamla-sorok>
-                        <tr data-sdh-szamla-ures<?php echo $tetelek === [] ? '' : ' hidden'; ?>>
+                        <tr data-sdh-szamla-ures<?php echo $tetelek === [] || !$ml_tetel ? '' : ' hidden'; ?>>
                             <td colspan="<?php echo $torlo ? 8 : 7; ?>" class="sdh-tabla__ures">Nincs tétel. Vegyél fel terméket, szolgáltatást vagy kézi tételt az alábbi gombokkal.</td>
                         </tr>
 
@@ -1571,7 +1575,7 @@ final class SDH_Muhely_Szamla
                         $fajta      = (string) $t->forras === self::BEVIZSGALAS ? 'Bevizsgálási díj'
                             : ((string) $t->forras === self::BEVIZSGALAS_LE ? 'Díj levonása' : ((string) $t->tipus === 'termek' ? 'Termék' : 'Szolgáltatás'));
                         ?>
-                        <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>" data-sdh-szamla-sor>
+                        <tr class="<?php echo $szamlazva ? 'sdh-sor--inaktiv' : ''; ?>" data-sdh-szamla-sor<?php echo $ub('munkalap_tetelek'); // phpcs:ignore WordPress.Security.EscapeOutput -- a munkalap tétele: a fogaskerékkel elrejthető ?>>
                             <td>
                                 <input type="checkbox" name="tetel[]" value="<?php echo (int) $t->id; ?>" data-sdh-szamla-tetel
                                        data-eszkoz="<?php echo (int) ($tetel_kulcs[(int) $t->id] ?? 0); ?>"
@@ -1624,6 +1628,10 @@ final class SDH_Muhely_Szamla
                                         title="Szolgáltatás keresése és felvétele a számlára"><span class="sdh-plusz" aria-hidden="true"></span>Szolgáltatás…</button>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="kezi"
                                         title="Üres sor: a megnevezést és az árat kézzel írod be"><span class="sdh-plusz" aria-hidden="true"></span>Kézi tétel</button>
+                                <?php // Leggyakoribb Számla tételek listája (0.63.0): popupban választható és szerkeszthető (emlek.js). ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-gyakori<?php echo $ub('gyakori_tetelek'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                                        data-sdh-lista="<?php echo esc_attr((string) wp_json_encode(class_exists('SDH_Muhely_Emlek') ? SDH_Muhely_Emlek::gyakori() : [], JSON_UNESCAPED_UNICODE)); ?>"
+                                        title="Leggyakoribb Számla tételek listája – egy kattintással felveszi a tételt; a lista ugyanott szerkeszthető"><span class="sdh-csillag" aria-hidden="true">★</span>Gyakori tételek…</button>
                                 <span class="sdh-szamlaurlap__ujsugo">
                                     <?php echo $helyi
                                         ? 'Az itt felvett tétel csak a nyomtatványra kerül; a munkalapra a Termékek / Szolgáltatások fülön vedd fel.'
@@ -1654,8 +1662,10 @@ final class SDH_Muhely_Szamla
                             <input type="hidden" name="uj[__I__][tipus]" value="szolgaltatas" data-u="tipus">
                             <input type="hidden" name="uj[__I__][termek_id]" value="0" data-u="termek_id">
                             <span class="sdh-szamlaurlap__sor">
+                                <?php // data-sdh-emlek: gépelés közben a Gyakori tételek és a korábban kézzel írt tételnevek jönnek fel (emlek.js). ?>
                                 <input type="text" name="uj[__I__][megnevezes]" maxlength="255" autocomplete="off" data-u="megnevezes"
-                                       placeholder="Megnevezés" aria-label="Megnevezés">
+                                       data-sdh-emlek="tetelnev" data-sdh-emlek-fokusz
+                                       placeholder="Megnevezés – kezdd el gépelni" aria-label="Megnevezés">
                                 <button type="button" class="sdh-termval__kat sdh-szamlaurlap__tipus" data-sdh-szamla-tipus
                                         title="Kattintásra vált: szolgáltatás / termék">Szolgáltatás</button>
                             </span>

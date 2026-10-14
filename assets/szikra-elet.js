@@ -403,7 +403,31 @@
         sor: [34, 42, g('<path d="M26 14h4a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-4" fill="none" stroke-width="2.6"/>' +
             '<rect x="3" y="10" width="24" height="30" rx="3" fill="#f59e0b"/><path d="M9 16v18M15 16v18M21 16v18" stroke="#fde68a" stroke-width="1.6"/>' +
             '<path d="M2 12c0-6 4-8 7-7 2-4 8-4 10 0 3-2 9 0 8 7z" fill="#fff"/>')],
-        fustkarika: [30, 30, '<g fill="none" stroke="rgba(203,213,225,.9)" stroke-width="3"><circle cx="15" cy="15" r="9"/></g>']
+        fustkarika: [30, 30, '<g fill="none" stroke="rgba(203,213,225,.9)" stroke-width="3"><circle cx="15" cy="15" r="9"/></g>'],
+        // Táncos Tóni (0.63.0): saját szereplő – flitteres rózsaszín zakó, arany sál, barna bodor tincs. Minden számban meghal, és mindig visszajön.
+        toni: [60, 84, g(
+            '<g class="sdh-sz-labak"><path d="M25 66l-3 13M36 66l3 13" stroke-width="4.2"/><path d="M17 80h8M37 80h8" stroke-width="3.6"/></g>' +
+            '<path d="M20 46l-12-12M41 46l12-12" stroke-width="3.6"/><circle cx="7" cy="33" r="3" fill="#f2c29b"/><circle cx="54" cy="33" r="3" fill="#f2c29b"/>' +
+            '<path d="M19 44h23l3 24H16z" fill="#ec4899"/>' +
+            '<g fill="#fde68a" stroke="none"><circle cx="23" cy="52" r="1.3"/><circle cx="30" cy="58" r="1.3"/><circle cx="37" cy="51" r="1.3"/><circle cx="26" cy="63" r="1.3"/><circle cx="35" cy="62" r="1.3"/></g>' +
+            '<path d="M30 44v24" stroke-width="1.6"/>' +
+            '<circle cx="30.5" cy="29" r="13" fill="#f2c29b"/>' +
+            '<path d="M17 26c-1-12 10-17 20-13 6 2 8 7 7 11-3-4-8-5-12-3-5-4-11-2-15 5z" fill="#7c4a24"/>' +
+            '<circle cx="25.5" cy="29" r="1.8" fill="' + TINTA + '" stroke="none"/><circle cx="35.5" cy="29" r="1.8" fill="' + TINTA + '" stroke="none"/>' +
+            '<path d="M24 35q6.5 6 13 0z" fill="#fff"/>' +
+            '<path d="M19 43c6 4 16 4 23 0l12 6-4 3-10-4" fill="#f59e0b"/>')],
+        toniszellem: [60, 76, g(
+            '<ellipse cx="31" cy="6" rx="10" ry="3" fill="none" stroke="#ffd23f" stroke-width="2.4"/>' +
+            '<path d="M14 70V30a17 17 0 0 1 34 0v40l-6-5-5 5-6-5-6 5-5-5z" fill="rgba(255,255,255,.88)"/>' +
+            '<path d="M18 26c-1-11 10-15 19-11 5 2 7 6 6 10-3-3-7-4-11-2-5-4-10-2-14 3z" fill="#7c4a24" opacity=".75"/>' +
+            '<circle cx="25" cy="32" r="2" fill="' + TINTA + '" stroke="none"/><circle cx="37" cy="32" r="2" fill="' + TINTA + '" stroke="none"/>' +
+            '<path d="M26 39q5 4 10 0" fill="none"/><path d="M14 46l-8-8M48 46l8-8" stroke-width="3"/>')],
+        zongora: [70, 56, g(
+            '<rect x="4" y="4" width="62" height="34" rx="4" fill="#111827"/>' +
+            '<rect x="8" y="26" width="54" height="10" fill="#f8fafc"/>' +
+            '<path d="M14 26v10M20 26v10M26 26v10M32 26v10M38 26v10M44 26v10M50 26v10M56 26v10" stroke-width="1.2"/>' +
+            '<path d="M12 26v6M18 26v6M30 26v6M36 26v6M42 26v6M54 26v6" stroke-width="3" stroke="#111827"/>' +
+            '<path d="M10 38v16M60 38v16" stroke-width="4"/>')]
     };
 
     function svg(nev) {
@@ -1179,6 +1203,102 @@
             c.vege(9000);
         },
 
+        /* --- Bollywood-szám Táncos Tónival: mindig meghal, és mindig visszajön (0.63.0) --- */
+        bollywood: function (c) {
+            var t = c.szereplo('toni', 330, 0, .95, 'is-jar');
+            var halal = veletlen(['ullo', 'zongora', 'villam', 'banan', 'motor', 'tuzijatek']);
+            var HELY = 160; // ennyire áll meg Szikrától (a szereplő tere)
+
+            c.szikrak(10, 'csillag');
+            c.mim('sztár');
+            c.mond(veletlen(['Bollywood-szám indul!', 'Zene, csillogás, tánc!', 'Most jön a nagy jelenet!']), 1600);
+            c.gesztus('tancol', 3600);
+
+            // Tóni betáncol: szökken, pörög, csípőt riszál.
+            c.mozgat(t, [T(0), T(-50, 16, 'rotate(-10deg)'), T(-100, 0, 'rotate(10deg)'), T(-140, 16, 'rotate(-8deg)'), T(-(330 - HELY), 0)], 2400, { easing: 'ease-in-out' });
+            c.ido(1300, function () { c.mond(veletlen(['Táncolj velem, Szikra!', 'Flitter fel, csípő ki!', 'Ez a nap a miénk!']), 1500, t); });
+            c.ido(2400, function () {
+                t.classList.remove('is-jar');
+                c.mozgat(t, [T(-(330 - HELY)), T(-(330 - HELY), 12, 'rotate(180deg)'), T(-(330 - HELY), 0, 'rotate(360deg)')], 800, { iterations: 2 });
+                c.figura([T(0), T(0, 0, 'rotate(-8deg)'), T(0, 0, 'rotate(8deg)'), T(0)], 800, { iterations: 2 });
+                c.szikrak(8, 'sziv');
+                c.mim('nevető');
+            });
+
+            var X = HELY;         // Tóni helye a halál pillanatában
+            var mikor = 4200;     // ekkor éri a baj
+
+            if (halal === 'ullo' || halal === 'zongora') {
+                c.ido(mikor - 500, function () { c.mond('Mi ez az árnyék?', 900, t); });
+                c.ido(mikor, function () {
+                    var u = c.szereplo(halal, X + (halal === 'zongora' ? 2 : 12), 260, halal === 'zongora' ? .9 : .9);
+
+                    c.mozgat(u, [T(0, 0), T(0, -232)], 450, { easing: 'cubic-bezier(.5,0,1,.5)' });
+                });
+                c.ido(mikor + 450, function () { t.classList.add('is-lapos'); c.szikrak(6, 'csillag'); });
+            } else if (halal === 'villam') {
+                c.ido(mikor, function () {
+                    var f = c.szereplo('felho', X - 10, 130, .9);
+                    var v = c.szereplo('villam', X + 14, 52, .9, 'is-villan');
+
+                    c.mozgat(f, [{ opacity: 0 }, { opacity: 1 }], 200);
+                    c.mozgat(v, [{ opacity: 0 }, { opacity: 1 }, { opacity: 0 }, { opacity: 1 }], 400);
+                });
+                c.ido(mikor + 400, function () { t.classList.add('is-egett'); });
+            } else if (halal === 'banan') {
+                c.ido(mikor - 400, function () {
+                    var b = c.szereplo('banan', X - 30, 0, .9);
+
+                    c.mozgat(b, [T(-30, 30, 'rotate(0)'), T(0, 0, 'rotate(360deg)')], 400);
+                });
+                c.ido(mikor, function () {
+                    c.mozgat(t, [T(-(330 - HELY)), T(-(330 - HELY) + 20, 60, 'rotate(-120deg)'), T(-(330 - HELY) + 60, -160, 'rotate(-300deg)')], 900, { easing: 'ease-in' });
+                });
+            } else if (halal === 'motor') {
+                c.ido(mikor - 300, function () { c.mond('Brrrumm!', 700); });
+                c.ido(mikor, function () {
+                    var m = c.szereplo('motor', 520, 0, 1);
+
+                    m.classList.add('is-megy');
+                    c.mozgat(m, [T(0, 0, 'scaleX(-1)'), T(-700, 0, 'scaleX(-1)')], 1300, { easing: 'linear' });
+                    c.ido(450, function () {
+                        c.mozgat(t, [T(-(330 - HELY)), T(-(330 - HELY) - 80, 90, 'rotate(200deg)'), T(-(330 - HELY) - 200, -150, 'rotate(520deg)')], 1000, { easing: 'ease-out' });
+                    });
+                });
+            } else {
+                c.ido(mikor - 600, function () { c.mond('Hoztam tűzijátékot is!', 1000, t); });
+                c.ido(mikor, function () {
+                    c.szikrak(16, 'csillag');
+                    t.classList.add('is-egett');
+                    c.mozgat(t, [{ transform: T(-(330 - HELY)), opacity: 1 }, { transform: T(-(330 - HELY), 20, 'scale(1.35)'), opacity: .9 }], 300);
+                });
+            }
+
+            // Drámai, lassított pillanat – aztán Tóni szellemként száll fel, és megígéri, hogy visszajön.
+            c.ido(mikor + 700, function () {
+                c.mim('döbbent');
+                c.figura([T(0), T(0, -4, 'scale(1.06,.92)')], 600, { fill: 'forwards' });
+            });
+            c.ido(mikor + 1400, function () {
+                c.mim('síró');
+                c.mond(veletlen(['Neeee! Tóniii!', 'Már megint?! Minden szám végén!', 'Tóni! Pedig ma olyan szépen forogtál!', 'Miért mindig a refrénnél?!']), 2000);
+            });
+            c.ido(mikor + 1900, function () {
+                var sz = c.szereplo('toniszellem', X, 0, .9, 'is-lebeg');
+
+                c.mozgat(t, [{ opacity: 1 }, { opacity: 0 }], 600);
+                c.mozgat(sz, [{ transform: T(0, 0), opacity: 0 }, { transform: T(0, 50), opacity: .95, offset: .35 }, { transform: T(0, 80), opacity: .95, offset: .75 }, { transform: T(-10, 170), opacity: 0 }], 4400, { easing: 'ease-out' });
+                // A szellem csak akkor szól, amikor Szikra buborékja már eltűnt – a kettő nem takarja egymást.
+                c.ido(1600, function () { c.mond(veletlen(['Semmi baj, a következő számban visszajövök!', 'Holnap ugyanitt, ugyanekkor!', 'Ráadás lesz!']), 1800, sz); });
+            });
+            c.ido(mikor + 5600, function () {
+                c.figura([T(0, -4, 'scale(1.06,.92)'), T(0)], 400);
+                c.mim('megkönnyebbült', 1400);
+                c.mond('Akkor… a refrénig!', 1200);
+            });
+            c.vege(mikor + 7200);
+        },
+
         /* --- Vakarózik --- */
         vakarozik: function (c) {
             c.mim('gyanakvó');
@@ -1197,7 +1317,7 @@
         kaki: ['kaki'],
         budos: ['budos'],
         magany: ['baratno', 'csajozas', 'telefon'],
-        kaland: ['motor', 'auto', 'kodbaro', 'edzes', 'csirke', 'eger', 'madar', 'pityu']
+        kaland: ['motor', 'auto', 'kodbaro', 'edzes', 'csirke', 'eger', 'madar', 'pityu', 'bollywood']
     };
 
     var ALTESTI_JELENETEK = ['pisi', 'kaki', 'fing', 'budos'];
@@ -1207,7 +1327,7 @@
     var ALKALMI = [
         ['csirke', 3], ['eger', 3], ['madar', 3], ['pityu', 3], ['kodbaro', 2], ['tusszent', 3], ['csuklik', 2],
         ['csajozas', 2], ['baratno', 1], ['motor', 2], ['auto', 2], ['edzes', 2], ['telefon', 2], ['zene', 2],
-        ['vakarozik', 2], ['fing', 2], ['ivas', 1], ['pia', 4], ['fu', 4]
+        ['vakarozik', 2], ['fing', 2], ['ivas', 1], ['pia', 4], ['fu', 4], ['bollywood', 3]
     ].filter(function (j) {
         return (ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1) && (BULIS || BULIS_JELENETEK.indexOf(j[0]) === -1);
     });
