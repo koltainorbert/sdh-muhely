@@ -39,7 +39,7 @@
 
 /* Erősebb, látható légzés: a test és az arc együtt emelkedik-süllyed. */
 .sdh-ai .sdh-ai__test {
-    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-sz-legzes 3.6s ease-in-out infinite;
+    animation: sdh-ai-amoba 9s steps(4) infinite, sdh-sz-legzes 3.6s ease-in-out infinite;
 }
 
 @keyframes sdh-sz-legzes {

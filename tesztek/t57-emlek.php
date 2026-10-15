@@ -75,6 +75,7 @@ $id = t_munkalap($u, [$e1]);
 t_tetel($id, 'Akkumulátorcsere', 12000, 0);
 SDH_Muhely_Tetel::ujraszamol($id);
 $EM::rogzit($EM::TETELNEV, 'Adatmentés pendrive-ra');
+SDH_Muhely_Gyorsitotar::allando_torol($EM::TETELNEV_TAR); // a munkalapok tételnevei 10 percig tárolódnak (0.64)
 
 $tn = array_map(static fn (array $x): string => $x['e'], $EM::ertekek($EM::TETELNEV));
 T::egyezik('Telefon szerviz szolgáltatás', $tn[0] ?? '', 'a tételnév-felajánlásban elöl a gyakori tételek');

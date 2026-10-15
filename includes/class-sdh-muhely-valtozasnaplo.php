@@ -52,7 +52,7 @@ final class SDH_Muhely_Valtozasnaplo
     private const KIHAGYOTT = [
         'valtozasnaplo', 'tac', 'level', 'level_mappa', 'ai_uzenet', 'ai_muvelet', 'ai_tudas',
         'munkalap_naplo', 'penztar_naplo', 'csapat_tag', 'csapat_nyugta', 'naptar_jelzes',
-        'sms_esemeny', 'sms_onteszt', 'sms_link_esemeny', 'sms_sablon_verzio', 'mezo_emlek',
+        'sms_esemeny', 'sms_onteszt', 'sms_link_esemeny', 'sms_sablon_verzio', 'mezo_emlek', 'ugyfel_szo',
     ];
 
     /** Mezők, amelyek változása önmagában nem napló-esemény (minden mentéskor változnak). */
@@ -60,6 +60,8 @@ final class SDH_Muhely_Valtozasnaplo
 
     /** Táblánként a zajos mezők (pozíció a falon, olvasottság, újraszámolt összesítők). */
     private const ZAJ = [
+        // A gyorskereső származtatott oszlopai (0.64): mentéskor magától készülnek.
+        'ugyfel'             => ['kereso', 'tel_ford', 'cim_rendez'],
         // Az RMA-token a QR-kódhoz magától készül (első címke / matrica) – nem a lap módosítása.
         'munkalap'           => ['rma_token'],
         'csapat_cetli'       => ['x', 'y', 'z'],
@@ -83,6 +85,25 @@ final class SDH_Muhely_Valtozasnaplo
     private const OPT_KIHAGY = '/(utolso|futott|_naplo$|_napi$|_nap$|verzio|version|potlas|telepitve|_zar$|_fut$|lock|gyorsitotar|cache|szamlalo|ujdonsag|ertekeles|_demo$|atallas|tudott|health|_db_version|_jelzes|_allapot_ido|rewrite|onteszt|_pulzus|_sor$|statusz|_allapot$|keresesek)/i';
 
     private static bool $bent = false;
+
+    /**
+     * Egy műveletet a napló nélkül futtat (származtatott oszlopok, tömeges
+     * háttérfeltöltés) – a lekérdezés nem kerül a naplóba, és nem is olvassa
+     * ki előtte az érintett sorokat.
+     *
+     * @return mixed
+     */
+    public static function csendben(callable $muvelet)
+    {
+        $elozo       = self::$bent;
+        self::$bent = true;
+
+        try {
+            return $muvelet();
+        } finally {
+            self::$bent = $elozo;
+        }
+    }
 
     /** @var array<string, mixed>|null A még le nem zárt író lekérdezés (előtte-állapottal). */
     private static ?array $fuggo = null;

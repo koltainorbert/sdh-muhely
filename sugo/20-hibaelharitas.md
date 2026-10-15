@@ -31,6 +31,43 @@ Elakadások a bejelentkezésnél és a műhely-felület megnyitásakor.
 - **Belépés után a WordPress vezérlőpultja nyílik meg, nem a műhely.** – *Ok:* adminisztrátor vagy; a kolléga kerül egyenesen a műhelybe. *Megoldás:* nyisd meg a műhely címét, vagy a vezérlőpult műhely-oldalán nyomd meg a **Megnyitás a műhely-felületen** gombot.
 - **Az oldal magától újratöltődött.** – *Ok:* a rendszer közben új verziót kapott, és a nyitott oldal egyszer frissített. *Megoldás:* nincs teendő.
 
+## Sebesség: ha lassú a rendszer
+
+A rendszer sok százezer ügyféllel és munkalappal is gyors, ha a szerver (a gépen futó WordPress) jól van beállítva. Két beállításon múlik a legtöbb – ezeket a rendszergazda egyszer állítja be.
+
+### Gyors betöltés (Beállítások › Rendszer › Sebesség)
+
+Bekapcsolva a műhely-felület és a wp-admin is két fájlban tölti be a stílusokat és a szkripteket, sok tucat helyett. Hagyd bekapcsolva.
+
+### Hol látod, hogy rendben van
+
+**Beállítások › Rendszer › Sebesség**, a **Gyors betöltés** doboz alján: *Szerver: PHP OPcache* (be / ki) és *MySQL puffer* (megabájtban). Ezt a webszerver PHP-ja mondja meg, nem a parancssor.
+
+### PHP OPcache bekapcsolása – LocalWP (Windows)
+
+1. A LocalWP-ben állítsd le a webhelyet (**Stop site**).
+2. Nyisd meg a webhely mappájában (**Go to site folder**) a `conf\php\php.ini.hbs` fájlt Jegyzettömbbel.
+3. Keresd meg benne az `opcache` szót. Windowson van egy `; zend_extension = php_opcache.dll` sor (a `{{#if os.windows}}` részben): töröld az elejéről a pontosvesszőt.
+4. Ugyanott (vagy a fájl végén) legyenek ezek a sorok – ha `opcache.enable=0` áll, írd át 1-re:
+   `opcache.enable=1`, `opcache.memory_consumption=192`, `opcache.interned_strings_buffer=16`, `opcache.max_accelerated_files=20000`, `opcache.validate_timestamps=1`, `opcache.revalidate_freq=0` – soronként egy.
+5. Mentsd, és indítsd el a webhelyet (**Start site**).
+6. Ellenőrzés: Beállítások › Rendszer › Sebesség – *PHP OPcache: be*. Ha nem indul el a webhely, tedd vissza a pontosvesszőt (a fájlt a LocalWP a következő induláskor újra beolvassa).
+
+### MySQL / MariaDB puffer – LocalWP
+
+1. **Stop site**.
+2. A webhely mappájában nyisd meg a `conf\mysql\my.cnf.hbs` fájlt.
+3. A `[mysqld]` sor alá írd: `innodb_buffer_pool_size = 1G` (8 GB-nál kevesebb memóriájú gépen `512M`). Ha már van ilyen sor, azt írd át.
+4. **Start site**, majd ellenőrizd: Beállítások › Rendszer › Sebesség – *MySQL puffer: 1024 MB*.
+
+### Az ügyfélkereső frissítése után
+
+Új verzióra lépéskor a rendszer egyszer, a háttérben feltölti az ügyfelek keresőadatait (kérésenként legfeljebb egy másodpercig, ott folytatja, ahol abbahagyta). Amíg ez tart, az ügyfélkereső a régi módon keres – ugyanazt találja, csak lassabban. Nagy állománynál ez néhány percnyi használat alatt ér véget.
+
+### Mérés a saját gépen
+
+A `tools/mero-meres.php` csak olvas: lefuttatja a gyakori lekérdezéseket a meglévő adatokon, és kiírja az időket, a MySQL beállításait és azt, hol olvas végig egy egész táblát. Indítás: **Open site shell**, a plugin mappájában `php tools/mero-meres.php`. Semmit nem ír az adatbázisba.
+
 ## Popupok és mentés
 
 Bármelyik menüpont felugró ablakára (popupjára) és a mentésre érvényes elakadások.
@@ -197,6 +234,8 @@ Ezek nem hibák, hanem a rendszer mostani működésének határai:
 - **A Számla ablak fejléce eladásnál is „Munkalap".** Napi árukiadásról vagy rendelésről nyitva is „Munkalap" és a sorszám áll a címben. Csak a felirat ilyen, a számla jó.
 - **A popup bezárása nem kérdez rá a mentésre.**
 - **A fejléc keresője munkalapszámra nem keres** – csak ügyfélre és eszközre.
+- **A rács keresője nagyon sok munkalapnál lassabb, ha a keresett szöveg ritka.** A „tartalmazza" keresés minden látható oszlopot végignéz; ha sok a találat, az első oldal hamar megvan, ha alig van (vagy nincs), a teljes állományt végig kell olvasni. Szűkíts oszlopszűrővel, vagy rejtsd el a fölösleges oszlopokat.
+- **Háttérben (másik fülön) a jelvények nem frissülnek.** A közös háttérkérés rejtett lapon szünetel; visszatéréskor azonnal frissül minden. A levelek letöltése (Levelezés) ettől függetlenül a saját ütemében fut.
 - **A mentésből nincs visszatöltő felület.** (Napi mentés magától készül.) Lásd: [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag).
 - **A másoló gomb nem biztonságos (`http://`) címen egyes böngészőkben nem működik.** Ilyenkor ezt írja: *Nem sikerült kimásolni – jelöld ki, és Ctrl+C*.
 

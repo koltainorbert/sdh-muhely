@@ -872,8 +872,12 @@ final class SDH_Muhely_Munkalap
         $sql   = "SELECT COUNT(*) FROM {$tabla} WHERE fajta = 'javitas' AND munkalap_szam IS NOT NULL AND allapot IN ("
             . self::in_helyorzo($nyitott) . ')';
 
+        // Gyorsítótárazva: 500 ezer lapnál ez minden betöltéskor a teljes táblát számolná (0.64).
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- csak helyőrzők kerülnek bele.
-        return (int) $wpdb->get_var($wpdb->prepare($sql, $nyitott));
+        return (int) SDH_Muhely_Gyorsitotar::ertek(
+            'nyitott_db|' . implode(',', $nyitott),
+            static fn (): int => (int) $wpdb->get_var($wpdb->prepare($sql, $nyitott))
+        );
         // phpcs:enable
     }
 
@@ -1998,29 +2002,25 @@ final class SDH_Muhely_Munkalap
 
         if ($eszkoz_id > 0) {
             // Az eszköz akkor is ehhez a laphoz tartozik, ha nem a fő, hanem csatolt eszköze.
-            $feltetelek[] = "(m.eszkoz_id = %d OR EXISTS (SELECT 1 FROM {$tobbi_tabla} tk WHERE tk.munkalap_id = m.id AND tk.eszkoz_id = %d))";
+            $feltetelek[] = "(m.eszkoz_id = %d OR m.id IN (SELECT tk.munkalap_id FROM {$tobbi_tabla} tk WHERE tk.eszkoz_id = %d))";
             $ertekek[]    = $eszkoz_id;
             $ertekek[]    = $eszkoz_id;
         }
 
         if ($kereses !== '') {
             $minta  = '%' . $wpdb->esc_like($kereses) . '%';
+            // 0.64: az ügyfél és az eszköz feltételei egy-egy allekérdezésben (a táblájuk egyszer
+            // olvasódik, nem munkalaponként) – ugyanaz a találat, mint az összekapcsolt úton.
             $reszek = [
                 'm.nev LIKE %s',
-                'u.nev LIKE %s',
-                'u.telefon LIKE %s',
-                'e.imei LIKE %s',
-                'e.sorozatszam LIKE %s',
-                'e.gyarto LIKE %s',
-                'e.tipus LIKE %s',
-                'e.megnevezes LIKE %s',
+                "m.ugyfel_id IN (SELECT ku.id FROM {$ugyfel_tabla} ku WHERE ku.nev LIKE %s OR ku.telefon LIKE %s)",
+                "m.eszkoz_id IN (SELECT ke.id FROM {$eszkoz_tabla} ke WHERE ke.imei LIKE %s OR ke.sorozatszam LIKE %s
+                                  OR ke.gyarto LIKE %s OR ke.tipus LIKE %s OR ke.megnevezes LIKE %s)",
                 // A csatolt (további) eszközök IMEI-je, sorozatszáma és típusa is találat.
-                "EXISTS (SELECT 1 FROM {$tobbi_tabla} tk INNER JOIN {$eszkoz_tabla} te2 ON te2.id = tk.eszkoz_id
-                         WHERE tk.munkalap_id = m.id
-                           AND (te2.imei LIKE %s OR te2.imei2 LIKE %s OR te2.sorozatszam LIKE %s OR te2.tipus LIKE %s OR te2.megnevezes LIKE %s))",
+                "m.id IN (SELECT tk.munkalap_id FROM {$tobbi_tabla} tk INNER JOIN {$eszkoz_tabla} te2 ON te2.id = tk.eszkoz_id
+                         WHERE te2.imei LIKE %s OR te2.imei2 LIKE %s OR te2.sorozatszam LIKE %s OR te2.tipus LIKE %s OR te2.megnevezes LIKE %s)",
             ];
-            // Az utolsó (EXISTS) rész öt helyőrzőt tartalmaz.
-            $par    = array_fill(0, count($reszek) + 4, $minta);
+            $par    = array_fill(0, 13, $minta);
 
             if (ctype_digit($kereses)) {
                 array_unshift($reszek, 'm.munkalap_szam = %d');
@@ -2037,24 +2037,41 @@ final class SDH_Muhely_Munkalap
                   LEFT JOIN {$eszkoz_tabla} e ON e.id = m.eszkoz_id";
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        // A darabszámhoz keresés nélkül nem kell az ügyfél és az eszköz (a kapcsolat 1:1):
-        // a csak munkalapos számolás 40 000 lapnál is az indexből fut.
-        $szam_sql = $kereses === '' ? "SELECT COUNT(*) FROM {$tabla} m {$hol}" : "SELECT COUNT(*) {$tobb} {$hol}";
-        $osszesen = (int) $wpdb->get_var(
+        // A darabszámhoz nem kell az ügyfél és az eszköz (a kapcsolat 1:1, a kereső allekérdezésben
+        // szűr): a csak munkalapos számolás az indexből fut, és az eredmény tárolva van (0.64).
+        $szam_sql = "SELECT COUNT(*) FROM {$tabla} m {$hol}";
+        $osszesen = SDH_Muhely_Gyorsitotar::szam(
             $ertekek === [] ? $szam_sql : $wpdb->prepare($szam_sql, $ertekek)
         );
 
-        $sor_sql = "SELECT m.*, u.nev AS ugyfel_nev, u.telefon AS ugyfel_telefon,
-                           u.szamlazasi_iranyitoszam, u.szamlazasi_telepules, u.szamlazasi_cim,
-                           e.gyarto AS e_gyarto, e.tipus AS e_tipus,
-                           e.megnevezes AS e_megnevezes, e.imei AS e_imei
-                    {$tobb} {$hol}
-                    ORDER BY m.munkalap_szam DESC, m.id DESC
-                    LIMIT %d OFFSET %d";
+        // Halasztott összekapcsolás (0.64): előbb az oldal azonosítói (keskeny rendezés), aztán
+        // ennek az oldalnak a sorai az ügyféllel és az eszközzel – ugyanabban a sorrendben.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT m.id FROM {$tabla} m {$hol} ORDER BY m.munkalap_szam DESC, m.id DESC LIMIT %d OFFSET %d",
+            array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
+        )));
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare($sor_sql, array_merge($ertekek, [self::OLDAL_MERET, $eltolas]))
-        );
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results(
+                "SELECT m.*, u.nev AS ugyfel_nev, u.telefon AS ugyfel_telefon,
+                        u.szamlazasi_iranyitoszam, u.szamlazasi_telepules, u.szamlazasi_cim,
+                        e.gyarto AS e_gyarto, e.tipus AS e_tipus,
+                        e.megnevezes AS e_megnevezes, e.imei AS e_imei
+                 {$tobb} WHERE m.id IN (" . implode(',', $idk) . ')'
+            ) as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
         $sorok = is_array($sorok) ? $sorok : [];
@@ -2247,7 +2264,8 @@ final class SDH_Muhely_Munkalap
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozo">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <?php if ($i === $oldal) : ?>
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
@@ -2267,7 +2285,7 @@ final class SDH_Muhely_Munkalap
                             ?>
                             <a href="<?php echo esc_url($lap_url); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>

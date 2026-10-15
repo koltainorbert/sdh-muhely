@@ -1877,6 +1877,7 @@ final class SDH_Muhely_Asszisztens_Eszkozok
 
                 $adat['modositva'] = $most;
                 $wpdb->update(self::tabla('ugyfel'), $adat, ['id' => (int) $p['id']]);
+                SDH_Muhely_Ugyfel::kereso_frissit((int) $p['id']);
 
                 return ['eredmeny' => 'Az ügyfél adatai átírva.', 'rekord_id' => (int) $p['id'], 'tabla' => 'ugyfel'];
 

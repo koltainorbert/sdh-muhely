@@ -30,14 +30,14 @@ Az ügyfél adatlapja mindig felugró ablakban nyílik, így a lista és a keres
 Az Ügyfelek menüpont listája névsorban mutatja az aktív ügyfeleket, oldalanként 25-öt.
 
 1. Kattints a keresőmezőbe. A felirata: `Név, telefon, e-mail, ügyfélszám, cím…`
-2. Írd be, amit tudsz: a név egy részét, a telefonszám néhány jegyét, az e-mail-címet, az ügyfélszámot, a települést, az utcát vagy az irányítószámot.
+2. Írd be, amit tudsz: a név egy részét, a telefonszám néhány jegyét, az e-mail-címet, az ügyfélszámot, a települést, az utcát vagy az irányítószámot. Ékezet és kis-nagybetű nem számít: a `kovacs` a Kovácsot is megtalálja.
 3. Nyomd meg a **Keresés** gombot vagy az [[Enter]] billentyűt.
 4. A kereső mellett látod, hány találat van.
 5. A sorban a névre vagy a **Megnyit** gombra kattintva megnyílik az adatlap.
 
 A **Szűrő törlése** gomb visszaadja a teljes listát. Ha sok az ügyfél, a lista alján számozott lapozó áll.
 
-> **Tipp:** A telefonszámból elég a közepe vagy a vége. A `123 45` beírására azt is megtalálod, akinek a száma +36 30 123 4567 – feltéve, hogy ugyanúgy tagolva írták be.
+> **Tipp:** A telefonszámból elég a közepe vagy a vége, a tagolás (szóköz, kötőjel, +36 vagy 06) nem számít: a `123 45` és a `1234567` is megtalálja azt, akinek a száma +36 30 123 4567.
 
 ## Lépésről lépésre: új ügyfél felvétele
 
@@ -155,9 +155,15 @@ A lapfülön szám jelzi, hány fájl van csatolva. A fájlokat három nézetben
 
 Ez a mező áll a munkalapon, az árukiadáson, a rendelésen és az eszköz adatlapján. A felirata: `Kezdd el írni a nevet, telefont, ügyfélszámot…`
 
-- Legalább két karaktert írj be, utána jelennek meg a találatok.
-- Névre, mindkét telefonszámra, e-mail-címre, ügyfélszámra és utcára keres.
+- Legalább három karaktert írj be, utána jelennek meg a találatok (két betűre úgyis szinte mindenki illene).
+- Ékezet és kis-nagybetű nem számít.
+- Ebben a sorrendben keres:
+  1. akinek a **neve** így kezdődik (névsorban);
+  2. akinek a **telefonszáma így végződik**, akinek az **ügyfélszáma** vagy **e-mail-címe** így kezdődik;
+  3. akinek bármelyik **szava** így kezdődik: keresztnév, település, utca, a telefonszám 06-tal, +36-tal vagy előhívó nélkül, az ügyfélszám számjegyei. Több szót is írhatsz (`edina antal`, `kovács zirc`): mindegyikre kell egyezés;
+  4. ha így sincs találat: akinek az adataiban **bárhol** szerepel a beírt részlet (pl. egy szó közepe).
 - Egyszerre legfeljebb tíz találatot mutat. Ha nem látod, akit keresel, írj be többet.
+- Gépelés közben nem minden leütésre kérdez: ha gyorsan gépelsz, a gépelés szünetében (egytized másodperc) indul a keresés; ha betűnként, megállva gépelsz, minden betűre azonnal. Az előző, már fölösleges kérés megszakad. Ha visszatörlöd a szöveget egy korábbira, a lista azonnal, kérés nélkül jön.
 - Minden találat alatt ott a telefonszám, a teljes cím és az ügyfélszám.
 - Az [[Enter]] az első találatot választja. Az [[Esc]] bezárja a listát.
 - Ha nincs egyezés, ezt írja: „Nincs találat."
@@ -233,7 +239,11 @@ A rendszer nem von össze ügyfeleket. Döntsd el, melyiket használod tovább, 
 
 ### Mire tudok keresni az ügyféllistában?
 
-Névre, mindkét telefonszámra, e-mail-címre, ügyfélszámra, településre, utcára és irányítószámra. Elég egy részlet is.
+Névre, mindkét telefonszámra, e-mail-címre, ügyfélszámra, településre, utcára és irányítószámra. Elég egy részlet is, ékezet és kis-nagybetű nem számít.
+
+### Miért nem a középen egyező nevet hozza elsőnek az ügyfélválasztó?
+
+Mert előbb azokat mutatja, akiknek a neve (vagy egy szava) a beírt szöveggel *kezdődik* – ez a gyakoribb, és sok ezer ügyfélnél is azonnal megvan. A „bárhol szerepel" keresés csak akkor fut, ha így nincs találat.
 
 ### Miért csak tíz találatot mutat az ügyfélválasztó?
 

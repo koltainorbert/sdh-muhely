@@ -1,3 +1,6 @@
 # A telepítő zipbe (git archive) nem kerülnek be a tesztek – csak a fejlesztéshez kellenek.
 /tesztek        export-ignore
 /.gitattributes export-ignore
+# A mérőpad tesztadat-generátora soha nem kerül a telepítőbe.
+/tools/mero-tesztadat.php export-ignore
+/tools/mero-meres.php export-ignore

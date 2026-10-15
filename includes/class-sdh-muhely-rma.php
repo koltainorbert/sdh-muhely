@@ -81,6 +81,9 @@ final class SDH_Muhely_Rma
         add_action('wp_ajax_sdh_muhely_uzenet_kuld', [self::class, 'ajax_uzenet_kuld']);
         add_action('wp_ajax_sdh_muhely_uzenet_olvasva', [self::class, 'ajax_olvasva']);
         add_action('wp_ajax_sdh_muhely_uzenet_allapot', [self::class, 'ajax_allapot']);
+        // 0.64: az olvasatlan RMA-üzenetek száma a közös háttérkérésben (pulzus) is megjön –
+        // így az rma.js-nek nem kell külön, saját ütemben kérdeznie.
+        add_filter('sdh_muhely_pulzus', [self::class, 'pulzus']);
         // A csevegő frissítése: jött-e új üzenet, amíg az ablak nyitva van (rma.js).
         add_action('wp_ajax_sdh_muhely_uzenet_szal', [self::class, 'ajax_szal']);
         add_action('wp_ajax_sdh_muhely_rma_gyors_ment', [self::class, 'ajax_gyors_ment']);
@@ -1203,9 +1206,9 @@ final class SDH_Muhely_Rma
     {
         global $wpdb;
 
-        return (int) $wpdb->get_var(
+        return (int) SDH_Muhely_Gyorsitotar::ertek('rma_olvasatlan_db', static fn (): int => (int) $wpdb->get_var(
             'SELECT COUNT(*) FROM ' . self::uzenet_tabla() . " WHERE irany = 'be' AND olvasva = 0"
-        );
+        ));
     }
 
     private static function friss_ugyfeluzenetek(int $munkalap_id): int
@@ -1428,6 +1431,21 @@ final class SDH_Muhely_Rma
     }
 
     /** Az olvasatlan üzenetek száma (AJAX, az oldalmenü jelvényének frissítéséhez). */
+    /**
+     * @param array<string, mixed> $d A pulzus válasza.
+     * @return array<string, mixed>
+     */
+    public static function pulzus($d): array
+    {
+        $d = is_array($d) ? $d : [];
+
+        if (!class_exists('SDH_Muhely_Modulok') || SDH_Muhely_Modulok::be('rma')) {
+            $d['rma'] = ['olvasatlan' => self::olvasatlan_db()];
+        }
+
+        return $d;
+    }
+
     public static function ajax_allapot(): void
     {
         self::ajax_jog();
@@ -2046,10 +2064,11 @@ final class SDH_Muhely_Rma
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozas">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <a class="sdh-gomb<?php echo $i === $oldal ? ' sdh-gomb--elsodleges' : ''; ?>"
                            href="<?php echo esc_url($url(array_filter(['mind' => $csak_uj ? null : 1, 'oldalszam' => $i]))); ?>"><?php echo (int) $i; ?></a>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>

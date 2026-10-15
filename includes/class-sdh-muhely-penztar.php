@@ -1598,14 +1598,24 @@ final class SDH_Muhely_Penztar
 
         $tol = preg_match('/^\d{4}-\d{2}-\d{2}/', $tol) ? wp_date('Y-m-d', strtotime(substr($tol, 0, 10) . ' 12:00:00') - 2 * DAY_IN_SECONDS) : '1970-01-01';
 
+        // 0.64: a két egyezés két, indexről olvasott részben (azonosító VAGY szám): az „OR" miatt
+        // a régi alak a teljes pénztártáblát végigolvasta. A második rész kizárja az elsőt – ugyanaz az összeg.
+        $osszeg = "CASE WHEN tipus = 'kihagyva' THEN info_osszeg ELSE kp + kartya + utalas END";
+
         // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         return round((float) $wpdb->get_var($wpdb->prepare(
-            "SELECT COALESCE(SUM(CASE WHEN tipus = 'kihagyva' THEN info_osszeg ELSE kp + kartya + utalas END), 0)
-             FROM {$t} WHERE torolve = 0 AND tipus IN ('bevetel', 'kihagyva')
-               AND (munkalap_id = %d OR (munkalap_szam <> '' AND munkalap_szam = %s AND datum >= %s))",
+            "SELECT COALESCE(SUM(x.o), 0) FROM (
+                SELECT {$osszeg} AS o FROM {$t}
+                 WHERE munkalap_id = %d AND torolve = 0 AND tipus IN ('bevetel', 'kihagyva')
+                UNION ALL
+                SELECT {$osszeg} AS o FROM {$t}
+                 WHERE munkalap_szam = %s AND munkalap_szam <> '' AND datum >= %s AND munkalap_id <> %d
+                   AND torolve = 0 AND tipus IN ('bevetel', 'kihagyva')
+             ) x",
             $id > 0 ? $id : -1,
             $szam !== '' ? $szam : '#',
-            $tol
+            $tol,
+            $id > 0 ? $id : -1
         )), 2);
     }
 

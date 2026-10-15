@@ -1037,8 +1037,10 @@ final class SDH_Muhely_Termek
 
         echo '<div class="sdh-lapozo">';
 
-        for ($i = 1; $i <= $oldalak; $i++) {
-            if ($i === $oldal) {
+        foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) {
+            if ($i === 0) {
+                echo '<span class="sdh-lapozo__kihagy" aria-hidden="true">…</span>';
+            } elseif ($i === $oldal) {
                 echo '<span class="sdh-lapozo__aktiv">' . (int) $i . '</span>';
             } else {
                 echo '<a href="' . esc_url(self::url(array_merge($alap, ['oldalszam' => $i]))) . '">' . (int) $i . '</a>';

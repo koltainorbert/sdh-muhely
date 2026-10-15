@@ -279,7 +279,12 @@ final class SDH_Muhely_Sms_Felulet
 
         echo '<div class="sdh-lapozo">';
 
-        for ($i = 1; $i <= $oldalak; $i++) {
+        foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) {
+            if ($i === 0) {
+                echo '<span class="sdh-lapozo__kihagy" aria-hidden="true">…</span>';
+                continue;
+            }
+
             echo $i === $oldal
                 ? '<span class="sdh-lapozo__aktiv">' . (int) $i . '</span>'
                 : '<a href="' . esc_url(self::url(array_merge($alap, ['oldalszam' => $i]))) . '">' . (int) $i . '</a>';

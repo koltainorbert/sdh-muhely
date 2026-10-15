@@ -126,10 +126,13 @@
     }
 
     function toltesKozben(szint) {
+        // 0.64: a popup a betöltés alatt már a végleges (legutóbbi) méretében áll – nem „nyílik ki".
+        popupRogzit(szint.dialog);
         szint.torzs.innerHTML = '<div class="sdh-modal__toltes">Betöltés…</div>';
     }
 
     function hiba(szint, szoveg) {
+        popupElenged(szint.dialog);
         szint.torzs.innerHTML =
             '<div class="sdh-uzenet sdh-uzenet--hiba">' + szovegBiztonsagos(szoveg) + '</div>';
     }
@@ -166,15 +169,91 @@
 
     var ILLESZT_MIN = 0.55;
 
+    /*
+     * Betöltés alatti rögzített méret (0.64).
+     *
+     * Régen a popup a kis „Betöltés…" felirattal nyílt meg, aztán a tartalom
+     * beérkezésekor megnőtt, majd az illesztés (zoom) összehúzta – az ablak
+     * kétszer-háromszor „ugrott". Most az ablak űrlapfajtánként megjegyzi a
+     * legutóbbi végleges méretét és nagyítását; a következő megnyitáskor a
+     * betöltés alatt ebben áll, az illesztés addig szünetel, és a tartalom
+     * beillesztése után egyetlen lépésben (ugyanabban a képkockában) áll be
+     * a pontos méret.
+     */
+    var POPUP_UTOLSO = {};
+
+    function popupUtolsoKulcs(modul) {
+        return 'sdh-popup-utolso:' + (modul || 'altalanos');
+    }
+
+    function popupUtolso(modul) {
+        var m = POPUP_UTOLSO[modul];
+
+        if (!m) {
+            try {
+                m = JSON.parse(window.localStorage.getItem(popupUtolsoKulcs(modul)) || 'null');
+            } catch (e) { m = null; }
+        }
+
+        // Más ablakméretnél (másik monitor, átméretezett böngésző) nem érvényes.
+        if (!m || m.vw !== window.innerWidth || m.vh !== window.innerHeight || !(m.w > 0) || !(m.h > 0) || !(m.z > 0)) {
+            return null;
+        }
+
+        return m;
+    }
+
+    function popupRogzit(dialog) {
+        var m = popupUtolso(dialog.sdhModul);
+        var doboz = dialog.querySelector('.sdh-modal__doboz');
+
+        if (!m || !doboz) {
+            return;
+        }
+
+        dialog.classList.add('sdh-modal--tolt');
+        dialog.style.zoom = m.z !== 1 ? String(m.z) : '';
+        dialog.style.width = (m.w / m.z) + 'px';
+        doboz.style.minHeight = (m.h / m.z) + 'px';
+    }
+
+    /** A rögzítés feloldása és az egyszeri, azonnali illesztés (a tartalom már bent van). */
+    function popupElenged(dialog) {
+        if (!dialog || !dialog.classList.contains('sdh-modal--tolt')) {
+            return;
+        }
+
+        var doboz = dialog.querySelector('.sdh-modal__doboz');
+
+        dialog.classList.remove('sdh-modal--tolt');
+        dialog.style.width = '';
+
+        if (doboz) {
+            doboz.style.minHeight = '';
+        }
+    }
+
+    function popupBeallt(dialog) {
+        popupElenged(dialog);
+        illesztPopup(dialog);
+
+        // A beillesztés DOM-változásaira már nem kell újra illeszteni (ez a hívás elvégezte).
+        if (dialog.sdhIllesztFigyelo) {
+            dialog.sdhIllesztFigyelo.takeRecords();
+        }
+    }
+
     /**
      * Ha a popup magasabb, mint a képernyő, nem görgetőssé tesszük, hanem
      * arányosan kicsinyítjük (CSS zoom). Mérés közben a zoom nulla, így a
      * természetes magasságot látjuk; a mérés és a beállítás egy lépésben fut.
      */
     function illesztPopup(dialog) {
-        if (!dialog || !dialog.open) {
+        if (!dialog || !dialog.open || dialog.classList.contains('sdh-modal--tolt')) {
             return;
         }
+
+        dialog.sdhIllesztDb = (dialog.sdhIllesztDb || 0) + 1;
 
         var elozo = dialog.style.zoom;
 
@@ -216,6 +295,16 @@
         Array.prototype.forEach.call(dialog.querySelectorAll(':scope > .sdh-ai'), function (figura) {
             figura.style.zoom = zoom !== 1 ? String(1 / zoom) : '';
         });
+
+        // A végleges méret megjegyzése a következő megnyitás betöltési idejére (popupRogzit).
+        if (dialog.sdhModul && !dialog.querySelector('.sdh-modal__toltes')) {
+            var r = dialog.getBoundingClientRect();
+
+            POPUP_UTOLSO[dialog.sdhModul] = {
+                w: Math.round(r.width), h: Math.round(r.height), z: zoom,
+                vw: window.innerWidth, vh: window.innerHeight
+            };
+        }
     }
 
     /**
@@ -461,11 +550,24 @@
             });
         };
 
-        new MutationObserver(function (valtozasok) {
+        dialog.sdhIllesztFigyelo = new MutationObserver(function (valtozasok) {
             if (illesztSzamit(valtozasok)) {
                 kesleltet();
             }
-        }).observe(dialog, {
+        });
+
+        // Bezáráskor a megjegyzett méret a böngészőben is megmarad (a következő oldalbetöltésre).
+        dialog.addEventListener('close', function () {
+            var m = POPUP_UTOLSO[dialog.sdhModul];
+
+            if (m) {
+                try {
+                    window.localStorage.setItem(popupUtolsoKulcs(dialog.sdhModul), JSON.stringify(m));
+                } catch (e) { /* nincs tárhely: csak erre a munkamenetre szól */ }
+            }
+        });
+
+        dialog.sdhIllesztFigyelo.observe(dialog, {
             childList: true,
             subtree: true,
             attributes: true,
@@ -529,6 +631,18 @@
         }
 
         var resz = fejlec.split('|');
+
+        // 0.64: összefűzött csomag (Gyors betöltés) – a címkén a forrásfájlok verziója; eltérésnél egyszer frissít.
+        var cssCsomag = document.querySelector('link[data-sdh-css-v]');
+        var jsCsomag = document.querySelector('script[data-sdh-js-v]');
+
+        if ((cssCsomag && resz[0] && cssCsomag.getAttribute('data-sdh-css-v') !== resz[0]) ||
+            (jsCsomag && resz[1] && jsCsomag.getAttribute('data-sdh-js-v') !== resz[1])) {
+            egyszerFrissit('sdhFrissitve:' + resz[0] + '|' + resz[1]);
+
+            return;
+        }
+
         var css = document.querySelector('link[rel="stylesheet"][href*="assets/admin.css"]');
         var regiCss = elemVerzio(css, 'href');
 
@@ -547,22 +661,26 @@
         var regiJs = elemVerzio(js, 'src');
 
         if (js && regiJs && resz[1] && regiJs !== resz[1]) {
-            var kulcs = 'sdhFrissitve:' + resz[1];
-            var mehet = true;
+            egyszerFrissit('sdhFrissitve:' + resz[1]);
+        }
+    }
 
-            try {
-                if (window.sessionStorage.getItem(kulcs)) {
-                    mehet = false;
-                } else {
-                    window.sessionStorage.setItem(kulcs, '1');
-                }
-            } catch (e) { /* nincs tárhely: egyszeri frissítés nem garantálható */
+    /** Az oldal egyszeri újratöltése (ugyanarra a verzióra csak egyszer – nem kerülhet körbe). */
+    function egyszerFrissit(kulcs) {
+        var mehet = true;
+
+        try {
+            if (window.sessionStorage.getItem(kulcs)) {
                 mehet = false;
+            } else {
+                window.sessionStorage.setItem(kulcs, '1');
             }
+        } catch (e) { /* nincs tárhely: egyszeri frissítés nem garantálható */
+            mehet = false;
+        }
 
-            if (mehet) {
-                window.location.reload();
-            }
+        if (mehet) {
+            window.location.reload();
         }
     }
 
@@ -676,9 +794,12 @@
 
         if (allas) {
             urlapAllasVissza(szint, allas);
+            popupBeallt(szint.dialog);
 
             return;
         }
+
+        popupBeallt(szint.dialog);
 
         var kertSzam = kertFul ? (kertFul.className.match(/sdh-fulek__ful--(\d+)/) || [])[1] : '';
         var elso = kertSzam
@@ -1204,6 +1325,23 @@
 
     var keresesIdozito = null;
 
+    /* 0.64: gépelés-késleltetés; legalább ennyi karaktertől megy kérés (ügyfeleknél 3: az első két betűnél
+     * az eredmény úgyis „mindenki"); a régi kérés megszakad; ugyanarra a szövegre a már megkapott lista
+     * azonnal (késleltetés és kérés nélkül) jön vissza – pl. törlésnél, visszagépelésnél. */
+    var VALASZTO_KESLELTETES = 100;
+    /* Ha az előző leütés óta ennél több idő telt el (lassú, „pultos" gépelés), a kérés azonnal megy –
+     * csak a gyors egymás utáni leütéseket fogja össze a késleltetés. */
+    var VALASZTO_SZUNET = 150;
+    var valasztoUtolsoLeutes = 0;
+    var VALASZTO_MIN = { ugyfelek: 3 };
+    var VALASZTO_ALAP_MIN = 2;
+    var VALASZTO_ELET = 30000;
+    var valasztoTar = {};
+
+    function valasztoMin(modul) {
+        return VALASZTO_MIN[modul] || VALASZTO_ALAP_MIN;
+    }
+
     function valasztoLista(doboz) {
         return doboz.querySelector('.sdh-valaszto__lista');
     }
@@ -1214,48 +1352,88 @@
         lista.hidden = true;
     }
 
+    function valasztoKirajzol(doboz, talalatok) {
+        var lista = valasztoLista(doboz);
+        var darab = document.createDocumentFragment();
+
+        lista.innerHTML = '';
+
+        if (!talalatok.length) {
+            lista.innerHTML = '<li class="sdh-valaszto__ures">Nincs találat.</li>';
+            lista.hidden = false;
+
+            return;
+        }
+
+        talalatok.forEach(function (talalat) {
+            var elem = document.createElement('li');
+            elem.className = 'sdh-valaszto__elem';
+            elem.dataset.id = talalat.id;
+            elem.dataset.nev = talalat.nev;
+            elem.innerHTML =
+                '<strong>' + szovegBiztonsagos(talalat.nev) + '</strong>' +
+                (talalat.reszlet
+                    ? '<span>' + szovegBiztonsagos(talalat.reszlet) + '</span>'
+                    : '');
+
+            darab.appendChild(elem);
+        });
+
+        lista.appendChild(darab);
+        lista.hidden = false;
+    }
+
+    function valasztoTarolt(modul, q) {
+        var tarolt = valasztoTar[modul + '|' + q];
+
+        return tarolt && Date.now() - tarolt.ido <= VALASZTO_ELET ? tarolt.sorok : null;
+    }
+
     function valasztoKeres(doboz, q) {
         var modul = doboz.dataset.sdhValaszto;
-        var lista = valasztoLista(doboz);
+        var kulcs = modul + '|' + q;
+        var tarolt = valasztoTarolt(modul, q);
+
+        if (tarolt) {
+            valasztoKirajzol(doboz, tarolt);
+
+            return;
+        }
+
+        if (doboz.sdhKeresMegszak) {
+            doboz.sdhKeresMegszak.abort();
+        }
+
+        var megszakito = typeof AbortController === 'function' ? new AbortController() : null;
+        doboz.sdhKeresMegszak = megszakito;
 
         var cim = new URL(beallitas.ajax, window.location.origin);
         cim.searchParams.set('action', 'sdh_muhely_' + modul + '_kereso');
         cim.searchParams.set('q', q);
         cim.searchParams.set('_wpnonce', beallitas.nonce || '');
 
-        fetch(cim.toString(), { credentials: 'same-origin' })
+        fetch(cim.toString(), { credentials: 'same-origin', signal: megszakito ? megszakito.signal : undefined })
             .then(function (valasz) {
                 return valasz.json();
             })
             .then(function (eredmeny) {
-                var talalatok = (eredmeny && eredmeny.success && eredmeny.data) || [];
+                var mezo = doboz.querySelector('.sdh-valaszto__mezo');
 
-                lista.innerHTML = '';
-
-                if (!talalatok.length) {
-                    lista.innerHTML = '<li class="sdh-valaszto__ures">Nincs találat.</li>';
-                    lista.hidden = false;
-
+                // Közben tovább gépelt: ez a válasz már nem az övé.
+                if (mezo && mezo.value.trim() !== q) {
                     return;
                 }
 
-                talalatok.forEach(function (talalat) {
-                    var elem = document.createElement('li');
-                    elem.className = 'sdh-valaszto__elem';
-                    elem.dataset.id = talalat.id;
-                    elem.dataset.nev = talalat.nev;
-                    elem.innerHTML =
-                        '<strong>' + szovegBiztonsagos(talalat.nev) + '</strong>' +
-                        (talalat.reszlet
-                            ? '<span>' + szovegBiztonsagos(talalat.reszlet) + '</span>'
-                            : '');
+                var talalatok = (eredmeny && eredmeny.success && eredmeny.data) || [];
 
-                    lista.appendChild(elem);
-                });
-
-                lista.hidden = false;
+                valasztoTar[kulcs] = { ido: Date.now(), sorok: talalatok };
+                valasztoKirajzol(doboz, talalatok);
             })
-            .catch(function () {
+            .catch(function (hiba) {
+                if (hiba && hiba.name === 'AbortError') {
+                    return;
+                }
+
                 valasztoTorol(doboz);
             });
     }
@@ -1272,23 +1450,53 @@
 
         // Amíg nem választott a listából, nincs érvényes azonosító.
         // Így nem fordulhat elő, hogy átírja a nevet, és közben a régi
-        // ügyfélhez menti az eszközt.
+        // ügyfélhez menti az eszközt. (0.64: az eszközlista és az összefoglaló
+        // csak akkor töltődik újra, ha tényleg volt választott ügyfél – nem
+        // minden leütésre.)
+        var volt = rejtett.value;
+
         rejtett.value = '0';
-        munkalapEszkozFrissit(doboz, '0');
+
+        if (volt !== '0') {
+            munkalapEszkozFrissit(doboz, '0');
+        }
 
         window.clearTimeout(keresesIdozito);
 
         var q = mezo.value.trim();
 
-        if (q.length < 2) {
+        if (doboz.sdhKeresMegszak) {
+            doboz.sdhKeresMegszak.abort();
+            doboz.sdhKeresMegszak = null;
+        }
+
+        if (q.length < valasztoMin(doboz.dataset.sdhValaszto)) {
             valasztoTorol(doboz);
+
+            return;
+        }
+
+        // Már megkapott lista (ugyanez a szöveg): azonnal, kérés nélkül.
+        if (valasztoTarolt(doboz.dataset.sdhValaszto, q)) {
+            valasztoKeres(doboz, q);
+
+            return;
+        }
+
+        var most = Date.now();
+        var szunet = most - valasztoUtolsoLeutes;
+
+        valasztoUtolsoLeutes = most;
+
+        if (szunet >= VALASZTO_SZUNET) {
+            valasztoKeres(doboz, q);
 
             return;
         }
 
         keresesIdozito = window.setTimeout(function () {
             valasztoKeres(doboz, q);
-        }, 250);
+        }, VALASZTO_KESLELTETES);
     });
 
     document.addEventListener('keydown', function (esemeny) {

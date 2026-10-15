@@ -59,7 +59,7 @@ A csempék elrejtése a saját böngésződre szól. Hogy melyik csempe létezze
 
 A rács az Áttekintés fő része: minden javítási munkalap és minden napi árukiadás egy-egy sor. A rendelések nincsenek benne, azok a [Rendelések](modul:rendelesek) menüpontban állnak.
 
-Mindig csak egy oldalnyi sort tölt be, ezért sok ezer munkalapnál is gyors.
+Mindig csak egy oldalnyi sort tölt be, ezért sok százezer munkalapnál is gyors. A sorok azonnal megjelennek; a találatok számát és az összesítő sort a rendszer közben számolja, és ha még nem kész, egy pillanatra `…` áll a helyén (lapozó: `1 / …`). Amíg a munkalapok nem változnak, ugyanarra a szűrésre a szám azonnal jön.
 
 ### Az eszköztár
 
@@ -164,6 +164,7 @@ Egy szűrőt a mezőjében az [[Esc]] töröl. Mindet egyszerre a **Szűrők tö
 - Kattints az oszlop fejlécére: először növekvő, másodszor csökkenő, harmadszor megszűnik a rendezés.
 - [[Shift]] + kattintás: másodlagos rendezés. Legfeljebb három oszlop szerint rendezhetsz, a fejlécben szám mutatja a sorrendet.
 - Az **Állapot** oszlop az állapotlista sorrendjében rendez, nem ábécé szerint.
+- Az ügyfél, telefonszám, cím, gyártó, típus, megnevezés, IMEI, sorozatszám és azonosító szerinti rendezés nagyon sok munkalapnál is gyors (a rendszer az ügyfelek és eszközök sorrendjében halad). Nagyon mély oldalon (több ezredik sor) lassabb lehet.
 
 ### Összesítő sor
 

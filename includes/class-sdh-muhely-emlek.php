@@ -33,6 +33,9 @@ final class SDH_Muhely_Emlek
     /** A számla kézi tételének mezőkulcsa: a tételnevek közös memóriája. */
     public const TETELNEV = 'tetelnev';
 
+    /** A munkalapok tételneveinek (gyakoriság szerint) tárolt listája – 10 percig él (0.64). */
+    public const TETELNEV_TAR = 'emlek_tetelnevek';
+
     /** Mezőnként legfeljebb ennyi érték marad meg (a legritkábban használtak mennek el). */
     private const MAX_KULCSONKENT = 300;
 
@@ -269,10 +272,12 @@ final class SDH_Muhely_Emlek
         if ($kulcs === self::TETELNEV && count($ki) < self::MAX_KULD) {
             $tt = SDH_Muhely_Schema::tabla('munkalap_tetel');
 
-            $nevek = $wpdb->get_col($wpdb->prepare(
+            // 0.64: tárolva (10 percig): 500 ezer munkalapnál ez a teljes tételtábla csoportosítása lenne
+            // minden kérésre. A gyakorisági sorrend lassan változik – a pár perces késés nem számít.
+            $nevek = SDH_Muhely_Gyorsitotar::ertek(self::TETELNEV_TAR, static fn (): array => (array) $wpdb->get_col($wpdb->prepare(
                 "SELECT megnevezes FROM {$tt} WHERE megnevezes <> '' GROUP BY megnevezes ORDER BY COUNT(*) DESC LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 self::MAX_KULD
-            ));
+            )), 600, false);
 
             foreach ((array) $nevek as $nev) {
                 if (count($ki) >= self::MAX_KULD) {

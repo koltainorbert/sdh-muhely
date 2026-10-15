@@ -29,6 +29,28 @@ final class SDH_Muhely_Racs
     private const META_NEZETEK = 'sdh_muhely_racs_nezetek';
 
     /** Választható oldalméretek. */
+    /**
+     * Index menti rendezés (0.64, seta_idk): rács-oszlop => [álnév, tábla, mező, a munkalap kulcsa].
+     * Csak nagy elemszámú, indexelt mezők: kevés különböző értéknél (gyártó) nem gyorsítana.
+     */
+    private const SETA = [
+        'ugyfel'      => ['u', 'ugyfel', 'nev', 'ugyfel_id'],
+        'telefon'     => ['u', 'ugyfel', 'telefon', 'ugyfel_id'],
+        'imei'        => ['e', 'eszkoz', 'imei', 'eszkoz_id'],
+        'sorozatszam' => ['e', 'eszkoz', 'sorozatszam', 'eszkoz_id'],
+        'gyarto'      => ['e', 'eszkoz', 'gyarto', 'eszkoz_id'],
+        'tipus'       => ['e', 'eszkoz', 'tipus', 'eszkoz_id'],
+        'megnevezes'  => ['e', 'eszkoz', 'megnevezes', 'eszkoz_id'],
+        // A „Cím" kifejezés értéke az ügyfél cim_rendez mezőjében is ott áll (mentéskor töltve).
+        'cim'         => ['u', 'ugyfel', 'cim_rendez', 'ugyfel_id', self::CIM_SQL],
+    ];
+
+    /** Egy köteg ennyi ügyfél / eszköz értékét veszi (az utolsó érték csoportja egészben hozzá). */
+    private const SETA_KOTEG = 200;
+
+    /** Legfeljebb ennyi köteg; ha az oldal így sem telik meg, a régi út megy. */
+    private const SETA_MAX_KOR = 40;
+
     private const MERETEK = [25, 50, 100, 200];
 
     private const ALAP_MERET = 50;
@@ -52,6 +74,7 @@ final class SDH_Muhely_Racs
     public static function init(): void
     {
         add_action('wp_ajax_sdh_muhely_racs_adat', [self::class, 'ajax_adat']);
+        add_action('wp_ajax_sdh_muhely_racs_osszeg', [self::class, 'ajax_osszeg']);
         add_action('wp_ajax_sdh_muhely_racs_reszlet', [self::class, 'ajax_reszlet']);
         add_action('wp_ajax_sdh_muhely_racs_nezet', [self::class, 'ajax_nezet']);
         add_action('wp_ajax_sdh_muhely_racs_jelzes', [self::class, 'ajax_jelzes']);
@@ -265,9 +288,10 @@ final class SDH_Muhely_Racs
             $ertekek[(string) $kulcs] = ['nev' => $felirat];
         }
 
-        $hasznalt = $wpdb->get_col(
+        // Gyorsítótárazva (0.64): 600 ezer eszköznél ez minden betöltéskor végigolvasná a táblát.
+        $hasznalt = SDH_Muhely_Gyorsitotar::ertek('eszkoz_kategoriak', static fn (): array => (array) $wpdb->get_col(
             'SELECT DISTINCT kategoria FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' ORDER BY kategoria ASC LIMIT 60'
-        );
+        ));
 
         foreach ((array) $hasznalt as $kulcs) {
             $kulcs = (string) $kulcs;
@@ -713,6 +737,8 @@ final class SDH_Muhely_Racs
 
         $minta  = '%' . $wpdb->esc_like($q) . '%';
         $kicsi  = mb_strtolower($q);
+
+        /** @var array<int, array{0: string, 1: array<int, mixed>}> $reszek Feltétel és a hozzá tartozó értékek. */
         $reszek = [];
 
         foreach ($lathato as $k) {
@@ -721,14 +747,12 @@ final class SDH_Muhely_Racs
 
             switch ($oszlop['tipus']) {
                 case 'szoveg':
-                    $reszek[]  = "{$sql} LIKE %s";
-                    $ertekek[] = $minta;
+                    $reszek[] = ["{$sql} LIKE %s", [$minta]];
                     break;
 
                 case 'szam':
                     if (preg_match('/^\d+$/', $q) === 1) {
-                        $reszek[]  = "CAST({$sql} AS CHAR) LIKE %s";
-                        $ertekek[] = $minta;
+                        $reszek[] = ["CAST({$sql} AS CHAR) LIKE %s", [$minta]];
                     }
                     break;
 
@@ -736,15 +760,16 @@ final class SDH_Muhely_Racs
                     $szam = self::szam_ertelmez($q);
 
                     if ($szam !== null) {
-                        $reszek[]  = "{$sql} = %f";
-                        $ertekek[] = $szam;
+                        $reszek[] = ["{$sql} = %f", [$szam]];
                     }
                     break;
 
                 case 'datum':
                     if (preg_match('/^[\d.\-\/ ]+$/', $q) === 1) {
-                        $reszek[]  = self::datum_szoveg_sql($sql) . ' LIKE %s';
-                        $ertekek[] = '%' . $wpdb->esc_like(str_replace(['-', '/', ' '], ['.', '.', ''], $q)) . '%';
+                        $reszek[] = [
+                            self::datum_szoveg_sql($sql) . ' LIKE %s',
+                            ['%' . $wpdb->esc_like(str_replace(['-', '/', ' '], ['.', '.', ''], $q)) . '%'],
+                        ];
                     }
                     break;
 
@@ -763,12 +788,10 @@ final class SDH_Muhely_Racs
                     if ($talalo !== []) {
                         $egesz = !empty($oszlop['egesz']);
 
-                        foreach ($talalo as $ertek) {
-                            $ertekek[] = $egesz ? (int) $ertek : $ertek;
-                        }
-
-                        $reszek[] = $sql . ' IN ('
-                            . implode(', ', array_fill(0, count($talalo), $egesz ? '%d' : '%s')) . ')';
+                        $reszek[] = [
+                            $sql . ' IN (' . implode(', ', array_fill(0, count($talalo), $egesz ? '%d' : '%s')) . ')',
+                            array_map(static fn (string $e) => $egesz ? (int) $e : $e, $talalo),
+                        ];
                     }
                     break;
             }
@@ -777,17 +800,78 @@ final class SDH_Muhely_Racs
         // A lapra csatolt (további) eszközök is találatok, ha valamelyik
         // eszközoszlop látszik: a rács soraiban csak a fő eszköz áll, de az
         // IMEI-re, sorozatszámra, típusra keresve a csatolt készülék lapja is előjön.
+        // (0.64: egyszeri allekérdezés a soronkénti EXISTS helyett – ugyanaz az eredmény.)
         if (array_intersect($lathato, ['imei', 'sorozatszam', 'tipus', 'megnevezes', 'gyarto']) !== []) {
-            $reszek[] = 'EXISTS (SELECT 1 FROM ' . SDH_Muhely_Schema::tabla('munkalap_eszkoz') . ' tk'
+            $reszek[] = [
+                'm.id IN (SELECT tk.munkalap_id FROM ' . SDH_Muhely_Schema::tabla('munkalap_eszkoz') . ' tk'
                 . ' INNER JOIN ' . SDH_Muhely_Schema::tabla('eszkoz') . ' te2 ON te2.id = tk.eszkoz_id'
-                . ' WHERE tk.munkalap_id = m.id AND (te2.imei LIKE %s OR te2.imei2 LIKE %s'
-                . ' OR te2.sorozatszam LIKE %s OR te2.tipus LIKE %s OR te2.megnevezes LIKE %s OR te2.gyarto LIKE %s))';
-
-            array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta);
+                . ' WHERE te2.imei LIKE %s OR te2.imei2 LIKE %s'
+                . ' OR te2.sorozatszam LIKE %s OR te2.tipus LIKE %s OR te2.megnevezes LIKE %s OR te2.gyarto LIKE %s)',
+                [$minta, $minta, $minta, $minta, $minta, $minta],
+            ];
         }
 
         // Ha a keresett szó egyik látható oszlopban sem értelmezhető, nincs találat.
-        return $reszek === [] ? '1 = 0' : '(' . implode(' OR ', $reszek) . ')';
+        if ($reszek === []) {
+            return '1 = 0';
+        }
+
+        $sql = self::kereso_csoportosit($reszek);
+
+        foreach ($reszek as $resz) {
+            array_push($ertekek, ...$resz[1]);
+        }
+
+        return $sql;
+    }
+
+    /**
+     * A kereső feltételei táblánként (0.64).
+     *
+     * Az ügyfél- és az eszközoszlopokra vonatkozó feltételek egy-egy
+     * allekérdezésbe kerülnek („m.ugyfel_id IN (SELECT … FROM ügyfél WHERE …)"):
+     * így az ügyféltábla egyszer olvasódik végig, nem munkalaponként egy
+     * összekapcsolt soron – és a rácsnak a kereséshez nem kell az ügyfelet és
+     * az eszközt minden munkalaphoz hozzákötnie. Az eredmény ugyanaz: üres
+     * (nem létező) ügyfélre a régi „COALESCE(u.…, '') LIKE" sem talált.
+     *
+     * A részek sorrendje (és vele az értékeké) a kimenetben: előbb a
+     * munkalap saját feltételei, aztán az ügyfélé, aztán az eszközé – a
+     * $reszek tömb is ebben a sorrendben marad vissza.
+     *
+     * @param array<int, array{0: string, 1: array<int, mixed>}> $reszek
+     */
+    private static function kereso_csoportosit(array &$reszek): string
+    {
+        $csoport = ['m' => [], 'u' => [], 'e' => []];
+
+        foreach ($reszek as $resz) {
+            preg_match_all('/\b(m|u|e|f)\./', $resz[0], $talalat);
+            $alnevek = array_values(array_unique($talalat[1]));
+
+            if ($alnevek === ['u'] || $alnevek === ['e']) {
+                $csoport[$alnevek[0]][] = $resz;
+            } else {
+                $csoport['m'][] = $resz;
+            }
+        }
+
+        $sorrend = array_merge($csoport['m'], $csoport['u'], $csoport['e']);
+        $ki      = array_map(static fn (array $r): string => $r[0], $csoport['m']);
+
+        if ($csoport['u'] !== []) {
+            $belso = array_map(static fn (array $r): string => (string) preg_replace('/\bu\./', 'ku.', $r[0]), $csoport['u']);
+            $ki[]  = 'm.ugyfel_id IN (SELECT ku.id FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' ku WHERE ' . implode(' OR ', $belso) . ')';
+        }
+
+        if ($csoport['e'] !== []) {
+            $belso = array_map(static fn (array $r): string => (string) preg_replace('/\be\./', 'ke.', $r[0]), $csoport['e']);
+            $ki[]  = 'm.eszkoz_id IN (SELECT ke.id FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' ke WHERE ' . implode(' OR ', $belso) . ')';
+        }
+
+        $reszek = $sorrend;
+
+        return '(' . implode(' OR ', $ki) . ')';
     }
 
     /**
@@ -805,7 +889,10 @@ final class SDH_Muhely_Racs
         // A rácsban a javítási munkalapok és a napi árukiadás lapjai állnak (az
         // utóbbi az „Azonosító" oszlopban „Napi árukiadás"); a rendelés a saját
         // menüpontjában marad (SDH_Muhely_Eladas).
-        $feltetelek = ['m.fajta IN (%s, %s)'];
+        // A COALESCE szándékos (0.64): a fajta szinte minden sorra illik, ezért ne erről az indexről
+        // olvasson az adatbázis, hanem a rendezés indexéről (alapnézet: sorszám) – így a lap első
+        // 50 sora a teljes tábla rendezése nélkül jön. A fajta NOT NULL, az eredmény ugyanaz.
+        $feltetelek = ["COALESCE(m.fajta, '') IN (%s, %s)"];
         // Kikapcsolt Napi árukiadás modulnál (Modulok) csak a javítási munkalapok állnak a rácsban.
         $ertekek    = ['javitas', SDH_Muhely_Modulok::be('arukiadas') ? 'arukiadas' : 'javitas'];
 
@@ -873,6 +960,12 @@ final class SDH_Muhely_Racs
             $kif    = (string) ($oszlop['rendez'] ?? $oszlop['sql']);
             $irany  = $elem['i'] === 'fel' ? 'ASC' : 'DESC';
 
+            // SQLite-on (csak a tesztkörnyezet) a kifejezés (COALESCE, CONCAT) elveszítené az oszlop
+            // kis-nagybetű-független összevetését: ott kimondjuk – MySQL-en ez magától így van.
+            if (self::sqlite() && ($oszlop['tipus'] === 'szoveg' || $elem['k'] === 'azonosito')) {
+                $kif .= ' COLLATE NOCASE';
+            }
+
             if ($irany === 'ASC') {
                 $reszek[] = "({$kif} IS NULL) ASC";
             }
@@ -888,10 +981,15 @@ final class SDH_Muhely_Racs
     /**
      * Egy oldalnyi sor, a találatok száma és az összesítő sor.
      *
+     * $kesobb: ha a találatszám és az összegsor még nincs a gyorsítótárban,
+     * a sorok nélküle mennek vissza ('osszesen' => null), és a böngésző külön
+     * kéri el (ajax_osszeg) – így a rács sorai nem várnak a teljes tábla
+     * végigszámolására (0.64).
+     *
      * @param array<string, mixed> $allapot Az allapot_tisztit() eredménye.
      * @return array<string, mixed>
      */
-    public static function adat(array $allapot): array
+    public static function adat(array $allapot, bool $kesobb = false): array
     {
         global $wpdb;
 
@@ -902,24 +1000,72 @@ final class SDH_Muhely_Racs
         $fizetendo = self::FIZETENDO;
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket és rögzített oszlopkifejezéseket tartalmaz.
-        $ossz = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT COUNT(*) AS db,
-                        COALESCE(SUM(m.brutto_ertek), 0) AS brutto,
-                        COALESCE(SUM(m.fizetett), 0) AS fizetett,
-                        COALESCE(SUM({$fizetendo}), 0) AS fizetendo
-                 {$szukitett} WHERE {$hol}",
-                $ertekek
-            )
+        // A találatszám és az összegsor gyorsítótárból (0.64): lapozáskor és ugyanarra a
+        // szűrésre nem számolódik újra – csak ha a munkalapok (vagy ügyfelek, eszközök) változnak.
+        $ossz_sql = $wpdb->prepare(
+            "SELECT COUNT(*) AS db,
+                    COALESCE(SUM(m.brutto_ertek), 0) AS brutto,
+                    COALESCE(SUM(m.fizetett), 0) AS fizetett,
+                    COALESCE(SUM({$fizetendo}), 0) AS fizetendo
+             {$szukitett} WHERE {$hol}",
+            $ertekek
         );
+        $szamol = static function () use ($wpdb, $ossz_sql): ?object {
+            $sor = SDH_Muhely_Gyorsitotar::ertek('racs_ossz|' . $ossz_sql, static function () use ($wpdb, $ossz_sql): ?array {
+                $sor = $wpdb->get_row($ossz_sql, ARRAY_A);
+
+                return is_array($sor) ? $sor : null;
+            });
+
+            return is_array($sor) ? (object) $sor : null;
+        };
+
+        $meret = (int) $allapot['meret'];
+        $van   = true;
+
+        if ($kesobb) {
+            $tarolt = SDH_Muhely_Gyorsitotar::tarolt('racs_ossz|' . $ossz_sql, $van);
+            $ossz   = $van && is_array($tarolt) ? (object) $tarolt : null;
+        } else {
+            $ossz = $szamol();
+        }
 
         $osszesen = $ossz ? (int) $ossz->db : 0;
-        $meret    = (int) $allapot['meret'];
         $oldalak  = max(1, (int) ceil($osszesen / $meret));
-        $oldal    = min($oldalak, max(1, (int) $allapot['oldal']));
+        $oldal    = $van ? min($oldalak, max(1, (int) $allapot['oldal'])) : max(1, (int) $allapot['oldal']);
+        $rendez   = self::rendezes_sql($allapot['rendezes']);
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
+        // Halasztott összekapcsolás (0.64): előbb csak az oldal azonosítói – a rendezéshez és
+        // a szűréshez szükséges táblákkal –, utána ennek az egy oldalnak a teljes sorai.
+        // Így a rendezés keskeny sorokon fut (azonosító + kulcs), nem a teljes rács-soron.
+        $oldal_idk = static function (int $oldal) use ($wpdb, $allapot, $hol, $ertekek, $meret, $rendez): array {
+            $idk = self::seta_idk($allapot, $hol, $ertekek, $meret, ($oldal - 1) * $meret);
+
+            return $idk ?? array_map('intval', (array) $wpdb->get_col(
+                $wpdb->prepare(
+                    'SELECT m.id ' . self::forras_sql($hol . ' ' . $rendez) . " WHERE {$hol} {$rendez} LIMIT %d OFFSET %d",
+                    array_merge($ertekek, [$meret, ($oldal - 1) * $meret])
+                )
+            ));
+        };
+
+        $idk = $oldal_idk($oldal);
+
+        // Halasztott számlálásnál az oldal túl lehet a végén (pl. szűrés után): ekkor mégis
+        // megszámoljuk, és az utolsó létező oldalt adjuk – ahogy eddig.
+        if (!$van && $idk === [] && $oldal > 1) {
+            $ossz     = $szamol();
+            $van      = true;
+            $osszesen = $ossz ? (int) $ossz->db : 0;
+            $oldalak  = max(1, (int) ceil($osszesen / $meret));
+            $oldal    = min($oldalak, $oldal);
+            $idk      = $oldal_idk($oldal);
+        }
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $nyers = $wpdb->get_results(
                 "SELECT m.id, m.munkalap_szam, m.jelzes, m.allapot, m.nev, m.felelos, m.keszult,
                         m.hatarido, m.lezarva, m.fizetve, m.fizetes_ideje, m.brutto_ertek,
                         m.fizetett, m.fizetesi_mod, m.megjegyzes, m.letrehozva, m.modositva,
@@ -932,10 +1078,21 @@ final class SDH_Muhely_Racs
                         e.megnevezes AS e_megnevezes, e.garancias AS e_garancias,
                         e.imei AS e_imei, e.sorozatszam AS e_sorozatszam,
                         f.display_name AS f_nev
-                 {$forras} WHERE {$hol} " . self::rendezes_sql($allapot['rendezes']) . ' LIMIT %d OFFSET %d',
-                array_merge($ertekek, [$meret, ($oldal - 1) * $meret])
-            )
-        );
+                 {$forras} WHERE m.id IN (" . implode(',', $idk) . ')'
+            );
+
+            $szerint = [];
+
+            foreach ((array) $nyers as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
         $allapotok = SDH_Muhely_Munkalap::allapotok();
@@ -977,18 +1134,336 @@ final class SDH_Muhely_Racs
             $ki[]               = $formazott;
         }
 
-        return [
+        return array_merge([
             'sorok'    => $ki,
-            'osszesen' => $osszesen,
             'oldal'    => $oldal,
-            'oldalak'  => $oldalak,
             'meret'    => $meret,
+        ], $van ? self::osszesites($ossz, $meret) : ['osszesen' => null, 'oldalak' => null, 'osszegek' => null]);
+    }
+
+    /**
+     * A találatszám, az oldalszám és az összegsor egy összesítő sorból.
+     *
+     * @return array{osszesen: int, oldalak: int, osszegek: array<string, float>}
+     */
+    private static function osszesites(?object $ossz, int $meret): array
+    {
+        $osszesen = $ossz ? (int) $ossz->db : 0;
+
+        return [
+            'osszesen' => $osszesen,
+            'oldalak'  => max(1, (int) ceil($osszesen / max(1, $meret))),
             'osszegek' => [
                 'brutto'    => $ossz ? (float) $ossz->brutto : 0.0,
                 'fizetett'  => $ossz ? (float) $ossz->fizetett : 0.0,
                 'fizetendo' => $ossz ? (float) $ossz->fizetendo : 0.0,
             ],
         ];
+    }
+
+    /**
+     * Csak a találatszám és az összegsor (a halasztott számláláshoz).
+     *
+     * @param array<string, mixed> $allapot Az allapot_tisztit() eredménye.
+     * @return array{osszesen: int, oldalak: int, osszegek: array<string, float>}
+     */
+    public static function osszeg(array $allapot): array
+    {
+        global $wpdb;
+
+        [$hol, $ertekek] = self::feltetelek($allapot);
+
+        $fizetendo = self::FIZETENDO;
+        $szukitett = self::forras_sql($hol);
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket és rögzített oszlopkifejezéseket tartalmaz.
+        $ossz_sql = $wpdb->prepare(
+            "SELECT COUNT(*) AS db,
+                    COALESCE(SUM(m.brutto_ertek), 0) AS brutto,
+                    COALESCE(SUM(m.fizetett), 0) AS fizetett,
+                    COALESCE(SUM({$fizetendo}), 0) AS fizetendo
+             {$szukitett} WHERE {$hol}",
+            $ertekek
+        );
+        // phpcs:enable
+
+        $sor = SDH_Muhely_Gyorsitotar::ertek('racs_ossz|' . $ossz_sql, static function () use ($wpdb, $ossz_sql): ?array {
+            $sor = $wpdb->get_row($ossz_sql, ARRAY_A);
+
+            return is_array($sor) ? $sor : null;
+        });
+
+        return self::osszesites(is_array($sor) ? (object) $sor : null, (int) $allapot['meret']);
+    }
+
+    /**
+     * Ügyfél- vagy eszközoszlop szerinti rendezés index mentén (0.64).
+     *
+     * A „rendezés ügyfél szerint" a régi úton minden munkalaphoz hozzákötötte
+     * az ügyfelet, és az egész táblát sorba rakta – 500 ezer lapnál ez
+     * másodpercekig tart. Itt az ügyfeleket (eszközöket) a saját indexük
+     * sorrendjében járjuk be, kötegenként; minden köteghez megszámoljuk,
+     * hány munkalap tartozik hozzá (a szűrőkkel együtt), és csak addig
+     * megyünk, amíg az oldal meg nem telik. A végső sorrendet mindig az
+     * adatbázis adja ugyanazzal az ORDER BY-jal, csak a kiválasztott kis
+     * halmazon – így az eredmény pontosan ugyanaz, mint a régi úton
+     * (az egyenlő értékek is m.id szerint csökkenőben), és a kötegek mindig
+     * egész értékcsoportokat tartalmaznak.
+     *
+     * Az üres érték („" – nincs ügyfél / eszköz, vagy üres a mező) növekvő
+     * rendezésnél elöl, csökkenőnél a végén áll, mint a régi úton.
+     *
+     * Null-t ad (és a hívó a régi úton megy), ha nem egyértelmű a gyors út:
+     * több rendezési kulcs, ismeretlen oszlop, vagy ha a köteg-korlátig sem
+     * telik meg az oldal (mély lap, ritka szűrő).
+     *
+     * @param array<string, mixed>  $allapot
+     * @param array<int, mixed>     $ertekek
+     * @return array<int, int>|null
+     */
+    private static function seta_idk(array $allapot, string $hol, array $ertekek, int $meret, int $eltolas): ?array
+    {
+        global $wpdb;
+
+        if (count((array) $allapot['rendezes']) !== 1) {
+            return null;
+        }
+
+        $r = $allapot['rendezes'][0];
+
+        if ($r['k'] === 'azonosito') {
+            return self::azonosito_idk($r['i'] === 'fel', $allapot, $hol, $ertekek, $meret, $eltolas);
+        }
+
+        if (!isset(self::SETA[$r['k']])) {
+            return null;
+        }
+
+        [$alnev, $tabla_nev, $oszlop, $fk] = self::SETA[$r['k']];
+
+        $def = self::oszlopok()[$r['k']];
+
+        // Csak a pontosan ismert alakú kifejezésre (különben a sorrend eltérhetne).
+        if ((string) ($def['rendez'] ?? $def['sql']) !== (self::SETA[$r['k']][4] ?? "COALESCE({$alnev}.{$oszlop}, '')")) {
+            return null;
+        }
+
+        // A tárolt mező (pl. cim_rendez) csak a teljes feltöltés után megbízható.
+        if (isset(self::SETA[$r['k']][4]) && !SDH_Muhely_Ugyfel::kereso_keszen()) {
+            return null;
+        }
+
+        $t        = SDH_Muhely_Schema::tabla($tabla_nev);
+        $fel      = $r['i'] === 'fel';
+        $irany    = $fel ? 'ASC' : 'DESC';
+        $rendez   = self::rendezes_sql($allapot['rendezes']);
+        $kell     = $eltolas + $meret;
+        $szam_for = self::forras_sql($hol);
+
+        // Egy szelet: a munkalapok, amelyek kapcsolt rekordjának értéke a felsoroltak egyike.
+        // A feltétel értékekkel (nem azonosítókkal) szűr: az adatbázis összevetése (kis-nagybetű,
+        // ékezet) így ugyanaz, mint a rendezésé. Az üres szelet a kapcsolat nélküli lapokat is viszi.
+        $feltetel = static function (array $ertek_lista) use ($wpdb, $t, $oszlop, $fk): string {
+            $belso = $wpdb->prepare(
+                "SELECT id FROM {$t} WHERE {$oszlop} IN (" . implode(',', array_fill(0, count($ertek_lista), '%s')) . ')',
+                $ertek_lista
+            );
+
+            return in_array('', $ertek_lista, true)
+                ? "(m.{$fk} = 0 OR m.{$fk} IN ({$belso}))"
+                : "m.{$fk} IN ({$belso})";
+        };
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- csak rögzített nevek, helyőrzők és prepare-rel készült részek.
+        $szamol = static function (string $f) use ($wpdb, $szam_for, $hol, $ertekek): int {
+            $sql = $wpdb->prepare("SELECT COUNT(*) {$szam_for} WHERE {$hol} AND {$f}", $ertekek);
+
+            return (int) SDH_Muhely_Gyorsitotar::ertek('racs_szelet|' . $sql, static fn (): int => (int) $wpdb->get_var($sql));
+        };
+
+        /** @var array<int, array{0: string, 1: int, 2: bool}> $szeletek Sorrendben: feltétel, lapok száma, egyetlen érték-e. */
+        $szeletek = [];
+        $osszes   = 0;
+        $ures_f   = $feltetel(['']);
+
+        if ($fel) {
+            $db         = $szamol($ures_f);
+            $szeletek[] = [$ures_f, $db, true];
+            $osszes    += $db;
+        }
+
+        // Mély lap: a kötegek nem érnének oda – a régi út megy.
+        if ($kell - $osszes > self::SETA_KOTEG * self::SETA_MAX_KOR / 2 && $kell > $osszes) {
+            return null;
+        }
+
+        $utolso   = null;
+        $kimerult = false;
+        $kor      = 0;
+
+        while ($osszes < $kell) {
+            if (++$kor > self::SETA_MAX_KOR) {
+                return null;
+            }
+
+            $ertek_lista = array_values(array_unique(array_map('strval', (array) $wpdb->get_col(
+                $utolso === null
+                    ? "SELECT {$oszlop} FROM {$t} WHERE {$oszlop} > '' ORDER BY {$oszlop} {$irany} LIMIT " . self::SETA_KOTEG
+                    : $wpdb->prepare(
+                        "SELECT {$oszlop} FROM {$t} WHERE {$oszlop} > '' AND {$oszlop} " . ($fel ? '>' : '<') . " %s ORDER BY {$oszlop} {$irany} LIMIT " . self::SETA_KOTEG,
+                        $utolso
+                    )
+            ))));
+
+            if ($ertek_lista === []) {
+                $kimerult = true;
+                break;
+            }
+
+            // Az utolsó érték csoportja egészben kerül a szeletbe (a feltétel értékre szűr),
+            // a következő köteg az ennél nagyobb (kisebb) értékekkel folytatódik.
+            $utolso     = (string) end($ertek_lista);
+            $f          = $feltetel($ertek_lista);
+            $db         = $szamol($f);
+            $szeletek[] = [$f, $db, count($ertek_lista) === 1];
+            $osszes    += $db;
+        }
+
+        if (!$fel && $kimerult) {
+            $db         = $szamol($ures_f);
+            $szeletek[] = [$ures_f, $db, true];
+            $osszes    += $db;
+        }
+
+        // phpcs:enable
+
+        return self::szeletekbol($szeletek, $hol, $ertekek, $rendez, $meret, $eltolas);
+    }
+
+    /**
+     * Rendezés az „Azonosító" (eszközkategória / napi árukiadás) szerint (0.64).
+     *
+     * Kevés különböző érték van (telefon, számítógép, …, napi árukiadás, üres):
+     * mindegyik egy szelet, a sorrendjüket az adatbázis adja (ugyanazzal az
+     * összevetéssel, mint a régi ORDER BY), a szeleten belül m.id csökkenő.
+     *
+     * @param array<string, mixed> $allapot
+     * @param array<int, mixed>    $ertekek
+     * @return array<int, int>|null
+     */
+    private static function azonosito_idk(bool $fel, array $allapot, string $hol, array $ertekek, int $meret, int $eltolas): ?array
+    {
+        global $wpdb;
+
+        $def = self::oszlopok()['azonosito'];
+        $aru = self::ARU_KATEGORIA;
+
+        if ((string) ($def['rendez'] ?? $def['sql']) !== "CASE WHEN m.fajta = 'arukiadas' THEN '" . $aru . "' ELSE COALESCE(e.kategoria, '') END") {
+            return null;
+        }
+
+        $et       = SDH_Muhely_Schema::tabla('eszkoz');
+        $rendez   = self::rendezes_sql($allapot['rendezes']);
+        $szam_for = self::forras_sql($hol);
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- rögzített nevek és prepare-rel készült részek.
+        $lista = array_map('strval', (array) SDH_Muhely_Gyorsitotar::ertek('azonosito_ertekek|' . ($fel ? 'fel' : 'le'), static fn (): array => (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT v FROM (SELECT DISTINCT kategoria AS v FROM {$et} UNION SELECT %s UNION SELECT '') x ORDER BY v " . ($fel ? 'ASC' : 'DESC'),
+            $aru
+        ))));
+
+        if ($lista === [] || count($lista) > 200) {
+            return null;
+        }
+
+        $szeletek = [];
+        $osszes   = 0;
+        $kell     = $eltolas + $meret;
+
+        foreach ($lista as $v) {
+            $belso = $wpdb->prepare("m.eszkoz_id IN (SELECT id FROM {$et} WHERE kategoria = %s)", $v);
+
+            if ($v === $aru) {
+                $f = "(m.fajta = 'arukiadas' OR (m.fajta <> 'arukiadas' AND {$belso}))";
+            } elseif ($v === '') {
+                $f = "(m.fajta <> 'arukiadas' AND (m.eszkoz_id = 0 OR {$belso}))";
+            } else {
+                $f = "(m.fajta <> 'arukiadas' AND {$belso})";
+            }
+
+            $sql = $wpdb->prepare("SELECT COUNT(*) {$szam_for} WHERE {$hol} AND {$f}", $ertekek);
+            $db  = (int) SDH_Muhely_Gyorsitotar::ertek('racs_szelet|' . $sql, static fn (): int => (int) $wpdb->get_var($sql));
+
+            $szeletek[] = [$f, $db, true];
+            $osszes    += $db;
+
+            if ($osszes >= $kell) {
+                break;
+            }
+        }
+        // phpcs:enable
+
+        return self::szeletekbol($szeletek, $hol, $ertekek, $rendez, $meret, $eltolas);
+    }
+
+    /**
+     * Az oldal sorai a sorrendben felsorolt szeletekből (seta_idk, azonosito_idk).
+     *
+     * @param array<int, array{0: string, 1: int, 2: bool}> $szeletek feltétel, lapok száma, egyetlen érték-e
+     * @param array<int, mixed>                            $ertekek
+     * @return array<int, int>
+     */
+    private static function szeletekbol(array $szeletek, string $hol, array $ertekek, string $rendez, int $meret, int $eltolas): array
+    {
+        global $wpdb;
+
+        $kell   = $eltolas + $meret;
+        $elotte = 0;
+        $kell_f = [];
+        $egy    = true;
+        $futo   = 0;
+
+        // Ami teljesen az eltolás elé esik, az kimarad.
+        foreach ($szeletek as [$f, $db, $egyetlen]) {
+            if ($futo + $db <= $eltolas) {
+                $futo  += $db;
+                $elotte = $futo;
+                continue;
+            }
+
+            if ($db > 0) {
+                $kell_f[] = $f;
+                $egy      = $egy && $egyetlen;
+            }
+
+            $futo += $db;
+
+            if ($futo >= $kell) {
+                break;
+            }
+        }
+
+        if ($kell_f === []) {
+            return [];
+        }
+
+        // Egyetlen értékcsoporton belül minden kulcs egyenlő: ott a sorrend m.id szerint csökkenő
+        // (ez indexről jön); különben az adatbázis rendez – de csak a kiválasztott szeleteken.
+        $vegso = count($kell_f) === 1 && $egy ? 'ORDER BY m.id DESC' : $rendez;
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- prepare-rel készült részek.
+        return array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            'SELECT m.id ' . self::forras_sql($hol . ' ' . $vegso) . " WHERE {$hol} AND (" . implode(' OR ', $kell_f) . ")
+             {$vegso} LIMIT %d OFFSET %d",
+            array_merge($ertekek, [$meret, $eltolas - $elotte])
+        )));
+        // phpcs:enable
+    }
+
+    /** SQLite-adatbázison fut-e (a WordPress SQLite-bővítménye – a tesztkörnyezet). */
+    private static function sqlite(): bool
+    {
+        return class_exists('WP_SQLite_DB', false) && $GLOBALS['wpdb'] instanceof WP_SQLite_DB;
     }
 
     /** Dátum a rácsban: 2026.10.07 – üres, ha nincs. */
@@ -1279,12 +1754,20 @@ final class SDH_Muhely_Racs
         return is_array($adat) ? $adat : [];
     }
 
-    /** Egy oldalnyi sor (AJAX). */
+    /** Egy oldalnyi sor (AJAX). A „kesobb" jelzéssel a számlálás külön kérésben jöhet (ajax_osszeg). */
     public static function ajax_adat(): void
     {
         self::ajax_vedelem();
 
-        wp_send_json_success(self::adat(self::allapot_tisztit(self::bejovo_json('allapot'))));
+        wp_send_json_success(self::adat(self::allapot_tisztit(self::bejovo_json('allapot')), !empty($_POST['kesobb'])));
+    }
+
+    /** A találatszám és az összegsor (AJAX) – a halasztott számláláshoz. */
+    public static function ajax_osszeg(): void
+    {
+        self::ajax_vedelem();
+
+        wp_send_json_success(self::osszeg(self::allapot_tisztit(self::bejovo_json('allapot'))));
     }
 
     /** A jelzés (zászló) be- és kikapcsolása egy munkalapon (AJAX). */

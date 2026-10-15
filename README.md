@@ -64,6 +64,42 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.64.0
+- **Sebesség 500 ezer rekordnál** (séma 0.43.0). Mérés: tesztkonténer, SQLite (MariaDB a konténerben nem volt
+  telepíthető), 500 000 ügyfél / 600 000 eszköz / 500 000 munkalap / 1 millió tétel. Részletek: ALLAPOT, súgó
+  › Hibaelhárítás › Sebesség. A funkció és a megjelenés változatlan; ahol a sorrend vagy a találat számít, a
+  tesztek a régi úttal vetik össze (t58, t59).
+- **Ügyfélkereső**: új `kereso` / `tel_ford` / `cim_rendez` oszlop (indexelt) és `sdh_ugyfel_szo` szó-index;
+  lépcsők: név eleje → telefon vége, ügyfélszám, e-mail eleje → bármely szó eleje (keresztnév, település,
+  utca, 06/+36/előhívó nélküli telefon) → „tartalmazza" csak találat nélkül. Mentéskor frissül (AI-eszköz,
+  demó is); a meglévő sorokat kötegelt háttérfeltöltés tölti (`kereso_hatter`, kérésenként ≤ 1 mp), addig a
+  régi út megy. Böngésző: 3 betűtől, 100 ms késleltetés, AbortController, ugyanarra a szövegre azonnali lista,
+  az összefoglaló nem töltődik újra minden leütésre. A fejléc keresője is ezt használja.
+- **Gyorsítótár** (`SDH_Muhely_Gyorsitotar`): adatverzió a `query` szűrőn (munkalap, ügyfél, eszköz, tétel,
+  pénztár, üzenet, számla … írása érvényteleníti), tranziens + memória. Tárolva: a kezdőképernyő és a csempék
+  számai, a rács találatszáma és összegsora, a listák találatszáma, az eszközkategóriák, a tételnevek (10 perc).
+- **Rács (Áttekintés)**: halasztott összekapcsolás (előbb az oldal azonosítói); a találatszám és az összegsor
+  külön kérésben (`sdh_muhely_racs_osszeg`), a sorok nem várnak rá; index menti rendezés ügyfél, telefon, cím,
+  IMEI, sorozatszám, gyártó, típus, megnevezés és azonosító szerint (szeletek, pontosan a régi sorrend);
+  kereső: ügyfél- és eszközfeltételek allekérdezésben; SQLite-on a szöveges rendezés kis-nagybetű-független
+  (mint MySQL-en). Gépelés-késleltetés 280 → 150 ms.
+- **Listák**: Munkalapok (halasztott összekapcsolás, kereső allekérdezésben), Ügyfelek, Eszközök (join csak
+  kereséskor) – tárolt találatszám; a számozott lapozó kilenc oldal fölött ablakos (első kettő, aktuális ± 2,
+  utolsó kettő, „…") – 500 ezer sornál nem húszezer link.
+- **Indexek**: munkalap (fajta, allapot), (fajta, rend_allapot); eszköz imei2, tipus, megnevezes, kategoria,
+  modositva. Munkalap pénztári összege: két indexelt rész (OR helyett).
+- **Popup**: a betöltés alatt a legutóbbi végleges méretében áll (`popupRogzit`), az illesztés addig szünetel,
+  a beillesztés után egyszer fut (`takeRecords`) – nincs „kinyílás", ugrálás.
+- **Háttérkérések**: egy közös pulzus 30 mp-enként (volt 15), rejtett lapon szünetel; az RMA-jelvény a pulzusban
+  jön (`sdh_muhely_pulzus` szűrő); a csevegő csak látható lapon és látható csevegőnél frissül.
+- **Eszközcsomag a műhely-felületen is** (volt: csak wp-admin): egy CSS + egy JS, fájlonként try-blokkban;
+  `.htaccess` gyorsítótár-szabály a csomag mappájában; a verzióellenőrzés a csomagra is (`data-sdh-*-v`).
+  Beállítások › Rendszer › Sebesség: kiírja az OPcache és a MySQL-puffer állapotát.
+- **Szikra**: az amőba-mozgás azonos görbével, de ~14 kép/mp (a border-radius minden képkockán az egész oldalt
+  újrarajzoltatta).
+- `tools/mero-tesztadat.php` (mérő-adat generálás/törlés, csak tesztadatbázisra; a zipbe és a munkagépre nem
+  kerül), `tools/mero-meres.php` (csak olvasó mérés EXPLAIN-nel – a saját gépen futtatható).
+
 ### 0.63.0
 - **Mezőmemória** (új tábla: `sdh_mezo_emlek`, séma 0.40.0): minden szövegmező megjegyzi, amit beírtak / amire
   kerestek, és gépelés közben felajánlja (`assets/emlek.js`, `SDH_Muhely_Emlek`). Nyíl + Enter, Esc, a × kivesz.

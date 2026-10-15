@@ -804,6 +804,15 @@ a.sdh-kartya:focus-visible {
     color: #fff;
 }
 
+/* Kihagyott oldalak helye a hosszú lapozóban (0.64): csak egy „…", keret nélkül. */
+.sdh-lapozo .sdh-lapozo__kihagy {
+    min-width: 0;
+    padding: 0 .2rem;
+    border-color: transparent;
+    background: transparent;
+    color: var(--sdh-halvany);
+}
+
 /* ================================================================== */
 /* Űrlap                                                               */
 /* ================================================================== */

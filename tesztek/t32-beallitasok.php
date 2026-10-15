@@ -79,7 +79,18 @@ SDH_Muhely_Frontend::keret('Teszt', 'beallitasok', static function (): void {
 $keret = (string) ob_get_clean();
 T::igaz(preg_match('#class="sdh-sav__link[^"]*"\s+href="[^"]*wp-admin#', $keret) !== 1, 'az oldalmenüben nincs wp-adminba mutató link');
 T::tartalmaz($keret, 'muhely=beallitasok', 'az oldalmenü alján a Beállítások a műhely-felületre mutat');
-T::tartalmaz($keret, 'beallitasok.js', 'a Beállítások oldalon betöltődik a saját szkript');
+// 0.64: bekapcsolt Gyors betöltésnél a szkriptek egy csomagban jönnek – akkor a csomagban kell lennie.
+$csomag_js = '';
+
+if (preg_match('#<script src="([^"]+/sdh-muhely-csomag/[^"]+\.js)"#', $keret, $cs) === 1) {
+    $feltoltes = wp_get_upload_dir();
+    $csomag_js = (string) @file_get_contents(str_replace($feltoltes['baseurl'], $feltoltes['basedir'], $cs[1]));
+}
+
+T::igaz(
+    str_contains($keret, 'beallitasok.js') || str_contains($csomag_js, '/* beallitasok.js */'),
+    'a Beállítások oldalon betöltődik a saját szkript'
+);
 T::nem_tartalmaz($keret, 'Karbantartás', 'a wp-adminba vivő „Karbantartás” link megszűnt');
 
 /* --- Lapfülenkénti mentés: a többi beállítás érintetlen ------------------ */

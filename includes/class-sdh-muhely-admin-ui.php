@@ -150,7 +150,8 @@ final class SDH_Muhely_Admin_UI
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
         $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
 
-        $ugyfelek = $wpdb->get_results(
+        // 0.64: az ügyfeleket az ügyfélválasztó gyors (indexelt, lépcsőzetes) keresése adja.
+        $ugyfelek = SDH_Muhely_Ugyfel::kereses($q, 5) ?? $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam
                  FROM {$ugyfel_tabla}
@@ -166,6 +167,8 @@ final class SDH_Muhely_Admin_UI
             )
         );
 
+        // A COALESCE szándékos (0.64): ritka keresett szónál a módosítás indexén végigmenni lassabb, mint
+        // egyszer végigolvasni a táblát (a sorrend ugyanaz: a dátum nélküli eszköz a végére kerül).
         $eszkozok = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT e.id, e.gyarto, e.tipus, e.megnevezes, e.imei, e.sorozatszam,
@@ -175,7 +178,7 @@ final class SDH_Muhely_Admin_UI
                  WHERE e.aktiv = 1
                    AND (e.imei LIKE %s OR e.imei2 LIKE %s OR e.sorozatszam LIKE %s
                         OR e.tipus LIKE %s OR e.megnevezes LIKE %s OR e.modell_szam LIKE %s)
-                 ORDER BY e.modositva DESC LIMIT 5",
+                 ORDER BY COALESCE(e.modositva, '1000-01-01') DESC LIMIT 5",
                 $minta,
                 $minta,
                 $minta,
@@ -693,13 +696,10 @@ final class SDH_Muhely_Admin_UI
     {
         global $wpdb;
 
-        $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
-        $eszkoz_tabla = SDH_Muhely_Schema::tabla('eszkoz');
-
         $munkalap_db = SDH_Muhely_Munkalap::nyitott_db();
 
-        $ugyfel_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$ugyfel_tabla} WHERE aktiv = 1");
-        $eszkoz_db = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$eszkoz_tabla} WHERE aktiv = 1");
+        $ugyfel_db = self::aktiv_db('ugyfel');
+        $eszkoz_db = self::aktiv_db('eszkoz');
 
         $gombok = [
             [
@@ -935,6 +935,16 @@ final class SDH_Muhely_Admin_UI
      * Áttekintés ebből frissíti magát, oldal-újratöltés nélkül (app.js:
      * csempekFrissit). Csak a helyben változó, olcsón számolható értékek.
      */
+    /** Az aktív ügyfelek / eszközök száma – gyorsítótárazva (0.64): változáskor számolódik újra. */
+    public static function aktiv_db(string $tabla): int
+    {
+        global $wpdb;
+
+        $t = SDH_Muhely_Schema::tabla($tabla);
+
+        return (int) SDH_Muhely_Gyorsitotar::ertek('aktiv_db|' . $tabla, static fn (): int => (int) $wpdb->get_var("SELECT COUNT(*) FROM {$t} WHERE aktiv = 1")); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+    }
+
     public static function ajax_csempe_szamok(): void
     {
         check_ajax_referer('sdh_muhely_modal');
@@ -947,8 +957,8 @@ final class SDH_Muhely_Admin_UI
 
         $szamok = [
             'munkalapok' => SDH_Muhely_Munkalap::nyitott_db(),
-            'ugyfelek'   => (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . ' WHERE aktiv = 1'),
-            'eszkozok'   => (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('eszkoz') . ' WHERE aktiv = 1'),
+            'ugyfelek'   => self::aktiv_db('ugyfel'),
+            'eszkozok'   => self::aktiv_db('eszkoz'),
         ];
 
         if (class_exists('SDH_Muhely_Penztar')) {
@@ -1180,6 +1190,42 @@ final class SDH_Muhely_Admin_UI
      * módosítási ideje. Így minden fájlcsere után az első betöltés már az újat
      * kéri, akkor is, ha a PHP-gyorsítótár (OPcache) még a régi verziószámot adná.
      */
+    /**
+     * A számozott lapozó oldalszámai (0.64). Legfeljebb kilenc oldalnál mind; többnél az
+     * első kettő, az aktuális körüli öt és az utolsó kettő, a kihagyott részek helyén 0
+     * (a lapozó ott „…"-ot ír). 500 ezer sornál így nem húszezer link kerül az oldalra.
+     *
+     * @return array<int, int>
+     */
+    public static function lapozo_oldalak(int $oldal, int $oldalak): array
+    {
+        if ($oldalak <= 9) {
+            return $oldalak > 0 ? range(1, $oldalak) : [];
+        }
+
+        $kell = array_unique(array_filter(
+            [1, 2, $oldal - 2, $oldal - 1, $oldal, $oldal + 1, $oldal + 2, $oldalak - 1, $oldalak],
+            static fn (int $i): bool => $i >= 1 && $i <= $oldalak
+        ));
+        sort($kell);
+
+        $ki     = [];
+        $elozo  = 0;
+
+        foreach ($kell as $i) {
+            if ($i - $elozo === 2) {
+                $ki[] = $i - 1; // egyetlen kihagyott oldal: inkább kiírjuk
+            } elseif ($i - $elozo > 2) {
+                $ki[] = 0;
+            }
+
+            $ki[]  = $i;
+            $elozo = $i;
+        }
+
+        return $ki;
+    }
+
     public static function eszkoz_verzio(string $relativ): string
     {
         $ido = @filemtime(SDH_MUHELY_DIR . $relativ);

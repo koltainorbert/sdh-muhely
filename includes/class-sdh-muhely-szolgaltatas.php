@@ -878,13 +878,14 @@ final class SDH_Muhely_Szolgaltatas
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozo">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <?php if ($i === $oldal) : ?>
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
                             <a href="<?php echo esc_url(self::url(array_merge($alap, ['oldalszam' => $i]))); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>

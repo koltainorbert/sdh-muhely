@@ -107,15 +107,48 @@
         inset 0 4px 10px rgba(255, 255, 255, .35),
         0 10px 26px color-mix(in srgb, var(--sdh-ai-a) 45%, transparent),
         0 0 0 1px rgba(255, 255, 255, .25);
-    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-ai-legzes 4.2s ease-in-out infinite;
+    animation: sdh-ai-amoba 9s steps(4) infinite, sdh-ai-legzes 4.2s ease-in-out infinite;
 }
 
 /* Az amőbaszerű, lassan változó test – ettől „élő". */
+/* 0.64: az amőba-mozgás a régi ease-in-out görbe mentén, sűrű kulcskockákkal, kulcskockánként 4
+   lépésben (~14 kép/mp). A border-radius változása minden képkockán az egész oldalt újrarajzoltatta
+   (az Áttekintésen a böngésző munkájának kb. harmada); így negyedannyiszor, és a lépések (a figura
+   méreténél egy képpont tört része) nem látszanak. */
 @keyframes sdh-ai-amoba {
-    0%, 100% { border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%; }
+    0% { border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%; }
+    3.12% { border-radius: 46.25% 53.75% 51.75% 48.25% / 51.81% 46.31% 53.69% 48.19%; }
+    6.25% { border-radius: 47.03% 52.97% 50.97% 49.03% / 51.23% 47.29% 52.71% 48.77%; }
+    9.38% { border-radius: 48.34% 51.66% 49.66% 50.34% / 50.24% 48.93% 51.07% 49.76%; }
+    12.5% { border-radius: 50% 50% 48% 52% / 49% 51% 49% 51%; }
+    15.62% { border-radius: 51.66% 48.34% 46.34% 53.66% / 47.76% 53.07% 46.93% 52.24%; }
+    18.75% { border-radius: 52.97% 47.03% 45.03% 54.97% / 46.77% 54.71% 45.29% 53.23%; }
+    21.88% { border-radius: 53.75% 46.25% 44.25% 55.75% / 46.19% 55.69% 44.31% 53.81%; }
     25% { border-radius: 54% 46% 44% 56% / 46% 56% 44% 54%; }
+    28.12% { border-radius: 53.88% 46.12% 44.37% 55.63% / 46.31% 55.75% 44.25% 53.69%; }
+    31.25% { border-radius: 53.48% 46.52% 45.55% 54.45% / 47.29% 54.97% 45.03% 52.71%; }
+    34.38% { border-radius: 52.83% 47.17% 47.51% 52.49% / 48.93% 53.66% 46.34% 51.07%; }
+    37.5% { border-radius: 52% 48% 50% 50% / 51% 52% 48% 49%; }
+    40.62% { border-radius: 51.17% 48.83% 52.49% 47.51% / 53.07% 50.34% 49.66% 46.93%; }
+    43.75% { border-radius: 50.52% 49.48% 54.45% 45.55% / 54.71% 49.03% 50.97% 45.29%; }
+    46.88% { border-radius: 50.12% 49.88% 55.63% 44.37% / 55.69% 48.25% 51.75% 44.31%; }
     50% { border-radius: 50% 50% 56% 44% / 56% 48% 52% 44%; }
+    53.12% { border-radius: 49.81% 50.19% 55.81% 44.19% / 55.75% 48.12% 51.88% 44.25%; }
+    56.25% { border-radius: 49.23% 50.77% 55.23% 44.77% / 54.97% 48.52% 51.48% 45.03%; }
+    59.38% { border-radius: 48.24% 51.76% 54.24% 45.76% / 53.66% 49.17% 50.83% 46.34%; }
+    62.5% { border-radius: 47% 53% 53% 47% / 52% 50% 50% 48%; }
+    65.62% { border-radius: 45.76% 54.24% 51.76% 48.24% / 50.34% 50.83% 49.17% 49.66%; }
+    68.75% { border-radius: 44.77% 55.23% 50.77% 49.23% / 49.03% 51.48% 48.52% 50.97%; }
+    71.88% { border-radius: 44.19% 55.81% 50.19% 49.81% / 48.25% 51.88% 48.12% 51.75%; }
     75% { border-radius: 44% 56% 50% 50% / 48% 52% 48% 52%; }
+    78.12% { border-radius: 44.06% 55.94% 50.06% 49.94% / 48.12% 51.81% 48.19% 51.88%; }
+    81.25% { border-radius: 44.26% 55.74% 50.26% 49.74% / 48.52% 51.23% 48.77% 51.48%; }
+    84.38% { border-radius: 44.59% 55.41% 50.59% 49.41% / 49.17% 50.24% 49.76% 50.83%; }
+    87.5% { border-radius: 45% 55% 51% 49% / 50% 49% 51% 50%; }
+    90.62% { border-radius: 45.41% 54.59% 51.41% 48.59% / 50.83% 47.76% 52.24% 49.17%; }
+    93.75% { border-radius: 45.74% 54.26% 51.74% 48.26% / 51.48% 46.77% 53.23% 48.52%; }
+    96.88% { border-radius: 45.94% 54.06% 51.94% 48.06% / 51.88% 46.19% 53.81% 48.12%; }
+    100% { border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%; }
 }
 
 @keyframes sdh-ai-legzes {
@@ -642,7 +675,7 @@
     border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%;
     background: linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
     box-shadow: 0 0 14px color-mix(in srgb, var(--sdh-ai-a) 50%, transparent);
-    animation: sdh-ai-amoba 9s ease-in-out infinite;
+    animation: sdh-ai-amoba 9s steps(4) infinite;
 }
 
 .sdh-ai-mini span {
@@ -1608,7 +1641,7 @@
 }
 
 .sdh-ai[data-allapot="szedul"] .sdh-ai__test {
-    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-ai-szedul 1s ease-in-out infinite;
+    animation: sdh-ai-amoba 9s steps(4) infinite, sdh-ai-szedul 1s ease-in-out infinite;
 }
 
 @keyframes sdh-ai-szedul-szem {
@@ -1848,7 +1881,7 @@
 /* ---- Séta a képernyő alján ---- */
 
 .sdh-ai.is-setal .sdh-ai__test {
-    animation: sdh-ai-amoba 9s ease-in-out infinite, sdh-ai-totyog .42s ease-in-out infinite alternate;
+    animation: sdh-ai-amoba 9s steps(4) infinite, sdh-ai-totyog .42s ease-in-out infinite alternate;
 }
 
 .sdh-ai.is-setal .sdh-ai__lab--b { animation: sdh-ai-lab .21s ease-in-out infinite alternate; }

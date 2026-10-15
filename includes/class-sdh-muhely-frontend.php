@@ -418,43 +418,16 @@ final class SDH_Muhely_Frontend
                 }());
             </script>
 
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naptar.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naptar.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/szikra-elet.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/szikra-elet.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.css')); ?>">
-            <?php // Napló, lezárt lap, RMA-matrica (0.59): a munkalap popupja bárhol megnyílhat. ?>
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.css')); ?>">
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.css')); ?>">
-            <?php // Űrlap-beállítások (0.62.0): a fogaskerék a munkalap / eladás / számla ablakában, bármelyik oldalon. ?>
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/urlap-beallitas.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/urlap-beallitas.css')); ?>">
-            <?php // Mezőmemória és Gyakori tételek (0.63.0). ?>
-            <link rel="stylesheet"
-                  href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/emlek.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/emlek.css')); ?>">
-            <?php if ($aktiv_kulcs === 'attekintes') : ?>
-                <link rel="stylesheet"
-                      href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.css')); ?>">
-            <?php endif; ?>
+            <?php
+            // A stíluslapok sorrendben (0.64: a Gyors betöltés bekapcsolva egyetlen fájlba fűzve jönnek).
+            $sdh_css = ['assets/admin.css', 'assets/app.css', 'assets/levelezes.css', 'assets/penztar.css', 'assets/csapat.css', 'assets/naptar.css', 'assets/asszisztens.css', 'assets/szikra-elet.css', 'assets/sugo.css', 'assets/nyomtatas.css', 'assets/sms.css', 'assets/naplo.css', 'assets/matrica.css', 'assets/urlap-beallitas.css', 'assets/emlek.css'];
+
+            if ($aktiv_kulcs === 'attekintes') {
+                $sdh_css[] = 'assets/racs.css';
+            }
+
+            self::eszkozok_ki($sdh_css, 'css');
+            ?>
             <?php // Az Arculat beállításából adódó stílus (egyéni kiemelő szín, lekerekítés) – a stíluslapok után. ?>
             <?php if (SDH_Muhely_Arculat::stilus_css() !== '') : ?>
                 <style id="sdh-arculat"><?php echo SDH_Muhely_Arculat::stilus_css(); // phpcs:ignore WordPress.Security.EscapeOutput -- csak ellenőrzött színkódok és rögzített értékek. ?></style>
@@ -663,41 +636,74 @@ final class SDH_Muhely_Frontend
                 echo wp_json_encode(SDH_Muhely_Admin_UI::js_beallitas('frontend'));
             ?>;
         </script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/app.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')); ?>"></script>
-        <?php if ($aktiv_kulcs === 'attekintes') : ?>
-            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/racs.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/racs.js')); ?>"></script>
-        <?php endif; ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/rma.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/rma.js')); ?>"></script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/levelezes.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/levelezes.js')); ?>"></script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/penztar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/penztar.js')); ?>"></script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/eladas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/eladas.js')); ?>"></script>
-        <?php // Nyomtatás: a Nyomtatás ablak és a felajánlás bármelyik oldalon megjelenhet. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/nyomtatas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/nyomtatas.js')); ?>"></script>
-        <?php // SMS: a „Küldjek SMS-t?” popup státuszváltás után, bármelyik oldalon. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sms.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sms.js')); ?>"></script>
-        <?php // Napló ablak, lezárt lap zárolása, RMA-matrica (0.59): bármelyik oldalon. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naplo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naplo.js')); ?>"></script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/matrica.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/matrica.js')); ?>"></script>
-        <?php // Űrlap-beállítások (0.62.0): fogaskerék, élő kapcsolás, a számla „tételei rajta" kapcsolója. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/urlap-beallitas.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/urlap-beallitas.js')); ?>"></script>
-        <?php // Mezőmemória és Gyakori tételek (0.63.0): minden mező felajánlja, amit már beírtak. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/emlek.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/emlek.js')); ?>"></script>
-        <?php if ($aktiv_kulcs === 'beallitasok') : ?>
-            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/beallitasok.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/beallitasok.js')); ?>"></script>
-        <?php endif; ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/csapat.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/csapat.js')); ?>"></script>
-        <?php // Naptár: az esedékes események kártyái minden oldalon megjelennek (a pulzusból), ezért mindenhol betölt. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/naptar.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/naptar.js')); ?>"></script>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/asszisztens.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/asszisztens.js')); ?>"></script>
-        <?php // Szikra élete (0.59.4): mimikák, szükségletek, jelenetek – az asszisztens.js SDH_SZIKRA felületére épül. ?>
-        <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/szikra-elet.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/szikra-elet.js')); ?>"></script>
-        <?php if ($aktiv_kulcs === 'sugo') : ?>
-            <script src="<?php echo esc_url(SDH_MUHELY_URL . 'assets/sugo.js?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/sugo.js')); ?>"></script>
-        <?php endif; ?>
+        <?php
+        // A szkriptek sorrendben (0.64: a Gyors betöltés bekapcsolva egyetlen fájlba fűzve jönnek).
+        // Az app.js az első: a többi az SDH_MUHELY_APP felületére épül.
+        $sdh_js = ['assets/app.js'];
 
+        if ($aktiv_kulcs === 'attekintes') {
+            $sdh_js[] = 'assets/racs.js';
+        }
+
+        // RMA, levelezés, pénztár, eladás; a Nyomtatás ablak és felajánlás, az „SMS-t küldjek?" popup,
+        // a Napló ablak, a lezárt lap, az RMA-matrica, a fogaskerék és a mezőmemória – mind bármelyik
+        // oldalon megnyílhat (a munkalap popupja mindenhol elérhető).
+        array_push($sdh_js, 'assets/rma.js', 'assets/levelezes.js', 'assets/penztar.js', 'assets/eladas.js', 'assets/nyomtatas.js',
+            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js');
+
+        if ($aktiv_kulcs === 'beallitasok') {
+            $sdh_js[] = 'assets/beallitasok.js';
+        }
+
+        // Csapat (pulzus), naptár (az esedékes események kártyái minden oldalon), az asszisztens és Szikra élete.
+        array_push($sdh_js, 'assets/csapat.js', 'assets/naptar.js', 'assets/asszisztens.js', 'assets/szikra-elet.js');
+
+        if ($aktiv_kulcs === 'sugo') {
+            $sdh_js[] = 'assets/sugo.js';
+        }
+
+        self::eszkozok_ki($sdh_js, 'js');
+        ?>
         </body>
         </html>
         <?php
+    }
+
+    /**
+     * Stíluslapok vagy szkriptek kiírása: bekapcsolt „Gyors betöltés" mellett egyetlen
+     * összefűzött fájlként (SDH_Muhely_Csomag), különben – vagy ha a csomag nem készülhet
+     * el – egyenként, ugyanabban a sorrendben, ahogy eddig (0.64).
+     *
+     * A csomag címkéjén ott az admin.css és az app.js verziója is (data-sdh-css-v /
+     * data-sdh-js-v): az app.js ebből ismeri fel, ha frissítés után régi oldal fut.
+     *
+     * @param array<int, string> $relativ A plugin mappájához viszonyított utak.
+     */
+    private static function eszkozok_ki(array $relativ, string $fajta): void
+    {
+        $csomag = class_exists('SDH_Muhely_Csomag') ? SDH_Muhely_Csomag::fajlokbol($relativ, $fajta) : '';
+
+        if ($csomag !== '') {
+            if ($fajta === 'css') {
+                echo '<link rel="stylesheet" href="' . esc_url($csomag) . '" data-sdh-csomag data-sdh-css-v="'
+                    . esc_attr(SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')) . '">' . "\n";
+            } else {
+                echo '<script src="' . esc_url($csomag) . '" data-sdh-csomag data-sdh-js-v="'
+                    . esc_attr(SDH_Muhely_Admin_UI::eszkoz_verzio('assets/app.js')) . '"></script>' . "\n";
+            }
+
+            return;
+        }
+
+        foreach ($relativ as $ut) {
+            $cim = SDH_MUHELY_URL . $ut . '?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio($ut);
+
+            if ($fajta === 'css') {
+                echo '<link rel="stylesheet" href="' . esc_url($cim) . '">' . "\n";
+            } else {
+                echo '<script src="' . esc_url($cim) . '"></script>' . "\n";
+            }
+        }
     }
 
     /* =================================================================

@@ -151,10 +151,23 @@
             .catch(function () {});
     }
 
+    // 0.64: ha fut a közös háttérkérés (pulzus, csapat.js), a jelvény abból frissül – nincs külön kérés.
+    document.addEventListener('sdh:pulzus', function (ev) {
+        var d = ev.detail || {};
+
+        if (d.rma && typeof d.rma.olvasatlan !== 'undefined') {
+            menuJelveny(d.rma.olvasatlan);
+        }
+    });
+
     if (B.ajax) {
-        setInterval(frissit, FRISSITES_MS);
+        setInterval(function () {
+            if (!window.SDH_CSAPAT) {
+                frissit();
+            }
+        }, FRISSITES_MS);
         document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'visible') {
+            if (document.visibilityState === 'visible' && !window.SDH_CSAPAT) {
                 frissit();
             }
         });
@@ -398,6 +411,11 @@
             }
 
             var latszik = szal.offsetParent !== null;
+
+            // 0.64: rejtett lapon, és ha a csevegő nem látszik (pl. másik lapfül), nem kérdez.
+            if (document.visibilityState === 'hidden' || !latszik) {
+                return;
+            }
 
             chat.sdhKer = true;
 

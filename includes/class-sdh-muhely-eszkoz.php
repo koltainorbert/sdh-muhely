@@ -252,10 +252,11 @@ final class SDH_Muhely_Eszkoz
         $hol = 'WHERE ' . implode(' AND ', $feltetelek);
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        $osszesen = (int) $wpdb->get_var(
+        // 0.64: az ügyfél csak a keresésnél kell a számláláshoz (u.nev), és a szám tárolva van.
+        $osszesen = SDH_Muhely_Gyorsitotar::szam(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM {$eszkoz_tabla} e
-                 LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id {$hol}",
+                "SELECT COUNT(*) FROM {$eszkoz_tabla} e"
+                . ($kereses !== '' ? " LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id" : '') . " {$hol}",
                 $ertekek
             )
         );
@@ -416,7 +417,8 @@ final class SDH_Muhely_Eszkoz
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozo">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <?php if ($i === $oldal) : ?>
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
@@ -434,7 +436,7 @@ final class SDH_Muhely_Eszkoz
                             ?>
                             <a href="<?php echo esc_url($lap_url); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>

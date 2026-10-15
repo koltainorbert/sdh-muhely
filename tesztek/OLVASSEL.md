@@ -47,3 +47,5 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.
 A korábbi (0.42.0-ig írt) t14–t21 tesztek csak a felhős munkakörnyezetben éltek, és azzal együtt elvesztek –
 ezért kerültek a tesztek a repóba.
+| `t58-ugyfelkereso` | gyors ügyfélkereső: keresőszöveg és szó-index, séma és indexek, mentéskor / bármely azonosító szerinti íráskor frissül, kötegelt háttérfeltöltés, gyors út ⊇ régi út, „tartalmazza" csak találat nélkül, ügyféllista, böngészőoldal (100 ms, megszakítás, azonnali lista) |
+| `t59-racs-sebesseg` | gyorsítótár (érvénytelenítés, takarítás), kezdőképernyő-számok, rács: halasztott számlálás, index menti rendezés = teljes ORDER BY, kereső-allekérdezés = régi találatszám; listák (találatszám, sorrend), ablakos lapozó, pénztári összeg, fejléc-kereső, szerverállapot, felület-csomag |

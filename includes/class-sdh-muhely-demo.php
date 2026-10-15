@@ -139,6 +139,7 @@ final class SDH_Muhely_Demo
 
                 $id = (int) $wpdb->insert_id;
                 $wpdb->update($ugyfel_tabla, ['ugyfel_szam' => sprintf('U-%06d', $id)], ['id' => $id]);
+                SDH_Muhely_Ugyfel::kereso_frissit($id);
                 $uj_ugyfel++;
             }
 

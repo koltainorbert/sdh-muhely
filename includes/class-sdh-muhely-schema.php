@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.40.0';
+    public const DB_VERSION = '0.43.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -102,6 +102,7 @@ final class SDH_Muhely_Schema
     private static function tabla_definiciok(string $charset): array
     {
         $ugyfel = self::tabla('ugyfel');
+        $ugyfel_szo = self::tabla('ugyfel_szo');
         $eszkoz = self::tabla('eszkoz');
         $tac    = self::tabla('tac');
         $munkalap = self::tabla('munkalap');
@@ -200,13 +201,36 @@ final class SDH_Muhely_Schema
             letrehozva datetime NULL,
             modositva datetime NULL,
             letrehozo bigint(20) unsigned NOT NULL default 0,
+            kereso varchar(190) NOT NULL default '',
+            tel_ford varchar(40) NOT NULL default '',
+            cim_rendez varchar(190) NOT NULL default '',
             PRIMARY KEY  (id),
             key ugyfel_szam (ugyfel_szam),
             key nev (nev),
             key telefon (telefon),
             key email (email),
             key aktiv (aktiv),
-            key kulso_azonosito (kulso_azonosito)
+            key kulso_azonosito (kulso_azonosito),
+            key kereso (kereso),
+            key tel_ford (tel_ford),
+            key cim_rendez (cim_rendez)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Ügyfél – szó-index (0.64)
+         *
+         * Az ügyfélkereső „szó eleje" lépcsője: minden ügyfél keresőszavai
+         * (név, település, cím, e-mail szavai; telefonszámok több alakban;
+         * ügyfélszám), kisbetűsen, ékezet nélkül. A „kezdődik vele" keresés
+         * így a keresztnévre, a településre vagy a 06-os telefonra is indexről
+         * megy. Származtatott adat: a SDH_Muhely_Ugyfel tölti mentéskor, és a
+         * meglévő ügyfeleknél egyszer, kötegelve. A változásnapló kihagyja.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$ugyfel_szo} (
+            szo varchar(40) NOT NULL default '',
+            ugyfel_id bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (szo,ugyfel_id),
+            key ugyfel_id (ugyfel_id)
         ) {$charset};";
 
         /* -------------------------------------------------------------
@@ -262,8 +286,13 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             key ugyfel_id (ugyfel_id),
             key imei (imei),
+            key imei2 (imei2),
             key sorozatszam (sorozatszam),
             key gyarto (gyarto),
+            key tipus (tipus),
+            key megnevezes (megnevezes),
+            key kategoria (kategoria),
+            key modositva (modositva),
             key aktiv (aktiv),
             key kulso_azonosito (kulso_azonosito)
         ) {$charset};";
@@ -412,6 +441,8 @@ final class SDH_Muhely_Schema
             key fajta (fajta),
             key fajta_szam (fajta,munkalap_szam),
             key fajta_keszult (fajta,keszult),
+            key fajta_allapot (fajta,allapot),
+            key fajta_rend (fajta,rend_allapot),
             key rma_token (rma_token),
             key allapot (allapot),
             key ugyfel_id (ugyfel_id),

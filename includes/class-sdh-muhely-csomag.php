@@ -119,6 +119,8 @@ class SDH_Muhely_Csomag
             return '';
         }
 
+        self::fejlec_szabaly($mappa);
+
         $szoveg = '';
 
         foreach ($fajlok as $fajl) {
@@ -129,7 +131,11 @@ class SDH_Muhely_Csomag
             }
 
             // A fájl neve a csomagban is látszik: így a böngésző hibaüzenete is értelmezhető marad.
-            $szoveg .= '/* ' . basename($fajl) . " */\n" . $tartalom . "\n";
+            // Szkriptnél (0.64) minden fájl saját try-blokkban fut: ha az egyik indulás közben hibát dob,
+            // a többi ugyanúgy elindul, mint külön fájlként (a fájlok önálló függvényblokkok).
+            $szoveg .= $kiterjesztes === 'js'
+                ? '/* ' . basename($fajl) . " */\ntry {\n" . $tartalom . "\n} catch (sdhHiba) { if (window.console) { console.error('SDH Műhely – " . basename($fajl) . "', sdhHiba); } }\n"
+                : '/* ' . basename($fajl) . " */\n" . $tartalom . "\n";
         }
 
         // Ideiglenes néven írunk, majd átnevezünk: fél fájlt soha nem szolgálunk ki.
@@ -148,6 +154,55 @@ class SDH_Muhely_Csomag
         self::takarit($mappa);
 
         return $cim;
+    }
+
+    /**
+     * Csomag a műhely-felület (Frontend::keret) fájljaiból (0.64).
+     *
+     * A wp-admin a WordPress sorából csomagol (osszevon); a műhely-felület saját
+     * kezűleg sorolja fel az eszközeit – ez a függvény azokat fűzi össze, ugyanúgy.
+     * Üres sztringet ad, ha ki van kapcsolva, vagy ha nem sikerül (ilyenkor a
+     * felület a fájlokat egyenként tölti be, ahogy eddig).
+     *
+     * @param array<int, string> $relativ A plugin mappájához viszonyított utak (assets/…).
+     */
+    public static function fajlokbol(array $relativ, string $fajta): string
+    {
+        if (!self::be() || count($relativ) < 2 || !in_array($fajta, ['js', 'css'], true)) {
+            return '';
+        }
+
+        $fajlok = [];
+        $reszek = [SDH_MUHELY_VERSION, $fajta, 'felulet'];
+
+        foreach ($relativ as $ut) {
+            $fajl = self::fajl(SDH_MUHELY_URL . $ut);
+
+            if ($fajl === '') {
+                return '';
+            }
+
+            $fajlok[] = $fajl;
+            $reszek[] = $ut . '|' . (string) filemtime($fajl);
+        }
+
+        return self::csomagol($fajlok, $fajta, substr(md5(implode("\n", $reszek)), 0, 16));
+    }
+
+    /**
+     * Apache alatt (.htaccess) a csomagok egy évig gyorsítótárazhatók: a nevükben a tartalom
+     * lenyomata van, új tartalom új nevet kap. (Nginx – LocalWP alapból – ezt a fájlt nem olvassa;
+     * ott a súgó Sebesség fejezete mondja meg, mit kell beállítani.)
+     */
+    private static function fejlec_szabaly(string $mappa): void
+    {
+        $ut = $mappa . '/.htaccess';
+
+        if (is_file($ut)) {
+            return;
+        }
+
+        @file_put_contents($ut, "<IfModule mod_headers.c>\n    <FilesMatch \"^sdh-[0-9a-f]+\\.(js|css)$\">\n        Header set Cache-Control \"public, max-age=31536000, immutable\"\n    </FilesMatch>\n</IfModule>\n"); // phpcs:ignore
     }
 
     /** A régi csomagok törlése (verziónként keletkezik egy-egy új). */
@@ -315,8 +370,53 @@ class SDH_Muhely_Csomag
                     magától új csomag készül, a régieket a rendszer takarítja – nincs mit üríteni.
                 </p>
             <?php endif; ?>
+
+            <?php $szerver = self::szerver_allapot(); ?>
+            <p class="sdh-sugo" data-sdh-szerver-allapot>
+                <strong>Szerver:</strong>
+                PHP OPcache: <strong><?php echo esc_html($szerver['opcache']); ?></strong> ·
+                MySQL puffer: <strong><?php echo esc_html($szerver['puffer']); ?></strong>
+                <?php if ($szerver['tanacs'] !== '') : ?>
+                    <br><?php echo esc_html($szerver['tanacs']); ?>
+                <?php endif; ?>
+            </p>
         </div>
         <?php
+    }
+
+    /**
+     * A sebességhez fontos két szerverbeállítás (0.64): a webszerver PHP-jának OPcache-e és
+     * a MySQL / MariaDB InnoDB-puffere. Csak olvas.
+     *
+     * @return array{opcache: string, puffer: string, tanacs: string}
+     */
+    public static function szerver_allapot(): array
+    {
+        global $wpdb;
+
+        $opcache = function_exists('opcache_get_status') ? @opcache_get_status(false) : false; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+        $be      = is_array($opcache) && !empty($opcache['opcache_enabled']);
+        $mb      = 0;
+
+        if (!(class_exists('WP_SQLite_DB', false) && $wpdb instanceof WP_SQLite_DB)) {
+            $mb = (int) round((int) $wpdb->get_var('SELECT @@innodb_buffer_pool_size') / 1048576);
+        }
+
+        $tanacs = [];
+
+        if (!$be) {
+            $tanacs[] = 'Kapcsold be az OPcache-t (Súgó › Hibaelhárítás › Sebesség).';
+        }
+
+        if ($mb > 0 && $mb < 512) {
+            $tanacs[] = 'Növeld a MySQL pufferét legalább 512 MB-ra (Súgó › Hibaelhárítás › Sebesség).';
+        }
+
+        return [
+            'opcache' => $be ? 'be' : 'ki',
+            'puffer'  => $mb > 0 ? $mb . ' MB' : 'nem MySQL (SQLite)',
+            'tanacs'  => implode(' ', $tanacs),
+        ];
     }
 
     public static function beallitas_mentes(): void

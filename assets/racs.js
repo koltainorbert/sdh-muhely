@@ -818,6 +818,20 @@
 
         tbody.innerHTML = html;
 
+        rajzolLab(lathato);
+    }
+
+    /** Az összesítő sor (a halasztott számlálás végén külön is frissül). */
+    function rajzolLab(lathato) {
+        lathato = lathato || lathatoOszlopok();
+
+        // A számlálás még tart (0.64: a sorok nem várnak rá) – az összegsor a válasszal jön.
+        if (!adat || adat.osszesen === null) {
+            tfoot.innerHTML = '';
+
+            return;
+        }
+
         if (A.osszeg && lathato.length) {
             var lab = '<tr>';
 
@@ -847,11 +861,13 @@
         eszkoztar.querySelector('[data-nezetnev]').textContent =
             (nezet ? nezet.nev : 'Egyéni szűrés') + (nezet && nezetModosult() ? ' •' : '');
 
+        var szamolva = !!adat && adat.osszesen !== null;
+
         eszkoztar.querySelector('[data-oldal]').textContent = adat
-            ? adat.oldal + ' / ' + szam(adat.oldalak)
+            ? adat.oldal + ' / ' + (szamolva ? szam(adat.oldalak) : '…')
             : '…';
 
-        eszkoztar.querySelector('[data-talalat]').textContent = adat
+        eszkoztar.querySelector('[data-talalat]').textContent = szamolva
             ? szam(adat.osszesen) + ' munkalap'
             : '';
 
@@ -859,9 +875,10 @@
             eszkoztar.querySelector('[data-m="' + m + '"]').disabled = !adat || adat.oldal <= 1;
         });
 
-        ['kovetkezo', 'utolso'].forEach(function (m) {
-            eszkoztar.querySelector('[data-m="' + m + '"]').disabled = !adat || adat.oldal >= adat.oldalak;
-        });
+        // Amíg a számlálás tart: tovább akkor lehet lapozni, ha ez az oldal tele van; az utolsóra csak utána.
+        eszkoztar.querySelector('[data-m="kovetkezo"]').disabled = !adat ||
+            (szamolva ? adat.oldal >= adat.oldalak : adat.sorok.length < adat.meret);
+        eszkoztar.querySelector('[data-m="utolso"]').disabled = !adat || !szamolva || adat.oldal >= adat.oldalak;
 
         // A törlés az alapnézetre áll vissza: akkor él, ha attól bármi eltér
         // (szűrő, kereső, rendezés vagy más nézet).
@@ -919,17 +936,21 @@
         kerMegszakito = window.AbortController ? new AbortController() : null;
         keret.classList.add('is-toltes');
 
-        return kuld('sdh_muhely_racs_adat', {
-            allapot: JSON.stringify({
-                oldal: A.oldal,
-                meret: A.meret,
-                rendezes: A.rendezes,
-                szurok: A.szurok,
-                q: A.q,
-                lathato: lathatoOszlopok().map(function (o) {
-                    return o.k;
-                })
+        var allapotJson = JSON.stringify({
+            oldal: A.oldal,
+            meret: A.meret,
+            rendezes: A.rendezes,
+            szurok: A.szurok,
+            q: A.q,
+            lathato: lathatoOszlopok().map(function (o) {
+                return o.k;
             })
+        });
+
+        return kuld('sdh_muhely_racs_adat', {
+            allapot: allapotJson,
+            // 0.64: ha a találatszám még nincs kiszámolva, a sorok nem várnak rá (osszegKer).
+            kesobb: '1'
         }, kerMegszakito ? kerMegszakito.signal : undefined)
             .then(function (valasz) {
                 if (sorszam !== kerSorszam) {
@@ -950,6 +971,10 @@
 
                 rajzolSorok();
                 frissitEszkoztar();
+
+                if (adat.osszesen === null) {
+                    osszegKer(sorszam, allapotJson);
+                }
 
                 if (kijeloltId !== elozo || !opciok.csendben) {
                     reszletTolt(kijeloltId);
@@ -976,9 +1001,27 @@
             });
     }
 
+    /** A halasztott találatszám és összegsor (a sorok már kint vannak). */
+    function osszegKer(sorszam, allapotJson) {
+        kuld('sdh_muhely_racs_osszeg', { allapot: allapotJson }, kerMegszakito ? kerMegszakito.signal : undefined)
+            .then(function (valasz) {
+                if (sorszam !== kerSorszam || !adat) {
+                    return;
+                }
+
+                adat.osszesen = valasz.osszesen;
+                adat.oldalak = valasz.oldalak;
+                adat.osszegek = valasz.osszegek;
+
+                rajzolLab();
+                frissitEszkoztar();
+            })
+            .catch(function () { /* a következő lekérés újra hozza */ });
+    }
+
     var lekerKesve = kesleltet(function () {
         leker({ csendben: true });
-    }, 280);
+    }, 150); // 0.64: 280 → 150 ms (a kereső és a szűrők gépelése)
 
     /** Szűrő, rendezés vagy nézet változott: első oldal, mentés, lekérés. */
     function valtozott(azonnal) {

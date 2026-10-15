@@ -2,7 +2,8 @@
  * SDH Műhely – Csapat: belső üzenetek (0.38).
  *
  * Két része van:
- *  1. MINDEN CRM-oldalon: a „pulzus" – 15 másodpercenként megnézi az
+ *  1. MINDEN CRM-oldalon: a „pulzus" – 30 másodpercenként (0.64; rejtett lapon
+ *     szünetel, visszatéréskor azonnal fut) megnézi az
  *     olvasatlanokat (oldalmenü jelvénye), az új üzenetekből felugró kártyát
  *     mutat (gyors válasszal), a fontos üzenetet felugró ablakban hozza,
  *     amíg nyugtázzák. A választ `sdh:pulzus` eseményként továbbadja – az
@@ -118,6 +119,7 @@
     var MAX_KULCS = 'sdh-cs-max';
     var utana = 0;
     var pulzusIdozito = 0;
+    var PULZUS_MS = 30000;
     var eredetiCim = document.title.replace(/^\(\d+\+?\)\s*/, '');
     var latottFontos = {};
 
@@ -154,6 +156,11 @@
     function pulzus() {
         window.clearTimeout(pulzusIdozito);
 
+        // Rejtett lapon nem kérdez (0.64): a lap láthatóvá válásakor (visibilitychange) azonnal fut.
+        if (document.visibilityState === 'hidden') {
+            return;
+        }
+
         kerdes('pulzus', { utana: utana })
             .then(function (d) {
                 jelveny(d.olvasatlan);
@@ -188,7 +195,13 @@
             })
             .catch(function () { /* hálózati hiba: a következő ütem újrapróbálja */ })
             .then(function () {
-                pulzusIdozito = window.setTimeout(pulzus, document.visibilityState === 'visible' ? 15000 : 60000);
+                // 0.64: ez az EGYETLEN közös háttérkérés (csapat, naptár, asszisztens, RMA-jelvény):
+                // látható lapon 30 mp-enként, rejtett lapon egyáltalán nem – visszatéréskor azonnal fut.
+                window.clearTimeout(pulzusIdozito);
+
+                if (document.visibilityState === 'visible') {
+                    pulzusIdozito = window.setTimeout(pulzus, PULZUS_MS);
+                }
             });
     }
 

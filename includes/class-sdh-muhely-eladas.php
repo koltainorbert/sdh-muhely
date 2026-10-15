@@ -670,9 +670,9 @@ final class SDH_Muhely_Eladas
     {
         global $wpdb;
 
-        return (int) $wpdb->get_var(
+        return (int) SDH_Muhely_Gyorsitotar::ertek('erkezett_db', static fn (): int => (int) $wpdb->get_var(
             'SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('munkalap') . " WHERE fajta = 'rendeles' AND rend_allapot = 'megerkezett'"
-        );
+        ));
     }
 
     /** A még át nem adott (nyitott) rendelések száma – az Áttekintés csempéje. */
@@ -685,10 +685,10 @@ final class SDH_Muhely_Eladas
 
         if ($zart !== []) {
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- csak helyőrzők kerülnek bele.
-            return (int) $wpdb->get_var($wpdb->prepare($sql . ' AND allapot NOT IN (' . implode(',', array_fill(0, count($zart), '%s')) . ')', $zart));
+            $sql = $wpdb->prepare($sql . ' AND allapot NOT IN (' . implode(',', array_fill(0, count($zart), '%s')) . ')', $zart);
         }
 
-        return (int) $wpdb->get_var($sql); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        return (int) SDH_Muhely_Gyorsitotar::ertek('nyitott_rendeles_db|' . $sql, static fn (): int => (int) $wpdb->get_var($sql)); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
     }
 
     /** A mai árukiadások száma – az Áttekintés csempéje. */
@@ -696,10 +696,12 @@ final class SDH_Muhely_Eladas
     {
         global $wpdb;
 
-        return (int) $wpdb->get_var($wpdb->prepare(
+        $ma = current_time('Y-m-d');
+
+        return (int) SDH_Muhely_Gyorsitotar::ertek('mai_arukiadas_db|' . $ma, static fn (): int => (int) $wpdb->get_var($wpdb->prepare(
             'SELECT COUNT(*) FROM ' . SDH_Muhely_Schema::tabla('munkalap') . " WHERE fajta = 'arukiadas' AND keszult = %s",
-            current_time('Y-m-d')
-        ));
+            $ma
+        )));
     }
 
     /* =================================================================
@@ -1610,7 +1612,8 @@ final class SDH_Muhely_Eladas
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozo">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <?php if ($i === $oldal) : ?>
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
@@ -1621,7 +1624,7 @@ final class SDH_Muhely_Eladas
                                 'torzs'     => $torzs > 0 ? $torzs : null,
                             ], static fn ($e): bool => $e !== null))); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>

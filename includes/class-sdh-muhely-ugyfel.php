@@ -40,6 +40,36 @@ final class SDH_Muhely_Ugyfel
     /** Hány sor egy oldalon. */
     private const OLDAL_MERET = 25;
 
+    /** A gyorskereső oszlopainak állapota: KERESO_KESZ, ha minden meglévő sor fel van töltve. */
+    public const KERESO_ALLAPOT = 'sdh_muhely_kereso_allapot';
+
+    /** A kész feltöltés jele (ha a kereső adatai bővülnek, ez lép – a feltöltés újrafut). */
+    public const KERESO_KESZ = 'kesz-2';
+
+    /** Egy ügyfél legfeljebb ennyi keresőszót kap (név, település, cím, e-mail, telefon, ügyfélszám). */
+    private const SZO_MAX = 16;
+
+    /** A közterület jellege: a címből ezek nem lesznek keresőszavak. */
+    private const KOZTERULET = [
+        'utca', 'u', 'ut', 'utja', 'ter', 'tere', 'korut', 'krt', 'koz', 'sor', 'sugarut', 'fasor', 'setany', 'dulo',
+        'lakotelep', 'ltp', 'hrsz', 'emelet', 'em', 'ajto', 'fszt', 'hsz', 'major', 'tanya', 'puszta', 'park', 'liget', 'rakpart', 'lejto', 'lepcso',
+    ];
+
+    /** Egy keresőszó legfeljebb ennyi karakter (a séma varchar(40)-e). */
+    private const SZO_HOSSZ = 40;
+
+    /** A háttérfeltöltés kurzora (az utolsó feldolgozott azonosító). */
+    private const KERESO_KURZOR = 'sdh_muhely_kereso_utolso';
+
+    /** Egy feltöltési köteg mérete (egy UPDATE … CASE). */
+    private const KERESO_KOTEG = 500;
+
+    /** Egy kérés legfeljebb ennyi másodpercet tölt a feltöltéssel. */
+    private const KERESO_IDO = 1.0;
+
+    /** A kereső-oszlop hossza (a séma varchar(190)-ével egyezik). */
+    private const KERESO_HOSSZ = 190;
+
     public static function init(): void
     {
         SDH_Muhely_Modulok::regisztral([
@@ -59,6 +89,16 @@ final class SDH_Muhely_Ugyfel
 
         // Más modulok ügyfélválasztó mezője ebből él.
         add_action('wp_ajax_sdh_muhely_ugyfelek_kereso', [self::class, 'ajax_kereso']);
+
+        // Gyorskereső (0.64): bármelyik kódút írja az ügyfelet azonosító szerint (számla, SMS,
+        // AI-eszköz, jövőbeli modul), a keresőadatai a kérés végén frissülnek.
+        add_filter('query', [self::class, 'iras_figyel'], 5);
+        add_action('shutdown', [self::class, 'iras_utan'], -1);
+
+        // Gyorskereső (0.64): a meglévő sorok kötegelt feltöltése, amíg el nem készül.
+        if (get_option(self::KERESO_ALLAPOT) !== self::KERESO_KESZ) {
+            add_action('init', [self::class, 'kereso_hatter'], 30);
+        }
     }
 
     /* =================================================================
@@ -122,6 +162,12 @@ final class SDH_Muhely_Ugyfel
      * Csak aktív ügyfeleket ad vissza, és legfeljebb tízet: a lista
      * nem böngészésre való, hanem arra, hogy gépelés közben megtaláld
      * a megfelelőt.
+     *
+     * Gyors út (0.64): az indexelt `kereso` oszlopon előbb „kezdődik vele"
+     * keresés (név), aztán a telefon vége, ügyfélszám és e-mail elejére,
+     * és csak ha így sincs tíz találat, a „tartalmazza" – egyetlen
+     * oszlopon, nem hat oszlopon OR-ral. Amíg a meglévő sorok feltöltése
+     * tart, a régi út működik.
      */
     public static function ajax_kereso(): void
     {
@@ -131,34 +177,13 @@ final class SDH_Muhely_Ugyfel
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
 
-        global $wpdb;
-
         $q = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
 
         if (mb_strlen($q) < 2) {
             wp_send_json_success([]);
         }
 
-        $minta = '%' . $wpdb->esc_like($q) . '%';
-        $tabla = self::tabla();
-
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam
-                 FROM {$tabla}
-                 WHERE aktiv = 1
-                   AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
-                        OR email LIKE %s OR ugyfel_szam LIKE %s OR szamlazasi_cim LIKE %s)
-                 ORDER BY nev ASC
-                 LIMIT 10",
-                $minta,
-                $minta,
-                $minta,
-                $minta,
-                $minta,
-                $minta
-            )
-        );
+        $sorok = self::kereso_keszen() ? self::kereso_gyors($q) : self::kereso_regi($q);
 
         $talalatok = [];
 
@@ -178,6 +203,506 @@ final class SDH_Muhely_Ugyfel
         }
 
         wp_send_json_success($talalatok);
+    }
+
+    /**
+     * Gyors ügyfélkeresés más modulok számára (pl. a fejléc globális keresője): ugyanaz a
+     * lépcsőzetes keresés, mint az ügyfélválasztóé; a feltöltés végéig null (a hívó a régi úton megy).
+     *
+     * @return array<int, object>|null
+     */
+    public static function kereses(string $q, int $limit): ?array
+    {
+        return self::kereso_keszen() && mb_strlen($q) >= 2 ? self::kereso_gyors($q, $limit) : null;
+    }
+
+    /** @var array<int, true> A kérésben azonosító szerint írt ügyfelek (iras_figyel). */
+    private static array $irt = [];
+
+    private static bool $frissit_fut = false;
+
+    /**
+     * Az ügyféltábla azonosító szerinti írásának észlelése ($wpdb->update alakja:
+     * UPDATE `…sdh_ugyfel` SET … WHERE `id` = 12). Csak megjegyzi; a frissítés a kérés végén fut.
+     *
+     * @param mixed $query
+     * @return mixed
+     */
+    public static function iras_figyel($query)
+    {
+        if (self::$frissit_fut || !is_string($query) || stripos($query, 'update') === false) {
+            return $query;
+        }
+
+        if (preg_match('/^\s*UPDATE\s+`?' . preg_quote(self::tabla(), '/') . '`?\s+SET\s.+\sWHERE\s+`?id`?\s*=\s*\'?(\d+)\'?\s*$/is', $query, $m) === 1) {
+            self::$irt[(int) $m[1]] = true;
+        }
+
+        return $query;
+    }
+
+    /** A kérés végén: a megváltozott ügyfelek keresőadatai (legfeljebb 200 – tömeges írásnál a háttérfeltöltés dolgozik). */
+    public static function iras_utan(): void
+    {
+        // A feltöltés közben is: ami a kurzor mögött változik, azt a háttérfeltöltés már nem nézi újra.
+        if (self::$irt === []) {
+            return;
+        }
+
+        foreach (array_slice(array_keys(self::$irt), 0, 200) as $id) {
+            self::kereso_frissit($id);
+        }
+
+        self::$irt = [];
+    }
+
+    /** A kereső-oszlopok fel vannak-e töltve (különben a régi, lassú út megy). */
+    public static function kereso_keszen(): bool
+    {
+        return get_option(self::KERESO_ALLAPOT) === self::KERESO_KESZ;
+    }
+
+    /**
+     * Keresőszöveg: kisbetűs, ékezet nélküli.
+     */
+    public static function kereso_norm(string $szoveg): string
+    {
+        $szoveg = mb_strtolower(remove_accents($szoveg));
+
+        return trim((string) preg_replace('/\s+/u', ' ', $szoveg));
+    }
+
+    /** Csak a számjegyek. */
+    private static function szamjegyek(string $szoveg): string
+    {
+        return (string) preg_replace('/\D+/', '', $szoveg);
+    }
+
+    /**
+     * A két származtatott oszlop értéke egy ügyfélsorból.
+     *
+     * kereso: név, település, cím, irányítószám, e-mail, ügyfélszám és a
+     * két telefon számjegyei, egy sorban (a név elöl – az előtag-keresés
+     * erre épül). tel_ford: az első telefon számjegyei megfordítva, hogy a
+     * telefon VÉGÉRE is lehessen indexszel keresni.
+     *
+     * cim_rendez: a teljes cím pontosan úgy, ahogy a rács „Cím" oszlopa
+     * kiírja és rendezi (irányítószám, település, cím, szóközzel) – indexelve,
+     * hogy a rács e szerint is gyorsan rendezhessen.
+     *
+     * @param object|array<string, mixed> $u
+     * @return array{kereso: string, tel_ford: string, cim_rendez: string}
+     */
+    public static function kereso_adat($u): array
+    {
+        $u = (array) $u;
+        $m = static fn (string $k): string => trim((string) ($u[$k] ?? ''));
+
+        $kereso = self::kereso_norm(implode(' ', array_filter([
+            $m('nev'),
+            $m('szamlazasi_telepules'),
+            $m('szamlazasi_cim'),
+            $m('szamlazasi_iranyitoszam'),
+            $m('email'),
+            $m('ugyfel_szam'),
+            self::szamjegyek($m('telefon')),
+            self::szamjegyek($m('telefon2')),
+        ], static fn (string $r): bool => $r !== '')));
+
+        return [
+            'kereso'     => mb_substr($kereso, 0, self::KERESO_HOSSZ),
+            'tel_ford'   => strrev(substr(self::szamjegyek($m('telefon')), 0, 40)),
+            'cim_rendez' => mb_substr(self::cim_rendez_ertek($u), 0, self::KERESO_HOSSZ),
+        ];
+    }
+
+    /**
+     * A rács „Cím" kifejezésének (SDH_Muhely_Racs::CIM_SQL) PHP-megfelelője:
+     * TRIM(CONCAT(COALESCE(irsz, ''), ' ', COALESCE(település, ''), ' ', COALESCE(cím, ''))).
+     *
+     * @param array<string, mixed> $u
+     */
+    public static function cim_rendez_ertek(array $u): string
+    {
+        return trim(
+            (string) ($u['szamlazasi_iranyitoszam'] ?? '') . ' '
+            . (string) ($u['szamlazasi_telepules'] ?? '') . ' '
+            . (string) ($u['szamlazasi_cim'] ?? ''),
+            ' '
+        );
+    }
+
+    /**
+     * Az ügyfél keresőszavai (a szó-index tartalma): a név, a település, a cím
+     * és az e-mail szavai kisbetűsen, ékezet nélkül; a telefonszámok számjegyei
+     * (nemzetközi, 06-os és előhívó nélküli alakban is); az ügyfélszám (és a
+     * számjegyei vezető nullák nélkül). Ezek ELEJÉRE lehet indexszel keresni.
+     *
+     * @param object|array<string, mixed> $u
+     * @return array<int, string>
+     */
+    public static function kereso_szavak($u): array
+    {
+        $u = (array) $u;
+        $m = static fn (string $k): string => trim((string) ($u[$k] ?? ''));
+
+        // Az e-mailből csak a @ előtti rész (a domain – gmail, hu – mindenkinél ugyanaz lenne).
+        $email = $m('email');
+        $email = str_contains($email, '@') ? strstr($email, '@', true) : $email;
+
+        $szavak = preg_split('/[^a-z0-9]+/', self::kereso_norm(implode(' ', [$m('nev'), $m('szamlazasi_telepules'), $email])), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        // A címből az utca neve (a házszám és a közterület jellege – utca, út, tér – nem keresőszó).
+        foreach (preg_split('/[^a-z0-9]+/', self::kereso_norm($m('szamlazasi_cim')), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $szo) {
+            if (!ctype_digit($szo) && !in_array($szo, self::KOZTERULET, true)) {
+                $szavak[] = $szo;
+            }
+        }
+
+        foreach (['telefon', 'telefon2'] as $mezo) {
+            $d = self::szamjegyek($m($mezo));
+
+            if (strlen($d) < 6) {
+                continue;
+            }
+
+            $szavak[] = $d;
+
+            // 36 30 123 4567 → 06301234567 és 301234567; 06 30 … → 3630… és 30…
+            if (str_starts_with($d, '36')) {
+                $szavak[] = substr($d, 2);
+                $szavak[] = '06' . substr($d, 2);
+            } elseif (str_starts_with($d, '06')) {
+                $szavak[] = substr($d, 2);
+                $szavak[] = '36' . substr($d, 2);
+            }
+        }
+
+        $szam = self::kereso_norm($m('ugyfel_szam'));
+
+        if ($szam !== '') {
+            $szavak[] = $szam;
+
+            $jegyek = ltrim(self::szamjegyek($szam), '0');
+
+            if ($jegyek !== '') {
+                $szavak[] = $jegyek;
+            }
+        }
+
+        $ki = [];
+
+        foreach ($szavak as $szo) {
+            $szo = substr($szo, 0, self::SZO_HOSSZ);
+
+            if (strlen($szo) >= 2 && !in_array($szo, $ki, true)) {
+                $ki[] = $szo;
+            }
+        }
+
+        return array_slice($ki, 0, self::SZO_MAX);
+    }
+
+    /** A szó-index táblája. */
+    private static function szo_tabla(): string
+    {
+        return SDH_Muhely_Schema::tabla('ugyfel_szo');
+    }
+
+    /**
+     * Ügyfelek szavainak cseréje a szó-indexben (egy törlés + egy beszúrás).
+     *
+     * @param array<int, array<int, string>> $szavak ügyfél-azonosító => szavak
+     */
+    private static function szavak_ir(array $szavak): void
+    {
+        global $wpdb;
+
+        if ($szavak === []) {
+            return;
+        }
+
+        $t      = self::szo_tabla();
+        $idk    = implode(',', array_map('intval', array_keys($szavak)));
+        $ertek  = [];
+
+        foreach ($szavak as $id => $lista) {
+            foreach ($lista as $szo) {
+                $ertek[] = "('" . esc_sql($szo) . "'," . (int) $id . ')';
+            }
+        }
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- esc_sql-lel készült értékek, egész azonosítók.
+        SDH_Muhely_Valtozasnaplo::csendben(static function () use ($wpdb, $t, $idk, $ertek): void {
+            $wpdb->query("DELETE FROM {$t} WHERE ugyfel_id IN ({$idk})");
+
+            foreach (array_chunk($ertek, 1000) as $darab) {
+                $wpdb->query("INSERT INTO {$t} (szo, ugyfel_id) VALUES " . implode(',', $darab));
+            }
+        });
+        // phpcs:enable
+    }
+
+    /**
+     * Egy ügyfél kereső-oszlopainak frissítése. Minden kódnak hívnia kell,
+     * amely ügyfelet ír (mentés, AI-eszköz, demó, import).
+     */
+    public static function kereso_frissit(int $id): void
+    {
+        global $wpdb;
+
+        if ($id <= 0) {
+            return;
+        }
+
+        $sor = $wpdb->get_row($wpdb->prepare(
+            'SELECT nev, szamlazasi_telepules, szamlazasi_cim, szamlazasi_iranyitoszam, email, ugyfel_szam, telefon, telefon2 FROM ' . self::tabla() . ' WHERE id = %d',
+            $id
+        ));
+
+        if (!$sor) {
+            return;
+        }
+
+        $adat = self::kereso_adat($sor);
+
+        self::$frissit_fut = true;
+
+        try {
+            SDH_Muhely_Valtozasnaplo::csendben(static function () use ($wpdb, $adat, $id): void {
+                $wpdb->update(self::tabla(), $adat, ['id' => $id]);
+            });
+
+            self::szavak_ir([$id => self::kereso_szavak($sor)]);
+        } finally {
+            self::$frissit_fut = false;
+        }
+
+        unset(self::$irt[$id]);
+    }
+
+    /**
+     * A meglévő sorok kötegelt feltöltése. Kérésenként legfeljebb
+     * KERESO_IDO másodpercet dolgozik, és ott folytatja, ahol abbahagyta –
+     * 500 ezer sornál sem fut ki az időből.
+     */
+    public static function kereso_hatter(): void
+    {
+        if (self::kereso_keszen() || !current_user_can(SDH_Muhely_Admin_UI::jog())) {
+            return;
+        }
+
+        if (get_transient('sdh_muhely_kereso_zar') !== false) {
+            return;
+        }
+
+        set_transient('sdh_muhely_kereso_zar', 1, 30);
+
+        global $wpdb;
+
+        $tabla  = self::tabla();
+        $kezdet = microtime(true);
+        $utolso = (int) get_option(self::KERESO_KURZOR, 0);
+
+        do {
+            $sorok = $wpdb->get_results($wpdb->prepare(
+                "SELECT id, nev, szamlazasi_telepules, szamlazasi_cim, szamlazasi_iranyitoszam, email, ugyfel_szam, telefon, telefon2
+                 FROM {$tabla} WHERE id > %d ORDER BY id ASC LIMIT %d",
+                $utolso,
+                self::KERESO_KOTEG
+            ));
+
+            if (!$sorok) {
+                update_option(self::KERESO_ALLAPOT, self::KERESO_KESZ);
+                delete_option(self::KERESO_KURZOR);
+                break;
+            }
+
+            $kereso = '';
+            $ford   = '';
+            $cim    = '';
+            $idk    = [];
+            $szavak = [];
+
+            foreach ($sorok as $sor) {
+                $adat    = self::kereso_adat($sor);
+                $id      = (int) $sor->id;
+                $idk[]   = $id;
+                $kereso .= ' WHEN ' . $id . ' THEN ' . "'" . esc_sql($adat['kereso']) . "'";
+                $ford   .= ' WHEN ' . $id . ' THEN ' . "'" . esc_sql($adat['tel_ford']) . "'";
+                $cim    .= ' WHEN ' . $id . ' THEN ' . "'" . esc_sql($adat['cim_rendez']) . "'";
+                $utolso  = $id;
+
+                $szavak[$id] = self::kereso_szavak($sor);
+            }
+
+            $lista = implode(',', $idk);
+
+            self::szavak_ir($szavak);
+
+            // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- az értékek esc_sql-lel, az azonosítók egész számok.
+            SDH_Muhely_Valtozasnaplo::csendben(static function () use ($wpdb, $tabla, $kereso, $ford, $cim, $lista): void {
+                $wpdb->query("UPDATE {$tabla} SET kereso = CASE id{$kereso} END, tel_ford = CASE id{$ford} END, cim_rendez = CASE id{$cim} END WHERE id IN ({$lista})");
+            });
+            // phpcs:enable
+
+            update_option(self::KERESO_KURZOR, $utolso, false);
+        } while ((microtime(true) - $kezdet) < self::KERESO_IDO);
+
+        delete_transient('sdh_muhely_kereso_zar');
+    }
+
+    /**
+     * Gyors keresés az indexelt oszlopokon (lásd ajax_kereso).
+     *
+     * @return array<int, object>
+     */
+    private static function kereso_gyors(string $q, int $limit = 10): array
+    {
+        global $wpdb;
+
+        $tabla  = self::tabla();
+        $oszlop = 'id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam';
+        $qn     = self::kereso_norm($q);
+        $qd     = preg_match('/^[\d\s+\-()\/.]+$/', $q) === 1 ? self::szamjegyek($q) : '';
+        $talalat = [];
+
+        $kovetkezo = function (string $hol, array $ertekek) use ($wpdb, $tabla, $oszlop, $limit, &$talalat): void {
+            $hianyzik = $limit - count($talalat);
+
+            if ($hianyzik <= 0) {
+                return;
+            }
+
+            $mar = $talalat !== [] ? ' AND id NOT IN (' . implode(',', array_map('intval', array_keys($talalat))) . ')' : '';
+
+            // A rendezés (ha van) a $hol végén áll: a kizárás elé kell kerülnie.
+            $rend = '';
+
+            if (preg_match('/\s(ORDER BY .+)$/', $hol, $r) === 1) {
+                $rend = ' ' . $r[1];
+                $hol  = substr($hol, 0, -strlen($rend));
+            }
+
+            $sql = "SELECT {$oszlop} FROM {$tabla} WHERE aktiv = 1 AND {$hol}{$mar}{$rend} LIMIT {$hianyzik}";
+
+            // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz, a $mar egész számokat.
+            $sorok = $wpdb->get_results($ertekek !== [] ? $wpdb->prepare($sql, $ertekek) : $sql);
+            // phpcs:enable
+
+            foreach ((array) $sorok as $sor) {
+                $talalat[(int) $sor->id] = $sor;
+            }
+        };
+
+        // 1. Név (a keresőszöveg eleje) – indexen, rendezve.
+        $kovetkezo('kereso LIKE %s ORDER BY kereso ASC', [$wpdb->esc_like($qn) . '%']);
+
+        // 2. Telefon vége, ügyfélszám és e-mail eleje – mind indexen.
+        if ($qd !== '' && strlen($qd) >= 3) {
+            $kovetkezo('tel_ford LIKE %s', [$wpdb->esc_like(strrev($qd)) . '%']);
+        }
+
+        $kovetkezo('ugyfel_szam LIKE %s', [$wpdb->esc_like($q) . '%']);
+        $kovetkezo('email LIKE %s', [$wpdb->esc_like($q) . '%']);
+
+        // 3. Szavak eleje (keresztnév, település, utca, telefon 06-tal / anélkül) – a szó-indexen.
+        if (count($talalat) < $limit) {
+            $idk = self::szo_kereses($qd !== '' ? $qd : $qn, $limit - count($talalat), array_keys($talalat));
+
+            if ($idk !== []) {
+                $kovetkezo('id IN (' . implode(',', $idk) . ') ORDER BY nev ASC', []);
+            }
+        }
+
+        // 4. Tartalmazza – egyetlen oszlopon, és csak ha semmi nem került elő: ez az egyetlen
+        //    lépés, amely az egész táblát végigolvassa (pl. szó közepe, elgépelés).
+        if ($talalat === []) {
+            $kovetkezo('kereso LIKE %s ORDER BY kereso ASC', ['%' . $wpdb->esc_like($qn) . '%']);
+
+            if ($qd !== '' && strlen($qd) >= 3) {
+                $kovetkezo('kereso LIKE %s ORDER BY kereso ASC', ['%' . $wpdb->esc_like($qd) . '%']);
+            }
+        }
+
+        return array_values($talalat);
+    }
+
+    /**
+     * Ügyfelek, akiknek MINDEN keresett szóra van ezzel kezdődő keresőszava
+     * (a szó-indexen). A leghosszabb szó vezet (az a legszűkebb).
+     *
+     * @param array<int, int> $kiveve Ezek már megvannak.
+     * @return array<int, int>
+     */
+    private static function szo_kereses(string $q, int $db, array $kiveve): array
+    {
+        global $wpdb;
+
+        $szavak = preg_split('/[^a-z0-9]+/', self::kereso_norm($q), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $szavak = array_values(array_unique(array_filter($szavak, static fn (string $s): bool => strlen($s) >= 2)));
+
+        if ($szavak === [] || $db <= 0) {
+            return [];
+        }
+
+        usort($szavak, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+        $szavak = array_slice($szavak, 0, 4);
+
+        $t      = self::szo_tabla();
+        $ut     = self::tabla();
+        $join   = '';
+        $ertek  = [];
+
+        foreach (array_slice($szavak, 1) as $i => $szo) {
+            $join   .= " INNER JOIN {$t} s{$i} ON s{$i}.ugyfel_id = s.ugyfel_id AND s{$i}.szo LIKE %s";
+            $ertek[] = $wpdb->esc_like(substr($szo, 0, self::SZO_HOSSZ)) . '%';
+        }
+
+        $ertek[] = $wpdb->esc_like(substr($szavak[0], 0, self::SZO_HOSSZ)) . '%';
+        $kiz     = $kiveve !== [] ? ' AND s.ugyfel_id NOT IN (' . implode(',', array_map('intval', $kiveve)) . ')' : '';
+
+        // Ugyanaz az ügyfél több szavával is illeszkedhet: bőven kérünk, és itt szűrjük egyedire.
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- helyőrzők és egész számok.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT s.ugyfel_id FROM {$t} s{$join} INNER JOIN {$ut} u ON u.id = s.ugyfel_id AND u.aktiv = 1
+             WHERE s.szo LIKE %s{$kiz} LIMIT " . ($db * 4),
+            $ertek
+        )));
+        // phpcs:enable
+
+        return array_slice(array_values(array_unique($idk)), 0, $db);
+    }
+
+    /**
+     * A régi út (a feltöltés végéig): „tartalmazza" hat oszlopon.
+     *
+     * @return array<int, object>
+     */
+    private static function kereso_regi(string $q): array
+    {
+        global $wpdb;
+
+        $minta = '%' . $wpdb->esc_like($q) . '%';
+        $tabla = self::tabla();
+
+        return (array) $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT id, nev, telefon, szamlazasi_iranyitoszam, szamlazasi_telepules, szamlazasi_cim, ugyfel_szam
+                 FROM {$tabla}
+                 WHERE aktiv = 1
+                   AND (nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s
+                        OR email LIKE %s OR ugyfel_szam LIKE %s OR szamlazasi_cim LIKE %s)
+                 ORDER BY nev ASC
+                 LIMIT 10",
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta,
+                $minta
+            )
+        );
     }
 
     private static function tabla(): string
@@ -263,7 +788,19 @@ final class SDH_Muhely_Ugyfel
         $feltetelek = ['aktiv = %d'];
         $ertekek    = [$inaktiv ? 0 : 1];
 
-        if ($kereses !== '') {
+        if ($kereses !== '' && self::kereso_keszen()) {
+            // Gyors út: egyetlen indexelt keresőoszlop (név, cím, e-mail, ügyfélszám, telefon számjegyei).
+            $qd     = preg_match('/^[\d\s+\-()\/.]+$/', $kereses) === 1 ? self::szamjegyek($kereses) : '';
+            $minta  = '%' . $wpdb->esc_like(self::kereso_norm($kereses)) . '%';
+
+            if ($qd !== '' && strlen($qd) >= 3) {
+                $feltetelek[] = '(kereso LIKE %s OR kereso LIKE %s)';
+                array_push($ertekek, $minta, '%' . $wpdb->esc_like($qd) . '%');
+            } else {
+                $feltetelek[] = 'kereso LIKE %s';
+                $ertekek[]    = $minta;
+            }
+        } elseif ($kereses !== '') {
             $minta = '%' . $wpdb->esc_like($kereses) . '%';
 
             $feltetelek[] = '(nev LIKE %s OR telefon LIKE %s OR telefon2 LIKE %s OR email LIKE %s '
@@ -276,9 +813,8 @@ final class SDH_Muhely_Ugyfel
         $hol = 'WHERE ' . implode(' AND ', $feltetelek);
 
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        $osszesen = (int) $wpdb->get_var(
-            $wpdb->prepare("SELECT COUNT(*) FROM {$tabla} {$hol}", $ertekek)
-        );
+        // 0.64: a találatszám tárolva (lapozáskor és ugyanarra a keresésre nem számolódik újra).
+        $osszesen = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} {$hol}", $ertekek));
 
         $sorok = $wpdb->get_results(
             $wpdb->prepare(
@@ -410,7 +946,8 @@ final class SDH_Muhely_Ugyfel
 
             <?php if ($oldalak > 1) : ?>
                 <div class="sdh-lapozo">
-                    <?php for ($i = 1; $i <= $oldalak; $i++) : ?>
+                    <?php foreach (SDH_Muhely_Admin_UI::lapozo_oldalak($oldal, $oldalak) as $i) : ?>
+                        <?php if ($i === 0) : ?><span class="sdh-lapozo__kihagy" aria-hidden="true">…</span><?php continue; endif; ?>
                         <?php if ($i === $oldal) : ?>
                             <span class="sdh-lapozo__aktiv"><?php echo (int) $i; ?></span>
                         <?php else : ?>
@@ -428,7 +965,7 @@ final class SDH_Muhely_Ugyfel
                             ?>
                             <a href="<?php echo esc_url($lap_url); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>
@@ -956,6 +1493,8 @@ final class SDH_Muhely_Ugyfel
                 ['id' => $id]
             );
         }
+
+        self::kereso_frissit($id);
 
         return [$id, $uzenet];
     }
