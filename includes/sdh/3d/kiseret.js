@@ -1,5 +1,5 @@
 /**
- * SDH – belső: 3D figura (0.66.1). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
+ * SDH – belső: 3D figura (0.66.1; 0.66.2: kéz, láb, séta, párbaj). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
  *
  * Saját feltöltésű .glb modell valódi 3D-ben (three.js, WebGL, GPU). Két szerep:
  *
@@ -162,6 +162,40 @@ function gesztusMozgas(nev, f) {
             break;
         default:
             break;
+    }
+
+    return o;
+}
+
+/**
+ * Szikra „állapot-osztályai" (0.66.2): séta (is-setal) és párbaj a hiba-bogárral
+ * (is-parbaj, is-parbaj-viv, is-parbaj-lemerul). A bogár balról jön.
+ */
+function osztalyMozgas(lista, t) {
+    const o = { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0, eger: 1 };
+
+    if (lista.contains('is-setal')) {
+        o.y = Math.abs(Math.sin(t * 14)) * 0.035;          // lépésenként kicsit felbillen
+        o.roll = Math.sin(t * 14) * 0.09;                  // totyog
+        o.pitch = 0.08;
+    }
+
+    if (lista.contains('is-parbaj')) {
+        o.yaw = -0.75;                                     // a bogár felé fordul
+        o.eger = 0;
+
+        if (lista.contains('is-parbaj-viv')) {
+            const c = Math.sin(t * 15);
+            o.yaw += c * 0.28;                             // csapások jobbra-balra
+            o.roll = -c * 0.16;
+            o.pitch = 0.12 + Math.abs(c) * 0.08;           // rádől a csapásra
+            o.y = Math.abs(Math.cos(t * 15)) * 0.02;
+        }
+
+        if (lista.contains('is-parbaj-lemerul')) {
+            o.pitch = 0.3;                                 // lemerült a penge: lekonyul
+            o.y = -0.04;
+        }
     }
 
     return o;
@@ -438,6 +472,11 @@ function indit() {
         const mozg = csendes ? { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0, fenyes: 0 } : hangulatMozgas(hang, ido);
         const gnev = HELYETTE ? gesztusOlvas(most) : '';
         const gm = gnev && !csendes ? gesztusMozgas(gnev, (most - gesztusKezd) / 1000) : { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0 };
+        const om = HELYETTE && gyoker ? osztalyMozgas(gyoker.classList, ido) : { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0, eger: 1 };
+
+        if (csendes) {
+            om.y = 0;
+        }
 
         // Tekintet: egér, vagy tétlenségben magától nézelődik / Szikra felé néz.
         let cx = cel.x;
@@ -452,9 +491,9 @@ function indit() {
         const k = dt > 0 ? 1 - Math.exp(-dt * 4.5) : 1;
         const k2 = dt > 0 ? 1 - Math.exp(-dt * 3) : 1;
 
-        poz.ex = sima(poz.ex, cx * alap.eger, k);
-        poz.ey = sima(poz.ey, cy * alap.eger, k);
-        poz.yaw = sima(poz.yaw, alap.yaw, k2);
+        poz.ex = sima(poz.ex, cx * alap.eger * om.eger, k);
+        poz.ey = sima(poz.ey, cy * alap.eger * om.eger, k);
+        poz.yaw = sima(poz.yaw, alap.yaw + (om.eger === 0 ? om.yaw : 0), k2);
         poz.pitch = sima(poz.pitch, alap.pitch, k2);
         poz.roll = sima(poz.roll, alap.roll, k2);
         poz.y = sima(poz.y, alap.y, k2);
@@ -476,12 +515,16 @@ function indit() {
         const irany = (B.forgas || 0) * Math.PI / 180;
 
         forgo.rotation.order = 'YXZ';
-        forgo.rotation.y = irany + poz.ex * 0.65 + poz.yaw + mozg.yaw + gm.yaw + porgo;
-        forgo.rotation.x = poz.ey * 0.28 + poz.pitch + mozg.pitch + gm.pitch;
-        forgo.rotation.z = -poz.ex * 0.06 + poz.roll + mozg.roll + gm.roll;
+        // A párbaj alapfordulása (om.yaw) simítva a poz.yaw-ban van; a csapás-rezgés közvetlenül.
+        const csapas = om.eger === 0 ? 0 : om.yaw;
+
+        forgo.rotation.y = irany + poz.ex * 0.65 + poz.yaw + mozg.yaw + gm.yaw + csapas + porgo
+            + (gyoker && gyoker.classList.contains('is-parbaj-viv') ? Math.sin(ido * 15) * 0.28 : 0);
+        forgo.rotation.x = poz.ey * 0.28 + poz.pitch + mozg.pitch + gm.pitch + om.pitch;
+        forgo.rotation.z = -poz.ex * 0.06 + poz.roll + mozg.roll + gm.roll + om.roll;
 
         const lebeg = csendes ? 0 : Math.sin(ido * 1.9) * 0.035;
-        const emel = lebeg + poz.y + mozg.y + gm.y + (porges >= 0 ? Math.sin(Math.min(1, porges) * Math.PI) * 0.12 : 0);
+        const emel = lebeg + poz.y + mozg.y + gm.y + om.y + (porges >= 0 ? Math.sin(Math.min(1, porges) * Math.PI) * 0.12 : 0);
 
         lebego.position.y = emel;
         lebego.scale.setScalar(poz.scale + mozg.scale + gm.scale + (csendes ? 0 : Math.sin(ido * 1.3) * 0.012));

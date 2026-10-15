@@ -34,22 +34,21 @@
 
 /* ---- „Helyette": a modell maga az asszisztens, Szikra testének helyén ---- */
 
-/* A rajzlap a figura dobozában, kicsit nagyobb nála (a modell kilóghat), alul igazítva.
+/* A rajzlap a figura dobozában, nagyobb nála (a modell kilóghat), a közepe a figura közepén –
+   így a kéz a modell két oldalán, a láb alatta van.
    A kattintás a figuráé marad (csevegő, húzás) – a rajzlap átengedi. */
 .sdh-3d--benne {
     position: absolute;
     left: -38%;
     right: -38%;
-    bottom: -10%;
+    bottom: -40%;
     height: 176%;
     z-index: 1;
 }
 
-/* Amint a modell kész, Szikra saját teste, arca, keze-lába és dísze eltűnik;
-   a kellékek, szikrák, „zzz", jelvény, buborék és a csevegő maradnak. */
+/* Amint a modell kész, Szikra saját teste, arca és dísze eltűnik; a kellékek (pl. a
+   fénypenge), szikrák, „zzz", jelvény, buborék és a csevegő maradnak. */
 .sdh-ai.is-3d .sdh-ai__aura,
-.sdh-ai.is-3d .sdh-ai__lab,
-.sdh-ai.is-3d .sdh-ai__kar,
 .sdh-ai.is-3d .sdh-ai__csap,
 .sdh-ai.is-3d .sdh-ai__test,
 .sdh-ai.is-3d .sdh-sz-arc {
@@ -59,6 +58,28 @@
 .sdh-ai.is-3d .sdh-ai__leny::before,
 .sdh-ai.is-3d .sdh-ai__leny::after {
     display: none;
+}
+
+/* Kéz és láb 3D-ben is (0.66.2): sötét „kesztyű" és „csizma" kék neon éllel. A láb – mint
+   Szikránál – sétánál és táncnál bújik elő; a kéz integetésnél, táncnál, sétánál és a
+   párbajban (abban tartja a fénypengét). */
+.sdh-ai.is-3d .sdh-ai__lab,
+.sdh-ai.is-3d .sdh-ai__kar {
+    z-index: 2;
+    background: linear-gradient(160deg, #3a4150, #06080d 70%);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, .45), inset 0 1px 2px rgba(255, 255, 255, .3);
+}
+
+.sdh-ai.is-3d .sdh-ai__kar {
+    opacity: 0;
+    transition: opacity .25s ease, rotate .3s ease, translate .3s ease;
+}
+
+.sdh-ai.is-3d.is-parbaj .sdh-ai__kar,
+.sdh-ai.is-3d.is-setal .sdh-ai__kar,
+.sdh-ai.is-3d.is-g-integet .sdh-ai__kar,
+.sdh-ai.is-3d.is-g-tancol .sdh-ai__kar {
+    opacity: 1;
 }
 
 .sdh-ai.is-3d .sdh-ai__kellek,

@@ -64,6 +64,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.66.2
+- **3D figura: kéz, láb, séta, párbaj.** Szikra helyett is kap kezet-lábat (sötét kesztyű és csizma kék neon éllel):
+  a láb sétánál/táncnál, a kéz integetésnél, táncnál, sétánál és a párbajban látszik – abban tartja a fénypengét.
+  Séta közben totyog, a hiba-bogárral vív (felé fordul, csapások, lemerülésnél lekonyul). A rajzlap közepe a figura
+  közepén, így a kéz a modell mellett, a láb alatta van. t61.
+
 ### 0.66.1
 - **3D figura Szikra helyett** (SDH – belső): a „Szerepe" beállítással (alapból *Szikra helyett*) a feltöltött modell
   maga az asszisztens – Szikra figurájának dobozában él (a kattintás, csevegő, buborék, séta, túra, jelenetek, alvás
