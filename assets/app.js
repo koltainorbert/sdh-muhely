@@ -56,6 +56,31 @@
     /* ---------------------------------------------------------------- */
 
     /**
+     * Pénz került a kasszába (0.67.0) – „sdh:penz-be" esemény, erre az asszisztens figurája
+     * vigyázzba áll, összecsattantja a bokáját és tiszteleg. Új bevétel vagy befizetés a
+     * pénztár űrlapján, illetve munkalap / árukiadás / rendelés fizetése. Szerkesztésre,
+     * kivétre és kifizetésre nem.
+     */
+    function penzBeJelez(urlap) {
+        var akcio = urlap && urlap.dataset ? urlap.dataset.sdhAjaxAction || '' : '';
+        var be = false;
+
+        if (akcio === 'sdh_muhely_penztar_fizet') {
+            be = true;
+        } else if (akcio === 'sdh_muhely_penztar_ment') {
+            var id = urlap.querySelector('input[name="id"]');
+            var t = urlap.querySelector('input[name="tipus"]:checked');
+            var tipus = t ? t.value : (urlap.getAttribute('data-tipus') || 'bevetel');
+
+            be = !(id && parseInt(id.value, 10) > 0) && (tipus === 'bevetel' || tipus === 'befizetes');
+        }
+
+        if (be) {
+            document.dispatchEvent(new CustomEvent('sdh:penz-be', { detail: { forras: akcio } }));
+        }
+    }
+
+    /**
      * Az ablak gombjai a bal felső sarokban, macOS módra: piros = bezárás, zöld = teljes képernyő.
      * A jel rajz (nem betű), ezért minden gépen pontosan a kör közepén ül. Minden felugró ablak ezt használja.
      */
@@ -921,6 +946,9 @@
                     if (eredmeny && eredmeny.success) {
                         // A Mentés gomb maga is értesít: a bezáráskor nem kell még egyszer.
                         szint.automentve = false;
+
+                        // Pénz került a kasszába (0.67.0): az asszisztens vigyázzba áll és tiszteleg.
+                        penzBeJelez(urlap);
 
                         // Ráépülő popupnál (pl. új ügyfél a munkalapról) nincs
                         // oldalfrissítés: a hívó megkapja az új rekordot, a fő

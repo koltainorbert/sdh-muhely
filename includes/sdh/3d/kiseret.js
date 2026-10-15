@@ -156,6 +156,13 @@ function gesztusMozgas(nev, f) {
             o.scale = Math.sin(Math.min(1, f / 1.2) * Math.PI) * 0.12;
             o.pitch = -Math.sin(Math.min(1, f / 1.2) * Math.PI) * 0.3;
             break;
+        case 'tiszteleg':
+            // Pénz a kasszában (0.67.0): bokacsattintásnál kis szökkenés, aztán kihúzza magát,
+            // állát felszegi, és mereven, egyenesen előre néz (az egeret ilyenkor nem követi).
+            o.y = f < 0.45 ? Math.sin(f / 0.45 * Math.PI) * 0.05 : 0;
+            o.pitch = f < 0.45 ? 0 : -0.12 * Math.min(1, (f - 0.45) / 0.2) * Math.max(0, Math.min(1, (2.8 - f) / 0.3));
+            o.scale = f > 0.45 && f < 2.5 ? 0.03 : 0;
+            break;
         case 'kukucs':
             o.roll = Math.sin(Math.min(1, f / 0.9) * Math.PI) * 0.4;
             o.yaw = Math.sin(Math.min(1, f / 0.9) * Math.PI) * 0.5;
@@ -491,8 +498,10 @@ function indit() {
         const k = dt > 0 ? 1 - Math.exp(-dt * 4.5) : 1;
         const k2 = dt > 0 ? 1 - Math.exp(-dt * 3) : 1;
 
-        poz.ex = sima(poz.ex, cx * alap.eger * om.eger, k);
-        poz.ey = sima(poz.ey, cy * alap.eger * om.eger, k);
+        const egyenes = gnev === 'tiszteleg' ? 0 : 1;   // tisztelgésnél mereven előre néz
+
+        poz.ex = sima(poz.ex, cx * alap.eger * om.eger * egyenes, k);
+        poz.ey = sima(poz.ey, cy * alap.eger * om.eger * egyenes, k);
         poz.yaw = sima(poz.yaw, alap.yaw + (om.eger === 0 ? om.yaw : 0), k2);
         poz.pitch = sima(poz.pitch, alap.pitch, k2);
         poz.roll = sima(poz.roll, alap.roll, k2);

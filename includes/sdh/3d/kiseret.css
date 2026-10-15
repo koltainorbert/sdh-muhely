@@ -78,8 +78,21 @@
 .sdh-ai.is-3d.is-parbaj .sdh-ai__kar,
 .sdh-ai.is-3d.is-setal .sdh-ai__kar,
 .sdh-ai.is-3d.is-g-integet .sdh-ai__kar,
-.sdh-ai.is-3d.is-g-tancol .sdh-ai__kar {
+.sdh-ai.is-3d.is-g-tancol .sdh-ai__kar,
+.sdh-ai.is-3d.is-g-tiszteleg .sdh-ai__kar--j {
     opacity: 1;
+}
+
+/* Tisztelgés 3D-ben (0.67.0): a modell nagyobb a figuránál, ezért a kesztyű a sisak
+   homlokának jobb széléhez megy (nem az arc közepére). */
+.sdh-ai.is-3d.is-g-tiszteleg .sdh-ai__kar--j {
+    animation-name: sdh-3d-tiszteleg;
+}
+
+@keyframes sdh-3d-tiszteleg {
+    0%, 16% { rotate: -28deg; translate: 0 0; }
+    26%, 84% { rotate: -150deg; translate: -10% -150%; }
+    100% { rotate: -28deg; translate: 0 0; }
 }
 
 .sdh-ai.is-3d .sdh-ai__kellek,

@@ -1059,6 +1059,152 @@
         window.requestAnimationFrame(buborekIgazit);
     });
 
+    /* ---- Pénz a kasszában (0.67.0): vigyázzállás, bokacsattintás, határozott tisztelgés ---- */
+
+    var TISZTELGES_SZOVEG = [
+        'Pénz a kasszában! Vigyázz! Tisztelgek!',
+        'Jelentem, a kassza gyarapodott!',
+        'Bevétel beérkezett, parancsnok úr!',
+        'Kassza feltöltve, a szolgálat folytatódik!',
+        'Pénz jött – én meg vigyázzba vágom magam!',
+        'Ez az! Ilyenkor csattan a bakancs!',
+        'A kassza hálás. Én még hálásabb.',
+        'Tisztelgés a vásárlónak – és a pénztárosnak!',
+        'Jelentem: a pénz a helyén, a fiók becsukva!',
+        'Bevételi parancs teljesítve!',
+        'Pénz be, mosoly ki!',
+        'Egy újabb érme a hadikasszába!',
+        'Ezért kelek fel minden reggel… vagyis kapcsolnak be.',
+        'Csatt! Ennyi volt a bokám. Megérte.',
+        'A kassza tele, a lelkem könnyű!',
+        'Ma is nyerünk, főnök!',
+        'Jelentés: a forint megérkezett, ép és egészséges!',
+        'Ez a hang a kasszából – szebb, mint bármilyen zene!',
+        'Pénztár feltöltve, szolgálatra kész!',
+        'Vigyázz! Pihenj! Számolj!',
+        'Én ilyenkor mindig tisztelgek. A pénznek kijár.',
+        'Kasszakapitány jelenti: bevétel rögzítve!',
+        'Ez a nap is jól indul… vagy folytatódik… vagy végződik!',
+        'Pénz beérkezett. A morál az egekben!',
+        'Ha minden ilyen egyszerű lenne, mint egy bevétel…',
+        'Egy pénzzel több, egy gonddal kevesebb!',
+        'A számok nem hazudnak: jó napunk van!',
+        'Mostantól ezt a dalt dúdolom: csiling-csiling!',
+        'Ezt is beírtuk – a könyvelő büszke lesz!',
+        'Kassza: plusz. Hangulat: plusz-plusz.',
+        'Szép munka! A kassza is mosolyog.',
+        'Bevétel jelentve, folytatjuk a hadműveletet!',
+        'Jelentem, a pénz nem szökött meg!',
+        'Kassza őrség: minden rendben!',
+        'Egy újabb győzelem a pult frontján!',
+        'Ezt a pénzt személyesen köszöntöm. Tisztelgek!',
+        'Tisztelgés! És egy kis tánc – csak gondolatban.',
+        'Pénz a fiókban, rend a lelkekben!',
+        'Megérkezett a jutalom a kemény munkáért!',
+        'Bevétel? Bevétel! Bevétel!!',
+        'Hű, ez jólesett a kasszának.',
+        'Vigyázzban állok – a pénz előtt mindig.',
+        'Jelentés a parancsnokságnak: a kassza nem éhezik!',
+        'Egy újabb csillag a pénztár vállapjára!',
+        'A pénz beállt a sorba. Szép fegyelem!',
+        'Rendben, ezt is számontartjuk. Pontosan.',
+        'Így kell ezt csinálni! Bokacsattintás!',
+        'Mondtam, hogy jó napunk lesz!',
+        'Kasszaszolgálat: jelen!',
+        'Ez a forint is hazatalált.',
+        'Ügyfél elégedett, kassza elégedett, én is elégedett vagyok!',
+        'Éljen a pult hősei!',
+        'Ilyenkor érzem, hogy van értelme a létezésemnek.',
+        'Bevétel rögzítve – a változásnaplóban is ott a helye!',
+        'Ha a kassza tudna, most tisztelegne. Megteszem helyette.',
+        'Pénz be! Mindenki a helyén!',
+        'Fegyelem, pontosság, bevétel. Ez a mi mottónk.',
+        'Kassza-riadó? Nem, csak egy szép bevétel!',
+        'Tisztelettel jelentem: ez is megvan!',
+        'Pénztárnapló frissítve, tiszteletem!',
+        'A számla is boldog, hogy kifizették.',
+        'Megint egy elégedett ügyfél. Csatt!',
+        'A kassza szíve gyorsabban ver.',
+        'Ezt a tisztelgést a pénztárosnak szánom!',
+        'Bevétel? Nálam az ünnepnap!',
+        'A pénz itt van, én is itt vagyok – minden rendben.',
+        'Ez nem csak pénz, ez elismerés!',
+        'Kasszajelentés: zöld lámpa!',
+        'Haptákban állok, főnök!',
+        'Pénztár: egy lépéssel közelebb a zárás mosolyához!',
+        'Ilyenkor a zárás is könnyebb lesz este.',
+        'Este a címletezés is mosolyogni fog.',
+        'Egy újabb tégla a sikerhez!',
+        'Jelentem: a bevétel kifogástalan állapotban érkezett!',
+        'Brávó, csapat! Erre tisztelgek.',
+        'Le a kalappal – akarom mondani: tisztelgés!',
+        'Ez a pénz is jó helyre került.',
+        'Kassza: tele szívvel, tele fiókkal.',
+        'Na, ez már beszéd!',
+        'Ettől a hangtól mindig kihúzom magam.',
+        'Pénzt kaptunk, vigyázzba álltunk!',
+        'Rendszer jelenti: bevétel OK, hangulat OK, figura OK!',
+        'Ma még a csizmám is fényesebb.',
+        'Ezért szeretem ezt a munkát!',
+        'Tisztelgés jár minden befizetésért!',
+        'Bevétel – a kedvenc szavam.',
+        'Fegyelmezetten örülök. Nagyon.',
+        'Pénz a kasszában – ez az én harci kiáltásom!',
+        'Csatt-csatt! Dupla bokacsattintás, mert megérdemli.',
+        'Jól halad a nap, jelentem!',
+        'Ez a bevétel egyenesen díszszemlét érdemel!',
+        'Egy kis pénz, nagy öröm!',
+        'Rögzítve, nyugtázva, tisztelegve!',
+        'Most egy pillanatra igazi katonának érzem magam.',
+        'A kassza ezt köszöni. Én is.',
+        'Bevétel beérkezett – irány a következő ügyfél!',
+        'Mindig készen állok – főleg, ha pénz jön!',
+        'Tisztelgek a forint előtt!',
+        'Pénz be, figura vigyázz, szolgálat folytatva!',
+        'Ez volt a nap legszebb pillanata… eddig!',
+        'Hadd szóljon: csiling!',
+        'A fiók nyílik, a lelkem dalol!',
+        'Jelentem, a pénztár egyenlege nő!',
+        'Ilyenkor még az ügyfélszolgálat is mosolyog.',
+        'Ezt a bevételt külön kiemelem a naplóban. Vagyis a szívemben.',
+        'Kasszafegyelem: tízes!',
+        'Pénzt láttam, tisztelegtem – ez nálam reflex.',
+        'Rend a lelke mindennek. Főleg a kasszának.',
+        'Szolgálatot teljesítek – a kassza őrzőjeként!'
+    ];
+
+    var tisztelgesUtolso = -1;
+
+    /** Pénz került a kasszába: kis ugrás után vigyázzállás, bokacsattintás, tisztelgés, frappáns szöveg. */
+    function tiszteleg() {
+        if (!gyoker) {
+            return;
+        }
+
+        setalVege();
+        parbajVege();
+
+        var i;
+
+        do {
+            i = Math.floor(Math.random() * TISZTELGES_SZOVEG.length);
+        } while (i === tisztelgesUtolso && TISZTELGES_SZOVEG.length > 1);
+
+        tisztelgesUtolso = i;
+
+        // A mentés öröme (ugrás) után jön: a tisztelgés felülírná, ha egyszerre indulna.
+        window.setTimeout(function () {
+            allapot('buszke', 2800);
+            gesztus('tiszteleg', 2800);
+
+            if (panel.hidden && !tura) {
+                buborekMutat(TISZTELGES_SZOVEG[i], [], { ms: 4200, allapot: 'buszke' });
+            }
+        }, 950);
+    }
+
+    document.addEventListener('sdh:penz-be', tiszteleg);
+
     function setalVege() {
         if (!gyoker || !gyoker.classList.contains('is-setal')) {
             return;

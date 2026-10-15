@@ -649,6 +649,7 @@
                     kesz = true;
                     toast('Beírva a pénztárba: ' + penz(v.osszeg) + ' – eszközönként külön (' + v.db + ' tétel).', 'siker');
                     document.dispatchEvent(new CustomEvent('sdh:penztar-valtozott'));
+                    document.dispatchEvent(new CustomEvent('sdh:penz-be', { detail: { forras: 'eszkozonkent' } }));
                     d.close();
                 }).catch(function (h) {
                     gomb.disabled = false;
@@ -674,6 +675,7 @@
                 kesz = true;
                 toast('Beírva a pénztárba: ' + penz(osszeg) + '.', 'siker');
                 document.dispatchEvent(new CustomEvent('sdh:penztar-valtozott'));
+                document.dispatchEvent(new CustomEvent('sdh:penz-be', { detail: { forras: 'ajanlat' } }));
                 d.close();
             }).catch(function (h) {
                 gomb.disabled = false;
@@ -1132,6 +1134,7 @@
             urlap.querySelector('[data-pt-gyors-info]').textContent = '';
             maRajzol(c);
             toast('Rögzítve.', 'siker');
+            document.dispatchEvent(new CustomEvent('sdh:penz-be', { detail: { forras: 'gyors' } }));
             var sor = gyoker.querySelector('[data-pt-tetel="' + c.id + '"]');
 
             if (sor) {

@@ -64,6 +64,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.67.0
+- **Tisztelgés, ha pénz kerül a kasszába**: új `sdh:penz-be` esemény (app.js `penzBeJelez()`: új bevétel/befizetés
+  a pénztár űrlapján, munkalap-/árukiadás-/rendelésfizetés; penztar.js: gyors felvitel, eszközönkénti és egyösszegű
+  fizetés). Az asszisztens (asszisztens.js `tiszteleg()`): az ugrás után vigyázzállás, bokacsattintás (a lábak
+  összecsattannak), kihúzza magát, jobb kézzel határozott tisztelgés (`is-g-tiszteleg`, 2,8 mp), és 109 frappáns
+  mondat közül egy véletlenszerű (kétszer egymás után nem ugyanaz). A 3D figura (SDH-belső) ugyanezt 3D-ben: szökkenés,
+  kihúzás, felszegett áll, merev előrenézés, kesztyű a sisak homlokánál. t62.
+
 ### 0.66.2
 - **3D figura: kéz, láb, séta, párbaj.** Szikra helyett is kap kezet-lábat (sötét kesztyű és csizma kék neon éllel):
   a láb sétánál/táncnál, a kéz integetésnél, táncnál, sétánál és a párbajban látszik – abban tartja a fénypengét.

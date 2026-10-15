@@ -1792,6 +1792,54 @@
     to { rotate: 82deg; }
 }
 
+/* Tisztelgés (0.67.0, pénz a kasszában): vigyázzállás – a két láb előbújik és összecsattan
+   (bokacsattintás), a test kihúzza magát, a jobb kéz határozottan a homlokhoz. */
+.sdh-ai.is-g-tiszteleg .sdh-ai__leny {
+    animation: sdh-ai-g-vigyazz 2.8s cubic-bezier(.3, 1.4, .5, 1) 1;
+}
+
+@keyframes sdh-ai-g-vigyazz {
+    0% { translate: 0 0; scale: 1 1; }
+    8% { translate: 0 calc(-7px * var(--sdh-n)); scale: .97 1.05; }
+    14% { translate: 0 0; scale: 1.04 .95; }
+    20%, 88% { translate: 0 0; scale: .97 1.05; }
+    100% { translate: 0 0; scale: 1 1; }
+}
+
+.sdh-ai.is-g-tiszteleg .sdh-ai__lab {
+    opacity: 1;
+    translate: 0 0;
+    animation: sdh-ai-g-csatt 2.8s cubic-bezier(.5, 0, .2, 1) 1 both;
+}
+
+.sdh-ai.is-g-tiszteleg .sdh-ai__lab--b { --sdh-csatt: 22%; }
+.sdh-ai.is-g-tiszteleg .sdh-ai__lab--j { --sdh-csatt: -22%; }
+
+/* A lábak kissé szétállva indulnak, és a 14%-nál összecsattannak (sarok a sarokhoz). */
+@keyframes sdh-ai-g-csatt {
+    0%, 6% { transform: translateX(calc(var(--sdh-csatt) * -.4)); }
+    14%, 92% { transform: translateX(var(--sdh-csatt)); }
+    100% { transform: translateX(0); }
+}
+
+.sdh-ai.is-g-tiszteleg .sdh-ai__kar--j {
+    z-index: 3;
+    opacity: 1;
+    animation: sdh-ai-g-tiszteleg 2.8s cubic-bezier(.2, 1.3, .4, 1) 1 both;
+}
+
+.sdh-ai.is-g-tiszteleg .sdh-ai__kar--b {
+    rotate: -6deg;
+    translate: 18% 20%;
+}
+
+/* A kéz egy határozott, gyors mozdulattal a homlokhoz, ott áll, aztán le. */
+@keyframes sdh-ai-g-tiszteleg {
+    0%, 16% { rotate: -28deg; translate: 0 0; }
+    26%, 84% { rotate: -160deg; translate: -92% -104%; }
+    100% { rotate: -28deg; translate: 0 0; }
+}
+
 .sdh-ai.is-g-tancol .sdh-ai__leny {
     animation: sdh-ai-g-tancol .52s ease-in-out infinite alternate;
 }

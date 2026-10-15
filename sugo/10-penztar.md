@@ -4,7 +4,7 @@ cim: Házipénztár
 csoport: Pénz
 modul: penztar
 szakaszok: penztar, fizmodok
-kulcsszavak: pénztár, házipénztár, kassza, napi kassza, zárás, napi zárás, nyitó, készpénz, KP, bankkártya, utalás, bevétel, kivét, kifizetés, befizetés, váltópénz, címlet, pénzszámolás, eltérés, hiány, többlet, újranyitás, napló, riport, statisztika, export, CSV, Excel, import, ügynök, egyeztetés, fizetés, előleg, részfizetés, fizetési mód
+kulcsszavak: pénztár, házipénztár, kassza, napi kassza, zárás, napi zárás, nyitó, készpénz, KP, bankkártya, utalás, bevétel, kivét, kifizetés, befizetés, váltópénz, címlet, pénzszámolás, eltérés, hiány, többlet, újranyitás, napló, riport, statisztika, export, CSV, Excel, import, ügynök, egyeztetés, fizetés, előleg, részfizetés, fizetési mód, tisztelgés, tiszteleg, vigyázz, bokacsattintás, pénz a kasszában, figura tiszteleg
 osszefoglalo: A napi kassza – bevételek, kivétek, kifizetések, címletes számolás és zárás, riport, statisztika és egyeztető ügynök.
 ---
 
@@ -242,6 +242,10 @@ A Beállítások **Pénz és eladás** csoportjában a **Fizetési módok** lapf
 - **Rossz napra került a tétel.** Nyisd meg, állítsd át a **Nap** mezőt, és mentsd. Mindkét nap összege újraszámolódik.
 
 ## GYIK
+
+### Miért tiszteleg az asszisztens, amikor pénzt rögzítek?
+
+Mert pénz került a kasszába. Új **bevételnél** és **befizetésnél** (a pénztár űrlapján vagy a gyors felvitellel), és amikor egy munkalapot, napi árukiadást vagy rendelést kifizettek, a figura előbb örömében felugrik, aztán **vigyázzba áll**: a két lába előbújik és összecsattan (bokacsattintás), kihúzza magát, és a jobb kezével határozottan **tiszteleg** – közben egy frappáns mondatot mond a buborékban (több mint száz közül véletlenszerűen, kétszer egymás után nem ugyanazt). Tétel módosítására, kivétre és kifizetésre nem tiszteleg. Ha nyitva van a csevegő, csak tiszteleg, nem szól közbe.
 
 ### Miért szól az asszisztens a bankkártya-terminálról, amikor lezárom a napot?
 

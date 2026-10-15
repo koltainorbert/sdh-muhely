@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1, kisvárosi srácok, kartonfigura, kivágott papír, gyerekek, bence, lilla, gergő, űrcsata, csillagőr zoli, zoli, bip, droid, lebegő robot, plazmavilla, galaktikus parkolóőrség, parkolójegy, tányér-cirkáló, ufo, űrhajó, új szereplők, ki az a bip, kik azok a gyerekek, melyik figura, választható figura, figura cseréje, figura kiválasztása, kartonka, bojtika, bip droid, zoli csillagőr, szikra, láng, csepp, moha, kobold, bigyó, felhő, zümi, pára, csillag
+kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1, kisvárosi srácok, kartonfigura, kivágott papír, gyerekek, bence, lilla, gergő, űrcsata, csillagőr zoli, zoli, bip, droid, lebegő robot, plazmavilla, galaktikus parkolóőrség, parkolójegy, tányér-cirkáló, ufo, űrhajó, új szereplők, ki az a bip, kik azok a gyerekek, melyik figura, választható figura, figura cseréje, figura kiválasztása, kartonka, bojtika, bip droid, zoli csillagőr, szikra, láng, csepp, moha, kobold, bigyó, felhő, zümi, pára, csillag, tisztelgés, tiszteleg, vigyázz, bokacsattintás, pénz a kasszában
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -442,6 +442,10 @@ Ha a böngésző nem használja a videokártyát (hardveres gyorsítás), a mozg
 ### Hogyan cserélem le a figurát?
 
 Beállítások › Asszisztens › **Melyik figura?** – kattints a kedvencedre, és mentsd. Tizennégy van: Szikra, Láng, Csepp, Moha, Kobold, Bigyó, Felhő, Zümi, Pára, Csillag, valamint az újak: **Kartonka** (kivágott papír kisfiú), **Bojtika** (kivágott papír kislány), **Bip** (lebegő gömbdroid) és **Zoli** (csillagőr). Mindegyik ugyanúgy tud mindent; csak a külseje más.
+
+### Miért áll vigyázzba és tiszteleg?
+
+Mert pénz került a kasszába (új bevétel vagy befizetés, illetve egy munkalap, árukiadás vagy rendelés fizetése). Ilyenkor előbb felugrik, aztán vigyázzba vágja magát: a lábai előbújnak és összecsattannak, kihúzza magát, és határozottan tiszteleg, közben egy frappáns mondatot mond (több mint száz közül véletlenszerűen). A 3D figura ugyanígy: szökken egyet, kihúzza magát, állát felszegi, egyenesen előre néz, és kesztyűs kezével a sisakja széléhez tiszteleg.
 
 ### Kikapcsolható a pisilés és a kakilás?
 
