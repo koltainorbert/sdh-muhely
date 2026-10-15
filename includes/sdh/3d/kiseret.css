@@ -1,18 +1,12 @@
 /*
- * SDH – belső: 3D kísérő (0.66.0). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
- * A méretet és a helyet a kiseret.js adja (a felület nagyításával együtt), a mozgatás transform.
+ * SDH – belső: 3D figura (0.66.1). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
+ * A méretet a kiseret.js adja (a felület nagyításával együtt), a mozgatás transform.
  */
 
 .sdh-3d {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 100039;
     opacity: 0;
-    cursor: pointer;
-    pointer-events: auto;
-    will-change: transform;
-    transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
+    pointer-events: none;
+    transition: opacity .5s ease;
 }
 
 .sdh-3d.is-kesz {
@@ -25,8 +19,58 @@
     height: 100%;
 }
 
+/* ---- „Mellette": kísérő Szikra mellett, saját kattintással ---- */
+
+.sdh-3d--mellette {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100039;
+    cursor: pointer;
+    pointer-events: auto;
+    will-change: transform;
+    transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
+}
+
+/* ---- „Helyette": a modell maga az asszisztens, Szikra testének helyén ---- */
+
+/* A rajzlap a figura dobozában, kicsit nagyobb nála (a modell kilóghat), alul igazítva.
+   A kattintás a figuráé marad (csevegő, húzás) – a rajzlap átengedi. */
+.sdh-3d--benne {
+    position: absolute;
+    left: -38%;
+    right: -38%;
+    bottom: -10%;
+    height: 176%;
+    z-index: 1;
+}
+
+/* Amint a modell kész, Szikra saját teste, arca, keze-lába és dísze eltűnik;
+   a kellékek, szikrák, „zzz", jelvény, buborék és a csevegő maradnak. */
+.sdh-ai.is-3d .sdh-ai__aura,
+.sdh-ai.is-3d .sdh-ai__lab,
+.sdh-ai.is-3d .sdh-ai__kar,
+.sdh-ai.is-3d .sdh-ai__csap,
+.sdh-ai.is-3d .sdh-ai__test,
+.sdh-ai.is-3d .sdh-sz-arc {
+    visibility: hidden;
+}
+
+.sdh-ai.is-3d .sdh-ai__leny::before,
+.sdh-ai.is-3d .sdh-ai__leny::after {
+    display: none;
+}
+
+.sdh-ai.is-3d .sdh-ai__kellek,
+.sdh-ai.is-3d .sdh-ai__szikrak,
+.sdh-ai.is-3d .sdh-ai__zzz,
+.sdh-ai.is-3d .sdh-ai__jelveny,
+.sdh-ai.is-3d .sdh-sz-kellek {
+    z-index: 2;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .sdh-3d {
+    .sdh-3d--mellette {
         transition: opacity .2s ease;
     }
 }

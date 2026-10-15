@@ -98,6 +98,34 @@ $ki = (string) ob_get_clean();
 T::tartalmaz($ki, 'type="module"', 'bekapcsolva modulként töltődik');
 T::tartalmaz($ki, 'includes/sdh/3d/kiseret.js', 'a belső mappából');
 T::tartalmaz($ki, $uj['fajl'], 'a feltöltött modellel');
+T::tartalmaz($ki, '&quot;mod&quot;:&quot;helyette&quot;', 'alapból Szikra helyett: ő maga az asszisztens');
+
+/* --- Szikra helyett (0.66.1) --------------------------------------------------------- */
+
+$css3 = (string) file_get_contents($d . '3d/kiseret.css');
+T::tartalmaz($css3, '.sdh-ai.is-3d .sdh-ai__test', 'Szikra teste eltűnik, amint a modell kész');
+T::tartalmaz($css3, '.sdh-ai.is-3d .sdh-sz-arc', 'és a rajzolt arca is');
+T::nem_tartalmaz($css3, '.sdh-ai.is-3d .sdh-ai__buborek', 'a buborék megmarad');
+T::tartalmaz($js, "gyoker.classList.add('is-3d')", 'Szikra csak a kész modell után tűnik el (betöltési hibánál marad)');
+T::tartalmaz($js, "getAttribute('data-allapot')", 'a modell Szikra hangulatát követi');
+T::tartalmaz($js, "indexOf('is-g-')", 'és a gesztusait');
+
+foreach (['gondolkodik', 'beszel', 'orul', 'szomoru', 'alszik', 'meglepett', 'mutat'] as $h) {
+    T::tartalmaz($js, "    {$h}: {", "3D póz a(z) „{$h}” hangulathoz");
+}
+
+foreach (['porog', 'ugral', 'integet', 'bolint', 'tancol', 'razkodik', 'nyujt', 'kukucs'] as $gn) {
+    T::tartalmaz($js, "case '{$gn}':", "3D mozdulat a(z) „{$gn}” gesztushoz");
+}
+
+$_POST = ['sdh_3d_jelen' => '1', 'sdh_3d_aktiv' => '1', 'sdh_3d_mod' => 'mellette'];
+$K::mentes();
+T::egyezik('mellette', $K::beallitas()['mod'], 'kísérőnek is beállítható');
+$_POST = ['sdh_3d_jelen' => '1', 'sdh_3d_aktiv' => '1', 'sdh_3d_mod' => 'barmi'];
+$K::mentes();
+$_POST = [];
+T::egyezik('helyette', $K::beallitas()['mod'], 'ismeretlen szerep helyett „helyette”');
+update_option($K::OPT, array_merge($K::beallitas(), $uj, ['aktiv' => true]));
 
 update_option(SDH_Muhely_Sdh::OPT, '0');
 ob_start();
@@ -122,6 +150,7 @@ wp_delete_file($rossz);
 /* --- Súgó -------------------------------------------------------------------------- */
 
 $sugo = (string) file_get_contents(SDH_MUHELY_DIR . 'sugo/27-sdh-belso.md');
-T::tartalmaz($sugo, '## 3D kísérő', 'a belső fejezet leírja a 3D kísérőt');
+T::tartalmaz($sugo, '## 3D figura', 'a belső fejezet leírja a 3D figurát');
+T::tartalmaz($sugo, 'Szikra helyett', 'és hogy Szikra helyett is lehet');
 
 T::vege('t61 SDH-belső 3D kísérő');

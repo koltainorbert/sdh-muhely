@@ -1,6 +1,6 @@
 <?php
 /**
- * SDH – belső modul: 3D kísérő (0.66.0).
+ * SDH – belső modul: 3D figura (0.66.0; 0.66.1: Szikra helyett is).
  *
  * CSAK AZ SDH SZERVIZÉ (lásd includes/sdh/class-sdh-muhely-sdh.php). Eladáskor az
  * `includes/sdh/` mappával együtt nyomtalanul eltűnik.
@@ -35,8 +35,8 @@ final class SDH_Muhely_Sdh_3d
         }
 
         SDH_Muhely_Sdh::regisztral('3d', [
-            'cim'    => '3D kísérő',
-            'leiras' => 'Saját feltöltésű 3D modell (.glb) Szikra mellett: valódi 3D, lebeg, követi az egeret, kattintásra megpördül. A modell csak ezen a gépen van, a repóba és az eladási csomagba nem kerül.',
+            'cim'    => '3D figura',
+            'leiras' => 'Saját feltöltésű 3D modell (.glb) Szikra helyett (ő az asszisztens, mindent ugyanúgy csinál) vagy mellette: valódi 3D, lebeg, követi az egeret. A modell csak ezen a gépen van, a repóba és az eladási csomagba nem kerül.',
             'rajz'   => [self::class, 'doboz'],
             'ment'   => [self::class, 'mentes'],
         ]);
@@ -46,7 +46,7 @@ final class SDH_Muhely_Sdh_3d
         add_action('admin_footer', [self::class, 'kiir_admin']);
     }
 
-    /** @return array{aktiv: bool, fajl: string, nev: string, kredit: string, meret: int, hely: string, eger: bool, forgas: int} */
+    /** @return array{aktiv: bool, mod: string, fajl: string, nev: string, kredit: string, meret: int, hely: string, eger: bool, forgas: int} */
     public static function beallitas(): array
     {
         $b = get_option(self::OPT, []);
@@ -54,6 +54,9 @@ final class SDH_Muhely_Sdh_3d
 
         return [
             'aktiv'  => !empty($b['aktiv']),
+            // 0.66.1: „helyette" – a modell MAGA az asszisztens (Szikra helyén, mindent ugyanúgy csinál);
+            // „mellette" – kísérő Szikra mellett.
+            'mod'    => ($b['mod'] ?? 'helyette') === 'mellette' ? 'mellette' : 'helyette',
             'fajl'   => (string) ($b['fajl'] ?? ''),
             'nev'    => (string) ($b['nev'] ?? ''),
             'kredit' => (string) ($b['kredit'] ?? ''),
@@ -156,11 +159,13 @@ final class SDH_Muhely_Sdh_3d
         $ut = self::modell_ut();
         ?>
         <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">3D kísérő Szikra mellett</h2>
+            <h2 class="sdh-doboz__cim">3D figura – Szikra helyett vagy mellett</h2>
 
             <p class="sdh-sugo">
-                Egy saját 3D modell (.glb) él Szikra mellett: valódi 3D-ben, a videokártyán rajzolva lebeg,
-                követi az egeret, kattintásra megpördül, és Szikra reagál rá. A modell <strong>csak ezen a
+                Egy saját 3D modell (.glb) valódi 3D-ben, a videokártyán rajzolva. <strong>Szikra helyett</strong>
+                ő maga az asszisztens: kattintásra nyílik a csevegő, buborékban beszél, sétál, végigvezet,
+                jeleneteket játszik, alszik – Szikra hangulatait és mozdulatait 3D-ben játssza el (gondolkodik,
+                bólogat, örül, szomorú, pörög, táncol…). <strong>Szikra mellett</strong> kísérőként lebeg mellette. A modell <strong>csak ezen a
                 gépen</strong> van (a feltöltési mappában) – a git-repóba és az eladási csomagba nem kerül.
                 Ha a böngészőben nincs hardveres gyorsítás, mozdulatlan képként jelenik meg.
             </p>
@@ -175,7 +180,15 @@ final class SDH_Muhely_Sdh_3d
 
             <div class="sdh-mezo sdh-mezo--jelolo">
                 <input type="checkbox" name="sdh_3d_aktiv" id="sdh_3d_aktiv" value="1" <?php checked($b['aktiv']); ?>>
-                <label for="sdh_3d_aktiv">A 3D kísérő látszódjon</label>
+                <label for="sdh_3d_aktiv">A 3D figura látszódjon</label>
+            </div>
+
+            <div class="sdh-mezo">
+                <label for="sdh_3d_mod">Szerepe</label>
+                <select name="sdh_3d_mod" id="sdh_3d_mod">
+                    <option value="helyette" <?php selected($b['mod'], 'helyette'); ?>>Szikra helyett – ő az asszisztens, mindent ugyanúgy csinál</option>
+                    <option value="mellette" <?php selected($b['mod'], 'mellette'); ?>>Szikra mellett – kísérő</option>
+                </select>
             </div>
 
             <div class="sdh-mezo">
@@ -204,12 +217,12 @@ final class SDH_Muhely_Sdh_3d
             </div>
 
             <div class="sdh-mezo">
-                <label for="sdh_3d_meret">Méret (képpont)</label>
+                <label for="sdh_3d_meret">Méret (képpont – csak kísérőként; Szikra helyett a figura méretét veszi át)</label>
                 <input type="number" name="sdh_3d_meret" id="sdh_3d_meret" min="60" max="320" step="10" value="<?php echo (int) $b['meret']; ?>">
             </div>
 
             <div class="sdh-mezo">
-                <label for="sdh_3d_hely">Hol legyen</label>
+                <label for="sdh_3d_hely">Hol legyen (csak kísérőként)</label>
                 <select name="sdh_3d_hely" id="sdh_3d_hely">
                     <option value="bal" <?php selected($b['hely'], 'bal'); ?>>Szikra bal oldalán</option>
                     <option value="felette" <?php selected($b['hely'], 'felette'); ?>>Szikra fölött</option>
@@ -239,6 +252,7 @@ final class SDH_Muhely_Sdh_3d
         $regi = self::beallitas();
         $uj   = [
             'aktiv'  => !empty($_POST['sdh_3d_aktiv']),
+            'mod'    => ($_POST['sdh_3d_mod'] ?? $regi['mod']) === 'mellette' ? 'mellette' : 'helyette',
             'fajl'   => $regi['fajl'],
             'nev'    => $regi['nev'],
             'kredit' => isset($_POST['sdh_3d_kredit']) ? mb_substr(sanitize_text_field(wp_unslash((string) $_POST['sdh_3d_kredit'])), 0, 300) : $regi['kredit'],
@@ -347,6 +361,7 @@ final class SDH_Muhely_Sdh_3d
 
         return [
             'url'    => $url . $b['fajl'] . '?v=' . (int) filemtime(self::modell_ut()),
+            'mod'    => $b['mod'],
             'nev'    => $b['nev'],
             'kredit' => $b['kredit'],
             'meret'  => $b['meret'],

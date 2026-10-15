@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.66.1
+- **3D figura Szikra helyett** (SDH – belső): a „Szerepe" beállítással (alapból *Szikra helyett*) a feltöltött modell
+  maga az asszisztens – Szikra figurájának dobozában él (a kattintás, csevegő, buborék, séta, túra, jelenetek, alvás
+  ugyanúgy megy), Szikra teste csak a kész modell után tűnik el (`.sdh-ai.is-3d`). A `data-allapot` hangulatokat és
+  az `is-g-*` gesztusokat 3D pózra és mozdulatra fordítja (gondolkodik, beszel, orul, szomoru, alszik, porog, tancol…).
+  Állókép módban állapotváltáskor újrarajzol. A *Szikra mellett* kísérő megmaradt. t61.
+
 ### 0.66.0
 - **SDH – belső: 3D kísérő** (`includes/sdh/class-sdh-muhely-sdh-3d.php`, `includes/sdh/3d/`): saját feltöltésű .glb
   modell Szikra mellett – three.js r169 (MIT, `3d/vendor/`, relatív importokkal), PBR + neon élfények, valódi GPU-n

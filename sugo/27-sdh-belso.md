@@ -4,8 +4,8 @@ cim: SDH – belső modulok
 csoport: Rendszer
 modul:
 szakaszok: sdh, sdh_gigatel, sdh_3d
-kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh, 3D kísérő, 3D modell, glb, három dimenziós, sisak, modell feltöltése, Szikra mellett, three.js, WebGL, forog, lebeg, kredit, CC-BY, hivatkozás
-osszefoglalo: Az SDH Szerviz saját, belső moduljai – ami csak nálunk fut, és eladáskor nem megy ki a rendszerrel. Jelenleg a Gigatel beszállítói levelek feldolgozása és a 3D kísérő Szikra mellett.
+kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh, 3D kísérő, 3D modell, glb, három dimenziós, sisak, modell feltöltése, Szikra mellett, three.js, WebGL, forog, lebeg, kredit, CC-BY, hivatkozás, 3D figura, Szikra helyett, saját figura, 3D asszisztens, sisak mint asszisztens
+osszefoglalo: Az SDH Szerviz saját, belső moduljai – ami csak nálunk fut, és eladáskor nem megy ki a rendszerrel. Jelenleg a Gigatel beszállítói levelek feldolgozása és a 3D figura Szikra helyett vagy mellett.
 ---
 
 ## Mire való
@@ -23,7 +23,7 @@ A szabály egyszerű:
 
 - **SDH-modulok** – mi fut, és egyben ki-be kapcsolható.
 - **Gigatel** – a Gigatel webáruház napi leveleinek feldolgozása.
-- **3D kísérő** – saját feltöltésű 3D modell Szikra mellett.
+- **3D figura** – saját feltöltésű 3D modell Szikra helyett (ő az asszisztens) vagy mellette.
 
 ## SDH-modulok
 
@@ -69,29 +69,36 @@ Címke csak azokra a tételekre kell, amelyekhez telefonszám tartozik: azokat v
 
 A címke tartalmát a **Beállítások › Címkenyomtatás › Beszállítói tétel** lapon állítod.
 
-## 3D kísérő
+## 3D figura
 
-Egy saját 3D modell él Szikra mellett, valódi 3D-ben: a videokártyán rajzolva finoman lebeg, alatta puha árnyék, a tekintetével követi az egeret, tétlenségben Szikrára néz, **kattintásra megpördül**, Szikra pedig ugrik és szikrázik. Kék és lila élfény adja a CRM neon hangulatát.
+Egy saját 3D modell valódi 3D-ben, a videokártyán rajzolva. Két szerepe lehet:
 
-**Beállítások › SDH – belső › 3D kísérő**:
+- **Szikra helyett** (alapból): a modell **maga az asszisztens**. Szikra testének helyén él, és mindent ugyanúgy csinál: kattintásra (vagy [[F1]]) nyílik a csevegő, buborékban beszél, sétál, végigvezet az oldalakon, jeleneteket játszik, elalszik. Szikra hangulatait és mozdulatait 3D-ben játssza el: **gondolkodik** – billeg, lüktet a fénye; **beszél** – bólogat; **örül** – ugrik, felfénylik; **szomorú** – lehajtja a fejét, elhalványul; **alszik** – előrebukik és szuszog; **meglepett** – hátrahőköl; **pörög**, **táncol**, **integet**, **bólint**, **rázkódik** – ugyanígy. Közben a tekintetével követi az egeret. A neve és a tudása ugyanaz marad (a nevét a Beállítások › Asszisztens › **A neve** mezőben írod át).
+- **Szikra mellett**: kísérőként lebeg Szikra mellett vagy fölött; kattintásra megpördül, Szikra pedig ugrik és szikrázik.
+
+Kék és lila élfény adja a CRM neon hangulatát. Amíg a modell töltődik, Szikra látszik; ha a modell nem tölthető be, Szikra marad.
+
+**Beállítások › SDH – belső › 3D figura**:
 
 | Mező | Mire való |
 |---|---|
-| **A 3D kísérő látszódjon** | Ki- és bekapcsolja. |
+| **A 3D figura látszódjon** | Ki- és bekapcsolja. |
+| **Szerepe** | *Szikra helyett* (ő az asszisztens) vagy *Szikra mellett* (kísérő). |
 | **3D modell (.glb)** | A modell feltöltése (glTF 2.0 bináris, legfeljebb 40 MB). Új feltöltés a régit lecseréli. A Sketchfabról letöltött modelleknél a „glTF / .glb" formátumot válaszd; az FBX, STL, OBJ nem tölthető fel. |
 | **A modell törlése** | Törli a feltöltött fájlt. |
-| **Hivatkozás** | A modell szerzője és licence. CC-BY licencű modellnél kötelező; ha üres, a rendszer a modellből olvassa ki. Az egér a kísérő fölött ezt mutatja. |
-| **Méret** | 60–320 képpont (a felület nagyításával együtt nő). |
-| **Hol legyen** | Szikra bal oldalán, vagy fölötte. |
+| **Hivatkozás** | A modell szerzője és licence. CC-BY licencű modellnél kötelező; ha üres, a rendszer a modellből olvassa ki. |
+| **Méret**, **Hol legyen** | Csak kísérőként számít (60–320 képpont; bal oldalt vagy fölötte). Szikra helyett a figura méretét veszi át. |
 | **Alapirány** | Ha a modell nem szembe néz, itt fordítod (fokban, pl. 180). |
 | **Kövesse a tekintetével az egeret** | Kikapcsolva magától nézelődik. |
 
 Fontos tudnivalók:
 
 - A modell **csak ezen a gépen** van: a WordPress feltöltési mappájában (`uploads/sdh-muhely-3d/`), nem a pluginban – ezért nem kerül a git-repóba, a frissítő zipbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni.
-- Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelenik meg, hogy ne lassítsa a munkát. Rejtett lapon nem rajzol.
+- Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelenik meg – a hangulatváltáskor ilyenkor is felveszi az új tartását. Rejtett lapon nem rajzol.
 - A munka nem vár rá: az oldal betöltése után, ráérő időben töltődik be.
 - Nyomtatáskor nem látszik.
+
+## Szabályok, amiket a rendszer betart
 
 
 

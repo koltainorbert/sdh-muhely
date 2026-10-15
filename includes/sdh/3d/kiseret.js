@@ -1,13 +1,18 @@
 /**
- * SDH – belső: 3D kísérő (0.66.0). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
+ * SDH – belső: 3D figura (0.66.1). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
  *
- * Saját feltöltésű .glb modell Szikra mellett, valódi 3D-ben (three.js, WebGL, GPU):
- *   - finoman lebeg és „lélegzik", alatta puha árnyék, ami a magassággal együtt halványul;
- *   - a tekintetével követi az egeret (simított, rugós mozgás), tétlenségben Szikrára néz;
- *   - kattintásra megpördül, Szikra ugrik és szikrázik;
- *   - követi Szikra helyét (ha sétál vagy a felület nagyít), a mozgatás compositor-réteg;
- *   - rejtett lapon nem rajzol; szoftveres rajzolásnál (nincs hardveres gyorsítás) és
- *     „kevesebb mozgás" beállításnál mozdulatlan, egyetlen kép.
+ * Saját feltöltésű .glb modell valódi 3D-ben (three.js, WebGL, GPU). Két szerep:
+ *
+ *   „helyette" – a modell MAGA AZ ASSZISZTENS: Szikra testének helyén él, és mindent
+ *                ugyanúgy csinál, mint Szikra – kattintásra nyílik a csevegő, buborékban
+ *                beszél, sétál, végigvezet, jeleneteket játszik, alszik. Szikra hangulatait
+ *                (data-allapot) és gesztusait (is-g-*) 3D mozdulatokra fordítja: gondolkodik
+ *                → billeg és lüktet a fénye, beszél → bólogat, örül → ugrik, szomorú →
+ *                lehajtja a fejét, alszik → elbóbiskol, pörög → megpördül, táncol → ring…
+ *   „mellette" – kísérő Szikra mellett (külön kattintható, kattintásra megpördül).
+ *
+ * Mindkettő: lebeg, a tekintetével követi az egeret, rejtett lapon nem rajzol, szoftveres
+ * rajzolásnál és „kevesebb mozgás" mellett állókép (állapotváltáskor újrarajzolva).
  */
 import * as THREE from './vendor/three.module.min.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
@@ -22,30 +27,185 @@ try {
     B = {};
 }
 
-function n() {
+const HELYETTE = B.mod !== 'mellette';
+
+function nagyitas() {
     return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sdh-n')) || 1;
 }
 
-function szikraElem() {
+function szikraLeny() {
     return document.querySelector('.sdh-ai:not(.sdh-ai-figura__kep) .sdh-ai__leny');
 }
+
+/* ===================================================================== */
+/* Szikra hangulatai és gesztusai → 3D póz                                  */
+/* ===================================================================== */
+
+// Alappóz hangulatonként: elfordulás (yaw), bólintás (pitch, + = előre), dőlés (roll),
+// emelés (y), méret, fényerő, és mennyire kövesse az egeret.
+const POZ = {
+    nyugi: {},
+    figyel: { pitch: 0.12, scale: 1.03, fenyes: 1.15 },
+    kivancsi: { pitch: 0.1, roll: 0.14, scale: 1.04 },
+    gondolkodik: { pitch: -0.12, roll: 0.1, eger: 0.3 },
+    beszel: { pitch: 0.06, fenyes: 1.2 },
+    orul: { y: 0.05, scale: 1.06, fenyes: 1.35 },
+    nevet: { pitch: -0.18, scale: 1.05, fenyes: 1.3 },
+    buszke: { pitch: -0.2, y: 0.03, scale: 1.05 },
+    szomoru: { pitch: 0.38, y: -0.06, scale: 0.96, fenyes: 0.6, eger: 0.2 },
+    jelez: { roll: -0.12, fenyes: 1.4 },
+    mutat: { yaw: -0.45, pitch: 0.1, eger: 0.2 },
+    alszik: { pitch: 0.42, roll: 0.16, y: -0.07, fenyes: 0.35, eger: 0 },
+    asit: { pitch: -0.35, scale: 1.04 },
+    kacsint: { roll: 0.22 },
+    meglepett: { pitch: -0.15, y: 0.06, scale: 1.1, fenyes: 1.4 },
+    ijedt: { pitch: -0.1, y: -0.03, scale: 0.92 },
+    szedul: { roll: 0.12 },
+    kave: { pitch: 0.18 },
+    olvas: { pitch: 0.3, eger: 0.1 }
+};
+
+function hangulatPoz(nev) {
+    const p = POZ[nev] || {};
+
+    return {
+        yaw: p.yaw || 0,
+        pitch: p.pitch || 0,
+        roll: p.roll || 0,
+        y: p.y || 0,
+        scale: p.scale || 1,
+        fenyes: p.fenyes || 1,
+        eger: p.eger === undefined ? 1 : p.eger
+    };
+}
+
+/** Folyamatos rátét a hangulatra (t: másodperc). */
+function hangulatMozgas(nev, t) {
+    const o = { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0, fenyes: 0 };
+
+    switch (nev) {
+        case 'gondolkodik':
+            o.roll = Math.sin(t * 1.6) * 0.12;
+            o.yaw = Math.sin(t * 0.8) * 0.18;
+            o.fenyes = 0.35 + Math.sin(t * 5) * 0.35;      // lüktető fény
+            break;
+        case 'beszel':
+            o.pitch = Math.abs(Math.sin(t * 7)) * 0.1;      // bólogat beszéd közben
+            o.fenyes = Math.abs(Math.sin(t * 9)) * 0.3;
+            break;
+        case 'nevet':
+            o.roll = Math.sin(t * 18) * 0.06;
+            o.y = Math.abs(Math.sin(t * 9)) * 0.03;
+            break;
+        case 'orul':
+            o.y = Math.abs(Math.sin(t * 6)) * 0.05;
+            break;
+        case 'alszik':
+            o.pitch = Math.sin(t * 0.9) * 0.05;             // lassú szuszogás
+            o.scale = Math.sin(t * 0.9) * 0.015;
+            break;
+        case 'ijedt':
+            o.yaw = Math.sin(t * 40) * 0.025;               // remeg
+            break;
+        case 'szedul':
+            o.roll = Math.sin(t * 3) * 0.22;
+            o.pitch = Math.cos(t * 3) * 0.15;
+            break;
+        case 'jelez':
+            o.fenyes = Math.max(0, Math.sin(t * 8)) * 0.8;  // villog
+            break;
+        case 'kivancsi':
+            o.roll = Math.sin(t * 1.2) * 0.05;
+            break;
+        default:
+            break;
+    }
+
+    return o;
+}
+
+const kozep = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+/** Gesztusok (is-g-<név>): f = eltelt idő mp-ben a gesztus kezdete óta. */
+function gesztusMozgas(nev, f) {
+    const o = { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0 };
+
+    switch (nev) {
+        case 'porog':
+            o.yaw = kozep(Math.min(1, f / 0.9)) * Math.PI * 2;
+            break;
+        case 'ugral':
+            o.y = Math.max(0, Math.sin(Math.min(1, f / 0.5) * Math.PI)) * 0.14;
+            o.scale = o.y * 0.4;
+            break;
+        case 'integet':
+            o.roll = Math.sin(f * 14) * 0.18 * Math.max(0, 1 - f / 1.6);
+            break;
+        case 'bolint':
+            o.pitch = Math.sin(Math.min(1, f / 0.5) * Math.PI) * 0.35;
+            break;
+        case 'tancol':
+            o.roll = Math.sin(f * 6.5) * 0.25;
+            o.yaw = Math.sin(f * 3.25) * 0.6;
+            o.y = Math.abs(Math.sin(f * 6.5)) * 0.06;
+            break;
+        case 'razkodik':
+            o.yaw = Math.sin(f * 45) * 0.12 * Math.max(0, 1 - f / 0.8);
+            break;
+        case 'nyujt':
+            o.scale = Math.sin(Math.min(1, f / 1.2) * Math.PI) * 0.12;
+            o.pitch = -Math.sin(Math.min(1, f / 1.2) * Math.PI) * 0.3;
+            break;
+        case 'kukucs':
+            o.roll = Math.sin(Math.min(1, f / 0.9) * Math.PI) * 0.4;
+            o.yaw = Math.sin(Math.min(1, f / 0.9) * Math.PI) * 0.5;
+            break;
+        default:
+            break;
+    }
+
+    return o;
+}
+
+/* ===================================================================== */
+/* Indulás                                                                 */
+/* ===================================================================== */
 
 function indit() {
     if (!B.url || window.SDH_3D_KISERO) {
         return;
     }
 
+    const leny = szikraLeny();
+
+    if (HELYETTE && !leny) {
+        // Szikra még nem készült el: ha szól, hogy kész, indulunk.
+        document.addEventListener('sdh:szikra-kesz', indit, { once: true });
+
+        return;
+    }
+
     window.SDH_3D_KISERO = true;
 
+    const gyoker = leny ? leny.closest('.sdh-ai') : null;
     const csendes = document.documentElement.classList.contains('sdh-gyenge-gep')
         || (window.SDH_GPU && window.SDH_GPU.allapot !== 'gyors')
         || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const doboz = document.createElement('div');
-    doboz.className = 'sdh-3d';
-    doboz.title = [B.nev, B.kredit].filter(Boolean).join(' – ') || '3D kísérő';
+    doboz.className = HELYETTE ? 'sdh-3d sdh-3d--benne' : 'sdh-3d sdh-3d--mellette';
     doboz.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(doboz);
+
+    if (B.kredit) {
+        doboz.setAttribute('data-kredit', B.kredit);
+    }
+
+    if (HELYETTE) {
+        leny.appendChild(doboz);
+    } else {
+        doboz.title = [B.nev, B.kredit].filter(Boolean).join(' – ') || '3D kísérő';
+        document.body.appendChild(doboz);
+    }
 
     let renderer;
 
@@ -53,6 +213,7 @@ function indit() {
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     } catch (x) {
         doboz.remove();
+        window.SDH_3D_KISERO = false;
 
         return;
     }
@@ -64,6 +225,7 @@ function indit() {
     doboz.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
+
     // Tükröződő környezet (fényes fém felületekhez) csak valódi GPU-n: a szoftveres
     // rajzolók egy része a PMREM lebegőpontos textúráit nem tudja – ott fekete lenne.
     const gpu = !!(window.SDH_GPU && window.SDH_GPU.allapot === 'gyors');
@@ -90,9 +252,12 @@ function indit() {
         scene.add(szem);
     }
 
+    const KEK = 3.2;
+    const LILA = 2.4;
+
     const kamera = new THREE.PerspectiveCamera(24, 1, 0.01, 100);
-    const forgo = new THREE.Group();   // egér-követés, pördülés
-    const lebego = new THREE.Group();  // lebegés
+    const forgo = new THREE.Group();   // tekintet, hangulat, gesztus
+    const lebego = new THREE.Group();  // lebegés, méret
     lebego.add(forgo);
     scene.add(lebego);
 
@@ -112,24 +277,49 @@ function indit() {
     arnyek.rotation.x = -Math.PI / 2;
     scene.add(arnyek);
 
-    let meret = 0;
+    let szel = 0;
+    let mag = 0;
     let alj = -0.5;
 
     function meretez() {
-        const m = Math.round((B.meret || 130) * n());
+        let w;
+        let h;
 
-        if (m !== meret) {
-            meret = m;
-            doboz.style.width = doboz.style.height = m + 'px';
-            renderer.setSize(m, m, false);
+        if (HELYETTE) {
+            const r = doboz.getBoundingClientRect();
+            w = Math.round(r.width);
+            h = Math.round(r.height);
+        } else {
+            w = h = Math.round((B.meret || 130) * nagyitas());
+            doboz.style.width = doboz.style.height = w + 'px';
         }
+
+        if (w > 0 && h > 0 && (w !== szel || h !== mag)) {
+            szel = w;
+            mag = h;
+            renderer.setSize(w, h, false);
+            kamera.aspect = w / h;
+            kamera.updateProjectionMatrix();
+
+            return true;
+        }
+
+        return false;
     }
 
-    // Hely: Szikra mellé; a mozgatás transform (GPU-réteg), CSS-átmenettel.
+    // „Mellette" szerep: Szikra mellé helyezés (transform, CSS-átmenettel).
     let utolsoHely = '';
 
     function helyez() {
-        const sz = szikraElem();
+        if (HELYETTE) {
+            if (meretez() && csendes) {
+                rajzol(0);
+            }
+
+            return;
+        }
+
+        const sz = szikraLeny();
 
         if (!sz) {
             doboz.style.opacity = '0';
@@ -138,20 +328,20 @@ function indit() {
         }
 
         const r = sz.getBoundingClientRect();
-        const res = 8 * n();
+        const res = 8 * nagyitas();
         let x;
         let y;
 
         if (B.hely === 'felette') {
-            x = r.left + r.width / 2 - meret / 2;
-            y = r.top - meret - res;
+            x = r.left + r.width / 2 - szel / 2;
+            y = r.top - mag - res;
         } else {
-            x = r.left - meret - res;
-            y = r.bottom - meret;
+            x = r.left - szel - res;
+            y = r.bottom - mag;
         }
 
-        x = Math.max(4, Math.min(window.innerWidth - meret - 4, Math.round(x)));
-        y = Math.max(4, Math.min(window.innerHeight - meret - 4, Math.round(y)));
+        x = Math.max(4, Math.min(window.innerWidth - szel - 4, Math.round(x)));
+        y = Math.max(4, Math.min(window.innerHeight - mag - 4, Math.round(y)));
         const h = x + ',' + y;
 
         if (h !== utolsoHely) {
@@ -162,14 +352,13 @@ function indit() {
         doboz.style.opacity = '';
     }
 
-    // Egér: a tekintet célja (-1..1), simítva.
+    // Egér: a tekintet célja (-1..1).
     const cel = { x: 0, y: 0 };
-    const most = { x: 0, y: 0 };
     let utolsoEger = performance.now();
 
     if (B.eger !== false && !csendes) {
         window.addEventListener('pointermove', function (e) {
-            const r = doboz.getBoundingClientRect();
+            const r = (HELYETTE ? leny : doboz).getBoundingClientRect();
             const kx = r.left + r.width / 2;
             const ky = r.top + r.height / 2;
 
@@ -179,61 +368,104 @@ function indit() {
         }, { passive: true });
     }
 
-    // Kattintás: pördülés + Szikra reagál.
+    // Kattintás: „helyette" szerepben a leny kattintása Szikráé (csevegő); „mellette" pördül.
     let porges = -1;
     let hover = 0;
 
-    doboz.addEventListener('click', function () {
-        if (porges >= 0) {
-            return;
+    if (!HELYETTE) {
+        doboz.addEventListener('click', function () {
+            if (porges >= 0) {
+                return;
+            }
+
+            porges = 0;
+
+            const S = window.SDH_SZIKRA;
+
+            try {
+                if (S && S.gesztus) { S.gesztus('ugral', 950); }
+                if (S && S.szikrak) { S.szikrak(6, 'csillag'); }
+            } catch (x) { /* a figura épp foglalt */ }
+
+            if (csendes) {
+                rajzol(0);
+            }
+        });
+    }
+
+    const hoverElem = HELYETTE ? leny : doboz;
+    hoverElem.addEventListener('pointerenter', function () { hover = 1; });
+    hoverElem.addEventListener('pointerleave', function () { hover = 0; });
+
+    // Szikra állapotának olvasása (hangulat, gesztus) – „helyette" szerepben.
+    let gesztusNev = '';
+    let gesztusKezd = 0;
+
+    function gesztusOlvas(most) {
+        if (!gyoker) {
+            return '';
         }
 
-        porges = 0;
+        let nev = '';
 
-        const S = window.SDH_SZIKRA;
+        gyoker.classList.forEach(function (o) {
+            if (o.indexOf('is-g-') === 0) {
+                nev = o.slice(5);
+            }
+        });
 
-        try {
-            if (S && S.gesztus) { S.gesztus('ugral', 950); }
-            if (S && S.szikrak) { S.szikrak(6, 'csillag'); }
-        } catch (x) { /* a figura épp foglalt */ }
-
-        if (csendes) {
-            rajzol(0);
+        if (nev !== gesztusNev) {
+            gesztusNev = nev;
+            gesztusKezd = most;
         }
-    });
 
-    doboz.addEventListener('pointerenter', function () { hover = 1; });
-    doboz.addEventListener('pointerleave', function () { hover = 0; });
+        return nev;
+    }
 
     const sima = (a, b, k) => a + (b - a) * k;
-    const kezdo = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
+    // A simított póz.
+    const poz = { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 1, fenyes: 1, ex: 0, ey: 0 };
     let ido = 0;
     let elozo = performance.now();
-    let skala = 1;
 
     function rajzol(dt) {
         ido += dt;
 
-        // Tétlenségben (8 mp egér nélkül) Szikra felé néz, aztán vissza.
+        const most = performance.now();
+        const hang = HELYETTE && gyoker ? (gyoker.getAttribute('data-allapot') || 'nyugi') : 'nyugi';
+        const alap = hangulatPoz(hang);
+        const mozg = csendes ? { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0, fenyes: 0 } : hangulatMozgas(hang, ido);
+        const gnev = HELYETTE ? gesztusOlvas(most) : '';
+        const gm = gnev && !csendes ? gesztusMozgas(gnev, (most - gesztusKezd) / 1000) : { yaw: 0, pitch: 0, roll: 0, y: 0, scale: 0 };
+
+        // Tekintet: egér, vagy tétlenségben magától nézelődik / Szikra felé néz.
         let cx = cel.x;
         let cy = cel.y;
 
-        if (B.eger === false || performance.now() - utolsoEger > 8000) {
-            const fazis = Math.sin(ido * 0.35);
-            cx = B.hely === 'felette' ? fazis * 0.5 : 0.35 + fazis * 0.35;
-            cy = B.hely === 'felette' ? 0.5 : 0.1;
+        if (B.eger === false || most - utolsoEger > 8000) {
+            const f = Math.sin(ido * 0.35);
+            cx = HELYETTE ? f * 0.45 : (B.hely === 'felette' ? f * 0.5 : 0.35 + f * 0.35);
+            cy = HELYETTE ? 0.15 : (B.hely === 'felette' ? 0.5 : 0.1);
         }
 
-        const k = 1 - Math.exp(-dt * 4.5);
-        most.x = sima(most.x, cx, k);
-        most.y = sima(most.y, cy, k);
+        const k = dt > 0 ? 1 - Math.exp(-dt * 4.5) : 1;
+        const k2 = dt > 0 ? 1 - Math.exp(-dt * 3) : 1;
+
+        poz.ex = sima(poz.ex, cx * alap.eger, k);
+        poz.ey = sima(poz.ey, cy * alap.eger, k);
+        poz.yaw = sima(poz.yaw, alap.yaw, k2);
+        poz.pitch = sima(poz.pitch, alap.pitch, k2);
+        poz.roll = sima(poz.roll, alap.roll, k2);
+        poz.y = sima(poz.y, alap.y, k2);
+        poz.scale = sima(poz.scale, alap.scale + hover * 0.05, k2);
+        poz.fenyes = sima(poz.fenyes, alap.fenyes, k2);
 
         let porgo = 0;
 
         if (porges >= 0) {
             porges += dt / 1.4;
-            porgo = kezdo(Math.min(1, porges)) * Math.PI * 2;
+            porgo = kozep(Math.min(1, porges)) * Math.PI * 2;
 
             if (porges >= 1) {
                 porges = -1;
@@ -241,21 +473,27 @@ function indit() {
             }
         }
 
-        const alap = (B.forgas || 0) * Math.PI / 180;
+        const irany = (B.forgas || 0) * Math.PI / 180;
 
-        forgo.rotation.y = alap + most.x * 0.65 + porgo;
-        forgo.rotation.x = most.y * 0.28;
-        forgo.rotation.z = -most.x * 0.06;
+        forgo.rotation.order = 'YXZ';
+        forgo.rotation.y = irany + poz.ex * 0.65 + poz.yaw + mozg.yaw + gm.yaw + porgo;
+        forgo.rotation.x = poz.ey * 0.28 + poz.pitch + mozg.pitch + gm.pitch;
+        forgo.rotation.z = -poz.ex * 0.06 + poz.roll + mozg.roll + gm.roll;
 
-        const emel = csendes ? 0 : Math.sin(ido * 1.9) * 0.035 + (porges >= 0 ? Math.sin(Math.min(1, porges) * Math.PI) * 0.12 : 0);
+        const lebeg = csendes ? 0 : Math.sin(ido * 1.9) * 0.035;
+        const emel = lebeg + poz.y + mozg.y + gm.y + (porges >= 0 ? Math.sin(Math.min(1, porges) * Math.PI) * 0.12 : 0);
+
         lebego.position.y = emel;
-        skala = sima(skala, 1 + hover * 0.06 + (csendes ? 0 : Math.sin(ido * 1.3) * 0.012), 1 - Math.exp(-dt * 8));
-        lebego.scale.setScalar(skala);
+        lebego.scale.setScalar(poz.scale + mozg.scale + gm.scale + (csendes ? 0 : Math.sin(ido * 1.3) * 0.012));
+
+        const f = Math.max(0.2, poz.fenyes + mozg.fenyes);
+        kek.intensity = KEK * f;
+        lila.intensity = LILA * f;
 
         arnyek.position.y = alj - 0.02;
         const tav = Math.max(0, emel + 0.05);
         arnyek.scale.setScalar(0.85 + tav * 1.5);
-        arnyek.material.opacity = Math.max(0.25, 0.9 - tav * 4);
+        arnyek.material.opacity = Math.max(0.2, 0.9 - tav * 4);
 
         renderer.render(scene, kamera);
     }
@@ -291,10 +529,13 @@ function indit() {
         }
     });
 
-    meretez();
-    helyez();
     window.addEventListener('resize', function () { meretez(); helyez(); if (csendes) { rajzol(0); } });
     window.setInterval(helyez, 250);
+
+    // Állókép módban az állapotváltásra újrarajzol (hangulat, gesztus).
+    if (csendes && gyoker) {
+        new MutationObserver(function () { rajzol(0); }).observe(gyoker, { attributes: true, attributeFilter: ['data-allapot', 'class'] });
+    }
 
     new GLTFLoader().load(B.url, function (gltf) {
         const modell = gltf.scene;
@@ -333,16 +574,28 @@ function indit() {
         kamera.position.set(0, 0.08, tav);
         kamera.lookAt(0, -0.02, 0);
 
-        // Előbb a shaderek fordulnak le és kész képkocka áll elő – csak utána tűnik fel,
-        // így soha nem villan fekete vagy félkész kép.
+        meretez();
+        helyez();
+
+        // Előbb a shaderek fordulnak le és kész képkocka áll elő – csak utána tűnik fel
+        // (és „helyette" szerepben csak ekkor tűnik el Szikra teste), így soha nem villan
+        // fekete vagy üres kép.
         renderer.compile(scene, kamera);
         rajzol(0);
         start();
         requestAnimationFrame(function () {
-            requestAnimationFrame(function () { doboz.classList.add('is-kesz'); });
+            requestAnimationFrame(function () {
+                doboz.classList.add('is-kesz');
+
+                if (HELYETTE && gyoker) {
+                    gyoker.classList.add('is-3d');
+                }
+            });
         });
     }, undefined, function () {
+        // Nem tölthető be a modell: Szikra marad.
         doboz.remove();
+        window.SDH_3D_KISERO = false;
     });
 }
 
