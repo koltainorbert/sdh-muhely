@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1
+kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1, kisvárosi srácok, kartonfigura, kivágott papír, gyerekek, bence, lilla, gergő, űrcsata, csillagőr zoli, zoli, bip, droid, lebegő robot, plazmavilla, galaktikus parkolóőrség, parkolójegy, tányér-cirkáló, ufo, űrhajó, új szereplők, ki az a bip, kik azok a gyerekek
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -123,8 +123,8 @@ Rövid jelenetek a képernyő alján, a figura bal oldalán:
 | Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |
 | Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |
 | Bollywood-szám Táncos Tónival | Tóni flitteres zakóban betáncol, együtt pörögnek, aztán Tóni minden számban máshogy hal meg (üllő, zongora, villám, banánhéj, motor, tűzijáték) – Szikra drámaian megsiratja, Tóni szellemként felszáll, és megígéri, hogy visszajön. |
-| Kisvárosi srácok | Három lapos, kivágott papír hatású gyerek (Bence, Lilla, Gergő – saját szereplők) odabillegnek, vitatkoznak azon, mi is Szikra (nyúl? amőba? éhes?), Szikra beszáll a vitába, aztán a gyerekek hazamennek. |
-| Űrcsata | Egy tányér-cirkáló húz át az égen, Bip, a lebegő droid beúszik, majd Csillagőr Zoli plazmavillával és a Galaktikus Parkolóőrség nevében parkolójegyet kér Szikrától – Szikra tüsszent, Zoli visszavonul, Bip pedig a végén is hűséges marad. |
+| Kisvárosi srácok | Három lapos, kivágott papír hatású gyerek odabillegve megáll Szikra előtt: **Bence** (zöld baseball-sapkás, barna kabátos, a gyanakvó), **Lilla** (lila bojtos sapkás, rózsaszín kabátos, a határozott) és **Gergő** (piros fejhallgatós, szürke pulóveres, a kissé lemaradó). Vitatkoznak azon, mi is Szikra („nyúl", „nem nyúl, ő tök más", „csak éhes…"), Szikra beszáll („Én vagyok Szikra!"), aztán hazamennek. A figurák saját tervezésűek. |
+| Űrcsata | Egy tányér-cirkáló húz át az égen. **Bip**, a lebegő kis droid (kék lencsés szem, világító talp) beúszik, majd **Csillagőr Zoli** (narancs páncélos, kék sisakrostélyos, lilán izzó plazmavillával) a *Galaktikus Parkolóőrség* nevében parkolójegyet kér Szikrától. Szikra tüsszent, Zoli visszavonul („Visszavonulás!"), Bip pedig a végén is hűséges marad („Bip-bup… szeretlek"). A figurák saját tervezésűek. |
 | Sörözés, füves cigi | Csak bekapcsolt **Bulis jelenetek** mellett: sört iszik, csuklik és tántorog (néha elalszik), füves cigiből füstkarikákat fúj, vihog, utána farkaséhes. |
 
 Minden szereplő saját rajz (a kartonfigurás és az űrszereplők is saját tervezésűek, nem ismert filmes vagy rajzfilmes alakok). Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.
@@ -403,6 +403,18 @@ A **Hiba-bogár** – a figura játékos ellenfele. Pár másodpercig fénypeng�
 ### Ki az a zöld sapkás fiú, és miért hal meg mindig?
 
 **Pechás Pityu**, a figura szerencsétlen ismerőse: neki mindig rossz napja van. Rajzfilmes baleset éri, szellemként elszáll, és legközelebb ugyanúgy visszajön. A jelenetek a **Szikra élete** kapcsolóval kapcsolhatók ki.
+
+### Kik azok a lapos, kartonszerű gyerekek, akik vitatkoznak Szikrán?
+
+**Bence** (zöld sapka), **Lilla** (lila bojtos sapka) és **Gergő** (piros fejhallgató) – a *Kisvárosi srácok* jelenet szereplői. Odabillegnek Szikra elé, vitatkoznak azon, hogy Szikra nyúl-e vagy valami egészen más, aztán hazamennek. Saját tervezésű figurák, nem ismert rajzfilmes szereplők. A jelenet a **Szikra élete** kapcsolóval kapcsolható ki.
+
+### Ki az a narancs páncélos őr, és mi az a lebegő robot?
+
+**Csillagőr Zoli** és **Bip**, az *Űrcsata* jelenet szereplői. Zoli lila plazmavillával, a Galaktikus Parkolóőrség nevében parkolójegyet kér Szikrától (aztán a tüsszentéstől visszavonul), Bip pedig egy kedves, lebegő kis droid, aki a végén is Szikra mellett marad. Közben egy tányér-cirkáló is áthúz az égen. Saját tervezésű figurák; a jelenet a **Szikra élete** kapcsolóval kapcsolható ki.
+
+### Miért nem mozog simán / miért akadozik a figura?
+
+Ha a böngésző nem használja a videokártyát (hardveres gyorsítás), a mozgás lassabb. A rendszer ezt magától észleli, és figyelmeztet; a bekapcsolás lépéseit lásd: Hibaelhárítás › Hardveres gyorsítás (a böngészőben).
 
 ### Kikapcsolható a pisilés és a kakilás?
 

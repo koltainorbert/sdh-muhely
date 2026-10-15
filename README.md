@@ -64,6 +64,9 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.65.1
+- **Az AI ismeri az új szereplőket**: a `sugo/16-asszisztens.md` kulcsszavai, a jelenettáblázat (megjelenés, jellem, mondatok) és három új GYIK-válasz (kik a kartonfigurás gyerekek, ki Zoli és Bip, miért akadozik a figura). Az asszisztens a súgóból tanul, ezért most már válaszol rájuk.
+
 ### 0.65.0
 - **Hardveres gyorsítás** (`assets/gyorsitas.js` / `.css`): a felület induláskor WebGL-próbával megállapítja, hogy
   a böngésző a GPU-val rajzol-e (SwiftShader, llvmpipe, Microsoft Basic Render = szoftveres). Ha nem: egyszer

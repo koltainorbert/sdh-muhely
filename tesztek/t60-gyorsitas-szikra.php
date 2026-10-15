@@ -72,6 +72,13 @@ foreach (['Stan', 'Kyle', 'Cartman', 'Kenny', 'South Park', 'Jedi', 'Yoda', 'Vad
 $sugo = (string) file_get_contents(SDH_MUHELY_DIR . 'sugo/16-asszisztens.md');
 T::tartalmaz($sugo, 'Kisvárosi srácok', 'a súgó leírja a Kisvárosi srácok jelenetet');
 T::tartalmaz($sugo, 'Űrcsata', 'és az Űrcsatát');
+foreach (['Bence', 'Lilla', 'Gergő', 'Csillagőr Zoli', 'Bip', 'plazmavilla', 'tányér-cirkáló'] as $nev) {
+    T::tartalmaz($sugo, $nev, "a súgó (és így az AI) ismeri: {$nev}");
+}
+T::tartalmaz($sugo, '### Kik azok a lapos, kartonszerű gyerekek', 'GYIK: a kartonfigurás gyerekek');
+T::tartalmaz($sugo, '### Ki az a narancs páncélos őr', 'GYIK: Zoli és Bip');
+T::tartalmaz($sugo, 'kulcsszavak: ', 'a kulcsszó-sor megvan');
+T::igaz(strpos((string) preg_replace('/^(?!kulcsszavak:).*$/m', '', $sugo), 'csillagőr zoli') !== false, 'a kulcsszavak között ott van: csillagőr zoli');
 T::tartalmaz((string) file_get_contents(SDH_MUHELY_DIR . 'sugo/20-hibaelharitas.md'), 'Hardveres gyorsítás (a böngészőben)', 'a hibaelhárítás fejezet tárgyalja a hardveres gyorsítást');
 
 $ossz = trim((string) shell_exec('node --check ' . escapeshellarg($assets . 'gyorsitas.js') . ' 2>&1 && node --check ' . escapeshellarg($assets . 'szikra-elet.js') . ' 2>&1'));
