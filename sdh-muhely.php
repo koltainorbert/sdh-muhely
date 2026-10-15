@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.65.2
+ * Version:           0.66.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.65.2');
+define('SDH_MUHELY_VERSION', '0.66.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -118,6 +118,8 @@ $sdh_muhely_modulok = [
      * -------------------------------------------------------------- */
     'includes/sdh/class-sdh-muhely-sdh.php'         => 'SDH_Muhely_Sdh',
     'includes/sdh/class-sdh-muhely-sdh-gigatel.php' => 'SDH_Muhely_Sdh_Gigatel',
+    // 3D kísérő (0.66.0): saját feltöltésű .glb modell Szikra mellett (three.js, GPU).
+    'includes/sdh/class-sdh-muhely-sdh-3d.php'      => 'SDH_Muhely_Sdh_3d',
 ];
 
 foreach ($sdh_muhely_modulok as $sdh_muhely_fajl => $sdh_muhely_osztaly) {

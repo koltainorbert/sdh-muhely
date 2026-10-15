@@ -1,0 +1,1 @@
+three.js r169 (MIT, mrdoob/three.js, GitHub tag r169): build/three.module.min.js és az examples/jsm GLTFLoader, RoomEnvironment, BufferGeometryUtils – az importok átírva relatív útra (./three.module.min.js), import map nélkül.

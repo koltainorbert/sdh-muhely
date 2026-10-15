@@ -3,9 +3,9 @@ kulcs: sdh-belso
 cim: SDH – belső modulok
 csoport: Rendszer
 modul:
-szakaszok: sdh, sdh_gigatel
-kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh
-osszefoglalo: Az SDH Szerviz saját, belső moduljai – ami csak nálunk fut, és eladáskor nem megy ki a rendszerrel. Jelenleg a Gigatel beszállítói levelek feldolgozása.
+szakaszok: sdh, sdh_gigatel, sdh_3d
+kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh, 3D kísérő, 3D modell, glb, három dimenziós, sisak, modell feltöltése, Szikra mellett, three.js, WebGL, forog, lebeg, kredit, CC-BY, hivatkozás
+osszefoglalo: Az SDH Szerviz saját, belső moduljai – ami csak nálunk fut, és eladáskor nem megy ki a rendszerrel. Jelenleg a Gigatel beszállítói levelek feldolgozása és a 3D kísérő Szikra mellett.
 ---
 
 ## Mire való
@@ -23,6 +23,7 @@ A szabály egyszerű:
 
 - **SDH-modulok** – mi fut, és egyben ki-be kapcsolható.
 - **Gigatel** – a Gigatel webáruház napi leveleinek feldolgozása.
+- **3D kísérő** – saját feltöltésű 3D modell Szikra mellett.
 
 ## SDH-modulok
 
@@ -68,7 +69,31 @@ Címke csak azokra a tételekre kell, amelyekhez telefonszám tartozik: azokat v
 
 A címke tartalmát a **Beállítások › Címkenyomtatás › Beszállítói tétel** lapon állítod.
 
-## Szabályok, amiket a rendszer betart
+## 3D kísérő
+
+Egy saját 3D modell él Szikra mellett, valódi 3D-ben: a videokártyán rajzolva finoman lebeg, alatta puha árnyék, a tekintetével követi az egeret, tétlenségben Szikrára néz, **kattintásra megpördül**, Szikra pedig ugrik és szikrázik. Kék és lila élfény adja a CRM neon hangulatát.
+
+**Beállítások › SDH – belső › 3D kísérő**:
+
+| Mező | Mire való |
+|---|---|
+| **A 3D kísérő látszódjon** | Ki- és bekapcsolja. |
+| **3D modell (.glb)** | A modell feltöltése (glTF 2.0 bináris, legfeljebb 40 MB). Új feltöltés a régit lecseréli. A Sketchfabról letöltött modelleknél a „glTF / .glb" formátumot válaszd; az FBX, STL, OBJ nem tölthető fel. |
+| **A modell törlése** | Törli a feltöltött fájlt. |
+| **Hivatkozás** | A modell szerzője és licence. CC-BY licencű modellnél kötelező; ha üres, a rendszer a modellből olvassa ki. Az egér a kísérő fölött ezt mutatja. |
+| **Méret** | 60–320 képpont (a felület nagyításával együtt nő). |
+| **Hol legyen** | Szikra bal oldalán, vagy fölötte. |
+| **Alapirány** | Ha a modell nem szembe néz, itt fordítod (fokban, pl. 180). |
+| **Kövesse a tekintetével az egeret** | Kikapcsolva magától nézelődik. |
+
+Fontos tudnivalók:
+
+- A modell **csak ezen a gépen** van: a WordPress feltöltési mappájában (`uploads/sdh-muhely-3d/`), nem a pluginban – ezért nem kerül a git-repóba, a frissítő zipbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni.
+- Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelenik meg, hogy ne lassítsa a munkát. Rejtett lapon nem rajzol.
+- A munka nem vár rá: az oldal betöltése után, ráérő időben töltődik be.
+- Nyomtatáskor nem látszik.
+
+
 
 - A belső rész **nem megy ki eladáskor**: az `includes/sdh/` mappa törlésével nyomtalanul eltűnik, és semmi más nem változik.
 - Ide **általános képesség nem kerülhet** – ha más szerviznek is jó lenne, a rendes modulba való.

@@ -1,0 +1,38 @@
+/*
+ * SDH – belső: 3D kísérő (0.66.0). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
+ * A méretet és a helyet a kiseret.js adja (a felület nagyításával együtt), a mozgatás transform.
+ */
+
+.sdh-3d {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100039;
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    will-change: transform;
+    transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
+}
+
+.sdh-3d.is-kesz {
+    opacity: 1;
+}
+
+.sdh-3d canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sdh-3d {
+        transition: opacity .2s ease;
+    }
+}
+
+@media print {
+    .sdh-3d {
+        display: none;
+    }
+}

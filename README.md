@@ -64,6 +64,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.66.0
+- **SDH – belső: 3D kísérő** (`includes/sdh/class-sdh-muhely-sdh-3d.php`, `includes/sdh/3d/`): saját feltöltésű .glb
+  modell Szikra mellett – three.js r169 (MIT, `3d/vendor/`, relatív importokkal), PBR + neon élfények, valódi GPU-n
+  tükröződő környezet (RoomEnvironment), lebegés, egérkövetés, kattintásra pördülés (Szikra reagál), Szikra helyének
+  követése (transform), rejtett lapon szünet, szoftveres rajzolásnál állókép, betöltés ráérő időben. A modell a
+  feltöltési mappába kerül (`uploads/sdh-muhely-3d/`), a repóba és az eladási csomagba soha. Új horog:
+  `do_action('sdh_muhely_felulet_vege')` a műhely-felület végén. t61.
+
 ### 0.65.2
 - **Négy új választható figura** a Beállítások › Asszisztens › Melyik figura? dobozban (összesen tizennégy): *Kartonka*
   és *Bojtika* (lapos, kivágott papír hatású gyerekek sapkában), *Bip* (lebegő gömbdroid) és *Zoli* (csillagőr). Saját

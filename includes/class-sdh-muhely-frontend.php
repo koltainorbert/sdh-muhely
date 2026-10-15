@@ -663,6 +663,9 @@ final class SDH_Muhely_Frontend
         }
 
         self::eszkozok_ki($sdh_js, 'js');
+
+        // Kiegészítők a felület végén (0.66.0) – pl. az SDH-belső 3D kísérő (includes/sdh/).
+        do_action('sdh_muhely_felulet_vege');
         ?>
         </body>
         </html>
