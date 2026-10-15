@@ -123,9 +123,11 @@ Rövid jelenetek a képernyő alján, a figura bal oldalán:
 | Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |
 | Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |
 | Bollywood-szám Táncos Tónival | Tóni flitteres zakóban betáncol, együtt pörögnek, aztán Tóni minden számban máshogy hal meg (üllő, zongora, villám, banánhéj, motor, tűzijáték) – Szikra drámaian megsiratja, Tóni szellemként felszáll, és megígéri, hogy visszajön. |
+| Kisvárosi srácok | Három lapos, kivágott papír hatású gyerek (Bence, Lilla, Gergő – saját szereplők) odabillegnek, vitatkoznak azon, mi is Szikra (nyúl? amőba? éhes?), Szikra beszáll a vitába, aztán a gyerekek hazamennek. |
+| Űrcsata | Egy tányér-cirkáló húz át az égen, Bip, a lebegő droid beúszik, majd Csillagőr Zoli plazmavillával és a Galaktikus Parkolóőrség nevében parkolójegyet kér Szikrától – Szikra tüsszent, Zoli visszavonul, Bip pedig a végén is hűséges marad. |
 | Sörözés, füves cigi | Csak bekapcsolt **Bulis jelenetek** mellett: sört iszik, csuklik és tántorog (néha elalszik), füves cigiből füstkarikákat fúj, vihog, utána farkaséhes. |
 
-Minden szereplő saját rajz. Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.
+Minden szereplő saját rajz (a kartonfigurás és az űrszereplők is saját tervezésűek, nem ismert filmes vagy rajzfilmes alakok). Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.
 
 Időnként megszólal egy rövid, vicces mondattal. Ezeket nem az AI találja ki helyben, hanem a rendszerbe épített mondatok közül választ, a napszakhoz igazodva (reggel, ebédidő, zárás előtt, péntek délután). Gépelés közben nem szól közbe, és a buborék pár másodperc múlva magától eltűnik.
 

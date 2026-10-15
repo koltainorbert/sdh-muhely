@@ -39,7 +39,8 @@
 
 /* Erősebb, látható légzés: a test és az arc együtt emelkedik-süllyed. */
 .sdh-ai .sdh-ai__test {
-    animation: sdh-ai-amoba 9s steps(4) infinite, sdh-sz-legzes 3.6s ease-in-out infinite;
+    animation: sdh-ai-amoba 11s ease-in-out infinite, sdh-sz-legzes 3.6s ease-in-out infinite;
+    will-change: transform, scale, rotate;
 }
 
 @keyframes sdh-sz-legzes {
@@ -239,4 +240,57 @@
     .sdh-ai .sdh-sz-takony {
         animation: none;
     }
+}
+
+/* ---- 0.65: kartonfigurák és űrszereplők (mind transform / opacity: a GPU rétegén futnak) ---- */
+
+/* Kivágott papír járás: ide-oda billenő, kissé ugráló lapos figura. */
+.sdh-ai .sdh-sz-szereplo--karton.is-jar > svg {
+    transform-origin: 50% 100%;
+    animation: sdh-sz-karton-jaras .42s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes sdh-sz-karton-jaras {
+    from { rotate: -5deg; translate: 0 0; }
+    to { rotate: 5deg; translate: 0 calc(-3px * var(--sdh-n)); }
+}
+
+.sdh-ai .sdh-sz-szereplo--karton .sdh-sz-labak {
+    transform-box: fill-box;
+}
+
+.sdh-ai .sdh-sz-szereplo--zoli.is-jar > svg {
+    transform-origin: 50% 100%;
+    animation: sdh-sz-karton-jaras .5s ease-in-out infinite alternate;
+}
+
+/* A plazmavilla izzása. */
+.sdh-ai .sdh-sz-szereplo--zoli .sdh-sz-villa {
+    animation: sdh-sz-izzik .6s ease-in-out infinite alternate;
+}
+
+.sdh-ai .sdh-sz-szereplo--zoli.is-villan .sdh-sz-villa {
+    animation-duration: .12s;
+}
+
+@keyframes sdh-sz-izzik {
+    from { opacity: .6; }
+    to { opacity: 1; }
+}
+
+/* Bip: a lebegő talp és a pislogó lencse. */
+.sdh-ai .sdh-sz-szereplo--bip .sdh-sz-tolo {
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
+    animation: sdh-sz-tolo .45s ease-in-out infinite alternate;
+}
+
+@keyframes sdh-sz-tolo {
+    from { transform: scale(.8, .8); opacity: .6; }
+    to { transform: scale(1.1, 1.1); opacity: 1; }
+}
+
+.sdh-ai .sdh-sz-szereplo--bip .sdh-sz-lencse {
+    animation: sdh-sz-izzik .9s ease-in-out infinite alternate;
 }

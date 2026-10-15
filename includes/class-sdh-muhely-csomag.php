@@ -380,6 +380,13 @@ class SDH_Muhely_Csomag
                     <br><?php echo esc_html($szerver['tanacs']); ?>
                 <?php endif; ?>
             </p>
+
+            <p class="sdh-sugo" data-sdh-gpu-allapot>Hardveres gyorsítás: ellenőrzés…</p>
+            <p class="sdh-sugo">
+                A hardveres gyorsítást weboldal nem kapcsolhatja be a böngészőben – ezt a böngésző
+                beállítása dönti el. Ha KI van, a felület figyelmeztet, és könnyített módba kapcsol.
+                Kikényszerítés a cég gépein: <code>tools/hardveres-gyorsitas/</code> (Súgó › Hibaelhárítás › Sebesség).
+            </p>
         </div>
         <?php
     }

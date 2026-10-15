@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+; Visszavonas: a hazirend torlese, a bongeszo ujra sajat beallitasa szerint megy.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+"HardwareAccelerationModeEnabled"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"HardwareAccelerationModeEnabled"=-

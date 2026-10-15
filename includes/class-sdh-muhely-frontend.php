@@ -420,7 +420,7 @@ final class SDH_Muhely_Frontend
 
             <?php
             // A stíluslapok sorrendben (0.64: a Gyors betöltés bekapcsolva egyetlen fájlba fűzve jönnek).
-            $sdh_css = ['assets/admin.css', 'assets/app.css', 'assets/levelezes.css', 'assets/penztar.css', 'assets/csapat.css', 'assets/naptar.css', 'assets/asszisztens.css', 'assets/szikra-elet.css', 'assets/sugo.css', 'assets/nyomtatas.css', 'assets/sms.css', 'assets/naplo.css', 'assets/matrica.css', 'assets/urlap-beallitas.css', 'assets/emlek.css'];
+            $sdh_css = ['assets/admin.css', 'assets/app.css', 'assets/levelezes.css', 'assets/penztar.css', 'assets/csapat.css', 'assets/naptar.css', 'assets/asszisztens.css', 'assets/szikra-elet.css', 'assets/sugo.css', 'assets/nyomtatas.css', 'assets/sms.css', 'assets/naplo.css', 'assets/matrica.css', 'assets/urlap-beallitas.css', 'assets/emlek.css', 'assets/gyorsitas.css'];
 
             if ($aktiv_kulcs === 'attekintes') {
                 $sdh_css[] = 'assets/racs.css';
@@ -649,7 +649,7 @@ final class SDH_Muhely_Frontend
         // a Napló ablak, a lezárt lap, az RMA-matrica, a fogaskerék és a mezőmemória – mind bármelyik
         // oldalon megnyílhat (a munkalap popupja mindenhol elérhető).
         array_push($sdh_js, 'assets/rma.js', 'assets/levelezes.js', 'assets/penztar.js', 'assets/eladas.js', 'assets/nyomtatas.js',
-            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js');
+            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js');
 
         if ($aktiv_kulcs === 'beallitasok') {
             $sdh_js[] = 'assets/beallitasok.js';

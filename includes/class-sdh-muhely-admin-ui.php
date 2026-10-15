@@ -409,6 +409,10 @@ final class SDH_Muhely_Admin_UI
         wp_enqueue_style('sdh-muhely-emlek', SDH_MUHELY_URL . 'assets/emlek.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/emlek.css'));
         wp_enqueue_script('sdh-muhely-emlek', SDH_MUHELY_URL . 'assets/emlek.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/emlek.js'), true);
 
+        // Hardveres gyorsítás (0.65.0): észlelés, figyelmeztetés, „gyenge gép" mód – minden oldalon.
+        wp_enqueue_style('sdh-muhely-gyorsitas', SDH_MUHELY_URL . 'assets/gyorsitas.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/gyorsitas.css'));
+        wp_enqueue_script('sdh-muhely-gyorsitas', SDH_MUHELY_URL . 'assets/gyorsitas.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/gyorsitas.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(

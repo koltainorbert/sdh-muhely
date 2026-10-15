@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.65.0
+- **Hardveres gyorsítás** (`assets/gyorsitas.js` / `.css`): a felület induláskor WebGL-próbával megállapítja, hogy
+  a böngésző a GPU-val rajzol-e (SwiftShader, llvmpipe, Microsoft Basic Render = szoftveres). Ha nem: egyszer
+  figyelmeztet böngészőre szabott lépésekkel, és „gyenge gép" módba kapcsol (`html.sdh-gyenge-gep`: nincs
+  homályítás és nehéz árnyék). Az állapot a Beállítások › Rendszer › Sebesség lapon is látszik. A böngésző
+  beállítását weboldal nem tudja átírni; Chrome / Edge házirenddel kikényszeríthető:
+  `tools/hardveres-gyorsitas/` (.reg be / vissza, OLVASSEL.md).
+- **Szikra mozgása**: a test hullámzása a `border-radius` helyett `scale` / `rotate` tulajdonságokon fut
+  (GPU-réteg, főszál nélkül, a monitor teljes képfrissítésével, nem 14 kép/mp-es lépcső); `will-change` az aurán,
+  a testen és a forgó fényen.
+- **Új jelenetek, saját szereplőkkel**: *Kisvárosi srácok* (kartonfigurás gyerekek: Bence, Lilla, Gergő) és
+  *Űrcsata* (Csillagőr Zoli plazmavillával, Bip a lebegő droid, tányér-cirkáló). Nem ismert filmes vagy
+  rajzfilmes alakok másai.
+
 ### 0.64.0
 - **Sebesség 500 ezer rekordnál** (séma 0.43.0). Mérés: tesztkonténer, SQLite (MariaDB a konténerben nem volt
   telepíthető), 500 000 ügyfél / 600 000 eszköz / 500 000 munkalap / 1 millió tétel. Részletek: ALLAPOT, súgó

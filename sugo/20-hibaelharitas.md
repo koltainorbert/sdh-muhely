@@ -43,6 +43,15 @@ Bekapcsolva a műhely-felület és a wp-admin is két fájlban tölti be a stíl
 
 **Beállítások › Rendszer › Sebesség**, a **Gyors betöltés** doboz alján: *Szerver: PHP OPcache* (be / ki) és *MySQL puffer* (megabájtban). Ezt a webszerver PHP-ja mondja meg, nem a parancssor.
 
+### Hardveres gyorsítás (a böngészőben)
+
+A műhely-felület mozgásai (a figura, a popupok, az árnyékok) akkor simák, ha a böngésző a videokártyával (GPU) rajzol. Weboldal ezt a böngészőben **nem tudja bekapcsolni** – csak a gép felhasználója vagy rendszergazdája –, de a CRM minden induláskor megvizsgálja:
+
+- Ha be van kapcsolva: semmi nem látszik; a **Beállítások › Rendszer › Sebesség** lapon a *Hardveres gyorsítás: be* sor áll.
+- Ha ki van kapcsolva: egy figyelmeztető sáv jelenik meg bal alul az adott böngészőre szabott lépésekkel (*Újraellenőrzés* és *Ne mutasd 7 napig* gombbal), és a felület **könnyített módba** kapcsol (nincs homályítás és nehéz árnyék), hogy a processzoron is gyors maradjon.
+
+Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-gyorsitas/hardveres-gyorsitas-be.reg` fájl rendszergazdaként futtatva házirendet állít be, amit a felhasználó sem tud kikapcsolni; a böngészőt utána teljesen újra kell indítani. Ellenőrzés: `chrome://policy` és `chrome://gpu`. Visszavonás: `hardveres-gyorsitas-vissza.reg`. Ha a videokártya-illesztő hibás vagy tiltólistás, a gyorsítás ettől még nem indul – ilyenkor az illesztőt kell frissíteni. Firefoxban kézzel kapcsolható (Beállítások › Általános › Teljesítmény).
+
 ### PHP OPcache bekapcsolása – LocalWP (Windows)
 
 1. A LocalWP-ben állítsd le a webhelyet (**Stop site**).

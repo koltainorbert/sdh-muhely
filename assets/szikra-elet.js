@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Szikra élete (0.59.4).
+ * SDH Műhely – Szikra élete (0.65.0).
  *
  * Az asszisztens.js figurájára épül (window.SDH_SZIKRA): több száz arckifejezés
  * (mimika), szükségletek (éhség, pisi, kaki, fáradtság, büdösség, magány,
@@ -294,6 +294,35 @@
         return '<g stroke="' + TINTA + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">' + belso + '</g>';
     }
 
+    /**
+     * Kartonfigura (0.65): lapos, kivágott papír hatású gyerek – nagy fej, két összeérő nagy szem,
+     * kesztyűs kéz, nyak nélkül. Saját tervezés, nem ismert szereplő.
+     * o: bor, kabat, nadrag, kez, sapka ('sapka' | 'bojt' | 'fejhallgato'), szin, pom, sz (test fél-szélessége)
+     */
+    function karton(o) {
+        var sz = o.sz || 14;
+        var kalap = '';
+
+        if (o.sapka === 'sapka') {
+            kalap = '<path d="M7 22c0-15 36-15 36 0z" fill="' + o.szin + '"/><path d="M5 22h42" stroke-width="3.4"/><path d="M40 22h8" stroke-width="3.4"/>';
+        } else if (o.sapka === 'bojt') {
+            kalap = '<path d="M8 22c0-17 34-17 34 0z" fill="' + o.szin + '"/><path d="M7 22h36" stroke-width="3.4"/><circle cx="25" cy="6" r="4.6" fill="' + (o.pom || '#fde047') + '"/>';
+        } else if (o.sapka === 'fejhallgato') {
+            kalap = '<path d="M7 28C7 4 43 4 43 28" fill="none" stroke="' + o.szin + '" stroke-width="4.4"/><rect x="2" y="23" width="9" height="13" rx="4" fill="' + o.szin + '"/><rect x="39" y="23" width="9" height="13" rx="4" fill="' + o.szin + '"/>';
+        }
+
+        return g(
+            '<g class="sdh-sz-labak"><rect x="14" y="58" width="9" height="14" rx="3" fill="' + o.nadrag + '"/><rect x="27" y="58" width="9" height="14" rx="3" fill="' + o.nadrag + '"/></g>' +
+            '<rect x="' + (25 - sz) + '" y="38" width="' + (sz * 2) + '" height="26" rx="10" fill="' + o.kabat + '"/>' +
+            '<circle cx="' + (25 - sz - 1) + '" cy="54" r="4.4" fill="' + o.kez + '"/><circle cx="' + (25 + sz + 1) + '" cy="54" r="4.4" fill="' + o.kez + '"/>' +
+            '<circle cx="25" cy="26" r="18" fill="' + o.bor + '"/>' +
+            '<ellipse cx="19.6" cy="27" rx="5.3" ry="6.6" fill="#fff"/><ellipse cx="30.4" cy="27" rx="5.3" ry="6.6" fill="#fff"/>' +
+            '<circle cx="21.4" cy="28.4" r="1.6" fill="' + TINTA + '" stroke="none"/><circle cx="28.6" cy="28.4" r="1.6" fill="' + TINTA + '" stroke="none"/>' +
+            '<path d="M20.5 39q4.5 2.6 9 0" fill="none" stroke-width="1.8"/>' +
+            kalap
+        );
+    }
+
     var RAJZ = {
         csirke: [64, 64, g(
             '<g class="sdh-sz-labak"><path d="M26 52l-2 9M36 52l1 9" stroke="#f59e0b" stroke-width="2.8"/></g>' +
@@ -427,7 +456,36 @@
             '<rect x="8" y="26" width="54" height="10" fill="#f8fafc"/>' +
             '<path d="M14 26v10M20 26v10M26 26v10M32 26v10M38 26v10M44 26v10M50 26v10M56 26v10" stroke-width="1.2"/>' +
             '<path d="M12 26v6M18 26v6M30 26v6M36 26v6M42 26v6M54 26v6" stroke-width="3" stroke="#111827"/>' +
-            '<path d="M10 38v16M60 38v16" stroke-width="4"/>')]
+            '<path d="M10 38v16M60 38v16" stroke-width="4"/>')],
+        // 0.65: kartonfigurás kisvárosi gyerekek – saját tervezésű, lapos, kivágott papír hatású szereplők.
+        bence: [50, 76, karton({ bor: '#f6cfa5', kabat: '#8b5e3c', nadrag: '#374151', kez: '#f6cfa5', sapka: 'sapka', szin: '#16a34a' })],
+        lilla: [50, 76, karton({ bor: '#f3c7a6', kabat: '#ec4899', nadrag: '#7c3aed', kez: '#f3c7a6', sapka: 'bojt', szin: '#a855f7', pom: '#fde047' })],
+        gergo: [56, 76, karton({ bor: '#f0c8a0', kabat: '#9ca3af', nadrag: '#1f2937', kez: '#f0c8a0', sapka: 'fejhallgato', szin: '#ef4444', sz: 17 })],
+        // 0.65: űropera-hangulatú saját szereplők – Csillagőr Zoli (plazmavillával), Bip (lebegő droid), tányér-cirkáló.
+        zoli: [60, 90, g(
+            '<path d="M22 66v18M38 66v18" stroke-width="5"/><path d="M17 86h11M33 86h11" stroke-width="4"/>' +
+            '<rect x="16" y="40" width="28" height="30" rx="9" fill="#f97316"/>' +
+            '<rect x="21" y="48" width="18" height="10" rx="3" fill="#fed7aa"/>' +
+            '<circle cx="14" cy="44" r="8" fill="#64748b"/><circle cx="46" cy="44" r="8" fill="#64748b"/>' +
+            '<circle cx="30" cy="24" r="17" fill="#cbd5e1"/>' +
+            '<path d="M15 22h30v9a6 6 0 0 1-6 6H21a6 6 0 0 1-6-6z" fill="#22d3ee"/>' +
+            '<path d="M21 26h6M33 26h6" stroke="#0e7490" stroke-width="2"/>' +
+            '<path d="M30 7v-6" stroke-width="2.4"/><circle cx="30" cy="2" r="2.4" fill="#f43f5e"/>' +
+            '<g class="sdh-sz-villa"><path d="M53 22v62" stroke="#475569" stroke-width="3.4"/>' +
+            '<path d="M47 20v-10M53 22V6M59 20V10" stroke="#c084fc" stroke-width="3.4"/><path d="M47 22h12" stroke="#475569" stroke-width="3.4"/></g>')],
+        bip: [48, 52, g(
+            '<g class="sdh-sz-tolo"><ellipse cx="24" cy="46" rx="14" ry="4" fill="#38bdf8" stroke="none" opacity=".75"/>' +
+            '<ellipse cx="24" cy="46" rx="8" ry="2" fill="#e0f2fe" stroke="none"/></g>' +
+            '<circle cx="24" cy="28" r="16" fill="#d1d5db"/>' +
+            '<path d="M9 30h30" stroke-width="2.2"/><path d="M12 36h24" stroke-width="1.6"/>' +
+            '<circle cx="24" cy="23" r="8" fill="#fff"/><circle class="sdh-sz-lencse" cx="24" cy="23" r="4.6" fill="#38bdf8"/>' +
+            '<circle cx="24" cy="23" r="1.9" fill="' + TINTA + '" stroke="none"/><circle cx="22.4" cy="21.4" r="1.2" fill="#fff" stroke="none"/>' +
+            '<path d="M24 12V4" stroke-width="2.2"/><circle cx="24" cy="3.4" r="2.4" fill="#f59e0b"/>' +
+            '<path d="M8 28c-5 1-6 7-3 9M40 28c5 1 6 7 3 9" fill="none" stroke-width="2.6"/>')],
+        tanyer: [76, 30, g(
+            '<path d="M24 14c0-12 28-12 28 0z" fill="#bae6fd"/>' +
+            '<path d="M2 20c0-8 18-9 36-9s36 1 36 9c0 6-16 8-36 8S2 26 2 20z" fill="#94a3b8"/>' +
+            '<circle cx="18" cy="20" r="2.4" fill="#fde047" stroke="none"/><circle cx="38" cy="22" r="2.4" fill="#fde047" stroke="none"/><circle cx="58" cy="20" r="2.4" fill="#fde047" stroke="none"/>')]
     };
 
     function svg(nev) {
@@ -1299,6 +1357,73 @@
             c.vege(mikor + 7200);
         },
 
+        /* --- Kisvárosi srácok: kartonfigurás, lapos kivágott gyerekek (saját szereplők) --- */
+        karton: function (c) {
+            var VEG = 130;
+            var b = c.szereplo('bence', VEG + 210, 0, .9, 'is-jar');
+            var l = c.szereplo('lilla', VEG + 270, 0, .9, 'is-jar');
+            var r = c.szereplo('gergo', VEG + 330, 0, .9, 'is-jar');
+
+            [b, l, r].forEach(function (k, i) {
+                k.classList.add('sdh-sz-szereplo--karton');
+                c.mozgat(k, [T(0), T(-210)], 2300 + i * 150, { easing: 'linear' });
+                c.ido(2300 + i * 150, function () { k.classList.remove('is-jar'); });
+            });
+
+            c.ido(2700, function () { c.mim('gyanakvó', 1800); c.mond('Szerintem Szikra egy nyúl.', 1900, b); });
+            c.ido(4600, function () { c.mim('értetlen', 1800); c.mond('Nem nyúl. Ő tök más.', 1700, l); });
+            c.ido(6500, function () { c.mim('gondolkodó', 1800); c.mond('Szerintem csak éhes…', 1800, r); });
+            c.ido(8500, function () {
+                c.mim('boldog', 1600);
+                c.gesztus('ugral', 950);
+                c.mond('Én vagyok Szikra!', 1500);
+                c.szikrak(5, 'csillag');
+            });
+            c.ido(10200, function () {
+                c.mond('Mindegy, gyerünk haza!', 1600, b);
+                [b, l, r].forEach(function (k, i) {
+                    k.classList.add('is-jar', 'is-fordul');
+                    c.mozgat(k, [T(-210), T(30)], 2600 + i * 200, { easing: 'linear' });
+                });
+            });
+            c.vege(13400);
+        },
+
+        /* --- Űrcsata: Csillagőr Zoli és Bip, a lebegő droid (saját szereplők) --- */
+        urcsata: function (c) {
+            var t = c.szereplo('tanyer', 40, 230, .8, 'is-lebeg');
+            var d = c.szereplo('bip', 360, 4, .95, 'is-lebeg');
+            var z = c.szereplo('zoli', 440, 0, .9, 'is-jar');
+
+            c.mozgat(t, [T(60), T(-330)], 4200, { easing: 'ease-in-out' });
+            c.mozgat(d, [T(0), T(-215)], 2200, { easing: 'ease-out' });
+            c.mozgat(z, [T(0), T(-250)], 3000, { easing: 'linear' });
+            c.ido(1500, function () { c.mond('Bip-bup-bip!', 1300, d); });
+            c.ido(3000, function () { z.classList.remove('is-jar'); c.mim('gyanakvó', 2200); });
+            c.ido(3200, function () { c.mond('Állj! A Galaktikus Parkolóőrség nevében!', 2200, z); });
+            c.ido(5600, function () { c.mim('értetlen', 1800); c.mond('Parkolóőrség?', 1500); });
+            c.ido(7300, function () {
+                z.classList.add('is-villan');
+                c.mond('Kérem a parkolójegyet!', 1800, z);
+                c.figura([T(0), T(5, 0, 'rotate(-4deg)'), T(0)], 400, { iterations: 2 });
+            });
+            c.ido(9300, function () {
+                c.mim('tüsszentő', 1300);
+                c.mond('Hacsiii!', 900);
+            });
+            c.ido(10200, function () {
+                z.classList.remove('is-villan');
+                z.classList.add('is-jar', 'is-fordul');
+                c.mim('büszke', 1800);
+                c.szikrak(6, 'csillag');
+                c.mond('Visszavonulás!', 1400, z);
+                c.mozgat(z, [T(-250), T(40)], 1800, { easing: 'ease-in' });
+            });
+            c.ido(11800, function () { c.mond('Bip-bup… (szeretlek)', 1900, d); c.mim('boldog', 2000); });
+            c.ido(13800, function () { c.mozgat(d, [T(-215), T(40)], 1600, { easing: 'ease-in' }); });
+            c.vege(15600);
+        },
+
         /* --- Vakarózik --- */
         vakarozik: function (c) {
             c.mim('gyanakvó');
@@ -1317,7 +1442,7 @@
         kaki: ['kaki'],
         budos: ['budos'],
         magany: ['baratno', 'csajozas', 'telefon'],
-        kaland: ['motor', 'auto', 'kodbaro', 'edzes', 'csirke', 'eger', 'madar', 'pityu', 'bollywood']
+        kaland: ['motor', 'auto', 'kodbaro', 'edzes', 'csirke', 'eger', 'madar', 'pityu', 'bollywood', 'karton', 'urcsata']
     };
 
     var ALTESTI_JELENETEK = ['pisi', 'kaki', 'fing', 'budos'];
@@ -1327,7 +1452,7 @@
     var ALKALMI = [
         ['csirke', 3], ['eger', 3], ['madar', 3], ['pityu', 3], ['kodbaro', 2], ['tusszent', 3], ['csuklik', 2],
         ['csajozas', 2], ['baratno', 1], ['motor', 2], ['auto', 2], ['edzes', 2], ['telefon', 2], ['zene', 2],
-        ['vakarozik', 2], ['fing', 2], ['ivas', 1], ['pia', 4], ['fu', 4], ['bollywood', 3]
+        ['vakarozik', 2], ['fing', 2], ['ivas', 1], ['pia', 4], ['fu', 4], ['bollywood', 3], ['karton', 3], ['urcsata', 3]
     ].filter(function (j) {
         return (ALTESTI || ALTESTI_JELENETEK.indexOf(j[0]) === -1) && (BULIS || BULIS_JELENETEK.indexOf(j[0]) === -1);
     });
