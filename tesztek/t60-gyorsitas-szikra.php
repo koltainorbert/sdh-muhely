@@ -84,4 +84,18 @@ T::tartalmaz((string) file_get_contents(SDH_MUHELY_DIR . 'sugo/20-hibaelharitas.
 $ossz = trim((string) shell_exec('node --check ' . escapeshellarg($assets . 'gyorsitas.js') . ' 2>&1 && node --check ' . escapeshellarg($assets . 'szikra-elet.js') . ' 2>&1'));
 T::igaz($ossz === '', 'mindkét szkript szintaktikailag hibátlan' . ($ossz !== '' ? ': ' . $ossz : ''));
 
+/* --- Új választható figurák (0.65.2) ------------------------------------------ */
+
+$figurak = SDH_Muhely_Asszisztens::figurak();
+T::igaz(count($figurak) >= 14, 'legalább tizennégy választható figura (' . count($figurak) . ')');
+
+foreach (['karton' => 'Kartonka', 'bojtos' => 'Bojtika', 'droid' => 'Bip', 'orszem' => 'Zoli'] as $kulcs => $nev) {
+    T::igaz(isset($figurak[$kulcs]) && $figurak[$kulcs]['nev'] === $nev, "választható figura: {$nev}");
+    T::tartalmaz($ajs, '.sdh-ai[data-figura="' . $kulcs . '"]', "{$nev} rajza megvan a stíluslapon");
+    T::tartalmaz($sugo, '| ' . $nev . ' |', "a súgó figuratáblázatában ott van: {$nev}");
+}
+
+T::tartalmaz($sugo, '### Melyik figura?', 'a súgóban van „Melyik figura?" szakasz');
+T::tartalmaz($sugo, '### Hogyan cserélem le a figurát?', 'és GYIK-válasz a cseréről');
+
 T::vege('t60 hardveres gyorsítás, sima Szikra, új szereplők');

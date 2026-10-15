@@ -124,7 +124,7 @@ final class SDH_Muhely_Asszisztens
             // Bulis jelenetek (0.62.1): sörözés, tántorgás, füves cigi – alapból KI (ügyfél előtt, eladásnál).
             'bulis'            => !empty($b['bulis']),
             'eszkozok'         => is_array($b['eszkozok'] ?? null) ? array_map('boolval', $b['eszkozok']) : [],
-            // Melyik figura (0.61.0): tíz választható alak, mind saját színnel és arccal.
+            // Melyik figura (0.61.0): tíz, 0.65.2 óta tizennégy választható alak, mind saját színnel és arccal.
             'figura'           => isset(self::figurak()[(string) ($b['figura'] ?? '')]) ? (string) $b['figura'] : 'szikra',
         ];
     }
@@ -150,6 +150,11 @@ final class SDH_Muhely_Asszisztens
             'meh'     => ['nev' => 'Zümi', 'alcim' => 'Sárga-fekete csíkos, szorgos.', 'nevjavaslat' => 'Zümi'],
             'szellem' => ['nev' => 'Pára', 'alcim' => 'Halvány, áttetsző, hullámos aljjal.', 'nevjavaslat' => 'Pára'],
             'csillag' => ['nev' => 'Csillag', 'alcim' => 'Aranyszínű, saját fénnyel.', 'nevjavaslat' => 'Csillag'],
+            // 0.65.2: kartonfigurás és űropera-hangulatú figurák – saját tervezés, nem ismert szereplők.
+            'karton'  => ['nev' => 'Kartonka', 'alcim' => 'Lapos, kivágott papír hatású kisfiú zöld sapkában.', 'nevjavaslat' => 'Kartonka'],
+            'bojtos'  => ['nev' => 'Bojtika', 'alcim' => 'Lapos, kivágott papír hatású kislány lila bojtos sapkában.', 'nevjavaslat' => 'Bojtika'],
+            'droid'   => ['nev' => 'Bip', 'alcim' => 'Lebegő ezüst gömbdroid, világító kék talppal.', 'nevjavaslat' => 'Bip'],
+            'orszem'  => ['nev' => 'Zoli', 'alcim' => 'Csillagőr: szürke sisak, kék rostély, narancs gallér.', 'nevjavaslat' => 'Zoli'],
         ];
     }
 

@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.65.2
+- **Négy új választható figura** a Beállítások › Asszisztens › Melyik figura? dobozban (összesen tizennégy): *Kartonka*
+  és *Bojtika* (lapos, kivágott papír hatású gyerekek sapkában), *Bip* (lebegő gömbdroid) és *Zoli* (csillagőr). Saját
+  tervezés, a meglévő mimikával és jelenetekkel. A súgóban új „Melyik figura?" szakasz és GYIK-válasz, így az AI is ismeri.
+
 ### 0.65.1
 - **Az AI ismeri az új szereplőket**: a `sugo/16-asszisztens.md` kulcsszavai, a jelenettáblázat (megjelenés, jellem, mondatok) és három új GYIK-válasz (kik a kartonfigurás gyerekek, ki Zoli és Bip, miért akadozik a figura). Az asszisztens a súgóból tanul, ezért most már válaszol rájuk.
 

@@ -2262,7 +2262,7 @@ a.sdh-ai__buborek-gomb {
 }
 
 /* ================================================================== */
-/* Tíz választható figura (0.61.0)                                     */
+/* Választható figurák (0.61.0: tíz, 0.65.2: tizennégy)                  */
 /* ================================================================== */
 /*
  * Mind ugyanaz a lény: a test, a szem és a száj szabálya közös, csak a
@@ -2424,6 +2424,160 @@ a.sdh-ai__buborek-gomb {
     border-radius: 42% 58% 44% 56% / 48% 42% 58% 52%;
     clip-path: polygon(50% 0, 62% 35%, 100% 38%, 70% 60%, 82% 100%, 50% 76%, 18% 100%, 30% 60%, 0 38%, 38% 35%);
     animation: sdh-ai-legzes 4.2s ease-in-out infinite;
+}
+
+/* ---- 0.65.2: négy új figura – kartonfigurás gyerekek és űropera-hangulatú szereplők (saját tervezés) ---- */
+
+/* Kivágott papír hatás: lapos színek, vastag sötét körvonal, nincs fény és mélység. */
+.sdh-ai[data-figura="karton"],
+.sdh-ai[data-figura="bojtos"] {
+    --sdh-ai-a: #f6cfa5;
+    --sdh-ai-b: #f6cfa5;
+    --sdh-ai-c: #f6cfa5;
+}
+
+.sdh-ai[data-figura="karton"] .sdh-ai__test,
+.sdh-ai[data-figura="bojtos"] .sdh-ai__test {
+    border-radius: 50%;
+    background: #f6cfa5;
+    box-shadow: 0 0 0 calc(2.5px * var(--sdh-n)) #0b1020;
+}
+
+.sdh-ai[data-figura="karton"] .sdh-ai__aura,
+.sdh-ai[data-figura="bojtos"] .sdh-ai__aura,
+.sdh-ai[data-figura="karton"] .sdh-ai__mag,
+.sdh-ai[data-figura="bojtos"] .sdh-ai__mag,
+.sdh-ai[data-figura="karton"] .sdh-ai__fenyfolt,
+.sdh-ai[data-figura="bojtos"] .sdh-ai__fenyfolt {
+    display: none;
+}
+
+/* Sapka: kupola (::before) és karima / bojt (::after). */
+.sdh-ai[data-figura="karton"] .sdh-ai__leny::before,
+.sdh-ai[data-figura="bojtos"] .sdh-ai__leny::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: -12%;
+    left: 4%;
+    width: 92%;
+    height: 34%;
+    border: calc(2.5px * var(--sdh-n)) solid #0b1020;
+    border-bottom-width: calc(3px * var(--sdh-n));
+    border-radius: 100% 100% 10% 10% / 120% 120% 14% 14%;
+    background: #16a34a;
+}
+
+.sdh-ai[data-figura="karton"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 19%;
+    left: -6%;
+    width: 112%;
+    height: 8%;
+    border: calc(2.5px * var(--sdh-n)) solid #0b1020;
+    border-radius: calc(999px * var(--sdh-n));
+    background: #16a34a;
+}
+
+.sdh-ai[data-figura="bojtos"] .sdh-ai__leny::before {
+    background: #a855f7;
+}
+
+.sdh-ai[data-figura="bojtos"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: -22%;
+    left: 50%;
+    width: 24%;
+    height: 24%;
+    border: calc(2.5px * var(--sdh-n)) solid #0b1020;
+    border-radius: 50%;
+    background: #fde047;
+    transform: translateX(-50%);
+}
+
+/* Bip: ezüst gömbdroid, a „talpa" a kék izzás (aura). */
+.sdh-ai[data-figura="droid"] {
+    --sdh-ai-a: #9ca3af;
+    --sdh-ai-b: #f3f4f6;
+    --sdh-ai-c: #38bdf8;
+    --sdh-ai-szem: #7dd3fc;
+}
+
+.sdh-ai[data-figura="droid"] .sdh-ai__test {
+    border-radius: 50%;
+    background:
+        linear-gradient(transparent 62%, rgba(15, 23, 42, .4) 62% 66%, transparent 66%),
+        radial-gradient(circle at 32% 26%, rgba(255, 255, 255, .9) 0 6%, rgba(255, 255, 255, .25) 14%, transparent 30%),
+        linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
+}
+
+.sdh-ai[data-figura="droid"] .sdh-ai__leny::before {
+    content: "";
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: calc(3px * var(--sdh-n));
+    height: 22%;
+    background: #475569;
+    transform: translateX(-50%);
+}
+
+.sdh-ai[data-figura="droid"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    top: -28%;
+    left: 50%;
+    width: 15%;
+    height: 15%;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 calc(9px * var(--sdh-n)) #f59e0b;
+    transform: translateX(-50%);
+}
+
+/* Zoli: szürke sisak, kék rostély a szemek mögött, narancs gallér, piros jelzőgömb. */
+.sdh-ai[data-figura="orszem"] {
+    --sdh-ai-a: #94a3b8;
+    --sdh-ai-b: #e2e8f0;
+    --sdh-ai-c: #f97316;
+    --sdh-ai-szem: #ffffff;
+}
+
+.sdh-ai[data-figura="orszem"] .sdh-ai__test {
+    border-radius: 50% 50% 38% 38% / 56% 56% 36% 36%;
+    background:
+        linear-gradient(transparent 76%, #f97316 76%),
+        linear-gradient(transparent 28%, rgba(14, 116, 144, .62) 28% 64%, transparent 64%),
+        radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .85) 0 6%, rgba(255, 255, 255, .25) 14%, transparent 30%),
+        linear-gradient(140deg, var(--sdh-ai-a), var(--sdh-ai-b));
+}
+
+.sdh-ai[data-figura="orszem"] .sdh-ai__leny::before {
+    content: "";
+    position: absolute;
+    top: -18%;
+    left: 50%;
+    width: calc(3px * var(--sdh-n));
+    height: 20%;
+    background: #475569;
+    transform: translateX(-50%);
+}
+
+.sdh-ai[data-figura="orszem"] .sdh-ai__leny::after {
+    content: "";
+    position: absolute;
+    top: -26%;
+    left: 50%;
+    width: 14%;
+    height: 14%;
+    border-radius: 50%;
+    background: #f43f5e;
+    box-shadow: 0 0 calc(8px * var(--sdh-n)) #f43f5e;
+    transform: translateX(-50%);
 }
 
 /* ---------- A választó a Beállításokban ---------- */

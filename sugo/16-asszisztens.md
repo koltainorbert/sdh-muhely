@@ -4,7 +4,7 @@ cim: Asszisztens
 csoport: Csapat és idő
 modul: asszisztens
 szakaszok: asszisztens
-kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1, kisvárosi srácok, kartonfigura, kivágott papír, gyerekek, bence, lilla, gergő, űrcsata, csillagőr zoli, zoli, bip, droid, lebegő robot, plazmavilla, galaktikus parkolóőrség, parkolójegy, tányér-cirkáló, ufo, űrhajó, új szereplők, ki az a bip, kik azok a gyerekek
+kulcsszavak: szikra élete, mimika, arckifejezés, csirke, egér, madár, pechás pityu, ködbáró, csilla, barátnő, motor, autó, pisi, kaki, fing, büdös, tüsszent, altesti humor, napló, mi történt, ki módosította, idővonal, előzmény, párbaj, hiba-bogár, bogár, fénypenge, kard, asszisztens, AI, mesterséges intelligencia, robot, figura, gömb, chat, csevegés, kérdés, túra, végigvezetés, vezess végig, megmutat, javaslat, jóváhagyás, megerősítő kód, visszaállítás, tudástár, tanítás, jegyezd meg, humor, élénkség, Claude, API-kulcs, F1, kisvárosi srácok, kartonfigura, kivágott papír, gyerekek, bence, lilla, gergő, űrcsata, csillagőr zoli, zoli, bip, droid, lebegő robot, plazmavilla, galaktikus parkolóőrség, parkolójegy, tányér-cirkáló, ufo, űrhajó, új szereplők, ki az a bip, kik azok a gyerekek, melyik figura, választható figura, figura cseréje, figura kiválasztása, kartonka, bojtika, bip droid, zoli csillagőr, szikra, láng, csepp, moha, kobold, bigyó, felhő, zümi, pára, csillag
 osszefoglalo: A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.
 ---
 ## Mire való
@@ -99,6 +99,29 @@ Néha egy morcos kis lila bogár – a **Hiba-bogár** – mászik elő a képer
 - néha a figura pengéje merül le, a bogár örömében ugrál egyet, és elballag.
 
 Az egész néhány másodperc. Bármilyen kattintásra vagy gépelésre azonnal abbamarad, új levél jelzésekor is. Amíg levél-jelzés látszik, el sem kezdődik. Hogy milyen gyakran jön, azt az **Élénkség** adja; a **Párbaj a Hiba-bogárral** kapcsolóval ki is kapcsolható (Beállítások › Asszisztens › Személyiség).
+
+### Melyik figura?
+
+A Beállítások › Asszisztens › **Melyik figura?** dobozban tizennégy figura közül választasz; a kiválasztott él a képernyő sarkában. Mindegyik ugyanaz az asszisztens (ugyanúgy tud mindent, ugyanazt a mimikát és ugyanazokat a jeleneteket játssza), csak a külseje más. A nevét alatta átírhatod.
+
+| Figura | Milyen |
+|---|---|
+| Szikra | A klasszikus: eleven, kékes-lila fénygombóc. |
+| Láng | Narancs-vörös lobogás, hegyes csúccsal. |
+| Csepp | Hűvös türkiz vízcsepp, csillogó szemmel. |
+| Moha | Zöld, nyugodt, kerek – a türelmes fajta. |
+| Kobold | Lila, hegyes fülekkel; szeret ugratni. |
+| Bigyó | Szögletes acélszürke fej, antennával. |
+| Felhő | Lágy fehér-kék pamacs, álmos tekintettel. |
+| Zümi | Sárga-fekete csíkos, szorgos. |
+| Pára | Halvány, áttetsző, hullámos aljjal. |
+| Csillag | Aranyszínű, saját fénnyel. |
+| Kartonka | Lapos, kivágott papír hatású kisfiú zöld sapkában, vastag sötét körvonallal. |
+| Bojtika | Lapos, kivágott papír hatású kislány lila, sárga bojtos sapkában. |
+| Bip | Lebegő ezüst gömbdroid, antennával és világító kék „talppal". |
+| Zoli | Csillagőr: szürke sisak, kék rostély a szemek mögött, narancs gallér, piros jelzőgömb. |
+
+Az új négy (Kartonka, Bojtika, Bip, Zoli) saját tervezés – nem ismert film- vagy rajzfilmszereplők másai. Ha a **Kartonka** vagy a **Bojtika** a figurád, a *Kisvárosi srácok* jelenetben is ők a főszereplők barátai; a **Bip** és a **Zoli** az *Űrcsata* jelenet szereplői.
 
 ### Szikra élete
 
@@ -415,6 +438,10 @@ A **Hiba-bogár** – a figura játékos ellenfele. Pár másodpercig fénypeng�
 ### Miért nem mozog simán / miért akadozik a figura?
 
 Ha a böngésző nem használja a videokártyát (hardveres gyorsítás), a mozgás lassabb. A rendszer ezt magától észleli, és figyelmeztet; a bekapcsolás lépéseit lásd: Hibaelhárítás › Hardveres gyorsítás (a böngészőben).
+
+### Hogyan cserélem le a figurát?
+
+Beállítások › Asszisztens › **Melyik figura?** – kattints a kedvencedre, és mentsd. Tizennégy van: Szikra, Láng, Csepp, Moha, Kobold, Bigyó, Felhő, Zümi, Pára, Csillag, valamint az újak: **Kartonka** (kivágott papír kisfiú), **Bojtika** (kivágott papír kislány), **Bip** (lebegő gömbdroid) és **Zoli** (csillagőr). Mindegyik ugyanúgy tud mindent; csak a külseje más.
 
 ### Kikapcsolható a pisilés és a kakilás?
 
