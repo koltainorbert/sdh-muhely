@@ -4,8 +4,8 @@ cim: Mentés, jogosultság, biztonság
 csoport: Rendszer
 modul:
 szakaszok: mentes
-kulcsszavak: külső mentés, Google Drive, FTP, NAS, WebDAV, export, import, költözés, élesítés, jelszavas mentés, előző napi mentés, napi mentés, automatikus mentés, mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
-osszefoglalo: Ki mit lát a rendszerben, hogyan és mikor készül mentés (a gépen és külső helyre: Google Drive, FTP, NAS, saját gép), hogyan állítható vissza, hogyan költöztethető a teljes beállítás élesbe, mit nem töröl a rendszer soha, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.
+kulcsszavak: kétlépcsős belépés, kétfaktoros, 2FA, hitelesítő alkalmazás, Google Authenticator, Microsoft Authenticator, telefonos kód, tartalék kód, megbízható gép, elveszett telefon, új telefon, külső mentés, Google Drive, FTP, NAS, WebDAV, export, import, költözés, élesítés, jelszavas mentés, előző napi mentés, napi mentés, automatikus mentés, mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
+osszefoglalo: Ki mit lát a rendszerben, a kétlépcsős belépés (telefonos kód), hogyan és mikor készül mentés (a gépen és külső helyre: Google Drive, FTP, NAS, saját gép), hogyan állítható vissza, hogyan költöztethető a teljes beállítás élesbe, mit nem töröl a rendszer soha, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.
 ---
 
 ## Mire való
@@ -22,6 +22,7 @@ Röviden:
 - A mentésből a **Beállítások › Mentés** lapon **visszaállíthatsz** – előtte a rendszer biztonsági mentést készít a mostani állapotról.
 - A **beállítások külön exportálhatók** és importálhatók: élesbe költözéskor nem kell mindent újra beállítani.
 - A szerver saját, teljes mentése (fájlok is) továbbra is kell.
+- **Kétlépcsős belépés:** a jelszó mellé a telefon hitelesítő alkalmazásának kódja is kérhető – kívülről (internetről) elérhető rendszernél kötelezőre érdemes állítani.
 
 ## Ki mit lát: adminisztrátor és kolléga
 
@@ -225,6 +226,62 @@ Csak a saját műveletedet állíthatod vissza; adminisztrátor bárkiét. A ká
 
 Részletek az asszisztensről: [Asszisztens](sugo:asszisztens).
 
+## Kétlépcsős belépés (azonosítás telefonnal)
+
+A belépéshez a jelszó mellé a telefonon futó **hitelesítő alkalmazás** 6 jegyű kódja is kell. A kód 30 másodpercenként változik, és egyszer használható – így egy kitudódott jelszó egymagában nem elég senkinek. Bármelyik szokásos alkalmazás jó: Google Authenticator, Microsoft Authenticator, Aegis, 2FAS. Internet a telefonon sem kell hozzá.
+
+### Ki kell-e és kinek
+
+**Beállítások › Jogosultságok › Kétlépcsős belépés** (adminisztrátor):
+
+| Mező | Mire való |
+|---|---|
+| **Kinek kell** | **Kikapcsolva** – senkitől nem kér kódot. **Választható** (alap) – aki akarja, bekapcsolja magának a profilmenüben. **Adminisztrátoroknak kötelező** – a többieknek választható. **Mindenkinek kötelező**. |
+| **Megbízható gép (nap)** | Ennyi napig nem kér kódot azon a gépen, ahol belépéskor bepipálták az „Ezen a gépen ne kérje” jelölőt. 0 = mindig kér. Alap: 30. |
+
+Alatta a fiókok listája: kinél van bekapcsolva, hány tartalék kódja maradt, és a **Visszaállítás** gomb (kétszer kell rákattintani).
+
+Mielőtt a rendszer kívülről (internetről) is elérhető lesz, állítsd **Adminisztrátoroknak** vagy **Mindenkinek kötelező**-re.
+
+### Lépésről lépésre: bekapcsolás a saját fiókon
+
+1. Telepíts a telefonra egy hitelesítő alkalmazást.
+2. A jobb felső sarokban nyisd meg a profilmenüt, és kattints a **Kétlépcsős belépés** sorra.
+3. Az alkalmazásban olvasd be a QR-kódot (vagy írd be a kulcsot kézzel).
+4. Írd be az alkalmazás 6 jegyű kódját, és kattints a **Bekapcsolás** gombra.
+5. Megjelenik **10 tartalék kód**. Írd le vagy nyomtasd ki őket – többet nem látod.
+
+Ha kötelező, és még nem állítottad be, a rendszer **belépéskor**, a jelszó után kéri ugyanezt: QR-kód, kód beírása, tartalék kódok.
+
+### Belépés kóddal
+
+1. Add meg a neved és a jelszavad, mint eddig.
+2. A következő képernyőn írd be a telefon 6 jegyű kódját.
+3. Ha ez a te géped, pipáld be az **Ezen a gépen … napig ne kérje** jelölőt.
+
+Telefon nélkül egy **tartalék kódot** is beírhatsz a kód helyére (mindegyik egyszer használható). Öt hibás kód után újra a jelszóval kell kezdeni; ha egy fióknál rövid időn belül tíz hibás kód gyűlik össze, a rendszer negyedórára nem fogad el kódot.
+
+### A profilmenü „Kétlépcsős belépés” ablaka
+
+Bekapcsolt állapotban a telefon aktuális kódjával (vagy egy tartalék kóddal):
+
+- **Új tartalék kódok** – tíz új kód; a régiek érvénytelenek lesznek.
+- **Megbízható gépek visszavonása** – minden gépen újra kéri a kódot (pl. ha egy gép eltűnt).
+- **Kikapcsolás** – csak ha a fiókodnál nem kötelező.
+
+### Elveszett vagy új telefon
+
+- Ha van tartalék kódod: lépj be vele, kapcsold ki, majd be újra az új telefonnal (vagy kérj új tartalék kódokat).
+- Ha nincs: az adminisztrátor a **Beállítások › Jogosultságok** fiók-listáján a **Visszaállítás** gombbal törli a fiók kódját. A következő belépéskor (ha kötelező) újra beállítod.
+
+### Közös fiók
+
+A közös fióknak egy kódja van – a fiókhoz tartozik, nem a dolgozókhoz. A közös fiókos gépeken érdemes a **Megbízható gép** jelölőt használni. A közös fiók kódját csak adminisztrátor kezelheti.
+
+### Vészkapcsoló [fejlesztő]
+
+Ha senki nem tud belépni (pl. minden admin elvesztette a telefonját és a tartalék kódjait): a `wp-config.php`-ba írt `define('SDH_MUHELY_KETLEPCSOS_KI', true);` sor kikapcsolja a kétlépcsős belépést. Belépés után állítsd vissza a fiókokat, és töröld a sort. A titkok a felhasználói adatok között állnak (`sdh_muhely_2fa_*`), a titok a Titok-osztállyal titkosítva; a teljes mentés a felhasználókat nem viszi.
+
 ## Szabályok, amiket a rendszer betart
 
 - **Ügyfelet nem töröl.** Az ügyfél űrlapján az **Inaktívra állít** gomb kiveszi a napi listából, az **Újra aktív** visszateszi. Az inaktív ügyfelet a fejléc keresője nem hozza, de a régi munkalapjain megmarad.
@@ -284,6 +341,22 @@ A **Beállítások › Levelezés** lapfülön egy postafióknak külön jelszó
 További elakadások: [Hibaelhárítás](sugo:hibaelharitas).
 
 ## GYIK
+
+### Mi az a kétlépcsős belépés?
+
+A jelszó mellé a telefonod hitelesítő alkalmazásának 6 jegyű kódja is kell a belépéshez. Bekapcsolás: profilmenü › **Kétlépcsős belépés**.
+
+### Mire jók a tartalék kódok?
+
+A tartalék kód (10 darab, XXXX-XXXX alakú) a telefon helyett írható be a kód mezőbe, ha a telefon nincs kéznél vagy elveszett. Mindegyik egyszer használható. Újakat a profilmenü › **Kétlépcsős belépés** ablakában kérhetsz.
+
+### Melyik hitelesítő alkalmazást telepítsem (Google Authenticator)?
+
+Bármelyik jó, amelyik 6 jegyű, 30 másodpercenként változó kódot ad: Google Authenticator, Microsoft Authenticator, Aegis, 2FAS. A QR-kódot ezzel olvasod be a bekapcsoláskor.
+
+### Elveszett a telefonom. Hogyan lépek be?
+
+Írj be egy **tartalék kódot** a kód helyére. Ha nincs, kérd az adminisztrátort: a **Beállítások › Jogosultságok** listáján visszaállítja a fiókodat.
 
 ### Készül magától mentés minden nap?
 

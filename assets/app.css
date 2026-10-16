@@ -742,6 +742,72 @@ body.sdh-belepo[data-hely="jobb"] .sdh-belepes {
     }
 }
 
+/* H7 (0.81.0): a kétlépcsős belépés második lépése a bejelentkezőn. */
+.sdh-app__kozep h2.sdh-belepes__lepes {
+    margin: 0 0 calc(6px * var(--sdh-n));
+    font-size: calc(16px * var(--sdh-n));
+    font-weight: 600;
+    color: var(--belepo-cimke, var(--sdh-szoveg));
+}
+
+.sdh-app__kozep p.sdh-belepes__szoveg {
+    margin: 0 0 calc(10px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.5;
+    color: var(--belepo-halvany, var(--sdh-halvany));
+}
+
+.sdh-belepes__lepesek {
+    margin: 0 0 calc(10px * var(--sdh-n));
+    padding-left: 1.2rem;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.5;
+    color: var(--belepo-halvany, var(--sdh-halvany));
+}
+
+.sdh-belepes__qr {
+    display: flex;
+    justify-content: center;
+    width: max-content;
+    margin: 0 auto calc(10px * var(--sdh-n));
+    padding: calc(8px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    background: #fff;
+    line-height: 0;
+}
+
+.sdh-belepes__qrkep {
+    width: calc(176px * var(--sdh-n));
+    height: calc(176px * var(--sdh-n));
+}
+
+.sdh-belepes__kulcs code,
+.sdh-belepes__tartalek code {
+    word-break: break-all;
+    color: var(--belepo-cimke, var(--sdh-szoveg));
+}
+
+.sdh-belepes__tartalek {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(4px * var(--sdh-n)) calc(18px * var(--sdh-n));
+    margin: 0 0 calc(14px * var(--sdh-n));
+    padding: calc(10px * var(--sdh-n)) calc(10px * var(--sdh-n)) calc(10px * var(--sdh-n)) 2rem;
+    border: 1px dashed var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    font-size: calc(14px * var(--sdh-n));
+    color: var(--belepo-cimke, var(--sdh-szoveg));
+}
+
+a.sdh-gomb.sdh-belepes__gomb {
+    display: flex;
+    text-decoration: none;
+}
+
+.sdh-belepes__lab a {
+    color: inherit;
+}
+
 /* Mobilon és „kevesebb mozgás” kérésre nincs videó: a kép (vagy a szín) áll. */
 @media (max-width: 700px), (prefers-reduced-motion: reduce) {
     .sdh-belepo-hatter__video {

@@ -613,6 +613,7 @@ final class SDH_Muhely_Frontend
                         </p>
 
                         <?php echo class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::profil_sor() : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+                        <?php echo class_exists('SDH_Muhely_Ketlepcsos') ? SDH_Muhely_Ketlepcsos::profil_sor() : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (H7). ?>
                         <?php // Megjelenés (Rendszer / Világos / Sötét) és Üvegszín (Duó, Egyszínű) – a dolgozó saját gépére szól. ?>
                         <?php echo SDH_Muhely_Arculat::megjelenes_valaszto('profil'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
 

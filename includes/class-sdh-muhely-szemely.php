@@ -520,6 +520,10 @@ final class SDH_Muhely_Szemely
         SDH_Muhely_Szerepkor::doboz();
         SDH_Muhely_Utkozes::beallitas_doboz();
         self::beallitas_doboz();
+
+        if (class_exists('SDH_Muhely_Ketlepcsos')) {
+            SDH_Muhely_Ketlepcsos::beallitas_doboz();
+        }
     }
 
     public static function jogosultsagok_mentes(): void
@@ -527,6 +531,10 @@ final class SDH_Muhely_Szemely
         SDH_Muhely_Szerepkor::mentes();
         SDH_Muhely_Utkozes::beallitas_mentes();
         self::beallitas_mentes();
+
+        if (class_exists('SDH_Muhely_Ketlepcsos')) {
+            SDH_Muhely_Ketlepcsos::beallitas_mentes();
+        }
     }
 
     public static function beallitas_doboz(): void

@@ -253,7 +253,7 @@ final class SDH_Muhely_Beallitasok
             // --- Rendszer ----------------------------------------------------
             'jogosultsagok' => [
                 'cim' => 'Jogosultságok', 'csoport' => 'rendszer',
-                'leiras' => 'Egyszerre egy ablakban szerkeszthető lap (zárolás, felülbíráló kód) és a közös fiók „Ki vagy?” választója (dolgozók, PIN).',
+                'leiras' => 'Szerepkörök és jogok, egyszerre egy ablakban szerkeszthető lap (zárolás, felülbíráló kód), a közös fiók „Ki vagy?” választója (dolgozók, PIN) és a kétlépcsős belépés.',
                 'rajz' => [SDH_Muhely_Szemely::class, 'jogosultsagok_rajz'], 'ment' => [SDH_Muhely_Szemely::class, 'jogosultsagok_mentes'],
             ],
             'sebesseg' => [

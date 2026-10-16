@@ -142,3 +142,91 @@
 .sdh-nem-torles [data-sdh-ujranyit] {
     display: none !important;
 }
+
+/* Kétlépcsős belépés (H7, 0.81.0): profilmenü sora, a saját fiók popupja, Beállítások › Jogosultságok. */
+
+.sdh-ketlepcsos__nyit {
+    width: 100%;
+    justify-content: flex-start;
+    margin: calc(4px * var(--sdh-n)) 0 calc(8px * var(--sdh-n));
+}
+
+.sdh-ketlepcsos {
+    display: grid;
+    gap: calc(10px * var(--sdh-n));
+    max-width: calc(560px * var(--sdh-n));
+}
+
+.sdh-ketlepcsos__beallit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: calc(14px * var(--sdh-n));
+}
+
+.sdh-ketlepcsos__qr {
+    flex: none;
+    padding: calc(6px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    background: #fff;
+    line-height: 0;
+}
+
+.sdh-ketlepcsos__qrkep {
+    width: calc(164px * var(--sdh-n));
+    height: calc(164px * var(--sdh-n));
+}
+
+.sdh-ketlepcsos__lepesek {
+    flex: 1 1 calc(220px * var(--sdh-n));
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.55;
+}
+
+.sdh-ketlepcsos__lepesek code,
+.sdh-ketlepcsos code {
+    word-break: break-all;
+}
+
+.sdh-ketlepcsos__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6px * var(--sdh-n));
+    margin: 0;
+}
+
+.sdh-ketlepcsos__ki,
+.sdh-ketlepcsos__ki[data-sdh-biztos="1"] {
+    color: var(--sdh-hiba);
+    border-color: color-mix(in srgb, var(--sdh-hiba) 45%, var(--sdh-keret-eros));
+}
+
+.sdh-ketlepcsos__tartalek {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(4px * var(--sdh-n)) calc(18px * var(--sdh-n));
+    margin: 0;
+    padding: calc(10px * var(--sdh-n)) calc(10px * var(--sdh-n)) calc(10px * var(--sdh-n)) 2rem;
+    border: 1px dashed var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    font-size: calc(14px * var(--sdh-n));
+}
+
+.sdh-ketlepcsos__tartalek code {
+    font-size: calc(14px * var(--sdh-n));
+    letter-spacing: .06em;
+}
+
+.sdh-ketlepcsos__lista {
+    margin-top: calc(12px * var(--sdh-n));
+}
+
+[data-sdh-ketlepcsos-visszaallit][data-sdh-biztos="1"] {
+    color: var(--sdh-hiba);
+}
+
+.sdh-ketlepcsos [hidden] {
+    display: none !important;
+}

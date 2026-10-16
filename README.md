@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.81.0
+- **H7 – kétlépcsős belépés (TOTP)**, új `SDH_Muhely_Ketlepcsos`. RFC 6238 (SHA-1, 6 jegy, 30 mp, ±1 lépés), base32 titok
+  fiókonként a user metában, `SDH_Muhely_Titok`-kal titkosítva; egy kód csak egyszer (az utolsó elfogadott lépés tárolva).
+  10 tartalék kód (XXXX-XXXX, csak HMAC-lenyomat tárolva, egyszer használható).
+- Szabály (Beállítások › Jogosultságok › Kétlépcsős belépés, opció `sdh_muhely_ketlepcsos`): kikapcsolva / választható (alap) /
+  adminisztrátoroknak kötelező / mindenkinek kötelező; megbízható gép 0–90 nap (alap 30; HMAC-aláírt süti, a titok cseréje,
+  a visszaállítás és a „gépek visszavonása” érvényteleníti). Fiók-lista állapottal és kétlépcsős **Visszaállítás** gombbal
+  (a fejlesztő fiókját csak fejlesztő). Vészkapcsoló: `SDH_MUHELY_KETLEPCSOS_KI`.
+- Belépés: a saját bejelentkező előbb csak a jelszót nézi (`wp_authenticate`), utána függő jegy (transient, 10 perc, 5 próba) →
+  kód lépés, vagy kötelezőnél **beállítás a belépéskor** (QR + kulcs + tartalék kódok), és csak ezután süti + `wp_login`. Fiókonként
+  10 rossz kód: 15 perc zár. Minden más út (wp-login.php beküldése, `wp_signon`) `authenticate` szűrővel elutasítva, ha kód kell.
+- Saját fiók: profilmenü › **Kétlépcsős belépés** popup (QR, bekapcsolás, új tartalék kódok, gépek visszavonása, kikapcsolás –
+  utóbbiak az aktuális kóddal). Közös fiókon csak admin kezeli. Változásnapló-események. Súgó: 19. fejezet. Teszt: t73.
+
 ### 0.80.0
 - **H6b – a bejelentkező oldal testreszabása** (új `SDH_Muhely_Belepo`, opció `sdh_muhely_belepo` – a mentés és az Export / Import
   magától viszi). Új lapfül: **Beállítások › Bejelentkező oldal** (Cég és megjelenés). Állítható: logó (saját vagy a rendszeré) és

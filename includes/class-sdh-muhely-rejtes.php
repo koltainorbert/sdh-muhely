@@ -337,10 +337,32 @@ final class SDH_Muhely_Rejtes
     }
 
     /**
+     * Egy beküldés a bejelentkezőn: az első lépés (név + jelszó) vagy a második (kétlépcsős kód).
+     * A második lépés sikere után a cél a „login_redirect” szerint.
+     *
+     * @param array<string, mixed> $be
+     * @return array<string, mixed>
+     */
+    public static function kuldes(array $be): array
+    {
+        if (!isset($be['sdh_2fa_jegy']) || !class_exists('SDH_Muhely_Ketlepcsos')) {
+            return self::belepes_feldolgoz($be);
+        }
+
+        $r = SDH_Muhely_Ketlepcsos::feldolgoz($be);
+
+        if (isset($r['cel'])) {
+            $r['cel'] = self::cel((string) $r['cel'], wp_get_current_user());
+        }
+
+        return $r;
+    }
+
+    /**
      * A bejelentkező űrlap feldolgozása.
      *
      * @param array<string, mixed> $be
-     * @return array{cel?: string, hiba?: string}
+     * @return array{cel?: string, hiba?: string, lepes?: string, jegy?: string}
      */
     public static function belepes_feldolgoz(array $be): array
     {
@@ -355,20 +377,33 @@ final class SDH_Muhely_Rejtes
             return ['hiba' => 'Add meg a neved és a jelszavad.'];
         }
 
-        $felhasznalo = wp_signon([
-            'user_login'    => $nev,
-            'user_password' => $jelszo,
-            'remember'      => !empty($be['rememberme']),
-        ], is_ssl());
+        // H7 (0.81.0): előbb csak a jelszó; a belépés (süti) a kétlépcsős kód után – ha kell.
+        $felhasznalo = class_exists('SDH_Muhely_Ketlepcsos')
+            ? SDH_Muhely_Ketlepcsos::jelszo($nev, $jelszo)
+            : wp_authenticate($nev, $jelszo);
 
-        if (is_wp_error($felhasznalo)) {
+        if (is_wp_error($felhasznalo) || !$felhasznalo instanceof WP_User) {
             // A WordPress hibaszövege linket és árulkodó szavakat tartalmazna: saját, általános üzenet.
             return ['hiba' => $felhasznalo->get_error_code() === 'sdh_dolgozo'
                 ? 'Ezzel a névvel nem lehet belépni: a közös fiókon kell kiválasztani.'
                 : 'Hibás felhasználónév vagy jelszó.'];
         }
 
-        wp_set_current_user((int) $felhasznalo->ID);
+        $marad = !empty($be['rememberme']);
+
+        if (class_exists('SDH_Muhely_Ketlepcsos')) {
+            $lepes = SDH_Muhely_Ketlepcsos::fuggo_indit($felhasznalo, $marad, (string) ($be['redirect_to'] ?? ''));
+
+            if ($lepes !== null) {
+                return $lepes;
+            }
+
+            SDH_Muhely_Ketlepcsos::belep($felhasznalo, $marad);
+        } else {
+            wp_set_auth_cookie((int) $felhasznalo->ID, $marad, is_ssl());
+            wp_set_current_user((int) $felhasznalo->ID);
+            do_action('wp_login', $felhasznalo->user_login, $felhasznalo);
+        }
 
         return ['cel' => self::cel((string) ($be['redirect_to'] ?? ''), $felhasznalo)];
     }
@@ -399,26 +434,29 @@ final class SDH_Muhely_Rejtes
             exit;
         }
 
-        $hiba = '';
-        $nev  = '';
+        $hiba  = '';
+        $nev   = '';
+        $lepes = [];
 
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $be = wp_unslash($_POST);
             $be = is_array($be) ? $be : [];
             $be['redirect_to'] = $vissza;
-            $nev = sanitize_user((string) ($be['log'] ?? ''));
-            $r   = self::belepes_feldolgoz($be);
+            $r  = self::kuldes($be);
 
-            if (isset($r['cel'])) {
+            if (isset($r['cel']) && !isset($r['tartalek'])) {
                 wp_safe_redirect($r['cel'], 302);
                 exit;
             }
 
-            $hiba = (string) ($r['hiba'] ?? '');
+            $nev   = sanitize_user((string) ($be['log'] ?? ''));
+            $hiba  = (string) ($r['hiba'] ?? '');
+            $lepes = isset($r['tartalek']) ? ['lepes' => 'tartalek', 'tartalek' => $r['tartalek'], 'cel' => $r['cel']]
+                : (isset($r['lepes']) ? $r : []);
         }
         // phpcs:enable
 
-        echo self::belepo_html($hiba, $nev, $vissza); // phpcs:ignore WordPress.Security.EscapeOutput
+        echo self::belepo_html(isset($lepes['lepes']) ? '' : $hiba, $nev, $vissza, null, false, $lepes); // phpcs:ignore WordPress.Security.EscapeOutput
         exit;
     }
 
@@ -428,9 +466,12 @@ final class SDH_Muhely_Rejtes
      * $b: az élő előnézet még nem mentett beállítása. $elonezet: a Beállítások előnézete –
      * nem küldhető be, és nem veszi el a fókuszt az űrlaptól.
      *
+     * $lepes: a kétlépcsős belépés második lépése (SDH_Muhely_Ketlepcsos::lepes_html).
+     *
      * @param array<string, mixed>|null $b
+     * @param array<string, mixed>      $lepes
      */
-    public static function belepo_html(string $hiba = '', string $nev = '', string $vissza = '', ?array $b = null, bool $elonezet = false): string
+    public static function belepo_html(string $hiba = '', string $nev = '', string $vissza = '', ?array $b = null, bool $elonezet = false, array $lepes = []): string
     {
         $van_belepo = class_exists('SDH_Muhely_Belepo') && class_exists('SDH_Muhely_Arculat');
         $b          = $van_belepo ? ($b ?? SDH_Muhely_Belepo::beallitas()) : [];
@@ -523,6 +564,9 @@ final class SDH_Muhely_Rejtes
                         <div class="sdh-uzenet sdh-uzenet--hiba" role="alert"><?php echo esc_html($hiba); ?></div>
                     <?php endif; ?>
 
+                    <?php if ($lepes !== [] && class_exists('SDH_Muhely_Ketlepcsos')) : ?>
+                        <?php echo SDH_Muhely_Ketlepcsos::lepes_html($lepes, self::belepes_url('', $vissza)); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
+                    <?php else : ?>
                     <div class="sdh-mezo">
                         <label for="sdh-belepes-nev">Felhasználónév vagy e-mail</label>
                         <input type="text" id="sdh-belepes-nev" name="log" value="<?php echo esc_attr($nev); ?>" autocomplete="username" required<?php echo $elonezet ? '' : ' autofocus'; ?>>
@@ -541,6 +585,7 @@ final class SDH_Muhely_Rejtes
                     <button type="<?php echo $elonezet ? 'button' : 'submit'; ?>" class="sdh-gomb sdh-gomb--elsodleges sdh-belepes__gomb"><?php echo esc_html($gomb); ?></button>
                     <?php if ($lab !== '') : ?>
                         <p class="sdh-sugo sdh-belepes__lab"><?php echo esc_html($lab); ?></p>
+                    <?php endif; ?>
                     <?php endif; ?>
                 </form>
             </div>
