@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.87.0
+- **F5 – riportok** (új `SDH_Muhely_Riport`, csak adminnak, menüpont „Riportok”). Időszak: ez a hónap, előző hónap, utolsó 30 nap,
+  idén vagy egyéni (saját dátumválasztó). Csempék: lezárt javítás, átlagos és medián átfutás (felvétel → lezárás, napban),
+  sikeres javítás aránya (ami nem jött vissza garanciában), bevétel. Táblák: technikusonként (db, átfutás, bevétel, visszajött),
+  eszközkategória, munkalapfajta, szolgáltatás/termék tételek, termékkategória, árajánlatok (elküldve/elfogadva/elutasítva),
+  utolsó 12 hónap sávokkal. Az érvénytelen lap nem számít. Súgó: 29. fejezet. Teszt: t79.
+
 ### 0.86.0
 - **F4 – raktár** (új `SDH_Muhely_Raktar`). Új oszlop: `termek.cel_keszlet` (a rendelés utáni célkészlet; 0 = a minimum kétszerese)
   – **DB_VERSION 0.49.0**. Foglalás = a nyitott (nem lezárt, nem érvénytelen) számozott lapok kimenő terméktételei

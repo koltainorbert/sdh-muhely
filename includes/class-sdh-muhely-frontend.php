@@ -313,6 +313,8 @@ final class SDH_Muhely_Frontend
             'beallitasok'  => '<circle cx="10" cy="10" r="2.5"/>'
                 . '<path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>',
 
+            // Riportok (F5, 0.87.0): oszlopdiagram.
+            'riportok'     => '<path d="M3 16.5h14"/><path d="M5.5 16V10.5M9 16V6.5M12.5 16V9M16 16V4.5"/>',
             'sugo'         => '<circle cx="10" cy="10" r="6.8"/><path d="M8 8.1a2.1 2.1 0 1 1 2.9 1.9c-.6.3-.9.7-.9 1.3"/><path d="M10 13.8v.1"/>',
             // Modulok (0.58): a menüpont és a kikapcsolható modulok kártyái.
             'modulok'      => '<rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/>'

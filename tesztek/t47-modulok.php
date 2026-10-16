@@ -87,7 +87,7 @@ try {
     $kat = $Mo::katalogus();
 
     T::egyezik(16, count($kat), '16 kikapcsolható fő modul (0.59: RMA-matrica)');
-    T::egyezik(9, count($Mo::alapreszek()), '9 alaprész (mindig fut; 0.59: Napló)');
+    T::egyezik(10, count($Mo::alapreszek()), '10 alaprész (mindig fut; 0.59: Napló, 0.87: Riportok)');
     T::egyezik([], array_intersect(array_keys($kat), array_keys($Mo::alapreszek())), 'alaprész nem kapcsolható ki');
 
     foreach ($kat as $kulcs => $m) {
@@ -143,7 +143,7 @@ try {
     T::egyezik(16, substr_count($oldal, 'name="be[]"'), '16 kapcsoló');
     T::egyezik(16, substr_count($oldal, 'name="be[]" id="sdh-modul-') , 'minden kapcsolónak saját azonosítója');
     T::egyezik(16, preg_match_all('/name="be\[\]" id="[^"]+" value="[a-z]+"\s+checked/', $oldal), 'alapból mind bekapcsolva');
-    T::egyezik(9, substr_count($oldal, 'sdh-modulkartya--alap'), 'az alaprendszer 9 kártyája');
+    T::egyezik(10, substr_count($oldal, 'sdh-modulkartya--alap'), 'az alaprendszer 10 kártyája');
     T::tartalmaz($oldal, 'Ehhez kell: Ügyfélüzenetek és RMA-oldal', 'a függőség kiírva');
     T::tartalmaz($oldal, 'value="sdh_muhely_modulok"', 'az űrlap a mentésre küld');
     T::tartalmaz($oldal, 'Telepítői zár', 'a telepítői zár doboza');

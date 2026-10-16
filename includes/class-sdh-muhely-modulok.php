@@ -151,6 +151,7 @@ final class SDH_Muhely_Modulok
             'sugo'           => ['cim' => 'Súgó', 'leiras' => 'Bemutató, dokumentáció, kérdés–válasz.'],
             'mentes'         => ['cim' => 'Mentés', 'leiras' => 'Független napi mentés és visszaállítás.'],
             'naplo'          => ['cim' => 'Napló', 'leiras' => 'Minden módosítás mezőszinten, visszakereshetően; lezárt lap zárolása.'],
+            'riportok'       => ['cim' => 'Riportok', 'leiras' => 'Átfutás, technikusok, javítási arány, bevétel kategóriák szerint (csak adminnak).'],
         ];
     }
 

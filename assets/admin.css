@@ -10640,3 +10640,121 @@ button.sdh-allapot,
     font-size: calc(12.5px * var(--sdh-n));
     font-weight: 600;
 }
+
+/* ================================================================== */
+/* F5 (0.87.0) – Riportok                                               */
+/* ================================================================== */
+
+.sdh-riport__szuro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    margin: 0 0 calc(6px * var(--sdh-n));
+}
+
+.sdh-riport__pillek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(4px * var(--sdh-n));
+}
+
+.sdh-riport__datum {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(6px * var(--sdh-n));
+    font-size: calc(12px * var(--sdh-n));
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-riport__datum input {
+    width: 8.5rem;
+}
+
+.sdh-riport__idoszak {
+    margin: 0 0 calc(12px * var(--sdh-n));
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-riport__csempek {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: calc(10px * var(--sdh-n));
+    margin-bottom: calc(14px * var(--sdh-n));
+}
+
+.sdh-riport__csempe {
+    display: grid;
+    gap: calc(2px * var(--sdh-n));
+    padding: calc(12px * var(--sdh-n)) calc(14px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r-nagy);
+    background: var(--sdh-felulet);
+}
+
+.sdh-riport__csempe span {
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-riport__csempe strong {
+    font-size: calc(22px * var(--sdh-n));
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-riport__csempe em {
+    color: var(--sdh-halvany);
+    font-size: calc(11.5px * var(--sdh-n));
+    font-style: normal;
+}
+
+.sdh-riport__racs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+    gap: calc(14px * var(--sdh-n));
+    align-items: start;
+}
+
+.sdh-riport .sdh-tabla td {
+    font-variant-numeric: tabular-nums;
+}
+
+.sdh-riport__savcella {
+    width: 30%;
+}
+
+.sdh-riport__sav {
+    display: block;
+    height: calc(8px * var(--sdh-n));
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    overflow: hidden;
+}
+
+.sdh-riport__sav span {
+    display: block;
+    height: 100%;
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-accent);
+}
+
+.sdh-riport__osszeg td {
+    font-weight: 600;
+}
+
+.sdh-riport__alcim {
+    margin: calc(14px * var(--sdh-n)) 0 calc(6px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-riport__al td {
+    color: var(--sdh-szoveg-2);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+@media (max-width: 700px) {
+    .sdh-riport__racs {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
