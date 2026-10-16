@@ -10072,6 +10072,55 @@
             return;
         }
 
+        // Bevizsgálási díj (0.68.2): csak a díjlista (a Szolgáltatások között „bevizsgálási díj”-ként
+        // jelöltek); a sor neve a készülékkel együtt, az ablakban választott eszközé (ennek híján a fő eszközé).
+        if (fajta === 'bevizsgalas') {
+            var nevek = {};
+
+            try {
+                nevek = JSON.parse(gomb.getAttribute('data-sdh-dijnevek') || '{}') || {};
+            } catch (x) {
+                nevek = {};
+            }
+
+            var dijNev = function (dij) {
+                var valasztott = urlap.querySelector('input[name="eszkoz"]:checked');
+                var kulcs = valasztott && valasztott.value !== 'mind' ? valasztott.value : '0';
+                var minta = nevek[kulcs] || nevek['0'] || 'Bevizsgálási díj';
+                var nev = minta.replace(/\{dij\}/g, dij || '').replace(/\s+/g, ' ').trim();
+
+                return nev ? nev.charAt(0).toUpperCase() + nev.slice(1) : 'Bevizsgálási díj';
+            };
+
+            szValNyit(gomb, {
+                cim: 'Bevizsgálási díj a számlára',
+                alcim: 'Kattints a díjra, vagy ↑ ↓ és Enter. A tétel neve a készülékkel együtt kerül a számlára.',
+                helyorzo: 'Díj neve…',
+                egyseg: 'díj',
+                oszlopok: [['Díj', ''], ['Bruttó ár', '8rem', true]],
+                forras: function (q) {
+                    return szolgBetolt().then(function (adat) {
+                        return szolgKeres(adat.filter(function (t) { return t.dij; }), q);
+                    });
+                },
+                cellak: function (t) {
+                    return [szovegBiztonsagos(t.nev) + (t.kat ? ' <span class="sdh-termval__kat">' + szovegBiztonsagos(t.kat) + '</span>' : ''), t.ar > 0 ? mlPenz(t.ar) + ' Ft' : '—'];
+                },
+                valaszt: function (t) {
+                    var sor = szamlaSorUj(urlap, { tipus: 'szolgaltatas', megnevezes: dijNev(t.nev), me: t.me || 'db', brutto_ar: t.ar, afa_kulcs: t.afa });
+                    var ar = sor ? szamlaUjMezo(sor, 'brutto_ar') : null;
+
+                    if (ar) {
+                        ar.focus();
+                        ar.select();
+                    }
+                },
+                kezi: function () { kezi('szolgaltatas', dijNev('')); }
+            });
+
+            return;
+        }
+
         if (fajta === 'termek') {
             szValNyit(gomb, {
                 cim: 'Termék a számlára',

@@ -1626,6 +1626,19 @@ final class SDH_Muhely_Szamla
                                         title="Termék keresése és felvétele a számlára"><span class="sdh-plusz" aria-hidden="true"></span>Termék…</button>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="szolgaltatas"
                                         title="Szolgáltatás keresése és felvétele a számlára"><span class="sdh-plusz" aria-hidden="true"></span>Szolgáltatás…</button>
+                                <?php
+                                // Bevizsgálási díj (0.68.2): a díjlistából választva, a készülék nevével
+                                // (eszközönként; a {dij} helyére a választott díj neve kerül – app.js).
+                                $dij_bontas = SDH_Muhely_Munkalap::eszkoz_bontas($munkalap);
+                                $dij_nevek  = [];
+
+                                foreach ($dij_bontas as $db_sor) {
+                                    $dij_nevek[(string) (int) $db_sor['eszkoz_id']] = self::bevizsgalas_nev($munkalap, 'bevizsgalas_sablon', $db_sor['eszkoz'] ?? null, '{dij}', count($dij_bontas));
+                                }
+                                ?>
+                                <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="bevizsgalas"
+                                        data-sdh-dijnevek="<?php echo esc_attr((string) wp_json_encode($dij_nevek, JSON_UNESCAPED_UNICODE)); ?>"
+                                        title="Bevizsgálási díj a számlára – a díjlistából választva, a készülék nevével (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”)"><span class="sdh-plusz" aria-hidden="true"></span>Bevizsgálási díj…</button>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-szamla-uj="kezi"
                                         title="Üres sor: a megnevezést és az árat kézzel írod be"><span class="sdh-plusz" aria-hidden="true"></span>Kézi tétel</button>
                                 <?php // Leggyakoribb Számla tételek listája (0.63.0): popupban választható és szerkeszthető (emlek.js). ?>

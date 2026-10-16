@@ -4,7 +4,7 @@ cim: Számlázás
 csoport: Pénz
 modul:
 szakaszok: szamlazas
-kulcsszavak: számla, számlázás, Számlázz.hu, Számla Agent, agent kulcs, számla kiállítása, előnézet, számla-előkészítő, díjbekérő, elszámolás, átadási bizonylat, PDF, vevő, céges számla, adószám, cég keresése, bevizsgálási díj, adattörlő kód, e-számla, előtag, számlatömb, tétel megjegyzés, eszközönkénti számla
+kulcsszavak: számla, számlázás, Számlázz.hu, Számla Agent, agent kulcs, számla kiállítása, előnézet, számla-előkészítő, díjbekérő, elszámolás, átadási bizonylat, PDF, vevő, céges számla, adószám, cég keresése, bevizsgálási díj, adattörlő kód, e-számla, előtag, számlatömb, tétel megjegyzés, eszközönkénti számla, bevizsgálási díj gomb, díj a számlára, bevizsgálási díj felvétele
 osszefoglalo: Számla a munkalapról a Számlázz.hu-n keresztül, és helyben készülő, számlának nem minősülő előkészítő PDF.
 ---
 
@@ -87,11 +87,13 @@ A számla ablakában a munkalap minden számlázható tétele megjelenik: elöl 
 
 **Tétel kihagyása.** Vedd ki a pipát a sor elejéről. A tétel a munkalapon megmarad, csak erre a számlára nem kerül rá.
 
-**Új tétel felvétele.** A tábla alján három gomb áll:
+**Új tétel felvétele.** A tábla alján ezek a gombok állnak:
 
 - **Termék…** – a terméklistából keresel és választasz.
 - **Szolgáltatás…** – a szolgáltatások közül választasz.
+- **Bevizsgálási díj…** – a díjlistából (a Szolgáltatások között bevizsgálási díjként jelöltek közül) választasz; a sor a **készülék nevével** kerül a számlára, a Számlázás beállításaiban megadott minta szerint (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”), a díj árával. Több eszközös lapon az ablak tetején választott eszközé, ennek híján a fő eszközé. Ha nincs a listában a kellő díj, a **kézzel** gombbal üres díjsort kapsz a készülék nevével, és az árat te írod be.
 - **Kézi tétel** – üres sort kapsz, a megnevezést és az árat te írod be.
+- **★ Gyakori tételek…** – a leggyakoribb tételek listája.
 
 Az új sorban megadható a megnevezés, a mennyiség, a mennyiségi egység, a **bruttó** egységár és az áfakulcs; a nettót a rendszer számolja, és a bruttó ár mellett, ugyanabban a sorban mutatja („nettó …”). A tételsor minden cellája egy vonalban áll. A megnevezés melletti kis címkére kattintva a tétel fajtája váltható (szolgáltatás vagy termék).
 

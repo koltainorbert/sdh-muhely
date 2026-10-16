@@ -64,6 +64,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.68.2
+- **Számla ablaka: „Bevizsgálási díj…" gomb** a Termék… / Szolgáltatás… mellett: a díjlistából (a szolgáltatástörzs
+  bevizsgálási díjként jelölt sorai) választ, és a sort a készülék nevével veszi fel (`bevizsgalas_sablon`, pl.
+  „Samsung SM-A175B mobiltelefon bevizsgálási díj"), a díj árával; több eszközös lapon az ablakban választott eszközé.
+  (A 0.69.0 – összevont szervizsor – visszavonva; a Szolgáltatás… gomb megvan.) t63.
+
 ### 0.68.1
 - **Számla ablaka – egyenes tételsorok**: a kézi tétel bruttó ára és a belőle számolt nettó egy sorban
   (`.sdh-szamlaurlap__arsor`), minden cella `vertical-align: middle`; a tétel **+ Megjegyzés** gombja pill a név sorában
