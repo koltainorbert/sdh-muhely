@@ -39,6 +39,9 @@ $_SERVER['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
 
 require $sdh_wp_load;
 
+// H12 (0.91.0): a tesztek a hálózattól függetlenek – a net-ellenőrzés „van net”-et mond (a hamis válaszok így átmennek).
+add_filter('sdh_muhely_halozat_kenyszer', static fn (): string => 'online');
+
 if (!class_exists('SDH_Muhely_Munkalap')) {
     fwrite(STDERR, "Az SDH Műhely plugin nincs bekapcsolva ezen a WordPress-oldalon.\n");
     exit(2);

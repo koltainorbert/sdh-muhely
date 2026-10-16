@@ -10821,3 +10821,22 @@ button.sdh-allapot,
     line-height: 1.45;
     white-space: pre;
 }
+
+/* Netkimaradás jelzés (H12, 0.91.0) */
+.sdh-net {
+    display: inline-flex;
+    align-items: center;
+    height: calc(28px * var(--sdh-n));
+    padding: 0 calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-figyelem);
+    border-radius: calc(999px * var(--sdh-n));
+    background: color-mix(in srgb, var(--sdh-figyelem) 14%, transparent);
+    color: var(--sdh-szoveg);
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sdh-net[hidden] {
+    display: none;
+}

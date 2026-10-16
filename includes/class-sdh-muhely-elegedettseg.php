@@ -155,6 +155,11 @@ final class SDH_Muhely_Elegedettseg
     /** Az óránkénti futás: az esedékes lapoknak kiküldi a kérdést. Visszaadja, hánynak ment ki. */
     public static function esedekes_kuld(?string $most = null): int
     {
+        // H12: net nélkül a kör kimarad (különben a lapok „nincs” csatornával kiesnének); a következő órában pótol.
+        if (class_exists('SDH_Muhely_Halozat') && !SDH_Muhely_Halozat::online()) {
+            return 0;
+        }
+
         $db = 0;
 
         foreach (self::esedekesek($most) as $lap) {

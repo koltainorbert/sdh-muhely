@@ -12465,3 +12465,36 @@
             });
     });
 }());
+
+/* Netkimaradás (H12, 0.91.0): „Nincs internet” jelzés a fejlécben a pulzus alapján. A helyi munka közben is megy. */
+(function () {
+    'use strict';
+
+    var jel = null;
+
+    document.addEventListener('sdh:pulzus', function (ev) {
+        var net = ev.detail && ev.detail.net;
+
+        if (!net) {
+            return;
+        }
+
+        if (!jel) {
+            var fej = document.querySelector('.sdh-fej');
+
+            if (!fej) {
+                return;
+            }
+
+            jel = document.createElement('span');
+            jel.className = 'sdh-net';
+            jel.setAttribute('role', 'status');
+            jel.hidden = true;
+            fej.appendChild(jel);
+        }
+
+        jel.hidden = !!net.online;
+        jel.textContent = net.online ? '' : 'Nincs internet' + (net.ota ? ' (' + net.ota + ' óta)' : '') + ' – a helyi munka megy';
+        jel.title = net.online ? '' : 'Ami internetet kér (számla, e-mail, AI, külső mentés), az most nem megy ki. Súgó › Hibaelhárítás › Ha nincs internet.';
+    });
+}());

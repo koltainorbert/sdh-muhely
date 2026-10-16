@@ -381,6 +381,12 @@ class SDH_Muhely_Csomag
                 <?php endif; ?>
             </p>
 
+            <?php if (class_exists('SDH_Muhely_Halozat')) : $sdh_net = SDH_Muhely_Halozat::allapot(); ?>
+                <p class="sdh-sugo" data-sdh-net-allapot>
+                    <strong>Internet:</strong> <?php echo $sdh_net['online'] ? 'van' : 'NINCS – ami netet kér (számla, e-mail, AI, külső mentés), az most azonnal hibát ad, a helyi munka megy'; ?>
+                    (ellenőrizve <?php echo esc_html(wp_date('H:i', (int) $sdh_net['ido'])); ?>, percenként frissül).
+                </p>
+            <?php endif; ?>
             <p class="sdh-sugo" data-sdh-gpu-allapot>Hardveres gyorsítás: ellenőrzés…</p>
             <p class="sdh-sugo">
                 A hardveres gyorsítást weboldal nem kapcsolhatja be a böngészőben – ezt a böngésző

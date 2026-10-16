@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.91.0
+- **H12 – netkimaradás** (új `SDH_Muhely_Halozat`). `online()`: TCP-próba (1.1.1.1:443, 8.8.8.8:53, 9.9.9.9:443, egyenként
+  1,5 mp; proxynál a proxy), 60 mp-ig tárolva. `pre_http_request` (5): ha nincs net, a KÜLSŐ kérés azonnal
+  `sdh_nincs_internet` hibát ad (a Számlázz.hu 40 mp, az AI 60 mp várakozás helyett); helyi címek (localhost, magánhálózat,
+  *.local, pont nélküli név, saját webhely – pl. a bolti SMS-telefon) mindig mennek. Pulzus: `net` → fejlécben „Nincs internet
+  (HH:MM óta) – a helyi munka megy”. Az elégedettségi kör net nélkül kimarad (később pótol). Sebesség lapfül: *Internet: van / NINCS*.
+  Vészkapcsoló: `SDH_MUHELY_HALOZAT_KI`; teszthez `sdh_muhely_halozat_kenyszer` szűrő (a `_keret.php` „online”-ra állítja).
+- Súgó › Hibaelhárítás › **Ha nincs internet**: mi megy, mi vár, próba lépésről lépésre (kábel ki). Teszt: t83.
+
 ### 0.90.0
 - **H10 – mérés** (új `SDH_Muhely_Meres`): a `tools/mero-meres.php` logikája osztályba került, és a **Beállítások › Rendszer ›
   Sebesség** lapfülről is indítható (**Mérés indítása**, csak fejlesztőnek, AJAX `sdh_muhely_meres`). A futás idejére egy

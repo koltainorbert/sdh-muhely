@@ -4,7 +4,7 @@ cim: Hibaelhárítás
 csoport: Rendszer
 modul:
 szakaszok:
-kulcsszavak: hiba, hibaüzenet, elakadtam, nem megy, nem működik, nem tölt be, nem ment, nem menthető, piros üzenet, nincs jogosultság, lejárt a munkamenet, nem megy ki az e-mail, nem jön levél, eltűnt, nem találom, lassú, 404, 403, korlát, ismert hiba, megoldás
+kulcsszavak: nincs internet, netkimaradás, offline, internet nélkül, kábel, szünetmentes, helyi cím, hiba, hibaüzenet, elakadtam, nem megy, nem működik, nem tölt be, nem ment, nem menthető, piros üzenet, nincs jogosultság, lejárt a munkamenet, nem megy ki az e-mail, nem jön levél, eltűnt, nem találom, lassú, 404, 403, korlát, ismert hiba, megoldás
 osszefoglalo: A leggyakoribb elakadások tünet, ok és megoldás szerint, menüpontonként csoportosítva, a rendszer valódi hibaüzeneteivel.
 ---
 
@@ -80,6 +80,24 @@ Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-
 ### Mérés a saját gépen [fejlesztő]
 
 A mérés csak olvas: lefuttatja a gyakori lekérdezéseket és az új funkciók (Riportok, Raktár, Elégedettség, Időpontfoglalás) számolásait a meglévő adatokon, és kiírja az időket, a MySQL beállításait és azt, hol olvas végig egy egész táblát. A 300 ms fölötti lépéseket a végén LASSÚ-ként sorolja fel. Indítás: **Beállítások › Rendszer › Sebesség › Mérés indítása**, vagy **Open site shell**-ben a plugin mappájában `php tools/mero-meres.php`. Semmit nem ír az adatbázisba. 40 000 munkalapos próbaadaton minden lépés 300 ms alatt maradt (SQLite); az éles MySQL-mérés eredményét érdemes elküldeni a fejlesztőnek.
+
+## Ha nincs internet
+
+A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is megy. Ami internetet kér, az kimaradáskor nem várakoztat: azonnal szól, hogy most nem megy ki. A fejlécben **Nincs internet** jelzés áll, amíg vissza nem jön (percenként ellenőrzi). A **Beállítások › Rendszer › Sebesség** lapon is látszik: *Internet: van / NINCS*.
+
+**Net nélkül is megy:** munkalapok, ügyfelek, eszközök; házipénztár, napi árukiadás, rendelések; nyomtatás helyi nyomtatóra, matrica, PDF; naptár, csapatüzenetek, napló; helyi mentés; SMS a bolti telefonon át, ha a telefon a helyi hálózaton van és van térereje.
+
+**Net nélkül vár:** Számlázz.hu-számla (ha visszajött a net, a lapról újra kiállítható), e-mail, asszisztens, IMEI-lekérdezés, Google Drive / távoli FTP-mentés, frissítés-ellenőrzés, és a kívülről elérhető oldalak (ügyféloldal, időpontfoglalás, értékelés). Az elégedettségi kérdés kimaradáskor később megy ki.
+
+### Lépésről lépésre: próba élesítés előtt
+
+1. A szerver és a pultgépek a **helyi címen** érjék el a rendszert (például `http://192.168.1.10/`), ne a kívülről elérhető címen – különben net nélkül a gépek sem találják a szervert.
+2. A szerver és a switch (router) legyen **szünetmentes tápon**.
+3. Húzd ki a **net-kábelt** a routerből (a helyi hálózat maradjon).
+4. Egy percen belül megjelenik a **Nincs internet** jelzés.
+5. Próbáld ki: új munkalap, pénztármozgás, nyomtatás, mentés – mennek.
+6. Próbálj számlát kiállítani: azonnal szól, hogy most nem megy ki (nem vár percekig).
+7. Dugd vissza a kábelt: egy percen belül eltűnik a jelzés; a számlát most kiállíthatod.
 
 ## Popupok és mentés
 
@@ -253,6 +271,14 @@ Ezek nem hibák, hanem a rendszer mostani működésének határai:
 - **A másoló gomb nem biztonságos (`http://`) címen egyes böngészőkben nem működik.** Ilyenkor ezt írja: *Nem sikerült kimásolni – jelöld ki, és Ctrl+C*.
 
 ## GYIK
+
+### Mi működik, ha elmegy az internet?
+
+Minden belső munka: munkalap, ügyfél, pénztár, nyomtatás, naptár, helyi mentés. Ami netet kér (számla, e-mail, AI, külső mentés), az azonnal szól, hogy most nem megy ki. Részletek: Hibaelhárítás › Ha nincs internet.
+
+### Miért áll a fejlécben „Nincs internet”?
+
+A szerver percenként megnézi, eléri-e az internetet. Ha nem, ezt jelzi; a helyi munka közben is folytatható. Ha visszajött a net, egy percen belül eltűnik.
 
 ### Nem tölt be az oldal. Mit csináljak?
 
