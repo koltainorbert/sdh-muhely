@@ -170,6 +170,11 @@ final class SDH_Muhely_Demo
 
             unset($sor['imei_alap'], $sor['imei2_alap'], $sor['kep']);
 
+            // H6: a feloldó kód és minta titkosítva (mint a valódi eszközöknél).
+            foreach (SDH_Muhely_Zarkod::MEZOK as $titkos) {
+                $sor[$titkos] = SDH_Muhely_Zarkod::tarol((string) ($sor[$titkos] ?? ''));
+            }
+
             if ($wpdb->insert($eszkoz_tabla, $sor) !== false) {
                 $uj_eszkoz++;
             }

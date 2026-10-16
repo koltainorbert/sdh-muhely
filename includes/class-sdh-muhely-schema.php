@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.43.0';
+    public const DB_VERSION = '0.44.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -268,8 +268,8 @@ final class SDH_Muhely_Schema
             kep_url varchar(255) NOT NULL default '',
             lekerdezve datetime NULL,
             szin varchar(40) NOT NULL default '',
-            zarkod varchar(60) NOT NULL default '',
-            minta varchar(20) NOT NULL default '',
+            zarkod varchar(255) NOT NULL default '',
+            minta varchar(255) NOT NULL default '',
             tartozekok text NULL,
             belso_megjegyzes text NULL,
             atveteli_allapot text NULL,

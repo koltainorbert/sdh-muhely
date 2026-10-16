@@ -247,10 +247,13 @@ A rendszer a külső szolgáltatások jelszavait nem tárolja olvasható formáb
 | A letöltött levelek gyorsítótára | Titkosított fájlokban. |
 | A Számla Agent kulcs (**Beállítások › Számlázás**) | Titkosítva. A képernyőre nem kerül vissza. |
 | A fizetős IMEI-szolgáltató kulcsa (**Beállítások › IMEI-lekérdezés**) | Titkosítva. A mezője mentés után üres marad; törölni a **Kulcs törlése** pipával lehet. |
+| A készülékek **zárkódja és feloldó mintája** (Eszközök) | Titkosítva. Csak a **Feloldó kód és minta megnézése** jogú szerep láthatja, a **Megmutat** gombbal; minden megnézés a Naplóba kerül. |
 
 A titkosítás kulcsa a szerver saját titkos kulcsaiból képződik (ezek a telepítéskor jönnek létre). A kulcsok a **mentésfájlba is titkosítva** kerülnek: aki csak a mentést vagy az adatbázist szerzi meg, nem tudja kiolvasni őket.
 
-A korábbi verzióban titkosítatlanul eltárolt Számla Agent kulcsot és IMEI-kulcsot a rendszer a frissítés után magától titkosítja – nem kell újra beírni.
+A korábbi verzióban titkosítatlanul eltárolt Számla Agent kulcsot, IMEI-kulcsot, zárkódokat és mintákat a rendszer a frissítés után magától titkosítja – nem kell újra beírni. (A Napló régebbi bejegyzéseiben a korábbi kódok változatlanul megmaradnak – a napló nem írható át –, de ott is csak a jogosult látja őket.)
+
+Költözéskor a **Letöltés (titkosítva)** csomag a zárkódokat is hordozható alakban viszi, és az új gépen újra titkosítja – ott is olvashatók maradnak.
 
 > **Figyelem:** Ha ezek megváltoznak – például költözéskor –, a titkosítva tárolt jelszavak és kulcsok nem fejthetők vissza. Ilyenkor az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot újra be kell írni; a Számlázás és az IMEI-lekérdezés lapfülén piros sáv figyelmeztet rá.
 

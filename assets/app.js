@@ -1936,7 +1936,7 @@
         if (sorElem) {
             sorElem.textContent = sorrend.length
                 ? sorrend.join(' → ')
-                : 'Nincs minta felvéve.';
+                : (doboz.querySelector('[data-sdh-minta-rejtett]') ? 'Mentett minta van (rejtve).' : 'Nincs minta felvéve.');
         }
     }
 
@@ -2100,9 +2100,103 @@
                 sorrend = [];
                 mintaMent(doboz, sorrend);
                 mintaRajzol(doboz, sorrend, null);
+
+                // H6: a Törlés a rejtett, mentett mintát is törli (különben az üres mező mellett megmaradna).
+                var marad = doboz.closest('form') ? doboz.closest('form').querySelector('input[name="minta_marad"]') : null;
+
+                if (marad) {
+                    marad.value = '0';
+                }
+
+                var jel = doboz.querySelector('[data-sdh-minta-rejtett]');
+
+                if (jel) {
+                    jel.remove();
+                }
             });
         }
+
+        // H6: a Megmutat gomb után a felfedett minta kerül a rajzra.
+        doboz.addEventListener('sdh-minta-betolt', function () {
+            sorrend = mintaErtek(doboz);
+            mintaRajzol(doboz, sorrend, null);
+        });
     }
+
+    /* -----------------------------------------------------------------
+     * H6 (0.79): feloldó kód / minta – Megmutat (jogkötelesen, a szerver naplózza)
+     * ----------------------------------------------------------------- */
+
+    document.addEventListener('click', function (esemeny) {
+        var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-zarkod-megmutat]') : null;
+
+        if (!gomb) {
+            return;
+        }
+
+        esemeny.preventDefault();
+
+        var adat = new FormData();
+        adat.set('action', 'sdh_muhely_zarkod_megmutat');
+        adat.set('id', gomb.getAttribute('data-sdh-zarkod-megmutat') || '0');
+        adat.set('_wpnonce', beallitas.nonce || '');
+        gomb.disabled = true;
+
+        fetch(beallitas.ajax, { method: 'POST', body: adat, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (valasz) {
+                gomb.disabled = false;
+
+                if (!valasz || !valasz.success) {
+                    gomb.textContent = (valasz && valasz.data && valasz.data.uzenet) || 'Nem sikerült.';
+
+                    return;
+                }
+
+                var d = valasz.data;
+                var hatokor = gomb.closest('form') || gomb.closest('dl') || gomb.parentNode;
+                var kod = hatokor.querySelector('input[name="zarkod"]');
+
+                if (kod) {
+                    kod.value = d.zarkod || '';
+                    kod.placeholder = d.olvashatatlan ? 'A mentett kód ezen a gépen nem olvasható' : '';
+                }
+
+                ['zarkod_marad', 'minta_marad'].forEach(function (nev) {
+                    var m = hatokor.querySelector('input[name="' + nev + '"]');
+
+                    if (m) {
+                        m.value = '0';
+                    }
+                });
+
+                var minta = hatokor.querySelector('[data-sdh-minta]');
+
+                if (minta) {
+                    minta.querySelector('input[name="minta"]').value = d.minta || '';
+
+                    var jel = minta.querySelector('[data-sdh-minta-rejtett]');
+
+                    if (jel) {
+                        jel.remove();
+                    }
+
+                    minta.dispatchEvent(new CustomEvent('sdh-minta-betolt'));
+                }
+
+                hatokor.querySelectorAll('[data-sdh-zarkod-ertek]').forEach(function (el) {
+                    var ertek = el.getAttribute('data-sdh-zarkod-ertek') === 'minta' ? d.minta_kiiras : d.zarkod;
+                    el.textContent = ertek || (d.olvashatatlan ? 'ezen a gépen nem olvasható' : '—');
+                    el.classList.remove('sdh-adatlista__ures');
+                });
+
+                gomb.remove();
+            })
+            .catch(function () {
+                gomb.disabled = false;
+                gomb.textContent = 'Nem sikerült.';
+            });
+    });
 
     /**
      * Az űrlap a popupba AJAX-szal érkezik, ezért a rajzolót akkor

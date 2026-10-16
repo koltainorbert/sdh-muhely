@@ -1403,6 +1403,17 @@ final class SDH_Muhely_Valtozasnaplo
             return $v === null || $v === '' ? '—' : '(rejtett)';
         }
 
+        // H6 (0.79): a feloldó kód / minta titkosítva áll – csak a jogosult látja, visszafejtve.
+        if ($tabla === 'eszkoz' && in_array($mezo, self::AI_REJTETT, true) && $v !== null && $v !== '' && class_exists('SDH_Muhely_Zarkod')) {
+            if (!SDH_Muhely_Zarkod::lathat()) {
+                return '(rejtett)';
+            }
+
+            $v = SDH_Muhely_Zarkod::olvas((string) $v);
+
+            return $v !== '' ? $v : '(titkosítva – ezen a gépen nem olvasható)';
+        }
+
         if ($v === null || $v === '') {
             return '—';
         }

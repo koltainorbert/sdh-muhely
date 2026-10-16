@@ -129,7 +129,9 @@ final class SDH_Muhely_Eszkoz
                 'orszag'           => (string) $sor->orszag,
                 'szolgaltato'      => (string) $sor->szolgaltato,
                 'kep_url'          => (string) $sor->kep_url,
-                'zarkod'           => (string) $sor->zarkod,
+                // H6: a feloldó kód nem megy ki; a megtalált eszköz kódja és mintája mentéskor marad.
+                'zarkod_marad'     => '1',
+                'minta_marad'      => '1',
                 'tartozekok'       => (string) ($sor->tartozekok ?? ''),
                 'atveteli_allapot' => (string) ($sor->atveteli_allapot ?? ''),
                 'megjegyzes'       => (string) ($sor->megjegyzes ?? ''),
@@ -667,9 +669,23 @@ final class SDH_Muhely_Eszkoz
                             <div class="sdh-sor">
                                 <div class="sdh-ig">
                                     <label for="zarkod">Zárkód / PIN</label>
-                                    <input type="text" name="zarkod" id="zarkod" autocomplete="off"
+                                    <?php
+                                    // H6: a mentett kód nem kerül az oldalba – a Megmutat gomb kéri le (jogkötelesen, naplózva).
+                                    $kod_van   = $eszkoz !== null && SDH_Muhely_Zarkod::van((string) ($eszkoz->zarkod ?? ''));
+                                    $minta_van = $eszkoz !== null && SDH_Muhely_Zarkod::van((string) ($eszkoz->minta ?? ''));
+                                    ?>
+                                    <input type="text" name="zarkod" id="zarkod" autocomplete="off" data-sdh-zarkod-mezo
                                            title="E nélkül a javítás nagy része nem tesztelhető."
-                                           value="<?php echo esc_attr($ert('zarkod')); ?>">
+                                           placeholder="<?php echo esc_attr($kod_van ? '•••• mentve – írd felül, ha új' : ''); ?>"
+                                           value="">
+                                    <input type="hidden" name="zarkod_marad" value="1">
+                                    <input type="hidden" name="minta_marad" value="1">
+                                    <?php if (($kod_van || $minta_van) && SDH_Muhely_Zarkod::lathat()) : ?>
+                                        <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--kicsi" data-sdh-zarkod-megmutat="<?php echo (int) $eszkoz->id; ?>"
+                                                title="A mentett feloldó kód és minta megjelenítése (naplózva)">Megmutat</button>
+                                    <?php elseif ($kod_van || $minta_van) : ?>
+                                        <span class="sdh-mezo__sugo">A mentett kódot a szereped nem láthatja.</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
@@ -719,7 +735,7 @@ final class SDH_Muhely_Eszkoz
 
                         <div class="sdh-azon__minta">
                             <span class="sdh-ig__cimke">Feloldó minta</span>
-                            <?php self::minta_mezo($ert('minta')); ?>
+                            <?php self::minta_mezo('', $eszkoz !== null && SDH_Muhely_Zarkod::van((string) ($eszkoz->minta ?? ''))); ?>
                         </div>
                     </div>
                 </div>
@@ -870,12 +886,15 @@ final class SDH_Muhely_Eszkoz
      * Itt egérrel behúzható, és a nyilak mutatják az irányt. A tárolt
      * érték a pöttyök sorrendje: a bal felső az 1, a jobb alsó a 9.
      */
-    private static function minta_mezo(string $ertek): void
+    private static function minta_mezo(string $ertek, bool $mentett = false): void
     {
         ?>
         <div class="sdh-minta" data-sdh-minta
              title="Húzd be egérrel, ahogy az ügyfél mutatta. A nyilak az irányt jelölik. Sorszámozás balról jobbra, fentről lefelé: 1–9. Szabad rajznál pöttyönként kattints: újra érinthető pötty, kihagyható köztes pötty.">
             <input type="hidden" name="minta" value="<?php echo esc_attr($ertek); ?>">
+            <?php if ($mentett) : ?>
+                <span data-sdh-minta-rejtett hidden></span>
+            <?php endif; ?>
 
             <svg class="sdh-minta__rajz" viewBox="0 0 240 240"
                  role="img" aria-label="Feloldó minta rajzolása"></svg>
@@ -1016,6 +1035,18 @@ final class SDH_Muhely_Eszkoz
     private static function adatbazisba(int $id, array $adatok): ?array
     {
         global $wpdb;
+
+        // H6: a feloldó kód és minta titkosítva; ami az űrlapon érintetlen maradt, az nem változik.
+        $kod = SDH_Muhely_Zarkod::mentendo(
+            $id > 0 ? self::egy($id) : null,
+            ['zarkod' => (string) ($adatok['zarkod'] ?? ''), 'minta' => (string) ($adatok['minta'] ?? '')],
+            [
+                'zarkod' => isset($_POST['zarkod_marad']) && $_POST['zarkod_marad'] === '1', // phpcs:ignore WordPress.Security.NonceVerification.Missing
+                'minta'  => isset($_POST['minta_marad']) && $_POST['minta_marad'] === '1', // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            ]
+        );
+        unset($adatok['zarkod'], $adatok['minta']);
+        $adatok += $kod;
 
         if ($id > 0) {
             $eredmeny = $wpdb->update(self::tabla(), $adatok, ['id' => $id]);

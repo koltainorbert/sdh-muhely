@@ -142,7 +142,7 @@ A szövegekben jelölők használhatók, amelyek helyére a rendszer a lap adata
 
 A **Gyári beállítás visszaállítása** gomb kétszeri kattintásra visszaállítja a nyomtatványt az eredeti állapotába – a saját szövegek is elvesznek.
 
-> **Figyelem:** A **Belső megjegyzés** és a **Zárkód és feloldóminta** kapcsolót csak belső papíron kapcsold be. Amelyik nyomtatványt az ügyfél kézbe kapja, azon ezek ne látsszanak.
+> **Figyelem:** A zárkód és a minta csak annál kerül a papírra, akinek a szerepe láthatja (**Feloldó kód és minta megnézése** jog). A **Belső megjegyzés** és a **Zárkód és feloldóminta** kapcsolót csak belső papíron kapcsold be. Amelyik nyomtatványt az ügyfél kézbe kapja, azon ezek ne látsszanak.
 
 ### Közös megjelenés
 

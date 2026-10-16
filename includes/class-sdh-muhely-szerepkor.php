@@ -37,6 +37,9 @@ final class SDH_Muhely_Szerepkor
     public const ALAP  = 'kollega';
     public const MAX   = 12;
 
+    /** A 0.75–0.78 között ismert jogok: az ennél régebbi mentésben ezekről döntött az admin. */
+    private const REGI_JOGOK = ['penztar_riport', 'ar_atiras', 'szamla', 'torles', 'beallitasok'];
+
     /** @var array<string, array<string, mixed>>|null */
     private static ?array $gyors = null;
 
@@ -72,6 +75,10 @@ final class SDH_Muhely_Szerepkor
             'torles' => [
                 'cim'    => 'Törlés-szerű műveletek',
                 'leiras' => 'Termék törlése, pénztártétel törlése, pénztárnap és lezárt munkalap újranyitása, importált napló visszavonása, naptári bejegyzés és emlék törlése.',
+            ],
+            'zarkod' => [
+                'cim'    => 'Feloldó kód és minta megnézése',
+                'leiras' => 'A készülék zárkódja és feloldó mintája csak ennek a szerepnek látszik (a felfedés naplózva). Beírni / felülírni jog nélkül is lehet. Nyomtatványra és matricára is csak így kerül.',
             ],
             'beallitasok' => [
                 'cim'    => 'Beállítások, Mentés, Modulok, Napló',
@@ -153,7 +160,7 @@ final class SDH_Muhely_Szerepkor
             'szerelo' => [
                 'nev' => 'Szerelő', 'zarolt' => false,
                 'tiltott' => ['penztar', 'szamlazas', 'arukiadas', 'rendelesek', 'levelezes', 'sms', 'asszisztens'],
-                'jogok' => [],
+                'jogok' => ['zarkod'],
             ],
             'penztaros' => [
                 'nev' => 'Pénztáros', 'zarolt' => false,
@@ -192,11 +199,24 @@ final class SDH_Muhely_Szerepkor
                 continue;
             }
 
+            $jogok = array_values(array_intersect($ismert, array_map('strval', (array) ($sz['jogok'] ?? []))));
+
+            // A mentés óta bejött új jog (pl. 0.79: zarkod) az alapértelmezést kapja: az azonos nevű
+            // gyári szerepét, saját szerepnél a Kollégáét – így frissítés után senki nem veszít el semmit.
+            $tudott = isset($sz['ismert']) && is_array($sz['ismert']) ? array_map('strval', $sz['ismert']) : self::REGI_JOGOK;
+            $minta  = $alap[$slug]['jogok'] ?? $alap[self::ALAP]['jogok'];
+
+            foreach (array_diff($ismert, $tudott) as $uj_jog) {
+                if (in_array($uj_jog, $minta, true) && !in_array($uj_jog, $jogok, true)) {
+                    $jogok[] = $uj_jog;
+                }
+            }
+
             $ki[$slug] = [
                 'nev'     => mb_substr(trim((string) ($sz['nev'] ?? $slug)), 0, 40) ?: $slug,
                 'zarolt'  => false,
                 'tiltott' => array_values(array_intersect($modulok, array_map('strval', (array) ($sz['tiltott'] ?? [])))),
-                'jogok'   => array_values(array_intersect($ismert, array_map('strval', (array) ($sz['jogok'] ?? [])))),
+                'jogok'   => $jogok,
             ];
         }
 
@@ -557,15 +577,16 @@ final class SDH_Muhely_Szerepkor
             $uj[$slug] = [
                 'nev'     => $nev_uj,
                 'zarolt'  => false,
-                'tiltott' => $regi[self::ALAP]['tiltott'],
-                'jogok'   => $regi[self::ALAP]['jogok'],
+                // A Kolléga jogaival indul – ahogy EBBEN a mentésben áll (nem a mentés előtti állapot szerint).
+                'tiltott' => ($uj[self::ALAP] ?? $regi[self::ALAP])['tiltott'],
+                'jogok'   => ($uj[self::ALAP] ?? $regi[self::ALAP])['jogok'],
             ];
         }
 
         $mentendo = [];
 
         foreach ($uj as $slug => $sz) {
-            $mentendo[$slug] = ['nev' => $sz['nev'], 'tiltott' => $sz['tiltott'], 'jogok' => $sz['jogok']];
+            $mentendo[$slug] = ['nev' => $sz['nev'], 'tiltott' => $sz['tiltott'], 'jogok' => $sz['jogok'], 'ismert' => $ismert];
         }
 
         update_option(self::OPT, $mentendo);

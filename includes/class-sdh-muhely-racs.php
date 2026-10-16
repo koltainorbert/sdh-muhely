@@ -2365,10 +2365,22 @@ final class SDH_Muhely_Racs
         self::adatsor('Vásárlás dátuma', esc_html(self::datum($eszkoz->vasarlas_datuma)));
         self::adatsor('Garancia lejár', esc_html(self::datum($eszkoz->garancia_lejar)));
         self::adatsor('Szolgáltató', esc_html((string) $eszkoz->szolgaltato));
-        self::adatsor('Zárkód', esc_html((string) $eszkoz->zarkod));
+        // H6: a feloldó kód és minta titkosítva áll; a panelen rejtve, a Megmutat gomb kéri le (jogkötelesen, naplózva).
+        $kod_van   = SDH_Muhely_Zarkod::van((string) $eszkoz->zarkod);
+        $minta_van = SDH_Muhely_Zarkod::van((string) $eszkoz->minta);
 
-        if ((string) $eszkoz->minta !== '') {
-            self::adatsor('Feloldó minta', esc_html(implode('-', str_split((string) $eszkoz->minta))));
+        if ($kod_van || $minta_van) {
+            $gomb = SDH_Muhely_Zarkod::lathat()
+                ? ' <button type="button" class="sdh-gomb sdh-gomb--vilagos sdh-gomb--pill" data-sdh-zarkod-megmutat="' . (int) $eszkoz->id . '" title="Megjelenítés (naplózva)">Megmutat</button>'
+                : ' <span class="sdh-adatlista__ures">(a szereped nem láthatja)</span>';
+
+            self::adatsor('Zárkód', $kod_van ? '<span class="sdh-adatlista__ures" data-sdh-zarkod-ertek="zarkod">•••• rejtve</span>' . $gomb : '');
+
+            if ($minta_van) {
+                self::adatsor('Feloldó minta', '<span class="sdh-adatlista__ures" data-sdh-zarkod-ertek="minta">•••• rejtve</span>' . ($kod_van ? '' : $gomb));
+            }
+        } else {
+            self::adatsor('Zárkód', '');
         }
 
         self::adatsor('Tartozékok', esc_html((string) $eszkoz->tartozekok));

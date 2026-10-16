@@ -533,8 +533,9 @@ final class SDH_Muhely_Matrica
                 'rma'          => $token !== '' ? strtoupper(substr($token, 0, 4) . '-' . substr($token, 4, 4)) : '',
                 'url'          => $url,
                 'hiba'         => $hibak !== [] ? implode(', ', $hibak) : (string) $ml->nev,
-                'kod'          => $esz ? (string) $esz->zarkod : '',
-                'minta'        => $esz ? preg_replace('/[^1-9]/', '', (string) $esz->minta) : '',
+                // H6: titkosítva tárolt; a matricára csak annál kerül, akinek a szerepe láthatja.
+                'kod'          => $esz ? SDH_Muhely_Zarkod::nyilt($esz)['zarkod'] : '',
+                'minta'        => $esz ? SDH_Muhely_Zarkod::nyilt($esz)['minta'] : '',
                 'imei'         => $esz ? trim((string) $esz->imei . ((string) $esz->sorozatszam !== '' ? ' · SN ' . $esz->sorozatszam : ((string) $esz->imei2 !== '' ? ' · ' . $esz->imei2 : ''))) : '',
                 'datum'        => SDH_Muhely_Munkalap::datum_megjelenit((string) ($ml->keszult ?: current_time('Y-m-d'))),
                 'telefon'      => $ugyfel ? (string) $ugyfel->telefon : '',

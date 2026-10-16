@@ -3705,11 +3705,11 @@ a.sdh-kartya:focus-visible {
     position: relative;
 }
 
-/* A „Szabad rajz” kapcsoló a „Feloldó minta” címsorba kerül (jobbra), hogy ne nyújtsa a fület. */
+/* A „Szabad rajz” kapcsoló a rács alá kerül: az egységes (Aktív/Inaktív feliratos) kapcsoló a
+   címsorban rácsúszott a „Feloldó minta” feliratra (0.79). */
 .sdh-azon__minta .sdh-minta__szabad {
-    position: absolute;
-    top: calc(-1px * var(--sdh-n));
-    right: 0;
+    position: static;
+    align-self: flex-start;
 }
 
 .sdh-minta__szabad {

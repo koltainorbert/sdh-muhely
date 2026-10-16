@@ -83,6 +83,18 @@ A zárkód és a feloldó minta az eszköz adatlapjának **Eszköz** lapfülén 
 - A számkódot vagy jelszót a **Zárkód / PIN** mezőbe írd.
 - A mintát a jobb oldali **Feloldó minta** rácson rajzolod be.
 
+## A zárkód és a minta védelme
+
+A zárkód és a feloldó minta az ügyfél készülékének kulcsa, ezért a rendszer **titkosítva** tárolja: aki csak az adatbázist vagy egy mentést szerez meg, nem tudja kiolvasni.
+
+- **Mentés után nem látszik magától.** Újra megnyitva az adatlapot a **Zárkód / PIN** mező üres, a helyén ez áll: *•••• mentve – írd felül, ha új*. A mintarács üres, alatta: *Mentett minta van (rejtve)*.
+- **Megmutat** – a mező mellett álló gomb előhozza a mentett kódot és mintát. Csak annak a szerepnek jelenik meg, amelyiknél a **Beállítások › Jogosultságok** rácsában be van pipálva a **Feloldó kód és minta megnézése** jog. Minden megnézés bekerül a **Naplóba** (ki, mikor, melyik eszköz).
+- **Beírni mindenki tud.** Aki nem nézheti meg, az is beírhat új kódot vagy rajzolhat új mintát – ez felülírja a régit. Ha üresen hagyod, a mentett érték marad. A mintarács **Törlés** gombja a rejtett mintát is törli.
+- **Alapból** az Admin, a Kolléga és a Szerelő szerep láthatja; a Pultos és a Pénztáros nem.
+- Az Áttekintés részletpaneljén is **•••• rejtve** áll a zárkód és a minta helyén, mellette a **Megmutat** gomb.
+- Nyomtatványra (Belső munkalap) és RMA-matricára is csak akkor kerül, ha a nyomtatást indító ember szerepe láthatja.
+- Az asszisztens soha nem kapja meg.
+
 A minta berajzolása:
 
 1. Tartsd lenyomva az egérgombot az első pöttyön, és húzd végig, ahogy az ügyfél mutatta.
@@ -324,7 +336,11 @@ Pipáld be a **Szabad rajz** jelölőt, és pöttyönként kattintva építsd fe
 
 ### Hol látom a zárkódot, amikor a készüléken dolgozom?
 
-Az eszköz adatlapján a **Zárkód / PIN** mezőben és a mintarácson. Az Áttekintésen a kijelölt munkalap részleteinél az eszköz adatai között is ott a zárkód és a minta sorrendje.
+Az eszköz adatlapján és az Áttekintés részletpaneljén is rejtve áll (**•••• rejtve**): nyomd meg a **Megmutat** gombot. Ha nincs ilyen gomb, a szereped nem nézheti meg – szólj az adminisztrátornak (**Beállítások › Jogosultságok**, **Feloldó kód és minta megnézése**).
+
+### Miért nem látom a zárkódot, amit tegnap beírtam?
+
+Mert titkosítva tárolódik, és csak kérésre jelenik meg: nyomd meg a **Megmutat** gombot a mező mellett. A megnézés a Naplóba kerül.
 
 ### Látja az ügyfél a belső megjegyzést?
 

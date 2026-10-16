@@ -673,9 +673,11 @@ final class SDH_Muhely_Nyomtatvany
         }
 
         if (!empty($s['zarkod'])) {
+            // H6: titkosítva tárolt; nyomtatványra csak annál kerül, akinek a szerepe láthatja.
+            $ny  = SDH_Muhely_Zarkod::nyilt($e);
             $kod = implode('  ·  ', array_filter([
-                trim((string) ($e->zarkod ?? '')) !== '' ? 'kód: ' . trim((string) $e->zarkod) : '',
-                trim((string) ($e->minta ?? '')) !== '' ? 'minta: ' . trim((string) $e->minta) : '',
+                trim($ny['zarkod']) !== '' ? 'kód: ' . trim($ny['zarkod']) : '',
+                $ny['minta'] !== '' ? 'minta: ' . implode('-', str_split($ny['minta'])) : '',
             ]));
 
             if ($kod !== '') {

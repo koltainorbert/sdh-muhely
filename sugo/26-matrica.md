@@ -134,7 +134,7 @@ A **Nyomtató típusa**, a **Nyomtatási mód** és a **Címke / szalag** felül
 - A QR-kód az ügyféloldalra mutat (ugyanaz, mint a munkalap címkéjén); kikapcsolt Ügyfélüzenetek és RMA-oldal modulnál nincs RMA-kód és QR-kód.
 - A **102 mm**-es címke csak a széles QL nyomtatókon (QL-1050/1060N/1100/1110NWB/1115NWB) fér el.
 - A TZe-szalag és az egyedi méret csak böngészőből nyomtatható.
-- A feloldó kód és minta a matricán olvasható – csak olyan készülékre tedd, amely a szervizben marad.
+- A feloldó kód és minta a matricán olvasható – csak olyan készülékre tedd, amely a szervizben marad. A matricára csak akkor kerül, ha a nyomtatást indító ember szerepe láthatja (**Feloldó kód és minta megnézése** jog); különben üresen marad.
 
 ## Tippek
 

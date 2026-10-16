@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.79.0
+- **H6 – a feloldó kód (zárkód) és minta titkosítva** (új `SDH_Muhely_Zarkod`). Az `eszkoz.zarkod` / `eszkoz.minta` `sdh1:`
+  alakban (SDH_Muhely_Titok, libsodium, a szerver sóihoz kötve); a két oszlop varchar(255) – **DB_VERSION 0.44.0**. A régi nyílt
+  értékeket az `atallas_most()` csendben (napló nélkül), kötegenként titkosítja (sémafrissítéskor, ill. `init`-en, amíg van).
+- **Megnézés jogkötelesen:** új jog `zarkod` („Feloldó kód és minta megnézése”; alap: Admin, Kolléga, Szerelő – Pultos, Pénztáros
+  nem). A régi mentett szerepek az új jogot a gyári alapjuk szerint kapják (a mentés ezentúl `ismert` jogokat is tárol). Az űrlap
+  és a részletpanel a kódot nem küldi ki: **Megmutat** gomb → `sdh_muhely_zarkod_megmutat` (naplózva: „Feloldó kód / minta
+  megnézve”, jog nélkül „…elutasítva”). Beírni / felülírni jog nélkül is lehet; üres + `zarkod_marad` / `minta_marad` = érintetlen
+  (a tárolt marad); ugyanaz az érték nem ad új titkos alakot (nincs felesleges naplósor). A mintarács Törlés gombja a rejtett mintát is törli.
+- Nyomtatvány (Belső munkalap) és RMA-matrica: kód / minta csak jogosultnál. Napló: a régi (nyílt) és az új (titkos) érték is csak
+  jogosultnak látszik, visszafejtve. IMEI-találat: a kód nem megy ki (eddig nyíltan ment, és a minta a mentéskor elveszett volna).
+  Hordozható mentés: a titkos táblamezők `sdh-nyilt:` alakban utaznak, az új gépen újratitkosítva. Demó: titkosítva.
+- Korlát: a 0.79.0 előtti Változásnapló-bejegyzésekben a régi kódok nyíltan állnak (a napló nem írható át). Teszt: t72.
+
 ### 0.78.1
 - **Javítás: a saját bejelentkező oldal szétesett** (0.77.0 óta). A `body.sdh-app` rácsa (232 px-es oldalsáv-oszlop, 52 px-es
   fejlécsor) erősebb volt, mint a `.sdh-app--uzenet` flex-középre zárása: a doboz a bal felső sarokba szorult, a teteje (a

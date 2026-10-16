@@ -133,6 +133,16 @@ final class SDH_Muhely_Mentes_Vissza
         $hiba = null;
 
         while (($sor = gzgets($be)) !== false) {
+            // Táblasor sóhoz kötött titkos mezővel (0.79: feloldó kód / minta): hordozható alakra.
+            if (strncmp($sor, '{"t":', 5) === 0 && strpos($sor, '"sdh1:') !== false) {
+                $t = json_decode($sor, true);
+
+                if (is_array($t) && isset($t['s']) && is_array($t['s'])) {
+                    $t['s'] = self::atalakit($t['s'], true);
+                    $sor    = (string) wp_json_encode($t, JSON_UNESCAPED_UNICODE) . "\n";
+                }
+            }
+
             if (strncmp($sor, '{"o":', 5) === 0) {
                 $o = json_decode($sor, true);
 
@@ -542,7 +552,8 @@ final class SDH_Muhely_Mentes_Vissza
 
                 foreach ($oszlopok[$nev] as $o) {
                     if (array_key_exists($o, $a['s'])) {
-                        $sorf[$o] = $a['s'][$o];
+                        // A hordozható csomag nyílt titkai (sdh-nyilt:…) az új gép sóival titkosítva kerülnek vissza.
+                        $sorf[$o] = is_string($a['s'][$o]) ? self::atalakit($a['s'][$o], false) : $a['s'][$o];
                     }
                 }
 
