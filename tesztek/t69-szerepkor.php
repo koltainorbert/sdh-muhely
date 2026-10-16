@@ -18,6 +18,8 @@ class T69_Die extends Exception
 
 global $wpdb;
 
+require_once ABSPATH . 'wp-admin/includes/user.php';
+
 $Sz    = 'SDH_Muhely_Szerepkor';
 $admin = get_current_user_id();
 
@@ -76,6 +78,11 @@ $or = static function (string $akcio, bool $ajax = true): string {
 
     return $ki;
 };
+
+// Egy korábbi, félbeszakadt futás maradványai.
+foreach (get_users(['search' => '*T69*', 'search_columns' => ['display_name']]) as $maradek) {
+    wp_delete_user((int) $maradek->ID);
+}
 
 delete_option($Sz::OPT);
 delete_option(SDH_Muhely_Modulok::OPT_KI);
@@ -246,6 +253,78 @@ SDH_Muhely_Szemely::felejt();
 $Sz::felejt();
 T::egyezik(true, SDH_Muhely_Admin_UI::admin_e(), 'a személy váltása után újra admin');
 
+/* --- 6b. Mentőöv: az adminisztrátor nem zárhatja ki magát ------------------------------- */
+
+// A dolgozót a WP-ben adminisztrátorrá teszik: dolgozó marad (a bejelentkezési neve miatt), és admin.
+$norbi = SDH_Muhely_Szemely::uj_dolgozo('Norbi T69', '4321');
+wp_update_user(['ID' => $norbi, 'role' => 'administrator']);
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+T::egyezik(true, SDH_Muhely_Szemely::dolgozo_e($norbi), 'a WP-ben adminisztrátorrá tett dolgozó továbbra is dolgozó');
+T::egyezik(true, isset(SDH_Muhely_Szemely::dolgozok(true)[$norbi]), 'ő a „Ki vagy?" listában marad');
+T::egyezik('admin', $Sz::szerep_slug($norbi), 'a szerepe admin (WP-adminisztrátor)');
+wp_update_user(['ID' => $norbi, 'role' => SDH_Muhely_Szemely::SZEREP]);
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+T::egyezik('kollega', $Sz::szerep_slug($norbi), 'sima dolgozóként kolléga');
+
+// Közös adminisztrátori fiók, admin-személy nélkül: nincs választó (különben kizárná magát).
+wp_set_current_user($bolt);
+unset($_COOKIE[SDH_Muhely_Szemely::SUTI]);
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+T::egyezik(['Dolgozó T69', 'Norbi T69'], array_values(array_map(static fn ($d) => $d['nev'], array_filter(SDH_Muhely_Szemely::dolgozok(true), static fn ($d) => in_array($d['nev'], ['Dolgozó T69', 'Norbi T69'], true)))), 'a dolgozók listája (név szerint rendezve)');
+T::egyezik([], SDH_Muhely_Szemely::admin_szemelyek(), 'még nincs admin-személy');
+T::egyezik(false, SDH_Muhely_Szemely::kell_valasztani(), 'admin-személy nélkül az adminisztrátori közös fiókon nincs választó');
+T::egyezik(true, SDH_Muhely_Admin_UI::admin_e(), 'és a Beállítások elérhető');
+T::egyezik('', $or('sdh_muhely_penztar_riport'), 'a rendszer hívásai nem állnak meg');
+
+// Admin szerep egy dolgozónak (a Jogosultságok fülön) → a választó megjelenik, ő belép a PIN-jével.
+wp_set_current_user($admin);
+$mentes(['szemely_szerep' => [(string) $norbi => 'admin']]);
+T::egyezik('admin', $Sz::szerep_slug($norbi), 'a dolgozó Admin szerepet kaphat');
+$kolleg2 = $felh('Kolléga2 T69', 'sdh_kollega');
+$mentes(['szemely_szerep' => [(string) $kolleg2 => 'admin']]);
+T::egyezik('kollega', $Sz::szerep_slug($kolleg2), 'nem dolgozó kollégának Admin szerep nem adható');
+wp_delete_user($kolleg2);
+
+update_option(SDH_Muhely_Szemely::OPT, ['be' => true, 'pin' => true, 'fiokok' => [$bolt]]);
+wp_set_current_user($bolt);
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+T::egyezik([$norbi => 'Norbi T69'], SDH_Muhely_Szemely::admin_szemelyek(), 'most van admin-személy');
+T::egyezik(true, SDH_Muhely_Szemely::kell_valasztani(), 'ezért a közös fiókon a választó megjelenik');
+
+$v = t_ajax('sdh_muhely_ki_vagy', ['szemely' => $norbi, 'pin' => '0000']);
+T::egyezik(false, !empty($v['success']), 'hibás PIN: nem lép be');
+$v = t_ajax('sdh_muhely_ki_vagy', ['szemely' => $norbi, 'pin' => '4321']);
+T::egyezik(true, !empty($v['success']), 'a jó PIN-nel belép');
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+T::egyezik(true, SDH_Muhely_Admin_UI::admin_e(), 'az Admin szerepű dolgozóval a közös adminisztrátori fiókon a Beállítások elérhető');
+SDH_Muhely_Szemely::torol();
+SDH_Muhely_Szemely::felejt();
+
+// Admin-személy PIN nélkül: a saját WordPress-jelszavával is belép.
+update_user_meta($norbi, SDH_Muhely_Szemely::META_PIN, '');
+wp_update_user(['ID' => $norbi, 'role' => 'administrator']);
+wp_set_password('Norbi-jelszo-T69!', $norbi);
+SDH_Muhely_Szemely::felejt();
+$Sz::felejt();
+$v = t_ajax('sdh_muhely_ki_vagy', ['szemely' => $norbi, 'pin' => 'rossz']);
+T::egyezik(false, !empty($v['success']), 'WP-adminisztrátor személy: rossz jelszó nem jó');
+$v = t_ajax('sdh_muhely_ki_vagy', ['szemely' => $norbi, 'pin' => 'Norbi-jelszo-T69!']);
+T::egyezik(true, !empty($v['success']), 'WP-adminisztrátor személy PIN nélkül a WordPress-jelszavával belép');
+SDH_Muhely_Szemely::torol();
+SDH_Muhely_Szemely::felejt();
+
+// Sima dolgozó PIN nélkül nem léphet be (a véletlen jelszavával sem).
+$pnelkul = SDH_Muhely_Szemely::uj_dolgozo('PINnélkül T69', '');
+$v = t_ajax('sdh_muhely_ki_vagy', ['szemely' => $pnelkul, 'pin' => '1234']);
+T::egyezik(false, !empty($v['success']), 'a PIN nélküli dolgozó nem választható');
+
+update_option(SDH_Muhely_Szemely::OPT, ['be' => true, 'pin' => false, 'fiokok' => [$bolt]]);
+
 /* --- 7. Törlés, korlátok, kontextus ------------------------------------------------------ */
 
 wp_set_current_user($admin);
@@ -287,7 +366,7 @@ $Sz::felejt();
 SDH_Muhely_Szemely::felejt();
 require_once ABSPATH . 'wp-admin/includes/user.php';
 
-foreach ([$kolléga, $penztaros, $megfigyelo, $bolt, $dolgozo_id] as $id) {
+foreach ([$kolléga, $penztaros, $megfigyelo, $bolt, $dolgozo_id, $norbi, $pnelkul] as $id) {
     if ($id > 0) {
         wp_delete_user($id);
     }

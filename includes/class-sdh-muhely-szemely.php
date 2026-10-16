@@ -23,6 +23,12 @@ final class SDH_Muhely_Szemely
     public const OPT       = 'sdh_muhely_ki_vagy';
     public const SZEREP    = 'sdh_dolgozo';
     public const SUTI      = 'sdh_muhely_szemely';
+    /** A dolgozók bejelentkezési neve ezzel kezdődik – így a WP-ben átállított szerepű dolgozó sem tűnik el. */
+    public const LOGIN_ELOTAG = 'sdh-dolgozo-';
+
+    /** wp-config.php: define('SDH_MUHELY_KI_VAGY_KI', true); – kikapcsolja a választót (mentőöv). */
+    public const KI_ALLANDO = 'SDH_MUHELY_KI_VAGY_KI';
+
     public const META_PIN  = 'sdh_muhely_pin';
     public const META_AKTIV = 'sdh_muhely_dolgozo_aktiv';
     public const TTL       = 12 * HOUR_IN_SECONDS;
@@ -69,6 +75,10 @@ final class SDH_Muhely_Szemely
     /** Közös (választót kérő) fiók-e. */
     public static function kozos(?int $uid = null): bool
     {
+        if (defined(self::KI_ALLANDO) && constant(self::KI_ALLANDO)) {
+            return false;
+        }
+
         $uid = $uid ?? get_current_user_id();
         $b   = self::beallitas();
 
@@ -78,7 +88,39 @@ final class SDH_Muhely_Szemely
     /** Ennél a kérésnél kell-e (még) választani. */
     public static function kell_valasztani(): bool
     {
-        return self::kozos() && self::aktiv_id() === 0;
+        return self::kozos() && self::aktiv_id() === 0 && !self::admin_kizarva();
+    }
+
+    /**
+     * Mentőöv: az adminisztrátor közös fiókján, ha nincs egyetlen választható adminisztrátor-személy sem,
+     * a választó nem jelenik meg – különben senki nem érhetné el a Beállításokat.
+     */
+    public static function admin_kizarva(): bool
+    {
+        if (!current_user_can(SDH_Muhely_Admin_UI::ADMIN_JOG)) {
+            return false;
+        }
+
+        return self::admin_szemelyek() === [];
+    }
+
+    /**
+     * A közös fiókon választható adminisztrátor-személyek: aktív dolgozók, akik WP-adminisztrátorok
+     * vagy Admin szerepet kaptak.
+     *
+     * @return array<int, string>
+     */
+    public static function admin_szemelyek(): array
+    {
+        $lista = [];
+
+        foreach (self::dolgozok(true) as $id => $d) {
+            if (SDH_Muhely_Szerepkor::szerep_slug((int) $id) === SDH_Muhely_Szerepkor::ADMIN) {
+                $lista[(int) $id] = $d['nev'];
+            }
+        }
+
+        return $lista;
     }
 
     /* ------------------------------------------------------------------
@@ -108,7 +150,19 @@ final class SDH_Muhely_Szemely
     public static function dolgozok(bool $csak_aktiv = false): array
     {
         $lista = [];
-        $userek = get_users(['role' => self::SZEREP, 'orderby' => 'display_name', 'order' => 'ASC']);
+        $userek = [];
+
+        // Szerep szerint és bejelentkezési név szerint is: ha a WP-ben a dolgozó szerepét átállítják
+        // (pl. adminisztrátorrá teszik), akkor is dolgozó marad.
+        foreach (get_users(['role' => self::SZEREP]) as $u) {
+            $userek[(int) $u->ID] = $u;
+        }
+
+        foreach (get_users(['search' => self::LOGIN_ELOTAG . '*', 'search_columns' => ['user_login']]) as $u) {
+            $userek[(int) $u->ID] = $u;
+        }
+
+        uasort($userek, static fn ($a, $b): int => strcasecmp((string) $a->display_name, (string) $b->display_name));
 
         foreach ($userek as $u) {
             $aktiv = get_user_meta($u->ID, self::META_AKTIV, true) !== '0';
@@ -131,7 +185,8 @@ final class SDH_Muhely_Szemely
     {
         $u = $id > 0 ? get_userdata($id) : false;
 
-        return $u instanceof WP_User && in_array(self::SZEREP, (array) $u->roles, true);
+        return $u instanceof WP_User
+            && (in_array(self::SZEREP, (array) $u->roles, true) || str_starts_with((string) $u->user_login, self::LOGIN_ELOTAG));
     }
 
     /** Új dolgozó (belépni nem tudó felhasználó). Visszaad: azonosító vagy 0. */
@@ -344,18 +399,27 @@ final class SDH_Muhely_Szemely
             $szamlalo = 'sdh_muhely_kivagy_proba_' . $uid . '_' . $id;
             $proba    = (int) get_transient($szamlalo);
             $hash     = (string) get_user_meta($id, self::META_PIN, true);
+            $u        = get_userdata($id);
+
+            // A WP-adminisztrátor személy a saját WordPress-jelszavával is igazolhat (a dolgozóé véletlen jelszó).
+            $admin_szemely = $u instanceof WP_User && user_can($u, SDH_Muhely_Admin_UI::ADMIN_JOG);
 
             if ($proba >= self::MAX_PROBA) {
                 wp_send_json_error(['uzenet' => 'Túl sok hibás PIN. Próbáld újra 5 perc múlva.']);
             }
 
-            if ($hash === '') {
+            if ($hash === '' && !$admin_szemely) {
                 wp_send_json_error(['uzenet' => 'Ennek a névnek még nincs PIN-je – az adminisztrátor a Beállítások › Jogosultságok fülön adhatja meg.']);
             }
 
-            if ($pin === '' || !wp_check_password($pin, $hash)) {
+            $jo = $pin !== '' && (
+                ($hash !== '' && wp_check_password($pin, $hash))
+                || ($admin_szemely && wp_check_password($pin, (string) $u->user_pass, $id))
+            );
+
+            if (!$jo) {
                 set_transient($szamlalo, $proba + 1, 5 * MINUTE_IN_SECONDS);
-                wp_send_json_error(['uzenet' => 'Hibás PIN.']);
+                wp_send_json_error(['uzenet' => $pin === '' ? 'Add meg a PIN-ed.' : 'Hibás PIN.']);
             }
 
             delete_transient($szamlalo);
@@ -413,7 +477,7 @@ final class SDH_Muhely_Szemely
                     <?php if ($pin) : ?>
                         <div class="sdh-kivagy__pin" data-sdh-kivagy-pinsor hidden>
                             <label for="sdh-kivagy-pin">PIN</label>
-                            <input type="password" id="sdh-kivagy-pin" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" data-sdh-kivagy-pin>
+                            <input type="password" id="sdh-kivagy-pin" maxlength="72" autocomplete="off" data-sdh-kivagy-pin>
                             <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-kivagy-ok>Belépés</button>
                         </div>
                     <?php endif; ?>
@@ -498,6 +562,23 @@ final class SDH_Muhely_Szemely
                     <label for="kivagy_fiok_<?php echo (int) $f->ID; ?>"><?php echo esc_html($f->display_name . ' (' . $f->user_login . ')'); ?></label>
                 </div>
             <?php endforeach; ?>
+
+            <?php
+            $kizart = [];
+
+            foreach ($fiokok as $f) {
+                if (in_array((int) $f->ID, $b['fiokok'], true) && user_can($f, SDH_Muhely_Admin_UI::ADMIN_JOG)) {
+                    $kizart[] = $f->display_name;
+                }
+            }
+
+            if ($b['be'] && $kizart !== [] && self::admin_szemelyek() === []) :
+                ?>
+                <div class="sdh-uzenet sdh-uzenet--hiba">
+                    A(z) <?php echo esc_html(implode(', ', $kizart)); ?> adminisztrátori közös fiók, de nincs <strong>Admin</strong> szerepű (vagy WP-adminisztrátor) dolgozó,
+                    ezért a választó azon a fiókon <strong>nem jelenik meg</strong> – így nem zárhatod ki magad. Adj egy dolgozónak Admin szerepet (fent, „Ki melyik szerepben?”).
+                </div>
+            <?php endif; ?>
 
             <h3 class="sdh-doboz__alcim">Dolgozók</h3>
             <p class="sdh-sugo">

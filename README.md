@@ -64,6 +64,14 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.75.1
+- **Javítás: az adminisztrátor nem zárhatja ki magát a közös fiókról.** (Eset: a közös fiókon a dolgozót a WP-ben adminisztrátorrá tették →
+  eltűnt a „Ki vagy?" listáról, és a fiók nem volt használható.) A dolgozó a bejelentkezési neve (`sdh-dolgozo-…`) alapján akkor is dolgozó
+  marad, ha a WP-ben átállítják a szerepét; a WP-adminisztrátor személy mindig admin, a PIN-je helyett a saját WP-jelszavával is igazolhat;
+  a dolgozó Admin szerepet kaphat (Jogosultságok › Ki melyik szerepben?), és csak ő éri el a Beállításokat az adminisztrátori közös fiókon.
+  Mentőöv: ha az adminisztrátori közös fiókon nincs admin-személy, a választó nem jelenik meg (a Jogosultságok fül figyelmeztet);
+  végső eset: `define('SDH_MUHELY_KI_VAGY_KI', true);` a wp-config.php-ban. Teszt: t69 (100). DB_VERSION változatlan (0.43.0).
+
 ### 0.75.0
 - **Szerepkörök és jogok (HIBALISTA H5).** Új `SDH_Muhely_Szerepkor`. Szerepek: admin (zárolt), kolléga (a 0.74-es teljes hozzáférés – a
   frissítés semmit nem vesz el), pultos, szerelő, pénztáros + egyéni szerepek (max. 12). Tiltólistás modulok (új modul mindenkinek látszik)

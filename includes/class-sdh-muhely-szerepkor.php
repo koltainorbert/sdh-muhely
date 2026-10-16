@@ -228,12 +228,17 @@ final class SDH_Muhely_Szerepkor
             return self::ADMIN;
         }
 
-        // A WordPress-adminisztrátor mindig admin: nem zárhatja ki magát.
-        if (user_can($szemely, SDH_Muhely_Admin_UI::ADMIN_JOG) && !SDH_Muhely_Szemely::dolgozo_e($szemely)) {
+        // A WordPress-adminisztrátor mindig admin (közös fiókon kiválasztva is): nem zárhatja ki magát.
+        if (user_can($szemely, SDH_Muhely_Admin_UI::ADMIN_JOG)) {
             return self::ADMIN;
         }
 
         $slug = sanitize_key((string) get_user_meta($szemely, self::META, true));
+
+        // Admin szerepet csak dolgozó kaphat (a közös adminisztrátori fiókon ő az „admin személy").
+        if ($slug === self::ADMIN) {
+            return SDH_Muhely_Szemely::dolgozo_e($szemely) ? self::ADMIN : self::ALAP;
+        }
 
         return $slug !== '' && isset(self::szerepek()[$slug]) ? $slug : self::ALAP;
     }
@@ -253,6 +258,12 @@ final class SDH_Muhely_Szerepkor
     public static function szerep_beallit(int $szemely, string $slug): void
     {
         $slug = sanitize_key($slug);
+
+        if ($slug === self::ADMIN && SDH_Muhely_Szemely::dolgozo_e($szemely)) {
+            update_user_meta($szemely, self::META, self::ADMIN);
+
+            return;
+        }
 
         if ($slug === '' || $slug === self::ALAP || !isset(self::szerepek()[$slug]) || $slug === self::ADMIN) {
             delete_user_meta($szemely, self::META);
@@ -463,17 +474,24 @@ final class SDH_Muhely_Szerepkor
                 <?php foreach ($szemelyek as $id => $p) : ?>
                     <div class="sdh-kivagy-lista__sor">
                         <span><?php echo esc_html($p['nev']); ?> <small>(<?php echo esc_html($p['fajta']); ?>)</small></span>
-                        <select name="szemely_szerep[<?php echo (int) $id; ?>]" aria-label="Szerep – <?php echo esc_attr($p['nev']); ?>">
-                            <?php foreach ($szerepek as $slug => $sz) : ?>
-                                <?php if ($sz['zarolt']) { continue; } ?>
-                                <option value="<?php echo esc_attr($slug); ?>" <?php selected(self::szerep_slug($id), $slug); ?>><?php echo esc_html($sz['nev']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <?php if (user_can($id, SDH_Muhely_Admin_UI::ADMIN_JOG)) : ?>
+                            <span>Admin (WordPress-adminisztrátor)</span>
+                        <?php else : ?>
+                            <select name="szemely_szerep[<?php echo (int) $id; ?>]" aria-label="Szerep – <?php echo esc_attr($p['nev']); ?>">
+                                <?php foreach ($szerepek as $slug => $sz) : ?>
+                                    <?php if ($sz['zarolt'] && $p['fajta'] !== 'dolgozó') { continue; } ?>
+                                    <option value="<?php echo esc_attr($slug); ?>" <?php selected(self::szerep_slug($id), $slug); ?>><?php echo esc_html($sz['nev']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
                         <span></span>
                     </div>
                 <?php endforeach; ?>
             </div>
-            <p class="sdh-sugo">Adminisztrátor WordPress-fiók mindig admin; az ő szerepe itt nem állítható.</p>
+            <p class="sdh-sugo">
+                Adminisztrátor WordPress-fiók mindig admin; az ő szerepe itt nem állítható. Közös adminisztrátori fiókon az <strong>Admin</strong>
+                szerepű dolgozó éri el a Beállításokat – ha nincs ilyen, a választó azon a fiókon nem jelenik meg (hogy senki ne zárhassa ki magát).
+            </p>
         </div>
         <?php
     }
@@ -565,7 +583,7 @@ final class SDH_Muhely_Szerepkor
         foreach ((array) ($_POST['szemely_szerep'] ?? []) as $id => $slug) {
             $id = (int) $id;
 
-            if ($id > 0 && (SDH_Muhely_Szemely::dolgozo_e($id) || (user_can($id, SDH_Muhely_Admin_UI::jog()) && !user_can($id, SDH_Muhely_Admin_UI::ADMIN_JOG)))) {
+            if ($id > 0 && !user_can($id, SDH_Muhely_Admin_UI::ADMIN_JOG) && (SDH_Muhely_Szemely::dolgozo_e($id) || user_can($id, SDH_Muhely_Admin_UI::jog()))) {
                 self::szerep_beallit($id, sanitize_key(wp_unslash((string) $slug)));
             }
         }

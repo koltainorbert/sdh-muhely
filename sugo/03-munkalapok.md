@@ -95,6 +95,7 @@ Ha többen dolgoztok **egy fiókkal**, a rendszer nem tudná, ki mit csinált. E
 
 - **Váltás:** jobb felül a profilmenüben **Személy váltása** – a következő kolléga választ. Kijelentkezéskor a választás törlődik, és a böngészőben legfeljebb 12 óráig él.
 - **Beállítás** (adminisztrátor): **Beállítások › Jogosultságok** › *Közös fiók: „Ki vagy?”*. Itt kapcsolod be és ki a választót, külön a **PIN-t** (kikapcsolva elég a név), itt jelölöd, **melyik fiók közös**, és itt veszed fel a **dolgozókat** (név + PIN). A PIN csak lenyomatként tárolódik; üresen hagyva a régi marad. Dolgozót nem törlünk – inaktívra állítva nem választható, a régi munkái az ő nevén maradnak.
+- **Adminisztrátori közös fiók:** ha a közös fiók maga adminisztrátor, a Beállítások csak az **Admin** szerepű dolgozónak (vagy WP-adminisztrátor személynek) érhetők el: a Jogosultságok fülön a dolgozónak adj Admin szerepet. A WP-ben adminisztrátorrá tett dolgozó is a listán marad; ő a PIN-jével **vagy a saját WordPress-jelszavával** választhatja ki magát. Ha nincs ilyen admin-személy, a választó azon a fiókon **nem jelenik meg**, így nem zárhatod ki magad. Végső mentőöv a `wp-config.php`-ban: `define('SDH_MUHELY_KI_VAGY_KI', true);` – kikapcsolja a választót (a beállítás után töröld).
 - A dolgozó nevével **nem lehet belépni** a rendszerbe – csak a közös fiókon választható. Öt hibás PIN után 5 percig nem próbálható újra.
 
 ## Szerepkörök és jogok

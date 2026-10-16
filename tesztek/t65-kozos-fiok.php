@@ -18,7 +18,7 @@ require_once ABSPATH . 'wp-admin/includes/user.php';
 
 $naplo = SDH_Muhely_Valtozasnaplo::tabla();
 $admin = get_current_user_id();
-$bolt  = wp_insert_user(['user_login' => 'bolt_t65_' . wp_rand(1000, 9999), 'user_pass' => wp_generate_password(), 'role' => 'administrator', 'display_name' => 'Bolt Közös']);
+$bolt  = wp_insert_user(['user_login' => 'bolt_t65_' . wp_rand(1000, 9999), 'user_pass' => wp_generate_password(), 'role' => 'sdh_kollega', 'display_name' => 'Bolt Közös']);
 T::igaz(is_int($bolt) && $bolt > 0, 'a közös fiók létrejött');
 
 $beall = static function (array $post): void {
