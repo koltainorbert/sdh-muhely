@@ -114,6 +114,10 @@ Nem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül te
 - **Közös fiókon** a ténylegesen dolgozó szerepe számít: ha Gábor Pultos, akkor a közös fiókon is csak azt teheti, amit a Pultos. A *Beállítások* jog csak adminisztrátori fiókon él: közös adminisztrátori fiókon ez választja el az adminisztrátor dolgozót a többitől.
 - Ha valaki olyat próbál, amihez nincs joga, a rendszer megmondja, melyik jog hiányzik, és a **Napló** rögzíti a próbálkozást.
 
+### Régi adminisztrátorok átállítása [fejlesztő]
+
+Akit korábban a Csapatban tettetek adminná, az fejlesztő lett (a háttérrendszer adminisztrációját is látja). A **Beállítások › Jogosultságok** lap alján a **Fejlesztői fiókok** doboz sorolja fel őket (saját magadat nem). Az **SDH adminisztrátorrá** gomb kétszeri kattintásra átállítja: a rendszerben minden adminisztrátori joga megmarad, a háttérrendszer elrejtve. Legalább egy fejlesztő mindig marad; az átállítás a Naplóba kerül.
+
 ## Ügyfél és eszköz a munkalapon
 
 A munkalap jobb felső részén áll az **Ügyfél** és az **Eszköz** mező. Mindkettő mellett két kis gomb van:

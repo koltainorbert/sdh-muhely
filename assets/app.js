@@ -12498,3 +12498,61 @@
         jel.title = net.online ? '' : 'Ami internetet kér (számla, e-mail, AI, külső mentés), az most nem megy ki. Súgó › Hibaelhárítás › Ha nincs internet.';
     });
 }());
+
+/* N6 (0.92.0): fejlesztői fiók átállítása SDH adminisztrátorra – kétlépcsős gomb. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-atallit]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        if (!gomb.hasAttribute('data-elso')) {
+            gomb.setAttribute('data-elso', '1');
+            gomb.setAttribute('data-eredeti', gomb.textContent);
+            gomb.textContent = 'Biztosan? Kattints újra';
+            window.setTimeout(function () {
+                if (gomb.hasAttribute('data-elso')) {
+                    gomb.removeAttribute('data-elso');
+                    gomb.textContent = gomb.getAttribute('data-eredeti');
+                }
+            }, 4000);
+
+            return;
+        }
+
+        gomb.removeAttribute('data-elso');
+
+        var doboz = gomb.closest('[data-sdh-atallas]');
+        var uzenet = gomb.parentNode.querySelector('[data-sdh-atallit-uzenet]');
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+
+        fd.set('action', 'sdh_muhely_admin_atallit');
+        fd.set('user', gomb.getAttribute('data-sdh-atallit'));
+        fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
+        gomb.disabled = true;
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                uzenet.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+
+                if (v && v.success) {
+                    gomb.hidden = true;
+                } else {
+                    gomb.disabled = false;
+                    gomb.textContent = gomb.getAttribute('data-eredeti');
+                }
+            })
+            .catch(function () {
+                gomb.disabled = false;
+                uzenet.textContent = 'Nincs kapcsolat a szerverrel.';
+            });
+    });
+}());

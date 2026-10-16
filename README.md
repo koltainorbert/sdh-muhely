@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.92.0
+- **N6** (új `SDH_Muhely_Admin_Atallas`): Beállítások › Jogosultságok › **Fejlesztői fiókok** (csak fejlesztőnek, csak ha van
+  más WordPress-adminisztrátor): kétlépcsős **SDH adminisztrátorrá** gomb (`sdh_muhely_admin_atallit`) → `set_role('sdh_admin')`,
+  naplózva; saját magát nem, legalább egy fejlesztő marad. Súgó: 3. fejezet. Teszt: t84.
+
 ### 0.91.0
 - **H12 – netkimaradás** (új `SDH_Muhely_Halozat`). `online()`: TCP-próba (1.1.1.1:443, 8.8.8.8:53, 9.9.9.9:443, egyenként
   1,5 mp; proxynál a proxy), 60 mp-ig tárolva. `pre_http_request` (5): ha nincs net, a KÜLSŐ kérés azonnal
