@@ -4,7 +4,7 @@ cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
 szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, garancia, zarolas, jogosultsagok
-kulcsszavak: javítási garancia, garancia, garanciális, jótállás, visszajött, visszatérés, garanciális visszatérés, ismét hozta, újra hozta, lejárat, szerepkör, szerep, jogosultság, jog, pultos, szerelő, pénztáros, kolléga, tiltott, nincs jogod, közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+kulcsszavak: átvételi fotó, fénykép, fotó, kamera, karc, sérülés, állapotfotó, aláírás, aláíró, érintőképernyő, tablet, átvétel lapfül, javítási garancia, garancia, garanciális, jótállás, visszajött, visszatérés, garanciális visszatérés, ismét hozta, újra hozta, lejárat, szerepkör, szerep, jogosultság, jog, pultos, szerelő, pénztáros, kolléga, tiltott, nincs jogod, közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -342,6 +342,31 @@ Több eszköznél eszközönként egy címke készül; amelyik nem kell, annál 
 
 A címke csak akkor készül el, amikor a lap **munkalapszámot kapott**. Az RMA lapfül új lapnál a mentés után érhető el. Ugyanitt írhatsz üzenetet az ügyfélnek, és látod az **Állapottörténetet**.
 
+## Átvétel lapfül: fotók és aláírás
+
+A javítási munkalap **Átvétel** lapfülén rögzíted, milyen állapotban hozták a készüléket, és itt írja alá az ügyfél az átvételt.
+
+### Fotók a készülék állapotáról
+
+1. Nyisd meg az **Átvétel** lapfület.
+2. Telefonon vagy tableten a **Fotó készítése** gomb a kamerát nyitja: fényképezd le a karcokat, repedéseket, sérüléseket. Gépen a **+ Fájl hozzáadása** gombbal (vagy behúzással) tölthetsz fel képet.
+3. **Mentsd** a lapot: a fotók ekkor kerülnek fel.
+
+A fotók csak bejelentkezett munkatársnak látszanak. Az **átvételi nyomtatványon** az első négy fotó bélyegképként a lap alján áll („Fotók átvételkor”).
+
+### Az ügyfél aláírása
+
+1. Az **Átvétel** lapfülön az ügyfél ujjal, tollal vagy egérrel aláír a keretben. A **Törlés** gomb kiüríti a keretet.
+2. Írd be az **aláíró nevét** (pl. ha meghatalmazott hozta).
+3. **Mentsd** a lapot.
+
+Az aláírás ezután a lapfülön kép formájában látszik a nevével és az idejével; az **Új aláírás** gombbal cserélhető. Az **átvételi nyomtatványon** az „Átadó (ügyfél)” vonal fölött áll. A Változásnaplóba is bekerül.
+
+Jó tudni:
+
+- Ha az aláírás képe hibás, a lap nem mentődik – töröld, és írd alá újra.
+- Eladásnál (árukiadás, rendelés) nincs Átvétel lapfül.
+
 ## Javítási garancia
 
 A lezárt javításra a szerviz garanciát vállal. Alapból a **Beállítások › Javítási garancia** napjai érvényesek (gyárilag 180 nap); egy lapon a **Dátumok** alatti **Javítási garancia** csoportban felülírható (0 = nincs garancia). A garancia a **lezárás napjától** számít; lezárt lapnál ugyanitt látszik a **Lejár** dátuma, és a nyomtatványokon is megjelenik („Garancia: 180 nap, … -ig”).
@@ -522,6 +547,14 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - **„Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.”** – Eszközt csak kiválasztott ügyfél mellé lehet csatolni.
 
 ## GYIK
+
+### Hogyan fényképezem le a hozott készüléket?
+
+A munkalap **Átvétel** lapfülén a **Fotó készítése** gombbal (telefonon, tableten a kamera nyílik), majd mentsd a lapot. Az átvételi nyomtatványra is rákerülnek.
+
+### Alá tudja írni az ügyfél a tableten?
+
+Igen: a munkalap **Átvétel** lapfülén ujjal ír alá a keretben, utána mentsd a lapot. Az aláírás az átvételi nyomtatványon is megjelenik.
 
 ### Visszahozták a készüléket a javítás után. Mit csináljak?
 

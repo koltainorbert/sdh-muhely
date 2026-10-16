@@ -64,6 +64,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.85.0
+- **F3 – átvételi fotók és aláírás** (új `SDH_Muhely_Atvetel`). A javítási munkalap új **Átvétel** lapfüle (6. fül):
+  fotók (csatolmány `munkalap` típus; „Fotó készítése” gomb `capture="environment"`-tel) és az ügyfél aláírása
+  érintőképernyőn (app.js: vászon, pointer események → PNG data URL a rejtett mezőben) + az aláíró neve.
+- Mentés: `sdh_muhely_munkalap_mentve` akció (Atvetel::mentes_utan); előtte ellenőrzés (hibás kép / aláírás: a lap sem mentődik).
+  Az aláírás `munkalap_alairas` csatolmány (PNG ≤ 400 kB, fejléc + képméret ellenőrizve), cserénél egy marad; oszlopok:
+  `atvetel_alairva`, `atvetel_alairo` – **DB_VERSION 0.48.0**. Csatolmány: `tarol_bajt()`, `torol_mind()`, `fajl_ut()`.
+- Nyomtatvány: az **átvételi** lapon „Fotók átvételkor” (legfeljebb 4 bélyegkép, `kepsor()`), és az aláírás az „Átadó (ügyfél)”
+  vonal fölött (`alairasok(..., $kepek)`). Súgó: 3. fejezet. Teszt: t77.
+
 ### 0.84.0
 - **F2 – online árajánlat-elfogadás** (új `SDH_Muhely_Ajanlat`). Új oszlopok a munkalapon: `ajanlat_allapot` ('' / var /
   elfogadva / elutasitva), `ajanlat_osszeg`, `ajanlat_kuldve`, `ajanlat_valasz`, `ajanlat_megjegyzes` – **DB_VERSION 0.47.0**.

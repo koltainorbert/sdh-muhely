@@ -332,6 +332,8 @@ final class SDH_Muhely_Nyomtatvany
             'felveve'     => self::nap((string) ($m->keszult ?: $m->letrehozva)),
             'hatarido'    => self::nap((string) $m->hatarido),
             'lezarva'     => self::nap((string) $m->lezarva),
+            // F3 (0.85.0): az átvételi aláírás és fotók fájljai.
+            'atvetel'     => class_exists('SDH_Muhely_Atvetel') ? SDH_Muhely_Atvetel::pdf_adat((int) $m->id) : ['alairas' => '', 'fotok' => []],
             // F1 (0.83.0): a javítási garancia vége (lezárt javítási lapnál).
             'garancia'    => class_exists('SDH_Muhely_Garancia') && SDH_Muhely_Garancia::lejar($m) !== ''
                 ? SDH_Muhely_Garancia::nap($m) . ' nap, ' . self::nap(SDH_Muhely_Garancia::lejar($m)) . '-ig'
@@ -636,12 +638,22 @@ final class SDH_Muhely_Nyomtatvany
             $pdf->bekezdes($zaro);
         }
 
+        // Átvételi fotók (F3): legfeljebb négy bélyegkép egy sorban – csak az átvételi nyomtatványon.
+        $atvetel = $d['atvetel'] ?? ['alairas' => '', 'fotok' => []];
+
+        if ($tipus === 'atveteli' && !empty($atvetel['fotok'])) {
+            $pdf->szakasz('Fotók átvételkor');
+            $pdf->kepsor((array) $atvetel['fotok']);
+        }
+
         if (!empty($s['alairas'])) {
             $pdf->alairasok(
                 [(string) $s['alairas_bal'], (string) $s['alairas_jobb']],
                 self::kelt($a),
                 !empty($s['igazolvany']) ? ['Átvevő neve', 'Igazolványszám'] : [],
-                !empty($s['ph'])
+                !empty($s['ph']),
+                // Az ügyfél aláírása (átvételkor, érintőképernyőn) a jobb oldali, „Átadó (ügyfél)” vonal fölé.
+                $tipus === 'atveteli' && (string) ($atvetel['alairas'] ?? '') !== '' ? [1 => (string) $atvetel['alairas']] : []
             );
         }
     }

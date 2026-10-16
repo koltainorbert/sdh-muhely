@@ -1146,7 +1146,8 @@ a.sdh-kartya:focus-visible {
 .sdh-fulek__ful--2:checked ~ .sdh-fulek__panel--2,
 .sdh-fulek__ful--3:checked ~ .sdh-fulek__panel--3,
 .sdh-fulek__ful--4:checked ~ .sdh-fulek__panel--4,
-.sdh-fulek__ful--5:checked ~ .sdh-fulek__panel--5 {
+.sdh-fulek__ful--5:checked ~ .sdh-fulek__panel--5,
+.sdh-fulek__ful--6:checked ~ .sdh-fulek__panel--6 {
     display: flex;
 }
 
@@ -1154,7 +1155,8 @@ a.sdh-kartya:focus-visible {
 .sdh-fulek__ful--2:checked ~ .sdh-fulek__sav label:nth-child(2),
 .sdh-fulek__ful--3:checked ~ .sdh-fulek__sav label:nth-child(3),
 .sdh-fulek__ful--4:checked ~ .sdh-fulek__sav label:nth-child(4),
-.sdh-fulek__ful--5:checked ~ .sdh-fulek__sav label:nth-child(5) {
+.sdh-fulek__ful--5:checked ~ .sdh-fulek__sav label:nth-child(5),
+.sdh-fulek__ful--6:checked ~ .sdh-fulek__sav label:nth-child(6) {
     border-bottom-color: var(--sdh-felulet);
     background: var(--sdh-felulet);
     box-shadow: inset 0 2px 0 var(--sdh-accent);
@@ -10512,4 +10514,72 @@ button.sdh-allapot,
     flex-wrap: wrap;
     gap: calc(6px * var(--sdh-n));
     margin: 0;
+}
+
+/* ================================================================== */
+/* F3 (0.85.0) – a munkalap Átvétel lapfüle: fotók, aláírás            */
+/* ================================================================== */
+
+.sdh-fulek__panel--atvetel {
+    flex-direction: column;
+}
+
+.sdh-atvetel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: calc(14px * var(--sdh-n));
+    width: 100%;
+}
+
+.sdh-atvetel__resz {
+    display: grid;
+    gap: calc(8px * var(--sdh-n));
+    align-content: start;
+    min-width: 0;
+}
+
+.sdh-atvetel__cim {
+    margin: 0;
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 600;
+}
+
+.sdh-atvetel__kamera {
+    justify-self: start;
+    cursor: pointer;
+}
+
+.sdh-atvetel__vaszon {
+    display: block;
+    width: 100%;
+    height: calc(150px * var(--sdh-n));
+    border: 1px dashed var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: #fff;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+.sdh-atvetel__lab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(6px * var(--sdh-n));
+    margin-top: calc(4px * var(--sdh-n));
+}
+
+.sdh-atvetel__meglevo {
+    display: grid;
+    gap: calc(6px * var(--sdh-n));
+    justify-items: start;
+}
+
+.sdh-atvetel__meglevo img {
+    max-width: 100%;
+    max-height: calc(120px * var(--sdh-n));
+    padding: calc(4px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: #fff;
 }

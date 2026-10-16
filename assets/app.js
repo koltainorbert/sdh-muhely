@@ -12152,3 +12152,162 @@
             });
     });
 }());
+
+/* Átvételi aláírás és fotók (F3, 0.85.0): aláíró vászon (ujj, toll, egér) a munkalap Átvétel lapfülén.
+   A kész aláírás PNG-ként a rejtett mezőbe kerül; a lap mentésekor megy fel. */
+(function () {
+    'use strict';
+
+    function meretez(vaszon) {
+        var r = vaszon.getBoundingClientRect();
+        var arany = window.devicePixelRatio || 1;
+
+        if (r.width < 10 || (vaszon.width === Math.round(r.width * arany) && vaszon.height === Math.round(r.height * arany))) {
+            return false;
+        }
+
+        vaszon.width = Math.round(r.width * arany);
+        vaszon.height = Math.round(r.height * arany);
+
+        var c = vaszon.getContext('2d');
+
+        c.setTransform(arany, 0, 0, arany, 0, 0);
+        c.lineWidth = 2.2;
+        c.lineCap = 'round';
+        c.lineJoin = 'round';
+        c.strokeStyle = '#111';
+
+        return true;
+    }
+
+    function bekot(vaszon) {
+        if (vaszon.hasAttribute('data-sdh-kesz')) {
+            return;
+        }
+
+        vaszon.setAttribute('data-sdh-kesz', '1');
+
+        var doboz = vaszon.closest('[data-sdh-alairas]');
+        var mezo = doboz.querySelector('[data-sdh-alairas-mezo]');
+        var rajzol = false;
+        var volt = false;
+        var elozo = null;
+
+        function pont(e) {
+            var r = vaszon.getBoundingClientRect();
+
+            return { x: e.clientX - r.left, y: e.clientY - r.top };
+        }
+
+        vaszon.addEventListener('pointerdown', function (e) {
+            meretez(vaszon);
+            rajzol = true;
+            elozo = pont(e);
+            vaszon.setPointerCapture(e.pointerId);
+
+            var c = vaszon.getContext('2d');
+
+            c.beginPath();
+            c.arc(elozo.x, elozo.y, 1.1, 0, Math.PI * 2);
+            c.fillStyle = '#111';
+            c.fill();
+            volt = true;
+            e.preventDefault();
+        });
+
+        vaszon.addEventListener('pointermove', function (e) {
+            if (!rajzol) {
+                return;
+            }
+
+            var p = pont(e);
+            var c = vaszon.getContext('2d');
+
+            c.beginPath();
+            c.moveTo(elozo.x, elozo.y);
+            c.lineTo(p.x, p.y);
+            c.stroke();
+            elozo = p;
+            e.preventDefault();
+        });
+
+        function vege() {
+            if (!rajzol) {
+                return;
+            }
+
+            rajzol = false;
+
+            if (volt && mezo) {
+                mezo.value = vaszon.toDataURL('image/png');
+                mezo.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+
+        vaszon.addEventListener('pointerup', vege);
+        vaszon.addEventListener('pointercancel', vege);
+
+        doboz.addEventListener('click', function (e) {
+            if (e.target.closest('[data-sdh-alairas-torol]')) {
+                e.preventDefault();
+                vaszon.getContext('2d').clearRect(0, 0, vaszon.width, vaszon.height);
+                volt = false;
+
+                if (mezo) {
+                    mezo.value = '';
+                }
+            }
+
+            if (e.target.closest('[data-sdh-alairas-uj]')) {
+                e.preventDefault();
+
+                var meglevo = doboz.querySelector('[data-sdh-alairas-meglevo]');
+                var pad = doboz.querySelector('[data-sdh-alairas-pad]');
+
+                if (pad) {
+                    pad.hidden = false;
+                }
+
+                if (meglevo) {
+                    meglevo.hidden = true;
+                }
+
+                meretez(vaszon);
+            }
+        });
+
+        if (window.ResizeObserver) {
+            new ResizeObserver(function () { meretez(vaszon); }).observe(vaszon);
+        }
+    }
+
+    function keres(gyoker) {
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-alairas-vaszon]'), bekot);
+    }
+
+    new MutationObserver(function (v) {
+        v.forEach(function (m) {
+            Array.prototype.forEach.call(m.addedNodes, function (n) {
+                if (n.nodeType === 1) {
+                    keres(n.matches('[data-sdh-alairas-vaszon]') ? n.parentNode : n);
+                }
+            });
+        });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+
+    keres(document);
+
+    // „Fotó készítése”: hány kép van kiválasztva (a csatolt fájlok listájától függetlenül, a mentéssel megy fel).
+    document.addEventListener('change', function (e) {
+        if (!e.target.matches || !e.target.matches('[data-sdh-atvetel-kamera]')) {
+            return;
+        }
+
+        var db = e.target.files ? e.target.files.length : 0;
+        var hely = e.target.closest('.sdh-atvetel__resz').querySelector('[data-sdh-atvetel-kamera-db]');
+
+        if (hely) {
+            hely.textContent = db > 0 ? db + ' fotó kiválasztva – a mentéssel kerül fel.' : '';
+        }
+    });
+}());

@@ -404,6 +404,55 @@ class SDH_Muhely_Nyomtatvany_Pdf extends tFPDF
      * Építőelemek
      * ============================================================== */
 
+    /**
+     * Képek egy sorban (F3: átvételi fotók). Elemenként „út|TÍPUS” (JPG / PNG); legfeljebb négy,
+     * egyforma szélességben, legfeljebb 38 mm magasan. A hibás kép kimarad.
+     *
+     * @param array<int, string> $kepek
+     */
+    public function kepsor(array $kepek): void
+    {
+        $kepek = array_slice(array_values($kepek), 0, 4);
+
+        if ($kepek === []) {
+            return;
+        }
+
+        $res = 4.0;
+        $w   = ($this->szeles() - $res * 3) / 4;
+        $max = 38.0;
+
+        $this->hely($max + 3);
+        $y  = $this->GetY() + 1;
+        $mm = 0.0;
+
+        foreach ($kepek as $i => $kep) {
+            [$ut, $tipus] = array_pad(explode('|', (string) $kep, 2), 2, 'JPG');
+            $meret        = is_file($ut) ? @getimagesize($ut) : false; // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+            if (!is_array($meret) || (int) $meret[0] < 1 || (int) $meret[1] < 1) {
+                continue;
+            }
+
+            $kw = $w;
+            $kh = $w * (int) $meret[1] / (int) $meret[0];
+
+            if ($kh > $max) {
+                $kh = $max;
+                $kw = $max * (int) $meret[0] / (int) $meret[1];
+            }
+
+            try {
+                $this->Image($ut, $this->lMargin + $i * ($w + $res), $y, $kw, $kh, $tipus === 'PNG' ? 'PNG' : 'JPG');
+                $mm = max($mm, $kh);
+            } catch (Throwable $e) {
+                continue;
+            }
+        }
+
+        $this->SetY($y + $mm + 2);
+    }
+
     /** Szakaszcím vékony kiemelő vonallal. */
     public function szakasz(string $cim): void
     {
@@ -798,8 +847,25 @@ class SDH_Muhely_Nyomtatvany_Pdf extends tFPDF
      * @param array<int, string> $feliratok  az aláírásvonalak alatti szövegek (1–3)
      * @param array<int, string> $elotte     kitöltendő sorok az aláírás fölött (pl. „Név", „Igazolványszám")
      */
-    public function alairasok(array $feliratok, string $kelt = '', array $elotte = [], bool $ph = false): void
+    public function alairasok(array $feliratok, string $kelt = '', array $elotte = [], bool $ph = false, array $kepek = []): void
     {
+        // $kepek: az aláírásvonal sorszáma (a szűrés előtti) => PNG-fájl útja – a vonal fölé rajzolt aláírás (F3).
+        $kepek_eredeti = $kepek;
+        $kepek         = [];
+        $j             = 0;
+
+        foreach (array_map('strval', $feliratok) as $i => $f) {
+            if (trim($f) === '') {
+                continue;
+            }
+
+            if (!empty($kepek_eredeti[$i]) && is_file((string) $kepek_eredeti[$i])) {
+                $kepek[$j] = (string) $kepek_eredeti[$i];
+            }
+
+            $j++;
+        }
+
         $feliratok = array_values(array_filter(array_map('strval', $feliratok), static fn (string $s): bool => trim($s) !== ''));
         $magas     = ($kelt !== '' ? $this->sm() + 2 : 0) + count($elotte) * 7.5 + ($feliratok !== [] ? 19 + $this->sm(0.85) : 0);
 
@@ -840,6 +906,14 @@ class SDH_Muhely_Nyomtatvany_Pdf extends tFPDF
         foreach ($feliratok as $i => $felirat) {
             // Egy aláírás jobbra, kettő a két szélre, három egyenletesen.
             $x = $n === 1 ? $this->lMargin + $sz - $w : $this->lMargin + $i * ($sz - $w) / ($n - 1);
+
+            if (isset($kepek[$i])) {
+                try {
+                    $this->Image($kepek[$i], $x + 2, $y - 14, 0, 13, 'PNG');
+                } catch (Throwable $e) {
+                    // A hibás kép nem akasztja meg a nyomtatványt: üres vonal marad.
+                }
+            }
 
             $this->SetDrawColor(60, 60, 60);
             $this->SetLineWidth(0.2);

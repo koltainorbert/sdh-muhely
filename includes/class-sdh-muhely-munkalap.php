@@ -3892,6 +3892,10 @@ final class SDH_Muhely_Munkalap
                                id="ful_m_termek"<?php echo $eladas && !$termek_rejt ? ' checked' : ''; ?>>
                         <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--5" name="_ful_munkalap"
                                id="ful_m_rma" data-sdh-ful-kulcs="rma">
+                        <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
+                            <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--6" name="_ful_munkalap"
+                                   id="ful_m_atvetel" data-sdh-ful-kulcs="atvetel">
+                        <?php endif; ?>
 
                         <div class="sdh-fulek__sav">
                             <label for="ful_m_eszkoz"<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('ful_eszkoz'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
@@ -3904,6 +3908,10 @@ final class SDH_Muhely_Munkalap
                                 <label for="ful_m_termek"<?php echo $termek_rejt ? ' hidden' : ''; ?><?php echo $ub('ful_termek'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Termékek <span class="sdh-fulek__db" data-sdh-db="termek" hidden></span></label>
                             <?php endif; ?>
                             <label for="ful_m_rma" data-sdh-rma-ful<?php echo $rma_rejt ? ' hidden' : $ub('ful_rma'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html($rma_felirat); ?> <?php echo $munkalap && $rma_felirat === 'RMA' ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+                            <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
+                                <?php $atv_db = $munkalap ? SDH_Muhely_Atvetel::darab((int) $munkalap->id) : 0; ?>
+                                <label for="ful_m_atvetel">Átvétel<?php echo $atv_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $atv_db . '</span>' : ''; ?></label>
+                            <?php endif; ?>
                         </div>
 
                         <?php if ($eladas) : ?>
@@ -3961,6 +3969,12 @@ final class SDH_Muhely_Munkalap
                         <div class="sdh-fulek__panel sdh-fulek__panel--5 sdh-fulek__panel--rma">
                             <?php SDH_Muhely_Rma::munkalap_ful($munkalap); ?>
                         </div>
+
+                        <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
+                            <div class="sdh-fulek__panel sdh-fulek__panel--6 sdh-fulek__panel--atvetel">
+                                <?php SDH_Muhely_Atvetel::ful($munkalap); ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="sdh-fulek sdh-fulek--also">
@@ -5251,6 +5265,11 @@ final class SDH_Muhely_Munkalap
         $hiba      = self::ervenyesit($adatok, $szamozott);
 
         if ($hiba !== null) {
+            return $hiba;
+        }
+
+        // Átvételi fotók és aláírás (F3): hibás fájlnál a lap sem mentődik félig.
+        if (class_exists('SDH_Muhely_Atvetel') && ($hiba = SDH_Muhely_Atvetel::ellenoriz()) !== null) {
             return $hiba;
         }
 

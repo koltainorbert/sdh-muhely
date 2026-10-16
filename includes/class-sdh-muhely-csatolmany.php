@@ -33,7 +33,7 @@ final class SDH_Muhely_Csatolmany
     private const MAPPA = 'sdh-muhely/csatolmany';
 
     /** Mely modulokhoz lehet csatolni (új modulnál ide kell felvenni). */
-    private const TIPUSOK = ['ugyfel', 'eszkoz'];
+    private const TIPUSOK = ['ugyfel', 'eszkoz', 'munkalap', 'munkalap_alairas'];
 
     /** A mi felső korlátunk fájlonként; a szerver saját korlátja ennél kisebb is lehet. */
     private const MAX_FAJL_MB = 25;
@@ -379,6 +379,76 @@ final class SDH_Muhely_Csatolmany
         }
 
         return $eredmeny;
+    }
+
+    /**
+     * Kész tartalom eltárolása (nem feltöltésből – pl. az érintőképernyős aláírás PNG-je, F3).
+     * Visszaad: a csatolmány azonosítója, vagy 0.
+     */
+    public static function tarol_bajt(string $tipus, int $ref_id, string $nev, string $mime, string $bajtok): int
+    {
+        global $wpdb;
+
+        if ($ref_id <= 0 || !self::tipus_ervenyes($tipus) || $bajtok === '') {
+            return 0;
+        }
+
+        $tarolt = bin2hex(random_bytes(16));
+        $cel    = self::mappa() . '/' . $tarolt;
+
+        if (file_put_contents($cel, $bajtok) === false) {
+            return 0;
+        }
+
+        @chmod($cel, 0644); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+        $ok = $wpdb->insert(self::tabla(), [
+            'tipus'       => $tipus,
+            'ref_id'      => $ref_id,
+            'eredeti_nev' => mb_substr(sanitize_file_name($nev), 0, 190),
+            'tarolt_nev'  => $tarolt,
+            'mime'        => $mime,
+            'meret'       => strlen($bajtok),
+            'feltoltve'   => current_time('mysql'),
+            'feltolto'    => get_current_user_id(),
+        ]);
+
+        if ($ok === false) {
+            @unlink($cel); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+            return 0;
+        }
+
+        return (int) $wpdb->insert_id;
+    }
+
+    /** Egy rekord összes csatolmányának törlése (fájllal együtt) a megadott típusban. */
+    public static function torol_mind(string $tipus, int $ref_id): int
+    {
+        global $wpdb;
+
+        $db = 0;
+
+        foreach (self::lista($tipus, $ref_id) as $sor) {
+            self::fajl_torol((string) $sor->tarolt_nev);
+            $db += (int) $wpdb->delete(self::tabla(), ['id' => (int) $sor->id]);
+        }
+
+        return $db;
+    }
+
+    /** A tárolt fájl útja a szerveren (a PDF-be rajzoláshoz), vagy ''. */
+    public static function fajl_ut(object $sor): string
+    {
+        $tarolt = (string) ($sor->tarolt_nev ?? '');
+
+        if (!self::tarolt_nev_ervenyes($tarolt)) {
+            return '';
+        }
+
+        $ut = self::mappa() . '/' . $tarolt;
+
+        return is_file($ut) ? $ut : '';
     }
 
     private static function fajl_torol(string $tarolt): void
