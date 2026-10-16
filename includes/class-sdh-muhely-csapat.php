@@ -248,7 +248,7 @@ final class SDH_Muhely_Csapat
     {
         if ($felhasznalo instanceof WP_User
             && user_can($felhasznalo, SDH_Muhely_Admin_UI::JOG)
-            && !user_can($felhasznalo, SDH_Muhely_Admin_UI::ADMIN_JOG)) {
+            && !user_can($felhasznalo, SDH_Muhely_Admin_UI::FEJLESZTO_JOG)) {
             return SDH_Muhely_Modulok::frontend_url();
         }
 
@@ -258,7 +258,7 @@ final class SDH_Muhely_Csapat
     /** A kolléga nem a WordPress-adminban dolgozik: onnan a műhelybe kerül. */
     public static function admin_kizar(): void
     {
-        if (wp_doing_ajax() || !is_user_logged_in() || SDH_Muhely_Admin_UI::admin_e()) {
+        if (wp_doing_ajax() || !is_user_logged_in() || SDH_Muhely_Admin_UI::fejleszto_e()) {
             return;
         }
 
@@ -286,7 +286,7 @@ final class SDH_Muhely_Csapat
 
     public static function admin_sav(bool $mutat): bool
     {
-        return current_user_can(SDH_Muhely_Admin_UI::ADMIN_JOG) ? $mutat : false;
+        return SDH_Muhely_Admin_UI::fejleszto_e() ? $mutat : false;
     }
 
     /* =================================================================
@@ -387,7 +387,7 @@ final class SDH_Muhely_Csapat
         }
 
         $felhasznalok = get_users([
-            'role__in' => ['administrator', self::SZEREP],
+            'role__in' => ['administrator', SDH_Muhely_Admin_UI::ADMIN_SZEREP, self::SZEREP],
             'orderby'  => 'display_name',
             'order'    => 'ASC',
         ]);

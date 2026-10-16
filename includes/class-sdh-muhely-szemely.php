@@ -575,7 +575,7 @@ final class SDH_Muhely_Szemely
             if ($b['be'] && $kizart !== [] && self::admin_szemelyek() === []) :
                 ?>
                 <div class="sdh-uzenet sdh-uzenet--hiba">
-                    A(z) <?php echo esc_html(implode(', ', $kizart)); ?> adminisztrátori közös fiók, de nincs <strong>Admin</strong> szerepű (vagy WP-adminisztrátor) dolgozó,
+                    A(z) <?php echo esc_html(implode(', ', $kizart)); ?> adminisztrátori közös fiók, de nincs <strong>Admin</strong> szerepű dolgozó,
                     ezért a választó azon a fiókon <strong>nem jelenik meg</strong> – így nem zárhatod ki magad. Adj egy dolgozónak Admin szerepet (fent, „Ki melyik szerepben?”).
                 </div>
             <?php endif; ?>

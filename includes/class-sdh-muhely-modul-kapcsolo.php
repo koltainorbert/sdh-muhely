@@ -39,6 +39,7 @@ final class SDH_Muhely_Modul_Kapcsolo
             'render'     => [self::class, 'oldal'],
             'sorrend'    => 96,
             'csak_admin' => true,
+            'csak_fejleszto' => true,
         ]);
 
         // Az őr az admin_init legelején fut: az admin-ajax.php és az admin-post.php is ezen megy át.
@@ -183,7 +184,7 @@ final class SDH_Muhely_Modul_Kapcsolo
 
     public static function mentes(): void
     {
-        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
+        SDH_Muhely_Admin_UI::fejleszto_jog_ellenoriz();
         check_admin_referer('sdh_muhely_modulok', 'sdh_nonce');
 
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- fent ellenőrizve.
@@ -231,7 +232,7 @@ final class SDH_Muhely_Modul_Kapcsolo
 
     public static function zar_mentes(): void
     {
-        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
+        SDH_Muhely_Admin_UI::fejleszto_jog_ellenoriz();
         check_admin_referer('sdh_muhely_modulok_zar', 'sdh_nonce');
 
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- fent ellenőrizve.
@@ -264,7 +265,7 @@ final class SDH_Muhely_Modul_Kapcsolo
 
     public static function oldal(): void
     {
-        SDH_Muhely_Admin_UI::admin_jog_ellenoriz();
+        SDH_Muhely_Admin_UI::fejleszto_jog_ellenoriz();
 
         $katalogus = SDH_Muhely_Modulok::katalogus();
         $ki        = SDH_Muhely_Modulok::kikapcsoltak();

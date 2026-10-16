@@ -331,8 +331,8 @@ final class SDH_Muhely_Frissites
     {
         check_ajax_referer('sdh_muhely_modal');
 
-        if (!SDH_Muhely_Admin_UI::admin_e()) {
-            wp_send_json_error(['uzenet' => 'Ehhez adminisztrátori jog kell.'], 403);
+        if (!SDH_Muhely_Admin_UI::fejleszto_e()) {
+            wp_send_json_error(['uzenet' => 'Ehhez fejlesztői jog kell.'], 403);
         }
     }
 

@@ -29,7 +29,14 @@ final class SDH_Muhely_Admin_UI
     public const JOG = 'sdh_muhely_hasznal';
 
     /** Beállítások, karbantartás, kollégák kezelése: csak adminisztrátor. */
-    public const ADMIN_JOG = 'manage_options';
+    /** A rendszer adminisztrátora (plugin-beállítások): a fejlesztő és az „SDH adminisztrátor" szerep. */
+    public const ADMIN_JOG = 'sdh_muhely_admin';
+
+    /** A fejlesztő: a teljes WordPress-adminisztráció (csak ő látja, hogy ez WordPress). */
+    public const FEJLESZTO_JOG = 'manage_options';
+
+    /** A WP-szerep, amely a rendszer adminisztrátorának jár, de a WordPress-adminba nem léphet. */
+    public const ADMIN_SZEREP = 'sdh_admin';
 
     public static function init(): void
     {
@@ -47,6 +54,12 @@ final class SDH_Muhely_Admin_UI
         // ha a szerepkörébe valamiért nem íródott be a jog); a letiltott
         // kollégától a jog elvész.
         add_filter('user_has_cap', [self::class, 'jog_szuro'], 10, 4);
+
+        // A bejelentkező képernyő sem mondja meg, hogy WordPress (csak a fejlesztő tudja).
+        add_filter('login_headerurl', static fn (): string => home_url('/'));
+        add_filter('login_headertext', static fn (): string => (string) get_bloginfo('name'));
+        add_filter('login_title', static fn ($cim, $tovabb = ''): string => (string) get_bloginfo('name'), 10, 2);
+        add_action('login_enqueue_scripts', [self::class, 'belepo_arculat']);
         add_action('init', [self::class, 'jog_telepit'], 5);
     }
 
@@ -58,8 +71,14 @@ final class SDH_Muhely_Admin_UI
      */
     public static function jog_szuro(array $osszes, array $kert, array $args, $felhasznalo): array
     {
-        if (!in_array(self::JOG, $kert, true)) {
+        if (!in_array(self::JOG, $kert, true) && !in_array(self::ADMIN_JOG, $kert, true)) {
             return $osszes;
+        }
+
+        // A fejlesztő (WP-adminisztrátor) a rendszernek is adminisztrátora.
+        if (!empty($osszes[self::FEJLESZTO_JOG])) {
+            $osszes[self::JOG]       = true;
+            $osszes[self::ADMIN_JOG] = true;
         }
 
         if (!empty($osszes[self::ADMIN_JOG])) {
@@ -75,20 +94,41 @@ final class SDH_Muhely_Admin_UI
         return $osszes;
     }
 
+    /** A bejelentkező képernyőn a WordPress-logó helyett a rendszer neve áll. */
+    public static function belepo_arculat(): void
+    {
+        echo '<style id="sdh-belepo">'
+            . '.login h1 a{background-image:none!important;width:auto!important;height:auto!important;'
+            . 'text-indent:0!important;font-size:1.6rem;font-weight:600;line-height:1.3;text-decoration:none;color:inherit}'
+            . '#backtoblog{display:none}'
+            . '</style>';
+    }
+
     /** Egyszer: az adminisztrátor szerepkör megkapja a használat jogát (a felhasználólisták miatt). */
     public static function jog_telepit(): void
     {
-        if (get_option('sdh_muhely_jog_telepitve') === self::JOG) {
+        // Az „SDH adminisztrátor": a rendszer minden beállítása, de nem a WordPress-admin.
+        if (get_role(self::ADMIN_SZEREP) === null) {
+            add_role(self::ADMIN_SZEREP, 'SDH adminisztrátor', ['read' => true, self::JOG => true, self::ADMIN_JOG => true]);
+        }
+
+        $jel = self::JOG . '+' . self::ADMIN_JOG;
+
+        if (get_option('sdh_muhely_jog_telepitve') === $jel) {
             return;
         }
 
         $szerep = get_role('administrator');
 
-        if ($szerep !== null && !$szerep->has_cap(self::JOG)) {
-            $szerep->add_cap(self::JOG);
+        if ($szerep !== null) {
+            foreach ([self::JOG, self::ADMIN_JOG] as $jog) {
+                if (!$szerep->has_cap($jog)) {
+                    $szerep->add_cap($jog);
+                }
+            }
         }
 
-        update_option('sdh_muhely_jog_telepitve', self::JOG);
+        update_option('sdh_muhely_jog_telepitve', $jel);
     }
 
     /**
@@ -250,6 +290,28 @@ final class SDH_Muhely_Admin_UI
     }
 
     /** Beállítások és karbantartás: csak adminisztrátor. */
+    /**
+     * A fejlesztő: aki a WordPress-adminba is bemehet. Közös fiókon a kiválasztott
+     * dolgozó is fejlesztő kell legyen (különben egy dolgozó a közös fejlesztői fiókkal bejutna).
+     */
+    public static function fejleszto_e(): bool
+    {
+        if (!current_user_can(self::FEJLESZTO_JOG)) {
+            return false;
+        }
+
+        $szemely = class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::aktiv_id() : 0;
+
+        return $szemely === 0 || user_can($szemely, self::FEJLESZTO_JOG);
+    }
+
+    public static function fejleszto_jog_ellenoriz(): void
+    {
+        if (!self::fejleszto_e()) {
+            wp_die(esc_html__('Ehhez fejlesztői jog kell.', 'sdh-muhely'), '', ['response' => 403]);
+        }
+    }
+
     public static function admin_e(): bool
     {
         // Közös adminisztrátori fiókon a kiválasztott dolgozó szerepe is dönt (H5).

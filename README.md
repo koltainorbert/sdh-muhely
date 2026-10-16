@@ -64,6 +64,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.76.0
+- **Három szint: fejlesztő – SDH adminisztrátor – a többi szerep.** A fejlesztő = a WP-adminisztrátor (`manage_options`): mindent lát. Új WP-szerep
+  `sdh_admin` („SDH adminisztrátor"): `sdh_muhely_hasznal` + `sdh_muhely_admin`, de nincs WordPress-adminisztráció. `ADMIN_JOG` mostantól
+  `sdh_muhely_admin` (a fejlesztő dinamikusan megkapja: `user_has_cap`), új `FEJLESZTO_JOG` = `manage_options`, `fejleszto_e()` (közös fiókon a
+  kiválasztott dolgozó is fejlesztő kell legyen). Csak a fejlesztőnek: Modulok oldal (`csak_fejleszto` a modul-katalógusban, `Modulok::lathato()` szűri),
+  a Frissítés doboz és AJAX, a Névjegy technikai sorai (WordPress, PHP). Az `sdh_admin` és a kolléga a wp-adminból a műhelybe kerül (`admin_kizar`,
+  `belepes_utan`), nincs admin sáv; a bejelentkező képernyőn nincs WordPress-logó / -szöveg (`login_headertext/url/title`).
+  Teszt: t70 (42). Következmény: a már bejegyzett (nem fejlesztő) WP-adminisztrátorokat a fejlesztő állítsa „SDH adminisztrátor" szerepre.
+  DB_VERSION változatlan (0.43.0).
+
 ### 0.75.1
 - **Javítás: az adminisztrátor nem zárhatja ki magát a közös fiókról.** (Eset: a közös fiókon a dolgozót a WP-ben adminisztrátorrá tették →
   eltűnt a „Ki vagy?" listáról, és a fiók nem volt használható.) A dolgozó a bejelentkezési neve (`sdh-dolgozo-…`) alapján akkor is dolgozó

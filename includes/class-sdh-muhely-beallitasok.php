@@ -333,7 +333,7 @@ final class SDH_Muhely_Beallitasok
                 'Minden állítható adat egy helyen, témánként külön lapfülön. Minden lapfül külön ment.'
             );
             ?>
-            <?php if ($ful !== 'rendszer' && SDH_Muhely_Frissites::ismert_ujabb() !== '' && !SDH_Muhely_Frissites::git_peldany()) : ?>
+            <?php if ($ful !== 'rendszer' && SDH_Muhely_Admin_UI::fejleszto_e() && SDH_Muhely_Frissites::ismert_ujabb() !== '' && !SDH_Muhely_Frissites::git_peldany()) : ?>
                 <p class="sdh-uzenet sdh-uzenet--figyelem">
                     Frissítés elérhető: <strong><?php echo esc_html(SDH_Muhely_Frissites::ismert_ujabb()); ?></strong> –
                     <a href="<?php echo esc_url(self::url('rendszer')); ?>">Beállítások › Névjegy</a>.
@@ -665,7 +665,12 @@ final class SDH_Muhely_Beallitasok
     /** Névjegy: verziók, címek, és ami internet nélkül is megy. */
     public static function rendszer_doboz(): void
     {
-        SDH_Muhely_Frissites::doboz();
+        $fejleszto = SDH_Muhely_Admin_UI::fejleszto_e();
+
+        // A frissítés és a technikai adatok a fejlesztőnek szólnak: az adminisztrátor nem tudja meg, mi fut alatta.
+        if ($fejleszto) {
+            SDH_Muhely_Frissites::doboz();
+        }
         ?>
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Verziók</h2>
@@ -675,8 +680,10 @@ final class SDH_Muhely_Beallitasok
                     <tr><th>Plugin verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
                     <tr><th>Séma verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>
                     <tr><th>Műhely-felület</th><td><code><?php echo esc_html(SDH_Muhely_Modulok::frontend_url()); ?></code></td></tr>
-                    <tr><th>WordPress</th><td><code><?php echo esc_html(get_bloginfo('version')); ?></code></td></tr>
-                    <tr><th>PHP</th><td><code><?php echo esc_html(PHP_VERSION); ?></code></td></tr>
+                    <?php if ($fejleszto) : ?>
+                        <tr><th>WordPress</th><td><code><?php echo esc_html(get_bloginfo('version')); ?></code></td></tr>
+                        <tr><th>PHP</th><td><code><?php echo esc_html(PHP_VERSION); ?></code></td></tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

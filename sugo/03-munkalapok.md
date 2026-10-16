@@ -100,6 +100,8 @@ Ha többen dolgoztok **egy fiókkal**, a rendszer nem tudná, ki mit csinált. E
 
 ## Szerepkörök és jogok
 
+**Három szint van.** A **fejlesztő** (a rendszer eredeti, teljes jogú fiókja) mindent lát, a háttérrendszer teljes adminisztrációját is, és csak ő éri el a **Modulok** oldalt, a **Frissítést** és a technikai adatokat (Névjegy). Az **adminisztrátor** a rendszer minden beállítását kezeli (Beállítások, Mentés, Napló, Jogosultságok), de a háttérrendszer adminisztrációja nem látszik neki: belépés után a műhelybe kerül, nincs admin sáv, és a bejelentkező képernyő sem árulja el, mi fut alatta. Az új adminisztrátor fiókot a fejlesztő hozza létre „SDH adminisztrátor" szereppel. A **többiek** (kolléga, pultos, szerelő, pénztáros…) az alábbi szerepkörök szerint dolgoznak.
+
 Nem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül tetején a **Szerepkörök és jogok** rács mutatja, melyik szerep mit tehet. Alapból öt szerep van: **Admin** (mindent), **Kolléga** (a régi állapot: mindent lát és csinál, a Beállításokon kívül), **Pultos**, **Szerelő** és **Pénztáros**. Bármelyik átírható, újat is felvehetsz (az új a Kolléga jogaival indul; törléséhez ürítsd ki a nevét – akié volt, kolléga lesz).
 
 - **Jogok** (jelölőnégyzet szerepenként): *Pénztárriport* (riport, statisztika, Excel-export és -import, egyeztető ügynök), *Árak és törzsek átírása* (termék- és szolgáltatás-törzs, árlista), *Számla kiállítása* (a valódi számla; az előnézet nem kell hozzá), *Törlés-szerű műveletek* (termék, pénztártétel törlése, pénztárnap és lezárt munkalap újranyitása, importált napló visszavonása, naptári bejegyzés és emlék törlése), *Beállítások, Mentés, Modulok, Napló*.

@@ -65,6 +65,11 @@ final class SDH_Muhely_Modulok
      */
     private static function lathato(array $modul): ?array
     {
+        // A csak fejlesztőnek szóló modul (Modulok: a telepítői zár, a kapcsolók) az adminisztrátornak sem látszik.
+        if (!empty($modul['csak_fejleszto']) && class_exists('SDH_Muhely_Admin_UI') && !SDH_Muhely_Admin_UI::fejleszto_e()) {
+            return null;
+        }
+
         // A szerepkör (H5): amit a tényleges személy szerepe nem enged, annak nincs menüpontja, csempéje, oldala.
         if (class_exists('SDH_Muhely_Szerepkor') && !SDH_Muhely_Szerepkor::modul_engedett((string) $modul['kulcs'])) {
             return null;

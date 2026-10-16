@@ -75,7 +75,7 @@ final class SDH_Muhely_Szerepkor
             ],
             'beallitasok' => [
                 'cim'    => 'Beállítások, Mentés, Modulok, Napló',
-                'leiras' => 'Csak adminisztrátori WordPress-fiókon él: közös adminisztrátori fiókon ez választja el az adminisztrátor dolgozót a többitől.',
+                'leiras' => 'Az adminisztrátor kapja; közös adminisztrátori fiókon ez választja el az Admin szerepű dolgozót a többitől. A Modulok oldalt és a frissítést csak a fejlesztő éri el.',
             ],
         ];
     }
@@ -475,7 +475,7 @@ final class SDH_Muhely_Szerepkor
                     <div class="sdh-kivagy-lista__sor">
                         <span><?php echo esc_html($p['nev']); ?> <small>(<?php echo esc_html($p['fajta']); ?>)</small></span>
                         <?php if (user_can($id, SDH_Muhely_Admin_UI::ADMIN_JOG)) : ?>
-                            <span>Admin (WordPress-adminisztrátor)</span>
+                            <span>Admin (fiókjából adódóan)</span>
                         <?php else : ?>
                             <select name="szemely_szerep[<?php echo (int) $id; ?>]" aria-label="Szerep – <?php echo esc_attr($p['nev']); ?>">
                                 <?php foreach ($szerepek as $slug => $sz) : ?>
@@ -489,7 +489,7 @@ final class SDH_Muhely_Szerepkor
                 <?php endforeach; ?>
             </div>
             <p class="sdh-sugo">
-                Adminisztrátor WordPress-fiók mindig admin; az ő szerepe itt nem állítható. Közös adminisztrátori fiókon az <strong>Admin</strong>
+                Az adminisztrátor fiókok mindig Adminok; az ő szerepük itt nem állítható. Közös adminisztrátori fiókon az <strong>Admin</strong>
                 szerepű dolgozó éri el a Beállításokat – ha nincs ilyen, a választó azon a fiókon nem jelenik meg (hogy senki ne zárhassa ki magát).
             </p>
         </div>

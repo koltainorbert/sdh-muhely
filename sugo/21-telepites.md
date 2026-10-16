@@ -99,6 +99,8 @@ A naptár e-mail értesítései a WordPress időzített feladataival (WP-Cron) f
 
 ## Frissítés egy kattintással (GitHubról)
 
+**Csak a fejlesztőnek látszik** (a teljes jogú fiók): az adminisztrátor és a többi szerep nem látja a Frissítés dobozt és az értesítő sávot.
+
 A rendszer magától megnézi, van-e újabb verzió a GitHubon (kb. félnaponta, és amikor te kéred). Ha van, a **Beállítások** minden lapfülének tetején megjelenik: **Frissítés elérhető: …**, a WordPress **Bővítmények** oldalán pedig a szokásos „Új verzió érhető el” jelzés.
 
 ### Lépésről lépésre: frissítés a gombbal
