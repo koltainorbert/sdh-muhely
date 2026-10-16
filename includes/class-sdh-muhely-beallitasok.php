@@ -168,6 +168,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A Megjegyzés lapfülön popupból választható, előre megírt megjegyzések.',
                 'rajz' => $munkalap('gyakori-megjegyzesek'), 'ment' => [SDH_Muhely_Munkalap::class, 'beallitas_mentes'],
             ],
+            'garancia' => [
+                'cim' => 'Javítási garancia', 'csoport' => 'munkalap',
+                'leiras' => 'A lezárt javításra vállalt garancia napjai, és a visszatérő készülék jelzése a munkalapon.',
+                'rajz' => [SDH_Muhely_Garancia::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Garancia::class, 'beallitas_mentes'],
+            ],
             'zarolas' => [
                 'cim' => 'Lezárt lapok', 'csoport' => 'munkalap',
                 'leiras' => 'A lezárt lap csak újranyitás után szerkeszthető; kötelező-e megadni az újranyitás okát.',

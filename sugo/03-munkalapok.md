@@ -3,8 +3,8 @@ kulcs: munkalapok
 cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
-szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas, jogosultsagok
-kulcsszavak: szerepkör, szerep, jogosultság, jog, pultos, szerelő, pénztáros, kolléga, tiltott, nincs jogod, közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, garancia, zarolas, jogosultsagok
+kulcsszavak: javítási garancia, garancia, garanciális, jótállás, visszajött, visszatérés, garanciális visszatérés, ismét hozta, újra hozta, lejárat, szerepkör, szerep, jogosultság, jog, pultos, szerelő, pénztáros, kolléga, tiltott, nincs jogod, közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -342,6 +342,32 @@ Több eszköznél eszközönként egy címke készül; amelyik nem kell, annál 
 
 A címke csak akkor készül el, amikor a lap **munkalapszámot kapott**. Az RMA lapfül új lapnál a mentés után érhető el. Ugyanitt írhatsz üzenetet az ügyfélnek, és látod az **Állapottörténetet**.
 
+## Javítási garancia
+
+A lezárt javításra a szerviz garanciát vállal. Alapból a **Beállítások › Javítási garancia** napjai érvényesek (gyárilag 180 nap); egy lapon a **Dátumok** alatti **Javítási garancia** csoportban felülírható (0 = nincs garancia). A garancia a **lezárás napjától** számít; lezárt lapnál ugyanitt látszik a **Lejár** dátuma, és a nyomtatványokon is megjelenik („Garancia: 180 nap, … -ig”).
+
+### Ha a készülék visszajön
+
+Az új munkalapon, amint kiválasztod az eszközt, az **Eszköz** lapfül kártyája alatt jelzés áll:
+
+- hány munkalapon szerepelt már a készülék (és melyik a legutóbbi);
+- ha még **garanciában** van: melyik lap garanciája, és meddig.
+
+Ilyenkor kattints a **Garanciális visszatérésként rögzítem** gombra. Az új lap az eredeti **garanciális visszatérése** lesz: a Javítási garancia csoportban ez látszik („az eredeti lap: …”), az eredeti lapon pedig a visszatérései sorakoznak. A gomb még egyszer megnyomva visszavonja.
+
+Jó tudni:
+
+- A visszatérés **új lap**: az eredeti lap, a számlája és a pénztára érintetlen marad. A díjat te döntöd el (garanciális javításnál jellemzően nincs).
+- A visszatérés **nem hosszabbítja** a garanciát: a láncban mindig az eredeti lap garanciája számít.
+- A visszajövések számát a riport mutatja (javítási arány).
+
+### Beállítások › Javítási garancia
+
+| Mező | Mire való |
+|---|---|
+| **Alap garancia (nap)** | A lezárt javításra vállalt garancia napjai. Pl. 90, 180, 365. A jogszabályi jótállási időt ellenőrizd, és ahhoz igazítsd. |
+| **Visszatérő készülék jelzése** | Ki-be kapcsolja az Eszköz lapfül jelzését. |
+
 ## Lezárt lap zárolása
 
 A lezárt állapotú lap (**Lezárt**, **Érvénytelen** – minden, ami a **Beállítások › Állapotok** listájában `zart` jelzős) **csak olvasható**:
@@ -496,6 +522,14 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - **„Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.”** – Eszközt csak kiválasztott ügyfél mellé lehet csatolni.
 
 ## GYIK
+
+### Visszahozták a készüléket a javítás után. Mit csináljak?
+
+Vegyél fel új munkalapot, és válaszd ki a készüléket. Ha még garanciában van, az **Eszköz** lapfülön kattints a **Garanciális visszatérésként rögzítem** gombra: az új lap az eredeti visszatérése lesz.
+
+### Hol állítom, hány nap garanciát adunk?
+
+**Beállítások › Javítási garancia** – az alapérték. Egy lapon a **Javítási garancia** csoportban felülírható (0 = nincs).
 
 ### Miért nem tudom szerkeszteni a lezárt lapot?
 

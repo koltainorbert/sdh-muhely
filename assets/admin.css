@@ -10431,3 +10431,44 @@ button.sdh-allapot,
 .sdh-anonim-sav {
     margin-bottom: calc(10px * var(--sdh-n));
 }
+
+/* ================================================================== */
+/* F1 (0.83.0) – javítási garancia a munkalapon                         */
+/* ================================================================== */
+
+.sdh-ml-garancia input[type="number"] {
+    max-width: 6rem;
+}
+
+.sdh-ml-garancia__elozo,
+.sdh-ml-garancia__vissza {
+    margin: calc(6px * var(--sdh-n)) 0 0;
+    padding: calc(6px * var(--sdh-n)) calc(8px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    background: color-mix(in srgb, var(--sdh-figyelem) 12%, transparent);
+    font-size: calc(12px * var(--sdh-n));
+    line-height: 1.45;
+}
+
+.sdh-ml-garancia-jel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(6px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    margin: calc(8px * var(--sdh-n)) calc(12px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    padding: calc(8px * var(--sdh-n)) calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet-2, var(--sdh-felulet));
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-ml-garancia-jel.is-garancialis {
+    border-color: color-mix(in srgb, var(--sdh-figyelem) 55%, var(--sdh-keret));
+    background: color-mix(in srgb, var(--sdh-figyelem) 10%, var(--sdh-felulet));
+}
+
+.sdh-ml-garancia-jel .sdh-gomb.is-aktiv {
+    border-color: var(--sdh-siker);
+    color: var(--sdh-siker);
+}

@@ -12025,3 +12025,76 @@
     }
 
 }());
+
+/* Javítási garancia (F1, 0.83.0): a munkalap Eszköz lapfülén a „Garanciális visszatérésként rögzítem”
+   gomb az űrlap rejtett mezőjébe írja az eredeti lap azonosítóját (mentéskor kerül a lapra). */
+(function () {
+    'use strict';
+
+    function frissit(gomb, urlap) {
+        var mezo = urlap.querySelector('[data-sdh-garancia-elozo-mezo]');
+        var sav = urlap.querySelector('[data-sdh-garancia-elozo-sav]');
+        var id = gomb.getAttribute('data-sdh-garancia-elozo');
+        var be = mezo && mezo.value === id;
+
+        gomb.textContent = be ? 'Garanciális visszatérés ✓ (visszavonás)' : 'Garanciális visszatérésként rögzítem';
+        gomb.classList.toggle('is-aktiv', be);
+
+        if (sav) {
+            sav.hidden = !(mezo && mezo.value !== '0' && mezo.value !== '');
+
+            if (be) {
+                sav.textContent = 'Garanciális visszatérés – az eredeti lap: ' + (gomb.getAttribute('data-sdh-garancia-felirat') || '');
+            }
+        }
+    }
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-garancia-elozo]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var urlap = gomb.closest('form');
+        var mezo = urlap && urlap.querySelector('[data-sdh-garancia-elozo-mezo]');
+
+        if (!mezo) {
+            return;
+        }
+
+        mezo.value = mezo.value === gomb.getAttribute('data-sdh-garancia-elozo') ? '0' : gomb.getAttribute('data-sdh-garancia-elozo');
+        mezo.dispatchEvent(new Event('change', { bubbles: true }));
+        frissit(gomb, urlap);
+    });
+
+    // A lap a saját garanciájára nem lehet visszatérés: ott a gomb nem kell; a többinél az állapotot mutatja.
+    function rendez(gyoker) {
+        Array.prototype.forEach.call(gyoker.querySelectorAll('[data-sdh-garancia-elozo]'), function (gomb) {
+            var urlap = gomb.closest('form');
+            var sajat = urlap && urlap.querySelector('input[name="id"]');
+
+            if (sajat && sajat.value === gomb.getAttribute('data-sdh-garancia-elozo')) {
+                gomb.hidden = true;
+
+                return;
+            }
+
+            if (urlap) {
+                frissit(gomb, urlap);
+            }
+        });
+    }
+
+    new MutationObserver(function (valtozasok) {
+        valtozasok.forEach(function (v) {
+            Array.prototype.forEach.call(v.addedNodes, function (n) {
+                if (n.nodeType === 1 && (n.matches('[data-sdh-garancia-jel]') || n.querySelector('[data-sdh-garancia-jel]'))) {
+                    rendez(n.parentNode || n);
+                }
+            });
+        });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+}());

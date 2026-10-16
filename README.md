@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.83.0
+- **F1 – javítási garancia** (új `SDH_Muhely_Garancia`). Új oszlopok: `munkalap.garancia_nap` (NULL = a beállítás) és
+  `garancia_elozo` – **DB_VERSION 0.46.0**. Beállítások › **Javítási garancia** (alap 180 nap, visszatérő készülék jelzése).
+  A garancia a lezárás napjától számít, csak javításnál; a munkalap Dátumok alatti csoportjában a napok és a lejárat, a
+  nyomtatványon „Garancia: N nap, … -ig” (`{garancia}` jelölő is).
+- Visszatérő készülék: az Eszköz lapfül kártyáján (`ajax_osszefoglalo`) jelzés – hány lapon szerepelt, garanciában van-e – és a
+  **Garanciális visszatérésként rögzítem** gomb (app.js: rejtett `garancia_elozo` mező). A visszatérés új lap; az eredetin a
+  visszatérései. Láncban mindig az eredeti lap garanciája számít. AJAX: `sdh_muhely_garancia_eszkoz`. Súgó: 3. fejezet. Teszt: t75.
+
 ### 0.82.1
 - **H9 – tesztkörnyezet.** `tesztek/futtat.php`: **tiszta adatbázis minden tesztnél** SQLite-os tesztoldalon
   (`SDH_TESZT_DB` + `SDH_TESZT_ALAP`: az első futás elmenti az alapot, utána minden tesztfájl előtt az kerül vissza).

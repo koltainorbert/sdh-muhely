@@ -3622,6 +3622,8 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
+                    <?php echo !$eladas && class_exists('SDH_Muhely_Garancia') ? SDH_Muhely_Garancia::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F1). ?>
+
                     <div class="sdh-ml__csoport sdh-ml__csoport--osszeg"<?php echo $ub('osszeg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Összeg</h3>
 
@@ -4204,6 +4206,11 @@ final class SDH_Muhely_Munkalap
                     echo '<div class="sdh-ml-kartya__torzs">' . SDH_Muhely_Mockup::html($egy, 'l', 'sdh-ml-kartya__kep'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
                     $eszkoz_adatok($egy);
                     echo '</div>';
+
+                    // Visszatérő készülék, garancia (F1) – a fő eszköznél.
+                    if ($i === 0 && class_exists('SDH_Muhely_Garancia')) {
+                        echo SDH_Muhely_Garancia::eszkoz_jelzes((int) $egy->id); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML.
+                    }
                 } else {
                     echo '<p class="sdh-ml-kartya__ures">'
                         . esc_html($ugyfel ? 'Válassz eszközt a fenti mezőben – az adatai itt jelennek meg.' : 'Előbb válassz ügyfelet, utána eszközt.')
@@ -4849,6 +4856,11 @@ final class SDH_Muhely_Munkalap
 
         if ($eladas && class_exists('SDH_Muhely_Eladas')) {
             $sajat += SDH_Muhely_Eladas::bekuldott_mezok($fajta, $regi);
+        }
+
+        // Javítási garancia (F1): a lap napjai és a garanciális visszatérés előzménye.
+        if (class_exists('SDH_Muhely_Garancia')) {
+            $sajat += SDH_Muhely_Garancia::bekuldott($regi, $fajta);
         }
 
         return $sajat + [

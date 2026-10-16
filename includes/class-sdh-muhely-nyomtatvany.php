@@ -184,6 +184,7 @@ final class SDH_Muhely_Nyomtatvany
             '{eszkoz}'    => (string) ($d['eszkoz_nev'] ?? ''),
             '{datum}'     => wp_date('Y. m. d.'),
             '{hatarido}'  => (string) ($d['hatarido'] ?? ''),
+            '{garancia}'  => (string) ($d['garancia'] ?? ''),
             '{vegosszeg}' => isset($d['brutto']) ? self::ft((float) $d['brutto']) : '',
             '{fizetendo}' => isset($d['fizetendo']) ? self::ft((float) $d['fizetendo']) : '',
             '{eloleg}'    => isset($d['fizetett']) ? self::ft((float) $d['fizetett']) : '',
@@ -331,6 +332,10 @@ final class SDH_Muhely_Nyomtatvany
             'felveve'     => self::nap((string) ($m->keszult ?: $m->letrehozva)),
             'hatarido'    => self::nap((string) $m->hatarido),
             'lezarva'     => self::nap((string) $m->lezarva),
+            // F1 (0.83.0): a javítási garancia vége (lezárt javítási lapnál).
+            'garancia'    => class_exists('SDH_Muhely_Garancia') && SDH_Muhely_Garancia::lejar($m) !== ''
+                ? SDH_Muhely_Garancia::nap($m) . ' nap, ' . self::nap(SDH_Muhely_Garancia::lejar($m)) . '-ig'
+                : '',
             'felelos'     => SDH_Muhely_Munkalap::felelos_nev((int) $m->felelos),
             'allapot_nev' => (string) ($allapotok[(string) $m->allapot]['nev'] ?? $m->allapot),
             'helyszin'    => $helyszin,
@@ -481,6 +486,10 @@ final class SDH_Muhely_Nyomtatvany
 
         if (!empty($d['ervenyes'])) {
             $adatok[] = ['Érvényes:', (string) $d['ervenyes']];
+        }
+
+        if (!empty($d['garancia'])) {
+            $adatok[] = ['Garancia:', (string) $d['garancia']];
         }
 
         if (!empty($s['allapot']) && (string) $d['allapot_nev'] !== '') {
