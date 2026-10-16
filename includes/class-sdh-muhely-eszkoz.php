@@ -550,6 +550,7 @@ final class SDH_Muhely_Eszkoz
 
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($eszkoz->id ?? 0); ?>">
+        <?php SDH_Muhely_Utkozes::mezok('eszkoz', (int) ($eszkoz->id ?? 0)); ?>
         <input type="hidden" name="kontextus" value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <input type="hidden" name="kep_url" data-sdh-kep-mezo value="<?php echo esc_attr($ert('kep_url')); ?>">
         <?php wp_nonce_field('sdh_muhely_eszkoz_mentes', 'sdh_nonce'); ?>
@@ -1118,7 +1119,16 @@ final class SDH_Muhely_Eszkoz
         }
 
         $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-        $adatok = self::adatok_osszeallit();
+
+        // Párhuzamos szerkesztés (0.70.0): ha közben más módosította az eszközt, a mentés nem fut le.
+        $utkozes = SDH_Muhely_Utkozes::ellenoriz('eszkoz', $id);
+
+        if ($utkozes !== null) {
+            wp_send_json_error($utkozes, 409);
+        }
+
+        $szerk_naplo = SDH_Muhely_Utkozes::alap();
+        $adatok      = self::adatok_osszeallit();
 
         if (self::ugyfel_hibas((int) $adatok['ugyfel_id'])) {
             wp_send_json_error([
@@ -1158,6 +1168,7 @@ final class SDH_Muhely_Eszkoz
             'id'         => $uj_id,
             'ugyfel_id'  => $ugyfel_id,
             'ugyfel_nev' => SDH_Muhely_Ugyfel::nev($ugyfel_id),
+            'szerk_naplo' => $szerk_naplo,
             'vissza'     => self::vissza(['uzenet' => $uzenet]),
         ]);
     }

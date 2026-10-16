@@ -1084,6 +1084,7 @@ final class SDH_Muhely_Ugyfel
 
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($ugyfel->id ?? 0); ?>">
+        <?php SDH_Muhely_Utkozes::mezok('ugyfel', (int) ($ugyfel->id ?? 0)); ?>
         <input type="hidden" name="kontextus"
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
@@ -1563,7 +1564,16 @@ final class SDH_Muhely_Ugyfel
         }
 
         $id     = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-        $adatok = self::adatok_osszeallit();
+
+        // Párhuzamos szerkesztés (0.70.0): ha közben más módosította az ügyfelet, a mentés nem fut le.
+        $utkozes = SDH_Muhely_Utkozes::ellenoriz('ugyfel', $id);
+
+        if ($utkozes !== null) {
+            wp_send_json_error($utkozes, 409);
+        }
+
+        $szerk_naplo = SDH_Muhely_Utkozes::alap();
+        $adatok      = self::adatok_osszeallit();
 
         if ($adatok['nev'] === '') {
             wp_send_json_error(['uzenet' => 'A név kitöltése kötelező.']);
@@ -1599,6 +1609,7 @@ final class SDH_Muhely_Ugyfel
         wp_send_json_success([
             'id'     => $uj_id,
             'nev'    => (string) $adatok['nev'],
+            'szerk_naplo' => $szerk_naplo,
             'vissza' => self::vissza(['uzenet' => $uzenet]),
         ]);
     }

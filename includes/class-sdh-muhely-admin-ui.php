@@ -413,6 +413,10 @@ final class SDH_Muhely_Admin_UI
         wp_enqueue_style('sdh-muhely-gyorsitas', SDH_MUHELY_URL . 'assets/gyorsitas.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/gyorsitas.css'));
         wp_enqueue_script('sdh-muhely-gyorsitas', SDH_MUHELY_URL . 'assets/gyorsitas.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/gyorsitas.js'), true);
 
+        // Párhuzamos szerkesztés (0.70.0): ütközés-jelzés és „X is szerkeszti" – minden oldalon (a pulzus futásidőben kéri tőle az adatot, a sorrend mindegy).
+        wp_enqueue_style('sdh-muhely-utkozes', SDH_MUHELY_URL . 'assets/utkozes.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/utkozes.css'));
+        wp_enqueue_script('sdh-muhely-utkozes', SDH_MUHELY_URL . 'assets/utkozes.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/utkozes.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(

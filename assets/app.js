@@ -989,6 +989,13 @@
                         gomb.textContent = eredetiFelirat;
                     }
 
+                    // Közben más módosította (0.70.0): az ütközés-sáv (utkozes.js) kínálja a frissítést vagy a felülírást.
+                    if (eredmeny && eredmeny.data && eredmeny.data.utkozes) {
+                        utkozesJelez(urlap, eredmeny.data, 'kuldes', n);
+
+                        return;
+                    }
+
                     mutatUrlapHiba(
                         urlap,
                         (eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'A mentés nem sikerült.'
@@ -1214,6 +1221,14 @@
                         return;
                     }
 
+                    // Közben más módosította (0.70.0): nincs csendes felülírás – az ütközés-sáv (utkozes.js) kínálja a döntést.
+                    if (eredmeny && eredmeny.data && eredmeny.data.utkozes) {
+                        automentesJelzo(a.urlap, 'Nincs mentve – közben más módosította', 'hiba');
+                        utkozesJelez(a.urlap, eredmeny.data, 'auto', n);
+
+                        return;
+                    }
+
                     automentesJelzo(a.urlap, 'Nincs mentve: ' + ((eredmeny && eredmeny.data && eredmeny.data.uzenet) || 'hiba'), 'hiba');
 
                     return;
@@ -1248,7 +1263,7 @@
                 automentesJelzo(a.urlap, 'Mentve ' + ('0' + most.getHours()).slice(-2) + ':' + ('0' + most.getMinutes()).slice(-2), 'kesz');
 
                 document.dispatchEvent(new CustomEvent('sdh:automentve', {
-                    detail: { action: a.akcio, adat: eredmeny.data || {}, id: a.id }
+                    detail: { action: a.akcio, adat: eredmeny.data || {}, id: a.id, urlap: a.urlap }
                 }));
 
                 // Közben újra változott: előbb az is mentődjön, a frissítés utána jön.
@@ -1274,6 +1289,22 @@
                 a.fut = false;
                 automentesJelzo(a.urlap, 'Nincs mentve: ' + hiba.message, 'hiba');
             });
+    }
+
+    /**
+     * Párhuzamos szerkesztés (0.70.0): a szerver ütközést jelzett (más módosította a rekordot).
+     * Az `sdh:utkozes` eseményt az utkozes.js rajzolja ki (sáv, két kétlépcsős gomb); a `frissit`
+     * a legfrissebb állapotot tölti be (a saját, még nem mentett változtatások elvesznek).
+     */
+    function utkozesJelez(urlap, adat, forras, n) {
+        document.dispatchEvent(new CustomEvent('sdh:utkozes', {
+            detail: {
+                urlap: urlap,
+                adat: adat,
+                forras: forras,
+                frissit: function () { csendesFrissit(n, true); }
+            }
+        }));
     }
 
     /** A nyitott űrlap újratöltése „Betöltés…" nélkül – ha közben nem változott. */

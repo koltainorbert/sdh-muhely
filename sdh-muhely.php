@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.68.3
+ * Version:           0.70.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.68.3');
+define('SDH_MUHELY_VERSION', '0.70.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -88,6 +88,8 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-emlek.php'           => 'SDH_Muhely_Emlek',
     // Napló menüpont, a rekordok Napló ablaka, Beállítások › Változásnapló / Lezárt lapok (0.59).
     'includes/class-sdh-muhely-naplo-felulet.php'   => 'SDH_Muhely_Naplo_Felulet',
+    // Párhuzamos szerkesztés (0.70.0): „közben módosította" és „X is szerkeszti" – a Változásnaplóra és a pulzusra épül.
+    'includes/class-sdh-muhely-utkozes.php'         => 'SDH_Muhely_Utkozes',
     // Brother RMA-matrica (0.59): címkenyomtató, böngészőből (PDF) vagy közvetlenül hálózaton.
     'includes/class-sdh-muhely-matrica.php'         => 'SDH_Muhely_Matrica',
     // Modulok (0.58): a fő funkciók ki- és bekapcsolása, telepítői zár; az AJAX-őr.

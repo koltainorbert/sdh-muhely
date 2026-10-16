@@ -161,7 +161,10 @@
             return;
         }
 
-        kerdes('pulzus', { utana: utana })
+        // 0.70.0: a nyitott űrlapok (munkalap, ügyfél, eszköz) is mennek a pulzussal – így látszik, ki szerkeszti még (utkozes.js).
+        var szerk = window.SDH_UTKOZES && window.SDH_UTKOZES.pulzusAdat ? window.SDH_UTKOZES.pulzusAdat() : {};
+
+        kerdes('pulzus', Object.assign({ utana: utana }, szerk))
             .then(function (d) {
                 jelveny(d.olvasatlan);
 

@@ -3486,6 +3486,7 @@ final class SDH_Muhely_Munkalap
 
         ?>
         <input type="hidden" name="id" value="<?php echo (int) ($munkalap->id ?? 0); ?>">
+        <?php SDH_Muhely_Utkozes::mezok('munkalap', (int) ($munkalap->id ?? 0)); ?>
         <input type="hidden" name="fajta" value="<?php echo esc_attr($fajta); ?>">
         <input type="hidden" name="kontextus"
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
@@ -5350,6 +5351,17 @@ final class SDH_Muhely_Munkalap
         }
 
         $id       = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+
+        // Párhuzamos szerkesztés (0.70.0): ha közben más módosította a lapot, a mentés nem fut le.
+        $utkozes = SDH_Muhely_Utkozes::ellenoriz('munkalap', $id);
+
+        if ($utkozes !== null) {
+            wp_send_json_error($utkozes, 409);
+        }
+
+        // A mentés előtti naplóállás lesz az új alap: a saját módosításaink ennél újabbak, de a sajátunk nem ütközés.
+        $szerk_naplo = SDH_Muhely_Utkozes::alap();
+
         // A mentés előtti állapot: a pénztár ebből látja, most lett-e fizetve / nőtt-e az előleg.
         $elotte   = $id > 0 ? self::egy($id) : null;
         $eredmeny = self::feldolgoz($id);
@@ -5374,6 +5386,7 @@ final class SDH_Muhely_Munkalap
         // A lista oldalára térünk vissza, hogy a változás rögtön látszódjon.
         wp_send_json_success([
             'id'     => $uj_id,
+            'szerk_naplo' => $szerk_naplo,
             // Az új tétel- és hibasorok azonosítója (űrlapkulcs => id) – az automatikus mentés visszaírja.
             'uj_sorok' => (object) SDH_Muhely_Tetel::$uj_azonositok,
             // Van-e most keletkezett nyomtatási ajánlat (új lap, lezárás): a böngésző csak ekkor kérdez rá.

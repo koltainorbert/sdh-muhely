@@ -1,0 +1,42 @@
+/* Párhuzamos szerkesztés (0.70.0, H1): „közben módosította" sáv és „X is szerkeszti" jelzés. */
+
+.sdh-utkozes-sav {
+    display: grid;
+    gap: .6rem;
+    margin: 0 0 1rem;
+}
+
+.sdh-utkozes-sav__szoveg {
+    margin: 0;
+}
+
+.sdh-utkozes-sav__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.sdh-utkozes-sav__gombok .sdh-gomb[data-sdh-biztos="1"] {
+    border-color: var(--sdh-figyelem);
+    color: var(--sdh-figyelem);
+}
+
+/* Az űrlap láblécében, az automatikus mentés jelzője mellett. */
+.sdh-szerk-jelzo {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-right: .75rem;
+    color: var(--sdh-figyelem);
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sdh-szerk-jelzo::before {
+    content: "";
+    width: calc(8px * var(--sdh-n));
+    height: calc(8px * var(--sdh-n));
+    border-radius: 50%;
+    background: var(--sdh-figyelem);
+}

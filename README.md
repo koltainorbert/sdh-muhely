@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.70.0
+- **Párhuzamos szerkesztés védelme (HIBALISTA H1).** Munkalap, ügyfél és eszköz űrlapja alapot (`szerk_naplo`: a
+  Változásnapló vége) kap; mentéskor (gombbal és automentéssel is) a szerver megnézi, írt-e **másik belépett
+  felhasználó** ugyanerre a rekordra azóta (`SDH_Muhely_Utkozes::ellenoriz`, a Változásnapló mezőmódosításai;
+  az esemény, a rendszer és az ügyfél írása nem ütközés). Ütközésnél a mentés **nem fut le** (409), a válasz megnevezi,
+  ki és mikor; az űrlap tetején sáv két **kétlépcsős** gombbal: *Frissítés a legújabbra* / *Az enyémet mentsd*
+  (felülírás, `szerk_felulir=1`). Sikeres mentés új alapot ad. **„X is szerkeszti”**: a nyitott űrlapok a közös
+  pulzussal (`szerk`, `szerk_el`) jelentkeznek, a jelenlét 75 mp-re szóló átmeneti adat (nem kerül a naplóba), a jelzés az
+  űrlap láblécében; megnyitáskor és bezáráskor azonnali pulzus. Új: `class-sdh-muhely-utkozes.php`, `assets/utkozes.js|css`.
+  Nincs séma-változás (DB_VERSION marad). Korlát: közös fióknál két gép nem különböztethető meg (H2); a bezáráskor
+  elküldött utolsó (keepalive) mentés ütközésnél csendben elmarad. t64.
+
 ### 0.68.3
 - **Nyomtatás felajánlása: látszik a „Bezárás" felirata.** Egy nyomtatás vagy számla után a „Most nem" gomb
   „Bezárás"-ra vált és kiemelt lesz; eddig a világos háttér maradt rajta, így a fehér felirat eltűnt. A gomb most
