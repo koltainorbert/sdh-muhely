@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.78.1
+- **Javítás: a saját bejelentkező oldal szétesett** (0.77.0 óta). A `body.sdh-app` rácsa (232 px-es oldalsáv-oszlop, 52 px-es
+  fejlécsor) erősebb volt, mint a `.sdh-app--uzenet` flex-középre zárása: a doboz a bal felső sarokba szorult, a teteje (a
+  felhasználónév mezője) kilógott a képernyőről – nem lehetett belépni. Most `body.sdh-app.sdh-app--uzenet` (rács kikapcsolva,
+  `margin: auto` – nagy nagyításnál sem vágódik le a teteje). A jelszómező ugyanolyan, mint a többi mező. Böngészőben kipróbálva
+  (asztal 1920 és mobil 390 px; belépés fejlesztővel és SDH adminisztrátorral → Áttekintés). Teszt: t71.
+
 ### 0.78.0
 - **Súgó: a nem fejlesztő nem tudja meg, mi fut alatta.** Új jelölések a `sugo/` fejezetekben: fejlécben `csak: fejleszto`
   (egész fejezet), `## Cím [fejlesztő]` (szakasz), `### Alcím [fejlesztő]` (szakaszon belüli rész a következő `###`-ig) és

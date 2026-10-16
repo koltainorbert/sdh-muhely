@@ -880,6 +880,7 @@ a.sdh-kartya:focus-visible {
 }
 
 .sdh-mezo input[type="text"],
+.sdh-mezo input[type="password"],
 .sdh-mezo input[type="email"],
 .sdh-mezo input[type="tel"],
 .sdh-mezo input[type="number"],

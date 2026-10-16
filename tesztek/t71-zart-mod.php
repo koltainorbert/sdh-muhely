@@ -189,4 +189,9 @@ foreach ([$kolleg, $dolg] as $id) {
     }
 }
 
+// 0.78.1: a bejelentkező doboz nem szorulhat a műhely rácsának keskeny oldalsáv-oszlopába.
+$app_css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/app.css');
+T::igaz(preg_match('/body\.sdh-app\.sdh-app--uzenet\s*\{[^}]*display:\s*flex[^}]*grid-template-columns:\s*none/s', $app_css) === 1, 'a belépő / üzenet oldal felülírja a body.sdh-app rácsát (középre zárt doboz)');
+T::tartalmaz((string) file_get_contents(SDH_MUHELY_DIR . 'assets/admin.css'), '.sdh-mezo input[type="password"]', 'a jelszómező ugyanúgy néz ki, mint a többi mező');
+
 T::vege('t71 zárt mód');

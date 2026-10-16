@@ -504,16 +504,25 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
 /* Középre zárt üzenetoldal (403)                                      */
 /* ================================================================== */
 
-.sdh-app--uzenet {
+/* A `body.sdh-app` rácsát (oldalsáv + tartalom) felül kell írni: enélkül az üzenet- és a
+   bejelentkező doboz a keskeny oldalsáv-oszlopba, az 52 px-es fejlécsorba szorult, és a
+   teteje (a felhasználónév mezője) a képernyőn kívülre csúszott (0.78.1). */
+body.sdh-app.sdh-app--uzenet {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 2rem;
+    min-height: 100dvh;
+    padding: 2rem 1rem;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    grid-template-areas: none;
 }
 
 .sdh-app__kozep {
+    width: 100%;
     max-width: 29rem;
+    margin: auto;
     padding: 2rem 2.2rem;
     background: var(--sdh-felulet);
     border: 1px solid var(--sdh-keret);
