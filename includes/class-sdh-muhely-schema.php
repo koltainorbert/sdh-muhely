@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.52.0';
+    public const DB_VERSION = '0.53.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -148,6 +148,7 @@ final class SDH_Muhely_Schema
         $sms_leir     = self::tabla('sms_leiratkozas');
         $naplo_v      = self::tabla('valtozasnaplo');
         $mezo_emlek   = self::tabla('mezo_emlek');
+        $atvetel_sor  = self::tabla('atvetel_sor');
 
         $definiciok = [];
 
@@ -1576,6 +1577,19 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             unique key kulcs_ertek (kulcs,lenyomat),
             key kulcs_db (kulcs,db)
+        ) {$charset};";
+
+        /* -------------------------------------------------------------
+         * Adatátvétel (U1, 0.94.0): melyik átvétel melyik sort hozta
+         * létre – ebből vonható vissza egy átvétel.
+         * ---------------------------------------------------------- */
+        $definiciok[] = "CREATE TABLE {$atvetel_sor} (
+            id bigint(20) unsigned NOT NULL auto_increment,
+            import_id varchar(24) NOT NULL default '',
+            tabla varchar(20) NOT NULL default '',
+            sor_id bigint(20) unsigned NOT NULL default 0,
+            PRIMARY KEY  (id),
+            key import_tabla (import_id,tabla)
         ) {$charset};";
 
         return $definiciok;

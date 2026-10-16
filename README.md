@@ -64,6 +64,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.94.0
+- **U1 – adatátvétel** (új `SDH_Muhely_Adatatvetel`, Beállítások › Rendszer › **Adatátvétel**, adminnak). Sorrend: ügyfelek →
+  eszközök → munkalapok → tételek → hibák. Feltöltés (`sdh_muhely_atvetel_feltolt`): kódolás (UTF-8 BOM, UTF-16, Windows-1250
+  iconv-val), elválasztó (; , tab |), XLSX (saját olvasó: sharedStrings + sheet1, inlineStr), egységes UTF-8 CSV a védett
+  `uploads/sdh-atvetel/` mappában. Párosítás: magyar fejléc-álnevek (ékezet nélkül), kézzel átírható; munkalapnál állapot-párosítás
+  („régi = új”, különben szóminták). Próba (`_proba`, írás nélkül): jó / már bent / hibás (sorszámmal), bruttó összeg, állapotok.
+  Átvétel (`_futtat`): 500 soros adagok, folytatható; `forras = munkalap3`, `kulso_azonosito`; ismétlésnél kihagy; dátum
+  (több alak + Excel-sorszám), pénz (Ft, szóköz, vessző); zárkód/minta `Zarkod::tarol`; ügyfélszám + `kereso_frissit`; napló adagonként
+  egy esemény (`csendben`). Visszavonás (`_visszavon`): az átvétel új sorai (új tábla `atvetel_sor`) – **DB_VERSION 0.53.0**.
+- Súgó: 31. fejezet (új). Teszt: t86.
+
 ### 0.93.0
 - **N4 – licenc és forgalmazói központ.** Vevő oldal: új `SDH_Muhely_Licenc`, Beállítások › Rendszer › **Licenc** (adminnak):
   központ címe + licenckulcs; óránkénti időzítő, naponta egy jelentés (`rest_route=/sdh-kozpont/v1/jelentes`: kulcs, példány

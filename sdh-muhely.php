@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.93.0
+ * Version:           0.94.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.93.0');
+define('SDH_MUHELY_VERSION', '0.94.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -106,6 +106,8 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-admin-atallas.php'   => 'SDH_Muhely_Admin_Atallas',
     // N4 (0.93.0): licenc, napi jelentés a központnak (aláírt válasz), frissítés a központból, támogatási hozzáférés.
     'includes/class-sdh-muhely-licenc.php'          => 'SDH_Muhely_Licenc',
+    // U1 (0.94.0): adatátvétel a MunkaLap 3-ból / táblázatból – próba, adagos átvétel, visszavonás.
+    'includes/class-sdh-muhely-adatatvetel.php'     => 'SDH_Muhely_Adatatvetel',
     // Párhuzamos szerkesztés (0.70.0): „közben módosította" és „X is szerkeszti" – a Változásnaplóra és a pulzusra épül.
     'includes/class-sdh-muhely-utkozes.php'         => 'SDH_Muhely_Utkozes',
     'includes/class-sdh-muhely-szemely.php'         => 'SDH_Muhely_Szemely',
