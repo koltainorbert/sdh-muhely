@@ -654,7 +654,7 @@ final class SDH_Muhely_Frontend
         // a Napló ablak, a lezárt lap, az RMA-matrica, a fogaskerék és a mezőmemória – mind bármelyik
         // oldalon megnyílhat (a munkalap popupja mindenhol elérhető).
         array_push($sdh_js, 'assets/rma.js', 'assets/levelezes.js', 'assets/penztar.js', 'assets/eladas.js', 'assets/nyomtatas.js',
-            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js', 'assets/kapcsolo.js', 'assets/szemely.js', 'assets/mentes.js');
+            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js', 'assets/kapcsolo.js', 'assets/szemely.js', 'assets/mentes.js', 'assets/frissites.js');
 
         if ($aktiv_kulcs === 'beallitasok') {
             $sdh_js[] = 'assets/beallitasok.js';

@@ -278,7 +278,7 @@ final class SDH_Muhely_Beallitasok
             ],
             'rendszer' => [
                 'cim' => 'Névjegy', 'csoport' => 'rendszer',
-                'leiras' => 'Verziók, címek, és ami internet nélkül is működik.',
+                'leiras' => 'Verziók, frissítés a GitHubról, címek, és ami internet nélkül is működik.',
                 'rajz' => [self::class, 'rendszer_doboz'],
             ],
         ];
@@ -333,6 +333,12 @@ final class SDH_Muhely_Beallitasok
                 'Minden állítható adat egy helyen, témánként külön lapfülön. Minden lapfül külön ment.'
             );
             ?>
+            <?php if ($ful !== 'rendszer' && SDH_Muhely_Frissites::ismert_ujabb() !== '' && !SDH_Muhely_Frissites::git_peldany()) : ?>
+                <p class="sdh-uzenet sdh-uzenet--figyelem">
+                    Frissítés elérhető: <strong><?php echo esc_html(SDH_Muhely_Frissites::ismert_ujabb()); ?></strong> –
+                    <a href="<?php echo esc_url(self::url('rendszer')); ?>">Beállítások › Névjegy</a>.
+                </p>
+            <?php endif; ?>
 
             <nav class="sdh-beall__menu" aria-label="Beállítások lapfülei">
                 <?php foreach (self::csoportok() as $csoport => $csoport_nev) : ?>
@@ -659,6 +665,7 @@ final class SDH_Muhely_Beallitasok
     /** Névjegy: verziók, címek, és ami internet nélkül is megy. */
     public static function rendszer_doboz(): void
     {
+        SDH_Muhely_Frissites::doboz();
         ?>
         <div class="sdh-doboz">
             <h2 class="sdh-doboz__cim">Verziók</h2>

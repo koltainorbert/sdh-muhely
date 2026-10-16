@@ -73,7 +73,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **Sebesség** | A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás. | ez a fejezet |
 | **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |
 | **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |
-| **Névjegy** | Verziók, címek, és ami internet nélkül is működik. | ez a fejezet |
+| **Névjegy** | Verziók, frissítés a GitHubról, címek, és ami internet nélkül is működik. | ez a fejezet |
 
 Egy lapfül csak akkor jelenik meg, ha a hozzá tartozó modul be van töltve.
 
@@ -104,7 +104,7 @@ A Beállítások oldal közös elemei – ezek minden lapfülön ugyanúgy műk�
 - **Színválasztó és színkód** – össze vannak kötve: bármelyiket állítod, a másik követi.
 - **Kapcsolók** – minden be/ki beállítás (és a popupok be/ki jelölői) egyforma kapcsoló: **zöld = AKTÍV**, **piros = INAKTÍV**, mellette felirattal. Táblázatban (sorok kijelölése) marad a kis jelölőnégyzet.
 
-Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** és a **Névjegy** pedig csak megmutat.
+Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** csak megmutat; a **Névjegy** a **Frissítés** doboz saját gombjaival dolgozik.
 
 ## Szabályok, amiket a rendszer betart
 
@@ -181,6 +181,8 @@ A színek neve mellett álló `--sdh-…` kezdetű kód a szín belső változó
 ## Névjegy
 
 A **Beállítások › Névjegy** lapfül megmondja, melyik verzió fut, és hol érhető el a rendszer. Hibabejelentésnél ezt add meg.
+
+A tetején a **Frissítés** doboz áll: telepített és legújabb verzió, **Ellenőrzés most** és (ha van újabb) **Frissítés most** gomb. A részleteket a [Telepítés és frissítés](sugo:telepites) fejezet írja le.
 
 A **Verziók** doboz sorai:
 

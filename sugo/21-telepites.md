@@ -4,8 +4,8 @@ cim: Telepítés és frissítés
 csoport: Rendszer
 modul:
 szakaszok:
-kulcsszavak: telepítés, telepít, frissítés, frissít, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
-osszefoglalo: Mit kíván a rendszer, hogyan telepíted egy külön belső WordPressbe, hogyan frissíted a teljes zip feltöltésével úgy, hogy az adatok megmaradnak, és mit próbálj ki élesítés előtt.
+kulcsszavak: telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
+osszefoglalo: Mit kíván a rendszer, hogyan telepíted egy külön belső WordPressbe, hogyan frissíted egy kattintással a GitHubról vagy a teljes zip feltöltésével úgy, hogy az adatok megmaradnak, és mit próbálj ki élesítés előtt.
 ---
 
 ## Mire való
@@ -97,9 +97,35 @@ A WordPress alapból a szerver saját levélküldőjét használja, amelynek lev
 
 A naptár e-mail értesítései a WordPress időzített feladataival (WP-Cron) futnak, ötpercenként. Ez alapból akkor lép működésbe, amikor valaki megnyit egy oldalt; ha zárva tartás alatt is pontos értesítés kell, az üzemeltető állítson be hozzá valódi ütemezett feladatot.
 
-## Lépésről lépésre: frissítés
+## Frissítés egy kattintással (GitHubról)
 
-A frissítés a **teljes zip** feltöltése. Nem kell előtte semmit törölni vagy kikapcsolni.
+A rendszer magától megnézi, van-e újabb verzió a GitHubon (kb. félnaponta, és amikor te kéred). Ha van, a **Beállítások** minden lapfülének tetején megjelenik: **Frissítés elérhető: …**, a WordPress **Bővítmények** oldalán pedig a szokásos „Új verzió érhető el” jelzés.
+
+### Lépésről lépésre: frissítés a gombbal
+
+1. Nyisd meg a **Beállítások › Névjegy** lapfület. A **Frissítés** dobozban látod a telepített és a legújabb verziót.
+2. Ha nem biztos, hogy friss az adat, nyomd meg az **Ellenőrzés most** gombot.
+3. Nyomd meg a **Frissítés most** gombot. A gomb kétlépcsős: az első kattintás megerősítést kér (**Biztosan? Kattints újra**), a második indít.
+4. A rendszer **először teljes mentést készít** (a neve `…-frissites-elott-…`), és csak utána cseréli a fájlokat. Ha a mentés nem sikerül, nem frissít.
+5. Az oldal magától újratöltődik. A **Plugin verzió** sor az új számot mutatja.
+
+Ami közben történik:
+
+- **Az adatok megmaradnak**, mint a zipes frissítésnél. Az adatbázis az első oldalnál magától igazodik.
+- A csere néhány másodpercig tart; ez alatt a WordPress rövid „karbantartás alatt” oldalt mutathat. Frissíts nyitás előtt vagy zárás után.
+- Ha a csere bármiért elakad, a régi verzió marad, és a gomb mellett az ok olvasható.
+
+**Mikor nem működik a gomb:**
+
+- **Nincs internet.** Az ellenőrzés csendben kihagyódik, a munka nem akad meg; a hibaüzenet kiírja, hogy a GitHub nem érhető el. Később próbáld újra.
+- **Fejlesztői példány.** Ha a bővítmény mappájában git-tároló van (a fejlesztő gépén), a gomb nem frissít, mert felülírná a munkát: ott `git pull` a rend.
+- **A szerver nem írhatja a bővítmény mappáját.** Ilyenkor a tárhely üzemeltetője tud segíteni; addig a zipes frissítés használható.
+
+> **Figyelem:** A GitHubon a `main` ágon álló verzió a „legújabb”. Más tárolóból vagy ágról a fejlesztő állíthatja át a forrást.
+
+## Lépésről lépésre: frissítés zippel
+
+Ha a gomb nem használható, a frissítés a **teljes zip** feltöltése. Nem kell előtte semmit törölni vagy kikapcsolni.
 
 1. **Ments.** A műhely-felületen: **Beállítások › Asszisztens › Mentések › Mentés most**. Nagyobb frissítés előtt a szerver teljes mentése is legyen kéznél.
 2. A WordPress vezérlőpultjában nyisd meg: **Bővítmények › Új bővítmény › Bővítmény feltöltése**.
@@ -176,7 +202,15 @@ A WordPress címe, a végén `/muhely/`. A pontos címet a **Beállítások › 
 
 ### Hogyan frissítek új verzióra?
 
-A WordPress vezérlőpultjában: **Bővítmények › Új bővítmény › Bővítmény feltöltése**. Töltsd fel a teljes zipet, és válaszd a meglévő lecserélését.
+Legegyszerűbben a **Beállítások › Névjegy** lapfülön: **Ellenőrzés most**, majd **Frissítés most** (kétlépcsős, előtte mentés készül). Zippel, a WordPress vezérlőpultjában: **Bővítmények › Új bővítmény › Bővítmény feltöltése**. Töltsd fel a teljes zipet, és válaszd a meglévő lecserélését.
+
+### Honnan tudom, hogy van újabb verzió?
+
+A Beállítások lapfülei fölött megjelenik a **Frissítés elérhető: …** sáv, és a **Névjegy** lapfülön ott a legújabb verzió száma. A rendszer kb. félnaponta maga is megnézi.
+
+### Mi van, ha frissítés közben megszakad a net?
+
+A frissítés a csomag letöltésével kezdődik; ha az nem sikerül, a régi verzió változatlanul marad, és a gomb mellett az ok olvasható. A frissítés előtti mentés ilyenkor is megvan.
 
 ### Elvesznek az adatok frissítéskor?
 

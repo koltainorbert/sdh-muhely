@@ -64,6 +64,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.74.0
+- **Frissítés a GitHubról, egy kattintással (HIBALISTA H4).** Új `SDH_Muhely_Frissites`. A GitHub `main` ágán álló `sdh-muhely.php`
+  `Version:` fejléce adja az újabb verziót (nincs külön release); 6 órás gyorsítótár, hiba 15 percig (net nélkül csendes). Bekötve a
+  WordPress frissítési rendszerébe (`pre_set_site_transient_update_plugins`, `plugins_api`, `upgrader_source_selection` a GitHub-os
+  mappanév → `sdh-muhely`), így a Bővítmények oldalon is „Frissítés elérhető”. **Beállítások › Névjegy › Frissítés:** Ellenőrzés most +
+  kétlépcsős Frissítés most: előbb teljes mentés (`frissites-elott`, nélküle nem frissít), utána `Plugin_Upgrader`; a lapfülek tetején
+  sáv jelzi az elérhető verziót. Git-példányon (a mappában `.git`) nem frissít. Forrás/ág/privát tároló kulcsa: `sdh_muhely_frissites`
+  opció vagy `sdh_muhely_frissites_forras` szűrő. Teszt: t68 (hamis GitHub); a tényleges csere eldobható WP-másolaton is kipróbálva
+  (csere, aktív marad, adat épp). DB_VERSION változatlan (0.43.0).
+
 ### 0.73.0
 - **Külső, automatikus, jelszavas mentés + visszaállítás + Export/Import (HIBALISTA H3).** Új osztályok: `SDH_Muhely_Mentes_Titkos`
   (libsodium: Argon2id + secretstream, `.sdhmentes`), `SDH_Muhely_Mentes_Cel` (Saját gép / NAS-mappa, NAS-WebDAV), `…_Ftp` (FTP/FTPS),
