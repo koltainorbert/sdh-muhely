@@ -389,6 +389,10 @@ class SDH_Muhely_Csomag
             </p>
         </div>
         <?php
+        // H10 (0.90.0): adatbázis-mérés a böngészőből (csak fejlesztőnek).
+        if (class_exists('SDH_Muhely_Meres')) {
+            SDH_Muhely_Meres::doboz();
+        }
     }
 
     /**

@@ -10805,3 +10805,19 @@ button.sdh-allapot,
 .sdh-ml-elegedettseg__csillag.is-rossz span {
     color: var(--sdh-hiba);
 }
+
+/* Adatbázis-mérés (H10, 0.90.0) */
+.sdh-meres__ki {
+    max-width: 100%;
+    margin: calc(10px * var(--sdh-n)) 0 0;
+    padding: calc(10px * var(--sdh-n));
+    overflow-x: auto;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-vaszon);
+    color: var(--sdh-szoveg);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: calc(11.5px * var(--sdh-n));
+    line-height: 1.45;
+    white-space: pre;
+}

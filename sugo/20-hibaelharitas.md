@@ -79,7 +79,7 @@ Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-
 
 ### Mérés a saját gépen [fejlesztő]
 
-A `tools/mero-meres.php` csak olvas: lefuttatja a gyakori lekérdezéseket a meglévő adatokon, és kiírja az időket, a MySQL beállításait és azt, hol olvas végig egy egész táblát. Indítás: **Open site shell**, a plugin mappájában `php tools/mero-meres.php`. Semmit nem ír az adatbázisba.
+A mérés csak olvas: lefuttatja a gyakori lekérdezéseket és az új funkciók (Riportok, Raktár, Elégedettség, Időpontfoglalás) számolásait a meglévő adatokon, és kiírja az időket, a MySQL beállításait és azt, hol olvas végig egy egész táblát. A 300 ms fölötti lépéseket a végén LASSÚ-ként sorolja fel. Indítás: **Beállítások › Rendszer › Sebesség › Mérés indítása**, vagy **Open site shell**-ben a plugin mappájában `php tools/mero-meres.php`. Semmit nem ír az adatbázisba. 40 000 munkalapos próbaadaton minden lépés 300 ms alatt maradt (SQLite); az éles MySQL-mérés eredményét érdemes elküldeni a fejlesztőnek.
 
 ## Popupok és mentés
 

@@ -12419,3 +12419,49 @@
             });
     });
 }());
+
+/* Adatbázis-mérés (H10, 0.90.0): Beállítások › Sebesség – csak fejlesztőnek. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-meres-indit]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var doboz = gomb.closest('[data-sdh-meres]');
+        var B = window.SDH_MUHELY || {};
+        var allapot = doboz.querySelector('[data-sdh-meres-allapot]');
+        var ki = doboz.querySelector('[data-sdh-meres-ki]');
+        var fd = new FormData();
+
+        fd.set('action', 'sdh_muhely_meres');
+        fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
+        gomb.disabled = true;
+        allapot.textContent = 'Mérés folyamatban…';
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                gomb.disabled = false;
+
+                if (v && v.success) {
+                    ki.textContent = v.data.szoveg;
+                    ki.hidden = false;
+                    allapot.textContent = v.data.lassu.length ? 'Lassú: ' + v.data.lassu.join(', ') : 'Minden lépés gyors.';
+
+                    return;
+                }
+
+                allapot.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+            })
+            .catch(function () {
+                gomb.disabled = false;
+                allapot.textContent = 'Nincs kapcsolat a szerverrel.';
+            });
+    });
+}());

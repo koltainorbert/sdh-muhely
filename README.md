@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.90.0
+- **H10 – mérés** (új `SDH_Muhely_Meres`): a `tools/mero-meres.php` logikája osztályba került, és a **Beállítások › Rendszer ›
+  Sebesség** lapfülről is indítható (**Mérés indítása**, csak fejlesztőnek, AJAX `sdh_muhely_meres`). A futás idejére egy
+  `query` szűrő minden író lekérdezést `SELECT 1`-re cserél. Új lépések: Riportok (egy év, 12 hónap), Raktár, Elégedettség,
+  Időpontfoglalás; 300 ms fölött LASSÚ-lista.
+- Új indexek `munkalap`: `fajta_lezarva (fajta, lezarva)`, `elegedettseg_ido` – **DB_VERSION 0.52.0**.
+- Próbaadat (felhőben, SQLite): 15 000 ügyfél, 20 000 eszköz, 40 000 munkalap, 80 000 tétel – minden mért lépés 300 ms
+  alatt (riport egy évre ~260 ms). Az éles MySQL-mérés Norbi gépén van hátra. Teszt: t82.
+
 ### 0.89.1
 - Böngészős ellenőrzés (F1–F7) javításai: a **Riportok** menüpont adminnak az oldalsáv alján (új modul-jelző: `admin_menu`);
   a foglalóoldal mobilon nem középre igazít (a hosszú űrlap teteje nem csúszik ki); a Riportok szűrőjének dátummezői és

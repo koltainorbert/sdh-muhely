@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.51.0';
+    public const DB_VERSION = '0.52.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -459,6 +459,8 @@ final class SDH_Muhely_Schema
             key fajta_keszult (fajta,keszult),
             key fajta_allapot (fajta,allapot),
             key fajta_rend (fajta,rend_allapot),
+            key fajta_lezarva (fajta,lezarva),
+            key elegedettseg_ido (elegedettseg_ido),
             key rma_token (rma_token),
             key allapot (allapot),
             key ugyfel_id (ugyfel_id),
