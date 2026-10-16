@@ -534,6 +534,64 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__fej {
     font-size: calc(13px * var(--sdh-n));
 }
 
+/* Saját bejelentkező (zárt mód) */
+.sdh-belepes {
+    width: 100%;
+    max-width: 24rem;
+    text-align: left;
+}
+
+.sdh-belepes__fej {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    margin-bottom: 1.1rem;
+}
+
+.sdh-belepes__jel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.6rem;
+    height: 2.6rem;
+    padding: 0 .5rem;
+    border-radius: var(--sdh-radius);
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-szoveg);
+    font-weight: 700;
+    font-size: calc(14px * var(--sdh-n));
+}
+
+.sdh-belepes__logo {
+    max-height: 2.6rem;
+    max-width: 8rem;
+}
+
+.sdh-app__kozep h1.sdh-belepes__cim {
+    margin: 0;
+    font-size: calc(18px * var(--sdh-n));
+}
+
+.sdh-belepes .sdh-mezo {
+    margin-bottom: .8rem;
+}
+
+.sdh-belepes .sdh-mezo input[type="text"],
+.sdh-belepes .sdh-mezo input[type="password"] {
+    width: 100%;
+}
+
+.sdh-belepes__gomb {
+    width: 100%;
+    justify-content: center;
+    margin-top: .4rem;
+}
+
+.sdh-app__kozep p.sdh-belepes__lab {
+    margin: .9rem 0 0;
+    font-size: calc(12px * var(--sdh-n));
+}
+
 /* ================================================================== */
 /* Kis képernyő                                                        */
 /* ================================================================== */

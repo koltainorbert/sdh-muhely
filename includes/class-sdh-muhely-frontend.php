@@ -186,6 +186,11 @@ final class SDH_Muhely_Frontend
 
         SDH_Muhely_Modulok::kontextus_beallit('frontend');
 
+        // Saját bejelentkező és kilépés (zárt mód): a belépés-ellenőrzés előtt.
+        if (class_exists('SDH_Muhely_Rejtes') && in_array($kulcs, [SDH_Muhely_Rejtes::BELEPES, SDH_Muhely_Rejtes::KILEPES], true)) {
+            SDH_Muhely_Rejtes::fogad($kulcs);
+        }
+
         if (!is_user_logged_in()) {
             wp_safe_redirect(wp_login_url(self::aktualis_url()));
             exit;
@@ -373,6 +378,7 @@ final class SDH_Muhely_Frontend
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="robots" content="noindex, nofollow">
             <title><?php echo esc_html($cim . ' – ' . SDH_Muhely_Arculat::rendszer_nev()); ?></title>
+            <?php if (class_exists('SDH_Muhely_Rejtes')) { SDH_Muhely_Rejtes::ikon_link(); } ?>
 
             <script>
                 /* A mentett megjelenés még a stílusok előtt beáll, hogy
@@ -735,6 +741,7 @@ final class SDH_Muhely_Frontend
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="robots" content="noindex, nofollow">
             <title><?php echo esc_html("Nincs jogosultság – " . SDH_Muhely_Arculat::rendszer_nev()); ?></title>
+            <?php if (class_exists('SDH_Muhely_Rejtes')) { SDH_Muhely_Rejtes::ikon_link(); } ?>
             <link rel="stylesheet"
                   href="<?php echo esc_url(SDH_MUHELY_URL . 'assets/admin.css?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio('assets/admin.css')); ?>">
             <link rel="stylesheet"

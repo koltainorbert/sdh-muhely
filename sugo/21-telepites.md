@@ -97,6 +97,10 @@ A WordPress alapból a szerver saját levélküldőjét használja, amelynek lev
 
 A naptár e-mail értesítései a WordPress időzített feladataival (WP-Cron) futnak, ötpercenként. Ez alapból akkor lép működésbe, amikor valaki megnyit egy oldalt; ha zárva tartás alatt is pontos értesítés kell, az üzemeltető állítson be hozzá valódi ütemezett feladatot.
 
+## Zárt mód (a fejlesztőnek)
+
+A telepítés csak a műhelyé, ezért a rendszer nem mutat mást: a kezdőlap, bármilyen más vagy nem létező cím a műhelybe visz, kijelentkezve a saját **bejelentkező oldalra** (`/muhely/belepes/`). A böngészőfülön a rendszer saját ikonja áll, a `robots.txt` mindent tilt, a háttérrendszer programozói felületei kívülről nem válaszolnak, és a gyökérben álló `readme.html` / `license.txt` naponta törlődik. Ha mégis kellene a sima weboldal: a `wp-config.php`-ba `define('SDH_MUHELY_NYITOTT_OLDAL', true);`.
+
 ## Frissítés egy kattintással (GitHubról)
 
 **Csak a fejlesztőnek látszik** (a teljes jogú fiók): az adminisztrátor és a többi szerep nem látja a Frissítés dobozt és az értesítő sávot.

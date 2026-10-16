@@ -488,6 +488,7 @@ final class SDH_Muhely_Rma_Oldal
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title><?php echo esc_html($cim . ' – ' . $b['szerviz_nev']); ?></title>
+<?php if (class_exists('SDH_Muhely_Rejtes')) { SDH_Muhely_Rejtes::ikon_link(); } ?>
 <script>
     (function () {
         var alap = <?php echo wp_json_encode((string) $b['tema']); ?>, t = null;

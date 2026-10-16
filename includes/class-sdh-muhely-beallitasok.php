@@ -278,7 +278,7 @@ final class SDH_Muhely_Beallitasok
             ],
             'rendszer' => [
                 'cim' => 'Névjegy', 'csoport' => 'rendszer',
-                'leiras' => 'Verziók, frissítés a GitHubról, címek, és ami internet nélkül is működik.',
+                'leiras' => 'Verziók, címek, és ami internet nélkül is működik.',
                 'rajz' => [self::class, 'rendszer_doboz'],
             ],
         ];

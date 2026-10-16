@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.77.0
+- **Zárt mód: a rendszer nem árulja el, hogy WordPress** (új `SDH_Muhely_Rejtes`). Minden idegen oldal (kezdőlap, bejegyzés, 404, hírcsatorna,
+  oldaltérkép, `/wp-json/` index) 302-vel a műhelybe irányít, kijelentkezve onnan a **saját bejelentkezőre** (`/muhely/belepes/`, `wp_signon`,
+  általános hibaüzenet, nincs WordPress-szöveg / -link); kilépés: `/muhely/kilepes/` (nonce `log-out`). `login_url` / `logout_url` szűrve,
+  a `wp-login.php` sima megnyitása ide visz (a jelszó-visszaállító, a kilépés és a POST marad). Saját ikon (`/favicon.ico`, `?sdh_ikon=1`: a logó
+  vagy a jelből rajzolt SVG; a műhely, a bejelentkező és az ügyféloldal fejében is). `robots.txt`: mindent tilt. REST kívülről (nem fejlesztőnek)
+  csak a `/sdh-muhely/` végpontok; XML-RPC 404; nincs `X-Redirect-By: WordPress`, generator meta, RSD/REST-link; oldaltérkép ki. A gyökér
+  `readme.html` / `license.txt` naponta (és frissítés után) törlődik. Kikapcsolás fejlesztőnek: `define('SDH_MUHELY_NYITOTT_OLDAL', true);`.
+  Élő próba beépített PHP-szerveren (kezdőlap, 404, wp-login, favicon, robots, REST, XML-RPC, belépés jó/rossz jelszóval, kilépés, wp-admin).
+  Ami marad: a forráskódban a stíluslapok útvonala (`/wp-content/…`), a WordPress jelszó-visszaállító képernyője (linket nem adunk rá),
+  a Súgó szövegei (következő lépés). Teszt: t71. DB_VERSION változatlan (0.43.0).
+
 ### 0.76.0
 - **Három szint: fejlesztő – SDH adminisztrátor – a többi szerep.** A fejlesztő = a WP-adminisztrátor (`manage_options`): mindent lát. Új WP-szerep
   `sdh_admin` („SDH adminisztrátor"): `sdh_muhely_hasznal` + `sdh_muhely_admin`, de nincs WordPress-adminisztráció. `ADMIN_JOG` mostantól
