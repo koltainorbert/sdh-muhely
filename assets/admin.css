@@ -10864,3 +10864,32 @@ button.sdh-allapot,
 .sdh-licenc-jel {
     margin-bottom: calc(12px * var(--sdh-n));
 }
+
+/* Adatátvétel (U1, 0.94.0) és a Licenc időtartam-választója: egységes legördülők */
+.sdh-adatatvetel .sdh-tabla select,
+.sdh-adatatvetel select,
+.sdh-licenc__ora {
+    min-width: calc(180px * var(--sdh-n));
+    height: calc(34px * var(--sdh-n));
+    padding: 0 calc(8px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-mezo-r, var(--sdh-r));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-adatatvetel h3 {
+    margin: calc(16px * var(--sdh-n)) 0 calc(8px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-adatatvetel .sdh-tabla td:last-child {
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-adatatvetel [hidden] {
+    display: none !important;
+}

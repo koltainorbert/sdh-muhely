@@ -932,7 +932,7 @@ final class SDH_Muhely_Foglalas
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="foglalas_adatv">Adatkezelési tájékoztató címe (nem kötelező)</label>
-                    <input type="url" name="foglalas[adatvedelem]" id="foglalas_adatv" value="<?php echo esc_attr($b['adatvedelem']); ?>" placeholder="https://">
+                    <input type="text" inputmode="url" spellcheck="false" name="foglalas[adatvedelem]" id="foglalas_adatv" value="<?php echo esc_attr($b['adatvedelem']); ?>" placeholder="https://">
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="foglalas_link">A foglalóoldal címe (ezt linkeld a weboldalon)</label>

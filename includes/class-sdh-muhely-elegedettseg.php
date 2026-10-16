@@ -544,7 +544,7 @@ final class SDH_Muhely_Elegedettseg
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="eleg_google">Google-értékelés linkje</label>
-                    <input type="url" name="elegedettseg[google]" id="eleg_google" value="<?php echo esc_attr($b['google']); ?>" placeholder="https://g.page/r/…/review">
+                    <input type="text" inputmode="url" spellcheck="false" name="elegedettseg[google]" id="eleg_google" value="<?php echo esc_attr($b['google']); ?>" placeholder="https://g.page/r/…/review">
                     <span class="sdh-mezo__sugo">A cégprofilod „Értékelés kérése” linkje. Üresen az elégedett ügyfél csak köszönetet lát.</span>
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">

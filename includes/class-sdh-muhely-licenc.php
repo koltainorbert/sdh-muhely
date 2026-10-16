@@ -560,7 +560,7 @@ final class SDH_Muhely_Licenc
             <div class="sdh-mezok">
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="licenc_kozpont">A központ címe</label>
-                    <input type="url" name="licenc[kozpont]" id="licenc_kozpont" value="<?php echo esc_attr($b['kozpont']); ?>" placeholder="https://">
+                    <input type="text" inputmode="url" spellcheck="false" name="licenc[kozpont]" id="licenc_kozpont" value="<?php echo esc_attr($b['kozpont']); ?>" placeholder="https://">
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="licenc_kulcs">Licenckulcs</label>
@@ -596,7 +596,7 @@ final class SDH_Muhely_Licenc
                 A támogató ebben az időben látja az adatokat – csak akkor engedélyezd, ha kérted.
             </p>
             <p>
-                <select data-sdh-tamogatas-ora aria-label="Időtartam">
+                <select class="sdh-licenc__ora" data-sdh-tamogatas-ora aria-label="Időtartam">
                     <?php foreach (self::TAMOGATAS_ORAK as $o => $nev) : ?>
                         <option value="<?php echo (int) $o; ?>"<?php selected($o, 24); ?>><?php echo esc_html($nev); ?></option>
                     <?php endforeach; ?>

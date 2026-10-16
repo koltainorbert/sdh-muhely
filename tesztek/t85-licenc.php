@@ -141,8 +141,8 @@ T::egyezik($uid, $L::tamogatas_token((string) ($q[$L::QV] ?? ''))
 , 'a belépő link érvényes');
 T::egyezik(0, $L::tamogatas_token('rossz-token-rossz-token-rossz-token-xx'), 'hamis link: nem');
 T::egyezik(0, $L::tamogatas_token((string) ($q[$L::QV] ?? ''), time() + 25 * HOUR_IN_SECONDS), 'lejárt link: nem');
-T::egyezik(0, $L::tamogatas_takarit(), 'még élő: nem törlődik');
-T::egyezik(1, $L::tamogatas_takarit(time() + 25 * HOUR_IN_SECONDS), 'lejárat után a fiók törlődik');
+T::igaz(get_userdata($uid) !== false && $L::tamogatas_takarit() >= 0 && get_userdata($uid) !== false, 'még élő: nem törlődik');
+T::igaz($L::tamogatas_takarit(time() + 25 * HOUR_IN_SECONDS) >= 1, 'lejárat után a fiók törlődik (a korábbi próbák lejártjai is)');
 T::igaz(get_userdata($uid) === false, 'a fiók nincs meg');
 $t2 = $L::tamogatas_indit(2);
 T::igaz($L::tamogatas_visszavon((int) $t2['user']), 'visszavonás');

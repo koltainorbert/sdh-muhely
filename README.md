@@ -64,6 +64,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.94.1
+- Böngészős ellenőrzés (0.90–0.94: mérés, N6, licenc + támogatási belépés, adatátvétel teljes körben, net-jelzés) javításai:
+  az Adatátvétel doboza ütközött az Átvétel lapfül `.sdh-atvetel` osztályával (rácsba esett) → `.sdh-adatatvetel`; a rejtett
+  állapot-párosítás nem látszik ügyfeleknél; „–” a visszavonás helyett, ha az átvétel nem hozott új sort; a cím-mezők
+  (központ, adatkezelési tájékoztató, Google-link) szövegmezőként kapják az egységes stílust; egységes legördülők.
+
 ### 0.94.0
 - **U1 – adatátvétel** (új `SDH_Muhely_Adatatvetel`, Beállítások › Rendszer › **Adatátvétel**, adminnak). Sorrend: ügyfelek →
   eszközök → munkalapok → tételek → hibák. Feltöltés (`sdh_muhely_atvetel_feltolt`): kódolás (UTF-8 BOM, UTF-16, Windows-1250

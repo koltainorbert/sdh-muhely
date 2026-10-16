@@ -1069,7 +1069,7 @@ final class SDH_Muhely_Adatatvetel
         $naplo = get_option(self::OPT_NAPLO, []);
         $naplo = is_array($naplo) ? array_reverse($naplo, true) : [];
         ?>
-        <div class="sdh-doboz sdh-atvetel" data-sdh-atvetel data-nonce="<?php echo esc_attr(wp_create_nonce('sdh_muhely_atvetel')); ?>">
+        <div class="sdh-doboz sdh-adatatvetel" data-sdh-atvetel data-nonce="<?php echo esc_attr(wp_create_nonce('sdh_muhely_atvetel')); ?>">
             <h2 class="sdh-doboz__cim">Adatátvétel (MunkaLap 3 vagy táblázat)</h2>
             <p class="sdh-sugo">
                 A régi program táblázatait (CSV, TXT vagy XLSX) ebben a sorrendben vedd át: <strong>1. Ügyfelek, 2. Eszközök
@@ -1123,7 +1123,7 @@ final class SDH_Muhely_Adatatvetel
                             <td><?php echo (int) $n['uj']; ?><?php echo empty($n['kesz']) ? ' (félbemaradt)' : ''; ?></td>
                             <td><?php echo (int) $n['meglevo']; ?></td>
                             <td><?php echo (int) $n['hibas']; ?></td>
-                            <td><?php if (!empty($n['visszavonva'])) : ?>visszavonva<?php else : ?>
+                            <td><?php if (!empty($n['visszavonva'])) : ?>visszavonva<?php elseif ((int) $n['uj'] === 0) : ?>–<?php else : ?>
                                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-atvetel-visszavon="<?php echo esc_attr((string) $id); ?>">Visszavonás</button><?php endif; ?></td>
                         </tr>
                     <?php endforeach; ?>
