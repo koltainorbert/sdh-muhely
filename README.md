@@ -64,6 +64,19 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.71.0
+- **Egyszerre egy ablak: zárolás + felülbíráló kód (a H1 folytatása).** Amit másik ablakban (akár ugyanazzal a fiókkal, másik
+  gépen) épp szerkesztenek, azt a szerver **nem engedi megnyitni**, amíg be nem zárják: a megnyitó kérés kapuja
+  (`SDH_Muhely_Utkozes::kapu`, a `wp_ajax_sdh_muhely_*_urlap` első kezelője) az űrlap helyett zárolás-dobozt küld
+  (`data-sdh-zar`). Az ablakot a böngészőlap azonosítója (`szerk_fiok`, sessionStorage) különbözteti meg; a foglalás
+  megnyitáskor azonnal él, a pulzus tartja, a bezárás (`szerk_el`, `pagehide`) és a lejárat (75 mp) oldja. **Felülbírálás
+  kóddal:** a kódot külön POST ellenőrzi (`sdh_muhely_szerk_felulir`, nem URL-ben), siker után egyszeri, 60 mp-es engedély,
+  a rekord újra megnyílik; öt hibás kód után 5 perc kizárás; a felülbírálás és a hibás kód a Naplóba kerül.
+  **Új Beállítások › Jogosultságok fül:** melyik rekord zárol (munkalap alapból igen, ügyfél és eszköz nem), a kód
+  megadása / cseréje / törlése (`sdh_muhely_jogosultsagok`, csak `wp_hash_password` lenyomat; legalább 4 karakter).
+  Külön „admin kód" nincs; erre egy önálló közös kód szolgál. A lezárt (zárolt) lap és az új rekord nem zárol. Az
+  „X is szerkeszti" most ablakonként számol („Te (másik ablakban)" is látszik). Nincs séma-változás. t64.
+
 ### 0.70.0
 - **Párhuzamos szerkesztés védelme (HIBALISTA H1).** Munkalap, ügyfél és eszköz űrlapja alapot (`szerk_naplo`: a
   Változásnapló vége) kap; mentéskor (gombbal és automentéssel is) a szerver megnézi, írt-e **másik belépett

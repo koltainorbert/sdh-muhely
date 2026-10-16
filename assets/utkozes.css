@@ -40,3 +40,30 @@
     border-radius: 50%;
     background: var(--sdh-figyelem);
 }
+
+/* Zárolás-doboz (0.71.0): a rekordot másik ablak szerkeszti – a felülbíráló kód mezője. */
+.sdh-zar-doboz {
+    display: grid;
+    gap: .75rem;
+}
+
+.sdh-zar-doboz p {
+    margin: 0;
+}
+
+.sdh-zar-doboz__kod {
+    display: grid;
+    gap: .3rem;
+    max-width: 20rem;
+}
+
+.sdh-zar-doboz__hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-zar-doboz__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}

@@ -3,8 +3,8 @@ kulcs: munkalapok
 cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
-szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas
-kulcsszavak: egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas, jogosultsagok
+kulcsszavak: zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -76,14 +76,18 @@ Ugyanígy működik az ügyfél, az eszköz, a termék és a szolgáltatás abla
 
 ## Ha ketten szerkesztik ugyanazt
 
-Ha két kolléga egyszerre nyitja meg ugyanazt a lapot, az ablak alján megjelenik: **„Gábor is szerkeszti”** (a jelzés fél percen belül frissül, és a bezárás után hamar eltűnik). Ez figyelmeztetés, nem zár: mindketten dolgozhattok, de érdemes szólni egymásnak.
+**Egy lapot egyszerre csak egy ablakban lehet szerkeszteni.** Ha egy munkalapot már megnyitottak (akár másik gépen, akár ugyanazzal a fiókkal másik böngészőlapon), az újabb megnyitás **megáll**: az űrlap helyett egy doboz jelenik meg, amely kiírja, ki szerkeszti – *„Gábor már megnyitotta szerkesztésre. Amíg be nem zárja, nem nyitható meg."* Amint a szerkesztő bezárja az ablakot, a lap megnyitható. Ha a szerkesztő böngészője összeomlik, a zárolás fél-egy percen belül magától lejár.
 
-Ha közben a másik kolléga **módosított valamit**, és te is mentenél (a Mentés gombbal vagy az automatikus mentés), a mentés **nem fut le**, és az űrlap tetején sáv jelenik meg: *„Közben Gábor módosította (14:32).”* Két gomb közül választasz – mindkettő két lépésben működik, a második kattintás erősíti meg:
+**Felülbírálás kóddal.** A dobozban a **Felülbíráló kód** megadásával a lap mégis megnyitható (**Megnyitás kóddal**). A kódot a **Beállítások › Jogosultságok** fülön állítod be (egyetlen közös kód; csak lenyomatként tárolódik, nem olvasható vissza). Amíg nincs kód beállítva, a zárolás nem bírálható felül. Öt hibás kód után a felhasználó 5 percre kizárt a próbálkozásból. A felülbírálás és a hibás kód is a lap **Naplójába** kerül.
+
+A **Beállítások › Jogosultságok** fülön azt is megadod, mely rekordok zárolnak: a **munkalap** alapból igen, az **ügyfél** és az **eszköz** alapból nem (ezeket gyakran nyitják meg egymás mellől). A lezárt (zárolt) lap csak olvasható, ezért nem zárol. Új, még el nem mentett lapot sem lehet „foglalni".
+
+**Ha mégis ketten vannak a lapon** (felülbírálás után, vagy ha a zárolás ki van kapcsolva), az ablak alján megjelenik: **„Gábor is szerkeszti"** (a jelzés fél percen belül frissül). Ha közben a másik **módosított valamit**, és te is mentenél (a Mentés gombbal vagy az automatikus mentés), a mentés **nem fut le**, és az űrlap tetején sáv jelenik meg: *„Közben Gábor módosította (14:32)."* Két gomb közül választasz – mindkettő két lépésben működik, a második kattintás erősíti meg:
 
 - **Frissítés a legújabbra** – a lap a másik kolléga változtatásával töltődik be újra; ami nálad még nem volt elmentve, elvész.
 - **Az enyémet mentsd** – a te változtatásod mentődik, és felülírja a másikét. A másik kolléga változtatása így is megmarad a lap **Naplójában**.
 
-Nem számít ütközésnek: a saját előző mentésed, a nyomtatás, az SMS és az ügyfél vagy az időzítő (rendszer) módosítása. Ugyanazzal a felhasználóval két gépen a rendszer nem tudja megkülönböztetni a két szerkesztőt – ezért érdemes külön felhasználót adni mindenkinek.
+Nem számít ütközésnek: a saját előző mentésed, a nyomtatás, az SMS és az ügyfél vagy az időzítő (rendszer) módosítása. A mentési ütközés-védelem felhasználó szerint különböztet, ezért érdemes külön felhasználót adni mindenkinek.
 
 ## Ügyfél és eszköz a munkalapon
 
@@ -447,6 +451,7 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - **A lezárt lap csak újranyitás után szerkeszthető**, és az újranyitás a Naplóba kerül (lásd: Lezárt lap zárolása).
 - A lap minden változása – mezők, tételek, hibák, eszközök, fizetés, üzenetek – a lap **Naplójába** kerül, és onnan nem törölhető.
 - Ha egy fizetési mód vagy egy felelős már nincs a listán, a régi lapon akkor is látszik.
+- **Egy lapot egyszerre egy ablakban lehet szerkeszteni**: amit más épp szerkeszt, az nem nyitható meg, amíg be nem zárja – kivéve a felülbíráló kóddal (Beállítások › Jogosultságok).
 - **Közben módosított lapot a rendszer nem ír felül szó nélkül**: ha más belépett kolléga a megnyitás óta módosította, a mentés megáll, és te döntesz (lásd: Ha ketten szerkesztik ugyanazt).
 
 ## Ha valami nem megy
@@ -460,6 +465,7 @@ Az előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok s
 - **Nincs számlagomb.** – A lapnak még nincs munkalapszáma, vagy még nincs elmentve.
 - **„Közben … módosította”** (sárga sáv az űrlap tetején) – egy kolléga a megnyitás óta módosította a lapot, ezért a mentésed megállt. Válaszd a **Frissítés a legújabbra** vagy az **Az enyémet mentsd** gombot (mindkettő két kattintás).
 - **„… is szerkeszti”** az ablak alján – egy kolléga is nyitva tartja ugyanezt a lapot. Szólj neki, mielőtt nagyobb átírásba kezdesz.
+- **„Ezt a munkalapot most más szerkeszti”** – a lap másik ablakban nyitva van. Várd meg, amíg bezárják, vagy add meg a felülbíráló kódot (ha nincs ilyen kód, a Beállítások › Jogosultságok fülön állítható be).
 - **„Ez a lap lezárt – szerkeszteni csak újranyitás után lehet”** – a lap lezárt állapotban van. Nyisd újra a lap tetején az **Újranyitás** gombbal.
 - **„A lezárt lap újranyitásához ok kell”** – a Beállításokban kötelező az újranyitás oka: nyisd meg a lapot, és a tetején írd be az okot.
 - **„Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.”** – Eszközt csak kiválasztott ügyfél mellé lehet csatolni.
@@ -474,9 +480,9 @@ Mert a lezárt lap csak olvasható – így nem változhat meg utólag észrevé
 
 Igen. A nyomtatás, a matrica, a számla és az ügyfélüzenet nem módosítja a lapot, ezért zárolva is megy.
 
-### Mi történik, ha ketten szerkesztjük ugyanazt a lapot?
+### Mi történik, ha ketten szeretnénk ugyanazt a lapot megnyitni?
 
-Amíg egyikőtök sem módosít, semmi. Ha egyikőtök ment, a másiknak a következő mentésekor sárga sáv jelzi, hogy közben változott a lap, és ő dönt: frissít (a másik változtatását látja), vagy felülír (a másikét felülírja). Szó nélkül soha nem íródik felül semmi, és minden változás a Naplóban marad.
+Amit az egyikőtök már szerkeszt, azt a másik nem tudja megnyitni, amíg az első be nem zárja – a másik helyette azt látja, ki szerkeszti. Felülbíráló kóddal ez megkerülhető (Beállítások › Jogosultságok). Ha mégis ketten vannak a lapon, a mentéskor jelzett ütközésnél frissítesz vagy felülírsz; szó nélkül soha nem íródik felül semmi, és minden változás a Naplóban marad.
 
 ### Hol látom, ki módosított egy munkalapot?
 

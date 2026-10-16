@@ -752,6 +752,11 @@
         cim.searchParams.set('kontextus', beallitas.kontextus || 'admin');
         cim.searchParams.set('_wpnonce', beallitas.nonce || '');
 
+        // Egyszerre egy ablak (0.71.0): a szerver ebből tudja, melyik böngészőlap nyitja a rekordot (utkozes.js).
+        if (window.SDH_UTKOZES && window.SDH_UTKOZES.fiok) {
+            cim.searchParams.set('szerk_fiok', window.SDH_UTKOZES.fiok());
+        }
+
         Object.keys(opciok.parameterek || {}).forEach(function (nev) {
             cim.searchParams.set(nev, opciok.parameterek[nev]);
         });
@@ -11903,6 +11908,15 @@
         nyit: nyit,
         bezar: bezar,
         sajatSzint: sajatSzint,
+        // Ugyanaz a rekord újra, ugyanabban a szintben (a zárolás-doboz kód utáni megnyitása – utkozes.js).
+        ujraNyit: function (elem) {
+            var n = sajatSzint(elem);
+            var sz = n >= 0 ? szintek[n] : null;
+
+            if (sz && sz.modul) {
+                nyit(sz.modul, sz.id, Object.assign({}, sz.opciok || {}, { szint: n }));
+            }
+        },
         valaszto: szValNyit,
         pillek: pillNyit,
         hiba: mutatUrlapHiba

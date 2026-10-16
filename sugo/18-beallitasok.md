@@ -69,6 +69,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **IMEI-lekérdezés** | A fizetős IMEI-szolgáltató végpontja és kulcsa, és az ingyenes ellenőrző oldalak gombjai. | [Eszközök](sugo:eszkozok) |
 | **TAC adatbázis** | Az IMEI elejéből ez mondja meg a gyártót és a típust: állapot, betöltés. | [Eszközök](sugo:eszkozok) |
 | **Mentés** | A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés. | [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag) |
+| **Jogosultságok** | Egyszerre egy ablakban szerkeszthető lap: melyik rekordtípus zárol (munkalap, ügyfél, eszköz), és a zárolást felülbíráló kód. | [Munkalapok](sugo:munkalapok) |
 | **Sebesség** | A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás. | ez a fejezet |
 | **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |
 | **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |

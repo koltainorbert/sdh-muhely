@@ -10,6 +10,11 @@
  *       – „Az enyémet mentsd": a saját változtatás felülírja a másikét.
  *     Sikeres mentés után az űrlap új alapot kap (szerk_naplo), a sáv eltűnik.
  *
+ *  3. Zárolás (0.71.0): amit másik ablak szerkeszt, azt a szerver nem engedi megnyitni; helyette zárolás-doboz jön
+ *     (`data-sdh-zar`), benne a felülbíráló kód mezője. A kód külön POST-kérésben ellenőrződik (nem kerül URL-be),
+ *     siker után a rekord újra megnyílik. Az ablakot egy lapazonosító (fiok) különbözteti meg: a lapon belül állandó,
+ *     újratöltés után is megmarad (sessionStorage).
+ *
  *  2. „X is szerkeszti": a nyitott űrlapok a közös pulzussal (csapat.js, 30 mp) jelentkeznek;
  *     a válaszban (`szerkeszti`) megjön, ki más tartja még nyitva ugyanazt. A jelzés az
  *     űrlap láblécében látszik. Megnyitáskor és bezáráskor azonnal pulzus indul.
@@ -24,6 +29,35 @@
     }
 
     var JELZO_OSZTALY = 'sdh-szerk-jelzo';
+
+    /** A böngészőlap (ablak) azonosítója: kisbetű + szám, 8–48 karakter. */
+    var fiokAzon = '';
+
+    function fiok() {
+        if (fiokAzon) {
+            return fiokAzon;
+        }
+
+        try {
+            fiokAzon = String(window.sessionStorage.getItem('sdhSzerkFiok') || '');
+        } catch (x) { fiokAzon = ''; }
+
+        if (!/^[a-z0-9]{8,48}$/.test(fiokAzon)) {
+            fiokAzon = '';
+
+            for (var i = 0; i < 3; i++) {
+                fiokAzon += Math.random().toString(36).slice(2, 10);
+            }
+
+            fiokAzon = (fiokAzon + Date.now().toString(36)).replace(/[^a-z0-9]/g, '').slice(0, 40);
+
+            try {
+                window.sessionStorage.setItem('sdhSzerkFiok', fiokAzon);
+            } catch (x) { /* a lapon belül így is állandó */ }
+        }
+
+        return fiokAzon;
+    }
     var SAV_OSZTALY = 'sdh-utkozes-sav';
 
     /** A nyitott, védett űrlapok mezői (a láthatatlan / bezárt popupé nem számít). */
@@ -55,7 +89,7 @@
     function pulzusAdat() {
         var most = kulcsok();
         var el = jelentett.filter(function (k) { return most.indexOf(k) < 0; });
-        var adat = {};
+        var adat = { szerk_fiok: fiok() };
 
         if (most.length) {
             adat.szerk = most.join(',');
@@ -154,6 +188,7 @@
 
             fd.set('action', 'sdh_muhely_pulzus');
             fd.set('_wpnonce', window.SDH_MUHELY.nonce || '');
+            fd.set('szerk_fiok', fiok());
             fd.set('szerk_el', most.join(','));
             navigator.sendBeacon(window.SDH_MUHELY.ajax, fd);
         } catch (x) { /* a jelenlét magától lejár */ }
@@ -300,8 +335,113 @@
         savEltavolit(urlap);
     });
 
+    /* ---- Zárolás-doboz ------------------------------------------------------ */
+
+    function zarKotes(doboz) {
+        if (doboz.getAttribute('data-sdh-zar-kotve') === '1') {
+            return;
+        }
+
+        doboz.setAttribute('data-sdh-zar-kotve', '1');
+
+        var kulcs = doboz.getAttribute('data-sdh-zar') || '';
+        var mezo = doboz.querySelector('[data-sdh-zar-kod]');
+        var hiba = doboz.querySelector('[data-sdh-zar-hiba]');
+        var nyit = doboz.querySelector('[data-sdh-zar-nyit]');
+        var bezar = doboz.querySelector('[data-sdh-zar-bezar]');
+        var foglalt = false;
+
+        function hibaKi(szoveg) {
+            if (hiba) {
+                hiba.textContent = szoveg;
+                hiba.hidden = !szoveg;
+            }
+        }
+
+        function probal() {
+            var B = window.SDH_MUHELY || {};
+
+            if (foglalt || !mezo || !B.ajax) {
+                return;
+            }
+
+            if (!mezo.value) {
+                hibaKi('Add meg a kódot.');
+
+                return;
+            }
+
+            foglalt = true;
+            hibaKi('');
+
+            var fd = new FormData();
+
+            fd.set('action', 'sdh_muhely_szerk_felulir');
+            fd.set('_wpnonce', B.nonce || '');
+            fd.set('szerk_fiok', fiok());
+            fd.set('kulcs', kulcs);
+            fd.set('kod', mezo.value);
+
+            fetch(B.ajax, { method: 'POST', body: fd, credentials: 'same-origin' })
+                .then(function (v) { return v.json(); })
+                .then(function (j) {
+                    foglalt = false;
+
+                    if (!j || !j.success) {
+                        mezo.value = '';
+                        hibaKi((j && j.data && j.data.uzenet) || 'A kód nem fogadható el.');
+
+                        return;
+                    }
+
+                    // Az engedély egyszeri és rövid életű: azonnal újra megnyitjuk ugyanazt a rekordot.
+                    if (window.SDH_MUHELY_APP && window.SDH_MUHELY_APP.ujraNyit) {
+                        window.SDH_MUHELY_APP.ujraNyit(doboz);
+                    }
+                })
+                .catch(function () {
+                    foglalt = false;
+                    hibaKi('A kód ellenőrzése nem sikerült. Próbáld újra.');
+                });
+        }
+
+        if (nyit) {
+            nyit.addEventListener('click', probal);
+        }
+
+        if (mezo) {
+            mezo.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    probal();
+                }
+            });
+            window.setTimeout(function () { mezo.focus(); }, 30);
+        }
+
+        if (bezar) {
+            bezar.addEventListener('click', function () {
+                if (window.SDH_MUHELY_APP && window.SDH_MUHELY_APP.sajatSzint && window.SDH_MUHELY_APP.bezar) {
+                    var n = window.SDH_MUHELY_APP.sajatSzint(doboz);
+
+                    window.SDH_MUHELY_APP.bezar(n >= 0 ? n : 0);
+                }
+            });
+        }
+    }
+
+    document.addEventListener('sdh:urlap-betoltve', function (ev) {
+        var torzs = ev && ev.detail && ev.detail.torzs;
+        var doboz = torzs && torzs.querySelector ? torzs.querySelector('[data-sdh-zar]') : null;
+
+        if (doboz) {
+            zarKotes(doboz);
+        }
+    });
+
     window.SDH_UTKOZES = {
         pulzusAdat: pulzusAdat,
-        nyitott: kulcsok
+        nyitott: kulcsok,
+        fiok: fiok
     };
 }());
