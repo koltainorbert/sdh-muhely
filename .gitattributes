@@ -4,3 +4,5 @@
 # A mérőpad tesztadat-generátora soha nem kerül a telepítőbe.
 /tools/mero-tesztadat.php export-ignore
 /tools/mero-meres.php export-ignore
+# A forgalmazói központ külön bővítmény (kozpont/sdh-kozpont), nem kerül a vevők telepítőjébe.
+/kozpont        export-ignore

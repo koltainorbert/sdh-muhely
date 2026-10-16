@@ -67,6 +67,11 @@ final class SDH_Muhely_Frissites
 
     public static function csomag_url(): string
     {
+        // N4 (0.93.0): központtal a csomagot a központ adja, licencellenőrzéssel.
+        if (class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol()) {
+            return SDH_Muhely_Licenc::csomag_url();
+        }
+
         $f = self::forras();
 
         return 'https://api.github.com/repos/' . $f['repo'] . '/zipball/' . $f['ag'];
@@ -100,6 +105,11 @@ final class SDH_Muhely_Frissites
      */
     public static function uj_verzio(bool $kenyszer = false): array
     {
+        // N4 (0.93.0): központtal az újabb verziót a központ napi válasza adja (nem a GitHub).
+        if (class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol()) {
+            return SDH_Muhely_Licenc::frissites_info($kenyszer);
+        }
+
         if (!$kenyszer) {
             $c = get_transient(self::CACHE);
 

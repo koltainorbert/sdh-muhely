@@ -271,6 +271,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'Szerepkörök és jogok, egyszerre egy ablakban szerkeszthető lap (zárolás, felülbíráló kód), a közös fiók „Ki vagy?” választója (dolgozók, PIN) és a kétlépcsős belépés.',
                 'rajz' => [SDH_Muhely_Szemely::class, 'jogosultsagok_rajz'], 'ment' => [SDH_Muhely_Szemely::class, 'jogosultsagok_mentes'],
             ],
+            'licenc' => [
+                'cim' => 'Licenc', 'csoport' => 'rendszer',
+                'leiras' => 'A licenckulcs és a forgalmazó központja (frissítés, állapot), és a támogatási hozzáférés engedélyezése meghatározott időre.',
+                'rajz' => [SDH_Muhely_Licenc::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Licenc::class, 'beallitas_mentes'],
+            ],
             'sebesseg' => [
                 'cim' => 'Sebesség', 'csoport' => 'rendszer', 'ujratolt' => true,
                 'leiras' => 'A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás.',

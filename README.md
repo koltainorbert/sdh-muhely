@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.93.0
+- **N4 – licenc és forgalmazói központ.** Vevő oldal: új `SDH_Muhely_Licenc`, Beállítások › Rendszer › **Licenc** (adminnak):
+  központ címe + licenckulcs; óránkénti időzítő, naponta egy jelentés (`rest_route=/sdh-kozpont/v1/jelentes`: kulcs, példány
+  UUID, sózott ujjlenyomat, verzió – semmi más). Ed25519-aláírt válasz (libsodium), a központ kulcsa TOFU-val megjegyezve,
+  példány- és időellenőrzés (visszajátszás ellen). Állapot: saját / aktív / lejárt / tiltva / túl sok / ismeretlen /
+  nincs kapcsolat (30 nap) / még nem. Nem aktív licencnél a rendszer működik, csak frissítést nem kap; adminnak sáv a műhely tetején.
+  `Frissites::uj_verzio()` / `csomag_url()` központtal a központot kérdezi.
+- **Támogatási hozzáférés:** a vevő adminja 2 / 24 / 72 órára engedélyez → ideiglenes `administrator` fiók, belépő link
+  (`?sdh_tamogatas=<token>`, hash-elve tárolva), a link a központba megy; lejáratkor (óránként) vagy visszavonáskor a fiók törlődik;
+  minden lépés naplózva. Kétlépcsős gombok.
+- Központ: külön bővítmény `kozpont/sdh-kozpont` (1.0.0, export-ignore a vevői zipből): licencek (kulcs magától), példányok,
+  kiadás feltöltése (verzió a zip fejlécéből, védett mappa), támogatási linkek, nyilvános kulcs. A zárt mód a `/sdh-kozpont/`
+  REST-utat átengedi. Súgó: 30. fejezet (új), 21. fejezet [fejlesztő]. Teszt: t85.
+
 ### 0.92.0
 - **N6** (új `SDH_Muhely_Admin_Atallas`): Beállítások › Jogosultságok › **Fejlesztői fiókok** (csak fejlesztőnek, csak ha van
   más WordPress-adminisztrátor): kétlépcsős **SDH adminisztrátorrá** gomb (`sdh_muhely_admin_atallit`) → `set_role('sdh_admin')`,

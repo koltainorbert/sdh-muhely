@@ -281,7 +281,8 @@ final class SDH_Muhely_Rejtes
 
         $ut = isset($GLOBALS['wp']->query_vars['rest_route']) ? (string) $GLOBALS['wp']->query_vars['rest_route'] : '';
 
-        if ($ut !== '' && str_starts_with($ut, self::REST_SAJAT)) {
+        // A központ (N4) végpontjai nyilvánosak – ha ugyanezen a webhelyen fut a központi bővítmény is.
+        if ($ut !== '' && (str_starts_with($ut, self::REST_SAJAT) || str_starts_with($ut, '/sdh-kozpont/'))) {
             return $eredmeny;
         }
 

@@ -5,7 +5,7 @@ csoport: Rendszer
 csak: fejleszto
 modul:
 szakaszok:
-kulcsszavak: telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
+kulcsszavak: licenc, központ, SDH Központ, eladás, vevő, licenckulcs, kiadás, telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
 osszefoglalo: Mit kíván a rendszer, hogyan telepíted egy külön belső WordPressbe, hogyan frissíted egy kattintással a GitHubról vagy a teljes zip feltöltésével úgy, hogy az adatok megmaradnak, és mit próbálj ki élesítés előtt.
 ---
 
@@ -150,6 +150,24 @@ Ami a frissítéskor magától megtörténik:
 - **Az asszisztens megtanulja az újdonságokat;** a **Súgó › Újdonságok** oldalon is olvashatók.
 
 > **Tipp:** Frissíts nyitás előtt vagy zárás után, amikor senki nem ment éppen.
+
+## Forgalmazói központ és licenc (eladáshoz)
+
+A vevőknek eladott példányokat a **SDH Központ** bővítmény kezeli. Ez a forgalmazó saját WordPressére kerül, nem a vevőkhöz (a forrásban: `kozpont/sdh-kozpont/`, külön zip: `sdh-kozpont-1.0.0.zip`).
+
+### Lépésről lépésre: központ beállítása
+
+1. A forgalmazói webhelyen: **Bővítmények › Új › Feltöltés**, `sdh-kozpont-1.0.0.zip`, bekapcsolás. Bal oldalt megjelenik az **SDH Központ** menü.
+2. **Licencek** fül: vevő neve, vevőazonosító, lejárat (üresen soha), példányszám → **Licenc létrehozása**. A kulcs (`SDH-XXXX-…`) magától készül.
+3. **Kiadás** fül: töltsd fel az SDH Műhely telepítő zipjét. A verziót a zip `sdh-muhely/sdh-muhely.php` fejlécéből olvassa ki.
+4. A vevőnek add meg: a központ címét (a **Kulcs** fül alján áll) és a licenckulcsot. Ő a saját rendszerében a **Beállítások › Licenc** lapon írja be.
+5. **Példányok** fül: minden telepítés, a verziója és az utolsó jelentés ideje (ügyféladat nincs). **Támogatás** fül: a vevők által engedélyezett, időkorlátos belépő linkek.
+
+### Ami a vevőnél történik
+
+- Naponta egy jelentés (kulcs, példány-azonosító, ujjlenyomat, verzió); a válasz Ed25519-aláírt, a kulcsot az első kapcsolatkor jegyzi meg (a fejlesztő a Licenc lapon törölheti, ha a központ kulcsot cserélt).
+- Központtal a frissítés a központból jön (aktív licenccel), nem a GitHubról. Lejárt / tiltott licencnél a rendszer tovább működik, csak frissítést nem kap; az adminisztrátor figyelmeztetést lát.
+- A támogatási link ideiglenes fejlesztői fiókot nyit; lejáratkor törlődik.
 
 ## Szabályok, amiket a rendszer betart
 

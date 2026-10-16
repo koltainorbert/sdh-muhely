@@ -12556,3 +12556,93 @@
             });
     });
 }());
+
+/* Licenc és támogatási hozzáférés (N4, 0.93.0): Beállítások › Licenc. */
+(function () {
+    'use strict';
+
+    function kuld(doboz, adat, kesz) {
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+
+        Object.keys(adat).forEach(function (k) { fd.set(k, adat[k]); });
+        fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(kesz)
+            .catch(function () { kesz({ success: false, data: { uzenet: 'Nincs kapcsolat a szerverrel.' } }); });
+    }
+
+    document.addEventListener('click', function (e) {
+        var g = e.target.closest && e.target.closest('[data-sdh-licenc-ellenoriz],[data-sdh-tamogatas-indit],[data-sdh-tamogatas-visszavon]');
+
+        if (!g) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var doboz = g.closest('[data-sdh-licenc]');
+        var uzenet = doboz.querySelector('[data-sdh-licenc-uzenet]');
+        var adat;
+
+        if (g.hasAttribute('data-sdh-tamogatas-visszavon') || g.hasAttribute('data-sdh-tamogatas-indit')) {
+            // Kétlépcsős gomb: az első kattintás csak megerősítést kér.
+            if (!g.hasAttribute('data-elso')) {
+                g.setAttribute('data-elso', '1');
+                g.setAttribute('data-eredeti', g.textContent);
+                g.textContent = 'Biztosan? Kattints újra';
+                window.setTimeout(function () {
+                    if (g.hasAttribute('data-elso')) {
+                        g.removeAttribute('data-elso');
+                        g.textContent = g.getAttribute('data-eredeti');
+                    }
+                }, 4000);
+
+                return;
+            }
+
+            g.removeAttribute('data-elso');
+            g.textContent = g.getAttribute('data-eredeti');
+        }
+
+        if (g.hasAttribute('data-sdh-licenc-ellenoriz')) {
+            adat = { action: 'sdh_muhely_licenc_ellenoriz' };
+        } else if (g.hasAttribute('data-sdh-tamogatas-indit')) {
+            adat = { action: 'sdh_muhely_tamogatas_indit', ora: (doboz.querySelector('[data-sdh-tamogatas-ora]') || {}).value || '24' };
+        } else {
+            adat = { action: 'sdh_muhely_tamogatas_visszavon', user: g.getAttribute('data-sdh-tamogatas-visszavon') };
+        }
+
+        g.disabled = true;
+
+        if (uzenet) {
+            uzenet.textContent = 'Folyamatban…';
+        }
+
+        kuld(doboz, adat, function (v) {
+            g.disabled = false;
+
+            if (uzenet) {
+                uzenet.textContent = (v && v.data && v.data.uzenet) || (v && v.success ? 'Kész.' : 'Nem sikerült.');
+            }
+
+            var link = doboz.querySelector('[data-sdh-tamogatas-link]');
+
+            if (v && v.success && v.data && v.data.link && link) {
+                link.value = v.data.link;
+                link.hidden = false;
+                link.select();
+            }
+
+            if (v && v.success && g.hasAttribute('data-sdh-tamogatas-visszavon')) {
+                var sor = g.closest('tr');
+
+                if (sor) {
+                    sor.remove();
+                }
+            }
+        });
+    });
+}());

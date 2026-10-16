@@ -10840,3 +10840,27 @@ button.sdh-allapot,
 .sdh-net[hidden] {
     display: none;
 }
+
+/* Licenc (N4, 0.93.0) */
+.sdh-licenc__link {
+    width: 100%;
+    height: calc(34px * var(--sdh-n));
+    padding: 0 calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-licenc__torol {
+    display: inline-flex;
+    gap: .3rem;
+    align-items: center;
+    margin-left: .5rem;
+}
+
+.sdh-licenc-jel {
+    margin-bottom: calc(12px * var(--sdh-n));
+}

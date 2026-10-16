@@ -120,7 +120,9 @@ T::egyezik(0, get_current_user_id(), 'rossz kóddal nincs belépés');
 $r = $R::kuldes(['sdh_2fa_jegy' => $jegy, '_sdh_2fa' => 'rossz', 'kod' => $K::kod($kt, $K::most_lepes())]);
 T::igaz(!empty($r['elolrol']), 'hibás nonce: elölről');
 
-$r = $R::kuldes(['sdh_2fa_jegy' => $jegy, '_sdh_2fa' => $n2, 'kod' => $K::kod($kt, $K::most_lepes())]);
+// A kódot egyszer kérjük le: ha közben 30 mp-es lépéshatárt lépünk, a „már felhasznált” próba is ugyanezt használja (0.93.0).
+$hasznalt = $K::kod($kt, $K::most_lepes());
+$r = $R::kuldes(['sdh_2fa_jegy' => $jegy, '_sdh_2fa' => $n2, 'kod' => $hasznalt]);
 T::egyezik(SDH_Muhely_Modulok::frontend_url(), $r['cel'] ?? '', 'jó kód: belépés, a műhelybe');
 T::egyezik($kolleg, get_current_user_id(), 'be van jelentkezve');
 T::egyezik(null, $K::fuggo($jegy), 'a jegy felhasználva (nem lehet újra)');
@@ -129,7 +131,7 @@ T::egyezik(null, $K::fuggo($jegy), 'a jegy felhasználva (nem lehet újra)');
 wp_set_current_user(0);
 $r = $R::belepes_feldolgoz(['log' => 'kolleg_t73', 'pwd' => 'Jelszo-T73-ok!', '_sdh_belepes' => wp_create_nonce('sdh_muhely_belepes')]);
 $jegy = (string) ($r['jegy'] ?? '');
-$r = $R::kuldes(['sdh_2fa_jegy' => $jegy, '_sdh_2fa' => wp_create_nonce('sdh_muhely_2fa'), 'kod' => $K::kod($kt, $K::most_lepes())]);
+$r = $R::kuldes(['sdh_2fa_jegy' => $jegy, '_sdh_2fa' => wp_create_nonce('sdh_muhely_2fa'), 'kod' => $hasznalt]);
 T::igaz(!isset($r['cel']), 'a már felhasznált kód nem enged be másodszor');
 
 // Tartalék kód.
