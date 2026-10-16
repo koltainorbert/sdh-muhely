@@ -27,17 +27,21 @@ Elakadások a bejelentkezésnél és a műhely-felület megnyitásakor.
 - **„Ehhez nincs jogosultságod."** – *Ok:* a fiókod be van jelentkezve, de nem fér hozzá a műhelyrendszerhez, vagy kollégaként egy csak adminisztrátornak szóló oldalt nyitottál meg. *Megoldás:* szólj az adminisztrátornak. A **Beállítások** menüpont a kollégának nem jár.
 - **„Ez a fiók le van tiltva. Szólj az adminisztrátornak."** – *Ok:* a fiókodat letiltották. *Megoldás:* az adminisztrátor a **Csapat** menüpontban, a kolléga űrlapján állíthatja vissza **Aktív** állapotra.
 - **„Nincs ilyen oldal" – „Ez a modul nem létezik."** – *Ok:* elírt vagy régi cím. *Megoldás:* válassz a bal oldali menüből, és frissítsd a könyvjelzőt.
-- **A műhely címe a WordPress „nem található" oldalát adja.** – *Ok:* a WordPress címszabályai közül kiesett a műhelyé. A rendszer ezt magától pótolja. *Megoldás:* töltsd újra az oldalt. Ha így sem jó, a cím végére írd: `?muhely=attekintes` – ez mindig működik. Részletek: [Telepítés és frissítés](sugo:telepites).
-- **Belépés után a WordPress vezérlőpultja nyílik meg, nem a műhely.** – *Ok:* adminisztrátor vagy; a kolléga kerül egyenesen a műhelybe. *Megoldás:* nyisd meg a műhely címét, vagy a vezérlőpult műhely-oldalán nyomd meg a **Megnyitás a műhely-felületen** gombot.
+- **A műhely címe „nem található” oldalt ad.** – *Ok:* a rendszer címszabályai közül kiesett a műhelyé. A rendszer ezt magától pótolja. *Megoldás:* töltsd újra az oldalt. Ha így sem jó, a cím végére írd: `?muhely=attekintes` – ez mindig működik.
 - **Az oldal magától újratöltődött.** – *Ok:* a rendszer közben új verziót kapott, és a nyitott oldal egyszer frissített. *Megoldás:* nincs teendő.
+
+### A fejlesztő belépése [fejlesztő]
+
+- **Belépés után a WordPress vezérlőpultja nyílik meg, nem a műhely.** – *Ok:* fejlesztőként (WordPress-adminisztrátorként) léptél be; mindenki más egyenesen a műhelybe kerül. *Megoldás:* nyisd meg a műhely címét, vagy a vezérlőpult műhely-oldalán nyomd meg a **Megnyitás a műhely-felületen** gombot.
+- **A műhely címe a WordPress „nem található” oldalát adja.** – a címszabályok újraépítéséről: [Telepítés és frissítés](sugo:telepites).
 
 ## Sebesség: ha lassú a rendszer
 
-A rendszer sok százezer ügyféllel és munkalappal is gyors, ha a szerver (a gépen futó WordPress) jól van beállítva. Két beállításon múlik a legtöbb – ezeket a rendszergazda egyszer állítja be.
+A rendszer sok százezer ügyféllel és munkalappal is gyors, ha a szerver jól van beállítva. Két beállításon múlik a legtöbb – ezeket a rendszer üzemeltetője egyszer állítja be.
 
 ### Gyors betöltés (Beállítások › Rendszer › Sebesség)
 
-Bekapcsolva a műhely-felület és a wp-admin is két fájlban tölti be a stílusokat és a szkripteket, sok tucat helyett. Hagyd bekapcsolva.
+Bekapcsolva a műhely-felület két fájlban tölti be a stílusokat és a szkripteket, sok tucat helyett. Hagyd bekapcsolva.
 
 ### Hol látod, hogy rendben van
 
@@ -52,7 +56,7 @@ A műhely-felület mozgásai (a figura, a popupok, az árnyékok) akkor simák, 
 
 Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-gyorsitas/hardveres-gyorsitas-be.reg` fájl rendszergazdaként futtatva házirendet állít be, amit a felhasználó sem tud kikapcsolni; a böngészőt utána teljesen újra kell indítani. Ellenőrzés: `chrome://policy` és `chrome://gpu`. Visszavonás: `hardveres-gyorsitas-vissza.reg`. Ha a videokártya-illesztő hibás vagy tiltólistás, a gyorsítás ettől még nem indul – ilyenkor az illesztőt kell frissíteni. Firefoxban kézzel kapcsolható (Beállítások › Általános › Teljesítmény).
 
-### PHP OPcache bekapcsolása – LocalWP (Windows)
+### PHP OPcache bekapcsolása – LocalWP (Windows) [fejlesztő]
 
 1. A LocalWP-ben állítsd le a webhelyet (**Stop site**).
 2. Nyisd meg a webhely mappájában (**Go to site folder**) a `conf\php\php.ini.hbs` fájlt Jegyzettömbbel.
@@ -62,7 +66,7 @@ Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-
 5. Mentsd, és indítsd el a webhelyet (**Start site**).
 6. Ellenőrzés: Beállítások › Rendszer › Sebesség – *PHP OPcache: be*. Ha nem indul el a webhely, tedd vissza a pontosvesszőt (a fájlt a LocalWP a következő induláskor újra beolvassa).
 
-### MySQL / MariaDB puffer – LocalWP
+### MySQL / MariaDB puffer – LocalWP [fejlesztő]
 
 1. **Stop site**.
 2. A webhely mappájában nyisd meg a `conf\mysql\my.cnf.hbs` fájlt.
@@ -73,7 +77,7 @@ Kikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-
 
 Új verzióra lépéskor a rendszer egyszer, a háttérben feltölti az ügyfelek keresőadatait (kérésenként legfeljebb egy másodpercig, ott folytatja, ahol abbahagyta). Amíg ez tart, az ügyfélkereső a régi módon keres – ugyanazt találja, csak lassabban. Nagy állománynál ez néhány percnyi használat alatt ér véget.
 
-### Mérés a saját gépen
+### Mérés a saját gépen [fejlesztő]
 
 A `tools/mero-meres.php` csak olvas: lefuttatja a gyakori lekérdezéseket a meglévő adatokon, és kiírja az időket, a MySQL beállításait és azt, hol olvas végig egy egész táblát. Indítás: **Open site shell**, a plugin mappájában `php tools/mero-meres.php`. Semmit nem ír az adatbázisba.
 
@@ -159,7 +163,7 @@ A **Napi árukiadás** és a **Rendelések** menüpont üzenetei.
 Az **Üzenetek** menüpont és az ügyfélnek szóló ügyféloldal elakadásai.
 
 - **„Írd be az üzenetet."** – *Ok:* üres üzenetet küldenél. *Megoldás:* írj szöveget.
-- **Az ügyfél nem kapja meg az e-mail értesítést.** – *Ok:* nincs e-mail-címe, vagy a szerver levélküldése nem működik. *Megoldás:* ellenőrizd az ügyfél e-mail-címét; a levélküldésről lásd: [Telepítés és frissítés](sugo:telepites).
+- **Az ügyfél nem kapja meg az e-mail értesítést.** – *Ok:* nincs e-mail-címe, vagy a szerver levélküldése nem működik. *Megoldás:* ellenőrizd az ügyfél e-mail-címét; ha az jó, a szerver levélküldését a rendszer üzemeltetője tudja beállítani.
 - **Az ügyfél azt mondja, nem tud belépni az ügyféloldalra.** – *Ok:* a telefonszám vagy a munkalap sorszáma nem egyezik; több hibás próbálkozás után az oldal 15 percig nem enged újra próbálkozni. *Megoldás:* egyeztesd vele a munkalapon szereplő telefonszámot és sorszámot. Részletek: [Üzenetek és ügyféloldal](sugo:uzenetek-rma).
 
 ## Levelezés
@@ -185,7 +189,7 @@ A **Naptár** menüpont üzenetei.
 - **„Ezt az eseményt csak a naptár gazdája vagy az adminisztrátor módosíthatja."** – *Ok:* más naptárában lévő eseményt írnál át. *Megoldás:* kérd meg a gazdáját.
 - **„Ismétlődő esemény időpontját az űrlapján lehet módosítani."** – *Ok:* ismétlődő eseményt húzással nem lehet áttenni. *Megoldás:* nyisd meg, és ott írd át.
 - **„A neveket az adminisztrátor szerkesztheti."** – *Megoldás:* a naptár neveit adminisztrátor veszi fel.
-- **Nem jön az esemény e-mail értesítése.** – *Ok:* a szerver levélküldése vagy az időzített feladatai nem futnak. *Megoldás:* lásd: [Telepítés és frissítés](sugo:telepites).
+- **Nem jön az esemény e-mail értesítése.** – *Ok:* a szerver levélküldése vagy az időzített feladatai nem futnak. *Megoldás:* szólj a rendszer üzemeltetőjének.
 
 ## Csapat
 
@@ -222,7 +226,7 @@ A nyomtatványok (átvételi, munkalap, árajánlat, szállítólevél, pénztá
 - **„A próbanyomat nem küldhető el…”** – *Ok:* a próbanyomat kitalált adatokkal készül. *Megoldás:* valódi lapról küldj.
 - **Nincs Nyomtatás gomb a munkalapon.** – *Ok:* a lap még nincs elmentve. *Megoldás:* mentsd el; utána a rendszer felajánlja az átvételi elismervényt.
 - **Nem jelenik meg a felajánlás új lapnál vagy lezáráskor.** – *Ok:* ki van kapcsolva. *Megoldás:* **Beállítások › Nyomtatványok**, **Felajánlás és e-mail** doboz.
-- **„A mentett kulcs ezen a telepítésen nem olvasható…”** (Számlázás, IMEI-lekérdezés) – *Ok:* a rendszer másik gépre költözött, vagy megváltoztak a `wp-config.php` titkos kulcsai. *Megoldás:* írd be újra a kulcsot.
+- **„A mentett kulcs ezen a telepítésen nem olvasható…”** (Számlázás, IMEI-lekérdezés) – *Ok:* a rendszer másik gépre költözött, vagy megváltoztak a szerver titkos kulcsai. *Megoldás:* írd be újra a kulcsot.
 
 ## Beállítások, mentés, frissítés
 
@@ -231,7 +235,7 @@ A **Beállítások** menüpont, a teljes mentés és a frissítés elakadásai �
 - **„Lejárt a munkamenet – töltsd újra az oldalt, és próbáld újra."** – *Ok:* a Beállítások oldal túl régóta állt nyitva. *Megoldás:* [[F5]], majd mentés újra.
 - **„A fájl nem érkezett meg (túl nagy, vagy megszakadt a feltöltés)."** – *Ok:* a logó vagy a háttér nagyobb a szerver feltöltési korlátjánál. *Megoldás:* tölts fel kisebb fájlt.
 - **„A szerveren nincs gzip – a mentés nem készülhet el."** / **„A mentési mappa nem írható: …"** – *Megoldás:* a tárhely üzemeltetője kapcsolja be a tömörítést, illetve adjon írási jogot a feltöltési mappára.
-- **A TAC-betöltésnél: „A data/tac.csv.gz nem olvasható."** – *Ok:* a bővítmény hiányosan került fel. *Megoldás:* töltsd fel újra a teljes zipet.
+- **A TAC-betöltésnél: „A data/tac.csv.gz nem olvasható."** – *Ok:* a rendszer hiányosan került fel. *Megoldás:* szólj a rendszer üzemeltetőjének, hogy telepítse újra.
 - **Frissítés után furcsán néz ki a felület.** – *Ok:* a böngésző még a régi stíluslapot használja. *Megoldás:* [[Ctrl]]+[[F5]]. A rendszer egyébként magától is cseréli.
 
 ## Ismert korlátok
@@ -264,7 +268,7 @@ Vagy elrejtetted őket a **Csempék elrejtése** gombbal (ugyanott **Csempék me
 
 ### Nem megy ki az e-mail. Hol keressem a hibát?
 
-Attól függ, melyik. A **Levelezés** menüpont levelei a bekötött postafiókon mennek: ott a **Kapcsolat ellenőrzése** gomb segít. Az ügyfél-értesítők és a naptár levelei a szerver levélküldőjén mennek: ahhoz a WordPressben kell beállított levélküldés. Lásd: [Telepítés és frissítés](sugo:telepites).
+Attól függ, melyik. A **Levelezés** menüpont levelei a bekötött postafiókon mennek: ott a **Kapcsolat ellenőrzése** gomb segít. Az ügyfél-értesítők és a naptár levelei a szerver levélküldőjén mennek: azt a rendszer üzemeltetője állítja be.
 
 ### Miért kapok „Nincs jogosultságod ehhez." üzenetet?
 
@@ -308,7 +312,7 @@ A profilmenüben a **Betűméret** csúszka melletti körkörös nyíl visszaál
 
 ### Rossz időt mutat az óra. Hol állítom át?
 
-Az óra a WordPress időzónája szerint jár. Az adminisztrátor a WordPress általános beállításaiban állítja be. Lásd: [Telepítés és frissítés](sugo:telepites).
+Az óra a rendszer időzónája szerint jár. Ha rossz, szólj a rendszer üzemeltetőjének: ő állítja be.
 
 ### Miért nem látszik a „zárásig hátralévő idő"?
 

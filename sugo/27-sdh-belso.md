@@ -97,7 +97,7 @@ Nagy modellek: a 3D figura kis méretben látszik, ezért a nagyon részletes (t
 
 Fontos tudnivalók:
 
-- A modellek **csak ezen a gépen** vannak: a WordPress feltöltési mappájában (`uploads/sdh-muhely-3d/`), nem a pluginban – ezért nem kerülnek a git-repóba, a frissítő zipbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni őket.
+- A modellek **csak ezen a gépen** vannak: a szerver feltöltött fájljai között (`sdh-muhely-3d/`), nem a program mappájában – ezért nem kerülnek a frissítésbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni őket.
 - Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelennek meg – a hangulatváltáskor ilyenkor is felveszik az új tartást. Rejtett lapon nem rajzolnak.
 - A munka nem vár rájuk: az oldal betöltése után, ráérő időben töltődnek be.
 - Nyomtatáskor nem látszanak.

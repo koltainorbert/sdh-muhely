@@ -239,7 +239,7 @@ A gyakori elakadások részletes listája: [Hibaelhárítás](sugo:hibaelharitas
 
 ### Hol találom a rendszert, mi a címe?
 
-A címet az adminisztrátortól kapod. A cég belső WordPress-oldalának címe, a végén `/muhely/` – például `muhely.pelda.hu/muhely/`. Érdemes könyvjelzőbe tenni.
+A címet az adminisztrátortól kapod. A cég belső rendszerének címe, a végén `/muhely/` – például `muhely.pelda.hu/muhely/`. Érdemes könyvjelzőbe tenni.
 
 ### Elfelejtettem a jelszavamat, mit csináljak?
 

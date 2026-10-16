@@ -35,15 +35,14 @@ A rendszert az adminisztrátor és a **Kolléga** szerepű fiók használhatja.
 | Kollégák és csoportok felvétele, letiltása | nem | igen |
 | Az asszisztens naplója, tudástára, a mentések | nem | igen |
 | A naptár neveinek szerkesztése | nem | igen |
-| A WordPress vezérlőpultja (wp-admin) | nem | igen |
 
 Amit még tudni kell a kollégáról:
 
-- **Belépés után egyenesen a műhely-felületre kerül.** Ha a wp-admin címét nyitná meg, a rendszer visszaviszi a műhelybe. A WordPress felső eszköztárát sem látja.
+- **Belépés után egyenesen a műhely-felületre kerül**, és ott is marad: más oldal nem nyílik meg neki.
 - **A csak adminisztrátornak szóló oldalak** a menüjében meg sem jelennek. Ha a címet kézzel írja be, az **Ehhez nincs jogosultságod.** oldalt kapja.
-- **Kollégánkénti modul-jogosultság nincs.** Aki kolléga, az minden napi menüpontot lát. Az egyetlen finomabb zár a postafiókoké (lásd lejjebb).
+- **Aki Kolléga, az minden napi menüpontot lát.** Szűkebb szerepet (Pultos, Szerelő, Pénztáros vagy saját) a **Beállítások › Jogosultságok** fülön adhatsz neki – lásd [Szerepkörök és jogok](sugo:munkalapok#szerepkorok-es-jogok). A postafiókok külön jelszóval is zárhatók (lásd lejjebb).
 
-A szerepet az adminisztrátor a **Csapat** menüpontban, a kolléga űrlapján állítja: **Kolléga – napi munka a CRM-ben** vagy **Adminisztrátor – beállítások, kollégák, WordPress**. Részletek: [Csapat](sugo:csapat).
+A szerepet az adminisztrátor a **Csapat** menüpontban, a kolléga űrlapján állítja: **Kolléga – napi munka a CRM-ben** vagy **Adminisztrátor – beállítások, kollégák, jogosultságok**. Részletek: [Csapat](sugo:csapat).
 
 A saját szerepedet és állapotodat nem módosíthatod – így nem tudod kizárni magad.
 
@@ -86,10 +85,10 @@ A napi mentés nem függ az asszisztenstől: akkor is elkészül, ha az assziszt
 
 - a TAC-adatbázist és a levelek gyorsítótárát – ezek újra előállíthatók,
 - a csatolt fájlokat, a logót és a feltöltött képeket (ezek a szerver feltöltési mappájában vannak),
-- a felhasználói fiókokat és a jelszavakat (ezek a WordPress saját tábláiban vannak),
+- a felhasználói fiókokat és a jelszavakat (ezeket a rendszer külön, a mentésen kívül kezeli),
 - magukat a leveleket (azok a levelezőszerveren vannak).
 
-**Hol tárolódik:** a szerveren, a `wp-content/uploads/sdh-muhely-mentes/` mappában. A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.
+**Hol tárolódik:** a szerveren, a feltöltött fájlok mappájában (`sdh-muhely-mentes/`). A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.
 
 **Hány marad meg:** alapból az utolsó 20; a szám a **Beállítások › Mentés** lapfülön állítható (3 és 365 között). Amikor eggyel több készül, a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak. Ezen felül **mindig megmarad**:
 
@@ -179,7 +178,7 @@ A visszaállítás mindig **két lépésből** áll: előbb **előnézet**, utá
 
 - **Először biztonsági mentést készít** a mostani állapotról (a neve `…-visszaallitas-elott-…`). Ha az nem sikerül, nem állít vissza semmit.
 - Az egész visszaállítás **egyetlen tranzakció**: ha bármi hiba van (sérült fájl), minden visszagördül, és az adatok nem változnak.
-- Az **újabb verzióból** készült mentést nem fogadja el – előbb frissíteni kell a plugint.
+- Az **újabb verzióból** készült mentést nem fogadja el – előbb frissíteni kell a rendszert.
 - Utána újraépíti a keresőt és a gyorsítótárakat.
 
 **Visszavonás:** ha a visszaállítás nem azt hozta, amit vártál, a **visszaállítás előtti** biztonsági mentést ugyanígy visszaállíthatod – az megmarad a listában.
@@ -197,7 +196,7 @@ A **teljes mentés** (adatok + beállítások) a mentések listájából tölthe
 ### Lépésről lépésre: költözés a próbarendszerből élesbe
 
 1. A próbarendszeren: **Beállítások › Mentés › Beállítások exportja**. Mentsd el a fájlt.
-2. Az éles szerveren telepítsd a pluginet.
+2. Az éles szerveren telepítsd a rendszert (ezt a rendszer üzemeltetője végzi).
 3. Ott: **Beállítások › Mentés › Import fájlból** – válaszd ki a fájlt, add meg a jelszavát, nyisd meg az előnézetet.
 4. Nyomd meg a **Csak a beállítások visszaállítása** gombot (és erősítsd meg).
 5. Ellenőrizd a külső mentési helyeket (**Kapcsolat próbája**). A Google Drive kapcsolat a másik gépről is érvényes marad, de ha ugyanazt a mappát a két rendszer használja, érdemes az élesen újra összekapcsolni.
@@ -243,13 +242,13 @@ A rendszer a külső szolgáltatások jelszavait nem tárolja olvasható formáb
 |---|---|
 | E-mail-fiók alkalmazásjelszava (**Beállítások › Levelezés**) | Titkosítva. Soha nem kerül vissza a képernyőre. |
 | A levélügynök AI-kulcsa (**Beállítások › Levelezés**) | Titkosítva. |
-| Az asszisztens Claude API-kulcsa (**Beállítások › Asszisztens**) | Titkosítva. A legbiztonságosabb, ha a `wp-config.php` fájlban adod meg – akkor az adatbázisba be sem kerül. |
+| Az asszisztens Claude API-kulcsa (**Beállítások › Asszisztens**) | Titkosítva. A rendszer üzemeltetője a szerver beállítófájljában is megadhatja – akkor az adatbázisba be sem kerül. |
 | A postafiók külön jelszava (**Külön jelszó a CRM-ben**) | Lenyomatként: maga a jelszó nem olvasható vissza. |
 | A letöltött levelek gyorsítótára | Titkosított fájlokban. |
 | A Számla Agent kulcs (**Beállítások › Számlázás**) | Titkosítva. A képernyőre nem kerül vissza. |
 | A fizetős IMEI-szolgáltató kulcsa (**Beállítások › IMEI-lekérdezés**) | Titkosítva. A mezője mentés után üres marad; törölni a **Kulcs törlése** pipával lehet. |
 
-A titkosítás kulcsa a WordPress saját titkos kulcsaiból (a `wp-config.php` *salt* értékeiből) képződik. A kulcsok a **mentésfájlba is titkosítva** kerülnek: aki csak a mentést vagy az adatbázist szerzi meg, nem tudja kiolvasni őket.
+A titkosítás kulcsa a szerver saját titkos kulcsaiból képződik (ezek a telepítéskor jönnek létre). A kulcsok a **mentésfájlba is titkosítva** kerülnek: aki csak a mentést vagy az adatbázist szerzi meg, nem tudja kiolvasni őket.
 
 A korábbi verzióban titkosítatlanul eltárolt Számla Agent kulcsot és IMEI-kulcsot a rendszer a frissítés után magától titkosítja – nem kell újra beírni.
 
@@ -264,10 +263,10 @@ A **Beállítások › Levelezés** lapfülön egy postafióknak külön jelszó
 
 ## Amit a rendszer nem tud
 
-- **A felhasználói fiókok nincsenek a mentésben, ezért a visszaállítás sem érinti őket.** A kollégák és a közös fiók dolgozói (WordPress-felhasználók) a rendszeren kívül maradnak; új gépen őket újra létre kell hozni.
+- **A felhasználói fiókok nincsenek a mentésben, ezért a visszaállítás sem érinti őket.** A kollégák fiókjai a mentésen kívül maradnak; új gépen őket újra létre kell hozni.
 - **A külső hely beállításai a beállításokkal együtt utaznak.** Másik gépre importálva a Drive-kapcsolat és a mentési helyek is átkerülnek – ellenőrizd őket (**Kapcsolat próbája**), mielőtt a régi rendszert kikapcsolod.
 - **A Google Drive csak akkor marad összekapcsolva, ha az OAuth-állapot „Éles".** Tesztelés állapotban a Google 7 naponta lejáratja.
-- **Nincs kollégánkénti modul-jogosultság.**
+- **Kollégánként nincs modul-jogosultság – szerepenként van.** Egy kolléga jogait a szerepe adja (**Beállítások › Jogosultságok**).
 - **A csatolt fájlok és a felhasználói fiókok nincsenek a mentésben.** Ezekhez a szerver teljes mentése kell.
 - **A kézzel végzett módosításnak nincs visszaállító gombja.** Visszaállítani csak az asszisztens műveletét lehet.
 
@@ -321,11 +320,11 @@ Mert a rendszer elvből nem töröl munkalapot. A téves lapot tedd érvénytele
 
 ### Mit lát egy kolléga, és mit nem?
 
-Minden napi menüpontot lát. Nem látja a Beállításokat, nem kezelhet kollégákat, nem éri el a mentéseket és a WordPress vezérlőpultját.
+A **Kolléga** szerepű minden napi menüpontot lát. Nem látja a Beállításokat, nem kezelhet kollégákat, és nem éri el a mentéseket. A szűkebb szerepek (Pultos, Szerelő, Pénztáros) ennél is kevesebbet látnak.
 
 ### Be lehet állítani, hogy egy kolléga ne lássa a Pénztárat?
 
-Nem. Kollégánkénti modul-jogosultság nincs. Külön zárni csak postafiókot lehet, jelszóval.
+Igen, a szerepén keresztül. A **Beállítások › Jogosultságok** fülön adj neki olyan szerepet (például **Szerelő**), amelynél a Házipénztár modul nincs bejelölve – vagy vedd ki onnan. A postafiókok ezen felül külön jelszóval is zárhatók.
 
 ### Kilépett egy kolléga a cégtől. Mit csináljak a fiókjával?
 
@@ -349,7 +348,7 @@ Nem. Titkosítva tárolódik, és soha nem kerül vissza a képernyőre. A mező
 
 ### Költöztettük a szervert, és nem megy a levelezés. Miért?
 
-Ha a `wp-config.php` titkos kulcsai megváltoztak, a titkosított jelszavak és kulcsok nem fejthetők vissza. Írd be újra az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot a Beállításokban.
+Ha a szerver titkos kulcsai a költözéskor megváltoztak, a titkosított jelszavak és kulcsok nem fejthetők vissza. Írd be újra az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot a Beállításokban.
 
 ### Elég a rendszer saját mentése?
 

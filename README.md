@@ -64,6 +64,24 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.78.0
+- **Súgó: a nem fejlesztő nem tudja meg, mi fut alatta.** Új jelölések a `sugo/` fejezetekben: fejlécben `csak: fejleszto`
+  (egész fejezet), `## Cím [fejlesztő]` (szakasz), `### Alcím [fejlesztő]` (szakaszon belüli rész a következő `###`-ig) és
+  `### Kérdés? [fejlesztő]` (GYIK). A többieknek ezek a súgóból, a keresőből, a tartalomjegyzékből és az asszisztens tudásából is
+  hiányoznak; a rejtett fejezetre mutató `sugo:` hivatkozás sima szöveg; a fejlesztő „Csak fejlesztő” címkét lát. Csak fejlesztőé:
+  Telepítés és frissítés, Modulok; jelölt rész: Névjegy › Frissítés / technikai adatok, LocalWP-hangolás, mérés, „Ki vagy?” mentőöv.
+  A többi fejezet WordPress / wp-admin / wp-config / plugin / bővítmény / GitHub említése semleges szövegre cserélve („a rendszer
+  üzemeltetője”, „a feltöltött fájlok mappája”); az elavult „nincs kollégánkénti modul-jogosultság” rész a szerepkörökhöz igazítva.
+  Gyorsítótár szerepenként: `sdh_muhely_sugo_index(_f)`, a fejezetlista szerepváltáskor újraolvas.
+- **Asszisztens:** külön rendszerüzenet a fejlesztőnek és a többieknek (`sdh_muhely_ai_statikus(_f)`); a nem fejlesztőnek
+  „webes rendszer”, új 9. szabály (a műszaki hátteréről nem beszél), a README és a tudástár árulkodó pontjai kimaradnak
+  (`SDH_Muhely_Rejtes::arulkodo()` / `semlegesit()` – a több soros pont egészében). Súgó › Újdonságok és a frissítés utáni
+  újdonság-buborék ugyanígy szűrve.
+- **Csapat – javítás:** a kolléga-űrlap „Adminisztrátor” szerepe eddig WordPress-adminisztrátort (= fejlesztőt) csinált; most
+  **SDH adminisztrátor** (`sdh_admin`). A fejlesztő fiókjának szerepét és állapotát csak fejlesztő módosíthatja (az űrlapon
+  „a rendszer üzemeltetőjének fiókja”). Felirat: „Adminisztrátor – beállítások, kollégák, jogosultságok”.
+- Névjegy: „Plugin verzió” → **Verzió**, „Séma verzió” → **Adatbázis-verzió**. Tesztek: t36 (9. rész), t70 (5b). DB_VERSION változatlan (0.43.0).
+
 ### 0.77.0
 - **Zárt mód: a rendszer nem árulja el, hogy WordPress** (új `SDH_Muhely_Rejtes`). Minden idegen oldal (kezdőlap, bejegyzés, 404, hírcsatorna,
   oldaltérkép, `/wp-json/` index) 302-vel a műhelybe irányít, kijelentkezve onnan a **saját bejelentkezőre** (`/muhely/belepes/`, `wp_signon`,

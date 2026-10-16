@@ -2,6 +2,7 @@
 kulcs: modulok
 cim: Modulok
 csoport: Rendszer
+csak: fejleszto
 modul: modulok
 szakaszok:
 kulcsszavak: modulok, modul, funkció, funkciók, bekapcsolás, kikapcsolás, ki-be kapcsolás, kapcsoló, licenc, előfizetés, csomag, alapcsomag, külön díj, eltűnt menüpont, nincs menüpont, telepítői zár, telepítői kód, zár, függőség

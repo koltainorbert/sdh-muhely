@@ -95,6 +95,45 @@ final class SDH_Muhely_Rejtes
         return $db;
     }
 
+    /* ------------------------------------------------------------------
+     * Szöveg a nem fejlesztőnek (asszisztens, súgó): nincs benne a háttér
+     * ------------------------------------------------------------------ */
+
+    /**
+     * Elárulja-e a szöveg, mi fut a rendszer alatt (WordPress, wp-admin, plugin, LocalWP…).
+     * A súgó-teszt (t36) is ezzel nézi a nem fejlesztőnek látszó fejezeteket.
+     */
+    public static function arulkodo(string $szoveg): bool
+    {
+        return preg_match('/wordpress|\bwp-|\bWP\b|plugin|(?<![\p{L}])bővítmény|localwp|local by flywheel|\.php\b|wp_|github|\bgit\b/iu', $szoveg) === 1;
+    }
+
+    /**
+     * A nem fejlesztőnek szánt szövegből kimaradnak az árulkodó pontok (a fejlesztő mindent kap).
+     * Egy pont: egy nem behúzott sor és az utána következő behúzott folytatósorai – így a
+     * verziónapló több soros felsorolás-pontja egészében marad ki, nem csonkán.
+     */
+    public static function semlegesit(string $szoveg, ?bool $fejleszto = null): string
+    {
+        $fejleszto = $fejleszto ?? (class_exists('SDH_Muhely_Admin_UI') && SDH_Muhely_Admin_UI::fejleszto_e());
+
+        if ($fejleszto || !self::arulkodo($szoveg)) {
+            return $szoveg;
+        }
+
+        $pontok = [];
+
+        foreach (explode("\n", str_replace("\r\n", "\n", $szoveg)) as $sor) {
+            if ($pontok !== [] && $sor !== '' && ($sor[0] === ' ' || $sor[0] === "\t")) {
+                $pontok[count($pontok) - 1] .= "\n" . $sor;
+            } else {
+                $pontok[] = $sor;
+            }
+        }
+
+        return trim(implode("\n", array_filter($pontok, static fn (string $p): bool => !self::arulkodo($p))));
+    }
+
     /** Be van-e kapcsolva a zárt mód. */
     public static function zart(): bool
     {

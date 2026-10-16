@@ -483,7 +483,7 @@ final class SDH_Muhely_Asszisztens_Eszkozok
                 case 'csapat_olvasatlan':
                     return self::json(self::csapat_olvasatlan());
                 case 'tudastar_kereses':
-                    return self::json(array_map(static fn ($r) => ['id' => (int) $r->id, 'cim' => $r->cim, 'szoveg' => $r->szoveg, 'forras' => $r->forras], SDH_Muhely_Asszisztens_Tudas::keres((string) ($p['kifejezes'] ?? ''), 10)));
+                    return self::json(array_map(static fn ($r) => ['id' => (int) $r->id, 'cim' => $r->cim, 'szoveg' => class_exists('SDH_Muhely_Rejtes') ? SDH_Muhely_Rejtes::semlegesit((string) $r->szoveg) : $r->szoveg, 'forras' => $r->forras], SDH_Muhely_Asszisztens_Tudas::keres((string) ($p['kifejezes'] ?? ''), 10)));
                 case 'muveletnaplo':
                     return self::json(self::naplo(min(50, max(1, (int) ($p['limit'] ?? 15)))));
                 case 'naplo_idovonal':

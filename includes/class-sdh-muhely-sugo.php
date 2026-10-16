@@ -23,6 +23,13 @@
  * asszisztens tudástárába kerülnek (forras = gyik) – ezek cégadatok, ezért
  * az adatbázisban élnek, nem a kódban.
  *
+ * Fejlesztői tartalom (0.78): a `csak: fejleszto` fejlécű fejezet, a
+ * `## Cím [fejlesztő]` szakasz, a `### Kérdés [fejlesztő]` kérdés–válasz és a
+ * szakaszon belüli `### Alcím [fejlesztő]` rész csak a fejlesztőnek
+ * (SDH_Muhely_Admin_UI::fejleszto_e()) létezik – a többieknek a súgóból, a
+ * keresőből és az asszisztens tudásából is hiányzik. Az ilyen fejezetre mutató
+ * hivatkozás nekik sima szöveg.
+ *
  * @package SDH_Muhely
  */
 
@@ -40,11 +47,17 @@ final class SDH_Muhely_Sugo
     private const GYIK_OLDAL    = 12;
     private const UJDONSAG_OLDAL = 3;
 
+    /** A csak fejlesztőnek szóló szakasz / kérdés jele a címsor végén. */
+    public const FEJLESZTO_JEL = '[fejlesztő]';
+
     /** A fejezetek csoportjai, ebben a sorrendben. */
     private const CSOPORTOK = ['Kezdés', 'Napi munka', 'Pénz', 'Kapcsolat', 'Csapat és idő', 'Rendszer'];
 
     /** @var array<string, array<string, mixed>>|null */
     private static ?array $fejezetek = null;
+
+    /** A beolvasott fejezetek a fejlesztőnek készültek-e. */
+    private static bool $fejezetek_fejleszto = false;
 
     public static function init(): void
     {
@@ -99,13 +112,73 @@ final class SDH_Muhely_Sugo
         return $h !== '' ? mb_substr($h, 0, 80) : 'szakasz';
     }
 
+    /** A jelenlegi felhasználó a fejlesztő-e (neki látszik a fejlesztői tartalom). */
+    public static function fejleszto(): bool
+    {
+        return class_exists('SDH_Muhely_Admin_UI') && SDH_Muhely_Admin_UI::fejleszto_e();
+    }
+
+    /**
+     * A címsor fejlesztői jele: a jel nélküli cím, és hogy volt-e jel.
+     *
+     * @return array{0: string, 1: bool}
+     */
+    private static function jel(string $cim): array
+    {
+        $cim = trim($cim);
+        $n   = strlen(self::FEJLESZTO_JEL);
+
+        if ($n > 0 && substr($cim, -$n) === self::FEJLESZTO_JEL) {
+            return [rtrim(substr($cim, 0, -$n)), true];
+        }
+
+        return [$cim, false];
+    }
+
+    /**
+     * A szakasz törzséből a `### … [fejlesztő]` részek (a következő ### vagy
+     * a szakasz végéig) kimaradnak, ha nem a fejlesztő olvas; neki a jel lekerül.
+     *
+     * @param array<int, string> $sorok
+     * @return array<int, string>
+     */
+    private static function fejlesztoi_alszakaszok(array $sorok, bool $fejleszto): array
+    {
+        $ki     = [];
+        $kihagy = false;
+        $kodban = false;
+
+        foreach ($sorok as $sor) {
+            if (strpos($sor, '```') === 0) {
+                $kodban = !$kodban;
+            }
+
+            if (!$kodban && strpos($sor, '### ') === 0) {
+                [$cim, $jeles] = self::jel(substr($sor, 4));
+                $kihagy        = $jeles && !$fejleszto;
+
+                if ($jeles && $fejleszto) {
+                    $sor = '### ' . $cim . ' (fejlesztő)';
+                }
+            }
+
+            if (!$kihagy) {
+                $ki[] = $sor;
+            }
+        }
+
+        return $ki;
+    }
+
     /**
      * Egy fejezetfájl feldolgozása.
      *
+     * @param bool|null $fejleszto A fejlesztői részek is kellenek-e (null: a jelenlegi felhasználó szerint).
      * @return array<string, mixed>|null
      */
-    public static function fajl_olvas(string $ut): ?array
+    public static function fajl_olvas(string $ut, ?bool $fejleszto = null): ?array
     {
+        $fejleszto = $fejleszto ?? self::fejleszto();
         $nyers = is_readable($ut) ? (string) file_get_contents($ut) : '';
         $nyers = str_replace(["\r\n", "\r"], "\n", $nyers);
 
@@ -141,6 +214,7 @@ final class SDH_Muhely_Sugo
             'kulcsszavak'  => (string) ($fej['kulcsszavak'] ?? ''),
             'osszefoglalo' => (string) ($fej['osszefoglalo'] ?? ''),
             'verzio'       => (string) ($fej['verzio'] ?? ''),
+            'csak_fejleszto' => in_array(sanitize_key(remove_accents((string) ($fej['csak'] ?? ''))), ['fejleszto'], true),
             'szakaszok'    => [],
             'gyik'         => [],
             'turak'        => [],
@@ -171,29 +245,38 @@ final class SDH_Muhely_Sugo
         $horgonyok = [];
 
         foreach ($reszek as $r) {
-            $cim   = (string) $r['cim'];
-            $torzs = trim(implode("\n", $r['sorok']));
+            [$cim, $jeles] = self::jel((string) $r['cim']);
+
+            // A fejlesztői szakasz a többieknek nem létezik.
+            if ($jeles && !$fejleszto) {
+                continue;
+            }
+
+            $torzs = trim(implode("\n", $cim === 'GYIK' ? $r['sorok'] : self::fejlesztoi_alszakaszok($r['sorok'], $fejleszto)));
 
             if ($cim === 'GYIK') {
                 $kerdes = null;
                 $valasz = [];
-                $zar    = static function () use (&$f, &$kerdes, &$valasz, $kulcs): void {
-                    if ($kerdes !== null && trim(implode("\n", $valasz)) !== '') {
+                $fjel   = false;
+                $zar    = static function () use (&$f, &$kerdes, &$valasz, &$fjel, $kulcs, $fejleszto): void {
+                    if ($kerdes !== null && trim(implode("\n", $valasz)) !== '' && (!$fjel || $fejleszto)) {
                         $f['gyik'][] = [
-                            'id'     => $kulcs . '-' . (count($f['gyik']) + 1),
-                            'kerdes' => $kerdes,
-                            'valasz' => trim(implode("\n", $valasz)),
+                            'id'        => $kulcs . '-' . (count($f['gyik']) + 1),
+                            'kerdes'    => $kerdes,
+                            'valasz'    => trim(implode("\n", $valasz)),
+                            'fejleszto' => $fjel,
                         ];
                     }
 
                     $kerdes = null;
                     $valasz = [];
+                    $fjel   = false;
                 };
 
                 foreach ($r['sorok'] as $sor) {
                     if (strpos($sor, '### ') === 0) {
                         $zar();
-                        $kerdes = trim(substr($sor, 4));
+                        [$kerdes, $fjel] = self::jel(substr($sor, 4));
                     } elseif ($kerdes !== null) {
                         $valasz[] = $sor;
                     }
@@ -237,7 +320,7 @@ final class SDH_Muhely_Sugo
 
             $horgonyok[$h] = true;
 
-            $f['szakaszok'][] = ['id' => $kulcs . '#' . $h, 'horgony' => $h, 'cim' => $cim, 'torzs' => $torzs];
+            $f['szakaszok'][] = ['id' => $kulcs . '#' . $h, 'horgony' => $h, 'cim' => $cim, 'torzs' => $torzs, 'fejleszto' => $jeles];
         }
 
         return $f;
@@ -250,14 +333,23 @@ final class SDH_Muhely_Sugo
      */
     public static function fejezetek(): array
     {
-        if (self::$fejezetek !== null) {
+        $fejleszto = self::fejleszto();
+
+        // A fejlesztő mást lát, mint a többiek: szerepváltás után újraolvasunk.
+        if (self::$fejezetek !== null && self::$fejezetek_fejleszto === $fejleszto) {
             return self::$fejezetek;
         }
 
-        self::$fejezetek = [];
+        self::$fejezetek           = [];
+        self::$fejezetek_fejleszto = $fejleszto;
 
         foreach (self::fajlok() as $ut) {
-            $f = self::fajl_olvas($ut);
+            $f = self::fajl_olvas($ut, $fejleszto);
+
+            // A csak fejlesztőnek szóló fejezet (fejléc: `csak: fejleszto`) a többieknek nem létezik.
+            if ($f !== null && !empty($f['csak_fejleszto']) && !$fejleszto) {
+                continue;
+            }
 
             if ($f !== null && self::fejezet_el((array) $f['modulok'])) {
                 self::$fejezetek[(string) $f['kulcs']] = $f;
@@ -299,6 +391,7 @@ final class SDH_Muhely_Sugo
     {
         self::$fejezetek = null;
         delete_transient('sdh_muhely_sugo_index');
+        delete_transient('sdh_muhely_sugo_index_f');
     }
 
     /** A súgó verziója (a 00-sugo.md fejlécének `verzio` sora). */
@@ -326,7 +419,9 @@ final class SDH_Muhely_Sugo
 
         // A kikapcsolt modulok is benne vannak: átkapcsolás után a tartalomjegyzék újraépül.
         $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()));
-        $c   = get_transient('sdh_muhely_sugo_index');
+        // A fejlesztő több fejezetet lát: neki külön tartalomjegyzék jár (a kettő nem írja felül egymást).
+        $tkulcs = 'sdh_muhely_sugo_index' . (self::fejleszto() ? '_f' : '');
+        $c      = get_transient($tkulcs);
 
         if (is_array($c) && ($c['u'] ?? '') === $ujj && is_array($c['i'] ?? null)) {
             return $c['i'];
@@ -346,7 +441,7 @@ final class SDH_Muhely_Sugo
             }
         }
 
-        set_transient('sdh_muhely_sugo_index', ['u' => $ujj, 'i' => $i], DAY_IN_SECONDS);
+        set_transient($tkulcs, ['u' => $ujj, 'i' => $i], DAY_IN_SECONDS);
 
         return $i;
     }
@@ -655,6 +750,12 @@ final class SDH_Muhely_Sugo
 
             if (strpos($cel, 'sugo:') === 0) {
                 [$fejezet, $horgony] = array_pad(explode('#', substr($cel, 5), 2), 2, '');
+
+                // A más (pl. a fejlesztő) számára fenntartott fejezetre mutató hivatkozás sima szöveg.
+                if ($fejezet !== '' && self::fejezet(sanitize_key($fejezet)) === null) {
+                    return $m[1];
+                }
+
                 $url = $fejezet === ''
                     ? SDH_Muhely_Modulok::url(self::KULCS)
                     : SDH_Muhely_Modulok::url(self::KULCS, ['nezet' => 'dokumentacio', 'fejezet' => sanitize_key($fejezet)]) . ($horgony !== '' ? '#' . sanitize_key($horgony) : '');
@@ -1126,6 +1227,12 @@ final class SDH_Muhely_Sugo
      * Az oldal
      * ============================================================== */
 
+    /** A csak fejlesztőnek látszó rész jelvénye (ugyanaz a címke, mint a „Saját” kérdés–válaszé). */
+    private static function fejleszto_jelveny(): string
+    {
+        return ' <span class="sdh-cs-cimke sdh-cs-cimke--admin" title="Ezt csak a fejlesztő látja">Csak fejlesztő</span>';
+    }
+
     private static function ikon(string $nev): string
     {
         $rajzok = [
@@ -1439,7 +1546,7 @@ final class SDH_Muhely_Sugo
 
             <article class="sdh-sugo-fejezet">
                 <header class="sdh-sugo-fejezet__fej">
-                    <p class="sdh-sugo-fejezet__kalap"><?php echo esc_html((string) $f['csoport']); ?></p>
+                    <p class="sdh-sugo-fejezet__kalap"><?php echo esc_html((string) $f['csoport']); ?><?php echo !empty($f['csak_fejleszto']) ? self::fejleszto_jelveny() : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
                     <h2><?php echo esc_html((string) $f['cim']); ?></h2>
                     <p class="sdh-sugo-fejezet__ossz"><?php echo esc_html((string) $f['osszefoglalo']); ?></p>
                     <div class="sdh-sugo-fejezet__gombok">
@@ -1451,7 +1558,7 @@ final class SDH_Muhely_Sugo
                 <div class="sdh-sugo-torzs">
                     <?php foreach ((array) $f['szakaszok'] as $s) : ?>
                         <section id="<?php echo esc_attr((string) $s['horgony']); ?>" class="sdh-sugo-szakasz">
-                            <h3 class="sdh-sugo-szakasz__cim"><a href="#<?php echo esc_attr((string) $s['horgony']); ?>" aria-label="Hivatkozás erre a szakaszra">#</a><?php echo esc_html((string) $s['cim']); ?></h3>
+                            <h3 class="sdh-sugo-szakasz__cim"><a href="#<?php echo esc_attr((string) $s['horgony']); ?>" aria-label="Hivatkozás erre a szakaszra">#</a><?php echo esc_html((string) $s['cim']); ?><?php echo !empty($s['fejleszto']) ? self::fejleszto_jelveny() : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></h3>
                             <?php echo self::md((string) $s['torzs']); // phpcs:ignore WordPress.Security.EscapeOutput -- az md() szűrt HTML-t ad. ?>
                         </section>
                     <?php endforeach; ?>
@@ -1507,6 +1614,7 @@ final class SDH_Muhely_Sugo
                 <?php if (!empty($g['sajat'])) : ?>
                     <span class="sdh-cs-cimke sdh-cs-cimke--admin">Saját</span>
                 <?php endif; ?>
+                <?php echo !empty($g['fejleszto']) ? self::fejleszto_jelveny() : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
                 <?php if (isset($g['aktiv']) && !$g['aktiv']) : ?>
                     <span class="sdh-cs-cimke sdh-cs-cimke--tilt">Rejtve</span>
                 <?php endif; ?>
@@ -1709,6 +1817,13 @@ final class SDH_Muhely_Sugo
         echo '<p class="sdh-sugo">Minden verzió minden változása, a legújabb elöl. A jelenlegi verzió: <strong>' . esc_html(SDH_MUHELY_VERSION) . '</strong>.</p>';
 
         foreach (array_slice($verziok, ($lap - 1) * self::UJDONSAG_OLDAL, self::UJDONSAG_OLDAL, true) as $v => $szoveg) {
+            // A nem fejlesztő a műszaki háttérről szóló pontokat nem látja.
+            $szoveg = class_exists('SDH_Muhely_Rejtes') ? SDH_Muhely_Rejtes::semlegesit((string) $szoveg) : (string) $szoveg;
+
+            if (trim($szoveg) === '') {
+                $szoveg = '*Ebben a verzióban a háttér változott, a felületen nincs újdonság.*';
+            }
+
             echo '<article class="sdh-doboz sdh-sugo-verzio"><h2 class="sdh-doboz__cim">' . esc_html((string) $v)
                 . ((string) strtok((string) $v, ' ') === SDH_MUHELY_VERSION ? ' <span class="sdh-cs-cimke sdh-cs-cimke--admin">ez fut most</span>' : '')
                 . '</h2><div class="sdh-sugo-torzs">' . self::md((string) $szoveg) . '</div></article>'; // phpcs:ignore WordPress.Security.EscapeOutput -- az md() szűrt HTML-t ad.

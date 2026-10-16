@@ -1953,6 +1953,8 @@ final class SDH_Muhely_Csapat
         $f  = $id > 0 ? get_userdata($id) : null;
         $k  = $f instanceof WP_User ? self::kollega_adat($f) : null;
         $en = get_current_user_id() === $id;
+        // A fejlesztő fiókjának szerepéhez és állapotához csak a fejlesztő nyúlhat (0.78).
+        $vedett = !$en && $id > 0 && user_can($id, SDH_Muhely_Admin_UI::FEJLESZTO_JOG) && !SDH_Muhely_Admin_UI::fejleszto_e();
 
         $szinek = [];
 
@@ -2002,11 +2004,13 @@ final class SDH_Muhely_Csapat
                         <span class="sdh-ig__cimke">Szerep</span>
                         <?php if ($en) : ?>
                             <p class="sdh-mezo__sugo">A saját szerepedet és állapotodat nem módosíthatod (nehogy kizárd magad).</p>
+                        <?php elseif ($vedett) : ?>
+                            <p class="sdh-mezo__sugo">Ez a rendszer üzemeltetőjének fiókja: a szerepét és az állapotát nem módosíthatod.</p>
                         <?php else : ?>
-                            <?php self::pillek('szerep', ['kollega' => 'Kolléga – napi munka a CRM-ben', 'admin' => 'Adminisztrátor – beállítások, kollégák, WordPress'], [$k && $k['admin'] ? 'admin' : 'kollega']); ?>
+                            <?php self::pillek('szerep', ['kollega' => 'Kolléga – napi munka a CRM-ben', 'admin' => 'Adminisztrátor – beállítások, kollégák, jogosultságok'], [$k && $k['admin'] ? 'admin' : 'kollega']); ?>
                         <?php endif; ?>
                     </div>
-                    <?php if (!$en) : ?>
+                    <?php if (!$en && !$vedett) : ?>
                         <div class="sdh-ig">
                             <span class="sdh-ig__cimke">Állapot</span>
                             <?php self::pillek('allapot', ['aktiv' => 'Aktív', 'letiltva' => 'Letiltva (nem léphet be)'], [$k && $k['letiltva'] ? 'letiltva' : 'aktiv']); ?>
@@ -2133,12 +2137,19 @@ final class SDH_Muhely_Csapat
         $id = (int) $id;
 
         // Szerep és állapot – a saját fiókon nem (kizárás ellen).
-        if ($id !== $en) {
+        // A fejlesztő fiókjához csak a fejlesztő nyúlhat: az adminisztrátor nem fokozhatja le, nem tilthatja le (0.78).
+        $cel_fejleszto = user_can($id, SDH_Muhely_Admin_UI::FEJLESZTO_JOG);
+
+        if ($id !== $en && (!$cel_fejleszto || SDH_Muhely_Admin_UI::fejleszto_e())) {
             $f = new WP_User($id);
             $szerep = self::g('szerep', 10);
 
+            // Az „Adminisztrátor” az SDH adminisztrátor szerep – NEM a fejlesztő (WordPress-adminisztrátor):
+            // abból csak a fejlesztő csinálhat a háttérben. A fejlesztő adminként fejlesztő marad.
             if ($szerep === 'admin') {
-                $f->set_role('administrator');
+                if (!$cel_fejleszto) {
+                    $f->set_role(SDH_Muhely_Admin_UI::ADMIN_SZEREP);
+                }
             } elseif ($szerep === 'kollega') {
                 $f->set_role(self::SZEREP);
             }

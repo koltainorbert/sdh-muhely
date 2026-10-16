@@ -2,6 +2,7 @@
 kulcs: telepites
 cim: Telepítés és frissítés
 csoport: Rendszer
+csak: fejleszto
 modul:
 szakaszok:
 kulcsszavak: telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés

@@ -4,7 +4,7 @@ cim: A súgó használata
 csoport: Kezdés
 modul: sugo
 szakaszok:
-verzio: 0.77.0
+verzio: 0.78.0
 kulcsszavak: súgó, segítség, dokumentáció, leírás, bemutató, gyik, kérdés, válasz, túra, végigvezetés, keresés, újdonság, kézikönyv, használati útmutató
 osszefoglalo: A Súgó menüpontban egy helyen van a bemutató, a részletes dokumentáció, a kérdés–válaszok és az újdonságok – és ebből tanul az asszisztens is.
 ---
@@ -114,7 +114,7 @@ Próbáld más szóval – a kereső a köznyelvi szavakat is érti. Ha így sin
 
 ### Mindig naprakész a súgó?
 
-Igen, ez a rendszer egyik alapszabálya: a súgó fejezetei a bővítmény részei, és minden változtatással együtt frissülnek. A Súgó fejlécében látod a verziószámot, amelyet leír; az **Újdonságok** lapfülön pedig azt, mi változott.
+Igen, ez a rendszer egyik alapszabálya: a súgó fejezetei a rendszer részei, és minden változtatással együtt frissülnek. A Súgó fejlécében látod a verziószámot, amelyet leír; az **Újdonságok** lapfülön pedig azt, mi változott.
 
 ### Ki vehet fel saját kérdés–választ?
 

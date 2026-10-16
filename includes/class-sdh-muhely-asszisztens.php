@@ -553,7 +553,12 @@ final class SDH_Muhely_Asszisztens
             $t .= "\nTUDÁSTÁR (a kérdéshez illő; ez a legfrissebb, cégen belüli tudás – ha ide tartozik a kérdés, ezt használd)\n";
 
             foreach ($tudas as $r) {
-                $t .= '[#' . (int) $r->id . '] ' . $r->cim . ': ' . mb_substr((string) $r->szoveg, 0, 1500) . "\n";
+                // A tudástárban a verziónapló is ott van: a nem fejlesztő nem kapja meg a műszaki hátteret.
+                $sz = class_exists('SDH_Muhely_Rejtes') ? SDH_Muhely_Rejtes::semlegesit((string) $r->szoveg) : (string) $r->szoveg;
+
+                if (trim($sz) !== '') {
+                    $t .= '[#' . (int) $r->id . '] ' . $r->cim . ': ' . mb_substr($sz, 0, 1500) . "\n";
+                }
             }
         }
 
@@ -1211,7 +1216,8 @@ final class SDH_Muhely_Asszisztens
             $pontok = [];
 
             foreach ((array) ($ujd['reszek'] ?? []) as $szoveg) {
-                $pontok = array_merge($pontok, SDH_Muhely_Asszisztens_Tudas::ujdonsag_pontok((string) $szoveg, 5));
+                $szoveg = class_exists('SDH_Muhely_Rejtes') ? SDH_Muhely_Rejtes::semlegesit((string) $szoveg) : (string) $szoveg;
+                $pontok = array_merge($pontok, SDH_Muhely_Asszisztens_Tudas::ujdonsag_pontok($szoveg, 5));
             }
 
             if ($pontok !== []) {
@@ -1349,6 +1355,7 @@ final class SDH_Muhely_Asszisztens
 
         update_option(self::OPTION, $uj, false);
         delete_transient('sdh_muhely_ai_statikus');
+        delete_transient('sdh_muhely_ai_statikus_f');
         unset($b);
 
         // A Beállítások lapfüléről mentve oda térünk vissza, különben az asszisztens saját lapjára.

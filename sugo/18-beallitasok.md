@@ -22,7 +22,7 @@ A bal oldali menü legalján áll a **Beállítások** menüpont, fogaskerék ik
 
 - **Csak adminisztrátor látja.** A kolléga menüjében a menüpont nem jelenik meg, és az Áttekintésen sincs csempéje.
 - Ha kolléga a címet kézzel írja be, az **Ehhez nincs jogosultságod.** oldalt kapja.
-- A műhely-felületről a Beállítások nem visz át a WordPress vezérlőpultjába (wp-admin): ugyanabban a keretben dolgozol, mint bárhol máshol. A wp-adminból megnyitva ugyanez az oldal jelenik meg.
+- A Beállítások a műhely-felületen nyílik meg, ugyanabban a keretben, mint bármi más: nincs külön adminfelület, ahová át kellene lépni.
 
 A jogosultságokról bővebben: [Mentés, jogosultság, biztonság](sugo:mentes-biztonsag).
 
@@ -37,7 +37,7 @@ Az oldal tetején a **Beállítások** cím áll, alatta a lapfülek hat sorban,
 - **Készülékadatok**
 - **Rendszer**
 
-A kikapcsolt modul lapfüle nem látszik (például kikapcsolt SMS-értesítéseknél nincs **SMS-értesítések** lapfül). A modulokat a **Modulok** menüpontban kapcsolod ki és be: [Modulok](sugo:modulok).
+A kikapcsolt modul lapfüle nem látszik (például kikapcsolt SMS-értesítéseknél nincs **SMS-értesítések** lapfül). A modulokat a rendszer üzemeltetője kapcsolja ki és be.
 
 Az éppen nyitott lapfül kiemelve látszik. Ha az egeret egy lapfül fölé viszed, rövid leírás jelenik meg róla. A lapfülek alatt a kiválasztott lapfül tartalma áll: felül a neve és egy mondat arról, mire való, alatta a dobozok a mezőkkel, legalul a **Mentés** gomb.
 
@@ -73,7 +73,7 @@ A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az uto
 | **Sebesség** | A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás. | ez a fejezet |
 | **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |
 | **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |
-| **Névjegy** | Verziók, frissítés a GitHubról, címek, és ami internet nélkül is működik. | ez a fejezet |
+| **Névjegy** | Verziók, címek, és ami internet nélkül is működik. | ez a fejezet |
 
 Egy lapfül csak akkor jelenik meg, ha a hozzá tartozó modul be van töltve.
 
@@ -100,11 +100,11 @@ A Beállítások oldal közös elemei – ezek minden lapfülön ugyanúgy műk�
 - **Lapfülek** – a téma kiválasztása. Minden lapfülnek saját címe van, könyvjelzőbe tehető.
 - **Mentés** – az éppen nyitott lapfület menti.
 - **Állapotjelző a Mentés mellett** – **Nem mentett módosítás.**, **Mentés…**, **Elmentve.**, vagy pirossal a hiba szövege.
-- **Feltöltő gombok** (logó, háttérkép, háttérvideó) – a műhely-felület saját, egyszerű feltöltője. Kép: JPG, PNG, GIF vagy WebP; videó: MP4 vagy WebM. A fájl a WordPress médiatárába kerül.
+- **Feltöltő gombok** (logó, háttérkép, háttérvideó) – a műhely-felület saját, egyszerű feltöltője. Kép: JPG, PNG, GIF vagy WebP; videó: MP4 vagy WebM. A fájl a rendszer feltöltött fájljai közé kerül.
 - **Színválasztó és színkód** – össze vannak kötve: bármelyiket állítod, a másik követi.
 - **Kapcsolók** – minden be/ki beállítás (és a popupok be/ki jelölői) egyforma kapcsoló: **zöld = AKTÍV**, **piros = INAKTÍV**, mellette felirattal. Táblázatban (sorok kijelölése) marad a kis jelölőnégyzet.
 
-Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** csak megmutat; a **Névjegy** a **Frissítés** doboz saját gombjaival dolgozik.
+Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** és a **Névjegy** csak megmutat.
 
 ## Szabályok, amiket a rendszer betart
 
@@ -113,21 +113,21 @@ Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TA
 - **Csak adminisztrátor menthet.** Másnak a válasz: **A beállításokhoz adminisztrátori jog kell.**
 - **A kulcsok és jelszavak nem jelennek meg újra.** A mentett jelszó vagy kulcs mezője üres marad, helyőrző jelzi, hogy van mentett érték. Újat csak akkor írj be, ha cserélni akarod. A fizetős IMEI-szolgáltató kulcsa kivétel: az a mezőjében olvasható.
 - **A változás azonnal él.** A kollégák a következő oldalbetöltéskor látják.
-- **Nincs átjárás a wp-adminba.** A Beállítások, a mentés és a feltöltés is a műhely-felületen marad; mentés után ugyanarra a lapfülre térsz vissza.
+- **Minden a műhely-felületen marad.** A Beállítások, a mentés és a feltöltés sem visz máshová; mentés után ugyanarra a lapfülre térsz vissza.
 
 ## Sebesség
 
 A **Beállítások › Sebesség** lapfülön egyetlen kapcsoló van: **a felület CSS- és JS-fájljai egy kérésben töltődjenek be**. Alapból be van kapcsolva.
 
-Miért van rá szükség: a műhely-felület több mint húsz stíluslapot és szkriptet használ, és mindegyik kell minden oldalon, mert a popupok (munkalap, pénztár, nyomtatás, napló, levélíró) bárhol megnyílhatnak. Ez önmagában nem sok adat, de **sok kérés** – és egy helyi szerveren (LocalWP) minden egyes kérés sokat tart, akkor is, ha a fájl pici.
+Miért van rá szükség: a műhely-felület több mint húsz stíluslapot és szkriptet használ, és mindegyik kell minden oldalon, mert a popupok (munkalap, pénztár, nyomtatás, napló, levélíró) bárhol megnyílhatnak. Ez önmagában nem sok adat, de **sok kérés** – és egy helyi szerveren minden egyes kérés sokat tart, akkor is, ha a fájl pici.
 
 Bekapcsolva a rendszer ezeket a fájlokat egyetlen stíluslapba és egyetlen szkriptbe fűzi össze:
 
 - a kód **karakterre ugyanaz**, és ugyanabban a sorrendben fut – nincs tömörítés, nincs átírás,
-- a csomag a **feltöltési mappába** kerül (`wp-content/uploads/sdh-muhely-csomag/`), nem a bővítmény mappájába,
+- a csomag a szerveren a **feltöltött fájlok mappájába** kerül (`sdh-muhely-csomag/`), nem a program mappájába,
 - a fájl neve a verzióból képződik, így **frissítés után magától új csomag készül** – nincs mit üríteni, és a böngésző sem tölt be régit,
 - a régi csomagokat a rendszer magától törli,
-- csak a **saját** fájljaihoz nyúl: a WordPress és a többi bővítmény eszközeihez nem.
+- csak a **saját** fájljaihoz nyúl, máshoz nem.
 
 Ha a feltöltési mappa nem írható, a lapfül ezt kiírja, és a felület – észrevétlenül – a régi módon, külön fájlokból töltődik be. A kapcsoló ilyenkor is bekapcsolva maradhat: amint a mappa írhatóvá válik, magától működni kezd.
 
@@ -182,25 +182,31 @@ A színek neve mellett álló `--sdh-…` kezdetű kód a szín belső változó
 
 A **Beállítások › Névjegy** lapfül megmondja, melyik verzió fut, és hol érhető el a rendszer. Hibabejelentésnél ezt add meg.
 
-A tetején a **Frissítés** doboz áll: telepített és legújabb verzió, **Ellenőrzés most** és (ha van újabb) **Frissítés most** gomb. A részleteket a [Telepítés és frissítés](sugo:telepites) fejezet írja le.
+A frissítést a rendszer üzemeltetője végzi; a Névjegyen a futó verziót látod.
+
+### Frissítés [fejlesztő]
+
+A lapfül tetején a fejlesztő a **Frissítés** dobozt is látja: telepített és legújabb verzió, **Ellenőrzés most** és (ha van újabb) **Frissítés most** gomb. A részleteket a [Telepítés és frissítés](sugo:telepites) fejezet írja le.
+
+### A Verziók doboz
 
 A **Verziók** doboz sorai:
 
 | Sor | Mit mutat |
 |---|---|
 | **Rendszer** | A rendszer neve, ahogy a **Logó és megjelenés** lapfülön megadtad. |
-| **Plugin verzió** | A bővítmény verziószáma. Frissítés után ennek kell megváltoznia. |
-| **Séma verzió** | Az adatbázis szerkezetének verziója. Ritkábban változik, mint a bővítményé – nem hiba, ha a kettő eltér. |
+| **Verzió** | A rendszer verziószáma. Frissítés után ennek kell megváltoznia. |
+| **Adatbázis-verzió** | Az adatbázis szerkezetének verziója. Ritkábban változik, mint a rendszeré – nem hiba, ha a kettő eltér. |
 | **Műhely-felület** | A műhely címe. Ezt add oda a kollégáknak. |
-| **WordPress** | A WordPress verziója. |
-| **PHP** | A szerver PHP-verziója. |
 
 Az **Ami internet nélkül is megy** doboz szerint:
 
 - **Megy enélkül is:** a felvitel, a munkalap, a pénztár és a helyi nyomtatvány. Az IMEI-ből a gyártót, a gyári számot és a kereskedelmi nevet a rendszer a saját nyilvántartásából és a helyi TAC-adatbázisból tölti ki.
 - **Internet kell hozzá:** a levelezés, a Számlázz.hu-számla és az asszisztens. A sorozatszámot, a garanciát és a gyártási dátumot fizetős IMEI-szolgáltató nélkül kézzel kell beírni.
 
-A frissítésről és a verziók ellenőrzéséről: [Telepítés és frissítés](sugo:telepites).
+### Technikai adatok [fejlesztő]
+
+A fejlesztő a **Verziók** dobozban két további sort is lát: **WordPress** (a WordPress verziója) és **PHP** (a szerver PHP-verziója). A frissítésről és a verziók ellenőrzéséről: [Telepítés és frissítés](sugo:telepites).
 
 ## Ha valami nem megy
 
@@ -259,9 +265,9 @@ Arra, hogy egy helyen lásd a felület összes elemét a beállított színekkel
 
 ### Hol látom, melyik verzió fut?
 
-A **Névjegy** lapfülön, a **Plugin verzió** sorban.
+A **Névjegy** lapfülön, a **Verzió** sorban.
 
-### Miért más a séma verziója, mint a bővítményé?
+### Miért más az adatbázis verziója, mint a rendszeré?
 
 Mert az adatbázis szerkezete nem változik minden frissítéssel. Ez nem hiba.
 

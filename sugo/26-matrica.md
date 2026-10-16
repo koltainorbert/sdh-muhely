@@ -32,7 +32,7 @@ Bekapcsolható még: telefonszám, a szerviz neve, határidő, tartozékok, szí
 - **Szolgáltatás-címke:** a szolgáltatás ablakának alján a **Címke** gomb (mentett szolgáltatásnál).
 - **Címkék menüpont:** az oldalmenü **Címkék** pontja. Innen indul az **Egyedi címke**, és itt látod egy táblázatban, melyik címke hol érhető el és mi áll rajta.
 - **Egyedi címke:** a **Címkék** oldal **Egyedi címke** gombja – ide bármit beírhatsz, nem kell hozzá se munkalap, se termék.
-- A modul a **Modulok** menüpontban kikapcsolható (**Címkenyomtatás (Brother)**); kikapcsolva nincs Matrica és Címke gomb.
+- A modul kikapcsolható (**Címkenyomtatás (Brother)**; ezt a rendszer üzemeltetője teszi); kikapcsolva nincs Matrica és Címke gomb.
 
 ## Termék- és szolgáltatás-címke
 

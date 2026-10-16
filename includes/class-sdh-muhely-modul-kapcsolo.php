@@ -168,7 +168,9 @@ final class SDH_Muhely_Modul_Kapcsolo
 
         // A menü és a súgó gyorsítótára a modulok listájától függ.
         delete_transient('sdh_muhely_sugo_index');
+        delete_transient('sdh_muhely_sugo_index_f');
         delete_transient('sdh_muhely_ai_statikus');
+        delete_transient('sdh_muhely_ai_statikus_f');
 
         $uzenet = $ki === []
             ? 'Elmentve: minden modul be van kapcsolva.'

@@ -116,7 +116,7 @@ A felső fejlécben, minden oldalon ott az óra: a pontos idő, mellette a dátu
 
 Az óra neon üveg-hatású. Alapból a **stílus színét** viseli (a kiemelő színt, amit a Megjelenésnél választottál); zárás előtt borostyán lesz (ilyenkor lassan lüktet), zárva szürke. Ha jobban szereted az állapot szerinti színeket (zöld nyitvatartáskor, kék nyitás előtt), a **Beállítások › Nyitvatartás › Az óra színe** mezőben átállíthatod. Az óra ikonját gyűrű veszi körül: fent kezdődik, óramutató irányban telik, a végén fénylő pont jelzi, a nyitvatartási nap mekkora része telt el. A **Papír** megjelenésben az óra lapos, üveg- és fényhatás nélkül; a gyűrű ott is látszik.
 
-Az óra a szerver idejét mutatja, nem a gépedét – ezért mindenkinél ugyanazt, akkor is, ha valakinek rosszul jár a gépe órája. Ha nem a helyi időt mutatja, a webhely időzónája nincs jól beállítva (lásd a [Telepítés és frissítés](sugo:telepites) fejezetet).
+Az óra a szerver idejét mutatja, nem a gépedét – ezért mindenkinél ugyanazt, akkor is, ha valakinek rosszul jár a gépe órája. Ha nem a helyi időt mutatja, a rendszer időzónája nincs jól beállítva – szólj a rendszer üzemeltetőjének.
 
 Keskeny képernyőn az óra összehúzódik: előbb a dátum, aztán a zárás sora tűnik el, az idő marad.
 
@@ -245,7 +245,7 @@ Ebből számol a fejléc órája.
 - **Sárgás a kép.** Be van kapcsolva a **Kékfény-szűrő** – a profilmenüben húzd a csúszkát balra, **Ki** állásba.
 - **Furcsák a betűk, mint egy könyvben.** A **Papír** megjelenés van bekapcsolva; válts **Világos** vagy **Rendszer** megjelenésre.
 - **Nagyításnál a felugró ablak kisebb lett.** Ismert viselkedés: a rendszer a képernyőhöz igazítja az ablakot, hogy kiférjen. Kisebb nagyítással vagy teljes képernyős ablakkal megszűnik.
-- **Az óra rossz időt mutat.** A webhely időzónája nincs beállítva – ezt az adminisztrátor a WordPress beállításaiban tudja megadni.
+- **Az óra rossz időt mutat.** A rendszer időzónája nincs jól beállítva – ezt a rendszer üzemeltetője tudja megadni.
 - **Nincs óra a fejlécben.** Ki van kapcsolva: Beállítások › Nyitvatartás és óra.
 - **Az óra nem írja ki a zárásig hátralévő időt.** Nincs megadva nyitvatartás ugyanott.
 

@@ -133,7 +133,8 @@ SDH_Muhely_Beallitasok::rendszer_doboz();
 $nevjegy = (string) ob_get_clean();
 T::egyezik(false, strpos($nevjegy, 'data-sdh-frissites') !== false, 'a Névjegyen nincs Frissítés doboz az adminisztrátornak');
 T::egyezik(false, strpos($nevjegy, '>PHP<') !== false || strpos($nevjegy, '>WordPress<') !== false, 'és nincs technikai adat (WordPress, PHP verzió)');
-T::tartalmaz($nevjegy, 'Plugin verzió', 'a rendszer verziója látszik');
+T::tartalmaz($nevjegy, '<th>Verzió</th>', 'a rendszer verziója látszik');
+T::nem_tartalmaz($nevjegy, 'Plugin', 'a Névjegy nem írja, hogy bővítmény (0.78)');
 
 wp_set_current_user($admin);
 SDH_Muhely_Szemely::felejt();
@@ -171,6 +172,42 @@ T::egyezik(SDH_Muhely_Modulok::frontend_url(), $atiranyit(static function (): vo
 SDH_Muhely_Szemely::torol();
 SDH_Muhely_Szemely::felejt();
 T::egyezik(true, $UI::fejleszto_e(), 'a személy váltása után újra fejlesztő');
+
+/* --- 5b. Csapat: az „Adminisztrátor” szerep SDH adminisztrátor, a fejlesztőhöz nem nyúlhat (0.78) ------ */
+
+$cs_ment = static function (int $id, string $nev, string $szerep, string $allapot = 'aktiv'): array {
+    $f = get_userdata($id);
+
+    return t_ajax('sdh_muhely_csapatkollega_ment', ['id' => $id, 'nev' => $nev, 'email' => $f ? $f->user_email : '', 'login' => $f ? $f->user_login : '', 'szerep' => $szerep, 'allapot' => $allapot]);
+};
+$cs_kollega = $felh('Csapat kolléga T70', SDH_Muhely_Csapat::SZEREP);
+wp_update_user(['ID' => $cs_kollega, 'user_email' => 'cs-kollega-t70@pelda.hu']);
+$cs_fejl = $felh('Másik fejlesztő T70', 'administrator');
+wp_update_user(['ID' => $cs_fejl, 'user_email' => 'cs-fejl-t70@pelda.hu']);
+
+wp_set_current_user($sdhadmin);
+SDH_Muhely_Szemely::felejt();
+$r = $cs_ment($cs_kollega, 'Csapat kolléga T70', 'admin');
+T::egyezik(true, !empty($r['success']), 'az SDH adminisztrátor adminná teheti a kollégát');
+T::egyezik([$UI::ADMIN_SZEREP], array_values(get_userdata($cs_kollega)->roles), 'a Csapat „Adminisztrátor” szerepe SDH adminisztrátor, nem WordPress-adminisztrátor');
+T::egyezik(false, user_can($cs_kollega, $UI::FEJLESZTO_JOG), 'és nem lesz belőle fejlesztő');
+$cs_ment($cs_fejl, 'Másik fejlesztő T70', 'kollega', 'letiltva');
+T::egyezik(['administrator'], array_values(get_userdata($cs_fejl)->roles), 'az SDH adminisztrátor a fejlesztőt nem fokozhatja le');
+T::egyezik('', (string) get_user_meta($cs_fejl, 'sdh_letiltva', true), 'és nem tilthatja le');
+$urlap = t_ajax('sdh_muhely_csapatkollega_urlap', ['id' => $cs_fejl]);
+T::tartalmaz((string) ($urlap['data']['html'] ?? $urlap['nyers']), 'a rendszer üzemeltetőjének fiókja', 'a fejlesztő űrlapján nincs szerepváltó');
+T::nem_tartalmaz((string) ($urlap['data']['html'] ?? $urlap['nyers']), 'WordPress', 'a kolléga-űrlap nem írja, hogy WordPress');
+
+wp_set_current_user($admin);
+SDH_Muhely_Szemely::felejt();
+$cs_ment($cs_fejl, 'Másik fejlesztő T70', 'admin');
+T::egyezik(['administrator'], array_values(get_userdata($cs_fejl)->roles), 'a fejlesztő „Adminisztrátor” mentése után is fejlesztő marad');
+$cs_ment($cs_kollega, 'Csapat kolléga T70', 'kollega');
+T::egyezik([SDH_Muhely_Csapat::SZEREP], array_values(get_userdata($cs_kollega)->roles), 'a kolléga visszaállítható kollégára');
+
+foreach ([$cs_kollega, $cs_fejl] as $id) {
+    wp_delete_user($id);
+}
 
 /* --- 6. Bejelentkező képernyő ----------------------------------------------------------------- */
 

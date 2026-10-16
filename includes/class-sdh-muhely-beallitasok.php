@@ -677,8 +677,8 @@ final class SDH_Muhely_Beallitasok
             <table class="sdh-tabla sdh-tabla--keskeny">
                 <tbody>
                     <tr><th>Rendszer</th><td><?php echo esc_html(SDH_Muhely_Arculat::rendszer_nev()); ?></td></tr>
-                    <tr><th>Plugin verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
-                    <tr><th>Séma verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>
+                    <tr><th>Verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
+                    <tr><th>Adatbázis-verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>
                     <tr><th>Műhely-felület</th><td><code><?php echo esc_html(SDH_Muhely_Modulok::frontend_url()); ?></code></td></tr>
                     <?php if ($fejleszto) : ?>
                         <tr><th>WordPress</th><td><code><?php echo esc_html(get_bloginfo('version')); ?></code></td></tr>

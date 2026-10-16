@@ -154,7 +154,7 @@ Ezt a részt csak adminisztrátor látja és kezeli, a **Csapat** menüpont **Ko
   - **Beosztás** – például szerelő, pultos.
 3. A **Szerep** sorban válassz:
   - **Kolléga – napi munka a CRM-ben**;
-  - **Adminisztrátor – beállítások, kollégák, WordPress**.
+  - **Adminisztrátor – beállítások, kollégák, jogosultságok**.
 4. Válassz **Színt**, és ha vannak csoportok, jelöld be a **Csoportokat**.
 5. Ha szeretnéd, kapcsold be: **Belépési link e-mailben a kollégának**.
 6. Kattints a **Kolléga felvétele** gombra.
@@ -165,7 +165,9 @@ Mentés után a lap tetején megjelennek a belépési adatok: „Belépési adat
 
 ### Mit tud a „Kolléga” szerep
 
-A Kolléga szerepű munkatárs belép, és a rendszerben dolgozik – a WordPress adminfelületét nem látja. Belépés után egyenesen a műhely felületére kerül, és ha az adminfelület címét nyitná meg, oda sem jut be. A beállításokhoz, a kollégák és csoportok kezeléséhez adminisztrátor kell.
+A Kolléga szerepű munkatárs belép, és a rendszerben dolgozik. Belépés után egyenesen a műhely felületére kerül, és mindig ott marad. A beállításokhoz, a kollégák és csoportok kezeléséhez adminisztrátor kell.
+
+A rendszer üzemeltetőjének (fejlesztő) fiókja is a kollégák között látszik, de a szerepét és az állapotát az adminisztrátor nem módosíthatja.
 
 ### Szerkesztés, letiltás
 
@@ -354,9 +356,9 @@ Vidd fölé az egeret, kattints a **Válasz** gombra, és írd meg a választ. A
 
 Adminisztrátorként a Csapat → **Kollégák** lapon a **+ Új kolléga** gombbal. Kell hozzá név, e-mail-cím és felhasználónév.
 
-### Látja a kolléga a WordPress adminfelületét?
+### Lát a kolléga a műhely-felületen kívül mást is?
 
-A **Kolléga** szerepű munkatárs nem. Belépés után a műhely felületére kerül, és csak ott dolgozik.
+Nem. Belépés után a műhely felületére kerül, és csak ott dolgozik – más oldal nem nyílik meg neki.
 
 ### Elfelejtettem felírni az új kolléga jelszavát. Mit tegyek?
 

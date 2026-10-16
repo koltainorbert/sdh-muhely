@@ -78,3 +78,23 @@ A `## Túra: <modulkulcs>` szakasz az adott oldal végigvezetése. Soronként eg
 - **Cégadat nem kerülhet bele:** se cégnév, se valódi személy, se ár. A példák kitaláltak
   („Minta Márta", „+36 30 123 4567", „12 000 Ft").
 - Belső kódnév (függvény, tábla) csak a `Rendszer` csoport fejezeteiben szerepelhet.
+- **A rendszer nem árulja el, mi fut alatta (0.78).** Csak a fejlesztő (a WordPress-adminisztrátor) tudja,
+  hogy WordPress-bővítmény. A többiek – az SDH adminisztrátor is – szövegében nem szerepelhet: WordPress,
+  WP, wp-admin, wp-config, wp-content, plugin, bővítmény, LocalWP, GitHub, git, `.php` fájlnév. Helyette:
+  „a rendszer”, „a szerver”, „a rendszer üzemeltetője”, „a feltöltött fájlok mappája”. A `t36` ezt
+  minden nem fejlesztőnek látszó szövegen ellenőrzi (`SDH_Muhely_Rejtes::arulkodo()`).
+
+## Csak a fejlesztőnek
+
+Ami a műszaki háttérről szól (telepítés, szerverbeállítás, fájlok, kulcsok helye), azt jelöld:
+
+| Jelölés | Hatás |
+|---|---|
+| fejlécben `csak: fejleszto` | az egész fejezet csak a fejlesztőnek létezik |
+| `## Cím [fejlesztő]` | a szakasz csak a fejlesztőnek |
+| `### Alcím [fejlesztő]` (szakaszon belül) | az alcím a következő `###`-ig vagy a szakasz végéig csak a fejlesztőnek |
+| `### Kérdés? [fejlesztő]` (a `## GYIK`-ben) | a kérdés–válasz csak a fejlesztőnek |
+
+A többieknek ezek a súgóból, a keresőből és az asszisztens tudásából is hiányoznak; a rejtett fejezetre
+mutató `sugo:` hivatkozás nekik sima szöveg. A fejlesztő **Csak fejlesztő** címkét lát mellettük.
+A jelölt szakasz után a szöveg maradjon érthető a jelölt rész nélkül is.

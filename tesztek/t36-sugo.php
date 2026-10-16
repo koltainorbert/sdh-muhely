@@ -500,6 +500,101 @@ T::egyezik(1500.0, $arak['Gyorsszerviz'] ?? 0.0, 'árlista: pénznem nélkül ez
 T::egyezik('Kiegészítők', (string) ($al['tetelek'][0]['kategoria'] ?? ''), 'árlista: a kategóriasor kategória marad');
 T::egyezik([], SDH_Muhely_Szolgaltatas::arlista_ertelmez("Mobiltelefon 100")['tetelek'], 'árlista: a puszta kis szám nem ár');
 
+/* ======================================================================== */
+/* 9. Csak a fejlesztőnek (0.78): a többiek nem tudják meg, mi fut alatta    */
+/* ======================================================================== */
+
+$fejl_id  = get_current_user_id();
+$sdh_adm  = wp_insert_user(['user_login' => 'sdh_t36_' . wp_rand(10000, 99999), 'user_pass' => wp_generate_password(), 'role' => SDH_Muhely_Admin_UI::ADMIN_SZEREP]);
+$fejl_fej = $S::fejezetek();
+T::igaz(isset($fejl_fej['telepites'], $fejl_fej['modulok']), 'a fejlesztő látja a Telepítés és a Modulok fejezetet');
+
+// A csak fejlesztőnek szóló menüpont fejezete is csak fejlesztőé.
+foreach (SDH_Muhely_Modulok::osszes() as $mk => $m) {
+    if (!empty($m['csak_fejleszto']) && ($fk = $S::modul_fejezet((string) $mk)) !== '') {
+        T::igaz(!empty($fejl_fej[$fk]['csak_fejleszto']), 'a csak fejlesztőnek szóló „' . $mk . '” menüpont fejezete is csak fejlesztőé (fejléc: csak: fejleszto)');
+    }
+}
+
+// A jel a fejlesztőnél lekerül a címről, a rész jelölve marad.
+$jelolt = 0;
+
+foreach ($fejl_fej as $f) {
+    foreach ((array) $f['szakaszok'] as $sz) {
+        T::igaz(strpos((string) $sz['cim'] . (string) $sz['torzs'], $S::FEJLESZTO_JEL) === false, 'a fejlesztői jel nem marad a szövegben: ' . $f['kulcs'] . ' › ' . $sz['cim']);
+        $jelolt += !empty($sz['fejleszto']) ? 1 : substr_count((string) $sz['torzs'], '(fejlesztő)');
+    }
+}
+
+T::igaz($jelolt >= 5, 'a fejlesztő a jelölt részeket is látja (' . $jelolt . ')');
+
+wp_set_current_user((int) $sdh_adm);
+SDH_Muhely_Szemely::felejt();
+T::egyezik(false, SDH_Muhely_Admin_UI::fejleszto_e(), 'az SDH adminisztrátor nem fejlesztő');
+$adm_fej = $S::fejezetek();
+T::egyezik(count($fejl_fej) - 2, count($adm_fej), 'az adminisztrátor két fejezettel kevesebbet lát (Telepítés, Modulok)');
+T::igaz(!isset($adm_fej['telepites']) && !isset($adm_fej['modulok']), 'a Telepítés és a Modulok fejezet nem létezik neki');
+T::egyezik(null, $S::fejezet('telepites'), 'és fejezetként sem nyitható meg');
+T::egyezik('', $S::modul_fejezet('modulok'), 'a tartalomjegyzékben sincs (külön gyorsítótár)');
+T::egyezik([], array_values(array_filter($S::keres('telepítés frissítés GitHub zip', 10), static fn (array $t): bool => $t['fejezet'] === 'telepites')), 'a kereső sem találja');
+T::egyezik('<p>Lásd: Telepítés</p>', trim($S::md('Lásd: [Telepítés](sugo:telepites)')), 'a rejtett fejezetre mutató hivatkozás sima szöveg');
+
+// Egyetlen látható sor sem árulja el, mi fut alatta.
+$arulkodo = [];
+
+foreach ($adm_fej as $f) {
+    $sorok = [(string) $f['cim'], (string) $f['osszefoglalo'], (string) $f['kulcsszavak']];
+
+    foreach ((array) $f['szakaszok'] as $sz) {
+        $sorok[] = (string) $sz['cim'];
+        $sorok   = array_merge($sorok, explode("\n", (string) $sz['torzs']));
+        T::igaz(empty($sz['fejleszto']), 'fejlesztői szakasz nem jut el az adminisztrátorhoz: ' . $f['kulcs'] . ' › ' . $sz['cim']);
+    }
+
+    foreach ((array) $f['gyik'] as $g) {
+        $sorok[] = (string) $g['kerdes'];
+        $sorok   = array_merge($sorok, explode("\n", (string) $g['valasz']));
+    }
+
+    foreach ($sorok as $sor) {
+        if (SDH_Muhely_Rejtes::arulkodo($sor)) {
+            $arulkodo[] = $f['kulcs'] . ': ' . mb_substr($sor, 0, 90);
+        }
+    }
+}
+
+T::egyezik([], $arulkodo, 'a nem fejlesztőnek látszó súgóban nincs WordPress / wp- / plugin / bővítmény / GitHub / LocalWP / .php (sugo/OLVASSEL.md)');
+
+$html = $oldal(['nezet' => 'dokumentacio', 'fejezet' => 'beallitasok']);
+T::nem_tartalmaz($html, 'Csak fejlesztő', 'az adminisztrátor nem lát „Csak fejlesztő” jelvényt');
+T::nem_tartalmaz($html, '(fejlesztő)', 'és fejlesztői alcímet sem');
+T::nem_tartalmaz($html, 'WordPress', 'a Beállítások fejezete az adminisztrátornak nem írja, hogy WordPress');
+$html = $oldal(['nezet' => 'dokumentacio', 'fejezet' => 'telepites']);
+T::nem_tartalmaz($html, 'GitHub', 'a Telepítés fejezet címe kézzel beírva sem nyílik meg');
+
+// Az asszisztens: külön rendszerüzenet, a műszaki háttér nélkül.
+$st_adm = SDH_Muhely_Asszisztens_Tudas::statikus();
+T::nem_tartalmaz($st_adm, '- telepites – ', 'az adminisztrátor asszisztensének tartalomjegyzékében nincs Telepítés');
+T::tartalmaz($st_adm, 'a rendszer üzemeltetője tudja megmondani', 'az asszisztens nem beszél a műszaki háttérről');
+T::egyezik(false, SDH_Muhely_Rejtes::arulkodo(preg_replace('/\nADATBÁZIS \(tábla: mezők\).*\z/su', '', $st_adm) ?? ''), 'az adminisztrátor asszisztensének rendszerüzenete nem árulja el, mi fut alatta');
+T::nem_tartalmaz(SDH_Muhely_Sugo::ai_tartalom(), 'telepites', 'a súgó-tartalomjegyzékben sincs');
+T::egyezik(
+    "- Új naptár\n- Ügyféllista",
+    SDH_Muhely_Rejtes::semlegesit("- Új naptár\n- WordPress-frissítés: a `wp-admin`\n  folytatósor a pontból\n- Ügyféllista", false),
+    'semlegesítés: a több soros árulkodó pont egészében marad ki'
+);
+T::egyezik("- WordPress", SDH_Muhely_Rejtes::semlegesit('- WordPress', true), 'semlegesítés: a fejlesztő mindent kap');
+
+wp_set_current_user($fejl_id);
+SDH_Muhely_Szemely::felejt();
+T::tartalmaz(SDH_Muhely_Asszisztens_Tudas::statikus(), 'WordPress-bővítmény', 'a fejlesztő asszisztense tudja, hogy WordPress');
+T::igaz($S::fejezet('telepites') !== null, 'szerepváltás után a fejlesztő újra látja a Telepítés fejezetet');
+T::tartalmaz($oldal(['nezet' => 'dokumentacio', 'fejezet' => 'telepites']), 'Csak fejlesztő', 'a fejlesztő látja a „Csak fejlesztő” jelvényt');
+T::tartalmaz($oldal(['nezet' => 'dokumentacio', 'fejezet' => 'beallitasok']), 'Frissítés (fejlesztő)', 'a fejlesztő a jelölt alcímet is látja, jelölve');
+require_once ABSPATH . 'wp-admin/includes/user.php';
+wp_delete_user((int) $sdh_adm);
+delete_transient('sdh_muhely_ai_statikus_f');
+
 /* ---- Takarítás ---------------------------------------------------------- */
 
 $wpdb->query('DELETE FROM ' . SDH_Muhely_Asszisztens_Tudas::tabla() . " WHERE forras = 'gyik'");
