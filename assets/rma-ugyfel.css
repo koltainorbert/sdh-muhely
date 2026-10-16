@@ -1336,3 +1336,72 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
         padding-inline: .35rem;
     }
 }
+
+/* F2 (0.84.0): az árajánlat doboza az összegzés tetején. */
+.rma-ajanlat {
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--sdh-accent) 45%, var(--sdh-keret));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--sdh-accent) 8%, var(--sdh-felulet));
+}
+
+.rma-ajanlat--elfogadva {
+    border-color: color-mix(in srgb, var(--sdh-siker) 50%, var(--sdh-keret));
+    background: color-mix(in srgb, var(--sdh-siker) 8%, var(--sdh-felulet));
+}
+
+.rma-ajanlat--elutasitva {
+    border-color: var(--sdh-keret);
+    background: var(--sdh-felulet);
+}
+
+.rma-ajanlat__osszeg {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin: 4px 0 8px;
+}
+
+.rma-ajanlat__osszeg b {
+    font-size: 20px;
+}
+
+.rma-ajanlat__urlap {
+    display: grid;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.rma-ajanlat__cimke {
+    font-size: 12px;
+    color: var(--sdh-halvany);
+}
+
+.rma-ajanlat__urlap textarea {
+    width: 100%;
+    min-height: 3.2em;
+    padding: 6px 8px;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    resize: vertical;
+}
+
+.rma-ajanlat__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.rma-ajanlat__gombok .sdh-gomb {
+    flex: 1 1 8rem;
+    justify-content: center;
+}
+
+.rma-ajanlat__valasz {
+    margin: 0;
+    font-weight: 600;
+}

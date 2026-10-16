@@ -3623,6 +3623,7 @@ final class SDH_Muhely_Munkalap
                     </div>
 
                     <?php echo !$eladas && class_exists('SDH_Muhely_Garancia') ? SDH_Muhely_Garancia::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F1). ?>
+                    <?php echo !$arukiadas && class_exists('SDH_Muhely_Ajanlat') ? SDH_Muhely_Ajanlat::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F2). ?>
 
                     <div class="sdh-ml__csoport sdh-ml__csoport--osszeg"<?php echo $ub('osszeg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Összeg</h3>

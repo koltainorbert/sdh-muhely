@@ -12098,3 +12098,57 @@
         });
     }).observe(document.documentElement, { childList: true, subtree: true });
 }());
+
+/* Online árajánlat (F2, 0.84.0): a munkalap „Online árajánlat” csoportjának gombjai. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-ajanlat-akcio]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var doboz = gomb.closest('[data-sdh-ajanlat]');
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+        var uzenet = doboz.querySelector('[data-sdh-ajanlat-uzenet]');
+
+        fd.set('action', 'sdh_muhely_ajanlat_' + gomb.getAttribute('data-sdh-ajanlat-akcio'));
+        fd.set('id', doboz.getAttribute('data-sdh-ajanlat'));
+        fd.set('_wpnonce', B.nonce || '');
+        gomb.disabled = true;
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                if (v && v.success && v.data && v.data.html) {
+                    var uj = document.createElement('div');
+
+                    uj.innerHTML = v.data.html;
+
+                    if (uj.firstElementChild) {
+                        doboz.replaceWith(uj.firstElementChild);
+                    }
+
+                    return;
+                }
+
+                gomb.disabled = false;
+
+                if (uzenet) {
+                    uzenet.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+                }
+            })
+            .catch(function () {
+                gomb.disabled = false;
+
+                if (uzenet) {
+                    uzenet.textContent = 'Nincs kapcsolat a szerverrel.';
+                }
+            });
+    });
+}());

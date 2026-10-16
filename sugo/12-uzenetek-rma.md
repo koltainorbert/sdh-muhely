@@ -4,7 +4,7 @@ cim: Üzenetek és ügyféloldal (RMA)
 csoport: Kapcsolat
 modul: uzenetek
 szakaszok: ugyfeloldal
-kulcsszavak: üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
+kulcsszavak: árajánlat, ajánlat elfogadása, online elfogadás, elfogadom, nem kérem, jóváhagyás, ügyfél jóváhagyja, üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
 osszefoglalo: Az ügyfél a QR-kóddal vagy linkkel megnyitott oldalon látja a javítás állapotát és üzenhet; te a munkalap RMA-fülén válaszolsz, az olvasatlan üzeneteket az Üzenetek menüpont gyűjti össze.
 ---
 
@@ -230,6 +230,30 @@ Az ügyfél a rendelés oldalán ezt látja:
 
 Az üzenet a rendelés üzenetei közé kerül; az ügyfél látja, és válaszolhat rá. A rendelés állapota „Ügyfél értesítve” lesz, a gomb felirata pedig **Újra értesít**. Az előre megírt szöveget a Beállítások → **Árukiadás és rendelések** lapfülön módosíthatod.
 
+## Online árajánlat: az ügyfél egy gombbal elfogadja
+
+Ha a javítás előtt az ügyfél jóváhagyása kell, nem kell telefonálni: az ajánlatot az ügyféloldalon fogadja el vagy utasítja el.
+
+### Lépésről lépésre: ajánlat küldése
+
+1. Vedd fel a lapra a szolgáltatásokat és a termékeket, és **mentsd** a lapot.
+2. A munkalap bal oldalán, az **Online árajánlat** csoportban kattints az **Árajánlat küldése az ügyfélnek** gombra.
+3. A rendszer a lap mostani **végösszegét** küldi el: üzenetet ír a csevegőbe, és ha van e-mail címe, levelet is kap az ügyféloldal linkjével.
+4. A csoportban ez áll: „Elküldve … – Válaszra vár”. Innen **visszavonhatod** vagy **újraküldheted** (pl. ha közben változott az összeg – ezt a rendszer jelzi).
+
+### Amit az ügyfél lát
+
+Az ügyféloldal összegzésének tetején egy **Árajánlat** doboz: az ajánlott összeg, rövid magyarázat (a tételeket a Szolgáltatások és a Termékek fülön látja), egy megjegyzésmező és két gomb: **Elfogadom** és **Nem kérem**. Magyarul, angolul és németül is.
+
+### A válasz
+
+- A munkalapon az **Online árajánlat** csoport mutatja: **Elfogadta** vagy **Elutasította**, mikor, és az ügyfél megjegyzését.
+- A csevegőbe **olvasatlan üzenet** érkezik („Az árajánlatot ELFOGADOM (… Ft)”), és a beállított értesítési címre e-mail megy – ugyanúgy, mint egy ügyfélüzenetnél.
+- A Változásnaplóban is ott van.
+- Egy ajánlatra egyszer lehet válaszolni. Új ajánlathoz kattints az **Új ajánlat küldése** gombra.
+- Az ügyfél válasza nem számít párhuzamos szerkesztésnek: ha közben nyitva van a lap, a mentésed nem ütközik vele.
+- Lezárt (zárolt) lapról nem küldhető ajánlat.
+
 ## Mezők és gombok
 
 A munkalap **RMA** lapfülén felül a címke és három gomb áll (**Címke nyomtatása**, **Ügyféloldal**, **Link másolása**), középen a csevegő, alul az **Állapottörténet**: a munkalap állapotváltásai időponttal és a munkatárs nevével. Hat sor fér egy lapra, alatta a ‹ és › gombbal lapozhatsz.
@@ -318,6 +342,10 @@ Amelyik mezőt üresen hagyod, az az ügyféloldalon egyszerűen nem jelenik meg
 - **Nem látszik a „Megjött – értesítés” gomb.** A rendeléshez nincs ügyfél rendelve, vagy még nincs rögzítve (nincs sorszáma).
 
 ## GYIK
+
+### Hogyan kérem az ügyfél jóváhagyását az árajánlatra?
+
+A munkalapon az **Online árajánlat** csoportban kattints az **Árajánlat küldése az ügyfélnek** gombra. Az ügyfél az ügyféloldalon az **Elfogadom** vagy a **Nem kérem** gombbal válaszol; a válasz a munkalapon és olvasatlan üzenetként is megjelenik.
 
 ### Hogyan küldök üzenetet az ügyfélnek?
 

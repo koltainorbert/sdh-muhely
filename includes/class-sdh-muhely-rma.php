@@ -1006,6 +1006,38 @@ final class SDH_Muhely_Rma
             return;
         }
 
+        // F2 (0.84.0): az árajánlat elfogadása / elutasítása.
+        if ($muvelet === 'ajanlat' && class_exists('SDH_Muhely_Ajanlat')) {
+            $elonezet = !empty($_POST['elonezet']) && self::munkatars();
+
+            if ($elonezet) {
+                $vissza = add_query_arg('elonezet', '1', $vissza);
+            } elseif (!self::feloldva($munkalap, $ugyfel)) {
+                wp_safe_redirect($vissza);
+                return;
+            }
+
+            $jel = isset($_POST['jel']) ? (string) wp_unslash($_POST['jel']) : '';
+
+            if (!hash_equals(self::urlap_jel($munkalap), $jel)) {
+                wp_safe_redirect(add_query_arg('h', 'lejart', $vissza));
+                return;
+            }
+
+            $valasz = isset($_POST['valasz']) ? sanitize_key(wp_unslash($_POST['valasz'])) : '';
+
+            if (in_array($valasz, ['elfogad', 'elutasit'], true)) {
+                SDH_Muhely_Ajanlat::valasz(
+                    (int) $munkalap->id,
+                    $valasz === 'elfogad',
+                    isset($_POST['megjegyzes']) ? (string) wp_unslash($_POST['megjegyzes']) : ''
+                );
+            }
+
+            wp_safe_redirect(add_query_arg('ok', 'ajanlat', $vissza) . '#ajanlat');
+            return;
+        }
+
         if ($muvelet === 'valasz') {
             // Munkatársi előnézetből is küldhető üzenet (az ügyfél nevében kerül
             // a szálba) – így a teljes út kipróbálható belépés nélkül.
@@ -1309,7 +1341,9 @@ final class SDH_Muhely_Rma
             $fejlec[] = 'Reply-To: ' . self::fejlec_nev($nev) . ' <' . $ugyfel->email . '>';
         }
 
-        return (bool) wp_mail($cel, '[SDH Műhely] Ügyfélüzenet – munkalap ' . $szam . ($nev !== '' ? ' – ' . $nev : ''), $torzs, $fejlec);
+        $rendszer = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : 'Műhely';
+
+        return (bool) wp_mail($cel, '[' . $rendszer . '] Ügyfélüzenet – munkalap ' . $szam . ($nev !== '' ? ' – ' . $nev : ''), $torzs, $fejlec);
     }
 
     private static function email_ugyfelnek(object $munkalap, ?object $ugyfel, string $szoveg): bool

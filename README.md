@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.84.0
+- **F2 – online árajánlat-elfogadás** (új `SDH_Muhely_Ajanlat`). Új oszlopok a munkalapon: `ajanlat_allapot` ('' / var /
+  elfogadva / elutasitva), `ajanlat_osszeg`, `ajanlat_kuldve`, `ajanlat_valasz`, `ajanlat_megjegyzes` – **DB_VERSION 0.47.0**.
+- Munkalap: **Online árajánlat** csoport (küldés = a lap mostani végösszege; visszavonás, újraküldés, „azóta változott” jelzés;
+  zárolt lapról nem). AJAX: `sdh_muhely_ajanlat_kuld` / `_visszavon` (app.js). Küldéskor kimenő üzenet a csevegőbe + e-mail
+  az ügyfélnek a linkkel; napló-esemény.
+- Ügyféloldal: Árajánlat doboz az összegzés tetején (HU/EN/DE), megjegyzés + **Elfogadom** / **Nem kérem** (POST
+  `sdh_rma_muvelet=ajanlat`, védő jel, munkatársi előnézetből is). A válasz: a lapon, olvasatlan bejövő üzenet + e-mail a
+  szerviznek, napló; egyszer. Nem ütközés (nincs belépett felhasználója).
+- Javítás: a szerviznek menő értesítő levél tárgyában a beégetett „[SDH Műhely]” helyett a rendszer neve (Arculat).
+  Súgó: 12. fejezet. Teszt: t76.
+
 ### 0.83.0
 - **F1 – javítási garancia** (új `SDH_Muhely_Garancia`). Új oszlopok: `munkalap.garancia_nap` (NULL = a beállítás) és
   `garancia_elozo` – **DB_VERSION 0.46.0**. Beállítások › **Javítási garancia** (alap 180 nap, visszatérő készülék jelzése).

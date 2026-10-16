@@ -10472,3 +10472,44 @@ button.sdh-allapot,
     border-color: var(--sdh-siker);
     color: var(--sdh-siker);
 }
+
+/* F2 (0.84.0) – online árajánlat a munkalapon */
+.sdh-ml-ajanlat__allapot {
+    margin: 0 0 calc(6px * var(--sdh-n));
+    padding: calc(6px * var(--sdh-n)) calc(8px * var(--sdh-n));
+    border-radius: var(--sdh-r);
+    font-size: calc(12.5px * var(--sdh-n));
+    line-height: 1.45;
+    background: var(--sdh-felulet-2);
+}
+
+.sdh-ml-ajanlat__allapot.is-var {
+    background: color-mix(in srgb, var(--sdh-figyelem) 12%, transparent);
+}
+
+.sdh-ml-ajanlat__allapot.is-elfogadva {
+    background: color-mix(in srgb, var(--sdh-siker) 14%, transparent);
+}
+
+.sdh-ml-ajanlat__allapot.is-elutasitva {
+    background: color-mix(in srgb, var(--sdh-hiba) 12%, transparent);
+}
+
+.sdh-ml-ajanlat__figyel {
+    margin: 0 0 calc(6px * var(--sdh-n));
+    color: var(--sdh-figyelem);
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ml-ajanlat__megj {
+    margin: 0 0 calc(6px * var(--sdh-n));
+    font-size: calc(12px * var(--sdh-n));
+    font-style: italic;
+}
+
+.sdh-ml-ajanlat__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6px * var(--sdh-n));
+    margin: 0;
+}

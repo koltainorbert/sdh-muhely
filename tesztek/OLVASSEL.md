@@ -61,6 +61,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t73-ketlepcsos` | kétlépcsős belépés (H7, 0.81): TOTP (RFC 6238 vektorok), base32, ablak, egyszer használható kód; szabály; belépés kóddal / tartalék kóddal / beállítással a belépéskor; kísérlet-korlát, zárolás; más belépési utak elutasítva; megbízható gép; popup (AJAX); admin visszaállítás; vészkapcsoló |
 | `t74-anonim` | GDPR-anonimizálás (H8, 0.82): mi törlődik / mi marad, napló személyes adat nélkül, visszaigazoló e-mail, igazoló sáv, jog, kötelező mezők, kétszer nem futhat |
 | `t75-garancia` | javítási garancia (F1, 0.83): lejárat, visszatérő készülék jelzése, garanciális visszatérés (lánc), beküldött mezők, űrlap, nyomtatvány, beállítás |
+| `t76-ajanlat` | online árajánlat (F2, 0.84): küldés, ügyféloldali doboz és POST (jel, előnézet), elfogadás / elutasítás, üzenetek, e-mailek, napló, nem ütközés, visszavonás, zárolt lap, AJAX, fordítás |
 | `t69-szerepkor` | szerepkörök és jogok (H5): alap szerepek, mentés / új / törlés, személy → szerep, szerveroldali őr (modul + jog, AJAX / popup / admin-post), láthatóság, body-osztályok, közös fiók + dolgozó, admin_e() |
 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.

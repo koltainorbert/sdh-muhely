@@ -118,6 +118,16 @@ final class SDH_Muhely_Rma_Oldal
         'h_ures'          => ['Az üzenet üres volt.', 'The message was empty.', 'Die Nachricht war leer.'],
         'h_sokuzenet'     => ['Rövid időn belül sok üzenet érkezett. Kérjük, próbálja később, vagy hívjon minket.', 'Too many messages in a short time. Please try later or give us a call.', 'Zu viele Nachrichten in kurzer Zeit. Bitte später erneut versuchen oder anrufen.'],
         'ok_kuldve'       => ['Üzenetét megkaptuk, hamarosan válaszolunk.', 'We have received your message and will reply soon.', 'Wir haben Ihre Nachricht erhalten und antworten bald.'],
+        // F2 (0.84.0): online árajánlat.
+        'ajanlat_cim'        => ['Árajánlat', 'Quote', 'Kostenvoranschlag'],
+        'ajanlat_osszeg'     => ['Ajánlott összeg (bruttó)', 'Quoted amount (gross)', 'Angebotener Betrag (brutto)'],
+        'ajanlat_szoveg'     => ['A tételeket a Szolgáltatások és a Termékek fülön látja. Kérjük, jelezze, elvégezhetjük-e a javítást.', 'You can see the items on the Services and Products tabs. Please let us know whether we may carry out the repair.', 'Die Positionen sehen Sie unter Leistungen und Produkte. Bitte teilen Sie uns mit, ob wir die Reparatur durchführen dürfen.'],
+        'ajanlat_megj'       => ['Megjegyzés (nem kötelező)', 'Comment (optional)', 'Anmerkung (optional)'],
+        'ajanlat_elfogad'    => ['Elfogadom', 'I accept', 'Ich akzeptiere'],
+        'ajanlat_elutasit'   => ['Nem kérem', 'I decline', 'Ich lehne ab'],
+        'ajanlat_elfogadva'  => ['Ön elfogadta az ajánlatot', 'You accepted the quote', 'Sie haben das Angebot angenommen'],
+        'ajanlat_elutasitva' => ['Ön elutasította az ajánlatot', 'You declined the quote', 'Sie haben das Angebot abgelehnt'],
+        'ok_ajanlat'         => ['Köszönjük, a válaszát megkaptuk.', 'Thank you, we have received your answer.', 'Vielen Dank, wir haben Ihre Antwort erhalten.'],
         'ismeretlen_cim'  => ['Ismeretlen munkalap', 'Unknown job', 'Unbekannter Auftrag'],
         'ismeretlen'      => [
             'Ez a hivatkozás nem érvényes, vagy a munkalap még nincs rögzítve. Kérjük, olvassa be újra a munkalapon lévő QR-kódot, vagy keresse a szervizt.',
@@ -597,8 +607,8 @@ final class SDH_Muhely_Rma_Oldal
             return '<p class="rma-jelzes rma-jelzes--hiba" role="alert" data-rma-jelzes>' . esc_html(self::t('h_' . $h)) . '</p>';
         }
 
-        if ($ok === 'kuldve') {
-            return '<p class="rma-jelzes rma-jelzes--ok" role="status" data-rma-jelzes>' . esc_html(self::t('ok_kuldve')) . '</p>';
+        if ($ok === 'kuldve' || $ok === 'ajanlat') {
+            return '<p class="rma-jelzes rma-jelzes--ok" role="status" data-rma-jelzes>' . esc_html(self::t('ok_' . $ok)) . '</p>';
         }
 
         return '';
@@ -746,7 +756,7 @@ final class SDH_Muhely_Rma_Oldal
             $elso_ful   = $van_eszkoz ? 'eszkoz' : 'termekek';
 
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            $alap_ful = isset($_GET['ok']) || in_array($_GET['h'] ?? '', ['ures', 'sokuzenet', 'lejart'], true) ? 'uzenetek' : '';
+            $alap_ful = (isset($_GET['ok']) && $_GET['ok'] !== 'ajanlat') || in_array($_GET['h'] ?? '', ['ures', 'sokuzenet', 'lejart'], true) ? 'uzenetek' : '';
 
             ?>
             <div class="rma-ablak">
@@ -795,6 +805,7 @@ final class SDH_Muhely_Rma_Oldal
                     </nav>
 
                     <aside class="rma-oldal rma-panel" data-rma-panel="osszegzes" id="rma-panel-osszegzes" role="tabpanel">
+                        <?php echo class_exists('SDH_Muhely_Ajanlat') ? SDH_Muhely_Ajanlat::rma_doboz($munkalap, $elonezet) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F2). ?>
                         <?php self::oldalsav($munkalap, $allapot, $kulcs, $utolso); ?>
                     </aside>
 
