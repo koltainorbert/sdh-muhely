@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.89.1
+- Böngészős ellenőrzés (F1–F7) javításai: a **Riportok** menüpont adminnak az oldalsáv alján (új modul-jelző: `admin_menu`);
+  a foglalóoldal mobilon nem középre igazít (a hosszú űrlap teteje nem csúszik ki); a Riportok szűrőjének dátummezői és
+  időszak-pilljei egységes stílust kaptak; az Elégedettség csempe tizedesvesszővel.
+
 ### 0.89.0
 - **F7 – elégedettségi kérdés** (új `SDH_Muhely_Elegedettseg`, az Ügyfélüzenetek modul része). Óránkénti időzítő
   (`sdh_muhely_elegedettseg_cron`): a lezárt javítási lapok a beállított nap után (legfeljebb +3 nap, a beállított órától,

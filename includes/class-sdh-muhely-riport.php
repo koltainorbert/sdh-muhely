@@ -32,6 +32,7 @@ final class SDH_Muhely_Riport
             'render'     => [self::class, 'oldal'],
             'sorrend'    => 92,
             'csak_admin' => true,
+            'admin_menu' => true,
         ]);
     }
 
@@ -405,7 +406,7 @@ final class SDH_Muhely_Riport
                 <div class="sdh-riport__csempe"><span>Sikeres javítás</span><strong><?php echo esc_html(self::szazalek((float) $d['sikeres_arany'])); ?></strong><em><?php echo (int) $d['visszajott']; ?> jött vissza garanciában</em></div>
                 <div class="sdh-riport__csempe"><span>Bevétel (bruttó)</span><strong><?php echo esc_html(self::ft((float) $d['bevetel'])); ?></strong><em>a lezárt lapok végösszege</em></div>
                 <div class="sdh-riport__csempe"><span>Árajánlat</span><strong><?php echo (int) $d['ajanlat']['elfogadva']; ?> / <?php echo (int) $d['ajanlat']['kuldve']; ?></strong><em>elfogadva / elküldve, <?php echo (int) $d['ajanlat']['elutasitva']; ?> elutasítva</em></div>
-                <div class="sdh-riport__csempe"><span>Elégedettség</span><strong><?php echo $d['elegedettseg']['db'] > 0 ? esc_html(number_format_i18n((float) $d['elegedettseg']['atlag'], 1)) . ' / 5' : '–'; ?></strong><em><?php echo (int) $d['elegedettseg']['db']; ?> értékelés, <?php echo (int) $d['elegedettseg']['jo']; ?> elégedett</em></div>
+                <div class="sdh-riport__csempe"><span>Elégedettség</span><strong><?php echo $d['elegedettseg']['db'] > 0 ? esc_html(number_format((float) $d['elegedettseg']['atlag'], 1, ',', '')) . ' / 5' : '–'; ?></strong><em><?php echo (int) $d['elegedettseg']['db']; ?> értékelés, <?php echo (int) $d['elegedettseg']['jo']; ?> elégedett</em></div>
             </div>
 
             <div class="sdh-riport__racs">

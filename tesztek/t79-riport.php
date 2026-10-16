@@ -129,6 +129,7 @@ T::tartalmaz($oldal, '66,7%', 'a sikeres javítás aránya');
 T::tartalmaz($oldal, 'data-sdh-pop="datum"', 'saját dátumválasztó (nem natív)');
 T::igaz(SDH_Muhely_Modulok::egy($R::KULCS) !== null, 'a Riportok menüpont be van jegyezve');
 T::igaz(isset(SDH_Muhely_Modulok::alapreszek()['riportok']), 'a Riportok az alaprendszer része');
+T::igaz(!empty(SDH_Muhely_Modulok::egy($R::KULCS)['admin_menu']), 'adminnak menüpont az oldalsáv alján');
 
 // Rendrakás: a jövőbeli lapok vissza a múltba, hogy más tesztet ne zavarjanak.
 $wpdb->query($wpdb->prepare('UPDATE ' . $T('munkalap') . " SET lezarva = NULL, keszult = %s, allapot = 'nyitott', ajanlat_kuldve = NULL WHERE id IN (%d, %d, %d, %d, %d, %d)", '2026-01-01', $a, $b, $c, (int) $d, $e, $f));

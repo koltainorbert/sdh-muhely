@@ -540,6 +540,15 @@ final class SDH_Muhely_Frontend
             <?php if (SDH_Muhely_Admin_UI::admin_e() && class_exists('SDH_Muhely_Beallitasok')) : ?>
             <div class="sdh-sav__also">
                 <?php $sdh_aktiv_modul = SDH_Muhely_Modulok::egy($aktiv_kulcs); ?>
+                <?php // Adminisztrátori menüpontok (0.89.1): a csak adminnak szóló modulok közül, amelyek kérik (pl. Riportok). ?>
+                <?php foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) : ?>
+                    <?php if (empty($modul['csak_admin']) || empty($modul['admin_menu']) || !empty($modul['rejtett'])) { continue; } ?>
+                    <a class="sdh-sav__link <?php echo $aktiv_kulcs === $kulcs ? 'sdh-sav__link--aktiv' : ''; ?>"
+                       href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url((string) $kulcs)); ?>">
+                        <?php echo self::ikon((string) $kulcs); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                        <span class="sdh-sav__felirat"><?php echo esc_html((string) $modul['cim']); ?></span>
+                    </a>
+                <?php endforeach; ?>
                 <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Beallitasok::KULCS || ($sdh_aktiv_modul !== null && !empty($sdh_aktiv_modul['rejtett'])) ? 'sdh-sav__link--aktiv' : ''; ?>"
                    href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Beallitasok::KULCS)); ?>">
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>

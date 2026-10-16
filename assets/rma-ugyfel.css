@@ -1615,3 +1615,10 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     font: inherit;
     font-size: 16px;
 }
+
+/* A hosszú foglalóűrlap mobilon ne középre igazodjon (a teteje kicsúszna és nem lenne görgethető). */
+@media (max-width: 760px) {
+    .rma-ablak--kicsi.rma-ablak--foglalas .rma-zar {
+        justify-content: flex-start;
+    }
+}

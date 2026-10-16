@@ -10669,6 +10669,19 @@ button.sdh-allapot,
 
 .sdh-riport__datum input {
     width: 8.5rem;
+    height: calc(32px * var(--sdh-n));
+    padding: 0 calc(10px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-mezo-r, var(--sdh-r));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+    cursor: pointer;
+}
+
+.sdh-riport__pillek a.sdh-pill {
+    text-decoration: none;
 }
 
 .sdh-riport__idoszak {
