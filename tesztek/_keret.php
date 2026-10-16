@@ -135,6 +135,20 @@ function t_ugyfel(string $nev = 'Teszt Elek', array $tovabbi = []): int
     return (int) $wpdb->insert_id;
 }
 
+/** Van-e a táblának ilyen oszlopa – MySQL-en és SQLite-on is (a „SHOW COLUMNS … LIKE” SQLite-on nem megy). */
+function t_oszlop(string $tabla, string $oszlop): bool
+{
+    global $wpdb;
+
+    $oszlopok = (array) $wpdb->get_col('SHOW COLUMNS FROM ' . $tabla);
+
+    if ($oszlopok === []) {
+        $oszlopok = array_column((array) $wpdb->get_results('PRAGMA table_info(' . $tabla . ')', ARRAY_A), 'name');
+    }
+
+    return in_array($oszlop, $oszlopok, true);
+}
+
 /** Új eszköz az ügyfélnek; visszaadja az azonosítóját. */
 function t_eszkoz(int $ugyfel_id, string $gyarto, string $tipus): int
 {

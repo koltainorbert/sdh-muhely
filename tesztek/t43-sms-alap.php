@@ -60,8 +60,8 @@ foreach (['sablon', 'sablon_verzio', 'szabaly', 'uzenet', 'esemeny', 'dontes', '
     T::igaz($wpdb->get_var("SHOW TABLES LIKE '{$n}'") === $n, 'tábla: sms_' . $t);
 }
 
-T::igaz(count($wpdb->get_results('SHOW COLUMNS FROM ' . SDH_Muhely_Schema::tabla('ugyfel') . " LIKE 'sms_tilt'")) === 1, 'ügyfél.sms_tilt oszlop');
-T::igaz(count($wpdb->get_results('SHOW COLUMNS FROM ' . SDH_Muhely_Schema::tabla('uzenet') . " LIKE 'sms_id'")) === 1, 'üzenet.sms_id oszlop');
+T::igaz(t_oszlop(SDH_Muhely_Schema::tabla('ugyfel'), 'sms_tilt'), 'ügyfél.sms_tilt oszlop');
+T::igaz(t_oszlop(SDH_Muhely_Schema::tabla('uzenet'), 'sms_id'), 'üzenet.sms_id oszlop');
 
 /* --- Beállítások: alapok, mentés, titkosított jelszó ----------------------- */
 

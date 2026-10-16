@@ -10,6 +10,13 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 
 - `SDH_TESZT_ADATBAZIS=1` nélkül a tesztek nem indulnak el (védelem a véletlen futtatás ellen).
 - `SDH_WP_LOAD` elhagyható, ha a plugin a `wp-content/plugins/sdh-muhely` mappában áll.
+- **Tiszta adatbázis minden tesztnél** (SQLite-os tesztoldalon): add meg az adatbázisfájlt és egy alap-másolat helyét –
+  `SDH_TESZT_DB=/út/wp-content/database/teszt.sqlite SDH_TESZT_ALAP=/út/alap.sqlite`. Az első futás a mostani adatbázist
+  menti alapnak (ezért friss telepítés után indítsd), utána minden tesztfájl előtt az alap kerül vissza, a végén is.
+  MySQL-en ehhez külön, eldobható tesztadatbázis kell.
+- **Böngészős alapteszt:** `SDH_TESZT_ADATBAZIS=1 SDH_E2E_CIM=http://127.0.0.1:8765/wp SDH_E2E_NEV=admin SDH_E2E_JELSZO=… python3 tesztek/e2e/fofolyamat.py`
+  (Python + Playwright; a tesztoldal fusson, pl. `php -S`; a PHP-figyelmeztetéshez `WP_DEBUG` + `WP_DEBUG_DISPLAY` legyen bekapcsolva;
+  kétlépcsős kód nélküli fiókkal).
 - Tesztenként egy összegző sor jön (`t22 eszköz-állapot: 69/69 OK`); hibánál alatta a bukott állítások.
 - A Számlázz.hu-t a tesztek hamis válasszal helyettesítik: valódi számla nem készül, a hálózatra semmi nem megy ki.
 - A telepítő zipbe ez a mappa nem kerül be (`.gitattributes`: `export-ignore`).

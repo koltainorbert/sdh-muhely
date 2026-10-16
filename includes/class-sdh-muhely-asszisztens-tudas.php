@@ -585,7 +585,7 @@ final class SDH_Muhely_Asszisztens_Tudas
         // Ami megmarad: a beállított számú legfrissebb, az előző napi mentés és a legutóbbi visszaállítás előtti
         // biztonsági mentés (lásd SDH_Muhely_Mentes::megtartando).
         $kell  = class_exists('SDH_Muhely_Mentes')
-            ? SDH_Muhely_Mentes::megtartando($lista, $db)
+            ? SDH_Muhely_Mentes::megtartando($lista, $db, null, $megtart)
             : array_column(array_slice($lista, 0, $db), 'fajl');
 
         foreach ($lista as $m) {

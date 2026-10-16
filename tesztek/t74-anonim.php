@@ -18,7 +18,7 @@ $admin = get_current_user_id();
 $T     = static fn (string $t): string => SDH_Muhely_Schema::tabla($t);
 
 T::igaz(version_compare(SDH_Muhely_Schema::DB_VERSION, '0.45.0', '>='), 'sémaverzió 0.45.0');
-T::igaz(in_array('anonimizalva', (array) $wpdb->get_col('SHOW COLUMNS FROM ' . $T('ugyfel')), true) || in_array('anonimizalva', array_column((array) $wpdb->get_results('PRAGMA table_info(' . $T('ugyfel') . ')', ARRAY_A), 'name'), true), 'új oszlop: ugyfel.anonimizalva');
+T::igaz(t_oszlop($T('ugyfel'), 'anonimizalva'), 'új oszlop: ugyfel.anonimizalva');
 
 /* --- Előkészítés: egy ügyfél minden kapcsolódó adattal ------------------------------------------- */
 

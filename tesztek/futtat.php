@@ -11,9 +11,38 @@ $szuro = $argv[1] ?? '';
 $hibas = 0;
 $ossz  = 0;
 
+/*
+ * Tiszta adatbázis minden tesztnél (H9, 0.82.1) – SQLite-os tesztoldalon:
+ *   SDH_TESZT_DB=/út/wp-content/database/teszt.sqlite  SDH_TESZT_ALAP=/út/alap.sqlite
+ * Az első futás az alapot a mostani adatbázisból menti (ezért friss telepítés után indítsd);
+ * utána minden tesztfájl előtt az alap kerül vissza – a tesztek nem hagynak nyomot egymásnak.
+ */
+$db_fajl  = (string) getenv('SDH_TESZT_DB');
+$alap     = (string) getenv('SDH_TESZT_ALAP');
+$tisztit  = $db_fajl !== '' && $alap !== '' && is_file($db_fajl);
+
+if ($tisztit && !is_file($alap)) {
+    copy($db_fajl, $alap);
+    echo "Az alap adatbázis elmentve: {$alap}\n";
+}
+
+$visszaallit = static function () use ($db_fajl, $alap): void {
+    foreach (['-wal', '-shm', '-journal'] as $vege) {
+        if (is_file($db_fajl . $vege)) {
+            unlink($db_fajl . $vege);
+        }
+    }
+
+    copy($alap, $db_fajl);
+};
+
 foreach (glob(__DIR__ . '/t[0-9]*.php') ?: [] as $fajl) {
     if ($szuro !== '' && strpos(basename($fajl), $szuro) === false) {
         continue;
+    }
+
+    if ($tisztit) {
+        $visszaallit();
     }
 
     $kimenet = [];
@@ -27,6 +56,11 @@ foreach (glob(__DIR__ . '/t[0-9]*.php') ?: [] as $fajl) {
     $hibas += $kod === 0 ? 0 : 1;
 }
 
-echo $hibas === 0 ? "Mind zöld ({$ossz} teszt).\n" : "{$hibas} teszt hibás a(z) {$ossz}-ból.\n";
+if ($tisztit) {
+    $visszaallit();
+}
+
+echo $hibas === 0 ? "Mind zöld ({$ossz} teszt)" : "{$hibas} teszt hibás a(z) {$ossz}-ból";
+echo $tisztit ? ", minden teszt tiszta adatbázisról.\n" : ".\n";
 
 exit($hibas === 0 ? 0 : 1);

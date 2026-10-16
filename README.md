@@ -64,6 +64,16 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.82.1
+- **H9 – tesztkörnyezet.** `tesztek/futtat.php`: **tiszta adatbázis minden tesztnél** SQLite-os tesztoldalon
+  (`SDH_TESZT_DB` + `SDH_TESZT_ALAP`: az első futás elmenti az alapot, utána minden tesztfájl előtt az kerül vissza).
+  Új `t_oszlop()` segéd (a `SHOW COLUMNS … LIKE` SQLite-on nem ment – ezért bukott a t43). Új böngészős alapteszt:
+  `tesztek/e2e/fofolyamat.py` (Playwright: bejelentkező, belépés, Áttekintés, munkalap / ügyfél / eszköz popup, minden
+  Beállítások-lapfül, Súgó, kilépés – JS-hiba és PHP-figyelmeztetés nélkül).
+- **Javítás (mentés megőrzése):** azonos másodpercben készült mentéseknél a név végi véletlen jelek döntöttek a sorrendről, így
+  a most elkészült mentés kívül eshetett a megtartottakon, és eggyel több maradt (ezért bukott néha a t37). A `megtartando()`
+  most a frissen készültet a sor elejére veszi (helyben és a külső célokon is).
+
 ### 0.82.0
 - **H8 – GDPR: ügyfél anonimizálása** (új `SDH_Muhely_Anonim`). Az ügyfél adatlapján **Anonimizálás (GDPR)** gomb (admin +
   `torles` jog) → popup (`sdh_muhely_anonim_urlap`): mi törlődik / mi marad (darabszámokkal), kötelező „kérés” mező, üzenetek

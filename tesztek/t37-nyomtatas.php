@@ -224,6 +224,13 @@ for ($i = 0; $i < 4; $i++) {
 
 T::igaz(count(SDH_Muhely_Asszisztens_Tudas::mentesek()) <= 3, 'legfeljebb a beállított számú mentés marad meg');
 
+// Azonos másodpercben készült mentések: a most elkészült akkor is a megtartottak közé számít, ha a neve végi
+// véletlen jelek szerint hátrébb állna (H9: ezért bukott néha ez a teszt).
+$egy_mp = array_map(static fn (string $v): array => ['fajl' => 'sdh-mentes-20261016-120000-kezi-' . $v . '.jsonl.gz', 'ido' => 0], ['zzzzzz', 'yyyyyy', 'xxxxxx', 'aaaaaa']);
+$meg    = SDH_Muhely_Mentes::megtartando($egy_mp, 3, '2026-10-16', 'sdh-mentes-20261016-120000-kezi-aaaaaa.jsonl.gz');
+T::egyezik(3, count($meg), 'azonos másodpercnél is pontosan 3 marad');
+T::igaz(in_array('sdh-mentes-20261016-120000-kezi-aaaaaa.jsonl.gz', $meg, true), 'és köztük a most elkészült');
+
 $_POST = ['mentes_jelen' => '1', 'mentes_megtart' => '20'];
 $M::beallitas_mentes();
 $_POST = [];

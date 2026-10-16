@@ -286,9 +286,10 @@ final class SDH_Muhely_Mentes
      *   – a legutóbbi visszaállítás előtti biztonsági mentés (a visszaállítás visszacsinálásához).
      *
      * @param array<int, array{fajl: string, ido: int}> $lista
+     * @param string $legujabb a most elkészült mentés (mindig megmarad, és beleszámít a darabszámba)
      * @return string[] a megtartandó fájlnevek
      */
-    public static function megtartando(array $lista, int $db, ?string $ma = null): array
+    public static function megtartando(array $lista, int $db, ?string $ma = null, string $legujabb = ''): array
     {
         $ma = $ma ?? current_time('Y-m-d');
 
@@ -296,7 +297,9 @@ final class SDH_Muhely_Mentes
             $lista[$k]['ido'] = self::nev_ido($m['fajl']) ?: (int) $m['ido'];
         }
 
-        usort($lista, static fn (array $a, array $b): int => [$b['ido'], $b['fajl']] <=> [$a['ido'], $a['fajl']]);
+        // Azonos másodpercben készült mentéseknél a név végi véletlen jelek döntenének: a most elkészült
+        // ($legujabb) ezért kifejezetten a sor elejére kerül, és beleszámít a megtartott darabszámba.
+        usort($lista, static fn (array $a, array $b): int => [$b['fajl'] === $legujabb, $b['ido'], $b['fajl']] <=> [$a['fajl'] === $legujabb, $a['ido'], $a['fajl']]);
 
         $meg = array_column(array_slice($lista, 0, max(1, $db)), 'fajl');
 
@@ -366,7 +369,7 @@ final class SDH_Muhely_Mentes
                 $hiba = $cel === null ? 'Ez a cél ezen a szerveren nem érhető el.' : $cel->feltolt($enc, $nev);
 
                 if ($hiba === null && $cel !== null) {
-                    self::kulso_takarit($id, $cel);
+                    self::kulso_takarit($id, $cel, $nev);
                 }
             }
 
@@ -416,7 +419,7 @@ final class SDH_Muhely_Mentes
     }
 
     /** A célon a megőrzési szabály szerint felesleges mentések törlése (idegen fájlhoz nem nyúl). */
-    private static function kulso_takarit(string $id, SDH_Muhely_Mentes_Cel_Alap $cel): void
+    private static function kulso_takarit(string $id, SDH_Muhely_Mentes_Cel_Alap $cel, string $friss = ''): void
     {
         $lista = $cel->listaz();
 
@@ -424,7 +427,7 @@ final class SDH_Muhely_Mentes
             return;
         }
 
-        $kell = self::megtartando($lista, self::megtartas());
+        $kell = self::megtartando($lista, self::megtartas(), null, $friss);
 
         foreach ($lista as $m) {
             if (!in_array($m['fajl'], $kell, true) && SDH_Muhely_Mentes_Cel_Alap::mentes_nev($m['fajl'])) {
