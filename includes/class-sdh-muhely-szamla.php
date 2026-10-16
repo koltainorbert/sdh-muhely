@@ -1668,8 +1668,9 @@ final class SDH_Muhely_Szamla
                                        placeholder="Megnevezés – kezdd el gépelni" aria-label="Megnevezés">
                                 <button type="button" class="sdh-termval__kat sdh-szamlaurlap__tipus" data-sdh-szamla-tipus
                                         title="Kattintásra vált: szolgáltatás / termék">Szolgáltatás</button>
+                                <?php // 0.68.1: a megjegyzés pillje a név sorában – nem tolja fel a nevet. ?>
+                                <?php self::tetel_megjegyzes_gomb(); ?>
                             </span>
-                            <?php self::tetel_megjegyzes_gomb(); ?>
                             <?php self::tetel_megjegyzes_mezo('uj[__I__][megjegyzes]'); ?>
                         </td>
                         <td class="sdh-tabla__szam">
@@ -1679,10 +1680,13 @@ final class SDH_Muhely_Szamla
                                    class="sdh-szamlaurlap__me" aria-label="Mennyiségi egység">
                         </td>
                         <td class="sdh-tabla__szam">
-                            <input type="text" name="uj[__I__][brutto_ar]" inputmode="decimal" autocomplete="off" data-u="brutto_ar"
-                                   class="sdh-szamlaurlap__ar" placeholder="bruttó ár" aria-label="Bruttó egységár"
-                                   title="BRUTTÓ egységár forintban – a nettót a rendszer számolja belőle">
-                            <small class="sdh-szamlaurlap__netto">nettó <output data-u-ki="egysegar">0,00</output></small>
+                            <?php // 0.68.1: a bruttó ár és a belőle számolt nettó egy sorban – a sor nem lesz magasabb. ?>
+                            <span class="sdh-szamlaurlap__arsor">
+                                <input type="text" name="uj[__I__][brutto_ar]" inputmode="decimal" autocomplete="off" data-u="brutto_ar"
+                                       class="sdh-szamlaurlap__ar" placeholder="bruttó ár" aria-label="Bruttó egységár"
+                                       title="BRUTTÓ egységár forintban – a nettót a rendszer számolja belőle">
+                                <small class="sdh-szamlaurlap__netto" title="Nettó egységár (a bruttóból számolva)">nettó <output data-u-ki="egysegar">0,00</output></small>
+                            </span>
                         </td>
                         <td>
                             <select name="uj[__I__][afa_kulcs]" data-u="afa_kulcs" aria-label="Áfakulcs">
@@ -1843,7 +1847,7 @@ final class SDH_Muhely_Szamla
     {
         ?>
         <button type="button" class="sdh-szamlaurlap__megjgomb" data-sdh-szamla-megj
-                title="Megjegyzés ehhez a tételhez – a számlán a tétel alatt jelenik meg"><span class="sdh-plusz sdh-plusz--kicsi" aria-hidden="true"></span>megjegyzés</button>
+                title="Megjegyzés ehhez a tételhez – a számlán a tétel alatt jelenik meg"><span class="sdh-plusz sdh-plusz--kicsi" aria-hidden="true"></span>Megjegyzés</button>
         <?php
     }
 

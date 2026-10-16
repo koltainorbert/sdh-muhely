@@ -93,11 +93,11 @@ A számla ablakában a munkalap minden számlázható tétele megjelenik: elöl 
 - **Szolgáltatás…** – a szolgáltatások közül választasz.
 - **Kézi tétel** – üres sort kapsz, a megnevezést és az árat te írod be.
 
-Az új sorban megadható a megnevezés, a mennyiség, a mennyiségi egység, a **bruttó** egységár és az áfakulcs; a nettót a rendszer számolja. A megnevezés melletti kis címkére kattintva a tétel fajtája váltható (szolgáltatás vagy termék).
+Az új sorban megadható a megnevezés, a mennyiség, a mennyiségi egység, a **bruttó** egységár és az áfakulcs; a nettót a rendszer számolja, és a bruttó ár mellett, ugyanabban a sorban mutatja („nettó …”). A tételsor minden cellája egy vonalban áll. A megnevezés melletti kis címkére kattintva a tétel fajtája váltható (szolgáltatás vagy termék).
 
 **Új tétel törlése.** Az itt felvett sor elején **×** gomb áll: ezzel törölheted. A munkalapról érkezett tételt nem törölni kell, hanem a pipát kivenni.
 
-**Megjegyzés tételenként.** A megnevezés melletti **megjegyzés** gomb egy mezőt nyit a tétel alatt. Amit ide írsz (például IMEI, garancia, gyári szám), az a számlán a tétel alatt jelenik meg.
+**Megjegyzés tételenként.** A megnevezés sorában, a fajta (Szolgáltatás / Termék) mellett álló **+ Megjegyzés** pill egy mezőt nyit a tétel alatt – a kézi tételnél is a név mellett van, nem alatta, így nem tolja el a sort. Amit ide írsz (például IMEI, garancia, gyári szám), az a számlán a tétel alatt jelenik meg.
 
 > **Fontos:** A számla ablakában felvett új tétel a számla kiállításakor a munkalapra is rákerül, így a munkalap végösszege követi a számlát. Ha csak előnézetet kérsz, vagy bezárod az ablakot, a munkalap nem változik.
 
@@ -253,7 +253,7 @@ Igen, a **Termék…**, a **Szolgáltatás…** vagy a **Kézi tétel** gombbal.
 
 ### Hová írjam az IMEI-t vagy a garanciát a számlán?
 
-A tétel megnevezése melletti **megjegyzés** gombbal nyiss mezőt, és írd oda. A számlán a tétel alatt jelenik meg. Az egész számlára vonatkozó szöveget az ablak alján a **Megjegyzés** mezőbe írd.
+A tétel megnevezése melletti **+ Megjegyzés** pillel nyiss mezőt, és írd oda. A számlán a tétel alatt jelenik meg. Az egész számlára vonatkozó szöveget az ablak alján a **Megjegyzés** mezőbe írd.
 
 ### Hogyan kerül a bevizsgálási díj a számlára?
 

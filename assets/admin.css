@@ -4981,6 +4981,8 @@ a.sdh-szamlajel:hover {
     padding: .32rem .6rem;
     font-size: calc(13px * var(--sdh-n));
     white-space: nowrap;
+    /* 0.68.1: minden cella egy vonalban, középre igazítva – nem „kacsázik" a sor. */
+    vertical-align: middle;
 }
 
 .sdh-szamlaurlap__tetelek th:first-child,
@@ -5113,12 +5115,23 @@ a.sdh-szamlajel:hover {
     text-align: right;
 }
 
+/* A bruttó ár mezője és mellette a belőle számolt nettó: egy sorban. */
+.sdh-szamlaurlap__arsor {
+    display: inline-flex;
+    gap: .4rem;
+    align-items: center;
+    vertical-align: middle;
+}
+
 .sdh-szamlaurlap__netto {
-    display: block;
-    margin-top: .1rem;
+    display: inline-block;
+    min-width: 4.6rem;
+    margin: 0;
     color: var(--sdh-halvany);
     font-size: calc(11px * var(--sdh-n));
     font-variant-numeric: tabular-nums;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .sdh-szamlaurlap__tipus {
@@ -5141,7 +5154,7 @@ a.sdh-szamlajel:hover {
 .sdh-szamlaurlap__nevsor {
     display: flex;
     gap: .5rem;
-    align-items: baseline;
+    align-items: center;
     min-width: 0;
 }
 
@@ -5153,25 +5166,29 @@ a.sdh-szamlajel:hover {
     white-space: nowrap;
 }
 
+/* 0.68.1: a tétel megjegyzése pill – a név sorában, a típus (Szolgáltatás / Termék) pillje mellett. */
 .sdh-szamlaurlap__megjgomb {
+    display: inline-flex;
     flex: 0 0 auto;
+    gap: .25rem;
+    align-items: center;
     margin: 0;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--sdh-accent);
+    padding: .15rem .55rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-halvany);
     cursor: pointer;
     font-family: inherit;
     font-size: calc(11.5px * var(--sdh-n));
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
 .sdh-szamlaurlap__megjgomb:hover,
 .sdh-szamlaurlap__megjgomb:focus-visible {
-    text-decoration: underline;
-}
-
-.sdh-szamlaurlap__ujnev .sdh-szamlaurlap__megjgomb {
-    margin: .15rem 0 0;
+    border-color: var(--sdh-accent);
+    color: var(--sdh-szoveg);
 }
 
 .sdh-szamlaurlap__tetelek input.sdh-szamlaurlap__tetelmegj {

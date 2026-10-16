@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.68.1
+- **Számla ablaka – egyenes tételsorok**: a kézi tétel bruttó ára és a belőle számolt nettó egy sorban
+  (`.sdh-szamlaurlap__arsor`), minden cella `vertical-align: middle`; a tétel **+ Megjegyzés** gombja pill a név sorában
+  (a kézi tételnél is, nem a név alatt – nem tolja fel a nevet). Súgó: Számlázás.
+
 ### 0.68.0
 - **3D figura: több modell** (SDH – belső, `modellek` lista, legfeljebb 8): modellenként szerep (*helyette* /
   *mellette* / *pihen*), alapirány, hivatkozás, törlés és **Saját keze-lába** (egész alakos figuránál nincs rajzolt
