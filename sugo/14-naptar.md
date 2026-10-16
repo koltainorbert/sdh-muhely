@@ -3,8 +3,8 @@ kulcs: naptar
 cim: Naptár
 csoport: Csapat és idő
 modul: naptar
-szakaszok: naptar
-kulcsszavak: naptár, esemény, időpont, találkozó, megbeszélés, határidő, emlékeztető, értesítés, kártya, kinyomom, ismétlődés, ismétlődő, sorozat, privát, foglalt, résztvevő, nézet, heti nézet, havi nézet, napirend, idővonal, tábla, visszaszámlálás, napi összefoglaló, kész, szabadság
+szakaszok: naptar, foglalas
+kulcsszavak: naptár, esemény, időpont, találkozó, megbeszélés, határidő, emlékeztető, értesítés, kártya, kinyomom, ismétlődés, ismétlődő, sorozat, privát, foglalt, résztvevő, nézet, heti nézet, havi nézet, napirend, idővonal, tábla, visszaszámlálás, napi összefoglaló, kész, szabadság, online foglalás, időpontfoglalás, foglalóoldal, lemondás, weboldal, beágyazás
 osszefoglalo: Minden névnek saját naptára van; az eseményekről kártya szól, amely addig marad a képernyőn, amíg kézzel ki nem nyomod, a fontos eseményekről pedig e-mail is megy.
 ---
 
@@ -288,6 +288,36 @@ A **Kategóriák** mezőbe soronként egy kategóriát írj: a név, utána füg
 | **Az összefoglaló ideje** | 04:00 és 12:30 között, félórás lépésekben. Alapból 07:30. |
 | **Az összefoglaló címzettjei (vesszővel vagy soronként)** | Az itt megadott címek mindenki naptárát megkapják. Üresen mindenki a sajátját kapja, a saját címére. |
 
+## Online időpontfoglalás
+
+Az ügyfelek a weboldalatokról maguk foglalhatnak időpontot. A foglalás eseményként bekerül a kiválasztott naptárba, az ügyfél e-mailben visszaigazolást kap, benne egy lemondó linkkel, a naptár gazdája pedig e-mailt kap az új foglalásról.
+
+### Lépésről lépésre: bekapcsolás
+
+1. **Beállítások › Online időpontfoglalás** lapfül.
+2. Pipáld be: **Online időpontfoglalás bekapcsolva**.
+3. Válaszd ki, **melyik naptárba** kerüljenek a foglalások, és ha kell, a **kategóriát**.
+4. Add meg a **foglalható napokat**, az **első időpontot**, a **zárást** és **egy foglalás hosszát** (például 30 perc).
+5. **Egyszerre fogadható ügyfél**: hány foglalás eshet ugyanarra az időpontra (1 = egyszerre egy ügyfél).
+6. **Mentés**. A lapfül alján ott a **foglalóoldal címe** – ezt linkeld a weboldalatokon –, és egy **beágyazó kód**, amellyel az űrlap a weboldal egy oldalán belül jelenik meg.
+
+### Mit lát az ügyfél
+
+1. A szabad napokat gombokként, alattuk a választott nap szabad időpontjait.
+2. A nevét, telefonszámát, e-mail-címét, a készüléket és a hibát kérő mezőket, és egy jelölőnégyzetet az adatkezelésről.
+3. Az **Időpont foglalása** gomb után egy visszaigazoló képernyőt; ha megadta az e-mail-címét, levelet is a lemondó linkkel.
+
+### Mi számít foglaltnak
+
+- Minden időponthoz kötött esemény a kiválasztott naptárban – a kézzel felvett is. Ha egy sávban annyi esemény van, ahány ügyfelet egyszerre fogadtok, a sáv nem foglalható.
+- Az **egész napos** esemény nem foglal időt. Szabadság idejére vegyél fel időponthoz kötött eseményt (például 0:00-tól 23:55-ig), vagy kapcsold ki a foglalást.
+- Az **Elmaradt** állapotú esemény nem foglal.
+- Csak a **Legalább ennyi órával előre** utáni és a **Legfeljebb ennyi napra előre** belüli időpont foglalható.
+
+### Az online foglalás a naptárban
+
+A foglalás címe az ügyfél neve és a készülék, a végén „(online foglalás)”. A leírásban az ügyfél telefonszáma, e-mail-címe, a téma, a készülék és a hiba. Ha az ügyfél telefonszáma már szerepel az Ügyfelek között, a foglalás hozzá kapcsolódik. Ha az ügyfél lemondja, az esemény **Elmaradt** lesz, és a naptár gazdája levelet kap.
+
 ## Szabályok, amiket a rendszer betart
 
 - Minden eseménynek pontosan egy gazdája van; a résztvevők naptárában is megjelenik.
@@ -407,6 +437,18 @@ A **Személyek** nézet egy napra, nevenként egy oszlopban; az **Idővonal** ne
 ### Honnan tudom, mennyi idő van még az eseményig?
 
 A visszaszámlálásból: ott van a kártyán, a megnyitott esemény ablakában és a bal hasáb **Következő** blokkjában.
+
+### Hogyan foglalhatnak az ügyfelek időpontot a weboldalról?
+
+Kapcsold be a **Beállítások › Online időpontfoglalás** lapfülön, és a foglalóoldal címét linkeld a weboldalatokon, vagy illeszd be a beágyazó kódot.
+
+### Hogyan mondja le az ügyfél a foglalást?
+
+A visszaigazoló levélben lévő linkkel. A foglalás **Elmaradt** lesz, az időpont újra szabad, a naptár gazdája levelet kap.
+
+### Miért nem foglalható egy időpont, pedig ráérünk?
+
+Valószínűleg más esemény van abban a sávban a kiválasztott naptárban, vagy az időpont túl közel van (Legalább ennyi órával előre), vagy nem foglalható nap.
 
 ## Túra: naptar
 

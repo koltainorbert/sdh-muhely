@@ -405,7 +405,7 @@ final class SDH_Muhely_Rma_Oldal
      * ============================================================== */
 
     /** Ikonok (vonalas, a CRM ikonjaihoz illő). */
-    private static function ikon(string $nev): string
+    public static function ikon(string $nev): string
     {
         $rajzok = [
             'osszegzes'   => '<rect x="3.5" y="4" width="13" height="12" rx="1.6"/><path d="M3.5 8h13M8 8v8"/>',
@@ -472,7 +472,7 @@ final class SDH_Muhely_Rma_Oldal
      *
      * @param callable $tartalom Az ablak tartalma.
      */
-    private static function keret(string $cim, string $osztaly, callable $tartalom): void
+    public static function keret(string $cim, string $osztaly, callable $tartalom): void
     {
         $b       = SDH_Muhely_Rma::beallitas();
         $arculat = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::beallitas() : ['szin' => ''];
@@ -526,7 +526,7 @@ final class SDH_Muhely_Rma_Oldal
     }
 
     /** Az ablak fejléce: márka, (munkalap), nyelv, mód, kilépés. */
-    private static function fejlec(?object $munkalap, bool $kilepes, bool $elonezet): void
+    public static function fejlec(?object $munkalap, bool $kilepes, bool $elonezet): void
     {
         $b = SDH_Muhely_Rma::beallitas();
 
@@ -644,7 +644,7 @@ final class SDH_Muhely_Rma_Oldal
     }
 
     /** Gyorsgombok: Hívás, E-mail, Útvonal (ami meg van adva). */
-    private static function gyorsgombok(): string
+    public static function gyorsgombok(): string
     {
         $e     = self::elerhetoseg();
         $gombok = '';

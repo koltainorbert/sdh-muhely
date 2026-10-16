@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.87.0
+ * Version:           0.88.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.87.0');
+define('SDH_MUHELY_VERSION', '0.88.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -119,6 +119,8 @@ $sdh_muhely_modulok = [
     // H8 (0.82.0): GDPR – ügyfél anonimizálása törlési kérésre (visszaigazolással).
     'includes/class-sdh-muhely-anonim.php'          => 'SDH_Muhely_Anonim',
     'includes/class-sdh-muhely-naptar.php'          => 'SDH_Muhely_Naptar',
+    // F6 (0.88.0): online időpontfoglalás a weboldalról a naptárba.
+    'includes/class-sdh-muhely-foglalas.php'        => 'SDH_Muhely_Foglalas',
     'includes/class-sdh-muhely-asszisztens-tudas.php'    => 'SDH_Muhely_Asszisztens_Tudas',
     'includes/class-sdh-muhely-asszisztens-eszkozok.php' => 'SDH_Muhely_Asszisztens_Eszkozok',
     'includes/class-sdh-muhely-asszisztens.php'     => 'SDH_Muhely_Asszisztens',

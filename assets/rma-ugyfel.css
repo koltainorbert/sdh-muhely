@@ -1405,3 +1405,149 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     margin: 0;
     font-weight: 600;
 }
+
+/* ================================================================== */
+/* Online időpontfoglalás (F6, 0.88.0)                                 */
+/* ================================================================== */
+
+.rma-ablak--foglalas {
+    width: min(560px, 100%);
+}
+
+.rma--foglalas .rma-zar h1 + p {
+    margin-top: -.3rem;
+}
+
+.rma-fogl-ido {
+    font-size: 17px;
+}
+
+.rma-fogl__csapda {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.rma-fogl__napok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.rma-fogl__nap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 52px;
+    padding: .35rem .3rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 9px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    cursor: pointer;
+}
+
+.rma-fogl__nap b {
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.rma-fogl__nap small {
+    color: var(--sdh-halvany);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.rma-fogl__nap.is-aktiv {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.rma-fogl__nap.is-aktiv small {
+    color: inherit;
+}
+
+.rma-fogl__idok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.rma-fogl__idok legend {
+    margin-bottom: .3rem;
+    padding: 0;
+    color: var(--sdh-szoveg-2);
+    font-weight: 600;
+}
+
+.js .rma-fogl__idok[data-rejtve] {
+    display: none;
+}
+
+.rma-fogl__ido input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.rma-fogl__ido span {
+    display: inline-block;
+    padding: .45rem .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 8px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rma-fogl__ido input:checked + span {
+    border-color: var(--sdh-accent);
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.rma-fogl__ido input:focus-visible + span {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 2px;
+}
+
+.rma-fogl .rma-mezo select,
+.rma-fogl .rma-mezo textarea {
+    min-height: 44px;
+    padding: .55rem .8rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 9px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.rma-fogl__jelolo {
+    display: flex;
+    gap: .55rem;
+    align-items: flex-start;
+    color: var(--sdh-szoveg-2);
+    font-size: 13px;
+}
+
+.rma-fogl__jelolo input {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin-top: .1rem;
+}
+
+.rma-fogl__jelolo a {
+    color: var(--sdh-accent-szoveg);
+}

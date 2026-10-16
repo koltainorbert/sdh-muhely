@@ -10758,3 +10758,16 @@ button.sdh-allapot,
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* Online időpontfoglalás beállítás (F6, 0.88.0) */
+.sdh-fogl-napok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1rem;
+}
+
+.sdh-fogl-napok label {
+    display: inline-flex;
+    gap: .35rem;
+    align-items: center;
+}

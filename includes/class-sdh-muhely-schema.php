@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.49.0';
+    public const DB_VERSION = '0.50.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -1292,12 +1292,17 @@ final class SDH_Muhely_Schema
             munkalap_szam varchar(20) NOT NULL default '',
             link varchar(255) NOT NULL default '',
             privat tinyint(1) NOT NULL default 0,
+            forras varchar(20) NOT NULL default '',
+            foglalas_kulcs varchar(40) NOT NULL default '',
+            foglalo_email varchar(190) NOT NULL default '',
+            foglalo_telefon varchar(40) NOT NULL default '',
             letrehozta bigint(20) unsigned NOT NULL default 0,
             letrehozva datetime NULL,
             modositva datetime NULL,
             torolve tinyint(1) NOT NULL default 0,
             PRIMARY KEY  (id),
             key szemely_kezdet (szemely_id,kezdet),
+            key foglalas_kulcs (foglalas_kulcs),
             key kezdet (kezdet),
             key ismetles (ismetles)
         ) {$charset};";

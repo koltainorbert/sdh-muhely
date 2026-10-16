@@ -232,6 +232,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A naptár alapnézete és órasávja, a kategóriák, az emlékeztetők, az e-mail értesítések és a napi összefoglaló.',
                 'rajz' => [SDH_Muhely_Naptar::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Naptar::class, 'beallitas_mentes'],
             ],
+            'foglalas' => [
+                'cim' => 'Online időpontfoglalás', 'csoport' => 'kapcsolat',
+                'leiras' => 'A weboldalról foglalható időpontok: napok, nyitás–zárás, foglalási hossz, melyik naptárba kerüljön, a link és a beágyazó kód.',
+                'rajz' => [SDH_Muhely_Foglalas::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Foglalas::class, 'beallitas_mentes'],
+            ],
             'asszisztens' => [
                 'cim' => 'Asszisztens', 'csoport' => 'kapcsolat',
                 'leiras' => 'Az AI-asszisztens: be- és kikapcsolás, neve, kérdéskeret, API-kulcs, engedélyek.',

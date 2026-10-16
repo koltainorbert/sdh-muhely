@@ -239,9 +239,9 @@ final class SDH_Muhely_Modulok
             ],
             'naptar' => [
                 'cim' => 'Naptár', 'csoport' => 'Csapat és idő', 'ikon' => 'naptar',
-                'leiras' => 'Naptár névenként, minden nézettel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.',
+                'leiras' => 'Naptár névenként, minden nézettel, emlékeztetőkkel, e-mail értesítéssel, napi összefoglalóval és online időpontfoglalással.',
                 'ajax' => ['naptar'],
-                'szakaszok' => ['naptar'],
+                'szakaszok' => ['naptar', 'foglalas'],
             ],
 
             // --- Mesterséges intelligencia -------------------------------------

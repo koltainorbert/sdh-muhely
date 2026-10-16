@@ -241,3 +241,44 @@
     document.addEventListener('fullscreenchange', allapot);
     allapot();
 }());
+
+/* Online időpontfoglalás (F6, 0.88.0): napválasztó – a kiválasztott nap időpontjai látszanak. */
+(function () {
+    'use strict';
+
+    var urlap = document.querySelector('[data-rma-foglalas]');
+
+    if (!urlap) {
+        return;
+    }
+
+    var napok = urlap.querySelectorAll('[data-rma-fogl-nap]');
+    var csoportok = urlap.querySelectorAll('[data-rma-fogl-idok]');
+
+    function valaszt(nap) {
+        napok.forEach(function (g) {
+            var be = g.getAttribute('data-rma-fogl-nap') === nap;
+            g.classList.toggle('is-aktiv', be);
+            g.setAttribute('aria-pressed', be ? 'true' : 'false');
+        });
+        csoportok.forEach(function (c) {
+            c.querySelectorAll('input[type="radio"]').forEach(function (r) {
+                if (c.getAttribute('data-rma-fogl-idok') !== nap) {
+                    r.checked = false;
+                }
+            });
+
+            if (c.getAttribute('data-rma-fogl-idok') === nap) {
+                c.removeAttribute('data-rejtve');
+            } else {
+                c.setAttribute('data-rejtve', '');
+            }
+        });
+    }
+
+    napok.forEach(function (g) {
+        g.addEventListener('click', function () {
+            valaszt(g.getAttribute('data-rma-fogl-nap'));
+        });
+    });
+}());

@@ -64,6 +64,19 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.88.0
+- **F6 – online időpontfoglalás** (új `SDH_Muhely_Foglalas`, a Naptár modul része). Nyilvános oldal: `/?sdh_foglalas=1`
+  (az ügyféloldal kinézetével, X-Frame-Options nélkül, így beágyazható). Napválasztó + szabad időpontok (rádiógombok, JS nélkül is
+  működik), név, telefon, e-mail, téma, készülék, hiba, adatkezelési hozzájárulás. Szabad sáv: a beállított naptár időponthoz kötött,
+  nem elmaradt eseményei (ismétlődőké is) kevesebben vannak, mint az egyszerre fogadható ügyfél; az egész napos nem foglal.
+- Új oszlopok `naptar_esemeny`: `forras`, `foglalas_kulcs`, `foglalo_email`, `foglalo_telefon` – **DB_VERSION 0.50.0**. A foglalás
+  `SDH_Muhely_Naptar::ment()`-tel jön létre; meglévő ügyfélhez a telefonszám (szóköz/kötőjel nélkül) köti.
+- Levelek: visszaigazolás az ügyfélnek lemondó linkkel (`?sdh_foglalas=1&k=…`), értesítés a naptár gazdájának; lemondáskor
+  az esemény Elmaradt, a gazda levelet kap. Védelem: csapdamező, aláírt időbélyeg (3 mp – 2 óra), 5 foglalás / óra / cím.
+- Beállítások › **Online időpontfoglalás** (kapcsolat csoport): napok, első időpont, zárás, hossz, párhuzam, előre (óra/nap),
+  témák, bevezető, adatkezelési link, a foglalóoldal címe és beágyazó kód. `Rma_Oldal::keret/fejlec/gyorsgombok/ikon` publikus.
+  Súgó: 14. fejezet. Teszt: t80.
+
 ### 0.87.0
 - **F5 – riportok** (új `SDH_Muhely_Riport`, csak adminnak, menüpont „Riportok”). Időszak: ez a hónap, előző hónap, utolsó 30 nap,
   idén vagy egyéni (saját dátumválasztó). Csempék: lezárt javítás, átlagos és medián átfutás (felvétel → lezárás, napban),
