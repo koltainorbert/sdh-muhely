@@ -36,7 +36,7 @@ $napl  = static function (int $id) use ($wpdb, $naplo): array {
 
 /* --- 1. Séma, titkosítás ------------------------------------------------------------ */
 
-T::egyezik('0.44.0', SDH_Muhely_Schema::DB_VERSION, 'sémaverzió 0.44.0');
+T::igaz(version_compare(SDH_Muhely_Schema::DB_VERSION, '0.44.0', '>='), 'sémaverzió legalább 0.44.0');
 T::igaz(SDH_Muhely_Schema::naprakesz(), 'a séma naprakész');
 $t = $Z::tarol('1234');
 T::igaz(SDH_Muhely_Titok::titkos_e($t), 'a zárkód titkos alakban (sdh1:)');

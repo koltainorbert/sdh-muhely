@@ -1089,6 +1089,7 @@ final class SDH_Muhely_Ugyfel
                value="<?php echo esc_attr(self::kontextus_ertek()); ?>">
         <?php wp_nonce_field('sdh_muhely_ugyfel_mentes', 'sdh_nonce'); ?>
 
+        <?php echo class_exists('SDH_Muhely_Anonim') ? SDH_Muhely_Anonim::sav($ugyfel) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (H8). ?>
         <div class="sdh-ugyfelurlap">
             <?php
             // Kompakt, lapfüles elrendezés a MunkaLap 3 ügyfélszerkesztője nyomán.
@@ -1310,6 +1311,7 @@ final class SDH_Muhely_Ugyfel
                     'sdh_muhely_ugyfel_allapot_' . (int) $ugyfel->id
                 );
                 ?>
+                <?php echo class_exists('SDH_Muhely_Anonim') ? SDH_Muhely_Anonim::gomb($ugyfel) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (H8). ?>
                 <a class="sdh-gomb sdh-gomb--vilagos sdh-gomb--jobbra"
                    href="<?php echo esc_url($allapot_url); ?>">
                     <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>

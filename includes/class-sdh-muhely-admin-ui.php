@@ -686,6 +686,7 @@ final class SDH_Muhely_Admin_UI
             'rendeles_letrehozva'  => ['siker', 'A rendelés rögzítve.'],
             'inaktivalva'       => ['siker', 'Az ügyfél inaktívra állítva.'],
             'aktivalva'         => ['siker', 'Az ügyfél újra aktív.'],
+            'anonimizalva'      => ['siker', 'Az ügyfél személyes adatai törölve (anonimizálva). Az igazolás az ügyfél lapján áll.'],
             'hianyzo_nev'       => ['hiba',  'A név kitöltése kötelező – e nélkül nem menthető az ügyfél.'],
             'hianyzo_ugyfel'    => ['hiba',  'Válassz ügyfelet a listából – eszköz ügyfél nélkül nem vihető fel.'],
             'nincs_ilyen'       => ['hiba',  'Nincs ilyen rekord. Lehet, hogy időközben törölték.'],

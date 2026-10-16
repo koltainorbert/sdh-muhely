@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.44.0';
+    public const DB_VERSION = '0.45.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -204,6 +204,7 @@ final class SDH_Muhely_Schema
             kereso varchar(190) NOT NULL default '',
             tel_ford varchar(40) NOT NULL default '',
             cim_rendez varchar(190) NOT NULL default '',
+            anonimizalva datetime NULL,
             PRIMARY KEY  (id),
             key ugyfel_szam (ugyfel_szam),
             key nev (nev),

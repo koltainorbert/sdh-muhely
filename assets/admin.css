@@ -10402,3 +10402,32 @@ button.sdh-allapot,
         order: -1;
     }
 }
+
+/* ================================================================== */
+/* H8 (0.82.0) – ügyfél anonimizálása (GDPR)                           */
+/* ================================================================== */
+
+.sdh-anonim__ket {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: calc(12px * var(--sdh-n)) calc(18px * var(--sdh-n));
+    margin: calc(4px * var(--sdh-n)) 0 calc(12px * var(--sdh-n));
+}
+
+.sdh-anonim__cim {
+    margin: 0 0 calc(4px * var(--sdh-n));
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 600;
+}
+
+.sdh-anonim__lista {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: calc(12.5px * var(--sdh-n));
+    line-height: 1.55;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-anonim-sav {
+    margin-bottom: calc(10px * var(--sdh-n));
+}

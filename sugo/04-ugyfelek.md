@@ -4,7 +4,7 @@ cim: Ügyfelek
 csoport: Napi munka
 modul: ugyfelek
 szakaszok:
-kulcsszavak: ügyfél, vevő, partner, cég, magánszemély, közület, adószám, cím, irányítószám, település, telefon, e-mail, ügyfélszám, kapcsolattartó, inaktív, ügyfélválasztó, másolás, csatolt fájl, kedvezmény
+kulcsszavak: GDPR, adattörlés, adatvédelem, anonimizálás, törlési kérés, elfeledtetés, személyes adat, ügyfél, vevő, partner, cég, magánszemély, közület, adószám, cím, irányítószám, település, telefon, e-mail, ügyfélszám, kapcsolattartó, inaktív, ügyfélválasztó, másolás, csatolt fájl, kedvezmény
 osszefoglalo: Az Ügyfelek menüpontban magánszemélyeket és cégeket tartasz nyilván; minden munkalap, rendelés és eszköz egy ügyfélhez tartozik.
 ---
 
@@ -150,6 +150,7 @@ A lapfülön szám jelzi, hány fájl van csatolva. A fájlokat három nézetben
 - **Készülékei** – az Eszközök lista, erre az ügyfélre szűrve.
 - **Munkalapjai** – a Munkalapok lista az ügyfél összes lapjával.
 - **Inaktívra állít** vagy **Újra aktív** – lásd a szabályoknál.
+- **Anonimizálás (GDPR)** – csak adminisztrátornak (a „Törlés-szerű műveletek” joggal): az ügyfél személyes adatainak törlése a kérésére. Lásd lent.
 
 ### Az ügyfélválasztó mező
 
@@ -171,6 +172,42 @@ Ez a mező áll a munkalapon, az árukiadáson, a rendelésen és az eszköz ada
 ### Az ügyfél kártyája a lapon
 
 A munkalapon, az árukiadáson és a rendelésen kártya mutatja a kiválasztott ügyfelet: **Név**, **Kategória**, **Cím**, **Telefonszám**, **E-mail**, és ha van, **Kedvezmény**. Az árukiadáson a kártya címe **Vevő**. Minden adat mellett kis másoló gomb áll.
+
+## Ügyfél adatainak törlése kérésre (GDPR)
+
+Ha az ügyfél kéri, hogy töröljük az adatait, az ügyfelet nem töröljük – a munkalapjai, számlái és a pénztártételek hivatkoznak rá, és a számlákat a számviteli szabályok miatt meg kell őrizni. Helyette **anonimizáljuk**: a személyes adatai véglegesen eltűnnek, a javítások története névtelenül megmarad.
+
+### Lépésről lépésre: anonimizálás
+
+1. Nyisd meg az ügyfél adatlapját.
+2. Az adatlap alján kattints az **Anonimizálás (GDPR)** gombra (csak adminisztrátornak látszik).
+3. Nézd át, mi törlődik és mi marad (a munkalapok, számlák, üzenetek számával).
+4. Írd be, **mikor és hogyan** kérte az ügyfél (pl. „e-mailben, 2026. 10. 16.”) – ez kötelező.
+5. Döntsd el, törlődjön-e az ügyféllel váltott **üzenetek szövege** is (RMA-üzenetek, SMS-ek). Alapból igen.
+6. Ha van e-mail címe, a rendszer **visszaigazolást** küld rá (még a törlés előtt). Kikapcsolható.
+7. Pipáld be a **Megértettem** jelölőt, és kattints az **Anonimizálás** gombra.
+
+### Mi törlődik és mi marad
+
+| Törlődik | Megmarad |
+|---|---|
+| Név (helyette: „Anonimizált ügyfél (ügyfélszám)”), kapcsolattartó, adószám | Az ügyfélszám – a munkalapok, számlák ezzel hivatkoznak rá |
+| Telefonszámok, e-mail cím, minden cím, a megjegyzések | A munkalapok (javítás, tételek, árak) |
+| A kereső szavai – a régi nevére, számára nem található | A számlák és a pénztártételek (számviteli megőrzés) |
+| Az ügyféloldal (QR-kód) linkjei | A készülékek (típus, IMEI) – a garancia miatt |
+| A készülékek feloldó kódja és mintája | A régi adatokból készült korábbi naplóbejegyzések (a Változásnapló nem írható át) |
+| Az SMS-ek telefonszáma (csak az utolsó két számjegy marad) | |
+| A rendszer által megjegyzett mezőértékei (név, telefon, cím) | |
+| Választhatóan az üzenetek szövege | |
+
+Az anonimizált ügyfél inaktív lesz, SMS nem megy neki, és az adatlapja tetején egy **igazoló sor** áll: mikor, milyen kérésre, ki hajtotta végre, és ment-e visszaigazolás. A Változásnaplóba egyetlen bejegyzés kerül – személyes adat nélkül.
+
+Jó tudni:
+
+- **Nem vonható vissza.** A régi adatokat csak egy korábbi mentésből lehetne visszahozni.
+- A **levelezés** postafiókjában lévő e-maileket a rendszer nem törli (azok a levelezőszerveren vannak) – ha kell, ott töröld.
+- A **naptár** bejegyzéseinek szövegét nézd át kézzel, ha írtál bele nevet.
+- Ha később újra jön, új ügyfélként veszed fel.
 
 ## Szabályok, amiket a rendszer betart
 
@@ -219,7 +256,11 @@ Igen. A munkalapon az **Ügyfél** mező mellett kattints a pluszjelre. Az új �
 
 ### Miért nem tudom törölni az ügyfelet?
 
-Mert munkalapok, rendelések és eszközök hivatkoznak rá. Törlés helyett az adatlap alján az **Inaktívra állít** gombot használd: az ügyfél eltűnik a napi listából, de a múltja megmarad.
+Mert munkalapok, rendelések és eszközök hivatkoznak rá. Törlés helyett az adatlap alján az **Inaktívra állít** gombot használd: az ügyfél eltűnik a napi listából, de a múltja megmarad. Ha az ügyfél kéri az adatai törlését, az **Anonimizálás (GDPR)** gombot használd.
+
+### Az ügyfél kérte, hogy töröljük az adatait. Mit tegyek?
+
+Adminisztrátorként nyisd meg az adatlapját, és kattints az **Anonimizálás (GDPR)** gombra. A neve, telefonja, e-mail címe és címei törlődnek, a munkalapok és a számlák névtelenül megmaradnak. Ha van e-mail címe, visszaigazolást is kap.
 
 ### Hogyan hozok vissza egy inaktív ügyfelet?
 

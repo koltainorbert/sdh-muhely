@@ -52,6 +52,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t70-szintek` | fejlesztő / SDH adminisztrátor / kolléga szintek (0.76): szerep és jogok, WordPress-admin kizárás, Modulok és Frissítés csak fejlesztőnek, közös fiók, bejelentkező képernyő; Csapat: az „Adminisztrátor” SDH adminisztrátor, a fejlesztő fiókja védett (0.78) |
 | `t72-zarkod` | H6 (0.79): zárkód / minta titkosítva – séma, átállás napló nélkül, mentés (érintetlen / azonos / új / törlés / jog nélküli felülírás), új jog és a régi szerepek átállítása, űrlap és Megmutat (naplózva, jog nélkül elutasítva), napló, matrica, IMEI-találat, hordozható mentés |
 | `t73-ketlepcsos` | kétlépcsős belépés (H7, 0.81): TOTP (RFC 6238 vektorok), base32, ablak, egyszer használható kód; szabály; belépés kóddal / tartalék kóddal / beállítással a belépéskor; kísérlet-korlát, zárolás; más belépési utak elutasítva; megbízható gép; popup (AJAX); admin visszaállítás; vészkapcsoló |
+| `t74-anonim` | GDPR-anonimizálás (H8, 0.82): mi törlődik / mi marad, napló személyes adat nélkül, visszaigazoló e-mail, igazoló sáv, jog, kötelező mezők, kétszer nem futhat |
 | `t69-szerepkor` | szerepkörök és jogok (H5): alap szerepek, mentés / új / törlés, személy → szerep, szerveroldali őr (modul + jog, AJAX / popup / admin-post), láthatóság, body-osztályok, közös fiók + dolgozó, admin_e() |
 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.

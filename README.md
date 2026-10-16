@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.82.0
+- **H8 – GDPR: ügyfél anonimizálása** (új `SDH_Muhely_Anonim`). Az ügyfél adatlapján **Anonimizálás (GDPR)** gomb (admin +
+  `torles` jog) → popup (`sdh_muhely_anonim_urlap`): mi törlődik / mi marad (darabszámokkal), kötelező „kérés” mező, üzenetek
+  szövege igen/nem, visszaigazoló e-mail, „Megértettem”. Végrehajtás (`sdh_muhely_anonim_vegrehajt`) `Valtozasnaplo::csendben`
+  alatt (a napló nem írja le újra a törölt adatokat), utána egyetlen esemény személyes adat nélkül.
+- Törlődik: név (→ „Anonimizált ügyfél (ügyfélszám)”), kapcsolattartó, adószám, telefonok, e-mail, minden cím, megjegyzések,
+  `ugyfel_szo`, a munkalapok `rma_token`-je, az eszközök zárkódja / mintája, a mezőmemória egyező értékei, az SMS-ek száma és
+  eredeti száma (maszk: `***NN`) és követő linkje; választhatóan az RMA-üzenetek és SMS-ek szövege. Marad: ügyfélszám,
+  `kulso_azonosito` (újraimport nem hozza vissza), munkalapok, számlák, pénztár, eszközök, a régi naplóbejegyzések.
+- Új oszlop: `ugyfel.anonimizalva` – **DB_VERSION 0.45.0**. Igazoló sáv az adatlap tetején (a `belso_megjegyzes` helyén:
+  mikor, milyen kérés, ki, ment-e visszaigazolás). Súgó: 4. fejezet. Teszt: t74.
+
 ### 0.81.0
 - **H7 – kétlépcsős belépés (TOTP)**, új `SDH_Muhely_Ketlepcsos`. RFC 6238 (SHA-1, 6 jegy, 30 mp, ±1 lépés), base32 titok
   fiókonként a user metában, `SDH_Muhely_Titok`-kal titkosítva; egy kód csak egyszer (az utolsó elfogadott lépés tárolva).
