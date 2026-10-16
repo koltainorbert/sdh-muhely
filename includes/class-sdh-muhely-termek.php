@@ -422,6 +422,8 @@ final class SDH_Muhely_Termek
             'osztaly'        => $szoveg('osztaly', 60),
             'keszletkezeles' => !empty($_POST['keszletkezeles']) ? 1 : 0,
             'min_keszlet'    => max(0.0, round($szam('min_keszlet'), 3)),
+            // F4 (0.86.0): a rendelés utáni célkészlet (0 = a minimum kétszerese).
+            'cel_keszlet'    => max(0.0, round($szam('cel_keszlet'), 3)),
             'me'             => $szoveg('me', 20) !== '' ? $szoveg('me', 20) : 'db',
             'besz_netto'     => $besz,
             'besz_afa_kulcs' => $besz_afa,
@@ -703,6 +705,21 @@ final class SDH_Muhely_Termek
             return;
         }
 
+        if ($nezet === 'rendeles' && class_exists('SDH_Muhely_Raktar')) {
+            ?>
+            <div class="sdh-wrap">
+                <?php
+                SDH_Muhely_Admin_UI::uzenet();
+                SDH_Muhely_Admin_UI::fejlec('Termékek', 'Rendelési javaslat: ami a minimális készlet alatt van, beszállítónként.');
+                self::nezetfulek('rendeles');
+                SDH_Muhely_Raktar::javaslat_oldal();
+                ?>
+            </div>
+            <?php
+
+            return;
+        }
+
         self::lista_oldal();
     }
 
@@ -750,6 +767,13 @@ final class SDH_Muhely_Termek
             'mozgasok'  => ['Összes tételmozgás', null, self::url(['nezet' => 'mozgasok'])],
         ];
 
+        // F4 (0.86.0): a rendelési javaslat (darab = hány terméket kell rendelni).
+        if (class_exists('SDH_Muhely_Raktar')) {
+            $fulek = array_slice($fulek, 0, 3, true)
+                + ['rendeles' => ['Rendelési javaslat', array_sum(array_map('count', SDH_Muhely_Raktar::javaslat())), self::url(['nezet' => 'rendeles'])]]
+                + array_slice($fulek, 3, null, true);
+        }
+
         echo '<nav class="sdh-nezetfulek" aria-label="Nézetek">';
 
         foreach ($fulek as $kulcs => [$cim, $szam, $cel]) {
@@ -764,7 +788,7 @@ final class SDH_Muhely_Termek
                 $kulcs === $aktiv ? ' aria-current="page"' : '',
                 esc_html($cim),
                 $szam !== null
-                    ? ' <span class="sdh-nezetfulek__db' . ($kulcs === 'hiany' && $szam > 0 ? ' is-figyelem' : '') . '">' . (int) $szam . '</span>'
+                    ? ' <span class="sdh-nezetfulek__db' . (in_array($kulcs, ['hiany', 'rendeles'], true) && $szam > 0 ? ' is-figyelem' : '') . '">' . (int) $szam . '</span>'
                     : ''
             );
         }
@@ -1395,12 +1419,21 @@ final class SDH_Muhely_Termek
                                    placeholder="0" value="<?php echo esc_attr($min > 0 ? self::mezobe($min, 3) : ''); ?>">
                         </div>
 
+                        <div class="sdh-termekurlap__kmezo" data-t-keszletsor>
+                            <label for="termek_cel_keszlet" title="A rendelési javaslat eddig a mennyiségig tölt fel. Üresen: a minimum kétszerese.">Célkészlet</label>
+                            <input type="text" inputmode="decimal" name="cel_keszlet" id="termek_cel_keszlet" class="is-jobb"
+                                   placeholder="<?php echo esc_attr($min > 0 ? self::mezobe($min * 2, 3) : ''); ?>"
+                                   value="<?php echo esc_attr(!$uj && (float) ($t->cel_keszlet ?? 0) > 0 ? self::mezobe((float) $t->cel_keszlet, 3) : ''); ?>">
+                        </div>
+
                         <div class="sdh-termekurlap__kmezo sdh-termekurlap__kmezo--szeles">
                             <span class="sdh-termekurlap__sugo" data-t-keszletsugo>
                                 <?php echo $uj
                                     ? 'A nyitókészlet készletmozgásként rögzül. A munkalapra tett termék magától levonódik.'
                                     : 'Az átírt készlet mozgásként rögzül (bevételezés vagy korrekció); a munkalapok fogyása magától levonódik.'; ?>
                             </span>
+
+                            <?php echo !$uj && class_exists('SDH_Muhely_Raktar') ? SDH_Muhely_Raktar::termek_foglalas($t) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F4). ?>
 
                             <?php if (!$uj) : ?>
                                 <span class="sdh-termekurlap__ok" data-t-keszletok hidden>

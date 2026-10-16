@@ -4,7 +4,7 @@ cim: Termékek
 csoport: Napi munka
 modul: termekek
 szakaszok:
-kulcsszavak: termék, alkatrész, áru, cikk, készlet, raktár, nyitókészlet, bevételezés, korrekció, leltár, készletmozgás, tételmozgás, beszerzési ár, eladási ár, haszonkulcs, árrés, cikkszám, termékkód, vonalkód, gyári szám, beszállító, minimális készlet, rendelni kell, inaktív
+kulcsszavak: rendelési javaslat, rendelés beszállítótól, foglalás, foglalt, lefoglalt alkatrész, célkészlet, megérkezett, hiány, nincs raktáron, CSV, termék, alkatrész, áru, cikk, készlet, raktár, nyitókészlet, bevételezés, korrekció, leltár, készletmozgás, tételmozgás, beszerzési ár, eladási ár, haszonkulcs, árrés, cikkszám, termékkód, vonalkód, gyári szám, beszállító, minimális készlet, rendelni kell, inaktív
 osszefoglalo: A Termékek menüpont az alkatrészek és eladható áruk törzse készlettel, beszerzési és eladási árral; a munkalapra vagy árukiadásra tett termék magától lejön a készletről.
 ---
 
@@ -22,7 +22,7 @@ A készletet nem neked kell fejben tartanod. Amit a munkalapra vagy a napi áruk
 - Az Áttekintésen az **Új termék** gombbal.
 - A munkalap és a napi árukiadás **Termékek** lapfülén a termékválasztó ablakból: ott is felvehetsz és szerkeszthetsz terméket.
 
-A Termékek oldal tetején nézetfülek állnak: **Összes termék**, **Készleten**, **Rendelni kell**, **Inaktív** és **Összes tételmozgás**. Az **Inaktív** fül csak akkor látszik, ha van inaktív termék.
+A Termékek oldal tetején nézetfülek állnak: **Összes termék**, **Készleten**, **Rendelni kell**, **Rendelési javaslat**, **Inaktív** és **Összes tételmozgás**. Az **Inaktív** fül csak akkor látszik, ha van inaktív termék.
 
 ## Lépésről lépésre: új termék felvétele
 
@@ -127,6 +127,26 @@ Minden termék mozgása egyben:
 3. A bevételt pluszjel, a kiadást mínuszjel jelöli.
 4. A „Munkalap" fajtájú sorban a szóra kattintva megnyílik az a lap, amelyik a terméket felhasználta. A megjegyzésben a munkalap száma áll.
 
+## Raktár: foglalás és rendelési javaslat
+
+### Foglalás nyitott munkalapon
+
+A munkalapra tett termék rögtön lejön a készletről. Amíg a lap **nyitott** (nincs lezárva), a termék **foglalt**: a javításhoz félre van téve. A termék űrlapján, a készlet alatt látszik: „Foglalva nyitott munkalapokon: 3 db – melyik lapokon”. A lap lezárásakor a foglalás felhasználássá válik.
+
+Ha egy lap terméke miatt a készlet **nulla alá** megy, a munkalap bal oldalán **Raktár – Nincs elég raktáron** jelzés áll a termék nevével.
+
+### Célkészlet
+
+A termék űrlapján a **Min. készlet** mellett a **Célkészlet**: rendeléskor eddig a mennyiségig érdemes feltölteni. Üresen a minimum kétszerese.
+
+### Lépésről lépésre: rendelés a beszállítótól
+
+1. Nyisd meg a **Termékek › Rendelési javaslat** nézetet (a fülön szám jelzi, hány terméket kell rendelni).
+2. A termékek **beszállítónként** csoportosítva állnak: készlet, minimum, foglalt, a **javasolt mennyiség** (a célkészletig) és a becsült nettó beszerzési érték.
+3. A mennyiség átírható. A **Szöveg a beszállítónak** részben kész rendelési lista van – másold ki, és küldd el.
+4. A **Letöltés (CSV, Excelhez)** gombbal az egész javaslat táblázatba menthető.
+5. Ha az áru megérkezett, kattints a sor **Megérkezett** gombjára: a rendszer bevételezi a beírt mennyiséget (készletmozgásként, „Rendelés megérkezett” megjegyzéssel).
+
 ## Mezők és gombok
 
 ### A Termékek lista oszlopai
@@ -220,6 +240,14 @@ Az ablak tetején látod a termék sorszámát, és hogy hány munkalap-tételbe
 - **„A termékek listája nem töltődött be."** – a választó nem érte el a szervert. Zárd be, és nyisd meg újra.
 
 ## GYIK
+
+### Honnan tudom, mit kell rendelni?
+
+A **Termékek › Rendelési javaslat** nézetből: beszállítónként mutatja, mi van a minimum alatt, és mennyit érdemes rendelni. Megérkezéskor a **Megérkezett** gomb bevételezi.
+
+### Mit jelent, hogy egy alkatrész foglalt?
+
+Nyitott munkalapon van: a javításhoz félre van téve, és már lejött a készletről. A termék űrlapján látszik, melyik lapokon.
 
 ### Hogyan veszek fel új terméket?
 

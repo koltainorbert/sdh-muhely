@@ -63,6 +63,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t75-garancia` | javítási garancia (F1, 0.83): lejárat, visszatérő készülék jelzése, garanciális visszatérés (lánc), beküldött mezők, űrlap, nyomtatvány, beállítás |
 | `t76-ajanlat` | online árajánlat (F2, 0.84): küldés, ügyféloldali doboz és POST (jel, előnézet), elfogadás / elutasítás, üzenetek, e-mailek, napló, nem ütközés, visszavonás, zárolt lap, AJAX, fordítás |
 | `t77-atvetel` | átvételi fotók és aláírás (F3, 0.85): PNG-ellenőrzés, mentés a lappal, csere, törlés, fotó, lapfül, átvételi nyomtatvány képekkel, eladásnál nincs |
+| `t78-raktar` | raktár (F4, 0.86): célkészlet, javasolt mennyiség, foglalás nyitott lapon, hiány a lapon, lezárás után, bevételezés, CSV, nézet, űrlapmező |
 | `t69-szerepkor` | szerepkörök és jogok (H5): alap szerepek, mentés / új / törlés, személy → szerep, szerveroldali őr (modul + jog, AJAX / popup / admin-post), láthatóság, body-osztályok, közös fiók + dolgozó, admin_e() |
 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.

@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.48.0';
+    public const DB_VERSION = '0.49.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -715,6 +715,7 @@ final class SDH_Muhely_Schema
             keszletkezeles tinyint(1) NOT NULL default 1,
             keszlet decimal(12,3) NOT NULL default 0.000,
             min_keszlet decimal(12,3) NOT NULL default 0.000,
+            cel_keszlet decimal(12,3) NOT NULL default 0.000,
             me varchar(20) NOT NULL default 'db',
             besz_netto decimal(14,2) NOT NULL default 0.00,
             besz_afa_kulcs varchar(12) NOT NULL default '27',

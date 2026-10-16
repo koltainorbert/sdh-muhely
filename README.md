@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.86.0
+- **F4 – raktár** (új `SDH_Muhely_Raktar`). Új oszlop: `termek.cel_keszlet` (a rendelés utáni célkészlet; 0 = a minimum kétszerese)
+  – **DB_VERSION 0.49.0**. Foglalás = a nyitott (nem lezárt, nem érvénytelen) számozott lapok kimenő terméktételei
+  (`foglalasok()`); a termék űrlapján „Foglalva nyitott munkalapokon”. A munkalapon „Nincs elég raktáron” jelzés, ha a lap
+  terméke miatt a készlet negatív.
+- Termékek › **Rendelési javaslat** nézet (nézetfül darabszámmal): beszállítónként, javasolt mennyiség a célig (felfelé kerekítve),
+  becsült nettó érték, foglalt, másolható rendelési szöveg, **CSV** (`sdh_muhely_raktar_csv`, BOM + pontosvessző), soronként
+  **Megérkezett** = bevételezés (`sdh_muhely_raktar_bevet`). A `raktar_` AJAX a Termékek modulhoz tartozik. Súgó: 7. fejezet. Teszt: t78.
+
 ### 0.85.0
 - **F3 – átvételi fotók és aláírás** (új `SDH_Muhely_Atvetel`). A javítási munkalap új **Átvétel** lapfüle (6. fül):
   fotók (csatolmány `munkalap` típus; „Fotó készítése” gomb `capture="environment"`-tel) és az ügyfél aláírása

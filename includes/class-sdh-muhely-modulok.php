@@ -179,7 +179,7 @@ final class SDH_Muhely_Modulok
             'termekek' => [
                 'cim' => 'Termékek és készlet', 'csoport' => 'Értékesítés', 'ikon' => 'termekek',
                 'leiras' => 'Termékkatalógus, készlet, vonalkód; termék-tételek a munkalapon, az árukiadáson és a rendelésen.',
-                'ajax' => ['termekek', 'termek_'], 'post' => ['termek_'],
+                'ajax' => ['termekek', 'termek_', 'raktar_'], 'post' => ['termek_'],
                 'szakaszok' => [],
             ],
             'arukiadas' => [

@@ -12311,3 +12311,54 @@
         }
     });
 }());
+
+/* Raktár (F4, 0.86.0): a rendelési javaslat „Megérkezett” gombja – bevételezés a sor mennyiségével. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-raktar-bevet]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var sor = gomb.closest('[data-sdh-raktar-sor]');
+        var menny = sor ? sor.querySelector('[data-sdh-raktar-menny]') : null;
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+
+        fd.set('action', 'sdh_muhely_raktar_bevet');
+        fd.set('_wpnonce', B.nonce || '');
+        fd.set('termek', gomb.getAttribute('data-sdh-raktar-bevet'));
+        fd.set('mennyiseg', menny ? menny.value : '0');
+        gomb.disabled = true;
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                if (v && v.success) {
+                    var k = sor.querySelector('[data-sdh-raktar-keszlet]');
+
+                    if (k) {
+                        k.textContent = v.data.keszlet;
+                        k.classList.remove('is-hiba');
+                    }
+
+                    gomb.textContent = 'Bevételezve ✓';
+                    sor.classList.add('is-kesz');
+
+                    return;
+                }
+
+                gomb.disabled = false;
+                gomb.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült';
+            })
+            .catch(function () {
+                gomb.disabled = false;
+                gomb.textContent = 'Nincs kapcsolat';
+            });
+    });
+}());

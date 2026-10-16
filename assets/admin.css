@@ -10583,3 +10583,60 @@ button.sdh-allapot,
     border-radius: var(--sdh-r);
     background: #fff;
 }
+
+/* ================================================================== */
+/* F4 (0.86.0) – raktár: rendelési javaslat, hiány a munkalapon         */
+/* ================================================================== */
+
+.sdh-raktar__besz .sdh-tabla td,
+.sdh-raktar__besz .sdh-tabla th {
+    white-space: nowrap;
+}
+
+.sdh-raktar__besz .sdh-tabla td:first-child {
+    white-space: normal;
+}
+
+.sdh-raktar__ossz {
+    margin-left: calc(8px * var(--sdh-n));
+    color: var(--sdh-halvany);
+    font-size: calc(12px * var(--sdh-n));
+    font-weight: 500;
+}
+
+.sdh-raktar__menny {
+    width: 5rem;
+    text-align: right;
+}
+
+.sdh-raktar .is-hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-raktar tr.is-kesz {
+    opacity: .55;
+}
+
+.sdh-raktar__szoveg {
+    margin-top: calc(8px * var(--sdh-n));
+}
+
+.sdh-raktar__szoveg textarea {
+    width: 100%;
+    margin-top: calc(6px * var(--sdh-n));
+    font-family: var(--sdh-betutipus);
+}
+
+.sdh-ml-raktar ul {
+    margin: 0 0 calc(4px * var(--sdh-n));
+    padding-left: 1.1rem;
+    font-size: calc(12.5px * var(--sdh-n));
+}
+
+.sdh-ml-raktar__hiany {
+    margin: 0 0 calc(4px * var(--sdh-n));
+    color: var(--sdh-hiba);
+    font-size: calc(12.5px * var(--sdh-n));
+    font-weight: 600;
+}
