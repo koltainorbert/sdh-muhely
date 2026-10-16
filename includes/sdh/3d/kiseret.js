@@ -1,5 +1,5 @@
 /**
- * SDH – belső: 3D figura (0.66.1; 0.66.2: kéz, láb, séta, párbaj). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
+ * SDH – belső: 3D figura (0.66.1; 0.66.2: kéz, láb, séta, párbaj; 0.68.0: több modell). CSAK AZ SDH SZERVIZÉ (includes/sdh/).
  *
  * Saját feltöltésű .glb modell valódi 3D-ben (three.js, WebGL, GPU). Két szerep:
  *
@@ -19,15 +19,16 @@ import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
 
 const cimke = document.getElementById('sdh-3d-kiseret');
-let B = {};
+let ADAT = {};
 
 try {
-    B = JSON.parse(cimke ? cimke.getAttribute('data-beall') || '{}' : '{}');
+    ADAT = JSON.parse(cimke ? cimke.getAttribute('data-beall') || '{}' : '{}');
 } catch (x) {
-    B = {};
+    ADAT = {};
 }
 
-const HELYETTE = B.mod !== 'mellette';
+// 0.68.0: több modell – egy Szikra helyett és egy mellette egyszerre is futhat.
+const LISTA = Array.isArray(ADAT.figurak) ? ADAT.figurak : (ADAT.url ? [ADAT] : []);
 
 function nagyitas() {
     return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sdh-n')) || 1;
@@ -212,8 +213,11 @@ function osztalyMozgas(lista, t) {
 /* Indulás                                                                 */
 /* ===================================================================== */
 
-function indit() {
-    if (!B.url || window.SDH_3D_KISERO) {
+function indit(B) {
+    const HELYETTE = B.mod !== 'mellette';
+    const ZAR = HELYETTE ? 'SDH_3D_BENNE' : 'SDH_3D_MELLETTE';
+
+    if (!B.url || window[ZAR]) {
         return;
     }
 
@@ -221,12 +225,12 @@ function indit() {
 
     if (HELYETTE && !leny) {
         // Szikra még nem készült el: ha szól, hogy kész, indulunk.
-        document.addEventListener('sdh:szikra-kesz', indit, { once: true });
+        document.addEventListener('sdh:szikra-kesz', function () { indit(B); }, { once: true });
 
         return;
     }
 
-    window.SDH_3D_KISERO = true;
+    window[ZAR] = true;
 
     const gyoker = leny ? leny.closest('.sdh-ai') : null;
     const csendes = document.documentElement.classList.contains('sdh-gyenge-gep')
@@ -254,7 +258,7 @@ function indit() {
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     } catch (x) {
         doboz.remove();
-        window.SDH_3D_KISERO = false;
+        window[ZAR] = false;
 
         return;
     }
@@ -641,22 +645,26 @@ function indit() {
 
                 if (HELYETTE && gyoker) {
                     gyoker.classList.add('is-3d');
+                    // Saját keze-lába van (egész alakos modell): a rajzolt kesztyű-csizma nem kell.
+                    gyoker.classList.toggle('is-3d-testes', !!B.vegtag);
                 }
             });
         });
     }, undefined, function () {
         // Nem tölthető be a modell: Szikra marad.
         doboz.remove();
-        window.SDH_3D_KISERO = false;
+        window[ZAR] = false;
     });
 }
 
 function kesobb() {
     // A felület után, ráérő időben: a munka nem vár a 3D-re.
+    const mind = function () { LISTA.forEach(indit); };
+
     if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(indit, { timeout: 2500 });
+        window.requestIdleCallback(mind, { timeout: 2500 });
     } else {
-        window.setTimeout(indit, 800);
+        window.setTimeout(mind, 800);
     }
 }
 

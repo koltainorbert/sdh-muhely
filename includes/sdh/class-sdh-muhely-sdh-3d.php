@@ -1,19 +1,21 @@
 <?php
 /**
- * SDH – belső modul: 3D figura (0.66.0; 0.66.1: Szikra helyett is).
+ * SDH – belső modul: 3D figura (0.66.0; 0.66.1: Szikra helyett is; 0.68.0: több modell).
  *
  * CSAK AZ SDH SZERVIZÉ (lásd includes/sdh/class-sdh-muhely-sdh.php). Eladáskor az
  * `includes/sdh/` mappával együtt nyomtalanul eltűnik.
  *
- * Egy saját feltöltésű 3D modell (.glb) él Szikra mellett: valódi 3D-ben, a
- * videokártyán (three.js / WebGL) rajzolva, lebeg, követi az egeret, kattintásra
- * megpördül, és Szikra reagál rá. A modellfájl NEM a pluginban és NEM a git-repóban
- * van, hanem a WordPress feltöltési mappájában (uploads/sdh-muhely-3d/) – a
- * Beállítások › SDH – belső › 3D kísérő lapon töltöd fel. Így a nyilvános repóba és az
- * eladási csomagba soha nem kerülhet harmadik fél modellje.
+ * Saját feltöltésű 3D modellek (.glb) valódi 3D-ben, a videokártyán (three.js / WebGL)
+ * rajzolva. Minden modellnek szerepe van:
+ *   - „helyette": MAGA az asszisztens, Szikra helyén – mindent ugyanúgy csinál;
+ *   - „mellette": kísérő Szikra (vagy a helyette álló modell) mellett;
+ *   - „pihen": megvan, de nem látszik.
+ * Egyszerre egy „helyette" és egy „mellette" futhat. A modellfájlok NEM a pluginban és NEM
+ * a git-repóban vannak, hanem a WordPress feltöltési mappájában (uploads/sdh-muhely-3d/) –
+ * a Beállítások › SDH – belső › 3D figura lapon töltöd fel őket. Így a nyilvános repóba és
+ * az eladási csomagba soha nem kerülhet harmadik fél modellje.
  *
- * A three.js (MIT) a `3d/vendor/` mappában van; csak akkor töltődik be, ha a kísérő
- * be van kapcsolva és van feltöltött modell.
+ * A three.js (MIT) a `3d/vendor/` mappában van; csak akkor töltődik be, ha van látható modell.
  *
  * @package SDH_Muhely
  */
@@ -27,6 +29,14 @@ final class SDH_Muhely_Sdh_3d
     public const OPT    = 'sdh_muhely_sdh_3d';
     public const MAPPA  = 'sdh-muhely-3d';
     public const MAX_MB = 40;
+    public const MAX_DB = 8;
+
+    /** A szerepek, a választó sorrendjében. */
+    public const SZEREPEK = [
+        'helyette' => 'Szikra helyett – ő az asszisztens',
+        'mellette' => 'Kísérő – mellette lebeg',
+        'pihen'    => 'Pihen – nem látszik',
+    ];
 
     public static function init(): void
     {
@@ -36,7 +46,7 @@ final class SDH_Muhely_Sdh_3d
 
         SDH_Muhely_Sdh::regisztral('3d', [
             'cim'    => '3D figura',
-            'leiras' => 'Saját feltöltésű 3D modell (.glb) Szikra helyett (ő az asszisztens, mindent ugyanúgy csinál) vagy mellette: valódi 3D, lebeg, követi az egeret. A modell csak ezen a gépen van, a repóba és az eladási csomagba nem kerül.',
+            'leiras' => 'Saját feltöltésű 3D modellek (.glb): egy Szikra helyett (ő az asszisztens, mindent ugyanúgy csinál), egy mellette kísérőként – valódi 3D, lebeg, követi az egeret. A modellek csak ezen a gépen vannak, a repóba és az eladási csomagba nem kerülnek.',
             'rajz'   => [self::class, 'doboz'],
             'ment'   => [self::class, 'mentes'],
         ]);
@@ -46,25 +56,88 @@ final class SDH_Muhely_Sdh_3d
         add_action('admin_footer', [self::class, 'kiir_admin']);
     }
 
-    /** @return array{aktiv: bool, mod: string, fajl: string, nev: string, kredit: string, meret: int, hely: string, eger: bool, forgas: int} */
+    /**
+     * Egy modell adatai, rendbe téve.
+     *
+     * @param array<string, mixed> $m
+     * @return array{fajl: string, nev: string, kredit: string, szerep: string, forgas: int, vegtag: bool}
+     */
+    private static function modell_rend(array $m): array
+    {
+        return [
+            'fajl'   => (string) ($m['fajl'] ?? ''),
+            'nev'    => mb_substr((string) ($m['nev'] ?? ''), 0, 120),
+            'kredit' => mb_substr((string) ($m['kredit'] ?? ''), 0, 300),
+            'szerep' => isset(self::SZEREPEK[(string) ($m['szerep'] ?? '')]) ? (string) $m['szerep'] : 'pihen',
+            'forgas' => max(-180, min(180, (int) ($m['forgas'] ?? 0))),
+            'vegtag' => !empty($m['vegtag']),
+        ];
+    }
+
+    /**
+     * A beállítás. A 0.66-os egymodelles formát (fajl, mod, nev, kredit, forgas) magától
+     * átveszi az új listába.
+     *
+     * @return array{aktiv: bool, meret: int, hely: string, eger: bool, modellek: list<array{fajl: string, nev: string, kredit: string, szerep: string, forgas: int, vegtag: bool}>}
+     */
     public static function beallitas(): array
     {
         $b = get_option(self::OPT, []);
         $b = is_array($b) ? $b : [];
 
+        $lista = is_array($b['modellek'] ?? null) ? $b['modellek'] : [];
+
+        if ($lista === [] && !empty($b['fajl'])) {
+            $lista = [[
+                'fajl'   => $b['fajl'],
+                'nev'    => $b['nev'] ?? '',
+                'kredit' => $b['kredit'] ?? '',
+                'szerep' => ($b['mod'] ?? 'helyette') === 'mellette' ? 'mellette' : 'helyette',
+                'forgas' => $b['forgas'] ?? 0,
+                'vegtag' => false,
+            ]];
+        }
+
+        $modellek = [];
+
+        foreach ($lista as $m) {
+            if (is_array($m) && preg_match('/^modell-[a-f0-9]{8,16}\.glb$/', (string) ($m['fajl'] ?? '')) === 1) {
+                $modellek[] = self::modell_rend($m);
+            }
+        }
+
         return [
-            'aktiv'  => !empty($b['aktiv']),
-            // 0.66.1: „helyette" – a modell MAGA az asszisztens (Szikra helyén, mindent ugyanúgy csinál);
-            // „mellette" – kísérő Szikra mellett.
-            'mod'    => ($b['mod'] ?? 'helyette') === 'mellette' ? 'mellette' : 'helyette',
-            'fajl'   => (string) ($b['fajl'] ?? ''),
-            'nev'    => (string) ($b['nev'] ?? ''),
-            'kredit' => (string) ($b['kredit'] ?? ''),
-            'meret'  => max(60, min(320, (int) ($b['meret'] ?? 130))),
-            'hely'   => in_array(($b['hely'] ?? 'bal'), ['bal', 'felette'], true) ? (string) ($b['hely'] ?? 'bal') : 'bal',
-            'eger'   => !array_key_exists('eger', $b) || !empty($b['eger']),
-            'forgas' => max(-180, min(180, (int) ($b['forgas'] ?? 0))),
+            'aktiv'    => !empty($b['aktiv']),
+            'meret'    => max(60, min(320, (int) ($b['meret'] ?? 130))),
+            'hely'     => in_array(($b['hely'] ?? 'bal'), ['bal', 'felette'], true) ? (string) ($b['hely'] ?? 'bal') : 'bal',
+            'eger'     => !array_key_exists('eger', $b) || !empty($b['eger']),
+            'modellek' => self::szerepek_rendbe(array_slice($modellek, 0, self::MAX_DB)),
         ];
+    }
+
+    /**
+     * Egy szerepből csak egy lehet (helyette, mellette): a később következő azonos szerepű pihenni megy.
+     *
+     * @param list<array<string, mixed>> $modellek
+     * @return list<array<string, mixed>>
+     */
+    private static function szerepek_rendbe(array $modellek): array
+    {
+        $foglalt = [];
+
+        foreach ($modellek as $i => $m) {
+            if ($m['szerep'] === 'pihen') {
+                continue;
+            }
+
+            if (isset($foglalt[$m['szerep']])) {
+                $modellek[$i]['szerep'] = 'pihen';
+            } else {
+                $foglalt[$m['szerep']] = true;
+            }
+        }
+
+        return $modellek;
     }
 
     /** A feltöltési mappa útja és címe (a végén perjellel). */
@@ -79,17 +152,21 @@ final class SDH_Muhely_Sdh_3d
         return [trailingslashit($f['basedir']) . self::MAPPA . '/', trailingslashit($f['baseurl']) . self::MAPPA . '/'];
     }
 
-    /** A feltöltött modell útja, ha megvan. */
-    public static function modell_ut(): string
+    /** Egy feltöltött modell útja, ha megvan (üres név: az első modellé). */
+    public static function modell_ut(string $fajl = ''): string
     {
-        $b = self::beallitas();
         [$ut] = self::mappa();
 
-        if ($b['fajl'] === '' || $ut === '' || preg_match('/^modell-[a-f0-9]{8,16}\.glb$/', $b['fajl']) !== 1) {
+        if ($fajl === '') {
+            $elso = self::beallitas()['modellek'][0] ?? null;
+            $fajl = $elso ? (string) $elso['fajl'] : '';
+        }
+
+        if ($fajl === '' || $ut === '' || preg_match('/^modell-[a-f0-9]{8,16}\.glb$/', $fajl) !== 1) {
             return '';
         }
 
-        return is_file($ut . $b['fajl']) ? $ut . $b['fajl'] : '';
+        return is_file($ut . $fajl) ? $ut . $fajl : '';
     }
 
     /**
@@ -150,24 +227,23 @@ final class SDH_Muhely_Sdh_3d
     }
 
     /* =================================================================
-     * Beállítások › SDH – belső › 3D kísérő
+     * Beállítások › SDH – belső › 3D figura
      * ============================================================== */
 
     public static function doboz(): void
     {
-        $b  = self::beallitas();
-        $ut = self::modell_ut();
+        $b = self::beallitas();
         ?>
         <div class="sdh-doboz">
-            <h2 class="sdh-doboz__cim">3D figura – Szikra helyett vagy mellett</h2>
+            <h2 class="sdh-doboz__cim">3D figurák – Szikra helyett és mellette</h2>
 
             <p class="sdh-sugo">
-                Egy saját 3D modell (.glb) valódi 3D-ben, a videokártyán rajzolva. <strong>Szikra helyett</strong>
-                ő maga az asszisztens: kattintásra nyílik a csevegő, buborékban beszél, sétál, végigvezet,
-                jeleneteket játszik, alszik – Szikra hangulatait és mozdulatait 3D-ben játssza el (gondolkodik,
-                bólogat, örül, szomorú, pörög, táncol…). <strong>Szikra mellett</strong> kísérőként lebeg mellette. A modell <strong>csak ezen a
-                gépen</strong> van (a feltöltési mappában) – a git-repóba és az eladási csomagba nem kerül.
-                Ha a böngészőben nincs hardveres gyorsítás, mozdulatlan képként jelenik meg.
+                Saját 3D modellek (.glb) valódi 3D-ben, a videokártyán rajzolva. A <strong>Szikra helyett</strong>
+                szerepű maga az asszisztens: kattintásra nyílik a csevegő, buborékban beszél, sétál, végigvezet,
+                jeleneteket játszik, alszik, tiszteleg – Szikra hangulatait és mozdulatait 3D-ben játssza el.
+                A <strong>Kísérő</strong> mellette lebeg. Egyszerre egy-egy futhat; a többi pihen. A modellek
+                <strong>csak ezen a gépen</strong> vannak (a feltöltési mappában) – a git-repóba és az eladási
+                csomagba nem kerülnek. Hardveres gyorsítás nélkül mozdulatlan képként jelennek meg.
             </p>
 
             <input type="hidden" name="sdh_3d_jelen" value="1">
@@ -180,63 +256,89 @@ final class SDH_Muhely_Sdh_3d
 
             <div class="sdh-mezo sdh-mezo--jelolo">
                 <input type="checkbox" name="sdh_3d_aktiv" id="sdh_3d_aktiv" value="1" <?php checked($b['aktiv']); ?>>
-                <label for="sdh_3d_aktiv">A 3D figura látszódjon</label>
+                <label for="sdh_3d_aktiv">A 3D figurák látszódjanak</label>
             </div>
 
-            <div class="sdh-mezo">
-                <label for="sdh_3d_mod">Szerepe</label>
-                <select name="sdh_3d_mod" id="sdh_3d_mod">
-                    <option value="helyette" <?php selected($b['mod'], 'helyette'); ?>>Szikra helyett – ő az asszisztens, mindent ugyanúgy csinál</option>
-                    <option value="mellette" <?php selected($b['mod'], 'mellette'); ?>>Szikra mellett – kísérő</option>
-                </select>
-            </div>
-
-            <div class="sdh-mezo">
-                <label for="sdh_3d_fajl">3D modell (.glb, legfeljebb <?php echo (int) self::MAX_MB; ?> MB)</label>
-                <input type="file" name="sdh_3d_fajl" id="sdh_3d_fajl" accept=".glb,model/gltf-binary">
-                <?php if ($ut !== '') : ?>
-                    <span class="sdh-sugo" data-sdh-3d-modell>
-                        Jelenleg: <strong><?php echo esc_html($b['nev'] !== '' ? $b['nev'] : $b['fajl']); ?></strong>
-                        (<?php echo esc_html(size_format((int) filesize($ut), 1)); ?>)
-                    </span>
-                <?php else : ?>
-                    <span class="sdh-sugo">Még nincs feltöltött modell.</span>
-                <?php endif; ?>
-            </div>
-
-            <?php if ($ut !== '') : ?>
-                <div class="sdh-mezo sdh-mezo--jelolo">
-                    <input type="checkbox" name="sdh_3d_torol" id="sdh_3d_torol" value="1">
-                    <label for="sdh_3d_torol">A modell törlése</label>
-                </div>
+            <?php if ($b['modellek'] === []) : ?>
+                <p class="sdh-sugo">Még nincs feltöltött modell.</p>
+            <?php else : ?>
+                <table class="sdh-tabla" data-sdh-3d-modellek>
+                    <thead>
+                        <tr>
+                            <th>Modell</th>
+                            <th>Szerepe</th>
+                            <th>Alapirány (fok)</th>
+                            <th>Saját keze-lába</th>
+                            <th>Hivatkozás (szerző, licenc)</th>
+                            <th>Törlés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($b['modellek'] as $m) : ?>
+                            <?php
+                            $k  = 'sdh_3d_m[' . $m['fajl'] . ']';
+                            $ut = self::modell_ut($m['fajl']);
+                            ?>
+                            <tr data-sdh-3d-modell="<?php echo esc_attr($m['fajl']); ?>">
+                                <td class="sdh-tabla__nev">
+                                    <?php echo esc_html($m['nev'] !== '' ? $m['nev'] : $m['fajl']); ?>
+                                    <?php if ($ut !== '') : ?>
+                                        <br><span class="sdh-sugo">(<?php echo esc_html(size_format((int) filesize($ut), 1)); ?>)</span>
+                                    <?php else : ?>
+                                        <br><span class="sdh-sugo">(a fájl hiányzik)</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <select name="<?php echo esc_attr($k . '[szerep]'); ?>" aria-label="Szerepe">
+                                        <?php foreach (self::SZEREPEK as $sk => $sn) : ?>
+                                            <option value="<?php echo esc_attr($sk); ?>" <?php selected($m['szerep'], $sk); ?>><?php echo esc_html($sn); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="<?php echo esc_attr($k . '[forgas]'); ?>" min="-180" max="180" step="15" value="<?php echo (int) $m['forgas']; ?>" aria-label="Alapirány">
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="<?php echo esc_attr($k . '[vegtag]'); ?>" value="1" <?php checked($m['vegtag']); ?> aria-label="Saját keze-lába van (egész alakos)">
+                                </td>
+                                <td>
+                                    <input type="text" name="<?php echo esc_attr($k . '[kredit]'); ?>" maxlength="300" value="<?php echo esc_attr($m['kredit']); ?>" aria-label="Hivatkozás">
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="<?php echo esc_attr($k . '[torol]'); ?>" value="1" aria-label="Törlés">
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <p class="sdh-sugo">
+                    <strong>Saját keze-lába</strong>: pipáld be az egész alakos figuráknál (fej, test, kéz, láb) – így a
+                    rendszer nem rajzol rá külön kesztyűt és csizmát. Csak fejnél, sisaknál hagyd üresen.
+                </p>
             <?php endif; ?>
 
             <div class="sdh-mezo">
-                <label for="sdh_3d_kredit">Hivatkozás (szerző, licenc – a CC-BY modelleknél kötelező)</label>
-                <input type="text" name="sdh_3d_kredit" id="sdh_3d_kredit" maxlength="300" value="<?php echo esc_attr($b['kredit']); ?>">
+                <label for="sdh_3d_fajl">Új modell feltöltése (.glb, legfeljebb <?php echo (int) self::MAX_MB; ?> MB, összesen <?php echo (int) self::MAX_DB; ?> modell)</label>
+                <input type="file" name="sdh_3d_fajl" id="sdh_3d_fajl" accept=".glb,model/gltf-binary">
+                <span class="sdh-sugo">Ha még nincs asszisztens-modell, az új az lesz; ha már van, kísérő lesz; különben pihen.</span>
             </div>
 
             <div class="sdh-mezo">
-                <label for="sdh_3d_meret">Méret (képpont – csak kísérőként; Szikra helyett a figura méretét veszi át)</label>
+                <label for="sdh_3d_meret">A kísérő mérete (képpont)</label>
                 <input type="number" name="sdh_3d_meret" id="sdh_3d_meret" min="60" max="320" step="10" value="<?php echo (int) $b['meret']; ?>">
             </div>
 
             <div class="sdh-mezo">
-                <label for="sdh_3d_hely">Hol legyen (csak kísérőként)</label>
+                <label for="sdh_3d_hely">Hol legyen a kísérő</label>
                 <select name="sdh_3d_hely" id="sdh_3d_hely">
-                    <option value="bal" <?php selected($b['hely'], 'bal'); ?>>Szikra bal oldalán</option>
-                    <option value="felette" <?php selected($b['hely'], 'felette'); ?>>Szikra fölött</option>
+                    <option value="bal" <?php selected($b['hely'], 'bal'); ?>>Az asszisztens bal oldalán</option>
+                    <option value="felette" <?php selected($b['hely'], 'felette'); ?>>Az asszisztens fölött</option>
                 </select>
-            </div>
-
-            <div class="sdh-mezo">
-                <label for="sdh_3d_forgas">Alapirány (fok – ha a modell nem szembe néz)</label>
-                <input type="number" name="sdh_3d_forgas" id="sdh_3d_forgas" min="-180" max="180" step="15" value="<?php echo (int) $b['forgas']; ?>">
             </div>
 
             <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--also-ter">
                 <input type="checkbox" name="sdh_3d_eger" id="sdh_3d_eger" value="1" <?php checked($b['eger']); ?>>
-                <label for="sdh_3d_eger">Kövesse a tekintetével az egeret</label>
+                <label for="sdh_3d_eger">Kövessék a tekintetükkel az egeret</label>
             </div>
         </div>
         <?php
@@ -250,26 +352,41 @@ final class SDH_Muhely_Sdh_3d
         }
 
         $regi = self::beallitas();
-        $uj   = [
-            'aktiv'  => !empty($_POST['sdh_3d_aktiv']),
-            'mod'    => ($_POST['sdh_3d_mod'] ?? $regi['mod']) === 'mellette' ? 'mellette' : 'helyette',
-            'fajl'   => $regi['fajl'],
-            'nev'    => $regi['nev'],
-            'kredit' => isset($_POST['sdh_3d_kredit']) ? mb_substr(sanitize_text_field(wp_unslash((string) $_POST['sdh_3d_kredit'])), 0, 300) : $regi['kredit'],
-            'meret'  => max(60, min(320, (int) ($_POST['sdh_3d_meret'] ?? $regi['meret']))),
-            'hely'   => in_array(($_POST['sdh_3d_hely'] ?? ''), ['bal', 'felette'], true) ? (string) $_POST['sdh_3d_hely'] : $regi['hely'],
-            'eger'   => !empty($_POST['sdh_3d_eger']),
-            'forgas' => max(-180, min(180, (int) ($_POST['sdh_3d_forgas'] ?? $regi['forgas']))),
+        $be   = isset($_POST['sdh_3d_m']) && is_array($_POST['sdh_3d_m']) ? wp_unslash($_POST['sdh_3d_m']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+        $mod  = [];
+
+        foreach ($regi['modellek'] as $m) {
+            $u = is_array($be[$m['fajl']] ?? null) ? $be[$m['fajl']] : null;
+
+            if ($u !== null && !empty($u['torol'])) {
+                $ut = self::modell_ut($m['fajl']);
+
+                if ($ut !== '') {
+                    wp_delete_file($ut);
+                }
+
+                continue;
+            }
+
+            if ($u !== null) {
+                $m['szerep'] = isset(self::SZEREPEK[(string) ($u['szerep'] ?? '')]) ? (string) $u['szerep'] : $m['szerep'];
+                $m['forgas'] = max(-180, min(180, (int) ($u['forgas'] ?? $m['forgas'])));
+                $m['vegtag'] = !empty($u['vegtag']);
+                $m['kredit'] = isset($u['kredit']) ? mb_substr(sanitize_text_field((string) $u['kredit']), 0, 300) : $m['kredit'];
+            }
+
+            $mod[] = $m;
+        }
+
+        $uj = [
+            'aktiv'    => !empty($_POST['sdh_3d_aktiv']),
+            'meret'    => max(60, min(320, (int) ($_POST['sdh_3d_meret'] ?? $regi['meret']))),
+            'hely'     => in_array(($_POST['sdh_3d_hely'] ?? ''), ['bal', 'felette'], true) ? (string) $_POST['sdh_3d_hely'] : $regi['hely'],
+            'eger'     => !empty($_POST['sdh_3d_eger']),
+            'modellek' => $mod,
         ];
 
         [$mappa] = self::mappa();
-
-        if (!empty($_POST['sdh_3d_torol']) && self::modell_ut() !== '') {
-            wp_delete_file(self::modell_ut());
-            $uj['fajl'] = '';
-            $uj['nev']  = '';
-        }
-
         $f = $_FILES['sdh_3d_fajl'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
         if (is_array($f) && (int) ($f['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
@@ -280,17 +397,20 @@ final class SDH_Muhely_Sdh_3d
             }
         }
 
+        $uj['modellek'] = self::szerepek_rendbe($uj['modellek']);
         update_option(self::OPT, $uj, false);
         // phpcs:enable
     }
 
     /**
-     * A feltöltött .glb átvétele. Hibánál üzenettel tér vissza, és a régi modell marad.
+     * A feltöltött .glb átvétele: a lista végére kerül. A szerepe: ha még nincs asszisztens-
+     * modell, „helyette"; ha van, de nincs kísérő, „mellette"; különben „pihen".
+     * Hibánál üzenettel tér vissza, és a lista változatlan.
      *
      * @param array<string, mixed> $f
-     * @param array<string, mixed> $uj
+     * @param array<string, mixed> $b  a beállítás (a „modellek" listát bővíti)
      */
-    public static function feltolt(array $f, string $mappa, array &$uj): string
+    public static function feltolt(array $f, string $mappa, array &$b): string
     {
         if ((int) $f['error'] !== UPLOAD_ERR_OK) {
             return 'A feltöltés nem sikerült (hibakód: ' . (int) $f['error'] . ').';
@@ -304,6 +424,12 @@ final class SDH_Muhely_Sdh_3d
             return 'Csak .glb fájl tölthető fel.';
         }
 
+        $b['modellek'] = is_array($b['modellek'] ?? null) ? $b['modellek'] : [];
+
+        if (count($b['modellek']) >= self::MAX_DB) {
+            return 'Legfeljebb ' . self::MAX_DB . ' modell lehet – előbb törölj egyet.';
+        }
+
         $v = self::glb_vizsgal((string) $f['tmp_name']);
 
         if (!$v['jo']) {
@@ -315,6 +441,13 @@ final class SDH_Muhely_Sdh_3d
         }
 
         $nev = 'modell-' . substr(md5_file((string) $f['tmp_name']) ?: wp_generate_password(12, false), 0, 12) . '.glb';
+
+        foreach ($b['modellek'] as $m) {
+            if ($m['fajl'] === $nev) {
+                return 'Ez a modell már fel van töltve.';
+            }
+        }
+
         $cel = $mappa . $nev;
         $ok  = is_uploaded_file((string) $f['tmp_name'])
             ? move_uploaded_file((string) $f['tmp_name'], $cel)
@@ -324,18 +457,17 @@ final class SDH_Muhely_Sdh_3d
             return 'A modell mentése nem sikerült.';
         }
 
-        $regi = self::modell_ut();
+        $szerepek = array_column($b['modellek'], 'szerep');
+        $szerep   = !in_array('helyette', $szerepek, true) ? 'helyette' : (!in_array('mellette', $szerepek, true) ? 'mellette' : 'pihen');
 
-        if ($regi !== '' && $regi !== $cel) {
-            wp_delete_file($regi);
-        }
-
-        $uj['fajl'] = $nev;
-        $uj['nev']  = $v['cim'] !== '' ? $v['cim'] : sanitize_file_name((string) $f['name']);
-
-        if ((string) $uj['kredit'] === '' && $v['kredit'] !== '') {
-            $uj['kredit'] = $v['kredit'];
-        }
+        $b['modellek'][] = self::modell_rend([
+            'fajl'   => $nev,
+            'nev'    => $v['cim'] !== '' ? $v['cim'] : sanitize_file_name((string) $f['name']),
+            'kredit' => $v['kredit'],
+            'szerep' => $szerep,
+            'forgas' => 0,
+            'vegtag' => false,
+        ]);
 
         return '';
     }
@@ -344,7 +476,12 @@ final class SDH_Muhely_Sdh_3d
      * Betöltés a felületen
      * ============================================================== */
 
-    /** A betöltő adatai, vagy null, ha nincs mit mutatni. */
+    /**
+     * A betöltő adatai (a látható modellek: legfeljebb egy „helyette" és egy „mellette"),
+     * vagy null, ha nincs mit mutatni.
+     *
+     * @return array{figurak: list<array<string, mixed>>}|null
+     */
     public static function adat(): ?array
     {
         if (!SDH_Muhely_Sdh::be() || !is_user_logged_in()) {
@@ -353,22 +490,34 @@ final class SDH_Muhely_Sdh_3d
 
         $b = self::beallitas();
 
-        if (!$b['aktiv'] || self::modell_ut() === '') {
+        if (!$b['aktiv']) {
             return null;
         }
 
         [, $url] = self::mappa();
+        $figurak = [];
 
-        return [
-            'url'    => $url . $b['fajl'] . '?v=' . (int) filemtime(self::modell_ut()),
-            'mod'    => $b['mod'],
-            'nev'    => $b['nev'],
-            'kredit' => $b['kredit'],
-            'meret'  => $b['meret'],
-            'hely'   => $b['hely'],
-            'eger'   => $b['eger'],
-            'forgas' => $b['forgas'],
-        ];
+        foreach ($b['modellek'] as $m) {
+            $ut = self::modell_ut($m['fajl']);
+
+            if ($m['szerep'] === 'pihen' || $ut === '') {
+                continue;
+            }
+
+            $figurak[] = [
+                'url'    => $url . $m['fajl'] . '?v=' . (int) filemtime($ut),
+                'mod'    => $m['szerep'],
+                'nev'    => $m['nev'],
+                'kredit' => $m['kredit'],
+                'meret'  => $b['meret'],
+                'hely'   => $b['hely'],
+                'eger'   => $b['eger'],
+                'forgas' => $m['forgas'],
+                'vegtag' => $m['vegtag'],
+            ];
+        }
+
+        return $figurak === [] ? null : ['figurak' => $figurak];
     }
 
     public static function kiir(): void

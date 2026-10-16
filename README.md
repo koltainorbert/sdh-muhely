@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.68.0
+- **3D figura: több modell** (SDH – belső, `modellek` lista, legfeljebb 8): modellenként szerep (*helyette* /
+  *mellette* / *pihen*), alapirány, hivatkozás, törlés és **Saját keze-lába** (egész alakos figuránál nincs rajzolt
+  kesztyű-csizma: `.is-3d-testes`). Egyszerre egy asszisztens-modell és egy kísérő fut (`kiseret.js`: `LISTA.forEach(indit)`,
+  szerepenkénti zár); azonos szerepből a lista elején álló marad. Új feltöltés szerepe: helyette → mellette → pihen.
+  A 0.66-os egymodelles beállítás magától átjön. t61.
+
 ### 0.67.0
 - **Tisztelgés, ha pénz kerül a kasszába**: új `sdh:penz-be` esemény (app.js `penzBeJelez()`: új bevétel/befizetés
   a pénztár űrlapján, munkalap-/árukiadás-/rendelésfizetés; penztar.js: gyors felvitel, eszközönkénti és egyösszegű

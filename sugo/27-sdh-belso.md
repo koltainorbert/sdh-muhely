@@ -4,7 +4,7 @@ cim: SDH – belső modulok
 csoport: Rendszer
 modul:
 szakaszok: sdh, sdh_gigatel, sdh_3d
-kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh, 3D kísérő, 3D modell, glb, három dimenziós, sisak, modell feltöltése, Szikra mellett, three.js, WebGL, forog, lebeg, kredit, CC-BY, hivatkozás, 3D figura, Szikra helyett, saját figura, 3D asszisztens, sisak mint asszisztens
+kulcsszavak: SDH belső, belső modul, saját modul, eladás, Gigatel, beszállítói levél, beszállítói számla, tételcímke, telefonszámos tétel, nem megy ki, includes/sdh, 3D kísérő, 3D modell, glb, három dimenziós, sisak, modell feltöltése, Szikra mellett, three.js, WebGL, forog, lebeg, kredit, CC-BY, hivatkozás, 3D figura, Szikra helyett, saját figura, 3D asszisztens, sisak mint asszisztens, több modell, két figura, kísérő, pihen, saját keze-lába, egész alakos figura, modell egyszerűsítése
 osszefoglalo: Az SDH Szerviz saját, belső moduljai – ami csak nálunk fut, és eladáskor nem megy ki a rendszerrel. Jelenleg a Gigatel beszállítói levelek feldolgozása és a 3D figura Szikra helyett vagy mellett.
 ---
 
@@ -23,7 +23,7 @@ A szabály egyszerű:
 
 - **SDH-modulok** – mi fut, és egyben ki-be kapcsolható.
 - **Gigatel** – a Gigatel webáruház napi leveleinek feldolgozása.
-- **3D figura** – saját feltöltésű 3D modell Szikra helyett (ő az asszisztens) vagy mellette.
+- **3D figura** – saját feltöltésű 3D modellek: egy Szikra helyett (ő az asszisztens), egy mellette kísérőként.
 
 ## SDH-modulok
 
@@ -71,10 +71,13 @@ A címke tartalmát a **Beállítások › Címkenyomtatás › Beszállítói t
 
 ## 3D figura
 
-Egy saját 3D modell valódi 3D-ben, a videokártyán rajzolva. Két szerepe lehet:
+Saját 3D modellek valódi 3D-ben, a videokártyán rajzolva. **Több modellt is feltölthetsz** (legfeljebb nyolcat), mindegyiknek szerepe van:
 
-- **Szikra helyett** (alapból): a modell **maga az asszisztens**. Szikra testének helyén él, és mindent ugyanúgy csinál: kattintásra (vagy [[F1]]) nyílik a csevegő, buborékban beszél, sétál, végigvezet az oldalakon, jeleneteket játszik, elalszik. Szikra hangulatait és mozdulatait 3D-ben játssza el: **gondolkodik** – billeg, lüktet a fénye; **beszél** – bólogat; **örül** – ugrik, felfénylik; **szomorú** – lehajtja a fejét, elhalványul; **alszik** – előrebukik és szuszog; **meglepett** – hátrahőköl; **pörög**, **táncol**, **integet**, **bólint**, **rázkódik** – ugyanígy. **Lábra is kel**: sétánál és táncnál előbújik a két sötét csizmája, integetésnél és táncnál a kesztyűs keze; a **hiba-bogárral is párbajozik** – a bogár felé fordul, a kezében felizzik a fénypenge, és csapásokkal vív (ha lemerül a pengéje, lekonyul). Közben a tekintetével követi az egeret. A neve és a tudása ugyanaz marad (a nevét a Beállítások › Asszisztens › **A neve** mezőben írod át).
-- **Szikra mellett**: kísérőként lebeg Szikra mellett vagy fölött; kattintásra megpördül, Szikra pedig ugrik és szikrázik.
+- **Szikra helyett**: a modell **maga az asszisztens**. Szikra testének helyén él, és mindent ugyanúgy csinál: kattintásra (vagy [[F1]]) nyílik a csevegő, buborékban beszél, sétál, végigvezet az oldalakon, jeleneteket játszik, elalszik, és tiszteleg, ha pénz kerül a kasszába. Szikra hangulatait és mozdulatait 3D-ben játssza el: **gondolkodik** – billeg, lüktet a fénye; **beszél** – bólogat; **örül** – ugrik, felfénylik; **szomorú** – lehajtja a fejét, elhalványul; **alszik** – előrebukik és szuszog; **meglepett** – hátrahőköl; **pörög**, **táncol**, **integet**, **bólint**, **rázkódik** – ugyanígy. **Lábra is kel**: egy fej vagy sisak alakú modellnél sétánál és táncnál előbújik a két sötét csizmája, integetésnél és táncnál a kesztyűs keze; a **hiba-bogárral is párbajozik** – a bogár felé fordul, a kezében felizzik a fénypenge, és csapásokkal vív. A neve és a tudása ugyanaz marad (a nevét a Beállítások › Asszisztens › **A neve** mezőben írod át).
+- **Kísérő**: az asszisztens mellett vagy fölött lebeg, rá néz, kattintásra megpördül.
+- **Pihen**: megvan, de nem látszik.
+
+Egyszerre egy „Szikra helyett" és egy kísérő futhat – például az egyik modell az asszisztens, a másik mellette lebeg. Ha kettőt is „Szikra helyett"-re állítasz, a listában előrébb álló marad, a másik pihenni megy. Új feltöltésnél: ha még nincs asszisztens-modell, az új az lesz; ha van, kísérő; ha az is van, pihen.
 
 Kék és lila élfény adja a CRM neon hangulatát. Amíg a modell töltődik, Szikra látszik; ha a modell nem tölthető be, Szikra marad.
 
@@ -82,21 +85,22 @@ Kék és lila élfény adja a CRM neon hangulatát. Amíg a modell töltődik, S
 
 | Mező | Mire való |
 |---|---|
-| **A 3D figura látszódjon** | Ki- és bekapcsolja. |
-| **Szerepe** | *Szikra helyett* (ő az asszisztens) vagy *Szikra mellett* (kísérő). |
-| **3D modell (.glb)** | A modell feltöltése (glTF 2.0 bináris, legfeljebb 40 MB). Új feltöltés a régit lecseréli. A Sketchfabról letöltött modelleknél a „glTF / .glb" formátumot válaszd; az FBX, STL, OBJ nem tölthető fel. |
-| **A modell törlése** | Törli a feltöltött fájlt. |
-| **Hivatkozás** | A modell szerzője és licence. CC-BY licencű modellnél kötelező; ha üres, a rendszer a modellből olvassa ki. |
-| **Méret**, **Hol legyen** | Csak kísérőként számít (60–320 képpont; bal oldalt vagy fölötte). Szikra helyett a figura méretét veszi át. |
-| **Alapirány** | Ha a modell nem szembe néz, itt fordítod (fokban, pl. 180). |
-| **Kövesse a tekintetével az egeret** | Kikapcsolva magától nézelődik. |
+| **A 3D figurák látszódjanak** | Ki- és bekapcsolja mindet. |
+| **Modellek táblázata** | Modellenként: **Szerepe** (Szikra helyett / Kísérő / Pihen), **Alapirány** (fokban, ha a modell nem szembe néz, pl. 180), **Saját keze-lába** (lásd lent), **Hivatkozás** (szerző, licenc – CC-BY modellnél kötelező; a Sketchfab-modellekből magától kiolvassa), **Törlés**. |
+| **Új modell feltöltése** | glTF 2.0 bináris (.glb), legfeljebb 40 MB. A Sketchfabról letöltött modelleknél a „glTF / .glb" formátumot válaszd; az FBX, STL, OBJ nem tölthető fel. |
+| **A kísérő mérete**, **Hol legyen a kísérő** | 60–320 képpont; az asszisztens bal oldalán vagy fölötte. Az asszisztens-modell Szikra méretét veszi át. |
+| **Kövessék a tekintetükkel az egeret** | Kikapcsolva magától nézelődnek. |
+
+**Saját keze-lába**: pipáld be az **egész alakos** figuráknál (fej, test, kéz, láb). Ilyenkor a rendszer nem rajzol rá külön kesztyűt és csizmát. Mivel egy feltöltött modell merev (nincs benne mozgatható csontváz), az egész alakos figura a karját nem tudja mozgatni: tisztelgésnél vigyázzba vágja magát, szökken, kihúzza magát és felszegi az állát, de a kezét nem emeli a homlokához. Fej vagy sisak alakú modellnél hagyd üresen – ott a rajzolt kesztyűvel tiszteleg.
+
+Nagy modellek: a 3D figura kis méretben látszik, ezért a nagyon részletes (több százezer háromszöges, nagy textúrás) modell feleslegesen lassít. Ilyenkor érdemes egyszerűsített változatot feltölteni (kb. 50–100 ezer háromszög, 1024 képpontos textúrák, 2–5 MB).
 
 Fontos tudnivalók:
 
-- A modell **csak ezen a gépen** van: a WordPress feltöltési mappájában (`uploads/sdh-muhely-3d/`), nem a pluginban – ezért nem kerül a git-repóba, a frissítő zipbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni.
-- Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelenik meg – a hangulatváltáskor ilyenkor is felveszi az új tartását. Rejtett lapon nem rajzol.
-- A munka nem vár rá: az oldal betöltése után, ráérő időben töltődik be.
-- Nyomtatáskor nem látszik.
+- A modellek **csak ezen a gépen** vannak: a WordPress feltöltési mappájában (`uploads/sdh-muhely-3d/`), nem a pluginban – ezért nem kerülnek a git-repóba, a frissítő zipbe és az eladási csomagba sem. Másik gépen (otthon) ott is fel kell tölteni őket.
+- Hardveres gyorsítás nélkül (és ha a gépen be van állítva a „kevesebb mozgás") mozdulatlan képként jelennek meg – a hangulatváltáskor ilyenkor is felveszik az új tartást. Rejtett lapon nem rajzolnak.
+- A munka nem vár rájuk: az oldal betöltése után, ráérő időben töltődnek be.
+- Nyomtatáskor nem látszanak.
 
 ## Szabályok, amiket a rendszer betart
 

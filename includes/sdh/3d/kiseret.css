@@ -95,6 +95,12 @@
     100% { rotate: -28deg; translate: 0 0; }
 }
 
+/* Egész alakos modell (0.68.0): saját keze-lába van, a rajzolt kesztyű-csizma nem kell. */
+.sdh-ai.is-3d.is-3d-testes .sdh-ai__lab,
+.sdh-ai.is-3d.is-3d-testes .sdh-ai__kar {
+    display: none;
+}
+
 .sdh-ai.is-3d .sdh-ai__kellek,
 .sdh-ai.is-3d .sdh-ai__szikrak,
 .sdh-ai.is-3d .sdh-ai__zzz,
