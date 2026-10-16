@@ -4,7 +4,7 @@ cim: Számlázás
 csoport: Pénz
 modul:
 szakaszok: szamlazas
-kulcsszavak: számla, számlázás, Számlázz.hu, Számla Agent, agent kulcs, számla kiállítása, előnézet, számla-előkészítő, díjbekérő, elszámolás, átadási bizonylat, PDF, vevő, céges számla, adószám, cég keresése, bevizsgálási díj, adattörlő kód, e-számla, előtag, számlatömb, tétel megjegyzés, eszközönkénti számla, összevont szervizsor, szerviz szolgáltatás, telefon szerviz szolgáltatás, tv szerviz szolgáltatás, tételek neve nélkül, összevonás, eszköz fajtája
+kulcsszavak: számla, számlázás, Számlázz.hu, Számla Agent, agent kulcs, számla kiállítása, előnézet, számla-előkészítő, díjbekérő, elszámolás, átadási bizonylat, PDF, vevő, céges számla, adószám, cég keresése, bevizsgálási díj, adattörlő kód, e-számla, előtag, számlatömb, tétel megjegyzés, eszközönkénti számla
 osszefoglalo: Számla a munkalapról a Számlázz.hu-n keresztül, és helyben készülő, számlának nem minősülő előkészítő PDF.
 ---
 
@@ -111,20 +111,6 @@ A fogaskerékkel a munkalap tételei el is tüntethetők az ablakból (**A munka
 A számla ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) állítod, hogy a munkalap tételei **magától kipipálva** nyíljanak-e. Kikapcsolva egy tétel sincs kipipálva: te pipálod be, ami kell, vagy **Kézi tétel**lel írod – így a kollégák nem tévesztenek a pipálgatásnál. Ugyanitt kapcsolható a tétel-megjegyzés (eszköz neve, IMEI) és a **Megjegyzés** mező automatikus kitöltése. A Számlázz.hu számla és a számla-előkészítő **külön** állítható, és a beállítás frissítés után is megmarad.
 
 A tétellista fölötti **A munkalap tételei a számlán** kapcsoló egy kattintással mindet be- vagy kipipálja – csak abban az ablakban, az alapállás marad. Részletesen: [Űrlapok beállítása](sugo:urlapok).
-
-## Összevont szervizsor: „Telefon szerviz szolgáltatás"
-
-Ha nem akarod, hogy a számlán a termékek és szolgáltatások neve szerepeljen, kapcsold be az **Összevont szervizsort**. Ilyenkor a számlára (és a számla-előkészítőre) **eszközönként egy sor** kerül az eszköz fajtájával – például **Telefon szerviz szolgáltatás**, **TV szerviz szolgáltatás**, **Laptop szerviz szolgáltatás**, **Konzol szerviz szolgáltatás** –, 1 db mennyiséggel és a **fizetendő összeggel**: a kipipált tételek összegével (a levont bevizsgálási díj már nélküle, a kedvezmény benne).
-
-- A **fajtát** az eszköz **kategóriájából** veszi – az eszközlista minden mostani és később felvett kategóriájára működik. A hosszú kategórianévből a „/" előtti részt használja (pl. „Okosóra / sportóra" → „Okosóra"), és a beállított **rövidebb neveket** (pl. „Televízió=TV").
-- **Több eszközös** munkalapon minden eszköz külön sort kap (pl. egy telefon és egy TV → két sor). Ha egy eszköz tételei között eltérő áfakulcs van, kulcsonként külön sor lesz.
-- A tételekhez írt **megjegyzések** (pl. IMEI) az összevont sor megjegyzésébe kerülnek.
-- A munkalapon a tételek ugyanúgy megmaradnak, és ugyanúgy számlázottnak jelölődnek – csak a számla képe más.
-
-Hol kapcsolod:
-
-1. **Alapállás**: **Beállítások › Számlázás** – **Összevont szervizsor** kapcsoló. Itt írod át a sor nevének mintáját is (alap: „{eszkoz} szerviz szolgáltatás") és a rövidebb neveket (soronként „Kategória=Név").
-2. **Számlánként**: a számla ablakában, „A munkalap tételei a számlán" kapcsoló alatt álló **Összevont szervizsor** kapcsolóval – alatta látod, milyen nevű sor(ok) kerül(nek) a számlára.
 
 ## Lépésről lépésre: bevizsgálási díj és több eszköz a számlán
 
@@ -264,10 +250,6 @@ Vedd ki a pipát a tétel sorának elejéről. A tétel a munkalapon megmarad.
 ### Felvehetek olyan tételt a számlára, ami nincs a munkalapon?
 
 Igen, a **Termék…**, a **Szolgáltatás…** vagy a **Kézi tétel** gombbal. A számla kiállításakor ez a tétel a munkalapra is rákerül.
-
-### Kerülhet a számlára „Telefon szerviz szolgáltatás" a termékek neve helyett?
-
-Igen: kapcsold be az **Összevont szervizsort** (alapállás: Beállítások › Számlázás; számlánként: a számla ablakában). Ekkor eszközönként egy sor kerül a számlára az eszköz fajtájával (pl. „Telefon szerviz szolgáltatás", „TV szerviz szolgáltatás") és a fizetendő összeggel – a tételek neve nélkül.
 
 ### Hová írjam az IMEI-t vagy a garanciát a számlán?
 

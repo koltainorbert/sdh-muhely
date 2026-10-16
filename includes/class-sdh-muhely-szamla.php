@@ -116,11 +116,6 @@ final class SDH_Muhely_Szamla
             'alap_fizmod'        => 'Készpénz',
             'email_kuldes'       => false,
             'torlokod'           => false,
-            // Összevont szervizsor (0.69.0): a tételek neve helyett eszközönként egy sor, pl.
-            // „Telefon szerviz szolgáltatás" – a fizetendő összeggel. {eszkoz} = az eszköz fajtája.
-            'osszevont'          => false,
-            'osszevont_minta'    => '{eszkoz} szerviz szolgáltatás',
-            'osszevont_nevek'    => "Televízió=TV\nJátékkonzol=Konzol\nOkosóra / sportóra=Okosóra",
             'megjegyzes'         => 'Munkalap: {munkalap} · {eszkoz}',
             'bevizsgalas_sablon' => '{eszkoz} {fajta} bevizsgálási díj',
             'bevizsgalas_le_sablon' => 'Bevizsgálási díj levonása (javítás esetén)',
@@ -268,35 +263,6 @@ final class SDH_Muhely_Szamla
                     </span>
                 </div>
 
-                <?php // Összevont szervizsor (0.69.0). ?>
-                <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles" data-sdh-osszevont-beallitas>
-                    <label class="sdh-kapcsolo">
-                        <input type="checkbox" name="szamla_osszevont" id="szamla_osszevont" value="1" <?php checked(!empty($b['osszevont'])); ?>>
-                        <span class="sdh-kapcsolo__csuszka" aria-hidden="true"></span>
-                        <span class="sdh-kapcsolo__felirat">Összevont szervizsor: a tételek neve helyett eszközönként egy sor, a fizetendő összeggel</span>
-                    </label>
-                    <span class="sdh-mezo__sugo">
-                        A számlára (és a számla-előkészítőre) nem a termékek és szolgáltatások neve kerül, hanem az eszköz fajtája
-                        szerint egy sor – például „Telefon szerviz szolgáltatás", „TV szerviz szolgáltatás" –, és mellé a kipipált
-                        tételek fizetendő összege (a levont bevizsgálási díj már nélküle). A fajtát az eszköz kategóriájából veszi,
-                        az eszközlista minden mostani és később felvett kategóriájára. Ez itt az alapállás; a számla ablakában
-                        számlánként átkapcsolható.
-                    </span>
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="szamla_osszevont_minta">Az összevont sor neve</label>
-                    <input type="text" name="szamla_osszevont_minta" id="szamla_osszevont_minta" maxlength="120"
-                           value="<?php echo esc_attr((string) $b['osszevont_minta']); ?>">
-                    <span class="sdh-mezo__sugo">{eszkoz} = az eszköz fajtája (pl. Telefon). Alap: „{eszkoz} szerviz szolgáltatás".</span>
-                </div>
-
-                <div class="sdh-mezo">
-                    <label for="szamla_osszevont_nevek">Rövidebb nevek a számlán (soronként: Kategória=Név)</label>
-                    <textarea name="szamla_osszevont_nevek" id="szamla_osszevont_nevek" rows="3"><?php echo esc_textarea((string) $b['osszevont_nevek']); ?></textarea>
-                    <span class="sdh-mezo__sugo">Pl. „Televízió=TV". Ami nincs itt, az a kategória nevével megy (a „/" előtti részével).</span>
-                </div>
-
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="szamla_megjegyzes">Megjegyzés a számlán</label>
                     <input type="text" name="szamla_megjegyzes" id="szamla_megjegyzes" maxlength="250"
@@ -437,11 +403,6 @@ final class SDH_Muhely_Szamla
         $b['alap_fizmod']        = $szoveg('szamla_alap_fizmod', 40) !== '' ? $szoveg('szamla_alap_fizmod', 40) : 'Készpénz';
         $b['email_kuldes']       = !empty($_POST['szamla_email_kuldes']);
         $b['torlokod']           = !empty($_POST['szamla_torlokod']);
-        $b['osszevont']          = !empty($_POST['szamla_osszevont']);
-        $b['osszevont_minta']    = $szoveg('szamla_osszevont_minta', 120) !== '' ? $szoveg('szamla_osszevont_minta', 120) : '{eszkoz} szerviz szolgáltatás';
-        $b['osszevont_nevek']    = isset($_POST['szamla_osszevont_nevek']) && is_scalar($_POST['szamla_osszevont_nevek'])
-            ? mb_substr(sanitize_textarea_field(wp_unslash((string) $_POST['szamla_osszevont_nevek'])), 0, 2000)
-            : (string) $b['osszevont_nevek'];
         $b['megjegyzes']         = $szoveg('szamla_megjegyzes', 250);
         $b['bevizsgalas_le_sablon'] = $szoveg('szamla_bevizsgalas_le_sablon', 200) !== ''
             ? $szoveg('szamla_bevizsgalas_le_sablon', 200)
@@ -476,126 +437,6 @@ final class SDH_Muhely_Szamla
         $b['kulcs'] = $tarolt_kulcs;
 
         update_option(self::OPTION, $b, false);
-    }
-
-    /* =================================================================
-     * Összevont szervizsor (0.69.0)
-     * ============================================================== */
-
-    /**
-     * Az eszköz fajtájának neve a számlán: a kategória neve (a „/" és a zárójel előtti része),
-     * vagy a beállított rövidebb név (Kategória=Név). Kategória nélkül üres.
-     */
-    public static function osszevont_fajta(?object $eszkoz): string
-    {
-        $kulcs = $eszkoz ? trim((string) ($eszkoz->kategoria ?? '')) : '';
-
-        if ($kulcs === '') {
-            return '';
-        }
-
-        $nevek = SDH_Muhely_Eszkoz::kategoriak();
-        $nev   = trim((string) ($nevek[$kulcs] ?? $kulcs));
-
-        foreach (preg_split('/\R/', (string) self::beallitas()['osszevont_nevek']) ?: [] as $sor) {
-            $r = array_map('trim', explode('=', (string) $sor, 2));
-
-            if (count($r) === 2 && $r[0] !== '' && $r[1] !== '' && (mb_strtolower($r[0], 'UTF-8') === mb_strtolower($nev, 'UTF-8') || $r[0] === $kulcs)) {
-                return $r[1];
-            }
-        }
-
-        $nev = trim((string) preg_split('/\s*[\/(]/u', $nev)[0]);
-
-        return (string) apply_filters('sdh_muhely_osszevont_fajta', $nev, $kulcs, $eszkoz);
-    }
-
-    /** Az összevont sor neve egy eszközre, pl. „Telefon szerviz szolgáltatás". */
-    public static function osszevont_nev(?object $eszkoz): string
-    {
-        $minta = (string) self::beallitas()['osszevont_minta'];
-        $minta = strpos($minta, '{eszkoz}') === false ? '{eszkoz} ' . $minta : $minta;
-        $nev   = trim((string) preg_replace('/\s+/u', ' ', str_replace('{eszkoz}', self::osszevont_fajta($eszkoz), $minta)));
-
-        return $nev === '' ? 'Szerviz szolgáltatás' : mb_strtoupper(mb_substr($nev, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($nev, 1, null, 'UTF-8');
-    }
-
-    /**
-     * A számla sorai összevonva: eszközönként (és áfakulcsonként) egy sor az összevont névvel,
-     * 1 db mennyiséggel és a tételek összegével. A tételek megjegyzései a sor megjegyzésébe
-     * kerülnek, az adattörlő kódok darabszáma összeadódik. A 0 Ft-os csoport kimarad.
-     *
-     * @param array<int, array<string, mixed>> $sorok   tetel_sor() eredményei (+ megjegyzes, torlokod)
-     * @param array<int, int>                  $kulcsok soronként az eszköz kulcsa (0 = a lap fő eszköze)
-     * @return array<int, array<string, mixed>>
-     */
-    public static function osszevon(array $sorok, array $kulcsok, object $munkalap): array
-    {
-        // Az eszközönkénti bontás az eszköz kulcsa szerint (0 = a fő eszköz, különben a csatolt eszköz azonosítója).
-        $bontas = [];
-
-        foreach (SDH_Muhely_Munkalap::eszkoz_bontas($munkalap) as $sb) {
-            $bontas[(int) $sb['eszkoz_id']] = $sb;
-        }
-
-        $csoportok = [];
-
-        foreach (array_values($sorok) as $i => $s) {
-            $k = (int) ($kulcsok[$i] ?? 0);
-            $k = isset($bontas[$k]) ? $k : 0;
-            $c = $k . '|' . (string) $s['afakulcs'];
-
-            if (!isset($csoportok[$c])) {
-                $csoportok[$c] = [
-                    'megnevezes' => self::osszevont_nev($bontas[$k]['eszkoz'] ?? null),
-                    'mennyiseg'  => 1.0,
-                    'me'         => 'db',
-                    'afakulcs'   => (string) $s['afakulcs'],
-                    'netto'      => 0.0,
-                    'afa'        => 0.0,
-                    'brutto'     => 0.0,
-                    'megj'       => [],
-                    'torlokod'   => 0,
-                ];
-            }
-
-            $csoportok[$c]['netto']    += (float) $s['netto'];
-            $csoportok[$c]['afa']      += (float) $s['afa'];
-            $csoportok[$c]['brutto']   += (float) $s['brutto'];
-            $csoportok[$c]['torlokod'] += (int) ($s['torlokod'] ?? 0);
-
-            if (trim((string) ($s['megjegyzes'] ?? '')) !== '') {
-                $csoportok[$c]['megj'][] = trim((string) $s['megjegyzes']);
-            }
-        }
-
-        $ki = [];
-
-        foreach ($csoportok as $g) {
-            $brutto = round($g['brutto'], 2);
-
-            if (abs($brutto) < 0.005) {
-                continue;
-            }
-
-            $netto = round($g['netto'], 2);
-
-            $ki[] = [
-                'megnevezes'      => $g['megnevezes'],
-                'mennyiseg'       => 1.0,
-                'me'              => 'db',
-                'netto_egysegar'  => $netto,
-                'brutto_egysegar' => $brutto,
-                'afakulcs'        => $g['afakulcs'],
-                'netto'           => $netto,
-                'afa'             => round($brutto - $netto, 2),
-                'brutto'          => $brutto,
-                'megjegyzes'      => mb_substr(implode(' · ', array_unique($g['megj'])), 0, self::TETEL_MEGJ_HOSSZ),
-                'torlokod'        => $g['torlokod'],
-            ];
-        }
-
-        return $ki;
     }
 
     /* =================================================================
@@ -1706,23 +1547,6 @@ final class SDH_Muhely_Szamla
                 </div>
                 </div>
 
-                <?php
-                // Összevont szervizsor (0.69.0): a tételek neve helyett eszközönként egy sor – a fizetendő összeggel.
-                $ossz_nevek = array_values(array_unique(array_map(
-                    static fn (array $b): string => self::osszevont_nev($b['eszkoz'] ?? null),
-                    SDH_Muhely_Munkalap::eszkoz_bontas($munkalap)
-                )));
-                ?>
-                <div class="sdh-szamlaurlap__auto" data-sdh-szamla-osszevont>
-                    <input type="hidden" name="osszevon_jelen" value="1">
-                    <label class="sdh-kapcsolo" title="Bekapcsolva a <?php echo $helyi ? 'nyomtatványra' : 'számlára'; ?> nem a tételek neve kerül, hanem eszközönként egy sor az eszköz fajtájával – a kipipált tételek fizetendő összegével. Az alapállás a Beállítások › Számlázás lapon állítható.">
-                        <input type="checkbox" name="osszevon" value="1" data-sdh-szamla-osszevon <?php checked(!empty($b['osszevont'])); ?>>
-                        <span class="sdh-kapcsolo__csuszka" aria-hidden="true"></span>
-                        <span class="sdh-kapcsolo__felirat">Összevont szervizsor</span>
-                    </label>
-                    <span class="sdh-mezo__sugo">A <?php echo $helyi ? 'nyomtatványon' : 'számlán'; ?>: „<?php echo esc_html(implode('", „', $ossz_nevek)); ?>" – a fizetendő összeggel, a tételek neve nélkül.</span>
-                </div>
-
                 <?php // --- Tételek: a munkalapé pipával, az itt hozzáadottak szerkeszthetők ---- ?>
                 <table class="sdh-tabla sdh-szamlaurlap__tetelek<?php echo $torlo ? ' sdh-szamlaurlap__tetelek--torlo' : ''; ?>" data-sdh-szamla-tetelek>
                     <thead>
@@ -2356,14 +2180,6 @@ final class SDH_Muhely_Szamla
         $sorok    = [];
         $idk      = [];
         $uj       = [];
-        $kulcsok  = []; // soronként az eszköz kulcsa – az összevont szervizsorhoz
-        $tk       = []; // tétel → eszköz kulcsa, ahogy az eszközönkénti bontás látja
-
-        foreach (SDH_Muhely_Munkalap::eszkoz_bontas($munkalap) as $sb) {
-            foreach ($sb['tetelek'] as $sb_tetel) {
-                $tk[(int) $sb_tetel->id] = (int) $sb['eszkoz_id'];
-            }
-        }
 
         // A munkalap tételei közül csak a sajátjai, és csak a kipipáltak kerülnek a számlára.
         foreach (self::tetelek((int) $munkalap->id) as $t) {
@@ -2378,9 +2194,8 @@ final class SDH_Muhely_Szamla
             $s['megjegyzes'] = $tiszta($megj[$id] ?? '', self::TETEL_MEGJ_HOSSZ);
             $s['torlokod']   = $torlo_be && !empty($torlo[$id]) ? self::torlokod_db((float) $s['mennyiseg']) : 0;
 
-            $sorok[]   = $s;
-            $idk[]     = $id;
-            $kulcsok[] = $tk[$id] ?? (int) ($t->eszkoz_id ?? 0);
+            $sorok[] = $s;
+            $idk[]   = $id;
         }
 
         // A számla ablakában felvett tételek (választóból vagy kézzel).
@@ -2427,9 +2242,8 @@ final class SDH_Muhely_Szamla
             $s['megjegyzes'] = $tiszta($u['megjegyzes'] ?? '', self::TETEL_MEGJ_HOSSZ);
             $s['torlokod']   = $torlo_be && !empty($u['torlokod']) ? self::torlokod_db($menny) : 0;
 
-            $sorok[]   = $s;
-            $uj[]      = $adat;
-            $kulcsok[] = -1; // az ablakban felvett tétel: lent kapja meg az eszközét
+            $sorok[] = $s;
+            $uj[]    = $adat;
         }
 
         if ($sorok === []) {
@@ -2459,18 +2273,6 @@ final class SDH_Muhely_Szamla
         if ($szamla_eszkoz !== null) {
             foreach ($uj as $i => $adat) {
                 $uj[$i]['eszkoz_id'] = $szamla_eszkoz['kulcs'];
-            }
-        }
-
-        // Összevont szervizsor (0.69.0): a számla ablakának kapcsolója, ennek hiányában a beállítás.
-        $osszevon = isset($_POST['osszevon_jelen']) ? !empty($_POST['osszevon']) : !empty(self::beallitas()['osszevont']);
-
-        if ($osszevon) {
-            $uj_kulcs = $szamla_eszkoz !== null ? (int) $szamla_eszkoz['kulcs'] : 0;
-            $sorok    = self::osszevon($sorok, array_map(static fn (int $k): int => $k < 0 ? $uj_kulcs : $k, $kulcsok), $munkalap);
-
-            if ($sorok === []) {
-                return 'Az összevont szervizsor összege 0 Ft – nincs mit számlázni.';
             }
         }
 

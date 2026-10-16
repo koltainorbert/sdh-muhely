@@ -64,13 +64,6 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
-### 0.69.0
-- **Összevont szervizsor a számlán**: Beállítások › Számlázás kapcsoló (`osszevont`, alapból ki), a sor nevének mintája
-  (`osszevont_minta`, „{eszkoz} szerviz szolgáltatás") és rövidebb nevek (`osszevont_nevek`, „Televízió=TV"); a számla
-  ablakában számlánként átkapcsolható (`osszevon`). Bekapcsolva a tételek neve helyett eszközönként (és áfakulcsonként)
-  egy sor kerül a számlára és a számla-előkészítőre az eszköz kategóriájából képzett névvel, 1 db-bal és a fizetendő
-  összeggel; a megjegyzések és az adattörlő kódok átjönnek. `SDH_Muhely_Szamla::osszevon()`, `osszevont_nev()`. t63.
-
 ### 0.68.1
 - **Számla ablaka – egyenes tételsorok**: a kézi tétel bruttó ára és a belőle számolt nettó egy sorban
   (`.sdh-szamlaurlap__arsor`), minden cella `vertical-align: middle`; a tétel **+ Megjegyzés** gombja pill a név sorában
