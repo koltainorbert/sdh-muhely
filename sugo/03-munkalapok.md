@@ -4,7 +4,7 @@ cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
 szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas, jogosultsagok
-kulcsszavak: közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+kulcsszavak: szerepkör, szerep, jogosultság, jog, pultos, szerelő, pénztáros, kolléga, tiltott, nincs jogod, közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -96,6 +96,16 @@ Ha többen dolgoztok **egy fiókkal**, a rendszer nem tudná, ki mit csinált. E
 - **Váltás:** jobb felül a profilmenüben **Személy váltása** – a következő kolléga választ. Kijelentkezéskor a választás törlődik, és a böngészőben legfeljebb 12 óráig él.
 - **Beállítás** (adminisztrátor): **Beállítások › Jogosultságok** › *Közös fiók: „Ki vagy?”*. Itt kapcsolod be és ki a választót, külön a **PIN-t** (kikapcsolva elég a név), itt jelölöd, **melyik fiók közös**, és itt veszed fel a **dolgozókat** (név + PIN). A PIN csak lenyomatként tárolódik; üresen hagyva a régi marad. Dolgozót nem törlünk – inaktívra állítva nem választható, a régi munkái az ő nevén maradnak.
 - A dolgozó nevével **nem lehet belépni** a rendszerbe – csak a közös fiókon választható. Öt hibás PIN után 5 percig nem próbálható újra.
+
+## Szerepkörök és jogok
+
+Nem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül tetején a **Szerepkörök és jogok** rács mutatja, melyik szerep mit tehet. Alapból öt szerep van: **Admin** (mindent), **Kolléga** (a régi állapot: mindent lát és csinál, a Beállításokon kívül), **Pultos**, **Szerelő** és **Pénztáros**. Bármelyik átírható, újat is felvehetsz (az új a Kolléga jogaival indul; törléséhez ürítsd ki a nevét – akié volt, kolléga lesz).
+
+- **Jogok** (jelölőnégyzet szerepenként): *Pénztárriport* (riport, statisztika, Excel-export és -import, egyeztető ügynök), *Árak és törzsek átírása* (termék- és szolgáltatás-törzs, árlista), *Számla kiállítása* (a valódi számla; az előnézet nem kell hozzá), *Törlés-szerű műveletek* (termék, pénztártétel törlése, pénztárnap és lezárt munkalap újranyitása, importált napló visszavonása, naptári bejegyzés és emlék törlése), *Beállítások, Mentés, Modulok, Napló*.
+- **Modulok:** amit a szerepnél nem jelölsz be, azt a szerep nem látja – nincs menüpontja, csempéje, oldala, és a műveletei sem futnak. (A munkalap **Fizetés** ablaka a Házipénztár modul nélkül is megy.)
+- **Ki melyik szerepben?** Ugyanitt a nem adminisztrátor kollégákhoz és a dolgozókhoz választasz szerepet. Szerep nélkül mindenki **Kolléga**. A WordPress-adminisztrátor mindig **Admin**, ő nem zárhatja ki magát.
+- **Közös fiókon** a ténylegesen dolgozó szerepe számít: ha Gábor Pultos, akkor a közös fiókon is csak azt teheti, amit a Pultos. A *Beállítások* jog csak adminisztrátori WordPress-fiókon él: közös adminisztrátori fiókon ez választja el az adminisztrátor dolgozót a többitől.
+- Ha valaki olyat próbál, amihez nincs joga, a rendszer megmondja, melyik jog hiányzik, és a **Napló** rögzíti a próbálkozást.
 
 ## Ügyfél és eszköz a munkalapon
 

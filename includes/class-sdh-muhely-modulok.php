@@ -65,6 +65,11 @@ final class SDH_Muhely_Modulok
      */
     private static function lathato(array $modul): ?array
     {
+        // A szerepkör (H5): amit a tényleges személy szerepe nem enged, annak nincs menüpontja, csempéje, oldala.
+        if (class_exists('SDH_Muhely_Szerepkor') && !SDH_Muhely_Szerepkor::modul_engedett((string) $modul['kulcs'])) {
+            return null;
+        }
+
         if (self::be((string) $modul['kulcs'])) {
             return $modul;
         }

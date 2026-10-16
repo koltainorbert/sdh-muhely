@@ -215,10 +215,15 @@ final class SDH_Muhely_Frontend
             $ki_szoveg = SDH_Muhely_Modulok::ki($kulcs) && class_exists('SDH_Muhely_Modul_Kapcsolo')
                 ? SDH_Muhely_Modul_Kapcsolo::ki_szoveg($kulcs)
                 : '';
+            $szerep_tilt = $ki_szoveg === '' && class_exists('SDH_Muhely_Szerepkor') && !SDH_Muhely_Szerepkor::modul_engedett($kulcs);
 
-            status_header(404);
+            if ($szerep_tilt) {
+                $ki_szoveg = 'Ez az oldal a te szerepkörödben nem elérhető. Kérd a vezetőt, hogy engedélyezze.';
+            }
+
+            status_header($szerep_tilt ? 403 : 404);
             self::keret(
-                $ki_szoveg !== '' ? 'Kikapcsolt modul' : 'Nincs ilyen oldal',
+                $szerep_tilt ? 'Nincs jogosultság' : ($ki_szoveg !== '' ? 'Kikapcsolt modul' : 'Nincs ilyen oldal'),
                 '',
                 static function () use ($ki_szoveg): void {
                     echo '<div class="sdh-wrap"><div class="sdh-doboz"><p class="sdh-sugo sdh-sugo--utolso">'

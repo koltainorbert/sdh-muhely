@@ -252,7 +252,9 @@ final class SDH_Muhely_Admin_UI
     /** Beállítások és karbantartás: csak adminisztrátor. */
     public static function admin_e(): bool
     {
-        return current_user_can(self::ADMIN_JOG);
+        // Közös adminisztrátori fiókon a kiválasztott dolgozó szerepe is dönt (H5).
+        return current_user_can(self::ADMIN_JOG)
+            && (!class_exists('SDH_Muhely_Szerepkor') || SDH_Muhely_Szerepkor::megvan('beallitasok'));
     }
 
     public static function admin_jog_ellenoriz(): void

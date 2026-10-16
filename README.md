@@ -64,6 +64,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.75.0
+- **Szerepkörök és jogok (HIBALISTA H5).** Új `SDH_Muhely_Szerepkor`. Szerepek: admin (zárolt), kolléga (a 0.74-es teljes hozzáférés – a
+  frissítés semmit nem vesz el), pultos, szerelő, pénztáros + egyéni szerepek (max. 12). Tiltólistás modulok (új modul mindenkinek látszik)
+  és engedélylistás finom jogok: `penztar_riport`, `ar_atiras`, `szamla`, `torles`, `beallitasok`. A szerep a tényleges személyé
+  (`SDH_Muhely_Szemely::ki()`): közös fiókon a kiválasztott dolgozóé; a WP-adminisztrátor mindig admin. Szerveroldali őr az `admin_init` 0-n
+  (AJAX + admin-post: modul- és jogtérkép, `_urlap` végpontnál popup-üzenet, a próbálkozás a Naplóba); `Modulok::lathato()` elrejti a
+  tiltott modul menüjét / csempéjét / oldalát; `sdh-ki-<modul>` + `sdh-nem-<jog>` body-osztályok rejtik a gombokat. `admin_e()` a
+  dolgozó `beallitasok` jogát is figyeli. UI: Beállítások › Jogosultságok › Szerepkörök és jogok (rács + ki melyik szerepben).
+  Korlát: a szerep-hozzárendelés felhasználói meta (a WP-felhasználók nincsenek a mentésben); a munkalap-tételek ára nincs külön jogként.
+  Teszt: t69. DB_VERSION változatlan (0.43.0).
+
 ### 0.74.0
 - **Frissítés a GitHubról, egy kattintással (HIBALISTA H4).** Új `SDH_Muhely_Frissites`. A GitHub `main` ágán álló `sdh-muhely.php`
   `Version:` fejléce adja az újabb verziót (nincs külön release); 6 órás gyorsítótár, hiba 15 percig (net nélkül csendes). Bekötve a

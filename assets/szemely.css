@@ -84,3 +84,61 @@
     align-items: center;
     gap: .5rem;
 }
+
+/* Beállítások › Jogosultságok: szerepkörök és jogok rácsa (H5). */
+.sdh-szerep-racs {
+    display: grid;
+    gap: .15rem;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.sdh-szerep-racs__sor {
+    display: grid;
+    grid-template-columns: minmax(calc(180px * var(--sdh-n)), 1.6fr) repeat(var(--sdh-szerep-oszlop, 5), minmax(calc(84px * var(--sdh-n)), 1fr));
+    align-items: center;
+    gap: .4rem;
+    padding: .15rem 0;
+    border-bottom: 1px solid var(--sdh-vonal, rgba(128, 128, 128, .25));
+}
+
+.sdh-szerep-racs__sor--fej {
+    position: sticky;
+    top: 0;
+    background: var(--sdh-felulet, inherit);
+    z-index: 1;
+}
+
+.sdh-szerep-racs__fej input {
+    width: 100%;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-szerep-racs__fej,
+.sdh-szerep-racs__cella {
+    text-align: center;
+}
+
+.sdh-szerep-racs__csoport {
+    margin-top: .5rem;
+    font-weight: 600;
+    font-size: calc(13px * var(--sdh-n));
+    opacity: .8;
+}
+
+.sdh-szerep-racs__leiras {
+    margin: 0 0 .2rem;
+    font-size: calc(12px * var(--sdh-n));
+    opacity: .65;
+}
+
+/* A szerepkör által tiltott gombok nem látszanak (a szerver amúgy is elutasít). */
+.sdh-nem-penztar_riport [data-pt-ful="riport"],
+.sdh-nem-penztar_riport [data-pt-ful="statisztika"],
+.sdh-nem-penztar_riport [data-pt-ful="ugynok"],
+.sdh-nem-torles [data-sdh-termek-torol],
+.sdh-nem-torles [data-sdh-pt-torol],
+.sdh-nem-torles [data-sdh-np-torol],
+.sdh-nem-torles [data-sdh-ujranyit] {
+    display: none !important;
+}

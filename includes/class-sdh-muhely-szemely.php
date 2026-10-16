@@ -453,12 +453,14 @@ final class SDH_Muhely_Szemely
     /** A Jogosultságok fül: a zárolás (Utkozes) és a közös fiók egy helyen. */
     public static function jogosultsagok_rajz(): void
     {
+        SDH_Muhely_Szerepkor::doboz();
         SDH_Muhely_Utkozes::beallitas_doboz();
         self::beallitas_doboz();
     }
 
     public static function jogosultsagok_mentes(): void
     {
+        SDH_Muhely_Szerepkor::mentes();
         SDH_Muhely_Utkozes::beallitas_mentes();
         self::beallitas_mentes();
     }

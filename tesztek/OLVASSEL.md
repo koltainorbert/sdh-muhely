@@ -48,6 +48,7 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t67-visszaallitas` | visszaállítás (H3): bájtra pontos sorok, NULL, titkos kulcsok újratitkosítása, biztonsági mentés és visszavonás, csak beállítások, Export/Import, ROLLBACK sérült fájlnál, verziókapu, zár, AJAX-folyamat |
 
 | `t68-frissites` | frissítés a GitHubról (H4): verzió-kiolvasás és gyorsítótár, hibák (nincs net, 404, korlát), WordPress-bekötés, csomagmappa átnevezése, privát tároló kulcsa, védelmek (nem admin, git-példány), a Névjegy doboz |
+| `t69-szerepkor` | szerepkörök és jogok (H5): alap szerepek, mentés / új / törlés, személy → szerep, szerveroldali őr (modul + jog, AJAX / popup / admin-post), láthatóság, body-osztályok, közös fiók + dolgozó, admin_e() |
 
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.
 A korábbi (0.42.0-ig írt) t14–t21 tesztek csak a felhős munkakörnyezetben éltek, és azzal együtt elvesztek –

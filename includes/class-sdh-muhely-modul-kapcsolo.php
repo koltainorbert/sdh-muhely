@@ -118,6 +118,11 @@ final class SDH_Muhely_Modul_Kapcsolo
             }
         }
 
+        // A szerepkör (H5) tiltásai: sdh-ki-<modul> és sdh-nem-<jog>.
+        if (class_exists('SDH_Muhely_Szerepkor')) {
+            $ki .= SDH_Muhely_Szerepkor::body_osztalyok();
+        }
+
         return $ki;
     }
 
