@@ -10771,3 +10771,24 @@ button.sdh-allapot,
     gap: .35rem;
     align-items: center;
 }
+
+/* Elégedettség csoport a munkalapon (F7, 0.89.0) */
+.sdh-ml-elegedettseg__csillag {
+    display: flex;
+    gap: .5rem;
+    align-items: baseline;
+    margin: 0 0 .3rem;
+}
+
+.sdh-ml-elegedettseg__csillag span {
+    font-size: calc(18px * var(--sdh-n));
+    letter-spacing: calc(1px * var(--sdh-n));
+}
+
+.sdh-ml-elegedettseg__csillag.is-jo span {
+    color: var(--sdh-siker);
+}
+
+.sdh-ml-elegedettseg__csillag.is-rossz span {
+    color: var(--sdh-hiba);
+}

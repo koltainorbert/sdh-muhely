@@ -3,8 +3,8 @@ kulcs: uzenetek-rma
 cim: Üzenetek és ügyféloldal (RMA)
 csoport: Kapcsolat
 modul: uzenetek
-szakaszok: ugyfeloldal
-kulcsszavak: árajánlat, ajánlat elfogadása, online elfogadás, elfogadom, nem kérem, jóváhagyás, ügyfél jóváhagyja, üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
+szakaszok: ugyfeloldal, elegedettseg
+kulcsszavak: elégedettség, elégedettségi kérdés, értékelés, csillag, vélemény, Google-értékelés, Google review, visszajelzés, árajánlat, ajánlat elfogadása, online elfogadás, elfogadom, nem kérem, jóváhagyás, ügyfél jóváhagyja, üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
 osszefoglalo: Az ügyfél a QR-kóddal vagy linkkel megnyitott oldalon látja a javítás állapotát és üzenhet; te a munkalap RMA-fülén válaszolsz, az olvasatlan üzeneteket az Üzenetek menüpont gyűjti össze.
 ---
 
@@ -254,6 +254,25 @@ Az ügyféloldal összegzésének tetején egy **Árajánlat** doboz: az ajánlo
 - Az ügyfél válasza nem számít párhuzamos szerkesztésnek: ha közben nyitva van a lap, a mentésed nem ütközik vele.
 - Lezárt (zárolt) lapról nem küldhető ajánlat.
 
+## Elégedettségi kérdés: értékelés a javítás után
+
+A lezárt javítás után az ügyfél magától kap egy SMS-t vagy e-mailt egy linkkel. A linken 1–5 csillaggal értékel, és megjegyzést írhat. Ha elégedett, az oldal megkéri, hogy a Google-ön is értékeljen (ha megadtad a linket). Ha nem elégedett, te kapsz azonnal e-mailt a megjegyzésével, hogy felhívhasd és rendezhesd – így a rossz élmény nem a Google-ön landol először.
+
+### Lépésről lépésre: bekapcsolás
+
+1. **Beállítások › Elégedettségi kérdés** lapfül.
+2. Pipáld be: **Elégedettségi kérdés küldése a lezárt javítások után**.
+3. **Hogyan menjen**: SMS (ha nincs szám, e-mail), csak e-mail vagy csak SMS. SMS-hez az SMS-küldésnek bekapcsolva kell lennie.
+4. **Hány nappal a lezárás után** és **legkorábban hány órakor** – így senki nem kap üzenetet éjjel.
+5. **Elégedettnek számít**: hány csillagtól kérje a Google-értékelést (alapból 4).
+6. **Google-értékelés linkje**: a cégprofilod „Értékelés kérése” linkje.
+7. Ha akarod, írd át az SMS és az e-mail szövegét. Helyőrzők: {nev}, {szerviz}, {munkalap}, {link}.
+8. **Mentés**.
+
+### A munkalapon
+
+Lezárt javítási lapon az **Elégedettség** csoport mutatja, kiment-e a kérdés (és hogyan), és ha az ügyfél értékelt, a csillagokat és a megjegyzést. Ha még nem ment ki, a **Kérdés küldése most** gombbal azonnal elküldheted. Az értékelés a lap Naplójába is bekerül, a Riportokban pedig az **Elégedettség** csempe átlagolja.
+
 ## Mezők és gombok
 
 A munkalap **RMA** lapfülén felül a címke és három gomb áll (**Címke nyomtatása**, **Ügyféloldal**, **Link másolása**), középen a csevegő, alul az **Állapottörténet**: a munkalap állapotváltásai időponttal és a munkatárs nevével. Hat sor fér egy lapra, alatta a ‹ és › gombbal lapozhatsz.
@@ -342,6 +361,22 @@ Amelyik mezőt üresen hagyod, az az ügyféloldalon egyszerűen nem jelenik meg
 - **Nem látszik a „Megjött – értesítés” gomb.** A rendeléshez nincs ügyfél rendelve, vagy még nincs rögzítve (nincs sorszáma).
 
 ## GYIK
+
+### Hogyan kérek értékelést az ügyfelektől?
+
+Kapcsold be a **Beállítások › Elégedettségi kérdés** lapfülön. A lezárt javítás után az ügyfél magától kap SMS-t vagy e-mailt egy értékelő linkkel.
+
+### Hogyan kapok több Google-értékelést?
+
+Add meg a **Google-értékelés linkjét** az Elégedettségi kérdés lapfülön. Aki elégedett, az értékelés után egy gombbal a Google-ön is értékelhet.
+
+### Mi történik, ha az ügyfél elégedetlen?
+
+Az értékelés és a megjegyzés a munkalapra kerül, te pedig e-mailt kapsz róla, hogy felhívhasd. A Google-értékelést ilyenkor nem kéri az oldal.
+
+### Kap-e kérdést minden régi lezárt munkalap, ha bekapcsolom?
+
+Nem. Csak a frissen lezárt javítások kapnak (a beállított nap után legfeljebb három napig), és minden lap csak egyszer.
 
 ### Hogyan kérem az ügyfél jóváhagyását az árajánlatra?
 

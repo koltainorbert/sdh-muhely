@@ -214,8 +214,8 @@ final class SDH_Muhely_Modulok
             'uzenetek' => [
                 'cim' => 'Ügyfélüzenetek és RMA-oldal', 'csoport' => 'Ügyfélkapcsolat', 'ikon' => 'uzenetek',
                 'leiras' => 'Az ügyfél QR-kóddal követi a javítást; csevegő a munkalapon, üzenetek menü, gyors szövegek.',
-                'ajax' => ['uzenet_', 'rma_'],
-                'szakaszok' => ['ugyfeloldal'],
+                'ajax' => ['uzenet_', 'rma_', 'elegedettseg_'],
+                'szakaszok' => ['ugyfeloldal', 'elegedettseg'],
             ],
             'sms' => [
                 'cim' => 'SMS-értesítések', 'csoport' => 'Ügyfélkapcsolat', 'ikon' => 'sms',

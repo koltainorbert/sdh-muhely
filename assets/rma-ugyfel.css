@@ -1551,3 +1551,67 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 .rma-fogl__jelolo a {
     color: var(--sdh-accent-szoveg);
 }
+
+/* ================================================================== */
+/* Elégedettségi értékelés (F7, 0.89.0)                                */
+/* ================================================================== */
+
+.rma-ert__csillagok {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: .2rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.rma-ert__csillagok legend,
+.rma-ert__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.rma-ert__csillagok input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.rma-ert__csillagok label {
+    color: var(--sdh-keret-eros);
+    font-size: 42px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color .12s ease, transform .12s ease;
+}
+
+.rma-ert__csillagok label:hover,
+.rma-ert__csillagok label:hover ~ label,
+.rma-ert__csillagok input:checked ~ label {
+    color: var(--sdh-allapot-sarga);
+}
+
+.rma-ert__csillagok label:hover {
+    transform: scale(1.08);
+}
+
+.rma-ert__csillagok input:focus-visible + label {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.rma-ert .rma-mezo textarea {
+    min-height: 80px;
+    padding: .55rem .8rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: 9px;
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: 16px;
+}

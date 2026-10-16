@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.50.0';
+    public const DB_VERSION = '0.51.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -446,6 +446,11 @@ final class SDH_Muhely_Schema
             ajanlat_megjegyzes varchar(500) NOT NULL default '',
             atvetel_alairva datetime NULL,
             atvetel_alairo varchar(120) NOT NULL default '',
+            elegedettseg_kuldve datetime NULL,
+            elegedettseg_csatorna varchar(10) NOT NULL default '',
+            elegedettseg tinyint(1) NOT NULL default 0,
+            elegedettseg_szoveg varchar(1000) NOT NULL default '',
+            elegedettseg_ido datetime NULL,
             PRIMARY KEY  (id),
             unique key munkalap_szam (munkalap_szam),
             key garancia_elozo (garancia_elozo),

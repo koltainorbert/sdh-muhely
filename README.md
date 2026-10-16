@@ -64,6 +64,17 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.89.0
+- **F7 – elégedettségi kérdés** (új `SDH_Muhely_Elegedettseg`, az Ügyfélüzenetek modul része). Óránkénti időzítő
+  (`sdh_muhely_elegedettseg_cron`): a lezárt javítási lapok a beállított nap után (legfeljebb +3 nap, a beállított órától,
+  futásonként 30) SMS-t (`Sms::sor_be`, auto, kulcs `elegedettseg-<id>`, az SMS-tiltást tiszteli) vagy e-mailt kapnak;
+  egy lap egyszer. Anonimizált ügyfél nem kap.
+- Új oszlopok `munkalap`: `elegedettseg_kuldve`, `elegedettseg_csatorna` (sms/email/nincs), `elegedettseg` (1–5),
+  `elegedettseg_szoveg`, `elegedettseg_ido` – **DB_VERSION 0.51.0**.
+- Nyilvános oldal `/?sdh_ertekeles=<rma_token>`: 1–5 csillag + megjegyzés; a küszöbtől (alap 4) a Google-értékelés gombja,
+  alatta e-mail a szerviznek. A munkalapon „Elégedettség” csoport + **Kérdés küldése most** (`sdh_muhely_elegedettseg_kuld`).
+  Riportok: Elégedettség csempe (átlag, db, elégedett). Beállítások › **Elégedettségi kérdés**. Súgó: 12. és 29. fejezet. Teszt: t81.
+
 ### 0.88.0
 - **F6 – online időpontfoglalás** (új `SDH_Muhely_Foglalas`, a Naptár modul része). Nyilvános oldal: `/?sdh_foglalas=1`
   (az ügyféloldal kinézetével, X-Frame-Options nélkül, így beágyazható). Napválasztó + szabad időpontok (rádiógombok, JS nélkül is

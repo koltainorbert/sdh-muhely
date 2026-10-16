@@ -26,6 +26,7 @@ A bal oldali menüben a **Riportok** menüpont (adminisztrátornak). Az oldal te
 | **Sikeres javítás** | A lezárt javítások hány százaléka NEM jött vissza garanciában (Javítási garancia). Alatta: hány jött vissza. |
 | **Bevétel (bruttó)** | A lezárt lapok végösszege (javítás, árukiadás, rendelés). |
 | **Árajánlat** | Az online árajánlatok: elfogadva / elküldve, és hány lett elutasítva. |
+| **Elégedettség** | Az ügyfelek értékeléseinek átlaga (1–5 csillag), hány értékelés jött az időszakban, és ebből hány elégedett (Elégedettségi kérdés). |
 
 ## Technikusonként
 

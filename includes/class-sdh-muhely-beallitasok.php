@@ -237,6 +237,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A weboldalról foglalható időpontok: napok, nyitás–zárás, foglalási hossz, melyik naptárba kerüljön, a link és a beágyazó kód.',
                 'rajz' => [SDH_Muhely_Foglalas::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Foglalas::class, 'beallitas_mentes'],
             ],
+            'elegedettseg' => [
+                'cim' => 'Elégedettségi kérdés', 'csoport' => 'kapcsolat',
+                'leiras' => 'A lezárt javítás után SMS vagy e-mail az ügyfélnek egy értékelő linkkel; elégedett ügyfélnek a Google-értékelés linkje.',
+                'rajz' => [SDH_Muhely_Elegedettseg::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Elegedettseg::class, 'beallitas_mentes'],
+            ],
             'asszisztens' => [
                 'cim' => 'Asszisztens', 'csoport' => 'kapcsolat',
                 'leiras' => 'Az AI-asszisztens: be- és kikapcsolás, neve, kérdéskeret, API-kulcs, engedélyek.',

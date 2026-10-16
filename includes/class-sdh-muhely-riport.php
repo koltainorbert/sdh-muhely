@@ -273,6 +273,8 @@ final class SDH_Muhely_Riport
             'tetel'         => $tetel,
             'termek_kat'    => $tkat,
             'ajanlat'       => array_map('intval', $ajanlat + ['kuldve' => 0, 'elfogadva' => 0, 'elutasitva' => 0, 'var' => 0]),
+            // F7 (0.89.0): az időszakban beérkezett ügyfél-értékelések.
+            'elegedettseg'  => class_exists('SDH_Muhely_Elegedettseg') ? SDH_Muhely_Elegedettseg::osszesit($tol, $ig) : ['db' => 0, 'atlag' => 0.0, 'jo' => 0],
         ];
     }
 
@@ -403,6 +405,7 @@ final class SDH_Muhely_Riport
                 <div class="sdh-riport__csempe"><span>Sikeres javítás</span><strong><?php echo esc_html(self::szazalek((float) $d['sikeres_arany'])); ?></strong><em><?php echo (int) $d['visszajott']; ?> jött vissza garanciában</em></div>
                 <div class="sdh-riport__csempe"><span>Bevétel (bruttó)</span><strong><?php echo esc_html(self::ft((float) $d['bevetel'])); ?></strong><em>a lezárt lapok végösszege</em></div>
                 <div class="sdh-riport__csempe"><span>Árajánlat</span><strong><?php echo (int) $d['ajanlat']['elfogadva']; ?> / <?php echo (int) $d['ajanlat']['kuldve']; ?></strong><em>elfogadva / elküldve, <?php echo (int) $d['ajanlat']['elutasitva']; ?> elutasítva</em></div>
+                <div class="sdh-riport__csempe"><span>Elégedettség</span><strong><?php echo $d['elegedettseg']['db'] > 0 ? esc_html(number_format_i18n((float) $d['elegedettseg']['atlag'], 1)) . ' / 5' : '–'; ?></strong><em><?php echo (int) $d['elegedettseg']['db']; ?> értékelés, <?php echo (int) $d['elegedettseg']['jo']; ?> elégedett</em></div>
             </div>
 
             <div class="sdh-riport__racs">

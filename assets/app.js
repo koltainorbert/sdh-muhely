@@ -12362,3 +12362,60 @@
             });
     });
 }());
+
+/* Elégedettségi kérdés (F7, 0.89.0): „Kérdés küldése most” a munkalap Elégedettség csoportjában. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var gomb = e.target.closest && e.target.closest('[data-sdh-elegedettseg-kuld]');
+
+        if (!gomb) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var doboz = gomb.closest('[data-sdh-elegedettseg]');
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+        var uzenet = doboz.querySelector('[data-sdh-elegedettseg-uzenet]');
+
+        fd.set('action', 'sdh_muhely_elegedettseg_kuld');
+        fd.set('id', doboz.getAttribute('data-sdh-elegedettseg'));
+        fd.set('_wpnonce', B.nonce || '');
+        gomb.disabled = true;
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                var html = v && v.data && v.data.html;
+
+                if (html) {
+                    var uj = document.createElement('div');
+
+                    uj.innerHTML = html;
+
+                    if (uj.firstElementChild) {
+                        doboz.replaceWith(uj.firstElementChild);
+                        doboz = uj.firstElementChild;
+                    }
+                } else {
+                    gomb.disabled = false;
+                }
+
+                var u = doboz.querySelector('[data-sdh-elegedettseg-uzenet]') || uzenet;
+
+                if (u) {
+                    u.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+                }
+            })
+            .catch(function () {
+                gomb.disabled = false;
+
+                if (uzenet) {
+                    uzenet.textContent = 'Nincs kapcsolat a szerverrel.';
+                }
+            });
+    });
+}());
