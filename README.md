@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.68.3
+- **Nyomtatás felajánlása: látszik a „Bezárás" felirata.** Egy nyomtatás vagy számla után a „Most nem" gomb
+  „Bezárás"-ra vált és kiemelt lesz; eddig a világos háttér maradt rajta, így a fehér felirat eltűnt. A gomb most
+  leveszi a világos változatot, és a stíluslap is a kiemelt hátteret adja, ha egy gombon mindkettő rajta van.
+
 ### 0.68.2
 - **Számla ablaka: „Bevizsgálási díj…" gomb** a Termék… / Szolgáltatás… mellett: a díjlistából (a szolgáltatástörzs
   bevizsgálási díjként jelölt sorai) választ, és a sort a készülék nevével veszi fel (`bevizsgalas_sablon`, pl.

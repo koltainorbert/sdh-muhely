@@ -748,6 +748,8 @@
 
             if (bezaro) {
                 bezaro.textContent = 'Bezárás';
+                // 0.68.3: a világos változat le, különben fehér gombon fehér felirat lenne.
+                bezaro.classList.remove('sdh-gomb--vilagos');
                 bezaro.classList.add('sdh-gomb--elsodleges');
             }
         }

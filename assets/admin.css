@@ -296,6 +296,21 @@ a.sdh-gomb.sdh-gomb--elsodleges:visited {
     background: var(--sdh-felulet);
 }
 
+/* 0.68.3: ha egy gomb világosból elsődlegessé válik (pl. „Most nem" → „Bezárás"), a kiemelt
+   háttér nyerjen – különben a fehér felirat fehér háttéren eltűnik. */
+.sdh-gomb--vilagos.sdh-gomb--elsodleges {
+    background: var(--sdh-accent);
+    border-color: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.sdh-gomb--vilagos.sdh-gomb--elsodleges:hover,
+.sdh-gomb--vilagos.sdh-gomb--elsodleges:focus-visible {
+    background: var(--sdh-accent-sotet);
+    border-color: var(--sdh-accent-sotet);
+    color: var(--sdh-accent-felirat);
+}
+
 .sdh-gomb[disabled] {
     opacity: .55;
     cursor: default;
