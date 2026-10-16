@@ -121,6 +121,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A rendszer logója, neve, színei, a sarkok, az oldalsáv és a popupok neon kerete.',
                 'rajz' => [SDH_Muhely_Arculat::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Arculat::class, 'beallitas_mentes'],
             ],
+            'belepes' => [
+                'cim' => 'Bejelentkező oldal', 'csoport' => 'megjelenes',
+                'leiras' => 'A belépő képernyő: logó, háttér (szín, átmenet, kép, videó), a doboz színe, üveghatása, neon fénye és helye, a szövegek, a betű és a gomb – élő előnézettel.',
+                'rajz' => [SDH_Muhely_Belepo::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Belepo::class, 'beallitas_mentes'],
+            ],
             'csempek' => [
                 'cim' => 'Áttekintés csempéi', 'csoport' => 'megjelenes',
                 'leiras' => 'Melyik modul csempéje látszik az Áttekintés tetején, milyen sorrendben és felirattal.',

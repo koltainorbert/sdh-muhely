@@ -422,38 +422,102 @@ final class SDH_Muhely_Rejtes
         exit;
     }
 
-    /** A bejelentkező oldal (önálló, a rendszer arculatával – sehol nincs benne a WordPress). */
-    public static function belepo_html(string $hiba = '', string $nev = '', string $vissza = ''): string
+    /**
+     * A bejelentkező oldal (önálló, a rendszer arculatával – sehol nincs benne a WordPress).
+     * A megjelenése a Beállítások › Bejelentkező oldal lapfülről jön (SDH_Muhely_Belepo);
+     * $b: az élő előnézet még nem mentett beállítása. $elonezet: a Beállítások előnézete –
+     * nem küldhető be, és nem veszi el a fókuszt az űrlaptól.
+     *
+     * @param array<string, mixed>|null $b
+     */
+    public static function belepo_html(string $hiba = '', string $nev = '', string $vissza = '', ?array $b = null, bool $elonezet = false): string
     {
-        $rendszer = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : '';
-        $arc      = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::beallitas() : ['logo' => '', 'jel' => ''];
-        $cim      = SDH_Muhely_Modulok::frontend_url(self::BELEPES, $vissza !== '' ? ['redirect_to' => rawurlencode($vissza)] : []);
-        $v        = static fn (string $f): string => SDH_MUHELY_URL . $f . '?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio($f);
+        $van_belepo = class_exists('SDH_Muhely_Belepo') && class_exists('SDH_Muhely_Arculat');
+        $b          = $van_belepo ? ($b ?? SDH_Muhely_Belepo::beallitas()) : [];
+        $arc        = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::beallitas() : ['logo' => '', 'jel' => '', 'tema' => 'rendszer', 'szin' => '', 'uveg' => 'mono'];
+        $rendszer   = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : '';
+        $cim_szoveg = $van_belepo ? SDH_Muhely_Belepo::cim($b) : $rendszer;
+        $logo       = $van_belepo ? SDH_Muhely_Belepo::logo($b) : (string) $arc['logo'];
+        $alcim      = (string) ($b['alcim'] ?? '');
+        $lab        = $van_belepo ? (string) $b['elfelejtett'] : 'Elfelejtett jelszó: szólj az adminisztrátornak.';
+        $gomb       = $van_belepo ? (string) $b['gomb_szoveg'] : 'Belépés';
+        $hatter     = (string) ($b['hatter'] ?? 'alap');
+        $cim        = SDH_Muhely_Modulok::frontend_url(self::BELEPES, $vissza !== '' ? ['redirect_to' => rawurlencode($vissza)] : []);
+        $v          = static fn (string $f): string => SDH_MUHELY_URL . $f . '?v=' . SDH_Muhely_Admin_UI::eszkoz_verzio($f);
+        $arc_css    = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::stilus_css() : '';
 
         ob_start();
         ?>
         <!doctype html>
-        <html lang="hu">
+        <html lang="hu"<?php echo $van_belepo ? SDH_Muhely_Belepo::html_attr($b) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt attribútumok. ?>>
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="robots" content="noindex, nofollow">
             <title><?php echo esc_html('Belépés – ' . $rendszer); ?></title>
             <link rel="icon" href="<?php echo esc_url(self::ikon_url()); ?>">
+            <script>
+                /* A megjelenés (világos / sötét, kiemelő szín, üvegszín) a festés előtt: a gépen
+                   választott, különben a cég alapértelmezése – mint a műhely-felületen. */
+                (function () {
+                    var t = <?php echo wp_json_encode((string) $arc['tema']); ?>, sz = <?php echo wp_json_encode((string) $arc['szin']); ?>, uv = <?php echo wp_json_encode((string) $arc['uveg']); ?>;
+                    try {
+                        t = localStorage.getItem('sdh-tema') || t;
+                        sz = localStorage.getItem('sdh-szin') === null ? sz : localStorage.getItem('sdh-szin');
+                        uv = localStorage.getItem('sdh-uveg') || uv;
+                    } catch (e) { /* a cég alapértelmezése marad */ }
+                    var d = document.documentElement;
+                    var sotet = t === 'sotet' || (t === 'rendszer' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    d.setAttribute('data-theme', sotet ? 'dark' : 'light');
+                    if (t === 'papir') { d.setAttribute('data-papir', '1'); }
+                    if (sz) { d.setAttribute('data-accent', sz); }
+                    d.setAttribute('data-uveg', uv === 'duo' ? 'duo' : 'mono');
+                }());
+            </script>
             <link rel="stylesheet" href="<?php echo esc_url($v('assets/admin.css')); ?>">
             <link rel="stylesheet" href="<?php echo esc_url($v('assets/app.css')); ?>">
+            <?php if ($arc_css !== '' || $van_belepo) : ?>
+                <style id="sdh-belepo"><?php echo $arc_css . ($van_belepo ? SDH_Muhely_Belepo::css($b) : ''); // phpcs:ignore WordPress.Security.EscapeOutput -- csak ellenőrzött színkódok, számok és szűrt címek. ?></style>
+            <?php endif; ?>
         </head>
-        <body class="sdh-app sdh-app--uzenet">
+        <body class="sdh-app sdh-app--uzenet sdh-belepo"<?php echo $van_belepo ? SDH_Muhely_Belepo::body_attr($b) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt attribútumok. ?>>
+            <?php if (in_array($hatter, ['kep', 'video'], true)) : ?>
+                <div class="sdh-belepo-hatter" aria-hidden="true">
+                    <?php if ($hatter === 'video') : ?>
+                        <video class="sdh-belepo-hatter__video" data-src="<?php echo esc_url((string) $b['hatter_video']); ?>" muted loop playsinline preload="none"<?php echo (string) $b['hatter_kep'] !== '' ? ' poster="' . esc_url((string) $b['hatter_kep']) . '"' : ''; ?>></video>
+                        <script>
+                            /* A videó csak széles képernyőn töltődik le (mobilon a kép áll), és ha a gép nem kéri a mozgás csökkentését. */
+                            (function () {
+                                var v = document.querySelector('.sdh-belepo-hatter__video');
+                                var m = window.matchMedia ? window.matchMedia('(min-width: <?php echo (int) SDH_Muhely_Belepo::MOBIL_HATAR + 1; ?>px) and (prefers-reduced-motion: no-preference)') : null;
+                                function indit() {
+                                    if (!v || !m || !m.matches || v.getAttribute('src')) { return; }
+                                    v.setAttribute('src', v.getAttribute('data-src'));
+                                    v.muted = true;
+                                    var p = v.play();
+                                    if (p && p.catch) { p.catch(function () {}); }
+                                }
+                                indit();
+                                if (m && m.addEventListener) { m.addEventListener('change', indit); }
+                            }());
+                        </script>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
             <div class="sdh-app__kozep sdh-belepes">
-                <form class="sdh-belepes__doboz" method="post" action="<?php echo esc_url($cim); ?>" autocomplete="on">
+                <form class="sdh-belepes__doboz" method="post" action="<?php echo esc_url($elonezet ? '#' : $cim); ?>" autocomplete="on"<?php echo $elonezet ? ' onsubmit="return false"' : ''; ?>>
                     <div class="sdh-belepes__fej">
-                        <?php if ((string) $arc['logo'] !== '') : ?>
-                            <img class="sdh-belepes__logo" src="<?php echo esc_url((string) $arc['logo']); ?>" alt="">
+                        <?php if ($logo !== '') : ?>
+                            <img class="sdh-belepes__logo" src="<?php echo esc_url($logo); ?>" alt="">
                         <?php else : ?>
                             <span class="sdh-belepes__jel"><?php echo esc_html((string) $arc['jel']); ?></span>
                         <?php endif; ?>
-                        <h1 class="sdh-belepes__cim"><?php echo esc_html($rendszer); ?></h1>
+                        <h1 class="sdh-belepes__cim"><?php echo esc_html($cim_szoveg); ?></h1>
                     </div>
+
+                    <?php if ($alcim !== '') : ?>
+                        <p class="sdh-belepes__alcim"><?php echo esc_html($alcim); ?></p>
+                    <?php endif; ?>
 
                     <?php if ($hiba !== '') : ?>
                         <div class="sdh-uzenet sdh-uzenet--hiba" role="alert"><?php echo esc_html($hiba); ?></div>
@@ -461,7 +525,7 @@ final class SDH_Muhely_Rejtes
 
                     <div class="sdh-mezo">
                         <label for="sdh-belepes-nev">Felhasználónév vagy e-mail</label>
-                        <input type="text" id="sdh-belepes-nev" name="log" value="<?php echo esc_attr($nev); ?>" autocomplete="username" required autofocus>
+                        <input type="text" id="sdh-belepes-nev" name="log" value="<?php echo esc_attr($nev); ?>" autocomplete="username" required<?php echo $elonezet ? '' : ' autofocus'; ?>>
                     </div>
                     <div class="sdh-mezo">
                         <label for="sdh-belepes-jelszo">Jelszó</label>
@@ -471,9 +535,13 @@ final class SDH_Muhely_Rejtes
                         <input type="checkbox" id="sdh-belepes-marad" name="rememberme" value="1">
                         <label for="sdh-belepes-marad">Maradjak bejelentkezve</label>
                     </div>
-                    <?php wp_nonce_field(self::NONCE, '_sdh_belepes', false); ?>
-                    <button type="submit" class="sdh-gomb sdh-gomb--elsodleges sdh-belepes__gomb">Belépés</button>
-                    <p class="sdh-sugo sdh-belepes__lab">Elfelejtett jelszó: szólj az adminisztrátornak.</p>
+                    <?php if (!$elonezet) : ?>
+                        <?php wp_nonce_field(self::NONCE, '_sdh_belepes', false); ?>
+                    <?php endif; ?>
+                    <button type="<?php echo $elonezet ? 'button' : 'submit'; ?>" class="sdh-gomb sdh-gomb--elsodleges sdh-belepes__gomb"><?php echo esc_html($gomb); ?></button>
+                    <?php if ($lab !== '') : ?>
+                        <p class="sdh-sugo sdh-belepes__lab"><?php echo esc_html($lab); ?></p>
+                    <?php endif; ?>
                 </form>
             </div>
         </body>

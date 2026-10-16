@@ -601,6 +601,154 @@ body.sdh-app.sdh-app--uzenet {
     font-size: calc(12px * var(--sdh-n));
 }
 
+/* ------------------------------------------------------------------ */
+/* H6b (0.80.0): a bejelentkező oldal testreszabása                     */
+/* A változókat (--belepo-…) a Beállítások › Bejelentkező oldal adja     */
+/* (SDH_Muhely_Belepo::css); ami nincs megadva, az a rendszer arculata.  */
+/* ------------------------------------------------------------------ */
+
+body.sdh-belepo {
+    position: relative;
+    background: var(--belepo-hatter, var(--sdh-vaszon));
+    background-attachment: fixed;
+}
+
+/* „A rendszer háttere”: a műhely-felület dereng háttere marad. */
+body.sdh-belepo[data-hatter="alap"] {
+    background:
+        radial-gradient(62rem 42rem at 0% 0%, color-mix(in srgb, var(--sdh-accent) 9%, transparent), transparent 70%),
+        radial-gradient(58rem 42rem at 100% 100%, color-mix(in srgb, var(--sdh-accent-2) 12%, transparent), transparent 70%),
+        var(--sdh-vaszon);
+    background-attachment: fixed;
+}
+
+.sdh-belepo-hatter {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background-color: var(--belepo-hatter, var(--sdh-vaszon));
+    background-image: var(--belepo-kep, none);
+    background-position: center;
+    background-size: cover;
+    pointer-events: none;
+}
+
+.sdh-belepo-hatter::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--belepo-sotet, 0));
+}
+
+.sdh-belepo-hatter__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* A doboz: szín, üveghatás, szöveg. */
+body.sdh-belepo .sdh-belepes {
+    position: relative;
+    z-index: 1;
+    background: var(--belepo-doboz, var(--sdh-felulet));
+}
+
+body.sdh-belepo[data-uveg-doboz="1"] .sdh-belepes {
+    -webkit-backdrop-filter: blur(var(--belepo-elmosas, 14px)) saturate(1.2);
+    backdrop-filter: blur(var(--belepo-elmosas, 14px)) saturate(1.2);
+}
+
+body.sdh-belepo .sdh-belepes__cim,
+body.sdh-belepo .sdh-belepes .sdh-mezo label {
+    color: var(--belepo-cimke, var(--sdh-szoveg-2));
+}
+
+body.sdh-belepo .sdh-belepes h1.sdh-belepes__cim {
+    color: var(--belepo-cimke, var(--sdh-szoveg));
+}
+
+body.sdh-belepo .sdh-app__kozep p.sdh-belepes__lab,
+body.sdh-belepo .sdh-app__kozep p.sdh-belepes__alcim {
+    color: var(--belepo-halvany, var(--sdh-halvany));
+}
+
+.sdh-app__kozep p.sdh-belepes__alcim {
+    margin: -.4rem 0 1.1rem;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+/* Neon fény, mint a popupoknál (data-neon a <html> elemen). */
+:root[data-neon] body.sdh-belepo .sdh-belepes {
+    border-color: var(--sdh-popneon);
+    box-shadow:
+        0 0 0 1px var(--sdh-popneon),
+        0 0 var(--sdh-popneon-kozel) color-mix(in srgb, var(--sdh-popneon) var(--sdh-popneon-kozel-ero), transparent),
+        0 0 var(--sdh-popneon-tavol) color-mix(in srgb, var(--sdh-popneon) var(--sdh-popneon-tavol-ero), transparent),
+        var(--sdh-arnyek);
+}
+
+/* Logó és jel: a beállított magasság. */
+body.sdh-belepo .sdh-belepes__logo {
+    height: var(--belepo-logo, 2.6rem);
+    max-height: none;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+body.sdh-belepo .sdh-belepes__jel {
+    height: var(--belepo-logo, 2.6rem);
+    min-width: var(--belepo-logo, 2.6rem);
+    font-size: calc(var(--belepo-logo, 2.6rem) * .36);
+}
+
+body.sdh-belepo[data-fej="felul"] .sdh-belepes__fej {
+    flex-direction: column;
+    text-align: center;
+}
+
+body.sdh-belepo[data-fej="felul"] .sdh-belepes__alcim {
+    text-align: center;
+}
+
+/* A doboz helye: bal / jobb oldalt függőlegesen középen (mobilon mindig középen). */
+body.sdh-belepo[data-hely="bal"] {
+    justify-content: flex-start;
+    padding-left: max(1rem, 7vw);
+}
+
+body.sdh-belepo[data-hely="jobb"] {
+    justify-content: flex-end;
+    padding-right: max(1rem, 7vw);
+}
+
+body.sdh-belepo[data-hely="bal"] .sdh-belepes,
+body.sdh-belepo[data-hely="jobb"] .sdh-belepes {
+    margin: auto 0;
+}
+
+@media (max-width: 700px) {
+    body.sdh-belepo[data-hely] {
+        justify-content: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    body.sdh-belepo[data-hely] .sdh-belepes {
+        margin: auto;
+    }
+}
+
+/* Mobilon és „kevesebb mozgás” kérésre nincs videó: a kép (vagy a szín) áll. */
+@media (max-width: 700px), (prefers-reduced-motion: reduce) {
+    .sdh-belepo-hatter__video {
+        display: none;
+    }
+}
+
 /* ================================================================== */
 /* Kis képernyő                                                        */
 /* ================================================================== */

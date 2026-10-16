@@ -3,9 +3,9 @@ kulcs: megjelenes
 cim: Megjelenés, óra, nyitvatartás
 csoport: Rendszer
 modul:
-szakaszok: arculat, nyitvatartas
-kulcsszavak: betű területenként, területenkénti betű, űrlap betűmérete, popup betűmérete, táblázat betűje, megjelenés, téma, világos, sötét, papír, e-könyv, e-ink, olvasó, kékfény, kék fény, szűrő, éjszakai mód, szem, szín, kiemelő szín, üvegszín, duó, egyszínű, betűméret, nagyítás, betűtípus, neon, keret, logó, jel, név, arculat, lekerekítés, oldalsáv, óra, nyitvatartás, zárás, visszaszámláló
-osszefoglalo: Itt állítod, hogyan nézzen ki a rendszer – világos, sötét vagy papír megjelenés, kékfény-szűrő, betűméret, színek, logó –, és a fejléc órájához a nyitvatartást.
+szakaszok: arculat, belepes, nyitvatartas
+kulcsszavak: bejelentkező oldal, belépő oldal, belépés, bejelentkezés, belépő képernyő, háttérvideó, háttérkép, színátmenet, doboz helye, elfelejtett jelszó, betű területenként, területenkénti betű, űrlap betűmérete, popup betűmérete, táblázat betűje, megjelenés, téma, világos, sötét, papír, e-könyv, e-ink, olvasó, kékfény, kék fény, szűrő, éjszakai mód, szem, szín, kiemelő szín, üvegszín, duó, egyszínű, betűméret, nagyítás, betűtípus, neon, keret, logó, jel, név, arculat, lekerekítés, oldalsáv, óra, nyitvatartás, zárás, visszaszámláló
+osszefoglalo: Itt állítod, hogyan nézzen ki a rendszer – világos, sötét vagy papír megjelenés, kékfény-szűrő, betűméret, színek, logó, a bejelentkező oldal –, és a fejléc órájához a nyitvatartást.
 ---
 ## Mire való
 
@@ -22,6 +22,7 @@ Ugyanitt van a fejléc órája és a nyitvatartás: az óra mindig mutatja, menn
 
 - **Profilmenü:** a jobb felső sarokban a nevedre kattintva nyílik. Felülről lefelé: **Megjelenés**, **Kékfény-szűrő**, **Üvegszín**, **Betűméret**, **Popup neon keret**, legalul a **Kijelentkezés**.
 - **Beállítások › Logó és megjelenés:** a cég logója, neve és az alapértelmezett megjelenés. Csak adminisztrátor látja.
+- **Beállítások › Bejelentkező oldal:** a belépő képernyő kinézete – logó, háttér, a doboz, a szövegek –, élő előnézettel. Csak adminisztrátor látja.
 - **Beállítások › Nyitvatartás és óra:** a nyitvatartási idő és az óra kapcsolói. Csak adminisztrátor látja.
 - **Az óra:** a felső fejlécben, a profil mellett, minden oldalon.
 
@@ -202,6 +203,66 @@ Jó tudni:
 
 A lapfül alján a **Mentés** gomb menti a változtatásokat.
 
+## Beállítások › Bejelentkező oldal
+
+Csak adminisztrátor látja. Itt állítod, hogyan nézzen ki a **belépő képernyő** – amit mindenki lát, mielőtt belép. Ami üresen marad, az a **Logó és megjelenés** lapfül szerint látszik (a rendszer logója, neve, kiemelő színe, betűje, a popupok neon kerete): új telepítésnél itt semmit nem kell állítani.
+
+A lapfül jobb oldalán **élő előnézet** áll: minden változás mentés nélkül, azonnal látszik benne. Fölötte két gomb: **Asztali gép** és **Mobil** – így azt is látod, mi jelenik meg telefonon. A belépő képernyőn a változás a **Mentés** után jelenik meg. Keskeny képernyőn az előnézet a mezők fölé kerül.
+
+### Logó és szövegek
+
+| Mező | Mire való |
+|---|---|
+| **Logó a bejelentkezőn** | Saját logó csak ide. Üresen a rendszer logója; ha az sincs, a jel (néhány betű a színes négyzetben). |
+| **Logó magassága** | 24–160 képpont. A szélesség ehhez igazodik. A jelre is hat. |
+| **Logó és cím elrendezése** | A logó a cím mellett, vagy a cím fölött, középen (nagy logóhoz ez szebb). |
+| **Címsor** | Üresen a rendszer neve. |
+| **Alcím** | Kisebb betűs sor a címsor alatt, pl. „Jó munkát!”. Üresen nem látszik. |
+| **Az „Elfelejtett jelszó” sor** | A doboz alján. Alapból: „Elfelejtett jelszó: szólj az adminisztrátornak.” Üresen nem látszik. |
+| **A gomb felirata** | Alapból „Belépés”. Üresen is az marad. |
+
+### Háttér
+
+| Mező | Mire való |
+|---|---|
+| **Háttér** | **A rendszer háttere** (ugyanaz, mint a műhely-felületen), **Egyszínű**, **Színátmenet**, **Kép** vagy **Videó**. |
+| **Háttérszín** | Egyszínűnél ez a szín. Átmenetnél az első szín (üresen: a kiemelő szín). Képnél és videónál ez látszik, amíg betölt. |
+| **Az átmenet második színe** | Üresen a felület háttérszíne. |
+| **Az átmenet iránya** | 0–345 fok, 15 fokos lépésben (0° = alulról felfelé, 90° = balról jobbra). |
+| **Kép / videó sötétítése** | 0–85%. Világos képen így olvasható marad a doboz körüli rész. |
+| **Háttérkép** | A **Feltöltés…** gombbal, vagy a címe. JPG vagy WebP, legalább 1600 képpont széles. Videós háttérnél **ez áll mobilon**, és ez látszik, amíg a videó betölt. |
+| **Háttérvideó** | MP4 (H.264) vagy WebM, hang nélkül ismétlődik. Rövid, kis fájlt válassz (néhány MB). |
+
+A videó csak **széles képernyőn** (700 képpont fölött) töltődik le és indul el. **Mobilon** a videó helyett a háttérkép áll – a telefon nem tölti le a videót, így nem fogy a mobilnet. Akkor is a kép áll, ha a gépen be van kapcsolva a „mozgás csökkentése” (kevesebb animáció).
+
+### A belépő doboz
+
+| Mező | Mire való |
+|---|---|
+| **A doboz helye** | Bal oldalt, Középen vagy Jobb oldalt (függőlegesen mindig középen). Mobilon mindig középen. |
+| **A doboz színe** | Üresen a felület színe (világosban világos, sötétben sötét). |
+| **A szöveg színe** | Üresen magától: a doboz színén olvasható szín (sötét doboz – fehér betű, világos doboz – sötét betű). Saját dobozszínnél a mezők is a dobozhoz igazodnak. |
+| **Üveghatás** | Áttetsző doboz, mögötte elmosott háttér. Képpel vagy videóval mutat a legjobban. |
+| **Átlátszóság** | 0–90%, csak üveghatással. |
+| **Elmosás** | 0–40 képpont, csak üveghatással. |
+| **Neon fény a doboz körül** | Alapból **Mint a popupoké** (a Logó és megjelenés neon kerete). Választható saját neon szín, vagy Kikapcsolva. |
+| **Egyéni neon szín** | Csak az „Egyéni szín” választásnál. |
+| **A neon fényereje** | Mint a popupoké, Finom, Közepes vagy Erős. |
+
+### Betű és gomb
+
+| Mező | Mire való |
+|---|---|
+| **Betűtípus** | Mint a rendszerben, a gép betűtípusa, vagy egy a listából. Csak a gépen meglévő betű: a rendszer nem tölt le betűt az internetről. |
+| **Egyéni betű neve** | Csak az „Egyéni” választásnál. A betűnek telepítve kell lennie a gépen. |
+| **A gomb színe** | Üresen a kiemelő szín. A felirat magától fehér vagy sötét, hogy olvasható legyen. |
+
+Jó tudni:
+
+- A belépő képernyő a gép **világos / sötét** beállítását követi, mint a rendszer többi része.
+- Ha valami félresikerült, töröld a mezőt (vagy válaszd az első, „Mint…” kezdetű lehetőséget): akkor újra a rendszer arculata látszik.
+- A beállítás a mentéssel és a beállítások exportjával együtt költözik.
+
 ## Beállítások › Nyitvatartás és óra
 
 Csak adminisztrátor látja.
@@ -298,6 +359,14 @@ Mert a saját megjelenés a böngészőben tárolódik, nem a fiókodban. Ez tes
 ### Hol cserélem le a logót?
 
 Beállítások › Logó és megjelenés › **Logó és név** doboz, **Feltöltés…** gomb. Csak adminisztrátor teheti.
+
+### Lehet videó a belépő képernyő hátterében?
+
+Igen: **Beállítások › Bejelentkező oldal** › **Háttér** › **Videó**, és töltsd fel a videót. Adj meg háttérképet is: mobilon a videó helyett az áll, és az látszik, amíg a videó betölt.
+
+### Hogyan teszem a belépő dobozt oldalra?
+
+**Beállítások › Bejelentkező oldal** › **A belépő doboz** › **A doboz helye**: Bal oldalt vagy Jobb oldalt. Mobilon a doboz mindig középen áll.
 
 ### Megadhatom a cég saját színét?
 

@@ -561,4 +561,102 @@
             }
         });
     }
+    /* ---------------------------------------------------------------- */
+    /* Bejelentkező oldal: élő előnézet (H6b, 0.80.0)                    */
+    /* A szerver rajzolja a teljes oldalt a még nem mentett mezőkből –  */
+    /* ugyanaz a kód, mint a valódi bejelentkezőé.                      */
+    /* ---------------------------------------------------------------- */
+
+    var belepo = gyoker.querySelector('[data-sdh-belepo-elonezet]');
+
+    if (belepo && urlap) {
+        var belepoKeret = belepo.querySelector('[data-sdh-belepo-keret]');
+        var belepoLap = belepo.querySelector('[data-sdh-belepo-lap]');
+        var belepoAllapot = belepo.querySelector('[data-sdh-belepo-allapot]');
+        var belepoAllapotSzoveg = belepoAllapot ? belepoAllapot.innerHTML : '';
+        var belepoIdozito = null;
+        var belepoSorszam = 0;
+
+        var belepoSkala = function () {
+            if (!belepoKeret || !belepoLap || !belepoLap.offsetWidth) {
+                return;
+            }
+
+            belepoLap.style.setProperty('--sdh-belepo-skala', String(belepoKeret.clientWidth / belepoLap.offsetWidth));
+        };
+
+        var belepoFrissit = function () {
+            var adat = new FormData(urlap);
+            var sorszam = ++belepoSorszam;
+
+            adat.set('action', 'sdh_muhely_belepo_elonezet');
+
+            fetch(ajaxCim(), { method: 'POST', body: adat, credentials: 'same-origin' })
+                .then(function (valasz) {
+                    return valasz.json();
+                })
+                .then(function (json) {
+                    if (!json || !json.success) {
+                        throw new Error((json && json.data && json.data.uzenet) || 'Az előnézet nem frissült.');
+                    }
+
+                    // Csak a legutolsó kérés válasza számít (gyors gépelésnél a régebbi később is megjöhet).
+                    if (sorszam === belepoSorszam) {
+                        belepoLap.srcdoc = json.data.html;
+
+                        if (belepoAllapot) {
+                            belepoAllapot.innerHTML = belepoAllapotSzoveg;
+                            belepoAllapot.classList.remove('is-hiba');
+                        }
+                    }
+                })
+                .catch(function (hiba) {
+                    if (belepoAllapot && sorszam === belepoSorszam) {
+                        belepoAllapot.textContent = (hiba && hiba.message) || 'Az előnézet nem frissült.';
+                        belepoAllapot.classList.add('is-hiba');
+                    }
+                });
+        };
+
+        var belepoValtozas = function (esemeny) {
+            if (esemeny.target && esemeny.target.type === 'file') {
+                return;
+            }
+
+            clearTimeout(belepoIdozito);
+            belepoIdozito = setTimeout(belepoFrissit, 350);
+        };
+
+        urlap.addEventListener('input', belepoValtozas);
+        urlap.addEventListener('change', belepoValtozas);
+
+        // Asztali gép / mobil: a keret és a lap mérete vált, a skála újraszámol.
+        belepo.addEventListener('click', function (esemeny) {
+            var gomb = esemeny.target.closest ? esemeny.target.closest('[data-sdh-belepo-mod]') : null;
+
+            if (!gomb) {
+                return;
+            }
+
+            esemeny.preventDefault();
+            belepo.setAttribute('data-mod', gomb.getAttribute('data-sdh-belepo-mod'));
+
+            Array.prototype.forEach.call(belepo.querySelectorAll('[data-sdh-belepo-mod]'), function (g) {
+                var aktiv = g === gomb;
+
+                g.classList.toggle('is-aktiv', aktiv);
+                g.setAttribute('aria-pressed', aktiv ? 'true' : 'false');
+            });
+
+            belepoSkala();
+        });
+
+        if (window.ResizeObserver && belepoKeret) {
+            new ResizeObserver(belepoSkala).observe(belepoKeret);
+        } else {
+            window.addEventListener('resize', belepoSkala);
+        }
+
+        belepoSkala();
+    }
 }());

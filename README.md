@@ -64,6 +64,21 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.80.0
+- **H6b – a bejelentkező oldal testreszabása** (új `SDH_Muhely_Belepo`, opció `sdh_muhely_belepo` – a mentés és az Export / Import
+  magától viszi). Új lapfül: **Beállítások › Bejelentkező oldal** (Cég és megjelenés). Állítható: logó (saját vagy a rendszeré) és
+  magassága (24–160 px), elrendezés (logó a cím mellett / fölött), címsor, alcím, az „Elfelejtett jelszó” sor (üresen nem látszik), a gomb
+  felirata; háttér: a rendszer háttere / egyszínű / színátmenet (két szín + irány) / kép / videó, sötétítés; a doboz helye (bal / közép /
+  jobb, mobilon mindig közép), színe, szövegszíne (üresen a dobozhoz illő), üveghatás (átlátszóság, elmosás), neon fény (alap: mint a
+  popupoké), betűtípus, a gomb színe. Ami üres, az a Logó és megjelenés (Arculat) szerint látszik.
+- **Videó csak széles képernyőn:** a `<video>` `data-src`-et kap, és csak 700 px fölött, „mozgás csökkentése” nélkül tölt le / indul;
+  mobilon a háttérkép áll (CSS-ben is rejtve).
+- **Élő előnézet:** a lapfül jobb oldalán a valódi bejelentkező (ugyanaz a PHP rajzolja) a még nem mentett mezőkből –
+  `sdh_muhely_belepo_elonezet` (AJAX, csak admin), `iframe srcdoc`, lekicsinyítve; Asztali gép / Mobil nézet. Előnézetben nincs nonce,
+  autofocus, és a gomb nem küld be.
+- A bejelentkező mostantól a gép / a cég világos-sötét és kiemelőszín-beállítását is követi (eddig mindig világos, alapszínű volt), és
+  megkapja az Arculat stílusát (egyéni szín, lekerekítés, betű). A CSS-be csak ellenőrzött színkód, szám és szűrt cím kerül. Súgó: 17. fejezet. Teszt: t71.
+
 ### 0.79.0
 - **H6 – a feloldó kód (zárkód) és minta titkosítva** (új `SDH_Muhely_Zarkod`). Az `eszkoz.zarkod` / `eszkoz.minta` `sdh1:`
   alakban (SDH_Muhely_Titok, libsodium, a szerver sóihoz kötve); a két oszlop varchar(255) – **DB_VERSION 0.44.0**. A régi nyílt

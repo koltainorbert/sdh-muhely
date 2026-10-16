@@ -10308,3 +10308,97 @@ button.sdh-allapot,
     gap: calc(8px * var(--sdh-n));
     margin: calc(10px * var(--sdh-n)) 0 calc(16px * var(--sdh-n));
 }
+
+/* ================================================================== */
+/* H6b (0.80.0) – Beállítások › Bejelentkező oldal: mezők + élő előnézet */
+/* ================================================================== */
+
+.sdh-belepo-beall {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 30rem);
+    gap: calc(16px * var(--sdh-n));
+    align-items: start;
+}
+
+.sdh-belepo-beall__mezok {
+    min-width: 0;
+}
+
+.sdh-belepo-beall__elonezet {
+    position: sticky;
+    top: calc(12px * var(--sdh-n));
+    min-width: 0;
+}
+
+.sdh-belepo-elonezet__fej {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(8px * var(--sdh-n));
+    margin-bottom: calc(10px * var(--sdh-n));
+}
+
+.sdh-belepo-elonezet__fej .sdh-doboz__cim {
+    margin: 0;
+}
+
+.sdh-belepo-elonezet__mod {
+    display: inline-flex;
+    gap: calc(4px * var(--sdh-n));
+}
+
+/* A keret arányos: benne az előnézet valódi képernyőméretben, lekicsinyítve (a skálát a beallitasok.js adja). */
+.sdh-belepo-elonezet__keret {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--sdh-keret);
+    border-radius: var(--sdh-r);
+    background: var(--sdh-vaszon);
+}
+
+.sdh-belepo-elonezet__lap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(1280px * var(--sdh-n));
+    height: calc(800px * var(--sdh-n));
+    border: 0;
+    transform: scale(var(--sdh-belepo-skala, .35));
+    transform-origin: 0 0;
+    pointer-events: none;
+    background: transparent;
+}
+
+.sdh-belepo-elonezet[data-mod="mobil"] .sdh-belepo-elonezet__keret {
+    max-width: 15rem;
+    margin: 0 auto;
+    aspect-ratio: 390 / 780;
+}
+
+.sdh-belepo-elonezet[data-mod="mobil"] .sdh-belepo-elonezet__lap {
+    width: calc(390px * var(--sdh-n));
+    height: calc(780px * var(--sdh-n));
+}
+
+.sdh-belepo-elonezet .sdh-mezo__sugo {
+    display: block;
+    margin-top: calc(8px * var(--sdh-n));
+}
+
+.sdh-belepo-elonezet .sdh-mezo__sugo.is-hiba {
+    color: var(--sdh-hiba);
+}
+
+@media (max-width: 1100px) {
+    .sdh-belepo-beall {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdh-belepo-beall__elonezet {
+        position: static;
+        order: -1;
+    }
+}
