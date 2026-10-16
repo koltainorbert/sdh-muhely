@@ -354,6 +354,10 @@ final class SDH_Muhely_Frontend
     {
         $felhasznalo = wp_get_current_user();
         $nev         = $felhasznalo->display_name ?: $felhasznalo->user_login;
+        // Közös fiók (H2): a fejlécben a kiválasztott dolgozó neve áll.
+        if (class_exists('SDH_Muhely_Szemely') && SDH_Muhely_Szemely::aktiv_id() > 0) {
+            $nev = SDH_Muhely_Szemely::nev();
+        }
         $kezdo       = mb_strtoupper(mb_substr($nev, 0, 1));
 
         ?>
@@ -420,7 +424,7 @@ final class SDH_Muhely_Frontend
 
             <?php
             // A stíluslapok sorrendben (0.64: a Gyors betöltés bekapcsolva egyetlen fájlba fűzve jönnek).
-            $sdh_css = ['assets/admin.css', 'assets/app.css', 'assets/levelezes.css', 'assets/penztar.css', 'assets/csapat.css', 'assets/naptar.css', 'assets/asszisztens.css', 'assets/szikra-elet.css', 'assets/sugo.css', 'assets/nyomtatas.css', 'assets/sms.css', 'assets/naplo.css', 'assets/matrica.css', 'assets/urlap-beallitas.css', 'assets/emlek.css', 'assets/gyorsitas.css', 'assets/utkozes.css'];
+            $sdh_css = ['assets/admin.css', 'assets/app.css', 'assets/levelezes.css', 'assets/penztar.css', 'assets/csapat.css', 'assets/naptar.css', 'assets/asszisztens.css', 'assets/szikra-elet.css', 'assets/sugo.css', 'assets/nyomtatas.css', 'assets/sms.css', 'assets/naplo.css', 'assets/matrica.css', 'assets/urlap-beallitas.css', 'assets/emlek.css', 'assets/gyorsitas.css', 'assets/utkozes.css', 'assets/kapcsolo.css', 'assets/szemely.css'];
 
             if ($aktiv_kulcs === 'attekintes') {
                 $sdh_css[] = 'assets/racs.css';
@@ -597,6 +601,7 @@ final class SDH_Muhely_Frontend
                             <span><?php echo esc_html($felhasznalo->user_email); ?></span>
                         </p>
 
+                        <?php echo class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::profil_sor() : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
                         <?php // Megjelenés (Rendszer / Világos / Sötét) és Üvegszín (Duó, Egyszínű) – a dolgozó saját gépére szól. ?>
                         <?php echo SDH_Muhely_Arculat::megjelenes_valaszto('profil'); // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML. ?>
 
@@ -649,7 +654,7 @@ final class SDH_Muhely_Frontend
         // a Napló ablak, a lezárt lap, az RMA-matrica, a fogaskerék és a mezőmemória – mind bármelyik
         // oldalon megnyílhat (a munkalap popupja mindenhol elérhető).
         array_push($sdh_js, 'assets/rma.js', 'assets/levelezes.js', 'assets/penztar.js', 'assets/eladas.js', 'assets/nyomtatas.js',
-            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js');
+            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js', 'assets/kapcsolo.js', 'assets/szemely.js');
 
         if ($aktiv_kulcs === 'beallitasok') {
             $sdh_js[] = 'assets/beallitasok.js';

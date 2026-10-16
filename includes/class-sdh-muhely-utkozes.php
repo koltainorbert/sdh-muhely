@@ -225,7 +225,7 @@ final class SDH_Muhely_Utkozes
 
         $id   = isset($_GET['id']) ? (int) $_GET['id'] : 0; // phpcs:ignore WordPress.Security
         $fiok = self::fiok();
-        $user = get_current_user_id();
+        $user = SDH_Muhely_Szemely::ki();
 
         if ($id <= 0 || $fiok === '' || !self::zar_be($tipus)) {
             return;
@@ -297,7 +297,7 @@ final class SDH_Muhely_Utkozes
             wp_send_json_error(['uzenet' => 'Nincs jogosultságod ehhez.'], 403);
         }
 
-        $user  = get_current_user_id();
+        $user  = SDH_Muhely_Szemely::ki();
         $fiok  = self::fiok();
         $kulcs = (string) wp_unslash($_POST['kulcs'] ?? ''); // phpcs:ignore WordPress.Security.NonceVerification
         $kod   = (string) wp_unslash($_POST['kod'] ?? ''); // phpcs:ignore WordPress.Security.NonceVerification
@@ -396,7 +396,7 @@ final class SDH_Muhely_Utkozes
         }
 
         $alap = (int) $_POST['szerk_naplo'];
-        $sorok = self::masok_modositasai($tipus, $id, $alap, get_current_user_id());
+        $sorok = self::masok_modositasai($tipus, $id, $alap, SDH_Muhely_Szemely::ki());
 
         if ($sorok === []) {
             return null;
@@ -484,6 +484,11 @@ final class SDH_Muhely_Utkozes
      */
     public static function pulzus(array $valasz, int $user = 0): array
     {
+        // Közös fiók (H2): a kiválasztott dolgozó nevén jelez.
+        if ($user > 0 && $user === get_current_user_id()) {
+            $user = SDH_Muhely_Szemely::ki();
+        }
+
         $fiok = self::fiok();
 
         if ($user <= 0 || $fiok === '') {

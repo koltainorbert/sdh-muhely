@@ -2403,7 +2403,7 @@ final class SDH_Muhely_Szamla
             'pdf'         => self::pdf_ment($valasz['pdf']),
             'tetelek'     => (string) wp_json_encode($k['sorok']),
             'vevo'        => (string) wp_json_encode($k['vevo']),
-            'felhasznalo' => get_current_user_id(),
+            'felhasznalo' => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
             'letrehozva'  => current_time('mysql'),
         ]);
 

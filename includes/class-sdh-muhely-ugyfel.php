@@ -1473,7 +1473,7 @@ final class SDH_Muhely_Ugyfel
             $uzenet   = 'mentve';
         } else {
             $adatok['letrehozva'] = current_time('mysql');
-            $adatok['letrehozo']  = get_current_user_id();
+            $adatok['letrehozo']  = (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id());
             $adatok['aktiv']      = 1;
             $adatok['forras']     = 'kezi';
 

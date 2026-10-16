@@ -256,7 +256,7 @@ final class SDH_Muhely_Termek
             'tipus'       => isset(self::mozgas_tipusok()[$tipus]) && $tipus !== 'munkalap' ? $tipus : 'korrekcio',
             'mennyiseg'   => $mennyiseg,
             'megjegyzes'  => mb_substr($megjegyzes, 0, 255),
-            'felhasznalo' => get_current_user_id(),
+            'felhasznalo' => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
             'letrehozva'  => current_time('mysql'),
         ]);
 
@@ -362,7 +362,7 @@ final class SDH_Muhely_Termek
                 'munkalap_id' => $munkalap_id,
                 'tetel_id'    => $tetel_id,
                 'megjegyzes'  => $megjegyzes,
-                'felhasznalo' => get_current_user_id(),
+                'felhasznalo' => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
                 'letrehozva'  => current_time('mysql'),
             ]);
 
@@ -454,7 +454,7 @@ final class SDH_Muhely_Termek
 
         $adat['keszlet']    = 0;
         $adat['letrehozva'] = $most;
-        $adat['letrehozo']  = get_current_user_id();
+        $adat['letrehozo']  = (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id());
         $adat['forras']     = $adat['forras'] ?? 'kezi';
 
         return $wpdb->insert(self::tabla(), $adat) === false ? 0 : (int) $wpdb->insert_id;
@@ -1784,7 +1784,7 @@ final class SDH_Muhely_Termek
                 'kulso_azonosito' => $kulcs,
                 'letrehozva'      => $most,
                 'modositva'       => $most,
-                'letrehozo'       => get_current_user_id(),
+                'letrehozo'       => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
             ]);
 
             if ($siker === false) {

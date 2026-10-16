@@ -416,6 +416,10 @@ final class SDH_Muhely_Admin_UI
         // Párhuzamos szerkesztés (0.70.0): ütközés-jelzés és „X is szerkeszti" – minden oldalon (a pulzus futásidőben kéri tőle az adatot, a sorrend mindegy).
         wp_enqueue_style('sdh-muhely-utkozes', SDH_MUHELY_URL . 'assets/utkozes.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/utkozes.css'));
         wp_enqueue_script('sdh-muhely-utkozes', SDH_MUHELY_URL . 'assets/utkozes.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/utkozes.js'), true);
+        wp_enqueue_style('sdh-muhely-kapcsolo', SDH_MUHELY_URL . 'assets/kapcsolo.css', ['sdh-muhely-utkozes'], self::eszkoz_verzio('assets/kapcsolo.css'));
+        wp_enqueue_script('sdh-muhely-kapcsolo', SDH_MUHELY_URL . 'assets/kapcsolo.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/kapcsolo.js'), true);
+        wp_enqueue_style('sdh-muhely-szemely', SDH_MUHELY_URL . 'assets/szemely.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/szemely.css'));
+        wp_enqueue_script('sdh-muhely-szemely', SDH_MUHELY_URL . 'assets/szemely.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/szemely.js'), true);
 
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.

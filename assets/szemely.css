@@ -1,0 +1,86 @@
+/* Közös fiók: „Ki vagy?" választó (0.72.0, H2). */
+
+.sdh-kivagy {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--sdh-hatter) 82%, transparent);
+    backdrop-filter: blur(6px);
+}
+
+.sdh-kivagy__doboz {
+    display: grid;
+    gap: .9rem;
+    width: min(calc(520px * var(--sdh-n)), 100%);
+    padding: 1.4rem 1.5rem;
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(14px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .25);
+}
+
+.sdh-kivagy__cim {
+    margin: 0;
+    font-size: calc(22px * var(--sdh-n));
+}
+
+.sdh-kivagy__sugo,
+.sdh-kivagy__doboz p {
+    margin: 0;
+}
+
+.sdh-kivagy__nevek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.sdh-kivagy__nev.is-valasztott {
+    border-color: var(--sdh-siker);
+    color: var(--sdh-siker);
+    font-weight: 700;
+}
+
+.sdh-kivagy__pin {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.sdh-kivagy__pin input {
+    width: calc(120px * var(--sdh-n));
+    letter-spacing: .3em;
+}
+
+.sdh-kivagy__hiba {
+    color: var(--sdh-hiba);
+    font-weight: 600;
+}
+
+.sdh-kivagy__lab {
+    font-size: calc(12px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-kivagy__valt {
+    width: 100%;
+    margin-bottom: .6rem;
+}
+
+/* Beállítások › Jogosultságok: a dolgozók sorai. */
+.sdh-kivagy-lista {
+    display: grid;
+    gap: .4rem;
+    max-width: calc(560px * var(--sdh-n));
+}
+
+.sdh-kivagy-lista__sor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) calc(130px * var(--sdh-n)) calc(120px * var(--sdh-n));
+    align-items: center;
+    gap: .5rem;
+}

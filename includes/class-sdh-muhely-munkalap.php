@@ -1864,6 +1864,15 @@ final class SDH_Muhely_Munkalap
             $lista[(int) $felhasznalo->ID] = (string) $felhasznalo->display_name;
         }
 
+        // Közös fiók (H2): a választható dolgozók is felelősek lehetnek.
+        if (class_exists('SDH_Muhely_Szemely') && SDH_Muhely_Szemely::beallitas()['be']) {
+            foreach (SDH_Muhely_Szemely::dolgozok(true) as $id => $d) {
+                $lista[$id] = $d['nev'];
+            }
+
+            asort($lista, SORT_LOCALE_STRING);
+        }
+
         return $lista;
     }
 
@@ -3406,7 +3415,7 @@ final class SDH_Muhely_Munkalap
             : (int) $munkalap->eszkoz_id;
 
         $allapot  = $uj ? self::alap_kulcs($allapotok) : (string) $munkalap->allapot;
-        $felelos  = $uj ? get_current_user_id() : (int) $munkalap->felelos;
+        $felelos  = $uj ? (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()) : (int) $munkalap->felelos;
         $keszult  = $uj ? current_time('Y-m-d') : self::datum_ertek((string) $munkalap->keszult);
         $hatarido = $uj ? '' : self::datum_ertek((string) $munkalap->hatarido);
         $lezarva  = $uj ? '' : self::datum_ertek((string) ($munkalap->lezarva ?? ''));
@@ -5044,7 +5053,7 @@ final class SDH_Muhely_Munkalap
                 $uzenet   = 'munkalap_mentve';
             } else {
                 $adatok['letrehozva'] = current_time('mysql');
-                $adatok['letrehozo']  = get_current_user_id();
+                $adatok['letrehozo']  = (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id());
                 $adatok['forras']     = $adatok['forras'] ?? 'kezi';
 
                 $eredmeny = $wpdb->insert(self::tabla(), $adatok);

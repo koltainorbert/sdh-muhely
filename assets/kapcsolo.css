@@ -1,0 +1,66 @@
+/* Egységes kapcsoló (0.72.0): minden be/ki jelölőnégyzet ugyanúgy néz ki –
+   zöld = Aktív, piros = Inaktív, mellette felirat. A felirat a kapcsolo.js-től jön. */
+
+:is(.sdh-app, .sdh-modal) input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input) {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: 0 0 auto;
+    position: relative;
+    width: calc(34px * var(--sdh-n));
+    height: calc(19px * var(--sdh-n));
+    margin: 0;
+    border: 0;
+    border-radius: calc(999px * var(--sdh-n));
+    background-color: var(--sdh-hiba);
+    background-image: radial-gradient(circle, #fff 0 46%, transparent 50%);
+    background-repeat: no-repeat;
+    background-size: calc(15px * var(--sdh-n)) calc(15px * var(--sdh-n));
+    background-position: calc(2px * var(--sdh-n)) center;
+    cursor: pointer;
+    vertical-align: middle;
+    opacity: 1;
+    pointer-events: auto;
+    transition: background-color .15s, background-position .15s;
+}
+
+:is(.sdh-app, .sdh-modal) input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input):checked {
+    background-color: var(--sdh-siker);
+    background-position: calc(100% - 2px * var(--sdh-n)) center;
+}
+
+:is(.sdh-app, .sdh-modal) input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input):focus-visible {
+    outline: 2px solid var(--sdh-accent-halvany);
+    outline-offset: 2px;
+}
+
+:is(.sdh-app, .sdh-modal) input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input):disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+/* A régi, külön rajzolt csúszkák helyett a jelölőnégyzet maga a kapcsoló. */
+.sdh-kapcsolo__csuszka,
+.sdh-cs-kapcs__sin {
+    display: none;
+}
+
+.sdh-kapcsolo,
+.sdh-cs-kapcs {
+    gap: .5rem;
+}
+
+/* „Aktív" / „Inaktív" felirat a kapcsoló mellett. */
+.sdh-kapcs-allapot {
+    flex: 0 0 auto;
+    min-width: 3.9em;
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--sdh-hiba);
+    white-space: nowrap;
+}
+
+.sdh-kapcs-allapot.is-aktiv {
+    color: var(--sdh-siker);
+}

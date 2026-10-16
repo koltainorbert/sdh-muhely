@@ -4,7 +4,7 @@ cim: Munkalapok
 csoport: Napi munka
 modul: munkalapok
 szakaszok: allapotok, hiba-allapotok, gyakori-hibak, gyakori-megjegyzesek, szamozas, zarolas, jogosultsagok
-kulcsszavak: zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
+kulcsszavak: közös fiók, ki vagy, PIN, dolgozó, dolgozók, személy váltása, ki dolgozik, zárolás, felülbíráló kód, jogosultságok, nem nyitható meg, más szerkeszti, egyszerre szerkeszt, párhuzamos szerkesztés, közben módosította, ütközés, felülír, is szerkeszti, automatikus mentés, automentés, magától ment, nem kell menteni, mentés gomb, munkalap, munkalapok, javítás, szerviz, felvétel, átvétel, új munkalap, állapot, munkalapszám, sorszám, számozás, hiba, hibák, gyakori hibák, tétel, szolgáltatás, termék, több eszköz, részben elkészült, bevizsgálási díj, előleg, fizetett, fizetve, fizetendő, megjegyzés, gyakori megjegyzések, címke, QR-kód, számla, érvénytelen, törlés, árajánlat, sablon, lezárt, zárolt, újranyitás, nem szerkeszthető, csak olvasható, napló, előzmény, matrica
 osszefoglalo: A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.
 ---
 
@@ -87,7 +87,15 @@ A **Beállítások › Jogosultságok** fülön azt is megadod, mely rekordok z�
 - **Frissítés a legújabbra** – a lap a másik kolléga változtatásával töltődik be újra; ami nálad még nem volt elmentve, elvész.
 - **Az enyémet mentsd** – a te változtatásod mentődik, és felülírja a másikét. A másik kolléga változtatása így is megmarad a lap **Naplójában**.
 
-Nem számít ütközésnek: a saját előző mentésed, a nyomtatás, az SMS és az ügyfél vagy az időzítő (rendszer) módosítása. A mentési ütközés-védelem felhasználó szerint különböztet, ezért érdemes külön felhasználót adni mindenkinek.
+Nem számít ütközésnek: a saját előző mentésed, a nyomtatás, az SMS és az ügyfél vagy az időzítő (rendszer) módosítása. A mentési ütközés-védelem személy szerint különböztet: külön felhasználónál a fiók, közös fióknál a **„Ki vagy?”** választóban kiválasztott dolgozó számít.
+
+## Közös fiók: „Ki vagy?”
+
+Ha többen dolgoztok **egy fiókkal**, a rendszer nem tudná, ki mit csinált. Ezért a közösnek jelölt fiókon a felület indulásakor egy **„Ki vagy?”** ablak jelenik meg: rákattintasz a nevedre, és megadod a **PIN**-ed (4–8 számjegy). Amíg nem választottál, a rendszer nem dolgozik (a hívásai megállnak). Választás után minden a **te neveden** megy: a **Naplóba**, a **pénztárba**, az új munkalap **Felelős** mezőjébe, és a „Gábor is szerkeszti” jelzésbe is.
+
+- **Váltás:** jobb felül a profilmenüben **Személy váltása** – a következő kolléga választ. Kijelentkezéskor a választás törlődik, és a böngészőben legfeljebb 12 óráig él.
+- **Beállítás** (adminisztrátor): **Beállítások › Jogosultságok** › *Közös fiók: „Ki vagy?”*. Itt kapcsolod be és ki a választót, külön a **PIN-t** (kikapcsolva elég a név), itt jelölöd, **melyik fiók közös**, és itt veszed fel a **dolgozókat** (név + PIN). A PIN csak lenyomatként tárolódik; üresen hagyva a régi marad. Dolgozót nem törlünk – inaktívra állítva nem választható, a régi munkái az ő nevén maradnak.
+- A dolgozó nevével **nem lehet belépni** a rendszerbe – csak a közös fiókon választható. Öt hibás PIN után 5 percig nem próbálható újra.
 
 ## Ügyfél és eszköz a munkalapon
 

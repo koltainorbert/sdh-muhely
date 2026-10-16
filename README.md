@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.72.0
+- **Közös fiók: „Ki vagy?” választó (HIBALISTA H2).** Új `SDH_Muhely_Szemely`. A közösnek jelölt fiókon a felület indulásakor
+  név + PIN (4–8 számjegy) választás; amíg nincs, a rendszer AJAX-hívásai nem futnak (`admin_init` kapu, 403 `ki_vagy`).
+  A dolgozók belépni nem tudó WP-felhasználók (szerep `sdh_dolgozo`, jog nélkül, `wp_authenticate_user` tiltja), így az
+  azonosítójuk a meglévő mezőkbe írható: Változásnapló (`felhasznalo`, `felhasznalo_nev`), pénztár (`felhasznalo`, `lezarta`),
+  új munkalap felelős, `letrehozo` (munkalap, ügyfél, eszköz, termék), számla; a H1 ütközés és a jelenlét is személyre szól.
+  A választás böngészőnként él (HttpOnly süti → transient, 12 óra), Személy váltása a profilmenüben, kijelentkezéskor törlődik.
+  5 hibás PIN → 5 perc. **Beállítások › Jogosultságok:** választó be/ki, PIN be/ki, közös fiókok, dolgozók (név, PIN, aktív).
+- **Egységes kapcsoló.** Minden be/ki jelölőnégyzet (a táblázatok sorkijelölői és a pillek kivételével) ugyanaz a kapcsoló:
+  zöld = Aktív, piros = Inaktív, mellette felirat (`assets/kapcsolo.css`, `assets/kapcsolo.js`, popupokban is). A régi
+  `.sdh-kapcsolo__csuszka` és `.sdh-cs-kapcs__sin` rajz elrejtve. Teszt: t65. DB_VERSION változatlan (0.43.0).
+
 ### 0.71.0
 - **Egyszerre egy ablak: zárolás + felülbíráló kód (a H1 folytatása).** Amit másik ablakban (akár ugyanazzal a fiókkal, másik
   gépen) épp szerkesztenek, azt a szerver **nem engedi megnyitni**, amíg be nem zárják: a megnyitó kérés kapuja

@@ -694,6 +694,15 @@ final class SDH_Muhely_Valtozasnaplo
         $user = function_exists('wp_get_current_user') ? wp_get_current_user() : null;
         $uid  = $user instanceof WP_User ? (int) $user->ID : 0;
 
+        // Közös fiók (H2): a kiválasztott dolgozó nevére kerül a bejegyzés.
+        $szemely = $uid > 0 && class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::aktiv_id() : 0;
+        $szemely_u = $szemely > 0 ? get_userdata($szemely) : false;
+
+        if ($szemely_u instanceof WP_User) {
+            $user = $szemely_u;
+            $uid  = $szemely;
+        }
+
         $sor = [
             'ido'             => current_time('mysql'),
             'keres'           => self::keres_azon(),

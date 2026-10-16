@@ -248,8 +248,8 @@ final class SDH_Muhely_Beallitasok
             // --- Rendszer ----------------------------------------------------
             'jogosultsagok' => [
                 'cim' => 'Jogosultságok', 'csoport' => 'rendszer',
-                'leiras' => 'Egyszerre egy ablakban szerkeszthető lap: melyik rekordtípus zárol, és a zárolást felülbíráló kód.',
-                'rajz' => [SDH_Muhely_Utkozes::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Utkozes::class, 'beallitas_mentes'],
+                'leiras' => 'Egyszerre egy ablakban szerkeszthető lap (zárolás, felülbíráló kód) és a közös fiók „Ki vagy?” választója (dolgozók, PIN).',
+                'rajz' => [SDH_Muhely_Szemely::class, 'jogosultsagok_rajz'], 'ment' => [SDH_Muhely_Szemely::class, 'jogosultsagok_mentes'],
             ],
             'sebesseg' => [
                 'cim' => 'Sebesség', 'csoport' => 'rendszer', 'ujratolt' => true,

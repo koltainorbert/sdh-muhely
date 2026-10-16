@@ -451,7 +451,7 @@ final class SDH_Muhely_Penztar
             'muvelet'     => mb_substr($muvelet, 0, 20),
             'regi'        => $regi === null ? null : (string) wp_json_encode($regi, JSON_UNESCAPED_UNICODE),
             'uj'          => $uj === null ? null : (string) wp_json_encode($uj, JSON_UNESCAPED_UNICODE),
-            'felhasznalo' => get_current_user_id(),
+            'felhasznalo' => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
             'ido'         => current_time('mysql'),
         ]);
     }
@@ -604,7 +604,7 @@ final class SDH_Muhely_Penztar
                 'ido'         => $adat['datum'] === self::ma() ? $most : $adat['datum'] . ' 12:00:00',
                 'forras'      => $forras,
                 'sorrend'     => 900000 + (int) current_time('G') * 3600 + (int) current_time('i') * 60 + (int) current_time('s'),
-                'felhasznalo' => get_current_user_id(),
+                'felhasznalo' => (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id()),
                 'letrehozva'  => $most,
                 'modositva'   => $most,
             ];
@@ -1275,7 +1275,7 @@ final class SDH_Muhely_Penztar
 
         if ($lezar) {
             $adat['allapot'] = 'lezart';
-            $adat['lezarta'] = get_current_user_id();
+            $adat['lezarta'] = (class_exists('SDH_Muhely_Szemely') ? SDH_Muhely_Szemely::ki() : get_current_user_id());
             $adat['lezarva'] = current_time('mysql');
         }
 
