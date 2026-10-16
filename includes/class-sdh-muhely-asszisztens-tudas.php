@@ -453,8 +453,8 @@ final class SDH_Muhely_Asszisztens_Tudas
         return $m;
     }
 
-    /** A mentendő táblák (a TAC-adatbázis és a levél-gyorsítótár kimarad: újra előállíthatók). */
-    private static function mentendo_tablak(): array
+    /** A mentendő táblák (a TAC-adatbázis, a levél-gyorsítótár és az ügyfél-szóindex kimarad: újra előállíthatók). */
+    public static function mentendo_tablak(): array
     {
         try {
             $m = new ReflectionMethod('SDH_Muhely_Schema', 'tabla_definiciok');
@@ -472,7 +472,7 @@ final class SDH_Muhely_Asszisztens_Tudas
             }
         }
 
-        return array_values(array_diff($ki, [SDH_Muhely_Schema::tabla('tac'), SDH_Muhely_Schema::tabla('level')]));
+        return array_values(array_diff($ki, [SDH_Muhely_Schema::tabla('tac'), SDH_Muhely_Schema::tabla('level'), SDH_Muhely_Schema::tabla('ugyfel_szo')]));
     }
 
     /**
@@ -572,15 +572,22 @@ final class SDH_Muhely_Asszisztens_Tudas
 
     private static function mentes_takarit(string $megtart = ''): void
     {
-        $lista = array_values(array_filter(self::mentesek(), static fn (array $m): bool => $m['fajl'] !== $megtart));
+        $lista = self::mentesek();
         $db    = class_exists('SDH_Muhely_Mentes') ? SDH_Muhely_Mentes::megtartas() : self::MENTES_DB;
+        // Ami megmarad: a beállított számú legfrissebb, az előző napi mentés és a legutóbbi visszaállítás előtti
+        // biztonsági mentés (lásd SDH_Muhely_Mentes::megtartando).
+        $kell  = class_exists('SDH_Muhely_Mentes')
+            ? SDH_Muhely_Mentes::megtartando($lista, $db)
+            : array_column(array_slice($lista, 0, $db), 'fajl');
 
-        foreach (array_slice($lista, max(0, $db - ($megtart !== '' ? 1 : 0))) as $m) {
-            @unlink(self::mentes_mappa() . $m['fajl']); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        foreach ($lista as $m) {
+            if ($m['fajl'] !== $megtart && !in_array($m['fajl'], $kell, true)) {
+                @unlink(self::mentes_mappa() . $m['fajl']); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            }
         }
 
         // Egy korábbi, félbeszakadt mentés maradéka (egy óránál régebbi ideiglenes fájl).
-        foreach (glob(self::mentes_mappa() . 'sdh-mentes-*.jsonl.gz.tmp') ?: [] as $f) {
+        foreach (glob(self::mentes_mappa() . 'sdh-mentes-*.tmp') ?: [] as $f) {
             if ((int) filemtime($f) < time() - HOUR_IN_SECONDS) {
                 @unlink($f); // phpcs:ignore WordPress.PHP.NoSilencedErrors
             }

@@ -1,0 +1,134 @@
+/* Beállítások › Mentés (0.73.0): külső mentési helyek, lista, visszaállítás-panel. */
+
+.sdh-mentes-cel {
+    margin: 0 0 1rem;
+    padding: calc(14px * var(--sdh-n)) calc(16px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(12px * var(--sdh-n));
+    background: var(--sdh-felulet);
+}
+
+.sdh-mentes-cel__fej {
+    display: flex;
+    align-items: center;
+    gap: calc(10px * var(--sdh-n));
+    margin: 0 0 calc(6px * var(--sdh-n));
+    font-size: calc(14px * var(--sdh-n));
+    color: var(--sdh-szoveg);
+}
+
+.sdh-mentes-cel__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n));
+    margin: calc(10px * var(--sdh-n)) 0 0;
+}
+
+.sdh-mentes-cel [hidden] {
+    display: none;
+}
+
+.sdh-mentes-gdrive {
+    margin: calc(10px * var(--sdh-n)) 0 0;
+}
+
+.sdh-mentes-kod {
+    display: block;
+    line-height: 1.8;
+}
+
+.sdh-mentes-kod__ertek {
+    padding: .1rem .5rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(6px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    color: var(--sdh-szoveg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: calc(16px * var(--sdh-n));
+    letter-spacing: .08em;
+}
+
+.sdh-mentes-hiba {
+    color: var(--sdh-hiba);
+}
+
+.sdh-mentes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6px * var(--sdh-n));
+    margin: calc(10px * var(--sdh-n)) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sdh-mentes-lista li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    padding: calc(8px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(12px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    font-size: calc(13px * var(--sdh-n));
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-mentes-lista li code {
+    flex: 1 1 calc(240px * var(--sdh-n));
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sdh-mentes-sor__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6px * var(--sdh-n));
+    margin-left: auto;
+}
+
+.sdh-mentes-sor__uzenet {
+    flex: 1 1 100%;
+    margin: 0;
+}
+
+.sdh-mentes-jelveny {
+    padding: .05rem .5rem;
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+    font-size: calc(11px * var(--sdh-n));
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sdh-mentes-allapot {
+    margin: calc(8px * var(--sdh-n)) 0 0;
+    font-size: calc(12px * var(--sdh-n));
+    color: var(--sdh-halvany);
+}
+
+.sdh-mentes-vissza__adatok {
+    margin: 0 0 calc(10px * var(--sdh-n));
+    padding: 0;
+    list-style: none;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.7;
+    color: var(--sdh-szoveg-2);
+}
+
+.sdh-mentes-vissza__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n));
+    margin: 0;
+}
+
+.sdh-mentes-vissza [hidden],
+.sdh-mentes-lista[hidden] {
+    display: none;
+}

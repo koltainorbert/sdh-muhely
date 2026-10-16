@@ -4,8 +4,8 @@ cim: Mentés, jogosultság, biztonság
 csoport: Rendszer
 modul:
 szakaszok: mentes
-kulcsszavak: napi mentés, automatikus mentés, mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
-osszefoglalo: Ki mit lát a rendszerben, hogyan és mikor készül mentés, mit lehet visszaállítani, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.
+kulcsszavak: külső mentés, Google Drive, FTP, NAS, WebDAV, export, import, költözés, élesítés, jelszavas mentés, előző napi mentés, napi mentés, automatikus mentés, mentés, biztonsági mentés, backup, visszaállítás, visszatöltés, jogosultság, jog, szerep, szerepkör, adminisztrátor, admin, kolléga, közös fiók, letiltás, törlés, inaktív, érvénytelen, titkosítás, jelszó, kulcs, API-kulcs, napló, műveletnapló, pillanatkép, biztonság
+osszefoglalo: Ki mit lát a rendszerben, hogyan és mikor készül mentés (a gépen és külső helyre: Google Drive, FTP, NAS, saját gép), hogyan állítható vissza, hogyan költöztethető a teljes beállítás élesbe, mit nem töröl a rendszer soha, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.
 ---
 
 ## Mire való
@@ -18,7 +18,10 @@ Röviden:
 - A rendszer **ügyfelet és munkalapot nem töröl**.
 - **Teljes mentés** minden nap magától készül, és kézzel is bármikor indítható (**Beállítások › Mentés**).
 - Az asszisztens minden módosítása előtt **pillanatkép** készül, és a művelet visszaállítható.
-- A mentésből **visszatöltésnek nincs felülete**, ezért a szerver saját, teljes mentése továbbra is kell.
+- A mentés **külső helyre is másolódik**, jelszóval titkosítva: **Google Drive**, **FTP**, **NAS** vagy **saját gép** mappájába.
+- A mentésből a **Beállítások › Mentés** lapon **visszaállíthatsz** – előtte a rendszer biztonsági mentést készít a mostani állapotról.
+- A **beállítások külön exportálhatók** és importálhatók: élesbe költözéskor nem kell mindent újra beállítani.
+- A szerver saját, teljes mentése (fájlok is) továbbra is kell.
 
 ## Ki mit lát: adminisztrátor és kolléga
 
@@ -88,7 +91,12 @@ A napi mentés nem függ az asszisztenstől: akkor is elkészül, ha az assziszt
 
 **Hol tárolódik:** a szerveren, a `wp-content/uploads/sdh-muhely-mentes/` mappában. A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.
 
-**Hány marad meg:** alapból az utolsó 20; a szám a **Beállítások › Mentés** lapfülön állítható (3 és 365 között). Amikor eggyel több készül, a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak.
+**Hány marad meg:** alapból az utolsó 20; a szám a **Beállítások › Mentés** lapfülön állítható (3 és 365 között). Amikor eggyel több készül, a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak. Ezen felül **mindig megmarad**:
+
+- az **előző napi mentés** (a legutóbbi, nem mai mentés) – ha ma valami elromlik, a tegnapi állapot biztosan megvan,
+- a legutóbbi **visszaállítás előtti** biztonsági mentés.
+
+Ez a szabály a külső helyeken is ugyanígy érvényes.
 
 ## Lépésről lépésre: kézi mentés és letöltés
 
@@ -109,9 +117,90 @@ A Beállítások **Rendszer** csoportjában van; csak adminisztrátor látja.
 - **Napi mentés bekapcsolva** – alapból be van kapcsolva. Kikapcsolva magától nem készül mentés; a **Mentés most** gomb akkor is működik.
 - **Megőrzött mentések száma** – ennyi marad meg (alapból 20). Napi egy mentésnél a 20 nagyjából három hét.
 - **Mentés most** – azonnal készít egy teljes mentést.
-- A lista a legutóbbi mentéseket mutatja, **Letöltés** gombbal.
+- **Titkosító jelszó** – legalább 8 karakter; a külső helyekre kerülő másolatok ezzel vannak titkosítva. Külső hely bekapcsolásához kötelező.
+- **Külső mentési helyek** – négy kártya (Saját gép, NAS, FTP / FTPS, Google Drive), mindegyiken **Kapcsolat próbája** és **Mentések listázása**.
+- A lista a legutóbbi mentéseket mutatja, **Letöltés**, **Letöltés (titkosítva)** és **Visszaállítás…** gombbal.
+- **Export és import** – a beállítások jelszavas fájlba, illetve fájlból.
 
 Ha a legutóbbi mentés nem sikerült (például megtelt a lemez, vagy a mappa nem írható), a lapfül tetején piros sáv írja ki az okát.
+
+## Külső mentés: Google Drive, FTP, NAS, saját gép
+
+A szerveren maradó mentés nem véd a lemez meghibásodása ellen, ezért a rendszer minden mentés után **titkosított másolatot** tölt fel a bekapcsolt helyekre. Egyszerre több helyre is.
+
+**A másolat titkosított.** A Beállítások › Mentés lapon megadott **titkosító jelszóval** készül, így a Drive-on, az FTP-n vagy a NAS-on lévő fájlt jelszó nélkül senki nem tudja elolvasni. **A jelszót tedd el biztos helyre** – elvesztése esetén a külső másolatok nem nyithatók meg.
+
+| Hely | Mit kell megadni |
+|---|---|
+| **Saját gép** | Egy mappa útvonala (pl. csatolt vagy hálózati meghajtó). A mappa nem lehet a rendszer saját mentési mappája. |
+| **NAS** | Mappa (csatolt vagy `\\szerver\mappa` hálózati út), vagy **WebDAV** cím, felhasználó, jelszó. |
+| **FTP / FTPS** | Szerver, port, titkosítás (FTPS ajánlott), felhasználó, jelszó, mappa. |
+| **Google Drive** | Saját Google-kliens azonosítója és titka, majd egyszeri összekapcsolás (lent). |
+
+### Lépésről lépésre: külső hely bekapcsolása
+
+1. Nyisd meg a **Beállítások › Mentés** lapfület.
+2. A **Titkosítás** dobozban adj meg jelszót (kétszer), és mentsd a lapot.
+3. A kívánt kártyán kapcsold be az **Aktív** kapcsolót, és töltsd ki a mezőket.
+4. Nyomd meg a **Kapcsolat próbája** gombot: a rendszer megpróbál írni a helyre, és kiírja az eredményt vagy az okot.
+5. **Mentsd a lapot.** Az első másolat a következő mentéskor (vagy a **Mentés most** gombra) készül.
+
+Ha a külső hely éppen nem elérhető, a mentés **nem lesz hibás**: a helyi mentés elkészül, a másolat pedig **várakozik**, és 15 percenként újrapróbálkozik (legfeljebb hatszor, a napi mentés pedig mindig újra megpróbálja). A kártya állapotsora mutatja az utolsó sikeres másolatot és a hibát.
+
+### Google Drive összekapcsolása
+
+A Google-nak egyszeri beállítás kell (kb. 5 perc, a saját Google-fiókodban):
+
+1. A [Google Cloud Console](https://console.cloud.google.com/)-ban hozz létre egy projektet, és kapcsold be a **Google Drive API**-t.
+2. **OAuth-hozzájárulási képernyő**: típus *Külső*, add meg az alkalmazás nevét és az e-mail-címedet. **Állítsd az állapotot „Éles" (Production) értékre.** Ha „Tesztelés" marad, a Google 7 naponta lejáratja a kapcsolatot.
+3. **Hitelesítő adatok › OAuth-kliensazonosító létrehozása**, típusa *Televíziók és korlátozott bemenetű eszközök*. Másold ki a **kliensazonosítót** és a **kliens titkát**.
+4. A rendszerben a Google Drive kártyán írd be mindkettőt, és nyomd meg az **Összekapcsolás a Google-fiókkal** gombot.
+5. Megjelenik egy kód és egy cím. Nyisd meg a címet, írd be a kódot, és engedélyezd a hozzáférést. A rendszer magától észreveszi, és kiírja az összekapcsolt fiókot.
+
+A rendszer csak a **saját maga által létrehozott** fájlokhoz és mappához fér hozzá (`drive.file` jogosultság), a többi Drive-fájlodat nem látja. A mentések a **SDH Műhely mentés** nevű mappába kerülnek. Ha a Google később visszavonja a hozzáférést, a kártya kiírja, hogy a kapcsolat lejárt – nyomd meg újra az **Összekapcsolás** gombot.
+
+## Visszaállítás mentésből
+
+A visszaállítás mindig **két lépésből** áll: előbb **előnézet**, utána a tényleges visszaállítás. Csak adminisztrátor végezheti.
+
+### Lépésről lépésre: visszaállítás
+
+1. A **Beállítások › Mentés** lapon válaszd ki a forrást:
+   - egy helyi mentés mellett **Visszaállítás…**,
+   - egy külső hely kártyáján **Mentések listázása**, majd a kívánt sor **Visszaállítás…** gombja,
+   - vagy az **Import fájlból** részben válassz fájlt (és add meg a jelszavát, ha eltér a beállítottól).
+2. Az **előnézet** megmutatja a mentés idejét, verzióját, a táblák és sorok számát.
+3. Válassz módot:
+   - **Adatok és beállítások visszaállítása** – a mostani adatok a mentés állapotára cserélődnek,
+   - **Csak a beállítások visszaállítása** – az adatokhoz (ügyfelek, lapok, pénztár) nem nyúl.
+4. Mindkét gomb **kétlépcsős**: az első kattintás megerősítést kér („Biztosan? Kattints újra"), a második indítja.
+
+**Mit csinál a rendszer közben:**
+
+- **Először biztonsági mentést készít** a mostani állapotról (a neve `…-visszaallitas-elott-…`). Ha az nem sikerül, nem állít vissza semmit.
+- Az egész visszaállítás **egyetlen tranzakció**: ha bármi hiba van (sérült fájl), minden visszagördül, és az adatok nem változnak.
+- Az **újabb verzióból** készült mentést nem fogadja el – előbb frissíteni kell a plugint.
+- Utána újraépíti a keresőt és a gyorsítótárakat.
+
+**Visszavonás:** ha a visszaállítás nem azt hozta, amit vártál, a **visszaállítás előtti** biztonsági mentést ugyanígy visszaállíthatod – az megmarad a listában.
+
+> **Figyelem:** A visszaállítás a mentés óta felvett adatokat (új ügyfelek, lapok, pénztártételek) törli. Éles adaton csak akkor használd, ha biztos vagy benne; előtte nézd meg az előnézetet.
+
+## Export, import és költözés élesbe
+
+**Beállítások exportja** (Beállítások › Mentés › Export és import): a rendszer **minden beállítása** egy jelszavas fájlba kerül – arculat, számlázás, SMS, levelezés, nyomtatványok, kulcsok, mentési helyek –, **adatok nélkül**. Új telepítésen (például az éles szerveren) az **Import fájlból** résznél betöltöd, és nem kell mindent újra beállítani.
+
+**A kulcsok és jelszavak utaznak.** A rendszer a titkosított kulcsokat (Számla Agent, IMEI, levelezés, SMS…) a jelszavas fájlon belül nyíltan viszi át, és az új gépen az **ottani** kulcsokkal titkosítja újra. A fájl ezért érzékeny: erős jelszóval készül, és tárold biztonságosan.
+
+A **teljes mentés** (adatok + beállítások) a mentések listájából tölthető le titkosítva (**Letöltés (titkosítva)**), és másik gépen ugyanígy visszaállítható.
+
+### Lépésről lépésre: költözés a próbarendszerből élesbe
+
+1. A próbarendszeren: **Beállítások › Mentés › Beállítások exportja**. Mentsd el a fájlt.
+2. Az éles szerveren telepítsd a pluginet.
+3. Ott: **Beállítások › Mentés › Import fájlból** – válaszd ki a fájlt, add meg a jelszavát, nyisd meg az előnézetet.
+4. Nyomd meg a **Csak a beállítások visszaállítása** gombot (és erősítsd meg).
+5. Ellenőrizd a külső mentési helyeket (**Kapcsolat próbája**). A Google Drive kapcsolat a másik gépről is érvényes marad, de ha ugyanazt a mappát a két rendszer használja, érdemes az élesen újra összekapcsolni.
 
 ## Az asszisztens módosításai: pillanatkép és visszaállítás
 
@@ -175,8 +264,9 @@ A **Beállítások › Levelezés** lapfülön egy postafióknak külön jelszó
 
 ## Amit a rendszer nem tud
 
-- **A mentésből visszatöltésnek nincs felülete.** A fájl letölthető, de nincs gomb, amely visszaírná. Visszatöltéshez fejlesztő kell.
-- **Nincs időzített, napi automatikus mentés.** Az automatikus mentést csak az asszisztens módosítása indítja.
+- **A felhasználói fiókok nincsenek a mentésben, ezért a visszaállítás sem érinti őket.** A kollégák és a közös fiók dolgozói (WordPress-felhasználók) a rendszeren kívül maradnak; új gépen őket újra létre kell hozni.
+- **A külső hely beállításai a beállításokkal együtt utaznak.** Másik gépre importálva a Drive-kapcsolat és a mentési helyek is átkerülnek – ellenőrizd őket (**Kapcsolat próbája**), mielőtt a régi rendszert kikapcsolod.
+- **A Google Drive csak akkor marad összekapcsolva, ha az OAuth-állapot „Éles".** Tesztelés állapotban a Google 7 naponta lejáratja.
 - **Nincs kollégánkénti modul-jogosultság.**
 - **A csatolt fájlok és a felhasználói fiókok nincsenek a mentésben.** Ezekhez a szerver teljes mentése kell.
 - **A kézzel végzett módosításnak nincs visszaállító gombja.** Visszaállítani csak az asszisztens műveletét lehet.
@@ -215,7 +305,7 @@ A **Beállítások › Mentés** lapfülön. Csak adminisztrátor látja.
 
 ### Hogyan állítok vissza egy mentésből?
 
-A rendszerben erre nincs felület. A mentés fájlja letölthető, a visszatöltéshez fejlesztő segítsége kell. Gyors visszaállításra a szerver teljes mentése való.
+A **Beállítások › Mentés** lapon: a mentés mellett nyomd meg a **Visszaállítás…** gombot, nézd meg az előnézetet, és válaszd az **Adatok és beállítások** vagy a **Csak a beállítások** módot (kétlépcsős megerősítéssel). Előtte a rendszer biztonsági mentést készít a mostani állapotról, így a visszaállítás visszavonható. Részletek: lásd a **Visszaállítás mentésből** részt fent.
 
 ### Benne vannak a mentésben a csatolt fotók és a logó?
 
@@ -263,4 +353,20 @@ Ha a `wp-config.php` titkos kulcsai megváltoztak, a titkosított jelszavak és 
 
 ### Elég a rendszer saját mentése?
 
-Nem. Jó kiegészítés, de nincs benne minden, és nincs hozzá visszatöltő felület. A szerver teljes, rendszeres mentése nélkül ne élesíts.
+Nem teljesen. Az adatokat és a beállításokat a külső helyre másolt, titkosított mentés védi, és a **Beállítások › Mentés** lapról vissza is állítható. A csatolt fájlok és a felhasználói fiókok viszont nincsenek benne, ezért a szerver teljes, rendszeres mentése nélkül ne élesíts.
+
+### Hova érdemes külső mentést beállítani?
+
+Legalább egy, a szervertől **független** helyre: Google Drive, vagy a saját gép / NAS. Ha az irodában van NAS, az ingyenes és gyors; a Drive a másik telephelyről is elérhető. Két hely együtt a legbiztonságosabb.
+
+### Mit jelent az „előző napi" jelvény?
+
+A lista legutóbbi, **nem mai** mentését jelöli. Ez a mentés a megőrzött darabszámtól függetlenül mindig megmarad, hogy mindig legyen egy tegnapi állapotod.
+
+### Elfelejtettem a titkosító jelszót. Mit tegyek?
+
+A régi külső másolatok nem nyithatók meg a jelszó nélkül – ez a titkosítás lényege. A szerveren lévő (nem titkosított) helyi mentések viszont megvannak. Állíts be új jelszót a Beállítások › Mentés lapon: az új másolatok már azzal készülnek.
+
+### Költözés élesbe: mit vigyek át?
+
+A **Beállítások exportját**, ami a kulcsokat és minden beállítást tartalmaz. Lépések: lásd az **Export, import és költözés élesbe** részt.

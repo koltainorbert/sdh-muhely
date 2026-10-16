@@ -64,6 +64,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.73.0
+- **Külső, automatikus, jelszavas mentés + visszaállítás + Export/Import (HIBALISTA H3).** Új osztályok: `SDH_Muhely_Mentes_Titkos`
+  (libsodium: Argon2id + secretstream, `.sdhmentes`), `SDH_Muhely_Mentes_Cel` (Saját gép / NAS-mappa, NAS-WebDAV), `…_Ftp` (FTP/FTPS),
+  `…_Gdrive` (Google Drive, OAuth eszközkód, `drive.file`, folytatható feltöltés), `…_Vissza` (előnézet, visszaállítás, hordozható csomag),
+  `…_Felulet` (Beállítások › Mentés). Minden mentés után titkosított másolat a bekapcsolt helyekre; hiba esetén várakozó lista, 15 perces
+  újrapróba (max. 6), a napi futás mindig újrapróbál. Megőrzés: legfrissebb N + az **előző napi** + a visszaállítás előtti (helyben és a célon).
+- **Visszaállítás:** előnézet, majd teljes (adat + beállítás) vagy csak beállítás; előtte biztonsági mentés; egy tranzakció (hiba → ROLLBACK);
+  újabb verziójú mentés elutasítva. **Export/Import:** minden beállítás jelszavas fájlban; a `sdh1:` titkok a burkon belül nyíltan,
+  az új gépen újratitkosítva. Javítva: a mentés korábban hibásan kezelte az `ugyfel_szo` táblát (nincs `id` oszlopa) – kihagyva, a keresőindex újraépül.
+  Korlát: a WordPress-felhasználók nincsenek a mentésben. Teszt: t66 (titkosítás, célok, megőrzés, újrapróba), t67 (visszaállítás, Export/Import).
+  DB_VERSION változatlan (0.43.0).
+
 ### 0.72.0
 - **Közös fiók: „Ki vagy?” választó (HIBALISTA H2).** Új `SDH_Muhely_Szemely`. A közösnek jelölt fiókon a felület indulásakor
   név + PIN (4–8 számjegy) választás; amíg nincs, a rendszer AJAX-hívásai nem futnak (`admin_init` kapu, 403 `ki_vagy`).

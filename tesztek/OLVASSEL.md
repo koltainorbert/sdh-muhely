@@ -44,6 +44,9 @@ SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/út/a/wp-load.php php tesztek/futtat.php t22 
 | `t57-emlek` | mezőmemória (rögzítés, titokszűrő, kártyaszám, törlés, ki/be, AJAX), Leggyakoribb Számla tételek (alap, mentés, tételnév-felajánlás), a munkalap tételeinek elrejtése a számlán, eszközcsatolás-doboz, Beállítások › Űrlapok |
 | `t26-fust` | füstteszt: űrlap, rács, részletpanel, beállítások, asszisztens – PHP-figyelmeztetés nélkül |
 
+| `t66-kulso-mentes` | külső jelszavas mentés (H3): titkosítás körút / rossz jelszó / csonka és módosított fájl; megőrzés (N + előző napi + visszaállítás előtti); mappa, WebDAV (valódi HTTP-kiszolgálóval), FTP (valódi FTP-kiszolgálóval), Google Drive (hamis Google-válaszokkal); teljes folyamat, várakozás és újrapróba |
+| `t67-visszaallitas` | visszaállítás (H3): bájtra pontos sorok, NULL, titkos kulcsok újratitkosítása, biztonsági mentés és visszavonás, csak beállítások, Export/Import, ROLLBACK sérült fájlnál, verziókapu, zár, AJAX-folyamat |
+
 Új teszt: `tNN-nev.php`, az elején `require __DIR__ . '/_keret.php';`, a végén `T::vege('tNN név');`.
 A korábbi (0.42.0-ig írt) t14–t21 tesztek csak a felhős munkakörnyezetben éltek, és azzal együtt elvesztek –
 ezért kerültek a tesztek a repóba.

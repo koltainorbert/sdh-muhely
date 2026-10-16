@@ -213,6 +213,11 @@ $M::beallitas_mentes();
 $_POST = [];
 T::egyezik(3, $M::megtartas(), 'a megőrzött mentések száma állítható');
 
+// Tiszta lappal: a megőrzés az előző napi és a visszaállítás előtti mentést is védi (t66 / t67 hagyhat ilyet).
+foreach (glob($mappa . 'sdh-mentes-*.jsonl.gz') ?: [] as $regi_mentes) {
+    @unlink($regi_mentes);
+}
+
 for ($i = 0; $i < 4; $i++) {
     $M::keszit(true);
 }

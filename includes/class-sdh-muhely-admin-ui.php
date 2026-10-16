@@ -421,6 +421,10 @@ final class SDH_Muhely_Admin_UI
         wp_enqueue_style('sdh-muhely-szemely', SDH_MUHELY_URL . 'assets/szemely.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/szemely.css'));
         wp_enqueue_script('sdh-muhely-szemely', SDH_MUHELY_URL . 'assets/szemely.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/szemely.js'), true);
 
+        // Külső mentés, visszaállítás (0.73.0): Beállítások › Mentés.
+        wp_enqueue_style('sdh-muhely-mentes', SDH_MUHELY_URL . 'assets/mentes.css', ['sdh-muhely-admin'], self::eszkoz_verzio('assets/mentes.css'));
+        wp_enqueue_script('sdh-muhely-mentes', SDH_MUHELY_URL . 'assets/mentes.js', ['sdh-muhely-app'], self::eszkoz_verzio('assets/mentes.js'), true);
+
         // RMA (üzenetküldés, lapozás, olvasatlan-jelvény): minden oldalon,
         // mert a munkalap-popup bárhol megnyílhat.
         wp_enqueue_script(

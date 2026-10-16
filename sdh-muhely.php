@@ -3,7 +3,7 @@
  * Plugin Name:       SDH Műhely
  * Plugin URI:        https://sdh.hu
  * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.72.0
+ * Version:           0.73.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.72.0');
+define('SDH_MUHELY_VERSION', '0.73.0');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -106,6 +106,13 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-nyomtatvany.php'     => 'SDH_Muhely_Nyomtatvany',
     'includes/class-sdh-muhely-nyomtatas.php'       => 'SDH_Muhely_Nyomtatas',
     // Független napi mentés (az asszisztenstől függetlenül).
+    // H3 (0.73.0): külső mentés – titkosítás, célok (mappa, NAS, FTP, Google Drive), visszaállítás, felület.
+    'includes/class-sdh-muhely-mentes-titkos.php'   => 'SDH_Muhely_Mentes_Titkos',
+    'includes/class-sdh-muhely-mentes-cel.php'      => 'SDH_Muhely_Mentes_Cel',
+    'includes/class-sdh-muhely-mentes-ftp.php'      => 'SDH_Muhely_Mentes_Ftp',
+    'includes/class-sdh-muhely-mentes-gdrive.php'   => 'SDH_Muhely_Mentes_Gdrive',
+    'includes/class-sdh-muhely-mentes-vissza.php'   => 'SDH_Muhely_Mentes_Vissza',
+    'includes/class-sdh-muhely-mentes-felulet.php'  => 'SDH_Muhely_Mentes_Felulet',
     'includes/class-sdh-muhely-mentes.php'          => 'SDH_Muhely_Mentes',
     // Súgó: bemutató, dokumentáció, kérdés–válasz, túrák – a sugo/ mappa fejezeteiből.
     'includes/class-sdh-muhely-sugo.php'            => 'SDH_Muhely_Sugo',

@@ -258,7 +258,7 @@ final class SDH_Muhely_Beallitasok
             ],
             'mentes' => [
                 'cim' => 'Mentés', 'csoport' => 'rendszer',
-                'leiras' => 'A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés.',
+                'leiras' => 'A napi automatikus mentés, külső helyre (Google Drive, FTP, NAS, saját gép) jelszóval titkosítva, visszaállítás, a beállítások exportja és importja.',
                 'rajz' => [SDH_Muhely_Mentes::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Mentes::class, 'beallitas_mentes'],
             ],
             'naplo' => [
