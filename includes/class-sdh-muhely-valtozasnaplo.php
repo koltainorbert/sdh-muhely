@@ -1314,6 +1314,7 @@ final class SDH_Muhely_Valtozasnaplo
             'beszallito' => 'Beszállító', 'sms_sablon' => 'SMS-sablon', 'sms_szabaly' => 'SMS-szabály', 'sms_uzenet' => 'SMS',
             'sms_dontes' => 'SMS-döntés', 'sms_leiratkozas' => 'SMS-leiratkozás', 'csatolmany' => 'Csatolmány',
             'beallitas' => 'Beállítás', 'valtozasnaplo' => 'Napló', 'naplo' => 'Napló',
+            'felhasznalo' => 'Fiók', 'atvetel' => 'Adatátvétel',
         ];
 
         return $n[$t] ?? self::emberi($t);
@@ -1502,6 +1503,18 @@ final class SDH_Muhely_Valtozasnaplo
     }
 
     /** Egy rekord rövid neve (pl. „Munkalap 000123 – Minta Márta"). */
+    /** @return array<string, true> a rendszer saját táblái (kérésenként egyszer). */
+    private static function sajat_tablak(): array
+    {
+        static $t = null;
+
+        if ($t === null) {
+            $t = array_fill_keys(SDH_Muhely_Asszisztens_Tudas::mentendo_tablak(), true);
+        }
+
+        return $t;
+    }
+
     public static function rekord_cimke(string $tipus, int $id): string
     {
         global $wpdb;
@@ -1523,7 +1536,16 @@ final class SDH_Muhely_Valtozasnaplo
         $cimke = self::tabla_nev($tipus) . ' #' . $id;
 
         try {
-            if (in_array($tipus, self::KIHAGYOTT, true) || preg_match('/^[a-z_]+$/', $tipus) !== 1) {
+            // 0.95.1: a fiók (felhasználó) nem saját tábla – a nevét a fiókból vesszük.
+            if ($tipus === 'felhasznalo') {
+                $u = get_userdata($id);
+
+                return self::$cimke_gyorsitotar[$kulcs] = 'Fiók: ' . ($u ? (string) $u->display_name : '#' . $id . ' (már nincs meg)');
+            }
+
+            // Csak a rendszer létező saját táblája kérdezhető le (pl. az „atvetel” esemény nem tábla).
+            if (in_array($tipus, self::KIHAGYOTT, true) || preg_match('/^[a-z_]+$/', $tipus) !== 1
+                || !isset(self::sajat_tablak()[SDH_Muhely_Schema::tabla($tipus)])) {
                 return self::$cimke_gyorsitotar[$kulcs] = $cimke;
             }
 

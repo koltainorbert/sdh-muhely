@@ -64,6 +64,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.95.2
+- Javítás (a teljes tesztsor `WP_DEBUG` naplóval futtatva): a Napló a „Fiók” (`felhasznalo`) és az „Adatátvétel” (`atvetel`)
+  eseményeknél nem létező táblát kérdezett (`sdh_felhasznalo`) – most a fiók nevét mutatja, és csak a rendszer saját tábláit
+  kérdezi le (`Valtozasnaplo::sajat_tablak`). A debug-napló a teljes tesztsor után üres.
+
 ### 0.95.1
 - **H5b – új jog: „Tételár átírása a lapon”** (`tetel_ar`; alapból Admin, Kolléga, Pénztáros; a mentett szerepkészletben a
   Kolléga alapértékét kapja). Jog nélkül a munkalap mentése elutasít, ha egy meglévő tétel ára / kedvezménye változott, vagy egy új
