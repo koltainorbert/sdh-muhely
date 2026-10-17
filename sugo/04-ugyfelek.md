@@ -206,7 +206,7 @@ Jó tudni:
 
 - **Nem vonható vissza.** A régi adatokat csak egy korábbi mentésből lehetne visszahozni.
 - A **levelezés** postafiókjában lévő e-maileket a rendszer nem törli (azok a levelezőszerveren vannak) – ha kell, ott töröld.
-- A **naptár** bejegyzéseinek szövegét nézd át kézzel, ha írtál bele nevet.
+- Az ügyfélhez kötött **naptár**bejegyzések (például az online foglalás) címe és leírása is törlődik. A nem az ügyfélhez kötött bejegyzések szövegét nézd át kézzel, ha írtál bele nevet.
 - Ha később újra jön, új ügyfélként veszed fel.
 
 ## Szabályok, amiket a rendszer betart

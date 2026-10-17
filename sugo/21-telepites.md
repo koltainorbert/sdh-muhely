@@ -108,6 +108,10 @@ A telepítés csak a műhelyé, ezért a rendszer nem mutat mást: a kezdőlap, 
 
 A rendszer magától megnézi, van-e újabb verzió a GitHubon (kb. félnaponta, és amikor te kéred). Ha van, a **Beállítások** minden lapfülének tetején megjelenik: **Frissítés elérhető: …**, a WordPress **Bővítmények** oldalán pedig a szokásos „Új verzió érhető el” jelzés.
 
+### A forrás beállítása
+
+A **Beállítások › Névjegy › Frissítés** dobozban a **Forrás beállítása** részben adod meg a GitHub-tárolót (`tulajdonos/név`), az ágat és – privát tárolóhoz – a hozzáférési kulcsot (csak olvasási jog kell). A kulcs titkosítva tárolódik; ha üresen hagyod, a régi marad, a **kulcs törlése** pipával törölhető. Licenccel (központtal) a frissítés a központból jön, ezt a mezőt nem használja.
+
 ### Lépésről lépésre: frissítés a gombbal
 
 1. Nyisd meg a **Beállítások › Névjegy** lapfület. A **Frissítés** dobozban látod a telepített és a legújabb verziót.

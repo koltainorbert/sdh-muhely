@@ -545,6 +545,12 @@ final class SDH_Muhely_Asszisztens_Tudas
             $ir(['o' => $o['option_name'], 'v' => $o['option_value']]);
         }
 
+        // 0.95.0 (H3b): a fiókok is a mentésben (költözéshez): név, e-mail, jelszó-LENYOMAT, szerep, a rendszer saját
+        // beállításai. A kétlépcsős titok (az új gépen úgysem fejthető vissza) és az ideiglenes támogatási fiók nem.
+        foreach (self::mentendo_fiokok() as $f) {
+            $ir(['f' => $f]);
+        }
+
         if (!gzclose($gz)) {
             $hibas = true;
         }
@@ -563,6 +569,50 @@ final class SDH_Muhely_Asszisztens_Tudas
         self::mentes_takarit($nev);
 
         return ['fajl' => $nev, 'meret' => $meret, 'sorok' => $sorok];
+    }
+
+    /**
+     * A mentendő fiókok (H3b, 0.95.0).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function mentendo_fiokok(): array
+    {
+        global $wpdb;
+
+        $ki = [];
+
+        foreach (get_users(['fields' => 'all', 'orderby' => 'ID']) as $u) {
+            if (get_user_meta((int) $u->ID, 'sdh_muhely_tamogatas', true) !== '') {
+                continue;
+            }
+
+            $meta  = [];
+            $sorok = $wpdb->get_results($wpdb->prepare("SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE user_id = %d", (int) $u->ID), ARRAY_A); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+            foreach ((array) $sorok as $m) {
+                $k = (string) $m['meta_key'];
+
+                if ((str_starts_with($k, 'sdh_') || in_array($k, ['first_name', 'last_name', 'nickname'], true))
+                    && preg_match('/ketlepcsos|2fa|totp|tamogatas|session/i', $k) !== 1) {
+                    $meta[$k] = (string) $m['meta_value'];
+                }
+            }
+
+            $ki[] = [
+                'id'        => (int) $u->ID,
+                'login'     => (string) $u->user_login,
+                'pass'      => (string) $u->user_pass,
+                'email'     => (string) $u->user_email,
+                'nev'       => (string) $u->display_name,
+                'nicename'  => (string) $u->user_nicename,
+                'regisztralt' => (string) $u->user_registered,
+                'szerepek'  => array_values((array) $u->roles),
+                'meta'      => $meta,
+            ];
+        }
+
+        return $ki;
     }
 
     /** Naponta az első módosítás előtt teljes mentés. */

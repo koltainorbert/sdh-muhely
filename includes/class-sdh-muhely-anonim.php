@@ -180,6 +180,19 @@ final class SDH_Muhely_Anonim
                 $wpdb->update(self::t('uzenet'), ['szoveg' => '(anonimizálva)'], ['ugyfel_id' => $id]);
             }
 
+            // 0.95.0 (H8b): az ügyfélhez kötött naptárbejegyzések (pl. online foglalás) címe, leírása és elérhetősége.
+            foreach ((array) $wpdb->get_results($wpdb->prepare('SELECT id FROM ' . self::t('naptar_esemeny') . ' WHERE ugyfel_id = %d', $id)) as $np) {
+                $wpdb->update(self::t('naptar_esemeny'), [
+                    'cim'             => 'Anonimizált ügyfél (' . $szam . ')',
+                    'leiras'          => '(anonimizálva)',
+                    'foglalo_email'   => '',
+                    'foglalo_telefon' => '',
+                ], ['id' => (int) $np->id]);
+            }
+
+            // Az elégedettségi megjegyzés (az ügyfél saját szövege) a munkalapjain.
+            $wpdb->query($wpdb->prepare('UPDATE ' . self::t('munkalap') . " SET elegedettseg_szoveg = '' WHERE ugyfel_id = %d AND elegedettseg_szoveg <> ''", $id)); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
             if ($regi_ertekek !== []) {
                 $hely = implode(',', array_fill(0, count($regi_ertekek), '%s'));
                 $wpdb->query($wpdb->prepare('DELETE FROM ' . self::t('mezo_emlek') . " WHERE ertek IN ({$hely})", ...$regi_ertekek)); // phpcs:ignore WordPress.DB.PreparedSQL

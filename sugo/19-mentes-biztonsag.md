@@ -80,13 +80,14 @@ A napi mentés nem függ az asszisztenstől: akkor is elkészül, ha az assziszt
 **Mit tartalmaz:**
 
 - a rendszer minden saját adattábláját (ügyfelek, eszközök, munkalapok, pénztár, számlák, üzenetek, naptár és a többi),
-- a rendszer minden beállítását (az `sdh_muhely_` kezdetű opciókat).
+- a rendszer minden beállítását (az `sdh_muhely_` kezdetű opciókat),
+- a **fiókokat**: belépési név, e-mail, a jelszó lenyomata (maga a jelszó soha), a szerep és a rendszerbeli beállítások. Visszaállításkor a hiányzó fiók újra létrejön (ugyanazzal a jelszóval beléphet), a meglévőhöz nem nyúl a rendszer.
 
 **Mit nem tartalmaz:**
 
 - a TAC-adatbázist és a levelek gyorsítótárát – ezek újra előállíthatók,
 - a csatolt fájlokat, a logót és a feltöltött képeket (ezek a szerver feltöltési mappájában vannak),
-- a felhasználói fiókokat és a jelszavakat (ezeket a rendszer külön, a mentésen kívül kezeli),
+- a kétlépcsős belépés titkait (költözés után ezt mindenki újra beállítja) és az ideiglenes támogatási fiókokat,
 - magukat a leveleket (azok a levelezőszerveren vannak).
 
 **Hol tárolódik:** a szerveren, a feltöltött fájlok mappájában (`sdh-muhely-mentes/`). A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.

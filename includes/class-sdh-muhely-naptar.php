@@ -415,7 +415,7 @@ final class SDH_Muhely_Naptar
             <p class="sdh-sugo">
                 A megjelölt („E-mail értesítés") és a „Nagyon fontos" eseményekről levél megy a naptár gazdájának és a
                 résztvevőknek: az első emlékeztető idején, emlékeztető nélkül a kezdéskor. A cím a személy adatlapján
-                áll (többfelhasználós módban a fiók e-mail-címe). A levelet a WordPress küldi – ugyanazon az úton, mint a
+                áll (többfelhasználós módban a fiók e-mail-címe). A levelet a rendszer levélküldője küldi – ugyanazon az úton, mint a
                 rendszer többi értesítőjét.
             </p>
 

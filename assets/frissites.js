@@ -104,3 +104,48 @@
         betolt();
     }
 })();
+
+/* H4b (0.95.0): a frissítés forrása (tároló, ág, hozzáférési kulcs) – csak fejlesztőnek. */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (e) {
+        var g = e.target.closest && e.target.closest('[data-sdh-forras-ment]');
+
+        if (!g) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var doboz = g.closest('[data-sdh-frissites]');
+        var r = g.closest('[data-sdh-frissites-forras]');
+        var uzenet = r.querySelector('[data-sdh-forras-uzenet]');
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+        var token = r.querySelector('[data-sdh-forras-token]');
+
+        fd.set('action', 'sdh_muhely_frissites_forras');
+        fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
+        fd.set('repo', r.querySelector('[data-sdh-forras-repo]').value);
+        fd.set('ag', r.querySelector('[data-sdh-forras-ag]').value);
+        fd.set('token', token.value);
+        fd.set('torol', r.querySelector('[data-sdh-forras-torol]').checked ? '1' : '');
+        g.disabled = true;
+
+        fetch(doboz.getAttribute('data-ajax') || B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                g.disabled = false;
+                uzenet.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+
+                if (v && v.success) {
+                    token.value = '';
+                }
+            })
+            .catch(function () {
+                g.disabled = false;
+                uzenet.textContent = 'Nincs kapcsolat a szerverrel.';
+            });
+    });
+}());

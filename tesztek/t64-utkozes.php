@@ -423,4 +423,17 @@ T::tartalmaz($css, '.sdh-zar-doboz', 'CSS: zárolás-doboz');
 require_once ABSPATH . 'wp-admin/includes/user.php';
 wp_delete_user($admin_b);
 
+// 0.95.0 (H1b): a Napi árukiadás és a Rendelés megnyitója is zárol.
+unset($_REQUEST['szerk_fiok']);
+delete_option(SDH_Muhely_Utkozes::OPT);
+foreach (['arukiadas' => 'arukiadas', 'rendelesek' => 'rendeles'] as $modul => $fajta) {
+    $lap = SDH_Muhely_Munkalap::letrehoz(['fajta' => $fajta, 'allapot' => 'nyitott', 'ugyfel_id' => $u, 'keszult' => current_time('Y-m-d')]);
+    delete_transient('sdh_muhely_szerk_pulzus_munkalap_' . (int) $lap);
+    wp_set_current_user($admin_a);
+    T::igaz($megnyilt($nyit($modul, (int) $lap, 'aaaaaaaa7')), $modul . ': az első megnyitás sikeres');
+    // Ugyanaz a felhasználó, másik ablak (gép): az is zárolás.
+    T::igaz($blokkolt($nyit($modul, (int) $lap, 'bbbbbbbb7')), $modul . ': a második ablak zárolás-dobozt kap');
+}
+wp_set_current_user($admin_a);
+
 T::vege('t64 párhuzamos szerkesztés (H1)');

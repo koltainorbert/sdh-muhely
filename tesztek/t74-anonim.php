@@ -38,6 +38,9 @@ $ml = t_munkalap($u, [$e]);
 $wpdb->update($T('munkalap'), ['rma_token' => 'tokenT74' . wp_rand(1000, 9999)], ['id' => $ml]);
 $wpdb->insert($T('uzenet'), ['munkalap_id' => $ml, 'ugyfel_id' => $u, 'irany' => 'be', 'szoveg' => 'Itt Géza, hívjanak a ' . $telefon . ' számon', 'letrehozva' => current_time('mysql')]);
 $wpdb->insert($T('sms_uzenet'), ['munkalap_id' => $ml, 'ugyfel_id' => $u, 'szam' => $telefon, 'szam_eredeti' => $telefon, 'szoveg' => 'Kész a telefonja, Géza', 'kovetes_token' => 'kovT74', 'letrehozva' => current_time('mysql')]);
+$wpdb->insert($T('naptar_esemeny'), ['szemely_id' => 1, 'cim' => $nev . ' – online foglalás', 'leiras' => 'Telefon: ' . $telefon, 'kezdet' => '2031-01-01 10:00:00', 'veg' => '2031-01-01 10:30:00', 'ugyfel_id' => $u, 'forras' => 'online', 'foglalo_email' => $email, 'foglalo_telefon' => $telefon]);
+$np_t74 = (int) $wpdb->insert_id;
+$wpdb->update($T('munkalap'), ['elegedettseg' => 2, 'elegedettseg_szoveg' => 'Géza vagyok, rossz volt'], ['id' => $ml]);
 $wpdb->insert($T('mezo_emlek'), ['kulcs' => 'ugyfel.nev', 'lenyomat' => md5('t74' . $nev . wp_rand()), 'ertek' => $nev, 'utolso' => current_time('mysql')]);
 $wpdb->insert($T('mezo_emlek'), ['kulcs' => 'munkalap.megjegyzes', 'lenyomat' => md5('t74masik' . wp_rand()), 'ertek' => 'Nem személyes T74', 'utolso' => current_time('mysql')]);
 
@@ -125,6 +128,10 @@ T::egyezik('***' . substr($telefon, -2), (string) $sms->szam_eredeti, 'az eredet
 T::egyezik('(anonimizálva)', (string) $sms->szoveg, 'az SMS szövege törölve');
 T::egyezik('', (string) $sms->kovetes_token, 'az SMS követő linkje megszűnt');
 T::egyezik(0, (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $T('mezo_emlek') . ' WHERE ertek = %s', $nev)), 'a mezőmemóriából a neve kiment');
+$np = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $T('naptar_esemeny') . ' WHERE id = %d', $np_t74));
+T::igaz(!str_contains((string) $np->cim, 'Géza') && (string) $np->leiras === '(anonimizálva)' && (string) $np->foglalo_email === '' && (string) $np->foglalo_telefon === '', 'a naptárbejegyzés (online foglalás) is anonim (H8b)');
+T::egyezik('', (string) $wpdb->get_var($wpdb->prepare('SELECT elegedettseg_szoveg FROM ' . $T('munkalap') . ' WHERE id = %d', $ml)), 'az elégedettségi megjegyzés törölve');
+T::egyezik(2, (int) $wpdb->get_var($wpdb->prepare('SELECT elegedettseg FROM ' . $T('munkalap') . ' WHERE id = %d', $ml)), 'az értékelés száma marad (riport)');
 T::igaz((int) $wpdb->get_var("SELECT COUNT(*) FROM " . $T('mezo_emlek') . " WHERE ertek = 'Nem személyes T74'") >= 1, 'a többi emlék marad');
 
 // A napló: egy esemény, és a törölt adatok nem kerültek bele újra.

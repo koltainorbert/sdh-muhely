@@ -748,6 +748,7 @@ final class SDH_Muhely_Mentes_Felulet
 
         wp_send_json_success([
             'uzenet' => 'Visszaállítva: ' . $r['tablak'] . ' tábla, ' . $r['sorok'] . ' sor, ' . $r['opciok'] . ' beállítás. '
+                . (!empty($r['fiokok']['uj']) || !empty($r['fiokok']['mas_azon']) ? 'Új fiók: ' . ((int) ($r['fiokok']['uj'] ?? 0) + (int) ($r['fiokok']['mas_azon'] ?? 0)) . ' (a kétlépcsős belépést újra be kell állítaniuk). ' : '')
                 . 'A visszaállítás előtti állapot elmentve: ' . $r['biztonsagi'] . '.',
         ]);
     }

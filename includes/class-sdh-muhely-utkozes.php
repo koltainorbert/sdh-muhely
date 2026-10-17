@@ -66,7 +66,8 @@ final class SDH_Muhely_Utkozes
         add_filter('sdh_muhely_pulzus', [self::class, 'pulzus'], 20, 2);
 
         // A zárolás kapuja: a megnyitó kérés ELSŐ kezelője (a rekord saját kezelője előtt fut).
-        foreach (['munkalap' => 'munkalapok', 'ugyfel' => 'ugyfelek', 'eszkoz' => 'eszkozok'] as $tipus => $modul) {
+        // 0.95.0 (H1b): a Napi árukiadás és a Rendelés ugyanaz a munkalap-rekord, saját megnyitóval – őket is védi.
+        foreach (['munkalapok' => 'munkalap', 'arukiadas' => 'munkalap', 'rendelesek' => 'munkalap', 'ugyfelek' => 'ugyfel', 'eszkozok' => 'eszkoz'] as $modul => $tipus) {
             add_action('wp_ajax_sdh_muhely_' . $modul . '_urlap', static function () use ($tipus): void {
                 self::kapu($tipus);
             }, 1);

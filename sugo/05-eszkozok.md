@@ -216,7 +216,7 @@ Minden mockup egy sor:
 
 | Mező | Mire való |
 |---|---|
-| **Kép** | Az előnézet alatt a kép címe. **Feltöltés…** – kép a gépről; **Kép törlése** – kép nélkül a sor nem jelenik meg az eszközöknél. Ide beilleszthetsz külső képcímet is (például a Magnificből kimásolt linket): mentéskor a rendszer letölti a saját médiatárába, így akkor is megmarad, ha a külső link lejár. |
+| **Kép** | Az előnézet alatt a kép címe. **Feltöltés…** – kép a gépről; **Kép törlése** – kép nélkül a sor nem jelenik meg az eszközöknél. Ide beilleszthetsz külső képcímet is (például a Magnificből kimásolt linket): mentéskor a rendszer letölti a saját képei közé, így akkor is megmarad, ha a külső link lejár. |
 | **Név** | A mockup neve, például *Telefon*. |
 | **Gyártó (nem kötelező)** | Csak ennek a gyártónak az eszközeire illik. |
 | **Típus tartalmazza (nem kötelező)** | Vesszővel több részlet is megadható, például *iPhone, Galaxy S*. |
@@ -225,7 +225,7 @@ Minden mockup egy sor:
 | **Generáló szöveg (prompt)** | Lenyitva a kész szöveg. **Másolás** – a vágólapra; **Megnyitás a Magnificben** – új lapon nyílik. |
 | **×** | A sor törlése (két kattintás: *Biztosan?*). A mentéskor kerül le. |
 
-Az **Új mockup** gombbal új sor kerül a lista végére. A **Gyári készlet visszaállítása mentéskor** pipával a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek a médiatárban maradnak).
+Az **Új mockup** gombbal új sor kerül a lista végére. A **Gyári készlet visszaállítása mentéskor** pipával a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek megmaradnak).
 
 ### Lépésről lépésre: új mockup a Magnific segítségével
 

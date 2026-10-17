@@ -230,4 +230,22 @@ foreach ([$M::OPT, $M::CACHE] as $o) {
     delete_transient($o);
 }
 
+// H4b (0.95.0): a forrás a Névjegy lapról állítható.
+$regi_f = get_option($M::OPT);
+T::tartalmaz($M::forras_ment('rossz', 'main', '', false), 'tulajdonos/név', 'hibás tároló: elutasítva');
+T::egyezik('', $M::forras_ment('ceg/sajat-repo', 'stabil', 'ghp_UJKULCS', false), 'forrás mentve');
+T::egyezik(['ceg/sajat-repo', 'stabil', 'ghp_UJKULCS'], [$M::forras()['repo'], $M::forras()['ag'], $M::forras()['token']], 'tároló, ág, kulcs');
+T::nem_tartalmaz((string) wp_json_encode(get_option($M::OPT)), 'ghp_UJKULCS', 'a kulcs titkosítva tárolódik');
+$M::forras_ment('ceg/sajat-repo', 'stabil', '', false);
+T::egyezik('ghp_UJKULCS', $M::forras()['token'], 'üres mezővel a régi kulcs marad');
+$M::forras_ment('ceg/sajat-repo', 'stabil', '', true);
+T::egyezik('', $M::forras()['token'], 'a kulcs törölhető');
+$v = t_ajax('sdh_muhely_frissites_forras', ['repo' => 'ceg/masik', 'ag' => 'main'], '_wpnonce', 'sdh_muhely_modal');
+T::igaz(!empty($v['success']) && $M::forras()['repo'] === 'ceg/masik', 'AJAX: mentés');
+ob_start();
+$M::doboz();
+T::tartalmaz((string) ob_get_clean(), 'data-sdh-forras-ment', 'a Névjegy lapon a forrás-űrlap');
+$regi_f === false ? delete_option($M::OPT) : update_option($M::OPT, $regi_f);
+delete_transient($M::CACHE);
+
 T::vege('t68 frissítés a GitHubról (H4): verzió, hibák, WordPress-bekötés, csomagmappa, védelmek, felület');

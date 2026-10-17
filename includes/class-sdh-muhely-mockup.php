@@ -335,7 +335,7 @@ final class SDH_Muhely_Mockup
             </p>
             <p class="sdh-sugo sdh-sugo--utolso">
                 Új kép: töltsd fel a <strong>Feltöltés…</strong> gombbal, vagy illessz be egy képcímet (pl. a Magnificből
-                kimásolt linket) – mentéskor a rendszer letölti a saját médiatárába, így a kép akkor is megmarad,
+                kimásolt linket) – mentéskor a rendszer letölti a saját képei közé, így a kép akkor is megmarad,
                 ha a külső link lejár. Ugyanilyen stílusú képhez másold ki a mockup <strong>generáló szövegét</strong>,
                 és a Magnificben vedd le a hátterét (Remove background), hogy átlátszó legyen.
             </p>
@@ -363,7 +363,7 @@ final class SDH_Muhely_Mockup
 
             <div class="sdh-mockup-gombok">
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-mockup-uj><span class="sdh-plusz" aria-hidden="true"></span>Új mockup</button>
-                <label class="sdh-jelolo" title="Mentéskor a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek a médiatárban maradnak).">
+                <label class="sdh-jelolo" title="Mentéskor a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek megmaradnak).">
                     <input type="checkbox" name="mockup_gyari" value="1"> Gyári készlet visszaállítása mentéskor
                 </label>
             </div>

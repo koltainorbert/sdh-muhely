@@ -363,10 +363,15 @@ final class SDH_Muhely_Szamla
 
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="szamla_logo">Logó a nyomtatványon</label>
-                    <input type="text" name="szamla_logo" id="szamla_logo" maxlength="300" value="<?php echo esc_attr((string) $b['logo']); ?>"
-                           placeholder="(a beépített logó)">
+                    <div class="sdh-rma-media" data-sdh-media="image">
+                        <input type="text" name="szamla_logo" id="szamla_logo" maxlength="300" value="<?php echo esc_attr((string) $b['logo']); ?>"
+                               placeholder="(a beépített logó)">
+                        <button type="button" class="sdh-gomb" data-sdh-media-valaszt>Feltöltés…</button>
+                        <button type="button" class="sdh-gomb" data-sdh-media-torol<?php echo (string) $b['logo'] === '' ? ' hidden' : ''; ?>>Törlés</button>
+                        <span class="sdh-rma-media__elo" data-sdh-media-elo><?php if ((string) $b['logo'] !== '') : ?><img src="<?php echo esc_url((string) $b['logo']); ?>" alt=""><?php endif; ?></span>
+                    </div>
                     <span class="sdh-mezo__sugo">
-                        Üresen a pluginnal szállított logó. Másikhoz töltsd fel a Médiatárba (PNG vagy JPG), és másold ide a fájl címét.
+                        Üresen a rendszerrel érkező logó. Saját logóhoz a <strong>Feltöltés…</strong> gombbal válassz képet (PNG vagy JPG).
                     </span>
                 </div>
             </div>

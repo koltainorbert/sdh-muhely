@@ -465,6 +465,7 @@ final class SDH_Muhely_Mentes_Vissza
         $hiba     = null;
         $sorok    = 0;
         $opciok   = 0;
+        $fiokok   = ['uj' => 0, 'mas_azon' => 0, 'megvolt' => 0];
 
         $wpdb->suppress_errors(true);
         $wpdb->query('START TRANSACTION');
@@ -579,6 +580,23 @@ final class SDH_Muhely_Mentes_Vissza
                 continue;
             }
 
+            // 0.95.0 (H3b): fiókok. A meglévőhöz (azonos belépési név) nem nyúl; a hiányzót létrehozza – ha lehet,
+            // ugyanazzal az azonosítóval (a munkalapok felelőse, a napló stb. erre hivatkozik).
+            if (isset($a['f'])) {
+                if ($mod === 'teljes' && is_array($a['f'])) {
+                    $e = self::fiok_vissza($a['f']);
+
+                    if ($e === 'hiba') {
+                        $hiba = 'Adatbázis-hiba a(z) ' . (string) ($a['f']['login'] ?? '') . ' fióknál: ' . $wpdb->last_error;
+                        break;
+                    }
+
+                    $fiokok[$e] = ($fiokok[$e] ?? 0) + 1;
+                }
+
+                continue;
+            }
+
             if (isset($a['o'])) {
                 $nev = (string) $a['o'];
 
@@ -623,7 +641,75 @@ final class SDH_Muhely_Mentes_Vissza
         $wpdb->query('COMMIT');
         $wpdb->suppress_errors(false);
 
-        return ['tablak' => count($tablak), 'sorok' => $sorok, 'opciok' => $opciok];
+        return ['tablak' => count($tablak), 'sorok' => $sorok, 'opciok' => $opciok, 'fiokok' => $fiokok];
+    }
+
+    /**
+     * Egy mentett fiók visszaállítása. 'megvolt' | 'uj' | 'mas_azon' | 'hiba'.
+     *
+     * @param array<string, mixed> $f
+     */
+    public static function fiok_vissza(array $f): string
+    {
+        global $wpdb;
+
+        $login = sanitize_user((string) ($f['login'] ?? ''), true);
+
+        if ($login === '' || username_exists($login)) {
+            return 'megvolt';
+        }
+
+        $email = sanitize_email((string) ($f['email'] ?? ''));
+
+        if ($email !== '' && email_exists($email)) {
+            $email = '';
+        }
+
+        $id     = (int) ($f['id'] ?? 0);
+        $foglalt = $id <= 0 || (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->users} WHERE ID = %d", $id)) > 0; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $sor    = [
+            'user_login'      => $login,
+            'user_pass'       => (string) ($f['pass'] ?? ''),
+            'user_email'      => $email,
+            'user_nicename'   => sanitize_title((string) ($f['nicename'] ?? $login)),
+            'display_name'    => sanitize_text_field((string) ($f['nev'] ?? $login)),
+            'user_registered' => (string) ($f['regisztralt'] ?? current_time('mysql', true)),
+        ];
+
+        if (!$foglalt) {
+            $sor['ID'] = $id;
+        }
+
+        if ($wpdb->insert($wpdb->users, $sor) === false) {
+            return 'hiba';
+        }
+
+        $uj = $foglalt ? (int) $wpdb->insert_id : $id;
+        clean_user_cache($uj);
+
+        $u = new WP_User($uj);
+        $elso = true;
+
+        foreach ((array) ($f['szerepek'] ?? []) as $szerep) {
+            if (!is_string($szerep) || get_role($szerep) === null) {
+                continue;
+            }
+
+            $elso ? $u->set_role($szerep) : $u->add_role($szerep);
+            $elso = false;
+        }
+
+        if ($elso) {
+            $u->set_role(get_option('default_role', 'subscriber'));
+        }
+
+        foreach ((array) ($f['meta'] ?? []) as $k => $v) {
+            if (is_string($k) && is_string($v)) {
+                update_user_meta($uj, $k, maybe_unserialize($v));
+            }
+        }
+
+        return $foglalt ? 'mas_azon' : 'uj';
     }
 
     /** Futási állapot-e (visszaállításkor sosem írjuk). */

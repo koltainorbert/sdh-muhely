@@ -195,7 +195,7 @@ A Beállítások **Pénz és eladás** csoportjában találod a **Számlázás**
 - **Kiállító neve**, **Adószám**, **Cím – irányítószám, település**, **Cím – utca, házszám** – a nyomtatvány fejlécébe kerülnek.
 - **Bank neve**, **Bankszámlaszám** – szintén a fejlécbe.
 - **Levelezési cím (lábléc)**, **Telefon (lábléc)** – a nyomtatvány aljára.
-- **Logó a nyomtatványon** – üresen a rendszerrel érkező logó. Saját logóhoz töltsd fel a képet (PNG vagy JPG) a Médiatárba, és másold ide a fájl címét.
+- **Logó a nyomtatványon** – üresen a rendszerrel érkező logó. Saját logóhoz a **Feltöltés…** gombbal válassz képet (PNG vagy JPG).
 
 > **Fontos:** A kiállító itt megadott adatai csak a helyi nyomtatványra kerülnek. A valódi számlán a kiállító adatai a Számlázz.hu-fiókodból jönnek.
 

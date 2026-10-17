@@ -10893,3 +10893,14 @@ button.sdh-allapot,
 .sdh-adatatvetel [hidden] {
     display: none !important;
 }
+
+/* Frissítés forrása (H4b, 0.95.0) */
+.sdh-frissites__forras {
+    margin: calc(8px * var(--sdh-n)) 0;
+}
+
+.sdh-frissites__forras summary {
+    cursor: pointer;
+    color: var(--sdh-accent-szoveg);
+    font-size: calc(12.5px * var(--sdh-n));
+}

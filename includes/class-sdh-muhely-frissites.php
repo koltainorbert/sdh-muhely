@@ -33,6 +33,7 @@ final class SDH_Muhely_Frissites
         add_filter('http_request_args', [self::class, 'kerelem_fejlec'], 10, 2);
         add_action('wp_ajax_sdh_muhely_frissites_ellenorzes', [self::class, 'ajax_ellenorzes']);
         add_action('wp_ajax_sdh_muhely_frissites_indit', [self::class, 'ajax_indit']);
+        add_action('wp_ajax_sdh_muhely_frissites_forras', [self::class, 'ajax_forras']);
     }
 
     /* =================================================================
@@ -301,7 +302,7 @@ final class SDH_Muhely_Frissites
                 <tbody>
                     <tr><th>Telepített verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
                     <tr><th>Legújabb verzió</th><td><code data-sdh-frissites-uj><?php echo esc_html($uj['verzio'] !== '' ? $uj['verzio'] : '–'); ?></code></td></tr>
-                    <tr><th>Forrás</th><td><code><?php echo esc_html('github.com/' . $f['repo'] . ' (' . $f['ag'] . ')'); ?></code></td></tr>
+                    <tr><th>Forrás</th><td><code><?php echo esc_html(class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol() ? 'a licenc központja' : 'github.com/' . $f['repo'] . ' (' . $f['ag'] . ')'); ?></code></td></tr>
                 </tbody>
             </table>
 
@@ -325,6 +326,27 @@ final class SDH_Muhely_Frissites
                 <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-frissites-ellenorzes>Ellenőrzés most</button>
                 <button type="button" class="sdh-gomb sdh-gomb--elsodleges" data-sdh-frissites-indit<?php echo $ujabb && !$git ? '' : ' hidden'; ?>>Frissítés most</button>
             </p>
+            <details class="sdh-frissites__forras" data-sdh-frissites-forras>
+                <summary>Forrás beállítása (GitHub-tároló, ág, hozzáférési kulcs)</summary>
+                <div class="sdh-mezok">
+                    <div class="sdh-mezo">
+                        <label for="frissites_repo">Tároló (tulajdonos/név)</label>
+                        <input type="text" id="frissites_repo" data-sdh-forras-repo value="<?php echo esc_attr($f['repo']); ?>" spellcheck="false">
+                    </div>
+                    <div class="sdh-mezo">
+                        <label for="frissites_ag">Ág</label>
+                        <input type="text" id="frissites_ag" data-sdh-forras-ag value="<?php echo esc_attr($f['ag']); ?>" spellcheck="false">
+                    </div>
+                    <div class="sdh-mezo sdh-mezo--szeles">
+                        <label for="frissites_token">Hozzáférési kulcs (privát tárolóhoz; csak olvasási jog kell)</label>
+                        <input type="password" id="frissites_token" data-sdh-forras-token autocomplete="new-password" placeholder="<?php echo esc_attr($f['token'] !== '' ? 'megadva – üresen marad a régi' : 'nincs megadva'); ?>">
+                        <label class="sdh-mezo__sugo"><input type="checkbox" data-sdh-forras-torol> a kulcs törlése</label>
+                    </div>
+                </div>
+                <p><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-forras-ment>Forrás mentése</button>
+                    <span class="sdh-mezo__sugo" data-sdh-forras-uzenet role="status"></span></p>
+            </details>
+
             <p class="sdh-sugo sdh-sugo--utolso">
                 A frissítés előtt a rendszer teljes mentést készít, és csak utána cserél. Az adatok és a beállítások megmaradnak.
                 A csere néhány másodpercig tart; közben a felület rövid időre „karbantartás alatt” állapotot mutathat.
@@ -336,6 +358,61 @@ final class SDH_Muhely_Frissites
     /* =================================================================
      * AJAX
      * ============================================================== */
+
+    /**
+     * A forrás mentése (H4b, 0.95.0). A kulcs titkosítva tárolódik; üresen a régi marad.
+     *
+     * @return string hiba vagy ''
+     */
+    public static function forras_ment(string $repo, string $ag, string $token, bool $torol): string
+    {
+        $repo = trim($repo);
+        $ag   = trim($ag);
+
+        if (!preg_match('#^[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+$#', $repo)) {
+            return 'A tároló „tulajdonos/név” alakú legyen.';
+        }
+
+        if (!preg_match('#^[A-Za-z0-9_.\-/]+$#', $ag)) {
+            return 'Az ág neve hibás.';
+        }
+
+        $o = get_option(self::OPT, []);
+        $o = is_array($o) ? $o : [];
+        $o['repo'] = $repo;
+        $o['ag']   = $ag;
+
+        if ($torol) {
+            $o['token'] = '';
+        } elseif (trim($token) !== '') {
+            $o['token'] = SDH_Muhely_Titok::titkosit(trim($token));
+        }
+
+        update_option(self::OPT, $o, false);
+        delete_transient(self::CACHE);
+
+        return '';
+    }
+
+    public static function ajax_forras(): void
+    {
+        self::admin_vagy_leall();
+
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
+        $hiba = self::forras_ment(
+            isset($_POST['repo']) ? sanitize_text_field(wp_unslash($_POST['repo'])) : '',
+            isset($_POST['ag']) ? sanitize_text_field(wp_unslash($_POST['ag'])) : '',
+            isset($_POST['token']) ? trim((string) wp_unslash($_POST['token'])) : '',
+            !empty($_POST['torol'])
+        );
+        // phpcs:enable
+
+        if ($hiba !== '') {
+            wp_send_json_error(['uzenet' => $hiba]);
+        }
+
+        wp_send_json_success(['uzenet' => 'Mentve. Ellenőrzés most: a gombbal.']);
+    }
 
     private static function admin_vagy_leall(): void
     {

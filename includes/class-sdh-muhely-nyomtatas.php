@@ -937,7 +937,7 @@ final class SDH_Muhely_Nyomtatas
                                 <?php foreach ($fiokok as $k => $nev) : ?>
                                     <option value="<?php echo esc_attr((string) $k); ?>"<?php selected((string) $a['email_fiok'], (string) $k); ?>><?php echo esc_html($nev); ?></option>
                                 <?php endforeach; ?>
-                                <option value=""<?php selected((string) $a['email_fiok'], ''); ?>>A rendszer levélküldője (WordPress)</option>
+                                <option value=""<?php selected((string) $a['email_fiok'], ''); ?>>A rendszer levélküldője</option>
                             </select>
                         </div>
                     <?php else : ?>
@@ -1366,7 +1366,7 @@ final class SDH_Muhely_Nyomtatas
                 <div class="sdh-mezo">
                     <label for="ny_email_fiok">Alap feladó az e-mailhez</label>
                     <select name="ny_email_fiok" id="ny_email_fiok">
-                        <option value=""<?php selected((string) $a['email_fiok'], ''); ?>>A rendszer levélküldője (WordPress)</option>
+                        <option value=""<?php selected((string) $a['email_fiok'], ''); ?>>A rendszer levélküldője</option>
                         <?php foreach ($fiokok as $k => $nev) : ?>
                             <option value="<?php echo esc_attr((string) $k); ?>"<?php selected((string) $a['email_fiok'], (string) $k); ?>><?php echo esc_html($nev); ?></option>
                         <?php endforeach; ?>

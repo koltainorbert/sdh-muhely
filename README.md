@@ -64,6 +64,20 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.95.0 – a nyitott korlátok lezárása
+- **H1b:** a Napi árukiadás és a Rendelés megnyitója (`sdh_muhely_arukiadas_urlap`, `_rendelesek_urlap`) is zárol (t64).
+- **H3b:** a teljes mentésben a fiókok is (`{"f": …}`: belépési név, e-mail, jelszó-lenyomat, szerepek, `sdh_*` meta; a 2FA-titok
+  és az ideiglenes támogatási fiók nem). Visszaállításkor a hiányzó fiók létrejön, lehetőleg ugyanazzal az azonosítóval;
+  meglévőhöz nem nyúl (`Mentes_Vissza::fiok_vissza`). Teszt: t87.
+- **H4b:** Névjegy › Frissítés › **Forrás beállítása**: tároló, ág, hozzáférési kulcs (titkosítva; üresen a régi marad) –
+  `sdh_muhely_frissites_forras` (t68).
+- **H8b:** az anonimizálás az ügyfélhez kötött naptárbejegyzéseket (online foglalás) és az elégedettségi megjegyzést is törli (t74).
+- **Nem árulkodik:** a nem fejlesztőnek látható szövegekből kimaradt a „WordPress” / „bővítmény” / „médiatár”; a számla logója
+  saját feltöltő gombot kapott; `.htaccess` a bővítmény mappájában (a leírások, adatfájlok kívülről nem olvashatók, nincs
+  mappalista). Teszt: t88 (minden Beállítások-lapfül és menüpont SDH-adminként).
+- Tudatosan marad: a régi naplóbejegyzésekben álló nyílt zárkódok (a napló sorai HMAC-lánccal védettek, utólag nem írhatók
+  át), és a forráskódban látszó rendszer-útvonalak.
+
 ### 0.94.1
 - Böngészős ellenőrzés (0.90–0.94: mérés, N6, licenc + támogatási belépés, adatátvétel teljes körben, net-jelzés) javításai:
   az Adatátvétel doboza ütközött az Átvétel lapfül `.sdh-atvetel` osztályával (rácsba esett) → `.sdh-adatatvetel`; a rejtett

@@ -448,7 +448,7 @@ final class SDH_Muhely_Urlap_Beallitas
         <div class="sdh-doboz sdh-ub-beall">
         <p class="sdh-mezo__sugo">
             Minden űrlapnál kapcsold ki, ami nem kell. Ugyanez az űrlapok címsorában álló fogaskerékkel is állítható
-            (ott élőben látszik a változás). A beállítás a bővítmény frissítése után is megmarad.
+            (ott élőben látszik a változás). A beállítás a rendszer frissítése után is megmarad.
             Az elrejtett mező értéke nem vész el, csak nem látszik.
         </p>
         <div class="sdh-ub-lapok">
