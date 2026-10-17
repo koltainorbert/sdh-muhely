@@ -163,7 +163,7 @@ A vevőknek eladott példányokat a **SDH Központ** bővítmény kezeli. Ez a f
 
 1. A forgalmazói webhelyen: **Bővítmények › Új › Feltöltés**, `sdh-kozpont-1.0.0.zip`, bekapcsolás. Bal oldalt megjelenik az **SDH Központ** menü.
 2. **Licencek** fül: vevő neve, vevőazonosító, lejárat (üresen soha), példányszám → **Licenc létrehozása**. A kulcs (`SDH-XXXX-…`) magától készül.
-3. **Kiadás** fül: töltsd fel az SDH Műhely telepítő zipjét. A verziót a zip `sdh-muhely/sdh-muhely.php` fejlécéből olvassa ki.
+3. **Kiadás** fül: töltsd fel a **vevői** telepítő zipet. Ezt a forrásból a `sh tools/vevo-csomag.sh` készíti (`sdh-muhely-<verzió>-vevo.zip`): kimarad belőle a belső `includes/sdh/` mappa (saját modulok, cégadatok, frissítési tároló), a fejlesztői eszközök és a verziónapló. A verziót a zip `sdh-muhely/sdh-muhely.php` fejlécéből olvassa ki.
 4. A vevőnek add meg: a központ címét (a **Kulcs** fül alján áll) és a licenckulcsot. Ő a saját rendszerében a **Beállítások › Licenc** lapon írja be.
 5. **Példányok** fül: minden telepítés, a verziója és az utolsó jelentés ideje (ügyféladat nincs). **Támogatás** fül: a vevők által engedélyezett, időkorlátos belépő linkek.
 

@@ -145,7 +145,7 @@ final class SDH_Muhely_Level_Feladat
                 'ertesit' => !empty($t['ertesit']),
                 'nyomtat' => ($t['nyomtat'] ?? '') === 'csatolmany' ? 'csatolmany' : '',
                 // Ha a számla nem melléklet, hanem LINK a levélben: ez a minta keresi meg
-                // (az URL-ben vagy a link szövegében). Pl. „szamla" vagy „gigatel.hu".
+                // (az URL-ben vagy a link szövegében). Pl. „szamla" vagy „beszallito.hu".
                 'link'    => mb_strtolower($szo($t['link'] ?? '', 120)),
                 'olvaso'  => $olv !== '' && isset(self::$olvasok[$olv]) ? $olv : '',
             ],

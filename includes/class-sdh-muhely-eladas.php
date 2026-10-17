@@ -336,7 +336,10 @@ final class SDH_Muhely_Eladas
             return;
         }
 
-        foreach (['Sini', 'CHS', 'Gigatel'] as $i => $nev) {
+        $minta = sdh_muhely_kezdo_adat('beszallitok.json');
+        $minta = is_array($minta['nevek'] ?? null) ? array_values(array_filter($minta['nevek'], 'is_string')) : [];
+
+        foreach ($minta as $i => $nev) {
             $wpdb->insert($tabla, [
                 'nev'        => $nev,
                 'aktiv'      => 1,

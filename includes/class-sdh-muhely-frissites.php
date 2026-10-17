@@ -20,7 +20,7 @@ final class SDH_Muhely_Frissites
 {
     public const OPT   = 'sdh_muhely_frissites';
     public const CACHE = 'sdh_muhely_frissites_uj';
-    public const REPO  = 'koltainorbert/sdh-muhely';
+    /** A tároló nincs a kódba írva: az SDH-példányban az includes/sdh/data/frissites.json adja, vevőnél a licencközpont vagy a beállítás. */
     public const AG    = 'main';
     private const FAJL = 'sdh-muhely.php';
     private const MAPPA = 'sdh-muhely';
@@ -40,6 +40,15 @@ final class SDH_Muhely_Frissites
      * Forrás
      * ============================================================== */
 
+    /** Az alapértelmezett tároló („tulajdonos/név”) – üres, ha nincs ilyen előbeállítás. */
+    public static function alap_repo(): string
+    {
+        $k = sdh_muhely_kezdo_adat('frissites.json');
+        $r = (string) apply_filters('sdh_muhely_frissites_alap_repo', is_string($k['repo'] ?? null) ? $k['repo'] : '');
+
+        return preg_match('#^[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+$#', $r) ? $r : '';
+    }
+
     /** @return array{repo: string, ag: string, token: string} */
     public static function forras(): array
     {
@@ -47,7 +56,7 @@ final class SDH_Muhely_Frissites
         $o = is_array($o) ? $o : [];
 
         $f = [
-            'repo'  => isset($o['repo']) && is_string($o['repo']) && $o['repo'] !== '' ? $o['repo'] : self::REPO,
+            'repo'  => isset($o['repo']) && is_string($o['repo']) && $o['repo'] !== '' ? $o['repo'] : self::alap_repo(),
             'ag'    => isset($o['ag']) && is_string($o['ag']) && $o['ag'] !== '' ? $o['ag'] : self::AG,
             'token' => isset($o['token']) && is_string($o['token']) ? SDH_Muhely_Titok::visszafejt($o['token']) : '',
         ];
@@ -56,7 +65,7 @@ final class SDH_Muhely_Frissites
 
         // Csak „tulajdonos/tároló” és ágnév-alakú érték mehet az URL-be.
         if (!preg_match('#^[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+$#', (string) $f['repo'])) {
-            $f['repo'] = self::REPO;
+            $f['repo'] = self::alap_repo();
         }
 
         if (!preg_match('#^[A-Za-z0-9_.\-/]+$#', (string) $f['ag'])) {
@@ -75,7 +84,7 @@ final class SDH_Muhely_Frissites
 
         $f = self::forras();
 
-        return 'https://api.github.com/repos/' . $f['repo'] . '/zipball/' . $f['ag'];
+        return $f['repo'] === '' ? '' : 'https://api.github.com/repos/' . $f['repo'] . '/zipball/' . $f['ag'];
     }
 
     /** A hitelesítő fejléc a GitHub-csomag letöltéséhez (privát tárolóhoz). */
@@ -83,7 +92,7 @@ final class SDH_Muhely_Frissites
     {
         $f = self::forras();
 
-        if ($f['token'] !== '' && strpos($url, 'https://api.github.com/repos/' . $f['repo'] . '/') === 0) {
+        if ($f['token'] !== '' && $f['repo'] !== '' && strpos($url, 'https://api.github.com/repos/' . $f['repo'] . '/') === 0) {
             $args['headers'] = (array) ($args['headers'] ?? []);
             $args['headers']['Authorization'] = 'Bearer ' . $f['token'];
         }
@@ -120,6 +129,11 @@ final class SDH_Muhely_Frissites
         }
 
         $f = self::forras();
+
+        if ($f['repo'] === '') {
+            return ['verzio' => '', 'ido' => time(), 'hiba' => 'Nincs megadva, honnan jöjjön a frissítés (licenc vagy forrás).'];
+        }
+
         $h = ['Accept' => 'application/vnd.github.raw+json', 'User-Agent' => 'sdh-muhely/' . SDH_MUHELY_VERSION];
 
         if ($f['token'] !== '') {
@@ -196,6 +210,11 @@ final class SDH_Muhely_Frissites
 
         $uj = self::uj_verzio();
         $f  = self::forras();
+
+        if ($f['repo'] === '' && !(class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol())) {
+            return $t;
+        }
+
         $e  = (object) [
             'id'          => 'github.com/' . $f['repo'],
             'slug'        => self::MAPPA,
@@ -302,7 +321,7 @@ final class SDH_Muhely_Frissites
                 <tbody>
                     <tr><th>Telepített verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
                     <tr><th>Legújabb verzió</th><td><code data-sdh-frissites-uj><?php echo esc_html($uj['verzio'] !== '' ? $uj['verzio'] : '–'); ?></code></td></tr>
-                    <tr><th>Forrás</th><td><code><?php echo esc_html(class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol() ? 'a licenc központja' : 'github.com/' . $f['repo'] . ' (' . $f['ag'] . ')'); ?></code></td></tr>
+                    <tr><th>Forrás</th><td><code><?php echo esc_html(class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Licenc::kozpontbol() ? 'a licenc központja' : ($f['repo'] === '' ? 'nincs megadva' : 'github.com/' . $f['repo'] . ' (' . $f['ag'] . ')')); ?></code></td></tr>
                 </tbody>
             </table>
 

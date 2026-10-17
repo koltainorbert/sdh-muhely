@@ -134,9 +134,8 @@ final class SDH_Muhely_Szamla
         ];
 
         // A kiállító kezdőértékei adatfájlból jönnek (nem a kódból), és a Beállításokban átírhatók.
-        $fajl   = SDH_MUHELY_DIR . 'data/kiallito.json';
-        $kezdo  = is_readable($fajl) ? json_decode((string) file_get_contents($fajl), true) : [];
-        $alap   = array_merge($alap, is_array($kezdo) ? array_intersect_key(array_map('strval', $kezdo), $alap) : []);
+        $kezdo  = sdh_muhely_kezdo_adat('kiallito.json');
+        $alap   = array_merge($alap, array_intersect_key(array_map('strval', array_filter($kezdo, 'is_scalar')), $alap));
         $mentett = get_option(self::OPTION, []);
         $b       = array_merge($alap, is_array($mentett) ? array_intersect_key($mentett, $alap) : []);
 

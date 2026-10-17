@@ -1,9 +1,8 @@
 <?php
 /**
  * Plugin Name:       SDH Műhely
- * Plugin URI:        https://sdh.hu
- * Description:       Belső műhely- és ügyfélkezelő rendszer (CRM + munkalap) az SDH Szerviz számára. A MunkaLap desktop program webes utódja.
- * Version:           0.96.0
+ * Description:       Műhely- és ügyfélkezelő rendszer (CRM + munkalap) javítószervizeknek: munkalap, ügyfél, eszköz, pénztár, nyomtatványok.
+ * Version:           0.96.1
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -28,11 +27,31 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.96.0');
+define('SDH_MUHELY_VERSION', '0.96.1');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
 define('SDH_MUHELY_BASENAME', plugin_basename(__FILE__));
+
+/**
+ * Cégre szabott KEZDŐÉRTÉKEK (kiállító, postafiókok, minta-beszállítók…).
+ * Az SDH saját példányában az includes/sdh/data/ alól jönnek, a vevői
+ * csomagban ez a mappa nincs; ott a data/ alatti (alapból hiányzó) fájl
+ * vagy üres tömb. Minden érték a Beállításokban átírható.
+ *
+ * @return array<mixed>
+ */
+function sdh_muhely_kezdo_adat(string $nev): array
+{
+    foreach (['includes/sdh/data/', 'data/'] as $mappa) {
+        $fajl = SDH_MUHELY_DIR . $mappa . basename($nev);
+        if (is_readable($fajl)) {
+            $adat = json_decode((string) file_get_contents($fajl), true);
+            return is_array($adat) ? $adat : [];
+        }
+    }
+    return [];
+}
 
 /* =====================================================================
  * Modulok betöltése
@@ -155,17 +174,17 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-level-feladat.php'   => 'SDH_Muhely_Level_Feladat',
     // Eszközcsomag (0.60.0): a plugin CSS/JS fájljai egy kérésben – a sor végén, mindenki után.
     'includes/class-sdh-muhely-csomag.php'          => 'SDH_Muhely_Csomag',
-
-    /* -----------------------------------------------------------------
-     * SDH – belső modulok. CSAK az SDH Szervizé: eladáskor az
-     * `includes/sdh/` mappa törlésével nyomtalanul eltűnik (a betöltő a
-     * hiányzó fájlt átlépi). Ide SEMMI általános képesség nem kerülhet.
-     * -------------------------------------------------------------- */
-    'includes/sdh/class-sdh-muhely-sdh.php'         => 'SDH_Muhely_Sdh',
-    'includes/sdh/class-sdh-muhely-sdh-gigatel.php' => 'SDH_Muhely_Sdh_Gigatel',
-    // 3D kísérő (0.66.0): saját feltöltésű .glb modell Szikra mellett (three.js, GPU).
-    'includes/sdh/class-sdh-muhely-sdh-3d.php'      => 'SDH_Muhely_Sdh_3d',
 ];
+
+/* ---------------------------------------------------------------------
+ * Telepítésre szabott, belső modulok (az includes/sdh/ mappa). A vevői
+ * csomagban ez a mappa nincs, így itt sem marad róla nyom; a lista a
+ * mappa saját modulok.php fájljában áll. Ide SEMMI általános képesség
+ * nem kerülhet.
+ * ------------------------------------------------------------------ */
+if (is_readable(SDH_MUHELY_DIR . 'includes/sdh/modulok.php')) {
+    $sdh_muhely_modulok += (array) require SDH_MUHELY_DIR . 'includes/sdh/modulok.php';
+}
 
 foreach ($sdh_muhely_modulok as $sdh_muhely_fajl => $sdh_muhely_osztaly) {
     $sdh_muhely_ut = SDH_MUHELY_DIR . $sdh_muhely_fajl;

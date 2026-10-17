@@ -4,7 +4,7 @@ cim: Levelezés
 csoport: Kapcsolat
 modul: levelezes
 szakaszok: levelezes
-kulcsszavak: levél-feladat, feladat, teendő, beszállítói számla, Gigatel, levelezés, e-mail, levél, Gmail, postafiók, fiók, IMAP, SMTP, alkalmazásjelszó, mappa, címke, csatolmány, válasz, továbbítás, piszkozat, törlés, kuka, spam, archiválás, áthelyezés, új levél, értesítés, fontos levél, teendők, ügynök, rendező ügynök, jelszóval védett fiók, aláírás
+kulcsszavak: levél-feladat, feladat, teendő, beszállítói számla, levelezés, e-mail, levél, Gmail, postafiók, fiók, IMAP, SMTP, alkalmazásjelszó, mappa, címke, csatolmány, válasz, továbbítás, piszkozat, törlés, kuka, spam, archiválás, áthelyezés, új levél, értesítés, fontos levél, teendők, ügynök, rendező ügynök, jelszóval védett fiók, aláírás
 osszefoglalo: A szerviz e-mail-fiókjai a rendszeren belül: olvasás, írás, válasz, csatolmány, mappák, új levél jelzése minden oldalon, és két ügynök – az egyik a fontos leveleket jelzi, a másik kérésre mappákba rendez.
 ---
 
@@ -258,7 +258,7 @@ Amíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért,
 - **Ettől a naptól:** a szabály csak az ennél újabb levelekkel foglalkozik. Új szabály a bekapcsolás előtti naptól figyel, így a régi postafiókra nem nyit visszamenőleg több száz feladatot. Ha utólag állítod át a napot, a rendszer a nála régebbi **nyitott** feladatokat magától kitakarítja – a lezártakat meghagyja, azok a napló részei.
 - **Mit:** melyik mappába kerüljön, emlékeztessen-e, ajánlja-e a melléklet nyomtatását, és melyik **tételolvasó** nézze át a levelet.
 
-A tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ami csak az SDH-é (például a Gigatel), az a **Beállítások › SDH – belső** sorban van, és eladáskor nem megy ki.
+A tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ha egy beszállítónak saját olvasó készült, az a saját beállítási lapján jelenik meg.
 
 ## A rendező ügynök
 

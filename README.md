@@ -64,6 +64,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.96.1 – eladható csomag
+- `tools/vevo-csomag.sh`: a vevői telepítő zip (`sdh-muhely-<verzió>-vevo.zip`) – a fő ág, de `includes/sdh/`, `tools/`,
+  `README.md` és a 27-es (belső) súgófejezet nélkül. Ezt kell a Központ „Kiadás” fülén feltölteni.
+- Cégadat a kódban nincs: a kiállító (`kiallito.json`), a postafiókok (`levelezes.json`), a minta-beszállítók
+  (`beszallitok.json`) és a frissítési tároló (`frissites.json`) az `includes/sdh/data/` alól jön (`sdh_muhely_kezdo_adat()`);
+  vevőnél ezek üresek, minden a Beállításokban adható meg. A belső modulok listája `includes/sdh/modulok.php`.
+- Frissítés: tároló nélkül (vevő, licenc nélkül) nincs kifelé hívás és nincs frissítési bejegyzés; licenccel a központ adja.
+- Új teszt: t89 (a vevői fájlokban nincs név, cím, adószám, bankszámla, postafiók, tároló, beszállító).
+
 ### 0.96.0 – telefonon is
 - Böngészős bejárás 60 oldalon (minden menüpont + Beállítások-lapfül) asztalon és 390 px széles telefonon: asztalon 0 hiba;
   telefonon minden oldal ~200 px-lel oldalra csúszott. Javítva: a tartalom oszlopa `minmax(0, 1fr)`, 600 px alatt keskenyebb

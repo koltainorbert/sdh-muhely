@@ -1,5 +1,5 @@
 {
-    "_megjegyzes": "A helyi nyomtatvány (számla-előkészítő) kiállítójának KEZDŐÉRTÉKEI – a Beállítások → Számlázás dobozban átírhatók. Más szerviznek eladott példányból ezt a fájlt ki kell üríteni.",
+    "_megjegyzes": "A helyi nyomtatvány (számla-előkészítő) kiállítójának KEZDŐÉRTÉKEI – a Beállítások → Számlázás dobozban átírhatók. Csak az SDH saját példányában van meg (includes/sdh), a vevői csomagba nem kerül.",
     "kiallito_nev": "SMART DEVICE HUNGARY Kft.",
     "kiallito_cim1": "8200 Veszprém",
     "kiallito_cim2": "Haszkovó utca, 37. C. lház. 4. em. 15.",

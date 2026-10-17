@@ -448,7 +448,7 @@ final class SDH_Muhely_Rma
             <div class="sdh-mezok">
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="rma_cim">Cím</label>
-                    <input type="text" name="rma_cim" id="rma_cim" value="<?php echo esc_attr((string) $b['cim']); ?>" placeholder="8200 Veszprém, …">
+                    <input type="text" name="rma_cim" id="rma_cim" value="<?php echo esc_attr((string) $b['cim']); ?>" placeholder="Irányítószám, település, utca, házszám">
                 </div>
                 <div class="sdh-mezo">
                     <label for="rma_telefon">Telefon</label>

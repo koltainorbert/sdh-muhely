@@ -46,7 +46,7 @@ add_filter('pre_http_request', static function ($elo, array $args, string $url) 
 $uj = $M::uj_verzio(true);
 T::egyezik('99.0.0', $uj['verzio'], 'az újabb verzió kiolvasva');
 T::egyezik('', $uj['hiba'], 'siker: nincs hiba');
-T::igaz(strpos($g->url, '/repos/' . $M::REPO . '/contents/sdh-muhely.php?ref=main') !== false, 'a kérés a tároló fő fájljára megy');
+T::igaz(strpos($g->url, '/repos/' . $M::alap_repo() . '/contents/sdh-muhely.php?ref=main') !== false, 'a kérés a tároló fő fájljára megy');
 T::igaz(($g->fej['Accept'] ?? '') === 'application/vnd.github.raw+json' && strpos((string) ($g->fej['User-Agent'] ?? ''), 'sdh-muhely/') === 0, 'kérés-fejlécek: nyers tartalom + User-Agent');
 T::igaz(!isset($g->fej['Authorization']), 'kulcs nélkül nincs Authorization fejléc');
 
@@ -83,8 +83,8 @@ $g->hiba = false;
 /* ---- 3. Forrás és privát tároló ------------------------------------------ */
 $g->verzio = '99.0.0';
 delete_transient($M::CACHE);
-T::egyezik(['repo' => $M::REPO, 'ag' => 'main', 'token' => ''], $M::forras(), 'alapértelmezett forrás');
-T::egyezik('https://api.github.com/repos/' . $M::REPO . '/zipball/main', $M::csomag_url(), 'a csomag a GitHub zipball-ja');
+T::egyezik(['repo' => $M::alap_repo(), 'ag' => 'main', 'token' => ''], $M::forras(), 'alapértelmezett forrás');
+T::egyezik('https://api.github.com/repos/' . $M::alap_repo() . '/zipball/main', $M::csomag_url(), 'a csomag a GitHub zipball-ja');
 
 update_option($M::OPT, ['repo' => 'valaki/masik-repo', 'ag' => 'stabil', 'token' => SDH_Muhely_Titok::titkosit('ghp_TESZTKULCS')], false);
 T::egyezik('valaki/masik-repo', $M::forras()['repo'], 'a tároló beállítható');
@@ -101,7 +101,7 @@ $h = $M::kerelem_fejlec(['headers' => []], 'https://api.github.com/repos/mas/tar
 T::igaz(!isset($h['headers']['Authorization']), 'másik tárolóra a kulcs nem megy ki');
 
 update_option($M::OPT, ['repo' => '../etc/passwd; x', 'ag' => 'a b;c'], false);
-T::egyezik(['repo' => $M::REPO, 'ag' => 'main'], array_intersect_key($M::forras(), ['repo' => 1, 'ag' => 1]), 'szabálytalan tároló / ág érték nem kerül az URL-be');
+T::egyezik(['repo' => $M::alap_repo(), 'ag' => 'main'], array_intersect_key($M::forras(), ['repo' => 1, 'ag' => 1]), 'szabálytalan tároló / ág érték nem kerül az URL-be');
 delete_option($M::OPT);
 
 add_filter('sdh_muhely_frissites_forras', static fn (array $f): array => ['repo' => 'szuro/proba'] + $f);
@@ -214,7 +214,7 @@ T::tartalmaz($html, 'data-sdh-frissites', 'a Névjegy lapfül tartalmazza a Fris
 T::tartalmaz($html, SDH_MUHELY_VERSION, 'kiírja a telepített verziót');
 T::tartalmaz($html, 'Frissítés elérhető: 99.0.0.', 'kiírja az elérhető verziót');
 T::igaz(preg_match('/data-sdh-frissites-indit(?! hidden)/', $html) === 1, 'a „Frissítés most” gomb látszik, ha van újabb');
-T::tartalmaz($html, 'github.com/' . $M::REPO, 'kiírja a forrást');
+T::tartalmaz($html, 'github.com/' . $M::alap_repo(), 'kiírja a forrást');
 
 remove_all_filters('sdh_muhely_frissites_git');
 add_filter('sdh_muhely_frissites_git', '__return_true');
@@ -245,6 +245,18 @@ T::igaz(!empty($v['success']) && $M::forras()['repo'] === 'ceg/masik', 'AJAX: me
 ob_start();
 $M::doboz();
 T::tartalmaz((string) ob_get_clean(), 'data-sdh-forras-ment', 'a Névjegy lapon a forrás-űrlap');
+
+// 0.96.1: vevői példány – nincs SDH-előbeállítás, nincs licencközpont → nincs tároló, nincs kifelé hívás.
+delete_option($M::OPT);
+delete_transient($M::CACHE);
+add_filter('sdh_muhely_frissites_alap_repo', '__return_empty_string');
+T::egyezik('', $M::forras()['repo'], 'előbeállítás nélkül nincs tároló a kódban');
+T::egyezik('', $M::csomag_url(), 'és nincs csomag-URL');
+T::tartalmaz($M::uj_verzio(true)['hiba'], 'Nincs megadva', 'a keresés érthető hibát ad, hálózati hívás nélkül');
+$t0 = (object) ['response' => []];
+T::egyezik($t0, $M::szuro($t0), 'a WordPress frissítőlistája érintetlen marad');
+remove_all_filters('sdh_muhely_frissites_alap_repo');
+
 $regi_f === false ? delete_option($M::OPT) : update_option($M::OPT, $regi_f);
 delete_transient($M::CACHE);
 

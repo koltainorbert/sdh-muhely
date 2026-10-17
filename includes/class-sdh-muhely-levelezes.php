@@ -176,8 +176,7 @@ final class SDH_Muhely_Levelezes
         }
 
         // A fiókok kezdőértékei adatfájlból jönnek (nem a kódból), és a Beállításokban átírhatók.
-        $fajl  = SDH_MUHELY_DIR . 'data/levelezes.json';
-        $kezdo = is_readable($fajl) ? json_decode((string) file_get_contents($fajl), true) : [];
+        $kezdo = sdh_muhely_kezdo_adat('levelezes.json');
 
         foreach (is_array($kezdo['fiokok'] ?? null) ? $kezdo['fiokok'] : [] as $k => $f) {
             if (isset($alap['fiokok'][$k]) && is_array($f)) {
