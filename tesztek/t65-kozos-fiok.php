@@ -7,7 +7,7 @@
  * - Választás nélkül a közös fiókon a rendszer AJAX-hívásai nem futnak (a választó takarja a felületet).
  * - PIN: hibás → elutasít, 5 hibás próba után vár; jó → a választás rögzül (böngészőnként).
  * - A Naplóba, a pénztárba, az új lap felelősébe a kiválasztott dolgozó kerül; a H1 ütközés személyre szól.
- * - Kapcsoló: minden be/ki jelölő zöld/piros, „Aktív / Inaktív" felirattal (táblázatban nem).
+ * - Kapcsoló: minden be/ki jelölő zöld/piros (táblázatban nem); felirat nélkül (0.97.0, t90).
  */
 
 require __DIR__ . '/_keret.php';
@@ -171,17 +171,13 @@ T::tartalmaz($ful, 'dolgozo_uj[0][nev]', 'új dolgozó felvehető');
 /* --- 8. Egységes kapcsoló --------------------------------------------------------- */
 
 $css = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/kapcsolo.css');
-$js  = (string) file_get_contents(SDH_MUHELY_DIR . 'assets/kapcsolo.js');
 T::tartalmaz($css, 'var(--sdh-siker)', 'bekapcsolva zöld');
 T::tartalmaz($css, 'var(--sdh-hiba)', 'kikapcsolva piros');
 T::tartalmaz($css, ':not(table input)', 'táblázatban (sorkijelölés) marad a jelölőnégyzet');
-T::tartalmaz($js, "'Aktív'", 'felirat: Aktív');
-T::tartalmaz($js, "'Inaktív'", 'felirat: Inaktív');
-T::tartalmaz($js, 'MutationObserver', 'a később megnyíló popupokban is');
-T::nem_tartalmaz($js . (string) file_get_contents(SDH_MUHELY_DIR . 'assets/szemely.js'), 'innerHTML', 'nincs innerHTML');
+T::nem_tartalmaz((string) file_get_contents(SDH_MUHELY_DIR . 'assets/szemely.js'), 'innerHTML', 'nincs innerHTML');
 $fe = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-frontend.php');
 $au = (string) file_get_contents(SDH_MUHELY_DIR . 'includes/class-sdh-muhely-admin-ui.php');
-foreach (['assets/kapcsolo.css', 'assets/kapcsolo.js', 'assets/szemely.css', 'assets/szemely.js'] as $f) {
+foreach (['assets/kapcsolo.css', 'assets/szemely.css', 'assets/szemely.js'] as $f) {
     T::igaz(str_contains($fe, $f) && str_contains($au, $f), $f . ' mindkét felületen betöltődik');
 }
 

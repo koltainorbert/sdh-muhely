@@ -181,7 +181,7 @@ Itt dől el, milyen formájúak a gombok és a beviteli mezők az **egész** ren
 
 | Mező | Mire való |
 |---|---|
-| **Forma** | **Pill (ovális)** – teljesen lekerekített, modern felület (ez az alap). **Lekerekített** – enyhén lekerekített sarkok (a korábbi megjelenés). **Szögletes** – éles sarkok, a legtömörebb felület. |
+| **Forma** | **Pill (ovális)** – teljesen lekerekített, modern felület (ez az alap). **Lekerekített** – enyhén lekerekített sarkok (a korábbi megjelenés). **Tömör** – kis lekerekítés, a legtömörebb felület. Éles sarkú mező vagy gomb nincs: minden lekerekített. |
 | **Fénykeret** | Nincs, Finom, Közepes vagy Erős. A gomb felső élén világos csík, alatta lágy fény a kiemelő színben. |
 | **Üveghatás** | Áttetsző, enyhén elmosott gombháttér (glassmorphism). |
 
@@ -418,7 +418,7 @@ Beállítások › Logó és megjelenés › **Gombok és mezők** › Forma ›
 
 ### Visszakaphatom a régi, szögletes gombokat?
 
-Igen: Gombok és mezők › Forma › **Lekerekített** (a korábbi megjelenés) vagy **Szögletes**.
+Éles sarkú gomb nincs, de a kevésbé kerek forma igen: Gombok és mezők › Forma › **Lekerekített** (a korábbi megjelenés) vagy **Tömör** (kis ív).
 
 ### Miért nem látom az üveghatást vagy a fénykeretet?
 

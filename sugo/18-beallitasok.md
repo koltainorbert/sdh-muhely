@@ -102,7 +102,8 @@ A Beállítások oldal közös elemei – ezek minden lapfülön ugyanúgy műk�
 - **Állapotjelző a Mentés mellett** – **Nem mentett módosítás.**, **Mentés…**, **Elmentve.**, vagy pirossal a hiba szövege.
 - **Feltöltő gombok** (logó, háttérkép, háttérvideó) – a műhely-felület saját, egyszerű feltöltője. Kép: JPG, PNG, GIF vagy WebP; videó: MP4 vagy WebM. A fájl a rendszer feltöltött fájljai közé kerül.
 - **Színválasztó és színkód** – össze vannak kötve: bármelyiket állítod, a másik követi.
-- **Kapcsolók** – minden be/ki beállítás (és a popupok be/ki jelölői) egyforma kapcsoló: **zöld = AKTÍV**, **piros = INAKTÍV**, mellette felirattal. Táblázatban (sorok kijelölése) marad a kis jelölőnégyzet.
+- **Kapcsolók** – minden be/ki beállítás (és a popupok be/ki jelölői) egyforma kapcsoló: **zöld = bekapcsolva**, **piros = kikapcsolva**. Külön „Aktív / Inaktív” felirat nincs mellette, a mező neve mondja meg, mit kapcsol. Táblázatban (sorok kijelölése) marad a kis jelölőnégyzet.
+- **Mezők és gombok** – minden szövegmező, legördülő és gomb lekerekített; a forma (pill, lekerekített, tömör) a **Logó és megjelenés** lapfülön állítható.
 
 Néhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** és a **Névjegy** csak megmutat.
 

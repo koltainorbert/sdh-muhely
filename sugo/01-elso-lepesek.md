@@ -187,7 +187,7 @@ Amire a következő napokban lesz szükséged:
 
 Háromféle segítség van kéznél, bármelyik oldalon:
 
-- **Súgó menüpont.** Négy része van: **Bemutató**, **Dokumentáció** (ezek a fejezetek), **Kérdés–válasz** és **Újdonságok**, fölöttük keresővel. A fejléc kérdőjeles gombja annak az oldalnak a fejezetét nyitja meg, ahol éppen vagy. Fejezet: [A súgó használata](sugo:sugo).
+- **Súgó menüpont.** Négy része van: **Bemutató**, **Dokumentáció** (ezek a fejezetek), **Kérdés–válasz** és **Újdonságok**, fölöttük keresővel. A fejléc **Súgó** gombja annak az oldalnak a fejezetét nyitja meg, ahol éppen vagy. Fejezet: [A súgó használata](sugo:sugo).
 - **Az asszisztens.** A jobb alsó sarokban élő kis figura. Kattints rá, vagy nyomd meg az [[F1]] billentyűt, és kérdezz a saját szavaiddal. A **Vezess végig ezen az oldalon** kérésre több lépésben, sorban megmutatja az oldal részeit.
 - **Hibánál magától szól.** Ha egy ablak hibaüzenetet ad, az asszisztens felajánlja a segítségét a **Segíts** gombbal.
 

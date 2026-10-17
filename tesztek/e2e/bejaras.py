@@ -4,7 +4,7 @@ Böngészős bejárás (0.96.0): minden menüpont és minden Beállítások-lapf
 
     SDH_TESZT_ADATBAZIS=1 SDH_E2E_CIM=http://127.0.0.1:8765/wp SDH_E2E_NEV=admin SDH_E2E_JELSZO=... python3 tesztek/e2e/bejaras.py
 
-Hibának számít: az oldal nem töltődik be, PHP-figyelmeztetés, JavaScript-hiba, telefonon vízszintes oldalgörgetés.
+Hibának számít: az oldal nem töltődik be vagy 4xx/5xx választ ad (a menüben csak megnyitható oldal állhat), PHP-figyelmeztetés, JavaScript-hiba, telefonon vízszintes oldalgörgetés.
 Kimenet: nézetenként egy összegző sor, alatta a hibák. Kilépési kód: 0, ha minden rendben.
 """
 import asyncio
@@ -38,8 +38,12 @@ async def nezet(b, szel, mag, cimke):
 
     for l in sorted(linkek):
         try:
-            await o.goto(l, wait_until='load', timeout=30000)
+            v = await o.goto(l, wait_until='load', timeout=30000)
             await o.wait_for_timeout(400)
+            if v is not None and v.status >= 400:
+                # A menüben csak az álljon, amit a belépett fiók meg is nyithat.
+                hibak.append('HTTP %d (a menüben van, de nem nyitható meg): %s' % (v.status, l.split('?')[-1]))
+                continue
         except Exception:
             hibak.append('nem töltődik be: ' + l)
             continue

@@ -39,7 +39,7 @@ A **Nyomtatás** gombot nyomtató ikon jelöli. Négy helyen éred el:
 
 - **A munkalap, az árukiadás és a rendelés ablakában**, alul a gombsorban – a lap nyomtatványaihoz.
 - **Az Áttekintés részletpaneljén**, a **Szerkesztés** mellett – a kijelölt lap nyomtatványaihoz, a lap megnyitása nélkül.
-- **A felső fejlécben** (nyomtató ikon a súgó kérdőjele mellett) – ami nem egy laphoz tartozik: bianko munkalap, pénztárzárás, pénztárjelentés, listák.
+- **A felső fejlécben** (nyomtató ikon a **Súgó** gomb mellett) – ami nem egy laphoz tartozik: bianko munkalap, pénztárzárás, pénztárjelentés, listák.
 - **A Pénztárban**: a **KP – kassza** lapfülön a **Zárás nyomtatása**, a **Riport** lapfülön a **Nyomtatás / PDF**, egy tétel ablakában az **Igazolás** gomb.
 
 ## Lépésről lépésre: egy lap nyomtatása

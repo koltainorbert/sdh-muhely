@@ -1,5 +1,7 @@
 /* Egységes kapcsoló (0.72.0): minden be/ki jelölőnégyzet ugyanúgy néz ki –
-   zöld = Aktív, piros = Inaktív, mellette felirat. A felirat a kapcsolo.js-től jön. */
+   zöld = bekapcsolva, piros = kikapcsolva. 0.97.0: mellette NINCS „Aktív / Inaktív”
+   felirat (a szín és a mező saját címkéje elég), és körülötte mindig van levegő.
+   Projektszabály: tesztek/e2e/urlapelemek.py ellenőrzi. */
 
 :is(.sdh-app, .sdh-modal) input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input) {
     appearance: none;
@@ -8,7 +10,8 @@
     position: relative;
     width: calc(34px * var(--sdh-n));
     height: calc(19px * var(--sdh-n));
-    margin: 0;
+    /* Levegő: ne érjen a szomszéd szöveghez, mezőhöz, és az egymás alatti kapcsolók se tapadjanak. */
+    margin: calc(6px * var(--sdh-n)) calc(8px * var(--sdh-n)) calc(6px * var(--sdh-n)) 0;
     border: 0;
     border-radius: calc(999px * var(--sdh-n));
     background-color: var(--sdh-hiba);
@@ -49,18 +52,50 @@
     gap: .5rem;
 }
 
-/* „Aktív" / „Inaktív" felirat a kapcsoló mellett. */
-.sdh-kapcs-allapot {
-    flex: 0 0 auto;
-    min-width: 3.9em;
-    font-size: calc(11px * var(--sdh-n));
-    font-weight: 700;
-    letter-spacing: .03em;
-    text-transform: uppercase;
-    color: var(--sdh-hiba);
-    white-space: nowrap;
+/* Ha a kapcsoló a szöveg UTÁN áll (címke, majd kapcsoló), balra is kell levegő. */
+:is(.sdh-app, .sdh-modal) :is(span, b, strong, em, label) + input[type="checkbox"]:not([data-sdh-nativ]):not(table input):not(.sdh-cs-pill input) {
+    margin-left: calc(8px * var(--sdh-n));
 }
 
-.sdh-kapcs-allapot.is-aktiv {
-    color: var(--sdh-siker);
+/* =====================================================================
+ * Lekerekített mezők és gombok (0.97.0, projektszabály)
+ *
+ * Minden szövegmező, legördülő, szövegdoboz és gomb lekerekített. Ahol egy
+ * elemnek nincs saját stílusa (a böngésző alapja jönne: szögletes, beütött
+ * keret), ott a rendszer mezője áll be. 0 specificitás (:where) – bármely
+ * saját szabály felülírja, tehát csak az eddig stílus nélküli elemeket érinti.
+ * ================================================================== */
+:where(.sdh-app, .sdh-modal) :where(input:not([type="checkbox"], [type="radio"], [type="hidden"], [type="range"], [type="color"], [type="file"], [type="image"], [type="submit"], [type="button"], [type="reset"]), select) {
+    box-sizing: border-box;
+    padding: .25rem .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: var(--sdh-mezo-r);
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-family: inherit;
+}
+
+:where(.sdh-app, .sdh-modal) :where(textarea) {
+    box-sizing: border-box;
+    padding: .45rem .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: min(var(--sdh-mezo-r), calc(14px * var(--sdh-n)));
+    background-color: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font-family: inherit;
+}
+
+:where(.sdh-app, .sdh-modal) :where(button, input[type="submit"], input[type="button"], input[type="reset"]) {
+    border-radius: var(--sdh-gomb-r);
+}
+
+/* A jelszómező és a szövegdoboz a beállított formát kövesse (a pill alak a szövegdobozon túl nagy). */
+.sdh-mezo input[type="password"],
+.sdh-ig input[type="password"] {
+    border-radius: var(--sdh-mezo-r);
+}
+
+.sdh-mezo textarea,
+.sdh-ig textarea {
+    border-radius: min(var(--sdh-mezo-r), calc(14px * var(--sdh-n)));
 }

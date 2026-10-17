@@ -205,3 +205,9 @@
 .sdh-szamlaurlap__auto .sdh-mezo__sugo {
     margin: 0;
 }
+
+/* 0.97.0: a kapcsoló alatti jelölő ne tapadjon a kapcsoló feliratához. */
+.sdh-ub-kapcs + .sdh-jelolo {
+    display: flex;
+    margin-top: calc(8px * var(--sdh-n));
+}

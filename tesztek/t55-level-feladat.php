@@ -235,7 +235,7 @@ $arculat_regi = get_option('sdh_muhely_arculat');
 update_option('sdh_muhely_arculat', ['gombforma' => 'szogletes', 'uveghatas' => 0, 'gombfeny' => '']);
 $acss = $A::stilus_css();
 
-T::tartalmaz($acss, '--sdh-gomb-r:calc(2px', 'a szögletes forma CSS-változóban megy ki');
+T::tartalmaz($acss, '--sdh-gomb-r:calc(5px', 'a tömör (kis ív) forma CSS-változóban megy ki');
 T::tartalmaz($acss, '--sdh-uvegero:0', 'a kikapcsolt üveghatás is');
 T::tartalmaz($acss, '--sdh-gombfeny:0', 'és a kikapcsolt fénykeret');
 

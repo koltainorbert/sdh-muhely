@@ -62,7 +62,33 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ---
 
+## Felületi szabályok (kötelezők, minden új képernyőre)
+
+- Felvitel popupban; asztalon a popup nem görget; natív dátumválasztó nincs; a színek CSS-változók; `confirm()` helyett kétlépcsős gomb; áfa 27%.
+- **Kapcsoló** (be/ki jelölő): zöld = be, piros = ki. **Mellette nincs „Aktív / Inaktív” felirat.**
+- **A kapcsoló körül mindig van levegő:** nem érhet hozzá szöveghez, mezőhöz, másik kapcsolóhoz (legalább 6 px). Az alap
+  margót az `assets/kapcsolo.css` adja; ahol szűk, ott a helyi CSS-ben kell helyet adni.
+- **Minden szövegmező, legördülő, szövegdoboz és gomb lekerekített** (`--sdh-mezo-r`, `--sdh-gomb-r`); éles sarkú nincs.
+  Stílus nélküli elemet a `kapcsolo.css` `:where()` szabálya kerekít; saját stílusnál `border-radius: 0` csak a kerek
+  doboz belső, keret nélküli részén állhat.
+- A menüben csak az áll, amit a belépett fiók meg is nyithat.
+- Ellenőrzés: `tesztek/e2e/urlapelemek.py` (minden menüpont + Beállítások-lapfül + „Új …” popupok), `tesztek/e2e/bejaras.py`
+  (fejlesztőként és nem fejlesztő adminisztrátorként is), `tesztek/t90-urlapelemek.php`.
+
+---
+
 ## Verziónapló
+
+### 0.97.0 – egységes űrlapelemek
+- A kapcsolók mellől eltűnt az „Aktív / Inaktív” felirat (a `kapcsolo.js` törölve).
+- Kapcsoló körüli levegő: 6 px fent-lent, 8 px jobbra (szöveg után balra is). Böngészős mérés 60 oldal + 11 popup:
+  összeérő kapcsoló 215 → 0.
+- Minden szövegmező, legördülő, szövegdoboz és gomb lekerekített: a stílus nélküli (böngésző-alap) elemek is a rendszer
+  mezőjét kapják (`:where()`, 0 specificitás). Mérés: kerekítetlen 255 → 0. A „Szögletes” forma helyett „Tömör” (kis ív).
+- Fejléc: a Súgó feliratos gomb minden oldalon (a Súgó oldalon kiemelve); telefonon csak a kérdőjel.
+- A **Modulok** menüpont csak a fejlesztő menüjében áll (más adminisztrátor meg sem nyithatja). Bejárás nem fejlesztő
+  adminisztrátorként: 59 oldal × asztal/telefon, 0 hiba; a bejárás a 4xx választ is hibának veszi.
+- Új teszt: t90; új böngészős ellenőrzés: `tesztek/e2e/urlapelemek.py`.
 
 ### 0.96.1 – eladható csomag
 - `tools/vevo-csomag.sh`: a vevői telepítő zip (`sdh-muhely-<verzió>-vevo.zip`) – a fő ág, de `includes/sdh/`, `tools/`,

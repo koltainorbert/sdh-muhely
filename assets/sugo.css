@@ -29,10 +29,35 @@
     font-variant-numeric: tabular-nums;
 }
 
-/* A fejléc „?" gombja: súgó az éppen nyitott oldalhoz. */
-.sdh-fej__sugo {
+/* A fejléc Súgó gombja: súgó az éppen nyitott oldalhoz (0.97.0: felirattal, telefonon csak a „?”). */
+.sdh-fej__ikongomb.sdh-fej__sugo {
     flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    width: auto;
+    padding: 0 .7rem 0 .5rem;
+    color: var(--sdh-szoveg-2);
+    font-size: calc(13px * var(--sdh-n));
+    font-weight: 600;
     text-decoration: none;
+}
+
+.sdh-fej__ikongomb.sdh-fej__sugo.is-aktiv {
+    background: var(--sdh-accent-halvany);
+    color: var(--sdh-accent-szoveg);
+}
+
+@media (max-width: 860px) {
+    .sdh-fej__ikongomb.sdh-fej__sugo {
+        width: calc(30px * var(--sdh-n));
+        padding: 0;
+        justify-content: center;
+    }
+
+    .sdh-fej__sugo-felirat {
+        display: none;
+    }
 }
 
 /* ---- Kereső ---- */

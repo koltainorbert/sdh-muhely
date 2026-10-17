@@ -543,6 +543,7 @@ final class SDH_Muhely_Frontend
                 <?php // Adminisztrátori menüpontok (0.89.1): a csak adminnak szóló modulok közül, amelyek kérik (pl. Riportok). ?>
                 <?php foreach (SDH_Muhely_Modulok::osszes() as $kulcs => $modul) : ?>
                     <?php if (empty($modul['csak_admin']) || empty($modul['admin_menu']) || !empty($modul['rejtett'])) { continue; } ?>
+                    <?php if (!empty($modul['csak_fejleszto']) && !SDH_Muhely_Admin_UI::fejleszto_e()) { continue; } ?>
                     <a class="sdh-sav__link <?php echo $aktiv_kulcs === $kulcs ? 'sdh-sav__link--aktiv' : ''; ?>"
                        href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url((string) $kulcs)); ?>">
                         <?php echo self::ikon((string) $kulcs); // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -554,8 +555,8 @@ final class SDH_Muhely_Frontend
                     <?php echo self::ikon('beallitasok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
                     <span class="sdh-sav__felirat">Beállítások</span>
                 </a>
-                <?php // Modulok (0.58): a fő funkciók ki- és bekapcsolása – csak adminisztrátornak. ?>
-                <?php if (class_exists('SDH_Muhely_Modul_Kapcsolo')) : ?>
+                <?php // Modulok (0.58): a fő funkciók ki- és bekapcsolása – csak a fejlesztőnek (más admin nem nyithatja meg, így a menüben sincs). ?>
+                <?php if (class_exists('SDH_Muhely_Modul_Kapcsolo') && SDH_Muhely_Admin_UI::fejleszto_e()) : ?>
                     <a class="sdh-sav__link <?php echo $aktiv_kulcs === SDH_Muhely_Modul_Kapcsolo::KULCS ? 'sdh-sav__link--aktiv' : ''; ?>"
                        href="<?php echo esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Modul_Kapcsolo::KULCS)); ?>">
                         <?php echo self::ikon('modulok'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -599,14 +600,17 @@ final class SDH_Muhely_Frontend
                         . '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7V3h9v4"/><rect x="3" y="7" width="14" height="7" rx="1.6"/><path d="M5.5 12h9v5h-9z"/></svg></button>';
                 }
 
-                // Súgó ehhez az oldalhoz: az oldalt leíró fejezet (ha nincs ilyen, a Súgó kezdőlapja).
-                if (class_exists('SDH_Muhely_Sugo') && $aktiv_kulcs !== SDH_Muhely_Sugo::KULCS) {
-                    $sdh_sugo_fejezet = SDH_Muhely_Sugo::modul_fejezet((string) $aktiv_kulcs);
+                // Súgó a fejlécben (0.97.0: feliratos gomb, minden oldalon – a Súgó oldalon kiemelve):
+                // az oldalt leíró fejezetre visz (ha nincs ilyen, a Súgó kezdőlapjára).
+                if (class_exists('SDH_Muhely_Sugo')) {
+                    $sdh_sugo_itt     = $aktiv_kulcs === SDH_Muhely_Sugo::KULCS;
+                    $sdh_sugo_fejezet = $sdh_sugo_itt ? '' : SDH_Muhely_Sugo::modul_fejezet((string) $aktiv_kulcs);
                     printf(
-                        '<a class="sdh-fej__ikongomb sdh-fej__sugo" href="%s" title="%s" aria-label="%s">%s</a>',
+                        '<a class="sdh-fej__ikongomb sdh-fej__sugo%s" href="%s" title="%s"%s>%s<span class="sdh-fej__sugo-felirat">Súgó</span></a>',
+                        $sdh_sugo_itt ? ' is-aktiv' : '',
                         esc_url(SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Sugo::KULCS, $sdh_sugo_fejezet !== '' ? ['nezet' => 'dokumentacio', 'fejezet' => $sdh_sugo_fejezet] : [])),
                         esc_attr($sdh_sugo_fejezet !== '' ? 'Súgó ehhez az oldalhoz' : 'Súgó'),
-                        esc_attr($sdh_sugo_fejezet !== '' ? 'Súgó ehhez az oldalhoz' : 'Súgó'),
+                        $sdh_sugo_itt ? ' aria-current="page"' : '',
                         '<svg viewBox="0 0 20 20" aria-hidden="true">' . self::ikon_rajz('sugo', null) . '</svg>' // phpcs:ignore WordPress.Security.EscapeOutput -- saját SVG.
                     );
                 }
@@ -681,7 +685,7 @@ final class SDH_Muhely_Frontend
         // a Napló ablak, a lezárt lap, az RMA-matrica, a fogaskerék és a mezőmemória – mind bármelyik
         // oldalon megnyílhat (a munkalap popupja mindenhol elérhető).
         array_push($sdh_js, 'assets/rma.js', 'assets/levelezes.js', 'assets/penztar.js', 'assets/eladas.js', 'assets/nyomtatas.js',
-            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js', 'assets/kapcsolo.js', 'assets/szemely.js', 'assets/mentes.js', 'assets/frissites.js');
+            'assets/sms.js', 'assets/naplo.js', 'assets/matrica.js', 'assets/urlap-beallitas.js', 'assets/emlek.js', 'assets/gyorsitas.js', 'assets/utkozes.js', 'assets/szemely.js', 'assets/mentes.js', 'assets/frissites.js');
 
         if ($aktiv_kulcs === 'beallitasok') {
             $sdh_js[] = 'assets/beallitasok.js';

@@ -4,7 +4,7 @@ cim: A súgó használata
 csoport: Kezdés
 modul: sugo
 szakaszok:
-verzio: 0.96.1
+verzio: 0.97.0
 kulcsszavak: súgó, segítség, dokumentáció, leírás, bemutató, gyik, kérdés, válasz, túra, végigvezetés, keresés, újdonság, kézikönyv, használati útmutató
 osszefoglalo: A Súgó menüpontban egy helyen van a bemutató, a részletes dokumentáció, a kérdés–válaszok és az újdonságok – és ebből tanul az asszisztens is.
 ---
@@ -32,7 +32,7 @@ Ha valamire nincs találat, a Súgó felajánlja, hogy megkérdezed az assziszte
 
 ## Súgó az éppen nyitott oldalhoz
 
-A felső fejlécben, az óra mellett egy kérdőjeles gomb áll. Rákattintva annak az oldalnak a fejezete nyílik meg, ahol éppen vagy – nem kell keresgélned.
+A felső fejlécben, a nyomtató ikon mellett a **Súgó** gomb áll (kérdőjel ikonnal; telefonon csak a kérdőjel látszik). Rákattintva annak az oldalnak a fejezete nyílik meg, ahol éppen vagy – nem kell keresgélned.
 
 Ugyanezt billentyűről az [[F1]] adja: az asszisztens nyílik meg, és tőle is megkérdezheted, amit az oldalon nem értesz.
 

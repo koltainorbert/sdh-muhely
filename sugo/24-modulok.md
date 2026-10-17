@@ -27,7 +27,7 @@ Az adatai **nem törlődnek**. Ha a modult később visszakapcsolod, minden ott 
 
 A bal oldali menü legalján, a **Beállítások** alatt áll a **Modulok** menüpont. [Modulok megnyitása](modul:modulok)
 
-- **Csak adminisztrátor látja.** A kolléga menüjében nem jelenik meg.
+- **Csak a fejlesztő látja.** Az adminisztrátor és a kolléga menüjében nem jelenik meg, mert meg sem nyithatják.
 - A wp-adminból megnyitva ugyanez az oldal jelenik meg.
 
 ## Lépésről lépésre: modul ki- vagy bekapcsolása
@@ -106,11 +106,11 @@ A munkalapon az RMA lapfül helyén **Címke** lapfül áll: ott van a címke (Q
 
 ### Ki kapcsolhatja át a modulokat?
 
-Csak adminisztrátor. Ha be van kapcsolva a telepítői zár, ahhoz a telepítői kód is kell.
+Csak a fejlesztő. Ha be van kapcsolva a telepítői zár, ahhoz a telepítői kód is kell.
 
 ### Eltűnt a Naptár (vagy más) menüpont. Mi történt?
 
-Valószínűleg kikapcsolták a modulját. Az adminisztrátor a **Modulok** menüpontban látja, mi fut, és ott vissza is kapcsolhatja.
+Valószínűleg kikapcsolták a modulját. A fejlesztő a **Modulok** menüpontban látja, mi fut, és ott vissza is kapcsolhatja.
 
 ### Kikapcsoltam az Ügyfélüzenetek modult, és az SMS is kikapcsolt. Miért?
 

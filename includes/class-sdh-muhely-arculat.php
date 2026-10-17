@@ -82,7 +82,7 @@ final class SDH_Muhely_Arculat
             'neon_ero'    => isset(self::neon_erok()[$ero]) ? $ero : 'kozepes',
             // Területenkénti betű (0.60.1): űrlap, táblázat, rács, címsor, gomb, menü.
             'teruletek'   => self::teruletek_szukit(is_array($mentett['teruletek'] ?? null) ? $mentett['teruletek'] : []),
-            // Gombok és mezők formája (0.61.2): szögletes, lekerekített vagy pill.
+            // Gombok és mezők formája (0.61.2): tömör (kis ív), lekerekített vagy pill. 0.97.0: éles sarok nincs.
             'gombforma'   => isset(self::gombformak()[$forma]) ? $forma : 'pill',
             // Üveghatás (áttetsző, elmosott háttér) és finom fénykeret a gombokon.
             'uveghatas'   => !isset($mentett['uveghatas']) || !empty($mentett['uveghatas']),
@@ -102,7 +102,7 @@ final class SDH_Muhely_Arculat
         return [
             'pill'    => ['nev' => 'Pill (ovális)', 'alcim' => 'Teljesen lekerekített gombok és mezők – modern, lágy felület.'],
             'lagy'    => ['nev' => 'Lekerekített', 'alcim' => 'Enyhén lekerekített sarkok (a korábbi megjelenés).'],
-            'szogletes' => ['nev' => 'Szögletes', 'alcim' => 'Éles sarkok – a legtömörebb, legsűrűbb felület.'],
+            'szogletes' => ['nev' => 'Tömör', 'alcim' => 'Kis lekerekítés – a legtömörebb, legsűrűbb felület. Éles sarok nincs: minden mező és gomb lekerekített.'],
         ];
     }
 
@@ -452,7 +452,7 @@ final class SDH_Muhely_Arculat
         if ($b['gombforma'] !== 'pill') {
             $forma = [
                 'lagy'      => ['calc(10px * var(--sdh-n))', 'calc(14px * var(--sdh-n))'],
-                'szogletes' => ['calc(2px * var(--sdh-n))', 'calc(3px * var(--sdh-n))'],
+                'szogletes' => ['calc(5px * var(--sdh-n))', 'calc(6px * var(--sdh-n))'],
             ][$b['gombforma']] ?? ['999px', '999px'];
 
             $css .= ':root{--sdh-gomb-r:' . $forma[0] . ';--sdh-mezo-r:' . $forma[1] . '}';
