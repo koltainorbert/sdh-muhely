@@ -10904,3 +10904,11 @@ button.sdh-allapot,
     color: var(--sdh-accent-szoveg);
     font-size: calc(12.5px * var(--sdh-n));
 }
+
+/* H5b (0.95.0): „Tételár átírása” jog nélkül az ár és a kedvezmény csak olvasható (a szerver is elutasítja). */
+.sdh-nem-tetel_ar input[name^="tetelek"][name$="[brutto_ar]"],
+.sdh-nem-tetel_ar input[name^="tetelek"][name$="[kedvezmeny]"] {
+    pointer-events: none;
+    background: var(--sdh-vaszon);
+    color: var(--sdh-halvany);
+}

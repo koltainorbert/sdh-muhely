@@ -170,6 +170,24 @@ T::egyezik('', $or('valami_mas_plugin_akcio'), 'idegen művelethez az őr nem ny
 
 T::tartalmaz($or('sdh_muhely_termek_torol'), '|torles', 'a válasz megmondja, melyik jog hiányzik');
 
+// H5b (0.95.0): „Tételár átírása a lapon” – a pultosnak nincs.
+$ml69 = t_munkalap(t_ugyfel('Ár T69'), [t_eszkoz(t_ugyfel('Ár2 T69'), 'Apple', 'T69')]);
+$wpdb->insert(SDH_Muhely_Tetel::tabla(), ['munkalap_id' => $ml69, 'tipus' => 'szolgaltatas', 'mozgas' => 'kimeno', 'megnevezes' => 'Csere T69', 'mennyiseg' => 1, 'brutto_ar' => 10000, 'brutto_ertek' => 10000, 'kedvezmeny' => 0]);
+$t69 = (int) $wpdb->insert_id;
+$sor69 = static fn (array $x): array => $x + ['id' => $t69, 'tipus' => 'szolgaltatas', 'megnevezes' => 'Csere T69', 'termek_id' => 0, 'brutto_ar' => 10000.0, 'kedvezmeny' => 0.0];
+T::egyezik(false, $Sz::megvan('tetel_ar'), 'a pultosnak nincs tételár-joga');
+T::egyezik('', SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$sor69([])]), 'változatlan ár: mehet');
+T::tartalmaz(SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$sor69(['brutto_ar' => 8000.0])]), 'Tételár átírása', 'átírt ár: elutasítva');
+T::tartalmaz(SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$sor69(['kedvezmeny' => 10.0])]), 'Csere T69', 'kedvezmény: elutasítva, a tétel nevével');
+$wpdb->insert(SDH_Muhely_Schema::tabla('szolgaltatas'), ['nev' => 'Törzs T69 ' . $ml69, 'brutto_ar' => 5000, 'ar_max' => 7000]);
+$uj69 = static fn (float $ar): array => ['id' => 0, 'tipus' => 'szolgaltatas', 'megnevezes' => 'Törzs T69 ' . $ml69, 'termek_id' => 0, 'brutto_ar' => $ar, 'kedvezmeny' => 0.0];
+T::egyezik('', SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$uj69(5000.0)]), 'új tétel törzsáron: mehet');
+T::egyezik('', SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$uj69(6500.0)]), 'ársávon (tól–ig) belül: mehet');
+T::tartalmaz(SDH_Muhely_Tetel::ar_jog_hiba($ml69, [$uj69(9000.0)]), 'Tételár', 'ársávon kívül: elutasítva');
+$v69 = t_ajax('sdh_muhely_munkalapok_ment', ['id' => $ml69, 'tetelek_jelen' => '1', 'tetelek' => ['szolgaltatas' => ['a' => ['id' => $t69, 'megnevezes' => 'Csere T69', 'brutto_ar' => '1', 'mennyiseg' => '1', 'afa_kulcs' => '27']]]], 'sdh_nonce', 'sdh_muhely_munkalap_mentes');
+T::igaz(empty($v69['success']) && str_contains((string) ($v69['data']['uzenet'] ?? ''), 'Tételár'), 'a munkalap mentése jog nélkül átírt árral: elutasítva');
+T::egyezik(10000.0, (float) $wpdb->get_var($wpdb->prepare('SELECT brutto_ar FROM ' . SDH_Muhely_Tetel::tabla() . ' WHERE id = %d', $t69)), 'és az ár nem változott');
+
 /* --- 4. Láthatóság --------------------------------------------------------------------- */
 
 T::egyezik(false, isset(SDH_Muhely_Modulok::osszes()['penztar']), 'a pultosnak nincs Házipénztár menüpontja');

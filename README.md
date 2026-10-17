@@ -64,6 +64,12 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.95.1
+- **H5b – új jog: „Tételár átírása a lapon”** (`tetel_ar`; alapból Admin, Kolléga, Pénztáros; a mentett szerepkészletben a
+  Kolléga alapértékét kapja). Jog nélkül a munkalap mentése elutasít, ha egy meglévő tétel ára / kedvezménye változott, vagy egy új
+  tétel ára eltér a törzsártól (ársávos szolgáltatásnál a sávon belül nem); a lap ilyenkor el sem mentődik, a Napló „elutasítva”
+  bejegyzést kap (`Tetel::ar_valtozasok`, `ar_jog_hiba`). A felületen az ár- és kedvezménymező csak olvasható. Teszt: t69.
+
 ### 0.95.0 – a nyitott korlátok lezárása
 - **H1b:** a Napi árukiadás és a Rendelés megnyitója (`sdh_muhely_arukiadas_urlap`, `_rendelesek_urlap`) is zárol (t64).
 - **H3b:** a teljes mentésben a fiókok is (`{"f": …}`: belépési név, e-mail, jelszó-lenyomat, szerepek, `sdh_*` meta; a 2FA-titok

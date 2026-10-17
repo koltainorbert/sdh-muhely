@@ -441,6 +441,81 @@ final class SDH_Muhely_Tetel
      */
     public static $uj_azonositok = [];
 
+    /**
+     * H5b (0.95.0): a beküldött sorok közül azok neve, amelyeknek az ára vagy kedvezménye eltér a meglévő sortól,
+     * illetve új sornál a törzsártól (termék: terméktörzs, szolgáltatás: azonos nevű szolgáltatás). A bevizsgálási díj
+     * sorait a díj szinkronja kezeli – azok kimaradnak.
+     *
+     * @param array<int, array<string, mixed>> $sorok
+     * @return array<int, string>
+     */
+    public static function ar_valtozasok(int $munkalap_id, array $sorok): array
+    {
+        global $wpdb;
+
+        $regiek = [];
+
+        if ($munkalap_id > 0) {
+            foreach ((array) $wpdb->get_results($wpdb->prepare('SELECT id, brutto_ar, kedvezmeny, forras FROM ' . self::tabla() . ' WHERE munkalap_id = %d', $munkalap_id)) as $r) {
+                $regiek[(int) $r->id] = $r;
+            }
+        }
+
+        $ki = [];
+
+        foreach ($sorok as $sor) {
+            $ar   = (float) $sor['brutto_ar'];
+            $kedv = (float) $sor['kedvezmeny'];
+            $id   = (int) ($sor['id'] ?? 0);
+
+            if ($id > 0 && isset($regiek[$id])) {
+                $r = $regiek[$id];
+
+                if (in_array((string) $r->forras, ['bevizsgalas', 'bevizsgalas_le'], true)) {
+                    continue;
+                }
+
+                if (abs((float) $r->brutto_ar - $ar) >= 0.005 || abs((float) $r->kedvezmeny - $kedv) >= 0.005) {
+                    $ki[] = (string) $sor['megnevezes'];
+                }
+
+                continue;
+            }
+
+            $torzs = null;
+            $felso = 0.0;
+
+            if ((int) ($sor['termek_id'] ?? 0) > 0) {
+                $torzs = $wpdb->get_var($wpdb->prepare('SELECT brutto_ar FROM ' . SDH_Muhely_Schema::tabla('termek') . ' WHERE id = %d', (int) $sor['termek_id']));
+            } elseif ((string) $sor['tipus'] === 'szolgaltatas') {
+                $sz = $wpdb->get_row($wpdb->prepare('SELECT brutto_ar, ar_max FROM ' . SDH_Muhely_Schema::tabla('szolgaltatas') . ' WHERE nev = %s LIMIT 1', (string) $sor['megnevezes']));
+                $torzs = $sz ? $sz->brutto_ar : null;
+                $felso = $sz ? (float) $sz->ar_max : 0.0;
+            }
+
+            // Ársávos szolgáltatásnál (tól–ig) a sávon belüli ár nem átírás.
+            $savban = $torzs !== null && $felso > 0 && $ar >= (float) $torzs - 0.005 && $ar <= $felso + 0.005;
+
+            if ($kedv >= 0.005 || ($torzs !== null && !$savban && abs((float) $torzs - $ar) >= 0.005)) {
+                $ki[] = (string) $sor['megnevezes'];
+            }
+        }
+
+        return array_values(array_unique($ki));
+    }
+
+    /** Ha a szerepnek nincs „Tételár átírása” joga és mégis átírt árat küldött: a hibaüzenet, különben ''. */
+    public static function ar_jog_hiba(int $munkalap_id, array $sorok): string
+    {
+        if (!class_exists('SDH_Muhely_Szerepkor') || SDH_Muhely_Szerepkor::megvan('tetel_ar')) {
+            return '';
+        }
+
+        $v = self::ar_valtozasok($munkalap_id, $sorok);
+
+        return $v === [] ? '' : 'A tétel árát vagy kedvezményét nem írhatod át (hiányzó jog: „Tételár átírása a lapon”): ' . implode(', ', array_slice($v, 0, 3)) . '. Kérd meg az adminisztrátort, vagy hagyd a törzsárat.';
+    }
+
     public static function mentes(int $munkalap_id, array $sorok): void
     {
         global $wpdb;

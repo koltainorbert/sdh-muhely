@@ -12915,3 +12915,15 @@
         });
     });
 }());
+
+/* H5b (0.95.0): „Tételár átírása” jog nélkül a tételár / kedvezmény mezőbe billentyűzettel sem lehet írni. */
+document.addEventListener('focusin', function (e) {
+    'use strict';
+
+    var t = e.target;
+
+    if (document.body.classList.contains('sdh-nem-tetel_ar') && t && t.name && /^tetelek.*\[(brutto_ar|kedvezmeny)\]$/.test(t.name)) {
+        t.readOnly = true;
+        t.title = 'Az ár átírásához „Tételár átírása a lapon” jog kell.';
+    }
+});

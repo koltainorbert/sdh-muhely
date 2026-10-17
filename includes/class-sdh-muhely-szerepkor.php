@@ -68,6 +68,10 @@ final class SDH_Muhely_Szerepkor
                 'cim'    => 'Árak és törzsek átírása',
                 'leiras' => 'Termék- és szolgáltatás-törzs, árlista szerkesztése (az árak a munkalapon ettől függetlenül használhatók).',
             ],
+            'tetel_ar' => [
+                'cim'    => 'Tételár átírása a lapon',
+                'leiras' => 'A munkalapon a szolgáltatás / termék árát a törzsárhoz képest átírhatja, kedvezményt adhat. Enélkül a törzsár megy.',
+            ],
             'szamla' => [
                 'cim'    => 'Számla kiállítása',
                 'leiras' => 'Valódi (Számlázz.hu) számla kiállítása; az előnézet nem kell hozzá.',
@@ -165,7 +169,7 @@ final class SDH_Muhely_Szerepkor
             'penztaros' => [
                 'nev' => 'Pénztáros', 'zarolt' => false,
                 'tiltott' => ['asszisztens', 'levelezes'],
-                'jogok' => ['penztar_riport', 'szamla'],
+                'jogok' => ['penztar_riport', 'szamla', 'tetel_ar'],
             ],
         ];
     }

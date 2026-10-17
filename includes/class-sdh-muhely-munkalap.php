@@ -5402,6 +5402,19 @@ final class SDH_Muhely_Munkalap
             wp_send_json_error($utkozes, 409);
         }
 
+        // H5b (0.95.0): jog nélkül átírt tételár – a lap el sem mentődik (nincs félig mentett állapot).
+        if (!empty($_POST['tetelek_jelen'])) {
+            $ar_hiba = SDH_Muhely_Tetel::ar_jog_hiba($id, SDH_Muhely_Tetel::bekuldott(isset($_POST['tetelek']) ? wp_unslash($_POST['tetelek']) : []));
+
+            if ($ar_hiba !== '') {
+                if (class_exists('SDH_Muhely_Valtozasnaplo')) {
+                    SDH_Muhely_Valtozasnaplo::esemeny('munkalap', $id, 'Elutasítva: tételár átírása jog nélkül.', [], 'elutasitva');
+                }
+
+                wp_send_json_error(['uzenet' => $ar_hiba]);
+            }
+        }
+
         // A mentés előtti naplóállás lesz az új alap: a saját módosításaink ennél újabbak, de a sajátunk nem ütközés.
         $szerk_naplo = SDH_Muhely_Utkozes::alap();
 
