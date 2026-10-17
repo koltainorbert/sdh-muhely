@@ -99,6 +99,10 @@ A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is m
 6. Próbálj számlát kiállítani: azonnal szól, hogy most nem megy ki (nem vár percekig).
 7. Dugd vissza a kábelt: egy percen belül eltűnik a jelzés; a számlát most kiállíthatod.
 
+## Telefonon és tableten
+
+A rendszer telefonon is használható. Keskeny képernyőn a bal oldali menü ikonokra szűkül, a fejlécben csak a kereső, az óra ideje és a gombok maradnak; a széles táblázatok a saját helyükön oldalra húzhatók (maga az oldal nem csúszik el). A felugró ablakok (munkalap, ügyfél…) telefonon kitöltik a képernyőt, és **görgethetők** – nagy képernyőn továbbra sem görgetnek, ott a tartalom fér el egyben.
+
 ## Popupok és mentés
 
 Bármelyik menüpont felugró ablakára (popupjára) és a mentésre érvényes elakadások.

@@ -1101,3 +1101,56 @@ body.sdh-app[data-sav="csukva"] .sdh-sav__alsorok {
 body.sdh-app[data-sdh-sav-stilus="szines"] .sdh-sav__alsor::before {
     background: var(--sdh-accent-felirat);
 }
+
+/* ================================================================== */
+/* Telefon (0.96.0): a tartalom oszlopa összehúzódhat, a fejléc elfér, */
+/* a széles táblázat a tartalmon belül görgethető – az oldal nem.      */
+/* ================================================================== */
+
+@media (max-width: 860px) {
+    body.sdh-app,
+    body.sdh-app[data-sav="csukva"] {
+        grid-template-columns: calc(60px * var(--sdh-n)) minmax(0, 1fr);
+    }
+
+    .sdh-fej,
+    .sdh-app__torzs,
+    .sdh-kutat {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    body.sdh-app,
+    body.sdh-app[data-sav="csukva"] {
+        grid-template-columns: calc(48px * var(--sdh-n)) minmax(0, 1fr);
+    }
+
+    .sdh-fej {
+        gap: .4rem;
+        padding: 0 .5rem;
+    }
+
+    .sdh-fej__morzsa,
+    .sdh-ora--fej .sdh-ora__resz,
+    .sdh-ora--fej .sdh-ora__gyuru {
+        display: none;
+    }
+
+    .sdh-fej__jobb {
+        flex: 0 0 auto;
+        gap: .3rem;
+    }
+
+    .sdh-app__torzs {
+        overflow-x: auto;
+        padding: .8rem .6rem 2.5rem;
+    }
+
+    .sdh-net {
+        position: absolute;
+        top: 100%;
+        right: .5rem;
+        margin-top: .3rem;
+    }
+}

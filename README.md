@@ -64,6 +64,13 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.96.0 – telefonon is
+- Böngészős bejárás 60 oldalon (minden menüpont + Beállítások-lapfül) asztalon és 390 px széles telefonon: asztalon 0 hiba;
+  telefonon minden oldal ~200 px-lel oldalra csúszott. Javítva: a tartalom oszlopa `minmax(0, 1fr)`, 600 px alatt keskenyebb
+  oldalsáv, a fejlécből kimarad a morzsa és az óra dátuma, a széles táblázat a tartalmon belül görgethető. Utána 0 hiba.
+- A popupok telefonon (600 px alatt) nem kicsinyítődnek olvashatatlanra (`illesztPopup`), hanem kitöltik a képernyőt és
+  görgethetők (`.sdh-modal--telefon`). Nagy képernyőn változatlan (nincs görgetés). Súgó: Hibaelhárítás › Telefonon és tableten.
+
 ### 0.95.2
 - Javítás (a teljes tesztsor `WP_DEBUG` naplóval futtatva): a Napló a „Fiók” (`felhasznalo`) és az „Adatátvétel” (`atvetel`)
   eseményeknél nem létező táblát kérdezett (`sdh_felhasznalo`) – most a fiók nevét mutatja, és csak a rendszer saját tábláit

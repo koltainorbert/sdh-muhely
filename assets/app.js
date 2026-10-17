@@ -280,6 +280,17 @@
 
         dialog.sdhIllesztDb = (dialog.sdhIllesztDb || 0) + 1;
 
+        // Telefonon (0.96.0) a kicsinyítés olvashatatlan lenne: a popup kitölti a képernyőt, és görgethető.
+        if (window.innerWidth < 600) {
+            dialog.style.zoom = '';
+            dialog.classList.remove('sdh-modal--illeszt');
+            dialog.classList.add('sdh-modal--telefon');
+
+            return;
+        }
+
+        dialog.classList.remove('sdh-modal--telefon');
+
         var elozo = dialog.style.zoom;
 
         dialog.style.zoom = '';
