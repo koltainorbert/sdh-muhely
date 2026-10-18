@@ -37,7 +37,8 @@ T::tartalmaz($css, '+ input[type="checkbox"]', 'szöveg után álló kapcsolón�
 T::tartalmaz($css, ':where(.sdh-app, .sdh-modal) :where(input:not(', 'stílus nélküli mező is a rendszer mezője (0 specificitás)');
 T::igaz(substr_count($css, 'border-radius: var(--sdh-mezo-r)') >= 2, 'mezők: --sdh-mezo-r');
 T::tartalmaz($css, 'border-radius: var(--sdh-gomb-r)', 'gombok: --sdh-gomb-r');
-T::tartalmaz($css, 'min(var(--sdh-mezo-r), calc(14px * var(--sdh-n)))', 'szövegdoboz: legfeljebb 14 px ív');
+T::tartalmaz($css, 'min(var(--sdh-mezo-r), calc(15px * var(--sdh-n)))', 'szövegdoboz: legfeljebb 15 px ív');
+T::tartalmaz($css, 'select[multiple]', 'többsoros lista: legfeljebb 15 px ív (nem pill)');
 $forma = (string) file_get_contents($d . 'includes/class-sdh-muhely-arculat.php');
 T::igaz(preg_match("/'szogletes'\s*=>\s*\['calc\((\d+)px/", $forma, $m) === 1 && (int) $m[1] >= 4, 'a legkisebb gombforma is legalább 4 px-es ív');
 

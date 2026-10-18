@@ -79,7 +79,7 @@
     box-sizing: border-box;
     padding: .45rem .7rem;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: min(var(--sdh-mezo-r), calc(14px * var(--sdh-n)));
+    border-radius: min(var(--sdh-mezo-r), calc(15px * var(--sdh-n)));
     background-color: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font-family: inherit;
@@ -97,5 +97,12 @@
 
 .sdh-mezo textarea,
 .sdh-ig textarea {
-    border-radius: min(var(--sdh-mezo-r), calc(14px * var(--sdh-n)));
+    border-radius: min(var(--sdh-mezo-r), calc(15px * var(--sdh-n)));
+}
+
+/* Többsoros lista (select multiple / size) és szövegdoboz: legfeljebb 15 px-es ív – a pill alak rajtuk levágná a sorokat (0.97.1). */
+:is(.sdh-app, .sdh-modal) select[multiple],
+:is(.sdh-app, .sdh-modal) select[size]:not([size="1"]),
+:is(.sdh-app, .sdh-modal) :is(.sdh-mezo, .sdh-ig) select[multiple] {
+    border-radius: min(var(--sdh-mezo-r), calc(15px * var(--sdh-n)));
 }

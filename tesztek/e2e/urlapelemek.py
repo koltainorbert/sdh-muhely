@@ -29,7 +29,7 @@ MERES = r"""
       return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && r.bottom > -2000; };
   const nev = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.name ? '[name=' + el.name + ']' : '') +
       (typeof el.className === 'string' && el.className ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '');
-  const ki = {felirat: [], ter: [], kerek: []};
+  const ki = {felirat: [], ter: [], kerek: [], kilog: [], lista: []};
   const kapcsolok = [...document.querySelectorAll('.sdh-app input[type=checkbox], .sdh-modal input[type=checkbox]')]
       .filter(i => !i.closest('table') && !i.closest('.sdh-cs-pill') && !i.hasAttribute('data-sdh-nativ') && lat(i));
   // Szomszédok: látható, szöveget hordozó levélelemek és vezérlők.
@@ -72,6 +72,16 @@ MERES = r"""
       const keret = parseFloat(s.borderTopWidth) > 0 || (s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundColor !== 'transparent');
       if (!keret || m.closest('.sdh-szam__gombok')) continue;   // a léptető fél-gombjai a kerek dobozon belül   // keret és háttér nélküli (ikon- / szöveggomb): nincs mit kerekíteni
       if (parseFloat(s.borderTopLeftRadius) <= 0 && parseFloat(s.borderBottomRightRadius) <= 0) ki.kerek.push(nev(m));
+      // Többsoros lista: nem lehet pill (a sorokat levágná), legfeljebb 15 px ív.
+      if (m.tagName === 'SELECT' && (m.multiple || m.size > 1) && parseFloat(s.borderTopLeftRadius) > 16) ki.lista.push(nev(m) + ' (' + s.borderTopLeftRadius + ')');
+      // A gomb tartalma (ikon, felirat) nem lóghat ki a gombból (a gomb dobozán túl).
+      const gb = m.getBoundingClientRect();
+      if (/^(BUTTON|A)$/.test(m.tagName) || m.classList.contains('sdh-gomb')) {
+          for (const c of m.querySelectorAll('span, svg, img')) {
+              const cb = c.getBoundingClientRect();
+              if (cb.width > 0 && (cb.right > gb.right + 0.5 || cb.left < gb.left - 0.5)) { ki.kilog.push(nev(m) + ' „' + (m.textContent || '').trim().slice(0, 30) + '”'); break; }
+          }
+      }
   }
   return ki;
 }
@@ -94,7 +104,7 @@ async def fo():
         linkek = set(await o.eval_on_selector_all('.sdh-sav a.sdh-sav__link', 'l => l.map(a => a.href)'))
         await o.goto(CIM + '/?muhely=beallitasok')
         linkek |= set(await o.eval_on_selector_all('.sdh-beall__menu a.sdh-pill', 'l => l.map(a => a.href)'))
-        osszes = {'felirat': {}, 'ter': {}, 'kerek': {}}
+        osszes = {'felirat': {}, 'ter': {}, 'kerek': {}, 'kilog': {}, 'lista': {}}
         csak = os.environ.get('SDH_E2E_CSAK', '')
         if csak:
             linkek = {l for l in linkek if csak in l}
@@ -129,7 +139,7 @@ async def fo():
         await b.close()
 
     hiba = sum(len(v) for v in osszes.values())
-    print('űrlapelemek: %d oldal + %d popup, felirat %d, összeérő kapcsoló %d, kerekítetlen %d' % (db, popupok, len(osszes['felirat']), len(osszes['ter']), len(osszes['kerek'])))
+    print('űrlapelemek: %d oldal + %d popup, felirat %d, összeérő kapcsoló %d, kerekítetlen %d, kilógó gombtartalom %d, pill többsoros lista %d' % (db, popupok, len(osszes['felirat']), len(osszes['ter']), len(osszes['kerek']), len(osszes['kilog']), len(osszes['lista'])))
     n = 0
     for k, v in osszes.items():
         for h, hol in v.items():

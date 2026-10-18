@@ -454,6 +454,13 @@ dialog.sdh-ny-ajanlat::backdrop {
     gap: calc(8px * var(--sdh-n));
 }
 
+/* 0.97.1: a gomb felirata ne kapja meg a leírás-span szabályát (100% széles volt, kilógott a gombból). */
+.sdh-ny-beall__gombok .sdh-ny-gomb span {
+    flex: 0 0 auto;
+    font-size: inherit;
+    color: inherit;
+}
+
 /* ================================================================== */
 /* Sablonszerkesztő                                                    */
 /* ================================================================== */

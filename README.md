@@ -69,6 +69,7 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 - **A kapcsoló körül mindig van levegő:** nem érhet hozzá szöveghez, mezőhöz, másik kapcsolóhoz (legalább 6 px). Az alap
   margót az `assets/kapcsolo.css` adja; ahol szűk, ott a helyi CSS-ben kell helyet adni.
 - **Minden szövegmező, legördülő, szövegdoboz és gomb lekerekített** (`--sdh-mezo-r`, `--sdh-gomb-r`); éles sarkú nincs.
+  Többsoros lista és szövegdoboz legfeljebb 15 px-es ív (nem pill). A gomb tartalma nem lóghat ki a gombból.
   Stílus nélküli elemet a `kapcsolo.css` `:where()` szabálya kerekít; saját stílusnál `border-radius: 0` csak a kerek
   doboz belső, keret nélküli részén állhat.
 - A menüben csak az áll, amit a belépett fiók meg is nyithat.
@@ -78,6 +79,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 ---
 
 ## Verziónapló
+
+### 0.97.1
+- Beállítások › Nyomtatványok: a „Próbanyomat” gomb felirata kilógott a gombból (a leírás-span 100%-os szabályát kapta meg). Javítva.
+- A többsoros lista (pl. Mockupok › Kategóriák) nem pill: legfeljebb 15 px-es ív; a szövegdoboz is 15 px.
+- `tesztek/e2e/urlapelemek.py`: új mérés – kilógó gombtartalom, pill alakú többsoros lista (mindkettő 0).
 
 ### 0.97.0 – egységes űrlapelemek
 - A kapcsolók mellől eltűnt az „Aktív / Inaktív” felirat (a `kapcsolo.js` törölve).
