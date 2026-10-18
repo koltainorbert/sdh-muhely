@@ -102,7 +102,8 @@ final class SDH_Muhely_Sms
         $b       = array_merge(self::alapok(), is_array($mentett) ? $mentett : []);
 
         $b['be']         = !empty($b['be']);
-        $b['szimulacio'] = !empty($b['szimulacio']);
+        // Tesztüzemben (0.98.0) SMS nem megy ki: szimuláció, csak naplóz.
+        $b['szimulacio'] = !empty($b['szimulacio']) || (class_exists('SDH_Muhely_Halozat') && SDH_Muhely_Halozat::tesztuzem());
         $b['mod']        = in_array($b['mod'], ['helyi', 'felho', 'privat'], true) ? (string) $b['mod'] : 'helyi';
         $b['port']       = max(0, min(65535, (int) $b['port']));
         $b['idotullepes'] = max(2, min(60, (int) $b['idotullepes']));

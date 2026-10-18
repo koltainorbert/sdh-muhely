@@ -6,3 +6,4 @@
 /tools/mero-meres.php export-ignore
 # A forgalmazói központ külön bővítmény (kozpont/sdh-kozpont), nem kerül a vevők telepítőjébe.
 /kozpont        export-ignore
+/tesztadat      export-ignore

@@ -34,8 +34,28 @@ final class SDH_Muhely_Halozat
     /** @var array{online: bool, ido: int}|null */
     private static ?array $most = null;
 
+    /** Tesztüzemben ezekre a címekre semmi nem megy ki: számla, Google (Drive-mentés). */
+    private const TESZT_TILTOTT = ['szamlazz.hu', 'googleapis.com', 'accounts.google.com', 'oauth2.googleapis.com'];
+
+    /**
+     * Tesztüzem (0.98.0): próbapéldányon (pl. tömeges tesztadattal) semmi nem mehet ki valódi embernek vagy
+     * valódi szolgáltatásba – SMS (szimuláció), e-mail, számla, külső mentés. Bekapcsolja az `sdh_muhely_tesztuzem`
+     * szűrő (az SDH Tesztadat kiegészítő) vagy a wp-config.php: `define('SDH_MUHELY_TESZTUZEM', true);`
+     */
+    public static function tesztuzem(): bool
+    {
+        return (bool) apply_filters('sdh_muhely_tesztuzem', defined('SDH_MUHELY_TESZTUZEM') && SDH_MUHELY_TESZTUZEM);
+    }
+
+    /** Tesztüzemben a WordPress levele „elküldöttnek” számít, de nem megy ki. @param mixed $elozo @return mixed */
+    public static function level_elott($elozo)
+    {
+        return self::tesztuzem() ? true : $elozo;
+    }
+
     public static function init(): void
     {
+        add_filter('pre_wp_mail', [self::class, 'level_elott'], 1);
         add_filter('pre_http_request', [self::class, 'kerelem_elott'], 5, 3);
         add_filter('sdh_muhely_pulzus', [self::class, 'pulzus'], 30, 1);
     }
@@ -156,6 +176,16 @@ final class SDH_Muhely_Halozat
 
         if ($elozo !== false || !is_string($url) || self::helyi($url)) {
             return $elozo;
+        }
+
+        if (self::tesztuzem()) {
+            $host = strtolower((string) wp_parse_url($url, PHP_URL_HOST));
+
+            foreach (self::TESZT_TILTOTT as $t) {
+                if ($host === $t || str_ends_with($host, '.' . $t)) {
+                    return new WP_Error('sdh_tesztuzem', 'Tesztüzem: ez a kérés (számla, Google-mentés) próbapéldányról nem megy ki.');
+                }
+            }
         }
 
         if (self::online()) {

@@ -113,6 +113,11 @@ final class SDH_Muhely_Mentes
 
     public static function idozitett(): void
     {
+        // Tesztüzemben (0.98.0) nincs napi automatikus mentés (próbaadat; a kézi mentés megy).
+        if (class_exists('SDH_Muhely_Halozat') && SDH_Muhely_Halozat::tesztuzem()) {
+            return;
+        }
+
         self::keszit();
         // A napi futás a korábban elakadt külső másolásokat is újraindítja.
         self::kulso_ujra_ha_kell(true);
@@ -332,6 +337,11 @@ final class SDH_Muhely_Mentes
      */
     public static function kulso_masolat(string $fajl, ?array $csak = null): array
     {
+        // Tesztüzemben (0.98.0) a próbaadat nem kerülhet a valódi Drive / FTP / NAS mentések közé.
+        if (class_exists('SDH_Muhely_Halozat') && SDH_Muhely_Halozat::tesztuzem()) {
+            return [];
+        }
+
         $idk = SDH_Muhely_Mentes_Cel::aktiv_idk();
 
         if ($csak !== null) {

@@ -4,8 +4,8 @@ cim: Telepítés és frissítés
 csoport: Rendszer
 csak: fejleszto
 modul:
-szakaszok:
-kulcsszavak: licenc, központ, SDH Központ, eladás, vevő, licenckulcs, kiadás, telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
+szakaszok: tesztadat
+kulcsszavak: tesztadat, tesztüzem, terheléses teszt, próbaadat, 300 000, generálás, licenc, központ, SDH Központ, eladás, vevő, licenckulcs, kiadás, telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
 osszefoglalo: Mit kíván a rendszer, hogyan telepíted egy külön belső WordPressbe, hogyan frissíted egy kattintással a GitHubról vagy a teljes zip feltöltésével úgy, hogy az adatok megmaradnak, és mit próbálj ki élesítés előtt.
 ---
 
@@ -189,6 +189,20 @@ Költöztetéskor a teljes WordPresst vidd át: az adatbázist és a fájlokat i
 - A `wp-config.php` titkos kulcsait (a *salt* értékeket) vidd át változatlanul. A titkosítva tárolt jelszavak ezekhez kötődnek: ha megváltoznak, az alkalmazásjelszót és az API-kulcsokat újra be kell írni.
 - Költözés után nézd meg a **Névjegy** lapfület, és próbáld ki a levelezés **Kapcsolat ellenőrzése** gombját.
 
+## Tesztadat és tesztüzem (terheléses teszt)
+
+Nagy adatmennyiséggel a sebesség és a keresés csak úgy próbálható ki, ha van mivel. Erre való a külön **SDH Tesztadat** kiegészítő (a forrásban: `tesztadat/sdh-tesztadat/`, zip: `sdh-tesztadat-1.0.0.zip`). **Csak próbapéldányra** kerülhet – a LocalWP-ben az oldal klónjára (jobb klikk az oldalon › Clone), soha nem az éles rendszerre.
+
+1. A klónon kapcsold be a kiegészítőt. A felület tetején megjelenik a **Tesztüzem** sáv: ettől kezdve SMS csak szimuláció, e-mail, számla és külső mentés nem megy ki, napi automatikus mentés nincs.
+2. **Beállítások › Rendszer › Tesztadat**: válaszd a méretet (1 000 / 10 000 / 100 000 / 300 000 mindenből), és nyomd meg kétszer a **Generálás indítása** gombot.
+3. A sáv mutatja, hol tart. Az oldal maradjon nyitva; ha megszakad, a **Folytatás** onnan megy tovább.
+4. Utána: keresés, rácsok, riportok, és a **Sebesség › Mérés indítása**.
+5. A végén **Tesztadat törlése** (kétszer), majd a kiegészítő kikapcsolása. A kikapcsolás magában is töröl, de nagy adatnál a gomb a biztosabb, mert sávval, adagokban dolgozik.
+
+Amit generál: kitalált ügyfelek (85% magyar, 15% külföldi – fele külföldi címmel), eszközök, termékek (nyitókészlettel), szolgáltatások, munkalapok (javítás, árukiadás, rendelés; 1–3 tétellel és egy hibával), pénztártételek, az elmúlt hat évre szétosztva. Minden sor jelölt; a törlés csak a jelölt sorokat és a hozzájuk később kapcsolt adatot (hibák, napló, üzenetek, SMS-ek) viszi el – a példány saját adataihoz nem nyúl, akkor sem, ha a generálás közben megszakadt.
+
+> **Figyelem:** A tesztüzem a wp-config.php-ban is bekapcsolható: `define('SDH_MUHELY_TESZTUZEM', true);` – így egy próbapéldány akkor sem küld semmit, ha a kiegészítő nincs fent.
+
 ## Mit próbálj ki élesítés előtt
 
 Menj végig ezen a listán egy próbaügyféllel:
@@ -280,6 +294,10 @@ A felvitel, a munkalap, a pénztár és a helyi nyomtatvány igen. A levelezés,
 ### Kell más bővítmény a működéshez?
 
 Maga a rendszer nem kíván másikat. Az értesítő levelekhez érdemes egy SMTP-bővítmény.
+
+### Mennyi idő 300 000 tesztadat generálása?
+
+A tesztkörnyezetben (SQLite) 100 000 mindenből kb. egy perc volt; MySQL-en a géptől függ, becslés szerint 10–30 perc a 300 000. A sáv mutatja az eltelt és a hátralévő időt.
 
 ### Vissza tudok lépni az előző verzióra?
 

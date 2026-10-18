@@ -660,6 +660,10 @@ final class SDH_Muhely_Frontend
         </header>
 
         <main class="sdh-app__torzs">
+            <?php // Tesztüzem (0.98.0): mindenki lássa, hogy ez próbapéldány, és semmi nem megy ki. ?>
+            <?php if (class_exists('SDH_Muhely_Halozat') && SDH_Muhely_Halozat::tesztuzem()) : ?>
+                <div class="sdh-uzenet sdh-uzenet--figyelem sdh-tesztuzem-jel" role="status"><strong>Tesztüzem.</strong> Ez próbapéldány: SMS, e-mail, számla és külső mentés nem megy ki.</div>
+            <?php endif; ?>
             <?php // N4 (0.93.0): licencfigyelmeztetés az adminisztrátornak (lejárt / tiltott / nincs kapcsolat). ?>
             <?php if (class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Admin_UI::admin_e() && ($sdh_licenc_jel = SDH_Muhely_Licenc::figyelmeztetes()) !== '') : ?>
                 <div class="sdh-uzenet sdh-uzenet--hiba sdh-licenc-jel" role="status"><?php echo esc_html($sdh_licenc_jel); ?></div>

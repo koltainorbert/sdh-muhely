@@ -3346,6 +3346,11 @@ final class SDH_Muhely_Levelezes
     /** A kimenő levelek küldője (a WordPress saját PHPMailer-példánya helyett külön, fiókonként beállítva). */
     private static function levelkuldo(array $fiok): \PHPMailer\PHPMailer\PHPMailer
     {
+        // Tesztüzemben (0.98.0) levél nem megy ki a saját postafiókokból sem.
+        if (class_exists('SDH_Muhely_Halozat') && SDH_Muhely_Halozat::tesztuzem()) {
+            throw new \RuntimeException('Tesztüzem: ezen a próbapéldányon levél nem megy ki.');
+        }
+
         if (!class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
             require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
             require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';

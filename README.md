@@ -80,6 +80,18 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.98.0 – tesztüzem és tesztadat
+- **Tesztüzem** (`SDH_Muhely_Halozat::tesztuzem()`, szűrő: `sdh_muhely_tesztuzem`, vagy `define('SDH_MUHELY_TESZTUZEM', true)`):
+  SMS csak szimuláció, `wp_mail` nem megy ki, a saját postafiókokból sem, Számlázz.hu és Google (Drive) tiltva, nincs külső
+  mentés és napi automatikus mentés; a felületen „Tesztüzem” sáv.
+- **SDH Tesztadat 1.0.0** – külön kiegészítő (`tesztadat/sdh-tesztadat`, zip: `sdh-tesztadat-1.0.0.zip`, a telepítőbe nem kerül):
+  1 000 / 10 000 / 100 000 / 300 000 mindenből (ügyfél 85% magyar / 15% külföldi, eszköz, termék nyitókészlettel,
+  szolgáltatás, munkalap 1–3 tétellel és hibával, pénztártétel), adagolva, sávval, folytatható. Bekapcsolva tesztüzem.
+  Törlés jelölés alapján (állapot nélkül is), a saját adathoz nem nyúl; kikapcsoláskor is töröl.
+  Mért (SQLite tesztkörnyezet): 100 000 mindenből 67 s generálás, 21,7 s törlés; Sebesség-mérés: ügyfélkereső és rács 0,3–69 ms;
+  bejárás 61 oldal × 2 nézet 0 hiba, fő folyamatok 99/99.
+- Új teszt: t91.
+
 ### 0.97.1
 - Beállítások › Nyomtatványok: a „Próbanyomat” gomb felirata kilógott a gombból (a leírás-span 100%-os szabályát kapta meg). Javítva.
 - A többsoros lista (pl. Mockupok › Kategóriák) nem pill: legfeljebb 15 px-es ív; a szövegdoboz is 15 px.
