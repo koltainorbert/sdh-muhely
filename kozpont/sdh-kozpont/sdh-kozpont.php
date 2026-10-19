@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       SDH Központ
  * Description:       Az SDH Műhely forgalmazói központja: vevők (CRM), licencek és jogok, élő rendszerfigyelés, távoli karbantartás és támogatás, kiadások.
- * Version:           2.0.0
+ * Version:           2.0.1
  * Requires PHP:      8.0
  * Text Domain:       sdh-kozpont
  *
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SDH_KOZPONT_VERSION', '2.0.0');
+define('SDH_KOZPONT_VERSION', '2.0.1');
 define('SDH_KOZPONT_FILE', __FILE__);
 define('SDH_KOZPONT_DIR', __DIR__);
 
