@@ -223,7 +223,8 @@ const SDH_TEMA_BETU_BRICOLAGE = ['meret' => '100', 'fel' => '100', 'le' => '25']
 function sdh_tema_fej_elso(): void
 {
     // A localStorage tiltott lehet (privát mód) – try/catch.
-    echo "<script>(function(d){d.className+=' js';try{var t=localStorage.getItem('szinmod');if(t==='sotet'||t==='vilagos'){d.setAttribute('data-tema',t)}}catch(e){}})(document.documentElement)</script>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+    // A wp_print_inline_script_tag a CSP-nonce-t is felteszi (a biztonsági modul szűrőjén át).
+    wp_print_inline_script_tag("(function(d){d.className+=' js';try{var t=localStorage.getItem('szinmod');if(t==='sotet'||t==='vilagos'){d.setAttribute('data-tema',t)}}catch(e){}})(document.documentElement)");
 }
 add_action('wp_head', 'sdh_tema_fej_elso', 0);
 

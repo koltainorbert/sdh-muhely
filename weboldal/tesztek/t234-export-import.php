@@ -21,6 +21,10 @@ SDH_Sales::b_ment(['termeknev' => 'Más']);
 SDH_Sales_Tartalom::ment('csomag', 't234', ['kulcs' => 't234', 'nev' => 'Átírt', 'havi' => 1]);
 SDH_Sales_Tartalom::szekciok_ment($p, [['tipus' => 'cta', 'cim' => 'Más']]);
 SDH_Sales_Exportimport::seo_ir($p, ['title' => 'Más', 'description' => '', 'kulcsszo' => '']);
+// Tiszta kiindulás: a korábbi futások mentései (a feltöltési mappa nem áll vissza a tiszta adatbázissal) ne érjék el a megőrzési korlátot.
+foreach (SDH_Sales_Exportimport::mentesek() as $m) {
+    @unlink(trailingslashit(wp_upload_dir()['basedir']) . 'portal-mentes/' . $m['nev']);
+}
 $elo = count(SDH_Sales_Exportimport::mentesek());
 $r = t_rest('POST', '/admin/import', ['csomag' => $e1])->get_data();
 T::igaz(!empty($r['ok']), 'import ok');

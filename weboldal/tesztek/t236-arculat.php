@@ -17,12 +17,12 @@ T::igaz(SDH_Sales_Arculat::ervenyes('arnyek', '0 10px 30px -10px rgba(0,0,0,.5),
 T::igaz(SDH_Sales_Arculat::ervenyes('betu-cim', '"Space Grotesk", Inter, sans-serif') !== null, 'jó betű');
 T::igaz(SDH_Sales_Arculat::ervenyes('max', '1240px') !== null, 'jó méret');
 
-$v = t_rest('POST', '/admin/arculat', ['ertekek' => ['kiemelo' => ['#ff0000', 'red;}</style><script>alert(1)</script>'], 'r-gomb' => '8px', 'max' => '1200px'], 'mod' => 'vilagos', 'logo' => 'javascript:alert(1)']);
+$v = t_rest('POST', '/admin/arculat', ['ertekek' => ['kiemelo' => ['#ff0000', 'red;}</style><script>alert(1)</script>'], 'r-gomb' => '8px', 'max' => (string) (SDH_Sales_Arculat::alapok()['max'][0] ?? '1200px')], 'mod' => 'vilagos', 'logo' => 'javascript:alert(1)']);
 T::egyezik(422, $v->get_status(), 'hibás érték → 422');
 $css = SDH_Sales_Arculat::css();
 T::tartalmaz($css, '--s-kiemelo:#ff0000', 'jó érték mentve');
 T::tartalmaz($css, '--s-r-gomb:8px', 'méret');
-T::nem_tartalmaz($css, '--s-max', 'az alappal egyező nem kerül ki');
+T::nem_tartalmaz($css, '--s-max:', 'az alappal egyező nem kerül ki');
 T::nem_tartalmaz($css, '</style', 'nincs kitörés');
 T::nem_tartalmaz($css, 'script', 'nincs szkript');
 T::egyezik('', (string) SDH_Sales::b('arculat.logo', ''), 'javascript-logó elutasítva');

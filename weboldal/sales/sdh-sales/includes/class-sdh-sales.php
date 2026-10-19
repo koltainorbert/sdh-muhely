@@ -32,6 +32,8 @@ final class SDH_Sales
         }
 
         add_filter('document_title_parts', [self::class, 't_tomb'], 99);
+        // A pre_get_document_title eredményét a rendszer nem escapeli: utolsóként mi tesszük (dupla escapelés nélkül).
+        add_filter('pre_get_document_title', static fn ($t) => is_string($t) && $t !== '' ? esc_html(wp_specialchars_decode(self::t($t), ENT_QUOTES)) : $t, 9999);
         add_filter('rank_math/frontend/title', [self::class, 'szuro_t'], 99);
         add_filter('rank_math/frontend/description', [self::class, 'szuro_t'], 99);
         add_filter('rank_math/opengraph/facebook/og_title', [self::class, 'szuro_t'], 99);
