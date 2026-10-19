@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "Az **Áttekintés** a rendszer kezdőképernyője. Belépés után ide érkezel, és a napi munka nagy része innen elvégezhető.\n\nHárom része van, fentről lefelé:\n\n- **Gombsor** a cím mellett: új munkalap, ügyfél, termék, szolgáltatás, árukiadás, rendelés.\n- **Modulcsempék**: minden menüpont egy csempe, a legfontosabb számával.\n- **Munkalap-rács**: az összes munkalap egy táblázatban, nézetekkel, szűrőkkel, kereséssel. Alatta a kijelölt munkalap részletei.\n\nA lapok popupban nyílnak, mentés után a rács magától frissül.",
-            "t": "attekintes mire valo mire valo attekintes rendszer kezdokepernyo belepes utan ide erkezel napi munka nagy resze inn elvegezheto har resze fen lefele gombsor cim mell uj munkalap ugyfel term szolgaltatas arukiadas rendeles modulcsemp menup csempe legfontosabb szama munkalap racs osszes munkalap tablaz nez szurokkel keresessel alatta kijelol munkalap reszl lap popup nyil mentes utan racs maga frissul",
+            "t": "attekin mire valo mire valo attekin rendszer kezdokepernyo belep utan ide erkezel napi munka nagy resze inn elvegezheto har resze fen lefele gombsor cim mell uj munkalap ugyfel term szolgalt aruki rendel modulcsemp menup csempe legfontosabb szama munkalap racs ossz munkalap tablaz nez szurokkel keresessel alatta kijelol munkalap reszl lap popup nyil men utan racs maga frissul",
             "h": 57
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "Az oldalmenü legfelső pontja: Áttekintés. Belépés után is ez az oldal jelenik meg.\n\nAz óra és a zárásig hátralévő idő a felső fejlécben van, minden oldalon. A betűméret csúszkája a profilmenüben (jobb felső sarok, a nevedre kattintva) és a Beállítások **Logó és megjelenés** lapfülén található.",
-            "t": "attekintes talal talal oldalmenu legfelso pon attekintes belepes utan oldal jeleni ora zaras hatralevo ido felso fejlec oldal betumer csuszka profilmenu jobb felso sar nev kattintva beallitas logo megjelenes lapful talalhato",
+            "t": "attekin talal talal oldalmenu legfelso pon attekin belep utan oldal jele ora zar hatralevo ido felso fejlec oldal betumer csuszka profilmenu jobb felso sar nev kattintva beallit logo megjel lapful talalhato",
             "h": 31
         },
         {
@@ -25,7 +25,7 @@
             "cim": "A fejléc gombsora",
             "horgony": "a-fejlec-gombsora",
             "szoveg": "Az Áttekintés címe mellett ezek a gombok állnak:\n\n| Gomb | Mit csinál |\n|---|---|\n| **+ Új munkalap** | Üres munkalap popupban. Részletesen: Munkalapok. |\n| **+ Új ügyfél** | Új ügyfél felvétele popupban. |\n| **+ Új termék**, **+ Új szolgáltatás** | Új tétel a törzsbe. Mentés után az Áttekintésen maradsz. |\n| **Napi árukiadás** | Új pultos eladás lapja, javítás nélkül. |\n| **Rendelések** | Új rendelés lapja egy ügyfélnek. |\n| **Csempék elrejtése** | Eltünteti a modulcsempéket, így a rács több helyet kap. Vissza: **Csempék megjelenítése**. |\n\nA meglévő árukiadások és rendelések listáját a menüpontjukban vagy a csempéjükre kattintva találod.",
-            "t": "attekintes fejlec gombso fejlec gombso attekintes cime mell gomb all gomb csinal uj munkalap ures munkalap popup reszletes munkalap uj ugyfel uj ugyfel felvetele popup uj term uj szolgaltatas uj tetel torzs mentes utan attekintes maradsz napi arukiadas uj pultos eladas lap javitas nelkul rendeles uj rendeles lap ugyfel csemp elrejtese eltunteti modulcsemp igy racs tobb hely kap vissza csemp megjelenitese meglevo arukiadas rendeles listaj menupont csempe kattintva talal",
+            "t": "attekin fejlec gombso fejlec gombso attekin cime mell gomb all gomb csinal uj munkalap ures munkalap popup reszlet munkalap uj ugyfel uj ugyfel felvetele popup uj term uj szolgalt uj tetel torzs men utan attekint maradsz napi aruki uj pultos elad lap javi nelkul rendel uj rendel lap ugyfel csemp elrejtese eltunteti modulcsemp igy racs tobb hely kap vissza csemp megjelenitese meglevo arukiad rendel listaj menupont csempe kattintva talal",
             "h": 69
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Modulcsempék",
             "horgony": "modulcsempek",
             "szoveg": "Az Áttekintés gombsora alatt minden menüpontnak van egy csempéje: a modul neve, alatta egy szám és egy rövid felirat. Kattintásra megnyílik a modul.\n\nAlapból ezek a számok látszanak: aktív ügyfél, nyilvántartott eszköz, nyitott munkalap, olvasatlan üzenet, olvasatlan levél (és külön, hány azonnali), Ft a kasszában (várható), szolgáltatás, termék, olvasatlan csapatüzenet, mai esemény, mai árukiadás, folyamatban lévő rendelés.\n\nAmelyik modulnak nincs száma, annak a csempéjén csak ennyi áll: *megnyitás*. A csempe kiemelve jelez, ha teendő vár: olvasatlan ügyfélüzenet vagy csapatüzenet, azonnali levél, esedékes naptáresemény.\n\nA **nyitott munkalap** a számozott, le nem zárt javítási lapok száma. Az árajánlat, a sablon, a napi árukiadás és a rendelés nem számít bele.\n\nMentés és állapotváltás után a számok maguktól frissülnek, nem kell újratölteni az oldalt.\n\nA csempék elrejtése a saját böngésződre szól. Hogy melyik csempe létezzen egyáltalán, azt a Beállítások **Áttekintés csempéi** lapfülén lehet megadni.",
-            "t": "attekintes modulcsemp modulcsemp attekintes gombso ala menupon csempe modul neve alatta szam rovid felir kattintas megnyili modul alap szam latsza aktiv ugyfel nyilvantart eszkoz nyit munkalap olvasatlan uzen olvasatlan level kul hany azonnali ft penztar varhato szolgaltatas term olvasatlan csapatuz mai esemeny mai arukiadas folyam levo rendeles amelyi modul nincs szama ann csempej ennyi all megnyitas csempe kiemelve jelez teendo var olvasatlan ugyfeluz csapatuz azonnali level esedekes naptaresemeny nyit munkalap szamoz zar javitasi lap szama arajanl sabl napi arukiadas rendeles szami bele mentes allapotvaltas utan szam mag frissul ujratolteni oldal csemp elrejtese saj bongesz szol csempe letezz egyaltalan beallitas attekintes csemp lapful megadni",
+            "t": "attekin modulcsemp modulcsemp attekin gombso ala menupon csempe modul neve alatta szam rovid felir kattint megnyili modul alap szam latsza aktiv ugyfel nyilvantart eszkoz nyit munkalap olvasatlan uzen olvasatlan level kul hany azonnali ft penztar varhato szolgalt term olvasatlan csapatuz mai esemeny mai aruki folyam levo rendel amelyi modul nincs szama ann csempej ennyi all megnyi csempe kiemelve jelez teendo var olvasatlan ugyfeluz csapatuz azonnali level esed naptaresemeny nyit munkalap szamoz zar javitasi lap szama arajanl sabl napi aruki rendel szami bele men allapotval utan szam mag frissul ujratolte oldal csemp elrejtese saj bongesz szol csempe letezz egyaltalan beallit attekin csemp lapful meg",
             "h": 103
         },
         {
@@ -41,7 +41,7 @@
             "cim": "A munkalap-rács",
             "horgony": "a-munkalap-racs",
             "szoveg": "A rács az Áttekintés fő része: minden javítási munkalap és minden napi árukiadás egy-egy sor. A rendelések nincsenek benne, azok a Rendelések menüpontban állnak.\n\nMindig csak egy oldalnyi sort tölt be, ezért sok százezer munkalapnál is gyors. A sorok azonnal megjelennek; a találatok számát és az összesítő sort a rendszer közben számolja, és ha még nem kész, egy pillanatra `…` áll a helyén (lapozó: `1 / …`). Amíg a munkalapok nem változnak, ugyanarra a szűrésre a szám azonnal jön.",
-            "t": "attekintes munkalap racs munkalap racs racs attekintes fo resze javitasi munkalap napi arukiadas sor rendeles nincse benne rendeles menupon all oldalnyi sor tol ezer szazezer munkalapnal gyors sor azonnal megjel talal szam osszesito sor rendszer koz szamol kesz pillan all hely lapozo amig munkalap valtoz ugyanar szures szam azonnal jon",
+            "t": "attekin munkalap racs munkalap racs racs attekin fo resze javitasi munkalap napi aruki sor rendel nincse benne rendel menupon all oldalnyi sor tol ezer szazezer munkalapnal gyors sor azonnal megjel talal szam osszesito sor rendszer koz szamol kesz pillan all hely lapozo amig munkalap valtoz ugyanar szur szam azonnal jon",
             "h": 50
         },
         {
@@ -49,7 +49,7 @@
             "cim": "A munkalap-rács › Az eszköztár",
             "horgony": "a-munkalap-racs",
             "szoveg": "### Az eszköztár\n\nA rács fölötti sor, balról jobbra:\n\n- **Nézetek** gomb – a kiválasztott nézet nevét mutatja. Ha a szűrést átállítottad, a név után pötty (•) áll; ha nincs kiválasztott nézet: *Egyéni szűrés*.\n- **Lapozó** – első, előző, következő, utolsó oldal, közte az oldalszám (`3 / 12`).\n- **Frissítés** és **Összesítő sor** (ki-be kapcsolja a rács alján az összegző sort).\n- **Szűrők törlése** – minden szűrőt és a keresést is törli, és visszaáll a *Minden munkalap* nézetre. A gombon szám mutatja, hány szűrő él.\n- A találatok száma, majd a **Keresés a látható oszlopokban…** mező.\n- **Sorok száma** – 25, 50, 100 vagy 200 sor oldalanként (alap: 50).\n- **Oszlopok** – melyik oszlop látszik.",
-            "t": "attekintes munkalap racs eszkoztar munkalap racs eszkoztar eszkoztar racs folotti sor bal jobb nez gomb kivalaszt nez nev mut szures atallitot nev utan potty all nincs kivalaszt nez egyeni szures lapozo elso elozo kovetkezo utolso oldal kozte oldalsz 12 frissites osszesito sor kapcsol racs aljan osszegzo sor szur torlese szur kereses torli visszaall munkalap nez gomb szam mut hany szuro talal szama majd kereses lathato oszlop mezo sor szama 25 50 100 200 sor oldalank alap 50 oszlop oszlop latszi",
+            "t": "attekin munkalap racs eszkoztar munkalap racs eszkoztar eszkoztar racs folotti sor bal jobb nez gomb kivalaszt nez nev mut szur atallitot nev utan potty all nincs kivalaszt nez egye szur lapozo elso elozo kovetkezo utolso oldal kozte oldalsz 12 frissi osszesito sor kapcsol racs aljan osszegzo sor szur torlese szur keres torli visszaall munkalap nez gomb szam mut hany szuro talal szama majd ker lathato oszlop mezo sor szama 25 50 100 200 sor oldalank alap 50 oszlop oszlop latszi",
             "h": 80
         },
         {
@@ -57,7 +57,7 @@
             "cim": "A munkalap-rács › A sorok",
             "horgony": "a-munkalap-racs",
             "szoveg": "### A sorok\n\n- Egy kattintás **kijelöli** a sort: kiemelő színt és a bal szélén színes sávot kap, a szövege félkövér lesz. A részletei megjelennek alul.\n- Dupla kattintás vagy Enter **megnyitja** a munkalapot szerkesztésre, popupban.\n- A ↑ ↓ nyilakkal lépkedhetsz a sorok között; a Home / End az oldal első, illetve utolsó sorára visz.\n- A lezárt munkalapok sora halványabb.\n- A lejárt határidő kiemelve látszik – de csak a még nyitott lapoknál.\n- Ha a sorra állsz, a típus, az IMEI szám, a sorozatszám, az ügyfél, a telefonszám és a cím mellett **másoló gomb** jelenik meg.\n- A **Sorszám** oszlopban gondolatjel áll, amíg a lap nem kapott munkalapszámot (árajánlat, sablon).",
-            "t": "attekintes munkalap racs sor munkalap racs sor sor kattintas kijeloli sor kiemelo szin bal szel szines sav kap szovege felkover reszl megjel alul dupla kattintas enter megnyi munkalap szerkesztes popup nyil lepkedhetsz sor koz home end oldal elso illetve utolso sora visz lezar munkalap sora halvanyabb lejar hatarido kiemelve latszi nyit lapoknal sor allsz tipus imei szam sorozatsz ugyfel telefonsz cim mell masolo gomb jeleni sorsz oszlop gondolatjel all amig lap kap munkalapsz arajanl sabl",
+            "t": "attekin munkalap racs sor munkalap racs sor sor kattin kijeloli sor kiemelo szin bal szel szin sav kap szovege felkover reszl megjel alul dupla kattin enter megnyi munkalap szerkeszt popup nyil lepkedhetsz sor koz home end oldal elso illetve utolso sora visz lezar munkalap sora halvanyabb lejar hatarido kiemelve latszi nyit lapoknal sor allsz tipus imei szam sorozatsz ugyfel telefonsz cim mell masolo gomb jele sorsz oszlop gondolatjel all amig lap kap munkalapsz arajanl sabl",
             "h": 75
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Nézetek",
             "horgony": "nezetek",
             "szoveg": "A nézet egy előre összeállított szűrés és rendezés az Áttekintés rácsában. A **Nézetek** gombra kattintva ezek közül választhatsz:\n\n| Nézet | Mit mutat |\n|---|---|\n| **Minden munkalap** | Mindent, sorszám szerint csökkenően. |\n| **Nyitott munkalapok** | A számozott, még le nem zárt lapokat. |\n| **Elkészült – átvételre vár** | Az elkészült lapokat, és ahol több eszközből már van kész. |\n| **Napi árukiadás** | Csak a pultos eladások lapjait. |\n| **Csak javítás (árukiadás nélkül)** | A javítási munkalapokat, eladások nélkül. |\n| **Fizetendő** | Ahol még van fizetnivaló, a legnagyobb összeggel elöl. |\n| **Lejárt határidő** | A nyitott lapokat, amelyek határideje elmúlt. |\n| **Ma készült** | A mai napon felvett lapokat. |\n| **Árajánlatok és sablonok** | A munkalapszám nélküli lapokat. |\n\nA nézetek az állapotlistából épülnek: ha a Beállításokban átnevezel egy állapotot, a nézet követi.\n\n### Lépésről lépésre: saját nézet mentése\n\n1. Állítsd be a szűrőket, a rendezést, az oszlopokat és az oldalméretet.\n2. Kattints a **Nézetek** gombra.\n3. Alul írd be a nevet az **Új nézet neve** mezőbe.\n4. Kattints a **Mentés** gombra (vagy nyomj Enter-t).\n\nA saját nézet a **Saját nézetek** alatt jelenik meg, és az oszlopokat is megjegyzi. A fiókodhoz tartozik: másik gépről belépve is megvan, de a kolléga nem látja. Legfeljebb 30 lehet. Módosítás után a panel **„Név” frissítése** gombja írja felül, a sor végi **×** törli.",
-            "t": "attekintes nez nez nez elo osszeallit szures rendezes attekintes racsa nez gomb kattintva kozul valaszthatsz nez mut munkalap mind sorsz szerin csokkeno nyit munkalap szamoz zar lap elkeszul atvetel var elkeszul lap ahol tobb eszkoz kesz napi arukiadas pultos eladas lapj javitas arukiadas nelkul javitasi munkalap eladas nelkul fizetendo ahol fizetnivalo legnagyobb osszeggel elol lejar hatarido nyit lap amely hataride elmul ma keszul mai nap felv lap arajanl sabl munkalapsz nelkuli lap nez allapotlista epul beallitas atnevezel allap nez koveti lepes lepes saj nez mentese allitsd szur rendezes oszlop oldalmer kattints nez gomb alul ird nev uj nez neve mezo kattints mentes gomb nyomj enter saj nez saj nez ala jeleni oszlop megjegyzi fiok tartozi masi gep belepve megvan kollega lat legfeljebb 30 modositas utan panel nev frissitese gomb irja felul sor vegi torli",
+            "t": "attekin nez nez nez elo osszeallit szur rendez attekin racsa nez gomb kattintva kozul valaszthatsz nez mut munkalap mind sorsz szerin csokkeno nyit munkalap szamoz zar lap elkeszul atvetel var elkeszul lap ahol tobb eszkoz kesz napi aruki pultos elad lapj javi aruki nelkul javitasi munkalap elad nelkul fizetendo ahol fizetnivalo legnagyobb osszeggel elol lejar hatarido nyit lap amely hataride elmul ma keszul mai nap felv lap arajanl sabl munkalapsz nelkuli lap nez allapotlista epul beallit atnevezel allap nez koveti lep lep saj nez mentese allitsd szur rendez oszlop oldalmer kattints nez gomb alul ird nev uj nez neve mezo kattints men gomb nyomj enter saj nez saj nez ala jele oszlop megjegyzi fiok tartozi masi gep belepve megvan kollega lat legfeljebb 30 modosi utan panel nev frissitese gomb irja felul sor vegi torli",
             "h": 134
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Oszlopok",
             "horgony": "oszlopok",
             "szoveg": "Az Áttekintés rácsában alapból ezek az oszlopok látszanak: **Sorszám, Jelzés, Állapot, Felelős, Azonosító, Gyártó, Típus, Garancia, IMEI szám, Sorozatszám, Ügyfél, Telefonszám, Cím, Készült, Határidő, Lezárva, Fizetve, Fizetés ideje, Bruttó é., Fizetett, Fizetendő, Belső megjegyzés**.\n\nBekapcsolható, alapból rejtett oszlopok: **Név, Megnevezés, Fizetési mód, Létrehozva, Módosítva**.\n\n- **Megjelenítés, elrejtés:** az **Oszlopok** gombbal. Az **Alaphelyzet** visszaállítja az eredeti elrendezést.\n- **Sorrend:** fogd meg az oszlop fejlécét, és húzd a helyére.\n- **Szélesség:** húzd az oszlopfej jobb szélét.\n\nNéhány oszlop jelentése:\n\n- **Azonosító** – az eszköz fajtája (például mobiltelefon).\n- **Típus** – az eszköz típusa. Ha a lapon több eszköz van, mellette `+1`, `+2` jelzi, hány további.\n- **Fizetett** – ami ténylegesen befolyt (előleg, részfizetés, teljes fizetés).\n- **Fizetendő** – a bruttó érték mínusz a fizetett összeg; kifizetett lapnál nulla. Negatív is lehet, ha az előleg több, mint a tételek értéke.\n\nAz oszlopok, a szűrők, a rendezés és az oldalméret a böngésződben megmarad: a rács legközelebb úgy nyílik, ahogy hagytad.",
-            "t": "attekintes oszlop oszlop attekintes racsa alap oszlop latsza sorsz jelzes allap felelos azonosito gyarto tipus garancia imei szam sorozatsz ugyfel telefonsz cim keszul hatarido lezarva fizetve fizetes ide brutto fizet fizetendo belso megjegyzes bekapcsolhato alap rejt oszlop nev megnevezes fizetesi mod letrehozva modositva megjelenites elrejtes oszlop gombbal alaphelyz visszaalli eredeti elrendezes sorrend fogd oszlop fejlec huzd helye szelesseg huzd oszlopfej jobb szel nehany oszlop jelentese azonosito eszkoz fajta peldaul mobiltelef tipus eszkoz tipusa lap tobb eszkoz mellette jelzi hany tovabbi fizet tenyleges befoly eloleg reszfizetes teljes fizetes fizetendo brutto ert minusz fizet osszeg kifizet lapnal nulla negativ eloleg tobb tetel erteke oszlop szur rendezes oldalmer bongesz megmar racs legkozelebb ugy nyili ahogy hagy",
+            "t": "attekin oszlop oszlop attekin racsa alap oszlop latsza sorsz jelz allap felelos azonosito gyarto tipus garancia imei szam sorozatsz ugyfel telefonsz cim keszul hatarido lezarva fizetve fiz ide brutto fizet fizetendo belso megjegyz bekapcsolhato alap rejt oszlop nev megnevez fizetesi mod letrehozva modositva megjeleni elrej oszlop gombbal alaphelyz visszaalli eredeti elrendez sorrend fogd oszlop fejlec huzd helye szelesseg huzd oszlopfej jobb szel nehany oszlop jelentese azonosito eszkoz fajta peldaul mobiltelef tipus eszkoz tipusa lap tobb eszkoz mellette jelzi hany tovabbi fizet tenyleg befoly eloleg reszfiz telj fiz fizetendo brutto ert minusz fizet osszeg kifizet lapnal nulla negativ eloleg tobb tetel erteke oszlop szur rendez oldalmer bongesz megmar racs legkozelebb ugy nyili ahogy hagy",
             "h": 113
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Szűrés, keresés, rendezés › Keresés",
             "horgony": "szures-kereses-rendezes",
             "szoveg": "### Keresés\n\nAz Áttekintés rácsa fölötti **Keresés a látható oszlopokban…** mezőbe írt szöveget a rács minden *látható* oszlopban keresi; elrejtett oszlopban nem. Az Esc törli a keresést.",
-            "t": "attekintes szures kereses rendezes kereses szures kereses rendezes kereses kereses attekintes racsa folotti kereses lathato oszlop mezo irt szoveg racs lathato oszlop keresi elrejt oszlop esc torli kereses",
+            "t": "attekin szur ker rendez ker szur ker rendez ker ker attekin racsa folotti ker lathato oszlop mezo irt szoveg racs lathato oszlop keresi elrejt oszlop esc torli keres",
             "h": 28
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Szűrés, keresés, rendezés › Szűrés oszloponként",
             "horgony": "szures-kereses-rendezes",
             "szoveg": "### Szűrés oszloponként\n\nAz oszlopfejek alatt szűrősor áll: minden oszlopnak saját szűrője van, és több szűrő egyszerre érvényes.\n\n**Szöveges oszlop** (Ügyfél, Típus, IMEI szám…): írd be a keresett részletet. Az alap a *tartalmazza*.\n\n**Szám és pénz** (Sorszám, Bruttó é., Fizetendő…): gépelhető rövidítések:\n\n| Beírás | Jelentés |\n|---|---|\n| `>5000` | nagyobb, mint 5000 |\n| `<=5000` | legfeljebb 5000 |\n| `<>0` | nem egyenlő nullával |\n| `=12000` | pontosan 12 000 |\n| `1000..5000` | 1000 és 5000 között |\n\n**Dátum** (Készült, Határidő, Lezárva…): részlet is elég – a `2026.10` az egész hónapot adja. A `>2026.10.01` az ez utáni, a `<2026.10.01` az ez előtti napokat mutatja.\n\n**Választós oszlop** (Jelzés, Állapot, Felelős, Azonosító, Garancia, Fizetve): kattints a szűrőmezőre, és pipáld ki az értékeket. Az **A kijelöltek kizárása** megfordítja a szűrést, a **Mind** mindent kijelöl.\n\nA mezők jobb szélén lévő kis gomb megnyitja a **szűrési feltétel** panelt a többi feltétellel: *nem tartalmazza, ezzel kezdődik, erre végződik, üres, nem üres*; dátumnál *ma, tegnap, ezen a héten, ebben a hónapban, az utolsó 7 napban, az utolsó 30 napban, ma előtt (lejárt)*. Alul **Alkalmaz** és **Szűrő törlése**.\n\nEgy szűrőt a mezőjében az Esc töröl. Mindet egyszerre a **Szűrők törlése** gomb.",
-            "t": "attekintes szures kereses rendezes szures oszloponk szures kereses rendezes szures oszloponk szures oszloponk oszlopfej ala szurosor all oszlop saj szuro tobb szuro egyszer ervenyes szoveges oszlop ugyfel tipus imei szam ird keres reszl alap tartalmazza szam penz sorsz brutto fizetendo gepelheto rovidites beiras jelentes 5000 nagyobb 5000 2026 10 01 utani",
+            "t": "attekin szur ker rendez szur oszloponk szur ker rendez szur oszloponk szur oszloponk oszlopfej ala szurosor all oszlop saj szuro tobb szuro egyszer erveny szoveg oszlop ugyfel tipus imei szam ird keres reszl alap tartalmazza szam penz sorsz brutto fizetendo gepelheto rovidit beir jelen 5000 nagyobb 5000 2026 10 01 uta",
             "h": 51
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Szűrés, keresés, rendezés › Rendezés",
             "horgony": "szures-kereses-rendezes",
             "szoveg": "### Rendezés\n\n- Kattints az oszlop fejlécére: először növekvő, másodszor csökkenő, harmadszor megszűnik a rendezés.\n- Shift + kattintás: másodlagos rendezés. Legfeljebb három oszlop szerint rendezhetsz, a fejlécben szám mutatja a sorrendet.\n- Az **Állapot** oszlop az állapotlista sorrendjében rendez, nem ábécé szerint.\n- Az ügyfél, telefonszám, cím, gyártó, típus, megnevezés, IMEI, sorozatszám és azonosító szerinti rendezés nagyon sok munkalapnál is gyors (a rendszer az ügyfelek és eszközök sorrendjében halad). Nagyon mély oldalon (több ezredik sor) lassabb lehet.",
-            "t": "attekintes szures kereses rendezes rendezes szures kereses rendezes rendezes rendezes kattints oszlop fejlece eloszor novekvo masodszor csokkeno harmadszor megszuni rendezes shif kattintas masodlagos rendezes legfeljebb har oszlop szerin rendezhetsz fejlec szam mut sorrend allap oszlop allapotlista sorrend rendez abece szerin ugyfel telefonsz cim gyarto tipus megnevezes imei sorozatsz azonosito szerinti rendezes munkalapnal gyors rendszer ugyfel eszkoz sorrend hal oldal tobb ezredi sor lassabb",
+            "t": "attekin szur ker rendez rendez szur ker rendez rendez rendez kattints oszlop fejlece eloszor novekvo masodszor csokkeno harmadszor megszu rendez shif kattin masodlagos rendez legfeljebb har oszlop szerin rendezhetsz fejlec szam mut sorrend allap oszlop allapotlista sorrend rendez abece szerin ugyfel telefonsz cim gyarto tipus megnevez imei sorozatsz azonosito szerinti rendez munkalapnal gyors rendszer ugyfel eszkoz sorrend hal oldal tobb ezredi sor lassabb",
             "h": 63
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Szűrés, keresés, rendezés › Összesítő sor",
             "horgony": "szures-kereses-rendezes",
             "szoveg": "### Összesítő sor\n\nA rács alján az *összes* találat összege áll, nem csak a látható oldalé: a munkalapok száma (Σ), és a **Bruttó é.**, a **Fizetett**, a **Fizetendő** összege.",
-            "t": "attekintes szures kereses rendezes osszesito sor szures kereses rendezes osszesito sor osszesito sor racs aljan osszes talal osszege all lathato oldale munkalap szama brutto fizet fizetendo osszege",
+            "t": "attekin szur ker rendez osszesito sor szur ker rendez osszesito sor osszesito sor racs aljan ossz talal osszege all lathato oldale munkalap szama brutto fizet fizetendo osszege",
             "h": 27
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Részletpanel a kijelölt sor alatt",
             "horgony": "reszletpanel-a-kijelolt-sor-alatt",
             "szoveg": "Az Áttekintés rácsa alatt a kijelölt munkalap részletei látszanak, lapfüleken:\n\n| Lapfül | Tartalom |\n|---|---|\n| **Munkalap** | Állapot, eszköz, ügyfél, felelős, dátumok, fizetés, összegek. Bal oldalt kiemelve a bruttó összeg és a fizetendő. |\n| **Eszköz** / **Eszközök (3)** | Az eszköz adatai; több eszköznél mind, egymás alatt. |\n| **Ügyfél** | Az ügyfél adatai. |\n| **Hibák** | A lap hibasorai. |\n| **Szolgáltatások**, **Termékek** | A tételek, összesítve. Több eszköznél Eszköz oszloppal. |\n| **RMA / Üzenetek** | Címke, ügyféloldal, üzenetek az ügyféllel. A jelvény az üzenetek számát mutatja; kiemelve, ha van olvasatlan. |\n| **Számlák**, **Pénztárbizonylatok** | Ezek a lapfülek jelenleg üresek. A számlákat a Számlázás, a pénztártételeket a Házipénztár mutatja. |\n\nBal oldalt alfülek vannak (**Adatok**, **Megjegyzés**, az eszköznél és az ügyfélnél **Csatolt fájlok**); a *(!)* jel azt mutatja, hogy van rajta tartalom. Fölöttük a **Szerkesztés** gomb megnyitja a lapot, az eszközt vagy az ügyfelet.\n\nA panel alján olvasható, ki és mikor készítette a munkalapot. A magasságát a rács és a panel közötti elválasztó húzásával állítod; az elválasztón a **Részletek elrejtése** gomb el is tünteti (vissza: **Részletek megjelenítése**).\n\nTöbb eszközös lapnál a **Munkalap** lapfülön eszközönként külön állapotválasztó áll; a váltás azonnal mentődik.",
-            "t": "attekintes reszletpanel kijelol sor ala reszletpanel kijelol sor ala attekintes racsa ala kijelol munkalap reszl latsza lapful lapful tartal munkalap allap eszkoz ugyfel felelos datum fizetes osszeg bal oldal kiemelve brutto osszeg fizetendo eszkoz eszkoz eszkoz ada tobb eszkoznel mind egymas ala ugyfel ugyfel ada hib lap hibasor szolgaltatas term tetel osszesitve tobb eszkoznel eszkoz oszloppal rma uzen cimke ugyfeloldal uzen ugyfellel jelveny uzen szam mut kiemelve olvasatlan szamla penztarbizonyl lapful jelenleg ures szaml szamlazas penztartetel hazipenztar mut bal oldal alful van ada megjegyzes eszkoznel ugyfelnel csa fajl jel mut rajta tartal folot szerkesztes gomb megnyi lap eszkoz ugyfel panel aljan olvashato keszitette munkalap magassag racs panel kozotti elvalaszto huzasa alli elvalasz reszl elrejtese gomb tunteti vissza reszl megjelenitese tobb eszkozos lapnal munkalap lapful eszkozonk kul allapotvalaszto all valtas azonnal mentodi",
+            "t": "attekin reszletpanel kijelol sor ala reszletpanel kijelol sor ala attekin racsa ala kijelol munkalap reszl latsza lapful lapful tartal munkalap allap eszkoz ugyfel felelos datum fiz osszeg bal oldal kiemelve brutto osszeg fizetendo eszkoz eszkoz eszkoz ada tobb eszkoznel mind egym ala ugyfel ugyfel ada hib lap hibasor szolgaltat term tetel osszesitve tobb eszkoznel eszkoz oszloppal rma uzen cimke ugyfeloldal uzen ugyfellel jelveny uzen szam mut kiemelve olvasatlan szamla penztarbizonyl lapful jelenleg ures szaml szamlaz penztartetel hazipenztar mut bal oldal alful van ada megjegyz eszkoznel ugyfelnel csa fajl jel mut rajta tartal folot szerkesz gomb megnyi lap eszkoz ugyfel panel aljan olvashato keszitette munkalap magassag racs panel kozotti elvalaszto huzasa alli elvalasz reszl elrejtese gomb tunteti vissza reszl megjelenitese tobb eszkozos lapnal munkalap lapful eszkozonk kul allapotvalaszto all val azonnal mentodi",
             "h": 131
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Lépésről lépésre: állapotváltás a rácsból",
             "horgony": "lepesrol-lepesre-allapotvaltas-a-racsbol",
             "szoveg": "1. Keresd meg a munkalap sorát az Áttekintés rácsában.\n2. Az **Állapot** oszlopban kattints a színes állapotra.\n3. Válaszd ki az új állapotot. Azonnal mentődik, nincs külön Mentés gomb.\n\nMi történik ilyenkor:\n\n- Ha a lap most lép először számozott állapotba, **munkalapszámot kap**.\n- Lezárt állapotnál beíródik a **Lezárva** dátum, és a sor elhalványul.\n- A rács és a csempék frissülnek; szűrt nézetből a sor el is tűnhet.\n- Ha a váltás nem lehetséges, visszaáll az előző állapot, és a rács kiírja az okot.\n\nFigyelem: Több eszközös lapnál a rácsban a **közös** állapotot látod; mellette például `1/2` jelzi, hány eszköz kész. Ha itt írod át, **minden eszköz** ezt kapja. Egyetlen eszközét a részletpanelen vagy a munkalapon állítsd.",
-            "t": "attekintes lepes lepes allapotvaltas racs lepes lepes allapotvaltas racs keresd munkalap sor attekintes racsa allap oszlop kattints szines allap valaszd uj allap azonnal mentodi nincs kul mentes gomb torteni ily lap lep eloszor szamoz allap munkalapsz kap lezar allapotnal beirodi lezarva datum sor elhalvanyul racs csemp frissul szur nez sor tunh valtas lehetseges visszaall elozo allap racs kiir oko figyel tobb eszkozos lapnal racs kozos allap lat mellette peldaul jelzi hany eszkoz kesz irod eszkoz kap egyetl eszkoz reszletpanel munkalap allitsd",
+            "t": "attekin lep lep allapotval racs lep lep allapotval racs keresd munkalap sor attekin racsa allap oszlop kattints szin allap valaszd uj allap azonnal mentodi nincs kul men gomb torte ily lap lep eloszor szamoz allap munkalapsz kap lezar allapotnal beirodi lezarva datum sor elhalvanyul racs csemp frissul szur nez sor tunh val lehetseg visszaall elozo allap racs kiir oko figyel tobb eszkozos lapnal racs kozos allap lat mellette peldaul jelzi hany eszkoz kesz irod eszkoz kap egyetl eszkoz reszletpanel munkalap allitsd",
             "h": 81
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Jelzés (zászló)",
             "horgony": "jelzes-zaszlo",
             "szoveg": "Az Áttekintés rácsának **Jelzés** oszlopában a zászlóra kattintva megjelölheted a munkalapot (**Megjelölés**), újra kattintva leveszed (**Jelzés levétele**). A jelzést a kollégák is látják; az oszlop szűrőjével csak a megjelölt lapokat is kérheted.",
-            "t": "attekintes jelzes zaszlo jelzes zaszlo attekintes racsa jelzes oszlopa zaszlo kattintva megjelolh munkalap megjeloles ujra kattintva levesz jelzes levetele jelzes kolleg latj oszlop szuro megjelol lap kerh",
+            "t": "attekin jelz zaszlo jelz zaszlo attekin racsa jelz oszlopa zaszlo kattintva megjelolh munkalap megjelol ujra kattintva levesz jelz levetele jelz kolleg latj oszlop szuro megjelol lap kerh",
             "h": 27
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Napi árukiadás a rácsban",
             "horgony": "napi-arukiadas-a-racsban",
             "szoveg": "A pultos eladások lapjai az Áttekintés rácsában a munkalapok között állnak, ugyanabban a számsorban.\n\n- Az **Azonosító** oszlopban *Napi árukiadás* áll.\n- A **Típus** oszlopban az eladott tételek olvashatók.\n- Az **Ügyfél** oszlopban a vevő neve; ha nem választottál ügyfelet, itt is *Napi árukiadás* áll.\n- Gyártó, IMEI szám és sorozatszám nincs – az eladásnak nincs eszköze.\n- Dupla kattintásra az árukiadás lapja nyílik meg.\n\nCsak az eladásokat a **Napi árukiadás** nézet mutatja, nélkülük a **Csak javítás (árukiadás nélkül)** nézet.",
-            "t": "attekintes napi arukiadas racs napi arukiadas racs pultos eladas lapj attekintes racsa munkalap koz all ugyanab szamsor azonosito oszlop napi arukiadas all tipus oszlop elad tetel olvash ugyfel oszlop ugyfel neve valasztottal ugyfel napi arukiadas all gyarto imei szam sorozatsz nincs eladas nincs eszkoze dupla kattintas arukiadas lap nyili eladas napi arukiadas nez mut nelkul javitas arukiadas nelkul nez",
+            "t": "attekin napi aruki racs napi aruki racs pultos elad lapj attekin racsa munkalap koz all ugyanab szamsor azonosito oszlop napi aruki all tipus oszlop elad tetel olvash ugyfel oszlop ugyfel neve valasztottal ugyfel napi aruki all gyarto imei szam sorozatsz nincs elad nincs eszkoze dupla kattint aruki lap nyili elad napi aruki nez mut nelkul javi aruki nelkul nez",
             "h": 59
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Áttekintés csempéi",
             "horgony": "attekintes-csempei",
             "szoveg": "A Beállítások egyik lapfüle (*Cég és megjelenés* csoport), csak adminisztrátor éri el. Itt adod meg, melyik modul csempéje látszik az Áttekintés tetején, milyen sorrendben és felirattal. Mindenkire érvényes; a lapfül alján **Mentés**.\n\nMinden modulnak egy sora van:\n\n| Oszlop | Mire való |\n|---|---|\n| **Látszik** | Pipa nélkül a csempe senkinél nem jelenik meg. A menüpont ettől még megmarad. |\n| **Sorrend** | A fel és le nyilakkal a sor feljebb vagy lejjebb kerül. |\n| **Cím a csempén** | Saját cím, legfeljebb 40 karakter. Üresen a modul neve marad. |\n| **Alsó felirat** | A szám alatti szöveg, legfeljebb 60 karakter. Üresen az alapértelmezett marad. |\n| **Szám** | Pipa nélkül a csempén nem látszik szám, csak a felirat. |\n\nA táblázat alatt a **Mindent vissza az alapértelmezésre** jelölő: bepipálva és mentve minden csempe visszaáll az eredetire.\n\nFontos: A fejléc **Csempék elrejtése** gombja más: az *összes* csempét rejti el, és csak a te böngésződben. A Beállítások egyenként, mindenkinél állítja a csempéket.",
-            "t": "attekintes attekintes csemp attekintes csemp beallitas egyi lapfule ceg megjelenes csopor adminisztrator eri adod modul csempe latszi attekintes tetej sorrend felirattal mindenki ervenyes lapful aljan mentes modul sora oszlop mire valo latszi pipa nelkul csempe senkinel jeleni menup ettol megmar sorrend nyil sor feljebb lejjebb ar cim csemp saj cim legfeljebb 40 karakter ures modul neve mar also felir szam alatti szoveg legfeljebb 60 karakter ures alapertelmez mar szam pipa nelkul csemp latszi szam felir tablaz ala mind vissza alapertelmezes jelolo bepipalva mentve csempe visszaall eredeti fontos fejlec csemp elrejtese gomb mas osszes csemp rejti bongesz beallitas egyenk mindenkinel alli csemp",
+            "t": "attekin attekin csemp attekin csemp beallit egyi lapfule ceg megjel csopor adminisztrator eri adod modul csempe latszi attekin tetej sorrend felirattal mindenki erveny lapful aljan men modul sora oszlop mire valo latszi pipa nelkul csempe senkinel jele menup ettol megmar sorrend nyil sor feljebb lejjebb ar cim csemp saj cim legfeljebb 40 karakter ures modul neve mar also felir szam alatti szoveg legfeljebb 60 karakter ures alapertelmez mar szam pipa nelkul csemp latszi szam felir tablaz ala mind vissza alapertelmez jelolo bepipalva mentve csempe visszaall eredeti fontos fejlec csemp elrejtese gomb mas ossz csemp rejti bongesz beallit egyenk mindenkinel alli csemp",
             "h": 101
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- Az Áttekintés rácsában javítási munkalapok és napi árukiadások állnak, rendelés nincs.\n- A szűrés, a rendezés és az összesítés az összes lapra vonatkozik, nem csak a látható oldalra.\n- Javítási lap csak akkor tehető számozott állapotba, ha van ügyfele és eszköze.\n- A *Részben elkészült* állapot több eszközös lapnál magától áll be, kézzel nem választható.\n- A csak adminisztrátornak szóló modul csempéje a kollégánál nem jelenik meg.",
-            "t": "attekintes szabaly ami rendszer betar szabaly ami rendszer betar attekintes racsa javitasi munkalap napi arukiadas all rendeles nincs szures rendezes osszesites osszes lap vonatkozi lathato oldal javitasi lap teheto szamoz allap ugyfele eszkoze resz elkeszul allap tobb eszkozos lapnal maga all kezzel valaszthato adminisztrator szolo modul csempe kolleganal jeleni",
+            "t": "attekin szabaly ami rendszer betar szabaly ami rendszer betar attekin racsa javitasi munkalap napi arukiad all rendel nincs szur rendez osszesi ossz lap vonatkozi lathato oldal javitasi lap teheto szamoz allap ugyfele eszkoze resz elkeszul allap tobb eszkozos lapnal maga all kezzel valaszthato adminisztrator szolo modul csempe kolleganal jele",
             "h": 49
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **„A szűrésnek egyetlen munkalap sem felel meg.”** – Túl szűk a szűrés. Kattints a **Szűrők törlése** gombra.\n- **Nem találom a most felvett lapot.** – Valószínűleg szűrt nézetben vagy. Válts a **Minden munkalap** nézetre.\n- **„A munkalapok nem töltődtek be.”** – Kattints az **Újra** gombra. A *Lejárt a munkamenet* üzenetnél frissítsd az oldalt.\n- **Nem látszanak a csempék.** – Kattints a **Csempék megjelenítése** gombra. Ha csak egy hiányzik, a Beállításokban van kikapcsolva.\n- **Összekeveredtek az oszlopok.** – **Oszlopok › Alaphelyzet**.",
-            "t": "attekintes megy megy szures egyetl munkalap felel tul szu szures kattints szur torlese gomb talal felv lap valoszinuleg szur nez valts munkalap nez munkalap toltod kattints ujra gomb lejar munkam uzenetnel frissitsd oldal latsza csemp kattints csemp megjelenitese gomb hianyzi beallitas kikapcsolva osszekevered oszlop oszlop alaphelyz",
+            "t": "attekin megy megy szur egyetl munkalap felel tul szu szur kattints szur torlese gomb talal felv lap valoszinuleg szur nez valts munkalap nez munkalap toltod kattints ujra gomb lejar munkam uzenetnel frissitsd oldal latsza csemp kattints csemp megjelenitese gomb hianyzi beallit kikapcsolva osszekevered oszlop oszlop alaphelyz",
             "h": 46
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › Hogyan nyitok meg egy munkalapot a rácsból?",
             "horgony": "hogyan-nyitok-meg-egy-munkalapot-a-racsbol",
             "szoveg": "Kattints duplán a sorára, vagy jelöld ki és nyomj Enter-t. A részletpanel **Szerkesztés** gombja is megnyitja.",
-            "t": "attekintes gyi nyi munkalap racs gyi nyi munkalap racs kattints duplan sora jelold nyomj enter reszletpanel szerkesztes gomb megnyi",
+            "t": "attekin gyi nyi munkalap racs gyi nyi munkalap racs kattints duplan sora jelold nyomj enter reszletpanel szerkesz gomb megnyi",
             "h": 19
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Miért halványabb néhány sor?",
             "horgony": "miert-halvanyabb-nehany-sor",
             "szoveg": "Azok a lezárt munkalapok (Lezárt, Érvénytelen). Megnyithatók és szerkeszthetők, csak már nem számítanak nyitottnak.",
-            "t": "attekintes gyi halvanyabb nehany sor gyi halvanyabb nehany sor lezar munkalap lezar ervenytel megnyith szerkeszth szamita nyitot",
+            "t": "attekin gyi halvanyabb nehany sor gyi halvanyabb nehany sor lezar munkalap lezar ervenytel megnyith szerkeszth szamita nyitot",
             "h": 17
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Miért nincs sorszáma egy sornak?",
             "horgony": "miert-nincs-sorszama-egy-sornak",
             "szoveg": "Mert a lap még nem volt számozott állapotban – jellemzően árajánlat vagy sablon. Amint számozott állapotba teszed, megkapja a következő munkalapszámot.",
-            "t": "attekintes gyi nincs sorszama sor gyi nincs sorszama sor lap szamoz allap jellemzo arajanl sabl amin szamoz allap tesz megkap kovetkezo munkalapsz",
+            "t": "attekin gyi nincs sorszama sor gyi nincs sorszama sor lap szamoz allap jellemzo arajanl sabl amin szamoz allap tesz megkap kovetkezo munkalapsz",
             "h": 22
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Hogyan keresek IMEI-re vagy telefonszámra?",
             "horgony": "hogyan-keresek-imei-re-vagy-telefonszamra",
             "szoveg": "Írd be a rács keresőjébe. Részlet is elég. Az IMEI szám és a Telefonszám oszlopnak látszania kell.",
-            "t": "attekintes gyi keres imei re telefonsz gyi keres imei re telefonsz ird racs kereso reszl eleg imei szam telefonsz oszlop latszania",
+            "t": "attekin gyi ker imei re telefonsz gyi ker imei re telefonsz ird racs kereso reszl eleg imei szam telefonsz oszlop latszania",
             "h": 21
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Hogyan nézem meg, mennyi a kintlévőség?",
             "horgony": "hogyan-nezem-meg-mennyi-a-kintlevoseg",
             "szoveg": "Válaszd a **Fizetendő** nézetet, és kapcsold be az **Összesítő sort**. A Fizetendő oszlop alatt az összes találat összege áll.",
-            "t": "attekintes gyi nez kintlevoseg gyi nez kintlevoseg valaszd fizetendo nez kapcsold osszesito sor fizetendo oszlop ala osszes talal osszege all",
+            "t": "attekin gyi nez kintlevoseg gyi nez kintlevoseg valaszd fizetendo nez kapcsold osszesito sor fizetendo oszlop ala ossz talal osszege all",
             "h": 20
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Mit jelent a „+1” a Típus oszlopban?",
             "horgony": "mit-jelent-a-1-a-tipus-oszlopban",
             "szoveg": "A munkalapon több eszköz van: a fő eszköz mellett még egy. Mindet a részletpanel **Eszközök** lapfülén látod.",
-            "t": "attekintes gyi jel tipus oszlop gyi jel tipus oszlop munkalap tobb eszkoz fo eszkoz mell mind reszletpanel eszkoz lapful lat",
+            "t": "attekin gyi jel tipus oszlop gyi jel tipus oszlop munkalap tobb eszkoz fo eszkoz mell mind reszletpanel eszkoz lapful lat",
             "h": 20
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Miért tűnt el a sor, amikor átállítottam az állapotát?",
             "horgony": "miert-tunt-el-a-sor-amikor-atallitottam-az-allapotat",
             "szoveg": "Mert szűrt nézetben vagy, és az új állapot már nem felel meg a szűrésnek. A lap megvan: a **Minden munkalap** nézetben megtalálod.",
-            "t": "attekintes gyi tun sor ami atallitot allap gyi tun sor ami atallitot allap szur nez uj allap felel szures lap megvan munkalap nez megtalal",
+            "t": "attekin gyi tun sor ami atallitot allap gyi tun sor ami atallitot allap szur nez uj allap felel szur lap megvan munkalap nez megtalal",
             "h": 24
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Miért nem enged a rács számozott állapotba tenni egy lapot?",
             "horgony": "miert-nem-enged-a-racs-szamozott-allapotba-tenni-egy-lapot",
             "szoveg": "Mert a lapnak nincs ügyfele vagy eszköze. Nyisd meg a lapot, válaszd ki mindkettőt, és ments.",
-            "t": "attekintes gyi eng racs szamoz allap tenni lap gyi eng racs szamoz allap tenni lap lap nincs ugyfele eszkoze nyisd lap valaszd mindket ments",
+            "t": "attekin gyi eng racs szamoz allap ten lap gyi eng racs szamoz allap ten lap lap nincs ugyfele eszkoze nyisd lap valaszd mindket ments",
             "h": 24
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Hogyan szűrök egy kolléga munkalapjaira?",
             "horgony": "hogyan-szurok-egy-kollega-munkalapjaira",
             "szoveg": "A **Felelős** oszlop szűrőjében pipáld ki a nevét.",
-            "t": "attekintes gyi szur kollega munkalapj gyi szur kollega munkalapj felelos oszlop szuro pipald nev",
+            "t": "attekin gyi szur kollega munkalapj gyi szur kollega munkalapj felelos oszlop szuro pipald nev",
             "h": 14
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Megmarad a szűrésem, ha kilépek?",
             "horgony": "megmarad-a-szuresem-ha-kilepek",
             "szoveg": "Ugyanabban a böngészőben igen. Másik gépre saját nézetet ments: az a fiókodhoz tartozik.",
-            "t": "attekintes gyi megmar szures kilep gyi megmar szures kilep ugyanab bongeszo masi gep saj nez ments fiok tartozi",
+            "t": "attekin gyi megmar szur kilep gyi megmar szur kilep ugyanab bongeszo masi gep saj nez ments fiok tartozi",
             "h": 18
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Hogyan rejtem el a csempéket?",
             "horgony": "hogyan-rejtem-el-a-csempeket",
             "szoveg": "A fejléc **Csempék elrejtése** gombjával. Ez csak a te böngésződre szól.",
-            "t": "attekintes gyi rej csemp gyi rej csemp fejlec csemp elrejtese gomb bongesz szol",
+            "t": "attekin gyi rej csemp gyi rej csemp fejlec csemp elrejtese gomb bongesz szol",
             "h": 13
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Hol vannak a rendelések?",
             "horgony": "hol-vannak-a-rendelesek",
             "szoveg": "A Rendelések menüpontban. A rácsba csak a javítási munkalapok és a napi árukiadások kerülnek.",
-            "t": "attekintes gyi van rendeles gyi van rendeles rendeles menupon racs javitasi munkalap napi arukiadas ar",
+            "t": "attekin gyi van rendel gyi van rendel rendel menupon racs javitasi munkalap napi arukiad ar",
             "h": 15
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Átnevezhetem a csempéket?",
             "horgony": "atnevezhetem-a-csempeket",
             "szoveg": "Igen, adminisztrátorként: **Beállítások › Áttekintés csempéi**, a **Cím a csempén** és az **Alsó felirat** mezőben.",
-            "t": "attekintes gyi atnevezh csemp gyi atnevezh csemp adminisztratork beallitas attekintes csemp cim csemp also felir mezo",
+            "t": "attekin gyi atnevezh csemp gyi atnevezh csemp adminisztratork beallit attekin csemp cim csemp also felir mezo",
             "h": 16
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Hol van az óra és a betűméret csúszkája?",
             "horgony": "hol-van-az-ora-es-a-betumeret-csuszkaja",
             "szoveg": "Az óra a felső fejlécben van, minden oldalon. A betűméretet a profilmenüben állítod (jobb felső sarok, a nevedre kattintva).",
-            "t": "attekintes gyi ora betumer csuszka gyi ora betumer csuszka ora felso fejlec oldal betumer profilmenu alli jobb felso sar nev kattintva",
+            "t": "attekin gyi ora betumer csuszka gyi ora betumer csuszka ora felso fejlec oldal betumer profilmenu alli jobb felso sar nev kattintva",
             "h": 21
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Van segítség, ha először látom ezt az oldalt?",
             "horgony": "van-segitseg-ha-eloszor-latom-ezt-az-oldalt",
             "szoveg": "Igen. Kérd meg a jobb alsó sarokban lévő asszisztenst: „Vezess végig ezen az oldalon”. Lépésenként megmutatja az oldal részeit.",
-            "t": "attekintes gyi segitseg eloszor lat oldal gyi segitseg eloszor lat oldal kerd jobb also sar levo asszisztens vezess veg ezen oldal lepesenk megmut oldal resz",
+            "t": "attekin gyi segitseg eloszor lat oldal gyi segitseg eloszor lat oldal kerd jobb also sar levo asszisztens vezess veg ezen oldal lepesenk megmut oldal resz",
             "h": 25
         }
     ]

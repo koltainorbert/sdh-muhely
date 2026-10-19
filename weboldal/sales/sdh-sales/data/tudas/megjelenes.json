@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A rendszer kinézete két szinten állítható:\n\n- **A saját gépeden** – a profilmenüben. Amit itt állítasz, csak a te böngésződben érvényes, és megmarad a következő belépésig is. Kollégáidat nem érinti.\n- **A cég alapértelmezése** – a **Beállítások** › **Logó és megjelenés** lapfülön, adminisztrátorként. Ezt kapja mindenki, aki a saját gépén még nem állított be mást.\n\nA sorrend mindig ez: előbb a saját beállításod számít, és csak ha nincs, akkor a cég alapértelmezése.\n\nUgyanitt van a fejléc órája és a nyitvatartás: az óra mindig mutatja, mennyi idő van még zárásig.",
-            "t": "megjelenes ora nyitvatartas mire valo mire valo rendszer kinezete ket szin allithato saj gep profilmenu allitasz bongesz ervenyes megmar kovetkezo belepes kollegaid erinti ceg alapertelmezese beallitas logo megjelenes lapful adminisztratork kap mindenki saj gep allit mas sorrend elobb saj beallitas szami nincs ceg alapertelmezese ugyani fejlec ora nyitvatartas ora mut ido zaras",
+            "t": "megjel ora nyitvatar mire valo mire valo rendszer kinezete ket szin allithato saj gep profilmenu allitasz bongesz erveny megmar kovetkezo belep kollegaid erinti ceg alapertelmezese beallit logo megjel lapful adminisztratork kap mindenki saj gep allit mas sorrend elobb saj beallit szami nincs ceg alapertelmezese ugyani fejlec ora nyitvatar ora mut ido zar",
             "h": 52
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- **Profilmenü:** a jobb felső sarokban a nevedre kattintva nyílik. Felülről lefelé: **Megjelenés**, **Kékfény-szűrő**, **Üvegszín**, **Betűméret**, **Popup neon keret**, legalul a **Kijelentkezés**.\n- **Beállítások › Logó és megjelenés:** a cég logója, neve és az alapértelmezett megjelenés. Csak adminisztrátor látja.\n- **Beállítások › Bejelentkező oldal:** a belépő képernyő kinézete – logó, háttér, a doboz, a szövegek –, élő előnézettel. Csak adminisztrátor látja.\n- **Beállítások › Nyitvatartás és óra:** a nyitvatartási idő és az óra kapcsolói. Csak adminisztrátor látja.\n- **Az óra:** a felső fejlécben, a profil mellett, minden oldalon.",
-            "t": "megjelenes ora nyitvatartas talal talal profilmenu jobb felso sar nev kattintva nyili felul lefele megjelenes kekfeny szuro uvegszin betumer popup neon ker legalul kijelentkezes beallitas logo megjelenes ceg logo neve alapertelmez megjelenes adminisztrator lat beallitas bejelentkezo oldal belepo kepernyo kinezete logo hatter doboz szoveg elo elonezettel adminisztrator lat beallitas nyitvatartas ora nyitvatartasi ido ora kapcsoloi adminisztrator lat ora felso fejlec profil mell oldal",
+            "t": "megjel ora nyitvatar talal talal profilmenu jobb felso sar nev kattintva nyili felul lefele megjel kekfeny szuro uvegszin betumer popup neon ker legalul kijelentkez beallit logo megjel ceg logo neve alapertelmez megjel adminisztrator lat beallit bejelentkezo oldal belepo kepernyo kinezete logo hatter doboz szoveg elo elonezettel adminisztrator lat beallit nyitvatar ora nyitvatartasi ido ora kapcsoloi adminisztrator lat ora felso fejlec profil mell oldal",
             "h": 63
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Megjelenés: Rendszer, Világos, Sötét, Papír",
             "horgony": "megjelenes-rendszer-vilagos-sotet-papir",
             "szoveg": "A profilmenü tetején négy gomb áll:\n\n| Gomb | Mit ad |\n|---|---|\n| **Rendszer** | A géped beállítását követi: ha az operációs rendszer sötét módban van, a rendszer is sötét. Ha a gép közben vált, a felület vele vált. |\n| **Világos** | Mindig világos felület. |\n| **Sötét** | Mindig sötét felület. |\n| **Papír** | E-könyv-olvasó-szerű, nyugodt felület – lásd lejjebb. |\n\nA váltás azonnali, menteni nem kell.",
-            "t": "megjelenes ora nyitvatartas megjelenes rendszer vilagos sot papir megjelenes rendszer vilagos sot papir profilmenu tetej negy gomb all gomb ad rendszer gep beallitas koveti operacios rendszer sot mod rendszer sot gep koz val felul vele val vilagos vilagos felul sot sot felul papir konyv olvaso szeru nyug felul lasd lejjebb valtas azonnali menteni",
+            "t": "megjel ora nyitvatar megjel rendszer vilagos sot papir megjel rendszer vilagos sot papir profilmenu tetej negy gomb all gomb ad rendszer gep beallit koveti operacios rendszer sot mod rendszer sot gep koz val felul vele val vilagos vilagos felul sot sot felul papir konyv olvaso szeru nyug felul lasd lejjebb val azonnali mente",
             "h": 53
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Papír megjelenés",
             "horgony": "papir-megjelenes",
             "szoveg": "A **Papír** olyan, mintha papírról olvasnál – az e-könyv-olvasók képernyőjét idézi. Hosszabb munkához, sok olvasáshoz, este pihentetőbb.\n\nMiben más:\n\n- **Meleg papírszín** a fehér helyett, **tintaszínű betű** a fekete helyett – kisebb a kontraszt, kevésbé vakít.\n- **Olvasásra való, talpas betűtípus**, mint a könyvekben.\n- **Nincs üveghatás, elmosás és fényudvar**: minden felület lapos, a tagolást vékony vonal adja.\n- **A felugró ablakoknak nincs neon keretük** – sima papírlapként jelennek meg.\n- **Halvány papírszemcse** az egész oldal fölött.\n- Az oldalmenü is papírszínű, akkor is, ha a cég sötét vagy színes oldalsávot állított be.\n\nAmi megmarad: a kiemelő szín (a gombok és a kijelölés színe), az állapotok színei és minden funkció.\n\nTipp: a Papír megjelenés és a kékfény-szűrő együtt is használható – este ez a legnyugodtabb párosítás.",
-            "t": "megjelenes ora nyitvatartas papir megjelenes papir megjelenes papir mintha papir olvasnal konyv olvas kepernyoj idezi hosszabb munka olvasas este pihentetobb mib mas meleg papirszin feher hely tintaszinu betu fekete hely kisebb kontrasz keves vaki olvasas valo talpas betutipus konyv nincs uveghatas elmosas fenyudvar felul lapos tagolas vekony vonal adja felugro abl nincs neon ker sima papirlapk jel halvany papirszemcse egesz oldal fol oldalmenu papirszinu ceg sot szines oldalsav allit megmar kiemelo szin gomb kijeloles szine allap szin funkcio tipp papir megjelenes kekfeny szuro egyu hasznalhato este legnyugodtabb parositas",
+            "t": "megjel ora nyitvatar papir megjel papir megjel papir mintha papir olvasnal konyv olv kepernyoj idezi hosszabb munka olvas este pihentetobb mib mas meleg papirszin feher hely tintaszinu betu fekete hely kisebb kontrasz kev vaki olvas valo talp betutipus konyv nincs uvegh elmos fenyudvar felul lapos tagol vekony vonal adja felugro abl nincs neon ker sima papirlapk jel halvany papirszemcse egesz oldal fol oldalmenu papirszinu ceg sot szin oldalsav allit megmar kiemelo szin gomb kijelol szine allap szin funkcio tipp papir megjel kekfeny szuro egyu hasznalhato este legnyugodtabb parosi",
             "h": 88
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Kékfény-szűrő",
             "horgony": "kekfeny-szuro",
             "szoveg": "A **Kékfény-szűrő** melegebbé teszi a képet: visszaveszi a kék fényt, ahogy a telefonok és a gépek „éjszakai fény\" módja. Esti munkához kíméli a szemet.\n\n1. Nyisd meg a profilmenüt.\n2. A **Kékfény-szűrő** csúszkát húzd jobbra. A mellette álló szám mutatja az erősséget; bal szélen **Ki** áll.\n3. A hatás húzás közben, azonnal látszik.\n\nA szűrő az egész felületre hat – a felugró ablakokra is –, és bármelyik megjelenéssel együtt használható. 5%-os lépésekben állítható 0 és 100% között.\n\nFigyelem: erős szűrőnél a színek elcsúsznak a sárga felé. Ha színre kell döntened (például egy állapot színét választod), arra az időre vedd vissza.",
-            "t": "megjelenes ora nyitvatartas kekfeny szuro kekfeny szuro kekfeny szuro melegeb teszi kep visszaveszi kek feny ahogy telef gep ejsz feny mod esti munka kimeli szem nyisd profilmenu kekfeny szuro csusz huzd jobb mellette allo szam mut erosseg bal szel all hatas huzas koz azonnal latszi szuro egesz felul hat felugro ablak barmelyi megjelenessel egyu hasznalhato os lepes allithato 100 koz figyel eros szuronel szi elcsusz sarga fele szin dont peldaul allap szin valasz ido vedd vissza",
+            "t": "megjel ora nyitvatar kekfeny szuro kekfeny szuro kekfeny szuro melegeb teszi kep visszaveszi kek feny ahogy telef gep ejsz feny mod esti munka kimeli szem nyisd profilmenu kekfeny szuro csusz huzd jobb mellette allo szam mut erosseg bal szel all hat huz koz azonnal latszi szuro egesz felul hat felugro ablak barmelyi megjelenessel egyu hasznalhato os lep allithato 100 koz figyel eros szuronel szi elcsusz sarga fele szin dont peldaul allap szin valasz ido vedd vissza",
             "h": 76
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Üvegszín: a kiemelő szín",
             "horgony": "uvegszin-a-kiemelo-szin",
             "szoveg": "Az **Üvegszín** a gombok, a kijelölés és a kiemelések színe. Két sorban választhatsz:\n\n- **Duó** – a kiemelő szín mellé egy vele kontrasztos társszín kerül.\n- **Egyszínű** – egyetlen színcsalád árnyalatai.\n\nMindkét sorban ugyanazok a színek állnak: Alapértelmezett, Kék, Smaragdzöld, Ibolya, Rózsaszín, Borostyán, Türkiz, Rubin. Ha a cég megadott saját színt, az **A cég színe** néven kilencedikként jelenik meg.\n\nA pipa mutatja, melyik van érvényben.",
-            "t": "megjelenes ora nyitvatartas uvegszin kiemelo szin uvegszin kiemelo szin uvegszin gomb kijeloles kiemeles szine ket sor valaszthatsz duo kiemelo szin melle vele kontrasztos tarsszin ar egyszinu egyetl szincsal arnyal mind sor ugyanaz szi all alapertelmez kek smaragdzold ibolya rozsaszin borostyan turkiz rubin ceg megad saj szin ceg szine nev kilencedikk jeleni pipa mut erveny",
+            "t": "megjel ora nyitvatar uvegszin kiemelo szin uvegszin kiemelo szin uvegszin gomb kijelol kiemel szine ket sor valaszthatsz duo kiemelo szin melle vele kontrasztos tarsszin ar egyszinu egyetl szincsal arnyal mind sor ugyanaz szi all alapertelmez kek smaragdzold ibolya rozsaszin borostyan turkiz rubin ceg megad saj szin ceg szine nev kilencedikk jele pipa mut erveny",
             "h": 54
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Betűméret",
             "horgony": "betumeret",
             "szoveg": "A profilmenü **Betűméret** csúszkája az egész felületet nagyítja: a betűket, a gombokat, a sorokat együtt, 80% és 160% között.\n\n1. Húzd a csúszkát. Húzás közben a csúszka fölött egy **Aa** minta és a százalék mutatja, mekkora lesz a betű – **a felület ilyenkor még nem mozdul**.\n2. Amikor elengeded, a felület lágyan átvált az új méretre.\n\nA két **A** gomb 5%-onként lép kisebbre, illetve nagyobbra. A kör alakú nyíl visszaáll a cég alapértelmezésére, és törli a saját beállításodat.\n\nA nagyítás csak a műhely-felületen érvényes; a nyomtatott címke és bizonylat mérete nem változik tőle.\n\nTipp: billentyűzetről is állítható: kattints a csúszkára, és a ← → billentyűkkel lépkedj.",
-            "t": "megjelenes ora nyitvatartas betumer betumer profilmenu betumer csuszka egesz felul nagyi bet gomb sor egyu 80 160 koz huzd csusz huzas koz csuszka fol aa minta szazal mut mekko betu felul ily mozdul ami eleng felul lagyan atval uj mer ket gomb onk lep kisebb illetve nagyobb kor alaku nyil visszaall ceg alapertelmezese torli saj beallitas nagyitas muhely felul ervenyes nyomtat cimke bizonyl merete valtozi tole tipp billentyuz allithato kattints csuszka billentyukkel lepkedj",
+            "t": "megjel ora nyitvatar betumer betumer profilmenu betumer csuszka egesz felul nagyi bet gomb sor egyu 80 160 koz huzd csusz huz koz csuszka fol aa minta szazal mut mekko betu felul ily mozdul ami eleng felul lagyan atval uj mer ket gomb onk lep kisebb illetve nagyobb kor alaku nyil visszaall ceg alapertelmezese torli saj beallitas nagyi muhely felul erveny nyomtat cimke bizonyl merete valtozi tole tipp billentyuz allithato kattints csuszka billentyukkel lepkedj",
             "h": 73
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Számmezők",
             "horgony": "szammezok",
             "szoveg": "Minden számmező (előleg, kedvezmény, díj, példányszám, beállítások) egyformán néz ki: a szám jobbra zárva áll, mellette a mértékegység (**Ft**, **%**), a mező jobb szélén pedig egy beépített, lekerekített léptető a fel–le nyilakkal. A nyíl nyomva tartva folyamatosan léptet; a határon (pl. 0 alatt) szürkére vált.\n\nA mező szélessége a beírt számhoz igazodik, de legalább ötjegyű számnyi helyet foglal: így a 0 és a 99 999 ugyanott áll, és a hosszabb összeg sem lóg ki. A mező bármely pontjára kattintva a kurzor a számba kerül.",
-            "t": "megjelenes ora nyitvatartas szammez szammez szammezo eloleg kedvezmeny dij peldanysz beallitas egyforman nez szam jobb zarva all mellette mertekegyseg ft mezo jobb szel ped beepit lekerekit lepteto nyil nyil nyomva tartva folyamatosan lep hatar pl ala szurke val mezo szelessege beir szam igazodi legalabb otjegyu szamnyi hely foglal igy 99 999 ugyan all hosszabb osszeg log mezo barmely pont kattintva kurzor szam ar",
+            "t": "megjel ora nyitvatar szammez szammez szammezo eloleg kedvezmeny dij peldanysz beallit egyforman nez szam jobb zarva all mellette mertekegyseg ft mezo jobb szel ped beepit lekerekit lepteto nyil nyil nyomva tartva folyamatosan lep hatar pl ala szurke val mezo szelessege beir szam igazodi legalabb otjegyu szamnyi hely foglal igy 99 999 ugyan all hosszabb osszeg log mezo barmely pont kattintva kurzor szam ar",
             "h": 63
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Popup neon keret",
             "horgony": "popup-neon-keret",
             "szoveg": "A felugró ablakok körül világító keret színe. A profilmenü alján a színes körök közül választasz; az áthúzott kör kikapcsolja.\n\nPapír megjelenésnél a keret nem látszik.",
-            "t": "megjelenes ora nyitvatartas popup neon ker popup neon ker felugro abl korul vilagito ker szine profilmenu aljan szines kor kozul valasztasz athuz kor kikapcsol papir megjelenesnel ker latszi",
+            "t": "megjel ora nyitvatar popup neon ker popup neon ker felugro abl korul vilagito ker szine profilmenu aljan szin kor kozul valasztasz athuz kor kikapcsol papir megjelenesnel ker latszi",
             "h": 28
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Az óra a fejlécben",
             "horgony": "az-ora-a-fejlecben",
             "szoveg": "A felső fejlécben, minden oldalon ott az óra: a pontos idő, mellette a dátum, alatta a nyitvatartás szerinti állapot.\n\n| Mit ír | Mikor |\n|---|---|\n| **Zárásig …** | Nyitvatartási időben: ennyi van még hátra. |\n| Figyelmeztető színre vált | A beállított percnyivel zárás előtt. |\n| Nyitásig hátralévő idő | Nyitás előtt. |\n| **Zárva · nyitás: …** | Zárás után, illetve szünnapon: mikor nyit legközelebb. |\n\nAz óra neon üveg-hatású. Alapból a **stílus színét** viseli (a kiemelő színt, amit a Megjelenésnél választottál); zárás előtt borostyán lesz (ilyenkor lassan lüktet), zárva szürke. Ha jobban szereted az állapot szerinti színeket (zöld nyitvatartáskor, kék nyitás előtt), a **Beállítások › Nyitvatartás › Az óra színe** mezőben átállíthatod. Az óra ikonját gyűrű veszi körül: fent kezdődik, óramutató irányban telik, a végén fénylő pont jelzi, a nyitvatartási nap mekkora része telt el. A **Papír** megjelenésben az óra lapos, üveg- és fényhatás nélkül; a gyűrű ott is látszik.\n\nAz óra a szerver idejét mutatja, nem a gépedét – ezért mindenkinél ugyanazt, akkor is, ha valakinek rosszul jár a gépe órája. Ha nem a helyi időt mutatja, a rendszer időzónája nincs jól beállítva – szólj a rendszer üzemeltetőjének.\n\nKeskeny képernyőn az óra összehúzódik: előbb a dátum, aztán a zárás sora tűnik el, az idő marad.\n\nHa nincs megadva nyitvatartás, az adminisztrátornál a zárás sora helyén **Nyitvatartás megadása** hivatkozás áll.",
-            "t": "megjelenes ora nyitvatartas ora fejlec ora fejlec felso fejlec oldal ora pontos ido mellette datum alatta nyitvatartas szerinti allap ir zaras nyitvatartasi ido ennyi hat figyelmezteto szin val beallit percnyi zaras elo nyitas hatralevo ido nyitas elo zarva nyitas zaras utan illetve szunnap nyi legkozelebb ora neon uveg hatasu alap stilus szin viseli kiemelo szin megjelenesnel valasztottal zaras elo borostyan ily lassan luk zarva szurke job szer allap szerinti szin zold nyitvatartas kek nyitas elo beallitas nyitvatartas ora szine mezo atallith ora ikonj gyuru veszi korul fen kezdodi oramutato irany teli veg fenylo pon jelzi nyitvatartasi nap mekko resze tel papir megjelenes ora lapos uveg fenyhatas nelkul gyuru latszi ora szerver idej mut gep ezer mindenkinel ugyanaz valaki rosszul jar gepe ora helyi ido mut rendszer idozona nincs jol beallitva szolj rendszer uzemelteto keskeny keperny ora osszehuzodi elobb datum aztan zaras sora tuni ido mar nincs megadva nyitvatartas adminisztratornal zaras sora hely nyitvatartas megadasa hivatkozas all",
+            "t": "megjel ora nyitvatar ora fejlec ora fejlec felso fejlec oldal ora pontos ido mellette datum alatta nyitvatar szerinti allap ir zar nyitvatartasi ido ennyi hat figyelmezteto szin val beallit percnyi zar elo nyit hatralevo ido nyi elo zarva nyi zar utan illetve szunnap nyi legkozelebb ora neon uveg hatasu alap stilus szin viseli kiemelo szin megjelenesnel valasztottal zar elo borostyan ily lassan luk zarva szurke job szer allap szerinti szin zold nyitvatart kek nyi elo beallit nyitvatar ora szine mezo atallith ora ikonj gyuru veszi korul fen kezdodi oramutato irany teli veg fenylo pon jelzi nyitvatartasi nap mekko resze tel papir megjelen ora lapos uveg fenyh nelkul gyuru latszi ora szerver idej mut gep ezer mindenkinel ugyanaz valaki rosszul jar gepe ora helyi ido mut rendszer idozona nincs jol beallitva szolj rendszer uzemelteto keskeny keperny ora osszehuzodi elobb datum aztan zar sora tuni ido mar nincs megadva nyitvatar adminisztratornal zar sora hely nyitvatar megadasa hivatkoz all",
             "h": 156
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Beállítások › Logó és megjelenés",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "Csak adminisztrátor látja. Négy doboza van.",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes beallitas logo megjelenes adminisztrator lat negy doboza",
+            "t": "megjel ora nyitvatar beallit logo megjel beallit logo megjel adminisztrator lat negy doboza",
             "h": 13
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Beállítások › Logó és megjelenés › Logó és név",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Logó és név\n\nEz látszik a bal felső sarokban, a böngészőfül címében és a menüben.\n\n| Mező | Mire való |\n|---|---|\n| **Logó** | A **Feltöltés…** gombbal tölthetsz fel képet, vagy beírhatod a címét. Átlátszó hátterű PNG vagy SVG a legjobb. A **Törlés** gomb leveszi. |\n| **Jel (logó nélkül ez látszik)** | Legfeljebb 4 betű a színes négyzetben. |\n| **Név** | A logó vagy a jel mellett áll. Üresen hagyva csak a logó marad. |",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes logo nev beallitas logo megjelenes logo nev logo nev latszi bal felso sar bongeszoful cime menu mezo mire valo logo feltoltes gombbal tolthetsz kep beirh cim atlatszo hatteru png svg legjobb torles gomb leveszi jel logo nelkul latszi legfeljebb betu szines negyz nev logo jel mell all ures hagyva logo mar",
+            "t": "megjel ora nyitvatar beallit logo megjel logo nev beallit logo megjel logo nev logo nev latszi bal felso sar bongeszoful cime menu mezo mire valo logo feltol gombbal tolthetsz kep beirh cim atlatszo hatteru png svg legjobb torl gomb leveszi jel logo nelkul latszi legfeljebb betu szin negyz nev logo jel mell all ures hagyva logo mar",
             "h": 57
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Beállítások › Logó és megjelenés › Alapértelmezett megjelenés",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Alapértelmezett megjelenés\n\nUgyanaz a választó, mint a profilmenüben – **Megjelenés**, **Kékfény-szűrő**, **Üvegszín** –, csak itt a cég alapértelmezését állítod. Ezt kapja mindenki, aki a saját gépén még nem állított be mást; aki már állított, annál az övé marad.\n\n| Mező | Mire való |\n|---|---|\n| **Egyéni kiemelő szín** | A cég saját színe, színkóddal. Mentés után a választóban **A cég színe** néven jelenik meg. |\n| **Sarkok lekerekítése** | Szögletes, Normál vagy Kerek. |\n| **Oldalsáv (menü) a műhely-felületen** | Világos (a felület színe), Sötét, vagy A kiemelő színnel kitöltve. |",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes alapertelmez megjelenes beallitas logo megjelenes alapertelmez megjelenes alapertelmez megjelenes ugyanaz valaszto profilmenu megjelenes kekfeny szuro uvegszin ceg alapertelmezes alli kap mindenki saj gep allit mas allit annal ove mar mezo mire valo egyeni kiemelo szin ceg saj szine szinkoddal mentes utan valaszto ceg szine nev jeleni sar lekerekitese szogletes normal ker oldalsav menu muhely felul vilagos felul szine sot kiemelo szinnel kitoltve",
+            "t": "megjel ora nyitvatar beallit logo megjel alapertelmez megjel beallit logo megjel alapertelmez megjel alapertelmez megjel ugyanaz valaszto profilmenu megjel kekfeny szuro uvegszin ceg alapertelmez alli kap mindenki saj gep allit mas allit annal ove mar mezo mire valo egye kiemelo szin ceg saj szine szinkoddal men utan valaszto ceg szine nev jele sar lekerekitese szogl normal ker oldalsav menu muhely felul vilagos felul szine sot kiemelo szinnel kitoltve",
             "h": 68
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Beállítások › Logó és megjelenés › Betűtípus és betűméret",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Betűtípus és betűméret\n\n| Mező | Mire való |\n|---|---|\n| **Betűtípus** | A gép betűtípusa (alap), vagy egy a listából. Csak olyan betű választható, amely a gépeken megvan – a rendszer nem tölt le betűt az internetről. |\n| **Egyéni betű neve** | Csak az „Egyéni\" választásnál számít. A betűnek telepítve kell lennie a gépen. |\n| **Alap betűméret** | A cég alapértelmezett nagyítása. Húzás közben a minta mutatja a méretet; elengedéskor ez a képernyő is átméreteződik, de csak mentés után lesz alapértelmezés. |",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes betutipus betumer beallitas logo megjelenes betutipus betumer betutipus betumer mezo mire valo betutipus gep betutipusa alap lista betu valaszthato amely gep megvan rendszer tol betu intern egyeni betu neve egyeni valasztasnal szami betu telepitve lennie gep alap betumer ceg alapertelmez nagyitasa huzas koz minta mut mer elengedes kepernyo atmeretezodi mentes utan alapertelmezes",
+            "t": "megjel ora nyitvatar beallit logo megjel betutipus betumer beallit logo megjel betutipus betumer betutipus betumer mezo mire valo betutipus gep betutipusa alap lista betu valaszthato amely gep megvan rendszer tol betu intern egye betu neve egye valasztasnal szami betu telepitve lennie gep alap betumer ceg alapertelmez nagyitasa huz koz minta mut mer elenged kepernyo atmeretezodi men utan alapertelmez",
             "h": 58
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Beállítások › Logó és megjelenés › Betű területenként",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Betű területenként\n\nA felület részei külön betűtípust és külön méretet kaphatnak. Ez a fenti alapra épül: a **méret az alap betűméretet szorozza** (100% = pont akkora, mint az alap), a betűtípus pedig csak akkor változik, ha nem a „Mint az alap\" áll benne. A méret nemcsak a betűt mozgatja, hanem a vele növő mezőket és térközöket is – így az ablak nem esik szét.\n\n| Terület | Mire vonatkozik |\n|---|---|\n| **Űrlapok és popup ablakok** | A munkalap, az ügyfél, az eszköz és minden más felviteli ablak: mezők, címkék, lapfülek. **Ezt állítsd, ha az ablakban kicsi a betű.** |\n| **Listák és táblázatok** | A munkalapok, ügyfelek, termékek listája, a pénztár és a számlák táblázatai. |\n| **Áttekintés rácsa** | A kezdőképernyő munkalap-rácsa: sorok, oszlopfejlécek, szűrők. |\n| **Címsorok** | Az oldalak és az ablakok címe, a dobozok fejléce. |\n| **Gombok** | Minden gomb felirata – a mentéstől a lapfülekig. |\n| **Oldalmenü** | A bal oldali menüsáv menüpontjai. |\n\nSoronként három dolgot állíthatsz: **Betűtípus** (vagy „Mint az alap\"), **Egyéni betű neve** (csak az „Egyéni\" választásnál) és **Méret az alaphoz képest** (70–180%). A sor alatti minta azonnal mutatja a választást; a felület a **Mentés** után veszi fel.\n\nJó tudni:\n\n- A popup akkor is lekicsinyíti magát, ha a tartalma nem fér ki a képernyőn (lásd Első lépések). Ha az űrlapok betűjét feljebb viszed, egy hosszú munkalap hamarabb ér a képernyő aljáig. Ilyenkor segít a teljes képernyő (zöld ablakgomb), vagy ha csak a **Címsorok** és a **Gombok** méretét növeled, az űrlapmezőkét nem.\n- Ha valami félresikerült, állíts minden sort „Mint az alap\" + 100% értékre: ezzel visszaáll a gyári állapot.",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes betu teruletenk beallitas logo megjelenes betu teruletenk betu teruletenk felul resz kul betutipus kul mer kaph fenti alap epul mer alap betumer szorozza 100 pon akko alap betutipus ped valtozi alap all benne mer nemcs betu mozg han vele novo mez terkoz igy abl esi sze terul mire vonatkozi urlap popup abl munkalap ugyfel eszkoz mas felviteli abl mez cim lapful allitsd abl kicsi betu lis tablaz munkalap ugyfel term lista penztar szamla tablaz attekintes racsa kezdokepernyo munkalap racsa sor oszlopfejlec szur cimsor oldal abl cime doboz fejlece gomb gomb felirata mentes lapful oldalmenu bal oldali menusav menupontj soronk har dolg allithatsz betutipus alap egyeni betu neve egyeni valasztasnal mer alap kepes 70 180 sor alatti minta azonnal mut valasztas felul mentes utan veszi jo tudni popup lekicsinyiti mag tartalma fer keperny lasd elso lepes urlap betuj feljebb visz hosszu munkalap hamarabb er kepernyo alja ily segi teljes kepernyo zold ablakgomb cimsor gomb mer novel urlapmez felresikerul allits sor alap 100 ert ezzel visszaall gyari allap",
+            "t": "megjel ora nyitvatar beallit logo megjel betu teruletenk beallit logo megjel betu teruletenk betu teruletenk felul resz kul betutipus kul mer kaph fenti alap epul mer alap betumer szorozza 100 pon akko alap betutipus ped valtozi alap all benne mer nemcs betu mozg han vele novo mez terkoz igy abl esi sze terul mire vonatkozi urlap popup abl munkalap ugyfel eszkoz mas felviteli abl mez cim lapful allitsd abl kicsi betu lis tablaz munkalap ugyfel term lista penztar szamla tablaz attekin racsa kezdokepernyo munkalap racsa sor oszlopfejlec szur cimsor oldal abl cime doboz fejlece gomb gomb felirata ment lapful oldalmenu bal oldali menusav menupontj soronk har dolg allithatsz betutipus alap egye betu neve egye valasztasnal mer alap kep 70 180 sor alatti minta azonnal mut valaszt felul men utan veszi jo tud popup lekicsinyiti mag tartalma fer keperny lasd elso lep urlap betuj feljebb visz hosszu munkalap hamarabb er kepernyo alja ily segi telj kepernyo zold ablakgomb cimsor gomb mer novel urlapmez felresikerul allits sor alap 100 ert ezzel visszaall gyari allap",
             "h": 172
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Beállítások › Logó és megjelenés › Gombok és mezők",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Gombok és mezők\n\nItt dől el, milyen formájúak a gombok és a beviteli mezők az **egész** rendszerben: a műhelyfelületen, a beállításokban és az ügyfél felé mutatott RMA-oldalon is.\n\n| Mező | Mire való |\n|---|---|\n| **Forma** | **Pill (ovális)** – teljesen lekerekített, modern felület (ez az alap). **Lekerekített** – enyhén lekerekített sarkok (a korábbi megjelenés). **Tömör** – kis lekerekítés, a legtömörebb felület. Éles sarkú mező vagy gomb nincs: minden lekerekített. |\n| **Fénykeret** | Nincs, Finom, Közepes vagy Erős. A gomb felső élén világos csík, alatta lágy fény a kiemelő színben. |\n| **Üveghatás** | Áttetsző, enyhén elmosott gombháttér (glassmorphism). |\n\nA doboz alján egy **mintasor** mutatja az aktuális beállítást: egy elsődleges gomb, egy világos gomb és egy pill. Mentés után az egész felület átveszi.\n\nJó tudni:\n\n- A **Papír** megjelenés nyomtatáshoz készült: ott az üveghatás és a fénykeret nem jelenik meg, hogy a nyomat tiszta maradjon.\n- Az üveghatás csak olyan böngészőben látszik, amelyik ismeri az elmosást (minden mai Chrome, Edge, Safari, Firefox). Ahol nem, ott a gomb sima színű marad – semmi nem romlik el.\n- A forma a mezőkre is hat (keresőmező, legördülők, számmezők), hogy a felület egységes maradjon.",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes gomb mez beallitas logo megjelenes gomb mez gomb mez dol formaju gomb beviteli mez egesz rendszer muhelyfelul beallitas ugyfel fele mutat rma oldal mezo mire valo forma pill ovalis teljes lekerekit modern felul alap lekerekit enyh lekerekit sar korabbi megjelenes tomor kis lekerekites legtomorebb felul eles sarku mezo gomb nincs lekerekit fenyker nincs fin kozepes eros gomb felso elen vilagos csi alatta lagy feny kiemelo szin uveghatas attetszo enyh elmos gombhatter glassmorphism doboz aljan mintasor mut aktualis beallitas elsodleges gomb vilagos gomb pill mentes utan egesz felul atveszi jo tudni papir megjelenes nyomtatas keszul uveghatas fenyker jeleni nyom tiszta maradj uveghatas bongeszo latszi amelyi ismeri elmosas mai chrome edge safari firefox ahol gomb sima szinu mar semmi romli forma mez hat keresomezo legordul szammez felul egyseges maradj",
+            "t": "megjel ora nyitvatar beallit logo megjel gomb mez beallit logo megjel gomb mez gomb mez dol formaju gomb beviteli mez egesz rendszer muhelyfelul beallit ugyfel fele mutat rma oldal mezo mire valo forma pill ovalis telj lekerekit modern felul alap lekerekit enyh lekerekit sar korabbi megjel tomor kis lekereki legtomorebb felul eles sarku mezo gomb nincs lekerekit fenyker nincs fin kozep eros gomb felso elen vilagos csi alatta lagy feny kiemelo szin uvegh attetszo enyh elmos gombhatter glassmorphism doboz aljan mintasor mut aktualis beallit elsodleg gomb vilagos gomb pill men utan egesz felul atveszi jo tud papir megjel nyomtat keszul uvegh fenyker jele nyom tiszta maradj uvegh bongeszo latszi amelyi ismeri elmos mai chrome edge safari firefox ahol gomb sima szinu mar semmi romli forma mez hat keresomezo legordul szammez felul egyseg maradj",
             "h": 133
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Beállítások › Logó és megjelenés › Popupok – neon keret",
             "horgony": "beallitasok-logo-es-megjelenes",
             "szoveg": "### Popupok – neon keret\n\n| Mező | Mire való |\n|---|---|\n| **Kijelölő (neon) szín** | Kikapcsolva, A kiemelő szín, Cián, Elektromos kék, Lila, Magenta, Narancs, Lime vagy Egyéni szín. |\n| **Egyéni színkód** | Csak az „Egyéni szín\" választásnál számít. |\n| **Fényerő** | Finom, Közepes vagy Erős. |\n\nA lapfül alján a **Mentés** gomb menti a változtatásokat.",
-            "t": "megjelenes ora nyitvatartas beallitas logo megjelenes popup neon ker beallitas logo megjelenes popup neon ker popup neon ker mezo mire valo kijelolo neon szin kikapcsolva kiemelo szin cian elektromos kek lila magenta narancs lime egyeni szin egyeni szin egyeni szin valasztasnal szami fenyero fin kozepes eros lapful aljan mentes gomb menti valtoztatas",
+            "t": "megjel ora nyitvatar beallit logo megjel popup neon ker beallit logo megjel popup neon ker popup neon ker mezo mire valo kijelolo neon szin kikapcsolva kiemelo szin cian elektromos kek lila magenta narancs lime egye szin egye szin egye szin valasztasnal szami fenyero fin kozep eros lapful aljan men gomb menti valtoztat",
             "h": 52
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Beállítások › Bejelentkező oldal",
             "horgony": "beallitasok-bejelentkezo-oldal",
             "szoveg": "Csak adminisztrátor látja. Itt állítod, hogyan nézzen ki a **belépő képernyő** – amit mindenki lát, mielőtt belép. Ami üresen marad, az a **Logó és megjelenés** lapfül szerint látszik (a rendszer logója, neve, kiemelő színe, betűje, a popupok neon kerete): új telepítésnél itt semmit nem kell állítani.\n\nA lapfül jobb oldalán **élő előnézet** áll: minden változás mentés nélkül, azonnal látszik benne. Fölötte két gomb: **Asztali gép** és **Mobil** – így azt is látod, mi jelenik meg telefonon. A belépő képernyőn a változás a **Mentés** után jelenik meg. Keskeny képernyőn az előnézet a mezők fölé kerül.",
-            "t": "megjelenes ora nyitvatartas beallitas bejelentkezo oldal beallitas bejelentkezo oldal adminisztrator lat alli nezz belepo kepernyo mindenki lat miel belep ures mar logo megjelenes lapful szerin latszi rendszer logo neve kiemelo szine betu popup neon kerete uj telepitesnel semmi allitani lapful jobb oldalan elo elonez all valtozas mentes nelkul azonnal latszi benne folotte ket gomb asztali gep mobil igy lat jeleni telef belepo keperny valtozas mentes utan jeleni keskeny keperny elonez mez fole ar",
+            "t": "megjel ora nyitvatar beallit bejelentkezo oldal beallit bejelentkezo oldal adminisztrator lat alli nezz belepo kepernyo mindenki lat miel belep ures mar logo megjel lapful szerin latszi rendszer logo neve kiemelo szine betu popup neon kerete uj telepitesnel semmi allita lapful jobb oldalan elo elonez all valtoz men nelkul azonnal latszi benne folotte ket gomb asztali gep mobil igy lat jele telef belepo keperny valtoz men utan jele keskeny keperny elonez mez fole ar",
             "h": 73
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Beállítások › Bejelentkező oldal › Logó és szövegek",
             "horgony": "beallitasok-bejelentkezo-oldal",
             "szoveg": "### Logó és szövegek\n\n| Mező | Mire való |\n|---|---|\n| **Logó a bejelentkezőn** | Saját logó csak ide. Üresen a rendszer logója; ha az sincs, a jel (néhány betű a színes négyzetben). |\n| **Logó magassága** | 24–160 képpont. A szélesség ehhez igazodik. A jelre is hat. |\n| **Logó és cím elrendezése** | A logó a cím mellett, vagy a cím fölött, középen (nagy logóhoz ez szebb). |\n| **Címsor** | Üresen a rendszer neve. |\n| **Alcím** | Kisebb betűs sor a címsor alatt, pl. „Jó munkát!”. Üresen nem látszik. |\n| **Az „Elfelejtett jelszó” sor** | A doboz alján. Alapból: „Elfelejtett jelszó: szólj az adminisztrátornak.” Üresen nem látszik. |\n| **A gomb felirata** | Alapból „Belépés”. Üresen is az marad. |",
-            "t": "megjelenes ora nyitvatartas beallitas bejelentkezo oldal logo szoveg beallitas bejelentkezo oldal logo szoveg logo szoveg mezo mire valo logo bejelentkez saj logo ide ures rendszer logo sincs jel nehany betu szines negyz logo magassaga 24 160 kepp szelesseg ehhez igazodi jel hat logo cim elrendezese logo cim mell cim fol kozep nagy logo szebb cimsor ures rendszer neve alcim kisebb betus sor cimsor ala pl jo mun ures latszi elfelejt jelszo sor doboz aljan alap elfelejt jelszo szolj adminisztrator ures latszi gomb felirata alap belepes ures mar",
+            "t": "megjel ora nyitvatar beallit bejelentkezo oldal logo szoveg beallit bejelentkezo oldal logo szoveg logo szoveg mezo mire valo logo bejelentkez saj logo ide ures rendszer logo sincs jel nehany betu szin negyz logo magassaga 24 160 kepp szelesseg ehhez igazodi jel hat logo cim elrendezese logo cim mell cim fol kozep nagy logo szebb cimsor ures rendszer neve alcim kisebb betus sor cimsor ala pl jo mun ures latszi elfelejt jelszo sor doboz aljan alap elfelejt jelszo szolj adminisztrator ures latszi gomb felirata alap belep ures mar",
             "h": 87
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Beállítások › Bejelentkező oldal › Háttér",
             "horgony": "beallitasok-bejelentkezo-oldal",
             "szoveg": "### Háttér\n\n| Mező | Mire való |\n|---|---|\n| **Háttér** | **A rendszer háttere** (ugyanaz, mint a műhely-felületen), **Egyszínű**, **Színátmenet**, **Kép** vagy **Videó**. |\n| **Háttérszín** | Egyszínűnél ez a szín. Átmenetnél az első szín (üresen: a kiemelő szín). Képnél és videónál ez látszik, amíg betölt. |\n| **Az átmenet második színe** | Üresen a felület háttérszíne. |\n| **Az átmenet iránya** | 0–345 fok, 15 fokos lépésben (0° = alulról felfelé, 90° = balról jobbra). |\n| **Kép / videó sötétítése** | 0–85%. Világos képen így olvasható marad a doboz körüli rész. |\n| **Háttérkép** | A **Feltöltés…** gombbal, vagy a címe. JPG vagy WebP, legalább 1600 képpont széles. Videós háttérnél **ez áll mobilon**, és ez látszik, amíg a videó betölt. |\n| **Háttérvideó** | MP4 (H.264) vagy WebM, hang nélkül ismétlődik. Rövid, kis fájlt válassz (néhány MB). |\n\nA videó csak **széles képernyőn** (700 képpont fölött) töltődik le és indul el. **Mobilon** a videó helyett a háttérkép áll – a telefon nem tölti le a videót, így nem fogy a mobilnet. Akkor is a kép áll, ha a gépen be van kapcsolva a „mozgás csökkentése” (kevesebb animáció).",
-            "t": "megjelenes ora nyitvatartas beallitas bejelentkezo oldal hatter beallitas bejelentkezo oldal hatter hatter mezo mire valo hatter rendszer hatte ugyanaz muhely felul egyszinu szinatm kep video hatterszin egyszinunel szin atmenetnel elso szin ures kiemelo szin kepnel videonal latszi amig betol atm masodi szine ures felul hatterszine atm iranya 345 fok 15 fokos lepes alul felfele 90 bal jobb kep video sotetitese 85 vilagos kep igy olvashato mar doboz koruli resz hatterkep feltoltes gombbal cime jpg webp legalabb 1600 kepp szeles videos hatternel all mobil latszi amig video betol hattervideo mp4 264 webm hang nelkul ismetlodi rovid kis fajl valassz nehany mb video szeles keperny 700 kepp fol toltodi indul mobil video hely hatterkep all telef tolti vide igy fogy mobiln kep all gep kapcsolva mozgas csokkentese kevesebb animacio",
+            "t": "megjel ora nyitvatar beallit bejelentkezo oldal hatter beallit bejelentkezo oldal hatter hatter mezo mire valo hatter rendszer hatte ugyanaz muhely felul egyszinu szinatm kep video hatterszin egyszinunel szin atmenetnel elso szin ures kiemelo szin kepnel videonal latszi amig betol atm masodi szine ures felul hatterszine atm iranya 345 fok 15 fokos lep alul felfele 90 bal jobb kep video sotetitese 85 vilagos kep igy olvashato mar doboz koruli resz hatterkep feltol gombbal cime jpg webp legalabb 1600 kepp szel videos hatternel all mobil latszi amig video betol hattervideo mp4 264 webm hang nelkul ismetlodi rovid kis fajl valassz nehany mb video szel keperny 700 kepp fol toltodi indul mobil video hely hatterkep all telef tolti vide igy fogy mobiln kep all gep kapcsolva mozg csokkentese kevesebb animacio",
             "h": 127
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Beállítások › Bejelentkező oldal › A belépő doboz",
             "horgony": "beallitasok-bejelentkezo-oldal",
             "szoveg": "### A belépő doboz\n\n| Mező | Mire való |\n|---|---|\n| **A doboz helye** | Bal oldalt, Középen vagy Jobb oldalt (függőlegesen mindig középen). Mobilon mindig középen. |\n| **A doboz színe** | Üresen a felület színe (világosban világos, sötétben sötét). |\n| **A szöveg színe** | Üresen magától: a doboz színén olvasható szín (sötét doboz – fehér betű, világos doboz – sötét betű). Saját dobozszínnél a mezők is a dobozhoz igazodnak. |\n| **Üveghatás** | Áttetsző doboz, mögötte elmosott háttér. Képpel vagy videóval mutat a legjobban. |\n| **Átlátszóság** | 0–90%, csak üveghatással. |\n| **Elmosás** | 0–40 képpont, csak üveghatással. |\n| **Neon fény a doboz körül** | Alapból **Mint a popupoké** (a Logó és megjelenés neon kerete). Választható saját neon szín, vagy Kikapcsolva. |\n| **Egyéni neon szín** | Csak az „Egyéni szín” választásnál. |\n| **A neon fényereje** | Mint a popupoké, Finom, Közepes vagy Erős. |",
-            "t": "megjelenes ora nyitvatartas beallitas bejelentkezo oldal belepo doboz beallitas bejelentkezo oldal belepo doboz belepo doboz mezo mire valo doboz helye bal oldal kozep jobb oldal fuggoleges kozep mobil kozep doboz szine ures felul szine vilagos vilagos sot sot szoveg szine ures maga doboz szin olvashato szin sot doboz feher betu vilagos doboz sot betu saj dobozszinnel mez doboz igaz uveghatas attetszo doboz mogotte elmos hatter keppel video mut legjob atlatszosag 90 uveghatassal elmosas 40 kepp uveghatassal neon feny doboz korul alap popupoke logo megjelenes neon kerete valaszthato saj neon szin kikapcsolva egyeni neon szin egyeni szin valasztasnal neon fenye popupoke fin kozepes eros",
+            "t": "megjel ora nyitvatar beallit bejelentkezo oldal belepo doboz beallit bejelentkezo oldal belepo doboz belepo doboz mezo mire valo doboz helye bal oldal kozep jobb oldal fuggoleg kozep mobil kozep doboz szine ures felul szine vilagos vilagos sot sot szoveg szine ures maga doboz szin olvashato szin sot doboz feher betu vilagos doboz sot betu saj dobozszinnel mez doboz igaz uvegh attetszo doboz mogotte elmos hatter keppel video mut legjob atlatszosag 90 uveghatassal elmos 40 kepp uveghatassal neon feny doboz korul alap popupoke logo megjel neon kerete valaszthato saj neon szin kikapcsolva egye neon szin egye szin valasztasnal neon fenye popupoke fin kozep eros",
             "h": 103
         },
         {
@@ -177,7 +177,7 @@
             "cim": "Beállítások › Bejelentkező oldal › Betű és gomb",
             "horgony": "beallitasok-bejelentkezo-oldal",
             "szoveg": "### Betű és gomb\n\n| Mező | Mire való |\n|---|---|\n| **Betűtípus** | Mint a rendszerben, a gép betűtípusa, vagy egy a listából. Csak a gépen meglévő betű: a rendszer nem tölt le betűt az internetről. |\n| **Egyéni betű neve** | Csak az „Egyéni” választásnál. A betűnek telepítve kell lennie a gépen. |\n| **A gomb színe** | Üresen a kiemelő szín. A felirat magától fehér vagy sötét, hogy olvasható legyen. |\n\nJó tudni:\n\n- A belépő képernyő a gép **világos / sötét** beállítását követi, mint a rendszer többi része.\n- Ha valami félresikerült, töröld a mezőt (vagy válaszd az első, „Mint…” kezdetű lehetőséget): akkor újra a rendszer arculata látszik.\n- A beállítás a mentéssel és a beállítások exportjával együtt költözik.",
-            "t": "megjelenes ora nyitvatartas beallitas bejelentkezo oldal betu gomb beallitas bejelentkezo oldal betu gomb betu gomb mezo mire valo betutipus rendszer gep betutipusa lista gep meglevo betu rendszer tol betu intern egyeni betu neve egyeni valasztasnal betu telepitve lennie gep gomb szine ures kiemelo szin felir maga feher sot olvashato legy jo tudni belepo kepernyo gep vilagos sot beallitas koveti rendszer tobbi resze felresikerul torold mez valaszd elso kezdetu lehetoseg ujra rendszer arculata latszi beallitas mentessel beallitas export egyu koltozi",
+            "t": "megjel ora nyitvatar beallit bejelentkezo oldal betu gomb beallit bejelentkezo oldal betu gomb betu gomb mezo mire valo betutipus rendszer gep betutipusa lista gep meglevo betu rendszer tol betu intern egye betu neve egye valasztasnal betu telepitve lennie gep gomb szine ures kiemelo szin felir maga feher sot olvashato legy jo tud belepo kepernyo gep vilagos sot beallit koveti rendszer tobbi resze felresikerul torold mez valaszd elso kezdetu lehetoseg ujra rendszer arculata latszi bealli mentessel beallit export egyu koltozi",
             "h": 79
         },
         {
@@ -185,7 +185,7 @@
             "cim": "Beállítások › Nyitvatartás és óra",
             "horgony": "beallitasok-nyitvatartas-es-ora",
             "szoveg": "Csak adminisztrátor látja.\n\n### Nyitvatartás\n\nA hét minden napjához: **Nyitva** pipa, **Nyitás** és **Zárás** időpont. Az időpont `óó:pp` alakú, például `09:00`. A nap, amelyiknél nincs pipa vagy hiányzik az időpont, zárva van.\n\nEbből számol a fejléc órája.\n\n### Óra a fejlécben\n\n| Mező | Mire való |\n|---|---|\n| **A felső fejlécben, minden oldalon látszik az óra és a zárásig hátralévő idő** | Kikapcsolva az óra eltűnik. |\n| **Az óra a másodperceket is mutatja** | Kikapcsolva csak óra és perc látszik. |\n| **Figyelmeztetés zárás előtt (perc)** | Ennyi perccel zárás előtt a visszaszámláló figyelmeztető színre vált. 0 = nincs figyelmeztetés. |\n| **Az óra színe** | **A stílus színe** (alap): az óra a Megjelenés kiemelő színét viseli. **Állapot szerint**: zöld nyitvatartáskor, kék nyitás előtt. Zárás előtt (borostyán) és zárva (szürke) mindkét módban külön színű. |",
-            "t": "megjelenes ora nyitvatartas beallitas nyitvatartas ora beallitas nyitvatartas ora adminisztrator lat nyitvatartas het nap nyitva pipa nyitas zaras idop idop oo pp alaku peldaul 09 00 nap amelyiknel nincs pipa hianyzi idop zarva ebbol szamol fejlec ora ora fejlec mezo mire valo felso fejlec oldal latszi ora zaras hatralevo ido kikapcsolva ora eltuni ora masodperc mut kikapcsolva ora perc latszi figyelmeztetes zaras elo perc ennyi perccel zaras elo visszaszamlalo figyelmezteto szin val nincs figyelmeztetes ora szine stilus szine alap ora megjelenes kiemelo szin viseli allap szerin zold nyitvatartas kek nyitas elo zaras elo borostyan zarva szurke mind mod kul szinu",
+            "t": "megjel ora nyitvatar beallit nyitvatar ora beallit nyitvatar ora adminisztrator lat nyitvatar het nap nyitva pipa nyi zar idop idop oo pp alaku peldaul 09 00 nap amelyiknel nincs pipa hianyzi idop zarva ebbol szamol fejlec ora ora fejlec mezo mire valo felso fejlec oldal latszi ora zar hatralevo ido kikapcsolva ora eltu ora masodperc mut kikapcsolva ora perc latszi figyelmezt zar elo perc ennyi perccel zar elo visszaszamlalo figyelmezteto szin val nincs figyelmezt ora szine stilus szine alap ora megjel kiemelo szin viseli allap szerin zold nyitvatart kek nyi elo zar elo borostyan zarva szurke mind mod kul szinu",
             "h": 100
         },
         {
@@ -193,7 +193,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **A saját beállításod erősebb**, mint a cég alapértelmezése – és a cég későbbi változtatása sem írja felül.\n- A saját beállítás **a böngészőben** tárolódik: másik gépen vagy másik böngészőben újra be kell állítanod. Közös fióknál is gépenként külön van.\n- A rendszer **nem tölt le betűtípust az internetről**: internet nélkül is ugyanúgy néz ki.\n- Minden szín a megjelenéshez igazodik: sötétben és papíron is olvasható marad.\n- A nyomtatás (címke, bizonylat, súgófejezet) **független** a megjelenéstől, a nagyítástól és a kékfény-szűrőtől.\n- Az **ügyféloldal** (amit az ügyfél a QR-kóddal megnyit) külön megjelenésű – ezek a beállítások arra nem hatnak.",
-            "t": "megjelenes ora nyitvatartas szabaly ami rendszer betar szabaly ami rendszer betar saj beallitas erosebb ceg alapertelmezese ceg kesobbi valtoztatasa irja felul saj beallitas bongeszo tarolodi masi gep masi bongeszo ujra allitan kozos fioknal gepenk kul rendszer tol betutipus intern intern nelkul ugyanugy nez szin megjelenes igazodi sot papir olvashato mar nyomtatas cimke bizonyl sugofejez fuggetl megjelenes nagyitas kekfeny szuro ugyfeloldal ugyfel qr koddal megnyi kul megjelenesu beallitas hat",
+            "t": "megjel ora nyitvatar szabaly ami rendszer betar szabaly ami rendszer betar saj beallit erosebb ceg alapertelmezese ceg kesobbi valtoztatasa irja felul saj bealli bongeszo tarolodi masi gep masi bongeszo ujra allitan kozos fioknal gepenk kul rendszer tol betutipus intern intern nelkul ugyanugy nez szin megjelen igazodi sot papir olvashato mar nyomt cimke bizonyl sugofejez fuggetl megjelen nagyit kekfeny szuro ugyfeloldal ugyfel qr koddal megnyi kul megjelenesu beallit hat",
             "h": 68
         },
         {
@@ -201,7 +201,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- Esti munkához: **Papír** megjelenés, a **Kékfény-szűrő** 30–50% körül.\n- Ha távolabbról nézed a képernyőt (pult mögül), emeld a **Betűméretet** 115–130%-ra.\n- Fényes, napos helyiségben a **Világos** megjelenés olvasható a legjobban.\n- Új kolléga gépén semmit nem kell állítani: a cég alapértelmezésével indul.",
-            "t": "megjelenes ora nyitvatartas tipp tipp esti munka papir megjelenes kekfeny szuro 30 50 korul tavolabb nez keperny pul mogul emeld betumer 115 130 fenyes napos helyiseg vilagos megjelenes olvashato legjob uj kollega gep semmi allitani ceg alapertelmezese indul",
+            "t": "megjel ora nyitvatar tipp tipp esti munka papir megjel kekfeny szuro 30 50 korul tavolabb nez keperny pul mogul emeld betumer 115 130 feny napos helyiseg vilagos megjel olvashato legjob uj kollega gep semmi allita ceg alapertelmezese indul",
             "h": 38
         },
         {
@@ -209,7 +209,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem jegyzi meg a beállításomat.** A böngésző privát ablakban nem tárol semmit, és a böngészőadatok törlése is elviszi. Rendes ablakban állítsd be újra.\n- **Másik gépen máshogy néz ki.** A saját beállítás gépenként külön van; ott is állítsd be, vagy kérd az adminisztrátort, hogy a cég alapértelmezése legyen az.\n- **A cég megváltoztatta az alapot, de nálam nem változott.** Van saját beállításod, az erősebb. A betűméretnél a kör alakú nyíl visszaáll a cég alapjára.\n- **Sárgás a kép.** Be van kapcsolva a **Kékfény-szűrő** – a profilmenüben húzd a csúszkát balra, **Ki** állásba.\n- **Furcsák a betűk, mint egy könyvben.** A **Papír** megjelenés van bekapcsolva; válts **Világos** vagy **Rendszer** megjelenésre.\n- **Nagyításnál a felugró ablak kisebb lett.** Ismert viselkedés: a rendszer a képernyőhöz igazítja az ablakot, hogy kiférjen. Kisebb nagyítással vagy teljes képernyős ablakkal megszűnik.\n- **Az óra rossz időt mutat.** A rendszer időzónája nincs jól beállítva – ezt a rendszer üzemeltetője tudja megadni.\n- **Nincs óra a fejlécben.** Ki van kapcsolva: Beállítások › Nyitvatartás és óra.\n- **Az óra nem írja ki a zárásig hátralévő időt.** Nincs megadva nyitvatartás ugyanott.",
-            "t": "megjelenes ora nyitvatartas megy megy jegyzi beallitas bongeszo priv abl tarol semmi bongeszoad torlese elviszi rendes abl allitsd ujra masi gep mashogy nez saj beallitas gepenk kul allitsd kerd adminisztrator ceg alapertelmezese legy ceg megvaltoztatta alap nal valtoz saj beallitas erosebb betumeretnel kor alaku nyil visszaall ceg alap sargas kep kapcsolva kekfeny szuro profilmenu huzd csusz bal allas furcs bet konyv papir megjelenes bekapcsolva valts vilagos rendszer megjelenes nagyitasnal felugro abl kisebb let ism viselkedes rendszer kepernyo igazi abl kiferj kisebb nagyitassal teljes kepernyos abl megszuni ora rossz ido mut rendszer idozona nincs jol beallitva rendszer uzemelteto tud megadni nincs ora fejlec kapcsolva beallitas nyitvatartas ora ora irja zaras hatralevo ido nincs megadva nyitvatartas ugyan",
+            "t": "megjel ora nyitvatar megy megy jegyzi beallitas bongeszo priv abl tarol semmi bongeszoad torlese elviszi rend abl allitsd ujra masi gep mashogy nez saj bealli gepenk kul allitsd kerd adminisztrator ceg alapertelmezese legy ceg megvaltoztatta alap nal valtoz saj beallit erosebb betumeretnel kor alaku nyil visszaall ceg alap sarg kep kapcsolva kekfeny szuro profilmenu huzd csusz bal all furcs bet konyv papir megjel bekapcsolva valts vilagos rendszer megjelen nagyitasnal felugro abl kisebb let ism viselk rendszer kepernyo igazi abl kiferj kisebb nagyitassal telj kepernyos abl megszu ora rossz ido mut rendszer idozona nincs jol beallitva rendszer uzemelteto tud meg nincs ora fejlec kapcsolva beallit nyitvatar ora ora irja zar hatralevo ido nincs megadva nyitvatar ugyan",
             "h": 115
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Miért ilyen keskenyek a számmezők?",
             "horgony": "miert-ilyen-keskenyek-a-szammezok",
             "szoveg": "Mert a beírt számhoz igazodnak: legalább ötjegyű számnyi helyük van, és hosszabb számnál maguktól szélesednek. Így minden számmező egyforma, és a szám mindig jobbra zárva, a mértékegység mellett áll.",
-            "t": "megjelenes ora nyitvatartas gyi keskeny szammez gyi keskeny szammez beir szam igaz legalabb otjegyu szamnyi hely hosszabb szamnal mag szeles igy szammezo egyforma szam jobb zarva mertekegyseg mell all",
+            "t": "megjel ora nyitvatar gyi keskeny szammez gyi keskeny szammez beir szam igaz legalabb otjegyu szamnyi hely hosszabb szamnal mag szeles igy szammezo egyforma szam jobb zarva mertekegyseg mell all",
             "h": 29
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Hogyan váltok sötét módra?",
             "horgony": "hogyan-valtok-sotet-modra",
             "szoveg": "Kattints a jobb felső sarokban a nevedre, és a **Megjelenés** sorban válaszd a **Sötét** gombot. Azonnal vált, menteni nem kell.",
-            "t": "megjelenes ora nyitvatartas gyi val sot mod gyi val sot mod kattints jobb felso sar nev megjelenes sor valaszd sot gomb azonnal val menteni",
+            "t": "megjel ora nyitvatar gyi val sot mod gyi val sot mod kattints jobb felso sar nev megjel sor valaszd sot gomb azonnal val mente",
             "h": 24
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Mi az a Papír megjelenés?",
             "horgony": "mi-az-a-papir-megjelenes",
             "szoveg": "E-könyv-olvasó-szerű, nyugodt felület: meleg papírszín, tintaszínű, könyvszerű betű, fények és üveghatás nélkül. A profilmenü **Megjelenés** sorában a negyedik gomb.",
-            "t": "megjelenes ora nyitvatartas gyi papir megjelenes gyi papir megjelenes konyv olvaso szeru nyug felul meleg papirszin tintaszinu konyvszeru betu feny uveghatas nelkul profilmenu megjelenes sora negyedi gomb",
+            "t": "megjel ora nyitvatar gyi papir megjel gyi papir megjel konyv olvaso szeru nyug felul meleg papirszin tintaszinu konyvszeru betu feny uvegh nelkul profilmenu megjel sora negyedi gomb",
             "h": 27
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Mire jó a kékfény-szűrő?",
             "horgony": "mire-jo-a-kekfeny-szuro",
             "szoveg": "Melegebbé teszi a képet, visszaveszi a kék fényt – esti munkánál kíméli a szemet. A profilmenüben a **Kékfény-szűrő** csúszkával állítod, 0 és 100% között.",
-            "t": "megjelenes ora nyitvatartas gyi mire jo kekfeny szuro gyi mire jo kekfeny szuro melegeb teszi kep visszaveszi kek feny esti munkanal kimeli szem profilmenu kekfeny szuro csuszka alli 100 koz",
+            "t": "megjel ora nyitvatar gyi mire jo kekfeny szuro gyi mire jo kekfeny szuro melegeb teszi kep visszaveszi kek feny esti munkanal kimeli szem profilmenu kekfeny szuro csuszka alli 100 koz",
             "h": 30
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › A kékfény-szűrő a felugró ablakokra is hat?",
             "horgony": "a-kekfeny-szuro-a-felugro-ablakokra-is-hat",
             "szoveg": "Igen, az egész felületre, a felugró ablakokra is.",
-            "t": "megjelenes ora nyitvatartas gyi kekfeny szuro felugro ablak hat gyi kekfeny szuro felugro ablak hat egesz felul felugro ablak",
+            "t": "megjel ora nyitvatar gyi kekfeny szuro felugro ablak hat gyi kekfeny szuro felugro ablak hat egesz felul felugro ablak",
             "h": 19
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Hogyan kapcsolom ki a kékfény-szűrőt?",
             "horgony": "hogyan-kapcsolom-ki-a-kekfeny-szurot",
             "szoveg": "A profilmenüben húzd a csúszkát teljesen balra: a szám helyén **Ki** jelenik meg.",
-            "t": "megjelenes ora nyitvatartas gyi kapcsol kekfeny szur gyi kapcsol kekfeny szur profilmenu huzd csusz teljes bal szam hely jeleni",
+            "t": "megjel ora nyitvatar gyi kapcsol kekfeny szur gyi kapcsol kekfeny szur profilmenu huzd csusz telj bal szam hely jele",
             "h": 19
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Hogyan állítom nagyobbra a betűket?",
             "horgony": "hogyan-allitom-nagyobbra-a-betuket",
             "szoveg": "A profilmenü **Betűméret** csúszkájával, vagy a mellette álló nagy **A** gombbal. Az egész felület vele nő.",
-            "t": "megjelenes ora nyitvatartas gyi alli nagyobb bet gyi alli nagyobb bet profilmenu betumer csuszka mellette allo nagy gombbal egesz felul vele no",
+            "t": "megjel ora nyitvatar gyi alli nagyobb bet gyi alli nagyobb bet profilmenu betumer csuszka mellette allo nagy gombbal egesz felul vele no",
             "h": 22
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Miért nem változik a méret, amíg húzom a csúszkát?",
             "horgony": "miert-nem-valtozik-a-meret-amig-huzom-a-csuszkat",
             "szoveg": "Szándékosan: húzás közben csak a csúszka fölötti minta és a százalék mutatja az új méretet, a felület az elengedéskor vált. Így a csúszka nem mozdul el az egér alól, és a méret nem ugrál.",
-            "t": "megjelenes ora nyitvatartas gyi valtozi mer amig huz csusz gyi valtozi mer amig huz csusz szandekosan huzas koz csuszka folotti minta szazal mut uj mer felul elengedes val igy csuszka mozdul eger alol mer ugral",
+            "t": "megjel ora nyitvatar gyi valtozi mer amig huz csusz gyi valtozi mer amig huz csusz szandekosan huz koz csuszka folotti minta szazal mut uj mer felul elenged val igy csuszka mozdul eger alol mer ugral",
             "h": 35
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Hogyan állok vissza az eredeti betűméretre?",
             "horgony": "hogyan-allok-vissza-az-eredeti-betumeretre",
             "szoveg": "A csúszka végén a kör alakú nyíllal. Ez a cég alapértelmezésére áll vissza, és törli a saját beállításodat.",
-            "t": "megjelenes ora nyitvatartas gyi all vissza eredeti betumer gyi all vissza eredeti betumer csuszka veg kor alaku nyillal ceg alapertelmezese all vissza torli saj beallitas",
+            "t": "megjel ora nyitvatar gyi all vissza eredeti betumer gyi all vissza eredeti betumer csuszka veg kor alaku nyillal ceg alapertelmezese all vissza torli saj beallitas",
             "h": 25
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › A kollégáim is azt látják, amit én beállítottam?",
             "horgony": "a-kollegaim-is-azt-latjak-amit-en-beallitottam",
             "szoveg": "Nem. A profilmenü beállításai csak a te böngésződben érvényesek. A mindenkire érvényes alapot az adminisztrátor állítja a Beállítások › Logó és megjelenés lapfülön.",
-            "t": "megjelenes ora nyitvatartas gyi kollegaim latj beallitot gyi kollegaim latj beallitot profilmenu beallitas bongesz ervenyes mindenki ervenyes alap adminisztrator alli beallitas logo megjelenes lapful",
+            "t": "megjel ora nyitvatar gyi kollegaim latj beallitot gyi kollegaim latj beallitot profilmenu beallit bongesz erveny mindenki erveny alap adminisztrator alli beallit logo megjel lapful",
             "h": 24
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Miért kell minden gépen újra beállítanom?",
             "horgony": "miert-kell-minden-gepen-ujra-beallitanom",
             "szoveg": "Mert a saját megjelenés a böngészőben tárolódik, nem a fiókodban. Ez teszi lehetővé, hogy közös fiók használatánál is mindenki a saját gépén a neki kényelmeset lássa.",
-            "t": "megjelenes ora nyitvatartas gyi gep ujra beallitan gyi gep ujra beallitan saj megjelenes bongeszo tarolodi fiok teszi lehetove kozos fio hasznalatanal mindenki saj gep neki kenyelmes lassa",
+            "t": "megjel ora nyitvatar gyi gep ujra beallitan gyi gep ujra beallitan saj megjel bongeszo tarolodi fiok teszi lehetove kozos fio hasznalatanal mindenki saj gep neki kenyelm lassa",
             "h": 27
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Hol cserélem le a logót?",
             "horgony": "hol-cserelem-le-a-logot",
             "szoveg": "Beállítások › Logó és megjelenés › **Logó és név** doboz, **Feltöltés…** gomb. Csak adminisztrátor teheti.",
-            "t": "megjelenes ora nyitvatartas gyi cserel log gyi cserel log beallitas logo megjelenes logo nev doboz feltoltes gomb adminisztrator teheti",
+            "t": "megjel ora nyitvatar gyi cserel log gyi cserel log beallit logo megjel logo nev doboz feltol gomb adminisztrator teheti",
             "h": 19
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Lehet videó a belépő képernyő hátterében?",
             "horgony": "lehet-video-a-belepo-kepernyo-hattereben",
             "szoveg": "Igen: **Beállítások › Bejelentkező oldal** › **Háttér** › **Videó**, és töltsd fel a videót. Adj meg háttérképet is: mobilon a videó helyett az áll, és az látszik, amíg a videó betölt.",
-            "t": "megjelenes ora nyitvatartas gyi video belepo kepernyo hatte gyi video belepo kepernyo hatte beallitas bejelentkezo oldal hatter video toltsd vide adj hatterkep mobil video hely all latszi amig video betol",
+            "t": "megjel ora nyitvatar gyi video belepo kepernyo hatte gyi video belepo kepernyo hatte beallit bejelentkezo oldal hatter video toltsd vide adj hatterkep mobil video hely all latszi amig video betol",
             "h": 30
         },
         {
@@ -321,7 +321,7 @@
             "cim": "GYIK › Hogyan teszem a belépő dobozt oldalra?",
             "horgony": "hogyan-teszem-a-belepo-dobozt-oldalra",
             "szoveg": "**Beállítások › Bejelentkező oldal** › **A belépő doboz** › **A doboz helye**: Bal oldalt vagy Jobb oldalt. Mobilon a doboz mindig középen áll.",
-            "t": "megjelenes ora nyitvatartas gyi tesz belepo doboz oldal gyi tesz belepo doboz oldal beallitas bejelentkezo oldal belepo doboz doboz helye bal oldal jobb oldal mobil doboz kozep all",
+            "t": "megjel ora nyitvatar gyi tesz belepo doboz oldal gyi tesz belepo doboz oldal beallit bejelentkezo oldal belepo doboz doboz helye bal oldal jobb oldal mobil doboz kozep all",
             "h": 28
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Megadhatom a cég saját színét?",
             "horgony": "megadhatom-a-ceg-sajat-szinet",
             "szoveg": "Igen: Beállítások › Logó és megjelenés › **Egyéni kiemelő szín**. Mentés után a választóban **A cég színe** néven jelenik meg, és bárki kiválaszthatja.",
-            "t": "megjelenes ora nyitvatartas gyi megadh ceg saj szin gyi megadh ceg saj szin beallitas logo megjelenes egyeni kiemelo szin mentes utan valaszto ceg szine nev jeleni barki kivalaszth",
+            "t": "megjel ora nyitvatar gyi megadh ceg saj szin gyi megadh ceg saj szin beallit logo megjel egye kiemelo szin men utan valaszto ceg szine nev jele barki kivalaszth",
             "h": 28
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Használhatok saját betűtípust?",
             "horgony": "hasznalhatok-sajat-betutipust",
             "szoveg": "Igen, ha telepítve van a gépeken: Beállítások › Logó és megjelenés › **Betűtípus** › Egyéni, és írd be a nevét az **Egyéni betű neve** mezőbe. A rendszer nem tölt le betűt az internetről.",
-            "t": "megjelenes ora nyitvatartas gyi hasznalh saj betutipus gyi hasznalh saj betutipus telepitve gep beallitas logo megjelenes betutipus egyeni ird nev egyeni betu neve mezo rendszer tol betu intern",
+            "t": "megjel ora nyitvatar gyi hasznalh saj betutipus gyi hasznalh saj betutipus telepitve gep beallit logo megjel betutipus egye ird nev egye betu neve mezo rendszer tol betu intern",
             "h": 28
         },
         {
@@ -345,7 +345,7 @@
             "cim": "GYIK › Mi az a neon keret, és hogyan kapcsolom ki?",
             "horgony": "mi-az-a-neon-keret-es-hogyan-kapcsolom-ki",
             "szoveg": "A felugró ablakok körüli világító keret. A profilmenü **Popup neon keret** sorában az áthúzott körrel kapcsolod ki a saját gépeden.",
-            "t": "megjelenes ora nyitvatartas gyi neon ker kapcsol gyi neon ker kapcsol felugro abl koruli vilagito ker profilmenu popup neon ker sora athuz korrel kapcsol saj gep",
+            "t": "megjel ora nyitvatar gyi neon ker kapcsol gyi neon ker kapcsol felugro abl koruli vilagito ker profilmenu popup neon ker sora athuz korrel kapcsol saj gep",
             "h": 26
         },
         {
@@ -353,7 +353,7 @@
             "cim": "GYIK › Hol van az óra?",
             "horgony": "hol-van-az-ora",
             "szoveg": "A felső fejlécben, a profil mellett – minden oldalon.",
-            "t": "megjelenes ora nyitvatartas gyi ora gyi ora felso fejlec profil mell oldal",
+            "t": "megjel ora nyitvatar gyi ora gyi ora felso fejlec profil mell oldal",
             "h": 12
         },
         {
@@ -361,7 +361,7 @@
             "cim": "GYIK › Honnan tudja az óra, mikor zárunk?",
             "horgony": "honnan-tudja-az-ora-mikor-zarunk",
             "szoveg": "A Beállítások › Nyitvatartás és óra lapfülön megadott nyitvatartásból. Naponként külön megadható a nyitás és a zárás.",
-            "t": "megjelenes ora nyitvatartas gyi honnan tud ora zar gyi honnan tud ora zar beallitas nyitvatartas ora lapful megad nyitvatartas naponk kul megadhato nyitas zaras",
+            "t": "megjel ora nyitvatar gyi honnan tud ora zar gyi honnan tud ora zar beallit nyitvatar ora lapful megad nyitvatart naponk kul megadhato nyi zar",
             "h": 24
         },
         {
@@ -369,7 +369,7 @@
             "cim": "GYIK › Miért vált színt az óra zárás előtt?",
             "horgony": "miert-valt-szint-az-ora-zaras-elott",
             "szoveg": "Figyelmeztetésül. Hogy hány perccel előtte, azt a **Figyelmeztetés zárás előtt (perc)** mező állítja; 0-val kikapcsolható.",
-            "t": "megjelenes ora nyitvatartas gyi val szin ora zaras elo gyi val szin ora zaras elo figyelmeztetesul hany perccel elotte figyelmeztetes zaras elo perc mezo alli val kikapcsolhato",
+            "t": "megjel ora nyitvatar gyi val szin ora zar elo gyi val szin ora zar elo figyelmeztetesul hany perccel elotte figyelmezt zar elo perc mezo alli val kikapcsolhato",
             "h": 27
         },
         {
@@ -377,7 +377,7 @@
             "cim": "GYIK › Az óra a gépem idejét mutatja?",
             "horgony": "az-ora-a-gepem-idejet-mutatja",
             "szoveg": "Nem, a szerverét – így mindenkinél ugyanazt mutatja. Ha nem a helyi időt látod, a webhely időzónáját kell beállítani.",
-            "t": "megjelenes ora nyitvatartas gyi ora gep idej mut gyi ora gep idej mut szerver igy mindenkinel ugyanaz mut helyi ido lat webhely idozonaj beallitani",
+            "t": "megjel ora nyitvatar gyi ora gep idej mut gyi ora gep idej mut szerver igy mindenkinel ugyanaz mut helyi ido lat webhely idozonaj beallita",
             "h": 24
         },
         {
@@ -385,7 +385,7 @@
             "cim": "GYIK › Kikapcsolható a másodperc?",
             "horgony": "kikapcsolhato-a-masodperc",
             "szoveg": "Igen: Beállítások › Nyitvatartás és óra › **Az óra a másodperceket is mutatja**.",
-            "t": "megjelenes ora nyitvatartas gyi kikapcsolhato masodperc gyi kikapcsolhato masodperc beallitas nyitvatartas ora ora masodperc mut",
+            "t": "megjel ora nyitvatar gyi kikapcsolhato masodperc gyi kikapcsolhato masodperc beallit nyitvatar ora ora masodperc mut",
             "h": 15
         },
         {
@@ -393,7 +393,7 @@
             "cim": "GYIK › A nyomtatott címkén is látszik a nagyítás vagy a szűrő?",
             "horgony": "a-nyomtatott-cimken-is-latszik-a-nagyitas-vagy-a-szuro",
             "szoveg": "Nem. A nyomtatás független a megjelenéstől, a betűmérettől és a kékfény-szűrőtől.",
-            "t": "megjelenes ora nyitvatartas gyi nyomtat cim latszi nagyitas szuro gyi nyomtat cim latszi nagyitas szuro nyomtatas fuggetl megjelenes betumer kekfeny szuro",
+            "t": "megjel ora nyitvatar gyi nyomtat cim latszi nagyi szuro gyi nyomtat cim latszi nagyi szuro nyomt fuggetl megjelen betumer kekfeny szuro",
             "h": 21
         },
         {
@@ -401,7 +401,7 @@
             "cim": "GYIK › Az ügyfél is ezt a megjelenést látja az ügyféloldalon?",
             "horgony": "az-ugyfel-is-ezt-a-megjelenest-latja-az-ugyfeloldalon",
             "szoveg": "Nem. Az ügyféloldal külön megjelenésű; annak a beállításai a Beállítások › Ügyféloldal (RMA) lapfülön vannak. A gombok formája viszont ott is érvényes: ha pillre állítod, az ügyfél is ovális gombokat lát.",
-            "t": "megjelenes ora nyitvatartas gyi ugyfel megjelenes lat ugyfeloldal gyi ugyfel megjelenes lat ugyfeloldal ugyfeloldal kul megjelenesu ann beallitas beallitas ugyfeloldal rma lapful van gomb forma visz ervenyes pill alli ugyfel ovalis gomb lat",
+            "t": "megjel ora nyitvatar gyi ugyfel megjelen lat ugyfeloldal gyi ugyfel megjelen lat ugyfeloldal ugyfeloldal kul megjelenesu ann beallit beallit ugyfeloldal rma lapful van gomb forma visz erveny pill alli ugyfel ovalis gomb lat",
             "h": 33
         },
         {
@@ -409,7 +409,7 @@
             "cim": "GYIK › Hogyan lesznek ováliasak (pillek) a gombok?",
             "horgony": "hogyan-lesznek-ovaliasak-pillek-a-gombok",
             "szoveg": "Beállítások › Logó és megjelenés › **Gombok és mezők** › Forma › **Pill (ovális)**. Ez az alapbeállítás; a teljes rendszerre hat.",
-            "t": "megjelenes ora nyitvatartas gyi lesz ovalias pill gomb gyi lesz ovalias pill gomb beallitas logo megjelenes gomb mez forma pill ovalis alapbeallitas teljes rendszer hat",
+            "t": "megjel ora nyitvatar gyi lesz ovali pill gomb gyi lesz ovali pill gomb beallit logo megjel gomb mez forma pill ovalis alapbealli telj rendszer hat",
             "h": 25
         },
         {
@@ -417,7 +417,7 @@
             "cim": "GYIK › Mi az az üveghatás?",
             "horgony": "mi-az-az-uveghatas",
             "szoveg": "Áttetsző, enyhén elmosott gombháttér – a mai felületeken „glassmorphism\" néven ismert. Beállítások › Logó és megjelenés › Gombok és mezők › **Üveghatás a gombokon**.",
-            "t": "megjelenes ora nyitvatartas gyi uveghatas gyi uveghatas attetszo enyh elmos gombhatter mai felul glassmorphism nev ism beallitas logo megjelenes gomb mez uveghatas gomb",
+            "t": "megjel ora nyitvatar gyi uvegh gyi uvegh attetszo enyh elmos gombhatter mai felul glassmorphism nev ism beallit logo megjel gomb mez uvegh gomb",
             "h": 23
         },
         {
@@ -425,7 +425,7 @@
             "cim": "GYIK › Visszakaphatom a régi, szögletes gombokat?",
             "horgony": "visszakaphatom-a-regi-szogletes-gombokat",
             "szoveg": "Éles sarkú gomb nincs, de a kevésbé kerek forma igen: Gombok és mezők › Forma › **Lekerekített** (a korábbi megjelenés) vagy **Tömör** (kis ív).",
-            "t": "megjelenes ora nyitvatartas gyi visszakaph regi szogletes gomb gyi visszakaph regi szogletes gomb eles sarku gomb nincs keves ker forma gomb mez forma lekerekit korabbi megjelenes tomor kis iv",
+            "t": "megjel ora nyitvatar gyi visszakaph regi szogl gomb gyi visszakaph regi szogl gomb eles sarku gomb nincs kev ker forma gomb mez forma lekerekit korabbi megjel tomor kis iv",
             "h": 29
         },
         {
@@ -433,7 +433,7 @@
             "cim": "GYIK › Miért nem látom az üveghatást vagy a fénykeretet?",
             "horgony": "miert-nem-latom-az-uveghatast-vagy-a-fenykeretet",
             "szoveg": "Papír megjelenésben szándékosan nincs, mert nyomtatáshoz készült. Ellenőrizd a profilmenüben, melyik megjelenés aktív.",
-            "t": "megjelenes ora nyitvatartas gyi lat uveghatas fenyker gyi lat uveghatas fenyker papir megjelenes szandekosan nincs nyomtatas keszul ellenorizd profilmenu megjelenes aktiv",
+            "t": "megjel ora nyitvatar gyi lat uveghat fenyker gyi lat uveghat fenyker papir megjelen szandekosan nincs nyomtat keszul ellenorizd profilmenu megjel aktiv",
             "h": 21
         }
     ]

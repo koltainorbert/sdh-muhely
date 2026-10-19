@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "Az asszisztens a rendszer beépített segítője. Minden oldalon ott van a jobb alsó sarokban, egy kis élő figura képében. Arra való, hogy ne kelljen keresgélned:\n\n- **elmagyarázza**, hogyan működik valami – a teljes dokumentációból és a kérdés–válaszokból felel,\n- **végigvezet** az oldalakon: lépésenként megmutatja, mi hol van,\n- **megmutatja a képernyőn**, mire kell kattintanod,\n- **utánanéz az adatoknak**: munkalap, ügyfél, eszköz, pénztár, naptár, árukiadás, rendelés, készlet, szolgáltatások,\n- **szól magától**, ha valami figyelmet kér (lejárt határidő, lezáratlan kassza, új verzió),\n- kérésre **javaslatot tesz** egy módosításra – amit te hagysz jóvá.\n\nEgy dolgot soha nem tesz: a jóváhagyásod nélkül nem módosít adatot.",
-            "t": "asszisztens mire valo mire valo asszisztens rendszer beepit segito oldal jobb also sar kis elo figu kepe valo ne kellj keresgeln elmagyarazza mukodi teljes dokumentacio kerdes valasz felel vegigvez oldal lepesenk megmut megmut keperny mire kattintan utananez ada munkalap ugyfel eszkoz penztar naptar arukiadas rendeles keszl szolgaltatas szol maga figyelm ker lejar hatarido lezaratlan penztar uj verzio keres javasl tesz modositas hagysz jova dolg soha tesz jovahagyas nelkul modosi ada",
+            "t": "asszisztens mire valo mire valo asszisztens rendszer beepit segito oldal jobb also sar kis elo figu kepe valo ne kellj keresgeln elmagyarazza mukodi telj dokumentacio kerd valasz felel vegigvez oldal lepesenk megmut megmut keperny mire kattintan utananez ada munkalap ugyfel eszkoz penztar naptar aruki rendel keszl szolgaltat szol maga figyelm ker lejar hatarido lezaratlan penztar uj verzio ker javasl tesz modosit hagysz jova dolg soha tesz jovahagy nelkul modosi ada",
             "h": 70
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- **A figura** minden oldalon a jobb alsó sarokban áll. Rákattintva megnyílik a beszélgetés; újra rákattintva bezárul.\n- Az F1 billentyű bárhonnan megnyitja.\n- Ha felugró ablakban dolgozol, a figura oda is veled megy.\n- A **naplója, a tudástára, a mentések és a beállításai** az Asszisztens oldalon vannak. Ez adminisztrátori oldal: a **Beállítások** › **Asszisztens** lapfülről nyílik, az oldalmenüben nincs külön pontja.",
-            "t": "asszisztens talal talal figu oldal jobb also sar all rakattintva megnyili beszelgetes ujra rakattintva bezarul f1 billentyu barhonnan megnyi felugro abl dolgozol figu oda vel megy naplo tudasta mentes beallitas asszisztens oldal van adminisztratori oldal beallitas asszisztens lapful nyili oldalmenu nincs kul pon",
+            "t": "asszisztens talal talal figu oldal jobb also sar all rakattintva megnyili beszelg ujra rakattintva bezarul f1 billentyu barhonnan megnyi felugro abl dolgozol figu oda vel megy naplo tudasta ment beallit asszisztens oldal van adminisztratori oldal beallit asszisztens lapful nyili oldalmenu nincs kul pon",
             "h": 43
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: kérdezz tőle",
             "horgony": "lepesrol-lepesre-kerdezz-tole",
             "szoveg": "1. Kattints a figurára, vagy nyomd meg az F1-et.\n2. Írd be a kérdésed a **Kérdezz bármit, vagy kérd a segítségem…** mezőbe. Az Enter küldi, a Shift + Enter új sort kezd.\n3. A mező fölött az oldalhoz illő javasolt kérdések állnak – egy kattintás, és már kérdeztél is.\n4. A válasz alatt gombot kaphatsz, amely megnyit egy oldalt, egy rekordot (munkalapot, ügyfelet, eszközt) vagy egy lap **Nyomtatás** ablakát.\n\nÚgy kérdezz, ahogy egy kollégától kérdeznél:\n\n- `Hogyan veszek fel második eszközt egy munkalapra?`\n- `Mi a mai helyzet?`\n- `Melyik munkalapok késnek?`\n- `Mi lesz holnap a naptárban?`\n- `Mi fogyott a minimum alá a készletből?`\n- `Ezt a hibaüzenetet kaptam – mit csináljak?`\n\nA beszélgetésre emlékszik, visszautalhatsz a korábbiakra. Az **Új beszélgetés** gomb (a beszélgetés fejlécében) tiszta lappal indít.\n\nA panel fejlécében a zöld gomb teljes képernyőre nyitja a beszélgetést, a piros bezárja – ugyanúgy, mint a rendszer többi ablakánál.",
-            "t": "asszisztens lepes lepes kerdezz tole lepes lepes kerdezz tole kattints figu nyomd f1 et ird kerdes kerdezz barmi kerd segitseg mezo enter kuldi shif enter uj sor kezd mezo fol oldal illo javasol kerdes all kattintas kerdeztel valasz ala gomb kaphatsz amely megnyi oldal rekord munkalap ugyfel eszkoz lap nyomtatas abl ugy kerdezz ahogy kollega kerdeznel vesz masodi eszkoz munkalap mai helyz munkalap kes holnap naptar fogy minimum ala keszl hibauzen kap csinalj beszelgetes emlekszi visszautalhatsz korabbi uj beszelgetes gomb beszelgetes fejlece tiszta lappal indi panel fejlece zold gomb teljes kepernyo nyi beszelgetes piros bezar ugyanugy rendszer tobbi ablakanal",
+            "t": "asszisztens lep lep kerdezz tole lep lep kerdezz tole kattints figu nyomd f1 et ird kerd kerdezz barmi kerd segitseg mezo enter kuldi shif enter uj sor kezd mezo fol oldal illo javasol kerd all kattin kerdeztel valasz ala gomb kaphatsz amely megnyi oldal rekord munkalap ugyfel eszkoz lap nyomt abl ugy kerdezz ahogy kollega kerdeznel vesz masodi eszkoz munkalap mai helyz munkalap kes holnap naptar fogy minimum ala keszl hibauzen kap csinalj beszelget emlekszi visszautalhatsz korabbi uj beszelg gomb beszelg fejlece tiszta lappal indi panel fejlece zold gomb telj kepernyo nyi beszelget piros bezar ugyanugy rendszer tobbi ablakanal",
             "h": 99
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: vezettesd végig magad egy oldalon",
             "horgony": "lepesrol-lepesre-vezettesd-vegig-magad-egy-oldalon",
             "szoveg": "1. Menj arra az oldalra, amelyet meg akarsz ismerni.\n2. Kattints a figurára, és válaszd a **Vezess végig ezen az oldalon** javaslatot – vagy írd be neki ugyanezt.\n3. A figura odarepül az első elemhez, kiemeli, és egy buborékban elmondja, mire való.\n4. A **Következő** gombbal vagy a → billentyűvel lépj tovább, az **Előző** gombbal vagy a ← billentyűvel vissza. A buborékban látod, hányadik lépésnél jársz.\n5. Az utolsó lépésnél a **Kész** gomb zárja a túrát; a **Részletes leírás** gomb az oldal súgófejezetét nyitja meg.\n\nAmit érdemes tudni a túráról:\n\n- **Nem tűnik el, ha máshova kattintasz.** Közben nyugodtan dolgozhatsz, kipróbálhatod, amit mutatott.\n- **Megvár.** Ha túra közben felugró ablakot nyitsz, a figura félreáll, és amikor bezártad, onnan folytatja, ahol abbahagytad.\n- **Kilépni** a buborék sarkában lévő **×** gombbal vagy az Esc billentyűvel lehet. Bármikor újrakezdheted.\n- **Ami épp nincs a képernyőn, azt kihagyja** – például ha a csempéket elrejtetted.\n- A túra **internet és API-kulcs nélkül is működik**: a lépések a súgó fejezeteiből jönnek.\n\nA Súgó **Bemutató** lapján és a fejezetek tetején a **Vezess végig** gomb ugyanezt indítja: megnyitja az oldalt, és rögtön kezdi a túrát.",
-            "t": "asszisztens lepes lepes vezettesd veg mag oldal lepes lepes vezettesd veg mag oldal menj oldal amely akarsz ismerni kattints figu valaszd vezess veg ezen oldal javasl ird neki ugyanez figu odarepul elso elem kiemeli bubor elmond mire valo kovetkezo gombbal billentyu lepj tovabb elozo gombbal billentyu vissza bubor lat hanyadi lepesnel jarsz utolso lepesnel kesz gomb zar tur reszletes leiras gomb oldal sugofejez nyi erdemes tudni tura tuni mashova kattintasz koz nyugodtan dolgozhatsz kiprobalh mutat megvar tura koz felugro abl nyitsz figu felreall ami bezar onnan folyt ahol abbahagy kilepni bubor sarka levo gombbal esc billentyu barmi ujrakezdh epp nincs keperny kihagy peldaul csemp elrejtet tura intern api kulcs nelkul mukodi lepes sugo fejezet jon sugo bemutato lapjan fejez tetej vezess veg gomb ugyanez indi megnyi oldal rog kezdi tur",
+            "t": "asszisztens lep lep vezettesd veg mag oldal lep lep vezettesd veg mag oldal menj oldal amely akarsz ismer kattints figu valaszd vezess veg ezen oldal javasl ird neki ugyanez figu odarepul elso elem kiemeli bubor elmond mire valo kovetkezo gombbal billentyu lepj tovabb elozo gombbal billentyu vissza bubor lat hanyadi lepesnel jarsz utolso lepesnel kesz gomb zar tur reszl leir gomb oldal sugofejez nyi erd tud tura tuni mashova kattintasz koz nyugodtan dolgozhatsz kiprobalh mutat megvar tura koz felugro abl nyitsz figu felreall ami bezar onnan folyt ahol abbahagy kilep bubor sarka levo gombbal esc billentyu barmi ujrakezdh epp nincs keperny kihagy peldaul csemp elrejtet tura intern api kulcs nelkul mukodi lep sugo fejezet jon sugo bemutato lapjan fejez tetej vezess veg gomb ugyanez indi megnyi oldal rog kezdi tur",
             "h": 130
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Megmutatja és lépésenként vezet a feladatokban",
             "horgony": "megmutatja-es-lepesenkent-vezet-a-feladatokban",
             "szoveg": "Nem csak kész túrái vannak. Ha azt kérdezed, hogyan csinálj meg valamit az éppen nyitott oldalon, az asszisztens a képernyőn is megmutatja:\n\n- **egy elemnél** kiemeli, amire kattintanod kell; az **Értem** gomb elengedi, a **Vissza a beszélgetéshez** visszanyitja a panelt;\n- **több lépésnél** végigvezet: sorban kiemeli a teendőket, ugyanazokkal az **Előző** / **Következő** gombokkal, mint az oldaltúránál.\n\nEhhez azt látja, ami a képernyődön van: a gombok, mezők, lapfülek feliratát, a nyitott ablak címét és a látható hibaüzenetet. A mezőkbe írt adatokat nem olvassa ki.",
-            "t": "asszisztens megmut lepesenk vez felad megmut lepesenk vez felad kesz tur van kerdez csinalj valami epp nyit oldal asszisztens keperny megmut elemnel kiemeli ami kattintan ert gomb elengedi vissza beszelgetes visszanyi panel tobb lepesnel vegigvez sor kiemeli teend ugyanaz elozo kovetkezo gomb oldalturanal ehhez lat keperny gomb mez lapful felir nyit abl cim lathato hibauzen mez irt ada olvassa",
+            "t": "asszisztens megmut lepesenk vez felad megmut lepesenk vez felad kesz tur van kerdez csinalj valami epp nyit oldal asszisztens keperny megmut elemnel kiemeli ami kattintan ert gomb elengedi vissza beszelget visszanyi panel tobb lepesnel vegigvez sor kiemeli teend ugyanaz elozo kovetkezo gomb oldalturanal ehhez lat keperny gomb mez lapful felir nyit abl cim lathato hibauzen mez irt ada olvassa",
             "h": 59
         },
         {
@@ -49,7 +49,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "A figura nem csak ikon. Pislog, követi a szemével az egeret, és látszik rajta, mi történik:\n\n| Mit csinál | Mikor |\n|---|---|\n| Nagy szemmel figyel | amikor írsz neki |\n| Gondolkodik, pörög körülötte a fény | amíg a válaszon dolgozik |\n| Ugrik, konfettit szór | amikor sikeresen mentettél valamit, vagy végigértél egy túrán |\n| Megijed, verejtékezik | amikor hibaüzenet jelenik meg – és felajánlja a segítségét |\n| Jelez, a sarkában szám jelenik meg | amikor javaslata vár jóváhagyásra |\n| Elalszik, hálósapkában | négy perc tétlenség után; az első mozdulatra ásítva felébred |\n| Elszédül | ha négyszer gyorsan rákattintasz |\n| Elpirul, szívecskéket szór | ha rajta tartod az egeret |\n\nAmikor nincs dolga, magától is elfoglalja magát: körülnéz, integet, nyújtózik, táncol, kávézik, olvas, napszemüveget vesz, elsétál a képernyő alján és visszajön. Amint dolgozni kezdesz, abbahagyja – nem lábatlankodik.",
-            "t": "asszisztens figu elete hangul mozgas humor figu elete hangul mozgas humor figu ikon pislog koveti szeme eger latszi rajta torteni csinal nagy szemmel figyel ami irsz neki gondolkodi porog korulotte feny amig valasz dolgozi ugri konfetti szor ami sikeres mentettel valami vegigertel turan megij verejtekezi ami hibauz jeleni felajanl segitseg jelez sarka szam jeleni ami javaslata var jovahagyas elalszi halosapka negy perc tetlenseg utan elso mozdul asitva felebr elszedul negyszer gyorsan rakattintasz elpirul szivecs szor rajta tar eger ami nincs dolga maga elfoglal mag korulnez integ nyujtozi tancol kavezi olvas napszemuveg vesz elsetal kepernyo aljan visszaj amin dolgozni kezdesz abbahagy labatlankodi",
+            "t": "asszisztens figu elete hangul mozg humor figu elete hangul mozg humor figu ikon pislog koveti szeme eger latszi rajta torte csinal nagy szemmel figyel ami irsz neki gondolkodi porog korulotte feny amig valasz dolgozi ugri konfetti szor ami siker mentettel valami vegigertel turan megij verejtekezi ami hibauz jele felajanl segitseg jelez sarka szam jele ami javaslata var jovahagy elalszi halosapka negy perc tetlenseg utan elso mozdul asitva felebr elszedul negyszer gyorsan rakattintasz elpirul szivecs szor rajta tar eger ami nincs dolga maga elfoglal mag korulnez integ nyujtozi tancol kavezi olv napszemuveg vesz elsetal kepernyo aljan visszaj amin dolgoz kezdesz abbahagy labatlankodi",
             "h": 101
         },
         {
@@ -57,7 +57,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor › Párbaj a Hiba-bogárral",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "### Párbaj a Hiba-bogárral\n\nNéha egy morcos kis lila bogár – a **Hiba-bogár** – mászik elő a képernyő alján, a figura bal oldalán. Mindkettőjük kezében felizzik egy fénypenge, pár csapást váltanak, szikrák pattognak, aztán:\n\n- többnyire a bogár elejti a pengéjét, és elinal – a figura büszkén ugrál;\n- néha a figura pengéje merül le, a bogár örömében ugrál egyet, és elballag.\n\nAz egész néhány másodperc. Bármilyen kattintásra vagy gépelésre azonnal abbamarad, új levél jelzésekor is. Amíg levél-jelzés látszik, el sem kezdődik. Hogy milyen gyakran jön, azt az **Élénkség** adja; a **Párbaj a Hiba-bogárral** kapcsolóval ki is kapcsolható (Beállítások › Asszisztens › Személyiség).",
-            "t": "asszisztens figu elete hangul mozgas humor parbaj hiba bogarral figu elete hangul mozgas humor parbaj hiba bogarral parbaj hiba bogarral neha morcos kis lila bogar hiba bogar maszi elo kepernyo aljan figu bal oldalan mindketto keze felizzi fenypenge par csapas valta szikr pattog aztan tobbnyi bogar elejti pengej elinal figu busz ugral neha figu penge merul bogar orome ugral egy elballag egesz nehany masodperc barmily kattintas gepeles azonnal abbamar uj level jelzese amig level jelzes latszi kezdodi gyakran jon elenkseg adja parbaj hiba bogarral kapcsolo kapcsolhato beallitas asszisztens szemelyiseg",
+            "t": "asszisztens figu elete hangul mozg humor parbaj hiba bogarral figu elete hangul mozg humor parbaj hiba bogarral parbaj hiba bogarral neha morcos kis lila bogar hiba bogar maszi elo kepernyo aljan figu bal oldalan mindketto keze felizzi fenypenge par csap valta szikr pattog aztan tobbnyi bogar elejti pengej elinal figu busz ugral neha figu penge merul bogar orome ugral egy elballag egesz nehany masodperc barmily kattint gepel azonnal abbamar uj level jelzese amig level jelz latszi kezdodi gyakran jon elenkseg adja parbaj hiba bogarral kapcsolo kapcsolhato beallit asszisztens szemelyiseg",
             "h": 89
         },
         {
@@ -65,7 +65,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor › Melyik figura?",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "### Melyik figura?\n\nA Beállítások › Asszisztens › **Melyik figura?** dobozban tizennégy figura közül választasz; a kiválasztott él a képernyő sarkában. Mindegyik ugyanaz az asszisztens (ugyanúgy tud mindent, ugyanazt a mimikát és ugyanazokat a jeleneteket játssza), csak a külseje más. A nevét alatta átírhatod.\n\n| Figura | Milyen |\n|---|---|\n| Szikra | A klasszikus: eleven, kékes-lila fénygombóc. |\n| Láng | Narancs-vörös lobogás, hegyes csúccsal. |\n| Csepp | Hűvös türkiz vízcsepp, csillogó szemmel. |\n| Moha | Zöld, nyugodt, kerek – a türelmes fajta. |\n| Kobold | Lila, hegyes fülekkel; szeret ugratni. |\n| Bigyó | Szögletes acélszürke fej, antennával. |\n| Felhő | Lágy fehér-kék pamacs, álmos tekintettel. |\n| Zümi | Sárga-fekete csíkos, szorgos. |\n| Pára | Halvány, áttetsző, hullámos aljjal. |\n| Csillag | Aranyszínű, saját fénnyel. |\n| Kartonka | Lapos, kivágott papír hatású kisfiú zöld sapkában, vastag sötét körvonallal. |\n| Bojtika | Lapos, kivágott papír hatású kislány lila, sárga bojtos sapkában. |\n| Bip | Lebegő ezüst gömbdroid, antennával és világító kék „talppal\". |\n| Zoli | Csillagőr: szürke sisak, kék rostély a szemek mögött, narancs gallér, piros jelzőgömb. |\n\nAz új négy (Kartonka, Bojtika, Bip, Zoli) saját tervezés – nem ismert film- vagy rajzfilmszereplők másai. Ha a **Kartonka** vagy a **Bojtika** a figurád, a *Kisvárosi srácok* jelenetben is ők a főszereplők barátai; a **Bip** és a **Zoli** az *Űrcsata* jelenet szereplői.",
-            "t": "asszisztens figu elete hangul mozgas humor figu figu elete hangul mozgas humor figu figu beallitas asszisztens figu doboz tizennegy figu kozul valasztasz kivalaszt kepernyo sarka mindegyi ugyanaz asszisztens ugyanugy tud mind ugyanaz mimi ugyanaz jelen jatssza kulse mas nev alatta atirh figu szi klasszikus elev kekes lila fenygomboc lang narancs voros lobogas hegyes csuccsal csepp huvos turkiz vizcsepp csillogo szemmel moha zold nyug ker turelmes fajta kobold lila hegyes ful szer ugratni bigyo szogletes acelszurke fej antenna felho lagy feher kek pamacs almos tekintettel zumi sarga fekete csikos szorgos para halvany attetszo hullamos aljjal csillag aranyszinu saj fennyel kartonka lapos kivag papir hatasu kisfiu zold sapka vastag sot korvonallal bojtika lapos kivag papir hatasu kislany lila sarga bojtos sapka bip lebego ezus gombdroid antenna vilagito kek talppal zoli csillagor szurke sis kek rostely szem mog narancs galler piros jelzogomb uj negy kartonka bojtika bip zoli saj tervezes ism film rajzfilmszerepl mas kartonka bojtika figur kisvarosi srac jelen foszerepl bar bip zoli urcsata jel szereploi",
+            "t": "asszisztens figu elete hangul mozg humor figu figu elete hangul mozg humor figu figu beallit asszisztens figu doboz tizennegy figu kozul valasztasz kivalaszt kepernyo sarka mindegyi ugyanaz asszisztens ugyanugy tud mind ugyanaz mimi ugyanaz jelen jatssza kulse mas nev alatta atirh figu szi klasszikus elev kek lila fenygomboc lang narancs voros lobog hegy csuccsal csepp huvos turkiz vizcsepp csillogo szemmel moha zold nyug ker turelm fajta kobold lila hegy ful szer ugr bigyo szogl acelszurke fej antenna felho lagy feher kek pamacs almos tekintettel zumi sarga fekete csikos szorgos para halvany attetszo hullamos aljjal csillag aranyszinu saj fennyel kartonka lapos kivag papir hatasu kisfiu zold sapka vastag sot korvonallal bojtika lapos kivag papir hatasu kislany lila sarga bojtos sapka bip lebego ezus gombdroid antenna vilagito kek talppal zoli csillagor szurke sis kek rostely szem mog narancs galler piros jelzogomb uj negy kartonka bojtika bip zoli saj tervez ism film rajzfilmszerepl mas kartonka bojtika figur kisvarosi srac jelen foszerepl bar bip zoli urcsata jel szereploi",
             "h": 164
         },
         {
@@ -73,7 +73,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor › Szikra élete",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "### Szikra élete\n\nA figura nem csak ül a sarokban, hanem él. Lélegzik, és **több mint 400 arckifejezése** van (boldog, kacsintó, gyanakvó, rémült, szerelmes, büdös, szédült és még sok más, mindegyik több árnyalatban). Időnként magától grimaszol.\n\nSzükségletei is vannak, amelyek az idővel nőnek: **éhes** lesz, **pisilnie** és **WC-re** kell mennie, **elfárad**, **büdös** lesz, **hiányzik neki a barátnője**, és **kalandra vágyik**. Ha valami sürgőssé válik, és épp ráér, elintézi. Hogy éppen mire van szüksége, azt akkor látod, ha az egeret a figura fölé viszed: a felugró címke kiírja.\n\nRövid jelenetek a képernyő alján, a figura bal oldalán:",
-            "t": "asszisztens figu elete hangul mozgas humor szi elete figu elete hangul mozgas humor szi elete szi elete figu ul sar han lelegzi tobb 400 arckifejezese boldog kacsinto gyanakvo remul szerelmes budos szedul mas mindegyi tobb arnyal idonk maga grimaszol szuksegl van amely ido non ehes pisilnie wc re mennie elfar budos hianyzi neki baratno kaland vagyi surgosse vali epp raer elintezi epp mire szuksege lat eger figu fole visz felugro cimke kiir rovid jel kepernyo aljan figu bal oldalan",
+            "t": "asszisztens figu elete hangul mozg humor szi elete figu elete hangul mozg humor szi elete szi elete figu ul sar han lelegzi tobb 400 arckifejezese boldog kacsinto gyanakvo remul szerelm budos szedul mas mindegyi tobb arnyal idonk maga grimaszol szuksegl van amely ido non ehes pisilnie wc re mennie elfar budos hianyzi neki baratno kaland vagyi surgosse vali epp raer elintezi epp mire szuksege lat eger figu fole visz felugro cimke kiir rovid jel kepernyo aljan figu bal oldalan",
             "h": 79
         },
         {
@@ -81,7 +81,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor › Szikra élete",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "| Jelenet | Mi történik |\n|---|---|\n| Csirke | Egy tyúk odasétál és megcsípi. Hadakoznak; többnyire a tyúk menekül, néha a figura adja fel. |\n| Egér | Egér szalad be, a figura ijedtében felugrik, aztán elkergeti. |\n| Madár | Egy madár lecsap és fejbe csípi; másodszorra a figura elhajol. |\n| Pechás Pityu | Zöld sapkás, szemüveges kis szerencsétlen, akinek mindig rossz napja van: üllő esik rá, villám csap belé, vagy elcsúszik egy banánhéjon. Szellemként száll el, a figura pedig fütyörészve úgy tesz, mintha ott sem lett volna. |\n| Ködbáró | Lila ködfelhő cilinderrel és villámpálcával. Villám és fénypenge csap össze; többnyire a báró párolog el. |\n| Csajozás | Csilla sétál el mellette. A figura napszemüveget vesz, virágot ad; a végén vagy szívecskék jönnek, vagy egy pofon. |\n| A barátnő látogatása | Csilla meglátogatja: ölelés, puszi, randiterv. |\n| Motor, autó | Motorra pattan bukósisakkal, vagy beül a kis piros autójába, végigmegy a képernyő alján és vissza. |\n| Evés, ivás | Hamburger, böfögés, üdítő. |\n| Tüsszentés, csuklás, vakarózás | „Ha… haaa… HAPCI!”, „hukk!”, és valami csíp. |\n| Edzés, zene, telefon | Súlyzózik, fejhallgatóval táncol, Csillával telefonál. |\n| Pisilés, kakilás, fing, zuhany | Csak bekapcsolt **Altesti humor** mellett: bokor, WC újsággal, „Prrrt”, büdösség és zuhany habbal. |\n| Bollywood-szám Táncos Tónival | Tóni flitteres zakóban betáncol, együtt pörögnek, aztán Tóni minden számban máshogy hal meg (üllő, zongora, villám, banánhéj, motor, tűzijáték) – Szikra drámaian megsiratja, Tóni szellemként felszáll, és megígéri, hogy visszajön. |\n| Kisvárosi srácok | Három lapos, kivágott papír hatású gyerek odabillegve megáll Szikra előtt: **Bence** (zöld baseball-sapkás, barna kabátos, a gyanakvó), **Lilla** (lila bojtos sapkás, rózsaszín kabátos, a határozott) és **Gergő** (piros fejhallgatós, szürke pulóveres, a kissé lemaradó). Vitatkoznak azon, mi is Szikra („nyúl\", „nem nyúl, ő tök más\", „csak éhes…\"), Szikra beszáll („Én vagyok Szikra!\"), aztán hazamennek. A figurák saját tervezésűek. |\n| Űrcsata | Egy tányér-cirkáló húz át az égen. **Bip**, a lebegő kis droid (kék lencsés szem, világító talp) beúszik, majd **Csillagőr Zoli** (narancs páncélos, kék sisakrostélyos, lilán izzó plazmavillával) a *Galaktikus Parkolóőrség* nevében parkolójegyet kér Szikrától. Szikra tüsszent, Zoli visszavonul („Visszavonulás!\"), Bip pedig a végén is hűséges marad („Bip-bup… szeretlek\"). A figurák saját tervezésűek. |\n| Sörözés, füves cigi | Csak bekapcsolt **Bulis jelenetek** mellett: sört iszik, csuklik és tántorog (néha elalszik), füves cigiből füstkarikákat fúj, vihog, utána farkaséhes. |",
-            "t": "asszisztens figu elete hangul mozgas humor szi elete figu elete hangul mozgas humor szi elete jel torteni csirke tyu odasetal megcsipi hadakoz tobbnyi tyu menekul neha figu adja eger eger szal figu ijedte felugri aztan elkergeti madar madar lecsap fej csipi masodszor figu elhajol pechas pityu zold sapkas szemuveges kis szerencsetl aki rossz nap ullo esi vill csap bele elcsuszi bananhej szellemk szall figu ped futyoreszve ugy tesz mintha let volna kodbaro lila kodfelho cilinderrel villampalca vill fenypenge csap ossze tobbnyi baro parolog csajozas csilla setal mellette figu napszemuveg vesz virag ad veg szivecs jon pof baratno latogatasa csilla meglatog oleles puszi randiterv motor auto motor pattan bukosis beul kis piros auto vegigmegy kepernyo aljan vissza eves ivas hamburger bofoges udito tusszentes csuklas vakarozas haaa hapci huk csip edzes zene telef sulyzozi fejhallgato tancol csilla telefonal pisiles kakilas fing zuhany bekapcsol altesti humor mell bokor wc ujsaggal prrr budosseg zuhany habbal bollywo szam tancos toni toni flitteres zako betancol egyu porog aztan toni szam mashogy hal ullo zongo vill bananhej motor tuzij szi dramaian megsir toni szellemk felszall megigeri visszaj kisvarosi srac har lapos kivag papir hatasu gyer odabillegve megall szi elo bence zold baseball sapkas barna kabatos gyanakvo lilla lila bojtos sapkas rozsaszin kabatos hataroz gergo piros fejhallgatos szurke puloveres kisse lemarado vitatkoz azon szi nyul nyul tok mas ehes szi beszall szi aztan hazam figur saj tervezesu urcsata tanyer cirkalo huz egen bip lebego kis droid kek lencses szem vilagito talp beuszi majd csillagor zoli narancs pancelos kek sisakrostelyos lilan izzo plazmavilla galaktikus parkoloorseg neve parkolojegy ker szik szi tussz zoli visszavonul visszavonulas bip ped veg huseges mar bip bup szeretl figur saj tervezesu sorozes fuves cigi bekapcsol bulis jel mell sor iszi csukli tantorog neha elalszi fuves cigi fustkari fuj vihog utana farkasehes",
+            "t": "asszisztens figu elete hangul mozg humor szi elete figu elete hangul mozg humor szi elete jel torte csirke tyu odasetal megcsipi hadakoz tobbnyi tyu menekul neha figu adja eger eger szal figu ijedte felugri aztan elkergeti madar madar lecsap fej csipi masodszor figu elhajol pech pityu zold sap szemuveg kis szerencsetl aki rossz nap ullo esi vill csap bele elcsuszi bananhej szellemk szall figu ped futyoreszve ugy tesz mintha let volna kodbaro lila kodfelho cilinderrel villampalca vill fenypenge csap ossze tobbnyi baro parolog csajoz csilla setal mellette figu napszemuveg vesz virag ad veg szivecs jon pof baratno latogatasa csilla meglatog olel puszi randiterv motor auto motor pattan bukosis beul kis piros auto vegigmegy kepernyo aljan vissza eves ivas hamburger bofog udito tusszen csukl vakaroz haaa hapci huk csip edz zene telef sulyzozi fejhallgato tancol csilla telefonal pisil kakil fing zuhany bekapcsol altesti humor mell bokor wc ujsaggal prrr budosseg zuhany habbal bollywo szam tancos toni toni flitter zako betancol egyu porog aztan toni szam mashogy hal ullo zongo vill bananhej motor tuzij szi dramaian megsir toni szellemk felszall megigeri visszaj kisvarosi srac har lapos kivag papir hatasu gyer odabillegve megall szi elo bence zold baseball sap barna kabatos gyanakvo lilla lila bojtos sap rozsaszin kabatos hataroz gergo piros fejhallgatos szurke pulover kisse lemarado vitatkoz azon szi nyul nyul tok mas ehes szi beszall szi aztan hazam figur saj tervezesu urcsata tanyer cirkalo huz egen bip lebego kis droid kek lencs szem vilagito talp beuszi majd csillagor zoli narancs pancelos kek sisakrostelyos lilan izzo plazmavilla galaktikus parkoloorseg neve parkolojegy ker szik szi tussz zoli visszavonul visszavonul bip ped veg huseg mar bip bup szeretl figur saj tervezesu soroz fuv cigi bekapcsol bulis jel mell sor iszi csukli tantorog neha elalszi fuv cigi fustkari fuj vihog utana farkaseh",
             "h": 296
         },
         {
@@ -89,7 +89,7 @@
             "cim": "A figura élete: hangulatok, mozgás, humor › Szikra élete",
             "horgony": "a-figura-elete-hangulatok-mozgas-humor",
             "szoveg": "Minden szereplő saját rajz (a kartonfigurás és az űrszereplők is saját tervezésűek, nem ismert filmes vagy rajzfilmes alakok). Bármilyen kattintásra vagy gépelésre azonnal abbahagyja, és csak akkor kezd jelenetbe, ha néhány másodperce nem dolgozol, és nincs nyitva se a panelje, se buborék, se túra. Kikapcsolni a Beállítások › Asszisztens › **Szikra élete** kapcsolóval lehet; a pisis-kakis részt külön is, az **Altesti humor** kapcsolóval (ügyfél előtt érdemes). A gépen beállított „kevesebb mozgás” mellett jelenet nincs, csak az arckifejezések változnak.\n\nIdőnként megszólal egy rövid, vicces mondattal. Ezeket nem az AI találja ki helyben, hanem a rendszerbe épített mondatok közül választ, a napszakhoz igazodva (reggel, ebédidő, zárás előtt, péntek délután). Gépelés közben nem szól közbe, és a buborék pár másodperc múlva magától eltűnik.\n\nA személyisége állítható – lásd lejjebb, a **Beállítások › Asszisztens** résznél:\n\n- **Humorérzék** – mennyire viccelődik a válaszaiban és a beszólásaiban. Az alapérték 90%. Alacsonyra állítva tárgyszerű, beszólások nélkül.\n- **Élénkség** – mennyit mozog magától. Nullára állítva nyugton marad.\n\nA humor soha nem megy a pontosság rovására: a lépések, a számok és a gombok felirata viccelődés közben is pontos. Ha sietsz, hibát jelzel vagy pénzről van szó, előbb segít, és csak utána – ha egyáltalán – tréfál.\n\nTipp: ha a gépeden be van állítva a „kevesebb mozgás\" (az operációs rendszer kisegítő beállítása), a figura magától nem mozog, akármilyen élénkre van állítva.",
-            "t": "asszisztens figu elete hangul mozgas humor szi elete figu elete hangul mozgas humor szi elete szereplo saj rajz kartonfiguras urszerepl saj tervezesu ism filmes rajzfilmes ala barmily kattintas gepeles azonnal abbahagy kezd jelen nehany masodperce dolgozol nincs nyitva se panel se bubor se tura kikapcsolni beallitas asszisztens szi elete kapcsolo pisis kakis resz kul altesti humor kapcsolo ugyfel elo erdemes gep beallit kevesebb mozgas mell jel nincs arckifejezes valtoz idonk megszolal rovid vicces mondattal eze ai talal hely han rendszer epit mond kozul valasz napsz igazodva reggel ebedido zaras elo pen delutan gepeles koz szol koz bubor par masodperc mulva maga eltuni szemelyisege allithato lasd lejjebb beallitas asszisztens resznel humorerz mennyi viccelodi valasz beszolas alap 90 alacsony allitva targyszeru beszolas nelkul elenkseg mennyi mozog maga nulla allitva nyug mar humor soha megy pontossag rovasa lepes szam gomb felirata viccelodes koz pontos sietsz hib jelzel penz szo elobb segi utana egyaltalan trefal tipp gep allitva kevesebb mozgas operacios rendszer kisegito beallitasa figu maga mozog akarmily elen allitva",
+            "t": "asszisztens figu elete hangul mozg humor szi elete figu elete hangul mozg humor szi elete szereplo saj rajz kartonfigur urszerepl saj tervezesu ism film rajzfilm ala barmily kattint gepel azonnal abbahagy kezd jelen nehany masodperce dolgozol nincs nyitva se panel se bubor se tura kikapcsol beallit asszisztens szi elete kapcsolo pisis kakis resz kul altesti humor kapcsolo ugyfel elo erd gep beallit kevesebb mozg mell jel nincs arckifejez valtoz idonk megszolal rovid vicc mondattal eze ai talal hely han rendszer epit mond kozul valasz napsz igazodva reggel ebedido zar elo pen delutan gepel koz szol koz bubor par masodperc mulva maga eltu szemelyisege allithato lasd lejjebb beallit asszisztens resznel humorerz mennyi viccelodi valasz beszolas alap 90 alacsony allitva targyszeru beszol nelkul elenkseg mennyi mozog maga nulla allitva nyug mar humor soha megy pontossag rovasa lep szam gomb felirata viccel koz pontos sietsz hib jelzel penz szo elobb segi utana egyaltalan trefal tipp gep allitva kevesebb mozg operacios rendszer kisegito beallitasa figu maga mozog akarmily elen allitva",
             "h": 166
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Mit tud – honnan tudja",
             "horgony": "mit-tud-honnan-tudja",
             "szoveg": "Az asszisztens háromféle forrásból felel:\n\n1. **A súgóból** – a rendszer működését a dokumentációból és a kérdés–válaszokból tudja. Minden kérdésnél megkapja a hozzá legjobban illő részeket, előnyben részesítve annak az oldalnak a fejezetét, ahol éppen vagy. Ha ez nem elég, maga is keres és elolvassa a fejezetet. Amikor a súgó frissül, a következő kérdésnél már az újat tudja.\n2. **A rendszer adataiból** – amikor konkrét dologra kérdezel („mi a mai helyzet?\"), lekéri a friss adatot.\n3. **A cég saját tudásából** – a tudástárból és a Súgó saját kérdés–válaszaiból.\n\nAmit nem tud, arra nem talál ki választ: megmondja, hogy erről nincs leírása.\n\nAz eszközei, amelyekkel dolgozik:",
-            "t": "asszisztens tud honnan tud tud honnan tud asszisztens haromfele forras felel sugo rendszer mukodes dokumentacio kerdes valasz tud kerdesnel megkap hozza legjob illo resz elony reszesitve ann oldal fejez ahol epp eleg maga keres elolvassa fejez ami sugo frissul kovetkezo kerdesnel uja tud rendszer adat ami konkr dolog kerdezel mai helyz lekeri friss ada ceg saj tudasa tudastar sugo saj kerdes valasz tud talal valasz megmond errol nincs leirasa eszkoz amely dolgozi",
+            "t": "asszisztens tud honnan tud tud honnan tud asszisztens haromfele forr felel sugo rendszer mukod dokumentacio kerd valasz tud kerdesnel megkap hozza legjob illo resz elony reszesitve ann oldal fejez ahol epp eleg maga ker elolvassa fejez ami sugo frissul kovetkezo kerdesnel uja tud rendszer adat ami konkr dolog kerdezel mai helyz lekeri friss ada ceg saj tudasa tudastar sugo saj kerd valasz tud talal valasz megmond errol nincs leirasa eszkoz amely dolgozi",
             "h": 72
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Mit tud – honnan tudja",
             "horgony": "mit-tud-honnan-tudja",
             "szoveg": "| Eszköz | Mit csinál | Fajta |\n|---|---|---|\n| Keresés | ügyfél, eszköz, munkalap, termék, szolgáltatás keresése | olvas |\n| Munkalap adatai | egy munkalap minden adata, állapottörténettel | olvas |\n| Munkalapok listája | szűrve: állapot, nyitott, lejárt, fizetetlen, felelős | olvas |\n| Ügyfél adatai | az ügyfél adatai, eszközei, legutóbbi munkalapjai | olvas |\n| Eszköz adatai | az eszköz adatai és eddigi munkalapjai | olvas |\n| Pénztár egy napja | a házipénztár egy napjának összesítője és tételei | olvas |\n| Árukiadások és rendelések | a pultos eladások és az ügyfeleknek rendelt áruk listája | olvas |\n| Termékek és készlet | terméktörzs, készlet, ami a minimum alá fogyott | olvas |\n| Szolgáltatások és árak | a szolgáltatások és áraik, a bevizsgálási díjak | olvas |\n| Naptár eseményei | egy időszak eseményei, akár egy névre szűrve | olvas |\n| Nyitvatartás | a beállított nyitvatartás, és hogy mennyi van zárásig | olvas |\n| Mi van beállítva | mi van bekötve és mi hiányzik – titkok nélkül | olvas |\n| Áttekintés | a rendszer állapota számokban | olvas |\n| Olvasatlan csapatüzenetek | a saját olvasatlan belső üzeneteid | olvas |\n| Keresés a súgóban | keresés a dokumentációban és a kérdés–válaszokban | olvas |\n| Súgófejezet elolvasása | egy fejezet vagy szakasz teljes szövege | olvas |\n| Tudástár | keresés abban, amit tanítottak neki | olvas |\n| Műveletnapló | a saját javaslatai és műveletei | olvas |\n| Egy rekord története (Napló) | egy munkalap, árukiadás, rendelés vagy más rekord teljes története a változásnaplóból: ki, mikor, honnan, mit (régi → új) | olvas |\n| Keresés a Naplóban | keresés a teljes változásnaplóban: mi, ki, honnan, milyen művelet, időszak, szöveg, munkalapszám | olvas |\n| Napló-összesítés | a módosítások száma kollégánként, fajtánként, naponként egy időszakra | olvas |\n| A napló épsége | ellenőrzi, hogy a naplót nem írták-e át, és nem hiányzik-e belőle | olvas |\n| Megmutatom | kiemel egy elemet a képernyőn | megmutat |\n| Végigvezetem | több lépésben vezet végig egy feladaton | megmutat |\n| Oldaltúra | elindítja az oldal kész túráját | megmutat |\n| Megnyitás | gombot ad egy oldal vagy rekord megnyitásához, vagy egy lap **Nyomtatás** ablakához (átvételi, munkalap, árajánlat, szállítólevél – nyomtatás, PDF, e-mail) | megmutat |\n| Megjegyzés a munkalapra | belső megjegyzést fűz a munkalaphoz | hozzáad – jóváhagyással |\n| Csapatüzenet küldése | belső üzenetet küld a nevedben, vagy cetlit tesz a falra | hozzáad – jóváhagyással |\n| Megtanulom | új tudást ment a tudástárába | hozzáad – jóváhagyással |\n| Munkalap állapotának átírása | átírja egy munkalap állapotát | átír – kérésre, kóddal |\n| Munkalap határidejének átírása | átírja vagy törli a határidőt | átír – kérésre, kóddal |\n| Ügyfél adatainak átírása | átírja az ügyfél megadott mezőit | átír – kérésre, kóddal |\n| Szolgáltatás árának átírása | átírja egy szolgáltatás bruttó árát | átír – kérésre, kóddal |\n| Tudás törlése | kikapcsol egy sort a tudástárban | töröl – kérésre, kóddal |\n\nAz adminisztrátor bármelyik eszközt kikapcsolhatja (lásd a beállításoknál).\n\nAmit **nem** lát: a zárkódot, a feloldó mintát, a jelszavakat és az API-kulcsokat.",
-            "t": "asszisztens tud honnan tud tud honnan tud eszkoz csinal fajta kereses ugyfel eszkoz munkalap term szolgaltatas keresese olvas munkalap ada munkalap adata allapottortenettel olvas munkalap lista szurve allap nyit lejar fizetetl felelos olvas ugyfel ada ugyfel ada eszkoz legutobbi munkalapj olvas eszkoz ada eszkoz ada eddigi munkalapj olvas penztar nap hazipenztar nap osszesito tetel olvas arukiadas rendeles pultos eladas ugyfel rendel aru lista olvas term keszl termektorzs keszl minimum ala fogy olvas szolgaltatas ar szolgaltatas ar bevizsgalasi dij olvas naptar esemeny idosz esemeny akar nev szurve olvas nyitvatartas beallit nyitvatartas zaras olvas beallitva bekotve hianyzi tit nelkul olvas attekintes rendszer allapota szam olvas olvasatlan csapatuz saj olvasatlan belso uzeneteid olvas kereses sugo kereses dokumentacio kerdes valasz olvas sugofejez elolvasasa fejez szakasz teljes szovege olvas tudastar kereses abban tanitot neki olvas muveletnaplo saj javasl muvel olvas rekord tortenete naplo munkalap arukiadas rendeles mas rekord teljes tortenete valtozasnaplo honnan regi uj olvas kereses naplo kereses teljes valtozasnaplo honnan muvel idosz szoveg munkalapsz olvas naplo osszesites modositas szama kollegank fajtank naponk idosz olvas naplo epsege ellenorzi napl irt hianyzi belole olvas megmut kiemel elem keperny megmu vegigvez tobb lepes vez veg felad megmu oldaltu elindi oldal kesz turaj megmu megnyitas gomb ad oldal rekord megnyitasa lap nyomtatas ablaka atveteli munkalap arajanl szallitole nyomtatas pdf mail megmu megjegyzes munkalap belso megjegyzes fuz munkalap hozza jovahagyassal csapatuz kuldese belso uzen kuld nev cetli tesz fal hozza jovahagyassal megtanul uj tudas men tudasta hozza jovahagyassal munkalap allapota atirasa atir munkalap allap atir keres koddal munkalap hataride atirasa atir torli hatarid atir keres koddal ugyfel ada atirasa atir ugyfel megad mezoi atir keres koddal szolgaltatas ar atirasa atir szolgaltatas brutto ar atir keres koddal tudas torlese kikapcsol sor tudastar torol keres koddal adminisztrator barmelyi eszkoz kikapcsolh lasd beallitasoknal lat zark feloldo min jelszav api kulcs",
+            "t": "asszisztens tud honnan tud tud honnan tud eszkoz csinal fajta ker ugyfel eszkoz munkalap term szolgalt keresese olv munkalap ada munkalap adata allapottortenettel olv munkalap lista szurve allap nyit lejar fizetetl felelos olv ugyfel ada ugyfel ada eszkoz legutobbi munkalapj olv eszkoz ada eszkoz ada eddigi munkalapj olv penztar nap hazipenztar nap osszesito tetel olv arukiad rendel pultos elad ugyfel rendel aru lista olv term keszl termektorzs keszl minimum ala fogy olv szolgaltat ar szolgaltat ar bevizsgalasi dij olv naptar esemeny idosz esemeny akar nev szurve olv nyitvatar beallit nyitvatar zar olv beallitva bekotve hianyzi tit nelkul olv attekin rendszer allapota szam olv olvasatlan csapatuz saj olvasatlan belso uzeneteid olv ker sugo ker dokumentacio kerd valasz olv sugofejez elolvasasa fejez szakasz telj szovege olv tudastar ker abban tanitot neki olv muveletnaplo saj javasl muvel olv rekord tortenete naplo munkalap aruki rendel mas rekord telj tortenete valtozasnaplo honnan regi uj olv ker naplo ker telj valtozasnaplo honnan muvel idosz szoveg munkalapsz olv naplo osszesi modosit szama kollegank fajtank naponk idosz olv naplo epsege ellenorzi napl irt hianyzi belole olv megmut kiemel elem keperny megmu vegigvez tobb lep vez veg felad megmu oldaltu elindi oldal kesz turaj megmu megnyi gomb ad oldal rekord megnyitasa lap nyomt ablaka atveteli munkalap arajanl szallitole nyomt pdf mail megmu megjegyz munkalap belso megjegyz fuz munkalap hozza jovahagyassal csapatuz kuldese belso uzen kuld nev cetli tesz fal hozza jovahagyassal megtanul uj tud men tudasta hozza jovahagyassal munkalap allapota atirasa atir munkalap allap atir ker koddal munkalap hataride atirasa atir torli hatarid atir ker koddal ugyfel ada atirasa atir ugyfel megad mezoi atir ker koddal szolgalt ar atirasa atir szolgalt brutto ar atir ker koddal tud torlese kikapcsol sor tudastar torol ker koddal adminisztrator barmelyi eszkoz kikapcsolh lasd beallitasoknal lat zark feloldo min jelszav api kulcs",
             "h": 298
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Mit tud – honnan tudja › A Napló és az asszisztens",
             "horgony": "mit-tud-honnan-tudja",
             "szoveg": "### A Napló és az asszisztens\n\nAz asszisztens a teljes változásnaplót olvassa. Ha egy munkalap vagy egy Napló ablak nyitva van, a rekord története **magától** megy hozzá – kérdezd meg: `Mi történt ezzel a lappal?`, `Ki írta át a határidőt?`, `Mikor lett lezárva, és ki nyitotta újra?`, és azonnal, idővonalszerűen felel. A Napló ablak megnyitásakor maga is felajánlja, hogy elmondja, mi történt. A teljes naplóban is keres (`Mit csinált ma Minta Márta?`, `Mi változott tegnap a termékeknél?`). A naplót csak olvassa; a beállítások naplóját csak adminisztrátornak mutatja. A lezárt munkalapra nem javasol megjegyzést vagy határidőt – előbb az újranyitást (állapotváltás) kell kérni.",
-            "t": "asszisztens tud honnan tud naplo asszisztens tud honnan tud naplo asszisztens naplo asszisztens asszisztens teljes valtozasnapl olvassa munkalap naplo abl nyitva rekord tortenete maga megy hozza kerdezd tort ezzel lappal irta hatarid let lezarva nyitotta ujra azonnal idovonalszeru felel naplo abl megnyitasa maga felajanl elmond tort teljes naplo keres csinal ma minta marta valtoz tegnap termekeknel napl olvassa beallitas naploj adminisztrator mut lezar munkalap javasol megjegyzes hatarid elobb ujranyitas allapotvaltas kerni",
+            "t": "asszisztens tud honnan tud naplo asszisztens tud honnan tud naplo asszisztens naplo asszisztens asszisztens telj valtozasnapl olvassa munkalap naplo abl nyitva rekord tortenete maga megy hozza kerdezd tort ezzel lappal irta hatarid let lezarva nyitotta ujra azonnal idovonalszeru felel naplo abl megnyitasa maga felajanl elmond tort telj naplo ker csinal ma minta marta valtoz tegnap termekeknel napl olvassa beallit naploj adminisztrator mut lezar munkalap javasol megjegyz hatarid elobb ujranyit allapotval ker",
             "h": 71
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Javaslat, jóváhagyás, megerősítő kód",
             "horgony": "javaslat-jovahagyas-megerosito-kod",
             "szoveg": "Ha olyat kérsz, ami adatot változtat, az asszisztens nem csinálja meg – **javaslatot** tesz, amely kártyaként jelenik meg a beszélgetésben. A kártyán látod, mi változna: a régi és az új értéket.\n\n- **Engedélyezem** – ekkor történik meg a változtatás.\n- **Elutasítom** – semmi nem változik.\n\nHáromféle módosítás van:\n\n- **Hozzáadás** (megjegyzés, csapatüzenet, új tudás): elég az **Engedélyezem** gomb.\n- **Átírás** és **Törlés**: csak akkor javasolja, ha kifejezetten kérted. A kártyán egy **megerősítő kód** áll, amelyet be kell gépelned – addig az **Engedélyezem** gomb nem nyomható meg.\n\nA javaslat hat óráig érvényes; utána lejár, és újra kell kérned.\n\nHa a figura sarkában szám jelenik meg, ennyi javaslata vár rád.",
-            "t": "asszisztens javasl jovahagyas megerosito kod javasl jovahagyas megerosito kod oly kersz ada valtoz asszisztens csinal javasl tesz amely kartyak jeleni beszelgetes kartyan lat valtozna regi uj ert engedelyez ekkor torteni valtoztatas elutasi semmi valtozi haromfele modositas hozzaadas megjegyzes csapatuz uj tudas eleg engedelyez gomb atiras torles javasol kifejezet ker kartyan megerosito kod all amely gepeln add engedelyez gomb nyomhato javasl hat ora ervenyes utana lejar ujra kern figu sarka szam jeleni ennyi javaslata var rad",
+            "t": "asszisztens javasl jovahagy megerosito kod javasl jovahagy megerosito kod oly kersz ada valtoz asszisztens csinal javasl tesz amely kartyak jele beszelget kartyan lat valtozna regi uj ert engedelyez ekkor torte valtozt elutasi semmi valtozi haromfele modosi hozza megjegyz csapatuz uj tud eleg engedelyez gomb atir torl javasol kifejezet ker kartyan megerosito kod all amely gepeln add engedelyez gomb nyomhato javasl hat ora erveny utana lejar ujra kern figu sarka szam jele ennyi javaslata var rad",
             "h": 75
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Visszaállítás és mentés",
             "horgony": "visszaallitas-es-mentes",
             "szoveg": "Minden végrehajtott módosítás előtt a rendszer elmenti az érintett rekord teljes másolatát. Ezért a művelet visszavonható:\n\n1. A végrehajtott kártyán nyisd le a **Visszaállítás…** sort.\n2. Írd be a művelet számát (a kártya alján, a kettőskereszt után áll).\n3. Kattints a **Visszaállítom** gombra.\n\nEzen felül minden nap teljes mentés készül a rendszer saját adatairól – az asszisztens használatától függetlenül (**Beállítások › Mentés**); az asszisztens az első módosítása előtt ellenőrzi, hogy az aznapi megvan-e. A részleteket a Mentés, jogosultság, biztonság fejezet írja le.",
-            "t": "asszisztens visszaallitas mentes visszaallitas mentes vegrehajt modositas elo rendszer elmenti erint rekord teljes masol ezer muvel visszavonhato vegrehajt kartyan nyisd visszaallitas sor ird muvel szam kartya aljan kettoskeresz utan all kattints visszaalli gomb ezen felul nap teljes mentes keszul rendszer saj adat asszisztens hasznalata fuggetlenul beallitas mentes asszisztens elso modositasa elo ellenorzi aznapi megvan reszl mentes jogosultsag biztonsag fejez irja",
+            "t": "asszisztens visszaalli men visszaalli men vegrehajt modosi elo rendszer elmenti erint rekord telj masol ezer muvel visszavonhato vegrehajt kartyan nyisd visszaalli sor ird muvel szam kartya aljan kettoskeresz utan all kattints visszaalli gomb ezen felul nap telj men keszul rendszer saj adat asszisztens hasznalata fuggetlenul beallit men asszisztens elso modositasa elo ellenorzi aznapi megvan reszl men jogosultsag biztonsag fejez irja",
             "h": 60
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Tanítás: a tudástár",
             "horgony": "tanitas-a-tudastar",
             "szoveg": "A rendszer működését az asszisztens a súgóból tudja. A cég saját szabályait viszont neked kell megtanítanod – erre három út van:\n\n- **Jegyezd meg** – egy jó válasz alatt ez a gomb javaslatot tesz arra, hogy a válasz a tudástárba kerüljön. Jóváhagyás után megjegyzi.\n- **Új tudás** – az Asszisztens oldal **Tudástár** lapfülén az adminisztrátor kézzel vehet fel tudást: cím, tartalom, kulcsszavak. A **Mindig tudja** kapcsolóval minden kérdésnél megkapja, az **Aktív** kapcsoló kivételével megmarad, de nem használja.\n- **Saját kérdés–válasz** – a Súgó **Kérdés–válasz** lapfülén felvett saját kérdéseket is tudja (lásd A súgó használata).\n\nA válaszok alatti **Jó válasz** és **Rossz válasz** gombbal jelezheted, mennyire volt hasznos.\n\nFrissítés után az asszisztens magától megtanulja az új verzió változásait, és egy buborékban felsorolja a legfontosabbakat.",
-            "t": "asszisztens tanitas tudastar tanitas tudastar rendszer mukodes asszisztens sugo tud ceg saj szabaly visz nek megtanitan har ut jegyezd jo valasz ala gomb javasl tesz valasz tudastar kerulj jovahagyas utan megjegyzi uj tudas asszisztens oldal tudastar lapful adminisztrator kezzel veh tudas cim tartal kulcsszav tud kapcsolo kerdesnel megkap aktiv kapcsolo kivetele megmar hasznal saj kerdes valasz sugo kerdes valasz lapful felv saj kerdes tud lasd sugo hasznalata valasz alatti jo valasz rossz valasz gombbal jelezh mennyi hasznos frissites utan asszisztens maga megtanul uj verzio valtozas bubor felso legfontosabb",
+            "t": "asszisztens tani tudastar tani tudastar rendszer mukod asszisztens sugo tud ceg saj szabaly visz nek megtanitan har ut jegyezd jo valasz ala gomb javasl tesz valasz tudastar kerulj jovahagy utan megjegyzi uj tud asszisztens oldal tudastar lapful adminisztrator kezzel veh tud cim tartal kulcsszav tud kapcsolo kerdesnel megkap aktiv kapcsolo kivetele megmar hasznal saj kerd valasz sugo kerd valasz lapful felv saj kerd tud lasd sugo hasznalata valasz alatti jo valasz rossz valasz gombbal jelezh mennyi hasznos frissi utan asszisztens maga megtanul uj verzio valtoz bubor felso legfontosabb",
             "h": 88
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Magától szól",
             "horgony": "magatol-szol",
             "szoveg": "Ha a **Magától szól** be van kapcsolva, az asszisztens buborékban jelez:\n\n- lejárt határidejű nyitott munkalap,\n- ma lejáró határidő,\n- le nem zárt tegnapi kassza,\n- jóváhagyásra váró javaslat,\n- hibaüzenet az oldalon – felajánlja, hogy segít megoldani,\n- új verzió – elmondja, mit tanult.\n\nUgyanarról a dologról naponta legfeljebb egyszer szól, és öt percen belül nem jelez kétszer. Naponta egyszer köszön is.",
-            "t": "asszisztens maga szol maga szol maga szol kapcsolva asszisztens bubor jelez lejar hatarideju nyit munkalap ma lejaro hatarido zar tegnapi penztar jovahagyas varo javasl hibauz oldal felajanl segi megoldani uj verzio elmond tanul ugyanar dolog naponta legfeljebb egyszer szol ot perc belul jelez ketszer naponta egyszer kosz",
+            "t": "asszisztens maga szol maga szol maga szol kapcsolva asszisztens bubor jelez lejar hatarideju nyit munkalap ma lejaro hatarido zar tegnapi penztar jovahagy varo javasl hibauz oldal felajanl segi megolda uj verzio elmond tanul ugyanar dolog naponta legfeljebb egyszer szol ot perc belul jelez ketszer naponta egyszer kosz",
             "h": 47
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Az Asszisztens oldal",
             "horgony": "az-asszisztens-oldal",
             "szoveg": "Adminisztrátori oldal, a **Beállítások** › **Asszisztens** lapfülről nyílik. Négy lapfüle van:\n\n- **Javaslatok és napló** – minden javaslat és művelet, a legújabb elöl: mit javasolt, ki hagyta jóvá, mi futott le, mit állítottak vissza. A kártyák itt is jóváhagyhatók és visszaállíthatók.\n- **Tudástár** – amit a rendszer leírásán felül tud: kézzel tanított szabályok, jóváhagyott „Jegyezd meg\" válaszok, a verziókból tanult újdonságok, a saját kérdés–válaszok.\n- **Mentések** – a teljes mentések listája, **Mentés most** és **Letöltés** gombbal.\n- **Beállítások** – ugyanaz az űrlap, mint a Beállítások › Asszisztens lapfülön.\n\nA fejlécben a **Beszélgetés** gomb megnyitja az asszisztenst, a **Vissza a Beállításokhoz** visszavisz.",
-            "t": "asszisztens asszisztens oldal asszisztens oldal adminisztratori oldal beallitas asszisztens lapful nyili negy lapfule javasl naplo javasl muvel legujabb elol javasol hagyta jova fut allitot vissza karty jovahagyh visszaallith tudastar rendszer leirasan felul tud kezzel tanit szabaly jovahagy jegyezd valasz verzi tanul ujdonsag saj kerdes valasz mentes teljes mentes lista mentes letoltes gombbal beallitas ugyanaz urlap beallitas asszisztens lapful fejlec beszelgetes gomb megnyi asszisztens vissza beallitas visszavisz",
+            "t": "asszisztens asszisztens oldal asszisztens oldal adminisztratori oldal beallit asszisztens lapful nyili negy lapfule javasl naplo javasl muvel legujabb elol javasol hagyta jova fut allitot vissza karty jovahagyh visszaallith tudastar rendszer leirasan felul tud kezzel tanit szabaly jovahagy jegyezd valasz verzi tanul ujdonsag saj kerd valasz ment telj ment lista men letol gombbal beallit ugyanaz urlap beallit asszisztens lapful fejlec beszelg gomb megnyi asszisztens vissza beallit visszavisz",
             "h": 66
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Beállítások › Asszisztens",
             "horgony": "beallitasok-asszisztens",
             "szoveg": "Csak adminisztrátor látja. Négy doboza van.",
-            "t": "asszisztens beallitas asszisztens beallitas asszisztens adminisztrator lat negy doboza",
+            "t": "asszisztens beallit asszisztens beallit asszisztens adminisztrator lat negy doboza",
             "h": 9
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Beállítások › Asszisztens › Alapok",
             "horgony": "beallitasok-asszisztens",
             "szoveg": "### Alapok\n\n| Mező | Mire való |\n|---|---|\n| **Bekapcsolva** | A figura minden oldalon ott van a jobb alsó sarokban. Kikapcsolva eltűnik. |\n| **Magától szól** | Lejárt határidő, lezáratlan kassza, újdonság, hibaüzenet – buborékban jelez. Az alkalmi, napszakhoz illő beszólásokat is ez engedi. |\n| **Olvasáshoz is engedélyt kér** | Bekapcsolva az adatok lekérése előtt is jóváhagyást kér, nem csak a módosítás előtt. |\n| **A neve** | Így mutatkozik be, és ez áll a beszélgetés fejlécében. |\n| **Napi kérdéskeret / kolléga** | Ennyi kérdést tehet fel egy kolléga naponta. A költséget tartja kordában. |\n| **Claude modell** | Az AI-modell azonosítója. Ha a megadottat a szolgáltató nem ismeri, a rendszer magától egy tartalékra vált. |\n| **Claude API-kulcs** | A szabad szöveges válaszokhoz kell. Titkosítva tárolódik; a mező üresen hagyva a mentett kulcs marad. A **Mentett kulcs törlése** kapcsoló törli. |\n\nA kulcs a webhely beállítófájljában is megadható – az a legbiztonságosabb; ilyenkor a mező helyén erről szóló sor áll.",
-            "t": "asszisztens beallitas asszisztens alap beallitas asszisztens alap alap mezo mire valo bekapcsolva figu oldal jobb also sar kikapcsolva eltuni maga szol lejar hatarido lezaratlan penztar ujdonsag hibauz bubor jelez alkalmi napsz illo beszolas engedi olvasas engedely ker bekapcsolva ada lekerese elo jovahagyas ker modositas elo neve igy mutatkozi all beszelgetes fejlece napi kerdesker kollega ennyi kerdes teh kollega naponta ar tar korda claude modell ai modell azonosito megadot szolgaltato ismeri rendszer maga tartal val claude api kulcs szab szoveges valasz titkositva tarolodi mezo ures hagyva ment kulcs mar ment kulcs torlese kapcsolo torli kulcs webhely beallitofajl megadhato legbiztonsagosabb ily mezo hely errol szolo sor all",
+            "t": "asszisztens beallit asszisztens alap beallit asszisztens alap alap mezo mire valo bekapcsolva figu oldal jobb also sar kikapcsolva eltu maga szol lejar hatarido lezaratlan penztar ujdonsag hibauz bubor jelez alkalmi napsz illo beszol engedi olvas engedely ker bekapcsolva ada lekerese elo jovahagy ker modosi elo neve igy mutatkozi all beszelg fejlece napi kerdesker kollega ennyi kerd teh kollega naponta ar tar korda claude modell ai modell azonosito megadot szolgaltato ismeri rendszer maga tartal val claude api kulcs szab szoveg valasz titkositva tarolodi mezo ures hagyva ment kulcs mar ment kulcs torlese kapcsolo torli kulcs webhely beallitofajl megadhato legbiztonsagosabb ily mezo hely errol szolo sor all",
             "h": 105
         },
         {
@@ -177,7 +177,7 @@
             "cim": "Beállítások › Asszisztens › Személyiség",
             "horgony": "beallitasok-asszisztens",
             "szoveg": "### Személyiség\n\n| Mező | Mire való |\n|---|---|\n| **Humorérzék** | A csúszka a „komoly\" és a „vicces\" között állítja, mennyit tréfál a válaszaiban és a magától mondott beszólásaiban. Alap: 90%. 15% alatt nincs beszólás, 10% alatt a válaszai is teljesen tárgyszerűek. |\n| **Élénkség** | A „nyugodt\" és az „izgő-mozgó\" között állítja, milyen gyakran mozog magától. Alap: 80%. Nullán nem mozog magától. |\n| **Párbaj a Hiba-bogárral** | Bekapcsolva a figura időnként fénypenge-párbajt vív egy kis bogárral a képernyő alján. Alap: bekapcsolva. Az élénkség nullán, vagy a gépen beállított „kevesebb mozgás” mellett nincs párbaj. |\n| **Szikra élete** | Bekapcsolva a figura lélegzik, több száz arckifejezést vált, szükségletei vannak, és rövid jeleneteket játszik a képernyő alján (lásd: Szikra élete). Alap: bekapcsolva. |\n| **Altesti humor** | A pisilés, kakilás, fing és büdösség jelenetei. Kikapcsolva ezek nem jönnek, a többi marad. Alap: bekapcsolva. |\n| **Bulis jelenetek** | Sörözés tántorgással és füves cigi (rajzfilmes poén). Bekapcsolva rendszeresen előjönnek. Alap: kikapcsolva – ügyfél előtt ne legyen bekapcsolva. |",
-            "t": "asszisztens beallitas asszisztens szemelyiseg beallitas asszisztens szemelyiseg szemelyiseg mezo mire valo humorerz csuszka komoly vicces koz alli mennyi trefal valasz maga mond beszolas alap 90 15 ala nincs beszolas 10 ala valasz teljes targyszeru elenkseg nyug izgo mozgo koz alli gyakran mozog maga alap 80 nullan mozog maga parbaj hiba bogarral bekapcsolva figu idonk fenypenge parbaj viv kis bogarral kepernyo aljan alap bekapcsolva elenkseg nullan gep beallit kevesebb mozgas mell nincs parbaj szi elete bekapcsolva figu lelegzi tobb szaz arckifejezes val szuksegl van rovid jelen jatszi kepernyo aljan lasd szi elete alap bekapcsolva altesti humor pisiles kakilas fing budosseg jelen kikapcsolva jon tobbi mar alap bekapcsolva bulis jel sorozes tantorgassal fuves cigi rajzfilmes poen bekapcsolva rendszeres eloj alap kikapcsolva ugyfel elo ne legy bekapcsolva",
+            "t": "asszisztens beallit asszisztens szemelyiseg beallit asszisztens szemelyiseg szemelyiseg mezo mire valo humorerz csuszka komoly vicc koz alli mennyi trefal valasz maga mond beszolas alap 90 15 ala nincs beszol 10 ala valasz telj targyszeru elenkseg nyug izgo mozgo koz alli gyakran mozog maga alap 80 nullan mozog maga parbaj hiba bogarral bekapcsolva figu idonk fenypenge parbaj viv kis bogarral kepernyo aljan alap bekapcsolva elenkseg nullan gep beallit kevesebb mozg mell nincs parbaj szi elete bekapcsolva figu lelegzi tobb szaz arckifejez val szuksegl van rovid jelen jatszi kepernyo aljan lasd szi elete alap bekapcsolva altesti humor pisil kakil fing budosseg jelen kikapcsolva jon tobbi mar alap bekapcsolva bulis jel soroz tantorgassal fuv cigi rajzfilm poen bekapcsolva rendszer eloj alap kikapcsolva ugyfel elo ne legy bekapcsolva",
             "h": 124
         },
         {
@@ -185,7 +185,7 @@
             "cim": "Beállítások › Asszisztens › Mit tehet az asszisztens",
             "horgony": "beallitasok-asszisztens",
             "szoveg": "### Mit tehet az asszisztens\n\nMinden eszköze külön kapcsolható. A kikapcsolt eszközt nem kapja meg. A módosító eszközök bekapcsolva is csak javaslatot tesznek.",
-            "t": "asszisztens beallitas asszisztens teh asszisztens beallitas asszisztens teh asszisztens teh asszisztens eszkoze kul kapcsolhato kikapcsol eszkoz kap modosito eszkoz bekapcsolva javasl tesz",
+            "t": "asszisztens beallit asszisztens teh asszisztens beallit asszisztens teh asszisztens teh asszisztens eszkoze kul kapcsolhato kikapcsol eszkoz kap modosito eszkoz bekapcsolva javasl tesz",
             "h": 22
         },
         {
@@ -193,7 +193,7 @@
             "cim": "Beállítások › Asszisztens › Mentés és próba",
             "horgony": "beallitasok-asszisztens",
             "szoveg": "### Mentés és próba\n\nA **Mentés** gomb elmenti a beállításokat. Az **API teszt** gomb egy próbakérdéssel ellenőrzi, hogy a kulcs és a modell működik-e; az eredményt a gomb mellé írja.",
-            "t": "asszisztens beallitas asszisztens mentes pro beallitas asszisztens mentes pro mentes pro mentes gomb elmenti beallitas api tesz gomb probakerdessel ellenorzi kulcs modell mukodi eredmeny gomb melle irja",
+            "t": "asszisztens beallit asszisztens men pro beallit asszisztens men pro men pro men gomb elmenti beallit api tesz gomb probakerdessel ellenorzi kulcs modell mukodi eredmeny gomb melle irja",
             "h": 27
         },
         {
@@ -201,7 +201,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- Az asszisztens **adatot közvetlenül soha nem módosít** – csak javaslatot tesz, amit ember hagy jóvá.\n- **Magától nem kezdeményez** módosítást: csak akkor javasol, ha kérted.\n- **Átírás és törlés** csak kifejezett kérésre, megerősítő kóddal.\n- **Ügyfelet és munkalapot nem töröl** – a rendszer elvből nem engedi.\n- **Számlát nem állít ki, levelet nem küld és nem töröl, a pénztárba nem ír.** Ezeknél elmondja, hogyan csináld meg te.\n- Minden módosítás előtt **mentés készül**, és a művelet **visszaállítható**.\n- **Titkot nem lát**: zárkód, feloldó minta, jelszó, API-kulcs nem kerül hozzá.\n- A humor **nem megy a pontosság rovására**: számot, árat, nevet viccből sem talál ki.",
-            "t": "asszisztens szabaly ami rendszer betar szabaly ami rendszer betar asszisztens ada kozvetlenul soha modosi javasl tesz ember hagy jova maga kezdemenyez modositas javasol ker atiras torles kifejez keres megerosito koddal ugyfel munkalap torol rendszer elv engedi szamla alli level kuld torol penztar ir ezeknel elmond csinald modositas elo mentes keszul muvel visszaallithato tit lat zar feloldo minta jelszo api kulcs ar hozza humor megy pontossag rovasa szam ar nev vicc talal",
+            "t": "asszisztens szabaly ami rendszer betar szabaly ami rendszer betar asszisztens ada kozvetlenul soha modosi javasl tesz ember hagy jova maga kezdemenyez modosit javasol ker atir torl kifejez ker megerosito koddal ugyfel munkalap torol rendszer elv engedi szamla alli level kuld torol penztar ir ezeknel elmond csinald modosi elo men keszul muvel visszaallithato tit lat zar feloldo minta jelszo api kulcs ar hozza humor megy pontossag rovasa szam ar nev vicc talal",
             "h": 71
         },
         {
@@ -209,7 +209,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- Kérdezz az adott oldalon: az asszisztens látja, hol vagy, és arra az oldalra szabja a választ.\n- Hibaüzenetnél elég annyi: „Ezt kaptam, mit csináljak?\" – a látható hibaüzenetet magától is olvassa.\n- A „Mi a mai helyzet?\" reggelre jó kezdés: nyitott, lejárt, ma lejáró munkalapok, olvasatlan üzenetek, a kassza állása.\n- Ha a cégnek saját szabálya van valamire, vedd fel saját kérdés–válaszként – attól kezdve mindenkinek ugyanazt mondja.\n- Új kollégának a Súgó **Bemutató** lapja és az oldaltúrák a leggyorsabb betanulás.",
-            "t": "asszisztens tipp tipp kerdezz ado oldal asszisztens lat oldal szab valasz hibauzenetnel eleg annyi kap csinalj lathato hibauzen maga olvassa mai helyz reggel jo kezdes nyit lejar ma lejaro munkalap olvasatlan uzen penztar allasa ceg saj szabalya valami vedd saj kerdes valaszk attol kezdve mindenki ugyanaz mond uj kollega sugo bemutato lap oldaltur leggyorsabb betanulas",
+            "t": "asszisztens tipp tipp kerdezz ado oldal asszisztens lat oldal szab valasz hibauzenetnel eleg annyi kap csinalj lathato hibauzen maga olvassa mai helyz reggel jo kezd nyit lejar ma lejaro munkalap olvasatlan uzen penztar allasa ceg saj szabalya valami vedd saj kerd valaszk attol kezdve mindenki ugyanaz mond uj kollega sugo bemutato lap oldaltur leggyorsabb betanul",
             "h": 55
         },
         {
@@ -217,7 +217,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nincs figura a sarokban.** Az asszisztens ki van kapcsolva: Beállítások › Asszisztens › **Bekapcsolva**.\n- **„Az asszisztenshez Claude API-kulcs kell.\"** A szabad szöveges válaszokhoz kulcs kell: Beállítások › Asszisztens › **Claude API-kulcs**, majd **API teszt**. A túrák és a Súgó kulcs nélkül is működnek.\n- **„Mára elérted a napi keretet.\"** Elfogyott a napi kérdéskereted; holnap újraindul. Az adminisztrátor a **Napi kérdéskeret / kolléga** mezőben emelheti.\n- **„Ezt az elemet már nem látom a képernyőn.\"** Közben bezárult egy ablak vagy lapfület váltottál. Kérd újra, és megmutatja.\n- **A túra kihagy egy lépést.** Az az elem épp nincs a képernyőn (például el van rejtve) – ez így helyes.\n- **Nem mozog a figura.** Az **Élénkség** nullán áll, vagy a gépen be van kapcsolva a „kevesebb mozgás\".\n- **Túl sokat beszél.** Vedd lejjebb a **Humorérzék** csúszkát, vagy kapcsold ki a **Magától szól** kapcsolót.\n- **Nem engedi megnyomni az „Engedélyezem\" gombot.** Átírásnál és törlésnél előbb be kell gépelned a kártyán álló megerősítő kódot.",
-            "t": "asszisztens megy megy nincs figu sar asszisztens kapcsolva beallitas asszisztens bekapcsolva asszisztens claude api kulcs szab szoveges valasz kulcs beallitas asszisztens claude api kulcs majd api tesz tur sugo kulcs nelkul muk mara eler napi ker elfogy napi kerdesker holnap ujraindul adminisztrator napi kerdesker kollega mezo emelheti elem lat keperny koz bezarul abl lapful valtottal kerd ujra megmut tura kihagy lepes elem epp nincs keperny peldaul rejtve igy helyes mozog figu elenkseg nullan all gep kapcsolva kevesebb mozgas tul sok beszel vedd lejjebb humorerz csusz kapcsold maga szol kapcsol engedi megnyomni engedelyez gomb atirasnal torlesnel elobb gepeln kartyan allo megerosito kod",
+            "t": "asszisztens megy megy nincs figu sar asszisztens kapcsolva beallit asszisztens bekapcsolva asszisztens claude api kulcs szab szoveg valasz kulcs beallit asszisztens claude api kulcs majd api tesz tur sugo kulcs nelkul muk mara eler napi ker elfogy napi kerdesker holnap ujraindul adminisztrator napi kerdesker kollega mezo emelheti elem lat keperny koz bezarul abl lapful valtottal kerd ujra megmut tura kihagy lep elem epp nincs keperny peldaul rejtve igy hely mozog figu elenkseg nullan all gep kapcsolva kevesebb mozg tul sok beszel vedd lejjebb humorerz csusz kapcsold maga szol kapcsol engedi megny engedelyez gomb atirasnal torlesnel elobb gepeln kartyan allo megerosito kod",
             "h": 101
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Miért nem tűnik el a túra, amikor máshova kattintok?",
             "horgony": "miert-nem-tunik-el-a-tura-amikor-mashova-kattintok",
             "szoveg": "Szándékosan. Így közben kipróbálhatod, amit mutatott. Kilépni a buborék **×** gombjával vagy az Esc billentyűvel tudsz.",
-            "t": "asszisztens gyi tuni tura ami mashova kattin gyi tuni tura ami mashova kattin szandekosan igy koz kiprobalh mutat kilepni bubor gomb esc billentyu",
+            "t": "asszisztens gyi tuni tura ami mashova kattin gyi tuni tura ami mashova kattin szandekosan igy koz kiprobalh mutat kilep bubor gomb esc billentyu",
             "h": 23
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Mi történik, ha túra közben megnyitok egy ablakot?",
             "horgony": "mi-tortenik-ha-tura-kozben-megnyitok-egy-ablakot",
             "szoveg": "A túra megvár: a figura félreáll, és jelzi, hogy folytatja, ha bezártad. Az ablak bezárása után ugyanannál a lépésnél folytatódik.",
-            "t": "asszisztens gyi torteni tura koz megnyi abl gyi torteni tura koz megnyi abl tura megvar figu felreall jelzi folyt bezar abl bezarasa utan ugyanannal lepesnel folytatodi",
+            "t": "asszisztens gyi torte tura koz megnyi abl gyi torte tura koz megnyi abl tura megvar figu felreall jelzi folyt bezar abl bezarasa utan ugyanannal lepesnel folytatodi",
             "h": 26
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Kell internet vagy API-kulcs a túrához?",
             "horgony": "kell-internet-vagy-api-kulcs-a-turahoz",
             "szoveg": "Nem. A túra lépései a súgó fejezeteiből jönnek, a saját szerveretekről. A szabad szöveges kérdésekhez viszont internet és API-kulcs kell.",
-            "t": "asszisztens gyi intern api kulcs tura gyi intern api kulcs tura tura lepes sugo fejezet jon saj szerver szab szoveges kerdes visz intern api kulcs",
+            "t": "asszisztens gyi intern api kulcs tura gyi intern api kulcs tura tura lep sugo fejezet jon saj szerver szab szoveg kerd visz intern api kulcs",
             "h": 25
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Módosíthat adatot a tudtom nélkül?",
             "horgony": "modosithat-adatot-a-tudtom-nelkul",
             "szoveg": "Nem. Minden módosítás javaslat, amelyet neked kell engedélyezned. Átírásnál és törlésnél megerősítő kódot is be kell írnod.",
-            "t": "asszisztens gyi modosith ada tud nelkul gyi modosith ada tud nelkul modositas javasl amely nek engedelyezn atirasnal torlesnel megerosito kod irn",
+            "t": "asszisztens gyi modosith ada tud nelkul gyi modosith ada tud nelkul modosi javasl amely nek engedelyezn atirasnal torlesnel megerosito kod irn",
             "h": 21
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Mi az a megerősítő kód?",
             "horgony": "mi-az-a-megerosito-kod",
             "szoveg": "Egy rövid szám a javaslat kártyáján. Átírásnál és törlésnél be kell gépelned, mielőtt az **Engedélyezem** gomb megnyomható lesz. Arra való, hogy ilyen műveletet ne lehessen véletlenül jóváhagyni.",
-            "t": "asszisztens gyi megerosito kod gyi megerosito kod rovid szam javasl kartyajan atirasnal torlesnel gepeln miel engedelyez gomb megnyomhato valo muvel ne lehess veletlenul jovahagyni",
+            "t": "asszisztens gyi megerosito kod gyi megerosito kod rovid szam javasl kartyajan atirasnal torlesnel gepeln miel engedelyez gomb megnyomhato valo muvel ne lehess veletlenul jovahagy",
             "h": 24
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Vissza tudom csinálni, amit jóváhagytam?",
             "horgony": "vissza-tudom-csinalni-amit-jovahagytam",
             "szoveg": "Igen. A végrehajtott kártyán a **Visszaállítás…** sort lenyitva írd be a művelet számát, és kattints a **Visszaállítom** gombra. Az adminisztrátor a naplóban bármelyik korábbi műveletet megtalálja.",
-            "t": "asszisztens gyi vissza tud csinalni jovahagy gyi vissza tud csinalni jovahagy vegrehajt kartyan visszaallitas sor lenyitva ird muvel szam kattints visszaalli gomb adminisztrator naplo barmelyi korabbi muvel megtalal",
+            "t": "asszisztens gyi vissza tud csinal jovahagy gyi vissza tud csinal jovahagy vegrehajt kartyan visszaalli sor lenyitva ird muvel szam kattints visszaalli gomb adminisztrator naplo barmelyi korabbi muvel megtalal",
             "h": 28
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › Tud számlát kiállítani vagy levelet küldeni?",
             "horgony": "tud-szamlat-kiallitani-vagy-levelet-kuldeni",
             "szoveg": "Nem. Számlát kiállítani, levelet küldeni vagy törölni, a pénztárba írni nem tud – ezeknél lépésenként elmondja, hogyan csináld meg te.",
-            "t": "asszisztens gyi tud szamla kiallitani level kuldeni gyi tud szamla kiallitani level kuldeni szamla kiallitani level kuldeni torolni penztar irni tud ezeknel lepesenk elmond csinald",
+            "t": "asszisztens gyi tud szamla kiallita level kulde gyi tud szamla kiallita level kulde szamla kiallita level kulde torol penztar irni tud ezeknel lepesenk elmond csinald",
             "h": 25
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Honnan tudja, hogyan működik a rendszer?",
             "horgony": "honnan-tudja-hogyan-mukodik-a-rendszer",
             "szoveg": "A súgóból: a teljes dokumentációból és a kérdés–válaszokból. Minden kérdésnél megkapja a hozzá illő részeket, és ha kell, maga is utánanéz.",
-            "t": "asszisztens gyi honnan tud mukodi rendszer gyi honnan tud mukodi rendszer sugo teljes dokumentacio kerdes valasz kerdesnel megkap hozza illo resz maga utananez",
+            "t": "asszisztens gyi honnan tud mukodi rendszer gyi honnan tud mukodi rendszer sugo telj dokumentacio kerd valasz kerdesnel megkap hozza illo resz maga utananez",
             "h": 23
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Kell külön tanítani, ha a rendszer frissül?",
             "horgony": "kell-kulon-tanitani-ha-a-rendszer-frissul",
             "szoveg": "Nem. A súgó a rendszerrel együtt frissül, és az asszisztens a következő kérdésnél már az újat tudja. A frissítés után egy buborékban el is mondja, mi változott.",
-            "t": "asszisztens gyi kul tanitani rendszer frissul gyi kul tanitani rendszer frissul sugo rendszerrel egyu frissul asszisztens kovetkezo kerdesnel uja tud frissites utan bubor mond valtoz",
+            "t": "asszisztens gyi kul tanita rendszer frissul gyi kul tanita rendszer frissul sugo rendszerrel egyu frissul asszisztens kovetkezo kerdesnel uja tud frissi utan bubor mond valtoz",
             "h": 25
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Hogyan tanítom meg a cég saját szabályaira?",
             "horgony": "hogyan-tanitom-meg-a-ceg-sajat-szabalyaira",
             "szoveg": "Három módon: egy jó válasz alatt a **Jegyezd meg** gombbal; az Asszisztens oldal **Tudástár** lapfülén az **Új tudás** gombbal; vagy a Súgóban saját kérdés–válaszként.",
-            "t": "asszisztens gyi tani ceg saj szabaly gyi tani ceg saj szabaly har mod jo valasz ala jegyezd gombbal asszisztens oldal tudastar lapful uj tudas gombbal sugo saj kerdes valaszk",
+            "t": "asszisztens gyi tani ceg saj szabaly gyi tani ceg saj szabaly har mod jo valasz ala jegyezd gombbal asszisztens oldal tudastar lapful uj tud gombbal sugo saj kerd valaszk",
             "h": 29
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Látja, amit a mezőkbe írok?",
             "horgony": "latja-amit-a-mezokbe-irok",
             "szoveg": "Nem a tartalmukat. Azt látja, milyen gombok, mezők és lapfülek vannak a képernyőn (a feliratukat), mi a nyitott ablak címe, és van-e látható hibaüzenet – ebből tudja megmutatni, mire kattints.",
-            "t": "asszisztens gyi lat mez iro gyi lat mez iro tartalm lat gomb mez lapful van keperny felirat nyit abl cime lathato hibauz ebbol tud megmutatni mire kattints",
+            "t": "asszisztens gyi lat mez iro gyi lat mez iro tartalm lat gomb mez lapful van keperny felirat nyit abl cime lathato hibauz ebbol tud megmut mire kattints",
             "h": 27
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Az asszisztens ezt írta: „Input should be an object”. Mi ez?",
             "horgony": "az-asszisztens-ezt-irta-input-should-be-an-object-mi-ez",
             "szoveg": "Ez egy régi hiba volt (0.55.1-ig): amikor az asszisztens paraméter nélküli eszközt használt (például megmutatott valamit a képernyőn), a következő lépésben a rendszer rossz alakban küldte vissza a kérést, és az AI elutasította. A 0.55.2-től nem fordulhat elő. Ha mégis megjelenik, írd le, mit kérdeztél.",
-            "t": "asszisztens gyi asszisztens irta inpu should an objec gyi asszisztens irta inpu should an objec regi hiba 55 ig ami asszisztens parameter nelkuli eszkoz hasznal peldaul megmutat valami keperny kovetkezo lepes rendszer rossz ala kuldte vissza keres ai elutasitotta 55 tol fordulh elo megis megjeleni ird kerdeztel",
+            "t": "asszisztens gyi asszisztens irta inpu should an objec gyi asszisztens irta inpu should an objec regi hiba 55 ig ami asszisztens parameter nelkuli eszkoz hasznal peldaul megmutat valami keperny kovetkezo lep rendszer rossz ala kuldte vissza ker ai elutasitotta 55 tol fordulh elo megis megjele ird kerdeztel",
             "h": 47
         },
         {
@@ -345,7 +345,7 @@
             "cim": "GYIK › Túl sokat viccel. Lehet rajta állítani?",
             "horgony": "tul-sokat-viccel-lehet-rajta-allitani",
             "szoveg": "Igen. Beállítások › Asszisztens › **Személyiség** › **Humorérzék**. Alacsonyra állítva tárgyszerű, beszólások nélkül.",
-            "t": "asszisztens gyi tul sok viccel rajta allitani gyi tul sok viccel rajta allitani beallitas asszisztens szemelyiseg humorerz alacsony allitva targyszeru beszolas nelkul",
+            "t": "asszisztens gyi tul sok viccel rajta allita gyi tul sok viccel rajta allita beallit asszisztens szemelyiseg humorerz alacsony allitva targyszeru beszol nelkul",
             "h": 22
         },
         {
@@ -353,7 +353,7 @@
             "cim": "GYIK › Zavar, hogy mozog. Ki lehet kapcsolni?",
             "horgony": "zavar-hogy-mozog-ki-lehet-kapcsolni",
             "szoveg": "Igen. Az **Élénkség** csúszkát nullára állítva magától nem mozog. Ha a gépeden be van kapcsolva a „kevesebb mozgás\", akkor sem.",
-            "t": "asszisztens gyi zavar mozog kapcsolni gyi zavar mozog kapcsolni elenkseg csusz nulla allitva maga mozog gep kapcsolva kevesebb mozgas",
+            "t": "asszisztens gyi zavar mozog kapcsol gyi zavar mozog kapcsol elenkseg csusz nulla allitva maga mozog gep kapcsolva kevesebb mozg",
             "h": 19
         },
         {
@@ -361,7 +361,7 @@
             "cim": "GYIK › Mi az a bogár, akivel a figura néha vív?",
             "horgony": "mi-az-a-bogar-akivel-a-figura-neha-viv",
             "szoveg": "A **Hiba-bogár** – a figura játékos ellenfele. Pár másodpercig fénypengével vívnak a képernyő alján, aztán a bogár elszalad (vagy ritkán a figura pengéje merül le). Kattintásra vagy gépelésre azonnal abbahagyják. Kikapcsolni a Beállítások › Asszisztens › **Párbaj a Hiba-bogárral** kapcsolóval lehet.",
-            "t": "asszisztens gyi bogar aki figu neha viv gyi bogar aki figu neha viv hiba bogar figu jatekos ellenfele par masodperc fenypenge viv kepernyo aljan aztan bogar elszal ritkan figu penge merul kattintas gepeles azonnal abbahagyj kikapcsolni beallitas asszisztens parbaj hiba bogarral kapcsolo",
+            "t": "asszisztens gyi bogar aki figu neha viv gyi bogar aki figu neha viv hiba bogar figu jatekos ellenfele par masodperc fenypenge viv kepernyo aljan aztan bogar elszal ritkan figu penge merul kattint gepel azonnal abbahagyj kikapcsol beallit asszisztens parbaj hiba bogarral kapcsolo",
             "h": 42
         },
         {
@@ -369,7 +369,7 @@
             "cim": "GYIK › Ki az a zöld sapkás fiú, és miért hal meg mindig?",
             "horgony": "ki-az-a-zold-sapkas-fiu-es-miert-hal-meg-mindig",
             "szoveg": "**Pechás Pityu**, a figura szerencsétlen ismerőse: neki mindig rossz napja van. Rajzfilmes baleset éri, szellemként elszáll, és legközelebb ugyanúgy visszajön. A jelenetek a **Szikra élete** kapcsolóval kapcsolhatók ki.",
-            "t": "asszisztens gyi zold sapkas fiu hal gyi zold sapkas fiu hal pechas pityu figu szerencsetl ismerose neki rossz nap rajzfilmes bales eri szellemk elszall legkozelebb ugyanugy visszaj jel szi elete kapcsolo kapcsolh",
+            "t": "asszisztens gyi zold sap fiu hal gyi zold sap fiu hal pech pityu figu szerencsetl ismerose neki rossz nap rajzfilm bal eri szellemk elszall legkozelebb ugyanugy visszaj jel szi elete kapcsolo kapcsolh",
             "h": 32
         },
         {
@@ -377,7 +377,7 @@
             "cim": "GYIK › Kik azok a lapos, kartonszerű gyerekek, akik vitatkoznak Szikrán?",
             "horgony": "kik-azok-a-lapos-kartonszeru-gyerekek-akik-vitatkoznak-szikran",
             "szoveg": "**Bence** (zöld sapka), **Lilla** (lila bojtos sapka) és **Gergő** (piros fejhallgató) – a *Kisvárosi srácok* jelenet szereplői. Odabillegnek Szikra elé, vitatkoznak azon, hogy Szikra nyúl-e vagy valami egészen más, aztán hazamennek. Saját tervezésű figurák, nem ismert rajzfilmes szereplők. A jelenet a **Szikra élete** kapcsolóval kapcsolható ki.",
-            "t": "asszisztens gyi kik lapos kartonszeru gyer aki vitatkoz szikran gyi kik lapos kartonszeru gyer aki vitatkoz szikran bence zold sapka lilla lila bojtos sapka gergo piros fejhallgato kisvarosi srac jel szereploi odabilleg szi ele vitatkoz azon szi nyul egesz mas aztan hazam saj tervezesu figur ism rajzfilmes szerepl jel szi elete kapcsolo kapcsolhato",
+            "t": "asszisztens gyi kik lapos kartonszeru gyer aki vitatkoz szikran gyi kik lapos kartonszeru gyer aki vitatkoz szikran bence zold sapka lilla lila bojtos sapka gergo piros fejhallgato kisvarosi srac jel szereploi odabilleg szi ele vitatkoz azon szi nyul egesz mas aztan hazam saj tervezesu figur ism rajzfilm szerepl jel szi elete kapcsolo kapcsolhato",
             "h": 53
         },
         {
@@ -385,7 +385,7 @@
             "cim": "GYIK › Ki az a narancs páncélos őr, és mi az a lebegő robot?",
             "horgony": "ki-az-a-narancs-pancelos-or-es-mi-az-a-lebego-robot",
             "szoveg": "**Csillagőr Zoli** és **Bip**, az *Űrcsata* jelenet szereplői. Zoli lila plazmavillával, a Galaktikus Parkolóőrség nevében parkolójegyet kér Szikrától (aztán a tüsszentéstől visszavonul), Bip pedig egy kedves, lebegő kis droid, aki a végén is Szikra mellett marad. Közben egy tányér-cirkáló is áthúz az égen. Saját tervezésű figurák; a jelenet a **Szikra élete** kapcsolóval kapcsolható ki.",
-            "t": "asszisztens gyi narancs pancelos lebego rob gyi narancs pancelos lebego rob csillagor zoli bip urcsata jel szereploi zoli lila plazmavilla galaktikus parkoloorseg neve parkolojegy ker szik aztan tusszentes visszavonul bip ped kedves lebego kis droid veg szi mell mar koz tanyer cirkalo athuz egen saj tervezesu figur jel szi elete kapcsolo kapcsolhato",
+            "t": "asszisztens gyi narancs pancelos lebego rob gyi narancs pancelos lebego rob csillagor zoli bip urcsata jel szereploi zoli lila plazmavilla galaktikus parkoloorseg neve parkolojegy ker szik aztan tusszent visszavonul bip ped kedv lebego kis droid veg szi mell mar koz tanyer cirkalo athuz egen saj tervezesu figur jel szi elete kapcsolo kapcsolhato",
             "h": 52
         },
         {
@@ -393,7 +393,7 @@
             "cim": "GYIK › Miért nem mozog simán / miért akadozik a figura?",
             "horgony": "miert-nem-mozog-siman-miert-akadozik-a-figura",
             "szoveg": "Ha a böngésző nem használja a videokártyát (hardveres gyorsítás), a mozgás lassabb. A rendszer ezt magától észleli, és figyelmeztet; a bekapcsolás lépéseit lásd: Hibaelhárítás › Hardveres gyorsítás (a böngészőben).",
-            "t": "asszisztens gyi mozog siman akadozi figu gyi mozog siman akadozi figu bongeszo hasznal videokarty hardveres gyorsitas mozgas lassabb rendszer maga eszleli figyelmez bekapcsolas lepes lasd hibaelharitas hardveres gyorsitas bongeszo",
+            "t": "asszisztens gyi mozog siman akadozi figu gyi mozog siman akadozi figu bongeszo hasznal videokarty hardver gyorsi mozg lassabb rendszer maga eszleli figyelmez bekapcsol lep lasd hibaelhari hardver gyorsi bongeszo",
             "h": 29
         },
         {
@@ -401,7 +401,7 @@
             "cim": "GYIK › Hogyan cserélem le a figurát?",
             "horgony": "hogyan-cserelem-le-a-figurat",
             "szoveg": "Beállítások › Asszisztens › **Melyik figura?** – kattints a kedvencedre, és mentsd. Tizennégy van: Szikra, Láng, Csepp, Moha, Kobold, Bigyó, Felhő, Zümi, Pára, Csillag, valamint az újak: **Kartonka** (kivágott papír kisfiú), **Bojtika** (kivágott papír kislány), **Bip** (lebegő gömbdroid) és **Zoli** (csillagőr). Mindegyik ugyanúgy tud mindent; csak a külseje más.",
-            "t": "asszisztens gyi cserel figur gyi cserel figur beallitas asszisztens figu kattints kedvenc mentsd tizennegy szi lang csepp moha kobold bigyo felho zumi para csillag valamin uja kartonka kivag papir kisfiu bojtika kivag papir kislany bip lebego gombdroid zoli csillagor mindegyi ugyanugy tud mind kulse mas",
+            "t": "asszisztens gyi cserel figur gyi cserel figur beallit asszisztens figu kattints kedvenc mentsd tizennegy szi lang csepp moha kobold bigyo felho zumi para csillag valamin uja kartonka kivag papir kisfiu bojtika kivag papir kislany bip lebego gombdroid zoli csillagor mindegyi ugyanugy tud mind kulse mas",
             "h": 45
         },
         {
@@ -409,7 +409,7 @@
             "cim": "GYIK › Miért áll vigyázzba és tiszteleg?",
             "horgony": "miert-all-vigyazzba-es-tiszteleg",
             "szoveg": "Mert pénz került a kasszába (új bevétel vagy befizetés, illetve egy munkalap, árukiadás vagy rendelés fizetése). Ilyenkor előbb felugrik, aztán vigyázzba vágja magát: a lábai előbújnak és összecsattannak, kihúzza magát, és határozottan tiszteleg, közben egy frappáns mondatot mond (több mint száz közül véletlenszerűen). A 3D figura ugyanígy: szökken egyet, kihúzza magát, állát felszegi, egyenesen előre néz, és kesztyűs kezével a sisakja széléhez tiszteleg.",
-            "t": "asszisztens gyi all vigyazz tiszteleg gyi all vigyazz tiszteleg penz ar penztar uj bevetel befizetes illetve munkalap arukiadas rendeles fizetese ily elobb felugri aztan vigyazz vag mag lab elobuj osszecsattan kihuzza mag hatarozottan tiszteleg koz frappans mond mond tobb szaz kozul veletlenszeru 3d figu ugyanigy szok egy kihuzza mag all felszegi egyenes elo nez kesztyus keze sis szele tiszteleg",
+            "t": "asszisztens gyi all vigyazz tiszteleg gyi all vigyazz tiszteleg penz ar penztar uj bevetel befiz illetve munkalap aruki rendel fizetese ily elobb felugri aztan vigyazz vag mag lab elobuj osszecsattan kihuzza mag hatarozottan tiszteleg koz frappans mond mond tobb szaz kozul veletlenszeru 3d figu ugyanigy szok egy kihuzza mag all felszegi egyen elo nez kesztyus keze sis szele tiszteleg",
             "h": 59
         },
         {
@@ -417,7 +417,7 @@
             "cim": "GYIK › Kikapcsolható a pisilés és a kakilás?",
             "horgony": "kikapcsolhato-a-pisiles-es-a-kakilas",
             "szoveg": "Igen, külön is: Beállítások › Asszisztens › **Altesti humor**. A többi jelenet (csirke, egér, motor, barátnő…) megmarad.",
-            "t": "asszisztens gyi kikapcsolhato pisiles kakilas gyi kikapcsolhato pisiles kakilas kul beallitas asszisztens altesti humor tobbi jel csirke eger motor baratno megmar",
+            "t": "asszisztens gyi kikapcsolhato pisil kakil gyi kikapcsolhato pisil kakil kul beallit asszisztens altesti humor tobbi jel csirke eger motor baratno megmar",
             "h": 21
         },
         {
@@ -425,7 +425,7 @@
             "cim": "GYIK › Mit jelent a szám a figura sarkában?",
             "horgony": "mit-jelent-a-szam-a-figura-sarkaban",
             "szoveg": "Ennyi javaslata vár jóváhagyásra. Kattints rá, és a beszélgetésben megtalálod a kártyákat.",
-            "t": "asszisztens gyi jel szam figu sarka gyi jel szam figu sarka ennyi javaslata var jovahagyas kattints beszelgetes megtalal karty",
+            "t": "asszisztens gyi jel szam figu sarka gyi jel szam figu sarka ennyi javaslata var jovahagy kattints beszelget megtalal karty",
             "h": 19
         },
         {
@@ -441,7 +441,7 @@
             "cim": "GYIK › Hogyan kapcsolom be, hogy Szikra sörözzön és füvezzen?",
             "horgony": "hogyan-kapcsolom-be-hogy-szikra-sorozzon-es-fuvezzen",
             "szoveg": "Beállítások › Asszisztens › **Bulis jelenetek**. Alapból ki van kapcsolva; bekapcsolva rendszeresen sörözik (csuklik, tántorog, néha elalszik), és füves cigit szív (füstkarikák, vihogás, utána éhes). Kattintásra vagy gépelésre azonnal abbahagyja.",
-            "t": "asszisztens gyi kapcsol szi sorozz fuvezz gyi kapcsol szi sorozz fuvezz beallitas asszisztens bulis jel alap kapcsolva bekapcsolva rendszeres sorozi csukli tantorog neha elalszi fuves cigi sziv fustkari vihogas utana ehes kattintas gepeles azonnal abbahagy",
+            "t": "asszisztens gyi kapcsol szi sorozz fuvezz gyi kapcsol szi sorozz fuvezz beallit asszisztens bulis jel alap kapcsolva bekapcsolva rendszer sorozi csukli tantorog neha elalszi fuv cigi sziv fustkari vihog utana ehes kattint gepel azonnal abbahagy",
             "h": 35
         },
         {
@@ -449,7 +449,7 @@
             "cim": "GYIK › Át lehet nevezni?",
             "horgony": "at-lehet-nevezni",
             "szoveg": "Igen: Beállítások › Asszisztens › **A neve**.",
-            "t": "asszisztens gyi nevezni gyi nevezni beallitas asszisztens neve",
+            "t": "asszisztens gyi nevez gyi nevez beallit asszisztens neve",
             "h": 8
         },
         {
@@ -457,7 +457,7 @@
             "cim": "GYIK › Mennyibe kerül a használata?",
             "horgony": "mennyibe-kerul-a-hasznalata",
             "szoveg": "A szabad szöveges válaszok az AI-szolgáltató díjszabása szerint kerülnek pénzbe, a saját API-kulcsotok terhére. A **Napi kérdéskeret / kolléga** mező korlátozza, hány kérdést tehet fel egy kolléga naponta. A túrák, a beszólások és a Súgó nem használnak AI-hívást.",
-            "t": "asszisztens gyi ar ar hasznalata gyi ar ar hasznalata szab szoveges valasz ai szolgaltato dijszabasa szerin ar penz saj api kulcs terhe napi kerdesker kollega mezo korlatozza hany kerdes teh kollega naponta tur beszolas sugo hasznal ai hivas",
+            "t": "asszisztens gyi ar ar hasznalata gyi ar ar hasznalata szab szoveg valasz ai szolgaltato dijszabasa szerin ar penz saj api kulcs terhe napi kerdesker kollega mezo korlatozza hany kerd teh kollega naponta tur beszol sugo hasznal ai hiv",
             "h": 38
         },
         {
@@ -465,7 +465,7 @@
             "cim": "GYIK › A kollégák is látják, amit kérdeztem?",
             "horgony": "a-kollegak-is-latjak-amit-kerdeztem",
             "szoveg": "A beszélgetés felhasználónként külön van. Közös fiók használatánál viszont mindenki ugyanazt a beszélgetést látja – ilyenkor az **Új beszélgetés** gombbal érdemes tiszta lappal kezdeni.",
-            "t": "asszisztens gyi kolleg latj kerdez gyi kolleg latj kerdez beszelgetes felhasznalonk kul kozos fio hasznalatanal visz mindenki ugyanaz beszelgetes lat ily uj beszelgetes gombbal erdemes tiszta lappal kezdeni",
+            "t": "asszisztens gyi kolleg latj kerdez gyi kolleg latj kerdez beszelg felhasznalonk kul kozos fio hasznalatanal visz mindenki ugyanaz beszelget lat ily uj beszelg gombbal erd tiszta lappal kezde",
             "h": 28
         },
         {
@@ -481,7 +481,7 @@
             "cim": "GYIK › A buborék hosszú szövegénél mit látok?",
             "horgony": "a-buborek-hosszu-szovegenel-mit-latok",
             "szoveg": "A buborék a figura fölött nő, de soha nem lóg ki a képernyő tetején, és a jobb felső sarokban álló jelzések alá sem. Ha a szöveg hosszabb a helynél, a buborékon belül görgethető – a gombok és a bezáró X mindig látszik.",
-            "t": "asszisztens gyi bubor hosszu szovegenel lat gyi bubor hosszu szovegenel lat bubor figu fol no soha log kepernyo tetej jobb felso sar allo jelzes ala szoveg hosszabb helynel bubor belul gorgetheto gomb bezaro latszi",
+            "t": "asszisztens gyi bubor hosszu szovegenel lat gyi bubor hosszu szovegenel lat bubor figu fol no soha log kepernyo tetej jobb felso sar allo jelz ala szoveg hosszabb helynel bubor belul gorgetheto gomb bezaro latszi",
             "h": 34
         }
     ]

@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A rendszer minden papírját ugyanaz a **Nyomtatás** ablak adja: megmutatja az előnézetet, kinyomtatja a kért példányszámban, elmenti PDF-be, és elküldi e-mailben. A nyomtatványok kinézete és szövege a **Beállítások › Nyomtatványok** lapfülön szerkeszthető.\n\nAmi nyomtatható:\n\n| Nyomtatvány | Miből készül | Mire való |\n|---|---|---|\n| **Átvételi elismervény** | javítási munkalap | Felvételkor jár az ügyfélnek: mit hozott, milyen hibával, milyen állapotban. Ár nincs rajta. |\n| **Munkalap** | javítási munkalap | A kész javítás papírja: hibák, elvégzett munka, tételek, végösszeg, aláírás. |\n| **Belső munkalap** | javítás, rendelés | A műhelynek: ár nélkül, a belső megjegyzéssel és a zárkóddal. Az ügyfélnek nem adható ki. |\n| **Árajánlat** | bármelyik lap | A lap tételeiből, érvényességi idővel. |\n| **Szállítólevél** | bármelyik lap | Címzett, eszköz, tételek – ár nélkül, átadó–átvevő aláírással. |\n| **Átadási bizonylat** | napi árukiadás, rendelés | A kiadott áru papírja a tételekkel és a végösszeggel. Nem számla. |\n| **Megrendelés** | rendelés | A felvett rendelés visszaigazolása. |\n| **Bianko munkalap** | – | Üres, kézzel kitölthető munkalap. |\n| **Pénztárzárás** | a Pénztár egy napja | Összesítő, megszámolt készpénz, eltérés, címletek, a nap tételei. |\n| **Pénztárjelentés** | a Pénztár egy időszaka | Bevételek fizetési mód szerint, kiadások, napok. |\n| **Pénztártétel-igazolás** | egy pénztártétel | Egy bevétel, kivét vagy kifizetés aláírható papírja. |\n| **Lapok listája** | munkalapok, árukiadások, rendelések | Nyitott, lezárt, fizetetlen lapok, vagy egy időszak. |\n| **Készletlista** | Termékek | Darabszám és készletérték – leltárhoz is. |\n| **Számlák listája** | Számlázás | Az időszakban kiállított számlák. |\n\nFontos: Ezek egyike sem számla. Számlát csak a Számlázz.hu állít ki – lásd: Számlázás.",
-            "t": "nyomtatas pdf mail mire valo mire valo rendszer papirj ugyanaz nyomtatas abl adja megmut elonez kinyomt ker peldanysz elmenti pdf elkuldi mail nyomtatvany kinezete szovege beallitas nyomtatvany lapful szerkesztheto nyomtathato nyomtatvany mibol keszul mire valo atveteli elismerveny javitasi munkalap felvetel jar ugyfel hoz hiba allap ar nincs rajta munkalap javitasi munkalap kesz javitas papir hib elvegz munka tetel vegosszeg alairas belso munkalap javitas rendeles muhely ar nelkul belso megjegyzessel zarkoddal ugyfel adhato arajanl barmelyi lap lap tetel ervenyessegi ido szallitole barmelyi lap cimz eszkoz tetel ar nelkul atado atvevo alairassal atadasi bizonyl napi arukiadas rendeles kiad aru papir tetel vegosszeggel szamla megrendeles rendeles felv rendeles visszaigazolasa bianko munkalap ures kezzel kitoltheto munkalap penztarzaras penztar nap osszesito megszamol keszpenz elteres ciml nap tetel penztarjelentes penztar idoszaka bevetel fizetesi mod szerin kiadas nap penztartetel igazolas penztartetel bevetel kiv kifizetes alairhato papir lap lista munkalap arukiadas rendeles nyit lezar fizetetl lap idosz keszletlista term darabsz keszlet leltar szamla lista szamlazas idosz kiallit szamla fontos egyike szamla szamla szamlazz hu alli lasd szamlazas",
+            "t": "nyomt pdf mail mire valo mire valo rendszer papirj ugyanaz nyomt abl adja megmut elonez kinyomt ker peldanysz elmenti pdf elkuldi mail nyomtatvany kinezete szovege beallit nyomtatvany lapful szerkesztheto nyomtathato nyomtatvany mibol keszul mire valo atveteli elismerveny javitasi munkalap felvetel jar ugyfel hoz hiba allap ar nincs rajta munkalap javitasi munkalap kesz javi papir hib elvegz munka tetel vegosszeg alair belso munkalap javi rendel muhely ar nelkul belso megjegyzessel zarkoddal ugyfel adhato arajanl barmelyi lap lap tetel ervenyessegi ido szallitole barmelyi lap cimz eszkoz tetel ar nelkul atado atvevo alairassal atadasi bizonyl napi aruki rendel kiad aru papir tetel vegosszeggel szamla megrendel rendel felv rendel visszaigazolasa bianko munkalap ures kezzel kitoltheto munkalap penztarzar penztar nap osszesito megszamol keszpenz elter ciml nap tetel penztarjelen penztar idoszaka bevetel fizetesi mod szerin kiad nap penztartetel igazol penztartetel bevetel kiv kifiz alairhato papir lap lista munkalap arukiad rendel nyit lezar fizetetl lap idosz keszletlista term darabsz keszlet leltar szamla lista szamlaz idosz kiallit szamla fontos egyike szamla szamla szamlazz hu alli lasd szamlaz",
             "h": 169
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "A **Nyomtatás** gombot nyomtató ikon jelöli. Négy helyen éred el:\n\n- **A munkalap, az árukiadás és a rendelés ablakában**, alul a gombsorban – a lap nyomtatványaihoz.\n- **Az Áttekintés részletpaneljén**, a **Szerkesztés** mellett – a kijelölt lap nyomtatványaihoz, a lap megnyitása nélkül.\n- **A felső fejlécben** (nyomtató ikon a **Súgó** gomb mellett) – ami nem egy laphoz tartozik: bianko munkalap, pénztárzárás, pénztárjelentés, listák.\n- **A Pénztárban**: a **KP – kassza** lapfülön a **Zárás nyomtatása**, a **Riport** lapfülön a **Nyomtatás / PDF**, egy tétel ablakában az **Igazolás** gomb.",
-            "t": "nyomtatas pdf mail talal talal nyomtatas gomb nyomtato ikon jeloli negy hely ered munkalap arukiadas rendeles ablaka alul gombsor lap nyomtatvany attekintes reszletpanelj szerkesztes mell kijelol lap nyomtatvany lap megnyitasa nelkul felso fejlec nyomtato ikon sugo gomb mell lap tartozi bianko munkalap penztarzaras penztarjelentes lis penztar kp penztar lapful zaras nyomtatasa ripor lapful nyomtatas pdf tetel ablaka igazolas gomb",
+            "t": "nyomt pdf mail talal talal nyomt gomb nyomtato ikon jeloli negy hely ered munkalap aruki rendel ablaka alul gombsor lap nyomtatvany attekin reszletpanelj szerkesz mell kijelol lap nyomtatvany lap megnyitasa nelkul felso fejlec nyomtato ikon sugo gomb mell lap tartozi bianko munkalap penztarzar penztarjelen lis penztar kp penztar lapful zar nyomtatasa ripor lapful nyomt pdf tetel ablaka igazol gomb",
             "h": 59
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: egy lap nyomtatása",
             "horgony": "lepesrol-lepesre-egy-lap-nyomtatasa",
             "szoveg": "1. Nyisd meg a munkalapot, és kattints alul a **Nyomtatás** gombra. (Az Áttekintésen elég kijelölni a sort, és a részletpanelen a **Nyomtatás** gombra kattintani.)\n2. A megnyíló ablak bal oldalán válaszd ki a nyomtatványt: **Átvételi elismervény**, **Munkalap**, **Belső munkalap**, **Árajánlat**, **Szállítólevél**. Jobbra azonnal megjelenik az előnézet.\n3. Állítsd be a **Példányszám** mezőt a **−** és **+** gombbal (1–9).\n4. Kattints a **Nyomtatás** gombra. Megnyílik a böngésző nyomtatás-ablaka – ott válaszd ki a nyomtatót, és indítsd el.\n\nA rendszer magától azt a nyomtatványt választja ki, ami a lap állapotához illik: nyitott javításnál az átvételi elismervényt, kész vagy lezárt javításnál a munkalapot, árukiadásnál az átadási bizonylatot.\n\nFigyelem: A nyomtatvány a lap **elmentett** adataiból készül. Ha a lapon nem mentett módosítás van, az ablak szól – előbb mentsd a lapot, aztán nyomtass.\n\nTipp: Több példánynál a PDF már tartalmazza mindet (a láblécben „1. példány”, „2. példány”). A böngésző nyomtatás-ablakában ezért a példányszám maradjon **1**.\n\n### Több eszközös lap\n\nHa a lapon több eszköz van, a **Melyik eszköz** mezőben választhatsz:\n\n- **Mind az eszköz egy lapon** – minden eszköz a saját hibáival és tételeivel, eszközönként részösszeggel.\n- **Csak:** egy eszköz – csak annak a hibái, tételei és számai; a sorszám végén az eszköz sorszáma áll (például `1234/2`).",
-            "t": "nyomtatas pdf mail lepes lepes lap nyomtatasa lepes lepes lap nyomtatasa nyisd munkalap kattints alul nyomtatas gomb attekintes eleg kijelolni sor reszletpanel nyomtatas gomb kattintani megnyilo abl bal oldalan valaszd nyomtatvany atveteli elismerveny munkalap belso munkalap arajanl szallitole jobb azonnal megjeleni elonez allitsd peldanysz mez gombbal kattints nyomtatas gomb megnyili bongeszo nyomtatas ablaka valaszd nyomt inditsd rendszer maga nyomtatvany valasz lap allapota illi nyit javitasnal atveteli elismerveny kesz lezar javitasnal munkalap arukiadasnal atadasi bizonyl figyel nyomtatvany lap elment adat keszul lap ment modositas abl szol elobb mentsd lap aztan nyomtass tipp tobb peldanynal pdf tartalmazza mind lablec peldany peldany bongeszo nyomtatas ablaka ezer peldanysz maradj tobb eszkozos lap lap tobb eszkoz eszkoz mezo valaszthatsz mind eszkoz lap eszkoz saj hib tetel eszkozonk reszosszeggel eszkoz ann hib tetel szam sorsz veg eszkoz sorszama all peldaul 1234",
+            "t": "nyomt pdf mail lep lep lap nyomtatasa lep lep lap nyomtatasa nyisd munkalap kattints alul nyomt gomb attekint eleg kijelol sor reszletpanel nyomt gomb kattinta megnyilo abl bal oldalan valaszd nyomtatvany atveteli elismerveny munkalap belso munkalap arajanl szallitole jobb azonnal megjele elonez allitsd peldanysz mez gombbal kattints nyomt gomb megnyili bongeszo nyomt ablaka valaszd nyomt inditsd rendszer maga nyomtatvany valasz lap allapota illi nyit javitasnal atveteli elismerveny kesz lezar javitasnal munkalap arukiadasnal atadasi bizonyl figyel nyomtatvany lap elment adat keszul lap ment modosi abl szol elobb mentsd lap aztan nyomtass tipp tobb peldanynal pdf tartalmazza mind lablec peldany peldany bongeszo nyomt ablaka ezer peldanysz maradj tobb eszkozos lap lap tobb eszkoz eszkoz mezo valaszthatsz mind eszkoz lap eszkoz saj hib tetel eszkozonk reszosszeggel eszkoz ann hib tetel szam sorsz veg eszkoz sorszama all peldaul 1234",
             "h": 135
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: mentés PDF-be",
             "horgony": "lepesrol-lepesre-mentes-pdf-be",
             "szoveg": "1. Nyisd meg a **Nyomtatás** ablakot, és válaszd ki a nyomtatványt.\n2. Kattints a **Mentés PDF-be** gombra. A böngésző letölti a fájlt; a neve a nyomtatvány címéből és a sorszámból áll (például `Arajanlat-1234.pdf`).\n\nA letöltött PDF annyi példányt tartalmaz, amennyit a **Példányszám** mezőben beállítottál.",
-            "t": "nyomtatas pdf mail lepes lepes mentes pdf lepes lepes mentes pdf nyisd nyomtatas abl valaszd nyomtatvany kattints mentes pdf gomb bongeszo letolti fajl neve nyomtatvany cime sorsz all peldaul arajanl 1234 pdf letolt pdf annyi peldany tartalmaz amennyi peldanysz mezo beallitottal",
+            "t": "nyomt pdf mail lep lep men pdf lep lep men pdf nyisd nyomt abl valaszd nyomtatvany kattints men pdf gomb bongeszo letolti fajl neve nyomtatvany cime sorsz all peldaul arajanl 1234 pdf letolt pdf annyi peldany tartalmaz amennyi peldanysz mezo beallitottal",
             "h": 41
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: küldés e-mailben",
             "horgony": "lepesrol-lepesre-kuldes-e-mailben",
             "szoveg": "1. A **Nyomtatás** ablakban válaszd ki a nyomtatványt, és kattints a **Küldés e-mailben** gombra.\n2. Ellenőrizd a **Címzett** mezőt: a rendszer az ügyfél e-mail-címét írja be. Több címet vesszővel válassz el.\n3. A **Tárgy** és a **Szöveg** a nyomtatvány saját sablonjából jön – küldés előtt átírhatod.\n4. Ha van bekötött postafiók, a **Feladó** mezőben választhatsz: a saját fiókod, vagy a rendszer levélküldője.\n5. Kattints a **Küldés** gombra. A nyomtatvány PDF-ben, csatolmányként megy, egy példányban.\n\nHa az ügyfél címére küldted, a munkalap **RMA** lapfülén, az üzenetek között megjelenik egy sor arról, hogy mi ment ki. A kollégának küldött papír nem kerül oda, mert azt az ügyfél is látná az ügyféloldalon.\n\nA **Belső munkalap** kollégának elküldhető, az ügyfél címére nem: ha mégis az ügyfél címét írod be, a rendszer megírja, hogy belső megjegyzés vagy zárkód van rajta, és nem küldi el.\n\nFontos: A saját fiókból (például Gmail) küldéshez a postafiókot be kell kötni a **Beállítások › Levelezés** lapfülön – lásd: Levelezés. Enélkül a levél a szerver levélküldőjével megy, ami sok szolgáltatónál nincs beállítva; ilyenkor a rendszer megírja, miért nem ment el.",
-            "t": "nyomtatas pdf mail lepes lepes kuldes mail lepes lepes kuldes mail nyomtatas abl valaszd nyomtatvany kattints kuldes mail gomb ellenorizd cimz mez rendszer ugyfel mail cim irja tobb cim vesszo valassz targy szoveg nyomtatvany saj sablon jon kuldes elo atirh bekot postafi felado mezo valaszthatsz saj fio rendszer levelkuldo kattints kuldes gomb nyomtatvany pdf ben csatolmanyk megy peldany ugyfel cime kuld munkalap rma lapful uzen koz megjeleni sor arrol men kollega kuld papir ar oda ugyfel latna ugyfeloldal belso munkalap kollega elkuldheto ugyfel cime megis ugyfel cim irod rendszer megir belso megjegyzes zar rajta kuldi fontos saj fio peldaul gmail kuldes postafi kotni beallitas levelezes lapful lasd levelezes enelkul level szerver levelkuldo megy szolgaltatonal nincs beallitva ily rendszer megir men",
+            "t": "nyomt pdf mail lep lep kuld mail lep lep kuld mail nyomt abl valaszd nyomtatvany kattints kuld mail gomb ellenorizd cimz mez rendszer ugyfel mail cim irja tobb cim vesszo valassz targy szoveg nyomtatvany saj sablon jon kuld elo atirh bekot postafi felado mezo valaszthatsz saj fio rendszer levelkuldo kattints kuld gomb nyomtatvany pdf ben csatolmanyk megy peldany ugyfel cime kuld munkalap rma lapful uzen koz megjele sor arrol men kollega kuld papir ar oda ugyfel latna ugyfeloldal belso munkalap kollega elkuldheto ugyfel cime megis ugyfel cim irod rendszer megir belso megjegyz zar rajta kuldi fontos saj fio peldaul gmail kuld postafi kot beallit levelez lapful lasd levelez enelkul level szerver levelkuldo megy szolgaltatonal nincs beallitva ily rendszer megir men",
             "h": 120
         },
         {
@@ -49,7 +49,7 @@
             "cim": "A felajánlás: új lapnál és lezáráskor",
             "horgony": "a-felajanlas-uj-lapnal-es-lezaraskor",
             "szoveg": "A rendszer két pillanatban magától rákérdez, hogy nyomtass-e:\n\n- **Új lap mentése után** – javításnál az **átvételi elismervényt**, napi árukiadásnál az **átadási bizonylatot**, új rendelésnél a **megrendelést** ajánlja.\n- **A lap lezárásakor** – javításnál a **munkalapot**, árukiadásnál és rendelésnél az **átadási bizonylatot**.\n\n**Az ablak addig marad nyitva, amíg be nem zárod.** Egy lezárás után rendszerint több papír is kell: a munkalap az ügyfélnek, és számla is. Ezért a gombok nem zárják be az ablakot – a lefutott gomb **Kész –** jelet kap, a **Most nem** felirata pedig **Bezárás** lesz. Nyomtathatsz egymás után kettőt, vagy nyomtatás után kérhetsz számlát.\n\nA felajánló ablak gombjai:\n\n- **Nyomtatás: <nyomtatvány>** – azonnal nyomtat, a nyomtatvány alap példányszámával. A lap többi papírja is itt van saját gombbal (javításnál az átvételi mellett a munkalap, rendelésnél a megrendelés mellett az átadási bizonylat), így nem kell a Nyomtatás ablakot megnyitni hozzá.\n- **Előnézet, e-mail…** – megnyitja a Nyomtatás ablakot, ahol bármelyik nyomtatványt választhatod, vagy elküldheted levélben.\n- **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – minden sorszámot kapott lapnál (felvételkor és lezáráskor is): innen rögtön a számla ablaka nyílik, a felajánlás fölött. Így a bevizsgálási díjról már átvételkor adható számla. A Számlázz.hu gomb csak bekapcsolt Számlázás modulnál látszik.\n- **Bezárás** (eleinte **Most nem**) – bezárja; a lap később is kinyomtatható és számlázható.\n\nA lezárást a rendszer bárhonnan észreveszi: a lap ablakából, a lista állapotválasztójából és a fizetés rögzítéséből is.\n\nA három felajánlás külön-külön kikapcsolható a **Beállítások › Nyomtatványok** lapfülön, a **Felajánlás és e-mail** dobozban.",
-            "t": "nyomtatas pdf mail felajanlas uj lapnal lezaras felajanlas uj lapnal lezaras rendszer ket pillan maga rakerdez nyomtass uj lap mentese utan javitasnal atveteli elismerveny napi arukiadasnal atadasi bizonyl uj rendelesnel megrendeles ajanl lap lezarasa javitasnal munkalap arukiadasnal rendelesnel atadasi bizonyl abl add mar nyitva amig zar lezaras utan rendszerin tobb papir munkalap ugyfel szamla ezer gomb zarj abl lefut gomb kesz jel kap felirata ped bezaras nyomtathatsz egymas utan ket nyomtatas utan kerhetsz szamla felajanlo abl gombj nyomtatas azonnal nyom nyomtatvany alap peldanyszama lap tobbi papir saj gombbal javitasnal atveteli mell munkalap rendelesnel megrendeles mell atadasi bizonyl igy nyomtatas abl megnyitni hozza elonez mail megnyi nyomtatas abl ahol barmelyi nyomtatvany valaszth elkuldh level szamlazz hu szamla szamla elokeszito pdf sorsz kap lapnal felvetel lezaras inn rog szamla ablaka nyili felajanlas fol igy bevizsgalasi dij atvetel adhato szamla szamlazz hu gomb bekapcsol szamlazas modulnal latszi bezaras eleinte bezar lap kesobb kinyomtathato szamlazhato lezaras rendszer barhonnan eszreveszi lap ablaka lista allapotvalaszto fizetes rogzitese har felajanlas kul kul kikapcsolhato beallitas nyomtatvany lapful felajanlas mail doboz",
+            "t": "nyomt pdf mail felajanl uj lapnal lezar felajanl uj lapnal lezar rendszer ket pillan maga rakerdez nyomtass uj lap mentese utan javitasnal atveteli elismerveny napi arukiadasnal atadasi bizonyl uj rendelesnel megrendel ajanl lap lezarasa javitasnal munkalap arukiadasnal rendelesnel atadasi bizonyl abl add mar nyitva amig zar lezar utan rendszerin tobb papir munkalap ugyfel szamla ezer gomb zarj abl lefut gomb kesz jel kap felirata ped bezar nyomtathatsz egym utan ket nyomt utan kerhetsz szamla felajanlo abl gombj nyomt azonnal nyom nyomtatvany alap peldanyszama lap tobbi papir saj gombbal javitasnal atveteli mell munkalap rendelesnel megrendel mell atadasi bizonyl igy nyomt abl megnyi hozza elonez mail megnyi nyomt abl ahol barmelyi nyomtatvany valaszth elkuldh level szamlazz hu szamla szamla elokeszito pdf sorsz kap lapnal felvetel lezar inn rog szamla ablaka nyili felajanl fol igy bevizsgalasi dij atvetel adhato szamla szamlazz hu gomb bekapcsol szamlaz modulnal latszi bezar eleinte bezar lap kesobb kinyomtathato szamlazhato lezar rendszer barhonnan eszreveszi lap ablaka lista allapotvalaszto fiz rogzitese har felajanl kul kul kikapcsolhato beallit nyomtatvany lapful felajanl mail doboz",
             "h": 172
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: bianko munkalap, listák, pénztárzárás",
             "horgony": "lepesrol-lepesre-bianko-munkalap-listak-penztarzaras",
             "szoveg": "1. Kattints a felső fejlécben a **nyomtató ikonra**.\n2. Válaszd ki, mit nyomtatnál:\n   - **Bianko munkalap** – üres lap ügyfél-, eszköz-, hiba- és tételmezőkkel, kézi kitöltésre.\n   - **Pénztárzárás** – a **Melyik nap** mezőben válaszd ki a napot.\n   - **Pénztárjelentés** – add meg az **Ettől** és az **Eddig** napot.\n   - **Lapok listája** – válaszd ki, mit listázol (munkalap, napi árukiadás, rendelés) és melyeket: **Nyitott lapok**, **Fizetetlen lapok**, **Lezártak az időszakban**, **Minden lap az időszakban**.\n   - **Készletlista** – **Ami készleten van**, **Ami fogyóban van**, vagy **Minden készletkezelt termék**.\n   - **Számlák listája** – az időszakban kiállított számlák.\n3. Az előnézet a beállítás változásakor magától frissül. Innen ugyanúgy megy a **Nyomtatás**, a **Mentés PDF-be** és a **Küldés e-mailben**.\n\nAz ablak alján **Az oldal nyomtatása, ahogy látszik** gomb a mögötte lévő oldalt nyomtatja ki – a menü, a fejléc és az asszisztens nélkül. Ezt akkor használd, ha valamiről nincs külön nyomtatvány (például a Pénztár **Statisztika** lapfüléről vagy egy keresés eredményéről).",
-            "t": "nyomtatas pdf mail lepes lepes bianko munkalap lis penztarzaras lepes lepes bianko munkalap lis penztarzaras kattints felso fejlec nyomtato ikon valaszd nyomtatnal bianko munkalap ures lap ugyfel eszkoz hiba tetelmezokkel kezi kitoltes penztarzaras nap mezo valaszd nap penztarjelentes add ettol edd nap lap lista valaszd listazol munkalap napi arukiadas rendeles mely nyit lap fizetetl lap lezar idosz lap idosz keszletlista keszl fogyo keszletkezel term szamla lista idosz kiallit szamla elonez beallitas valtozasa maga frissul inn ugyanugy megy nyomtatas mentes pdf kuldes mail abl aljan oldal nyomtatasa ahogy latszi gomb mogotte levo oldal nyomt menu fejlec asszisztens nelkul hasznald valami nincs kul nyomtatvany peldaul penztar statisztika lapfule kereses eredmenye",
+            "t": "nyomt pdf mail lep lep bianko munkalap lis penztarzar lep lep bianko munkalap lis penztarzar kattints felso fejlec nyomtato ikon valaszd nyomtatnal bianko munkalap ures lap ugyfel eszkoz hiba tetelmezokkel kezi kitolt penztarzar nap mezo valaszd nap penztarjelen add ettol edd nap lap lista valaszd listazol munkalap napi aruki rendel mely nyit lap fizetetl lap lezar idosz lap idosz keszletlista keszl fogyo keszletkezel term szamla lista idosz kiallit szamla elonez bealli valtozasa maga frissul inn ugyanugy megy nyomt men pdf kuld mail abl aljan oldal nyomtatasa ahogy latszi gomb mogotte levo oldal nyomt menu fejlec asszisztens nelkul hasznald valami nincs kul nyomtatvany peldaul penztar statisztika lapfule ker eredmenye",
             "h": 108
         },
         {
@@ -65,7 +65,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "Itt szerkesztheted az összes nyomtatványt. A lapfület adminisztrátor látja; négy doboza van.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule beallitas nyomtatvany lapfule szerkeszth osszes nyomtatvany lapful adminisztrator lat negy doboza",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule beallit nyomtatvany lapfule szerkeszth ossz nyomtatvany lapful adminisztrator lat negy doboza",
             "h": 17
         },
         {
@@ -73,7 +73,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Nyomtatványok",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "### Nyomtatványok\n\nMinden nyomtatvány egy kártya: a neve, a leírása, az alap példányszáma és a papírmérete. Két gomb tartozik hozzá:\n\n- **Szerkesztés** – megnyitja a nyomtatvány szerkesztőjét.\n- **Próbanyomat** – megnyitja a Nyomtatás ablakot; a lapokhoz kötött nyomtatványoknál kitalált adatokkal („Minta Ügyfél”), így valódi munkalap nélkül is látod, hogy fest.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule nyomtatvany beallitas nyomtatvany lapfule nyomtatvany nyomtatvany nyomtatvany kartya neve leirasa alap peldanyszama papirmerete ket gomb tartozi hozza szerkesztes megnyi nyomtatvany szerkesztoj probany megnyi nyomtatas abl lap kot nyomtatvanyoknal kitalal ada minta ugyfel igy valodi munkalap nelkul lat fes",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule nyomtatvany beallit nyomtatvany lapfule nyomtatvany nyomtatvany nyomtatvany kartya neve leirasa alap peldanyszama papirmerete ket gomb tartozi hozza szerkesz megnyi nyomtatvany szerkesztoj probany megnyi nyomt abl lap kot nyomtatvanyoknal kitalal ada minta ugyfel igy valodi munkalap nelkul lat fes",
             "h": 44
         },
         {
@@ -81,7 +81,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Egy nyomtatvány szerkesztése",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "### Egy nyomtatvány szerkesztése\n\nA szerkesztő bal oldalán lapfülek, jobb oldalán **élő előnézet**: amit átírsz, az egy pillanat múlva látszik rajta – mentés nélkül is.\n\n- **Alapok** – **A nyomtatvány címe** (ez áll nagy betűvel a lap tetején), **Alap példányszám**, **Papírméret** (az általános beállítás, A4 vagy A5). Az árajánlatnál **Az ajánlat érvényessége (nap)**, a bianko lapnál az üres hiba-, tétel- és megjegyzéssorok száma.\n- **Mi látszik rajta** – kapcsolók: **Ügyfél adatai**, **Eszköz adatai**, **Tartozékok és az átvételi állapot**, **Hibák**, **A hibasor állapota**, **Az elvégzett javítás szövege a hiba alatt**, **Szolgáltatások és termékek**, **A tervezett tételek is**, **Árak**, **Összesítő**, **Befizetett előleg**, **Megjegyzés**, **Belső megjegyzés**, **Zárkód és feloldóminta**, **Határidő a fejben**, **A lap állapota a fejben**, **Felelős a fejben**, **QR-kód az ügyféloldalhoz**.\n- **Szövegek** – **Bevezető szöveg**, **A QR-kód melletti szöveg**, **Az apró betűs rész címe**, **Apró betűs szöveg** (ide másolhatod a saját átvételi és garanciális feltételeidet – hosszú is lehet, új oldalra törik), **Záró szöveg**.\n- **Aláírás** – **Kelt és aláírás**, a bal és a jobb oldali aláírás felirata, az **„Átvevő neve” és „Igazolványszám” sor**, a **P. H.** (bélyegző helye).\n- **E-mail** – a kísérőlevél **tárgya** és **szövege**.\n\nA szövegekben jelölők használhatók, amelyek helyére a rendszer a lap adatait írja: `{cim}`, `{szam}`, `{ugyfel}`, `{eszkoz}`, `{datum}`, `{hatarido}`, `{vegosszeg}`, `{fizetendo}`, `{eloleg}`, `{ervenyes}`, `{ceg}`.\n\nA **Gyári beállítás visszaállítása** gomb kétszeri kattintásra visszaállítja a nyomtatványt az eredeti állapotába – a saját szövegek is elvesznek.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule nyomtatvany szerkesztese beallitas nyomtatvany lapfule nyomtatvany szerkesztese nyomtatvany szerkesztese szerkeszto bal oldalan lapful jobb oldalan elo elonez atirsz pillan mulva latszi rajta mentes nelkul alap nyomtatvany cime all nagy betu lap tetej alap peldanysz papirmer altalanos beallitas a4 a5 arajanlatnal ajanl ervenyessege nap bianko lapnal ures hiba tetel megjegyzessor szama latszi rajta kapcsol ugyfel ada eszkoz ada tartoz atveteli allap hib hibasor allapota elvegz javitas szovege hiba ala szolgaltatas term tervez tetel ar osszesito befizet eloleg megjegyzes belso megjegyzes zar feloldominta hatarido fej lap allapota fej felelos fej qr kod ugyfeloldal szoveg bevezeto szoveg qr kod melletti szoveg apro betus resz cime apro betus szoveg ide masolh saj atveteli garancialis felteteleid hosszu uj oldal tori zaro szoveg alairas kel alairas bal jobb oldali alairas felirata atvevo neve igazolvanysz sor belyegzo helye mail kiserole targya szovege szoveg jelol hasznalh amely helye rendszer lap ada irja cim szam ugyfel eszkoz datum hatarido vegosszeg fizetendo eloleg ervenyes ceg gyari beallitas visszaallitasa gomb ketszeri kattintas visszaalli nyomtatvany eredeti allapota saj szoveg elvesz",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule nyomtatvany szerkesztese beallit nyomtatvany lapfule nyomtatvany szerkesztese nyomtatvany szerkesztese szerkeszto bal oldalan lapful jobb oldalan elo elonez atirsz pillan mulva latszi rajta men nelkul alap nyomtatvany cime all nagy betu lap tetej alap peldanysz papirmer altalanos bealli a4 a5 arajanlatnal ajanl ervenyessege nap bianko lapnal ures hiba tetel megjegyzessor szama latszi rajta kapcsol ugyfel ada eszkoz ada tartoz atveteli allap hib hibasor allapota elvegz javi szovege hiba ala szolgaltat term tervez tetel ar osszesito befizet eloleg megjegyz belso megjegyz zar feloldominta hatarido fej lap allapota fej felelos fej qr kod ugyfeloldal szoveg bevezeto szoveg qr kod melletti szoveg apro betus resz cime apro betus szoveg ide masolh saj atveteli garancialis felteteleid hosszu uj oldal tori zaro szoveg alair kel alair bal jobb oldali alair felirata atvevo neve igazolvanysz sor belyegzo helye mail kiserole targya szovege szoveg jelol hasznalh amely helye rendszer lap ada irja cim szam ugyfel eszkoz datum hatarido vegosszeg fizetendo eloleg erveny ceg gyari bealli visszaallitasa gomb ketszeri kattint visszaalli nyomtatvany eredeti allapota saj szoveg elvesz",
             "h": 174
         },
         {
@@ -89,7 +89,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Egy nyomtatvány szerkesztése",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "Figyelem: A zárkód és a minta csak annál kerül a papírra, akinek a szerepe láthatja (**Feloldó kód és minta megnézése** jog). A **Belső megjegyzés** és a **Zárkód és feloldóminta** kapcsolót csak belső papíron kapcsold be. Amelyik nyomtatványt az ügyfél kézbe kapja, azon ezek ne látsszanak.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule nyomtatvany szerkesztese beallitas nyomtatvany lapfule nyomtatvany szerkesztese figyel zar minta annal ar papir aki szerepe lath feloldo kod minta megnezese jog belso megjegyzes zar feloldominta kapcsol belso papir kapcsold amelyi nyomtatvany ugyfel kez kap azon ne latssza",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule nyomtatvany szerkesztese beallit nyomtatvany lapfule nyomtatvany szerkesztese figyel zar minta annal ar papir aki szerepe lath feloldo kod minta megnezese jog belso megjegyz zar feloldominta kapcsol belso papir kapcsold amelyi nyomtatvany ugyfel kez kap azon ne latssza",
             "h": 43
         },
         {
@@ -97,7 +97,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Közös megjelenés",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "### Közös megjelenés\n\nMinden nyomtatványra érvényes:\n\n- **Betűtípus** – négy közül választhatsz: keskeny DejaVu, Liberation Sans (Arial-szerű), Carlito (Calibri-szerű), Liberation Serif (Times-szerű). Mind kezeli a magyar ékezeteket.\n- **Betűméret (pont)** – az alapszöveg mérete, 7 és 13 között. A cím, a címkék és az apró betű ehhez igazodik.\n- **Papírméret** – A4 vagy A5; nyomtatványonként felülírható.\n- **Margó (mm)** – 6 és 25 között.\n- **Kiemelő szín** – színkód (`#rrggbb`): a fejléc vonala, a szakaszcímek aláhúzása, a **Fizetendő** sáv. Üresen a rendszer kiemelő színe.\n- **Kelt (település)** – az aláírás fölötti „Kelt: …, dátum” sorba.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule kozos megjelenes beallitas nyomtatvany lapfule kozos megjelenes kozos megjelenes nyomtatvany ervenyes betutipus negy kozul valaszthatsz keskeny dejavu liberati sans arial szeru carlito calibri szeru liberati serif times szeru mind kezeli magyar ekez betumer pon alapszoveg merete 13 koz cim cim apro betu ehhez igazodi papirmer a4 a5 nyomtatvanyonk felulirhato margo mm 25 koz kiemelo szin szin rrggbb fejlec vonala szakaszcim alahuzasa fizetendo sav ures rendszer kiemelo szine kel telepules alairas folotti kel datum sor",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule kozos megjel beallit nyomtatvany lapfule kozos megjel kozos megjel nyomtatvany erveny betutipus negy kozul valaszthatsz keskeny dejavu liberati sans arial szeru carlito calibri szeru liberati serif tim szeru mind kezeli magyar ekez betumer pon alapszoveg merete 13 koz cim cim apro betu ehhez igazodi papirmer a4 a5 nyomtatvanyonk felulirhato margo mm 25 koz kiemelo szin szin rrggbb fejlec vonala szakaszcim alahuzasa fizetendo sav ures rendszer kiemelo szine kel telepul alair folotti kel datum sor",
             "h": 80
         },
         {
@@ -105,7 +105,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Fejléc és lábléc",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "### Fejléc és lábléc\n\n- **Logó** – PNG vagy JPG, a **Feltöltés…** gombbal. Üresen a Számlázás lapfülön megadott logó kerül a nyomtatványokra.\n- **Logó a fejlécben**, **A logó szélessége (mm)**, **A logó helye** (balra, jobbra, középre).\n- **Cégadatok a fejlécben** és **A fejléc szövege** – soronként egy adat, az első sor (a cégnév) félkövér. Üresen a **Számlázás** lapfül kiállítói adataiból áll össze; a mezőben halványan az látszik.\n- **A lábléc szövege** – legfeljebb négy sor minden oldal alján (elérhetőség, nyitvatartás). Üresen az **Ügyféloldal** lapfül elérhetőségei.\n\nA lábléc alsó sorát a rendszer írja: a nyomtatvány neve és sorszáma, a nyomtatás időpontja, az oldalszám és a példány sorszáma.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule fejlec lablec beallitas nyomtatvany lapfule fejlec lablec fejlec lablec logo png jpg feltoltes gombbal ures szamlazas lapful megad logo ar nyomtatvany logo fejlec logo szelessege mm logo helye bal jobb kozep cegad fejlec fejlec szovege soronk ada elso sor cegnev felkover ures szamlazas lapful kiallitoi adat all ossze mezo halvanyan latszi lablec szovege legfeljebb negy sor oldal aljan elerhetoseg nyitvatartas ures ugyfeloldal lapful elerhetoseg lablec also sor rendszer irja nyomtatvany neve sorszama nyomtatas idopon oldalsz peldany sorszama",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule fejlec lablec beallit nyomtatvany lapfule fejlec lablec fejlec lablec logo png jpg feltol gombbal ures szamlaz lapful megad logo ar nyomtatvany logo fejlec logo szelessege mm logo helye bal jobb kozep cegad fejlec fejlec szovege soronk ada elso sor cegnev felkover ures szamlaz lapful kiallitoi adat all ossze mezo halvanyan latszi lablec szovege legfeljebb negy sor oldal aljan elerhetoseg nyitvatar ures ugyfeloldal lapful elerhetoseg lablec also sor rendszer irja nyomtatvany neve sorszama nyomt idopon oldalsz peldany sorszama",
             "h": 83
         },
         {
@@ -113,7 +113,7 @@
             "cim": "A Beállítások „Nyomtatványok\" lapfüle › Felajánlás és e-mail",
             "horgony": "a-beallitasok-nyomtatvanyok-lapfule",
             "szoveg": "### Felajánlás és e-mail\n\n- A három felajánlás kapcsolója (új munkalap, lezárás, árukiadás és rendelés).\n- **Alap feladó az e-mailhez** – a bekötött postafiókok egyike, vagy a rendszer levélküldője.\n- **Rejtett másolat minden kiküldött nyomtatványról** – ide megadhatsz egy címet (például a cég saját címét), amely minden kiküldött papírról másolatot kap.\n\nA dobozok alján a **Mentés** gomb ment; a nyomtatványok szerkesztője külön, a saját **Mentés** gombjával.",
-            "t": "nyomtatas pdf mail beallitas nyomtatvany lapfule felajanlas mail beallitas nyomtatvany lapfule felajanlas mail felajanlas mail har felajanlas kapcsolo uj munkalap lezaras arukiadas rendeles alap felado mail bekot postafi egyike rendszer levelkuldo rejt masol kikuld nyomtatvany ide megadhatsz cim peldaul ceg saj cim amely kikuld papir masol kap doboz aljan mentes gomb men nyomtatvany szerkeszto kul saj mentes gomb",
+            "t": "nyomt pdf mail beallit nyomtatvany lapfule felajanl mail beallit nyomtatvany lapfule felajanl mail felajanl mail har felajanl kapcsolo uj munkalap lezar aruki rendel alap felado mail bekot postafi egyike rendszer levelkuldo rejt masol kikuld nyomtatvany ide megadhatsz cim peldaul ceg saj cim amely kikuld papir masol kap doboz aljan men gomb men nyomtatvany szerkeszto kul saj men gomb",
             "h": 58
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Egy PDF, négy felhasználás.** Ugyanaz a fájl megy az előnézetbe, a nyomtatóra, a letöltésbe és az e-mailbe – amit látsz, az megy ki.\n- **A nyomtatvány a mentett adatokból készül.** A lapon félbehagyott, nem mentett módosítás nincs rajta.\n- **Ár nélküli papíron nincs díjsor.** Ahol az **Árak** ki van kapcsolva (átvételi, belső munkalap, szállítólevél), ott a bevizsgálási díj és a levonása sem jelenik meg a tételek között.\n- **Az üres adat nem foglal helyet.** Ha az eszköznek nincs megadva színe vagy tartozéka, az a sor kimarad.\n- **A hosszú szöveg nem vágódik le.** A táblázat és az apró betűs szöveg új oldalra törik; a táblázat fejléce az új oldalon megismétlődik.\n- **A példányok külön számozódnak.** Minden példány „Oldal 1/…”-gyel indul.\n- **Belső papír nem megy az ügyfélnek.** Amelyik nyomtatványon belső megjegyzés vagy zárkód van (alapból a **Belső munkalap**), annál a címzett mező üresen indul, és a rendszer nem engedi az ügyfél saját címére elküldeni.\n- **A próbanyomat nem küldhető el** – kitalált adatokkal készül.\n- **A nyomtatás nem ír a lapra.** Sem állapotot, sem pénzt nem változtat; számlát nem állít ki. Ezért **lezárt lapról is** nyomtathatsz.\n- **A Naplóba kerül.** A lap nyomtatványának nyomtatása, PDF-letöltése és e-mailje a lap Naplójába kerül (ki, mikor, mit, kinek) – az előnézet nem.\n- **Internet nélkül is megy.** A PDF a szerveren készül, külső szolgáltatás nélkül. E-mailhez internet kell.",
-            "t": "nyomtatas pdf mail szabaly ami rendszer betar szabaly ami rendszer betar pdf negy felhasznalas ugyanaz fajl megy elonez nyomtato letoltes mail latsz megy nyomtatvany ment ada keszul lap felbehagy ment modositas nincs rajta ar nelkuli papir nincs dijsor ahol ar kapcsolva atveteli belso munkalap szallitole bevizsgalasi dij levonasa jeleni tetel koz ures ada foglal hely eszkoz nincs megadva szine tartozeka sor kimar hosszu szoveg vagodi tablaz apro betus szoveg uj oldal tori tablaz fejlece uj oldal megismetlodi peldany kul szamoz peldany oldal gyel indul belso papir megy ugyfel amelyi nyomtatvany belso megjegyzes zar alap belso munkalap annal cimz mezo ures indul rendszer engedi ugyfel saj cime elkuldeni probany kuldheto kitalal ada keszul nyomtatas ir lap allap penz valtoz szamla alli ezer lezar lap nyomtathatsz naplo ar lap nyomtatvanya nyomtatasa pdf letoltese mail lap naplo ar kin elonez intern nelkul megy pdf szerver keszul kulso szolgaltatas nelkul mail intern",
+            "t": "nyomt pdf mail szabaly ami rendszer betar szabaly ami rendszer betar pdf negy felhasznal ugyanaz fajl megy elonez nyomtato letolt mail latsz megy nyomtatvany ment ada keszul lap felbehagy ment modosi nincs rajta ar nelkuli papir nincs dijsor ahol ar kapcsolva atveteli belso munkalap szallitole bevizsgalasi dij levonasa jele tetel koz ures ada foglal hely eszkoz nincs megadva szine tartozeka sor kimar hosszu szoveg vagodi tablaz apro betus szoveg uj oldal tori tablaz fejlece uj oldal megismetlodi peldany kul szamoz peldany oldal gyel indul belso papir megy ugyfel amelyi nyomtatvany belso megjegyz zar alap belso munkalap annal cimz mezo ures indul rendszer engedi ugyfel saj cime elkulde probany kuldheto kitalal ada keszul nyomt ir lap allap penz valtoz szamla alli ezer lezar lap nyomtathatsz naplo ar lap nyomtatvanya nyomtatasa pdf letoltese mail lap naplo ar kin elonez intern nelkul megy pdf szerver keszul kulso szolgalt nelkul mail intern",
             "h": 148
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- **Garanciális feltételek az átvételin:** Beállítások › Nyomtatványok › **Átvételi elismervény** › **Szerkesztés** › **Szövegek** lapfül › **Apró betűs szöveg**. Egyszer kell bemásolni, onnantól minden átvételin ott lesz.\n- **Két példány az átvételiből:** az alap példányszám 2 – egy az ügyfélnek, egy aláírva marad nálatok. Ha nem kell, írd át 1-re.\n- **Kisebb papír:** ha A5-re nyomtattok, a **Papírméret** legyen A5 – a betűméret és az elrendezés magától igazodik.\n- **QR-kód:** az átvételi elismervényen alapból rajta van. Az ügyfél beolvassa, és az ügyféloldalon követi a javítást – kevesebb telefon.\n- **Matrica a készülékre:** az azonosító matricát nem itt, hanem a munkalap **Matrica** gombjával nyomtatod Brother címkenyomtatóra – lásd: RMA-matrica.\n- **Telefonon** az előnézet nem mindig jelenik meg a keretben. Ilyenkor az előnézet sarkában a **Megnyitás új lapon** hivatkozás nyitja meg a PDF-et.",
-            "t": "nyomtatas pdf mail tipp tipp garancialis feltetel atvetelin beallitas nyomtatvany atveteli elismerveny szerkesztes szoveg lapful apro betus szoveg egyszer bemasolni onnan atvetelin ket peldany atveteli alap peldanysz ugyfel alairva mar nal ird re kisebb papir a5 re nyomtat papirmer legy a5 betumer elrendezes maga igazodi qr kod atveteli elismerveny alap rajta ugyfel beolvassa ugyfeloldal koveti javitas kevesebb telef matrica eszkoz azonosito matric han munkalap matrica gomb nyomt brother cimkenyomtato lasd rma matrica telef elonez jeleni ker ily elonez sarka megnyitas uj lap hivatkozas nyi pdf et",
+            "t": "nyomt pdf mail tipp tipp garancialis feltetel atvetelin beallit nyomtatvany atveteli elismerveny szerkesz szoveg lapful apro betus szoveg egyszer bemasol onnan atvetelin ket peldany atveteli alap peldanysz ugyfel alairva mar nal ird re kisebb papir a5 re nyomtat papirmer legy a5 betumer elrendez maga igazodi qr kod atveteli elismerveny alap rajta ugyfel beolvassa ugyfeloldal koveti javit kevesebb telef matrica eszkoz azonosito matric han munkalap matrica gomb nyomt brother cimkenyomtato lasd rma matrica telef elonez jele ker ily elonez sarka megnyi uj lap hivatkoz nyi pdf et",
             "h": 86
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Az előnézet üres vagy szürke.** A böngésző nem jelenít meg PDF-et keretben (telefonon gyakori). *Megoldás:* **Megnyitás új lapon**, vagy **Mentés PDF-be**.\n- **A Nyomtatás gombra nem nyílik meg a nyomtatás-ablak.** A böngésző nem enged a háttérből nyomtatni (telefonon gyakori). *Megoldás:* néhány másodperc múlva az ablak kiírja, és hivatkozást ad: **Nyisd meg a PDF-et új lapon** – onnan a böngésző saját nyomtatás gombjával megy.\n- **Kétszer annyi példány jött ki, mint kellett.** A Példányszám mezőben és a böngésző nyomtatás-ablakában is több példány volt beállítva. *Megoldás:* a böngészőben maradjon 1.\n- **„A levél nem ment el: …”** A hibaüzenet megírja az okát. Ha a rendszer levélküldőjével próbáltad, kösd be a postafiókot a **Beállítások › Levelezés** lapfülön, és azt válaszd feladónak.\n- **Lemaradt a lap alja.** A nyomtató margója nagyobb, mint a nyomtatványé. *Megoldás:* növeld a **Margó (mm)** értékét, vagy a böngésző nyomtatás-ablakában válaszd az „Oldalhoz igazítás” lehetőséget.\n- **Nem a saját logóm van a papíron.** *Megoldás:* töltsd fel a **Fejléc és lábléc** doboz **Logó** mezőjében.\n- **Nem látom a Nyomtatás gombot a munkalapon.** Új, még el nem mentett lapnál nincs mit nyomtatni. *Megoldás:* mentsd el a lapot – utána a rendszer magától felajánlja az átvételit.",
-            "t": "nyomtatas pdf mail megy megy elonez ures szurke bongeszo jeleni pdf et ker telef gyakori megoldas megnyitas uj lap mentes pdf nyomtatas gomb nyili nyomtatas abl bongeszo eng hatter nyomtatni telef gyakori megoldas nehany masodperc mulva abl kiir hivatkozas ad nyisd pdf et uj lap onnan bongeszo saj nyomtatas gomb megy ketszer annyi peldany jot kell peldanysz mezo bongeszo nyomtatas ablaka tobb peldany beallitva megoldas bongeszo maradj level men hibauz megir oka rendszer levelkuldo probal kosd postafi beallitas levelezes lapful valaszd felado lemar lap alja nyomtato margo nagyobb nyomtatvanye megoldas noveld margo mm ert bongeszo nyomtatas ablaka valaszd oldal igazitas lehetoseg saj log papir megoldas toltsd fejlec lablec doboz logo mezo lat nyomtatas gomb munkalap uj ment lapnal nincs nyomtatni megoldas mentsd lap utana rendszer maga felajanl atveteli",
+            "t": "nyomt pdf mail megy megy elonez ures szurke bongeszo jele pdf et ker telef gyakori megold megnyi uj lap men pdf nyomt gomb nyili nyomt abl bongeszo eng hatter nyomt telef gyakori megold nehany masodperc mulva abl kiir hivatkoz ad nyisd pdf et uj lap onnan bongeszo saj nyomt gomb megy ketszer annyi peldany jot kell peldanysz mezo bongeszo nyomt ablaka tobb peldany beallitva megold bongeszo maradj level men hibauz megir oka rendszer levelkuldo probal kosd postafi beallit levelez lapful valaszd felado lemar lap alja nyomtato margo nagyobb nyomtatvanye megold noveld margo mm ert bongeszo nyomt ablaka valaszd oldal igazi lehetoseg saj log papir megold toltsd fejlec lablec doboz logo mezo lat nyomt gomb munkalap uj ment lapnal nincs nyomt megold mentsd lap utana rendszer maga felajanl atveteli",
             "h": 128
         },
         {
@@ -145,7 +145,7 @@
             "cim": "GYIK › Hogyan nyomtatok átvételi elismervényt?",
             "horgony": "hogyan-nyomtatok-atveteli-elismervenyt",
             "szoveg": "Új munkalap mentése után a rendszer magától felajánlja – kattints a **Nyomtatás** gombra. Később a munkalap ablakában alul a **Nyomtatás** gombbal éred el: az ablakban válaszd az **Átvételi elismervény** nyomtatványt.",
-            "t": "nyomtatas pdf mail gyi nyomt atveteli elismerveny gyi nyomt atveteli elismerveny uj munkalap mentese utan rendszer maga felajanl kattints nyomtatas gomb kesobb munkalap ablaka alul nyomtatas gombbal ered abl valaszd atveteli elismerveny nyomtatvany",
+            "t": "nyomt pdf mail gyi nyomt atveteli elismerveny gyi nyomt atveteli elismerveny uj munkalap mentese utan rendszer maga felajanl kattints nyomt gomb kesobb munkalap ablaka alul nyomt gombbal ered abl valaszd atveteli elismerveny nyomtatvany",
             "h": 33
         },
         {
@@ -153,7 +153,7 @@
             "cim": "GYIK › Hogyan nyomtatom ki a munkalapot, amikor az ügyfél elviszi a készüléket?",
             "horgony": "hogyan-nyomtatom-ki-a-munkalapot-amikor-az-ugyfel-elviszi-a-keszuleket",
             "szoveg": "Amikor a lapot lezárod, a rendszer felajánlja a **Munkalap** nyomtatását – és ugyanabban az ablakban az átvételi elismervényt meg a számlát is. Az ablak nyitva marad, amíg be nem zárod. Ha már bezártad, a lap **Nyomtatás** gombjával bármikor előveheted.",
-            "t": "nyomtatas pdf mail gyi nyomt munkalap ami ugyfel elviszi eszkoz gyi nyomt munkalap ami ugyfel elviszi eszkoz ami lap lezar rendszer felajanl munkalap nyomtatas ugyanab abl atveteli elismerveny szamla abl nyitva mar amig zar bezar lap nyomtatas gomb barmi eloveh",
+            "t": "nyomt pdf mail gyi nyomt munkalap ami ugyfel elviszi eszkoz gyi nyomt munkalap ami ugyfel elviszi eszkoz ami lap lezar rendszer felajanl munkalap nyomtat ugyanab abl atveteli elismerveny szamla abl nyitva mar amig zar bezar lap nyomt gomb barmi eloveh",
             "h": 40
         },
         {
@@ -161,7 +161,7 @@
             "cim": "GYIK › Hogyan küldök árajánlatot e-mailben?",
             "horgony": "hogyan-kuldok-arajanlatot-e-mailben",
             "szoveg": "Nyisd meg a lapot, kattints a **Nyomtatás** gombra, válaszd az **Árajánlat** nyomtatványt, majd a **Küldés e-mailben** gombot. A címzett az ügyfél címe, a tárgy és a szöveg előre ki van töltve; a **Küldés** gombbal megy, PDF csatolmánnyal.",
-            "t": "nyomtatas pdf mail gyi kuld arajanl mail gyi kuld arajanl mail nyisd lap kattints nyomtatas gomb valaszd arajanl nyomtatvany majd kuldes mail gomb cimz ugyfel cime targy szoveg elo toltve kuldes gombbal megy pdf csatolmannyal",
+            "t": "nyomt pdf mail gyi kuld arajanl mail gyi kuld arajanl mail nyisd lap kattints nyomt gomb valaszd arajanl nyomtatvany majd kuld mail gomb cimz ugyfel cime targy szoveg elo toltve kuld gombbal megy pdf csatolmannyal",
             "h": 35
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › El tudom menteni a nyomtatványt PDF-be?",
             "horgony": "el-tudom-menteni-a-nyomtatvanyt-pdf-be",
             "szoveg": "Igen, a Nyomtatás ablak **Mentés PDF-be** gombjával. Minden nyomtatványnál működik.",
-            "t": "nyomtatas pdf mail gyi tud menteni nyomtatvany pdf gyi tud menteni nyomtatvany pdf nyomtatas abl mentes pdf gomb nyomtatvanynal mukodi",
+            "t": "nyomt pdf mail gyi tud mente nyomtatvany pdf gyi tud mente nyomtatvany pdf nyomt abl men pdf gomb nyomtatvanynal mukodi",
             "h": 20
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Hogyan állítom be, hány példány jöjjön ki?",
             "horgony": "hogyan-allitom-be-hany-peldany-jojjon-ki",
             "szoveg": "A Nyomtatás ablak **Példányszám** mezőjében, 1 és 9 között. Hogy mi legyen az alap, azt nyomtatványonként a **Beállítások › Nyomtatványok** lapfülön, a nyomtatvány **Szerkesztés** ablakában állíthatod.",
-            "t": "nyomtatas pdf mail gyi alli hany peldany jojj gyi alli hany peldany jojj nyomtatas abl peldanysz mezo koz legy alap nyomtatvanyonk beallitas nyomtatvany lapful nyomtatvany szerkesztes ablaka allith",
+            "t": "nyomt pdf mail gyi alli hany peldany jojj gyi alli hany peldany jojj nyomt abl peldanysz mezo koz legy alap nyomtatvanyonk beallit nyomtatvany lapful nyomtatvany szerkesz ablaka allith",
             "h": 28
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Hol nyomtatok üres (bianko) munkalapot?",
             "horgony": "hol-nyomtatok-ures-bianko-munkalapot",
             "szoveg": "A felső fejléc nyomtató ikonjára kattintva, a **Bianko munkalap** gombbal. Az üres sorok száma a Beállításokban állítható.",
-            "t": "nyomtatas pdf mail gyi nyomt ures bianko munkalap gyi nyomt ures bianko munkalap felso fejlec nyomtato ikon kattintva bianko munkalap gombbal ures sor szama beallitas allithato",
+            "t": "nyomt pdf mail gyi nyomt ures bianko munkalap gyi nyomt ures bianko munkalap felso fejlec nyomtato ikon kattintva bianko munkalap gombbal ures sor szama beallit allithato",
             "h": 26
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Mi a különbség a munkalap és a belső munkalap között?",
             "horgony": "mi-a-kulonbseg-a-munkalap-es-a-belso-munkalap-kozott",
             "szoveg": "A **Munkalap** az ügyfélnek készül: árakkal, végösszeggel, aláírással. A **Belső munkalap** a műhelynek: ár nélkül, de rajta van a belső megjegyzés, a zárkód, a felelős és a határidő. A belső munkalapot ne add ki az ügyfélnek.",
-            "t": "nyomtatas pdf mail gyi kulonbseg munkalap belso munkalap koz gyi kulonbseg munkalap belso munkalap koz munkalap ugyfel keszul arakkal vegosszeggel alairassal belso munkalap muhely ar nelkul rajta belso megjegyzes zar felelos hatarido belso munkalap ne add ugyfel",
+            "t": "nyomt pdf mail gyi kulonbseg munkalap belso munkalap koz gyi kulonbseg munkalap belso munkalap koz munkalap ugyfel keszul arakkal vegosszeggel alairassal belso munkalap muhely ar nelkul rajta belso megjegyz zar felelos hatarido belso munkalap ne add ugyfel",
             "h": 37
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Hogyan nyomtatok szállítólevelet?",
             "horgony": "hogyan-nyomtatok-szallitolevelet",
             "szoveg": "A lap **Nyomtatás** ablakában válaszd a **Szállítólevél** nyomtatványt. Ha az ügyfélnek külön szállítási címe van, az is rákerül. Alapból két példány készül, átadó–átvevő aláírással és igazolványszám sorral.",
-            "t": "nyomtatas pdf mail gyi nyomt szallitole gyi nyomt szallitole lap nyomtatas ablaka valaszd szallitole nyomtatvany ugyfel kul szallitasi cime rakerul alap ket peldany keszul atado atvevo alairassal igazolvanysz sorral",
+            "t": "nyomt pdf mail gyi nyomt szallitole gyi nyomt szallitole lap nyomt ablaka valaszd szallitole nyomtatvany ugyfel kul szallitasi cime rakerul alap ket peldany keszul atado atvevo alairassal igazolvanysz sorral",
             "h": 29
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Ki tudom nyomtatni a pénztárzárást?",
             "horgony": "ki-tudom-nyomtatni-a-penztarzarast",
             "szoveg": "Igen. A Pénztár **KP – kassza** lapfülén a **Zárás nyomtatása** gombbal, vagy a fejléc nyomtató ikonjával, a **Pénztárzárás** nyomtatványnál a nap kiválasztásával. Zárás után az asszisztens buborékjában is ott a **Zárás nyomtatása** gomb.",
-            "t": "nyomtatas pdf mail gyi tud nyomtatni penztarzaras gyi tud nyomtatni penztarzaras penztar kp penztar lapful zaras nyomtatasa gombbal fejlec nyomtato ikon penztarzaras nyomtatvanynal nap kivalasztasa zaras utan asszisztens buborek zaras nyomtatasa gomb",
+            "t": "nyomt pdf mail gyi tud nyomt penztarzar gyi tud nyomt penztarzar penztar kp penztar lapful zar nyomtatasa gombbal fejlec nyomtato ikon penztarzar nyomtatvanynal nap kivalasztasa zar utan asszisztens buborek zar nyomtatasa gomb",
             "h": 32
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Hogyan írom rá a saját garanciális feltételeimet az átvételire?",
             "horgony": "hogyan-irom-ra-a-sajat-garancialis-felteteleimet-az-atvetelire",
             "szoveg": "**Beállítások › Nyomtatványok**, az **Átvételi elismervény** kártyán **Szerkesztés**, a **Szövegek** lapfülön az **Apró betűs szöveg** mezőbe másold be. A rendszer gyárilag üresen hagyja, mert minden cégnek más a feltétele.",
-            "t": "nyomtatas pdf mail gyi irom saj garancialis felteteleim atveteli gyi irom saj garancialis felteteleim atveteli beallitas nyomtatvany atveteli elismerveny kartyan szerkesztes szoveg lapful apro betus szoveg mezo masold rendszer gyarilag ures hagy ceg mas feltetele",
+            "t": "nyomt pdf mail gyi irom saj garancialis felteteleim atveteli gyi irom saj garancialis felteteleim atveteli beallit nyomtatvany atveteli elismerveny kartyan szerkesz szoveg lapful apro betus szoveg mezo masold rendszer gyarilag ures hagy ceg mas feltetele",
             "h": 35
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Átírhatom a nyomtatvány címét?",
             "horgony": "atirhatom-a-nyomtatvany-cimet",
             "szoveg": "Igen, a nyomtatvány szerkesztőjében, **A nyomtatvány címe** mezőben. A cím bármi lehet – a rendszer a nyomtatványt nem a címéről ismeri fel.",
-            "t": "nyomtatas pdf mail gyi atirh nyomtatvany cim gyi atirh nyomtatvany cim nyomtatvany szerkeszto nyomtatvany cime mezo cim rendszer nyomtatvany cime ismeri",
+            "t": "nyomt pdf mail gyi atirh nyomtatvany cim gyi atirh nyomtatvany cim nyomtatvany szerkeszto nyomtatvany cime mezo cim rendszer nyomtatvany cime ismeri",
             "h": 21
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Hogyan cserélem ki a logót a papírokon?",
             "horgony": "hogyan-cserelem-ki-a-logot-a-papirokon",
             "szoveg": "**Beállítások › Nyomtatványok**, **Fejléc és lábléc** doboz, **Logó** mező, **Feltöltés…** gomb. Ugyanitt állítható a logó szélessége és helye.",
-            "t": "nyomtatas pdf mail gyi cserel log papir gyi cserel log papir beallitas nyomtatvany fejlec lablec doboz logo mezo feltoltes gomb ugyani allithato logo szelessege helye",
+            "t": "nyomt pdf mail gyi cserel log papir gyi cserel log papir beallit nyomtatvany fejlec lablec doboz logo mezo feltol gomb ugyani allithato logo szelessege helye",
             "h": 25
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Milyen betűtípusok közül választhatok?",
             "horgony": "milyen-betutipusok-kozul-valaszthatok",
             "szoveg": "Négy közül: keskeny DejaVu, Liberation Sans (az Arialhoz hasonló), Carlito (a Calibrihez hasonló) és Liberation Serif (a Times-hoz hasonló). Más betűtípus nem tölthető fel.",
-            "t": "nyomtatas pdf mail gyi betutipus kozul valaszth gyi betutipus kozul valaszth negy kozul keskeny dejavu liberati sans arial hasonlo carlito calibri hasonlo liberati serif times hoz hasonlo mas betutipus toltheto",
+            "t": "nyomt pdf mail gyi betutipus kozul valaszth gyi betutipus kozul valaszth negy kozul keskeny dejavu liberati sans arial hasonlo carlito calibri hasonlo liberati serif tim hoz hasonlo mas betutipus toltheto",
             "h": 30
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Lehet A5-ös papírra nyomtatni?",
             "horgony": "lehet-a5-os-papirra-nyomtatni",
             "szoveg": "Igen. Általánosan a **Közös megjelenés** dobozban, nyomtatványonként a szerkesztő **Papírméret** mezőjében állítható. A5-ön a betűméret és az elrendezés magától igazodik.",
-            "t": "nyomtatas pdf mail gyi a5 os papir nyomtatni gyi a5 os papir nyomtatni altalanosan kozos megjelenes doboz nyomtatvanyonk szerkeszto papirmer mezo allithato a5 betumer elrendezes maga igazodi",
+            "t": "nyomt pdf mail gyi a5 os papir nyomt gyi a5 os papir nyomt altalanosan kozos megjel doboz nyomtatvanyonk szerkeszto papirmer mezo allithato a5 betumer elrendez maga igazodi",
             "h": 27
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Ki tudom kapcsolni, hogy a rendszer felajánlja a nyomtatást?",
             "horgony": "ki-tudom-kapcsolni-hogy-a-rendszer-felajanlja-a-nyomtatast",
             "szoveg": "Igen, a **Beállítások › Nyomtatványok** lapfülön, a **Felajánlás és e-mail** dobozban – külön az új munkalapra, külön a lezárásra, külön az árukiadásra és a rendelésre.",
-            "t": "nyomtatas pdf mail gyi tud kapcsolni rendszer felajanl nyomtatas gyi tud kapcsolni rendszer felajanl nyomtatas beallitas nyomtatvany lapful felajanlas mail doboz kul uj munkalap kul lezaras kul arukiadas rendeles",
+            "t": "nyomt pdf mail gyi tud kapcsol rendszer felajanl nyomtat gyi tud kapcsol rendszer felajanl nyomtat beallit nyomtatvany lapful felajanl mail doboz kul uj munkalap kul lezar kul arukiad rendel",
             "h": 29
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Rákerül a nyomtatványra a belső megjegyzés?",
             "horgony": "rakerul-a-nyomtatvanyra-a-belso-megjegyzes",
             "szoveg": "Csak a **Belső munkalapra**. Az átvételin, a munkalapon, az árajánlaton és a szállítólevélen a belső megjegyzés és a zárkód nem látszik – hacsak a nyomtatvány szerkesztőjében be nem kapcsolod.",
-            "t": "nyomtatas pdf mail gyi rakerul nyomtatvany belso megjegyzes gyi rakerul nyomtatvany belso megjegyzes belso munkalap atvetelin munkalap arajanl szallitole belso megjegyzes zar latszi hacs nyomtatvany szerkeszto kapcsol",
+            "t": "nyomt pdf mail gyi rakerul nyomtatvany belso megjegyz gyi rakerul nyomtatvany belso megjegyz belso munkalap atvetelin munkalap arajanl szallitole belso megjegyz zar latszi hacs nyomtatvany szerkeszto kapcsol",
             "h": 27
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Több eszköz van a lapon. Tudok csak az egyikről nyomtatni?",
             "horgony": "tobb-eszkoz-van-a-lapon-tudok-csak-az-egyikrol-nyomtatni",
             "szoveg": "Igen. A Nyomtatás ablak **Melyik eszköz** mezőjében válaszd ki az eszközt: csak annak a hibái, tételei és összegei kerülnek a papírra.",
-            "t": "nyomtatas pdf mail gyi tobb eszkoz lap tud egyi nyomtatni gyi tobb eszkoz lap tud egyi nyomtatni nyomtatas abl eszkoz mezo valaszd eszkoz ann hib tetel osszeg ar papir",
+            "t": "nyomt pdf mail gyi tobb eszkoz lap tud egyi nyomt gyi tobb eszkoz lap tud egyi nyomt nyomt abl eszkoz mezo valaszd eszkoz ann hib tetel osszeg ar papir",
             "h": 29
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Számlának számít a munkalap vagy az átadási bizonylat?",
             "horgony": "szamlanak-szamit-a-munkalap-vagy-az-atadasi-bizonylat",
             "szoveg": "Nem. Egyik nyomtatvány sem számla. Számlát a munkalap **Számlázz.hu számla** gombjával állítasz ki.",
-            "t": "nyomtatas pdf mail gyi szamla szami munkalap atadasi bizonyl gyi szamla szami munkalap atadasi bizonyl egyi nyomtatvany szamla szamla munkalap szamlazz hu szamla gomb allitasz",
+            "t": "nyomt pdf mail gyi szamla szami munkalap atadasi bizonyl gyi szamla szami munkalap atadasi bizonyl egyi nyomtatvany szamla szamla munkalap szamlazz hu szamla gomb allitasz",
             "h": 25
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › Mi az a QR-kód az átvételi elismervényen?",
             "horgony": "mi-az-a-qr-kod-az-atveteli-elismervenyen",
             "szoveg": "Az ügyféloldal címe. Az ügyfél a telefonjával beolvassa, a telefonszámával és a munkalapszámmal belép, és látja a javítás állapotát. A nyomtatvány szerkesztőjében kikapcsolható.",
-            "t": "nyomtatas pdf mail gyi qr kod atveteli elismerveny gyi qr kod atveteli elismerveny ugyfeloldal cime ugyfel telefon beolvassa telefonszama munkalapszammal belep lat javitas allap nyomtatvany szerkeszto kikapcsolhato",
+            "t": "nyomt pdf mail gyi qr kod atveteli elismerveny gyi qr kod atveteli elismerveny ugyfeloldal cime ugyfel telefon beolvassa telefonszama munkalapszammal belep lat javi allap nyomtatvany szerkeszto kikapcsolhato",
             "h": 27
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Miért nem tudom elküldeni a belső munkalapot az ügyfélnek?",
             "horgony": "miert-nem-tudom-elkuldeni-a-belso-munkalapot-az-ugyfelnek",
             "szoveg": "Mert belső megjegyzés és zárkód van rajta – ezek nem az ügyfélnek szólnak. Az ügyfélnek a **Munkalapot** vagy az **Átvételi elismervényt** küldd; a belső munkalap kollégának mehet.",
-            "t": "nyomtatas pdf mail gyi tud elkuldeni belso munkalap ugyfel gyi tud elkuldeni belso munkalap ugyfel belso megjegyzes zar rajta ugyfel szol ugyfel munkalap atveteli elismerveny kuldd belso munkalap kollega meh",
+            "t": "nyomt pdf mail gyi tud elkulde belso munkalap ugyfel gyi tud elkulde belso munkalap ugyfel belso megjegyz zar rajta ugyfel szol ugyfel munkalap atveteli elismerveny kuldd belso munkalap kollega meh",
             "h": 30
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Látszik valahol, hogy elküldtem az ügyfélnek a papírt?",
             "horgony": "latszik-valahol-hogy-elkuldtem-az-ugyfelnek-a-papirt",
             "szoveg": "Igen. Ha az ügyfél saját e-mail-címére küldted, a munkalap **RMA** lapfülén az üzenetek között megjelenik, hogy mi ment ki.",
-            "t": "nyomtatas pdf mail gyi latszi valahol elkuld ugyfel papir gyi latszi valahol elkuld ugyfel papir ugyfel saj mail cime kuld munkalap rma lapful uzen koz megjeleni men",
+            "t": "nyomt pdf mail gyi latszi valahol elkuld ugyfel papir gyi latszi valahol elkuld ugyfel papir ugyfel saj mail cime kuld munkalap rma lapful uzen koz megjele men",
             "h": 27
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Miért nem megy el az e-mail?",
             "horgony": "miert-nem-megy-el-az-e-mail",
             "szoveg": "Leggyakrabban azért, mert nincs beállítva levélküldés. Kösd be a postafiókot a **Beállítások › Levelezés** lapfülön, és a **Feladó** mezőben azt válaszd. A hibaüzenet mindig megírja a pontos okot.",
-            "t": "nyomtatas pdf mail gyi megy mail gyi megy mail leggyakrab azer nincs beallitva levelkuldes kosd postafi beallitas levelezes lapful felado mezo valaszd hibauz megir pontos oko",
+            "t": "nyomt pdf mail gyi megy mail gyi megy mail leggyakrab azer nincs beallitva levelkuld kosd postafi beallit levelez lapful felado mezo valaszd hibauz megir pontos oko",
             "h": 26
         },
         {
@@ -321,7 +321,7 @@
             "cim": "GYIK › Mit nyomtat „Az oldal nyomtatása, ahogy látszik\" gomb?",
             "horgony": "mit-nyomtat-az-oldal-nyomtatasa-ahogy-latszik-gomb",
             "szoveg": "Azt az oldalt, amelyen éppen állsz, a menü, a fejléc és az asszisztens nélkül. Akkor hasznos, ha valamiről nincs külön nyomtatvány.",
-            "t": "nyomtatas pdf mail gyi nyom oldal nyomtatasa ahogy latszi gomb gyi nyom oldal nyomtatasa ahogy latszi gomb oldal amely epp allsz menu fejlec asszisztens nelkul hasznos valami nincs kul nyomtatvany",
+            "t": "nyomt pdf mail gyi nyom oldal nyomtatasa ahogy latszi gomb gyi nyom oldal nyomtatasa ahogy latszi gomb oldal amely epp allsz menu fejlec asszisztens nelkul hasznos valami nincs kul nyomtatvany",
             "h": 30
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Ki szerkesztheti a nyomtatványokat?",
             "horgony": "ki-szerkesztheti-a-nyomtatvanyokat",
             "szoveg": "Csak adminisztrátor. Nyomtatni, PDF-be menteni és e-mailben küldeni minden kolléga tud.",
-            "t": "nyomtatas pdf mail gyi szerkesztheti nyomtatvany gyi szerkesztheti nyomtatvany adminisztrator nyomtatni pdf menteni mail kuldeni kollega tud",
+            "t": "nyomt pdf mail gyi szerkesztheti nyomtatvany gyi szerkesztheti nyomtatvany adminisztrator nyomt pdf mente mail kulde kollega tud",
             "h": 17
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Elromlik valami a lapon, ha sokszor nyomtatom?",
             "horgony": "elromlik-valami-a-lapon-ha-sokszor-nyomtatom",
             "szoveg": "Nem. A nyomtatás nem ír semmit a lapra: nem változtat állapotot, nem rögzít fizetést, nem állít ki számlát.",
-            "t": "nyomtatas pdf mail gyi elromli lap sokszor nyomt gyi elromli lap sokszor nyomt nyomtatas ir semmi lap valtoz allap rogzi fizetes alli szamla",
+            "t": "nyomt pdf mail gyi elromli lap sokszor nyomt gyi elromli lap sokszor nyomt nyomt ir semmi lap valtoz allap rogzi fizet alli szamla",
             "h": 23
         },
         {
@@ -345,7 +345,7 @@
             "cim": "GYIK › Meg tudja nyitni az asszisztens a nyomtatást?",
             "horgony": "meg-tudja-nyitni-az-asszisztens-a-nyomtatast",
             "szoveg": "Igen. Ha megkéred („nyomtasd ki az 1234-es lap átvételijét”), gombot ad, amely megnyitja a lap Nyomtatás ablakát. Nyomtatni és levelet küldeni te fogsz – az asszisztens maga nem küld ki semmit.",
-            "t": "nyomtatas pdf mail gyi tud nyitni asszisztens nyomtatas gyi tud nyitni asszisztens nyomtatas megker nyomtasd 1234 lap atvetelij gomb ad amely megnyi lap nyomtatas abl nyomtatni level kuldeni fogsz asszisztens maga kuld semmi",
+            "t": "nyomt pdf mail gyi tud nyi asszisztens nyomtat gyi tud nyi asszisztens nyomtat megker nyomtasd 1234 lap atvetelij gomb ad amely megnyi lap nyomt abl nyomt level kulde fogsz asszisztens maga kuld semmi",
             "h": 33
         }
     ]

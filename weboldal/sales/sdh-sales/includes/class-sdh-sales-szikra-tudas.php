@@ -49,7 +49,7 @@ final class SDH_Sales_Szikra_Tudas
         'aktol', 'okon', 'eken', 'akon', 'okat', 'eket', 'akat', 'otok', 'etek', 'jaik', 'jeik', 'unk', 'ink', 'juk', 'ait',
         'eit', 'val', 'vel', 'ban', 'ben', 'bol', 'rol', 'tol', 'nak', 'nek', 'hoz', 'hez', 'kor', 'ert', 'ig', 'ra', 're',
         'ba', 'be', 'on', 'en', 'ot', 'et', 'at', 'ok', 'ek', 'ak', 'ja', 'je', 'uk', 'ai', 'ei', 'om', 'em', 'am', 'od',
-        'ed', 'ad', 't', 'k',
+        'ed', 'ad', 'as', 'es', 'ni', 't', 'k',
     ];
 
     /** Rokon szavak és kivételek (tövezés előtt): a köznyelvi alak → a súgó szava. */

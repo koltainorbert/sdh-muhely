@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A **Napi árukiadás** menüpont a pultos eladásra szolgál: amikor valaki nem javíttat, csak vásárol. Egy árukiadásra termék és szolgáltatás is kerülhet, akár vegyesen.\n\nAz árukiadás ugyanolyan lap, mint a munkalap, csak egyszerűbb:\n\n- nincs rajta eszköz, nincs hiba és nincs bevizsgálási díj;\n- nincs ügyféloldala (RMA-füle), mert nincs miről értesíteni a vevőt;\n- ügyfelet nem kötelező megadni: ha üresen hagyod, a vevő neve **Napi árukiadás** lesz.\n\nMinden más ugyanúgy működik, mint a munkalapon: tételek, kedvezmény, előleg, a fizetés ablaka, pénztár, számla.\n\nPélda: Valaki tokot és fóliát vesz. Felveszed a két terméket, megnyomod a **Rögzítés és fizetés** gombot, a fizetés ablakában kiválasztod a módot – kész. Az eladás magától lezárul.",
-            "t": "napi arukiadas mire valo mire valo napi arukiadas menup pultos eladas szolgal ami valaki javit vasa arukiadas term szolgaltatas kerulh akar vegyes arukiadas ugyanolyan lap munkalap egyszerubb nincs rajta eszkoz nincs hiba nincs bevizsgalasi dij nincs ugyfeloldala rma fule nincs mirol ertesiteni ugyfel ugyfel kotelezo megadni ures hagy ugyfel neve napi arukiadas mas ugyanugy mukodi munkalap tetel kedvezmeny eloleg fizetes ablaka penztar szamla pelda valaki tok foli vesz felvesz ket term megny rogzites fizetes gomb fizetes ablaka kivalasz mod kesz eladas maga lezarul",
+            "t": "napi aruki mire valo mire valo napi aruki menup pultos elad szolgal ami valaki javit vasa arukiad term szolgalt kerulh akar vegy aruki ugyanolyan lap munkalap egyszerubb nincs rajta eszkoz nincs hiba nincs bevizsgalasi dij nincs ugyfeloldala rma fule nincs mirol ertesite ugyfel ugyfel kotelezo meg ures hagy ugyfel neve napi aruki mas ugyanugy mukodi munkalap tetel kedvezmeny eloleg fiz ablaka penztar szamla pelda valaki tok foli vesz felvesz ket term megny rogzi fiz gomb fiz ablaka kivalasz mod kesz elad maga lezarul",
             "h": 83
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- Az oldalmenüben: Napi árukiadás. Itt van az eladások listája, és innen indul az új eladás.\n- Az Áttekintésen a **Napi árukiadás** gomb egy kattintással az új árukiadás ablakát nyitja meg; a csempe a mai árukiadások számát mutatja.\n- Az Áttekintés munkalap-rácsában az árukiadások a munkalapok között is ott állnak.\n- Az ügyfél adatlapján a **Vásárlások** lapfül sorolja fel azokat az árukiadásokat, amelyeket az ő nevére rögzítettél.",
-            "t": "napi arukiadas talal talal oldalmenu napi arukiadas eladas lista inn indul uj eladas attekintes napi arukiadas gomb kattintassal uj arukiadas abl nyi csempe mai arukiadas szam mut attekintes munkalap racsa arukiadas munkalap koz all ugyfel adatlapjan vasarlas lapful sorol azo arukiadas amely neve rogzitettel",
+            "t": "napi aruki talal talal oldalmenu napi aruki elad lista inn indul uj elad attekint napi aruki gomb kattintassal uj aruki abl nyi csempe mai arukiad szam mut attekin munkalap racsa arukiad munkalap koz all ugyfel adatlapjan vasarl lapful sorol azo arukiad amely neve rogzitettel",
             "h": 44
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: új árukiadás rögzítése",
             "horgony": "lepesrol-lepesre-uj-arukiadas-rogzitese",
             "szoveg": "1. Nyisd meg a Napi árukiadás menüpontot, és kattints a fejlécben az **Új árukiadás** gombra.\n2. A megnyíló ablakban a **Termékek** lapfül áll elöl. Vedd fel, amit a vevő visz. Ha szolgáltatást is fizet, azt a **Szolgáltatások** lapfülön add hozzá.\n3. Bal oldalon az **Összeg** dobozban gépelés közben látod a nettót, az áfát és a bruttót, a **Fizetés** dobozban pedig a **Fizetendő** összeget.\n4. Ha minden tételre ugyanaz a kedvezmény jár, írd be a **Tételek** dobozban a **Kedvezmény** mezőbe. Ugyanitt állítható az **Áfakulcs** is.\n5. Ha a vevő nevére szól az eladás, válaszd ki az **Ügyfél** mezőben. Ha nem kell név, hagyd üresen.\n6. Több üzlet esetén nézd meg a **Helyszín** mezőt: azt az üzletet mutassa, ahol az árut kiadod.\n7. Kattints a **Rögzítés és fizetés** gombra. A rendszer elmenti az eladást, és rögtön megnyitja a fizetés ablakát.\n8. A fizetés ablakában válaszd ki a fizetési módot, ellenőrizd a **Kapott összeg** mezőt, majd kattints a **Fizetés rögzítése** gombra.\n\nA kifizetett eladás ezután magától lezárt állapotba kerül, és megjelenik a lista tetején.\n\nTipp: Az új árukiadáson a **Rögzítés és fizetés** az elsődleges gomb, ezért az Enter is ezt indítja. A pultnál így egy eladás két mozdulat.",
-            "t": "napi arukiadas lepes lepes uj arukiadas rogzitese lepes lepes uj arukiadas rogzitese nyisd napi arukiadas menupon kattints fejlec uj arukiadas gomb megnyilo abl term lapful all elol vedd ugyfel visz szolgaltatas fiz szolgaltatas lapful add hozza bal oldal osszeg doboz gepeles koz lat net afa brut fizetes doboz ped fizetendo osszeg tetel ugyanaz kedvezmeny jar ird tetel doboz kedvezmeny mezo ugyani allithato afakulcs ugyfel neve szol eladas valaszd ugyfel mezo nev hagyd ures tobb uzl ese nezd helyszin mez uzl mutassa ahol aru kiad kattints rogzites fizetes gomb rendszer elmenti eladas rog megnyi fizetes abl fizetes ablaka valaszd fizetesi mod ellenorizd kap osszeg mez majd kattints fizetes rogzitese gomb kifizet eladas ezutan maga lezar allap ar megjeleni lista tetej tipp uj arukiadas rogzites fizetes elsodleges gomb ezer enter indi pultnal igy eladas ket mozdul",
+            "t": "napi aruki lep lep uj aruki rogzitese lep lep uj aruki rogzitese nyisd napi aruki menupon kattints fejlec uj aruki gomb megnyilo abl term lapful all elol vedd ugyfel visz szolgaltat fiz szolgaltat lapful add hozza bal oldal osszeg doboz gepel koz lat net afa brut fiz doboz ped fizetendo osszeg tetel ugyanaz kedvezmeny jar ird tetel doboz kedvezmeny mezo ugyani allithato afakulcs ugyfel neve szol elad valaszd ugyfel mezo nev hagyd ures tobb uzl ese nezd helyszin mez uzl mutassa ahol aru kiad kattints rogzi fiz gomb rendszer elmenti elad rog megnyi fiz abl fiz ablaka valaszd fizetesi mod ellenorizd kap osszeg mez majd kattints fiz rogzitese gomb kifizet elad ezutan maga lezar allap ar megjele lista tetej tipp uj arukiad rogzi fiz elsodleg gomb ezer enter indi pultnal igy elad ket mozdul",
             "h": 134
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: eladás fizetés nélkül vagy előleggel",
             "horgony": "lepesrol-lepesre-eladas-fizetes-nelkul-vagy-eloleggel",
             "szoveg": "Nem minden eladást fizetnek ki azonnal.\n\n- **Később fizet:** az új árukiadáson a **Csak rögzítés** gombot nyomd meg. Az eladás bekerül a listába, a **Fizetés** oszlopban a fizetendő összeg és a *nincs fizetve* felirat áll.\n- **Előleget ad:** rögzítsd az eladást a **Rögzítés és fizetés** gombbal, majd a fizetés ablakában válaszd az **Előleg / részfizetés** lehetőséget, és írd be a kapott összeget. A listában ezután a hátralévő összeg és az *előleg:* sor látszik.\n- **Utólag fizet:** nyisd meg az eladást (a sorszámra vagy a **Megnyit** gombra kattintva), és az ablak alján kattints a **Fizetés** gombra.\n\nA ki nem fizetett eladásokat a lista **Nincs kifizetve** szűrője szedi össze.",
-            "t": "napi arukiadas lepes lepes eladas fizetes nelkul eloleggel lepes lepes eladas fizetes nelkul eloleggel eladas fiz azonnal kesobb fiz uj arukiadas rogzites gomb nyomd eladas bekerul lista fizetes oszlop fizetendo osszeg nincs fizetve felir all eloleg ad rogzitsd eladas rogzites fizetes gombbal majd fizetes ablaka valaszd eloleg reszfizetes lehetoseg ird kap osszeg lista ezutan hatralevo osszeg eloleg sor latszi utolag fiz nyisd eladas sorsz megnyi gomb kattintva abl aljan kattints fizetes gomb fizet eladas lista nincs kifizetve szuro szedi ossze",
+            "t": "napi aruki lep lep elad fiz nelkul eloleggel lep lep elad fiz nelkul eloleggel elad fiz azonnal kesobb fiz uj arukiad rogzi gomb nyomd elad bekerul lista fiz oszlop fizetendo osszeg nincs fizetve felir all eloleg ad rogzitsd elad rogzi fiz gombbal majd fiz ablaka valaszd eloleg reszfiz lehetoseg ird kap osszeg lista ezutan hatralevo osszeg eloleg sor latszi utolag fiz nyisd elad sorsz megnyi gomb kattintva abl aljan kattints fiz gomb fizet elad lista nincs kifizetve szuro szedi ossze",
             "h": 80
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: ügyfél megadása az árukiadáson",
             "horgony": "lepesrol-lepesre-ugyfel-megadasa-az-arukiadason",
             "szoveg": "Az árukiadáson az **Ügyfél** mező nem kötelező, és három dolgot tehetsz vele.\n\n1. **Üresen hagyod.** A vevő neve a listában és a rácsban **Napi árukiadás** lesz.\n2. **Meglévő ügyfelet választasz.** Kezdd el gépelni a nevét, a telefonszámát vagy az ügyfélszámát, és válaszd ki a legördülő listából. A begépelt szöveg önmagában nem ügyfél: csak az számít, akit a listából kiválasztasz.\n3. **Új ügyfelet veszel fel.** A mező melletti **+** gomb az új ügyfél ablakát nyitja meg az árukiadás fölött. Mentés után visszakerülsz az eladáshoz, az új ügyfél már ki van választva.\n\nA kiválasztott ügyfél adatai a lapfülek fölött, kártyán jelennek meg. A mező melletti ceruza gombbal az eladás bezárása nélkül javíthatod őket.",
-            "t": "napi arukiadas lepes lepes ugyfel megadasa arukiadas lepes lepes ugyfel megadasa arukiadas arukiadas ugyfel mezo kotelezo har dolg tehetsz vele ures hagy ugyfel neve lista racs napi arukiadas meglevo ugyfel valasztasz kezdd gepelni nev telefonsz ugyfelsz valaszd legordulo lista begepel szoveg onmaga ugyfel szami aki lista kivalasztasz uj ugyfel veszel mezo melletti gomb uj ugyfel abl nyi arukiadas fol mentes utan visszakerulsz eladas uj ugyfel valasztva kivalaszt ugyfel ada lapful fol kartyan jel mezo melletti ceruza gombbal eladas bezarasa nelkul javith oke",
+            "t": "napi aruki lep lep ugyfel megadasa arukiad lep lep ugyfel megadasa arukiad arukiad ugyfel mezo kotelezo har dolg tehetsz vele ures hagy ugyfel neve lista racs napi aruki meglevo ugyfel valasztasz kezdd gepel nev telefonsz ugyfelsz valaszd legordulo lista begepel szoveg onmaga ugyfel szami aki lista kivalasztasz uj ugyfel veszel mezo melletti gomb uj ugyfel abl nyi aruki fol men utan visszakerulsz elad uj ugyfel valasztva kivalaszt ugyfel ada lapful fol kartyan jel mezo melletti ceruza gombbal elad bezarasa nelkul javith oke",
             "h": 82
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Lépésről lépésre: helyszínek, ha több üzleted van",
             "horgony": "lepesrol-lepesre-helyszinek-ha-tobb-uzleted-van",
             "szoveg": "A helyszín az az üzlet, ahol az árut kiadod.\n\n- **Egy üzlet:** nem kell semmit felvenned. Ha nincs helyszín, vagy csak egy aktív van, a **Helyszín** mező meg sem jelenik az árukiadáson, és a listában sincs helyszín oszlop.\n- **Több üzlet:** amint legalább két aktív helyszín van, az árukiadáson megjelenik a **Helyszín** választó, a listában a **Helyszín** oszlop, a szűrők között pedig a **Minden helyszín** lista.\n\nHelyszínt adminisztrátor vehet fel:\n\n1. A Napi árukiadás oldal fejlécében kattints a **Helyszínek** gombra (csak adminisztrátornak látszik), vagy a Beállítások **Árukiadás és rendelések** lapfülén a **Helyszínek szerkesztése** gombra.\n2. Írd be a helyszín nevét. Megadható hozzá cím, telefon és megjegyzés is.\n3. További üzlethez kattints az **Új helyszín** gombra.\n4. Az **Alap** oszlopban jelöld meg, melyik helyszínnel induljon az új árukiadás.\n5. Kattints a **Mentés** gombra.\n\nAz új árukiadás azzal a helyszínnel indul, amelyet legutóbb te használtál; ha ilyen még nincs, az **Alap** jelölésűvel.\n\nFontos: Helyszínt törölni nem lehet, mert a régi eladások hivatkoznak rá. Ami megszűnt, annál vedd ki az **Aktív** pipát: így új eladásnál már nem választható, a régi eladásokon viszont megmarad.",
-            "t": "napi arukiadas lepes lepes helyszi tobb uzl lepes lepes helyszi tobb uzl helyszin uzl ahol aru kiad uzl semmi felvenn nincs helyszin aktiv helyszin mezo jeleni arukiadas lista sincs helyszin oszlop tobb uzl amin legalabb ket aktiv helyszin arukiadas megjeleni helyszin valaszto lista helyszin oszlop szur koz ped helyszin lista helyszin adminisztrator veh napi arukiadas oldal fejlece kattints helyszi gomb adminisztrator latszi beallitas arukiadas rendeles lapful helyszi szerkesztese gomb ird helyszin nev megadhato hozza cim telef megjegyzes tovabbi uzl kattints uj helyszin gomb alap oszlop jelold helyszinnel indulj uj arukiadas kattints mentes gomb uj arukiadas azzal helyszinnel indul amely legutobb hasznaltal nincs alap jelolesu fontos helyszin torolni regi eladas hivatkoz megszun annal vedd aktiv pip igy uj eladasnal valaszthato regi eladas visz megmar",
+            "t": "napi aruki lep lep helyszi tobb uzl lep lep helyszi tobb uzl helyszin uzl ahol aru kiad uzl semmi felvenn nincs helyszin aktiv helyszin mezo jele arukiad lista sincs helyszin oszlop tobb uzl amin legalabb ket aktiv helyszin arukiad megjele helyszin valaszto lista helyszin oszlop szur koz ped helyszin lista helyszin adminisztrator veh napi aruki oldal fejlece kattints helyszi gomb adminisztrator latszi beallit aruki rendel lapful helyszi szerkesztese gomb ird helyszin nev megadhato hozza cim telef megjegyz tovabbi uzl kattints uj helyszin gomb alap oszlop jelold helyszinnel indulj uj aruki kattints men gomb uj aruki azzal helyszinnel indul amely legutobb hasznaltal nincs alap jelolesu fontos helyszin torol regi elad hivatkoz megszun annal vedd aktiv pip igy uj eladasnal valaszthato regi elad visz megmar",
             "h": 123
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: keresés és szűrés a listában",
             "horgony": "lepesrol-lepesre-kereses-es-szures-a-listaban",
             "szoveg": "A lista alapból a **mai** eladásokat mutatja.\n\n- **Időszak:** a szűrőben választható a **Ma**, az **Utolsó 7 nap**, az **Utolsó 30 nap**, a **Mind** és a **Nincs kifizetve**.\n- **Keresés:** a keresőmezőbe sorszámot, vevőnevet, telefonszámot vagy terméknevet írhatsz. Kereséskor az időszak nem szűkít, így a régi eladás is előkerül.\n- **Helyszín:** több üzletnél a **Minden helyszín** listából egy üzletre szűkíthetsz.\n- **Szűrő törlése:** ez a gomb visszaállítja az alapnézetet.\n\nA lista fölötti négy szám (az eladások száma, **Bruttó összesen**, **Befolyt**, **Még fizetendő**) mindig a szűrt eladásokra vonatkozik.",
-            "t": "napi arukiadas lepes lepes kereses szures lista lepes lepes kereses szures lista lista alap mai eladas mut idosz szuro valaszthato ma utolso nap utolso 30 nap mind nincs kifizetve kereses keresomezo sorsz vevonev telefonsz termeknev irhatsz kereses idosz szuki igy regi eladas elokerul helyszin tobb uzletnel helyszin lista uzl szukithetsz szuro torlese gomb visszaalli alapnez lista folotti negy szam eladas szama brutto osszes befoly fizetendo szur eladas vonatkozi",
+            "t": "napi aruki lep lep ker szur lista lep lep ker szur lista lista alap mai elad mut idosz szuro valaszthato ma utolso nap utolso 30 nap mind nincs kifizetve ker keresomezo sorsz vevonev telefonsz termeknev irhatsz keres idosz szuki igy regi elad elokerul helyszin tobb uzletnel helyszin lista uzl szukithetsz szuro torlese gomb visszaalli alapnez lista folotti negy szam elad szama brutto ossz befoly fizetendo szur eladas vonatkozi",
             "h": 68
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Lépésről lépésre: állapot állítása a listából",
             "horgony": "lepesrol-lepesre-allapot-allitasa-a-listabol",
             "szoveg": "Az árukiadás állapotát nem kell az ablakban átállítanod.\n\n1. A listában keresd meg a sort.\n2. Az **Állapot** oszlopban kattints a színes állapotjelzőre.\n3. Válaszd ki az új állapotot. A változás azonnal mentődik.\n\nAz árukiadásnál csak az értelmes állapotok választhatók: az új lap alapállapota, a lezárt állapotok (például a *Lezárt* és az *Érvénytelen*), valamint az, ami éppen a lapon áll. A javítás állapotai itt nem jelennek meg.\n\nPélda: Tévedésből rögzítettél egy eladást. A listában állítsd az állapotát *Érvénytelen*-re. A hozzá rögzített pénztártételt a Házipénztár oldalán külön kell törölnöd.",
-            "t": "napi arukiadas lepes lepes allap allitasa lista lepes lepes allap allitasa lista arukiadas allap abl atallitan lista keresd sor allap oszlop kattints szines allapotjelzo valaszd uj allap valtozas azonnal mentodi arukiadasnal ertelmes allap valaszth uj lap alapallapota lezar allap peldaul lezar ervenytel valamin epp lap all javitas allap jel pelda tevedes rogzitettel eladas lista allitsd allap ervenytel re hozza rogzit penztartetel hazipenztar oldalan kul toroln",
+            "t": "napi aruki lep lep allap allitasa lista lep lep allap allitasa lista aruki allap abl atallitan lista keresd sor allap oszlop kattints szin allapotjelzo valaszd uj allap valtoz azonnal mentodi arukiadasnal ertelm allap valaszth uj lap alapallapota lezar allap peldaul lezar ervenytel valamin epp lap all javi allap jel pelda teved rogzitettel elad lista allitsd allap ervenytel re hozza rogzit penztartetel hazipenztar oldalan kul toroln",
             "h": 65
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Mezők és gombok",
             "horgony": "mezok-es-gombok",
             "szoveg": "**A lista oszlopai**\n\n| Oszlop | Mit mutat |\n|---|---|\n| **Szám** | Az eladás sorszáma. Rákattintva megnyílik az eladás. |\n| **Dátum** | Az eladás napja, alatta a rögzítés időpontja. |\n| **Vevő** | A kiválasztott ügyfél neve és telefonszáma, vagy **Napi árukiadás**. |\n| **Tételek** | Az első három tétel neve; ha több van, a végén a továbbiak száma. Alatta az eladás **Név** mezője, ha kitöltötted. |\n| **Helyszín** | Csak több üzletnél látszik. |\n| **Bruttó** | Az eladás bruttó végösszege. |\n| **Fizetés** | **Fizetve** és a fizetési mód, vagy a még fizetendő összeg. |\n| **Állapot** | Az eladás állapota; itt helyben átállítható. |\n\n**Az árukiadás ablaka**\n\n- **Név** – rövid tárgy, nem kötelező. A listában a tételek alatt jelenik meg.\n- **Készült** – az eladás napja. Határidő mező az árukiadáson nincs.\n- **Kedvezmény** és **Áfakulcs** – minden tételsorra érvényes, az új sorok is ezzel indulnak.\n- **Fizetési mód**, **Fizetve**, **Fizetés ideje**, **Fizetett (előleg)** – a fizetés adatai. A fizetés ablaka ezeket magától kitölti.\n- **Fizetendő** – a bruttó összeg és a már befizetett rész különbsége.\n- **Megjegyzés** – az ügyfél felé is megjelenhet; a **Gyakori megjegyzések** gombbal előre megírt szöveg illeszthető be. A **Belső megjegyzés** csak a rendszerben látszik.\n\n**Gombok az ablak alján**\n\n- **Rögzítés és fizetés** – új eladásnál: ment, majd megnyitja a fizetés ablakát.\n- **Csak rögzítés** – új eladásnál: ment, fizetés nélkül.\n- **Mentés** – már rögzített eladás módosításakor.\n- **Fizetés** – már rögzített eladásnál a fizetés ablakát nyitja meg. Kifizetett eladáson a felirata **Fizetve ✓**.\n- **Számlázz.hu számla** és a számla-előkészítő gombja – a rögzített eladásról ugyanúgy készíthető számla, mint a munkalapról.",
-            "t": "napi arukiadas mez gomb mez gomb lista oszlop oszlop mut szam eladas sorszama rakattintva megnyili eladas datum eladas nap alatta rogzites idopon ugyfel kivalaszt ugyfel neve telefonszama napi arukiadas tetel elso har tetel neve tobb veg tovabbi szama alatta eladas nev mezo kitoltot helyszin tobb uzletnel latszi brutto eladas brutto vegosszege fizetes fizetve fizetesi mod fizetendo osszeg allap eladas allapota hely atallithato arukiadas ablaka nev rovid targy kotelezo lista tetel ala jeleni keszul eladas nap hatarido mezo arukiadas nincs kedvezmeny afakulcs tetelsor ervenyes uj sor ezzel indul fizetesi mod fizetve fizetes ide fizet eloleg fizetes ada fizetes ablaka eze maga kitolti fizetendo brutto osszeg befizet resz kulonbsege megjegyzes ugyfel fele megjelenh gyakori megjegyzes gombbal elo megir szoveg illesztheto belso megjegyzes rendszer latszi gomb abl aljan rogzites fizetes uj eladasnal men majd megnyi fizetes abl rogzites uj eladasnal men fizetes nelkul mentes rogzit eladas modositasa fizetes rogzit eladasnal fizetes abl nyi kifizet eladas felirata fizetve szamlazz hu szamla szamla elokeszito gomb rogzit eladas ugyanugy keszitheto szamla munkalap",
+            "t": "napi aruki mez gomb mez gomb lista oszlop oszlop mut szam elad sorszama rakattintva megnyili elad datum elad nap alatta rogzi idopon ugyfel kivalaszt ugyfel neve telefonszama napi aruki tetel elso har tetel neve tobb veg tovabbi szama alatta elad nev mezo kitoltot helyszin tobb uzletnel latszi brutto elad brutto vegosszege fiz fizetve fizetesi mod fizetendo osszeg allap elad allapota hely atallithato aruki ablaka nev rovid targy kotelezo lista tetel ala jele keszul elad nap hatarido mezo arukiad nincs kedvezmeny afakulcs tetelsor erveny uj sor ezzel indul fizetesi mod fizetve fiz ide fizet eloleg fiz ada fiz ablaka eze maga kitolti fizetendo brutto osszeg befizet resz kulonbsege megjegyz ugyfel fele megjelenh gyakori megjegyz gombbal elo megir szoveg illesztheto belso megjegyz rendszer latszi gomb abl aljan rogzi fiz uj eladasnal men majd megnyi fiz abl rogzi uj eladasnal men fiz nelkul men rogzit elad modositasa fiz rogzit eladasnal fiz abl nyi kifizet elad felirata fizetve szamlazz hu szamla szamla elokeszito gomb rogzit elad ugyanugy keszitheto szamla munkalap",
             "h": 166
         },
         {
@@ -81,7 +81,7 @@
             "cim": "A Beállítások „Árukiadás és rendelések\" lapfüle",
             "horgony": "a-beallitasok-arukiadas-es-rendelesek-lapfule",
             "szoveg": "A Beállítások menüpontban, a **Pénz és eladás** csoportban találod az **Árukiadás és rendelések** lapfület. A Beállításokat csak adminisztrátor nyithatja meg. A lapfül a Napi árukiadás és a Rendelések közös beállításait tartalmazza.\n\n- **Helyszínek szerkesztése** – az üzletek listája (név, cím, telefon, megjegyzés, **Alap**, **Aktív**). A gomb zárójelben az aktív helyszínek számát mutatja. Egy üzletnél a lista üresen hagyható.\n- **Beszállítók szerkesztése** – a rendelések forrásainak listája (név, weboldal, telefon, e-mail, megjegyzés, **Aktív**). A rendelés ablakából is megnyitható.\n- **A kifizetett napi árukiadás és az átadott, kifizetett rendelés magától lezárul** – alapból be van kapcsolva. Ha kiveszed a pipát, a kifizetett eladás az addigi állapotában marad, és neked kell lezárnod.\n- **Sorok egy oldalon (árukiadás, rendelések listája)** – hány sor fér egy oldalra a két listában. 10 és 200 között állítható, az alapérték 25.\n- **A rendelés állapotainak neve** – a rendelés útjának öt lépése átnevezhető. A sorrendjük adott. Üresen hagyva az alapnév marad.\n- **Értesítő szövege, ha megérkezett a rendelt áru** – a rendelések értesítőjének alapszövege. Használható jelölők: `{nev}` az ügyfél neve, `{sorszam}` a rendelés száma, `{tetelek}` a rendelt tételek, `{szerviz}` a cég neve. Üresen hagyva az alapszöveg jön vissza. Küldés előtt a rendelésnél még átírható.\n\nA **Mentés** gomb csak ezt a lapfület menti. A helyszínek és a beszállítók listája a saját ablakában, külön mentődik.",
-            "t": "napi arukiadas beallitas arukiadas rendeles lapfule beallitas arukiadas rendeles lapfule beallitas menupon penz eladas csopor talal arukiadas rendeles lapful beallitas adminisztrator nyith lapful napi arukiadas rendeles kozos beallitas tartalmazza helyszi szerkesztese uzl lista nev cim telef megjegyzes alap aktiv gomb zarojel aktiv helyszi szam mut uzletnel lista ures hagyhato beszalli szerkesztese rendeles forras lista nev weboldal telef mail megjegyzes aktiv rendeles ablaka megnyithato kifizet napi arukiadas atad kifizet rendeles maga lezarul alap kapcsolva kivesz pip kifizet eladas addigi allapota mar nek lezarn sor oldal arukiadas rendeles lista hany sor fer oldal ket lista 10 200 koz allithato alap 25 rendeles allap neve rendeles utja ot lepese atnevezheto sorrend ado ures hagyva alapnev mar ertesito szovege megerkez rendel aru rendeles ertesito alapszovege hasznalhato jelol nev ugyfel neve sorsz rendeles szama tetel rendel tetel szerviz ceg neve ures hagyva alapszoveg jon vissza kuldes elo rendelesnel atirhato mentes gomb lapful menti helyszi beszalli lista saj ablaka kul mentodi",
+            "t": "napi aruki beallit aruki rendel lapfule beallit aruki rendel lapfule beallit menupon penz elad csopor talal aruki rendel lapful beallit adminisztrator nyith lapful napi aruki rendel kozos beallit tartalmazza helyszi szerkesztese uzl lista nev cim telef megjegyz alap aktiv gomb zarojel aktiv helyszi szam mut uzletnel lista ures hagyhato beszalli szerkesztese rendel forr lista nev weboldal telef mail megjegyz aktiv rendel ablaka megnyithato kifizet napi aruki atad kifizet rendel maga lezarul alap kapcsolva kivesz pip kifizet elad addigi allapota mar nek lezarn sor oldal aruki rendel lista hany sor fer oldal ket lista 10 200 koz allithato alap 25 rendel allap neve rendel utja ot lepese atnevezheto sorrend ado ures hagyva alapnev mar ertesito szovege megerkez rendel aru rendel ertesito alapszovege hasznalhato jelol nev ugyfel neve sorsz rendel szama tetel rendel tetel szerviz ceg neve ures hagyva alapszoveg jon vissza kuld elo rendelesnel atirhato men gomb lapful menti helyszi beszalli lista saj ablaka kul mentodi",
             "h": 155
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Mi látszódjon az űrlapon (fogaskerék)",
             "horgony": "mi-latszodjon-az-urlapon-fogaskerek",
             "szoveg": "A napi árukiadás ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami ezen az űrlapon nem kell – mezők, lapfülek, gombok, választható állapotok. A beállítás külön él a munkalapétól, és frissítés után is megmarad. Részletesen: Űrlapok beállítása.",
-            "t": "napi arukiadas latszodj urlap fogasker latszodj urlap fogasker napi arukiadas ablaka jobb felso sarka allo fogasker adminisztrator kapcsol ezen urlap mez lapful gomb valaszthato allap beallitas kul munkalape frissites utan megmar reszletes urlap beallitasa",
+            "t": "napi aruki latszodj urlap fogasker latszodj urlap fogasker napi aruki ablaka jobb felso sarka allo fogasker adminisztrator kapcsol ezen urlap mez lapful gomb valaszthato allap bealli kul munkalape frissi utan megmar reszlet urlap beallitasa",
             "h": 34
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **A sorszám közös.** Az árukiadás, a rendelés és a munkalap ugyanabból a számsorból kap sorszámot.\n- **Az árukiadás mindig kap sorszámot,** már a rögzítéskor. Sorszám nélküli (például sablon vagy árajánlat jellegű) állapotba nem kerülhet.\n- **Sem ügyfél, sem eszköz nem kell hozzá.** Ügyfél megadható, eszköz nem.\n- **A kifizetett eladás magától lezárul.** Amint az eladás **Fizetve** lesz, az első lezárt (nem érvénytelen) állapotba kerül. Ez a fizetés rögzítésekor és a mentéskor is megtörténik. Az előleg önmagában nem zárja le az eladást.\n- **A fizetés ablaka csak akkor nyílik meg,** ha van mit fizetni. Nulla forintos eladásnál a **Rögzítés és fizetés** gomb is csak rögzít.\n- **A lap fajtája nem változik.** Árukiadásból később nem lesz munkalap vagy rendelés.\n- **Az árukiadás a rácsban is látszik.** Az Áttekintés munkalap-rácsában az **Azonosító** oszlopban **Napi árukiadás** áll, a **Típus** oszlopban pedig az eladott tételek. A Munkalapok menüpont listájában viszont csak a javítási lapok szerepelnek.\n- **A helyszínek listáját csak adminisztrátor szerkesztheti.**",
-            "t": "napi arukiadas szabaly ami rendszer betar szabaly ami rendszer betar sorsz kozos arukiadas rendeles munkalap ugyanab szamsor kap sorsz arukiadas kap sorsz rogzites sorsz nelkuli peldaul sabl arajanl jellegu allap kerulh ugyfel eszkoz hozza ugyfel megadhato eszkoz kifizet eladas maga lezarul amin eladas fizetve elso lezar ervenytel allap ar fizetes rogzitese mentes megtorteni eloleg onmaga zar eladas fizetes ablaka nyili fizetni nulla forintos eladasnal rogzites fizetes gomb rogzi lap fajta valtozi arukiadas kesobb munkalap rendeles arukiadas racs latszi attekintes munkalap racsa azonosito oszlop napi arukiadas all tipus oszlop ped elad tetel munkalap menup lista visz javitasi lap szerepel helyszi listaj adminisztrator szerkesztheti",
+            "t": "napi aruki szabaly ami rendszer betar szabaly ami rendszer betar sorsz kozos aruki rendel munkalap ugyanab szamsor kap sorsz aruki kap sorsz rogzit sorsz nelkuli peldaul sabl arajanl jellegu allap kerulh ugyfel eszkoz hozza ugyfel megadhato eszkoz kifizet elad maga lezarul amin elad fizetve elso lezar ervenytel allap ar fiz rogzitese ment megtorte eloleg onmaga zar elad fiz ablaka nyili fiz nulla forintos eladasnal rogzi fiz gomb rogzi lap fajta valtozi arukiad kesobb munkalap rendel aruki racs latszi attekin munkalap racsa azonosito oszlop napi aruki all tipus oszlop ped elad tetel munkalap menup lista visz javitasi lap szerepel helyszi listaj adminisztrator szerkesztheti",
             "h": 102
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- A rácsban két kész nézet van: a **Napi árukiadás** csak az eladásokat, a **Csak javítás (árukiadás nélkül)** csak a munkalapokat mutatja.\n- **Papír a vevőnek:** az árukiadás ablakának alján a **Nyomtatás** gomb **Átadási bizonylatot** (tételek, végösszeg, aláírás), árajánlatot vagy szállítólevelet ad – nyomtatva, PDF-ben vagy e-mailben. A rendszer **mentés után és lezáráskor is** felajánlja, ugyanabban az ablakban a **Számlázz.hu számla** és a **Számla-előkészítő (PDF)** gombbal. Az ablak nyitva marad, amíg be nem zárod, így a bizonylat és a számla egymás után kiadható. A bizonylat nem számla. Lásd: Nyomtatás, PDF és e-mail.\n- Visszatérő vevőt válassz ki ügyfélként: az adatlapján a **Vásárlások** lapfülön látod, mit vitt, mennyiért, és van-e tartozása.",
-            "t": "napi arukiadas tipp tipp racs ket kesz nez napi arukiadas eladas javitas arukiadas nelkul munkalap mut papir ugyfel arukiadas ablaka aljan nyomtatas gomb atadasi bizonyl tetel vegosszeg alairas arajanl szallitole ad nyomtatva pdf ben mail rendszer mentes utan lezaras felajanl ugyanab abl szamlazz hu szamla szamla elokeszito pdf gombbal abl nyitva mar amig zar igy bizonyl szamla egymas utan kiadhato bizonyl szamla lasd nyomtatas pdf mail visszatero ugyfel valassz ugyfelk adatlapjan vasarlas lapful lat vit mennyi tartozasa",
+            "t": "napi aruki tipp tipp racs ket kesz nez napi aruki elad javi aruki nelkul munkalap mut papir ugyfel aruki ablaka aljan nyomt gomb atadasi bizonyl tetel vegosszeg alair arajanl szallitole ad nyomtatva pdf ben mail rendszer men utan lezar felajanl ugyanab abl szamlazz hu szamla szamla elokeszito pdf gombbal abl nyitva mar amig zar igy bizonyl szamla egym utan kiadhato bizonyl szamla lasd nyomt pdf mail visszatero ugyfel valassz ugyfelk adatlapjan vasarl lapful lat vit mennyi tartozasa",
             "h": 77
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem látom a Helyszín mezőt.** Csak akkor jelenik meg, ha legalább két aktív helyszín van.\n- **Nem nyílt meg a fizetés ablaka.** Az eladás végösszege nulla, vagy a **Csak rögzítés** gombot nyomtad meg. Nyisd meg az eladást, és kattints a **Fizetés** gombra.\n- **Kifizettem, mégsem zárult le.** Vagy csak előleget rögzítettél, vagy a Beállításokban ki van kapcsolva az automatikus lezárás.\n- **Beírtam a vevő nevét, mégsem került az ügyfélhez az eladás.** Az ügyfelet a legördülő listából kell kiválasztani; a begépelt név önmagában nem ügyfél. Nyisd meg az eladást, válaszd ki az ügyfelet a listából, és mentsd el.",
-            "t": "napi arukiadas megy megy lat helyszin mez jeleni legalabb ket aktiv helyszin nyil fizetes ablaka eladas vegosszege nulla rogzites gomb nyom nyisd eladas kattints fizetes gomb kifizet megs zarul eloleg rogzitettel beallitas kapcsolva automatikus lezaras beir ugyfel nev megs ar ugyfel eladas ugyfel legordulo lista kivalasztani begepel nev onmaga ugyfel nyisd eladas valaszd ugyfel lista mentsd",
+            "t": "napi aruki megy megy lat helyszin mez jele legalabb ket aktiv helyszin nyil fiz ablaka elad vegosszege nulla rogzi gomb nyom nyisd elad kattints fiz gomb kifizet megs zarul eloleg rogzitettel beallit kapcsolva automatikus lezar beir ugyfel nev megs ar ugyfel elad ugyfel legordulo lista kivalaszta begepel nev onmaga ugyfel nyisd elad valaszd ugyfel lista mentsd",
             "h": 56
         },
         {
@@ -121,7 +121,7 @@
             "cim": "GYIK › Tudok papírt adni a vevőnek a napi árukiadásról?",
             "horgony": "tudok-papirt-adni-a-vevonek-a-napi-arukiadasrol",
             "szoveg": "Igen. Az árukiadás ablakának alján a **Nyomtatás** gombbal **Átadási bizonylatot** nyomtathatsz a tételekkel és a végösszeggel; a rendszer mentés után és lezáráskor magától is felajánlja – ugyanabból az ablakból a számla is elindítható. Ez nem számla – számlát a **Számlázz.hu számla** gombbal állítasz ki.",
-            "t": "napi arukiadas gyi tud papir adni ugyfel napi arukiadas gyi tud papir adni ugyfel napi arukiadas arukiadas ablaka aljan nyomtatas gombbal atadasi bizonyl nyomtathatsz tetel vegosszeggel rendszer mentes utan lezaras maga felajanl ugyanab abl szamla elindithato szamla szamla szamlazz hu szamla gombbal allitasz",
+            "t": "napi aruki gyi tud papir adni ugyfel napi arukiad gyi tud papir adni ugyfel napi arukiad aruki ablaka aljan nyomt gombbal atadasi bizonyl nyomtathatsz tetel vegosszeggel rendszer men utan lezar maga felajanl ugyanab abl szamla elindithato szamla szamla szamlazz hu szamla gombbal allitasz",
             "h": 43
         },
         {
@@ -129,7 +129,7 @@
             "cim": "GYIK › Kell ügyfelet megadnom az árukiadáshoz?",
             "horgony": "kell-ugyfelet-megadnom-az-arukiadashoz",
             "szoveg": "Nem. Ha az **Ügyfél** mezőt üresen hagyod, a vevő neve **Napi árukiadás** lesz. Ügyfelet akkor érdemes megadni, ha később látni szeretnéd, ki mit vásárolt.",
-            "t": "napi arukiadas gyi ugyfel megadn arukiadas gyi ugyfel megadn arukiadas ugyfel mez ures hagy ugyfel neve napi arukiadas ugyfel erdemes megadni kesobb latni szeretn vasa",
+            "t": "napi aruki gyi ugyfel megadn arukiad gyi ugyfel megadn arukiad ugyfel mez ures hagy ugyfel neve napi aruki ugyfel erd meg kesobb lat szeretn vasa",
             "h": 25
         },
         {
@@ -137,7 +137,7 @@
             "cim": "GYIK › Felvehetek új ügyfelet az eladás közben?",
             "horgony": "felvehetek-uj-ugyfelet-az-eladas-kozben",
             "szoveg": "Igen. Az **Ügyfél** mező melletti **+** gomb az új ügyfél ablakát nyitja meg az árukiadás fölött. Mentés után az eladásnál folytatod, az új ügyfél már ki van választva.",
-            "t": "napi arukiadas gyi felveh uj ugyfel eladas koz gyi felveh uj ugyfel eladas koz ugyfel mezo melletti gomb uj ugyfel abl nyi arukiadas fol mentes utan eladasnal folyt uj ugyfel valasztva",
+            "t": "napi aruki gyi felveh uj ugyfel elad koz gyi felveh uj ugyfel elad koz ugyfel mezo melletti gomb uj ugyfel abl nyi aruki fol men utan eladasnal folyt uj ugyfel valasztva",
             "h": 31
         },
         {
@@ -145,7 +145,7 @@
             "cim": "GYIK › Miért nincs az árukiadáson eszköz és hiba?",
             "horgony": "miert-nincs-az-arukiadason-eszkoz-es-hiba",
             "szoveg": "Mert az árukiadás javítás nélküli eladás. Az eszköz, a hibák, a bevizsgálási díj és az ügyféloldal a munkalaphoz tartozik. Ha javítás is van, munkalapot vegyél fel.",
-            "t": "napi arukiadas gyi nincs arukiadas eszkoz hiba gyi nincs arukiadas eszkoz hiba arukiadas javitas nelkuli eladas eszkoz hib bevizsgalasi dij ugyfeloldal munkalap tartozi javitas munkalap vegyel",
+            "t": "napi aruki gyi nincs arukiad eszkoz hiba gyi nincs arukiad eszkoz hiba aruki javi nelkuli elad eszkoz hib bevizsgalasi dij ugyfeloldal munkalap tartozi javi munkalap vegyel",
             "h": 26
         },
         {
@@ -153,7 +153,7 @@
             "cim": "GYIK › Szolgáltatást is eladhatok árukiadáson?",
             "horgony": "szolgaltatast-is-eladhatok-arukiadason",
             "szoveg": "Igen. A **Szolgáltatások** lapfülön ugyanúgy felvehetsz szolgáltatást, mint a munkalapon. Egy eladáson termék és szolgáltatás együtt is szerepelhet.",
-            "t": "napi arukiadas gyi szolgaltatas eladh arukiadas gyi szolgaltatas eladh arukiadas szolgaltatas lapful ugyanugy felvehetsz szolgaltatas munkalap eladas term szolgaltatas egyu szerepelh",
+            "t": "napi aruki gyi szolgaltat eladh arukiad gyi szolgaltat eladh arukiad szolgaltat lapful ugyanugy felvehetsz szolgaltat munkalap elad term szolgalt egyu szerepelh",
             "h": 21
         },
         {
@@ -161,7 +161,7 @@
             "cim": "GYIK › Mi a különbség a „Rögzítés és fizetés\" és a „Csak rögzítés\" között?",
             "horgony": "mi-a-kulonbseg-a-rogzites-es-fizetes-es-a-csak-rogzites-kozott",
             "szoveg": "Mindkettő elmenti az eladást. A **Rögzítés és fizetés** utána rögtön megnyitja a fizetés ablakát, a **Csak rögzítés** nem. Az utóbbit akkor használd, ha a vevő később fizet.",
-            "t": "napi arukiadas gyi kulonbseg rogzites fizetes rogzites koz gyi kulonbseg rogzites fizetes rogzites koz mindketto elmenti eladas rogzites fizetes utana rog megnyi fizetes abl rogzites utobbi hasznald ugyfel kesobb fiz",
+            "t": "napi aruki gyi kulonbseg rogzi fiz rogzi koz gyi kulonbseg rogzi fiz rogzi koz mindketto elmenti elad rogzi fiz utana rog megnyi fiz abl rogzi utobbi hasznald ugyfel kesobb fiz",
             "h": 30
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › Lehet előleget felvenni árukiadásra?",
             "horgony": "lehet-eloleget-felvenni-arukiadasra",
             "szoveg": "Igen. A fizetés ablakában válaszd az **Előleg / részfizetés** lehetőséget, és írd be a kapott összeget. A hátralévő rész a listában fizetendőként látszik, az eladás pedig nyitva marad.",
-            "t": "napi arukiadas gyi eloleg felvenni arukiadas gyi eloleg felvenni arukiadas fizetes ablaka valaszd eloleg reszfizetes lehetoseg ird kap osszeg hatralevo resz lista fizetendok latszi eladas ped nyitva mar",
+            "t": "napi aruki gyi eloleg felv arukiad gyi eloleg felv arukiad fiz ablaka valaszd eloleg reszfiz lehetoseg ird kap osszeg hatralevo resz lista fizetendok latszi elad ped nyitva mar",
             "h": 28
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Miért zárult le magától az eladás?",
             "horgony": "miert-zarult-le-magatol-az-eladas",
             "szoveg": "Mert kifizették. A kifizetett árukiadás magától lezárt állapotba kerül, hogy ne maradjon a nyitott lapok között. Adminisztrátor a Beállítások **Árukiadás és rendelések** lapfülén kikapcsolhatja.",
-            "t": "napi arukiadas gyi zarul maga eladas gyi zarul maga eladas kifizet kifizet arukiadas maga lezar allap ar ne maradj nyit lap koz adminisztrator beallitas arukiadas rendeles lapful kikapcsolh",
+            "t": "napi aruki gyi zarul maga elad gyi zarul maga elad kifizet kifizet aruki maga lezar allap ar ne maradj nyit lap koz adminisztrator beallit aruki rendel lapful kikapcsolh",
             "h": 28
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Csak egy üzletünk van. Kell helyszínt felvennem?",
             "horgony": "csak-egy-uzletunk-van-kell-helyszint-felvennem",
             "szoveg": "Nem. Egy üzletnél a helyszínek listája üresen hagyható, és a **Helyszín** mező meg sem jelenik. Második üzletet adminisztrátor vehet fel a **Helyszínek** gombbal; két aktív helyszíntől jelenik meg a választó.",
-            "t": "napi arukiadas gyi uzl helyszin felvenn gyi uzl helyszin felvenn uzletnel helyszi lista ures hagyhato helyszin mezo jeleni masodi uzl adminisztrator veh helyszi gombbal ket aktiv helyszin jeleni valaszto",
+            "t": "napi aruki gyi uzl helyszin felvenn gyi uzl helyszin felvenn uzletnel helyszi lista ures hagyhato helyszin mezo jele masodi uzl adminisztrator veh helyszi gombbal ket aktiv helyszin jele valaszto",
             "h": 29
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Melyik helyszínnel indul az új árukiadás?",
             "horgony": "melyik-helyszinnel-indul-az-uj-arukiadas",
             "szoveg": "Azzal, amelyet legutóbb te használtál. Ha még nem rögzítettél árukiadást, az **Alap** jelölésű helyszínnel indul.",
-            "t": "napi arukiadas gyi helyszinnel indul uj arukiadas gyi helyszinnel indul uj arukiadas azzal amely legutobb hasznaltal rogzitettel arukiadas alap jelolesu helyszinnel indul",
+            "t": "napi aruki gyi helyszinnel indul uj aruki gyi helyszinnel indul uj aruki azzal amely legutobb hasznaltal rogzitettel arukiad alap jelolesu helyszinnel indul",
             "h": 22
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Törölhetek helyszínt?",
             "horgony": "torolhetek-helyszint",
             "szoveg": "Nem. A régi eladások hivatkoznak rá. Ha egy üzlet megszűnt, vedd ki az **Aktív** pipát: új eladásnál már nem lesz választható.",
-            "t": "napi arukiadas gyi torolh helyszin gyi torolh helyszin regi eladas hivatkoz uzl megszun vedd aktiv pip uj eladasnal valaszthato",
+            "t": "napi aruki gyi torolh helyszin gyi torolh helyszin regi elad hivatkoz uzl megszun vedd aktiv pip uj eladasnal valaszthato",
             "h": 19
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Látszik az árukiadás a munkalapok között?",
             "horgony": "latszik-az-arukiadas-a-munkalapok-kozott",
             "szoveg": "Az Áttekintés munkalap-rácsában igen: az **Azonosító** oszlopban **Napi árukiadás** áll. A Munkalapok menüpont listájában nem, ott csak a javítási lapok szerepelnek.",
-            "t": "napi arukiadas gyi latszi arukiadas munkalap koz gyi latszi arukiadas munkalap koz attekintes munkalap racsa azonosito oszlop napi arukiadas all munkalap menup lista javitasi lap szerepel",
+            "t": "napi aruki gyi latszi aruki munkalap koz gyi latszi aruki munkalap koz attekin munkalap racsa azonosito oszlop napi aruki all munkalap menup lista javitasi lap szerepel",
             "h": 26
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Miért ugranak a sorszámok a munkalapok között?",
             "horgony": "miert-ugranak-a-sorszamok-a-munkalapok-kozott",
             "szoveg": "Mert a sorszám közös: a munkalap, az árukiadás és a rendelés ugyanabból a számsorból kap számot.",
-            "t": "napi arukiadas gyi ugra sorsz munkalap koz gyi ugra sorsz munkalap koz sorsz kozos munkalap arukiadas rendeles ugyanab szamsor kap szam",
+            "t": "napi aruki gyi ugra sorsz munkalap koz gyi ugra sorsz munkalap koz sorsz kozos munkalap aruki rendel ugyanab szamsor kap szam",
             "h": 21
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Hogyan állítom át az állapotot gyorsan?",
             "horgony": "hogyan-allitom-at-az-allapotot-gyorsan",
             "szoveg": "A listában az **Állapot** oszlopban kattints az állapotjelzőre, és válaszd ki az újat. Nem kell megnyitnod az eladást.",
-            "t": "napi arukiadas gyi alli allap gyorsan gyi alli allap gyorsan lista allap oszlop kattints allapotjelzo valaszd uja megnyitn eladas",
+            "t": "napi aruki gyi alli allap gyorsan gyi alli allap gyorsan lista allap oszlop kattints allapotjelzo valaszd uja megnyitn elad",
             "h": 19
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Készíthetek számlát az árukiadásról?",
             "horgony": "keszithetek-szamlat-az-arukiadasrol",
             "szoveg": "Igen. Nyisd meg a rögzített eladást: az ablak alján ott a **Számlázz.hu számla** gomb és a számla-előkészítő gombja. A részleteket a Számlázás fejezet írja le.",
-            "t": "napi arukiadas gyi keszith szamla arukiadas gyi keszith szamla arukiadas nyisd rogzit eladas abl aljan szamlazz hu szamla gomb szamla elokeszito gomb reszl szamlazas fejez irja",
+            "t": "napi aruki gyi keszith szamla arukiad gyi keszith szamla arukiad nyisd rogzit elad abl aljan szamlazz hu szamla gomb szamla elokeszito gomb reszl szamlaz fejez irja",
             "h": 26
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Bekerül az eladás a házipénztárba?",
             "horgony": "bekerul-az-eladas-a-hazipenztarba",
             "szoveg": "Igen, ha a fizetés ablakában bent hagyod a **Kerüljön be a házipénztárba** pipát. A pénztár működését a Házipénztár fejezet írja le.",
-            "t": "napi arukiadas gyi bekerul eladas hazipenztar gyi bekerul eladas hazipenztar fizetes ablaka ben hagy kerulj hazipenztar pip penztar mukodes hazipenztar fejez irja",
+            "t": "napi aruki gyi bekerul elad hazipenztar gyi bekerul elad hazipenztar fiz ablaka ben hagy kerulj hazipenztar pip penztar mukod hazipenztar fejez irja",
             "h": 22
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Hogyan látom a ki nem fizetett eladásokat?",
             "horgony": "hogyan-latom-a-ki-nem-fizetett-eladasokat",
             "szoveg": "A lista szűrőjében válaszd a **Nincs kifizetve** lehetőséget. A lista fölött a **Még fizetendő** összeg mutatja, mennyi van kint.",
-            "t": "napi arukiadas gyi lat fizet eladas gyi lat fizet eladas lista szuro valaszd nincs kifizetve lehetoseg lista fol fizetendo osszeg mut kin",
+            "t": "napi aruki gyi lat fizet elad gyi lat fizet elad lista szuro valaszd nincs kifizetve lehetoseg lista fol fizetendo osszeg mut kin",
             "h": 22
         }
     ]

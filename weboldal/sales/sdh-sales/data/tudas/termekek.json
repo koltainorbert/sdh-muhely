@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A **Termékek** menüpont a terméktörzs és a készletnyilvántartás. Itt van minden alkatrész és eladható áru: kijelzők, akkumulátorok, tartozékok, műhelyanyagok.\n\nEgy terméknél nyilvántartod a kódjait (gyári szám, cikkszám, termékkód, vonalkód), a kategóriáját, a beszállítóját, a beszerzési és az eladási árát, és a készletét.\n\nA készletet nem neked kell fejben tartanod. Amit a munkalapra vagy a napi árukiadásra termékként felteszel, az mentéskor magától lejön a készletről. Amit beveszel vagy leltárban javítasz, az az űrlapon rögzül. Minden változás visszakereshető a készletmozgások között.",
-            "t": "term mire valo mire valo term menup termektorzs keszletnyilvantartas alkatresz eladhato aru kijelz akkumulator tartoz muhelyanyag termeknel nyilvantar kodj gyari szam cikksz termek vonal kategoriaj beszallitoj beszerzesi eladasi ar keszl keszl nek fej tartan munkalap napi arukiadas termekk felteszel mentes maga lej keszl beveszel leltar javitasz urlap rogzul valtozas visszakeresheto keszletmozgas koz",
+            "t": "term mire valo mire valo term menup termektorzs keszletnyilvantar alkatresz eladhato aru kijelz akkumulator tartoz muhelyanyag termeknel nyilvantar kodj gyari szam cikksz termek vonal kategoriaj beszallitoj beszerzesi eladasi ar keszl keszl nek fej tartan munkalap napi arukiad termekk felteszel ment maga lej keszl beveszel leltar javitasz urlap rogzul valtoz visszakeresheto keszletmozg koz",
             "h": 52
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- Az oldalmenüben a **Termékek** pontra kattintva: Termékek megnyitása.\n- Az Áttekintésen az **Új termék** gombbal.\n- A munkalap és a napi árukiadás **Termékek** lapfülén a termékválasztó ablakból: ott is felvehetsz és szerkeszthetsz terméket.\n\nA Termékek oldal tetején nézetfülek állnak: **Összes termék**, **Készleten**, **Rendelni kell**, **Rendelési javaslat**, **Inaktív** és **Összes tételmozgás**. Az **Inaktív** fül csak akkor látszik, ha van inaktív termék.",
-            "t": "term talal talal oldalmenu term pon kattintva term megnyitasa attekintes uj term gombbal munkalap napi arukiadas term lapful termekvalaszto abl felvehetsz szerkeszthetsz term term oldal tetej nezetful all osszes term keszl rendelni rendelesi javasl inaktiv osszes tetelmozgas inaktiv ful latszi inaktiv term",
+            "t": "term talal talal oldalmenu term pon kattintva term megnyitasa attekint uj term gombbal munkalap napi aruki term lapful termekvalaszto abl felvehetsz szerkeszthetsz term term oldal tetej nezetful all ossz term keszl rendel rendelesi javasl inaktiv ossz tetelmozg inaktiv ful latszi inaktiv term",
             "h": 42
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: új termék felvétele",
             "horgony": "lepesrol-lepesre-uj-termek-felvetele",
             "szoveg": "1. A Termékek menüpontban kattints az **Új termék** gombra.\n2. Írd be a **Megnevezés** mezőt. **Csak ez kötelező.**\n3. Kattints a **Kategória** mezőre, és válassz a használt vagy a javasolt kategóriák közül, vagy írj be újat.\n4. Kattints a **Beszállító** mezőre, és válassz, vagy írj be újat. A választó az eddigi beszállítókat és az ügyfelek között szereplő cégeket kínálja.\n5. A **Készletkezelés** jelölő alapból be van pipálva. Írd be a **Nyitókészlet** mezőbe, mennyi van most a polcon.\n6. Állítsd be a **M.e.** (mennyiségi egység) mezőt; az alap `db`.\n7. Ha szeretnél figyelmeztetést a fogyásra, írd be a **Min. készlet** értékét.\n8. Töltsd ki az árakat: **Beszerzési ár** és **Eladási ár**. Elég az egyik oszlopot beírni, a másik kiszámolódik.\n9. A **Kódok** dobozban add meg a cikkszámot, a termékkódot, a vonalkódot – amelyik van.\n10. Kattints a **Termék létrehozása** gombra.\n\nA nyitókészlet készletmozgásként rögzül, „Nyitókészlet\" néven.\n\nPélda: Megnevezés: Kijelző kerettel, fekete. Kategória: Kijelző. Nyitókészlet: 3. Min. készlet: 1. Beszerzési ár nettó: 10 000 Ft. Eladási ár bruttó: 19 000 Ft.",
-            "t": "term lepes lepes uj term felvetele lepes lepes uj term felvetele term menupon kattints uj term gomb ird megnevezes mez kotelezo kattints kategoria mezo valassz hasznal javasol kategori kozul irj uja kattints beszallito mezo valassz irj uja valaszto eddigi beszalli ugyfel koz szereplo ceg kinal keszletkezeles jelolo alap pipalva ird nyitokeszl mezo polc allitsd mennyisegi egyseg mez alap db szeretnel figyelmeztetes fogyas ird min keszl ert toltsd ar beszerzesi ar eladasi ar eleg egyi oszlop beirni masi kiszamolodi kod doboz add cikksz termekk vonalk amelyi 10 kattints term letrehozasa gomb nyitokeszl keszletmozgask rogzul nyitokeszl nev pelda megnevezes kijelzo kerettel fekete kategoria kijelzo nyitokeszl min keszl beszerzesi ar netto 10 000 ft eladasi ar brutto 19 000 ft",
+            "t": "term lep lep uj term felvetele lep lep uj term felvetele term menupon kattints uj term gomb ird megnevez mez kotelezo kattints kategoria mezo valassz hasznal javasol kategori kozul irj uja kattints beszallito mezo valassz irj uja valaszto eddigi beszalli ugyfel koz szereplo ceg kinal keszletkezel jelolo alap pipalva ird nyitokeszl mezo polc allitsd mennyisegi egyseg mez alap db szeretnel figyelmeztet fogy ird min keszl ert toltsd ar beszerzesi ar eladasi ar eleg egyi oszlop beir masi kiszamolodi kod doboz add cikksz termekk vonalk amelyi 10 kattints term letrehozasa gomb nyitokeszl keszletmozgask rogzul nyitokeszl nev pelda megnevez kijelzo kerettel fekete kategoria kijelzo nyitokeszl min keszl beszerzesi ar netto 10 000 ft eladasi ar brutto 19 000 ft",
             "h": 117
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: árak és haszonkulcs beállítása",
             "horgony": "lepesrol-lepesre-arak-es-haszonkulcs-beallitasa",
             "szoveg": "A termék űrlapján az árak táblázata élőben számol. Négy oszlopa van: **Nettó**, **Bruttó**, **Áfakulcs**, **Haszonkulcs**.\n\n1. A **Beszerzési ár** sorban írd be a nettó vagy a bruttó árat. A másik az áfakulcsból kiszámolódik.\n2. Az **Eladási ár** sorban ugyanígy: írd be a nettót vagy a bruttót.\n3. A **Haszonkulcs** mező magától megmutatja, hány százalék a haszon a beszerzési árhoz képest.\n4. Fordítva is megy: írd át a haszonkulcsot, és a rendszer kiszámolja belőle az eladási árat.\n5. A táblázat alatt ezt látod: „Haszon darabonként\", forintban, nettóban.\n6. A **Kedvezmény** mezőbe írt százalékkal kerül a termék a munkalapra.\n\nTudnivalók:\n\n- A haszonkulcs képlete: az eladási nettó és a beszerzési nettó különbsége, osztva a beszerzési nettóval.\n- A haszonkulcs csak akkor látszik, ha van beszerzési ár.\n- Ha az eladás áfakulcsát váltod, a bruttó ár marad, a nettó igazodik hozzá.\n- A beszerzésnek és az eladásnak külön áfakulcsa van.",
-            "t": "term lepes lepes ar haszonkulcs beallitasa lepes lepes ar haszonkulcs beallitasa term urlapjan ar tablazata elo szamol negy oszlopa netto brutto afakulcs haszonkulcs beszerzesi ar sor ird netto brutto ar masi afakulcs kiszamolodi eladasi ar sor ugyanigy ird net brut haszonkulcs mezo maga megmut hany szazal hasz beszerzesi arhoz kepes forditva megy ird haszonkulcs rendszer kiszamol belole eladasi ar tablaz ala lat hasz darabonk forin netto kedvezmeny mezo irt szazalekkal ar term munkalap tudni haszonkulcs keplete eladasi netto beszerzesi netto kulonbsege osztva beszerzesi netto haszonkulcs latszi beszerzesi ar eladas afakulcs val brutto ar mar netto igazodi hozza beszerzes eladas kul afakulcsa",
+            "t": "term lep lep ar haszonkulcs beallitasa lep lep ar haszonkulcs beallitasa term urlapjan ar tablazata elo szamol negy oszlopa netto brutto afakulcs haszonkulcs beszerzesi ar sor ird netto brutto ar masi afakulcs kiszamolodi eladasi ar sor ugyanigy ird net brut haszonkulcs mezo maga megmut hany szazal hasz beszerzesi arhoz kep forditva megy ird haszonkulcs rendszer kiszamol belole eladasi ar tablaz ala lat hasz darabonk forin netto kedvezmeny mezo irt szazalekkal ar term munkalap tudni haszonkulcs keplete eladasi netto beszerzesi netto kulonbsege osztva beszerzesi netto haszonkulcs latszi beszerzesi ar elad afakulcs val brutto ar mar netto igazodi hozza beszerz elad kul afakulcsa",
             "h": 101
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: bevételezés és készletkorrekció",
             "horgony": "lepesrol-lepesre-bevetelezes-es-keszletkorrekcio",
             "szoveg": "A készletet a termék űrlapján, a **Készlet** mező átírásával módosítod.\n\n1. A Termékek listában kattints a termék megnevezésére.\n2. Írd át a **Készlet** mezőt arra az értékre, amennyi most valóban van.\n3. Amint az érték eltér az eredetitől, megjelenik **A változás oka** mező. Írd be, miért változott: beérkezett rendelés, leltár, selejt.\n4. Kattints a **Mentés** gombra.\n\nA rendszer a régi és az új érték különbségét rögzíti mozgásként:\n\n| Mit tettél | Milyen mozgás lesz |\n|---|---|\n| Új terméknél beírtad a készletet | Nyitókészlet |\n| Növelted a készletet | Bevételezés |\n| Csökkentetted a készletet | Korrekció |\n\nPélda: A készlet 3 volt, érkezett 5 darab. A **Készlet** mezőbe 8-at írsz, az okhoz: beérkezett rendelés. A rendszer +5 darab Bevételezést rögzít.",
-            "t": "term lepes lepes bevetelezes keszletkorrekcio lepes lepes bevetelezes keszletkorrekcio keszl term urlapjan keszl mezo atirasa modosi term lista kattints term megnevezese ird keszl mez ert amennyi valo amin ert elter eredeti megjeleni valtozas oka mezo ird valtoz beerkez rendeles leltar selej kattints mentes gomb rendszer regi uj ert kulonbseg rogziti mozgask tettel mozgas uj termeknel beir keszl nyitokeszl novel keszl bevetelezes csokkentet keszl korrekcio pelda keszl erkez darab keszl mezo irsz okhoz beerkez rendeles rendszer darab bevetelezes rogzi",
+            "t": "term lep lep bevetelez keszletkorrekcio lep lep bevetelez keszletkorrekcio keszl term urlapjan keszl mezo atirasa modosi term lista kattints term megnevezese ird keszl mez ert amennyi valo amin ert elter eredeti megjele valtoz oka mezo ird valtoz beerkez rendel leltar selej kattints men gomb rendszer regi uj ert kulonbseg rogziti mozgask tettel mozg uj termeknel beir keszl nyitokeszl novel keszl bevetelez csokkentet keszl korrekcio pelda keszl erkez darab keszl mezo irsz okhoz beerkez rendel rendszer darab bevetelez rogzi",
             "h": 78
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Lépésről lépésre: termék felvétele a munkalapra",
             "horgony": "lepesrol-lepesre-termek-felvetele-a-munkalapra",
             "szoveg": "A munkalap **Termékek** lapfülén a terméket felugró választóból veszed fel.\n\n1. Nyisd meg a munkalapot, és kattints a **Termékek** lapfülre.\n2. Kattints a pluszjeles **Termék** gombra. Megnyílik a *Termék választása* ablak.\n3. Kezdd el írni a megnevezést, a cikkszámot, a termékkódot vagy a vonalkódot.\n4. Kattints a sorra, vagy lépj rá a ↑ ↓ nyilakkal, és nyomj Enter billentyűt.\n5. A munkalap sorába bekerül a megnevezés, a termékkód, a cikkszám, a gyári szám, az egység, a bruttó ár, az áfakulcs és a termék kedvezménye. A kurzor a mennyiségre áll.\n6. Írd át a mennyiséget, ha nem egy darab.\n7. Mentsd a munkalapot. A termék ekkor lejön a készletről.\n\nA választó ablak további lehetőségei:\n\n- **Új termék** – felveszed, ami még nincs a törzsben. Mentés után rögtön a munkalapra kerül.\n- **Ceruza a sor végén** – a termék szerkesztése a választó elhagyása nélkül.\n- **Kézzel írom be** – üres sort ad. A nevet és az árat te írod be, a készlet ilyenkor nem változik.\n- **Mégsem** – bezárja a választót.\n\nA választó minden sorában látod a készletet és a bruttó árat. A lista tíz soronként lapoz.\n\nTipp: Vonalkódolvasóval a leggyorsabb. Nyisd meg a választót, olvasd be a kódot: a pontos egyezés kerül az első helyre, és az Enter rögtön a munkalapra teszi.",
-            "t": "term lepes lepes term felvetele munkalap lepes lepes term felvetele munkalap munkalap term lapful term felugro valaszto vesz nyisd munkalap kattints term lapful kattints pluszjeles term gomb megnyili term valasztasa abl kezdd irni megnevezes cikksz termekk vonalk kattints sor lepj nyil nyomj enter billentyu munkalap sora bekerul megnevezes termek cikksz gyari szam egyseg brutto ar afakulcs term kedvezmenye kurzor mennyiseg all ird mennyiseg darab mentsd munkalap term ekkor lej keszl valaszto abl tovabbi lehetoseg uj term felvesz nincs torzs mentes utan rog munkalap ar ceruza sor veg term szerkesztese valaszto elhagyasa nelkul kezzel irom ures sor ad nev ar irod keszl ily valtozi megs bezar valasz valaszto sora lat keszl brutto ar lista tiz soronk lapoz tipp vonalkodolvaso leggyorsabb nyisd valasz olvasd kod pontos egyezes ar elso hely enter rog munkalap teszi",
+            "t": "term lep lep term felvetele munkalap lep lep term felvetele munkalap munkalap term lapful term felugro valaszto vesz nyisd munkalap kattints term lapful kattints pluszjel term gomb megnyili term valasztasa abl kezdd irni megnevez cikksz termekk vonalk kattints sor lepj nyil nyomj enter billentyu munkalap sora bekerul megnevez termek cikksz gyari szam egyseg brutto ar afakulcs term kedvezmenye kurzor mennyiseg all ird mennyiseg darab mentsd munkalap term ekkor lej keszl valaszto abl tovabbi lehetoseg uj term felvesz nincs torzs men utan rog munkalap ar ceruza sor veg term szerkesztese valaszto elhagyasa nelkul kezzel irom ures sor ad nev ar irod keszl ily valtozi megs bezar valasz valaszto sora lat keszl brutto ar lista tiz soronk lapoz tipp vonalkodolvaso leggyorsabb nyisd valasz olvasd kod pontos egyez ar elso hely enter rog munkalap teszi",
             "h": 132
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: termék eladása a napi árukiadáson",
             "horgony": "lepesrol-lepesre-termek-eladasa-a-napi-arukiadason",
             "szoveg": "A pultos eladásnál ugyanez a termékválasztó dolgozik.\n\n1. Nyisd meg a napi árukiadást: Napi árukiadás megnyitása.\n2. Az új eladás lapján a **Termékek** lapfül áll elöl.\n3. Kattints a **Termék** gombra, és válaszd ki az árut, ahogy a munkalapon.\n4. Mentsd az eladást.\n\nAz árukiadás mindig sorszámot kap, ezért a rátett készletkezelt termék mentéskor lejön a készletről. A rendelés lapja is ugyanezt a **Termékek** lapfület és választót használja.",
-            "t": "term lepes lepes term eladasa napi arukiadas lepes lepes term eladasa napi arukiadas pultos eladasnal ugyanez termekvalaszto dolgozi nyisd napi arukiadas napi arukiadas megnyitasa uj eladas lapjan term lapful all elol kattints term gomb valaszd aru ahogy munkalap mentsd eladas arukiadas sorsz kap ezer rat keszletkezel term mentes lej keszl rendeles lap ugyanez term lapful valasz hasznal",
+            "t": "term lep lep term eladasa napi arukiad lep lep term eladasa napi arukiad pultos eladasnal ugyanez termekvalaszto dolgozi nyisd napi arukiad napi aruki megnyitasa uj elad lapjan term lapful all elol kattints term gomb valaszd aru ahogy munkalap mentsd elad aruki sorsz kap ezer rat keszletkezel term ment lej keszl rendel lap ugyanez term lapful valasz hasznal",
             "h": 57
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Lépésről lépésre: készletmozgások megnézése",
             "horgony": "lepesrol-lepesre-keszletmozgasok-megnezese",
             "szoveg": "Egy termék mozgásai:\n\n1. Nyisd meg a terméket.\n2. Az alsó lapfülek közül válaszd a **Készletmozgás** fület.\n3. Az utolsó hat mozgást látod: időpont, fajta, mennyiség, megjegyzés és ki rögzítette.\n\nMinden termék mozgása egyben:\n\n1. A Termékek oldal tetején kattints az **Összes tételmozgás** nézetfülre.\n2. A lista a legújabb mozgással kezdődik, oldalanként 50 sorral.\n3. A bevételt pluszjel, a kiadást mínuszjel jelöli.\n4. A „Munkalap\" fajtájú sorban a szóra kattintva megnyílik az a lap, amelyik a terméket felhasználta. A megjegyzésben a munkalap száma áll.",
-            "t": "term lepes lepes keszletmozgas megnezese lepes lepes keszletmozgas megnezese term mozgas nyisd term also lapful kozul valaszd keszletmozgas ful utolso hat mozgas lat idop fajta mennyiseg megjegyzes rogzitette term mozgasa egy term oldal tetej kattints osszes tetelmozgas nezetful lista legujabb mozgassal kezdodi oldalank 50 sorral bevetel pluszjel kiadas minuszjel jeloli munkalap fajtaju sor szo kattintva megnyili lap amelyi term felhasznalta megjegyzes munkalap szama all",
+            "t": "term lep lep keszletmozg megnezese lep lep keszletmozg megnezese term mozg nyisd term also lapful kozul valaszd keszletmozg ful utolso hat mozg lat idop fajta mennyiseg megjegyz rogzitette term mozgasa egy term oldal tetej kattints ossz tetelmozg nezetful lista legujabb mozgassal kezdodi oldalank 50 sorral bevetel pluszjel kiad minuszjel jeloli munkalap fajtaju sor szo kattintva megnyili lap amelyi term felhasznalta megjegyz munkalap szama all",
             "h": 64
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Raktár: foglalás és rendelési javaslat",
             "horgony": "raktar-foglalas-es-rendelesi-javaslat",
             "szoveg": "### Foglalás nyitott munkalapon\n\nA munkalapra tett termék rögtön lejön a készletről. Amíg a lap **nyitott** (nincs lezárva), a termék **foglalt**: a javításhoz félre van téve. A termék űrlapján, a készlet alatt látszik: „Foglalva nyitott munkalapokon: 3 db – melyik lapokon”. A lap lezárásakor a foglalás felhasználássá válik.\n\nHa egy lap terméke miatt a készlet **nulla alá** megy, a munkalap bal oldalán **Raktár – Nincs elég raktáron** jelzés áll a termék nevével.\n\n### Célkészlet\n\nA termék űrlapján a **Min. készlet** mellett a **Célkészlet**: rendeléskor eddig a mennyiségig érdemes feltölteni. Üresen a minimum kétszerese.\n\n### Lépésről lépésre: rendelés a beszállítótól\n\n1. Nyisd meg a **Termékek › Rendelési javaslat** nézetet (a fülön szám jelzi, hány terméket kell rendelni).\n2. A termékek **beszállítónként** csoportosítva állnak: készlet, minimum, foglalt, a **javasolt mennyiség** (a célkészletig) és a becsült nettó beszerzési érték.\n3. A mennyiség átírható. A **Szöveg a beszállítónak** részben kész rendelési lista van – másold ki, és küldd el.\n4. A **Letöltés (CSV, Excelhez)** gombbal az egész javaslat táblázatba menthető.\n5. Ha az áru megérkezett, kattints a sor **Megérkezett** gombjára: a rendszer bevételezi a beírt mennyiséget (készletmozgásként, „Rendelés megérkezett” megjegyzéssel).",
-            "t": "term raktar foglalas rendelesi javasl raktar foglalas rendelesi javasl foglalas nyit munkalap munkalap tet term rog lej keszl amig lap nyit nincs lezarva term foglal javitas fel teve term urlapjan keszl ala latszi foglalva nyit munkalap db lap lap lezarasa foglalas felhasznalassa vali lap termeke mia keszl nulla ala megy munkalap bal oldalan raktar nincs eleg raktar jelzes all term neve celkeszl term urlapjan min keszl mell celkeszl rendeles edd mennyiseg erdemes feltolteni ures minimum ketszerese lepes lepes rendeles beszallito nyisd term rendelesi javasl nez ful szam jelzi hany term rendelni term beszallitonk csoportositva all keszl minimum foglal javasol mennyiseg celkeszl becsul netto beszerzesi ert mennyiseg atirhato szoveg beszallito resz kesz rendelesi lista masold kuldd letoltes csv excel gombbal egesz javasl tablaz mentheto aru megerkez kattints sor megerkez gomb rendszer bevetelezi beir mennyiseg keszletmozgask rendeles megerkez megjegyzessel",
+            "t": "term raktar foglal rendelesi javasl raktar foglal rendelesi javasl foglal nyit munkalap munkalap tet term rog lej keszl amig lap nyit nincs lezarva term foglal javit fel teve term urlapjan keszl ala latszi foglalva nyit munkalap db lap lap lezarasa foglal felhasznalassa vali lap termeke mia keszl nulla ala megy munkalap bal oldalan raktar nincs eleg raktar jelz all term neve celkeszl term urlapjan min keszl mell celkeszl rendel edd mennyiseg erd feltolte ures minimum ketszerese lep lep rendel beszallito nyisd term rendelesi javasl nez ful szam jelzi hany term rendel term beszallitonk csoportositva all keszl minimum foglal javasol mennyiseg celkeszl becsul netto beszerzesi ert mennyiseg atirhato szoveg beszallito resz kesz rendelesi lista masold kuldd letol csv excel gombbal egesz javasl tablaz mentheto aru megerkez kattints sor megerkez gomb rendszer bevetelezi beir mennyiseg keszletmozgask rendel megerkez megjegyzessel",
             "h": 137
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Mezők és gombok › A Termékek lista oszlopai",
             "horgony": "mezok-es-gombok",
             "szoveg": "### A Termékek lista oszlopai\n\n| Oszlop | Mit mutat |\n|---|---|\n| Sorsz. | A termék sorszáma |\n| Kategória | A termék kategóriája |\n| Megnevezés | A név; kattintásra megnyílik a termék |\n| Termékkód, Cikkszám, Gyári szám, Vonalkód | A termék kódjai |\n| Készlet | A jelenlegi készlet, színes jelzéssel |\n| M.e. | Mennyiségi egység |\n| Besz. n. ár, Besz. b. ár | Beszerzési nettó és bruttó egységár |\n| Áfak. | Az eladás áfakulcsa |\n| Nettó ár, Bruttó ár | Eladási nettó és bruttó egységár |\n| Bruttó é. | A készlet értéke eladási bruttó áron |\n\nA legtöbb oszlopfejre kattintva rendezel; újabb kattintás megfordítja a sorrendet. Az alap sorrend: a legutóbb felvett termék elöl. Keskeny képernyőn a ritkábban használt oszlopok elrejtőznek.\n\nA lista alján összesítő sor áll a teljes találatra: a készlet összesen, a készlet értéke beszerzési nettó áron és eladási bruttó áron.",
-            "t": "term mez gomb term lista oszlop mez gomb term lista oszlop term lista oszlop oszlop mut sorsz term sorszama kategoria term kategoria megnevezes nev kattintas megnyili term termek cikksz gyari szam vonal term kodj keszl jelenlegi keszl szines jelzessel mennyisegi egyseg besz ar besz ar beszerzesi netto brutto egysegar afa eladas afakulcsa netto ar brutto ar eladasi netto brutto egysegar brutto keszl erteke eladasi brutto ar legtobb oszlopfej kattintva rendezel ujabb kattintas megfordi sorrend alap sorrend legutobb felv term elol keskeny keperny ritkab hasznal oszlop elrejtoz lista aljan osszesito sor all teljes talal keszl osszes keszl erteke beszerzesi netto ar eladasi brutto ar",
+            "t": "term mez gomb term lista oszlop mez gomb term lista oszlop term lista oszlop oszlop mut sorsz term sorszama kategoria term kategoria megnevez nev kattint megnyili term termek cikksz gyari szam vonal term kodj keszl jelenlegi keszl szin jelzessel mennyisegi egyseg besz ar besz ar beszerzesi netto brutto egysegar afa elad afakulcsa netto ar brutto ar eladasi netto brutto egysegar brutto keszl erteke eladasi brutto ar legtobb oszlopfej kattintva rendezel ujabb kattin megfordi sorrend alap sorrend legutobb felv term elol keskeny keperny ritkab hasznal oszlop elrejtoz lista aljan osszesito sor all telj talal keszl ossz keszl erteke beszerzesi netto ar eladasi brutto ar",
             "h": 103
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Mezők és gombok › A készlet jelzése",
             "horgony": "mezok-es-gombok",
             "szoveg": "### A készlet jelzése\n\n- **Készleten** – van belőle, és nincs a minimum alatt.\n- **A minimális készlet alatt** – van, de kevesebb a beállított minimumnál.\n- **Nincs készleten** – nulla vagy annál kevesebb.\n- **—** – a terméknél nincs készletkezelés.\n\nA pontos szöveget akkor látod, ha az egeret a szám fölé viszed.",
-            "t": "term mez gomb keszl jelzese mez gomb keszl jelzese keszl jelzese keszl belole nincs minimum ala minimalis keszl ala kevesebb beallit minimumnal nincs keszl nulla annal kevesebb termeknel nincs keszletkezeles pontos szoveg lat eger szam fole visz",
+            "t": "term mez gomb keszl jelzese mez gomb keszl jelzese keszl jelzese keszl belole nincs minimum ala minimalis keszl ala kevesebb beallit minimumnal nincs keszl nulla annal kevesebb termeknel nincs keszletkezel pontos szoveg lat eger szam fole visz",
             "h": 37
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Mezők és gombok › Nézetfülek és szűrők",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Nézetfülek és szűrők\n\n- **Összes termék** – minden aktív termék.\n- **Készleten** – amiből van készlet.\n- **Rendelni kell** – ami elfogyott, vagy a minimális készlet alá ment. A fülön szám jelzi, hány ilyen van.\n- **Inaktív** – az inaktívra állított termékek.\n- **Összes tételmozgás** – a készletmozgások naplója.\n- **Keresőmező** – megnevezésre, cikkszámra, termékkódra, gyári számra, vonalkódra, kategóriára, beszállítóra és osztályra keres.\n- **Minden kategória** – lenyíló lista; választásra rögtön szűr.\n- **Szűrő törlése** – csak keresés vagy kategóriaszűrés után látszik.",
-            "t": "term mez gomb nezetful szur mez gomb nezetful szur nezetful szur osszes term aktiv term keszl ami keszl rendelni elfogy minimalis keszl ala men ful szam jelzi hany inaktiv inaktiv allit term osszes tetelmozgas keszletmozgas naplo keresomezo megnevezes cikksz termekk gyari szam vonalk kategoria beszallito osztaly keres kategoria lenyilo lista valasztas rog szur szuro torlese kereses kategoriaszures utan latszi",
+            "t": "term mez gomb nezetful szur mez gomb nezetful szur nezetful szur ossz term aktiv term keszl ami keszl rendel elfogy minimalis keszl ala men ful szam jelzi hany inaktiv inaktiv allit term ossz tetelmozg keszletmozg naplo keresomezo megnevez cikksz termekk gyari szam vonalk kategoria beszallito osztaly ker kategoria lenyilo lista valaszt rog szur szuro torlese ker kategoriaszur utan latszi",
             "h": 59
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Mezők és gombok › A termék űrlapjának mezői",
             "horgony": "mezok-es-gombok",
             "szoveg": "### A termék űrlapjának mezői\n\n- **Megnevezés** – kötelező.\n- **Kategória**, **Beszállító** – választóból, vagy saját szöveggel.\n- **Készletkezelés** – ha kiveszed a pipát, a termék nem fogy a készletből (például apró, nem számolt műhelyanyag).\n- **Nyitókészlet** / **Készlet**, **M.e.**, **Min. készlet**.\n- **Beszerzési ár**, **Eladási ár**, **Haszonkulcs**, **Kedvezmény**.\n- **Kódok:** Gyári szám, Cikkszám, Termékkód, Vonalkód, Osztály, Könyvelve (dátum).\n- Alsó lapfülek: **Leírás**, **Megjegyzés** (belső), és meglévő terméknél **Készletmozgás**.\n- **Aktív** – meglévő terméknél; ha kiveszed a pipát, a termék inaktív lesz.\n\nAz ablak tetején látod a termék sorszámát, és hogy hány munkalap-tételben szerepel.",
-            "t": "term mez gomb term urlap mezoi mez gomb term urlap mezoi term urlap mezoi megnevezes kotelezo kategoria beszallito valaszto saj szoveggel keszletkezeles kivesz pip term fogy keszl peldaul apro szamol muhelyanyag nyitokeszl keszl min keszl beszerzesi ar eladasi ar haszonkulcs kedvezmeny kod gyari szam cikksz termek vonal osztaly konyvelve datum also lapful leiras megjegyzes belso meglevo termeknel keszletmozgas aktiv meglevo termeknel kivesz pip term inaktiv abl tetej lat term sorsz hany munkalap tetel szerepel",
+            "t": "term mez gomb term urlap mezoi mez gomb term urlap mezoi term urlap mezoi megnevez kotelezo kategoria beszallito valaszto saj szoveggel keszletkezel kivesz pip term fogy keszl peldaul apro szamol muhelyanyag nyitokeszl keszl min keszl beszerzesi ar eladasi ar haszonkulcs kedvezmeny kod gyari szam cikksz termek vonal osztaly konyvelve datum also lapful leir megjegyz belso meglevo termeknel keszletmozg aktiv meglevo termeknel kivesz pip term inaktiv abl tetej lat term sorsz hany munkalap tetel szerepel",
             "h": 74
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **A készlet a mozgások összege.** Minden változás egy sor a mozgások között, a termék készlete ezekből adódik. Kézzel átírt készlet is mozgásként rögzül.\n- **A munkalapra tett termék magától levonódik** – de csak akkor, ha a lap számozott állapotban van, és nem érvénytelen. Az árajánlat és a sablon nem fogyaszt készletet.\n- **Az érvénytelenített lap visszaadja a készletet.** Állapotváltáskor a készlet követi a lapot: ha az árajánlatból munkalap lesz, a termék levonódik.\n- A munkalap akárhányszor újramenthető: egy tételhez egy mozgás tartozik. Ha átírod a mennyiséget, a mozgás igazodik; ha törlöd a tételt, a termék visszakerül.\n- **Csak a választóból felvett termék fogyaszt készletet.** A kézzel beírt sor nem. Ha egy sorban kitörlöd a megnevezést, a sor elengedi a terméket.\n- Csak az a termék fogy, amelynél be van kapcsolva a **Készletkezelés**.\n- A rendszer nem tiltja meg, hogy készleten nem lévő terméket tegyél a lapra. A készlet ilyenkor mínuszba megy, és a termék a **Rendelni kell** nézetbe kerül.\n- A készletet ahhoz az értékhez méri, amit az űrlap megnyitáskor mutatott. Ha közben egy kolléga munkalapja fogyasztott a termékből, azt a mentésed nem írja vissza.\n- **Törlés:** ha a termék már szerepelt munkalapon, nem törlődik, csak inaktív lesz. Ha még sosem szerepelt, a mozgásaival együtt törlődik.\n- Az inaktív termék a munkalap választójában nem jelenik meg.\n- Az eladási ár bruttóban, a beszerzési ár nettóban tárolódik. A haszonkulcs nem tárolt adat, mindig az árakból számolódik.\n- A megnevezés nélküli termék nem menthető.",
-            "t": "term szabaly ami rendszer betar szabaly ami rendszer betar keszl mozgas osszege valtozas sor mozgas koz term keszlete eze adodi kezzel atir keszl mozgask rogzul munkalap tet term maga levonodi lap szamoz allap ervenytel arajanl sabl fogyasz keszl ervenytelenit lap vissza keszl allapotvaltas keszl koveti lap arajanl munkalap term levonodi munkalap akarhanyszor ujramentheto tetel mozgas tartozi atir mennyiseg mozgas igazodi torl tetel term visszakerul valaszto felv term fogyasz keszl kezzel beir sor sor kitorl megnevezes sor elengedi term term fogy amelynel kapcsolva keszletkezeles rendszer til keszl levo term tegyel lap keszl ily minusz megy term rendelni nez ar keszl ahhoz ert meri urlap megnyitas mutat koz kollega munkalap fogyaszt term mentes irja vissza torles term szerepel munkalap torlodi inaktiv sos szerepel mozgas egyu torlodi inaktiv term munkalap valaszto jeleni eladasi ar brutto beszerzesi ar netto tarolodi haszonkulcs tarol ada ar szamolodi megnevezes nelkuli term mentheto",
+            "t": "term szabaly ami rendszer betar szabaly ami rendszer betar keszl mozg osszege valtoz sor mozg koz term keszlete eze adodi kezzel atir keszl mozgask rogzul munkalap tet term maga levonodi lap szamoz allap ervenytel arajanl sabl fogyasz keszl ervenytelenit lap vissza keszl allapotvalt keszl koveti lap arajanl munkalap term levonodi munkalap akarhanyszor ujramentheto tetel mozg tartozi atir mennyiseg mozg igazodi torl tetel term visszakerul valaszto felv term fogyasz keszl kezzel beir sor sor kitorl megnevez sor elengedi term term fogy amelynel kapcsolva keszletkezel rendszer til keszl levo term tegyel lap keszl ily minusz megy term rendel nez ar keszl ahhoz ert meri urlap megnyit mutat koz kollega munkalap fogyaszt term ment irja vissza torl term szerepel munkalap torlodi inaktiv sos szerepel mozgas egyu torlodi inaktiv term munkalap valaszto jele eladasi ar brutto beszerzesi ar netto tarolodi haszonkulcs tarol ada ar szamolodi megnevez nelkuli term mentheto",
             "h": 145
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- A jobb alsó sarokban élő asszisztensnek írd be: „Vezess végig ezen az oldalon\". Többlépcsős túrát indít a Termékek oldalon.\n- A teljes dokumentációt és a gyakori kérdéseket a **Súgó** menüpontban találod.\n- Reggel nézd meg a **Rendelni kell** fület: egy pillantással látod, miből kell utánrendelni.\n- Add meg a vonalkódot a terméknél. Utána a munkalapon és az árukiadáson elég beolvasni.\n- Árcímke vagy polccímke kell? A termék ablakának alján a **Címke** gomb Brother címkenyomtatóra nyomtat (név, ár, cikkszám, vonalkód) – lásd a **Címkenyomtatás (Brother)** fejezetet.\n- A **Min. készlet** értékét a gyorsan fogyó alkatrészeknél állítsd be. Enélkül a termék csak akkor kerül a **Rendelni kell** nézetbe, amikor teljesen elfogyott.\n- **A változás oka** mezőt mindig töltsd ki. Fél év múlva ebből derül ki, miért lett kevesebb a készlet.\n- A lista alján az összesítő sor megmutatja, mennyi pénz áll a készletben. Kategóriára szűrve kategóriánként is látod.\n- Ha csak kipróbálnád a modult, az üres listán a **20 mintatermék betöltése** gomb kitalált termékeket tölt be nyitókészlettel.",
-            "t": "term tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi term oldal teljes dokumentaci gyakori kerdes sugo menupon talal reggel nezd rendelni ful pillantassal lat mibol utanrendelni add vonalk termeknel utana munkalap arukiadas eleg beolvasni arcimke polccimke term ablaka aljan cimke gomb brother cimkenyomtato nyom nev ar cikksz vonal lasd cimkenyomtatas brother fejez min keszl ert gyorsan fogyo alkatreszeknel allitsd enelkul term ar rendelni nez ami teljes elfogy valtozas oka mez toltsd ev mulva ebbol derul let kevesebb keszl lista aljan osszesito sor megmut penz all keszl kategoria szurve kategoriank lat kiprobaln modul ures listan 20 mintaterm betoltese gomb kitalal term tol nyitokeszlettel",
+            "t": "term tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi term oldal telj dokumentaci gyakori kerd sugo menupon talal reggel nezd rendel ful pillantassal lat mibol utanrendel add vonalk termeknel utana munkalap arukiad eleg beolv arcimke polccimke term ablaka aljan cimke gomb brother cimkenyomtato nyom nev ar cikksz vonal lasd cimkenyomt brother fejez min keszl ert gyorsan fogyo alkatreszeknel allitsd enelkul term ar rendel nez ami telj elfogy valtoz oka mez toltsd ev mulva ebbol derul let kevesebb keszl lista aljan osszesito sor megmut penz all keszl kategoria szurve kategoriank lat kiprobaln modul ures listan 20 mintaterm betoltese gomb kitalal term tol nyitokeszlettel",
             "h": 109
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **„A megnevezés kitöltése kötelező.\"** – írd be a termék nevét.\n- **Nem fogyott a készlet a munkalap mentése után.** Négy oka lehet: a lap árajánlat vagy sablon; a terméket kézzel írtad be, nem a választóból; a terméknél ki van kapcsolva a **Készletkezelés**; vagy a lap érvénytelen.\n- **A termék nincs a választóban.** Valószínűleg inaktív. Nézd meg a Termékek **Inaktív** fülén, nyisd meg, pipáld be az **Aktív** jelölőt, és mentsd.\n- **Nem jelenik meg „A változás oka\" mező.** Csak akkor látszik, ha a **Készlet** mező értéke eltér az eredetitől, és a készletkezelés be van kapcsolva.\n- **A Törlés után a termék megmaradt.** Ezt az üzenetet kaptad: „A termék már szerepelt munkalapon, ezért nem törlődött: inaktív lett.\" Ez így helyes: a régi lapok hivatkoznak rá.\n- **Mínuszban van a készlet.** Többet adtál ki, mint amennyi nyilván volt tartva. Számold meg a polcon, és írd be a valós értéket a **Készlet** mezőbe, az okhoz: leltár.\n- **Nem számolódik a haszonkulcs.** Nincs beírva beszerzési ár vagy eladási ár.\n- **„A termékek listája nem töltődött be.\"** – a választó nem érte el a szervert. Zárd be, és nyisd meg újra.",
-            "t": "term megy megy megnevezes kitoltese kotelezo ird term nev fogy keszl munkalap mentese utan negy oka lap arajanl sabl term kezzel irt valaszto termeknel kapcsolva keszletkezeles lap ervenytel term nincs valaszto valoszinuleg inaktiv nezd term inaktiv ful nyisd pipald aktiv jelol mentsd jeleni valtozas oka mezo latszi keszl mezo erteke elter eredeti keszletkezeles kapcsolva torles utan term megmar uzen kap term szerepel munkalap ezer torlod inaktiv let igy helyes regi lap hivatkoz minusz keszl tobb adtal amennyi nyilvan tartva szamold polc ird valos ert keszl mezo okhoz leltar szamolodi haszonkulcs nincs beirva beszerzesi ar eladasi ar term lista toltod valaszto erte szerv zard nyisd ujra",
+            "t": "term megy megy megnevez kitoltese kotelezo ird term nev fogy keszl munkalap mentese utan negy oka lap arajanl sabl term kezzel irt valaszto termeknel kapcsolva keszletkezel lap ervenytel term nincs valaszto valoszinuleg inaktiv nezd term inaktiv ful nyisd pipald aktiv jelol mentsd jele valtoz oka mezo latszi keszl mezo erteke elter eredeti keszletkezel kapcsolva torl utan term megmar uzen kap term szerepel munkalap ezer torlod inaktiv let igy hely regi lap hivatkoz minusz keszl tobb adtal amennyi nyilvan tartva szamold polc ird valos ert keszl mezo okhoz leltar szamolodi haszonkulcs nincs beirva beszerzesi ar eladasi ar term lista toltod valaszto erte szerv zard nyisd ujra",
             "h": 105
         },
         {
@@ -137,7 +137,7 @@
             "cim": "GYIK › Honnan tudom, mit kell rendelni?",
             "horgony": "honnan-tudom-mit-kell-rendelni",
             "szoveg": "A **Termékek › Rendelési javaslat** nézetből: beszállítónként mutatja, mi van a minimum alatt, és mennyit érdemes rendelni. Megérkezéskor a **Megérkezett** gomb bevételezi.",
-            "t": "term gyi honnan tud rendelni gyi honnan tud rendelni term rendelesi javasl nez beszallitonk mut minimum ala mennyi erdemes rendelni megerkezes megerkez gomb bevetelezi",
+            "t": "term gyi honnan tud rendel gyi honnan tud rendel term rendelesi javasl nez beszallitonk mut minimum ala mennyi erd rendel megerkez megerkez gomb bevetelezi",
             "h": 24
         },
         {
@@ -145,7 +145,7 @@
             "cim": "GYIK › Mit jelent, hogy egy alkatrész foglalt?",
             "horgony": "mit-jelent-hogy-egy-alkatresz-foglalt",
             "szoveg": "Nyitott munkalapon van: a javításhoz félre van téve, és már lejött a készletről. A termék űrlapján látszik, melyik lapokon.",
-            "t": "term gyi jel alkatresz foglal gyi jel alkatresz foglal nyit munkalap javitas fel teve lej keszl term urlapjan latszi lap",
+            "t": "term gyi jel alkatresz foglal gyi jel alkatresz foglal nyit munkalap javit fel teve lej keszl term urlapjan latszi lap",
             "h": 20
         },
         {
@@ -153,7 +153,7 @@
             "cim": "GYIK › Hogyan veszek fel új terméket?",
             "horgony": "hogyan-veszek-fel-uj-termeket",
             "szoveg": "A Termékek menüpontban kattints az **Új termék** gombra, írd be a megnevezést, a nyitókészletet és az árakat, majd **Termék létrehozása**. A munkalap termékválasztójából is felveheted.",
-            "t": "term gyi vesz uj term gyi vesz uj term term menupon kattints uj term gomb ird megnevezes nyitokeszl ar majd term letrehozasa munkalap termekvalaszto felveh",
+            "t": "term gyi vesz uj term gyi vesz uj term term menupon kattints uj term gomb ird megnevez nyitokeszl ar majd term letrehozasa munkalap termekvalaszto felveh",
             "h": 25
         },
         {
@@ -161,7 +161,7 @@
             "cim": "GYIK › Hogyan rögzítem, ha megjött az áru?",
             "horgony": "hogyan-rogzitem-ha-megjott-az-aru",
             "szoveg": "Nyisd meg a terméket, írd át a **Készlet** mezőt az új összes mennyiségre, **A változás oka** mezőbe írd be, hogy beérkezett rendelés, és mentsd. A rendszer a különbséget Bevételezésként rögzíti.",
-            "t": "term gyi rogzi megj aru gyi rogzi megj aru nyisd term ird keszl mez uj osszes mennyiseg valtozas oka mezo ird beerkez rendeles mentsd rendszer kulonbseg bevetelezesk rogziti",
+            "t": "term gyi rogzi megj aru gyi rogzi megj aru nyisd term ird keszl mez uj ossz mennyiseg valtoz oka mezo ird beerkez rendel mentsd rendszer kulonbseg bevetelezesk rogziti",
             "h": 28
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › A beérkezett darabszámot vagy az új összes készletet kell beírnom?",
             "horgony": "a-beerkezett-darabszamot-vagy-az-uj-osszes-keszletet-kell-beirnom",
             "szoveg": "Az új összes készletet. Ha 3 volt, és 5 érkezett, 8-at írsz. A különbséget a rendszer számolja ki.",
-            "t": "term gyi beerkez darabsz uj osszes keszl beirn gyi beerkez darabsz uj osszes keszl beirn uj osszes keszl erkez irsz kulonbseg rendszer szamol",
+            "t": "term gyi beerkez darabsz uj ossz keszl beirn gyi beerkez darabsz uj ossz keszl beirn uj ossz keszl erkez irsz kulonbseg rendszer szamol",
             "h": 23
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Hogyan javítom a készletet leltár után?",
             "horgony": "hogyan-javitom-a-keszletet-leltar-utan",
             "szoveg": "Ugyanúgy: írd be a **Készlet** mezőbe a megszámolt mennyiséget, az okhoz azt, hogy leltár. Ha kevesebb lett, Korrekció, ha több, Bevételezés rögzül.",
-            "t": "term gyi javi keszl leltar utan gyi javi keszl leltar utan ugyanugy ird keszl mezo megszamol mennyiseg okhoz leltar kevesebb let korrekcio tobb bevetelezes rogzul",
+            "t": "term gyi javi keszl leltar utan gyi javi keszl leltar utan ugyanugy ird keszl mezo megszamol mennyiseg okhoz leltar kevesebb let korrekcio tobb bevetelez rogzul",
             "h": 25
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Mikor vonódik le a termék a készletből?",
             "horgony": "mikor-vonodik-le-a-termek-a-keszletbol",
             "szoveg": "A munkalap vagy az árukiadás mentésekor, ha a lap számozott állapotban van, és nem érvénytelen. Árajánlatnál és sablonnál nem vonódik le.",
-            "t": "term gyi vonodi term keszl gyi vonodi term keszl munkalap arukiadas mentese lap szamoz allap ervenytel arajanlatnal sablonnal vonodi",
+            "t": "term gyi vonodi term keszl gyi vonodi term keszl munkalap aruki mentese lap szamoz allap ervenytel arajanlatnal sablonnal vonodi",
             "h": 19
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Mi történik a készlettel, ha érvénytelenítem a munkalapot?",
             "horgony": "mi-tortenik-a-keszlettel-ha-ervenytelenitem-a-munkalapot",
             "szoveg": "A rátett termékek visszakerülnek a készletre. A mozgás eltűnik a naplóból, a készlet újraszámolódik.",
-            "t": "term gyi torteni keszlettel ervenyteleni munkalap gyi torteni keszlettel ervenyteleni munkalap rat term visszakerul keszl mozgas eltuni naplo keszl ujraszamolodi",
+            "t": "term gyi torte keszlettel ervenyteleni munkalap gyi torte keszlettel ervenyteleni munkalap rat term visszakerul keszl mozg eltu naplo keszl ujraszamolodi",
             "h": 20
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Elrontottam a mennyiséget a munkalapon. Kétszer vonja le?",
             "horgony": "elrontottam-a-mennyiseget-a-munkalapon-ketszer-vonja-le",
             "szoveg": "Nem. Írd át a mennyiséget, és mentsd újra a lapot. Egy tételhez egy mozgás tartozik, az igazodik az új mennyiséghez.",
-            "t": "term gyi elrontot mennyiseg munkalap ketszer von gyi elrontot mennyiseg munkalap ketszer von ird mennyiseg mentsd ujra lap tetel mozgas tartozi igazodi uj mennyiseg",
+            "t": "term gyi elrontot mennyiseg munkalap ketszer von gyi elrontot mennyiseg munkalap ketszer von ird mennyiseg mentsd ujra lap tetel mozg tartozi igazodi uj mennyiseg",
             "h": 24
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Fel tudok tenni a munkalapra olyan terméket, ami nincs készleten?",
             "horgony": "fel-tudok-tenni-a-munkalapra-olyan-termeket-ami-nincs-keszleten",
             "szoveg": "Igen, a rendszer nem tiltja. A készlet mínuszba megy, és a termék megjelenik a **Rendelni kell** nézetben.",
-            "t": "term gyi tud tenni munkalap term nincs keszl gyi tud tenni munkalap term nincs keszl rendszer til keszl minusz megy term megjeleni rendelni nez",
+            "t": "term gyi tud ten munkalap term nincs keszl gyi tud ten munkalap term nincs keszl rendszer til keszl minusz megy term megjele rendel nez",
             "h": 24
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Mit jelent a Rendelni kell fül?",
             "horgony": "mit-jelent-a-rendelni-kell-ful",
             "szoveg": "Azokat a készletkezelt termékeket mutatja, amelyek elfogytak, vagy a **Min. készlet** értéke alá mentek. A fülön szám jelzi, hány ilyen van.",
-            "t": "term gyi jel rendelni ful gyi jel rendelni ful azo keszletkezel term mut amely elfogy min keszl erteke ala men ful szam jelzi hany",
+            "t": "term gyi jel rendel ful gyi jel rendel ful azo keszletkezel term mut amely elfogy min keszl erteke ala men ful szam jelzi hany",
             "h": 24
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Mire jó a Készletkezelés pipa?",
             "horgony": "mire-jo-a-keszletkezeles-pipa",
             "szoveg": "Ezzel döntöd el, vezet-e a rendszer készletet a termékről. Ha kiveszed, a termék felvehető a munkalapra, de nem fogy, és a listában a készlet helyén gondolatjel áll.",
-            "t": "term gyi mire jo keszletkezeles pipa gyi mire jo keszletkezeles pipa ezzel don vez rendszer keszl term kivesz term felveheto munkalap fogy lista keszl hely gondolatjel all",
+            "t": "term gyi mire jo keszletkezel pipa gyi mire jo keszletkezel pipa ezzel don vez rendszer keszl term kivesz term felveheto munkalap fogy lista keszl hely gondolatjel all",
             "h": 27
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Be tudom állítani, hogy mindig ugyanakkora haszonkulccsal áraz?",
             "horgony": "be-tudom-allitani-hogy-mindig-ugyanakkora-haszonkulccsal-araz",
             "szoveg": "Egy terméknél igen: írd be a beszerzési árat, majd a **Haszonkulcs** mezőbe a kívánt százalékot. Az eladási ár kiszámolódik. Ha később változik a beszerzési ár, a haszonkulcsot újra be kell írnod.",
-            "t": "term gyi tud allitani ugyanakko haszonkulccsal araz gyi tud allitani ugyanakko haszonkulccsal araz termeknel ird beszerzesi ar majd haszonkulcs mezo kivan szazal eladasi ar kiszamolodi kesobb valtozi beszerzesi ar haszonkulcs ujra irn",
+            "t": "term gyi tud allita ugyanakko haszonkulccsal araz gyi tud allita ugyanakko haszonkulccsal araz termeknel ird beszerzesi ar majd haszonkulcs mezo kivan szazal eladasi ar kiszamolodi kesobb valtozi beszerzesi ar haszonkulcs ujra irn",
             "h": 32
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Miért nem tudom törölni a terméket?",
             "horgony": "miert-nem-tudom-torolni-a-termeket",
             "szoveg": "Mert már szerepelt munkalapon, és a régi lap hivatkozik rá. Ilyenkor a törlés helyett inaktív lesz: a választóban nem jelenik meg, de a múltja megmarad.",
-            "t": "term gyi tud torolni term gyi tud torolni term szerepel munkalap regi lap hivatkozi ily torles hely inaktiv valaszto jeleni mul megmar",
+            "t": "term gyi tud torol term gyi tud torol term szerepel munkalap regi lap hivatkozi ily torl hely inaktiv valaszto jele mul megmar",
             "h": 22
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Miért kérdez rá kétszer a Törlés gomb?",
             "horgony": "miert-kerdez-ra-ketszer-a-torles-gomb",
             "szoveg": "Hogy véletlenül ne törölj. Az első kattintásra a felirata „Biztosan törlöd?\" lesz, a másodikra hajtja végre. Ha nem kattintasz, néhány másodperc múlva visszaáll.",
-            "t": "term gyi kerdez ketszer torles gomb gyi kerdez ketszer torles gomb veletlenul ne torolj elso kattintas felirata biztosan torl masodi haj veg kattintasz nehany masodperc mulva visszaall",
+            "t": "term gyi kerdez ketszer torl gomb gyi kerdez ketszer torl gomb veletlenul ne torolj elso kattint felirata biztosan torl masodi haj veg kattintasz nehany masodperc mulva visszaall",
             "h": 27
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › Hol látom, melyik munkalapra ment el egy alkatrész?",
             "horgony": "hol-latom-melyik-munkalapra-ment-el-egy-alkatresz",
             "szoveg": "Nyisd meg a terméket, és nézd meg a **Készletmozgás** fület, vagy az **Összes tételmozgás** nézetet. A „Munkalap\" fajtájú sor megjegyzésében ott a munkalap száma, a szóra kattintva megnyílik a lap.",
-            "t": "term gyi lat munkalap men alkatresz gyi lat munkalap men alkatresz nyisd term nezd keszletmozgas ful osszes tetelmozgas nez munkalap fajtaju sor megjegyzese munkalap szama szo kattintva megnyili lap",
+            "t": "term gyi lat munkalap men alkatresz gyi lat munkalap men alkatresz nyisd term nezd keszletmozg ful ossz tetelmozg nez munkalap fajtaju sor megjegyzese munkalap szama szo kattintva megnyili lap",
             "h": 29
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Ki módosította a készletet?",
             "horgony": "ki-modositotta-a-keszletet",
             "szoveg": "A készletmozgások között minden sor végén ott a név, aki rögzítette, az időponttal együtt.",
-            "t": "term gyi modositotta keszl gyi modositotta keszl keszletmozgas koz sor veg nev rogzitette idoponttal egyu",
+            "t": "term gyi modositotta keszl gyi modositotta keszl keszletmozg koz sor veg nev rogzitette idoponttal egyu",
             "h": 15
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Használhatok vonalkódolvasót?",
             "horgony": "hasznalhatok-vonalkodolvasot",
             "szoveg": "Igen. Add meg a terméknél a **Vonalkód** mezőt. A munkalap termékválasztójában olvasd be a kódot, és nyomj Enter billentyűt: a termék a lapra kerül.",
-            "t": "term gyi hasznalh vonalkodolvas gyi hasznalh vonalkodolvas add termeknel vonal mez munkalap termekvalaszto olvasd kod nyomj enter billentyu term lap ar",
+            "t": "term gyi hasznalh vonalkodolv gyi hasznalh vonalkodolv add termeknel vonal mez munkalap termekvalaszto olvasd kod nyomj enter billentyu term lap ar",
             "h": 21
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Mennyit ér a teljes készletem?",
             "horgony": "mennyit-er-a-teljes-keszletem",
             "szoveg": "A Termékek lista alján az összesítő sor mutatja: a készlet értékét beszerzési nettó áron és eladási bruttó áron. Az összeg mindig az éppen szűrt találatra vonatkozik.",
-            "t": "term gyi mennyi er teljes keszl gyi mennyi er teljes keszl term lista aljan osszesito sor mut keszl ert beszerzesi netto ar eladasi brutto ar osszeg epp szur talal vonatkozi",
+            "t": "term gyi mennyi er telj keszl gyi mennyi er telj keszl term lista aljan osszesito sor mut keszl ert beszerzesi netto ar eladasi brutto ar osszeg epp szur talal vonatkozi",
             "h": 30
         },
         {

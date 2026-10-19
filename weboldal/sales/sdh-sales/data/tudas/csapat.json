@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A **Csapat** menüpont a kollégák egymás közti üzeneteire való. Nem az ügyfeleknek szól: amit itt írsz, azt csak a munkatársak látják.\n\nA menüpont **két módban** működhet, és a kettő egészen másképp néz ki:\n\n- **Többfelhasználós csevegés** – minden kollégának saját belépése van. Írhatsz egy kollégának, többnek, egy csoportnak vagy mindenkinek.\n- **Üzenőfal (egy közös fiók)** – ha mindenki ugyanazzal a fiókkal lép be. Itt nincs csevegés; helyette egy fal van cetlikkel, mint az öntapadó jegyzetek. Minden cetlin ott áll, kinek szól és ki írta.\n\nHogy melyik mód él, azt a Beállítások → **Csapat** lapfülön választod ki.",
-            "t": "csap mire valo mire valo csap menup kolleg egymas kozti uzenet valo ugyfel szol irsz munkatars latj menup ket mod mukodh ketto egesz maskepp nez tobbfelhasznalos cseveges kollega saj belepese irhatsz kollega tobb csopor mindenki uzenofal kozos fio mindenki ugyanazzal fiokkal lep nincs cseveges helyette fal cetlikkel ontapado jegyz cetlin all kin szol irta mod beallitas csap lapful valasz",
+            "t": "csap mire valo mire valo csap menup kolleg egym kozti uzenet valo ugyfel szol irsz munkatars latj menup ket mod mukodh ketto egesz maskepp nez tobbfelhasznalos cseveg kollega saj belepese irhatsz kollega tobb csopor mindenki uzenofal kozos fio mindenki ugyanazzal fiokkal lep nincs cseveg helyette fal cetlikkel ontapado jegyz cetlin all kin szol irta mod beallit csap lapful valasz",
             "h": 59
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- **A menüpont:** az oldalmenüben Csapat néven. Üzenőfal módban a menüpont a fal nevét viseli (alapból „Üzenőfal”).\n- **A menü száma:** csevegés módban az olvasatlan üzeneteid számát mutatja.\n- **Minden oldalon:** az új üzenetről felugró kártya szól, bárhol dolgozol éppen; a fontos üzenet felugró ablakban jelenik meg.\n- **A beállításai:** Beállítások → **Csapat** lapfül (a „Kapcsolat és csapat” sorban).",
-            "t": "csap talal talal menup oldalmenu csap nev uzenofal mod menup fal nev viseli alap uzenofal menu szama cseveges mod olvasatlan uzeneteid szam mut oldal uj uzen felugro kartya szol barhol dolgozol epp fontos uzen felugro abl jeleni beallitas beallitas csap lapful kapcsol csap sor",
+            "t": "csap talal talal menup oldalmenu csap nev uzenofal mod menup fal nev viseli alap uzenofal menu szama cseveg mod olvasatlan uzeneteid szam mut oldal uj uzen felugro kartya szol barhol dolgozol epp fontos uzen felugro abl jele beallit beallit csap lapful kapcsol csap sor",
             "h": 44
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Melyik módot válaszd",
             "horgony": "melyik-modot-valaszd",
             "szoveg": "| Helyzet | Ajánlott mód |\n|---|---|\n| Minden kolléga saját névvel és jelszóval lép be. | **Többfelhasználós csevegés** |\n| A pultnál egy közös gép van, mindenki ugyanazzal a fiókkal dolgozik. | **Üzenőfal (egy közös fiók)** |\n| Fontos, hogy lásd, ki olvasta el az üzenetet. | **Többfelhasználós csevegés** |\n| Személyes üzenetet is akartok küldeni egymásnak. | **Többfelhasználós csevegés** |\n| Csak rövid emlékeztetőket hagytok egymásnak („hívd vissza”, „megjött az alkatrész”). | **Üzenőfal** |\n\nMiért nem jó a csevegés közös fióknál? Mert a rendszer a belépésből tudja, ki vagy. Ha mindenki ugyanaz a fiók, a csevegésben mindenki mindent látna, és nem derülne ki, ki írt kinek. A falon ezt a cetli maga mondja meg.\n\nFontos: a mód a Naptárra is hat. Csevegés módban minden kolléga magától kap naptárat; üzenőfal módban a naptárak neveit kézzel veszed fel.\n\nA módváltáskor semmi nem vész el: a korábbi beszélgetések és cetlik megmaradnak, csak épp az a nézet látszik, amelyik módot választottad.",
-            "t": "csap mod valaszd mod valaszd helyz ajanl mod kollega saj nev jelszo lep tobbfelhasznalos cseveges pultnal kozos gep mindenki ugyanazzal fiokkal dolgozi uzenofal kozos fio fontos lasd olvasta uzen tobbfelhasznalos cseveges szemelyes uzen akar kuldeni egymas tobbfelhasznalos cseveges rovid emlekeztet hagy egymas hivd vissza megj alkatresz uzenofal jo cseveges kozos fioknal rendszer belepes tud mindenki ugyanaz fio cseveges mindenki mind latna derulne irt kin fal cetli maga mond fontos mod naptar hat cseveges mod kollega maga kap naptar uzenofal mod naptar nev kezzel vesz modvaltas semmi vesz korabbi beszelgetes cetli megmar epp nez latszi amelyi mod valasztot",
+            "t": "csap mod valaszd mod valaszd helyz ajanl mod kollega saj nev jelszo lep tobbfelhasznalos cseveg pultnal kozos gep mindenki ugyanazzal fiokkal dolgozi uzenofal kozos fio fontos lasd olvasta uzen tobbfelhasznalos cseveg szemely uzen akar kulde egym tobbfelhasznalos cseveg rovid emlekeztet hagy egym hivd vissza megj alkatresz uzenofal jo cseveg kozos fioknal rendszer belep tud mindenki ugyanaz fio cseveg mindenki mind latna derulne irt kin fal cetli maga mond fontos mod naptar hat cseveg mod kollega maga kap naptar uzenofal mod naptar nev kezzel vesz modvalt semmi vesz korabbi beszelget cetli megmar epp nez latszi amelyi mod valasztot",
             "h": 97
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Csevegés: az oldal felépítése",
             "horgony": "cseveges-az-oldal-felepitese",
             "szoveg": "Ez a szakasz a **Csapat** menüpontról szól többfelhasználós csevegés módban.\n\nAz oldal két részből áll:\n\n- **Bal oldalt** a beszélgetések listája, fölötte a **Keresés: kolléga, csoport…** mező.\n- **Jobb oldalt** a megnyitott beszélgetés. Amíg nem választottál, ez áll ott: „Válassz beszélgetést a bal oldalon, vagy írj újat a „+ Új üzenet” gombbal.”\n\nAdminisztrátorként a fejléc alatt három lapot látsz: **Beszélgetések**, **Kollégák**, **Csoportok**. A többi kolléga csak a beszélgetéseket látja.\n\nA megnyitott beszélgetés fejében ott a neve és a tagjai; az éppen elérhető kollégát jelzés mutatja.",
-            "t": "csap cseveges oldal felepitese cseveges oldal felepitese szakasz csap menupon szol tobbfelhasznalos cseveges mod oldal ket resz all bal oldal beszelgetes lista folotte kereses kollega csopor mezo jobb oldal megnyit beszelgetes amig valasztottal all valassz beszelgetes bal oldal irj uja uj uzen gombbal adminisztratork fejlec ala har lap latsz beszelgetes kolleg csopor tobbi kollega beszelgetes lat megnyit beszelgetes feje neve tagj epp elerheto kolleg jelzes mut",
+            "t": "csap cseveg oldal felepitese cseveg oldal felepitese szakasz csap menupon szol tobbfelhasznalos cseveg mod oldal ket resz all bal oldal beszelget lista folotte ker kollega csopor mezo jobb oldal megnyit beszelg amig valasztottal all valassz beszelget bal oldal irj uja uj uzen gombbal adminisztratork fejlec ala har lap latsz beszelget kolleg csopor tobbi kollega beszelget lat megnyit beszelg feje neve tagj epp elerheto kolleg jelz mut",
             "h": 66
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: üzenet küldése",
             "horgony": "lepesrol-lepesre-uzenet-kuldese",
             "szoveg": "### Új beszélgetés\n\n1. Kattints a **+ Új üzenet** gombra.\n2. A **Kinek** sorban válaszd ki a címzetteket:\n  - egy kolléga – közvetlen üzenet, csak ti ketten látjátok;\n  - több kolléga – közös beszélgetés lesz belőle; ilyenkor megjelenik **A közös beszélgetés neve (nem kötelező)** mező;\n  - egy csoport – a neve mellett „(csoport)” áll; az üzenet a csoport saját beszélgetésébe megy;\n  - **Mindenki** – minden kolléga megkapja. A Mindenki kizárja a többi választást, és fordítva.\n3. Írd be az **Üzenet** mezőbe a szöveget. Legfeljebb 4000 karakter lehet.\n4. Ha kell, kapcsold be a **Fontos** vagy a **Kitűzés** kapcsolót.\n5. Kattints a **Küldés** gombra. A beszélgetés megnyílik.\n\n### Meglévő beszélgetésben\n\n1. Kattints a beszélgetésre a bal oldali listában.\n2. Írd be az üzenetet alul a mezőbe.\n3. Nyomj Enter-t, vagy kattints a küldés gombra. Új sort Shift + Enter-rel kezdesz.\n\nA beírómező alatt két kis kapcsoló van: **Fontos** és **Kitűzés**.\n\nEgyszerre a legutóbbi 40 üzenet töltődik be. A régebbiekhez kattints a **Korábbi üzenetek** gombra a beszélgetés tetején.\n\n### Gyors válasz bármelyik oldalról\n\nHa más oldalon dolgozol, és üzenetet kapsz, felugró kártya jelzi: ki „üzent neked”, és mit. A kártyán:\n\n- a **Gyors válasz…** mezőbe írva rögtön válaszolhatsz – siker esetén „Elküldve ✓”;\n- a **Megnyitom a beszélgetést** hivatkozás a Csapat oldalra visz.\n\nEgyszerre legfeljebb négy kártya látszik.",
-            "t": "csap lepes lepes uzen kuldese lepes lepes uzen kuldese uj beszelgetes kattints uj uzen gomb kin sor valaszd cimzet kollega kozvetl uzen ket latj tobb kollega kozos beszelgetes belole ily megjeleni kozos beszelgetes neve kotelezo mezo csopor neve mell csopor all uzen csopor saj beszelgetese megy mindenki kollega megkap mindenki kizar tobbi valasztas forditva ird uzen mezo szoveg legfeljebb 4000 karakter kapcsold fontos kituzes kapcsol kattints kuldes gomb beszelgetes megnyili meglevo beszelgetes kattints beszelgetes bal oldali lista ird uzen alul mezo nyomj enter kattints kuldes gomb uj sor shif enter rel kezdesz beiromezo ala ket kis kapcsolo fontos kituzes egyszer legutobbi 40 uzen toltodi regebbi kattints korabbi uzen gomb beszelgetes tetej gyors valasz barmelyi oldal mas oldal dolgozol uzen kapsz felugro kartya jelzi uzen nek kartyan gyors valasz mezo irva rog valaszolhatsz siker ese elkuldve megnyi beszelgetes hivatkozas csap oldal visz egyszer legfeljebb negy kartya latszi",
+            "t": "csap lep lep uzen kuldese lep lep uzen kuldese uj beszelg kattints uj uzen gomb kin sor valaszd cimzet kollega kozvetl uzen ket latj tobb kollega kozos beszelg belole ily megjele kozos beszelg neve kotelezo mezo csopor neve mell csopor all uzen csopor saj beszelgetese megy mindenki kollega megkap mindenki kizar tobbi valaszt forditva ird uzen mezo szoveg legfeljebb 4000 karakter kapcsold fontos kituz kapcsol kattints kuld gomb beszelg megnyili meglevo beszelget kattints beszelget bal oldali lista ird uzen alul mezo nyomj enter kattints kuld gomb uj sor shif enter rel kezdesz beiromezo ala ket kis kapcsolo fontos kituz egyszer legutobbi 40 uzen toltodi regebbi kattints korabbi uzen gomb beszelg tetej gyors valasz barmelyi oldal mas oldal dolgozol uzen kapsz felugro kartya jelzi uzen nek kartyan gyors valasz mezo irva rog valaszolhatsz siker ese elkuldve megnyi beszelget hivatkoz csap oldal visz egyszer legfeljebb negy kartya latszi",
             "h": 146
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "Ha az egeret egy üzenet fölé viszed, mellette megjelennek a műveleti gombok.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas cseveges valasz fontos uzen kituzes visszavonas eger uzen fole visz mellette megjel muveleti gomb",
+            "t": "csap cseveg valasz fontos uzen kituz visszav cseveg valasz fontos uzen kituz visszav eger uzen fole visz mellette megjel muveleti gomb",
             "h": 21
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás › Válasz idézettel",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "### Válasz idézettel\n\n1. Kattints az üzenet melletti **Válasz** gombra.\n2. A beírómező fölött megjelenik az idézett üzenet. Az X-szel elvetheted.\n3. Írd meg a választ, és küldd el.\n\nA válaszod buborékjában ott lesz az idézet: ki írta és mit. Az idézetre kattintva a beszélgetés az eredeti üzenethez ugrik.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas valasz idezettel cseveges valasz fontos uzen kituzes visszavonas valasz idezettel valasz idezettel kattints uzen melletti valasz gomb beiromezo fol megjeleni idez uzen szel elveth ird valasz kuldd valasz buborek idez irta idez kattintva beszelgetes eredeti uzen ugri",
+            "t": "csap cseveg valasz fontos uzen kituz visszav valasz idezettel cseveg valasz fontos uzen kituz visszav valasz idezettel valasz idezettel kattints uzen melletti valasz gomb beiromezo fol megjele idez uzen szel elveth ird valasz kuldd valasz buborek idez irta idez kattintva beszelg eredeti uzen ugri",
             "h": 44
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás › Fontos üzenet",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "### Fontos üzenet\n\nA **Fontos** kapcsolóval küldött üzenet nem sikkadhat el.\n\n- A címzetteknél **felugró ablakban** jelenik meg, „Fontos üzenet” címmel – bármelyik oldalon dolgoznak éppen.\n- Az ablakban három gomb van:\n  - **Elolvastam** – nyugtázza az üzenetet; az ablak többé nem jön elő;\n  - **Válaszolok** – megnyitja a beszélgetést;\n  - **Később** – most bezárja, de az ablak újra fel fog ugrani, amíg nem nyugtázzák.\n- A buborékon „Fontos” jelzés áll.\n- Te mint küldő az üzenet alatt látod: „Elolvasta: …”, a nyugtázók nevével.\n\nTipp: a fontos üzenetet tartogasd arra, ami tényleg nem maradhat el. Ha minden fontos, a kollégák gondolkodás nélkül fogják elnyomni.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas fontos uzen cseveges valasz fontos uzen kituzes visszavonas fontos uzen fontos uzen fontos kapcsolo kuld uzen sikkadh cimzetteknel felugro abl jeleni fontos uzen cimmel barmelyi oldal dolgoz epp abl har gomb elolvas nyugtazza uzen abl tob jon elo valaszol megnyi beszelgetes kesobb bezar abl ujra fog ugrani amig nyugtazz bubor fontos jelzes all kuldo uzen ala lat elolvasta nyugtaz neve tipp fontos uzen tartogasd tenyleg maradh fontos kolleg gondolkodas nelkul fogj elnyomni",
+            "t": "csap cseveg valasz fontos uzen kituz visszav fontos uzen cseveg valasz fontos uzen kituz visszav fontos uzen fontos uzen fontos kapcsolo kuld uzen sikkadh cimzetteknel felugro abl jele fontos uzen cimmel barmelyi oldal dolgoz epp abl har gomb elolvas nyugtazza uzen abl tob jon elo valaszol megnyi beszelget kesobb bezar abl ujra fog ugra amig nyugtazz bubor fontos jelz all kuldo uzen ala lat elolvasta nyugtaz neve tipp fontos uzen tartogasd tenyleg maradh fontos kolleg gondolk nelkul fogj elny",
             "h": 79
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás › Kitűzés",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "### Kitűzés\n\nA kitűzött üzenet a beszélgetés tetején marad, a **Kitűzve (N)** sávban. Így lehet üzenetet „otthagyni” a többieknek – például a hétvégi ügyelet rendjét.\n\n- Kitűzni küldéskor a **Kitűzés** kapcsolóval, vagy utólag az üzenet melletti **Kitűzés** gombbal lehet.\n- A sáv legfeljebb három kitűzött üzenetet mutat; rákattintva a beszélgetés odaugrik.\n- Levenni ugyanazzal a gombbal lehet – a felirata ilyenkor **Levétel**.\n- Kitűzni és levenni a saját üzenetedet tudod; adminisztrátorként bárkiét.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas kituzes cseveges valasz fontos uzen kituzes visszavonas kituzes kituzes kituz uzen beszelgetes tetej mar kituzve sav igy uzen otthagyni tobbi peldaul hetvegi ugyel rendj kituzni kuldes kituzes kapcsolo utolag uzen melletti kituzes gombbal sav legfeljebb har kituz uzen mut rakattintva beszelgetes odaugri levenni ugyanazzal gombbal felirata ily levetel kituzni levenni saj uzenet adminisztratork barki",
+            "t": "csap cseveg valasz fontos uzen kituz visszav kituz cseveg valasz fontos uzen kituz visszav kituz kituz kituz uzen beszelg tetej mar kituzve sav igy uzen otthagy tobbi peldaul hetvegi ugyel rendj kituz kuld kituz kapcsolo utolag uzen melletti kituz gombbal sav legfeljebb har kituz uzen mut rakattintva beszelg odaugri lev ugyanazzal gombbal felirata ily levetel kituz lev saj uzenet adminisztratork barki",
             "h": 61
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás › Visszavonás",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "### Visszavonás\n\nA saját üzenetedet visszavonhatod.\n\n1. Kattints az üzenet melletti **Visszavonás** gombra.\n2. Megerősítést kér: „Biztosan visszavonod? Kattints még egyszer.”\n3. Kattints rá még egyszer.\n\nA szöveg eltűnik, a helyén „Visszavont üzenet” marad – a nyoma tehát megmarad, a tartalma nem. Más üzenetét nem vonhatod vissza.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas visszavonas cseveges valasz fontos uzen kituzes visszavonas visszavonas visszavonas saj uzenet visszavonh kattints uzen melletti visszavonas gomb megerosites ker biztosan visszav kattints egyszer kattints egyszer szoveg eltuni hely visszav uzen mar nyoma teh megmar tartalma mas uzen vonh vissza",
+            "t": "csap cseveg valasz fontos uzen kituz visszav visszav cseveg valasz fontos uzen kituz visszav visszav visszav saj uzenet visszavonh kattints uzen melletti visszav gomb megerosit ker biztosan visszav kattints egyszer kattints egyszer szoveg eltu hely visszav uzen mar nyoma teh megmar tartalma mas uzen vonh vissza",
             "h": 46
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Csevegés: válasz, fontos üzenet, kitűzés, visszavonás › Gépelésjelző és olvasási visszaigazolás",
             "horgony": "cseveges-valasz-fontos-uzenet-kituzes-visszavonas",
             "szoveg": "### Gépelésjelző és olvasási visszaigazolás\n\n- Ha a másik fél éppen ír, a beszélgetés alján megjelenik: „… gépel…”.\n- A saját üzeneted alatt az időpont mellett látod: „Látta: …”, azok nevével, akik már megnyitották a beszélgetést.\n- A fontos üzenetnél emellett az „Elolvasta: …” is megjelenik – ez a tényleges nyugtázást jelenti.",
-            "t": "csap cseveges valasz fontos uzen kituzes visszavonas gepelesjelzo olvasasi visszaigazolas cseveges valasz fontos uzen kituzes visszavonas gepelesjelzo olvasasi visszaigazolas gepelesjelzo olvasasi visszaigazolas masi epp ir beszelgetes aljan megjeleni gepel saj uzen ala idop mell lat latta neve aki megnyitot beszelgetes fontos uzenetnel emell elolvasta megjeleni tenyleges nyugtazas jelenti",
+            "t": "csap cseveg valasz fontos uzen kituz visszav gepelesjelzo olvasasi visszaigazol cseveg valasz fontos uzen kituz visszav gepelesjelzo olvasasi visszaigazol gepelesjelzo olvasasi visszaigazol masi epp ir beszelg aljan megjele gepel saj uzen ala idop mell lat latta neve aki megnyitot beszelget fontos uzenetnel emell elolvasta megjele tenyleg nyugtaz jelenti",
             "h": 48
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Csevegés: kollégák és csoportok",
             "horgony": "cseveges-kollegak-es-csoportok",
             "szoveg": "Ezt a részt csak adminisztrátor látja és kezeli, a **Csapat** menüpont **Kollégák** és **Csoportok** lapján.",
-            "t": "csap cseveges kolleg csopor cseveges kolleg csopor resz adminisztrator lat kezeli csap menup kolleg csopor lapjan",
+            "t": "csap cseveg kolleg csopor cseveg kolleg csopor resz adminisztrator lat kezeli csap menup kolleg csopor lapjan",
             "h": 16
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Csevegés: kollégák és csoportok › Új kolléga felvétele",
             "horgony": "cseveges-kollegak-es-csoportok",
             "szoveg": "### Új kolléga felvétele\n\n1. Nyisd meg a **Kollégák** lapot, és kattints a **+ Új kolléga** gombra.\n2. Töltsd ki:\n  - **Név** (kötelező) – például „Minta Márta”;\n  - **E-mail** (kötelező) – például `marta@pelda.hu`; egy cím csak egy fiókhoz tartozhat;\n  - **Felhasználónév** (kötelező) – legalább 3 karakter, ékezet és szóköz nélkül; később nem változtatható;\n  - **Jelszó** – legalább 8 karakter; üresen hagyva a rendszer erős jelszót generál;\n  - **Beosztás** – például szerelő, pultos.\n3. A **Szerep** sorban válassz:\n  - **Kolléga – napi munka a CRM-ben**;\n  - **Adminisztrátor – beállítások, kollégák, jogosultságok**.\n4. Válassz **Színt**, és ha vannak csoportok, jelöld be a **Csoportokat**.\n5. Ha szeretnéd, kapcsold be: **Belépési link e-mailben a kollégának**.\n6. Kattints a **Kolléga felvétele** gombra.\n\nMentés után a lap tetején megjelennek a belépési adatok: „Belépési adatok – most látszik utoljára, add át a kollégának:”, alatta a felhasználónév, a jelszó és a belépés címe.\n\nFigyelem: a jelszó csak egyszer látszik. Írd fel vagy add át azonnal; később már csak újat tudsz beállítani.",
-            "t": "csap cseveges kolleg csopor uj kollega felvetele cseveges kolleg csopor uj kollega felvetele uj kollega felvetele nyisd kolleg lap kattints uj kollega gomb toltsd nev kotelezo peldaul minta marta mail kotelezo peldaul marta pelda hu cim fio tartozh felhasznalonev kotelezo legalabb karakter ekez szokoz nelkul kesobb valtoztathato jelszo legalabb karakter ures hagyva rendszer eros jelsz general beosztas peldaul szerelo pultos szerep sor valassz kollega napi munka crm ben adminisztrator beallitas kolleg jogosultsag valassz szin van csopor jelold csopor szeretn kapcsold belepesi lin mail kollega kattints kollega felvetele gomb mentes utan lap tetej megjel belepesi ada belepesi ada latszi utol add kollega alatta felhasznalonev jelszo belepes cime figyel jelszo egyszer latszi ird add azonnal kesobb uja beallitani",
+            "t": "csap cseveg kolleg csopor uj kollega felvetele cseveg kolleg csopor uj kollega felvetele uj kollega felvetele nyisd kolleg lap kattints uj kollega gomb toltsd nev kotelezo peldaul minta marta mail kotelezo peldaul marta pelda hu cim fio tartozh felhasznalonev kotelezo legalabb karakter ekez szokoz nelkul kesobb valtoztathato jelszo legalabb karakter ures hagyva rendszer eros jelsz general beosz peldaul szerelo pultos szerep sor valassz kollega napi munka crm ben adminisztrator beallit kolleg jogosultsag valassz szin van csopor jelold csopor szeretn kapcsold belepesi lin mail kollega kattints kollega felvetele gomb men utan lap tetej megjel belepesi ada belepesi ada latszi utol add kollega alatta felhasznalonev jelszo belep cime figyel jelszo egyszer latszi ird add azonnal kesobb uja beallita",
             "h": 116
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Csevegés: kollégák és csoportok › Mit tud a „Kolléga” szerep",
             "horgony": "cseveges-kollegak-es-csoportok",
             "szoveg": "### Mit tud a „Kolléga” szerep\n\nA Kolléga szerepű munkatárs belép, és a rendszerben dolgozik. Belépés után egyenesen a műhely felületére kerül, és mindig ott marad. A beállításokhoz, a kollégák és csoportok kezeléséhez adminisztrátor kell.",
-            "t": "csap cseveges kolleg csopor tud kollega szerep cseveges kolleg csopor tud kollega szerep tud kollega szerep kollega szerepu munkatars belep rendszer dolgozi belepes utan egyenes muhely felulete ar mar beallitas kolleg csopor kezelese adminisztrator",
+            "t": "csap cseveg kolleg csopor tud kollega szerep cseveg kolleg csopor tud kollega szerep tud kollega szerep kollega szerepu munkatars belep rendszer dolgozi belep utan egyen muhely felulete ar mar beallit kolleg csopor kezelese adminisztrator",
             "h": 34
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Csevegés: kollégák és csoportok › Szerkesztés, letiltás",
             "horgony": "cseveges-kollegak-es-csoportok",
             "szoveg": "### Szerkesztés, letiltás\n\nA kolléga kártyáján a **Szerkesztés** gombbal nyitod meg az adatait.\n\n- **Új jelszó (csak ha cserélni akarod)** – üresen hagyva marad a régi.\n- **Állapot:** **Aktív** vagy **Letiltva (nem léphet be)**. A letiltott kolléga azonnal kilép mindenhonnan, és belépéskor ezt látja: „Ez a fiók le van tiltva. Szólj az adminisztrátornak.”\n- Törlés nincs: a letiltott kolléga régi üzenetei és munkalapjai megmaradnak.\n- A saját szerepedet és állapotodat nem módosíthatod – nehogy kizárd magad.",
-            "t": "csap cseveges kolleg csopor szerkesztes letiltas cseveges kolleg csopor szerkesztes letiltas szerkesztes letiltas kollega kartyajan szerkesztes gombbal nyi ada uj jelszo cserelni akar ures hagyva mar regi allap aktiv letiltva leph letilt kollega azonnal kilep mindenhonnan belepes lat fio tiltva szolj adminisztrator torles nincs letilt kollega regi uzen munkalapj megmar saj szerep allapot modosith nehogy kizard mag",
+            "t": "csap cseveg kolleg csopor szerkesz letil cseveg kolleg csopor szerkesz letil szerkesz letil kollega kartyajan szerkesz gombbal nyi ada uj jelszo cserel akar ures hagyva mar regi allap aktiv letiltva leph letilt kollega azonnal kilep mindenhonnan belep lat fio tiltva szolj adminisztrator torl nincs letilt kollega regi uzen munkalapj megmar saj szerep allapot modosith nehogy kizard mag",
             "h": 57
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Csevegés: kollégák és csoportok › Csoportok",
             "horgony": "cseveges-kollegak-es-csoportok",
             "szoveg": "### Csoportok\n\nA csoport (például „Szerelők”, „Pult”) több kollégát fog össze, és saját beszélgetése van.\n\n1. Nyisd meg a **Csoportok** lapot, és kattints a **+ Új csoport** gombra.\n2. Add meg a **Nevet**, ha kell a **Leírást**, válassz **Színt**.\n3. A **Tagok** sorban jelöld be a kollégákat.\n4. Kattints a **Csoport létrehozása** gombra.\n\nSzerkesztéskor az **Állapot** sorban a csoport archiválható: **Archivált (a beszélgetés megmarad, de nem jelenik meg)**.",
-            "t": "csap cseveges kolleg csopor csopor cseveges kolleg csopor csopor csopor csopor peldaul szerel pul tobb kolleg fog ossze saj beszelgetese nyisd csopor lap kattints uj csopor gomb add nev leiras valassz szin tag sor jelold kolleg kattints csopor letrehozasa gomb szerkesztes allap sor csopor archivalhato archi beszelgetes megmar jeleni",
+            "t": "csap cseveg kolleg csopor csopor cseveg kolleg csopor csopor csopor csopor peldaul szerel pul tobb kolleg fog ossze saj beszelgetese nyisd csopor lap kattints uj csopor gomb add nev leir valassz szin tag sor jelold kolleg kattints csopor letrehozasa gomb szerkeszt allap sor csopor archivalhato archi beszelg megmar jele",
             "h": 49
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Üzenőfal: az oldal felépítése",
             "horgony": "uzenofal-az-oldal-felepitese",
             "szoveg": "Ez a szakasz a **Csapat** menüpontról szól üzenőfal módban. A menüpont ilyenkor a fal nevét viseli.\n\n- A fejlécben a **+ Új cetli** gomb.\n- Alatta két lap: **A fal** és **Levett cetlik**.\n- A fal fölött a szűrők: **Mind (N)**, **Mindenkinek**, és nevenként egy gomb. Mellettük a **Rendezés** gomb.\n- Maga a fal: rajta a cetlik, szabadon elhelyezve. Üres falon ez áll: „Üres a fal. Hagyj üzenetet a „+ Új cetli” gombbal.”\n\n### Egy cetli\n\n- **Felül:** kinek szól – „→ Minta Márta” vagy „Mindenkinek”. Mellette három gomb: pipa, ceruza, X.\n- **Középen:** az üzenet.\n- **Alul:** ki írta, és mikor.",
-            "t": "csap uzenofal oldal felepitese uzenofal oldal felepitese szakasz csap menupon szol uzenofal mod menup ily fal nev viseli fejlec uj cetli gomb alatta ket lap fal lev cetli fal fol szur mind mindenki nevenk gomb mellet rendezes gomb maga fal rajta cetli szab elhelyezve ures fal all ures fal hagyj uzen uj cetli gombbal cetli felul kin szol minta marta mindenki mellette har gomb pipa ceruza kozep uzen alul irta",
+            "t": "csap uzenofal oldal felepitese uzenofal oldal felepitese szakasz csap menupon szol uzenofal mod menup ily fal nev viseli fejlec uj cetli gomb alatta ket lap fal lev cetli fal fol szur mind mindenki nevenk gomb mellet rendez gomb maga fal rajta cetli szab elhelyezve ures fal all ures fal hagyj uzen uj cetli gombbal cetli felul kin szol minta marta mindenki mellette har gomb pipa ceruza kozep uzen alul irta",
             "h": 70
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Lépésről lépésre: cetli a falra",
             "horgony": "lepesrol-lepesre-cetli-a-falra",
             "szoveg": "1. Kattints a **+ Új cetli** gombra. Megnyílik az **Új cetli a falra** ablak.\n2. Írd be az **Üzenetet** (kötelező, legfeljebb 2000 karakter). Például: „Hívd vissza az ügyfelet a kijelző miatt!”\n3. A **Kinek szól** sorban válaszd ki a nevet, vagy hagyd **Mindenkinek**.\n4. A **Ki írta** sorban válaszd ki a saját nevedet.\n5. Válassz **Színt**: Sárga, Rózsaszín, Zöld, Kék, Lila vagy Narancs.\n6. Kattints a **Felteszem a falra** gombra.\n\nAz új cetli a következő szabad helyre kerül.\n\nTipp: egyezzetek meg a színekben – például a narancs a sürgős, a zöld a ráérő. A rendszer a színnek nem ad jelentést, azt ti adjátok.\n\nHa a **Kinek szól** és a **Ki írta** sorban nincsenek nevek, add meg a névsort a Beállítások → Csapat lapfülön.",
-            "t": "csap lepes lepes cetli fal lepes lepes cetli fal kattints uj cetli gomb megnyili uj cetli fal abl ird uzen kotelezo legfeljebb 2000 karakter peldaul hivd vissza ugyfel kijelzo mia kin szol sor valaszd nev hagyd mindenki irta sor valaszd saj nev valassz szin sarga rozsaszin zold kek lila narancs kattints feltesz fal gomb uj cetli kovetkezo szab hely ar tipp egyezz szin peldaul narancs surgos zold raero rendszer szin ad jelentes adj kin szol irta sor nincse nev add nevsor beallitas csap lapful",
+            "t": "csap lep lep cetli fal lep lep cetli fal kattints uj cetli gomb megnyili uj cetli fal abl ird uzen kotelezo legfeljebb 2000 karakter peldaul hivd vissza ugyfel kijelzo mia kin szol sor valaszd nev hagyd mindenki irta sor valaszd saj nev valassz szin sarga rozsaszin zold kek lila narancs kattints feltesz fal gomb uj cetli kovetkezo szab hely ar tipp egyezz szin peldaul narancs surgos zold raero rendszer szin ad jelent adj kin szol irta sor nincse nev add nevsor beallit csap lapful",
             "h": 84
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Üzenőfal: húzás, kész, levétel, szűrés",
             "horgony": "uzenofal-huzas-kesz-levetel-szures",
             "szoveg": "### Elhelyezés húzással\n\nFogd meg a cetlit a felső sávjánál, és húzd oda, ahová szeretnéd. Egérrel és érintőképernyőn is megy. A helye megmarad – mindenkinél ugyanott lesz.\n\nHa a fal rendetlen lett, kattints a **Rendezés** gombra: a látható cetlik öt oszlopos rácsba állnak.\n\n### Kész pipa\n\nA cetli pipájára kattintva elintézettnek jelölöd (**Elintézve**). A cetli a falon marad, de látszik rajta, hogy kész. Újra rákattintva visszavonod (**Mégsincs kész**).\n\n### Szerkesztés\n\nA ceruzával megnyílik a **Cetli szerkesztése** ablak: átírhatod a szöveget, a címzettet, az írót és a színt.\n\n### Levétel és visszatétel\n\n1. Kattints a cetli X gombjára (**Levétel a falról**).\n2. A gomb pirosra vált, megerősítést kér: „Még egy kattintás: levétel a falról”.\n3. Kattints rá még egyszer.\n\nA levett cetli nem törlődik: a **Levett cetlik** lapra kerül. Ott a visszatevő gombbal (**Visszatesz a falra**) bármikor visszateheted. A lap a legutóbb levett 60 cetlit mutatja.\n\n### Szűrés címzettre\n\nA fal fölötti gombokkal szűrsz:\n\n- **Mind (N)** – minden cetli; a szám a falon lévő cetlik száma.\n- **Mindenkinek** – csak a mindenkinek szóló cetlik.\n- **Egy név** – a neki szóló cetlik, és a mindenkinek szólók is, hiszen azok rá is vonatkoznak.",
-            "t": "csap uzenofal huzas kesz levetel szures uzenofal huzas kesz levetel szures elhelyezes huzassal fogd cetli felso savjanal huzd oda ahova szeretn egerrel erintokeperny megy helye megmar mindenkinel ugyan fal rendetl let kattints rendezes gomb lathato cetli ot oszlopos racs all kesz pipa cetli pipa kattintva elintezet jelol elintezve cetli fal mar latszi rajta kesz ujra rakattintva visszav megsincs kesz szerkesztes ceruza megnyili cetli szerkesztese abl atirh szoveg cimzet iro szin levetel visszatetel kattints cetli gomb levetel fal gomb piros val megerosites ker kattintas levetel fal kattints egyszer lev cetli torlodi lev cetli lap ar visszatevo gombbal visszatesz fal barmi visszateh lap legutobb lev 60 cetli mut szures cimzet fal folotti gomb szursz mind cetli szam fal levo cetli szama mindenki mindenki szolo cetli nev neki szolo cetli mindenki szol hisz vonatkoz",
+            "t": "csap uzenofal huz kesz levetel szur uzenofal huz kesz levetel szur elhelyez huzassal fogd cetli felso savjanal huzd oda ahova szeretn egerrel erintokeperny megy helye megmar mindenkinel ugyan fal rendetl let kattints rendez gomb lathato cetli ot oszlopos racs all kesz pipa cetli pipa kattintva elintezet jelol elintezve cetli fal mar latszi rajta kesz ujra rakattintva visszav megsincs kesz szerkesz ceruza megnyili cetli szerkesztese abl atirh szoveg cimzet iro szin levetel visszatetel kattints cetli gomb levetel fal gomb piros val megerosit ker kattin levetel fal kattints egyszer lev cetli torlodi lev cetli lap ar visszatevo gombbal visszatesz fal barmi visszateh lap legutobb lev 60 cetli mut szur cimzet fal folotti gomb szursz mind cetli szam fal levo cetli szama mindenki mindenki szolo cetli nev neki szolo cetli mindenki szol hisz vonatkoz",
             "h": 131
         },
         {
@@ -161,7 +161,7 @@
             "cim": "A Csapat lapfül a Beállításokban",
             "horgony": "a-csapat-lapful-a-beallitasokban",
             "szoveg": "A Beállítások → **Csapat** lapfülön két doboz van. A lap alján a **Mentés** gomb csak ezt a lapfület menti.\n\n### Csapat – üzenetek\n\n| Mező | Mire való |\n|---|---|\n| **Többfelhasználós csevegés** | Minden kollégának saját belépése van; személyes, csoportos és mindenkinek szóló beszélgetések, fontos üzenet felugró ablakban. |\n| **Üzenőfal (egy közös fiók)** | Csevegés helyett fal cetlikkel; minden cetlin ott áll, kinek szól és ki írta. |\n| **Az üzenőfal neve (ez látszik a menüben)** | Üzenőfal módban ez a menüpont és az oldal neve. Legfeljebb 40 karakter; üresen „Üzenőfal”. |\n| **Kollégák az üzenőfalhoz (soronként egy név)** | Belépés nélküli nevek: ezek közül választod, kinek szól a cetli és ki írta. Üresen a felhasználói fiókok nevei jelennek meg. |\n\nA két mód közül pontosan egy választható.\n\n### Kollégák és csoportok\n\nEbben a dobozban két gomb van: **Kollégák kezelése** és **Csoportok kezelése**. A Csapat menüpont megfelelő lapjára visznek, ahol a kollégák és a csoportok felugró ablakban szerkeszthetők. Ezek a lapok többfelhasználós csevegés módban érhetők el.",
-            "t": "csap csap lapful beallitas csap lapful beallitas beallitas csap lapful ket doboz lap aljan mentes gomb lapful menti csap uzen mezo mire valo tobbfelhasznalos cseveges kollega saj belepese szemelyes csoportos mindenki szolo beszelgetes fontos uzen felugro abl uzenofal kozos fio cseveges hely fal cetlikkel cetlin all kin szol irta uzenofal neve latszi menu uzenofal mod menup oldal neve legfeljebb 40 karakter ures uzenofal kolleg uzenofal soronk nev belepes nelkuli nev kozul valasz kin szol cetli irta ures felhasznaloi fio nev jel ket mod kozul pontosan valaszthato kolleg csopor ebb doboz ket gomb kolleg kezelese csopor kezelese csap menup megfelelo lap visz ahol kolleg csopor felugro abl szerkeszth lap tobbfelhasznalos cseveges mod erh",
+            "t": "csap csap lapful beallit csap lapful beallit beallit csap lapful ket doboz lap aljan men gomb lapful menti csap uzen mezo mire valo tobbfelhasznalos cseveg kollega saj belepese szemely csoportos mindenki szolo beszelget fontos uzen felugro abl uzenofal kozos fio cseveg hely fal cetlikkel cetlin all kin szol irta uzenofal neve latszi menu uzenofal mod menup oldal neve legfeljebb 40 karakter ures uzenofal kolleg uzenofal soronk nev belep nelkuli nev kozul valasz kin szol cetli irta ures felhasznaloi fio nev jel ket mod kozul pontosan valaszthato kolleg csopor ebb doboz ket gomb kolleg kezelese csopor kezelese csap menup megfelelo lap visz ahol kolleg csopor felugro abl szerkeszth lap tobbfelhasznalos cseveg mod erh",
             "h": 112
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- A Csapat üzenetei belsők: ügyfél soha nem látja őket.\n- Csevegésben csak azt a beszélgetést látod, amelynek tagja vagy.\n- Üres üzenet nem küldhető.\n- Visszavonni csak a saját üzenetedet lehet; kitűzni a sajátodat, adminisztrátorként bárkiét.\n- A fontos üzenet ablaka addig jön elő újra, amíg a címzett az **Elolvastam** gombbal nem nyugtázza.\n- Kollégát és csoportot csak adminisztrátor kezelhet.\n- Kolléga nem törölhető, csak letiltható; a csoport nem törölhető, csak archiválható.\n- A falról levett cetli nem törlődik végleg.\n- A visszavonás és a levétel két kattintás.",
-            "t": "csap szabaly ami rendszer betar szabaly ami rendszer betar csap uzen bels ugyfel soha lat oke cseveges beszelgetes lat amely tag ures uzen kuldheto visszavonni saj uzenet kituzni sajat adminisztratork barki fontos uzen ablaka add jon elo ujra amig cimz elolvas gombbal nyugtazza kolleg csopor adminisztrator kezelh kollega torolheto letilthato csopor torolheto archivalhato fal lev cetli torlodi vegleg visszavonas levetel ket kattintas",
+            "t": "csap szabaly ami rendszer betar szabaly ami rendszer betar csap uzen bels ugyfel soha lat oke cseveg beszelget lat amely tag ures uzen kuldheto visszav saj uzenet kituz sajat adminisztratork barki fontos uzen ablaka add jon elo ujra amig cimz elolvas gombbal nyugtazza kolleg csopor adminisztrator kezelh kollega torolheto letilthato csopor torolheto archivalhato fal lev cetli torlodi vegleg visszav levetel ket kattin",
             "h": 62
         },
         {
@@ -177,7 +177,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- Az AI-asszisztens (a jobb alsó sarokban élő figura) a „Vezess végig ezen az oldalon” kérésre lépésenként bemutatja a Csapat oldalt – abban a módban, amelyik éppen be van állítva.\n- A műszak végi átadást érdemes kitűzött üzenetben vagy mindenkinek szóló cetlin hagyni.\n- A csoportokat a tényleges munkamegosztás szerint alakítsd ki (például pult és műhely).\n- A falon rendszeresen vedd le a kész cetliket, különben megtelik.\n- Az új kolléga jelszavát a legbiztosabb személyesen átadni.\n- A teljes leírást és a gyakori kérdéseket a **Súgó** menüpontban találod.",
-            "t": "csap tipp tipp ai asszisztens jobb also sar elo figu vezess veg ezen oldal keres lepesenk bemut csap oldal abban mod amelyi epp allitva musz vegi atadas erdemes kituz uzen mindenki szolo cetlin hagyni csopor tenyleges munkamegosztas szerin alakitsd peldaul pul muhely fal rendszeres vedd kesz cetli kul megteli uj kollega jelszav legbiztosabb szemelyes atadni teljes leiras gyakori kerdes sugo menupon talal",
+            "t": "csap tipp tipp ai asszisztens jobb also sar elo figu vezess veg ezen oldal ker lepesenk bemut csap oldal abban mod amelyi epp allitva musz vegi atad erd kituz uzen mindenki szolo cetlin hagy csopor tenyleg munkamegosz szerin alakitsd peldaul pul muhely fal rendszer vedd kesz cetli kul megteli uj kollega jelszav legbiztosabb szemely atad telj leir gyakori kerd sugo menupon talal",
             "h": 62
         },
         {
@@ -185,7 +185,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem látom a Kollégák és a Csoportok lapot.** Csak adminisztrátor látja, és csak csevegés módban.\n- **Cetliket látok csevegés helyett (vagy fordítva).** A másik mód van beállítva. A Beállítások → Csapat lapfülön válthatsz.\n- **„Lejárt a munkamenet – frissítsd az oldalt.”** Töltsd újra az oldalt, és ha kell, lépj be újra.\n- **A kolléga nem tud belépni.** Nézd meg a Kollégák lapon, nincs-e letiltva; ha elfelejtette a jelszavát, állíts be újat a **Szerkesztés** ablakban.\n- **„Ez az e-mail-cím már egy másik fiókhoz tartozik.”** Minden kollégának saját e-mail-cím kell.\n- **Nem ment ki a belépési link e-mailben.** A levelet a webhely levélküldése továbbítja. Ha nem érkezik meg, add át a belépési adatokat személyesen – a mentés után a lap tetején látod őket.\n- **Nincs név a cetli „Kinek szól” sorában.** Add meg a névsort a Beállítások → Csapat lapfülön.\n- **Nem tudom visszavonni az üzenetet.** Csak a sajátodat vonhatod vissza.",
-            "t": "csap megy megy lat kolleg csopor lap adminisztrator lat cseveges mod cetli lat cseveges hely forditva masi mod beallitva beallitas csap lapful valthatsz lejar munkam frissitsd oldal toltsd ujra oldal lepj ujra kollega tud belepni nezd kolleg lap nincs letiltva elfelejtette jelszav allits uja szerkesztes abl mail cim masi fio tartozi kollega saj mail cim men belepesi lin mail level webhely levelkuldese tovabbi erkezi add belepesi ada szemelyes mentes utan lap tetej lat oke nincs nev cetli kin szol sora add nevsor beallitas csap lapful tud visszavonni uzen sajat vonh vissza",
+            "t": "csap megy megy lat kolleg csopor lap adminisztrator lat cseveg mod cetli lat cseveg hely forditva masi mod beallitva beallit csap lapful valthatsz lejar munkam frissitsd oldal toltsd ujra oldal lepj ujra kollega tud belep nezd kolleg lap nincs letiltva elfelejtette jelszav allits uja szerkesz abl mail cim masi fio tartozi kollega saj mail cim men belepesi lin mail level webhely levelkuldese tovabbi erkezi add belepesi ada szemely men utan lap tetej lat oke nincs nev cetli kin szol sora add nevsor beallit csap lapful tud visszav uzen sajat vonh vissza",
             "h": 91
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Mi a különbség a csevegés és az üzenőfal között?",
             "horgony": "mi-a-kulonbseg-a-cseveges-es-az-uzenofal-kozott",
             "szoveg": "A csevegésben mindenki saját belépéssel ír, személyes és csoportos beszélgetésekben. Az üzenőfalon egy közös fiókkal dolgoztok, és cetliket hagytok egymásnak; a cetlin áll, kinek szól és ki írta.",
-            "t": "csap gyi kulonbseg cseveges uzenofal koz gyi kulonbseg cseveges uzenofal koz cseveges mindenki saj belepessel ir szemelyes csoportos beszelgetes uzenofal kozos fiokkal dolgoz cetli hagy egymas cetlin all kin szol irta",
+            "t": "csap gyi kulonbseg cseveg uzenofal koz gyi kulonbseg cseveg uzenofal koz cseveg mindenki saj belepessel ir szemely csoportos beszelget uzenofal kozos fiokkal dolgoz cetli hagy egym cetlin all kin szol irta",
             "h": 31
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Egyetlen közös géppel dolgozunk. Melyik módot válasszuk?",
             "horgony": "egyetlen-kozos-geppel-dolgozunk-melyik-modot-valasszuk",
             "szoveg": "Az üzenőfalat. A csevegés a belépésből tudja, ki ír – közös fióknál ez nem működne.",
-            "t": "csap gyi egyetl kozos geppel dolgoz mod valassz gyi egyetl kozos geppel dolgoz mod valassz uzenofal cseveges belepes tud ir kozos fioknal mukodne",
+            "t": "csap gyi egyetl kozos geppel dolgoz mod valassz gyi egyetl kozos geppel dolgoz mod valassz uzenofal cseveg belep tud ir kozos fioknal mukodne",
             "h": 23
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Át lehet váltani később a másik módra?",
             "horgony": "at-lehet-valtani-kesobb-a-masik-modra",
             "szoveg": "Igen, a Beállítások → Csapat lapfülön. A korábbi üzenetek és cetlik megmaradnak.",
-            "t": "csap gyi valtani kesobb masi mod gyi valtani kesobb masi mod beallitas csap lapful korabbi uzen cetli megmar",
+            "t": "csap gyi valta kesobb masi mod gyi valta kesobb masi mod beallit csap lapful korabbi uzen cetli megmar",
             "h": 18
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Hogyan írok egyetlen kollégának?",
             "horgony": "hogyan-irok-egyetlen-kolleganak",
             "szoveg": "Kattints a **+ Új üzenet** gombra, a **Kinek** sorban válaszd ki őt, írd meg az üzenetet, és **Küldés**. Ezt csak ti ketten látjátok.",
-            "t": "csap gyi iro egyetl kollega gyi iro egyetl kollega kattints uj uzen gomb kin sor valaszd ot ird uzen kuldes ket latj",
+            "t": "csap gyi iro egyetl kollega gyi iro egyetl kollega kattints uj uzen gomb kin sor valaszd ot ird uzen kuld ket latj",
             "h": 22
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Honnan tudom, hogy elolvasták az üzenetemet?",
             "horgony": "honnan-tudom-hogy-elolvastak-az-uzenetemet",
             "szoveg": "Az üzeneted alatt megjelenik: „Látta: …”, a nevekkel. Fontos üzenetnél az „Elolvasta: …” mutatja, ki nyugtázta.",
-            "t": "csap gyi honnan tud elolvas uzenet gyi honnan tud elolvas uzenet uzen ala megjeleni latta nev fontos uzenetnel elolvasta mut nyugtazta",
+            "t": "csap gyi honnan tud elolvas uzenet gyi honnan tud elolvas uzenet uzen ala megjele latta nev fontos uzenetnel elolvasta mut nyugtazta",
             "h": 21
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Mit jelent a „Fontos” kapcsoló?",
             "horgony": "mit-jelent-a-fontos-kapcsolo",
             "szoveg": "Az így küldött üzenet a címzetteknél felugró ablakban jelenik meg, és addig jön elő újra, amíg az **Elolvastam** gombbal nem nyugtázzák.",
-            "t": "csap gyi jel fontos kapcsolo gyi jel fontos kapcsolo igy kuld uzen cimzetteknel felugro abl jeleni add jon elo ujra amig elolvas gombbal nyugtazz",
+            "t": "csap gyi jel fontos kapcsolo gyi jel fontos kapcsolo igy kuld uzen cimzetteknel felugro abl jele add jon elo ujra amig elolvas gombbal nyugtazz",
             "h": 24
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Mi történik, ha a fontos üzenetnél a „Később” gombra kattintok?",
             "horgony": "mi-tortenik-ha-a-fontos-uzenetnel-a-kesobb-gombra-kattintok",
             "szoveg": "Az ablak most bezárul, de újra fel fog ugrani. Végleg csak az **Elolvastam** gomb tünteti el.",
-            "t": "csap gyi torteni fontos uzenetnel kesobb gomb kattin gyi torteni fontos uzenetnel kesobb gomb kattin abl bezarul ujra fog ugrani vegleg elolvas gomb tunteti",
+            "t": "csap gyi torte fontos uzenetnel kesobb gomb kattin gyi torte fontos uzenetnel kesobb gomb kattin abl bezarul ujra fog ugra vegleg elolvas gomb tunteti",
             "h": 24
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Mire jó a kitűzés?",
             "horgony": "mire-jo-a-kituzes",
             "szoveg": "A kitűzött üzenet a beszélgetés tetején marad, így mindenki látja, aki megnyitja. Jó a tartósan érvényes tudnivalókra.",
-            "t": "csap gyi mire jo kituzes gyi mire jo kituzes kituz uzen beszelgetes tetej mar igy mindenki lat megnyi jo tartosan ervenyes tudnival",
+            "t": "csap gyi mire jo kituz gyi mire jo kituz kituz uzen beszelg tetej mar igy mindenki lat megnyi jo tartosan erveny tudnival",
             "h": 22
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Vissza tudom vonni, amit elküldtem?",
             "horgony": "vissza-tudom-vonni-amit-elkuldtem",
             "szoveg": "A saját üzenetedet igen, a **Visszavonás** gombbal, két kattintással. A helyén „Visszavont üzenet” marad.",
-            "t": "csap gyi vissza tud vonni elkuld gyi vissza tud vonni elkuld saj uzenet visszavonas gombbal ket kattintassal hely visszav uzen mar",
+            "t": "csap gyi vissza tud von elkuld gyi vissza tud von elkuld saj uzenet visszav gombbal ket kattintassal hely visszav uzen mar",
             "h": 21
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Szerkeszteni is lehet az elküldött üzenetet?",
             "horgony": "szerkeszteni-is-lehet-az-elkuldott-uzenetet",
             "szoveg": "Nem. Vond vissza, és küldd el újra helyesen.",
-            "t": "csap gyi szerkeszteni elkuld uzen gyi szerkeszteni elkuld uzen vond vissza kuldd ujra helyes",
+            "t": "csap gyi szerkeszte elkuld uzen gyi szerkeszte elkuld uzen vond vissza kuldd ujra hely",
             "h": 14
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Lát a kolléga a műhely-felületen kívül mást is?",
             "horgony": "lat-a-kollega-a-muhely-feluleten-kivul-mast-is",
             "szoveg": "Nem. Belépés után a műhely felületére kerül, és csak ott dolgozik – más oldal nem nyílik meg neki.",
-            "t": "csap gyi lat kollega muhely felul kivul mas gyi lat kollega muhely felul kivul mas belepes utan muhely felulete ar dolgozi mas oldal nyili neki",
+            "t": "csap gyi lat kollega muhely felul kivul mas gyi lat kollega muhely felul kivul mas belep utan muhely felulete ar dolgozi mas oldal nyili neki",
             "h": 25
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Elfelejtettem felírni az új kolléga jelszavát. Mit tegyek?",
             "horgony": "elfelejtettem-felirni-az-uj-kollega-jelszavat-mit-tegyek",
             "szoveg": "Nyisd meg a kollégát a **Szerkesztés** gombbal, és az **Új jelszó** mezőben adj meg egy újat.",
-            "t": "csap gyi elfelejtet felirni uj kollega jelszav tegy gyi elfelejtet felirni uj kollega jelszav tegy nyisd kolleg szerkesztes gombbal uj jelszo mezo adj uja",
+            "t": "csap gyi elfelejtet felir uj kollega jelszav tegy gyi elfelejtet felir uj kollega jelszav tegy nyisd kolleg szerkesz gombbal uj jelszo mezo adj uja",
             "h": 24
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Hogyan törlök egy kilépett kollégát?",
             "horgony": "hogyan-torlok-egy-kilepett-kollegat",
             "szoveg": "Törölni nem lehet, de letilthatod: a **Szerkesztés** ablakban az **Állapot** legyen **Letiltva (nem léphet be)**. A korábbi üzenetei és munkalapjai megmaradnak.",
-            "t": "csap gyi torl kilep kolleg gyi torl kilep kolleg torolni letilth szerkesztes abl allap legy letiltva leph korabbi uzen munkalapj megmar",
+            "t": "csap gyi torl kilep kolleg gyi torl kilep kolleg torol letilth szerkesz abl allap legy letiltva leph korabbi uzen munkalapj megmar",
             "h": 21
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Véletlenül levettem egy cetlit. Vissza tudom tenni?",
             "horgony": "veletlenul-levettem-egy-cetlit-vissza-tudom-tenni",
             "szoveg": "Igen. Nyisd meg a **Levett cetlik** lapot, és kattints a cetlin a **Visszatesz a falra** gombra.",
-            "t": "csap gyi veletlenul levet cetli vissza tud tenni gyi veletlenul levet cetli vissza tud tenni nyisd lev cetli lap kattints cetlin visszatesz fal gomb",
+            "t": "csap gyi veletlenul levet cetli vissza tud ten gyi veletlenul levet cetli vissza tud ten nyisd lev cetli lap kattints cetlin visszatesz fal gomb",
             "h": 24
         },
         {
@@ -361,7 +361,7 @@
             "cim": "GYIK › Hogyan nevezem át az üzenőfalat?",
             "horgony": "hogyan-nevezem-at-az-uzenofalat",
             "szoveg": "A Beállítások → Csapat lapfülön, **Az üzenőfal neve** mezőben. Mentés után a menüben is az új név látszik.",
-            "t": "csap gyi nevez uzenofal gyi nevez uzenofal beallitas csap lapful uzenofal neve mezo mentes utan menu uj nev latszi",
+            "t": "csap gyi nevez uzenofal gyi nevez uzenofal beallit csap lapful uzenofal neve mezo men utan menu uj nev latszi",
             "h": 19
         },
         {
@@ -369,7 +369,7 @@
             "cim": "GYIK › Ha áthúzok egy cetlit, a többiek is ott látják?",
             "horgony": "ha-athuzok-egy-cetlit-a-tobbiek-is-ott-latjak",
             "szoveg": "Igen, a cetli helye mentődik, és mindenkinél ugyanott jelenik meg.",
-            "t": "csap gyi athuz cetli tobbi latj gyi athuz cetli tobbi latj cetli helye mentodi mindenkinel ugyan jeleni",
+            "t": "csap gyi athuz cetli tobbi latj gyi athuz cetli tobbi latj cetli helye mentodi mindenkinel ugyan jele",
             "h": 17
         },
         {

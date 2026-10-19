@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "Ez a fejezet arról szól, ki mihez fér hozzá, mi történik az adatokkal, ha valami elromlik, és hogyan vigyáz a rendszer a jelszavakra.\n\nRöviden:\n\n- Két szerep van: **adminisztrátor** és **kolléga**.\n- A rendszer **ügyfelet és munkalapot nem töröl**.\n- **Teljes mentés** minden nap magától készül, és kézzel is bármikor indítható (**Beállítások › Mentés**).\n- Az asszisztens minden módosítása előtt **pillanatkép** készül, és a művelet visszaállítható.\n- A mentés **külső helyre is másolódik**, jelszóval titkosítva: **Google Drive**, **FTP**, **NAS** vagy **saját gép** mappájába.\n- A mentésből a **Beállítások › Mentés** lapon **visszaállíthatsz** – előtte a rendszer biztonsági mentést készít a mostani állapotról.\n- A **beállítások külön exportálhatók** és importálhatók: élesbe költözéskor nem kell mindent újra beállítani.\n- A szerver saját, teljes mentése (fájlok is) továbbra is kell.\n- **Kétlépcsős belépés:** a jelszó mellé a telefon hitelesítő alkalmazásának kódja is kérhető – kívülről (internetről) elérhető rendszernél kötelezőre érdemes állítani.",
-            "t": "mentes jogosultsag biztonsag mire valo mire valo fejez arrol szol mihez fer hozza torteni ada elromli vigyaz rendszer jelszav rovid ket szerep adminisztrator kollega rendszer ugyfel munkalap torol teljes mentes nap maga keszul kezzel barmi indithato beallitas mentes asszisztens modositasa elo pillanatkep keszul muvel visszaallithato mentes kulso hely masolodi jelszo titkositva google drive ftp nas saj gep mappa mentes beallitas mentes lap visszaallithatsz elotte rendszer biztonsagi mentes keszi mostani allap beallitas kul exportalh importalh eles koltozes mind ujra beallitani szerver saj teljes mentese fajl tovabb ketlepcsos belepes jelszo melle telef hitelesito alkalmazasa kod kerheto kivul intern elerheto rendszernel kotelezo erdemes allitani",
+            "t": "men jogosultsag biztonsag mire valo mire valo fejez arrol szol mihez fer hozza torte ada elromli vigyaz rendszer jelszav rovid ket szerep adminisztrator kollega rendszer ugyfel munkalap torol telj men nap maga keszul kezzel barmi indithato beallit men asszisztens modositasa elo pillanatkep keszul muvel visszaallithato men kulso hely masolodi jelszo titkositva google drive ftp nas saj gep mappa ment beallit men lap visszaallithatsz elotte rendszer biztonsagi ment keszi mosta allap beallit kul exportalh importalh eles koltoz mind ujra beallita szerver saj telj mentese fajl tovabb ketlepcsos belep jelszo melle telef hitelesito alkalmazasa kod kerheto kivul intern elerheto rendszernel kotelezo erd allita",
             "h": 101
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Ki mit lát: adminisztrátor és kolléga",
             "horgony": "ki-mit-lat-adminisztrator-es-kollega",
             "szoveg": "A rendszert az adminisztrátor és a **Kolléga** szerepű fiók használhatja.\n\n| | Kolléga | Adminisztrátor |\n|---|---|---|\n| A napi menüpontok (Áttekintéstől a Súgóig), számla kiállítása | igen | igen |\n| Beszélgetés az asszisztenssel, javaslat jóváhagyása | igen | igen |\n| **Beállítások** menüpont | nem | igen |\n| Kollégák és csoportok felvétele, letiltása | nem | igen |\n| Az asszisztens naplója, tudástára, a mentések | nem | igen |\n| A naptár neveinek szerkesztése | nem | igen |\n\nAmit még tudni kell a kollégáról:\n\n- **Belépés után egyenesen a műhely-felületre kerül**, és ott is marad: más oldal nem nyílik meg neki.\n- **A csak adminisztrátornak szóló oldalak** a menüjében meg sem jelennek. Ha a címet kézzel írja be, az **Ehhez nincs jogosultságod.** oldalt kapja.\n- **Aki Kolléga, az minden napi menüpontot lát.** Szűkebb szerepet (Pultos, Szerelő, Pénztáros vagy saját) a **Beállítások › Jogosultságok** fülön adhatsz neki – lásd Szerepkörök és jogok. A postafiókok külön jelszóval is zárhatók (lásd lejjebb).\n\nA szerepet az adminisztrátor a **Csapat** menüpontban, a kolléga űrlapján állítja: **Kolléga – napi munka a CRM-ben** vagy **Adminisztrátor – beállítások, kollégák, jogosultságok**. Részletek: Csapat.\n\nA saját szerepedet és állapotodat nem módosíthatod – így nem tudod kizárni magad.",
-            "t": "mentes jogosultsag biztonsag lat adminisztrator kollega lat adminisztrator kollega rendsz adminisztrator kollega szerepu fio hasznalh kollega adminisztrator napi menupon attekintes sugo szamla kiallitasa beszelgetes asszisztenssel javasl jovahagyasa beallitas menup kolleg csopor felvetele letiltasa asszisztens naplo tudasta mentes naptar nev szerkesztese tudni kollega belepes utan egyenes muhely felul ar mar mas oldal nyili neki adminisztrator szolo oldal menu jel cim kezzel irja ehhez nincs jogosultsag oldal kap kollega napi menupon lat szukebb szerep pultos szerelo penztaros saj beallitas jogosultsag ful adhatsz neki lasd szerep jog postafi kul jelszo zarh lasd lejjebb szerep adminisztrator csap menupon kollega urlapjan alli kollega napi munka crm ben adminisztrator beallitas kolleg jogosultsag reszl csap saj szerep allapot modosith igy kizarni mag",
+            "t": "men jogosultsag biztonsag lat adminisztrator kollega lat adminisztrator kollega rendsz adminisztrator kollega szerepu fio hasznalh kollega adminisztrator napi menupon attekint sugo szamla kiallitasa beszelg asszisztenssel javasl jovahagyasa beallit menup kolleg csopor felvetele letiltasa asszisztens naplo tudasta ment naptar nev szerkesztese tud kollega belep utan egyen muhely felul ar mar mas oldal nyili neki adminisztrator szolo oldal menu jel cim kezzel irja ehhez nincs jogosultsag oldal kap kollega napi menupon lat szukebb szerep pultos szerelo penztaros saj beallit jogosultsag ful adhatsz neki lasd szerep jog postafi kul jelszo zarh lasd lejjebb szerep adminisztrator csap menupon kollega urlapjan alli kollega napi munka crm ben adminisztrator beallit kolleg jogosultsag reszl csap saj szerep allapot modosith igy kizar mag",
             "h": 115
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Letiltás törlés helyett",
             "horgony": "letiltas-torles-helyett",
             "szoveg": "A kollégát nem lehet törölni, csak letiltani. A **Csapat** menüpontban, a kolléga űrlapján az **Állapot** legyen **Letiltva (nem léphet be)**.\n\n- A letiltott kolléga azonnal kilép mindenhonnan. Belépéskor ezt látja: **Ez a fiók le van tiltva. Szólj az adminisztrátornak.**\n- A régi üzenetei és a munkalapjai megmaradnak.\n- Visszaállítani ugyanott lehet: **Állapot › Aktív**.",
-            "t": "mentes jogosultsag biztonsag letiltas torles hely letiltas torles hely kolleg torolni letiltani csap menupon kollega urlapjan allap legy letiltva leph letilt kollega azonnal kilep mindenhonnan belepes lat fio tiltva szolj adminisztrator regi uzen munkalapj megmar visszaallitani ugyan allap aktiv",
+            "t": "men jogosultsag biztonsag letil torl hely letil torl hely kolleg torol letilta csap menupon kollega urlapjan allap legy letiltva leph letilt kollega azonnal kilep mindenhonnan belep lat fio tiltva szolj adminisztrator regi uzen munkalapj megmar visszaallita ugyan allap aktiv",
             "h": 39
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Közös fiókos használat",
             "horgony": "kozos-fiokos-hasznalat",
             "szoveg": "Ha a cég egyetlen közös fiókkal dolgozik, a **Beállítások › Csapat** lapfülön válaszd az **Üzenőfal (egy közös fiók)** módot.\n\n- A **Csapat** helyén ekkor üzenőfal van cetlikkel; minden cetlin ott áll, kinek szól és ki írta.\n- A kollégák neve belépés nélküli névlista (**Kollégák az üzenőfalhoz**, soronként egy név).\n- A rendszer szemében ilyenkor egyetlen felhasználó dolgozik: nem tudja megkülönböztetni, ki rögzítette a munkalapot.\n\nFigyelem: Ha a közös fiók adminisztrátor, mindenki eléri a Beállításokat és a mentéseket is. Közös használatra hozz létre külön, **Kolléga** szerepű fiókot.",
-            "t": "mentes jogosultsag biztonsag kozos fiokos hasznal kozos fiokos hasznal ceg egyetl kozos fiokkal dolgozi beallitas csap lapful valaszd uzenofal kozos fio mod csap hely ekkor uzenofal cetlikkel cetlin all kin szol irta kolleg neve belepes nelkuli nevlista kolleg uzenofal soronk nev rendszer szeme ily egyetl felhasznalo dolgozi tud megkulonboztetni rogzitette munkalap figyel kozos fio adminisztrator mindenki eleri beallitas mentes kozos hasznal hozz let kul kollega szerepu fio",
+            "t": "men jogosultsag biztonsag kozos fiokos hasznal kozos fiokos hasznal ceg egyetl kozos fiokkal dolgozi beallit csap lapful valaszd uzenofal kozos fio mod csap hely ekkor uzenofal cetlikkel cetlin all kin szol irta kolleg neve belep nelkuli nevlista kolleg uzenofal soronk nev rendszer szeme ily egyetl felhasznalo dolgozi tud megkulonbozt rogzitette munkalap figyel kozos fio adminisztrator mindenki eleri beallit ment kozos hasznal hozz let kul kollega szerepu fio",
             "h": 67
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Teljes mentés: mikor készül és mit tartalmaz",
             "horgony": "teljes-mentes-mikor-keszul-es-mit-tartalmaz",
             "szoveg": "A teljes mentés a rendszer összes saját adatáról készült másolat, egyetlen tömörített fájlban.\n\n**Mikor készül:**\n\n- **Magától, minden nap egyszer.** Ha a szerver éjjel is megy, az időzítő indítja. Ha a gép éjjel ki van kapcsolva, a nap **első bejelentkezése után** készül el, a háttérben – a munkát nem lassítja.\n- **Kézzel:** bármikor, a **Mentés most** gombbal.\n- **Az asszisztens első módosítása előtt** is ellenőrzi a rendszer, hogy megvan-e az aznapi mentés; ha valamiért nincs, előbb ment.\n\nA napi mentés nem függ az asszisztenstől: akkor is elkészül, ha az asszisztens ki van kapcsolva. A mentés ideiglenes néven íródik, és csak a hibátlanul elkészült fájl kerül a listába – a félbeszakadt (megtelt lemez) mentés nem szorít ki egy jót.\n\n**Mit tartalmaz:**\n\n- a rendszer minden saját adattábláját (ügyfelek, eszközök, munkalapok, pénztár, számlák, üzenetek, naptár és a többi),\n- a **fiókokat**: belépési név, e-mail, a jelszó lenyomata (maga a jelszó soha), a szerep és a rendszerbeli beállítások. Visszaállításkor a hiányzó fiók újra létrejön (ugyanazzal a jelszóval beléphet), a meglévőhöz nem nyúl a rendszer.\n\n**Mit nem tartalmaz:**\n\n- a TAC-adatbázist és a levelek gyorsítótárát – ezek újra előállíthatók,\n- a csatolt fájlokat, a logót és a feltöltött képeket (ezek a szerver feltöltési mappájában vannak),\n- a kétlépcsős belépés titkait (költözés után ezt mindenki újra beállítja) és az ideiglenes támogatási fiókokat,\n- magukat a leveleket (azok a levelezőszerveren vannak).\n\n**Hol tárolódik:** a szerveren, a feltöltött fájlok mappájában (`sdh-muhely-mentes/`). A fájl neve `sdh-mentes-` kezdetű, benne a dátum, az idő és a mentés oka (`napi` vagy `kezi`); a kiterjesztése `.jsonl.gz`. A mappát `.htaccess` fájl zárja le, kívülről nem olvasható.",
-            "t": "mentes jogosultsag biztonsag teljes mentes keszul tartalmaz teljes mentes keszul tartalmaz teljes mentes rendszer osszes saj adata keszul masol egyetl tomorit fajl keszul maga nap egyszer szerver ejjel megy idozito indi gep ejjel kapcsolva nap elso bejelentkezese utan keszul hatter mun lassi kezzel barmi mentes gombbal asszisztens elso modositasa elo ellenorzi rendszer megvan aznapi mentes valami nincs elobb men napi mentes fugg asszisztens elkeszul asszisztens kapcsolva mentes ideiglenes nev irodi hibatlanul elkeszul fajl ar lista felbeszak megtel lemez mentes szori jot tartalmaz rendszer saj adattablaj ugyfel eszkoz munkalap penztar szamla uzen naptar tobbi fio belepesi nev mail jelszo lenyomata maga jelszo soha szerep rendszerbeli beallitas visszaallitas hianyzo fio ujra letrej ugyanazzal jelszo beleph meglevo nyul rendszer tartalmaz tac adatbazis level gyorsitotar ujra eloallith csa fajl log feltolt kep szerver feltoltesi mappa van ketlepcsos belepes tit koltozes utan mindenki ujra bealli ideiglenes tamogatasi fio mag level levelezoszerver van tarolodi szerver feltolt fajl mappa sdh muhely mentes fajl neve sdh mentes kezdetu benne datum ido mentes oka napi kezi kiterjesztese jsonl gz mapp htaccess fajl zar kivul olvashato",
+            "t": "men jogosultsag biztonsag telj men keszul tartalmaz telj men keszul tartalmaz telj men rendszer ossz saj adata keszul masol egyetl tomorit fajl keszul maga nap egyszer szerver ejjel megy idozito indi gep ejjel kapcsolva nap elso bejelentkezese utan keszul hatter mun lassi kezzel barmi men gombbal asszisztens elso modositasa elo ellenorzi rendszer megvan aznapi men valami nincs elobb men napi men fugg asszisztens elkeszul asszisztens kapcsolva men ideigl nev irodi hibatlanul elkeszul fajl ar lista felbeszak megtel lemez men szori jot tartalmaz rendszer saj adattablaj ugyfel eszkoz munkalap penztar szamla uzen naptar tobbi fio belepesi nev mail jelszo lenyomata maga jelszo soha szerep rendszerbeli beallit visszaallit hianyzo fio ujra letrej ugyanazzal jelszo beleph meglevo nyul rendszer tartalmaz tac adatbazis level gyorsitotar ujra eloallith csa fajl log feltolt kep szerver feltoltesi mappa van ketlepcsos belep tit koltoz utan mindenki ujra bealli ideigl tamogatasi fio mag level levelezoszerver van tarolodi szerver feltolt fajl mappa sdh muhely men fajl neve sdh men kezdetu benne datum ido men oka napi kezi kiterjesztese jsonl gz mapp htaccess fajl zar kivul olvashato",
             "h": 176
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Teljes mentés: mikor készül és mit tartalmaz",
             "horgony": "teljes-mentes-mikor-keszul-es-mit-tartalmaz",
             "szoveg": "**Hány marad meg:** alapból az utolsó 20; a szám a **Beállítások › Mentés** lapfülön állítható (3 és 365 között). Amikor eggyel több készül, a legrégebbi törlődik – a kézi és a napi mentések együtt számítanak. Ezen felül **mindig megmarad**:\n\n- az **előző napi mentés** (a legutóbbi, nem mai mentés) – ha ma valami elromlik, a tegnapi állapot biztosan megvan,\n- a legutóbbi **visszaállítás előtti** biztonsági mentés.\n\nEz a szabály a külső helyeken is ugyanígy érvényes.",
-            "t": "mentes jogosultsag biztonsag teljes mentes keszul tartalmaz teljes mentes keszul tartalmaz hany mar alap utolso 20 szam beallitas mentes lapful allithato 365 koz ami eggyel tobb keszul legregebbi torlodi kezi napi mentes egyu szamita ezen felul megmar elozo napi mentes legutobbi mai mentes ma elromli tegnapi allap biztosan megvan legutobbi visszaallitas elotti biztonsagi mentes szabaly kulso hely ugyanigy ervenyes",
+            "t": "men jogosultsag biztonsag telj men keszul tartalmaz telj men keszul tartalmaz hany mar alap utolso 20 szam beallit men lapful allithato 365 koz ami eggyel tobb keszul legregebbi torlodi kezi napi ment egyu szamita ezen felul megmar elozo napi men legutobbi mai men ma elromli tegnapi allap biztosan megvan legutobbi visszaalli elotti biztonsagi men szabaly kulso hely ugyanigy erveny",
             "h": 59
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: kézi mentés és letöltés",
             "horgony": "lepesrol-lepesre-kezi-mentes-es-letoltes",
             "szoveg": "A mentésekhez adminisztrátori jog kell.\n\n1. Nyisd meg a **Beállítások › Mentés** lapfület (a **Rendszer** csoportban).\n2. A **Mentések** dobozban nyomd meg a **Mentés most** gombot. A gomb mellett megjelenik az eredmény, például: *Mentés kész: sdh-mentes-….jsonl.gz (1 MB, 5200 sor).*\n3. A listában minden mentés mellett ott a dátuma, a fájl neve és a mérete. A **Letöltés** gombbal a saját gépedre mented.\n\nUgyanez a lista a **Beállítások › Asszisztens** lapfül **Mentések** gombja mögött is megvan.\n\nFigyelem: A mentések a szerveren maradnak: ha a gép lemeze meghibásodik, velük együtt vesznek el. Időnként tölts le egyet, és tedd el a szerveren kívül (pendrive, felhő). A fájl minden ügyféladatot és beállítást tartalmaz, ezért kezeld bizalmasan.",
-            "t": "mentes jogosultsag biztonsag lepes lepes kezi mentes letoltes lepes lepes kezi mentes letoltes mentes adminisztratori jog nyisd beallitas mentes lapful rendszer csopor mentes doboz nyomd mentes gomb gomb mell megjeleni eredmeny peldaul mentes kesz sdh mentes jsonl gz mb 5200 sor lista mentes mell datuma fajl neve merete letoltes gombbal saj gep men ugyanez lista beallitas asszisztens lapful mentes gomb mog megvan figyel mentes szerver mar gep lemeze meghibasodi vel egyu vesz idonk tolts egy tedd szerver kivul pendrive felho fajl ugyfelad beallitas tartalmaz ezer kezeld bizalmasan",
+            "t": "men jogosultsag biztonsag lep lep kezi men letol lep lep kezi men letol ment adminisztratori jog nyisd beallit men lapful rendszer csopor ment doboz nyomd men gomb gomb mell megjele eredmeny peldaul men kesz sdh men jsonl gz mb 5200 sor lista men mell datuma fajl neve merete letol gombbal saj gep men ugyanez lista beallit asszisztens lapful ment gomb mog megvan figyel ment szerver mar gep lemeze meghibasodi vel egyu vesz idonk tolts egy tedd szerver kivul pendrive felho fajl ugyfelad beallit tartalmaz ezer kezeld bizalmasan",
             "h": 87
         },
         {
@@ -65,7 +65,7 @@
             "cim": "A Beállítások „Mentés\" lapfüle",
             "horgony": "a-beallitasok-mentes-lapfule",
             "szoveg": "A Beállítások **Rendszer** csoportjában van; csak adminisztrátor látja.\n\n- **Napi mentés bekapcsolva** – alapból be van kapcsolva. Kikapcsolva magától nem készül mentés; a **Mentés most** gomb akkor is működik.\n- **Megőrzött mentések száma** – ennyi marad meg (alapból 20). Napi egy mentésnél a 20 nagyjából három hét.\n- **Mentés most** – azonnal készít egy teljes mentést.\n- **Titkosító jelszó** – legalább 8 karakter; a külső helyekre kerülő másolatok ezzel vannak titkosítva. Külső hely bekapcsolásához kötelező.\n- **Külső mentési helyek** – négy kártya (Saját gép, NAS, FTP / FTPS, Google Drive), mindegyiken **Kapcsolat próbája** és **Mentések listázása**.\n- A lista a legutóbbi mentéseket mutatja, **Letöltés**, **Letöltés (titkosítva)** és **Visszaállítás…** gombbal.\n- **Export és import** – a beállítások jelszavas fájlba, illetve fájlból.\n\nHa a legutóbbi mentés nem sikerült (például megtelt a lemez, vagy a mappa nem írható), a lapfül tetején piros sáv írja ki az okát.",
-            "t": "mentes jogosultsag biztonsag beallitas mentes lapfule beallitas mentes lapfule beallitas rendszer csoport adminisztrator lat napi mentes bekapcsolva alap kapcsolva kikapcsolva maga keszul mentes mentes gomb mukodi megorz mentes szama ennyi mar alap 20 napi mentesnel 20 nagy har het mentes azonnal keszi teljes mentes titkosito jelszo legalabb karakter kulso hely kerulo masol ezzel van titkositva kulso hely bekapcsolasa kotelezo kulso mentesi hely negy kartya saj gep nas ftp ftps google drive mindegyi kapcsol pro mentes listazasa lista legutobbi mentes mut letoltes letoltes titkositva visszaallitas gombbal expor impor beallitas jelszavas fajl illetve fajl legutobbi mentes sikerul peldaul megtel lemez mappa irhato lapful tetej piros sav irja oka",
+            "t": "men jogosultsag biztonsag beallit men lapfule beallit men lapfule beallit rendszer csoport adminisztrator lat napi men bekapcsolva alap kapcsolva kikapcsolva maga keszul men men gomb mukodi megorz ment szama ennyi mar alap 20 napi mentesnel 20 nagy har het men azonnal keszi telj ment titkosito jelszo legalabb karakter kulso hely kerulo masol ezzel van titkositva kulso hely bekapcsolasa kotelezo kulso mentesi hely negy kartya saj gep nas ftp ftps google drive mindegyi kapcsol pro ment listazasa lista legutobbi ment mut letol letol titkositva visszaalli gombbal expor impor beallit jelszav fajl illetve fajl legutobbi men sikerul peldaul megtel lemez mappa irhato lapful tetej piros sav irja oka",
             "h": 106
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Külső mentés: Google Drive, FTP, NAS, saját gép",
             "horgony": "kulso-mentes-google-drive-ftp-nas-sajat-gep",
             "szoveg": "A szerveren maradó mentés nem véd a lemez meghibásodása ellen, ezért a rendszer minden mentés után **titkosított másolatot** tölt fel a bekapcsolt helyekre. Egyszerre több helyre is.\n\n**A másolat titkosított.** A Beállítások › Mentés lapon megadott **titkosító jelszóval** készül, így a Drive-on, az FTP-n vagy a NAS-on lévő fájlt jelszó nélkül senki nem tudja elolvasni. **A jelszót tedd el biztos helyre** – elvesztése esetén a külső másolatok nem nyithatók meg.\n\n| Hely | Mit kell megadni |\n|---|---|\n| **Saját gép** | Egy mappa útvonala (pl. csatolt vagy hálózati meghajtó). A mappa nem lehet a rendszer saját mentési mappája. |\n| **NAS** | Mappa (csatolt vagy `\\\\szerver\\mappa` hálózati út), vagy **WebDAV** cím, felhasználó, jelszó. |\n| **FTP / FTPS** | Szerver, port, titkosítás (FTPS ajánlott), felhasználó, jelszó, mappa. |\n| **Google Drive** | Saját Google-kliens azonosítója és titka, majd egyszeri összekapcsolás (lent). |",
-            "t": "mentes jogosultsag biztonsag kulso mentes google drive ftp nas saj gep kulso mentes google drive ftp nas saj gep szerver marado mentes ved lemez meghibasodasa ell ezer rendszer mentes utan titkosit masol tol bekapcsol hely egyszer tobb hely masol titkosit beallitas mentes lap megad titkosito jelszo keszul igy drive ftp nas levo fajl jelszo nelkul senki tud elolvasni jelsz tedd biztos hely elvesztese ese kulso masol nyith hely megadni saj gep mappa utvonala pl csa halozati meghajto mappa rendszer saj mentesi mappa nas mappa csa szerver mappa halozati ut webdav cim felhasznalo jelszo ftp ftps szerver por titkositas ftps ajanl felhasznalo jelszo mappa google drive saj google ugyfel azonosito titka majd egyszeri osszekapcsolas len",
+            "t": "men jogosultsag biztonsag kulso men google drive ftp nas saj gep kulso men google drive ftp nas saj gep szerver marado men ved lemez meghibasodasa ell ezer rendszer men utan titkosit masol tol bekapcsol hely egyszer tobb hely masol titkosit beallit men lap megad titkosito jelszo keszul igy drive ftp nas levo fajl jelszo nelkul senki tud elolv jelsz tedd biztos hely elvesztese ese kulso masol nyith hely meg saj gep mappa utvonala pl csa halozati meghajto mappa rendszer saj mentesi mappa nas mappa csa szerver mappa halozati ut webdav cim felhasznalo jelszo ftp ftps szerver por titkosi ftps ajanl felhasznalo jelszo mappa google drive saj google ugyfel azonosito titka majd egyszeri osszekapcsol len",
             "h": 114
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Külső mentés: Google Drive, FTP, NAS, saját gép › Lépésről lépésre: külső hely bekapcsolása",
             "horgony": "kulso-mentes-google-drive-ftp-nas-sajat-gep",
             "szoveg": "### Lépésről lépésre: külső hely bekapcsolása\n\n1. Nyisd meg a **Beállítások › Mentés** lapfület.\n2. A **Titkosítás** dobozban adj meg jelszót (kétszer), és mentsd a lapot.\n3. A kívánt kártyán kapcsold be az **Aktív** kapcsolót, és töltsd ki a mezőket.\n4. Nyomd meg a **Kapcsolat próbája** gombot: a rendszer megpróbál írni a helyre, és kiírja az eredményt vagy az okot.\n5. **Mentsd a lapot.** Az első másolat a következő mentéskor (vagy a **Mentés most** gombra) készül.\n\nHa a külső hely éppen nem elérhető, a mentés **nem lesz hibás**: a helyi mentés elkészül, a másolat pedig **várakozik**, és 15 percenként újrapróbálkozik (legfeljebb hatszor, a napi mentés pedig mindig újra megpróbálja). A kártya állapotsora mutatja az utolsó sikeres másolatot és a hibát.",
-            "t": "mentes jogosultsag biztonsag kulso mentes google drive ftp nas saj gep lepes lepes kulso hely bekapcsolasa kulso mentes google drive ftp nas saj gep lepes lepes kulso hely bekapcsolasa lepes lepes kulso hely bekapcsolasa nyisd beallitas mentes lapful titkositas doboz adj jelsz ketszer mentsd lap kivan kartyan kapcsold aktiv kapcsol toltsd mez nyomd kapcsol pro gomb rendszer megprobal irni hely kiir eredmeny oko mentsd lap elso masol kovetkezo mentes mentes gomb keszul kulso hely epp elerheto mentes hibas helyi mentes elkeszul masol ped varakozi 15 percenk ujraprobalkozi legfeljebb hatszor napi mentes ped ujra megprobal kartya allapotso mut utolso sikeres masol hib",
+            "t": "men jogosultsag biztonsag kulso men google drive ftp nas saj gep lep lep kulso hely bekapcsolasa kulso men google drive ftp nas saj gep lep lep kulso hely bekapcsolasa lep lep kulso hely bekapcsolasa nyisd beallit men lapful titkosi doboz adj jelsz ketszer mentsd lap kivan kartyan kapcsold aktiv kapcsol toltsd mez nyomd kapcsol pro gomb rendszer megprobal irni hely kiir eredmeny oko mentsd lap elso masol kovetkezo ment men gomb keszul kulso hely epp elerheto men hib helyi men elkeszul masol ped varakozi 15 percenk ujraprobalkozi legfeljebb hatszor napi men ped ujra megprobal kartya allapotso mut utolso siker masol hib",
             "h": 101
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Külső mentés: Google Drive, FTP, NAS, saját gép › Google Drive összekapcsolása",
             "horgony": "kulso-mentes-google-drive-ftp-nas-sajat-gep",
             "szoveg": "### Google Drive összekapcsolása\n\nA Google-nak egyszeri beállítás kell (kb. 5 perc, a saját Google-fiókodban):\n\n1. A [Google Cloud Console](https://console.cloud.google.com/)-ban hozz létre egy projektet, és kapcsold be a **Google Drive API**-t.\n2. **OAuth-hozzájárulási képernyő**: típus *Külső*, add meg az alkalmazás nevét és az e-mail-címedet. **Állítsd az állapotot „Éles\" (Production) értékre.** Ha „Tesztelés\" marad, a Google 7 naponta lejáratja a kapcsolatot.\n3. **Hitelesítő adatok › OAuth-kliensazonosító létrehozása**, típusa *Televíziók és korlátozott bemenetű eszközök*. Másold ki a **kliensazonosítót** és a **kliens titkát**.\n4. A rendszerben a Google Drive kártyán írd be mindkettőt, és nyomd meg az **Összekapcsolás a Google-fiókkal** gombot.\n5. Megjelenik egy kód és egy cím. Nyisd meg a címet, írd be a kódot, és engedélyezd a hozzáférést. A rendszer magától észreveszi, és kiírja az összekapcsolt fiókot.\n\nA rendszer csak a **saját maga által létrehozott** fájlokhoz és mappához fér hozzá (`drive.file` jogosultság), a többi Drive-fájlodat nem látja. A mentések a **{termeknev} mentés** nevű mappába kerülnek. Ha a Google később visszavonja a hozzáférést, a kártya kiírja, hogy a kapcsolat lejárt – nyomd meg újra az **Összekapcsolás** gombot.",
-            "t": "mentes jogosultsag biztonsag kulso mentes google drive ftp nas saj gep google drive osszekapcsolasa kulso mentes google drive ftp nas saj gep google drive osszekapcsolasa google drive osszekapcsolasa google nak egyszeri beallitas kb perc saj google fiok google cloud console https console cloud google com ban hozz let projek kapcsold google drive api oauth hozzajarulasi kepernyo tipus kulso add alkalmazas nev mail cim allitsd allap eles producti ert teszteles mar google naponta lejar kapcsol hitelesito ada oauth kliensazonosito letrehozasa tipusa televizi korlatoz bemenetu eszkoz masold kliensazonosi ugyfel tit rendszer google drive kartyan ird mindket nyomd osszekapcsolas google fiokkal gomb megjeleni kod cim nyisd cim ird kod engedelyezd hozzaferes rendszer maga eszreveszi kiir osszekapcsol fio rendszer saj maga altal letrehoz fajl mappa fer hozza drive file jogosultsag tobbi drive fajl lat mentes termeknev mentes nevu mappa ar google kesobb visszav hozzaferes kartya kiir kapcsol lejar nyomd ujra osszekapcsolas gomb",
+            "t": "men jogosultsag biztonsag kulso men google drive ftp nas saj gep google drive osszekapcsolasa kulso men google drive ftp nas saj gep google drive osszekapcsolasa google drive osszekapcsolasa google nak egyszeri bealli kb perc saj google fiok google cloud console https console cloud google com ban hozz let projek kapcsold google drive api oauth hozzajarulasi kepernyo tipus kulso add alkalmaz nev mail cim allitsd allap eles producti ert tesztel mar google naponta lejar kapcsol hitelesito ada oauth kliensazonosito letrehozasa tipusa televizi korlatoz bemenetu eszkoz masold kliensazonosi ugyfel tit rendszer google drive kartyan ird mindket nyomd osszekapcsol google fiokkal gomb megjele kod cim nyisd cim ird kod engedelyezd hozzafer rendszer maga eszreveszi kiir osszekapcsol fio rendszer saj maga altal letrehoz fajl mappa fer hozza drive file jogosultsag tobbi drive fajl lat ment termeknev men nevu mappa ar google kesobb visszav hozzafer kartya kiir kapcsol lejar nyomd ujra osszekapcsol gomb",
             "h": 148
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Visszaállítás mentésből",
             "horgony": "visszaallitas-mentesbol",
             "szoveg": "A visszaállítás mindig **két lépésből** áll: előbb **előnézet**, utána a tényleges visszaállítás. Csak adminisztrátor végezheti.\n\n### Lépésről lépésre: visszaállítás\n\n1. A **Beállítások › Mentés** lapon válaszd ki a forrást:\n   - egy helyi mentés mellett **Visszaállítás…**,\n   - egy külső hely kártyáján **Mentések listázása**, majd a kívánt sor **Visszaállítás…** gombja,\n   - vagy az **Import fájlból** részben válassz fájlt (és add meg a jelszavát, ha eltér a beállítottól).\n2. Az **előnézet** megmutatja a mentés idejét, verzióját, a táblák és sorok számát.\n3. Válassz módot:\n   - **Adatok és beállítások visszaállítása** – a mostani adatok a mentés állapotára cserélődnek,\n   - **Csak a beállítások visszaállítása** – az adatokhoz (ügyfelek, lapok, pénztár) nem nyúl.\n4. Mindkét gomb **kétlépcsős**: az első kattintás megerősítést kér („Biztosan? Kattints újra\"), a második indítja.\n\n**Mit csinál a rendszer közben:**\n\n- **Először biztonsági mentést készít** a mostani állapotról (a neve `…-visszaallitas-elott-…`). Ha az nem sikerül, nem állít vissza semmit.\n- Az egész visszaállítás **egyetlen tranzakció**: ha bármi hiba van (sérült fájl), minden visszagördül, és az adatok nem változnak.\n- Az **újabb verzióból** készült mentést nem fogadja el – előbb frissíteni kell a rendszert.\n- Utána újraépíti a keresőt és a gyorsítótárakat.\n\n**Visszavonás:** ha a visszaállítás nem azt hozta, amit vártál, a **visszaállítás előtti** biztonsági mentést ugyanígy visszaállíthatod – az megmarad a listában.\n\nFigyelem: A visszaállítás a mentés óta felvett adatokat (új ügyfelek, lapok, pénztártételek) törli. Éles adaton csak akkor használd, ha biztos vagy benne; előtte nézd meg az előnézetet.",
-            "t": "mentes jogosultsag biztonsag visszaallitas mentes visszaallitas mentes visszaallitas ket lepes all elobb elonez utana tenyleges visszaallitas adminisztrator vegezheti lepes lepes visszaallitas beallitas mentes lap valaszd forras helyi mentes mell visszaallitas kulso hely kartyajan mentes listazasa majd kivan sor visszaallitas gomb impor fajl resz valassz fajl add jelszav elter beallit elonez megmut mentes idej verzioj tabl sor szam valassz mod ada beallitas visszaallitasa mostani ada mentes allapota cserel beallitas visszaallitasa ada ugyfel lap penztar nyul mind gomb ketlepcsos elso kattintas megerosites ker biztosan kattints ujra masodi indi csinal rendszer koz eloszor biztonsagi mentes keszi mostani allap neve visszaallitas elo sikerul alli vissza semmi egesz visszaallitas egyetl tranzakcio hiba serul fajl visszagordul ada valtoz ujabb verzio keszul mentes fog elobb frissiteni rendsz utana ujraepiti keres gyorsitotar visszavonas visszaallitas hozta vartal visszaallitas elotti biztonsagi mentes ugyanigy visszaallith megmar lista figyel visszaallitas mentes ota felv ada uj ugyfel lap penztartetel torli eles ada hasznald biztos benne elotte nezd elonez",
+            "t": "men jogosultsag biztonsag visszaalli ment visszaalli ment visszaalli ket lep all elobb elonez utana tenyleg visszaalli adminisztrator vegezheti lep lep visszaalli beallit men lap valaszd forr helyi men mell visszaalli kulso hely kartyajan ment listazasa majd kivan sor visszaalli gomb impor fajl resz valassz fajl add jelszav elter beallit elonez megmut men idej verzioj tabl sor szam valassz mod ada beallit visszaallitasa mosta ada men allapota cserel beallit visszaallitasa ada ugyfel lap penztar nyul mind gomb ketlepcsos elso kattin megerosit ker biztosan kattints ujra masodi indi csinal rendszer koz eloszor biztonsagi ment keszi mosta allap neve visszaalli elo sikerul alli vissza semmi egesz visszaalli egyetl tranzakcio hiba serul fajl visszagordul ada valtoz ujabb verzio keszul ment fog elobb frissite rendsz utana ujraepiti ker gyorsitotar visszav visszaalli hozta vartal visszaalli elotti biztonsagi ment ugyanigy visszaallith megmar lista figyel visszaalli men ota felv ada uj ugyfel lap penztartetel torli eles ada hasznald biztos benne elotte nezd elonez",
             "h": 155
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Export, import és költözés élesbe",
             "horgony": "export-import-es-koltozes-elesbe",
             "szoveg": "**Beállítások exportja** (Beállítások › Mentés › Export és import): a rendszer **minden beállítása** egy jelszavas fájlba kerül – arculat, számlázás, SMS, levelezés, nyomtatványok, kulcsok, mentési helyek –, **adatok nélkül**. Új telepítésen (például az éles szerveren) az **Import fájlból** résznél betöltöd, és nem kell mindent újra beállítani.\n\n**A kulcsok és jelszavak utaznak.** A rendszer a titkosított kulcsokat (Számla Agent, IMEI, levelezés, SMS…) a jelszavas fájlon belül nyíltan viszi át, és az új gépen az **ottani** kulcsokkal titkosítja újra. A fájl ezért érzékeny: erős jelszóval készül, és tárold biztonságosan.\n\nA **teljes mentés** (adatok + beállítások) a mentések listájából tölthető le titkosítva (**Letöltés (titkosítva)**), és másik gépen ugyanígy visszaállítható.\n\n### Lépésről lépésre: költözés a próbarendszerből élesbe\n\n1. A próbarendszeren: **Beállítások › Mentés › Beállítások exportja**. Mentsd el a fájlt.\n2. Az éles szerveren telepítsd a rendszert (ezt a rendszer üzemeltetője végzi).\n3. Ott: **Beállítások › Mentés › Import fájlból** – válaszd ki a fájlt, add meg a jelszavát, nyisd meg az előnézetet.\n4. Nyomd meg a **Csak a beállítások visszaállítása** gombot (és erősítsd meg).\n5. Ellenőrizd a külső mentési helyeket (**Kapcsolat próbája**). A Google Drive kapcsolat a másik gépről is érvényes marad, de ha ugyanazt a mappát a két rendszer használja, érdemes az élesen újra összekapcsolni.",
-            "t": "mentes jogosultsag biztonsag expor impor koltozes eles expor impor koltozes eles beallitas expor beallitas mentes expor impor rendszer beallitasa jelszavas fajl ar arcul szamlazas sms levelezes nyomtatvany kulcs mentesi hely ada nelkul uj telepites peldaul eles szerver impor fajl resznel betol mind ujra beallitani kulcs jelszav utaz rendszer titkosit kulcs szamla agen imei levelezes sms jelszavas fajl belul nyiltan viszi uj gep ottani kulcs titkosi ujra fajl ezer erzekeny eros jelszo keszul tarold biztonsagosan teljes mentes ada beallitas mentes lista toltheto titkositva letoltes titkositva masi gep ugyanigy visszaallithato lepes lepes koltozes probarendszer eles probarendszer beallitas mentes beallitas expor mentsd fajl eles szerver telepitsd rendsz rendszer uzemelteto vegzi beallitas mentes impor fajl valaszd fajl add jelszav nyisd elonez nyomd beallitas visszaallitasa gomb erositsd ellenorizd kulso mentesi hely kapcsol pro google drive kapcsol masi gep ervenyes mar ugyanaz mapp ket rendszer hasznal erdemes eles ujra osszekapcsolni",
+            "t": "men jogosultsag biztonsag expor impor koltoz eles expor impor koltoz eles beallit expor beallit men expor impor rendszer beallitasa jelszav fajl ar arcul szamlaz sms levelez nyomtatvany kulcs mentesi hely ada nelkul uj telepit peldaul eles szerver impor fajl resznel betol mind ujra beallita kulcs jelszav utaz rendszer titkosit kulcs szamla agen imei levelez sms jelszav fajl belul nyiltan viszi uj gep otta kulcs titkosi ujra fajl ezer erzekeny eros jelszo keszul tarold biztonsagosan telj men ada beallit ment lista toltheto titkositva letol titkositva masi gep ugyanigy visszaallithato lep lep koltoz probarendszer eles probarendszer beallit men beallit expor mentsd fajl eles szerver telepitsd rendsz rendszer uzemelteto vegzi beallit men impor fajl valaszd fajl add jelszav nyisd elonez nyomd beallit visszaallitasa gomb erositsd ellenorizd kulso mentesi hely kapcsol pro google drive kapcsol masi gep erveny mar ugyanaz mapp ket rendszer hasznal erd eles ujra osszekapcsol",
             "h": 144
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Az asszisztens módosításai: pillanatkép és visszaállítás",
             "horgony": "az-asszisztens-modositasai-pillanatkep-es-visszaallitas",
             "szoveg": "Az asszisztens adatot soha nem módosít magától. Minden módosítás előbb **javaslat**, amelyet egy kártyán látsz.\n\n1. A kártya megmutatja, mi változna: a mező nevét, a régi és az új értéket. A kártya típusa **Hozzáadás**, **Átírás**, **Törlés** vagy **Adatlekérés**.\n2. Te döntesz: **Engedélyezem** vagy **Elutasítom**.\n3. Átírásnál és törlésnél a kártya egy négyjegyű kódot is kér: **Biztonsági megerősítés – írd be a kódot**. Amíg nem írtad be, az **Engedélyezem** gomb nem nyomható meg.\n4. Engedélyezés után a rendszer előbb elmenti a rekord teljes, előző állapotát (ez a pillanatkép), és csak utána hajtja végre a változást.\n\nA javaslat hat óra után lejár. Az döntheti el, akinek készült, vagy egy adminisztrátor.\n\n### Lépésről lépésre: egy módosítás visszaállítása\n\n1. Keresd meg a végrehajtott művelet kártyáját a beszélgetésben. Adminisztrátorként a **Beállítások › Asszisztens › Javaslatok és napló** oldalon az összes művelet ott van, tizenkettesével lapozva.\n2. Nyisd le a kártyán a **Visszaállítás…** részt.\n3. Írd be a művelet számát – a kártya kiírja, melyik az.\n4. Nyomd meg a **Visszaállítom** gombot.\n\nHa a rekord a művelet óta megváltozott, a rendszer nem írja felül vakon: szól, és csak a **Mégis visszaállítom** gombbal megy tovább.\n\nCsak a saját műveletedet állíthatod vissza; adminisztrátor bárkiét. A kártya állapota: **Jóváhagyásra vár**, **Végrehajtva**, **Elutasítva**, **Visszaállítva**, **Nem sikerült** vagy **Lejárt**.\n\nRészletek az asszisztensről: Asszisztens.",
-            "t": "mentes jogosultsag biztonsag asszisztens modositas pillanatkep visszaallitas asszisztens modositas pillanatkep visszaallitas asszisztens ada soha modosi maga modositas elobb javasl amely kartyan latsz kartya megmut valtozna mezo nev regi uj ert kartya tipusa hozzaadas atiras torles adatlekeres dontesz engedelyez elutasi atirasnal torlesnel kartya negyjegyu kod ker biztonsagi megerosites ird kod amig irt engedelyez gomb nyomhato engedelyezes utan rendszer elobb elmenti rekord teljes elozo allap pillanatkep utana haj veg valtozas javasl hat ora utan lejar dontheti aki keszul adminisztrator lepes lepes modositas visszaallitasa keresd vegrehajt muvel kartyaj beszelgetes adminisztratork beallitas asszisztens javasl naplo oldal osszes muvel tizenkettese lapozva nyisd kartyan visszaallitas resz ird muvel szam kartya kiir nyomd visszaalli gomb rekord muvel ota megvaltoz rendszer irja felul vak szol megis visszaalli gombbal megy tovabb saj muvelet allith vissza adminisztrator barki kartya allapota jovahagyas var vegrehajtva elutasitva visszaallitva sikerul lejar reszl asszisztens asszisztens",
+            "t": "men jogosultsag biztonsag asszisztens modosit pillanatkep visszaalli asszisztens modosit pillanatkep visszaalli asszisztens ada soha modosi maga modosi elobb javasl amely kartyan latsz kartya megmut valtozna mezo nev regi uj ert kartya tipusa hozza atir torl adatleker dontesz engedelyez elutasi atirasnal torlesnel kartya negyjegyu kod ker biztonsagi megerosi ird kod amig irt engedelyez gomb nyomhato engedelyez utan rendszer elobb elmenti rekord telj elozo allap pillanatkep utana haj veg valtoz javasl hat ora utan lejar dontheti aki keszul adminisztrator lep lep modosi visszaallitasa keresd vegrehajt muvel kartyaj beszelget adminisztratork beallit asszisztens javasl naplo oldal ossz muvel tizenkettese lapozva nyisd kartyan visszaalli resz ird muvel szam kartya kiir nyomd visszaalli gomb rekord muvel ota megvaltoz rendszer irja felul vak szol megis visszaalli gombbal megy tovabb saj muvelet allith vissza adminisztrator barki kartya allapota jovahagy var vegrehajtva elutasitva visszaallitva sikerul lejar reszl asszisztens asszisztens",
             "h": 140
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal)",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "A belépéshez a jelszó mellé a telefonon futó **hitelesítő alkalmazás** 6 jegyű kódja is kell. A kód 30 másodpercenként változik, és egyszer használható – így egy kitudódott jelszó egymagában nem elég senkinek. Bármelyik szokásos alkalmazás jó: Google Authenticator, Microsoft Authenticator, Aegis, 2FAS. Internet a telefonon sem kell hozzá.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal ketlepcsos belepes azonositas telefonnal belepes jelszo melle telef futo hitelesito alkalmazas jegyu kod kod 30 masodpercenk valtozi egyszer hasznalhato igy kitudod jelszo egymaga eleg senki barmelyi szokasos alkalmazas jo google authenticator microsof authenticator aegis 2fas intern telef hozza",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal ketlepcsos belep azonosi telefonnal belep jelszo melle telef futo hitelesito alkalmaz jegyu kod kod 30 masodpercenk valtozi egyszer hasznalhato igy kitudod jelszo egymaga eleg senki barmelyi szokasos alkalmaz jo google authenticator microsof authenticator aegis 2fas intern telef hozza",
             "h": 45
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › Ki kell-e és kinek",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### Ki kell-e és kinek\n\n**Beállítások › Jogosultságok › Kétlépcsős belépés** (adminisztrátor):\n\n| Mező | Mire való |\n|---|---|\n| **Kinek kell** | **Kikapcsolva** – senkitől nem kér kódot. **Választható** (alap) – aki akarja, bekapcsolja magának a profilmenüben. **Adminisztrátoroknak kötelező** – a többieknek választható. **Mindenkinek kötelező**. |\n| **Megbízható gép (nap)** | Ennyi napig nem kér kódot azon a gépen, ahol belépéskor bepipálták az „Ezen a gépen ne kérje” jelölőt. 0 = mindig kér. Alap: 30. |\n\nAlatta a fiókok listája: kinél van bekapcsolva, hány tartalék kódja maradt, és a **Visszaállítás** gomb (kétszer kell rákattintani).\n\nMielőtt a rendszer kívülről (internetről) is elérhető lesz, állítsd **Adminisztrátoroknak** vagy **Mindenkinek kötelező**-re.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal kin ketlepcsos belepes azonositas telefonnal kin kin beallitas jogosultsag ketlepcsos belepes adminisztrator mezo mire valo kin kikapcsolva senki ker kod valaszthato alap akar bekapcsol maga profilmenu adminisztrator kotelezo tobbi valaszthato mindenki kotelezo megbizhato gep nap ennyi nap ker kod azon gep ahol belepes bepipal ezen gep ne ker jelol ker alap 30 alatta fio lista kinel bekapcsolva hany tartal kod mar visszaallitas gomb ketszer rakattintani miel rendszer kivul intern elerheto allitsd adminisztrator mindenki kotelezo re",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal kin ketlepcsos belep azonosi telefonnal kin kin beallit jogosultsag ketlepcsos belep adminisztrator mezo mire valo kin kikapcsolva senki ker kod valaszthato alap akar bekapcsol maga profilmenu adminisztrator kotelezo tobbi valaszthato mindenki kotelezo megbizhato gep nap ennyi nap ker kod azon gep ahol belep bepipal ezen gep ne ker jelol ker alap 30 alatta fio lista kinel bekapcsolva hany tartal kod mar visszaalli gomb ketszer rakattinta miel rendszer kivul intern elerheto allitsd adminisztrator mindenki kotelezo re",
             "h": 82
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › Lépésről lépésre: bekapcsolás a saját fiókon",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### Lépésről lépésre: bekapcsolás a saját fiókon\n\n1. Telepíts a telefonra egy hitelesítő alkalmazást.\n2. A jobb felső sarokban nyisd meg a profilmenüt, és kattints a **Kétlépcsős belépés** sorra.\n3. Az alkalmazásban olvasd be a QR-kódot (vagy írd be a kulcsot kézzel).\n4. Írd be az alkalmazás 6 jegyű kódját, és kattints a **Bekapcsolás** gombra.\n5. Megjelenik **10 tartalék kód**. Írd le vagy nyomtasd ki őket – többet nem látod.\n\nHa kötelező, és még nem állítottad be, a rendszer **belépéskor**, a jelszó után kéri ugyanezt: QR-kód, kód beírása, tartalék kódok.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal lepes lepes bekapcsolas saj fio ketlepcsos belepes azonositas telefonnal lepes lepes bekapcsolas saj fio lepes lepes bekapcsolas saj fio telepits telef hitelesito alkalmazas jobb felso sar nyisd profilmenu kattints ketlepcsos belepes sor alkalmazas olvasd qr kod ird kulcs kezzel ird alkalmazas jegyu kodj kattints bekapcsolas gomb megjeleni 10 tartal kod ird nyomtasd oke tobb lat kotelezo allitot rendszer belepes jelszo utan keri ugyanez qr kod kod beirasa tartal kod",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal lep lep bekapcsol saj fio ketlepcsos belep azonosi telefonnal lep lep bekapcsol saj fio lep lep bekapcsol saj fio telepits telef hitelesito alkalmaz jobb felso sar nyisd profilmenu kattints ketlepcsos belep sor alkalmaz olvasd qr kod ird kulcs kezzel ird alkalmaz jegyu kodj kattints bekapcsol gomb megjele 10 tartal kod ird nyomtasd oke tobb lat kotelezo allitot rendszer belep jelszo utan keri ugyanez qr kod kod beirasa tartal kod",
             "h": 76
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › Belépés kóddal",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### Belépés kóddal\n\n1. Add meg a neved és a jelszavad, mint eddig.\n2. A következő képernyőn írd be a telefon 6 jegyű kódját.\n3. Ha ez a te géped, pipáld be az **Ezen a gépen … napig ne kérje** jelölőt.\n\nTelefon nélkül egy **tartalék kódot** is beírhatsz a kód helyére (mindegyik egyszer használható). Öt hibás kód után újra a jelszóval kell kezdeni; ha egy fióknál rövid időn belül tíz hibás kód gyűlik össze, a rendszer negyedórára nem fogad el kódot.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal belepes koddal ketlepcsos belepes azonositas telefonnal belepes koddal belepes koddal add nev jelszav edd kovetkezo keperny ird telef jegyu kodj gep pipald ezen gep nap ne ker jelol telef nelkul tartal kod beirhatsz kod helye mindegyi egyszer hasznalhato ot hibas kod utan ujra jelszo kezdeni fioknal rovid idon belul tiz hibas kod gyuli ossze rendszer negyedo fog kod",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal belep koddal ketlepcsos belep azonosi telefonnal belep koddal belep koddal add nev jelszav edd kovetkezo keperny ird telef jegyu kodj gep pipald ezen gep nap ne ker jelol telef nelkul tartal kod beirhatsz kod helye mindegyi egyszer hasznalhato ot hib kod utan ujra jelszo kezde fioknal rovid idon belul tiz hib kod gyuli ossze rendszer negyedo fog kod",
             "h": 65
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › A profilmenü „Kétlépcsős belépés” ablaka",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### A profilmenü „Kétlépcsős belépés” ablaka\n\nBekapcsolt állapotban a telefon aktuális kódjával (vagy egy tartalék kóddal):\n\n- **Új tartalék kódok** – tíz új kód; a régiek érvénytelenek lesznek.\n- **Megbízható gépek visszavonása** – minden gépen újra kéri a kódot (pl. ha egy gép eltűnt).\n- **Kikapcsolás** – csak ha a fiókodnál nem kötelező.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal profilmenu ketlepcsos belepes ablaka ketlepcsos belepes azonositas telefonnal profilmenu ketlepcsos belepes ablaka profilmenu ketlepcsos belepes ablaka bekapcsol allap telef aktualis kod tartal koddal uj tartal kod tiz uj kod regi ervenytele lesz megbizhato gep visszavonasa gep ujra keri kod pl gep eltun kikapcsolas fiokodnal kotelezo",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal profilmenu ketlepcsos belep ablaka ketlepcsos belep azonosi telefonnal profilmenu ketlepcsos belep ablaka profilmenu ketlepcsos belep ablaka bekapcsol allap telef aktualis kod tartal koddal uj tartal kod tiz uj kod regi ervenytele lesz megbizhato gep visszavonasa gep ujra keri kod pl gep eltun kikapcsol fiokodnal kotelezo",
             "h": 52
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › Elveszett vagy új telefon",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### Elveszett vagy új telefon\n\n- Ha van tartalék kódod: lépj be vele, kapcsold ki, majd be újra az új telefonnal (vagy kérj új tartalék kódokat).\n- Ha nincs: az adminisztrátor a **Beállítások › Jogosultságok** fiók-listáján a **Visszaállítás** gombbal törli a fiók kódját. A következő belépéskor (ha kötelező) újra beállítod.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal elvesz uj telef ketlepcsos belepes azonositas telefonnal elvesz uj telef elvesz uj telef tartal kod lepj vele kapcsold majd ujra uj telefonnal kerj uj tartal kod nincs adminisztrator beallitas jogosultsag fio listajan visszaallitas gombbal torli fio kodj kovetkezo belepes kotelezo ujra bealli",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal elvesz uj telef ketlepcsos belep azonosi telefonnal elvesz uj telef elvesz uj telef tartal kod lepj vele kapcsold majd ujra uj telefonnal kerj uj tartal kod nincs adminisztrator beallit jogosultsag fio listajan visszaalli gombbal torli fio kodj kovetkezo belep kotelezo ujra bealli",
             "h": 49
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Kétlépcsős belépés (azonosítás telefonnal) › Közös fiók",
             "horgony": "ketlepcsos-belepes-azonositas-telefonnal",
             "szoveg": "### Közös fiók\n\nA közös fióknak egy kódja van – a fiókhoz tartozik, nem a dolgozókhoz. A közös fiókos gépeken érdemes a **Megbízható gép** jelölőt használni. A közös fiók kódját csak adminisztrátor kezelheti.",
-            "t": "mentes jogosultsag biztonsag ketlepcsos belepes azonositas telefonnal kozos fio ketlepcsos belepes azonositas telefonnal kozos fio kozos fio kozos fio kod fio tartozi dolgoz kozos fiokos gep erdemes megbizhato gep jelol hasznalni kozos fio kodj adminisztrator kezelheti",
+            "t": "men jogosultsag biztonsag ketlepcsos belep azonosi telefonnal kozos fio ketlepcsos belep azonosi telefonnal kozos fio kozos fio kozos fio kod fio tartozi dolgoz kozos fiokos gep erd megbizhato gep jelol hasznal kozos fio kodj adminisztrator kezelheti",
             "h": 36
         },
         {
@@ -177,7 +177,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Ügyfelet nem töröl.** Az ügyfél űrlapján az **Inaktívra állít** gomb kiveszi a napi listából, az **Újra aktív** visszateszi. Az inaktív ügyfelet a fejléc keresője nem hozza, de a régi munkalapjain megmarad.\n- **Munkalapot nem töröl.** A téves munkalap az érvénytelen állapotba kerül; a száma és a története megmarad.\n- **Kollégát nem töröl.** Csak letiltani lehet.\n- **A munkalapon használt terméket nem törli:** törlés helyett inaktív lesz. A szolgáltatás törölhető a törzsből, de a munkalapokra már felvett tételei megmaradnak.\n- **Az asszisztens ügyfél vagy munkalap törlésére javaslatot sem tesz.** Számlát kiállítani, levelet küldeni, pénztárba írni sem tud.\n- **Belépés nélkül semmi nem érhető el.** A csatolt fájlokat is csak bejelentkezett, jogosult felhasználó kapja meg.",
-            "t": "mentes jogosultsag biztonsag szabaly ami rendszer betar szabaly ami rendszer betar ugyfel torol ugyfel urlapjan inaktiv alli gomb kiveszi napi lista ujra aktiv visszateszi inaktiv ugyfel fejlec kereso hozza regi munkalapjain megmar munkalap torol teves munkalap ervenytel allap ar szama tortenete megmar kolleg torol letiltani munkalap hasznal term torli torles hely inaktiv szolgaltatas torolheto torzs munkalap felv tetel megmar asszisztens ugyfel munkalap torlese javasl tesz szamla kiallitani level kuldeni penztar irni tud belepes nelkul semmi erheto csa fajl bejelentkez jogosul felhasznalo kap",
+            "t": "men jogosultsag biztonsag szabaly ami rendszer betar szabaly ami rendszer betar ugyfel torol ugyfel urlapjan inaktiv alli gomb kiveszi napi lista ujra aktiv visszateszi inaktiv ugyfel fejlec kereso hozza regi munkalapjain megmar munkalap torol tev munkalap ervenytel allap ar szama tortenete megmar kolleg torol letilta munkalap hasznal term torli torl hely inaktiv szolgalt torolheto torzs munkalap felv tetel megmar asszisztens ugyfel munkalap torlese javasl tesz szamla kiallita level kulde penztar irni tud belep nelkul semmi erheto csa fajl bejelentkez jogosul felhasznalo kap",
             "h": 82
         },
         {
@@ -185,7 +185,7 @@
             "cim": "Titkosítva tárolt kulcsok és jelszavak",
             "horgony": "titkositva-tarolt-kulcsok-es-jelszavak",
             "szoveg": "A rendszer a külső szolgáltatások jelszavait nem tárolja olvasható formában.\n\n| Adat | Hogyan tárolódik |\n|---|---|\n| E-mail-fiók alkalmazásjelszava (**Beállítások › Levelezés**) | Titkosítva. Soha nem kerül vissza a képernyőre. |\n| A levélügynök AI-kulcsa (**Beállítások › Levelezés**) | Titkosítva. |\n| Az asszisztens Claude API-kulcsa (**Beállítások › Asszisztens**) | Titkosítva. A rendszer üzemeltetője a szerver beállítófájljában is megadhatja – akkor az adatbázisba be sem kerül. |\n| A postafiók külön jelszava (**Külön jelszó a CRM-ben**) | Lenyomatként: maga a jelszó nem olvasható vissza. |\n| A letöltött levelek gyorsítótára | Titkosított fájlokban. |\n| A Számla Agent kulcs (**Beállítások › Számlázás**) | Titkosítva. A képernyőre nem kerül vissza. |\n| A fizetős IMEI-szolgáltató kulcsa (**Beállítások › IMEI-lekérdezés**) | Titkosítva. A mezője mentés után üres marad; törölni a **Kulcs törlése** pipával lehet. |\n| A készülékek **zárkódja és feloldó mintája** (Eszközök) | Titkosítva. Csak a **Feloldó kód és minta megnézése** jogú szerep láthatja, a **Megmutat** gombbal; minden megnézés a Naplóba kerül. |\n\nA titkosítás kulcsa a szerver saját titkos kulcsaiból képződik (ezek a telepítéskor jönnek létre). A kulcsok a **mentésfájlba is titkosítva** kerülnek: aki csak a mentést vagy az adatbázist szerzi meg, nem tudja kiolvasni őket.\n\nA korábbi verzióban titkosítatlanul eltárolt Számla Agent kulcsot, IMEI-kulcsot, zárkódokat és mintákat a rendszer a frissítés után magától titkosítja – nem kell újra beírni. (A Napló régebbi bejegyzéseiben a korábbi kódok változatlanul megmaradnak – a napló nem írható át –, de ott is csak a jogosult látja őket.)",
-            "t": "mentes jogosultsag biztonsag titkositva tarol kulcs jelszav titkositva tarol kulcs jelszav rendszer kulso szolgaltatas jelszav tarol olvashato forma ada tarolodi mail fio alkalmazasjelszava beallitas levelezes titkositva soha ar vissza kepernyo levelugyn ai kulcsa beallitas levelezes titkositva asszisztens claude api kulcsa beallitas asszisztens titkositva rendszer uzemelteto szerver beallitofajl megadh adatbazis ar postafi kul jelszava kul jelszo crm ben lenyomatk maga jelszo olvashato vissza letolt level gyorsitota titkosit fajl szamla agen kulcs beallitas szamlazas titkositva kepernyo ar vissza fizetos imei szolgaltato kulcsa beallitas imei lekerdezes titkositva mezo mentes utan ures mar torolni kulcs torlese pipa eszkoz zark feloldo minta eszkoz titkositva feloldo kod minta megnezese jogu szerep lath megmu gombbal megnezes naplo ar titkositas kulcsa szerver saj titkos kulcs kepzodi telepites jon let kulcs mentesfajl titkositva ar mentes adatbazis szerzi tud kiolvasni oke korabbi verzio titkositatlanul elta szamla agen kulcs imei kulcs zark min rendszer frissites utan maga titkosi ujra beirni naplo regebbi bejegyzes korabbi kod valtozatlanul megmar naplo irhato jogosul lat oke",
+            "t": "men jogosultsag biztonsag titkositva tarol kulcs jelszav titkositva tarol kulcs jelszav rendszer kulso szolgaltat jelszav tarol olvashato forma ada tarolodi mail fio alkalmazasjelszava beallit levelez titkositva soha ar vissza kepernyo levelugyn ai kulcsa beallit levelez titkositva asszisztens claude api kulcsa beallit asszisztens titkositva rendszer uzemelteto szerver beallitofajl megadh adatbazis ar postafi kul jelszava kul jelszo crm ben lenyomatk maga jelszo olvashato vissza letolt level gyorsitota titkosit fajl szamla agen kulcs beallit szamlaz titkositva kepernyo ar vissza fizetos imei szolgaltato kulcsa beallit imei lekerdez titkositva mezo men utan ures mar torol kulcs torlese pipa eszkoz zark feloldo minta eszkoz titkositva feloldo kod minta megnezese jogu szerep lath megmu gombbal megnez naplo ar titkosi kulcsa szerver saj titkos kulcs kepzodi telepit jon let kulcs mentesfajl titkositva ar ment adatbazis szerzi tud kiolv oke korabbi verzio titkositatlanul elta szamla agen kulcs imei kulcs zark min rendszer frissi utan maga titkosi ujra beir naplo regebbi bejegyzes korabbi kod valtozatlanul megmar naplo irhato jogosul lat oke",
             "h": 161
         },
         {
@@ -193,7 +193,7 @@
             "cim": "Titkosítva tárolt kulcsok és jelszavak",
             "horgony": "titkositva-tarolt-kulcsok-es-jelszavak",
             "szoveg": "Költözéskor a **Letöltés (titkosítva)** csomag a zárkódokat is hordozható alakban viszi, és az új gépen újra titkosítja – ott is olvashatók maradnak.\n\nFigyelem: Ha ezek megváltoznak – például költözéskor –, a titkosítva tárolt jelszavak és kulcsok nem fejthetők vissza. Ilyenkor az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot újra be kell írni; a Számlázás és az IMEI-lekérdezés lapfülén piros sáv figyelmeztet rá.",
-            "t": "mentes jogosultsag biztonsag titkositva tarol kulcs jelszav titkositva tarol kulcs jelszav koltozes letoltes titkositva csomag zark hordozhato ala viszi uj gep ujra titkosi olvash mar figyel megvaltoz peldaul koltozes titkositva tarol jelszav kulcs fejth vissza ily alkalmazasjelsz api kulcs szamla agen kulcs imei kulcs ujra irni szamlazas imei lekerdezes lapful piros sav figyelmez",
+            "t": "men jogosultsag biztonsag titkositva tarol kulcs jelszav titkositva tarol kulcs jelszav koltoz letol titkositva csomag zark hordozhato ala viszi uj gep ujra titkosi olvash mar figyel megvaltoz peldaul koltoz titkositva tarol jelszav kulcs fejth vissza ily alkalmazasjelsz api kulcs szamla agen kulcs imei kulcs ujra irni szamlaz imei lekerdez lapful piros sav figyelmez",
             "h": 53
         },
         {
@@ -201,7 +201,7 @@
             "cim": "Titkosítva tárolt kulcsok és jelszavak › A postafiók külön jelszava",
             "horgony": "titkositva-tarolt-kulcsok-es-jelszavak",
             "szoveg": "### A postafiók külön jelszava\n\nA **Beállítások › Levelezés** lapfülön egy postafióknak külön jelszó adható. Amíg valaki be nem írja, annak a fióknak semmilyen adata nem jut el a böngészőjébe.\n\n- Öt hibás próbálkozás után 15 perc szünet következik.\n- A megnyitott fiók a beállított idő után újra bezár (alapból 480 perc; 5 és 1440 perc között állítható).",
-            "t": "mentes jogosultsag biztonsag titkositva tarol kulcs jelszav postafi kul jelszava titkositva tarol kulcs jelszav postafi kul jelszava postafi kul jelszava beallitas levelezes lapful postafi kul jelszo adhato amig valaki irja ann fio semmily adata jut bongeszo ot hibas probalkozas utan 15 perc szun kovetkezi megnyit fio beallit ido utan ujra bezar alap 480 perc 1440 perc koz allithato",
+            "t": "men jogosultsag biztonsag titkositva tarol kulcs jelszav postafi kul jelszava titkositva tarol kulcs jelszav postafi kul jelszava postafi kul jelszava beallit levelez lapful postafi kul jelszo adhato amig valaki irja ann fio semmily adata jut bongeszo ot hib probalkoz utan 15 perc szun kovetkezi megnyit fio beallit ido utan ujra bezar alap 480 perc 1440 perc koz allithato",
             "h": 58
         },
         {
@@ -209,7 +209,7 @@
             "cim": "Amit a rendszer nem tud",
             "horgony": "amit-a-rendszer-nem-tud",
             "szoveg": "- **A felhasználói fiókok nincsenek a mentésben, ezért a visszaállítás sem érinti őket.** A kollégák fiókjai a mentésen kívül maradnak; új gépen őket újra létre kell hozni.\n- **A külső hely beállításai a beállításokkal együtt utaznak.** Másik gépre importálva a Drive-kapcsolat és a mentési helyek is átkerülnek – ellenőrizd őket (**Kapcsolat próbája**), mielőtt a régi rendszert kikapcsolod.\n- **A Google Drive csak akkor marad összekapcsolva, ha az OAuth-állapot „Éles\".** Tesztelés állapotban a Google 7 naponta lejáratja.\n- **Kollégánként nincs modul-jogosultság – szerepenként van.** Egy kolléga jogait a szerepe adja (**Beállítások › Jogosultságok**).\n- **A csatolt fájlok és a felhasználói fiókok nincsenek a mentésben.** Ezekhez a szerver teljes mentése kell.\n- **A kézzel végzett módosításnak nincs visszaállító gombja.** Visszaállítani csak az asszisztens műveletét lehet.\n\nÉlesítés előtt ezért egyeztess a tárhely üzemeltetőjével: legyen napi, teljes szervermentés (fájlok és adatbázis), és tudd, hogyan kérhető vissza.",
-            "t": "mentes jogosultsag biztonsag rendszer tud rendszer tud felhasznaloi fio nincse mentes ezer visszaallitas erinti oke kolleg fiokj mentes kivul mar uj gep oke ujra let hozni kulso hely beallitas beallitas egyu utaz masi gep importalva drive kapcsol mentesi hely atkerul ellenorizd oke kapcsol pro miel regi rendsz kikapcsol google drive mar osszekapcsolva oauth allap eles teszteles allap google naponta lejar kollegank nincs modul jogosultsag szerepenk kollega jog szerepe adja beallitas jogosultsag csa fajl felhasznaloi fio nincse mentes eze szerver teljes mentese kezzel vegz modositas nincs visszaallito gomb visszaallitani asszisztens muvel elesites elo ezer egyeztess tarhely uzemelteto legy napi teljes szervermentes fajl adatbazis tudd kerheto vissza",
+            "t": "men jogosultsag biztonsag rendszer tud rendszer tud felhasznaloi fio nincse ment ezer visszaalli erinti oke kolleg fiokj ment kivul mar uj gep oke ujra let hoz kulso hely beallit beallit egyu utaz masi gep importalva drive kapcsol mentesi hely atkerul ellenorizd oke kapcsol pro miel regi rendsz kikapcsol google drive mar osszekapcsolva oauth allap eles tesztel allap google naponta lejar kollegank nincs modul jogosultsag szerepenk kollega jog szerepe adja beallit jogosultsag csa fajl felhasznaloi fio nincse ment eze szerver telj mentese kezzel vegz modosit nincs visszaallito gomb visszaallita asszisztens muvel elesi elo ezer egyeztess tarhely uzemelteto legy napi telj szervermen fajl adatbazis tudd kerheto vissza",
             "h": 105
         },
         {
@@ -217,7 +217,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **„A szerveren nincs gzip – a mentés nem készülhet el.\"** A szerver PHP-jéből hiányzik a tömörítés. Kérd a tárhely üzemeltetőjét, hogy kapcsolja be.\n- **„A mentési mappa nem írható: …\"** A mappa jogosultságait az üzemeltető állítja be.\n- **„Ez a javaslat lejárt – kérd újra az asszisztenstől.\"** Hat óránál régebbi javaslat.\n\nTovábbi elakadások: Hibaelhárítás.",
-            "t": "mentes jogosultsag biztonsag megy megy szerver nincs gzip mentes keszulh szerver php jebol hianyzi tomorites kerd tarhely uzemeltetoj kapcsol mentesi mappa irhato mappa jogosultsag uzemelteto alli javasl lejar kerd ujra asszisztens hat oranal regebbi javasl tovabbi elakadas hibaelharitas",
+            "t": "men jogosultsag biztonsag megy megy szerver nincs gzip men keszulh szerver php jebol hianyzi tomori kerd tarhely uzemeltetoj kapcsol mentesi mappa irhato mappa jogosultsag uzemelteto alli javasl lejar kerd ujra asszisztens hat oranal regebbi javasl tovabbi elakad hibaelhari",
             "h": 38
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Mi az a kétlépcsős belépés?",
             "horgony": "mi-az-a-ketlepcsos-belepes",
             "szoveg": "A jelszó mellé a telefonod hitelesítő alkalmazásának 6 jegyű kódja is kell a belépéshez. Bekapcsolás: profilmenü › **Kétlépcsős belépés**.",
-            "t": "mentes jogosultsag biztonsag gyi ketlepcsos belepes gyi ketlepcsos belepes jelszo melle telef hitelesito alkalmazasa jegyu kod belepes bekapcsolas profilmenu ketlepcsos belepes",
+            "t": "men jogosultsag biztonsag gyi ketlepcsos belep gyi ketlepcsos belep jelszo melle telef hitelesito alkalmazasa jegyu kod belep bekapcsol profilmenu ketlepcsos belep",
             "h": 21
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Mire jók a tartalék kódok?",
             "horgony": "mire-jok-a-tartalek-kodok",
             "szoveg": "A tartalék kód (10 darab, XXXX-XXXX alakú) a telefon helyett írható be a kód mezőbe, ha a telefon nincs kéznél vagy elveszett. Mindegyik egyszer használható. Újakat a profilmenü › **Kétlépcsős belépés** ablakában kérhetsz.",
-            "t": "mentes jogosultsag biztonsag gyi mire jok tartal kod gyi mire jok tartal kod tartal kod 10 darab xxxx xxxx alaku telef hely irhato kod mezo telef nincs keznel elvesz mindegyi egyszer hasznalhato uja profilmenu ketlepcsos belepes ablaka kerhetsz",
+            "t": "men jogosultsag biztonsag gyi mire jok tartal kod gyi mire jok tartal kod tartal kod 10 darab xxxx xxxx alaku telef hely irhato kod mezo telef nincs keznel elvesz mindegyi egyszer hasznalhato uja profilmenu ketlepcsos belep ablaka kerhetsz",
             "h": 38
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Melyik hitelesítő alkalmazást telepítsem (Google Authenticator)?",
             "horgony": "melyik-hitelesito-alkalmazast-telepitsem-google-authenticator",
             "szoveg": "Bármelyik jó, amelyik 6 jegyű, 30 másodpercenként változó kódot ad: Google Authenticator, Microsoft Authenticator, Aegis, 2FAS. A QR-kódot ezzel olvasod be a bekapcsoláskor.",
-            "t": "mentes jogosultsag biztonsag gyi hitelesito alkalmazas telepits google authenticator gyi hitelesito alkalmazas telepits google authenticator barmelyi jo amelyi jegyu 30 masodpercenk valtozo kod ad google authenticator microsof authenticator aegis 2fas qr kod ezzel olvas bekapcsolas",
+            "t": "men jogosultsag biztonsag gyi hitelesito alkalmaz telepits google authenticator gyi hitelesito alkalmaz telepits google authenticator barmelyi jo amelyi jegyu 30 masodpercenk valtozo kod ad google authenticator microsof authenticator aegis 2fas qr kod ezzel olv bekapcsol",
             "h": 35
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Elveszett a telefonom. Hogyan lépek be?",
             "horgony": "elveszett-a-telefonom-hogyan-lepek-be",
             "szoveg": "Írj be egy **tartalék kódot** a kód helyére. Ha nincs, kérd az adminisztrátort: a **Beállítások › Jogosultságok** listáján visszaállítja a fiókodat.",
-            "t": "mentes jogosultsag biztonsag gyi elvesz telefon lep gyi elvesz telefon lep irj tartal kod kod helye nincs kerd adminisztrator beallitas jogosultsag listajan visszaalli fiok",
+            "t": "men jogosultsag biztonsag gyi elvesz telefon lep gyi elvesz telefon lep irj tartal kod kod helye nincs kerd adminisztrator beallit jogosultsag listajan visszaalli fiok",
             "h": 24
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Készül magától mentés minden nap?",
             "horgony": "keszul-magatol-mentes-minden-nap",
             "szoveg": "Igen. Naponta egy teljes mentés készül – ha a gép éjjel ki van kapcsolva, akkor a nap első bejelentkezése után, a háttérben. Az asszisztens használatától nem függ. A beállítása: **Beállítások › Mentés**.",
-            "t": "mentes jogosultsag biztonsag gyi keszul maga mentes nap gyi keszul maga mentes nap naponta teljes mentes keszul gep ejjel kapcsolva nap elso bejelentkezese utan hatter asszisztens hasznalata fugg beallitasa beallitas mentes",
+            "t": "men jogosultsag biztonsag gyi keszul maga men nap gyi keszul maga men nap naponta telj men keszul gep ejjel kapcsolva nap elso bejelentkezese utan hatter asszisztens hasznalata fugg beallitasa beallit men",
             "h": 31
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Hány mentés marad meg, és hol állítom?",
             "horgony": "hany-mentes-marad-meg-es-hol-allitom",
             "szoveg": "Alapból az utolsó 20. A **Beállítások › Mentés** lapfülön, a **Megőrzött mentések száma** mezőben állíthatod.",
-            "t": "mentes jogosultsag biztonsag gyi hany mentes mar alli gyi hany mentes mar alli alap utolso 20 beallitas mentes lapful megorz mentes szama mezo allith",
+            "t": "men jogosultsag biztonsag gyi hany men mar alli gyi hany men mar alli alap utolso 20 beallit men lapful megorz ment szama mezo allith",
             "h": 24
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Benne van a mentésben a Számla Agent kulcs?",
             "horgony": "benne-van-a-mentesben-a-szamla-agent-kulcs",
             "szoveg": "Igen, de titkosítva – ugyanúgy, ahogy az adatbázisban áll. Aki csak a mentésfájlt szerzi meg, nem tudja kiolvasni.",
-            "t": "mentes jogosultsag biztonsag gyi benne mentes szamla agen kulcs gyi benne mentes szamla agen kulcs titkositva ugyanugy ahogy adatbazis all mentesfajl szerzi tud kiolvasni",
+            "t": "men jogosultsag biztonsag gyi benne ment szamla agen kulcs gyi benne ment szamla agen kulcs titkositva ugyanugy ahogy adatbazis all mentesfajl szerzi tud kiolv",
             "h": 24
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Ki tudom kapcsolni a napi mentést?",
             "horgony": "ki-tudom-kapcsolni-a-napi-mentest",
             "szoveg": "Igen, a **Beállítások › Mentés** lapfülön – de nem ajánlott. Kikapcsolva csak a **Mentés most** gombra készül mentés.",
-            "t": "mentes jogosultsag biztonsag gyi tud kapcsolni napi mentes gyi tud kapcsolni napi mentes beallitas mentes lapful ajanl kikapcsolva mentes gomb keszul mentes",
+            "t": "men jogosultsag biztonsag gyi tud kapcsol napi ment gyi tud kapcsol napi ment beallit men lapful ajanl kikapcsolva men gomb keszul men",
             "h": 22
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › Hol találom a mentéseket?",
             "horgony": "hol-talalom-a-menteseket",
             "szoveg": "A **Beállítások › Mentés** lapfülön. Csak adminisztrátor látja.",
-            "t": "mentes jogosultsag biztonsag gyi talal mentes gyi talal mentes beallitas mentes lapful adminisztrator lat",
+            "t": "men jogosultsag biztonsag gyi talal ment gyi talal ment beallit men lapful adminisztrator lat",
             "h": 14
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Hogyan állítok vissza egy mentésből?",
             "horgony": "hogyan-allitok-vissza-egy-mentesbol",
             "szoveg": "A **Beállítások › Mentés** lapon: a mentés mellett nyomd meg a **Visszaállítás…** gombot, nézd meg az előnézetet, és válaszd az **Adatok és beállítások** vagy a **Csak a beállítások** módot (kétlépcsős megerősítéssel). Előtte a rendszer biztonsági mentést készít a mostani állapotról, így a visszaállítás visszavonható. Részletek: lásd a **Visszaállítás mentésből** részt fent.",
-            "t": "mentes jogosultsag biztonsag gyi alli vissza mentes gyi alli vissza mentes beallitas mentes lap mentes mell nyomd visszaallitas gomb nezd elonez valaszd ada beallitas beallitas mod ketlepcsos megerositessel elotte rendszer biztonsagi mentes keszi mostani allap igy visszaallitas visszavonhato reszl lasd visszaallitas mentes resz fen",
+            "t": "men jogosultsag biztonsag gyi alli vissza ment gyi alli vissza ment beallit men lap men mell nyomd visszaalli gomb nezd elonez valaszd ada beallit beallit mod ketlepcsos megerositessel elotte rendszer biztonsagi ment keszi mosta allap igy visszaalli visszavonhato reszl lasd visszaalli ment resz fen",
             "h": 44
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Benne vannak a mentésben a csatolt fotók és a logó?",
             "horgony": "benne-vannak-a-mentesben-a-csatolt-fotok-es-a-logo",
             "szoveg": "Nem. A mentés az adatbázis adatait és a beállításokat tartalmazza. A fájlokhoz a szerver fájlmentése kell.",
-            "t": "mentes jogosultsag biztonsag gyi benne van mentes csa fot logo gyi benne van mentes csa fot logo mentes adatbazis ada beallitas tartalmazza fajl szerver fajlmentese",
+            "t": "men jogosultsag biztonsag gyi benne van ment csa fot logo gyi benne van ment csa fot logo men adatbazis ada beallit tartalmazza fajl szerver fajlmentese",
             "h": 25
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Véletlenül töröltem egy ügyfelet. Vissza lehet hozni?",
             "horgony": "veletlenul-toroltem-egy-ugyfelet-vissza-lehet-hozni",
             "szoveg": "Ügyfelet nem lehet törölni, csak inaktívvá tenni. Az **Ügyfelek** listában nyomd meg az **Inaktívak** gombot, nyisd meg az ügyfelet, és nyomd meg az **Újra aktív** gombot.",
-            "t": "mentes jogosultsag biztonsag gyi veletlenul torol ugyfel vissza hozni gyi veletlenul torol ugyfel vissza hozni ugyfel torolni inaktivva tenni ugyfel lista nyomd inaktiv gomb nyisd ugyfel nyomd ujra aktiv gomb",
+            "t": "men jogosultsag biztonsag gyi veletlenul torol ugyfel vissza hoz gyi veletlenul torol ugyfel vissza hoz ugyfel torol inaktivva ten ugyfel lista nyomd inaktiv gomb nyisd ugyfel nyomd ujra aktiv gomb",
             "h": 30
         },
         {
@@ -321,7 +321,7 @@
             "cim": "GYIK › Miért nem tudok törölni egy munkalapot?",
             "horgony": "miert-nem-tudok-torolni-egy-munkalapot",
             "szoveg": "Mert a rendszer elvből nem töröl munkalapot. A téves lapot tedd érvénytelen állapotba: így a sorszáma és a története megmarad.",
-            "t": "mentes jogosultsag biztonsag gyi tud torolni munkalap gyi tud torolni munkalap rendszer elv torol munkalap teves lap tedd ervenytel allap igy sorszama tortenete megmar",
+            "t": "men jogosultsag biztonsag gyi tud torol munkalap gyi tud torol munkalap rendszer elv torol munkalap tev lap tedd ervenytel allap igy sorszama tortenete megmar",
             "h": 24
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Mit lát egy kolléga, és mit nem?",
             "horgony": "mit-lat-egy-kollega-es-mit-nem",
             "szoveg": "A **Kolléga** szerepű minden napi menüpontot lát. Nem látja a Beállításokat, nem kezelhet kollégákat, és nem éri el a mentéseket. A szűkebb szerepek (Pultos, Szerelő, Pénztáros) ennél is kevesebbet látnak.",
-            "t": "mentes jogosultsag biztonsag gyi lat kollega gyi lat kollega kollega szerepu napi menupon lat lat beallitas kezelh kolleg eri mentes szukebb szerep pultos szerelo penztaros ennel kevesebb lat",
+            "t": "men jogosultsag biztonsag gyi lat kollega gyi lat kollega kollega szerepu napi menupon lat lat beallit kezelh kolleg eri ment szukebb szerep pultos szerelo penztaros ennel kevesebb lat",
             "h": 28
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Be lehet állítani, hogy egy kolléga ne lássa a Pénztárat?",
             "horgony": "be-lehet-allitani-hogy-egy-kollega-ne-lassa-a-penztarat",
             "szoveg": "Igen, a szerepén keresztül. A **Beállítások › Jogosultságok** fülön adj neki olyan szerepet (például **Szerelő**), amelynél a Házipénztár modul nincs bejelölve – vagy vedd ki onnan. A postafiókok ezen felül külön jelszóval is zárhatók.",
-            "t": "mentes jogosultsag biztonsag gyi allitani kollega ne lassa penztar gyi allitani kollega ne lassa penztar szerep keresztul beallitas jogosultsag ful adj neki szerep peldaul szerelo amelynel hazipenztar modul nincs bejelolve vedd onnan postafi ezen felul kul jelszo zarh",
+            "t": "men jogosultsag biztonsag gyi allita kollega ne lassa penztar gyi allita kollega ne lassa penztar szerep keresztul beallit jogosultsag ful adj neki szerep peldaul szerelo amelynel hazipenztar modul nincs bejelolve vedd onnan postafi ezen felul kul jelszo zarh",
             "h": 38
         },
         {
@@ -345,7 +345,7 @@
             "cim": "GYIK › Kilépett egy kolléga a cégtől. Mit csináljak a fiókjával?",
             "horgony": "kilepett-egy-kollega-a-cegtol-mit-csinaljak-a-fiokjaval",
             "szoveg": "A **Csapat** menüpontban tiltsd le. Azonnal kilép mindenhonnan, és nem tud újra belépni. A munkalapjai és az üzenetei megmaradnak.",
-            "t": "mentes jogosultsag biztonsag gyi kilep kollega ceg csinalj fiok gyi kilep kollega ceg csinalj fiok csap menupon tiltsd azonnal kilep mindenhonnan tud ujra belepni munkalapj uzen megmar",
+            "t": "men jogosultsag biztonsag gyi kilep kollega ceg csinalj fiok gyi kilep kollega ceg csinalj fiok csap menupon tiltsd azonnal kilep mindenhonnan tud ujra belep munkalapj uzen megmar",
             "h": 27
         },
         {
@@ -353,7 +353,7 @@
             "cim": "GYIK › Biztonságos, ha mindenki egy fiókot használ?",
             "horgony": "biztonsagos-ha-mindenki-egy-fiokot-hasznal",
             "szoveg": "Működik, erre való az üzenőfal mód. De ne az adminisztrátori fiók legyen a közös, és nem látszik majd, ki mit rögzített.",
-            "t": "mentes jogosultsag biztonsag gyi biztonsagos mindenki fio hasznal gyi biztonsagos mindenki fio hasznal mukodi valo uzenofal mod ne adminisztratori fio legy kozos latszi majd rogzit",
+            "t": "men jogosultsag biztonsag gyi biztonsagos mindenki fio hasznal gyi biztonsagos mindenki fio hasznal mukodi valo uzenofal mod ne adminisztratori fio legy kozos latszi majd rogzit",
             "h": 25
         },
         {
@@ -361,7 +361,7 @@
             "cim": "GYIK › Az asszisztens átírhat valamit a tudtom nélkül?",
             "horgony": "az-asszisztens-atirhat-valamit-a-tudtom-nelkul",
             "szoveg": "Nem. Minden módosítás javaslat, amelyet neked kell engedélyezned. Átíráshoz és törléshez kódot is be kell írnod.",
-            "t": "mentes jogosultsag biztonsag gyi asszisztens atirh valami tud nelkul gyi asszisztens atirh valami tud nelkul modositas javasl amely nek engedelyezn atiras torles kod irn",
+            "t": "men jogosultsag biztonsag gyi asszisztens atirh valami tud nelkul gyi asszisztens atirh valami tud nelkul modosi javasl amely nek engedelyezn atir torl kod irn",
             "h": 24
         },
         {
@@ -369,7 +369,7 @@
             "cim": "GYIK › Engedélyeztem egy javaslatot, de rossz lett. Mit tegyek?",
             "horgony": "engedelyeztem-egy-javaslatot-de-rossz-lett-mit-tegyek",
             "szoveg": "A művelet kártyáján nyisd le a **Visszaállítás…** részt, írd be a művelet számát, és nyomd meg a **Visszaállítom** gombot.",
-            "t": "mentes jogosultsag biztonsag gyi engedelyez javasl rossz let tegy gyi engedelyez javasl rossz let tegy muvel kartyajan nyisd visszaallitas resz ird muvel szam nyomd visszaalli gomb",
+            "t": "men jogosultsag biztonsag gyi engedelyez javasl rossz let tegy gyi engedelyez javasl rossz let tegy muvel kartyajan nyisd visszaalli resz ird muvel szam nyomd visszaalli gomb",
             "h": 26
         },
         {
@@ -377,7 +377,7 @@
             "cim": "GYIK › Látja valaki a levelezés jelszavát?",
             "horgony": "latja-valaki-a-levelezes-jelszavat",
             "szoveg": "Nem. Titkosítva tárolódik, és soha nem kerül vissza a képernyőre. A mezője mentés után üres marad.",
-            "t": "mentes jogosultsag biztonsag gyi lat valaki levelezes jelszav gyi lat valaki levelezes jelszav titkositva tarolodi soha ar vissza kepernyo mezo mentes utan ures mar",
+            "t": "men jogosultsag biztonsag gyi lat valaki levelez jelszav gyi lat valaki levelez jelszav titkositva tarolodi soha ar vissza kepernyo mezo men utan ures mar",
             "h": 24
         },
         {
@@ -385,7 +385,7 @@
             "cim": "GYIK › Költöztettük a szervert, és nem megy a levelezés. Miért?",
             "horgony": "koltoztettuk-a-szervert-es-nem-megy-a-levelezes-miert",
             "szoveg": "Ha a szerver titkos kulcsai a költözéskor megváltoztak, a titkosított jelszavak és kulcsok nem fejthetők vissza. Írd be újra az alkalmazásjelszót, az API-kulcsokat, a Számla Agent kulcsot és az IMEI-kulcsot a Beállításokban.",
-            "t": "mentes jogosultsag biztonsag gyi koltoztet szerv megy levelezes gyi koltoztet szerv megy levelezes szerver titkos kulcs koltozes megvaltoz titkosit jelszav kulcs fejth vissza ird ujra alkalmazasjelsz api kulcs szamla agen kulcs imei kulcs beallitas",
+            "t": "men jogosultsag biztonsag gyi koltoztet szerv megy levelez gyi koltoztet szerv megy levelez szerver titkos kulcs koltoz megvaltoz titkosit jelszav kulcs fejth vissza ird ujra alkalmazasjelsz api kulcs szamla agen kulcs imei kulcs beallit",
             "h": 34
         },
         {
@@ -393,7 +393,7 @@
             "cim": "GYIK › Elég a rendszer saját mentése?",
             "horgony": "eleg-a-rendszer-sajat-mentese",
             "szoveg": "Nem teljesen. Az adatokat és a beállításokat a külső helyre másolt, titkosított mentés védi, és a **Beállítások › Mentés** lapról vissza is állítható. A csatolt fájlok és a felhasználói fiókok viszont nincsenek benne, ezért a szerver teljes, rendszeres mentése nélkül ne élesíts.",
-            "t": "mentes jogosultsag biztonsag gyi eleg rendszer saj mentese gyi eleg rendszer saj mentese teljes ada beallitas kulso hely masol titkosit mentes vedi beallitas mentes lap vissza allithato csa fajl felhasznaloi fio visz nincse benne ezer szerver teljes rendszeres mentese nelkul ne elesits",
+            "t": "men jogosultsag biztonsag gyi eleg rendszer saj mentese gyi eleg rendszer saj mentese telj ada beallit kulso hely masol titkosit men vedi beallit men lap vissza allithato csa fajl felhasznaloi fio visz nincse benne ezer szerver telj rendszer mentese nelkul ne elesits",
             "h": 42
         },
         {
@@ -401,7 +401,7 @@
             "cim": "GYIK › Hova érdemes külső mentést beállítani?",
             "horgony": "hova-erdemes-kulso-mentest-beallitani",
             "szoveg": "Legalább egy, a szervertől **független** helyre: Google Drive, vagy a saját gép / NAS. Ha az irodában van NAS, az ingyenes és gyors; a Drive a másik telephelyről is elérhető. Két hely együtt a legbiztonságosabb.",
-            "t": "mentes jogosultsag biztonsag gyi hova erdemes kulso mentes beallitani gyi hova erdemes kulso mentes beallitani legalabb szerver fuggetl hely google drive saj gep nas iroda nas ingyenes gyors drive masi telephely elerheto ket hely egyu legbiztonsagosabb",
+            "t": "men jogosultsag biztonsag gyi hova erd kulso ment beallita gyi hova erd kulso ment beallita legalabb szerver fuggetl hely google drive saj gep nas iroda nas ingy gyors drive masi telephely elerheto ket hely egyu legbiztonsagosabb",
             "h": 36
         },
         {
@@ -409,7 +409,7 @@
             "cim": "GYIK › Mit jelent az „előző napi\" jelvény?",
             "horgony": "mit-jelent-az-elozo-napi-jelveny",
             "szoveg": "A lista legutóbbi, **nem mai** mentését jelöli. Ez a mentés a megőrzött darabszámtól függetlenül mindig megmarad, hogy mindig legyen egy tegnapi állapotod.",
-            "t": "mentes jogosultsag biztonsag gyi jel elozo napi jelveny gyi jel elozo napi jelveny lista legutobbi mai mentes jeloli mentes megorz darabsz fuggetlenul megmar legy tegnapi allap",
+            "t": "men jogosultsag biztonsag gyi jel elozo napi jelveny gyi jel elozo napi jelveny lista legutobbi mai ment jeloli men megorz darabsz fuggetlenul megmar legy tegnapi allap",
             "h": 26
         },
         {
@@ -417,7 +417,7 @@
             "cim": "GYIK › Elfelejtettem a titkosító jelszót. Mit tegyek?",
             "horgony": "elfelejtettem-a-titkosito-jelszot-mit-tegyek",
             "szoveg": "A régi külső másolatok nem nyithatók meg a jelszó nélkül – ez a titkosítás lényege. A szerveren lévő (nem titkosított) helyi mentések viszont megvannak. Állíts be új jelszót a Beállítások › Mentés lapon: az új másolatok már azzal készülnek.",
-            "t": "mentes jogosultsag biztonsag gyi elfelejtet titkosito jelsz tegy gyi elfelejtet titkosito jelsz tegy regi kulso masol nyith jelszo nelkul titkositas lenyege szerver levo titkosit helyi mentes visz megvan allits uj jelsz beallitas mentes lap uj masol azzal keszul",
+            "t": "men jogosultsag biztonsag gyi elfelejtet titkosito jelsz tegy gyi elfelejtet titkosito jelsz tegy regi kulso masol nyith jelszo nelkul titkosi lenyege szerver levo titkosit helyi ment visz megvan allits uj jelsz beallit men lap uj masol azzal keszul",
             "h": 38
         },
         {
@@ -425,7 +425,7 @@
             "cim": "GYIK › Költözés élesbe: mit vigyek át?",
             "horgony": "koltozes-elesbe-mit-vigyek-at",
             "szoveg": "A **Beállítások exportját**, ami a kulcsokat és minden beállítást tartalmaz. Lépések: lásd az **Export, import és költözés élesbe** részt.",
-            "t": "mentes jogosultsag biztonsag gyi koltozes eles vigy gyi koltozes eles vigy beallitas exportj kulcs beallitas tartalmaz lepes lasd expor impor koltozes eles resz",
+            "t": "men jogosultsag biztonsag gyi koltoz eles vigy gyi koltoz eles vigy beallit exportj kulcs beallit tartalmaz lep lasd expor impor koltoz eles resz",
             "h": 23
         }
     ]
