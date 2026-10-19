@@ -1,0 +1,484 @@
+{
+ "hero": {
+  "alt": "Absztrakt high-tech műhely: üvegpaneleken lebegő munkalap-lista, állapotcímkék, bevételi diagram és egy okostelefon, korall, ibolya és cián neonfényben",
+  "szelesseg": 2400,
+  "magassag": 1350,
+  "valtozatok": {
+   "avif": [
+    "hero-480.avif",
+    "hero-960.avif",
+    "hero-1600.avif",
+    "hero-2400.avif"
+   ],
+   "webp": [
+    "hero-480.webp",
+    "hero-960.webp",
+    "hero-1600.webp",
+    "hero-2400.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600,
+   2400
+  ]
+ },
+ "og": {
+  "alt": "Absztrakt high-tech szerviz-illusztráció neon üvegpanelekkel, munkalap-listával és okostelefonnal",
+  "szelesseg": 1200,
+  "magassag": 630,
+  "valtozatok": {
+   "avif": [],
+   "webp": [
+    "og-1200.webp"
+   ],
+   "jpg": [
+    "og-1200.jpg"
+   ]
+  },
+  "szelessegek": [
+   1200
+  ]
+ },
+ "iparag-szerviz": {
+  "alt": "Szerviz: Neon csavarkulcs-ikon üvegpanelen, munkalap-lista és állapotjelzők a háttérben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-szerviz-480.avif",
+    "iparag-szerviz-960.avif",
+    "iparag-szerviz-1600.avif"
+   ],
+   "webp": [
+    "iparag-szerviz-480.webp",
+    "iparag-szerviz-960.webp",
+    "iparag-szerviz-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-ipar": {
+  "alt": "Ipar: Gyárépület-ikon üvegpanelen, eszközállapot-diagram neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-ipar-480.avif",
+    "iparag-ipar-960.avif",
+    "iparag-ipar-1600.avif"
+   ],
+   "webp": [
+    "iparag-ipar-480.webp",
+    "iparag-ipar-960.webp",
+    "iparag-ipar-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-kkv": {
+  "alt": "KKV: Aktatáska-ikon üvegpanelen, ügyfél- és rendeléslista neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-kkv-480.avif",
+    "iparag-kkv-960.avif",
+    "iparag-kkv-1600.avif"
+   ],
+   "webp": [
+    "iparag-kkv-480.webp",
+    "iparag-kkv-960.webp",
+    "iparag-kkv-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-zrt": {
+  "alt": "ZRT és nagyvállalat: Irodaház-ikon üvegpanelen, eszközflotta-kimutatás neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-zrt-480.avif",
+    "iparag-zrt-960.avif",
+    "iparag-zrt-1600.avif"
+   ],
+   "webp": [
+    "iparag-zrt-480.webp",
+    "iparag-zrt-960.webp",
+    "iparag-zrt-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-allami": {
+  "alt": "Állami szektor: Középület-ikon üvegpanelen, eszköznyilvántartás és naptár neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-allami-480.avif",
+    "iparag-allami-960.avif",
+    "iparag-allami-1600.avif"
+   ],
+   "webp": [
+    "iparag-allami-480.webp",
+    "iparag-allami-960.webp",
+    "iparag-allami-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-egeszsegugy": {
+  "alt": "Egészségügy és orvosi informatika: Szív és pulzusgörbe-ikon üvegpanelen, eszközállapot-gyűrű neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-egeszsegugy-480.avif",
+    "iparag-egeszsegugy-960.avif",
+    "iparag-egeszsegugy-1600.avif"
+   ],
+   "webp": [
+    "iparag-egeszsegugy-480.webp",
+    "iparag-egeszsegugy-960.webp",
+    "iparag-egeszsegugy-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-kereskedelem": {
+  "alt": "Kereskedelem: Bevásárlótáska-ikon üvegpanelen, nyugta és pénztár-összesítő neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-kereskedelem-480.avif",
+    "iparag-kereskedelem-960.avif",
+    "iparag-kereskedelem-1600.avif"
+   ],
+   "webp": [
+    "iparag-kereskedelem-480.webp",
+    "iparag-kereskedelem-960.webp",
+    "iparag-kereskedelem-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "iparag-egyeb": {
+  "alt": "Egyéb területek: Egymásra rakott rétegek ikonja üvegpanelen, rugalmas modul-rács neonfényben",
+  "szelesseg": 1600,
+  "magassag": 1067,
+  "valtozatok": {
+   "avif": [
+    "iparag-egyeb-480.avif",
+    "iparag-egyeb-960.avif",
+    "iparag-egyeb-1600.avif"
+   ],
+   "webp": [
+    "iparag-egyeb-480.webp",
+    "iparag-egyeb-960.webp",
+    "iparag-egyeb-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-munkalap": {
+  "alt": "Munkalap: Vágólap-ikon neon üvegcsempén, mellette munkalap-lista állapotcímkékkel",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-munkalap-480.avif",
+    "funkcio-munkalap-960.avif",
+    "funkcio-munkalap-1600.avif"
+   ],
+   "webp": [
+    "funkcio-munkalap-480.webp",
+    "funkcio-munkalap-960.webp",
+    "funkcio-munkalap-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-ugyfel": {
+  "alt": "Ügyfélnyilvántartás: Személy-ikon neon üvegcsempén, mellette ügyféllista",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-ugyfel-480.avif",
+    "funkcio-ugyfel-960.avif",
+    "funkcio-ugyfel-1600.avif"
+   ],
+   "webp": [
+    "funkcio-ugyfel-480.webp",
+    "funkcio-ugyfel-960.webp",
+    "funkcio-ugyfel-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-eszkoz": {
+  "alt": "Eszköznyilvántartás: Okostelefon-ikon neon üvegcsempén, mellette eszközállapot-gyűrű",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-eszkoz-480.avif",
+    "funkcio-eszkoz-960.avif",
+    "funkcio-eszkoz-1600.avif"
+   ],
+   "webp": [
+    "funkcio-eszkoz-480.webp",
+    "funkcio-eszkoz-960.webp",
+    "funkcio-eszkoz-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-raktar": {
+  "alt": "Raktár: Doboz-ikon neon üvegcsempén, mellette készletszint-oszlopdiagram",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-raktar-480.avif",
+    "funkcio-raktar-960.avif",
+    "funkcio-raktar-1600.avif"
+   ],
+   "webp": [
+    "funkcio-raktar-480.webp",
+    "funkcio-raktar-960.webp",
+    "funkcio-raktar-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-penztar": {
+  "alt": "Házipénztár: Bankjegy-ikon neon üvegcsempén, mellette pénztárnyugta-összesítő",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-penztar-480.avif",
+    "funkcio-penztar-960.avif",
+    "funkcio-penztar-1600.avif"
+   ],
+   "webp": [
+    "funkcio-penztar-480.webp",
+    "funkcio-penztar-960.webp",
+    "funkcio-penztar-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-szamlazas": {
+  "alt": "Számlázás: Számla-ikon neon üvegcsempén, mellette tételes számlaösszesítő",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-szamlazas-480.avif",
+    "funkcio-szamlazas-960.avif",
+    "funkcio-szamlazas-1600.avif"
+   ],
+   "webp": [
+    "funkcio-szamlazas-480.webp",
+    "funkcio-szamlazas-960.webp",
+    "funkcio-szamlazas-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-naptar": {
+  "alt": "Naptár és foglalás: Naptár-ikon neon üvegcsempén, mellette havi foglalási rács",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-naptar-480.avif",
+    "funkcio-naptar-960.avif",
+    "funkcio-naptar-1600.avif"
+   ],
+   "webp": [
+    "funkcio-naptar-480.webp",
+    "funkcio-naptar-960.webp",
+    "funkcio-naptar-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-sms": {
+  "alt": "SMS és üzenetek: Üzenetbuborék-ikon neon üvegcsempén, mellette üzenetváltás",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-sms-480.avif",
+    "funkcio-sms-960.avif",
+    "funkcio-sms-1600.avif"
+   ],
+   "webp": [
+    "funkcio-sms-480.webp",
+    "funkcio-sms-960.webp",
+    "funkcio-sms-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-ai": {
+  "alt": "AI-asszisztens: Szikra-ikon neon üvegcsempén, mellette asszisztens-beszélgetés",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-ai-480.avif",
+    "funkcio-ai-960.avif",
+    "funkcio-ai-1600.avif"
+   ],
+   "webp": [
+    "funkcio-ai-480.webp",
+    "funkcio-ai-960.webp",
+    "funkcio-ai-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-mentes": {
+  "alt": "Mentés és biztonság: Pajzs pipával ikon neon üvegcsempén, mellette mentési állapotgyűrű",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-mentes-480.avif",
+    "funkcio-mentes-960.avif",
+    "funkcio-mentes-1600.avif"
+   ],
+   "webp": [
+    "funkcio-mentes-480.webp",
+    "funkcio-mentes-960.webp",
+    "funkcio-mentes-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-riport": {
+  "alt": "Riportok: Diagram-ikon neon üvegcsempén, mellette bevételi oszlopdiagram",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-riport-480.avif",
+    "funkcio-riport-960.avif",
+    "funkcio-riport-1600.avif"
+   ],
+   "webp": [
+    "funkcio-riport-480.webp",
+    "funkcio-riport-960.webp",
+    "funkcio-riport-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "funkcio-licenc": {
+  "alt": "Licenc és központ: Kulcs-ikon neon üvegcsempén, mellette telepített példányok listája",
+  "szelesseg": 1600,
+  "magassag": 1200,
+  "valtozatok": {
+   "avif": [
+    "funkcio-licenc-480.avif",
+    "funkcio-licenc-960.avif",
+    "funkcio-licenc-1600.avif"
+   ],
+   "webp": [
+    "funkcio-licenc-480.webp",
+    "funkcio-licenc-960.webp",
+    "funkcio-licenc-1600.webp"
+   ]
+  },
+  "szelessegek": [
+   480,
+   960,
+   1600
+  ]
+ }
+}

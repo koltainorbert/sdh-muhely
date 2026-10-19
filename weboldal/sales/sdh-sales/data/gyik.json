@@ -1,0 +1,1792 @@
+[
+ {
+  "kulcs": "hogyan-vasarolhatok",
+  "kategoria": "vasarlas",
+  "kerdes": "Hogyan vásárolhatom meg a(z) {termeknev} rendszert?",
+  "valasz": "<p>Az <a href=\"/arak/\">Árak</a> oldalon válassza ki a csomagot, a ciklust (havi vagy éves), a felhasználók számát és a kívánt modulokat, majd tegye a kosárba. A pénztárban adja meg a cégadatokat, és küldje el a rendelést. E-mailben azonnal megkapja a díjbekérőt az átutalási adatokkal és egy QR-kóddal. A fizetés beérkezése után a számla és a licenckulcs magától érkezik e-mailben, kézi ügyintézés nélkül.</p>",
+  "kapcsolodo": [
+   "fizetesi-modok",
+   "mikor-kapom-meg-a-licenckulcsot",
+   "milyen-adatok-kellenek-a-rendeleshez"
+  ]
+ },
+ {
+  "kulcs": "fizetesi-modok",
+  "kategoria": "vasarlas",
+  "kerdes": "Milyen fizetési módok közül választhatok?",
+  "valasz": "<p>Az alapértelmezett mód a <strong>banki átutalás díjbekérő alapján</strong>. A díjbekérő levélben az átutalási adatok mellett MNB-szabványú QR-kód is van, így a mobilbank-alkalmazással beolvasva kitöltődik az összeg, a számlaszám és a közlemény. Ha a kártyás fizetés be van kapcsolva, a pénztárban <strong>bankkártyával</strong> is fizethet (Barion vagy SimplePay). A számla mindkét esetben automatikusan készül el a sikeres fizetés után.</p>",
+  "kapcsolodo": [
+   "mi-az-mnb-qr-kod",
+   "mikor-kapom-meg-a-szamlat",
+   "hogyan-vasarolhatok"
+  ]
+ },
+ {
+  "kulcs": "mi-az-mnb-qr-kod",
+  "kategoria": "vasarlas",
+  "kerdes": "Mire jó a díjbekérőn lévő QR-kód?",
+  "valasz": "<p>A díjbekérő levélben lévő QR-kód a Magyar Nemzeti Bank fizetési QR-kód szabványát követi. A legtöbb hazai mobilbank-alkalmazás be tudja olvasni: ilyenkor a kedvezményezett, a számlaszám, az összeg és a közlemény magától kitöltődik, Önnek csak jóvá kell hagynia az utalást. Így nem kell kézzel begépelni a közleményt, ami a fizetés párosításához fontos. Ha a bankja nem támogatja, a levélben szereplő adatokkal kézzel is utalhat.</p>",
+  "kapcsolodo": [
+   "fizetesi-modok",
+   "rossz-kozlemennyel-utaltam"
+  ]
+ },
+ {
+  "kulcs": "mikor-kapom-meg-a-licenckulcsot",
+  "kategoria": "vasarlas",
+  "kerdes": "Mikor kapom meg a licenckulcsot?",
+  "valasz": "<p>A licenckulcs a fizetés beérkezése után <strong>automatikusan</strong> készül el, és e-mailben érkezik. Ugyanebben a levélben van a letöltő link, a telepítési útmutató, a fiókja belépő linkje és a számla PDF-je. Kártyás fizetésnél ez a sikeres tranzakció után szinte azonnal megtörténik. Átutalásnál akkor, amikor az összeg a bankszámlánkon megjelenik és a rendszer párosítja a rendeléssel; ez a bankok feldolgozási idejétől függ.</p>",
+  "kapcsolodo": [
+   "letolto-link-ervenyessege",
+   "hogyan-vasarolhatok",
+   "mikor-kapom-meg-a-szamlat"
+  ]
+ },
+ {
+  "kulcs": "mikor-kapom-meg-a-szamlat",
+  "kategoria": "vasarlas",
+  "kerdes": "Mikor és hogyan kapom meg a számlát?",
+  "valasz": "<p>A rendeléskor díjbekérő készül, amely még nem számla. A végszámlát a Számlázz.hu állítja ki <strong>automatikusan</strong>, amint a fizetés beérkezett, és PDF-ben csatoljuk az üdvözlő levélhez. A számla az elektronikus számlázás szabályai szerint készül, a megadott cégnévre és adószámra. Később az ügyfélfiókjában is megtalálja a rendeléseit és a hozzájuk tartozó dokumentumokat.</p>",
+  "kapcsolodo": [
+   "milyen-adatok-kellenek-a-rendeleshez",
+   "ugyfelfiok-belepes",
+   "mikor-kapom-meg-a-licenckulcsot"
+  ]
+ },
+ {
+  "kulcs": "milyen-adatok-kellenek-a-rendeleshez",
+  "kategoria": "vasarlas",
+  "kerdes": "Milyen adatokat kell megadnom a rendeléskor?",
+  "valasz": "<p>A számlázáshoz a cég nevét, adószámát és székhelyét kérjük, valamint egy kapcsolattartó nevét, e-mail-címét és telefonszámát. Az e-mail-címre érkezik a díjbekérő, a számla, a licenckulcs és a fiókba lépő link, ezért olyan címet adjon meg, amelyet rendszeresen olvas. A rendelés feldolgozásához ennél több adatra nincs szükség; a szervizük ügyféladataihoz a vásárlás során sem férünk hozzá.</p>",
+  "kapcsolodo": [
+   "mikor-kapom-meg-a-szamlat",
+   "ugyfeladat-nem-jut-el-hozzank",
+   "hogyan-vasarolhatok"
+  ]
+ },
+ {
+  "kulcs": "ugyfelfiok-belepes",
+  "kategoria": "vasarlas",
+  "kerdes": "Hogyan lépek be az ügyfélfiókomba? Nincs jelszavam.",
+  "valasz": "<p>Az ügyfélfiókhoz nem kell jelszó. A belépő oldalon adja meg a rendeléskor használt e-mail-címet, és a rendszer egy egyszer használható, rövid ideig érvényes belépő linket küld. A linkre kattintva bent van. Így nincs elfelejthető vagy kiszivárogtatható jelszó. A fiókban látja a rendeléseit, a licencét és a lejáratot, innen indíthatja a megújítást vagy a bővítést is.</p>",
+  "kapcsolodo": [
+   "megujitas-menete",
+   "bovites-kesobb",
+   "mikor-kapom-meg-a-szamlat"
+  ]
+ },
+ {
+  "kulcs": "rossz-kozlemennyel-utaltam",
+  "kategoria": "vasarlas",
+  "kerdes": "Rossz közleménnyel vagy rossz összeggel utaltam. Mi történik?",
+  "valasz": "<p>A rendszer a közlemény alapján párosítja az utalást a rendeléssel. Ha a közlemény hiányzik vagy eltér, a fizetés nem tud magától párosodni, ezért kérjük, írjon nekünk a rendelésszámmal, és kézzel rendezzük. Részfizetésnél a rendelés nyitva marad a hiányzó összegig. Egy már kifizetett rendelést a rendszer nem dolgoz fel kétszer, így dupla utalás esetén sem kap két licencet: a különbözetet egyeztetjük.</p>",
+  "kapcsolodo": [
+   "mi-az-mnb-qr-kod",
+   "fizetesi-modok",
+   "dijbekero-lejart"
+  ]
+ },
+ {
+  "kulcs": "dijbekero-lejart",
+  "kategoria": "vasarlas",
+  "kerdes": "Lejárt a díjbekérő, mielőtt fizettem. Mit tegyek?",
+  "valasz": "<p>A díjbekérőn fizetési határidő szerepel. Ha addig nem érkezik meg az összeg, a rendszer emlékeztetőt küld, egy idő után pedig a rendelést törli. Ilyenkor egyszerűen adja le újra a rendelést az <a href=\"/arak/\">Árak</a> oldalon, és az új díjbekérő alapján fizessen. Ha már elutalta az összeget, de a rendelés közben törlődött, írjon nekünk a régi rendelésszámmal, és rendezzük.</p>",
+  "kapcsolodo": [
+   "rossz-kozlemennyel-utaltam",
+   "hogyan-vasarolhatok"
+  ]
+ },
+ {
+  "kulcs": "arajanlat-kerese",
+  "kategoria": "vasarlas",
+  "kerdes": "Kérhetek árajánlatot a rendelés előtt?",
+  "valasz": "<p>Igen. Ha a cégénél jóváhagyás kell a beszerzéshez, vagy több telephelyre, sok felhasználóra, egyedi modulösszeállításra kérne árat, használja az ajánlatkérő űrlapot. Az árakat az <a href=\"/arak/\">Árak</a> oldal kalkulátora is azonnal kiszámolja nettóban és bruttóban, ezt el is mentheti magának. Egyedi fejlesztési igényhez az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldal igényfelmérőjét ajánljuk.</p>",
+  "kapcsolodo": [
+   "kalkulator-pontos",
+   "egyedi-fejlesztes-menete",
+   "tobb-telephely-ara"
+  ]
+ },
+ {
+  "kulcs": "letolto-link-ervenyessege",
+  "kategoria": "vasarlas",
+  "kerdes": "Meddig érvényes a letöltő link?",
+  "valasz": "<p>Az üdvözlő levélben kapott letöltő link biztonsági okból <strong>egyszer használható</strong>, és 14 napig érvényes. Töltse le a telepítő csomagot, és tegye el biztos helyre. Ha a link lejárt vagy elveszett, a licenc aktiválása után a rendszer a frissítéseket a licenckulccsal úgyis a központból kapja; új telepítő csomagért írjon nekünk, és a licenc ellenőrzése után küldünk újat.</p>",
+  "kapcsolodo": [
+   "mikor-kapom-meg-a-licenckulcsot",
+   "frissites-menete"
+  ]
+ },
+ {
+  "kulcs": "ugyfeladat-nem-jut-el-hozzank",
+  "kategoria": "vasarlas",
+  "kerdes": "Hozzáférést kaptok a vásárlással a szervizünk adataihoz?",
+  "valasz": "<p>Nem. A vásárlás csak a licencet hozza létre. A(z) {termeknev} az Önök saját szerverén fut, az ügyfelek, munkalapok és pénzügyek ott maradnak. A rendszer a licencközpontnak csak műszaki adatot küld (példányazonosító, ujjlenyomat, verzió, működési mérőszámok). Belépni csak akkor tudunk, ha Önök kifejezetten engedélyezik a támogatási hozzáférést, időkorláttal.</p>",
+  "kapcsolodo": [
+   "mit-kuld-a-rendszer",
+   "tamogatasi-hozzaferes",
+   "hol-vannak-az-adatok"
+  ]
+ },
+ {
+  "kulcs": "hol-latom-az-arakat",
+  "kategoria": "arak",
+  "kerdes": "Hol látom a pontos árakat?",
+  "valasz": "<p>A csomagok, modulok és szolgáltatások aktuális árait az <a href=\"/arak/\">Árak</a> oldalon tesszük közzé, nettó forintban, mellettük a bruttó összeggel. Az oldalon kalkulátor is van: a felhasználók és telephelyek számának, a ciklusnak és a moduloknak a megadásával azonnal kiszámolja a fizetendőt. Az árakat csak itt tartjuk naprakészen, ezért a GYIK válaszai nem tartalmaznak konkrét összegeket.</p>",
+  "kapcsolodo": [
+   "kalkulator-pontos",
+   "netto-vagy-brutto",
+   "havi-vagy-eves"
+  ]
+ },
+ {
+  "kulcs": "netto-vagy-brutto",
+  "kategoria": "arak",
+  "kerdes": "Nettó vagy bruttó árak szerepelnek az oldalon?",
+  "valasz": "<p>Az árakat <strong>nettóban</strong> adjuk meg, egész forintra kerekítve, és mellettük feltüntetjük a 27%-os áfával növelt bruttó összeget is. A díjbekérő és a számla is a nettó összeget, az áfát és a bruttó végösszeget tartalmazza. A rendelésnél mindig a szerver által számolt ár az irányadó, így a kosárban látott összeg és a díjbekérő összege megegyezik.</p>",
+  "kapcsolodo": [
+   "hol-latom-az-arakat",
+   "kalkulator-pontos"
+  ]
+ },
+ {
+  "kulcs": "havi-vagy-eves",
+  "kategoria": "arak",
+  "kerdes": "Fizethetek havonta és évente is?",
+  "valasz": "<p>Igen, a csomagok havi és éves ciklusban is megrendelhetők. Éves fizetésnél kedvezmény jár; a mértékét és a pontos összegeket az <a href=\"/arak/\">Árak</a> oldalon a ciklusválasztó mutatja. A ciklus a licenc lejáratát is meghatározza: a lejárat előtt e-mailben emlékeztetőt küldünk, és a megújítás az ügyfélfiókból néhány kattintással elindítható.</p>",
+  "kapcsolodo": [
+   "megujitas-menete",
+   "mi-van-ha-nem-ujitok",
+   "hol-latom-az-arakat"
+  ]
+ },
+ {
+  "kulcs": "kalkulator-pontos",
+  "kategoria": "arak",
+  "kerdes": "Pontos a kalkulátor által mutatott összeg?",
+  "valasz": "<p>A kalkulátor ugyanazt a szabályt követi, amellyel a szerver a rendelést árazza: csomag, ciklus, felhasználók, telephelyek, modulok, kupon. A végleges összeget mindig a szerver számolja ki a rendelés elküldésekor, és ez kerül a díjbekérőre. Ha a kettő között eltérés lenne (például közben árváltozás történt), a pénztár a rendelés elküldése előtt a frissített összeget mutatja.</p>",
+  "kapcsolodo": [
+   "netto-vagy-brutto",
+   "kupon-hasznalata"
+  ]
+ },
+ {
+  "kulcs": "rejtett-koltsegek",
+  "kategoria": "arak",
+  "kerdes": "Vannak rejtett vagy járulékos költségek?",
+  "valasz": "<p>A licencen felül csak olyan költség merülhet fel, amely <strong>harmadik félnek</strong> jár, és amelyet Önök választanak:</p><ul><li>a szerver vagy tárhely díja,</li><li>a saját Számlázz.hu-előfizetés, ha számláznak a rendszerből,</li><li>az SMS-ek a bolti telefon díjcsomagja szerint,</li><li>az AI-asszisztens hívásai a saját API-kulcsuk terhére,</li><li>a fizetős IMEI-lekérdező szolgáltatás, ha használják.</li></ul><p>A telepítést és a támogatást szolgáltatásként külön is kínáljuk, áraik az <a href=\"/arak/\">Árak</a> oldalon.</p>",
+  "kapcsolodo": [
+   "sms-koltseg",
+   "ai-koltseg",
+   "telepites-szolgaltataskent"
+  ]
+ },
+ {
+  "kulcs": "felhasznalok-szama-ar",
+  "kategoria": "arak",
+  "kerdes": "Hogyan számít bele az árba a felhasználók száma?",
+  "valasz": "<p>Minden csomag tartalmaz egy alap felhasználószámot, e fölött felhasználónként felár jár; az aktuális értékeket az <a href=\"/arak/\">Árak</a> oldal mutatja. A licenc rögzíti, hány felhasználóra szól. Ha a cégnél többen dolgoznak a rendszerben, mint amennyit a licenc enged, az adminisztrátor figyelmeztetést lát, de a munka nem áll le: ilyenkor érdemes bővíteni a licencet.</p>",
+  "kapcsolodo": [
+   "tul-sok-felhasznalo",
+   "bovites-kesobb",
+   "kozos-fiok-pin"
+  ]
+ },
+ {
+  "kulcs": "tobb-telephely-ara",
+  "kategoria": "arak",
+  "kerdes": "Több üzletünk van. Mennyibe kerül a több telephely?",
+  "valasz": "<p>A csomagok egy telephelyet tartalmaznak alapból, további telephelyenként felár jár (az összeg az <a href=\"/arak/\">Árak</a> oldalon). A rendszerben a napi árukiadáson helyszínenként rögzíthetik az eladásokat, és helyszínre szűrhetnek. Ha az üzletek külön szerveren, külön példányt futtatnának, az több példányra szóló licencet igényel; ilyen esetben kérjen ajánlatot.</p>",
+  "kapcsolodo": [
+   "helyszinek-tobb-uzlet",
+   "arajanlat-kerese",
+   "tul-sok-peldany"
+  ]
+ },
+ {
+  "kulcs": "modulok-kulon-ara",
+  "kategoria": "arak",
+  "kerdes": "A modulokat külön kell megvenni?",
+  "valasz": "<p>A csomagok eleve tartalmaznak modulokat, a magasabb csomagok többet. Ami egy csomagban nincs benne, azt sok esetben külön modulként hozzá lehet venni. Az alaprendszer (munkalapok, ügyfelek, eszközök, szolgáltatások, mentés, napló, súgó) minden csomagban benne van. Az <a href=\"/arak/\">Árak</a> oldal összehasonlító táblázata mutatja, melyik modul melyik csomag része, és mennyibe kerül külön.</p>",
+  "kapcsolodo": [
+   "alaprendszer-mi-van-benne",
+   "modul-utolag",
+   "melyik-csomag-kell"
+  ]
+ },
+ {
+  "kulcs": "kupon-hasznalata",
+  "kategoria": "arak",
+  "kerdes": "Hogyan használhatok kuponkódot?",
+  "valasz": "<p>A kosárban vagy a pénztárban van egy kuponmező: írja be a kódot, és a rendszer azonnal ellenőrzi. Érvényes kuponnál a kedvezmény megjelenik a sorok között, és a végösszeg ennek megfelelően változik. Egy kuponnak lehet lejárata és felhasználási korlátja, ilyenkor a rendszer kiírja, miért nem fogadható el. A kedvezményt a szerver számolja, így a díjbekérőn is pontosan ugyanez szerepel.</p>",
+  "kapcsolodo": [
+   "kalkulator-pontos",
+   "hol-latom-az-arakat"
+  ]
+ },
+ {
+  "kulcs": "sms-koltseg",
+  "kategoria": "arak",
+  "kerdes": "Mennyibe kerülnek az SMS-értesítések?",
+  "valasz": "<p>A(z) {termeknev} nem külső SMS-szolgáltatón küld, hanem a szerviz <strong>saját androidos telefonján</strong> futó SMS-átjáró alkalmazáson keresztül. Az SMS így a telefonban lévő SIM-kártya díjcsomagja szerint kerül pénzbe, külön SMS-kapu-előfizetés nem kell. Az ékezetes szöveg 70 karakterig egy SMS, hosszabbnál 67 karakterenként újabb darabnak számít; a szerkesztő számlálója mutatja a darabszámot.</p>",
+  "kapcsolodo": [
+   "sms-hogyan-mukodik",
+   "rejtett-koltsegek"
+  ]
+ },
+ {
+  "kulcs": "ai-koltseg",
+  "kategoria": "arak",
+  "kerdes": "Mennyibe kerül az AI-asszisztens használata?",
+  "valasz": "<p>Az asszisztens szabad szöveges válaszai a Claude nevű AI-szolgáltatáson futnak, a <strong>saját API-kulcsuk</strong> terhére, az AI-szolgáltató díjszabása szerint. A költség kordában tartására a beállításokban napi kérdéskeret adható meg kollégánként. Az oldaltúrák, a súgó és az asszisztens magától jövő jelzései nem használnak AI-hívást, így ezek ingyenesek és internet nélkül is működnek.</p>",
+  "kapcsolodo": [
+   "ai-asszisztens-mit-tud",
+   "ai-adatvedelem",
+   "rejtett-koltsegek"
+  ]
+ },
+ {
+  "kulcs": "visszaterites",
+  "kategoria": "arak",
+  "kerdes": "Visszakaphatom a pénzem, ha mégsem vált be?",
+  "valasz": "<p>A vásárlás előtt érdemes a <a href=\"/demo/\">demóban</a> alaposan kipróbálni a rendszert 10 000 mintarekorddal, illetve személyes bemutatót kérni, hogy a döntés megalapozott legyen. Az elállás és a visszatérítés feltételeit az Általános Szerződési Feltételek rögzítik; kérdés esetén írjon nekünk a rendelésszámmal, és megnézzük a konkrét esetet.</p>",
+  "kapcsolodo": [
+   "mi-a-demo",
+   "szemelyes-bemutato"
+  ]
+ },
+ {
+  "kulcs": "mi-van-ha-lejar-a-licenc",
+  "kategoria": "licenc",
+  "kerdes": "Mi történik, ha lejár a licenc?",
+  "valasz": "<p><strong>A rendszer tovább működik.</strong> Lejárt licencnél minden adat, munkalap és funkció megmarad és használható, csak <strong>frissítést nem kap</strong> a rendszer. Az adminisztrátor a képernyő tetején figyelmeztetést lát, a pontos ok a Licenc lapon áll. A megújítás után a következő jelentkezéskor (legfeljebb 5 perc) minden visszaáll, és a frissítések is ismét elérhetők.</p>",
+  "kapcsolodo": [
+   "megujitas-menete",
+   "mi-van-ha-nem-ujitok",
+   "licenc-allapotok"
+  ]
+ },
+ {
+  "kulcs": "mi-van-ha-nem-ujitok",
+  "kategoria": "licenc",
+  "kerdes": "Ha nem újítom meg, elvesznek az adataink?",
+  "valasz": "<p>Nem. Az adatok az Önök szerverén vannak, és az Önökéi. A licenc lejárta után a rendszer nem zárja el és nem törli az adatokat, a munka zavartalanul folytatható. Ami elmarad: az új verziók, a biztonsági frissítések és a licenchez kötött támogatás. Ezért hosszabb távon ajánlott aktív licenccel használni, de a döntés nem fenyegeti az adataikat.</p>",
+  "kapcsolodo": [
+   "mi-van-ha-lejar-a-licenc",
+   "hol-vannak-az-adatok"
+  ]
+ },
+ {
+  "kulcs": "licenc-nelkuli-modul",
+  "kategoria": "licenc",
+  "kerdes": "Mi történik egy olyan modullal, amely nincs a licencben?",
+  "valasz": "<p>A licenc határozza meg, melyik modul fut. Ami nincs benne, az <strong>nem fut</strong>: eltűnik a menüből, a Modulok oldalon a kapcsolója szürke, és a kártyán ez áll: „a licenc nem tartalmazza”. Az adatai viszont <strong>megmaradnak</strong>. Ha később bővítik a licencet, a modul a következő jelentkezéskor (legfeljebb 5 perc) visszajön, és ott folytatódik minden, ahol abbamaradt.</p>",
+  "kapcsolodo": [
+   "modul-utolag",
+   "bovites-kesobb",
+   "modul-kikapcsolas-adat"
+  ]
+ },
+ {
+  "kulcs": "licenckulcs-megadasa",
+  "kategoria": "licenc",
+  "kerdes": "Hol kell megadni a licenckulcsot?",
+  "valasz": "<p>A telepítés után a rendszerben: <strong>Beállítások › Rendszer › Licenc</strong>. Ide kell beírni a központ címét és az <code>SDH-XXXX-XXXX-XXXX-XXXX</code> alakú licenckulcsot, majd menteni. A rendszer azonnal jelentkezik a központnál, és az Állapot sorban megjelenik: Aktív, a vevő neve és a lejárat. Ezt a lapot csak adminisztrátor látja. A kulcsot kis- és nagybetűvel is beírhatja.</p>",
+  "kapcsolodo": [
+   "licenc-allapotok",
+   "mikor-kapom-meg-a-licenckulcsot"
+  ]
+ },
+ {
+  "kulcs": "licenc-allapotok",
+  "kategoria": "licenc",
+  "kerdes": "Milyen licencállapotok vannak, és mit jelentenek?",
+  "valasz": "<ul><li><strong>Aktív</strong>: minden rendben, a frissítések jönnek.</li><li><strong>Lejárt</strong> vagy <strong>Letiltva</strong>: a rendszer működik, frissítés nincs.</li><li><strong>Túl sok példány</strong>: a kulcsot több helyre telepítették, mint amennyit a licenc enged.</li><li><strong>Ismeretlen licenckulcs</strong>: valószínűleg elírás.</li><li><strong>Nincs kapcsolat a központtal</strong>: 30 napja nem sikerült jelentkezni.</li></ul><p>Az adatok és a funkciók egyik állapotban sem vesznek el.</p>",
+  "kapcsolodo": [
+   "mi-van-ha-lejar-a-licenc",
+   "tul-sok-peldany",
+   "licenckulcs-megadasa"
+  ]
+ },
+ {
+  "kulcs": "tul-sok-peldany",
+  "kategoria": "licenc",
+  "kerdes": "Mit jelent a „Túl sok példány” állapot?",
+  "valasz": "<p>A licenc rögzíti, hány telepítésen (példányon) használható a kulcs. Ha ugyanazzal a kulccsal több helyen fut a rendszer, mint amennyit a licenc enged, a központ ezt jelzi, és az adminisztrátor figyelmeztetést lát. Gyakori ok, hogy egy próbapéldányon is megadták az éles kulcsot. Megoldás: a felesleges példányról törölje a kulcsot, vagy kérjen több példányra szóló licencet.</p>",
+  "kapcsolodo": [
+   "licenc-allapotok",
+   "probapeldany-teszteleshez"
+  ]
+ },
+ {
+  "kulcs": "tul-sok-felhasznalo",
+  "kategoria": "licenc",
+  "kerdes": "Mi történik, ha több felhasználónk van, mint amennyire a licenc szól?",
+  "valasz": "<p>Az adminisztrátor a képernyő tetején figyelmeztetést lát, hogy a licenc felhasználószáma kevesebb a ténylegesnél. <strong>A munka ilyenkor sem áll le</strong>, senkit nem zár ki a rendszer. A helyzetet a licenc bővítésével lehet rendezni az ügyfélfiókból, vagy a nem használt fiókok letiltásával. A felhasználónkénti díjat az <a href=\"/arak/\">Árak</a> oldal mutatja.</p>",
+  "kapcsolodo": [
+   "felhasznalok-szama-ar",
+   "bovites-kesobb"
+  ]
+ },
+ {
+  "kulcs": "megujitas-menete",
+  "kategoria": "licenc",
+  "kerdes": "Hogyan újíthatom meg a licencet?",
+  "valasz": "<p>A lejárat előtt e-mailben emlékeztetőt küldünk egy megújító linkkel. A megújítást az ügyfélfiókból is indíthatja. Ugyanaz a menet, mint a vásárlásnál: díjbekérő, fizetés, majd automatikus számla. A licenckulcs <strong>nem változik</strong>, csak a lejárata tolódik ki, így a rendszerben semmit nem kell átírni: a következő jelentkezéskor az új lejárat magától megjelenik.</p>",
+  "kapcsolodo": [
+   "ugyfelfiok-belepes",
+   "mi-van-ha-lejar-a-licenc",
+   "havi-vagy-eves"
+  ]
+ },
+ {
+  "kulcs": "bovites-kesobb",
+  "kategoria": "licenc",
+  "kerdes": "Bővíthetem később a licencet modulokkal vagy felhasználókkal?",
+  "valasz": "<p>Igen. Az ügyfélfiókban a licencnél indítható a bővítés: válassza ki az új modulokat vagy a további felhasználókat, és a rendszer díjbekérőt küld. A fizetés után a központ frissíti a licencet, és a rendszer a következő jelentkezéskor (legfeljebb 5 perc) már az új modulokkal fut. A licenckulcs ugyanaz marad, újratelepítés nem kell.</p>",
+  "kapcsolodo": [
+   "modul-utolag",
+   "ugyfelfiok-belepes",
+   "licenc-nelkuli-modul"
+  ]
+ },
+ {
+  "kulcs": "licenc-masik-szerverre",
+  "kategoria": "licenc",
+  "kerdes": "Átvihetem a licencet egy új szerverre?",
+  "valasz": "<p>Igen. Költözéskor a teljes rendszert viszi át (adatbázis és fájlok), és a licenckulcs ugyanaz marad. Ha a régi telepítés is tovább fut ugyanazzal a kulccsal, a központ „túl sok példány” állapotot jelezhet, ezért a régi helyen kapcsolja ki a rendszert, vagy törölje ott a kulcsot. A költözés részleteiről a telepítési útmutató és a súgó szól.</p>",
+  "kapcsolodo": [
+   "szerver-koltoztetes",
+   "tul-sok-peldany"
+  ]
+ },
+ {
+  "kulcs": "szivveres-mi-az",
+  "kategoria": "licenc",
+  "kerdes": "Miért jelentkezik a rendszer 5 percenként a központnál?",
+  "valasz": "<p>A jelentkezés (szívverés) két dolgot tesz lehetővé: a rendszer megkapja a licenc aktuális állapotát és a frissítéseket, mi pedig időben látjuk a műszaki gondokat (lassulás, fogyó tárhely, elmaradt mentés), mielőtt bajt okoznának. A jelentkezés csak műszaki adatot tartalmaz, ügyféladatot soha. Ha a központ 30 napig nem érhető el, a rendszer jelzi, de tovább működik.</p>",
+  "kapcsolodo": [
+   "mit-kuld-a-rendszer",
+   "tavoli-karbantartas"
+  ]
+ },
+ {
+  "kulcs": "probapeldany-teszteleshez",
+  "kategoria": "licenc",
+  "kerdes": "Használhatok próbapéldányt az éles mellett?",
+  "valasz": "<p>A licenc rögzíti, hány példányon fut a kulcs. Ha egy próbapéldányt is szeretnének (például frissítés előtti kipróbáláshoz), és a licenc egy példányra szól, a próbapéldányon ne adják meg a kulcsot, vagy kérjenek több példányra szóló licencet. A rendszerben van tesztüzem is, amelyben SMS, e-mail, számla és külső mentés nem megy ki, így a próba nem zavar ügyfeleket.</p>",
+  "kapcsolodo": [
+   "tul-sok-peldany",
+   "tesztuzem"
+  ]
+ },
+ {
+  "kulcs": "rendszerkovetelmenyek",
+  "kategoria": "telepites",
+  "kerdes": "Milyen szerver kell a(z) {termeknev} futtatásához?",
+  "valasz": "<p>A rendszer webes alkalmazás, amely egy saját, belső webhelyen fut. A követelmények:</p><ul><li>PHP 8.1 vagy újabb, a sodium, zlib, mbstring, ZipArchive és XMLReader bővítményekkel (a szokásos tárhelyeken mind megvan),</li><li>MySQL vagy MariaDB adatbázis,</li><li>https-es cím,</li><li>friss Chrome, Edge, Firefox vagy Safari a munkaállomásokon.</li></ul><p>Futhat bérelt tárhelyen, saját szerveren vagy a bolt helyi hálózatán lévő gépen.</p>",
+  "kapcsolodo": [
+   "hol-fusson-a-rendszer",
+   "telepites-menete",
+   "https-kotelezo"
+  ]
+ },
+ {
+  "kulcs": "telepites-menete",
+  "kategoria": "telepites",
+  "kerdes": "Hogyan zajlik a telepítés?",
+  "valasz": "<p>A telepítő csomagot egy külön, erre a célra létrehozott belső webhelyre kell feltölteni és bekapcsolni; a rendszer ekkor magától létrehozza az adattábláit. Utána a <strong>Beállítások › Rendszer › Licenc</strong> lapon meg kell adni a licenckulcsot, majd a cégadatokat, a számozást és a kollégákat. Ha nem szeretnék maguk elvégezni, a telepítést szolgáltatásként is megrendelhetik, és időpontot foglalhatnak hozzá.</p>",
+  "kapcsolodo": [
+   "telepites-szolgaltataskent",
+   "rendszerkovetelmenyek",
+   "elso-nap-teendoi"
+  ]
+ },
+ {
+  "kulcs": "telepites-szolgaltataskent",
+  "kategoria": "telepites",
+  "kerdes": "Telepítitek nekünk a rendszert?",
+  "valasz": "<p>Igen, a telepítés külön szolgáltatásként megrendelhető (az ára az <a href=\"/arak/\">Árak</a> oldalon). A vásárlás után az üdvözlő levélben időpontfoglaló linket is kap. A telepítés során a rendszert a választott szerverre tesszük, beállítjuk a licencet, a levelezést és az alapadatokat, és igény szerint segítünk a régi adatok átvételében. Ehhez a szerver hozzáférését Önök adják meg.</p>",
+  "kapcsolodo": [
+   "telepites-menete",
+   "adatatvetel-szolgaltataskent",
+   "oktatas"
+  ]
+ },
+ {
+  "kulcs": "hol-fusson-a-rendszer",
+  "kategoria": "telepites",
+  "kerdes": "Hol érdemes futtatni: bérelt tárhelyen vagy a boltban?",
+  "valasz": "<p>Mindkettő működik, a választás a prioritásokon múlik. <strong>Bérelt tárhelyen</strong> a rendszer bárhonnan elérhető (például otthonról vagy több üzletből), és az üzemeltetés a szolgáltatóé. <strong>Helyi szerveren</strong> a bolt hálózatán a munka akkor is megy, ha kimarad az internet, és az adatok fizikailag Önöknél vannak. Az ügyféloldal, az online foglalás és az értékelőoldal csak kívülről elérhető címen működik.</p>",
+  "kapcsolodo": [
+   "offline-mi-mukodik",
+   "felho-vagy-sajat-szerver",
+   "rendszerkovetelmenyek"
+  ]
+ },
+ {
+  "kulcs": "https-kotelezo",
+  "kategoria": "telepites",
+  "kerdes": "Kötelező a https?",
+  "valasz": "<p>Erősen ajánlott, és élesben ne használják nélküle. Titkosítatlan címen a jelszavak és az ügyféladatok védtelenül utaznak a hálózaton. Bérelt tárhelyen a tanúsítvány általában ingyenesen bekapcsolható. Helyi hálózaton futó rendszernél a helyi cím használata elfogadott, de ha a rendszer kívülről is elérhető (ügyféloldal, foglalás), a kívülről elérhető címnek https-esnek kell lennie.</p>",
+  "kapcsolodo": [
+   "rendszerkovetelmenyek",
+   "hol-fusson-a-rendszer"
+  ]
+ },
+ {
+  "kulcs": "kulon-webhely-kell",
+  "kategoria": "telepites",
+  "kerdes": "Telepíthető a cég meglévő weboldalára?",
+  "valasz": "<p>Nem ajánlott. A rendszer egy <strong>önálló, belső webhelyre</strong> való, például egy külön aldomainre (<code>muhely.pelda.hu</code>) vagy a helyi hálózaton futó szerverre. Így a nyilvános weboldal bővítményei és látogatói nem érintik a műhely adatait, és a rendszer zárt módban működhet: kívülről csak a bejelentkező, az ügyféloldal és a foglalóoldal látszik.</p>",
+  "kapcsolodo": [
+   "hol-fusson-a-rendszer",
+   "zart-mod"
+  ]
+ },
+ {
+  "kulcs": "frissites-menete",
+  "kategoria": "telepites",
+  "kerdes": "Hogyan kapjuk meg a frissítéseket?",
+  "valasz": "<p>Aktív licenccel az új verzió a licencközpontból érkezik. Az adminisztrátor a rendszerben látja, ha új verzió van, és egy kattintással telepítheti. A frissítés előtt a rendszer mindig teljes mentést készít, és enélkül nem frissít. A frissítés nem veszít adatot. Ha a távoli karbantartás be van kapcsolva, a frissítést kérésre mi is elindíthatjuk, előtte szintén mentéssel.</p>",
+  "kapcsolodo": [
+   "mi-van-ha-lejar-a-licenc",
+   "tavoli-karbantartas",
+   "napi-mentes"
+  ]
+ },
+ {
+  "kulcs": "elso-nap-teendoi",
+  "kategoria": "telepites",
+  "kerdes": "Mit kell beállítani az első napon?",
+  "valasz": "<p>A súgó „Első lépések” fejezete sorrendben végigvezet. A legfontosabbak: cégadatok és logó, a munkalapszámozás kezdőértéke, a kollégák és szerepeik, a levélküldés, a nyomtatványok, és ha használják, a Számlázz.hu-kulcs. Élesítés előtt érdemes egy próbaügyféllel végigmenni a teljes körön: munkalap, állapotváltás, fizetés, pénztárzárás, nyomtatás, számla, ügyféloldal.</p>",
+  "kapcsolodo": [
+   "oktatas",
+   "telepites-menete",
+   "szamozas-folytatasa"
+  ]
+ },
+ {
+  "kulcs": "oktatas",
+  "kategoria": "telepites",
+  "kerdes": "Van betanítás vagy oktatás?",
+  "valasz": "<p>A rendszerbe épített súgó minden menüponthoz részletes fejezetet, kérdés–válaszokat és kattintásról kattintásra vezető oldaltúrákat ad, és az AI-asszisztens is ebből felel. Ezen felül személyes vagy online oktatás is foglalható; a szolgáltatásokat és áraikat az <a href=\"/arak/\">Árak</a> oldalon találja. A <a href=\"/demo/\">demóban</a> a vásárlás előtt is kipróbálhatja a felületet.</p>",
+  "kapcsolodo": [
+   "sugo-a-rendszerben",
+   "telepites-szolgaltataskent",
+   "mi-a-demo"
+  ]
+ },
+ {
+  "kulcs": "telefonon-tableten",
+  "kategoria": "telepites",
+  "kerdes": "Használható telefonon és tableten is?",
+  "valasz": "<p>Igen, a felület böngészőből működik, külön alkalmazás nélkül. Keskeny képernyőn a menü ikonokra szűkül, a felugró ablakok kitöltik a képernyőt és görgethetők, a széles táblázatok oldalra húzhatók. Tableten az átvételkor az ügyfél aláírhat a képernyőn, és a készülékről a tablet kamerájával fotó készíthető. A pultgépen továbbra is a megszokott, egyben látható ablakok jelennek meg.</p>",
+  "kapcsolodo": [
+   "atveteli-foto-alairas",
+   "rendszerkovetelmenyek"
+  ]
+ },
+ {
+  "kulcs": "szamozas-folytatasa",
+  "kategoria": "telepites",
+  "kerdes": "Folytathatjuk a munkalapszámozást ott, ahol a régi programban tartottunk?",
+  "valasz": "<p>Igen. A <strong>Beállítások › Számozás</strong> lapfülön megadható a kezdőérték. Ha a régi adatokat átveszik, a munkalapok eredeti számukkal érkeznek, és az új munkalapok a legnagyobb átvett szám után folytatják a számozást. Így az ügyfelek kezében lévő régi átvételi elismervények száma is visszakereshető marad.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "elso-nap-teendoi"
+  ]
+ },
+ {
+  "kulcs": "tesztuzem",
+  "kategoria": "telepites",
+  "kerdes": "Van tesztüzem, amelyben semmi nem megy ki élesben?",
+  "valasz": "<p>Igen. Tesztüzemben az SMS csak szimuláció, e-mail nem megy ki, a Számlázz.hu és a külső mentés tiltva van, és a felület tetején „Tesztüzem” sáv jelzi az állapotot. Ez próbapéldányon, oktatáskor vagy terheléses próbánál hasznos, mert valódi ügyfél nem kap üzenetet, és valódi számla sem készül. Éles rendszeren ne kapcsolják be.</p>",
+  "kapcsolodo": [
+   "probapeldany-teszteleshez",
+   "mi-a-demo"
+  ]
+ },
+ {
+  "kulcs": "hol-vannak-az-adatok",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Hol tárolódnak a szerviz adatai?",
+  "valasz": "<p>A(z) {termeknev} az Önök által választott szerveren fut, és minden adat (ügyfelek, eszközök, munkalapok, pénztár, számlák, üzenetek) ott, az Önök adatbázisában van. Nincs közös felhő, amelyben más cégek adataival együtt tárolnánk. A licencközpont ügyféladatot nem kap. A feltöltött fájlok (fotók, aláírások, mentések) védett mappákban vannak, kívülről nem olvashatók.</p>",
+  "kapcsolodo": [
+   "mit-kuld-a-rendszer",
+   "ugyfeladat-nem-jut-el-hozzank",
+   "felho-vagy-sajat-szerver"
+  ]
+ },
+ {
+  "kulcs": "mit-kuld-a-rendszer",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Pontosan milyen adatot küld a rendszer a licencközpontnak?",
+  "valasz": "<p>Csak műszaki adatot:</p><ul><li>licenckulcs, a példány véletlen azonosítója és egy ujjlenyomat (a webhely címéből képzett lenyomat, nem maga a cím),</li><li>verzió, szerver- és PHP-adatok, válaszidő, memória, adatbázis- és tárhelyméret, a legutóbbi mentés ideje, a végzetes hibák helye kitakart üzenettel, a bekapcsolt modulok,</li><li>darabszámok: hány munkalap, ügyfél, eszköz, termék, felhasználó.</li></ul><p>Ügyfelek nevét, elérhetőségét, munkalap-tartalmat és forgalmi összeget <strong>soha</strong> nem küld.</p>",
+  "kapcsolodo": [
+   "szivveres-mi-az",
+   "hol-vannak-az-adatok",
+   "telemetria-kikapcsolasa"
+  ]
+ },
+ {
+  "kulcs": "telemetria-kikapcsolasa",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Kikapcsolható a távoli karbantartás?",
+  "valasz": "<p>Igen. A <strong>Beállítások › Rendszer › Licenc</strong> lapon a „Távoli karbantartás” kapcsolóval kikapcsolható; ilyenkor a központból kért műveletek (mentés, diagnosztika, frissítés) nem futnak le, és a központ látja, hogy kikapcsolták. A licenc állapotának jelentése ettől megmarad, mert enélkül a rendszer nem kapna frissítést. Belépni a rendszerbe a karbantartással sem lehet, csak engedélyezett támogatási hozzáféréssel.</p>",
+  "kapcsolodo": [
+   "tavoli-karbantartas",
+   "mit-kuld-a-rendszer",
+   "tamogatasi-hozzaferes"
+  ]
+ },
+ {
+  "kulcs": "ketlepcsos-belepes",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Van kétlépcsős azonosítás (2FA)?",
+  "valasz": "<p>Igen. A jelszó mellé a telefon hitelesítő alkalmazásának 6 jegyű kódja kell (TOTP szabvány, bármelyik elterjedt hitelesítő alkalmazással működik). Az adminisztrátor beállíthatja, hogy választható legyen, adminisztrátoroknak vagy mindenkinek kötelező. Minden fiók 10 egyszer használható tartalék kódot kap, és megadható, hány napig maradjon megbízható egy gép. Sorozatos rossz kódnál a fiók átmenetileg zárolódik.</p>",
+  "kapcsolodo": [
+   "elveszett-telefon-2fa",
+   "jogosultsagok-szerepek"
+  ]
+ },
+ {
+  "kulcs": "elveszett-telefon-2fa",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Elveszett a telefon, amelyen a kétlépcsős kód volt. Hogyan lépünk be?",
+  "valasz": "<p>A kód helyére írjon be egy <strong>tartalék kódot</strong>; ezeket a kétlépcsős belépés bekapcsolásakor kapta, és mindegyik egyszer használható. Ha nincs tartalék kód, az adminisztrátor a <strong>Beállítások › Jogosultságok</strong> listáján visszaállíthatja a fiók kétlépcsős belépését, utána az új telefonnal újra beállítható. A megbízható gépek listája ilyenkor érdemes visszavonni.</p>",
+  "kapcsolodo": [
+   "ketlepcsos-belepes"
+  ]
+ },
+ {
+  "kulcs": "jogosultsagok-szerepek",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Beállítható, hogy ki mit lásson a rendszerben?",
+  "valasz": "<p>Igen. Beépített szerepek vannak (Admin, Kolléga, Pultos, Szerelő, Pénztáros), és saját szerepek is létrehozhatók. Szerepenként tiltható egy-egy modul (például a pénztár), és finom jogok adhatók: pénztárriport, ár átírása a lapon, számlázás, törlés, beállítások, a feloldó kód megnézése. Jog nélkül a gombok el sem látszanak, és a szerver is elutasítja a kérést, a próbálkozás a naplóba kerül.</p>",
+  "kapcsolodo": [
+   "zarkod-titkositas",
+   "kozos-fiok-pin",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "zarkod-titkositas",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Hogyan védi a rendszer a készülékek feloldó kódját és mintáját?",
+  "valasz": "<p>A zárkód és a feloldó minta <strong>titkosítva</strong> tárolódik az adatbázisban. Megnézni csak az tudja, akinek a szerepe erre jogot ad: a mező mellett a Megmutat gombbal, és minden megnézés a naplóba kerül. A kód nem jelenik meg a listákban, a keresési találatokban, és az AI-asszisztens sem látja. A belső munkalapon és a matricán is csak jogosultnak nyomtatódik.</p>",
+  "kapcsolodo": [
+   "jogosultsagok-szerepek",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "valtozasnaplo",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Visszakövethető, ki mit módosított?",
+  "valasz": "<p>Igen. A Napló minden módosítást mezőnként megőriz: ki, mikor, honnan, mi volt és mi lett. A naplót senki nem írhatja át vagy törölheti; a bejegyzések láncolt ellenőrzőkóddal védettek, így az utólagos belenyúlás kiderül. Egy munkalap teljes története a saját Napló gombjával nyitható meg, a teljes napló pedig szűrhető kollégára, időszakra, műveletre.</p>",
+  "kapcsolodo": [
+   "jogosultsagok-szerepek",
+   "kozos-fiok-pin"
+  ]
+ },
+ {
+  "kulcs": "kozos-fiok-pin",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Egy közös gépen, közös fiókkal dolgozunk. Látszik, ki mit csinált?",
+  "valasz": "<p>Igen, ha bekapcsolják a „Ki vagy?” választót. A közösnek jelölt fiókon a felület indulásakor mindenki kiválasztja a nevét és beírja a PIN-kódját (4–8 számjegy). Ettől kezdve a napló, a pénztár, a munkalap felelőse a valódi személyt mutatja, és a jogosultságok is személyre szólnak. Személyt váltani a profilmenüből lehet; öt hibás PIN után a választó 5 percre zárol.</p>",
+  "kapcsolodo": [
+   "jogosultsagok-szerepek",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "parhuzamos-szerkesztes",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Mi történik, ha ketten egyszerre szerkesztik ugyanazt a munkalapot?",
+  "valasz": "<p>A rendszer ezt megakadályozza. Amit egy másik ablakban épp szerkesztenek, azt nem engedi megnyitni, hanem kiírja, ki dolgozik rajta. Ha valaki mégis közben mentett, a második mentés nem írja felül csendben, hanem jelzi az ütközést, és választani lehet: frissítés a legújabbra, vagy a saját változat mentése. Sürgős esetben felülbíráló kóddal a zárolás feloldható, ez a naplóba kerül.</p>",
+  "kapcsolodo": [
+   "valtozasnaplo",
+   "kozos-fiok-pin"
+  ]
+ },
+ {
+  "kulcs": "tamogatasi-hozzaferes",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Be tud lépni a forgalmazó a rendszerünkbe?",
+  "valasz": "<p>Csak akkor, ha Önök engedélyezik. A <strong>Beállítások › Rendszer › Licenc</strong> lapon az adminisztrátor 2 órára, 1 napra vagy 3 napra engedélyezhet ideiglenes hozzáférést, kétszeri kattintással. A lejáratkor vagy visszavonáskor az ideiglenes fiók törlődik, és minden lépés a naplóba kerül. Ha a támogatás kér hozzáférést, a képernyő tetején sávban jelenik meg, és elutasítható.</p>",
+  "kapcsolodo": [
+   "tamogatasi-hozzaferes-mit-lat",
+   "tavoli-karbantartas",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "tamogatasi-hozzaferes-mit-lat",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Mit lát a támogató, amíg a hozzáférés él?",
+  "valasz": "<p>Amíg az ideiglenes hozzáférés érvényes, a támogató adminisztrátorként mindent lát, ugyanúgy, mint Önök. Ezért csak akkor engedélyezze, ha segítséget kért, és válassza a legrövidebb időt, ami elég (2 óra). A hozzáférés bármikor visszavonható, és a Naplóban látszik minden támogatói belépés. A lejárat után a link nem működik, és a fiók megszűnik.</p>",
+  "kapcsolodo": [
+   "tamogatasi-hozzaferes",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "tavoli-karbantartas",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Mit jelent a távoli karbantartás?",
+  "valasz": "<p>A licencközpontból karbantartási műveletek indíthatók: mentés, diagnosztika (sebességmérés), gyorsítótár ürítése, internetkapcsolat ellenőrzése, frissítés keresése és telepítése (előtte mindig teljes mentés készül). Ezek egyike sem küld el ügyféladatot, és egyike sem nyit belépést. A funkció a Licenc lapon kikapcsolható; ilyenkor a kért művelet nem fut le.</p>",
+  "kapcsolodo": [
+   "telemetria-kikapcsolasa",
+   "tamogatasi-hozzaferes",
+   "frissites-menete"
+  ]
+ },
+ {
+  "kulcs": "zart-mod",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Látják kívülről, hogy milyen rendszer fut nálunk?",
+  "valasz": "<p>A rendszer zárt módban működik: kívülről csak a saját bejelentkező oldal, az ügyféloldal és a foglalóoldal érhető el, minden más oldal a bejelentkezőre irányít. A keresőknek nem ad indexelhető tartalmat, és a bejelentkező oldal sem árulja el a mögötte lévő technikát. A bejelentkező oldal a cég logójával és színeivel testre szabható.</p>",
+  "kapcsolodo": [
+   "kulon-webhely-kell",
+   "hol-vannak-az-adatok"
+  ]
+ },
+ {
+  "kulcs": "gdpr-anonimizalas",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Az ügyfél kéri az adatai törlését. Mit tudunk tenni?",
+  "valasz": "<p>Az ügyfél adatlapján az <strong>Anonimizálás (GDPR)</strong> gomb törli a személyes adatokat: nevet, elérhetőségeket, címeket, megjegyzéseket, a készülékek zárkódját, az SMS-ek számát, és választhatóan az üzenetek szövegét. Megmarad az ügyfélszám, a munkalapok, a számlák és a pénztár, mert ezek megőrzését jogszabály írhatja elő. A művelet kérésmegjelöléssel, visszaigazoló e-maillel és naplóbejegyzéssel történik.</p>",
+  "kapcsolodo": [
+   "gdpr-mi-marad",
+   "hol-vannak-az-adatok"
+  ]
+ },
+ {
+  "kulcs": "gdpr-mi-marad",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Mi marad meg anonimizálás után, és miért?",
+  "valasz": "<p>Megmarad az ügyfélszám, a munkalapok, a számlák, a pénztártételek és az eszközök (személyes azonosító nélkül), mert a számviteli bizonylatokat jogszabály szerint meg kell őrizni, és a statisztikákhoz is kellenek. A név helyére „Anonimizált ügyfél” kerül. A naplóba egyetlen bejegyzés kerül személyes adat nélkül. Az újraimport sem hozza vissza az anonimizált ügyfél adatait.</p>",
+  "kapcsolodo": [
+   "gdpr-anonimizalas"
+  ]
+ },
+ {
+  "kulcs": "jelszavak-kulcsok-tarolasa",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Hogyan tárolja a rendszer a jelszavakat és az API-kulcsokat?",
+  "valasz": "<p>A felhasználói jelszavakból csak lenyomat tárolódik. A külső szolgáltatások kulcsai (Számlázz.hu Agent-kulcs, AI API-kulcs, levelezési alkalmazásjelszó, mentési jelszavak) <strong>titkosítva</strong> állnak az adatbázisban, a szerver saját kulcsaihoz kötve, így a mentésfájlban sem olvashatók. A beírt kulcs mentés után nem jelenik meg újra a mezőben, csak cserélni lehet.</p>",
+  "kapcsolodo": [
+   "zarkod-titkositas",
+   "titkositott-kulso-mentes"
+  ]
+ },
+ {
+  "kulcs": "adatatvetel-hogyan",
+  "kategoria": "adatatvetel",
+  "kerdes": "Át tudjuk hozni az adatainkat a régi programból?",
+  "valasz": "<p>Igen. A <strong>Beállítások › Rendszer › Adatátvétel</strong> lapon táblázatfájlokból (CSV, TXT, XLSX) vehetők át az ügyfelek, eszközök, munkalapok, tételek és hibák, ebben a sorrendben. A rendszer felismeri a kódolást és az elválasztót, javasolja az oszlopok párosítását, és élesítés előtt írás nélküli próbát futtat. Az átvétel visszavonható. Részletek az <a href=\"/adatatvetel/\">Adatátvétel</a> oldalon.</p>",
+  "kapcsolodo": [
+   "munkalap3-atvetel",
+   "adatatvetel-proba",
+   "adatatvetel-visszavonas"
+  ]
+ },
+ {
+  "kulcs": "munkalap3-atvetel",
+  "kategoria": "adatatvetel",
+  "kerdes": "MunkaLap 3-at használunk. Hogyan váltunk?",
+  "valasz": "<p>A MunkaLap 3 modulonként menti ki a táblázatait (Ügyfél, Tárgy, Munkalap, Tétel, Hiba) CSV, TXT vagy XLS formában. A régi .xls fájlt egy táblázatkezelőben .xlsx-ként vagy CSV-ként kell újramenteni. Ezután az Adatátvétel lapon ebben a sorrendben vehetők át. A régi azonosítók és munkalapszámok megmaradnak, a feloldó kódok titkosítva érkeznek, az állapotok párosíthatók.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "xls-fajl",
+   "allapotok-parositasa"
+  ]
+ },
+ {
+  "kulcs": "excelbol-valtas",
+  "kategoria": "adatatvetel",
+  "kerdes": "Eddig Excelben vezettük a javításokat. Ezt is át lehet hozni?",
+  "valasz": "<p>Igen, ha a táblázat soronként egy ügyfelet, eszközt vagy munkalapot tartalmaz. Mentse el a lapokat külön fájlba (XLSX vagy CSV), és az Adatátvétel lapon párosítsa az oszlopokat a rendszer mezőivel. Minden sorhoz kell egy egyedi azonosító (például sorszám), mert ezzel kapcsolódik a munkalap az ügyfeléhez. A próba megmutatja, hány sor jó és melyik miért hibás.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "oszlopok-parositasa",
+   "adatatvetel-proba"
+  ]
+ },
+ {
+  "kulcs": "adatatvetel-proba",
+  "kategoria": "adatatvetel",
+  "kerdes": "Mit mutat az adatátvétel próbája?",
+  "valasz": "<p>A próba az egész fájlt végigolvassa, de <strong>semmit nem ír</strong> az adatbázisba. Megmutatja, hány sor jó, hány van már bent, hány hibás és miért (az első 25 hibás sor számával), a munkalapoknál és tételeknél a bruttó végösszeget, és hogy melyik állapotba hány lap kerül. Ezt érdemes összevetni a régi program összesítőjével, mielőtt az éles átvételt elindítják.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "adatatvetel-visszavonas"
+  ]
+ },
+ {
+  "kulcs": "adatatvetel-visszavonas",
+  "kategoria": "adatatvetel",
+  "kerdes": "Visszavonható az adatátvétel?",
+  "valasz": "<p>Igen. Az <strong>Eddigi átvételek</strong> táblázatban minden átvétel mellett van Visszavonás gomb (kétszeri kattintással), amely az adott átvétel összes új sorát törli. Ahhoz, amit az átvétel kihagyott, mert már bent volt, nem nyúl. Több táblázatnál fordított sorrendben érdemes visszavonni: előbb a hibákat és tételeket, végül az ügyfeleket. Előtte mindenképp készítsenek mentést.</p>",
+  "kapcsolodo": [
+   "adatatvetel-proba",
+   "napi-mentes"
+  ]
+ },
+ {
+  "kulcs": "dupla-atvetel",
+  "kategoria": "adatatvetel",
+  "kerdes": "Mi történik, ha ugyanazt a fájlt kétszer veszem át?",
+  "valasz": "<p>Semmi baj nem történik. A rendszer minden átvett sorhoz megjegyzi a régi azonosítót, és a már bent lévőt kihagyja, így nem lesz kettő ugyanabból. Ezért egy megszakadt átvétel is nyugodtan újraindítható: onnan folytatja, ahol abbamaradt. A már foglalt munkalapszámú sort nem veszi át, hanem hibaként jelzi.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "nagy-adatmennyiseg-atvetel"
+  ]
+ },
+ {
+  "kulcs": "xls-fajl",
+  "kategoria": "adatatvetel",
+  "kerdes": "A régi programunk .xls fájlt ment. Ezt be tudja olvasni a rendszer?",
+  "valasz": "<p>A régi .xls formátumot közvetlenül nem. Nyissa meg a fájlt egy táblázatkezelőben (Excel, LibreOffice), és mentse el <strong>.xlsx</strong>-ként vagy <strong>CSV</strong>-ként. Ha az ékezetek helyén furcsa jelek jelennek meg, válassza a „CSV UTF-8” mentési formát. A rendszer egyébként a régi Windows-os kódolást (Windows-1250) és az UTF-16-ot is felismeri.</p>",
+  "kapcsolodo": [
+   "munkalap3-atvetel",
+   "excelbol-valtas"
+  ]
+ },
+ {
+  "kulcs": "oszlopok-parositasa",
+  "kategoria": "adatatvetel",
+  "kerdes": "Mi van, ha a fájlunk fejlécei másképp szólnak?",
+  "valasz": "<p>A rendszer a fejlécek alapján javasol párosítást (a magyar elnevezések ékezet nélküli változatait is ismeri), és minden mező mellett mintát mutat a fájlból. Ahol a javaslat nem jó, kézzel kiválasztható a megfelelő oszlop. A csillagos mezők kötelezők, például az ügyfél neve és régi azonosítója. A dátumokat és pénzösszegeket többféle írásmódban is felismeri.</p>",
+  "kapcsolodo": [
+   "excelbol-valtas",
+   "adatatvetel-proba"
+  ]
+ },
+ {
+  "kulcs": "allapotok-parositasa",
+  "kategoria": "adatatvetel",
+  "kerdes": "Mi lesz a régi munkalap-állapotokkal?",
+  "valasz": "<p>Az átvételnél megadható, melyik régi állapot melyik új legyen, soronként (például <code>Kiadva = lezart</code>). Ha üresen hagyja, a rendszer maga dönt: a kiadott, átadott lapok lezártak lesznek, a kész elkészült, az érvénytelen vagy sztornó érvénytelen, a többi az alapállapotot kapja. A próba megmutatja, melyik állapotba hány lap kerül, mielőtt bármi íródna.</p>",
+  "kapcsolodo": [
+   "munkalap3-atvetel",
+   "adatatvetel-proba"
+  ]
+ },
+ {
+  "kulcs": "nagy-adatmennyiseg-atvetel",
+  "kategoria": "adatatvetel",
+  "kerdes": "Mennyi idő alatt jön át több tízezer munkalap?",
+  "valasz": "<p>Az átvétel 500 soros adagokban halad, közben mutatja, hol tart. A teljes idő a szerver teljesítményétől és a fájl méretétől függ, több percig is tarthat; ezt előre nem tudjuk pontosan megmondani. Az oldalt hagyják nyitva. Ha megszakad, az addig átvett sorok bent maradnak, és az újraindítás a már bent lévőket kihagyva folytatja.</p>",
+  "kapcsolodo": [
+   "dupla-atvetel",
+   "nagy-adatbazis-sebesseg"
+  ]
+ },
+ {
+  "kulcs": "adatatvetel-szolgaltataskent",
+  "kategoria": "adatatvetel",
+  "kerdes": "Segítetek az adatátvételben?",
+  "valasz": "<p>Igen, az adatátvétel a telepítési szolgáltatással együtt is kérhető. Ilyenkor a régi program kimentett táblázatai alapján elvégezzük a párosítást, a próbát és az éles átvételt, és az eredményt Önökkel együtt vetjük össze a régi program összesítőivel. A szolgáltatások árát az <a href=\"/arak/\">Árak</a> oldalon találja; nem szabványos forrásnál előbb egy mintafájlt kérünk.</p>",
+  "kapcsolodo": [
+   "telepites-szolgaltataskent",
+   "adatatvetel-hogyan"
+  ]
+ },
+ {
+  "kulcs": "penztar-excel-import",
+  "kategoria": "adatatvetel",
+  "kerdes": "A házipénztárt eddig Excelben vezettük. Áthozható?",
+  "valasz": "<p>Igen. A Házipénztár modul saját Excel-importtal rendelkezik: a régi „Zárás” táblázat .xlsx vagy CSV formában betölthető, a rendszer a már rögzített tételeket nem rontja el, és az import vissza is vonható. A pénztár-riport CSV-ben exportálható is. Ez külön az ügyfél- és munkalap-átvételtől működik, a Házipénztár menüpontban.</p>",
+  "kapcsolodo": [
+   "adatatvetel-hogyan",
+   "hazipenztar-mit-tud"
+  ]
+ },
+ {
+  "kulcs": "alaprendszer-mi-van-benne",
+  "kategoria": "modulok",
+  "kerdes": "Mi van benne minden csomagban, modultól függetlenül?",
+  "valasz": "<p>Az <strong>alaprendszer</strong> mindig fut, és nem kapcsolható ki: Áttekintés (a munkalapok szűrhető rácsa), Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés és Napló. Ide tartozik az átvételi fotó és aláírás, a javítási garancia nyilvántartása, a GDPR-anonimizálás, a kétlépcsős belépés, a szerepkörök és az adatátvétel is. A többi funkció modulként kapcsolható.</p>",
+  "kapcsolodo": [
+   "modulok-kulon-ara",
+   "melyik-csomag-kell",
+   "modul-kikapcsolas-adat"
+  ]
+ },
+ {
+  "kulcs": "melyik-csomag-kell",
+  "kategoria": "modulok",
+  "kerdes": "Melyik csomag kell egy kis, egyszemélyes szerviznek?",
+  "valasz": "<p>Egy kis szervizben gyakran elég az alaprendszer és néhány modul: nyomtatványok, ügyfélüzenetek, esetleg házipénztár és SMS. Ahogy nő a forgalom, jöhet a készletkezelés, a számlázás vagy a naptár. Az <a href=\"/arak/\">Árak</a> oldal összehasonlító táblázata mutatja, melyik csomagban mi van, és a <a href=\"/demo/\">demóban</a> minden modul kipróbálható, mielőtt dönt.</p>",
+  "kapcsolodo": [
+   "alaprendszer-mi-van-benne",
+   "modul-utolag",
+   "mi-a-demo"
+  ]
+ },
+ {
+  "kulcs": "modul-utolag",
+  "kategoria": "modulok",
+  "kerdes": "Hozzáadhatok később modult?",
+  "valasz": "<p>Igen. A licenc bővítése után a modul a következő jelentkezéskor (legfeljebb 5 perc) bekapcsolható, újratelepítés nélkül. Ha korábban már használták, és csak a licencből esett ki, az adatai megvannak, és ott folytatódik minden, ahol abbamaradt. A bővítést az ügyfélfiókból indíthatja, a modulok árát az <a href=\"/arak/\">Árak</a> oldalon találja.</p>",
+  "kapcsolodo": [
+   "bovites-kesobb",
+   "licenc-nelkuli-modul"
+  ]
+ },
+ {
+  "kulcs": "modul-kikapcsolas-adat",
+  "kategoria": "modulok",
+  "kerdes": "Elvesznek az adatok, ha egy modult kikapcsolunk?",
+  "valasz": "<p>Nem. A kikapcsolt modul eltűnik a menüből, a csempék közül és a beállításokból, az időzített munkái nem futnak (például kikapcsolt SMS-nél semmi nem megy ki), de az adatai nem törlődnek. Visszakapcsolás után minden ott folytatódik, ahol abbamaradt. Egyes modulok egymásra épülnek: az SMS és a Rendelések az Ügyfélüzenetek modult igénylik.</p>",
+  "kapcsolodo": [
+   "licenc-nelkuli-modul",
+   "alaprendszer-mi-van-benne"
+  ]
+ },
+ {
+  "kulcs": "keszletkezeles-modul",
+  "kategoria": "modulok",
+  "kerdes": "Mit tud a Termékek és készlet modul?",
+  "valasz": "<p>Alkatrész- és árutörzs beszerzési és eladási árral, haszonkulccsal, vonalkóddal és készlettel. A munkalapra vagy árukiadásra tett termék magától lejön a készletről. A nyitott munkalapokon lévő alkatrészek <strong>foglaltként</strong> látszanak, a minimum alá fogyott termékekből beszállítónként <strong>rendelési javaslat</strong> készül (CSV-be is), és a beérkezés egy kattintással bevételezhető.</p>",
+  "kapcsolodo": [
+   "rendelesi-javaslat",
+   "vonalkodolvaso"
+  ]
+ },
+ {
+  "kulcs": "rendelesi-javaslat",
+  "kategoria": "modulok",
+  "kerdes": "Hogyan segít a rendszer eldönteni, mit kell rendelni?",
+  "valasz": "<p>A Termékek menü <strong>Rendelési javaslat</strong> nézete beszállítónként listázza, mi fogyott a minimumkészlet alá, és mennyit érdemes rendelni a beállított célkészletig, a nyitott munkalapok foglalásait is figyelembe véve. Látszik a becsült nettó érték, a lista másolható rendelési szövegként vagy CSV-ben letölthető, és a beérkezett tétel soronként bevételezhető a Megérkezett gombbal.</p>",
+  "kapcsolodo": [
+   "keszletkezeles-modul"
+  ]
+ },
+ {
+  "kulcs": "hazipenztar-mit-tud",
+  "kategoria": "modulok",
+  "kerdes": "Mit tud a Házipénztár modul?",
+  "valasz": "<p>A napi kassza nyilvántartása: bevétel, kivét, kifizetés és befizetés rögzítése, készpénz, kártya, utalás és vegyes fizetés kezelése, címletes számolás és napzárás. Van riport, statisztika, CSV-export és nyomtatható zárás. Az <strong>egyeztető ügynök</strong> segít megtalálni, miért hiányzik vagy több a pénz. A munkalap fizetése egy lépésben a pénztárba is bekerül.</p>",
+  "kapcsolodo": [
+   "penztar-excel-import",
+   "szamlazas-szamlazzhu"
+  ]
+ },
+ {
+  "kulcs": "ugyfeloldal-rma",
+  "kategoria": "modulok",
+  "kerdes": "Mit lát az ügyfél a saját oldalán?",
+  "valasz": "<p>Az ügyfél az átvételi elismervény QR-kódjával vagy egy linkkel nyitja meg az oldalát, és a telefonszámával és a munkalap számával lép be, jelszó nélkül. Látja a javítás állapotát, az összeget, üzenhet a szerviznek, és az árajánlatot is itt fogadhatja el vagy utasíthatja el. Az oldal magyarul, angolul és németül is elérhető, és telefonon is jól használható.</p>",
+  "kapcsolodo": [
+   "online-arajanlat",
+   "sms-hogyan-mukodik",
+   "elegedettsegi-kerdes"
+  ]
+ },
+ {
+  "kulcs": "online-arajanlat",
+  "kategoria": "modulok",
+  "kerdes": "Elfogadhatja az ügyfél online az árajánlatot?",
+  "valasz": "<p>Igen. A munkalapról az árajánlat egy gombbal elküldhető: az ügyfél e-mailt kap a linkkel, és a saját oldalán megjegyzéssel együtt az <strong>Elfogadom</strong> vagy a <strong>Nem kérem</strong> gombot választja. A válasz a munkalapra kerül, a szerviz értesítést kap, és a napló is rögzíti. Ha a lap összege a küldés óta változott, a rendszer jelzi.</p>",
+  "kapcsolodo": [
+   "ugyfeloldal-rma",
+   "riportok"
+  ]
+ },
+ {
+  "kulcs": "elegedettsegi-kerdes",
+  "kategoria": "modulok",
+  "kerdes": "Hogyan gyűjthetünk több Google-értékelést?",
+  "valasz": "<p>Az elégedettségi kérdés modul a lezárt javítások után a beállított nap múlva SMS-ben vagy e-mailben 1–5 csillagos értékelést kér. Aki a küszöb fölött értékel, egy gombbal a Google-értékelő oldalra jut. Aki elégedetlen, annak a megjegyzése a munkalapra kerül, és Ön e-mailt kap, hogy felhívhassa. Minden lap csak egyszer kap kérdést.</p>",
+  "kapcsolodo": [
+   "sms-hogyan-mukodik",
+   "riportok"
+  ]
+ },
+ {
+  "kulcs": "naptar-foglalas",
+  "kategoria": "modulok",
+  "kerdes": "Foglalhatnak az ügyfelek időpontot a weboldalunkról?",
+  "valasz": "<p>Igen, az Online időpontfoglalás modullal. A foglalóoldal a naptár szabad sávjait mutatja; az ügyfél megadja a nevét, telefonszámát, a készüléket és a hibát. Visszaigazoló e-mailt kap lemondó linkkel, a naptár gazdája pedig értesítést. A foglalóoldal linkelhető vagy beágyazható a weboldalba, és a napok, időpontok, párhuzamos foglalások száma beállítható.</p>",
+  "kapcsolodo": [
+   "naptar-modul",
+   "foglalas-vedelem"
+  ]
+ },
+ {
+  "kulcs": "naptar-modul",
+  "kategoria": "modulok",
+  "kerdes": "Mit tud a Naptár?",
+  "valasz": "<p>Minden kollégának saját naptára van: napi, heti és havi nézet, ismétlődő események, húzással áthelyezés, fontosság és privát esemény. Az emlékeztető kártya addig marad a képernyőn, amíg kézzel ki nem nyomják, és a fontos eseményekről e-mail is megy. Reggeli összefoglaló is kérhető. Az online időpontfoglalás erre a naptárra épül.</p>",
+  "kapcsolodo": [
+   "naptar-foglalas",
+   "csapat-uzenetek"
+  ]
+ },
+ {
+  "kulcs": "csapat-uzenetek",
+  "kategoria": "modulok",
+  "kerdes": "Van belső üzenetküldés a kollégák között?",
+  "valasz": "<p>Igen, a Csapat-üzenetek modul kétféleképpen működik. Saját belépéssel <strong>csevegés</strong>: egy kollégának, csoportnak vagy mindenkinek, olvasási visszaigazolással, kitűzéssel és felugró fontos üzenettel. Közös fióknál <strong>üzenőfal</strong> cetlikkel. A mód később is váltható. A fontos üzenet a címzettnél felugró ablakban jelenik meg. Kollégák és csoportok a beállításokban vehetők fel akkor is, ha a modul ki van kapcsolva.</p>",
+  "kapcsolodo": [
+   "naptar-modul",
+   "kozos-fiok-pin"
+  ]
+ },
+ {
+  "kulcs": "levelezes-modul",
+  "kategoria": "modulok",
+  "kerdes": "Kezelhetjük a céges e-mailt a rendszerből?",
+  "valasz": "<p>Igen, a Levelezés modul a szerviz e-mail-fiókjait IMAP-on és SMTP-n köti be (Gmailnél alkalmazásjelszóval): olvasás, írás, válasz, csatolmány, mappák, és új levél jelzése minden oldalon. Egy ügynök a fontos leveleket jelzi, egy másik kérésre mappákba rendez. A rendszer értesítő levelei is a cég saját fiókjából mehetnek ki.</p>",
+  "kapcsolodo": [
+   "integraciok-listaja"
+  ]
+ },
+ {
+  "kulcs": "riportok",
+  "kategoria": "modulok",
+  "kerdes": "Milyen kimutatásokat ad a rendszer?",
+  "valasz": "<p>A Riportok menüpont a lezárt lapokból mutatja a lezárt javítások számát, az átlagos és medián átfutási időt, a sikeres javítás arányát (ami nem jött vissza garanciában) és a bevételt. Bontás van technikusonként, eszközkategóriánként, munkalapfajtánként és termékkategóriánként, az árajánlatok elfogadási arányával és az utolsó 12 hónap alakulásával.</p>",
+  "kapcsolodo": [
+   "elegedettsegi-kerdes",
+   "javitasi-garancia"
+  ]
+ },
+ {
+  "kulcs": "nyomtatvanyok",
+  "kategoria": "modulok",
+  "kerdes": "Milyen nyomtatványokat tud a rendszer?",
+  "valasz": "<p>Átvételi elismervény (fotókkal és az ügyfél aláírásával), munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás és listák. Mindegyik előnézettel, példányszámmal, PDF-be mentve és e-mailben is küldhető. A nyomtatványok szövege, fejléce, lábléce és papírmérete (A4, A5) a beállításokban szerkeszthető, a saját garanciális feltételek is ráírhatók.</p>",
+  "kapcsolodo": [
+   "brother-cimkenyomtato",
+   "atveteli-foto-alairas"
+  ]
+ },
+ {
+  "kulcs": "imei-tac",
+  "kategoria": "modulok",
+  "kerdes": "Felismeri a rendszer a telefon típusát az IMEI-ből?",
+  "valasz": "<p>Igen. Az IMEI első nyolc számjegye (TAC) a készüléktípust azonosítja, és a rendszer beépített típusadatbázisából internet nélkül kitölti a gyártót és a típust; az ismeretlen típusokat megtanulja. A sorozatszámot, a garanciát és a gyártás dátumát ingyenes ellenőrző oldalról beillesztve vagy előfizetett IMEI-lekérdező szolgáltatásból töltheti be.</p>",
+  "kapcsolodo": [
+   "okos-kereso",
+   "telefonszerviz"
+  ]
+ },
+ {
+  "kulcs": "atveteli-foto-alairas",
+  "kategoria": "modulok",
+  "kerdes": "Lehet fotót készíteni és aláíratni az ügyféllel átvételkor?",
+  "valasz": "<p>Igen. A munkalap Átvétel lapfülén a készülékről fotó készíthető (tableten vagy telefonon közvetlenül a kamerával), és az ügyfél az érintőképernyőn aláírhat. Az átvételi elismervényre legfeljebb négy fotó bélyegképe és az aláírás kerül. Ez vita esetén bizonyítja a készülék átvételkori állapotát.</p>",
+  "kapcsolodo": [
+   "nyomtatvanyok",
+   "telefonon-tableten"
+  ]
+ },
+ {
+  "kulcs": "javitasi-garancia",
+  "kategoria": "modulok",
+  "kerdes": "Nyilvántartja a rendszer a javításra adott garanciát?",
+  "valasz": "<p>Igen. A beállításokban megadható az alapértelmezett garanciaidő (gyárilag 180 nap), és munkalaponként eltérő is lehet. A garancia a lezárás napjától számít, a lapon és a nyomtatványon látszik a lejárat. Ha egy készülék visszajön, a rendszer jelzi, hányszor járt már bent és garanciában van-e, és garanciális visszatérésként rögzíthető. A garanciaidőt a jogszabályoknak megfelelően Önök állítják be.</p>",
+  "kapcsolodo": [
+   "riportok",
+   "atveteli-foto-alairas"
+  ]
+ },
+ {
+  "kulcs": "telefonszerviz",
+  "kategoria": "iparagak",
+  "kerdes": "Alkalmas a rendszer mobiltelefon-szerviznek?",
+  "valasz": "<p>Igen, ez az egyik fő terület. Az IMEI-ből felismeri a típust, a feloldó kódot és mintát titkosítva tárolja, az okos kereső az IMEI-t, telefonszámot és sorozatszámot is felismeri. Van RMA-matrica Brother címkenyomtatóra, átvételi fotó és aláírás, QR-kódos ügyféloldal és SMS-értesítés. Részletek: <a href=\"/iparagak/telefonszerviz/\">Telefonszerviz</a>.</p>",
+  "kapcsolodo": [
+   "imei-tac",
+   "zarkod-titkositas",
+   "brother-cimkenyomtato"
+  ]
+ },
+ {
+  "kulcs": "szamitogep-szerviz",
+  "kategoria": "iparagak",
+  "kerdes": "Számítógép- és laptopszerviznek is jó?",
+  "valasz": "<p>Igen. Az eszközöknél kategória (például laptop, asztali gép), gyártó, típus, gyári szám, tartozékok és átvételkori állapot rögzíthető, a munkalapon hibák, szolgáltatások és alkatrészek szerepelnek. Több eszköz is lehet egy lapon, külön állapottal. A készletkezelés és a rendelések modul az alkatrészbeszerzést segíti. Részletek: <a href=\"/iparagak/szamitogep-szerviz/\">Számítógép-szerviz</a>.</p>",
+  "kapcsolodo": [
+   "tobb-eszkoz-egy-lapon",
+   "keszletkezeles-modul"
+  ]
+ },
+ {
+  "kulcs": "elektronikai-szerviz",
+  "kategoria": "iparagak",
+  "kerdes": "Használható általános elektronikai javítóműhelyben?",
+  "valasz": "<p>Igen. A rendszer bármilyen, ügyfél által behozott készülékre működik, amelynek típusa és gyári száma van: televízió, hangtechnika, háztartási kisgép, okosóra, konzol. A kategóriák és gyártók listája bővíthető, és minden eszköznek megvan az előélete. Részletek: <a href=\"/iparagak/elektronikai-szerviz/\">Elektronikai szerviz</a>. Egy munkalapon több készülék is lehet, a garancia és az átvételi fotó itt is működik, és a nyomtatványokra a saját feltételeik írhatók.</p>",
+  "kapcsolodo": [
+   "eszkoz-elozmenyek",
+   "mire-nem-valo"
+  ]
+ },
+ {
+  "kulcs": "mire-nem-valo",
+  "kategoria": "iparagak",
+  "kerdes": "Milyen vállalkozásnak nem ajánlott a rendszer?",
+  "valasz": "<p>A(z) {termeknev} ügyfél által behozott készülékek javítására készült. Nem helyszíni kiszállásos munkák ütemezésére, nem gépjárműszervizre (nincs például rendszám- vagy kilométeróra-kezelés), és nem webáruháznak. Ha a tevékenységük ezektől eltér, érdemes a <a href=\"/demo/\">demóban</a> kipróbálni, vagy az <a href=\"/egyedi-fejlesztes/\">egyedi fejlesztés</a> lehetőségéről érdeklődni. Ha bizonytalan, írja le a folyamatukat, és őszintén megmondjuk, megfelel-e.</p>",
+  "kapcsolodo": [
+   "elektronikai-szerviz",
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "kis-uzlet-egy-gep",
+  "kategoria": "iparagak",
+  "kerdes": "Egyetlen gépünk van a pultban. Megéri nekünk?",
+  "valasz": "<p>Egy gépen, egy közös fiókkal is jól használható: a „Ki vagy?” választóval mégis látszik, ki mit rögzített. Az üzenőfal mód a közös gépre készült. A fizetés, a nyomtatás, az SMS és az ügyféloldal kis forgalomnál is időt takarít meg. A <a href=\"/demo/\">demóban</a> ki lehet próbálni, hogy a napi rutinjukhoz illik-e.</p>",
+  "kapcsolodo": [
+   "kozos-fiok-pin",
+   "melyik-csomag-kell"
+  ]
+ },
+ {
+  "kulcs": "tobb-eszkoz-egy-lapon",
+  "kategoria": "iparagak",
+  "kerdes": "Egy ügyfél több készüléket hozott. Több munkalap kell?",
+  "valasz": "<p>Nem kell. Egy munkalapon több eszköz is lehet, mindegyik saját állapottal, hibákkal és tételekkel. Ha az egyik elkészül és elviszik, a lap „Részben elkészült” állapotba kerülhet. Eszközönként külön matrica, külön QR-kód és akár külön számla is kérhető. Ha mégis külön ügyként kezelnék, külön lapra is felvehetők.</p>",
+  "kapcsolodo": [
+   "szamitogep-szerviz",
+   "brother-cimkenyomtato"
+  ]
+ },
+ {
+  "kulcs": "eszkoz-elozmenyek",
+  "kategoria": "iparagak",
+  "kerdes": "Visszakereshető, hányszor járt nálunk egy készülék?",
+  "valasz": "<p>Igen. Minden eszköznek megvan az előélete: az összes munkalap, amelyen szerepelt. Az eszköz lapfülön a rendszer jelzi, hány lapon szerepelt már, és garanciában van-e. Az IMEI-t vagy a gyári számot bármelyik keresőbe beírva azonnal megjelenik a készülék és a korábbi javításai.</p>",
+  "kapcsolodo": [
+   "okos-kereso",
+   "javitasi-garancia"
+  ]
+ },
+ {
+  "kulcs": "tobb-uzlet-lanc",
+  "kategoria": "iparagak",
+  "kerdes": "Több üzletünk van. Egy rendszerben kezelhetjük?",
+  "valasz": "<p>Igen, egy közös rendszerben: a napi árukiadáson helyszínt lehet választani, a lista helyszínre szűrhető, és minden üzletben ugyanaz az ügyfél- és készülékadatbázis látszik. Ehhez a rendszernek kívülről elérhető címen kell futnia. A telephelyek díját az <a href=\"/arak/\">Árak</a> oldal mutatja. A közös adatbázis miatt bármelyik üzletben felvett készülék előzménye a többiben is azonnal kereshető.</p>",
+  "kapcsolodo": [
+   "helyszinek-tobb-uzlet",
+   "tobb-telephely-ara"
+  ]
+ },
+ {
+  "kulcs": "helyszinek-tobb-uzlet",
+  "kategoria": "iparagak",
+  "kerdes": "Hogyan működnek a helyszínek a napi árukiadásnál?",
+  "valasz": "<p>Amíg csak egy helyszín van, a mező meg sem jelenik. Két aktív helyszíntől az árukiadáson választóként jelenik meg, a listában oszlopként, a szűrők között pedig „Minden helyszín” lista. Az új eladás a legutóbb használt helyszínnel indul. Helyszínt nem lehet törölni, mert a régi eladások hivatkoznak rá, de inaktiválható.</p>",
+  "kapcsolodo": [
+   "tobb-uzlet-lanc"
+  ]
+ },
+ {
+  "kulcs": "tamogatas-elerhetoseg",
+  "kategoria": "tamogatas",
+  "kerdes": "Hogyan kérhetek segítséget, ha elakadok?",
+  "valasz": "<p>Először a rendszerbe épített <strong>súgót</strong> érdemes megnézni: minden menüponthoz van fejezet, kérdés–válasz és oldaltúra, és az AI-asszisztens is ebből felel. Ha ez nem elég, a weboldal kapcsolati űrlapján vagy e-mailben kérhet segítséget, illetve támogatási időpontot foglalhat. A támogatási csomagokat és a válaszidőket az <a href=\"/arak/\">Árak</a> oldal tartalmazza.</p>",
+  "kapcsolodo": [
+   "sugo-a-rendszerben",
+   "valaszido-sla",
+   "tamogatasi-hozzaferes"
+  ]
+ },
+ {
+  "kulcs": "valaszido-sla",
+  "kategoria": "tamogatas",
+  "kerdes": "Milyen gyorsan válaszol a támogatás?",
+  "valasz": "<p>A válaszidő a választott támogatási csomagtól függ. A csomagokat, a vállalt válaszidőket és a munkaidőt az <a href=\"/arak/\">Árak</a> oldal támogatási része tartalmazza; ott mindig az aktuális feltételek állnak. Sürgős műszaki gondnál segít, ha a kéréssel együtt engedélyezi az időkorlátos támogatási hozzáférést, mert így nem kell hosszan leírni a hibát.</p>",
+  "kapcsolodo": [
+   "tamogatas-elerhetoseg",
+   "tamogatasi-hozzaferes"
+  ]
+ },
+ {
+  "kulcs": "sugo-a-rendszerben",
+  "kategoria": "tamogatas",
+  "kerdes": "Milyen súgó van a rendszerben?",
+  "valasz": "<p>A Súgó menüpontban egy helyen van a bemutató, menüpontonként egy részletes fejezet, kérdés–válaszok, újdonságok és oldaltúrák, amelyek kattintásról kattintásra végigvezetnek. Minden oldalról a hozzá tartozó fejezet nyílik meg. A cég saját szabályai saját kérdés–válaszként felvehetők, és az asszisztens ezekből is felel.</p>",
+  "kapcsolodo": [
+   "ai-asszisztens-mit-tud",
+   "oktatas"
+  ]
+ },
+ {
+  "kulcs": "hibabejelentes",
+  "kategoria": "tamogatas",
+  "kerdes": "Hibát találtam. Hogyan jelentsem?",
+  "valasz": "<p>Írja le röviden, mit csinált, mit várt és mi történt, és ha lehet, csatoljon képernyőképet. A rendszer verziószáma a <strong>Beállítások › Névjegy</strong> lapon látszik, ezt is érdemes megadni. A licencközpont a végzetes hibák helyét kitakart üzenettel automatikusan jelzi nekünk, így sok hibáról már a bejelentés előtt tudunk. A javítás a következő frissítéssel érkezik.</p>",
+  "kapcsolodo": [
+   "frissites-menete",
+   "tamogatas-elerhetoseg"
+  ]
+ },
+ {
+  "kulcs": "tamogatas-lejart-licenc",
+  "kategoria": "tamogatas",
+  "kerdes": "Kapunk támogatást, ha lejárt a licenc?",
+  "valasz": "<p>A rendszer lejárt licenccel is működik, de a licenchez kötött támogatás és a frissítés jogosultsága megszűnik. Ilyenkor a támogatási hozzáférés is csak aktív joggal működik. A megújítás után a támogatás azonnal ismét igénybe vehető. Egyszeri segítség a szolgáltatásaink közül is kérhető; az árakat az <a href=\"/arak/\">Árak</a> oldal mutatja.</p>",
+  "kapcsolodo": [
+   "mi-van-ha-lejar-a-licenc",
+   "megujitas-menete"
+  ]
+ },
+ {
+  "kulcs": "tavsegitseg-menete",
+  "kategoria": "tamogatas",
+  "kerdes": "Hogyan zajlik a távsegítség?",
+  "valasz": "<p>Ha a támogatónak be kell néznie a rendszerbe, az adminisztrátor a Licenc lapon engedélyezi a hozzáférést 2 órára, 1 napra vagy 3 napra. A belépő link magától eljut hozzánk, külön programot nem kell telepíteni. A munka végén a hozzáférés visszavonható, a lejáratkor pedig magától megszűnik. Minden belépés a Naplóban látszik.</p>",
+  "kapcsolodo": [
+   "tamogatasi-hozzaferes",
+   "tamogatasi-hozzaferes-mit-lat"
+  ]
+ },
+ {
+  "kulcs": "uj-funkcio-kerese",
+  "kategoria": "tamogatas",
+  "kerdes": "Kérhetünk új funkciót?",
+  "valasz": "<p>Igen, a javaslatokat szívesen fogadjuk, és sok fejlesztés vevői kérésből indult. Hogy egy javaslat mikor és hogyan kerül be a közös termékbe, azt nem tudjuk előre megígérni. Ha egy funkcióra saját határidővel van szükség, az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést és ajánlatot.</p>",
+  "kapcsolodo": [
+   "egyedi-fejlesztes-menete",
+   "ujdonsagok"
+  ]
+ },
+ {
+  "kulcs": "ujdonsagok",
+  "kategoria": "tamogatas",
+  "kerdes": "Honnan tudjuk meg, mi változott egy frissítéssel?",
+  "valasz": "<p>A súgóban van egy Újdonságok rész, és a frissítés után a rendszer buborékban is jelzi az új funkciókat. A súgó fejezetei a rendszerrel együtt változnak, így a leírás mindig az aktuális verziót követi. Nagyobb változásnál a licencközpontból üzenet is érkezhet az adminisztrátoroknak a képernyő tetején.</p>",
+  "kapcsolodo": [
+   "frissites-menete",
+   "sugo-a-rendszerben"
+  ]
+ },
+ {
+  "kulcs": "szemelyes-bemutato",
+  "kategoria": "tamogatas",
+  "kerdes": "Kérhetek személyes vagy online bemutatót?",
+  "valasz": "<p>Igen. A weboldalon időpontot foglalhat bemutatóra, amelyen végigmegyünk a szervizük napi folyamatán, és megmutatjuk, hogyan nézne ki a rendszerben. Előtte érdemes a <a href=\"/demo/\">demót</a> kipróbálni, és összeírni a kérdéseket. A bemutató a döntést segíti, nem kötelez vásárlásra. A bemutató után az esetleges adatátvételről és a telepítésről is tudunk egyeztetni.</p>",
+  "kapcsolodo": [
+   "mi-a-demo",
+   "oktatas"
+  ]
+ },
+ {
+  "kulcs": "bongeszok",
+  "kategoria": "technikai",
+  "kerdes": "Milyen böngészővel működik?",
+  "valasz": "<p>Friss Chrome, Edge, Firefox vagy Safari kell. Külön program telepítése a munkaállomásokra nem szükséges, a rendszer böngészőben fut, asztali gépen, tableten és telefonon is. Ha valami lassúnak tűnik, a böngésző hardveres gyorsításának bekapcsolása gyakran segít; a súgó Hibaelhárítás fejezete leírja a lépéseket.</p>",
+  "kapcsolodo": [
+   "telefonon-tableten",
+   "rendszerkovetelmenyek"
+  ]
+ },
+ {
+  "kulcs": "okos-kereso",
+  "kategoria": "technikai",
+  "kerdes": "Mire lehet keresni a rendszerben?",
+  "valasz": "<p>Minden kereső gépelés közben ad találatot, és felismeri, mit írt be: IMEI-t, telefonszámot, munkalapszámot, e-mail-címet, kódot, márkát vagy nevet. A fejléc keresője a munkalapok, ügyfelek, eszközök, termékek és szolgáltatások között egyszerre keres. A találatok nyíllal és Enterrel választhatók, és felugró ablakban nyílnak meg.</p>",
+  "kapcsolodo": [
+   "nagy-adatbazis-sebesseg",
+   "eszkoz-elozmenyek"
+  ]
+ },
+ {
+  "kulcs": "nagy-adatbazis-sebesseg",
+  "kategoria": "technikai",
+  "kerdes": "Nem lassul be a rendszer, ha sok adat gyűlik össze?",
+  "valasz": "<p>A listák nagy adatmennyiségre készültek. Fejlesztői próbán 300 000 rekordos tesztadattal mértük: az ügyféllista 11 801. oldala 0,018 s, a termékek listája 0,38 s alatt töltött be (SQLite-os tesztkörnyezet). Az éles szerveren a tényleges idő a hardvertől és az adatbázistól függ, ezt előre nem tudjuk megmondani. A rendszer saját mérőeszközzel is ellenőrizhető.</p>",
+  "kapcsolodo": [
+   "okos-kereso",
+   "szerver-meretezes"
+  ]
+ },
+ {
+  "kulcs": "vonalkodolvaso",
+  "kategoria": "technikai",
+  "kerdes": "Használhatunk vonalkódolvasót?",
+  "valasz": "<p>Igen. A termékeknél megadható a vonalkód, és a munkalap termékválasztójában beolvasva, Enterrel a termék a lapra kerül. Minden munkalaphoz Code 128 vonalkód és QR-kód is tartozik; az IMEI mező a beolvasó által adott szóközöket kiszűri. A vonalkódolvasó billentyűzetként működik, külön beállítás nem kell hozzá.</p>",
+  "kapcsolodo": [
+   "keszletkezeles-modul",
+   "brother-cimkenyomtato"
+  ]
+ },
+ {
+  "kulcs": "brother-cimkenyomtato",
+  "kategoria": "technikai",
+  "kerdes": "Milyen címkenyomtató kell a matricákhoz?",
+  "valasz": "<p>Böngészőből bármelyik Brother címkenyomtató működik (QL, PT, TD sorozat) a gyári illesztőprogrammal. Közvetlen, ablak nélküli nyomtatáshoz hálózatos QL nyomtató kell (például QL-820NWB, QL-810W, QL-720NW). Nyomtatható RMA-matrica a készülékre, termék- és szolgáltatáscímke, rendelés-címke és egyedi címke; hogy mi kerüljön rá, a beállításokban adható meg.</p>",
+  "kapcsolodo": [
+   "nyomtatvanyok",
+   "vonalkodolvaso"
+  ]
+ },
+ {
+  "kulcs": "megjelenes-testreszabas",
+  "kategoria": "technikai",
+  "kerdes": "Testreszabható a rendszer kinézete?",
+  "valasz": "<p>Igen. Választható világos, sötét vagy papír megjelenés, kékfény-szűrő és betűméret, és állítható a kiemelő szín, a logó, a gombok és mezők formája. A bejelentkező oldal saját logót, hátteret (szín, színátmenet, kép vagy videó) és szöveget kaphat. Az ügyféloldal is a cég logójával és hátterével jelenik meg.</p>",
+  "kapcsolodo": [
+   "zart-mod",
+   "ugyfeloldal-rma"
+  ]
+ },
+ {
+  "kulcs": "automatikus-mentes-urlap",
+  "kategoria": "technikai",
+  "kerdes": "Kell Mentést nyomni a munkalapon?",
+  "valasz": "<p>A munkalap automatikusan ment: a változtatások elmentődnek, és a bezáráskor is elmegy, ami még nem ment el. Az állapotváltás is azonnal rögzül. Ha a mentés ütközne egy kolléga közbeni módosításával, a rendszer nem írja felül csendben, hanem jelzi, és választani lehet.</p>",
+  "kapcsolodo": [
+   "parhuzamos-szerkesztes",
+   "valtozasnaplo"
+  ]
+ },
+ {
+  "kulcs": "billentyuparancsok",
+  "kategoria": "technikai",
+  "kerdes": "Vannak billentyűparancsok a gyors munkához?",
+  "valasz": "<p>Igen, a súgó Első lépések fejezete felsorolja őket. A listákban a sorok dupla kattintásra nyílnak, a lapozóknál oldalszámra lehet ugrani, a keresőkben nyíllal és Enterrel lehet választani, a felugró ablak Esc-re bezárul, és ami még nem ment el, elmenti. A vonalkódolvasó is Enterrel zárja a beolvasást.</p>",
+  "kapcsolodo": [
+   "okos-kereso",
+   "automatikus-mentes-urlap"
+  ]
+ },
+ {
+  "kulcs": "urlap-testreszabas",
+  "kategoria": "technikai",
+  "kerdes": "Elrejthetők az űrlap mezői, amelyeket nem használunk?",
+  "valasz": "<p>Igen. A munkalap, a rendelés, a napi árukiadás és a számla ablakának jobb felső sarkában lévő fogaskerékkel beállítható, mi látszódjon, és mely állapotok legyenek választhatók. A beállítás űrlapfajtánként érvényes, és frissítés után is megmarad. A rendszer a gyakran beírt értékeket is felajánlja (mezőmemória).</p>",
+  "kapcsolodo": [
+   "megjelenes-testreszabas"
+  ]
+ },
+ {
+  "kulcs": "ugyfeloldal-nyelvek",
+  "kategoria": "technikai",
+  "kerdes": "Milyen nyelveken érhető el az ügyféloldal?",
+  "valasz": "<p>Az ügyféloldal magyarul, angolul és németül érhető el; a beállításokban megadható, melyik legyen elérhető és melyik az alapértelmezett. A szerviz saját szövegeit (hibaleírás, megjegyzés, üzenet) a rendszer nem fordítja le. A belső munkafelület magyar nyelvű. Az ügyféloldal felirataihoz tartozó fordítások a rendszerrel együtt érkeznek, külön beállítás nélkül.</p>",
+  "kapcsolodo": [
+   "ugyfeloldal-rma"
+  ]
+ },
+ {
+  "kulcs": "export-adatok",
+  "kategoria": "technikai",
+  "kerdes": "Ki tudjuk exportálni az adatainkat?",
+  "valasz": "<p>Az adatok az Önök adatbázisában vannak, így mindig hozzáférhetők. A rendszerből a teljes mentés letölthető, a pénztár CSV-ben exportálható, a rendelési javaslat CSV-ben letölthető, a napló CSV-be menthető, és minden nyomtatvány PDF-be menthető. A beállítások jelszóval védett exportfájlba menthetők és másik példányba importálhatók.</p>",
+  "kapcsolodo": [
+   "napi-mentes",
+   "hol-vannak-az-adatok"
+  ]
+ },
+ {
+  "kulcs": "felho-vagy-sajat-szerver",
+  "kategoria": "szerver",
+  "kerdes": "Felhőben vagy saját szerveren fut a rendszer?",
+  "valasz": "<p>A(z) {termeknev} nem közös felhőszolgáltatás: minden vevő a saját példányát futtatja, a saját választott szerverén. Ez lehet bérelt webtárhely vagy virtuális szerver, illetve a bolt helyi hálózatán lévő gép. Az adatok így a vevőnél maradnak, és nincs olyan közös adatbázis, amelyben más cégek adatai is lennének.</p>",
+  "kapcsolodo": [
+   "hol-fusson-a-rendszer",
+   "hol-vannak-az-adatok",
+   "offline-mi-mukodik"
+  ]
+ },
+ {
+  "kulcs": "szerver-meretezes",
+  "kategoria": "szerver",
+  "kerdes": "Mekkora szerver kell?",
+  "valasz": "<p>Egy átlagos szerviz forgalmához egy szokásos, PHP 8.1-et és MySQL-t vagy MariaDB-t támogató tárhely is elég. A tényleges igény a felhasználók számától, a csatolt fotók mennyiségétől és a mentések megőrzési számától függ. Pontos számot nem tudunk előre ígérni, ezért a rendszer saját sebességmérője és a licencközpont figyelése mutatja, ha a szerver kezd szűk lenni (válaszidő, memória, tárhely).</p>",
+  "kapcsolodo": [
+   "rendszerkovetelmenyek",
+   "nagy-adatbazis-sebesseg",
+   "tarhely-figyeles"
+  ]
+ },
+ {
+  "kulcs": "tarhely-figyeles",
+  "kategoria": "szerver",
+  "kerdes": "Szól valaki, ha betelik a tárhely vagy elmarad a mentés?",
+  "valasz": "<p>Igen. Ha a legutóbbi mentés nem sikerült (például megtelt a lemez), a mentési lapfül tetején piros sáv jelzi az okát. Aktív licenc mellett a licencközpont is figyeli a szabad tárhelyet, a válaszidőt és a mentés idejét, így mi is időben látjuk, ha valami gond van, és jelezni tudunk, mielőtt baj lenne.</p>",
+  "kapcsolodo": [
+   "szivveres-mi-az",
+   "napi-mentes"
+  ]
+ },
+ {
+  "kulcs": "szerver-koltoztetes",
+  "kategoria": "szerver",
+  "kerdes": "Hogyan költöztethető a rendszer másik szerverre?",
+  "valasz": "<p>A teljes webhelyet kell átvinni: az adatbázist és a fájlokat a feltöltési mappával együtt. A szerver titkos kulcsait változatlanul kell átvinni, mert a titkosított jelszavak és kulcsok ezekhez kötődnek; ha megváltoznak, a külső szolgáltatások kulcsait újra be kell írni. Költözés után érdemes a levelezés és a számlázás kapcsolatát ellenőrizni.</p>",
+  "kapcsolodo": [
+   "licenc-masik-szerverre",
+   "export-adatok"
+  ]
+ },
+ {
+  "kulcs": "napi-mentes",
+  "kategoria": "szerver",
+  "kerdes": "Készül automatikus mentés?",
+  "valasz": "<p>Igen. A rendszer naponta egyszer magától teljes mentést készít az összes adatról és beállításról; ha a szerver éjjel ki van kapcsolva, a nap első bejelentkezése után a háttérben. Kézzel bármikor lehet menteni. Alapból az utolsó 20 mentés marad meg (3 és 365 között állítható), és az előző napi, valamint a legutóbbi visszaállítás előtti mentés mindig megmarad.</p>",
+  "kapcsolodo": [
+   "titkositott-kulso-mentes",
+   "visszaallitas-mentesbol",
+   "tarhely-figyeles"
+  ]
+ },
+ {
+  "kulcs": "titkositott-kulso-mentes",
+  "kategoria": "szerver",
+  "kerdes": "Menthetünk a szerveren kívülre is?",
+  "valasz": "<p>Igen, és erősen ajánlott, mert a szerveren maradó mentés nem véd a lemez meghibásodása ellen. Minden mentés után titkosított másolat kerülhet Google Drive-ra, FTP/FTPS-re, NAS-ra (mappa vagy WebDAV) vagy egy csatolt meghajtóra, egyszerre több helyre is. A másolat a megadott jelszóval titkosított; ha a hely épp nem elérhető, a rendszer később újrapróbálja.</p>",
+  "kapcsolodo": [
+   "napi-mentes",
+   "mentesi-jelszo-elveszett"
+  ]
+ },
+ {
+  "kulcs": "mentesi-jelszo-elveszett",
+  "kategoria": "szerver",
+  "kerdes": "Elfelejtettük a mentések titkosító jelszavát. Mi a teendő?",
+  "valasz": "<p>A külső helyeken lévő másolatok csak ezzel a jelszóval nyithatók meg, ezért a jelszót érdemes biztos helyen tárolni. Elvesztése esetén a régi külső másolatok nem állíthatók vissza; a szerveren lévő helyi mentések ettől még használhatók. Új jelszót megadva a következő mentésektől az új jelszóval készülnek a külső másolatok.</p>",
+  "kapcsolodo": [
+   "titkositott-kulso-mentes"
+  ]
+ },
+ {
+  "kulcs": "visszaallitas-mentesbol",
+  "kategoria": "szerver",
+  "kerdes": "Hogyan állítható vissza egy mentés?",
+  "valasz": "<p>A visszaállítás két lépésben megy: előbb előnézet (a mentés ideje, verziója, a táblák és sorok száma), utána a tényleges visszaállítás, kétlépcsős gombbal. Választható a teljes visszaállítás vagy csak a beállításoké. Előtte a rendszer biztonsági mentést készít, és az egész egyetlen tranzakcióban fut: hiba esetén semmi nem változik.</p>",
+  "kapcsolodo": [
+   "napi-mentes",
+   "titkositott-kulso-mentes"
+  ]
+ },
+ {
+  "kulcs": "mi-nincs-a-mentesben",
+  "kategoria": "szerver",
+  "kerdes": "Mi nincs benne a mentésben?",
+  "valasz": "<p>A teljes mentés az adattáblákat, a beállításokat és a fiókokat (jelszólenyomattal) tartalmazza. Nincs benne: a csatolt fájlok, a logó és a feltöltött képek (ezek a feltöltési mappában vannak), a kétlépcsős belépés titkai, az ideiglenes támogatási fiókok, maguk az e-mailek, valamint az újra előállítható típusadatbázis. A feltöltési mappát a tárhely saját mentése is védheti.</p>",
+  "kapcsolodo": [
+   "napi-mentes",
+   "szerver-koltoztetes"
+  ]
+ },
+ {
+  "kulcs": "shared-hosting",
+  "kategoria": "szerver",
+  "kerdes": "Elég egy olcsó osztott tárhely?",
+  "valasz": "<p>Kisebb szerviznek gyakran igen, ha a tárhely támogatja a PHP 8.1-et, a szükséges PHP-bővítményeket, a MySQL-t vagy MariaDB-t, a https-t és az ütemezett feladatokat. Nagyobb adatmennyiségnél vagy több felhasználónál virtuális szerver ajánlott. Ha a mentési mappák védelméhez szükséges <code>.htaccess</code> nem működik (például nginx-en), a szolgáltatónak kell lezárnia ezeket a mappákat.</p>",
+  "kapcsolodo": [
+   "szerver-meretezes",
+   "rendszerkovetelmenyek"
+  ]
+ },
+ {
+  "kulcs": "levelkuldes-smtp",
+  "kategoria": "szerver",
+  "kerdes": "Hogyan küld e-mailt a rendszer?",
+  "valasz": "<p>Az értesítő levelek (árajánlat, foglalás visszaigazolása, elégedettségi kérdés, nyomtatványok) a cég levelezőfiókjából mehetnek ki SMTP-n, ha be van kötve; különben a szerver levélküldőjével. A saját fiók ajánlott, mert így a levelek kisebb eséllyel kerülnek levélszemétbe. Élesítés előtt érdemes kipróbálni, hogy az értesítő megérkezik-e.</p>",
+  "kapcsolodo": [
+   "levelezes-modul",
+   "integraciok-listaja"
+  ]
+ },
+ {
+  "kulcs": "ido-idozona",
+  "kategoria": "szerver",
+  "kerdes": "Miért fontos a szerver időzónája?",
+  "valasz": "<p>A határidők, a naptár, a pénztár napjai, az online foglalások és az elégedettségi kérdés időzítése mind a rendszer idejéhez igazodik. Ha az időzóna rossz, az események eltolódhatnak. Telepítéskor ezért be kell állítani a magyar időzónát; élesítés előtt ellenőrizze, hogy a fejléc órája a helyes időt mutatja.</p>",
+  "kapcsolodo": [
+   "elso-nap-teendoi"
+  ]
+ },
+ {
+  "kulcs": "offline-mi-mukodik",
+  "kategoria": "offline",
+  "kerdes": "Működik a rendszer, ha kimarad az internet?",
+  "valasz": "<p>Ha a rendszer a bolt helyi hálózatán lévő szerveren fut, igen. Internet nélkül is megy a munkalap, az ügyfelek, az eszközök, a házipénztár, a napi árukiadás, a rendelések, a nyomtatás helyi nyomtatóra, a matrica és a PDF, a naptár, a csapatüzenetek, a napló és a helyi mentés. A fejléc „Nincs internet” jelzést mutat, amíg a kapcsolat vissza nem jön.</p>",
+  "kapcsolodo": [
+   "offline-mi-var",
+   "offline-elofeltetel",
+   "hol-fusson-a-rendszer"
+  ]
+ },
+ {
+  "kulcs": "offline-mi-var",
+  "kategoria": "offline",
+  "kerdes": "Mi nem működik internet nélkül?",
+  "valasz": "<p>Ami külső szolgáltatást kér: a Számlázz.hu-számla, az e-mail, az AI-asszisztens, az IMEI-lekérdezés, a Google Drive- és távoli FTP-mentés, a frissítés ellenőrzése, valamint a kívülről elérhető oldalak (ügyféloldal, időpontfoglalás, értékelés). Ezek nem várakoztatnak: a rendszer azonnal jelzi, hogy most nem megy ki. A számla a kapcsolat visszatérése után a lapról kiállítható.</p>",
+  "kapcsolodo": [
+   "offline-mi-mukodik",
+   "szamla-offline"
+  ]
+ },
+ {
+  "kulcs": "offline-elofeltetel",
+  "kategoria": "offline",
+  "kerdes": "Mi kell ahhoz, hogy net nélkül is dolgozhassunk?",
+  "valasz": "<p>A rendszernek a bolt helyi hálózatán lévő szerveren kell futnia, és a pultgépeknek a <strong>helyi címen</strong> kell elérniük (például <code>http://192.168.1.10/</code>), nem a kívülről elérhető címen. A szervert és a routert érdemes szünetmentes tápra tenni. Bérelt tárhelyen futó rendszer internet nélkül nem érhető el.</p>",
+  "kapcsolodo": [
+   "offline-proba",
+   "hol-fusson-a-rendszer"
+  ]
+ },
+ {
+  "kulcs": "offline-proba",
+  "kategoria": "offline",
+  "kerdes": "Hogyan próbálhatjuk ki az offline működést élesítés előtt?",
+  "valasz": "<p>Húzza ki az internetkábelt a routerből úgy, hogy a helyi hálózat megmaradjon. Egy percen belül megjelenik a „Nincs internet” jelzés. Próbáljon ki egy új munkalapot, pénztármozgást, nyomtatást és mentést, ezeknek menniük kell. Egy számla kiállítása azonnal jelzi, hogy most nem megy ki. A kábelt visszadugva a jelzés egy percen belül eltűnik.</p>",
+  "kapcsolodo": [
+   "offline-elofeltetel",
+   "offline-mi-var"
+  ]
+ },
+ {
+  "kulcs": "szamla-offline",
+  "kategoria": "offline",
+  "kerdes": "Kiállítható számla internet nélkül?",
+  "valasz": "<p>Valódi számla nem, mert azt a Számlázz.hu állítja ki az interneten keresztül. A rendszer ilyenkor nem vár perceken át, hanem azonnal jelzi, hogy most nem megy. A helyben készülő, számlának nem minősülő számla-előkészítő PDF viszont internet nélkül is elkészül, és a kapcsolat visszatérése után a valódi számla a munkalapról kiállítható.</p>",
+  "kapcsolodo": [
+   "offline-mi-var",
+   "szamlazas-szamlazzhu"
+  ]
+ },
+ {
+  "kulcs": "sms-offline",
+  "kategoria": "offline",
+  "kerdes": "Megy az SMS, ha nincs internet a boltban?",
+  "valasz": "<p>Ha az SMS-átjáró telefon a bolt helyi hálózatán van, és van térereje, igen: a rendszer a helyi hálózaton éri el a telefont, a telefon pedig a mobilhálózaton küld. A kívülről elérhető ügyféloldalra mutató link ettől függetlenül csak akkor nyitható meg az ügyfélnek, ha a rendszer kívülről is elérhető.</p>",
+  "kapcsolodo": [
+   "sms-hogyan-mukodik",
+   "offline-mi-mukodik"
+  ]
+ },
+ {
+  "kulcs": "elegedettseg-offline",
+  "kategoria": "offline",
+  "kerdes": "Mi lesz az elégedettségi kérdéssel, ha kimarad a net?",
+  "valasz": "<p>Az elégedettségi kérdés küldése internetkimaradáskor kimarad, és a kapcsolat visszatérése után pótlódik, a beállított időablakon belül. Minden lap egyszer kap kérdést, így a kimaradás után sem megy ki kétszer. Az ügyfél az értékelőoldalt csak akkor tudja megnyitni, ha a rendszer kívülről elérhető.</p>",
+  "kapcsolodo": [
+   "elegedettsegi-kerdes",
+   "offline-mi-var"
+  ]
+ },
+ {
+  "kulcs": "aramszunet",
+  "kategoria": "offline",
+  "kerdes": "Mi történik áramszünetkor?",
+  "valasz": "<p>A rendszer az adatokat a szerver adatbázisába írja, a munkalap pedig folyamatosan, automatikusan ment, így legfeljebb az utolsó pillanatban beírt adat veszhet el. Hogy a helyi szerver és a router ne álljon le, szünetmentes táp ajánlott. Áramszünet után a napi mentés a nap első bejelentkezése után elkészül, ha éjjel kimaradt.</p>",
+  "kapcsolodo": [
+   "offline-elofeltetel",
+   "napi-mentes"
+  ]
+ },
+ {
+  "kulcs": "offline-jelzes",
+  "kategoria": "offline",
+  "kerdes": "Honnan tudjuk, hogy épp nincs internet?",
+  "valasz": "<p>A fejlécben „Nincs internet (óra:perc óta) – a helyi munka megy” felirat jelenik meg, és a rendszer percenként ellenőrzi a kapcsolatot. A Beállítások › Rendszer › Sebesség lapon is látszik: „Internet: van / NINCS”. Amint a kapcsolat visszajön, a jelzés magától eltűnik.</p>",
+  "kapcsolodo": [
+   "offline-mi-mukodik"
+  ]
+ },
+ {
+  "kulcs": "integraciok-listaja",
+  "kategoria": "integraciok",
+  "kerdes": "Milyen külső szolgáltatásokkal működik együtt a rendszer?",
+  "valasz": "<ul><li><strong>Számlázz.hu</strong>: valódi számla a munkalapról,</li><li><strong>SMS</strong>: a saját androidos telefonon futó SMS-átjáró alkalmazás,</li><li><strong>e-mail</strong>: céges fiókok IMAP/SMTP-n,</li><li><strong>Google Drive, FTP/FTPS, NAS, WebDAV</strong>: titkosított mentés,</li><li><strong>Claude</strong>: AI-asszisztens saját API-kulccsal,</li><li><strong>IMEI-lekérdező szolgáltatás</strong>: gyári adatok,</li><li><strong>Brother</strong> címkenyomtatók,</li><li><strong>Google-értékelés</strong>: elégedett ügyfelek továbbirányítása.</li></ul>",
+  "kapcsolodo": [
+   "szamlazas-szamlazzhu",
+   "sms-hogyan-mukodik",
+   "titkositott-kulso-mentes"
+  ]
+ },
+ {
+  "kulcs": "szamlazas-szamlazzhu",
+  "kategoria": "integraciok",
+  "kerdes": "Hogyan működik a számlázás a Számlázz.hu-val?",
+  "valasz": "<p>A munkalap, a napi árukiadás és a rendelés ablakából a Számlázz.hu számla gomb a számla ablakát nyitja meg: látszik a vevő és a tételek, minden átírható, előnézet kérhető. Számla <strong>csak</strong> a Számla kiállítása gombra készül, magától soha. Adószámnál a cég neve és címe lekérhető. A kész számla PDF-je a lapon megmarad, és a pénztárba is bekerül a számlaszám.</p>",
+  "kapcsolodo": [
+   "szamlazzhu-elofizetes",
+   "szamla-offline",
+   "szamla-javitas"
+  ]
+ },
+ {
+  "kulcs": "szamlazzhu-elofizetes",
+  "kategoria": "integraciok",
+  "kerdes": "Kell saját Számlázz.hu-fiók?",
+  "valasz": "<p>Igen, ha a rendszerből valódi számlát szeretnének kiállítani. A számlák a saját Számlázz.hu-fiókjukban, a saját számlatömbjükben készülnek, a Számla Agent-kulcsukkal. A kulcs titkosítva tárolódik. A számla-előkészítő PDF, amely nem minősül számlának, Számlázz.hu-fiók nélkül is működik. A Számlázz.hu-előfizetés díja a Számlázz.hu-t illeti, nem része a licencnek. Kapcsolat-ellenőrző gombbal élesítés előtt kipróbálható, hogy a kulcs működik-e.</p>",
+  "kapcsolodo": [
+   "szamlazas-szamlazzhu",
+   "rejtett-koltsegek"
+  ]
+ },
+ {
+  "kulcs": "szamla-javitas",
+  "kategoria": "integraciok",
+  "kerdes": "Elrontottunk egy számlát. Javítható a rendszerben?",
+  "valasz": "<p>Nem. A kiállított számla végleges, a rendszerben nem módosítható és nem törölhető. A javítás (sztornó, helyesbítő számla) a Számlázz.hu-fiókban történik. A rendszer azért nem engedi a módosítást, hogy a nyilvántartása mindig egyezzen a számlázóprogrammal. A Számlázz.hu-ban javított számla PDF-je ott elérhető, a munkalapon az eredeti számla száma és PDF-je továbbra is megnyitható.</p>",
+  "kapcsolodo": [
+   "szamlazas-szamlazzhu"
+  ]
+ },
+ {
+  "kulcs": "sms-hogyan-mukodik",
+  "kategoria": "integraciok",
+  "kerdes": "Hogyan küld SMS-t a rendszer?",
+  "valasz": "<p>A szerviz saját androidos telefonján egy SMS-átjáró alkalmazás fut, ezen keresztül megy ki az SMS a bolt számáról. Állapotváltáskor a rendszer rákérdez, küldjön-e SMS-t (vagy beállítás szerint magától küld), kézzel is lehet küldeni, és az ügyfél válasza a munkalap üzenetei közé érkezik. Alapból minden ki van kapcsolva, a sablonokat jóvá kell hagyni.</p>",
+  "kapcsolodo": [
+   "sms-koltseg",
+   "sms-offline",
+   "sms-leiratkozas"
+  ]
+ },
+ {
+  "kulcs": "sms-leiratkozas",
+  "kategoria": "integraciok",
+  "kerdes": "Leiratkozhat az ügyfél az SMS-ekről?",
+  "valasz": "<p>Igen. Ha az ügyfél STOP (vagy LEIRATKOZAS) szóval válaszol, az automatikus SMS-ek a továbbiakban nem mennek neki; kézi SMS-t ezután is lehet küldeni. Csendes idő is beállítható, amelyben az automatikus SMS-ek nem mennek ki, hanem reggel indulnak. Minden elküldött SMS és a sablon verziója naplózva marad.</p>",
+  "kapcsolodo": [
+   "sms-hogyan-mukodik"
+  ]
+ },
+ {
+  "kulcs": "google-drive-mentes",
+  "kategoria": "integraciok",
+  "kerdes": "Hogyan köthető be a Google Drive a mentéshez?",
+  "valasz": "<p>A saját Google-fiókban egyszer létre kell hozni egy kliensazonosítót (a súgó lépésről lépésre leírja), utána a rendszerben egy kód beírásával összekapcsolható. A rendszer csak a saját maga által létrehozott fájlokhoz fér hozzá, a Drive többi tartalmát nem látja. A mentések titkosítva kerülnek fel, egy erre kijelölt mappába.</p>",
+  "kapcsolodo": [
+   "titkositott-kulso-mentes",
+   "integraciok-listaja"
+  ]
+ },
+ {
+  "kulcs": "konyveloprogram",
+  "kategoria": "integraciok",
+  "kerdes": "Összeköthető a rendszer könyvelőprogrammal?",
+  "valasz": "<p>Közvetlen könyvelőprogram-kapcsolat nincs. A számlák a Számlázz.hu-ban készülnek, ahonnan a könyvelő a megszokott módon hozzájuk fér. A pénztár tételei CSV-ben exportálhatók, és a riportok is segítik a havi egyeztetést. Ha egyedi összekötésre van szükség, az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést.</p>",
+  "kapcsolodo": [
+   "szamlazas-szamlazzhu",
+   "export-adatok",
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "webaruhaz-integracio",
+  "kategoria": "integraciok",
+  "kerdes": "Összeköthető webáruházzal?",
+  "valasz": "<p>Kész webáruház-kapcsolat nincs a rendszerben. A weboldalhoz az online időpontfoglaló oldal linkelhető vagy beágyazható, és az ügyféloldal QR-kóddal vagy linkkel érhető el. Ha a webáruház rendeléseit vagy készletét szeretnék összekötni, ez egyedi fejlesztés tárgya lehet; kérjen felmérést. A felmérésnél azt is megvizsgáljuk, melyik rendszer legyen az irányadó a készletre és az árakra.</p>",
+  "kapcsolodo": [
+   "naptar-foglalas",
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "imei-szolgaltato",
+  "kategoria": "integraciok",
+  "kerdes": "Bekötható fizetős IMEI-lekérdező szolgáltatás?",
+  "valasz": "<p>Igen. A beállításokban megadható a szolgáltató lekérdező címe és kulcsa; utána az eszköz adatlapján megjelenik a „Lekérdezés a szolgáltatótól” gomb, és a gyári adatok (sorozatszám, garancia, gyártási dátum) egy kattintással betöltődnek. A szolgáltatás díja a szolgáltatóé. Ingyenes ellenőrző oldal eredménye beillesztéssel is feldolgozható.</p>",
+  "kapcsolodo": [
+   "imei-tac",
+   "rejtett-koltsegek"
+  ]
+ },
+ {
+  "kulcs": "egyedi-fejlesztes-menete",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Hogyan kérhetek egyedi fejlesztést?",
+  "valasz": "<p>Az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon lévő igényfelmérő űrlapon írja le, milyen folyamatot szeretne megoldani, és mi most a gond. A felmérés alapján visszajelzünk, hogy megoldható-e, és ha igen, írásos ajánlatot adunk a terjedelemmel, határidővel és árral. A munka csak az ajánlat elfogadása után indul.</p>",
+  "kapcsolodo": [
+   "egyedi-modul-licenc",
+   "egyedi-fejlesztes-ar",
+   "uj-funkcio-kerese"
+  ]
+ },
+ {
+  "kulcs": "egyedi-fejlesztes-ar",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Mennyibe kerül egy egyedi fejlesztés?",
+  "valasz": "<p>Az ár a feladat terjedelmétől függ, ezért előre, felmérés nélkül nem tudunk számot mondani. Az igényfelmérő alapján írásos ajánlatot adunk, amely tartalmazza a terjedelmet, a határidőt és a díjat. Kisebb kiegészítéseknél sokszor kiderül, hogy a rendszer meglévő beállításaival is megoldható az igény, ilyenkor ezt jelezzük.</p>",
+  "kapcsolodo": [
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "egyedi-modul-licenc",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Az egyedi modul a miénk lesz?",
+  "valasz": "<p>A tulajdonjog és a felhasználási jog részleteit az egyedi ajánlat és a szerződés rögzíti, ez feladatonként eltérhet. A rendszer modulszerkezete lehetővé teszi, hogy egy egyedi modul csak az adott vevőnél fusson, és ne kerüljön be a közös termékbe. Erre a felmérésnél külön kitérünk.</p>",
+  "kapcsolodo": [
+   "egyedi-fejlesztes-menete",
+   "egyedi-frissites"
+  ]
+ },
+ {
+  "kulcs": "egyedi-frissites",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Megmarad az egyedi fejlesztés a frissítések után?",
+  "valasz": "<p>Az egyedi modulokat úgy tervezzük, hogy a közös termék frissítései ne írják felül. A kompatibilitás fenntartásának módját és feltételeit az egyedi ajánlat rögzíti. A frissítés előtti automatikus mentés itt is védi az adatokat. Ha egy közös frissítés érinti az egyedi modul működését, ennek kezelését az egyedi ajánlatban rögzítjük; próbapéldányon előre ki is próbálható.</p>",
+  "kapcsolodo": [
+   "egyedi-modul-licenc",
+   "frissites-menete"
+  ]
+ },
+ {
+  "kulcs": "sajat-nyomtatvany",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Kérhetünk saját nyomtatványt vagy címkét?",
+  "valasz": "<p>Sok minden fejlesztés nélkül is beállítható: a nyomtatványok szövege, fejléce, lábléce, papírmérete, és hogy mi kerüljön a matricára. Van bianko lap és egyedi címke is. Ha teljesen új nyomtatványra van szükség, például egy beszállító formanyomtatványára, ez egyedi fejlesztésként kérhető. A felmérésnél kérjük a nyomtatvány mintáját és azt, mely adatok kerüljenek rá a rendszerből.</p>",
+  "kapcsolodo": [
+   "nyomtatvanyok",
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "egyedi-import",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Nem szabványos régi programból is át tudjátok hozni az adatokat?",
+  "valasz": "<p>Ha a régi program táblázatba (CSV, XLSX) tud menteni, a beépített adatátvétel általában elég, kézi oszloppárosítással. Ha csak adatbázisfájl vagy egyedi formátum érhető el, az átalakítás egyedi munka. Ilyenkor egy mintafájl alapján felmérjük, és ajánlatot adunk. A régi adatok átalakítását csak az Önök által átadott fájlokon végezzük.</p>",
+  "kapcsolodo": [
+   "adatatvetel-szolgaltataskent",
+   "excelbol-valtas"
+  ]
+ },
+ {
+  "kulcs": "egyedi-integracio",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Össze tudjátok kötni a rendszert más szoftverrel?",
+  "valasz": "<p>Igen, egyedi fejlesztésként ez is kérhető, ha a másik rendszer biztosít hozzáférési lehetőséget (például API-t vagy fájlexportot). A felmérésnél azt nézzük meg, milyen adat menjen merre, milyen gyakran, és ki a felelős az adat helyességéért. Erről írásos ajánlatot adunk. A kapcsolatot úgy tervezzük, hogy ügyféladat csak oda kerüljön, ahová Önök kifejezetten kérik.</p>",
+  "kapcsolodo": [
+   "konyveloprogram",
+   "webaruhaz-integracio",
+   "egyedi-fejlesztes-menete"
+  ]
+ },
+ {
+  "kulcs": "egyedi-fejlesztes-hatarido",
+  "kategoria": "egyedi-fejlesztes",
+  "kerdes": "Mennyi idő alatt készül el egy egyedi fejlesztés?",
+  "valasz": "<p>A határidő a feladattól függ, ezért felmérés nélkül nem ígérünk számot. Az ajánlatban a határidőt is rögzítjük, nagyobb munkánál részhatáridőkkel. Az elkészült fejlesztést előbb próbapéldányon adjuk át kipróbálásra, és csak jóváhagyás után kerül az éles rendszerbe. Ha közben a feladat bővül, a többletet külön egyeztetjük, és a határidőt is ehhez igazítjuk.</p>",
+  "kapcsolodo": [
+   "egyedi-fejlesztes-menete",
+   "probapeldany-teszteleshez"
+  ]
+ },
+ {
+  "kulcs": "mi-a-demo",
+  "kategoria": "demo",
+  "kerdes": "Mi a demó, és mit lehet benne kipróbálni?",
+  "valasz": "<p>A <a href=\"/demo/\">demó</a> egy külön, kipróbálásra szolgáló példány 10 000 mintarekorddal: ügyfelek, eszközök, munkalapok, termékek, pénztártételek. Minden menüpont és modul kipróbálható benne, beleértve a munkalap felvételét, az állapotváltást, a nyomtatványokat és a riportokat. A demó adatai kitaláltak, valódi ügyféladat nincs benne.</p>",
+  "kapcsolodo": [
+   "demo-korlatok",
+   "demo-sms-email",
+   "demo-adat-torlodik"
+  ]
+ },
+ {
+  "kulcs": "demo-korlatok",
+  "kategoria": "demo",
+  "kerdes": "Milyen korlátai vannak a demónak?",
+  "valasz": "<p>A demó közös próbakörnyezet, ezért néhány korlát van: egy címről 24 óra alatt legfeljebb 10 új rekord vehető fel, valódi SMS, e-mail és számla nem megy ki, és a rendszer minden éjjel visszaáll az eredeti állapotra. Ezek a korlátok csak a demóra vonatkoznak, a megvásárolt rendszerre nem.</p>",
+  "kapcsolodo": [
+   "demo-sms-email",
+   "demo-adat-torlodik"
+  ]
+ },
+ {
+  "kulcs": "demo-sms-email",
+  "kategoria": "demo",
+  "kerdes": "Kimegy SMS vagy e-mail a demóból?",
+  "valasz": "<p>Nem. A demóban az SMS, az e-mail és a számlázás csak szimuláció, valódi üzenet vagy számla nem készül. A felületen így is látszik, hogyan működnek: az SMS-ablak, a sablonok, a számla előnézete. Ha a valódi küldést is látni szeretné, kérjen személyes bemutatót.</p>",
+  "kapcsolodo": [
+   "demo-korlatok",
+   "szemelyes-bemutato"
+  ]
+ },
+ {
+  "kulcs": "demo-adat-torlodik",
+  "kategoria": "demo",
+  "kerdes": "Megmaradnak a demóban rögzített adataim?",
+  "valasz": "<p>Nem. A demó minden éjjel visszaáll az eredeti mintaadatokra, így az ott rögzített rekordok másnapra eltűnnek. Ezért ne vigyen fel valódi ügyféladatot a demóba. Ha a saját adataikkal szeretnék kipróbálni a rendszert, az adatátvétel a megvásárolt példányban próbával, írás nélkül is lefuttatható.</p>",
+  "kapcsolodo": [
+   "demo-korlatok",
+   "adatatvetel-proba"
+  ]
+ },
+ {
+  "kulcs": "demo-regisztracio",
+  "kategoria": "demo",
+  "kerdes": "Kell regisztráció a demóhoz?",
+  "valasz": "<p>A demó indításának menetét a <a href=\"/demo/\">Demó</a> oldal írja le. A demóban kitalált adatokkal dolgozhat, valódi ügyféladatot ne vigyen fel. A demó célja, hogy a vásárlás előtt kockázat nélkül végig lehessen menni a szerviz napi folyamatán. Ha a demó után kérdése marad, foglaljon bemutatót, vagy írjon nekünk a kapcsolati űrlapon.</p>",
+  "kapcsolodo": [
+   "mi-a-demo",
+   "demo-adat-torlodik"
+  ]
+ },
+ {
+  "kulcs": "demo-sebesseg",
+  "kategoria": "demo",
+  "kerdes": "A demó sebessége megfelel majd a saját rendszerünkének?",
+  "valasz": "<p>Nem feltétlenül. A demó egy közös szerveren fut, amelyet egyszerre többen is használhatnak, a saját rendszer sebessége pedig a választott szervertől függ. A demó a funkciók és a kezelés kipróbálására való, nem teljesítménymérésre. A saját szerveren a beépített sebességmérő ad számszerű képet.</p>",
+  "kapcsolodo": [
+   "szerver-meretezes",
+   "nagy-adatbazis-sebesseg"
+  ]
+ },
+ {
+  "kulcs": "demo-utan",
+  "kategoria": "demo",
+  "kerdes": "Mi a következő lépés a demó után?",
+  "valasz": "<p>Ha a demó alapján megfelel a rendszer, az <a href=\"/arak/\">Árak</a> oldalon összeállíthatja a csomagot és megrendelheti. Ha kérdése maradt, foglaljon bemutatót vagy írjon nekünk. A vásárlás után a licenckulcs és a telepítő automatikusan érkezik, a telepítés pedig szolgáltatásként is kérhető. A régi adatok átvétele a saját példányban próbával, írás nélkül kezdhető.</p>",
+  "kapcsolodo": [
+   "hogyan-vasarolhatok",
+   "szemelyes-bemutato",
+   "telepites-szolgaltataskent"
+  ]
+ },
+ {
+  "kulcs": "demo-modulok",
+  "kategoria": "demo",
+  "kerdes": "Minden modul látszik a demóban?",
+  "valasz": "<p>Igen, a demóban minden modul be van kapcsolva, hogy a teljes rendszer kipróbálható legyen: készlet, pénztár, számlázás előnézete, ügyféloldal, SMS-ablak, naptár, foglalás, riportok, nyomtatványok. A saját rendszerben a licenc határozza meg, mely modulok futnak, ezért a vásárlás előtt érdemes megnézni, melyikre van valóban szükség.</p>",
+  "kapcsolodo": [
+   "melyik-csomag-kell",
+   "mi-a-demo"
+  ]
+ },
+ {
+  "kulcs": "ai-asszisztens-mit-tud",
+  "kategoria": "modulok",
+  "kerdes": "Mire jó az AI-asszisztens?",
+  "valasz": "<p>Az asszisztens minden oldalon elérhető segítő: a súgóból felel a kérdésekre, végigvezet az oldalakon, utánanéz az adatoknak (munkalap, ügyfél, pénztár, naptár, készlet), és szól, ha valami figyelmet kér. Adatot csak javaslatként módosít, amelyet Önnek kell jóváhagynia; az átíráshoz és törléshez megerősítő kódot is be kell gépelni.</p>",
+  "kapcsolodo": [
+   "ai-adatvedelem",
+   "ai-koltseg"
+  ]
+ },
+ {
+  "kulcs": "ai-adatvedelem",
+  "kategoria": "adatbiztonsag",
+  "kerdes": "Mit lát az AI-asszisztens az adatainkból?",
+  "valasz": "<p>Az asszisztens csak azokat az adatokat kéri le, amelyek a kérdés megválaszolásához kellenek, és ezek a kérdéssel együtt a Claude AI-szolgáltatáshoz kerülnek feldolgozásra, a saját API-kulcsukkal. A zárkódot, a feloldó mintát, a jelszavakat és az API-kulcsokat soha nem látja. Az adminisztrátor egyenként kikapcsolhatja az eszközeit, és a modul teljesen ki is kapcsolható.</p>",
+  "kapcsolodo": [
+   "ai-asszisztens-mit-tud",
+   "zarkod-titkositas"
+  ]
+ },
+ {
+  "kulcs": "foglalas-vedelem",
+  "kategoria": "technikai",
+  "kerdes": "Nem fognak visszaélni az online foglalással?",
+  "valasz": "<p>A foglalóoldal több védelemmel is rendelkezik: rejtett csapdamező a robotok ellen, aláírt időbélyeg, és címenként óránként legfeljebb 5 foglalás. A foglalásról visszaigazoló e-mail megy lemondó linkkel, a naptár gazdája pedig értesítést kap. A beállításokban megadható, hány órával előre lehet foglalni.</p>",
+  "kapcsolodo": [
+   "naptar-foglalas"
+  ]
+ }
+]

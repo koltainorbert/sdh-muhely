@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Kozpont
 {
-    public const DB_VERSION = '2.0.0';
+    public const DB_VERSION = '2.1.0';
     public const NS         = 'sdh-kozpont/v1';
     public const CRON       = 'sdh_kozpont_cron';
     private const OPT_KULCS    = 'sdh_kozpont_kulcspar';
@@ -243,6 +243,11 @@ final class SDH_Kozpont
             PRIMARY KEY  (id)
         ) {$c};");
 
+        // 2.1: kiszolgálás (rendelések, egyszer használható letöltés, nonce).
+        if (class_exists('SDH_Kozpont_Kiszolgalas')) {
+            SDH_Kozpont_Kiszolgalas::sema($c);
+        }
+
         if ($regi !== '' && version_compare($regi, '2.0.0', '<')) {
             self::atallas_v2();
         }
@@ -303,6 +308,8 @@ final class SDH_Kozpont
             'belepeskor'     => 1,
             'email_riasztas' => 1,
             'email_cim'      => '',
+            'ertekesito_kulcs' => '',
+            'ertekesito_ip'    => '',
             'csomagok'       => [
                 ['kulcs' => 'teljes', 'nev' => 'Teljes', 'modulok' => '*', 'max_peldany' => 1, 'max_felhasznalo' => 0],
                 ['kulcs' => 'alap', 'nev' => 'Alap', 'modulok' => ['uzenetek', 'nyomtatas', 'matrica', 'tac'], 'max_peldany' => 1, 'max_felhasznalo' => 3],
@@ -318,6 +325,8 @@ final class SDH_Kozpont
         $b['belepeskor']     = (int) !empty($b['belepeskor']);
         $b['email_riasztas'] = (int) !empty($b['email_riasztas']);
         $b['email_cim']      = sanitize_email((string) $b['email_cim']);
+        $b['ertekesito_kulcs'] = (string) $b['ertekesito_kulcs'];
+        $b['ertekesito_ip']    = (string) $b['ertekesito_ip'];
         $b['csomagok']       = is_array($b['csomagok']) ? array_values($b['csomagok']) : $alap['csomagok'];
 
         return $b;
@@ -345,6 +354,20 @@ final class SDH_Kozpont
 
         if (isset($be['email_cim'])) {
             $b['email_cim'] = sanitize_email((string) $be['email_cim']);
+        }
+
+        // 2.1: az értékesítő webhely nyilvános kulcsa (érvénytelen kulcs nem kerül be) és az engedélyezett IP-címek.
+        if (isset($be['ertekesito_kulcs']) && class_exists('SDH_Kozpont_Kiszolgalas')) {
+            $k = SDH_Kozpont_Kiszolgalas::kulcs_tisztit((string) $be['ertekesito_kulcs']);
+
+            if ($k !== null && $k !== $b['ertekesito_kulcs']) {
+                $b['ertekesito_kulcs'] = $k;
+                self::naplo('beallitas', $k === '' ? 'Az értékesítő webhely kulcsa törölve.' : 'Az értékesítő webhely kulcsa beállítva.', 'figyel', [], (string) wp_get_current_user()->display_name);
+            }
+        }
+
+        if (isset($be['ertekesito_ip']) && class_exists('SDH_Kozpont_Kiszolgalas')) {
+            $b['ertekesito_ip'] = SDH_Kozpont_Kiszolgalas::ip_tisztit((string) $be['ertekesito_ip']);
         }
 
         if (isset($be['csomagok']) && is_array($be['csomagok'])) {

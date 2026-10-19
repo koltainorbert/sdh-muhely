@@ -1,4 +1,4 @@
-/* SDH Központ 2.0 – egyoldalas felület (külső könyvtár nélkül). */
+/* SDH Központ 2.1 – egyoldalas felület (külső könyvtár nélkül). */
 (() => {
     'use strict';
 
@@ -1138,9 +1138,24 @@
                 <div class="kp-rendszerek">${b.csomagok.map((c, i) => `<div class="kp-rk" data-csomag="${i}"><div class="kp-rk__fej"><span class="kp-hos__orb" style="width:34px;height:34px;border-radius:11px">${I('modul')}</span><div style="flex:1;min-width:0"><div class="kp-rk__nev">${e(c.nev)}</div><div class="kp-rk__vevo">${c.modulok === '*' ? 'minden modul' : c.modulok.length + ' modul'} · ${c.max_peldany} gép · ${c.max_felhasznalo || 'korlátlan'} felhasználó</div></div></div></div>`).join('')}</div></section>
             <section class="kp-kartya"><div class="kp-kartya__fej"><h3 class="kp-kartya__cim">Csatlakozás</h3><span class="kp-kartya__al">ezt adod meg a vevőnél: Beállítások › Licenc</span></div>
                 <dl class="kp-kv"><dt>A központ címe</dt><dd><span class="kp-licenckulcs" data-masol="${e(a.cim)}">${e(a.cim)}</span></dd><dt>Aláíró kulcs</dt><dd><span class="kp-licenckulcs" data-masol="${e(a.kulcs)}" style="word-break:break-all">${e(a.kulcs)}</span></dd><dt>Központ verzió</dt><dd>${e(a.verzio)}</dd></dl>
-                <p class="kp-halvany kp-kicsi" style="margin:12px 0 0">A vevő rendszere az első kapcsolatkor megjegyzi az aláíró kulcsot, utána csak ezzel aláírt választ fogad el. A vevőtől műszaki adat és darabszám jön; ügyfeleinek személyes adata és a forgalom összege nem.</p></section>`;
+                <p class="kp-halvany kp-kicsi" style="margin:12px 0 0">A vevő rendszere az első kapcsolatkor megjegyzi az aláíró kulcsot, utána csak ezzel aláírt választ fogad el. A vevőtől műszaki adat és darabszám jön; ügyfeleinek személyes adata és a forgalom összege nem.</p></section>
+            <section class="kp-kartya" data-b="ertekesito"><div class="kp-kartya__fej"><h3 class="kp-kartya__cim">Értékesítő webhely</h3><span class="kp-kartya__al">automatikus kiszolgálás: fizetett rendelésből vevő, licenc és letöltő link</span><span class="kp-ter"></span><span class="kp-cimke kp-cimke--${b.ertekesito_kulcs ? 'ok' : 'szurke'}">${b.ertekesito_kulcs ? 'összekapcsolva' : 'nincs összekapcsolva'}</span></div>
+                <div class="kp-mezok">${mezo('Értékesítő webhely nyilvános kulcsa', `<textarea class="kp-textarea kp-input--mono" name="ertekesito_kulcs" rows="2" spellcheck="false" autocomplete="off" placeholder="Az értékesítő webhely adminjában: Beállítások › Központ › Saját nyilvános kulcs">${e(b.ertekesito_kulcs)}</textarea>`, 'Csak az ezzel a kulccsal aláírt rendelést fogadja el a Központ. Üresen hagyva a távoli kiszolgálás ki van kapcsolva.', 'kp-mezo--szeles')}
+                ${mezo('Engedélyezett IP-címek (nem kötelező)', input('ertekesito_ip', b.ertekesito_ip, 'placeholder="pl. 203.0.113.10, 2001:db8::/32" spellcheck="false"'), 'Vesszővel elválasztva, CIDR is mehet. Üresen bármely címről jöhet (az aláírás így is kötelező).', 'kp-mezo--szeles')}</div>
+                <dl class="kp-kv" style="margin-top:14px"><dt>A Központ kulcsa</dt><dd><span class="kp-licenckulcs" data-masol="${e(a.kulcs)}" style="word-break:break-all">${e(a.kulcs)}</span></dd><dt>Végpont</dt><dd class="kp-mono" style="word-break:break-all">${e(a.cim)}wp-json/sdh-kozpont/v1/kiszolgalas</dd></dl>
+                <p class="kp-halvany kp-kicsi" style="margin:12px 0 0">Ha az értékesítő webhely ezen a WordPressen fut, nem kell semmit beállítani. Külön webhelynél a fenti Központ-kulcsot és címet ott add meg, az ottani nyilvános kulcsot pedig ide másold.</p>
+                <div class="kp-sor" style="justify-content:flex-end;margin-top:14px"><button class="kp-gomb kp-gomb--fo" data-bment="ertekesito">Mentés</button></div></section>`;
         $$('[data-masol]').forEach((x) => x.addEventListener('click', () => masol(x.dataset.masol)));
-        $$('[data-bment]').forEach((g) => g.addEventListener('click', async () => { await api('beallitas', { method: 'POST', body: urlapAdat($(`[data-b="${g.dataset.bment}"]`)) }); jelez('Beállítások elmentve.'); }));
+        $$('[data-bment]').forEach((g) => g.addEventListener('click', async () => {
+            const adat = urlapAdat($(`[data-b="${g.dataset.bment}"]`));
+            let v;
+            try { v = await api('beallitas', { method: 'POST', body: adat }); } catch (x) { jelez(x.message, 'hiba'); return; }
+            if (g.dataset.bment === 'ertekesito') {
+                if (adat.ertekesito_kulcs.replace(/\s+/g, '') !== (v.b.ertekesito_kulcs || '')) { jelez('A kulcs nem érvényes (32 bájtos Ed25519 nyilvános kulcs, base64).', 'hiba'); return; }
+                jelez('Értékesítő webhely elmentve.'); beallitasok(); return;
+            }
+            jelez('Beállítások elmentve.');
+        }));
         const csomagPopup = (i) => {
             const c = i === null ? { nev: '', modulok: '*', max_peldany: 1, max_felhasznalo: 0 } : b.csomagok[i];
             const minden = c.modulok === '*';

@@ -1,0 +1,15 @@
+/*
+Theme Name:        SDH Értékesítés téma
+Theme URI:         https://sdh.hu/
+Author:            InfoStudio Hungary
+Description:       Könnyű, gyors értékesítő téma az SDH Értékesítés bővítményhez: szekció-alapú oldalak, árak, GYIK, blog, kereső, sötét / világos mód. Nincs page builder, nincs jQuery.
+Version:           1.0.0
+Requires at least: 6.4
+Requires PHP:      8.1
+License:           GPL-2.0-or-later
+Text Domain:       sdh-sales-tema
+Domain Path:       /languages
+
+A tényleges stílusok az assets/css/ alatt vannak (kritikus.css a fejbe ágyazva, a többi a dist/tema.min.css-ben,
+nem blokkolva). Ez a fájl csak a téma fejléce.
+*/

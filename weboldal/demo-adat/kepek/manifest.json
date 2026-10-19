@@ -1,0 +1,3502 @@
+{
+ "telefon-001": {
+  "alt": "Általános okostelefon, grafitszürke, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-001.avif"
+   ],
+   "webp": [
+    "telefon-001.webp"
+   ]
+  }
+ },
+ "telefon-002": {
+  "alt": "Általános okostelefon, ezüst, hátoldal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-002.avif"
+   ],
+   "webp": [
+    "telefon-002.webp"
+   ]
+  }
+ },
+ "telefon-003": {
+  "alt": "Általános okostelefon, fehér, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-003.avif"
+   ],
+   "webp": [
+    "telefon-003.webp"
+   ]
+  }
+ },
+ "telefon-004": {
+  "alt": "Általános okostelefon, éjkék, hátoldal, törött hátlappal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-004.avif"
+   ],
+   "webp": [
+    "telefon-004.webp"
+   ]
+  }
+ },
+ "telefon-005": {
+  "alt": "Kompakt okostelefon, zsályazöld, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-005.avif"
+   ],
+   "webp": [
+    "telefon-005.webp"
+   ]
+  }
+ },
+ "telefon-006": {
+  "alt": "Általános okostelefon, rózsaszín, hátoldal, kikapcsolt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-006.avif"
+   ],
+   "webp": [
+    "telefon-006.webp"
+   ]
+  }
+ },
+ "telefon-007": {
+  "alt": "Általános okostelefon, levendula, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-007.avif"
+   ],
+   "webp": [
+    "telefon-007.webp"
+   ]
+  }
+ },
+ "telefon-008": {
+  "alt": "Általános okostelefon, pezsgőarany, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-008.avif"
+   ],
+   "webp": [
+    "telefon-008.webp"
+   ]
+  }
+ },
+ "telefon-009": {
+  "alt": "Általános okostelefon, piros, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-009.avif"
+   ],
+   "webp": [
+    "telefon-009.webp"
+   ]
+  }
+ },
+ "telefon-010": {
+  "alt": "Általános okostelefon, égkék, hátoldal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-010.avif"
+   ],
+   "webp": [
+    "telefon-010.webp"
+   ]
+  }
+ },
+ "telefon-011": {
+  "alt": "Általános okostelefon, fekete, elölnézet, repedt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-011.avif"
+   ],
+   "webp": [
+    "telefon-011.webp"
+   ]
+  }
+ },
+ "telefon-012": {
+  "alt": "Általános okostelefon, narancs, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-012.avif"
+   ],
+   "webp": [
+    "telefon-012.webp"
+   ]
+  }
+ },
+ "telefon-013": {
+  "alt": "Általános okostelefon, grafitszürke, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-013.avif"
+   ],
+   "webp": [
+    "telefon-013.webp"
+   ]
+  }
+ },
+ "telefon-014": {
+  "alt": "Általános okostelefon, ezüst, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-014.avif"
+   ],
+   "webp": [
+    "telefon-014.webp"
+   ]
+  }
+ },
+ "telefon-015": {
+  "alt": "Általános okostelefon, fehér, elölnézet, kikapcsolt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-015.avif"
+   ],
+   "webp": [
+    "telefon-015.webp"
+   ]
+  }
+ },
+ "telefon-016": {
+  "alt": "Kompakt okostelefon, éjkék, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-016.avif"
+   ],
+   "webp": [
+    "telefon-016.webp"
+   ]
+  }
+ },
+ "telefon-017": {
+  "alt": "Általános okostelefon, zsályazöld, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-017.avif"
+   ],
+   "webp": [
+    "telefon-017.webp"
+   ]
+  }
+ },
+ "telefon-018": {
+  "alt": "Általános okostelefon, rózsaszín, hátoldal, törött hátlappal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-018.avif"
+   ],
+   "webp": [
+    "telefon-018.webp"
+   ]
+  }
+ },
+ "telefon-019": {
+  "alt": "Általános okostelefon, levendula, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-019.avif"
+   ],
+   "webp": [
+    "telefon-019.webp"
+   ]
+  }
+ },
+ "telefon-020": {
+  "alt": "Általános okostelefon, pezsgőarany, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-020.avif"
+   ],
+   "webp": [
+    "telefon-020.webp"
+   ]
+  }
+ },
+ "telefon-021": {
+  "alt": "Általános okostelefon, piros, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-021.avif"
+   ],
+   "webp": [
+    "telefon-021.webp"
+   ]
+  }
+ },
+ "telefon-022": {
+  "alt": "Általános okostelefon, égkék, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-022.avif"
+   ],
+   "webp": [
+    "telefon-022.webp"
+   ]
+  }
+ },
+ "telefon-023": {
+  "alt": "Általános okostelefon, fekete, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-023.avif"
+   ],
+   "webp": [
+    "telefon-023.webp"
+   ]
+  }
+ },
+ "telefon-024": {
+  "alt": "Általános okostelefon, narancs, hátoldal, kikapcsolt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-024.avif"
+   ],
+   "webp": [
+    "telefon-024.webp"
+   ]
+  }
+ },
+ "telefon-025": {
+  "alt": "Általános okostelefon, grafitszürke, elölnézet, repedt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-025.avif"
+   ],
+   "webp": [
+    "telefon-025.webp"
+   ]
+  }
+ },
+ "telefon-026": {
+  "alt": "Általános okostelefon, ezüst, hátoldal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-026.avif"
+   ],
+   "webp": [
+    "telefon-026.webp"
+   ]
+  }
+ },
+ "telefon-027": {
+  "alt": "Kompakt okostelefon, fehér, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-027.avif"
+   ],
+   "webp": [
+    "telefon-027.webp"
+   ]
+  }
+ },
+ "telefon-028": {
+  "alt": "Általános okostelefon, éjkék, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-028.avif"
+   ],
+   "webp": [
+    "telefon-028.webp"
+   ]
+  }
+ },
+ "telefon-029": {
+  "alt": "Általános okostelefon, zsályazöld, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-029.avif"
+   ],
+   "webp": [
+    "telefon-029.webp"
+   ]
+  }
+ },
+ "telefon-030": {
+  "alt": "Általános okostelefon, rózsaszín, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-030.avif"
+   ],
+   "webp": [
+    "telefon-030.webp"
+   ]
+  }
+ },
+ "telefon-031": {
+  "alt": "Általános okostelefon, levendula, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-031.avif"
+   ],
+   "webp": [
+    "telefon-031.webp"
+   ]
+  }
+ },
+ "telefon-032": {
+  "alt": "Általános okostelefon, pezsgőarany, hátoldal, törött hátlappal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-032.avif"
+   ],
+   "webp": [
+    "telefon-032.webp"
+   ]
+  }
+ },
+ "telefon-033": {
+  "alt": "Általános okostelefon, piros, elölnézet, kikapcsolt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-033.avif"
+   ],
+   "webp": [
+    "telefon-033.webp"
+   ]
+  }
+ },
+ "telefon-034": {
+  "alt": "Általános okostelefon, égkék, hátoldal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-034.avif"
+   ],
+   "webp": [
+    "telefon-034.webp"
+   ]
+  }
+ },
+ "telefon-035": {
+  "alt": "Általános okostelefon, fekete, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-035.avif"
+   ],
+   "webp": [
+    "telefon-035.webp"
+   ]
+  }
+ },
+ "telefon-036": {
+  "alt": "Általános okostelefon, narancs, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-036.avif"
+   ],
+   "webp": [
+    "telefon-036.webp"
+   ]
+  }
+ },
+ "telefon-037": {
+  "alt": "Általános okostelefon, grafitszürke, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-037.avif"
+   ],
+   "webp": [
+    "telefon-037.webp"
+   ]
+  }
+ },
+ "telefon-038": {
+  "alt": "Kompakt okostelefon, ezüst, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-038.avif"
+   ],
+   "webp": [
+    "telefon-038.webp"
+   ]
+  }
+ },
+ "telefon-039": {
+  "alt": "Általános okostelefon, fehér, elölnézet, repedt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-039.avif"
+   ],
+   "webp": [
+    "telefon-039.webp"
+   ]
+  }
+ },
+ "telefon-040": {
+  "alt": "Általános okostelefon, éjkék, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-040.avif"
+   ],
+   "webp": [
+    "telefon-040.webp"
+   ]
+  }
+ },
+ "telefon-041": {
+  "alt": "Általános okostelefon, zsályazöld, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-041.avif"
+   ],
+   "webp": [
+    "telefon-041.webp"
+   ]
+  }
+ },
+ "telefon-042": {
+  "alt": "Általános okostelefon, rózsaszín, hátoldal, kikapcsolt kijelzővel, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-042.avif"
+   ],
+   "webp": [
+    "telefon-042.webp"
+   ]
+  }
+ },
+ "telefon-043": {
+  "alt": "Általános okostelefon, levendula, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-043.avif"
+   ],
+   "webp": [
+    "telefon-043.webp"
+   ]
+  }
+ },
+ "telefon-044": {
+  "alt": "Általános okostelefon, pezsgőarany, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-044.avif"
+   ],
+   "webp": [
+    "telefon-044.webp"
+   ]
+  }
+ },
+ "telefon-045": {
+  "alt": "Általános okostelefon, piros, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-045.avif"
+   ],
+   "webp": [
+    "telefon-045.webp"
+   ]
+  }
+ },
+ "telefon-046": {
+  "alt": "Általános okostelefon, égkék, hátoldal, törött hátlappal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-046.avif"
+   ],
+   "webp": [
+    "telefon-046.webp"
+   ]
+  }
+ },
+ "telefon-047": {
+  "alt": "Általános okostelefon, fekete, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-047.avif"
+   ],
+   "webp": [
+    "telefon-047.webp"
+   ]
+  }
+ },
+ "telefon-048": {
+  "alt": "Általános okostelefon, narancs, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-048.avif"
+   ],
+   "webp": [
+    "telefon-048.webp"
+   ]
+  }
+ },
+ "telefon-049": {
+  "alt": "Kompakt okostelefon, grafitszürke, elölnézet",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-049.avif"
+   ],
+   "webp": [
+    "telefon-049.webp"
+   ]
+  }
+ },
+ "telefon-050": {
+  "alt": "Általános okostelefon, ezüst, hátoldal, átlátszó tokban",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-050.avif"
+   ],
+   "webp": [
+    "telefon-050.webp"
+   ]
+  }
+ },
+ "telefon-051": {
+  "alt": "Általános okostelefon, fehér, elölnézet, kikapcsolt kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-051.avif"
+   ],
+   "webp": [
+    "telefon-051.webp"
+   ]
+  }
+ },
+ "telefon-052": {
+  "alt": "Általános okostelefon, éjkék, hátoldal",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-052.avif"
+   ],
+   "webp": [
+    "telefon-052.webp"
+   ]
+  }
+ },
+ "telefon-053": {
+  "alt": "Szétszedett okostelefon (fekete) a szervizasztalon: látható alaplap és akkumulátor, mellette a levett kijelző",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-053.avif"
+   ],
+   "webp": [
+    "telefon-053.webp"
+   ]
+  }
+ },
+ "telefon-054": {
+  "alt": "Szétszedett okostelefon (narancs) a szervizasztalon: látható alaplap és akkumulátor, mellette a levett kijelző",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-054.avif"
+   ],
+   "webp": [
+    "telefon-054.webp"
+   ]
+  }
+ },
+ "telefon-055": {
+  "alt": "Szétszedett okostelefon (zsályazöld) a szervizasztalon: látható alaplap és akkumulátor, mellette a levett kijelző",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-055.avif"
+   ],
+   "webp": [
+    "telefon-055.webp"
+   ]
+  }
+ },
+ "telefon-056": {
+  "alt": "Szétszedett okostelefon (éjkék) a szervizasztalon: látható alaplap és akkumulátor, mellette a levett kijelző",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-056.avif"
+   ],
+   "webp": [
+    "telefon-056.webp"
+   ]
+  }
+ },
+ "telefon-057": {
+  "alt": "Kinyitott hajtogatható okostelefon, narancs keret",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-057.avif"
+   ],
+   "webp": [
+    "telefon-057.webp"
+   ]
+  }
+ },
+ "telefon-058": {
+  "alt": "Kinyitott hajtogatható okostelefon, fekete keret",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-058.avif"
+   ],
+   "webp": [
+    "telefon-058.webp"
+   ]
+  }
+ },
+ "telefon-059": {
+  "alt": "Kinyitott hajtogatható okostelefon, levendula keret, sérült belső kijelzővel",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-059.avif"
+   ],
+   "webp": [
+    "telefon-059.webp"
+   ]
+  }
+ },
+ "telefon-060": {
+  "alt": "Kinyitott hajtogatható okostelefon, zsályazöld keret",
+  "kategoria": "telefon",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "telefon-060.avif"
+   ],
+   "webp": [
+    "telefon-060.webp"
+   ]
+  }
+ },
+ "tablet-001": {
+  "alt": "Általános tablet, grafitszürke, fekvő elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-001.avif"
+   ],
+   "webp": [
+    "tablet-001.webp"
+   ]
+  }
+ },
+ "tablet-002": {
+  "alt": "Általános tablet, rózsaszín, álló elölnézet, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-002.avif"
+   ],
+   "webp": [
+    "tablet-002.webp"
+   ]
+  }
+ },
+ "tablet-003": {
+  "alt": "Általános tablet, fekete, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-003.avif"
+   ],
+   "webp": [
+    "tablet-003.webp"
+   ]
+  }
+ },
+ "tablet-004": {
+  "alt": "Általános tablet, éjkék, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-004.avif"
+   ],
+   "webp": [
+    "tablet-004.webp"
+   ]
+  }
+ },
+ "tablet-005": {
+  "alt": "Általános tablet, piros, fekvő elölnézet, repedt kijelzővel",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-005.avif"
+   ],
+   "webp": [
+    "tablet-005.webp"
+   ]
+  }
+ },
+ "tablet-006": {
+  "alt": "Általános tablet, ezüst, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-006.avif"
+   ],
+   "webp": [
+    "tablet-006.webp"
+   ]
+  }
+ },
+ "tablet-007": {
+  "alt": "Általános tablet, levendula, fekvő elölnézet, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-007.avif"
+   ],
+   "webp": [
+    "tablet-007.webp"
+   ]
+  }
+ },
+ "tablet-008": {
+  "alt": "Általános tablet, narancs, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-008.avif"
+   ],
+   "webp": [
+    "tablet-008.webp"
+   ]
+  }
+ },
+ "tablet-009": {
+  "alt": "Általános tablet, zsályazöld, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-009.avif"
+   ],
+   "webp": [
+    "tablet-009.webp"
+   ]
+  }
+ },
+ "tablet-010": {
+  "alt": "Általános tablet, égkék, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-010.avif"
+   ],
+   "webp": [
+    "tablet-010.webp"
+   ]
+  }
+ },
+ "tablet-011": {
+  "alt": "Általános tablet, fehér, fekvő elölnézet, repedt kijelzővel",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-011.avif"
+   ],
+   "webp": [
+    "tablet-011.webp"
+   ]
+  }
+ },
+ "tablet-012": {
+  "alt": "Általános tablet, pezsgőarany, hátoldal, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-012.avif"
+   ],
+   "webp": [
+    "tablet-012.webp"
+   ]
+  }
+ },
+ "tablet-013": {
+  "alt": "Általános tablet, grafitszürke, fekvő elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-013.avif"
+   ],
+   "webp": [
+    "tablet-013.webp"
+   ]
+  }
+ },
+ "tablet-014": {
+  "alt": "Általános tablet, rózsaszín, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-014.avif"
+   ],
+   "webp": [
+    "tablet-014.webp"
+   ]
+  }
+ },
+ "tablet-015": {
+  "alt": "Általános tablet, fekete, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-015.avif"
+   ],
+   "webp": [
+    "tablet-015.webp"
+   ]
+  }
+ },
+ "tablet-016": {
+  "alt": "Általános tablet, éjkék, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-016.avif"
+   ],
+   "webp": [
+    "tablet-016.webp"
+   ]
+  }
+ },
+ "tablet-017": {
+  "alt": "Általános tablet, piros, fekvő elölnézet, repedt kijelzővel, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-017.avif"
+   ],
+   "webp": [
+    "tablet-017.webp"
+   ]
+  }
+ },
+ "tablet-018": {
+  "alt": "Általános tablet, ezüst, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-018.avif"
+   ],
+   "webp": [
+    "tablet-018.webp"
+   ]
+  }
+ },
+ "tablet-019": {
+  "alt": "Általános tablet, levendula, fekvő elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-019.avif"
+   ],
+   "webp": [
+    "tablet-019.webp"
+   ]
+  }
+ },
+ "tablet-020": {
+  "alt": "Általános tablet, narancs, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-020.avif"
+   ],
+   "webp": [
+    "tablet-020.webp"
+   ]
+  }
+ },
+ "tablet-021": {
+  "alt": "Általános tablet, zsályazöld, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-021.avif"
+   ],
+   "webp": [
+    "tablet-021.webp"
+   ]
+  }
+ },
+ "tablet-022": {
+  "alt": "Általános tablet, égkék, álló elölnézet, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-022.avif"
+   ],
+   "webp": [
+    "tablet-022.webp"
+   ]
+  }
+ },
+ "tablet-023": {
+  "alt": "Általános tablet, fehér, fekvő elölnézet, repedt kijelzővel",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-023.avif"
+   ],
+   "webp": [
+    "tablet-023.webp"
+   ]
+  }
+ },
+ "tablet-024": {
+  "alt": "Általános tablet, pezsgőarany, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-024.avif"
+   ],
+   "webp": [
+    "tablet-024.webp"
+   ]
+  }
+ },
+ "tablet-025": {
+  "alt": "Általános tablet, grafitszürke, fekvő elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-025.avif"
+   ],
+   "webp": [
+    "tablet-025.webp"
+   ]
+  }
+ },
+ "tablet-026": {
+  "alt": "Általános tablet, rózsaszín, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-026.avif"
+   ],
+   "webp": [
+    "tablet-026.webp"
+   ]
+  }
+ },
+ "tablet-027": {
+  "alt": "Általános tablet, fekete, hátoldal, érintőtollal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-027.avif"
+   ],
+   "webp": [
+    "tablet-027.webp"
+   ]
+  }
+ },
+ "tablet-028": {
+  "alt": "Általános tablet, éjkék, álló elölnézet",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-028.avif"
+   ],
+   "webp": [
+    "tablet-028.webp"
+   ]
+  }
+ },
+ "tablet-029": {
+  "alt": "Általános tablet, piros, fekvő elölnézet, repedt kijelzővel",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-029.avif"
+   ],
+   "webp": [
+    "tablet-029.webp"
+   ]
+  }
+ },
+ "tablet-030": {
+  "alt": "Általános tablet, ezüst, hátoldal",
+  "kategoria": "tablet",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "tablet-030.avif"
+   ],
+   "webp": [
+    "tablet-030.webp"
+   ]
+  }
+ },
+ "laptop-001": {
+  "alt": "Általános laptop, grafitszürke, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-001.avif"
+   ],
+   "webp": [
+    "laptop-001.webp"
+   ]
+  }
+ },
+ "laptop-002": {
+  "alt": "Általános laptop, ezüst, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-002.avif"
+   ],
+   "webp": [
+    "laptop-002.webp"
+   ]
+  }
+ },
+ "laptop-003": {
+  "alt": "Általános laptop, éjkék, nyitott, bekapcsolt kijelzővel, repedt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-003.avif"
+   ],
+   "webp": [
+    "laptop-003.webp"
+   ]
+  }
+ },
+ "laptop-004": {
+  "alt": "Általános laptop, fekete, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-004.avif"
+   ],
+   "webp": [
+    "laptop-004.webp"
+   ]
+  }
+ },
+ "laptop-005": {
+  "alt": "Általános laptop, pezsgőarany, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-005.avif"
+   ],
+   "webp": [
+    "laptop-005.webp"
+   ]
+  }
+ },
+ "laptop-006": {
+  "alt": "Általános laptop, zsályazöld, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-006.avif"
+   ],
+   "webp": [
+    "laptop-006.webp"
+   ]
+  }
+ },
+ "laptop-007": {
+  "alt": "Általános laptop, grafitszürke, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-007.avif"
+   ],
+   "webp": [
+    "laptop-007.webp"
+   ]
+  }
+ },
+ "laptop-008": {
+  "alt": "Általános laptop, ezüst, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-008.avif"
+   ],
+   "webp": [
+    "laptop-008.webp"
+   ]
+  }
+ },
+ "laptop-009": {
+  "alt": "Általános laptop, éjkék, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-009.avif"
+   ],
+   "webp": [
+    "laptop-009.webp"
+   ]
+  }
+ },
+ "laptop-010": {
+  "alt": "Általános laptop, fekete, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-010.avif"
+   ],
+   "webp": [
+    "laptop-010.webp"
+   ]
+  }
+ },
+ "laptop-011": {
+  "alt": "Általános laptop, pezsgőarany, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-011.avif"
+   ],
+   "webp": [
+    "laptop-011.webp"
+   ]
+  }
+ },
+ "laptop-012": {
+  "alt": "Általános laptop, zsályazöld, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-012.avif"
+   ],
+   "webp": [
+    "laptop-012.webp"
+   ]
+  }
+ },
+ "laptop-013": {
+  "alt": "Általános laptop, grafitszürke, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-013.avif"
+   ],
+   "webp": [
+    "laptop-013.webp"
+   ]
+  }
+ },
+ "laptop-014": {
+  "alt": "Általános laptop, ezüst, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-014.avif"
+   ],
+   "webp": [
+    "laptop-014.webp"
+   ]
+  }
+ },
+ "laptop-015": {
+  "alt": "Általános laptop, éjkék, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-015.avif"
+   ],
+   "webp": [
+    "laptop-015.webp"
+   ]
+  }
+ },
+ "laptop-016": {
+  "alt": "Általános laptop, fekete, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-016.avif"
+   ],
+   "webp": [
+    "laptop-016.webp"
+   ]
+  }
+ },
+ "laptop-017": {
+  "alt": "Általános laptop, pezsgőarany, nyitott, bekapcsolt kijelzővel, repedt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-017.avif"
+   ],
+   "webp": [
+    "laptop-017.webp"
+   ]
+  }
+ },
+ "laptop-018": {
+  "alt": "Általános laptop, zsályazöld, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-018.avif"
+   ],
+   "webp": [
+    "laptop-018.webp"
+   ]
+  }
+ },
+ "laptop-019": {
+  "alt": "Általános laptop, grafitszürke, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-019.avif"
+   ],
+   "webp": [
+    "laptop-019.webp"
+   ]
+  }
+ },
+ "laptop-020": {
+  "alt": "Általános laptop, ezüst, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-020.avif"
+   ],
+   "webp": [
+    "laptop-020.webp"
+   ]
+  }
+ },
+ "laptop-021": {
+  "alt": "Általános laptop, éjkék, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-021.avif"
+   ],
+   "webp": [
+    "laptop-021.webp"
+   ]
+  }
+ },
+ "laptop-022": {
+  "alt": "Általános laptop, fekete, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-022.avif"
+   ],
+   "webp": [
+    "laptop-022.webp"
+   ]
+  }
+ },
+ "laptop-023": {
+  "alt": "Általános laptop, pezsgőarany, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-023.avif"
+   ],
+   "webp": [
+    "laptop-023.webp"
+   ]
+  }
+ },
+ "laptop-024": {
+  "alt": "Általános laptop, zsályazöld, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-024.avif"
+   ],
+   "webp": [
+    "laptop-024.webp"
+   ]
+  }
+ },
+ "laptop-025": {
+  "alt": "Általános laptop, grafitszürke, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-025.avif"
+   ],
+   "webp": [
+    "laptop-025.webp"
+   ]
+  }
+ },
+ "laptop-026": {
+  "alt": "Általános laptop, ezüst, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-026.avif"
+   ],
+   "webp": [
+    "laptop-026.webp"
+   ]
+  }
+ },
+ "laptop-027": {
+  "alt": "Általános laptop, éjkék, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-027.avif"
+   ],
+   "webp": [
+    "laptop-027.webp"
+   ]
+  }
+ },
+ "laptop-028": {
+  "alt": "Általános laptop, fekete, nyitott, bekapcsolt kijelzővel",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-028.avif"
+   ],
+   "webp": [
+    "laptop-028.webp"
+   ]
+  }
+ },
+ "laptop-029": {
+  "alt": "Általános laptop, pezsgőarany, alsó burkolat nélkül, látható alaplap, ventilátor és akkumulátor",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-029.avif"
+   ],
+   "webp": [
+    "laptop-029.webp"
+   ]
+  }
+ },
+ "laptop-030": {
+  "alt": "Általános laptop, zsályazöld, lecsukva",
+  "kategoria": "laptop",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "laptop-030.avif"
+   ],
+   "webp": [
+    "laptop-030.webp"
+   ]
+  }
+ },
+ "konzol-001": {
+  "alt": "Általános asztali játékkonzol, fehér",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-001.avif"
+   ],
+   "webp": [
+    "konzol-001.webp"
+   ]
+  }
+ },
+ "konzol-002": {
+  "alt": "Általános kézi játékkonzol, fekete",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-002.avif"
+   ],
+   "webp": [
+    "konzol-002.webp"
+   ]
+  }
+ },
+ "konzol-003": {
+  "alt": "Általános játékvezérlő (kontroller), grafitszürke",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-003.avif"
+   ],
+   "webp": [
+    "konzol-003.webp"
+   ]
+  }
+ },
+ "konzol-004": {
+  "alt": "Általános asztali játékkonzol, piros",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-004.avif"
+   ],
+   "webp": [
+    "konzol-004.webp"
+   ]
+  }
+ },
+ "konzol-005": {
+  "alt": "Általános kézi játékkonzol, égkék, repedt kijelzővel",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-005.avif"
+   ],
+   "webp": [
+    "konzol-005.webp"
+   ]
+  }
+ },
+ "konzol-006": {
+  "alt": "Általános játékvezérlő (kontroller), ezüst",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-006.avif"
+   ],
+   "webp": [
+    "konzol-006.webp"
+   ]
+  }
+ },
+ "konzol-007": {
+  "alt": "Általános asztali játékkonzol, fehér",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-007.avif"
+   ],
+   "webp": [
+    "konzol-007.webp"
+   ]
+  }
+ },
+ "konzol-008": {
+  "alt": "Általános kézi játékkonzol, fekete",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-008.avif"
+   ],
+   "webp": [
+    "konzol-008.webp"
+   ]
+  }
+ },
+ "konzol-009": {
+  "alt": "Általános játékvezérlő (kontroller), grafitszürke",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-009.avif"
+   ],
+   "webp": [
+    "konzol-009.webp"
+   ]
+  }
+ },
+ "konzol-010": {
+  "alt": "Általános asztali játékkonzol, piros",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-010.avif"
+   ],
+   "webp": [
+    "konzol-010.webp"
+   ]
+  }
+ },
+ "konzol-011": {
+  "alt": "Általános kézi játékkonzol, égkék",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-011.avif"
+   ],
+   "webp": [
+    "konzol-011.webp"
+   ]
+  }
+ },
+ "konzol-012": {
+  "alt": "Általános játékvezérlő (kontroller), ezüst",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-012.avif"
+   ],
+   "webp": [
+    "konzol-012.webp"
+   ]
+  }
+ },
+ "konzol-013": {
+  "alt": "Általános asztali játékkonzol, fehér",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-013.avif"
+   ],
+   "webp": [
+    "konzol-013.webp"
+   ]
+  }
+ },
+ "konzol-014": {
+  "alt": "Általános kézi játékkonzol, fekete",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-014.avif"
+   ],
+   "webp": [
+    "konzol-014.webp"
+   ]
+  }
+ },
+ "konzol-015": {
+  "alt": "Általános játékvezérlő (kontroller), grafitszürke, kopott karokkal",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-015.avif"
+   ],
+   "webp": [
+    "konzol-015.webp"
+   ]
+  }
+ },
+ "konzol-016": {
+  "alt": "Általános asztali játékkonzol, piros",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-016.avif"
+   ],
+   "webp": [
+    "konzol-016.webp"
+   ]
+  }
+ },
+ "konzol-017": {
+  "alt": "Általános kézi játékkonzol, égkék",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-017.avif"
+   ],
+   "webp": [
+    "konzol-017.webp"
+   ]
+  }
+ },
+ "konzol-018": {
+  "alt": "Általános játékvezérlő (kontroller), ezüst",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-018.avif"
+   ],
+   "webp": [
+    "konzol-018.webp"
+   ]
+  }
+ },
+ "konzol-019": {
+  "alt": "Általános asztali játékkonzol, fehér",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-019.avif"
+   ],
+   "webp": [
+    "konzol-019.webp"
+   ]
+  }
+ },
+ "konzol-020": {
+  "alt": "Általános kézi játékkonzol, fekete, repedt kijelzővel",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-020.avif"
+   ],
+   "webp": [
+    "konzol-020.webp"
+   ]
+  }
+ },
+ "konzol-021": {
+  "alt": "Általános játékvezérlő (kontroller), grafitszürke",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-021.avif"
+   ],
+   "webp": [
+    "konzol-021.webp"
+   ]
+  }
+ },
+ "konzol-022": {
+  "alt": "Általános asztali játékkonzol, piros",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-022.avif"
+   ],
+   "webp": [
+    "konzol-022.webp"
+   ]
+  }
+ },
+ "konzol-023": {
+  "alt": "Általános kézi játékkonzol, égkék",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-023.avif"
+   ],
+   "webp": [
+    "konzol-023.webp"
+   ]
+  }
+ },
+ "konzol-024": {
+  "alt": "Általános játékvezérlő (kontroller), ezüst",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-024.avif"
+   ],
+   "webp": [
+    "konzol-024.webp"
+   ]
+  }
+ },
+ "konzol-025": {
+  "alt": "Általános asztali játékkonzol, fehér",
+  "kategoria": "konzol",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "konzol-025.avif"
+   ],
+   "webp": [
+    "konzol-025.webp"
+   ]
+  }
+ },
+ "ora-001": {
+  "alt": "Általános okosóra, szögletes tok, grafitszürke, éjkék szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-001.avif"
+   ],
+   "webp": [
+    "ora-001.webp"
+   ]
+  }
+ },
+ "ora-002": {
+  "alt": "Általános okosóra, kerek tok, ezüst, fekete szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-002.avif"
+   ],
+   "webp": [
+    "ora-002.webp"
+   ]
+  }
+ },
+ "ora-003": {
+  "alt": "Általános okosóra, szögletes tok, pezsgőarany, rózsaszín szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-003.avif"
+   ],
+   "webp": [
+    "ora-003.webp"
+   ]
+  }
+ },
+ "ora-004": {
+  "alt": "Általános okosóra, szögletes tok, fekete, grafitszürke szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-004.avif"
+   ],
+   "webp": [
+    "ora-004.webp"
+   ]
+  }
+ },
+ "ora-005": {
+  "alt": "Általános okosóra, kerek tok, rózsaszín, pezsgőarany szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-005.avif"
+   ],
+   "webp": [
+    "ora-005.webp"
+   ]
+  }
+ },
+ "ora-006": {
+  "alt": "Általános okosóra, szögletes tok, grafitszürke, fehér szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-006.avif"
+   ],
+   "webp": [
+    "ora-006.webp"
+   ]
+  }
+ },
+ "ora-007": {
+  "alt": "Általános okosóra, szögletes tok, ezüst, égkék szíjjal, repedt előlappal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-007.avif"
+   ],
+   "webp": [
+    "ora-007.webp"
+   ]
+  }
+ },
+ "ora-008": {
+  "alt": "Általános okosóra, kerek tok, pezsgőarany, zsályazöld szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-008.avif"
+   ],
+   "webp": [
+    "ora-008.webp"
+   ]
+  }
+ },
+ "ora-009": {
+  "alt": "Általános okosóra, szögletes tok, fekete, narancs szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-009.avif"
+   ],
+   "webp": [
+    "ora-009.webp"
+   ]
+  }
+ },
+ "ora-010": {
+  "alt": "Általános okosóra, szögletes tok, rózsaszín, levendula szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-010.avif"
+   ],
+   "webp": [
+    "ora-010.webp"
+   ]
+  }
+ },
+ "ora-011": {
+  "alt": "Általános okosóra, kerek tok, grafitszürke, ezüst szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-011.avif"
+   ],
+   "webp": [
+    "ora-011.webp"
+   ]
+  }
+ },
+ "ora-012": {
+  "alt": "Általános okosóra, szögletes tok, ezüst, piros szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-012.avif"
+   ],
+   "webp": [
+    "ora-012.webp"
+   ]
+  }
+ },
+ "ora-013": {
+  "alt": "Általános okosóra, szögletes tok, pezsgőarany, éjkék szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-013.avif"
+   ],
+   "webp": [
+    "ora-013.webp"
+   ]
+  }
+ },
+ "ora-014": {
+  "alt": "Általános okosóra, kerek tok, fekete, fekete szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-014.avif"
+   ],
+   "webp": [
+    "ora-014.webp"
+   ]
+  }
+ },
+ "ora-015": {
+  "alt": "Általános okosóra, szögletes tok, rózsaszín, rózsaszín szíjjal, repedt előlappal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-015.avif"
+   ],
+   "webp": [
+    "ora-015.webp"
+   ]
+  }
+ },
+ "ora-016": {
+  "alt": "Általános okosóra, szögletes tok, grafitszürke, grafitszürke szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-016.avif"
+   ],
+   "webp": [
+    "ora-016.webp"
+   ]
+  }
+ },
+ "ora-017": {
+  "alt": "Általános okosóra, kerek tok, ezüst, pezsgőarany szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-017.avif"
+   ],
+   "webp": [
+    "ora-017.webp"
+   ]
+  }
+ },
+ "ora-018": {
+  "alt": "Általános okosóra, szögletes tok, pezsgőarany, fehér szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-018.avif"
+   ],
+   "webp": [
+    "ora-018.webp"
+   ]
+  }
+ },
+ "ora-019": {
+  "alt": "Általános okosóra, szögletes tok, fekete, égkék szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-019.avif"
+   ],
+   "webp": [
+    "ora-019.webp"
+   ]
+  }
+ },
+ "ora-020": {
+  "alt": "Általános okosóra, kerek tok, rózsaszín, zsályazöld szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-020.avif"
+   ],
+   "webp": [
+    "ora-020.webp"
+   ]
+  }
+ },
+ "ora-021": {
+  "alt": "Általános okosóra, szögletes tok, grafitszürke, narancs szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-021.avif"
+   ],
+   "webp": [
+    "ora-021.webp"
+   ]
+  }
+ },
+ "ora-022": {
+  "alt": "Általános okosóra, szögletes tok, ezüst, levendula szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-022.avif"
+   ],
+   "webp": [
+    "ora-022.webp"
+   ]
+  }
+ },
+ "ora-023": {
+  "alt": "Általános okosóra, kerek tok, pezsgőarany, ezüst szíjjal, repedt előlappal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-023.avif"
+   ],
+   "webp": [
+    "ora-023.webp"
+   ]
+  }
+ },
+ "ora-024": {
+  "alt": "Általános okosóra, szögletes tok, fekete, piros szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-024.avif"
+   ],
+   "webp": [
+    "ora-024.webp"
+   ]
+  }
+ },
+ "ora-025": {
+  "alt": "Általános okosóra, szögletes tok, rózsaszín, éjkék szíjjal",
+  "kategoria": "ora",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "ora-025.avif"
+   ],
+   "webp": [
+    "ora-025.webp"
+   ]
+  }
+ },
+ "alkatresz-001": {
+  "alt": "Telefon-akkumulátor csatlakozóval, felpúposodott (cserére szoruló)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-001.avif"
+   ],
+   "webp": [
+    "alkatresz-001.webp"
+   ]
+  }
+ },
+ "alkatresz-002": {
+  "alt": "Csere-kijelzőegység (okostelefon), bekapcsolt tesztképpel, flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-002.avif"
+   ],
+   "webp": [
+    "alkatresz-002.webp"
+   ]
+  }
+ },
+ "alkatresz-003": {
+  "alt": "Hátlapi kameramodul (dupla lencse) flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-003.avif"
+   ],
+   "webp": [
+    "alkatresz-003.webp"
+   ]
+  }
+ },
+ "alkatresz-004": {
+  "alt": "Töltőcsatlakozó-panel flexkábellel (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-004.avif"
+   ],
+   "webp": [
+    "alkatresz-004.webp"
+   ]
+  }
+ },
+ "alkatresz-005": {
+  "alt": "Okostelefon-alaplap (logikai panel) chipekkel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-005.avif"
+   ],
+   "webp": [
+    "alkatresz-005.webp"
+   ]
+  }
+ },
+ "alkatresz-006": {
+  "alt": "Belső hangszóró-modul (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-006.avif"
+   ],
+   "webp": [
+    "alkatresz-006.webp"
+   ]
+  }
+ },
+ "alkatresz-007": {
+  "alt": "Csere-hátlap üveg (okostelefon), levendula, kameranyílással",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-007.avif"
+   ],
+   "webp": [
+    "alkatresz-007.webp"
+   ]
+  }
+ },
+ "alkatresz-008": {
+  "alt": "Tablet-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-008.avif"
+   ],
+   "webp": [
+    "alkatresz-008.webp"
+   ]
+  }
+ },
+ "alkatresz-009": {
+  "alt": "Telefon-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-009.avif"
+   ],
+   "webp": [
+    "alkatresz-009.webp"
+   ]
+  }
+ },
+ "alkatresz-010": {
+  "alt": "Csere-kijelzőegység (okostelefon), bekapcsolt tesztképpel, flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-010.avif"
+   ],
+   "webp": [
+    "alkatresz-010.webp"
+   ]
+  }
+ },
+ "alkatresz-011": {
+  "alt": "Hátlapi kameramodul (dupla lencse) flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-011.avif"
+   ],
+   "webp": [
+    "alkatresz-011.webp"
+   ]
+  }
+ },
+ "alkatresz-012": {
+  "alt": "Töltőcsatlakozó-panel flexkábellel (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-012.avif"
+   ],
+   "webp": [
+    "alkatresz-012.webp"
+   ]
+  }
+ },
+ "alkatresz-013": {
+  "alt": "Okostelefon-alaplap (logikai panel) chipekkel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-013.avif"
+   ],
+   "webp": [
+    "alkatresz-013.webp"
+   ]
+  }
+ },
+ "alkatresz-014": {
+  "alt": "Belső hangszóró-modul (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-014.avif"
+   ],
+   "webp": [
+    "alkatresz-014.webp"
+   ]
+  }
+ },
+ "alkatresz-015": {
+  "alt": "Csere-hátlap üveg (okostelefon), levendula, kameranyílással",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-015.avif"
+   ],
+   "webp": [
+    "alkatresz-015.webp"
+   ]
+  }
+ },
+ "alkatresz-016": {
+  "alt": "Telefon-akkumulátor csatlakozóval, felpúposodott (cserére szoruló)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-016.avif"
+   ],
+   "webp": [
+    "alkatresz-016.webp"
+   ]
+  }
+ },
+ "alkatresz-017": {
+  "alt": "Telefon-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-017.avif"
+   ],
+   "webp": [
+    "alkatresz-017.webp"
+   ]
+  }
+ },
+ "alkatresz-018": {
+  "alt": "Csere-kijelzőegység (okostelefon), bekapcsolt tesztképpel, flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-018.avif"
+   ],
+   "webp": [
+    "alkatresz-018.webp"
+   ]
+  }
+ },
+ "alkatresz-019": {
+  "alt": "Hátlapi kameramodul (dupla lencse) flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-019.avif"
+   ],
+   "webp": [
+    "alkatresz-019.webp"
+   ]
+  }
+ },
+ "alkatresz-020": {
+  "alt": "Töltőcsatlakozó-panel flexkábellel (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-020.avif"
+   ],
+   "webp": [
+    "alkatresz-020.webp"
+   ]
+  }
+ },
+ "alkatresz-021": {
+  "alt": "Okostelefon-alaplap (logikai panel) chipekkel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-021.avif"
+   ],
+   "webp": [
+    "alkatresz-021.webp"
+   ]
+  }
+ },
+ "alkatresz-022": {
+  "alt": "Belső hangszóró-modul (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-022.avif"
+   ],
+   "webp": [
+    "alkatresz-022.webp"
+   ]
+  }
+ },
+ "alkatresz-023": {
+  "alt": "Csere-hátlap üveg (okostelefon), levendula, kameranyílással",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-023.avif"
+   ],
+   "webp": [
+    "alkatresz-023.webp"
+   ]
+  }
+ },
+ "alkatresz-024": {
+  "alt": "Tablet-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-024.avif"
+   ],
+   "webp": [
+    "alkatresz-024.webp"
+   ]
+  }
+ },
+ "alkatresz-025": {
+  "alt": "Telefon-akkumulátor csatlakozóval, felpúposodott (cserére szoruló)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-025.avif"
+   ],
+   "webp": [
+    "alkatresz-025.webp"
+   ]
+  }
+ },
+ "alkatresz-026": {
+  "alt": "Csere-kijelzőegység (okostelefon), bekapcsolt tesztképpel, flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-026.avif"
+   ],
+   "webp": [
+    "alkatresz-026.webp"
+   ]
+  }
+ },
+ "alkatresz-027": {
+  "alt": "Hátlapi kameramodul (dupla lencse) flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-027.avif"
+   ],
+   "webp": [
+    "alkatresz-027.webp"
+   ]
+  }
+ },
+ "alkatresz-028": {
+  "alt": "Töltőcsatlakozó-panel flexkábellel (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-028.avif"
+   ],
+   "webp": [
+    "alkatresz-028.webp"
+   ]
+  }
+ },
+ "alkatresz-029": {
+  "alt": "Okostelefon-alaplap (logikai panel) chipekkel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-029.avif"
+   ],
+   "webp": [
+    "alkatresz-029.webp"
+   ]
+  }
+ },
+ "alkatresz-030": {
+  "alt": "Belső hangszóró-modul (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-030.avif"
+   ],
+   "webp": [
+    "alkatresz-030.webp"
+   ]
+  }
+ },
+ "alkatresz-031": {
+  "alt": "Csere-hátlap üveg (okostelefon), levendula, kameranyílással",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-031.avif"
+   ],
+   "webp": [
+    "alkatresz-031.webp"
+   ]
+  }
+ },
+ "alkatresz-032": {
+  "alt": "Telefon-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-032.avif"
+   ],
+   "webp": [
+    "alkatresz-032.webp"
+   ]
+  }
+ },
+ "alkatresz-033": {
+  "alt": "Telefon-akkumulátor csatlakozóval",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-033.avif"
+   ],
+   "webp": [
+    "alkatresz-033.webp"
+   ]
+  }
+ },
+ "alkatresz-034": {
+  "alt": "Csere-kijelzőegység (okostelefon), bekapcsolt tesztképpel, flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-034.avif"
+   ],
+   "webp": [
+    "alkatresz-034.webp"
+   ]
+  }
+ },
+ "alkatresz-035": {
+  "alt": "Hátlapi kameramodul (dupla lencse) flexkábellel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-035.avif"
+   ],
+   "webp": [
+    "alkatresz-035.webp"
+   ]
+  }
+ },
+ "alkatresz-036": {
+  "alt": "Töltőcsatlakozó-panel flexkábellel (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-036.avif"
+   ],
+   "webp": [
+    "alkatresz-036.webp"
+   ]
+  }
+ },
+ "alkatresz-037": {
+  "alt": "Okostelefon-alaplap (logikai panel) chipekkel",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-037.avif"
+   ],
+   "webp": [
+    "alkatresz-037.webp"
+   ]
+  }
+ },
+ "alkatresz-038": {
+  "alt": "Belső hangszóró-modul (csere-alkatrész)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-038.avif"
+   ],
+   "webp": [
+    "alkatresz-038.webp"
+   ]
+  }
+ },
+ "alkatresz-039": {
+  "alt": "Csere-hátlap üveg (okostelefon), levendula, kameranyílással",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-039.avif"
+   ],
+   "webp": [
+    "alkatresz-039.webp"
+   ]
+  }
+ },
+ "alkatresz-040": {
+  "alt": "Tablet-akkumulátor csatlakozóval, felpúposodott (cserére szoruló)",
+  "kategoria": "alkatresz",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "alkatresz-040.avif"
+   ],
+   "webp": [
+    "alkatresz-040.webp"
+   ]
+  }
+ },
+ "kiegeszito-001": {
+  "alt": "Töltőkábel (USB-C – USB-C), fehér",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-001.avif"
+   ],
+   "webp": [
+    "kiegeszito-001.webp"
+   ]
+  }
+ },
+ "kiegeszito-002": {
+  "alt": "Hálózati gyorstöltő adapter (USB-C), pezsgőarany",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-002.avif"
+   ],
+   "webp": [
+    "kiegeszito-002.webp"
+   ]
+  }
+ },
+ "kiegeszito-003": {
+  "alt": "Telefontok, grafitszürke",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-003.avif"
+   ],
+   "webp": [
+    "kiegeszito-003.webp"
+   ]
+  }
+ },
+ "kiegeszito-004": {
+  "alt": "Vezeték nélküli fülhallgató töltőtokkal, rózsaszín",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-004.avif"
+   ],
+   "webp": [
+    "kiegeszito-004.webp"
+   ]
+  }
+ },
+ "kiegeszito-005": {
+  "alt": "Edzett üveg kijelzővédő fólia (okostelefon)",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-005.avif"
+   ],
+   "webp": [
+    "kiegeszito-005.webp"
+   ]
+  }
+ },
+ "kiegeszito-006": {
+  "alt": "Hordozható külső akkumulátor (powerbank), éjkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-006.avif"
+   ],
+   "webp": [
+    "kiegeszito-006.webp"
+   ]
+  }
+ },
+ "kiegeszito-007": {
+  "alt": "Vezeték nélküli töltőpad, piros",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-007.avif"
+   ],
+   "webp": [
+    "kiegeszito-007.webp"
+   ]
+  }
+ },
+ "kiegeszito-008": {
+  "alt": "Állítható telefontartó állvány, ezüst",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-008.avif"
+   ],
+   "webp": [
+    "kiegeszito-008.webp"
+   ]
+  }
+ },
+ "kiegeszito-009": {
+  "alt": "Töltőkábel (USB-C – Lightning-típusú), levendula",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-009.avif"
+   ],
+   "webp": [
+    "kiegeszito-009.webp"
+   ]
+  }
+ },
+ "kiegeszito-010": {
+  "alt": "Hálózati gyorstöltő adapter (USB-C), narancs",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-010.avif"
+   ],
+   "webp": [
+    "kiegeszito-010.webp"
+   ]
+  }
+ },
+ "kiegeszito-011": {
+  "alt": "Telefontok, zsályazöld",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-011.avif"
+   ],
+   "webp": [
+    "kiegeszito-011.webp"
+   ]
+  }
+ },
+ "kiegeszito-012": {
+  "alt": "Vezeték nélküli fülhallgató töltőtokkal, égkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-012.avif"
+   ],
+   "webp": [
+    "kiegeszito-012.webp"
+   ]
+  }
+ },
+ "kiegeszito-013": {
+  "alt": "Edzett üveg kijelzővédő fólia (okostelefon)",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-013.avif"
+   ],
+   "webp": [
+    "kiegeszito-013.webp"
+   ]
+  }
+ },
+ "kiegeszito-014": {
+  "alt": "Hordozható külső akkumulátor (powerbank), pezsgőarany",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-014.avif"
+   ],
+   "webp": [
+    "kiegeszito-014.webp"
+   ]
+  }
+ },
+ "kiegeszito-015": {
+  "alt": "Vezeték nélküli töltőpad, grafitszürke",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-015.avif"
+   ],
+   "webp": [
+    "kiegeszito-015.webp"
+   ]
+  }
+ },
+ "kiegeszito-016": {
+  "alt": "Állítható telefontartó állvány, rózsaszín",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-016.avif"
+   ],
+   "webp": [
+    "kiegeszito-016.webp"
+   ]
+  }
+ },
+ "kiegeszito-017": {
+  "alt": "Töltőkábel (USB-A – USB-C), fekete",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-017.avif"
+   ],
+   "webp": [
+    "kiegeszito-017.webp"
+   ]
+  }
+ },
+ "kiegeszito-018": {
+  "alt": "Hálózati gyorstöltő adapter (USB-C), éjkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-018.avif"
+   ],
+   "webp": [
+    "kiegeszito-018.webp"
+   ]
+  }
+ },
+ "kiegeszito-019": {
+  "alt": "Átlátszó szilikon telefontok",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-019.avif"
+   ],
+   "webp": [
+    "kiegeszito-019.webp"
+   ]
+  }
+ },
+ "kiegeszito-020": {
+  "alt": "Vezeték nélküli fülhallgató töltőtokkal, ezüst",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-020.avif"
+   ],
+   "webp": [
+    "kiegeszito-020.webp"
+   ]
+  }
+ },
+ "kiegeszito-021": {
+  "alt": "Edzett üveg kijelzővédő fólia (okostelefon)",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-021.avif"
+   ],
+   "webp": [
+    "kiegeszito-021.webp"
+   ]
+  }
+ },
+ "kiegeszito-022": {
+  "alt": "Hordozható külső akkumulátor (powerbank), narancs",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-022.avif"
+   ],
+   "webp": [
+    "kiegeszito-022.webp"
+   ]
+  }
+ },
+ "kiegeszito-023": {
+  "alt": "Vezeték nélküli töltőpad, zsályazöld",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-023.avif"
+   ],
+   "webp": [
+    "kiegeszito-023.webp"
+   ]
+  }
+ },
+ "kiegeszito-024": {
+  "alt": "Állítható telefontartó állvány, égkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-024.avif"
+   ],
+   "webp": [
+    "kiegeszito-024.webp"
+   ]
+  }
+ },
+ "kiegeszito-025": {
+  "alt": "Töltőkábel (USB-C – USB-C), fehér",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-025.avif"
+   ],
+   "webp": [
+    "kiegeszito-025.webp"
+   ]
+  }
+ },
+ "kiegeszito-026": {
+  "alt": "Hálózati gyorstöltő adapter (USB-C), pezsgőarany",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-026.avif"
+   ],
+   "webp": [
+    "kiegeszito-026.webp"
+   ]
+  }
+ },
+ "kiegeszito-027": {
+  "alt": "Telefontok, grafitszürke",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-027.avif"
+   ],
+   "webp": [
+    "kiegeszito-027.webp"
+   ]
+  }
+ },
+ "kiegeszito-028": {
+  "alt": "Vezeték nélküli fülhallgató töltőtokkal, rózsaszín",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-028.avif"
+   ],
+   "webp": [
+    "kiegeszito-028.webp"
+   ]
+  }
+ },
+ "kiegeszito-029": {
+  "alt": "Edzett üveg kijelzővédő fólia (okostelefon)",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-029.avif"
+   ],
+   "webp": [
+    "kiegeszito-029.webp"
+   ]
+  }
+ },
+ "kiegeszito-030": {
+  "alt": "Hordozható külső akkumulátor (powerbank), éjkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-030.avif"
+   ],
+   "webp": [
+    "kiegeszito-030.webp"
+   ]
+  }
+ },
+ "kiegeszito-031": {
+  "alt": "Vezeték nélküli töltőpad, piros",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-031.avif"
+   ],
+   "webp": [
+    "kiegeszito-031.webp"
+   ]
+  }
+ },
+ "kiegeszito-032": {
+  "alt": "Állítható telefontartó állvány, ezüst",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-032.avif"
+   ],
+   "webp": [
+    "kiegeszito-032.webp"
+   ]
+  }
+ },
+ "kiegeszito-033": {
+  "alt": "Töltőkábel (USB-C – Lightning-típusú), levendula",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-033.avif"
+   ],
+   "webp": [
+    "kiegeszito-033.webp"
+   ]
+  }
+ },
+ "kiegeszito-034": {
+  "alt": "Hálózati gyorstöltő adapter (USB-C), narancs",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-034.avif"
+   ],
+   "webp": [
+    "kiegeszito-034.webp"
+   ]
+  }
+ },
+ "kiegeszito-035": {
+  "alt": "Telefontok, zsályazöld",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-035.avif"
+   ],
+   "webp": [
+    "kiegeszito-035.webp"
+   ]
+  }
+ },
+ "kiegeszito-036": {
+  "alt": "Vezeték nélküli fülhallgató töltőtokkal, égkék",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-036.avif"
+   ],
+   "webp": [
+    "kiegeszito-036.webp"
+   ]
+  }
+ },
+ "kiegeszito-037": {
+  "alt": "Edzett üveg kijelzővédő fólia (okostelefon)",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-037.avif"
+   ],
+   "webp": [
+    "kiegeszito-037.webp"
+   ]
+  }
+ },
+ "kiegeszito-038": {
+  "alt": "Hordozható külső akkumulátor (powerbank), pezsgőarany",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-038.avif"
+   ],
+   "webp": [
+    "kiegeszito-038.webp"
+   ]
+  }
+ },
+ "kiegeszito-039": {
+  "alt": "Vezeték nélküli töltőpad, grafitszürke",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-039.avif"
+   ],
+   "webp": [
+    "kiegeszito-039.webp"
+   ]
+  }
+ },
+ "kiegeszito-040": {
+  "alt": "Állítható telefontartó állvány, rózsaszín",
+  "kategoria": "kiegeszito",
+  "szelesseg": 400,
+  "magassag": 400,
+  "valtozatok": {
+   "avif": [
+    "kiegeszito-040.avif"
+   ],
+   "webp": [
+    "kiegeszito-040.webp"
+   ]
+  }
+ }
+}
