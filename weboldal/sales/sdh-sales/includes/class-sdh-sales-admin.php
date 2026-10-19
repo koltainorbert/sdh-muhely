@@ -147,11 +147,21 @@ final class SDH_Sales_Admin
             wp_die('Nincs jogosultság.', 403);
         }
 
+        // Rejtés: ezen az oldalon a fájlok is az álnév-útvonalakról töltődnek (a webszerver a valódiakat elzárhatja).
+        $alias = class_exists('SDH_Sales_Rejtes') && method_exists('SDH_Sales_Rejtes', 'alias_csere') && SDH_Sales_Rejtes::be('aktiv') && SDH_Sales_Rejtes::be('alias');
+        $al    = static fn (string $x): string => $alias ? SDH_Sales_Rejtes::alias_csere($x) : $x;
+
+        if ($alias) {
+            add_filter('script_loader_src', $al, 99);
+            add_filter('style_loader_src', $al, 99);
+            add_filter('includes_url', $al, 99);
+        }
+
         $u     = wp_get_current_user();
         $tema  = (string) get_user_meta($u->ID, self::META_TEMA, true);
         $tema  = in_array($tema, ['sotet', 'vilagos'], true) ? $tema : '';
         $utak  = self::utak();
-        $alap  = SDH_SALES_URL . 'assets/';
+        $alap  = $al(SDH_SALES_URL . 'assets/');
         $ver   = static fn (string $f): string => SDH_SALES_VERSION . '.' . (string) @filemtime(SDH_SALES_DIR . 'assets/' . $f); // phpcs:ignore WordPress.PHP.NoSilencedErrors
         $nyelv = array_values(array_filter(array_map('strval', (array) SDH_Sales::b('nyelvek', ['hu'])), static fn ($x) => preg_match('/^[a-z]{2}$/', $x) === 1)) ?: ['hu'];
 
@@ -160,7 +170,7 @@ final class SDH_Sales_Admin
             'nonce'     => wp_create_nonce('wp_rest'),
             'nev'       => (string) ($u->first_name !== '' ? $u->first_name : $u->display_name),
             'teljes'    => (string) $u->display_name,
-            'avatar'    => get_avatar_url($u->ID, ['size' => 64]),
+            'avatar'    => '', // nincs külső kérés (Gravatar) – monogram
             'wp'        => admin_url('index.php'),
             'kilep'     => wp_logout_url(wp_login_url()),
             'webhely'   => home_url('/'),

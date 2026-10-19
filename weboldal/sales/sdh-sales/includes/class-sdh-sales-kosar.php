@@ -62,7 +62,7 @@ final class SDH_Sales_Kosar
     /** @return array<string, mixed> */
     public static function kosar_adat(): array
     {
-        return SDH_Sales_Katalogus::publikus() + ['fizmodok' => self::fizmodok()];
+        return SDH_Sales_Katalogus::publikus() + ['fizmodok' => self::fizmodok(), 'b2b_felirat' => __('Rendelést csak vállalkozások és szervezetek adhatnak le.', 'sdh-sales')];
     }
 
     /** @return array<string, mixed> */
@@ -90,6 +90,7 @@ final class SDH_Sales_Kosar
             'fiok_url' => self::oldal_url('fiok', 'fiok'),
             'kosar_url' => self::oldal_url('kosar', 'kosar'),
             'afa'      => SDH_Sales::afa(),
+            'b2b'      => ['felirat' => __('Rendelést csak vállalkozások és szervezetek adhatnak le.', 'sdh-sales'), 'nyilatkozat' => __('Vállalkozásként / szervezetként vásárolok (nem fogyasztóként).', 'sdh-sales')],
         ];
     }
 
