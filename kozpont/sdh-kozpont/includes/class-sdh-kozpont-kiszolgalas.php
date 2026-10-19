@@ -78,9 +78,11 @@ final class SDH_Kozpont_Kiszolgalas
         ) {$c};");
 
         dbDelta('CREATE TABLE ' . SDH_Kozpont::t('nonce') . " (
+            id bigint(20) unsigned NOT NULL auto_increment,
             nonce varchar(64) NOT NULL default '',
             lejar bigint(20) NOT NULL default 0,
-            PRIMARY KEY  (nonce),
+            PRIMARY KEY  (id),
+            unique key nonce (nonce),
             key lejar (lejar)
         ) {$c};");
     }

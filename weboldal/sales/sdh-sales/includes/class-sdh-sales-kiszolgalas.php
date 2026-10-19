@@ -7,7 +7,7 @@
  *   indit(int $rendeles_id): array          – a `sdh_sales_fizetve` hookra fut; többször hívva sem csinál semmit kétszer
  *   lepes_ujra(int $rendeles_id, string $lepes): array – adminisztrátori újraindítás (hibás / váró lépés; a sikeres nem fut újra)
  *   allapot(int $rendeles_id): ?array       – {rendeles, allapot, tipus, kesz, lepesek{…}} (a letöltő link nélkül)
- *   cron(?int $most = null): void           – SDH_Sales::CRON: esedékes újrapróbák + napi lejárat-emlékeztetők
+ *   cron($most = null): void                – SDH_Sales::CRON (0 argumentummal regisztrálva; nem int argumentum = most): esedékes újrapróbák + napi lejárat-emlékeztetők
  *   emlekeztetok(?int $most = null): int    – a lejárat előtti levelek (30 / 7 / 1 nap; havi licencnél 7 / 1)
  *   licencek(): array                       – a Központ válaszaiból tárolt licencek (kulcs → lejárat, e-mail, …)
  * Admin REST: GET /admin/kiszolgalas/(?P<id>\d+), POST /admin/kiszolgalas/(?P<id>\d+)/ujra {lepes}.
@@ -62,7 +62,7 @@ final class SDH_Sales_Kiszolgalas
     public static function init(): void
     {
         add_action('sdh_sales_fizetve', [self::class, 'fizetve_hook'], 20, 1);
-        add_action(SDH_Sales::CRON, [self::class, 'cron']);
+        add_action(SDH_Sales::CRON, [self::class, 'cron'], 10, 0);
 
         SDH_Sales_Rest::ut('/admin/kiszolgalas/(?P<id>\d+)', 'GET', [self::class, 'rest_allapot'], 'admin');
         SDH_Sales_Rest::ut('/admin/kiszolgalas/(?P<id>\d+)/ujra', 'POST', [self::class, 'rest_ujra'], 'admin', ['kiszolgalas_ujra', 30, 60]);
@@ -232,8 +232,8 @@ final class SDH_Sales_Kiszolgalas
             $l = self::eredmeny_beir($s, $l, $e, $most, $r);
             $lanc['lepesek'][$s] = $l;
 
-            if ($s === 'kozpont' && $l['allapot'] === 'ok') {
-                $r = (array) self::rendeles($id);
+            if ($l['allapot'] === 'ok') {
+                $r = (array) self::rendeles($id) ?: $r;
             }
 
             self::lanc_ment($id, $lanc);
@@ -425,6 +425,7 @@ final class SDH_Sales_Kiszolgalas
      */
     public static function licenc_adat(array $r): array
     {
+        $tetelek = self::tetelek($r);
         $csomag  = '';
         $cs_adat = [];
         $mod     = [];
@@ -436,7 +437,7 @@ final class SDH_Sales_Kiszolgalas
         $dij     = 0;
         $van_dij = false;
 
-        foreach ((array) $r['tetelek'] as $t) {
+        foreach ($tetelek as $t) {
             if (!is_array($t)) {
                 continue;
             }
@@ -475,7 +476,15 @@ final class SDH_Sales_Kiszolgalas
             }
         }
 
-        if ($csomag !== '') {
+        if ($csomag !== '' && class_exists('SDH_Sales_Katalogus') && method_exists('SDH_Sales_Katalogus', 'csomag_modulok')) {
+            $cm = SDH_Sales_Katalogus::csomag_modulok($csomag);
+
+            if (in_array('*', $cm, true)) {
+                $minden = true;
+            } else {
+                $mod = array_merge($mod, array_map('sanitize_key', $cm));
+            }
+        } elseif ($csomag !== '') {
             $cm = $cs_adat['modulok'] ?? [];
 
             if ($cm === '*' || (is_array($cm) && in_array('*', $cm, true))) {
@@ -491,6 +500,16 @@ final class SDH_Sales_Kiszolgalas
                     }
                 }
             }
+        }
+
+        // A teljes árszámítás-eredmény (ha így tárolták) már a végső keretet adja: azt használjuk, az extra sorok nélkül.
+        $osszes = (array) ($r['tetelek'] ?? []);
+
+        if ($csomag !== '' && isset($osszes['sorok'], $osszes['felhasznalo'])) {
+            $felh    = (int) $osszes['felhasznalo'];
+            $peld    = isset($osszes['max_peldany']) && (int) $osszes['max_peldany'] > 0 ? (int) $osszes['max_peldany'] : $peld;
+            $extra_f = 0;
+            $extra_p = 0;
         }
 
         $felh = $felh ?? (isset($cs_adat['felhasznalo_alap']) ? (int) $cs_adat['felhasznalo_alap'] : 0);
@@ -509,6 +528,19 @@ final class SDH_Sales_Kiszolgalas
         ];
 
         return (array) apply_filters('sdh_sales_kiszolgalas_licenc', $l, $r);
+    }
+
+    /**
+     * A rendelés tételsorai: a `tetelek` mező lehet sorlista, vagy a teljes `SDH_Sales_Ar::szamol()` eredmény (`sorok`).
+     *
+     * @param array<string, mixed> $r
+     * @return array<int, mixed>
+     */
+    public static function tetelek(array $r): array
+    {
+        $t = (array) ($r['tetelek'] ?? []);
+
+        return isset($t['sorok']) && is_array($t['sorok']) ? array_values($t['sorok']) : array_values($t);
     }
 
     /** @param array<string, mixed> $r */
@@ -754,7 +786,7 @@ final class SDH_Sales_Kiszolgalas
     {
         $ki = [];
 
-        foreach ((array) $r['tetelek'] as $t) {
+        foreach (self::tetelek($r) as $t) {
             $k = is_array($t) ? sanitize_key((string) ($t['kulcs'] ?? '')) : '';
 
             foreach (['telepites', 'oktatas', 'support'] as $tip) {
@@ -1002,11 +1034,12 @@ final class SDH_Sales_Kiszolgalas
      * Cron: újrapróba + lejárat-emlékeztetők
      * ============================================================== */
 
-    public static function cron(?int $most = null): void
+    /** @param mixed $most unix idő (teszthez); bármi más (pl. egy másik feliratkozó argumentuma) = most */
+    public static function cron($most = null): void
     {
         global $wpdb;
 
-        $most = $most ?? time();
+        $most = is_int($most) && $most > 0 ? $most : time();
         $ids  = (array) $wpdb->get_col($wpdb->prepare(
             'SELECT id FROM ' . SDH_Sales_Schema::t('rendeles') . " WHERE allapot IN ('fizetve', 'kiszolgalva') AND (lanc IS NULL OR lanc = '' OR lanc NOT LIKE %s) AND (fizetve_ido IS NULL OR fizetve_ido > %s) ORDER BY id ASC LIMIT 50",
             '%"kesz":true%',

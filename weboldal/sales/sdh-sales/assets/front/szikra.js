@@ -1,5 +1,5 @@
 /**
- * SDH Értékesítés – Szikra csevegő (vanilla JS, jQuery nélkül).
+ * SDH Értékesítés – Szikra csevegő (vanilla JS, külső függőség nélkül).
  * Csatolás: <div data-sdh="szikra" data-opciok='{"lebego":true}'></div> – lebegő indítógomb + panel;
  * lebego nélkül a csevegő helyben jelenik meg (pl. egy oldal szekciójában).
  * Adat: window.SDH_SZIKRA (SDH_Sales_Szikra::js_adat). Munkamenet: sessionStorage (nincs süti).

@@ -859,3 +859,74 @@ function sdh_tema_ceg(): array
 
     return $c;
 }
+
+/**
+ * Képmező kirajzolása: manifest-kulcs („hero”), médiatár-azonosító (szám) vagy URL. Üres → ''.
+ *
+ * @param mixed                          $ertek
+ * @param array<string, string|int|bool> $attrs
+ */
+function sdh_tema_kep_mezo($ertek, string $meret = 'kartya', array $attrs = [], string $alt = ''): string
+{
+    if (is_array($ertek)) {
+        $ertek = $ertek['url'] ?? ($ertek['id'] ?? '');
+    }
+
+    $ertek = is_scalar($ertek) ? trim((string) $ertek) : '';
+
+    if ($ertek === '') {
+        return '';
+    }
+
+    if ($alt !== '') {
+        $attrs['alt'] = sdh_tema_t($alt);
+    }
+
+    if (sdh_tema_van_kep($ertek)) {
+        return sdh_tema_kep($ertek, $meret, $attrs);
+    }
+
+    $hero = $meret === 'hero' || ($attrs['fetchpriority'] ?? '') === 'high';
+
+    if (ctype_digit($ertek)) {
+        $a = ['alt' => (string) ($attrs['alt'] ?? ''), 'class' => (string) ($attrs['class'] ?? ''), 'decoding' => $hero ? 'sync' : 'async'];
+        $a += $hero ? ['fetchpriority' => 'high', 'loading' => 'eager'] : ['loading' => 'lazy'];
+
+        return (string) wp_get_attachment_image((int) $ertek, $hero ? 'full' : 'large', false, $a);
+    }
+
+    $url = sdh_tema_url($ertek);
+
+    if ($url === '' || preg_match('#^(https?:)?//#i', $url) !== 1) {
+        return '';
+    }
+
+    $img = '<img src="' . esc_url($url) . '" alt="' . esc_attr((string) ($attrs['alt'] ?? '')) . '"';
+
+    // Saját médiatárbeli kép: méret a WP-ből (CLS ellen).
+    $id = attachment_url_to_postid($url);
+
+    if ($id > 0) {
+        $m = wp_get_attachment_metadata($id);
+
+        if (is_array($m) && !empty($m['width']) && !empty($m['height'])) {
+            $img .= ' width="' . (int) $m['width'] . '" height="' . (int) $m['height'] . '"';
+        }
+    }
+
+    foreach (['class', 'width', 'height'] as $k) {
+        if (isset($attrs[$k]) && strpos($img, ' ' . $k . '=') === false) {
+            $img .= ' ' . $k . '="' . esc_attr((string) $attrs[$k]) . '"';
+        }
+    }
+
+    $img .= $hero ? ' fetchpriority="high" decoding="sync"' : ' loading="lazy" decoding="async"';
+
+    return $img . '>';
+}
+
+/** Ár-/dátum-független rövid dátum: „2026. október 19.” */
+function sdh_tema_datum(int $ts, string $forma = 'Y. F j.'): string
+{
+    return (string) wp_date($forma, $ts);
+}

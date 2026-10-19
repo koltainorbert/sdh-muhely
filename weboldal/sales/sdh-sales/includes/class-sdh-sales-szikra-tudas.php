@@ -278,25 +278,21 @@ final class SDH_Sales_Szikra_Tudas
         return null;
     }
 
-    /** A tartalom-tár változását jelző kulcs (darab + utolsó módosítás + áfa), hogy a gyorsítótár magától frissüljön. */
-    private static function dinamikus_verzio(): string
-    {
-        global $wpdb;
-
-        $in = implode(',', array_fill(0, count(self::TIPUSOK), '%s'));
-        $v  = $wpdb->get_row($wpdb->prepare('SELECT COUNT(*) AS db, MAX(modositva) AS m FROM ' . SDH_Sales_Schema::t('tartalom') . " WHERE tipus IN ({$in}) AND aktiv = 1", ...self::TIPUSOK), ARRAY_A); // phpcs:ignore WordPress.DB.PreparedSQL
-
-        return md5(wp_json_encode($v) . '|' . SDH_Sales::afa() . '|' . SDH_Sales::termeknev() . '|' . (string) SDH_Sales::b('eves_kedvezmeny', 0) . '|' . home_url());
-    }
-
     /**
      * A tartalom-tár elemei kereshető darabként (GYIK, csomagok árakkal, modulok, szolgáltatások, funkciók, iparágak).
+     * A gyorsítótár kulcsa a tartalom lenyomata (+ áfa, terméknév, kedvezmény, webcím) – bármilyen változásra magától frissül.
      *
      * @return array<int, array<string, mixed>>
      */
     public static function dinamikus(): array
     {
-        $ver = self::dinamikus_verzio();
+        $listak = [];
+
+        foreach (self::TIPUSOK as $tipus) {
+            $listak[$tipus] = SDH_Sales_Tartalom::lista($tipus);
+        }
+
+        $ver = md5((string) wp_json_encode($listak) . '|' . SDH_Sales::afa() . '|' . SDH_Sales::termeknev() . '|' . (string) SDH_Sales::b('eves_kedvezmeny', 0) . '|' . home_url());
         $c   = get_transient('sdh_sales_szikra_dinamikus');
 
         if (is_array($c) && ($c['v'] ?? '') === $ver && is_array($c['d'] ?? null)) {
@@ -305,8 +301,8 @@ final class SDH_Sales_Szikra_Tudas
 
         $ki = [];
 
-        foreach (self::TIPUSOK as $tipus) {
-            foreach (SDH_Sales_Tartalom::lista($tipus) as $e) {
+        foreach ($listak as $tipus => $lista) {
+            foreach ($lista as $e) {
                 $d = self::elem_darab($tipus, $e);
 
                 if ($d !== null) {

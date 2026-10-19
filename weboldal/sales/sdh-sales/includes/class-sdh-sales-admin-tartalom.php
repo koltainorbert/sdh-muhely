@@ -346,10 +346,20 @@ final class SDH_Sales_Admin_Tartalom
             return SDH_Sales_Rest::hiba('Ismeretlen elemtípus.', 400);
         }
 
-        $nyelv = self::nyelv($r);
-        $adat  = SDH_Sales_Szekcio::elem_tisztit($tipus, (array) $r->get_param('adat'));
+        $nyelv   = self::nyelv($r);
+        $adat    = SDH_Sales_Szekcio::elem_tisztit($tipus, (array) $r->get_param('adat'));
+        $eredeti = mb_substr(trim(sanitize_text_field((string) $r->get_param('eredeti'))), 0, 120);
+
+        // Meglévő elem kulcsa nem változik (a kezdőtartalom kulcsa más alakú is lehet, mint amit az új elem kap).
+        if ($eredeti !== '') {
+            if (SDH_Sales_Tartalom::egy($tipus, $eredeti, $nyelv) === null) {
+                return SDH_Sales_Rest::hiba('Nincs ilyen elem.', 404, 'sdh_nincs');
+            }
+
+            $adat[$s['kulcsmezo']] = $eredeti;
+        }
+
         $kulcs = (string) ($adat[$s['kulcsmezo']] ?? '');
-        $eredeti = sanitize_text_field((string) $r->get_param('eredeti'));
 
         if ($kulcs === '') {
             return SDH_Sales_Rest::hiba('A kulcs kötelező (kisbetű, szám, kötőjel).', 422, 'sdh_ervenytelen');
@@ -359,10 +369,6 @@ final class SDH_Sales_Admin_Tartalom
             if (!empty($m['kotelezo']) && trim((string) (is_scalar($adat[$m['k']] ?? null) ? $adat[$m['k']] : '')) === '') {
                 return SDH_Sales_Rest::hiba('„' . $m['c'] . '” kötelező.', 422, 'sdh_ervenytelen');
             }
-        }
-
-        if ($eredeti !== '' && $eredeti !== $kulcs) {
-            return SDH_Sales_Rest::hiba('A kulcs mentés után nem változtatható.', 422, 'sdh_ervenytelen');
         }
 
         $regi = SDH_Sales_Tartalom::egy($tipus, $kulcs, $nyelv);

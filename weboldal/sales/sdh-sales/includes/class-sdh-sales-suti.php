@@ -287,7 +287,10 @@ final class SDH_Sales_Suti
 
     public static function modul_regisztral(): void
     {
-        SDH_Sales_Front::modul('suti', 'assets/front/suti.js', [], [self::class, 'js_adat'], 'assets/front/suti.css');
+        // Csak létező fájlt sorolunk be (hiányzó CSS ne adjon 404-et).
+        $css = is_file(SDH_SALES_DIR . 'assets/front/suti.css') ? 'assets/front/suti.css' : '';
+
+        SDH_Sales_Front::modul('suti', 'assets/front/suti.js', [], [self::class, 'js_adat'], $css);
     }
 
     /** @return array<string, mixed> */

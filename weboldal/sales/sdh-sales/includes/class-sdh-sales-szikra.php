@@ -279,17 +279,17 @@ final class SDH_Sales_Szikra
             return SDH_Sales_Rest::hiba(__('Szikra most nem elérhető. Írj nekünk a kapcsolati űrlapon, és egy kolléga válaszol.', 'sdh-sales'), 503, 'sdh_szikra_ki');
         }
 
-        // Korlátok: percenként, naponta (IP), munkamenetenként.
+        // Korlátok: percenként, munkamenetenként, naponta (IP) – a beszélgetés-korlát előbb, hogy ne fogyassza a napi keretet.
         if (!SDH_Sales_Rest::korlat('szikra_perc', max(1, self::i('szikra.percenkent')), 60)) {
             return SDH_Sales_Rest::hiba(__('Kicsit gyorsan jönnek a kérdések – várj egy percet, és folytassuk.', 'sdh-sales'), 429, 'sdh_korlat');
         }
 
-        if (!SDH_Sales_Rest::korlat('szikra_nap', max(1, self::i('szikra.napi_ip')), DAY_IN_SECONDS)) {
-            return SDH_Sales_Rest::hiba(__('Mára elérted a Szikrával váltható üzenetek számát. Holnap folytathatjuk – vagy írj nekünk, és egy kolléga válaszol.', 'sdh-sales'), 429, 'sdh_korlat');
-        }
-
         if (!SDH_Sales_Rest::korlat('szikra_mm', max(1, self::i('szikra.munkamenet_max')), DAY_IN_SECONDS, $mm)) {
             return SDH_Sales_Rest::hiba(__('Ez a beszélgetés elérte a hosszkorlátot. Kezdj újat, vagy kérj visszahívást egy kollégától.', 'sdh-sales'), 429, 'sdh_korlat');
+        }
+
+        if (!SDH_Sales_Rest::korlat('szikra_nap', max(1, self::i('szikra.napi_ip')), DAY_IN_SECONDS)) {
+            return SDH_Sales_Rest::hiba(__('Mára elérted a Szikrával váltható üzenetek számát. Holnap folytathatjuk – vagy írj nekünk, és egy kolléga válaszol.', 'sdh-sales'), 429, 'sdh_korlat');
         }
 
         if (self::keret_elfogyott()) {

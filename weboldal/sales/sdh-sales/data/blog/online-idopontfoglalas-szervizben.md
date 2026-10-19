@@ -100,6 +100,21 @@ A leggyakoribb kérdés: „miért nem foglalható ez az időpont, pedig ráér�
 
 A szabadság idejére érdemes időponthoz kötött eseményt felvenni, vagy kikapcsolni a foglalást.
 
+## Adatvédelem a foglalásnál
+
+A foglalóoldal nyilvános, és személyes adatot gyűjt. Ezért:
+
+- csak a szükséges adatokat kérd (név, telefon, e-mail, készülék, hiba),
+- az adatkezelési hozzájárulás legyen külön, nem előre bejelölt jelölőnégyzet,
+- a tájékoztató linkje legyen ott a jelölőnégyzet mellett,
+- a foglalás adatai ugyanabban a rendszerben maradjanak, ahol az ügyfelek, és ha az ügyfél kéri az adatai törlését, a foglalásai is törlődjenek.
+
+A {termeknev} anonimizálása az ügyfélhez kötött naptárbejegyzéseket (online foglalásokat) is törli.
+
+## Foglalás és munkalap
+
+A foglalás nem munkalap. Amikor az ügyfél megérkezik, a foglalásból indul a felvétel: a rendszer a telefonszám alapján felismeri, ha már ügyfél, így az adatait nem kell újra beírni. A foglaláskor megadott készülék és hiba segít, hogy a pultos felkészülten fogadja.
+
 ## Ellenőrzőlista
 
 - Foglalási típusok és hosszok meghatározva
