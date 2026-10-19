@@ -5,6 +5,27 @@
  */
 require_once __DIR__ . '/_keret.php';
 
+if (!function_exists('t_rejtett')) {
+    /**
+     * Rejtés (weboldal/REJTES.md): a modul kimenetében (HTML, JS, JSON, e-mail, ICS, PDF, fejléc) egyik
+     * SDH_Sales_Rejtes::TILTOTT minta sem fordulhat elő.
+     *
+     * @param mixed                $kimenet szöveg, tömb vagy WP_REST_Response (JSON-ként vizsgálva)
+     * @param array<string, mixed> $fejlecek
+     */
+    function t_rejtett($kimenet, string $nev, array $fejlecek = []): void
+    {
+        if ($kimenet instanceof WP_REST_Response) {
+            $fejlecek += $kimenet->get_headers();
+            $kimenet   = $kimenet->get_data();
+        }
+
+        $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+        T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+    }
+}
+
 /** @var array<int, array{mezo: string, xml: string}> az Agentnek küldött kérések */
 $GLOBALS['t26_agent']     = [];
 /** @var array<int, array{to: string, subject: string, message: string, csatolmany: array<string, string>}> */

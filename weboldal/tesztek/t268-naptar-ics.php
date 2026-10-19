@@ -34,7 +34,7 @@ $ki = str_replace("\r\n ", '', $ics); // visszahajtogatás (unfold)
 T::tartalmaz($ki, "DTSTART:20261026T080000Z\r\n", 'DTSTART UTC (DST utáni hétfő 9:00 = 08:00Z)');
 T::tartalmaz($ki, "DTEND:20261026T083000Z\r\n", 'DTEND UTC');
 T::egyezik(1, preg_match('/\r\nDTSTAMP:\d{8}T\d{6}Z\r\n/', $ki), 'DTSTAMP UTC-formátum');
-T::egyezik(1, preg_match('/\r\nUID:(sdh-foglalas-' . $e['id'] . '-[a-f0-9]{12}@[^\r]+)\r\n/', $ki, $m), 'UID formátum');
+T::egyezik(1, preg_match('/\r\nUID:(foglalas-' . $e['id'] . '-[a-f0-9]{12}@[^\r]+)\r\n/', $ki, $m), 'UID formátum');
 $uid = $m[1] ?? '';
 T::tartalmaz(str_replace("\r\n ", '', SDH_Sales_Naptar::ics($f, 'CANCEL')), 'UID:' . $uid . "\r\n", 'UID stabil (lemondásnál ugyanaz)');
 T::egyezik(0, preg_match('/TZID|DTSTART;/', $ki), 'nincs lebegő/TZID-es idő (UTC-vel DST-biztos)');
@@ -91,4 +91,11 @@ T::igaz($r->get_status() === 200 && strpos((string) ($r->get_headers()['Content-
 T::nem_tartalmaz((string) $r->get_data(), 'anna@pelda.hu', 'vevői ICS: nincs benne a saját adatlista (csak a cég)');
 T::egyezik(404, t_latogato(static fn () => t_rest('GET', '/foglalas/ics', ['t' => 'x']))->get_status(), 'ICS rossz tokennel 404');
 
+// Rejtés: az ICS (egyedi, lemondó) és a feed – a kiszolgált fejlécekkel együtt.
+t_rejtett($ics . $c, 'ICS (REQUEST + CANCEL)');
+$r = t_latogato(static fn () => t_rest('GET', '/foglalas/ics', ['t' => $e['token']]));
+t_rejtett((string) $r->get_data(), 'kiszolgált ICS', $r->get_headers());
+T::igaz(!isset($r->get_headers()['X-SDH-Nyers']), 'ICS: nincs árulkodó belső fejléc');
+t_rejtett($feed, 'iCal-feed');
+t_rejtett($uj, 'iCal-feed címe');
 T::vege('t268 ICS + feed');

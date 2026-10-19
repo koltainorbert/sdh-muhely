@@ -39,7 +39,7 @@ final class SDH_Sales_Naptar
         add_action(SDH_Sales::CRON, [self::class, 'cron']);
         add_filter('rest_pre_serve_request', [self::class, 'nyers_kiszolgal'], 10, 4);
         add_shortcode('foglalas', [self::class, 'shortcode']);
-        add_shortcode('sdh_foglalas', [self::class, 'shortcode']); // régi név (meglévő tartalomhoz); a kimenet ugyanaz
+        add_shortcode('sdh_foglalas', [self::class, 'shortcode']); // régi név: egy régi tartalomban se maradjon nyers szövegként
         add_action('init', [self::class, 'front_regisztral'], 6);
 
         SDH_Sales_Rest::ut('/foglalas/savok', 'GET', [self::class, 'rest_savok'], 'nyilvanos', ['fogl_savok', 120, 60]);
@@ -1193,7 +1193,7 @@ final class SDH_Sales_Naptar
 
         $h = $valasz->get_headers();
 
-        if (empty($h['X-SDH-Nyers']) || !is_string($valasz->get_data())) {
+        if (empty($h['X-Nyers']) || !is_string($valasz->get_data())) {
             return $kiszolgalva;
         }
 
@@ -1205,7 +1205,7 @@ final class SDH_Sales_Naptar
     private static function ics_valasz(string $ics, string $fajlnev, bool $letolt): WP_REST_Response
     {
         $v = new WP_REST_Response($ics, 200);
-        $v->header('X-SDH-Nyers', '1');
+        $v->header('X-Nyers', '1');
         $v->header('Content-Type', 'text/calendar; charset=utf-8');
         $v->header('Content-Disposition', ($letolt ? 'attachment' : 'inline') . '; filename="' . $fajlnev . '"');
 

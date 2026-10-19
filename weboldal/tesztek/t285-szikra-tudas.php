@@ -2,6 +2,17 @@
 /** t285 – Szikra tudásbázis: építés fejlesztői részek nélkül, magyar normalizálás, BM25 (ékezettel / nélkül), tartalom-tár. */
 require __DIR__ . '/_keret.php';
 
+/** Rejtés (weboldal/REJTES.md): a kimenetben egyik SDH_Sales_Rejtes::TILTOTT minta sem lehet. */
+$rejtett = static function ($kimenet, string $nev, array $fejlecek = []): void {
+    if ($kimenet instanceof WP_REST_Response) {
+        $fejlecek += $kimenet->get_headers();
+        $kimenet   = $kimenet->get_data();
+    }
+    $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+    T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+};
+
 $mappa = SDH_Sales_Szikra_Tudas::mappa();
 $gyoker = dirname(__DIR__, 2);
 
@@ -11,7 +22,7 @@ exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(dirname(__DIR__) . '/eszk
 T::egyezik(0, $kod, 'építő lefut (' . implode(' ', $ki) . ')');
 $idx = json_decode((string) @file_get_contents($tmp . '/_index.json'), true);
 T::igaz(is_array($idx) && $idx['darab_ossz'] > 500, 'építés: sok darab (' . (int) ($idx['darab_ossz'] ?? 0) . ')');
-T::igaz(in_array('27-sdh-belso.md', (array) ($idx['kihagyva']['fejezet'] ?? []), true), 'kihagyva: 27-sdh-belso.md');
+T::igaz(in_array('27-belso.md', (array) ($idx['kihagyva']['fejezet'] ?? []), true), 'kihagyva: a fejlesztő belső fejezete (27-…-belso.md, az indexben név nélkül)');
 T::igaz(in_array('21-telepites.md', (array) ($idx['kihagyva']['fejezet'] ?? []), true), 'kihagyva: csak fejlesztőnek szóló fejezet (21-telepites)');
 T::igaz(in_array('24-modulok.md', (array) ($idx['kihagyva']['fejezet'] ?? []), true), 'kihagyva: csak fejlesztőnek szóló fejezet (24-modulok)');
 T::igaz((int) ($idx['kihagyva']['alcim'] ?? 0) >= 5, 'kihagyva: [fejlesztő] alcímek (' . (int) ($idx['kihagyva']['alcim'] ?? 0) . ')');
@@ -28,6 +39,8 @@ foreach ([$tmp, $mappa] as $m) {
     T::igaz(preg_match('/\bplugin|github|wp-config|wp-admin|SDH_MUHELY_|Gigatel/iu', $osszes) !== 1, 'nincs plugin / GitHub / belső kódnév / SDH-belső: ' . basename($m));
     T::nem_tartalmaz($osszes, 'SDH Műhely', 'a terméknév token, nem beégetve: ' . basename($m));
     T::nem_tartalmaz($osszes, 'Túra:', 'túra-szakaszok nélkül: ' . basename($m));
+    T::igaz(preg_match('/sdh/i', $osszes) !== 1, 'nincs „SDH” semmilyen formában (index is): ' . basename($m));
+    $rejtett($osszes, 'tudásbázis (' . basename($m) . ')');
 }
 T::nem_tartalmaz((string) file_get_contents($mappa . '/munkalapok.json'), 'Végső mentőöv', 'a [fejlesztő] alcím tartalma sincs benne');
 T::tartalmaz((string) file_get_contents($mappa . '/munkalapok.json'), 'Szerepkörök és jogok', 'a jelölés utáni szakasz megmaradt');
@@ -92,4 +105,5 @@ $r = SDH_Sales_Szikra_Tudas::keres('Próba Pro csomag ára', 1);
 T::tartalmaz((string) ($r[0]['szoveg'] ?? ''), SDH_Sales::ft(15000), 'árváltozás azonnal látszik (gyorsítótár-verzió)');
 T::igaz(SDH_Sales_Szikra_Tudas::keres('zebracsik', 1)[0]['id'] === 'modul:t285-modul', 'modul a tudásban (ékezet nélkül is)');
 
+$rejtett(SDH_Sales_Szikra_Tudas::keres('mentés licenckulcs adminisztrátor csomag', 10), 'tudás-találatok (a modellnek átadott szöveg)');
 T::vege('t285 szikra-tudás');

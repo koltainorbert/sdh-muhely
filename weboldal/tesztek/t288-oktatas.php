@@ -2,6 +2,17 @@
 /** t288 – oktató mód: leckék a tárból, kvíz szerveroldali értékeléssel, haladás API (user meta), fiók-szűrő, tanúsítvány + ellenőrző kód, Szikra oktató mód. */
 require __DIR__ . '/_keret.php';
 
+/** Rejtés (weboldal/REJTES.md): a kimenetben egyik SDH_Sales_Rejtes::TILTOTT minta sem lehet. */
+$rejtett = static function ($kimenet, string $nev, array $fejlecek = []): void {
+    if ($kimenet instanceof WP_REST_Response) {
+        $fejlecek += $kimenet->get_headers();
+        $kimenet   = $kimenet->get_data();
+    }
+    $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+    T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+};
+
 // Leckék (a data/oktatas.json sémája szerint: {kulcs, modul, cim, cel, lepesek[], kviz[], ido_perc}).
 SDH_Sales_Tartalom::ment('lecke', 't288-a', [
     'kulcs' => 't288-a', 'modul' => 't288kurzus', 'cim' => 'Első munkalap a {termeknev}-ben', 'cel' => 'Felveszel egy munkalapot.', 'ido_perc' => 5,
@@ -118,6 +129,18 @@ $f = (string) file_get_contents(SDH_SALES_DIR . 'assets/front/oktatas.js');
 T::tartalmaz($f, 'localStorage', 'látogatói haladás localStorage-ban');
 T::tartalmaz($f, '/haladas', 'bejelentkezve a REST-tel szinkronizál');
 T::igaz(preg_match('/\b(alert|confirm)\s*\(/', $f) !== 1 && strpos($f, 'jQuery') === false, 'nincs alert/confirm/jQuery');
-T::tartalmaz(SDH_Sales_Oktatas::shortcode(['modul' => 't288kurzus']), 'data-sdh="oktatas"', 'csatolási pont');
+T::tartalmaz(SDH_Sales_Oktatas::shortcode(['modul' => 't288kurzus']), 'data-modul="oktatas"', 'csatolási pont');
+T::tartalmaz($f, 'window.APP_OKTATAS', 'adat: window.APP_OKTATAS');
+T::tartalmaz($f, 'window.APP.szikra', 'Szikra a közös APP-objektumon');
+T::tartalmaz(SDH_Sales_Oktatas::tanusitvany_url('AAAA-BBBB-CCCC'), '?tanusitvany=', 'tanúsítvány-link semleges paraméterrel');
+// Rejtés: JS, adat, shortcode, tanúsítvány-oldal, REST-válaszok.
+$rejtett($f, 'oktatas.js tartalma');
+$rejtett($js, 'APP_OKTATAS adat');
+$rejtett(SDH_Sales_Oktatas::shortcode(['modul' => 't288kurzus']) . do_shortcode('[oktatas modul="t288kurzus"]'), 'shortcode HTML');
+$rejtett($h, 'nyomtatható tanúsítvány');
+$rejtett(SDH_Sales_Oktatas::tanusitvany_html(null), 'érvénytelen tanúsítvány oldala');
+$rejtett(t_latogato(static fn () => t_rest('POST', '/oktatas/kviz', ['lecke' => 't288-a', 'valaszok' => [1, [1, 0]]])), 'kvíz REST-válasz');
+$rejtett(t_latogato(static fn () => t_rest('POST', '/oktatas/kviz', ['lecke' => 'nincs-ilyen', 'valaszok' => []])), 'kvíz hibaválasz');
+$rejtett(t_latogato(static fn () => t_rest('GET', '/oktatas/tanusitvany', ['kod' => $kod])), 'tanúsítvány-ellenőrzés REST');
 
 T::vege('t288 oktatás');

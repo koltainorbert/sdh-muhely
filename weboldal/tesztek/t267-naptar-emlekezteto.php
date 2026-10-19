@@ -56,4 +56,9 @@ SDH_Sales_Naptar::cron();
 T::egyezik(1, count(array_filter($GLOBALS['t26_levelek'], static fn ($x) => $x['to'] === 'cron@pelda.hu')), 'SDH_Sales::CRON: egyszer küld');
 T::egyezik(2, (int) SDH_Sales_Naptar::egy($cid)['emlekezteto_kuldve'], 'cron: 1 órás jelölés');
 
+// Rejtés: az emlékeztető levelek.
+T::igaz($GLOBALS['t26_levelek'] !== [], 'van emlékeztető levél a rejtés-ellenőrzéshez');
+foreach ($GLOBALS['t26_levelek'] as $i => $l) {
+    t_rejtett($l['subject'] . "\n" . $l['message'] . "\n" . implode("\n", $l['csatolmany']), 'emlékeztető #' . ($i + 1));
+}
 T::vege('t267 emlékeztetők');

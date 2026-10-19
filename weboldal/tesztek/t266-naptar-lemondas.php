@@ -55,7 +55,7 @@ T::igaz((string) $uf['tipus'] === 'demo' && (string) $uf['email'] === 'anna@peld
 T::egyezik('2026-10-22 12:00:00', (string) $uf['kezdet'], 'új időpont (14:00 helyi)');
 $l = $GLOBALS['t26_levelek'][0] ?? [];
 T::igaz(isset($l['csatolmany']['idopont.ics'], $l['csatolmany']['regi-idopont-torlese.ics']), 'áthelyezés: új ICS + régi törlő ICS');
-T::tartalmaz($l['csatolmany']['regi-idopont-torlese.ics'] ?? '', 'sdh-foglalas-' . $a['id'] . '-', 'törlő ICS: a régi UID-ja');
+T::tartalmaz($l['csatolmany']['regi-idopont-torlese.ics'] ?? '', 'UID:foglalas-' . $a['id'] . '-', 'törlő ICS: a régi UID-ja');
 $ido = array_column(SDH_Sales_Naptar::savok('demo', '2026-10-21', '2026-10-21', $most)['2026-10-21'] ?? [], 'utc');
 T::igaz(in_array('2026-10-21T07:00:00Z', $ido, true), 'áthelyezés: régi sáv felszabadult');
 T::igaz(is_wp_error(SDH_Sales_Naptar::foglal(['atfoglal' => $a['token'], 'kezdet' => '2026-10-22T13:00:00Z'], $most)), 'régi token már nem helyez át');
@@ -76,4 +76,10 @@ T::igaz(in_array(t_latogato(static fn () => t_rest('POST', '/admin/foglalasok/' 
 // napló
 T::igaz(SDH_Sales_Naplo::lista(['tipus' => 'foglalas', 'kereses' => 'Lemondva'])['ossz'] >= 2, 'lemondások naplózva');
 
+// Rejtés: a lemondás / áthelyezés levelei és REST-válaszai.
+foreach ($GLOBALS['t26_levelek'] as $i => $l) {
+    t_rejtett($l['subject'] . "\n" . $l['message'] . "\n" . implode("\n", $l['csatolmany']), 'levél #' . ($i + 1));
+}
+t_rejtett(t_latogato(static fn () => t_rest('GET', '/foglalas/adat', ['t' => $uj['token']])), 'REST foglalás-adat');
+t_rejtett(t_latogato(static fn () => t_rest('POST', '/foglalas/lemond', ['token' => 'nincs-ilyen'])), 'REST lemondás hibaválasz');
 T::vege('t266 lemondás + áthelyezés');

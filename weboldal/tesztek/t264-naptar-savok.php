@@ -94,14 +94,16 @@ SDH_Sales::b_ment(['naptar.tipus.support' => []]);
 $r = t_latogato(static fn () => t_rest('GET', '/foglalas/savok', ['tipus' => 'demo', 'tol' => gmdate('Y-m-d'), 'ig' => gmdate('Y-m-d', time() + 14 * DAY_IN_SECONDS)]));
 T::egyezik(200, $r->get_status(), 'REST savok 200');
 $r = rest_get_server()->dispatch((static function () {
-    $q = new WP_REST_Request('GET', '/sdh-sales/v1/foglalas/savok');
+    $q = new WP_REST_Request('GET', '/' . SDH_Sales_Rest::NS . '/foglalas/savok');
     $q->set_query_params(['tipus' => 'demo']);
     return $q;
 })());
-$r = apply_filters('rest_post_dispatch', $r, rest_get_server(), (static function () { $q = new WP_REST_Request('GET', '/sdh-sales/v1/foglalas/savok'); $q->set_route('/sdh-sales/v1/foglalas/savok'); return $q; })());
+$r = apply_filters('rest_post_dispatch', $r, rest_get_server(), (static function () { $q = new WP_REST_Request('GET', '/' . SDH_Sales_Rest::NS . '/foglalas/savok'); $q->set_route('/' . SDH_Sales_Rest::NS . '/foglalas/savok'); return $q; })());
 T::tartalmaz((string) ($r->get_headers()['Cache-Control'] ?? ''), 'no-store', 'REST savok: no-store (cache-biztos)');
 T::egyezik('Europe/Budapest', (string) ($r->get_data()['idozona'] ?? ''), 'REST: időzóna');
 $r = t_latogato(static fn () => t_rest('GET', '/foglalas/savok', ['tipus' => 'nincs']));
 T::egyezik(400, $r->get_status(), 'REST savok: ismeretlen típus 400');
 
+t_rejtett(t_latogato(static fn () => t_rest('GET', '/foglalas/savok', ['tipus' => 'demo'])), 'REST savok (törzs + fejléc)');
+t_rejtett($r, 'REST hibaválasz (ismeretlen típus)');
 T::vege('t264 naptár-sávok');

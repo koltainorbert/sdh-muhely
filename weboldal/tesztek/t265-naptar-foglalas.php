@@ -112,10 +112,14 @@ $tol  = (new DateTimeImmutable('now', new DateTimeZone('Europe/Budapest')))->mod
 $ig   = (new DateTimeImmutable($tol))->modify('+14 days')->format('Y-m-d');
 $sav  = array_values(SDH_Sales_Naptar::savok('support', $tol, $ig))[0][0] ?? null;
 T::igaz($sav !== null, 'van szabad support-sáv');
-$r = t_latogato(static fn () => t_rest('POST', '/foglalas', ['tipus' => 'support', 'kezdet' => $sav['utc'], 'nev' => 'Rest Elek', 'email' => 'rest@pelda.hu']));
+// A front a robotszűrés időbélyegét (_t) küldi (APP_FOGLALAS.vedelem → APP.vedelem); nélküle 400.
+$tok = SDH_Sales_Biztonsag::urlap_token(time() - 30);
+T::egyezik(400, t_latogato(static fn () => t_rest('POST', '/foglalas', ['tipus' => 'support', 'kezdet' => $sav['utc'], 'nev' => 'Rest Elek', 'email' => 'rest@pelda.hu']))->get_status(), 'REST foglalás robotszűrés nélkül: 400');
+$r = t_latogato(static fn () => t_rest('POST', '/foglalas', ['tipus' => 'support', 'kezdet' => $sav['utc'], 'nev' => 'Rest Elek', 'email' => 'rest@pelda.hu', '_t' => $tok]));
 T::egyezik(201, $r->get_status(), 'REST foglalás 201');
 T::igaz(strpos((string) ($r->get_data()['kezelo_url'] ?? ''), 'foglalas=') !== false && strpos((string) ($r->get_data()['ics_url'] ?? ''), '/foglalas/ics') !== false, 'REST: kezelő + ICS link');
-$r2 = t_latogato(static fn () => t_rest('POST', '/foglalas', ['tipus' => 'support', 'kezdet' => $sav['utc'], 'nev' => 'Más Ember', 'email' => 'mas@pelda.hu']));
+t_rejtett($r, 'REST foglalás válasza (kezelő + ICS link)');
+$r2 = t_latogato(static fn () => t_rest('POST', '/foglalas', ['tipus' => 'support', 'kezdet' => $sav['utc'], 'nev' => 'Más Ember', 'email' => 'mas@pelda.hu', '_t' => $tok]));
 T::egyezik(409, $r2->get_status(), 'REST dupla: 409');
 
 // admin lista token nélkül
@@ -124,4 +128,14 @@ T::igaz($a->get_status() === 200 && ($a->get_data()['ossz'] ?? 0) >= 4, 'admin l
 T::igaz(!array_key_exists('token', $a->get_data()['sorok'][0] ?? ['token' => 1]), 'admin lista: token nincs benne');
 T::igaz(in_array(t_latogato(static fn () => t_rest('GET', '/admin/foglalasok'))->get_status(), [401, 403], true), 'admin lista látogatónak tilos');
 
+t_rejtett($r2, 'REST dupla foglalás hibaválasza');
+t_rejtett($a, 'admin foglaláslista');
+// Rejtés: hibaüzenet és a visszaigazoló / értesítő levelek (tárgy, törzs, ICS-csatolmány).
+t_rejtett(SDH_Sales_Naptar::foglal(['kezdet' => '2026-10-23T07:00:00Z'] + $be, $most), 'hibaüzenet (ünnepnap)');
+$GLOBALS['t26_levelek'] = [];
+SDH_Sales_Naptar::foglal(['kezdet' => '2026-10-26T08:00:00Z', 'email' => 'e@pelda.hu'] + $be, $most);
+T::igaz(count($GLOBALS['t26_levelek']) >= 2, 'levelek a rejtés-ellenőrzéshez');
+foreach ($GLOBALS['t26_levelek'] as $i => $l) {
+    t_rejtett($l['subject'] . "\n" . $l['message'] . "\n" . implode("\n", $l['csatolmany']), 'levél #' . ($i + 1) . ' (' . $l['to'] . ')');
+}
 T::vege('t265 foglalás');

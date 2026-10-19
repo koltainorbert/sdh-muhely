@@ -4,6 +4,27 @@
  * A mintaadat a szerződés formátumait követi (data/arak.json, funkciok.json, iparagak.json, gyik.json, blog frontmatter).
  */
 
+if (!function_exists('t_rejtett')) {
+    /**
+     * Rejtés (weboldal/REJTES.md): a modul kimenetében (HTML, JS, JSON, e-mail, ICS, PDF, fejléc) egyik
+     * SDH_Sales_Rejtes::TILTOTT minta sem fordulhat elő.
+     *
+     * @param mixed                $kimenet szöveg, tömb vagy WP_REST_Response (JSON-ként vizsgálva)
+     * @param array<string, mixed> $fejlecek
+     */
+    function t_rejtett($kimenet, string $nev, array $fejlecek = []): void
+    {
+        if ($kimenet instanceof WP_REST_Response) {
+            $fejlecek += $kimenet->get_headers();
+            $kimenet   = $kimenet->get_data();
+        }
+
+        $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+        T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+    }
+}
+
 /** Mintatartalom betöltése (tartalom-tár + oldalak + blog). @return array<string, int> oldal-ID-k slug-útvonal szerint */
 function t_seo_minta(): array
 {

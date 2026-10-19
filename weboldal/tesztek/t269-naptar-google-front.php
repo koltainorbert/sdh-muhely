@@ -67,16 +67,18 @@ $r = t_rest('POST', '/admin/naptar/google');
 T::egyezik(200, $r->get_status(), 'admin Google-próba');
 
 // --- front ---
-$html = do_shortcode('[sdh_foglalas tipus="support"]');
-T::tartalmaz($html, 'data-sdh="foglalas"', 'shortcode: DOM-szerződés');
+$html = do_shortcode('[foglalas tipus="support"]');
+T::tartalmaz($html, 'data-modul="foglalas"', 'shortcode: DOM-szerződés');
+T::tartalmaz(do_shortcode('[sdh_foglalas tipus="support"]'), 'data-modul="foglalas"', 'régi shortcode-név: ugyanaz a kimenet (nem marad nyers szöveg)');
 T::tartalmaz($html, 'data-tipus="support"', 'shortcode: típus');
 T::igaz(SDH_Sales_Front::kell('foglalas'), 'shortcode igényli a modult');
 ob_start();
 SDH_Sales_Front::kiir();
 ob_end_clean();
-T::igaz(wp_script_is('sdh-sales-foglalas', 'enqueued'), 'foglalas.js betöltve');
-$inline = implode('', (array) wp_scripts()->get_data('sdh-sales-foglalas', 'before'));
-T::tartalmaz($inline, 'window.SDH_FOGLALAS=', 'adat: window.SDH_FOGLALAS');
+T::igaz(wp_script_is('p-foglalas', 'enqueued'), 'foglalas.js betöltve (p-foglalas)');
+$inline = implode('', (array) wp_scripts()->get_data('p-foglalas', 'before'));
+T::tartalmaz($inline, 'window.APP_FOGLALAS=', 'adat: window.APP_FOGLALAS');
+T::tartalmaz($inline, '"vedelem"', 'adat: robotszűrés (vedelem)');
 T::tartalmaz($inline, '"tipusok"', 'adat: típusok');
 T::nem_tartalmaz($inline, '{termeknev}', 'adat: token cserélve');
 
@@ -90,5 +92,11 @@ T::tartalmaz($js, "'H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'", 'JS: hétfővel kezd
 T::tartalmaz($js, "role: 'grid'", 'JS: rács-szerep (akadálymentes)');
 T::tartalmaz($js, 'ArrowDown', 'JS: billentyűzetes navigáció');
 T::tartalmaz($js, "'aria-live': 'polite'", 'JS: élő régió');
+T::tartalmaz($kod, '[data-modul="foglalas"]', 'JS: data-modul csatolás');
+T::tartalmaz($kod, 'window.APP.vedelem', 'JS: közös robotszűrés (APP.vedelem)');
+// Rejtés: a JS-fájl, a beágyazott adat és a shortcode HTML-je.
+t_rejtett($js, 'foglalas.js tartalma');
+t_rejtett($inline, 'APP_FOGLALAS adat');
+t_rejtett($html, 'shortcode HTML');
 
 T::vege('t269 Google + front');

@@ -2,6 +2,17 @@
 /** t287 – Szikra korlátai és adatai: bemenet-ellenőrzés, napi / munkamenet-korlát (429), havi keret, lead csak hozzájárulással, napló-megőrzés, front. */
 require __DIR__ . '/_keret.php';
 
+/** Rejtés (weboldal/REJTES.md): a kimenetben egyik SDH_Sales_Rejtes::TILTOTT minta sem lehet. */
+$rejtett = static function ($kimenet, string $nev, array $fejlecek = []): void {
+    if ($kimenet instanceof WP_REST_Response) {
+        $fejlecek += $kimenet->get_headers();
+        $kimenet   = $kimenet->get_data();
+    }
+    $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+    T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+};
+
 global $wpdb;
 SDH_Sales::titkos_ment(SDH_Sales_Szikra::TITOK, 'sk-ant-teszt-0123456789abcdef');
 SDH_Sales::b_ment(['szikra.aktiv' => true, 'szikra.havi_keret' => 1.0, 'szikra.ar_be_mtok' => 2.0, 'szikra.ar_ki_mtok' => 10.0, 'szikra.napi_ip' => 5, 'szikra.munkamenet_max' => 3, 'szikra.percenkent' => 100]);
@@ -25,7 +36,8 @@ T::egyezik(400, $kuld('rossz!', 'Szia')->get_status(), 'érvénytelen munkamenet
 T::egyezik(400, $kuld($mm(), '   ')->get_status(), 'üres üzenet → 400');
 $r = $kuld($mm(), str_repeat('a', SDH_Sales_Szikra::i('szikra.max_bemenet') + 1));
 T::egyezik(400, $r->get_status(), 'túl hosszú üzenet → 400');
-T::egyezik('sdh_szikra_hossz', $r->get_data()['code'] ?? '', 'hossz-hibakód');
+T::egyezik('szikra_hossz', $r->get_data()['code'] ?? '', 'hossz-hibakód');
+$rejtett($r, 'hibaválasz (túl hosszú)');
 SDH_Sales::b_ment(['szikra.aktiv' => false]);
 T::egyezik(503, $kuld($mm(), 'Szia')->get_status(), 'kikapcsolva → 503');
 SDH_Sales::b_ment(['szikra.aktiv' => true]);
@@ -56,7 +68,8 @@ SDH_Sales::b_ment(['szikra.havi_keret' => 0.16]);
 $kuld($mm(), 'Még egy');
 $r = $kuld($mm(), 'És még egy');
 T::egyezik(429, $r->get_status(), 'keret elfogyott → 429');
-T::egyezik('sdh_szikra_keret', $r->get_data()['code'] ?? '', 'keret-hibakód');
+T::egyezik('szikra_keret', $r->get_data()['code'] ?? '', 'keret-hibakód');
+$rejtett($r, 'hibaválasz (keret)');
 T::tartalmaz((string) $r->get_data()['message'], 'pihenőt tart', 'udvarias keret-üzenet');
 T::egyezik(6, $hivas, 'a keret felett nincs API-hívás');
 update_option(SDH_Sales_Szikra::OPT_HONAP, ['honap' => '2000-01', 'be' => 9e9, 'ki' => 9e9, 'koltseg' => 9e9]);
@@ -131,7 +144,7 @@ T::nem_tartalmaz((string) wp_json_encode($js), 'sk-ant', 'a kulcs nincs a front 
 ob_start();
 SDH_Sales_Szikra::lab();
 $lab = (string) ob_get_clean();
-T::tartalmaz($lab, 'data-sdh="szikra"', 'lebegő csatolási pont a láblécben');
+T::tartalmaz($lab, 'data-modul="szikra"', 'lebegő csatolási pont a láblécben');
 T::igaz(SDH_Sales_Front::kell('szikra'), 'a szikra modul igényelve');
 $cs = apply_filters('sdh_sales_admin_beallitas_csoportok', []);
 T::igaz(isset($cs['szikra']) && count($cs['szikra']['mezok']) >= 10, 'admin beállítás-csoport regisztrálva');
@@ -141,6 +154,12 @@ T::tartalmaz($js_fajl, 'sessionStorage', 'munkamenet sessionStorage-ban');
 T::nem_tartalmaz($js_fajl, 'document.cookie', 'nincs süti');
 T::igaz(preg_match('/\b(alert|confirm)\s*\(/', $js_fajl) !== 1 && strpos($js_fajl, 'jQuery') === false, 'nincs alert/confirm/jQuery');
 $css = (string) file_get_contents(SDH_SALES_DIR . 'assets/front/szikra.css');
+T::tartalmaz($js_fajl, 'window.APP_SZIKRA', 'adat: window.APP_SZIKRA');
+T::tartalmaz($js_fajl, '[data-modul="szikra"]', 'csatolás: data-modul');
+$rejtett($js_fajl, 'szikra.js tartalma');
+$rejtett($css, 'szikra.css tartalma');
+$rejtett($js, 'APP_SZIKRA adat');
+$rejtett($lab, 'lábléc-csatolási pont HTML');
 T::igaz(preg_match('/#[0-9a-f]{3,8}\b|rgba?\(/i', $css) !== 1, 'a CSS csak --s-* változókat használ színre');
 SDH_Sales::b_ment(['szikra.aktiv' => false]);
 ob_start();

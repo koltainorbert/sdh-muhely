@@ -24,9 +24,9 @@
             "id": "licenc#3",
             "cim": "Lépésről lépésre: a licenckulcs megadása",
             "horgony": "lepesrol-lepesre-a-licenckulcs-megadasa",
-            "szoveg": "1. Nyisd meg: **Beállítások › Rendszer › Licenc**.\n2. **A központ címe**: a forgalmazótól kapott cím (például `https://kozpont.pelda.hu/`).\n3. **Licenckulcs**: `SDH-XXXX-XXXX-XXXX-XXXX` alakú, a forgalmazótól kaptad.\n4. **Mentés**. A rendszer azonnal jelentkezik a központnál.\n5. Az **Állapot** sorban látod: *Aktív*, a vevő neve, és meddig érvényes.",
-            "t": "licenc tamogatasi hozzafer lep lep licenckulcs megadasa lep lep licenckulcs megadasa nyisd beallit rendszer licenc kozp cime forgalmazo kap cim peldaul https kozp pelda hu licenckulcs sdh xxxx xxxx xxxx xxxx alaku forgalmazo kap men rendszer azonnal jelentkezi kozpontnal allap sor lat aktiv ugyfel neve medd erveny",
-            "h": 47
+            "szoveg": "1. Nyisd meg: **Beállítások › Rendszer › Licenc**.\n2. **A központ címe**: a forgalmazótól kapott cím (például `https://kozpont.pelda.hu/`).\n3. **Licenckulcs**: `XXXX-XXXX-XXXX-XXXX` alakú, a forgalmazótól kaptad.\n4. **Mentés**. A rendszer azonnal jelentkezik a központnál.\n5. Az **Állapot** sorban látod: *Aktív*, a vevő neve, és meddig érvényes.",
+            "t": "licenc tamogatasi hozzafer lep lep licenckulcs megadasa lep lep licenckulcs megadasa nyisd beallit rendszer licenc kozp cime forgalmazo kap cim peldaul https kozp pelda hu licenckulcs xxxx xxxx xxxx xxxx alaku forgalmazo kap men rendszer azonnal jelentkezi kozpontnal allap sor lat aktiv ugyfel neve medd erveny",
+            "h": 46
         },
         {
             "id": "licenc#4",

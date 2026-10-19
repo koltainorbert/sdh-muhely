@@ -9,8 +9,8 @@
  *   - a `## Cím [fejlesztő]` szakaszokat, a `### Alcím [fejlesztő]` részeket (a következő ###-ig vagy a szakasz végéig);
  *   - a `## Túra: …` szakaszokat (CSS-szelektorok, a webhelyen értelmetlenek);
  *   - minden bekezdést / listapontot, amely elárulja a hátteret (WordPress, wp-, plugin, bővítmény, LocalWP, GitHub, git,
- *     .php) vagy belső kódnevet tartalmaz (define(, SDH_…, includes/).
- * A „SDH Műhely” név helyére a {termeknev} token kerül.
+ *     .php) vagy belső kódnevet tartalmaz (define(, SDH_…, includes/), vagy a fejlesztő nevét bármilyen formában (SDH, sdh-…, --sdh-…).
+ * A „SDH Műhely” név helyére a {termeknev} token kerül, a licenckulcs-minta előtag nélküli (az előtag a Központ beállítása).
  *
  * Kimenet: data/tudas/<kulcs>.json – {kulcs, cim, csoport, osszefoglalo, darabok:[{id, cim, horgony, szoveg, t, h}]}
  *          data/tudas/_index.json  – {verzio, forras_verzio, fejezetek:[…], darab_ossz, kihagyva:{…}}
@@ -42,10 +42,10 @@ require_once $gyoker . '/weboldal/sales/sdh-sales/includes/class-sdh-sales-szikr
 const SZIKRA_DARAB_MAX = 1800;
 const SZIKRA_KIHAGY_FAJL = ['27-sdh-belso.md', 'OLVASSEL.md'];
 
-/** Elárulja-e a hátteret (a Műhely SDH_Muhely_Rejtes::arulkodo() szabálya + belső kódnevek). */
+/** Elárulja-e a hátteret (a Műhely SDH_Muhely_Rejtes::arulkodo() szabálya + belső kódnevek + a fejlesztő neve: weboldal/REJTES.md). */
 function szikra_arulkodo(string $s): bool
 {
-    return preg_match('/wordpress|\bwp-|\bWP\b|plugin|(?<![\p{L}])bővítmény|localwp|local by flywheel|\.php\b|wp_|github|\bgit\b|define\(|\bSDH_[A-Z_]{3,}|includes\/|wp-config|wp-content|\[fejlesztő\]|\(fejlesztő\)/iu', $s) === 1;
+    return preg_match('/wordpress|\bwp-|\bWP\b|plugin|(?<![\p{L}])bővítmény|localwp|local by flywheel|\.php\b|wp_|github|\bgit\b|define\(|\bSDH_[A-Z_]{3,}|includes\/|wp-config|wp-content|\[fejlesztő\]|\(fejlesztő\)|sdh/iu', $s) === 1;
 }
 
 /** @return array{0: array<string, string>, 1: string} */
@@ -76,6 +76,7 @@ function szikra_jeloles(string $s): string
     $s = preg_replace('/^>\s*\*\*(Tipp|Figyelem|Fontos|Példa):\*\*\s*/mu', '$1: ', $s) ?? $s;
     $s = preg_replace('/^>\s?/mu', '', $s) ?? $s;
     $s = str_replace(['SDH Műhely', 'SDH műhely'], '{termeknev}', $s);
+    $s = preg_replace('/\bSDH-(XXXX-XXXX-XXXX-XXXX)\b/u', '$1', $s) ?? $s;            // licenckulcs-minta előtag nélkül
 
     return $s;
 }
@@ -221,7 +222,7 @@ foreach ($fajlok as $f) {
 
     if (in_array($nev, SZIKRA_KIHAGY_FAJL, true) || ($fej['csak'] ?? '') === 'fejleszto' || empty($fej['kulcs'])) {
         if ($nev !== 'OLVASSEL.md') {
-            $kihagy['fejezet'][] = $nev;
+            $kihagy['fejezet'][] = (string) preg_replace('/sdh[-_]?/i', '', $nev); // az index is a tudásbázis része: név nélkül
         }
 
         continue;

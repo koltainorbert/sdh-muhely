@@ -157,4 +157,6 @@ $d3  = t26_dom($x3);
 T::egyezik('A & B <c> "d" (3 db)', $d3->getElementsByTagName('megnevezes')->item(0)->textContent ?? '', 'escapelés + nem osztható nettó egy sorba');
 T::egyezik('1000', $d3->getElementsByTagName('nettoErtek')->item(0)->textContent ?? '', 'nem osztható nettó megmarad');
 
+// Rejtés: a Számlázz.hu-nak küldött XML (a vevő számláján is megjelenő mezőkkel) nem árulkodik.
+t_rejtett(SDH_Sales_Szamlazz::xml('dijbekero', SDH_Sales_Szamlazz::rendeles($id)) . SDH_Sales_Szamlazz::xml('vegszamla', SDH_Sales_Szamlazz::rendeles($id)), 'számla-XML (díjbekérő + végszámla)');
 T::vege('t260 számla-XML');

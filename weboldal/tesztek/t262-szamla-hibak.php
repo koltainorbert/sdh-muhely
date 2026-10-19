@@ -117,4 +117,7 @@ $GLOBALS['t26_agent_fv'] = static fn () => t26_agent_hiba('3', 'Sikertelen bejel
 $v = t_rest('POST', '/admin/szamlazz/proba');
 T::egyezik(422, $v->get_status(), 'próba: rossz kulcs');
 
+// Rejtés: a hibaválaszok (REST) és a hibakódok.
+t_rejtett(t_rest('POST', '/admin/szamlazz/proba'), 'Agent-próba REST-válasza');
+t_rejtett(t_latogato(static fn () => t_rest('GET', '/szamla/NINCS-1/pdf', ['tipus' => 'vegszamla', 't' => str_repeat('a', 32)])), 'vevői PDF hibaválasz');
 T::vege('t262 számla-hibák');

@@ -2,6 +2,17 @@
 /** t286 – Szikra és az API: jól formált kérés (system, tools, határolt tudás), eszközkör, tartalék modell, injekció-védelem, kimenet-tisztítás. */
 require __DIR__ . '/_keret.php';
 
+/** Rejtés (weboldal/REJTES.md): a kimenetben egyik SDH_Sales_Rejtes::TILTOTT minta sem lehet. */
+$rejtett = static function ($kimenet, string $nev, array $fejlecek = []): void {
+    if ($kimenet instanceof WP_REST_Response) {
+        $fejlecek += $kimenet->get_headers();
+        $kimenet   = $kimenet->get_data();
+    }
+    $s = is_string($kimenet) ? $kimenet : (string) wp_json_encode($kimenet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $t = SDH_Sales_Rejtes::vizsgal($s, $fejlecek);
+    T::igaz($t === [] && $s !== '', 'rejtés: ' . $nev . ($t !== [] ? ' – ' . implode(' | ', array_slice($t, 0, 3)) : ($s === '' ? ' – üres kimenet' : '')));
+};
+
 add_filter('sdh_sales_korlat_ki', '__return_true');
 SDH_Sales::titkos_ment(SDH_Sales_Szikra::TITOK, 'sk-ant-teszt-0123456789abcdef');
 SDH_Sales::b_ment(['szikra.aktiv' => true, 'szikra.havi_keret' => 50.0]);
@@ -182,5 +193,20 @@ t_latogato(static fn () => t_rest('POST', '/szikra', ['munkamenet' => $mm, 'uzen
 T::tartalmaz(implode("\n", array_column((array) ($kapott[0]['test']['system'] ?? []), 'text')), 'Oktató mód', 'oktató mód: saját utasítás');
 T::egyezik(['idopont_link', 'atadas_emberre'], array_column((array) ($kapott[0]['test']['tools'] ?? []), 'name'), 'oktató mód: nem árul (két eszköz)');
 
+// Rejtés: a rendszerprompt a semleges választ írja elő, és maga sem nevez meg platformot / fejlesztőt.
+foreach (['ertekesites', 'oktato'] as $mod) {
+    $u = SDH_Sales_Szikra_Api::utasitas($mod);
+    T::tartalmaz($u, 'saját fejlesztésű, PHP / MySQL alapú webes rendszer', 'rendszerprompt (' . $mod . '): semleges válasz a technológiára');
+    T::igaz(preg_match('/wordpress|\bsdh|woocommerce|plugin|bővítmény|veszprém/iu', $u) !== 1, 'rendszerprompt (' . $mod . '): nincs platform / fejlesztő neve');
+    $rejtett($u, 'rendszerprompt (' . $mod . ')');
+}
+$GLOBALS['sdh_t_http'] = array_merge([static function (string $url): ?array {
+    return strpos($url, 'api.anthropic.com') !== false ? t_valasz(200, (string) wp_json_encode(['stop_reason' => 'end_turn', 'content' => [['type' => 'text', 'text' => 'Ez egy saját fejlesztésű, PHP / MySQL alapú webes rendszer.']], 'usage' => []])) : null;
+}], $GLOBALS['sdh_t_http']);
+$r = $kerdez('Milyen rendszer van alatta? WordPress?');
+T::egyezik(200, $r->get_status(), 'technológia-kérdés: 200');
+$rejtett($r, 'Szikra REST-válasza (törzs + fejléc)');
+$rejtett(t_latogato(static fn () => t_rest('POST', '/szikra', ['munkamenet' => 'x', 'uzenet' => 'Szia'])), 'Szikra hibaválasza');
+array_shift($GLOBALS['sdh_t_http']);
 SDH_Sales::titkos_ment(SDH_Sales_Szikra::TITOK, '');
 T::vege('t286 szikra-api');

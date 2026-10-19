@@ -1,4 +1,5 @@
 <?php
+header_remove('X-Powered-By');
 /**
  * Fejlesztői útválasztó a `php -S`-hez: a rejtés útvonal-álneveit (static/m, static/t, media, static, lib) a valódi
  * mappákra képezi, a valódi rendszer-útvonalakat közvetlenül 404-gyel válaszolja (mint élesben a webszerver-szabály),

@@ -587,7 +587,8 @@ final class SDH_Sales_Rejtes
 
         uksort($par, static fn ($a, $b) => strlen($b) <=> strlen($a));
 
-        return strtr($s, $par);
+        // A záró perjel nélküli „…/wp-content/uploads” (pl. wp_upload_dir) a tartalom-álnévre fut: utólag a médiára.
+        return strtr(strtr($s, $par), ['/static/uploads' => '/media', '\\/static\\/uploads' => '\\/media', '/static/plugins/' => '/static/m/', '/static/themes/' => '/static/t/']);
     }
 
     /** @param array<string, mixed> $u */

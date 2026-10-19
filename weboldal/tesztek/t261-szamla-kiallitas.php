@@ -110,4 +110,10 @@ T::igaz(!SDH_Sales_Szamlazz::automatikus(), 'automatikus kikapcsolható');
 $v = t_rest('POST', '/admin/szamla/' . $id4 . '/ujra', ['tipus' => 'dijbekero']);
 T::nem_tartalmaz((string) wp_json_encode($v->get_data()), 'eleskulcs999', 'kulcs nincs a REST-válaszban');
 
+// Rejtés: a PDF-ek, a fájlútvonal (uploads/portal-szamla) és az Agentnek ment kérések.
+T::egyezik('portal-szamla', SDH_Sales_Szamlazz::MAPPA, 'PDF-mappa semleges néven');
+t_rejtett((string) file_get_contents((string) SDH_Sales_Szamlazz::dijbekero_pdf($id)), 'díjbekérő PDF');
+T::tartalmaz((string) $ut, '/uploads/portal-szamla/', 'PDF a semleges nevű feltöltési mappában');
+t_rejtett(basename((string) $ut), 'PDF fájlnév');
+t_rejtett(implode("\n", array_column($GLOBALS['t26_agent'], 'xml')), 'Agent-kérések XML-je');
 T::vege('t261 számla-kiállítás');

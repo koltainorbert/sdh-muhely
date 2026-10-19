@@ -1520,16 +1520,24 @@ final class SDH_Sales_Seo
         }
 
         $ki[] = $alap . '/' . rest_get_url_prefix() . '/' . SDH_Sales_Rest::NS . '/';
-        $ki[] = $alap . '/' . rest_get_url_prefix() . '/sdh-sales/';
 
         return array_values(array_unique((array) apply_filters('sdh_sales_robots_tiltott', $ki)));
     }
 
-    /** @return array<int, string> oldaltérkép-URL-ek */
+    /**
+     * Oldaltérkép-URL-ek. Rejtéssel (alap) a saját /sitemap.xml (SDH_Sales_Rejtes::sitemap; a core oldaltérképe ki van
+     * kapcsolva, a címe árulkodó lenne).
+     *
+     * @return array<int, string>
+     */
     public static function sitemapok(): array
     {
         if (self::rank_math()) {
             return [home_url('/sitemap_index.xml')];
+        }
+
+        if (class_exists('SDH_Sales_Rejtes') && SDH_Sales_Rejtes::be('aktiv')) {
+            return [home_url('/sitemap.xml')];
         }
 
         return function_exists('wp_sitemaps_get_server') && wp_sitemaps_get_server()->sitemaps_enabled() ? [get_sitemap_url('index')] : [];

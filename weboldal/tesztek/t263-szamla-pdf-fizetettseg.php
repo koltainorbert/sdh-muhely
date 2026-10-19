@@ -112,4 +112,9 @@ $r = t_latogato(static fn () => t_rest('POST', '/szamlazz/ipn', $adat));
 T::igaz(empty($r->get_data()['ok']), 'IPN: a Számlázz.hu adata nem igazolja → elutasítva');
 $_SERVER['REMOTE_ADDR'] = '203.0.113.7';
 
+// Rejtés: a kiszolgált PDF (törzs + fejlécek), a vevői link és az IPN-cím.
+$r = t_rest('GET', '/admin/szamla/' . $id . '/pdf');
+t_rejtett((string) $r->get_data(), 'kiszolgált végszámla PDF', $r->get_headers());
+T::igaz(!isset($r->get_headers()['X-SDH-Nyers']), 'nincs árulkodó belső fejléc');
+t_rejtett(SDH_Sales_Szamlazz::pdf_link($id) . "\n" . SDH_Sales_Szamlazz::ipn_url(), 'vevői PDF-link + IPN-cím');
 T::vege('t263 számla-PDF + fizetettség');

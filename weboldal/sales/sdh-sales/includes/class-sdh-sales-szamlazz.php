@@ -1096,7 +1096,7 @@ final class SDH_Sales_Szamlazz
      * REST
      * ============================================================== */
 
-    /** Nyers (nem JSON) válasz kiszolgálása: PDF, ICS. A választ az `X-SDH-Nyers` fejléc jelöli. */
+    /** Nyers (nem JSON) válasz kiszolgálása: PDF, ICS. A választ az `X-Nyers` fejléc jelöli. */
     public static function nyers_kiszolgal($kiszolgalva, $valasz, $keres, $szerver)
     {
         if ($kiszolgalva || !($valasz instanceof WP_HTTP_Response)) {
@@ -1105,7 +1105,7 @@ final class SDH_Sales_Szamlazz
 
         $h = $valasz->get_headers();
 
-        if (empty($h['X-SDH-Nyers']) || !is_string($valasz->get_data())) {
+        if (empty($h['X-Nyers']) || !is_string($valasz->get_data())) {
             return $kiszolgalva;
         }
 
@@ -1118,7 +1118,7 @@ final class SDH_Sales_Szamlazz
     {
         $pdf = (string) file_get_contents($ut);
         $v   = new WP_REST_Response($pdf, 200);
-        $v->header('X-SDH-Nyers', '1');
+        $v->header('X-Nyers', '1');
         $v->header('Content-Type', 'application/pdf');
         $v->header('Content-Disposition', 'inline; filename="' . sanitize_file_name($nev) . '.pdf"');
         $v->header('Content-Length', (string) strlen($pdf));

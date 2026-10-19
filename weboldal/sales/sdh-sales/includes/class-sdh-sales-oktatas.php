@@ -42,7 +42,7 @@ final class SDH_Sales_Oktatas
         add_action('template_redirect', [self::class, 'tanusitvany_oldal'], 1);
         add_filter('sdh_sales_fiok_oktatas', [self::class, 'fiok'], 10, 2);
         add_shortcode('oktatas', [self::class, 'shortcode']);
-        add_shortcode('sdh_oktatas', [self::class, 'shortcode']); // régi név (meglévő tartalomhoz); a kimenet ugyanaz
+        add_shortcode('sdh_oktatas', [self::class, 'shortcode']); // régi név: egy régi tartalomban se maradjon nyers szövegként
     }
 
     /* =================================================================
@@ -599,7 +599,7 @@ final class SDH_Sales_Oktatas
         // A stílus közös a csevegővel: ugyanazzal a kezelővel töltjük, így egy oldalon csak egyszer jön le.
         SDH_Sales_Front::modul('oktatas', 'assets/front/oktatas.js', [], [self::class, 'js_adat']);
         add_action('wp', static function (): void {
-            if (is_singular() && ($tart = (string) get_post_field('post_content', (int) get_queried_object_id())) !== '' && (has_shortcode($tart, 'oktatas') || has_shortcode($tart, 'sdh_oktatas'))) {
+            if (is_singular() && ($tart = (string) get_post_field('post_content', (int) get_queried_object_id())) !== '' && has_shortcode($tart, 'oktatas')) {
                 self::stilus();
             }
         });
