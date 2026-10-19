@@ -381,6 +381,7 @@ button { font: inherit; color: inherit; }
 .sa-szegmens button { border: 0; background: none; height: 30px; padding: 0 12px; border-radius: 9px; font-weight: 600; font-size: 12.5px; color: var(--sa-szoveg-3); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .sa-szegmens button:hover { color: var(--sa-szoveg); }
 .sa-szegmens button[aria-pressed="true"] { background: var(--sa-panel-eros); color: var(--sa-szoveg); box-shadow: 0 1px 2px rgba(0, 0, 0, .2), 0 0 0 1px var(--sa-vonal); }
+.sa-szegmens button svg { width: 15px; height: 15px; flex: none; }
 .sa-szegmens small { font-size: 11px; color: var(--sa-szoveg-3); font-weight: 600; }
 
 .sa-eszkozsor { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -542,6 +543,12 @@ button { font: inherit; color: inherit; }
 .sa-tipus svg { width: 20px; height: 20px; color: var(--sa-kiemelo); flex: none; margin-top: 2px; }
 .sa-tipus b { display: block; font-size: 13px; }
 .sa-tipus small { display: block; font-size: 11.5px; color: var(--sa-szoveg-3); line-height: 1.35; }
+.sa-tipusracs--suru { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.sa-tipusracs--suru .sa-tipus { min-height: 0; padding: 7px 10px; align-items: center; }
+.sa-tipusracs--suru .sa-tipus span { min-width: 0; }
+.sa-tipusracs--suru .sa-tipus b { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sa-tipusracs--suru .sa-tipus small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 960px) { .sa-tipusracs--suru { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .sa-tipus__csoport { grid-column: 1 / -1; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--sa-szoveg-3); margin-top: 4px; }
 
 /* Elemek oldal */

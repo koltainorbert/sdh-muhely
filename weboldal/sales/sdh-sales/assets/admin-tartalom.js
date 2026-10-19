@@ -225,12 +225,11 @@
         const { el, bezar } = popup({
             cim: 'Szekció hozzáadása',
             meret: 'szeles',
-            test: `<input class="sa-input" type="search" data-szur placeholder="Szűrés…" aria-label="Szekciótípus keresése" data-autofokusz><div class="sa-tipusracs" data-racs>${Object.entries(csop).map(([c, l]) => `<div class="sa-tipus__csoport" data-csoport>${e(c)}</div>` + l.map(([k, t]) => `<button type="button" class="sa-tipus" data-tipus="${e(k)}" data-kereso="${e((t.cim + ' ' + t.leiras + ' ' + k).toLowerCase())}">${WI(t.ikon)}<span><b>${e(t.cim)}</b><small>${e(t.leiras)}</small></span></button>`).join('')).join('')}</div>`,
+            test: `<input class="sa-input" type="search" data-szur placeholder="Szűrés (név, leírás, csoport)…" aria-label="Szekciótípus keresése" data-autofokusz><div class="sa-tipusracs sa-tipusracs--suru" data-racs>${Object.entries(csop).map(([c, l]) => l.map(([k, t]) => `<button type="button" class="sa-tipus" data-tipus="${e(k)}" title="${e(c + ' – ' + t.leiras)}" data-kereso="${e((t.cim + ' ' + t.leiras + ' ' + k + ' ' + c).toLowerCase())}">${WI(t.ikon)}<span><b>${e(t.cim)}</b><small>${e(c)} · ${e(t.leiras)}</small></span></button>`).join('')).join('')}</div>`,
         });
         $('[data-szur]', el).addEventListener('input', (ev) => {
             const q = ev.target.value.trim().toLowerCase();
             $$('[data-tipus]', el).forEach((g) => { g.hidden = !!q && !g.dataset.kereso.includes(q); });
-            $$('[data-csoport]', el).forEach((c) => { let n = c.nextElementSibling, l = false; while (n && !n.hasAttribute('data-csoport')) { if (!n.hidden) l = true; n = n.nextElementSibling; } c.hidden = !l; });
         });
         $('[data-szur]', el).addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { const g = $$('[data-tipus]', el).find((x) => !x.hidden); if (g) g.click(); } });
         $('[data-racs]', el).addEventListener('click', (ev) => { const g = ev.target.closest('[data-tipus]'); if (!g) return; bezar(); kesz(g.dataset.tipus); });

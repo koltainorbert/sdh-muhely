@@ -663,7 +663,7 @@ final class SDH_Sales_Szekcio
         $s = wp_kses($s, $szuk ? self::HTML_SZUK : self::HTML, ['http', 'https', 'mailto', 'tel']);
 
         // A target=_blank linkek kapjanak rel=noopener-t.
-        $s = (string) preg_replace_callback('/<a\s([^>]*target="_blank"[^>]*)>/i', static function ($m) {
+        $s = (string) preg_replace_callback('/<a\s([^>]*target=["\']?_blank["\']?[^>]*)>/i', static function ($m) {
             return stripos($m[1], 'rel=') === false ? '<a ' . $m[1] . ' rel="noopener">' : $m[0];
         }, $s);
 

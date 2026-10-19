@@ -562,8 +562,8 @@ final class SDH_Sales_Rejtes
 
     public static function url_alias(string $url): string
     {
-        if ($url === '' || is_admin() && !wp_doing_ajax() && !(defined('REST_REQUEST') && REST_REQUEST)) {
-            // Az adminban a valódi útvonal (a belső felület működéséhez, csak a bejelentkezett látja).
+        // Mindenhol álnév – az adminban is, mert élesben a webszerver a valódi tartalom-útvonalakat 404-gyel válaszolja.
+        if ($url === '') {
             return $url;
         }
 
@@ -593,10 +593,6 @@ final class SDH_Sales_Rejtes
     /** @param array<string, mixed> $u */
     public static function feltoltes_alias(array $u): array
     {
-        if (is_admin()) {
-            return $u;
-        }
-
         foreach (['url', 'baseurl'] as $k) {
             if (!empty($u[$k])) {
                 $u[$k] = self::alias_csere((string) $u[$k]);

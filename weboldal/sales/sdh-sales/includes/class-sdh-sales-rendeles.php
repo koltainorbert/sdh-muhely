@@ -1109,14 +1109,27 @@ final class SDH_Sales_Rendeles
             return SDH_Sales_Rest::hiba(__('A QR-kód most nem érhető el.', 'sdh-sales'), 404, 'nincs');
         }
 
-        $png = SDH_Sales_Qr::png($adat, 6, 4);
-        $v   = new WP_REST_Response($png, 200);
-        $v->header('Content-Type', 'image/png');
-        $v->header('Content-Length', (string) strlen($png));
+        $v = self::nyers(SDH_Sales_Qr::png($adat, 6, 4), 'image/png');
         $v->header('Cache-Control', 'private, max-age=600');
+
+        return $v;
+    }
+
+    /** Nyers (nem JSON-kódolt) REST-válasz: PNG, vagy bájtra pontos JSON (aláírt IPN-válasz). */
+    public static function nyers(string $test, string $tipus, int $kod = 200): WP_REST_Response
+    {
+        $v = new WP_REST_Response($test, $kod);
+        $v->header('Content-Type', $tipus);
+        $v->header('Content-Length', (string) strlen($test));
         self::$nyers[spl_object_id($v)] = true;
 
         return $v;
+    }
+
+    /** Teszthez: nyersen kiszolgálandó-e a válasz. */
+    public static function nyers_e(WP_REST_Response $v): bool
+    {
+        return isset(self::$nyers[spl_object_id($v)]);
     }
 
     /** Nyers (PNG) válasz kiszolgálása – jelölő fejléc nélkül (a jelölés a válaszobjektumon). */

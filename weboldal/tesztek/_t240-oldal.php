@@ -18,6 +18,8 @@ $GLOBALS['t240_hibak'] = [];
 
 $t240_url = (string) parse_url($t240_ut, PHP_URL_PATH);
 $_SERVER['HTTP_HOST']       = '127.0.0.1:8847';
+$_SERVER['SERVER_NAME']     = '127.0.0.1';
+$_SERVER['SERVER_PORT']     = '8847';
 $_SERVER['REQUEST_URI']     = '/wp' . $t240_ut;
 $_SERVER['REQUEST_METHOD']  = 'GET';
 $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';

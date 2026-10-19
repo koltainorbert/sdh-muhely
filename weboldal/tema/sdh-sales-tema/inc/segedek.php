@@ -187,6 +187,11 @@ function sdh_tema_url(string $u): string
         return $u;
     }
 
+    // Más séma (javascript:, data:, vbscript: …) soha nem lesz link.
+    if (preg_match('#^[a-z][a-z0-9+.\-]*:#i', $u) === 1 || strpos($u, '//') === 0) {
+        return '';
+    }
+
     if ($u[0] === '/') {
         return home_url($u);
     }
@@ -518,7 +523,13 @@ function sdh_tema_mount(string $nev, array $sz = [], array $attr = [], string $t
     }
 
     foreach ($attr as $k => $v) {
-        $ki .= ' data-' . esc_attr(sanitize_key((string) $k)) . '="' . esc_attr((string) $v) . '"';
+        $k = sanitize_key((string) $k);
+
+        if ($k === '' || $k === 'modul' || $k === 'opciok') {
+            continue;
+        }
+
+        $ki .= ' data-' . esc_attr($k) . '="' . esc_attr((string) $v) . '"';
     }
 
     $ki .= '>';
