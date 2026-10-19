@@ -1,8 +1,8 @@
 /*
- * SDH értékesítő téma – tervezési tokenek (design system).
+ * Értékesítő téma – tervezési tokenek (design system).
  *
  * Ez az egyetlen hely, ahol nyers színérték áll. Minden komponens a
- * --s-… változókat használja. A bővítmény (SDH_Sales_Arculat::css())
+ * --s-… változókat használja. A bővítmény (arculat-beállítás)
  * a :root-on felülírhatja a szerződés szerinti változókat (ARCHITEKTURA.md §7),
  * ez a fájl az alapértéket adja.
  *
@@ -143,7 +143,7 @@
     --s-szoveg: #eef0f6;
     --s-halvany: #a3a9bb;
     --s-vonal: rgba(255, 255, 255, 0.1);
-    --s-kiemelo: #ff5a52;          /* SDH-piros, sötét háttérre világosítva */
+    --s-kiemelo: #ff5a52;          /* márkapiros, sötét háttérre világosítva */
     --s-kiemelo-2: #9d8fff;        /* Központ-ibolya */
     --s-neon: #22d3ee;             /* cián neon */
     --s-ok: #34d399;

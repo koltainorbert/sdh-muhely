@@ -3,7 +3,7 @@
  * SDH Értékesítés – kereső: statikus JSON-index a böngészős keresőnek, szerveroldali tartalék (`GET /kereso?q=`),
  * és a WordPress-keresés kiegészítése a tartalom-tár elemeivel.
  *
- * Index (ARCHITEKTURA.md 7.): `uploads/sdh-sales/kereso-index.json` (+ `.json.gz` előtömörítve a gzip_static-nak),
+ * Index (ARCHITEKTURA.md 7.): `uploads/portal/kereso-index.json` (+ `.json.gz` előtömörítve a gzip_static-nak),
  *   `{"v": <hash>, "ido": <unix>, "elemek": [{t, u, k, s, w, n}, …]}`
  *   t = cím, u = URL, k = funkcio|modul|iparag|gyik|tudas|blog|oldal, s = kivonat (≤ 160 karakter),
  *   w = kulcsszavak (szóközzel), n = ékezet nélküli kisbetűs „cím + kulcsszavak” (a böngészős egyezéshez).
@@ -236,7 +236,7 @@ final class SDH_Sales_Kereso
     {
         $u = wp_upload_dir(null, false);
 
-        return ['dir' => trailingslashit((string) $u['basedir']) . 'sdh-sales/', 'url' => trailingslashit((string) $u['baseurl']) . 'sdh-sales/'];
+        return ['dir' => trailingslashit((string) $u['basedir']) . 'portal/', 'url' => trailingslashit((string) $u['baseurl']) . 'portal/'];
     }
 
     /** A tartalom ujjlenyomata: tartalom-tár + közzétett bejegyzések/oldalak + beállítások. */
@@ -530,7 +530,7 @@ final class SDH_Sales_Kereso
         $q = trim(sanitize_text_field((string) $r->get_param('q')));
 
         if (mb_strlen($q) < 2) {
-            return SDH_Sales_Rest::hiba(__('Írj be legalább 2 karaktert.', 'sdh-sales'), 400, 'sdh_kereso_rovid');
+            return SDH_Sales_Rest::hiba(__('Írj be legalább 2 karaktert.', 'sdh-sales'), 400, 'kereso_rovid');
         }
 
         $q     = mb_substr($q, 0, 100);

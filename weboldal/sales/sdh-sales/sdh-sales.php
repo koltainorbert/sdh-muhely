@@ -26,14 +26,17 @@ define('SDH_SALES_URL', plugin_dir_url(__FILE__));
 /** A mag: ezek töltődnek elsőként, ebben a sorrendben. */
 $sdh_sales_mag = ['', '-schema', '-naplo', '-rest'];
 
+// A fájlnév előtagja a fejlesztői tárolóban `class-sdh-sales`, a semleges csomagban `class-p` (eszkozok/csomagol.sh).
+$sdh_sales_elotag = is_file(SDH_SALES_DIR . 'includes/class-p.php') ? 'class-p' : 'class-sdh-sales';
+
 foreach ($sdh_sales_mag as $sdh_sales_v) {
-    require_once SDH_SALES_DIR . 'includes/class-sdh-sales' . $sdh_sales_v . '.php';
+    require_once SDH_SALES_DIR . 'includes/' . $sdh_sales_elotag . $sdh_sales_v . '.php';
 }
 
 $sdh_sales_osztalyok = ['SDH_Sales', 'SDH_Sales_Schema', 'SDH_Sales_Naplo', 'SDH_Sales_Rest'];
 
-foreach (glob(SDH_SALES_DIR . 'includes/class-sdh-sales-*.php') ?: [] as $sdh_sales_f) {
-    $sdh_sales_n = substr(basename($sdh_sales_f, '.php'), strlen('class-sdh-sales-'));
+foreach (glob(SDH_SALES_DIR . 'includes/' . $sdh_sales_elotag . '-*.php') ?: [] as $sdh_sales_f) {
+    $sdh_sales_n = substr(basename($sdh_sales_f, '.php'), strlen($sdh_sales_elotag . '-'));
 
     if (in_array('-' . $sdh_sales_n, $sdh_sales_mag, true)) {
         continue;
@@ -49,7 +52,7 @@ foreach ($sdh_sales_osztalyok as $sdh_sales_o) {
     }
 }
 
-unset($sdh_sales_mag, $sdh_sales_v, $sdh_sales_f, $sdh_sales_n, $sdh_sales_o, $sdh_sales_osztalyok);
+unset($sdh_sales_elotag, $sdh_sales_mag, $sdh_sales_v, $sdh_sales_f, $sdh_sales_n, $sdh_sales_o, $sdh_sales_osztalyok);
 
 register_activation_hook(__FILE__, ['SDH_Sales', 'aktivalas']);
 register_deactivation_hook(__FILE__, ['SDH_Sales', 'kikapcsolas']);

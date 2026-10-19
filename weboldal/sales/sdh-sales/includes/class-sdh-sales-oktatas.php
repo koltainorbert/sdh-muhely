@@ -8,13 +8,13 @@
  *   kviz[]:    {kerdes, valaszok|opciok[], helyes (index | szöveg | index-tömb), magyarazat}
  * Kurzus = egy modul leckéi (a `modul` mező szerint).
  *
- * REST (sdh-sales/v1):
+ * REST (SDH_Sales_Rest::NS):
  *   POST /oktatas/kviz         {lecke, valaszok:[index…]}         → {pont, ossz, sikeres, helyes[], magyarazat[], igazolas}
  *   GET  /oktatas/haladas      (fiók)                             → {haladas:{lecke:{lepes, kesz, kviz, ido}}}
  *   POST /oktatas/haladas      (fiók) {haladas:{…}}               → összefésülve (a nagyobb haladás marad)
  *   POST /oktatas/tanusitvany  {kurzus, nev, igazolasok:{lecke:igazolas}} → {kod, url}
  *   GET  /oktatas/tanusitvany  ?kod=…                             → {ervenyes, nev, kurzus, datum}
- * Nyomtatható tanúsítvány: bármely oldal ?sdh_tanusitvany=KOD
+ * Nyomtatható tanúsítvány: bármely oldal ?tanusitvany=KOD
  * Fiók: apply_filters('sdh_sales_fiok_oktatas', [], $user_id) → {kurzusok:[…], tanusitvanyok:[…]}
  *
  * @package SDH_Sales
@@ -41,7 +41,8 @@ final class SDH_Sales_Oktatas
         add_action('init', [self::class, 'front_regisztral'], 20);
         add_action('template_redirect', [self::class, 'tanusitvany_oldal'], 1);
         add_filter('sdh_sales_fiok_oktatas', [self::class, 'fiok'], 10, 2);
-        add_shortcode('sdh_oktatas', [self::class, 'shortcode']);
+        add_shortcode('oktatas', [self::class, 'shortcode']);
+        add_shortcode('sdh_oktatas', [self::class, 'shortcode']); // régi név (meglévő tartalomhoz); a kimenet ugyanaz
     }
 
     /* =================================================================
@@ -271,7 +272,7 @@ final class SDH_Sales_Oktatas
         $e = self::ertekel(sanitize_key((string) $r->get_param('lecke')), (array) $r->get_param('valaszok'));
 
         if ($e === null) {
-            return SDH_Sales_Rest::hiba(__('Ehhez a leckéhez nincs kvíz.', 'sdh-sales'), 404, 'sdh_oktatas_nincs');
+            return SDH_Sales_Rest::hiba(__('Ehhez a leckéhez nincs kvíz.', 'sdh-sales'), 404, 'oktatas_nincs');
         }
 
         if (is_user_logged_in()) {
@@ -393,11 +394,11 @@ final class SDH_Sales_Oktatas
         $k   = self::kurzusok()[$kurzus] ?? null;
 
         if ($k === null) {
-            return SDH_Sales_Rest::hiba(__('Nincs ilyen kurzus.', 'sdh-sales'), 404, 'sdh_oktatas_kurzus');
+            return SDH_Sales_Rest::hiba(__('Nincs ilyen kurzus.', 'sdh-sales'), 404, 'oktatas_kurzus');
         }
 
         if (mb_strlen($nev) < 2 || mb_strlen($nev) > 80) {
-            return SDH_Sales_Rest::hiba(__('Add meg a neved a tanúsítványhoz (2–80 karakter).', 'sdh-sales'), 400, 'sdh_oktatas_nev');
+            return SDH_Sales_Rest::hiba(__('Add meg a neved a tanúsítványhoz (2–80 karakter).', 'sdh-sales'), 400, 'oktatas_nev');
         }
 
         if ($user_id > 0) {
@@ -424,7 +425,7 @@ final class SDH_Sales_Oktatas
 
         if ($hiany !== []) {
             /* translators: %s: leckék címe */
-            return SDH_Sales_Rest::hiba(sprintf(__('A tanúsítványhoz ezeknek a leckéknek a kvízét kell sikeresen kitöltened: %s', 'sdh-sales'), implode(', ', $hiany)), 400, 'sdh_oktatas_hianyos');
+            return SDH_Sales_Rest::hiba(sprintf(__('A tanúsítványhoz ezeknek a leckéknek a kvízét kell sikeresen kitöltened: %s', 'sdh-sales'), implode(', ', $hiany)), 400, 'oktatas_hianyos');
         }
 
         $t = self::tanusitvanyok();
@@ -454,7 +455,7 @@ final class SDH_Sales_Oktatas
 
     public static function tanusitvany_url(string $kod): string
     {
-        return add_query_arg('sdh_tanusitvany', rawurlencode($kod), home_url('/'));
+        return add_query_arg('tanusitvany', rawurlencode($kod), home_url('/'));
     }
 
     /** @return array<string, mixed>|null */
@@ -493,10 +494,10 @@ final class SDH_Sales_Oktatas
         return new WP_REST_Response($t === null ? ['ervenyes' => false] : ['ervenyes' => true, 'kod' => $t['kod'], 'nev' => $t['nev'], 'kurzus' => $t['cim'], 'datum' => $t['datum']], 200);
     }
 
-    /** Nyomtatható tanúsítvány (?sdh_tanusitvany=KOD). */
+    /** Nyomtatható tanúsítvány (?tanusitvany=KOD). */
     public static function tanusitvany_oldal(): void
     {
-        if (!isset($_GET['sdh_tanusitvany'])) { // phpcs:ignore WordPress.Security.NonceVerification
+        if (!isset($_GET['tanusitvany'])) { // phpcs:ignore WordPress.Security.NonceVerification
             return;
         }
 
@@ -505,7 +506,7 @@ final class SDH_Sales_Oktatas
             exit;
         }
 
-        $t = self::ellenoriz(sanitize_text_field(wp_unslash((string) $_GET['sdh_tanusitvany']))); // phpcs:ignore WordPress.Security.NonceVerification
+        $t = self::ellenoriz(sanitize_text_field(wp_unslash((string) $_GET['tanusitvany']))); // phpcs:ignore WordPress.Security.NonceVerification
 
         nocache_headers();
         header('Content-Type: text/html; charset=utf-8');
@@ -598,7 +599,7 @@ final class SDH_Sales_Oktatas
         // A stílus közös a csevegővel: ugyanazzal a kezelővel töltjük, így egy oldalon csak egyszer jön le.
         SDH_Sales_Front::modul('oktatas', 'assets/front/oktatas.js', [], [self::class, 'js_adat']);
         add_action('wp', static function (): void {
-            if (is_singular() && has_shortcode((string) get_post_field('post_content', (int) get_queried_object_id()), 'sdh_oktatas')) {
+            if (is_singular() && ($tart = (string) get_post_field('post_content', (int) get_queried_object_id())) !== '' && (has_shortcode($tart, 'oktatas') || has_shortcode($tart, 'sdh_oktatas'))) {
                 self::stilus();
             }
         });
@@ -606,7 +607,7 @@ final class SDH_Sales_Oktatas
 
     public static function stilus(): void
     {
-        wp_enqueue_style('sdh-sales-szikra', SDH_SALES_URL . 'assets/front/szikra.css', [], SDH_SALES_VERSION);
+        wp_enqueue_style('p-szikra', SDH_SALES_URL . 'assets/front/szikra.css', [], SDH_SALES_VERSION);
     }
 
     /** @return array<string, mixed> */
@@ -621,7 +622,7 @@ final class SDH_Sales_Oktatas
 
         return [
             'rest'      => esc_url_raw(rest_url(SDH_Sales_Rest::NS . '/oktatas')),
-            'nonce'     => is_user_logged_in() ? wp_create_nonce('wp_rest') : '',
+            'nonce'     => is_user_logged_in() ? wp_create_nonce('wp_rest') : '', // a front X-App-Nonce fejlécben küldi
             'belepett'  => is_user_logged_in(),
             'leckek'    => self::nyilvanos(),
             'kurzusok'  => array_values(self::kurzusok()),
@@ -663,12 +664,12 @@ final class SDH_Sales_Oktatas
         ];
     }
 
-    /** [sdh_oktatas modul="…" lecke="…"] */
+    /** [oktatas modul="…" lecke="…"] */
     public static function shortcode($atts): string
     {
         $a = shortcode_atts(['modul' => '', 'lecke' => ''], (array) $atts);
         SDH_Sales_Front::igeny('oktatas');
 
-        return '<div data-sdh="oktatas" data-opciok="' . esc_attr((string) wp_json_encode(['modul' => sanitize_key($a['modul']), 'lecke' => sanitize_key($a['lecke'])])) . '"></div>';
+        return '<div data-modul="oktatas" data-opciok="' . esc_attr((string) wp_json_encode(['modul' => sanitize_key($a['modul']), 'lecke' => sanitize_key($a['lecke'])])) . '"></div>';
     }
 }

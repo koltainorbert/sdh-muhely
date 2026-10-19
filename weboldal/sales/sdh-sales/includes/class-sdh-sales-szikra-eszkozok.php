@@ -296,7 +296,7 @@ final class SDH_Sales_Szikra_Eszkozok
 
     private static function fuggo_kulcs(): string
     {
-        return 'sdh_szikra_fuggo_' . md5((string) (self::$kornyezet['munkamenet'] ?? '') . '|' . SDH_Sales::ip_hash());
+        return 'szikra_fuggo_' . md5((string) (self::$kornyezet['munkamenet'] ?? '') . '|' . SDH_Sales::ip_hash());
     }
 
     /** @return array<string, mixed>|null */

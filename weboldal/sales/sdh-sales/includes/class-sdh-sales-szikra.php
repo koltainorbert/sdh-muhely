@@ -261,41 +261,41 @@ final class SDH_Sales_Szikra
         $mod    = (string) $r->get_param('mod') === 'oktato' ? 'oktato' : 'ertekesites';
 
         if (preg_match('/^[A-Za-z0-9_-]{16,40}$/', $mm) !== 1) {
-            return SDH_Sales_Rest::hiba(__('Érvénytelen munkamenet.', 'sdh-sales'), 400, 'sdh_szikra_munkamenet');
+            return SDH_Sales_Rest::hiba(__('Érvénytelen munkamenet.', 'sdh-sales'), 400, 'szikra_munkamenet');
         }
 
         if ($uzenet === '') {
-            return SDH_Sales_Rest::hiba(__('Írj egy kérdést.', 'sdh-sales'), 400, 'sdh_szikra_ures');
+            return SDH_Sales_Rest::hiba(__('Írj egy kérdést.', 'sdh-sales'), 400, 'szikra_ures');
         }
 
         $max = max(100, self::i('szikra.max_bemenet'));
 
         if (mb_strlen($uzenet) > $max) {
             /* translators: %d: karakterek száma */
-            return SDH_Sales_Rest::hiba(sprintf(__('Az üzenet túl hosszú (legfeljebb %d karakter).', 'sdh-sales'), $max), 400, 'sdh_szikra_hossz');
+            return SDH_Sales_Rest::hiba(sprintf(__('Az üzenet túl hosszú (legfeljebb %d karakter).', 'sdh-sales'), $max), 400, 'szikra_hossz');
         }
 
         if (!(bool) self::b('szikra.aktiv') || !SDH_Sales::van_titok(self::TITOK)) {
-            return SDH_Sales_Rest::hiba(__('Szikra most nem elérhető. Írj nekünk a kapcsolati űrlapon, és egy kolléga válaszol.', 'sdh-sales'), 503, 'sdh_szikra_ki');
+            return SDH_Sales_Rest::hiba(__('Szikra most nem elérhető. Írj nekünk a kapcsolati űrlapon, és egy kolléga válaszol.', 'sdh-sales'), 503, 'szikra_ki');
         }
 
         // Korlátok: percenként, munkamenetenként, naponta (IP) – a beszélgetés-korlát előbb, hogy ne fogyassza a napi keretet.
         if (!SDH_Sales_Rest::korlat('szikra_perc', max(1, self::i('szikra.percenkent')), 60)) {
-            return SDH_Sales_Rest::hiba(__('Kicsit gyorsan jönnek a kérdések – várj egy percet, és folytassuk.', 'sdh-sales'), 429, 'sdh_korlat');
+            return SDH_Sales_Rest::hiba(__('Kicsit gyorsan jönnek a kérdések – várj egy percet, és folytassuk.', 'sdh-sales'), 429, 'korlat');
         }
 
         if (!SDH_Sales_Rest::korlat('szikra_mm', max(1, self::i('szikra.munkamenet_max')), DAY_IN_SECONDS, $mm)) {
-            return SDH_Sales_Rest::hiba(__('Ez a beszélgetés elérte a hosszkorlátot. Kezdj újat, vagy kérj visszahívást egy kollégától.', 'sdh-sales'), 429, 'sdh_korlat');
+            return SDH_Sales_Rest::hiba(__('Ez a beszélgetés elérte a hosszkorlátot. Kezdj újat, vagy kérj visszahívást egy kollégától.', 'sdh-sales'), 429, 'korlat');
         }
 
         if (!SDH_Sales_Rest::korlat('szikra_nap', max(1, self::i('szikra.napi_ip')), DAY_IN_SECONDS)) {
-            return SDH_Sales_Rest::hiba(__('Mára elérted a Szikrával váltható üzenetek számát. Holnap folytathatjuk – vagy írj nekünk, és egy kolléga válaszol.', 'sdh-sales'), 429, 'sdh_korlat');
+            return SDH_Sales_Rest::hiba(__('Mára elérted a Szikrával váltható üzenetek számát. Holnap folytathatjuk – vagy írj nekünk, és egy kolléga válaszol.', 'sdh-sales'), 429, 'korlat');
         }
 
         if (self::keret_elfogyott()) {
             SDH_Sales_Naplo::ir('szikra', 'A Szikra havi kerete elfogyott – a kérdés nem ment ki.', 'figyel');
 
-            return SDH_Sales_Rest::hiba(__('Szikra erre a hónapra pihenőt tart. Írj nekünk a kapcsolati űrlapon vagy foglalj időpontot – egy kolléga szívesen segít.', 'sdh-sales'), 429, 'sdh_szikra_keret');
+            return SDH_Sales_Rest::hiba(__('Szikra erre a hónapra pihenőt tart. Írj nekünk a kapcsolati űrlapon vagy foglalj időpontot – egy kolléga szívesen segít.', 'sdh-sales'), 429, 'szikra_keret');
         }
 
         $v = SDH_Sales_Szikra_Api::valaszol($mm, $uzenet, $mod, [
@@ -369,6 +369,6 @@ final class SDH_Sales_Szikra
         }
 
         SDH_Sales_Front::igeny('szikra');
-        echo '<div data-sdh="szikra" data-opciok="' . esc_attr((string) wp_json_encode(['lebego' => true])) . '"></div>' . "\n";
+        echo '<div data-modul="szikra" data-opciok="' . esc_attr((string) wp_json_encode(['lebego' => true])) . '"></div>' . "\n";
     }
 }

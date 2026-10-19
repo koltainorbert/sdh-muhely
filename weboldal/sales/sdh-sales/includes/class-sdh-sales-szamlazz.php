@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 final class SDH_Sales_Szamlazz
 {
     public const AGENT_URL = 'https://www.szamlazz.hu/szamla/';
-    public const MAPPA     = 'sdh-sales-szamla';
+    public const MAPPA     = 'portal-szamla';
 
     /** A Számlázz.hu IPN küldő címei (2025-08-01-től, docs.szamlazz.hu). */
     public const IPN_IP = ['3.73.214.98', '3.76.149.232', '18.153.156.51'];
@@ -334,7 +334,7 @@ final class SDH_Sales_Szamlazz
     /** Külső azonosító (a Számlázz.hu-n visszakereshető, a duplikáció kezeléséhez). */
     private static function kulso_azon(array $r, string $tipus): string
     {
-        return 'sdh-sales-' . (string) $r['azon'] . '-' . ($tipus === 'dijbekero' ? 'd' : 'v');
+        return 'p-' . (string) $r['azon'] . '-' . ($tipus === 'dijbekero' ? 'd' : 'v');
     }
 
     private static function megjegyzes(string $tipus, array $r): string
@@ -496,7 +496,7 @@ final class SDH_Sales_Szamlazz
     {
         $ki = ['ok' => false, 'kod' => '', 'uzenet' => '', 'szamlaszam' => '', 'brutto' => 0.0, 'pdf' => '', 'torzs' => '', 'http' => 0];
 
-        $hatar = '----sdhsales' . wp_generate_password(24, false);
+        $hatar = '----portal' . wp_generate_password(24, false);
         $torzs = '--' . $hatar . "\r\n"
             . 'Content-Disposition: form-data; name="' . $mezo . '"; filename="request.xml"' . "\r\n"
             . "Content-Type: text/xml\r\n\r\n" . $xml . "\r\n--" . $hatar . "--\r\n";
@@ -802,7 +802,7 @@ final class SDH_Sales_Szamlazz
     }
 
     /* =================================================================
-     * PDF-tár (uploads/sdh-sales-szamla, közvetlenül nem elérhető)
+     * PDF-tár (uploads/portal-szamla, közvetlenül nem elérhető)
      * ============================================================== */
 
     public static function mappa(): string
@@ -1133,7 +1133,7 @@ final class SDH_Sales_Szamlazz
         $r  = self::rendeles($id);
 
         if ($r === null) {
-            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404);
+            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'nincs');
         }
 
         $tipus = (string) $q->get_param('tipus');
@@ -1141,7 +1141,7 @@ final class SDH_Sales_Szamlazz
         $ut    = self::pdf($id, $tipus);
 
         if ($ut === null) {
-            return SDH_Sales_Rest::hiba('Ehhez a rendeléshez nincs letölthető ' . ($tipus === 'dijbekero' ? 'díjbekérő' : 'számla') . '.', 404);
+            return SDH_Sales_Rest::hiba('Ehhez a rendeléshez nincs letölthető ' . ($tipus === 'dijbekero' ? 'díjbekérő' : 'számla') . '.', 404, 'nincs');
         }
 
         return self::pdf_valasz($ut, (string) ($tipus === 'dijbekero' ? $r['szamla_dijbekero'] : $r['szamla_vegszamla']));
@@ -1159,12 +1159,12 @@ final class SDH_Sales_Szamlazz
         $szam  = $r !== null ? (string) ($tipus === 'dijbekero' ? $r['szamla_dijbekero'] : $r['szamla_vegszamla']) : '';
 
         if ($r === null || $szam === '' || strlen($t) !== 32 || !hash_equals(self::pdf_token($id, $tipus, $szam), $t)) {
-            return SDH_Sales_Rest::hiba('A letöltő link érvénytelen vagy lejárt. Kérj újat az ügyfélfiókodból.', 403, 'sdh_link');
+            return SDH_Sales_Rest::hiba('A letöltő link érvénytelen vagy lejárt. Kérj újat az ügyfélfiókodból.', 403, 'link');
         }
 
         $ut = self::pdf($id, $tipus);
 
-        return $ut !== null ? self::pdf_valasz($ut, $szam) : SDH_Sales_Rest::hiba('A számla PDF-je most nem érhető el. Próbáld újra később.', 404);
+        return $ut !== null ? self::pdf_valasz($ut, $szam) : SDH_Sales_Rest::hiba('A számla PDF-je most nem érhető el. Próbáld újra később.', 404, 'nincs');
     }
 
     public static function rest_ujra(WP_REST_Request $q)
@@ -1174,7 +1174,7 @@ final class SDH_Sales_Szamlazz
         $e     = self::bizonylat($tipus, $id, true);
 
         if (!$e['ok']) {
-            return SDH_Sales_Rest::hiba($e['uzenet'], 422, 'sdh_szamla');
+            return SDH_Sales_Rest::hiba($e['uzenet'], 422, 'szamla');
         }
 
         if ($tipus === 'vegszamla') {
@@ -1190,7 +1190,7 @@ final class SDH_Sales_Szamlazz
         $mod = self::mod();
 
         if ($mod === 'ki') {
-            return SDH_Sales_Rest::hiba('Előbb add meg és mentsd el az Agent-kulcsot, vagy kapcsold be a tesztüzemet.', 422, 'sdh_szamla');
+            return SDH_Sales_Rest::hiba('Előbb add meg és mentsd el az Agent-kulcsot, vagy kapcsold be a tesztüzemet.', 422, 'szamla');
         }
 
         if ($mod === 'minta') {
@@ -1199,13 +1199,13 @@ final class SDH_Sales_Szamlazz
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
             . '<xmlszamlaxml xmlns="http://www.szamlazz.hu/xmlszamlaxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . "\n"
-            . self::elemek(['szamlaagentkulcs' => self::kulcs(), 'szamlaszam' => 'SDH-KAPCSOLAT-ELLENORZES'], '  ')
+            . self::elemek(['szamlaagentkulcs' => self::kulcs(), 'szamlaszam' => 'KAPCSOLAT-ELLENORZES'], '  ')
             . "</xmlszamlaxml>\n";
 
         $v = self::agent_kuld('action-szamla_agent_xml', $xml);
 
         if (($v['kod'] === '' && !$v['ok']) || in_array($v['kod'], self::KAPCSOLAT_HIBAK, true)) {
-            return SDH_Sales_Rest::hiba(self::hiba_szoveg($v), 422, 'sdh_szamla');
+            return SDH_Sales_Rest::hiba(self::hiba_szoveg($v), 422, 'szamla');
         }
 
         return new WP_REST_Response(['ok' => true, 'mod' => $mod, 'ipn_url' => self::ipn_url(), 'uzenet' => 'A Számlázz.hu elfogadta a kulcsot – a kapcsolat él (' . ($mod === 'teszt' ? 'tesztkulcs' : 'éles kulcs') . '). Számla nem készült.']);
@@ -1243,7 +1243,7 @@ final class SDH_Sales_Szamlazz
         if ($titok === '' || !hash_equals($titok, (string) $q->get_param('k'))) {
             SDH_Sales_Naplo::ir('szamla', 'Számlázz.hu IPN elutasítva: hibás token.', 'figyel');
 
-            return SDH_Sales_Rest::hiba('Tiltott.', 403, 'sdh_ipn');
+            return SDH_Sales_Rest::hiba('Tiltott.', 403, 'ipn');
         }
 
         $ipk = (array) apply_filters('sdh_sales_szamlazz_ipn_ip', self::IPN_IP);
@@ -1251,7 +1251,7 @@ final class SDH_Sales_Szamlazz
         if (self::igen(SDH_Sales::b('szamlazz.ipn_ip_szures', true)) && !in_array(SDH_Sales::ip(), $ipk, true)) {
             SDH_Sales_Naplo::ir('szamla', 'Számlázz.hu IPN elutasítva: ismeretlen küldő.', 'figyel');
 
-            return SDH_Sales_Rest::hiba('Tiltott.', 403, 'sdh_ipn');
+            return SDH_Sales_Rest::hiba('Tiltott.', 403, 'ipn');
         }
 
         $p     = static fn (string $k): string => sanitize_text_field((string) $q->get_param($k));
@@ -1277,7 +1277,7 @@ final class SDH_Sales_Szamlazz
         }
 
         if (!class_exists('SDH_Sales_Rendeles') || !method_exists('SDH_Sales_Rendeles', 'fizetve')) {
-            return SDH_Sales_Rest::hiba('Átmenetileg nem elérhető.', 503);
+            return SDH_Sales_Rest::hiba('Átmenetileg nem elérhető.', 503, 'nem_elerheto');
         }
 
         // Az IPN a bizonylaton eddig kifizetett TELJES összeget hozza; a rendelésen a különbözet az új befizetés.

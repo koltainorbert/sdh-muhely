@@ -14,7 +14,7 @@
  *   ajanlat_kuld(int $rendeles_id, string $tipus = 'telepites'): bool   – ugyanez levélben (idopont_ajanlat)
  *   ics(array $foglalas, string $metodus = 'PUBLISH'): string / ical_feed(): string / ical_url(): string
  *   emlekezteto(?int $most = null): int – a cron hívja (SDH_Sales::CRON)
- * Front: `<div data-sdh="foglalas" data-tipus="demo"></div>` + SDH_Sales_Front::igeny('foglalas'), vagy [sdh_foglalas tipus="demo"].
+ * Front: `<div data-modul="foglalas" data-tipus="demo"></div>` + SDH_Sales_Front::igeny('foglalas'), vagy [foglalas tipus="demo"].
  *
  * @package SDH_Sales
  */
@@ -38,7 +38,8 @@ final class SDH_Sales_Naptar
     {
         add_action(SDH_Sales::CRON, [self::class, 'cron']);
         add_filter('rest_pre_serve_request', [self::class, 'nyers_kiszolgal'], 10, 4);
-        add_shortcode('sdh_foglalas', [self::class, 'shortcode']);
+        add_shortcode('foglalas', [self::class, 'shortcode']);
+        add_shortcode('sdh_foglalas', [self::class, 'shortcode']); // régi név (meglévő tartalomhoz); a kimenet ugyanaz
         add_action('init', [self::class, 'front_regisztral'], 6);
 
         SDH_Sales_Rest::ut('/foglalas/savok', 'GET', [self::class, 'rest_savok'], 'nyilvanos', ['fogl_savok', 120, 60]);
@@ -422,7 +423,7 @@ final class SDH_Sales_Naptar
         return $r;
     }
 
-    private static function hiba(string $uzenet, int $status = 422, string $kod = 'sdh_foglalas'): WP_Error
+    private static function hiba(string $uzenet, int $status = 422, string $kod = 'foglalas'): WP_Error
     {
         return new WP_Error($kod, $uzenet, ['status' => $status]);
     }
@@ -753,7 +754,7 @@ final class SDH_Sales_Naptar
         }
 
         $fajlok = [];
-        $mappa  = trailingslashit(get_temp_dir()) . 'sdh-sales-' . wp_generate_password(12, false);
+        $mappa  = trailingslashit(get_temp_dir()) . 'portal-' . wp_generate_password(12, false);
 
         foreach ($csatolmany as $c) {
             if (!is_dir($mappa)) {
@@ -879,7 +880,7 @@ final class SDH_Sales_Naptar
         $osszeg = $feed ? (string) $t['nev'] . ': ' . (string) $f['nev'] : (string) $t['nev'] . ' – ' . SDH_Sales::termeknev();
         $sorok  = [
             'BEGIN:VEVENT',
-            'UID:sdh-foglalas-' . (int) $f['id'] . '-' . substr(hash('sha256', (string) $f['id'] . '|' . wp_salt('nonce')), 0, 12) . '@' . $host,
+            'UID:foglalas-' . (int) $f['id'] . '-' . substr(hash('sha256', (string) $f['id'] . '|' . wp_salt('nonce')), 0, 12) . '@' . $host,
             'DTSTAMP:' . gmdate('Ymd\THis\Z'),
             'DTSTART:' . self::ics_ido((string) $f['kezdet']),
             'DTEND:' . self::ics_ido((string) $f['veg']),
@@ -1065,7 +1066,7 @@ final class SDH_Sales_Naptar
         $at = self::google_token();
 
         if ($at === '') {
-            return new WP_Error('sdh_google', 'Nincs Google-token.');
+            return new WP_Error('google', 'Nincs Google-token.');
         }
 
         $naptar = rawurlencode((string) SDH_Sales::b('naptar.google.naptar_id', 'primary') ?: 'primary');
@@ -1087,7 +1088,7 @@ final class SDH_Sales_Naptar
             delete_transient('sdh_sales_google_at');
         }
 
-        return $kod >= 200 && $kod < 300 ? (is_array($d) ? $d : []) : new WP_Error('sdh_google', 'Google Naptár: HTTP ' . $kod, ['kod' => $kod]);
+        return $kod >= 200 && $kod < 300 ? (is_array($d) ? $d : []) : new WP_Error('google', 'Google Naptár: HTTP ' . $kod, ['kod' => $kod]);
     }
 
     /** Új foglalások felküldése, lemondottak / átfoglaltak törlése a Google Naptárból (cronból, kötegben). */
@@ -1163,20 +1164,21 @@ final class SDH_Sales_Naptar
                 'max_nap'  => $b['max_nap'],
                 'lemondas_ora' => $b['lemondas_ora'],
                 'adatvedelem' => (string) SDH_Sales::b('naptar.adatvedelem_url', get_privacy_policy_url()),
+                'vedelem'  => class_exists('SDH_Sales_Biztonsag') ? SDH_Sales_Biztonsag::front_adat() : [],
             ];
         });
     }
 
-    /** [sdh_foglalas tipus="demo"] */
+    /** [foglalas tipus="demo"] */
     public static function shortcode($atts): string
     {
-        $a = shortcode_atts(['tipus' => 'demo'], (array) $atts, 'sdh_foglalas');
+        $a = shortcode_atts(['tipus' => 'demo'], (array) $atts, 'foglalas');
 
         if (class_exists('SDH_Sales_Front')) {
             SDH_Sales_Front::igeny('foglalas');
         }
 
-        return '<div id="foglalas" data-sdh="foglalas" data-tipus="' . esc_attr(sanitize_key((string) $a['tipus'])) . '"></div>';
+        return '<div id="foglalas" data-modul="foglalas" data-tipus="' . esc_attr(sanitize_key((string) $a['tipus'])) . '"></div>';
     }
 
     /* =================================================================
@@ -1342,7 +1344,7 @@ final class SDH_Sales_Naptar
         $j = SDH_Sales::titkos('naptar_ical_token');
 
         if ($j === '' || !hash_equals($j, $t)) {
-            return self::hiba('Tiltott.', 403, 'sdh_ical');
+            return self::hiba('Tiltott.', 403, 'ical');
         }
 
         return self::ics_valasz(self::ical_feed(), 'foglalasok.ics', false);
