@@ -459,7 +459,11 @@ final class SDH_Sales_Rejtes
     }
 
     /** A front hibaoldala nem árulja el a rendszert. */
-    public static function die_kezelo(string $kezelo): string
+    /**
+     * @param callable|string $kezelo
+     * @return callable|string
+     */
+    public static function die_kezelo($kezelo)
     {
         return is_admin() ? $kezelo : [self::class, 'die_oldal'];
     }
