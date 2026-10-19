@@ -41,6 +41,8 @@ $t240_horgok = [
     'pre_option_template'   => [99 => [['function' => static fn () => 'sdh-sales-tema', 'accepted_args' => 0]]],
     'pre_option_stylesheet' => [99 => [['function' => static fn () => 'sdh-sales-tema', 'accepted_args' => 0]]],
     'wp_redirect'           => [99 => [['function' => static fn () => false, 'accepted_args' => 0]]],
+    // A tesztoldal saját címe (home) eltérhet a kérés hostjától: a kanonikus átirányítás ne nyelje el az oldalt.
+    'redirect_canonical'    => [99 => [['function' => static fn () => false, 'accepted_args' => 0]]],
 ];
 
 if ($t240_np) {

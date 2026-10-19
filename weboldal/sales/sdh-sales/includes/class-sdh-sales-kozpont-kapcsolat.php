@@ -302,7 +302,7 @@ final class SDH_Sales_Kozpont_Kapcsolat
         SDH_Sales_Naplo::ir('kozpont', 'Központ-próba (' . self::mod() . '): ' . (!empty($v['ok']) ? 'rendben, ' . $ms . ' ms' : (string) $v['uzenet']), !empty($v['ok']) ? 'siker' : 'figyel');
 
         if (empty($v['ok'])) {
-            return SDH_Sales_Rest::hiba((string) $v['uzenet'], 502, 'sdh_kozpont');
+            return SDH_Sales_Rest::hiba((string) $v['uzenet'], 502, 'kozpont');
         }
 
         return rest_ensure_response(['ok' => true, 'uzenet' => 'A Központ elérhető (' . self::mod() . ' mód, ' . $ms . ' ms, Központ ' . sanitize_text_field((string) ($v['verzio'] ?? '')) . ').', 'ms' => $ms] + self::allapot());

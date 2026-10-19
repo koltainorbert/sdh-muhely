@@ -512,13 +512,13 @@ final class SDH_Sales_Suti
         $azon = (string) ($p['azon'] ?? '');
 
         if (preg_match('/^[A-Za-z0-9_-]{16,40}$/', $azon) !== 1) {
-            return SDH_Sales_Rest::hiba(__('Érvénytelen azonosító.', 'sdh-sales'), 400, 'sdh_suti_azon');
+            return SDH_Sales_Rest::hiba(__('Érvénytelen azonosító.', 'sdh-sales'), 400, 'suti_azon');
         }
 
         $verzio = (string) ($p['verzio'] ?? '');
 
         if (preg_match('/^[0-9A-Za-z._-]{1,20}$/', $verzio) !== 1) {
-            return SDH_Sales_Rest::hiba(__('Érvénytelen verzió.', 'sdh-sales'), 400, 'sdh_suti_verzio');
+            return SDH_Sales_Rest::hiba(__('Érvénytelen verzió.', 'sdh-sales'), 400, 'suti_verzio');
         }
 
         $be  = (array) ($p['kategoriak'] ?? []);
