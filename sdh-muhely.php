@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       SDH Műhely
  * Description:       Műhely- és ügyfélkezelő rendszer (CRM + munkalap) javítószervizeknek: munkalap, ügyfél, eszköz, pénztár, nyomtatványok.
- * Version:           0.99.3
+ * Version:           0.99.4
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.99.3');
+define('SDH_MUHELY_VERSION', '0.99.4');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -61,6 +61,8 @@ function sdh_muhely_kezdo_adat(string $nev): array
  * ================================================================== */
 
 $sdh_muhely_modulok = [
+    // 0.99.4: az AJAX-válasz védelme – a kiírt PHP-figyelmeztetés ne törje el a JSON-t (pl. „JSON.parse” a Naptárban).
+    'includes/class-sdh-muhely-ajax-vedo.php' => 'SDH_Muhely_Ajax_Vedo',
     'includes/class-sdh-muhely-schema.php'   => 'SDH_Muhely_Schema',
     'includes/class-sdh-muhely-modulok.php'  => 'SDH_Muhely_Modulok',
     // Változásnapló (0.59): minden módosítás mezőszinten – a többi modul ELŐTT, hogy semmi ne maradjon ki.
@@ -81,6 +83,8 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-garancia.php' => 'SDH_Muhely_Garancia',
     // F3 (0.85.0): átvételi fotók és aláírás (érintőképernyő) – a munkalap Átvétel lapfüle, a nyomtatványon is.
     'includes/class-sdh-muhely-atvetel.php'  => 'SDH_Muhely_Atvetel',
+    // 0.99.4: űrlapok e-mailben (gomb minden fő űrlapon) és a munkalap Fájlok lapfüle.
+    'includes/class-sdh-muhely-urlap-email.php' => 'SDH_Muhely_Urlap_Email',
     'includes/class-sdh-muhely-szolgaltatas.php' => 'SDH_Muhely_Szolgaltatas',
     'includes/class-sdh-muhely-termek.php'   => 'SDH_Muhely_Termek',
     // F4 (0.86.0): raktár – foglalás nyitott lapokon, hiány a lapon, rendelési javaslat beszállítónként.
@@ -91,6 +95,8 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-penztar-ugynok.php'  => 'SDH_Muhely_Penztar_Ugynok',
     'includes/class-sdh-muhely-penztar-import.php'  => 'SDH_Muhely_Penztar_Import',
     'includes/class-sdh-muhely-racs.php'     => 'SDH_Muhely_Racs',
+    // 0.99.4: okos kereső – típusfelismerés (IMEI, telefon, sorszám, kód, márka), azonnali találatok minden keresőben.
+    'includes/class-sdh-muhely-okoskereso.php' => 'SDH_Muhely_Okoskereso',
     'includes/class-sdh-muhely-kodok.php'    => 'SDH_Muhely_Kodok',
     'includes/class-sdh-muhely-rma.php'      => 'SDH_Muhely_Rma',
     'includes/class-sdh-muhely-rma-oldal.php' => 'SDH_Muhely_Rma_Oldal',
@@ -204,6 +210,31 @@ foreach ($sdh_muhely_modulok as $sdh_muhely_fajl => $sdh_muhely_osztaly) {
 }
 
 unset($sdh_muhely_fajl, $sdh_muhely_osztaly, $sdh_muhely_ut);
+
+/*
+ * AJAX-kérésnél (popupban betöltött űrlap, lista) a felület a kérésből jön: amit a műhely-felületről
+ * nyitottak meg, annak a linkjei is ott maradjanak, ne vigyenek a WordPress-adminba (0.99.4).
+ */
+function sdh_muhely_ajax_kontextus(): void
+{
+    if (!wp_doing_ajax() || !class_exists('SDH_Muhely_Modulok')) {
+        return;
+    }
+
+    if (isset($_REQUEST['kontextus'])) { // phpcs:ignore WordPress.Security.NonceVerification -- csak a linkek felületét választja.
+        SDH_Muhely_Modulok::kontextus_beallit(sanitize_key(wp_unslash((string) $_REQUEST['kontextus'])));
+
+        return;
+    }
+
+    $honnan = (string) wp_get_referer();
+
+    if ($honnan !== '' && strpos($honnan, '/wp-admin/') === false) {
+        SDH_Muhely_Modulok::kontextus_beallit('frontend');
+    }
+}
+
+add_action('init', 'sdh_muhely_ajax_kontextus', 0);
 
 /* =====================================================================
  * Aktiválás / deaktiválás

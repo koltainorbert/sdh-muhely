@@ -1346,3 +1346,85 @@
 .sdh-reszlet__eszkozfej ~ .sdh-reszlet__eszkozfej {
     margin-top: 1rem;
 }
+
+/* ================================================================== */
+/* 0.99.4 – oldalugró, pontos Állapot oszlop, szűrő-kereső            */
+/* ================================================================== */
+
+.sdh-racs__ugro {
+    width: 3.6rem;
+    height: calc(28px * var(--sdh-n));
+    margin: 0 .25rem;
+    padding: 0 .45rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(8px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(12px * var(--sdh-n));
+    text-align: center;
+}
+
+.sdh-racs__ugro:focus-visible {
+    outline: 2px solid var(--sdh-accent);
+    outline-offset: 1px;
+}
+
+/* Állapot csak színes pontként: a pont fölött átlátszó választó (kattintásra lenyílik). */
+.sdh-allapot--pontos {
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+    border-radius: 50%;
+}
+
+.sdh-allapot--pontos::before {
+    width: calc(11px * var(--sdh-n));
+    height: calc(11px * var(--sdh-n));
+    margin: 0;
+}
+
+.sdh-allapot--pontos select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border-radius: 50%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.sdh-racs__panelkereso {
+    width: 100%;
+    height: calc(30px * var(--sdh-n));
+    margin: 0 0 .45rem;
+    padding: 0 .7rem;
+    border: 1px solid var(--sdh-keret-eros);
+    border-radius: calc(8px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-szoveg);
+    font: inherit;
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-racs__panelkereso:focus-visible {
+    outline: 2px solid var(--sdh-accent-halvany);
+    border-color: var(--sdh-accent);
+}
+
+.sdh-racs__lista [data-ertek][hidden] {
+    display: none;
+}
+
+.sdh-racs__pontkapcs {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: .2rem 0 .35rem;
+    font-size: calc(13px * var(--sdh-n));
+    cursor: pointer;
+}

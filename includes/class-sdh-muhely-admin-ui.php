@@ -185,6 +185,13 @@ final class SDH_Muhely_Admin_UI
                 : 'frontend'
         );
 
+        // 0.99.4: az okos kereső – minden fajta rekord, a beírt szöveg fajtája szerinti sorrendben.
+        if (class_exists('SDH_Muhely_Okoskereso')) {
+            $elso = isset($_GET['elso']) ? sanitize_key(wp_unslash($_GET['elso'])) : '';
+
+            wp_send_json_success(SDH_Muhely_Okoskereso::keres($q, $elso));
+        }
+
         $minta = '%' . $wpdb->esc_like($q) . '%';
 
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
@@ -553,6 +560,10 @@ final class SDH_Muhely_Admin_UI
                 : ['be' => false, 'fuggo' => 0],
             // Modulok (0.58): a kikapcsolt fő modulok kulcsai – a szkriptek ebből tudják, mit ne kínáljanak fel.
             'modulokKi' => array_values(array_filter(array_keys(SDH_Muhely_Modulok::katalogus()), [SDH_Muhely_Modulok::class, 'ki'])),
+            // 0.99.4: Keresés és listák – azonnali találatok, okos keresés, oldalugró, dupla kattintás, szűrő-kereső.
+            'okos'      => class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::js() : [],
+            // 0.99.4: az űrlapok e-mailes továbbítása (melyik űrlapon van gomb) és a munkalap Fájlok lapfüle.
+            'urlapEmail' => class_exists('SDH_Muhely_Urlap_Email') ? SDH_Muhely_Urlap_Email::js() : [],
         ];
     }
 

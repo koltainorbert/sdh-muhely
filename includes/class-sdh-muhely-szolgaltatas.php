@@ -730,25 +730,64 @@ final class SDH_Muhely_Szolgaltatas
             $felt[] = 'bevizsgalas = 1';
         }
 
+        // 0.99.4: első körben specifikusan (kód; több szó: mind a névben) – ha így nincs találat, a teljes keresés.
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('szolgaltatas', $kereses) : null;
+        $visszaesett = false;
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
+        if ($szukites !== null) {
+            $sz_felt = array_merge(array_slice($felt, $kereses !== '' ? 1 : 0), [$szukites['sql']]);
+            $sz_ert  = $szukites['ertekek'];
+            $sz_db   = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $felt    = $sz_felt;
+                $ertekek = $sz_ert;
+            } else {
+                $visszaesett = true;
+            }
+        }
+
         $hol    = $felt === [] ? '' : 'WHERE ' . implode(' AND ', $felt);
         $rendez = $gyakori ? 'hasznalat DESC, nev ASC' : ($dij ? 'sorrend ASC, kategoria ASC, nev ASC' : 'nev ASC');
 
-        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        $osszesen = (int) ($ertekek === []
-            ? $wpdb->get_var("SELECT COUNT(*) FROM {$tabla} {$hol}")
-            : $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} {$hol}", $ertekek)));
+        $osszesen = $ertekek === []
+            ? SDH_Muhely_Gyorsitotar::szam("SELECT COUNT(*) FROM {$tabla} {$hol}")
+            : SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} {$hol}", $ertekek));
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM {$tabla} {$hol} ORDER BY {$rendez} LIMIT %d OFFSET %d",
-                array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
-            )
-        );
+        $max_oldal = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
+
+        if ($oldal > $max_oldal) {
+            $oldal   = $max_oldal;
+            $eltolas = ($oldal - 1) * self::OLDAL_MERET;
+        }
+
+        // Halasztott összekapcsolás (0.99.4): az oldal azonosítói a (nev) / (hasznalat, nev) indexről, aztán a sorok.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT id FROM {$tabla} {$hol} ORDER BY {$rendez}, id ASC LIMIT %d OFFSET %d",
+            array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
+        )));
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results("SELECT * FROM {$tabla} WHERE id IN (" . implode(',', $idk) . ')') as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
         $sorok   = is_array($sorok) ? $sorok : [];
         $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
-        $alap    = array_filter(['k' => $kereses !== '' ? $kereses : null, 'gyakori' => $gyakori ? 1 : null, 'dij' => $dij ? 1 : null]);
+        $alap    = array_filter(['k' => $kereses !== '' ? $kereses : null, 'gyakori' => $gyakori ? 1 : null, 'dij' => $dij ? 1 : null, 'mind' => !empty($_GET['mind']) ? 1 : null]); // phpcs:ignore WordPress.Security.NonceVerification
 
         ?>
         <div class="sdh-wrap">
@@ -797,6 +836,8 @@ final class SDH_Muhely_Szolgaltatas
                     <?php echo esc_html(number_format_i18n($osszesen)); ?> <?php echo $dij ? 'díj' : 'szolgáltatás'; ?>
                 </span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, self::KULCS, $alap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla sdh-tabla--szolg">
                 <thead>
@@ -1105,6 +1146,10 @@ final class SDH_Muhely_Szolgaltatas
                         Törlés
                     </button>
                 <?php endif; ?>
+
+                <?php if (!$uj && class_exists('SDH_Muhely_Urlap_Email')) : ?>
+                    <?php echo SDH_Muhely_Urlap_Email::gomb('szolgaltatas', (int) $sz->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
             </div>
         </div>
         <?php
@@ -1132,9 +1177,12 @@ final class SDH_Muhely_Szolgaltatas
     {
         self::jog_ellenorzes();
 
+        // 0.99.4: kereséssel (q) a szerver keres a teljes törzsben (a választó helyben csak a leggyakoribb
+        // LISTA_HATAR szolgáltatást szűri) – minden szó a névben, a névvel kezdődők elöl.
+        $q     = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
         $sorok = [];
 
-        foreach (self::lista() as $sz) {
+        foreach ($q !== '' ? self::keres_valasztonak($q, 200) : self::lista() as $sz) {
             $sorok[] = [
                 (int) $sz->id,
                 (string) $sz->nev,
@@ -1150,7 +1198,53 @@ final class SDH_Muhely_Szolgaltatas
         }
 
         nocache_headers();
-        wp_send_json_success(['sorok' => $sorok]);
+        wp_send_json_success(['sorok' => $sorok, 'tobb' => SDH_Muhely_Gyorsitotar::szam('SELECT COUNT(*) FROM ' . self::tabla()) > self::LISTA_HATAR]);
+    }
+
+    /**
+     * Keresés a választónak a teljes törzsben (0.99.4).
+     *
+     * @return array<int, object>
+     */
+    public static function keres_valasztonak(string $q, int $db): array
+    {
+        global $wpdb;
+
+        $t      = self::tabla();
+        $k      = trim($q);
+        $oszlop = 'id, nev, me, brutto_ar, afa_kulcs, hasznalat, kategoria, kod, ar_max, bevizsgalas';
+        $lep    = [['kod = %s', [$k]], ['nev LIKE %s', [$wpdb->esc_like($k) . '%']]];
+        $sql    = [];
+        $ert    = [];
+
+        foreach (array_slice(preg_split('/\s+/u', $k, -1, PREG_SPLIT_NO_EMPTY) ?: [], 0, 5) as $szo) {
+            $m     = '%' . $wpdb->esc_like($szo) . '%';
+            $sql[] = '(nev LIKE %s OR kategoria LIKE %s OR kod LIKE %s)';
+            array_push($ert, $m, $m, $m);
+        }
+
+        if ($sql !== []) {
+            $lep[] = [implode(' AND ', $sql), $ert];
+        }
+
+        $talalat = [];
+
+        foreach ($lep as [$feltetel, $ertekek]) {
+            $hiany = $db - count($talalat);
+
+            if ($hiany <= 0) {
+                break;
+            }
+
+            $kiz = $talalat !== [] ? ' AND id NOT IN (' . implode(',', array_map('intval', array_keys($talalat))) . ')' : '';
+
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- csak helyőrzők és egész számok.
+            foreach ((array) $wpdb->get_results($wpdb->prepare("SELECT {$oszlop} FROM {$t} WHERE ({$feltetel}){$kiz} ORDER BY hasznalat DESC, nev ASC LIMIT " . (int) $hiany, $ertekek)) as $sor) {
+                $talalat[(int) $sor->id] = $sor;
+            }
+        }
+
+        return array_values($talalat);
     }
 
     public static function ajax_felejt(): void

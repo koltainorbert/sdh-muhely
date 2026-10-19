@@ -33,7 +33,7 @@ final class SDH_Muhely_Csatolmany
     private const MAPPA = 'sdh-muhely/csatolmany';
 
     /** Mely modulokhoz lehet csatolni (új modulnál ide kell felvenni). */
-    private const TIPUSOK = ['ugyfel', 'eszkoz', 'munkalap', 'munkalap_alairas'];
+    private const TIPUSOK = ['ugyfel', 'eszkoz', 'munkalap', 'munkalap_alairas', 'munkalap_fajl'];
 
     /** A mi felső korlátunk fájlonként; a szerver saját korlátja ennél kisebb is lehet. */
     private const MAX_FAJL_MB = 25;
@@ -200,13 +200,13 @@ final class SDH_Muhely_Csatolmany
      *
      * @return array<int, array{nev: string, tmp: string, hiba: int, meret: int}>
      */
-    private static function beerkezett(): array
+    private static function beerkezett(string $mezo = 'csatolmany'): array
     {
-        if (empty($_FILES['csatolmany']) || !is_array($_FILES['csatolmany']['name'])) {
+        if (empty($_FILES[$mezo]) || !is_array($_FILES[$mezo]['name'])) {
             return [];
         }
 
-        $fajlok = $_FILES['csatolmany']; // phpcs:ignore WordPress.Security.NonceVerification
+        $fajlok = $_FILES[$mezo]; // phpcs:ignore WordPress.Security.NonceVerification
         $ki     = [];
 
         foreach ($fajlok['name'] as $i => $nev) {
@@ -235,12 +235,12 @@ final class SDH_Muhely_Csatolmany
      * Visszatérés: a hibaüzenet, vagy null, ha minden rendben. Így hibás
      * fájl esetén az őt tartalmazó rekord (pl. az ügyfél) sem mentődik félig.
      */
-    public static function ellenoriz(): ?string
+    public static function ellenoriz(string $mezo = 'csatolmany'): ?string
     {
         $hibak = [];
         $max   = self::max_meret();
 
-        foreach (self::beerkezett() as $fajl) {
+        foreach (self::beerkezett($mezo) as $fajl) {
             $nev = $fajl['nev'];
             $ext = self::kiterjesztes($nev);
 
@@ -297,7 +297,7 @@ final class SDH_Muhely_Csatolmany
      *
      * @return array{hozzaadva: int, torolve: int, hibak: array<int, string>}
      */
-    public static function feldolgoz(string $tipus, int $ref_id): array
+    public static function feldolgoz(string $tipus, int $ref_id, string $mezo = 'csatolmany'): array
     {
         global $wpdb;
 
@@ -308,8 +308,9 @@ final class SDH_Muhely_Csatolmany
         }
 
         // Törlés: csak az ehhez a rekordhoz tartozó sorok mehetnek.
-        $torlendo = isset($_POST['torol_csatolmany']) && is_array($_POST['torol_csatolmany']) // phpcs:ignore WordPress.Security.NonceVerification
-            ? array_filter(array_map('intval', wp_unslash($_POST['torol_csatolmany'])))
+        $torles_mezo = 'torol_' . $mezo;
+        $torlendo = isset($_POST[$torles_mezo]) && is_array($_POST[$torles_mezo]) // phpcs:ignore WordPress.Security.NonceVerification
+            ? array_filter(array_map('intval', wp_unslash($_POST[$torles_mezo])))
             : [];
 
         foreach ($torlendo as $id) {
@@ -327,7 +328,7 @@ final class SDH_Muhely_Csatolmany
         }
 
         // Feltöltés.
-        $fajlok = self::beerkezett();
+        $fajlok = self::beerkezett($mezo);
 
         if ($fajlok === []) {
             return $eredmeny;
@@ -591,7 +592,7 @@ final class SDH_Muhely_Csatolmany
      *
      * A böngészőoldali működés (húzás, kiválasztás, eltávolítás) az app.js-ben van.
      */
-    public static function panel(string $tipus, int $ref_id): void
+    public static function panel(string $tipus, int $ref_id, string $mezo = 'csatolmany'): void
     {
         $meglevok = self::lista($tipus, $ref_id);
         $max      = self::max_meret();
@@ -619,7 +620,7 @@ final class SDH_Muhely_Csatolmany
             </div>
 
             <div class="sdh-csat__zona" data-sdh-csat-zona>
-                <input type="file" name="csatolmany[]" multiple class="sdh-csat__input"
+                <input type="file" name="<?php echo esc_attr($mezo); ?>[]" multiple class="sdh-csat__input"
                        data-sdh-csat-input tabindex="-1">
 
                 <ul class="sdh-csat__lista" data-sdh-csat-lista>
@@ -662,7 +663,7 @@ final class SDH_Muhely_Csatolmany
                                         aria-label="Eltávolítás">×</button>
                             </span>
 
-                            <input type="hidden" name="torol_csatolmany[]"
+                            <input type="hidden" name="torol_<?php echo esc_attr($mezo); ?>[]" data-sdh-csat-torol-mezo
                                    value="<?php echo (int) $sor->id; ?>" disabled>
                         </li>
                     <?php endforeach; ?>

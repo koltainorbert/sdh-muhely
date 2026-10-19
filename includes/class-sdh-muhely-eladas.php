@@ -1322,15 +1322,14 @@ final class SDH_Muhely_Eladas
             $szurok = ['' => 'Ma', 'het' => 'Utolsó 7 nap', 'honap' => 'Utolsó 30 nap', 'mind' => 'Mind', 'tartozas' => 'Nincs kifizetve'];
             $szuro  = isset($szurok[$szuro]) ? $szuro : '';
 
-            // Keresésnél az időszak nem szűkít: a régi eladás is előkerül.
-            if ($kereses === '') {
-                if ($szuro === '') {
-                    $feltetelek[] = 'm.keszult = %s';
-                    $ertekek[]    = $ma;
-                } elseif ($szuro === 'het' || $szuro === 'honap') {
-                    $feltetelek[] = 'm.keszult >= %s';
-                    $ertekek[]    = gmdate('Y-m-d', strtotime($ma . ($szuro === 'het' ? ' -6 days' : ' -29 days')));
-                }
+            // Keresésnél az alap időszak (Ma) nem szűkít: a régi eladás is előkerül. A kiválasztott időszak
+            // (7 / 30 nap) viszont kereséskor is szűkít – ugyanúgy, mint a Munkalapok és a Rendelések szűrői (0.99.4).
+            if ($szuro === '' && $kereses === '') {
+                $feltetelek[] = 'm.keszult = %s';
+                $ertekek[]    = $ma;
+            } elseif ($szuro === 'het' || $szuro === 'honap') {
+                $feltetelek[] = 'm.keszult >= %s';
+                $ertekek[]    = gmdate('Y-m-d', strtotime($ma . ($szuro === 'het' ? ' -6 days' : ' -29 days')));
             }
 
             if ($szuro === 'tartozas') {
@@ -1380,6 +1379,10 @@ final class SDH_Muhely_Eladas
         $ugyfel_tabla = SDH_Muhely_Schema::tabla('ugyfel');
         $tetel_tabla  = SDH_Muhely_Schema::tabla('munkalap_tetel');
 
+        $alap_felt = $feltetelek;
+        $alap_ert  = $ertekek;
+        $kell_u    = false;
+
         if ($kereses !== '') {
             $minta  = '%' . $wpdb->esc_like($kereses) . '%';
             $reszek = [
@@ -1398,31 +1401,74 @@ final class SDH_Muhely_Eladas
 
             $feltetelek[] = '(' . implode(' OR ', $reszek) . ')';
             $ertekek      = array_merge($ertekek, $par);
+            $kell_u       = true;
+        }
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket és rögzített kifejezéseket tartalmaz.
+        // 0.99.4: első körben specifikusan (sorszám, telefon, e-mail, IMEI) – ha így nincs találat, a teljes keresés.
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('eladas', $kereses) : null;
+        $visszaesett = false;
+
+        if ($szukites !== null) {
+            $sz_felt = array_merge($alap_felt, [$szukites['sql']]);
+            $sz_ert  = array_merge($alap_ert, $szukites['ertekek']);
+            $sz_db   = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} m WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $feltetelek = $sz_felt;
+                $ertekek    = $sz_ert;
+                $kell_u     = false;
+            } else {
+                $visszaesett = true;
+            }
         }
 
         $hol  = 'WHERE ' . implode(' AND ', $feltetelek);
-        $tobb = "FROM {$tabla} m LEFT JOIN {$ugyfel_tabla} u ON u.id = m.ugyfel_id";
+        $tobb = "FROM {$tabla} m" . ($kell_u ? " LEFT JOIN {$ugyfel_tabla} u ON u.id = m.ugyfel_id" : '');
 
-        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket és rögzített kifejezéseket tartalmaz.
-        $ossz = $wpdb->get_row($wpdb->prepare(
+        // 0.99.4: az összesítő tárolva (amíg az adat nem változik), és az ügyfél csak a keresésnél kapcsolódik.
+        $ossz_sql = $wpdb->prepare(
             "SELECT COUNT(*) AS db, COALESCE(SUM(m.brutto_ertek), 0) AS brutto, COALESCE(SUM(m.fizetett), 0) AS fizetett,
                     COALESCE(SUM(CASE WHEN m.fizetve = 1 THEN 0 ELSE m.brutto_ertek - m.fizetett END), 0) AS fizetendo
              {$tobb} {$hol}",
             $ertekek
-        ));
+        );
+        $ossz_tomb = SDH_Muhely_Gyorsitotar::ertek('eladas_ossz|' . $ossz_sql, static function () use ($wpdb, $ossz_sql): array {
+            return (array) $wpdb->get_row($ossz_sql, ARRAY_A);
+        });
+        $ossz = $ossz_tomb !== [] ? (object) $ossz_tomb : null;
 
         $meret    = self::beallitas()['oldal_meret'];
         $osszesen = $ossz ? (int) $ossz->db : 0;
         $oldalak  = max(1, (int) ceil($osszesen / $meret));
         $oldal    = min($oldal, $oldalak);
 
-        $sorok = $wpdb->get_results($wpdb->prepare(
-            "SELECT m.*, u.nev AS ugyfel_nev, u.telefon AS ugyfel_telefon
-             {$tobb} {$hol}
+        // Halasztott összekapcsolás: előbb az oldal azonosítói (fajta + keszult index), aztán a sorok.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT m.id {$tobb} {$hol}
              ORDER BY m.keszult DESC, m.munkalap_szam DESC, m.id DESC
              LIMIT %d OFFSET %d",
             array_merge($ertekek, [$meret, ($oldal - 1) * $meret])
-        ));
+        )));
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results(
+                "SELECT m.*, u.nev AS ugyfel_nev, u.telefon AS ugyfel_telefon
+                 FROM {$tabla} m LEFT JOIN {$ugyfel_tabla} u ON u.id = m.ugyfel_id WHERE m.id IN (" . implode(',', $idk) . ')'
+            ) as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
         $sorok   = is_array($sorok) ? $sorok : [];
@@ -1496,6 +1542,8 @@ final class SDH_Muhely_Eladas
 
                 <span class="sdh-kereso__talalat"><?php echo esc_html(number_format_i18n($osszesen)); ?> találat</span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, $modul, array_filter(['k' => $kereses, 'szuro' => $szuro !== '' ? $szuro : null, 'torzs' => $torzs > 0 ? $torzs : null])) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla sdh-eladas__tabla">
                 <thead>
@@ -1625,6 +1673,7 @@ final class SDH_Muhely_Eladas
                                 'k'         => $kereses !== '' ? $kereses : null,
                                 'szuro'     => $szuro !== '' ? $szuro : null,
                                 'torzs'     => $torzs > 0 ? $torzs : null,
+                                'mind'      => !empty($_GET['mind']) ? 1 : null, // phpcs:ignore WordPress.Security.NonceVerification
                             ], static fn ($e): bool => $e !== null))); ?>"><?php echo (int) $i; ?></a>
                         <?php endif; ?>
                     <?php endforeach; ?>

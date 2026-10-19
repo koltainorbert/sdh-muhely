@@ -785,8 +785,10 @@ final class SDH_Muhely_Ugyfel
 
         // A feltételeket külön építjük, hogy a számláló és a lekérdezés
         // ugyanazt lássa.
-        $feltetelek = ['aktiv = %d'];
-        $ertekek    = [$inaktiv ? 0 : 1];
+        $alap_felt = ['aktiv = %d'];
+        $alap_ert  = [$inaktiv ? 0 : 1];
+        $feltetelek = $alap_felt;
+        $ertekek    = $alap_ert;
 
         if ($kereses !== '' && self::kereso_keszen()) {
             // Gyors út: egyetlen indexelt keresőoszlop (név, cím, e-mail, ügyfélszám, telefon számjegyei).
@@ -810,21 +812,60 @@ final class SDH_Muhely_Ugyfel
             array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta, $minta, $minta);
         }
 
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
+        // 0.99.4: első körben specifikusan (telefon, e-mail, ügyfélszám) – ha így nincs találat, a teljes keresés.
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('ugyfel', $kereses) : null;
+        $visszaesett = false;
+
+        if ($szukites !== null) {
+            $sz_felt  = array_merge($alap_felt, [$szukites['sql']]);
+            $sz_ert   = array_merge($alap_ert, $szukites['ertekek']);
+            $sz_db    = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $feltetelek = $sz_felt;
+                $ertekek    = $sz_ert;
+            } else {
+                $visszaesett = true;
+            }
+        }
+
         $hol = 'WHERE ' . implode(' AND ', $feltetelek);
 
-        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
         // 0.64: a találatszám tárolva (lapozáskor és ugyanarra a keresésre nem számolódik újra).
         $osszesen = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} {$hol}", $ertekek));
+        $oldalak  = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM {$tabla} {$hol} ORDER BY nev ASC LIMIT %d OFFSET %d",
-                array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
-            )
-        );
+        // Az utolsó oldalon túl (régi link, kézzel írt oldalszám): az utolsó oldal.
+        if ($oldal > $oldalak) {
+            $oldal   = $oldalak;
+            $eltolas = ($oldal - 1) * self::OLDAL_MERET;
+        }
+
+        // 0.99.4: halasztott összekapcsolás – előbb az oldal azonosítói a keskeny (aktiv, nev) indexről,
+        // aztán csak ennek az oldalnak a teljes sorai. A 11 801. oldal így sem olvas végig 295 000 teljes sort.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT id FROM {$tabla} {$hol} ORDER BY nev ASC, id ASC LIMIT %d OFFSET %d",
+            array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
+        )));
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results("SELECT * FROM {$tabla} WHERE id IN (" . implode(',', $idk) . ')') as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
-        $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
 
         ?>
         <div class="sdh-wrap">
@@ -875,6 +916,8 @@ final class SDH_Muhely_Ugyfel
                     <?php echo esc_html(number_format_i18n($osszesen)); ?> találat
                 </span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, self::KULCS, array_filter(['k' => $kereses, 'inaktiv' => $inaktiv ? 1 : null])) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla">
                 <thead>
@@ -958,6 +1001,7 @@ final class SDH_Muhely_Ugyfel
                                         'oldalszam' => $i,
                                         'k'         => $kereses !== '' ? $kereses : null,
                                         'inaktiv'   => $inaktiv ? 1 : null,
+                                        'mind'      => !empty($_GET['mind']) ? 1 : null, // phpcs:ignore WordPress.Security.NonceVerification
                                     ],
                                     static fn ($ertek): bool => $ertek !== null
                                 )
@@ -1316,6 +1360,10 @@ final class SDH_Muhely_Ugyfel
                    href="<?php echo esc_url($allapot_url); ?>">
                     <?php echo (int) $ugyfel->aktiv === 1 ? 'Inaktívra állít' : 'Újra aktív'; ?>
                 </a>
+
+                <?php if (class_exists('SDH_Muhely_Urlap_Email')) : ?>
+                    <?php echo SDH_Muhely_Urlap_Email::gomb('ugyfel', (int) $ugyfel->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         </div>

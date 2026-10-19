@@ -242,6 +242,10 @@ final class SDH_Muhely_Eszkoz
             $ertekek[]    = $ugyfel_id;
         }
 
+        $alap_felt = $feltetelek;
+        $alap_ert  = $ertekek;
+        $kell_u    = false;
+
         if ($kereses !== '') {
             $minta = '%' . $wpdb->esc_like($kereses) . '%';
 
@@ -249,34 +253,66 @@ final class SDH_Muhely_Eszkoz
                 . 'OR e.imei LIKE %s OR e.imei2 LIKE %s OR e.sorozatszam LIKE %s OR u.nev LIKE %s)';
 
             array_push($ertekek, $minta, $minta, $minta, $minta, $minta, $minta, $minta);
+            $kell_u = true;
         }
 
-        $hol = 'WHERE ' . implode(' AND ', $feltetelek);
-
         // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- a $hol csak helyőrzőket tartalmaz.
-        // 0.64: az ügyfél csak a keresésnél kell a számláláshoz (u.nev), és a szám tárolva van.
-        $osszesen = SDH_Muhely_Gyorsitotar::szam(
-            $wpdb->prepare(
-                "SELECT COUNT(*) FROM {$eszkoz_tabla} e"
-                . ($kereses !== '' ? " LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id" : '') . " {$hol}",
-                $ertekek
-            )
-        );
+        // 0.99.4: első körben specifikusan (IMEI, gyári szám, márka) – ha így nincs találat, a teljes keresés.
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('eszkoz', $kereses) : null;
+        $visszaesett = false;
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT e.*, u.nev AS ugyfel_nev
-                 FROM {$eszkoz_tabla} e
-                 LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id
-                 {$hol}
-                 ORDER BY e.modositva DESC, e.id DESC
-                 LIMIT %d OFFSET %d",
-                array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
-            )
-        );
+        if ($szukites !== null) {
+            $sz_felt = array_merge($alap_felt, [$szukites['sql']]);
+            $sz_ert  = array_merge($alap_ert, $szukites['ertekek']);
+            $sz_db   = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$eszkoz_tabla} e WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $feltetelek = $sz_felt;
+                $ertekek    = $sz_ert;
+                $kell_u     = false;
+            } else {
+                $visszaesett = true;
+            }
+        }
+
+        $hol  = 'WHERE ' . implode(' AND ', $feltetelek);
+        $join = $kell_u ? " LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id" : '';
+
+        // 0.64: az ügyfél csak a keresésnél kell a számláláshoz (u.nev), és a szám tárolva van.
+        $osszesen = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$eszkoz_tabla} e{$join} {$hol}", $ertekek));
+        $oldalak  = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
+
+        if ($oldal > $oldalak) {
+            $oldal   = $oldalak;
+            $eltolas = ($oldal - 1) * self::OLDAL_MERET;
+        }
+
+        // 0.99.4: halasztott összekapcsolás – előbb az oldal azonosítói (aktiv, modositva index), aztán a sorok.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT e.id FROM {$eszkoz_tabla} e{$join} {$hol} ORDER BY e.modositva DESC, e.id DESC LIMIT %d OFFSET %d",
+            array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
+        )));
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results(
+                "SELECT e.*, u.nev AS ugyfel_nev FROM {$eszkoz_tabla} e LEFT JOIN {$ugyfel_tabla} u ON u.id = e.ugyfel_id
+                 WHERE e.id IN (" . implode(',', $idk) . ')'
+            ) as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
-        $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
         $szurt   = $ugyfel_id > 0 ? SDH_Muhely_Ugyfel::nev($ugyfel_id) : '';
 
         ?>
@@ -322,6 +358,8 @@ final class SDH_Muhely_Eszkoz
                     <?php echo esc_html(number_format_i18n($osszesen)); ?> találat
                 </span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, self::KULCS, array_filter(['k' => $kereses, 'ugyfel_id' => $ugyfel_id > 0 ? $ugyfel_id : null])) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla">
                 <thead>
@@ -431,6 +469,7 @@ final class SDH_Muhely_Eszkoz
                                         'oldalszam' => $i,
                                         'k'         => $kereses !== '' ? $kereses : null,
                                         'ugyfel_id' => $ugyfel_id > 0 ? $ugyfel_id : null,
+                                        'mind'      => !empty($_GET['mind']) ? 1 : null, // phpcs:ignore WordPress.Security.NonceVerification
                                     ],
                                     static fn ($ertek): bool => $ertek !== null
                                 )
@@ -851,6 +890,10 @@ final class SDH_Muhely_Eszkoz
                     <button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-megsem>Mégsem</button>
                 <?php else : ?>
                     <a class="sdh-gomb sdh-gomb--vilagos" href="<?php echo esc_url(self::url()); ?>">Mégsem</a>
+                <?php endif; ?>
+
+                <?php if (!$uj && class_exists('SDH_Muhely_Urlap_Email')) : ?>
+                    <?php echo SDH_Muhely_Urlap_Email::gomb('eszkoz', (int) $eszkoz->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
             </div>
         </div>

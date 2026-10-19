@@ -113,6 +113,24 @@ final class SDH_Muhely_Raktar
     }
 
     /**
+     * Hány terméket kell rendelni (a Termékek lista fülének száma) – a foglalások nélkül (azok csak a javaslat
+     * kijelzéséhez kellenek), és tárolva, amíg a termékek nem változnak (0.99.4: 300 000 terméknél ez lassította a listát).
+     */
+    public static function javaslat_db(): int
+    {
+        global $wpdb;
+
+        // Ugyanaz, mint a javasolt() > 0, egy számlálással: a célkészlet (cel()) nagyobb a készletnél.
+        return (int) SDH_Muhely_Gyorsitotar::ertek('raktar_javaslat_db', static function () use ($wpdb): int {
+            return (int) $wpdb->get_var(
+                'SELECT COUNT(*) FROM ' . self::t('termek') . ' WHERE aktiv = 1 AND keszletkezeles = 1
+                   AND (keszlet < 0 OR (min_keszlet > 0 AND keszlet < min_keszlet) OR (keszlet <= 0 AND cel_keszlet > 0))
+                   AND (CASE WHEN cel_keszlet > 0 THEN cel_keszlet WHEN min_keszlet > 0 THEN min_keszlet * 2 ELSE 1 END) > keszlet'
+            );
+        });
+    }
+
+    /**
      * A rendelési javaslat, beszállítónként.
      *
      * @return array<string, array<int, array<string, mixed>>> beszállító => sorok

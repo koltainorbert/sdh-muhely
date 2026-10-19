@@ -133,7 +133,27 @@
         });
 
         return fetch(B.ajax, { method: 'POST', body: fd, credentials: 'same-origin' })
-            .then(function (v) { return v.json(); })
+            .then(function (v) {
+                // Nem JSON válasz (szerverhiba, lejárt belépés, kiírt PHP-figyelmeztetés): érthető üzenet a „JSON.parse" helyett.
+                return v.text().then(function (szoveg) {
+                    var t = String(szoveg || '');
+                    var hol = t.indexOf('{"success"');
+
+                    try {
+                        return JSON.parse(t);
+                    } catch (h) {
+                        if (hol > 0) {
+                            try { return JSON.parse(t.slice(hol)); } catch (h2) { /* lent */ }
+                        }
+                    }
+
+                    var tiszta = t.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 240);
+
+                    throw new Error(v.status >= 400
+                        ? 'A szerver hibát adott (' + v.status + ')' + (tiszta ? ': ' + tiszta : '.')
+                        : (tiszta === '0' || tiszta === '-1' ? 'Lejárt a belépés – töltsd újra az oldalt.' : 'A szerver nem várt választ adott' + (tiszta ? ': ' + tiszta : '.')));
+                });
+            })
             .then(function (v) {
                 if (!v || !v.success) {
                     throw new Error((v && v.data && v.data.uzenet) || 'A művelet nem sikerült.');

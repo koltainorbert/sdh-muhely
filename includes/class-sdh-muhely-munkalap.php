@@ -1995,9 +1995,11 @@ final class SDH_Muhely_Munkalap
         } elseif ($szuro !== '' && isset($allapotok[$szuro])) {
             $feltetelek[] = 'm.allapot = %s';
             $ertekek[]    = $szuro;
-        } elseif ($nyitott !== []) {
+        } elseif ($nyitott !== [] && $kereses === '') {
             // Alapnézet: a nyitott munkalapok. A Sablon és az Árajánlat
             // nem munkalap, azokat az állapotszűrő külön mutatja.
+            // Keresésnél (0.99.4) az alapnézet nem szűkít – a lezárt lap is előkerül, mint az árukiadásnál és a
+            // rendelésnél; a kiválasztott állapot viszont kereséskor is szűkít.
             $feltetelek[] = 'm.allapot IN (' . self::in_helyorzo($nyitott) . ')';
             $ertekek      = array_merge($ertekek, $nyitott);
         }
@@ -2015,6 +2017,9 @@ final class SDH_Muhely_Munkalap
             $ertekek[]    = $eszkoz_id;
             $ertekek[]    = $eszkoz_id;
         }
+
+        $alap_felt = $feltetelek;
+        $alap_ert  = $ertekek;
 
         if ($kereses !== '') {
             $minta  = '%' . $wpdb->esc_like($kereses) . '%';
@@ -2040,6 +2045,24 @@ final class SDH_Muhely_Munkalap
             $ertekek      = array_merge($ertekek, $par);
         }
 
+        // 0.99.4: első körben specifikusan (sorszám, IMEI, gyári szám, telefon, márka) – ha így nincs találat, a teljes keresés.
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('munkalap', $kereses) : null;
+        $visszaesett = false;
+
+        if ($szukites !== null) {
+            $sz_felt = array_merge($alap_felt, [$szukites['sql']]);
+            $sz_ert  = array_merge($alap_ert, $szukites['ertekek']);
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- csak helyőrzők.
+            $sz_db   = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} m WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $feltetelek = $sz_felt;
+                $ertekek    = $sz_ert;
+            } else {
+                $visszaesett = true;
+            }
+        }
+
         $hol   = 'WHERE ' . implode(' AND ', $feltetelek);
         $tobb  = "FROM {$tabla} m
                   LEFT JOIN {$ugyfel_tabla} u ON u.id = m.ugyfel_id
@@ -2052,6 +2075,14 @@ final class SDH_Muhely_Munkalap
         $osszesen = SDH_Muhely_Gyorsitotar::szam(
             $ertekek === [] ? $szam_sql : $wpdb->prepare($szam_sql, $ertekek)
         );
+
+        // Az utolsó oldalon túl: az utolsó oldal (0.99.4).
+        $max_oldal = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
+
+        if ($oldal > $max_oldal) {
+            $oldal   = $max_oldal;
+            $eltolas = ($oldal - 1) * self::OLDAL_MERET;
+        }
 
         // Halasztott összekapcsolás (0.64): előbb az oldal azonosítói (keskeny rendezés), aztán
         // ennek az oldalnak a sorai az ügyféllel és az eszközzel – ugyanabban a sorrendben.
@@ -2158,6 +2189,8 @@ final class SDH_Muhely_Munkalap
                     <?php echo esc_html(number_format_i18n($osszesen)); ?> találat
                 </span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, self::KULCS, array_filter(['k' => $kereses, 'allapot' => $szuro !== '' ? $szuro : null, 'ugyfel_id' => $ugyfel_id > 0 ? $ugyfel_id : null, 'eszkoz_id' => $eszkoz_id > 0 ? $eszkoz_id : null])) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla">
                 <thead>
@@ -2287,6 +2320,7 @@ final class SDH_Muhely_Munkalap
                                         'allapot'   => $szuro !== '' ? $szuro : null,
                                         'ugyfel_id' => $ugyfel_id > 0 ? $ugyfel_id : null,
                                         'eszkoz_id' => $eszkoz_id > 0 ? $eszkoz_id : null,
+                                        'mind'      => !empty($_GET['mind']) ? 1 : null, // phpcs:ignore WordPress.Security.NonceVerification
                                     ],
                                     static fn ($ertek): bool => $ertek !== null
                                 )
@@ -3902,6 +3936,15 @@ final class SDH_Muhely_Munkalap
                             <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--6" name="_ful_munkalap"
                                    id="ful_m_atvetel" data-sdh-ful-kulcs="atvetel">
                         <?php endif; ?>
+                        <?php
+                        // 0.99.4: a Fájlok lapfül (kép, dokumentum) – mindig az utolsó lapfül.
+                        $fajlok_be = class_exists('SDH_Muhely_Urlap_Email') && SDH_Muhely_Urlap_Email::fajlok_be();
+                        $n_fajlok  = !$eladas && class_exists('SDH_Muhely_Atvetel') ? 7 : 6;
+                        ?>
+                        <?php if ($fajlok_be) : ?>
+                            <input type="radio" class="sdh-fulek__ful sdh-fulek__ful--<?php echo (int) $n_fajlok; ?>" name="_ful_munkalap"
+                                   id="ful_m_fajlok" data-sdh-ful-kulcs="fajlok">
+                        <?php endif; ?>
 
                         <div class="sdh-fulek__sav">
                             <label for="ful_m_eszkoz"<?php echo $rejt; ?><?php echo $eladas ? '' : $ub('ful_eszkoz'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Eszköz <span class="sdh-fulek__db" data-sdh-db="eszkoz" hidden></span></label>
@@ -3917,6 +3960,10 @@ final class SDH_Muhely_Munkalap
                             <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
                                 <?php $atv_db = $munkalap ? SDH_Muhely_Atvetel::darab((int) $munkalap->id) : 0; ?>
                                 <label for="ful_m_atvetel"<?php echo $ub('ful_atvetel'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Átvétel<?php echo $atv_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $atv_db . '</span>' : ''; ?></label>
+                            <?php endif; ?>
+                            <?php if ($fajlok_be) : ?>
+                                <?php $fajl_db = $munkalap ? SDH_Muhely_Urlap_Email::darab((int) $munkalap->id) : 0; ?>
+                                <label for="ful_m_fajlok">Fájlok<?php echo $fajl_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $fajl_db . '</span>' : ''; ?></label>
                             <?php endif; ?>
                         </div>
 
@@ -3979,6 +4026,12 @@ final class SDH_Muhely_Munkalap
                         <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
                             <div class="sdh-fulek__panel sdh-fulek__panel--6 sdh-fulek__panel--atvetel">
                                 <?php SDH_Muhely_Atvetel::ful($munkalap); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($fajlok_be) : ?>
+                            <div class="sdh-fulek__panel sdh-fulek__panel--<?php echo (int) $n_fajlok; ?> sdh-fulek__panel--fajlok">
+                                <?php SDH_Muhely_Urlap_Email::ful($munkalap); ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -4084,6 +4137,11 @@ final class SDH_Muhely_Munkalap
                 <?php // Számlázás: csak mentett, sorszámot kapott lapnál (SDH_Muhely_Szamla). ?>
                 <?php if (!$uj && $modal && (int) $munkalap->munkalap_szam > 0 && class_exists('SDH_Muhely_Szamla')) : ?>
                     <?php SDH_Muhely_Szamla::munkalap_gombok($munkalap); ?>
+                <?php endif; ?>
+
+                <?php // 0.99.4: az űrlap továbbítása e-mailben – a gombsor utolsó eleme (Beállítások › Űrlapok e-mailben). ?>
+                <?php if (!$uj && class_exists('SDH_Muhely_Urlap_Email')) : ?>
+                    <?php echo SDH_Muhely_Urlap_Email::gomb($fajta === 'arukiadas' ? 'arukiadas' : ($fajta === 'rendeles' ? 'rendeles' : 'munkalap'), (int) $munkalap->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -5276,6 +5334,11 @@ final class SDH_Muhely_Munkalap
 
         // Átvételi fotók és aláírás (F3): hibás fájlnál a lap sem mentődik félig.
         if (class_exists('SDH_Muhely_Atvetel') && ($hiba = SDH_Muhely_Atvetel::ellenoriz()) !== null) {
+            return $hiba;
+        }
+
+        // A Fájlok lapfül feltöltései (0.99.4): hibás fájlnál a lap sem mentődik félig.
+        if (class_exists('SDH_Muhely_Urlap_Email') && ($hiba = SDH_Muhely_Urlap_Email::ellenoriz()) !== null) {
             return $hiba;
         }
 

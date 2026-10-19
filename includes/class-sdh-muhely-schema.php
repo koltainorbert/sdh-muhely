@@ -27,7 +27,7 @@ final class SDH_Muhely_Schema
      * A séma verziója. Ha táblát vagy mezőt módosítasz, EZT IS LÉPTESD,
      * különben a változás nem jut el a már működő telepítésekre.
      */
-    public const DB_VERSION = '0.53.0';
+    public const DB_VERSION = '0.54.0';
 
     /** Az option neve, amiben a telepített sémaverziót tartjuk. */
     private const OPTION = 'sdh_muhely_db_version';
@@ -212,6 +212,7 @@ final class SDH_Muhely_Schema
             key telefon (telefon),
             key email (email),
             key aktiv (aktiv),
+            key aktiv_nev (aktiv,nev),
             key kulso_azonosito (kulso_azonosito),
             key kereso (kereso),
             key tel_ford (tel_ford),
@@ -296,6 +297,8 @@ final class SDH_Muhely_Schema
             key kategoria (kategoria),
             key modositva (modositva),
             key aktiv (aktiv),
+            key aktiv_modositva (aktiv,modositva),
+            key modell_szam (modell_szam),
             key kulso_azonosito (kulso_azonosito)
         ) {$charset};";
 
@@ -644,6 +647,8 @@ final class SDH_Muhely_Schema
             PRIMARY KEY  (id),
             UNIQUE KEY kulcs (kulcs),
             key hasznalat (hasznalat),
+            key nev (nev(190)),
+            key kod (kod),
             key bevizsgalas (bevizsgalas)
         ) {$charset};";
 
@@ -744,7 +749,10 @@ final class SDH_Muhely_Schema
             key cikkszam (cikkszam),
             key termekkod (termekkod),
             key vonalkod (vonalkod),
+            key gyari_szam (gyari_szam),
+            key beszallito (beszallito),
             key aktiv (aktiv),
+            key aktiv_kategoria (aktiv,kategoria),
             key kulso_azonosito (kulso_azonosito)
         ) {$charset};";
 

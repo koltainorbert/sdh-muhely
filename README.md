@@ -80,6 +80,36 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.4 – okos keresés mindenhol, gyors listák nagy adatnál, űrlapok e-mailben, Fájlok lapfül
+- **Nagy listák (300 000 rekord):** az Ügyfelek, Eszközök, Termékek, Szolgáltatások, Napi árukiadás / Rendelések lapozása
+  halasztott összekapcsolással (előbb az oldal azonosítói a keskeny indexről, aztán csak a látszó sorok); az oldalszám az
+  utolsó oldalra korlátozva. Új indexek (DB 0.54.0): ügyfél `(aktiv, nev)`, eszköz `(aktiv, modositva)` + `modell_szam`,
+  termék `gyari_szam`, `beszallito`, `(aktiv, kategoria)`, szolgáltatás `nev`, `kod`. Mérés 300 000-es próbaadaton (SQLite):
+  ügyfél 11 801. oldal 0,589 → 0,018 s; eszköz 11 000. oldal 0,570 → 0,014 s; szolgáltatás 11 000. oldal 1,623 → 0,013 s;
+  **Termékek lista 5,28 → 0,38 s** (a „Rendelési javaslat” fül száma minden betöltéskor a teljes foglalás-lekérdezést
+  futtatta – most egy számlálás, tárolva; a fülek és az összesítő is tárolva); termékablak 0,23 → 0,05 s (beszállítólista
+  tárolva + index).
+- **Okos kereső** (`SDH_Muhely_Okoskereso`): a beírt szöveg fajtája (IMEI, telefonszám, sorszám, e-mail, kód, márka, szöveg);
+  azonnali (lenyíló) találatok **minden** lista keresőjében és az Áttekintés keresőjében, mint a fejlécben (↑ ↓ Enter, popupban
+  nyílik); a fejléc keresője is ezt használja, a munkalapok, termékek, szolgáltatások is benne vannak. A listák szűrése első
+  körben specifikus (jelzés + „Keresés mindenben”), üres pontos találatnál magától mindenben keres (IMEI-nél nem: ott a pontos
+  keresés a teljes). A termék- és a
+  szolgáltatásválasztó a helyben tartott 5000 / 3000 tételen túl a szerveren is keres.
+- **Oldalszám-ugró** a számozott lapozóknál és a rács eszköztárában; **dupla kattintás** megnyitja a lista sorát.
+- **Áttekintés:** kereső a választós szűrők ablakában, javaslat a szöveges szűrőkben (`sdh_muhely_racs_javaslat`);
+  **Állapot csak színes pont** (Oszlopok panel, kattintásra ugyanúgy választható).
+- **Felső szűrők egységesen:** kereséskor az alapnézet (nyitott lapok / Ma / Folyamatban) nem szűkít, a kiválasztott szűrő
+  (állapot, 7 / 30 nap) viszont kereséskor is – Munkalapok, Napi árukiadás, Rendelések ugyanúgy.
+- **Űrlapok e-mailben** (`SDH_Muhely_Urlap_Email`): E-mail gomb a munkalap, árukiadás, rendelés, ügyfél, eszköz, termék,
+  szolgáltatás gombsorának végén (adatlap + a lapoknál PDF), űrlaponként kapcsolható; napló. A munkalap **Fájlok** lapfüle
+  (csatolmány `munkalap_fajl`, saját mező `fajl_csatolmany`), a dokumentumok egy gombbal a beállított címre.
+- **Beállítások:** új lapfül *Keresés és listák* és *Űrlapok e-mailben* – minden újdonság kapcsolható.
+- **Javítások:** a popupból nyitott ügyfél „Készülékei” (és minden AJAX-ban rajzolt link) a WordPress-adminba vitt – az AJAX-kérés
+  felülete most a kérésből jön (`sdh_muhely_ajax_kontextus`). A munkalap **Átvétel** lapfülének tartalma láthatatlan volt
+  (a 6. panel kimaradt a láthatóvá tevő szabályból). **AJAX-védő** (`SDH_Muhely_Ajax_Vedo`): a JSON elé írt PHP-figyelmeztetést
+  levágja, végzetes hibánál olvasható JSON-hibát ad – a Naptár „JSON.parse: unexpected character” hibája helyett a valódi ok
+  látszik; a Naptár a nem JSON választ is érthetően írja ki. t93.
+
 ### 0.99.3 – az Online időpontfoglalás külön modul
 - Új modul a katalógusban: **Online időpontfoglalás** (`foglalas`, a Naptárra épül, saját lapfül: Beállítások › Online
   időpontfoglalás). Kikapcsolva a foglalóoldal „nem elérhető”, a már rögzített foglalások maradnak. Licencben külön adható

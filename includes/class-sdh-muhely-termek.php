@@ -111,9 +111,12 @@ final class SDH_Muhely_Termek
     {
         global $wpdb;
 
-        $sajat = $wpdb->get_col('SELECT DISTINCT kategoria FROM ' . self::tabla() . " WHERE kategoria <> '' ORDER BY kategoria ASC");
+        // 0.99.4: tárolva (amíg a termékek nem változnak) – minden termékablak és a lista szűrője kéri.
+        return (array) SDH_Muhely_Gyorsitotar::ertek('termek_kategoriak', static function () use ($wpdb): array {
+            $sajat = $wpdb->get_col('SELECT DISTINCT kategoria FROM ' . self::tabla() . " WHERE kategoria <> '' ORDER BY kategoria ASC");
 
-        return is_array($sajat) ? array_values(array_map('strval', $sajat)) : [];
+            return is_array($sajat) ? array_values(array_map('strval', $sajat)) : [];
+        });
     }
 
     /**
@@ -140,9 +143,12 @@ final class SDH_Muhely_Termek
     {
         global $wpdb;
 
-        $sajat = $wpdb->get_col('SELECT DISTINCT beszallito FROM ' . self::tabla() . " WHERE beszallito <> '' ORDER BY beszallito ASC");
+        // 0.99.4: tárolva, és a (beszallito) indexen – 300 000 terméknél ez lassította a termékablak megnyitását.
+        return (array) SDH_Muhely_Gyorsitotar::ertek('termek_beszallitok', static function () use ($wpdb): array {
+            $sajat = $wpdb->get_col('SELECT DISTINCT beszallito FROM ' . self::tabla() . " WHERE beszallito <> '' ORDER BY beszallito ASC");
 
-        return is_array($sajat) ? array_values(array_map('strval', $sajat)) : [];
+            return is_array($sajat) ? array_values(array_map('strval', $sajat)) : [];
+        });
     }
 
     /* =================================================================
@@ -751,13 +757,18 @@ final class SDH_Muhely_Termek
         global $wpdb;
 
         $tabla = self::tabla();
-        $db    = $wpdb->get_row(
-            "SELECT COUNT(*) AS mind,
-                    SUM(CASE WHEN aktiv = 1 AND keszletkezeles = 1 AND keszlet > 0 THEN 1 ELSE 0 END) AS keszleten,
-                    SUM(CASE WHEN aktiv = 1 AND keszletkezeles = 1 AND (keszlet <= 0 OR (min_keszlet > 0 AND keszlet < min_keszlet)) THEN 1 ELSE 0 END) AS hiany,
-                    SUM(CASE WHEN aktiv = 0 THEN 1 ELSE 0 END) AS inaktiv
-             FROM {$tabla}"
-        );
+
+        // 0.99.4: a fülek darabszámai tárolva, amíg a termékek nem változnak (minden listaoldal kérte, teljes táblán).
+        $db = (object) SDH_Muhely_Gyorsitotar::ertek('termek_fulek', static function () use ($wpdb, $tabla): array {
+            return (array) $wpdb->get_row(
+                "SELECT COUNT(*) AS mind,
+                        SUM(CASE WHEN aktiv = 1 AND keszletkezeles = 1 AND keszlet > 0 THEN 1 ELSE 0 END) AS keszleten,
+                        SUM(CASE WHEN aktiv = 1 AND keszletkezeles = 1 AND (keszlet <= 0 OR (min_keszlet > 0 AND keszlet < min_keszlet)) THEN 1 ELSE 0 END) AS hiany,
+                        SUM(CASE WHEN aktiv = 0 THEN 1 ELSE 0 END) AS inaktiv
+                 FROM {$tabla}",
+                ARRAY_A
+            );
+        });
 
         $fulek = [
             ''          => ['Összes termék', (int) ($db->mind ?? 0) - (int) ($db->inaktiv ?? 0), self::url()],
@@ -770,7 +781,7 @@ final class SDH_Muhely_Termek
         // F4 (0.86.0): a rendelési javaslat (darab = hány terméket kell rendelni).
         if (class_exists('SDH_Muhely_Raktar')) {
             $fulek = array_slice($fulek, 0, 3, true)
-                + ['rendeles' => ['Rendelési javaslat', array_sum(array_map('count', SDH_Muhely_Raktar::javaslat())), self::url(['nezet' => 'rendeles'])]]
+                + ['rendeles' => ['Rendelési javaslat', SDH_Muhely_Raktar::javaslat_db(), self::url(['nezet' => 'rendeles'])]]
                 + array_slice($fulek, 3, null, true);
         }
 
@@ -827,6 +838,9 @@ final class SDH_Muhely_Termek
             $ertekek[]    = $kat;
         }
 
+        $alap_felt = $feltetelek;
+        $alap_ert  = $ertekek;
+
         if ($kereses !== '') {
             $minta        = '%' . $wpdb->esc_like($kereses) . '%';
             $feltetelek[] = '(megnevezes LIKE %s OR cikkszam LIKE %s OR termekkod LIKE %s OR gyari_szam LIKE %s'
@@ -834,32 +848,78 @@ final class SDH_Muhely_Termek
             $ertekek      = array_merge($ertekek, array_fill(0, 8, $minta));
         }
 
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket, a $sorrend csak fehérlistás oszlopot tartalmaz.
+        // 0.99.4: első körben specifikusan (kód: vonalkód, cikkszám, termékkód, gyári szám; több szó: mind a névben).
+        $szukites    = $kereses !== '' && class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::szukites('termek', $kereses) : null;
+        $visszaesett = false;
+
+        if ($szukites !== null) {
+            $sz_felt = array_merge($alap_felt, [$szukites['sql']]);
+            $sz_ert  = array_merge($alap_ert, $szukites['ertekek']);
+            $sz_db   = SDH_Muhely_Gyorsitotar::szam($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} WHERE " . implode(' AND ', $sz_felt), $sz_ert));
+
+            if ($sz_db > 0 || !empty($szukites['veg'])) {
+                $feltetelek = $sz_felt;
+                $ertekek    = $sz_ert;
+            } else {
+                $visszaesett = true;
+            }
+        }
+
         $hol     = 'WHERE ' . implode(' AND ', $feltetelek);
         $sorrend = $rendezes[$rend] . ($irany === 'le' ? ' DESC' : ' ASC') . ($rend === 'id' ? '' : ', id DESC');
 
-        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- a $hol csak helyőrzőket, a $sorrend csak fehérlistás oszlopot tartalmaz.
         $ossz_sql = "SELECT COUNT(*) AS db,
                             COALESCE(SUM(CASE WHEN keszletkezeles = 1 THEN keszlet ELSE 0 END), 0) AS keszlet,
                             COALESCE(SUM(CASE WHEN keszletkezeles = 1 THEN keszlet * besz_netto ELSE 0 END), 0) AS besz_ertek,
                             COALESCE(SUM(CASE WHEN keszletkezeles = 1 THEN keszlet * brutto_ar ELSE 0 END), 0) AS brutto_ertek
                      FROM {$tabla} {$hol}";
-        $ossz     = $ertekek === [] ? $wpdb->get_row($ossz_sql) : $wpdb->get_row($wpdb->prepare($ossz_sql, $ertekek));
-        $osszesen = (int) ($ossz->db ?? 0);
+        $ossz_sql = $ertekek === [] ? $ossz_sql : $wpdb->prepare($ossz_sql, $ertekek);
 
-        $sorok = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM {$tabla} {$hol} ORDER BY {$sorrend} LIMIT %d OFFSET %d",
-                array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
-            )
-        );
+        // 0.99.4: a teljes találat összesítője (darab, készlet, érték) tárolva, amíg a termékek nem változnak –
+        // 300 000 terméknél ez az oldal legdrágább lekérdezése, és lapozáskor ugyanaz.
+        $ossz_tomb = SDH_Muhely_Gyorsitotar::ertek('termek_ossz|' . $ossz_sql, static function () use ($wpdb, $ossz_sql): array {
+            return (array) $wpdb->get_row($ossz_sql, ARRAY_A);
+        });
+        $ossz      = (object) ($ossz_tomb + ['db' => 0, 'keszlet' => 0, 'besz_ertek' => 0, 'brutto_ertek' => 0]);
+        $osszesen  = (int) ($ossz->db ?? 0);
+
+        $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
+
+        if ($oldal > $oldalak) {
+            $oldal   = $oldalak;
+            $eltolas = ($oldal - 1) * self::OLDAL_MERET;
+        }
+
+        // Halasztott összekapcsolás: előbb az oldal azonosítói, aztán csak ennek az oldalnak a sorai.
+        $idk = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+            "SELECT id FROM {$tabla} {$hol} ORDER BY {$sorrend} LIMIT %d OFFSET %d",
+            array_merge($ertekek, [self::OLDAL_MERET, $eltolas])
+        )));
+
+        $sorok = [];
+
+        if ($idk !== []) {
+            $szerint = [];
+
+            foreach ((array) $wpdb->get_results("SELECT * FROM {$tabla} WHERE id IN (" . implode(',', $idk) . ')') as $sor) {
+                $szerint[(int) $sor->id] = $sor;
+            }
+
+            foreach ($idk as $id) {
+                if (isset($szerint[$id])) {
+                    $sorok[] = $szerint[$id];
+                }
+            }
+        }
         // phpcs:enable
 
         $sorok   = is_array($sorok) ? $sorok : [];
-        $oldalak = max(1, (int) ceil($osszesen / self::OLDAL_MERET));
         $alap    = array_filter([
             'k'     => $kereses !== '' ? $kereses : null,
             'kat'   => $kat !== '' ? $kat : null,
             'szuro' => $szuro !== '' ? $szuro : null,
+            'mind'  => !empty($_GET['mind']) ? 1 : null, // phpcs:ignore WordPress.Security.NonceVerification
         ]);
         $rendezve = array_filter([
             'rend'  => $rend !== 'id' || $irany !== 'le' ? $rend : null,
@@ -936,6 +996,8 @@ final class SDH_Muhely_Termek
                     <?php echo esc_html(number_format_i18n($osszesen)); ?> termék
                 </span>
             </form>
+
+            <?php echo class_exists('SDH_Muhely_Okoskereso') ? SDH_Muhely_Okoskereso::jelzes($szukites, $visszaesett, self::KULCS, array_merge($alap, $rendezve)) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- a jelzes() escapel. ?>
 
             <table class="sdh-tabla sdh-tabla--termek">
                 <thead>
@@ -1604,6 +1666,10 @@ final class SDH_Muhely_Termek
                         Törlés
                     </button>
                 <?php endif; ?>
+
+                <?php if (!$uj && class_exists('SDH_Muhely_Urlap_Email')) : ?>
+                    <?php echo SDH_Muhely_Urlap_Email::gomb('termek', (int) $t->id); // phpcs:ignore WordPress.Security.EscapeOutput -- a gomb() escapel. ?>
+                <?php endif; ?>
             </div>
         </div>
         <?php
@@ -1659,7 +1725,11 @@ final class SDH_Muhely_Termek
 
         self::jog_ellenorzes();
 
-        $termekek = $wpdb->get_results(
+        // 0.99.4: kereséssel (q) a szerver keres a teljes törzsben – a választó az első LISTA_HATAR terméket
+        // helyben szűri, de ha ennél több termék van, a többit így éri el (okos kereső: kód, minden szó a névben).
+        $q = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+
+        $termekek = $q !== '' ? self::keres_valasztonak($q, 200) : $wpdb->get_results(
             $wpdb->prepare('SELECT * FROM ' . self::tabla() . ' WHERE aktiv = 1 ORDER BY megnevezes ASC, id ASC LIMIT %d', self::LISTA_HATAR)
         );
 
@@ -1669,8 +1739,66 @@ final class SDH_Muhely_Termek
             $sorok[] = self::valaszto_sor($t);
         }
 
+        $osszes = SDH_Muhely_Gyorsitotar::szam('SELECT COUNT(*) FROM ' . self::tabla() . ' WHERE aktiv = 1');
+
         nocache_headers();
-        wp_send_json_success(['sorok' => $sorok]);
+        wp_send_json_success(['sorok' => $sorok, 'tobb' => $osszes > self::LISTA_HATAR]);
+    }
+
+    /**
+     * Keresés a választónak a teljes törzsben (0.99.4): előbb a pontos / „kezdődik vele” kód (vonalkód, cikkszám,
+     * termékkód, gyári szám), aztán a névvel kezdődők, végül ahol minden szó szerepel a névben vagy a kódokban.
+     *
+     * @return array<int, object>
+     */
+    public static function keres_valasztonak(string $q, int $db): array
+    {
+        global $wpdb;
+
+        $t     = self::tabla();
+        $k     = trim($q);
+        $kez   = $wpdb->esc_like($k) . '%';
+        $lep   = [];
+        $kodos = preg_match('/\s/u', $k) !== 1 && preg_match('/\d/', $k) === 1;
+
+        if ($kodos) {
+            $lep[] = ['vonalkod = %s OR cikkszam = %s OR termekkod = %s OR gyari_szam = %s', [$k, $k, $k, $k]];
+            $lep[] = ['vonalkod LIKE %s OR cikkszam LIKE %s OR termekkod LIKE %s', [$kez, $kez, $kez]];
+        }
+
+        $lep[] = ['megnevezes LIKE %s', [$kez]];
+
+        $sql = [];
+        $ert = [];
+
+        foreach (array_slice(preg_split('/\s+/u', $k, -1, PREG_SPLIT_NO_EMPTY) ?: [], 0, 5) as $szo) {
+            $m     = '%' . $wpdb->esc_like($szo) . '%';
+            $sql[] = '(megnevezes LIKE %s OR cikkszam LIKE %s OR termekkod LIKE %s OR vonalkod LIKE %s OR gyari_szam LIKE %s)';
+            array_push($ert, $m, $m, $m, $m, $m);
+        }
+
+        if ($sql !== []) {
+            $lep[] = [implode(' AND ', $sql), $ert];
+        }
+
+        $talalat = [];
+
+        foreach ($lep as [$feltetel, $ertekek]) {
+            $hiany = $db - count($talalat);
+
+            if ($hiany <= 0) {
+                break;
+            }
+
+            $kiz = $talalat !== [] ? ' AND id NOT IN (' . implode(',', array_map('intval', array_keys($talalat))) . ')' : '';
+
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- csak helyőrzők és egész számok.
+            foreach ((array) $wpdb->get_results($wpdb->prepare("SELECT * FROM {$t} WHERE aktiv = 1 AND ({$feltetel}){$kiz} ORDER BY megnevezes ASC LIMIT " . (int) $hiany, $ertekek)) as $sor) {
+                $talalat[(int) $sor->id] = $sor;
+            }
+        }
+
+        return array_values($talalat);
     }
 
     public static function ajax_torol(): void

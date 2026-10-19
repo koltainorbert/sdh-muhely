@@ -128,6 +128,11 @@
             .replace(/'/g, '&#39;');
     }
 
+    /** Kisbetűs, ékezet nélküli szöveg (kereséshez). */
+    function normal(s) {
+        return String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+
     function masol(ertek) {
         return JSON.parse(JSON.stringify(ertek === undefined ? null : ertek));
     }
@@ -275,8 +280,15 @@
         osszeg: true,
         reszletMagas: 264,
         reszletRejtve: false,
-        ful: 'munkalap'
+        ful: 'munkalap',
+        // 0.99.4: az Állapot oszlop csak a színes pontot mutatja (kattintásra ugyanúgy választható).
+        allapotPont: !!(B.okos && B.okos.allapot_pont)
     };
+
+    /** Beállítások › Keresés és listák (0.99.4): ki-be kapcsolható újdonságok. */
+    function okosBe(kulcs) {
+        return !B.okos || B.okos[kulcs] === undefined ? true : !!B.okos[kulcs];
+    }
 
     (function betolt() {
         var mentett = null;
@@ -302,6 +314,7 @@
         A.reszletMagas = Math.max(120, parseInt(mentett.reszletMagas, 10) || A.reszletMagas);
         A.reszletRejtve = !!mentett.reszletRejtve;
         A.ful = typeof mentett.ful === 'string' ? mentett.ful : A.ful;
+        A.allapotPont = typeof mentett.allapotPont === 'boolean' ? mentett.allapotPont : A.allapotPont;
 
         Object.keys(A.szurok).forEach(function (k) {
             if (!OSZLOP[k]) {
@@ -321,7 +334,8 @@
                 osszeg: A.osszeg,
                 reszletMagas: A.reszletMagas,
                 reszletRejtve: A.reszletRejtve,
-                ful: A.ful
+                ful: A.ful,
+                allapotPont: A.allapotPont
             }));
         } catch (e) {
             /* nincs tárhely: a beállítás erre a betöltésre szól */
@@ -400,6 +414,7 @@
             '<button type="button" class="sdh-racs__gomb sdh-racs__gomb--ikon" data-m="elso" title="Első oldal" aria-label="Első oldal">' + IKON.elso + '</button>' +
             '<button type="button" class="sdh-racs__gomb sdh-racs__gomb--ikon" data-m="elozo" title="Előző oldal" aria-label="Előző oldal">' + IKON.elozo + '</button>' +
             '<span class="sdh-racs__oldal" data-oldal></span>' +
+            (okosBe('ugro') ? '<input type="text" inputmode="numeric" autocomplete="off" class="sdh-racs__ugro" data-ugro placeholder="Oldal" aria-label="Ugrás oldalra" title="Írd be az oldalszámot, és nyomj Entert">' : '') +
             '<button type="button" class="sdh-racs__gomb sdh-racs__gomb--ikon" data-m="kovetkezo" title="Következő oldal" aria-label="Következő oldal">' + IKON.kovetkezo + '</button>' +
             '<button type="button" class="sdh-racs__gomb sdh-racs__gomb--ikon" data-m="utolso" title="Utolsó oldal" aria-label="Utolsó oldal">' + IKON.utolso + '</button>' +
         '</span>' +
@@ -635,8 +650,11 @@
 
             var rend = rendIndex >= 0 ? A.rendezes[rendIndex] : null;
 
-            szelesseg += lo.sz;
-            cols += '<col data-k="' + esc(lo.k) + '" style="width:' + nagyPx(lo.sz) + '">';
+            // Pontos Állapot oszlop (0.99.4): keskeny, a mentett szélesség megmarad a visszakapcsoláshoz.
+            var losz = lo.k === 'allapot' && A.allapotPont ? 46 : lo.sz;
+
+            szelesseg += losz;
+            cols += '<col data-k="' + esc(lo.k) + '" style="width:' + nagyPx(losz) + '">';
 
             fej += '<th scope="col" draggable="true" data-k="' + esc(lo.k) + '" title="' + esc(o.cim) + '" class="' +
                 (o.igazit === 'jobb' ? 'is-jobb ' : '') +
@@ -719,6 +737,21 @@
         var resz = sor._tobb > 0 && sor._kesz
             ? '<span class="sdh-allapot__resz" title="' + esc(sor._kesz_szoveg || '') + '">' + esc(sor._kesz) + '</span>'
             : '';
+
+        if (A.allapotPont) {
+            var nev = '';
+
+            K.allapotok.forEach(function (a) {
+                if (a.k === sor.allapot) {
+                    nev = a.nev;
+                }
+            });
+
+            return '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--pontos sdh-allapot--' + esc(szin) + '" data-sdh-allapot-hely' +
+                ' title="' + esc((nev || sor.allapot) + (sor._kesz_szoveg ? ' – ' + sor._kesz_szoveg : '') + ' (kattints az állapotváltáshoz)') + '">' +
+                '<select data-sdh-lista-allapot data-id="' + sor.id + '" data-elozo="' + esc(sor.allapot) + '"' +
+                ' aria-label="Állapot: ' + esc(nev || sor.allapot) + ' – módosítás">' + opciok + '</select></span>';
+        }
 
         return '<span class="sdh-allapot sdh-allapot--valaszthato sdh-allapot--' + esc(szin) + '" data-sdh-allapot-hely' +
             (resz ? ' title="' + esc('Közös állapot – itt átírva minden eszköz ezt kapja. ' + (sor._kesz_szoveg || '')) + '"' : '') + '>' +
@@ -1509,9 +1542,21 @@
             valtozott(true);
         }
 
+        var szuroSzo = '';
+
         felugroNyit(horgony, function (panel) {
+            /** 0.99.4: szöveges kereső a választós szűrőben – a lista gépelésre szűkül. */
+            function szukit() {
+                var q = normal(szuroSzo);
+
+                Array.prototype.forEach.call(panel.querySelectorAll('.sdh-racs__lista [data-ertek]'), function (g) {
+                    g.hidden = q !== '' && normal(g.textContent).indexOf(q) === -1;
+                });
+            }
+
             function rajzol() {
                 var lista = '';
+                var fokusz = document.activeElement && document.activeElement.matches && document.activeElement.matches('[data-halmaz-kereso]');
 
                 (o.ertekek || []).forEach(function (e) {
                     var jelolt = mostani.l.indexOf(e.e) >= 0;
@@ -1531,6 +1576,7 @@
                 panel.style.maxWidth = hasab > 2 ? 'calc(100vw - 16px)' : '';
                 panel.innerHTML =
                     '<h3>' + esc(o.cim) + ' – szűrés</h3>' +
+                    (okosBe('szuro_kereso') ? '<input type="search" class="sdh-racs__panelkereso" data-halmaz-kereso autocomplete="off" placeholder="Keresés a listában…" aria-label="' + esc(o.cim) + ': keresés a listában">' : '') +
                     '<div class="sdh-racs__lista"' +
                     (hasab > 1 ? ' style="grid-template-columns:repeat(' + hasab + ',minmax(0,1fr));column-gap:.3rem"' : '') +
                     '>' + lista + '</div>' +
@@ -1543,8 +1589,39 @@
                         '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-szurotorol>Szűrő törlése</button>' +
                     '</div>';
 
+                var kereso = panel.querySelector('[data-halmaz-kereso]');
+
+                if (kereso) {
+                    kereso.value = szuroSzo;
+                    szukit();
+
+                    if (fokusz) {
+                        kereso.focus();
+                    }
+                }
+
                 felugroHelyez();
             }
+
+            panel.addEventListener('input', function (esemeny) {
+                if (esemeny.target.matches('[data-halmaz-kereso]')) {
+                    szuroSzo = esemeny.target.value;
+                    szukit();
+                }
+            });
+
+            // Enter a keresőben: az első látható érték ki-/bekapcsolása.
+            panel.addEventListener('keydown', function (esemeny) {
+                if (esemeny.key === 'Enter' && esemeny.target.matches('[data-halmaz-kereso]')) {
+                    esemeny.preventDefault();
+
+                    var elso = panel.querySelector('.sdh-racs__lista [data-ertek]:not([hidden])');
+
+                    if (elso) {
+                        elso.click();
+                    }
+                }
+            });
 
             panel.addEventListener('click', function (esemeny) {
                 var ertek = esemeny.target.closest('[data-ertek]');
@@ -1574,7 +1651,11 @@
                 }
 
                 if (esemeny.target.closest('[data-mind]')) {
-                    mostani.l = (o.ertekek || []).map(function (e) {
+                    var qq = normal(szuroSzo);
+
+                    mostani.l = (o.ertekek || []).filter(function (e) {
+                        return qq === '' || normal(e.nev).indexOf(qq) !== -1;
+                    }).map(function (e) {
                         return e.e;
                     });
                     rajzol();
@@ -1780,6 +1861,10 @@
                 panel.innerHTML =
                     '<h3>Látható oszlopok</h3>' +
                     '<div class="sdh-racs__lista sdh-racs__lista--harom">' + lista + '</div>' +
+                    '<div class="sdh-racs__vonal"></div>' +
+                    '<label class="sdh-racs__pontkapcs" title="Az Állapot oszlopban csak a színes pont látszik; rákattintva ugyanúgy választható az állapot.">' +
+                        '<input type="checkbox" data-allapot-pont' + (A.allapotPont ? ' checked' : '') + '>' +
+                        '<span>Állapot csak színes pont</span></label>' +
                     '<p class="sdh-racs__sugo">A sorrendet a fejléc húzásával, a szélességet az oszlop szélének húzásával állíthatod.</p>' +
                     '<div class="sdh-racs__sor">' +
                         '<button type="button" class="sdh-gomb sdh-gomb--vilagos" data-alap>Alaphelyzet</button>' +
@@ -1787,6 +1872,15 @@
 
                 felugroHelyez();
             }
+
+            panel.addEventListener('change', function (esemeny) {
+                if (esemeny.target.matches('[data-allapot-pont]')) {
+                    A.allapotPont = esemeny.target.checked;
+                    ment();
+                    rajzolFej();
+                    rajzolSorok();
+                }
+            });
 
             panel.addEventListener('click', function (esemeny) {
                 var gomb = esemeny.target.closest('[data-oszlop]');
@@ -1905,12 +1999,166 @@
         valtozott(false);
     });
 
+    /* ---- Oldalszám-ugró (0.99.4) ---- */
+
+    var ugroMezo = eszkoztar.querySelector('[data-ugro]');
+
+    if (ugroMezo) {
+        ugroMezo.addEventListener('keydown', function (esemeny) {
+            if (esemeny.key !== 'Enter') {
+                return;
+            }
+
+            esemeny.preventDefault();
+
+            var n = parseInt(String(ugroMezo.value).replace(/\D+/g, ''), 10);
+
+            if (isNaN(n) || n < 1) {
+                return;
+            }
+
+            A.oldal = adat && adat.osszesen !== null ? Math.min(n, Math.max(1, adat.oldalak)) : n;
+            ugroMezo.value = '';
+            leker();
+        });
+    }
+
+    /* ---- A szöveges szűrők javaslatai (0.99.4): gépelés közben a rekordokban előforduló értékek ---- */
+
+    var javaslat = null;
+    var javaslatMezo = null;
+    var javaslatIdo = null;
+    var javaslatSzam = 0;
+
+    function javaslatZar() {
+        if (javaslat) {
+            javaslat.hidden = true;
+            javaslat.innerHTML = '';
+        }
+
+        javaslatMezo = null;
+    }
+
+    function javaslatMutat(mezo, ertekek) {
+        if (!javaslat) {
+            javaslat = document.createElement('ul');
+            javaslat.className = 'sdh-kutat__lista sdh-racs__javaslat';
+            javaslat.hidden = true;
+            document.body.appendChild(javaslat);
+
+            javaslat.addEventListener('mousedown', function (esemeny) {
+                var li = esemeny.target.closest('[data-javaslat]');
+
+                if (li && javaslatMezo) {
+                    esemeny.preventDefault();
+                    javaslatValaszt(javaslatMezo, li.getAttribute('data-javaslat'));
+                }
+            });
+        }
+
+        if (!ertekek.length) {
+            javaslatZar();
+
+            return;
+        }
+
+        var r = mezo.getBoundingClientRect();
+
+        javaslatMezo = mezo;
+        javaslat.innerHTML = ertekek.map(function (e) {
+            return '<li><a class="sdh-kutat__elem" href="#" data-javaslat="' + esc(e) + '">' + esc(e) + '</a></li>';
+        }).join('');
+        javaslat.style.position = 'fixed';
+        javaslat.style.left = r.left + 'px';
+        javaslat.style.top = (r.bottom + 3) + 'px';
+        javaslat.style.width = Math.max(r.width, 220) + 'px';
+        javaslat.style.right = 'auto';
+        javaslat.hidden = false;
+    }
+
+    function javaslatValaszt(mezo, ertek) {
+        var k = mezo.getAttribute('data-szuromezo');
+
+        mezo.value = ertek;
+        A.szurok[k] = gepeltSzuro(k, ertek);
+        szuroJelzesek();
+        javaslatZar();
+        valtozott(true);
+    }
+
+    thead.addEventListener('input', function (esemeny) {
+        var mezo = esemeny.target.closest('[data-szuromezo]');
+
+        if (!mezo || mezo.readOnly || !okosBe('szuro_kereso') || OSZLOP[mezo.getAttribute('data-szuromezo')].tipus !== 'szoveg') {
+            return;
+        }
+
+        window.clearTimeout(javaslatIdo);
+
+        var q = mezo.value.trim();
+
+        if (q.length < 1) {
+            javaslatZar();
+
+            return;
+        }
+
+        javaslatIdo = window.setTimeout(function () {
+            var sz = ++javaslatSzam;
+            var u = new URL(B.ajax, window.location.origin);
+
+            u.searchParams.set('action', 'sdh_muhely_racs_javaslat');
+            u.searchParams.set('_wpnonce', B.nonce || '');
+            u.searchParams.set('oszlop', mezo.getAttribute('data-szuromezo'));
+            u.searchParams.set('q', q);
+
+            fetch(u.toString(), { credentials: 'same-origin' })
+                .then(function (v) { return v.json(); })
+                .then(function (v) {
+                    if (sz === javaslatSzam && document.activeElement === mezo && v && v.success) {
+                        javaslatMutat(mezo, (v.data || []).filter(function (e) { return e !== mezo.value; }));
+                    }
+                })
+                .catch(function () { /* a szűrő javaslat nélkül is működik */ });
+        }, 260);
+    });
+
+    thead.addEventListener('keydown', function (esemeny) {
+        var mezo = esemeny.target.closest('[data-szuromezo]');
+
+        if (!mezo || !javaslat || javaslat.hidden || javaslatMezo !== mezo) {
+            return;
+        }
+
+        var elemek = Array.prototype.slice.call(javaslat.querySelectorAll('[data-javaslat]'));
+        var most = elemek.indexOf(javaslat.querySelector('.is-kijelolt'));
+
+        if (esemeny.key === 'ArrowDown' || esemeny.key === 'ArrowUp') {
+            esemeny.preventDefault();
+            var uj = esemeny.key === 'ArrowDown' ? Math.min(elemek.length - 1, most + 1) : Math.max(0, most - 1);
+            elemek.forEach(function (a, i) { a.classList.toggle('is-kijelolt', i === uj); });
+        } else if (esemeny.key === 'Enter' && most >= 0) {
+            esemeny.preventDefault();
+            esemeny.stopImmediatePropagation();
+            javaslatValaszt(mezo, elemek[most].getAttribute('data-javaslat'));
+        } else if (esemeny.key === 'Escape') {
+            javaslatZar();
+        }
+    }, true);
+
+    thead.addEventListener('focusout', function (esemeny) {
+        if (esemeny.target === javaslatMezo) {
+            window.setTimeout(javaslatZar, 150);
+        }
+    });
+
     keresoMezo.addEventListener('keydown', function (esemeny) {
         if (esemeny.key === 'Escape' && keresoMezo.value !== '') {
             keresoMezo.value = '';
             A.q = '';
             valtozott(true);
-        } else if (esemeny.key === 'ArrowDown') {
+        } else if (esemeny.key === 'ArrowDown' && !document.querySelector('.sdh-okos-lista:not([hidden])')) {
+            // Nyitott azonnali találatlistánál a nyíl ott lépked (app.js, 0.99.4).
             esemeny.preventDefault();
             gorgeto.focus();
         }
