@@ -22,9 +22,9 @@
     width: 100%;
     max-width: var(--s-max-szuk, 760px);
     padding: var(--s-t-5, 1.5rem);
-    background: var(--s-uveg-tomor, var(--s-felulet));
-    color: var(--s-szoveg);
-    border: 1px solid var(--s-uveg-keret, var(--s-vonal));
+    background: var(--s-uveg-tomor, var(--s-felulet, Canvas));
+    color: var(--s-szoveg, CanvasText);
+    border: 1px solid var(--s-uveg-keret, var(--s-vonal, GrayText));
     border-radius: var(--s-r-kartya, 24px);
     box-shadow: var(--s-arnyek);
     font-family: var(--s-betu-szoveg);
@@ -35,7 +35,7 @@
 @supports (backdrop-filter: blur(1px)) {
     .s-suti-sav,
     .s-suti-ablak {
-        background: var(--s-uveg);
+        background: var(--s-uveg, Canvas);
         backdrop-filter: blur(var(--s-uveg-blur-eros, 28px)) saturate(var(--s-uveg-szaturacio, 160%));
     }
 }
@@ -45,18 +45,18 @@
     font-family: var(--s-betu-cim);
     font-size: var(--s-m-xl, 1.25rem);
     line-height: var(--s-sorkoz-cim, 1.18);
-    color: var(--s-szoveg);
+    color: var(--s-szoveg, CanvasText);
 }
 
 .s-suti-leiras,
 .s-suti-gpc,
 .s-suti-kat-leiras {
     margin: 0 0 var(--s-t-4, 1rem);
-    color: var(--s-halvany);
+    color: var(--s-halvany, GrayText);
 }
 
 .s-suti-link {
-    color: var(--s-szoveg);
+    color: var(--s-szoveg, CanvasText);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
@@ -74,23 +74,23 @@
     padding: 0 var(--s-t-5, 1.5rem);
     font: inherit;
     font-weight: var(--s-suly-felkover, 650);
-    color: var(--s-szoveg);
-    background: var(--s-felulet-2, var(--s-felulet));
-    border: 1px solid var(--s-vonal);
+    color: var(--s-szoveg, CanvasText);
+    background: var(--s-felulet-2, var(--s-felulet, Canvas));
+    border: 1px solid var(--s-vonal, GrayText);
     border-radius: var(--s-r-gomb, 999px);
     cursor: pointer;
     transition: border-color var(--s-ido-gyors, 140ms) var(--s-gorbe, ease-out), background var(--s-ido-gyors, 140ms) var(--s-gorbe, ease-out);
 }
 
 .s-suti-gomb:hover {
-    border-color: var(--s-szoveg);
+    border-color: var(--s-szoveg, CanvasText);
 }
 
 .s-suti-gomb:focus-visible,
 .s-suti-bezar:focus-visible,
 .s-suti-link:focus-visible,
 .s-suti-valaszto:focus-visible + .s-suti-csuszka {
-    outline: var(--s-fokusz-vastag, 2px) solid var(--s-neon);
+    outline: var(--s-fokusz-vastag, 2px) solid var(--s-neon, Highlight);
     outline-offset: var(--s-fokusz-tav, 3px);
 }
 
@@ -109,7 +109,7 @@
 .s-suti-hatter {
     position: absolute;
     inset: 0;
-    background: var(--s-bg);
+    background: var(--s-bg, Canvas);
     opacity: 0.72;
 }
 
@@ -120,9 +120,9 @@
     max-height: calc(100vh - 2 * var(--s-t-4, 1rem));
     overflow: auto;
     padding: var(--s-t-6, 2rem) var(--s-t-5, 1.5rem) var(--s-t-5, 1.5rem);
-    background: var(--s-uveg-tomor, var(--s-felulet));
-    color: var(--s-szoveg);
-    border: 1px solid var(--s-uveg-keret, var(--s-vonal));
+    background: var(--s-uveg-tomor, var(--s-felulet, Canvas));
+    color: var(--s-szoveg, CanvasText);
+    border: 1px solid var(--s-uveg-keret, var(--s-vonal, GrayText));
     border-radius: var(--s-r-popup, 28px);
     box-shadow: var(--s-arnyek);
     font-family: var(--s-betu-szoveg);
@@ -142,9 +142,9 @@
     height: var(--s-magassag-gomb-kicsi, 36px);
     font-size: var(--s-m-xl, 1.25rem);
     line-height: 1;
-    color: var(--s-szoveg);
+    color: var(--s-szoveg, CanvasText);
     background: transparent;
-    border: 1px solid var(--s-vonal);
+    border: 1px solid var(--s-vonal, GrayText);
     border-radius: var(--s-r-gomb, 999px);
     cursor: pointer;
 }
@@ -157,7 +157,7 @@
 
 .s-suti-kat {
     padding: var(--s-t-3, 0.75rem) 0;
-    border-top: 1px solid var(--s-vonal);
+    border-top: 1px solid var(--s-vonal, GrayText);
 }
 
 .s-suti-kat-fej {
@@ -169,7 +169,7 @@
 
 .s-suti-kat-nev {
     font-weight: var(--s-suly-felkover, 650);
-    color: var(--s-szoveg);
+    color: var(--s-szoveg, CanvasText);
 }
 
 .s-suti-kat-leiras {
@@ -200,8 +200,8 @@
 .s-suti-csuszka {
     position: absolute;
     inset: 0;
-    background: var(--s-felulet-2, var(--s-felulet));
-    border: 1px solid var(--s-vonal);
+    background: var(--s-felulet-2, var(--s-felulet, Canvas));
+    border: 1px solid var(--s-vonal, GrayText);
     border-radius: var(--s-r-pill, 999px);
     transition: background var(--s-ido, 220ms) var(--s-gorbe, ease-out);
     pointer-events: none;
@@ -214,18 +214,18 @@
     left: 3px;
     width: calc(var(--s-kapcsolo-mag, 24px) - 8px);
     height: calc(var(--s-kapcsolo-mag, 24px) - 8px);
-    background: var(--s-halvany);
+    background: var(--s-halvany, GrayText);
     border-radius: var(--s-r-pill, 999px);
     transition: transform var(--s-ido, 220ms) var(--s-gorbe-rugo, ease-out), background var(--s-ido, 220ms);
 }
 
 .s-suti-valaszto:checked + .s-suti-csuszka {
-    background: var(--s-kiemelo);
-    border-color: var(--s-kiemelo);
+    background: var(--s-kiemelo, Highlight);
+    border-color: var(--s-kiemelo, Highlight);
 }
 
 .s-suti-valaszto:checked + .s-suti-csuszka::after {
-    background: var(--s-szoveg);
+    background: var(--s-szoveg, CanvasText);
     transform: translateX(calc(var(--s-kapcsolo-szel, 44px) - var(--s-kapcsolo-mag, 24px)));
 }
 
