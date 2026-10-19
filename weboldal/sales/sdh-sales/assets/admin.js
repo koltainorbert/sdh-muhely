@@ -961,7 +961,10 @@
         const p = (B.panelek || {})[kulcs];
         S.oldal = kulcs;
         $$('[data-menupont]').forEach((a) => { if (a.dataset.menupont === kulcs) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-        const hova = tartalom();
+        // Minden panel friss tárolót kap: a korábbi panel eseménykezelői nem halmozódnak.
+        const regi = tartalom();
+        const hova = regi.cloneNode(false);
+        regi.replaceWith(hova);
         hova.className = 'sa-tartalom';
         window.scrollTo(0, 0);
         if (!p) { cim('Áttekintés'); return RAJZOLOK.attekintes(hova); }

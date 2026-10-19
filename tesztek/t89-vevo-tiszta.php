@@ -14,7 +14,7 @@ require __DIR__ . '/_keret.php';
 
 $gyoker = rtrim(SDH_MUHELY_DIR, '/');
 $tiltott = ['Haszkovó', '26234524', '10918001', 'sdhszerviz', 'smartdevicehungary', 'SMART DEVICE HUNGARY', 'koltainorbert', 'Gigatel', '237-5702', 'SDH Szerviz', 'sdh.hu'];
-$kihagy  = ['includes/sdh/', 'tools/', 'tesztek/', 'kozpont/', '.git/', 'node_modules/', 'README.md', 'sugo/27-sdh-belso.md'];
+$kihagy  = ['includes/sdh/', 'tools/', 'tesztek/', 'kozpont/', 'weboldal/', 'tesztadat/', '.git/', 'node_modules/', 'README.md', 'sugo/27-sdh-belso.md'];
 
 $talalat = [];
 $db      = 0;
