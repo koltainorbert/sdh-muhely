@@ -37,9 +37,10 @@ weboldal/
 ```
 | Fájl / mappa a `sales/sdh-sales/` alatt | Tulajdonos |
 |---|---|
-| `sdh-sales.php`, `includes/class-sdh-sales.php`, `-schema.php`, `-naplo.php`, `-rest.php` (mag) | vezető |
+| `sdh-sales.php`, `includes/class-sdh-sales.php`, `-schema.php`, `-naplo.php`, `-rest.php`, `-front.php`, `-tartalom.php` (mag; a tartalom-tár API-ja a fájl fejlécében) | vezető |
+| `assets/front/kozos.js` (közös front-segéd, lásd `-front.php` fejléce) | sales-backend |
 | `-katalogus.php`, `-ar.php`, `-kosar.php`, `-rendeles.php`, `-kupon.php`, `-fizetes*.php`, `-qr.php`, `-bank-import.php`, `-biztonsag.php`, `-fiok.php` | sales-backend |
-| `-admin*.php`, `assets/admin.*`, `-tartalom.php`, `-szekcio.php`, `-exportimport.php` | admin |
+| `-admin*.php`, `assets/admin.*`, `-szekcio.php` (szekció-sémák az adminnak), `-arculat.php`, `-exportimport.php` | admin |
 | `-kiszolgalas.php`, `-kozpont-kapcsolat.php`, `-email.php`, + **Központ 2.1** (`kozpont/sdh-kozpont`) | licenc-integráció |
 | `-szamlazz.php`, `-naptar.php` | számlázás + naptár |
 | `-szikra*.php`, `assets/szikra.*`, `-oktatas.php` | AI |
@@ -161,7 +162,15 @@ matrica, mockup; + a Műhely `Modulok::katalogus()` többi kulcsa) – így a li
   `--s-kiemelo-2`, `--s-neon`, `--s-ok`, `--s-figyel`, `--s-hiba`, `--s-r-mezo`, `--s-r-gomb`, `--s-r-pill`, `--s-r-kartya`,
   `--s-arnyek`, `--s-betu-cim`, `--s-betu-szoveg`, `--s-betu-kod`, `--s-max` (tartalomszélesség). Sötét / világos:
   `[data-tema="sotet"|"vilagos"]` a `<html>`-en + `prefers-color-scheme`.
-- Menü / lábléc: `SDH_Sales_Tartalom::menu('fo'|'lablec')` → `[{cim, url, gyerekek[]}]`.
+- Menü / lábléc: `SDH_Sales_Tartalom::menu('fo'|'lablec'|'jogi')` → `[{cim, url, gyerekek[]}]` (forrás: `data/menuk.json`
+  `[{kulcs:"fo", elemek:[{cim, oldal|url, gyerekek[]}]}]`, tartalom ügynök).
+- Kereső: az SEO ügynök építi az indexet (`SDH_Sales_Kereso::index_url()` → `/wp-content/uploads/sdh-sales/kereso-index.json`,
+  elemei `{t: cím, u: url, k: "funkcio"|"modul"|"gyik"|"tudas"|"blog"|"oldal"|"iparag", s: rövid kivonat, w: kulcsszavak}`,
+  ékezet nélküli `n` mezővel), és a szerveroldali tartalékot (`GET /kereso?q=`). A kereső felületét (Ctrl+K / „/” billentyű,
+  elírástűrő keresés a böngészőben) a téma adja (`assets/js/kereso.js`).
+- Tartalom-tár API: `SDH_Sales_Tartalom` (fájlfejléc). Funkció- és iparági aloldalak: a tartalom ügynök `data/oldalak/*.json`
+  fájlokat ír (a `funkciok/<kulcs>` és `iparagak/<kulcs>` oldalak a `szulo` mezővel), a `data/funkciok.json` és
+  `data/iparagak.json` a rácsokhoz (kártyaadatok) és a belső linkhálóhoz kell.
 
 ## 8. Cache / harmadik fél
 - Nem gyorsítótárazható: `/kosar/`, `/penztar/`, `/fiok/`, `/demo/` (indító), REST. A bővítmény `nocache_headers()` +
