@@ -74,10 +74,17 @@ final class SDH_Muhely_Urlap_Beallitas
                 'fizetes_ideje' => ['Fizetés ideje', 'Csak a dátum.'],
                 'eloleg'        => ['Fizetett (előleg)', 'Az előleg mezője.'],
                 'bevizsgalas'   => ['Bevizsgálási díj', 'A díj pipája, a díjlista és a „Ha az ügyfél kéri a javítást" választó.'],
+                'garancia'      => ['Javítási garancia', 'A garancia napjai, a lejárat és a garanciális visszatérés (Beállítások › Javítási garancia: mindenhol ki is kapcsolható).'],
+                'ajanlat'       => ['Online árajánlat', 'Az ajánlat küldése és az ügyfél válasza (Beállítások › Online árajánlat: mindenhol ki is kapcsolható).'],
+                'elegedettseg'  => ['Elégedettségi kérdés', 'A lezárás utáni értékelés állapota és küldése.'],
             ];
 
             if ($eladas) {
-                unset($bal['bevizsgalas']);
+                unset($bal['bevizsgalas'], $bal['garancia']);
+            }
+
+            if ($fajta === 'arukiadas') {
+                unset($bal['ajanlat']);
             }
 
             if ($fajta === 'arukiadas') {
@@ -95,6 +102,7 @@ final class SDH_Muhely_Urlap_Beallitas
                 'ful_szolg'    => ['Szolgáltatások lapfül', 'A szolgáltatás-tételek.'],
                 'ful_termek'   => ['Termékek lapfül', 'A termék-tételek.'],
                 'ful_rma'      => ['RMA / Címke lapfül', 'Ügyfélüzenetek, RMA-oldal, címke.'],
+                'ful_atvetel'  => ['Átvétel lapfül', 'Átvételi fotók és aláírás.'],
                 'megjegyzes'   => ['Megjegyzés', 'Az ügyfél felé is megjelenő megjegyzés lapfüle.'],
                 'belso'        => ['Belső megjegyzés', 'Csak a CRM-ben látszó megjegyzés lapfüle.'],
                 'gyakori_megj' => ['Gyakori megjegyzések gomb', 'Előre megírt megjegyzések popupból.'],
@@ -103,7 +111,7 @@ final class SDH_Muhely_Urlap_Beallitas
             if ($javitas) {
                 unset($fo['eladas_mezok'], $fo['rendeles_sor'], $fo['ugyfelkartya']);
             } else {
-                unset($fo['eszkozpanel'], $fo['eszkoz_csatolas'], $fo['ful_eszkoz'], $fo['ful_hibak']);
+                unset($fo['eszkozpanel'], $fo['eszkoz_csatolas'], $fo['ful_eszkoz'], $fo['ful_hibak'], $fo['ful_atvetel']);
             }
 
             if ($fajta === 'arukiadas') {

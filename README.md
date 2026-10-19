@@ -80,6 +80,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.2 – a munkalap fogaskerekén is kapcsolható csoportok
+- A munkalap „mi látszódjon” panelje (és Beállítások › Űrlapok) új elemei: **Javítási garancia**, **Online árajánlat**,
+  **Elégedettségi kérdés** (bal oldal) és **Átvétel lapfül** (lap). A Beállítások kapcsolói mindenhol kikapcsolják, a fogaskerék
+  űrlapfajtánként rejti. t65 bővítve.
+
 ### 0.99.1 – kapcsolható garancia és árajánlat, megbízható foglalási levél, széles foglalóoldal
 - **Beállítások › Javítási garancia**: „Javítási garancia a munkalapon” kapcsoló (ki: nincs csoport, nyomtatványsor, visszatérő-jelzés).
 - **Beállítások › Online árajánlat** (új lapfül): „Online árajánlat a munkalapon” kapcsoló (`SDH_Muhely_Ajanlat::beallitas()`).

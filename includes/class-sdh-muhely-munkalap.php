@@ -3622,10 +3622,14 @@ final class SDH_Muhely_Munkalap
                         </div>
                     </div>
 
-                    <?php echo !$eladas && class_exists('SDH_Muhely_Garancia') ? SDH_Muhely_Garancia::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F1). ?>
-                    <?php echo !$arukiadas && class_exists('SDH_Muhely_Ajanlat') ? SDH_Muhely_Ajanlat::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F2). ?>
+                    <?php
+                    // 0.99.2: a csoportok a fogaskerékkel (Űrlapok) is elrejthetők – a jelölő az első <div>-re kerül.
+                    $ubb = static fn (string $html, string $elem): string => $html === '' ? '' : (string) preg_replace('/<div\b/', '<div' . $ub($elem), $html, 1);
+                    ?>
+                    <?php echo !$eladas && class_exists('SDH_Muhely_Garancia') ? $ubb(SDH_Muhely_Garancia::urlap_blokk($munkalap), 'garancia') : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F1). ?>
+                    <?php echo !$arukiadas && class_exists('SDH_Muhely_Ajanlat') ? $ubb(SDH_Muhely_Ajanlat::urlap_blokk($munkalap), 'ajanlat') : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F2). ?>
                     <?php echo class_exists('SDH_Muhely_Raktar') ? SDH_Muhely_Raktar::munkalap_jelzes($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F4). ?>
-                    <?php echo class_exists('SDH_Muhely_Elegedettseg') ? SDH_Muhely_Elegedettseg::urlap_blokk($munkalap) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F7). ?>
+                    <?php echo class_exists('SDH_Muhely_Elegedettseg') ? $ubb(SDH_Muhely_Elegedettseg::urlap_blokk($munkalap), 'elegedettseg') : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- szűrt HTML (F7). ?>
 
                     <div class="sdh-ml__csoport sdh-ml__csoport--osszeg"<?php echo $ub('osszeg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
                         <h3 class="sdh-ml__cim">Összeg</h3>
@@ -3912,7 +3916,7 @@ final class SDH_Muhely_Munkalap
                             <label for="ful_m_rma" data-sdh-rma-ful<?php echo $rma_rejt ? ' hidden' : $ub('ful_rma'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html($rma_felirat); ?> <?php echo $munkalap && $rma_felirat === 'RMA' ? SDH_Muhely_Rma::ful_jelveny((int) $munkalap->id) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
                             <?php if (!$eladas && class_exists('SDH_Muhely_Atvetel')) : ?>
                                 <?php $atv_db = $munkalap ? SDH_Muhely_Atvetel::darab((int) $munkalap->id) : 0; ?>
-                                <label for="ful_m_atvetel">Átvétel<?php echo $atv_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $atv_db . '</span>' : ''; ?></label>
+                                <label for="ful_m_atvetel"<?php echo $ub('ful_atvetel'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>Átvétel<?php echo $atv_db > 0 ? ' <span class="sdh-fulek__db">' . (int) $atv_db . '</span>' : ''; ?></label>
                             <?php endif; ?>
                         </div>
 
