@@ -24,6 +24,24 @@ final class SDH_Sales
         add_filter('cron_schedules', [self::class, 'utemezes']);
         add_action('init', [self::class, 'cron_beallit']);
         add_action('init', [self::class, 'nyelv'], 1);
+
+        // A {termeknev} és a többi token a bejegyzések / oldalak szövegében, címében, kivonatában, a dokumentumcímben
+        // és a SEO-mezőkben is cserélődik (a blog és a jogi oldalak tokenekkel készülnek).
+        foreach (['the_content', 'the_title', 'the_excerpt', 'get_the_excerpt', 'single_post_title', 'widget_text', 'wp_get_attachment_caption', 'the_content_feed', 'the_excerpt_rss', 'the_title_rss'] as $sz) {
+            add_filter($sz, [self::class, 'szuro_t'], 99);
+        }
+
+        add_filter('document_title_parts', [self::class, 't_tomb'], 99);
+        add_filter('rank_math/frontend/title', [self::class, 'szuro_t'], 99);
+        add_filter('rank_math/frontend/description', [self::class, 'szuro_t'], 99);
+        add_filter('rank_math/opengraph/facebook/og_title', [self::class, 'szuro_t'], 99);
+        add_filter('rank_math/opengraph/facebook/og_description', [self::class, 'szuro_t'], 99);
+    }
+
+    /** Szűrő-alak: bármilyen bemenetre (a nem szöveget érintetlenül adja vissza). @param mixed $s @return mixed */
+    public static function szuro_t($s)
+    {
+        return is_string($s) ? self::t($s) : $s;
     }
 
     public static function nyelv(): void
