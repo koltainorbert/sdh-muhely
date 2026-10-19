@@ -66,7 +66,7 @@ Napi automatikus mentés, külső helyre (felhő, NAS, FTP) küldött titkosíto
 
 ### 11. Át lehet-e hozni a régi adatokat?
 
-A legtöbb szerviz évek óta gyűjti az ügyfeleit és a javításait. Ha ezek nem jönnek át, az ügyfél a régi gépen marad, és két rendszert kell nézni. Kérdezd meg, milyen formátumból tud importálni a program (CSV, XLSX), van-e próbaimport írás nélkül, és visszavonható-e. A menetet az [Adatátvétel](/adatatvetel/) oldal írja le.
+A legtöbb szerviz évek óta gyűjti az ügyfeleit és a javításait. Ha ezek nem jönnek át, az ügyfél a régi gépen marad, és két rendszert kell nézni. Kérdezd meg, milyen formátumból tud importálni a program (CSV, XLSX), van-e próbaimport írás nélkül, és visszavonható-e. A menetet az [Adatátvétel](/funkciok/adatatvetel/) oldal írja le.
 
 ### 12. Ki segít, ha elakadsz?
 

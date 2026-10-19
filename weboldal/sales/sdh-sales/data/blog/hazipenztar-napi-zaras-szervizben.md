@@ -75,7 +75,7 @@ A napi kassza adatai érzékenyek. Nem minden kollégának kell látnia a havi b
 
 ## Régi kassza-táblázat
 
-Ha eddig Excelben vezetted a zárásokat, nem kell elveszítened a múltat. A rendszer Házipénztára a régi „Zárás” táblázatot .xlsx-ből vagy CSV-ből be tudja tölteni, visszavonhatóan. Erről az [adatátvétel](/adatatvetel/) oldalon is írunk.
+Ha eddig Excelben vezetted a zárásokat, nem kell elveszítened a múltat. A rendszer Házipénztára a régi „Zárás” táblázatot .xlsx-ből vagy CSV-ből be tudja tölteni, visszavonhatóan. Erről az [adatátvétel](/funkciok/adatatvetel/) oldalon is írunk.
 
 ## Pultos eladás javítás nélkül
 

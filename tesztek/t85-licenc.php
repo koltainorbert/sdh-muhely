@@ -58,7 +58,7 @@ T::egyezik(24, strlen($L::ujjlenyomat()), 'ujjlenyomat (a cím nem megy át)');
 /* --- Licenc a központban, első jelentés ------------------------------------------------------------------------ */
 
 $kulcs = $K::uj_kulcs();
-T::igaz(preg_match('/^SDH-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/', $kulcs) === 1, 'kulcs formátuma');
+T::igaz(preg_match('/^' . preg_quote($K::kulcs_elotag(), '/') . '-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/', $kulcs) === 1, 'kulcs formátuma (a Központ előtagjával)');
 $wpdb->insert($K::t('licenc'), ['kulcs' => $kulcs, 'vevo' => 'Próba Szerviz T85', 'max_peldany' => 1, 'allapot' => 'aktiv', 'uzenet' => 'Köszönjük!', 'letrehozva' => current_time('mysql')]);
 $lid = (int) $wpdb->insert_id;
 

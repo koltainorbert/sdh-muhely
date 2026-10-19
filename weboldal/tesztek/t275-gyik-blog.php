@@ -59,7 +59,7 @@ foreach ($gyik as $e) {
         $hibak['szo'][] = "{$k} ({$n})";
     }
     $teljes = ($e['kerdes'] ?? '') . ' ' . $v;
-    if (stripos($teljes, 'SDH CRM') !== false || preg_match('/lorem|wordpress|plugin|bővítmény|github/iu', $teljes)) {
+    if (stripos($teljes, 'SDH CRM') !== false || preg_match('/lorem|wordpress|plugin|bővítmény|github|woocommerce|veszprém|sdh/iu', $teljes)) {
         $hibak['nev'][] = $k;
     }
     if (trim((string) ($e['kerdes'] ?? '')) === '') {
@@ -129,7 +129,7 @@ foreach ($fajlok as $f) {
         $bh['h2'][] = $slug;
     }
     $tn = substr_count($md, '{termeknev}');
-    if ($tn < 1 || $tn > 3 || stripos($md . implode(' ', array_filter($fej, 'is_string')), 'SDH CRM') !== false || preg_match('/lorem|wordpress|plugin|bővítmény|github/iu', $md)) {
+    if ($tn < 1 || $tn > 3 || stripos($md . implode(' ', array_filter($fej, 'is_string')), 'SDH CRM') !== false || preg_match('/lorem|wordpress|plugin|bővítmény|github|woocommerce|veszprém|sdh/iu', $md)) {
         $bh['nev'][] = "{$slug} ({$tn})";
     }
     if (strpos($md, '](/demo/)') === false && strpos($md, '](/arak/)') === false) {

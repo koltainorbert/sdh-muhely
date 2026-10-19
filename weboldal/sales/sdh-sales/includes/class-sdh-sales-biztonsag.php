@@ -35,6 +35,11 @@ final class SDH_Sales_Biztonsag
 
     public static function init(): void
     {
+        // A front a REST-nonce-ot semleges fejlécben küldi (X-App-Nonce); a hitelesítés a megszokott helyen keresi.
+        if (!empty($_SERVER['HTTP_X_APP_NONCE']) && empty($_SERVER['HTTP_X_WP_NONCE'])) {
+            $_SERVER['HTTP_X_WP_NONCE'] = sanitize_text_field(wp_unslash((string) $_SERVER['HTTP_X_APP_NONCE']));
+        }
+
         add_filter('wp_script_attributes', [self::class, 'script_nonce']);
         add_filter('wp_inline_script_attributes', [self::class, 'script_nonce']);
         add_action('send_headers', [self::class, 'fejlecek']);

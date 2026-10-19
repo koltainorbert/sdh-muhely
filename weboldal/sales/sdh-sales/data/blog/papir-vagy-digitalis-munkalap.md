@@ -80,7 +80,7 @@ Egy hétfő reggel, amikortól minden **új** ügy digitálisan indul. A folyama
 
 ### 2. Vidd át a törzsadatokat
 
-Ha van ügyféllistád táblázatban vagy egy régi programban, töltsd be előre. Így az első napon a törzsvásárlók már ott lesznek. Ha MunkaLap 3-ból vagy Excelből jössz, az [Adatátvétel](/adatatvetel/) oldal leírja a lépéseket.
+Ha van ügyféllistád táblázatban vagy egy régi programban, töltsd be előre. Így az első napon a törzsvásárlók már ott lesznek. Ha MunkaLap 3-ból vagy Excelből jössz, az [Adatátvétel](/funkciok/adatatvetel/) oldal leírja a lépéseket.
 
 ### 3. Állítsd be a nyomtatványokat
 

@@ -33,7 +33,7 @@ foreach ($kell as $k) {
         }
     }
 
-    if (strpos($s, 'SDH CRM') !== false) {
+    if (preg_match('~SDH|Munkora~', $s) === 1) {
         $hibas[] = $k . ': beégetett terméknév';
     }
 

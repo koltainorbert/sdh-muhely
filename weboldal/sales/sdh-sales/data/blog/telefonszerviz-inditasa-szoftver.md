@@ -97,7 +97,7 @@ Konkrét összeget itt nem írunk, mert a szoftverárak, a tárhelydíjak és az
 | SMS | Darabonként | Saját telefonnál a díjcsomag szerint |
 | Pultgép vagy tablet | Egyszeri | A tablet aláírásra és fotóra is jó |
 | Nyomtató, címkenyomtató | Egyszeri | A címkenyomtató ráér |
-| Telepítés, betanítás | Egyszeri | Ha nem magad állítod be |
+| Telepítés, betanítás | Egyszeri | A gyártó telepítési díja |
 
 Ha egy ajánlatban valamelyik sor hiányzik, kérdezz rá: lehet, hogy benne van, lehet, hogy külön fizetendő.
 
@@ -119,4 +119,4 @@ Ha ez gördülékenyen megy, nyithatsz.
 
 Egy induló telefonszerviznek nem kell minden funkció az első napon, de a rendes ügyfél- és készüléknyilvántartás, a munkalap, a számlázás és a mentés igen. A többit akkor kapcsold be, amikor a forgalom indokolja.
 
-A {termeknev} [telefonszervizeknek szóló oldalán](/iparagak/telefonszerviz/) összegyűjtöttük, mi segít kifejezetten mobiljavításnál. A [demóban](/demo/) a próbanapot is végig tudod vinni, a csomagok az [Árak](/arak/) oldalon vannak.
+A {termeknev} [telefonszervizeknek szóló oldalán](/iparagak/szerviz/) összegyűjtöttük, mi segít kifejezetten mobiljavításnál. A [demóban](/demo/) a próbanapot is végig tudod vinni, a csomagok az [Árak](/arak/) oldalon vannak.

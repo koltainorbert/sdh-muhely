@@ -109,7 +109,7 @@ $l = SDH_Kozpont::licenc((string) $r['licenc_kulcs']);
 T::igaz($l !== null && (int) $l->id === (int) $r['kozpont_licenc_id'], 'a licenc a (távoli) Központban');
 $u = t25_levelek('udvozlo', (string) $r['email']);
 T::tartalmaz((string) ($u[0]['html'] ?? ''), 'https://kozpont.example.hu/', 'levél: a távoli Központ címe');
-T::tartalmaz((string) ($u[0]['html'] ?? ''), 'letoltes?t=', 'levél: letöltő link');
+T::tartalmaz((string) ($u[0]['html'] ?? ''), '/licenc/letoltes/?t=', 'levél: letöltő link (semleges cím)');
 $n = count($GLOBALS['t252_keresek']);
 SDH_Sales_Kiszolgalas::indit($id);
 T::egyezik($n, count($GLOBALS['t252_keresek']), 'újrafuttatás: nincs új hálózati kérés');

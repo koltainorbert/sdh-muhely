@@ -99,7 +99,7 @@ Ha ezekre egyértelmű, írásos választ kapsz, a döntés sokkal megalapozotta
 
 ## Váltás nemzetközi programról
 
-Ha jelenleg nemzetközi programot használsz, és váltanál, az első kérdés az adatexport: milyen formában adja ki a program az ügyfeleket, készülékeket és munkalapokat? Ha CSV-ben vagy táblázatban, a rendszerünk [adatátvétele](/adatatvetel/) oszloppárosítással át tudja venni őket, próbával és visszavonási lehetőséggel.
+Ha jelenleg nemzetközi programot használsz, és váltanál, az első kérdés az adatexport: milyen formában adja ki a program az ügyfeleket, készülékeket és munkalapokat? Ha CSV-ben vagy táblázatban, a rendszerünk [adatátvétele](/funkciok/adatatvetel/) oszloppárosítással át tudja venni őket, próbával és visszavonási lehetőséggel.
 
 ## Mikor választanád mégis a nemzetközit?
 

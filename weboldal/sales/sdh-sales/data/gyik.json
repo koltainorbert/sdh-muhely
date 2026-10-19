@@ -100,7 +100,7 @@
   "kulcs": "arajanlat-kerese",
   "kategoria": "vasarlas",
   "kerdes": "Kérhetek árajánlatot a rendelés előtt?",
-  "valasz": "<p>Igen. Ha a cégénél jóváhagyás kell a beszerzéshez, vagy több telephelyre, sok felhasználóra, egyedi modulösszeállításra kérne árat, használja az ajánlatkérő űrlapot. Az árakat az <a href=\"/arak/\">Árak</a> oldal kalkulátora is azonnal kiszámolja nettóban és bruttóban, ezt el is mentheti magának. Egyedi fejlesztési igényhez az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldal igényfelmérőjét ajánljuk.</p>",
+  "valasz": "<p>Igen. Ha a cégénél jóváhagyás kell a beszerzéshez, vagy több telephelyre, sok felhasználóra, egyedi modulösszeállításra kérne árat, használja az ajánlatkérő űrlapot. Az árakat az <a href=\"/arak/\">Árak</a> oldal kalkulátora is azonnal kiszámolja nettóban és bruttóban, ezt el is mentheti magának. Egyedi fejlesztési igényhez az <a href=\"/egyedi-modulfejlesztes/\">Egyedi fejlesztés</a> oldal igényfelmérőjét ajánljuk.</p>",
   "kapcsolodo": [
    "kalkulator-pontos",
    "egyedi-fejlesztes-menete",
@@ -110,8 +110,8 @@
  {
   "kulcs": "letolto-link-ervenyessege",
   "kategoria": "vasarlas",
-  "kerdes": "Meddig érvényes a letöltő link?",
-  "valasz": "<p>Az üdvözlő levélben kapott letöltő link biztonsági okból <strong>egyszer használható</strong>, és 14 napig érvényes. Töltse le a telepítő csomagot, és tegye el biztos helyre. Ha a link lejárt vagy elveszett, a licenc aktiválása után a rendszer a frissítéseket a licenckulccsal úgyis a központból kapja; új telepítő csomagért írjon nekünk, és a licenc ellenőrzése után küldünk újat.</p>",
+  "kerdes": "Meddig érvényes az üdvözlő levélben kapott letöltő link?",
+  "valasz": "<p>Az üdvözlő levélben kapott letöltő link biztonsági okból <strong>egyszer használható</strong>, és 14 napig érvényes. A telepítést általában mi végezzük, így a csomagot nem kell Önöknek kezelniük. Ha mégis maguk őriznék meg, töltsék le időben. Aktív licenccel a frissítések a licencközpontból érkeznek, a letöltő linktől függetlenül; új csomagért írjon nekünk.</p>",
   "kapcsolodo": [
    "mikor-kapom-meg-a-licenckulcsot",
    "frissites-menete"
@@ -291,7 +291,7 @@
   "kulcs": "licenckulcs-megadasa",
   "kategoria": "licenc",
   "kerdes": "Hol kell megadni a licenckulcsot?",
-  "valasz": "<p>A telepítés után a rendszerben: <strong>Beállítások › Rendszer › Licenc</strong>. Ide kell beírni a központ címét és az <code>SDH-XXXX-XXXX-XXXX-XXXX</code> alakú licenckulcsot, majd menteni. A rendszer azonnal jelentkezik a központnál, és az Állapot sorban megjelenik: Aktív, a vevő neve és a lejárat. Ezt a lapot csak adminisztrátor látja. A kulcsot kis- és nagybetűvel is beírhatja.</p>",
+  "valasz": "<p>A rendszerben: <strong>Beállítások › Rendszer › Licenc</strong>. Ide kerül a licencközpont címe és a licenckulcs, majd mentés. A rendszer azonnal jelentkezik a központnál, és az Állapot sorban megjelenik: Aktív, a vevő neve és a lejárat. Ezt a lapot csak adminisztrátor látja. Ha a telepítést mi végezzük, a kulcsot is mi adjuk meg; a kulcsot kis- és nagybetűvel is be lehet írni.</p>",
   "kapcsolodo": [
    "licenc-allapotok",
    "mikor-kapom-meg-a-licenckulcsot"
@@ -384,7 +384,7 @@
   "kulcs": "rendszerkovetelmenyek",
   "kategoria": "telepites",
   "kerdes": "Milyen szerver kell a(z) {termeknev} futtatásához?",
-  "valasz": "<p>A rendszer webes alkalmazás, amely egy saját, belső webhelyen fut. A követelmények:</p><ul><li>PHP 8.1 vagy újabb, a sodium, zlib, mbstring, ZipArchive és XMLReader PHP-modulokkal (a szokásos tárhelyeken mind megvan),</li><li>MySQL vagy MariaDB adatbázis,</li><li>https-es cím,</li><li>friss Chrome, Edge, Firefox vagy Safari a munkaállomásokon.</li></ul><p>Futhat bérelt tárhelyen, saját szerveren vagy a bolt helyi hálózatán lévő gépen.</p>",
+  "valasz": "<p>A(z) {termeknev} saját fejlesztésű, PHP / MySQL alapú webes rendszer, amely saját szerveren vagy felhőben fut. A szerverrel szemben támasztott követelmények:</p><ul><li>Linux szerver,</li><li>PHP 8.1 vagy újabb,</li><li>MySQL 8 vagy MariaDB 10.6 vagy újabb adatbázis,</li><li>https-es cím,</li><li>ütemező (cron) az időzített feladatokhoz.</li></ul><p>A munkaállomásokon friss Chrome, Edge, Firefox vagy Safari kell. A telepítést mi végezzük.</p>",
   "kapcsolodo": [
    "hol-fusson-a-rendszer",
    "telepites-menete",
@@ -395,7 +395,7 @@
   "kulcs": "telepites-menete",
   "kategoria": "telepites",
   "kerdes": "Hogyan zajlik a telepítés?",
-  "valasz": "<p>A telepítő csomagot egy külön, erre a célra létrehozott belső webhelyre kell feltölteni és bekapcsolni; a rendszer ekkor magától létrehozza az adattábláit. Utána a <strong>Beállítások › Rendszer › Licenc</strong> lapon meg kell adni a licenckulcsot, majd a cégadatokat, a számozást és a kollégákat. Ha nem szeretnék maguk elvégezni, a telepítést szolgáltatásként is megrendelhetik, és időpontot foglalhatnak hozzá.</p>",
+  "valasz": "<p>A telepítést mi végezzük, telepítési díj ellenében (az összeg az <a href=\"/arak/\">Árak</a> oldalon). A vásárlás után az üdvözlő levélben időpontfoglaló linket kap. A választott szerverre feltesszük a rendszert, beállítjuk a licencet, a levélküldést és az ütemezőt, majd Önökkel együtt megadjuk a cégadatokat, a számozást és a kollégákat. Ehhez a szerver hozzáférését Önök biztosítják.</p>",
   "kapcsolodo": [
    "telepites-szolgaltataskent",
    "rendszerkovetelmenyek",
@@ -405,8 +405,8 @@
  {
   "kulcs": "telepites-szolgaltataskent",
   "kategoria": "telepites",
-  "kerdes": "Telepítitek nekünk a rendszert?",
-  "valasz": "<p>Igen, a telepítés külön szolgáltatásként megrendelhető (az ára az <a href=\"/arak/\">Árak</a> oldalon). A vásárlás után az üdvözlő levélben időpontfoglaló linket is kap. A telepítés során a rendszert a választott szerverre tesszük, beállítjuk a licencet, a levelezést és az alapadatokat, és igény szerint segítünk a régi adatok átvételében. Ehhez a szerver hozzáférését Önök adják meg.</p>",
+  "kerdes": "Ki telepíti a rendszert?",
+  "valasz": "<p>A telepítést mi végezzük, ez külön szolgáltatásként szerepel az <a href=\"/arak/\">Árak</a> oldalon. A vásárlás után az üdvözlő levélben időpontfoglaló linket kap. A telepítés során a rendszert a választott szerverre tesszük, beállítjuk a licencet, a levelezést és az alapadatokat, és igény szerint segítünk a régi adatok átvételében. Ehhez a szerver hozzáférését Önök adják meg.</p>",
   "kapcsolodo": [
    "telepites-menete",
    "adatatvetel-szolgaltataskent",
@@ -437,8 +437,8 @@
  {
   "kulcs": "kulon-webhely-kell",
   "kategoria": "telepites",
-  "kerdes": "Telepíthető a cég meglévő weboldalára?",
-  "valasz": "<p>Nem ajánlott. A rendszer egy <strong>önálló, belső webhelyre</strong> való, például egy külön aldomainre (<code>muhely.pelda.hu</code>) vagy a helyi hálózaton futó szerverre. Így a nyilvános weboldal kiegészítői és látogatói nem érintik a műhely adatait, és a rendszer zárt módban működhet: kívülről csak a bejelentkező, az ügyféloldal és a foglalóoldal látszik.</p>",
+  "kerdes": "Futhat a rendszer a cég meglévő weboldala mellett?",
+  "valasz": "<p>A rendszer önálló webes alkalmazás, saját címmel: például egy külön aldomainen (<code>szerviz.pelda.hu</code>) vagy a helyi hálózaton futó szerveren. Nem a nyilvános weboldal része, így a weboldal látogatói és tartalma nem érintik a műhely adatait. Kívülről csak a bejelentkező, az ügyféloldal és a foglalóoldal látszik; a foglalóoldal a weboldalba linkelhető vagy beágyazható.</p>",
   "kapcsolodo": [
    "hol-fusson-a-rendszer",
    "zart-mod"
@@ -685,7 +685,7 @@
   "kulcs": "adatatvetel-hogyan",
   "kategoria": "adatatvetel",
   "kerdes": "Át tudjuk hozni az adatainkat a régi programból?",
-  "valasz": "<p>Igen. A <strong>Beállítások › Rendszer › Adatátvétel</strong> lapon táblázatfájlokból (CSV, TXT, XLSX) vehetők át az ügyfelek, eszközök, munkalapok, tételek és hibák, ebben a sorrendben. A rendszer felismeri a kódolást és az elválasztót, javasolja az oszlopok párosítását, és élesítés előtt írás nélküli próbát futtat. Az átvétel visszavonható. Részletek az <a href=\"/adatatvetel/\">Adatátvétel</a> oldalon.</p>",
+  "valasz": "<p>Igen. A <strong>Beállítások › Rendszer › Adatátvétel</strong> lapon táblázatfájlokból (CSV, TXT, XLSX) vehetők át az ügyfelek, eszközök, munkalapok, tételek és hibák, ebben a sorrendben. A rendszer felismeri a kódolást és az elválasztót, javasolja az oszlopok párosítását, és élesítés előtt írás nélküli próbát futtat. Az átvétel visszavonható. Részletek az <a href=\"/funkciok/adatatvetel/\">Adatátvétel</a> oldalon.</p>",
   "kapcsolodo": [
    "munkalap3-atvetel",
    "adatatvetel-proba",
@@ -999,7 +999,7 @@
   "kulcs": "telefonszerviz",
   "kategoria": "iparagak",
   "kerdes": "Alkalmas a rendszer mobiltelefon-szerviznek?",
-  "valasz": "<p>Igen, ez az egyik fő terület. Az IMEI-ből felismeri a típust, a feloldó kódot és mintát titkosítva tárolja, az okos kereső az IMEI-t, telefonszámot és sorozatszámot is felismeri. Van RMA-matrica Brother címkenyomtatóra, átvételi fotó és aláírás, QR-kódos ügyféloldal és SMS-értesítés. Részletek: <a href=\"/iparagak/telefonszerviz/\">Telefonszerviz</a>.</p>",
+  "valasz": "<p>Igen, ez az egyik fő terület. Az IMEI-ből felismeri a típust, a feloldó kódot és mintát titkosítva tárolja, az okos kereső az IMEI-t, telefonszámot és sorozatszámot is felismeri. Van RMA-matrica Brother címkenyomtatóra, átvételi fotó és aláírás, QR-kódos ügyféloldal és SMS-értesítés. Részletek: <a href=\"/iparagak/szerviz/\">Telefonszerviz</a>.</p>",
   "kapcsolodo": [
    "imei-tac",
    "zarkod-titkositas",
@@ -1010,7 +1010,7 @@
   "kulcs": "szamitogep-szerviz",
   "kategoria": "iparagak",
   "kerdes": "Számítógép- és laptopszerviznek is jó?",
-  "valasz": "<p>Igen. Az eszközöknél kategória (például laptop, asztali gép), gyártó, típus, gyári szám, tartozékok és átvételkori állapot rögzíthető, a munkalapon hibák, szolgáltatások és alkatrészek szerepelnek. Több eszköz is lehet egy lapon, külön állapottal. A készletkezelés és a rendelések modul az alkatrészbeszerzést segíti. Részletek: <a href=\"/iparagak/szamitogep-szerviz/\">Számítógép-szerviz</a>.</p>",
+  "valasz": "<p>Igen. Az eszközöknél kategória (például laptop, asztali gép), gyártó, típus, gyári szám, tartozékok és átvételkori állapot rögzíthető, a munkalapon hibák, szolgáltatások és alkatrészek szerepelnek. Több eszköz is lehet egy lapon, külön állapottal. A készletkezelés és a rendelések modul az alkatrészbeszerzést segíti. Részletek: <a href=\"/iparagak/szerviz/\">Számítógép-szerviz</a>.</p>",
   "kapcsolodo": [
    "tobb-eszkoz-egy-lapon",
    "keszletkezeles-modul"
@@ -1020,7 +1020,7 @@
   "kulcs": "elektronikai-szerviz",
   "kategoria": "iparagak",
   "kerdes": "Használható általános elektronikai javítóműhelyben?",
-  "valasz": "<p>Igen. A rendszer bármilyen, ügyfél által behozott készülékre működik, amelynek típusa és gyári száma van: televízió, hangtechnika, háztartási kisgép, okosóra, konzol. A kategóriák és gyártók listája bővíthető, és minden eszköznek megvan az előélete. Részletek: <a href=\"/iparagak/elektronikai-szerviz/\">Elektronikai szerviz</a>. Egy munkalapon több készülék is lehet, a garancia és az átvételi fotó itt is működik, és a nyomtatványokra a saját feltételeik írhatók.</p>",
+  "valasz": "<p>Igen. A rendszer bármilyen, ügyfél által behozott készülékre működik, amelynek típusa és gyári száma van: televízió, hangtechnika, háztartási kisgép, okosóra, konzol. A kategóriák és gyártók listája bővíthető, és minden eszköznek megvan az előélete. Részletek: <a href=\"/iparagak/szerviz/\">Elektronikai szerviz</a>. Egy munkalapon több készülék is lehet, a garancia és az átvételi fotó itt is működik, és a nyomtatványokra a saját feltételeik írhatók.</p>",
   "kapcsolodo": [
    "eszkoz-elozmenyek",
    "mire-nem-valo"
@@ -1030,7 +1030,7 @@
   "kulcs": "mire-nem-valo",
   "kategoria": "iparagak",
   "kerdes": "Milyen vállalkozásnak nem ajánlott a rendszer?",
-  "valasz": "<p>A(z) {termeknev} ügyfél által behozott készülékek javítására készült. Nem helyszíni kiszállásos munkák ütemezésére, nem gépjárműszervizre (nincs például rendszám- vagy kilométeróra-kezelés), és nem webáruháznak. Ha a tevékenységük ezektől eltér, érdemes a <a href=\"/demo/\">demóban</a> kipróbálni, vagy az <a href=\"/egyedi-fejlesztes/\">egyedi fejlesztés</a> lehetőségéről érdeklődni. Ha bizonytalan, írja le a folyamatukat, és őszintén megmondjuk, megfelel-e.</p>",
+  "valasz": "<p>A(z) {termeknev} ügyfél által behozott készülékek javítására készült. Nem helyszíni kiszállásos munkák ütemezésére, nem gépjárműszervizre (nincs például rendszám- vagy kilométeróra-kezelés), és nem webáruháznak. Ha a tevékenységük ezektől eltér, érdemes a <a href=\"/demo/\">demóban</a> kipróbálni, vagy az <a href=\"/egyedi-modulfejlesztes/\">egyedi fejlesztés</a> lehetőségéről érdeklődni. Ha bizonytalan, írja le a folyamatukat, és őszintén megmondjuk, megfelel-e.</p>",
   "kapcsolodo": [
    "elektronikai-szerviz",
    "egyedi-fejlesztes-menete"
@@ -1150,7 +1150,7 @@
   "kulcs": "uj-funkcio-kerese",
   "kategoria": "tamogatas",
   "kerdes": "Kérhetünk új funkciót?",
-  "valasz": "<p>Igen, a javaslatokat szívesen fogadjuk, és sok fejlesztés vevői kérésből indult. Hogy egy javaslat mikor és hogyan kerül be a közös termékbe, azt nem tudjuk előre megígérni. Ha egy funkcióra saját határidővel van szükség, az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést és ajánlatot.</p>",
+  "valasz": "<p>Igen, a javaslatokat szívesen fogadjuk, és sok fejlesztés vevői kérésből indult. Hogy egy javaslat mikor és hogyan kerül be a közös termékbe, azt nem tudjuk előre megígérni. Ha egy funkcióra saját határidővel van szükség, az <a href=\"/egyedi-modulfejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést és ajánlatot.</p>",
   "kapcsolodo": [
    "egyedi-fejlesztes-menete",
    "ujdonsagok"
@@ -1285,6 +1285,17 @@
   ]
  },
  {
+  "kulcs": "mire-epul-a-rendszer",
+  "kategoria": "technikai",
+  "kerdes": "Milyen technológiára épül a rendszer?",
+  "valasz": "<p>A(z) {termeknev} saját fejlesztésű, PHP / MySQL alapú webes rendszer, amely saját szerveren vagy felhőben fut, és böngészőből használható asztali gépen, tableten és telefonon. Külön program telepítése a munkaállomásokra nem kell. A szerver beállítását és a telepítést mi végezzük, a frissítések a licencközpontból érkeznek.</p>",
+  "kapcsolodo": [
+   "rendszerkovetelmenyek",
+   "telepites-menete",
+   "felho-vagy-sajat-szerver"
+  ]
+ },
+ {
   "kulcs": "felho-vagy-sajat-szerver",
   "kategoria": "szerver",
   "kerdes": "Felhőben vagy saját szerveren fut a rendszer?",
@@ -1380,7 +1391,7 @@
   "kulcs": "shared-hosting",
   "kategoria": "szerver",
   "kerdes": "Elég egy olcsó osztott tárhely?",
-  "valasz": "<p>Kisebb szerviznek gyakran igen, ha a tárhely támogatja a PHP 8.1-et, a szükséges PHP-modulokat, a MySQL-t vagy MariaDB-t, a https-t és az ütemezett feladatokat. Nagyobb adatmennyiségnél vagy több felhasználónál virtuális szerver ajánlott. Ha a mentési mappák védelméhez szükséges <code>.htaccess</code> nem működik (például nginx-en), a szolgáltatónak kell lezárnia ezeket a mappákat.</p>",
+  "valasz": "<p>Kisebb szerviznek gyakran igen, ha a tárhely Linux alapú, támogatja a PHP 8.1-et, a MySQL 8-at vagy a MariaDB 10.6-ot, a https-t és az ütemezett feladatokat (cron). Nagyobb adatmennyiségnél vagy több felhasználónál virtuális szerver ajánlott. A telepítés előtt a választott tárhelyet átnézzük, és ha valami hiányzik, jelezzük, mit kell kérni a szolgáltatótól.</p>",
   "kapcsolodo": [
    "szerver-meretezes",
    "rendszerkovetelmenyek"
@@ -1570,7 +1581,7 @@
   "kulcs": "konyveloprogram",
   "kategoria": "integraciok",
   "kerdes": "Összeköthető a rendszer könyvelőprogrammal?",
-  "valasz": "<p>Közvetlen könyvelőprogram-kapcsolat nincs. A számlák a Számlázz.hu-ban készülnek, ahonnan a könyvelő a megszokott módon hozzájuk fér. A pénztár tételei CSV-ben exportálhatók, és a riportok is segítik a havi egyeztetést. Ha egyedi összekötésre van szükség, az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést.</p>",
+  "valasz": "<p>Közvetlen könyvelőprogram-kapcsolat nincs. A számlák a Számlázz.hu-ban készülnek, ahonnan a könyvelő a megszokott módon hozzájuk fér. A pénztár tételei CSV-ben exportálhatók, és a riportok is segítik a havi egyeztetést. Ha egyedi összekötésre van szükség, az <a href=\"/egyedi-modulfejlesztes/\">Egyedi fejlesztés</a> oldalon kérhet felmérést.</p>",
   "kapcsolodo": [
    "szamlazas-szamlazzhu",
    "export-adatok",
@@ -1601,7 +1612,7 @@
   "kulcs": "egyedi-fejlesztes-menete",
   "kategoria": "egyedi-fejlesztes",
   "kerdes": "Hogyan kérhetek egyedi fejlesztést?",
-  "valasz": "<p>Az <a href=\"/egyedi-fejlesztes/\">Egyedi fejlesztés</a> oldalon lévő igényfelmérő űrlapon írja le, milyen folyamatot szeretne megoldani, és mi most a gond. A felmérés alapján visszajelzünk, hogy megoldható-e, és ha igen, írásos ajánlatot adunk a terjedelemmel, határidővel és árral. A munka csak az ajánlat elfogadása után indul.</p>",
+  "valasz": "<p>Az <a href=\"/egyedi-modulfejlesztes/\">Egyedi fejlesztés</a> oldalon lévő igényfelmérő űrlapon írja le, milyen folyamatot szeretne megoldani, és mi most a gond. A felmérés alapján visszajelzünk, hogy megoldható-e, és ha igen, írásos ajánlatot adunk a terjedelemmel, határidővel és árral. A munka csak az ajánlat elfogadása után indul.</p>",
   "kapcsolodo": [
    "egyedi-modul-licenc",
    "egyedi-fejlesztes-ar",

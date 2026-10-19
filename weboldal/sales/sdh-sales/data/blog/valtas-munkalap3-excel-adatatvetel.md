@@ -45,7 +45,7 @@ Ha eddig táblázatban vezetted a javításokat, válaszd szét a lapokat: egy f
 
 ## Az átvétel menete
 
-A {termeknev} [Adatátvétel](/adatatvetel/) lapján az átvétel így megy:
+A {termeknev} [Adatátvétel](/funkciok/adatatvetel/) lapján az átvétel így megy:
 
 ### 1. Fájl kiválasztása és elemzés
 
