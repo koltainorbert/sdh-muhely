@@ -1,0 +1,351 @@
+/*
+ * SDH értékesítő téma – tervezési tokenek (design system).
+ *
+ * Ez az egyetlen hely, ahol nyers színérték áll. Minden komponens a
+ * --s-… változókat használja. A bővítmény (SDH_Sales_Arculat::css())
+ * a :root-on felülírhatja a szerződés szerinti változókat (ARCHITEKTURA.md §7),
+ * ez a fájl az alapértéket adja.
+ *
+ * Sötét az alap (high-tech, üveg + neon). Világos mód:
+ *   <html data-tema="vilagos">  – kényszerített világos
+ *   <html data-tema="sotet">    – kényszerített sötét
+ *   attribútum nélkül            – a rendszer (prefers-color-scheme) dönt
+ *
+ * A kontrasztarányokat a dokumentacio/arculat.md táblázata tartalmazza
+ * (szkripttel mérve, WCAG 2.2 AA: szöveg ≥ 4,5:1, nagy szöveg és UI ≥ 3:1).
+ *
+ * Betűk (önkiszolgált, @fontsource-variable csomagokból – a front ügynök tölti be):
+ *   cím:    Bricolage Grotesque Variable
+ *   szöveg: Onest Variable
+ *   kód:    JetBrains Mono Variable
+ */
+
+/* ================================================================== */
+/* 1. Téma-független tokenek                                           */
+/* ================================================================== */
+:root {
+    /* --- Betűcsaládok (szerződés) --- */
+    --s-betu-cim: "Bricolage Grotesque Variable", "Bricolage Grotesque", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+    --s-betu-szoveg: "Onest Variable", "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --s-betu-kod: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* --- Betűméret-skála (folyékony, 360 px → 1440 px; 1 rem = 16 px) --- */
+    --s-m-xs: 0.8125rem;                                   /* 13 px – címke, apró jegyzet */
+    --s-m-s: 0.875rem;                                     /* 14 px – pill, másodlagos */
+    --s-m-alap: 1rem;                                      /* 16 px – törzsszöveg */
+    --s-m-l: clamp(1.0625rem, 1.02rem + 0.19vw, 1.1875rem);   /* 17–19 px – bevezető */
+    --s-m-xl: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);       /* 20–24 px – kártyacím (h4) */
+    --s-m-2xl: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);           /* 24–32 px – h3 */
+    --s-m-3xl: clamp(1.875rem, 1.5rem + 1.65vw, 2.75rem);     /* 30–44 px – h2 */
+    --s-m-4xl: clamp(2.375rem, 1.75rem + 2.8vw, 4rem);        /* 38–64 px – h1 */
+    --s-m-5xl: clamp(2.75rem, 1.8rem + 4.2vw, 5.5rem);        /* 44–88 px – hero */
+
+    --s-sorkoz-szoros: 1.08;   /* hero, h1 */
+    --s-sorkoz-cim: 1.18;      /* h2–h4 */
+    --s-sorkoz: 1.6;           /* törzsszöveg */
+    --s-betukoz-cim: -0.02em;
+    --s-betukoz-felirat: 0.08em; /* nagybetűs címke (eyebrow) */
+
+    --s-suly-normal: 400;
+    --s-suly-kozepes: 500;
+    --s-suly-felkover: 650;
+    --s-suly-cim: 720;
+
+    --s-sor-max: 68ch;         /* olvasható sorhossz */
+
+    /* --- Térköz-skála (4 px alap) --- */
+    --s-t-0: 0;
+    --s-t-1: 0.25rem;   /*  4 */
+    --s-t-2: 0.5rem;    /*  8 */
+    --s-t-3: 0.75rem;   /* 12 */
+    --s-t-4: 1rem;      /* 16 */
+    --s-t-5: 1.5rem;    /* 24 */
+    --s-t-6: 2rem;      /* 32 */
+    --s-t-7: 3rem;      /* 48 */
+    --s-t-8: 4rem;      /* 64 */
+    --s-t-9: 6rem;      /* 96 */
+    --s-t-10: 8rem;     /* 128 */
+    --s-t-szekcio: clamp(4rem, 2.5rem + 6vw, 8rem);  /* szekciók függőleges ritmusa */
+    --s-t-oldal: clamp(1rem, 0.5rem + 2.5vw, 2.5rem); /* oldalsó margó (mobilon 16 px) */
+    --s-t-kapcsolo: 6px;                               /* minimális levegő a kapcsoló körül (szabály) */
+
+    /* --- Elrendezés --- */
+    --s-max: 1240px;           /* tartalomszélesség (szerződés) */
+    --s-max-szuk: 760px;       /* szöveges oldalak, jogi, blog */
+    --s-max-szeles: 1440px;    /* hero, teljes szélességű sávok */
+    --s-fejlec-magassag: 72px;
+
+    /* --- Lekerekítés (szerződés) – minden mező, gomb, pill lekerekített --- */
+    --s-r-mezo: 999px;         /* egysoros mező, legördülő */
+    --s-r-tobbsoros: 15px;     /* textarea, többsoros mező (szabály: max 15 px) */
+    --s-r-gomb: 999px;         /* gomb: pill */
+    --s-r-pill: 999px;         /* címke, szűrő, badge */
+    --s-r-kartya: 24px;        /* kártya, üvegpanel */
+    --s-r-kicsi: 12px;         /* belső elem kártyán, tooltip, kódblokk */
+    --s-r-popup: 28px;         /* modál, lebegő panel */
+
+    /* --- Méretek (érintési célterület ≥ 44 px, WCAG 2.5.8 AA ≥ 24 px) --- */
+    --s-magassag-gomb: 48px;
+    --s-magassag-gomb-kicsi: 36px;
+    --s-magassag-mezo: 48px;
+    --s-kapcsolo-szel: 44px;
+    --s-kapcsolo-mag: 24px;
+    --s-ikon: 20px;
+    --s-ikon-nagy: 28px;
+    --s-ikon-vonal: 1.75;      /* Lucide/Tabler stroke-width */
+    --s-fokusz-vastag: 2px;
+    --s-fokusz-tav: 3px;
+
+    /* --- Üveg (glassmorphism) paraméterek --- */
+    --s-uveg-blur: 18px;
+    --s-uveg-szaturacio: 160%;
+    --s-uveg-blur-eros: 28px;  /* fejléc, popup */
+    --s-uveg-szemcse: 0.035;   /* zajréteg átlátszósága (opcionális textúra) */
+
+    /* --- Mozgás --- */
+    --s-ido-azonnal: 80ms;
+    --s-ido-gyors: 140ms;
+    --s-ido: 220ms;
+    --s-ido-lassu: 420ms;
+    --s-ido-belepes: 640ms;    /* görgetésre megjelenés */
+    --s-gorbe: cubic-bezier(0.2, 0.7, 0.2, 1);          /* alap (ease-out) */
+    --s-gorbe-be: cubic-bezier(0.4, 0, 1, 1);
+    --s-gorbe-rugo: cubic-bezier(0.34, 1.4, 0.64, 1);   /* kapcsoló, pill */
+    --s-elmozdulas: 12px;      /* belépő animáció függőleges eltolása */
+
+    /* --- Rétegek (z-index skála) --- */
+    --s-z-alap: 0;
+    --s-z-emelt: 10;
+    --s-z-ragados: 100;        /* ragadós sávok, táblázatfej */
+    --s-z-fejlec: 200;
+    --s-z-legordulo: 300;
+    --s-z-fiok: 400;           /* mobil menü, kosár-fiók */
+    --s-z-hatter: 500;         /* modál háttér */
+    --s-z-modal: 510;
+    --s-z-kereso: 600;         /* Ctrl+K kereső */
+    --s-z-szikra: 700;         /* AI-chat buborék */
+    --s-z-suti: 800;           /* süti-sáv */
+    --s-z-ertesites: 900;      /* toast */
+    --s-z-tooltip: 1000;
+}
+
+/* ================================================================== */
+/* 2. Sötét mód (alap)                                                  */
+/* ================================================================== */
+:root,
+:root[data-tema="sotet"] {
+    color-scheme: dark;
+
+    /* Szerződés szerinti színek */
+    --s-bg: #07080c;
+    --s-felulet: #11131b;
+    --s-uveg: rgba(22, 25, 36, 0.66);
+    --s-szoveg: #eef0f6;
+    --s-halvany: #a3a9bb;
+    --s-vonal: rgba(255, 255, 255, 0.1);
+    --s-kiemelo: #ff5a52;          /* SDH-piros, sötét háttérre világosítva */
+    --s-kiemelo-2: #9d8fff;        /* Központ-ibolya */
+    --s-neon: #22d3ee;             /* cián neon */
+    --s-ok: #34d399;
+    --s-figyel: #fbbf24;
+    --s-hiba: #fb7185;
+    --s-arnyek: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 24px 60px -24px rgba(0, 0, 0, 0.75);
+
+    /* Kiegészítők */
+    --s-bg-2: #0c0e15;                                  /* váltakozó szekció-háttér */
+    --s-felulet-2: #181b26;                             /* kártyán belüli elem, táblázatfej */
+    --s-uveg-tomor: #141722;                            /* üveg tartalék backdrop-filter nélkül */
+    --s-uveg-keret: rgba(255, 255, 255, 0.12);
+    --s-uveg-feny: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 40%);
+    --s-vonal-eros: rgba(255, 255, 255, 0.2);
+    --s-mezo: rgba(255, 255, 255, 0.05);                /* beviteli mező kitöltése */
+    --s-mezo-keret: rgba(255, 255, 255, 0.4);           /* ≥ 3:1 a háttérhez (WCAG 1.4.11) */
+
+    --s-kiemelo-felirat: #0a0b10;                       /* szöveg kiemelő-kitöltésen (elsődleges gomb) */
+    --s-kiemelo-2-felirat: #0a0b10;
+    --s-neon-felirat: #0a0b10;
+    --s-kiemelo-halvany: rgba(255, 90, 82, 0.14);
+    --s-kiemelo-2-halvany: rgba(157, 143, 255, 0.16);
+    --s-neon-halvany: rgba(34, 211, 238, 0.12);
+    --s-ok-halvany: rgba(52, 211, 153, 0.14);
+    --s-figyel-halvany: rgba(251, 191, 36, 0.14);
+    --s-hiba-halvany: rgba(251, 113, 133, 0.14);
+
+    --s-atmenet: linear-gradient(120deg, #ff5a52 0%, #9d8fff 52%, #22d3ee 100%);
+    --s-atmenet-szoveg: linear-gradient(100deg, #ff7a73 0%, #b3a8ff 50%, #5fe3f5 100%);
+    --s-aurora-1: rgba(255, 90, 82, 0.16);
+    --s-aurora-2: rgba(124, 108, 255, 0.2);
+    --s-aurora-3: rgba(34, 211, 238, 0.12);
+    --s-racs-vonal: rgba(255, 255, 255, 0.04);          /* háttér-rácsminta */
+
+    --s-fokusz: #5fe3f5;
+    --s-arnyek-emelt: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 40px 100px -30px rgba(0, 0, 0, 0.85);
+    --s-arnyek-kicsi: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    /* Neon ragyogás (box-shadow / text-shadow / drop-shadow) */
+    --s-ragyogas-kiemelo: 0 0 0 1px rgba(255, 90, 82, 0.45), 0 0 24px -2px rgba(255, 90, 82, 0.55), 0 0 64px -8px rgba(255, 90, 82, 0.35);
+    --s-ragyogas-kiemelo-2: 0 0 0 1px rgba(157, 143, 255, 0.45), 0 0 24px -2px rgba(157, 143, 255, 0.5), 0 0 64px -8px rgba(124, 108, 255, 0.35);
+    --s-ragyogas-neon: 0 0 0 1px rgba(34, 211, 238, 0.45), 0 0 24px -2px rgba(34, 211, 238, 0.5), 0 0 64px -8px rgba(34, 211, 238, 0.3);
+    --s-ragyogas-szoveg: 0 0 18px rgba(34, 211, 238, 0.45);
+}
+
+/* ================================================================== */
+/* 3. Világos mód                                                       */
+/* ================================================================== */
+:root[data-tema="vilagos"] {
+    color-scheme: light;
+
+    --s-bg: #f4f5f9;
+    --s-felulet: #ffffff;
+    --s-uveg: rgba(255, 255, 255, 0.72);
+    --s-szoveg: #0f1222;
+    --s-halvany: #4b5168;
+    --s-vonal: rgba(15, 18, 34, 0.1);
+    --s-kiemelo: #c41f1a;
+    --s-kiemelo-2: #5b47d6;
+    --s-neon: #0e7490;
+    --s-ok: #047857;
+    --s-figyel: #a14a06;
+    --s-hiba: #be123c;
+    --s-arnyek: 0 1px 2px rgba(15, 18, 34, 0.05), 0 18px 44px -20px rgba(15, 18, 34, 0.2);
+
+    --s-bg-2: #eceef5;
+    --s-felulet-2: #f1f3f8;
+    --s-uveg-tomor: #fbfbfd;
+    --s-uveg-keret: rgba(15, 18, 34, 0.1);
+    --s-uveg-feny: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 45%);
+    --s-vonal-eros: rgba(15, 18, 34, 0.2);
+    --s-mezo: #ffffff;
+    --s-mezo-keret: rgba(15, 18, 34, 0.52);
+
+    --s-kiemelo-felirat: #ffffff;
+    --s-kiemelo-2-felirat: #ffffff;
+    --s-neon-felirat: #ffffff;
+    --s-kiemelo-halvany: rgba(196, 31, 26, 0.09);
+    --s-kiemelo-2-halvany: rgba(91, 71, 214, 0.1);
+    --s-neon-halvany: rgba(14, 116, 144, 0.1);
+    --s-ok-halvany: rgba(4, 120, 87, 0.1);
+    --s-figyel-halvany: rgba(161, 74, 6, 0.1);
+    --s-hiba-halvany: rgba(190, 18, 60, 0.09);
+
+    --s-atmenet: linear-gradient(120deg, #c41f1a 0%, #5b47d6 52%, #0e7490 100%);
+    --s-atmenet-szoveg: linear-gradient(100deg, #b51c17 0%, #5b47d6 50%, #0b6480 100%);
+    --s-aurora-1: rgba(255, 90, 82, 0.12);
+    --s-aurora-2: rgba(124, 108, 255, 0.14);
+    --s-aurora-3: rgba(34, 211, 238, 0.12);
+    --s-racs-vonal: rgba(15, 18, 34, 0.05);
+
+    --s-fokusz: #0b6480;
+    --s-arnyek-emelt: 0 2px 4px rgba(15, 18, 34, 0.04), 0 40px 90px -30px rgba(15, 18, 34, 0.3);
+    --s-arnyek-kicsi: 0 1px 2px rgba(15, 18, 34, 0.08);
+
+    --s-ragyogas-kiemelo: 0 0 0 1px rgba(196, 31, 26, 0.3), 0 12px 32px -10px rgba(196, 31, 26, 0.45);
+    --s-ragyogas-kiemelo-2: 0 0 0 1px rgba(91, 71, 214, 0.3), 0 12px 32px -10px rgba(91, 71, 214, 0.4);
+    --s-ragyogas-neon: 0 0 0 1px rgba(14, 116, 144, 0.3), 0 12px 32px -10px rgba(14, 116, 144, 0.4);
+    --s-ragyogas-szoveg: none;
+}
+
+/* Attribútum nélkül a rendszer-beállítás dönt (ugyanazok az értékek, mint fent). */
+@media (prefers-color-scheme: light) {
+    :root:not([data-tema="sotet"]):not([data-tema="vilagos"]) {
+        color-scheme: light;
+
+        --s-bg: #f4f5f9;
+        --s-felulet: #ffffff;
+        --s-uveg: rgba(255, 255, 255, 0.72);
+        --s-szoveg: #0f1222;
+        --s-halvany: #4b5168;
+        --s-vonal: rgba(15, 18, 34, 0.1);
+        --s-kiemelo: #c41f1a;
+        --s-kiemelo-2: #5b47d6;
+        --s-neon: #0e7490;
+        --s-ok: #047857;
+        --s-figyel: #a14a06;
+        --s-hiba: #be123c;
+        --s-arnyek: 0 1px 2px rgba(15, 18, 34, 0.05), 0 18px 44px -20px rgba(15, 18, 34, 0.2);
+
+        --s-bg-2: #eceef5;
+        --s-felulet-2: #f1f3f8;
+        --s-uveg-tomor: #fbfbfd;
+        --s-uveg-keret: rgba(15, 18, 34, 0.1);
+        --s-uveg-feny: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 45%);
+        --s-vonal-eros: rgba(15, 18, 34, 0.2);
+        --s-mezo: #ffffff;
+        --s-mezo-keret: rgba(15, 18, 34, 0.52);
+
+        --s-kiemelo-felirat: #ffffff;
+        --s-kiemelo-2-felirat: #ffffff;
+        --s-neon-felirat: #ffffff;
+        --s-kiemelo-halvany: rgba(196, 31, 26, 0.09);
+        --s-kiemelo-2-halvany: rgba(91, 71, 214, 0.1);
+        --s-neon-halvany: rgba(14, 116, 144, 0.1);
+        --s-ok-halvany: rgba(4, 120, 87, 0.1);
+        --s-figyel-halvany: rgba(161, 74, 6, 0.1);
+        --s-hiba-halvany: rgba(190, 18, 60, 0.09);
+
+        --s-atmenet: linear-gradient(120deg, #c41f1a 0%, #5b47d6 52%, #0e7490 100%);
+        --s-atmenet-szoveg: linear-gradient(100deg, #b51c17 0%, #5b47d6 50%, #0b6480 100%);
+        --s-aurora-1: rgba(255, 90, 82, 0.12);
+        --s-aurora-2: rgba(124, 108, 255, 0.14);
+        --s-aurora-3: rgba(34, 211, 238, 0.12);
+        --s-racs-vonal: rgba(15, 18, 34, 0.05);
+
+        --s-fokusz: #0b6480;
+        --s-arnyek-emelt: 0 2px 4px rgba(15, 18, 34, 0.04), 0 40px 90px -30px rgba(15, 18, 34, 0.3);
+        --s-arnyek-kicsi: 0 1px 2px rgba(15, 18, 34, 0.08);
+
+        --s-ragyogas-kiemelo: 0 0 0 1px rgba(196, 31, 26, 0.3), 0 12px 32px -10px rgba(196, 31, 26, 0.45);
+        --s-ragyogas-kiemelo-2: 0 0 0 1px rgba(91, 71, 214, 0.3), 0 12px 32px -10px rgba(91, 71, 214, 0.4);
+        --s-ragyogas-neon: 0 0 0 1px rgba(14, 116, 144, 0.3), 0 12px 32px -10px rgba(14, 116, 144, 0.4);
+        --s-ragyogas-szoveg: none;
+    }
+}
+
+/* ================================================================== */
+/* 4. Hozzáférhetőségi felülírások                                      */
+/* ================================================================== */
+
+/* Csökkentett mozgás: animációk gyakorlatilag kikapcsolva, nincs elmozdulás. */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --s-ido-azonnal: 0.01ms;
+        --s-ido-gyors: 0.01ms;
+        --s-ido: 0.01ms;
+        --s-ido-lassu: 0.01ms;
+        --s-ido-belepes: 0.01ms;
+        --s-elmozdulas: 0px;
+        --s-gorbe-rugo: linear;
+    }
+}
+
+/* Csökkentett átlátszóság: az üveg tömör felületté válik. */
+@media (prefers-reduced-transparency: reduce) {
+    :root {
+        --s-uveg: var(--s-uveg-tomor);
+        --s-uveg-blur: 0px;
+        --s-uveg-blur-eros: 0px;
+    }
+}
+
+/* Nagy kontraszt kérése: erősebb vonalak, halvány szöveg = fő szöveg. */
+@media (prefers-contrast: more) {
+    :root {
+        --s-halvany: var(--s-szoveg);
+        --s-vonal: var(--s-vonal-eros);
+        --s-mezo-keret: var(--s-szoveg);
+        --s-uveg: var(--s-uveg-tomor);
+    }
+}
+
+/* Windows kényszerített színek: a böngésző rendszerszíneit hagyjuk érvényesülni. */
+@media (forced-colors: active) {
+    :root {
+        --s-arnyek: none;
+        --s-arnyek-emelt: none;
+        --s-ragyogas-kiemelo: none;
+        --s-ragyogas-kiemelo-2: none;
+        --s-ragyogas-neon: none;
+        --s-ragyogas-szoveg: none;
+        --s-uveg-blur: 0px;
+    }
+}
