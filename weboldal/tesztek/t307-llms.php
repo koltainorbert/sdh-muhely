@@ -6,7 +6,7 @@ require __DIR__ . '/_seo-minta.php';
 $ids = t_seo_minta();
 $s   = SDH_Sales_Llms::szoveg(false);
 $sor = explode("\n", $s);
-T::egyezik('# SDH CRM', $sor[0], 'első sor H1 = termeknev');
+T::egyezik('# ' . SDH_Sales::termeknev(), $sor[0], 'első sor H1 = termeknev');
 T::egyezik(1, preg_match_all('/^# /m', $s), 'egy H1');
 T::igaz(strpos($sor[2] ?? '', '> ') === 0, 'összefoglaló idézetblokk a H1 után');
 foreach (['Funkciók', 'Modulok', 'Árak', 'Iparágak', 'GYIK', 'Telepítés', 'Jogi', 'Optional'] as $h) {
@@ -23,11 +23,11 @@ T::nem_tartalmaz($s, '{termeknev}', 'tokenek cserélve');
 T::nem_tartalmaz($s, '<', 'nincs HTML');
 
 $t = SDH_Sales_Llms::szoveg(true);
-T::egyezik('# SDH CRM', strtok($t, "\n"), 'full: H1');
+T::egyezik('# ' . SDH_Sales::termeknev(), strtok($t, "\n"), 'full: H1');
 T::tartalmaz($t, '| Start | 9 900 Ft | 12 573 Ft | 99 000 Ft | 125 730 Ft | 2 | 1 |', 'full: csomagár nettó + bruttó a tárból');
 T::tartalmaz($t, '2 900 Ft + 27% ÁFA (bruttó 3 683 Ft) / hó', 'full: modulár');
 T::tartalmaz($t, 'Telepítés**: 30 000 Ft + 27% ÁFA', 'full: szolgáltatás ára');
-T::tartalmaz($t, "**Mennyibe kerül a SDH CRM?**\n\nA Start csomag havi **9 900 Ft + ÁFA**.", 'full: GYIK kérdés–válasz Markdownban');
+T::tartalmaz($t, '**Mennyibe kerül a ' . SDH_Sales::termeknev() . "?**\n\nA Start csomag havi **9 900 Ft + ÁFA**.", 'full: GYIK kérdés–válasz Markdownban');
 T::tartalmaz($t, "- PHP 8.1+\n- MySQL", 'full: lista a válaszban');
 T::tartalmaz($t, '[Leírás](https://example.com/x)', 'full: link Markdownban');
 T::nem_tartalmaz($t, 'alert', 'full: script kiszűrve');
@@ -57,5 +57,8 @@ $k = SDH_Sales_Llms::general(true);
 T::igaz(strlen($k) < 2300 && str_contains($k, 'korlátozott'), 'méretkorlát (' . strlen($k) . ' B)');
 T::igaz(mb_check_encoding($k, 'UTF-8'), 'levágás után is érvényes UTF-8');
 
+t_rejtett($s, 'llms.txt');
+t_rejtett($t, 'llms-full.txt');
+t_rejtett($v['test'] ?? '', 'llms.txt HTTP-válasz', (array) $v['fejlec']);
 T::igaz(true, 'méret: llms.txt ' . strlen($s) . ' B, llms-full.txt ' . strlen($t) . ' B');
 T::vege('t307 llms.txt (' . strlen($s) . ' B / full ' . strlen($t) . ' B)');

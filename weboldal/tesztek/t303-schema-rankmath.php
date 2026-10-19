@@ -34,6 +34,7 @@ foreach ($lapok as $nev => [$url, $kell]) {
         T::igaz(in_array($t, $tip, true), "{$nev}: van {$t}");
     }
     T::nem_tartalmaz($html, 'og:title', "{$nev}: meta a Rank Mathé");
+    t_rejtett(implode('', $b), "{$nev}: JSON-LD");
     T::nem_tartalmaz($html, 'name="description"', "{$nev}: leírás a Rank Mathé");
 }
 t_lap(get_permalink($ids['funkciok/munkalapok']));

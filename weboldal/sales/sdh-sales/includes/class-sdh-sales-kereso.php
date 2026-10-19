@@ -239,6 +239,29 @@ final class SDH_Sales_Kereso
         return ['dir' => trailingslashit((string) $u['basedir']) . 'portal/', 'url' => trailingslashit((string) $u['baseurl']) . 'portal/'];
     }
 
+    /** A régi (árulkodó nevű) index-mappa fájljainak törlése – a fájlok nyilvánosan elérhetők voltak. */
+    private static function regi_torol(): void
+    {
+        $u    = wp_upload_dir(null, false);
+        $regi = trailingslashit((string) $u['basedir']) . 'sdh-sales/';
+
+        if (!is_dir($regi)) {
+            return;
+        }
+
+        foreach ([self::FAJL, self::FAJL . '.gz'] as $f) {
+            if (is_file($regi . $f)) {
+                wp_delete_file($regi . $f);
+            }
+        }
+
+        $maradt = array_diff((array) scandir($regi), ['.', '..']);
+
+        if ($maradt === []) {
+            @rmdir($regi); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        }
+    }
+
     /** A tartalom ujjlenyomata: tartalom-tár + közzétett bejegyzések/oldalak + beállítások. */
     public static function allapot(): string
     {
@@ -268,6 +291,7 @@ final class SDH_Sales_Kereso
         $json   = (string) wp_json_encode(['v' => $hash, 'ido' => time(), 'elemek' => $elemek], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $h      = self::hely();
         $ok     = wp_mkdir_p($h['dir']);
+        self::regi_torol();
         $gz     = function_exists('gzencode') ? (string) gzencode($json, 9) : '';
 
         if ($ok) {

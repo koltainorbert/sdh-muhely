@@ -807,8 +807,30 @@ final class SDH_Sales_Szamlazz
 
     public static function mappa(): string
     {
-        $u = wp_upload_dir();
-        $m = trailingslashit((string) $u['basedir']) . self::MAPPA;
+        $u    = wp_upload_dir();
+        $m    = trailingslashit((string) $u['basedir']) . self::MAPPA;
+        $regi = trailingslashit((string) $u['basedir']) . 'sdh-sales-szamla';
+
+        // A régi, árulkodó nevű mappa tartalma átkerül (a PDF-ek fájlneve nem függ a mappától, így megmaradnak).
+        if (is_dir($regi)) {
+            if (!is_dir($m)) {
+                @rename($regi, $m); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            } else {
+                foreach ((array) glob($regi . '/*.pdf') as $f) {
+                    if (!file_exists($m . '/' . basename((string) $f))) {
+                        @rename((string) $f, $m . '/' . basename((string) $f)); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+                    }
+                }
+
+                foreach (array_diff((array) scandir($regi), ['.', '..']) as $f) {
+                    if (is_file($regi . '/' . $f) && (!str_ends_with((string) $f, '.pdf') || file_exists($m . '/' . $f))) {
+                        wp_delete_file($regi . '/' . $f);
+                    }
+                }
+
+                @rmdir($regi); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            }
+        }
 
         if (!is_dir($m)) {
             wp_mkdir_p($m);

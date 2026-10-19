@@ -9,7 +9,7 @@
  * A `kozos` modul (assets/front/kozos.js) mindig az első: fetch-segéd (`window.APP.api(ut, adat)`), kétlépcsős gomb,
  * kosár-tár (`window.APP.kosar`), értesítő (`window.APP.uzen()`). Rejtés: a handle `p-<modul>`, a változó `window.APP_<MODUL>`
  * (a kimenetben nem lehet „sdh” / „wp” – lásd weboldal/REJTES.md).
- * A szkriptek `defer`-rel, a lábban; az adat `window.SDH_<MODUL>` alatt (wp_add_inline_script, CSP-nonce-szal).
+ * A szkriptek `defer`-rel, a lábban; az adat `window.APP_<MODUL>` alatt (wp_add_inline_script, CSP-nonce-szal).
  *
  * @package SDH_Sales
  */

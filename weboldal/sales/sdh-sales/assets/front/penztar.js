@@ -111,6 +111,7 @@
     /* ---------------- Pénztár ---------------- */
     function penztar(gy, opc) {
         var tipus = Q.get('tipus') || opc.tipus || 'uj', licenc = Q.get('licenc') || '';
+        if (['uj', 'megujitas', 'bovites', 'szolgaltatas'].indexOf(tipus) < 0) { tipus = 'uj'; }
         var v = D.vevo || {};
         var f = el('form', { osztaly: 's-penztar', novalidate: '' });
         gy.textContent = '';

@@ -1,5 +1,8 @@
 <?php
-/** t309 – WordPress-keresés a tartalom-tárral + élő HTTP (llms.txt, robots.txt, index-fájl) + a valós data/ tartalom, ha már létezik. */
+/**
+ * t309 – WordPress-keresés a tartalom-tárral + élő HTTP (llms.txt, robots.txt, index-fájl) + a valós data/ tartalom, ha már létezik.
+ * Az élő szerver a közös fejlesztői útválasztóval fut (eszkozok/router.php: a rejtés útvonal-álnevei, pl. /media/).
+ */
 require __DIR__ . '/_keret.php';
 require __DIR__ . '/_seo-minta.php';
 
@@ -18,12 +21,14 @@ T::egyezik($ids['funkciok/szamlazas'], (int) ($GLOBALS['wp_query']->posts[0]->ID
 
 // Élő HTTP a beépített szerveren (a saját másolat, saját port).
 $gyoker = dirname(ABSPATH);
-$port   = 8791;
+// Szabad port (rögzített porton egy másik tesztoldal szervere válaszolhatna – párhuzamos futásnál ez téves eredményt adott).
+$sock   = stream_socket_server('tcp://127.0.0.1:0');
+$port   = (int) substr((string) strrchr((string) stream_socket_get_name($sock, false), ':'), 1);
+fclose($sock);
 update_option('home', 'http://127.0.0.1:' . $port . '/wp');
 update_option('siteurl', 'http://127.0.0.1:' . $port . '/wp');
 $napl = sys_get_temp_dir() . '/t309-' . getmypid() . '.log';
-$rout = sys_get_temp_dir() . '/t309-router-' . getmypid() . '.php';
-file_put_contents($rout, '<?php $f = ' . var_export($gyoker, true) . ' . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH); if (is_file($f) && substr($f, -4) !== ".php") { return false; } chdir(' . var_export(rtrim(ABSPATH, '/'), true) . '); require "index.php";');
+$rout = dirname(__DIR__) . '/eszkozok/router.php';
 $pr   = proc_open([PHP_BINARY, '-S', '127.0.0.1:' . $port, '-t', $gyoker, $rout], [1 => ['file', $napl, 'a'], 2 => ['file', $napl, 'a']], $cs);
 usleep(600000);
 $kerj = static function (string $ut) use ($port): array {
@@ -34,21 +39,25 @@ $kerj = static function (string $ut) use ($port): array {
 [$t, $f] = $kerj('/wp/llms.txt');
 T::tartalmaz($f, '200', 'élő /llms.txt: 200');
 T::tartalmaz($f, 'text/plain; charset=utf-8', 'élő: Content-Type');
-T::igaz(str_starts_with($t, '# SDH CRM'), 'élő: H1');
+T::igaz(str_starts_with($t, '# ' . SDH_Sales::termeknev()), 'élő: H1');
+t_rejtett($t, 'élő /llms.txt (törzs + fejléc)', ['nyers' => $f]);
 [$t, $f] = $kerj('/wp/llms-full.txt');
 T::tartalmaz($t, '9 900 Ft', 'élő llms-full: ár');
+t_rejtett($t, 'élő /llms-full.txt', ['nyers' => $f]);
 // A WP csak gyökérbe telepítve szolgálja ki a /robots.txt-t; alkönyvtárban a ?robots=1 ugyanazt a kimenetet adja.
 [$t, $f] = $kerj('/wp/?robots=1');
 T::tartalmaz($t, 'User-agent: ClaudeBot', 'élő robots.txt: AI-botok');
 T::tartalmaz($t, 'Disallow: /wp/kosar/', 'élő robots.txt: kosár tiltva');
+T::tartalmaz($t, 'Sitemap: ' . home_url('/sitemap.xml'), 'élő robots.txt: saját oldaltérkép');
+t_rejtett($t, 'élő robots.txt', ['nyers' => $f]);
 [$t, $f] = $kerj((string) wp_parse_url(SDH_Sales_Kereso::index_url(), PHP_URL_PATH));
-T::igaz(is_array(json_decode($t, true)), 'élő: index-fájl elérhető');
+T::igaz(is_array(json_decode($t, true)), 'élő: index-fájl elérhető (' . (string) wp_parse_url(SDH_Sales_Kereso::index_url(), PHP_URL_PATH) . ')');
+t_rejtett($t, 'élő keresőindex', ['nyers' => $f]);
 [$t] = $kerj('/wp/kosar/');
 T::tartalmaz($t, 'noindex', 'élő: kosár noindex');
 proc_terminate($pr);
 proc_close($pr);
 @unlink($napl);
-@unlink($rout);
 update_option('home', 'http://127.0.0.1:8765/wp');
 update_option('siteurl', 'http://127.0.0.1:8765/wp');
 

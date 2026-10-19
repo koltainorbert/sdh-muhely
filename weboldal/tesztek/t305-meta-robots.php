@@ -9,10 +9,11 @@ $f = t_fej();
 T::tartalmaz($f, '<meta name="description" content="Csomagok és árak.">', 'description');
 T::tartalmaz($f, '<link rel="canonical" href="' . get_permalink($ids['arak']) . '">', 'canonical');
 T::egyezik(1, substr_count($f, 'rel="canonical"') + substr_count($f, "rel='canonical'"), 'egy canonical');
-T::tartalmaz($f, '<meta property="og:title" content="Árak – SDH CRM">', 'og:title tokennel');
+T::tartalmaz($f, '<meta property="og:title" content="Árak – ' . SDH_Sales::termeknev() . '">', 'og:title tokennel');
 T::tartalmaz($f, '<meta property="og:image" content="https://example.com/og.png">', 'og:image a beállításból');
 T::tartalmaz($f, '<meta name="twitter:card" content="summary_large_image">', 'twitter:card');
-T::egyezik('Árak – SDH CRM', SDH_Sales_Seo::dokumentum_cim('x'), '<title>');
+T::egyezik('Árak – ' . SDH_Sales::termeknev(), SDH_Sales_Seo::dokumentum_cim('x'), '<title>');
+t_rejtett(t_seo_fej(), 'árak-oldal SEO-fej (meta, OG, Twitter, JSON-LD)');
 T::nem_tartalmaz($f, 'noindex', 'árak indexelhető');
 
 foreach (['kosar', 'penztar', 'fiok', 'kereses'] as $s) {
@@ -48,4 +49,5 @@ $f = t_fej();
 T::tartalmaz($f, 'hreflang="hu" href="' . get_permalink($ids['arak']) . '"', 'hreflang hu = gyökér');
 T::tartalmaz($f, 'hreflang="en" href="' . home_url('/en/arak/') . '"', 'hreflang en = /en/');
 T::tartalmaz($f, 'hreflang="x-default"', 'x-default');
+t_rejtett(t_seo_fej(), 'SEO-fej hreflanggal');
 T::vege('t305 meta + robots');

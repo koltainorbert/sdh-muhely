@@ -59,7 +59,7 @@ final class SDH_Sales_Rest
                 },
                 'callback'            => static function (WP_REST_Request $r) use ($cb, $korlat) {
                     if (count($korlat) === 3 && !self::korlat((string) $korlat[0], (int) $korlat[1], (int) $korlat[2])) {
-                        return self::hiba('Túl sok kérés. Próbáld újra néhány perc múlva.', 429, 'sdh_korlat');
+                        return self::hiba('Túl sok kérés. Próbáld újra néhány perc múlva.', 429, 'korlat');
                     }
 
                     return call_user_func($cb, $r);
@@ -79,7 +79,7 @@ final class SDH_Sales_Rest
         return $valasz;
     }
 
-    public static function hiba(string $uzenet, int $status = 400, string $kod = 'sdh_hiba'): WP_Error
+    public static function hiba(string $uzenet, int $status = 400, string $kod = 'hiba'): WP_Error
     {
         return new WP_Error($kod, $uzenet, ['status' => $status]);
     }

@@ -77,11 +77,12 @@ file_put_contents($szkript, '<?php
 $_SERVER["HTTP_HOST"] = "127.0.0.1:8765"; $_SERVER["REQUEST_URI"] = "/wp/"; $_SERVER["REMOTE_ADDR"] = "203.0.113.9";
 require getenv("SDH_WP_LOAD");
 remove_all_actions("sdh_sales_fizetve");
+add_filter("pre_wp_mail", "__return_true");
 add_action("sdh_sales_fizetve", function ($id) { file_put_contents(' . var_export($dir, true) . ' . "/hook", "x", FILE_APPEND | LOCK_EX); });
 $cel = (float) $argv[3];
 while (microtime(true) < $cel) { usleep(500); }
 $ok = SDH_Sales_Rendeles::fizetve((int) $argv[1], "bank_import", $argv[2], (int) $argv[4]);
-echo $ok ? "1" : "0";
+echo $ok ? "[UJ]" : "[NEM]";
 ');
 $cel = microtime(true) + 2.5;
 $proc = [];
@@ -91,7 +92,7 @@ foreach (['V1', 'V2', 'V3', 'V1', 'V2', 'V3'] as $tr) {
 $ki = '';
 foreach ($proc as $p) { $ki .= trim((string) stream_get_contents($p)); pclose($p); }
 $hook = is_file($dir . '/hook') ? strlen((string) file_get_contents($dir . '/hook')) : 0;
-T::egyezik(3, substr_count($ki, '1'), 'verseny: 3 új befizetés rögzítve, 3 ismétlés elutasítva (' . mb_substr($ki, 0, 200) . ')');
+T::egyezik(3, substr_count($ki, '[UJ]'), 'verseny: 3 új befizetés rögzítve, 3 ismétlés elutasítva (' . mb_substr($ki, 0, 200) . ')');
 T::egyezik(1, $hook, 'verseny: a hook pontosan egyszer futott');
 T::egyezik(3, (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('fizetes') . ' WHERE rendeles_id = %d', $id6)), 'verseny: 3 fizetés-sor');
 $x = SDH_Sales_Rendeles::rendeles($id6);

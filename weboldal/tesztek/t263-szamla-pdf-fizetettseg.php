@@ -112,6 +112,14 @@ $r = t_latogato(static fn () => t_rest('POST', '/szamlazz/ipn', $adat));
 T::igaz(empty($r->get_data()['ok']), 'IPN: a Számlázz.hu adata nem igazolja → elutasítva');
 $_SERVER['REMOTE_ADDR'] = '203.0.113.7';
 
+// Régi mappa (uploads/sdh-sales-szamla) átnevezése az új semleges névre, a PDF-ek megmaradnak.
+$alap = trailingslashit((string) wp_upload_dir()['basedir']);
+wp_mkdir_p($alap . 'sdh-sales-szamla');
+$pdf_nev = basename((string) SDH_Sales_Szamlazz::vegszamla_pdf($id));
+rename($alap . SDH_Sales_Szamlazz::MAPPA . '/' . $pdf_nev, $alap . 'sdh-sales-szamla/' . $pdf_nev);
+file_put_contents($alap . 'sdh-sales-szamla/index.php', "<?php\n");
+T::igaz(is_dir(SDH_Sales_Szamlazz::mappa()) && !is_dir($alap . 'sdh-sales-szamla'), 'régi számla-mappa beolvasztva és törölve (portal-szamla)');
+T::igaz(is_file(SDH_Sales_Szamlazz::mappa() . '/' . $pdf_nev), 'a PDF az áthelyezés után is megvan');
 // Rejtés: a kiszolgált PDF (törzs + fejlécek), a vevői link és az IPN-cím.
 $r = t_rest('GET', '/admin/szamla/' . $id . '/pdf');
 t_rejtett((string) $r->get_data(), 'kiszolgált végszámla PDF', $r->get_headers());

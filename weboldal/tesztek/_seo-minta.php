@@ -28,6 +28,11 @@ if (!function_exists('t_rejtett')) {
 /** Mintatartalom betöltése (tartalom-tár + oldalak + blog). @return array<string, int> oldal-ID-k slug-útvonal szerint */
 function t_seo_minta(): array
 {
+    // A telepítő alaptartalma („Hello world”…) a rejtés szerint nem maradhat (régi alap-adatbázisban még megvan).
+    if (class_exists('SDH_Sales_Rejtes')) {
+        SDH_Sales_Rejtes::alap_tartalom_takarit();
+    }
+
     $m = static fn (string $t, string $k, array $a, int $s = 0) => SDH_Sales_Tartalom::ment($t, $k, $a, null, $s, true, 'hu', false);
 
     $m('csomag', 'start', ['kulcs' => 'start', 'nev' => 'Start', 'leiras' => 'Kis szervizeknek, egy pulttal.', 'havi' => 9900, 'eves' => 99000, 'felhasznalo_alap' => 2, 'telephely_alap' => 1, 'modulok' => ['szamlazas']], 1);
@@ -155,6 +160,17 @@ function t_fej(): string
 {
     ob_start();
     do_action('wp_head');
+
+    return (string) ob_get_clean();
+}
+
+/** Csak a SEO-modul fej-kimenete (meta, hreflang, JSON-LD) – a rejtés-ellenőrzéshez, más modulok / az adminsáv nélkül. */
+function t_seo_fej(): string
+{
+    ob_start();
+    SDH_Sales_Seo::meta_kiir();
+    SDH_Sales_Seo::hreflang_kiir();
+    SDH_Sales_Seo::graf_kiir();
 
     return (string) ob_get_clean();
 }

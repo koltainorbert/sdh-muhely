@@ -44,6 +44,8 @@ T::igaz($ms < 50, 'keresés 200 elemen < 50 ms (mért: ' . round($ms, 2) . ' ms)
 
 // Korlát: 60 / perc / IP.
 remove_all_filters('sdh_sales_korlat_ki');
+t_rejtett(t_latogato(fn () => t_rest('GET', '/kereso', ['q' => 'munkalap'])), 'kereső REST-válasz (törzs + fejléc)');
+t_rejtett(t_latogato(fn () => t_rest('GET', '/kereso', ['q' => 'a'])), 'kereső hibaválasz');
 $kod = 0;
 for ($i = 0; $i < 62; $i++) { $kod = t_latogato(fn () => t_rest('GET', '/kereso', ['q' => 'munkalap']))->get_status(); }
 T::egyezik(429, $kod, 'rate limit → 429');

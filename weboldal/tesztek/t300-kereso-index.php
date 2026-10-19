@@ -38,7 +38,14 @@ foreach (['kosar', 'penztar', 'fiok', 'kereses'] as $s) {
 T::igaz($st['meret'] < 20000 && $st['meret_gz'] < $st['meret'] / 2, 'kicsi (minta: ' . $st['meret'] . ' B, gz ' . $st['meret_gz'] . ' B)');
 
 $url = SDH_Sales_Kereso::index_url();
-T::tartalmaz($url, '/uploads/sdh-sales/kereso-index.json?v=' . $st['hash'], 'index_url verzióval');
+T::tartalmaz($url, '/portal/kereso-index.json?v=' . $st['hash'], 'index_url verzióval (semleges mappa)');
+T::tartalmaz($h['dir'], '/uploads/portal/', 'index a semleges nevű feltöltési mappában');
+$regi = trailingslashit((string) wp_upload_dir(null, false)['basedir']) . 'sdh-sales/';
+wp_mkdir_p($regi);
+file_put_contents($regi . SDH_Sales_Kereso::FAJL, '{}');
+SDH_Sales_Kereso::epit();
+T::igaz(!is_file($regi . SDH_Sales_Kereso::FAJL) && !is_dir($regi), 'a régi (árulkodó) index-mappa törölve');
+t_rejtett($url, 'index URL (kiszolgált cím)');
 
 // Újraépítés: a tartalom-tár mentése nem küld hookot → a cron ujjlenyomat-ellenőrzése veszi észre.
 T::igaz(!SDH_Sales_Kereso::ellenoriz(), 'változás nélkül nincs újraépítés');
@@ -57,4 +64,5 @@ T::egyezik(1, $db, 'save_post: egy késleltetett újraépítés');
 // betöltés hook → azonnal
 do_action('sdh_sales_tartalom_betoltve', [], false);
 T::igaz(empty(SDH_Sales_Kereso::info()['piszkos']), 'tartalom_betoltve → azonnal');
+t_rejtett((string) file_get_contents($f), 'keresőindex (JSON)');
 T::vege('t300 kereső-index (' . $st['db'] . ' elem, ' . $st['meret'] . ' B, gz ' . $st['meret_gz'] . ' B, ' . $st['ms'] . ' ms)');

@@ -43,4 +43,7 @@ T::tartalmaz(SDH_Sales_Seo::morzsa()[1]['cim'] ?? '', 'imei', 'keresés morzsa')
 T::egyezik(get_permalink($ids['csomagok/pro']), SDH_Sales_Seo::url('csomag', 'pro'), 'csomag-oldal, ha van');
 T::egyezik(get_permalink($ids['arak']) . '#csomag-start', SDH_Sales_Seo::url('csomag', 'start'), 'különben az árak horgonya');
 T::egyezik(get_permalink($ids['arak']) . '#modul-penztar', SDH_Sales_Seo::url('modul', 'penztar'), 'modul → árak horgony');
+t_lap(get_permalink($ids['funkciok/munkalapok']));
+t_rejtett(SDH_Sales_Seo::morzsa(), 'morzsa');
+t_rejtett(t_seo_fej(), 'funkció-oldal SEO-fej (BreadcrumbList)');
 T::vege('t308 kapcsolódó + morzsa');
