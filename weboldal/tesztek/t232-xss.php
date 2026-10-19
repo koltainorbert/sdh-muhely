@@ -8,7 +8,7 @@ $tiltott = ['<script', 'onerror', 'javascript:', '<svg', '<iframe', 'onload', 's
 $sz = [];
 foreach ($rossz as $r) {
     $sz[] = ['tipus' => 'szoveg', 'cim' => $r, 'html' => '<p>ok</p>' . $r];
-    $sz[] = ['tipus' => 'hero', 'cim' => $r, 'alcim' => $r, 'gomb' => ['szoveg' => $r, 'url' => 'javascript:alert(1)'], 'kep' => $r, 'ismeretlen_mezo' => $r, 'mely' => ['a' => [$r]]];
+    $sz[] = ['tipus' => 'hero', 'cim' => 'Cím ' . $r, 'alcim' => $r, 'gomb' => ['szoveg' => $r, 'url' => 'javascript:alert(1)'], 'kep' => $r, 'ismeretlen_mezo' => $r, 'mely' => ['a' => [$r]]];
     $sz[] = ['tipus' => 'jellemzok', 'elemek' => [['cim' => $r, 'szoveg' => $r, 'ikon' => $r]]];
 }
 $ki = (string) wp_json_encode(SDH_Sales_Szekcio::ervenyesit_lista($sz));

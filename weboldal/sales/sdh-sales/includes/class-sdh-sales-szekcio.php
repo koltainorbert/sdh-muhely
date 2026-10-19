@@ -679,6 +679,16 @@ final class SDH_Sales_Szekcio
             return '';
         }
 
+        // Szóköz, idézőjel, kacsacsőr: ez nem cím (és nem engedjük, hogy esc_url „javítsa”).
+        if (preg_match('/[\s<>"\'`\\\\]/', $u) === 1) {
+            return '';
+        }
+
+        // Séma nélküli, nem relatív szöveg csak akkor cím, ha domainnel kezdődik.
+        if (preg_match('#^([a-z][a-z0-9+.-]*:|/|\#)#i', $u) !== 1 && preg_match('#^[a-z0-9-]+(\.[a-z0-9-]+)+(/|$)#i', $u) !== 1) {
+            return '';
+        }
+
         if ($u[0] === '#') {
             return '#' . sanitize_title(substr($u, 1));
         }

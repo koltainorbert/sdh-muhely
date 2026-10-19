@@ -49,3 +49,11 @@ feladója a beállításból; saját `wp_die` kezelő; kimeneti szűrő (utolsó
 bővítmény-/témamappák semleges nevűek a telepítésnél (wp-config: `WP_CONTENT_DIR/URL`, sütinevek) – lásd az üzemeltetési
 leírást. Ellenőrzés: `tesztek/t310-rejtes.php` + a végső bejáró (`tesztek/e2e/rejtes-bejaras.py`), ami minden oldal HTML-jét,
 fejléceit, sütijeit és a betöltött fájlok URL-jeit átnézi a tiltott mintákra – 0 találat a cél.
+
+## Határ: licenc és jogszerűség (2026-10-19)
+- A kód GPL v2 (vagy későbbi) alatt terjed (a platform miatt kötelező). A vevői csomagban **benne marad a GPL licencszöveg**
+  (`LICENSE`), és az EULA nem tilthatja a kód módosítását / visszafejtését. A fizetős licenc a frissítésre, támogatásra, távoli
+  karbantartásra és a központi szolgáltatásokra szól. A licencszöveg nem nevezi meg a platformot, így ez nem árulkodik.
+- A rejtés **márka-semlegesítés (white-label) és biztonsági keményítés**: a böngészőn át (dolgozók, végügyfelek, látogatók,
+  demó) és a csomag nevein semmi nem árulkodik. Aki a szerverhez / fájlokhoz hozzáfér, a kódot látja – ezt nem rejtjük, és
+  szerződésben sem állítunk valótlant a platformról.
