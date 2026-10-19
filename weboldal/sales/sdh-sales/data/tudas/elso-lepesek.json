@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "Ez egy szerviz belső műhely- és ügyfélkezelő rendszere. Egy helyen van benne minden, ami a napi munkához kell: az ügyfelek, a készülékeik, a munkalapok, a pultos eladás, a rendelések, a napi kassza, a számlázás, az ügyfelekkel váltott üzenetek, a levelezés, a naptár és a kollégák közötti üzenetek.\n\nA rendszer böngészőben fut, telepíteni a gépedre semmit nem kell. Teljes képernyős, saját felülete van: bal oldalt a menü, felül a fejléc, középen az, amivel éppen dolgozol.\n\nKinek szól:\n\n- **A pultnál dolgozónak:** készülék átvétele, munkalap nyitása, fizetés, kiadás.\n- **A szerelőnek:** a rá váró munkalapok, a hibák és a javítás rögzítése, állapotváltás.\n- **Az adminisztrátornak:** mindez, és még a Beállítások, a kollégák kezelése és a mentések.\n\nBelépés nélkül a rendszerből semmi nem látszik: belső adatokat mutat, ezért csak bejelentkezett, jogosult fiók éri el.",
-            "t": "elso lepes mire valo mire valo szerviz belso muhely ugyfelkezelo rendsze hely benne napi munka ugyfel eszkoz munkalap pultos eladas rendeles napi penztar szamlazas ugyfel valt uzen levelezes naptar kolleg kozotti uzen rendszer bongeszo fut telepiteni geped semmi teljes kepernyos saj felulete bal oldal menu felul fejlec kozep ami epp dolgozol kin szol pultnal dolgozo eszkoz atvetele munkalap nyitasa fizetes kiadas szerelo varo munkalap hib javitas rogzitese allapotvaltas adminisztrator mindez beallitas kolleg kezelese mentes belepes nelkul rendszer semmi latszi belso ada mut ezer bejelentkez jogosul fio eri",
+            "t": "elso lepes mire valo mire valo szerviz belso muhely ugyfelkezelo rendsze hely benne napi munka ugyfel eszkoz munkalap pultos eladas rendeles napi penztar szamlazas ugyfel valt uzen levelezes naptar kolleg kozotti uzen rendszer bongeszo fut telepiteni gep semmi teljes kepernyos saj felulete bal oldal menu felul fejlec kozep ami epp dolgozol kin szol pultnal dolgozo eszkoz atvetele munkalap nyitasa fizetes kiadas szerelo varo munkalap hib javitas rogzitese allapotvaltas adminisztrator mindez beallitas kolleg kezelese mentes belepes nelkul rendszer semmi latszi belso ada mut ezer bejelentkez jogosul fio eri",
             "h": 87
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Belépés a rendszerbe",
             "horgony": "belepes-a-rendszerbe",
             "szoveg": "1. Nyisd meg a böngészőben a műhely címét. Ezt az adminisztrátortól kapod, például `muhely.pelda.hu/muhely/`.\n2. Ha még nem vagy bejelentkezve, a bejelentkező oldal jelenik meg. Írd be a felhasználónevedet és a jelszavadat.\n3. Belépés után az **Áttekintés** nyílik meg – vagy az az oldal, amelyet eredetileg megnyitottál.\n\nKilépni a jobb felső sarokban, a nevedre kattintva, a **Kijelentkezés** sorral tudsz.\n\nHa belépés után az **Ehhez nincs jogosultságod.** oldalt látod, a fiókod létezik, de nem fér hozzá a műhelyrendszerhez. Szólj az adminisztrátornak. Ha a bejelentkező oldal azt írja, **Ez a fiók le van tiltva. Szólj az adminisztrátornak.**, akkor a fiókodat letiltották.\n\nTipp: Tedd a műhely címét a böngésző könyvjelzői közé, vagy állítsd be kezdőlapnak a munkahelyi gépen.",
-            "t": "elso lepes belepes rendszer belepes rendszer nyisd bongeszo muhely cim adminisztrator kapod peldaul muhely pelda hu muhely bejelentkezve bejelentkezo oldal jeleni ird felhasznaloneved jelszavad belepes utan attekintes nyili oldal amely eredetileg megnyitottal kilepni jobb felso sar neved kattintva kijelentkezes sorral belepes utan ehhez nincs jogosultsagod oldal latod fiokod letezi fer hozza muhelyrendszer szolj adminisztrator bejelentkezo oldal irja fio tiltva szolj adminisztrator fiokod letiltot tipp tedd muhely cim bongeszo konyvjelzoi koze allitsd kezdolap munkahelyi gep",
+            "t": "elso lepes belepes rendszer belepes rendszer nyisd bongeszo muhely cim adminisztrator kap peldaul muhely pelda hu muhely bejelentkezve bejelentkezo oldal jeleni ird felhasznalonev jelszav belepes utan attekintes nyili oldal amely eredetileg megnyitottal kilepni jobb felso sar nev kattintva kijelentkezes sorral belepes utan ehhez nincs jogosultsag oldal lat fio letezi fer hozza muhelyrendszer szolj adminisztrator bejelentkezo oldal irja fio tiltva szolj adminisztrator fiok letiltot tipp tedd muhely cim bongeszo konyvjelzoi koze allitsd kezdolap munkahelyi gep",
             "h": 74
         },
         {
@@ -25,7 +25,7 @@
             "cim": "A bal oldali menü",
             "horgony": "a-bal-oldali-menu",
             "szoveg": "A bal oldali sávban van minden menüpont. Legfelül a logó és a rendszer neve áll – rákattintva mindig az **Áttekintésre** jutsz.\n\n- **Áttekintés** – a kezdőképernyő: csempék és az összes munkalap táblázata. Részletek: Áttekintés.\n- A **Nyilvántartás** felirat alatt a többi menüpont: **Ügyfelek**, **Eszközök**, **Munkalapok**, **Pénztár**, **Napi árukiadás**, **Rendelések**, **Üzenetek**, **Levelezés**, **Naptár**, **Csapat**, **Szolgáltatások**, **Termékek** és a **Súgó**.\n- Legalul a **Beállítások** – ezt csak az adminisztrátor látja.\n\nAz éppen megnyitott menüpont kiemelve látszik. Ha a cég egy közös fiókkal dolgozik, a **Csapat** helyén az üzenőfal neve áll (alapból **Üzenőfal**).\n\n### A menü összecsukása\n\nA fejléc bal szélén a három vízszintes vonalból álló gomb összecsukja a menüt, hogy több hely maradjon a tartalomnak. Újabb kattintásra visszanyílik. A böngésző megjegyzi, hogyan hagytad.",
-            "t": "elso lepes bal oldali menu bal oldali menu bal oldali sav menup legfelul logo rendszer neve all rakattintva attekintes jutsz attekintes kezdokepernyo csemp osszes munkalap tablazata reszl attekintes nyilvantartas felir ala tobbi menup ugyfel eszkoz munkalap penztar napi arukiadas rendeles uzen levelezes naptar csap szolgaltatas term sugo legalul beallitas adminisztrator lat epp megnyit menup kiemelve latszi ceg kozos fiokkal dolgozi csap hely uzenofal neve all alap uzenofal menu osszecsukasa fejlec bal szel harom vizszintes vonal allo gomb osszecs menu tobb hely maradj tartalom ujabb kattintas visszanyili bongeszo megjegyzi hagytad",
+            "t": "elso lepes bal oldali menu bal oldali menu bal oldali sav menup legfelul logo rendszer neve all rakattintva attekintes jutsz attekintes kezdokepernyo csemp osszes munkalap tablazata reszl attekintes nyilvantartas felir ala tobbi menup ugyfel eszkoz munkalap penztar napi arukiadas rendeles uzen levelezes naptar csap szolgaltatas term sugo legalul beallitas adminisztrator lat epp megnyit menup kiemelve latszi ceg kozos fiokkal dolgozi csap hely uzenofal neve all alap uzenofal menu osszecsukasa fejlec bal szel har vizszintes vonal allo gomb osszecs menu tobb hely maradj tartal ujabb kattintas visszanyili bongeszo megjegyzi hagy",
             "h": 89
         },
         {
@@ -33,7 +33,7 @@
             "cim": "A felső fejléc",
             "horgony": "a-felso-fejlec",
             "szoveg": "A fejléc minden oldalon ugyanaz. Balról jobbra:\n\n- **Menügomb** – a bal oldali menü összecsukása és kinyitása.\n- **Morzsa** – megmutatja, hol vagy: a rendszer neve, utána az aktuális oldal. A rendszer nevére kattintva az Áttekintésre jutsz.\n- **Mindenhol-kereső** – az **Ügyfél, telefon, IMEI, gyári szám…** feliratú mező. Lásd lejjebb.\n- **Óra** – neon üveg-hatású; a pontos idő, a mai dátum, és hogy mennyi idő van zárásig (például *Zárásig 2 óra 14 perc*). Nyitás előtt *Nyitásig …*, zárás után *Zárva · nyitás: …* áll ott. Ha még nincs megadva nyitvatartás, a **Nyitvatartás megadása** hivatkozás látszik. Az ikon körüli gyűrű mutatja, mennyi telt el a nyitvatartási napból. A nyitvatartást az adminisztrátor állítja be: Megjelenés.\n- **Profilmenü** – a neved a jobb szélen.",
-            "t": "elso lepes felso fejlec felso fejlec fejlec oldal ugyanaz bal jobb menugomb bal oldali menu osszecsukasa kinyitasa morzsa megmut rendszer neve utana aktualis oldal rendszer neve kattintva attekintes jutsz mindenhol kereso ugyfel telef imei gyari szam feliratu mezo lasd lejjebb ora neon uveg hatasu pontos ido mai datum ido zaras peldaul zaras ora 14 perc nyitas elo nyitas zaras utan zarva nyitas all nincs megadva nyitvatartas nyitvatartas megadasa hivatkozas latszi ikon koruli gyuru mut tel nyitvatartasi nap nyitvatartas adminisztrator alli megjelenes profilmenu neved jobb szel",
+            "t": "elso lepes felso fejlec felso fejlec fejlec oldal ugyanaz bal jobb menugomb bal oldali menu osszecsukasa kinyitasa morzsa megmut rendszer neve utana aktualis oldal rendszer neve kattintva attekintes jutsz mindenhol kereso ugyfel telef imei gyari szam feliratu mezo lasd lejjebb ora neon uveg hatasu pontos ido mai datum ido zaras peldaul zaras ora 14 perc nyitas elo nyitas zaras utan zarva nyitas all nincs megadva nyitvatartas nyitvatartas megadasa hivatkozas latszi ikon koruli gyuru mut tel nyitvatartasi nap nyitvatartas adminisztrator alli megjelenes profilmenu nev jobb szel",
             "h": 85
         },
         {
@@ -41,7 +41,7 @@
             "cim": "A felső fejléc › A mindenhol-kereső",
             "horgony": "a-felso-fejlec",
             "szoveg": "### A mindenhol-kereső\n\nA pultnál ez a leggyorsabb út egy ügyfélhez vagy egy készülékhez.\n\n1. Kattints a keresőbe, vagy nyomd meg a / billentyűt.\n2. Írj be legalább két karaktert: nevet, telefonszámot, e-mail-címet, ügyfélszámot, IMEI-t, gyári számot vagy típust.\n3. A találatok két csoportban jelennek meg: **Ügyfelek** és **Eszközök**, csoportonként legfeljebb öt.\n4. Kattints a találatra – megnyílik az ügyfél vagy az eszköz.\n\nHa nincs egyezés, a lista azt írja: **Nincs találat.** A kereső csak az aktív ügyfeleket és eszközöket nézi. Munkalapszámra az **Áttekintés** munkalap-táblázatában keress.",
-            "t": "elso lepes felso fejlec mindenhol kereso felso fejlec mindenhol kereso mindenhol kereso pultnal leggyorsabb ut ugyfel keszul kattints kereso nyomd billentyu irj legalabb ket karak nev telefonszam mail cim ugyfelszam imei gyari szam tipus talal ket csopor jel ugyfel eszkoz csoportonk legfeljebb ot kattints talal megnyili ugyfel eszkoz nincs egyezes lista irja nincs talal kereso aktiv ugyfel eszkoz nezi munkalapszam attekintes munkalap tablazata keress",
+            "t": "elso lepes felso fejlec mindenhol kereso felso fejlec mindenhol kereso mindenhol kereso pultnal leggyorsabb ut ugyfel keszul kattints kereso nyomd billentyu irj legalabb ket karak nev telefonsz mail cim ugyfelsz imei gyari szam tipus talal ket csopor jel ugyfel eszkoz csoportonk legfeljebb ot kattints talal megnyili ugyfel eszkoz nincs egyezes lista irja nincs talal kereso aktiv ugyfel eszkoz nezi munkalapsz attekintes munkalap tablazata keress",
             "h": 64
         },
         {
@@ -49,7 +49,7 @@
             "cim": "A felső fejléc › A profilmenü",
             "horgony": "a-felso-fejlec",
             "szoveg": "### A profilmenü\n\nA nevedre kattintva nyílik. Amit itt állítasz, az csak a te gépedre, a te böngésződre szól – a kollégákét nem változtatja meg.\n\n- **Megjelenés:** **Rendszer** (a géped beállítását követi), **Világos**, **Sötét** vagy **Papír** – az utóbbi nyugodt, e-könyv-olvasóra emlékeztető felület, hosszú olvasáshoz.\n- **Kékfény-szűrő:** csúszka; állítható erősségű melegebb színek, esti munkához.\n- **Üvegszín:** a felület kiemelő színe, két sorban: **Duó** (kontrasztos színpár) és **Egyszínű** (egy színcsalád).\n- **Betűméret:** csúszka. Húzás közben a csúszka fölötti minta mutatja az új méretet; a felület – minden betű, és vele a gombok, sorok – az elengedéskor vált. A két **A** gomb lépésenként állít, a körkörös nyíl visszaáll az alapméretre.\n- **Popup neon keret:** a felugró ablakok fénylő keretének színe, vagy kikapcsolva.\n- **Kijelentkezés.**\n\nA cég alapértelmezett megjelenését az adminisztrátor a Beállításokban adja meg: Megjelenés.",
-            "t": "elso lepes felso fejlec profilmenu felso fejlec profilmenu profilmenu neved kattintva nyili allitasz geped bongeszod szol kolleg valtozt megjelenes rendszer geped beallitas koveti vilagos sot papir utobbi nyugod konyv olvaso emlekezteto felul hosszu olvasas kekfeny szuro csuszka allithato erossegu melegebb szi esti munka uvegszin felul kiemelo szine ket sor duo kontrasztos szinpar egyszinu szincsalad betumer csuszka huzas koz csuszka folotti minta mut uj mer felul betu vele gomb sor elengedes val ket gomb lepesenk alli korkoros nyil visszaall alapmer popup neon ker felugro abl fenylo kerete szine kikapcsolva kijelentkezes ceg alapertelmez megjelenes adminisztrator beallitas adja megjelenes",
+            "t": "elso lepes felso fejlec profilmenu felso fejlec profilmenu profilmenu nev kattintva nyili allitasz gep bongesz szol kolleg valtozt megjelenes rendszer gep beallitas koveti vilagos sot papir utobbi nyug konyv olvaso emlekezteto felul hosszu olvasas kekfeny szuro csuszka allithato erossegu melegebb szi esti munka uvegszin felul kiemelo szine ket sor duo kontrasztos szinpar egyszinu szincsal betumer csuszka huzas koz csuszka folotti minta mut uj mer felul betu vele gomb sor elengedes val ket gomb lepesenk alli korkoros nyil visszaall alapmer popup neon ker felugro abl fenylo kerete szine kikapcsolva kijelentkezes ceg alapertelmez megjelenes adminisztrator beallitas adja megjelenes",
             "h": 96
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Hogyan működnek a popupok",
             "horgony": "hogyan-mukodnek-a-popupok",
             "szoveg": "A rendszerben minden felvitel és szerkesztés felugró ablakban, popupban történik: új ügyfél, új eszköz, új munkalap, fizetés, számla. Közben az oldal a háttérben a helyén marad, a lista nem tűnik el.\n\n- **Megnyitás:** az oldal tetején lévő gombbal (például **Új munkalap**), vagy a lista egy elemére kattintva.\n- **Mentés:** az ablak alján lévő gombbal. Mentés után az ablak bezárul, a lista frissül, és az oldal tetején megjelenik a visszajelzés (például *Az ügyfél létrejött.*).\n- **Bezárás mentés nélkül:** a **Mégsem** gombbal, a piros ablakgombbal, az Esc billentyűvel, vagy a popup melletti sötét háttérre kattintva.\n- **Hiba:** ha valami hiányzik, piros sáv jelenik meg az ablak tetején, benne a teendővel. Az ablak nyitva marad, a beírt adat nem vész el.\n\nFigyelem: A bezárás nem kérdez rá a mentésre. Amit beírtál, de nem mentettél el, az a bezárással elvész.",
-            "t": "elso lepes mukod popup mukod popup rendszer felvitel szerkesztes felugro abl popup torteni uj ugyfel uj eszkoz uj munkalap fizetes szamla koz oldal hatter hely marad lista tuni megnyitas oldal tetej levo gombbal peldaul uj munkalap lista eleme kattintva mentes abl aljan levo gombbal mentes utan abl bezarul lista frissul oldal tetej megjeleni visszajelzes peldaul ugyfel letrej bezaras mentes nelkul megsem gombbal piros ablakgombbal esc billentyu popup melletti sot hatter kattintva hiba hianyzi piros sav jeleni abl tetej benne teendo abl nyitva marad beir ada vesz figyelem bezaras kerdez mentes beirtal mentettel bezarassal elvesz",
+            "t": "elso lepes muk popup muk popup rendszer felvitel szerkesztes felugro abl popup torteni uj ugyfel uj eszkoz uj munkalap fizetes szamla koz oldal hatter hely mar lista tuni megnyitas oldal tetej levo gombbal peldaul uj munkalap lista eleme kattintva mentes abl aljan levo gombbal mentes utan abl bezarul lista frissul oldal tetej megjeleni visszajelzes peldaul ugyfel letrej bezaras mentes nelkul megs gombbal piros ablakgombbal esc billentyu popup melletti sot hatter kattintva hiba hianyzi piros sav jeleni abl tetej benne teendo abl nyitva mar beir ada vesz figyel bezaras kerdez mentes beirtal mentettel bezarassal elvesz",
             "h": 94
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Hogyan működnek a popupok › Az ablakgombok",
             "horgony": "hogyan-mukodnek-a-popupok",
             "szoveg": "### Az ablakgombok\n\nA popup bal felső sarkában két kerek gomb áll, ahogy egy asztali ablakon:\n\n- **Piros** – **Bezárás**.\n- **Zöld** – **Teljes képernyő**. Újabb kattintásra **Vissza ablakméretre**.",
-            "t": "elso lepes mukod popup ablakgomb mukod popup ablakgomb ablakgomb popup bal felso sarka ket ker gomb all ahogy asztali abl piros bezaras zold teljes kepernyo ujabb kattintas vissza ablakmer",
+            "t": "elso lepes muk popup ablakgomb muk popup ablakgomb ablakgomb popup bal felso sarka ket ker gomb all ahogy asztali abl piros bezaras zold teljes kepernyo ujabb kattintas vissza ablakmer",
             "h": 29
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Hogyan működnek a popupok › Méretezés",
             "horgony": "hogyan-mukodnek-a-popupok",
             "szoveg": "### Méretezés\n\n- Fogd meg az ablak bármelyik szélét vagy sarkát, és húzd. A popup középen marad, a szemközti széle együtt mozdul.\n- Dupla kattintás az ablak címén: teljes képernyő be vagy ki.\n- Dupla kattintás az ablak szélén: vissza az alapméretre.\n\nA méretet a böngésző ablakfajtánként megjegyzi: ha a munkalap ablakát nagyobbra húzod, legközelebb is úgy nyílik, az ügyfélé pedig marad, amilyen volt.",
-            "t": "elso lepes mukod popup meretezes mukod popup meretezes meretezes fogd abl barmelyi szel sar huzd popup kozep marad szemkozti szele egyu mozdul dupla kattintas abl cim teljes kepernyo dupla kattintas abl szel vissza alapmer mer bongeszo ablakfajtank megjegyzi munkalap abl nagyobb huzod legkozelebb ugy nyili ugyfele ped marad amily",
+            "t": "elso lepes muk popup meretezes muk popup meretezes meretezes fogd abl barmelyi szel sar huzd popup kozep mar szemkozti szele egyu mozdul dupla kattintas abl cim teljes kepernyo dupla kattintas abl szel vissza alapmer mer bongeszo ablakfajtank megjegyzi munkalap abl nagyobb huz legkozelebb ugy nyili ugyfele ped mar amily",
             "h": 49
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Hogyan működnek a popupok › Görgetősáv helyett kicsinyítés",
             "horgony": "hogyan-mukodnek-a-popupok",
             "szoveg": "### Görgetősáv helyett kicsinyítés\n\nA popupban nincs görgetősáv: a felvitel mindig egy képernyőn van, nem kell keresgélni, hol a mentés gomb. Ha a tartalom magasabb, mint a képernyő, az ablak arányosan kisebb lesz, hogy minden egyszerre látszódjon. Ha így túl apró a betű: tedd teljes képernyőre a zöld ablakgombbal, vagy állítsd az ablakok betűjét a **Beállítások › Logó és megjelenés › Betű területenként** dobozban – ott az „Űrlapok és popup ablakok\" sora szól erről.",
-            "t": "elso lepes mukod popup gorgetosav hely kicsinyites mukod popup gorgetosav hely kicsinyites gorgetosav hely kicsinyites popup nincs gorgetosav felvitel keperny keresgelni mentes gomb tartalom magasabb kepernyo abl aranyosan kisebb egyszer latszodj igy tul apro betu tedd teljes kepernyo zold ablakgombbal allitsd abl betuj beallitas logo megjelenes betu teruletenk doboz urlap popup abl sora szol errol",
+            "t": "elso lepes muk popup gorgetosav hely kicsinyites muk popup gorgetosav hely kicsinyites gorgetosav hely kicsinyites popup nincs gorgetosav felvitel keperny keresgelni mentes gomb tartal magasabb kepernyo abl aranyosan kisebb egyszer latszodj igy tul apro betu tedd teljes kepernyo zold ablakgombbal allitsd abl betuj beallitas logo megjelenes betu teruletenk doboz urlap popup abl sora szol errol",
             "h": 55
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Hogyan működnek a popupok › Ablak az ablak fölött",
             "horgony": "hogyan-mukodnek-a-popupok",
             "szoveg": "### Ablak az ablak fölött\n\nHa munkalap felvitele közben derül ki, hogy az ügyfél még nincs a rendszerben, nem kell kilépned. Az ügyfélmező melletti **+** gomb (**Új ügyfél felvétele**) egy második ablakot nyit az első fölött. Mentés után az új ügyfél rögtön bekerül a munkalapba, és a félig kitöltött munkalap érintetlen marad. Ugyanígy működik az **Új eszköz felvétele** is.",
-            "t": "elso lepes mukod popup abl abl fol mukod popup abl abl fol abl abl fol munkalap felvitele koz derul ugyfel nincs rendszer kilepned ugyfelmezo melletti gomb uj ugyfel felvetele masodi abl nyi elso fol mentes utan uj ugyfel rog bekerul munkalap fel kitolt munkalap erintetl marad ugyanigy mukodi uj eszkoz felvetele",
+            "t": "elso lepes muk popup abl abl fol muk popup abl abl fol abl abl fol munkalap felvitele koz derul ugyfel nincs rendszer kilepn ugyfelmezo melletti gomb uj ugyfel felvetele masodi abl nyi elso fol mentes utan uj ugyfel rog bekerul munkalap fel kitolt munkalap erintetl mar ugyanigy mukodi uj eszkoz felvetele",
             "h": 51
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Listák: keresés, szűrés, lapozás",
             "horgony": "listak-kereses-szures-lapozas",
             "szoveg": "A menüpontok többsége egy listával nyit: ügyfelek, eszközök, munkalapok, termékek.\n\n- **Keresés:** a lista fölötti mezőbe írd be, amit keresel, és nyomd meg a **Keresés** gombot vagy az Enter billentyűt.\n- **Szűrés:** ahol van szűrő (például kategória vagy állapot), a kiválasztása azonnal szűkíti a listát.\n- **Szűrő törlése:** visszaadja a teljes listát.\n- **Lapozás:** a hosszú lista oldalakra van bontva, a lista alján számozott lapozóval. A rendszer mindenhol lapoz, nem görget – így a fejléc és a gombok mindig szem előtt maradnak.\n- **Megnyitás:** a sorban a névre (a kiemelt hivatkozásra) kattintva a szerkesztő popup nyílik meg.\n\nAz egyes listák saját lehetőségeiről (rendezés, nézetek, oszlopok) a menüpont saját fejezete ír.",
-            "t": "elso lepes lis kereses szures lapozas lis kereses szures lapozas menupon tobbsege lista nyi ugyfel eszkoz munkalap term kereses lista folotti mezo ird keresel nyomd kereses gomb enter billentyu szures ahol szuro peldaul kategoria allap kivalasztasa azonnal szukiti lis szuro torlese visszaad teljes lis lapozas hosszu lista oldal bontva lista aljan szamoz lapozo rendszer mindenhol lapoz gorg igy fejlec gomb szem elo marad megnyitas sor nev kiemel hivatkozas kattintva szerkeszto popup nyili egyes lis saj lehetoseg rendezes nez oszlop menup saj fejezete ir",
+            "t": "elso lepes lis kereses szures lapozas lis kereses szures lapozas menupon tobbsege lista nyi ugyfel eszkoz munkalap term kereses lista folotti mezo ird keresel nyomd kereses gomb enter billentyu szures ahol szuro peldaul kategoria allap kivalasztasa azonnal szukiti lis szuro torlese vissza teljes lis lapozas hosszu lista oldal bontva lista aljan szamoz lapozo rendszer mindenhol lapoz gorg igy fejlec gomb szem elo mar megnyitas sor nev kiemel hivatkozas kattintva szerkeszto popup nyili egyes lis saj lehetoseg rendezes nez oszlop menup saj fejezete ir",
             "h": 83
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Másoló gombok az adatok mellett",
             "horgony": "masolo-gombok-az-adatok-mellett",
             "szoveg": "Sok adat mellett – IMEI, név, cím, telefonszám – egy kis, két lapot ábrázoló ikon áll. Rákattintva az adat a vágólapra kerül, és máshol a Ctrl+V billentyűkkel beillesztheted.\n\nA sikeres másolást pipa jelzi, a gomb fölé vitt egérnél a **Kimásolva** felirat látszik. Ha a böngésző nem engedte a másolást, a gomb azt írja: **Nem sikerült kimásolni – jelöld ki, és Ctrl+C**.",
-            "t": "elso lepes masolo gomb ada mell masolo gomb ada mell ada mell imei nev cim telefonszam kis ket lap abrazolo ikon all rakattintva ada vagolap ar mashol ctrl billentyukkel beillesztheted sikeres masolas pipa jelzi gomb fole vit egernel kimasolva felir latszi bongeszo engedte masolas gomb irja sikerul kimasolni jelold ctrl",
+            "t": "elso lepes masolo gomb ada mell masolo gomb ada mell ada mell imei nev cim telefonsz kis ket lap abrazolo ikon all rakattintva ada vagolap ar mashol ctrl billentyukkel beilleszth sikeres masolas pipa jelzi gomb fole vit egernel kimasolva felir latszi bongeszo engedte masolas gomb irja sikerul kimasolni jelold ctrl",
             "h": 50
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Az első nap teendői sorrendben",
             "horgony": "az-elso-nap-teendoi-sorrendben",
             "szoveg": "Új rendszernél ebben a sorrendben érdemes haladni. Az első lépés az adminisztrátoré, a többi mindenkié.\n\n1. **Beállítások.** Add meg a cég nevét és logóját, a nyitvatartást, a munkalapszám kezdőértékét, a fizetési módokat és a számlázás adatait. Ha több kolléga dolgozik, vedd fel őket. Fejezetek: Beállítások, Megjelenés, Csapat.\n2. **Szolgáltatások és termékek.** Vedd fel a leggyakoribb javításokat és az eladott alkatrészeket, tartozékokat az árukkal. Így a munkalapon már csak választani kell. Fejezetek: Szolgáltatások, Termékek.\n3. **Ügyfél.** Az **Áttekintésen** nyomd meg az **Új ügyfél** gombot. Csak a név kötelező. Fejezet: Ügyfelek.\n4. **Eszköz.** Vedd fel az ügyfél készülékét. Az eszköz mindig egy ügyfélhez tartozik. Fejezet: Eszközök.\n5. **Munkalap.** Az **Új munkalap** gombbal nyiss lapot: válaszd ki az ügyfelet és az eszközt, írd be a hibát. Fejezet: Munkalapok.\n6. **Fizetés.** Amikor az ügyfél fizet, a munkalapról rögzítsd a fizetést, és ha kell, állíts ki számlát. Fejezetek: Pénztár, Számlázás.\n7. **Zárás.** Nap végén számold meg a kasszát, és zárd le a napot a **Pénztár** menüpontban. Fejezet: Pénztár.\n\nAmire a következő napokban lesz szükséged:\n\n- Pultos eladás javítás nélkül: Napi árukiadás.\n- Ügyfélnek rendelt áru: Rendelések.\n- Üzenetváltás az ügyféllel a munkalapról: Üzenetek és ügyféloldal.\n- A cég e-mail-fiókjai a rendszerben: Levelezés.\n- Időpontok, emlékeztetők: Naptár.\n- A beépített segítő: Asszisztens.\n- Mentés és jogosultságok: Mentés, jogosultság, biztonság.\n- Ha elakadsz: Hibaelhárítás.\n\nTipp: Ha csak kipróbálnád a rendszert, az adminisztrátor egy gombbal betölthet kitalált ügyfeleket, készülékeket és munkalapokat. Éles rendszerbe ez nem való – lásd: Beállítások.",
-            "t": "elso lepes elso nap teendoi sorrend elso nap teendoi sorrend uj rendszernel ebb sorrend erdemes haladni elso lepes adminisztrato tobbi mindenkie beallitas add ceg nev logoj nyitvatartas munkalapszam kezdo fizetesi mod szamlazas ada tobb kollega dolgozi vedd oke fejez beallitas megjelenes csap szolgaltatas term vedd leggyakoribb javitas elad alkatresz tartoz arukkal igy munkalap valasztani fejez szolgaltatas term ugyfel attekintes nyomd uj ugyfel gomb nev kotelezo fejez ugyfel eszkoz vedd ugyfel eszkoz eszkoz ugyfel tartozi fejez eszkoz munkalap uj munkalap gombbal nyiss lap valaszd ugyfel eszkoz ird hib fejez munkalap fizetes ami ugyfel fiz munkalap rogzitsd fizetes allits szamla fejez penztar szamlazas zaras nap veg szamold penztar zard nap penztar menupon fejez penztar ami kovetkezo nap szukseged pultos eladas javitas nelkul napi arukiadas ugyfel rendel aru rendeles uzenetvaltas ugyfellel munkalap uzen ugyfeloldal ceg mail fiokj rendszer levelezes idopon emlekezt naptar beepit segito asszisztens mentes jogosultsag mentes jogosultsag biztonsag elakadsz hibaelharitas tipp kiprobalnad rendsz adminisztrator gombbal betolth kitalal ugyfel eszkoz munkalap eles rendszer valo lasd beallitas",
+            "t": "elso lepes elso nap teendoi sorrend elso nap teendoi sorrend uj rendszernel ebb sorrend erdemes haladni elso lepes adminisztrato tobbi mindenkie beallitas add ceg nev logoj nyitvatartas munkalapsz kezdo fizetesi mod szamlazas ada tobb kollega dolgozi vedd oke fejez beallitas megjelenes csap szolgaltatas term vedd leggyakoribb javitas elad alkatresz tartoz arukkal igy munkalap valasztani fejez szolgaltatas term ugyfel attekintes nyomd uj ugyfel gomb nev kotelezo fejez ugyfel eszkoz vedd ugyfel eszkoz eszkoz ugyfel tartozi fejez eszkoz munkalap uj munkalap gombbal nyiss lap valaszd ugyfel eszkoz ird hib fejez munkalap fizetes ami ugyfel fiz munkalap rogzitsd fizetes allits szamla fejez penztar szamlazas zaras nap veg szamold penztar zard nap penztar menupon fejez penztar ami kovetkezo nap szukseg pultos eladas javitas nelkul napi arukiadas ugyfel rendel aru rendeles uzenetvaltas ugyfellel munkalap uzen ugyfeloldal ceg mail fiokj rendszer levelezes idopon emlekezt naptar beepit segito asszisztens mentes jogosultsag mentes jogosultsag biztonsag elakadsz hibaelharitas tipp kiprobaln rendsz adminisztrator gombbal betolth kitalal ugyfel eszkoz munkalap eles rendszer valo lasd beallitas",
             "h": 164
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Billentyűparancsok",
             "horgony": "billentyuparancsok",
             "szoveg": "| Billentyű | Mit csinál |\n|---|---|\n| / | A mindenhol-keresőbe ugrik. Csak akkor, ha éppen nem egy mezőbe írsz. |\n| F1 | Megnyitja az asszisztenst. |\n| Esc | Bezárja a popupot, a kereső találati listáját vagy az asszisztens ablakát. |\n| Enter | Keresőmezőben keres; ügyfél- vagy eszközválasztó mezőben az első találatot választja. |\n| ↓ ↑ | A választólistákban és az irányítószám-listában lép a találatok között; az Enter választ. |\n| Page Down Page Up | A szolgáltatás- és a termékválasztóban egy oldalnyit lép. |\n| ↓ | A munkalap tételsorának megnevezés mezőjében megnyitja a választót. |\n| Enter, Szóköz | Kijelölt dátum- vagy választómezőn megnyitja a választót. |\n| Backspace, Delete | Kijelölt dátum- vagy választómezőn kiüríti a mezőt. |\n| Shift+Enter | Üzenet írásakor új sort kezd; a sima Enter elküldi az üzenetet. |\n| Ctrl+S | A Beállításokban elmenti az éppen nyitott lapfület (Macen Cmd+S). |",
-            "t": "elso lepes billentyuparancs billentyuparancs billentyu csinal mindenhol kereso ugri epp mezo irsz f1 megnyi asszisztens esc bezar popup kereso talalati listaj asszisztens abl enter keresomezo keres ugyfel eszkozvalaszto mezo elso talal valasz valasztolis iranyitoszam lista lep talal koz enter valasz page down page up szolgaltatas termekvalaszto oldalnyi lep munkalap tetelso megnevezes mezo megnyi valasz enter szokoz kijelol datum valasztomez megnyi valasz backspace delete kijelol datum valasztomez kiuriti mez shif enter uzen irasa uj sor kezd sima enter elkuldi uzen ctrl beallitas elmenti epp nyit lapful mac cmd",
+            "t": "elso lepes billentyuparancs billentyuparancs billentyu csinal mindenhol kereso ugri epp mezo irsz f1 megnyi asszisztens esc bezar popup kereso talalati listaj asszisztens abl enter keresomezo keres ugyfel eszkozvalaszto mezo elso talal valasz valasztolis iranyitosz lista lep talal koz enter valasz page down page up szolgaltatas termekvalaszto oldalnyi lep munkalap tetelso megnevezes mezo megnyi valasz enter szokoz kijelol datum valasztomez megnyi valasz backspace delete kijelol datum valasztomez kiuriti mez shif enter uzen irasa uj sor kezd sima enter elkuldi uzen ctrl beallitas elmenti epp nyit lapful mac cmd",
             "h": 87
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Belépés nélkül semmi nem látszik.** A be nem jelentkezett látogató a bejelentkező oldalra kerül.\n- **A Beállításokat csak az adminisztrátor éri el.** A kolléga menüjében a menüpont meg sem jelenik.\n- **Minden felvitel popupban történik,** és csak a mentés gombbal kerül a rendszerbe.\n- **A saját megjelenésed a saját gépedé.** A téma, a szín, a betűméret, a menü állapota és az ablakméretek a böngészőben tárolódnak, a kollégákét nem érintik.\n- **Ügyfelet és munkalapot a rendszer nem töröl.** Az ügyfél inaktívvá tehető, a téves munkalap érvénytelen állapotba kerül. Lásd: Mentés, jogosultság, biztonság.\n- **A felület frissítés után magától megújul.** Ha a rendszer új verziót kapott, a nyitva hagyott oldal egyszer újratöltődik.",
-            "t": "elso lepes szabaly ami rendszer betar szabaly ami rendszer betar belepes nelkul semmi latszi jelentkez latogato bejelentkezo oldal ar beallitas adminisztrator eri kollega menu menup jeleni felvitel popup torteni mentes gombbal ar rendszer saj megjelenesed saj gepede tema szin betumer menu allapota ablakmer bongeszo tarolod kolleg erinti ugyfel munkalap rendszer torol ugyfel inaktivva teheto teves munkalap ervenytel allap ar lasd mentes jogosultsag biztonsag felul frissites utan maga megujul rendszer uj verzi kap nyitva hagy oldal egyszer ujratoltodi",
+            "t": "elso lepes szabaly ami rendszer betar szabaly ami rendszer betar belepes nelkul semmi latszi jelentkez latogato bejelentkezo oldal ar beallitas adminisztrator eri kollega menu menup jeleni felvitel popup torteni mentes gombbal ar rendszer saj megjelenes saj gepede tema szin betumer menu allapota ablakmer bongeszo tarol kolleg erinti ugyfel munkalap rendszer torol ugyfel inaktivva teheto teves munkalap ervenytel allap ar lasd mentes jogosultsag biztonsag felul frissites utan maga megujul rendszer uj verzi kap nyitva hagy oldal egyszer ujratoltodi",
             "h": 77
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- A / billentyűvel soha nem kell az egérért nyúlnod, ha ügyfelet keresel.\n- A munkalap ablakát érdemes egyszer nagyobbra húzni vagy teljes képernyőre tenni – a rendszer megjegyzi.\n- Az IMEI-t ne gépeld át másik programba: használd a mellette álló másoló gombot.\n- Ha a pultnál több gépen dolgoztok, a megjelenést gépenként külön állíthatjátok be.\n- Ha kevés a hely, csukd össze a menüt, az Áttekintésen pedig rejtsd el a csempéket a **Csempék elrejtése** gombbal.",
-            "t": "elso lepes tipp tipp billentyu soha eger nyulnod ugyfel keresel munkalap abl erdemes egyszer nagyobb huzni teljes kepernyo tenni rendszer megjegyzi imei ne gepeld masi program hasznald mellette allo masolo gomb pultnal tobb gep dolgoz megjelenes gepenk kul allithatj keves hely csukd ossze menu attekintes ped rejtsd csemp csemp elrejtese gombbal",
+            "t": "elso lepes tipp tipp billentyu soha eger nyuln ugyfel keresel munkalap abl erdemes egyszer nagyobb huzni teljes kepernyo tenni rendszer megjegyzi imei ne gepeld masi progr hasznald mellette allo masolo gomb pultnal tobb gep dolgoz megjelenes gepenk kul allithatj keves hely csukd ossze menu attekintes ped rejtsd csemp csemp elrejtese gombbal",
             "h": 51
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem tölt be az oldal, vagy „Nincs ilyen oldal\" jelenik meg:** nézd meg a címet, vagy válassz a bal oldali menüből.\n- **Az űrlap nem töltődött be:** zárd be a popupot, töltsd újra az oldalt az F5 billentyűvel, és próbáld újra.\n- **Nem látod a Beállításokat:** kollégaként léptél be, a Beállítások az adminisztrátoré.\n- **Minden túl kicsi vagy túl nagy:** a profilmenüben a **Betűméret** csúszkán a körkörös nyíl visszaállítja az alapméretet.\n\nA gyakori elakadások részletes listája: Hibaelhárítás.",
-            "t": "elso lepes megy megy tol oldal nincs oldal jeleni nezd cim valassz bal oldali menu urlap toltod zard popup toltsd ujra oldal f5 billentyu probald ujra latod beallitas kollegak leptel beallitas adminisztrato tul kicsi tul nagy profilmenu betumer csuszkan korkoros nyil visszaalli alapmer gyakori elakadas reszletes lista hibaelharitas",
+            "t": "elso lepes megy megy tol oldal nincs oldal jeleni nezd cim valassz bal oldali menu urlap toltod zard popup toltsd ujra oldal f5 billentyu probald ujra lat beallitas kollegak leptel beallitas adminisztrato tul kicsi tul nagy profilmenu betumer csuszkan korkoros nyil visszaalli alapmer gyakori elakadas reszletes lista hibaelharitas",
             "h": 48
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Hol találom a rendszert, mi a címe?",
             "horgony": "hol-talalom-a-rendszert-mi-a-cime",
             "szoveg": "A címet az adminisztrátortól kapod. A cég belső rendszerének címe, a végén `/muhely/` – például `muhely.pelda.hu/muhely/`. Érdemes könyvjelzőbe tenni.",
-            "t": "elso lepes gyi talalom rendsz cime gyi talalom rendsz cime cim adminisztrator kapod ceg belso rendsze cime veg muhely peldaul muhely pelda hu muhely erdemes konyvjelzo tenni",
+            "t": "elso lepes gyi talal rendsz cime gyi talal rendsz cime cim adminisztrator kap ceg belso rendsze cime veg muhely peldaul muhely pelda hu muhely erdemes konyvjelzo tenni",
             "h": 27
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Elfelejtettem a jelszavamat, mit csináljak?",
             "horgony": "elfelejtettem-a-jelszavamat-mit-csinaljak",
             "szoveg": "Szólj az adminisztrátornak. Ő a **Csapat** menüpontban, a kollégák között új jelszót tud adni neked.",
-            "t": "elso lepes gyi elfelejtettem jelszavam csinalj gyi elfelejtettem jelszavam csinalj szolj adminisztrator csap menupon kolleg koz uj jelsz tud adni neked",
+            "t": "elso lepes gyi elfelejtet jelszav csinalj gyi elfelejtet jelszav csinalj szolj adminisztrator csap menupon kolleg koz uj jelsz tud adni nek",
             "h": 21
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Miért nem látom a Beállítások menüpontot?",
             "horgony": "miert-nem-latom-a-beallitasok-menupontot",
             "szoveg": "Mert kollégaként léptél be. A Beállításokat csak az adminisztrátor látja és nyithatja meg.",
-            "t": "elso lepes gyi latom beallitas menupon gyi latom beallitas menupon kollegak leptel beallitas adminisztrator lat nyith",
+            "t": "elso lepes gyi lat beallitas menupon gyi lat beallitas menupon kollegak leptel beallitas adminisztrator lat nyith",
             "h": 16
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Hogyan keresek rá gyorsan egy ügyfélre?",
             "horgony": "hogyan-keresek-ra-gyorsan-egy-ugyfelre",
             "szoveg": "Nyomd meg a / billentyűt, és kezdd el írni a nevét vagy a telefonszámát. Két karakter után megjelennek a találatok, kattints a megfelelőre.",
-            "t": "elso lepes gyi keres gyorsan ugyfel gyi keres gyorsan ugyfel nyomd billentyu kezdd irni nev telefonszam ket karakter utan megjel talal kattints megfelelo",
+            "t": "elso lepes gyi keres gyorsan ugyfel gyi keres gyorsan ugyfel nyomd billentyu kezdd irni nev telefonsz ket karakter utan megjel talal kattints megfelelo",
             "h": 23
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Miért nem találja a kereső a munkalapszámot?",
             "horgony": "miert-nem-talalja-a-kereso-a-munkalapszamot",
             "szoveg": "A fejléc keresője ügyfelet és eszközt keres. Munkalapszámra az **Áttekintés** munkalap-táblázatában keress, vagy a **Munkalapok** menüpontban.",
-            "t": "elso lepes gyi talal kereso munkalapszam gyi talal kereso munkalapszam fejlec kereso ugyfel eszkoz keres munkalapszam attekintes munkalap tablazata keress munkalap menupon",
+            "t": "elso lepes gyi talal kereso munkalapsz gyi talal kereso munkalapsz fejlec kereso ugyfel eszkoz keres munkalapsz attekintes munkalap tablazata keress munkalap menupon",
             "h": 22
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Bezártam a popupot, elveszett, amit beírtam?",
             "horgony": "bezartam-a-popupot-elveszett-amit-beirtam",
             "szoveg": "Igen, ha nem mentetted el. A bezárás nem kérdez rá. Mindig a mentés gombbal zárd le a munkát.",
-            "t": "elso lepes gyi bezartam popup elvesz beirtam gyi bezartam popup elvesz beirtam mentetted bezaras kerdez mentes gombbal zard mun",
+            "t": "elso lepes gyi bezar popup elvesz beir gyi bezar popup elvesz beir mentet bezaras kerdez mentes gombbal zard mun",
             "h": 19
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Hogyan teszem nagyobbra a felugró ablakot?",
             "horgony": "hogyan-teszem-nagyobbra-a-felugro-ablakot",
             "szoveg": "Húzd a szélét vagy a sarkát, vagy nyomd meg a bal felső sarokban a zöld gombot a teljes képernyőhöz. A rendszer megjegyzi a méretet.",
-            "t": "elso lepes gyi teszem nagyobb felugro abl gyi teszem nagyobb felugro abl huzd szel sar nyomd bal felso sar zold gomb teljes kepernyo rendszer megjegyzi mer",
+            "t": "elso lepes gyi tesz nagyobb felugro abl gyi tesz nagyobb felugro abl huzd szel sar nyomd bal felso sar zold gomb teljes kepernyo rendszer megjegyzi mer",
             "h": 26
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Miért lett apró betűs az ablak?",
             "horgony": "miert-lett-apro-betus-az-ablak",
             "szoveg": "Mert a tartalom nem fért ki a képernyőn, és a rendszer görgetés helyett lekicsinyítette – így nem kell görgetned a mentés gombig. Tedd teljes képernyőre, vagy a **Beállítások › Logó és megjelenés › Betű területenként** dobozban add nagyobbra az „Űrlapok és popup ablakok\" betűjét (a többi rész mérete változatlan marad).",
-            "t": "elso lepes gyi let apro betus abl gyi let apro betus abl tartalom fer keperny rendszer gorgetes hely lekicsinyitette igy gorgetned mentes gomb tedd teljes kepernyo beallitas logo megjelenes betu teruletenk doboz add nagyobb urlap popup abl betuj tobbi resz merete valtozatlan marad",
+            "t": "elso lepes gyi let apro betus abl gyi let apro betus abl tartal fer keperny rendszer gorgetes hely lekicsinyitette igy gorgetn mentes gomb tedd teljes kepernyo beallitas logo megjelenes betu teruletenk doboz add nagyobb urlap popup abl betuj tobbi resz merete valtozatlan mar",
             "h": 43
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Hogyan állítom vissza az ablak eredeti méretét?",
             "horgony": "hogyan-allitom-vissza-az-ablak-eredeti-meretet",
             "szoveg": "Kattints duplán az ablak bármelyik szélére. Ha teljes képernyőn van, előbb a zöld gombbal lépj vissza ablakméretre.",
-            "t": "elso lepes gyi allitom vissza abl eredeti mer gyi allitom vissza abl eredeti mer kattints duplan abl barmelyi szele teljes keperny elobb zold gombbal lepj vissza ablakmer",
+            "t": "elso lepes gyi alli vissza abl eredeti mer gyi alli vissza abl eredeti mer kattints duplan abl barmelyi szele teljes keperny elobb zold gombbal lepj vissza ablakmer",
             "h": 27
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Hol állítom át sötét módra?",
             "horgony": "hol-allitom-at-sotet-modra",
             "szoveg": "A jobb felső sarokban kattints a nevedre, és a **Megjelenés** sorban válaszd a **Sötét** lehetőséget. Ez csak a te gépedre szól.",
-            "t": "elso lepes gyi allitom sot mod gyi allitom sot mod jobb felso sar kattints neved megjelenes sor valaszd sot lehetoseg geped szol",
+            "t": "elso lepes gyi alli sot mod gyi alli sot mod jobb felso sar kattints nev megjelenes sor valaszd sot lehetoseg gep szol",
             "h": 22
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Mire jó a Papír mód és a Kékfény-szűrő?",
             "horgony": "mire-jo-a-papir-mod-es-a-kekfeny-szuro",
             "szoveg": "A **Papír** nyugodt, kevés színt használó felület, hosszú olvasáshoz. A **Kékfény-szűrő** melegebbé teszi a színeket, az erőssége állítható. Mindkettő a profilmenüben van.",
-            "t": "elso lepes gyi mire jo papir mod kekfeny szuro gyi mire jo papir mod kekfeny szuro papir nyugod keves szin hasznalo felul hosszu olvasas kekfeny szuro melegeb teszi szin erossege allithato mindketto profilmenu",
+            "t": "elso lepes gyi mire jo papir mod kekfeny szuro gyi mire jo papir mod kekfeny szuro papir nyug keves szin hasznalo felul hosszu olvasas kekfeny szuro melegeb teszi szin erossege allithato mindketto profilmenu",
             "h": 33
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Túl kicsik a betűk, lehet nagyítani?",
             "horgony": "tul-kicsik-a-betuk-lehet-nagyitani",
             "szoveg": "Igen. A profilmenüben a **Betűméret** csúszkával 80 és 160 százalék között állíthatod. A beállítás a gépeden megmarad.",
-            "t": "elso lepes gyi tul kicsi bet nagyitani gyi tul kicsi bet nagyitani profilmenu betumer csuszka 80 160 szazal koz allithatod beallitas geped megmarad",
+            "t": "elso lepes gyi tul kicsi bet nagyitani gyi tul kicsi bet nagyitani profilmenu betumer csuszka 80 160 szazal koz allith beallitas gep megmar",
             "h": 23
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Mit jelent a szám a menüpont mellett?",
             "horgony": "mit-jelent-a-szam-a-menupont-mellett",
             "szoveg": "Azt, hogy ott tennivaló vár: olvasatlan üzenet, új levél, esedékes naptáresemény vagy megérkezett rendelés. Ha elintézted, a jelvény eltűnik.",
-            "t": "elso lepes gyi jel szam menup mell gyi jel szam menup mell tennivalo var olvasatlan uzen uj level esedekes naptaresemeny megerkez rendeles elintezted jelveny eltuni",
+            "t": "elso lepes gyi jel szam menup mell gyi jel szam menup mell tennivalo var olvasatlan uzen uj level esedekes naptaresemeny megerkez rendeles elintez jelveny eltuni",
             "h": 25
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Hogyan másolok ki egy IMEI-t?",
             "horgony": "hogyan-masolok-ki-egy-imei-t",
             "szoveg": "Kattints az IMEI melletti kis másoló ikonra. A szám a vágólapra kerül, és a Ctrl+V billentyűkkel bárhová beillesztheted.",
-            "t": "elso lepes gyi masol imei gyi masol imei kattints imei melletti kis masolo ikon szam vagolap ar ctrl billentyukkel barhova beillesztheted",
+            "t": "elso lepes gyi masol imei gyi masol imei kattints imei melletti kis masolo ikon szam vagolap ar ctrl billentyukkel barhova beilleszth",
             "h": 21
         },
         {
@@ -305,7 +305,7 @@
             "cim": "GYIK › Miért töltődött újra magától az oldal?",
             "horgony": "miert-toltodott-ujra-magatol-az-oldal",
             "szoveg": "Mert a rendszer közben új verziót kapott. A nyitva hagyott oldal ilyenkor egyszer magától frissül, hogy az új felülettel dolgozz. Teendőd nincs vele.",
-            "t": "elso lepes gyi toltod ujra maga oldal gyi toltod ujra maga oldal rendszer koz uj verzi kap nyitva hagy oldal ily egyszer maga frissul uj felulettel dolgozz teendod nincs vele",
+            "t": "elso lepes gyi toltod ujra maga oldal gyi toltod ujra maga oldal rendszer koz uj verzi kap nyitva hagy oldal ily egyszer maga frissul uj felulettel dolgozz teend nincs vele",
             "h": 30
         },
         {
@@ -313,7 +313,7 @@
             "cim": "GYIK › Kit kérdezzek, ha elakadok?",
             "horgony": "kit-kerdezzek-ha-elakadok",
             "szoveg": "Nyomd meg az F1 billentyűt, és kérdezd meg az asszisztenst. Ha egy egész oldalt szeretnél megismerni, írd be neki: *Vezess végig ezen az oldalon*. A **Súgó** menüpontban a teljes dokumentáció is olvasható.",
-            "t": "elso lepes gyi kit kerdezz elakad gyi kit kerdezz elakad nyomd f1 billentyu kerdezd asszisztens egesz oldal szeretnel megismerni ird neki vezess veg ezen oldal sugo menupon teljes dokumentacio olvashato",
+            "t": "elso lepes gyi kit kerdezz elak gyi kit kerdezz elak nyomd f1 billentyu kerdezd asszisztens egesz oldal szeretnel megismerni ird neki vezess veg ezen oldal sugo menupon teljes dokumentacio olvashato",
             "h": 30
         },
         {
@@ -321,7 +321,7 @@
             "cim": "GYIK › Elront valamit, ha csak nézelődöm?",
             "horgony": "elront-valamit-ha-csak-nezelodom",
             "szoveg": "Nem. Amíg nem nyomsz mentés gombot, semmi nem változik. Ügyfelet és munkalapot a rendszer egyébként sem töröl.",
-            "t": "elso lepes gyi elr valami nezelodom gyi elr valami nezelodom amig nyomsz mentes gomb semmi valtozi ugyfel munkalap rendszer egyebk torol",
+            "t": "elso lepes gyi elr valami nezel gyi elr valami nezel amig nyomsz mentes gomb semmi valtozi ugyfel munkalap rendszer egyebk torol",
             "h": 21
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Milyen sorrendben kezdjem a munkát az első napon?",
             "horgony": "milyen-sorrendben-kezdjem-a-munkat-az-elso-napon",
             "szoveg": "Beállítások, aztán ügyfél, eszköz, munkalap, fizetés, és nap végén zárás. A részleteket *Az első nap teendői sorrendben* rész írja le.",
-            "t": "elso lepes gyi sorrend kezdjem mun elso nap gyi sorrend kezdjem mun elso nap beallitas aztan ugyfel eszkoz munkalap fizetes nap veg zaras reszl elso nap teendoi sorrend resz irja",
+            "t": "elso lepes gyi sorrend kezdj mun elso nap gyi sorrend kezdj mun elso nap beallitas aztan ugyfel eszkoz munkalap fizetes nap veg zaras reszl elso nap teendoi sorrend resz irja",
             "h": 30
         }
     ]

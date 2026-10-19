@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "Az **Ügyfelek** menüpont a rendszer ügyféltörzse. Itt van mindenki, aki valaha készüléket adott le, rendelt vagy vásárolt: magánszemélyek, cégek és közületek egy listában.\n\nAz ügyfél a munka kiindulópontja. A munkalap mindig egy ügyfélre hivatkozik, az eszköz mindig egy ügyfélé, a rendelés mindig ügyfélhez kötött. Ezért az ügyfelet elég egyszer felvenni: utána névre, telefonszámra vagy ügyfélszámra gépelve bárhol előhívod.\n\nAz ügyfél adatlapján egy helyen látod az elérhetőségeit, a címeit, a megjegyzést, a csatolt fájlokat, és azt is, milyen munkalapjai, rendelései és vásárlásai voltak.",
-            "t": "ugyfel mire valo mire valo ugyfel menup rendszer ugyfeltorzse mindenki valaha eszkoz ado rendel vasa maganszemely ceg kozul lista ugyfel munka kiindulopon munkalap ugyfel hivatkozi eszkoz ugyfele rendeles ugyfel kot ezer ugyfel eleg egyszer felvenni utana nev telefonszam ugyfelszam gepelve barhol elohivod ugyfel adatlapjan hely latod elerhetoseg cim megjegyzes csa fajl munkalapj rendeles vasarlas vol",
+            "t": "ugyfel mire valo mire valo ugyfel menup rendszer ugyfeltorzse mindenki valaha eszkoz ado rendel vasa maganszemely ceg kozul lista ugyfel munka kiindulopon munkalap ugyfel hivatkozi eszkoz ugyfele rendeles ugyfel kot ezer ugyfel eleg egyszer felvenni utana nev telefonsz ugyfelsz gepelve barhol elohiv ugyfel adatlapjan hely lat elerhetoseg cim megjegyzes csa fajl munkalapj rendeles vasarlas vol",
             "h": 55
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- Az oldalmenüben az **Ügyfelek** pontra kattintva: Ügyfelek megnyitása.\n- Az Áttekintésen az **Új ügyfél** gombbal rögtön felvehetsz egyet.\n- A munkalapon, a napi árukiadáson és a rendelésen az **Ügyfél** mező mellett: pluszjel az új ügyfélhez, ceruza a kiválasztott ügyfél szerkesztéséhez.\n- Az Eszközök listában az ügyfél nevére kattintva az adatlapja nyílik meg.\n\nAz ügyfél adatlapja mindig felugró ablakban nyílik, így a lista és a keresés a háttérben megmarad.",
-            "t": "ugyfel talalod talalod oldalmenu ugyfel pon kattintva ugyfel megnyitasa attekintes uj ugyfel gombbal rog felvehetsz egy munkalap napi arukiadas rendeles ugyfel mezo mell pluszjel uj ugyfel ceruza kivalaszt ugyfel szerkesztese eszkoz lista ugyfel neve kattintva adatlap nyili ugyfel adatlap felugro abl nyili igy lista kereses hatter megmarad",
+            "t": "ugyfel talal talal oldalmenu ugyfel pon kattintva ugyfel megnyitasa attekintes uj ugyfel gombbal rog felvehetsz egy munkalap napi arukiadas rendeles ugyfel mezo mell pluszjel uj ugyfel ceruza kivalaszt ugyfel szerkesztese eszkoz lista ugyfel neve kattintva adatlap nyili ugyfel adatlap felugro abl nyili igy lista kereses hatter megmar",
             "h": 47
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: ügyfél keresése a listában",
             "horgony": "lepesrol-lepesre-ugyfel-keresese-a-listaban",
             "szoveg": "Az Ügyfelek menüpont listája névsorban mutatja az aktív ügyfeleket, oldalanként 25-öt.\n\n1. Kattints a keresőmezőbe. A felirata: `Név, telefon, e-mail, ügyfélszám, cím…`\n2. Írd be, amit tudsz: a név egy részét, a telefonszám néhány jegyét, az e-mail-címet, az ügyfélszámot, a települést, az utcát vagy az irányítószámot. Ékezet és kis-nagybetű nem számít: a `kovacs` a Kovácsot is megtalálja.\n3. Nyomd meg a **Keresés** gombot vagy az Enter billentyűt.\n4. A kereső mellett látod, hány találat van.\n5. A sorban a névre vagy a **Megnyit** gombra kattintva megnyílik az adatlap.\n\nA **Szűrő törlése** gomb visszaadja a teljes listát. Ha sok az ügyfél, a lista alján számozott lapozó áll.\n\nTipp: A telefonszámból elég a közepe vagy a vége, a tagolás (szóköz, kötőjel, +36 vagy 06) nem számít: a `123 45` és a `1234567` is megtalálja azt, akinek a száma +36 30 123 4567.",
-            "t": "ugyfel lepes lepes ugyfel keresese lista lepes lepes ugyfel keresese lista ugyfel menup lista nevsor mut aktiv ugyfel oldalank 25 ot kattints keresomezo felirata nev telef mail ugyfelszam cim ird nev resz telefonszam nehany jegy mail cim ugyfelszam telepules utc iranyitoszam ekez kis nagybetu szami kovacs kovacs megtalal nyomd kereses gomb enter billentyu kereso mell latod hany talal sor nev megnyi gomb kattintva megnyili adatlap szuro torlese gomb visszaad teljes lis ugyfel lista aljan szamoz lapozo all tipp telefonszam eleg kozepe vege tagolas szokoz kotojel 36 06 szami 123 45 1234567 megtalal aki szama 36 30 123 4567",
+            "t": "ugyfel lepes lepes ugyfel keresese lista lepes lepes ugyfel keresese lista ugyfel menup lista nevsor mut aktiv ugyfel oldalank 25 ot kattints keresomezo felirata nev telef mail ugyfelsz cim ird nev resz telefonsz nehany jegy mail cim ugyfelsz telepules utc iranyitosz ekez kis nagybetu szami kovacs kovacs megtalal nyomd kereses gomb enter billentyu kereso mell lat hany talal sor nev megnyi gomb kattintva megnyili adatlap szuro torlese gomb vissza teljes lis ugyfel lista aljan szamoz lapozo all tipp telefonsz eleg kozepe vege tagolas szokoz kotojel 36 06 szami 123 45 1234567 megtalal aki szama 36 30 123 4567",
             "h": 98
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: új ügyfél felvétele",
             "horgony": "lepesrol-lepesre-uj-ugyfel-felvetele",
             "szoveg": "1. Az Ügyfelek menüpontban kattints az **Új ügyfél** gombra. Felugrik az *Új ügyfél* ablak.\n2. Írd be a nevet a felső mezőbe. Cégnél a cég nevét, magánszemélynél a teljes nevet. **Csak a név kötelező**, minden mást később is pótolhatsz.\n3. Add meg a címet egy sorban: **Isz.**, **Település**, **Utca, házszám**, **Ország**. Az ország alapból Magyarország.\n4. A **Státusz** sorban válaszd ki, kiről van szó: **Magánszemély**, **Cég** vagy **Közület**. Az alap a Magánszemély.\n5. Cégnél töltsd ki az **Adószám** mezőt, és írd be a **Kapcsolattartó** nevét.\n6. Írd be a **Telefon**, a **Telefon 2.** és az **E-mail** mezőt.\n7. Ha kell, adj meg **Kategória** szöveget (például viszonteladó) és **Kedvezmény** százalékot.\n8. Kattints az **Ügyfél létrehozása** gombra.\n\nMentés után visszakerülsz a listára, és megjelenik: „Az ügyfél létrejött.\"\n\nPélda: Név: Minta Márta. Isz.: beírod a négy számjegyet, a település magától megjelenik. Utca, házszám: Példa utca 1. Telefon: +36 30 123 4567. Státusz: Magánszemély.",
-            "t": "ugyfel lepes lepes uj ugyfel felvetele lepes lepes uj ugyfel felvetele ugyfel menupon kattints uj ugyfel gomb felugri uj ugyfel abl ird nev felso mezo cegnel ceg nev maganszemelynel teljes nev nev kotelezo mas kesobb potolhatsz add cim sor isz telepules utca hazszam orszag orszag alap magyarorszag statusz sor valaszd kirol szo maganszemely ceg kozul alap maganszemely cegnel toltsd adoszam mez ird kapcsolattarto nev ird telef telef mail mez adj kategoria szoveg peldaul viszontelado kedvezmeny szazal kattints ugyfel letrehozasa gomb mentes utan visszakerulsz lista megjeleni ugyfel letrej pelda nev minta marta isz beirod negy szamjegy telepules maga megjeleni utca hazszam pelda utca telef 36 30 123 4567 statusz maganszemely",
+            "t": "ugyfel lepes lepes uj ugyfel felvetele lepes lepes uj ugyfel felvetele ugyfel menupon kattints uj ugyfel gomb felugri uj ugyfel abl ird nev felso mezo cegnel ceg nev maganszemelynel teljes nev nev kotelezo mas kesobb potolhatsz add cim sor isz telepules utca hazsz orszag orszag alap magyarorszag statusz sor valaszd kirol szo maganszemely ceg kozul alap maganszemely cegnel toltsd adosz mez ird kapcsolattarto nev ird telef telef mail mez adj kategoria szoveg peldaul viszontelado kedvezmeny szazal kattints ugyfel letrehozasa gomb mentes utan visszakerulsz lista megjeleni ugyfel letrej pelda nev minta marta isz beir negy szamjegy telepules maga megjeleni utca hazsz pelda utca telef 36 30 123 4567 statusz maganszemely",
             "h": 109
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: cím megadása irányítószámmal",
             "horgony": "lepesrol-lepesre-cim-megadasa-iranyitoszammal",
             "szoveg": "Az ügyfél adatlapján az **Isz.** és a **Település** mező kitölti egymást. A magyar irányítószám-lista a rendszerben van, nem kell hozzá internet.\n\n1. Írd be a négyjegyű irányítószámot az **Isz.** mezőbe.\n2. Ha a kódhoz egy település tartozik, a **Település** rögtön kitöltődik, és a kurzor az utca mezőre ugrik.\n3. Ha több település vagy településrész osztozik a kódon, lista nyílik. Válassz a ↑ ↓ nyilakkal és az Enter billentyűvel, vagy kattintással.\n4. Fordítva is megy: kezdd el írni a település nevét, és a listából válaszd ki. Ha a településnek több irányítószáma van, előbb a nevet választod, utána a kódot.\n5. Írd be az utcát és a házszámot.\n\nTudnivalók:\n\n- Ékezet nélkül is megtalálja a települést. Amikor kilépsz a mezőből, a hivatalos írásmód kerül bele.\n- A településrész kötőjellel kerül a mezőbe, ahogy postai címben írják.\n- Budapestnél a kerület csak a listában látszik. A mezőbe „Budapest\" kerül, a kerületet az irányítószám hordozza.\n- Az Esc csak a listát zárja be, az ablakot nem.",
-            "t": "ugyfel lepes lepes cim megadasa iranyitoszammal lepes lepes cim megadasa iranyitoszammal ugyfel adatlapjan isz telepules mezo kitolti egymas magyar iranyitoszam lista rendszer hozza intern ird negyjegyu iranyitoszam isz mezo kod telepules tartozi telepules rog kitoltodi kurzor utca mezo ugri tobb telepules telepulesresz osztozi kod lista nyili valassz nyil enter billentyu kattintassal forditva megy kezdd irni telepules nev lista valaszd telepules tobb iranyitoszama elobb nev valasztod utana kod ird utc hazszam tudni ekez nelkul megtalal telepules ami kilepsz mezo hivatalos irasmod ar bele telepulesresz kotojellel ar mezo ahogy pos cim irj budapestnel ar lista latszi mezo budapes ar ar iranyitoszam hordozza esc lis zar abl",
+            "t": "ugyfel lepes lepes cim megadasa iranyitoszammal lepes lepes cim megadasa iranyitoszammal ugyfel adatlapjan isz telepules mezo kitolti egymas magyar iranyitosz lista rendszer hozza intern ird negyjegyu iranyitosz isz mezo kod telepules tartozi telepules rog kitoltodi kurzor utca mezo ugri tobb telepules telepulesresz osztozi kod lista nyili valassz nyil enter billentyu kattintassal forditva megy kezdd irni telepules nev lista valaszd telepules tobb iranyitoszama elobb nev valasz utana kod ird utc hazsz tudni ekez nelkul megtalal telepules ami kilepsz mezo hivatalos irasm ar bele telepulesresz kotojellel ar mezo ahogy pos cim irj budapestnel ar lista latszi mezo budapes ar ar iranyitosz hordozza esc lis zar abl",
             "h": 104
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Lépésről lépésre: levelezési, szállítási cím és telephely",
             "horgony": "lepesrol-lepesre-levelezesi-szallitasi-cim-es-telephely",
             "szoveg": "Az ügyfél adatlapjának tetején négy lapfül van: **Központi cím**, **Levelezési cím**, **Szállítási cím**, **Telephely**.\n\n1. Kattints a kívánt lapfülre.\n2. Alapból be van pipálva a **Megegyezik a központi címmel** jelölő. Amíg így marad, nincs külön teendőd.\n3. Ha a cím eltér, vedd ki a pipát, és töltsd ki az irányítószámot, a települést és az utcát.\n4. A **Telephely** lapfülön a telephely nevét is megadhatod (nem kötelező).\n5. Mentsd az ügyfelet.\n\nA központi cím a számlázási cím is. Ha egy másodlagos cím megegyezik vele, a rendszer nem tárol másolatot – így a két cím később sem csúszhat szét.",
-            "t": "ugyfel lepes lepes levelezesi szallitasi cim telephely lepes lepes levelezesi szallitasi cim telephely ugyfel adatlap tetej negy lapful kozponti cim levelezesi cim szallitasi cim telephely kattints kivan lapful alap pipalva megegyezi kozponti cimmel jelolo amig igy marad nincs kul teendod cim elter vedd pip toltsd iranyitoszam telepules utc telephely lapful telephely nev megadhatod kotelezo mentsd ugyfel kozponti cim szamlazasi cim masodlagos cim megegyezi vele rendszer tarol masol igy ket cim kesobb csuszh sze",
+            "t": "ugyfel lepes lepes levelezesi szallitasi cim telephely lepes lepes levelezesi szallitasi cim telephely ugyfel adatlap tetej negy lapful kozponti cim levelezesi cim szallitasi cim telephely kattints kivan lapful alap pipalva megegyezi kozponti cimmel jelolo amig igy mar nincs kul teend cim elter vedd pip toltsd iranyitosz telepules utc telephely lapful telephely nev megadh kotelezo mentsd ugyfel kozponti cim szamlazasi cim masodlagos cim megegyezi vele rendszer tarol masol igy ket cim kesobb csuszh sze",
             "h": 73
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: ügyfél szerkesztése a munkalapról",
             "horgony": "lepesrol-lepesre-ugyfel-szerkesztese-a-munkalaprol",
             "szoveg": "A betöltött ügyfelet a munkalapról, a napi árukiadásról és a rendelésről is szerkesztheted. Nem kell kilépned a lapból.\n\n1. Nyisd meg a munkalapot (vagy az árukiadást, a rendelést).\n2. Az **Ügyfél** mező mellett kattints a ceruzára. A ceruza csak akkor kattintható, ha már van kiválasztott ügyfél.\n3. Ugyanide jutsz az ügyfél kártyáján a **Szerkesztés** gombbal is.\n4. Az ügyfél ablaka a lap fölött nyílik meg. Javítsd, amit kell.\n5. Kattints a **Mentés** gombra.\n\nAz ügyfél ablaka bezárul, a lap nyitva marad. A név és a kártya adatai helyben frissülnek, a lapon beírt, még el nem mentett munkád nem vész el.",
-            "t": "ugyfel lepes lepes ugyfel szerkesztese munkalap lepes lepes ugyfel szerkesztese munkalap betolt ugyfel munkalap napi arukiadas rendeles szerkesztheted kilepned lap nyisd munkalap arukiadas rendeles ugyfel mezo mell kattints ceruza ceruza kattinthato kivalaszt ugyfel ugyanide jutsz ugyfel kartyajan szerkesztes gombbal ugyfel ablaka lap fol nyili javitsd kattints mentes gomb ugyfel ablaka bezarul lap nyitva marad nev kartya ada hely frissul lap beir ment munkad vesz",
+            "t": "ugyfel lepes lepes ugyfel szerkesztese munkalap lepes lepes ugyfel szerkesztese munkalap betolt ugyfel munkalap napi arukiadas rendeles szerkeszth kilepn lap nyisd munkalap arukiadas rendeles ugyfel mezo mell kattints ceruza ceruza kattinthato kivalaszt ugyfel ugyanide jutsz ugyfel kartyajan szerkesztes gombbal ugyfel ablaka lap fol nyili javitsd kattints mentes gomb ugyfel ablaka bezarul lap nyitva mar nev kartya ada hely frissul lap beir ment mun vesz",
             "h": 64
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Lépésről lépésre: csatolt fájl az ügyfélhez",
             "horgony": "lepesrol-lepesre-csatolt-fajl-az-ugyfelhez",
             "szoveg": "1. Nyisd meg az ügyfél adatlapját.\n2. Az alsó lapfülek közül válaszd a **Csatolt fájlok** fület.\n3. Húzd a fájlokat a „Húzza ide a csatolandó fájlokat\" területre, vagy kattints a **Fájl hozzáadása** gombra.\n4. Kattints a **Mentés** gombra. A fájlok csak ekkor kerülnek fel.\n\nMeglévő fájlt az **×** gombbal jelölsz törlésre; ez is mentéskor történik meg. A lefelé nyíl letölti a fájlt. A kép és a PDF kattintásra új lapon nyílik meg, a többi letöltődik.\n\nA lapfülön szám jelzi, hány fájl van csatolva. A fájlokat három nézetben láthatod: **Ikon**, **Lista**, **Tömör**. A választott nézetet a géped megjegyzi.",
-            "t": "ugyfel lepes lepes csa fajl ugyfel lepes lepes csa fajl ugyfel nyisd ugyfel adatlapj also lapful kozul valaszd csa fajl ful huzd fajl huzza ide csatolando fajl terul kattints fajl hozzaadasa gomb kattints mentes gomb fajl ekkor ar meglevo fajl gombbal jelolsz torles mentes torteni lefele nyil letolti fajl kep pdf kattintas uj lap nyili tobbi letoltodi lapful szam jelzi hany fajl csatolva fajl harom nez lathatod ikon lista tomor valaszt nez geped megjegyzi",
+            "t": "ugyfel lepes lepes csa fajl ugyfel lepes lepes csa fajl ugyfel nyisd ugyfel adatlapj also lapful kozul valaszd csa fajl ful huzd fajl huzza ide csatolando fajl terul kattints fajl hozzaadasa gomb kattints mentes gomb fajl ekkor ar meglevo fajl gombbal jelolsz torles mentes torteni lefele nyil letolti fajl kep pdf kattintas uj lap nyili tobbi letoltodi lapful szam jelzi hany fajl csatolva fajl har nez lath ikon lista tomor valaszt nez gep megjegyzi",
             "h": 74
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Mezők és gombok › Az ügyféllista oszlopai",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az ügyféllista oszlopai\n\n| Oszlop | Mit mutat |\n|---|---|\n| Név | Az ügyfél neve; alatta halványan a kapcsolattartó |\n| Típus | Magánszemély, Cég vagy Közület |\n| Telefon | Az elsődleges telefonszám |\n| E-mail | Az e-mail-cím (keskeny képernyőn elrejtve) |\n| Cím | A teljes cím: irányítószám, település, utca |\n| Ügyfélszám | Az ügyfél azonosítója |",
-            "t": "ugyfel mez gomb ugyfellista oszlop mez gomb ugyfellista oszlop ugyfellista oszlop oszlop mut nev ugyfel neve alatta halvanyan kapcsolattarto tipus maganszemely ceg kozul telef elsodleges telefonszam mail mail cim keskeny keperny elrejtve cim teljes cim iranyitoszam telepules utca ugyfelszam ugyfel azonosito",
+            "t": "ugyfel mez gomb ugyfellista oszlop mez gomb ugyfellista oszlop ugyfellista oszlop oszlop mut nev ugyfel neve alatta halvanyan kapcsolattarto tipus maganszemely ceg kozul telef elsodleges telefonsz mail mail cim keskeny keperny elrejtve cim teljes cim iranyitosz telepules utca ugyfelsz ugyfel azonosito",
             "h": 41
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Mezők és gombok › Gombok a lista fölött",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Gombok a lista fölött\n\n- **Új ügyfél** – új ügyfél felvétele felugró ablakban.\n- **Keresés** – a beírt szöveg keresése.\n- **Szűrő törlése** – csak keresés után látszik; visszaadja a teljes listát.\n- **Inaktívak** – az inaktívra állított ügyfelek listája. Ott a gomb felirata **Aktív ügyfelek**, azzal lépsz vissza.",
-            "t": "ugyfel mez gomb gomb lista fol mez gomb gomb lista fol gomb lista fol uj ugyfel uj ugyfel felvetele felugro abl kereses beir szoveg keresese szuro torlese kereses utan latszi visszaad teljes lis inaktiv inaktiv allit ugyfel lista gomb felirata aktiv ugyfel azzal lepsz vissza",
+            "t": "ugyfel mez gomb gomb lista fol mez gomb gomb lista fol gomb lista fol uj ugyfel uj ugyfel felvetele felugro abl kereses beir szoveg keresese szuro torlese kereses utan latszi vissza teljes lis inaktiv inaktiv allit ugyfel lista gomb felirata aktiv ugyfel azzal lepsz vissza",
             "h": 45
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Mezők és gombok › Az adatlap mezői",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az adatlap mezői\n\n- **Név** – kötelező.\n- **Isz.**, **Település**, **Utca, házszám**, **Ország** – a központi cím.\n- **Kategória** – szabad szöveg, például viszonteladó vagy szerződéses partner.\n- **Ügyfélszám** – üresen hagyva mentéskor a rendszer ad egyet.\n- **Adószám** – cégnél és közületnél.\n- **Kedvezmény** – százalék, 0 és 100 között.\n- **Státusz** – Magánszemély, Cég, Közület.\n- **Telefon**, **Telefon 2.**, **E-mail**, **Kapcsolattartó**.",
-            "t": "ugyfel mez gomb adatlap mezoi mez gomb adatlap mezoi adatlap mezoi nev kotelezo isz telepules utca hazszam orszag kozponti cim kategoria szabad szoveg peldaul viszontelado szerzodeses partner ugyfelszam ures hagyva mentes rendszer ad egy adoszam cegnel kozuletnel kedvezmeny szazal 100 koz statusz maganszemely ceg kozul telef telef mail kapcsolattarto",
+            "t": "ugyfel mez gomb adatlap mezoi mez gomb adatlap mezoi adatlap mezoi nev kotelezo isz telepules utca hazsz orszag kozponti cim kategoria szab szoveg peldaul viszontelado szerzodeses partner ugyfelsz ures hagyva mentes rendszer ad egy adosz cegnel kozuletnel kedvezmeny szazal 100 koz statusz maganszemely ceg kozul telef telef mail kapcsolattarto",
             "h": 49
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Mezők és gombok › Az adatlap alsó lapfülei",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az adatlap alsó lapfülei\n\n- **Megjegyzés** – szabad szöveg az ügyfélről.\n- **Csatolt fájlok** – fotó, PDF, számla, nyilatkozat.\n- **Munkalapok**, **Rendelések**, **Vásárlások** – csak már elmentett ügyfélnél. A fülön a darabszám áll. Felül összesítő sor: hány darab, mennyi az összeg, és van-e még fizetendő. Egy sorra kattintva a lap az ügyfél ablaka fölött nyílik meg. Görgetés helyett négy soronként lapozol.",
-            "t": "ugyfel mez gomb adatlap also lapful mez gomb adatlap also lapful adatlap also lapful megjegyzes szabad szoveg ugyfel csa fajl foto pdf szamla nyilatkoz munkalap rendeles vasarlas elment ugyfelnel ful darabszam all felul osszesito sor hany darab osszeg fizetendo sor kattintva lap ugyfel ablaka fol nyili gorgetes hely negy soronk lapozol",
+            "t": "ugyfel mez gomb adatlap also lapful mez gomb adatlap also lapful adatlap also lapful megjegyzes szab szoveg ugyfel csa fajl foto pdf szamla nyilatkoz munkalap rendeles vasarlas elment ugyfelnel ful darabsz all felul osszesito sor hany darab osszeg fizetendo sor kattintva lap ugyfel ablaka fol nyili gorgetes hely negy soronk lapozol",
             "h": 51
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Mezők és gombok › Az adatlap láblécének gombjai",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az adatlap láblécének gombjai\n\n- **Ügyfél létrehozása** (új ügyfélnél) vagy **Mentés**.\n- **Mégsem** – bezárja az ablakot mentés nélkül.\n- **Készülékei** – az Eszközök lista, erre az ügyfélre szűrve.\n- **Munkalapjai** – a Munkalapok lista az ügyfél összes lapjával.\n- **Inaktívra állít** vagy **Újra aktív** – lásd a szabályoknál.\n- **Anonimizálás (GDPR)** – csak adminisztrátornak (a „Törlés-szerű műveletek” joggal): az ügyfél személyes adatainak törlése a kérésére. Lásd lent.",
-            "t": "ugyfel mez gomb adatlap lablece gombj mez gomb adatlap lablece gombj adatlap lablece gombj ugyfel letrehozasa uj ugyfelnel mentes megsem bezar abl mentes nelkul eszkoz eszkoz lista ugyfel szurve munkalapj munkalap lista ugyfel osszes lap inaktiv alli ujra aktiv lasd szabalyoknal anonimizalas gdpr adminisztrator torles szeru muvel joggal ugyfel szemelyes ada torlese kerese lasd len",
+            "t": "ugyfel mez gomb adatlap lablece gombj mez gomb adatlap lablece gombj adatlap lablece gombj ugyfel letrehozasa uj ugyfelnel mentes megs bezar abl mentes nelkul eszkoz eszkoz lista ugyfel szurve munkalapj munkalap lista ugyfel osszes lap inaktiv alli ujra aktiv lasd szabalyoknal anonimizalas gdpr adminisztrator torles szeru muvel joggal ugyfel szemelyes ada torlese kerese lasd len",
             "h": 55
         },
         {
@@ -113,7 +113,7 @@
             "cim": "Mezők és gombok › Az ügyfélválasztó mező",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az ügyfélválasztó mező\n\nEz a mező áll a munkalapon, az árukiadáson, a rendelésen és az eszköz adatlapján. A felirata: `Kezdd el írni a nevet, telefont, ügyfélszámot…`\n\n- Legalább három karaktert írj be, utána jelennek meg a találatok (két betűre úgyis szinte mindenki illene).\n- Ékezet és kis-nagybetű nem számít.\n- Ebben a sorrendben keres:\n  1. akinek a **neve** így kezdődik (névsorban);\n  2. akinek a **telefonszáma így végződik**, akinek az **ügyfélszáma** vagy **e-mail-címe** így kezdődik;\n  3. akinek bármelyik **szava** így kezdődik: keresztnév, település, utca, a telefonszám 06-tal, +36-tal vagy előhívó nélkül, az ügyfélszám számjegyei. Több szót is írhatsz (`edina antal`, `kovács zirc`): mindegyikre kell egyezés;\n  4. ha így sincs találat: akinek az adataiban **bárhol** szerepel a beírt részlet (pl. egy szó közepe).\n- Egyszerre legfeljebb tíz találatot mutat. Ha nem látod, akit keresel, írj be többet.\n- Gépelés közben nem minden leütésre kérdez: ha gyorsan gépelsz, a gépelés szünetében (egytized másodperc) indul a keresés; ha betűnként, megállva gépelsz, minden betűre azonnal. Az előző, már fölösleges kérés megszakad. Ha visszatörlöd a szöveget egy korábbira, a lista azonnal, kérés nélkül jön.\n- Minden találat alatt ott a telefonszám, a teljes cím és az ügyfélszám.\n- Az Enter az első találatot választja. Az Esc bezárja a listát.\n- Ha nincs egyezés, ezt írja: „Nincs találat.\"",
-            "t": "ugyfel mez gomb ugyfelvalaszto mezo mez gomb ugyfelvalaszto mezo ugyfelvalaszto mezo mezo all munkalap arukiadas rendeles eszkoz adatlapjan felirata kezdd irni nev telef ugyfelszam legalabb harom karak irj utana jel talal ket betu ugyis szinte mindenki illene ekez kis nagybetu szami ebb sorrend keres aki neve igy kezdodi nevsor aki telefonszama igy vegzodi aki ugyfelszama mail cime igy kezdodi aki barmelyi szava igy kezdodi keresztnev telepules utca telefonszam 06 tal 36 tal elohivo nelkul ugyfelszam szamjegy tobb szo irhatsz edina antal kovacs zirc mindegyi egyezes igy sincs talal aki adat barhol szerepel beir reszl pl szo kozepe egyszer legfeljebb tiz talal mut latod aki keresel irj tobb gepeles koz leutes kerdez gyorsan gepelsz gepeles szunete egytized masodperc indul kereses betunk megallva gepelsz betu azonnal elozo folosleges keres megszakad visszatorlod szoveg korabbi lista azonnal keres nelkul jon talal ala telefonszam teljes cim ugyfelszam enter elso talal valasz esc bezar lis nincs egyezes irja nincs talal",
+            "t": "ugyfel mez gomb ugyfelvalaszto mezo mez gomb ugyfelvalaszto mezo ugyfelvalaszto mezo mezo all munkalap arukiadas rendeles eszkoz adatlapjan felirata kezdd irni nev telef ugyfelsz legalabb har karak irj utana jel talal ket betu ugyis szinte mindenki illene ekez kis nagybetu szami ebb sorrend keres aki neve igy kezdodi nevsor aki telefonszama igy vegzodi aki ugyfelszama mail cime igy kezdodi aki barmelyi szava igy kezdodi keresztnev telepules utca telefonsz 06 tal 36 tal elohivo nelkul ugyfelsz szamjegy tobb szo irhatsz edina antal kovacs zirc mindegyi egyezes igy sincs talal aki adat barhol szerepel beir reszl pl szo kozepe egyszer legfeljebb tiz talal mut lat aki keresel irj tobb gepeles koz leutes kerdez gyorsan gepelsz gepeles szunete egytiz masodperc indul kereses betunk megallva gepelsz betu azonnal elozo folosleges keres megsz visszatorl szoveg korabbi lista azonnal keres nelkul jon talal ala telefonsz teljes cim ugyfelsz enter elso talal valasz esc bezar lis nincs egyezes irja nincs talal",
             "h": 154
         },
         {
@@ -121,7 +121,7 @@
             "cim": "Mezők és gombok › Az ügyfél kártyája a lapon",
             "horgony": "mezok-es-gombok",
             "szoveg": "### Az ügyfél kártyája a lapon\n\nA munkalapon, az árukiadáson és a rendelésen kártya mutatja a kiválasztott ügyfelet: **Név**, **Kategória**, **Cím**, **Telefonszám**, **E-mail**, és ha van, **Kedvezmény**. Az árukiadáson a kártya címe **Vevő**. Minden adat mellett kis másoló gomb áll.",
-            "t": "ugyfel mez gomb ugyfel kartya lap mez gomb ugyfel kartya lap ugyfel kartya lap munkalap arukiadas rendeles kartya mut kivalaszt ugyfel nev kategoria cim telefonszam mail kedvezmeny arukiadas kartya cime ugyfel ada mell kis masolo gomb all",
+            "t": "ugyfel mez gomb ugyfel kartya lap mez gomb ugyfel kartya lap ugyfel kartya lap munkalap arukiadas rendeles kartya mut kivalaszt ugyfel nev kategoria cim telefonsz mail kedvezmeny arukiadas kartya cime ugyfel ada mell kis masolo gomb all",
             "h": 37
         },
         {
@@ -129,7 +129,7 @@
             "cim": "Ügyfél adatainak törlése kérésre (GDPR)",
             "horgony": "ugyfel-adatainak-torlese-keresre-gdpr",
             "szoveg": "Ha az ügyfél kéri, hogy töröljük az adatait, az ügyfelet nem töröljük – a munkalapjai, számlái és a pénztártételek hivatkoznak rá, és a számlákat a számviteli szabályok miatt meg kell őrizni. Helyette **anonimizáljuk**: a személyes adatai véglegesen eltűnnek, a javítások története névtelenül megmarad.",
-            "t": "ugyfel ugyfel ada torlese keres gdpr ugyfel ada torlese keres gdpr ugyfel keri torol ada ugyfel torol munkalapj szaml penztartetel hivatkoz szaml szamviteli szabaly mia orizni helyette anonimizal szemelyes ada vegleges eltun javitas tortenete nevtelenul megmarad",
+            "t": "ugyfel ugyfel ada torlese keres gdpr ugyfel ada torlese keres gdpr ugyfel keri torol ada ugyfel torol munkalapj szaml penztartetel hivatkoz szaml szamviteli szabaly mia orizni helyette anonimizal szemelyes ada vegleges eltun javitas tortenete nevtelenul megmar",
             "h": 36
         },
         {
@@ -137,7 +137,7 @@
             "cim": "Ügyfél adatainak törlése kérésre (GDPR) › Lépésről lépésre: anonimizálás",
             "horgony": "ugyfel-adatainak-torlese-keresre-gdpr",
             "szoveg": "### Lépésről lépésre: anonimizálás\n\n1. Nyisd meg az ügyfél adatlapját.\n2. Az adatlap alján kattints az **Anonimizálás (GDPR)** gombra (csak adminisztrátornak látszik).\n3. Nézd át, mi törlődik és mi marad (a munkalapok, számlák, üzenetek számával).\n4. Írd be, **mikor és hogyan** kérte az ügyfél (pl. „e-mailben, 2026. 10. 16.”) – ez kötelező.\n5. Döntsd el, törlődjön-e az ügyféllel váltott **üzenetek szövege** is (RMA-üzenetek, SMS-ek). Alapból igen.\n6. Ha van e-mail címe, a rendszer **visszaigazolást** küld rá (még a törlés előtt). Kikapcsolható.\n7. Pipáld be a **Megértettem** jelölőt, és kattints az **Anonimizálás** gombra.",
-            "t": "ugyfel ugyfel ada torlese keres gdpr lepes lepes anonimizalas ugyfel ada torlese keres gdpr lepes lepes anonimizalas lepes lepes anonimizalas nyisd ugyfel adatlapj adatlap aljan kattints anonimizalas gdpr gomb adminisztrator latszi nezd torlodi marad munkalap szamla uzen szama ird kerte ugyfel pl mail 2026 10 16 kotelezo dontsd torlodj ugyfellel valt uzen szovege rma uzen sms ek alap mail cime rendszer visszaigazolas kuld torles elo kikapcsolhato pipald megertettem jelol kattints anonimizalas gomb",
+            "t": "ugyfel ugyfel ada torlese keres gdpr lepes lepes anonimizalas ugyfel ada torlese keres gdpr lepes lepes anonimizalas lepes lepes anonimizalas nyisd ugyfel adatlapj adatlap aljan kattints anonimizalas gdpr gomb adminisztrator latszi nezd torlodi mar munkalap szamla uzen szama ird kerte ugyfel pl mail 2026 10 16 kotelezo dontsd torlodj ugyfellel valt uzen szovege rma uzen sms ek alap mail cime rendszer visszaigazolas kuld torles elo kikapcsolhato pipald megertet jelol kattints anonimizalas gomb",
             "h": 72
         },
         {
@@ -145,7 +145,7 @@
             "cim": "Ügyfél adatainak törlése kérésre (GDPR) › Mi törlődik és mi marad",
             "horgony": "ugyfel-adatainak-torlese-keresre-gdpr",
             "szoveg": "### Mi törlődik és mi marad\n\n| Törlődik | Megmarad |\n|---|---|\n| Név (helyette: „Anonimizált ügyfél (ügyfélszám)”), kapcsolattartó, adószám | Az ügyfélszám – a munkalapok, számlák ezzel hivatkoznak rá |\n| Telefonszámok, e-mail cím, minden cím, a megjegyzések | A munkalapok (javítás, tételek, árak) |\n| A kereső szavai – a régi nevére, számára nem található | A számlák és a pénztártételek (számviteli megőrzés) |\n| Az ügyféloldal (QR-kód) linkjei | A készülékek (típus, IMEI) – a garancia miatt |\n| A készülékek feloldó kódja és mintája | A régi adatokból készült korábbi naplóbejegyzések (a Változásnapló nem írható át) |\n| Az SMS-ek telefonszáma (csak az utolsó két számjegy marad) | |\n| A rendszer által megjegyzett mezőértékei (név, telefon, cím) | |\n| Választhatóan az üzenetek szövege | |\n\nAz anonimizált ügyfél inaktív lesz, SMS nem megy neki, és az adatlapja tetején egy **igazoló sor** áll: mikor, milyen kérésre, ki hajtotta végre, és ment-e visszaigazolás. A Változásnaplóba egyetlen bejegyzés kerül – személyes adat nélkül.\n\nJó tudni:\n\n- **Nem vonható vissza.** A régi adatokat csak egy korábbi mentésből lehetne visszahozni.\n- A **levelezés** postafiókjában lévő e-maileket a rendszer nem törli (azok a levelezőszerveren vannak) – ha kell, ott töröld.\n- Az ügyfélhez kötött **naptár**bejegyzések (például az online foglalás) címe és leírása is törlődik. A nem az ügyfélhez kötött bejegyzések szövegét nézd át kézzel, ha írtál bele nevet.\n- Ha később újra jön, új ügyfélként veszed fel.",
-            "t": "ugyfel ugyfel ada torlese keres gdpr torlodi marad ugyfel ada torlese keres gdpr torlodi marad torlodi marad torlodi megmarad nev helyette anonimizal ugyfel ugyfelszam kapcsolattarto adoszam ugyfelszam munkalap szamla ezzel hivatkoz telefonszam mail cim cim megjegyzes munkalap javitas tetel ar kereso szav regi neve szama talalhato szamla penztartetel szamviteli megorzes ugyfeloldal qr kod linkj eszkoz tipus imei garancia mia eszkoz feloldo kod minta regi ada keszul korabbi naplobejegyzes valtozasnaplo irhato sms ek telefonszama utolso ket szamjegy marad rendszer altal megjegyz mezoert nev telef cim valaszthatoan uzen szovege anonimizal ugyfel inaktiv sms megy neki adatlap tetej igazolo sor all keres hajtotta veg men visszaigazolas valtozasnaplo egyetl bejegyzes ar szemelyes ada nelkul jo tudni vonhato vissza regi ada korabbi mentes lehetne visszahozni levelezes postafiok levo mail rendszer torli levelezoszerver van torold ugyfel kot naptar bejegyzes peldaul online foglalas cime leirasa torlodi ugyfel kot bejegyzes szoveg nezd kezzel irtal bele nev kesobb ujra jon uj ugyfelk veszed",
+            "t": "ugyfel ugyfel ada torlese keres gdpr torlodi mar ugyfel ada torlese keres gdpr torlodi mar torlodi mar torlodi megmar nev helyette anonimizal ugyfel ugyfelsz kapcsolattarto adosz ugyfelsz munkalap szamla ezzel hivatkoz telefonsz mail cim cim megjegyzes munkalap javitas tetel ar kereso szav regi neve szama talalhato szamla penztartetel szamviteli megorzes ugyfeloldal qr kod linkj eszkoz tipus imei garancia mia eszkoz feloldo kod minta regi ada keszul korabbi naplobejegyzes valtozasnaplo irhato sms ek telefonszama utolso ket szamjegy mar rendszer altal megjegyz mezoert nev telef cim valaszthatoan uzen szovege anonimizal ugyfel inaktiv sms megy neki adatlap tetej igazolo sor all keres hajtotta veg men visszaigazolas valtozasnaplo egyetl bejegyzes ar szemelyes ada nelkul jo tudni vonhato vissza regi ada korabbi mentes lehetne visszahozni levelezes postafiok levo mail rendszer torli levelezoszerver van torold ugyfel kot naptar bejegyzes peldaul online foglalas cime leirasa torlodi ugyfel kot bejegyzes szoveg nezd kezzel irtal bele nev kesobb ujra jon uj ugyfelk vesz",
             "h": 154
         },
         {
@@ -153,7 +153,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Ügyfelet nem lehet törölni.** Az ügyfélre munkalapok hivatkoznak; ha eltűnne, a régi lapok érthetetlenné válnának. Törlés helyett **Inaktívra állít**: az ügyfél kikerül a napi listából és a választóból, de a régi lapjai mellett megmarad.\n- Az inaktív ügyfél bármikor visszahozható: **Inaktívak** lista, megnyitod, **Újra aktív**.\n- Az **Inaktívra állít** gomb azonnal átállít, nem kérdez rá. Előtte mentsd, amit az adatlapon módosítottál.\n- A név nélküli ügyfél nem menthető.\n- Az ügyfélválasztóban **a listából kell választani**. Ha a kiválasztás után átírod a nevet, a választás törlődik, és újra ki kell jelölnöd valakit. Így nem kerülhet munka véletlenül a korábbi ügyfélhez.\n- Az ügyfélválasztó csak aktív ügyfelet kínál fel.\n- Az ügyfélszám magától keletkezik, ha nem adsz meg sajátot: `U-` előtag és hatjegyű sorszám.\n- Mindenhol a teljes cím látszik, nem csak a település: az ügyféllistában, a munkalapok listájában, a választóban és a keresőben is.\n- Ha a csatolt fájlok közül bármelyik hibás (túl nagy, nem engedélyezett típus, sérült), semmi sem mentődik félig: előbb a fájlt kell rendbe tenni.\n- Az érvénytelen lap nem számít bele az adatlap Munkalapok, Rendelések és Vásárlások fülének összegébe.\n- A napi árukiadáson az ügyfél nem kötelező. Üresen hagyva a vevő „Napi árukiadás\".",
-            "t": "ugyfel szabaly ami rendszer betar szabaly ami rendszer betar ugyfel torolni ugyfel munkalap hivatkoz eltunne regi lap erthetetlenne valna torles hely inaktiv alli ugyfel kikerul napi lista valaszto regi lapj mell megmarad inaktiv ugyfel barmi visszahozhato inaktiv lista megnyitod ujra aktiv inaktiv alli gomb azonnal atalli kerdez elotte mentsd adatlap modositottal nev nelkuli ugyfel mentheto ugyfelvalaszto lista valasztani kivalasztas utan atirod nev valasztas torlodi ujra jelolnod valaki igy kerulh munka veletlenul korabbi ugyfel ugyfelvalaszto aktiv ugyfel kinal ugyfelszam maga keletkezi adsz saj elotag hatjegyu sorszam mindenhol teljes cim latszi telepules ugyfellista munkalap lista valaszto kereso csa fajl kozul barmelyi hibas tul nagy engedelyez tipus serul semmi mentodi fel elobb fajl rend tenni ervenytel lap szami bele adatlap munkalap rendeles vasarlas fule osszege napi arukiadas ugyfel kotelezo ures hagyva ugyfel napi arukiadas",
+            "t": "ugyfel szabaly ami rendszer betar szabaly ami rendszer betar ugyfel torolni ugyfel munkalap hivatkoz eltunne regi lap erthetetlenne valna torles hely inaktiv alli ugyfel kikerul napi lista valaszto regi lapj mell megmar inaktiv ugyfel barmi visszahozhato inaktiv lista megnyi ujra aktiv inaktiv alli gomb azonnal atalli kerdez elotte mentsd adatlap modositottal nev nelkuli ugyfel mentheto ugyfelvalaszto lista valasztani kivalasztas utan atir nev valasztas torlodi ujra jeloln valaki igy kerulh munka veletlenul korabbi ugyfel ugyfelvalaszto aktiv ugyfel kinal ugyfelsz maga keletkezi adsz saj elotag hatjegyu sorsz mindenhol teljes cim latszi telepules ugyfellista munkalap lista valaszto kereso csa fajl kozul barmelyi hibas tul nagy engedelyez tipus serul semmi mentodi fel elobb fajl rend tenni ervenytel lap szami bele adatlap munkalap rendeles vasarlas fule osszege napi arukiadas ugyfel kotelezo ures hagyva ugyfel napi arukiadas",
             "h": 131
         },
         {
@@ -161,7 +161,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- A jobb alsó sarokban élő asszisztensnek írd be: „Vezess végig ezen az oldalon\". Többlépcsős túrát indít, és sorban megmutatja az Ügyfelek oldal részeit.\n- A teljes dokumentációt és a gyakori kérdéseket a **Súgó** menüpontban találod.\n- Pultnál a leggyorsabb: az ügyfélválasztóba beírod a telefonszám végét, és Enter.\n- A másoló gombbal a név, a cím, a telefonszám és az e-mail egy kattintással a vágólapra kerül. Jól jön számlázásnál vagy futárrendelésnél.\n- Visszatérő cégnél töltsd ki a **Kapcsolattartó** mezőt: a listában a cégnév alatt látszik, kivel szoktál beszélni.\n- Ha az ügyfél több készüléket hoz, az adatlap **Készülékei** gombjával egyben látod mindet.\n- A **Megjegyzés** fülre írd, amit a kollégának is tudnia kell: mikor érhető el, ki veheti át a készüléket.",
-            "t": "ugyfel tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi sor megmut ugyfel oldal resz teljes dokumentaci gyakori kerdes sugo menupon talalod pultnal leggyorsabb ugyfelvalaszto beirod telefonszam veg enter masolo gombbal nev cim telefonszam mail kattintassal vagolap ar jol jon szamlazasnal futarrendelesnel visszatero cegnel toltsd kapcsolattarto mez lista cegnev ala latszi kivel szoktal beszelni ugyfel tobb eszkoz hoz adatlap eszkoz gomb egy latod mind megjegyzes ful ird kollega tudnia erheto veheti eszkoz",
+            "t": "ugyfel tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi sor megmut ugyfel oldal resz teljes dokumentaci gyakori kerdes sugo menupon talal pultnal leggyorsabb ugyfelvalaszto beir telefonsz veg enter masolo gombbal nev cim telefonsz mail kattintassal vagolap ar jol jon szamlazasnal futarrendelesnel visszatero cegnel toltsd kapcsolattarto mez lista cegnev ala latszi kivel szoktal beszelni ugyfel tobb eszkoz hoz adatlap eszkoz gomb egy lat mind megjegyzes ful ird kollega tudnia erheto veheti eszkoz",
             "h": 78
         },
         {
@@ -169,7 +169,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **„A név kitöltése kötelező.\"** – a felső mező üres. Írd be a nevet, és ments újra.\n- **Az ügyfél nem jelenik meg a választóban.** Valószínűleg inaktív. Nézd meg az Ügyfelek menüpont **Inaktívak** listájában, és állítsd **Újra aktív** állapotba.\n- **A ceruza szürke az Ügyfél mező mellett.** Nincs kiválasztott ügyfél. Előbb válassz egyet a listából.\n- **A település nem töltődik ki.** Ellenőrizd, hogy négy számjegyet írtál-e be. Külföldi címnél a mezőket kézzel töltsd ki.\n- **„Az ügyfél mentve, de néhány fájl nem\"** – az adatok elmentődtek, de egy fájlt nem sikerült tárolni. Nyisd meg újra az ügyfelet, és csatold ismét.\n- **A fájlt nem fogadja el.** Fájlonként legfeljebb 25 MB tölthető fel, de a szerver ennél kisebb korlátot is szabhat. A pontos értéket a Csatolt fájlok fül alján olvasod.\n- **„Nem sikerült kimásolni – jelöld ki, és Ctrl+C\"** – a böngésző nem engedte a vágólap használatát. Jelöld ki a szöveget egérrel, és másold kézzel.\n- **„Nincs jogosultságod ehhez.\"** – a fiókod nem fér hozzá a műhelyhez. Szólj az adminisztrátornak.",
-            "t": "ugyfel megy megy nev kitoltese kotelezo felso mezo ures ird nev ments ujra ugyfel jeleni valaszto valoszinuleg inaktiv nezd ugyfel menup inaktiv lista allitsd ujra aktiv allap ceruza szurke ugyfel mezo mell nincs kivalaszt ugyfel elobb valassz egy lista telepules toltodi ellenorizd negy szamjegy irtal kulfoldi cimnel mez kezzel toltsd ugyfel mentve nehany fajl ada elmentod fajl sikerul tarolni nyisd ujra ugyfel csatold ism fajl fogad fajlonk legfeljebb 25 mb toltheto szerver ennel kisebb korl szabh pontos ert csa fajl ful aljan olvasod sikerul kimasolni jelold ctrl bongeszo engedte vagolap hasznal jelold szoveg egerrel masold kezzel nincs jogosultsagod ehhez fiokod fer hozza muhely szolj adminisztrator",
+            "t": "ugyfel megy megy nev kitoltese kotelezo felso mezo ures ird nev ments ujra ugyfel jeleni valaszto valoszinuleg inaktiv nezd ugyfel menup inaktiv lista allitsd ujra aktiv allap ceruza szurke ugyfel mezo mell nincs kivalaszt ugyfel elobb valassz egy lista telepules toltodi ellenorizd negy szamjegy irtal kulfoldi cimnel mez kezzel toltsd ugyfel mentve nehany fajl ada elmentod fajl sikerul tarolni nyisd ujra ugyfel csatold ism fajl fog fajlonk legfeljebb 25 mb toltheto szerver ennel kisebb korl szabh pontos ert csa fajl ful aljan olvas sikerul kimasolni jelold ctrl bongeszo engedte vagolap hasznal jelold szoveg egerrel masold kezzel nincs jogosultsag ehhez fio fer hozza muhely szolj adminisztrator",
             "h": 105
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Fel tudok venni ügyfelet úgy, hogy közben munkalapot írok?",
             "horgony": "fel-tudok-venni-ugyfelet-ugy-hogy-kozben-munkalapot-irok",
             "szoveg": "Igen. A munkalapon az **Ügyfél** mező mellett kattints a pluszjelre. Az új ügyfél ablaka a munkalap fölött nyílik. Mentés után a munkalap megmarad, és az új ügyfél már be van töltve.",
-            "t": "ugyfel gyi tud venni ugyfel ugy koz munkalap iro gyi tud venni ugyfel ugy koz munkalap iro munkalap ugyfel mezo mell kattints pluszjel uj ugyfel ablaka munkalap fol nyili mentes utan munkalap megmarad uj ugyfel toltve",
+            "t": "ugyfel gyi tud venni ugyfel ugy koz munkalap iro gyi tud venni ugyfel ugy koz munkalap iro munkalap ugyfel mezo mell kattints pluszjel uj ugyfel ablaka munkalap fol nyili mentes utan munkalap megmar uj ugyfel toltve",
             "h": 36
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Miért nem tudom törölni az ügyfelet?",
             "horgony": "miert-nem-tudom-torolni-az-ugyfelet",
             "szoveg": "Mert munkalapok, rendelések és eszközök hivatkoznak rá. Törlés helyett az adatlap alján az **Inaktívra állít** gombot használd: az ügyfél eltűnik a napi listából, de a múltja megmarad. Ha az ügyfél kéri az adatai törlését, az **Anonimizálás (GDPR)** gombot használd.",
-            "t": "ugyfel gyi tudom torolni ugyfel gyi tudom torolni ugyfel munkalap rendeles eszkoz hivatkoz torles hely adatlap aljan inaktiv alli gomb hasznald ugyfel eltuni napi lista mul megmarad ugyfel keri ada torles anonimizalas gdpr gomb hasznald",
+            "t": "ugyfel gyi tud torolni ugyfel gyi tud torolni ugyfel munkalap rendeles eszkoz hivatkoz torles hely adatlap aljan inaktiv alli gomb hasznald ugyfel eltuni napi lista mul megmar ugyfel keri ada torles anonimizalas gdpr gomb hasznald",
             "h": 35
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Az ügyfél kérte, hogy töröljük az adatait. Mit tegyek?",
             "horgony": "az-ugyfel-kerte-hogy-toroljuk-az-adatait-mit-tegyek",
             "szoveg": "Adminisztrátorként nyisd meg az adatlapját, és kattints az **Anonimizálás (GDPR)** gombra. A neve, telefonja, e-mail címe és címei törlődnek, a munkalapok és a számlák névtelenül megmaradnak. Ha van e-mail címe, visszaigazolást is kap.",
-            "t": "ugyfel gyi ugyfel kerte torol ada tegy gyi ugyfel kerte torol ada tegy adminisztratork nyisd adatlapj kattints anonimizalas gdpr gomb neve telef mail cime cim torlod munkalap szamla nevtelenul megmarad mail cime visszaigazolas kap",
+            "t": "ugyfel gyi ugyfel kerte torol ada tegy gyi ugyfel kerte torol ada tegy adminisztratork nyisd adatlapj kattints anonimizalas gdpr gomb neve telef mail cime cim torl munkalap szamla nevtelenul megmar mail cime visszaigazolas kap",
             "h": 34
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Mi a különbség a Magánszemély, a Cég és a Közület között?",
             "horgony": "mi-a-kulonbseg-a-maganszemely-a-ceg-es-a-kozulet-kozott",
             "szoveg": "Ez az ügyfél típusa. A listában külön oszlopban látszik. Cégnél és közületnél érdemes az **Adószám** és a **Kapcsolattartó** mezőt is kitölteni.",
-            "t": "ugyfel gyi kulonbseg maganszemely ceg kozul koz gyi kulonbseg maganszemely ceg kozul koz ugyfel tipusa lista kul oszlop latszi cegnel kozuletnel erdemes adoszam kapcsolattarto mez kitolteni",
+            "t": "ugyfel gyi kulonbseg maganszemely ceg kozul koz gyi kulonbseg maganszemely ceg kozul koz ugyfel tipusa lista kul oszlop latszi cegnel kozuletnel erdemes adosz kapcsolattarto mez kitolteni",
             "h": 26
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Hová írom a cég adószámát?",
             "horgony": "hova-irom-a-ceg-adoszamat",
             "szoveg": "Az adatlap **Központi cím** lapfülén az **Adószám** mezőbe.",
-            "t": "ugyfel gyi hova irom ceg adoszam gyi hova irom ceg adoszam adatlap kozponti cim lapful adoszam mezo",
+            "t": "ugyfel gyi hova irom ceg adosz gyi hova irom ceg adosz adatlap kozponti cim lapful adosz mezo",
             "h": 17
         },
         {
@@ -233,7 +233,7 @@
             "cim": "GYIK › Kétszer vettem fel ugyanazt az ügyfelet. Mit tegyek?",
             "horgony": "ketszer-vettem-fel-ugyanazt-az-ugyfelet-mit-tegyek",
             "szoveg": "A rendszer nem von össze ügyfeleket. Döntsd el, melyiket használod tovább, a másikat pedig állítsd inaktívra. Az inaktív ügyfél régi lapjai megmaradnak.",
-            "t": "ugyfel gyi ketszer vettem ugyanaz ugyfel tegy gyi ketszer vettem ugyanaz ugyfel tegy rendszer von ossze ugyfel dontsd melyi hasznalod tovabb masi ped allitsd inaktiv inaktiv ugyfel regi lapj megmarad",
+            "t": "ugyfel gyi ketszer vet ugyanaz ugyfel tegy gyi ketszer vet ugyanaz ugyfel tegy rendszer von ossze ugyfel dontsd melyi hasznal tovabb masi ped allitsd inaktiv inaktiv ugyfel regi lapj megmar",
             "h": 30
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Mire tudok keresni az ügyféllistában?",
             "horgony": "mire-tudok-keresni-az-ugyfellistaban",
             "szoveg": "Névre, mindkét telefonszámra, e-mail-címre, ügyfélszámra, településre, utcára és irányítószámra. Elég egy részlet is, ékezet és kis-nagybetű nem számít.",
-            "t": "ugyfel gyi mire tud keresni ugyfellista gyi mire tud keresni ugyfellista nev mind telefonszam mail cim ugyfelszam telepules utca iranyitoszam eleg reszl ekez kis nagybetu szami",
+            "t": "ugyfel gyi mire tud keresni ugyfellista gyi mire tud keresni ugyfellista nev mind telefonsz mail cim ugyfelsz telepules utca iranyitosz eleg reszl ekez kis nagybetu szami",
             "h": 26
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Miért csak tíz találatot mutat az ügyfélválasztó?",
             "horgony": "miert-csak-tiz-talalatot-mutat-az-ugyfelvalaszto",
             "szoveg": "Mert gépelés közbeni gyors választásra való, nem böngészésre. Ha nem látod a keresett ügyfelet, írj be még egy-két betűt vagy számjegyet.",
-            "t": "ugyfel gyi tiz talal mut ugyfelvalaszto gyi tiz talal mut ugyfelvalaszto gepeles kozbeni gyors valasztas valo bongeszes latod keres ugyfel irj ket betu szamjegy",
+            "t": "ugyfel gyi tiz talal mut ugyfelvalaszto gyi tiz talal mut ugyfelvalaszto gepeles kozbeni gyors valasztas valo bongeszes lat keres ugyfel irj ket betu szamjegy",
             "h": 24
         },
         {
@@ -265,7 +265,7 @@
             "cim": "GYIK › Beírtam a nevet a munkalapon, mégis azt írja, hogy válasszak ügyfelet. Miért?",
             "horgony": "beirtam-a-nevet-a-munkalapon-megis-azt-irja-hogy-valasszak-ugyfelet-miert",
             "szoveg": "A gépelés önmagában nem elég: a lenyíló listából rá kell kattintani az ügyfélre, vagy Enter billentyűvel az elsőt kiválasztani.",
-            "t": "ugyfel gyi beirtam nev munkalap megis irja valassz ugyfel gyi beirtam nev munkalap megis irja valassz ugyfel gepeles onmaga eleg lenyilo lista kattintani ugyfel enter billentyu els kivalasztani",
+            "t": "ugyfel gyi beir nev munkalap megis irja valassz ugyfel gyi beir nev munkalap megis irja valassz ugyfel gepeles onmaga eleg lenyilo lista kattintani ugyfel enter billentyu els kivalasztani",
             "h": 28
         },
         {
@@ -273,7 +273,7 @@
             "cim": "GYIK › Hogyan javítom az ügyfél telefonszámát, ha épp a munkalapja van nyitva?",
             "horgony": "hogyan-javitom-az-ugyfel-telefonszamat-ha-epp-a-munkalapja-van-nyitva",
             "szoveg": "Kattints a ceruzára az **Ügyfél** mező mellett, vagy a kártyán a **Szerkesztés** gombra. Javítsd a számot, és mentsd. A munkalap nyitva marad.",
-            "t": "ugyfel gyi javitom ugyfel telefonszam epp munkalap nyitva gyi javitom ugyfel telefonszam epp munkalap nyitva kattints ceruza ugyfel mezo mell kartyan szerkesztes gomb javitsd szam mentsd munkalap nyitva marad",
+            "t": "ugyfel gyi javi ugyfel telefonsz epp munkalap nyitva gyi javi ugyfel telefonsz epp munkalap nyitva kattints ceruza ugyfel mezo mell kartyan szerkesztes gomb javitsd szam mentsd munkalap nyitva mar",
             "h": 29
         },
         {
@@ -281,7 +281,7 @@
             "cim": "GYIK › Honnan jön az ügyfélszám?",
             "horgony": "honnan-jon-az-ugyfelszam",
             "szoveg": "Ha nem írsz be sajátot, mentéskor a rendszer ad egyet. Ha a régi nyilvántartásodból van saját számod, azt is beírhatod az **Ügyfélszám** mezőbe.",
-            "t": "ugyfel gyi honnan jon ugyfelszam gyi honnan jon ugyfelszam irsz saj mentes rendszer ad egy regi nyilvantartasod saj szamod beirhatod ugyfelszam mezo",
+            "t": "ugyfel gyi honnan jon ugyfelsz gyi honnan jon ugyfelsz irsz saj mentes rendszer ad egy regi nyilvantartas saj szam beirh ugyfelsz mezo",
             "h": 22
         },
         {
@@ -289,7 +289,7 @@
             "cim": "GYIK › Hol látom, mit javíttatott eddig az ügyfél?",
             "horgony": "hol-latom-mit-javittatott-eddig-az-ugyfel",
             "szoveg": "Az adatlap alján a **Munkalapok** fülön. Egy sorra kattintva megnyílik a lap. A **Munkalapjai** gomb a teljes Munkalapok listát nyitja meg erre az ügyfélre szűrve.",
-            "t": "ugyfel gyi latom javittat edd ugyfel gyi latom javittat edd ugyfel adatlap aljan munkalap ful sor kattintva megnyili lap munkalapj gomb teljes munkalap lis nyi ugyfel szurve",
+            "t": "ugyfel gyi lat javittat edd ugyfel gyi lat javittat edd ugyfel adatlap aljan munkalap ful sor kattintva megnyili lap munkalapj gomb teljes munkalap lis nyi ugyfel szurve",
             "h": 27
         },
         {
@@ -297,7 +297,7 @@
             "cim": "GYIK › Hol látom, tartozik-e még az ügyfél?",
             "horgony": "hol-latom-tartozik-e-meg-az-ugyfel",
             "szoveg": "Az adatlap **Munkalapok**, **Rendelések** és **Vásárlások** fülének tetején. Ha van kifizetetlen összeg, kiírja: „még fizetendő\".",
-            "t": "ugyfel gyi latom tartozi ugyfel gyi latom tartozi ugyfel adatlap munkalap rendeles vasarlas fule tetej kifizetetl osszeg kiir fizetendo",
+            "t": "ugyfel gyi lat tartozi ugyfel gyi lat tartozi ugyfel adatlap munkalap rendeles vasarlas fule tetej kifizetetl osszeg kiir fizetendo",
             "h": 19
         },
         {
@@ -329,7 +329,7 @@
             "cim": "GYIK › Milyen fájlt csatolhatok az ügyfélhez?",
             "horgony": "milyen-fajlt-csatolhatok-az-ugyfelhez",
             "szoveg": "Képet, PDF-et, szöveges és táblázatos dokumentumot, tömörített fájlt, hang- és videófájlt. Amit a rendszer nem enged, arról mentéskor üzenetet kapsz.",
-            "t": "ugyfel gyi fajl csatolh ugyfel gyi fajl csatolh ugyfel kep pdf et szoveges tablazatos dokumentum tomorit fajl hang videofajl rendszer enged arrol mentes uzen kapsz",
+            "t": "ugyfel gyi fajl csatolh ugyfel gyi fajl csatolh ugyfel kep pdf et szoveges tablazatos dokumentum tomorit fajl hang videofajl rendszer eng arrol mentes uzen kapsz",
             "h": 25
         },
         {
@@ -337,7 +337,7 @@
             "cim": "GYIK › Hogyan másolom ki gyorsan az ügyfél címét?",
             "horgony": "hogyan-masolom-ki-gyorsan-az-ugyfel-cimet",
             "szoveg": "A munkalapon az ügyfél kártyáján a cím mellett kattints a kis másoló gombra. A gomb pipára vált, a cím a vágólapon van.",
-            "t": "ugyfel gyi masolom gyorsan ugyfel cim gyi masolom gyorsan ugyfel cim munkalap ugyfel kartyajan cim mell kattints kis masolo gomb gomb pipa val cim vagolap",
+            "t": "ugyfel gyi masol gyorsan ugyfel cim gyi masol gyorsan ugyfel cim munkalap ugyfel kartyajan cim mell kattints kis masolo gomb gomb pipa val cim vagolap",
             "h": 25
         },
         {
@@ -345,7 +345,7 @@
             "cim": "GYIK › Kell internet az irányítószám-kitöltéshez?",
             "horgony": "kell-internet-az-iranyitoszam-kitolteshez",
             "szoveg": "Nem. A magyar irányítószám-lista a rendszer része, a keresés a saját gépeden fut.",
-            "t": "ugyfel gyi intern iranyitoszam kitoltes gyi intern iranyitoszam kitoltes magyar iranyitoszam lista rendszer resze kereses saj geped fut",
+            "t": "ugyfel gyi intern iranyitosz kitoltes gyi intern iranyitosz kitoltes magyar iranyitosz lista rendszer resze kereses saj gep fut",
             "h": 18
         }
     ]

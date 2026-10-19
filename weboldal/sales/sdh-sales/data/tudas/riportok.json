@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "A bal oldali menüben a **Riportok** menüpont (adminisztrátornak). Az oldal tetején választod az időszakot: **Ez a hónap**, **Előző hónap**, **Utolsó 30 nap**, **Idén** – vagy a **Tól** és **Ig** mezővel egyénit, a **Mutasd** gombbal.",
-            "t": "ripor talalod talalod bal oldali menu ripor menup adminisztrator oldal tetej valasztod idosz honap elozo honap utolso 30 nap iden tol ig mezo egyeni mutasd gombbal",
+            "t": "ripor talal talal bal oldali menu ripor menup adminisztrator oldal tetej valasz idosz honap elozo honap utolso 30 nap iden tol ig mezo egyeni mutasd gombbal",
             "h": 26
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Bevétel kategóriák szerint",
             "horgony": "bevetel-kategoriak-szerint",
             "szoveg": "- **Fajtánként:** javítás, napi árukiadás, rendelés – lapszám és bevétel.\n- **Tételek szerint:** a szolgáltatások és a termékek összege, a termékek a **kategóriájuk** szerint is (a legnagyobb nyolc).\n- **Javítás eszközkategóriánként:** telefon, tablet, laptop… – hány javítás és mekkora bevétel. Alatta: hány javítási lap lett érvénytelen, és hány garanciális visszatérés érkezett az időszakban.",
-            "t": "ripor bevetel kategori szerin bevetel kategori szerin fajtank javitas napi arukiadas rendeles lapszam bevetel tetel szerin szolgaltatas term osszege term kategoria szerin legnagyobb nyolc javitas eszkozkategoriank telef tabl laptop hany javitas mekko bevetel alatta hany javitasi lap let ervenytel hany garancialis visszateres erkez idosz",
+            "t": "ripor bevetel kategori szerin bevetel kategori szerin fajtank javitas napi arukiadas rendeles lapsz bevetel tetel szerin szolgaltatas term osszege term kategoria szerin legnagyobb nyolc javitas eszkozkategoriank telef tabl laptop hany javitas mekko bevetel alatta hany javitasi lap let ervenytel hany garancialis visszateres erkez idosz",
             "h": 44
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Minden nulla:** az időszakban nem zárult le lap, vagy a lapoknak nincs lezárás-napja. Válassz hosszabb időszakot (Idén).\n- **Hiányzik egy technikus:** csak az látszik, akinek az időszakban volt lezárt javítása.\n- **Nem látom a menüpontot:** a Riportok csak adminisztrátornak jelenik meg.",
-            "t": "ripor megy megy nulla idosz zarul lap lap nincs lezaras nap valassz hosszabb idosz iden hianyzi technikus latszi aki idosz lezar javitasa latom menupon ripor adminisztrator jeleni",
+            "t": "ripor megy megy nulla idosz zarul lap lap nincs lezaras nap valassz hosszabb idosz iden hianyzi technikus latszi aki idosz lezar javitasa lat menupon ripor adminisztrator jeleni",
             "h": 27
         },
         {
@@ -81,7 +81,7 @@
             "cim": "GYIK › Hogyan nézem meg, mennyi idő alatt készülnek el a javítások?",
             "horgony": "hogyan-nezem-meg-mennyi-ido-alatt-keszulnek-el-a-javitasok",
             "szoveg": "A **Riportok** menüpontban az **Átlagos átfutás** csempe mutatja (alatta a medián). Technikusonként is látszik.",
-            "t": "ripor gyi nezem ido ala keszul javitas gyi nezem ido ala keszul javitas ripor menupon atlagos atfutas csempe mut alatta median technikusonk latszi",
+            "t": "ripor gyi nez ido ala keszul javitas gyi nez ido ala keszul javitas ripor menupon atlagos atfutas csempe mut alatta median technikusonk latszi",
             "h": 23
         },
         {
@@ -121,7 +121,7 @@
             "cim": "GYIK › Miért nem látom a Riportok menüpontot?",
             "horgony": "miert-nem-latom-a-riportok-menupontot",
             "szoveg": "Csak adminisztrátor látja. Kérd meg az adminisztrátort, hogy nézze meg ő, vagy adjon neked adminisztrátori szerepkört.",
-            "t": "ripor gyi latom ripor menupon gyi latom ripor menupon adminisztrator lat kerd adminisztrator nezze adj neked adminisztratori szerep",
+            "t": "ripor gyi lat ripor menupon gyi lat ripor menupon adminisztrator lat kerd adminisztrator nezze adj nek adminisztratori szerep",
             "h": 18
         },
         {

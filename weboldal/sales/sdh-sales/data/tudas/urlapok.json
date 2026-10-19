@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A **fogaskerék** minden nagy űrlap jobb felső sarkában áll: a **Munkalap**, a **Rendelés**, a **Napi árukiadás**, a **Számlázz.hu számla** és a **Számla-előkészítő** ablakában. Mögötte kapcsolókkal állítod, mi látszódjon azon az űrlapon:\n\n- **blokkok és mezők** – állapot, név, felelős, dátumok, összeg, kedvezmény és áfa, fizetés, előleg, bevizsgálási díj;\n- **lapfülek** – Eszköz, Hibák, Szolgáltatások, Termékek, RMA / Címke, Megjegyzés, Belső megjegyzés;\n- **+ Eszköz csatolása** – kikapcsolva a munkalapra nem csatolható újabb eszköz, és a „további eszközök itt jelennek meg\" üres doboz sem látszik (a már csatoltak látszanak);\n- **gombok** – Fizetés, Nyomtatás, Címke, Számlázz.hu számla, Számla-előkészítő;\n- **választható állapotok** – melyik állapot jelenjen meg az állapotválasztóban;\n- a két számlánál: **magától kerüljenek-e rá a munkalap tételei**, a tétel-megjegyzések (eszköz neve, IMEI) és a **Megjegyzés**.\n\nEgyszer beállítod, és úgy marad: minden megnyitáskor, minden kollégánál, a rendszer frissítése után is.",
-            "t": "urlap beallitasa fogasker mire valo mire valo fogasker nagy urlap jobb felso sarka all munkalap rendeles napi arukiadas szamlazz hu szamla szamla elokeszito ablaka mogotte kapcsol allitod latszodj azon urlap blok mez allap nev felelos datum osszeg kedvezmeny afa fizetes eloleg bevizsgalasi dij lapful eszkoz hib szolgaltatas term rma cimke megjegyzes belso megjegyzes eszkoz csatolasa kikapcsolva munkalap csatolhato ujabb eszkoz tovabbi eszkoz jel ures doboz latszi csatol latsza gomb fizetes nyomtatas cimke szamlazz hu szamla szamla elokeszito valaszthato allap allap jelenj allapotvalaszto ket szamlanal maga ar munkalap tetel tetel megjegyzes eszkoz neve imei megjegyzes egyszer beallitod ugy marad megnyitas kolleganal rendszer frissitese utan",
+            "t": "urlap beallitasa fogasker mire valo mire valo fogasker nagy urlap jobb felso sarka all munkalap rendeles napi arukiadas szamlazz hu szamla szamla elokeszito ablaka mogotte kapcsol alli latszodj azon urlap blok mez allap nev felelos datum osszeg kedvezmeny afa fizetes eloleg bevizsgalasi dij lapful eszkoz hib szolgaltatas term rma cimke megjegyzes belso megjegyzes eszkoz csatolasa kikapcsolva munkalap csatolhato ujabb eszkoz tovabbi eszkoz jel ures doboz latszi csatol latsza gomb fizetes nyomtatas cimke szamlazz hu szamla szamla elokeszito valaszthato allap allap jelenj allapotvalaszto ket szamlanal maga ar munkalap tetel tetel megjegyzes eszkoz neve imei megjegyzes egyszer bealli ugy mar megnyitas kolleganal rendszer frissitese utan",
             "h": 103
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- **Az űrlapon:** nyisd meg a munkalapot (vagy rendelést, árukiadást, számlát), és kattints a jobb felső sarokban a **fogaskerékre**. Lenyílik a kapcsolók panelje.\n- **A Beállításokban:** Beállítások › Munkalap sor › **Űrlapok** lapfül. Itt mind az öt űrlap kapcsolói egymás alatt állnak, egy közös **Mentés** gombbal.\n\nA fogaskereket csak az adminisztrátor látja és mentheti. A kollégák az űrlapot már a beállított formájában kapják, így nem tudják véletlenül átállítani.",
-            "t": "urlap beallitasa fogasker talalod talalod urlap nyisd munkalap rendeles arukiadas szamla kattints jobb felso sar fogasker lenyili kapcsol panel beallitas beallitas munkalap sor urlap lapful mind ot urlap kapcsoloi egymas ala all kozos mentes gombbal fogasker adminisztrator lat mentheti kolleg urlap beallit forma kapj igy tudj veletlenul atallitani",
+            "t": "urlap beallitasa fogasker talal talal urlap nyisd munkalap rendeles arukiadas szamla kattints jobb felso sar fogasker lenyili kapcsol panel beallitas beallitas munkalap sor urlap lapful mind ot urlap kapcsoloi egymas ala all kozos mentes gombbal fogasker adminisztrator lat mentheti kolleg urlap beallit forma kapj igy tudj veletlenul atallitani",
             "h": 48
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: valami elrejtése az űrlapon",
             "horgony": "lepesrol-lepesre-valami-elrejtese-az-urlapon",
             "szoveg": "1. Nyisd meg az űrlapot, pl. egy munkalapot.\n2. Kattints a jobb felső sarokban a **fogaskerékre**.\n3. Kapcsold ki, ami nem kell (pl. **Bevizsgálási díj**, **Felelős**, **Hibák lapfül**). A változás **azonnal látszik** az űrlapon.\n4. Kattints a **Mentés** gombra. A panel alján megjelenik: *Elmentve – így marad minden megnyitáskor.*\n5. Kész: a következő megnyitáskor és minden kollégánál így nyílik az űrlap.\n\nHa meggondolod magad, a **Mind be** gomb mindent visszakapcsol (utána itt is **Mentés**).",
-            "t": "urlap beallitasa fogasker lepes lepes elrejtese urlap lepes lepes elrejtese urlap nyisd urlap pl munkalap kattints jobb felso sar fogasker kapcsold pl bevizsgalasi dij felelos hib lapful valtozas azonnal latszi urlap kattints mentes gomb panel aljan megjeleni elmentve igy marad megnyitas kesz kovetkezo megnyitas kolleganal igy nyili urlap meggondolod magad mind gomb mind visszakapcsol utana mentes",
+            "t": "urlap beallitasa fogasker lepes lepes elrejtese urlap lepes lepes elrejtese urlap nyisd urlap pl munkalap kattints jobb felso sar fogasker kapcsold pl bevizsgalasi dij felelos hib lapful valtozas azonnal latszi urlap kattints mentes gomb panel aljan megjeleni elmentve igy mar megnyitas kesz kovetkezo megnyitas kolleganal igy nyili urlap meggondol mag mind gomb mind visszakapcsol utana mentes",
             "h": 56
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: a számla tételei ne kerüljenek rá magától",
             "horgony": "lepesrol-lepesre-a-szamla-tetelei-ne-keruljenek-ra-magatol",
             "szoveg": "Ha a számlát inkább kézzel töltöd ki, és nem akarod, hogy a kollégák a pipálgatásnál tévesszenek:\n\n1. Nyisd meg egy munkalap **Számlázz.hu számla** (vagy **Számla-előkészítő**) ablakát.\n2. Kattints a **fogaskerékre**.\n3. Kapcsold ki: **A munkalap tételei magától a számlára**. Ha kell, a **Tétel-megjegyzés magától** és a **Megjegyzés mező magától** kapcsolót is.\n4. **Mentés**.\n\nEttől kezdve a számla ablaka úgy nyílik, hogy **egy tétel sincs kipipálva**: te pipálod be, ami kell, vagy a **Kézi tétel** gombbal írod be a megnevezést és az árat. A két ablak (Számlázz.hu és előkészítő) **külön** állítható.",
-            "t": "urlap beallitasa fogasker lepes lepes szamla tetel ne ar maga lepes lepes szamla tetel ne ar maga szamla inkabb kezzel toltod akarod kolleg pipalgatasnal tevessze nyisd munkalap szamlazz hu szamla szamla elokeszito abl kattints fogasker kapcsold munkalap tetel maga szamla tetel megjegyzes maga megjegyzes mezo maga kapcsol mentes ettol kezdve szamla ablaka ugy nyili tetel sincs kipipalva pipalod kezi tetel gombbal irod megnevezes ar ket abl szamlazz hu elokeszito kul allithato",
+            "t": "urlap beallitasa fogasker lepes lepes szamla tetel ne ar maga lepes lepes szamla tetel ne ar maga szamla inkabb kezzel tol akar kolleg pipalgatasnal tevessze nyisd munkalap szamlazz hu szamla szamla elokeszito abl kattints fogasker kapcsold munkalap tetel maga szamla tetel megjegyzes maga megjegyzes mezo maga kapcsol mentes ettol kezdve szamla ablaka ugy nyili tetel sincs kipipalva pipal kezi tetel gombbal irod megnevezes ar ket abl szamlazz hu elokeszito kul allithato",
             "h": 71
         },
         {
@@ -49,7 +49,7 @@
             "cim": "A munkalap tételei el is tüntethetők a számláról",
             "horgony": "a-munkalap-tetelei-el-is-tuntethetok-a-szamlarol",
             "szoveg": "Ha a számlát mindig magad töltöd ki, a fogaskerékben kapcsold ki: **A munkalap tételei a listában**. Ekkor a munkalap tételei meg sem jelennek a számla (vagy a számla-előkészítő) ablakában, és nem is kerülnek rá – a számlán csak az lesz, amit kézzel veszel fel: **Kézi tétel**, **Gyakori tételek…**, **Termék…**, **Szolgáltatás…**. A Számlázz.hu számla és a számla-előkészítő külön állítható.",
-            "t": "urlap beallitasa fogasker munkalap tetel tunteth szamla munkalap tetel tunteth szamla szamla magad toltod fogasker kapcsold munkalap tetel lista ekkor munkalap tetel jel szamla szamla elokeszito ablaka ar szamlan kezzel veszel kezi tetel gyakori tetel term szolgaltatas szamlazz hu szamla szamla elokeszito kul allithato",
+            "t": "urlap beallitasa fogasker munkalap tetel tunteth szamla munkalap tetel tunteth szamla szamla mag tol fogasker kapcsold munkalap tetel lista ekkor munkalap tetel jel szamla szamla elokeszito ablaka ar szamlan kezzel veszel kezi tetel gyakori tetel term szolgaltatas szamlazz hu szamla szamla elokeszito kul allithato",
             "h": 44
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Leggyakoribb Számla tételek listája",
             "horgony": "leggyakoribb-szamla-tetelek-listaja",
             "szoveg": "A számla ablakában a **★ Gyakori tételek…** gomb egy popupot nyit a **Leggyakoribb Számla tételek listájával**. Alapból benne van: *Telefon szerviz szolgáltatás*, *TV szerviz szolgáltatás*, *Számítógép szerviz szolgáltatás*, *Számítógép alaplapi javítás*.\n\n- Egy tételre kattintva kézi tételként a számlára kerül, és a kurzor rögtön az árába ugrik.\n- A popupban ugyanott **szerkeszthető**: ✎ átírja, × törli (kétlépcsős: „Törlöd?\"), a ▲ ▼ sorrendezi, alul új tétel vehető fel – minden azonnal mentődik.\n- A **Kézi tétel** megnevezésébe kattintva ezek a tételek rögtön felkínálkoznak (★ jellel), gépelés közben pedig a korábban kézzel beírt és a munkalapokon már szerepelt tételnevek is.\n- A lista a Beállítások › **Űrlapok** lapfülön is szerkeszthető, soronként egy tétel.",
-            "t": "urlap beallitasa fogasker leggyakoribb szamla tetel lista leggyakoribb szamla tetel lista szamla ablaka gyakori tetel gomb popup nyi leggyakoribb szamla tetel lista alap benne telef szerviz szolgaltatas tv szerviz szolgaltatas szamitogep szerviz szolgaltatas szamitogep alaplapi javitas tetel kattintva kezi tetelk szamla ar kurzor rog ar ugri popup ugyan szerkesztheto atir torli ketlepcsos torlod sorrendezi alul uj tetel veheto azonnal mentodi kezi tetel megnevezese kattintva tetel rog felkinalkoz jellel gepeles koz ped korab kezzel beir munkalap szerepel tetelnev lista beallitas urlap lapful szerkesztheto soronk tetel",
+            "t": "urlap beallitasa fogasker leggyakoribb szamla tetel lista leggyakoribb szamla tetel lista szamla ablaka gyakori tetel gomb popup nyi leggyakoribb szamla tetel lista alap benne telef szerviz szolgaltatas tv szerviz szolgaltatas szamitogep szerviz szolgaltatas szamitogep alaplapi javitas tetel kattintva kezi tetelk szamla ar kurzor rog ar ugri popup ugyan szerkesztheto atir torli ketlepcsos torl sorrendezi alul uj tetel veheto azonnal mentodi kezi tetel megnevezese kattintva tetel rog felkinalkoz jellel gepeles koz ped korab kezzel beir munkalap szerepel tetelnev lista beallitas urlap lapful szerkesztheto soronk tetel",
             "h": 84
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Mezőmemória: amit egyszer beírtál, felajánlja",
             "horgony": "mezomemoria-amit-egyszer-beirtal-felajanlja",
             "szoveg": "A rendszer minden szövegmezője (vevő neve és címe, keresők, megnevezések, beállítások…) megjegyzi, mit írtatok bele vagy mire kerestetek, és legközelebb **gépelés közben felajánlja** – ugyanúgy, ahogy a munkalap az ügyfél nevét.\n\n- **Nyíl le / fel:** választás a listából, **Enter:** beírás, **Esc:** a lista bezárása. Üres mezőben a lefelé nyíl az összes korábbi értéket mutatja.\n- A sor végi **×** kiveszi az értéket a felajánlásból (pl. elgépelt szó).\n- A memória közös: amit egy kolléga beírt, azt a többiek is megkapják. A leggyakrabban és legutóbb használt áll elöl.\n- **Soha nem jegyez meg:** jelszót, kulcsot, kódot (feloldó kód, zárkód, minta), kártya- és bankszámlaszámot.\n- Ahol már saját felajánló lista van (ügyfél-, szolgáltatás-, termékválasztó, irányítószám, levél címzettje, IMEI), ott az marad.\n- Ki- és bekapcsolni, illetve teljesen kiüríteni a Beállítások › **Űrlapok** lapfül **Mezőmemória** dobozában lehet.",
-            "t": "urlap beallitasa fogasker mezomemoria egyszer beirtal felajanl mezomemoria egyszer beirtal felajanl rendszer szovegmezo ugyfel neve cime keres megnevezes beallitas megjegyzi irt bele mire keres legkozelebb gepeles koz felajanl ugyanugy ahogy munkalap ugyfel nev nyil valasztas lista enter beiras esc lista bezarasa ures mezo lefele nyil osszes korabbi ert mut sor vegi kiveszi ert felajanlas pl elgepel szo memoria kozos kollega beir tobbi megkapj leggyakrab legutobb hasznal all elol soha jegyez jelsz kulcs kod feloldo kod zarkod minta kartya bankszamlaszam ahol saj felajanlo lista ugyfel szolgaltatas termekvalaszto iranyitoszam level cimzet imei marad bekapcsolni illetve teljes kiuriteni beallitas urlap lapful mezomemoria doboza",
+            "t": "urlap beallitasa fogasker mezomemoria egyszer beirtal felajanl mezomemoria egyszer beirtal felajanl rendszer szovegmezo ugyfel neve cime keres megnevezes beallitas megjegyzi irt bele mire keres legkozelebb gepeles koz felajanl ugyanugy ahogy munkalap ugyfel nev nyil valasztas lista enter beiras esc lista bezarasa ures mezo lefele nyil osszes korabbi ert mut sor vegi kiveszi ert felajanlas pl elgepel szo memoria kozos kollega beir tobbi megkapj leggyakrab legutobb hasznal all elol soha jegyez jelsz kulcs kod feloldo kod zar minta kartya bankszamlasz ahol saj felajanlo lista ugyfel szolgaltatas termekvalaszto iranyitosz level cimzet imei mar bekapcsolni illetve teljes kiuriteni beallitas urlap lapful mezomemoria doboza",
             "h": 100
         },
         {
@@ -73,7 +73,7 @@
             "cim": "Az állapotok kapcsolása",
             "horgony": "az-allapotok-kapcsolasa",
             "szoveg": "A munkalap, a rendelés és az árukiadás fogaskerekében külön csoport a **Választható állapotok**. Amit kikapcsolsz, az nem jelenik meg az állapotválasztóban ezen az űrlapfajtán.\n\n- Az **alapállapot** (amivel az új lap indul) mindig választható – ennek a kapcsolója szürke.\n- Ami a lapon **épp áll**, az mindig látszik, akkor is, ha kikapcsoltad – így régi lapon sem vész el az állapot.\n- Az állapotok nevét, színét és sorrendjét továbbra is a Beállítások › **Állapotok** lapfülén szerkeszted.",
-            "t": "urlap beallitasa fogasker allap kapcsolasa allap kapcsolasa munkalap rendeles arukiadas fogaskereke kul csopor valaszthato allap kikapcsolsz jeleni allapotvalaszto ezen urlapfajtan alapallap ami uj lap indul valaszthato enn kapcsolo szurke lap epp all latszi kikapcsoltad igy regi lap vesz allap allap nev szin sorrendj tovabb beallitas allap lapful szerkeszted",
+            "t": "urlap beallitasa fogasker allap kapcsolasa allap kapcsolasa munkalap rendeles arukiadas fogaskereke kul csopor valaszthato allap kikapcsolsz jeleni allapotvalaszto ezen urlapfajtan alapallap ami uj lap indul valaszthato enn kapcsolo szurke lap epp all latszi kikapcsol igy regi lap vesz allap allap nev szin sorrendj tovabb beallitas allap lapful szerkesz",
             "h": 48
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Mezők és gombok",
             "horgony": "mezok-es-gombok",
             "szoveg": "| Elem | Mit csinál |\n|---|---|\n| **fogaskerék** | Kinyitja / becsukja a kapcsolók paneljét (az Esc is becsukja). |\n| kapcsoló | Ki: az elem nem látszik az űrlapon. Be: látszik. Azonnal hat, de csak a **Mentés** után marad meg. |\n| **Mentés** | Elmenti az űrlap beállítását; minden megnyitáskor és minden kollégánál így nyílik. |\n| **Mind be** | Minden elemet és állapotot visszakapcsol (utána **Mentés**). |\n| **Bezárás** | Becsukja a panelt. |\n| **Űrlapok** lapfül | A Beállításokban mind az öt űrlap kapcsolói, közös Mentéssel. |",
-            "t": "urlap beallitasa fogasker mez gomb mez gomb elem csinal fogasker kinyi becs kapcsol panelj esc becs kapcsolo elem latszi urlap latszi azonnal hat mentes utan marad mentes elmenti urlap beallitas megnyitas kolleganal igy nyili mind elem allap visszakapcsol utana mentes bezaras becs panel urlap lapful beallitas mind ot urlap kapcsoloi kozos mentessel",
+            "t": "urlap beallitasa fogasker mez gomb mez gomb elem csinal fogasker kinyi becs kapcsol panelj esc becs kapcsolo elem latszi urlap latszi azonnal hat mentes utan mar mentes elmenti urlap beallitas megnyitas kolleganal igy nyili mind elem allap visszakapcsol utana mentes bezaras becs panel urlap lapful beallitas mind ot urlap kapcsoloi kozos mentessel",
             "h": 52
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Az elrejtett mező értéke nem vész el.** A mező nem látszik, de benne marad az űrlapban és mentődik; ha visszakapcsolod, ott van az adata.\n- **A beállítás megmarad.** Egy beállításként tárolódik az adatbázisban; a rendszer frissítése nem nyúl hozzá, és a napi mentés is menti.\n- **Csak az adminisztrátor állíthatja.** A kollégák nem látják a fogaskereket, és a mentést a rendszer is elutasítja tőlük.\n- **Ha a nyitott lapfület elrejted,** az első látható lapfül nyílik helyette; ha egy lapfülsor minden füle rejtett, a sor is eltűnik.\n- **A változásnapló nem kapcsolható ki**, ezért a Napló gombja nem szerepel a listában.\n- Egy űrlap mentése **a többi űrlaphoz nem nyúl**: a munkalap beállítása nem változtatja a rendelését.\n- Ami egy lapfajtán amúgy sincs (pl. bevizsgálási díj az árukiadáson), az a fogaskerékben sem szerepel.",
-            "t": "urlap beallitasa fogasker szabaly ami rendszer betar szabaly ami rendszer betar elrejt mezo erteke vesz mezo latszi benne marad urlap mentodi visszakapcsolod adata beallitas megmarad beallitask tarolodi adatbazis rendszer frissitese nyul hozza napi mentes menti adminisztrator allith kolleg latj fogasker mentes rendszer elutasi tol nyit lapful elrejted elso lathato lapful nyili helyette lapfulsor fule rejt sor eltuni valtozasnaplo kapcsolhato ezer naplo gomb szerepel lista urlap mentese tobbi urlap nyul munkalap beallitasa valtozt rendeles lapfajtan amugy sincs pl bevizsgalasi dij arukiadas fogasker szerepel",
+            "t": "urlap beallitasa fogasker szabaly ami rendszer betar szabaly ami rendszer betar elrejt mezo erteke vesz mezo latszi benne mar urlap mentodi visszakapcsol adata beallitas megmar beallitask tarolodi adatbazis rendszer frissitese nyul hozza napi mentes menti adminisztrator allith kolleg latj fogasker mentes rendszer elutasi tol nyit lapful elrej elso lathato lapful nyili helyette lapfulsor fule rejt sor eltuni valtozasnaplo kapcsolhato ezer naplo gomb szerepel lista urlap mentese tobbi urlap nyul munkalap beallitasa valtozt rendeles lapfajtan amugy sincs pl bevizsgalasi dij arukiadas fogasker szerepel",
             "h": 82
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem látom a fogaskereket.** Csak adminisztrátorként látszik. Kollégaként kérd meg az admint, vagy lépj be admin fiókkal.\n- **Elrejtettem valamit, de a következő megnyitáskor visszajött.** A **Mentés** gomb kimaradt: a kapcsoló csak élőben hat, mentés nélkül nem marad meg.\n- **„A mentés nem sikerült (nincs kapcsolat)\".** Megszakadt a kapcsolat a szerverrel; frissítsd az oldalt, és próbáld újra.\n- **Eltűnt egy mező, és nem tudom, hol kapcsolom vissza.** A Beállítások › **Űrlapok** lapfülén minden űrlap minden kapcsolója egyszerre látszik; vagy a fogaskerékben a **Mind be**.",
-            "t": "urlap beallitasa fogasker megy megy latom fogasker adminisztratork latszi kollegak kerd admin lepj admin fiokkal elrejtettem valami kovetkezo megnyitas visszaj mentes gomb kimarad kapcsolo elo hat mentes nelkul marad mentes sikerul nincs kapcsol megszakad kapcsol szerverrel frissitsd oldal probald ujra eltun mezo tudom kapcsolom vissza beallitas urlap lapful urlap kapcsolo egyszer latszi fogasker mind",
+            "t": "urlap beallitasa fogasker megy megy lat fogasker adminisztratork latszi kollegak kerd admin lepj admin fiokkal elrejtet valami kovetkezo megnyitas visszaj mentes gomb kimar kapcsolo elo hat mentes nelkul mar mentes sikerul nincs kapcsol megszak kapcsol szerverrel frissitsd oldal probald ujra eltun mezo tud kapcsol vissza beallitas urlap lapful urlap kapcsolo egyszer latszi fogasker mind",
             "h": 54
         },
         {
@@ -113,7 +113,7 @@
             "cim": "GYIK › Megmarad a beállítás, ha frissül a rendszer?",
             "horgony": "megmarad-a-beallitas-ha-frissul-a-rendszer",
             "szoveg": "Igen. A beállítás az adatbázisban tárolódik, a rendszer frissítése nem írja felül; a napi mentés is menti.",
-            "t": "urlap beallitasa fogasker gyi megmarad beallitas frissul rendszer gyi megmarad beallitas frissul rendszer beallitas adatbazis tarolodi rendszer frissitese irja felul napi mentes menti",
+            "t": "urlap beallitasa fogasker gyi megmar beallitas frissul rendszer gyi megmar beallitas frissul rendszer beallitas adatbazis tarolodi rendszer frissitese irja felul napi mentes menti",
             "h": 23
         },
         {
@@ -121,7 +121,7 @@
             "cim": "GYIK › Elvész az adat, ha egy mezőt elrejtek?",
             "horgony": "elvesz-az-adat-ha-egy-mezot-elrejtek",
             "szoveg": "Nem. Az elrejtett mező benne marad az űrlapban és mentődik, csak nem látszik. Visszakapcsolva ott az adata.",
-            "t": "urlap beallitasa fogasker gyi elvesz ada mez elrej gyi elvesz ada mez elrej elrejt mezo benne marad urlap mentodi latszi visszakapcsolva adata",
+            "t": "urlap beallitasa fogasker gyi elvesz ada mez elrej gyi elvesz ada mez elrej elrejt mezo benne mar urlap mentodi latszi visszakapcsolva adata",
             "h": 22
         },
         {
@@ -137,7 +137,7 @@
             "cim": "GYIK › Ha kikapcsoltam az automatikus tételeket, egyszer mégis mindet rá tudom tenni?",
             "horgony": "ha-kikapcsoltam-az-automatikus-teteleket-egyszer-megis-mindet-ra-tudom-tenni",
             "szoveg": "Igen: a számla ablakában a tétellista fölötti **A munkalap tételei a számlán** kapcsolóval mindet egyszerre kipipálod. Ez csak arra az ablakra hat, a beállítás marad.",
-            "t": "urlap beallitasa fogasker gyi kikapcsoltam automatikus tetel egyszer megis mind tudom tenni gyi kikapcsoltam automatikus tetel egyszer megis mind tudom tenni szamla ablaka tetellista folotti munkalap tetel szamlan kapcsolo mind egyszer kipipalod abl hat beallitas marad",
+            "t": "urlap beallitasa fogasker gyi kikapcsol automatikus tetel egyszer megis mind tud tenni gyi kikapcsol automatikus tetel egyszer megis mind tud tenni szamla ablaka tetellista folotti munkalap tetel szamlan kapcsolo mind egyszer kipipal abl hat beallitas mar",
             "h": 36
         },
         {
@@ -153,7 +153,7 @@
             "cim": "GYIK › Miért üres a számla Megjegyzés mezője?",
             "horgony": "miert-ures-a-szamla-megjegyzes-mezoje",
             "szoveg": "Mert a fogaskerékben ki van kapcsolva a **Megjegyzés mező magától**. Kapcsold vissza, ha a „Munkalap: … · eszköz\" szöveget kéred.",
-            "t": "urlap beallitasa fogasker gyi ures szamla megjegyzes mezo gyi ures szamla megjegyzes mezo fogasker kapcsolva megjegyzes mezo maga kapcsold vissza munkalap eszkoz szoveg kered",
+            "t": "urlap beallitasa fogasker gyi ures szamla megjegyzes mezo gyi ures szamla megjegyzes mezo fogasker kapcsolva megjegyzes mezo maga kapcsold vissza munkalap eszkoz szoveg ker",
             "h": 24
         },
         {
@@ -161,7 +161,7 @@
             "cim": "GYIK › Ki tudom venni az állapotválasztóból azokat az állapotokat, amiket nem használunk?",
             "horgony": "ki-tudom-venni-az-allapotvalasztobol-azokat-az-allapotokat-amiket-nem-hasznalunk",
             "szoveg": "Igen: a fogaskerék **Választható állapotok** csoportjában kapcsold ki őket, és ments. Az alapállapot és a lapon épp álló állapot mindig látszik.",
-            "t": "urlap beallitasa fogasker gyi tudom venni allapotvalaszto azo allap ami hasznal gyi tudom venni allapotvalaszto azo allap ami hasznal fogasker valaszthato allap csoport kapcsold oke ments alapallap lap epp allo allap latszi",
+            "t": "urlap beallitasa fogasker gyi tud venni allapotvalaszto azo allap ami hasznal gyi tud venni allapotvalaszto azo allap ami hasznal fogasker valaszthato allap csoport kapcsold oke ments alapallap lap epp allo allap latszi",
             "h": 32
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › Miért nem tudom kikapcsolni az egyik állapotot?",
             "horgony": "miert-nem-tudom-kikapcsolni-az-egyik-allapotot",
             "szoveg": "Az az új lap alapállapota: enélkül új lap nem indulhatna, ezért mindig választható. Másik alapállapotot a Beállítások › Állapotok lapfülén jelölhetsz ki.",
-            "t": "urlap beallitasa fogasker gyi tudom kikapcsolni egyi allap gyi tudom kikapcsolni egyi allap uj lap alapallapota enelkul uj lap indulhatna ezer valaszthato masi alapallap beallitas allap lapful jelolhetsz",
+            "t": "urlap beallitasa fogasker gyi tud kikapcsolni egyi allap gyi tud kikapcsolni egyi allap uj lap alapallapota enelkul uj lap indulhatna ezer valaszthato masi alapallap beallitas allap lapful jelolhetsz",
             "h": 28
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Elrejtettem a Hibák lapfület, de a munkalap a Hibákon nyílt – mi történik?",
             "horgony": "elrejtettem-a-hibak-lapfulet-de-a-munkalap-a-hibakon-nyilt-mi-tortenik",
             "szoveg": "Az első látható lapfül nyílik helyette. Ha egy lapfülsor minden fülét elrejted, a sor is eltűnik.",
-            "t": "urlap beallitasa fogasker gyi elrejtettem hib lapful munkalap hib nyil torteni gyi elrejtettem hib lapful munkalap hib nyil torteni elso lathato lapful nyili helyette lapfulsor ful elrejted sor eltuni",
+            "t": "urlap beallitasa fogasker gyi elrejtet hib lapful munkalap hib nyil torteni gyi elrejtet hib lapful munkalap hib nyil torteni elso lathato lapful nyili helyette lapfulsor ful elrej sor eltuni",
             "h": 29
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › A munkalapon beállítottam valamit – a rendelésen is így lesz?",
             "horgony": "a-munkalapon-beallitottam-valamit-a-rendelesen-is-igy-lesz",
             "szoveg": "Nem, mindhárom lapfajtának (munkalap, rendelés, napi árukiadás) saját beállítása van. Mindegyiken a saját fogaskerekével állítod.",
-            "t": "urlap beallitasa fogasker gyi munkalap beallitottam valami rendeles igy gyi munkalap beallitottam valami rendeles igy mindharom lapfajta munkalap rendeles napi arukiadas saj beallitasa mindegyi saj fogaskereke allitod",
+            "t": "urlap beallitasa fogasker gyi munkalap beallitot valami rendeles igy gyi munkalap beallitot valami rendeles igy mindhar lapfajta munkalap rendeles napi arukiadas saj beallitasa mindegyi saj fogaskereke alli",
             "h": 27
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Hol látom egyszerre az összes űrlap beállítását?",
             "horgony": "hol-latom-egyszerre-az-osszes-urlap-beallitasat",
             "szoveg": "A Beállítások › Munkalap sor › **Űrlapok** lapfülén, egymás alatt mind az öttel.",
-            "t": "urlap beallitasa fogasker gyi latom egyszer osszes urlap beallitas gyi latom egyszer osszes urlap beallitas beallitas munkalap sor urlap lapful egymas ala mind ottel",
+            "t": "urlap beallitasa fogasker gyi lat egyszer osszes urlap beallitas gyi lat egyszer osszes urlap beallitas beallitas munkalap sor urlap lapful egymas ala mind ottel",
             "h": 24
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Ki tudom kapcsolni az „Eszköz csatolása\" gombot?",
             "horgony": "ki-tudom-kapcsolni-az-eszkoz-csatolasa-gombot",
             "szoveg": "Igen: a munkalap fogaskerekében (vagy Beállítások › Űrlapok › Munkalap) kapcsold ki a **+ Eszköz csatolása gomb** kapcsolót, és ments. A már csatolt eszközök továbbra is látszanak.",
-            "t": "urlap beallitasa fogasker gyi tudom kapcsolni eszkoz csatolasa gomb gyi tudom kapcsolni eszkoz csatolasa gomb munkalap fogaskereke beallitas urlap munkalap kapcsold eszkoz csatolasa gomb kapcsol ments csa eszkoz tovabb latsza",
+            "t": "urlap beallitasa fogasker gyi tud kapcsolni eszkoz csatolasa gomb gyi tud kapcsolni eszkoz csatolasa gomb munkalap fogaskereke beallitas urlap munkalap kapcsold eszkoz csatolasa gomb kapcsol ments csa eszkoz tovabb latsza",
             "h": 30
         },
         {
@@ -217,7 +217,7 @@
             "cim": "GYIK › Hogyan tüntetem el a munkalap tételeit a számla ablakából?",
             "horgony": "hogyan-tuntetem-el-a-munkalap-teteleit-a-szamla-ablakabol",
             "szoveg": "A számla ablakának fogaskerekében kapcsold ki **A munkalap tételei a listában**, és ments. Utána csak a kézzel felvett tételek kerülnek a számlára.",
-            "t": "urlap beallitasa fogasker gyi tuntetem munkalap tetel szamla ablaka gyi tuntetem munkalap tetel szamla ablaka szamla ablaka fogaskereke kapcsold munkalap tetel lista ments utana kezzel felv tetel ar szamla",
+            "t": "urlap beallitasa fogasker gyi tunt munkalap tetel szamla ablaka gyi tunt munkalap tetel szamla ablaka szamla ablaka fogaskereke kapcsold munkalap tetel lista ments utana kezzel felv tetel ar szamla",
             "h": 29
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Hol szerkesztem a Leggyakoribb Számla tételek listáját?",
             "horgony": "hol-szerkesztem-a-leggyakoribb-szamla-tetelek-listajat",
             "szoveg": "A számla ablakában a **★ Gyakori tételek…** popupban (átírás, törlés, sorrend, új tétel), vagy a Beállítások › Űrlapok lapfülön soronként.",
-            "t": "urlap beallitasa fogasker gyi szerkesztem leggyakoribb szamla tetel listaj gyi szerkesztem leggyakoribb szamla tetel listaj szamla ablaka gyakori tetel popup atiras torles sorrend uj tetel beallitas urlap lapful soronk",
+            "t": "urlap beallitasa fogasker gyi szerkesz leggyakoribb szamla tetel listaj gyi szerkesz leggyakoribb szamla tetel listaj szamla ablaka gyakori tetel popup atiras torles sorrend uj tetel beallitas urlap lapful soronk",
             "h": 29
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Megjegyzi a jelszavakat is?",
             "horgony": "megjegyzi-a-jelszavakat-is",
             "szoveg": "Nem. Jelszó, kulcs, kód, zárkód, feloldó minta, kártya- és bankszámlaszám soha nem kerül a memóriába – ezt a böngésző és a szerver is szűri.",
-            "t": "urlap beallitasa fogasker gyi megjegyzi jelszav gyi megjegyzi jelszav jelszo kulcs kod zarkod feloldo minta kartya bankszamlaszam soha ar memoria bongeszo szerver szuri",
+            "t": "urlap beallitasa fogasker gyi megjegyzi jelszav gyi megjegyzi jelszav jelszo kulcs kod zar feloldo minta kartya bankszamlasz soha ar memoria bongeszo szerver szuri",
             "h": 23
         },
         {
@@ -249,7 +249,7 @@
             "cim": "GYIK › Ki tudom kapcsolni vagy törölni a mezőmemóriát?",
             "horgony": "ki-tudom-kapcsolni-vagy-torolni-a-mezomemoriat",
             "szoveg": "Igen: Beállítások › Űrlapok › **Mezőmemória**. A kapcsolóval kikapcsolod; a „Mentéskor töröld a teljes mezőmemóriát\" pipa és a Mentés kiüríti.",
-            "t": "urlap beallitasa fogasker gyi tudom kapcsolni torolni mezomemori gyi tudom kapcsolni torolni mezomemori beallitas urlap mezomemoria kapcsolo kikapcsolod mentes torold teljes mezomemori pipa mentes kiuriti",
+            "t": "urlap beallitasa fogasker gyi tud kapcsolni torolni mezomemori gyi tud kapcsolni torolni mezomemori beallitas urlap mezomemoria kapcsolo kikapcsol mentes torold teljes mezomemori pipa mentes kiuriti",
             "h": 25
         },
         {
@@ -257,7 +257,7 @@
             "cim": "GYIK › Vissza tudom állítani az eredeti állapotot?",
             "horgony": "vissza-tudom-allitani-az-eredeti-allapotot",
             "szoveg": "Igen: a fogaskerékben a **Mind be** minden elemet visszakapcsol; utána **Mentés**.",
-            "t": "urlap beallitasa fogasker gyi vissza tudom allitani eredeti allap gyi vissza tudom allitani eredeti allap fogasker mind elem visszakapcsol utana mentes",
+            "t": "urlap beallitasa fogasker gyi vissza tud allitani eredeti allap gyi vissza tud allitani eredeti allap fogasker mind elem visszakapcsol utana mentes",
             "h": 21
         }
     ]

@@ -9,7 +9,7 @@
             "cim": "Mire való",
             "horgony": "mire-valo",
             "szoveg": "A **Rendelések** menüpontban azt az árut tartod nyilván, amelyet egy ügyfél kérésére rendelsz meg. Egy rendelésről mindig látszik:\n\n- **kinek** rendelted (a rendelés mindig ügyfélhez tartozik);\n- **honnan** jön (melyik beszállítótól);\n- **hol tart** (felvetted, megrendelted, megérkezett, szóltál az ügyfélnek, átadtad);\n- **ki van-e fizetve**, és mennyi előleget adott az ügyfél.\n\nAmikor az áru megérkezik, egy gombbal értesítheted az ügyfelet.\n\nA rendelés ugyanolyan lap, mint a munkalap, csak nincs rajta eszköz, hiba és bevizsgálási díj. A tételek, az előleg, a fizetés ablaka, a pénztár és a számla ugyanúgy működik. A rendelésnek – a napi árukiadással ellentétben – van ügyféloldala és üzenetváltása is.\n\nPélda: Minta Márta töltőt szeretne, ami nincs készleten. Felveszed a rendelést az ő nevére, a **Honnan** mezőben kiválasztod a „Példa Nagyker\" beszállítót, a **Várható érkezés** mezőben megadod a napot. Márta 5 000 Ft előleget ad. Amikor megjön a töltő, megnyomod a **Megjött – értesítés** gombot.",
-            "t": "rendeles mire valo mire valo rendeles menupon aru tartod nyilvan amely ugyfel kerese rendelsz rendeles latszi kin rendelted rendeles ugyfel tartozi honnan jon beszallito tar felvetted megrendelted megerkez szoltal ugyfel atadtad fizetve eloleg ado ugyfel ami aru megerkezi gombbal ertesitheted ugyfel rendeles ugyanolyan lap munkalap nincs rajta eszkoz hiba bevizsgalasi dij tetel eloleg fizetes ablaka penztar szamla ugyanugy mukodi rendeles napi arukiadassal ellent ugyfeloldala uzenetvaltasa pelda minta marta tol szeretne nincs keszl felveszed rendeles neve honnan mezo kivalasztod pelda nagyker beszalli varhato erkezes mezo megadod nap marta 000 ft eloleg ad ami megj tolto megnyomod megj ertesites gomb",
+            "t": "rendeles mire valo mire valo rendeles menupon aru tar nyilvan amely ugyfel kerese rendelsz rendeles latszi kin rendel rendeles ugyfel tartozi honnan jon beszallito tar felvet megrendel megerkez szoltal ugyfel atad fizetve eloleg ado ugyfel ami aru megerkezi gombbal ertesith ugyfel rendeles ugyanolyan lap munkalap nincs rajta eszkoz hiba bevizsgalasi dij tetel eloleg fizetes ablaka penztar szamla ugyanugy mukodi rendeles napi arukiadassal ellent ugyfeloldala uzenetvaltasa pelda minta marta tol szeretne nincs keszl felvesz rendeles neve honnan mezo kivalasz pelda nagyker beszalli varhato erkezes mezo meg nap marta 000 ft eloleg ad ami megj tolto megny megj ertesites gomb",
             "h": 98
         },
         {
@@ -17,7 +17,7 @@
             "cim": "Hol találod",
             "horgony": "hol-talalod",
             "szoveg": "- Az oldalmenüben: Rendelések. A menüpont melletti szám azt mutatja, hány rendelés érkezett meg úgy, hogy az ügyfél még nem tud róla.\n- Az Áttekintésen a **Rendelések** gomb egy kattintással az új rendelés ablakát nyitja meg; a csempe a folyamatban lévő rendelések számát mutatja.\n- Az ügyfél adatlapján a **Rendelések** lapfül sorolja fel az ügyfél összes rendelését.\n\nA rendelések az Áttekintés munkalap-rácsában és a Munkalapok listájában nem szerepelnek.",
-            "t": "rendeles talalod talalod oldalmenu rendeles menup melletti szam mut hany rendeles erkez ugy ugyfel tud rola attekintes rendeles gomb kattintassal uj rendeles abl nyi csempe folyam levo rendeles szam mut ugyfel adatlapjan rendeles lapful sorol ugyfel osszes rendeles rendeles attekintes munkalap racsa munkalap lista szerepel",
+            "t": "rendeles talal talal oldalmenu rendeles menup melletti szam mut hany rendeles erkez ugy ugyfel tud rola attekintes rendeles gomb kattintassal uj rendeles abl nyi csempe folyam levo rendeles szam mut ugyfel adatlapjan rendeles lapful sorol ugyfel osszes rendeles rendeles attekintes munkalap racsa munkalap lista szerepel",
             "h": 45
         },
         {
@@ -25,7 +25,7 @@
             "cim": "Lépésről lépésre: új rendelés felvétele",
             "horgony": "lepesrol-lepesre-uj-rendeles-felvetele",
             "szoveg": "1. Nyisd meg a Rendelések menüpontot, és kattints a fejlécben az **Új rendelés** gombra.\n2. Az **Ügyfél** mezőben válaszd ki az ügyfelet a listából. Ha még nincs felvéve, a mező melletti **+** gombbal vedd fel. Az ügyfél megadása kötelező.\n3. A **Honnan** mezőben válaszd ki a beszállítót. Ha nincs a listában, a mező melletti **+** gombbal felveheted.\n4. A **Hol tart** mező új rendelésnél **Felvéve**. Ha már meg is rendelted, állítsd **Megrendelve** értékre.\n5. Ha a beszállító adott rendelés- vagy visszaigazolás-számot, írd be a **Rendelésszám** mezőbe. Nem kötelező.\n6. Bal oldalon, a **Dátumok** dobozban a **Várható érkezés** mezőben add meg, mikorra várod az árut.\n7. A **Termékek** lapfülön vedd fel, mit rendelsz. Szolgáltatás a **Szolgáltatások** lapfülön adható hozzá.\n8. Kattints a **Rendelés rögzítése** gombra. Ha az ügyfél előleget ad vagy előre fizet, a **Rögzítés és fizetés** gombot nyomd meg: a mentés után rögtön megnyílik a fizetés ablaka.\n\nTipp: Új rendelésnél a **Rendelés rögzítése** az elsődleges gomb, ezért az Enter is ezt indítja.",
-            "t": "rendeles lepes lepes uj rendeles felvetele lepes lepes uj rendeles felvetele nyisd rendeles menupon kattints fejlec uj rendeles gomb ugyfel mezo valaszd ugyfel lista nincs felveve mezo melletti gombbal vedd ugyfel megadasa kotelezo honnan mezo valaszd beszalli nincs lista mezo melletti gombbal felveheted tar mezo uj rendelesnel felveve rendelted allitsd megrendelve ert beszallito ado rendeles visszaigazolas szam ird rendelesszam mezo kotelezo bal oldal datum doboz varhato erkezes mezo add mikor varod aru term lapful vedd rendelsz szolgaltatas szolgaltatas lapful adhato hozza kattints rendeles rogzitese gomb ugyfel eloleg ad elo fiz rogzites fizetes gomb nyomd mentes utan rog megnyili fizetes ablaka tipp uj rendelesnel rendeles rogzitese elsodleges gomb ezer enter indi",
+            "t": "rendeles lepes lepes uj rendeles felvetele lepes lepes uj rendeles felvetele nyisd rendeles menupon kattints fejlec uj rendeles gomb ugyfel mezo valaszd ugyfel lista nincs felveve mezo melletti gombbal vedd ugyfel megadasa kotelezo honnan mezo valaszd beszalli nincs lista mezo melletti gombbal felveh tar mezo uj rendelesnel felveve rendel allitsd megrendelve ert beszallito ado rendeles visszaigazolas szam ird rendelessz mezo kotelezo bal oldal datum doboz varhato erkezes mezo add mikor var aru term lapful vedd rendelsz szolgaltatas szolgaltatas lapful adhato hozza kattints rendeles rogzitese gomb ugyfel eloleg ad elo fiz rogzites fizetes gomb nyomd mentes utan rog megnyili fizetes ablaka tipp uj rendelesnel rendeles rogzitese elsodleges gomb ezer enter indi",
             "h": 110
         },
         {
@@ -33,7 +33,7 @@
             "cim": "Lépésről lépésre: a rendelés útjának követése",
             "horgony": "lepesrol-lepesre-a-rendeles-utjanak-kovetese",
             "szoveg": "A rendelés útja öt lépésből áll, ebben a sorrendben:\n\n| Állapot | Mit jelent |\n|---|---|\n| **Felvéve** | Az ügyfél kérte, de még nem rendelted meg. |\n| **Megrendelve** | Leadtad a rendelést a beszállítónak. |\n| **Megérkezett** | Az áru nálad van, de az ügyfél még nem tud róla. |\n| **Ügyfél értesítve** | Szóltál az ügyfélnek, hogy átveheti. |\n| **Átadva** | Az ügyfél átvette az árut. |\n\nAz állapotot két helyen állíthatod:\n\n- **A listából:** a **Rendelés** oszlopban kattints a színes állapotjelzőre, és válaszd ki az újat. A változás azonnal mentődik, a sort nem kell megnyitnod.\n- **A rendelés ablakában:** a **Hol tart** mezőben válaszd ki az állapotot, majd kattints a **Mentés** gombra.\n\nA lista alapból a **Folyamatban** lévő rendeléseket mutatja, vagyis azokat, amelyek még nincsenek átadva és nincsenek lezárva. A szűrőben egy-egy állapotra is szűkíthetsz, vagy a **Mind** lehetőséggel minden rendelést megnézhetsz.\n\nFontos: A **Megérkezett** állapotú rendelések számát mutatja a menüpont melletti jelvény. Amint értesíted az ügyfelet vagy átadod az árut, a szám csökken.",
-            "t": "rendeles lepes lepes rendeles utja kovetese lepes lepes rendeles utja kovetese rendeles utja ot lepes all ebb sorrend allap jel felveve ugyfel kerte rendelted megrendelve leadtad rendeles beszallito megerkez aru nalad ugyfel tud rola ugyfel ertesitve szoltal ugyfel atveheti atadva ugyfel atvette aru allap ket hely allithatod lista rendeles oszlop kattints szines allapotjelzo valaszd uja valtozas azonnal mentodi sor megnyitnod rendeles ablaka tar mezo valaszd allap majd kattints mentes gomb lista alap folyam levo rendeles mut vagyis azo amely nincse atadva nincse lezarva szuro allap szukithetsz mind lehetoseggel rendeles megnezhetsz fontos megerkez allapotu rendeles szam mut menup melletti jelveny amin ertesited ugyfel atadod aru szam csok",
+            "t": "rendeles lepes lepes rendeles utja kovetese lepes lepes rendeles utja kovetese rendeles utja ot lepes all ebb sorrend allap jel felveve ugyfel kerte rendel megrendelve lead rendeles beszallito megerkez aru nal ugyfel tud rola ugyfel ertesitve szoltal ugyfel atveheti atadva ugyfel atvette aru allap ket hely allith lista rendeles oszlop kattints szines allapotjelzo valaszd uja valtozas azonnal mentodi sor megnyitn rendeles ablaka tar mezo valaszd allap majd kattints mentes gomb lista alap folyam levo rendeles mut vagyis azo amely nincse atadva nincse lezarva szuro allap szukithetsz mind lehetoseggel rendeles megnezhetsz fontos megerkez allapotu rendeles szam mut menup melletti jelveny amin ertesi ugyfel atad aru szam csok",
             "h": 106
         },
         {
@@ -41,7 +41,7 @@
             "cim": "Lépésről lépésre: az ügyfél értesítése, ha megjött az áru",
             "horgony": "lepesrol-lepesre-az-ugyfel-ertesitese-ha-megjott-az-aru",
             "szoveg": "1. Nyisd meg a rendelést.\n2. A **Hol tart** mező mellett kattints a **Megjött – értesítés** gombra. (A gomb csak már rögzített rendelésen látszik.)\n3. Megnyílik az **Értesítés: megérkezett a rendelés** ablak. Az **Üzenet** mezőben ott az előre megírt szöveg az ügyfél nevével, a rendelés számával és a rendelt tételekkel. Ha kell, írd át.\n4. Ha az ügyfélnek van e-mail-címe, az **E-mailben is elküldöm** pipa be van kapcsolva. Ha csak az ügyféloldalra szánod az üzenetet, vedd ki.\n5. Kattints az **Értesítés küldése** gombra.\n\nAmi ezután történik:\n\n- Az üzenet a rendelés üzenetei közé kerül. Az ügyfél az ügyféloldalon (QR-kóddal vagy linkkel megnyitva) látja, és válaszolhat rá. A válasza a rendelés **RMA** lapfülén jelenik meg.\n- Ha kérted, az üzenet e-mailben is elmegy.\n- A rendelés állapota **Ügyfél értesítve** lesz. A már átadott rendelés állapota nem változik.\n- A gomb felirata **Újra értesít** lesz, alatta pedig megjelenik, mikor értesítetted az ügyfelet.\n\nFigyelem: Ha az ügyfélnek nincs e-mail-címe, a pipa nem kapcsolható be, és a felirat is jelzi: e-mail nem megy. Ilyenkor az üzenet csak az ügyféloldalra kerül – telefonon is szólj neki.\n\nAz értesítő alapszövege a Beállítások **Árukiadás és rendelések** lapfülén írható át. Ezt a lapfület a Napi árukiadás fejezet írja le.",
-            "t": "rendeles lepes lepes ugyfel ertesitese megj aru lepes lepes ugyfel ertesitese megj aru nyisd rendeles tar mezo mell kattints megj ertesites gomb gomb rogzit rendeles latszi megnyili ertesites megerkez rendeles abl uzen mezo elo megir szoveg ugyfel neve rendeles szama rendel tetel ird ugyfel mail cime mail elkuldom pipa kapcsolva ugyfeloldal szanod uzen vedd kattints ertesites kuldese gomb ezutan torteni uzen rendeles uzen koze ar ugyfel ugyfeloldal qr koddal linkkel megnyitva lat valaszolh valasza rendeles rma lapful jeleni kerted uzen mail elmegy rendeles allapota ugyfel ertesitve atad rendeles allapota valtozi gomb felirata ujra ertesi alatta ped megjeleni ertesitetted ugyfel figyelem ugyfel nincs mail cime pipa kapcsolhato felir jelzi mail megy ily uzen ugyfeloldal ar telef szolj neki ertesito alapszovege beallitas arukiadas rendeles lapful irhato lapful napi arukiadas fejez irja",
+            "t": "rendeles lepes lepes ugyfel ertesitese megj aru lepes lepes ugyfel ertesitese megj aru nyisd rendeles tar mezo mell kattints megj ertesites gomb gomb rogzit rendeles latszi megnyili ertesites megerkez rendeles abl uzen mezo elo megir szoveg ugyfel neve rendeles szama rendel tetel ird ugyfel mail cime mail elkuld pipa kapcsolva ugyfeloldal szan uzen vedd kattints ertesites kuldese gomb ezutan torteni uzen rendeles uzen koze ar ugyfel ugyfeloldal qr koddal linkkel megnyitva lat valaszolh valasza rendeles rma lapful jeleni ker uzen mail elmegy rendeles allapota ugyfel ertesitve atad rendeles allapota valtozi gomb felirata ujra ertesi alatta ped megjeleni ertesitet ugyfel figyel ugyfel nincs mail cime pipa kapcsolhato felir jelzi mail megy ily uzen ugyfeloldal ar telef szolj neki ertesito alapszovege beallitas arukiadas rendeles lapful irhato lapful napi arukiadas fejez irja",
             "h": 129
         },
         {
@@ -49,7 +49,7 @@
             "cim": "Lépésről lépésre: fizetés, előleg és átadás",
             "horgony": "lepesrol-lepesre-fizetes-eloleg-es-atadas",
             "szoveg": "A rendelés ugyanúgy fizethető, mint a munkalap.\n\n- **Előleg a felvételkor:** az új rendelésnél a **Rögzítés és fizetés** gombot nyomd meg, a fizetés ablakában válaszd az **Előleg / részfizetés** lehetőséget, és írd be a kapott összeget.\n- **Előleg vagy fizetés később:** nyisd meg a rendelést, és az ablak alján kattints a **Fizetés** gombra.\n- **Végfizetés az átadáskor:** a fizetés ablakában hagyd a **Teljes fizetés – lezárom** lehetőségen. A korábbi előleg levonódik, a **Kapott összeg** mezőben már csak a hátralék áll.\n\nA listában a **Fizetés** oszlop mutatja, hol tart a pénz: **Fizetve** és a fizetési mód, vagy a még fizetendő összeg és alatta az előleg.\n\nAz átadáskor állítsd a rendelést **Átadva** állapotra. Ha a rendelés át van adva **és** ki is van fizetve, magától lezárul. A sorrend mindegy: ha előbb fizet és később veszi át, az átadáskor zárul le; ha előbb veszi át és később fizet, a fizetéskor.",
-            "t": "rendeles lepes lepes fizetes eloleg atadas lepes lepes fizetes eloleg atadas rendeles ugyanugy fizetheto munkalap eloleg felvetel uj rendelesnel rogzites fizetes gomb nyomd fizetes ablaka valaszd eloleg reszfizetes lehetoseg ird kap osszeg eloleg fizetes kesobb nyisd rendeles abl aljan kattints fizetes gomb vegfizetes atadas fizetes ablaka hagyd teljes fizetes lezarom lehetoseg korabbi eloleg levonodi kap osszeg mezo hatral all lista fizetes oszlop mut tar penz fizetve fizetesi mod fizetendo osszeg alatta eloleg atadas allitsd rendeles atadva allap rendeles adva fizetve maga lezarul sorrend mindegy elobb fiz kesobb veszi atadas zarul elobb veszi kesobb fiz fizetes",
+            "t": "rendeles lepes lepes fizetes eloleg atadas lepes lepes fizetes eloleg atadas rendeles ugyanugy fizetheto munkalap eloleg felvetel uj rendelesnel rogzites fizetes gomb nyomd fizetes ablaka valaszd eloleg reszfizetes lehetoseg ird kap osszeg eloleg fizetes kesobb nyisd rendeles abl aljan kattints fizetes gomb vegfizetes atadas fizetes ablaka hagyd teljes fizetes lezar lehetoseg korabbi eloleg levonodi kap osszeg mezo hatral all lista fizetes oszlop mut tar penz fizetve fizetesi mod fizetendo osszeg alatta eloleg atadas allitsd rendeles atadva allap rendeles adva fizetve maga lezarul sorrend mindegy elobb fiz kesobb veszi atadas zarul elobb veszi kesobb fiz fizetes",
             "h": 95
         },
         {
@@ -57,7 +57,7 @@
             "cim": "Lépésről lépésre: beszállítók listájának szerkesztése",
             "horgony": "lepesrol-lepesre-beszallitok-listajanak-szerkesztese",
             "szoveg": "A **Honnan** mező listája szabadon bővíthető.\n\n1. A Rendelések oldal fejlécében kattints a **Beszállítók** gombra. Ugyanez a lista nyílik meg a rendelés ablakában a **Honnan** mező melletti **+** gombbal is.\n2. Új beszállítóhoz kattints az **Új beszállító** gombra, és írd be a nevét.\n3. Megadható hozzá weboldal, telefon, e-mail és megjegyzés is (például a kapcsolattartó neve vagy az ügyfélszámod).\n4. Kattints a **Mentés** gombra.\n\nHa a listát a rendelés ablakából nyitottad meg, mentés után a **Honnan** mező rögtön frissül, a félig kitöltött rendelés nem vész el. Ha éppen egy új beszállítót vettél fel, és még nem volt kiválasztva semmi, az új lesz kiválasztva.\n\nFontos: Beszállítót törölni nem lehet, mert a régi rendelések hivatkoznak rá. Akitől már nem rendelsz, annál vedd ki az **Aktív** pipát: új rendelésnél nem lesz választható, a régi rendeléseken megmarad.\n\nA lista telepítés után néhány mintasorral indulhat; ezek átírhatók.",
-            "t": "rendeles lepes lepes beszalli lista szerkesztese lepes lepes beszalli lista szerkesztese honnan mezo lista szabad bovitheto rendeles oldal fejlece kattints beszalli gomb ugyanez lista nyili rendeles ablaka honnan mezo melletti gombbal uj beszallito kattints uj beszallito gomb ird nev megadhato hozza weboldal telef mail megjegyzes peldaul kapcsolattarto neve ugyfelszamod kattints mentes gomb lis rendeles ablaka nyitottad mentes utan honnan mezo rog frissul fel kitolt rendeles vesz epp uj beszalli vettel kivalasztva semmi uj kivalasztva fontos beszalli torolni regi rendeles hivatkoz aki rendelsz annal vedd aktiv pip uj rendelesnel valaszthato regi rendeles megmarad lista telepites utan nehany mintasorral indulh atirh",
+            "t": "rendeles lepes lepes beszalli lista szerkesztese lepes lepes beszalli lista szerkesztese honnan mezo lista szab bovitheto rendeles oldal fejlece kattints beszalli gomb ugyanez lista nyili rendeles ablaka honnan mezo melletti gombbal uj beszallito kattints uj beszallito gomb ird nev megadhato hozza weboldal telef mail megjegyzes peldaul kapcsolattarto neve ugyfelsz kattints mentes gomb lis rendeles ablaka nyitot mentes utan honnan mezo rog frissul fel kitolt rendeles vesz epp uj beszalli vettel kivalasztva semmi uj kivalasztva fontos beszalli torolni regi rendeles hivatkoz aki rendelsz annal vedd aktiv pip uj rendelesnel valaszthato regi rendeles megmar lista telepites utan nehany mintasorral indulh atirh",
             "h": 99
         },
         {
@@ -65,7 +65,7 @@
             "cim": "Mezők és gombok",
             "horgony": "mezok-es-gombok",
             "szoveg": "**A lista oszlopai**\n\n| Oszlop | Mit mutat |\n|---|---|\n| **Szám** | A rendelés sorszáma. Rákattintva megnyílik a rendelés. |\n| **Felvéve** | A felvétel napja, alatta a várható érkezés. Ha a várt nap elmúlt, és a rendelés még **Felvéve** vagy **Megrendelve** állapotban van, a dátum kiemelve látszik. |\n| **Ügyfél** | Az ügyfél neve és telefonszáma. |\n| **Tételek** | Az első három tétel neve; ha több van, a végén a továbbiak száma. |\n| **Honnan** | A beszállító neve, alatta a beszállítói rendelésszám. |\n| **Rendelés** | Hol tart a rendelés; itt helyben átállítható. Mellette az üzenetek száma áll, kiemelve, ha van olvasatlan. Lezárt rendelésnél alatta a lap állapota is látszik. |\n| **Bruttó** | A rendelés bruttó végösszege. |\n| **Fizetés** | **Fizetve** és a fizetési mód, vagy a még fizetendő összeg és az előleg. |\n\n**A lista fölött**\n\n- Négy összegző szám: a rendelések száma, a **Bruttó összesen**, a **Befolyt** és a **Még fizetendő** összeg. Mindig a szűrt listára vonatkoznak.\n- Keresőmező: sorszámra, ügyfélre, telefonszámra, terméknévre és a beszállítói rendelésszámra keres.\n- Állapotszűrő: **Folyamatban**, **Mind**, vagy az öt állapot egyike.\n- Beszállítószűrő: **Minden beszállító**, vagy egy kiválasztott.\n- **Szűrő törlése:** visszaáll az alapnézet.\n\n**A rendelés ablakának saját mezői**\n\n- **Ügyfél** – kötelező. A ceruza gombbal az ügyfél adatai a rendelés bezárása nélkül javíthatók.\n- **Honnan** – a beszállító. Nem kötelező, de a listában e nélkül nem látszik, honnan várod az árut.\n- **Hol tart** – a rendelés útjának aktuális lépése.\n- **Rendelésszám** – a beszállító rendelés- vagy visszaigazolás-száma.\n- **Várható érkezés** – a **Dátumok** dobozban, a munkalap határidő mezőjének helyén.\n- **Megjött – értesítés** – az értesítő ablakát nyitja meg.",
-            "t": "rendeles mez gomb mez gomb lista oszlop oszlop mut szam rendeles sorszama rakattintva megnyili rendeles felveve felvetel nap alatta varhato erkezes var nap elmul rendeles felveve megrendelve allap datum kiemelve latszi ugyfel ugyfel neve telefonszama tetel elso harom tetel neve tobb veg tovabbi szama honnan beszallito neve alatta beszallitoi rendelesszam rendeles tar rendeles hely atallithato mellette uzen szama all kiemelve olvasatlan lezar rendelesnel alatta lap allapota latszi brutto rendeles brutto vegosszege fizetes fizetve fizetesi mod fizetendo osszeg eloleg lista fol negy osszegzo szam rendeles szama brutto osszes befoly fizetendo osszeg szur lista vonatkoz keresomezo sorszam ugyfel telefonszam termeknev beszallitoi rendelesszam keres allapotszuro folyam mind ot allap egyike beszallitoszuro beszallito kivalaszt szuro torlese visszaall alapnez rendeles ablaka saj mezoi ugyfel kotelezo ceruza gombbal ugyfel ada rendeles bezarasa nelkul javith honnan beszallito kotelezo lista nelkul latszi honnan varod aru tar rendeles utja aktualis lepese rendelesszam beszallito rendeles visszaigazolas szama varhato erkezes datum doboz munkalap hatarido mezo hely megj ertesites ertesito abl nyi",
+            "t": "rendeles mez gomb mez gomb lista oszlop oszlop mut szam rendeles sorszama rakattintva megnyili rendeles felveve felvetel nap alatta varhato erkezes var nap elmul rendeles felveve megrendelve allap datum kiemelve latszi ugyfel ugyfel neve telefonszama tetel elso har tetel neve tobb veg tovabbi szama honnan beszallito neve alatta beszallitoi rendelessz rendeles tar rendeles hely atallithato mellette uzen szama all kiemelve olvasatlan lezar rendelesnel alatta lap allapota latszi brutto rendeles brutto vegosszege fizetes fizetve fizetesi mod fizetendo osszeg eloleg lista fol negy osszegzo szam rendeles szama brutto osszes befoly fizetendo osszeg szur lista vonatkoz keresomezo sorsz ugyfel telefonsz termeknev beszallitoi rendelessz keres allapotszuro folyam mind ot allap egyike beszallitoszuro beszallito kivalaszt szuro torlese visszaall alapnez rendeles ablaka saj mezoi ugyfel kotelezo ceruza gombbal ugyfel ada rendeles bezarasa nelkul javith honnan beszallito kotelezo lista nelkul latszi honnan var aru tar rendeles utja aktualis lepese rendelessz beszallito rendeles visszaigazolas szama varhato erkezes datum doboz munkalap hatarido mezo hely megj ertesites ertesito abl nyi",
             "h": 160
         },
         {
@@ -81,7 +81,7 @@
             "cim": "Mi látszódjon az űrlapon (fogaskerék)",
             "horgony": "mi-latszodjon-az-urlapon-fogaskerek",
             "szoveg": "A rendelés ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami ezen az űrlapon nem kell – mezők, lapfülek, gombok, választható állapotok. A beállítás külön él a munkalapétól, és frissítés után is megmarad. Részletesen: Űrlapok beállítása.",
-            "t": "rendeles latszodj urlap fogasker latszodj urlap fogasker rendeles ablaka jobb felso sarka allo fogasker adminisztrator kapcsolod ezen urlap mez lapful gomb valaszthato allap beallitas kul munkalape frissites utan megmarad reszletes urlap beallitasa",
+            "t": "rendeles latszodj urlap fogasker latszodj urlap fogasker rendeles ablaka jobb felso sarka allo fogasker adminisztrator kapcsol ezen urlap mez lapful gomb valaszthato allap beallitas kul munkalape frissites utan megmar reszletes urlap beallitasa",
             "h": 32
         },
         {
@@ -89,7 +89,7 @@
             "cim": "Szabályok, amiket a rendszer betart",
             "horgony": "szabalyok-amiket-a-rendszer-betart",
             "szoveg": "- **Ügyfél nélkül nincs rendelés.** A rendelés mindig valakié, és őt kell értesíteni, ha megjött az áru. Ügyfél nélkül a rendelés nem menthető.\n- **Eszköz nem kell hozzá.** A rendelésen nincs eszköz, hiba és bevizsgálási díj.\n- **A sorszám közös** a munkalapokkal és az árukiadásokkal: mindhárom ugyanabból a számsorból kap számot. A rendelés már a rögzítéskor sorszámot kap.\n- **Az átadott és kifizetett rendelés magától lezárul.** Mindkét feltétel kell hozzá. Ez akkor is megtörténik, ha az állapotot a listából állítod át. A Beállításokban kikapcsolható.\n- **Az értesítés átállítja az állapotot** **Ügyfél értesítve** értékre – kivéve, ha a rendelés már **Átadva**.\n- **Az öt állapot sorrendje adott,** a nevük viszont a Beállításokban átírható. Ha átnevezted őket, a listában és a rendelésen a saját neveid látszanak.\n- **Az ügyfél a saját oldalán is látja a rendelés állását.** A **Megérkezett** és az **Ügyfél értesítve** állapot nála egyformán azt jelenti: megérkezett, átvehető. A várható érkezés napját addig látja, amíg a rendelés **Felvéve** vagy **Megrendelve** állapotban van.\n- **A beszállítók listáját bármelyik kolléga szerkesztheti,** nem kell hozzá adminisztrátori jog.\n- **Kereséskor az alapnézet szűkítése nem érvényes,** így az átadott és a lezárt rendelés is előkerül.",
-            "t": "rendeles szabaly ami rendszer betar szabaly ami rendszer betar ugyfel nelkul nincs rendeles rendeles valakie ot ertesiteni megj aru ugyfel nelkul rendeles mentheto eszkoz hozza rendeles nincs eszkoz hiba bevizsgalasi dij sorszam kozos munkalap arukiadas mindharom ugyanab szamsor kap szam rendeles rogzites sorszam kap atad kifizet rendeles maga lezarul mind feltetel hozza megtorteni allap lista allitod beallitas kikapcsolhato ertesites atalli allap ugyfel ertesitve ert kiveve rendeles atadva ot allap sorrend ado nev visz beallitas atirhato atnevezted oke lista rendeles saj neveid latsza ugyfel saj oldalan lat rendeles allas megerkez ugyfel ertesitve allap nala egyforman jelenti megerkez atveheto varhato erkezes napj add lat amig rendeles felveve megrendelve allap beszalli listaj barmelyi kollega szerkesztheti hozza adminisztratori jog kereses alapnez szukitese ervenyes igy atad lezar rendeles elokerul",
+            "t": "rendeles szabaly ami rendszer betar szabaly ami rendszer betar ugyfel nelkul nincs rendeles rendeles valakie ot ertesiteni megj aru ugyfel nelkul rendeles mentheto eszkoz hozza rendeles nincs eszkoz hiba bevizsgalasi dij sorsz kozos munkalap arukiadas mindhar ugyanab szamsor kap szam rendeles rogzites sorsz kap atad kifizet rendeles maga lezarul mind feltetel hozza megtorteni allap lista alli beallitas kikapcsolhato ertesites atalli allap ugyfel ertesitve ert kiveve rendeles atadva ot allap sorrend ado nev visz beallitas atirhato atnevez oke lista rendeles saj neveid latsza ugyfel saj oldalan lat rendeles allas megerkez ugyfel ertesitve allap nala egyforman jelenti megerkez atveheto varhato erkezes napj add lat amig rendeles felveve megrendelve allap beszalli listaj barmelyi kollega szerkesztheti hozza adminisztratori jog kereses alapnez szukitese ervenyes igy atad lezar rendeles elokerul",
             "h": 124
         },
         {
@@ -97,7 +97,7 @@
             "cim": "Tippek",
             "horgony": "tippek",
             "szoveg": "- **Címke az árura:** a rendelés ablakának alján a **Matrica** gomb a Brother címkenyomtatóra küld egy címkét (ügyfél neve, lapszám, dátum) – a megérkezett árura ragasztva látszik, kinek jött. Lásd: Címkenyomtatás.\n- **Papír a megrendelőnek:** a rendelés ablakának alján a **Nyomtatás** gomb **Megrendelést** (a felvett rendelés visszaigazolása az előleggel), átadáskor **Átadási bizonylatot** ad – nyomtatva, PDF-ben vagy e-mailben. Új rendelés mentése után és lezáráskor a rendszer fel is ajánlja, és ugyanabban az ablakban ott a másik papír meg a **Számla-előkészítő (PDF)** és a **Számlázz.hu számla** gombja is. Az ablak nyitva marad, amíg be nem zárod. Lásd: Nyomtatás, PDF és e-mail.\n- Reggel nézz rá a menüpont jelvényére: ha szám áll mellette, van megérkezett áru, amiről az ügyfél nem tud.\n- A **Várható érkezés** kitöltésével a késő rendelések maguktól kitűnnek a listában.\n- Az ügyfél adatlapján a **Rendelések** lapfül az összes rendelését mutatja darabszámmal, összeggel és a még fizetendő résszel. Egy sorra kattintva a rendelés az ügyfél ablaka fölött nyílik meg.",
-            "t": "rendeles tipp tipp cimke aru rendeles ablaka aljan matrica gomb brother cimkenyomtato kuld cim ugyfel neve lapszam datum megerkez aru ragasztva latszi kin jot lasd cimkenyomtatas papir megrendelo rendeles ablaka aljan nyomtatas gomb megrendeles felv rendeles visszaigazolasa eloleggel atadas atadasi bizonyl ad nyomtatva pdf ben mail uj rendeles mentese utan lezaras rendszer ajanl ugyanab abl masi papir szamla elokeszito pdf szamlazz hu szamla gomb abl nyitva marad amig zarod lasd nyomtatas pdf mail reggel nezz menup jelvenye szam all mellette megerkez aru ami ugyfel tud varhato erkezes kitoltese keso rendeles mag kitun lista ugyfel adatlapjan rendeles lapful osszes rendeles mut darabszammal osszeggel fizetendo resszel sor kattintva rendeles ugyfel ablaka fol nyili",
+            "t": "rendeles tipp tipp cimke aru rendeles ablaka aljan matrica gomb brother cimkenyomtato kuld cim ugyfel neve lapsz datum megerkez aru ragasztva latszi kin jot lasd cimkenyomtatas papir megrendelo rendeles ablaka aljan nyomtatas gomb megrendeles felv rendeles visszaigazolasa eloleggel atadas atadasi bizonyl ad nyomtatva pdf ben mail uj rendeles mentese utan lezaras rendszer ajanl ugyanab abl masi papir szamla elokeszito pdf szamlazz hu szamla gomb abl nyitva mar amig zar lasd nyomtatas pdf mail reggel nezz menup jelvenye szam all mellette megerkez aru ami ugyfel tud varhato erkezes kitoltese keso rendeles mag kitun lista ugyfel adatlapjan rendeles lapful osszes rendeles mut darabszammal osszeggel fizetendo resszel sor kattintva rendeles ugyfel ablaka fol nyili",
             "h": 111
         },
         {
@@ -105,7 +105,7 @@
             "cim": "Ha valami nem megy",
             "horgony": "ha-valami-nem-megy",
             "szoveg": "- **Nem tudom menteni a rendelést.** Válassz ügyfelet a listából, vagy vedd fel a **+** gombbal. A begépelt név önmagában nem elég.\n- **Nem látom a Megjött – értesítés gombot.** Új, még nem rögzített rendelésen nincs. Rögzítsd a rendelést, majd nyisd meg újra.\n- **Az e-mail pipa nem kapcsolható be.** Az ügyfélnek nincs e-mail-címe. Írd be az adatlapján (a ceruza gombbal), vagy szólj neki telefonon.\n- **Az értesítés elment, de az e-mail nem.** A rendszer ezt külön jelzi. Az üzenet az ügyféloldalra felkerült; ellenőrizd a levelezés beállítását, és telefonon is szólj az ügyfélnek.\n- **Átadtam, mégsem zárult le.** A rendelés nincs kifizetve, vagy a Beállításokban ki van kapcsolva az automatikus lezárás.\n- **Nem találom az átadott rendelést.** Az alapnézet csak a folyamatban lévőket mutatja. Válaszd a szűrőben a **Mind** vagy az **Átadva** lehetőséget, vagy keress rá.",
-            "t": "rendeles megy megy tudom menteni rendeles valassz ugyfel lista vedd gombbal begepel nev onmaga eleg latom megj ertesites gomb uj rogzit rendeles nincs rogzitsd rendeles majd nyisd ujra mail pipa kapcsolhato ugyfel nincs mail cime ird adatlapjan ceruza gombbal szolj neki telef ertesites elm mail rendszer kul jelzi uzen ugyfeloldal felkerul ellenorizd levelezes beallitas telef szolj ugyfel atadtam megsem zarul rendeles nincs kifizetve beallitas kapcsolva automatikus lezaras talalom atad rendeles alapnez folyam lev mut valaszd szuro mind atadva lehetoseg keress",
+            "t": "rendeles megy megy tud menteni rendeles valassz ugyfel lista vedd gombbal begepel nev onmaga eleg lat megj ertesites gomb uj rogzit rendeles nincs rogzitsd rendeles majd nyisd ujra mail pipa kapcsolhato ugyfel nincs mail cime ird adatlapjan ceruza gombbal szolj neki telef ertesites elm mail rendszer kul jelzi uzen ugyfeloldal felkerul ellenorizd levelezes beallitas telef szolj ugyfel atad megs zarul rendeles nincs kifizetve beallitas kapcsolva automatikus lezaras talal atad rendeles alapnez folyam lev mut valaszd szuro mind atadva lehetoseg keress",
             "h": 80
         },
         {
@@ -113,7 +113,7 @@
             "cim": "GYIK › Kap az ügyfél papírt a rendeléséről?",
             "horgony": "kap-az-ugyfel-papirt-a-rendeleserol",
             "szoveg": "Igen. Új rendelés mentése után a rendszer felajánlja a **Megrendelés** nyomtatását (mit rendelt, mennyi előleget fizetett); átadáskor az **Átadási bizonylatot**. A felajánló ablakban mindkettő ott van saját gombbal a számla mellett, és nyitva marad, amíg be nem zárod. Mindkét papír a rendelés ablakának **Nyomtatás** gombjával később is elérhető, és e-mailben is elküldhető.",
-            "t": "rendeles gyi kap ugyfel papir rendelese gyi kap ugyfel papir rendelese uj rendeles mentese utan rendszer felajanl megrendeles nyomtatas rendel eloleg fizet atadas atadasi bizonyl felajanlo abl mindketto saj gombbal szamla mell nyitva marad amig zarod mind papir rendeles ablaka nyomtatas gomb kesobb elerheto mail elkuldheto",
+            "t": "rendeles gyi kap ugyfel papir rendelese gyi kap ugyfel papir rendelese uj rendeles mentese utan rendszer felajanl megrendeles nyomtatas rendel eloleg fizet atadas atadasi bizonyl felajanlo abl mindketto saj gombbal szamla mell nyitva mar amig zar mind papir rendeles ablaka nyomtatas gomb kesobb elerheto mail elkuldheto",
             "h": 46
         },
         {
@@ -137,7 +137,7 @@
             "cim": "GYIK › Honnan tudom, hogy megjött áruról még nem szóltam az ügyfélnek?",
             "horgony": "honnan-tudom-hogy-megjott-arurol-meg-nem-szoltam-az-ugyfelnek",
             "szoveg": "A **Rendelések** menüpont melletti szám ezt mutatja: hány rendelés áll **Megérkezett** állapotban. A listában az állapotszűrővel rá is szűrhetsz.",
-            "t": "rendeles gyi honnan tudom megj aru szoltam ugyfel gyi honnan tudom megj aru szoltam ugyfel rendeles menup melletti szam mut hany rendeles all megerkez allap lista allapotszuro szurhetsz",
+            "t": "rendeles gyi honnan tud megj aru szol ugyfel gyi honnan tud megj aru szol ugyfel rendeles menup melletti szam mut hany rendeles all megerkez allap lista allapotszuro szurhetsz",
             "h": 28
         },
         {
@@ -161,7 +161,7 @@
             "cim": "GYIK › Mire való a Rendelésszám mező?",
             "horgony": "mire-valo-a-rendelesszam-mezo",
             "szoveg": "Ide a beszállító rendelés- vagy visszaigazolás-számát írhatod. Nem azonos a rendelés saját sorszámával. A listában a beszállító neve alatt látszik, és keresni is lehet rá.",
-            "t": "rendeles gyi mire valo rendelesszam mezo gyi mire valo rendelesszam mezo ide beszallito rendeles visszaigazolas szam irhatod azonos rendeles saj sorszama lista beszallito neve ala latszi keresni",
+            "t": "rendeles gyi mire valo rendelessz mezo gyi mire valo rendelessz mezo ide beszallito rendeles visszaigazolas szam irh azonos rendeles saj sorszama lista beszallito neve ala latszi keresni",
             "h": 27
         },
         {
@@ -169,7 +169,7 @@
             "cim": "GYIK › Mi történik, ha megnyomom a „Megjött – értesítés\" gombot?",
             "horgony": "mi-tortenik-ha-megnyomom-a-megjott-ertesites-gombot",
             "szoveg": "Megnyílik az értesítő ablaka az előre megírt szöveggel. Számla vagy pénzmozgás nem készül. Az üzenet csak az **Értesítés küldése** gombra megy el.",
-            "t": "rendeles gyi torteni megnyomom megj ertesites gomb gyi torteni megnyomom megj ertesites gomb megnyili ertesito ablaka elo megir szoveggel szamla penzmozgas keszul uzen ertesites kuldese gomb megy",
+            "t": "rendeles gyi torteni megny megj ertesites gomb gyi torteni megny megj ertesites gomb megnyili ertesito ablaka elo megir szoveggel szamla penzmozgas keszul uzen ertesites kuldese gomb megy",
             "h": 27
         },
         {
@@ -177,7 +177,7 @@
             "cim": "GYIK › Hová megy az értesítés?",
             "horgony": "hova-megy-az-ertesites",
             "szoveg": "A rendelés üzenetei közé kerül, amit az ügyfél az ügyféloldalon lát. Ha van e-mail-címe, és bent hagyod a pipát, e-mailben is megkapja. A szöveget küldés előtt az **Üzenet** mezőben átírhatod.",
-            "t": "rendeles gyi hova megy ertesites gyi hova megy ertesites rendeles uzen koze ar ugyfel ugyfeloldal lat mail cime ben hagyod pip mail megkap szoveg kuldes elo uzen mezo atirhatod",
+            "t": "rendeles gyi hova megy ertesites gyi hova megy ertesites rendeles uzen koze ar ugyfel ugyfeloldal lat mail cime ben hagy pip mail megkap szoveg kuldes elo uzen mezo atirh",
             "h": 29
         },
         {
@@ -185,7 +185,7 @@
             "cim": "GYIK › Értesíthetem még egyszer az ügyfelet?",
             "horgony": "ertesithetem-meg-egyszer-az-ugyfelet",
             "szoveg": "Igen. Az első értesítés után a gomb felirata **Újra értesít** lesz. A gomb alatt látod, mikor ment el az utolsó értesítés.",
-            "t": "rendeles gyi ertesithetem egyszer ugyfel gyi ertesithetem egyszer ugyfel elso ertesites utan gomb felirata ujra ertesi gomb ala latod men utolso ertesites",
+            "t": "rendeles gyi ertesith egyszer ugyfel gyi ertesith egyszer ugyfel elso ertesites utan gomb felirata ujra ertesi gomb ala lat men utolso ertesites",
             "h": 22
         },
         {
@@ -193,7 +193,7 @@
             "cim": "GYIK › Válaszolhat az ügyfél az értesítésre?",
             "horgony": "valaszolhat-az-ugyfel-az-ertesitesre",
             "szoveg": "Igen, az ügyféloldalon. A válasza a rendelés **RMA** lapfülén jelenik meg; a listában az üzenetszám kiemelve jelzi az olvasatlan üzenetet.",
-            "t": "rendeles gyi valaszolh ugyfel ertesites gyi valaszolh ugyfel ertesites ugyfeloldal valasza rendeles rma lapful jeleni lista uzenetszam kiemelve jelzi olvasatlan uzen",
+            "t": "rendeles gyi valaszolh ugyfel ertesites gyi valaszolh ugyfel ertesites ugyfeloldal valasza rendeles rma lapful jeleni lista uzenetsz kiemelve jelzi olvasatlan uzen",
             "h": 21
         },
         {
@@ -201,7 +201,7 @@
             "cim": "GYIK › Hogyan állítom át gyorsan a rendelés állapotát?",
             "horgony": "hogyan-allitom-at-gyorsan-a-rendeles-allapotat",
             "szoveg": "A listában a **Rendelés** oszlopban kattints az állapotjelzőre, és válaszd ki az újat. A változás azonnal mentődik.",
-            "t": "rendeles gyi allitom gyorsan rendeles allap gyi allitom gyorsan rendeles allap lista rendeles oszlop kattints allapotjelzo valaszd uja valtozas azonnal mentodi",
+            "t": "rendeles gyi alli gyorsan rendeles allap gyi alli gyorsan rendeles allap lista rendeles oszlop kattints allapotjelzo valaszd uja valtozas azonnal mentodi",
             "h": 21
         },
         {
@@ -209,7 +209,7 @@
             "cim": "GYIK › Mikor zárul le magától a rendelés?",
             "horgony": "mikor-zarul-le-magatol-a-rendeles",
             "szoveg": "Amikor egyszerre igaz, hogy **Átadva** állapotban van és ki van fizetve. Ha csak az egyik teljesül, a rendelés nyitva marad.",
-            "t": "rendeles gyi zarul maga rendeles gyi zarul maga rendeles ami egyszer igaz atadva allap fizetve egyi teljesul rendeles nyitva marad",
+            "t": "rendeles gyi zarul maga rendeles gyi zarul maga rendeles ami egyszer igaz atadva allap fizetve egyi teljesul rendeles nyitva mar",
             "h": 20
         },
         {
@@ -225,7 +225,7 @@
             "cim": "GYIK › Átnevezhetem a rendelés állapotait?",
             "horgony": "atnevezhetem-a-rendeles-allapotait",
             "szoveg": "Igen, a Beállítások **Árukiadás és rendelések** lapfülén, **A rendelés állapotainak neve** részben. A sorrend és az állapotok száma nem változtatható.",
-            "t": "rendeles gyi atnevezhetem rendeles allap gyi atnevezhetem rendeles allap beallitas arukiadas rendeles lapful rendeles allap neve resz sorrend allap szama valtoztathato",
+            "t": "rendeles gyi atnevezh rendeles allap gyi atnevezh rendeles allap beallitas arukiadas rendeles lapful rendeles allap neve resz sorrend allap szama valtoztathato",
             "h": 21
         },
         {
@@ -241,7 +241,7 @@
             "cim": "GYIK › Miért nem látom a rendelést a munkalapok között?",
             "horgony": "miert-nem-latom-a-rendelest-a-munkalapok-kozott",
             "szoveg": "Mert a rendelés a saját menüpontjában marad. A sorszáma viszont közös a munkalapokéval, ezért a munkalapok számai között kimaradhat egy-egy szám.",
-            "t": "rendeles gyi latom rendeles munkalap koz gyi latom rendeles munkalap koz rendeles saj menupont marad sorszama visz kozos munkalapoke ezer munkalap szam koz kimaradh szam",
+            "t": "rendeles gyi lat rendeles munkalap koz gyi lat rendeles munkalap koz rendeles saj menupont mar sorszama visz kozos munkalapoke ezer munkalap szam koz kimaradh szam",
             "h": 25
         },
         {
