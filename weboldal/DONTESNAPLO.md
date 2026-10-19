@@ -16,3 +16,9 @@
 ## Döntések
 - 2026-10-19 · Norbi: az értékesítő oldalon sikeres fizetés után a végszámla **automatikusan** megy ki (`szamlazz.automatikus` = igaz).
   A Műhely „valódi számla csak gombra” döntése a CRM-re érvényes marad.
+- 2026-10-19 21:18 · Norbi: **REJTÉS** – sehol nem derülhet ki, hogy WordPress az alap, és hogy az SDH áll mögötte (`REJTES.md`).
+  Ennek következményei: helyőrző terméknév „Munkora” (SDH CRM helyett), REST `/api/portal/v1`, semleges azonosítók,
+  útvonal-álnevek, titkos belépő, a Műhely semleges vevői buildje, licenckulcs-előtag a Központ beállításából.
+- 2026-10-19 · Vezető (jogi ügynök javaslatára): a webshop **csak vállalkozásoknak** árul (kötelező „vállalkozásként vásárolok”
+  jelölés + adószám), mert a fogyasztói digitális tartalomra vonatkozó elállási szabályok (45/2014. Korm. r. 29. § (1) m),
+  22. § (1a) online elállási gomb) külön folyamatot kívánnának. Ha Norbi fogyasztóknak is el akar adni, ezt ki kell építeni.
