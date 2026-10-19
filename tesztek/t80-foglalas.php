@@ -154,7 +154,14 @@ T::nem_tartalmaz($o, 'type="date"', 'nincs natív dátummező');
 T::nem_tartalmaz($o, 'WordPress', 'az ügyféloldalon nincs WordPress');
 
 T::igaz(isset(SDH_Muhely_Beallitasok::szakaszok()['foglalas']), 'Beállítások › Online időpontfoglalás');
-T::egyezik('naptar', SDH_Muhely_Modulok::szakasz_modulja('foglalas'), 'a Naptár modulhoz tartozik');
+T::egyezik('foglalas', SDH_Muhely_Modulok::szakasz_modulja('foglalas'), 'külön modul (Online időpontfoglalás)');
+T::egyezik(['naptar'], SDH_Muhely_Modulok::katalogus()['foglalas']['fugg'], 'a Naptárra épül');
+SDH_Muhely_Modulok::kikapcsoltak_ment(['foglalas']);
+T::igaz(SDH_Muhely_Modulok::be('naptar') && SDH_Muhely_Modulok::ki('foglalas'), 'kikapcsolható a Naptártól függetlenül');
+T::tartalmaz((string) $F::foglal(['nev' => 'x']), 'nem elérhető', 'kikapcsolva nem foglalható');
+SDH_Muhely_Modulok::kikapcsoltak_ment(['naptar']);
+T::igaz(SDH_Muhely_Modulok::ki('foglalas'), 'a Naptár nélkül sem fut');
+SDH_Muhely_Modulok::kikapcsoltak_ment([]);
 T::tartalmaz($F::url(), 'sdh_foglalas=1', 'a foglalóoldal címe');
 T::tartalmaz($F::beagyazo(), '<iframe', 'beágyazó kód');
 ob_start();

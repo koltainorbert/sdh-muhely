@@ -80,6 +80,11 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.3 – az Online időpontfoglalás külön modul
+- Új modul a katalógusban: **Online időpontfoglalás** (`foglalas`, a Naptárra épül, saját lapfül: Beállítások › Online
+  időpontfoglalás). Kikapcsolva a foglalóoldal „nem elérhető”, a már rögzített foglalások maradnak. Licencben külön adható
+  (a Központ katalógusában is). Alapból bekapcsolva. t80 bővítve.
+
 ### 0.99.2 – a munkalap fogaskerekén is kapcsolható csoportok
 - A munkalap „mi látszódjon” panelje (és Beállítások › Űrlapok) új elemei: **Javítási garancia**, **Online árajánlat**,
   **Elégedettségi kérdés** (bal oldal) és **Átvétel lapfül** (lap). A Beállítások kapcsolói mindenhol kikapcsolják, a fogaskerék

@@ -53,7 +53,8 @@ A bal oldali menü legalján, a **Beállítások** alatt áll a **Modulok** men�
 | SMS-értesítések | SMS a bolti telefonról | semmi nem megy ki, a sor nem fut |
 | Levelezés | e-mail-fiókok a rendszerben | eltűnik a menüpont; a nyomtatványok e-mailje a szerver levélküldőjével megy |
 | Csapat-üzenetek | belső csevegés vagy üzenőfal | a csevegés és a fal eltűnik; a kollégák felvétele a **Beállítások › Csapat** lapfülről továbbra is elérhető |
-| Naptár | névenkénti naptár, emlékeztetők | eltűnik a menüpont, nincs emlékeztető és e-mail |
+| Naptár | névenkénti naptár, emlékeztetők | eltűnik a menüpont, nincs emlékeztető és e-mail; az Online időpontfoglalás is leáll |
+| Online időpontfoglalás | foglalás a weboldalról a naptár szabad helyeire, visszaigazoló e-mail | a foglalóoldal „jelenleg nem elérhető” üzenetet mutat, eltűnik a **Beállítások › Online időpontfoglalás** lapfül; a már rögzített foglalások a naptárban maradnak |
 | AI-asszisztens | a figura és a chat | a figura és a chat eltűnik |
 | Nyomtatványok | PDF, nyomtatás, e-mail | eltűnik minden **Nyomtatás** gomb és a felajánlás |
 | IMEI-lekérdezés | szolgáltató, ellenőrző oldalak, beillesztés | eltűnik az eszköz űrlapjáról az Ellenőrzés és a Gyári adatok sor |

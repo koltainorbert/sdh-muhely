@@ -290,7 +290,7 @@ A **Kategóriák** mezőbe soronként egy kategóriát írj: a név, utána füg
 
 ## Online időpontfoglalás
 
-Az ügyfelek a weboldalatokról maguk foglalhatnak időpontot. A foglalás eseményként bekerül a kiválasztott naptárba, az ügyfél e-mailben visszaigazolást kap, benne egy lemondó linkkel, a naptár gazdája pedig e-mailt kap az új foglalásról.
+Az ügyfelek a weboldalatokról maguk foglalhatnak időpontot (külön modul: **Online időpontfoglalás**, a Modulok oldalon ki- és bekapcsolható; a Naptárra épül). A foglalás eseményként bekerül a kiválasztott naptárba, az ügyfél e-mailben visszaigazolást kap, benne egy lemondó linkkel, a naptár gazdája pedig e-mailt kap az új foglalásról.
 
 ### Lépésről lépésre: bekapcsolás
 

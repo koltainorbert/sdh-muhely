@@ -242,9 +242,15 @@ final class SDH_Muhely_Modulok
             ],
             'naptar' => [
                 'cim' => 'Naptár', 'csoport' => 'Csapat és idő', 'ikon' => 'naptar',
-                'leiras' => 'Naptár névenként, minden nézettel, emlékeztetőkkel, e-mail értesítéssel, napi összefoglalóval és online időpontfoglalással.',
+                'leiras' => 'Naptár névenként, minden nézettel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.',
                 'ajax' => ['naptar'],
-                'szakaszok' => ['naptar', 'foglalas'],
+                'szakaszok' => ['naptar'],
+            ],
+            'foglalas' => [
+                'cim' => 'Online időpontfoglalás', 'csoport' => 'Csapat és idő', 'ikon' => 'foglalas',
+                'leiras' => 'Az ügyfelek a weboldalról foglalnak időpontot a naptár szabad helyeire; visszaigazoló e-mail lemondó linkkel, beágyazó kód.',
+                'fugg' => ['naptar'],
+                'szakaszok' => ['foglalas'],
             ],
 
             // --- Mesterséges intelligencia -------------------------------------

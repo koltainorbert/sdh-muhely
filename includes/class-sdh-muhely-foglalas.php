@@ -370,7 +370,7 @@ final class SDH_Muhely_Foglalas
 
         $b = self::beallitas();
 
-        if (!$b['be'] || SDH_Muhely_Modulok::ki(SDH_Muhely_Naptar::KULCS)) {
+        if (!$b['be'] || SDH_Muhely_Modulok::ki('foglalas')) {
             return 'Az online időpontfoglalás jelenleg nem elérhető.';
         }
 
@@ -779,7 +779,7 @@ final class SDH_Muhely_Foglalas
     {
         $b = self::beallitas();
 
-        if (!$b['be'] || SDH_Muhely_Modulok::ki(SDH_Muhely_Naptar::KULCS) || self::szemely() === null) {
+        if (!$b['be'] || SDH_Muhely_Modulok::ki('foglalas') || self::szemely() === null) {
             self::kis_ablak('Időpontfoglalás', 'info', 'Az online időpontfoglalás jelenleg nem elérhető. Kérjük, hívjon minket telefonon.');
 
             return;

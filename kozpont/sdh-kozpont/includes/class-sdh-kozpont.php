@@ -54,7 +54,7 @@ final class SDH_Kozpont
         'termekek' => ['Termékek és készlet', 'Értékesítés'], 'arukiadas' => ['Napi árukiadás', 'Értékesítés'], 'rendelesek' => ['Rendelések', 'Értékesítés'],
         'penztar' => ['Házipénztár', 'Pénzügy'], 'szamlazas' => ['Számlázás', 'Pénzügy'],
         'uzenetek' => ['Ügyfélüzenetek és RMA-oldal', 'Ügyfélkapcsolat'], 'sms' => ['SMS-értesítések', 'Ügyfélkapcsolat'], 'levelezes' => ['Levelezés', 'Ügyfélkapcsolat'],
-        'csapat' => ['Csapat-üzenetek', 'Csapat és idő'], 'naptar' => ['Naptár', 'Csapat és idő'],
+        'csapat' => ['Csapat-üzenetek', 'Csapat és idő'], 'naptar' => ['Naptár', 'Csapat és idő'], 'foglalas' => ['Online időpontfoglalás', 'Csapat és idő'],
         'asszisztens' => ['AI-asszisztens', 'Mesterséges intelligencia'],
         'nyomtatas' => ['Nyomtatványok', 'Dokumentumok'], 'imei' => ['IMEI-lekérdezés', 'Dokumentumok'], 'tac' => ['TAC-adatbázis', 'Dokumentumok'],
         'matrica' => ['Címkenyomtatás', 'Dokumentumok'], 'mockup' => ['Eszköz-mockupok', 'Dokumentumok'],
