@@ -35,7 +35,7 @@ A {termeknev} szoftver forgalmazója és a webhely üzemeltetője a fenti cég.
 
 ## Szerzői jog
 
-A webhely tartalma (szöveg, kép, grafika, szoftver) szerzői jogi védelem alatt áll. Előzetes írásbeli engedély nélkül nem másolható és nem terjeszthető; idézni a forrás megjelölésével lehet.
+A webhely tartalma (szöveg, kép, grafika) szerzői jogi védelem alatt áll. Előzetes írásbeli engedély nélkül nem másolható és nem terjeszthető; idézni a forrás megjelölésével lehet. A {termeknev} név és logó a cégé. A szoftver forráskódjára a GNU General Public License 2. (vagy későbbi) változata vonatkozik (lásd a [Licencszerződést](/jogi/licencszerzodes/)).
 
 ## Jogi dokumentumok
 

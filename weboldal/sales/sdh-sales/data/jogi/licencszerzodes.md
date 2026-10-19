@@ -1,6 +1,6 @@
 ---
 cim: Licencszerződés (végfelhasználói feltételek)
-leiras: A saját szerveren futó szoftver felhasználási joga: terjedelem, frissítés, lejárat, modulok, tilalmak, támogatási hozzáférés és a központnak küldött műszaki adatok.
+leiras: A forráskód GPL-licence, és amire a fizetős licenckulcs jogosít: frissítés, támogatás, távoli karbantartás, központi szolgáltatások, modulok, lejárat, támogatási hozzáférés, telemetria.
 verzio: "1.0"
 hatalyos: "2026-11-01"
 szulo: jogi
@@ -15,11 +15,21 @@ Licencadó: **{ceg}** ({ceg_cim}, adószám: {ceg_adoszam}). Licencvevő: a megr
 
 A {termeknev} saját fejlesztésű, **PHP / MySQL alapú webes alkalmazás**, amely a Vevő szerverén fut.
 
-A licencadó a {termeknev} szoftverre (a hozzá tartozó dokumentációval és frissítésekkel együtt, a továbbiakban: Szoftver) **nem kizárólagos, át nem ruházható, harmadik személynek tovább nem engedélyezhető** felhasználási jogot ad (a szerzői jogról szóló 1999. évi LXXVI. törvény (Szjt.) szerint), a megrendelt licenc terjedelmében és időtartamára.
+## 1/A. A forráskód licence (GPL) és a fizetős licenc
+
+[ellenőrizendő – jogász]
+
+**A szoftver forráskódja a GNU General Public License 2. (vagy későbbi) változata alatt áll; a licencszöveg a csomagban található.** A forráskódot a Vevő a GPL feltételei szerint szabadon használhatja, tanulmányozhatja, módosíthatja és továbbadhatja. E szerződés egyetlen pontja sem korlátozza a GPL által biztosított jogokat; ha bármely pont ezzel ellentétesnek tűnne, a forráskód tekintetében a GPL az irányadó.
+
+**A fizetős licenc (licenckulcs) a frissítésekre, a támogatásra, a távoli karbantartásra és a központi szolgáltatásokra jogosít; a licenc nélküli modulok a rendszerben nem kapcsolódnak be, ennek kikerülése a frissítésekre és a támogatásra való jogosultságot megszünteti.**
+
+A fizetős licenc tehát **szolgáltatásra szóló jogosultság**, nem a forráskód felhasználási joga. A {termeknev} név, a logók, az arculati elemek és a licencadó szolgáltatásai (a központ, a frissítési csatorna, a támogatás) a licencadóé; a GPL ezekre nem terjed ki. A név és a logók a licencadó engedélye nélkül nem használhatók úgy, hogy azt a látszatot keltsék, mintha egy módosított vagy továbbadott változat a licencadótól származna, vagy azt a licencadó támogatná. A dokumentáció és a webhely tartalma szerzői jogi védelem alatt áll, kivéve, ha kifejezetten más licenc vonatkozik rá.
+
+A továbbiakban: **Szoftver** – a {termeknev} a hozzá tartozó dokumentációval és frissítésekkel; **Szolgáltatások** – a licenckulccsal igénybe vehető frissítés, támogatás, távoli karbantartás és központi szolgáltatások.
 
 ## 2. A licenc terjedelme
 
-A licenc (a licenckulcshoz tartozó adatok szerint) meghatározza:
+A licenckulcs (a hozzá tartozó adatok szerint) meghatározza, milyen terjedelemben jár a Szolgáltatás:
 
 - **a példányok számát** – hány telepítésen (webhelyen) használható ugyanaz a kulcs;
 - **a felhasználók számát** – hány felhasználói fiók dolgozhat a rendszerben;
@@ -27,7 +37,7 @@ A licenc (a licenckulcshoz tartozó adatok szerint) meghatározza:
 - **az időtartamot** – a lejárat napját;
 - **a jogokat** – frissítés, támogatás, távoli karbantartás.
 
-A Vevő a Szoftvert saját belső üzleti céljára, a saját vagy általa bérelt szerveren telepítheti és használhatja. Ha a felhasználók száma meghaladja a licencet, a Szoftver az adminisztrátornak figyelmeztetést mutat; a munka nem áll le, de a Vevő köteles a licencet bővíteni.
+Ha a felhasználók vagy a példányok száma meghaladja a licencet, a Szoftver az adminisztrátornak figyelmeztetést mutat; a munka nem áll le, de a Szolgáltatások a licenc szerinti terjedelemre szólnak, ezért a Vevő a licenc bővítésével tarthatja meg őket.
 
 ## 3. Frissítések
 
@@ -41,15 +51,14 @@ Lejárt (vagy a licencadó által letiltott) licenc esetén a Szoftver **tovább
 
 Az a modul, amely nincs a licencben, **nem fut**: eltűnik a menüből, a Modulok oldalon a kapcsolója szürke. Az addig rögzített **adatai megmaradnak**; ha a licencet bővítik, a modul a következő kapcsolódáskor (legfeljebb 5 perc) ott folytatódik, ahol abbamaradt.
 
-## 6. Tilalmak
+## 6. A licenckulcs és a Szolgáltatások használata
 
-A Vevő nem jogosult:
+A forráskódra a GPL vonatkozik (1/A. pont). A **licenckulcsra és a Szolgáltatásokra** a következők érvényesek:
 
-- a Szoftvert vagy a licenckulcsot harmadik személynek eladni, bérbe adni, kölcsönadni, allicencbe adni, vagy szolgáltatásként (SaaS) harmadik feleknek nyújtani;
-- a licencben meghatározottnál több példányon vagy felhasználóval használni;
-- a licencellenőrzést, a modul- vagy felhasználókorlátozást megkerülni, kikapcsolni vagy módosítani;
-- a Szoftvert visszafejteni (dekompilálni), szétbontani, abból származékos művet készíteni – kivéve, ha ezt az Szjt. kógens szabályai (különösen a 59–60. §: együttműködési képesség, hibajavítás) kifejezetten megengedik;
-- a szerzői jogi és a licencadóra utaló megjelöléseket eltávolítani.
+- a licenckulcs a Vevőhöz szól; harmadik személynek nem adható tovább, és a licencben meghatározottnál több példányhoz vagy felhasználóhoz nem használható – ez a Szolgáltatásokra való jogosultságot érinti, nem a forráskód GPL szerinti használatát;
+- ha a Vevő a licencellenőrzést vagy a modul- / felhasználókorlátozást kikerüli, a frissítésekre és a támogatásra való jogosultsága megszűnik (a már megfizetett díj nem jár vissza [DÖNTENDŐ]);
+- a Szolgáltatások (a központ, a frissítési csatorna, a támogatás) nem terhelhetők túl, és nem használhatók más szoftverhez vagy harmadik személy javára;
+- a licencadó a módosított forráskódú példányhoz támogatást csak akkor köteles nyújtani, ha a hiba a módosítatlan változatban is jelentkezik.
 
 ## 7. A központtal való kapcsolat és a küldött műszaki adatok
 
@@ -89,8 +98,8 @@ A Vevő felel a szerver üzemeltetéséért, a biztonsági mentésekért, a hozz
 
 ## 11. Megszűnés
 
-A licencadó a licencet azonnali hatállyal letilthatja, ha a Vevő a 6. pontot súlyosan megsérti. A letiltás után a Szoftver a 4. pont szerint működik tovább (frissítés és támogatás nélkül). [DÖNTENDŐ: súlyos jogsértésnél (pl. jogosulatlan terjesztés) további jogkövetkezmények]
+A licencadó a licenckulcsot azonnali hatállyal letilthatja, ha a Vevő a 6. pontot súlyosan megsérti. A letiltás csak a Szolgáltatásokat érinti: a Szoftver a 4. pont szerint működik tovább (frissítés és támogatás nélkül), a GPL szerinti jogokat nem érinti. [ellenőrizendő – jogász]
 
 ## 12. Irányadó jog
 
-A magyar jog, különösen a Ptk. és az Szjt. Jogvita esetén az ÁSZF 14. pontja szerint járunk el.
+A magyar jog, különösen a Ptk. és a szerzői jogról szóló 1999. évi LXXVI. törvény (Szjt.); a forráskód licencére a GNU General Public License 2. (vagy későbbi) változata. Jogvita esetén az ÁSZF 14. pontja szerint járunk el.

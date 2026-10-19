@@ -19,7 +19,7 @@ Hatályos: 2026. november 1-jétől. Verzió: 1.0.
 
 A szerződés tárgya:
 
-- a {termeknev} szoftver **felhasználási joga (licence)** a megrendelt csomag, modulok, felhasználószám és példányszám szerint, meghatározott időtartamra (havi vagy éves ciklus);
+- a {termeknev} szoftver **licence (licenckulcs)**, amely a megrendelt csomag, modulok, felhasználószám és példányszám szerint, meghatározott időtartamra (havi vagy éves ciklus) a frissítésekre, a támogatásra, a távoli karbantartásra és a központi szolgáltatásokra jogosít (a szoftver forráskódja a GNU GPL 2. vagy későbbi változata alatt áll – lásd a Licencszerződést);
 - a megrendelt **szolgáltatások** (például telepítés, oktatás, adatátvétel, support-csomag, egyedi fejlesztés), az árlistán szereplő tartalommal.
 
 A szoftver a Vevő saját szerverén (tárhelyén) fut („saját üzemeltetésű”). A felhasználás részletes feltételeit a [Licencszerződés](/jogi/licencszerzodes/) tartalmazza, amely e feltételek elválaszthatatlan része. A support-szintek tartalmát a [Támogatási szint (SLA)](/jogi/sla/) oldal írja le.
@@ -82,7 +82,7 @@ A szerződés megszűnik:
 
 - a licencidő lejártával, ha a Vevő nem újít meg;
 - közös megegyezéssel;
-- azonnali hatályú felmondással, ha a másik fél lényeges kötelezettségét súlyosan megszegi (különösen: a Licencszerződés megsértése, a szoftver visszafejtése, jogosulatlan továbbadása, illetve a díj meg nem fizetése), és a szerződésszegést írásbeli felszólítás után 15 napon belül sem orvosolja.
+- azonnali hatályú felmondással, ha a másik fél lényeges kötelezettségét súlyosan megszegi (különösen: a Licencszerződés megsértése, a licenckulcs jogosulatlan továbbadása, a licencellenőrzés kikerülése, illetve a díj meg nem fizetése), és a szerződésszegést írásbeli felszólítás után 15 napon belül sem orvosolja.
 
 A ciklus közbeni megszűnés esetén a már megfizetett díj – a fogyasztókra vonatkozó szabályokat és az [Elállás és visszatérítés](/jogi/elallas-visszaterites/) oldalt kivéve – nem jár vissza. [DÖNTENDŐ]
 
@@ -96,7 +96,7 @@ Vis maior (a felek érdekkörén kívül eső, elháríthatatlan körülmény) i
 
 ## 11. Szellemi tulajdon
 
-A szoftver, a dokumentáció és a webhely tartalma szerzői jogi védelem alatt áll (Szjt.). A Vevő kizárólag a Licencszerződésben meghatározott felhasználási jogot szerzi meg.
+A szoftver forráskódja a GNU General Public License 2. (vagy későbbi) változata alatt áll; a Vevő ezt a GPL szerint használhatja, módosíthatja és továbbadhatja. A {termeknev} név, a logók, az arculat, a dokumentáció, a webhely tartalma és a Szolgáltató szolgáltatásai (központ, frissítési csatorna, támogatás) a Szolgáltatóé; a fizetős licenc ezekre a szolgáltatásokra jogosít (részletek: [Licencszerződés](/jogi/licencszerzodes/)). [ellenőrizendő – jogász]
 
 ## 12. Adatkezelés
 

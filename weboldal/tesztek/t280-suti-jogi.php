@@ -40,6 +40,18 @@ foreach (['{ceg}', '{ceg_cim}', '{ceg_adoszam}', '{ceg_cegjegyzek}', '{ceg_email
     T::tartalmaz($imp, $tok, 'impresszum token');
 }
 
+// GPL: a forráskód GPL alatt; a licencszerződés nem tilthatja a visszafejtést / módosítást / továbbadást.
+$eula = (string) file_get_contents($jogi_mappa . 'licencszerzodes.md');
+T::tartalmaz($eula, 'A szoftver forráskódja a GNU General Public License 2. (vagy későbbi) változata alatt áll; a licencszöveg a csomagban található.', 'EULA: GPL-záradék');
+T::tartalmaz($eula, 'a licenc nélküli modulok a rendszerben nem kapcsolódnak be, ennek kikerülése a frissítésekre és a támogatásra való jogosultságot megszünteti.', 'EULA: fizetős licenc jogosít');
+T::tartalmaz($eula, '[ellenőrizendő – jogász]', 'EULA: jogászjelölés');
+T::tartalmaz($eula, 'PHP / MySQL alapú webes alkalmazás', 'EULA: platformsemleges leírás');
+foreach (['licencszerzodes', 'aszf', 'impresszum'] as $gd) {
+    $gs = (string) file_get_contents($jogi_mappa . $gd . '.md');
+    T::igaz(preg_match('/visszafejt|dekompil|szétbont|származékos művet|tovább nem engedélyezhető/iu', $gs) === 0, "{$gd}: nincs GPL-lel ütköző tilalom");
+    T::tartalmaz($gs, 'General Public License', "{$gd}: GPL említve");
+}
+
 // Token-csere: a tárhely-tokenek a magba be vannak kötve, a cégnév a beállításból jön.
 SDH_Sales::b_ment(['ceg.nev' => 'Próba Szerviz Bt.', 'jogi.tarhely_nev' => 'Próba Tárhely Zrt.']);
 $cs = SDH_Sales::t('{ceg} – {tarhely_nev} – {levelezo_nev}');
