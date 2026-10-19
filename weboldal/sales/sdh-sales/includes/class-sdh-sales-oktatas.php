@@ -595,12 +595,24 @@ final class SDH_Sales_Oktatas
 
     public static function front_regisztral(): void
     {
-        SDH_Sales_Front::modul('oktatas', 'assets/front/oktatas.js', [], [self::class, 'js_adat'], 'assets/front/szikra.css');
+        // A stílus közös a csevegővel: ugyanazzal a kezelővel töltjük, így egy oldalon csak egyszer jön le.
+        SDH_Sales_Front::modul('oktatas', 'assets/front/oktatas.js', [], [self::class, 'js_adat']);
+        add_action('wp', static function (): void {
+            if (is_singular() && has_shortcode((string) get_post_field('post_content', (int) get_queried_object_id()), 'sdh_oktatas')) {
+                self::stilus();
+            }
+        });
+    }
+
+    public static function stilus(): void
+    {
+        wp_enqueue_style('sdh-sales-szikra', SDH_SALES_URL . 'assets/front/szikra.css', [], SDH_SALES_VERSION);
     }
 
     /** @return array<string, mixed> */
     public static function js_adat(): array
     {
+        self::stilus();
         $szikra = class_exists('SDH_Sales_Szikra') && SDH_Sales_Szikra::aktiv();
 
         if ($szikra) {
