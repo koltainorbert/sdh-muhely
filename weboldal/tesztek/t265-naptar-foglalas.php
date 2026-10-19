@@ -43,7 +43,6 @@ T::igaz(is_array($e4), 'puffer utáni sáv: foglalható');
 T::egyezik(2, (int) $wpdb->get_var("SELECT COUNT(*) FROM " . SDH_Sales_Schema::t('foglalas') . " WHERE allapot = 'foglalt'"), '2 élő foglalás');
 
 // két párhuzamos folyamat ugyanarra a sávra: pontosan egy nyer
-$gyerek = __DIR__ . '/../../../../../tmp/nincs';
 $kod = <<<'PHP'
 <?php
 $_SERVER['HTTP_HOST'] = '127.0.0.1:8765'; $_SERVER['REQUEST_URI'] = '/wp/'; $_SERVER['REMOTE_ADDR'] = '203.0.113.' . $argv[2];
@@ -71,6 +70,7 @@ for ($i = 1; $i <= 4; $i++) {
 $nyert = count(array_filter($ki, static fn ($x) => $x === 'OK'));
 T::egyezik(1, $nyert, 'párhuzamos foglalás: pontosan 1 nyer (' . implode(',', $ki) . ')');
 T::egyezik(1, (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM " . SDH_Sales_Schema::t('foglalas') . " WHERE allapot = 'foglalt' AND kezdet = %s", '2026-10-21 07:00:00')), 'párhuzamos: egy sor az adatbázisban');
+T::egyezik(3, count(array_filter($ki, static fn ($x) => in_array($x, ['HIBA:409', 'HIBA:503'], true))), 'párhuzamos: a többi szabályos elutasítás');
 
 // ellenőrzések
 $hiba = static fn (array $x) => SDH_Sales_Naptar::foglal($x + $be, $most);
