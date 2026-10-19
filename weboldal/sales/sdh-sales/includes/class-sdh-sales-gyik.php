@@ -12,7 +12,7 @@
  *   SDH_Sales_Gyik::egy($kulcs)           → elem | null
  *   SDH_Sales_Gyik::anchor($kulcs)        → "gyik-<kulcs>" (az elem `id`-je az oldalon, a kereső és a llms.txt erre linkel)
  *   SDH_Sales_Gyik::megjelent($kulcs)     → jelzi, hogy a kérdés kirajzolódott (a FAQPage csak ezeket tartalmazza)
- * Elem: {kulcs, kategoria, kerdes (sima szöveg, tokenekkel), valasz (tisztított HTML, tokenekkel), valasz_szoveg, anchor,
+ * Elem: {kulcs, kategoria (megjelenő név), kategoria_kulcs, kerdes (sima szöveg, tokenekkel), valasz (tisztított HTML, tokenekkel), valasz_szoveg, anchor,
  *        url, kapcsolodo[]}
  *
  * @package SDH_Sales
@@ -61,7 +61,8 @@ final class SDH_Sales_Gyik
         $h = (string) preg_replace('#<(script|style|iframe|object|template)\b[^>]*>.*?</\1\s*>#is', '', SDH_Sales::t($h));
         $h = wp_kses($h, self::ENGEDETT, ['http', 'https', 'mailto', 'tel']);
         $h = (string) preg_replace_callback('/<a\s([^>]*)>/i', static function (array $m): string {
-            $attr = $m[1];
+            // Gyökérhez képest relatív link („/arak/”) → a webhely címével (alkönyvtáras telepítés, JSON-LD, llms.txt).
+            $attr = (string) preg_replace_callback('/href=(["\'])(\/(?!\/)[^"\']*)\1/i', static fn ($x) => 'href="' . esc_url(home_url($x[2])) . '"', $m[1]);
 
             if (preg_match('/target=["\']_blank["\']/i', $attr) && !preg_match('/\brel=/i', $attr)) {
                 $attr .= ' rel="noopener"';
@@ -88,7 +89,8 @@ final class SDH_Sales_Gyik
 
         return [
             'kulcs'         => $kulcs,
-            'kategoria'     => SDH_Sales::t(trim((string) ($a['kategoria'] ?? ''))) ?: __('Általános', 'sdh-sales'),
+            'kategoria'     => self::kategoria_nev((string) ($a['kategoria'] ?? '')),
+            'kategoria_kulcs' => sanitize_title((string) ($a['kategoria'] ?? '')) ?: 'altalanos',
             'kerdes'        => SDH_Sales_Seo::sima(SDH_Sales::t((string) ($a['kerdes'] ?? $e['cim'] ?? $kulcs))),
             'valasz'        => $v,
             'valasz_szoveg' => SDH_Sales_Seo::sima($v),
@@ -128,7 +130,7 @@ final class SDH_Sales_Gyik
 
         if ($kategoria !== null && $kategoria !== '') {
             $k = self::hajtott($kategoria);
-            $l = array_values(array_filter($l, static fn ($e) => self::hajtott($e['kategoria']) === $k || sanitize_title($e['kategoria']) === sanitize_title($kategoria)));
+            $l = array_values(array_filter($l, static fn ($e) => self::hajtott($e['kategoria']) === $k || $e['kategoria_kulcs'] === sanitize_title($kategoria) || sanitize_title($e['kategoria']) === sanitize_title($kategoria)));
         }
 
         return $l;
@@ -138,6 +140,53 @@ final class SDH_Sales_Gyik
     public static function egy(string $kulcs): ?array
     {
         return self::mind()[$kulcs] ?? null;
+    }
+
+    /**
+     * Kategória megjelenő neve. A gyik.json `kategoria` mezője lehet kulcs („adatbiztonsag”) vagy név („Adatbiztonság”).
+     * Kulcsnál: a `gyik.kategoriak` beállítás ({kulcs: név}), különben a beépített magyar nevek, különben nagy kezdőbetű.
+     */
+    public static function kategoria_nev(string $k): string
+    {
+        $k = trim($k);
+
+        if ($k === '') {
+            return __('Általános', 'sdh-sales');
+        }
+
+        if (preg_match('/^[a-z0-9_-]+$/', $k) !== 1) {
+            return SDH_Sales::t($k);
+        }
+
+        $sajat = SDH_Sales::b('gyik.kategoriak', []);
+
+        if (is_array($sajat) && !empty($sajat[$k])) {
+            return SDH_Sales::t((string) $sajat[$k]);
+        }
+
+        $nevek = [
+            'altalanos'         => __('Általános', 'sdh-sales'),
+            'vasarlas'          => __('Vásárlás', 'sdh-sales'),
+            'arak'              => __('Árak', 'sdh-sales'),
+            'licenc'            => __('Licenc', 'sdh-sales'),
+            'telepites'         => __('Telepítés', 'sdh-sales'),
+            'adatbiztonsag'     => __('Adatbiztonság', 'sdh-sales'),
+            'adatatvetel'       => __('Adatátvétel', 'sdh-sales'),
+            'modulok'           => __('Modulok', 'sdh-sales'),
+            'iparagak'          => __('Iparágak', 'sdh-sales'),
+            'tamogatas'         => __('Támogatás', 'sdh-sales'),
+            'technikai'         => __('Technikai kérdések', 'sdh-sales'),
+            'szerver'           => __('Szerver és tárhely', 'sdh-sales'),
+            'offline'           => __('Offline működés', 'sdh-sales'),
+            'integraciok'       => __('Integrációk', 'sdh-sales'),
+            'egyedi-fejlesztes' => __('Egyedi fejlesztés', 'sdh-sales'),
+            'demo'              => __('Demó', 'sdh-sales'),
+            'fizetes'           => __('Fizetés', 'sdh-sales'),
+            'szamlazas'         => __('Számlázás', 'sdh-sales'),
+            'adatok'            => __('Adatok', 'sdh-sales'),
+        ];
+
+        return (string) apply_filters('sdh_sales_gyik_kategoria', $nevek[$k] ?? mb_convert_case(str_replace(['-', '_'], ' ', $k), MB_CASE_TITLE, 'UTF-8'), $k);
     }
 
     /** @return array<int, string> a kategóriák első előfordulásuk sorrendjében */
@@ -155,8 +204,8 @@ final class SDH_Sales_Gyik
             $k = $e['kategoria'];
 
             if (!isset($ki[$k])) {
-                $slug   = sanitize_title($k);
-                $ki[$k] = ['kategoria' => $k, 'slug' => $slug, 'anchor' => 'gyik-kat-' . $slug, 'elemek' => []];
+                $slug   = sanitize_title(remove_accents($k));
+                $ki[$k] = ['kategoria' => $k, 'kulcs' => $e['kategoria_kulcs'], 'slug' => $slug, 'anchor' => 'gyik-kat-' . $slug, 'elemek' => []];
             }
 
             $ki[$k]['elemek'][] = $e;

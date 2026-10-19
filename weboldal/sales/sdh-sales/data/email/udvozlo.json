@@ -1,0 +1,20 @@
+{
+  "cim": "Üdvözlő levél (licenc + letöltés)",
+  "leiras": "A kiszolgálás után: licenckulcs, egyszer használható letöltő link, telepítési útmutató, fiók, számla.",
+  "targy": "Üdv a(z) {termeknev} felhasználói között! – licenckulcs és letöltés ({rendeles})",
+  "html": "<h1>Elkészült a(z) {termeknev} licenced</h1><p>Kedves {nev}!</p><p>Köszönjük, hogy a(z) {termeknev} rendszert választottad. Minden készen áll a telepítéshez.</p><div class=\"doboz\"><table><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr>{#kozpont_url}<tr><th>A központ címe</th><td><code>{kozpont_url}</code></td></tr>{/kozpont_url}{#csomag}<tr><th>Csomag</th><td>{csomag}</td></tr>{/csomag}{#lejar}<tr><th>Érvényes</th><td>{lejar}-ig</td></tr>{/lejar}<tr><th>Rendelés</th><td>{rendeles}</td></tr></table></div>{#letoltes_url}<p><a class=\"gomb\" href=\"{letoltes_url}\">A telepítőcsomag letöltése</a></p><p>A letöltő link biztonsági okból 14 napig él, és legfeljebb háromszor használható. Ha lejárt, a fiókodban vagy tőlünk kérhetsz újat.</p>{/letoltes_url}<h2>A telepítés lépései</h2><ol><li>Telepítsd a letöltött csomagot egy külön WordPress-webhelyre (PHP 8.1 és WordPress 6.4 vagy újabb kell).</li><li>Nyisd meg: <strong>Beállítások › Rendszer › Licenc</strong>, és add meg a központ címét és a licenckulcsot.</li><li>Mentés után a rendszer azonnal jelentkezik, és a megvett modulok bekapcsolnak.</li></ol>{#telepites_url}<p>Részletes, képes útmutató: <a href=\"{telepites_url}\">{telepites_url}</a></p>{/telepites_url}{#idopont_url}<p>Szívesen segítünk a telepítésben is – válassz időpontot: <a href=\"{idopont_url}\">időpontfoglalás</a></p>{/idopont_url}{#szamla_url}<p>A végszámlád: <a href=\"{szamla_url}\">letöltés (PDF)</a></p>{/szamla_url}<p>A fiókodban bármikor megtalálod a licencedet, a számláidat és a megújítást: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "licenc_kulcs",
+    "kozpont_url",
+    "csomag",
+    "modulok",
+    "lejar",
+    "letoltes_url",
+    "telepites_url",
+    "idopont_url",
+    "szamla_url",
+    "fiok_url"
+  ]
+}

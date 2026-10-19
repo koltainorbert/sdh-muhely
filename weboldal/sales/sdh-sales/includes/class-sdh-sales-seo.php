@@ -545,7 +545,7 @@ final class SDH_Sales_Seo
             ]);
         }
 
-        $same = array_values(array_filter(self::lista(SDH_Sales::b('seo.sameas', [])), static fn ($u) => wp_http_validate_url($u) !== false));
+        $same = array_values(array_filter(self::lista(SDH_Sales::b('seo.sameas', [])), [self::class, 'jo_url']));
 
         if ($same !== []) {
             $o['sameAs'] = $same;
@@ -957,6 +957,12 @@ final class SDH_Sales_Seo
         }
 
         return ['@type' => 'BreadcrumbList', '@id' => $m[count($m) - 1]['url'] . '#breadcrumb', 'itemListElement' => $l];
+    }
+
+    /** Szintaktikailag érvényes, nyilvános http(s) URL (DNS-feloldás nélkül). */
+    public static function jo_url(string $u): bool
+    {
+        return filter_var($u, FILTER_VALIDATE_URL) !== false && in_array(strtolower((string) wp_parse_url($u, PHP_URL_SCHEME)), ['http', 'https'], true) && strpos((string) wp_parse_url($u, PHP_URL_HOST), '.') !== false;
     }
 
     /** @return array<string, string>|null */
@@ -1470,7 +1476,8 @@ final class SDH_Sales_Seo
 
     public static function noindex_kell(): bool
     {
-        if (is_search()) {
+        // Keresés – a lapozott, üres (404-es) keresési oldal is.
+        if (is_search() || (string) get_query_var('s') !== '') {
             return true;
         }
 

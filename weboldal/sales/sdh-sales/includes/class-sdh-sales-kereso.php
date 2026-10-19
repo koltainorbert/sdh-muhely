@@ -538,13 +538,17 @@ final class SDH_Sales_Kereso
         $kezd  = microtime(true);
         $talal = self::keres($q, $max);
 
-        return new WP_REST_Response([
-            'q'          => $q,
-            'talalatok'  => $talal,
-            'db'         => count($talal),
-            'ms'         => round((microtime(true) - $kezd) * 1000, 2),
-            'index'      => self::index_url(),
+        $v = new WP_REST_Response([
+            'q'         => $q,
+            'talalatok' => $talal,
+            'db'        => count($talal),
+            'ms'        => round((microtime(true) - $kezd) * 1000, 2),
+            'index'     => self::index_url(),
         ], 200);
+        $v->header('Cache-Control', 'private, no-store, max-age=0');
+        $v->header('X-Robots-Tag', 'noindex');
+
+        return $v;
     }
 
     /* =================================================================

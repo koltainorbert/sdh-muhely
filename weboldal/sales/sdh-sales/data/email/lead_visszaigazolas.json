@@ -1,0 +1,13 @@
+{
+  "cim": "Kapcsolatfelvétel visszaigazolása",
+  "leiras": "Kapcsolat- és ajánlatkérő űrlap után.",
+  "targy": "Megkaptuk az üzenetedet – {termeknev}",
+  "html": "<p>Kedves {nev}!</p><p>Köszönjük, hogy írtál{#tema} ({tema}){/tema}! Hamarosan válaszolunk{#valaszido}, legkésőbb {valaszido} belül{/valaszido}.</p>{#uzenet}<div class=\"doboz\"><p><strong>Az üzeneted:</strong></p><p>{uzenet}</p></div>{/uzenet}{#demo_url}<p>Addig is kipróbálhatod a rendszert: <a href=\"{demo_url}\">élő demó</a></p>{/demo_url}<p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "tema",
+    "uzenet",
+    "valaszido",
+    "demo_url"
+  ]
+}

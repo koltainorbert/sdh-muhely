@@ -1,0 +1,14 @@
+{
+  "cim": "Licenc lejárat előtti emlékeztető",
+  "leiras": "30, 7 és 1 nappal a licenc lejárata előtt, megújító linkkel.",
+  "targy": "{termeknev}: a licenced {nap} nap múlva lejár ({lejar})",
+  "html": "<p>Kedves {nev}!</p><p>A(z) {termeknev} licenced <strong>{lejar}</strong>-én lejár ({nap} nap múlva).</p><div class=\"doboz\"><table><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr>{#csomag}<tr><th>Csomag</th><td>{csomag}</td></tr>{/csomag}</table></div><p>Lejárat után a rendszered nem kap frissítést, és a forgalmazói támogatás sem jár hozzá. A megújítás egy kattintás: a meglévő licenced hosszabbodik meg, a kulcs és a beállítások maradnak.</p><p><a class=\"gomb\" href=\"{megujitas_url}\">Megújítom a licencet</a></p><p>Ha már intézted, ezt a levelet tekintsd tárgytalannak.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "licenc_kulcs",
+    "csomag",
+    "lejar",
+    "nap",
+    "megujitas_url"
+  ]
+}

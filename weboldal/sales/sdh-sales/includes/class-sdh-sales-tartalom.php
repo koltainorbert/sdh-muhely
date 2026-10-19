@@ -12,6 +12,7 @@
  *   menu('fo'|'lablec'|'jogi')                    → [ {cim, url, gyerekek[]} ]
  *   betolt(kenyszer = false)                       → a data/ tartalma (hiányzó elemek; kenyszer: a nem szerkesztetteket is frissíti)
  *   md_html(markdown)                              → biztonságos HTML (a blog / jogi / tudásbázis szövegeihez)
+ * Hook: `sdh_sales_tartalom_mentve` (tipus, kulcs, nyelv) – minden mentés és törlés után.
  *
  * @package SDH_Sales
  */
@@ -123,6 +124,7 @@ final class SDH_Sales_Tartalom
         }
 
         self::urit();
+        do_action('sdh_sales_tartalom_mentve', $tipus, $kulcs, (string) $sor['nyelv']);
 
         if ($szerkesztve) {
             SDH_Sales_Naplo::ir('tartalom', ($regi ? 'Módosítva' : 'Új') . ': ' . $tipus . ' / ' . $kulcs, 'info', 'tartalom', $id, $regi, ['tipus' => $tipus, 'kulcs' => $kulcs, 'nyelv' => $sor['nyelv'], 'cim' => $sor['cim'], 'adat' => $adat, 'sorrend' => $sor['sorrend'], 'aktiv' => (bool) $sor['aktiv']]);
@@ -143,6 +145,7 @@ final class SDH_Sales_Tartalom
 
         $wpdb->delete(SDH_Sales_Schema::t('tartalom'), ['id' => (int) $regi['id']]);
         self::urit();
+        do_action('sdh_sales_tartalom_mentve', $tipus, $kulcs, $nyelv);
         SDH_Sales_Naplo::ir('tartalom', 'Törölve: ' . $tipus . ' / ' . $kulcs, 'figyel', 'tartalom', (int) $regi['id'], $regi + ['tipus' => $tipus, 'nyelv' => $nyelv], null);
 
         return true;

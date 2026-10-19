@@ -1,0 +1,15 @@
+{
+  "cim": "Bővítés kész",
+  "leiras": "A modulbővítő rendelés kiszolgálása után.",
+  "targy": "Bővítettük a licencedet – {rendeles}",
+  "html": "<p>Kedves {nev}!</p><p>Köszönjük! A(z) {termeknev} licenced bővült{#uj_modulok} ezekkel: <strong>{uj_modulok}</strong>{/uj_modulok}. A rendszered a következő jelentkezéskor (néhány percen belül) magától bekapcsolja az új modulokat – a Beállítások › Rendszer › Licenc lapon „Ellenőrzés most” gombbal azonnal is kérheted.</p><div class=\"doboz\"><table><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr>{#modulok}<tr><th>Modulok</th><td>{modulok}</td></tr>{/modulok}<tr><th>Rendelés</th><td>{rendeles}</td></tr></table></div>{#szamla_url}<p>A számlád: <a href=\"{szamla_url}\">letöltés (PDF)</a></p>{/szamla_url}<p>Fiókod: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "licenc_kulcs",
+    "uj_modulok",
+    "modulok",
+    "szamla_url",
+    "fiok_url"
+  ]
+}

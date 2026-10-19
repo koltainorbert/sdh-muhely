@@ -1,0 +1,12 @@
+{
+  "cim": "Foglalás lemondva",
+  "leiras": "Lemondás után (akár a vevő, akár mi mondtuk le).",
+  "targy": "Lemondva: {tipus}, {idopont}",
+  "html": "<p>Kedves {nev}!</p><p>A(z) <strong>{idopont}</strong> időpontot ({tipus}) töröltük.</p>{#foglalas_url}<p>Új időpontot itt foglalhatsz: <a href=\"{foglalas_url}\">{foglalas_url}</a></p>{/foglalas_url}<p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "tipus",
+    "idopont",
+    "foglalas_url"
+  ]
+}

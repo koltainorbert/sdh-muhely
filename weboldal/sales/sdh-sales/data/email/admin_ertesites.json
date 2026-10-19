@@ -1,0 +1,19 @@
+{
+  "cim": "Értesítés a forgalmazónak (új vevő)",
+  "leiras": "A kiszolgálási lánc végén – az email.ertesites címre.",
+  "targy": "[{termeknev}] Kiszolgálva: {rendeles} – {vevo_nev} ({osszeg})",
+  "html": "<p>Új rendelés ment végig a kiszolgáláson.</p><div class=\"doboz\"><table><tr><th>Rendelés</th><td>{rendeles} ({tipus})</td></tr><tr><th>Vevő</th><td>{vevo_nev}</td></tr><tr><th>E-mail</th><td>{vevo_email}</td></tr>{#vevo_telefon}<tr><th>Telefon</th><td>{vevo_telefon}</td></tr>{/vevo_telefon}<tr><th>Összeg</th><td>{osszeg}</td></tr><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr>{#lejar}<tr><th>Lejár</th><td>{lejar}</td></tr>{/lejar}{#szamlaszam}<tr><th>Számla</th><td>{szamlaszam}</td></tr>{/szamlaszam}</table></div>{#lanc}<p>Lépések: {lanc}</p>{/lanc}{#admin_url}<p><a class=\"gomb\" href=\"{admin_url}\">Megnyitás az adminban</a></p>{/admin_url}",
+  "tokenek": [
+    "rendeles",
+    "tipus",
+    "vevo_nev",
+    "vevo_email",
+    "vevo_telefon",
+    "osszeg",
+    "licenc_kulcs",
+    "lejar",
+    "szamlaszam",
+    "lanc",
+    "admin_url"
+  ]
+}

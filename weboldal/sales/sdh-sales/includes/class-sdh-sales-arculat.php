@@ -463,17 +463,23 @@ final class SDH_Sales_Arculat
      * Kiírás
      * ============================================================== */
 
-    /** A `:root` felülírás (csak az eltérő, érvényes értékek). Üres, ha nincs eltérés. */
-    public static function css(): string
+    /**
+     * A `:root` felülírás (csak az eltérő, érvényes értékek). Üres, ha nincs eltérés.
+     * `$ertekek` (beállításkulcs → érték) az előnézethez: a még nem mentett értékek.
+     *
+     * @param array<string, mixed>|null $ertekek
+     */
+    public static function css(?array $ertekek = null): string
     {
         $kozos = [];
         $sotet = [];
         $vil   = [];
+        $olvas = static fn (string $k): string => $ertekek !== null ? (string) ($ertekek[$k] ?? '') : (string) SDH_Sales::b($k, '');
 
         foreach (self::tokenek() as $tok => $m) {
             if (self::modos($tok)) {
                 foreach (['sotet', 'vilagos'] as $mod) {
-                    $v = self::ervenyes($tok, (string) SDH_Sales::b(self::kulcs($tok, $mod), ''));
+                    $v = self::ervenyes($tok, $olvas(self::kulcs($tok, $mod)));
 
                     if ($v !== null) {
                         if ($mod === 'sotet') {
@@ -486,7 +492,7 @@ final class SDH_Sales_Arculat
                 continue;
             }
 
-            $v = self::ervenyes($tok, (string) SDH_Sales::b(self::kulcs($tok), ''));
+            $v = self::ervenyes($tok, $olvas(self::kulcs($tok)));
 
             if ($v !== null) {
                 $kozos[] = '--s-' . $tok . ':' . $v;
@@ -510,6 +516,35 @@ final class SDH_Sales_Arculat
 
         // Végső védőháló: semmi, ami kitörhetne a <style>-ból.
         return str_ireplace(['</', '<!--', '-->'], '', $css);
+    }
+
+    /**
+     * Az admin-űrlap értékeiből (`ertekek` = {token: [sötét, világos] | érték}) beállításkulcs → érték térkép (előnézethez).
+     *
+     * @param array<string, mixed> $be
+     * @return array<string, string>
+     */
+    public static function terkep(array $be): array
+    {
+        $ki = [];
+
+        foreach ((array) ($be['ertekek'] ?? []) as $tok => $v) {
+            $tok = (string) $tok;
+
+            if (!isset(self::tokenek()[$tok])) {
+                continue;
+            }
+
+            if (self::modos($tok)) {
+                $par = is_array($v) ? array_values($v) + ['', ''] : [(string) $v, ''];
+                $ki[self::kulcs($tok, 'sotet')]   = (string) $par[0];
+                $ki[self::kulcs($tok, 'vilagos')] = (string) $par[1];
+            } else {
+                $ki[self::kulcs($tok)] = is_array($v) ? (string) ($v[0] ?? '') : (string) $v;
+            }
+        }
+
+        return $ki;
     }
 
     public static function kiir(): void

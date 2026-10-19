@@ -185,9 +185,15 @@ final class SDH_Sales_Llms
         return trim($h);
     }
 
+    /** Forintösszeg sima szóközzel (a Markdownban a nem törő szóköz zavaró lehet a gépi olvasónak). */
+    private static function ft(int $osszeg): string
+    {
+        return str_replace("\u{00A0}", ' ', SDH_Sales::ft($osszeg));
+    }
+
     private static function ar(int $netto, string $ciklus): string
     {
-        return SDH_Sales::ft($netto) . ' + ' . SDH_Sales::afa() . '% ÁFA (bruttó ' . SDH_Sales::ft(SDH_Sales::brutto($netto)) . ') / ' . $ciklus;
+        return self::ft($netto) . ' + ' . SDH_Sales::afa() . '% ÁFA (bruttó ' . self::ft(SDH_Sales::brutto($netto)) . ') / ' . $ciklus;
     }
 
     /** @return array<int, WP_Post> */
@@ -386,7 +392,7 @@ final class SDH_Sales_Llms
                 $o[] = '|---|---:|---:|---:|---:|---:|---:|';
 
                 foreach ($cs as $c) {
-                    $o[] = '| ' . self::md($c['nev']) . ' | ' . SDH_Sales::ft($c['havi']) . ' | ' . SDH_Sales::ft($c['havi_brutto']) . ' | ' . SDH_Sales::ft($c['eves']) . ' | ' . SDH_Sales::ft($c['eves_brutto']) . ' | ' . $c['felhasznalo'] . ' | ' . $c['telephely'] . ' |';
+                    $o[] = '| ' . self::md($c['nev']) . ' | ' . self::ft($c['havi']) . ' | ' . self::ft($c['havi_brutto']) . ' | ' . self::ft($c['eves']) . ' | ' . self::ft($c['eves_brutto']) . ' | ' . $c['felhasznalo'] . ' | ' . $c['telephely'] . ' |';
                 }
 
                 $o[] = '';
@@ -416,7 +422,7 @@ final class SDH_Sales_Llms
             $o[] = '';
             $o[] = __('Árak oldal:', 'sdh-sales') . ' ' . SDH_Sales_Seo::oldal_url($u['arak']);
         } else {
-            $o[] = self::link(__('Árak és csomagok', 'sdh-sales'), SDH_Sales_Seo::oldal_url($u['arak']), $cs !== [] ? implode(', ', array_map(static fn ($c) => $c['nev'] . ': ' . ($c['havi'] > 0 ? SDH_Sales::ft($c['havi']) . ' + ÁFA/hó' : SDH_Sales::ft($c['eves']) . ' + ÁFA/év'), $cs)) : '');
+            $o[] = self::link(__('Árak és csomagok', 'sdh-sales'), SDH_Sales_Seo::oldal_url($u['arak']), $cs !== [] ? implode(', ', array_map(static fn ($c) => $c['nev'] . ': ' . ($c['havi'] > 0 ? self::ft($c['havi']) . ' + ÁFA/hó' : self::ft($c['eves']) . ' + ÁFA/év'), $cs)) : '');
         }
 
         $o[] = '';

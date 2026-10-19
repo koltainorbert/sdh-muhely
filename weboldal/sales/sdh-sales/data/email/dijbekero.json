@@ -1,0 +1,19 @@
+{
+  "cim": "Díjbekérő (új rendelés)",
+  "leiras": "A rendelés után megy ki: átutalási adatok, QR-kód, díjbekérő.",
+  "targy": "Díjbekérő – {rendeles} ({termeknev})",
+  "html": "<p>Kedves {nev}!</p><p>Köszönjük a rendelésed! Az alábbi adatokkal tudod átutalni a díjat; a beérkezés után automatikusan elkészül a licenced, és e-mailben küldjük a telepítéshez szükséges mindent.</p>{#tetelek_html}{tetelek_html}{/tetelek_html}<div class=\"doboz\"><table><tr><th>Rendelés</th><td>{rendeles}</td></tr><tr><th>Fizetendő</th><td><strong>{osszeg}</strong></td></tr><tr><th>Kedvezményezett</th><td>{ceg}</td></tr><tr><th>Számlaszám</th><td>{ceg_bankszamla}</td></tr>{#ceg_iban}<tr><th>IBAN</th><td>{ceg_iban}</td></tr>{/ceg_iban}<tr><th>Közlemény</th><td><code>{kozlemeny}</code></td></tr>{#hatarido}<tr><th>Fizetési határidő</th><td>{hatarido}</td></tr>{/hatarido}</table></div><p>Fontos: a közleménybe pontosan ezt írd: <code>{kozlemeny}</code> – ebből ismerjük fel az utalásodat.</p>{#qr_url}<p>Mobilbankkal gyorsabb: olvasd be a QR-kódot, az adatok maguktól kitöltődnek.</p><p><img src=\"{qr_url}\" alt=\"Átutalási QR-kód\" width=\"180\" height=\"180\" style=\"display:block;width:180px;height:180px;border:0;\"></p>{/qr_url}{#szamla_url}<p><a class=\"gomb\" href=\"{szamla_url}\">Díjbekérő letöltése (PDF)</a></p>{/szamla_url}<p>A rendelésed állapotát a fiókodban követheted: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "osszeg",
+    "kozlemeny",
+    "hatarido",
+    "tetelek_html",
+    "qr_url",
+    "szamla_url",
+    "fiok_url",
+    "ceg_bankszamla",
+    "ceg_iban"
+  ]
+}

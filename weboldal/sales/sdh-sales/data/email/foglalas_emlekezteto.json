@@ -1,0 +1,14 @@
+{
+  "cim": "Foglalás – emlékeztető",
+  "leiras": "24 és 1 órával az időpont előtt.",
+  "targy": "Emlékeztető: {tipus}, {idopont}",
+  "html": "<p>Kedves {nev}!</p><p>Emlékeztetünk a közös időpontra:</p><div class=\"doboz\"><table><tr><th>Mi</th><td><strong>{tipus}</strong></td></tr><tr><th>Mikor</th><td>{idopont} ({idotartam})</td></tr><tr><th>Hol</th><td>{helyszin}</td></tr></table></div>{#lemondas_url}<p>Ha közbejött valami: <a href=\"{lemondas_url}\">lemondás vagy áthelyezés</a></p>{/lemondas_url}<p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "tipus",
+    "idopont",
+    "idotartam",
+    "helyszin",
+    "lemondas_url"
+  ]
+}

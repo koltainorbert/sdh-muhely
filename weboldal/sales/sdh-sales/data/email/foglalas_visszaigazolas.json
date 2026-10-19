@@ -1,0 +1,18 @@
+{
+  "cim": "Foglalás visszaigazolása",
+  "leiras": "Időpontfoglalás után, .ics naptárfájllal.",
+  "targy": "Időpontod rögzítve: {tipus}, {idopont}",
+  "html": "<p>Kedves {nev}!</p><p>{#atfoglalas}Áthelyeztük az időpontodat. {/atfoglalas}Rögzítettük a foglalásodat:</p><div class=\"doboz\"><table><tr><th>Mi</th><td><strong>{tipus}</strong></td></tr><tr><th>Mikor</th><td>{idopont} ({idotartam})</td></tr><tr><th>Hol</th><td>{helyszin}</td></tr>{#megjegyzes}<tr><th>Megjegyzés</th><td>{megjegyzes}</td></tr>{/megjegyzes}</table></div><p>A csatolt naptárfájllal (.ics) felveheted a saját naptáradba{#ics_url}, vagy <a href=\"{ics_url}\">innen is letöltheted</a>{/ics_url}.</p>{#lemondas_url}<p>Ha mégsem jó: <a href=\"{lemondas_url}\">lemondás vagy áthelyezés</a></p>{/lemondas_url}<p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "tipus",
+    "idopont",
+    "idotartam",
+    "helyszin",
+    "megjegyzes",
+    "lemondas_url",
+    "atfoglalas_url",
+    "ics_url",
+    "atfoglalas"
+  ]
+}

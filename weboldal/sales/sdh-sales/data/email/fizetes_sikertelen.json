@@ -1,0 +1,13 @@
+{
+  "cim": "Sikertelen kártyás fizetés",
+  "leiras": "Ha a kártyás fizetés nem sikerült; újrapróba-linkkel.",
+  "targy": "Nem sikerült a fizetés – {rendeles}",
+  "html": "<p>Kedves {nev}!</p><p>A(z) <strong>{rendeles}</strong> rendelésed fizetése ({osszeg}) nem sikerült. A kártyádat nem terheltük meg{#ok}, a bank válasza: {ok}{/ok}.</p><p>Gyakori ok a napi limit, a lejárt kártya vagy a megszakított banki megerősítés. Próbáld újra, vagy válaszd az átutalást:</p>{#ujraproba_url}<p><a class=\"gomb\" href=\"{ujraproba_url}\">Újrapróbálom a fizetést</a></p>{/ujraproba_url}<p>Ha elakadtál, válaszolj erre a levélre, és segítünk.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "osszeg",
+    "ok",
+    "ujraproba_url"
+  ]
+}

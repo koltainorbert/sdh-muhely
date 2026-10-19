@@ -1,0 +1,11 @@
+{
+  "cim": "Belépő link a fiókhoz",
+  "leiras": "Jelszó nélküli belépés: egyszer használható, rövid ideig érvényes link.",
+  "targy": "Belépés a fiókodba – {termeknev}",
+  "html": "<p>Kedves {nev}!</p><p>Ezzel a gombbal beléphetsz a fiókodba. A link {ervenyes_perc} percig érvényes, és csak egyszer használható.</p><p><a class=\"gomb\" href=\"{belepes_url}\">Belépek</a></p><p>Ha nem te kérted, nincs teendőd – a link magától lejár, a fiókodhoz senki nem fér hozzá nélküle.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "belepes_url",
+    "ervenyes_perc"
+  ]
+}

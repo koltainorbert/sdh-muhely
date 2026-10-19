@@ -1,0 +1,14 @@
+{
+  "cim": "Megújítás kész",
+  "leiras": "A megújító rendelés kiszolgálása után.",
+  "targy": "Megújítottuk a licencedet – érvényes {lejar}-ig",
+  "html": "<p>Kedves {nev}!</p><p>Köszönjük a megújítást! A(z) {termeknev} licenced most <strong>{lejar}</strong>-ig érvényes. A kulcs nem változott, a rendszeredben semmit nem kell átállítanod – a következő jelentkezéskor magától frissül.</p><div class=\"doboz\"><table><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr><tr><th>Rendelés</th><td>{rendeles}</td></tr></table></div>{#szamla_url}<p>A számlád: <a href=\"{szamla_url}\">letöltés (PDF)</a></p>{/szamla_url}<p>Fiókod: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "licenc_kulcs",
+    "lejar",
+    "szamla_url",
+    "fiok_url"
+  ]
+}

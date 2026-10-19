@@ -1,0 +1,12 @@
+{
+  "cim": "Időpont-ajánlat (telepítés / támogatás)",
+  "leiras": "A kiszolgálás után: foglaló link a rendeléshez (a Naptár modul tokenjeivel).",
+  "targy": "Válassz időpontot: {tipus} ({rendeles})",
+  "html": "<p>Kedves {nev}!</p><p>A(z) <strong>{rendeles}</strong> rendelésedhez közös időpontot ajánlunk: <strong>{tipus}</strong>. Válaszd ki a neked megfelelőt – a link a rendelésedhez kötött, az adataidat nem kell újra megadnod.</p><p><a class=\"gomb\" href=\"{foglalas_url}\">Időpontot választok</a></p><p>Ha most nem aktuális, később is foglalhatsz ugyanezzel a linkkel.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "tipus",
+    "foglalas_url"
+  ]
+}

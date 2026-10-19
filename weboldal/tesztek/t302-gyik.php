@@ -22,6 +22,17 @@ T::nem_tartalmaz($x, 'onerror', 'eseménykezelő kiszűrve');
 T::nem_tartalmaz($x, '<img', 'kép nem engedett');
 T::tartalmaz(SDH_Sales_Gyik::egy('adat-1')['valasz'], 'rel="noopener"', 'külső link noopener');
 T::tartalmaz(SDH_Sales_Gyik::egy('tel-1')['valasz'], '<li>PHP 8.1+</li>', 'lista megmarad');
+SDH_Sales_Tartalom::ment('gyik', 'rel-1', ['kulcs' => 'rel-1', 'kategoria' => 'adatbiztonsag', 'kerdes' => 'Relatív?', 'valasz' => '<p>Lásd <a href="/arak/">Árak</a>.</p>'], null, 99, true, 'hu', false);
+SDH_Sales_Gyik::urit();
+$r = SDH_Sales_Gyik::egy('rel-1');
+T::tartalmaz($r['valasz'], 'href="' . home_url('/arak/') . '"', 'relatív link → webhely címe');
+T::egyezik('Adatbiztonság', $r['kategoria'], 'kategória-kulcs → megjelenő név');
+T::egyezik(1, count(SDH_Sales_Gyik::lista('adatbiztonsag')), 'szűrés kategória-kulccsal');
+SDH_Sales::b_ment(['gyik.kategoriak' => ['adatbiztonsag' => 'Biztonság és GDPR']]);
+SDH_Sales_Gyik::urit();
+T::egyezik('Biztonság és GDPR', SDH_Sales_Gyik::egy('rel-1')['kategoria'], 'név beállításból');
+SDH_Sales_Tartalom::torol('gyik', 'rel-1');
+SDH_Sales_Gyik::urit();
 
 // FAQPage: csak a megjelentekből.
 t_lap(get_permalink($ids['funkciok/munkalapok']));

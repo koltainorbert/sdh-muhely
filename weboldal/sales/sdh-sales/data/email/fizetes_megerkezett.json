@@ -1,0 +1,12 @@
+{
+  "cim": "Fizetés megérkezett",
+  "leiras": "Azonnal a fizetés beérkezése után; a licenc és a számla ezután megy.",
+  "targy": "Megérkezett a fizetés – {rendeles}",
+  "html": "<p>Kedves {nev}!</p><p>Megérkezett a(z) <strong>{rendeles}</strong> rendelésed díja ({osszeg}). Köszönjük!</p><p>A licenced és a végszámlád elkészítése elindult – néhány percen belül külön levélben küldjük a licenckulcsot és a letöltő linket.</p><p>A rendelés állapota a fiókodban: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "osszeg",
+    "fiok_url"
+  ]
+}

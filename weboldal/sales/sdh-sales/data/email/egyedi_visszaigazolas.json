@@ -1,0 +1,12 @@
+{
+  "cim": "Igényfelmérés visszaigazolása",
+  "leiras": "Az egyedi igényfelmérő űrlap beküldése után.",
+  "targy": "Megkaptuk az igényedet – {azon}",
+  "html": "<p>Kedves {nev}!</p><p>Köszönjük, hogy leírtad, mire van szükséged. Átnézzük, és {#valaszido}{valaszido} belül{/valaszido} személyre szabott ajánlattal jelentkezünk.</p>{#osszefoglalo}<div class=\"doboz\"><p><strong>Amit küldtél ({azon}):</strong></p><p>{osszefoglalo}</p></div>{/osszefoglalo}<p>Ha közben eszedbe jut még valami, csak válaszolj erre a levélre.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "azon",
+    "osszefoglalo",
+    "valaszido"
+  ]
+}

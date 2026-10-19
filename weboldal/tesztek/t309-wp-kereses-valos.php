@@ -22,7 +22,9 @@ $port   = 8791;
 update_option('home', 'http://127.0.0.1:' . $port . '/wp');
 update_option('siteurl', 'http://127.0.0.1:' . $port . '/wp');
 $napl = sys_get_temp_dir() . '/t309-' . getmypid() . '.log';
-$pr   = proc_open([PHP_BINARY, '-S', '127.0.0.1:' . $port, '-t', $gyoker, ABSPATH . 'index.php'], [1 => ['file', $napl, 'a'], 2 => ['file', $napl, 'a']], $cs);
+$rout = sys_get_temp_dir() . '/t309-router-' . getmypid() . '.php';
+file_put_contents($rout, '<?php $f = ' . var_export($gyoker, true) . ' . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH); if (is_file($f) && substr($f, -4) !== ".php") { return false; } chdir(' . var_export(rtrim(ABSPATH, '/'), true) . '); require "index.php";');
+$pr   = proc_open([PHP_BINARY, '-S', '127.0.0.1:' . $port, '-t', $gyoker, $rout], [1 => ['file', $napl, 'a'], 2 => ['file', $napl, 'a']], $cs);
 usleep(600000);
 $kerj = static function (string $ut) use ($port): array {
     $c = stream_context_create(['http' => ['ignore_errors' => true, 'timeout' => 15]]);
@@ -35,7 +37,8 @@ T::tartalmaz($f, 'text/plain; charset=utf-8', 'élő: Content-Type');
 T::igaz(str_starts_with($t, '# SDH CRM'), 'élő: H1');
 [$t, $f] = $kerj('/wp/llms-full.txt');
 T::tartalmaz($t, '9 900 Ft', 'élő llms-full: ár');
-[$t, $f] = $kerj('/wp/robots.txt');
+// A WP csak gyökérbe telepítve szolgálja ki a /robots.txt-t; alkönyvtárban a ?robots=1 ugyanazt a kimenetet adja.
+[$t, $f] = $kerj('/wp/?robots=1');
 T::tartalmaz($t, 'User-agent: ClaudeBot', 'élő robots.txt: AI-botok');
 T::tartalmaz($t, 'Disallow: /wp/kosar/', 'élő robots.txt: kosár tiltva');
 [$t, $f] = $kerj((string) wp_parse_url(SDH_Sales_Kereso::index_url(), PHP_URL_PATH));
@@ -45,6 +48,7 @@ T::tartalmaz($t, 'noindex', 'élő: kosár noindex');
 proc_terminate($pr);
 proc_close($pr);
 @unlink($napl);
+@unlink($rout);
 update_option('home', 'http://127.0.0.1:8765/wp');
 update_option('siteurl', 'http://127.0.0.1:8765/wp');
 

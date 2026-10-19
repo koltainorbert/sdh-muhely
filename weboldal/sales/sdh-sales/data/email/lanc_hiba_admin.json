@@ -1,0 +1,15 @@
+{
+  "cim": "Kiszolgálási hiba (forgalmazónak)",
+  "leiras": "Ha egy kiszolgálási lépés a próbálkozások után sem sikerült.",
+  "targy": "[{termeknev}] Beavatkozás kell: {rendeles} – {lepes}",
+  "html": "<p>A(z) <strong>{rendeles}</strong> rendelés kiszolgálása elakadt, a rendszer {probalkozas} próbálkozás után leállt.</p><div class=\"doboz\"><table><tr><th>Lépés</th><td>{lepes}</td></tr><tr><th>Hiba</th><td>{uzenet}</td></tr><tr><th>Vevő</th><td>{vevo_nev} ({vevo_email})</td></tr></table></div><p>Javítsd a hibát, majd az adminban indítsd újra a lépést – a már sikeres lépések nem futnak le újra.</p>{#admin_url}<p><a class=\"gomb\" href=\"{admin_url}\">Megnyitás az adminban</a></p>{/admin_url}",
+  "tokenek": [
+    "rendeles",
+    "lepes",
+    "uzenet",
+    "probalkozas",
+    "vevo_nev",
+    "vevo_email",
+    "admin_url"
+  ]
+}

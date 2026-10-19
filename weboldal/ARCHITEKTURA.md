@@ -196,3 +196,11 @@ matrica, mockup; + a Műhely `Modulok::katalogus()` többi kulcsa) – így a li
 ## 10. Verzió
 Mindhárom csomag verziója **3 helyen**: fejléc `Version:`, konstans (`SDH_SALES_VERSION` / `SDH_DEMO_VERSION` / téma
 `style.css` + `SDH_TEMA_VERSION`), és a `dokumentacio/README.md` verziónaplója. Első kiadás: **1.0.0**.
+
+## 11. Kiegészítések (menet közben)
+- Hook: `sdh_sales_tartalom_mentve` (tipus, kulcs, nyelv) – a tartalom-tár minden mentése / törlése után (kereső-index, llms.txt).
+- Tartalomtípus `esemeny` (webinárium → Event séma), szekciótípus `esemenyek` (a téma rajzolja; adat: `lista('esemeny')`).
+- Oldal-meta `_sdh_seo_termek` (pl. `csomag:pro`, `modul:penztar`) → Product+Offer séma azon az oldalon.
+- `seo.*` beállítások: lásd `class-sdh-sales-seo.php` fejléce (ai_botok, bingbot, sameas, logo, og_kep, localbusiness…).
+- GYIK-szekció: a téma `SDH_Sales_Gyik::szekcio($sz)`-t hívja (ez gyűjti a FAQPage-et), a kérdés `id`-je az `anchor`.
+  Morzsa: `SDH_Sales_Seo::morzsa()`, kapcsolódó blokk: `SDH_Sales_Seo::kapcsolodo($tipus, $kulcs)`.

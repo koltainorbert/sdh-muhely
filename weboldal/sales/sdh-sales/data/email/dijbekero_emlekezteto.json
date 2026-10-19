@@ -1,0 +1,15 @@
+{
+  "cim": "Díjbekérő – emlékeztető",
+  "leiras": "Ha a díjbekérő határideje közeleg vagy lejárt, és még nem érkezett meg az utalás.",
+  "targy": "Emlékeztető: {rendeles} – még nem érkezett meg az utalás",
+  "html": "<p>Kedves {nev}!</p><p>A(z) <strong>{rendeles}</strong> rendelésed díja még nem érkezett meg hozzánk. Ha már elutaltad, ezt a levelet nyugodtan tekintsd tárgytalannak – a jóváírás néha 1–2 munkanapot is igénybe vehet.</p><div class=\"doboz\"><table><tr><th>Fizetendő</th><td><strong>{osszeg}</strong></td></tr><tr><th>Számlaszám</th><td>{ceg_bankszamla}</td></tr><tr><th>Közlemény</th><td><code>{kozlemeny}</code></td></tr>{#hatarido}<tr><th>Határidő</th><td>{hatarido}</td></tr>{/hatarido}</table></div>{#szamla_url}<p><a class=\"gomb\" href=\"{szamla_url}\">Díjbekérő letöltése (PDF)</a></p>{/szamla_url}<p>Ha meggondoltad magad, vagy kérdésed van, csak válaszolj erre a levélre.</p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "rendeles",
+    "osszeg",
+    "kozlemeny",
+    "hatarido",
+    "szamla_url",
+    "ceg_bankszamla"
+  ]
+}
