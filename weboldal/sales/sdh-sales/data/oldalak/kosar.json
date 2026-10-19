@@ -1,0 +1,31 @@
+{
+ "slug": "kosar",
+ "cim": "Kosár",
+ "sorrend": 92,
+ "seo": {
+  "title": "Kosár – {termeknev}",
+  "description": "A kiválasztott csomag, modulok és szolgáltatások nettó és bruttó áron. Innen indul a megrendelés.",
+  "kulcsszo": "kosár"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Kosár",
+   "alcim": "Ellenőrizd a csomagot, a modulokat és a szolgáltatásokat. Az árat a szerver számolja, a pénztárban ez lesz a végösszeg.",
+   "cimke": "Vásárlás",
+   "gomb": {
+    "szoveg": "Tovább a pénztárba",
+    "url": "/penztar/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "kosar",
+   "cim": "A kosarad"
+  }
+ ]
+}

@@ -1,0 +1,177 @@
+{
+ "slug": "munkalapok",
+ "cim": "Munkalapok",
+ "szulo": "funkciok",
+ "sorrend": 1,
+ "seo": {
+  "title": "Munkalap program fotóval, aláírással – {termeknev}",
+  "description": "Digitális munkalap szervizeknek: hibák, tételek, előleg, fizetés, átvételi fotó és aláírás, QR-kódos ügyfélkövetés. Próbálja ki a demóban!",
+  "kulcsszo": "munkalap program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Munkalap program fotóval, aláírással és QR-kódos követéssel",
+   "alcim": "Digitális munkalap a felvételtől a kiadásig: hibák, tételek, előleg, fizetés és állapot egy ablakban.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Egy javítás minden adata egy ablakban, a lista elhagyása nélkül"
+    },
+    {
+     "szoveg": "Automatikus mentés: azonnal vagy a mező elhagyásakor – nem vész el félbehagyott munka"
+    },
+    {
+     "szoveg": "Több eszköz egy munkalapon, eszközönkénti állapottal és részösszeggel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A munkalap végigkíséri a javítást: ügyfél és eszköz, hibák, szolgáltatások és termékek, előleg, fizetés, számla, lezárás. A mentett lap minden változása magától mentődik, egy lapra több eszköz is kerülhet, a lezárt lap pedig csak olvasható.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Munkalapok, vagy az Áttekintés „+ Új munkalap” gombja.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Egy javítás minden adata egy ablakban, a lista elhagyása nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Automatikus mentés: azonnal vagy a mező elhagyásakor – nem vész el félbehagyott munka",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Több eszköz egy munkalapon, eszközönkénti állapottal és részösszeggel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bevizsgálási díj, előleg, fizetés és pénztár egy folyamatban",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Lezárt lap zárolása, újranyitás csak okkal, naplózva",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új munkalap",
+     "szoveg": "Az Áttekintésen vagy a Munkalapok oldalon a „+ Új munkalap” gombbal nyílik az ablak. Az ügyfelet névre, telefonszámra vagy ügyfélszámra gépelve választod."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Eszköz és hiba",
+     "szoveg": "Az Eszköz mezőben az ügyfél készüléke áll, a Hibák lapfülön a hiba – a Gyakori hibák listából egy kattintással."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Tételek és fizetés",
+     "szoveg": "Szolgáltatás és termék a lapfüleken, előleg és bevizsgálási díj a bal oldali Fizetés részben. Az összeg gépelés közben frissül."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Állapot és lezárás",
+     "szoveg": "Az állapotváltás azonnal mentődik. Lezáráskor a lap zárolt, csak olvasható nézetre vált; nyomtatás, számla és üzenet így is megy."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Az új, még soha el nem mentett lap nem mentődik magától – így a félbehagyott felvitel nem kap munkalapszámot.</li><li>Számla, fizetés és üzenetküldés soha nem történik magától, csak a saját gombjára.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "atvetel-foto-alairas",
+    "javitasi-garancia",
+    "rma",
+    "nyomtatas",
+    "szamlazas",
+    "parhuzamos-szerkesztes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "allami-szektor",
+    "egeszsegugy",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Munkalapok",
+   "kulcsok": [
+    "atveteli-foto-alairas",
+    "automatikus-mentes-urlap",
+    "tobb-eszkoz-egy-lapon",
+    "javitasi-garancia",
+    "szamozas-folytatasa"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Munkalapok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

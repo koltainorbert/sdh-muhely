@@ -1,0 +1,169 @@
+{
+ "slug": "eszkozok",
+ "cim": "Eszközök és előélet",
+ "szulo": "funkciok",
+ "sorrend": 3,
+ "seo": {
+  "title": "Javítási nyilvántartás eszköztörténettel – {termeknev}",
+  "description": "Eszköznyilvántartás szervizeknek: IMEI, sorozatszám, tartozékok, titkosított zárkód és a készülék teljes javítási előélete egy helyen.",
+  "kulcsszo": "javítási nyilvántartás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Javítási nyilvántartás eszköztörténettel",
+   "alcim": "Minden készülék az ügyfeléhez kötve: IMEI, sorozatszám, tartozékok, zárkód, garancia és minden korábbi javítás.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-eszkoz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Az IMEI 15. számjegye után azonnal kiderül, járt-e már nálatok a készülék"
+    },
+    {
+     "szoveg": "Típusfelismerés az IMEI első nyolc számjegyéből – internet nélkül is"
+    },
+    {
+     "szoveg": "Feloldó kód és minta titkosítva, jogosultsághoz kötött megnézéssel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Ha ugyanaz a készülék újra bejön, az IMEI beírására a rendszer megtalálja, és betölti az adatait és az ügyfelét. Az eszköz előélete megmutatja, hány munkalapon szerepelt, és garanciában van-e még.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Eszközök; munkalap › Eszköz mező.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Az IMEI 15. számjegye után azonnal kiderül, járt-e már nálatok a készülék",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Típusfelismerés az IMEI első nyolc számjegyéből – internet nélkül is",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Feloldó kód és minta titkosítva, jogosultsághoz kötött megnézéssel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Készülékkép és csatolt fájlok az eszköz mellett",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszatérő készülék jelzése a garancia állapotával",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új eszköz",
+     "szoveg": "A munkalapon az Eszköz mező melletti „+” gombbal, vagy az Eszközök menüpontból. Az eszköz mindig egy ügyfélhez tartozik."
+    },
+    {
+     "ikon": "pont",
+     "cim": "IMEI beírása",
+     "szoveg": "Vonalkódolvasóval vagy kézzel. A 15. számjegy után üzenet jelzi, hogy ismert-e a készülék, vagy a típusadatbázis felismerte."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Zárkód és minta",
+     "szoveg": "A feloldó kód és a minta titkosítva tárolódik; később csak jogosult kolléga nézheti meg a Megmutat gombbal."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Előélet",
+     "szoveg": "Az eszköz kártyáján látszik, hány munkalapon szerepelt, melyik a legutóbbi, és garanciában van-e."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "imei-tac",
+    "zarkod-titkositas",
+    "javitasi-garancia",
+    "mockupok",
+    "munkalapok",
+    "cimkenyomtatas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "allami-szektor",
+    "egeszsegugy",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Eszközök és előélet",
+   "kulcsok": [
+    "eszkoz-elozmenyek",
+    "imei-tac",
+    "zarkod-titkositas",
+    "vonalkodolvaso"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Eszközök és előélet a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

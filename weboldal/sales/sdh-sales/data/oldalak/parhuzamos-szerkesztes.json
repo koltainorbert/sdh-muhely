@@ -1,0 +1,149 @@
+{
+ "slug": "parhuzamos-szerkesztes",
+ "cim": "Párhuzamos szerkesztés védelme",
+ "szulo": "funkciok",
+ "sorrend": 35,
+ "seo": {
+  "title": "Párhuzamos szerkesztés védelme – {termeknev}",
+  "description": "Többfelhasználós munkalap program ütközésvédelemmel: egy lap egy ablakban, „X is szerkeszti” jelzés, felülbíráló kód, naplózás.",
+  "kulcsszo": "többfelhasználós munkalap program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Egy lap, egy szerkesztő: zárolás és ütközésvédelem",
+   "alcim": "Amit valaki épp szerkeszt, azt a rendszer más ablakban nem nyitja meg; ütközésnél a mentés nem írja felül csendben a másikét.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Zárolás munkalapra alapból, ügyfélre és eszközre választhatóan"
+    },
+    {
+     "szoveg": "„X is szerkeszti” jelzés az űrlap alján"
+    },
+    {
+     "szoveg": "Felülbíráló kód sürgős esetre, naplózva"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A munkalap alapból zárol: egyszerre csak egy ablakban szerkeszthető, a doboz kiírja, ki dolgozik rajta. Ha mégis ketten mentenének, a rendszer megnevezi, ki és mikor módosított, és választást kínál: frissítés a legújabbra vagy a saját mentése.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Jogosultságok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Zárolás munkalapra alapból, ügyfélre és eszközre választhatóan",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "„X is szerkeszti” jelzés az űrlap alján",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Felülbíráló kód sürgős esetre, naplózva",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ütközéskor nincs csendes adatvesztés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Közös fióknál is személyre szól",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Zárolás",
+     "szoveg": "Beállítások › Jogosultságok: melyik rekordtípus zároljon."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kód",
+     "szoveg": "Ugyanitt a felülbíráló kód – csak lenyomatként tárolódik."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Ütközés",
+     "szoveg": "Ütközéskor sáv: „Frissítés a legújabbra” vagy „Az enyémet mentsd”."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "kozos-fiok",
+    "munkalapok",
+    "valtozasnaplo",
+    "szerepkorok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Párhuzamos szerkesztés védelme",
+   "kulcsok": [
+    "parhuzamos-szerkesztes",
+    "kozos-fiok-pin",
+    "valtozasnaplo"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Párhuzamos szerkesztés védelme a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

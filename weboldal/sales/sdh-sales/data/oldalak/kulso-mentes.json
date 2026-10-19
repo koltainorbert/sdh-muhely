@@ -1,0 +1,162 @@
+{
+ "slug": "kulso-mentes",
+ "cim": "Titkosított külső mentés",
+ "szulo": "funkciok",
+ "sorrend": 40,
+ "seo": {
+  "title": "Titkosított külső mentés: Drive, FTP, NAS – {termeknev}",
+  "description": "Titkosított mentés a szerviz adatairól Google Drive-ra, FTP/FTPS-re, NAS-ra vagy saját gépre, automatikus újrapróbálással.",
+  "kulcsszo": "titkosított mentés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Titkosított külső mentés Google Drive-ra, FTP-re, NAS-ra",
+   "alcim": "Minden mentés után jelszóval titkosított másolat a bekapcsolt helyekre: Google Drive, FTP/FTPS, NAS (mappa vagy WebDAV), saját gép.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Erős, jelszavas titkosítás – jelszó nélkül a fájl olvashatatlan"
+    },
+    {
+     "szoveg": "Egyszerre több cél: Drive, FTP/FTPS, NAS, saját gép"
+    },
+    {
+     "szoveg": "Google Drive: csak a saját létrehozott fájljaihoz fér hozzá"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A szerveren maradó mentés nem véd a lemez meghibásodása ellen, ezért minden mentésből titkosított másolat készül egy vagy több külső helyre. Ha a cél épp nem elérhető, a másolat várakozik, és 15 percenként újrapróbálkozik.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Mentés.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Erős, jelszavas titkosítás – jelszó nélkül a fájl olvashatatlan",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Egyszerre több cél: Drive, FTP/FTPS, NAS, saját gép",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Google Drive: csak a saját létrehozott fájljaihoz fér hozzá",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Újrapróbálás 15 percenként, legfeljebb hatszor",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Megőrzés: a legfrissebb N, az előző napi és a visszaállítás előtti",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Jelszó",
+     "szoveg": "Beállítások › Mentés › Titkosítás: jelszó kétszer, majd mentés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Cél",
+     "szoveg": "A kártyán az Aktív kapcsoló, a mezők, majd Kapcsolat próbája."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Első másolat",
+     "szoveg": "A következő mentéskor vagy a Mentés most gombra készül."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A titkosító jelszót tedd el biztos helyre: nélküle a külső másolat nem nyitható meg.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "mentes",
+    "biztonsag",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Titkosított külső mentés",
+   "kulcsok": [
+    "titkositott-kulso-mentes",
+    "google-drive-mentes",
+    "mentesi-jelszo-elveszett"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Titkosított külső mentés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

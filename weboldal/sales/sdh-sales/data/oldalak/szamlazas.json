@@ -1,0 +1,179 @@
+{
+ "slug": "szamlazas",
+ "cim": "Számlázz.hu-számlázás",
+ "szulo": "funkciok",
+ "sorrend": 19,
+ "seo": {
+  "title": "Munkalapból Számlázz.hu-számla – {termeknev}",
+  "description": "Számlázz.hu-integráció szervizeknek: valódi számla a munkalap tételeiből, előnézettel, céges vevővel – és PDF számla-előkészítő.",
+  "kulcsszo": "számlázz.hu munkalap"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Munkalapból Számlázz.hu-számla egy kattintással",
+   "alcim": "Valódi számla a munkalapról a saját Számlázz.hu-fiókodban, tételesen – és helyi számla-előkészítő PDF internet nélkül is.",
+   "cimke": "Pénzügy",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-szamlazas",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Munkalapból, árukiadásból és rendelésből, dupla adatbevitel nélkül"
+    },
+    {
+     "szoveg": "Számla soha nem készül magától – csak gombra"
+    },
+    {
+     "szoveg": "Céges vevő, adószám, e-számla, számlatömb előtag"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A Számlázz.hu számla gomb a számla ablakát nyitja meg: vevő, tételek, előnézet, minden átírható, és számla csak a „Számla kiállítása” gombra készül. A számla PDF-je a lapon címkeként látszik; adattörlő kód tételenként, eszközönkénti számla is lehetséges.</p><p><strong>Hol találod a rendszerben?</strong> Munkalap / árukiadás / rendelés › Számlázz.hu számla; Beállítások › Számlázás.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Munkalapból, árukiadásból és rendelésből, dupla adatbevitel nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Számla soha nem készül magától – csak gombra",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Céges vevő, adószám, e-számla, számlatömb előtag",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bevizsgálási díj és több eszköz kezelése a számlán",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A Számla Agent kulcs titkosítva tárolva",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Kulcs",
+     "szoveg": "Beállítások › Számlázás: Számla Agent kulcs, majd Kapcsolat ellenőrzése."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Számla ablak",
+     "szoveg": "A mentett, sorszámos lap alján a „Számlázz.hu számla” gomb."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kiállítás",
+     "szoveg": "Vevő és tételek átnézése, előnézet, majd „Számla kiállítása”."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A valódi számlát mindig a Számlázz.hu állítja ki; a rendszer összeállítja és elküldi neki az adatokat.</li><li>Saját Számlázz.hu-fiók kell hozzá.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "szamlazas"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "hazipenztar",
+    "arukiadas",
+    "munkalapok",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "kkv",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Számlázz.hu-számlázás",
+   "kulcsok": [
+    "szamlazas-szamlazzhu",
+    "szamlazzhu-elofizetes",
+    "szamla-javitas",
+    "szamla-offline"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Számlázz.hu-számlázás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

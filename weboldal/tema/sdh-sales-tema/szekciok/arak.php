@@ -138,7 +138,7 @@ foreach ($csomagok as $k => $c) {
     $gomb = sdh_tema_t((string) ($c['cta'] ?? '')) ?: sdh_tema__('Megveszem');
     $url  = add_query_arg(['csomag' => rawurlencode((string) $k)], sdh_tema_kosar_url('kosar'));
 
-    echo '<a class="s-gomb ' . ($kiemelt ? 's-gomb--elsodleges' : 's-gomb--masodlagos') . ' s-gomb--teljes" href="' . esc_url($url) . '" data-sdh-kosarba="' . sdh_tema_json_attr(['csomag' => (string) $k]) . '" data-ciklus-link>'
+    echo '<a class="s-gomb ' . ($kiemelt ? 's-gomb--elsodleges' : 's-gomb--masodlagos') . ' s-gomb--teljes" href="' . esc_url($url) . '" data-kosarba="' . sdh_tema_json_attr(['csomag' => (string) $k]) . '" data-ciklus-link>'
         . esc_html($gomb) . '<span class="s-sr"> – ' . esc_html(sdh_tema_t((string) $c['nev'])) . '</span></a>';
     echo '</li>';
 }

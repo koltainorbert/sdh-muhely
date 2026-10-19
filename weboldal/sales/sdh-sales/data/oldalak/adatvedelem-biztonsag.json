@@ -1,0 +1,149 @@
+{
+ "slug": "adatvedelem-biztonsag",
+ "cim": "Adatvédelem és biztonság",
+ "sorrend": 95,
+ "seo": {
+  "title": "Adatvédelem és biztonság – {termeknev}",
+  "description": "Hol vannak az adatok, mit küld a rendszer, hogyan titkosít, ki mihez fér hozzá: a {termeknev} biztonsági jellemzői tényszerűen.",
+  "kulcsszo": "szerviz CRM adatbiztonság"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Adatvédelem és biztonság, tényszerűen",
+   "alcim": "Hol vannak az adatok, mi megy ki a rendszerből, mi van titkosítva, és mit nem állítunk. Informatikusoknak és adatvédelmi felelősöknek.",
+   "cimke": "Bizalom",
+   "gomb": {
+    "szoveg": "Biztonsági funkciók",
+    "url": "/funkciok/biztonsag/"
+   },
+   "gomb2": {
+    "szoveg": "Jogi dokumentumok",
+    "url": "/jogi/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Hol vannak az adatok, és mi megy ki?",
+   "oszlop": "2",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "szerver",
+     "cim": "A saját szervereteken",
+     "szoveg": "A {termeknev} a ti szervereteken vagy tárhelyeteken fut; az ügyféladat ott marad."
+    },
+    {
+     "ikon": "info",
+     "cim": "A licencközpontnak",
+     "szoveg": "5 percenként licenckulcs, példányazonosító, verzió, műszaki állapot és darabszámok. Ügyfélnév, telefonszám, e-mail, cím, munkalap-tartalom és forgalom soha."
+    },
+    {
+     "ikon": "ai",
+     "cim": "Az AI-asszisztensnek",
+     "szoveg": "Csak bekapcsolva és saját Claude API-kulccsal: a kérdés és az ahhoz lekért adat. Zárkódot, mintát, jelszót, API-kulcsot nem lát."
+    },
+    {
+     "ikon": "felho",
+     "cim": "Külső mentésbe",
+     "szoveg": "Csak a bekapcsolt helyekre, jelszóval titkosítva; jelszó nélkül olvashatatlan."
+    }
+   ]
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Védelem a rendszerben",
+   "oszlop": "3",
+   "elemek": [
+    {
+     "ikon": "pajzs-pipa",
+     "cim": "Kétlépcsős belépés",
+     "szoveg": "TOTP-kód, tartalék kódok, kötelezővé tehető.",
+     "url": "/funkciok/ketlepcsos-belepes/"
+    },
+    {
+     "ikon": "felhasznalo",
+     "cim": "Szerepkörök",
+     "szoveg": "Modul- és finom jogok, szerveroldali ellenőrzéssel.",
+     "url": "/funkciok/szerepkorok/"
+    },
+    {
+     "ikon": "kulcs",
+     "cim": "Titkosított titkok",
+     "szoveg": "Zárkód, minta, API-kulcsok, jelszavak titkosítva tárolva.",
+     "url": "/funkciok/zarkod-titkositas/"
+    },
+    {
+     "ikon": "riport",
+     "cim": "Aláírt napló",
+     "szoveg": "Mezőszintű, nem átírható, épség-ellenőrzéssel.",
+     "url": "/funkciok/valtozasnaplo/"
+    },
+    {
+     "ikon": "gdpr",
+     "cim": "GDPR-anonimizálás",
+     "szoveg": "Törlési kérés a számviteli megőrzés mellett.",
+     "url": "/funkciok/gdpr-anonimizalas/"
+    },
+    {
+     "ikon": "mentes",
+     "cim": "Mentés és visszaállítás",
+     "szoveg": "Napi mentés, titkosított külső másolat, tranzakciós visszaállítás.",
+     "url": "/funkciok/mentes/"
+    },
+    {
+     "ikon": "lakat",
+     "cim": "Zárt felület",
+     "szoveg": "Belépés nélkül semmi nem látszik; a belső felület kívülről nem kereshető."
+    },
+    {
+     "ikon": "tamogatas",
+     "cim": "Támogatás csak engedéllyel",
+     "szoveg": "Időkorlátos belépés 2 órára, 1 vagy 3 napra; lejáratkor törlődik, naplózva.",
+     "url": "/funkciok/licenc-karbantartas/"
+    },
+    {
+     "ikon": "wifi-ki",
+     "cim": "Kiesés nélkül",
+     "szoveg": "A belső munka internet nélkül is megy.",
+     "url": "/funkciok/offline/"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Amit nem állítunk",
+   "szelesseg": "keskeny",
+   "hatter": "felulet",
+   "html": "<ul><li>A {termeknev} <strong>nem rendelkezik</strong> ISO 27001 vagy más biztonsági tanúsítvánnyal.</li><li>A szerver biztonsága (operációs rendszer, tűzfal, HTTPS, a szerver saját mentése) az üzemeltető feladata; ehhez a <a href=\"/telepites/\">telepítési útmutató</a> ad ellenőrzőlistát.</li><li>A közvetlen hálózati címkenyomtatás valódi nyomtatón még nincs kipróbálva.</li><li>A jogi dokumentumok tervezetek; jogászi ellenőrzés után véglegesek.</li></ul>"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Dokumentumok",
+   "szelesseg": "keskeny",
+   "html": "<ul><li><a href=\"/jogi/adatkezeles/\">Adatkezelési tájékoztató</a></li><li><a href=\"/jogi/adatfeldolgozasi-szerzodes/\">Adatfeldolgozási szerződés</a></li><li><a href=\"/jogi/ai-chat-tajekoztato/\">AI-chat tájékoztató</a></li><li><a href=\"/jogi/sla/\">SLA</a></li><li><a href=\"/jogi/licencszerzodes/\">Licencszerződés</a></li></ul>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Kérdések az adatbiztonságról",
+   "kategoria": "adatbiztonsag"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Biztonsági kérdésed van?",
+   "szoveg": "Az informatikusotok kérdéseire írásban is válaszolunk.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

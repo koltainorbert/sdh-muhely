@@ -1,0 +1,165 @@
+{
+ "slug": "javitasi-garancia",
+ "cim": "Javítási garancia",
+ "szulo": "funkciok",
+ "sorrend": 50,
+ "seo": {
+  "title": "Javítási garancia nyilvántartása – {termeknev}",
+  "description": "Javítási garancia nyilvántartása szervizeknek: lejárat a munkalapon és a nyomtatványon, visszatérő készülék jelzése, garanciális lánc.",
+  "kulcsszo": "javítási garancia"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Javítási garancia és visszatérő készülékek nyilvántartása",
+   "alcim": "Garancia a lezárás napjától (alapból 180 nap, laponként átírható), és jelzés, ha a készülék garanciaidőn belül visszajön.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Alap garancia napokban, laponként felülírható"
+    },
+    {
+     "szoveg": "Lejárat a nyomtatványon is"
+    },
+    {
+     "szoveg": "Visszatérő készülék jelzése"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A garancia napjai és lejárata a munkalapon és a nyomtatványon is látszik. Ha a készülék visszajön, az Eszköz lapfül jelzi, hány lapon szerepelt és garanciában van-e; a „Garanciális visszatérésként rögzítem” gomb az új lapot az eredetihez köti.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Javítási garancia; munkalap › Dátumok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Alap garancia napokban, laponként felülírható",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Lejárat a nyomtatványon is",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszatérő készülék jelzése",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Garanciális lánc: az eredeti lap, számla, pénztár érintetlen",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Sikeres javítási arány a Riportokban",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Alapérték",
+     "szoveg": "Beállítások › Javítási garancia: alap napok, visszatérő-jelzés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Laponként",
+     "szoveg": "A munkalap Dátumok alatti csoportjában felülírható."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Visszatérés",
+     "szoveg": "Az új lapon „Garanciális visszatérésként rögzítem”."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A jogszabályi jótállási időt ellenőrizd, és ahhoz igazítsd az alapértéket.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "munkalapok",
+    "eszkozok",
+    "riportok",
+    "rma"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "egeszsegugy",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Javítási garancia",
+   "kulcsok": [
+    "javitasi-garancia",
+    "riportok",
+    "ugyfeloldal-rma"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Javítási garancia a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

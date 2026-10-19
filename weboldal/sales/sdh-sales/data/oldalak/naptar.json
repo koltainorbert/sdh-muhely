@@ -1,0 +1,170 @@
+{
+ "slug": "naptar",
+ "cim": "Naptár",
+ "szulo": "funkciok",
+ "sorrend": 21,
+ "seo": {
+  "title": "Naptár névenként, 12 nézettel – {termeknev}",
+  "description": "Csapatnaptár szervizeknek: naptár minden kollégának, 12 nézet, emlékeztetők, e-mail értesítés, ügyfélhez és munkalaphoz kötött események.",
+  "kulcsszo": "csapat naptár szerviz"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Naptár névenként, 12 nézettel és emlékeztetőkkel",
+   "alcim": "Naptár névenként, tizenkét nézettel, ismétlődő eseményekkel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.",
+   "cimke": "Csapat és idő",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-naptar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "12 nézet a mai idővonaltól az éves áttekintésig"
+    },
+    {
+     "szoveg": "Esemény ügyfélhez és munkalapszámhoz köthető"
+    },
+    {
+     "szoveg": "Ismétlődés, több emlékeztető, fontosság, privát esemény"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Minden névhez saját naptár tartozik, és ezek egymás mellé tehetők: egy pillantással látszik, ki mikor foglalt. Az esedékes eseményről kártya szól a rendszer minden oldalán, és addig marad, amíg kézzel ki nem nyomod.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Naptár; Beállítások › Naptár.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "12 nézet a mai idővonaltól az éves áttekintésig",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Esemény ügyfélhez és munkalapszámhoz köthető",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ismétlődés, több emlékeztető, fontosság, privát esemény",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "E-mail értesítés és napi összefoglaló levél",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Áthelyezés húzással",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Esemény",
+     "szoveg": "Naptár › „+ Új esemény”, vagy kattintás a rács üres helyére."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Részletek",
+     "szoveg": "Megnevezés, naptár, idő, fontosság, emlékeztető, ügyfél, munkalapszám."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Mentés",
+     "szoveg": "„Felveszem a naptárba” – a naptár helyben frissül."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "naptar"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "foglalas",
+    "csapat",
+    "levelezes",
+    "asszisztens"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Naptár",
+   "kulcsok": [
+    "naptar-modul",
+    "naptar-foglalas",
+    "csapat-uzenetek"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Naptár a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

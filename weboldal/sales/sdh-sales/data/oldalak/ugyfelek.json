@@ -1,0 +1,166 @@
+{
+ "slug": "ugyfelek",
+ "cim": "Ügyfelek (CRM)",
+ "szulo": "funkciok",
+ "sorrend": 2,
+ "seo": {
+  "title": "CRM szervizeknek – ügyfél és eszköz egy helyen",
+  "description": "Ügyfélnyilvántartó program szervizeknek: magánszemély, cég, közület, címek, fájlok, munkalapok és vásárlások egy adatlapon, villámgyors keresővel.",
+  "kulcsszo": "CRM szerviznek"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "CRM szervizeknek – ügyfél és eszköz egy helyen",
+   "alcim": "Ügyféltörzs magánszemélyekkel, cégekkel és közületekkel – munkalapokkal, rendelésekkel és vásárlásokkal egy adatlapon.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-ugyfel",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Magánszemély, cég és közület egy listában, adószámmal és kapcsolattartóval"
+    },
+    {
+     "szoveg": "Az irányítószám beírására kitöltődik a település"
+    },
+    {
+     "szoveg": "Levelezési és szállítási cím, telephely ügyfelenként"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az ügyfelet elég egyszer felvenni: utána névre, telefonszámra vagy ügyfélszámra gépelve bárhol előhívod. Az adatlapon egy helyen látod az elérhetőségeit, a címeit, a csatolt fájlokat, a munkalapjait, a rendeléseit és a vásárlásait.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Ügyfelek.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Magánszemély, cég és közület egy listában, adószámmal és kapcsolattartóval",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az irányítószám beírására kitöltődik a település",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Levelezési és szállítási cím, telephely ügyfelenként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kategória és kedvezmény ügyfelenként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "GDPR-kérésre anonimizálás, a számlák és a munkalapok megtartásával",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új ügyfél",
+     "szoveg": "Az Ügyfelek menüpontban az „Új ügyfél” gomb. Csak a név kötelező, minden más később is pótolható."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Cím és státusz",
+     "szoveg": "Az irányítószámból kitöltődik a település; a Státusz sorban Magánszemély, Cég vagy Közület. Cégnél adószám és kapcsolattartó."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Elérhetőség",
+     "szoveg": "Két telefonszám és e-mail – az ügyféloldal belépése és az SMS is ezekre épül."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Előzmények",
+     "szoveg": "Az adatlap alján a Készülékei, a Rendelések és a Vásárlások lapfül mutatja, mi történt eddig az ügyféllel."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "eszkozok",
+    "munkalapok",
+    "okos-kereso",
+    "gdpr-anonimizalas",
+    "rma",
+    "sms"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Ügyfelek (CRM)",
+   "kulcsok": [
+    "okos-kereso",
+    "gdpr-anonimizalas",
+    "eszkoz-elozmenyek",
+    "adatatvetel-hogyan"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Ügyfelek (CRM) a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

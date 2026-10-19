@@ -1,0 +1,159 @@
+{
+ "slug": "valtozasnaplo",
+ "cim": "Változásnapló",
+ "szulo": "funkciok",
+ "sorrend": 37,
+ "seo": {
+  "title": "Változásnapló és nyomon követés – {termeknev}",
+  "description": "Aláírt változásnapló a szerviz rendszerében: minden módosítás mezőszinten, ki, mikor, honnan, régi és új értékkel.",
+  "kulcsszo": "változásnapló"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Változásnapló: ki, mikor, mit módosított",
+   "alcim": "Minden módosítás mezőszinten: ki, mikor, honnan, régi és új érték – aláírt, nem átírható napló, visszakereshetően.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-riport",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Mezőszintű napló régi → új értékkel"
+    },
+    {
+     "szoveg": "Honnan: felület, asszisztens, időzített feladat, ügyféloldal, SMS-átjáró"
+    },
+    {
+     "szoveg": "Napló gomb a lapokon: a rekord története popupban"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A napló mindent rögzít: munkalap, árukiadás, rendelés, ügyfél, eszköz, pénztár, számla, üzenetek, naptár, készlet és a Beállítások változásai. Minden bejegyzést aláírás véd, és az „Épség ellenőrzése” gomb megmutatja, ha valaki az adatbázisban mégis hozzányúlt.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Napló (adminisztrátornak); lap › Napló gomb.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Mezőszintű napló régi → új értékkel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Honnan: felület, asszisztens, időzített feladat, ügyféloldal, SMS-átjáró",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Napló gomb a lapokon: a rekord története popupban",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Szűrők, CSV-export, épség-ellenőrzés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Senki nem írhatja át, a rendszer sem",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Egy rekord",
+     "szoveg": "A lap alján a Napló gomb: a teljes története."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Teljes napló",
+     "szoveg": "Menü › Napló: szűrők, keresés, CSV, épség."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Beállítás",
+     "szoveg": "Beállítások › Változásnapló: mit naplózzon még."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "biztonsag",
+    "asszisztens",
+    "parhuzamos-szerkesztes",
+    "szerepkorok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Változásnapló",
+   "kulcsok": [
+    "valtozasnaplo",
+    "tamogatasi-hozzaferes-mit-lat",
+    "jogosultsagok-szerepek"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Változásnapló a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

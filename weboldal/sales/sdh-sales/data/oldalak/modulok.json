@@ -1,0 +1,65 @@
+{
+ "slug": "modulok",
+ "cim": "Modulok",
+ "sorrend": 31,
+ "seo": {
+  "title": "Modulok és bővítések – {termeknev}",
+  "description": "Raktár, házipénztár, Számlázz.hu, SMS, RMA-ügyféloldal, naptár, AI-asszisztens és még 10 modul: kapcsold be, amit használsz, a többit nem fizeted.",
+  "kulcsszo": "szerviz szoftver modulok"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Modulok: csak azt fizesd, amit használsz",
+   "alcim": "Az alaprendszer minden csomagban fut; a 17 modul egyenként kapcsolható, később is bővíthető, az adataid kikapcsoláskor is megmaradnak.",
+   "cimke": "Modulok",
+   "gomb": {
+    "szoveg": "Modulok összeállítása",
+    "url": "#kalkulator"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Minden modul csoportonként",
+   "csoportositva": true,
+   "arak": true
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mi van az alaprendszerben?",
+   "szelesseg": "keskeny",
+   "hatter": "felulet",
+   "html": "<p>Az <strong>alaprendszer</strong> minden csomagban benne van: Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó és Mentés – és mellette a biztonsági funkciók (kétlépcsős belépés, szerepkörök, változásnapló, GDPR-anonimizálás), az okos kereső, a riportok és az adatátvétel.</p><p>Kikapcsolt modulnál a menüpont, a gombok és az időzített feladatok eltűnnek, <strong>az adatok megmaradnak</strong>.</p>"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Állítsd össze a saját csomagod",
+   "horgony": "kalkulator"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Kérdések a modulokról",
+   "kategoria": "modulok",
+   "db": 10
+  },
+  {
+   "tipus": "cta",
+   "cim": "Hiányzik egy modul?",
+   "szoveg": "Egyedi modult is fejlesztünk – a licenc ugyanúgy kezeli, mint a gyáriakat.",
+   "gomb": {
+    "szoveg": "Egyedi modulfejlesztés",
+    "url": "/egyedi-modulfejlesztes/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

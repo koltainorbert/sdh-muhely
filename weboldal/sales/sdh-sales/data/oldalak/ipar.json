@@ -1,0 +1,139 @@
+{
+ "slug": "ipar",
+ "cim": "Ipari javítóműhelyek és karbantartás",
+ "szulo": "iparagak",
+ "sorrend": 2,
+ "seo": {
+  "title": "Munkalap program ipari javítóműhelynek – {termeknev}",
+  "description": "Ipari gépjavító és karbantartó műhelyeknek: munkalap, eszköztörténet sorozatszámmal, alkatrészraktár, riport technikusonként, offline működés.",
+  "kulcsszo": "karbantartás munkalap program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Munkalap és alkatrész-nyilvántartás ipari javítóműhelyeknek",
+   "alcim": "Munkalap, alkatrészraktár és technikusonkénti riport gépjavító, karbantartó és szerelőműhelyeknek.",
+   "cimke": "Ipari javítóműhelyek és karbantartás",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-ipar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "ora",
+     "cim": "Nem látszik az átfutás",
+     "szoveg": "Mennyi ideig áll egy gép javításra, és ki dolgozott rajta? Papírból ez nem derül ki."
+    },
+    {
+     "ikon": "doboz",
+     "cim": "Alkatrész a munkára félretéve",
+     "szoveg": "A raktárkészlet és a nyitott munkákra foglalt alkatrész nem ugyanaz."
+    },
+    {
+     "ikon": "wifi-ki",
+     "cim": "Gyenge hálózat a csarnokban",
+     "szoveg": "A felhős rendszer akkor áll le, amikor a legnagyobb szükség van rá."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>Ahol gépeket, szerszámokat, berendezéseket javítanak, ott is munkalap, eszköz és alkatrész a lényeg. Az eszköz sorozatszámmal, előélettel, csatolt fájlokkal tartható nyilván; az alkatrész a nyitott munkalapon foglalt, a rendelési javaslat beszállítónként áll össze.</p><ul><li><strong>Riportok:</strong> átlagos és medián átfutás, technikusonkénti darabszám és visszajövés.</li><li><strong>Saját szerver:</strong> a belső munka internet nélkül is megy.</li><li><strong>Szerepkörök:</strong> szerelő, raktáros (egyéni szerep), adminisztrátor – mindenki csak a sajátját látja.</li></ul>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "munkalapok",
+    "eszkozok",
+    "raktar",
+    "termekek",
+    "riportok",
+    "naptar",
+    "szerepkorok",
+    "nyomtatas",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "termekek",
+    "naptar",
+    "nyomtatas"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>A {termeknev} nem karbantartás-tervező (CMMS) rendszer: ütemezett megelőző karbantartást a Naptár ismétlődő eseményeivel lehet követni. Ipari tanúsítványt nem ígérünk; egyedi igényre a modul- és szoftverfejlesztés oldal ad lehetőséget.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Ipari javítóműhelyek és karbantartás",
+   "kulcsok": [
+    "mire-nem-valo",
+    "nagy-adatbazis-sebesseg",
+    "offline-mi-mukodik",
+    "keszletkezeles-modul"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "kkv",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

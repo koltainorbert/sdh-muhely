@@ -1,0 +1,174 @@
+{
+ "slug": "termekek",
+ "cim": "Termékek és készlet",
+ "szulo": "funkciok",
+ "sorrend": 14,
+ "seo": {
+  "title": "Terméktörzs és készletnyilvántartás – {termeknev}",
+  "description": "Alkatrész-nyilvántartás szervizeknek: kódok, vonalkód, árak, nyitókészlet, minimumkészlet és minden készletmozgás visszakereshetően.",
+  "kulcsszo": "alkatrész nyilvántartás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Terméktörzs és készletnyilvántartás vonalkóddal",
+   "alcim": "Terméktörzs és készletnyilvántartás: kódok, vonalkód, kategória, beszállító, beszerzési és eladási ár, készletmozgások.",
+   "cimke": "Értékesítés és raktár",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-raktar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Gyári szám, cikkszám, termékkód, vonalkód"
+    },
+    {
+     "szoveg": "Beszerzési és eladási ár: elég az egyiket beírni, a másik számolódik"
+    },
+    {
+     "szoveg": "Minimumkészlet és „Rendelni kell” nézet"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Amit a munkalapra vagy a napi árukiadásra termékként felteszel, mentéskor magától lejön a készletről; a bevételezés és a leltárkorrekció az űrlapon rögzül. Minden változás visszakereshető a készletmozgások között.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Termékek.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Gyári szám, cikkszám, termékkód, vonalkód",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Beszerzési és eladási ár: elég az egyiket beírni, a másik számolódik",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Minimumkészlet és „Rendelni kell” nézet",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Készletmozgások teljes listája",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Termékcímke árral, cikkszámmal, vonalkóddal",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új termék",
+     "szoveg": "Termékek › „Új termék”: csak a megnevezés kötelező."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Készlet",
+     "szoveg": "Nyitókészlet, mennyiségi egység, minimumkészlet – a nyitókészlet készletmozgásként rögzül."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Árak és kódok",
+     "szoveg": "Beszerzési vagy eladási ár, cikkszám, vonalkód; mentés a „Termék létrehozása” gombbal."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "termekek"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "raktar",
+    "arukiadas",
+    "rendelesek",
+    "cimkenyomtatas",
+    "munkalapok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar",
+    "kkv",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Termékek és készlet",
+   "kulcsok": [
+    "keszletkezeles-modul",
+    "rendelesi-javaslat",
+    "brother-cimkenyomtato",
+    "vonalkodolvaso"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Termékek és készlet a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

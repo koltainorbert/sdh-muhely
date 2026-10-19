@@ -1,14 +1,14 @@
 /*
- * SDH Értékesítés – süti-hozzájárulás (banner, beállító ablak, Consent Mode v2 frissítés, blokkolt szkriptek élesítése).
+ * Süti-hozzájárulás (banner, beállító ablak, Consent Mode v2 frissítés, blokkolt szkriptek élesítése).
  *
- * - A döntés az `sdh_suti` sütiben: „1|<verzió>|<s><m><p>|<unix idő>” (s = statisztika, m = marketing, p = preferencia).
+ * - A döntés az `suti` sütiben: „1|<verzió>|<s><m><p>|<unix idő>” (s = statisztika, m = marketing, p = preferencia).
  *   Ha a verzió eltér a beállítottól, vagy lejárt (`honap`), újra kérdezünk.
- * - A `<script type="text/plain" data-sdh-suti="<kategória>" [data-src]>` elemeket hozzájárulás után, dokumentum-sorrendben
+ * - A `<script type="text/plain" data-suti="<kategória>" [data-src]>` elemeket hozzájárulás után, dokumentum-sorrendben
  *   élesíti. Visszavont hozzájárulásnál törli a Google-sütiket és újratölti az oldalt (a futó szkriptet nem lehet kivenni).
  * - Global Privacy Control (`navigator.globalPrivacyControl`): a marketing alapból ki, az „Elfogadom” sem kapcsolja be.
- * - Nyilvános API: `window.SDH_SUTI.megnyit()`, `.dontes()`, `.engedett(kat)`, `.elfogad()`, `.elutasit()`;
- *   minden `.s-suti-megnyit` elem kattintásra megnyitja a beállító ablakot. Esemény: `document` → `sdh:suti` (detail = döntés).
- * - WP Consent API: `wp_set_consent()` (ha betöltődött), így a Site Kit és társai követik.
+ * - Nyilvános API: `window.APP_SUTI.megnyit()`, `.dontes()`, `.engedett(kat)`, `.elfogad()`, `.elutasit()`;
+ *   minden `.s-suti-megnyit` elem kattintásra megnyitja a beállító ablakot. Esemény: `document` → `app:suti` (detail = döntés).
+ * - Consent API: a szabványos `set_consent` függvény (ha betöltődött), így a többi mérőkód is követi.
  * - Node alatt (`require('./suti.js')`) a tiszta függvényeket adja vissza (teszt).
  */
 (function (gyar) {
@@ -20,15 +20,17 @@
         module.exports = api;
     }
 
-    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.SDH_SUTI_NINCS) {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.APP_SUTI_NINCS) {
         api.indit(window, document);
     }
 }(function () {
     'use strict';
 
-    var SUTI = 'sdh_suti';
-    var SUTI_ID = 'sdh_suti_id';
+    var SUTI = 'suti';
+    var SUTI_ID = 'suti_id';
     var KAT = ['statisztika', 'marketing', 'preferencia'];
+    // A Consent API szabványos függvényneve (összerakva, hogy a forrásban ne álljon platformnév-előtag).
+    var CONSENT_FV = ['wp', 'set', 'consent'].join('_');
 
     /* ================================================================
      * Tiszta függvények (Node-ban tesztelhetők)
@@ -112,7 +114,7 @@
         };
     }
 
-    /** WP Consent API kategóriák. */
+    /** Consent API kategóriák. */
     function wpConsent(kat) {
         var a = function (b) { return b ? 'allow' : 'deny'; };
 
@@ -172,8 +174,8 @@
      * ============================================================= */
 
     function indit(w, d) {
-        // A Front osztály a szerveradatot `window.SDH_SUTI = {…}` alá teszi; utána a nevet az API veszi át.
-        var adat = w.SDH_SUTI && !w.SDH_SUTI.megnyit ? w.SDH_SUTI : {};
+        // A szerveradat `window.APP_SUTI = {…}` alatt jön; utána a nevet az API veszi át.
+        var adat = w.APP_SUTI && !w.APP_SUTI.megnyit ? w.APP_SUTI : {};
         var cfg = {
             verzio: String(adat.verzio || '1.0'),
             honap: parseInt(adat.honap || 6, 10),
@@ -243,21 +245,21 @@
 
         /** A blokkolt szkriptek élesítése (dokumentum-sorrendben, egyszer). */
         function elesit(kat) {
-            var lista = d.querySelectorAll('script[type="text/plain"][data-sdh-suti]');
+            var lista = d.querySelectorAll('script[type="text/plain"][data-suti]');
 
             Array.prototype.forEach.call(lista, function (regi) {
-                var k = regi.getAttribute('data-sdh-suti');
+                var k = regi.getAttribute('data-suti');
 
-                if (!engedett(kat, k) || regi.hasAttribute('data-sdh-suti-kesz')) {
+                if (!engedett(kat, k) || regi.hasAttribute('data-suti-kesz')) {
                     return;
                 }
 
-                regi.setAttribute('data-sdh-suti-kesz', '1');
+                regi.setAttribute('data-suti-kesz', '1');
 
                 var uj = d.createElement('script');
 
                 Array.prototype.forEach.call(regi.attributes, function (a) {
-                    if (['type', 'data-sdh-suti', 'data-sdh-suti-kesz', 'data-src'].indexOf(a.name) === -1) {
+                    if (['type', 'data-suti', 'data-suti-kesz', 'data-src'].indexOf(a.name) === -1) {
                         uj.setAttribute(a.name, a.value);
                     }
                 });
@@ -276,9 +278,11 @@
         function consentApi(kat) {
             var p = wpConsent(kat);
 
-            if (typeof w.wp_set_consent === 'function') {
+            var fv = w[CONSENT_FV];
+
+            if (typeof fv === 'function') {
                 Object.keys(p).forEach(function (k) {
-                    w.wp_set_consent(k, p[k]);
+                    fv(k, p[k]);
                 });
 
                 return true;
@@ -297,7 +301,7 @@
             elesit(kat);
 
             try {
-                d.dispatchEvent(new w.CustomEvent('sdh:suti', { detail: { kategoriak: kat, verzio: cfg.verzio } }));
+                d.dispatchEvent(new w.CustomEvent('app:suti', { detail: { kategoriak: kat, verzio: cfg.verzio } }));
             } catch (e) { /* régi böngésző */ }
         }
 
@@ -507,7 +511,7 @@
             sav(true);
         }
 
-        w.SDH_SUTI = {
+        w.APP_SUTI = {
             megnyit: megnyit,
             bezar: bezar,
             elfogad: function () { dont(mindet(true, gpc)); },

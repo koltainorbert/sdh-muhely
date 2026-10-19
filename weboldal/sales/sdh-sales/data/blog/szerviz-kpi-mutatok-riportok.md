@@ -73,6 +73,32 @@ A mutatók csak annyira jók, amennyire a munkalapok:
 
 A {termeknev} Riportok menüpontja a lezárt lapokból mutatja ezeket a mutatókat: lezárt javítások, átlagos és medián átfutás, sikeres javítás aránya, bevétel, árajánlatok, elégedettség, technikusonként és kategóriánként, az utolsó 12 hónap alakulásával. Időszak választható: ez a hónap, az előző, az utolsó 30 nap, idén, vagy egyéni. Bővebben a [munkalapok](/funkciok/munkalapok/) és a kapcsolódó funkciók oldalain.
 
+## Gyakori félreolvasások
+
+### „Nőtt a bevétel, tehát jobban megy.”
+
+Lehet, de nézd meg, miből. Ha egyetlen nagy, egyszeri rendelés húzta fel, a következő hónap visszaeshet. A kategóriánkénti bontás megmutatja, honnan jött a növekedés.
+
+### „Javult az átfutás.”
+
+Ha közben a lezárt javítások száma csökkent, lehet, hogy csak kevesebb, egyszerűbb ügy volt. Az átfutást mindig a darabszámmal együtt nézd.
+
+### „Száz százalék a sikeres javítás aránya.”
+
+Gyanús. Valószínűbb, hogy a visszatérések nincsenek az eredeti laphoz kapcsolva. Nézz meg néhány visszahozott készüléket: hogyan rögzítették?
+
+### „Romlott az elégedettség.”
+
+Ha a hónapban csak öt értékelés jött, egy rossz válasz is nagyot mozdít az átlagon. Kevés válasznál az egyes megjegyzések többet mondanak, mint az átlag.
+
+## Egy egyszerű példa
+
+Tegyük fel, hogy a riportban azt látod: az átlagos átfutás 6 nap, a medián 2 nap. (A számok kitaláltak, csak a gondolatmenetet mutatják.) Ez azt jelenti, hogy a tipikus javítás két nap alatt kész, de van néhány nagyon hosszú ügy, amely felhúzza az átlagot. Ha megnyitod a leghosszabb lapokat, és kiderül, hogy mind ugyanarra a beszállítóra váró alkatrész miatt állt, a teendő világos: másik beszállító, vagy készlet abból az alkatrészből. A mutató itt nem ítélet, hanem irányjelző.
+
+## Mutatók, amelyeket később érdemes felvenni
+
+Ha az alapmutatók rendszeresen mennek, bővítheted a kört: a készlet forgási ideje (mennyi ideig áll egy alkatrész a polcon), a rendelésre váró javítások száma, vagy az online foglalások aránya. Ezek már a működés finomhangolásához valók, nem a kezdéshez.
+
 ## Havi rutin: 15 perc
 
 1. Nyisd meg a riportot az előző hónapra.

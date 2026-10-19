@@ -1,0 +1,47 @@
+{
+ "slug": "blog",
+ "cim": "Blog",
+ "sorrend": 60,
+ "seo": {
+  "title": "Blog szervizeknek – {termeknev}",
+  "description": "Gyakorlati cikkek szervizvezetésről, munkalapról, garanciáról, raktárról, ügyfélkommunikációról, adatbiztonságról és a váltásról.",
+  "kulcsszo": "szerviz blog"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Blog: gyakorlati tudás szervizeknek",
+   "alcim": "Munkalap, garancia, raktár, ügyfélkommunikáció, GDPR – rövid, használható cikkek a mindennapokhoz.",
+   "cimke": "Blog",
+   "gomb": {
+    "szoveg": "Cikkek",
+    "url": "#cikkek"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "blog_lista",
+   "cim": "Legújabb cikkek",
+   "db": 12,
+   "horgony": "cikkek"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki, amiről olvastál",
+   "szoveg": "A demóban minden cikkben említett funkció kipróbálható.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

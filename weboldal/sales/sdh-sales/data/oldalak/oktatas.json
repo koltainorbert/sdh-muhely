@@ -1,0 +1,64 @@
+{
+ "slug": "oktatas",
+ "cim": "Oktatás",
+ "sorrend": 51,
+ "seo": {
+  "title": "Oktatás és leckék a szerviz programhoz – {termeknev}",
+  "description": "Rövid, gyakorlatias leckék modulonként, kvízzel és tanúsítvánnyal: munkalap, raktár, pénztár, számlázás, SMS, AI-asszisztens.",
+  "kulcsszo": "szerviz szoftver oktatás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Oktatás: tanuld meg a rendszert leckénként",
+   "alcim": "Rövid leckék valódi menüutakkal, mindegyik végén kvíz. A kollégák a saját tempójukban tanulnak, te látod, ki hol tart.",
+   "cimke": "Oktatás",
+   "gomb": {
+    "szoveg": "Leckék",
+    "url": "#leckek"
+   },
+   "gomb2": {
+    "szoveg": "Személyes oktatás",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "oktatas",
+   "cim": "Leckék modulonként",
+   "alcim": "Haladásod a böngésződben, ügyfélfiókkal a fiókodban marad.",
+   "horgony": "leckek"
+  },
+  {
+   "tipus": "tudasbazis",
+   "cim": "Tudásbázis",
+   "alcim": "A rendszer súgójának nyilvános része, kereshetően.",
+   "kereso": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "oktatas",
+    "sugo-a-rendszerben",
+    "elso-nap-teendoi",
+    "szemelyes-bemutato"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Csapatoktatást szeretnél?",
+   "szoveg": "Online vagy helyszíni oktatás a kollégáknak, a saját beállításaitokon.",
+   "gomb": {
+    "szoveg": "Időpontot foglalok",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,173 @@
+[
+ {
+  "kulcs": "hely",
+  "cim": "1. A rendszer helye",
+  "sorrend": 1,
+  "szoveg": "<p>Döntsétek el, hol fusson: saját szerveren a helyi hálózatban, vagy felhőben / bérelt szerveren egy külön, belső címen (például muhely.pelda.hu). Ha internet nélkül is dolgozni akartok, a szerver legyen a helyi hálózatban, és a pultgépek a helyi címén érjék el.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Linux szerver vagy felhős virtuális gép kiválasztva</li><li>Külön, belső cím – nem a nyilvános weboldal</li><li>A szerver és a router szünetmentes tápon (offline működéshez)</li></ul>",
+  "leiras": "Döntsétek el, hol fusson: saját szerveren a helyi hálózatban, vagy felhőben / bérelt szerveren egy külön, belső címen (például muhely.pelda.hu). Ha internet nélkül is dolgozni akartok, a szerver legyen a helyi hálózatban, és a pultgépek a helyi címén érjék el.",
+  "ellenorzes": [
+   "Linux szerver vagy felhős virtuális gép kiválasztva",
+   "Külön, belső cím – nem a nyilvános weboldal",
+   "A szerver és a router szünetmentes tápon (offline működéshez)"
+  ],
+  "kovetelmenyek": [
+   "Szerver: Linux – Saját gép, virtuális szerver vagy felhő; külön, belső cím – nem a cég nyilvános weboldala.",
+   "PHP: 8.1 vagy újabb – Modulok: sodium, zlib, mbstring, zip, xmlreader (titkosítás, mentés, ékezetek, Excel-import).",
+   "Adatbázis: MySQL 8 vagy MariaDB 10.6+ – Nagy adatnál innodb_buffer_pool_size = 1G (8 GB-nál kisebb memóriánál 512M).",
+   "Tárhely: SSD – A mentésekhez és a csatolmányokhoz is legyen hely.",
+   "PHP OPcache: bekapcsolva – A Sebesség lapfül kiírja, be van-e kapcsolva.",
+   "HTTPS: kötelező – Titkosítatlan címen a jelszavak és az ügyféladatok védtelenül utaznak.",
+   "Ütemező (cron): 5 percenként – Emlékeztetők, mentés, SMS-sor, elégedettségi kérdés.",
+   "Internet: kimenő kapcsolat – Levelezés, Számlázz.hu, AI, IMEI-szolgáltató, licenc. A belső munka nélküle is megy.",
+   "Böngésző: friss Chrome, Edge, Firefox vagy Safari – Hardveres gyorsítással simább a felület."
+  ],
+  "kovetelmeny_tabla": [
+   {
+    "mi": "Szerver",
+    "mennyi": "Linux",
+    "megjegyzes": "Saját gép, virtuális szerver vagy felhő; külön, belső cím – nem a cég nyilvános weboldala."
+   },
+   {
+    "mi": "PHP",
+    "mennyi": "8.1 vagy újabb",
+    "megjegyzes": "Modulok: sodium, zlib, mbstring, zip, xmlreader (titkosítás, mentés, ékezetek, Excel-import)."
+   },
+   {
+    "mi": "Adatbázis",
+    "mennyi": "MySQL 8 vagy MariaDB 10.6+",
+    "megjegyzes": "Nagy adatnál innodb_buffer_pool_size = 1G (8 GB-nál kisebb memóriánál 512M)."
+   },
+   {
+    "mi": "Tárhely",
+    "mennyi": "SSD",
+    "megjegyzes": "A mentésekhez és a csatolmányokhoz is legyen hely."
+   },
+   {
+    "mi": "PHP OPcache",
+    "mennyi": "bekapcsolva",
+    "megjegyzes": "A Sebesség lapfül kiírja, be van-e kapcsolva."
+   },
+   {
+    "mi": "HTTPS",
+    "mennyi": "kötelező",
+    "megjegyzes": "Titkosítatlan címen a jelszavak és az ügyféladatok védtelenül utaznak."
+   },
+   {
+    "mi": "Ütemező (cron)",
+    "mennyi": "5 percenként",
+    "megjegyzes": "Emlékeztetők, mentés, SMS-sor, elégedettségi kérdés."
+   },
+   {
+    "mi": "Internet",
+    "mennyi": "kimenő kapcsolat",
+    "megjegyzes": "Levelezés, Számlázz.hu, AI, IMEI-szolgáltató, licenc. A belső munka nélküle is megy."
+   },
+   {
+    "mi": "Böngésző",
+    "mennyi": "friss Chrome, Edge, Firefox vagy Safari",
+    "megjegyzes": "Hardveres gyorsítással simább a felület."
+   }
+  ]
+ },
+ {
+  "kulcs": "hozzaferes",
+  "cim": "2. Hozzáférés a telepítéshez",
+  "sorrend": 2,
+  "szoveg": "<p>A telepítést mi végezzük (telepítési díj, lásd az Árak oldalt). Ehhez egy időpontot foglaltok, és ideiglenes hozzáférést adtok a szerverhez – vagy közösen, képernyőmegosztással dolgozunk. A hozzáférést a telepítés után visszavonhatjátok.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Telepítési időpont lefoglalva</li><li>Ideiglenes szerver-hozzáférés vagy közös munkamenet</li><li>A licenckulcs a rendelés után megérkezett e-mailben</li></ul>",
+  "leiras": "A telepítést mi végezzük (telepítési díj, lásd az Árak oldalt). Ehhez egy időpontot foglaltok, és ideiglenes hozzáférést adtok a szerverhez – vagy közösen, képernyőmegosztással dolgozunk. A hozzáférést a telepítés után visszavonhatjátok.",
+  "ellenorzes": [
+   "Telepítési időpont lefoglalva",
+   "Ideiglenes szerver-hozzáférés vagy közös munkamenet",
+   "A licenckulcs a rendelés után megérkezett e-mailben"
+  ]
+ },
+ {
+  "kulcs": "telepites-licenc",
+  "cim": "3. Telepítés és licenc",
+  "sorrend": 3,
+  "szoveg": "<p>Feltelepítjük a rendszert, beállítjuk az adatbázist, a HTTPS-t és az időzónát (Budapest – az első éles munkalap előtt, mert utólagos váltásnál a korábbi időpontok nem íródnak át). Utána a Beállítások › Rendszer › Licenc lapon megadjuk a licenckulcsot.</p><p><strong>Ellenőrizd:</strong></p><ul><li>A rendszer címe HTTPS-en megnyílik</li><li>Licenc állapota: Aktív</li><li>Beállítások › Nyitvatartás és óra: a helyes időt és időzónát mutatja</li></ul>",
+  "leiras": "Feltelepítjük a rendszert, beállítjuk az adatbázist, a HTTPS-t és az időzónát (Budapest – az első éles munkalap előtt, mert utólagos váltásnál a korábbi időpontok nem íródnak át). Utána a Beállítások › Rendszer › Licenc lapon megadjuk a licenckulcsot.",
+  "ellenorzes": [
+   "A rendszer címe HTTPS-en megnyílik",
+   "Licenc állapota: Aktív",
+   "Beállítások › Nyitvatartás és óra: a helyes időt és időzónát mutatja"
+  ]
+ },
+ {
+  "kulcs": "szerver-hangolas",
+  "cim": "4. Szerver hangolása",
+  "sorrend": 4,
+  "szoveg": "<p>Nagy adatmennyiségnél két beállításon múlik a legtöbb: a PHP OPcache és az adatbázis puffere. A Beállítások › Rendszer › Sebesség lapfül mindkettőt kiírja, a Mérés indítása pedig megmutatja a lassú lépéseket. Az ütemezett feladatok valódi szerver-cronnal futnak.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Sebesség lapfül: PHP OPcache: be</li><li>Sebesség lapfül: adatbázis-puffer legalább 512 MB</li><li>Mérés indítása: nincs LASSÚ lépés</li><li>Ütemező 5 percenként fut</li></ul>",
+  "leiras": "Nagy adatmennyiségnél két beállításon múlik a legtöbb: a PHP OPcache és az adatbázis puffere. A Beállítások › Rendszer › Sebesség lapfül mindkettőt kiírja, a Mérés indítása pedig megmutatja a lassú lépéseket. Az ütemezett feladatok valódi szerver-cronnal futnak.",
+  "ellenorzes": [
+   "Sebesség lapfül: PHP OPcache: be",
+   "Sebesség lapfül: adatbázis-puffer legalább 512 MB",
+   "Mérés indítása: nincs LASSÚ lépés",
+   "Ütemező 5 percenként fut"
+  ]
+ },
+ {
+  "kulcs": "mappak-vedelme",
+  "cim": "5. Védett mappák",
+  "sorrend": 5,
+  "szoveg": "<p>A csatolmányok, a mentések és a levelek titkosított gyorsítótára védett mappákban van, kívülről nem olvashatók. Apache-on ezt a rendszer maga állítja be; nginx szerveren a szerver beállításában zárjuk le őket.</p><p><strong>Ellenőrizd:</strong></p><ul><li>A csatolmány- és mentésmappa böngészőből nem nyitható meg</li></ul>",
+  "leiras": "A csatolmányok, a mentések és a levelek titkosított gyorsítótára védett mappákban van, kívülről nem olvashatók. Apache-on ezt a rendszer maga állítja be; nginx szerveren a szerver beállításában zárjuk le őket.",
+  "ellenorzes": [
+   "A csatolmány- és mentésmappa böngészőből nem nyitható meg"
+  ]
+ },
+ {
+  "kulcs": "levelkuldes",
+  "cim": "6. Levélküldés",
+  "sorrend": 6,
+  "szoveg": "<p>Az értesítők (ügyfélüzenet, naptár-emlékeztető, új kolléga) SMTP-n mennek a cég valódi postafiókjából, hogy ne kerüljenek a levélszemétbe. A Levelezés modul a bekötött postafiók saját kimenő szerverén küld.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Próbaértesítő megjön, és nem a levélszemétbe</li><li>Levelezés: Kapcsolat ellenőrzése sikeres</li></ul>",
+  "leiras": "Az értesítők (ügyfélüzenet, naptár-emlékeztető, új kolléga) SMTP-n mennek a cég valódi postafiókjából, hogy ne kerüljenek a levélszemétbe. A Levelezés modul a bekötött postafiók saját kimenő szerverén küld.",
+  "ellenorzes": [
+   "Próbaértesítő megjön, és nem a levélszemétbe",
+   "Levelezés: Kapcsolat ellenőrzése sikeres"
+  ]
+ },
+ {
+  "kulcs": "alapbeallitasok",
+  "cim": "7. Alapbeállítások",
+  "sorrend": 7,
+  "szoveg": "<p>Cégadatok és logó, nyitvatartás, munkalapszám kezdőértéke és előtagja, állapotok, fizetési módok, nyomtatványok. Régi adatoknál az Adatátvétel (MunkaLap 3, CSV, XLSX) jön ezután – előtte mentés.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Számozás: a kezdőérték az, ahonnan folytatjátok</li><li>Számlázás: Kapcsolat ellenőrzése sikeres</li><li>Mentés most lefut, a fájl letölthető</li></ul>",
+  "leiras": "Cégadatok és logó, nyitvatartás, munkalapszám kezdőértéke és előtagja, állapotok, fizetési módok, nyomtatványok. Régi adatoknál az Adatátvétel (MunkaLap 3, CSV, XLSX) jön ezután – előtte mentés.",
+  "ellenorzes": [
+   "Számozás: a kezdőérték az, ahonnan folytatjátok",
+   "Számlázás: Kapcsolat ellenőrzése sikeres",
+   "Mentés most lefut, a fájl letölthető"
+  ]
+ },
+ {
+  "kulcs": "biztonsag",
+  "cim": "8. Biztonság",
+  "sorrend": 8,
+  "szoveg": "<p>Kívülről elérhető rendszernél a kétlépcsős belépést állítsátok legalább az adminisztrátoroknak kötelezőre. Szerepkörök a kollégáknak, titkosított külső mentés legalább egy helyre. Költözéskor a szerver konfigurációs fájljának titkos kulcsait változatlanul kell átvinni, különben a titkosított jelszavakat újra be kell írni.</p><p><strong>Ellenőrizd:</strong></p><ul><li>Kétlépcsős belépés: Adminisztrátoroknak vagy Mindenkinek kötelező</li><li>Külső mentés: Kapcsolat próbája sikeres</li><li>A titkosító jelszó biztos helyen</li></ul>",
+  "leiras": "Kívülről elérhető rendszernél a kétlépcsős belépést állítsátok legalább az adminisztrátoroknak kötelezőre. Szerepkörök a kollégáknak, titkosított külső mentés legalább egy helyre. Költözéskor a szerver konfigurációs fájljának titkos kulcsait változatlanul kell átvinni, különben a titkosított jelszavakat újra be kell írni.",
+  "ellenorzes": [
+   "Kétlépcsős belépés: Adminisztrátoroknak vagy Mindenkinek kötelező",
+   "Külső mentés: Kapcsolat próbája sikeres",
+   "A titkosító jelszó biztos helyen"
+  ]
+ },
+ {
+  "kulcs": "elesites-elott",
+  "cim": "Ellenőrzőlista élesítés előtt",
+  "sorrend": 9,
+  "tipus": "ellenorzolista",
+  "leiras": "Menjetek végig egy próbaügyféllel – a próbát külön próbapéldányon végezzétek, mert a mintaadatok munkalapszámot foglalnak.",
+  "elemek": [
+   "Belépés adminisztrátorként és kollégaként – a kolléga nem látja a Beállításokat",
+   "A fejléc órája helyes, a nyitvatartás stimmel",
+   "Teljes kör: ügyfél, eszköz, munkalap, állapotváltás, fizetés, pénztárzárás",
+   "A munkalap és a címke kijön a nyomtatón",
+   "Számlázz.hu: Kapcsolat ellenőrzése sikeres",
+   "Ügyféloldal: a QR-kóddal megnyílik, az üzenet oda-vissza megérkezik",
+   "Értesítő levél megjön, nem a levélszemétbe",
+   "Levelezés: próbalevél kimegy",
+   "Mentés most lefut; a szerver saját napi mentése is megvan",
+   "Internet nélküli próba: kábel ki, a munka megy, a számla azonnal szól"
+  ]
+ }
+]

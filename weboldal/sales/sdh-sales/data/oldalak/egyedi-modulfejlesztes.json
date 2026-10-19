@@ -1,0 +1,118 @@
+{
+ "slug": "egyedi-modulfejlesztes",
+ "cim": "Egyedi modulfejlesztés",
+ "sorrend": 40,
+ "seo": {
+  "title": "Egyedi modulfejlesztés szervizeknek – {termeknev}",
+  "description": "Saját beszállítói formátum, egyedi nyomtatvány, belső folyamat: egyedi modul a {termeknev} rendszerhez, licencelve és frissíthetően.",
+  "kulcsszo": "egyedi modul fejlesztés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Egyedi modul a {termeknev} rendszerhez",
+   "alcim": "Ha a folyamatotok egyedi, a rendszer alkalmazkodik: saját modul, amely a licenccel együtt frissül, és a súgóba is bekerül.",
+   "cimke": "Egyedi fejlesztés",
+   "gomb": {
+    "szoveg": "Igényt jelzek",
+    "url": "#urlap"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "bal"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Mire szoktak egyedi modult kérni?",
+   "oszlop": "3",
+   "elemek": [
+    {
+     "ikon": "level",
+     "cim": "Beszállítói levelek feldolgozása",
+     "szoveg": "Egy beszállító napi leveleinek tételei a rendszerbe – a levél-feladat ügynök mintájára."
+    },
+    {
+     "ikon": "nyomtato",
+     "cim": "Saját nyomtatvány",
+     "szoveg": "Speciális átvételi vagy garanciális lap a cég formai előírásai szerint."
+    },
+    {
+     "ikon": "import",
+     "cim": "Egyedi import",
+     "szoveg": "Adatátvétel olyan programból, amelynek a formátuma eltér a CSV/XLSX-től."
+    },
+    {
+     "ikon": "link",
+     "cim": "Integráció",
+     "szoveg": "Kapcsolat egy belső rendszerrel vagy szolgáltatással, egyedi felmérés alapján."
+    },
+    {
+     "ikon": "riport",
+     "cim": "Saját riport",
+     "szoveg": "A vezetőség kérte kimutatás a meglévő adatokból."
+    },
+    {
+     "ikon": "modul",
+     "cim": "Saját munkafolyamat",
+     "szoveg": "Lépés, jóváhagyás, állapot, amit a gyári modulok nem fednek le."
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Hogyan zajlik?",
+   "hatter": "felulet",
+   "lepesek": [
+    {
+     "ikon": "uzenet",
+     "cim": "Igényfelmérés",
+     "szoveg": "Leírjátok a folyamatot; egy beszélgetésben tisztázzuk, mi kell pontosan."
+    },
+    {
+     "ikon": "szamla",
+     "cim": "Árajánlat",
+     "szoveg": "Írásos ajánlat a terjedelemmel, határidővel és díjjal."
+    },
+    {
+     "ikon": "kod",
+     "cim": "Fejlesztés és teszt",
+     "szoveg": "A modul a rendszer szabályai szerint készül: jogosultság, napló, súgófejezet, teszt."
+    },
+    {
+     "ikon": "raketa",
+     "cim": "Átadás",
+     "szoveg": "Telepítés, betanítás; a modul a licencben szerepel, és frissül."
+    }
+   ]
+  },
+  {
+   "tipus": "urlap",
+   "cim": "Írd le, mire van szükséged",
+   "alcim": "Minél konkrétabb, annál pontosabb az ajánlat. Két munkanapon belül jelentkezünk.",
+   "urlap": "egyedi",
+   "horgony": "urlap",
+   "siker": "Köszönjük! Az igényedet megkaptuk, hamarosan jelentkezünk."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Kérdések az egyedi fejlesztésről",
+   "kategoria": "egyedi-fejlesztes"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Előbb nézd meg, mit tud már most",
+   "szoveg": "Lehet, hogy amire gondolsz, már benne van: a demóban kipróbálhatod.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Funkciók",
+    "url": "/funkciok/"
+   }
+  }
+ ]
+}

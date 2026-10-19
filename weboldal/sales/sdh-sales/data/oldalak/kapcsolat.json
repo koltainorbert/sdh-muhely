@@ -1,0 +1,51 @@
+{
+ "slug": "kapcsolat",
+ "cim": "Kapcsolat",
+ "sorrend": 80,
+ "seo": {
+  "title": "Kapcsolat és árajánlat – {termeknev}",
+  "description": "Kérdésed van a {termeknev} rendszerről, árajánlatot kérnél, vagy bemutatót szeretnél? Írj nekünk – két munkanapon belül válaszolunk.",
+  "kulcsszo": "szerviz program kapcsolat"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Kapcsolat",
+   "alcim": "Kérdés, árajánlat, bemutató, támogatás – írj nekünk, és két munkanapon belül válaszolunk.",
+   "cimke": "Kapcsolat",
+   "gomb": {
+    "szoveg": "Üzenet küldése",
+    "url": "#urlap"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "urlap",
+   "cim": "Írj nekünk",
+   "urlap": "kapcsolat",
+   "horgony": "urlap",
+   "siker": "Köszönjük az üzenetet! Hamarosan válaszolunk."
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Elérhetőségek",
+   "szelesseg": "keskeny",
+   "hatter": "felulet",
+   "html": "<p><strong>{ceg}</strong><br>Cím: {ceg_cim}<br>E-mail: <a href=\"mailto:{ceg_email}\">{ceg_email}</a><br>Telefon: {ceg_telefon}</p><p>Adószám: {ceg_adoszam}<br>Cégjegyzékszám: {ceg_cegjegyzek}</p>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "tamogatas-elerhetoseg",
+    "valaszido-sla",
+    "arajanlat-kerese",
+    "szemelyes-bemutato"
+   ]
+  }
+ ]
+}

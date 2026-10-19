@@ -117,6 +117,7 @@ final class SDH_Sales
 
         update_option(self::OPT, $m, true);
         self::$cache = null;
+        do_action('sdh_sales_beallitas_mentve', array_keys($ut));
 
         if (class_exists('SDH_Sales_Naplo')) {
             SDH_Sales_Naplo::ir($ok, 'Beállítás módosítva: ' . implode(', ', array_keys($ut)), 'info', 'beallitas', 0, $el, $ut);
@@ -198,7 +199,7 @@ final class SDH_Sales
     {
         $n = trim((string) self::b('termeknev', ''));
 
-        return $n !== '' ? $n : 'SDH CRM';
+        return $n !== '' ? $n : 'Munkora';
     }
 
     /** @return array<string, string> */

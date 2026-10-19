@@ -1,0 +1,165 @@
+{
+ "slug": "offline",
+ "cim": "Internet nélküli működés",
+ "szulo": "funkciok",
+ "sorrend": 44,
+ "seo": {
+  "title": "Internet nélkül is működő szerviz program – {termeknev}",
+  "description": "Offline munkalap program saját szerveren: ha elmegy a net, a pult dolgozik tovább – munkalap, pénztár, nyomtatás és mentés helyben.",
+  "kulcsszo": "offline munkalap program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Internet nélkül is működő szerviz program",
+   "alcim": "A pult akkor is dolgozik, ha elmegy az internet: munkalap, pénztár, nyomtatás, mentés helyben megy, a külső kérések nem várakoztatnak.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-licenc",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Net nélkül is: munkalapok, ügyfelek, eszközök, pénztár, árukiadás, rendelések"
+    },
+    {
+     "szoveg": "Helyi nyomtatás, matrica, PDF, naptár, csapat, napló, helyi mentés"
+    },
+    {
+     "szoveg": "SMS a bolti telefonon át, ha az a helyi hálózaton van"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is megy. Ami internetet kér (számla, e-mail, asszisztens), az kimaradáskor azonnal szól, és nem vár perceket; a fejlécben „Nincs internet” jelzés áll, amíg vissza nem jön.</p><p><strong>Hol találod a rendszerben?</strong> Fejléc jelzés; Beállítások › Rendszer › Sebesség (Internet: van / NINCS).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Net nélkül is: munkalapok, ügyfelek, eszközök, pénztár, árukiadás, rendelések",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Helyi nyomtatás, matrica, PDF, naptár, csapat, napló, helyi mentés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "SMS a bolti telefonon át, ha az a helyi hálózaton van",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A számla később a lapról kiállítható",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Percenkénti ellenőrzés, jelzés a fejlécben",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Helyi cím",
+     "szoveg": "A pultgépek a szerver helyi címén érjék el a rendszert."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Szünetmentes",
+     "szoveg": "A szerver és a router legyen szünetmentes tápon."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Próba",
+     "szoveg": "Húzd ki a net-kábelt: egy percen belül megjelenik a jelzés, a munka megy tovább."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Net nélkül vár: Számlázz.hu-számla, e-mail, asszisztens, IMEI-lekérdezés, külső mentés, és a kívülről elérhető oldalak (ügyféloldal, foglalás).</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "sms",
+    "kulso-mentes",
+    "szamlazas",
+    "sebessegmeres"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar",
+    "allami-szektor"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Internet nélküli működés",
+   "kulcsok": [
+    "offline-mi-mukodik",
+    "offline-mi-var",
+    "offline-elofeltetel",
+    "aramszunet"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Internet nélküli működés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

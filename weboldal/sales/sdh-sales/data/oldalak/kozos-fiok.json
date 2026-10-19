@@ -1,0 +1,157 @@
+{
+ "slug": "kozos-fiok",
+ "cim": "Közös fiók: „Ki vagy?”",
+ "szulo": "funkciok",
+ "sorrend": 36,
+ "seo": {
+  "title": "Közös fiók „Ki vagy?” PIN-választóval – {termeknev}",
+  "description": "Közös pultgép, mégis tudni, ki mit csinált: „Ki vagy?” választó névvel és PIN-nel, a szerep és a napló a tényleges dolgozóé.",
+  "kulcsszo": "közös fiók pultgép"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Közös pultgép, személyre szóló nyomon követés",
+   "alcim": "Ha a pultnál mindenki ugyanazzal a fiókkal dolgozik, a választó névvel és PIN-nel rögzíti, ki mit csinált.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Név + 4–8 jegyű PIN, 5 hibás PIN után 5 perc szünet"
+    },
+    {
+     "szoveg": "A Napló, a pénztár és a munkalap a tényleges dolgozót mutatja"
+    },
+    {
+     "szoveg": "A dolgozó szerepe a közös fiókon is érvényes"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A közösnek jelölt fiókon induláskor „Ki vagy?” ablak jelenik meg: név és 4–8 jegyű PIN. A választott dolgozó neve kerül a naplóba, a pénztárba és a munkalap felelősébe, és az ő szerepe érvényes; váltás a profilmenüből.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Jogosultságok › Közös fiók: „Ki vagy?”.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Név + 4–8 jegyű PIN, 5 hibás PIN után 5 perc szünet",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A Napló, a pénztár és a munkalap a tényleges dolgozót mutatja",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A dolgozó szerepe a közös fiókon is érvényes",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A választás böngészőnként legfeljebb 12 óráig él",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A PIN csak lenyomatként tárolva",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Bekapcsolás",
+     "szoveg": "Beállítások › Jogosultságok › Közös fiók: választó be, PIN be, melyik fiók közös."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Dolgozók",
+     "szoveg": "Dolgozók felvétele névvel és PIN-nel."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Váltás",
+     "szoveg": "Profilmenü › Személy váltása."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "szerepkorok",
+    "parhuzamos-szerkesztes",
+    "csapat",
+    "valtozasnaplo"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Közös fiók: „Ki vagy?”",
+   "kulcsok": [
+    "kozos-fiok-pin",
+    "kis-uzlet-egy-gep",
+    "jogosultsagok-szerepek"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Közös fiók: „Ki vagy?” a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

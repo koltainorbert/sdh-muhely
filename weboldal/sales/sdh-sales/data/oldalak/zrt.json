@@ -1,0 +1,138 @@
+{
+ "slug": "zrt",
+ "cim": "Nagyvállalatok és zrt.-k",
+ "szulo": "iparagak",
+ "sorrend": 4,
+ "seo": {
+  "title": "Szervizszoftver nagyvállalatnak – {termeknev}",
+  "description": "Belső szervizosztályoknak és szervizhálózatoknak: szerepkörök, 2FA, aláírt változásnapló, titkosított mentés, mért sebesség nagy adatnál.",
+  "kulcsszo": "vállalati szerviz szoftver"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szervizszoftver nagyvállalati igényekre, saját szerveren",
+   "alcim": "Több telephely, szerepkörök, kétlépcsős belépés, aláírt napló, saját szerver – belső szervizosztályoknak és szervizhálózatoknak.",
+   "cimke": "Nagyvállalatok és zrt.-k",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-zrt",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pajzs",
+     "cim": "Ki fér hozzá mihez?",
+     "szoveg": "Az informatikai biztonság kérdései: jogosultság, belépés, naplózás, mentés."
+    },
+    {
+     "ikon": "szerver",
+     "cim": "Nagy adatmennyiség",
+     "szoveg": "Több százezer rekordnál a lassú lista a napi munkát lassítja."
+    },
+    {
+     "ikon": "szerver",
+     "cim": "Az adat maradjon nálunk",
+     "szoveg": "Külső felhőbe nem kerülhet ügyféladat."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>A {termeknev} a vállalat saját szerverén fut. A jogosultság szerepkörökkel és finom jogokkal szabályozható, a belépés kétlépcsős, a Változásnapló minden módosítást mezőszinten és aláírva rögzít.</p><ul><li><strong>Sebesség:</strong> 300 000 rekordos próbaadaton a Termékek lista 5,28 s-ról 0,38 s-ra gyorsult (mérés, SQLite tesztkörnyezet).</li><li><strong>Telephelyek:</strong> helyszínek az árukiadáson, a licenc telephelyenként bővíthető.</li><li><strong>Üzemeltetés:</strong> távoli karbantartás, amely kikapcsolható; támogatási belépés csak időkorláttal, engedéllyel.</li></ul>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "szerepkorok",
+    "ketlepcsos-belepes",
+    "valtozasnaplo",
+    "biztonsag",
+    "kulso-mentes",
+    "licenc-karbantartas",
+    "riportok",
+    "arukiadas",
+    "sebessegmeres"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "arukiadas"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>Az ISO 27001 vagy más tanúsítványt a {termeknev} nem kapott; a biztonsági jellemzőket az Adatvédelem és biztonság oldal tényszerűen sorolja fel. Adatfeldolgozási szerződés és SLA a jogi oldalakon érhető el; egyedi integráció egyedi fejlesztéssel.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Nagyvállalatok és zrt.-k",
+   "kulcsok": [
+    "tobb-uzlet-lanc",
+    "hol-vannak-az-adatok",
+    "szerver-meretezes",
+    "jogosultsagok-szerepek",
+    "valaszido-sla"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "allami-szektor",
+    "egeszsegugy",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

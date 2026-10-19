@@ -1,0 +1,176 @@
+{
+ "slug": "imei-tac",
+ "cim": "IMEI-lekérdezés és TAC-adatbázis",
+ "szulo": "funkciok",
+ "sorrend": 26,
+ "seo": {
+  "title": "IMEI-lekérdezés és TAC-adatbázis – {termeknev}",
+  "description": "Telefonszerviz program IMEI-kereséssel: gyártó és típus az IMEI-ből internet nélkül, gyári adatok betöltése ellenőrző oldalról.",
+  "kulcsszo": "telefonszerviz program IMEI"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "IMEI-lekérdezés és TAC-típusfelismerés telefonszervizeknek",
+   "alcim": "Az IMEI elejéből felismeri a gyártót és a típust – internet nélkül –, a gyári adatokat pedig ellenőrző oldalról vagy fizetős szolgáltatótól tölti be.",
+   "cimke": "Dokumentumok és készülékadatok",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-eszkoz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Típusfelismerés helyben, internet nélkül"
+    },
+    {
+     "szoveg": "Tanul a saját felvitelekből, az újratöltés nem írja felül"
+    },
+    {
+     "szoveg": "Ingyenes ellenőrző oldalak gombjai, IMEI a vágólapra"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A TAC-adatbázis az IMEI első nyolc számjegyéből mondja meg a gyártót és a típust, és a kézzel felvitt új készülékekből tanul. A sorozatszám, a garancia és a gyártás dátuma ingyenes ellenőrző oldal eredményének beillesztésével vagy előfizetett szolgáltatótól kérdezhető le.</p><p><strong>Hol találod a rendszerben?</strong> Eszköz adatlapja › IMEI; Beállítások › IMEI-lekérdezés, TAC adatbázis.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Típusfelismerés helyben, internet nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Tanul a saját felvitelekből, az újratöltés nem írja felül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ingyenes ellenőrző oldalak gombjai, IMEI a vágólapra",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Beillesztett eredményből automatikus mezőkitöltés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fizetős szolgáltató bekötése kulccsal",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "IMEI",
+     "szoveg": "Az eszköz adatlapján írd be vagy olvasd be az IMEI-t."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Felismerés",
+     "szoveg": "A 15. számjegy után kitöltődik a gyártó, a gyári szám és a kereskedelmi név."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Gyári adatok",
+     "szoveg": "Ellenőrzés sor: ingyenes oldal + beillesztés, vagy „Lekérdezés a szolgáltatótól”."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A szállított típuslista 2025 végéig tart; az újabb készülékeket a rendszer a felvitelekből tanulja.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modulok",
+   "kulcsok": [
+    "imei",
+    "tac"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "eszkozok",
+    "okos-kereso",
+    "mockupok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: IMEI-lekérdezés és TAC-adatbázis",
+   "kulcsok": [
+    "imei-tac",
+    "imei-szolgaltato",
+    "eszkoz-elozmenyek"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) IMEI-lekérdezés és TAC-adatbázis a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

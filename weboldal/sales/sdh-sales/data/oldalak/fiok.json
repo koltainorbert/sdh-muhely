@@ -1,0 +1,28 @@
+{
+ "slug": "fiok",
+ "cim": "Ügyfélfiók",
+ "sorrend": 91,
+ "seo": {
+  "title": "Ügyfélfiók – {termeknev}",
+  "description": "Licencek, számlák, letöltések, megújítás és bővítés egy helyen. Belépés jelszó nélkül, e-mailben kapott linkkel.",
+  "kulcsszo": "ügyfélfiók"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Ügyfélfiók",
+   "alcim": "Licencek, számlák, letöltések, megújítás és bővítés. Belépéshez nem kell jelszó: e-mailben küldünk egy belépő linket.",
+   "cimke": "Fiók",
+   "gomb": {
+    "szoveg": "Belépés",
+    "url": "#fiok"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "fiok",
+   "cim": "A fiókod",
+   "horgony": "fiok"
+  }
+ ]
+}

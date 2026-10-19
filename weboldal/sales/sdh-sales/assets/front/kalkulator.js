@@ -1,9 +1,9 @@
 /**
- * SDH Értékesítés – árkalkulátor. A számítás (SDHAr.szamol) a PHP SDH_Sales_Ar::szamol_tiszta() pontos tükre:
+ * Árkalkulátor. A számítás (APP.ar.szamol) a szerveroldali árszámítás pontos tükre:
  * ugyanazok a szabályok, kerekítések és magyar hibaüzenetek (a t210 teszt ugyanazokat az eseteket mindkettőn lefuttatja).
  * A rendelésnél mindig a szerver ára számít; ez csak az élő előnézet.
- * DOM: <div data-sdh="kalkulator" data-opciok='{"csomag":"pro","ciklus":"eves"}'></div>
- * Adat: window.SDH_KALKULATOR (SDH_Sales_Katalogus::publikus()).
+ * DOM: <div data-modul="kalkulator" data-opciok='{"csomag":"pro","ciklus":"eves"}'></div>
+ * Adat: window.APP_KALKULATOR.
  */
 (function (gyoker) {
     'use strict';
@@ -31,7 +31,7 @@
     function nv(o, k, alap) { return o[k] === null || o[k] === undefined ? String(alap) : String(o[k]); }
     function ia(o, k, alap) { return o[k] === null || o[k] === undefined ? alap : int(o[k]); }
 
-    /** A PHP szamol_tiszta() tükre. */
+    /** A szerveroldali számítás tükre. */
     function szamol(kat, tetelek, opciok) {
         opciok = opciok || {};
         var csomagok = kat.csomagok || {}, modulok = kat.modulok || {}, szolg = kat.szolgaltatasok || {};
@@ -210,13 +210,14 @@
 
     function kulcsolt(l) { var o = {}; l.forEach(function (e) { if (obj(e) && e.kulcs) { o[String(e.kulcs)] = e; } }); return o; }
 
-    var SDHAr = { szamol: szamol, ft: ft, kerek: kerek, eves: eves, kulcsolt: kulcsolt };
+    var Ar = { szamol: szamol, ft: ft, kerek: kerek, eves: eves, kulcsolt: kulcsolt };
 
-    if (typeof module === 'object' && module.exports) { module.exports = SDHAr; return; }
-    gyoker.SDHAr = SDHAr;
+    if (typeof module === 'object' && module.exports) { module.exports = Ar; return; }
+    gyoker.APP = gyoker.APP || {};
+    gyoker.APP.ar = Ar;
 
     /* ===================== Felület ===================== */
-    var D = gyoker.SDH_KALKULATOR;
+    var D = gyoker.APP_KALKULATOR;
     if (!D || !gyoker.document) { return; }
     var doc = gyoker.document;
 
@@ -230,14 +231,14 @@
     }
 
     function csatol(gy) {
-        if (gy.getAttribute('data-sdh-kesz')) { return; }
-        gy.setAttribute('data-sdh-kesz', '1');
+        if (gy.getAttribute('data-kesz')) { return; }
+        gy.setAttribute('data-kesz', '1');
         var o = {};
         try { o = JSON.parse(gy.getAttribute('data-opciok') || '{}') || {}; } catch (e) { o = {}; }
         var kat = { csomagok: kulcsolt(D.csomagok || []), modulok: kulcsolt(D.modulok || []), szolgaltatasok: kulcsolt(D.szolgaltatasok || []), eves_kedvezmeny: D.eves_kedvezmeny, afa: D.afa, ma: D.ma };
         var ck = Object.keys(kat.csomagok);
         var all = { csomag: o.csomag && kat.csomagok[o.csomag] ? o.csomag : (ck.filter(function (k) { return kat.csomagok[k].kiemelt; })[0] || ck[0] || ''), ciklus: o.ciklus === 'havi' ? 'havi' : 'eves', felhasznalo: null, telephely: null, modulok: [], szolg: {} };
-        var azon = 'sdh-kalk-' + Math.random().toString(36).slice(2, 8);
+        var azon = 'kalk-' + Math.random().toString(36).slice(2, 8);
 
         gy.textContent = '';
         gy.classList.add('s-kalk');
@@ -344,9 +345,9 @@
             var gomb = el('button', { type: 'button', osztaly: 's-gomb s-gomb-fo', szoveg: 'Kosárba teszem' });
             if (e.hibak.length) { gomb.disabled = true; }
             gomb.addEventListener('click', function () {
-                if (!gyoker.SDH || !gyoker.SDH.kosar) { return; }
-                gyoker.SDH.kosar.beallit(tetelek(), opc());
-                gyoker.SDH.uzen('A kosárba került.', 'ok');
+                if (!gyoker.APP || !gyoker.APP.kosar) { return; }
+                gyoker.APP.kosar.beallit(tetelek(), opc());
+                gyoker.APP.uzen('A kosárba került.', 'ok');
                 if (D.kosar_url) { gyoker.location.href = D.kosar_url; }
             });
             osszeg.appendChild(gomb);
@@ -354,6 +355,6 @@
         frissit();
     }
 
-    function indit() { Array.prototype.forEach.call(doc.querySelectorAll('[data-sdh="kalkulator"]'), csatol); }
+    function indit() { Array.prototype.forEach.call(doc.querySelectorAll('[data-modul="kalkulator"]'), csatol); }
     if (doc.readyState === 'loading') { doc.addEventListener('DOMContentLoaded', indit); } else { indit(); }
 }(typeof window !== 'undefined' ? window : this));

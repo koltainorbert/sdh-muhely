@@ -310,6 +310,8 @@ final class SDH_Kozpont
             'email_cim'      => '',
             'ertekesito_kulcs' => '',
             'ertekesito_ip'    => '',
+            'termek_nev'       => '',
+            'kulcs_elotag'     => '',
             'csomagok'       => [
                 ['kulcs' => 'teljes', 'nev' => 'Teljes', 'modulok' => '*', 'max_peldany' => 1, 'max_felhasznalo' => 0],
                 ['kulcs' => 'alap', 'nev' => 'Alap', 'modulok' => ['uzenetek', 'nyomtatas', 'matrica', 'tac'], 'max_peldany' => 1, 'max_felhasznalo' => 3],
@@ -327,6 +329,8 @@ final class SDH_Kozpont
         $b['email_cim']      = sanitize_email((string) $b['email_cim']);
         $b['ertekesito_kulcs'] = (string) $b['ertekesito_kulcs'];
         $b['ertekesito_ip']    = (string) $b['ertekesito_ip'];
+        $b['termek_nev']       = mb_substr(sanitize_text_field((string) $b['termek_nev']), 0, 60);
+        $b['kulcs_elotag']     = self::elotag_tisztit((string) $b['kulcs_elotag']);
         $b['csomagok']       = is_array($b['csomagok']) ? array_values($b['csomagok']) : $alap['csomagok'];
 
         return $b;
@@ -364,6 +368,15 @@ final class SDH_Kozpont
                 $b['ertekesito_kulcs'] = $k;
                 self::naplo('beallitas', $k === '' ? 'Az értékesítő webhely kulcsa törölve.' : 'Az értékesítő webhely kulcsa beállítva.', 'figyel', [], (string) wp_get_current_user()->display_name);
             }
+        }
+
+        // 2.1: a vevőknek látszó terméknév és a licenckulcs előtagja (üresen a terméknévből, végső esetben „LIC”).
+        if (isset($be['termek_nev'])) {
+            $b['termek_nev'] = mb_substr(sanitize_text_field((string) $be['termek_nev']), 0, 60);
+        }
+
+        if (isset($be['kulcs_elotag'])) {
+            $b['kulcs_elotag'] = self::elotag_tisztit((string) $be['kulcs_elotag']);
         }
 
         if (isset($be['ertekesito_ip']) && class_exists('SDH_Kozpont_Kiszolgalas')) {
@@ -484,6 +497,41 @@ final class SDH_Kozpont
      * Licenc
      * ============================================================== */
 
+    /** Licenckulcs-előtag: nagybetű, ékezet nélkül, 2–10 karakter (A–Z, 0–9); érvénytelennél üres. */
+    public static function elotag_tisztit(string $e): string
+    {
+        $e = strtoupper((string) preg_replace('/[^A-Za-z0-9]/', '', remove_accents($e)));
+
+        return strlen($e) >= 2 ? substr($e, 0, 10) : '';
+    }
+
+    /** Az új licenckulcsok előtagja: a beállítás, különben a terméknévből, különben „LIC”. (A régi kulcsok érvényesek maradnak.) */
+    public static function kulcs_elotag(): string
+    {
+        $b = self::beallitas();
+
+        if ($b['kulcs_elotag'] !== '') {
+            return $b['kulcs_elotag'];
+        }
+
+        $e = self::elotag_tisztit(self::termek_nev());
+
+        return $e !== '' && stripos($e, 'SDH') === false ? $e : 'LIC';
+    }
+
+    /** A vevőknek látszó terméknév (letöltött fájl neve); üresen semleges. */
+    public static function termek_nev(): string
+    {
+        $n = self::beallitas()['termek_nev'];
+
+        // Ugyanazon a webhelyen futó értékesítő oldal terméknevét veszi át, ha itt nincs megadva.
+        if ($n === '' && class_exists('SDH_Sales') && method_exists('SDH_Sales', 'termeknev')) {
+            $n = (string) SDH_Sales::termeknev();
+        }
+
+        return $n;
+    }
+
     public static function uj_kulcs(): string
     {
         $abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -499,7 +547,7 @@ final class SDH_Kozpont
             $r[] = $d;
         }
 
-        return 'SDH-' . implode('-', $r);
+        return self::kulcs_elotag() . '-' . implode('-', $r);
     }
 
     public static function licenc(string $kulcs): ?object

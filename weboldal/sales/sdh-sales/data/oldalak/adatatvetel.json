@@ -1,0 +1,164 @@
+{
+ "slug": "adatatvetel",
+ "cim": "Adatátvétel (MunkaLap 3, Excel)",
+ "szulo": "funkciok",
+ "sorrend": 45,
+ "seo": {
+  "title": "MunkaLap 3 és Excel adatátvétel – {termeknev}",
+  "description": "Váltás régi szerviz programról: MunkaLap 3 és Excel-adatok átvétele CSV/XLSX-ből, próbával, oszloppárosítással és visszavonással.",
+  "kulcsszo": "MunkaLap 3 adatátvétel"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Váltás MunkaLap 3-ról és Excelből: adatátvétel lépésről lépésre",
+   "alcim": "Átálláskor a régi adatok – akár több tízezer munkalap – kézi gépelés nélkül jönnek át CSV-, TXT- vagy XLSX-fájlból.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-licenc",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "MunkaLap 3 mentései és Excel-táblák (CSV, TXT, XLSX)"
+    },
+    {
+     "szoveg": "Régi Windows-os ékezetek is helyesen"
+    },
+    {
+     "szoveg": "Próba írás nélkül, bruttó végösszeggel az egyeztetéshez"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Sorrend: ügyfelek, eszközök, munkalapok, tételek, hibák. A rendszer felismeri a kódolást és az elválasztót, javasolja az oszlopok párosítását, és írás nélküli próbát futtat: hány sor jó, hány van már bent, hány hibás és miért. Minden átvétel visszavonható.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Rendszer › Adatátvétel.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "MunkaLap 3 mentései és Excel-táblák (CSV, TXT, XLSX)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Régi Windows-os ékezetek is helyesen",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Próba írás nélkül, bruttó végösszeggel az egyeztetéshez",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A munkalapszámok megmaradnak, a számozás utánuk folytatódik",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszavonás átvételenként",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Mentés",
+     "szoveg": "Előbb: Beállítások › Mentés › Mentés most."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Feltöltés",
+     "szoveg": "Beállítások › Rendszer › Adatátvétel: mit tartalmaz a fájl, Feltöltés és elemzés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Párosítás és próba",
+     "szoveg": "Oszlopok és állapotok párosítása, majd Próba (nem ír)."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Átvétel",
+     "szoveg": "„Átvétel indítása” – 500 soronként halad, közben mutatja, hol tart."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "ugyfelek",
+    "munkalapok",
+    "eszkozok",
+    "mentes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Adatátvétel (MunkaLap 3, Excel)",
+   "kulcsok": [
+    "adatatvetel-hogyan",
+    "munkalap3-atvetel",
+    "excelbol-valtas",
+    "adatatvetel-proba",
+    "adatatvetel-visszavonas"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Adatátvétel (MunkaLap 3, Excel) a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

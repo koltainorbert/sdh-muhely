@@ -1,0 +1,163 @@
+{
+ "slug": "sebessegmeres",
+ "cim": "Sebesség nagy adatnál",
+ "szulo": "funkciok",
+ "sorrend": 43,
+ "seo": {
+  "title": "Sebesség nagy adatnál, mérve – {termeknev}",
+  "description": "Gyors szerviz program 300 000 rekordnál is: mért listabetöltési idők próbaadaton, beépített sebességmérés és szerverajánlások.",
+  "kulcsszo": "gyors szerviz program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Sebességmérés és gyors listák nagy adatmennyiségnél",
+   "alcim": "Gyors listák több százezer rekordnál is, beépített sebességméréssel – a számok mérésből, nem ígéretből.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-riport",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Termékek lista: 5,28 s → 0,38 s 300 000 rekordos próbaadaton (mérés, SQLite)"
+    },
+    {
+     "szoveg": "Ügyfelek 11 801. oldala: 0,589 s → 0,018 s ugyanott (mérés)"
+    },
+    {
+     "szoveg": "40 000 munkalapos próbaadaton minden mért lépés 300 ms alatt (mérés, SQLite)"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A listák halasztott összekapcsolással lapoznak (előbb az azonosítók, aztán csak a látszó sorok), a gyakori számok tárolva vannak. A Sebesség lapfülön a mérés lefuttatja a gyakori lekérdezéseket, és a 300 ms fölötti lépéseket LASSÚ-ként sorolja fel.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Rendszer › Sebesség.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Termékek lista: 5,28 s → 0,38 s 300 000 rekordos próbaadaton (mérés, SQLite)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ügyfelek 11 801. oldala: 0,589 s → 0,018 s ugyanott (mérés)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "40 000 munkalapos próbaadaton minden mért lépés 300 ms alatt (mérés, SQLite)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Mérés indítása a Beállításokból, adatírás nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kiírja az OPcache és a MySQL-puffer állapotát",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Lapfül",
+     "szoveg": "Beállítások › Rendszer › Sebesség."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Mérés",
+     "szoveg": "„Mérés indítása” – csak olvas, nem ír az adatbázisba."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Eredmény",
+     "szoveg": "Lépésenkénti idők, a 300 ms fölöttiek LASSÚ-ként."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A mérések SQLite-os tesztkörnyezetben, próbaadaton készültek; éles MySQL-szerveren az eredmény a gép erejétől és beállításától függ.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "okos-kereso",
+    "attekintes",
+    "licenc-karbantartas",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Sebesség nagy adatnál",
+   "kulcsok": [
+    "nagy-adatbazis-sebesseg",
+    "szerver-meretezes",
+    "tarhely-figyeles"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Sebesség nagy adatnál a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

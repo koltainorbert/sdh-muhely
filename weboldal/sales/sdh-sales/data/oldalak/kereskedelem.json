@@ -1,0 +1,143 @@
+{
+ "slug": "kereskedelem",
+ "cim": "Kiskereskedelem szervizzel",
+ "szulo": "iparagak",
+ "sorrend": 7,
+ "seo": {
+  "title": "Bolti eladás és szerviz egy programban – {termeknev}",
+  "description": "Üzleteknek, amelyek javítanak is: pultos eladás, ügyfélrendelés értesítéssel, készlet, árcímke, garanciális ügyintézés, Számlázz.hu.",
+  "kulcsszo": "bolt és szerviz program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Bolt és szerviz egy rendszerben: eladás, rendelés, garancia",
+   "alcim": "Bolt és szerviz egy rendszerben: pultos eladás, ügyfélrendelés, készlet, garancia és RMA.",
+   "cimke": "Kiskereskedelem szervizzel",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-kereskedelem",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "bolt",
+     "cim": "Eladás és javítás külön",
+     "szoveg": "A kassza egy programban, a javítás egy másikban."
+    },
+    {
+     "ikon": "kosar",
+     "cim": "Rendelt áru, elfelejtett ügyfél",
+     "szoveg": "Megjött az alkatrész, de senki nem szólt az ügyfélnek."
+    },
+    {
+     "ikon": "cimke",
+     "cim": "Árcímke kézzel",
+     "szoveg": "Az ár és a cikkszám kézzel kerül a polcra."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>Ahol a pultnál eladnak is és javításra is vesznek át, ott a {termeknev} egy rendszerben tartja a kettőt. A Napi árukiadás két mozdulat, a rendelés öt lépésen megy végig értesítéssel, a termékcímke Brother nyomtatóra készül.</p>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "arukiadas",
+    "rendelesek",
+    "termekek",
+    "raktar",
+    "hazipenztar",
+    "szamlazas",
+    "rma",
+    "cimkenyomtatas",
+    "javitasi-garancia"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "arukiadas",
+    "rendelesek",
+    "uzenetek",
+    "termekek",
+    "penztar",
+    "szamlazas",
+    "matrica"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>A {termeknev} nem webáruház-motor és nem online pénztárgép. Számlát a Számlázz.hu állít ki; a házipénztár belső nyilvántartás. Webáruház-integrációhoz egyedi fejlesztés kell.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Kiskereskedelem szervizzel",
+   "kulcsok": [
+    "helyszinek-tobb-uzlet",
+    "tobb-uzlet-lanc",
+    "keszletkezeles-modul",
+    "szamlazas-szamlazzhu"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "slug": "iparagak",
+ "cim": "Iparágak",
+ "sorrend": 20,
+ "seo": {
+  "title": "Iparági megoldások szervizeknek – {termeknev}",
+  "description": "Telefon- és elektronikai szerviz, ipari javítóműhely, kkv, nagyvállalat, közintézmény, kereskedelem: nézd meg, hogyan illeszkedik a {termeknev}.",
+  "kulcsszo": "szerviz program iparágak"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz program iparáganként: kinek és mire való",
+   "alcim": "A {termeknev} elektronikai szervizek munkafolyamatára készült – és mindenhol működik, ahol ügyfél, tárgy, munkalap és alkatrész van.",
+   "cimke": "Iparágak",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-szerviz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Válaszd ki a saját területed"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire nem való?",
+   "szelesseg": "keskeny",
+   "html": "<p>A {termeknev} nem webáruház-motor, nem könyvelőprogram, nem betegnyilvántartó és nem karbantartás-tervező (CMMS) rendszer. A számlát a Számlázz.hu állítja ki. Ha a folyamatotok ettől eltér, nézd meg az <a href=\"/egyedi-modulfejlesztes/\">egyedi modulfejlesztést</a>.</p>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "telefonszerviz",
+    "szamitogep-szerviz",
+    "elektronikai-szerviz",
+    "mire-nem-valo",
+    "kis-uzlet-egy-gep",
+    "tobb-uzlet-lanc"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nem találod a saját iparágadat?",
+   "szoveg": "Írd meg, mivel foglalkoztok – megmondjuk őszintén, illik-e hozzátok a {termeknev}.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

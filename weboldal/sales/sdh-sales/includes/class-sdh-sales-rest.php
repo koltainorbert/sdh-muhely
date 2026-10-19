@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Rest
 {
-    public const NS = 'sdh-sales/v1';
+    public const NS = 'portal/v1';
 
     /** @var array<int, array<string, mixed>> */
     private static array $utak = [];

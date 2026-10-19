@@ -1,0 +1,399 @@
+[
+ {
+  "kulcs": "fo",
+  "cim": "Főmenü",
+  "elemek": [
+   {
+    "cim": "Funkciók",
+    "oldal": "funkciok",
+    "gyerekek": [
+     {
+      "cim": "Munkalapok",
+      "oldal": "funkciok/munkalapok"
+     },
+     {
+      "cim": "Ügyfelek (CRM)",
+      "oldal": "funkciok/ugyfelek"
+     },
+     {
+      "cim": "Eszközök és előélet",
+      "oldal": "funkciok/eszkozok"
+     },
+     {
+      "cim": "RMA-ügyféloldal",
+      "oldal": "funkciok/rma"
+     },
+     {
+      "cim": "Raktár: foglalás és rendelési javaslat",
+      "oldal": "funkciok/raktar"
+     },
+     {
+      "cim": "Házipénztár",
+      "oldal": "funkciok/hazipenztar"
+     },
+     {
+      "cim": "Számlázz.hu-számlázás",
+      "oldal": "funkciok/szamlazas"
+     },
+     {
+      "cim": "SMS-értesítések",
+      "oldal": "funkciok/sms"
+     },
+     {
+      "cim": "AI-asszisztens",
+      "oldal": "funkciok/asszisztens"
+     },
+     {
+      "cim": "Adatbiztonság",
+      "oldal": "funkciok/biztonsag"
+     },
+     {
+      "cim": "Internet nélküli működés",
+      "oldal": "funkciok/offline"
+     },
+     {
+      "cim": "Adatátvétel (MunkaLap 3, Excel)",
+      "oldal": "funkciok/adatatvetel"
+     },
+     {
+      "cim": "Minden funkció",
+      "oldal": "funkciok"
+     },
+     {
+      "cim": "Modulok",
+      "oldal": "modulok"
+     }
+    ]
+   },
+   {
+    "cim": "Iparágak",
+    "oldal": "iparagak",
+    "gyerekek": [
+     {
+      "cim": "Telefon-, számítógép- és elektronikai szerviz",
+      "oldal": "iparagak/szerviz"
+     },
+     {
+      "cim": "Ipari javítóműhelyek és karbantartás",
+      "oldal": "iparagak/ipar"
+     },
+     {
+      "cim": "Kis- és középvállalkozások",
+      "oldal": "iparagak/kkv"
+     },
+     {
+      "cim": "Nagyvállalatok és zrt.-k",
+      "oldal": "iparagak/zrt"
+     },
+     {
+      "cim": "Állami és önkormányzati intézmények",
+      "oldal": "iparagak/allami-szektor"
+     },
+     {
+      "cim": "Egészségügyi eszközszerviz",
+      "oldal": "iparagak/egeszsegugy"
+     },
+     {
+      "cim": "Kiskereskedelem szervizzel",
+      "oldal": "iparagak/kereskedelem"
+     },
+     {
+      "cim": "Egyéb javító- és szolgáltatócégek",
+      "oldal": "iparagak/egyeb"
+     }
+    ]
+   },
+   {
+    "cim": "Árak",
+    "oldal": "arak",
+    "gyerekek": []
+   },
+   {
+    "cim": "Erőforrások",
+    "oldal": "gyik",
+    "gyerekek": [
+     {
+      "cim": "Gyakori kérdések",
+      "oldal": "gyik"
+     },
+     {
+      "cim": "Blog",
+      "oldal": "blog"
+     },
+     {
+      "cim": "Oktatás",
+      "oldal": "oktatas"
+     },
+     {
+      "cim": "Tudásbázis",
+      "oldal": "tudasbazis"
+     },
+     {
+      "cim": "Telepítés",
+      "oldal": "telepites"
+     },
+     {
+      "cim": "Összehasonlítás",
+      "oldal": "osszehasonlitas"
+     },
+     {
+      "cim": "Esettanulmányok",
+      "oldal": "esettanulmany"
+     }
+    ]
+   },
+   {
+    "cim": "Demó",
+    "oldal": "demo",
+    "gyerekek": []
+   },
+   {
+    "cim": "Kapcsolat",
+    "oldal": "kapcsolat",
+    "gyerekek": [
+     {
+      "cim": "Kapcsolat",
+      "oldal": "kapcsolat"
+     },
+     {
+      "cim": "Bemutató időpont",
+      "oldal": "idopontfoglalas"
+     },
+     {
+      "cim": "Partnerprogram",
+      "oldal": "partnerprogram"
+     },
+     {
+      "cim": "Rólunk",
+      "oldal": "rolunk"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "kulcs": "lablec",
+  "cim": "Lábléc",
+  "elemek": [
+   {
+    "cim": "Termék",
+    "gyerekek": [
+     {
+      "cim": "Funkciók",
+      "oldal": "funkciok"
+     },
+     {
+      "cim": "Modulok",
+      "oldal": "modulok"
+     },
+     {
+      "cim": "Árak",
+      "oldal": "arak"
+     },
+     {
+      "cim": "Demó",
+      "oldal": "demo"
+     },
+     {
+      "cim": "Összehasonlítás",
+      "oldal": "osszehasonlitas"
+     },
+     {
+      "cim": "Adatvédelem és biztonság",
+      "oldal": "adatvedelem-biztonsag"
+     },
+     {
+      "cim": "Egyedi modulfejlesztés",
+      "oldal": "egyedi-modulfejlesztes"
+     },
+     {
+      "cim": "Egyedi szoftverfejlesztés",
+      "oldal": "egyedi-szoftverfejlesztes"
+     }
+    ]
+   },
+   {
+    "cim": "Iparágak",
+    "gyerekek": [
+     {
+      "cim": "Telefon-, számítógép- és elektronikai szerviz",
+      "oldal": "iparagak/szerviz"
+     },
+     {
+      "cim": "Ipari javítóműhelyek és karbantartás",
+      "oldal": "iparagak/ipar"
+     },
+     {
+      "cim": "Kis- és középvállalkozások",
+      "oldal": "iparagak/kkv"
+     },
+     {
+      "cim": "Nagyvállalatok és zrt.-k",
+      "oldal": "iparagak/zrt"
+     },
+     {
+      "cim": "Állami és önkormányzati intézmények",
+      "oldal": "iparagak/allami-szektor"
+     },
+     {
+      "cim": "Egészségügyi eszközszerviz",
+      "oldal": "iparagak/egeszsegugy"
+     },
+     {
+      "cim": "Kiskereskedelem szervizzel",
+      "oldal": "iparagak/kereskedelem"
+     },
+     {
+      "cim": "Egyéb javító- és szolgáltatócégek",
+      "oldal": "iparagak/egyeb"
+     }
+    ]
+   },
+   {
+    "cim": "Népszerű funkciók",
+    "gyerekek": [
+     {
+      "cim": "Munkalapok",
+      "oldal": "funkciok/munkalapok"
+     },
+     {
+      "cim": "IMEI-lekérdezés és TAC-adatbázis",
+      "oldal": "funkciok/imei-tac"
+     },
+     {
+      "cim": "RMA-ügyféloldal",
+      "oldal": "funkciok/rma"
+     },
+     {
+      "cim": "Raktár: foglalás és rendelési javaslat",
+      "oldal": "funkciok/raktar"
+     },
+     {
+      "cim": "Számlázz.hu-számlázás",
+      "oldal": "funkciok/szamlazas"
+     },
+     {
+      "cim": "SMS-értesítések",
+      "oldal": "funkciok/sms"
+     },
+     {
+      "cim": "Online időpontfoglalás",
+      "oldal": "funkciok/foglalas"
+     },
+     {
+      "cim": "Címkenyomtatás (Brother)",
+      "oldal": "funkciok/cimkenyomtatas"
+     }
+    ]
+   },
+   {
+    "cim": "Erőforrások",
+    "gyerekek": [
+     {
+      "cim": "Gyakori kérdések",
+      "oldal": "gyik"
+     },
+     {
+      "cim": "Blog",
+      "oldal": "blog"
+     },
+     {
+      "cim": "Oktatás",
+      "oldal": "oktatas"
+     },
+     {
+      "cim": "Tudásbázis",
+      "oldal": "tudasbazis"
+     },
+     {
+      "cim": "Telepítés",
+      "oldal": "telepites"
+     },
+     {
+      "cim": "Rendszerállapot",
+      "oldal": "statusz"
+     },
+     {
+      "cim": "Keresés",
+      "oldal": "kereses"
+     }
+    ]
+   },
+   {
+    "cim": "Cég",
+    "gyerekek": [
+     {
+      "cim": "Rólunk",
+      "oldal": "rolunk"
+     },
+     {
+      "cim": "Kapcsolat",
+      "oldal": "kapcsolat"
+     },
+     {
+      "cim": "Bemutató időpont",
+      "oldal": "idopontfoglalas"
+     },
+     {
+      "cim": "Partnerprogram",
+      "oldal": "partnerprogram"
+     },
+     {
+      "cim": "Ügyfélfiók",
+      "oldal": "fiok"
+     },
+     {
+      "cim": "Jogi dokumentumok",
+      "oldal": "jogi"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "kulcs": "jogi",
+  "cim": "Jogi menü",
+  "elemek": [
+   {
+    "cim": "Általános szerződési feltételek",
+    "oldal": "jogi/aszf"
+   },
+   {
+    "cim": "Adatkezelési tájékoztató",
+    "oldal": "jogi/adatkezeles"
+   },
+   {
+    "cim": "Süti-tájékoztató",
+    "oldal": "jogi/suti-tajekoztato"
+   },
+   {
+    "cim": "Impresszum",
+    "oldal": "jogi/impresszum"
+   },
+   {
+    "cim": "Licencszerződés",
+    "oldal": "jogi/licencszerzodes"
+   },
+   {
+    "cim": "Szolgáltatási szint (SLA)",
+    "oldal": "jogi/sla"
+   },
+   {
+    "cim": "Adatfeldolgozási szerződés",
+    "oldal": "jogi/adatfeldolgozasi-szerzodes"
+   },
+   {
+    "cim": "Elállás és visszatérítés",
+    "oldal": "jogi/elallas-visszaterites"
+   },
+   {
+    "cim": "AI-chat tájékoztató",
+    "oldal": "jogi/ai-chat-tajekoztato"
+   },
+   {
+    "cim": "Demó-feltételek",
+    "oldal": "jogi/demo-feltetelek"
+   }
+  ]
+ }
+]

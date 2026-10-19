@@ -1,0 +1,123 @@
+{
+ "slug": "egyedi-szoftverfejlesztes",
+ "cim": "Egyedi szoftverfejlesztés",
+ "sorrend": 41,
+ "seo": {
+  "title": "Egyedi szoftverfejlesztés cégeknek – {termeknev}",
+  "description": "Webes ügyviteli rendszer a saját folyamatotokra: igényfelmérés, fejlesztés, telepítés saját szerverre, támogatás. A {termeknev} csapatától.",
+  "kulcsszo": "egyedi szoftverfejlesztés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Egyedi szoftverfejlesztés a saját folyamatotokra",
+   "alcim": "Ha nem szerviz-, hanem saját ügyviteli rendszer kell, ugyanazzal a módszerrel fejlesztünk: webes felület, saját szerver, napló, mentés, magyar súgó.",
+   "cimke": "Egyedi fejlesztés",
+   "gomb": {
+    "szoveg": "Ajánlatot kérek",
+    "url": "#urlap"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "bal"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Amit a {termeknev} fejlesztéséből hozunk",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "szerver",
+     "cim": "Saját szerveren fut",
+     "szoveg": "Az adat nálatok marad; internet nélkül is működhet a belső munka."
+    },
+    {
+     "ikon": "riport",
+     "cim": "Napló és visszakereshetőség",
+     "szoveg": "Mezőszintű változásnapló, jogosultságok, kétlépcsős belépés."
+    },
+    {
+     "ikon": "mentes",
+     "cim": "Mentés és frissítés",
+     "szoveg": "Titkosított mentés, egykattintásos frissítés mentéssel előtte."
+    },
+    {
+     "ikon": "konyv",
+     "cim": "Dokumentáció",
+     "szoveg": "Magyar súgó fejezetenként, oktatás, átadás."
+    },
+    {
+     "ikon": "sebesseg",
+     "cim": "Mért teljesítmény",
+     "szoveg": "Nagy adatmennyiségre tervezve, mérve – nem becsülve."
+    },
+    {
+     "ikon": "telefon",
+     "cim": "Telefonon is",
+     "szoveg": "Reszponzív felület pultgépre, tabletre és telefonra."
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "A fejlesztés lépései",
+   "lepesek": [
+    {
+     "ikon": "kerdes",
+     "cim": "Felmérés",
+     "szoveg": "Folyamat, szereplők, adatok, meglévő rendszerek."
+    },
+    {
+     "ikon": "szamla",
+     "cim": "Specifikáció és ajánlat",
+     "szoveg": "Írásban: mit, mikorra, mennyiért."
+    },
+    {
+     "ikon": "kod",
+     "cim": "Fejlesztés szakaszokban",
+     "szoveg": "Részenként átadva, hogy menet közben is látszódjon az eredmény."
+    },
+    {
+     "ikon": "raketa",
+     "cim": "Bevezetés és támogatás",
+     "szoveg": "Telepítés, adatátvétel, oktatás, support-szerződés."
+    }
+   ]
+  },
+  {
+   "tipus": "urlap",
+   "cim": "Ajánlatkérés egyedi fejlesztésre",
+   "alcim": "Írd le röviden a célt és a jelenlegi megoldást. Két munkanapon belül jelentkezünk.",
+   "urlap": "egyedi",
+   "horgony": "urlap",
+   "siker": "Köszönjük! Az igényedet megkaptuk, hamarosan jelentkezünk."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "egyedi-fejlesztes-menete",
+    "egyedi-fejlesztes-ar",
+    "egyedi-fejlesztes-hatarido",
+    "egyedi-integracio"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Beszéljük át",
+   "szoveg": "Egy rövid hívásban kiderül, mire van szükségetek, és mennyi idő alatt reális.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   }
+  }
+ ]
+}

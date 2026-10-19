@@ -56,7 +56,7 @@ Forint, egész forintra kerekítve, 27%-os áfa, nettó és bruttó árak. Ezek 
 
 ### 4. Adatok helye
 
-Hol tárolódnak az ügyfeleid adatai? Egy uniós adatkezelőnek a GDPR szerint tudnia kell, kik az adatfeldolgozói, és ha az adatok az EU-n kívülre kerülnek, ennek jogalapjáról is gondoskodnia kell. Ez nem feltétlenül akadály, de az adatkezelési tájékoztatóban kezelni kell. A {termeknev} saját példányként fut a te választott szervereden, így az adatbázis nálad van.
+Hol tárolódnak az ügyfeleid adatai? Egy uniós adatkezelőnek a GDPR szerint tudnia kell, kik az adatfeldolgozói, és ha az adatok az EU-n kívülre kerülnek, ennek jogalapjáról is gondoskodnia kell. Ez nem feltétlenül akadály, de az adatkezelési tájékoztatóban kezelni kell. Az általunk forgalmazott rendszer saját példányként fut a te választott szervereden, így az adatbázis nálad van.
 
 ### 5. Internetkimaradás
 
@@ -99,7 +99,7 @@ Ha ezekre egyértelmű, írásos választ kapsz, a döntés sokkal megalapozotta
 
 ## Váltás nemzetközi programról
 
-Ha jelenleg nemzetközi programot használsz, és váltanál, az első kérdés az adatexport: milyen formában adja ki a program az ügyfeleket, készülékeket és munkalapokat? Ha CSV-ben vagy táblázatban, a {termeknev} [adatátvétele](/adatatvetel/) oszloppárosítással át tudja venni őket, próbával és visszavonási lehetőséggel.
+Ha jelenleg nemzetközi programot használsz, és váltanál, az első kérdés az adatexport: milyen formában adja ki a program az ügyfeleket, készülékeket és munkalapokat? Ha CSV-ben vagy táblázatban, a rendszerünk [adatátvétele](/adatatvetel/) oszloppárosítással át tudja venni őket, próbával és visszavonási lehetőséggel.
 
 ## Mikor választanád mégis a nemzetközit?
 

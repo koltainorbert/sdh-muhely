@@ -1,0 +1,235 @@
+{
+ "slug": "kezdolap",
+ "cim": "Kezdőlap",
+ "sorrend": 1,
+ "seo": {
+  "title": "{termeknev} – szerviz program és munkalapkezelő",
+  "description": "Szerviz program munkalappal, ügyfél- és eszköznyilvántartással, raktárral, pénztárral és Számlázz.hu-val. Saját szerveren, internet nélkül is.",
+  "kulcsszo": "szerviz program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz program a pult és a műhely mindennapjaira",
+   "alcim": "Munkalap, ügyfél, készülék, alkatrész, kassza és számla egy helyen – saját szerveren, magyarul, internet nélkül is. A {termeknev} a valódi javítási folyamatra épül, átvételtől a számláig.",
+   "cimke": "Szervizprogram és CRM",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "hero",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Saját szerveren fut, az adat nálatok marad"
+    },
+    {
+     "szoveg": "Internet nélkül is dolgozik a pult"
+    },
+    {
+     "szoveg": "Számlázz.hu-integráció"
+    },
+    {
+     "szoveg": "Magyar felület, súgó és támogatás"
+    }
+   ]
+  },
+  {
+   "tipus": "funkcio_racs",
+   "eyebrow": "Funkciók",
+   "cim": "Ami egy szerviz napjában tényleg számít",
+   "alcim": "A felvételtől a kiadásig: minden lépés egy rendszerben, dupla adatbevitel nélkül.",
+   "kulcsok": [
+    "munkalapok",
+    "eszkozok",
+    "rma",
+    "raktar",
+    "hazipenztar",
+    "szamlazas",
+    "sms",
+    "cimkenyomtatas",
+    "asszisztens"
+   ],
+   "gomb": {
+    "szoveg": "Mind a 50 funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Miben más?",
+   "cim": "Hat dolog, amit kevés szerviz program tud",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "wifi-ki",
+     "cim": "Internet nélkül is megy",
+     "szoveg": "Munkalap, pénztár, nyomtatás és mentés helyben fut; ami netet kér, nem várakoztat.",
+     "url": "/funkciok/offline/"
+    },
+    {
+     "ikon": "vonalkod",
+     "cim": "IMEI-ből felismeri a készüléket",
+     "szoveg": "A 15. számjegy után kiderül, járt-e már nálatok – a típus offline is.",
+     "url": "/funkciok/imei-tac/"
+    },
+    {
+     "ikon": "sms",
+     "cim": "SMS a saját telefonotokról",
+     "szoveg": "Androidos SMS-átjáró: havidíjas SMS-kapu nélkül, a saját számotokról.",
+     "url": "/funkciok/sms/"
+    },
+    {
+     "ikon": "ai",
+     "cim": "AI, amely kérdez, mielőtt módosít",
+     "szoveg": "Az asszisztens csak jóváhagyással változtat adatot, átírásnál kóddal.",
+     "url": "/funkciok/asszisztens/"
+    },
+    {
+     "ikon": "lakat",
+     "cim": "Titkosított zárkód és mentés",
+     "szoveg": "Zárkód titkosítva, megnézés joggal és naplóval; mentés jelszóval külső helyre.",
+     "url": "/funkciok/biztonsag/"
+    },
+    {
+     "ikon": "import",
+     "cim": "Átállás a régi programról",
+     "szoveg": "MunkaLap 3 és Excel-adatok átvétele próbával, visszavonhatóan.",
+     "url": "/funkciok/adatatvetel/"
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "eyebrow": "Így működik",
+   "cim": "Egy javítás útja a {termeknev} rendszerben",
+   "lepesek": [
+    {
+     "ikon": "kamera",
+     "cim": "Átvétel",
+     "szoveg": "Ügyfél és készülék felvétele, IMEI-felismerés, fotó és aláírás, átvételi elismervény."
+    },
+    {
+     "ikon": "vonalkod",
+     "cim": "Követés",
+     "szoveg": "QR-kódos címke: az ügyfél a telefonján látja az állapotot, és üzenhet."
+    },
+    {
+     "ikon": "csavarkulcs",
+     "cim": "Javítás",
+     "szoveg": "Alkatrész a munkalapra foglalva, árajánlat online elfogadásra, SMS állapotváltáskor."
+    },
+    {
+     "ikon": "szamla",
+     "cim": "Kiadás és számla",
+     "szoveg": "Fizetés a pénztárba, Számlázz.hu-számla egy kattintással, garancia a lezárástól."
+    }
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "eyebrow": "Iparágak",
+   "cim": "Kinek készült?",
+   "alcim": "Elektronikai szervizből indult – és ott működik, ahol munkalap, tárgy és alkatrész van."
+  },
+  {
+   "tipus": "szamok",
+   "cim": "Számok, mérésből",
+   "hatter": "felulet",
+   "szamok": [
+    {
+     "ertek": "17",
+     "cimke": "külön kapcsolható modul",
+     "ikon": "modul"
+    },
+    {
+     "ertek": "0,38 s",
+     "cimke": "Termékek lista 300 000 rekordos próbaadaton (mérés, SQLite)",
+     "ikon": "sebesseg"
+    },
+    {
+     "ertek": "3",
+     "cimke": "nyelvű ügyféloldal: magyar, angol, német",
+     "ikon": "globusz"
+    },
+    {
+     "ertek": "14",
+     "cimke": "szerkeszthető nyomtatvány",
+     "ikon": "nyomtato"
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Árak",
+   "cim": "Átlátható csomagok, nettó áron",
+   "alcim": "Havi vagy éves díj, modulonként bővíthető. Az ár a felhasználók és a telephelyek számától függ.",
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "megjegyzes": "Minden ár nettó, az áfa a pénztárban adódik hozzá. Részletek és kalkulátor az Árak oldalon."
+  },
+  {
+   "tipus": "osszehasonlitas",
+   "eyebrow": "Összehasonlítás",
+   "cim": "Hogyan viszonyul más szerviz programokhoz?",
+   "alcim": "Ugyanazokkal a szempontokkal, nyilvános forrásokból – a forrás és az ellenőrzés dátuma minden sorban.",
+   "konkurensek": [
+    "repairdesk",
+    "orderry",
+    "munkalaptar",
+    "serviceleaf"
+   ],
+   "db": 4,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Esettanulmány hamarosan",
+   "szoveg": "Az első ügyfeleink tapasztalatait engedéllyel, mért számokkal tesszük közzé. Szeretnél az elsők között lenni? Bevezetés közben mérjük veled az eredményt.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "sima",
+   "gomb2": {
+    "szoveg": "Esettanulmányok",
+    "url": "/esettanulmany/"
+   },
+   "eyebrow": "Vélemények"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "mi-a-demo",
+    "melyik-csomag-kell",
+    "hol-vannak-az-adatok",
+    "offline-mi-mukodik",
+    "adatatvetel-hogyan",
+    "szamlazas-szamlazzhu",
+    "rejtett-koltsegek",
+    "telepites-szolgaltataskent"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki ma, kötelezettség nélkül",
+   "szoveg": "Demó 10 000 mintarekorddal, regisztráció nélkül – vagy foglalj 30 perces bemutatót, és a saját folyamatodon megyünk végig.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

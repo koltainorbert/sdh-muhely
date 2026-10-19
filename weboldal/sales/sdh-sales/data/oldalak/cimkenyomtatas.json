@@ -1,0 +1,177 @@
+{
+ "slug": "cimkenyomtatas",
+ "cim": "Címkenyomtatás (Brother)",
+ "szulo": "funkciok",
+ "sorrend": 25,
+ "seo": {
+  "title": "Brother QL címke és RMA-matrica – {termeknev}",
+  "description": "RMA-matrica a készülékre és árcímke a termékre Brother QL, PT, TD nyomtatóval: QR-kód, IMEI, munkalapszám, vonalkód.",
+  "kulcsszo": "Brother QL címke szerviz"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Brother QL címkenyomtatás: RMA-matrica és árcímke",
+   "alcim": "RMA-matrica a készülékre, termék-, szolgáltatás-, rendelés- és egyedi címke Brother címkenyomtatóra, állítható tartalommal.",
+   "cimke": "Dokumentumok és készülékadatok",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-raktar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "RMA-matrica: név, munkalapszám, típus, RMA-kód + QR, hiba, IMEI, dátum"
+    },
+    {
+     "szoveg": "Mezőnként be/ki, sorrend, betű – élő előnézettel"
+    },
+    {
+     "szoveg": "Termékcímke árral, cikkszámmal, vonalkóddal"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A matricán ránézésre látszik, kié a készülék, melyik munkalaphoz tartozik, mi a baja és hogyan oldható fel; QR-kód visz az ügyféloldalra. Nyomtatás böngészőből (Brother illesztőprogrammal, pontos méretű PDF) vagy közvetlenül hálózaton a QL nyomtatókra.</p><p><strong>Hol találod a rendszerben?</strong> Munkalap › Matrica; Menü › Címkék; Beállítások › Címkenyomtatás.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "RMA-matrica: név, munkalapszám, típus, RMA-kód + QR, hiba, IMEI, dátum",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Mezőnként be/ki, sorrend, betű – élő előnézettel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Termékcímke árral, cikkszámmal, vonalkóddal",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "DK-tekercsek és TZe-szalagok, álló vagy fekvő",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Feloldó kód a matricán csak jogosultnak",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Nyomtató",
+     "szoveg": "Beállítások › Címkenyomtatás: típus, mód (böngésző vagy hálózat), címke / szalag."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Tartalom",
+     "szoveg": "Mezők be/ki, sorrend, betűméret; próbanyomat kitalált adatokkal."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Matrica",
+     "szoveg": "A munkalap alján a Matrica gomb: előnézet eszközönként, példányszám, Nyomtatás."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A böngészős mód minden Brother címkenyomtatóval működik. A közvetlen hálózati mód (QL, 9100-as port) valódi nyomtatón még nincs kipróbálva.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "matrica"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "nyomtatas",
+    "rma",
+    "termekek",
+    "eszkozok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Címkenyomtatás (Brother)",
+   "kulcsok": [
+    "brother-cimkenyomtato",
+    "nyomtatvanyok",
+    "vonalkodolvaso"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Címkenyomtatás (Brother) a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

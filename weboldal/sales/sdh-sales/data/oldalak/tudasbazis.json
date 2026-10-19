@@ -1,0 +1,47 @@
+{
+ "slug": "tudasbazis",
+ "cim": "Tudásbázis",
+ "sorrend": 52,
+ "seo": {
+  "title": "Tudásbázis és súgó – {termeknev}",
+  "description": "A {termeknev} súgója kereshetően: lépésről lépésre leírások munkalapról, raktárról, pénztárról, számlázásról, SMS-ről és biztonságról.",
+  "kulcsszo": "szerviz program súgó"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Tudásbázis: a rendszer súgója, kereshetően",
+   "alcim": "Ugyanaz a leírás, amit a rendszeren belül a Súgó mutat – menüpontonként, lépésekkel.",
+   "cimke": "Tudásbázis",
+   "gomb": {
+    "szoveg": "Keresés",
+    "url": "#tudas"
+   },
+   "gomb2": {
+    "szoveg": "Oktatás",
+    "url": "/oktatas/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "tudasbazis",
+   "cim": "Fejezetek",
+   "kereso": true,
+   "horgony": "tudas"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nem találod, amit keresel?",
+   "szoveg": "Kérdezd meg a GYIK-ot vagy írj nekünk.",
+   "gomb": {
+    "szoveg": "GYIK",
+    "url": "/gyik/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   }
+  }
+ ]
+}

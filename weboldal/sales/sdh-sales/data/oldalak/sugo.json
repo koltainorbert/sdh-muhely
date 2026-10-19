@@ -1,0 +1,149 @@
+{
+ "slug": "sugo",
+ "cim": "Súgó és oldaltúrák",
+ "szulo": "funkciok",
+ "sorrend": 8,
+ "seo": {
+  "title": "Beépített súgó és oldaltúrák – {termeknev}",
+  "description": "Magyar nyelvű, beépített súgó minden menüponthoz: lépésről lépésre leírások, kérdés–válasz, túrák és saját céges szabályok.",
+  "kulcsszo": "szerviz szoftver betanítás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Beépített súgó, kérdés–válasz és oldaltúrák",
+   "alcim": "Fejezetenkénti dokumentáció, kérdés–válasz, újdonságok, és lépésenkénti túra az oldalakon – kereshetően, magyarul.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-ai",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Toldalékokat és köznyelvi szavakat értő kereső („kassza” → pénztár)"
+    },
+    {
+     "szoveg": "Oldalanként kész túra, Következő / Előző lépésekkel"
+    },
+    {
+     "szoveg": "Saját kérdés–válasz a cég szabályairól"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A Súgó mindig a rendszer mostani állapotát írja le: minden menüpontnak saját fejezete van, lépésről lépésre leírásokkal. A fejléc Súgó gombja az éppen nyitott oldal fejezetét nyitja meg, a túra pedig egyenként megmutatja, mi hol van.</p><p><strong>Hol találod a rendszerben?</strong> Fejléc › Súgó gomb; F1: asszisztens.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Toldalékokat és köznyelvi szavakat értő kereső („kassza” → pénztár)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Oldalanként kész túra, Következő / Előző lépésekkel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Saját kérdés–válasz a cég szabályairól",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az „Amire nem volt találat” lista megmutatja, mit kell még leírni",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az AI-asszisztens ugyanebből a tudásból felel",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Súgó az oldalhoz",
+     "szoveg": "A fejléc Súgó gombja az éppen nyitott oldal fejezetét nyitja."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Keresés",
+     "szoveg": "A Súgó keresőjébe úgy írj, ahogy eszedbe jut: „hogyan zárom a kasszát”."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Túra",
+     "szoveg": "A „Vezess végig” gomb lépésenként megmutatja az oldal részeit."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "asszisztens",
+    "beallitasok",
+    "mobil"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Súgó és oldaltúrák",
+   "kulcsok": [
+    "sugo-a-rendszerben",
+    "oktatas",
+    "ujdonsagok",
+    "ai-asszisztens-mit-tud"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Súgó és oldaltúrák a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,148 @@
+{
+ "slug": "urlapok-emailben",
+ "cim": "Űrlapok és dokumentumok e-mailben",
+ "szulo": "funkciok",
+ "sorrend": 28,
+ "seo": {
+  "title": "Űrlapok és dokumentumok e-mailben – {termeknev}",
+  "description": "Munkalap, ügyfél- vagy eszközadatlap küldése e-mailben PDF-fel, a cég saját postafiókjából – és a munkalap dokumentumai egy levélben.",
+  "kulcsszo": "munkalap küldése e-mailben"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Űrlapok és dokumentumok küldése e-mailben egy gombbal",
+   "alcim": "E-mail gomb minden fő űrlapon: adatlap és PDF a cég levelezőfiókjából, a munkalap Fájlok lapfülének dokumentumai egy levélben.",
+   "cimke": "Dokumentumok és készülékadatok",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-szamlazas",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "E-mail gomb hét űrlapon, űrlaponként kapcsolható"
+    },
+    {
+     "szoveg": "PDF-csatolmány a lapoknál"
+    },
+    {
+     "szoveg": "Fájlok lapfül a munkalapon: fotó, PDF, Word, Excel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A munkalap, árukiadás, rendelés, ügyfél, eszköz, termék és szolgáltatás gombsorának végén ott az E-mail: kitöltött tárgy és szöveg, a lapoknál PDF-csatolmánnyal. A munkalap Fájlok lapfülére bármilyen dokumentum feltölthető, és egy gombbal elküldhető a beállított címre.</p><p><strong>Hol találod a rendszerben?</strong> Űrlap gombsora › E-mail; Beállítások › Űrlapok e-mailben.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "E-mail gomb hét űrlapon, űrlaponként kapcsolható",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "PDF-csatolmány a lapoknál",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fájlok lapfül a munkalapon: fotó, PDF, Word, Excel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A feloldó kód és a minta soha nem kerül a levélbe",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A lap naplójába bekerül, kinek ment",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Gomb",
+     "szoveg": "Mentett rekord gombsorának utolsó gombja: E-mail."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Levél",
+     "szoveg": "Címzett, tárgy és üzenet kitöltve, a lapoknál PDF csatolható."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Küldés",
+     "szoveg": "A cég levelezőfiókjából megy; a lap naplójába bekerül."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "nyomtatas",
+    "levelezes",
+    "munkalapok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Űrlapok és dokumentumok e-mailben",
+   "kulcsok": [
+    "levelkuldes-smtp",
+    "nyomtatvanyok",
+    "levelezes-modul"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Űrlapok és dokumentumok e-mailben a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

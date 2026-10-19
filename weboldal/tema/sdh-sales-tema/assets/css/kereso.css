@@ -1,0 +1,49 @@
+/* Kereső-ablak (Ctrl+K) és oldalkereső találatlistája. */
+
+.s-kereso { position: fixed; inset: 0; z-index: var(--s-z-kereso); display: grid; justify-items: center; align-items: start; padding: max(8vh, var(--s-t-6)) var(--s-t-4) var(--s-t-4); }
+.s-kereso__hatter { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.s-kereso__ablak {
+    position: relative; width: min(680px, 100%);
+    max-height: min(640px, calc(100dvh - 16vh));
+    display: flex; flex-direction: column;
+    border-radius: var(--s-r-popup);
+    background: var(--s-uveg-tomor);
+    overflow: hidden;
+    animation: s-be var(--s-ido) var(--s-gorbe);
+}
+.s-kereso__urlap { position: relative; display: flex; align-items: center; gap: var(--s-t-2); padding: var(--s-t-3) var(--s-t-3) var(--s-t-3) var(--s-t-5); border-bottom: 1px solid var(--s-vonal); }
+.s-kereso__ikon { color: var(--s-halvany); }
+.s-kereso__mezo {
+    flex: 1; min-width: 0; min-height: 52px;
+    border: 0; border-radius: var(--s-r-mezo);
+    background: transparent; color: var(--s-szoveg);
+    font-size: var(--s-m-l); padding: 0 var(--s-t-2);
+}
+.s-kereso__mezo:focus-visible { outline: none; }
+.s-kereso__urlap:focus-within { box-shadow: inset 0 -2px 0 var(--s-neon); }
+.s-kereso__talalatok { overflow-y: auto; overscroll-behavior: contain; padding: var(--s-t-2); flex: 1; }
+.s-kereso__lab { margin: 0; padding: var(--s-t-2) var(--s-t-5); border-top: 1px solid var(--s-vonal); font-size: var(--s-m-xs); color: var(--s-halvany); }
+
+.s-kt__csoport { margin: var(--s-t-3) var(--s-t-3) var(--s-t-1); font-size: var(--s-m-xs); text-transform: uppercase; letter-spacing: var(--s-betukoz-felirat); color: var(--s-halvany); font-weight: var(--s-suly-felkover); }
+.s-kt__elem {
+    display: flex; align-items: center; gap: var(--s-t-3);
+    min-height: 52px; padding: var(--s-t-2) var(--s-t-3);
+    border-radius: 14px; color: var(--s-szoveg); text-decoration: none; cursor: pointer;
+}
+.s-kt__elem[aria-selected="true"], .s-kt__elem:hover { background: var(--s-felulet-2); color: var(--s-szoveg); }
+.s-kt__elem[aria-selected="true"] { box-shadow: inset 2px 0 0 var(--s-neon); }
+.s-kt__ikon { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: var(--s-neon-halvany); color: var(--s-neon); }
+.s-kt__ikon .s-ikon { width: 18px; height: 18px; }
+.s-kt__szoveg { display: grid; min-width: 0; }
+.s-kt__cim { font-weight: var(--s-suly-kozepes); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s-kt__cim mark { background: none; color: var(--s-neon); font-weight: var(--s-suly-felkover); }
+.s-kt__kivonat { font-size: var(--s-m-xs); color: var(--s-halvany); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s-kt__ures { padding: var(--s-t-6) var(--s-t-5); text-align: center; color: var(--s-halvany); margin: 0; }
+
+/* Oldalkereső (kereső-szekció) */
+.s-oldalkereso { display: flex; gap: var(--s-t-2); }
+.s-oldalkereso__mezo { position: relative; flex: 1; min-width: 0; }
+.s-oldalkereso__mezo .s-ikon { position: absolute; left: var(--s-t-5); top: 50%; transform: translateY(-50%); color: var(--s-halvany); pointer-events: none; }
+.s-oldalkereso__mezo .s-mezo { padding-left: calc(var(--s-t-5) + 30px); }
+.s-oldalkereso + .s-kereso__talalatok { margin-top: var(--s-t-4); padding: 0; }
+.s-oldalkereso + .s-kereso__talalatok:not(:empty) { border: 1px solid var(--s-vonal); border-radius: var(--s-r-kartya); background: var(--s-felulet); padding: var(--s-t-2); }

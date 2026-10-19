@@ -6,8 +6,9 @@
  *   SDH_Sales_Front::modul('kalkulator', 'assets/front/kalkulator.js', ['kozos'], ['csomagok' => …]);
  * Igény jelzése (a téma szekció-sablonja vagy egy shortcode):
  *   SDH_Sales_Front::igeny('kalkulator');
- * A `kozos` modul (assets/front/kozos.js) mindig az első: fetch-segéd (`window.SDH.api(ut, adat)`), kétlépcsős gomb,
- * kosár-tár (`window.SDH.kosar`), értesítő (`window.SDH.uzen()`).
+ * A `kozos` modul (assets/front/kozos.js) mindig az első: fetch-segéd (`window.APP.api(ut, adat)`), kétlépcsős gomb,
+ * kosár-tár (`window.APP.kosar`), értesítő (`window.APP.uzen()`). Rejtés: a handle `p-<modul>`, a változó `window.APP_<MODUL>`
+ * (a kimenetben nem lehet „sdh” / „wp” – lásd weboldal/REJTES.md).
  * A szkriptek `defer`-rel, a lábban; az adat `window.SDH_<MODUL>` alatt (wp_add_inline_script, CSP-nonce-szal).
  *
  * @package SDH_Sales
@@ -62,7 +63,7 @@ final class SDH_Sales_Front
         $m = self::$modulok[$nev] ?? null;
 
         if ($m !== null && $m['css'] !== '' && !did_action('wp_head')) {
-            wp_enqueue_style('sdh-sales-' . $nev, SDH_SALES_URL . $m['css'], [], SDH_SALES_VERSION);
+            wp_enqueue_style('p-' . $nev, SDH_SALES_URL . $m['css'], [], SDH_SALES_VERSION);
         }
     }
 
@@ -108,8 +109,8 @@ final class SDH_Sales_Front
 
         foreach ($sor as $n) {
             $m      = self::$modulok[$n];
-            $handle = 'sdh-sales-' . $n;
-            $fugg   = array_map(static fn (string $f): string => 'sdh-sales-' . $f, array_values(array_filter($m['fugg'], static fn ($f) => isset(self::$modulok[$f]))));
+            $handle = 'p-' . $n;
+            $fugg   = array_map(static fn (string $f): string => 'p-' . $f, array_values(array_filter($m['fugg'], static fn ($f) => isset(self::$modulok[$f]))));
 
             if (!is_file(SDH_SALES_DIR . $m['fajl'])) {
                 continue;
@@ -124,7 +125,7 @@ final class SDH_Sales_Front
             $adat = is_callable($m['adat']) ? call_user_func($m['adat']) : $m['adat'];
 
             if (is_array($adat)) {
-                wp_add_inline_script($handle, 'window.SDH_' . strtoupper(str_replace('-', '_', $n)) . '=' . wp_json_encode(SDH_Sales::t_tomb($adat), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . ';', 'before');
+                wp_add_inline_script($handle, 'window.APP_' . strtoupper(str_replace('-', '_', $n)) . '=' . wp_json_encode(SDH_Sales::t_tomb($adat), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . ';', 'before');
             }
         }
     }

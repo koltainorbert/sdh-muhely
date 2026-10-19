@@ -1,0 +1,183 @@
+{
+ "slug": "sms",
+ "cim": "SMS-értesítések",
+ "szulo": "funkciok",
+ "sorrend": 12,
+ "seo": {
+  "title": "SMS-értesítés saját androidos telefonról – {termeknev}",
+  "description": "„Kész a javítás” SMS a saját bolti telefonodról: sablonok, szabályok, bejövő válaszok a munkalapon. Havidíjas SMS-kapu nem kell.",
+  "kulcsszo": "SMS értesítés szerviz"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "SMS-értesítés a saját androidos telefonról",
+   "alcim": "SMS a bolti androidos telefonról: sablonok, szabályok, állapotváltáskor felugró kérdés, bejövő SMS – havidíjas SMS-kapu nélkül.",
+   "cimke": "Ügyfélkapcsolat",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-sms",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Saját telefonszám, saját SMS-díjcsomag"
+    },
+    {
+     "szoveg": "Verziózott sablonok, állapotonkénti szabályok, kérdés vagy automatikus küldés"
+    },
+    {
+     "szoveg": "Csendes idő: éjjel nem megy automatikus SMS"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer nem külső SMS-szolgáltatón küld, hanem a saját Android-telefonodon futó SMS-átjáró alkalmazáson át, a te számodról. Állapotváltáskor a „Küldjek SMS-t az ügyfélnek?” ablak kitöltött sablont kínál; a válasz SMS az ügyfél munkalapjához kerül.</p><p><strong>Hol találod a rendszerben?</strong> Menü › SMS; Beállítások › SMS-értesítések.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Saját telefonszám, saját SMS-díjcsomag",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Verziózott sablonok, állapotonkénti szabályok, kérdés vagy automatikus küldés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Csendes idő: éjjel nem megy automatikus SMS",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bejövő SMS a munkalaphoz rendelve, STOP szóra leiratkozás",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ugyanaz az SMS nem megy ki kétszer; a napló csak bővül",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Átjáró",
+     "szoveg": "Telepítsd az SMS-átjáró alkalmazást a bolti Android-telefonra, és kapcsold be a helyi szerverét."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kapcsolat",
+     "szoveg": "Beállítások › SMS-értesítések: cím, port, felhasználó, jelszó, majd Kapcsolat-teszt."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Sablonok",
+     "szoveg": "SMS › Sablonok: nézd át a példaszövegeket, és állítsd be, melyik állapothoz melyik tartozzon."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Használat",
+     "szoveg": "Állapotváltáskor jön a kérdés: SMS küldése, Nem küldök vagy Később döntök."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Alapból minden ki van kapcsolva: új telepítés magától soha nem küld SMS-t.</li><li>Ékezetes szövegnél egy SMS 70 karakter; az üzenet legfeljebb 480 karakter.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "sms"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "rma",
+    "elegedettseg",
+    "online-arajanlat",
+    "rendelesek",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: SMS-értesítések",
+   "kulcsok": [
+    "sms-hogyan-mukodik",
+    "sms-koltseg",
+    "sms-leiratkozas",
+    "sms-offline"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) SMS-értesítések a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

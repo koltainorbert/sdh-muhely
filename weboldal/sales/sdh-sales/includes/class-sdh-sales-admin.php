@@ -3,13 +3,16 @@
  * SDH Értékesítés – admin: saját, teljes képernyős alkalmazás a wp-adminon belül (admin.php?page=sdh-sales, menü „Értékesítés”),
  * a Műhely / SDH Központ felületének mintájára. Vanilla JS (assets/admin.js + admin-*.js), REST: sdh-sales/v1/admin/*.
  *
+ * Rejtés (weboldal/REJTES.md): a felület szövegeiben nincs „SDH” / „WordPress”; a JS-globálisok `PA_BOOT` / `PA`,
+ * a REST-cím mindig rest_url(SDH_Sales_Rest::NS)-ből jön.
+ *
  * Ez a fájl: az oldal váza, a panel-nyilvántartás, és az Áttekintés / Rendelések / Vevők / Leadek / Napló / keresés végpontjai.
  * Tartalom (oldalak, szekciók, elemek, menük, előnézet): class-sdh-sales-admin-tartalom.php.
  * Beállítások, Arculat, Export / Import: class-sdh-sales-admin-beallitas.php.
  *
  * Bővítés:
  *   - `sdh_sales_admin_panelek` szűrő: [kulcs => {cim, ikon, csoport, sorrend, elerheto: bool, js?: URL, paletta?: bool}].
- *     Egy külső panel a saját JS-ében: `window.SDH_SA.panel('kulcs', async (hova, S) => {…})` (a `js` URL a vázzal töltődik).
+ *     Egy külső panel a saját JS-ében: `window.PA.panel('kulcs', async (hova, param) => {…})` (a `js` URL a vázzal töltődik).
  *   - `sdh_sales_admin_rendeles_reszlet` szűrő: (array $blokkok, array $rendeles) → [{cim, sorok: [[címke, érték], …]}].
  *   - `sdh_sales_admin_beallitas_csoportok` szűrő (lásd -admin-beallitas.php).
  *   - `sdh_sales_admin_lead_allapotok` szűrő: a lead-állapotok listája.
@@ -23,7 +26,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Admin
 {
-    public const OLDAL = 'sdh-sales';
+    public const OLDAL = 'ertekesites';
     public const META_TEMA = 'sdh_sales_admin_tema';
 
     /** Kiszolgálási lánc lépései (ARCHITEKTURA.md §5). */
@@ -218,14 +221,14 @@ final class SDH_Sales_Admin
     <div id="sa-app" class="sa-app">
         <div class="sa-indul"><div class="sa-indul__jel"></div><span>Értékesítés</span></div>
     </div>
-    <script>window.SDH_SA_BOOT = <?php echo wp_json_encode($boot, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP); ?>;</script>
+    <script>window.PA_BOOT = <?php echo wp_json_encode($boot, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP); ?>;</script>
     <script src="<?php echo esc_url($alap . 'admin.js?ver=' . rawurlencode($ver('admin.js'))); ?>"></script>
     <script src="<?php echo esc_url($alap . 'admin-tartalom.js?ver=' . rawurlencode($ver('admin-tartalom.js'))); ?>"></script>
     <script src="<?php echo esc_url($alap . 'admin-beallitas.js?ver=' . rawurlencode($ver('admin-beallitas.js'))); ?>"></script>
     <?php foreach ($extra as $js) : ?>
     <script src="<?php echo esc_url($js); ?>"></script>
     <?php endforeach; ?>
-    <script>window.SDH_SA && window.SDH_SA.indul();</script>
+    <script>window.PA && window.PA.indul();</script>
     <?php
     if ($boot['media']) {
         print_footer_scripts();
@@ -516,7 +519,7 @@ final class SDH_Sales_Admin
         $r  = self::rendeles($id);
 
         if ($r === null) {
-            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'nincs');
         }
 
         $lanc = self::lanc_lepesek(self::json($r['lanc']));
@@ -588,7 +591,7 @@ final class SDH_Sales_Admin
         $lepes = sanitize_key((string) $q->get_param('lepes'));
 
         if (self::rendeles($id) === null) {
-            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'nincs');
         }
 
         if (!isset(self::lepesek()[$lepes])) {
@@ -596,7 +599,7 @@ final class SDH_Sales_Admin
         }
 
         if (!class_exists('SDH_Sales_Kiszolgalas') || !method_exists('SDH_Sales_Kiszolgalas', 'lepes_ujra')) {
-            return SDH_Sales_Rest::hiba('A kiszolgálás még nincs bekapcsolva.', 501, 'sdh_nincs_bekapcsolva');
+            return SDH_Sales_Rest::hiba('A kiszolgálás még nincs bekapcsolva.', 501, 'nincs_bekapcsolva');
         }
 
         try {
@@ -729,7 +732,7 @@ final class SDH_Sales_Admin
         $s  = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE id = %d", $id), ARRAY_A);
 
         if (!is_array($s)) {
-            return SDH_Sales_Rest::hiba('Nincs ilyen lead.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen lead.', 404, 'nincs');
         }
 
         $uj   = [];
@@ -826,7 +829,7 @@ final class SDH_Sales_Admin
         $n = SDH_Sales_Naplo::egy((int) $r['id']);
 
         if ($n === null) {
-            return SDH_Sales_Rest::hiba('Nincs ilyen bejegyzés.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen bejegyzés.', 404, 'nincs');
         }
 
         $el = $n['elotte'] === null ? null : json_decode((string) $n['elotte'], true);
@@ -853,7 +856,7 @@ final class SDH_Sales_Admin
         $h = SDH_Sales_Naplo::visszaallit((int) $r['id']);
 
         if ($h !== '') {
-            return SDH_Sales_Rest::hiba($h, 409, 'sdh_nem_allithato');
+            return SDH_Sales_Rest::hiba($h, 409, 'nem_allithato');
         }
 
         return new WP_REST_Response(['ok' => true], 200);

@@ -1,0 +1,29 @@
+{
+ "slug": "jogi",
+ "cim": "Jogi dokumentumok",
+ "sorrend": 99,
+ "seo": {
+  "title": "Jogi dokumentumok – {termeknev}",
+  "description": "ÁSZF, adatkezelési és süti-tájékoztató, impresszum, licencszerződés, SLA, adatfeldolgozási szerződés, elállás, AI-chat és demó-feltételek.",
+  "kulcsszo": "ászf"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Jogi dokumentumok",
+   "alcim": "Szerződési feltételek, adatkezelés és szolgáltatási szint egy helyen. Minden dokumentum tetején a verzió és a hatálybalépés napja áll.",
+   "cimke": "Jogi",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Dokumentumok",
+   "szelesseg": "keskeny",
+   "html": "<ul><li><a href=\"/jogi/aszf/\">Általános szerződési feltételek</a></li><li><a href=\"/jogi/adatkezeles/\">Adatkezelési tájékoztató</a></li><li><a href=\"/jogi/suti-tajekoztato/\">Süti-tájékoztató</a></li><li><a href=\"/jogi/impresszum/\">Impresszum</a></li><li><a href=\"/jogi/licencszerzodes/\">Licencszerződés</a></li><li><a href=\"/jogi/sla/\">Szolgáltatási szint (SLA)</a></li><li><a href=\"/jogi/adatfeldolgozasi-szerzodes/\">Adatfeldolgozási szerződés</a></li><li><a href=\"/jogi/elallas-visszaterites/\">Elállás és visszatérítés</a></li><li><a href=\"/jogi/ai-chat-tajekoztato/\">AI-chat tájékoztató</a></li><li><a href=\"/jogi/demo-feltetelek/\">Demó-feltételek</a></li></ul><p>Kérdés esetén: {ceg}, <a href=\"mailto:{ceg_email}\">{ceg_email}</a>.</p>"
+  }
+ ]
+}

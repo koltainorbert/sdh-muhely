@@ -1,0 +1,181 @@
+{
+ "slug": "rma",
+ "cim": "RMA-ügyféloldal",
+ "szulo": "funkciok",
+ "sorrend": 9,
+ "seo": {
+  "title": "RMA-ügyféloldal QR-kódos követéssel – {termeknev}",
+  "description": "Az ügyfél QR-kóddal követi a javítást, üzen és árajánlatot fogad el – magyarul, angolul, németül. Kevesebb „hol tart a telefonom?” hívás.",
+  "kulcsszo": "garanciális ügyintézés szoftver"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Garanciális és RMA-ügyintézés követhetően, QR-kóddal",
+   "alcim": "Minden munkalap QR-kódot kap: az ügyfél a telefonján követi a javítást, üzen, és válaszol – telefonálás nélkül.",
+   "cimke": "Ügyfélkapcsolat",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-sms",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "QR-kódos címke a munkalapról, eszközönként"
+    },
+    {
+     "szoveg": "Ügyféloldal magyarul, angolul és németül"
+    },
+    {
+     "szoveg": "Kétirányú üzenetváltás, gyors szövegekkel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az ügyfél a QR-kóddal vagy a linkkel, a telefonszámával és a munkalap sorszámával lép be, és látja az állapotot, a történetet, a tételeket, a fizetendőt és az üzeneteket. A te oldaladon ugyanez a beszélgetés a munkalap RMA lapfülén van; az Üzenetek menüpont mutatja, hol vár olvasatlan ügyfélüzenet.</p><p><strong>Hol találod a rendszerben?</strong> Munkalap › RMA lapfül; Menü › Üzenetek; Beállítások › Ügyféloldal (RMA).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "QR-kódos címke a munkalapról, eszközönként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ügyféloldal magyarul, angolul és németül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kétirányú üzenetváltás, gyors szövegekkel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A rendeléseknek is van ügyféloldala",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az IMEI-ből csak az utolsó öt karakter látszik; a belső megjegyzés soha",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Címke",
+     "szoveg": "A mentett, sorszámot kapott munkalap RMA lapfülén a „Címke nyomtatása”: QR-kód, sorszám, eszköz, rövid útmutató."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Belépés",
+     "szoveg": "Az ügyfél beolvassa a kódot, és a telefonszámával és a sorszámmal lép be. Nyolc rossz próba után 15 perc szünet."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Követés",
+     "szoveg": "Látja az állapotot, a történetet, a tételeket, az összeget és a fizetendőt."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Üzenet",
+     "szoveg": "Az ügyfél írhat; a válaszod a munkalap RMA lapfülén megy, és kérésre SMS-ben is."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Start, Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "start",
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "uzenetek"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "online-arajanlat",
+    "elegedettseg",
+    "sms",
+    "munkalapok",
+    "rendelesek",
+    "cimkenyomtatas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "kereskedelem",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: RMA-ügyféloldal",
+   "kulcsok": [
+    "ugyfeloldal-rma",
+    "ugyfeloldal-nyelvek",
+    "online-arajanlat",
+    "sms-hogyan-mukodik"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) RMA-ügyféloldal a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

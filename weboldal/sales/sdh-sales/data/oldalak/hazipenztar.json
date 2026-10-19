@@ -1,0 +1,172 @@
+{
+ "slug": "hazipenztar",
+ "cim": "Házipénztár",
+ "szulo": "funkciok",
+ "sorrend": 18,
+ "seo": {
+  "title": "Házipénztár címletes zárással – {termeknev}",
+  "description": "Napi kassza szervizeknek: bevételek, kivétek, címletes zárás, eltérés-kereső ügynök, riport és Excel-import egy helyen.",
+  "kulcsszo": "házipénztár program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Házipénztár program címletes zárással",
+   "alcim": "Napi kassza címletes zárással, riporttal, statisztikával, Excel-importtal és egyeztető ügynökkel.",
+   "cimke": "Pénzügy",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-penztar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Bevétel, kivét, kifizetés, befizetés – kivét mindig névvel"
+    },
+    {
+     "szoveg": "Címletes számolás: Egyezik / Többlet / Hiány"
+    },
+    {
+     "szoveg": "Egyeztető ügynök: miért több vagy kevesebb a pénz"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A Házipénztár megmutatja, mennyi készpénznek kell a fiókban lennie, és mi történt a pénzzel a nap folyamán. Zárás eltéréssel? Az egyeztető ügynök összeveti a pénztárat a munkalapokkal és a számlákkal, és gombbal javítható megállapításokat tesz.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Pénztár (Házipénztár).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Bevétel, kivét, kifizetés, befizetés – kivét mindig névvel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Címletes számolás: Egyezik / Többlet / Hiány",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Egyeztető ügynök: miért több vagy kevesebb a pénz",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Régi Excel „Zárás” tábla importja, visszavonhatóan",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Pénztárzárás és pénztárjelentés nyomtatványként",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Fizetés a lapról",
+     "szoveg": "A munkalap, árukiadás vagy rendelés Fizetés gombja a pénztárba is beírja a bevételt."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Számolás",
+     "szoveg": "KP – kassza lapfül: címletenként a darabszám, jobb oldalt a megszámolt összeg és a levezetés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Zárás",
+     "szoveg": "„Nap zárása”; eltérésnél az ügynök rögtön megmondja, mit talált."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "penztar"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "arukiadas",
+    "szamlazas",
+    "munkalapok",
+    "riportok",
+    "nyomtatas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Házipénztár",
+   "kulcsok": [
+    "hazipenztar-mit-tud",
+    "penztar-excel-import",
+    "konyveloprogram"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Házipénztár a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

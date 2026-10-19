@@ -1,0 +1,1205 @@
+[
+ {
+  "kulcs": "elso-belepes",
+  "modul": "alap",
+  "cim": "Első belépés és a felület",
+  "cel": "Eligazodni a menüben, a fejlécben és a popupokban.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "Belépés",
+    "szoveg": "Nyisd meg a rendszer címét, és lépj be a nevedet és a jelszavadat megadva. Ha kétlépcsős belépés van, a telefonod 6 jegyű kódja is kell.",
+    "kep": "lecke-belepes"
+   },
+   {
+    "cim": "A bal oldali menü",
+    "szoveg": "Felül az Áttekintés, alatta a napi munka menüpontjai, legalul a Beállítások (csak adminisztrátornak). A menüben csak az áll, amit a fiókod megnyithat."
+   },
+   {
+    "cim": "A fejléc",
+    "szoveg": "Kereső, Súgó gomb, nyomtató ikon, óra a zárásig hátralévő idővel, jobbra a profilmenü."
+   },
+   {
+    "cim": "Popupok",
+    "szoveg": "A munkalap, az ügyfél, az eszköz mindig felugró ablakban nyílik – a lista a háttérben megmarad."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Hol nyílik meg egy munkalap?",
+    "valaszok": [
+     "Új böngészőlapon",
+     "Felugró ablakban, a lista fölött",
+     "A Beállításokban"
+    ],
+    "helyes": 1,
+    "magyarazat": "Minden nagy űrlap popupban nyílik, így a lista és a keresés megmarad."
+   },
+   {
+    "kerdes": "Mit mutat a fejléc órája?",
+    "valaszok": [
+     "A szerver idejét és a zárásig hátralévő időt",
+     "Csak a dátumot",
+     "A belépés idejét"
+    ],
+    "helyes": 0,
+    "magyarazat": "Az óra a nyitvatartás alapján a zárásig hátralévő időt is mutatja."
+   }
+  ]
+ },
+ {
+  "kulcs": "uj-munkalap",
+  "modul": "alap",
+  "cim": "Az első munkalap",
+  "cel": "Munkalapot felvenni ügyféllel, eszközzel, hibával.",
+  "ido_perc": 10,
+  "lepesek": [
+   {
+    "cim": "Új munkalap",
+    "szoveg": "Áttekintés vagy Munkalapok › „+ Új munkalap”.",
+    "kep": "lecke-uj-munkalap"
+   },
+   {
+    "cim": "Ügyfél",
+    "szoveg": "Az Ügyfél mezőbe gépelj nevet, telefonszámot vagy ügyfélszámot; ha nincs, a „+” gombbal vedd fel."
+   },
+   {
+    "cim": "Eszköz és hiba",
+    "szoveg": "Válaszd ki az ügyfél készülékét, a Hibák lapfülön írd be a hibát vagy válassz a Gyakori hibák közül."
+   },
+   {
+    "cim": "Mentés",
+    "szoveg": "„Munkalap létrehozása” – a rendszer kiírja a kiosztott munkalapszámot."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mentődik-e magától az új, még soha el nem mentett lap?",
+    "valaszok": [
+     "Igen, azonnal",
+     "Nem, egyszer a „Munkalap létrehozása” gombbal kell menteni",
+     "Csak bezáráskor"
+    ],
+    "helyes": 1,
+    "magyarazat": "Így a félbehagyott felvitel nem kap munkalapszámot. Mentés után minden változás magától mentődik."
+   },
+   {
+    "kerdes": "Hol rögzíted az előleget?",
+    "valaszok": [
+     "A bal oldali Fizetés részben",
+     "A Megjegyzés lapfülön",
+     "A Pénztárban kézzel"
+    ],
+    "helyes": 0,
+    "magyarazat": "Az előleg és a bevizsgálási díj a bal oldali Fizetés részben áll."
+   }
+  ]
+ },
+ {
+  "kulcs": "munkalap-allapot-lezaras",
+  "modul": "alap",
+  "cim": "Állapotok, lezárás, újranyitás",
+  "cel": "A munkalap útját végigvinni a lezárásig.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "Állapotváltás",
+    "szoveg": "A munkalap Állapot mezője vagy az Áttekintés rácsa – a váltás azonnal mentődik."
+   },
+   {
+    "cim": "Lezárás",
+    "szoveg": "Lezárt állapotban a lap csak olvasható: zöld sáv, a mezők letiltva. Nyomtatás, számla és üzenet így is megy."
+   },
+   {
+    "cim": "Újranyitás",
+    "szoveg": "A sávban válassz állapotot, írd be az okot, és kattints kétszer az Újranyitás gombra. Az ok a Naplóba kerül."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi történik a lezárt lappal?",
+    "valaszok": [
+     "Törlődik",
+     "Csak olvasható lesz",
+     "Bárki szabadon szerkesztheti"
+    ],
+    "helyes": 1,
+    "magyarazat": "A szerver is elutasít minden módosítást, amíg újra nem nyitod."
+   },
+   {
+    "kerdes": "Hova kerül az újranyitás oka?",
+    "valaszok": [
+     "Sehova",
+     "A lap Naplójába",
+     "Az ügyfélnek SMS-ben"
+    ],
+    "helyes": 1,
+    "magyarazat": "Az újranyitás, az új állapot és az ok a lap Naplójába kerül."
+   }
+  ]
+ },
+ {
+  "kulcs": "atvetel-foto-alairas",
+  "modul": "alap",
+  "cim": "Átvétel fotóval és aláírással",
+  "cel": "A készülék állapotát rögzíteni átvételkor.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Átvétel lapfül",
+    "szoveg": "Nyisd meg a javítási munkalap Átvétel lapfülét.",
+    "kep": "lecke-atvetel"
+   },
+   {
+    "cim": "Fotó",
+    "szoveg": "Telefonon a „Fotó készítése” a kamerát nyitja; gépen „+ Fájl hozzáadása”."
+   },
+   {
+    "cim": "Aláírás",
+    "szoveg": "Az ügyfél a keretben aláír; írd be az aláíró nevét, és mentsd a lapot."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Hány fotó kerül az átvételi elismervényre?",
+    "valaszok": [
+     "Mind",
+     "Legfeljebb 4 bélyegkép",
+     "Egy sem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Az első négy fotó bélyegképként a lap alján áll."
+   },
+   {
+    "kerdes": "Van-e Átvétel lapfül a napi árukiadáson?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Eladásnál (árukiadás, rendelés) nincs Átvétel lapfül."
+   }
+  ]
+ },
+ {
+  "kulcs": "ugyfel-felvetele",
+  "modul": "alap",
+  "cim": "Ügyfél felvétele és keresése",
+  "cel": "Ügyfelet felvenni és gyorsan megtalálni.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Új ügyfél",
+    "szoveg": "Ügyfelek › „Új ügyfél”. Csak a név kötelező."
+   },
+   {
+    "cim": "Cím",
+    "szoveg": "Az irányítószám beírására a település magától megjelenik."
+   },
+   {
+    "cim": "Státusz",
+    "szoveg": "Magánszemély, Cég vagy Közület; cégnél adószám és kapcsolattartó."
+   },
+   {
+    "cim": "Keresés",
+    "szoveg": "Bármelyik keresőbe gépelj nevet vagy telefonszámot – a találat gépelés közben lenyílik."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi kötelező új ügyfélnél?",
+    "valaszok": [
+     "Név és adószám",
+     "Csak a név",
+     "Név, telefon és e-mail"
+    ],
+    "helyes": 1,
+    "magyarazat": "Csak a név kötelező, a többi később is pótolható."
+   },
+   {
+    "kerdes": "Mit ismer fel a kereső „06 30 123 4567” beírására?",
+    "valaszok": [
+     "Sorszámot",
+     "Telefonszámot, és az ügyfelet teszi előre",
+     "IMEI-t"
+    ],
+    "helyes": 1,
+    "magyarazat": "A kereső felismeri a telefonszámot, és a teljes ügyfelet teszi előre."
+   }
+  ]
+ },
+ {
+  "kulcs": "eszkoz-imei",
+  "modul": "imei",
+  "cim": "Eszköz felvétele IMEI-vel",
+  "cel": "IMEI-ből felismertetni a készüléket és betölteni a gyári adatokat.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "IMEI",
+    "szoveg": "Az eszköz adatlapján írd be vagy olvasd be vonalkódolvasóval az IMEI-t.",
+    "kep": "lecke-imei"
+   },
+   {
+    "cim": "Üzenet",
+    "szoveg": "A 15. számjegy után üzenet jön: ismert készülék, felismert típus vagy új rekord."
+   },
+   {
+    "cim": "Gyári adatok",
+    "szoveg": "Ellenőrzés sor: ingyenes oldal + beillesztés a Gyári adatok mezőbe, vagy „Lekérdezés a szolgáltatótól”."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi alapján ismeri fel a típust a TAC-adatbázis?",
+    "valaszok": [
+     "Az IMEI első nyolc számjegye",
+     "A sorozatszám",
+     "Az internetről letöltve minden alkalommal"
+    ],
+    "helyes": 0,
+    "magyarazat": "A típusfelismerés az IMEI első nyolc számjegyéből dolgozik, internet nélkül."
+   },
+   {
+    "kerdes": "Felülírja-e a felismerés a már kitöltött mezőket?",
+    "valaszok": [
+     "Igen",
+     "Nem, csak az üreseket tölti"
+    ],
+    "helyes": 1,
+    "magyarazat": "A TAC-felismerés csak az üres mezőket tölti ki. (A gyártótól lekért gyári adat viszont felülírhat.)"
+   }
+  ]
+ },
+ {
+  "kulcs": "tac-adatbazis",
+  "modul": "tac",
+  "cim": "A TAC-adatbázis betöltése",
+  "cel": "A típusfelismerés hátterét előkészíteni.",
+  "ido_perc": 4,
+  "lepesek": [
+   {
+    "cim": "Lapfül",
+    "szoveg": "Beállítások › TAC adatbázis (Készülékadatok csoport)."
+   },
+   {
+    "cim": "Betöltés",
+    "szoveg": "„Betöltés indítása” – darabokban fut, kb. egy perc; ismételt futtatás nem duplikál."
+   },
+   {
+    "cim": "Tanulás",
+    "szoveg": "Az új típusokat a rendszer a kézi felvitelekből tanulja; az újratöltés ezeket nem írja felül."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Meddig tart a szállított típuslista?",
+    "valaszok": [
+     "2023 végéig",
+     "2025 végéig",
+     "Folyamatosan frissül az internetről"
+    ],
+    "helyes": 1,
+    "magyarazat": "A szállított lista 2025 végéig tart; az újabbakat a rendszer a felvitelekből tanulja."
+   }
+  ]
+ },
+ {
+  "kulcs": "zarkod",
+  "modul": "alap",
+  "cim": "Zárkód és minta biztonságosan",
+  "cel": "A feloldó kódot rögzíteni és jogosultként megnézni.",
+  "ido_perc": 5,
+  "lepesek": [
+   {
+    "cim": "Beírás",
+    "szoveg": "Az eszköz adatlapján beírod a kódot vagy rajzolod a mintát."
+   },
+   {
+    "cim": "Megnézés",
+    "szoveg": "A Megmutat gomb csak jogosultnak fedi fel; minden megnézés naplózódik."
+   },
+   {
+    "cim": "Jog",
+    "szoveg": "Beállítások › Jogosultságok: „Feloldó kód és minta megnézése” szerepenként."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Ki láthatja a zárkódot?",
+    "valaszok": [
+     "Mindenki",
+     "Akinek a szerepe megkapta a jogot",
+     "Az ügyfél az ügyféloldalon"
+    ],
+    "helyes": 1,
+    "magyarazat": "A megnézés jogkötelező, és naplózott."
+   },
+   {
+    "kerdes": "Kerül-e zárkód az e-mailbe küldött űrlapra?",
+    "valaszok": [
+     "Igen",
+     "Soha"
+    ],
+    "helyes": 1,
+    "magyarazat": "A feloldó kód és a minta soha nem kerül a levélbe."
+   }
+  ]
+ },
+ {
+  "kulcs": "szolgaltatas-arlista",
+  "modul": "alap",
+  "cim": "Árlista beillesztése",
+  "cel": "A meglévő árlistát egyben felvinni.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Gomb",
+    "szoveg": "Szolgáltatások › „Árlista beillesztése”."
+   },
+   {
+    "cim": "Beillesztés",
+    "szoveg": "Soronként megnevezés és ár; a jobb oldalon azonnal előnézet."
+   },
+   {
+    "cim": "Díjak",
+    "szoveg": "A Díj oszlop pipájával jelöld a bevizsgálási díjakat."
+   },
+   {
+    "cim": "Mentés",
+    "szoveg": "„Beillesztés a szolgáltatások közé”."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi történik a „teljes díjlista” pipa bent hagyásával, ha csak pár sort illesztesz be?",
+    "valaszok": [
+     "Semmi",
+     "A többi díj elveszíti a díj jelölését",
+     "Törlődnek a régi tételek"
+    ],
+    "helyes": 1,
+    "magyarazat": "Részleges beillesztésnél vedd ki a pipát."
+   }
+  ]
+ },
+ {
+  "kulcs": "attekintes-nezetek",
+  "modul": "alap",
+  "cim": "Áttekintés: nézetek és szűrés",
+  "cel": "A munkalap-rácsot a saját napi munkádra állítani.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Nézetek",
+    "szoveg": "Áttekintés › Nézetek: például „Elkészült – átvételre vár” vagy „Fizetendő”."
+   },
+   {
+    "cim": "Szűrés",
+    "szoveg": "Oszlopszűrők, rendezés, oszlopok ki-be."
+   },
+   {
+    "cim": "Saját nézet",
+    "szoveg": "Nézetek › Új nézet neve › Mentés – legfeljebb 30 fiókonként."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Látja-e a kolléga a te saját nézetedet?",
+    "valaszok": [
+     "Igen",
+     "Nem, a fiókodhoz tartozik"
+    ],
+    "helyes": 1,
+    "magyarazat": "A saját nézet a fiókodhoz tartozik, másik gépről is megvan."
+   }
+  ]
+ },
+ {
+  "kulcs": "termek-keszlet",
+  "modul": "termekek",
+  "cim": "Termék és készlet",
+  "cel": "Terméket felvenni nyitókészlettel és minimummal.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Új termék",
+    "szoveg": "Termékek › „Új termék”: csak a megnevezés kötelező."
+   },
+   {
+    "cim": "Készlet",
+    "szoveg": "Nyitókészlet, M.e., Min. készlet."
+   },
+   {
+    "cim": "Árak",
+    "szoveg": "Beszerzési vagy eladási ár – a másik kiszámolódik."
+   },
+   {
+    "cim": "Mozgások",
+    "szoveg": "„Összes tételmozgás” nézet: minden változás visszakereshető."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mikor jön le a termék a készletről?",
+    "valaszok": [
+     "Kézzel, hónap végén",
+     "Mentéskor, amikor munkalapra vagy árukiadásra kerül",
+     "A számla kiállításakor"
+    ],
+    "helyes": 1,
+    "magyarazat": "A munkalapra vagy árukiadásra tett termék mentéskor magától lejön."
+   }
+  ]
+ },
+ {
+  "kulcs": "rendelesi-javaslat",
+  "modul": "termekek",
+  "cim": "Rendelési javaslat és bevételezés",
+  "cel": "Beszállítónként rendelni és bevételezni.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Nézet",
+    "szoveg": "Termékek › Rendelési javaslat."
+   },
+   {
+    "cim": "Rendelés",
+    "szoveg": "Mennyiség átírása, a „Szöveg a beszállítónak” kimásolása vagy CSV-letöltés."
+   },
+   {
+    "cim": "Bevételezés",
+    "szoveg": "A sor „Megérkezett” gombja."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi a célkészlet, ha üresen hagyod?",
+    "valaszok": [
+     "Nulla",
+     "A minimum kétszerese",
+     "Száz darab"
+    ],
+    "helyes": 1,
+    "magyarazat": "Üresen a minimum kétszerese."
+   }
+  ]
+ },
+ {
+  "kulcs": "arukiadas",
+  "modul": "arukiadas",
+  "cim": "Pultos eladás két mozdulattal",
+  "cel": "Eladást rögzíteni és fizettetni.",
+  "ido_perc": 5,
+  "lepesek": [
+   {
+    "cim": "Új árukiadás",
+    "szoveg": "Napi árukiadás › „Új árukiadás”."
+   },
+   {
+    "cim": "Tételek",
+    "szoveg": "Termékek és szolgáltatások felvétele."
+   },
+   {
+    "cim": "Fizetés",
+    "szoveg": "„Rögzítés és fizetés”, majd fizetési mód és „Fizetés rögzítése”."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Kötelező-e ügyfelet megadni árukiadásnál?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Üresen hagyva a vevő neve „Napi árukiadás” lesz."
+   }
+  ]
+ },
+ {
+  "kulcs": "rendeles-ertesites",
+  "modul": "rendelesek",
+  "cim": "Ügyfélrendelés és értesítés",
+  "cel": "Rendelést felvenni és értesíteni az ügyfelet.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Új rendelés",
+    "szoveg": "Rendelések › „Új rendelés”: ügyfél, beszállító, várható érkezés, tételek."
+   },
+   {
+    "cim": "Követés",
+    "szoveg": "Állapot: Felvéve › Megrendelve › Megérkezett › Ügyfél értesítve › Átadva."
+   },
+   {
+    "cim": "Értesítés",
+    "szoveg": "„Megjött – értesítés”: kitöltött üzenet az ügyféloldalra, kérésre e-mailben."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mit mutat a Rendelések menüpont jelvénye?",
+    "valaszok": [
+     "Az összes rendelést",
+     "A megérkezett, de még nem értesített rendeléseket",
+     "A fizetetlen rendeléseket"
+    ],
+    "helyes": 1,
+    "magyarazat": "Értesítés vagy átadás után a szám csökken."
+   }
+  ]
+ },
+ {
+  "kulcs": "kassza-zaras",
+  "modul": "penztar",
+  "cim": "A kassza zárása",
+  "cel": "A napot címletes számolással lezárni.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "KP – kassza",
+    "szoveg": "Pénztár › KP – kassza lapfül.",
+    "kep": "lecke-penztar"
+   },
+   {
+    "cim": "Számolás",
+    "szoveg": "Címletenként a darabszám; jobb oldalt a megszámolt összeg és a levezetés."
+   },
+   {
+    "cim": "Eredmény",
+    "szoveg": "Egyezik, Többlet vagy Hiány – összeggel."
+   },
+   {
+    "cim": "Zárás",
+    "szoveg": "„Nap zárása”; eltérésnél az egyeztető ügynök megmondja, mit talált."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi adja a kassza egyenlegét?",
+    "valaszok": [
+     "Minden fizetés",
+     "Csak a készpénz",
+     "Csak a kártyás fizetés"
+    ],
+    "helyes": 1,
+    "magyarazat": "A kártyás és utalásos fizetés a forgalomban látszik, a fiókot nem érinti."
+   },
+   {
+    "kerdes": "Mit tesz az egyeztető ügynök?",
+    "valaszok": [
+     "Magától javít mindent",
+     "Javasol; minden javítást te hagysz jóvá",
+     "Törli az eltérő tételeket"
+    ],
+    "helyes": 1,
+    "magyarazat": "Csak javasol, a javítás gombnyomásra történik."
+   }
+  ]
+ },
+ {
+  "kulcs": "szamla-kiallitas",
+  "modul": "szamlazas",
+  "cim": "Számla a munkalapról",
+  "cel": "Valódi számlát kiállítani a Számlázz.hu-n át.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Kulcs",
+    "szoveg": "Beállítások › Számlázás: Számla Agent kulcs, Kapcsolat ellenőrzése."
+   },
+   {
+    "cim": "Ablak",
+    "szoveg": "Mentett, sorszámos lap alján: „Számlázz.hu számla”."
+   },
+   {
+    "cim": "Ellenőrzés",
+    "szoveg": "Vevő, tételek, előnézet – minden átírható."
+   },
+   {
+    "cim": "Kiállítás",
+    "szoveg": "„Számla kiállítása”."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Készül-e számla magától?",
+    "valaszok": [
+     "Igen, lezáráskor",
+     "Soha, csak a „Számla kiállítása” gombra",
+     "Igen, fizetéskor"
+    ],
+    "helyes": 1,
+    "magyarazat": "Számla soha nem készül magától."
+   },
+   {
+    "kerdes": "Számla-e a számla-előkészítő PDF?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Rá is van írva, hogy nem minősül számlának."
+   }
+  ]
+ },
+ {
+  "kulcs": "ugyfeloldal-qr",
+  "modul": "uzenetek",
+  "cim": "Ügyféloldal és QR-kód",
+  "cel": "Az ügyfelet a saját javítása követésére vezetni.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Címke",
+    "szoveg": "Munkalap › RMA lapfül › „Címke nyomtatása”.",
+    "kep": "lecke-rma"
+   },
+   {
+    "cim": "Belépés",
+    "szoveg": "Az ügyfél telefonszámmal és sorszámmal lép be."
+   },
+   {
+    "cim": "Üzenet",
+    "szoveg": "Az RMA lapfül csevegőjében írsz, az ügyfél az ügyféloldalon válaszol."
+   },
+   {
+    "cim": "Olvasatlan",
+    "szoveg": "Menü › Üzenetek: melyik lapon vár ügyfélüzenet."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Hány sikertelen belépés után jön szünet?",
+    "valaszok": [
+     "3",
+     "8",
+     "20"
+    ],
+    "helyes": 1,
+    "magyarazat": "Nyolc sikertelen próbálkozás után negyedóra szünet."
+   },
+   {
+    "kerdes": "Látja-e az ügyfél a Belső megjegyzést?",
+    "valaszok": [
+     "Igen",
+     "Soha"
+    ],
+    "helyes": 1,
+    "magyarazat": "A belső megjegyzés soha nem kerül az ügyfél elé."
+   }
+  ]
+ },
+ {
+  "kulcs": "online-arajanlat",
+  "modul": "uzenetek",
+  "cim": "Online árajánlat küldése",
+  "cel": "Az ügyfél jóváhagyását telefon nélkül megkérni.",
+  "ido_perc": 5,
+  "lepesek": [
+   {
+    "cim": "Tételek",
+    "szoveg": "Vedd fel a tételeket, és mentsd a lapot."
+   },
+   {
+    "cim": "Küldés",
+    "szoveg": "Online árajánlat csoport › „Árajánlat küldése az ügyfélnek”."
+   },
+   {
+    "cim": "Válasz",
+    "szoveg": "A csoport mutatja: Elfogadta vagy Elutasította, mikor, megjegyzéssel."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Hányszor válaszolhat az ügyfél egy ajánlatra?",
+    "valaszok": [
+     "Egyszer",
+     "Korlátlanul"
+    ],
+    "helyes": 0,
+    "magyarazat": "Új ajánlathoz az „Új ajánlat küldése” gomb kell."
+   }
+  ]
+ },
+ {
+  "kulcs": "sms-bekapcsolas",
+  "modul": "sms",
+  "cim": "SMS az androidos telefonról",
+  "cel": "Az SMS-átjárót bekötni és sablont élesíteni.",
+  "ido_perc": 10,
+  "lepesek": [
+   {
+    "cim": "Átjáró",
+    "szoveg": "A bolti Android-telefonon az SMS-átjáró alkalmazás helyi szervere."
+   },
+   {
+    "cim": "Kapcsolat",
+    "szoveg": "Beállítások › SMS-értesítések: cím, port, felhasználó, jelszó, Kapcsolat-teszt."
+   },
+   {
+    "cim": "Sablonok",
+    "szoveg": "SMS › Sablonok: a példák átírása és mentése, szabályok állapotonként."
+   },
+   {
+    "cim": "Főkapcsoló",
+    "szoveg": "Csendes idő, újrapróba, aláírás, majd a főkapcsoló."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Küld-e SMS-t egy új telepítés magától?",
+    "valaszok": [
+     "Igen",
+     "Nem, amíg a főkapcsolót be nem kapcsolod"
+    ],
+    "helyes": 1,
+    "magyarazat": "Alapból minden ki van kapcsolva."
+   },
+   {
+    "kerdes": "Hány karakter egy ékezetes SMS?",
+    "valaszok": [
+     "160",
+     "70",
+     "480"
+    ],
+    "helyes": 1,
+    "magyarazat": "Ékezetes szövegnél 70; egy üzenet legfeljebb 480 karakter."
+   }
+  ]
+ },
+ {
+  "kulcs": "elegedettseg",
+  "modul": "uzenetek",
+  "cim": "Elégedettségi kérdés beállítása",
+  "cel": "Több Google-értékelést gyűjteni a lezárt javítások után.",
+  "ido_perc": 5,
+  "lepesek": [
+   {
+    "cim": "Lapfül",
+    "szoveg": "Beállítások › Elégedettségi kérdés."
+   },
+   {
+    "cim": "Csatorna és idő",
+    "szoveg": "SMS vagy e-mail; hány nappal a lezárás után, hány órától."
+   },
+   {
+    "cim": "Google",
+    "szoveg": "A cégprofil „Értékelés kérése” linkje és a küszöb (alap: 4 csillag)."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Kit kér meg a Google-értékelésre?",
+    "valaszok": [
+     "Mindenkit",
+     "Aki legalább a küszöbértékkel értékelt",
+     "Senkit"
+    ],
+    "helyes": 1,
+    "magyarazat": "A küszöb alatt e-mail megy a szerviznek."
+   }
+  ]
+ },
+ {
+  "kulcs": "levelezes-bekotes",
+  "modul": "levelezes",
+  "cim": "Postafiók bekötése",
+  "cel": "A cég Gmail-fiókját a rendszerbe kötni.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "Alkalmazásjelszó",
+    "szoveg": "Google-fiók › Biztonság: kétlépcsős azonosítás, majd alkalmazásjelszó."
+   },
+   {
+    "cim": "Bekötés",
+    "szoveg": "Beállítások › Levelezés: e-mail-cím, név, alkalmazásjelszó, Mentés."
+   },
+   {
+    "cim": "Próba",
+    "szoveg": "„Kapcsolat ellenőrzése”, majd egy próbalevél."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Beírható-e a Google-fiók rendes jelszava?",
+    "valaszok": [
+     "Igen",
+     "Nem, csak alkalmazásjelszó"
+    ],
+    "helyes": 1,
+    "magyarazat": "A rendes jelszót soha ne írd be."
+   },
+   {
+    "kerdes": "Mit tesz a fontos-levél ügynök?",
+    "valaszok": [
+     "Válaszol helyetted",
+     "Csak jelez",
+     "Törli a reklámot"
+    ],
+    "helyes": 1,
+    "magyarazat": "Csak jelez, a postafiókhoz nem nyúl."
+   }
+  ]
+ },
+ {
+  "kulcs": "csapat-uzenet",
+  "modul": "csapat",
+  "cim": "Csapat-üzenetek",
+  "cel": "Kollégának, csoportnak üzenni.",
+  "ido_perc": 5,
+  "lepesek": [
+   {
+    "cim": "Mód",
+    "szoveg": "Beállítások › Csapat: csevegés vagy üzenőfal."
+   },
+   {
+    "cim": "Üzenet",
+    "szoveg": "Csapat › „+ Új üzenet”, címzett, szöveg, Küldés."
+   },
+   {
+    "cim": "Gyors válasz",
+    "szoveg": "A felugró kártyán bármelyik oldalról."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Melyik mód való közös fiókhoz?",
+    "valaszok": [
+     "Csevegés",
+     "Üzenőfal"
+    ],
+    "helyes": 1,
+    "magyarazat": "Közös fióknál a fal cetlijein áll, kinek szól és ki írta."
+   }
+  ]
+ },
+ {
+  "kulcs": "naptar-esemeny",
+  "modul": "naptar",
+  "cim": "Esemény a naptárban",
+  "cel": "Eseményt felvenni emlékeztetővel.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Új esemény",
+    "szoveg": "Naptár › „+ Új esemény” vagy kattintás a rácsra."
+   },
+   {
+    "cim": "Adatok",
+    "szoveg": "Megnevezés, naptár, mikor, fontosság, emlékeztető, ügyfél, munkalapszám."
+   },
+   {
+    "cim": "Mentés",
+    "szoveg": "„Felveszem a naptárba”."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Eltűnik-e magától az esedékes esemény kártyája?",
+    "valaszok": [
+     "Igen",
+     "Nem, kézzel kell kinyomni"
+    ],
+    "helyes": 1,
+    "magyarazat": "A kártya addig marad, amíg ki nem nyomod."
+   }
+  ]
+ },
+ {
+  "kulcs": "online-foglalas",
+  "modul": "foglalas",
+  "cim": "Online időpontfoglalás bekapcsolása",
+  "cel": "Az ügyfeleknek foglalóoldalt adni.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Lapfül",
+    "szoveg": "Beállítások › Online időpontfoglalás: bekapcsolás, naptár."
+   },
+   {
+    "cim": "Időpontok",
+    "szoveg": "Napok, első időpont, zárás, hossz, egyszerre fogadható ügyfél."
+   },
+   {
+    "cim": "Levél",
+    "szoveg": "A visszaigazoló levél a cég postafiókjából."
+   },
+   {
+    "cim": "Beágyazás",
+    "szoveg": "A lapfül alján a foglalóoldal címe és a beágyazó kód."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Foglal-e időt az egész napos esemény?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Szabadsághoz időponthoz kötött eseményt vegyél fel."
+   }
+  ]
+ },
+ {
+  "kulcs": "asszisztens-hasznalat",
+  "modul": "asszisztens",
+  "cim": "Az AI-asszisztens",
+  "cel": "Kérdezni, végigvezettetni, javaslatot jóváhagyni.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "Megnyitás",
+    "szoveg": "Kattints a jobb alsó figurára, vagy nyomd meg az F1-et.",
+    "kep": "lecke-asszisztens"
+   },
+   {
+    "cim": "Kérdés",
+    "szoveg": "Kérdezz a rendszerről vagy az adatokról: „mi a mai helyzet?”."
+   },
+   {
+    "cim": "Javaslat",
+    "szoveg": "Módosításnál kártya: Engedélyezem / Elutasítom; átírásnál megerősítő kód."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Módosít-e adatot jóváhagyás nélkül?",
+    "valaszok": [
+     "Igen",
+     "Soha"
+    ],
+    "helyes": 1,
+    "magyarazat": "Adatot csak javaslatként változtat."
+   },
+   {
+    "kerdes": "Látja-e a zárkódot?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "A zárkódot, a mintát, a jelszavakat és az API-kulcsokat nem látja."
+   }
+  ]
+ },
+ {
+  "kulcs": "nyomtatas",
+  "modul": "nyomtatas",
+  "cim": "Nyomtatás, PDF, e-mail",
+  "cel": "Átvételi elismervényt nyomtatni és PDF-ben elküldeni.",
+  "ido_perc": 6,
+  "lepesek": [
+   {
+    "cim": "Ablak",
+    "szoveg": "A lap alján a Nyomtatás gomb."
+   },
+   {
+    "cim": "Nyomtatvány",
+    "szoveg": "Bal oldalt a nyomtatvány, jobbra az előnézet; példányszám 1–9."
+   },
+   {
+    "cim": "Kimenet",
+    "szoveg": "Nyomtatás, Mentés PDF-be vagy Küldés e-mailben."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Elküldhető-e a Belső munkalap az ügyfél címére?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "Belső megjegyzés vagy zárkód van rajta, a rendszer nem küldi el."
+   }
+  ]
+ },
+ {
+  "kulcs": "brother-matrica",
+  "modul": "matrica",
+  "cim": "RMA-matrica Brother nyomtatóra",
+  "cel": "Matricát nyomtatni a készülékre.",
+  "ido_perc": 7,
+  "lepesek": [
+   {
+    "cim": "Nyomtató",
+    "szoveg": "Beállítások › Címkenyomtatás: típus, mód, címke / szalag."
+   },
+   {
+    "cim": "Próba",
+    "szoveg": "Próbanyomat kitalált adatokkal, majd Mentés."
+   },
+   {
+    "cim": "Matrica",
+    "szoveg": "Munkalap › Matrica: előnézet, példány, Nyomtatás."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Melyik mód működik minden Brother címkenyomtatóval?",
+    "valaszok": [
+     "Közvetlen hálózati mód",
+     "Böngészős mód illesztőprogrammal"
+    ],
+    "helyes": 1,
+    "magyarazat": "A hálózati mód csak a hálózatos QL nyomtatóké."
+   }
+  ]
+ },
+ {
+  "kulcs": "mockupok",
+  "modul": "mockup",
+  "cim": "Saját mockupképek",
+  "cel": "Egy gyártóhoz saját termékképet rendelni.",
+  "ido_perc": 4,
+  "lepesek": [
+   {
+    "cim": "Lapfül",
+    "szoveg": "Beállítások › Mockupok."
+   },
+   {
+    "cim": "Új sor",
+    "szoveg": "„Új mockup”: név, gyártó vagy típusrészlet, kategória."
+   },
+   {
+    "cim": "Kép",
+    "szoveg": "Feltöltés vagy képcím beillesztése, Mentés."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi kap elsőbbséget?",
+    "valaszok": [
+     "A kategória képe",
+     "A gyártóra / típusra illő mockup",
+     "A tartalék kép"
+    ],
+    "helyes": 1,
+    "magyarazat": "Sorrend: illő mockup, az eszköz saját fotója, a kategória, végül a tartalék."
+   }
+  ]
+ },
+ {
+  "kulcs": "mentes-visszaallitas",
+  "modul": "alap",
+  "cim": "Mentés és külső másolat",
+  "cel": "Kézzel menteni és titkosított külső helyet bekötni.",
+  "ido_perc": 8,
+  "lepesek": [
+   {
+    "cim": "Mentés most",
+    "szoveg": "Beállítások › Mentés › Mentés most."
+   },
+   {
+    "cim": "Titkosítás",
+    "szoveg": "A Titkosítás dobozban jelszó kétszer – tedd el biztos helyre."
+   },
+   {
+    "cim": "Külső hely",
+    "szoveg": "Kártya: Aktív, mezők, Kapcsolat próbája, Mentés."
+   },
+   {
+    "cim": "Visszaállítás",
+    "szoveg": "Visszaállítás… › előnézet › kétlépcsős gomb."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Mi történik visszaállítás előtt?",
+    "valaszok": [
+     "Semmi",
+     "Biztonsági mentés a mostani állapotról",
+     "A rendszer újratelepül"
+    ],
+    "helyes": 1,
+    "magyarazat": "Ha az nem sikerül, nem állít vissza semmit."
+   }
+  ]
+ },
+ {
+  "kulcs": "jogosultsagok",
+  "modul": "alap",
+  "cim": "Szerepkörök és kétlépcsős belépés",
+  "cel": "Jogokat kiosztani és a belépést megerősíteni.",
+  "ido_perc": 9,
+  "lepesek": [
+   {
+    "cim": "Szerepek",
+    "szoveg": "Beállítások › Jogosultságok › Szerepkörök és jogok."
+   },
+   {
+    "cim": "Hozzárendelés",
+    "szoveg": "„Ki melyik szerepben?”."
+   },
+   {
+    "cim": "2FA",
+    "szoveg": "Kétlépcsős belépés: Adminisztrátoroknak vagy Mindenkinek kötelező."
+   },
+   {
+    "cim": "Közös fiók",
+    "szoveg": "„Ki vagy?” választó, dolgozók névvel és PIN-nel."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Hány tartalék kód jár a kétlépcsős belépéshez?",
+    "valaszok": [
+     "3",
+     "10",
+     "100"
+    ],
+    "helyes": 1,
+    "magyarazat": "Mindegyik egyszer használható."
+   }
+  ]
+ },
+ {
+  "kulcs": "adatatvetel",
+  "modul": "alap",
+  "cim": "Átállás a régi programról",
+  "cel": "MunkaLap 3 vagy Excel-adatot átvenni.",
+  "ido_perc": 10,
+  "lepesek": [
+   {
+    "cim": "Mentés",
+    "szoveg": "Előbb Beállítások › Mentés › Mentés most."
+   },
+   {
+    "cim": "Sorrend",
+    "szoveg": "Ügyfelek › Eszközök › Munkalapok › Tételek › Hibák."
+   },
+   {
+    "cim": "Próba",
+    "szoveg": "Beállítások › Rendszer › Adatátvétel: feltöltés, párosítás, Próba (nem ír)."
+   },
+   {
+    "cim": "Átvétel",
+    "szoveg": "„Átvétel indítása” – 500 soronként."
+   }
+  ],
+  "kviz": [
+   {
+    "kerdes": "Ír-e a próba az adatbázisba?",
+    "valaszok": [
+     "Igen",
+     "Nem"
+    ],
+    "helyes": 1,
+    "magyarazat": "A próba semmit nem ír."
+   },
+   {
+    "kerdes": "Hogyan vonható vissza egy átvétel?",
+    "valaszok": [
+     "Sehogy",
+     "Az Eddigi átvételek táblában a Visszavonás gombbal"
+    ],
+    "helyes": 1,
+    "magyarazat": "Több táblánál fordított sorrendben."
+   }
+  ]
+ }
+]

@@ -905,6 +905,7 @@ final class SDH_Kozpont_Api
             'cim'       => home_url('/'),
             'verzio'    => SDH_KOZPONT_VERSION,
             'admin_email' => (string) get_option('admin_email'),
+            'kulcs_elotag' => SDH_Kozpont::kulcs_elotag(),
         ]);
     }
 

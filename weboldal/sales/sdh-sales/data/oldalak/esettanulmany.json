@@ -1,0 +1,88 @@
+{
+ "slug": "esettanulmany",
+ "cim": "Esettanulmányok",
+ "sorrend": 55,
+ "seo": {
+  "title": "Esettanulmányok – {termeknev}",
+  "description": "Valódi szervizek tapasztalatai a {termeknev} bevezetéséről, mért eredményekkel. Az első esettanulmányok hamarosan.",
+  "kulcsszo": "szerviz program tapasztalatok"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Esettanulmányok: hamarosan",
+   "alcim": "Csak valódi, engedéllyel közölt és mért eredményt teszünk közzé. Az első bevezetések adatait most gyűjtjük.",
+   "cimke": "Esettanulmány hamarosan",
+   "gomb": {
+    "szoveg": "Jelentkezem esettanulmánynak",
+    "url": "/kapcsolat/"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mit mérünk egy bevezetésnél?",
+   "szelesseg": "keskeny",
+   "html": "<p>Az esettanulmányokban csak a rendszerből mérhető számok szerepelnek, a bevezetés előtti és utáni időszakra:</p><ul><li>átlagos és medián átfutási idő (Riportok),</li><li>garanciában visszajött javítások aránya,</li><li>online elfogadott árajánlatok aránya,</li><li>elégedettségi átlag és a beérkezett értékelések száma,</li><li>kasszazárási eltérések száma.</li></ul>"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Kiinduló helyzet",
+   "rejtett": true,
+   "sablon": true,
+   "html": "<p>[Kitöltendő: a szerviz profilja, létszám, napi munkalapszám, előző megoldás.]</p>"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A bevezetés",
+   "rejtett": true,
+   "sablon": true,
+   "html": "<p>[Kitöltendő: telepítés módja, adatátvétel, oktatás, időtartam.]</p>"
+  },
+  {
+   "tipus": "szamok",
+   "cim": "Eredmények, mérve",
+   "rejtett": true,
+   "sablon": true,
+   "szamok": [
+    {
+     "ertek": "[érték]",
+     "cimke": "[mért mutató, időszak, forrás: Riportok]",
+     "ikon": "grafikon"
+    }
+   ]
+  },
+  {
+   "tipus": "velemeny",
+   "cim": "Az ügyfél szavaival",
+   "rejtett": true,
+   "sablon": true,
+   "velemenyek": [
+    {
+     "szoveg": "[Kitöltendő: írásos engedéllyel közölt idézet.]",
+     "nev": "[név]",
+     "ceg": "[cég, szerep]"
+    }
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Legyél az első esettanulmány",
+   "szoveg": "Bevezetés közben veled együtt mérjük az eredményt – és csak a jóváhagyásod után közöljük.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ],
+ "vazlat": true
+}

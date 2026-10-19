@@ -1,0 +1,167 @@
+{
+ "slug": "asszisztens",
+ "cim": "AI-asszisztens",
+ "szulo": "funkciok",
+ "sorrend": 29,
+ "seo": {
+  "title": "AI-asszisztens szervizeknek – {termeknev}",
+  "description": "AI-asszisztens a szervizpultnál: válaszol a rendszerről, utánanéz munkalapnak, ügyfélnek, kasszának, és csak jóváhagyással módosít.",
+  "kulcsszo": "AI asszisztens szerviznek"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "AI-asszisztens a szerviz mindennapjaihoz",
+   "alcim": "Beépített segítő minden oldalon: elmagyaráz, végigvezet, utánanéz az adatoknak – és csak jóváhagyással módosít.",
+   "cimke": "Mesterséges intelligencia",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-ai",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Kérdez-felel a teljes dokumentációból és az adatokból"
+    },
+    {
+     "szoveg": "Lépésenként végigvezet, megmutatja, hová kattints"
+    },
+    {
+     "szoveg": "Csak jóváhagyással módosít; átírásnál megerősítő kóddal"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az asszisztens a súgóból, a rendszer adataiból és a cég saját tudástárából felel; amit nem tud, arra nem talál ki választ. Adatot csak javaslatként változtat: a kártyán a régi és az új érték látszik, átírásnál megerősítő kódot is kér, és minden módosítás előtt pillanatkép készül.</p><p><strong>Hol találod a rendszerben?</strong> Minden oldalon a jobb alsó sarokban; Beállítások › Asszisztens.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Kérdez-felel a teljes dokumentációból és az adatokból",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Lépésenként végigvezet, megmutatja, hová kattints",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Csak jóváhagyással módosít; átírásnál megerősítő kóddal",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Zárkódot, mintát, jelszót és API-kulcsot nem lát",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Napi kérdéskeret kollégánként, eszközönként kapcsolható jogok",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Bekapcsolás",
+     "szoveg": "Beállítások › Asszisztens: név, napi kérdéskeret, Claude API-kulcs, API teszt."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kérdés",
+     "szoveg": "Kattints a jobb alsó figurára, vagy nyomd meg az F1-et, és kérdezz."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Javaslat",
+     "szoveg": "Módosításnál kártyát kapsz: Engedélyezem vagy Elutasítom."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A szabad szöveges válaszokhoz saját Claude API-kulcs kell (az Anthropic díjszabása szerint).</li><li>Bekapcsolva a kérdések és az ahhoz lekért adatok a Claude API-hoz kerülnek; ezt az AI-chat tájékoztató részletezi.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "asszisztens"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "sugo",
+    "valtozasnaplo",
+    "hazipenztar",
+    "levelezes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: AI-asszisztens",
+   "kulcsok": [
+    "ai-asszisztens-mit-tud",
+    "ai-koltseg",
+    "ai-adatvedelem"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) AI-asszisztens a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

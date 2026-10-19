@@ -75,7 +75,15 @@ A napi kassza adatai érzékenyek. Nem minden kollégának kell látnia a havi b
 
 ## Régi kassza-táblázat
 
-Ha eddig Excelben vezetted a zárásokat, nem kell elveszítened a múltat. A {termeknev} Házipénztára a régi „Zárás” táblázatot .xlsx-ből vagy CSV-ből be tudja tölteni, visszavonhatóan. Erről az [adatátvétel](/adatatvetel/) oldalon is írunk.
+Ha eddig Excelben vezetted a zárásokat, nem kell elveszítened a múltat. A rendszer Házipénztára a régi „Zárás” táblázatot .xlsx-ből vagy CSV-ből be tudja tölteni, visszavonhatóan. Erről az [adatátvétel](/adatatvetel/) oldalon is írunk.
+
+## Pultos eladás javítás nélkül
+
+Nem minden bevétel munkalapból jön. Egy tok, egy fólia, egy töltő a pultnál, javítás nélkül, ugyanúgy pénzmozgás. Ha ezek külön, papíron vagy egy másik programban futnak, este hiányozni fognak. A jobb megoldás egy egyszerű pultos eladás (napi árukiadás), amely a terméket leveszi a készletről, és a fizetést ugyanúgy a pénztárba teszi. Ügyfél megadása nélkül is működik, és több üzlet esetén helyszínenként szűrhető.
+
+## Riport és export
+
+A napi zárás mellett hasznos a havi kép: mennyi volt a bevétel fizetési módonként, mennyi a kiadás, ki mennyit vett ki. Ha a pénztár tételei CSV-ben exportálhatók, a könyvelőnek is egyszerűbb átadni. A keresés számlaszámra vagy összegre egy-egy vitás tételnél jön jól.
 
 ## Ellenőrzőlista
 

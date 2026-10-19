@@ -598,7 +598,7 @@ final class SDH_Sales_Kiszolgalas
 
         $kulcs = strtoupper(sanitize_text_field((string) ($v['licenc_kulcs'] ?? '')));
 
-        if (preg_match('/^SDH-[A-Z0-9]{4}(-[A-Z0-9]{4}){3}$/', $kulcs) !== 1) {
+        if (preg_match('/^[A-Z0-9]{2,10}(-[A-Z0-9]{4}){4}$/', $kulcs) !== 1) {
             return ['allapot' => 'ujra', 'uzenet' => 'A Központ nem adott érvényes licenckulcsot.'];
         }
 

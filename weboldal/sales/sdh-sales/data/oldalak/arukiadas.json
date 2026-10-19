@@ -1,0 +1,172 @@
+{
+ "slug": "arukiadas",
+ "cim": "Napi árukiadás",
+ "szulo": "funkciok",
+ "sorrend": 16,
+ "seo": {
+  "title": "Napi árukiadás, pultos eladás – {termeknev}",
+  "description": "Pultos eladás a szerviz rendszerében: termék és szolgáltatás, fizetés, pénztár és számla egy lapon, több üzlet kezelésével.",
+  "kulcsszo": "pultos eladás program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Napi árukiadás: pultos eladás két mozdulattal",
+   "alcim": "Pultos eladás javítás nélkül: termék és szolgáltatás vegyesen, előleggel, fizetéssel, több üzlet esetén helyszínnel.",
+   "cimke": "Értékesítés és raktár",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-penztar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Két mozdulat: rögzítés és fizetés"
+    },
+    {
+     "szoveg": "Termék és szolgáltatás vegyesen, kedvezménnyel"
+    },
+    {
+     "szoveg": "Több üzlet: helyszín eladásonként"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az árukiadás ugyanolyan lap, mint a munkalap, csak egyszerűbb: nincs eszköz, hiba és bevizsgálási díj, ügyfelet sem kötelező megadni. A „Rögzítés és fizetés” gombbal egy eladás két mozdulat, a kifizetett eladás magától lezárul.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Napi árukiadás; Áttekintés › Napi árukiadás gomb.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Két mozdulat: rögzítés és fizetés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Termék és szolgáltatás vegyesen, kedvezménnyel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Több üzlet: helyszín eladásonként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Előleg és fizetés nélküli rögzítés is",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Pénztár és számla ugyanúgy, mint a munkalapon",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új árukiadás",
+     "szoveg": "Napi árukiadás › „Új árukiadás”: a Termékek lapfül áll elöl."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Tételek",
+     "szoveg": "Vedd fel, amit a vevő visz; a kedvezmény és az áfakulcs minden tételre érvényes."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Fizetés",
+     "szoveg": "A „Rögzítés és fizetés” után válaszd a fizetési módot – az eladás magától lezárul."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "arukiadas"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "termekek",
+    "hazipenztar",
+    "szamlazas",
+    "attekintes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv",
+    "zrt",
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Napi árukiadás",
+   "kulcsok": [
+    "helyszinek-tobb-uzlet",
+    "tobb-uzlet-lanc",
+    "hazipenztar-mit-tud"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Napi árukiadás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

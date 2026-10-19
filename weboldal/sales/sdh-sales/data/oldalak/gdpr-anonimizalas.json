@@ -1,0 +1,163 @@
+{
+ "slug": "gdpr-anonimizalas",
+ "cim": "GDPR-anonimizálás",
+ "szulo": "funkciok",
+ "sorrend": 33,
+ "seo": {
+  "title": "GDPR ügyféladat-törlés anonimizálással – {termeknev}",
+  "description": "Ügyféladat törlése kérésre a szervizben: anonimizálás előnézettel, igazoló sorral, a számlák és munkalapok számviteli megőrzésével.",
+  "kulcsszo": "ügyféladat törlés GDPR"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "GDPR-anonimizálás: törlési kérés a számlák megtartásával",
+   "alcim": "Törlési kérésre a személyes adatok törlődnek, a munkalapok, számlák és pénztártételek a számviteli megőrzés miatt megmaradnak.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-ugyfel",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Előnézet: mi törlődik, mi marad"
+    },
+    {
+     "szoveg": "Kötelező kérésrögzítés, igazoló sor az adatlapon"
+    },
+    {
+     "szoveg": "Választható: az üzenetek szövege is törlődjön"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az Anonimizálás (GDPR) gomb előbb megmutatja, mi törlődik és mi marad, darabszámokkal, és kötelezően rögzíti, mikor és hogyan kérte az ügyfél. A név, a telefonszámok, az e-mail, a címek, a zárkódok és az ügyféloldali linkek törlődnek; az adatlap tetején igazoló sor marad.</p><p><strong>Hol találod a rendszerben?</strong> Ügyfél adatlapja › Anonimizálás (GDPR).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Előnézet: mi törlődik, mi marad",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kötelező kérésrögzítés, igazoló sor az adatlapon",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Választható: az üzenetek szövege is törlődjön",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszaigazoló e-mail az ügyfélnek a törlés előtt",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A naplóba egyetlen, személyes adat nélküli bejegyzés",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Gomb",
+     "szoveg": "Ügyfél adatlapja › Anonimizálás (GDPR) – adminisztrátornak, törlés joggal."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kérés",
+     "szoveg": "Írd be, mikor és hogyan kérte az ügyfél; döntsd el, törlődjön-e az üzenetek szövege."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Végrehajtás",
+     "szoveg": "„Megértettem” + Anonimizálás – nem vonható vissza."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Az anonimizálás nem vonható vissza; a régi adat csak egy korábbi mentésből hozható vissza.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "ugyfelek",
+    "biztonsag",
+    "valtozasnaplo",
+    "szerepkorok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "allami-szektor"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: GDPR-anonimizálás",
+   "kulcsok": [
+    "gdpr-anonimizalas",
+    "gdpr-mi-marad",
+    "hol-vannak-az-adatok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) GDPR-anonimizálás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

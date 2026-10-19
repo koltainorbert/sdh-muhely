@@ -6,11 +6,11 @@ global $wpdb;
 foreach (SDH_Sales_Schema::tablak() as $t) {
     T::igaz($wpdb->get_var("SELECT COUNT(*) FROM " . SDH_Sales_Schema::t($t)) !== null, "tábla: {$t}");
 }
-T::egyezik('SDH CRM', SDH_Sales::termeknev(), 'helyőrző termeknev');
+T::egyezik('Munkora', SDH_Sales::termeknev(), 'helyőrző termeknev');
 SDH_Sales::b_ment(['termeknev' => 'Próbanév']);
 T::egyezik('Próbanév', SDH_Sales::termeknev(), 'termeknev csere egy mezővel');
 T::egyezik('A Próbanév jó.', SDH_Sales::t('A {termeknev} jó.'), 'token');
-SDH_Sales::b_ment(['termeknev' => 'SDH CRM']);
+SDH_Sales::b_ment(['termeknev' => 'Munkora']);
 T::egyezik(27, SDH_Sales::afa(), 'áfa 27');
 T::egyezik(12700, SDH_Sales::brutto(10000), 'bruttó');
 SDH_Sales::titkos_ment('teszt', 'titok-123');

@@ -1,0 +1,161 @@
+{
+ "slug": "levelezes",
+ "cim": "Levelezés",
+ "szulo": "funkciok",
+ "sorrend": 13,
+ "seo": {
+  "title": "Levelezés a CRM-ben (IMAP/SMTP) – {termeknev}",
+  "description": "A szerviz e-mail-fiókjai a rendszeren belül: olvasás, válasz, mappák, és ügynök, amely megmondja, melyik levélre kell gyorsan reagálni.",
+  "kulcsszo": "e-mail kezelés CRM"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Céges e-mail-fiókok a CRM-ben, okos jelzésekkel",
+   "alcim": "A cég legfeljebb három e-mail-fiókja a rendszerben (IMAP / SMTP), a fontos levelek jelzésével és rendező ügynökkel.",
+   "cimke": "Ügyfélkapcsolat",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-sms",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Legfeljebb 3 postafiók, Gmail alkalmazásjelszóval vagy bármely IMAP/SMTP-szolgáltató"
+    },
+    {
+     "szoveg": "Fontos-levél ügynök: Azonnal / Ma / Ráér / Zaj"
+    },
+    {
+     "szoveg": "Rendező ügynök: csak azt mozgatja, amit jóváhagysz"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Olvasás, írás, válasz, továbbítás, mappák, keresés – a levelek a levelezőszolgáltatónál maradnak, ezért a telefonodon is ugyanígy látod őket. A fontos-levél ügynök megmondja, mire kell egy órán belül vagy még ma reagálni; csak jelez, a postafiókhoz nem nyúl.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Levelezés; Beállítások › Levelezés.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Legfeljebb 3 postafiók, Gmail alkalmazásjelszóval vagy bármely IMAP/SMTP-szolgáltató",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fontos-levél ügynök: Azonnal / Ma / Ráér / Zaj",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Rendező ügynök: csak azt mozgatja, amit jóváhagysz",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Levél-feladat ügynök az ismétlődő beszállítói levelekhez",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Új levél jelzése minden oldalon",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Alkalmazásjelszó",
+     "szoveg": "Gmailnél kapcsold be a kétlépcsős azonosítást, és kérj 16 betűs alkalmazásjelszót."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Bekötés",
+     "szoveg": "Beállítások › Levelezés: e-mail-cím, megjelenő név, alkalmazásjelszó, Mentés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Próba",
+     "szoveg": "„Kapcsolat ellenőrzése”, majd egy próbalevél a saját címedre."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "levelezes"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "urlapok-emailben",
+    "naptar",
+    "nyomtatas",
+    "asszisztens"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Levelezés",
+   "kulcsok": [
+    "levelezes-modul",
+    "levelkuldes-smtp",
+    "integraciok-listaja"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Levelezés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,89 @@
+{
+ "slug": "partnerprogram",
+ "cim": "Partnerprogram",
+ "sorrend": 82,
+ "seo": {
+  "title": "Partnerprogram viszonteladóknak – {termeknev}",
+  "description": "Informatikai cégek, rendszergazdák, tanácsadók: ajánld vagy értékesítsd a {termeknev} rendszert, és támogatunk a bevezetésben.",
+  "kulcsszo": "szerviz szoftver viszonteladó"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Partnerprogram viszonteladóknak és tanácsadóknak",
+   "alcim": "Szervizekkel dolgozol rendszergazdaként, informatikai cégként vagy tanácsadóként? Ajánld vagy értékesítsd a {termeknev} rendszert – a bevezetésben melletted állunk.",
+   "cimke": "Partnerprogram",
+   "gomb": {
+    "szoveg": "Jelentkezem",
+    "url": "#urlap"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Kinek szól?",
+   "oszlop": "3",
+   "elemek": [
+    {
+     "ikon": "szerver",
+     "cim": "Rendszergazdák, üzemeltetők",
+     "szoveg": "Akik a szervizek szerverét, hálózatát, mentését már ma is gondozzák."
+    },
+    {
+     "ikon": "kezfogas",
+     "cim": "Viszonteladók",
+     "szoveg": "Akik szoftvert, hardvert (címkenyomtató, vonalkódolvasó) adnak el szervizeknek."
+    },
+    {
+     "ikon": "kalap",
+     "cim": "Tanácsadók, oktatók",
+     "szoveg": "Akik folyamatot szerveznek, és bevezetést, oktatást vállalnak."
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Hogyan működik?",
+   "hatter": "felulet",
+   "lepesek": [
+    {
+     "ikon": "uzenet",
+     "cim": "Jelentkezés",
+     "szoveg": "Töltsd ki az űrlapot: ki vagy, milyen ügyfélkörrel dolgozol."
+    },
+    {
+     "ikon": "kezfogas",
+     "cim": "Megállapodás",
+     "szoveg": "Egyeztetjük a partneri formát (ajánló vagy viszonteladó) és a feltételeket, írásban."
+    },
+    {
+     "ikon": "kalap",
+     "cim": "Felkészítés",
+     "szoveg": "Bemutató, demó-hozzáférés, telepítési és oktatási anyagok."
+    },
+    {
+     "ikon": "raketa",
+     "cim": "Közös bevezetés",
+     "szoveg": "Az első ügyfeleidnél együtt telepítünk és oktatunk."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A partnerség keretei",
+   "szelesseg": "keskeny",
+   "html": "<p>A jutalék vagy a viszonteladói kedvezmény mértéke, a támogatás szintje és a licencek kezelése a partneri megállapodásban áll – partnerenként, írásban rögzítve. A licencet minden esetben a {termeknev} központja adja ki, így a vevő a frissítéseket és a támogatást közvetlenül is megkapja.</p>"
+  },
+  {
+   "tipus": "urlap",
+   "cim": "Jelentkezés partnernek",
+   "urlap": "partner",
+   "horgony": "urlap",
+   "siker": "Köszönjük a jelentkezést! Hamarosan keresünk."
+  }
+ ]
+}

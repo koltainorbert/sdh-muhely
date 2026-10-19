@@ -1,0 +1,156 @@
+{
+ "slug": "mockupok",
+ "cim": "Eszköz-mockupok",
+ "szulo": "funkciok",
+ "sorrend": 27,
+ "seo": {
+  "title": "Eszköz-mockupok, termékképek – {termeknev}",
+  "description": "Termékkép minden javításra hozott készülék mellett: gyári képkészlet kategóriánként, saját képek gyártóra és típusra szabva.",
+  "kulcsszo": "készülékkép szerviz"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Eszköz-mockupok: termékkép minden készülék mellett",
+   "alcim": "Termékkép minden eszköz mellett – kategória, gyártó vagy típus szerint, saját képekkel.",
+   "cimke": "Dokumentumok és készülékadatok",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-eszkoz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "20 gyári kép kategóriánként"
+    },
+    {
+     "szoveg": "Saját kép gyártóra vagy típusrészletre"
+    },
+    {
+     "szoveg": "Az eszköz saját fotója elsőbbséget kap"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A munkalapon, az Áttekintés részletpanelén és az Eszközök listában minden készülék mellett kép áll, így ránézésre látszik, miről van szó. A rendszer gyári képkészlettel érkezik; saját kép gyártóra vagy típusrészletre szabható.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Mockupok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "20 gyári kép kategóriánként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Saját kép gyártóra vagy típusrészletre",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az eszköz saját fotója elsőbbséget kap",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Egységes stílushoz generáló szöveg (prompt) sablon",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Lapfül",
+     "szoveg": "Beállítások › Mockupok: minden mockup egy sor."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Szabály",
+     "szoveg": "Név, gyártó vagy típusrészlet, kategóriák."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kép",
+     "szoveg": "Feltöltés a gépről, vagy kép címének beillesztése – mentéskor letöltődik."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Start, Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "start",
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "mockup"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "eszkozok",
+    "imei-tac",
+    "megjelenes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Eszköz-mockupok",
+   "kulcsok": [
+    "megjelenes-testreszabas",
+    "imei-tac"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Eszköz-mockupok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

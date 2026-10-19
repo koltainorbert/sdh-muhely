@@ -1,4 +1,7 @@
-# SDH értékesítő webhely – architektúra és szerződés (minden ügynök kötelező olvasmánya)
+# Értékesítő webhely – architektúra és szerződés (minden ügynök kötelező olvasmánya)
+
+> **ELSŐBBSÉG: `weboldal/REJTES.md`** – a kimenetben sehol nincs WordPress- vagy SDH-nyom. Ahol ez a fájl mást mond
+> (`data-sdh`, `window.SDH`, `sdh-sales/v1`, `sdh_suti_id`, „SDH CRM”), a REJTES.md az érvényes.
 
 Ez a fájl a közös megállapodás. Aki kódot vagy tartalmat ír a `weboldal/` alá, **ehhez tartja magát**, és csak a
 **saját mappájába / fájljaiba** ír (lásd „Tulajdonosok”). Ha a szerződésen változtatni kell, szólj a vezetőnek,
@@ -54,7 +57,7 @@ weboldal/
   konstansok `SDH_SALES_VERSION`, `SDH_SALES_DIR`, `SDH_SALES_URL`, `SDH_SALES_FILE`.
 - Téma: `sdh-sales-tema`, függvények `sdh_tema_*`. Demó: `sdh-demo`, `SDH_Demo_*`.
 - Táblák: `{$wpdb->prefix}sdh_sales_<nev>` – csak `SDH_Sales_Schema::t('nev')`-vel.
-- REST névtér: `sdh-sales/v1`. Nyilvános útvonalak: `/ar`, `/kosar/ellenoriz`, `/rendeles`, `/rendeles/(?P<azon>)/allapot`,
+- REST névtér: `portal/v1` (előtag `api` → `/api/portal/v1/…`). Nyilvános útvonalak: `/ar`, `/kosar/ellenoriz`, `/rendeles`, `/rendeles/(?P<azon>)/allapot`,
   `/kupon`, `/foglalas/savok`, `/foglalas`, `/lead`, `/egyedi`, `/szikra`, `/kereso`, `/suti`, `/fizetes/barion/ipn`,
   `/fizetes/simplepay/ipn`, `/fiok/belepes` (magic link). Admin: `/admin/<…>` (`manage_options` vagy `sdh_sales_admin` jog).
 - Opciók: `sdh_sales_beallitas` (egy tömb), `sdh_sales_db` (séma verzió), `sdh_sales_kulcspar` (Ed25519, titkosítva).
@@ -63,7 +66,7 @@ weboldal/
 ## 3. Beállítások (`SDH_Sales::b($kulcs, $alap)` / `SDH_Sales::b_ment(array)`)
 Egy tömb, pontozott kulcsok csoportosítanak. A kezdőértékek a `data/beallitas-alap.json`-ból jönnek.
 Fontos kulcsok (bővíthető, de NE nevezd át):
-- `termeknev` („SDH CRM” helyőrző), `termeknev_rovid`, `szlogen`
+- `termeknev` („Munkora” helyőrző), `termeknev_rovid`, `szlogen`
 - `ceg.nev`, `ceg.adoszam`, `ceg.cim`, `ceg.email`, `ceg.telefon`, `ceg.bankszamla`, `ceg.iban`, `ceg.bic`, `ceg.cegjegyzek`, `ceg.kepviselo`
 - `afa` (27), `penznem` („HUF”), `eves_kedvezmeny` (%), `nyelvek` (["hu"])
 - `fizetes.atutalas` (bool), `fizetes.barion.*`, `fizetes.simplepay.*`, `fizetes.automatizalas` ("import" | "szamlazz" | "kartya" | "kezi")
@@ -156,7 +159,7 @@ matrica, mockup; + a Műhely `Modulok::katalogus()` többi kulcsa) – így a li
 - A bővítmény a szekciók **adatait és végpontjait** adja; a téma a markupot és a CSS-t. Interaktív szekciók JS-e
   (kalkulátor, kosár, pénztár, foglalás, űrlapok, kereső, Szikra, süti) a bővítmény `assets/front/*.js`-e, modulonként, csak
   azon az oldalon töltődik, ahol a szekció szerepel (`SDH_Sales_Front::igeny('kalkulator')`). Közös DOM-szerződés:
-  `<div data-sdh="kalkulator" data-opciok='{…}'></div>` – a JS erre csatol.
+  `<div data-modul="kalkulator" data-opciok='{…}'></div>` – a JS erre csatol.
 - Arculat: a bővítmény a `:root` CSS-változókat írja ki (`SDH_Sales_Arculat::css()`), a téma `assets/css/tokenek.css` adja az
   alapértéket. Változónevek: `--s-bg`, `--s-felulet`, `--s-uveg`, `--s-szoveg`, `--s-halvany`, `--s-vonal`, `--s-kiemelo`,
   `--s-kiemelo-2`, `--s-neon`, `--s-ok`, `--s-figyel`, `--s-hiba`, `--s-r-mezo`, `--s-r-gomb`, `--s-r-pill`, `--s-r-kartya`,

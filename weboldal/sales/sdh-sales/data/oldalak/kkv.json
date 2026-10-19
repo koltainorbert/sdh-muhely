@@ -1,0 +1,140 @@
+{
+ "slug": "kkv",
+ "cim": "Kis- és középvállalkozások",
+ "szulo": "iparagak",
+ "sorrend": 3,
+ "seo": {
+  "title": "CRM és ügyviteli program kisvállalkozásnak – {termeknev}",
+  "description": "Magyar CRM kis- és középvállalkozásoknak: ügyfelek, munkalapok, pultos eladás, házipénztár, Számlázz.hu – modulonként bővíthetően.",
+  "kulcsszo": "CRM kisvállalkozásnak magyar"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "CRM és ügyviteli program kisvállalkozásoknak",
+   "alcim": "Ügyfél, munka, raktár, pénztár és számla egy helyen – egy géptől több üzletig, modulonként bővíthetően.",
+   "cimke": "Kis- és középvállalkozások",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-kkv",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "riport",
+     "cim": "Excel, füzet, három program",
+     "szoveg": "Az ügyfél az egyikben, a számla a másikban, a kassza a harmadikban."
+    },
+    {
+     "ikon": "ugyfel",
+     "cim": "Egy gép, több ember",
+     "szoveg": "A pultgépen mindenki ugyanazzal a fiókkal dolgozik, és nem tudni, ki mit csinált."
+    },
+    {
+     "ikon": "kassza",
+     "cim": "Esti kasszazárás",
+     "szoveg": "Hiányzik pénz, és órákig tart kideríteni, miért."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>Kisvállalkozásnál nem a funkciók száma számít, hanem hogy a napi munka egy helyen legyen. A {termeknev} alaprendszere (ügyfél, eszköz, munkalap, szolgáltatás) mindig fut, a többi modul akkor kapcsolható be, amikor kell.</p><ul><li><strong>Közös pultgép:</strong> „Ki vagy?” választó PIN-nel – a napló a tényleges dolgozót mutatja.</li><li><strong>Kassza:</strong> címletes zárás és egyeztető ügynök, amely megmondja, miért nem egyezik.</li><li><strong>Váltás:</strong> régi adatok átvétele CSV-ből vagy XLSX-ből, próbával és visszavonással.</li></ul>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "ugyfelek",
+    "munkalapok",
+    "arukiadas",
+    "hazipenztar",
+    "szamlazas",
+    "termekek",
+    "kozos-fiok",
+    "modulrendszer",
+    "adatatvetel"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "arukiadas",
+    "penztar",
+    "szamlazas",
+    "termekek"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>A számlát a Számlázz.hu állítja ki a saját fiókotokban; a házipénztár a belső nyilvántartást segíti, nem helyettesíti a könyvelőt. Az adatok a saját szervereteken vannak, napi mentéssel és titkosított külső másolattal.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Kis- és középvállalkozások",
+   "kulcsok": [
+    "kis-uzlet-egy-gep",
+    "melyik-csomag-kell",
+    "hazipenztar-mit-tud",
+    "excelbol-valtas"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

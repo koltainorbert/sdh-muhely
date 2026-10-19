@@ -1,0 +1,159 @@
+[
+ {
+  "kulcs": "szerviz",
+  "cim": "Telefon-, számítógép- és elektronikai szerviz",
+  "rovid": "Telefonszerviz program IMEI-kereséssel, RMA-ügyféloldallal, Brother-matricával – a pult és a műhely mindennapjaira.",
+  "ikon": "telefon",
+  "ikon_lucide": "smartphone",
+  "kep": "iparag-szerviz",
+  "funkciok": [
+   "munkalapok",
+   "eszkozok",
+   "imei-tac",
+   "rma",
+   "cimkenyomtatas",
+   "atvetel-foto-alairas",
+   "javitasi-garancia",
+   "sms",
+   "raktar",
+   "szamlazas"
+  ],
+  "sorrend": 0
+ },
+ {
+  "kulcs": "ipar",
+  "cim": "Ipari javítóműhelyek és karbantartás",
+  "rovid": "Munkalap, alkatrészraktár és technikusonkénti riport gépjavító, karbantartó és szerelőműhelyeknek.",
+  "ikon": "szerszam",
+  "ikon_lucide": "factory",
+  "kep": "iparag-ipar",
+  "funkciok": [
+   "munkalapok",
+   "eszkozok",
+   "raktar",
+   "termekek",
+   "riportok",
+   "naptar",
+   "szerepkorok",
+   "nyomtatas",
+   "offline"
+  ],
+  "sorrend": 1
+ },
+ {
+  "kulcs": "kkv",
+  "cim": "Kis- és középvállalkozások",
+  "rovid": "Ügyfél, munka, raktár, pénztár és számla egy helyen – egy géptől több üzletig, modulonként bővíthetően.",
+  "ikon": "bolt",
+  "ikon_lucide": "store",
+  "kep": "iparag-kkv",
+  "funkciok": [
+   "ugyfelek",
+   "munkalapok",
+   "arukiadas",
+   "hazipenztar",
+   "szamlazas",
+   "termekek",
+   "kozos-fiok",
+   "modulrendszer",
+   "adatatvetel"
+  ],
+  "sorrend": 2
+ },
+ {
+  "kulcs": "zrt",
+  "cim": "Nagyvállalatok és zrt.-k",
+  "rovid": "Több telephely, szerepkörök, kétlépcsős belépés, aláírt napló, saját szerver – belső szervizosztályoknak és szervizhálózatoknak.",
+  "ikon": "helyszin",
+  "ikon_lucide": "building-2",
+  "kep": "iparag-zrt",
+  "funkciok": [
+   "szerepkorok",
+   "ketlepcsos-belepes",
+   "valtozasnaplo",
+   "biztonsag",
+   "kulso-mentes",
+   "licenc-karbantartas",
+   "riportok",
+   "arukiadas",
+   "sebessegmeres"
+  ],
+  "sorrend": 3
+ },
+ {
+  "kulcs": "allami-szektor",
+  "cim": "Állami és önkormányzati intézmények",
+  "rovid": "Saját szerveren futó, aláírt naplót vezető nyilvántartás eszközökre, javításokra és ügyfelekre – az adat az intézménynél marad.",
+  "ikon": "pajzs",
+  "ikon_lucide": "landmark",
+  "kep": "iparag-allami",
+  "funkciok": [
+   "eszkozok",
+   "munkalapok",
+   "valtozasnaplo",
+   "szerepkorok",
+   "biztonsag",
+   "gdpr-anonimizalas",
+   "mentes",
+   "offline"
+  ],
+  "sorrend": 4
+ },
+ {
+  "kulcs": "egeszsegugy",
+  "cim": "Egészségügyi eszközszerviz",
+  "rovid": "Javítás- és eszköznyilvántartás egészségügyi eszközöket javító műhelyeknek – nem betegnyilvántartó rendszer.",
+  "ikon": "eszkoz",
+  "ikon_lucide": "stethoscope",
+  "kep": "iparag-egeszsegugy",
+  "funkciok": [
+   "eszkozok",
+   "munkalapok",
+   "atvetel-foto-alairas",
+   "valtozasnaplo",
+   "javitasi-garancia",
+   "szerepkorok",
+   "riportok"
+  ],
+  "sorrend": 5
+ },
+ {
+  "kulcs": "kereskedelem",
+  "cim": "Kiskereskedelem szervizzel",
+  "rovid": "Bolt és szerviz egy rendszerben: pultos eladás, ügyfélrendelés, készlet, garancia és RMA.",
+  "ikon": "kosar",
+  "ikon_lucide": "shopping-cart",
+  "kep": "iparag-kereskedelem",
+  "funkciok": [
+   "arukiadas",
+   "rendelesek",
+   "termekek",
+   "raktar",
+   "hazipenztar",
+   "szamlazas",
+   "rma",
+   "cimkenyomtatas",
+   "javitasi-garancia"
+  ],
+  "sorrend": 6
+ },
+ {
+  "kulcs": "egyeb",
+  "cim": "Egyéb javító- és szolgáltatócégek",
+  "rovid": "Kerékpár-, kisgép-, hangszer- vagy órajavítás: ahol ügyfél, tárgy, munkalap és alkatrész van, ott a {termeknev} illeszkedik.",
+  "ikon": "csavarkulcs",
+  "ikon_lucide": "wrench",
+  "kep": "iparag-egyeb",
+  "funkciok": [
+   "munkalapok",
+   "ugyfelek",
+   "eszkozok",
+   "szolgaltatasok",
+   "rma",
+   "nyomtatas",
+   "foglalas",
+   "modulrendszer"
+  ],
+  "sorrend": 7
+ }
+]

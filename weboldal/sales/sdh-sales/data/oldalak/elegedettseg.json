@@ -1,0 +1,163 @@
+{
+ "slug": "elegedettseg",
+ "cim": "Elégedettségi kérdés",
+ "szulo": "funkciok",
+ "sorrend": 11,
+ "seo": {
+  "title": "Elégedettségi kérdés, Google-értékelés – {termeknev}",
+  "description": "Több Google-értékelés szervizként: a lezárt javítás után automatikus elégedettségi kérdés SMS-ben vagy e-mailben, 1–5 csillaggal.",
+  "kulcsszo": "Google értékelés gyűjtés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Elégedettségi kérdés és Google-értékelés a javítás után",
+   "alcim": "A lezárt javítás után az ügyfél SMS-ben vagy e-mailben értékel 1–5 csillaggal; az elégedetteket a Google-értékelésre irányítja.",
+   "cimke": "Ügyfélkapcsolat",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-sms",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "SMS vagy e-mail, a beállított napon és órában"
+    },
+    {
+     "szoveg": "Google-értékelés kérése csak az elégedett ügyfelektől"
+    },
+    {
+     "szoveg": "Az elégedetlen visszajelzés e-mailben a szervizhez kerül"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A beállított nap után, a beállított órától magától megy ki a kérdés, laponként egyszer. Az értékelés a munkalapon és a Riportok Elégedettség csempéjén látszik; a küszöb (alapból 4 csillag) fölött az oldal a Google-értékelés linkjét kínálja, alatta e-mail megy a szerviznek.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Elégedettségi kérdés; munkalap › Elégedettség.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "SMS vagy e-mail, a beállított napon és órában",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Google-értékelés kérése csak az elégedett ügyfelektől",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az elégedetlen visszajelzés e-mailben a szervizhez kerül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Átlag és darabszám a Riportokban",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Anonimizált ügyfél és SMS-tiltás tiszteletben tartva",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Bekapcsolás",
+     "szoveg": "Beállítások › Elégedettségi kérdés: csatorna (SMS vagy e-mail), hány nappal a lezárás után, legkorábban hány órakor."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Google-link",
+     "szoveg": "Add meg a cégprofilod „Értékelés kérése” linkjét és a küszöböt."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Eredmény",
+     "szoveg": "A munkalap Elégedettség csoportja mutatja a csillagokat és a megjegyzést; a „Kérdés küldése most” azonnal küld."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Start, Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "start",
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "uzenetek"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "sms",
+    "rma",
+    "riportok",
+    "online-arajanlat"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Elégedettségi kérdés",
+   "kulcsok": [
+    "elegedettsegi-kerdes",
+    "sms-hogyan-mukodik",
+    "elegedettseg-offline"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Elégedettségi kérdés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

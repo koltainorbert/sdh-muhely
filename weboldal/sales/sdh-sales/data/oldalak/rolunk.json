@@ -1,0 +1,84 @@
+{
+ "slug": "rolunk",
+ "cim": "Rólunk",
+ "sorrend": 70,
+ "seo": {
+  "title": "Rólunk – {ceg} és a {termeknev}",
+  "description": "Ki fejleszti a {termeknev} szerviz programot, és miért? Szervizekre szabott, saját fejlesztésű webes rendszer – a {ceg} csapatától.",
+  "kulcsszo": "szerviz szoftver fejlesztő"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz szoftver, szervizek folyamatára szabva",
+   "alcim": "A {termeknev} saját fejlesztésű, PHP / MySQL alapú webes rendszer, amelyet a javítóműhelyek valódi napi munkafolyamatára építettünk.",
+   "cimke": "Rólunk",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Miért készült?",
+   "szelesseg": "keskeny",
+   "html": "<p>Egy javítóműhelyben a nap ugyanazokból a lépésekből áll: átvétel, hibafelvétel, alkatrész, ügyfél-értesítés, kiadás, kassza, számla. A {termeknev} minden funkciója egy-egy ilyen napi problémára válasz: a „hol tart a javítás?” hívásokra az ügyféloldal, a vitás átvételekre a fotó és az aláírás, az esti kasszazárásra az egyeztető ügynök.</p><p>A rendszer minden szerviznél a saját beállításaival dolgozik: cégadat, állapotok, nyomtatványok, modulok – minden beállítható, és a súgó minden változással együtt frissül.</p><p>A {termeknev} forgalmazója és fejlesztője: <strong>{ceg}</strong>.</p>"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A cég története",
+   "rejtett": true,
+   "sablon": true,
+   "html": "<p>[Kitöltendő: a cég bemutatása – csak jóváhagyott adatokkal, konkrét szerviz vagy település megnevezése nélkül.]</p>"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Amiben hiszünk",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Csak ami létezik",
+     "szoveg": "A weboldalon csak olyan funkció szerepel, ami a rendszerben ma is működik."
+    },
+    {
+     "ikon": "sebesseg",
+     "cim": "Számot mérésből",
+     "szoveg": "Sebességet, eredményt csak mérve közlünk – a mérés körülményeivel."
+    },
+    {
+     "ikon": "lakat",
+     "cim": "Az adat a tiétek",
+     "szoveg": "Saját szerver, titkosítás, kiléptetés nélküli export – nincs bezártság."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A csapat",
+   "rejtett": true,
+   "sablon": true,
+   "html": "<p>[Kitöltendő: a csapat bemutatása – csak a jóváhagyott adatokkal.]</p>"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Beszélgessünk",
+   "szoveg": "Kérdésed van a rendszerről vagy a bevezetésről? Írj, vagy foglalj időpontot.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

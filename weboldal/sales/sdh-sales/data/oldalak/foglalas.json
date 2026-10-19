@@ -1,0 +1,171 @@
+{
+ "slug": "foglalas",
+ "cim": "Online időpontfoglalás",
+ "szulo": "funkciok",
+ "sorrend": 22,
+ "seo": {
+  "title": "Online időpontfoglalás szervizeknek – {termeknev}",
+  "description": "Online bejelentkezés javításra: az ügyfél a weboldalon választ szabad időpontot, az esemény a naptárba kerül, visszaigazolással.",
+  "kulcsszo": "online időpontfoglalás szerviz"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Online időpontfoglalás szervizeknek",
+   "alcim": "Az ügyfelek a weboldalatokról foglalnak időpontot a naptár szabad helyeire; visszaigazoló e-mail lemondó linkkel, beágyazó kód.",
+   "cimke": "Csapat és idő",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-naptar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Foglalható napok, nyitás, zárás, foglalás hossza, párhuzam"
+    },
+    {
+     "szoveg": "Csak a valóban szabad sávok foglalhatók"
+    },
+    {
+     "szoveg": "Visszaigazolás a cég postafiókjából, lemondó linkkel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A foglalás eseményként kerül a kiválasztott naptárba, az ügyfél visszaigazoló levelet kap lemondó linkkel, a naptár gazdája értesítést. A foglalóoldal önálló címen fut, és beágyazó kóddal a weboldalatok egy oldalán belül is megjelenhet.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Online időpontfoglalás.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Foglalható napok, nyitás, zárás, foglalás hossza, párhuzam",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Csak a valóban szabad sávok foglalhatók",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszaigazolás a cég postafiókjából, lemondó linkkel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Meglévő ügyfélhez a telefonszám köti",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Védelem: csapdamező, időbélyeg, óránként 5 foglalás címenként",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Bekapcsolás",
+     "szoveg": "Beállítások › Online időpontfoglalás: naptár, napok, első időpont, zárás, foglalás hossza."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Levél",
+     "szoveg": "Válaszd a cég postafiókját a visszaigazoló levélhez."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Beágyazás",
+     "szoveg": "A lapfül alján a foglalóoldal címe és a beágyazó kód – linkeld a weboldalatokon."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modulok",
+   "kulcsok": [
+    "foglalas",
+    "naptar"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "naptar",
+    "levelezes",
+    "ugyfelek",
+    "mobil"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Online időpontfoglalás",
+   "kulcsok": [
+    "naptar-foglalas",
+    "foglalas-vedelem",
+    "naptar-modul"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Online időpontfoglalás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

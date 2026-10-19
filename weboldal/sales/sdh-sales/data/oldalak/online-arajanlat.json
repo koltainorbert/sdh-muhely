@@ -1,0 +1,163 @@
+{
+ "slug": "online-arajanlat",
+ "cim": "Online árajánlat-elfogadás",
+ "szulo": "funkciok",
+ "sorrend": 10,
+ "seo": {
+  "title": "Online árajánlat-elfogadás – {termeknev}",
+  "description": "Küldd el a javítás árát az ügyféloldalra: az ügyfél egy gombbal elfogadja vagy elutasítja, te azonnal látod a munkalapon.",
+  "kulcsszo": "online árajánlat elfogadás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Online árajánlat-elfogadás egy gombbal",
+   "alcim": "Az ügyfél az ügyféloldalon fogadja el vagy utasítja el a javítás árát – telefonálás nélkül, magyarul, angolul vagy németül.",
+   "cimke": "Ügyfélkapcsolat",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-sms",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Visszavonás, újraküldés, „azóta változott” jelzés"
+    },
+    {
+     "szoveg": "Egy ajánlatra egy válasz, időbélyeggel, a Változásnaplóban"
+    },
+    {
+     "szoveg": "Elfogadási arány a Riportokban"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A munkalap végösszege egy gombbal megy ki árajánlatként: üzenet a csevegőbe, és ha van e-mail-cím, levél a linkkel. A válasz – Elfogadom vagy Nem kérem, megjegyzéssel – a lapon, olvasatlan üzenetként és e-mailben is megjelenik.</p><p><strong>Hol találod a rendszerben?</strong> Munkalap › Online árajánlat; Beállítások › Online árajánlat.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Visszavonás, újraküldés, „azóta változott” jelzés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Egy ajánlatra egy válasz, időbélyeggel, a Változásnaplóban",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Elfogadási arány a Riportokban",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Lezárt lapról nem küldhető ajánlat",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kikapcsolható, ha nem használjátok",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Tételek",
+     "szoveg": "Vedd fel a szolgáltatásokat és termékeket, és mentsd a lapot."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Küldés",
+     "szoveg": "Online árajánlat csoport › „Árajánlat küldése az ügyfélnek”: a lap mostani végösszege megy ki."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Válasz",
+     "szoveg": "A csoport mutatja: Elfogadta vagy Elutasította, mikor, és az ügyfél megjegyzését."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Start, Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "start",
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "uzenetek"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "rma",
+    "sms",
+    "riportok",
+    "munkalapok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Online árajánlat-elfogadás",
+   "kulcsok": [
+    "online-arajanlat",
+    "ugyfeloldal-rma",
+    "riportok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Online árajánlat-elfogadás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

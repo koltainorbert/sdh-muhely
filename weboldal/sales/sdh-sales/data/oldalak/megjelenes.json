@@ -1,0 +1,148 @@
+{
+ "slug": "megjelenes",
+ "cim": "Megjelenés és arculat",
+ "szulo": "funkciok",
+ "sorrend": 47,
+ "seo": {
+  "title": "Arculat és megjelenés – {termeknev}",
+  "description": "A szerviz rendszere a saját arculatoddal: logó, színek, betűk, sötét és Papír megjelenés, kékfény-szűrő, nyitvatartás-óra.",
+  "kulcsszo": "testre szabható felület"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Saját arculat: logó, színek, sötét és Papír mód",
+   "alcim": "Saját logó, színek, sarkok, betűk – és négy megjelenés: Rendszer, Világos, Sötét, Papír, kékfény-szűrővel.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-ugyfel",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Logó, cégnév, kiemelő szín, lekerekítés, betűtípus"
+    },
+    {
+     "szoveg": "Rendszer / Világos / Sötét / Papír megjelenés"
+    },
+    {
+     "szoveg": "Kékfény-szűrő az esti munkához"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A cég alapértelmezését az adminisztrátor állítja be, a kolléga a saját gépén ettől eltérhet: megjelenés, kékfény-szűrő, üvegszín, betűméret. A fejléc órája a zárásig hátralévő időt is mutatja a nyitvatartás alapján.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Logó és megjelenés; profilmenü.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Logó, cégnév, kiemelő szín, lekerekítés, betűtípus",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Rendszer / Világos / Sötét / Papír megjelenés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kékfény-szűrő az esti munkához",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Betűméret gépenként, területenként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Nyitvatartás és óra a fejlécben",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Cég",
+     "szoveg": "Beállítások › Logó és megjelenés: logó, színek, alapértelmezett megjelenés."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Saját gép",
+     "szoveg": "Profilmenü: Megjelenés, Kékfény-szűrő, Üvegszín, Betűméret."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Óra",
+     "szoveg": "Beállítások › Nyitvatartás és óra."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "belepo-oldal",
+    "mobil",
+    "beallitasok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Megjelenés és arculat",
+   "kulcsok": [
+    "megjelenes-testreszabas",
+    "telefonon-tableten",
+    "bongeszok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Megjelenés és arculat a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

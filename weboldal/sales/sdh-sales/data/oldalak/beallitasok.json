@@ -1,0 +1,150 @@
+{
+ "slug": "beallitasok",
+ "cim": "Beállítások és űrlapok",
+ "szulo": "funkciok",
+ "sorrend": 7,
+ "seo": {
+  "title": "Beállítások és testre szabható űrlapok – {termeknev}",
+  "description": "Állapotok, számozás, gyakori hibák, fizetési módok, nyomtatványok – és a fogaskerék, amellyel minden űrlap a saját munkamódotokra szabható.",
+  "kulcsszo": "testre szabható szerviz szoftver"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Testre szabható beállítások és űrlapok a saját szervizedre",
+   "alcim": "Egyetlen adminfelület témánkénti lapfülekkel – és a fogaskerék minden nagy űrlapon, hogy csak az látszódjon, amit használtok.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Saját állapotlista névvel, színnel és lezáró jelzéssel"
+    },
+    {
+     "szoveg": "Munkalapszám előtagja, kezdőértéke és kitöltése"
+    },
+    {
+     "szoveg": "Fogaskerék: mezők, lapfülek, gombok elrejtése űrlaponként"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A Beállítások külön lapfülön kezelik, amit egy szerviz a saját szokására állít: munkalapszám, állapotok színekkel, gyakori hibák és megjegyzések, fizetési módok. Az űrlapok fogaskerekével az adminisztrátor eldönti, mi látszódjon a munkalapon, a rendelésen, az árukiadáson és a számlán.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Beállítások (csak adminisztrátornak).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Saját állapotlista névvel, színnel és lezáró jelzéssel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Munkalapszám előtagja, kezdőértéke és kitöltése",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fogaskerék: mezők, lapfülek, gombok elrejtése űrlaponként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Mezőmemória: amit egyszer beírtál, felajánlja",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Minden beállítás jelszavas fájlba exportálható",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Lapfül választása",
+     "szoveg": "Menü › Beállítások: témánként egy lapfül, mindegyik külön ment."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Állapotok és számozás",
+     "szoveg": "A Számozás és az Állapotok lapfülön a saját rendetek: előtag, kezdőszám, állapotnevek, színek."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Fogaskerék",
+     "szoveg": "A munkalap jobb felső fogaskerekén kapcsolod ki, ami nem kell – minden kollégánál úgy marad."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "szerepkorok",
+    "megjelenes",
+    "nyomtatas",
+    "modulrendszer"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Beállítások és űrlapok",
+   "kulcsok": [
+    "urlap-testreszabas",
+    "megjelenes-testreszabas",
+    "sajat-nyomtatvany",
+    "export-adatok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Beállítások és űrlapok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

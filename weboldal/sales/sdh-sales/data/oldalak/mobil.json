@@ -1,0 +1,144 @@
+{
+ "slug": "mobil",
+ "cim": "Telefonon és tableten",
+ "szulo": "funkciok",
+ "sorrend": 48,
+ "seo": {
+  "title": "Szerviz program telefonon és tableten – {termeknev}",
+  "description": "Böngészőben futó szerviz program pultgépre, tabletre és telefonra: reszponzív felület, fotó a kamerával, aláírás ujjal.",
+  "kulcsszo": "mobil munkalap"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Telefonon és tableten is használható szerviz program",
+   "alcim": "A rendszer böngészőben fut, telefonon és tableten is: a menü ikonokra szűkül, a popupok kitöltik a képernyőt, a táblázatok oldalra húzhatók.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Böngészőben fut, nincs telepítendő program"
+    },
+    {
+     "szoveg": "60 oldalas bejárás 390 px széles telefonon: 0 hiba (böngészős mérés)"
+    },
+    {
+     "szoveg": "Fotó a kamerával, aláírás érintőképernyőn"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Nem kell telepíteni semmit a gépekre: a pultgép, a műhely tabletje és a telefon ugyanazt a rendszert éri el. Az Átvétel lapfül telefonon a kamerát nyitja a fotóhoz, az aláírás ujjal megy.</p><p><strong>Hol találod a rendszerben?</strong> Bármely böngészőből, a rendszer címén.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Böngészőben fut, nincs telepítendő program",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "60 oldalas bejárás 390 px széles telefonon: 0 hiba (böngészős mérés)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fotó a kamerával, aláírás érintőképernyőn",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Popupok telefonon görgethetők, asztalon egyben",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Belépés",
+     "szoveg": "A telefon böngészőjében nyisd meg a rendszer címét."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Munkalap",
+     "szoveg": "A munkalap telefonon kitölti a képernyőt és görgethető."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Fotó",
+     "szoveg": "Átvétel lapfül › Fotó készítése: a kamera nyílik."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "atvetel-foto-alairas",
+    "megjelenes",
+    "offline",
+    "rma"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Telefonon és tableten",
+   "kulcsok": [
+    "telefonon-tableten",
+    "bongeszok",
+    "atveteli-foto-alairas"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Telefonon és tableten a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

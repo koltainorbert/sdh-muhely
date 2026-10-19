@@ -1,0 +1,28 @@
+{
+ "slug": "kereses",
+ "cim": "Keresés",
+ "sorrend": 94,
+ "seo": {
+  "title": "Keresés – {termeknev}",
+  "description": "Keress a {termeknev} funkciói, moduljai, gyakori kérdései, tudásbázisa és blogcikkei között.",
+  "kulcsszo": "keresés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Keresés",
+   "alcim": "Funkciók, modulok, kérdések, tudásbázis és blog – egy keresőben. Tipp: bárhol megnyomhatod a „/” billentyűt.",
+   "cimke": "Keresés",
+   "gomb": {
+    "szoveg": "GYIK",
+    "url": "/gyik/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "kereso",
+   "cim": "Mit keresel?",
+   "helyorzo": "Például: IMEI, kasszazárás, Számlázz.hu"
+  }
+ ]
+}

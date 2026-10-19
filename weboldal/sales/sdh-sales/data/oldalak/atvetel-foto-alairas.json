@@ -1,0 +1,164 @@
+{
+ "slug": "atvetel-foto-alairas",
+ "cim": "Átvételi fotó és aláírás",
+ "szulo": "funkciok",
+ "sorrend": 49,
+ "seo": {
+  "title": "Átvételi fotó és aláírás munkalapon – {termeknev}",
+  "description": "Átvételi elismervény javításra fotóval és aláírással: a készülék állapota rögzítve, az ügyfél érintőképernyőn ír alá.",
+  "kulcsszo": "átvételi elismervény javítás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Átvételi fotó és ügyfél-aláírás a munkalapon",
+   "alcim": "A munkalap Átvétel lapfülén fotó a készülék állapotáról és az ügyfél aláírása érintőképernyőn – az átvételi elismervényen is.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Fotó a kamerával vagy fájlból, behúzással"
+    },
+    {
+     "szoveg": "Aláírás érintőképernyőn, az aláíró nevével"
+    },
+    {
+     "szoveg": "Az átvételi elismervényen legfeljebb 4 bélyegkép"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Telefonon vagy tableten a „Fotó készítése” gomb a kamerát nyitja: a karcok, repedések rögzítve vannak, mielőtt hozzányúlnátok a készülékhez. Az ügyfél ujjal vagy tollal aláír; az aláírás és az első négy fotó az átvételi nyomtatványra is rákerül.</p><p><strong>Hol találod a rendszerben?</strong> Munkalap › Átvétel lapfül.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Fotó a kamerával vagy fájlból, behúzással",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Aláírás érintőképernyőn, az aláíró nevével",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az átvételi elismervényen legfeljebb 4 bélyegkép",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az aláírás a Változásnaplóba is bekerül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Vitás esetben bizonyíték az átvételkori állapotról",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Átvétel lapfül",
+     "szoveg": "Nyisd meg a munkalap Átvétel lapfülét."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Fotó",
+     "szoveg": "„Fotó készítése” vagy „+ Fájl hozzáadása”."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Aláírás",
+     "szoveg": "Az ügyfél aláír a keretben, beírod a nevét, és mented a lapot."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Eladásnál (árukiadás, rendelés) nincs Átvétel lapfül.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "munkalapok",
+    "nyomtatas",
+    "javitasi-garancia",
+    "mobil"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "szerviz",
+    "egeszsegugy"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Átvételi fotó és aláírás",
+   "kulcsok": [
+    "atveteli-foto-alairas",
+    "javitasi-garancia",
+    "nyomtatvanyok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Átvételi fotó és aláírás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

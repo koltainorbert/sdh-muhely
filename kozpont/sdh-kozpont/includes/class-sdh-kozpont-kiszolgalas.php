@@ -12,7 +12,12 @@
  * - POST `kiszolgalas` {adat: base64(json), alairas: base64(Ed25519)} – az értékesítő webhely kulcsával aláírva
  *   (Beállítások › Értékesítő webhely), időbélyeg ±300 mp, egyszer használható `nonce` (10 perc), opcionális IP-lista.
  *   Hibás kérésre 401, részletek nélkül. A válasz a Központ kulcsával aláírva (`SDH_Kozpont::alair()`).
- * - GET `letoltes?t=<token>` – a licenc csatornájának aktuális kiadása (mint a `csomag`), 14 napig, legfeljebb 3-szor.
+ * - GET `letoltes?t=<token>` – a licenc csatornájának aktuális kiadása (mint a `csomag`), 14 napig, legfeljebb 3-szor,
+ *   semleges fájlnévvel (`<termeknev-slug>-<verzio>.zip`, a Központ „termek_nev” beállításából).
+ *   A vevő linkje: `<webhely>/licenc/letoltes/?t=<token>` (sima permalinknél `<webhely>/?licenc_letoltes=<token>`) – nincs
+ *   benne REST-előtag, „rest_route” vagy „sdh”.
+ * Mindkét végpont két névtérben él: `sdh-kozpont/v1` (a meglévő példányoknak) és a semleges `licenc/v1` – a vevő ezt látja
+ * (REJTES.md: a kimenetben nem lehet „sdh”). A hibakódok is semlegesek.
  *
  * @package SDH_Kozpont
  */
@@ -37,9 +42,17 @@ final class SDH_Kozpont_Kiszolgalas
 
     private const KI = 'Értékesítés';
 
+    /** A vevőnek látszó, semleges REST-névtér (a régi `sdh-kozpont/v1` mellett). */
+    public const NS_SEMLEGES = 'licenc/v1';
+
+    /** A vevőnek küldött letöltő link útvonala és lekérdezés-paramétere (semleges, a REST-előtagtól független). */
+    public const LETOLTES_UT    = 'licenc/letoltes';
+    public const LETOLTES_PARAM = 'licenc_letoltes';
+
     public static function init(): void
     {
         add_action('rest_api_init', [self::class, 'utvonalak']);
+        add_filter('do_parse_request', [self::class, 'kozvetlen_letoltes'], 1, 2);
         add_action(SDH_Kozpont::CRON, [self::class, 'takarit']);
     }
 
@@ -179,17 +192,28 @@ final class SDH_Kozpont_Kiszolgalas
 
     public static function utvonalak(): void
     {
-        register_rest_route(SDH_Kozpont::NS, '/kiszolgalas', [
-            'methods'             => 'POST',
-            'permission_callback' => '__return_true',
-            'callback'            => [self::class, 'rest_kiszolgalas'],
-        ]);
+        foreach ([SDH_Kozpont::NS, self::NS_SEMLEGES] as $ns) {
+            register_rest_route($ns, '/kiszolgalas', [
+                'methods'             => 'POST',
+                'permission_callback' => '__return_true',
+                'callback'            => [self::class, 'rest_kiszolgalas'],
+            ]);
 
-        register_rest_route(SDH_Kozpont::NS, '/letoltes', [
-            'methods'             => 'GET',
-            'permission_callback' => '__return_true',
-            'callback'            => [self::class, 'rest_letoltes'],
-        ]);
+            register_rest_route($ns, '/letoltes', [
+                'methods'             => 'GET',
+                'permission_callback' => '__return_true',
+                'callback'            => [self::class, 'rest_letoltes'],
+            ]);
+        }
+    }
+
+    /** A letöltött csomag semleges neve: `<termeknev-slug>-<verzio>.zip` (alapból `telepito-<verzio>.zip`). */
+    public static function fajlnev(string $verzio): string
+    {
+        $slug = sanitize_title(remove_accents(SDH_Kozpont::termek_nev()));
+        $slug = $slug !== '' && stripos($slug, 'sdh') === false ? $slug : 'telepito';
+
+        return $slug . '-' . (preg_replace('/[^0-9.]/', '', $verzio) ?: '0') . '.zip';
     }
 
     /** @return WP_REST_Response|WP_Error */
@@ -202,7 +226,7 @@ final class SDH_Kozpont_Kiszolgalas
         if (is_string($ok)) {
             self::elutasit_naplo($ok);
 
-            return new WP_Error('sdh_kozpont_tiltva', 'Nem engedélyezett kérés.', ['status' => 401]);
+            return new WP_Error('tiltva', 'Nem engedélyezett kérés.', ['status' => 401]);
         }
 
         $valasz = self::feldolgoz($ok);
@@ -725,7 +749,80 @@ final class SDH_Kozpont_Kiszolgalas
             'letrehozva' => gmdate('Y-m-d H:i:s', $most),
         ]);
 
-        return add_query_arg('t', $token, rest_url(SDH_Kozpont::NS . '/letoltes'));
+        return self::letoltes_url($token);
+    }
+
+    /** A vevőnek küldött letöltő cím a tokenhez. */
+    public static function letoltes_url(string $token): string
+    {
+        if ((string) get_option('permalink_structure') !== '') {
+            return add_query_arg('t', $token, home_url('/' . self::LETOLTES_UT . '/'));
+        }
+
+        return add_query_arg(self::LETOLTES_PARAM, $token, home_url('/'));
+    }
+
+    /**
+     * A kérés a semleges letöltő címre szól-e; ha igen, a token (különben null).
+     *
+     * @param array<string, mixed> $get
+     */
+    public static function letoltes_token_keresbol(string $uri, array $get): ?string
+    {
+        if (isset($get[self::LETOLTES_PARAM]) && is_string($get[self::LETOLTES_PARAM])) {
+            return $get[self::LETOLTES_PARAM];
+        }
+
+        $ut   = (string) wp_parse_url($uri, PHP_URL_PATH);
+        $alap = untrailingslashit((string) wp_parse_url(home_url('/'), PHP_URL_PATH));
+
+        if (untrailingslashit($ut) === $alap . '/' . self::LETOLTES_UT) {
+            return isset($get['t']) && is_string($get['t']) ? $get['t'] : '';
+        }
+
+        return null;
+    }
+
+    /**
+     * `do_parse_request`: a semleges letöltő cím kiszolgálása a WordPress útválasztása előtt.
+     *
+     * @param bool  $folytat
+     * @param mixed $wp
+     */
+    public static function kozvetlen_letoltes($folytat, $wp = null)
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a token maga az azonosító.
+        $t = self::letoltes_token_keresbol((string) ($_SERVER['REQUEST_URI'] ?? ''), wp_unslash($_GET));
+
+        if ($t === null) {
+            return $folytat;
+        }
+
+        $e = self::letoltes_ellenoriz($t);
+
+        if (is_string($e)) {
+            nocache_headers();
+            status_header(410);
+            header('Content-Type: text/html; charset=utf-8');
+            header('X-Robots-Tag: noindex');
+            echo '<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Letöltés</title></head>'
+                . '<body style="font-family:system-ui,sans-serif;max-width:560px;margin:15vh auto;padding:0 16px;line-height:1.6"><h1 style="font-size:22px">A letöltés nem érhető el</h1><p>' . esc_html($e) . '</p></body></html>';
+            exit;
+        }
+
+        self::kuld_fajl($e);
+    }
+
+    /** @param array{fajl: string, verzio: string} $e */
+    private static function kuld_fajl(array $e): void
+    {
+        nocache_headers();
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . self::fajlnev($e['verzio']) . '"');
+        header('Content-Length: ' . (string) filesize($e['fajl']));
+        header('X-Robots-Tag: noindex');
+        readfile($e['fajl']); // phpcs:ignore WordPress.WP.AlternativeFunctions
+        exit;
     }
 
     /**
@@ -784,16 +881,10 @@ final class SDH_Kozpont_Kiszolgalas
         $e = self::letoltes_ellenoriz((string) $r->get_param('t'));
 
         if (is_string($e)) {
-            return new WP_Error('sdh_kozpont_letoltes', $e, ['status' => 410]);
+            return new WP_Error('letoltes', $e, ['status' => 410]);
         }
 
-        nocache_headers();
-        header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="sdh-muhely-' . preg_replace('/[^0-9.]/', '', $e['verzio']) . '.zip"');
-        header('Content-Length: ' . (string) filesize($e['fajl']));
-        header('X-Robots-Tag: noindex');
-        readfile($e['fajl']); // phpcs:ignore WordPress.WP.AlternativeFunctions
-        exit;
+        self::kuld_fajl($e);
     }
 
     /* =================================================================

@@ -1,0 +1,147 @@
+{
+ "slug": "funkciok",
+ "cim": "Funkciók",
+ "sorrend": 10,
+ "seo": {
+  "title": "Szerviz szoftver funkciói – {termeknev}",
+  "description": "Munkalap, ügyfél- és eszköznyilvántartás, raktár, pénztár, Számlázz.hu, SMS, RMA, AI-asszisztens: a {termeknev} összes funkciója egy helyen.",
+  "kulcsszo": "szerviz szoftver"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz szoftver funkciói: munkalaptól a számláig",
+   "alcim": "Minden, amit egy javítóműhely naponta csinál – egy rendszerben. 50 funkció, csoportonként; mindegyikről külön oldal, lépésekkel.",
+   "cimke": "Funkciók",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "hero",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "17 külön kapcsolható modul"
+    },
+    {
+     "szoveg": "Alaprendszer minden csomagban"
+    },
+    {
+     "szoveg": "Magyar felület és súgó"
+    }
+   ]
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Napi munka",
+   "alcim": "Munkalap, ügyfél, eszköz, szolgáltatás – a pult és a műhely alapjai.",
+   "csoport": "Napi munka",
+   "horgony": "napi-munka",
+   "hatter": ""
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Ügyfélkapcsolat",
+   "alcim": "Követés QR-kóddal, árajánlat, SMS, e-mail, elégedettség.",
+   "csoport": "Ügyfélkapcsolat",
+   "horgony": "ugyfelkapcsolat",
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Értékesítés és raktár",
+   "alcim": "Termékek, készlet, foglalás, pultos eladás, rendelések.",
+   "csoport": "Értékesítés és raktár",
+   "horgony": "ertekesites-es-raktar",
+   "hatter": ""
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Pénzügy",
+   "alcim": "Házipénztár, Számlázz.hu-számla, riportok.",
+   "csoport": "Pénzügy",
+   "horgony": "penzugy",
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Csapat és idő",
+   "alcim": "Naptár, online foglalás, belső üzenetek.",
+   "csoport": "Csapat és idő",
+   "horgony": "csapat-es-ido",
+   "hatter": ""
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Dokumentumok és készülékadatok",
+   "alcim": "Nyomtatványok, címkék, IMEI, mockupok, e-mail.",
+   "csoport": "Dokumentumok és készülékadatok",
+   "horgony": "dokumentumok-es-keszulekadatok",
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Mesterséges intelligencia",
+   "alcim": "Asszisztens, amely csak jóváhagyással módosít.",
+   "csoport": "Mesterséges intelligencia",
+   "horgony": "mesterseges-intelligencia",
+   "hatter": ""
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Biztonság és adatvédelem",
+   "alcim": "Belépés, jogok, titkosítás, napló, GDPR.",
+   "csoport": "Biztonság és adatvédelem",
+   "horgony": "biztonsag-es-adatvedelem",
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Üzemeltetés",
+   "alcim": "Mentés, frissítés, licenc, sebesség, offline működés, átállás.",
+   "csoport": "Üzemeltetés",
+   "horgony": "uzemeltetes",
+   "hatter": ""
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A modulok egy pillantásra",
+   "alcim": "A funkciók modulokba rendezve – csak azt kapcsold be, amit használsz.",
+   "csoportositva": true,
+   "gomb": {
+    "szoveg": "Modulok és árak",
+    "url": "/modulok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "alaprendszer-mi-van-benne",
+    "melyik-csomag-kell",
+    "modul-utolag",
+    "integraciok-listaja",
+    "mire-nem-valo"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézd meg élőben",
+   "szoveg": "A demó a teljes rendszert mutatja mintaadatokkal – regisztráció nélkül.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

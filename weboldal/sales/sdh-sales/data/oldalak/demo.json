@@ -1,0 +1,103 @@
+{
+ "slug": "demo",
+ "cim": "Demó",
+ "sorrend": 5,
+ "seo": {
+  "title": "Szerviz program kipróbálása: demó – {termeknev}",
+  "description": "Próbáld ki a {termeknev} szerviz programot 10 000 mintarekorddal, regisztráció nélkül. Munkalap, raktár, pénztár, RMA – azonnal.",
+  "kulcsszo": "szerviz program kipróbálás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Próbáld ki a szerviz programot: demó 10 000 mintarekorddal",
+   "alcim": "Saját próbapéldány egy kattintással, regisztráció nélkül. Minden modul be van kapcsolva, a mintaadatok kitaláltak.",
+   "cimke": "Ingyenes demó",
+   "gomb": {
+    "szoveg": "Demó indítása",
+    "url": "#indit"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "demo_inditas",
+   "cim": "Indítsd el a saját demódat",
+   "alcim": "Pár másodperc, és belépsz egy kitöltött rendszerbe.",
+   "gomb_szoveg": "Demó indítása",
+   "horgony": "indit"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Mit érdemes kipróbálni?",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "munkalap",
+     "cim": "Új munkalap 2 perc alatt",
+     "szoveg": "Ügyfél, készülék, hiba, előleg – és nézd meg a munkalapszámot.",
+     "url": "/funkciok/munkalapok/"
+    },
+    {
+     "ikon": "kereso",
+     "cim": "Okos kereső",
+     "szoveg": "Írj be egy IMEI-t vagy telefonszámot a fejléc keresőjébe.",
+     "url": "/funkciok/okos-kereso/"
+    },
+    {
+     "ikon": "vonalkod",
+     "cim": "Ügyféloldal",
+     "szoveg": "Nyisd meg egy munkalap RMA lapfülén az ügyféloldalt, és üzenj.",
+     "url": "/funkciok/rma/"
+    },
+    {
+     "ikon": "raktar",
+     "cim": "Rendelési javaslat",
+     "szoveg": "Termékek › Rendelési javaslat: mit kell rendelni beszállítónként.",
+     "url": "/funkciok/raktar/"
+    },
+    {
+     "ikon": "kassza",
+     "cim": "Kasszazárás",
+     "szoveg": "Pénztár › KP – kassza: számold meg a címleteket, és zárd a napot.",
+     "url": "/funkciok/hazipenztar/"
+    },
+    {
+     "ikon": "riport",
+     "cim": "Riportok és napló",
+     "szoveg": "Átfutás technikusonként, és a Napló: ki mit módosított.",
+     "url": "/funkciok/riportok/"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A demó korlátai",
+   "szelesseg": "keskeny",
+   "html": "<ul><li><strong>Legfeljebb 10 új rekord</strong> hozható létre IP-címenként 24 óránként.</li><li><strong>Éjszakánként visszaáll</strong> az eredeti mintaadatokra – amit felviszel, másnap eltűnik.</li><li><strong>Nincs valódi SMS, e-mail és számla:</strong> a küldés csak szimuláció, a Számlázz.hu nincs bekötve.</li><li>A mintaadatok kitaláltak; valódi személyes adatot ne írj be.</li></ul><p>A részletes feltételek: <a href=\"/jogi/demo-feltetelek/\">Demó-feltételek</a>.</p>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Kérdések a demóról",
+   "kategoria": "demo"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Tetszik? Nézzük meg együtt",
+   "szoveg": "Egy bemutatón a saját munkafolyamatodon megyünk végig, és megválaszoljuk a telepítéssel, árral kapcsolatos kérdéseket.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   }
+  }
+ ]
+}

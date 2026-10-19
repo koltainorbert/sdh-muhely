@@ -1,0 +1,64 @@
+/* Üveg (glassmorphism) és neon díszítés – nem kritikus, a kritikus váz fölé. */
+
+.s-uveg {
+    position: relative;
+    background: var(--s-uveg-tomor);
+    border: 1px solid var(--s-uveg-keret);
+    border-radius: var(--s-r-kartya);
+    box-shadow: var(--s-arnyek);
+}
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .s-uveg {
+        background: var(--s-uveg);
+        -webkit-backdrop-filter: blur(var(--s-uveg-blur)) saturate(var(--s-uveg-szaturacio));
+        backdrop-filter: blur(var(--s-uveg-blur)) saturate(var(--s-uveg-szaturacio));
+    }
+}
+.s-uveg::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: var(--s-uveg-feny);
+    pointer-events: none;
+}
+.s-panel { padding: clamp(var(--s-t-5), 3vw, var(--s-t-7)); }
+
+/* Neon: kiemelt kártya, ragyogó szegély, átmenetes szöveg */
+.s-neon-keret { box-shadow: var(--s-ragyogas-neon); border-color: transparent; }
+.s-atmenet-szoveg {
+    background: var(--s-atmenet-szoveg);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+}
+.s-hero__cim em, .s-szekcio__cim em {
+    font-style: normal;
+    background: var(--s-atmenet-szoveg);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+}
+
+/* A hero háttérrácsa (díszítés) */
+.s-hero::after {
+    content: "";
+    position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background-image:
+        linear-gradient(var(--s-racs-vonal) 1px, transparent 1px),
+        linear-gradient(90deg, var(--s-racs-vonal) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 30%, transparent 75%);
+}
+.s-hero__kep { box-shadow: var(--s-arnyek-emelt); }
+
+/* Ikondoboz neon fénye hoverre */
+.s-kartya:hover .s-ikondoboz { box-shadow: var(--s-ragyogas-neon); }
+
+/* Görgetésre megjelenés (csak JS mellett és ha a mozgás engedett; a tartalom JS nélkül is látszik) */
+@media (prefers-reduced-motion: no-preference) {
+    .js .s-belep { opacity: 0; transform: translateY(var(--s-elmozdulas)); transition: opacity var(--s-ido-belepes) var(--s-gorbe), transform var(--s-ido-belepes) var(--s-gorbe); }
+    .js .s-belep.s-latszik { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .s-uveg { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--s-uveg-tomor); }
+}

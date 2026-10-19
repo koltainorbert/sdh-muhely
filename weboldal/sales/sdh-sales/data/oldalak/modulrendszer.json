@@ -1,0 +1,158 @@
+{
+ "slug": "modulrendszer",
+ "cim": "Moduláris felépítés",
+ "szulo": "funkciok",
+ "sorrend": 46,
+ "seo": {
+  "title": "Moduláris szerviz szoftver – {termeknev}",
+  "description": "Moduláris szerviz szoftver 17 kapcsolható modullal: raktár, pénztár, Számlázz.hu, SMS, naptár, AI – később is bővíthető.",
+  "kulcsszo": "moduláris szerviz szoftver"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Moduláris szerviz szoftver: csak azt fizesd, amit használsz",
+   "alcim": "17 külön kapcsolható modul: a rendszer csak azt mutatja, amit használtok, és a licenc csak a megvett modulokat engedélyezi.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-licenc",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "17 modul: értékesítés, pénzügy, ügyfélkapcsolat, csapat, AI, dokumentumok"
+    },
+    {
+     "szoveg": "Kikapcsolva az adat megmarad"
+    },
+    {
+     "szoveg": "Függőségek kezelve (például az SMS az Ügyfélüzenetekre épül)"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az alaprendszer (Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés) mindig fut; a többi modul egyenként kapcsolható. A kikapcsolt modul eltűnik a menüből, a csempékből, a Beállításokból és a súgóból – az adatai megmaradnak, visszakapcsolva ott folytatódik.</p><p><strong>Hol találod a rendszerben?</strong> Az üzemeltető Modulok oldala; a licenc szerint.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "17 modul: értékesítés, pénzügy, ügyfélkapcsolat, csapat, AI, dokumentumok",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kikapcsolva az adat megmarad",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Függőségek kezelve (például az SMS az Ügyfélüzenetekre épül)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bővítés később, újratelepítés nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Egyedi modul is fejleszthető",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Csomag",
+     "szoveg": "Válaszd ki a csomagot és a hozzá kért modulokat az Árak oldalon."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Licenc",
+     "szoveg": "A licenc a megvett modulokat engedélyezi; a többi szürke."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Bővítés",
+     "szoveg": "Új modul a fiókodból rendelhető, az adataid maradnak."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "beallitasok",
+    "licenc-karbantartas",
+    "szerepkorok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kkv",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Moduláris felépítés",
+   "kulcsok": [
+    "alaprendszer-mi-van-benne",
+    "melyik-csomag-kell",
+    "modul-utolag",
+    "modul-kikapcsolas-adat"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Moduláris felépítés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

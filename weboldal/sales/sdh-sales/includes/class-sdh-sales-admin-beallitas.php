@@ -96,7 +96,7 @@ final class SDH_Sales_Admin_Beallitas
                 $f('szamlazz.automatikus', 'kapcsolo', 'Sikeres fizetés után a végszámla magától megy', ['fel' => true]),
                 $f('szamlazz.elotag', 'szoveg', 'Számlaszám-előtag', ['max' => 20, 'fel' => true]),
             ]],
-            'kozpont' => ['SDH Központ', 'kozpont', 'A licencek kiszolgálása. „Helyi”: a Központ ezen a webhelyen fut.', [
+            'kozpont' => ['Licencszerver (Központ)', 'kozpont', 'A licencek kiszolgálása. „Helyi”: a Központ ezen a webhelyen fut.', [
                 $f('kozpont.mod', 'valaszto', 'Kapcsolat módja', ['o' => ['helyi' => 'Helyi (ugyanez a webhely)', 'tavoli' => 'Távoli (aláírt kérés)'], 'fel' => true]),
                 $f('kozpont.url', 'url', 'A Központ címe (távoli módban)', ['fel' => true]),
                 $f('kozpont.nyilvanos', 'hosszu', 'A Központ nyilvános kulcsa (első kapcsolódáskor rögzül)', ['max' => 200]),
@@ -111,6 +111,13 @@ final class SDH_Sales_Admin_Beallitas
                 $f('szikra.napi_keret', 'szam', 'Napi keret (kérdés / látogató)', ['min' => 0, 'max' => 1000, 'fel' => true]),
                 $f('szikra.havi_keret_usd', 'szam', 'Havi költségkeret (USD)', ['min' => 0, 'max' => 100000, 'fel' => true]),
                 $f('szikra_kulcs', 'titok', 'Anthropic API-kulcs'),
+            ]],
+            'rejtes' => ['Rejtés', 'pajzs', 'A látogató semmiből nem tudhatja meg, mire épül a webhely. A belépési cím vagy az API-előtag módosítása után az új címet használd (a régi 404-et ad).', [
+                $f('rejtes.aktiv', 'kapcsolo', 'Rejtés bekapcsolva (főkapcsoló)', ['fel' => true, 'alap' => true]),
+                $f('rejtes.kimenet', 'kapcsolo', 'Kimeneti szűrő: a megmaradt nyomok cseréje (utolsó védvonal)', ['fel' => true, 'alap' => true]),
+                $f('rejtes.alias', 'kapcsolo', 'Semleges fájlútvonalak (/static/, /media/, /lib/)', ['fel' => true, 'alap' => true, 's' => 'A webszerveren is kell szabály (üzemeltetési leírás).']),
+                $f('rejtes.belepo', 'szoveg', 'Titkos belépési cím', ['max' => 60, 'fel' => true, 's' => 'Kisbetű, szám, kötőjel, legalább 8 karakter; üresen állandó, véletlen cím. Most: ' . (class_exists('SDH_Sales_Rejtes') ? home_url('/' . SDH_Sales_Rejtes::belepo_szelet() . '/') : '') . ' – jegyezd fel!']),
+                $f('rejtes.api', 'szoveg', 'API-előtag', ['max' => 30, 'fel' => true, 'alap' => 'api', 's' => 'Az API címe: ' . home_url('/') . '<előtag>/…']),
             ]],
             'turnstile' => ['Turnstile (robotszűrő)', 'pajzs', 'A Cloudflare Turnstile védi az űrlapokat.', [
                 $f('turnstile.aktiv', 'kapcsolo', 'Turnstile bekapcsolva', ['fel' => true]),
@@ -133,6 +140,7 @@ final class SDH_Sales_Admin_Beallitas
             ['cim' => 'Új saját kulcspár', 'ut' => '/admin/kozpont/kulcspar_uj', 'ketlepcsos' => 'Biztos? A Központban is cserélni kell'],
         ];
         $ki['szamlazz']['muveletek'] = [['cim' => 'Kapcsolat próbája', 'ut' => '/admin/szamlazz/proba']];
+        $ki['rejtes']['muveletek']   = [['cim' => 'Ellenőrzés most (kívülről nézve)', 'ut' => '/admin/rejtes/ellenoriz', 'lista' => true]];
 
         $ki  = (array) apply_filters('sdh_sales_admin_beallitas_csoportok', $ki);
         $out = [];
@@ -168,7 +176,7 @@ final class SDH_Sales_Admin_Beallitas
      * Csoport-műveletek (gombok): [{cim, ut (/admin/…), ketlepcsos?}] – csak a regisztrált admin-végpontok maradnak.
      *
      * @param array<int, mixed> $m
-     * @return array<int, array<string, string>>
+     * @return array<int, array<string, mixed>>
      */
     private static function muveletek(array $m): array
     {
@@ -177,7 +185,7 @@ final class SDH_Sales_Admin_Beallitas
 
         foreach ($m as $x) {
             if (is_array($x) && !empty($x['cim']) && in_array((string) ($x['ut'] ?? ''), $utak, true)) {
-                $ki[] = ['cim' => (string) $x['cim'], 'ut' => (string) $x['ut'], 'ketlepcsos' => (string) ($x['ketlepcsos'] ?? '')];
+                $ki[] = ['cim' => (string) $x['cim'], 'ut' => (string) $x['ut'], 'ketlepcsos' => (string) ($x['ketlepcsos'] ?? ''), 'lista' => !empty($x['lista'])];
             }
         }
 
@@ -336,13 +344,62 @@ final class SDH_Sales_Admin_Beallitas
             $uj[$k] = $t;
         }
 
+        $hibak = array_merge($hibak, self::rejtes_ellenoriz($uj));
+
         if ($hibak !== []) {
-            return new WP_Error('sdh_ervenytelen', implode(' ', $hibak), ['status' => 422]);
+            return new WP_Error('ervenytelen', implode(' ', $hibak), ['status' => 422]);
+        }
+
+        $cimvaltas = false;
+
+        foreach (['rejtes.belepo', 'rejtes.api'] as $k) {
+            if (array_key_exists($k, $uj) && (string) $uj[$k] !== (string) SDH_Sales::b($k, $k === 'rejtes.api' ? 'api' : '')) {
+                $cimvaltas = true;
+            }
         }
 
         SDH_Sales::b_ment($uj);
 
+        if ($cimvaltas) {
+            // Az átírási szabályokat a Rejtés modul építi újra (sdh_sales_beallitas_mentve); itt csak jelezzük.
+            do_action('sdh_sales_rejtes_valtozott');
+        }
+
         return self::r_beallitasok();
+    }
+
+    /**
+     * A Rejtés-címek ellenőrzése (a már tisztított értékeken).
+     *
+     * @param array<string, mixed> $uj
+     * @return array<int, string>
+     */
+    public static function rejtes_ellenoriz(array $uj): array
+    {
+        $h       = [];
+        $foglalt = ['wp-admin', 'wp-login', 'wp-json', 'wp-content', 'wp-includes', 'admin', 'login', 'belepes', 'api', 'feed', 'xmlrpc', 'kosar', 'penztar', 'fiok', 'blog'];
+
+        if (array_key_exists('rejtes.belepo', $uj)) {
+            $b = (string) $uj['rejtes.belepo'];
+
+            if ($b !== '' && (preg_match('/^[a-z0-9][a-z0-9-]{7,59}$/', $b) !== 1 || in_array($b, $foglalt, true) || strpos($b, 'wp') === 0)) {
+                $h[] = 'A titkos belépési cím legalább 8 karakter (kisbetű, szám, kötőjel), és nem lehet foglalt vagy „wp” kezdetű.';
+            } elseif ($b !== '' && get_page_by_path($b)) {
+                $h[] = 'Ilyen című oldal már van – válassz másik belépési címet.';
+            }
+        }
+
+        if (array_key_exists('rejtes.api', $uj)) {
+            $a = (string) $uj['rejtes.api'];
+
+            if (preg_match('/^[a-z][a-z0-9-]{1,29}$/', $a) !== 1 || strpos($a, 'wp') === 0) {
+                $h[] = 'Az API-előtag 2–30 karakter (kisbetűvel kezdődik; kisbetű, szám, kötőjel), és nem kezdődhet „wp”-vel.';
+            } elseif (isset($uj['rejtes.belepo']) && $uj['rejtes.belepo'] === $a) {
+                $h[] = 'Az API-előtag és a belépési cím nem lehet ugyanaz.';
+            }
+        }
+
+        return $h;
     }
 
     /** Titok beállítása / törlése (`ertek` üres = törlés). A válasz soha nem tartalmazza az értéket. */
@@ -358,7 +415,7 @@ final class SDH_Sales_Admin_Beallitas
         $v = trim((string) $r->get_param('ertek'));
 
         if (strlen($v) > 4000 || preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', $v) === 1) {
-            return SDH_Sales_Rest::hiba('Érvénytelen érték.', 422, 'sdh_ervenytelen');
+            return SDH_Sales_Rest::hiba('Érvénytelen érték.', 422, 'ervenytelen');
         }
 
         SDH_Sales::titkos_ment($k, $v);
@@ -380,7 +437,7 @@ final class SDH_Sales_Admin_Beallitas
         $e = SDH_Sales_Arculat::ment((array) $r->get_json_params());
 
         if ($e['hibas'] !== []) {
-            return new WP_Error('sdh_ervenytelen', 'Érvénytelen érték: ' . implode(', ', $e['hibas']) . '. A többi mentve.', ['status' => 422, 'hibas' => $e['hibas']]);
+            return new WP_Error('ervenytelen', 'Érvénytelen érték: ' . implode(', ', $e['hibas']) . '. A többi mentve.', ['status' => 422, 'hibas' => $e['hibas']]);
         }
 
         return self::r_arculat();
@@ -394,13 +451,13 @@ final class SDH_Sales_Admin_Beallitas
 
         set_transient('sdh_sales_arculat_elo_' . $token, ['user' => get_current_user_id(), 'terkep' => $terkep, 'mod' => in_array($mod, ['sotet', 'vilagos'], true) ? $mod : ''], 15 * MINUTE_IN_SECONDS);
 
-        return new WP_REST_Response(['url' => add_query_arg('sdh_arculat', $token, home_url('/')), 'css' => SDH_Sales_Arculat::css($terkep)], 200);
+        return new WP_REST_Response(['url' => add_query_arg('arculat_elonezet', $token, home_url('/')), 'css' => SDH_Sales_Arculat::css($terkep)], 200);
     }
 
     public static function arculat_elonezet_indit(): void
     {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a token a jogosítvány (+ bejelentkezett admin).
-        $t = isset($_GET['sdh_arculat']) ? preg_replace('/[^a-z0-9]/', '', strtolower((string) wp_unslash($_GET['sdh_arculat']))) : '';
+        $t = isset($_GET['arculat_elonezet']) ? preg_replace('/[^a-z0-9]/', '', strtolower((string) wp_unslash($_GET['arculat_elonezet']))) : '';
 
         if ($t === '' || strlen((string) $t) !== 32) {
             return;
@@ -437,7 +494,7 @@ final class SDH_Sales_Admin_Beallitas
         SDH_Sales_Naplo::ir('export', 'Export letöltve (' . count($e['tartalom']) . ' tartalomelem, ' . count($e['oldalak']) . ' oldal).', 'info');
 
         $v = new WP_REST_Response($e, 200);
-        $v->header('Content-Disposition', 'attachment; filename="sdh-sales-export-' . gmdate('Ymd-His') . '.json"');
+        $v->header('Content-Disposition', 'attachment; filename="portal-export-' . gmdate('Ymd-His') . '.json"');
 
         return $v;
     }
@@ -468,7 +525,7 @@ final class SDH_Sales_Admin_Beallitas
         $e = SDH_Sales_Exportimport::import(self::csomag($r));
 
         if (empty($e['ok'])) {
-            return new WP_Error('sdh_import', implode(' ', (array) $e['hibak']), ['status' => 422]);
+            return new WP_Error('import_hiba', implode(' ', (array) $e['hibak']), ['status' => 422]);
         }
 
         return new WP_REST_Response($e, 200);
@@ -483,6 +540,6 @@ final class SDH_Sales_Admin_Beallitas
     {
         $m = SDH_Sales_Exportimport::mentes((string) $r->get_param('nev'));
 
-        return $m === null ? SDH_Sales_Rest::hiba('Nincs ilyen mentés.', 404, 'sdh_nincs') : new WP_REST_Response($m, 200);
+        return $m === null ? SDH_Sales_Rest::hiba('Nincs ilyen mentés.', 404, 'nincs') : new WP_REST_Response($m, 200);
     }
 }

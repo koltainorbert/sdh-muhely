@@ -65,7 +65,7 @@ A szervizben vannak adatok, amelyeknek semmi keresnivalójuk egy AI-szolgáltat�
 - jelszavak,
 - API-kulcsok.
 
-A {termeknev} asszisztense ezeket nem látja. Az adminisztrátor ezen felül egyenként kikapcsolhatja az asszisztens eszközeit (például ha nem szeretnéd, hogy a pénztárhoz hozzáférjen), vagy az egész modult.
+A mi asszisztensünk ezeket nem látja. Az adminisztrátor ezen felül egyenként kikapcsolhatja az asszisztens eszközeit (például ha nem szeretnéd, hogy a pénztárhoz hozzáférjen), vagy az egész modult.
 
 ## Adatvédelem
 

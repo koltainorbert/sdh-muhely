@@ -1,0 +1,172 @@
+{
+ "slug": "rendelesek",
+ "cim": "Rendelések",
+ "szulo": "funkciok",
+ "sorrend": 17,
+ "seo": {
+  "title": "Ügyfélrendelések nyilvántartása – {termeknev}",
+  "description": "Ügyfélnek rendelt alkatrész és áru nyomon követése: beszállító, várható érkezés, előleg, és értesítés egy gombbal, ha megjött.",
+  "kulcsszo": "ügyfél rendelés nyilvántartás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Ügyfélrendelések beszállítóval és értesítéssel",
+   "alcim": "Ügyfélnek rendelt áru beszállítóval, várható érkezéssel, előleggel – és egy gombos értesítés, amikor megérkezett.",
+   "cimke": "Értékesítés és raktár",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-raktar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Öt lépéses rendelésút, állapotváltás a listából"
+    },
+    {
+     "szoveg": "Beszállító és rendelésszám rendelésenként"
+    },
+    {
+     "szoveg": "Előleg, fizetés, pénztár és számla"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendelés mindig ügyfélhez kötött, és öt állapoton megy végig: Felvéve, Megrendelve, Megérkezett, Ügyfél értesítve, Átadva. A „Megjött – értesítés” gomb kitöltött üzenetet küld az ügyféloldalra és kérésre e-mailben; a rendelésnek is van ügyféloldala.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Rendelések.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Öt lépéses rendelésút, állapotváltás a listából",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Beszállító és rendelésszám rendelésenként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Előleg, fizetés, pénztár és számla",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Értesítés egy gombbal, ügyféloldallal",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Jelvény mutatja, hány megérkezett rendelésről nem tud még az ügyfél",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Új rendelés",
+     "szoveg": "Rendelések › „Új rendelés”: ügyfél (kötelező), beszállító, várható érkezés, tételek."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Követés",
+     "szoveg": "Az állapotot a lista színes jelzőjére kattintva állítod."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Értesítés",
+     "szoveg": "A „Megjött – értesítés” gomb kitöltött üzenetet küld, és Ügyfél értesítve állapotra vált."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modulok",
+   "kulcsok": [
+    "rendelesek",
+    "uzenetek"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "raktar",
+    "termekek",
+    "rma",
+    "sms",
+    "cimkenyomtatas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "kereskedelem"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Rendelések",
+   "kulcsok": [
+    "rendelesi-javaslat",
+    "ugyfeloldal-rma",
+    "sms-hogyan-mukodik"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Rendelések a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

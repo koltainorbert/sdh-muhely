@@ -1,0 +1,27 @@
+{
+ "slug": "statusz",
+ "cim": "Rendszerállapot",
+ "sorrend": 90,
+ "seo": {
+  "title": "Rendszerállapot – {termeknev}",
+  "description": "A {termeknev} webes szolgáltatásainak állapota: weboldal, demó, licencközpont, letöltés, fizetés.",
+  "kulcsszo": "rendszerállapot"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Rendszerállapot",
+   "alcim": "A weboldal, a demó, a licencközpont és a letöltések állapota. A telepített rendszereitek a saját szervereteken futnak – ezeket ez az oldal nem érinti.",
+   "cimke": "Állapot",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "statusz",
+   "cim": "Szolgáltatások"
+  }
+ ]
+}

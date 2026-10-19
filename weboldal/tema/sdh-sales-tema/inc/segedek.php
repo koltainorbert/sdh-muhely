@@ -498,7 +498,7 @@ function sdh_tema_szekcio_zar(array $sz = [], bool $cta = true): string
 }
 
 /**
- * Interaktív rész csatolási pontja: <div data-sdh="nev" data-opciok='{…}'> + a bővítmény JS-ének igénylése.
+ * Interaktív rész csatolási pontja: <div data-modul="nev" data-opciok='{…}'> + a bővítmény JS-ének igénylése.
  * A szekció közös mezői nem kerülnek az opciókba.
  *
  * @param array<string, mixed> $sz
@@ -511,7 +511,7 @@ function sdh_tema_mount(string $nev, array $sz = [], array $attr = [], string $t
     }
 
     $opc = array_diff_key($sz, array_flip(['tipus', 'id', 'horgony', 'cim', 'alcim', 'eyebrow', 'cimke', 'hatter', 'terkoz', 'cta', 'rejtett', '_i', 'szelesseg', 'igazitas']));
-    $ki  = '<div class="s-mount s-mount--' . esc_attr($nev) . '" data-sdh="' . esc_attr($nev) . '"';
+    $ki  = '<div class="s-mount s-mount--' . esc_attr($nev) . '" data-modul="' . esc_attr($nev) . '"';
 
     if ($opc !== []) {
         $ki .= ' data-opciok="' . sdh_tema_json_attr(class_exists('SDH_Sales') ? SDH_Sales::t_tomb($opc) : $opc) . '"';
@@ -551,7 +551,7 @@ function sdh_tema_admin_megjegyzes(string $s): string
         return '';
     }
 
-    return '<!-- sdh-tema: ' . esc_html(str_replace('--', '–', $s)) . ' -->';
+    return '<!-- szekcio: ' . esc_html(str_replace('--', '–', $s)) . ' -->';
 }
 
 /* =====================================================================
@@ -929,4 +929,71 @@ function sdh_tema_kep_mezo($ertek, string $meret = 'kartya', array $attrs = [], 
 function sdh_tema_datum(int $ts, string $forma = 'Y. F j.'): string
 {
     return (string) wp_date($forma, $ts);
+}
+
+/**
+ * Morzsamenü az aktuális oldalhoz: a bővítmény SEO-moduljából (SDH_Sales_Seo::morzsa() – ugyanebből lesz a
+ * BreadcrumbList), különben a WP-szülőkből. Kezdőlapon üres.
+ */
+function sdh_tema_morzsa_auto(): string
+{
+    if (is_front_page()) {
+        return '';
+    }
+
+    $m = [];
+
+    if (class_exists('SDH_Sales_Seo')) {
+        try {
+            $m = SDH_Sales_Seo::morzsa();
+        } catch (Throwable $e) {
+            $m = [];
+        }
+    } elseif (function_exists('sdh_tema_tudas_e') && sdh_tema_tudas_e() && sdh_tema_tudas_fejezet() !== null) {
+        $m = sdh_tema_tudas_morzsa((array) sdh_tema_tudas_fejezet());
+    } else {
+        $m[] = ['cim' => '', 'url' => home_url('/')];
+
+        if (is_singular()) {
+            $id = (int) get_queried_object_id();
+
+            if (is_singular('post') && (int) get_option('page_for_posts') > 0) {
+                $b   = (int) get_option('page_for_posts');
+                $m[] = ['cim' => get_the_title($b), 'url' => (string) get_permalink($b)];
+            }
+
+            foreach (array_reverse(get_post_ancestors($id)) as $a) {
+                $m[] = ['cim' => get_the_title($a), 'url' => (string) get_permalink($a)];
+            }
+
+            $m[] = ['cim' => get_the_title($id), 'url' => (string) get_permalink($id)];
+        } elseif (is_search()) {
+            $m[] = ['cim' => sprintf(/* translators: %s: keresett szöveg */ sdh_tema__('Keresés: „%s”'), get_search_query(false)), 'url' => ''];
+        } elseif (is_archive()) {
+            $m[] = ['cim' => wp_strip_all_tags(get_the_archive_title()), 'url' => ''];
+        }
+    }
+
+    if (count($m) < 2) {
+        return '';
+    }
+
+    $ut = [];
+
+    foreach (array_slice($m, 1) as $e) {
+        $ut[] = [sdh_tema_t(wp_strip_all_tags((string) ($e['cim'] ?? ''))), (string) ($e['url'] ?? '')];
+    }
+
+    return sdh_tema_morzsa($ut);
+}
+
+/** Oldalfej (cím + morzsa) a szekció nélküli oldalakhoz. */
+function sdh_tema_oldalfej(string $cim, string $alcim = '', string $extra = ''): string
+{
+    sdh_tema_h1(true);
+
+    return '<header class="s-oldalfej"><div class="s-kont">' . sdh_tema_morzsa_auto()
+        . '<h1 class="s-oldalfej__cim">' . esc_html($cim) . '</h1>'
+        . ($alcim !== '' ? '<p class="s-oldalfej__alcim">' . esc_html($alcim) . '</p>' : '')
+        . $extra . '</div></header>';
 }

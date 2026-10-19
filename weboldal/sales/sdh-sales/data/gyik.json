@@ -384,7 +384,7 @@
   "kulcs": "rendszerkovetelmenyek",
   "kategoria": "telepites",
   "kerdes": "Milyen szerver kell a(z) {termeknev} futtatásához?",
-  "valasz": "<p>A rendszer webes alkalmazás, amely egy saját, belső webhelyen fut. A követelmények:</p><ul><li>PHP 8.1 vagy újabb, a sodium, zlib, mbstring, ZipArchive és XMLReader bővítményekkel (a szokásos tárhelyeken mind megvan),</li><li>MySQL vagy MariaDB adatbázis,</li><li>https-es cím,</li><li>friss Chrome, Edge, Firefox vagy Safari a munkaállomásokon.</li></ul><p>Futhat bérelt tárhelyen, saját szerveren vagy a bolt helyi hálózatán lévő gépen.</p>",
+  "valasz": "<p>A rendszer webes alkalmazás, amely egy saját, belső webhelyen fut. A követelmények:</p><ul><li>PHP 8.1 vagy újabb, a sodium, zlib, mbstring, ZipArchive és XMLReader PHP-modulokkal (a szokásos tárhelyeken mind megvan),</li><li>MySQL vagy MariaDB adatbázis,</li><li>https-es cím,</li><li>friss Chrome, Edge, Firefox vagy Safari a munkaállomásokon.</li></ul><p>Futhat bérelt tárhelyen, saját szerveren vagy a bolt helyi hálózatán lévő gépen.</p>",
   "kapcsolodo": [
    "hol-fusson-a-rendszer",
    "telepites-menete",
@@ -438,7 +438,7 @@
   "kulcs": "kulon-webhely-kell",
   "kategoria": "telepites",
   "kerdes": "Telepíthető a cég meglévő weboldalára?",
-  "valasz": "<p>Nem ajánlott. A rendszer egy <strong>önálló, belső webhelyre</strong> való, például egy külön aldomainre (<code>muhely.pelda.hu</code>) vagy a helyi hálózaton futó szerverre. Így a nyilvános weboldal bővítményei és látogatói nem érintik a műhely adatait, és a rendszer zárt módban működhet: kívülről csak a bejelentkező, az ügyféloldal és a foglalóoldal látszik.</p>",
+  "valasz": "<p>Nem ajánlott. A rendszer egy <strong>önálló, belső webhelyre</strong> való, például egy külön aldomainre (<code>muhely.pelda.hu</code>) vagy a helyi hálózaton futó szerverre. Így a nyilvános weboldal kiegészítői és látogatói nem érintik a műhely adatait, és a rendszer zárt módban működhet: kívülről csak a bejelentkező, az ügyféloldal és a foglalóoldal látszik.</p>",
   "kapcsolodo": [
    "hol-fusson-a-rendszer",
    "zart-mod"
@@ -1380,7 +1380,7 @@
   "kulcs": "shared-hosting",
   "kategoria": "szerver",
   "kerdes": "Elég egy olcsó osztott tárhely?",
-  "valasz": "<p>Kisebb szerviznek gyakran igen, ha a tárhely támogatja a PHP 8.1-et, a szükséges PHP-bővítményeket, a MySQL-t vagy MariaDB-t, a https-t és az ütemezett feladatokat. Nagyobb adatmennyiségnél vagy több felhasználónál virtuális szerver ajánlott. Ha a mentési mappák védelméhez szükséges <code>.htaccess</code> nem működik (például nginx-en), a szolgáltatónak kell lezárnia ezeket a mappákat.</p>",
+  "valasz": "<p>Kisebb szerviznek gyakran igen, ha a tárhely támogatja a PHP 8.1-et, a szükséges PHP-modulokat, a MySQL-t vagy MariaDB-t, a https-t és az ütemezett feladatokat. Nagyobb adatmennyiségnél vagy több felhasználónál virtuális szerver ajánlott. Ha a mentési mappák védelméhez szükséges <code>.htaccess</code> nem működik (például nginx-en), a szolgáltatónak kell lezárnia ezeket a mappákat.</p>",
   "kapcsolodo": [
    "szerver-meretezes",
    "rendszerkovetelmenyek"

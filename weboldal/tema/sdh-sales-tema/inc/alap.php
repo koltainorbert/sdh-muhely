@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 /** A nem kritikus CSS forrásai, betöltési sorrendben (bin/epit.php is ezt használja). @return array<int, string> */
 function sdh_tema_css_forrasok(): array
 {
-    return ['uveg', 'neon', 'gombok', 'urlap', 'datum', 'kartyak', 'tablazat', 'harmonika', 'ertesites', 'szekciok', 'arak', 'blog', 'kereso', 'lablec'];
+    return ['uveg', 'urlap', 'komponensek', 'szekciok', 'proza', 'kereso', 'lablec'];
 }
 
 /* =====================================================================
@@ -33,7 +33,6 @@ function sdh_tema_setup(): void
     add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script', 'navigation-widgets']);
     add_theme_support('responsive-embeds');
     add_theme_support('custom-logo', ['height' => 40, 'width' => 160, 'flex-height' => true, 'flex-width' => true]);
-    add_theme_support('automatic-feed-links');
 
     // Tartalék menühelyek (ha a bővítmény nincs bekapcsolva).
     register_nav_menus([
@@ -42,7 +41,7 @@ function sdh_tema_setup(): void
         'jogi'   => __('Jogi linkek', 'sdh-sales-tema'),
     ]);
 
-    add_image_size('sdh-kartya', 760, 428, true);
+    add_image_size('kartya', 760, 428, true);
 }
 add_action('after_setup_theme', 'sdh_tema_setup');
 
@@ -75,6 +74,21 @@ function sdh_tema_takaritas(): void
     remove_action('wp_head', 'wp_generator');
     remove_action('wp_head', 'wp_shortlink_wp_head');
     remove_action('wp_head', 'feed_links_extra', 3);
+    remove_action('wp_head', 'feed_links', 2);
+    remove_action('wp_head', 'rest_output_link_wp_head', 10);
+    remove_action('template_redirect', 'rest_output_link_header', 11);
+    remove_action('template_redirect', 'wp_shortlink_header', 11);
+    remove_action('wp_head', 'wp_print_speculation_rules');
+    remove_action('wp_footer', 'wp_print_speculation_rules');
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+    remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+    remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_classic_theme_styles');
+    remove_action('wp_footer', 'wp_enqueue_stored_styles', 1);
+    remove_action('wp_head', 'wp_print_auto_sizes_contain_css_fix', 1);
+    add_filter('the_generator', '__return_empty_string');
+    add_filter('wp_speculation_rules_configuration', '__return_null');
+    add_filter('show_recent_comments_widget_style', '__return_false');
 }
 add_action('init', 'sdh_tema_takaritas');
 
@@ -85,27 +99,67 @@ function sdh_tema_tinymce_emoji($p): array
 }
 add_filter('tiny_mce_plugins', 'sdh_tema_tinymce_emoji');
 
-/** A blog-oldalak (cikk, lista, archívum, keresés) – csak itt kell a blokk-könyvtár CSS-e. */
+/** A blog-oldalak (cikk, lista, archívum, keresés) – csak osztálynévhez. */
 function sdh_tema_blog_oldal(): bool
 {
     return is_singular('post') || is_home() || is_archive() || is_search();
 }
 
-function sdh_tema_blokk_css(): void
+/**
+ * Minden alap front-asset ki (REJTES.md): blokk-könyvtár, globális stílusok, klasszikus-téma CSS, emoji, embed, jQuery,
+ * comment-reply, és látogatónak az admin-sáv. A blogtartalom formázását a téma saját CSS-e (.s-proza) adja.
+ */
+function sdh_tema_alap_assetek_ki(): void
 {
-    if (sdh_tema_blog_oldal()) {
+    if (is_admin()) {
         return;
     }
 
-    foreach (['wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'core-block-supports'] as $h) {
+    $stilus = ['wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'core-block-supports', 'core-block-supports-duotone', 'wp-emoji-styles', 'dashicons', 'admin-bar', 'wp-img-auto-sizes-contain'];
+    $szkript = ['wp-embed', 'comment-reply', 'jquery', 'jquery-core', 'jquery-migrate', 'wp-emoji', 'admin-bar'];
+
+    if (is_user_logged_in() && is_admin_bar_showing()) {
+        $stilus  = array_diff($stilus, ['dashicons', 'admin-bar']);
+        $szkript = array_diff($szkript, ['admin-bar']);
+    }
+
+    foreach ($stilus as $h) {
         wp_dequeue_style($h);
-        wp_deregister_style($h);
+    }
+
+    foreach ($szkript as $h) {
+        wp_dequeue_script($h);
+    }
+
+    // Minden más, „wp-” kezdetű front-stílus (blokkonkénti CSS) is ki.
+    $ws = wp_styles();
+
+    foreach ((array) $ws->queue as $h) {
+        if (strncmp((string) $h, 'wp-', 3) === 0 || strncmp((string) $h, 'core-', 5) === 0 || preg_match('/^wp-block-|^block-/', (string) $h)) {
+            if (!in_array($h, ['admin-bar', 'dashicons'], true) || !is_admin_bar_showing()) {
+                wp_dequeue_style($h);
+            }
+        }
     }
 }
-add_action('wp_enqueue_scripts', 'sdh_tema_blokk_css', 100);
+add_action('wp_enqueue_scripts', 'sdh_tema_alap_assetek_ki', 100);
+add_action('wp_print_styles', 'sdh_tema_alap_assetek_ki', 100);
+add_action('wp_print_footer_scripts', 'sdh_tema_alap_assetek_ki', 1);
 
-// Klasszikus téma: a blokk-támogatás CSS-e ne kerüljön a lábba a nem-blog oldalakon.
+// Blokkonkénti CSS ne kerüljön ki; az admin-sáv csak adminisztrátornak.
 add_filter('should_load_separate_core_block_assets', '__return_true');
+add_filter('show_admin_bar', static fn ($l): bool => (bool) $l && current_user_can('manage_options'));
+
+/** Erőforrás-tippek: semmi a w.org felé. @param array<int, mixed> $u @return array<int, mixed> */
+function sdh_tema_eroforras_tipp(array $u, string $tipus): array
+{
+    return array_values(array_filter($u, static function ($x): bool {
+        $h = is_array($x) ? (string) ($x['href'] ?? '') : (string) $x;
+
+        return strpos($h, 'w.org') === false && strpos($h, 'wordpress') === false;
+    }));
+}
+add_filter('wp_resource_hints', 'sdh_tema_eroforras_tipp', 10, 2);
 
 /** jQuery migrate ki a fronton (a témának nincs jQuery-függése; ha egy bővítmény kéri a jQuery-t, az migrate nélkül jön). */
 function sdh_tema_jquery_migrate(WP_Scripts $s): void
@@ -169,7 +223,7 @@ const SDH_TEMA_BETU_BRICOLAGE = ['meret' => '100', 'fel' => '100', 'le' => '25']
 function sdh_tema_fej_elso(): void
 {
     // A localStorage tiltott lehet (privát mód) – try/catch.
-    echo "<script>(function(d){d.className+=' js';try{var t=localStorage.getItem('sdh-tema');if(t==='sotet'||t==='vilagos'){d.setAttribute('data-tema',t)}}catch(e){}})(document.documentElement)</script>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo "<script>(function(d){d.className+=' js';try{var t=localStorage.getItem('szinmod');if(t==='sotet'||t==='vilagos'){d.setAttribute('data-tema',t)}}catch(e){}})(document.documentElement)</script>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 add_action('wp_head', 'sdh_tema_fej_elso', 0);
 
@@ -237,11 +291,11 @@ function sdh_tema_fej_css(): void
     }
 
     // A kritikus CSS + a betűk: a CSS-ben nincs felhasználói adat (statikus fájl), a betű-URL-ek esc_url-lel mentek.
-    echo '<style id="sdh-tema-kritikus">' . sdh_tema_betu_css() . sdh_tema_kritikus_css() . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<style id="s-kritikus">' . sdh_tema_betu_css() . sdh_tema_kritikus_css() . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 
     // A teljes CSS nem blokkol: print → all; JS nélkül <noscript>.
     foreach (sdh_tema_css_url() as $i => $u) {
-        echo '<link rel="stylesheet" id="sdh-tema-css-' . (int) $i . '" href="' . esc_url($u) . '" media="print" onload="this.media=\'all\';this.onload=null">' . "\n";
+        echo '<link rel="stylesheet" id="s-css-' . (int) $i . '" href="' . esc_url($u) . '" media="print" onload="this.media=\'all\';this.onload=null">' . "\n";
     }
 
     echo '<noscript>';
@@ -295,7 +349,7 @@ function sdh_tema_js_url(string $nev): string
 
 function sdh_tema_szkriptek(): void
 {
-    wp_enqueue_script('sdh-tema', sdh_tema_js_url('tema'), [], null, ['in_footer' => true, 'strategy' => 'defer']); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- a verzió az URL-ben
+    wp_enqueue_script('p-tema', sdh_tema_js_url('tema'), [], null, ['in_footer' => true, 'strategy' => 'defer']); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- a verzió az URL-ben
 
     $index = '';
 
@@ -369,34 +423,76 @@ function sdh_tema_szkriptek(): void
         ],
     ];
 
-    wp_add_inline_script('sdh-tema', 'window.SDH_TEMA=' . wp_json_encode($adat, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES) . ';', 'before');
+    wp_add_inline_script('p-tema', 'window.APP_TEMA=' . wp_json_encode($adat, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES) . ';', 'before');
 
-    if (is_singular() && comments_open() && get_option('thread_comments')) {
-        wp_enqueue_script('comment-reply');
-    }
 }
 add_action('wp_enqueue_scripts', 'sdh_tema_szkriptek');
-
-/** A kereső- és naptár-JS előre jelzése alacsony prioritással nem kell (lusta) – csak a dns/előcsatlakozás nem kell (saját domain). */
 
 /* =====================================================================
  * Egyéb front-finomhangolás
  * ================================================================== */
 
-/** <body> osztályok: blog / szekciós oldal. @param array<int, string> $o @return array<int, string> */
-function sdh_tema_body_class(array $o): array
+/**
+ * Saját, semleges <body> osztályok (a WP body_class() kimenete ujjlenyomat – REJTES.md).
+ */
+function sdh_tema_body_osztaly(): string
 {
-    if (sdh_tema_blog_oldal()) {
-        $o[] = 's-blog-oldal';
+    $o = ['s-test'];
+
+    if (is_front_page()) {
+        $o[] = 's-kezdolap';
+    } elseif (is_404()) {
+        $o[] = 's-nincs-oldal';
+    } elseif (is_search()) {
+        $o[] = 's-kereses-oldal';
+    } elseif (is_singular('post')) {
+        $o[] = 's-cikk-oldal';
+    } elseif (sdh_tema_blog_oldal()) {
+        $o[] = 's-lista-oldal';
+    } else {
+        $o[] = 's-oldal';
     }
 
     if (is_singular() && sdh_tema_van_szekcio((int) get_queried_object_id())) {
         $o[] = 's-szekcios';
     }
 
-    return $o;
+    if (is_admin_bar_showing()) {
+        $o[] = 's-adminsav';
+    }
+
+    return implode(' ', $o);
 }
-add_filter('body_class', 'sdh_tema_body_class');
+
+/**
+ * A tartalom HTML-jéből a WP-ujjlenyomatok ki: `wp-image-123`, `wp-block-*` → `s-b-*`, `wp-element-*`, `size-*`,
+ * `attachment-*`, `aligncenter` marad (semleges). Szerkesztett tartalomra (the_content) és a kiemelt képre.
+ */
+function sdh_tema_osztaly_tisztit(string $html): string
+{
+    if (strpos($html, 'wp-') === false) {
+        return $html;
+    }
+
+    return (string) preg_replace_callback('/\sclass=(["\'])([^"\']*)\1/i', static function (array $m): string {
+        $o = preg_split('/\s+/', trim($m[2])) ?: [];
+        $k = [];
+
+        foreach ($o as $c) {
+            if ($c === '' || preg_match('/^(wp-image-\d+|wp-post-image|wp-elements?-[\w-]+|attachment-[\w-]+|size-[\w-]+)$/', $c)) {
+                continue;
+            }
+
+            $k[] = (string) preg_replace('/^wp-block-/', 's-b-', $c);
+        }
+
+        return $k === [] ? '' : ' class=' . $m[1] . esc_attr(implode(' ', $k)) . $m[1];
+    }, $html);
+}
+add_filter('the_content', 'sdh_tema_osztaly_tisztit', 999);
+add_filter('post_thumbnail_html', 'sdh_tema_osztaly_tisztit', 999);
+add_filter('wp_get_attachment_image', 'sdh_tema_osztaly_tisztit', 999);
+add_filter('get_avatar', 'sdh_tema_osztaly_tisztit', 999);
 
 /** A kivonat rövidebb, „…” végű. */
 add_filter('excerpt_length', static fn (): int => 26);
@@ -415,5 +511,7 @@ function sdh_tema_kereso_urlap(string $form = ''): string
 }
 add_filter('get_search_form', 'sdh_tema_kereso_urlap');
 
-/** Kommentek kikapcsolva az oldalakon (értékesítő webhely). */
-add_filter('comments_open', static fn ($nyitva, $id) => get_post_type((int) $id) === 'post' ? $nyitva : false, 10, 2);
+/** Hozzászólás nincs (értékesítő webhely): sem űrlap, sem pingback. */
+add_filter('comments_open', '__return_false', 20);
+add_filter('pings_open', '__return_false', 20);
+add_filter('comments_array', '__return_empty_array', 20);

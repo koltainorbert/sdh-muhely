@@ -3,7 +3,7 @@
  * SDH Értékesítés – admin: Tartalom (oldalak + szekció-építő + élő előnézet, típusos elemek, menük, kezdőtartalom újratöltése).
  *
  * Előnézet: POST /admin/elonezet {post_id, szekciok} → rövid életű (15 perc) tranziens-token; a lap a saját URL-jén
- * `?sdh_elonezet=<token>` paraméterrel a téma sablonjaival rajzolódik, de a `_sdh_szekciok` meta helyett a még nem mentett
+ * `?elonezet=<token>` paraméterrel a téma sablonjaival rajzolódik, de a `_sdh_szekciok` meta helyett a még nem mentett
  * szekciókkal (get_post_metadata szűrő). Csak bejelentkezett adminnak, nem gyorsítótárazható, noindex.
  *
  * @package SDH_Sales
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Admin_Tartalom
 {
-    public const ELONEZET = 'sdh_elonezet';
+    public const ELONEZET = 'elonezet';
     private const MENU_HELYEK = ['fo' => 'Főmenü', 'lablec' => 'Lábléc', 'jogi' => 'Jogi sáv'];
 
     /** @var array<int, array<int, array<string, mixed>>> post_id → előnézeti szekciók (a kérés idejére) */
@@ -123,7 +123,7 @@ final class SDH_Sales_Admin_Tartalom
         $p = get_post((int) $r['id']);
 
         if (!$p || $p->post_type !== 'page') {
-            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'nincs');
         }
 
         return new WP_REST_Response(self::oldal_sor($p) + [
@@ -162,7 +162,7 @@ final class SDH_Sales_Admin_Tartalom
         $p  = get_post($id);
 
         if (!$p || $p->post_type !== 'page') {
-            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'nincs');
         }
 
         $nyers = $r->get_param('szekciok');
@@ -176,7 +176,7 @@ final class SDH_Sales_Admin_Tartalom
             $hianyok = self::hianyok($tiszta);
 
             if ($hianyok !== []) {
-                return new WP_Error('sdh_ervenytelen', implode(' ', array_slice($hianyok, 0, 5)), ['status' => 422, 'hianyok' => $hianyok]);
+                return new WP_Error('ervenytelen', implode(' ', array_slice($hianyok, 0, 5)), ['status' => 422, 'hianyok' => $hianyok]);
             }
 
             SDH_Sales_Tartalom::szekciok_ment($id, $tiszta);
@@ -230,7 +230,7 @@ final class SDH_Sales_Admin_Tartalom
         $p  = get_post($id);
 
         if (!$p || $p->post_type !== 'page') {
-            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'sdh_nincs');
+            return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'nincs');
         }
 
         $sz    = SDH_Sales_Szekcio::ervenyesit_lista((array) $r->get_param('szekciok'));
@@ -353,7 +353,7 @@ final class SDH_Sales_Admin_Tartalom
         // Meglévő elem kulcsa nem változik (a kezdőtartalom kulcsa más alakú is lehet, mint amit az új elem kap).
         if ($eredeti !== '') {
             if (SDH_Sales_Tartalom::egy($tipus, $eredeti, $nyelv) === null) {
-                return SDH_Sales_Rest::hiba('Nincs ilyen elem.', 404, 'sdh_nincs');
+                return SDH_Sales_Rest::hiba('Nincs ilyen elem.', 404, 'nincs');
             }
 
             $adat[$s['kulcsmezo']] = $eredeti;
@@ -362,19 +362,19 @@ final class SDH_Sales_Admin_Tartalom
         $kulcs = (string) ($adat[$s['kulcsmezo']] ?? '');
 
         if ($kulcs === '') {
-            return SDH_Sales_Rest::hiba('A kulcs kötelező (kisbetű, szám, kötőjel).', 422, 'sdh_ervenytelen');
+            return SDH_Sales_Rest::hiba('A kulcs kötelező (kisbetű, szám, kötőjel).', 422, 'ervenytelen');
         }
 
         foreach ($s['mezok'] as $m) {
             if (!empty($m['kotelezo']) && trim((string) (is_scalar($adat[$m['k']] ?? null) ? $adat[$m['k']] : '')) === '') {
-                return SDH_Sales_Rest::hiba('„' . $m['c'] . '” kötelező.', 422, 'sdh_ervenytelen');
+                return SDH_Sales_Rest::hiba('„' . $m['c'] . '” kötelező.', 422, 'ervenytelen');
             }
         }
 
         $regi = SDH_Sales_Tartalom::egy($tipus, $kulcs, $nyelv);
 
         if ($eredeti === '' && $regi !== null) {
-            return SDH_Sales_Rest::hiba('Ilyen kulcsú elem már van.', 409, 'sdh_utkozes');
+            return SDH_Sales_Rest::hiba('Ilyen kulcsú elem már van.', 409, 'utkozes');
         }
 
         // A sémán kívüli, korábban tárolt mezők (más modul adatai) megmaradnak.
@@ -401,7 +401,7 @@ final class SDH_Sales_Admin_Tartalom
 
         $ok = SDH_Sales_Tartalom::torol($tipus, (string) $r->get_param('kulcs'), self::nyelv($r));
 
-        return $ok ? new WP_REST_Response(['ok' => true], 200) : SDH_Sales_Rest::hiba('Nincs ilyen elem.', 404, 'sdh_nincs');
+        return $ok ? new WP_REST_Response(['ok' => true], 200) : SDH_Sales_Rest::hiba('Nincs ilyen elem.', 404, 'nincs');
     }
 
     public static function r_sorrend(WP_REST_Request $r)

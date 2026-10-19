@@ -20,8 +20,10 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Exportimport
 {
-    public const FORMATUM = 'sdh-sales-export';
-    private const MAPPA   = 'sdh-sales-mentes';
+    public const FORMATUM = 'portal-export';
+    /** A régi formátumnév (importnál még elfogadjuk). */
+    private const FORMATUM_REGI = 'sdh-sales-export';
+    private const MAPPA   = 'portal-mentes';
     private const MAX_MENTES = 10;
 
     public static function init(): void
@@ -36,7 +38,8 @@ final class SDH_Sales_Exportimport
     public static function titok_kulcs(string $k): bool
     {
         return preg_match('/(^|[._])(agent_kulcs|api_kulcs|kulcs_titkos|titok|titkos|secret|poskey|jelszo|password|token|privat)$/', $k) === 1
-            || preg_match('/(^|\.)(szikra|anthropic)\.kulcs$/', $k) === 1;
+            || preg_match('/(^|\.)(szikra|anthropic)\.kulcs$/', $k) === 1
+            || $k === 'rejtes.belepo';
     }
 
     /** @return array<string, mixed> */
@@ -131,7 +134,7 @@ final class SDH_Sales_Exportimport
     /** @param mixed $csomag @return array<int, string> hibák (üres = rendben) */
     public static function ellenoriz($csomag): array
     {
-        if (!is_array($csomag) || ($csomag['formatum'] ?? '') !== self::FORMATUM) {
+        if (!is_array($csomag) || !in_array($csomag['formatum'] ?? '', [self::FORMATUM, self::FORMATUM_REGI], true)) {
             return ['Ez nem az Értékesítés exportfájlja.'];
         }
 

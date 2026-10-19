@@ -1,5 +1,5 @@
 /*
- * SDH Értékesítés – süti-sáv és beállító ablak. Csak --s-* változók (a téma tokenek.css-e / az Arculat adja).
+ * Süti-sáv és beállító ablak. Csak --s-* változók (alapérték: tokenek.css, felülírás: Arculat).
  * A három gomb egyforma súlyú (azonos méret, szín, sorrendben nincs kiemelés) – nincs „sötét minta”.
  */
 .s-suti[hidden],

@@ -62,7 +62,7 @@ A munkalap sorszáma az átvételi elismervényen van. Ha a lapon vonalkód vagy
 
 ### Egyetlen keresőmező
 
-A legjobb, ha nem kell kiválasztani, mire keresel. A [{termeknev}](/funkciok/eszkozok/) keresője gépelés közben felismeri, mit írtál be: 15 számjegynél IMEI-re keres, telefonszám-formánál az ügyfél telefonjában, sorszámnál a munkalapszámban, szövegnél a névben. A keresőmező alatt kiírja, mi szerint keresett, és ha nincs pontos találat, magától kiterjeszti a keresést mindenre.
+A legjobb, ha nem kell kiválasztani, mire keresel. Egy jó [eszköznyilvántartás](/funkciok/eszkozok/) keresője gépelés közben felismeri, mit írtál be: 15 számjegynél IMEI-re keres, telefonszám-formánál az ügyfél telefonjában, sorszámnál a munkalapszámban, szövegnél a névben. A keresőmező alatt kiírja, mi szerint keresett, és ha nincs pontos találat, magától kiterjeszti a keresést mindenre.
 
 ### Részletek elég
 

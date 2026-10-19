@@ -1,0 +1,149 @@
+{
+ "slug": "zarkod-titkositas",
+ "cim": "Zárkód-titkosítás",
+ "szulo": "funkciok",
+ "sorrend": 32,
+ "seo": {
+  "title": "Zárkód és feloldó minta titkosítva – {termeknev}",
+  "description": "A javításra hozott készülékek zárkódja és mintája titkosítva: megnézés csak joggal, minden megnézés a naplóban.",
+  "kulcsszo": "zárkód tárolás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Feloldó kód és minta titkosítva, jogosultsághoz kötve",
+   "alcim": "A készülékek feloldó kódja és mintája titkosítva tárolódik; megnézni csak jogosult kolléga tudja, és ez naplózódik.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-eszkoz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Titkosított tárolás az adatbázisban és a mentésben"
+    },
+    {
+     "szoveg": "Megnézés csak „Feloldó kód és minta megnézése” joggal"
+    },
+    {
+     "szoveg": "Minden megnézés naplózva"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A zárkód és a minta titkosítva áll az adatbázisban, a szerver kulcsaihoz kötve. Az űrlap nem küldi ki a kódot: a Megmutat gomb jogot ellenőriz, és minden megnézést – vagy elutasított próbát – a Napló rögzít.</p><p><strong>Hol találod a rendszerben?</strong> Eszköz adatlapja › Zárkód / minta › Megmutat.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Titkosított tárolás az adatbázisban és a mentésben",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Megnézés csak „Feloldó kód és minta megnézése” joggal",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Minden megnézés naplózva",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Belső munkalapon és matricán is csak jogosultnak",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "E-mailbe és az asszisztenshez soha nem kerül",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Beírás",
+     "szoveg": "Az eszköz adatlapján beírod a kódot vagy rajzolod a mintát – ehhez nem kell külön jog."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Megnézés",
+     "szoveg": "A Megmutat gomb csak jogosultnak fedi fel; jog nélkül „elutasítva” bejegyzés születik."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Jog",
+     "szoveg": "Beállítások › Jogosultságok: „Feloldó kód és minta megnézése” szerepenként."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "eszkozok",
+    "szerepkorok",
+    "biztonsag",
+    "valtozasnaplo"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Zárkód-titkosítás",
+   "kulcsok": [
+    "zarkod-titkositas",
+    "jogosultsagok-szerepek",
+    "jelszavak-kulcsok-tarolasa"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Zárkód-titkosítás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

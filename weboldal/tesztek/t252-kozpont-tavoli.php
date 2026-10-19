@@ -39,6 +39,12 @@ t_http(static function (string $url, array $args): ?array {
 
     parse_str((string) wp_parse_url($url, PHP_URL_QUERY), $q);
     $GLOBALS['t252_args'] = $args;
+
+    if (!empty($GLOBALS['t252_regi']) && strpos((string) ($q['rest_route'] ?? ''), '/licenc/') === 0) {
+        $GLOBALS['t252_keresek'][] = ['ut' => (string) $q['rest_route'], 'body' => ''];
+
+        return t_valasz(404, '{"code":"rest_no_route"}');
+    }
     $GLOBALS['t252_keresek'][] = ['ut' => (string) ($q['rest_route'] ?? ''), 'body' => (string) $args['body']];
 
     $r = new WP_REST_Request('POST', (string) ($q['rest_route'] ?? ''));
@@ -60,7 +66,7 @@ t_http(static function (string $url, array $args): ?array {
 $v = t_rest('POST', '/admin/kozpont/proba');
 T::egyezik(200, $v->get_status(), 'próba: 200');
 T::tartalmaz((string) $v->get_data()['uzenet'], 'tavoli mód', 'próba: mód az üzenetben');
-T::egyezik('/sdh-kozpont/v1/kiszolgalas', $GLOBALS['t252_keresek'][0]['ut'] ?? '', 'a kérés a kiszolgálási végpontra ment (?rest_route=)');
+T::egyezik('/licenc/v1/kiszolgalas', $GLOBALS['t252_keresek'][0]['ut'] ?? '', 'a kérés a semleges kiszolgálási végpontra ment');
 T::egyezik(20, (int) ($GLOBALS['t252_args']['timeout'] ?? 0), 'időkorlát: 20 mp');
 T::egyezik(base64_encode(SDH_Kozpont::kulcspar()['nyilvanos']), (string) SDH_Sales::b('kozpont.nyilvanos'), 'TOFU: a Központ kulcsa megjegyezve');
 $al = t_rest('GET', '/admin/kozpont')->get_data();
@@ -180,6 +186,14 @@ T::igaz($uj['sajat_nyilvanos'] !== $pub, 'új kulcspár');
 T::tartalmaz((string) $KK::kuld(['muvelet' => 'proba'])['uzenet'], 'nyilvános kulcsa', 'a régi kulccsal a Központ elutasít');
 SDH_Kozpont::beallitas_ment(['ertekesito_kulcs' => $uj['sajat_nyilvanos']]);
 T::igaz(!empty($KK::kuld(['muvelet' => 'proba'])['ok']), 'az új kulcs a Központban: újra megy');
+
+/* --- Régi Központ (nincs semleges névtér): a régi útvonalra vált ------------------------------------------------- */
+
+$GLOBALS['t252_keresek'] = [];
+$GLOBALS['t252_regi'] = true;
+T::igaz(!empty($KK::kuld(['muvelet' => 'proba'])['ok']), 'régi Központ: a 404 után a régi útvonallal megy');
+T::egyezik(['/licenc/v1/kiszolgalas', '/sdh-kozpont/v1/kiszolgalas'], array_column($GLOBALS['t252_keresek'], 'ut'), 'előbb a semleges, aztán a régi út');
+$GLOBALS['t252_regi'] = false;
 
 /* --- Helyi mód Központ nélkül ------------------------------------------------------------------------------------- */
 

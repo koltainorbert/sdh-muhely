@@ -1,0 +1,93 @@
+{
+ "slug": "arak",
+ "cim": "Árak",
+ "sorrend": 30,
+ "seo": {
+  "title": "Árak és csomagok – {termeknev}",
+  "description": "Szerviz program árak nettóban: Start, Pro, Business, Enterprise csomag, havi vagy éves díjjal, modulonként bővíthetően. Számold ki az árat!",
+  "kulcsszo": "szerviz program ár"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz program árak: csomagok és modulok",
+   "alcim": "Nettó árak, rejtett tétel nélkül. Válassz csomagot, add meg a felhasználók és a telephelyek számát – a kalkulátor azonnal mutatja a díjat.",
+   "cimke": "Árak",
+   "gomb": {
+    "szoveg": "Árkalkulátor",
+    "url": "#kalkulator"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "arak",
+   "cim": "Csomagok",
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "horgony": "csomagok",
+   "megjegyzes": "Minden ár nettó, egész forintban; az áfát ({afa}%) a pénztár adja hozzá. Éves fizetésnél kedvezmény jár."
+  },
+  {
+   "tipus": "ar_tablazat",
+   "cim": "Mi van az egyes csomagokban?",
+   "hatter": "felulet",
+   "horgony": "osszevetes"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Árkalkulátor",
+   "alcim": "Csomag, ciklus, felhasználók, telephelyek, extra modulok – a végösszeg a pénztárban a szerver számítása szerint.",
+   "horgony": "kalkulator"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Az árban benne van",
+   "oszlop": "4",
+   "elemek": [
+    {
+     "ikon": "frissites",
+     "cim": "Frissítések",
+     "szoveg": "Érvényes licenccel az új verziók egy kattintással."
+    },
+    {
+     "ikon": "tamogatas",
+     "cim": "E-mailes támogatás",
+     "szoveg": "A választott support-szint szerint."
+    },
+    {
+     "ikon": "konyv",
+     "cim": "Súgó és oktatás",
+     "szoveg": "Beépített súgó, leckék és tudásbázis."
+    },
+    {
+     "ikon": "pajzs",
+     "cim": "Biztonsági funkciók",
+     "szoveg": "2FA, titkosítás, napló minden csomagban."
+    }
+   ]
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Árakkal kapcsolatos kérdések",
+   "kategoria": "arak"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nagyobb csapat vagy egyedi igény?",
+   "szoveg": "Több telephely, egyedi modul vagy beszerzési eljárás: kérj személyre szabott árajánlatot.",
+   "gomb": {
+    "szoveg": "Árajánlatot kérek",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

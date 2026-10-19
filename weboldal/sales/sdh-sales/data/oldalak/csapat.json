@@ -1,0 +1,160 @@
+{
+ "slug": "csapat",
+ "cim": "Csapat-üzenetek",
+ "szulo": "funkciok",
+ "sorrend": 23,
+ "seo": {
+  "title": "Belső csapatüzenetek és üzenőfal – {termeknev}",
+  "description": "Belső üzenetek a szervizen belül: csevegés kollégáknak és csoportoknak, vagy üzenőfal cetlikkel, ha közös fiókkal dolgoztok.",
+  "kulcsszo": "belső üzenetküldő cégeknek"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Csapat-üzenetek: csevegés vagy üzenőfal",
+   "alcim": "Belső csevegés kollégának, csoportnak vagy mindenkinek – közös fióknál üzenőfal cetlikkel.",
+   "cimke": "Csapat és idő",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-naptar",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Csevegés vagy üzenőfal – a munkamódhoz igazítva"
+    },
+    {
+     "szoveg": "Fontos üzenet felugró ablakban, kitűzés"
+    },
+    {
+     "szoveg": "Gyors válasz bármelyik oldalról, a felugró kártyán"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Többfelhasználós módban közvetlen, csoportos és mindenkinek szóló üzenetek, fontos üzenet felugró ablakban, kitűzés. Ha mindenki egy közös fiókkal dolgozik, a Csapat üzenőfallá válik: cetlik, amelyeken ott áll, kinek szól és ki írta.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Csapat; Beállítások › Csapat.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Csevegés vagy üzenőfal – a munkamódhoz igazítva",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fontos üzenet felugró ablakban, kitűzés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Gyors válasz bármelyik oldalról, a felugró kártyán",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Csoportok és közös beszélgetések",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A csapatüzenetek is a Változásnaplóban",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Mód",
+     "szoveg": "Beállítások › Csapat: többfelhasználós csevegés vagy üzenőfal."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Üzenet",
+     "szoveg": "Csapat › „+ Új üzenet”: kolléga, csoport vagy Mindenki."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Jelzés",
+     "szoveg": "Az új üzenetről felugró kártya szól bármelyik oldalon."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "csapat"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "naptar",
+    "kozos-fiok",
+    "asszisztens"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Csapat-üzenetek",
+   "kulcsok": [
+    "csapat-uzenetek",
+    "kozos-fiok-pin",
+    "naptar-modul"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Csapat-üzenetek a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

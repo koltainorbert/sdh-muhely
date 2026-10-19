@@ -13,6 +13,8 @@ Hatályos: 2026. november 1-jétől. Verzió: 1.0. Ez a szerződés az [Általá
 
 Licencadó: **{ceg}** ({ceg_cim}, adószám: {ceg_adoszam}). Licencvevő: a megrendelő vállalkozás („Vevő”).
 
+A {termeknev} saját fejlesztésű, **PHP / MySQL alapú webes alkalmazás**, amely a Vevő szerverén fut.
+
 A licencadó a {termeknev} szoftverre (a hozzá tartozó dokumentációval és frissítésekkel együtt, a továbbiakban: Szoftver) **nem kizárólagos, át nem ruházható, harmadik személynek tovább nem engedélyezhető** felhasználási jogot ad (a szerzői jogról szóló 1999. évi LXXVI. törvény (Szjt.) szerint), a megrendelt licenc terjedelmében és időtartamára.
 
 ## 2. A licenc terjedelme
@@ -51,7 +53,7 @@ A Vevő nem jogosult:
 
 ## 7. A központtal való kapcsolat és a küldött műszaki adatok
 
-A licenc ellenőrzéséhez és a frissítésekhez a Szoftver a licencadó központjához (SDH Központ) kapcsolódik: **5 percenként** jelentkezik (a régebbi központ felé naponta). A központ válasza digitálisan aláírt (Ed25519); a Szoftver csak az első kapcsolatkor megjegyzett kulccsal aláírt választ fogadja el.
+A licenc ellenőrzéséhez és a frissítésekhez a Szoftver a licencadó központjához kapcsolódik: **5 percenként** jelentkezik (a régebbi központ felé naponta). A központ válasza digitálisan aláírt (Ed25519); a Szoftver csak az első kapcsolatkor megjegyzett kulccsal aláírt választ fogadja el.
 
 **Amit a Szoftver küld** (telemetria):
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Szekció: foglalas – időpontfoglalás (szabad sávok, foglalás). Mezők: cim, alcim, tipus (demo|telepites|oktatas|support).
- * Csatolás: <div data-sdh="foglalas" data-tipus="demo"> (a bővítmény assets/front/foglalas.js-e; a dátumválasztó saját).
+ * Csatolás: <div data-modul="foglalas" data-tipus="demo"> (a bővítmény assets/front/foglalas.js-e; a dátumválasztó saját).
  *
  * @package SDH_Sales_Tema
  * @var array<string, mixed> $sz

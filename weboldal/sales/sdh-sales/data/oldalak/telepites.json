@@ -1,0 +1,64 @@
+{
+ "slug": "telepites",
+ "cim": "Telepítés",
+ "sorrend": 50,
+ "seo": {
+  "title": "Telepítés és rendszerkövetelmények – {termeknev}",
+  "description": "Saját szerveren vagy felhőben: Linux, PHP 8.1+, MySQL 8 / MariaDB 10.6+, HTTPS, ütemező. A telepítést mi végezzük – lépések és ellenőrzőlista.",
+  "kulcsszo": "szerviz szoftver telepítés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Telepítés saját szerverre vagy felhőbe",
+   "alcim": "A {termeknev} saját fejlesztésű, PHP / MySQL alapú webes rendszer. Saját szerveren vagy felhőben fut – a telepítést mi végezzük. Itt a követelmények, a lépések és az ellenőrzőlista az üzemeltetőnek.",
+   "cimke": "Telepítés",
+   "gomb": {
+    "szoveg": "Telepítési időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "gomb2": {
+    "szoveg": "Követelmények",
+    "url": "#utmutato"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "telepito",
+   "cim": "Telepítési útmutató",
+   "alcim": "Az ellenőrzőlista pipái a böngésződben maradnak.",
+   "horgony": "utmutato"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "A telepítést mi végezzük",
+   "szelesseg": "keskeny",
+   "hatter": "felulet",
+   "html": "<p>A telepítést, a szerverhangolást és az első beállításokat mi végezzük, egy egyeztetett időpontban (telepítési díj). Régi adatoknál az <a href=\"/funkciok/adatatvetel/\">adatátvételt</a> (MunkaLap 3, CSV, XLSX) is vállaljuk. Az árakat az <a href=\"/arak/\">Árak</a> oldal szolgáltatásai között találod.</p>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Telepítés",
+   "kategoria": "telepites"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Szerver és mentés",
+   "kategoria": "szerver"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Segítsünk a telepítésben?",
+   "szoveg": "Foglalj időpontot: közösen telepítjük és beállítjuk a rendszert.",
+   "gomb": {
+    "szoveg": "Időpontot foglalok",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,178 @@
+{
+ "slug": "nyomtatas",
+ "cim": "Nyomtatványok",
+ "szulo": "funkciok",
+ "sorrend": 24,
+ "seo": {
+  "title": "Munkalap nyomtatvány, átvételi lap, PDF – {termeknev}",
+  "description": "Munkalap nyomtatvány, átvételi elismervény, árajánlat, szállítólevél és pénztárzárás: előnézet, PDF és e-mail egy ablakból.",
+  "kulcsszo": "munkalap nyomtatvány"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Munkalap, átvételi lap és árajánlat nyomtatása",
+   "alcim": "Átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – nyomtatás, PDF, e-mail.",
+   "cimke": "Dokumentumok és készülékadatok",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-szamlazas",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "14 féle nyomtatvány, mindegyik szerkeszthető"
+    },
+    {
+     "szoveg": "Előnézet, 1–9 példány, PDF-letöltés"
+    },
+    {
+     "szoveg": "Küldés e-mailben PDF-csatolmányként"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer minden papírját ugyanaz a Nyomtatás ablak adja: előnézet, példányszám, PDF, e-mail. A nyomtatványok kinézete és szövege a Beállításokban szerkeszthető; a rendszer a lap állapotához illő nyomtatványt választja ki elsőnek.</p><p><strong>Hol találod a rendszerben?</strong> Lap › Nyomtatás; fejléc › nyomtató ikon; Beállítások › Nyomtatványok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "14 féle nyomtatvány, mindegyik szerkeszthető",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Előnézet, 1–9 példány, PDF-letöltés",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Küldés e-mailben PDF-csatolmányként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Belső munkalap zárkóddal – az ügyfél címére nem küldhető",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Több eszközös lap: mind egy lapon vagy eszközönként",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Nyomtatás ablak",
+     "szoveg": "A lap alján a Nyomtatás gomb, vagy az Áttekintés részletpanelje."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Nyomtatvány",
+     "szoveg": "Bal oldalt a nyomtatvány, jobbra azonnal az előnézet."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kimenet",
+     "szoveg": "Nyomtatás, Mentés PDF-be vagy Küldés e-mailben."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>Egyik nyomtatvány sem számla – számlát a Számlázz.hu állít ki.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Ezekben a csomagokban benne van: Start, Pro, Business, Enterprise. Kisebb csomaghoz modulként is megvehető.",
+   "csomagok": [
+    "start",
+    "pro",
+    "business",
+    "enterprise"
+   ],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "A funkciót adó modul",
+   "kulcsok": [
+    "nyomtatas"
+   ],
+   "csoportositva": false,
+   "arak": true
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "cimkenyomtatas",
+    "atvetel-foto-alairas",
+    "urlapok-emailben",
+    "hazipenztar"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar",
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Nyomtatványok",
+   "kulcsok": [
+    "nyomtatvanyok",
+    "sajat-nyomtatvany",
+    "brother-cimkenyomtato"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Nyomtatványok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

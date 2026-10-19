@@ -1,0 +1,152 @@
+/*
+ * Űrlapok: mezők (lekerekített; többsoros max 15 px), címkék, súgó, hiba, jelölő / rádió, kapcsoló (.s-kapcsoló –
+ * felirat nélkül, körülötte ≥ 6 px), szegmens-váltó, saját dátumválasztó (.s-datum), kétlépcsős gomb.
+ * Az osztályokat a bővítmény JS-e is használja a saját űrlapjaihoz.
+ */
+
+.s-mezo, .s-urlap input[type="text"], .s-urlap input[type="email"], .s-urlap input[type="tel"], .s-urlap input[type="number"],
+.s-urlap input[type="url"], .s-urlap input[type="search"], .s-urlap input[type="password"], .s-urlap select {
+    display: block; width: 100%;
+    min-height: var(--s-magassag-mezo);
+    padding: 0 var(--s-t-5);
+    background: var(--s-mezo);
+    color: var(--s-szoveg);
+    border: 1px solid var(--s-mezo-keret);
+    border-radius: var(--s-r-mezo);
+    font-size: var(--s-m-alap);
+    transition: border-color var(--s-ido-gyors) var(--s-gorbe), box-shadow var(--s-ido-gyors) var(--s-gorbe);
+    -webkit-appearance: none; appearance: none;
+}
+.s-mezo--nagy { min-height: 60px; font-size: var(--s-m-l); padding-inline: var(--s-t-6); }
+textarea.s-mezo, .s-urlap textarea {
+    display: block; width: 100%;
+    min-height: 140px;
+    padding: var(--s-t-3) var(--s-t-4);
+    background: var(--s-mezo); color: var(--s-szoveg);
+    border: 1px solid var(--s-mezo-keret);
+    border-radius: var(--s-r-tobbsoros);
+    resize: vertical;
+}
+select.s-mezo, .s-urlap select {
+    padding-right: var(--s-t-7);
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
+    background-size: 6px 6px; background-repeat: no-repeat;
+}
+.s-mezo::placeholder, .s-urlap ::placeholder { color: var(--s-halvany); opacity: 1; }
+.s-mezo:hover, .s-urlap input:hover, .s-urlap select:hover, .s-urlap textarea:hover { border-color: var(--s-szoveg); }
+.s-mezo:focus-visible, .s-urlap input:focus-visible, .s-urlap select:focus-visible, .s-urlap textarea:focus-visible {
+    outline: none; border-color: var(--s-fokusz); box-shadow: 0 0 0 3px var(--s-neon-halvany);
+}
+.s-mezo[aria-invalid="true"], .s-urlap [aria-invalid="true"] { border-color: var(--s-hiba); }
+.s-mezo:disabled { opacity: 0.6; cursor: not-allowed; }
+input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.s-urlap { display: grid; gap: var(--s-t-5); }
+.s-urlap__sor { display: grid; gap: var(--s-t-5); }
+@media (min-width: 640px) { .s-urlap__sor--2 { grid-template-columns: 1fr 1fr; } }
+.s-mezocsoport { display: grid; gap: var(--s-t-2); }
+.s-cimke { font-weight: var(--s-suly-kozepes); font-size: var(--s-m-s); }
+.s-cimke__kotelezo { color: var(--s-hiba); margin-left: 2px; }
+.s-sugo { font-size: var(--s-m-xs); color: var(--s-halvany); margin: 0; }
+.s-hibauzenet { display: flex; gap: var(--s-t-1); align-items: center; font-size: var(--s-m-xs); color: var(--s-hiba); margin: 0; }
+
+/* Jelölő és rádió (saját, 24 px; a címkével együtt ≥ 44 px célterület) */
+.s-jelolo { display: flex; align-items: flex-start; gap: var(--s-t-3); min-height: 44px; padding-block: 10px; }
+.s-jelolo input[type="checkbox"], .s-jelolo input[type="radio"] {
+    flex: none; width: 22px; height: 22px; margin: 1px 0 0;
+    -webkit-appearance: none; appearance: none;
+    border: 1.5px solid var(--s-mezo-keret); background: var(--s-mezo);
+    border-radius: 7px; display: grid; place-content: center; cursor: pointer;
+    transition: background-color var(--s-ido-gyors), border-color var(--s-ido-gyors);
+}
+.s-jelolo input[type="radio"] { border-radius: 50%; }
+.s-jelolo input::before {
+    content: ""; width: 12px; height: 12px; transform: scale(0);
+    transition: transform var(--s-ido-gyors) var(--s-gorbe-rugo);
+    background: var(--s-kiemelo-felirat);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.s-jelolo input[type="radio"]::before { clip-path: circle(50%); width: 10px; height: 10px; }
+.s-jelolo input:checked { background: var(--s-kiemelo); border-color: var(--s-kiemelo); }
+.s-jelolo input:checked::before { transform: scale(1); }
+.s-jelolo label { cursor: pointer; }
+
+/* Kapcsoló: felirat nélkül (nincs Aktív/Inaktív), körülötte ≥ 6 px levegő */
+.s-kapcsolo {
+    position: relative; display: inline-flex; flex: none;
+    width: var(--s-kapcsolo-szel); height: var(--s-kapcsolo-mag);
+    margin: var(--s-t-kapcsolo);
+    -webkit-appearance: none; appearance: none;
+    border: 0; border-radius: var(--s-r-pill);
+    background: var(--s-vonal-eros);
+    cursor: pointer;
+    transition: background-color var(--s-ido) var(--s-gorbe);
+}
+.s-kapcsolo::after {
+    content: ""; position: absolute; top: 3px; left: 3px;
+    width: calc(var(--s-kapcsolo-mag) - 6px); height: calc(var(--s-kapcsolo-mag) - 6px);
+    border-radius: 50%; background: #fff; box-shadow: var(--s-arnyek-kicsi);
+    transition: transform var(--s-ido) var(--s-gorbe-rugo);
+}
+.s-kapcsolo:checked, .s-kapcsolo[aria-checked="true"] { background: var(--s-ok); }
+.s-kapcsolo:checked::after, .s-kapcsolo[aria-checked="true"]::after { transform: translateX(calc(var(--s-kapcsolo-szel) - var(--s-kapcsolo-mag))); }
+/* A 24 px magas kapcsoló célterülete 44 px-re bővítve (a látványt nem változtatja) */
+.s-kapcsolo::before { content: ""; position: absolute; inset: -10px -2px; }
+.s-kapcsolo-sor { display: flex; align-items: center; justify-content: space-between; gap: var(--s-t-4); min-height: 44px; }
+
+/* Szegmens-váltó (havi / éves) – rádiókból, JS nélkül is működik */
+.s-szegmens {
+    display: inline-flex; gap: var(--s-t-1);
+    margin: 0 auto var(--s-t-7); padding: var(--s-t-1);
+    border: 1px solid var(--s-uveg-keret); border-radius: var(--s-r-pill);
+    background: var(--s-felulet);
+}
+.s-szegmens__radio { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.s-szegmens__cimke {
+    display: inline-flex; align-items: center; gap: var(--s-t-2);
+    min-height: 44px; padding: 0 var(--s-t-5);
+    border-radius: var(--s-r-pill); cursor: pointer;
+    font-weight: var(--s-suly-felkover); color: var(--s-halvany);
+    transition: background-color var(--s-ido) var(--s-gorbe), color var(--s-ido) var(--s-gorbe);
+}
+.s-szegmens__radio:checked + .s-szegmens__cimke { background: var(--s-szoveg); color: var(--s-bg); }
+.s-szegmens__radio:checked + .s-szegmens__cimke .s-pill--ok { background: var(--s-ok); color: var(--s-bg); }
+.s-szegmens__radio:focus-visible + .s-szegmens__cimke { outline: var(--s-fokusz-vastag) solid var(--s-fokusz); outline-offset: 2px; }
+
+/* Kétlépcsős gomb: első kattintás után „Biztos?” állapot */
+[data-ketlepcsos].s-biztos, .s-gomb.s-biztos { background: var(--s-hiba); color: var(--s-kiemelo-felirat); border-color: var(--s-hiba); }
+
+/* Linkként kinéző gomb (lábléc: Süti-beállítások) */
+.s-linkgomb { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 0.18em; min-height: 24px; }
+.s-linkgomb:hover { color: var(--s-szoveg); }
+
+/* ---------- Dátumválasztó (assets/js/datum.js) ---------- */
+.s-datum { position: relative; }
+.s-datum__mezo { display: flex; align-items: center; gap: var(--s-t-2); }
+.s-datum__mezo .s-mezo { flex: 1; }
+.s-datum__gomb { flex: none; }
+.s-datum__panel {
+    position: absolute; z-index: var(--s-z-legordulo); top: calc(100% + 8px); left: 0;
+    width: min(340px, calc(100vw - 2 * var(--s-t-oldal)));
+    padding: var(--s-t-4);
+    background: var(--s-uveg-tomor);
+    border: 1px solid var(--s-uveg-keret); border-radius: var(--s-r-popup);
+    box-shadow: var(--s-arnyek-emelt);
+}
+.s-datum__fej { display: flex; align-items: center; justify-content: space-between; gap: var(--s-t-2); margin-bottom: var(--s-t-3); }
+.s-datum__honap { font-weight: var(--s-suly-felkover); text-transform: capitalize; }
+.s-datum__racs { width: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; }
+.s-datum__racs th { font-size: var(--s-m-xs); font-weight: var(--s-suly-kozepes); color: var(--s-halvany); padding-bottom: var(--s-t-1); text-align: center; }
+.s-datum__racs td { padding: 0; text-align: center; }
+.s-datum__nap {
+    width: 100%; aspect-ratio: 1; min-height: 40px;
+    border: 1px solid transparent; border-radius: 50%;
+    background: none; color: var(--s-szoveg); font-variant-numeric: tabular-nums;
+}
+.s-datum__nap:hover:not([aria-disabled="true"]) { background: var(--s-felulet-2); }
+.s-datum__nap[aria-selected="true"] { background: var(--s-kiemelo); color: var(--s-kiemelo-felirat); }
+.s-datum__nap.s-datum__nap--ma { border-color: var(--s-neon); }
+.s-datum__nap.s-datum__nap--mas { color: var(--s-halvany); opacity: 0.55; }
+.s-datum__nap[aria-disabled="true"] { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+.s-datum__lab { display: flex; justify-content: space-between; margin-top: var(--s-t-3); }

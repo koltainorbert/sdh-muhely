@@ -1,7 +1,7 @@
 <?php
 /**
  * Szekció: urlap – kapcsolat | ajanlat | egyedi | partner. Mezők: cim, alcim, urlap, siker.
- * A mezőket és a küldést a bővítmény JS-e adja (`data-sdh="urlap"`, `data-urlap="<fajta>"`); az egyedi igényfelmérő
+ * A mezőket és a küldést a bővítmény JS-e adja (`data-modul="urlap"`, `data-urlap="<fajta>"`); az egyedi igényfelmérő
  * külön modul (`egyedi`). JS nélkül: a céges e-mail-cím.
  *
  * @package SDH_Sales_Tema

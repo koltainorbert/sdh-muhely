@@ -1,0 +1,160 @@
+{
+ "slug": "riportok",
+ "cim": "Riportok",
+ "szulo": "funkciok",
+ "sorrend": 20,
+ "seo": {
+  "title": "Szerviz riportok és statisztika – {termeknev}",
+  "description": "Szerviz statisztika egy oldalon: átfutási idő, sikeres javítási arány, bevétel technikusonként és kategóriánként, 12 havi trend.",
+  "kulcsszo": "szerviz statisztika"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz riportok: átfutás, technikusok, bevétel",
+   "alcim": "Lezárt javítások, átlagos és medián átfutás, sikeres javítási arány, bevétel – technikusonként és az utolsó 12 hónapra.",
+   "cimke": "Pénzügy",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-riport",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Időszak: ez a hónap, előző hónap, 30 nap, idén vagy egyéni"
+    },
+    {
+     "szoveg": "Technikusonként: darab, átfutás, bevétel, visszajött"
+    },
+    {
+     "szoveg": "Bevétel fajtánként, tételenként, termékkategóriánként"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A Riportok egy oldalon mutatja, hogyan megy a szerviz: mennyi idő alatt készülnek el a javítások, ki mennyit javított, mennyi jön vissza garanciában, és miből jön a bevétel. Minden szám a lezárt lapokból jön, a lezárás napja szerint.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Riportok (adminisztrátornak).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Időszak: ez a hónap, előző hónap, 30 nap, idén vagy egyéni",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Technikusonként: darab, átfutás, bevétel, visszajött",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bevétel fajtánként, tételenként, termékkategóriánként",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Árajánlat-elfogadás és elégedettség csempéi",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az utolsó 12 hónap sávokkal: szezon és trend",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Időszak",
+     "szoveg": "Menü › Riportok: válassz időszakot, vagy adj meg Tól–Ig dátumot."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Csempék",
+     "szoveg": "Lezárt javítás, átlagos átfutás, sikeres javítás, bevétel, árajánlat, elégedettség."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Táblák",
+     "szoveg": "Technikusonként, kategóriánként, és az utolsó 12 hónap."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "javitasi-garancia",
+    "elegedettseg",
+    "online-arajanlat",
+    "hazipenztar",
+    "attekintes"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar",
+    "zrt",
+    "egeszsegugy"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Riportok",
+   "kulcsok": [
+    "riportok",
+    "export-adatok",
+    "javitasi-garancia"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Riportok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

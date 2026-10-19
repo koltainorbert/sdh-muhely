@@ -1,0 +1,148 @@
+{
+ "slug": "frissites",
+ "cim": "Egykattintásos frissítés",
+ "szulo": "funkciok",
+ "sorrend": 41,
+ "seo": {
+  "title": "Egykattintásos frissítés mentéssel – {termeknev}",
+  "description": "Szoftverfrissítés kockázat nélkül: automatikus teljes mentés előtte, megmaradó adatok, és távoli frissítés a forgalmazótól.",
+  "kulcsszo": "szoftver frissítés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Frissítés egy kattintással, előtte automatikus mentéssel",
+   "alcim": "Az új verzió egy gombbal települ; előtte a rendszer teljes mentést készít, és ha az nem sikerül, nem frissít.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-licenc",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Teljes mentés minden frissítés előtt"
+    },
+    {
+     "szoveg": "Az adatok és a beállítások megmaradnak"
+    },
+    {
+     "szoveg": "Elakadásnál a régi verzió marad"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A frissítés kétlépcsős gombbal indul, az adatok és a beállítások megmaradnak, az adatbázis az első oldalnál magától igazodik. Érvényes licenccel az új verzió a forgalmazói központból jön, és a forgalmazó távoli karbantartásként is elindíthatja.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Névjegy › Frissítés (a rendszer üzemeltetőjének).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Teljes mentés minden frissítés előtt",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az adatok és a beállítások megmaradnak",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Elakadásnál a régi verzió marad",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "A nyitva hagyott oldalak maguktól megújulnak",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Újdonságok a Súgóban és az asszisztens tudásában",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Értesítés",
+     "szoveg": "Ha van új verzió, a Beállítások tetején sáv jelzi."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Frissítés most",
+     "szoveg": "Kétlépcsős gomb: előbb teljes mentés, utána a csere."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Kész",
+     "szoveg": "Az oldal újratölt, a Névjegy az új verziót mutatja."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "licenc-karbantartas",
+    "mentes",
+    "sugo"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Egykattintásos frissítés",
+   "kulcsok": [
+    "frissites-menete",
+    "mi-van-ha-lejar-a-licenc",
+    "ujdonsagok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Egykattintásos frissítés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,162 @@
+{
+ "slug": "szolgaltatasok",
+ "cim": "Szolgáltatások és árlista",
+ "szulo": "funkciok",
+ "sorrend": 4,
+ "seo": {
+  "title": "Szolgáltatások, munkadíjak, árlista – {termeknev}",
+  "description": "Munkadíjak és bevizsgálási díjak egy törzsben: árlista beillesztése előnézettel, fix és sávos ár, választás a munkalapon egy kattintással.",
+  "kulcsszo": "szerviz árlista"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szolgáltatástörzs és árlista-beillesztés a munkadíjakhoz",
+   "alcim": "Munkadíjak és bevizsgálási díjak törzse; a meglévő árlista egyben beilleszthető, a munkalapon egy kattintással választható.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-szamlazas",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Árlista-beillesztés előnézettel: új, frissülő és kihagyott sorok"
+    },
+    {
+     "szoveg": "Fix ár és sávos ár (például 3 000 – 6 000 Ft)"
+    },
+    {
+     "szoveg": "Bevizsgálási díjak külön nézetben, kategóriakóddal"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A törzs kézzel vagy magától telik meg: amit a munkalapon egyszer beírtál, mentéskor megjegyzi névvel, egységgel, árral és áfakulccsal. A saját árlistád szövegként, előnézettel illeszthető be. A rendszer nem hoz magával árakat – az árlista a te adatod.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Szolgáltatások (Mind / Bevizsgálási díjak / Árlista).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Árlista-beillesztés előnézettel: új, frissülő és kihagyott sorok",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fix ár és sávos ár (például 3 000 – 6 000 Ft)",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Bevizsgálási díjak külön nézetben, kategóriakóddal",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Árlista nézet a gyors ár-átíráshoz",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Az ár átírása szerepkörhöz köthető",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Árlista beillesztése",
+     "szoveg": "Szolgáltatások › „Árlista beillesztése”: soronként megnevezés és ár, a jobb oldalon azonnal előnézet."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Díjak jelölése",
+     "szoveg": "Az előnézet Díj oszlopával soronként eldöntöd, mi számít bevizsgálási díjnak."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Mentés",
+     "szoveg": "A „Beillesztés a szolgáltatások közé” gomb létrehozza az új tételeket, a meglévők ára frissül."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Használat",
+     "szoveg": "A munkalap Szolgáltatások lapfülén a választóból kerül a lapra a név, az egység és a bruttó ár."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "munkalapok",
+    "termekek",
+    "szerepkorok",
+    "cimkenyomtatas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "egyeb"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Szolgáltatások és árlista",
+   "kulcsok": [
+    "alaprendszer-mi-van-benne",
+    "urlap-testreszabas",
+    "export-adatok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Szolgáltatások és árlista a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

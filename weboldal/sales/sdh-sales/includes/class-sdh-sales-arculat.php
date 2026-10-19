@@ -561,7 +561,7 @@ final class SDH_Sales_Arculat
         $css = self::css(self::$elonezet);
 
         if ($css !== '') {
-            echo '<style id="sdh-sales-arculat">' . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- érvényesített tokenek.
+            echo '<style id="s-arculat">' . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- érvényesített tokenek.
         }
     }
 

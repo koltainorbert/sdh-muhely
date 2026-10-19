@@ -1,0 +1,87 @@
+/* Hosszú szöveg (blog, jogi, tudásbázis, szöveg-szekció): olvasható sorhossz, ritmus, TJ, cikk-elrendezés. */
+
+.s-proza { max-width: var(--s-sor-max); font-size: var(--s-m-l); line-height: 1.7; }
+.s-proza > * + * { margin-top: 0; }
+.s-proza h2 { font-size: var(--s-m-2xl); margin: var(--s-t-7) 0 var(--s-t-4); }
+.s-proza h3 { font-size: var(--s-m-xl); margin: var(--s-t-6) 0 var(--s-t-3); }
+.s-proza h4 { margin: var(--s-t-5) 0 var(--s-t-2); }
+.s-proza h2:first-child, .s-proza h3:first-child { margin-top: 0; }
+.s-proza p, .s-proza ul, .s-proza ol { margin-bottom: var(--s-t-5); }
+.s-proza li + li { margin-top: var(--s-t-2); }
+.s-proza li::marker { color: var(--s-neon); }
+.s-proza a { color: var(--s-kiemelo-2); }
+.s-proza strong { font-weight: var(--s-suly-felkover); color: var(--s-szoveg); }
+.s-proza blockquote { margin: var(--s-t-6) 0; padding: var(--s-t-4) var(--s-t-5); border-left: 3px solid var(--s-kiemelo-2); background: var(--s-kiemelo-2-halvany); border-radius: 0 var(--s-r-kicsi) var(--s-r-kicsi) 0; font-size: var(--s-m-l); }
+.s-proza blockquote p:last-child { margin: 0; }
+.s-proza code { padding: 0.1em 0.4em; border-radius: 6px; background: var(--s-felulet-2); border: 1px solid var(--s-vonal); }
+.s-proza pre { padding: var(--s-t-4) var(--s-t-5); overflow-x: auto; border-radius: var(--s-r-kicsi); background: var(--s-felulet-2); border: 1px solid var(--s-vonal); font-size: var(--s-m-s); line-height: 1.6; }
+.s-proza pre code { padding: 0; border: 0; background: none; }
+.s-proza img, .s-proza figure { margin: var(--s-t-6) 0; border-radius: var(--s-r-kicsi); }
+.s-proza figcaption { font-size: var(--s-m-xs); color: var(--s-halvany); margin-top: var(--s-t-2); text-align: center; }
+.s-proza table { margin-bottom: var(--s-t-5); }
+.s-proza hr { margin: var(--s-t-7) 0; }
+.s-proza h2[id], .s-proza h3[id] { scroll-margin-top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); }
+.s-proza .aligncenter { margin-inline: auto; }
+.s-proza--jogi { font-size: var(--s-m-alap); }
+.s-proza--jogi h2 { font-size: var(--s-m-xl); }
+.s-proza--jogi h3 { font-size: var(--s-m-l); }
+
+/* Tartalomjegyzék */
+.s-tj { margin-bottom: var(--s-t-6); }
+.s-tj__doboz { border: 1px solid var(--s-vonal); border-radius: 20px; background: var(--s-felulet); padding: var(--s-t-2) var(--s-t-4) var(--s-t-4); }
+.s-tj__cim { display: flex; align-items: center; min-height: 44px; font-weight: var(--s-suly-felkover); cursor: pointer; list-style: none; font-size: var(--s-m-s); text-transform: uppercase; letter-spacing: var(--s-betukoz-felirat); color: var(--s-halvany); }
+.s-tj__cim::-webkit-details-marker { display: none; }
+.s-tj__lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; font-size: var(--s-m-s); counter-reset: tj; }
+.s-tj__elem a { display: block; padding: var(--s-t-1) var(--s-t-2); border-radius: 10px; color: var(--s-halvany); text-decoration: none; border-left: 2px solid transparent; min-height: 32px; }
+.s-tj__elem a:hover, .s-tj__elem a[aria-current="true"] { color: var(--s-szoveg); background: var(--s-felulet-2); border-left-color: var(--s-neon); }
+.s-tj__elem--3 a { padding-left: var(--s-t-5); font-size: var(--s-m-xs); }
+
+/* Cikk-elrendezés: TJ oldalt (széles képernyőn ragadós) */
+.s-cikk__fej { padding-bottom: var(--s-t-5); }
+.s-cikk__meta { display: flex; flex-wrap: wrap; gap: var(--s-t-2) var(--s-t-5); margin: var(--s-t-4) 0 0; font-size: var(--s-m-s); color: var(--s-halvany); }
+.s-cikk__meta > span { display: inline-flex; align-items: center; gap: var(--s-t-2); }
+.s-cikk__meta .s-ikon { width: 16px; height: 16px; }
+.s-cikk__kep { margin-bottom: var(--s-t-7); }
+.s-cikk__kep img { border-radius: var(--s-r-popup); width: 100%; }
+.s-cikk__racs { display: grid; gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
+@media (min-width: 1100px) {
+    .s-cikk__racs { grid-template-columns: 240px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); }
+    .s-cikk__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
+}
+@media (max-width: 1099.98px) { .s-cikk__racs { max-width: calc(var(--s-max-szuk) + 2 * var(--s-t-oldal)); } }
+.s-cikk__cimkek { margin: var(--s-t-6) 0; }
+.s-entitas { display: flex; gap: var(--s-t-4); align-items: flex-start; padding: var(--s-t-5); margin-top: var(--s-t-6); }
+.s-entitas__cim { font-size: var(--s-m-l); margin-bottom: var(--s-t-2); }
+.s-entitas__szoveg { color: var(--s-halvany); font-size: var(--s-m-s); margin-bottom: var(--s-t-2); }
+.s-entitas__linkek { display: flex; flex-wrap: wrap; gap: var(--s-t-4); margin: 0; font-size: var(--s-m-s); }
+
+/* Tudásbázis-fejezet */
+.s-tudas__racs { display: grid; gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
+@media (min-width: 1100px) {
+    .s-tudas__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); }
+    .s-tudas__oldalsav { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); align-self: start; max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
+}
+.s-tudas-darab { scroll-margin-top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); }
+.s-tudas-darab + .s-tudas-darab { margin-top: var(--s-t-7); padding-top: var(--s-t-6); border-top: 1px solid var(--s-vonal); }
+.s-tudas__lapozo { display: grid; gap: var(--s-t-3); margin-top: var(--s-t-7); }
+@media (min-width: 640px) { .s-tudas__lapozo { grid-template-columns: 1fr 1fr; } }
+.s-tudas__lapozo a { display: grid; gap: var(--s-t-1); padding: var(--s-t-4) var(--s-t-5); border: 1px solid var(--s-vonal); border-radius: 18px; text-decoration: none; color: var(--s-szoveg); background: var(--s-felulet); }
+.s-tudas__lapozo a:hover { border-color: var(--s-vonal-eros); }
+.s-tudas__lapozo small { color: var(--s-halvany); }
+.s-tudas__kov { text-align: right; }
+.s-fejezetlista { list-style: none; padding: 0; margin: var(--s-t-4) 0 0; font-size: var(--s-m-s); display: grid; gap: 2px; }
+.s-fejezetlista a { display: block; padding: var(--s-t-1) var(--s-t-2); border-radius: 10px; color: var(--s-halvany); text-decoration: none; min-height: 32px; }
+.s-fejezetlista a:hover, .s-fejezetlista a[aria-current="page"] { background: var(--s-felulet-2); color: var(--s-szoveg); }
+
+/* Keresési találatok (szerveroldal) */
+.s-talalatlista { list-style: none; padding: 0; margin: 0 0 var(--s-t-6); display: grid; gap: var(--s-t-2); }
+.s-talalat__link { display: grid; gap: var(--s-t-1); padding: var(--s-t-4) var(--s-t-5); border: 1px solid var(--s-vonal); border-radius: 18px; background: var(--s-felulet); text-decoration: none; color: var(--s-szoveg); }
+.s-talalat__link:hover { border-color: var(--s-vonal-eros); color: var(--s-szoveg); }
+.s-talalat__cim { font-weight: var(--s-suly-felkover); }
+.s-talalat__kivonat { font-size: var(--s-m-s); color: var(--s-halvany); }
+.s-oldalfej__kereso { max-width: 640px; margin-top: var(--s-t-5); }
+.s-kereso-urlap { display: flex; gap: var(--s-t-2); }
+.s-kereso-urlap .s-mezo { flex: 1; min-width: 0; }
+.s-kereso-urlap .s-gomb span { display: none; }
+@media (min-width: 480px) { .s-kereso-urlap .s-gomb span { display: inline; } }
+.s-pillsor--szuro { margin-top: var(--s-t-5); }

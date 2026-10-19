@@ -1,0 +1,150 @@
+{
+ "slug": "szerviz",
+ "cim": "Telefon-, számítógép- és elektronikai szerviz",
+ "szulo": "iparagak",
+ "sorrend": 1,
+ "seo": {
+  "title": "Telefonszerviz program IMEI-kereséssel – {termeknev}",
+  "description": "Szoftver telefon-, laptop-, számítógép- és elektronikai szervizeknek: IMEI-felismerés, RMA-ügyféloldal, Brother-matrica, alkatrészraktár.",
+  "kulcsszo": "telefonszerviz program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Telefonszerviz program és elektronikai szerviz szoftver",
+   "alcim": "Telefonszerviz program IMEI-kereséssel, RMA-ügyféloldallal, Brother-matricával – a pult és a műhely mindennapjaira.",
+   "cimke": "Telefon-, számítógép- és elektronikai szerviz",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-szerviz",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "4",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "telefon",
+     "cim": "Folyton cseng a telefon",
+     "szoveg": "„Kész van már?” – a hívások a pultot és a műhelyt is megakasztják."
+    },
+    {
+     "ikon": "kereso",
+     "cim": "Nehéz visszakeresni",
+     "szoveg": "Járt már nálunk ez a készülék? Mi volt a baja? Papíron vagy Excelben ez percekig tart."
+    },
+    {
+     "ikon": "figyelem",
+     "cim": "Vita az átvételkori állapotról",
+     "szoveg": "Fotó és aláírás nélkül nehéz bizonyítani, hogy a karc már behozatalkor ott volt."
+    },
+    {
+     "ikon": "doboz",
+     "cim": "Elfogy az alkatrész",
+     "szoveg": "A munkalapra félretett kijelző nincs sehol nyilvántartva, a rendelés emlékezetből megy."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>A {termeknev} a javítóműhelyek napi munkafolyamatára épül: készülékátvétel, hibafelvétel, alkatrész, ügyfél-értesítés, kiadás és számla. Mobiltelefon-, tablet-, laptop-, számítógép-, TV- és háztartási elektronikai szervizekben ugyanaz a folyamat – ezért itt minden funkció a helyén van.</p><ul><li><strong>IMEI-felismerés:</strong> a 15. számjegy után kiderül, járt-e már nálatok a készülék; a gyártót és a típust internet nélkül is felismeri.</li><li><strong>Átvétel:</strong> fotó a kamerával, aláírás érintőképernyőn, átvételi elismervény.</li><li><strong>Követés:</strong> QR-kódos ügyféloldal magyarul, angolul, németül; SMS a saját androidos telefonról.</li><li><strong>Műhely:</strong> RMA-matrica Brother címkenyomtatóra, alkatrészfoglalás munkalapra, rendelési javaslat.</li></ul>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "munkalapok",
+    "eszkozok",
+    "imei-tac",
+    "rma",
+    "cimkenyomtatas",
+    "atvetel-foto-alairas",
+    "javitasi-garancia",
+    "sms",
+    "raktar",
+    "szamlazas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "imei",
+    "tac",
+    "uzenetek",
+    "matrica",
+    "sms",
+    "termekek",
+    "szamlazas"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>Ügyféladat és készülékadat a saját szervereteken: a feloldó kód titkosítva, megnézése jogosultsághoz kötött és naplózott. Törlési kérésre GDPR-anonimizálás, a számlák és munkalapok számviteli megőrzésével. A javítási garancia napjait a jogszabályi jótállási időhöz igazítsátok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Telefon-, számítógép- és elektronikai szerviz",
+   "kulcsok": [
+    "telefonszerviz",
+    "szamitogep-szerviz",
+    "elektronikai-szerviz",
+    "eszkoz-elozmenyek",
+    "imei-tac"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "ipar",
+    "kkv",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

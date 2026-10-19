@@ -37,6 +37,26 @@ foreach (['rendeles', 'letoltes', 'nonce'] as $t) {
 
 $utak = rest_get_server()->get_routes();
 T::igaz(isset($utak['/sdh-kozpont/v1/kiszolgalas'], $utak['/sdh-kozpont/v1/letoltes'], $utak['/sdh-kozpont/v1/csomag']), 'végpontok: kiszolgalas, letoltes (+ a régi csomag)');
+T::igaz(isset($utak['/licenc/v1/kiszolgalas'], $utak['/licenc/v1/letoltes']), 'semleges álnév-névtér: licenc/v1');
+
+/* --- Rejtés: kulcs-előtag, terméknév, fájlnév ------------------------------------------------------------------- */
+
+$K::beallitas_ment(['termek_nev' => 'Munkóra Pro', 'kulcs_elotag' => '']);
+T::egyezik('MUNKORAPRO', $K::kulcs_elotag(), 'előtag a terméknévből (ékezet nélkül, nagybetű, max 10)');
+$K::beallitas_ment(['kulcs_elotag' => 'ab-c!d']);
+T::egyezik('ABCD', $K::kulcs_elotag(), 'beállított előtag tisztítva');
+T::igaz(preg_match('/^ABCD(-[A-Z2-9]{4}){4}$/', $K::uj_kulcs()) === 1, 'új kulcs az előtaggal');
+$K::beallitas_ment(['kulcs_elotag' => 'x', 'termek_nev' => 'SDH Műhely']);
+T::egyezik('LIC', $K::kulcs_elotag(), 'tiltott / túl rövid előtag helyett: LIC');
+T::egyezik('telepito-1.2.3.zip', $KS::fajlnev('1.2.3'), 'fájlnév: „sdh” nem kerülhet bele');
+$K::beallitas_ment(['termek_nev' => 'Munkóra Pro', 'kulcs_elotag' => 'MUNKORA']);
+T::egyezik('munkora-pro-1.2.3.zip', $KS::fajlnev('1.2.3'), 'fájlnév: <termék>-<verzió>.zip');
+$regi_k = 'SDH-' . substr($K::uj_kulcs(), 8);
+$wpdb->insert($K::t('licenc'), ['kulcs' => $regi_k, 'vevo' => 'Régi T94', 'allapot' => 'aktiv', 'letrehozva' => current_time('mysql')]);
+T::igaz($K::licenc(strtolower($regi_k)) !== null, 'régi SDH- kulcs továbbra is érvényes');
+T::egyezik('abc', $KS::letoltes_token_keresbol((string) wp_parse_url(home_url('/licenc/letoltes/'), PHP_URL_PATH) . '?t=abc', ['t' => 'abc']), 'semleges letöltő cím felismerve');
+T::egyezik('tok', $KS::letoltes_token_keresbol('/', ['licenc_letoltes' => 'tok']), 'sima permalinkes alak felismerve');
+T::egyezik(null, $KS::letoltes_token_keresbol('/valami/mas/', []), 'más cím: nem az enyém');
 
 /* --- Új licenc, vevő ---------------------------------------------------------------------------------------------- */
 
@@ -51,7 +71,8 @@ $k1   = [
 
 $v1 = $KS::feldolgoz($k1);
 T::igaz(!empty($v1['ok']), 'új licenc: ok (' . (string) ($v1['uzenet'] ?? '') . ')');
-T::igaz(preg_match('/^SDH-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/', (string) ($v1['licenc_kulcs'] ?? '')) === 1, 'licenckulcs formátuma');
+T::igaz(preg_match('/^' . $K::kulcs_elotag() . '-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/', (string) ($v1['licenc_kulcs'] ?? '')) === 1, 'licenckulcs formátuma (beállított előtag)');
+T::nem_tartalmaz((string) $v1['licenc_kulcs'], 'SDH', 'a kulcsban nincs SDH');
 $lic = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $K::t('licenc') . ' WHERE id = %d', (int) ($v1['licenc_id'] ?? 0)));
 T::igaz($lic !== null, 'licenc a Központban');
 T::egyezik(['sms', 'naptar', 'penztar'], $K::licenc_modulok($lic), 'modulok');
@@ -68,7 +89,8 @@ T::tartalmaz((string) $lic->megjegyzes, $k1['rendeles'], 'a licencnél a rendel�
 $vsor = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $K::t('vevo') . ' WHERE id = %d', (int) $v1['vevo_id']));
 T::igaz($vsor !== null && (string) $vsor->nev === $vevo['nev'] && (string) $vsor->email === $vevo['email'] && (string) $vsor->adoszam === $vevo['adoszam'], 'új vevő az adataival');
 T::tartalmaz((string) $vsor->cimkek, 'webshop', 'vevő címkéje: webshop');
-T::igaz(strpos((string) $v1['letoltes_url'], '/sdh-kozpont/v1/letoltes') !== false && strpos((string) $v1['letoltes_url'], 't=') !== false, 'letöltő link a válaszban');
+T::igaz(strpos((string) $v1['letoltes_url'], '/licenc/letoltes/?t=') !== false, 'letöltő link a válaszban (semleges cím)');
+T::igaz(preg_match('~sdh|wp-json|rest_route|wordpress~i', (string) $v1['letoltes_url']) !== 1, 'a linkben nincs sdh / wp-json / rest_route');
 
 /* --- Idempotencia ------------------------------------------------------------------------------------------------- */
 

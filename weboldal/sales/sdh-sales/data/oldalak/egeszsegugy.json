@@ -1,0 +1,124 @@
+{
+ "slug": "egeszsegugy",
+ "cim": "Egészségügyi eszközszerviz",
+ "szulo": "iparagak",
+ "sorrend": 6,
+ "seo": {
+  "title": "Javítás-nyilvántartás eszközszerviznek – {termeknev}",
+  "description": "Egészségügyi eszközöket javító műhelyeknek: sorozatszámos eszköznyilvántartás, átvételi fotó, aláírt napló. Betegadat kezelésére nem való.",
+  "kulcsszo": "eszközszerviz nyilvántartás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Javítás-nyilvántartás egészségügyi eszközöket javító műhelyeknek",
+   "alcim": "Javítás- és eszköznyilvántartás egészségügyi eszközöket javító műhelyeknek – nem betegnyilvántartó rendszer.",
+   "cimke": "Egészségügyi eszközszerviz",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-egeszsegugy",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "riport",
+     "cim": "Hiányos szervizelőzmény",
+     "szoveg": "Egy eszköz teljes javítási története kell az átadáskor."
+    },
+    {
+     "ikon": "kamera",
+     "cim": "Átvételkori állapot",
+     "szoveg": "Az átvétel rögzítése fotóval és aláírással."
+    },
+    {
+     "ikon": "lakat",
+     "cim": "Ki nyúlt hozzá?",
+     "szoveg": "Minden módosítás nyomon követése."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>Egészségügyi eszközöket javító műhelyben ugyanaz a munkafolyamat: átvétel, hiba, alkatrész, javítás, átadás. A {termeknev} sorozatszámmal és teljes előélettel tartja nyilván az eszközt, és mezőszinten naplózza a munkalapot.</p>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "eszkozok",
+    "munkalapok",
+    "atvetel-foto-alairas",
+    "valtozasnaplo",
+    "javitasi-garancia",
+    "szerepkorok",
+    "riportok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p><strong>Fontos:</strong> a {termeknev} nem orvostechnikai eszköz, nem betegnyilvántartó és nem egészségügyi dokumentációs rendszer. Betegadatot, egészségügyi adatot ne rögzítsetek benne. Orvostechnikai szabályozási megfelelést nem ígérünk; a karbantartási kötelezettségeket a saját minőségirányításotok szerint kövessétek.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Egészségügyi eszközszerviz",
+   "kulcsok": [
+    "mire-nem-valo",
+    "hol-vannak-az-adatok",
+    "valtozasnaplo"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "zrt",
+    "allami-szektor",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

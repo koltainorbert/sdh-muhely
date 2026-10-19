@@ -1,0 +1,27 @@
+{
+ "slug": "penztar",
+ "cim": "Pénztár",
+ "sorrend": 93,
+ "seo": {
+  "title": "Pénztár – {termeknev}",
+  "description": "Számlázási adatok és fizetési mód: átutalás díjbekérővel és MNB QR-kóddal. A licenckulcs a fizetés beérkezése után érkezik.",
+  "kulcsszo": "pénztár"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Pénztár",
+   "alcim": "Add meg a cégadatokat, és válassz fizetési módot. A díjbekérőt azonnal megkapod e-mailben, a licenckulcsot a fizetés beérkezése után.",
+   "cimke": "Vásárlás",
+   "gomb": {
+    "szoveg": "Vissza a kosárhoz",
+    "url": "/kosar/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "penztar",
+   "cim": "Megrendelés"
+  }
+ ]
+}

@@ -1,0 +1,157 @@
+{
+ "slug": "ketlepcsos-belepes",
+ "cim": "Kétlépcsős belépés",
+ "szulo": "funkciok",
+ "sorrend": 31,
+ "seo": {
+  "title": "Kétlépcsős belépés (2FA) – {termeknev}",
+  "description": "Kétlépcsős azonosítás a szerviz rendszerében: 6 jegyű kód a telefonról, tartalék kódok, megbízható gép, kötelezővé tehető szabály.",
+  "kulcsszo": "kétlépcsős azonosítás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Kétlépcsős belépés (2FA) hitelesítő alkalmazással",
+   "alcim": "A jelszó mellé a telefon hitelesítő alkalmazásának 6 jegyű, 30 másodpercenként változó kódja – kötelezővé is tehető.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Szabványos TOTP-kód (RFC 6238) bármely hitelesítő alkalmazással"
+    },
+    {
+     "szoveg": "10 egyszer használható tartalék kód"
+    },
+    {
+     "szoveg": "Kötelező adminisztrátoroknak vagy mindenkinek"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az adminisztrátor dönti el: kikapcsolva, választható, adminisztrátoroknak vagy mindenkinek kötelező. Minden kód egyszer használható, 10 tartalék kód jár hozzá, a megbízható gép 0–90 napig (alapból 30) nem kér kódot.</p><p><strong>Hol találod a rendszerben?</strong> Profilmenü › Kétlépcsős belépés; Beállítások › Jogosultságok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Szabványos TOTP-kód (RFC 6238) bármely hitelesítő alkalmazással",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "10 egyszer használható tartalék kód",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Kötelező adminisztrátoroknak vagy mindenkinek",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Fiókonként 10 rossz kód után 15 perc zár",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Elveszett telefonnál az adminisztrátor visszaállítja",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Szabály",
+     "szoveg": "Beállítások › Jogosultságok › Kétlépcsős belépés: kinek kötelező, megbízható gép napjai."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Bekapcsolás",
+     "szoveg": "Profilmenü › Kétlépcsős belépés: QR-kód beolvasása, kód beírása."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Tartalék kódok",
+     "szoveg": "A 10 tartalék kódot írd le vagy nyomtasd ki – többet nem látod."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "biztonsag",
+    "szerepkorok",
+    "belepo-oldal",
+    "kozos-fiok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Kétlépcsős belépés",
+   "kulcsok": [
+    "ketlepcsos-belepes",
+    "elveszett-telefon-2fa",
+    "kozos-fiok-pin"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Kétlépcsős belépés a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

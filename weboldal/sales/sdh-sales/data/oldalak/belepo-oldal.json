@@ -1,0 +1,143 @@
+{
+ "slug": "belepo-oldal",
+ "cim": "Testreszabható belépő oldal",
+ "szulo": "funkciok",
+ "sorrend": 38,
+ "seo": {
+  "title": "Testreszabható belépő oldal – {termeknev}",
+  "description": "A szerviz rendszerének bejelentkező oldala a cég arculatával: logó, háttérkép vagy videó, színek, szövegek, élő előnézettel.",
+  "kulcsszo": "céges belépő oldal"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Saját arculatú bejelentkező oldal élő előnézettel",
+   "alcim": "Logó, háttér (szín, színátmenet, kép, videó), a doboz helye és stílusa, szövegek – mentés előtt élő előnézettel.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Élő előnézet asztali és mobil nézetben"
+    },
+    {
+     "szoveg": "Háttér: egyszínű, színátmenet, kép vagy videó"
+    },
+    {
+     "szoveg": "Doboz balra, középre vagy jobbra, üveghatással"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A bejelentkező oldal a cég arculatát viseli: logó és magassága, címsor, alcím, gombfelirat, háttér, üveghatás, neon fény, betűtípus. A videós háttér csak széles képernyőn töltődik le; mobilon a háttérkép áll.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Bejelentkező oldal.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Élő előnézet asztali és mobil nézetben",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Háttér: egyszínű, színátmenet, kép vagy videó",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Doboz balra, középre vagy jobbra, üveghatással",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Ami üres, az a cég arculata szerint látszik",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Lapfül",
+     "szoveg": "Beállítások › Bejelentkező oldal."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Beállítás",
+     "szoveg": "Logó, háttér, doboz, szövegek – jobbra élő előnézet."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Mentés",
+     "szoveg": "Mentés után mindenki az új oldalt látja."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "megjelenes",
+    "ketlepcsos-belepes",
+    "biztonsag"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Testreszabható belépő oldal",
+   "kulcsok": [
+    "megjelenes-testreszabas",
+    "ketlepcsos-belepes",
+    "zart-mod"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Testreszabható belépő oldal a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

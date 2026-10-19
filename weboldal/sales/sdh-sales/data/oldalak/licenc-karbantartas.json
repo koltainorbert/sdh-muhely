@@ -1,0 +1,159 @@
+{
+ "slug": "licenc-karbantartas",
+ "cim": "Licenc és távoli karbantartás",
+ "szulo": "funkciok",
+ "sorrend": 42,
+ "seo": {
+  "title": "Licenc és távoli karbantartás – {termeknev}",
+  "description": "Távoli karbantartás és támogatás személyes adat küldése nélkül: állapotfigyelés, frissítés, mentés, időkorlátos támogatási belépés.",
+  "kulcsszo": "távoli karbantartás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Licenc, távoli karbantartás és támogatási hozzáférés",
+   "alcim": "A forgalmazó előre látja, ha baj van (lassú, fogy a tárhely, elmaradt a mentés), és távolról karbantart – a te engedélyeddel.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-licenc",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Licenc: modulok, felhasználók, frissítés jogosultsága"
+    },
+    {
+     "szoveg": "Lejárt licencnél is minden működik, csak frissítés nincs"
+    },
+    {
+     "szoveg": "Távoli karbantartás, a Licenc lapon kikapcsolható"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer 5 percenként jelentkezik a forgalmazó központjánál műszaki állapottal és darabszámokkal – ügyfélnevet, telefonszámot, munkalap-tartalmat és forgalmat soha nem küld. A forgalmazó mentést, diagnosztikát, gyorsítótár-ürítést és frissítést indíthat; támogatási belépést csak te engedélyezhetsz, 2 órára, 1 vagy 3 napra.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Rendszer › Licenc.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Licenc: modulok, felhasználók, frissítés jogosultsága",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Lejárt licencnél is minden működik, csak frissítés nincs",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Távoli karbantartás, a Licenc lapon kikapcsolható",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Időkorlátos támogatási belépés, minden lépés naplózva",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Digitálisan aláírt központi válaszok",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Kulcs",
+     "szoveg": "Beállítások › Rendszer › Licenc: a központ címe és a licenckulcs."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Állapot",
+     "szoveg": "Az Állapot sor: Aktív, a vevő neve és a lejárat."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Támogatás",
+     "szoveg": "Támogatási hozzáférés: időtartam, Engedélyezem – lejáratkor a fiók magától törlődik."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "frissites",
+    "sebessegmeres",
+    "mentes",
+    "biztonsag"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Licenc és távoli karbantartás",
+   "kulcsok": [
+    "tavoli-karbantartas",
+    "tamogatasi-hozzaferes",
+    "szivveres-mi-az",
+    "telemetria-kikapcsolasa",
+    "licenc-allapotok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Licenc és távoli karbantartás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

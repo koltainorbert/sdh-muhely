@@ -4,8 +4,9 @@
  *
  * Két mód (`kozpont.mod`):
  *   - `helyi`  – a Központ ugyanezen a WordPressen fut: közvetlen PHP-hívás `SDH_Kozpont_Kiszolgalas::feldolgoz()`.
- *   - `tavoli` – aláírt POST a `{kozpont.url}` Központnak (`sdh-kozpont/v1/kiszolgalas`, `?rest_route=` alakban, hogy sima
- *     permalinknél is menjen): törzs `{adat: base64(json), alairas: base64(Ed25519)}`, a kérésben `ido` és egyszer használható
+ *   - `tavoli` – aláírt POST a `{kozpont.url}` Központnak (`licenc/v1/kiszolgalas` – semleges névtér; ha a Központ még
+ *     nem ismeri (404), a régi `sdh-kozpont/v1/kiszolgalas`; `?rest_route=` alakban, hogy sima permalinknél és a
+ *     Központ saját REST-előtagjától függetlenül is menjen – ez szerver–szerver kérés, a vevő nem látja): törzs `{adat: base64(json), alairas: base64(Ed25519)}`, a kérésben `ido` és egyszer használható
  *     `nonce`. Az értékesítő webhely saját kulcspárja: titkos `SDH_Sales::titkos('kulcspar_titkos')`, nyilvános a
  *     `kozpont.sajat_nyilvanos` beállításban (ezt kell a Központ Beállítások › Értékesítő webhely mezőjébe másolni).
  *     A választ a Központ kulcsával ellenőrizzük: `kozpont.nyilvanos` (első kapcsolatkor megjegyezve – TOFU; utána csak az
@@ -31,7 +32,8 @@ final class SDH_Sales_Kozpont_Kapcsolat
     public const IDOKORLAT = 20;
     public const IDO_TURES = 300;
     public const TITOK     = 'kulcspar_titkos';
-    public const UT        = '/sdh-kozpont/v1/kiszolgalas';
+    public const UT        = '/licenc/v1/kiszolgalas';
+    public const UT_REGI   = '/sdh-kozpont/v1/kiszolgalas';
 
     public static function init(): void
     {
@@ -164,14 +166,19 @@ final class SDH_Sales_Kozpont_Kapcsolat
         $adat  = $keres + ['ido' => time(), 'nonce' => $nonce, 'kuldo' => home_url('/')];
         $raw   = (string) wp_json_encode($adat);
         $torzs = (string) wp_json_encode(['adat' => base64_encode($raw), 'alairas' => base64_encode(sodium_crypto_sign_detached($raw, $kp['titkos']))]);
-        $url   = add_query_arg('rest_route', self::UT, $cim);
-
-        $r = wp_remote_post($url, [
+        $kuld  = static fn (string $ut) => wp_remote_post(add_query_arg('rest_route', $ut, $cim), [
             'timeout'     => self::IDOKORLAT,
             'redirection' => 0,
             'headers'     => ['Content-Type' => 'application/json', 'Accept' => 'application/json'],
             'body'        => $torzs,
         ]);
+
+        $r = $kuld(self::UT);
+
+        // 2.1 előtti / semleges névtér nélküli Központ: a régi útvonal (ugyanaz a nonce – az első kérés el sem jutott hozzá).
+        if (!is_wp_error($r) && (int) wp_remote_retrieve_response_code($r) === 404) {
+            $r = $kuld(self::UT_REGI);
+        }
 
         if (is_wp_error($r)) {
             return self::hiba('A Központ nem érhető el (' . $r->get_error_message() . '). A rendszer később újrapróbálja.', true);

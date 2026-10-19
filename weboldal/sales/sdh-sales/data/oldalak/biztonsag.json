@@ -1,0 +1,162 @@
+{
+ "slug": "biztonsag",
+ "cim": "Adatbiztonság",
+ "szulo": "funkciok",
+ "sorrend": 30,
+ "seo": {
+  "title": "Adatbiztonság és GDPR – {termeknev}",
+  "description": "Saját szerveren futó szerviz CRM: kétlépcsős belépés, titkosított zárkódok és mentések, szerepkörök, aláírt napló, GDPR-anonimizálás.",
+  "kulcsszo": "GDPR szerviz ügyféladat"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Adatbiztonság és GDPR egy szerviz CRM-jében",
+   "alcim": "Kétlépcsős belépés, titkosított zárkódok és mentések, szerepkörök, aláírt változásnapló és GDPR-anonimizálás – a saját szervereden.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Kétlépcsős belépés, kötelezővé tehető"
+    },
+    {
+     "szoveg": "Zárkód, minta, API-kulcsok titkosítva"
+    },
+    {
+     "szoveg": "Szerepkörök és finom jogok, szerveroldali ellenőrzéssel"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer a cég saját szerverén fut, és belépés nélkül semmit nem mutat. A titkos adatok (zárkód, API-kulcsok, jelszavak) titkosítva állnak, a mentések jelszóval titkosítva mennek külső helyre, a Változásnapló minden sorát aláírás védi.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Jogosultságok, Mentés, Változásnapló.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Kétlépcsős belépés, kötelezővé tehető",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Zárkód, minta, API-kulcsok titkosítva",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Szerepkörök és finom jogok, szerveroldali ellenőrzéssel",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Aláírt, nem átírható változásnapló",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "GDPR-anonimizálás a számviteli megőrzés mellett",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Belépés",
+     "szoveg": "Kétlépcsős belépés kötelezővé tétele: Beállítások › Jogosultságok."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Jogok",
+     "szoveg": "Szerepkörök: ki mit lát és mit tehet, a zárkód megnézése is jog."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Mentés",
+     "szoveg": "Titkosított külső mentés: Beállítások › Mentés."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "ketlepcsos-belepes",
+    "zarkod-titkositas",
+    "kulso-mentes",
+    "gdpr-anonimizalas",
+    "valtozasnaplo",
+    "szerepkorok"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "zrt",
+    "allami-szektor"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Adatbiztonság",
+   "kulcsok": [
+    "hol-vannak-az-adatok",
+    "mit-kuld-a-rendszer",
+    "ketlepcsos-belepes",
+    "jelszavak-kulcsok-tarolasa",
+    "zart-mod"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Adatbiztonság a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

@@ -1,0 +1,138 @@
+{
+ "slug": "egyeb",
+ "cim": "Egyéb javító- és szolgáltatócégek",
+ "szulo": "iparagak",
+ "sorrend": 8,
+ "seo": {
+  "title": "Munkalap program javítóműhelynek – {termeknev}",
+  "description": "Kerékpár-, kisgép-, hangszer- és órajavítóknak: ügyfél, tárgy, munkalap, alkatrész, QR-kódos követés és időpontfoglalás egy helyen.",
+  "kulcsszo": "javítóműhely program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Munkalap program javítóműhelyeknek: kerékpár, kisgép, hangszer",
+   "alcim": "Kerékpár-, kisgép-, hangszer- vagy órajavítás: ahol ügyfél, tárgy, munkalap és alkatrész van, ott a {termeknev} illeszkedik.",
+   "cimke": "Egyéb javító- és szolgáltatócégek",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-egyeb",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "konyv",
+     "cim": "Papír munkalap",
+     "szoveg": "Elveszik, olvashatatlan, nem kereshető."
+    },
+    {
+     "ikon": "telefon",
+     "cim": "Hívások",
+     "szoveg": "Az ügyfél telefonon kérdezi, hol tart a javítás."
+    },
+    {
+     "ikon": "naptar",
+     "cim": "Bejelentkezés telefonon",
+     "szoveg": "Az időpontokat a füzetbe írjátok."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>A {termeknev} elektronikai szervizekre készült, de a munkalap, az eszköz és a tétel általános fogalmak: az „eszköz” lehet kerékpár, láncfűrész vagy gitár is. Ami telefon-specifikus (IMEI, TAC), az kikapcsolható modul.</p>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "munkalapok",
+    "ugyfelek",
+    "eszkozok",
+    "szolgaltatasok",
+    "rma",
+    "nyomtatas",
+    "foglalas",
+    "modulrendszer"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "modul_racs",
+   "cim": "Ajánlott modulok",
+   "kulcsok": [
+    "uzenetek",
+    "nyomtatas",
+    "foglalas",
+    "naptar"
+   ],
+   "csoportositva": false,
+   "arak": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>Mielőtt döntesz, próbáld ki a demót a saját munkafolyamatoddal. Ha valami hiányzik, az egyedi modulfejlesztés oldalon kérhetsz ajánlatot.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Egyéb javító- és szolgáltatócégek",
+   "kulcsok": [
+    "mire-nem-valo",
+    "egyedi-fejlesztes-menete",
+    "mi-a-demo"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy",
+    "kereskedelem"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

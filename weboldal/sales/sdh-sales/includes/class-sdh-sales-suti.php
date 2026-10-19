@@ -6,13 +6,14 @@
  * Működés (gyorsítótár-biztos: minden kimenet minden látogatónak ugyanaz, a döntést a böngésző olvassa a sütiből):
  * - `wp_head` legelején (PHP_INT_MIN) inline szkript: `dataLayer`, `gtag()`, Consent Mode v2 alapállapot (minden `denied`,
  *   csak `security_storage` `granted`, `wait_for_update` 500), `ads_data_redaction`; ha már van érvényes döntés a sütiben
- *   (verzió + élettartam rendben), azonnal `consent update`. `window.wp_consent_type = 'optin'`.
+ *   (verzió + élettartam rendben), azonnal `consent update`. `window.wp_consent_type = 'optin'` (a kimenetben összerakva).
+ * - Rejtés (REJTES.md): a kimenetben nincs `sdh` / platformnév – süti `suti`/`suti_id`, attribútum `data-suti`, JS `window.APP_SUTI`.
  * - Nem szükséges szkript csak `SDH_Sales_Suti::szkript($kategoria, $src_vagy_kod)`-dal kerülhet az oldalra:
- *   `<script type="text/plain" data-sdh-suti="<kat>" [data-src="…"]>` – az `assets/front/suti.js` hozzájárulás után élesíti
+ *   `<script type="text/plain" data-suti="<kat>" [data-src="…"]>` – az `assets/front/suti.js` hozzájárulás után élesíti
  *   (dokumentum-sorrendben). A GA4 / GTM betöltő is így megy ki (csak hozzájárulás után tölt be). A Site Kit gtag-je
  *   (`google_gtagjs` handle) ugyanígy blokkolva (szűrő: `sdh_sales_suti_blokk` → [handle => kategória]).
  * - Kategóriák: `szukseges` (mindig), `statisztika`, `marketing`, `preferencia`. Global Privacy Control: a marketing alapból ki.
- * - Süti: `sdh_suti` = „1|<verzió>|<s><m><p>|<unix idő>” (URL-kódolva), `sdh_suti_id` = véletlen azonosító; élettartam
+ * - Süti: `suti` = „1|<verzió>|<s><m><p>|<unix idő>” (URL-kódolva), `suti_id` = véletlen azonosító; élettartam
  *   `suti.honap` (6). Ha az admin a `suti.verzio`-t átírja, mindenkitől újra kérdez.
  * - Napló: `POST /suti` (nyilvános, korlátos) → `suti` tábla; admin CSV: `GET /admin/suti/export?tol=ÉÉÉÉ-HH-NN&ig=…`.
  * - WP Consent API: regisztrálva (`wp_consent_api_registered_<bővítmény>`), a JS `wp_set_consent()`-tel jelez, így a Site Kit
@@ -33,8 +34,8 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Suti
 {
-    public const SUTI     = 'sdh_suti';
-    public const SUTI_ID  = 'sdh_suti_id';
+    public const SUTI     = 'suti';
+    public const SUTI_ID  = 'suti_id';
     public const KATEGORIAK = ['szukseges', 'statisztika', 'marketing', 'preferencia'];
 
     private static bool $kiirva = false;
@@ -165,7 +166,7 @@ final class SDH_Sales_Suti
         return 'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}'
             . "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'denied',personalization_storage:'denied',security_storage:'granted',wait_for_update:500});"
             . "gtag('set','ads_data_redaction',true);"
-            . "window.wp_consent_type='optin';"
+            . "window['wp'+'_consent_type']='optin';"
             . '(function(){try{var m=document.cookie.match(/(?:^|;\s*)' . self::SUTI . '=([^;]*)/);if(!m)return;'
             . "var p=decodeURIComponent(m[1]).split('|');if(p.length<4||p[0]!=='1'||p[1]!==" . $v . ')return;'
             . 'var d=new Date(parseInt(p[3],10)*1000);d.setMonth(d.getMonth()+' . $h . ');if(!(d>new Date()))return;'
@@ -180,7 +181,7 @@ final class SDH_Sales_Suti
             return;
         }
 
-        wp_print_inline_script_tag(self::alap_js(), ['id' => 'sdh-suti-alap']);
+        wp_print_inline_script_tag(self::alap_js(), ['id' => 's-suti-alap']);
     }
 
     /** GA4 / GTM betöltő – blokkolva, csak hozzájárulás után fut. */
@@ -221,10 +222,10 @@ final class SDH_Sales_Suti
         }
 
         if ($url) {
-            return '<script type="text/plain" data-sdh-suti="' . esc_attr($kat) . '" data-src="' . esc_url($s) . '"></script>';
+            return '<script type="text/plain" data-suti="' . esc_attr($kat) . '" data-src="' . esc_url($s) . '"></script>';
         }
 
-        return '<script type="text/plain" data-sdh-suti="' . esc_attr($kat) . '">' . str_ireplace('</script', '<\/script', $s) . '</script>';
+        return '<script type="text/plain" data-suti="' . esc_attr($kat) . '">' . str_ireplace('</script', '<\/script', $s) . '</script>';
     }
 
     /* =================================================================
@@ -254,10 +255,10 @@ final class SDH_Sales_Suti
         $kat = self::kategoria((string) $b[$handle]);
 
         return (string) preg_replace_callback('/<script\b([^>]*)>/i', static function (array $m) use ($kat): string {
-            $attr = (string) preg_replace('/\s(type|data-sdh-suti)=("[^"]*"|\'[^\']*\')/i', '', $m[1]);
+            $attr = (string) preg_replace('/\s(type|data-suti)=("[^"]*"|\'[^\']*\')/i', '', $m[1]);
             $attr = (string) preg_replace('/\ssrc=/i', ' data-src=', $attr);
 
-            return '<script type="text/plain" data-sdh-suti="' . esc_attr($kat) . '"' . $attr . '>';
+            return '<script type="text/plain" data-suti="' . esc_attr($kat) . '"' . $attr . '>';
         }, $tag);
     }
 
@@ -274,7 +275,7 @@ final class SDH_Sales_Suti
         foreach (self::blokkolt() as $handle => $kat) {
             if (preg_match('/^' . preg_quote((string) $handle, '/') . '-js-(before|after|extra)$/', (string) $attr['id']) === 1) {
                 $attr['type']          = 'text/plain';
-                $attr['data-sdh-suti'] = self::kategoria((string) $kat);
+                $attr['data-suti'] = self::kategoria((string) $kat);
             }
         }
 
@@ -485,10 +486,10 @@ final class SDH_Sales_Suti
                 ['k' => 'suti.verzio', 't' => 'szoveg', 'c' => 'Szabályzat verziója', 's' => 'Ha átírod (pl. 1.0 → 1.1), minden látogatótól újra megkérdezi.', 'ful' => 'Alap', 'alap' => '1.0'],
                 ['k' => 'suti.honap', 't' => 'szam', 'c' => 'A döntés érvényessége (hónap)', 'min' => 1, 'max' => 13, 'ful' => 'Alap', 'alap' => 6],
                 ['k' => 'suti.naplo_ev', 't' => 'szam', 'c' => 'Hozzájárulás-napló megőrzése (év)', 'min' => 1, 'max' => 10, 'ful' => 'Alap', 'alap' => 5],
-                ['k' => 'suti.ga4', 't' => 'szoveg', 'c' => 'Google Analytics 4 mérőazonosító (G-…)', 's' => 'Csak statisztikai hozzájárulás után töltődik be. Ha a Site Kit méri a forgalmat, hagyd üresen.', 'ful' => 'Google', 'alap' => ''],
+                ['k' => 'suti.ga4', 't' => 'szoveg', 'c' => 'Google Analytics 4 mérőazonosító (G-…)', 's' => 'Csak statisztikai hozzájárulás után töltődik be. Ha a mérést már más betölti, hagyd üresen.', 'ful' => 'Google', 'alap' => ''],
                 ['k' => 'suti.gtm', 't' => 'szoveg', 'c' => 'Google Tag Manager azonosító (GTM-…)', 'ful' => 'Google', 'alap' => ''],
                 ['k' => 'suti.gtm_kategoria', 't' => 'valaszto', 'c' => 'A Tag Manager ennél a hozzájárulásnál indul', 'o' => ['statisztika' => 'Statisztika', 'marketing' => 'Marketing'], 'ful' => 'Google', 'alap' => 'statisztika'],
-                ['k' => 'suti.sitekit_blokk', 't' => 'kapcsolo', 'c' => 'A Site Kit mérőkódja is csak hozzájárulás után', 'ful' => 'Google', 'alap' => true],
+                ['k' => 'suti.sitekit_blokk', 't' => 'kapcsolo', 'c' => 'Más forrásból betöltött Google-mérőkód (gtag) is csak hozzájárulás után', 'ful' => 'Google', 'alap' => true],
                 ['k' => 'jogi.tarhely_nev', 't' => 'szoveg', 'c' => 'Tárhelyszolgáltató neve', 'ful' => 'Jogi adatok', 'alap' => ''],
                 ['k' => 'jogi.tarhely_cim', 't' => 'szoveg', 'c' => 'Tárhelyszolgáltató székhelye', 'ful' => 'Jogi adatok', 'alap' => ''],
                 ['k' => 'jogi.tarhely_elerhetoseg', 't' => 'szoveg', 'c' => 'Tárhelyszolgáltató elérhetősége', 'ful' => 'Jogi adatok', 'alap' => ''],

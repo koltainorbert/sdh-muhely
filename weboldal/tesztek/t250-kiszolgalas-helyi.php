@@ -32,7 +32,8 @@ T::egyezik('kiszolgalva', (string) $r['allapot'], 'rendelés: kiszolgalva');
 /* --- A licenc a Központban ------------------------------------------------------------------------------------------- */
 
 $kulcs = (string) $r['licenc_kulcs'];
-T::igaz(preg_match('/^SDH-[A-Z2-9]{4}(-[A-Z2-9]{4}){3}$/', $kulcs) === 1, 'licenckulcs a rendelésen');
+T::igaz(preg_match('/^' . SDH_Kozpont::kulcs_elotag() . '(-[A-Z2-9]{4}){4}$/', $kulcs) === 1, 'licenckulcs a rendelésen (' . $kulcs . ')');
+T::egyezik('MUNKORA', SDH_Kozpont::kulcs_elotag(), 'helyi mód: az előtag az értékesítő terméknevéből');
 $l = SDH_Kozpont::licenc($kulcs);
 T::igaz($l !== null && (int) $l->id === (int) $r['kozpont_licenc_id'], 'a Központban ugyanez a licenc (kozpont_licenc_id)');
 $mod = (array) SDH_Kozpont::licenc_modulok($l);
@@ -61,7 +62,18 @@ $u = t25_levelek('udvozlo', (string) $r['email']);
 T::egyezik(1, count($u), 'egy üdvözlő levél');
 $h = (string) ($u[0]['html'] ?? '');
 T::tartalmaz($h, $kulcs, 'levél: licenckulcs');
-T::tartalmaz($h, '/sdh-kozpont/v1/letoltes?t=', 'levél: letöltő link');
+T::tartalmaz($h, '/licenc/letoltes/?t=', 'levél: letöltő link (semleges cím)');
+$rejt = [];
+foreach ($GLOBALS['t25_levelek'] as $lv) {
+    if (!in_array($lv['sablon'], ['admin_ertesites', 'lanc_hiba_admin'], true)) {
+        foreach (SDH_Sales_Rejtes::TILTOTT as $minta) {
+            if (preg_match($minta, $lv['targy'] . $lv['html'] . $lv['szoveg'] . implode("\n", $lv['fejlec'])) === 1) {
+                $rejt[] = $lv['sablon'] . ': ' . $minta;
+            }
+        }
+    }
+}
+T::egyezik([], $rejt, 'rejtés: a vevői levelekben nincs tiltott minta (SDH, WordPress, wp-json, rest_route…)');
 T::tartalmaz($h, esc_html(home_url('/')), 'levél: a központ címe (helyi mód: ez a webhely)');
 T::tartalmaz($h, 'Kovács Béla', 'levél: név');
 T::tartalmaz($h, '/szamla/', 'levél: számla-link');

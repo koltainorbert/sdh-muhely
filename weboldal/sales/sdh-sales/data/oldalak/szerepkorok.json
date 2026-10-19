@@ -1,0 +1,160 @@
+{
+ "slug": "szerepkorok",
+ "cim": "Szerepkörök és jogok",
+ "szulo": "funkciok",
+ "sorrend": 34,
+ "seo": {
+  "title": "Szerepkörök és jogosultságok – {termeknev}",
+  "description": "Jogosultságkezelés szervizeknek: Admin, Kolléga, Pultos, Szerelő, Pénztáros és egyéni szerepek, modulonként és finom jogokkal.",
+  "kulcsszo": "jogosultságkezelés"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerepkörök és jogok: pultos, szerelő, pénztáros",
+   "alcim": "Öt gyári szerep és legfeljebb 12 egyéni: modulonként és finom jogokkal szabályozható, ki mit láthat és tehet.",
+   "cimke": "Biztonság és adatvédelem",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Tiltott modul: nincs menüpont, csempe, oldal, és a művelet sem fut"
+    },
+    {
+     "szoveg": "Finom jogok: pénztárriport, ár-átírás, tételár, számla, törlés, zárkód"
+    },
+    {
+     "szoveg": "Szerveroldali ellenőrzés, a próbálkozás a Naplóba kerül"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Alapból öt szerep van: Admin, Kolléga, Pultos, Szerelő és Pénztáros. A szerepnél nem bejelölt modul el sem látszik; finom jog szól a pénztárriportról, az árak és törzsek átírásáról, a tételár átírásáról a lapon, a számláról, a törlésről és a feloldó kód megnézéséről.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Jogosultságok.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Tiltott modul: nincs menüpont, csempe, oldal, és a művelet sem fut",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Finom jogok: pénztárriport, ár-átírás, tételár, számla, törlés, zárkód",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Szerveroldali ellenőrzés, a próbálkozás a Naplóba kerül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Közös fiókon a kiválasztott dolgozó szerepe érvényes",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Legfeljebb 12 egyéni szerep",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Rács",
+     "szoveg": "Beállítások › Jogosultságok › Szerepkörök és jogok: szerepenként modulok és jogok."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Hozzárendelés",
+     "szoveg": "„Ki melyik szerepben?”: kollégák és dolgozók szerepe."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Ellenőrzés",
+     "szoveg": "Jog nélküli próbálkozásnál a rendszer megmondja, mi hiányzik, és naplóz."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "kozos-fiok",
+    "ketlepcsos-belepes",
+    "zarkod-titkositas",
+    "valtozasnaplo"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "ipar",
+    "zrt",
+    "allami-szektor",
+    "egeszsegugy"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Szerepkörök és jogok",
+   "kulcsok": [
+    "jogosultsagok-szerepek",
+    "kozos-fiok-pin",
+    "felhasznalok-szama-ar"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Szerepkörök és jogok a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

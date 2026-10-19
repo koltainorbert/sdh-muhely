@@ -1,0 +1,163 @@
+{
+ "slug": "mentes",
+ "cim": "Napi mentés és visszaállítás",
+ "szulo": "funkciok",
+ "sorrend": 39,
+ "seo": {
+  "title": "Napi mentés és visszaállítás – {termeknev}",
+  "description": "A szerviz adatai biztonságban: napi automatikus mentés, kézi mentés, visszaállítás előnézettel és előzetes biztonsági mentéssel.",
+  "kulcsszo": "szerviz adatok mentése"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Automatikus napi mentés és visszaállítás előnézettel",
+   "alcim": "Teljes mentés minden nap magától, kézzel bármikor; visszaállítás előnézettel, egyetlen tranzakcióban.",
+   "cimke": "Üzemeltetés",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-mentes",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "Napi automatikus teljes mentés + Mentés most gomb"
+    },
+    {
+     "szoveg": "Visszaállítás: adatok és beállítások, vagy csak beállítások"
+    },
+    {
+     "szoveg": "Biztonsági mentés minden visszaállítás és frissítés előtt"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>A rendszer naponta teljes mentést készít, és kézzel is bármikor indítható. Visszaállítás előtt előnézetet mutat (idő, verzió, táblák, sorok), biztonsági mentést készít a mostani állapotról, és hiba esetén mindent visszagördít.</p><p><strong>Hol találod a rendszerben?</strong> Beállítások › Mentés.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "Napi automatikus teljes mentés + Mentés most gomb",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Visszaállítás: adatok és beállítások, vagy csak beállítások",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Biztonsági mentés minden visszaállítás és frissítés előtt",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Hibánál nincs félkész állapot: egy tranzakció",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Beállítások exportja és importja költözéshez",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Kézi mentés",
+     "szoveg": "Beállítások › Mentés › Mentés most; a fájl letölthető."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Előnézet",
+     "szoveg": "Visszaállítás… – idő, verzió, táblák és sorok száma."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Visszaállítás",
+     "szoveg": "Teljes vagy csak beállítások, kétlépcsős gombbal."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Jó tudni",
+   "html": "<ul><li>A szerver saját, teljes mentése (fájlokkal együtt) továbbra is ajánlott.</li></ul>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "kulso-mentes",
+    "frissites",
+    "biztonsag",
+    "valtozasnaplo"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "Iparágak, ahol különösen hasznos",
+   "kulcsok": [
+    "allami-szektor"
+   ],
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Napi mentés és visszaállítás",
+   "kulcsok": [
+    "napi-mentes",
+    "visszaallitas-mentesbol",
+    "mi-nincs-a-mentesben"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Napi mentés és visszaállítás a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

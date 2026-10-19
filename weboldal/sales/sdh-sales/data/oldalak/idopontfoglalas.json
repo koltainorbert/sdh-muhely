@@ -1,0 +1,75 @@
+{
+ "slug": "idopontfoglalas",
+ "cim": "Időpontfoglalás",
+ "sorrend": 81,
+ "seo": {
+  "title": "Bemutató időpont foglalása – {termeknev}",
+  "description": "Foglalj 30 perces online bemutatót a {termeknev} szerviz programról, vagy időpontot telepítésre, oktatásra, támogatásra.",
+  "kulcsszo": "szerviz program bemutató"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Foglalj időpontot bemutatóra",
+   "alcim": "Online bemutató a saját munkafolyamatodon, kötelezettség nélkül. Vevőként itt foglalhatsz telepítést, oktatást vagy támogatást is.",
+   "cimke": "Időpontfoglalás",
+   "gomb": {
+    "szoveg": "Szabad időpontok",
+    "url": "#foglalas"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "foglalas",
+   "cim": "Válassz időpontot",
+   "alcim": "A visszaigazolást e-mailben kapod, lemondó linkkel.",
+   "horgony": "foglalas"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Mire foglalhatsz?",
+   "oszlop": "4",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "raketa",
+     "cim": "Bemutató",
+     "szoveg": "A rendszer áttekintése a ti folyamatotokon."
+    },
+    {
+     "ikon": "szerszam",
+     "cim": "Telepítés",
+     "szoveg": "Közös telepítés és beállítás (vevőknek)."
+    },
+    {
+     "ikon": "kalap",
+     "cim": "Oktatás",
+     "szoveg": "A kollégák betanítása."
+    },
+    {
+     "ikon": "tamogatas",
+     "cim": "Támogatás",
+     "szoveg": "Segítség egy konkrét kérdésben."
+    }
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Inkább egyedül próbálnád ki?",
+   "szoveg": "A demó azonnal indul, regisztráció nélkül.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   }
+  }
+ ]
+}

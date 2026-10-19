@@ -1,0 +1,126 @@
+{
+ "slug": "allami-szektor",
+ "cim": "Állami és önkormányzati intézmények",
+ "szulo": "iparagak",
+ "sorrend": 5,
+ "seo": {
+  "title": "Javítás-nyilvántartás közintézményeknek – {termeknev}",
+  "description": "Intézményi informatikai és műszaki csoportoknak: eszköz- és javításnyilvántartás saját szerveren, aláírt naplóval, szerepkörökkel.",
+  "kulcsszo": "eszköznyilvántartás intézmény"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Eszköz- és javítás-nyilvántartás közintézményeknek",
+   "alcim": "Saját szerveren futó, aláírt naplót vezető nyilvántartás eszközökre, javításokra és ügyfelekre – az adat az intézménynél marad.",
+   "cimke": "Állami és önkormányzati intézmények",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "kep": "iparag-allami",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Ismerős?",
+   "cim": "Amivel a legtöbb időt veszítitek",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "kereso",
+     "cim": "Szétszórt nyilvántartás",
+     "szoveg": "Az eszközök, a hibabejelentések és a javítások külön táblákban élnek."
+    },
+    {
+     "ikon": "lakat",
+     "cim": "Elszámoltathatóság",
+     "szoveg": "Utólag is ki kell tudni mutatni, ki mit módosított."
+    },
+    {
+     "ikon": "szerver",
+     "cim": "Adat a házon belül",
+     "szoveg": "Ügyfél- és eszközadat nem kerülhet külső felhőbe."
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Hogyan segít a {termeknev}?",
+   "html": "<p>Intézményi informatikai vagy műszaki csoportnál az eszköz, a hibabejelentés és a javítás nyilvántartása ugyanaz a feladat, mint egy szervizben. Az ügyfél státusza lehet <strong>Közület</strong> is, az eszköz az intézményi egységhez köthető.</p><ul><li><strong>Napló:</strong> aláírt, nem átírható, épség-ellenőrzéssel.</li><li><strong>Saját üzemeltetés:</strong> a rendszer az intézmény szerverén fut; a forgalmazónak műszaki állapot megy, személyes adat nem.</li><li><strong>Adatvédelem:</strong> anonimizálás kérésre, titkosított mentések.</li></ul>",
+   "szelesseg": "normal"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "A legfontosabb funkciók ehhez az iparághoz",
+   "kulcsok": [
+    "eszkozok",
+    "munkalapok",
+    "valtozasnaplo",
+    "szerepkorok",
+    "biztonsag",
+    "gdpr-anonimizalas",
+    "mentes",
+    "offline"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Megfelelés és korlátok",
+   "html": "<p>Közbeszerzési minősítést, állami tanúsítványt a {termeknev} nem kapott. A beszerzéshez árajánlat és műszaki leírás kérhető; az adatkezelési és adatfeldolgozási dokumentumok tervezete a jogi oldalakon olvasható.</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "kalkulator",
+   "cim": "Mennyibe kerülne nálatok?",
+   "alcim": "Válaszd ki a csomagot, a felhasználók és a telephelyek számát – a nettó ár azonnal látszik."
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések – Állami és önkormányzati intézmények",
+   "kulcsok": [
+    "hol-vannak-az-adatok",
+    "valtozasnaplo",
+    "gdpr-anonimizalas",
+    "felho-vagy-sajat-szerver"
+   ]
+  },
+  {
+   "tipus": "iparag_racs",
+   "cim": "További iparágak",
+   "kulcsok": [
+    "szerviz",
+    "ipar",
+    "kkv",
+    "zrt",
+    "egeszsegugy",
+    "kereskedelem",
+    "egyeb"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nézzük meg a ti folyamatotokra szabva",
+   "szoveg": "Egy 30 perces bemutatón a saját munkafolyamatotokon megyünk végig – vagy próbáld ki egyedül a demót.",
+   "gomb": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   }
+  }
+ ]
+}

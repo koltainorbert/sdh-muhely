@@ -1,0 +1,122 @@
+{
+ "slug": "osszehasonlitas",
+ "cim": "Összehasonlítás",
+ "sorrend": 54,
+ "seo": {
+  "title": "Szerviz szoftver összehasonlítás – {termeknev}",
+  "description": "Mi a legjobb szervizszoftver? Fair szempontok és nyilvános adatok: {termeknev}, RepairDesk, Orderry és magyar munkalap-programok egymás mellett.",
+  "kulcsszo": "szerviz szoftver összehasonlítás"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Szerviz szoftver összehasonlítás: mi a legjobb szervizszoftver?",
+   "alcim": "Nincs mindenkinek legjobb – a szervized méretétől, a számlázástól és attól függ, hol akarod tartani az adatot. Itt ugyanazokkal a szempontokkal nézzük meg a lehetőségeket.",
+   "cimke": "Összehasonlítás",
+   "gomb": {
+    "szoveg": "Ugrás a táblázathoz",
+    "url": "#tablazat"
+   },
+   "gomb2": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "jellemzok",
+   "cim": "Szempontok, amelyek tényleg számítanak",
+   "alcim": "Ezeket érdemes bármelyik szerviz programnál megnézni vásárlás előtt.",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "globusz",
+     "cim": "Magyar felület és súgó",
+     "szoveg": "A kollégák nyelvén szól-e, van-e magyar dokumentáció és támogatás."
+    },
+    {
+     "ikon": "szamla",
+     "cim": "Magyar számlázás",
+     "szoveg": "Közvetlen Számlázz.hu- vagy más hazai számlázó-kapcsolat."
+    },
+    {
+     "ikon": "szerver",
+     "cim": "Hol van az adat?",
+     "szoveg": "Felhőben a szolgáltatónál, vagy a saját szervereteken."
+    },
+    {
+     "ikon": "wifi-ki",
+     "cim": "Internet nélkül",
+     "szoveg": "Tud-e dolgozni a pult, ha elmegy a net."
+    },
+    {
+     "ikon": "telefon",
+     "cim": "Szerviz-specifikus funkciók",
+     "szoveg": "IMEI, RMA-ügyféloldal, címkenyomtatás, garanciális visszatérés."
+    },
+    {
+     "ikon": "penz",
+     "cim": "Teljes költség",
+     "szoveg": "Felhasználónkénti, telephelyenkénti díj, SMS, AI, bevezetés."
+    }
+   ]
+  },
+  {
+   "tipus": "osszehasonlitas",
+   "cim": "Egymás mellett",
+   "alcim": "Nyilvános forrásokból, az ellenőrzés dátumával. Ahol az adat nem volt ellenőrizhető, „ismeretlen” áll.",
+   "konkurensek": [
+    "repairdesk",
+    "repairshopr",
+    "orderry",
+    "fixably",
+    "mhelpdesk",
+    "syncro",
+    "cellsmart",
+    "munkalaptar"
+   ],
+   "db": 8,
+   "horgony": "tablazat",
+   "megjegyzes": "Az adatok a gyártók nyilvános oldalairól származnak (forrás és dátum soronként). Ha hibát találsz, írj nekünk, és javítjuk."
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mikor válassz inkább mást?",
+   "szelesseg": "keskeny",
+   "html": "<ul><li>Ha <strong>csak felhőben</strong> akarjátok használni, saját szerver vagy tárhely nélkül, a felhős szolgáltatások egyszerűbbek lehetnek.</li><li>Ha <strong>webáruház-motor</strong> vagy <strong>könyvelőprogram</strong> kell, az nem a {termeknev} feladata.</li><li>Ha <strong>angol nyelvű, nemzetközi</strong> csapat dolgozik benne, a felület magyar; az ügyféloldal tud angolul és németül.</li><li>Ha <strong>autószervizről</strong> van szó, a járműspecifikus funkciók (rendszám, kilométer-állás) nincsenek benne.</li></ul>"
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Ahol a {termeknev} erős",
+   "szelesseg": "keskeny",
+   "hatter": "felulet",
+   "html": "<ul><li>Telefon- és elektronikai szerviz: IMEI-felismerés offline, RMA-ügyféloldal QR-kóddal, Brother-matrica.</li><li>Saját szerver, internet nélküli működés, titkosított mentés külső helyre.</li><li>Számlázz.hu-számla a munkalapról, házipénztár egyeztető ügynökkel.</li><li>Váltás MunkaLap 3-ról vagy Excelből próbával és visszavonással.</li></ul>"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések",
+   "kulcsok": [
+    "felho-vagy-sajat-szerver",
+    "integraciok-listaja",
+    "rejtett-koltsegek",
+    "mire-nem-valo",
+    "excelbol-valtas"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Döntés előtt próbáld ki",
+   "szoveg": "A demóban a saját szempontjaid szerint ellenőrizheted, amit itt olvastál.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

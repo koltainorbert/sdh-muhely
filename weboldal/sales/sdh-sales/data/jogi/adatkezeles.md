@@ -67,7 +67,7 @@ Fontos: a {termeknev} szoftver a vevő **saját szerverén** fut. Az abban rögz
 
 ### 2.7. Statisztika (csak hozzájárulással)
 
-Ha a webhelyen be van kapcsolva a Google Analytics (közvetlenül vagy a Google Site Kit révén), az csak akkor tölt be, ha a statisztikai sütiket elfogadod. Jogalap: hozzájárulás (6. cikk (1) a)), amely bármikor visszavonható a lábléc „Süti-beállítások” linkjével.
+Ha a webhelyen be van kapcsolva a Google Analytics, az csak akkor tölt be, ha a statisztikai sütiket elfogadod. Jogalap: hozzájárulás (6. cikk (1) a)), amely bármikor visszavonható a lábléc „Süti-beállítások” linkjével.
 
 ### 2.8. Biztonság, visszaélések elleni védelem
 

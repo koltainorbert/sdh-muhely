@@ -1,0 +1,48 @@
+{
+ "slug": "gyik",
+ "cim": "GYIK",
+ "sorrend": 53,
+ "seo": {
+  "title": "Gyakori kérdések – {termeknev}",
+  "description": "Válaszok a {termeknev} vásárlásáról, áráról, licencéről, telepítéséről, adatbiztonságáról, moduljairól, offline működéséről és a demóról.",
+  "kulcsszo": "szerviz program kérdések"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Gyakori kérdések a {termeknev} rendszerről",
+   "alcim": "175 kérdés és válasz témák szerint – vásárlás, árak, licenc, telepítés, biztonság, modulok, demó.",
+   "cimke": "GYIK",
+   "gomb": {
+    "szoveg": "Keresés a kérdések között",
+    "url": "#kerdesek"
+   },
+   "gomb2": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "elrendezes": "kozep"
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Minden kérdés témák szerint",
+   "csoportositva": true,
+   "kereso": true,
+   "horgony": "kerdesek"
+  },
+  {
+   "tipus": "cta",
+   "cim": "Nem találtad a választ?",
+   "szoveg": "Írj nekünk, vagy kérdezz egy bemutatón.",
+   "gomb": {
+    "szoveg": "Kapcsolat",
+    "url": "/kapcsolat/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}

@@ -68,7 +68,7 @@ Az ügyfél kapjon azonnal e-mailt a foglalás adataival és egy **lemondó link
 
 A foglalóoldalt linkeld a weboldaladon jól látható helyen (főoldal, kapcsolat oldal), vagy illeszd be a weboldal egy oldalába.
 
-## A {termeknev} online foglalása
+## Hogyan működik nálunk?
 
 A {termeknev} [online időpontfoglalása](/funkciok/foglalas/) a rendszer naptárára épül: a foglalás eseményként kerül a kiválasztott naptárba, a szabad sávokat a naptár eseményei alapján számolja, és meglévő ügyfélhez a telefonszám alapján kapcsolja. A foglalóoldal telefonon is használható, linkelhető és beágyazható.
 
@@ -76,7 +76,7 @@ A {termeknev} [online időpontfoglalása](/funkciok/foglalas/) a rendszer naptá
 
 ### Robotok
 
-Egy nyilvános űrlapot előbb-utóbb a robotok is megtalálnak. Védelem lehet egy rejtett csapdamező, egy időbélyeg-ellenőrzés (túl gyors kitöltés gyanús) és egy korlát arra, hogy egy címről óránként hány foglalás érkezhet. A {termeknev} foglalóoldala ezeket alkalmazza.
+Egy nyilvános űrlapot előbb-utóbb a robotok is megtalálnak. Védelem lehet egy rejtett csapdamező, egy időbélyeg-ellenőrzés (túl gyors kitöltés gyanús) és egy korlát arra, hogy egy címről óránként hány foglalás érkezhet. A mi foglalóoldalunk ezeket alkalmazza.
 
 ### Meg nem jelenés
 
@@ -109,7 +109,7 @@ A foglalóoldal nyilvános, és személyes adatot gyűjt. Ezért:
 - a tájékoztató linkje legyen ott a jelölőnégyzet mellett,
 - a foglalás adatai ugyanabban a rendszerben maradjanak, ahol az ügyfelek, és ha az ügyfél kéri az adatai törlését, a foglalásai is törlődjenek.
 
-A {termeknev} anonimizálása az ügyfélhez kötött naptárbejegyzéseket (online foglalásokat) is törli.
+A rendszer anonimizálása az ügyfélhez kötött naptárbejegyzéseket (online foglalásokat) is törli.
 
 ## Foglalás és munkalap
 

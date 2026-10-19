@@ -29,11 +29,11 @@ Nélkülük az oldal nem működne; ezekhez nem kell hozzájárulás.
 
 | Név | Tároló | Mire | Meddig |
 |---|---|---|---|
-| sdh_suti | süti | a süti-döntésed (kategóriák, a szabályzat verziója, időpont) | 6 hónap |
-| sdh_suti_id | süti | véletlen azonosító, amellyel a döntésed a hozzájárulás-naplóban igazolható | 6 hónap |
-| wordpress_logged_in_…, wordpress_sec_… | süti | belépés az ügyfélfiókba (csak belépés után) | a munkamenet végéig, vagy 14 nap |
-| wordpress_test_cookie | süti | annak ellenőrzése, hogy a böngésző fogad-e sütit (belépéskor) | munkamenet |
-| sdh_szikra | sessionStorage | az AI-csevegő aktuális beszélgetése, amíg a lap nyitva van | a böngészőlap bezárásáig |
+| suti | süti | a süti-döntésed (kategóriák, a szabályzat verziója, időpont) | 6 hónap |
+| suti_id | süti | véletlen azonosító, amellyel a döntésed a hozzájárulás-naplóban igazolható | 6 hónap |
+| belépési sütik | süti | belépés az ügyfélfiókba (csak belépés után jönnek létre) | a munkamenet végéig, legfeljebb 14 nap |
+| sütiteszt | süti | annak ellenőrzése, hogy a böngésző fogad-e sütit (belépéskor) | munkamenet |
+| AI-csevegő munkamenete | sessionStorage | az AI-csevegő aktuális beszélgetése, amíg a lap nyitva van | a böngészőlap bezárásáig |
 | kosár | localStorage | a kosár tartalma (csak ha terméket teszel bele) | amíg ki nem üríted |
 | Cloudflare (__cf_bm, cf_clearance, Turnstile) | süti | robot- és visszaélésszűrés (ha a webhely Cloudflare mögött fut) | 30 perc – 1 év |
 
@@ -41,14 +41,14 @@ Nélkülük az oldal nem működne; ezekhez nem kell hozzájárulás.
 
 | Név | Tároló | Mire | Meddig |
 |---|---|---|---|
-| sdh-tema | localStorage | a választott világos / sötét megjelenés | amíg nem törlöd |
-| sdh_oktatas | localStorage | az Oktatás oldal leckéinek haladása | amíg nem törlöd |
+| megjelenés | localStorage | a választott világos / sötét megjelenés | amíg nem törlöd |
+| oktatási haladás | localStorage | az Oktatás oldal leckéinek haladása | amíg nem törlöd |
 
 [DÖNTENDŐ: a sötét/világos mód és az oktatási haladás a látogató kifejezett kérésére tárolódik – jogász döntse el, „szükséges” vagy „preferencia” kategória. A kód jelenleg a kategóriától függetlenül tárolja őket.]
 
 ### Statisztika (csak hozzájárulással)
 
-Csak akkor, ha a webhely üzemeltetője bekapcsolta a Google Analyticset (közvetlenül vagy a Google Site Kit révén).
+Csak akkor, ha a webhely üzemeltetője bekapcsolta a Google Analyticset.
 
 | Név | Szolgáltató | Mire | Meddig |
 |---|---|---|---|
@@ -61,7 +61,7 @@ A webhely jelenleg nem használ hirdetési sütit. Ha a jövőben használna, it
 
 ## A Google Consent Mode
 
-A Google-szolgáltatások a „megtagadva” alapállapotból indulnak: `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`, `functionality_storage`, `personalization_storage` = megtagadva; csak a `security_storage` (biztonság) engedélyezett. A döntésed után ezt a kategóriáid szerint frissítjük. A WP Consent API felé is jelezzük a döntést, így a webhely többi része (például a Site Kit) is követi.
+A Google-szolgáltatások a „megtagadva” alapállapotból indulnak: `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`, `functionality_storage`, `personalization_storage` = megtagadva; csak a `security_storage` (biztonság) engedélyezett. A döntésed után ezt a kategóriáid szerint frissítjük. A döntést a webhely többi mérőkódja felé is jelezzük, így azok is követik.
 
 ## A hozzájárulás igazolása
 

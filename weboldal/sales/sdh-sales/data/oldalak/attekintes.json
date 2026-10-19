@@ -1,0 +1,155 @@
+{
+ "slug": "attekintes",
+ "cim": "Áttekintés és munkalap-rács",
+ "szulo": "funkciok",
+ "sorrend": 5,
+ "seo": {
+  "title": "Áttekintés és munkalap-rács – {termeknev}",
+  "description": "Szerviz ügyviteli kezdőképernyő: modulcsempék, munkalap-rács kész és saját nézetekkel, szűrőkkel, állapotváltással a rácsból.",
+  "kulcsszo": "szerviz ügyviteli program"
+ },
+ "szekciok": [
+  {
+   "tipus": "hero",
+   "cim": "Áttekintés: minden munkalap egy szűrhető rácsban",
+   "alcim": "Kezdőképernyő modulcsempékkel, és egy rácsban az összes munkalap: nézetek, szűrők, oszlopok, részletpanel.",
+   "cimke": "Napi munka",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "gomb2": {
+    "szoveg": "Árak és csomagok",
+    "url": "/arak/"
+   },
+   "kep": "funkcio-munkalap",
+   "kep_alt": "",
+   "elrendezes": "kep_jobb",
+   "pontok": [
+    {
+     "szoveg": "9 kész nézet, például Fizetendő és Lejárt határidő"
+    },
+    {
+     "szoveg": "Legfeljebb 30 saját nézet fiókonként, az oszlopokkal együtt"
+    },
+    {
+     "szoveg": "Állapotváltás közvetlenül a rácsból"
+    }
+   ]
+  },
+  {
+   "tipus": "szoveg",
+   "cim": "Mire jó?",
+   "html": "<p>Az Áttekintés a napi munka központja: gombsor az új lapokhoz, csempék a legfontosabb számokkal, alatta a munkalap-rács. Kész nézetek (nyitott lapok, átvételre vár, fizetendő, lejárt határidő), saját mentett nézetek, és a kijelölt lap részletei a sor alatt.</p><p><strong>Hol találod a rendszerben?</strong> Menü › Áttekintés (belépés után ez nyílik).</p>",
+   "szelesseg": "keskeny"
+  },
+  {
+   "tipus": "jellemzok",
+   "eyebrow": "Előnyök",
+   "cim": "Amit a napi munkában nyersz",
+   "oszlop": "3",
+   "hatter": "felulet",
+   "elemek": [
+    {
+     "ikon": "pipa",
+     "cim": "9 kész nézet, például Fizetendő és Lejárt határidő",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Legfeljebb 30 saját nézet fiókonként, az oszlopokkal együtt",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Állapotváltás közvetlenül a rácsból",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Részletpanel: nyomtatás a lap megnyitása nélkül",
+     "szoveg": ""
+    },
+    {
+     "ikon": "pipa",
+     "cim": "Csempék a modulok legfontosabb számaival",
+     "szoveg": ""
+    }
+   ]
+  },
+  {
+   "tipus": "lepesek",
+   "cim": "Így működik, lépésről lépésre",
+   "lepesek": [
+    {
+     "ikon": "pont",
+     "cim": "Belépés",
+     "szoveg": "Belépés után az Áttekintés nyílik: felül a gombsor és a csempék, alatta a rács."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Nézet választása",
+     "szoveg": "A Nézetek gombbal kész szűrés választható, például „Elkészült – átvételre vár”."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Szűrés és oszlopok",
+     "szoveg": "Oszlopszűrők, rendezés, oszlopok ki-be; a beállítás saját nézetként menthető."
+    },
+    {
+     "ikon": "pont",
+     "cim": "Részletek",
+     "szoveg": "A kijelölt sor alatt a lap részletei, onnan szerkesztés, nyomtatás, üzenetek."
+    }
+   ]
+  },
+  {
+   "tipus": "arak",
+   "eyebrow": "Csomagok",
+   "cim": "Melyik csomagban van benne?",
+   "alcim": "Az alaprendszer része: minden csomagban benne van.",
+   "csomagok": [],
+   "alap_ciklus": "eves",
+   "ciklus_valto": true,
+   "hatter": "felulet"
+  },
+  {
+   "tipus": "funkcio_racs",
+   "cim": "Kapcsolódó funkciók",
+   "kulcsok": [
+    "munkalapok",
+    "okos-kereso",
+    "riportok",
+    "arukiadas"
+   ],
+   "gomb": {
+    "szoveg": "Minden funkció",
+    "url": "/funkciok/"
+   }
+  },
+  {
+   "tipus": "gyik",
+   "cim": "Gyakori kérdések: Áttekintés és munkalap-rács",
+   "kulcsok": [
+    "alaprendszer-mi-van-benne",
+    "okos-kereso",
+    "nagy-adatbazis-sebesseg",
+    "billentyuparancsok"
+   ]
+  },
+  {
+   "tipus": "cta",
+   "cim": "Próbáld ki a saját munkafolyamatoddal",
+   "szoveg": "A demóban 10 000 mintarekorddal nézheted meg, hogyan működik a(z) Áttekintés és munkalap-rács a gyakorlatban.",
+   "gomb": {
+    "szoveg": "Demó kipróbálása",
+    "url": "/demo/"
+   },
+   "stilus": "atmenet",
+   "gomb2": {
+    "szoveg": "Bemutató időpont",
+    "url": "/idopontfoglalas/"
+   }
+  }
+ ]
+}
