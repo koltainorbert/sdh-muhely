@@ -466,18 +466,35 @@ final class SDH_Muhely_Frissites
     {
         self::admin_vagy_leall();
 
+        $r = self::telepit();
+
+        if (is_string($r)) {
+            wp_send_json_error(['uzenet' => $r]);
+        }
+
+        wp_send_json_success(['uzenet' => $r['uzenet']]);
+    }
+
+    /**
+     * A frissítés telepítése (a gomb és a központ távoli művelete is ezt hívja): előtte teljes mentés.
+     * Siker: ['verzio' => …, 'uzenet' => …], hiba: üzenet (a régi verzió ilyenkor változatlan).
+     *
+     * @return array{verzio: string, uzenet: string}|string
+     */
+    public static function telepit()
+    {
         if (self::git_peldany()) {
-            wp_send_json_error(['uzenet' => 'Fejlesztői példány (git): itt git pull-lal frissíts.']);
+            return 'Fejlesztői példány (git): itt git pull-lal frissíts.';
         }
 
         $uj = self::uj_verzio(true);
 
         if ($uj['hiba'] !== '') {
-            wp_send_json_error(['uzenet' => $uj['hiba']]);
+            return $uj['hiba'];
         }
 
         if (!self::van_ujabb($uj)) {
-            wp_send_json_error(['uzenet' => 'Nincs újabb verzió.']);
+            return 'Nincs újabb verzió.';
         }
 
         @set_time_limit(600); // phpcs:ignore WordPress.PHP.NoSilencedErrors
@@ -487,7 +504,7 @@ final class SDH_Muhely_Frissites
         $b = class_exists('SDH_Muhely_Asszisztens_Tudas') ? SDH_Muhely_Asszisztens_Tudas::teljes_mentes('frissites-elott') : 'A mentés nem érhető el.';
 
         if (!is_array($b)) {
-            wp_send_json_error(['uzenet' => 'A frissítés előtti mentés nem sikerült, ezért nem frissítek: ' . (string) $b]);
+            return 'A frissítés előtti mentés nem sikerült, ezért nem frissítek: ' . (string) $b;
         }
 
         // 2) A WordPress frissítője.
@@ -505,7 +522,7 @@ final class SDH_Muhely_Frissites
         $r    = $up->upgrade(SDH_MUHELY_BASENAME, ['clear_update_cache' => true]);
 
         if (is_wp_error($r)) {
-            wp_send_json_error(['uzenet' => 'A frissítés nem sikerült: ' . $r->get_error_message() . ' A régi verzió változatlan; a mentés: ' . $b['fajl'] . '.']);
+            return 'A frissítés nem sikerült: ' . $r->get_error_message() . ' A régi verzió változatlan; a mentés: ' . $b['fajl'] . '.';
         }
 
         if ($r !== true) {
@@ -513,7 +530,7 @@ final class SDH_Muhely_Frissites
             $v  = $up->skin->result;
             $ok = is_wp_error($v) ? $v->get_error_message() : (is_array($uz) && $uz !== [] ? wp_strip_all_tags((string) end($uz)) : 'a WordPress nem tudta felülírni a fájlokat (írási jog?).');
 
-            wp_send_json_error(['uzenet' => 'A frissítés nem sikerült: ' . $ok . ' A régi verzió változatlan; a mentés: ' . $b['fajl'] . '.']);
+            return 'A frissítés nem sikerült: ' . $ok . ' A régi verzió változatlan; a mentés: ' . $b['fajl'] . '.';
         }
 
         if (!is_plugin_active(SDH_MUHELY_BASENAME)) {
@@ -523,10 +540,9 @@ final class SDH_Muhely_Frissites
         delete_transient(self::CACHE);
         wp_clean_plugins_cache(true);
 
-        $adat = get_plugin_data(SDH_MUHELY_FILE, false, false);
+        $adat   = get_plugin_data(SDH_MUHELY_FILE, false, false);
+        $verzio = (string) ($adat['Version'] ?? $uj['verzio']);
 
-        wp_send_json_success([
-            'uzenet' => 'Frissítve: ' . (string) ($adat['Version'] ?? $uj['verzio']) . '. Az oldal újratöltődik. A frissítés előtti mentés: ' . $b['fajl'] . '.',
-        ]);
+        return ['verzio' => $verzio, 'uzenet' => 'Frissítve: ' . $verzio . '. Az oldal újratöltődik. A frissítés előtti mentés: ' . $b['fajl'] . '.'];
     }
 }

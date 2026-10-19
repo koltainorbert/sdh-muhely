@@ -317,6 +317,7 @@ final class SDH_Muhely_Modul_Kapcsolo
                                 <?php
                                 $sajat_be = !in_array($kulcs, $ki, true);
                                 $fut_e    = SDH_Muhely_Modulok::be($kulcs);
+                                $licenc_ki = in_array($kulcs, SDH_Muhely_Modulok::licenc_tiltott(), true);
                                 $fuggok   = array_map(static fn ($a): string => (string) ($katalogus[$a]['cim'] ?? $a), (array) ($m['fugg'] ?? []));
                                 $azon     = 'sdh-modul-' . $kulcs;
                                 ?>
@@ -325,14 +326,15 @@ final class SDH_Muhely_Modul_Kapcsolo
                                         <span class="sdh-modulkartya__ikon"><?php echo SDH_Muhely_Frontend::ikon((string) ($m['ikon'] ?? $kulcs)); // phpcs:ignore WordPress.Security.EscapeOutput -- rögzített SVG. ?></span>
                                         <span class="sdh-modulkartya__cim"><?php echo esc_html((string) $m['cim']); ?></span>
                                         <span class="sdh-kapcsolo">
-                                            <input type="checkbox" name="be[]" id="<?php echo esc_attr($azon); ?>" value="<?php echo esc_attr($kulcs); ?>" <?php checked($sajat_be); ?>>
+                                            <input type="checkbox" name="be[]" id="<?php echo esc_attr($azon); ?>" value="<?php echo esc_attr($kulcs); ?>" <?php checked($sajat_be); ?><?php disabled($licenc_ki); ?>>
+                                            <?php if ($licenc_ki && $sajat_be) : ?><input type="hidden" name="be[]" value="<?php echo esc_attr($kulcs); ?>"><?php endif; ?>
                                             <span class="sdh-kapcsolo__csuszka" aria-hidden="true"></span>
                                             <span class="sdh-kapcsolo__felirat"><?php echo esc_html((string) $m['cim']); ?> bekapcsolva</span>
                                         </span>
                                     </span>
                                     <span class="sdh-modulkartya__leiras"><?php echo esc_html((string) $m['leiras']); ?></span>
                                     <span class="sdh-modulkartya__lab">
-                                        <span class="sdh-modulkartya__allapot"><?php echo $fut_e ? 'Fut' : ($sajat_be ? 'Nem fut – ki van kapcsolva, amire épül' : 'Kikapcsolva'); ?></span>
+                                        <span class="sdh-modulkartya__allapot"><?php echo $fut_e ? 'Fut' : ($licenc_ki ? 'Nem fut – a licenc nem tartalmazza (a forgalmazótól kérhető)' : ($sajat_be ? 'Nem fut – ki van kapcsolva, amire épül' : 'Kikapcsolva')); ?></span>
                                         <?php if ($fuggok !== []) : ?>
                                             <span class="sdh-modulkartya__fugg">Ehhez kell: <?php echo esc_html(implode(', ', $fuggok)); ?></span>
                                         <?php endif; ?>

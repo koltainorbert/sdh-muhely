@@ -3,9 +3,11 @@
  * Licenc, központi kapcsolat és támogatási hozzáférés (N4, 0.93.0) – a VEVŐ oldala.
  *
  * - Központ nélkül (alap, a saját példány) semmi nem változik: nincs licencfeltétel, a frissítés a régi úton jön.
- * - Központtal (Beállítások › Rendszer › Licenc: a központ címe + a licenckulcs) a rendszer naponta egyszer jelentést
- *   küld: CSAK a licenckulcs, a példány véletlen azonosítója, egy ujjlenyomat (a webhely címének sózott lenyomata –
- *   a cím maga nem megy át) és a verzió. Ügyféladat, forgalom, név soha.
+ * - Központtal (Beállítások › Rendszer › Licenc: a központ címe + a licenckulcs) a rendszer 5 percenként szívverést
+ *   küld (0.99.0): licenckulcs, a példány véletlen azonosítója, ujjlenyomat (a cím sózott lenyomata), verzió, és a
+ *   műszaki állapotkép (SDH_Muhely_Telemetria: szerver, sebesség, mentés, hibák, darabszámok). Az ügyfelek személyes
+ *   adata, a munkalapok tartalma és a forgalom összege soha. A válaszban jönnek a licenc moduljai és jogai, és a
+ *   központ távoli műveletei (SDH_Muhely_Tavoli). Régi (1.0-s) központnál a napi jelentésre áll vissza.
  * - A központ válasza Ed25519-aláírt (libsodium). A központ nyilvános kulcsát az első sikeres kapcsolatkor jegyzi
  *   meg a rendszer (utána csak azzal aláírt választ fogad el; a fejlesztő törölheti, ha a központ kulcsot cserél).
  * - A licenc állapota: aktív / lejárt / tiltva / túl sok példány / ismeretlen kulcs. Lejárt vagy tiltott licencnél
@@ -27,6 +29,7 @@ final class SDH_Muhely_Licenc
 {
     public const OPT  = 'sdh_muhely_licenc';
     public const CRON = 'sdh_muhely_licenc_cron';
+    public const SZIV = 'sdh_muhely_szivveres';
     public const QV   = 'sdh_tamogatas';
     public const NS   = 'sdh-kozpont/v1';
 
@@ -37,14 +40,27 @@ final class SDH_Muhely_Licenc
 
     private const TAM_META = 'sdh_muhely_tamogatas';
 
+    /** Szívverés közben ne induljon még egy (pl. a „Frissítés keresése” művelet ne jelentsen újra). */
+    private static bool $fut = false;
+
     public static function init(): void
     {
+        add_filter('cron_schedules', [self::class, 'utemezesek']);
         add_action('init', [self::class, 'cron_beallit']);
         add_action(self::CRON, [self::class, 'idozitett']);
+        add_action(self::SZIV, [self::class, 'szivveres_cron']);
         add_action('template_redirect', [self::class, 'tamogatas_belepes'], 0);
         add_action('wp_ajax_sdh_muhely_licenc_ellenoriz', [self::class, 'ajax_ellenoriz']);
         add_action('wp_ajax_sdh_muhely_tamogatas_indit', [self::class, 'ajax_tamogatas_indit']);
         add_action('wp_ajax_sdh_muhely_tamogatas_visszavon', [self::class, 'ajax_tamogatas_visszavon']);
+    }
+
+    /** @param array<string, array<string, mixed>> $s */
+    public static function utemezesek(array $s): array
+    {
+        $s['sdh_muhely_5perc'] = ['interval' => 300, 'display' => 'SDH Műhely – 5 percenként'];
+
+        return $s;
     }
 
     public static function cron_beallit(): void
@@ -52,17 +68,42 @@ final class SDH_Muhely_Licenc
         if (!wp_next_scheduled(self::CRON)) {
             wp_schedule_event(time() + 600, 'hourly', self::CRON);
         }
+
+        $kell = self::kozpontbol();
+        $van  = wp_next_scheduled(self::SZIV, []);
+
+        if ($kell && !$van) {
+            wp_schedule_event(time() + 60, 'sdh_muhely_5perc', self::SZIV, []);
+        } elseif (!$kell && $van) {
+            wp_clear_scheduled_hook(self::SZIV, []);
+        }
     }
 
-    /** Óránként: lejárt támogatási fiókok törlése; naponta egyszer jelentés a központnak. */
+    /** Óránként: lejárt támogatási fiókok törlése; ha a szívverés valamiért elmaradt, pótlás. */
     public static function idozitett(): void
     {
         self::tamogatas_takarit();
 
         $u = self::beallitas()['utolso'];
 
-        if (self::kozpontbol() && (empty($u['ido']) || time() - (int) $u['ido'] > DAY_IN_SECONDS - 600)) {
-            self::jelentes();
+        if (self::kozpontbol() && (empty($u['ido']) || time() - (int) $u['ido'] > HOUR_IN_SECONDS)) {
+            self::szivveres();
+        }
+    }
+
+    /** Az ütemezett szívverés (az 5 perces és a gyorsított egyszeri is). */
+    public static function szivveres_cron(): void
+    {
+        if (self::kozpontbol()) {
+            self::szivveres();
+        }
+    }
+
+    /** Pár másodpercen belül még egy szívverés (pl. egy művelet eredménye menjen vissza azonnal). */
+    public static function szivveres_hamarosan(int $mp = 5): void
+    {
+        if (self::kozpontbol()) {
+            wp_schedule_single_event(time() + max(1, $mp), self::SZIV, ['gyors' => (int) floor(time() / 10)]);
         }
     }
 
@@ -84,6 +125,7 @@ final class SDH_Muhely_Licenc
             'utolso'        => is_array($m['utolso'] ?? null) ? $m['utolso'] : [],
             'hiba'          => (string) ($m['hiba'] ?? ''),
             'hiba_ido'      => (int) ($m['hiba_ido'] ?? 0),
+            'regi_kozpont'  => (int) ($m['regi_kozpont'] ?? 0),
         ];
     }
 
@@ -183,26 +225,65 @@ final class SDH_Muhely_Licenc
         return $adat;
     }
 
-    /** Jelentés a központnak. Siker: '', hiba: üzenet. */
+    /** Jelentés a központnak (0.99.0-tól a szívverés). Siker: '', hiba: üzenet. */
     public static function jelentes(): string
+    {
+        return self::szivveres();
+    }
+
+    /**
+     * Szívverés: állapotkép és eredmények a központnak, a válaszból licenc, jogok, modulok, műveletek.
+     * Siker: '', hiba: üzenet. Régi (1.0-s) központnál a napi jelentés megy.
+     */
+    public static function szivveres(): string
     {
         if (!self::kozpontbol()) {
             return 'Nincs megadva központ és licenckulcs.';
         }
 
+        if (self::$fut) {
+            return '';
+        }
+
+        self::$fut = true;
+
+        try {
+            return self::szivveres_kuld();
+        } finally {
+            self::$fut = false;
+        }
+    }
+
+    private static function szivveres_kuld(): string
+    {
         $b       = self::beallitas();
         $peldany = self::peldany();
+        $alap    = ['kulcs' => $b['kulcs'], 'peldany' => $peldany, 'ujjlenyomat' => self::ujjlenyomat(), 'verzio' => SDH_MUHELY_VERSION];
+        $regi    = !empty($b['regi_kozpont']) && time() - (int) $b['regi_kozpont'] < DAY_IN_SECONDS;
 
-        $r = wp_remote_post(self::vegpont('jelentes'), [
-            'timeout' => 10,
-            'headers' => ['Content-Type' => 'application/json'],
-            'body'    => wp_json_encode([
-                'kulcs'       => $b['kulcs'],
-                'peldany'     => $peldany,
-                'ujjlenyomat' => self::ujjlenyomat(),
-                'verzio'      => SDH_MUHELY_VERSION,
-            ]),
-        ]);
+        SDH_Muhely_Telemetria::bekapcsol(true);
+
+        if (!$regi) {
+            $tel   = SDH_Muhely_Telemetria::osszeallit();
+            $kuldo = SDH_Muhely_Tavoli::eredmenyek();
+            $r     = self::kerelem('szivveres', $alap + ['allapot' => $tel['allapot'], 'meres' => $tel['meres'], 'eredmenyek' => $kuldo]);
+
+            // 1.0-s központ: nincs szívverés-végpontja → napi jelentés, egy napig nem próbáljuk újra.
+            if (!is_wp_error($r) && (int) wp_remote_retrieve_response_code($r) === 404) {
+                self::ment(['regi_kozpont' => time()]);
+                $regi = true;
+            }
+        }
+
+        if ($regi) {
+            $u = $b['utolso'];
+
+            if (!empty($u['ido']) && time() - (int) $u['ido'] < DAY_IN_SECONDS - 600 && $b['hiba'] === '') {
+                return '';
+            }
+
+            $r = self::kerelem('jelentes', $alap);
+        }
 
         if (is_wp_error($r)) {
             $hiba = 'A központ nem érhető el: ' . $r->get_error_message();
@@ -213,19 +294,7 @@ final class SDH_Muhely_Licenc
             $adat = is_array($j) ? self::valasz_ellenoriz($j, $peldany) : 'A központ válasza hibás.';
 
             if (is_array($adat)) {
-                self::ment([
-                    'utolso' => [
-                        'ido'     => time(),
-                        'allapot' => sanitize_key((string) ($adat['allapot'] ?? '')),
-                        'lejar'   => sanitize_text_field((string) ($adat['lejar'] ?? '')),
-                        'vevo'    => sanitize_text_field((string) ($adat['vevo'] ?? '')),
-                        'uzenet'  => sanitize_text_field((string) ($adat['uzenet'] ?? '')),
-                        'verzio'  => preg_match('/^\d+(\.\d+){1,3}$/', (string) ($adat['verzio'] ?? '')) === 1 ? (string) $adat['verzio'] : '',
-                    ],
-                    'hiba'     => '',
-                    'hiba_ido' => 0,
-                ]);
-                delete_transient(SDH_Muhely_Frissites::CACHE);
+                self::valasz_feldolgoz($adat);
 
                 return '';
             }
@@ -236,6 +305,106 @@ final class SDH_Muhely_Licenc
         self::ment(['hiba' => $hiba, 'hiba_ido' => time()]);
 
         return $hiba;
+    }
+
+    /** @param array<string, mixed> $body */
+    private static function kerelem(string $ut, array $body)
+    {
+        return wp_remote_post(self::vegpont($ut), [
+            'timeout' => 12,
+            'headers' => ['Content-Type' => 'application/json'],
+            'body'    => wp_json_encode($body),
+        ]);
+    }
+
+    /** @param array<string, mixed> $adat A központ ellenőrzött válasza. */
+    private static function valasz_feldolgoz(array $adat): void
+    {
+        $regi_u = self::beallitas()['utolso'];
+        $utolso = [
+            'ido'     => time(),
+            'allapot' => sanitize_key((string) ($adat['allapot'] ?? '')),
+            'lejar'   => sanitize_text_field((string) ($adat['lejar'] ?? '')),
+            'vevo'    => sanitize_text_field((string) ($adat['vevo'] ?? '')),
+            'uzenet'  => sanitize_text_field((string) ($adat['uzenet'] ?? '')),
+            'verzio'  => preg_match('/^\d+(\.\d+){1,3}$/', (string) ($adat['verzio'] ?? '')) === 1 ? (string) $adat['verzio'] : '',
+        ];
+
+        // A licenc moduljai és jogai (2.0-s központtól). Ha nem jön, a korábbi marad érvényben.
+        if (array_key_exists('modulok', $adat)) {
+            $utolso['modulok'] = $adat['modulok'] === '*' ? '*' : array_values(array_filter(array_map('sanitize_key', (array) $adat['modulok'])));
+            $utolso['jogok']   = array_map('boolval', array_intersect_key((array) ($adat['jogok'] ?? []), ['frissites' => 1, 'tamogatas' => 1, 'tavoli' => 1]));
+            $utolso['max_felhasznalo'] = max(0, (int) ($adat['max_felhasznalo'] ?? 0));
+            $utolso['proba']   = (int) !empty($adat['proba']);
+        } else {
+            foreach (['modulok', 'jogok', 'max_felhasznalo', 'proba'] as $k) {
+                if (isset($regi_u[$k])) {
+                    $utolso[$k] = $regi_u[$k];
+                }
+            }
+        }
+
+        self::ment(['utolso' => $utolso, 'hiba' => '', 'hiba_ido' => 0]);
+        delete_transient(SDH_Muhely_Frissites::CACHE);
+
+        if ((string) wp_json_encode($regi_u['modulok'] ?? null) !== (string) wp_json_encode($utolso['modulok'] ?? null)) {
+            SDH_Muhely_Modulok::kapcsolok_urit();
+
+            foreach (['sdh_muhely_sugo_index', 'sdh_muhely_sugo_index_f', 'sdh_muhely_ai_statikus', 'sdh_muhely_ai_statikus_f'] as $t) {
+                delete_transient($t);
+            }
+        }
+
+        SDH_Muhely_Tavoli::nyugtaz((array) ($adat['nyugta'] ?? []));
+
+        $db = !empty($adat['muveletek']) && is_array($adat['muveletek'])
+            ? SDH_Muhely_Tavoli::vegrehajt($adat['muveletek'], self::jogok())
+            : 0;
+
+        $int = (int) ($adat['intervallum'] ?? 0);
+
+        if ($db > 0) {
+            self::szivveres_hamarosan(3);
+        } elseif ($int > 0 && $int < 300) {
+            self::szivveres_hamarosan($int);
+        }
+    }
+
+    /**
+     * A licenc jogai (központ nélkül, vagy 1.0-s központnál mind engedélyezett).
+     *
+     * @return array{frissites: bool, tamogatas: bool, tavoli: bool}
+     */
+    public static function jogok(): array
+    {
+        $j = self::beallitas()['utolso']['jogok'] ?? [];
+        $j = is_array($j) ? $j : [];
+
+        return [
+            'frissites' => !array_key_exists('frissites', $j) || !empty($j['frissites']),
+            'tamogatas' => !array_key_exists('tamogatas', $j) || !empty($j['tamogatas']),
+            'tavoli'    => !array_key_exists('tavoli', $j) || !empty($j['tavoli']),
+        ];
+    }
+
+    /**
+     * A licenc szerint NEM futó modulok (központ nélkül, vagy ha a licenc mindet adja: üres).
+     *
+     * @return array<int, string>
+     */
+    public static function tiltott_modulok(): array
+    {
+        if (!self::kozpontbol()) {
+            return [];
+        }
+
+        $m = self::beallitas()['utolso']['modulok'] ?? '*';
+
+        if ($m === '*' || !is_array($m)) {
+            return [];
+        }
+
+        return array_values(array_diff(array_keys(SDH_Muhely_Modulok::katalogus()), $m));
     }
 
     public const ALLAPOTOK = [
@@ -284,11 +453,20 @@ final class SDH_Muhely_Licenc
     {
         $a = self::allapot();
 
+        $u = self::beallitas()['utolso'];
+
+        if ($a === 'aktiv' && (int) ($u['max_felhasznalo'] ?? 0) > 0) {
+            $db = (int) (count_users()['total_users'] ?? 0);
+
+            if ($db > (int) $u['max_felhasznalo']) {
+                return 'Licenc: ' . (int) $u['max_felhasznalo'] . ' felhasználóra szól, most ' . $db . ' van. Bővítést a forgalmazótól kérhetsz.';
+            }
+        }
+
         if (in_array($a, ['sajat', 'aktiv', 'meg_nem'], true)) {
             return '';
         }
 
-        $u = self::beallitas()['utolso'];
 
         return 'Licenc: ' . self::ALLAPOTOK[$a] . ($a === 'lejart' && !empty($u['lejar']) ? ' (' . $u['lejar'] . ')' : '')
             . '. A rendszer tovább működik, de frissítést nem kap. Részletek: Beállítások › Licenc.';
@@ -301,14 +479,18 @@ final class SDH_Muhely_Licenc
      */
     public static function frissites_info(bool $kenyszer = false): array
     {
-        if ($kenyszer) {
-            self::jelentes();
+        if ($kenyszer && !self::$fut) {
+            self::szivveres();
         }
 
         $b = self::beallitas();
 
         if (!self::frissitheto()) {
             return ['verzio' => '', 'ido' => time(), 'hiba' => 'Frissítés csak érvényes licenccel jár (' . self::ALLAPOTOK[self::allapot()] . ').'];
+        }
+
+        if (!self::jogok()['frissites']) {
+            return ['verzio' => '', 'ido' => time(), 'hiba' => 'A licenc nem tartalmaz frissítést – a forgalmazótól kérhető.'];
         }
 
         if ($b['hiba'] !== '' && empty($b['utolso']['ido'])) {
@@ -362,6 +544,10 @@ final class SDH_Muhely_Licenc
 
         if (!isset(self::TAMOGATAS_ORAK[$ora])) {
             return 'Válassz időtartamot.';
+        }
+
+        if (self::kozpontbol() && !self::jogok()['tamogatas']) {
+            return 'A licenc nem tartalmaz támogatást – a forgalmazótól kérhető.';
         }
 
         $token = wp_generate_password(40, false, false);
@@ -553,9 +739,11 @@ final class SDH_Muhely_Licenc
         <div class="sdh-doboz sdh-licenc" id="licenc" data-sdh-licenc data-nonce="<?php echo esc_attr(wp_create_nonce('sdh_muhely_licenc')); ?>">
             <h2 class="sdh-doboz__cim">Licenc</h2>
             <p class="sdh-sugo">
-                Ha a rendszert forgalmazótól vásároltátok, itt add meg a központ címét és a licenckulcsot. A rendszer naponta
-                egyszer jelentkezik: csak a licenckulcsot, a példány azonosítóját és a verziót küldi – ügyféladatot, forgalmat,
-                nevet soha. Lejárt licencnél a rendszer tovább működik, csak frissítést nem kap. Saját példánynál hagyd üresen.
+                Ha a rendszert forgalmazótól vásároltátok, itt add meg a központ címét és a licenckulcsot. A rendszer 5 percenként
+                jelentkezik, és műszaki adatot küld (verzió, szerver, sebesség, tárhely, mentés, hibák helye, kiegészítők, modulok)
+                és darabszámokat (munkalap, ügyfél, felhasználó) – így a forgalmazó előre látja, ha baj van. Az ügyfelek nevét,
+                telefonját, e-mail-címét, a munkalapok tartalmát és a forgalom összegét soha. Lejárt licencnél a rendszer tovább
+                működik, csak frissítést nem kap. Saját példánynál hagyd üresen.
             </p>
             <div class="sdh-mezok">
                 <div class="sdh-mezo sdh-mezo--szeles">
@@ -574,7 +762,15 @@ final class SDH_Muhely_Licenc
                 <?php if (!empty($u['ido'])) : ?> · utolsó kapcsolat: <?php echo esc_html(wp_date('Y.m.d. H:i', (int) $u['ido'])); ?><?php endif; ?>
                 <?php if ($b['hiba'] !== '') : ?><br>Utolsó hiba: <?php echo esc_html($b['hiba']); ?><?php endif; ?>
                 <?php if (!empty($u['uzenet'])) : ?><br>A központ üzenete: <?php echo esc_html((string) $u['uzenet']); ?><?php endif; ?>
+                <?php $sdh_tilt = self::tiltott_modulok(); ?>
+                <?php if ($sdh_tilt !== []) : ?><br>A licenc nem tartalmazza: <?php echo esc_html(implode(', ', array_map(static fn (string $k): string => (string) (SDH_Muhely_Modulok::katalogus()[$k]['cim'] ?? $k), $sdh_tilt))); ?> (az adatuk megmarad).<?php endif; ?>
             </p>
+            <?php if (self::kozpontbol()) : ?>
+                <label class="sdh-licenc__tavoli"><input type="checkbox" name="licenc[tavoli]" value="1" <?php checked(SDH_Muhely_Tavoli::engedelyezve()); ?>>
+                    Távoli karbantartás: a forgalmazó innen indíthat mentést, diagnosztikát, gyorsítótár-ürítést és frissítést. Adatot
+                    egyik sem küld el, belépést egyik sem nyit (belépni csak az alábbi támogatási hozzáféréssel lehet).</label>
+                <input type="hidden" name="licenc[tavoli_mezo]" value="1">
+            <?php endif; ?>
             <?php if (self::kozpontbol()) : ?>
                 <p><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-licenc-ellenoriz>Kapcsolat ellenőrzése most</button>
                     <span class="sdh-mezo__sugo" data-sdh-licenc-uzenet role="status"></span></p>
@@ -643,11 +839,18 @@ final class SDH_Muhely_Licenc
             $uj['kozpont_kulcs'] = '';
         }
 
+        if (!empty($be['tavoli_mezo'])) {
+            SDH_Muhely_Tavoli::engedely_ment(!empty($be['tavoli']));
+        }
+
+        $uj['regi_kozpont'] = 0;
         self::ment($uj);
         self::peldany();
+        SDH_Muhely_Telemetria::bekapcsol($uj['kozpont'] !== '' && $uj['kulcs'] !== '');
+        self::cron_beallit();
 
         if ($uj['kozpont'] !== '' && $uj['kulcs'] !== '' && ($uj['kozpont'] !== $b['kozpont'] || $uj['kulcs'] !== $b['kulcs'])) {
-            self::jelentes();
+            self::szivveres();
         }
     }
 }

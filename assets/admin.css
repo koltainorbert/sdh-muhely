@@ -10865,6 +10865,24 @@ button.sdh-allapot,
     margin-bottom: calc(12px * var(--sdh-n));
 }
 
+/* 0.99.0: távoli karbantartás kapcsolója és a forgalmazó sávjai */
+.sdh-licenc__tavoli {
+    display: flex;
+    gap: calc(4px * var(--sdh-n));
+    align-items: flex-start;
+    margin: calc(10px * var(--sdh-n)) 0;
+    font-size: calc(13px * var(--sdh-n));
+    line-height: 1.45;
+}
+
+.sdh-tavoli-sav {
+    margin-bottom: calc(12px * var(--sdh-n));
+}
+
+.sdh-tavoli-sav__gomb {
+    margin: calc(6px * var(--sdh-n)) 0 0 calc(8px * var(--sdh-n));
+}
+
 /* Adatátvétel (U1, 0.94.0) és a Licenc időtartam-választója: egységes legördülők */
 .sdh-adatatvetel .sdh-tabla select,
 .sdh-adatatvetel select,

@@ -418,7 +418,7 @@ final class SDH_Muhely_Sugo
         }
 
         // A kikapcsolt modulok is benne vannak: átkapcsolás után a tartalomjegyzék újraépül.
-        $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()));
+        $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()) . '|' . implode(',', SDH_Muhely_Modulok::licenc_tiltott()));
         // A fejlesztő több fejezetet lát: neki külön tartalomjegyzék jár (a kettő nem írja felül egymást).
         $tkulcs = 'sdh_muhely_sugo_index' . (self::fejleszto() ? '_f' : '');
         $c      = get_transient($tkulcs);

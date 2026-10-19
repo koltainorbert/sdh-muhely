@@ -80,6 +80,25 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.0 – élő figyelés, távoli karbantartás, licencelt modulok + SDH Központ 2.0
+- **Szívverés** 5 percenként (`SDH_Muhely_Licenc::szivveres()`, cron `sdh_muhely_szivveres`, élő követésben 30 mp):
+  aláírt válasz a licenc moduljaival, jogaival (frissítés / támogatás / távoli), felhasználószámával és a központ műveleteivel.
+  1.0-s központnál magától a napi jelentésre áll vissza. Új jog nélkül a frissítés és a támogatási link nem megy.
+- **Telemetria** (`SDH_Muhely_Telemetria`): szerver, PHP, adatbázis, memória, válaszidő (átlag, 95%, leglassabb – a kérések
+  ideje fájlba, nem adatbázisba), adatbázis-, feltöltés- és lemezméret, mentés, ütemező, végzetes hibák helye (maszkolt üzenet),
+  bekapcsolt kiegészítők, modulok, darabszámok, aktív felhasználók. Személyes adat, munkalap-tartalom, forgalom nem megy.
+- **Távoli karbantartás** (`SDH_Muhely_Tavoli`): diagnosztika, mentés, gyorsítótár, hálózat, frissítés keresése / telepítése
+  (`SDH_Muhely_Frissites::telepit()`), üzenet a vevő adminjainak, támogatási kérés „Engedélyezem / Elutasítom” sávval.
+  Egyszer fut, lejár, eredmény nyugtáig; a vevő a Licenc lapon kikapcsolhatja.
+- **Licencelt modulok**: `SDH_Muhely_Modulok::licenc_tiltott()` – a nem licencelt modul nem fut, a Modulok oldalon szürke.
+- **SDH Központ 2.0.0** (`kozpont/sdh-kozpont`): saját, teljes képernyős felület (belépés után ez nyílik, „WordPress admin”
+  gomb), áttekintés (élő rendszerkártyák, riasztások, flotta-válaszidő, verziók, lejáró licencek, havi bevétel), rendszer
+  adatlap (grafikonok 1 óra–90 nap, minden adat, nyers jelentés, hibák, modulok), távoli műveletek, élő követés, vevők (CRM,
+  idővonal, jegyzet), licencek (csomag, modulok, jogok, korlátok, díj, esedékesség, csatorna, megújítás, új kulcs), kiadások
+  (stabil / teszt csatorna, feltöltés, eloszlás), támogatás, napló, beállítások (küszöbök, e-mail riasztás, csomagok), Ctrl+K.
+  DB 2.0.0, a 1.0-s adatot átveszi. A 0.93–0.98-as példányok továbbra is jelentenek (napi, korlátozott adat).
+- Új teszt: t92.
+
 ### 0.98.0 – tesztüzem és tesztadat
 - **Tesztüzem** (`SDH_Muhely_Halozat::tesztuzem()`, szűrő: `sdh_muhely_tesztuzem`, vagy `define('SDH_MUHELY_TESZTUZEM', true)`):
   SMS csak szimuláció, `wp_mail` nem megy ki, a saját postafiókokból sem, Számlázz.hu és Google (Drive) tiltva, nincs külső

@@ -70,6 +70,7 @@ Az **Alaprendszer** – Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgá
 - A kikapcsolt modul végpontjai elutasítanak: ha egy régen megnyitott ablakból mégis hívnák, a rendszer kiírja, hogy a modul ki van kapcsolva.
 - A kikapcsolt modul címét kézzel beírva a **Kikapcsolt modul** oldal jelenik meg.
 - Kikapcsolással semmi nem törlődik.
+- **Licenc** (forgalmazótól vett rendszernél): ami nincs a licencben, az nem fut, a kapcsolója szürke, és a kártyán ez áll: **Nem fut – a licenc nem tartalmazza**. Az adata megmarad; a licenc bővítésekor magától visszajön (Licenc fejezet).
 
 ## Telepítői zár
 

@@ -4,13 +4,13 @@ cim: Licenc és támogatási hozzáférés
 csoport: Rendszer
 modul:
 szakaszok: licenc
-kulcsszavak: licenc, licenckulcs, kulcs, központ, forgalmazó, vásárlás, lejárt licenc, érvényesség, frissítés, támogatás, támogató, távsegítség, hozzáférés, belépő link, ideiglenes fiók, visszavonás, adatvédelem, mit küld
+kulcsszavak: licenc, licenckulcs, kulcs, központ, forgalmazó, vásárlás, lejárt licenc, érvényesség, frissítés, támogatás, támogató, távsegítség, hozzáférés, belépő link, ideiglenes fiók, visszavonás, adatvédelem, mit küld, távoli karbantartás, figyelés, üzenet a forgalmazótól, licencelt modul, felhasználószám
 osszefoglalo: Ha a rendszert forgalmazótól vásároltátok, a Beállítások › Licenc lapon adod meg a központ címét és a licenckulcsot; ugyanitt engedélyezheted időkorláttal, hogy a forgalmazó támogatója belépjen.
 ---
 
 ## Mire való
 
-Ha a rendszert forgalmazótól vásároltátok, a licenc mondja meg, hogy jár-e hozzá frissítés. A rendszer naponta egyszer jelentkezik a forgalmazó központjánál, és onnan kapja az új verziót.
+Ha a rendszert forgalmazótól vásároltátok, a licenc mondja meg, melyik modulok járnak hozzá, hány gépre és hány felhasználóra szól, és jár-e frissítés. A rendszer 5 percenként jelentkezik a forgalmazó központjánál: onnan kapja az új verziót, és a forgalmazó így előre látja, ha valami baj van (lassú, elfogy a tárhely, elmaradt a mentés).
 
 Ugyanitt engedélyezheted, hogy a forgalmazó támogatója **meghatározott időre** belépjen, ha segítséget kértél.
 
@@ -30,14 +30,13 @@ Saját példánynál (amit nem forgalmazótól vettetek) a lapot üresen hagyod:
 
 ## Mit küld a rendszer a központnak
 
-Naponta egyszer, és csak ennyit:
+5 percenként:
 
-- a licenckulcsot,
-- a példány véletlen azonosítóját (egy hosszú, véletlen szám – nem árul el semmit),
-- egy ujjlenyomatot (a webhely címéből képzett lenyomat; magát a címet nem küldi),
-- a verziót.
+- a licenckulcsot, a példány véletlen azonosítóját és egy ujjlenyomatot (a webhely címéből képzett lenyomat; magát a címet nem küldi),
+- a verziót és a műszaki állapotot: a szerver adatai, a válaszidő, a memória, az adatbázis és a szabad tárhely mérete, az utolsó mentés ideje, az ütemezett feladatok, a végzetes hibák helye (az üzenetből az e-mail-címek és a számsorok kitakarva), a bekapcsolt kiegészítők és modulok,
+- darabszámokat: hány munkalap, ügyfél, eszköz, termék és felhasználó van, és hányan dolgoznak éppen.
 
-Ügyféladatot, munkalapot, forgalmat, nevet, e-mail-címet **soha** nem küld.
+Az ügyfelek nevét, telefonját, e-mail-címét, címét, a munkalapok tartalmát és a forgalom összegét **soha** nem küldi.
 
 A központ válasza digitálisan aláírt: a rendszer az első kapcsolatkor megjegyzi a központ kulcsát, és utána csak az azzal aláírt választ fogadja el.
 
@@ -55,6 +54,23 @@ A központ válasza digitálisan aláírt: a rendszer az első kapcsolatkor megj
 | **Nincs kapcsolat a központtal** | 30 napja nem sikerült jelentkezni (például nincs internet). |
 
 Ha az állapot nem *Aktív* (és nem *Saját példány*), az adminisztrátor a képernyő tetején figyelmeztetést lát. Az adatok, a munkalapok és minden funkció ilyenkor is megmarad és működik.
+
+## Licencelt modulok és felhasználók
+
+A licenc megmondja, melyik modulok járnak (például SMS, Házipénztár, Naptár). Ami nincs a licencben, az nem fut: eltűnik a menüből, a Modulok oldalon a kapcsolója szürke, és ott áll: *a licenc nem tartalmazza*. Az adatai megmaradnak – ha a forgalmazó bővíti a licencet, a következő jelentkezéskor (legfeljebb 5 perc) visszajön, ahol abbamaradt.
+
+Ha a licenc meghatározott számú felhasználóra szól, és többen vannak, az adminisztrátor figyelmeztetést lát a képernyő tetején. A munka ilyenkor sem áll le.
+
+## Távoli karbantartás
+
+A forgalmazó a központból karbantartást indíthat: **mentést**, **diagnosztikát** (sebességmérés), **gyorsítótár-ürítést**, **internetkapcsolat-ellenőrzést**, **frissítés keresését** és **telepítését** (előtte mindig teljes mentés készül). Ezek egyike sem küld el adatot, és egyike sem nyit belépést.
+
+A **Beállítások › Rendszer › Licenc** lapon a *Távoli karbantartás* kapcsolóval kikapcsolhatod; ilyenkor a kért művelet nem fut le, és a forgalmazó látja, hogy kikapcsoltad.
+
+## Üzenet és kérés a forgalmazótól
+
+- **Üzenet**: a forgalmazó üzenetet küldhet (például „ma este frissítünk”). Az adminisztrátorok sávként látják a képernyő tetején; a **Rendben** gombbal leveheted.
+- **Támogatási kérés**: ha a forgalmazó be szeretne nézni, a képernyő tetején sáv jelenik meg az okkal és az időtartammal. **Engedélyezem** (kétszeri kattintás) – ideiglenes belépés jön létre, és a link magától eljut a támogatóhoz. **Elutasítom** – nem jön létre semmi, a forgalmazó értesül. A kérés 24 óra után magától eltűnik.
 
 ## Támogatási hozzáférés
 
@@ -105,7 +121,7 @@ A doboz alján a táblázat mutatja az élő hozzáféréseket. A **Visszavonás
 
 ### Mit küld rólunk a rendszer a forgalmazónak?
 
-Csak a licenckulcsot, a példány véletlen azonosítóját, egy ujjlenyomatot és a verziót. Ügyféladatot, forgalmat, nevet soha.
+Műszaki adatot (verzió, sebesség, tárhely, mentés, hibák helye) és darabszámokat. Az ügyfelek nevét, elérhetőségét, a munkalapok tartalmát és a forgalom összegét soha.
 
 ### Leáll a rendszer, ha lejár a licenc?
 
@@ -138,6 +154,14 @@ A **Naplóban** minden támogatási belépés és megszűnés megjelenik.
 ### Kell licenckulcs a saját példányhoz?
 
 Nem. Ha nem forgalmazótól vettétek a rendszert, hagyd üresen a Licenc lapot.
+
+### Kikapcsolhatom a távoli karbantartást?
+
+Igen: **Beállítások › Rendszer › Licenc**, a *Távoli karbantartás* kapcsoló. Belépni a forgalmazó így sem tud, csak ha te engedélyezed a támogatási hozzáférést.
+
+### Miért szürke egy modul kapcsolója?
+
+Mert a licenc nem tartalmazza. Az adatai megmaradnak; a bővítést a forgalmazótól kérheted.
 
 ### Hogyan jön a frissítés licenccel?
 

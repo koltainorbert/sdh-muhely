@@ -668,6 +668,8 @@ final class SDH_Muhely_Frontend
             <?php if (class_exists('SDH_Muhely_Licenc') && SDH_Muhely_Admin_UI::admin_e() && ($sdh_licenc_jel = SDH_Muhely_Licenc::figyelmeztetes()) !== '') : ?>
                 <div class="sdh-uzenet sdh-uzenet--hiba sdh-licenc-jel" role="status"><?php echo esc_html($sdh_licenc_jel); ?></div>
             <?php endif; ?>
+            <?php // 0.99.0: a forgalmazó üzenete és támogatási kérése (csak adminisztrátornak). ?>
+            <?php if (class_exists('SDH_Muhely_Tavoli')) { SDH_Muhely_Tavoli::savok(); } ?>
             <?php call_user_func($tartalom); ?>
         </main>
 

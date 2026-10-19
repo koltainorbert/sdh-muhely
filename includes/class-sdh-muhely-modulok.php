@@ -133,6 +133,9 @@ final class SDH_Muhely_Modulok
     /** @var array<int, string>|null */
     private static ?array $ki_gyorsitotar = null;
 
+    /** A licenc szerint nem futó modulok (0.99.0) – kérésenként egyszer. */
+    private static ?array $licenc_gyorsitotar = null;
+
     /**
      * Az alaprendszer részei – ezek nem kapcsolhatók ki (a Modulok oldalon
      * tájékoztatásul szerepelnek).
@@ -310,17 +313,31 @@ final class SDH_Muhely_Modulok
             return true;
         }
 
-        if (in_array($kulcs, self::kikapcsoltak(), true)) {
+        if (in_array($kulcs, self::kikapcsoltak(), true) || in_array($kulcs, self::licenc_tiltott(), true)) {
             return false;
         }
 
         foreach ((array) ($katalogus[$kulcs]['fugg'] ?? []) as $alap) {
-            if (in_array((string) $alap, self::kikapcsoltak(), true)) {
+            if (in_array((string) $alap, self::kikapcsoltak(), true) || in_array((string) $alap, self::licenc_tiltott(), true)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * A licenc szerint nem futó modulok (központhoz kötött példányon a licenc dönt; az adatuk megmarad).
+     *
+     * @return array<int, string>
+     */
+    public static function licenc_tiltott(): array
+    {
+        if (self::$licenc_gyorsitotar === null) {
+            self::$licenc_gyorsitotar = class_exists('SDH_Muhely_Licenc') && function_exists('get_option') ? SDH_Muhely_Licenc::tiltott_modulok() : [];
+        }
+
+        return self::$licenc_gyorsitotar;
     }
 
     /** Ki van-e kapcsolva (a be() tagadása, az olvashatóság kedvéért). */
@@ -371,7 +388,8 @@ final class SDH_Muhely_Modulok
     /** Teszthez és mentés után: a gyorsítótár ürítése. */
     public static function kapcsolok_urit(): void
     {
-        self::$ki_gyorsitotar = null;
+        self::$ki_gyorsitotar     = null;
+        self::$licenc_gyorsitotar = null;
     }
 
     /**

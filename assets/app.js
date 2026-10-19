@@ -12938,3 +12938,73 @@ document.addEventListener('focusin', function (e) {
         t.title = 'Az ár átírásához „Tételár átírása a lapon” jog kell.';
     }
 });
+
+/* Távoli karbantartás (0.99.0): a forgalmazó üzenete és támogatási kérése – sáv az adminisztrátornak. */
+(function () {
+    'use strict';
+
+    function kuld(sav, adat, kesz) {
+        var B = window.SDH_MUHELY || {};
+        var fd = new FormData();
+
+        Object.keys(adat).forEach(function (k) { fd.set(k, adat[k]); });
+        fd.set('_wpnonce', sav.getAttribute('data-nonce') || '');
+
+        fetch(B.ajax || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(kesz)
+            .catch(function () { kesz({ success: false, data: { uzenet: 'Nincs kapcsolat a szerverrel.' } }); });
+    }
+
+    document.addEventListener('click', function (e) {
+        var g = e.target.closest && e.target.closest('[data-sdh-tavoli-valasz],[data-sdh-tavoli-uzenet-le]');
+
+        if (!g) {
+            return;
+        }
+
+        e.preventDefault();
+
+        var sav = g.closest('[data-sdh-tavoli]');
+        var allapot = sav.querySelector('[data-sdh-tavoli-allapot]');
+
+        if (g.hasAttribute('data-sdh-tavoli-uzenet-le')) {
+            kuld(sav, { action: 'sdh_muhely_tavoli_uzenet_le' }, function () { sav.remove(); });
+
+            return;
+        }
+
+        // Kétlépcsős gomb: az első kattintás csak megerősítést kér.
+        if (!g.hasAttribute('data-elso')) {
+            g.setAttribute('data-elso', '1');
+            g.setAttribute('data-eredeti', g.textContent);
+            g.textContent = 'Biztosan? Kattints újra';
+            window.setTimeout(function () {
+                if (g.hasAttribute('data-elso')) {
+                    g.removeAttribute('data-elso');
+                    g.textContent = g.getAttribute('data-eredeti');
+                }
+            }, 4000);
+
+            return;
+        }
+
+        g.removeAttribute('data-elso');
+        g.textContent = g.getAttribute('data-eredeti');
+        sav.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+
+        kuld(sav, { action: 'sdh_muhely_tavoli_valasz', engedi: g.getAttribute('data-sdh-tavoli-valasz') }, function (v) {
+            var szoveg = (v && v.data && v.data.uzenet) || (v && v.success ? 'Kész.' : 'Nem sikerült.');
+
+            if (v && v.success) {
+                sav.textContent = szoveg;
+            } else {
+                sav.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+
+                if (allapot) {
+                    allapot.textContent = szoveg;
+                }
+            }
+        });
+    });
+}());
