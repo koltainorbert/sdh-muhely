@@ -473,7 +473,8 @@ final class SDH_Kozpont_Kiszolgalas
             return self::eredmeny('megujit', $rendeles, $lid);
         }
 
-        // bovit: modulok hozzáadása, korlátok emelése (csökkenteni nem lehet).
+        // bovit: modulok hozzáadása, korlátok emelése (csökkenteni nem lehet). Hiányzó mező = nincs változás;
+        // `extra_felhasznalo` / `extra_peldany` hozzáadódik; `max_felhasznalo: 0` = korlátlanra emelés.
         $regi = SDH_Kozpont::licenc_modulok($l);
         $uj   = SDH_Kozpont::modulok_tisztit($lic['modulok'] ?? []);
 
@@ -483,15 +484,26 @@ final class SDH_Kozpont_Kiszolgalas
             $mod = array_values(array_unique(array_merge($regi, $uj)));
         }
 
+        $peld = max((int) $l->max_peldany, isset($lic['max_peldany']) ? (int) $lic['max_peldany'] : 0) + max(0, (int) ($lic['extra_peldany'] ?? 0));
+        $felh = (int) $l->max_felhasznalo;
+
+        if ($felh > 0 && array_key_exists('max_felhasznalo', $lic)) {
+            $felh = (int) $lic['max_felhasznalo'] === 0 ? 0 : max($felh, (int) $lic['max_felhasznalo']);
+        }
+
+        if ($felh > 0) {
+            $felh += max(0, (int) ($lic['extra_felhasznalo'] ?? 0));
+        }
+
         $frissit = [
             'modulok'         => $mod === '*' ? null : (string) wp_json_encode($mod),
-            'max_peldany'     => max((int) $l->max_peldany, min(99, (int) ($lic['max_peldany'] ?? 0))),
-            'max_felhasznalo' => (int) $l->max_felhasznalo === 0 ? 0 : max((int) $l->max_felhasznalo, min(999, (int) ($lic['max_felhasznalo'] ?? 0))),
+            'max_peldany'     => max(1, min(99, $peld)),
+            'max_felhasznalo' => max(0, min(999, $felh)),
             'modositva'       => SDH_Kozpont::most(),
         ];
 
-        if ((int) ($lic['max_felhasznalo'] ?? -1) === 0) {
-            $frissit['max_felhasznalo'] = 0;
+        if (trim((string) ($lic['csomag'] ?? '')) !== '') {
+            $frissit['csomag'] = mb_substr(sanitize_text_field((string) $lic['csomag']), 0, 60);
         }
 
         $wpdb->update(SDH_Kozpont::t('licenc'), $frissit, ['id' => $lid]);

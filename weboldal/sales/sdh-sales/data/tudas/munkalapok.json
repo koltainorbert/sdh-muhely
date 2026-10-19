@@ -1,0 +1,728 @@
+{
+    "kulcs": "munkalapok",
+    "cim": "Munkalapok",
+    "csoport": "Napi munka",
+    "osszefoglalo": "A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.",
+    "darabok": [
+        {
+            "id": "munkalapok#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **munkalap** egy javítási ügy: kié a készülék, mi a baja, mit csináltatok vele, mennyibe kerül, és hol tart. Egy munkalap egy ügyfélhez tartozik, és egy vagy több eszközről szól.\n\nA munkalap végigkíséri a javítást: felvétel, állapotváltások, hibák, tételek, előleg, fizetés, számla, lezárás. Az ügyfél a címkén lévő QR-kóddal maga is követheti.\n\nA pultos eladás (napi árukiadás) és a rendelés ugyanilyen lap, csak eszköz, hibák és bevizsgálási díj nélkül – ezeknek saját menüpontjuk van.",
+            "t": "munkalap mire valo mire valo munkalap javitasi ugy kie eszkoz baja csinalt vele ar ar tar munkalap ugyfel tartozi tobb eszkoz szol munkalap vegigkiseri javitas felvetel allapotvaltas hib tetel eloleg fizetes szamla lezaras ugyfel cim levo qr koddal maga kovetheti pultos eladas napi arukiadas rendeles ugyanily lap eszkoz hib bevizsgalasi dij nelkul eze saj menupon",
+            "h": 55
+        },
+        {
+            "id": "munkalapok#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- Az oldalmenüben: Munkalapok – a javítási lapok listája.\n- Az Áttekintés rácsában: ott minden munkalap látszik, szűrhető és rendezhető. Leírása: Áttekintés.\n- Új lap: a **+ Új munkalap** gomb az Áttekintés és a Munkalapok oldal fejlécében is ott van.\n\nA munkalap mindig popupban nyílik, az oldal elhagyása nélkül.",
+            "t": "munkalap talalod talalod oldalmenu munkalap javitasi lap lista attekintes racsa munkalap latszi szurheto rendezheto leirasa attekintes uj lap uj munkalap gomb attekintes munkalap oldal fejlece munkalap popup nyili oldal elhagyasa nelkul",
+            "h": 31
+        },
+        {
+            "id": "munkalapok#3",
+            "cim": "Lépésről lépésre: új munkalap felvétele",
+            "horgony": "lepesrol-lepesre-uj-munkalap-felvetele",
+            "szoveg": "1. Kattints a **+ Új munkalap** gombra. Megnyílik az *Új munkalap* ablak.\n2. Az **Ügyfél** mezőbe kezdd el írni a nevet, a telefonszámot vagy az ügyfélszámot, és válassz a listából. Ha még nincs felvéve, a mező melletti **+** gombbal veheted fel.\n3. Az **Eszköz** mezőben válaszd ki az ügyfél készülékét. Új készüléket a mellette lévő **+** gombbal vehetsz fel.\n4. A **Hibák** lapfülön írd be a hibát, vagy válassz a **Gyakori hibák** közül.\n5. Ha kell, állíts **Határidőt**, és válassz **Felelőst** (alapból te vagy az).\n6. Ha az ügyfél bevizsgálási díjat vagy előleget fizet, rögzítsd a bal oldali **Fizetés** részben.\n7. Kattints a **Munkalap létrehozása** gombra.\n\nMentés után a rendszer kiírja a kiosztott számot: *A munkalap létrejött. Száma: …* – ezt írd a készülék tasakjára, vagy nyomtass címkét.\n\nPélda: Minta Márta behozza a telefonját törött kijelzővel. Ügyfél: Minta Márta, eszköz: a telefonja, hiba: *Törött kijelző*, állapot: *Nyitott*. Mentés után a lap megkapja a következő munkalapszámot.",
+            "t": "munkalap lepes lepes uj munkalap felvetele lepes lepes uj munkalap felvetele kattints uj munkalap gomb megnyili uj munkalap abl ugyfel mezo kezdd irni nev telefonszam ugyfelszam valassz lista nincs felveve mezo melletti gombbal veheted eszkoz mezo valaszd ugyfel eszkoz uj eszkoz mellette levo gombbal vehetsz hib lapful ird hib valassz gyakori hib kozul allits hatarid valassz felelos alap ugyfel bevizsgalasi dij eloleg fiz rogzitsd bal oldali fizetes resz kattints munkalap letrehozasa gomb mentes utan rendszer kiir kioszt szam munkalap letrej szama ird eszkoz tasak nyomtass cim pelda minta marta behozza telefonj tor kijelzo ugyfel minta marta eszkoz telef hiba tor kijelzo allap nyit mentes utan lap megkap kovetkezo munkalapszam",
+            "h": 109
+        },
+        {
+            "id": "munkalapok#4",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "A munkalap ablakának bal oldalán a lap adatai, jobb oldalán az ügyfél, az eszköz és a lapfülek állnak.\n\n| Rész | Mezők |\n|---|---|\n| **Állapot** | **Állapot** (több eszköznél **Közös állapot**), **Név** – rövid tárgy, nem kötelező –, **Felelős**. |\n| **Dátumok** | **Készült** (alapból a mai nap), **Határidő**, és lezárt lapnál a **Lezárva** nap. |\n| **Összeg** | **Nettó**, **Áfa**, **Bruttó** – a tételekből számolódik, gépelés közben frissül. |\n| **Tételek** | **Kedvezmény** (%) és **Áfakulcs** – minden tételsorra érvényes, az új sorok is ezzel indulnak. |\n| **Fizetés** | **Fizetési mód**, **Fizetve**, **Fizetés ideje**, **Fizetett (előleg)**, **Bevizsgálási díj**, alul a **Fizetendő**. |\n\nAz ablak alján:\n\n- **Munkalap létrehozása** (új lapnál) vagy **Mentés**, és **Mégsem** – mentett lapnál a felirata **Bezárás**, mert a változások már maguktól mentődtek (lásd: Automatikus mentés).\n- Az alsó sor jobb szélén a mentés jelzője: **Mentés…**, **Mentve 14:32**, vagy pirossal, ha valami nem menthető (például hiányzik egy kötelező mező).\n- **Fizetés** – mentett lapnál; kifizetett lapon a felirata **Fizetve ✓**.\n- **Számlázz.hu számla** és **Számla-előkészítő (PDF)** – csak olyan lapnál, amelynek már van munkalapszáma.\n- **Matrica** – a készülékre ragasztható RMA-matrica Brother címkenyomtatóra (munkalapszámmal rendelkező javítási lapnál). Lásd: RMA-matrica.\n- **Napló** – a lap teljes története: ki, mikor, mit módosított. Lásd: Napló.",
+            "t": "munkalap mez gomb mez gomb munkalap ablaka bal oldalan lap ada jobb oldalan ugyfel eszkoz lapful all resz mez allap allap tobb eszkoznel kozos allap nev rovid targy kotelezo felelos datum keszul alap mai nap hatarido lezar lapnal lezarva nap osszeg netto afa brutto tetel szamolodi gepeles koz frissul tetel kedvezmeny afakulcs tetelsor ervenyes uj sor ezzel indul fizetes fizetesi mod fizetve fizetes ide fizet eloleg bevizsgalasi dij alul fizetendo abl aljan munkalap letrehozasa uj lapnal mentes megsem ment lapnal felirata bezaras valtozas mag mentod lasd automatikus mentes also sor jobb szel mentes jelzo mentes mentve 14 32 pirossal mentheto peldaul hianyzi kotelezo mezo fizetes ment lapnal kifizet lap felirata fizetve szamlazz hu szamla szamla elokeszito pdf lapnal amely munkalapszama matrica eszkoz ragaszthato rma matrica brother cimkenyomtato munkalapszammal rendelkezo javitasi lapnal lasd rma matrica naplo lap teljes tortenete modosit lasd naplo",
+            "h": 141
+        },
+        {
+            "id": "munkalapok#5",
+            "cim": "Automatikus mentés",
+            "horgony": "automatikus-mentes",
+            "szoveg": "Egy már elmentett lapon minden változás magától mentődik – nem kell a **Mentés** gombot nyomni, és a lap nyitva marad:\n\n- **azonnal**: tétel vagy hibasor felvétele és törlése, választómező, pipa, áfakulcs, kedvezmény;\n- **a mező elhagyásakor**: a beírt név, ár, mennyiség, előleg (így az előleg beírása közben nem jön félkész összegre pénztár-ajánlat);\n- **a gépelés megállása után**: a megjegyzés;\n- az **Állapot** és az eszköz állapota eddig is azonnal mentődött; lezáráskor a lap zárolt nézetre vált.\n\nA **Fizetve** és a **Bevizsgálási díj** pipa levétele előtt a rendszer figyelmeztet; ha a pipa lent marad, a következő változással vagy a bezáráskor mentődik. Bezáráskor (×, **Bezárás**, Esc) ami még nem ment el, elmegy, és a mögötte lévő lista frissül – az oldal nem vált át az Áttekintésre.\n\nNem mentődik magától: az **új, még soha el nem mentett** lap (különben minden félbehagyott felvitel munkalapszámot kapna) – ezt egyszer a **Munkalap létrehozása** gombbal mentsd –, a **lezárt (zárolt)** lap, és soha a számla, a fizetés vagy az üzenetküldés: ezek csak a saját gombjukra történnek.\n\nUgyanígy működik az ügyfél, az eszköz, a termék és a szolgáltatás ablaka, valamint a rendelés és a napi árukiadás.",
+            "t": "munkalap automatikus mentes automatikus mentes elment lap valtozas maga mentodi mentes gomb nyomni lap nyitva marad azonnal tetel hibasor felvetele torlese valasztomezo pipa afakulcs kedvezmeny mezo elhagyasa beir nev ar mennyiseg eloleg igy eloleg beirasa koz jon felkesz osszeg penztar ajanl gepeles megallasa utan megjegyzes allap eszkoz allapota edd azonnal mentod lezaras lap zarol nez val fizetve bevizsgalasi dij pipa levetele elo rendszer figyelmez pipa len marad kovetkezo valtozassal bezaras mentodi bezaras bezaras esc men elmegy mogotte levo lista frissul oldal val attekintes mentodi maga uj soha ment lap kul felbehagy felvitel munkalapszam kapna egyszer munkalap letrehozasa gombbal mentsd lezar zarol lap soha szamla fizetes uzenetkuldes saj gomb tort ugyanigy mukodi ugyfel eszkoz term szolgaltatas ablaka valamin rendeles napi arukiadas",
+            "h": 120
+        },
+        {
+            "id": "munkalapok#6",
+            "cim": "Ha ketten szerkesztik ugyanazt",
+            "horgony": "ha-ketten-szerkesztik-ugyanazt",
+            "szoveg": "**Egy lapot egyszerre csak egy ablakban lehet szerkeszteni.** Ha egy munkalapot már megnyitottak (akár másik gépen, akár ugyanazzal a fiókkal másik böngészőlapon), az újabb megnyitás **megáll**: az űrlap helyett egy doboz jelenik meg, amely kiírja, ki szerkeszti – *„Gábor már megnyitotta szerkesztésre. Amíg be nem zárja, nem nyitható meg.\"* Amint a szerkesztő bezárja az ablakot, a lap megnyitható. Ha a szerkesztő böngészője összeomlik, a zárolás fél-egy percen belül magától lejár.\n\n**Felülbírálás kóddal.** A dobozban a **Felülbíráló kód** megadásával a lap mégis megnyitható (**Megnyitás kóddal**). A kódot a **Beállítások › Jogosultságok** fülön állítod be (egyetlen közös kód; csak lenyomatként tárolódik, nem olvasható vissza). Amíg nincs kód beállítva, a zárolás nem bírálható felül. Öt hibás kód után a felhasználó 5 percre kizárt a próbálkozásból. A felülbírálás és a hibás kód is a lap **Naplójába** kerül.\n\nA **Beállítások › Jogosultságok** fülön azt is megadod, mely rekordok zárolnak: a **munkalap** alapból igen, az **ügyfél** és az **eszköz** alapból nem (ezeket gyakran nyitják meg egymás mellől). A lezárt (zárolt) lap csak olvasható, ezért nem zárol. Új, még el nem mentett lapot sem lehet „foglalni\".\n\n**Ha mégis ketten vannak a lapon** (felülbírálás után, vagy ha a zárolás ki van kapcsolva), az ablak alján megjelenik: **„Gábor is szerkeszti\"** (a jelzés fél percen belül frissül). Ha közben a másik **módosított valamit**, és te is mentenél (a Mentés gombbal vagy az automatikus mentés), a mentés **nem fut le**, és az űrlap tetején sáv jelenik meg: *„Közben Gábor módosította (14:32).\"* Két gomb közül választasz – mindkettő két lépésben működik, a második kattintás erősíti meg:",
+            "t": "munkalap ket szerkeszti ugyanaz ket szerkeszti ugyanaz lap egyszer abl szerkeszteni munkalap megnyitot akar masi gep akar ugyanazzal fiokkal masi bongeszolap ujabb megnyitas megall urlap hely doboz jeleni amely kiir szerkeszti gabor megnyitotta szerkesztes amig zar nyithato amin szerkeszto bezar abl lap megnyithato szerkeszto bongeszo osszeomli zarolas perc belul maga lejar felulbiralas koddal doboz felulbiralo kod megadasa lap megis megnyithato megnyitas koddal kod beallitas jogosultsag ful allitod egyetl kozos kod lenyomatk tarolodi olvashato vissza amig nincs kod beallitva zarolas biralhato felul ot hibas kod utan felhasznalo perc kizar probalkozas felulbiralas hibas kod lap naplo ar beallitas jogosultsag ful megadod rekord zarol munkalap alap ugyfel eszkoz alap eze gyakran nyitj egymas mellol lezar zarol lap olvashato ezer zarol uj ment lap foglalni megis ket van lap felulbiralas utan zarolas kapcsolva abl aljan megjeleni gabor szerkeszti jelzes perc belul frissul koz masi modosit valami mentenel mentes gombbal automatikus mentes mentes fut urlap tetej sav jeleni koz gabor modositotta 14 32 ket gomb kozul valasztasz mindketto ket lepes mukodi masodi kattintas erositi",
+            "h": 169
+        },
+        {
+            "id": "munkalapok#7",
+            "cim": "Ha ketten szerkesztik ugyanazt",
+            "horgony": "ha-ketten-szerkesztik-ugyanazt",
+            "szoveg": "- **Frissítés a legújabbra** – a lap a másik kolléga változtatásával töltődik be újra; ami nálad még nem volt elmentve, elvész.\n- **Az enyémet mentsd** – a te változtatásod mentődik, és felülírja a másikét. A másik kolléga változtatása így is megmarad a lap **Naplójában**.\n\nNem számít ütközésnek: a saját előző mentésed, a nyomtatás, az SMS és az ügyfél vagy az időzítő (rendszer) módosítása. A mentési ütközés-védelem személy szerint különböztet: külön felhasználónál a fiók, közös fióknál a **„Ki vagy?”** választóban kiválasztott dolgozó számít.",
+            "t": "munkalap ket szerkeszti ugyanaz ket szerkeszti ugyanaz frissites legujabb lap masi kollega valtoztatasa toltodi ujra nalad elmentve elvesz enyem mentsd valtoztatasod mentodi felulir masi masi kollega valtoztatasa igy megmarad lap naplo szami utkozes saj elozo mentesed nyomtatas sms ugyfel idozito rendszer modositasa mentesi utkozes vedelem szemely szerin kulonboz kul felhasznalonal fio kozos fioknal valaszto kivalaszt dolgozo szami",
+            "h": 57
+        },
+        {
+            "id": "munkalapok#8",
+            "cim": "Közös fiók: „Ki vagy?”",
+            "horgony": "kozos-fiok-ki-vagy",
+            "szoveg": "Ha többen dolgoztok **egy fiókkal**, a rendszer nem tudná, ki mit csinált. Ezért a közösnek jelölt fiókon a felület indulásakor egy **„Ki vagy?”** ablak jelenik meg: rákattintasz a nevedre, és megadod a **PIN**-ed (4–8 számjegy). Amíg nem választottál, a rendszer nem dolgozik (a hívásai megállnak). Választás után minden a **te neveden** megy: a **Naplóba**, a **pénztárba**, az új munkalap **Felelős** mezőjébe, és a „Gábor is szerkeszti” jelzésbe is.\n\n- **Váltás:** jobb felül a profilmenüben **Személy váltása** – a következő kolléga választ. Kijelentkezéskor a választás törlődik, és a böngészőben legfeljebb 12 óráig él.\n- **Beállítás** (adminisztrátor): **Beállítások › Jogosultságok** › *Közös fiók: „Ki vagy?”*. Itt kapcsolod be és ki a választót, külön a **PIN-t** (kikapcsolva elég a név), itt jelölöd, **melyik fiók közös**, és itt veszed fel a **dolgozókat** (név + PIN). A PIN csak lenyomatként tárolódik; üresen hagyva a régi marad. Dolgozót nem törlünk – inaktívra állítva nem választható, a régi munkái az ő nevén maradnak.\n- **Adminisztrátori közös fiók:** ha a közös fiók maga adminisztrátor, a Beállítások csak az **Admin** szerepű dolgozónak (vagy a fejlesztőnek) érhetők el: a Jogosultságok fülön a dolgozónak adj Admin szerepet. A saját fejlesztői fiókkal is rendelkező dolgozó is a listán marad; ő a PIN-jével **vagy a saját fiókja jelszavával** választhatja ki magát. Ha nincs ilyen admin-személy, a választó azon a fiókon **nem jelenik meg**, így nem zárhatod ki magad. Ha mégis kizártad magad, a rendszer üzemeltetője ki tudja kapcsolni a választót.\n- A dolgozó nevével **nem lehet belépni** a rendszerbe – csak a közös fiókon választható. Öt hibás PIN után 5 percig nem próbálható újra.",
+            "t": "munkalap kozos fio kozos fio tob dolgoz fiokkal rendszer tudna csinal ezer kozos jelol fio felul indulasa abl jeleni rakattintasz neved megadod pin ed szamjegy amig valasztottal rendszer dolgozi hivas megall valasztas utan neved megy naplo penztar uj munkalap felelos mezo gabor szerkeszti jelzes valtas jobb felul profilmenu szemely valtasa kovetkezo kollega valasz kijelentkezes valasztas torlodi bongeszo legfeljebb 12 ora beallitas adminisztrator beallitas jogosultsag kozos fio kapcsolod valasz kul pin kikapcsolva eleg nev jelolod fio kozos veszed dolgoz nev pin pin lenyomatk tarolodi ures hagyva regi marad dolgoz torl inaktiv allitva valaszthato regi mun nev marad adminisztratori kozos fio kozos fio maga adminisztrator beallitas admin szerepu dolgozo fejleszto erh jogosultsag ful dolgozo adj admin szerep saj fejlesztoi fiokkal rendelkezo dolgozo listan marad pin jevel saj fio jelszava valaszth mag nincs admin szemely valaszto azon fio jeleni igy zarhatod magad megis kizartad magad rendszer uzemelteto tud kapcsolni valasz dolgozo neve belepni rendszer kozos fio valaszthato ot hibas pin utan perc probalhato ujra",
+            "h": 161
+        },
+        {
+            "id": "munkalapok#9",
+            "cim": "Szerepkörök és jogok",
+            "horgony": "szerepkorok-es-jogok",
+            "szoveg": "**Három szint van.** A **fejlesztő** (a rendszer eredeti, teljes jogú fiókja) mindent lát, a háttérrendszer teljes adminisztrációját is, és csak ő éri el a **Modulok** oldalt, a **Frissítést** és a technikai adatokat (Névjegy). Az **adminisztrátor** a rendszer minden beállítását kezeli (Beállítások, Mentés, Napló, Jogosultságok), de a háttérrendszer adminisztrációja nem látszik neki: belépés után a műhelybe kerül, nincs admin sáv, és a bejelentkező képernyő sem árulja el, mi fut alatta. Az új adminisztrátor fiókot a fejlesztő hozza létre „SDH adminisztrátor\" szereppel. Belépni a saját bejelentkező oldalon lehet; a jelszót elfelejtő kollégának az adminisztrátor ad újat. A **többiek** (kolléga, pultos, szerelő, pénztáros…) az alábbi szerepkörök szerint dolgoznak.\n\nNem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül tetején a **Szerepkörök és jogok** rács mutatja, melyik szerep mit tehet. Alapból öt szerep van: **Admin** (mindent), **Kolléga** (a régi állapot: mindent lát és csinál, a Beállításokon kívül), **Pultos**, **Szerelő** és **Pénztáros**. Bármelyik átírható, újat is felvehetsz (az új a Kolléga jogaival indul; törléséhez ürítsd ki a nevét – akié volt, kolléga lesz).",
+            "t": "munkalap szerep jog szerep jog harom szin fejleszto rendszer eredeti teljes jogu fio mind lat hatterrendszer teljes adminisztracioj eri modul oldal frissites techni ada nevjegy adminisztrator rendszer beallitas kezeli beallitas mentes naplo jogosultsag hatterrendszer adminisztracio latszi neki belepes utan muhely ar nincs admin sav bejelentkezo kepernyo arul fut alatta uj adminisztrator fio fejleszto hozza let sdh adminisztrator szereppel belepni saj bejelentkezo oldal jelsz elfelejto kollega adminisztrator ad uja tobbi kollega pultos szerelo penztaros alabbi szerep szerin dolgoz mindenki csinalh mind beallitas jogosultsag ful tetej szerep jog racs mut szerep teh alap ot szerep admin mind kollega regi allap mind lat csinal beallitas kivul pultos szerelo penztaros barmelyi atirhato uja felvehetsz uj kollega jog indul torlese uritsd nev akie kollega",
+            "h": 119
+        },
+        {
+            "id": "munkalapok#10",
+            "cim": "Szerepkörök és jogok",
+            "horgony": "szerepkorok-es-jogok",
+            "szoveg": "- **Jogok** (jelölőnégyzet szerepenként): *Pénztárriport* (riport, statisztika, Excel-export és -import, egyeztető ügynök), *Árak és törzsek átírása* (termék- és szolgáltatás-törzs, árlista), *Tételár átírása a lapon* (a munkalapon a tétel árát a törzsárhoz képest átírhatja, kedvezményt adhat – alapból Admin, Kolléga, Pénztáros; enélkül a törzsár megy, ársávos szolgáltatásnál a sávon belüli ár beírható), *Számla kiállítása* (a valódi számla; az előnézet nem kell hozzá), *Törlés-szerű műveletek* (termék, pénztártétel törlése, pénztárnap és lezárt munkalap újranyitása, importált napló visszavonása, naptári bejegyzés és emlék törlése), *Feloldó kód és minta megnézése* (a készülék zárkódja és mintája – alapból Admin, Kolléga, Szerelő; beírni enélkül is lehet), *Beállítások, Mentés, Modulok, Napló*.\n- **Modulok:** amit a szerepnél nem jelölsz be, azt a szerep nem látja – nincs menüpontja, csempéje, oldala, és a műveletei sem futnak. (A munkalap **Fizetés** ablaka a Házipénztár modul nélkül is megy.)\n- **Ki melyik szerepben?** Ugyanitt a nem adminisztrátor kollégákhoz és a dolgozókhoz választasz szerepet. Szerep nélkül mindenki **Kolléga**. A fejlesztő mindig **Admin**, ő nem zárhatja ki magát.\n- **Közös fiókon** a ténylegesen dolgozó szerepe számít: ha Gábor Pultos, akkor a közös fiókon is csak azt teheti, amit a Pultos. A *Beállítások* jog csak adminisztrátori fiókon él: közös adminisztrátori fiókon ez választja el az adminisztrátor dolgozót a többitől.\n- Ha valaki olyat próbál, amihez nincs joga, a rendszer megmondja, melyik jog hiányzik, és a **Napló** rögzíti a próbálkozást.",
+            "t": "munkalap szerep jog szerep jog jog jelolonegyz szerepenk penztarripor ripor statisztika excel expor impor egyezteto ugyn ar torzs atirasa term szolgaltatas torzs arlista tetelar atirasa lap munkalap tetel ar torzsar kepes atirh kedvezmeny adh alap admin kollega penztaros enelkul torzsar megy arsavos szolgaltatasnal sav beluli ar beirhato szamla kiallitasa valodi szamla elonez hozza torles szeru muvel term penztartetel torlese penztarnap lezar munkalap ujranyitasa importal naplo visszavonasa naptari bejegyzes eml torlese feloldo kod minta megnezese eszkoz zarkod minta alap admin kollega szerelo beirni enelkul beallitas mentes modul naplo modul szerepnel jelolsz szerep lat nincs menupon csempe oldala muvel fut munkalap fizetes ablaka hazipenztar modul nelkul megy szerep ugyani adminisztrator kolleg dolgoz valasztasz szerep szerep nelkul mindenki kollega fejleszto admin zarh mag kozos fio tenyleges dolgozo szerepe szami gabor pultos kozos fio teheti pultos beallitas jog adminisztratori fio kozos adminisztratori fio valasz adminisztrator dolgoz tobbi valaki oly probal ami nincs joga rendszer megmond jog hianyzi naplo rogziti probalkozas",
+            "h": 156
+        },
+        {
+            "id": "munkalapok#11",
+            "cim": "Ügyfél és eszköz a munkalapon",
+            "horgony": "ugyfel-es-eszkoz-a-munkalapon",
+            "szoveg": "A munkalap jobb felső részén áll az **Ügyfél** és az **Eszköz** mező. Mindkettő mellett két kis gomb van:\n\n- **+** – új ügyfél, illetve új eszköz felvétele. Az ablak a munkalap *fölött* nyílik; mentés után a munkalap megmarad, és az új ügyfél vagy eszköz már ki is van választva.\n- **Ceruza** – a kiválasztott ügyfél vagy eszköz adatainak szerkesztése, szintén a lap fölött. Mentés után a név és az adatok a lapon helyben frissülnek.\n\nTudnivalók:\n\n- Az ügyfelet a listából kell kiválasztani – a begépelt név önmagában nem elég.\n- Az eszközlista csak a kiválasztott ügyfél készülékeit mutatja. Előbb ügyfelet válassz.\n- Az **Eszköz** lapfülön minden eszköz saját adatlapot kap, a termékképével: azonosító, gyártó, típus, szín, garancia, IMEI szám, sorozatszám, tartozékok. A második, harmadik eszköz is ugyanilyen teljes adatlapot kap. Alattuk az ügyfél adatai (név, cím, telefonszám, e-mail). Minden adat mellett másoló gomb van, a kártyák fejlécében **Szerkesztés**.",
+            "t": "munkalap ugyfel eszkoz munkalap ugyfel eszkoz munkalap munkalap jobb felso resz all ugyfel eszkoz mezo mindketto mell ket kis gomb uj ugyfel illetve uj eszkoz felvetele abl munkalap fol nyili mentes utan munkalap megmarad uj ugyfel eszkoz valasztva ceruza kivalaszt ugyfel eszkoz ada szerkesztese szin lap fol mentes utan nev ada lap hely frissul tudni ugyfel lista kivalasztani begepel nev onmaga eleg eszkozlista kivalaszt ugyfel eszkoz mut elobb ugyfel valassz eszkoz lapful eszkoz saj adatlap kap termekkepe azonosito gyarto tipus szin garancia imei szam sorozatszam tartoz masodi harmadi eszkoz ugyanily teljes adatlap kap alat ugyfel ada nev cim telefonszam mail ada mell masolo gomb karty fejlece szerkesztes",
+            "h": 107
+        },
+        {
+            "id": "munkalapok#12",
+            "cim": "Állapotok és a munkalapszám",
+            "horgony": "allapotok-es-a-munkalapszam",
+            "szoveg": "A munkalap állapota mutatja, hol tart az ügy. Az alaplista:\n\n| Állapot | Kap számot? | Tudnivaló |\n|---|---|---|\n| **Bejelentett** | igen | Nyitottnak számít. |\n| **Árajánlat** | nem | Még nem munkalap; ügyfél és eszköz nélkül is menthető. |\n| **Sablon** | nem | Ugyanúgy, mint az árajánlat. |\n| **Függő** | igen | Nyitottnak számít. |\n| **Nyitott** | igen | Az új munkalap ezzel indul. |\n| **Elkészült** | igen | Az eszköz kész, átvehető. |\n| **Részben elkészült** | igen | Több eszköznél: az egyik kész, a másik még nem. Magától áll be. |\n| **Lezárt** | igen | Lezárt, már nem számít nyitottnak. |\n| **Érvénytelen** | igen | Lezártnak számít; a tévedésből felvett lap helye. |\n\nA lista a Beállításokban átírható (lásd: *Állapotok*).\n\n**Munkalapszám:** a lap akkor kap számot, amikor először lép *számozott* állapotba. Ehhez ügyfél és eszköz kell. A kiosztott szám végleges: a lap később sem kap másikat. A munkalap, a napi árukiadás és a rendelés közös számsorból kap számot.\n\n**Állapotváltás:**\n\n- Már mentett lapon az új állapot **azonnal mentődik** – a mező alatt megjelenik: *Állapot elmentve*. A popup nyitva marad.\n- Új, még nem mentett lapon az állapot a többi mezővel együtt, a létrehozáskor mentődik.\n- Az állapot a Munkalapok listában és az Áttekintés rácsában, a sorban is átállítható.\n- Lezárt állapotba lépve beíródik a **Lezárva** nap. Ha a lapot újra megnyitod (nem lezárt állapotba teszed), a dátum törlődik.",
+            "t": "munkalap allap munkalapszam allap munkalapszam munkalap allapota mut tar ugy alaplista allap kap szam tudnivalo bejelent nyitot szami arajanl munkalap ugyfel eszkoz nelkul mentheto sabl ugyanugy arajanl fuggo nyitot szami nyit uj munkalap ezzel indul elkeszul eszkoz kesz atveheto resz elkeszul tobb eszkoznel egyi kesz masi maga all lezar lezar szami nyitot ervenytel lezar szami tevedes felv lap helye lista beallitas atirhato lasd allap munkalapszam lap kap szam ami eloszor lep szamoz allap ehhez ugyfel eszkoz kioszt szam vegleges lap kesobb kap masi munkalap napi arukiadas rendeles kozos szamsor kap szam allapotvaltas ment lap uj allap azonnal mentodi mezo ala megjeleni allap elmentve popup nyitva marad uj ment lap allap tobbi mezo egyu letrehozas mentodi allap munkalap lista attekintes racsa sor atallithato lezar allap lepve beirodi lezarva nap lap ujra megnyitod lezar allap teszed datum torlodi",
+            "h": 136
+        },
+        {
+            "id": "munkalapok#13",
+            "cim": "A munkalap lapfülei",
+            "horgony": "a-munkalap-lapfulei",
+            "szoveg": "A munkalap jobb oldalán öt lapfül van:\n\n| Lapfül | Mire való |\n|---|---|\n| **Eszköz** | Az eszköz és az ügyfél adatai kártyán. |\n| **Hibák** | A hibasorok: mi a baj, hol tart, mit csináltatok. |\n| **Szolgáltatások** | Munkadíjak, javítások. |\n| **Termékek** | Alkatrészek, kiegészítők. |\n| **RMA** | Címke és QR-kód, ügyféloldal, üzenetek az ügyféllel, állapottörténet. |\n\nA lapfülek nevén szám mutatja, hány hiba, illetve tétel van rajta.\n\nAlul két további lapfül: **Megjegyzés** és **Belső megjegyzés**. Felkiáltójel jelzi, ha van bennük szöveg.",
+            "t": "munkalap munkalap lapful munkalap lapful munkalap jobb oldalan ot lapful lapful mire valo eszkoz eszkoz ugyfel ada kartyan hib hibasor baj tar csinalt szolgaltatas munkadij javitas term alkatresz kiegeszi rma cimke qr kod ugyfeloldal uzen ugyfellel allapottort lapful nev szam mut hany hiba illetve tetel rajta alul ket tovabbi lapful megjegyzes belso megjegyzes felkialtojel jelzi benn szoveg",
+            "h": 57
+        },
+        {
+            "id": "munkalapok#14",
+            "cim": "Mi látszódjon a munkalapon (fogaskerék)",
+            "horgony": "mi-latszodjon-a-munkalapon-fogaskerek",
+            "szoveg": "A munkalap ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) kapcsolod ki, ami nem kell: blokkok (állapot, dátumok, összeg, fizetés, bevizsgálási díj), mezők (név, felelős, előleg), lapfülek (Eszköz, Hibák, Szolgáltatások, Termékek, RMA), gombok, és hogy mely **állapotok** legyenek választhatók. Élőben látszik, a **Mentés** után minden megnyitáskor és minden kollégánál így marad – a rendszer frissítése után is. Az elrejtett mező értéke nem vész el. Részletesen: Űrlapok beállítása.",
+            "t": "munkalap latszodj munkalap fogasker latszodj munkalap fogasker munkalap ablaka jobb felso sarka allo fogasker adminisztrator kapcsolod blok allap datum osszeg fizetes bevizsgalasi dij mez nev felelos eloleg lapful eszkoz hib szolgaltatas term rma gomb allap legye valaszth elo latszi mentes utan megnyitas kolleganal igy marad rendszer frissitese utan elrejt mezo erteke vesz reszletes urlap beallitasa",
+            "h": 55
+        },
+        {
+            "id": "munkalapok#15",
+            "cim": "Hibák és gyakori hibák",
+            "horgony": "hibak-es-gyakori-hibak",
+            "szoveg": "A munkalap **Hibák** lapfülén minden hiba egy sor: **Hiba**, **Állapot**, **Javítás / megjegyzés**. Több eszköznél a sor elején azt is megadod, melyik **Eszköz** hibája.\n\n- Új sor: a **+ Hiba** gomb.\n- Sor törlése: a sor végi **×**.\n- Minden hibának saját állapota van (alapból: **Új**, **Folyamatban**, **Kész**, **Nem javítható**).\n- Az üresen hagyott sor mentéskor eldobódik.\n\n### Lépésről lépésre: hiba felvétele a gyakori hibákból\n\n1. A Hibák lapfülön kattints a **Gyakori hibák** gombra.\n2. Több eszköznél fent válaszd ki, **melyik eszköz hibája**.\n3. Kattints a hibákra – mindegyik rögtön felkerül a munkalapra. Egymás után többet is választhatsz; ami már a lapon van, kiemelve látszik.\n4. Ha a hiba nincs a listán, írd be alul a **Más hiba – írd be…** mezőbe, és kattints a **Felvétel** gombra. Ha az **A gyakori hibák közé is** pipa be van jelölve, a hiba a listára is felkerül, és legközelebb onnan választható.\n5. Kattints a **Kész** gombra.",
+            "t": "munkalap hib gyakori hib hib gyakori hib munkalap hib lapful hiba sor hiba allap javitas megjegyzes tobb eszkoznel sor elej megadod eszkoz hiba uj sor hiba gomb sor torlese sor vegi hiba saj allapota alap uj folyam kesz javithato ures hagy sor mentes eldobodi lepes lepes hiba felvetele gyakori hib hib lapful kattints gyakori hib gomb tobb eszkoznel fen valaszd eszkoz hiba kattints hib mindegyi rog felkerul munkalap egymas utan tobb valaszthatsz lap kiemelve latszi hiba nincs listan ird alul mas hiba ird mezo kattints felvetel gomb gyakori hib koze pipa jelolve hiba lista felkerul legkozelebb onnan valaszthato kattints kesz gomb",
+            "h": 101
+        },
+        {
+            "id": "munkalapok#16",
+            "cim": "Tételek: szolgáltatások és termékek",
+            "horgony": "tetelek-szolgaltatasok-es-termekek",
+            "szoveg": "A munkalap **Szolgáltatások** és **Termékek** lapfülén állnak a tételek. Ezekből adódik a lap összege.\n\n### Lépésről lépésre: szolgáltatás felvétele\n\n1. A Szolgáltatások lapfülön kattints a **+ Szolgáltatás** gombra. Megnyílik a *Szolgáltatás választása* ablak.\n2. Keress a megnevezésben, majd kattints a sorra (vagy ↑ ↓ és Enter).\n3. A tétel a munkalapra kerül a megnevezéssel, a mennyiségi egységgel és az árral.\n\nA választó ablakban:\n\n- **+ Új szolgáltatás** – felveszel egyet a szolgáltatások közé, és rögtön választható.\n- **Ceruza** a sor végén – a szolgáltatás szerkesztése.\n- **Kézzel írom be** – üres sort ad a munkalapon, a nevet és az árat te írod be.\n\nA terméknél ugyanígy megy: **+ Termék** gomb, *Termék választása* ablak. Ott megnevezésre, cikkszámra, termékkódra és vonalkódra is kereshetsz, és látod a készletet.\n\n### A tételsor mezői\n\n**Megnevezés**, **Menny.**, **M.e.** (mennyiségi egység), **Bruttó ár**, **Kedv. %**, **Áfak.**, majd a kiszámolt **Nettó é.** és **Bruttó é.** A termékeknél ezen felül: **Termékkód**, **Cikkszám**, **Gyári szám**.\n\n- Az ár mindig **bruttó egységár**. A nettót a rendszer számolja az áfakulcsból.\n- Az áfakulcs alapból 27%. Soronként átírható; a bal oldali **Áfakulcs** minden sort egyszerre állít.\n- A bal oldali **Kedvezmény** minden tételsorra érvényes; soronként is megadható.\n- A lapfül alján a **Σ** sor összegzi a mennyiséget, a nettó és a bruttó értéket.\n- A már számlázott tétel sorszáma mellett pipa (✓) áll.\n- Sor törlése: a sor végi **×**.",
+            "t": "munkalap tetel szolgaltatas term tetel szolgaltatas term munkalap szolgaltatas term lapful all tetel eze adodi lap osszege lepes lepes szolgaltatas felvetele szolgaltatas lapful kattints szolgaltatas gomb megnyili szolgaltatas valasztasa abl keress megnevezes majd kattints sor enter tetel munkalap ar megnevezessel mennyisegi egyseggel arral valaszto abl uj szolgaltatas felveszel egy szolgaltatas koze rog valaszthato ceruza sor veg szolgaltatas szerkesztese kezzel irom ures sor ad munkalap nev ar irod termeknel ugyanigy megy term gomb term valasztasa abl megnevezes cikkszam termekkod vonalkod kereshetsz latod keszl tetelsor mezoi megnevezes menny mennyisegi egyseg brutto ar kedv afa majd kiszamol netto brutto termekeknel ezen felul termekkod cikkszam gyari szam ar brutto egysegar net rendszer szamol afakulcs afakulcs alap 27 soronk atirhato bal oldali afakulcs sor egyszer alli bal oldali kedvezmeny tetelsor ervenyes soronk megadhato lapful aljan sor osszegzi mennyiseg netto brutto ert szamlaz tetel sorszama mell pipa all sor torlese sor vegi",
+            "h": 146
+        },
+        {
+            "id": "munkalapok#17",
+            "cim": "Több eszköz egy munkalapon",
+            "horgony": "tobb-eszkoz-egy-munkalapon",
+            "szoveg": "Ha az ügyfél egyszerre több készüléket ad le, nem kell külön munkalap. A fő eszköz mellé akárhány további csatolható, és mindegyik önálló ügy a lapon belül.",
+            "t": "munkalap tobb eszkoz munkalap tobb eszkoz munkalap ugyfel egyszer tobb eszkoz ad kul munkalap fo eszkoz melle akarhany tovabbi csatolhato mindegyi onallo ugy lap belul",
+            "h": 25
+        },
+        {
+            "id": "munkalapok#18",
+            "cim": "Több eszköz egy munkalapon › Lépésről lépésre: második eszköz felvétele",
+            "horgony": "tobb-eszkoz-egy-munkalapon",
+            "szoveg": "### Lépésről lépésre: második eszköz felvétele\n\n1. A munkalapon, az **Eszközök a lapon** panel jobb felső sarkában kattints az **Eszköz csatolása** gombra.\n2. Válassz az ügyfél készülékei közül. Ha a készülék még nincs felvéve: **Új eszköz felvitele**.\n3. Az eszköz új kártyaként megjelenik a panelen, a fő eszköz mellett.",
+            "t": "munkalap tobb eszkoz munkalap lepes lepes masodi eszkoz felvetele tobb eszkoz munkalap lepes lepes masodi eszkoz felvetele lepes lepes masodi eszkoz felvetele munkalap eszkoz lap panel jobb felso sarka kattints eszkoz csatolasa gomb valassz ugyfel eszkoz kozul eszkoz nincs felveve uj eszkoz felvitele eszkoz uj kartyak megjeleni panel fo eszkoz mell",
+            "h": 51
+        },
+        {
+            "id": "munkalapok#19",
+            "cim": "Több eszköz egy munkalapon › Az Eszközök a lapon panel",
+            "horgony": "tobb-eszkoz-egy-munkalapon",
+            "szoveg": "### Az Eszközök a lapon panel\n\nA munkalap jobb oldalán, az Ügyfél és az Eszköz mező alatt áll. Minden eszköz egy kártya, sorszámmal (1, 2, 3…); az első mindig a **fő eszköz**. Egy kártyán minden ott van, ami ahhoz az eszközhöz tartozik:\n\n- **Kép** – a készülék termékképe (mockup) a kategóriája szerint; lásd Mockupok.\n- **Név és alcím** – gyártó, típus; alatta a kategória, az IMEI (vagy a sorozatszám) és a szín.\n- **Állapot** – az eszköz saját állapotválasztója; a váltás azonnal mentődik. Új, még nem mentett eszköznél: *állapot: mentés után*.\n- **díj** – a csatolt eszköz saját bevizsgálási díja (a mellette lévő gombbal a díjlistából is választható). A fő eszköz díja az előlegből adódik: *díj … Ft (az előlegből)*.\n- **végösszeg · befizetve · fizetendő** – az eszköz saját összegei. Ha az eszköz ki van fizetve: *✓ Fizetve*.\n- **Ceruza** és **×** – szerkesztés, illetve levétel a munkalapról (az eszköz az ügyfélnél megmarad).\n\nA panel fejléce kiírja, melyik eszköz kész, például: *1 / 2 kész: 2. …*",
+            "t": "munkalap tobb eszkoz munkalap eszkoz lap panel tobb eszkoz munkalap eszkoz lap panel eszkoz lap panel munkalap jobb oldalan ugyfel eszkoz mezo ala all eszkoz kartya sorszammal elso fo eszkoz kartyan ahhoz eszkoz tartozi kep eszkoz termekkepe mockup kategoria szerin lasd mockup nev alcim gyarto tipus alatta kategoria imei sorozatszam szin allap eszkoz saj allapotvalaszto valtas azonnal mentodi uj ment eszkoznel allap mentes utan dij csa eszkoz saj bevizsgalasi dij mellette levo gombbal dijlista valaszthato fo eszkoz dij eloleg adodi dij ft eloleg vegosszeg befizetve fizetendo eszkoz saj osszeg eszkoz fizetve fizetve ceruza szerkesztes illetve levetel munkalap eszkoz ugyfelnel megmarad panel fejlece kiir eszkoz kesz peldaul kesz",
+            "h": 107
+        },
+        {
+            "id": "munkalapok#20",
+            "cim": "Több eszköz egy munkalapon › Mi külön eszközönként?",
+            "horgony": "tobb-eszkoz-egy-munkalapon",
+            "szoveg": "### Mi külön eszközönként?\n\n- **Hibák** – minden hibasorban megadod, melyik eszközé.\n- **Tételek** – minden szolgáltatás- és terméksorban megadod, melyik eszközé. Az új sor az előző sor eszközét örökli.\n- **Állapot** – minden eszköz kártyáján saját állapotválasztó van; a váltás azonnal mentődik.\n- **Fizetve** – ha a Fizetés ablakban csak az egyik eszközt fizetik ki, az az eszköz *Fizetve* lesz, a lap nyitva marad.\n- **Bevizsgálási díj** – eszközönként külön díj, a saját tételeiből levonva.\n- **Összeg** – az eszköz kártyáján látod a végösszeget, a befizetett részt és a fizetendőt.\n- **Címke** – eszközönként egy készül (1/2, 2/2).",
+            "t": "munkalap tobb eszkoz munkalap kul eszkozonk tobb eszkoz munkalap kul eszkozonk kul eszkozonk hib hibasor megadod eszkoze tetel szolgaltatas termeksor megadod eszkoze uj sor elozo sor eszkoz orokli allap eszkoz kartyajan saj allapotvalaszto valtas azonnal mentodi fizetve fizetes abl egyi eszkoz fizeti eszkoz fizetve lap nyitva marad bevizsgalasi dij eszkozonk kul dij saj tetel levonva osszeg eszkoz kartyajan latod vegosszeg befizet resz fizetend cimke eszkozonk keszul",
+            "h": 66
+        },
+        {
+            "id": "munkalapok#21",
+            "cim": "Több eszköz egy munkalapon › A közös állapot",
+            "horgony": "tobb-eszkoz-egy-munkalapon",
+            "szoveg": "### A közös állapot\n\nTöbb eszköznél a lap állapota a **Közös állapot**, amely az eszközök állapotából adódik:\n\n- Ha minden eszköz ugyanabban az állapotban van, az a közös állapot.\n- Ha az egyik már kész (elkészült vagy lezárt), a másik még nem: **Részben elkészült**. A lap kiírja, melyik kész, például: *1 / 2 kész: 2. …*\n- A lap csak akkor zárul le, ha minden eszköz lezárt.\n- Az érvénytelen eszköz nem számít bele, amíg van másik.\n- Ha a **Közös állapotot** írod át, **minden eszköz** azt az állapotot kapja.\n- A *Részben elkészült* kézzel nem választható.\n\nHa egy eszközt leveszel a lapról, a hibái és a tételei nem vesznek el: a fő eszközhöz kerülnek.",
+            "t": "munkalap tobb eszkoz munkalap kozos allap tobb eszkoz munkalap kozos allap kozos allap tobb eszkoznel lap allapota kozos allap amely eszkoz allapota adodi eszkoz ugyanab allap kozos allap egyi kesz elkeszul lezar masi resz elkeszul lap kiir kesz peldaul kesz lap zarul eszkoz lezar ervenytel eszkoz szami bele amig masi kozos allap irod eszkoz allap kap resz elkeszul kezzel valaszthato eszkoz leveszel lap hib tetel vesz fo eszkoz ar",
+            "h": 69
+        },
+        {
+            "id": "munkalapok#22",
+            "cim": "Bevizsgálási díj",
+            "horgony": "bevizsgalasi-dij",
+            "szoveg": "A bevizsgálási díj az átvételkor fizetett összeg, amely a munkalapon és a számlán külön tételként jelenik meg.",
+            "t": "munkalap bevizsgalasi dij bevizsgalasi dij bevizsgalasi dij atvetel fizet osszeg amely munkalap szamlan kul tetelk jeleni",
+            "h": 16
+        },
+        {
+            "id": "munkalapok#23",
+            "cim": "Bevizsgálási díj › Lépésről lépésre: bevizsgálási díj rögzítése",
+            "horgony": "bevizsgalasi-dij",
+            "szoveg": "### Lépésről lépésre: bevizsgálási díj rögzítése\n\n1. A munkalap bal oldalán, a **Fizetés** részben kattints a **Díjlista** gombra, és válaszd ki az eszköz díját. A rendszer beírja az összeget a **Fizetett (előleg)** mezőbe, és bepipálja a **Bevizsgálási díj** jelölőt.\n2. Díjlista nélkül: pipáld be a **Bevizsgálási díj** jelölőt, és írd az összeget a **Fizetett (előleg)** mezőbe.\n3. Ments.\n\nA díj a beírás után azonnal megjelenik a Szolgáltatások között – szaggatott keretes előnézeti sorként, javításnál a levonással együtt. Mentéskor ebből lesz a valódi tételsor, ugyanazzal az összeggel; addig nem kell menteni és újranyitni a lapot.\n\n**A díj beszámít a javításba.** Ha az eszközre javítási tétel kerül, a díj mínusz tételként levonódik a végösszegből – legfeljebb a többi tétel összegéig. Amíg nincs javítási tétel, a díj munkadíjként áll a lapon. A jelölő alatt a rendszer mindig kiírja, éppen mi történik a díjjal.\n\nA bepipált jelölő alatt egy kétállású kapcsoló jelenik meg (**Ha az ügyfél kéri a javítást**): az alap a **Levonódik**. A **Munkadíj marad** akkor kell, ha a díj kivételesen nem számít be a javításba.\n\n- A díj- és a levonássort a rendszer tartja karban, a levonás sora nem szerkeszthető.\n- Több eszköznél minden eszköznek saját díja van (a címkéjén), és a saját tételeiből vonódik le. Amelyik eszközt nem javítjátok, annak a díja munkadíjként megmarad.\n- A díjlista a Szolgáltatások között állítható össze: az a szolgáltatás kerül bele, amelynél be van jelölve a **Bevizsgálási díj**.\n\nFontos: Bepipált **Bevizsgálási díj** mellett a **Fizetett (előleg)** mezőbe kézzel írt összeg díjnak számít. További előleget a **Fizetés** gombbal, **Előleg / részfizetés** módban rögzíts – így a díj nem változik.",
+            "t": "munkalap bevizsgalasi dij lepes lepes bevizsgalasi dij rogzitese bevizsgalasi dij lepes lepes bevizsgalasi dij rogzitese lepes lepes bevizsgalasi dij rogzitese munkalap bal oldalan fizetes resz kattints dijlista gomb valaszd eszkoz dij rendszer beir osszeg fizet eloleg mezo bepipal bevizsgalasi dij jelol dijlista nelkul pipald bevizsgalasi dij jelol ird osszeg fizet eloleg mezo ments dij beiras utan azonnal megjeleni szolgaltatas koz szaggat keretes elonezeti sork javitasnal levonassal egyu mentes ebbol valodi tetelsor ugyanazzal osszeggel add menteni ujranyitni lap dij beszami javitas eszkoz javitasi tetel ar dij minusz tetelk levonodi vegosszeg legfeljebb tobbi tetel osszege amig nincs javitasi tetel dij munkadijk all lap jelolo ala rendszer kiir epp torteni dijjal bepipal jelolo ala ketallasu kapcsolo jeleni ugyfel keri javitas alap levonodi munkadij marad dij kiveteles szami javitas dij levonassor rendszer tar kar levonas sora szerkesztheto tobb eszkoznel eszkoz saj dij cimkej saj tetel vonodi amelyi eszkoz javitj ann dij munkadijk megmarad dijlista szolgaltatas koz allithato ossze szolgaltatas ar bele amelynel jelolve bevizsgalasi dij fontos bepipal bevizsgalasi dij mell fizet eloleg mezo kezzel irt osszeg dij szami tovabbi eloleg fizetes gombbal eloleg reszfizetes mod rogzits igy dij valtozi",
+            "h": 185
+        },
+        {
+            "id": "munkalapok#24",
+            "cim": "Előleg, Fizetett és Fizetve",
+            "horgony": "eloleg-fizetett-es-fizetve",
+            "szoveg": "A munkalap **Fizetés** részében három dolog számít:\n\n- **Fizetett (előleg)** – a ténylegesen befolyt összeg: bevizsgálási díj, előleg, részfizetés, és a végén a lezáró fizetés is. Kifizetett lapon a teljes végösszeg áll itt.\n- **Fizetendő** – a bruttó összeg mínusz a fizetett. Az előleg tehát mindig levonódik. Kifizetett lapon nulla; ha az előleg több, mint a tételek értéke, negatív.\n- **Fizetve** – a lap ki van egyenlítve. A **Fizetés ideje** a fizetés napja.",
+            "t": "munkalap eloleg fizet fizetve eloleg fizet fizetve munkalap fizetes resze harom dolog szami fizet eloleg tenyleges befoly osszeg bevizsgalasi dij eloleg reszfizetes veg lezaro fizetes kifizet lap teljes vegosszeg all fizetendo brutto osszeg minusz fizet eloleg teh levonodi kifizet lap nulla eloleg tobb tetel erteke negativ fizetve lap egyenlitve fizetes ide fizetes nap",
+            "h": 53
+        },
+        {
+            "id": "munkalapok#25",
+            "cim": "Előleg, Fizetett és Fizetve › Lépésről lépésre: fizetés rögzítése",
+            "horgony": "eloleg-fizetett-es-fizetve",
+            "szoveg": "### Lépésről lépésre: fizetés rögzítése\n\n1. Nyisd meg a mentett munkalapot, és kattints alul a **Fizetés** gombra.\n2. Válaszd ki: **Teljes fizetés – lezárom** vagy **Előleg / részfizetés**.\n3. Add meg a fizetési módot és az összeget. Több eszköznél pipáld ki, melyik eszközt fizetik.\n4. Mentsd. A lap **Fizetett** összege nő; teljes fizetésnél a lap **Fizetve** lesz.\n\nA Fizetés ablak a házipénztárba is beírhatja a tételt – erről a Házipénztár szól.",
+            "t": "munkalap eloleg fizet fizetve lepes lepes fizetes rogzitese eloleg fizet fizetve lepes lepes fizetes rogzitese lepes lepes fizetes rogzitese nyisd ment munkalap kattints alul fizetes gomb valaszd teljes fizetes lezarom eloleg reszfizetes add fizetesi mod osszeg tobb eszkoznel pipald eszkoz fizeti mentsd lap fizet osszege no teljes fizetesnel lap fizetve fizetes abl hazipenztar beirh tetel errol hazipenztar szol",
+            "h": 58
+        },
+        {
+            "id": "munkalapok#26",
+            "cim": "Előleg, Fizetett és Fizetve › A „Fizetve” pipa levétele",
+            "horgony": "eloleg-fizetett-es-fizetve",
+            "szoveg": "### A „Fizetve” pipa levétele\n\nHa egy már kifizetett lapon kiveszed a **Fizetve** pipát, a rendszer előbb elmondja, mi fog történni, és három gombot ad:\n\n- **Mégsem – maradjon fizetve** – semmi nem változik.\n- **Fizetés visszavonása** – a lapot lezáró fizetés lekerül a Fizetett összegből, a díjak és a korábbi előlegek megmaradnak, a fizetendő visszajön. Utána **Mentés**.\n- **Csak a pipát veszem ki** – a lap „nincs kifizetve” lesz, de a befizetett összeg a Fizetett mezőben marad, ezért a fizetendő nem jön vissza.\n\nFigyelem: A házipénztárból a tétel egyik esetben sem törlődik magától. Ha a fizetés nem történt meg, a pénztártételt a Házipénztárban kézzel kell törölni.\n\nTöbb eszköznél az eszköz **Fizetve** jelzője külön levehető (az eszköz sora melletti **×**), amíg a lap egésze nincs kifizetve. A **Bevizsgálási díj** pipa levétele előtt a rendszer ugyanígy figyelmeztet: mentéskor a díj és a levonás sorai törlődnek, a befizetett összeg sima előlegként megmarad.",
+            "t": "munkalap eloleg fizet fizetve fizetve pipa levetele eloleg fizet fizetve fizetve pipa levetele fizetve pipa levetele kifizet lap kiveszed fizetve pip rendszer elobb elmond fog tortenni harom gomb ad megsem maradj fizetve semmi valtozi fizetes visszavonasa lap lezaro fizetes lekerul fizet osszeg dij korabbi eloleg megmarad fizetendo visszaj utana mentes pip veszem lap nincs kifizetve befizet osszeg fizet mezo marad ezer fizetendo jon vissza figyelem hazipenztar tetel egyi ese torlodi maga fizetes tort penztartetel hazipenztar kezzel torolni tobb eszkoznel eszkoz fizetve jelzo kul leveheto eszkoz sora melletti amig lap egesze nincs kifizetve bevizsgalasi dij pipa levetele elo rendszer ugyanigy figyelmez mentes dij levonas sor torlod befizet osszeg sima elolegk megmarad",
+            "h": 110
+        },
+        {
+            "id": "munkalapok#27",
+            "cim": "Megjegyzések és gyakori megjegyzések",
+            "horgony": "megjegyzesek-es-gyakori-megjegyzesek",
+            "szoveg": "A munkalap alján két megjegyzés van:\n\n- **Megjegyzés** – az ügyfél felé is megjelenhet (például nyomtatványon, az ügyféloldalon).\n- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja; az ügyfélnek szóló nyomtatványokra nem kerül ki, csak a **Belső munkalapra**.\n\nA **Gyakori megjegyzések** gomb előre megírt szövegeket kínál. Kattints egyre – a **Megjegyzés** új soraként a lapra kerül. Többet is választhatsz; újra kattintva lekerül. A kézzel írt sorokhoz nem nyúl. Bármelyik állapotú lapon használható.\n\nÚj szöveget a **Más megjegyzés – írd be…** mezővel és a **Felvétel** gombbal adsz hozzá; az **A gyakori megjegyzések közé is** pipával a listára is felkerül. Végül **Kész**.\n\nFigyelem: A gyakori megjegyzések a *Megjegyzésbe* kerülnek, amelyet az ügyfél is láthat. Belső információt a **Belső megjegyzés** fülre írj.",
+            "t": "munkalap megjegyzes gyakori megjegyzes megjegyzes gyakori megjegyzes munkalap aljan ket megjegyzes megjegyzes ugyfel fele megjelenh peldaul nyomtatvany ugyfeloldal belso megjegyzes rendszer latszi ugyfel lat ugyfel szolo nyomtatvany ar belso munkalap gyakori megjegyzes gomb elo megir szoveg kinal kattints egy megjegyzes uj sorak lap ar tobb valaszthatsz ujra kattintva lekerul kezzel irt sor nyul barmelyi allapotu lap hasznalhato uj szoveg mas megjegyzes ird mezo felvetel gombbal adsz hozza gyakori megjegyzes koze pipa lista felkerul vegul kesz figyelem gyakori megjegyzes megjegyzes ar amely ugyfel lath belso informaci belso megjegyzes ful irj",
+            "h": 89
+        },
+        {
+            "id": "munkalapok#28",
+            "cim": "Címke és QR-kód",
+            "horgony": "cimke-es-qr-kod",
+            "szoveg": "A munkalap **RMA** lapfülén áll a címke: QR-kód, vonalkód, munkalapszám, ügyfél, eszköz. A QR-kódot az ügyfél a telefonjával beolvassa, és a telefonszámával, valamint a munkalap sorszámával belépve látja a javítás állapotát.\n\n- **Címke nyomtatása** – új lapon megnyílik a nyomtatható címke. Az eszköz sora nyomtatás előtt átírható.\n- **Ügyféloldal** – megnézheted, mit lát az ügyfél.\n- **Link másolása** – az ügyféloldal címe a vágólapra kerül.\n\nTöbb eszköznél eszközönként egy címke készül; amelyik nem kell, annál vedd ki a pipát.\n\nA címke csak akkor készül el, amikor a lap **munkalapszámot kapott**. Az RMA lapfül új lapnál a mentés után érhető el. Ugyanitt írhatsz üzenetet az ügyfélnek, és látod az **Állapottörténetet**.",
+            "t": "munkalap cimke qr kod cimke qr kod munkalap rma lapful all cimke qr kod vonalkod munkalapszam ugyfel eszkoz qr kod ugyfel telefon beolvassa telefonszama valamin munkalap sorszama belepve lat javitas allap cimke nyomtatasa uj lap megnyili nyomtathato cimke eszkoz sora nyomtatas elo atirhato ugyfeloldal megnezheted lat ugyfel lin masolasa ugyfeloldal cime vagolap ar tobb eszkoznel eszkozonk cimke keszul amelyi annal vedd pip cimke keszul ami lap munkalapszam kap rma lapful uj lapnal mentes utan erheto ugyani irhatsz uzen ugyfel latod allapottorten",
+            "h": 81
+        },
+        {
+            "id": "munkalapok#29",
+            "cim": "Átvétel lapfül: fotók és aláírás",
+            "horgony": "atvetel-lapful-fotok-es-alairas",
+            "szoveg": "A javítási munkalap **Átvétel** lapfülén rögzíted, milyen állapotban hozták a készüléket, és itt írja alá az ügyfél az átvételt.\n\n### Fotók a készülék állapotáról\n\n1. Nyisd meg az **Átvétel** lapfület.\n2. Telefonon vagy tableten a **Fotó készítése** gomb a kamerát nyitja: fényképezd le a karcokat, repedéseket, sérüléseket. Gépen a **+ Fájl hozzáadása** gombbal (vagy behúzással) tölthetsz fel képet.\n3. **Mentsd** a lapot: a fotók ekkor kerülnek fel.\n\nA fotók csak bejelentkezett munkatársnak látszanak. Az **átvételi nyomtatványon** az első négy fotó bélyegképként a lap alján áll („Fotók átvételkor”).\n\n### Az ügyfél aláírása\n\n1. Az **Átvétel** lapfülön az ügyfél ujjal, tollal vagy egérrel aláír a keretben. A **Törlés** gomb kiüríti a keretet.\n2. Írd be az **aláíró nevét** (pl. ha meghatalmazott hozta).\n3. **Mentsd** a lapot.\n\nAz aláírás ezután a lapfülön kép formájában látszik a nevével és az idejével; az **Új aláírás** gombbal cserélhető. Az **átvételi nyomtatványon** az „Átadó (ügyfél)” vonal fölött áll. A Változásnaplóba is bekerül.\n\nJó tudni:\n\n- Ha az aláírás képe hibás, a lap nem mentődik – töröld, és írd alá újra.\n- Eladásnál (árukiadás, rendelés) nincs Átvétel lapfül.",
+            "t": "munkalap atvetel lapful fot alairas atvetel lapful fot alairas javitasi munkalap atvetel lapful rogzited allap hoz eszkoz irja ala ugyfel atvetel fot eszkoz allapota nyisd atvetel lapful telef tabl foto keszitese gomb kamer nyi fenykepezd karc repedes serules gep fajl hozzaadasa gombbal behuzassal tolthetsz kep mentsd lap fot ekkor ar fot bejelentkez munkatars latsza atveteli nyomtatvany elso negy foto belyegkepk lap aljan all fot atvetel ugyfel alairasa atvetel lapful ugyfel ujjal tollal egerrel alair ker torles gomb kiuriti ker ird alairo nev pl meghatalmaz hozta mentsd lap alairas ezutan lapful kep forma latszi neve ide uj alairas gombbal cserelheto atveteli nyomtatvany atado ugyfel vonal fol all valtozasnaplo bekerul jo tudni alairas kepe hibas lap mentodi torold ird ala ujra eladasnal arukiadas rendeles nincs atvetel lapful",
+            "h": 125
+        },
+        {
+            "id": "munkalapok#30",
+            "cim": "Javítási garancia",
+            "horgony": "javitasi-garancia",
+            "szoveg": "A lezárt javításra a szerviz garanciát vállal. Alapból a **Beállítások › Javítási garancia** napjai érvényesek (gyárilag 180 nap); egy lapon a **Dátumok** alatti **Javítási garancia** csoportban felülírható (0 = nincs garancia). A garancia a **lezárás napjától** számít; lezárt lapnál ugyanitt látszik a **Lejár** dátuma, és a nyomtatványokon is megjelenik („Garancia: 180 nap, … -ig”).\n\n### Ha a készülék visszajön\n\nAz új munkalapon, amint kiválasztod az eszközt, az **Eszköz** lapfül kártyája alatt jelzés áll:\n\n- hány munkalapon szerepelt már a készülék (és melyik a legutóbbi);\n- ha még **garanciában** van: melyik lap garanciája, és meddig.\n\nIlyenkor kattints a **Garanciális visszatérésként rögzítem** gombra. Az új lap az eredeti **garanciális visszatérése** lesz: a Javítási garancia csoportban ez látszik („az eredeti lap: …”), az eredeti lapon pedig a visszatérései sorakoznak. A gomb még egyszer megnyomva visszavonja.\n\nJó tudni:\n\n- A visszatérés **új lap**: az eredeti lap, a számlája és a pénztára érintetlen marad. A díjat te döntöd el (garanciális javításnál jellemzően nincs).\n- A visszatérés **nem hosszabbítja** a garanciát: a láncban mindig az eredeti lap garanciája számít.\n- A visszajövések számát a riport mutatja (javítási arány).\n\n### Beállítások › Javítási garancia\n\n| Mező | Mire való |\n|---|---|\n| **Javítási garancia a munkalapon** | Kikapcsolva eltűnik a munkalapról a Javítási garancia csoport, a nyomtatványról a lejárat, és nincs visszatérő-jelzés. A lapokon megadott napok megmaradnak. |\n| **Alap garancia (nap)** | A lezárt javításra vállalt garancia napjai. Pl. 90, 180, 365. A jogszabályi jótállási időt ellenőrizd, és ahhoz igazítsd. |\n| **Visszatérő készülék jelzése** | Ki-be kapcsolja az Eszköz lapfül jelzését. |",
+            "t": "munkalap javitasi garancia javitasi garancia lezar javitas szerviz garanci vallal alap beallitas javitasi garancia napj ervenyes gyarilag 180 nap lap datum alatti javitasi garancia csopor felulirhato nincs garancia garancia lezaras nap szami lezar lapnal ugyani latszi lejar datuma nyomtatvany megjeleni garancia 180 nap ig eszkoz visszaj uj munkalap amin kivalasztod eszkoz eszkoz lapful kartya ala jelzes all hany munkalap szerepel eszkoz legutobbi garancia lap garancia medd ily kattints garancialis visszateresk rogzitem gomb uj lap eredeti garancialis visszaterese javitasi garancia csopor latszi eredeti lap eredeti lap ped visszateres sorakoz gomb egyszer megnyomva visszav jo tudni visszateres uj lap eredeti lap szamla penzta erintetl marad dij dontod garancialis javitasnal jellemzo nincs visszateres hosszabbi garanci lanc eredeti lap garancia szami visszajoves szam ripor mut javitasi arany beallitas javitasi garancia mezo mire valo javitasi garancia munkalap kikapcsolva eltuni munkalap javitasi garancia csopor nyomtatvany lejar nincs visszatero jelzes lap megad nap megmarad alap garancia nap lezar javitas vallal garancia napj pl 90 180 365 jogszabalyi jotallasi ido ellenorizd ahhoz igazitsd visszatero eszkoz jelzese kapcsol eszkoz lapful jelzes",
+            "h": 172
+        },
+        {
+            "id": "munkalapok#31",
+            "cim": "Lezárt lap zárolása",
+            "horgony": "lezart-lap-zarolasa",
+            "szoveg": "A lezárt állapotú lap (**Lezárt**, **Érvénytelen** – minden, ami a **Beállítások › Állapotok** listájában `zart` jelzős) **csak olvasható**:\n\n- a lap tetején zöld sáv jelzi: **Lezárt lap – csak olvasható.**, mellette a lezárás napja,\n- a mezők és a szerkesztő gombok le vannak tiltva, a **Mentés** gomb nem látszik,\n- a szerver is elutasít minden módosítást: mentést, az eszköz állapotát és „fizetve” jelzőjét, fizetést (kivéve a már kifizetett lap utólagos pénztárba írását), a rendelés útját és az asszisztens javaslatát (megjegyzés, határidő),\n- ami nem a lap tartalma, az így is megy: **Nyomtatás**, **Matrica**, számla, ügyfélüzenet az RMA lapfülön, az ügyfél és az eszköz adatlapja, **Napló**.\n\n### Lépésről lépésre: lezárt lap újranyitása\n\n1. Nyisd meg a lezárt lapot.\n2. A lap tetején álló sávban válaszd ki, milyen állapotba kerüljön (alapból **Nyitott**).\n3. Írd be, **miért** nyitod újra (ha a Beállításokban kötelező, enélkül nem megy).\n4. Kattints az **Újranyitás** gombra, majd még egyszer (**Biztosan? Kattints újra**).\n5. Az ablak újratölt, a lap szerkeszthető. Az újranyitás, az új állapot és az ok a lap **Naplójába** kerül.\n\nA listában (Áttekintés) az állapot átírásával is újranyitható a lap – kivéve, ha az újranyitás oka kötelező: akkor csak a lapon, az okkal.",
+            "t": "munkalap lezar lap zarolasa lezar lap zarolasa lezar allapotu lap lezar ervenytel beallitas allap lista zar jelzos olvashato lap tetej zold sav jelzi lezar lap olvashato mellette lezaras nap mez szerkeszto gomb van tiltva mentes gomb latszi szerver elutasi modositas mentes eszkoz allap fizetve jelzoj fizetes kiveve kifizet lap utolagos penztar iras rendeles utj asszisztens javasl megjegyzes hatarido lap tartalma igy megy nyomtatas matrica szamla ugyfeluz rma lapful ugyfel eszkoz adatlap naplo lepes lepes lezar lap ujranyitasa nyisd lezar lap lap tetej allo sav valaszd allap kerulj alap nyit ird nyitod ujra beallitas kotelezo enelkul megy kattints ujranyitas gomb majd egyszer biztosan kattints ujra abl ujra lap szerkesztheto ujranyitas uj allap lap naplo ar lista attekintes allap atirasa ujranyithato lap kiveve ujranyitas oka kotelezo lap okkal",
+            "h": 126
+        },
+        {
+            "id": "munkalapok#32",
+            "cim": "Lezárt lapok (Beállítások)",
+            "horgony": "lezart-lapok-beallitasok",
+            "szoveg": "A **Beállítások › Lezárt lapok** lapfülön (a **Munkalap** sorban):\n\n- **A lezárt lap csak újranyitás után szerkeszthető** – alapból be van kapcsolva. Kikapcsolva a lezárt lap is szerkeszthető (minden módosítás akkor is a Naplóba kerül).\n- **Az újranyitás oka kötelező** – bekapcsolva a lezárt lap csak a lap **Újranyitás** gombjával, kitöltött okkal nyitható újra.",
+            "t": "munkalap lezar lap beallitas lezar lap beallitas beallitas lezar lap lapful munkalap sor lezar lap ujranyitas utan szerkesztheto alap kapcsolva kikapcsolva lezar lap szerkesztheto modositas naplo ar ujranyitas oka kotelezo bekapcsolva lezar lap lap ujranyitas gomb kitolt okkal nyithato ujra",
+            "h": 40
+        },
+        {
+            "id": "munkalapok#33",
+            "cim": "Nyomtatás, PDF és e-mail a munkalapról",
+            "horgony": "nyomtatas-pdf-es-e-mail-a-munkalaprol",
+            "szoveg": "A munkalap ablakának alján a **Nyomtatás** gomb (nyomtató ikon) megnyitja a lap nyomtatványait: **Átvételi elismervény**, **Munkalap**, **Belső munkalap**, **Árajánlat**, **Szállítólevél**. Mindegyik megnézhető előnézetben, kinyomtatható a kért példányszámban, elmenthető PDF-be és elküldhető e-mailben az ügyfélnek. Az Áttekintésen a kijelölt lap részletpaneljén is ott a gomb.\n\nA rendszer magától is rákérdez:\n\n- **új munkalap mentése után** az **átvételi elismervény** nyomtatására,\n- **a lap lezárásakor** a **munkalap** nyomtatására.\n\nA gomb csak mentett lapnál jelenik meg, és a nyomtatvány a lap **elmentett** adataiból készül. A részleteket – a példányszámot, a több eszközös lapot, az e-mailt és a nyomtatványok szerkesztését – a Nyomtatás, PDF és e-mail fejezet írja le.",
+            "t": "munkalap nyomtatas pdf mail munkalap nyomtatas pdf mail munkalap munkalap ablaka aljan nyomtatas gomb nyomtato ikon megnyi lap nyomtatvany atveteli elismerveny munkalap belso munkalap arajanl szallitole mindegyi megnezheto elonez kinyomtathato ker peldanyszam elmentheto pdf elkuldheto mail ugyfel attekintes kijelol lap reszletpanelj gomb rendszer maga rakerdez uj munkalap mentese utan atveteli elismerveny nyomtatasa lap lezarasa munkalap nyomtatasa gomb ment lapnal jeleni nyomtatvany lap elment adat keszul reszl peldanyszam tobb eszkozos lap mail nyomtatvany szerkesztes nyomtatas pdf mail fejez irja",
+            "h": 78
+        },
+        {
+            "id": "munkalapok#34",
+            "cim": "Számlagombok a munkalapon",
+            "horgony": "szamlagombok-a-munkalapon",
+            "szoveg": "A munkalap ablakának alján két számlagomb van. Csak mentett, munkalapszámmal rendelkező lapnál jelennek meg.\n\n- **Számlázz.hu számla** – megnyílik a számla ablaka. Ha minden mentve van (automatikus mentés), rögtön; ha van még mentetlen változás, előbb az mentődik, a munkalap pedig a háttérben, a számla ablaka mögött frissül. Számla csak a kiállítás gombjára készül.\n- **Számla-előkészítő (PDF)** – letölthető, nyomtatható PDF a tételekből. Helyben készül; **nem számla**. A gomb felirata a Számlázás beállításában választott nyomtatványnév szerint más is lehet.\n\nA gombok mellett a lap már kiállított számláinak sorszáma áll; kattintásra megnyílik a PDF.\n\nA számla ablakát, a beállításokat és az eszközönkénti számlázást a Számlázás fejezet írja le.",
+            "t": "munkalap szamlagomb munkalap szamlagomb munkalap munkalap ablaka aljan ket szamlagomb ment munkalapszammal rendelkezo lapnal jel szamlazz hu szamla megnyili szamla ablaka mentve automatikus mentes rog mentetl valtozas elobb mentodi munkalap ped hatter szamla ablaka mog frissul szamla kiallitas gomb keszul szamla elokeszito pdf letoltheto nyomtathato pdf tetel hely keszul szamla gomb felirata szamlazas beallitasa valaszt nyomtatvanynev szerin mas gomb mell lap kiallit szaml sorszama all kattintas megnyili pdf szamla abl beallitas eszkozonkenti szamlazas szamlazas fejez irja",
+            "h": 76
+        },
+        {
+            "id": "munkalapok#35",
+            "cim": "A Munkalapok lista",
+            "horgony": "a-munkalapok-lista",
+            "szoveg": "A Munkalapok menüpont a javítási lapok listája. Árukiadás és rendelés nincs benne.\n\n- **Kereső:** munkalapszám, név, ügyfél, telefon, IMEI, készülék. A csatolt eszközök IMEI-jére, sorozatszámára és típusára is talál.\n- **Állapotszűrő:** alapból **Nyitott munkalapok**. A **Mind** minden lapot mutat; alatta egyenként az állapotok (itt találod az árajánlatokat és a sablonokat is). A választás azonnal érvényesül.\n- **Szűrő törlése:** visszaáll az alapnézet.\n- **Oszlopok:** **Szám, Állapot, Ügyfél, Eszköz, Név, Felelős, Határidő, Hibák**. Az ügyfél alatt a telefonszám és a cím, az eszköz alatt az IMEI áll. A Hibák oszlop azt mutatja, hány hiba kész (például *1 / 2 kész*).\n- **Megnyitás:** a számra vagy a **Megnyit** gombra kattintva.\n- **Állapot:** a sorban, a színes állapotra kattintva is átállítható.\n- A legnagyobb számú lap áll elöl. Egy oldalon 25 lap fér el, alul lapozó.\n- A lejárt határidő kiemelve látszik; a lezárt lapok sora halvány színt kap.\n\nHa többféle szűrés, rendezés vagy összesítés kell, használd az Áttekintés rácsát.",
+            "t": "munkalap munkalap lista munkalap lista munkalap menup javitasi lap lista arukiadas rendeles nincs benne kereso munkalapszam nev ugyfel telef imei eszkoz csa eszkoz imei jere sorozatszama tipusa talal allapotszuro alap nyit munkalap mind lap mut alatta egyenk allap talalod arajanl sabl valasztas azonnal ervenyesul szuro torlese visszaall alapnez oszlop szam allap ugyfel eszkoz nev felelos hatarido hib ugyfel ala telefonszam cim eszkoz ala imei all hib oszlop mut hany hiba kesz peldaul kesz megnyitas szam megnyi gomb kattintva allap sor szines allap kattintva atallithato legnagyobb szamu lap all elol oldal 25 lap fer alul lapozo lejar hatarido kiemelve latszi lezar lap sora halvany szin kap tobbfele szures rendezes osszesites hasznald attekintes racs",
+            "h": 112
+        },
+        {
+            "id": "munkalapok#36",
+            "cim": "Állapotok",
+            "horgony": "allapotok",
+            "szoveg": "**Beállítások › Állapotok** (a *Munkalap* csoportban). Itt szerkeszted a munkalap állapotlistáját. Csak adminisztrátor éri el.\n\nSoronként egy állapot, ebben az alakban: `kulcs | Név | szín | jelzők`\n\n- **kulcs** – a rendszer ezt tárolja. Ha már használatban van, ne írd át; a **Nevet** szabadon átírhatod.\n- **szín** – `sarga`, `zold`, `szurke`, `kek`, `narancs`, `olajzold`, `lila`, `piros`.\n- **jelzők** – vesszővel elválasztva:\n\n| Jelző | Jelentése |\n|---|---|\n| `szamozott` | Ebben az állapotban a lap munkalapszámot kap. |\n| `zart` | A lap lezárt, nem számít nyitottnak. |\n| `alap` | Az új munkalap ezzel indul (több esetén az első). |\n| `kesz` | Az eszköz elkészült, átvehető. |\n| `reszben` | A több eszközös lap közös állapota; magától áll be. |\n| `ervenytelen` | Az ilyen eszköz nem számít bele a közös állapotba. |\n\nA sorok sorrendje a lista sorrendje – így rendez az Áttekintés Állapot oszlopa is. Üresen hagyva és mentve az alaplista jön vissza.\n\nPélda: `alkatreszre_var | Alkatrészre vár | kek | szamozott` – új, számozott, nyitottnak számító állapot.",
+            "t": "munkalap allap allap beallitas allap munkalap csopor szerkeszted munkalap allapotlistaj adminisztrator eri soronk allap ebb ala kulcs nev szin jelz kulcs rendszer tarol hasznal ne ird nev szabad atirhatod szin sarga zold szurke kek narancs olajzold lila piros jelz vesszo elvalasztva jelzo jelentese szamoz ebb allap lap munkalapszam kap zar lap lezar szami nyitot alap uj munkalap ezzel indul tobb ese elso kesz eszkoz elkeszul atveheto resz tobb eszkozos lap kozos allapota maga all ervenytel eszkoz szami bele kozos allap sor sorrend lista sorrend igy rendez attekintes allap oszlopa ures hagyva mentve alaplista jon vissza pelda alkatresz var alkatresz var kek szamoz uj szamoz nyitot szamito allap",
+            "h": 107
+        },
+        {
+            "id": "munkalapok#37",
+            "cim": "Hibasor-állapotok",
+            "horgony": "hibasor-allapotok",
+            "szoveg": "**Beállítások › Hibasor-állapotok**. A munkalap hibasorainak saját állapotlistája, ugyanabban az alakban: `kulcs | Név | szín | jelzők`.\n\nAz alaplista: **Új**, **Folyamatban**, **Kész**, **Nem javítható**. A `zart` jelzős állapot számít késznek a *1 / 2 kész* számlálóban. A `szamozott` jelzőnek itt nincs jelentése.",
+            "t": "munkalap hibasor allap hibasor allap beallitas hibasor allap munkalap hibasor saj allapotlista ugyanab ala kulcs nev szin jelz alaplista uj folyam kesz javithato zar jelzos allap szami kesz kesz szamlalo szamoz jelzo nincs jelentese",
+            "h": 34
+        },
+        {
+            "id": "munkalapok#38",
+            "cim": "Gyakori hibák",
+            "horgony": "gyakori-hibak",
+            "szoveg": "**Beállítások › Gyakori hibák**. A munkalap Hibák lapfülén, a **Gyakori hibák** gombbal felvehető hibák listája.\n\n- Soronként egy hiba; a sorrend a lista sorrendje.\n- Legfeljebb 60 hiba fér bele. Az ismétlődő és az üres sorok mentéskor kimaradnak.\n- A kollégák a munkalapról is bővíthetik: az új hiba a lista végére kerül.\n- Üresen hagyva és mentve a húsz leggyakoribb készülékhiba jön vissza.",
+            "t": "munkalap gyakori hib gyakori hib beallitas gyakori hib munkalap hib lapful gyakori hib gombbal felveheto hib lista soronk hiba sorrend lista sorrend legfeljebb 60 hiba fer bele ismetlodo ures sor mentes kimarad kolleg munkalap bovitheti uj hiba lista vege ar ures hagyva mentve husz leggyakoribb keszulekhi jon vissza",
+            "h": 48
+        },
+        {
+            "id": "munkalapok#39",
+            "cim": "Gyakori megjegyzések",
+            "horgony": "gyakori-megjegyzesek",
+            "szoveg": "**Beállítások › Gyakori megjegyzések**. A munkalap **Gyakori megjegyzések** gombjával választható, előre megírt szövegek.\n\n- Soronként egy megjegyzés, legfeljebb 60.\n- A munkalap **Megjegyzés** mezőjébe kerülnek, amelyet az ügyfél is láthat – ide ne írj belső szöveget.\n- A kollégák a munkalapról is bővíthetik.\n- Üresen hagyva és mentve az alaplista jön vissza (például: *Az ügyfél telefonos értesítést kér*, *Sürgős javítás*).",
+            "t": "munkalap gyakori megjegyzes gyakori megjegyzes beallitas gyakori megjegyzes munkalap gyakori megjegyzes gomb valaszthato elo megir szoveg soronk megjegyzes legfeljebb 60 munkalap megjegyzes mezo ar amely ugyfel lath ide ne irj belso szoveg kolleg munkalap bovitheti ures hagyva mentve alaplista jon vissza peldaul ugyfel telefonos ertesites ker surgos javitas",
+            "h": 48
+        },
+        {
+            "id": "munkalapok#40",
+            "cim": "Számozás",
+            "horgony": "szamozas",
+            "szoveg": "**Beállítások › Számozás**. A munkalapszám kezdőértéke és megjelenése. A lapfül tetején látod, mi lesz a következő kiadott szám.\n\n| Mező | Mire való |\n|---|---|\n| **Következő szám (legalább)** | A számozás kezdőértéke. Csak *előre* ugrathatja a számozást: ha már van ennél nagyobb kiadott szám, az számít. |\n| **Előtag** | A szám elé kerülő szöveg, legfeljebb 10 karakter, például `M-`. Üresen csak a szám látszik. |\n| **Kitöltés (számjegyek)** | Ennyi számjegyre egészíti ki nullákkal. `0` = nincs kitöltés; `6`-nál a 34983 így jelenik meg: `034983`. |\n\nAz előtag és a kitöltés csak a megjelenítést változtatja, a régi lapok száma is az új alakban látszik.",
+            "t": "munkalap szamozas szamozas beallitas szamozas munkalapszam kezdoerteke megjelenese lapful tetej latod kovetkezo kiad szam mezo mire valo kovetkezo szam legalabb szamozas kezdoerteke elo ugrath szamozas ennel nagyobb kiad szam szami elotag szam ele kerulo szoveg legfeljebb 10 karakter peldaul ures szam latszi kitoltes szamjegy ennyi szamjegy egesziti null nincs kitoltes nal 34983 igy jeleni 034983 elotag kitoltes megjelenites valtozt regi lap szama uj ala latszi",
+            "h": 65
+        },
+        {
+            "id": "munkalapok#41",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Munkalapot nem lehet törölni.** A tévedésből felvett lapot tedd **Érvénytelen** állapotba: lezártnak számít, a száma megmarad, és visszakereshető.\n- Számozott állapothoz ügyfél és eszköz kell. A kiválasztott eszköznek az ügyfél készülékének kell lennie.\n- A munkalapszámot a rendszer osztja ki, kézzel nem írható át, és két lap nem kaphatja ugyanazt.\n- Az előleg mindig levonódik a végösszegből.\n- A **Fizetett** a ténylegesen befolyt összeg.\n- A tételek ára bruttó; a mérvadó összeget mentéskor a rendszer számolja újra.\n- A számlagombok és a címke csak munkalapszámmal rendelkező lapnál érhetők el.\n- **A lezárt lap csak újranyitás után szerkeszthető**, és az újranyitás a Naplóba kerül (lásd: Lezárt lap zárolása).\n- A lap minden változása – mezők, tételek, hibák, eszközök, fizetés, üzenetek – a lap **Naplójába** kerül, és onnan nem törölhető.\n- Ha egy fizetési mód vagy egy felelős már nincs a listán, a régi lapon akkor is látszik.\n- **Egy lapot egyszerre egy ablakban lehet szerkeszteni**: amit más épp szerkeszt, az nem nyitható meg, amíg be nem zárja – kivéve a felülbíráló kóddal (Beállítások › Jogosultságok).\n- **Közben módosított lapot a rendszer nem ír felül szó nélkül**: ha más belépett kolléga a megnyitás óta módosította, a mentés megáll, és te döntesz (lásd: Ha ketten szerkesztik ugyanazt).",
+            "t": "munkalap szabaly ami rendszer betar szabaly ami rendszer betar munkalap torolni tevedes felv lap tedd ervenytel allap lezar szami szama megmarad visszakeresheto szamoz allap ugyfel eszkoz kivalaszt eszkoz ugyfel keszuleke lennie munkalapszam rendszer osz kezzel irhato ket lap kaph ugyanaz eloleg levonodi vegosszeg fizet tenyleges befoly osszeg tetel ar brutto mervado osszeg mentes rendszer szamol ujra szamlagomb cimke munkalapszammal rendelkezo lapnal erh lezar lap ujranyitas utan szerkesztheto ujranyitas naplo ar lasd lezar lap zarolasa lap valtozasa mez tetel hib eszkoz fizetes uzen lap naplo ar onnan torolheto fizetesi mod felelos nincs listan regi lap latszi lap egyszer abl szerkeszteni mas epp szerkesz nyithato amig zar kiveve felulbiralo koddal beallitas jogosultsag koz modosit lap rendszer ir felul szo nelkul mas belep kollega megnyitas ota modositotta mentes megall dontesz lasd ket szerkeszti ugyanaz",
+            "h": 131
+        },
+        {
+            "id": "munkalapok#42",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„Válassz ügyfelet a listából – gépelés önmagában nem elég.”** – A nevet begépelted, de nem választottad ki a listából.\n- **„Válassz ügyfelet a listából – ügyfél nélkül nem adható munkalapszám.”** – Számozott állapothoz ügyfél kell. Válassz ügyfelet, vagy tedd a lapot Árajánlat állapotba.\n- **„Válassz eszközt – a munkalap mindig egy eszközre vonatkozik.”** – Számozott állapothoz eszköz is kell.\n- **„A kiválasztott eszköz nem ennek az ügyfélnek a készüléke.”** – Ügyfelet váltottál. Válaszd ki újra az eszközt.\n- **„A Mentéssel együtt mentődik.”** az állapot alatt – az állapot még nem menthető azonnal (például az ügyfél még nincs elmentve a lapon). Kattints a **Mentés** gombra.\n- **„A számozás épp foglalt – próbáld újra egy pillanat múlva.”** – Egy kolléga ugyanakkor ment. Kattints újra a mentésre.\n- **Nincs számlagomb.** – A lapnak még nincs munkalapszáma, vagy még nincs elmentve.\n- **„Közben … módosította”** (sárga sáv az űrlap tetején) – egy kolléga a megnyitás óta módosította a lapot, ezért a mentésed megállt. Válaszd a **Frissítés a legújabbra** vagy az **Az enyémet mentsd** gombot (mindkettő két kattintás).\n- **„… is szerkeszti”** az ablak alján – egy kolléga is nyitva tartja ugyanezt a lapot. Szólj neki, mielőtt nagyobb átírásba kezdesz.\n- **„Ezt a munkalapot most más szerkeszti”** – a lap másik ablakban nyitva van. Várd meg, amíg bezárják, vagy add meg a felülbíráló kódot (ha nincs ilyen kód, a Beállítások › Jogosultságok fülön állítható be).\n- **„Ez a lap lezárt – szerkeszteni csak újranyitás után lehet”** – a lap lezárt állapotban van. Nyisd újra a lap tetején az **Újranyitás** gombbal.\n- **„A lezárt lap újranyitásához ok kell”** – a Beállításokban kötelező az újranyitás oka: nyisd meg a lapot, és a tetején írd be az okot.\n- **„Előbb válassz ügyfelet – az eszköz mindig egy ügyfélhez tartozik.”** – Eszközt csak kiválasztott ügyfél mellé lehet csatolni.",
+            "t": "munkalap megy megy valassz ugyfel lista gepeles onmaga eleg nev begepelted valasztottad lista valassz ugyfel lista ugyfel nelkul adhato munkalapszam szamoz allap ugyfel valassz ugyfel tedd lap arajanl allap valassz eszkoz munkalap eszkoz vonatkozi szamoz allap eszkoz kivalaszt eszkoz enn ugyfel keszuleke ugyfel valtottal valaszd ujra eszkoz mentessel egyu mentodi allap ala allap mentheto azonnal peldaul ugyfel nincs elmentve lap kattints mentes gomb szamozas epp foglal probald ujra pillan mulva kollega ugya men kattints ujra mentes nincs szamlagomb lap nincs munkalapszama nincs elmentve koz modositotta sarga sav urlap tetej kollega megnyitas ota modositotta lap ezer mentesed megall valaszd frissites legujabb enyem mentsd gomb mindketto ket kattintas szerkeszti abl aljan kollega nyitva tar ugyanez lap szolj neki miel nagyobb atiras kezdesz munkalap mas szerkeszti lap masi abl nyitva vard amig bezarj add felulbiralo kod nincs kod beallitas jogosultsag ful allithato lap lezar szerkeszteni ujranyitas utan lap lezar allap nyisd ujra lap tetej ujranyitas gombbal lezar lap ujranyitasa beallitas kotelezo ujranyitas oka nyisd lap tetej ird oko elobb valassz ugyfel eszkoz ugyfel tartozi eszkoz kivalaszt ugyfel melle csatolni",
+            "h": 176
+        },
+        {
+            "id": "munkalapok#43",
+            "cim": "GYIK › Hogyan fényképezem le a hozott készüléket?",
+            "horgony": "hogyan-fenykepezem-le-a-hozott-keszuleket",
+            "szoveg": "A munkalap **Átvétel** lapfülén a **Fotó készítése** gombbal (telefonon, tableten a kamera nyílik), majd mentsd a lapot. Az átvételi nyomtatványra is rákerülnek.",
+            "t": "munkalap gyi fenykepezem hoz eszkoz gyi fenykepezem hoz eszkoz munkalap atvetel lapful foto keszitese gombbal telef tabl kame nyili majd mentsd lap atveteli nyomtatvany rakerul",
+            "h": 25
+        },
+        {
+            "id": "munkalapok#44",
+            "cim": "GYIK › Alá tudja írni az ügyfél a tableten?",
+            "horgony": "ala-tudja-irni-az-ugyfel-a-tableten",
+            "szoveg": "Igen: a munkalap **Átvétel** lapfülén ujjal ír alá a keretben, utána mentsd a lapot. Az aláírás az átvételi nyomtatványon is megjelenik.",
+            "t": "munkalap gyi ala tud irni ugyfel tabl gyi ala tud irni ugyfel tabl munkalap atvetel lapful ujjal ir ala ker utana mentsd lap alairas atveteli nyomtatvany megjeleni",
+            "h": 27
+        },
+        {
+            "id": "munkalapok#45",
+            "cim": "GYIK › Visszahozták a készüléket a javítás után. Mit csináljak?",
+            "horgony": "visszahoztak-a-keszuleket-a-javitas-utan-mit-csinaljak",
+            "szoveg": "Vegyél fel új munkalapot, és válaszd ki a készüléket. Ha még garanciában van, az **Eszköz** lapfülön kattints a **Garanciális visszatérésként rögzítem** gombra: az új lap az eredeti visszatérése lesz.",
+            "t": "munkalap gyi visszahoz eszkoz javitas utan csinalj gyi visszahoz eszkoz javitas utan csinalj vegyel uj munkalap valaszd eszkoz garancia eszkoz lapful kattints garancialis visszateresk rogzitem gomb uj lap eredeti visszaterese",
+            "h": 30
+        },
+        {
+            "id": "munkalapok#46",
+            "cim": "GYIK › Hol állítom, hány nap garanciát adunk?",
+            "horgony": "hol-allitom-hany-nap-garanciat-adunk",
+            "szoveg": "**Beállítások › Javítási garancia** – az alapérték. Egy lapon a **Javítási garancia** csoportban felülírható (0 = nincs).",
+            "t": "munkalap gyi allitom hany nap garanci adun gyi allitom hany nap garanci adun beallitas javitasi garancia alap lap javitasi garancia csopor felulirhato nincs",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#47",
+            "cim": "GYIK › Miért nem tudom szerkeszteni a lezárt lapot?",
+            "horgony": "miert-nem-tudom-szerkeszteni-a-lezart-lapot",
+            "szoveg": "Mert a lezárt lap csak olvasható – így nem változhat meg utólag észrevétlenül. A lap tetején az **Újranyitás** gombbal nyisd újra; az újranyitás és az oka a Naplóba kerül.",
+            "t": "munkalap gyi tudom szerkeszteni lezar lap gyi tudom szerkeszteni lezar lap lezar lap olvashato igy valtozh utolag eszrevetlenul lap tetej ujranyitas gombbal nyisd ujra ujranyitas oka naplo ar",
+            "h": 28
+        },
+        {
+            "id": "munkalapok#48",
+            "cim": "GYIK › Lezárt lapról is nyomtathatok és számlázhatok?",
+            "horgony": "lezart-laprol-is-nyomtathatok-es-szamlazhatok",
+            "szoveg": "Igen. A nyomtatás, a matrica, a számla és az ügyfélüzenet nem módosítja a lapot, ezért zárolva is megy.",
+            "t": "munkalap gyi lezar lap nyomtath szamlazh gyi lezar lap nyomtath szamlazh nyomtatas matrica szamla ugyfeluz modosi lap ezer zarolva megy",
+            "h": 20
+        },
+        {
+            "id": "munkalapok#49",
+            "cim": "GYIK › Mi történik, ha ketten szeretnénk ugyanazt a lapot megnyitni?",
+            "horgony": "mi-tortenik-ha-ketten-szeretnenk-ugyanazt-a-lapot-megnyitni",
+            "szoveg": "Amit az egyikőtök már szerkeszt, azt a másik nem tudja megnyitni, amíg az első be nem zárja – a másik helyette azt látja, ki szerkeszti. Felülbíráló kóddal ez megkerülhető (Beállítások › Jogosultságok). Ha mégis ketten vannak a lapon, a mentéskor jelzett ütközésnél frissítesz vagy felülírsz; szó nélkül soha nem íródik felül semmi, és minden változás a Naplóban marad.",
+            "t": "munkalap gyi torteni ket szeretn ugyanaz lap megnyitni gyi torteni ket szeretn ugyanaz lap megnyitni egyi szerkesz masi tud megnyitni amig elso zar masi helyette lat szerkeszti felulbiralo koddal megkerulheto beallitas jogosultsag megis ket van lap mentes jelz utkozesnel frissitesz felulirsz szo nelkul soha irodi felul semmi valtozas naplo marad",
+            "h": 50
+        },
+        {
+            "id": "munkalapok#50",
+            "cim": "GYIK › Hol látom, ki módosított egy munkalapot?",
+            "horgony": "hol-latom-ki-modositott-egy-munkalapot",
+            "szoveg": "A lap ablakának alján a **Napló** gombbal: időrendben minden változás, a régi és az új értékkel, a kolléga nevével.",
+            "t": "munkalap gyi latom modosit munkalap gyi latom modosit munkalap lap ablaka aljan naplo gombbal idorend valtozas regi uj ert kollega neve",
+            "h": 21
+        },
+        {
+            "id": "munkalapok#51",
+            "cim": "GYIK › Miért nem kap munkalapszámot a lap?",
+            "horgony": "miert-nem-kap-munkalapszamot-a-lap",
+            "szoveg": "Mert még nem volt számozott állapotban. Az Árajánlat és a Sablon nem ad számot. Tedd a lapot például Nyitott állapotba – ehhez ügyfél és eszköz kell.",
+            "t": "munkalap gyi kap munkalapszam lap gyi kap munkalapszam lap szamoz allap arajanl sabl ad szam tedd lap peldaul nyit allap ehhez ugyfel eszkoz",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#52",
+            "cim": "GYIK › Mikor kap számot az árajánlat?",
+            "horgony": "mikor-kap-szamot-az-arajanlat",
+            "szoveg": "Amikor először számozott állapotba teszed (például Nyitott). Akkor megkapja a következő szabad számot.",
+            "t": "munkalap gyi kap szam arajanl gyi kap szam arajanl ami eloszor szamoz allap teszed peldaul nyit megkap kovetkezo szabad szam",
+            "h": 20
+        },
+        {
+            "id": "munkalapok#53",
+            "cim": "GYIK › Megváltozhat egy munkalap száma?",
+            "horgony": "megvaltozhat-egy-munkalap-szama",
+            "szoveg": "Nem. A kiosztott szám végleges, akkor is, ha a lapot később más állapotba teszed.",
+            "t": "munkalap gyi megvaltozh munkalap szama gyi megvaltozh munkalap szama kioszt szam vegleges lap kesobb mas allap teszed",
+            "h": 17
+        },
+        {
+            "id": "munkalapok#54",
+            "cim": "GYIK › Hogyan törlök egy tévedésből felvett munkalapot?",
+            "horgony": "hogyan-torlok-egy-tevedesbol-felvett-munkalapot",
+            "szoveg": "Sehogy: munkalap nem törölhető. Tedd **Érvénytelen** állapotba. Így nem számít nyitottnak, de a száma és a története megmarad.",
+            "t": "munkalap gyi torl tevedes felv munkalap gyi torl tevedes felv munkalap sehogy munkalap torolheto tedd ervenytel allap igy szami nyitot szama tortenete megmarad",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#55",
+            "cim": "GYIK › Felvehetek munkalapot ügyfél nélkül?",
+            "horgony": "felvehetek-munkalapot-ugyfel-nelkul",
+            "szoveg": "Csak nem számozott állapotban (Árajánlat, Sablon). Számozott laphoz ügyfél és eszköz kell.",
+            "t": "munkalap gyi felveh munkalap ugyfel nelkul gyi felveh munkalap ugyfel nelkul szamoz allap arajanl sabl szamoz lap ugyfel eszkoz",
+            "h": 19
+        },
+        {
+            "id": "munkalapok#56",
+            "cim": "GYIK › Az ügyfél még nincs a rendszerben. Ki kell lépnem a munkalapból?",
+            "horgony": "az-ugyfel-meg-nincs-a-rendszerben-ki-kell-lepnem-a-munkalapbol",
+            "szoveg": "Nem. Az Ügyfél mező melletti **+** gombbal a lap fölött veheted fel; mentés után már ki is van választva.",
+            "t": "munkalap gyi ugyfel nincs rendszer lepnem munkalap gyi ugyfel nincs rendszer lepnem munkalap ugyfel mezo melletti gombbal lap fol veheted mentes utan valasztva",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#57",
+            "cim": "GYIK › Hogyan javítom ki az ügyfél telefonszámát a munkalapról?",
+            "horgony": "hogyan-javitom-ki-az-ugyfel-telefonszamat-a-munkalaprol",
+            "szoveg": "Az Ügyfél mező melletti **ceruzával**, vagy az ügyfél kártyáján a **Szerkesztés** gombbal. Mentés után a lap megmarad, az adat frissül.",
+            "t": "munkalap gyi javitom ugyfel telefonszam munkalap gyi javitom ugyfel telefonszam munkalap ugyfel mezo melletti ceruza ugyfel kartyajan szerkesztes gombbal mentes utan lap megmarad ada frissul",
+            "h": 25
+        },
+        {
+            "id": "munkalapok#58",
+            "cim": "GYIK › Miért üres az eszközlista?",
+            "horgony": "miert-ures-az-eszkozlista",
+            "szoveg": "Mert még nincs ügyfél kiválasztva, vagy az ügyfélnek nincs felvett készüléke. Az Eszköz mező melletti **+** gombbal vegyél fel egyet.",
+            "t": "munkalap gyi ures eszkozlista gyi ures eszkozlista nincs ugyfel kivalasztva ugyfel nincs felv keszuleke eszkoz mezo melletti gombbal vegyel egy",
+            "h": 20
+        },
+        {
+            "id": "munkalapok#59",
+            "cim": "GYIK › Hogyan veszek fel második eszközt?",
+            "horgony": "hogyan-veszek-fel-masodik-eszkozt",
+            "szoveg": "A **További eszközök** sorban az **Eszköz csatolása** gombbal. Az ügyfél készülékei közül választhatsz, vagy újat vehetsz fel.",
+            "t": "munkalap gyi vesz masodi eszkoz gyi vesz masodi eszkoz tovabbi eszkoz sor eszkoz csatolasa gombbal ugyfel eszkoz kozul valaszthatsz uja vehetsz",
+            "h": 21
+        },
+        {
+            "id": "munkalapok#60",
+            "cim": "GYIK › Mi történik, ha leveszek egy eszközt a munkalapról?",
+            "horgony": "mi-tortenik-ha-leveszek-egy-eszkozt-a-munkalaprol",
+            "szoveg": "Az eszköz az ügyfélnél megmarad. A hibái és a tételei a fő eszközhöz kerülnek, a bevizsgálási díja kikerül az előlegből.",
+            "t": "munkalap gyi torteni levesz eszkoz munkalap gyi torteni levesz eszkoz munkalap eszkoz ugyfelnel megmarad hib tetel fo eszkoz ar bevizsgalasi dij kikerul eloleg",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#61",
+            "cim": "GYIK › Mit jelent a „Részben elkészült”?",
+            "horgony": "mit-jelent-a-reszben-elkeszult",
+            "szoveg": "Több eszközös lapon az egyik eszköz már kész, a másik még nem. A rendszer magától állítja be, és kiírja, melyik eszköz kész.",
+            "t": "munkalap gyi jel resz elkeszul gyi jel resz elkeszul tobb eszkozos lap egyi eszkoz kesz masi rendszer maga alli kiir eszkoz kesz",
+            "h": 22
+        },
+        {
+            "id": "munkalapok#62",
+            "cim": "GYIK › Miért nem tudom kiválasztani a „Részben elkészült” állapotot?",
+            "horgony": "miert-nem-tudom-kivalasztani-a-reszben-elkeszult-allapotot",
+            "szoveg": "Mert ez a közös állapot magától áll be. Az eszközök állapotát állítsd külön, a bal oldali **Eszközönként** részben.",
+            "t": "munkalap gyi tudom kivalasztani resz elkeszul allap gyi tudom kivalasztani resz elkeszul allap kozos allap maga all eszkoz allap allitsd kul bal oldali eszkozonk resz",
+            "h": 25
+        },
+        {
+            "id": "munkalapok#63",
+            "cim": "GYIK › Az egyik készüléket elviszik, a másik marad. Mit csináljak?",
+            "horgony": "az-egyik-keszuleket-elviszik-a-masik-marad-mit-csinaljak",
+            "szoveg": "Az elvitt eszköz állapotát állítsd Lezártra, a fizetését a **Fizetés** ablakban csak arra az eszközre rögzítsd. A lap nyitva marad, amíg a másik eszköz nincs kész.",
+            "t": "munkalap gyi egyi eszkoz elviszi masi marad csinalj gyi egyi eszkoz elviszi masi marad csinalj elvi eszkoz allap allitsd lezar fizetes fizetes abl eszkoz rogzitsd lap nyitva marad amig masi eszkoz nincs kesz",
+            "h": 33
+        },
+        {
+            "id": "munkalapok#64",
+            "cim": "GYIK › Kell Mentést nyomnom állapotváltás után?",
+            "horgony": "kell-mentest-nyomnom-allapotvaltas-utan",
+            "szoveg": "Mentett lapon nem: az állapot azonnal mentődik. Új lapon igen, ott a létrehozással együtt mentődik.",
+            "t": "munkalap gyi mentes nyomnom allapotvaltas utan gyi mentes nyomnom allapotvaltas utan ment lap allap azonnal mentodi uj lap letrehozassal egyu mentodi",
+            "h": 21
+        },
+        {
+            "id": "munkalapok#65",
+            "cim": "GYIK › Hogyan veszek fel olyan hibát, ami nincs a gyakori hibák között?",
+            "horgony": "hogyan-veszek-fel-olyan-hibat-ami-nincs-a-gyakori-hibak-kozott",
+            "szoveg": "Írd be közvetlenül a hibasorba, vagy a Gyakori hibák ablak alján a **Más hiba – írd be…** mezőbe.",
+            "t": "munkalap gyi vesz hib nincs gyakori hib koz gyi vesz hib nincs gyakori hib koz ird kozvetlenul hibasor gyakori hib abl aljan mas hiba ird mezo",
+            "h": 26
+        },
+        {
+            "id": "munkalapok#66",
+            "cim": "GYIK › Miért tűnt el az üres hibasor mentés után?",
+            "horgony": "miert-tunt-el-az-ures-hibasor-mentes-utan",
+            "szoveg": "Az üresen hagyott hibasort a rendszer mentéskor eldobja. Ez szándékos.",
+            "t": "munkalap gyi tun ures hibasor mentes utan gyi tun ures hibasor mentes utan ures hagy hibasor rendszer mentes eldob szandekos",
+            "h": 20
+        },
+        {
+            "id": "munkalapok#67",
+            "cim": "GYIK › Nettó vagy bruttó árat írjak a tételhez?",
+            "horgony": "netto-vagy-brutto-arat-irjak-a-tetelhez",
+            "szoveg": "Bruttót. A **Bruttó ár** mezőbe az áfás egységár kerül, a nettót a rendszer számolja.",
+            "t": "munkalap gyi netto brutto ar irj tetel gyi netto brutto ar irj tetel brut brutto ar mezo afas egysegar ar net rendszer szamol",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#68",
+            "cim": "GYIK › Hogyan adok kedvezményt?",
+            "horgony": "hogyan-adok-kedvezmenyt",
+            "szoveg": "Egy tételre a sor **Kedv. %** mezőjében. Az egész lapra a bal oldali **Kedvezmény** mezőben – ez minden tételsorra érvényes.",
+            "t": "munkalap gyi ado kedvezmeny gyi ado kedvezmeny tetel sor kedv mezo egesz lap bal oldali kedvezmeny mezo tetelsor ervenyes",
+            "h": 19
+        },
+        {
+            "id": "munkalapok#69",
+            "cim": "GYIK › Olyan szolgáltatás kell, ami nincs a listán. Mit tegyek?",
+            "horgony": "olyan-szolgaltatas-kell-ami-nincs-a-listan-mit-tegyek",
+            "szoveg": "A választó ablakban a **+ Új szolgáltatás** gombbal felveheted a listára, vagy a **Kézzel írom be** gombbal csak erre a lapra írod be.",
+            "t": "munkalap gyi szolgaltatas nincs listan tegy gyi szolgaltatas nincs listan tegy valaszto abl uj szolgaltatas gombbal felveheted lista kezzel irom gombbal lap irod",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#70",
+            "cim": "GYIK › Mi a különbség az előleg és a bevizsgálási díj között?",
+            "horgony": "mi-a-kulonbseg-az-eloleg-es-a-bevizsgalasi-dij-kozott",
+            "szoveg": "Mindkettő a **Fizetett (előleg)** mezőben áll, és levonódik a végösszegből. A bevizsgálási díj ezen felül külön tételként megjelenik a lapon és a számlán.",
+            "t": "munkalap gyi kulonbseg eloleg bevizsgalasi dij koz gyi kulonbseg eloleg bevizsgalasi dij koz mindketto fizet eloleg mezo all levonodi vegosszeg bevizsgalasi dij ezen felul kul tetelk megjeleni lap szamlan",
+            "h": 29
+        },
+        {
+            "id": "munkalapok#71",
+            "cim": "GYIK › Mi történik a bevizsgálási díjjal, ha az ügyfél kéri a javítást?",
+            "horgony": "mi-tortenik-a-bevizsgalasi-dijjal-ha-az-ugyfel-keri-a-javitast",
+            "szoveg": "Beszámít: mínusz tételként levonódik a végösszegből, legfeljebb a többi tétel összegéig.",
+            "t": "munkalap gyi torteni bevizsgalasi dijjal ugyfel keri javitas gyi torteni bevizsgalasi dijjal ugyfel keri javitas beszami minusz tetelk levonodi vegosszeg legfeljebb tobbi tetel osszege",
+            "h": 24
+        },
+        {
+            "id": "munkalapok#72",
+            "cim": "GYIK › És ha az ügyfél nem kéri a javítást?",
+            "horgony": "es-ha-az-ugyfel-nem-keri-a-javitast",
+            "szoveg": "Akkor nincs miből levonni: a díj munkadíjként a lapon marad.",
+            "t": "munkalap gyi ugyfel keri javitas gyi ugyfel keri javitas nincs mibol levonni dij munkadijk lap marad",
+            "h": 16
+        },
+        {
+            "id": "munkalapok#73",
+            "cim": "GYIK › Mi történik az előleggel, ha a javítás olcsóbb lett, mint az előleg?",
+            "horgony": "mi-tortenik-az-eloleggel-ha-a-javitas-olcsobb-lett-mint-az-eloleg",
+            "szoveg": "A **Fizetendő** negatív lesz – ennyi jár vissza az ügyfélnek.",
+            "t": "munkalap gyi torteni eloleggel javitas olcsobb let eloleg gyi torteni eloleggel javitas olcsobb let eloleg fizetendo negativ ennyi jar vissza ugyfel",
+            "h": 21
+        },
+        {
+            "id": "munkalapok#74",
+            "cim": "GYIK › Hogyan rögzítek újabb előleget egy lapra, amelyen már van bevizsgálási díj?",
+            "horgony": "hogyan-rogzitek-ujabb-eloleget-egy-lapra-amelyen-mar-van-bevizsgalasi-dij",
+            "szoveg": "A **Fizetés** gombbal, **Előleg / részfizetés** módban. Ne a Fizetett mezőt írd át kézzel, mert az díjnak számítana.",
+            "t": "munkalap gyi rogzi ujabb eloleg lap amely bevizsgalasi dij gyi rogzi ujabb eloleg lap amely bevizsgalasi dij fizetes gombbal eloleg reszfizetes mod ne fizet mez ird kezzel dij szamitana",
+            "h": 29
+        },
+        {
+            "id": "munkalapok#75",
+            "cim": "GYIK › Miért nagyobb a „Fizetett”, mint az előleg, amit rögzítettem?",
+            "horgony": "miert-nagyobb-a-fizetett-mint-az-eloleg-amit-rogzitettem",
+            "szoveg": "Mert a Fizetett minden befolyt összeget tartalmaz: a díjat, az előlegeket és a lezáró fizetést is.",
+            "t": "munkalap gyi nagyobb fizet eloleg rogzitettem gyi nagyobb fizet eloleg rogzitettem fizet befoly osszeg tartalmaz dij eloleg lezaro fizetes",
+            "h": 19
+        },
+        {
+            "id": "munkalapok#76",
+            "cim": "GYIK › Tévedésből fizetettre állítottam a lapot. Hogyan vonom vissza?",
+            "horgony": "tevedesbol-fizetettre-allitottam-a-lapot-hogyan-vonom-vissza",
+            "szoveg": "Vedd ki a **Fizetve** pipát, és válaszd a **Fizetés visszavonása** gombot, majd ments. Ha pénztártétel is készült, azt a Házipénztárban kézzel töröld.",
+            "t": "munkalap gyi tevedes fizetet allitottam lap vonom vissza gyi tevedes fizetet allitottam lap vonom vissza vedd fizetve pip valaszd fizetes visszavonasa gomb majd ments penztartetel keszul hazipenztar kezzel torold",
+            "h": 29
+        },
+        {
+            "id": "munkalapok#77",
+            "cim": "GYIK › Mi a különbség a „Fizetés visszavonása” és a „Csak a pipát veszem ki” között?",
+            "horgony": "mi-a-kulonbseg-a-fizetes-visszavonasa-es-a-csak-a-pipat-veszem-ki-kozott",
+            "szoveg": "A visszavonás a lezáró fizetést is leveszi, így a fizetendő visszajön. A másik csak a jelzőt veszi le, az összeg a Fizetett mezőben marad.",
+            "t": "munkalap gyi kulonbseg fizetes visszavonasa pip veszem koz gyi kulonbseg fizetes visszavonasa pip veszem koz visszavonas lezaro fizetes leveszi igy fizetendo visszaj masi jelz veszi osszeg fizet mezo marad",
+            "h": 29
+        },
+        {
+            "id": "munkalapok#78",
+            "cim": "GYIK › Hol nyomtatom ki az átvételi elismervényt és a munkalapot?",
+            "horgony": "hol-nyomtatom-ki-az-atveteli-elismervenyt-es-a-munkalapot",
+            "szoveg": "A munkalap ablakának alján, a **Nyomtatás** gombbal. Új lap mentése után és a lap lezárásakor a rendszer magától is felajánlja. Lásd: Nyomtatás, PDF és e-mail.",
+            "t": "munkalap gyi nyomtatom atveteli elismerveny munkalap gyi nyomtatom atveteli elismerveny munkalap munkalap ablaka aljan nyomtatas gombbal uj lap mentese utan lap lezarasa rendszer maga felajanl lasd nyomtatas pdf mail",
+            "h": 29
+        },
+        {
+            "id": "munkalapok#79",
+            "cim": "GYIK › El tudom küldeni az ügyfélnek a munkalapot vagy az árajánlatot e-mailben?",
+            "horgony": "el-tudom-kuldeni-az-ugyfelnek-a-munkalapot-vagy-az-arajanlatot-e-mailben",
+            "szoveg": "Igen. A lap **Nyomtatás** ablakában válaszd ki a nyomtatványt, majd a **Küldés e-mailben** gombot. A nyomtatvány PDF csatolmányként megy az ügyfél címére.",
+            "t": "munkalap gyi tudom kuldeni ugyfel munkalap arajanl mail gyi tudom kuldeni ugyfel munkalap arajanl mail lap nyomtatas ablaka valaszd nyomtatvany majd kuldes mail gomb nyomtatvany pdf csatolmanyk megy ugyfel cime",
+            "h": 30
+        },
+        {
+            "id": "munkalapok#80",
+            "cim": "GYIK › Hol nyomtatok címkét?",
+            "horgony": "hol-nyomtatok-cimket",
+            "szoveg": "A munkalap **RMA** lapfülén, a **Címke nyomtatása** gombbal.",
+            "t": "munkalap gyi nyomt cim gyi nyomt cim munkalap rma lapful cimke nyomtatasa gombbal",
+            "h": 13
+        },
+        {
+            "id": "munkalapok#81",
+            "cim": "GYIK › Miért nincs QR-kód a munkalapon?",
+            "horgony": "miert-nincs-qr-kod-a-munkalapon",
+            "szoveg": "Mert a lapnak még nincs munkalapszáma. A QR-kód és a vonalkód akkor készül el, amikor a lap számozott állapotba kerül.",
+            "t": "munkalap gyi nincs qr kod munkalap gyi nincs qr kod munkalap lap nincs munkalapszama qr kod vonalkod keszul ami lap szamoz allap ar",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#82",
+            "cim": "GYIK › Látja az ügyfél a megjegyzést?",
+            "horgony": "latja-az-ugyfel-a-megjegyzest",
+            "szoveg": "A **Megjegyzést** láthatja. A **Belső megjegyzést** nem.",
+            "t": "munkalap gyi lat ugyfel megjegyzes gyi lat ugyfel megjegyzes megjegyzes lath belso megjegyzes",
+            "h": 13
+        },
+        {
+            "id": "munkalapok#83",
+            "cim": "GYIK › Hogyan veszek le egy gyakori megjegyzést a lapról?",
+            "horgony": "hogyan-veszek-le-egy-gyakori-megjegyzest-a-laprol",
+            "szoveg": "Nyisd meg a **Gyakori megjegyzések** ablakot, és kattints újra a kiemelt szövegre. Vagy töröld ki a sort a Megjegyzés mezőből.",
+            "t": "munkalap gyi vesz gyakori megjegyzes lap gyi vesz gyakori megjegyzes lap nyisd gyakori megjegyzes abl kattints ujra kiemel szoveg torold sor megjegyzes mezo",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#84",
+            "cim": "GYIK › Miért nem látom a számlagombokat?",
+            "horgony": "miert-nem-latom-a-szamlagombokat",
+            "szoveg": "Csak mentett, munkalapszámmal rendelkező lapnál jelennek meg. Árajánlatnál és új, még nem mentett lapnál nincsenek.",
+            "t": "munkalap gyi latom szamlagomb gyi latom szamlagomb ment munkalapszammal rendelkezo lapnal jel arajanlatnal uj ment lapnal nincse",
+            "h": 17
+        },
+        {
+            "id": "munkalapok#85",
+            "cim": "GYIK › Számla a „Számla-előkészítő (PDF)”?",
+            "horgony": "szamla-a-szamla-elokeszito-pdf",
+            "szoveg": "Nem. Nyomtatható összesítő a tételekből. Számlát a **Számlázz.hu számla** gombbal állítasz ki – lásd: Számlázás.",
+            "t": "munkalap gyi szamla szamla elokeszito pdf gyi szamla szamla elokeszito pdf nyomtathato osszesito tetel szamla szamlazz hu szamla gombbal allitasz lasd szamlazas",
+            "h": 22
+        },
+        {
+            "id": "munkalapok#86",
+            "cim": "GYIK › Miért nem látom a lezárt munkalapot a Munkalapok listában?",
+            "horgony": "miert-nem-latom-a-lezart-munkalapot-a-munkalapok-listaban",
+            "szoveg": "Mert a lista alapból csak a nyitott lapokat mutatja. Az állapotszűrőben válaszd a **Mind** vagy a **Lezárt** értéket.",
+            "t": "munkalap gyi latom lezar munkalap munkalap lista gyi latom lezar munkalap munkalap lista lista alap nyit lap mut allapotszuro valaszd mind lezar ert",
+            "h": 23
+        },
+        {
+            "id": "munkalapok#87",
+            "cim": "GYIK › Hol találom az árajánlatokat?",
+            "horgony": "hol-talalom-az-arajanlatokat",
+            "szoveg": "A Munkalapok lista állapotszűrőjében az **Árajánlat** értéknél, vagy az Áttekintés **Árajánlatok és sablonok** nézetében.",
+            "t": "munkalap gyi talalom arajanl gyi talalom arajanl munkalap lista allapotszuro arajanl erteknel attekintes arajanl sabl nezete",
+            "h": 16
+        },
+        {
+            "id": "munkalapok#88",
+            "cim": "GYIK › Hogyan állítom be, honnan induljon a számozás?",
+            "horgony": "hogyan-allitom-be-honnan-induljon-a-szamozas",
+            "szoveg": "**Beállítások › Számozás**, **Következő szám (legalább)** mező. Visszafelé nem állítható: a már kiadott legnagyobb számnál kisebbet a rendszer nem vesz figyelembe.",
+            "t": "munkalap gyi allitom honnan indulj szamozas gyi allitom honnan indulj szamozas beallitas szamozas kovetkezo szam legalabb mezo visszafele allithato kiad legnagyobb szamnal kisebb rendszer vesz figyelem",
+            "h": 26
+        },
+        {
+            "id": "munkalapok#89",
+            "cim": "GYIK › Hogyan veszek fel új állapotot?",
+            "horgony": "hogyan-veszek-fel-uj-allapotot",
+            "szoveg": "**Beállítások › Állapotok**: írj új sort `kulcs | Név | szín | jelzők` alakban, és ments.",
+            "t": "munkalap gyi vesz uj allap gyi vesz uj allap beallitas allap irj uj sor kulcs nev szin jelz ala ments",
+            "h": 20
+        },
+        {
+            "id": "munkalapok#90",
+            "cim": "GYIK › Van segítség, ha először látom a Munkalapok oldalt?",
+            "horgony": "van-segitseg-ha-eloszor-latom-a-munkalapok-oldalt",
+            "szoveg": "Igen. Kérd meg a jobb alsó sarokban lévő asszisztenst: „Vezess végig ezen az oldalon”.",
+            "t": "munkalap gyi segitseg eloszor latom munkalap oldal gyi segitseg eloszor latom munkalap oldal kerd jobb also sar levo asszisztens vezess veg ezen oldal",
+            "h": 23
+        }
+    ]
+}

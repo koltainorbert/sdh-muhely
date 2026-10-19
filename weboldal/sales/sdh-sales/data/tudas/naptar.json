@@ -1,0 +1,384 @@
+{
+    "kulcs": "naptar",
+    "cim": "Naptár",
+    "csoport": "Csapat és idő",
+    "osszefoglalo": "Minden névnek saját naptára van; az eseményekről kártya szól, amely addig marad a képernyőn, amíg kézzel ki nem nyomod, a fontos eseményekről pedig e-mail is megy.",
+    "darabok": [
+        {
+            "id": "naptar#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Naptár** menüpontban az időpontokat, határidőket és teendőket tartod nyilván – névre szólóan.\n\n- **Minden névhez saját naptár tartozik.** A naptárak egymás mellé tehetők, így egy pillantással látod, ki mikor foglalt.\n- **Tizenkét nézet** közül választhatsz, a mai nap idővonalától az éves áttekintésig.\n- **Az esemény sokat tud:** időpont vagy egész nap, helyszín, leírás, kategória, fontosság, állapot, résztvevők, ismétlődés, több emlékeztető, ügyfél, munkalap száma.\n- **Az esedékes eseményről kártya szól** a rendszer minden oldalán. A kártya nem tűnik el magától: addig marad, amíg kézzel ki nem nyomod.\n- **A fontos eseményekről e-mail is megy**, és kérhető napi összefoglaló levél.",
+            "t": "naptar mire valo mire valo naptar menupon idopon hatarid teend tartod nyilvan nev szoloan nev saj naptar tartozi naptar egymas melle teh igy pillantassal latod foglal tizen nez kozul valaszthatsz mai nap idovonala eves attekintes esemeny sok tud idop egesz nap helyszin leiras kategoria fontossag allap resztvev ismetlodes tobb emlekezteto ugyfel munkalap szama esedekes esemeny kartya szol rendszer oldalan kartya tuni maga add marad amig kezzel nyomod fontos esemeny mail megy kerheto napi osszefoglalo level",
+            "h": 75
+        },
+        {
+            "id": "naptar#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- **A menüpont:** az oldalmenüben Naptár néven. A neve mellett szám jelzi, hány esedékes esemény kártyája vár kinyomásra.\n- **Az Áttekintésen:** a Naptár csempéje a mai, még le nem zárt események számát mutatja.\n- **Minden oldalon:** az esedékes események kártyái bárhol megjelennek, ahol éppen dolgozol.\n- **A beállításai:** Beállítások → **Naptár** lapfül (a „Kapcsolat és csapat” sorban). Adminisztrátorként a Naptár bal hasábjának alján **A naptár beállításai** hivatkozás is odavisz.\n\nAz óra a felső fejlécben van, minden oldalon – a naptár ehhez az időhöz igazodik.",
+            "t": "naptar talalod talalod menup oldalmenu naptar nev neve mell szam jelzi hany esedekes esemeny kartya var kinyomas attekintes naptar csempe mai zar esemeny szam mut oldal esedekes esemeny karty barhol megjel ahol epp dolgozol beallitas beallitas naptar lapful kapcsol csap sor adminisztratork naptar bal hasab aljan naptar beallitas hivatkozas odavisz ora felso fejlec oldal naptar ehhez ido igazodi",
+            "h": 58
+        },
+        {
+            "id": "naptar#3",
+            "cim": "Kinek van naptára",
+            "horgony": "kinek-van-naptara",
+            "szoveg": "Hogy a naptárak honnan jönnek, az attól függ, hogyan használjátok a rendszert. Ezt a Csapat beállítása dönti el.\n\n### Közös fiók (üzenőfal mód)\n\nHa mindenki ugyanazzal a fiókkal lép be, a neveket kézzel veszed fel – belépés nem kell hozzájuk.\n\n1. A bal hasábban a **Naptárak** felirat mellett kattints a pluszjelre.\n2. Megnyílik az **Új név – új naptár** ablak. Írd be a **Név** mezőbe a nevet (például „Minta Márta”, „Műhely”, „Kiszállás”).\n3. Ha kér e-mail értesítést, add meg az **E-mail az értesítésekhez** mezőben. Üresen a közös értesítő cím kapja.\n4. Válassz **Színt**, és ha kell, állítsd be a **Sorrendet**.\n5. Kattints a **Felveszem** gombra.\n\nAz első megnyitáskor a naptár a Csapat névsorából tölti fel a listát. Ebben a módban mindenki mindent láthat és szerkeszthet.\n\n### Többfelhasználós mód (profilok)\n\nHa minden kollégának saját belépése van, mindenki magától kap egy naptárat – profilonként pontosan egyet. A naptár neve a kolléga nevét követi; a sajátod mellett **(én)** áll.\n\nEbben a módban is felvehető fiók nélküli név (például „Műhely”) – ezt az adminisztrátor teheti meg, ugyanúgy a pluszjellel.\n\n### Név szerkesztése, elrejtése\n\nA név melletti ceruzával nyitod meg a naptár adatait. Fiók nélküli névnél az **Aktív** pipát kivéve a naptár eltűnik a listából, de az eseményei megmaradnak.",
+            "t": "naptar kin napta kin napta naptar honnan jon attol fugg hasznalj rendsz csap beallitasa donti kozos fio uzenofal mod mindenki ugyanazzal fiokkal lep nev kezzel veszed belepes hozza bal hasab naptar felir mell kattints pluszjel megnyili uj nev uj naptar abl ird nev mezo nev peldaul minta marta muhely kiszallas ker mail ertesites add mail ertesites mezo ures kozos ertesito cim kap valassz szin allitsd sorrend kattints felveszem gomb elso megnyitas naptar csap nevso tolti lis ebb mod mindenki mind lath szerkeszth tobbfelhasznalos mod profil kollega saj belepese mindenki maga kap naptar profilonk pontosan egy naptar neve kollega nev koveti sajatod mell all ebb mod felveheto fio nelkuli nev peldaul muhely adminisztrator teheti ugyanugy pluszjellel nev szerkesztese elrejtese nev melletti ceruza nyitod naptar ada fio nelkuli nevnel aktiv pip kiveve naptar eltuni lista esemeny megmarad",
+            "h": 135
+        },
+        {
+            "id": "naptar#4",
+            "cim": "A nézetek",
+            "horgony": "a-nezetek",
+            "szoveg": "A Naptár tetején a nézetváltó tizenkét gombja áll. A legutóbb használt nézetet a böngésző megjegyzi.\n\n| Nézet | Mit mutat |\n|---|---|\n| **Ma** | A mai nap idővonala, a hátralévő szabad idő, a lejárt és még nem kész események, az elintézetlen fontos levelek és a holnapi nap. |\n| **Nap** | Egy nap órarácsban. |\n| **3 nap** | Három egymást követő nap órarácsban. |\n| **Munkahét** | Hétfőtől péntekig. |\n| **Hét** | A teljes hét órarácsban. |\n| **Hónap** | Havi rács; a cellákban annyi esemény, amennyi kifér, a többi „+N további” mögött. |\n| **Negyedév** | Három kis hónap egymás mellett. |\n| **Év** | Tizenkét kis hónap; a napok színe azt mutatja, mennyi esemény van aznap, a nagyon fontos napok külön jelölve. |\n| **Napirend** | A következő 30 nap eseményei listában, kész-pipával. |\n| **Idővonal** | Soronként egy név. A **Nap órái** és a **Hét napjai** gombbal váltasz a lépték között. |\n| **Személyek** | Egy nap, nevenként egy oszlop – ki mikor foglalt. |\n| **Tábla** | A hét eseményei állapot szerint, négy oszlopban: Tervezett, Folyamatban, Kész, Elmaradt. |\n\n### Mozgás a naptárban\n\n- A nyilakkal előre-hátra lépsz, a **Ma** gombbal visszaugrasz a mai napra.\n- A bal hasáb kis naptárában egy napra kattintva odaugrasz. A megjelölt napokon van esemény.\n- A **0–24** gomb az órarácsos nézetekben az egész napot mutatja; kikapcsolva csak a Beállításokban megadott órasávot.\n- A **Keresés az eseményekben…** mezővel a látható időszak eseményei között szűrsz.\n- Görgetősáv nincs: ami nem fér ki, az lapozható, vagy „+N” mögött áll.\n\n### Kinek a naptára látszik\n\nA bal hasáb **Naptárak** listájában a nevekre kattintva ki-be kapcsolod, kinek a naptára látszódjon. Több névnél két gyorsgomb is van: **Mindenki** és – többfelhasználós módban – **Csak én**.",
+            "t": "naptar nez nez naptar tetej nezetvalto tizen gomb all legutobb hasznal nez bongeszo megjegyzi nez mut ma mai nap idovonala hatralevo szabad ido lejar kesz esemeny elintezetl fontos level holnapi nap nap nap oraracs nap harom egymas koveto nap oraracs munkah hetfo pent het teljes het oraracs honap havi racs cell annyi esemeny amennyi kifer tobbi tovabbi mog negyedev harom kis honap egymas mell ev tizen kis honap nap szine mut esemeny aznap fontos nap kul jelolve napirend kovetkezo 30 nap esemeny lista kesz pipa idovonal soronk nev nap orai het napj gombbal valtasz lep koz szemely nap nevenk oszlop foglal tabla het esemeny allap szerin negy oszlop tervez folyam kesz elmarad mozgas naptar nyil elo hat lepsz ma gombbal visszaugrasz mai nap bal hasab kis napta nap kattintva odaugrasz megjelol nap esemeny 24 gomb oraracsos nez egesz nap mut kikapcsolva beallitas megad orasav kereses esemeny mezo lathato idosz esemeny koz szursz gorgetosav nincs fer lapozhato mog all kin napta latszi bal hasab naptar lista nev kattintva kapcsolod kin napta latszodj tobb nevnel ket gyorsgomb mindenki tobbfelhasznalos mod",
+            "h": 178
+        },
+        {
+            "id": "naptar#5",
+            "cim": "Lépésről lépésre: esemény felvétele",
+            "horgony": "lepesrol-lepesre-esemeny-felvetele",
+            "szoveg": "1. Kattints a **+ Új esemény** gombra a Naptár fejlécében. Vagy kattints a rács egy üres helyére – ilyenkor az ablak már azzal a nappal, időponttal és névvel nyílik.\n2. Felugró ablakban megnyílik az **Új esemény** űrlap.\n3. Írd be a **Megnevezést** (kötelező).\n4. A **Naptár** sorban válaszd ki, kinek a naptárába kerüljön (kötelező).\n5. A **Mikor** résznél állítsd be a **Kezdet** és a **Vég** napját és idejét. Az idő 5 perces lépésekben adható meg. Egész napos eseménynél pipáld be: **Egész nap**.\n6. Töltsd ki, ami még kell (lásd lent).\n7. Kattints a **Felveszem a naptárba** gombra.\n\nA naptár mentés után helyben frissül, az oldal nem töltődik újra.",
+            "t": "naptar lepes lepes esemeny felvetele lepes lepes esemeny felvetele kattints uj esemeny gomb naptar fejlece kattints racs ures helye ily abl azzal nappal idoponttal nev nyili felugro abl megnyili uj esemeny urlap ird megnevezes kotelezo naptar sor valaszd kin napta kerulj kotelezo resznel allitsd kezd veg napj idej ido perces lepes adhato egesz napos esemenynel pipald egesz nap toltsd lasd len kattints felveszem naptar gomb naptar mentes utan hely frissul oldal toltodi ujra",
+            "h": 73
+        },
+        {
+            "id": "naptar#6",
+            "cim": "Lépésről lépésre: esemény felvétele › Az űrlap mezői",
+            "horgony": "lepesrol-lepesre-esemeny-felvetele",
+            "szoveg": "### Az űrlap mezői\n\n| Mező | Mire való |\n|---|---|\n| **Megnevezés** | Az esemény neve – ez látszik a naptárban és a kártyán. |\n| **Naptár** | A gazda: kinek a naptárába tartozik. |\n| **Mikor** | Kezdet, vég, vagy **Egész nap**. Több napos esemény is felvehető. |\n| **Helyszín** | Szabad szöveg. |\n| **Leírás, jegyzet** | Hosszabb megjegyzés. |\n| **Résztvevők** | Az ő naptárukban is megjelenik, és ők is megkapják az értesítést. |\n| **Kategória** | Például Megbeszélés, Feladat, Határidő, Ügyfél, Kiszállás, Szabadság. A lista a Beállításokban szerkeszthető. |\n| **Fontosság** | **Normál**, **Fontos** vagy **Nagyon fontos**. |\n| **Állapot** | **Tervezett**, **Folyamatban**, **Kész**, **Elmaradt**. |\n| **Emlékeztető** | Egy vagy több: Kezdéskor, 5, 15, 30 perccel, 1 vagy 2 órával, 1 vagy 2 nappal, 1 héttel előtte. |\n| **Értesítés** | Kártya a rendszerben, e-mail, és többfelhasználós módban a **Privát** jelző. |\n| **Ismétlődés** | Naponta, hetente, havonta, évente. |\n| **Szín** | Alapból a kategória színe; itt felülírhatod. |\n| **Ügyfél** | Hozzákötheted egy ügyfélhez. Nem kötelező. |\n| **Munkalap száma** | A kapcsolódó munkalap sorszáma. |\n| **Hivatkozás** | Egy webcím az eseményhez. |",
+            "t": "naptar lepes lepes esemeny felvetele urlap mezoi lepes lepes esemeny felvetele urlap mezoi urlap mezoi mezo mire valo megnevezes esemeny neve latszi naptar kartyan naptar gazda kin napta tartozi kezd veg egesz nap tobb napos esemeny felveheto helyszin szabad szoveg leiras jegyz hosszabb megjegyzes resztvev naptar megjeleni megkapj ertesites kategoria peldaul megbeszeles felad hatarido ugyfel kiszallas szabadsag lista beallitas szerkesztheto fontossag normal fontos fontos allap tervez folyam kesz elmarad emlekezteto tobb kezdes 15 30 perccel ora nappal hettel elotte ertesites kartya rendszer mail tobbfelhasznalos mod priv jelzo ismetlodes naponta hetente havonta evente szin alap kategoria szine felulirhatod ugyfel hozzakotheted ugyfel kotelezo munkalap szama kapcsolodo munkalap sorszama hivatkozas webcim esemeny",
+            "h": 109
+        },
+        {
+            "id": "naptar#7",
+            "cim": "Lépésről lépésre: ismétlődő esemény",
+            "horgony": "lepesrol-lepesre-ismetlodo-esemeny",
+            "szoveg": "1. Az esemény űrlapján az **Ismétlődés** mezőnél válaszd ki: **Naponta**, **Hetente**, **Havonta** vagy **Évente**.\n2. Mellette megadhatod a ritmust: „minden 2. héten”, „minden 3. hónapban” és így tovább.\n3. **Hetente** esetén megjelennek a hét napjai (H, K, Sze, Cs, P, Szo, V). Jelöld be, mely napokon ismétlődjön.\n4. A **Vége:** sorban válaszd ki, meddig tartson:\n  - **Soha** – határidő nélkül ismétlődik;\n  - **Eddig a napig** – add meg az utolsó napot;\n  - **Ennyi alkalom** – add meg a darabszámot (alapból 10).\n5. Mentsd el.\n\nA naptárban az ismétlődő eseményt kis jel különbözteti meg.\n\n### Egyetlen alkalom kihagyása\n\nEgy sorozat egyetlen alkalma **csak törölhető**, külön nem módosítható.\n\n1. Kattints a sorozat arra az alkalmára, amelyik elmarad.\n2. Az ablak alján kattints a **Csak ez az alkalom törlése** gombra.\n3. A gomb felirata **Biztos? Kattints újra** lesz. Kattints rá még egyszer.\n\nA sorozat többi alkalma megmarad. Az egész sorozatot **Az egész sorozat törlése** gombbal törlöd, ugyanígy két kattintással.\n\nFigyelem: ha egy ismétlődő eseménynek átírod az időpontját vagy az ismétlődését, a korábban kihagyott alkalmak újra megjelennek. Ha csak egy alkalom változik, töröld azt az alkalmat, és vegyél fel helyette egy külön eseményt.",
+            "t": "naptar lepes lepes ismetlodo esemeny lepes lepes ismetlodo esemeny esemeny urlapjan ismetlodes mezonel valaszd naponta hetente havonta evente mellette megadhatod ritmus het honap igy tovabb hetente ese megjel het napj sze cs szo jelold nap ismetlodj vege sor valaszd medd tarts soha hatarido nelkul ismetlodi edd nap add utolso nap ennyi alkalom add darabszam alap 10 mentsd naptar ismetlodo esemeny kis jel kulonbozteti egyetl alkalom kihagyasa soroz egyetl alkalma torolheto kul modosithato kattints soroz alkalma amelyi elmarad abl aljan kattints alkalom torlese gomb gomb felirata biztos kattints ujra kattints egyszer soroz tobbi alkalma megmarad egesz soroz egesz soroz torlese gombbal torlod ugyanigy ket kattintassal figyelem ismetlodo esemeny atirod idopontj ismetlodes korab kihagy alkalm ujra megjel alkalom valtozi torold alkalm vegyel helyette kul esemeny",
+            "h": 123
+        },
+        {
+            "id": "naptar#8",
+            "cim": "Lépésről lépésre: áthelyezés húzással",
+            "horgony": "lepesrol-lepesre-athelyezes-huzassal",
+            "szoveg": "Az eseményeket egérrel is áthelyezheted, az űrlap megnyitása nélkül.\n\n- **Órarácsos nézetekben** (Nap, 3 nap, Munkahét, Hét, Személyek): fogd meg az eseményt, és húzd másik időpontra vagy napra. A szélét húzva a hosszát állítod. A lépésköz 15 perc.\n- **Hónap nézetben:** húzd az eseményt másik napra.\n- **Személyek és Idővonal nézetben:** másik név oszlopába vagy sorába húzva az esemény az ő naptárába kerül.\n- **Tábla nézetben:** húzd a kártyát másik oszlopba – ezzel az állapotát váltod.\n\nAmit tudnod kell:\n\n- **Ismétlődő esemény nem húzható.** Ilyenkor ezt az üzenetet kapod: „Ismétlődő esemény időpontját az űrlapján lehet módosítani.”\n- Más naptárának eseményét csak akkor húzhatod, ha szerkesztheted is.\n- Áthelyezés után az emlékeztetők az új időponthoz igazodnak.",
+            "t": "naptar lepes lepes athelyezes huzassal lepes lepes athelyezes huzassal esemeny egerrel athelyezheted urlap megnyitasa nelkul oraracsos nez nap nap munkah het szemely fogd esemeny huzd masi idopon nap szel huzva hossz allitod lepeskoz 15 perc honap nez huzd esemeny masi nap szemely idovonal nez masi nev oszlopa sora huzva esemeny napta ar tabla nez huzd karty masi oszlop ezzel allap valtod tudnod ismetlodo esemeny huzhato ily uzen kapod ismetlodo esemeny idopontj urlapjan modositani mas napta esemeny huzhatod szerkesztheted athelyezes utan emlekezt uj idopon igazod",
+            "h": 84
+        },
+        {
+            "id": "naptar#9",
+            "cim": "Lépésről lépésre: kész-re állítás",
+            "horgony": "lepesrol-lepesre-kesz-re-allitas",
+            "szoveg": "Az esemény állapota négyféle lehet: Tervezett, Folyamatban, Kész, Elmaradt. A **Kész** háromféleképpen állítható be:\n\n1. **Pipával:** a **Ma** és a **Napirend** nézet soraiban az esemény előtti pipára kattintva. Újra rákattintva visszaáll tervezettre.\n2. **Húzással:** a **Tábla** nézetben a **Kész** oszlopba húzva.\n3. **Az űrlapon:** az **Állapot** sorban.\n\nHa egy eseményt **Kész** vagy **Elmaradt** állapotba teszel, a hozzá tartozó, még nyitott kártya is eltűnik – a lezárt eseményről a rendszer nem szól tovább.\n\nA **Ma** nézetben külön blokk gyűjti azokat az eseményeket, amelyek lejártak, de nincsenek kész.",
+            "t": "naptar lepes lepes kesz re allitas lepes lepes kesz re allitas esemeny allapota negyfele tervez folyam kesz elmarad kesz haromfelekepp allithato pipa ma napirend nez sor esemeny elotti pipa kattintva ujra rakattintva visszaall tervezet huzassal tabla nez kesz oszlop huzva urlap allap sor esemeny kesz elmarad allap teszel hozza tartozo nyit kartya eltuni lezar esemeny rendszer szol tovabb ma nez kul blo gyujti azo esemeny amely lejar nincse kesz",
+            "h": 69
+        },
+        {
+            "id": "naptar#10",
+            "cim": "Fontosság és privát esemény",
+            "horgony": "fontossag-es-privat-esemeny",
+            "szoveg": "### Fontosság\n\n- **Normál** – a szokásos esemény.\n- **Fontos** – a kártyáján „Fontos esemény” áll.\n- **Nagyon fontos** – a kártyáján „Nagyon fontos” áll, kiemelve; az összecsukott jelző is más színű; és **e-mail is megy róla**, akkor is, ha az e-mail értesítést nem pipáltad be.\n\n### Privát esemény\n\nTöbbfelhasználós módban az **Értesítés** résznél bepipálhatod: **Privát – a többiek csak annyit látnak, hogy foglalt**.\n\n- A többiek naptárában az időpont foglaltként jelenik meg, részletek nélkül.\n- Ha valaki rákattint, ezt látja: **Foglalt** – „Ez egy kolléga privát eseménye: csak azt látod, hogy az idő foglalt.”\n- A részleteket az látja, aki felvette, a naptár gazdája és a résztvevők.\n- A közös napi összefoglalóba a privát esemény részletei nem kerülnek bele.\n\nKözös fióknál nincs privát jelző, mert ott mindenki ugyanazt látja.",
+            "t": "naptar fontossag priv esemeny fontossag priv esemeny fontossag normal szokasos esemeny fontos kartyajan fontos esemeny all fontos kartyajan fontos all kiemelve osszecsuk jelzo mas szinu mail megy rola mail ertesites pipaltad priv esemeny tobbfelhasznalos mod ertesites resznel bepipalhatod priv tobbi annyi lat foglal tobbi napta idop foglaltk jeleni reszl nelkul valaki rakattin lat foglal kollega priv esemenye latod ido foglal reszl lat felvette naptar gazda resztvev kozos napi osszefoglalo priv esemeny reszl ar bele kozos fioknal nincs priv jelzo mindenki ugyanaz lat",
+            "h": 82
+        },
+        {
+            "id": "naptar#11",
+            "cim": "Visszaszámlálás",
+            "horgony": "visszaszamlalas",
+            "szoveg": "Minden eseménynél élőben látszik, mennyi idő van még hátra:\n\n- kezdés előtt: például „2 óra 14 perc múlva” – az utolsó tíz percben másodpercre pontosan;\n- közben: „most zajlik – még 25 perc”;\n- utána: „véget ért 3 órája”.\n\nA visszaszámlálást látod a megnyitott esemény ablakának címében, a kártyákon, a **Tábla** kártyáin, és a bal hasáb **Következő** blokkjában, ahol a legközelebbi események sorakoznak.",
+            "t": "naptar visszaszamlalas visszaszamlalas esemenynel elo latszi ido hat kezdes elo peldaul ora 14 perc mulva utolso tiz perc masodperc pontosan koz zajli 25 perc utana veg ert ora visszaszamlalas latod megnyit esemeny ablaka cime karty tabla kartyain bal hasab kovetkezo blokk ahol legkozelebbi esemeny sorakoz",
+            "h": 45
+        },
+        {
+            "id": "naptar#12",
+            "cim": "Emlékeztetők és a ki nem nyomható kártyák",
+            "horgony": "emlekeztetok-es-a-ki-nem-nyomhato-kartyak",
+            "szoveg": "Amikor egy esemény vagy az emlékeztetője esedékes, **kártya jelenik meg a képernyő sarkában – a rendszer minden oldalán**.\n\nFontos: a kártya **nem tűnik el magától**. Oldalváltás, újratöltés, újbóli belépés után is ott lesz, amíg kézzel ki nem nyomod. Ez szándékos: így egy esemény sem sikkad el.\n\n### Mi van a kártyán\n\n- A fejléce: „Esedékes esemény”, „Fontos esemény” vagy „Nagyon fontos”, mellette a naptár gazdájának neve.\n- Az esemény megnevezése, időpontja, helyszíne.\n- A visszaszámlálás.\n- Két gomb: **Kinyomom** és **Megnyitás**.\n\n### Mit tehetsz vele\n\n- **Kinyomom** – a kártya eltűnik. Ezzel jelzed, hogy tudomásul vetted.\n- **Megnyitás** – megnyitja az eseményt.\n- **Összecsuk** – a kártyák egy kis jelzővé húzódnak össze, hogy ne takarják, amin dolgozol. Ettől nem tűnnek el: a jelző mutatja, hány esedékes esemény vár. Rákattintva újra kinyílnak. Új esedékes eseménynél maguktól is kinyílnak.\n- **Mind kinyomása** – egyszerre nyomja ki az összeset.\n\nEgyszerre legfeljebb három kártya látszik; ha több van, alattuk „+N további esedékes esemény” áll.\n\n### Mikor jön kártya\n\n- Minden beállított emlékeztető idején, **és** a kezdéskor is.\n- Egy alkalomról mindig csak egy kártya él: az újabb a korábbi helyére lép.\n- Csak akkor, ha az eseménynél be van pipálva: **Kártya a rendszerben, amikor esedékes (addig marad, amíg ki nem nyomják)**. Új eseménynél ez alapból be van pipálva.\n- Utólag – a vége után – felvett eseményről már nem jön kártya.\n\n### Ki látja a kártyát\n\n- **Közös fióknál** mindenki minden kártyát lát.\n- **Többfelhasználós módban** mindenki a saját naptárának kártyáit látja – azokét az eseményekét, amelyeknek ő a gazdája vagy résztvevője.",
+            "t": "naptar emlekezt nyomhato karty emlekezt nyomhato karty ami esemeny emlekezteto esedekes kartya jeleni kepernyo sarka rendszer oldalan fontos kartya tuni maga oldalvaltas ujratoltes ujboli belepes utan amig kezzel nyomod szandekos igy esemeny sikkad kartyan fejlece esedekes esemeny fontos esemeny fontos mellette naptar gazda neve esemeny megnevezese idopon helyszine visszaszamlalas ket gomb kinyomom megnyitas tehetsz vele kinyomom kartya eltuni ezzel jelzed tudomasul vetted megnyitas megnyi esemeny osszecs karty kis jelzove huzod ossze ne takarj amin dolgozol ettol tun jelzo mut hany esedekes esemeny var rakattintva ujra kinyil uj esedekes esemenynel mag kinyil mind kinyomasa egyszer nyom osszes egyszer legfeljebb harom kartya latszi tobb alat tovabbi esedekes esemeny all jon kartya beallit emlekezteto idej kezdes alkalom kartya ujabb korabbi helye lep esemenynel pipalva kartya rendszer ami esedekes add marad amig nyomj uj esemenynel alap pipalva utolag vege utan felv esemeny jon kartya lat karty kozos fioknal mindenki karty lat tobbfelhasznalos mod mindenki saj napta karty lat azo esemeny amely gazda resztvevo",
+            "h": 159
+        },
+        {
+            "id": "naptar#13",
+            "cim": "E-mail értesítés és napi összefoglaló",
+            "horgony": "e-mail-ertesites-es-napi-osszefoglalo",
+            "szoveg": "### E-mail egy eseményről\n\nLevél megy az eseményről, ha:\n\n- az űrlapon bepipáltad az **E-mail értesítés** jelölőt, **vagy**\n- az esemény **Nagyon fontos**.\n\nA levél a naptár gazdájának és a résztvevőknek megy, az első emlékeztető idején – emlékeztető nélkül a kezdéskor. Alkalmanként egy levél megy. Benne van az időpont, a helyszín, a résztvevők, a kategória, és egy hivatkozás, amely megnyitja az eseményt a naptárban. A naptárban az ilyen eseményt kis jel különbözteti meg.\n\nHogy ki melyik címre kapja:\n\n1. a név saját címére, ha a naptár adatainál meg van adva;\n2. ennek híján – többfelhasználós módban – a kolléga fiókjának címére;\n3. végül a Beállításokban megadott közös értesítő címre. Ha az is üres, az a név nem kap levelet.\n\n### Napi összefoglaló\n\nKérhető napi összefoglaló levél: a nap eseményei, és azok a levelek, amelyeket a Levelezés fontos-levél ügynöke nagyon fontosnak ítélt. Naponta egyszer megy, a beállított idő után.\n\n### Hogyan próbáld ki\n\nA leveleket a webhely levélküldése továbbítja – ugyanazon az úton, mint a rendszer többi értesítőjét. A küldés ötpercenként fut, és akkor is, amikor valaki épp használja a rendszert.\n\n1. A Beállítások → Naptár lapfülön ellenőrizd, hogy be van pipálva: **E-mail értesítések küldése**.\n2. Vegyél fel egy próbaeseményt néhány perccel későbbre, **Nagyon fontos** fontossággal, a saját nevedre.\n3. Várd meg a kezdést, és nézd meg a postafiókodat (a levélszemetet is).\n\nHa nem jön levél, a webhely levélküldését kell ellenőrizni; a kártya ettől függetlenül megjelenik.",
+            "t": "naptar mail ertesites napi osszefoglalo mail ertesites napi osszefoglalo mail esemeny level megy esemeny urlap bepipaltad mail ertesites jelol esemeny fontos level naptar gazda resztvev megy elso emlekezteto idej emlekezteto nelkul kezdes alkalmank level megy benne idop helyszin resztvev kategoria hivatkozas amely megnyi esemeny naptar naptar esemeny kis jel kulonbozteti cim kap nev saj cime naptar adatainal adva enn hijan tobbfelhasznalos mod kollega fiok cime vegul beallitas megad kozos ertesito cim ures nev kap level napi osszefoglalo kerheto napi osszefoglalo level nap esemeny level amely levelezes fontos level ugynoke fontos itel naponta egyszer megy beallit ido utan probald level webhely levelkuldese tovabbi ugyanaz uton rendszer tobbi ertesitoj kuldes otpercenk fut ami valaki epp hasznal rendsz beallitas naptar lapful ellenorizd pipalva mail ertesites kuldese vegyel probaesemeny nehany perccel kesobb fontos fontossaggal saj neved vard kezdes nezd postafiokod levelszem jon level webhely levelkuldes ellenorizni kartya ettol fuggetlenul megjeleni",
+            "h": 146
+        },
+        {
+            "id": "naptar#14",
+            "cim": "A Naptár lapfül a Beállításokban",
+            "horgony": "a-naptar-lapful-a-beallitasokban",
+            "szoveg": "A Beállítások → **Naptár** lapfülön két doboz van. A lap alján a **Mentés** gomb csak ezt a lapfület menti.\n\n### Naptár – nézet\n\n| Mező | Mire való |\n|---|---|\n| **Ezzel a nézettel nyílik** | Az első megnyitás nézete. Utána mindenkinél a legutóbb használt nézet nyílik. |\n| **A nap látható kezdete (óra)** | Az órarácsos nézetek ettől az órától mutatják a napot. Alapból 07:00. |\n| **A nap látható vége (óra)** | Eddig az óráig. Alapból 19:00. A **0–24** gomb az egész napot mutatja. |\n| **Új esemény alap emlékeztetői** | Mely emlékeztetők legyenek előre bejelölve új eseménynél. Alapból: 15 perccel előtte. |\n\nA **Kategóriák** mezőbe soronként egy kategóriát írj: a név, utána függőleges vonal, utána a szín – például `Kiszállás | turkiz`. Üresen hagyva az alaplista áll vissza. A választható színek: `kek`, `zold`, `lila`, `narancs`, `rozsa`, `turkiz`, `sarga`, `piros`, `szurke`.\n\n### Naptár – e-mail értesítések\n\n| Mező | Mire való |\n|---|---|\n| **E-mail értesítések küldése** | A fő kapcsoló. Kikapcsolva eseményről nem megy levél. |\n| **Közös értesítő cím** | Ide megy annak a névnek az értesítése, akinek nincs saját e-mail-címe. Üresen az ilyen név nem kap levelet. |\n| **Napi összefoglaló levél (a nap eseményei és a nagyon fontos levelek)** | Be- és kikapcsolja a napi összefoglalót. |\n| **Az összefoglaló ideje** | 04:00 és 12:30 között, félórás lépésekben. Alapból 07:30. |\n| **Az összefoglaló címzettjei (vesszővel vagy soronként)** | Az itt megadott címek mindenki naptárát megkapják. Üresen mindenki a sajátját kapja, a saját címére. |",
+            "t": "naptar naptar lapful beallitas naptar lapful beallitas beallitas naptar lapful ket doboz lap aljan mentes gomb lapful menti naptar nez mezo mire valo ezzel nezettel nyili elso megnyitas nezete utana mindenkinel legutobb hasznal nez nyili nap lathato kezdete ora oraracsos nez ettol ora mutatj nap alap 07 00 nap lathato vege ora edd ora alap 19 00 24 gomb egesz nap mut uj esemeny alap emlekeztetoi emlekezt legye elo bejelolve uj esemenynel alap 15 perccel elotte kategori mezo soronk kategori irj nev utana fuggoleges vonal utana szin peldaul kiszallas turkiz ures hagyva alaplista all vissza valaszthato szi kek zold lila narancs rozsa turkiz sarga piros szurke naptar mail ertesites mezo mire valo mail ertesites kuldese fo kapcsolo kikapcsolva esemeny megy level kozos ertesito cim ide megy ann nev ertesitese aki nincs saj mail cime ures nev kap level napi osszefoglalo level nap esemeny fontos level kikapcsol napi osszefoglal osszefoglalo ide 04 00 12 30 koz feloras lepes alap 07 30 osszefoglalo cimzettj vesszo soronk megad cim mindenki naptar megkapj ures mindenki sajatj kap saj cime",
+            "h": 175
+        },
+        {
+            "id": "naptar#15",
+            "cim": "Online időpontfoglalás",
+            "horgony": "online-idopontfoglalas",
+            "szoveg": "Az ügyfelek a weboldalatokról maguk foglalhatnak időpontot (külön modul: **Online időpontfoglalás**, a Modulok oldalon ki- és bekapcsolható; a Naptárra épül). A foglalás eseményként bekerül a kiválasztott naptárba, az ügyfél e-mailben visszaigazolást kap, benne egy lemondó linkkel, a naptár gazdája pedig e-mailt kap az új foglalásról.",
+            "t": "naptar online idopontfoglalas online idopontfoglalas ugyfel weboldal mag foglalh idopon kul modul online idopontfoglalas modul oldal bekapcsolhato naptar epul foglalas esemenyk bekerul kivalaszt naptar ugyfel mail visszaigazolas kap benne lemondo linkkel naptar gazda ped mail kap uj foglalas",
+            "h": 38
+        },
+        {
+            "id": "naptar#16",
+            "cim": "Online időpontfoglalás › Lépésről lépésre: bekapcsolás",
+            "horgony": "online-idopontfoglalas",
+            "szoveg": "### Lépésről lépésre: bekapcsolás\n\n1. **Beállítások › Online időpontfoglalás** lapfül.\n2. Pipáld be: **Online időpontfoglalás bekapcsolva**.\n3. Válaszd ki, **melyik naptárba** kerüljenek a foglalások, és ha kell, a **kategóriát**.\n4. Add meg a **foglalható napokat**, az **első időpontot**, a **zárást** és **egy foglalás hosszát** (például 30 perc).\n5. **Egyszerre fogadható ügyfél**: hány foglalás eshet ugyanarra az időpontra (1 = egyszerre egy ügyfél).\n6. **A visszaigazoló e-mail innen megy**: válaszd a cég postafiókját (Beállítások › Levelezés-ben bekötött fiók) – így a levél biztosan megérkezik, és az ügyfél válasza is oda jön. A szerver levélküldője csak akkor kézbesít, ha a szerveren be van állítva a levélküldés. Alatta látod az **utolsó levél** eredményét (elküldve, vagy ha nem ment ki, miért).\n7. **Mentés**. A lapfül alján ott a **foglalóoldal címe** – ezt linkeld a weboldalatokon –, és egy **beágyazó kód**, amellyel az űrlap a weboldal egy oldalán belül jelenik meg.",
+            "t": "naptar online idopontfoglalas lepes lepes bekapcsolas online idopontfoglalas lepes lepes bekapcsolas lepes lepes bekapcsolas beallitas online idopontfoglalas lapful pipald online idopontfoglalas bekapcsolva valaszd naptar ar foglalas kategori add foglalhato nap elso idopon zaras foglalas hossz peldaul 30 perc egyszer fogadhato ugyfel hany foglalas esh ugyanar idopon egyszer ugyfel visszaigazolo mail inn megy valaszd ceg postafiokj beallitas levelezes ben bekot fio igy level biztosan megerkezi ugyfel valasza oda jon szerver levelkuldo kezbesi szerver allitva levelkuldes alatta latod utolso level eredmeny elkuldve men mentes lapful aljan foglalooldal cime linkeld weboldal beagyazo kod amellyel urlap weboldal oldalan belul jeleni",
+            "h": 96
+        },
+        {
+            "id": "naptar#17",
+            "cim": "Online időpontfoglalás › Mit lát az ügyfél",
+            "horgony": "online-idopontfoglalas",
+            "szoveg": "### Mit lát az ügyfél\n\nEgy széles, kéthasábos oldalt (telefonon egymás alatt):\n\n1. Balra a szabad napokat gombokként, alattuk a választott nap szabad időpontjait.\n2. Jobbra a nevét, telefonszámát, e-mail-címét, a témát, a készüléket és a hibát kérő mezőket, és egy jelölőnégyzetet az adatkezelésről.\n3. Az **Időpont foglalása** gomb után egy visszaigazoló képernyőt; ha megadta az e-mail-címét, levelet is a lemondó linkkel. Ha a levél nem ment ki, a képernyő ezt megmondja (az időpont ettől rögzítve van).",
+            "t": "naptar online idopontfoglalas lat ugyfel online idopontfoglalas lat ugyfel lat ugyfel szeles kethasabos oldal telef egymas ala bal szabad nap gombokk alat valaszt nap szabad idopontj jobb nev telefonszam mail cim tem eszkoz hib kero mez jelolonegyz adatkezeles idop foglalasa gomb utan visszaigazolo keperny megadta mail cim level lemondo linkkel level men kepernyo megmond idop ettol rogzitve",
+            "h": 57
+        },
+        {
+            "id": "naptar#18",
+            "cim": "Online időpontfoglalás › Mi számít foglaltnak",
+            "horgony": "online-idopontfoglalas",
+            "szoveg": "### Mi számít foglaltnak\n\n- Minden időponthoz kötött esemény a kiválasztott naptárban – a kézzel felvett is. Ha egy sávban annyi esemény van, ahány ügyfelet egyszerre fogadtok, a sáv nem foglalható.\n- Az **egész napos** esemény nem foglal időt. Szabadság idejére vegyél fel időponthoz kötött eseményt (például 0:00-tól 23:55-ig), vagy kapcsold ki a foglalást.\n- Az **Elmaradt** állapotú esemény nem foglal.\n- Csak a **Legalább ennyi órával előre** utáni és a **Legfeljebb ennyi napra előre** belüli időpont foglalható.",
+            "t": "naptar online idopontfoglalas szami foglal online idopontfoglalas szami foglal szami foglal idopon kot esemeny kivalaszt naptar kezzel felv sav annyi esemeny ahany ugyfel egyszer fogad sav foglalhato egesz napos esemeny foglal ido szabadsag ide vegyel idopon kot esemeny peldaul 00 tol 23 55 ig kapcsold foglalas elmarad allapotu esemeny foglal legalabb ennyi ora elo utani legfeljebb ennyi nap elo beluli idop foglalhato",
+            "h": 62
+        },
+        {
+            "id": "naptar#19",
+            "cim": "Online időpontfoglalás › Az online foglalás a naptárban",
+            "horgony": "online-idopontfoglalas",
+            "szoveg": "### Az online foglalás a naptárban\n\nA foglalás címe az ügyfél neve és a készülék, a végén „(online foglalás)”. A leírásban az ügyfél telefonszáma, e-mail-címe, a téma, a készülék és a hiba. Ha az ügyfél telefonszáma már szerepel az Ügyfelek között, a foglalás hozzá kapcsolódik. Ha az ügyfél lemondja, az esemény **Elmaradt** lesz, és a naptár gazdája levelet kap.",
+            "t": "naptar online idopontfoglalas online foglalas naptar online idopontfoglalas online foglalas naptar online foglalas naptar foglalas cime ugyfel neve eszkoz veg online foglalas leiras ugyfel telefonszama mail cime tema eszkoz hiba ugyfel telefonszama szerepel ugyfel koz foglalas hozza kapcsolodi ugyfel lemond esemeny elmarad naptar gazda level kap",
+            "h": 46
+        },
+        {
+            "id": "naptar#20",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- Minden eseménynek pontosan egy gazdája van; a résztvevők naptárában is megjelenik.\n- **Közös fióknál** mindenki mindent szerkeszthet.\n- **Többfelhasználós módban** az adminisztrátor mindent szerkeszthet. A kolléga a saját naptárát, azt az eseményt, amelyet ő vett fel, és a fiók nélküli nevek naptárát. Más eseményét megnézheti, de az ablakban ez áll: „Ez egy kolléga naptára: megnézheted, de csak ő (vagy az adminisztrátor) módosíthatja.”\n- A neveket közös fióknál bárki, többfelhasználós módban az adminisztrátor szerkesztheti.\n- A kártya csak kézi kinyomásra, vagy az esemény lezárására (Kész, Elmaradt) tűnik el.\n- Ismétlődő sorozat egyetlen alkalma csak törölhető; húzással sorozat nem helyezhető át.\n- Hibás vagy hiányzó vég esetén az esemény egyórás lesz.\n- A törlés két kattintás; a megerősítés négy másodperc után visszaáll.",
+            "t": "naptar szabaly ami rendszer betar szabaly ami rendszer betar esemeny pontosan gazda resztvev napta megjeleni kozos fioknal mindenki mind szerkeszth tobbfelhasznalos mod adminisztrator mind szerkeszth kollega saj naptar esemeny amely vet fio nelkuli nev naptar mas esemeny megnezheti abl all kollega napta megnezheted adminisztrator modosith nev kozos fioknal barki tobbfelhasznalos mod adminisztrator szerkesztheti kartya kezi kinyomas esemeny lezarasa kesz elmarad tuni ismetlodo soroz egyetl alkalma torolheto huzassal soroz helyezheto hibas hianyzo veg ese esemeny egyoras torles ket kattintas megerosites negy masodperc utan visszaall",
+            "h": 83
+        },
+        {
+            "id": "naptar#21",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- Az AI-asszisztens (a jobb alsó sarokban élő figura) tud a naptárról: megkérdezheted tőle, mi van mára. A „Vezess végig ezen az oldalon” kérésre lépésenként bemutatja a Naptár oldalt.\n- Reggel a **Ma** nézettel kezdj: egy helyen látod a napot, a lemaradt teendőket és a fontos leveleket.\n- Közös erőforrásnak (műhely, kiszálló autó) érdemes saját nevet felvenni – így látszik, mikor foglalt.\n- Ha zavarnak a kártyák, ne nyomd ki őket gondolkodás nélkül: használd az **Összecsuk** gombot.\n- Visszahívást, alkatrész érkezését érdemes az ügyfélhez és a munkalap számához kötni.\n- A teljes leírást és a gyakori kérdéseket a **Súgó** menüpontban találod.",
+            "t": "naptar tipp tipp ai asszisztens jobb also sar elo figu tud naptar megkerdezheted tole mara vezess veg ezen oldal keres lepesenk bemut naptar oldal reggel ma nezettel kezdj hely latod nap lemarad teend fontos level kozos eroforras muhely kiszallo auto erdemes saj nev felvenni igy latszi foglal zavar karty ne nyomd oke gondolkodas nelkul hasznald osszecs gomb visszahivas alkatresz erkezes erdemes ugyfel munkalap szama kotni teljes leiras gyakori kerdes sugo menupon talalod",
+            "h": 72
+        },
+        {
+            "id": "naptar#22",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„A naptár nem töltődött be.”** Töltsd újra az oldalt. Ha marad, nézd meg az internetkapcsolatot.\n- **Nem tudom áthúzni az eseményt.** Vagy ismétlődő (azt az űrlapján módosítod), vagy más naptárában van, amelyet nem szerkeszthetsz.\n- **Nem jön kártya.** Nézd meg az eseménynél, be van-e pipálva a kártyás értesítés, és nem áll-e már Kész vagy Elmaradt állapotban. Többfelhasználós módban csak a saját naptárad kártyáit látod.\n- **Nem jön e-mail.** Ellenőrizd az **E-mail értesítések küldése** kapcsolót, a név e-mail-címét vagy a közös értesítő címet, és próbáld ki a fenti lépésekkel.\n- **Nem látok egy naptárat.** A bal hasábban ki van kapcsolva a neve, vagy a név inaktív.\n- **Nem tudok nevet felvenni.** Többfelhasználós módban ezt csak az adminisztrátor teheti meg.\n- **Hiányzik a Privát jelölő.** Közös fióknál nincs, mert ott mindenki ugyanazt látja.",
+            "t": "naptar megy megy naptar toltod toltsd ujra oldal marad nezd internetkapcsol tudom athuzni esemeny ismetlodo urlapjan modositod mas napta amely szerkeszthetsz jon kartya nezd esemenynel pipalva kartyas ertesites all kesz elmarad allap tobbfelhasznalos mod saj naptarad karty latod jon mail ellenorizd mail ertesites kuldese kapcsol nev mail cim kozos ertesito cim probald fenti lepes lat naptar bal hasab kapcsolva neve nev inaktiv tud nev felvenni tobbfelhasznalos mod adminisztrator teheti hianyzi priv jelolo kozos fioknal nincs mindenki ugyanaz lat",
+            "h": 78
+        },
+        {
+            "id": "naptar#23",
+            "cim": "GYIK › Hogyan veszek fel gyorsan egy eseményt?",
+            "horgony": "hogyan-veszek-fel-gyorsan-egy-esemenyt",
+            "szoveg": "Kattints a naptár rácsában arra az időpontra, ahová szánod. Az űrlap már a jó nappal, idővel és névvel nyílik; csak a megnevezést kell beírnod.",
+            "t": "naptar gyi vesz gyorsan esemeny gyi vesz gyorsan esemeny kattints naptar racsa idopon ahova szanod urlap jo nappal ido nev nyili megnevezes beirnod",
+            "h": 23
+        },
+        {
+            "id": "naptar#24",
+            "cim": "GYIK › Miért nem tűnik el a kártya a képernyőről?",
+            "horgony": "miert-nem-tunik-el-a-kartya-a-kepernyorol",
+            "szoveg": "Mert szándékosan nem tűnik el magától. Addig marad, amíg a **Kinyomom** gombbal ki nem nyomod, vagy az eseményt Kész, illetve Elmaradt állapotba nem teszed.",
+            "t": "naptar gyi tuni kartya kepernyo gyi tuni kartya kepernyo szandekosan tuni maga add marad amig kinyomom gombbal nyomod esemeny kesz illetve elmarad allap teszed",
+            "h": 24
+        },
+        {
+            "id": "naptar#25",
+            "cim": "GYIK › Zavar a kártya, de még nem akarom kinyomni. Mit tegyek?",
+            "horgony": "zavar-a-kartya-de-meg-nem-akarom-kinyomni-mit-tegyek",
+            "szoveg": "Kattints az **Összecsuk** gombra. A kártyák kis jelzővé húzódnak össze, és megmaradnak.",
+            "t": "naptar gyi zavar kartya akarom kinyomni tegy gyi zavar kartya akarom kinyomni tegy kattints osszecs gomb karty kis jelzove huzod ossze megmarad",
+            "h": 22
+        },
+        {
+            "id": "naptar#26",
+            "cim": "GYIK › Más oldalon is megjelenik a kártya, nem csak a Naptárban?",
+            "horgony": "mas-oldalon-is-megjelenik-a-kartya-nem-csak-a-naptarban",
+            "szoveg": "Igen, a rendszer minden oldalán.",
+            "t": "naptar gyi mas oldal megjeleni kartya naptar gyi mas oldal megjeleni kartya naptar rendszer oldalan",
+            "h": 15
+        },
+        {
+            "id": "naptar#27",
+            "cim": "GYIK › Hogyan állítok be heti ismétlődést több napra?",
+            "horgony": "hogyan-allitok-be-heti-ismetlodest-tobb-napra",
+            "szoveg": "Az **Ismétlődés** mezőnél válaszd a **Hetente** lehetőséget, és jelöld be a napokat (például H, Sze, P).",
+            "t": "naptar gyi alli heti ismetlodes tobb nap gyi alli heti ismetlodes tobb nap ismetlodes mezonel valaszd hetente lehetoseg jelold nap peldaul sze",
+            "h": 22
+        },
+        {
+            "id": "naptar#28",
+            "cim": "GYIK › Hogyan hagyok ki egy alkalmat a sorozatból?",
+            "horgony": "hogyan-hagyok-ki-egy-alkalmat-a-sorozatbol",
+            "szoveg": "Kattints arra az alkalomra, majd az ablak alján a **Csak ez az alkalom törlése** gombra, kétszer.",
+            "t": "naptar gyi hagy alkalm soroz gyi hagy alkalm soroz kattints alkalom majd abl aljan alkalom torlese gomb ketszer",
+            "h": 18
+        },
+        {
+            "id": "naptar#29",
+            "cim": "GYIK › Át tudom írni egy sorozat egyetlen alkalmának időpontját?",
+            "horgony": "at-tudom-irni-egy-sorozat-egyetlen-alkalmanak-idopontjat",
+            "szoveg": "Külön nem. Töröld azt az alkalmat, és vegyél fel helyette egy önálló eseményt az új időpontra.",
+            "t": "naptar gyi tudom irni soroz egyetl alkalma idopontj gyi tudom irni soroz egyetl alkalma idopontj kul torold alkalm vegyel helyette onallo esemeny uj idopon",
+            "h": 24
+        },
+        {
+            "id": "naptar#30",
+            "cim": "GYIK › Miért nem tudom húzással áthelyezni az ismétlődő eseményt?",
+            "horgony": "miert-nem-tudom-huzassal-athelyezni-az-ismetlodo-esemenyt",
+            "szoveg": "Mert a húzás az egész sorozatot érintené. Nyisd meg az eseményt, és az űrlapon módosítsd az időpontot.",
+            "t": "naptar gyi tudom huzassal athelyezni ismetlodo esemeny gyi tudom huzassal athelyezni ismetlodo esemeny huzas egesz soroz erintene nyisd esemeny urlap modositsd idopon",
+            "h": 22
+        },
+        {
+            "id": "naptar#31",
+            "cim": "GYIK › Hogyan jelölöm késznek az eseményt?",
+            "horgony": "hogyan-jelolom-kesznek-az-esemenyt",
+            "szoveg": "A **Ma** vagy a **Napirend** nézetben kattints az esemény előtti pipára, vagy a **Tábla** nézetben húzd a **Kész** oszlopba.",
+            "t": "naptar gyi jelolom kesz esemeny gyi jelolom kesz esemeny ma napirend nez kattints esemeny elotti pipa tabla nez huzd kesz oszlop",
+            "h": 21
+        },
+        {
+            "id": "naptar#32",
+            "cim": "GYIK › Mit látnak a többiek a privát eseményemből?",
+            "horgony": "mit-latnak-a-tobbiek-a-privat-esemenyembol",
+            "szoveg": "Csak annyit, hogy az idő foglalt. A megnevezést, a helyszínt és a leírást nem.",
+            "t": "naptar gyi lat tobbi priv esemenyem gyi lat tobbi priv esemenyem annyi ido foglal megnevezes helyszin leiras",
+            "h": 17
+        },
+        {
+            "id": "naptar#33",
+            "cim": "GYIK › Miről megy e-mail?",
+            "horgony": "mirol-megy-e-mail",
+            "szoveg": "Arról az eseményről, amelynél bepipáltad az **E-mail értesítés** jelölőt, és minden **Nagyon fontos** eseményről. A levél az első emlékeztető idején megy, emlékeztető nélkül a kezdéskor.",
+            "t": "naptar gyi mirol megy mail gyi mirol megy mail arrol esemeny amelynel bepipaltad mail ertesites jelol fontos esemeny level elso emlekezteto idej megy emlekezteto nelkul kezdes",
+            "h": 26
+        },
+        {
+            "id": "naptar#34",
+            "cim": "GYIK › Kinek megy az e-mail?",
+            "horgony": "kinek-megy-az-e-mail",
+            "szoveg": "A naptár gazdájának és a résztvevőknek – annak, akinek van elérhető címe. Akinek nincs, annak a közös értesítő címre megy, ha az meg van adva.",
+            "t": "naptar gyi kin megy mail gyi kin megy mail naptar gazda resztvev ann aki elerheto cime aki nincs ann kozos ertesito cim megy adva",
+            "h": 24
+        },
+        {
+            "id": "naptar#35",
+            "cim": "GYIK › Hogyan kapok reggel összefoglalót a napomról?",
+            "horgony": "hogyan-kapok-reggel-osszefoglalot-a-napomrol",
+            "szoveg": "A Beállítások → Naptár lapfülön pipáld be a **Napi összefoglaló levél** jelölőt, és állítsd be az idejét.",
+            "t": "naptar gyi kap reggel osszefoglal napom gyi kap reggel osszefoglal napom beallitas naptar lapful pipald napi osszefoglalo level jelol allitsd idej",
+            "h": 21
+        },
+        {
+            "id": "naptar#36",
+            "cim": "GYIK › Állíthatok több emlékeztetőt egy eseményhez?",
+            "horgony": "allithatok-tobb-emlekeztetot-egy-esemenyhez",
+            "szoveg": "Igen. Az **Emlékeztető** sorban akárhányat bejelölhetsz, például 1 nappal és 15 perccel előtte.",
+            "t": "naptar gyi allith tobb emlekezt esemeny gyi allith tobb emlekezt esemeny emlekezteto sor akarhany bejelolhetsz peldaul nappal 15 perccel elotte",
+            "h": 20
+        },
+        {
+            "id": "naptar#37",
+            "cim": "GYIK › Hogyan veszek fel naptárat valakinek, akinek nincs belépése?",
+            "horgony": "hogyan-veszek-fel-naptarat-valakinek-akinek-nincs-belepese",
+            "szoveg": "A bal hasábban a **Naptárak** melletti pluszjellel. Csak nevet kell megadnod, fiók nem kell hozzá.",
+            "t": "naptar gyi vesz naptar valaki aki nincs belepese gyi vesz naptar valaki aki nincs belepese bal hasab naptar melletti pluszjellel nev megadnod fio hozza",
+            "h": 24
+        },
+        {
+            "id": "naptar#38",
+            "cim": "GYIK › Hogyan nézem meg csak a saját naptáramat?",
+            "horgony": "hogyan-nezem-meg-csak-a-sajat-naptaramat",
+            "szoveg": "Többfelhasználós módban a bal hasábban kattints a **Csak én** gombra. Közös fióknál kapcsold ki a többi nevet.",
+            "t": "naptar gyi nezem saj naptaram gyi nezem saj naptaram tobbfelhasznalos mod bal hasab kattints gomb kozos fioknal kapcsold tobbi nev",
+            "h": 20
+        },
+        {
+            "id": "naptar#39",
+            "cim": "GYIK › Miért csak reggel hét és este hét között látszik a nap?",
+            "horgony": "miert-csak-reggel-het-es-este-het-kozott-latszik-a-nap",
+            "szoveg": "Mert ez a beállított órasáv. A **0–24** gombbal az egész napot látod; az órasávot a Beállítások → Naptár lapfülön állíthatod át.",
+            "t": "naptar gyi reggel het este het koz latszi nap gyi reggel het este het koz latszi nap beallit orasav 24 gombbal egesz nap latod orasav beallitas naptar lapful allithatod",
+            "h": 29
+        },
+        {
+            "id": "naptar#40",
+            "cim": "GYIK › Hogyan adok hozzá saját kategóriát?",
+            "horgony": "hogyan-adok-hozza-sajat-kategoriat",
+            "szoveg": "A Beállítások → Naptár lapfülön a **Kategóriák** mezőbe írj új sort: a név, függőleges vonal, a szín (például `Kiszállás | turkiz`).",
+            "t": "naptar gyi ado hozza saj kategori gyi ado hozza saj kategori beallitas naptar lapful kategori mezo irj uj sor nev fuggoleges vonal szin peldaul kiszallas turkiz",
+            "h": 26
+        },
+        {
+            "id": "naptar#41",
+            "cim": "GYIK › Szerkeszthetem a kollégám eseményét?",
+            "horgony": "szerkeszthetem-a-kollegam-esemenyet",
+            "szoveg": "Közös fióknál igen. Többfelhasználós módban csak az adminisztrátor, a naptár gazdája és az, aki az eseményt felvette.",
+            "t": "naptar gyi szerkeszthetem kollegam esemeny gyi szerkeszthetem kollegam esemeny kozos fioknal tobbfelhasznalos mod adminisztrator naptar gazda esemeny felvette",
+            "h": 18
+        },
+        {
+            "id": "naptar#42",
+            "cim": "GYIK › Vissza tudom hozni a törölt eseményt?",
+            "horgony": "vissza-tudom-hozni-a-torolt-esemenyt",
+            "szoveg": "A felületről nem. Ezért kér a törlés két kattintást.",
+            "t": "naptar gyi vissza tudom hozni torol esemeny gyi vissza tudom hozni torol esemeny felul ezer ker torles ket kattintas",
+            "h": 19
+        },
+        {
+            "id": "naptar#43",
+            "cim": "GYIK › Melyik nézet mutatja, ki mikor ér rá?",
+            "horgony": "melyik-nezet-mutatja-ki-mikor-er-ra",
+            "szoveg": "A **Személyek** nézet egy napra, nevenként egy oszlopban; az **Idővonal** nevenként egy sorban, a nap óráira vagy a hét napjaira bontva.",
+            "t": "naptar gyi nez mut er gyi nez mut er szemely nez nap nevenk oszlop idovonal nevenk sor nap orai het napj bontva",
+            "h": 22
+        },
+        {
+            "id": "naptar#44",
+            "cim": "GYIK › Honnan tudom, mennyi idő van még az eseményig?",
+            "horgony": "honnan-tudom-mennyi-ido-van-meg-az-esemenyig",
+            "szoveg": "A visszaszámlálásból: ott van a kártyán, a megnyitott esemény ablakában és a bal hasáb **Következő** blokkjában.",
+            "t": "naptar gyi honnan tudom ido esemeny gyi honnan tudom ido esemeny visszaszamlalas kartyan megnyit esemeny ablaka bal hasab kovetkezo blokk",
+            "h": 20
+        },
+        {
+            "id": "naptar#45",
+            "cim": "GYIK › Hogyan foglalhatnak az ügyfelek időpontot a weboldalról?",
+            "horgony": "hogyan-foglalhatnak-az-ugyfelek-idopontot-a-weboldalrol",
+            "szoveg": "Kapcsold be a **Beállítások › Online időpontfoglalás** lapfülön, és a foglalóoldal címét linkeld a weboldalatokon, vagy illeszd be a beágyazó kódot.",
+            "t": "naptar gyi foglalh ugyfel idopon weboldal gyi foglalh ugyfel idopon weboldal kapcsold beallitas online idopontfoglalas lapful foglalooldal cim linkeld weboldal illeszd beagyazo kod",
+            "h": 23
+        },
+        {
+            "id": "naptar#46",
+            "cim": "GYIK › Hogyan mondja le az ügyfél a foglalást?",
+            "horgony": "hogyan-mondja-le-az-ugyfel-a-foglalast",
+            "szoveg": "A visszaigazoló levélben lévő linkkel. A foglalás **Elmaradt** lesz, az időpont újra szabad, a naptár gazdája levelet kap.",
+            "t": "naptar gyi mond ugyfel foglalas gyi mond ugyfel foglalas visszaigazolo level levo linkkel foglalas elmarad idop ujra szabad naptar gazda level kap",
+            "h": 22
+        },
+        {
+            "id": "naptar#47",
+            "cim": "GYIK › Miért nem foglalható egy időpont, pedig ráérünk?",
+            "horgony": "miert-nem-foglalhato-egy-idopont-pedig-raerunk",
+            "szoveg": "Valószínűleg más esemény van abban a sávban a kiválasztott naptárban, vagy az időpont túl közel van (Legalább ennyi órával előre), vagy nem foglalható nap.",
+            "t": "naptar gyi foglalhato idop ped raer gyi foglalhato idop ped raer valoszinuleg mas esemeny abban sav kivalaszt naptar idop tul kozel legalabb ennyi ora elo foglalhato nap",
+            "h": 27
+        }
+    ]
+}

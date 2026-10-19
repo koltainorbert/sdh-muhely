@@ -1,0 +1,160 @@
+{
+    "kulcs": "sms",
+    "cim": "SMS-értesítések",
+    "csoport": "Kapcsolat",
+    "osszefoglalo": "A rendszer az Android-telefonodon futó SMS-átjárón át küld SMS-t az ügyfeleknek – állapotváltáskor rákérdez (vagy magától küld), kézzel is küldhetsz, és a válaszok a munkalap üzenetei közé érkeznek.",
+    "darabok": [
+        {
+            "id": "sms#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "Az **SMS** menüpont és a **Beállítások › SMS-értesítések** lapfül együtt arra való, hogy az ügyfél SMS-ben értesüljön: elkészült a javítás, megérkezett a rendelés, árajánlatot kapott. A rendszer nem külső SMS-szolgáltatón küld, hanem a **saját Android-telefonodon** futó SMS-átjáró alkalmazáson (az „SMS Gateway for Android” appon) át – a szöveg a te számodról, a te díjcsomagod terhére megy ki.\n\nAlapból minden **ki van kapcsolva**: új telepítés magától soha nem küld SMS-t, amíg be nem kapcsolod a főkapcsolót.\n\nAz SMS sosem akadályoz: ha a küldés elakad, a munkalap állapota ettől még megváltozik, a hiba pedig piros jelzéssel megjelenik.",
+            "t": "sms ertesites mire valo mire valo sms menup beallitas sms ertesites lapful egyu valo ugyfel sms ben ertesulj elkeszul javitas megerkez rendeles arajanl kap rendszer kulso sms szolgalt kuld hanem saj android telefonod futo sms atjaro alkalmazas sms gateway android app szoveg szamod dijcsomagod terhe megy alap kapcsolva uj telepites maga soha kuld sms amig kapcsolod fokapcsol sms sosem akadalyoz kuldes elakad munkalap allapota ettol megvaltozi hiba ped piros jelzessel megjeleni",
+            "h": 71
+        },
+        {
+            "id": "sms#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- **SMS menüpont:** az oldalmenüben, SMS néven. A neve mellett szám jelzi, mennyi a teendő (megválaszolandó kérdés, olvasatlan bejövő SMS, hívandó ügyfél).\n- **Beállítások:** Beállítások → **SMS-értesítések** lapfül. Csak adminisztrátor módosíthatja.\n- **A munkalap és a rendelés:** az RMA-csevegő beírója alatt az **SMS-ben is** jelölő, az ügyfél adatlapján és a munkalapon az **Új SMS** gomb.\n- **Állapotváltáskor:** a **Küldjek SMS-t az ügyfélnek?** ablak magától megjelenik.",
+            "t": "sms ertesites talalod talalod sms menup oldalmenu sms nev neve mell szam jelzi teendo megvalaszolando kerdes olvasatlan bejovo sms hivando ugyfel beallitas beallitas sms ertesites lapful adminisztrator modosith munkalap rendeles rma csevego beiro ala sms ben jelolo ugyfel adatlapjan munkalap uj sms gomb allapotvaltas kuldj sms ugyfel abl maga megjeleni",
+            "h": 50
+        },
+        {
+            "id": "sms#3",
+            "cim": "Lépésről lépésre: az első bekapcsolás",
+            "horgony": "lepesrol-lepesre-az-elso-bekapcsolas",
+            "szoveg": "1. Telepítsd az SMS-átjáró appot a céges telefonra, és kapcsold be a helyi szervert (vagy a felhős módot).\n2. Nyisd meg a Beállítások → **SMS-értesítések** lapfület. Add meg az átjáró üzemmódját, címét, portját, a felhasználónevet és a jelszót.\n3. Nyomd meg a **Kapcsolat-teszt** gombot (a **Teszt SMS** dobozban egy próbaüzenetet is küldhetsz a saját számodra). Zöld jelzés esetén a telefon elérhető.\n4. Állítsd be a csendes időt, az újrapróbálások számát és az aláírást, majd kapcsold be a főkapcsolót, és mentsd.\n5. Nyisd meg az SMS menüpont **Sablonok** nézetét, nézd át a négy „PÉLDA – jóváhagyásra vár” szöveget, és amelyiket használnád, szerkeszd át és mentsd el – mentés után válik aktívvá.\n6. Ugyanott a **Mikor ajánljon SMS-t?** részben válaszd ki, melyik állapothoz melyik sablon tartozzon, és hogy kérdezzen rá, vagy automatikusan küldjön.",
+            "t": "sms ertesites lepes lepes elso bekapcsolas lepes lepes elso bekapcsolas telepitsd sms atjaro app ceges telef kapcsold helyi szerv felhos mod nyisd beallitas sms ertesites lapful add atjaro uzemmodj cim portj felhasznalonev jelsz nyomd kapcsol tesz gomb tesz sms doboz probauzen kuldhetsz saj szamod zold jelzes ese telef elerheto allitsd csendes ido ujraprobalas szam alairas majd kapcsold fokapcsol mentsd nyisd sms menup sabl nez nezd negy pelda jovahagyas var szoveg amelyi hasznalnad szerkeszd mentsd mentes utan vali aktivva ugyan ajanlj sms resz valaszd allap sabl tartozz kerdezz automatikusan kuldj",
+            "h": 89
+        },
+        {
+            "id": "sms#4",
+            "cim": "Lépésről lépésre: SMS állapotváltáskor",
+            "horgony": "lepesrol-lepesre-sms-allapotvaltaskor",
+            "szoveg": "1. Változtasd meg a munkalap (vagy a rendelés) állapotát, ahogy eddig is.\n2. Ha az új állapothoz van szabály, megjelenik a **Küldjek SMS-t az ügyfélnek?** ablak, a sablon már kitöltve a munkalap adataival.\n3. Írd át a szöveget, ha kell – a kijelzőn látod a karakter- és SMS-darabszámot –, majd válassz:\n   - **SMS küldése** – a szöveg a sorba kerül és elmegy,\n   - **Nem küldök** – a döntés rögzül, nem lesz SMS,\n   - **Később döntök** – a kérdés nyitva marad, az SMS menüpont **Függő döntések** nézetében megtalálod.\n4. Több eszközös munkalapnál a kérdés eszközönként jön, az SMS szövegében annak az eszköznek a neve szerepel, amelyiknek az állapota változott.",
+            "t": "sms ertesites lepes lepes sms allapotvaltas lepes lepes sms allapotvaltas valtoztasd munkalap rendeles allap ahogy edd uj allap szabaly megjeleni kuldj sms ugyfel abl sabl kitoltve munkalap adat ird szoveg kijelz latod karakter sms darabszam majd valassz sms kuldese szoveg sor ar elmegy kuld dontes rogzul sms kesobb don kerdes nyitva marad sms menup fuggo dontes nezete megtalalod tobb eszkozos munkalapnal kerdes eszkozonk jon sms szovege ann eszkoz neve szerepel amelyi allapota valtoz",
+            "h": 73
+        },
+        {
+            "id": "sms#5",
+            "cim": "Lépésről lépésre: kézi SMS",
+            "horgony": "lepesrol-lepesre-kezi-sms",
+            "szoveg": "1. Nyomd meg az **Új SMS** gombot a munkalapon, az ügyfélnél, vagy az SMS menüpontban (ez utóbbi önálló SMS: ott a számot is te adod meg).\n2. Válassz sablont, vagy írj szabad szöveget.\n3. Küldés. A sor a **Monitor** nézetben azonnal látszik.\n\nA munkalap RMA-csevegőjében az **SMS-ben is** jelölővel ugyanaz az üzenet az ügyféloldalra és SMS-ben is megy; a szálban egyetlen sor jelenik meg.",
+            "t": "sms ertesites lepes lepes kezi sms lepes lepes kezi sms nyomd uj sms gomb munkalap ugyfelnel sms menupon utobbi onallo sms szam adod valassz sabl irj szabad szoveg kuldes sor monitor nez azonnal latszi munkalap rma csevego sms ben jelolo ugyanaz uzen ugyfeloldal sms ben megy szal egyetl sor jeleni",
+            "h": 50
+        },
+        {
+            "id": "sms#6",
+            "cim": "Lépésről lépésre: bejövő SMS",
+            "horgony": "lepesrol-lepesre-bejovo-sms",
+            "szoveg": "1. A **Bejövő SMS** nézet tetején látod a **webhook-címet**. Másold be az SMS-átjáró app Webhooks részébe, esemény: `sms:received` (és ha akarod, `sms:delivered`, `sms:sent`).\n2. Ettől kezdve az ügyfél válasza megjelenik a **Bejövő SMS** listában, és az ügyfél legutóbbi nyitott munkalapjának üzenetei közé kerül. Te e-mailben is értesítést kapsz.\n3. Ha a feladó számát nem ismeri fel a rendszer, vagy az ügyfélnek nincs nyitott munkalapja, a sor **Párosítatlan**. Írd be a munkalap számát, és nyomd meg a **Hozzárendel** gombot.\n4. Az ügyfél a **STOP** (vagy LEIRATKOZAS) szóval lemondhatja az automatikus SMS-eket. Kézi SMS-t ezután is küldhetsz neki.\n\nFontos: a webhook-címben titkos kulcs van. Ne oszd meg; ha kiszivárgott, kérj **Új kulcs**at (a telefonban át kell írni a címet).",
+            "t": "sms ertesites lepes lepes bejovo sms lepes lepes bejovo sms bejovo sms nez tetej latod webho cim masold sms atjaro app webhooks resze esemeny sms received akarod sms delivered sms sen ettol kezdve ugyfel valasza megjeleni bejovo sms lista ugyfel legutobbi nyit munkalap uzen koze ar mail ertesites kapsz felado szam ismeri rendszer ugyfel nincs nyit munkalap sor parositatlan ird munkalap szam nyomd hozzarendel gomb ugyfel stop leiratkozas szo lemondh automatikus sms eke kezi sms ezutan kuldhetsz neki fontos webho cim titkos kulcs ne oszd kiszivarg kerj uj kulcs telef irni cim",
+            "h": 92
+        },
+        {
+            "id": "sms#7",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "| Név | Mit jelent |\n|---|---|\n| Főkapcsoló | Ki van kapcsolva, amíg be nem kapcsolod. Kikapcsolva semmi nem megy ki. |\n| Üzemmód | Helyi (a telefon a helyi hálózaton), felhős (az app szolgáltatásán át) vagy saját szerver. |\n| Csendes idő | Ebben az időszakban az **automatikus** SMS-ek nem mennek ki, reggel indulnak. A kézi és a megerősített SMS-t nem érinti. |\n| Újrapróbálás | Hibánál növekvő várakozással újra próbálja (5, 10, 20 perc…), az utolsó sikertelen próba után a sor a **Hívandók** közé kerül. |\n| Aláírás / lábléc | Minden SMS végére kerülő szöveg. |\n| Telefonszám | Az ügyfél **1. telefonmezője**. Ha azt az átjáró visszautasítja, a **2. mezőre** próbálkozik, ha az is hibás, értesítést kapsz. |\n\nA sablonokban használható változók: `{ugyfel}`, `{szam}` (munkalapszám), `{eszkoz}`, `{allapot}`, `{szerviz}`, `{link}` (az ügyfélnek szóló követő oldal), `{hatarido}`, `{osszeg}`. Ismeretlen vagy üres változó esetén a rendszer nem küldi el a levelet, hanem rákérdez.",
+            "t": "sms ertesites mez gomb mez gomb nev jel fokapcsolo kapcsolva amig kapcsolod kikapcsolva semmi megy uzemmod helyi telef helyi haloz felhos app szolgaltatasan saj szerver csendes ido ebb idosz automatikus sms ek men reggel indul kezi megerosit sms erinti ujraprobalas hibanal novekvo varakozassal ujra probal 10 20 perc utolso sikertel pro utan sor hivand koze ar alairas lablec sms vege kerulo szoveg telefonszam ugyfel telefonmezo atjaro visszautasi mezo probalkozi hibas ertesites kapsz sabl hasznalhato valtoz ugyfel szam munkalapszam eszkoz allap szerviz lin ugyfel szolo koveto oldal hatarido osszeg ismeretl ures valtozo ese rendszer kuldi level hanem rakerdez",
+            "h": 97
+        },
+        {
+            "id": "sms#8",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- A telefonszámot egységes alakra hozza (`06 30 …` → `+36 30 …`). Az üres, a „0” és az érvénytelen szám nem kap SMS-t, a hiba pirosan látszik.\n- Ugyanaz az SMS nem megy ki kétszer: a sorban minden küldésnek egyedi azonosítója van, a dupla kattintás sem küld másodikat.\n- Ha a telefon nem válaszol időben, a rendszer **nem küldi újra** magától (lehet, hogy az SMS elment) – az ilyen sor a **Hívandók** közé kerül.\n- A sablonok változtatáskor új verziót kapnak; az elküldött SMS mindig megőrzi a sablon verzióját és a pontos szöveget.\n- Az SMS-napló csak bővül, sor nem törlődik belőle.\n- A beállításokat és a sablonokat csak adminisztrátor módosíthatja, az SMS-t a normál munkajoggal lehet küldeni.\n- Ékezetes szöveg (á, í, ó, ú, ő, ű) egy SMS-ben 70 karakter, hosszabb szövegnél 67 karakter / darab – több darab több SMS-ként számlázódik. Egy üzenet legfeljebb 480 karakter lehet.",
+            "t": "sms ertesites szabaly ami rendszer betar szabaly ami rendszer betar telefonszam egyseges ala hozza 06 30 36 30 ures ervenytel szam kap sms hiba pirosan latszi ugyanaz sms megy ketszer sor kuldes egyedi azonosito dupla kattintas kuld masodi telef valaszol ido rendszer kuldi ujra maga sms elm sor hivand koze ar sabl valtoztatas uj verzi kap elkuld sms megorzi sabl verzioj pontos szoveg sms naplo bovul sor torlodi belole beallitas sabl adminisztrator modosith sms normal munkajoggal kuldeni ekezetes szoveg sms ben 70 karakter hosszabb szovegnel 67 karakter darab tobb darab tobb sms ken szamlazodi uzen legfeljebb 480 karakter",
+            "h": 98
+        },
+        {
+            "id": "sms#9",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **Nem megy ki SMS:** nézd meg a Monitort és a Beállítások › SMS-értesítések állapotsorát. Ellenőrizd, hogy a főkapcsoló be van-e kapcsolva, a telefon bekapcsolt, és az app szervere fut.\n- **Piros jelzés a sorban:** a **Hívandók** nézetben látod, mi a hiba. Hívd fel az ügyfelet, majd nyomd meg a **Felhívtam** gombot.\n- **Nem jön a bejövő SMS:** a Bejövő SMS oldalon ellenőrizd a webhook-címet; helyi telepítésnél a címben a gép hálózati címe legyen, ne a „localhost”.\n- **Nem jelenik meg a kérdés állapotváltáskor:** csak azokhoz az állapotokhoz jön, amelyekhez a **Sablonok** nézetben szabályt állítottál, és amelyek sablonja aktív.",
+            "t": "sms ertesites megy megy megy sms nezd monitor beallitas sms ertesites allapotsor ellenorizd fokapcsolo kapcsolva telef bekapcsol app szerve fut piros jelzes sor hivand nez latod hiba hivd ugyfel majd nyomd felhivtam gomb jon bejovo sms bejovo sms oldal ellenorizd webho cim helyi telepitesnel cim gep halozati cime legy ne localhos jeleni kerdes allapotvaltas azo allap jon amely sabl nez szabaly allitottal amely sabl aktiv",
+            "h": 65
+        },
+        {
+            "id": "sms#10",
+            "cim": "GYIK › Kell hozzá külön SMS-szolgáltató?",
+            "horgony": "kell-hozza-kulon-sms-szolgaltato",
+            "szoveg": "Nem. A saját Android-telefonod SIM-kártyáján megy ki az SMS, a telefon díjcsomagja szerint.",
+            "t": "sms ertesites gyi hozza kul sms szolgaltato gyi hozza kul sms szolgaltato saj android telefonod sim kartyajan megy sms telef dijcsomag szerin",
+            "h": 22
+        },
+        {
+            "id": "sms#11",
+            "cim": "GYIK › Elküldi a rendszer magától az SMS-t?",
+            "horgony": "elkuldi-a-rendszer-magatol-az-sms-t",
+            "szoveg": "Csak akkor, ha egy állapothoz **automatikus** működést állítottál. Alapból minden állapotváltásnál rákérdez.",
+            "t": "sms ertesites gyi elkuldi rendszer maga sms gyi elkuldi rendszer maga sms allap automatikus mukodes allitottal alap allapotvaltasnal rakerdez",
+            "h": 19
+        },
+        {
+            "id": "sms#12",
+            "cim": "GYIK › Miért „PÉLDA – jóváhagyásra vár” a sablonok neve?",
+            "horgony": "miert-pelda-jovahagyasra-var-a-sablonok-neve",
+            "szoveg": "Mert a minták kikapcsolva érkeznek: míg át nem nézed és el nem mented őket, nem használja őket a rendszer.",
+            "t": "sms ertesites gyi pelda jovahagyas var sabl neve gyi pelda jovahagyas var sabl neve min kikapcsolva erkez mig nezed mented oke hasznal oke rendszer",
+            "h": 24
+        },
+        {
+            "id": "sms#13",
+            "cim": "GYIK › Mi történik, ha az ügyfél nem kap SMS-t?",
+            "horgony": "mi-tortenik-ha-az-ugyfel-nem-kap-sms-t",
+            "szoveg": "Ha a telefon visszautasítja, a rendszer a második telefonmezőre próbálkozik. Ha az sem megy, értesítést kapsz, és a sor a **Hívandók** között várja, hogy felhívd az ügyfelet.",
+            "t": "sms ertesites gyi torteni ugyfel kap sms gyi torteni ugyfel kap sms telef visszautasi rendszer masodi telefonmezo probalkozi megy ertesites kapsz sor hivand koz var felhivd ugyfel",
+            "h": 27
+        },
+        {
+            "id": "sms#14",
+            "cim": "GYIK › Hogyan tiltom le egy ügyfélnek az automatikus SMS-t?",
+            "horgony": "hogyan-tiltom-le-egy-ugyfelnek-az-automatikus-sms-t",
+            "szoveg": "Az ügyfél a **STOP** szóval maga is leiratkozhat. Az automatikus SMS-ek ezután nem mennek neki, a kézi SMS igen.",
+            "t": "sms ertesites gyi tiltom ugyfel automatikus sms gyi tiltom ugyfel automatikus sms ugyfel stop szo maga leiratkozh automatikus sms ek ezutan men neki kezi sms",
+            "h": 25
+        },
+        {
+            "id": "sms#15",
+            "cim": "GYIK › Mit csináljak, ha az SMS „Hívandók” közé került?",
+            "horgony": "mit-csinaljak-ha-az-sms-hivandok-koze-kerult",
+            "szoveg": "Hívd fel az ügyfelet, mondd el neki az üzenetet, majd nyomd meg a **Felhívtam** gombot. Ettől a sor kikerül a teendők közül, de a naplóban megmarad.",
+            "t": "sms ertesites gyi csinalj sms hivand koze ar gyi csinalj sms hivand koze ar hivd ugyfel mondd neki uzen majd nyomd felhivtam gomb ettol sor kikerul teend kozul naplo megmarad",
+            "h": 30
+        },
+        {
+            "id": "sms#16",
+            "cim": "GYIK › Kimehet a szöveg kitöltetlen `{változóval}`?",
+            "horgony": "kimehet-a-szoveg-kitoltetlen-valtozoval",
+            "szoveg": "Nem. Ha a sablon egyik változójának nincs értéke (például a lapnak még nincs száma, ezért nincs link), a rendszer nem küldi el magától, hanem rákérdez, és a küldés előtt neked kell kitölteni.",
+            "t": "sms ertesites gyi kimeh szoveg kitoltetl valtozo gyi kimeh szoveg kitoltetl valtozo sabl egyi valtozo nincs erteke peldaul lap nincs szama ezer nincs lin rendszer kuldi maga hanem rakerdez kuldes elo neked kitolteni",
+            "h": 33
+        },
+        {
+            "id": "sms#17",
+            "cim": "GYIK › Mennyibe kerül egy hosszabb SMS?",
+            "horgony": "mennyibe-kerul-egy-hosszabb-sms",
+            "szoveg": "Az ékezetes szöveg 70 karakterig egy, utána 67 karakterenként újabb SMS-nek számít. A szerkesztőben a számláló mutatja a darabszámot. Egy üzenet legfeljebb 480 karakter lehet.",
+            "t": "sms ertesites gyi ar ar hosszabb sms gyi ar ar hosszabb sms ekezetes szoveg 70 karakter utana 67 karakterenk ujabb sms nek szami szerkeszto szamlalo mut darabszam uzen legfeljebb 480 karakter",
+            "h": 31
+        },
+        {
+            "id": "sms#18",
+            "cim": "GYIK › Látja az ügyfél az SMS-t az ügyféloldalon?",
+            "horgony": "latja-az-ugyfel-az-sms-t-az-ugyfeloldalon",
+            "szoveg": "Igen, ha a munkalap üzenetei között van: a munkalaphoz kötött SMS-ek bekerülnek a munkalap üzenetszálába, és a bejövő válasz is oda érkezik.",
+            "t": "sms ertesites gyi lat ugyfel sms ugyfeloldal gyi lat ugyfel sms ugyfeloldal munkalap uzen koz munkalap kot sms ek bekerul munkalap uzenetszala bejovo valasz oda erkezi",
+            "h": 26
+        },
+        {
+            "id": "sms#19",
+            "cim": "GYIK › Mi van, ha az ügyfélnek nincs telefonszáma?",
+            "horgony": "mi-van-ha-az-ugyfelnek-nincs-telefonszama",
+            "szoveg": "Az **Új SMS** és az **SMS-ben is** jelölő ilyenkor nem küld, és kiírja az okát. A munkalap állapota ettől még változik.",
+            "t": "sms ertesites gyi ugyfel nincs telefonszama gyi ugyfel nincs telefonszama uj sms sms ben jelolo ily kuld kiir oka munkalap allapota ettol valtozi",
+            "h": 23
+        }
+    ]
+}

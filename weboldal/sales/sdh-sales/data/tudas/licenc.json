@@ -1,0 +1,208 @@
+{
+    "kulcs": "licenc",
+    "cim": "Licenc és támogatási hozzáférés",
+    "csoport": "Rendszer",
+    "osszefoglalo": "Ha a rendszert forgalmazótól vásároltátok, a Beállítások › Licenc lapon adod meg a központ címét és a licenckulcsot; ugyanitt engedélyezheted időkorláttal, hogy a forgalmazó támogatója belépjen.",
+    "darabok": [
+        {
+            "id": "licenc#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "Ha a rendszert forgalmazótól vásároltátok, a licenc mondja meg, melyik modulok járnak hozzá, hány gépre és hány felhasználóra szól, és jár-e frissítés. A rendszer 5 percenként jelentkezik a forgalmazó központjánál: onnan kapja az új verziót, és a forgalmazó így előre látja, ha valami baj van (lassú, elfogy a tárhely, elmaradt a mentés).\n\nUgyanitt engedélyezheted, hogy a forgalmazó támogatója **meghatározott időre** belépjen, ha segítséget kértél.\n\nSaját példánynál (amit nem forgalmazótól vettetek) a lapot üresen hagyod: semmi nem változik.",
+            "t": "licenc tamogatasi hozzaferes mire valo mire valo rendsz forgalmazo vasarolt licenc mond modul jar hozza hany gep hany felhasznalo szol jar frissites rendszer percenk jelentkezi forgalmazo kozpontjanal onnan kap uj verzi forgalmazo igy elo lat baj lassu elfogy tarhely elmarad mentes ugyani engedelyezheted forgalmazo tamogato meghataroz ido belepj segitseg kertel saj peldanynal forgalmazo vet lap ures hagyod semmi valtozi",
+            "h": 59
+        },
+        {
+            "id": "licenc#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "**Beállítások › Rendszer › Licenc**. Csak adminisztrátor látja.",
+            "t": "licenc tamogatasi hozzaferes talalod talalod beallitas rendszer licenc adminisztrator lat",
+            "h": 10
+        },
+        {
+            "id": "licenc#3",
+            "cim": "Lépésről lépésre: a licenckulcs megadása",
+            "horgony": "lepesrol-lepesre-a-licenckulcs-megadasa",
+            "szoveg": "1. Nyisd meg: **Beállítások › Rendszer › Licenc**.\n2. **A központ címe**: a forgalmazótól kapott cím (például `https://kozpont.pelda.hu/`).\n3. **Licenckulcs**: `SDH-XXXX-XXXX-XXXX-XXXX` alakú, a forgalmazótól kaptad.\n4. **Mentés**. A rendszer azonnal jelentkezik a központnál.\n5. Az **Állapot** sorban látod: *Aktív*, a vevő neve, és meddig érvényes.",
+            "t": "licenc tamogatasi hozzaferes lepes lepes licenckulcs megadasa lepes lepes licenckulcs megadasa nyisd beallitas rendszer licenc kozp cime forgalmazo kap cim peldaul https kozp pelda hu licenckulcs sdh xxxx xxxx xxxx xxxx alaku forgalmazo kaptad mentes rendszer azonnal jelentkezi kozpontnal allap sor latod aktiv ugyfel neve medd ervenyes",
+            "h": 47
+        },
+        {
+            "id": "licenc#4",
+            "cim": "Mit küld a rendszer a központnak",
+            "horgony": "mit-kuld-a-rendszer-a-kozpontnak",
+            "szoveg": "5 percenként:\n\n- a licenckulcsot, a példány véletlen azonosítóját és egy ujjlenyomatot (a webhely címéből képzett lenyomat; magát a címet nem küldi),\n- a verziót és a műszaki állapotot: a szerver adatai, a válaszidő, a memória, az adatbázis és a szabad tárhely mérete, az utolsó mentés ideje, az ütemezett feladatok, a végzetes hibák helye (az üzenetből az e-mail-címek és a számsorok kitakarva), a bekapcsolt kiegészítők és modulok,\n- darabszámokat: hány munkalap, ügyfél, eszköz, termék és felhasználó van, és hányan dolgoznak éppen.\n\nAz ügyfelek nevét, telefonját, e-mail-címét, címét, a munkalapok tartalmát és a forgalom összegét **soha** nem küldi.\n\nA központ válasza digitálisan aláírt: a rendszer az első kapcsolatkor megjegyzi a központ kulcsát, és utána csak az azzal aláírt választ fogadja el.",
+            "t": "licenc tamogatasi hozzaferes kuld rendszer kozpon kuld rendszer kozpon percenk licenckulcs peldany veletl azonositoj ujjlenyom webhely cime kepz lenyom mag cim kuldi verzi muszaki allap szerver ada valaszido memoria adatbazis szabad tarhely merete utolso mentes ide utemez felad vegzetes hib helye uzen mail cim szamsor kitakarva bekapcsol kiegeszi modul darabszam hany munkalap ugyfel eszkoz term felhasznalo hanyan dolgoz epp ugyfel nev telefonj mail cim cim munkalap tartalm forgalom osszeg soha kuldi kozp valasza digitalisan alair rendszer elso kapcsol megjegyzi kozp kulcs utana azzal alair valasz fogad",
+            "h": 86
+        },
+        {
+            "id": "licenc#5",
+            "cim": "Az állapotok",
+            "horgony": "az-allapotok",
+            "szoveg": "| Állapot | Mit jelent |\n|---|---|\n| **Saját példány** | Nincs megadva központ. Nincs licencfeltétel. |\n| **Még nem volt kapcsolat** | Megadtad a kulcsot, de a központ még nem válaszolt. |\n| **Aktív** | Minden rendben, a frissítések jönnek. |\n| **Lejárt** | A licenc lejárt. A rendszer tovább működik, de frissítést nem kap. |\n| **Letiltva** | A forgalmazó letiltotta. A rendszer tovább működik, frissítés nincs. |\n| **Túl sok példány** | Ezzel a kulccsal több helyre telepítettétek, mint amennyit a licenc enged. |\n| **Ismeretlen licenckulcs** | A központ nem ismeri a kulcsot – nézd meg, jól írtad-e be. |\n| **Nincs kapcsolat a központtal** | 30 napja nem sikerült jelentkezni (például nincs internet). |\n\nHa az állapot nem *Aktív* (és nem *Saját példány*), az adminisztrátor a képernyő tetején figyelmeztetést lát. Az adatok, a munkalapok és minden funkció ilyenkor is megmarad és működik.",
+            "t": "licenc tamogatasi hozzaferes allap allap allap jel saj peldany nincs megadva kozp nincs licencfeltetel kapcsol megadtad kulcs kozp valaszol aktiv rend frissites jon lejar licenc lejar rendszer tovabb mukodi frissites kap letiltva forgalmazo letiltotta rendszer tovabb mukodi frissites nincs tul peldany ezzel kulccsal tobb hely telepitet amennyi licenc enged ismeretl licenckulcs kozp ismeri kulcs nezd jol irtad nincs kapcsol kozponttal 30 nap sikerul jelentkezni peldaul nincs intern allap aktiv saj peldany adminisztrator kepernyo tetej figyelmeztetes lat ada munkalap funkcio ily megmarad mukodi",
+            "h": 82
+        },
+        {
+            "id": "licenc#6",
+            "cim": "Licencelt modulok és felhasználók",
+            "horgony": "licencelt-modulok-es-felhasznalok",
+            "szoveg": "A licenc megmondja, melyik modulok járnak (például SMS, Házipénztár, Naptár). Ami nincs a licencben, az nem fut: eltűnik a menüből, a Modulok oldalon a kapcsolója szürke, és ott áll: *a licenc nem tartalmazza*. Az adatai megmaradnak – ha a forgalmazó bővíti a licencet, a következő jelentkezéskor (legfeljebb 5 perc) visszajön, ahol abbamaradt.\n\nHa a licenc meghatározott számú felhasználóra szól, és többen vannak, az adminisztrátor figyelmeztetést lát a képernyő tetején. A munka ilyenkor sem áll le.",
+            "t": "licenc tamogatasi hozzaferes licencel modul felhasznalo licencel modul felhasznalo licenc megmond modul jar peldaul sms hazipenztar naptar nincs licenc fut eltuni menu modul oldal kapcsolo szurke all licenc tartalmazza ada megmarad forgalmazo boviti licenc kovetkezo jelentkezes legfeljebb perc visszaj ahol abbamarad licenc meghataroz szamu felhasznalo szol tob van adminisztrator figyelmeztetes lat kepernyo tetej munka ily all",
+            "h": 56
+        },
+        {
+            "id": "licenc#7",
+            "cim": "Távoli karbantartás",
+            "horgony": "tavoli-karbantartas",
+            "szoveg": "A forgalmazó a központból karbantartást indíthat: **mentést**, **diagnosztikát** (sebességmérés), **gyorsítótár-ürítést**, **internetkapcsolat-ellenőrzést**, **frissítés keresését** és **telepítését** (előtte mindig teljes mentés készül). Ezek egyike sem küld el adatot, és egyike sem nyit belépést.\n\nA **Beállítások › Rendszer › Licenc** lapon a *Távoli karbantartás* kapcsolóval kikapcsolhatod; ilyenkor a kért művelet nem fut le, és a forgalmazó látja, hogy kikapcsoltad.",
+            "t": "licenc tamogatasi hozzaferes tavoli karbantartas tavoli karbantartas forgalmazo kozpon karbantartas indith mentes diagnoszti sebessegmeres gyorsitotar urites internetkapcsol ellenorzes frissites kereses telepites elotte teljes mentes keszul egyike kuld ada egyike nyi belepes beallitas rendszer licenc lap tavoli karbantartas kapcsolo kikapcsolhatod ily ker muvel fut forgalmazo lat kikapcsoltad",
+            "h": 46
+        },
+        {
+            "id": "licenc#8",
+            "cim": "Üzenet és kérés a forgalmazótól",
+            "horgony": "uzenet-es-keres-a-forgalmazotol",
+            "szoveg": "- **Üzenet**: a forgalmazó üzenetet küldhet (például „ma este frissítünk”). Az adminisztrátorok sávként látják a képernyő tetején; a **Rendben** gombbal leveheted.\n- **Támogatási kérés**: ha a forgalmazó be szeretne nézni, a képernyő tetején sáv jelenik meg az okkal és az időtartammal. **Engedélyezem** (kétszeri kattintás) – ideiglenes belépés jön létre, és a link magától eljut a támogatóhoz. **Elutasítom** – nem jön létre semmi, a forgalmazó értesül. A kérés 24 óra után magától eltűnik.",
+            "t": "licenc tamogatasi hozzaferes uzen keres forgalmazo uzen keres forgalmazo uzen forgalmazo uzen kuldh peldaul ma este frissi adminisztrator savk latj kepernyo tetej rend gombbal leveheted tamogatasi keres forgalmazo szeretne nezni kepernyo tetej sav jeleni okkal idotartammal engedelyezem ketszeri kattintas ideiglenes belepes jon let lin maga elju tamogato elutasitom jon let semmi forgalmazo ertesul keres 24 ora utan maga eltuni",
+            "h": 59
+        },
+        {
+            "id": "licenc#9",
+            "cim": "Támogatási hozzáférés",
+            "horgony": "tamogatasi-hozzaferes",
+            "szoveg": "Ha a forgalmazó támogatójának be kell néznie a rendszerbe, te engedélyezed – és csak addig, amíg kell.\n\n### Lépésről lépésre: engedélyezés\n\n1. **Beállítások › Rendszer › Licenc**, a **Támogatási hozzáférés** doboz.\n2. Válaszd ki, meddig: **2 óra**, **1 nap** vagy **3 nap**.\n3. Kattints az **Engedélyezem** gombra, majd még egyszer (megerősítés).\n4. Megjelenik a belépő link. Ha be van állítva a központ, a link magától eljut a támogatóhoz; ha nem, másold ki és küldd el neki.\n\n### Visszavonás\n\nA doboz alján a táblázat mutatja az élő hozzáféréseket. A **Visszavonás** gomb (kétszeri kattintás) azonnal törli az ideiglenes fiókot. Lejáratkor ez magától megtörténik (óránként ellenőrzi).\n\n### Amit tudnod kell\n\n- A támogató ebben az időben **mindent lát**, mint egy adminisztrátor. Csak akkor engedélyezd, ha kérted.\n- Minden engedélyezés, belépés és megszűnés a **Naplóba** kerül.\n- Lejárat után a link nem működik, a fiók nincs meg.",
+            "t": "licenc tamogatasi hozzaferes tamogatasi hozzaferes tamogatasi hozzaferes forgalmazo tamogato neznie rendszer engedelyezed add amig lepes lepes engedelyezes beallitas rendszer licenc tamogatasi hozzaferes doboz valaszd medd ora nap nap kattints engedelyezem gomb majd egyszer megerosites megjeleni belepo lin allitva kozp lin maga elju tamogato masold kuldd neki visszavonas doboz aljan tablaz mut elo hozzaferes visszavonas gomb ketszeri kattintas azonnal torli ideiglenes fio lejar maga megtorteni orank ellenorzi tudnod tamogato ebb ido mind lat adminisztrator engedelyezd kerted engedelyezes belepes megszunes naplo ar lejar utan lin mukodi fio nincs",
+            "h": 86
+        },
+        {
+            "id": "licenc#10",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- Lejárt vagy letiltott licencnél a rendszer **nem áll le** és nem zárja el az adatokat – csak frissítést nem kap.\n- A központ csak aláírt választ adhat; hamis vagy régi választ a rendszer elutasít.\n- A támogatási fiók mindig időkorlátos, és lejáratkor törlődik.\n- Központ nélkül (saját példány) semmi nem megy ki.",
+            "t": "licenc tamogatasi hozzaferes szabaly ami rendszer betar szabaly ami rendszer betar lejar letilt licencnel rendszer all zar ada frissites kap kozp alair valasz adh hamis regi valasz rendszer elutasi tamogatasi fio idokorlatos lejar torlodi kozp nelkul saj peldany semmi megy",
+            "h": 40
+        },
+        {
+            "id": "licenc#11",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- A licenckulcsot kis- vagy nagybetűvel is beírhatod.\n- Ha a központ címe változik, csak írd át – az állapot az új címről frissül.\n- Támogatáshoz elég a legrövidebb idő (2 óra); ha kevés, újra engedélyezheted.",
+            "t": "licenc tamogatasi hozzaferes tipp tipp licenckulcs kis nagybetu beirhatod kozp cime valtozi ird allap uj cim frissul tamogatas eleg legrovidebb ido ora keves ujra engedelyezheted",
+            "h": 25
+        },
+        {
+            "id": "licenc#12",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„A központ nem érhető el”** – nincs internet, vagy rossz a cím. Nézd meg a címet, és próbáld újra a **Kapcsolat ellenőrzése most** gombbal.\n- **„A központ kulcsa megváltozott”** – a forgalmazó új kulcsot kezdett használni. Szólj a forgalmazónak; a cserét a rendszer gazdája hagyhatja jóvá.\n- **Ismeretlen licenckulcs** – elírás a kulcsban. Másold be újra a forgalmazótól kapott kulcsot.\n- **Túl sok példány** – a kulcsot egy másik telepítés is használja. Kérj a forgalmazótól több példányra szóló licencet.",
+            "t": "licenc tamogatasi hozzaferes megy megy kozp erheto nincs intern rossz cim nezd cim probald ujra kapcsol ellenorzese gombbal kozp kulcsa megvaltoz forgalmazo uj kulcs kezd hasznalni szolj forgalmazo cser rendszer gazda hagyh jova ismeretl licenckulcs eliras kulcs masold ujra forgalmazo kap kulcs tul peldany kulcs masi telepites hasznal kerj forgalmazo tobb peldany szolo licenc",
+            "h": 54
+        },
+        {
+            "id": "licenc#13",
+            "cim": "GYIK › Hol adom meg a licenckulcsot?",
+            "horgony": "hol-adom-meg-a-licenckulcsot",
+            "szoveg": "**Beállítások › Rendszer › Licenc**, a **Licenckulcs** mezőben, a központ címével együtt.",
+            "t": "licenc tamogatasi hozzaferes gyi adom licenckulcs gyi adom licenckulcs beallitas rendszer licenc licenckulcs mezo kozp cime egyu",
+            "h": 17
+        },
+        {
+            "id": "licenc#14",
+            "cim": "GYIK › Mit küld rólunk a rendszer a forgalmazónak?",
+            "horgony": "mit-kuld-rolunk-a-rendszer-a-forgalmazonak",
+            "szoveg": "Műszaki adatot (verzió, sebesség, tárhely, mentés, hibák helye) és darabszámokat. Az ügyfelek nevét, elérhetőségét, a munkalapok tartalmát és a forgalom összegét soha.",
+            "t": "licenc tamogatasi hozzaferes gyi kuld rol rendszer forgalmazo gyi kuld rol rendszer forgalmazo muszaki ada verzio sebesseg tarhely mentes hib helye darabszam ugyfel nev elerhetoseg munkalap tartalm forgalom osszeg soha",
+            "h": 30
+        },
+        {
+            "id": "licenc#15",
+            "cim": "GYIK › Leáll a rendszer, ha lejár a licenc?",
+            "horgony": "leall-a-rendszer-ha-lejar-a-licenc",
+            "szoveg": "Nem. Minden működik tovább, az adatok a tieitek; csak frissítést nem kap a rendszer.",
+            "t": "licenc tamogatasi hozzaferes gyi leall rendszer lejar licenc gyi leall rendszer lejar licenc mukodi tovabb ada tiei frissites kap rendszer",
+            "h": 20
+        },
+        {
+            "id": "licenc#16",
+            "cim": "GYIK › Miért látok figyelmeztetést a képernyő tetején?",
+            "horgony": "miert-latok-figyelmeztetest-a-kepernyo-tetejen",
+            "szoveg": "A licenc lejárt, letiltották, vagy 30 napja nincs kapcsolat a központtal. A pontos ok a Licenc lapon áll.",
+            "t": "licenc tamogatasi hozzaferes gyi lat figyelmeztetes kepernyo tetej gyi lat figyelmeztetes kepernyo tetej licenc lejar letiltot 30 nap nincs kapcsol kozponttal pontos licenc lap all",
+            "h": 25
+        },
+        {
+            "id": "licenc#17",
+            "cim": "GYIK › Hogyan engedem, hogy a támogató belépjen?",
+            "horgony": "hogyan-engedem-hogy-a-tamogato-belepjen",
+            "szoveg": "**Beállítások › Licenc › Támogatási hozzáférés**: válassz időtartamot, és kattints kétszer az **Engedélyezem** gombra.",
+            "t": "licenc tamogatasi hozzaferes gyi engedem tamogato belepj gyi engedem tamogato belepj beallitas licenc tamogatasi hozzaferes valassz idotartam kattints ketszer engedelyezem gomb",
+            "h": 21
+        },
+        {
+            "id": "licenc#18",
+            "cim": "GYIK › Meddig fér hozzá a támogató?",
+            "horgony": "meddig-fer-hozza-a-tamogato",
+            "szoveg": "Amíg a választott idő (2 óra, 1 nap vagy 3 nap) le nem jár, vagy amíg vissza nem vonod.",
+            "t": "licenc tamogatasi hozzaferes gyi medd fer hozza tamogato gyi medd fer hozza tamogato amig valaszt ido ora nap nap jar amig vissza vonod",
+            "h": 23
+        },
+        {
+            "id": "licenc#19",
+            "cim": "GYIK › Hogyan vonom vissza a hozzáférést?",
+            "horgony": "hogyan-vonom-vissza-a-hozzaferest",
+            "szoveg": "A Támogatási hozzáférés doboz táblázatában a **Visszavonás** gombbal (kétszeri kattintás). A fiók azonnal törlődik.",
+            "t": "licenc tamogatasi hozzaferes gyi vonom vissza hozzaferes gyi vonom vissza hozzaferes tamogatasi hozzaferes doboz tablazata visszavonas gombbal ketszeri kattintas fio azonnal torlodi",
+            "h": 22
+        },
+        {
+            "id": "licenc#20",
+            "cim": "GYIK › Látja a támogató az ügyfeleinket?",
+            "horgony": "latja-a-tamogato-az-ugyfeleinket",
+            "szoveg": "Igen, amíg a hozzáférés él, mindent lát, mint egy adminisztrátor. Ezért csak akkor engedélyezd, ha segítséget kértél.",
+            "t": "licenc tamogatasi hozzaferes gyi lat tamogato ugyfele gyi lat tamogato ugyfele amig hozzaferes mind lat adminisztrator ezer engedelyezd segitseg kertel",
+            "h": 20
+        },
+        {
+            "id": "licenc#21",
+            "cim": "GYIK › Honnan tudom, hogy a támogató belépett?",
+            "horgony": "honnan-tudom-hogy-a-tamogato-belepett",
+            "szoveg": "A **Naplóban** minden támogatási belépés és megszűnés megjelenik.",
+            "t": "licenc tamogatasi hozzaferes gyi honnan tudom tamogato belep gyi honnan tudom tamogato belep naplo tamogatasi belepes megszunes megjeleni",
+            "h": 18
+        },
+        {
+            "id": "licenc#22",
+            "cim": "GYIK › Kell licenckulcs a saját példányhoz?",
+            "horgony": "kell-licenckulcs-a-sajat-peldanyhoz",
+            "szoveg": "Nem. Ha nem forgalmazótól vettétek a rendszert, hagyd üresen a Licenc lapot.",
+            "t": "licenc tamogatasi hozzaferes gyi licenckulcs saj peldany gyi licenckulcs saj peldany forgalmazo vet rendsz hagyd ures licenc lap",
+            "h": 18
+        },
+        {
+            "id": "licenc#23",
+            "cim": "GYIK › Kikapcsolhatom a távoli karbantartást?",
+            "horgony": "kikapcsolhatom-a-tavoli-karbantartast",
+            "szoveg": "Igen: **Beállítások › Rendszer › Licenc**, a *Távoli karbantartás* kapcsoló. Belépni a forgalmazó így sem tud, csak ha te engedélyezed a támogatási hozzáférést.",
+            "t": "licenc tamogatasi hozzaferes gyi kikapcsolhatom tavoli karbantartas gyi kikapcsolhatom tavoli karbantartas beallitas rendszer licenc tavoli karbantartas kapcsolo belepni forgalmazo igy tud engedelyezed tamogatasi hozzaferes",
+            "h": 24
+        },
+        {
+            "id": "licenc#24",
+            "cim": "GYIK › Miért szürke egy modul kapcsolója?",
+            "horgony": "miert-szurke-egy-modul-kapcsoloja",
+            "szoveg": "Mert a licenc nem tartalmazza. Az adatai megmaradnak; a bővítést a forgalmazótól kérheted.",
+            "t": "licenc tamogatasi hozzaferes gyi szurke modul kapcsolo gyi szurke modul kapcsolo licenc tartalmazza ada megmarad bovites forgalmazo kerheted",
+            "h": 18
+        },
+        {
+            "id": "licenc#25",
+            "cim": "GYIK › Hogyan jön a frissítés licenccel?",
+            "horgony": "hogyan-jon-a-frissites-licenccel",
+            "szoveg": "A központ mondja meg, van-e újabb verzió, és onnan töltődik le. A telepítést a rendszer gazdája indítja (aki a rendszert nálatok beállította).",
+            "t": "licenc tamogatasi hozzaferes gyi jon frissites licenccel gyi jon frissites licenccel kozp mond ujabb verzio onnan toltodi telepites rendszer gazda indi rendsz nal beallitotta",
+            "h": 24
+        }
+    ]
+}

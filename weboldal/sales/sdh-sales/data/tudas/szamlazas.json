@@ -1,0 +1,264 @@
+{
+    "kulcs": "szamlazas",
+    "cim": "Számlázás",
+    "csoport": "Pénz",
+    "osszefoglalo": "Számla a munkalapról a Számlázz.hu-n keresztül, és helyben készülő, számlának nem minősülő előkészítő PDF.",
+    "darabok": [
+        {
+            "id": "szamlazas#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A munkalap, a napi árukiadás és a rendelés ablakának alján két gomb tartozik a számlázáshoz. A kettő nagyon különböző dolgot csinál.\n\n| Gomb | Mit készít | Számla? |\n|---|---|---|\n| **Számlázz.hu számla** | Valódi számlát a saját Számlázz.hu-fiókodban, a Számla Agenten keresztül. | Igen. |\n| **Számla-előkészítő (PDF)** | Helyben készülő, letölthető és nyomtatható PDF-et a tételekből. | **Nem.** |\n\nA valódi számlát mindig a Számlázz.hu állítja ki; a rendszer csak összeállítja és elküldi neki az adatokat.\n\n**Számla soha nem készül magától.** A gomb csak a számla ablakát nyitja meg. Ott látod a vevőt és a tételeket, mindent átírhatsz, megnézheted az előnézetet – számla pedig kizárólag akkor készül, amikor az ablakban a **Számla kiállítása** gombra kattintasz.\n\nA számla-előkészítő az a papír, amit a kész termék mellé teszel. Rá is van írva: *„Ez a bizonylat nem minősül számlának – a számlát külön állítjuk ki.\"* Internet és Számlázz.hu-fiók nélkül is elkészül.",
+            "t": "szamlazas mire valo mire valo munkalap napi arukiadas rendeles ablaka aljan ket gomb tartozi szamlazas ketto kulonbozo dolg csinal gomb keszi szamla szamlazz hu szamla valodi szamla saj szamlazz hu fiokod szamla agen keresztul szamla elokeszito pdf hely keszulo letoltheto nyomtathato pdf et tetel valodi szamla szamlazz hu alli rendszer osszealli elkuldi neki ada szamla soha keszul maga gomb szamla abl nyi latod ugyfel tetel mind atirhatsz megnezheted elonez szamla ped kizarolag keszul ami abl szamla kiallitasa gomb kattintasz szamla elokeszito papir kesz term melle teszel irva bizonyl minosul szamla szamla kul alli intern szamlazz hu fio nelkul elkeszul",
+            "h": 99
+        },
+        {
+            "id": "szamlazas#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "A két gomb a **már elmentett, sorszámot kapott** lap ablakának alján áll, a **Fizetés** gomb mellett:\n\n- a munkalap ablakában,\n- a napi árukiadás ablakában,\n- a rendelés ablakában.\n\nÚj, még nem rögzített lapon és sorszám nélküli (például árajánlat állapotú) munkalapon a gombok nem jelennek meg.\n\nA gombok mellett kis címkéken látszik a laphoz már kiállított legutóbbi három számla száma. Egy címkére kattintva a számla PDF-je új lapon nyílik meg. Ha háromnál több számla van, a többit egy **+** jelű címke jelzi.\n\nA számlázásnak nincs saját menüpontja. A beállításai a Beállítások **Számlázás** lapfülén vannak.",
+            "t": "szamlazas talalod talalod ket gomb elment sorszam kap lap ablaka aljan all fizetes gomb mell munkalap ablaka napi arukiadas ablaka rendeles ablaka uj rogzit lap sorszam nelkuli peldaul arajanl allapotu munkalap gomb jel gomb mell kis cim latszi lap kiallit legutobbi harom szamla szama cimke kattintva szamla pdf je uj lap nyili haromnal tobb szamla tobbi jelu cimke jelzi szamlazas nincs saj menupon beallitas beallitas szamlazas lapful van",
+            "h": 68
+        },
+        {
+            "id": "szamlazas#3",
+            "cim": "Lépésről lépésre: számla kiállítása a munkalapról",
+            "horgony": "lepesrol-lepesre-szamla-kiallitasa-a-munkalaprol",
+            "szoveg": "1. Nyisd meg a munkalapot, és az ablak alján kattints a **Számlázz.hu számla** gombra. A rendszer előbb elmenti a munkalapot, hogy a számlára a friss tételek kerüljenek.\n2. Megnyílik a számla ablaka. A címsorban látod a munkalap számát és azt, melyik számlatömbbe kerül a számla.\n3. Ellenőrizd a **Vevő** dobozt: név, adószám, irányítószám, település, utca és házszám, e-mail. Az adatok az ügyfél adatlapjáról jönnek.\n4. A **Fizetés** dobozban ellenőrizd a **Fizetési mód**, a **Teljesítés** és a **Fiz. határidő** mezőt, valamint a **Fizetve** pipát.\n5. A tételek táblájában hagyd bepipálva, ami a számlára kerül. Amit nem kérsz rá, annál vedd ki a pipát.\n6. Nézd meg alul a **Végösszeg** sort, és ha kell, írd át a **Megjegyzés** mezőt.\n7. Ha biztos akarsz lenni, kattints az **Előnézet (PDF)** gombra. Ez megmutatja, hogyan fog kinézni – számla nem készül.\n8. Kattints a **Számla kiállítása** gombra.\n\nHa a számla elkészült, a munkalap ablaka újratöltődik, és a tetején megjelenik: **Elkészült a számla**, a számla számával, az összeggel és a **PDF megnyitása** hivatkozással.\n\nFontos: A kiállított számla végleges. A rendszerben nem módosítható és nem törölhető, és sztornó művelet sincs benne: a javítás a Számlázz.hu-fiókodban történik. Kiállítás előtt ezért mindig nézd át az ablakot.\n\nTipp: A számla ablakában az Enter egy szövegmezőből soha nem állít ki számlát. A névnél és az adószámnál keresést indít, máshol nem csinál semmit.",
+            "t": "szamlazas lepes lepes szamla kiallitasa munkalap lepes lepes szamla kiallitasa munkalap nyisd munkalap abl aljan kattints szamlazz hu szamla gomb rendszer elobb elmenti munkalap szamla friss tetel ar megnyili szamla ablaka cimsor latod munkalap szam szamlatomb ar szamla ellenorizd ugyfel doboz nev adoszam iranyitoszam telepules utca hazszam mail ada ugyfel adatlap jon fizetes doboz ellenorizd fizetesi mod teljesites fiz hatarido mez valamin fizetve pip tetel tabla hagyd bepipalva szamla ar kersz annal vedd pip nezd alul vegosszeg sor ird megjegyzes mez biztos akarsz lenni kattints elonez pdf gomb megmut fog kinezni szamla keszul kattints szamla kiallitasa gomb szamla elkeszul munkalap ablaka ujratoltodi tetej megjeleni elkeszul szamla szamla szama osszeggel pdf megnyitasa hivatkozassal fontos kiallit szamla vegleges rendszer modosithato torolheto sztorno muvel sincs benne javitas szamlazz hu fiokod torteni kiallitas elo ezer nezd abl tipp szamla ablaka enter szovegmezo soha alli szamla nevnel adoszamnal kereses indi mashol csinal semmi",
+            "h": 148
+        },
+        {
+            "id": "szamlazas#4",
+            "cim": "Lépésről lépésre: a vevő átírása és céges számla",
+            "horgony": "lepesrol-lepesre-a-vevo-atirasa-es-ceges-szamla",
+            "szoveg": "A számla nem csak az ügyfél nevére szólhat. A **Vevő** doboz minden mezője átírható, és ettől az ügyfél adatlapja nem változik.\n\n**Cégadatok az adószámból**\n\n1. Írd be az **Adószám** mezőbe a cég adószámát. Elég az első nyolc számjegy.\n2. Ha nyolc vagy tizenegy számjegyet írtál be, a keresés magától elindul. Egyébként kattints a **Cég keresése** gombra.\n3. A rendszer a Számlázz.hu-n keresztül lekéri a cég nevét és címét a NAV nyilvántartásából, és kitölti a mezőket. A doboz alján olvasható, honnan jött az adat.\n\nHa a lekérdezés nem sikerül, de a saját ügyfeleid között van ilyen adószámú, az ő adatai töltődnek ki. Ha az adószám vége hiányzik a válaszból, kézzel kell beírnod.\n\n**Vevő a listáról**\n\nA **Név** mező melletti **Listáról…** gomb az ügyfeleid és a korábbi számlák vevői közül enged választani. Aki egyszer céges számlát kért, az legközelebb innen egy kattintással kiválasztható.\n\n**Kézzel**\n\nEgyszerűen írd át a mezőket.\n\nAmit a rendszer a vevőnél figyel:\n\n- Valódi számlához kötelező a név, az irányítószám, a település és az utca, házszám. Amíg valamelyik hiányzik, a **Számla kiállítása** és az **Előnézet (PDF)** gomb nem kattintható.\n- Az adószámot ebben az alakban várja: `12345678-1-12` (tizenegy számjegy). Magánszemélynél a mező üresen marad.\n- Ha a számla más névre szól, mint a munkalap ügyfele, az ügyfél telefonszáma és postázási címe nem kerül rá.\n- Ha az ügyfélnek eddig nem volt e-mail-címe, és a saját nevére szóló számlánál most beírod, a cím az adatlapjára is elmentődik.",
+            "t": "szamlazas lepes lepes ugyfel atirasa ceges szamla lepes lepes ugyfel atirasa ceges szamla szamla ugyfel neve szolh ugyfel doboz mezo atirhato ettol ugyfel adatlap valtozi cegad adoszam ird adoszam mezo ceg adoszam eleg elso nyolc szamjegy nyolc tizenegy szamjegy irtal kereses maga elindul egyebk kattints ceg keresese gomb rendszer szamlazz hu keresztul lekeri ceg nev cim nav nyilvantartasa kitolti mez doboz aljan olvashato honnan jot ada lekerdezes sikerul saj ugyfeleid koz adoszamu ada toltod adoszam vege hianyzi valasz kezzel beirnod ugyfel lista nev mezo melletti lista gomb ugyfeleid korabbi szamla vevoi kozul enged valasztani egyszer ceges szamla ker legkozelebb inn kattintassal kivalaszthato kezzel egyszeru ird mez rendszer vevonel figyel valodi szamla kotelezo nev iranyitoszam telepules utca hazszam amig valamelyi hianyzi szamla kiallitasa elonez pdf gomb kattinthato adoszam ebb ala var 12345678 12 tizenegy szamjegy maganszemelynel mezo ures marad szamla mas nev szol munkalap ugyfele ugyfel telefonszama postazasi cime ar ugyfel edd mail cime saj neve szolo szamlanal beirod cim adatlap elmentodi",
+            "h": 161
+        },
+        {
+            "id": "szamlazas#5",
+            "cim": "Lépésről lépésre: tételek hozzáadása, kihagyása és megjegyzése",
+            "horgony": "lepesrol-lepesre-tetelek-hozzaadasa-kihagyasa-es-megjegyzese",
+            "szoveg": "A számla ablakában a munkalap minden számlázható tétele megjelenik: elöl a bevizsgálási díj, utána a szolgáltatások, végül a termékek. Minden tétel mellett címke mutatja a fajtáját.\n\n**Tétel kihagyása.** Vedd ki a pipát a sor elejéről. A tétel a munkalapon megmarad, csak erre a számlára nem kerül rá.\n\n**Új tétel felvétele.** A tábla alján ezek a gombok állnak:\n\n- **Termék…** – a terméklistából keresel és választasz.\n- **Szolgáltatás…** – a szolgáltatások közül választasz.\n- **Bevizsgálási díj…** – a díjlistából (a Szolgáltatások között bevizsgálási díjként jelöltek közül) választasz; a sor a **készülék nevével** kerül a számlára, a Számlázás beállításaiban megadott minta szerint (pl. „Samsung SM-A175B mobiltelefon bevizsgálási díj”), a díj árával. Több eszközös lapon az ablak tetején választott eszközé, ennek híján a fő eszközé. Ha nincs a listában a kellő díj, a **kézzel** gombbal üres díjsort kapsz a készülék nevével, és az árat te írod be.\n- **Kézi tétel** – üres sort kapsz, a megnevezést és az árat te írod be.\n- **★ Gyakori tételek…** – a leggyakoribb tételek listája.\n\nAz új sorban megadható a megnevezés, a mennyiség, a mennyiségi egység, a **bruttó** egységár és az áfakulcs; a nettót a rendszer számolja, és a bruttó ár mellett, ugyanabban a sorban mutatja („nettó …”). A tételsor minden cellája egy vonalban áll. A megnevezés melletti kis címkére kattintva a tétel fajtája váltható (szolgáltatás vagy termék).\n\n**Új tétel törlése.** Az itt felvett sor elején **×** gomb áll: ezzel törölheted. A munkalapról érkezett tételt nem törölni kell, hanem a pipát kivenni.",
+            "t": "szamlazas lepes lepes tetel hozzaadasa kihagyasa megjegyzese lepes lepes tetel hozzaadasa kihagyasa megjegyzese szamla ablaka munkalap szamlazhato tetele megjeleni elol bevizsgalasi dij utana szolgaltatas vegul term tetel mell cimke mut fajtaj tetel kihagyasa vedd pip sor ele tetel munkalap megmarad szamla ar uj tetel felvetele tabla aljan gomb all term termeklista keresel valasztasz szolgaltatas szolgaltatas kozul valasztasz bevizsgalasi dij dijlista szolgaltatas koz bevizsgalasi dijk jelol kozul valasztasz sor eszkoz neve ar szamla szamlazas beallitas megad minta szerin pl samsung sm a175b mobiltelef bevizsgalasi dij dij ar tobb eszkozos lap abl tetej valaszt eszkoze enn hijan fo eszkoze nincs lista kello dij kezzel gombbal ures dijsor kapsz eszkoz neve ar irod kezi tetel ures sor kapsz megnevezes ar irod gyakori tetel leggyakoribb tetel lista uj sor megadhato megnevezes mennyiseg mennyisegi egyseg brutto egysegar afakulcs net rendszer szamol brutto ar mell ugyanab sor mut netto tetelsor cella vonal all megnevezes melletti kis cimke kattintva tetel fajta valthato szolgaltatas term uj tetel torlese felv sor elej gomb all ezzel torolheted munkalap erkez tetel torolni hanem pip kivenni",
+            "h": 174
+        },
+        {
+            "id": "szamlazas#6",
+            "cim": "Lépésről lépésre: tételek hozzáadása, kihagyása és megjegyzése",
+            "horgony": "lepesrol-lepesre-tetelek-hozzaadasa-kihagyasa-es-megjegyzese",
+            "szoveg": "**Megjegyzés tételenként.** A megnevezés sorában, a fajta (Szolgáltatás / Termék) mellett álló **+ Megjegyzés** pill egy mezőt nyit a tétel alatt – a kézi tételnél is a név mellett van, nem alatta, így nem tolja el a sort. Amit ide írsz (például IMEI, garancia, gyári szám), az a számlán a tétel alatt jelenik meg.\n\nFontos: A számla ablakában felvett új tétel a számla kiállításakor a munkalapra is rákerül, így a munkalap végösszege követi a számlát. Ha csak előnézetet kérsz, vagy bezárod az ablakot, a munkalap nem változik.\n\nA már kiszámlázott tétel megjegyzi a számla számát. Ha később újabb számlát készítesz ugyanarról a lapról, ez a tétel halványan látszik, a számla számával, és alapból nincs bepipálva.",
+            "t": "szamlazas lepes lepes tetel hozzaadasa kihagyasa megjegyzese lepes lepes tetel hozzaadasa kihagyasa megjegyzese megjegyzes tetelenk megnevezes sora fajta szolgaltatas term mell allo megjegyzes pill mez nyi tetel ala kezi tetelnel nev mell alatta igy tol sor ide irsz peldaul imei garancia gyari szam szamlan tetel ala jeleni fontos szamla ablaka felv uj tetel szamla kiallitasa munkalap rakerul igy munkalap vegosszege koveti szamla elonez kersz bezarod abl munkalap valtozi kiszamlaz tetel megjegyzi szamla szam kesobb ujabb szamla keszitesz ugyanar lap tetel halvanyan latszi szamla szama alap nincs bepipalva",
+            "h": 87
+        },
+        {
+            "id": "szamlazas#7",
+            "cim": "A számla tételei magától vagy kézzel (fogaskerék)",
+            "horgony": "a-szamla-tetelei-magatol-vagy-kezzel-fogaskerek",
+            "szoveg": "A fogaskerékkel a munkalap tételei el is tüntethetők az ablakból (**A munkalap tételei a listában** ki): ekkor csak a kézzel felvett tétel kerül a számlára. A **★ Gyakori tételek…** gomb a Leggyakoribb Számla tételek listáját nyitja (Telefon / TV / Számítógép szerviz szolgáltatás, Számítógép alaplapi javítás…): kattintásra kézi tételként felkerül, és ugyanott szerkeszthető. A Kézi tétel megnevezésénél gépelés közben a korábban beírt tételnevek is felkínálkoznak. Részletesen: Űrlapok beállítása.\n\nA számla ablakának jobb felső sarkában álló **fogaskerékkel** (adminisztrátor) állítod, hogy a munkalap tételei **magától kipipálva** nyíljanak-e. Kikapcsolva egy tétel sincs kipipálva: te pipálod be, ami kell, vagy **Kézi tétel**lel írod – így a kollégák nem tévesztenek a pipálgatásnál. Ugyanitt kapcsolható a tétel-megjegyzés (eszköz neve, IMEI) és a **Megjegyzés** mező automatikus kitöltése. A Számlázz.hu számla és a számla-előkészítő **külön** állítható, és a beállítás frissítés után is megmarad.\n\nA tétellista fölötti **A munkalap tételei a számlán** kapcsoló egy kattintással mindet be- vagy kipipálja – csak abban az ablakban, az alapállás marad. Részletesen: Űrlapok beállítása.",
+            "t": "szamlazas szamla tetel maga kezzel fogasker szamla tetel maga kezzel fogasker fogasker munkalap tetel tunteth abl munkalap tetel lista ekkor kezzel felv tetel ar szamla gyakori tetel gomb leggyakoribb szamla tetel listaj nyi telef tv szamitogep szerviz szolgaltatas szamitogep alaplapi javitas kattintas kezi tetelk felkerul ugyan szerkesztheto kezi tetel megnevezesenel gepeles koz korab beir tetelnev felkinalkoz reszletes urlap beallitasa szamla ablaka jobb felso sarka allo fogasker adminisztrator allitod munkalap tetel maga kipipalva nyil kikapcsolva tetel sincs kipipalva pipalod kezi tetel lel irod igy kolleg teveszte pipalgatasnal ugyani kapcsolhato tetel megjegyzes eszkoz neve imei megjegyzes mezo automatikus kitoltese szamlazz hu szamla szamla elokeszito kul allithato beallitas frissites utan megmarad tetellista folotti munkalap tetel szamlan kapcsolo kattintassal mind kipipal abban abl alapallas marad reszletes urlap beallitasa",
+            "h": 124
+        },
+        {
+            "id": "szamlazas#8",
+            "cim": "Lépésről lépésre: bevizsgálási díj és több eszköz a számlán",
+            "horgony": "lepesrol-lepesre-bevizsgalasi-dij-es-tobb-eszkoz-a-szamlan",
+            "szoveg": "**Bevizsgálási díj külön tételként**\n\nHa a munkalapon be van pipálva a **Bevizsgálási díj**, az előleg összege külön tételsorként áll a munkalapon és a számlán is. A neve a készülék típusából áll össze, például: „Minta X1 mobiltelefon bevizsgálási díj\".\n\n- Átvételkor, amíg nincs javítás, a díj sora maga a számlázható tétel: erről kap számlát az ügyfél (eszközönként külön is).\n- Ha az ügyfél kéri a javítást, a díj levonódik. A **záró számlán** ilyenkor sem a díj, sem a levonás nem szerepel – a díjat már kifizette, és számlát is kapott róla. A számlára csak a javítás tétele kerül, a saját nevén, a még fizetendő összeggel. Például 10 000 Ft-os akkumulátor és 8 000 Ft díj esetén a záró számlán: „Huawei P30 Lite akkumulátor – 2 000 Ft\". Ha az eszköznek több tétele van, a díj a legnagyobb értékűből vonódik le; ami így 0 Ft-ra fogy, kimarad. A munkalapon a tételek eredeti ára megmarad.\n- Ha nem kéri a javítást, a díj munkadíjként megmarad.\n\nÍgy a bevizsgálási díj az átvételkor, a javítás pedig a végén külön számlázható, és a két számla együtt adja ki a teljes összeget. A díj és a levonás megnevezése a Beállítások **Számlázás** lapfülén írható át.\n\n**Eszközönkénti számla**\n\nHa a munkalapon több eszköz van, a számla ablakában megjelenik a **Mi kerül erre a számlára** sor:\n\n- **Minden eszköz együtt** – egy közös számla a lap minden eszközéről.\n- Egy-egy eszköz neve – csak annak az eszköznek a tételei maradnak bepipálva.\n\nEszközt választva a megjegyzésbe is csak az az egy eszköz kerül. A pipák utána kézzel is átállíthatók: a számlára az kerül, ami be van pipálva. Több eszköznél a tételek megjegyzése előre ki van töltve azzal, melyik készüléké (név és IMEI vagy gyári szám); ez átírható vagy kitörölhető.",
+            "t": "szamlazas lepes lepes bevizsgalasi dij tobb eszkoz szamlan lepes lepes bevizsgalasi dij tobb eszkoz szamlan bevizsgalasi dij kul tetelk munkalap pipalva bevizsgalasi dij eloleg osszege kul tetelsork all munkalap szamlan neve eszkoz tipusa all ossze peldaul minta x1 mobiltelef bevizsgalasi dij atvetel amig nincs javitas dij sora maga szamlazhato tetel errol kap szamla ugyfel eszkozonk kul ugyfel keri javitas dij levonodi zaro szamlan ily dij levonas szerepel dij kifizette szamla kap rola szamla javitas tetele ar saj nev fizetendo osszeggel peldaul 10 000 ft os akkumulator 000 ft dij ese zaro szamlan huaw p30 lite akkumulator 000 ft eszkoz tobb tetele dij legnagyobb erteku vonodi igy ft fogy kimarad munkalap tetel eredeti ar megmarad keri javitas dij munkadijk megmarad igy bevizsgalasi dij atvetel javitas ped veg kul szamlazhato ket szamla egyu adja teljes osszeg dij levonas megnevezese beallitas szamlazas lapful irhato eszkozonkenti szamla munkalap tobb eszkoz szamla ablaka megjeleni ar szamla sor eszkoz egyu kozos szamla lap eszkoze eszkoz neve ann eszkoz tetel marad bepipalva eszkoz valasztva megjegyzes eszkoz ar pip utana kezzel atallith szamla ar pipalva tobb eszkoznel tetel megjegyzese elo toltve azzal keszuleke nev imei gyari szam atirhato kitorolheto",
+            "h": 191
+        },
+        {
+            "id": "szamlazas#9",
+            "cim": "Lépésről lépésre: adattörlő kód, e-mail és a kész számla PDF-je",
+            "horgony": "lepesrol-lepesre-adattorlo-kod-e-mail-es-a-kesz-szamla-pdf-je",
+            "szoveg": "**Adattörlő kód.** Ha a Beállításokban be van kapcsolva, a tételek táblájában megjelenik az **Adattörlő kód** oszlop, soronként egy kapcsolóval. Amelyik tételnél bekapcsolod, ahhoz a Számlázz.hu rendel kódot – darabonként egyet. Ez csak akkor működik, ha a Számlázz.hu-fiókodban is be van kapcsolva. A számla-előkészítőnél ez az oszlop nincs.\n\n**E-mail az ügyfélnek.** Ha a **Fizetés** dobozban bepipálod, a Számlázz.hu elküldi a számlát a vevő e-mail-címére. Ha nincs megadva cím, a rendszer a **Vevő** dobozban kéri, és addig nem enged kiállítani.\n\n**A kész számla PDF-je.** A kiállított számla PDF-jét a rendszer eltárolja. Megnyithatod:\n\n- kiállítás után a munkalap tetején megjelenő **PDF megnyitása** hivatkozással;\n- később a munkalap alján, a gombok melletti számlaszám-címkére kattintva;\n- a számla ablakában az **Ehhez a munkalaphoz már készült számla** sorból.\n\nA PDF új lapon nyílik meg, onnan nyomtatható és menthető.\n\n**Pénztár.** A számla kiállítása után a munkalap pénztártételei maguktól megkapják a számla számát. Ha a pénz még nincs a pénztárban, a rendszer – a pénztár beállításától függően – megkérdezi, bekerüljön-e. Erről a Házipénztár fejezet ír bővebben.",
+            "t": "szamlazas lepes lepes adattorlo kod mail kesz szamla pdf je lepes lepes adattorlo kod mail kesz szamla pdf je adattorlo kod beallitas kapcsolva tetel tabla megjeleni adattorlo kod oszlop soronk kapcsolo amelyi tetelnel bekapcsolod ahhoz szamlazz hu rendel kod darabonk egy mukodi szamlazz hu fiokod kapcsolva szamla elokeszitonel oszlop nincs mail ugyfel fizetes doboz bepipalod szamlazz hu elkuldi szamla ugyfel mail cime nincs megadva cim rendszer ugyfel doboz keri add enged kiallitani kesz szamla pdf je kiallit szamla pdf jet rendszer elta megnyithatod kiallitas utan munkalap tetej megjeleno pdf megnyitasa hivatkozassal kesobb munkalap aljan gomb melletti szamlaszam cimke kattintva szamla ablaka ehhez munkalap keszul szamla sor pdf uj lap nyili onnan nyomtathato mentheto penztar szamla kiallitasa utan munkalap penztartetel mag megkapj szamla szam penz nincs penztar rendszer penztar beallitasa fuggo megkerdezi bekerulj errol hazipenztar fejez ir boveb",
+            "h": 137
+        },
+        {
+            "id": "szamlazas#10",
+            "cim": "Lépésről lépésre: számla-előkészítő PDF készítése",
+            "horgony": "lepesrol-lepesre-szamla-elokeszito-pdf-keszitese",
+            "szoveg": "1. A lap ablakának alján kattints a **Számla-előkészítő (PDF)** gombra. (Ha a Beállításokban más címet választottatok, a gomb felirata az lesz: **Díjbekérő**, **Elszámolás** vagy **Átadási bizonylat**.)\n2. Megnyílik ugyanaz az ablak, mint a számlánál, de a címsorban a nyomtatvány saját sorszáma áll.\n3. Ellenőrizd a vevőt és a tételeket. Itt csak a vevő neve kötelező; a cím hiányozhat.\n4. Kattints a **PDF megnyitása** gombra. A PDF új lapon nyílik meg, a gomb mellett pedig megjelenik egy **Letöltés** hivatkozás.\n\nMiben más, mint a számla:\n\n- **Nem számla.** A PDF-en ez kétszer is szerepel: a végösszeg alatt és a láblécben.\n- A sorszáma saját előtagot kap, előtag–év–munkalapszám alakban. Több eszközös lapon az egy eszközről készült nyomtatvány sorszáma az eszköz sorszámával végződik.\n- Helyben készül, a Számlázz.hu-hoz nem megy semmi. Internet nélkül is működik.\n- A **Fizetve** és az **E-mail az ügyfélnek** pipa itt nincs.\n- Az ablakban felvett új tétel csak a nyomtatványra kerül. Ha a munkalapon is szerepelnie kell, ott vedd fel a **Termékek** vagy a **Szolgáltatások** lapfülön.\n- A rendszer nem tárolja el: bármikor újra elkészíthető.\n\nA PDF tetején a logó, a kiállító és a bank adatai állnak, alatta a vevő, a fizetési adatok, a tételek táblája és a fizetendő összeg, egész forintra.",
+            "t": "szamlazas lepes lepes szamla elokeszito pdf keszitese lepes lepes szamla elokeszito pdf keszitese lap ablaka aljan kattints szamla elokeszito pdf gomb beallitas mas cim valasztott gomb felirata dijbekero elszamolas atadasi bizonyl megnyili ugyanaz abl szamlanal cimsor nyomtatvany saj sorszama all ellenorizd ugyfel tetel ugyfel neve kotelezo cim hianyozh kattints pdf megnyitasa gomb pdf uj lap nyili gomb mell ped megjeleni letoltes hivatkozas mib mas szamla szamla pdf ketszer szerepel vegosszeg ala lablec sorszama saj elotag kap elotag ev munkalapszam ala tobb eszkozos lap eszkoz keszul nyomtatvany sorszama eszkoz sorszama vegzodi hely keszul szamlazz hu hoz megy semmi intern nelkul mukodi fizetve mail ugyfel pipa nincs abl felv uj tetel nyomtatvany ar munkalap szerepelnie vedd term szolgaltatas lapful rendszer tarol barmi ujra elkeszitheto pdf tetej logo kiallito ban ada all alatta ugyfel fizetesi ada tetel tabla fizetendo osszeg egesz forin",
+            "h": 139
+        },
+        {
+            "id": "szamlazas#11",
+            "cim": "A Beállítások „Számlázás\" lapfüle",
+            "horgony": "a-beallitasok-szamlazas-lapfule",
+            "szoveg": "A Beállítások **Pénz és eladás** csoportjában találod a **Számlázás** lapfület. A Beállításokat csak adminisztrátor nyithatja meg.\n\n**A Számlázz.hu-kapcsolat**\n\n- **Számla Agent kulcs** – a Számlázz.hu-fiókod kulcsa; a fiók beállításai között, a Számla Agent kulcsoknál találod. A beírt kulcs mentés után nem jelenik meg újra a mezőben, és az adatbázisban (így a mentésfájlban is) **titkosítva** áll. Csak akkor írj bele, ha cserélni akarod.\n- **Kapcsolat ellenőrzése** – mentett kulcsnál megnézi, elfogadja-e a Számlázz.hu a kulcsot. Számla nem készül.\n- **Kulcs törlése** – bepipálva és mentve a kulcs törlődik.\n- **E-számla (elektronikus)** – kikapcsolva papír alapú, nyomtatandó számla készül.\n- **Előtag – „Számlázz.hu számla\" gomb** – melyik számlatömbbe kerüljön a számla. Üresen a fiók alapértelmezett számlatömbje. Csak olyan előtag használható, amely a Számlázz.hu-n már fel van véve.\n- **Alap fizetési mód** – akkor érvényes, ha a munkalapon nincs megadva fizetési mód.\n- **Fizetési határidő (nap)** – átutalásnál ennyi nappal a számla napja utánra kerül a határidő. Készpénznél és kártyánál a határidő a számla napja.\n- Jelölő arról, hogy a számla ablakában alapból be legyen-e pipálva az **E-mail az ügyfélnek** – ha bekapcsolod, a pipa előre be lesz jelölve, amennyiben a vevőnek van e-mail-címe.\n- **Adattörlő kód használata** – ezzel jelenik meg a számla ablakában a tételenkénti kapcsoló.\n- **Megjegyzés a számlán** – a számla megjegyzésének alapszövege. Helyőrzők: `{munkalap}`, `{eszkoz}`, `{imei}`. A számla ablakában átírható.\n- **A bevizsgálási díj megnevezése** – helyőrzők: `{eszkoz}` (gyártó és típus), `{fajta}` (például mobiltelefon), `{dij}` (a díjlistából választott díj neve).\n- **A díj levonásának (mínusz tétel) megnevezése** – ugyanazokkal a helyőrzőkkel.",
+            "t": "szamlazas beallitas szamlazas lapfule beallitas szamlazas lapfule beallitas penz eladas csoport talalod szamlazas lapful beallitas adminisztrator nyith szamlazz hu kapcsol szamla agen kulcs szamlazz hu fiokod kulcsa fio beallitas koz szamla agen kulcsoknal talalod beir kulcs mentes utan jeleni ujra mezo adatbazis igy mentesfajl titkositva all irj bele cserelni akarod kapcsol ellenorzese ment kulcsnal megnezi elfogad szamlazz hu kulcs szamla keszul kulcs torlese bepipalva mentve kulcs torlodi szamla elektronikus kikapcsolva papir alapu nyomtatando szamla keszul elotag szamlazz hu szamla gomb szamlatomb kerulj szamla ures fio alapertelmez szamlatomb elotag hasznalhato amely szamlazz hu veve alap fizetesi mod ervenyes munkalap nincs megadva fizetesi mod fizetesi hatarido nap atutalasnal ennyi nappal szamla nap utan ar hatarido keszpenznel kartyanal hatarido szamla nap jelolo arrol szamla ablaka alap legy pipalva mail ugyfel bekapcsolod pipa elo jelolve amennyi ugyfel mail cime adattorlo kod hasznalata ezzel jeleni szamla ablaka tetelenkenti kapcsolo megjegyzes szamlan szamla megjegyzese alapszovege helyorz munkalap eszkoz imei szamla ablaka atirhato bevizsgalasi dij megnevezese helyorz eszkoz gyarto tipus fajta peldaul mobiltelef dij dijlista valaszt dij neve dij levonasa minusz tetel megnevezese ugyanaz helyorzokkel",
+            "h": 178
+        },
+        {
+            "id": "szamlazas#12",
+            "cim": "A Beállítások „Számlázás\" lapfüle",
+            "horgony": "a-beallitasok-szamlazas-lapfule",
+            "szoveg": "**Helyi nyomtatvány (API nélkül)**\n\n- **A nyomtatvány címe** – **Számla-előkészítő**, **Díjbekérő**, **Elszámolás** vagy **Átadási bizonylat**. Ez lesz a gomb felirata is a munkalapon. „Számla\" szándékosan nincs a választék között.\n- **Sorszám-előtag** – a nyomtatvány sorszámának eleje. Nem egyezhet a számlatömb előtagjával, hogy a nyomtatvány ne legyen összetéveszthető a számlákkal. Ha mégis egyezne, a rendszer mentéskor módosítja.\n- **Kiállító neve**, **Adószám**, **Cím – irányítószám, település**, **Cím – utca, házszám** – a nyomtatvány fejlécébe kerülnek.\n- **Bank neve**, **Bankszámlaszám** – szintén a fejlécbe.\n- **Levelezési cím (lábléc)**, **Telefon (lábléc)** – a nyomtatvány aljára.\n- **Logó a nyomtatványon** – üresen a rendszerrel érkező logó. Saját logóhoz a **Feltöltés…** gombbal válassz képet (PNG vagy JPG).\n\nFontos: A kiállító itt megadott adatai csak a helyi nyomtatványra kerülnek. A valódi számlán a kiállító adatai a Számlázz.hu-fiókodból jönnek.",
+            "t": "szamlazas beallitas szamlazas lapfule beallitas szamlazas lapfule helyi nyomtatvany api nelkul nyomtatvany cime szamla elokeszito dijbekero elszamolas atadasi bizonyl gomb felirata munkalap szamla szandekosan nincs valasz koz sorszam elotag nyomtatvany sorszama ele egyezh szamlatomb elotag nyomtatvany ne legy osszetevesztheto szaml megis egyezne rendszer mentes modosi kiallito neve adoszam cim iranyitoszam telepules cim utca hazszam nyomtatvany fejlece ar ban neve bankszamlaszam szin fejlec levelezesi cim lablec telef lablec nyomtatvany alja logo nyomtatvany ures rendszerrel erkezo logo saj logo feltoltes gombbal valassz kep png jpg fontos kiallito megad ada helyi nyomtatvany ar valodi szamlan kiallito ada szamlazz hu fiokod jon",
+            "h": 98
+        },
+        {
+            "id": "szamlazas#13",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Számla csak gombnyomásra készül.** A lap mentése, a fizetés rögzítése vagy a lezárás soha nem állít ki számlát.\n- **Számla csak sorszámot kapott laphoz készíthető.**\n- **A számla gomb előbb elmenti a lapot.** Ha a mentés nem sikerül, a számla ablaka nem nyílik meg.\n- **Az előnézet nem számla.** Az előnézethez nem készül számlaszám, és e-mail sem megy ki.\n- **Legalább egy tétel kell.** Tétel nélkül sem számla, sem nyomtatvány nem készül.\n- **A munkalapon az ár bruttó, a számla nettó egységárból számol.** A nettó egységár két tizedesre kerekül, ezért a számla bruttója néhány fillérrel eltérhet a munkalapétól.\n- **A kedvezményes tétel** megnevezése végére a számlán odakerül a kedvezmény mértéke.\n- **A fizetési határidő nem lehet korábbi a mai napnál.** Ha korábbit adsz meg, a mai nap kerül a számlára. A számla kelte mindig a mai nap.\n- **A számla-előkészítő nem számla,** és a sorszáma nem egyezhet a számlák előtagjával.",
+            "t": "szamlazas szabaly ami rendszer betar szabaly ami rendszer betar szamla gombnyomas keszul lap mentese fizetes rogzitese lezaras soha alli szamla szamla sorszam kap lap keszitheto szamla gomb elobb elmenti lap mentes sikerul szamla ablaka nyili elonez szamla elonez keszul szamlaszam mail megy legalabb tetel tetel nelkul szamla nyomtatvany keszul munkalap ar brutto szamla netto egysegar szamol netto egysegar ket tizedes kerekul ezer szamla brutto nehany fillerrel elterh munkalape kedvezmenyes tetel megnevezese vege szamlan odakerul kedvezmeny merteke fizetesi hatarido korabbi mai napnal korabbi adsz mai nap ar szamla szamla kelte mai nap szamla elokeszito szamla sorszama egyezh szamla elotag",
+            "h": 98
+        },
+        {
+            "id": "szamlazas#14",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„Még nincs megadva a Számla Agent kulcs.\"** A Beállítások **Számlázás** lapfülén add meg a kulcsot. Addig a **Számla kiállítása** és az **Előnézet (PDF)** gomb nem kattintható. A számla-előkészítő kulcs nélkül is működik.\n- **A Számlázz.hu nem fogadta el a kulcsot.** Ellenőrizd a kulcsot a Beállításokban, és használd a **Kapcsolat ellenőrzése** gombot.\n- **Az előtag nincs felvéve.** A beállított előtagot előbb a Számlázz.hu-fiókodban kell felvenni.\n- **Nincs engedélyezve az e-számla a fiókban.** Kapcsold ki az **E-számla** jelölőt a Beállításokban, vagy engedélyezd a Számlázz.hu-n.\n- **A Számlázz.hu nem érhető el.** Ilyenkor számla nem készült. Próbáld újra később; addig a számla-előkészítő használható.\n- **Nem jött vissza számlaszám.** Mielőtt újra próbálod, nézd meg a Számlázz.hu-fiókodban, elkészült-e a számla.\n- **A számla PDF-je nem nyílik meg.** A rendszer megpróbálja újra letölteni. Ha ez sem sikerül, a számlát a Számlázz.hu-fiókodban a számlaszám alapján megtalálod.\n- **Nem látom a számla gombokat.** A lap még nincs elmentve, vagy nincs sorszáma.\n- **A hibaüzenet végén hibakód áll.** Ez a Számlázz.hu saját kódja; a rendszer a szöveget is kiírja mellé.",
+            "t": "szamlazas megy megy nincs megadva szamla agen kulcs beallitas szamlazas lapful add kulcs add szamla kiallitasa elonez pdf gomb kattinthato szamla elokeszito kulcs nelkul mukodi szamlazz hu fogadta kulcs ellenorizd kulcs beallitas hasznald kapcsol ellenorzese gomb elotag nincs felveve beallit elotag elobb szamlazz hu fiokod felvenni nincs engedelyezve szamla fio kapcsold szamla jelol beallitas engedelyezd szamlazz hu szamlazz hu erheto ily szamla keszul probald ujra kesobb add szamla elokeszito hasznalhato jot vissza szamlaszam miel ujra probalod nezd szamlazz hu fiokod elkeszul szamla szamla pdf je nyili rendszer megprobal ujra letolteni sikerul szamla szamlazz hu fiokod szamlaszam alapjan megtalalod latom szamla gomb lap nincs elmentve nincs sorszama hibauz veg hibakod all szamlazz hu saj kod rendszer szoveg kiir melle",
+            "h": 118
+        },
+        {
+            "id": "szamlazas#15",
+            "cim": "GYIK › Készülhet számla úgy, hogy nem akartam?",
+            "horgony": "keszulhet-szamla-ugy-hogy-nem-akartam",
+            "szoveg": "Nem. A munkalapon lévő gomb csak a számla ablakát nyitja meg. Számla kizárólag az ablak **Számla kiállítása** gombjára készül. A mentés, a fizetés és a lezárás nem számláz.",
+            "t": "szamlazas gyi keszulh szamla ugy akartam gyi keszulh szamla ugy akartam munkalap levo gomb szamla abl nyi szamla kizarolag abl szamla kiallitasa gomb keszul mentes fizetes lezaras szamlaz",
+            "h": 28
+        },
+        {
+            "id": "szamlazas#16",
+            "cim": "GYIK › Mi a különbség a „Számlázz.hu számla\" és a „Számla-előkészítő (PDF)\" között?",
+            "horgony": "mi-a-kulonbseg-a-szamlazz-hu-szamla-es-a-szamla-elokeszito-pdf-kozott",
+            "szoveg": "Az első valódi számlát állít ki a Számlázz.hu-fiókodban. A második helyben készít egy nyomtatható PDF-et, amely nem számla – ez rá is van írva.",
+            "t": "szamlazas gyi kulonbseg szamlazz hu szamla szamla elokeszito pdf koz gyi kulonbseg szamlazz hu szamla szamla elokeszito pdf koz elso valodi szamla alli szamlazz hu fiokod masodi hely keszi nyomtathato pdf et amely szamla irva",
+            "h": 35
+        },
+        {
+            "id": "szamlazas#17",
+            "cim": "GYIK › Hogyan nézem meg a számlát, mielőtt kiállítom?",
+            "horgony": "hogyan-nezem-meg-a-szamlat-mielott-kiallitom",
+            "szoveg": "A számla ablakában kattints az **Előnézet (PDF)** gombra. A PDF új lapon nyílik meg. Ettől számla nem készül.",
+            "t": "szamlazas gyi nezem szamla miel kiallitom gyi nezem szamla miel kiallitom szamla ablaka kattints elonez pdf gomb pdf uj lap nyili ettol szamla keszul",
+            "h": 24
+        },
+        {
+            "id": "szamlazas#18",
+            "cim": "GYIK › Hogyan állítok ki céges számlát magánszemély ügyfélnek?",
+            "horgony": "hogyan-allitok-ki-ceges-szamlat-maganszemely-ugyfelnek",
+            "szoveg": "A számla ablakában írd be a cég adószámát az **Adószám** mezőbe: a név és a cím kitöltődik. Az ügyfél adatlapja ettől nem változik, csak ez a számla szól a cég nevére.",
+            "t": "szamlazas gyi alli ceges szamla maganszemely ugyfel gyi alli ceges szamla maganszemely ugyfel szamla ablaka ird ceg adoszam adoszam mezo nev cim kitoltodi ugyfel adatlap ettol valtozi szamla szol ceg neve",
+            "h": 31
+        },
+        {
+            "id": "szamlazas#19",
+            "cim": "GYIK › Miért nem kattintható a „Számla kiállítása\" gomb?",
+            "horgony": "miert-nem-kattinthato-a-szamla-kiallitasa-gomb",
+            "szoveg": "Három oka lehet: nincs megadva a Számla Agent kulcs, a vevő kötelező adatai hiányosak (név, irányítószám, település, utca és házszám), vagy egyetlen tétel sincs bepipálva.",
+            "t": "szamlazas gyi kattinthato szamla kiallitasa gomb gyi kattinthato szamla kiallitasa gomb harom oka nincs megadva szamla agen kulcs ugyfel kotelezo ada hianyos nev iranyitoszam telepules utca hazszam egyetl tetel sincs bepipalva",
+            "h": 31
+        },
+        {
+            "id": "szamlazas#20",
+            "cim": "GYIK › Hogyan hagyok ki egy tételt a számláról?",
+            "horgony": "hogyan-hagyok-ki-egy-tetelt-a-szamlarol",
+            "szoveg": "Vedd ki a pipát a tétel sorának elejéről. A tétel a munkalapon megmarad.",
+            "t": "szamlazas gyi hagy tetel szamla gyi hagy tetel szamla vedd pip tetel sora ele tetel munkalap megmarad",
+            "h": 17
+        },
+        {
+            "id": "szamlazas#21",
+            "cim": "GYIK › Felvehetek olyan tételt a számlára, ami nincs a munkalapon?",
+            "horgony": "felvehetek-olyan-tetelt-a-szamlara-ami-nincs-a-munkalapon",
+            "szoveg": "Igen, a **Termék…**, a **Szolgáltatás…** vagy a **Kézi tétel** gombbal. A számla kiállításakor ez a tétel a munkalapra is rákerül.",
+            "t": "szamlazas gyi felveh tetel szamla nincs munkalap gyi felveh tetel szamla nincs munkalap term szolgaltatas kezi tetel gombbal szamla kiallitasa tetel munkalap rakerul",
+            "h": 23
+        },
+        {
+            "id": "szamlazas#22",
+            "cim": "GYIK › Hová írjam az IMEI-t vagy a garanciát a számlán?",
+            "horgony": "hova-irjam-az-imei-t-vagy-a-garanciat-a-szamlan",
+            "szoveg": "A tétel megnevezése melletti **+ Megjegyzés** pillel nyiss mezőt, és írd oda. A számlán a tétel alatt jelenik meg. Az egész számlára vonatkozó szöveget az ablak alján a **Megjegyzés** mezőbe írd.",
+            "t": "szamlazas gyi hova irjam imei garanci szamlan gyi hova irjam imei garanci szamlan tetel megnevezese melletti megjegyzes pillel nyiss mez ird oda szamlan tetel ala jeleni egesz szamla vonatkozo szoveg abl aljan megjegyzes mezo ird",
+            "h": 35
+        },
+        {
+            "id": "szamlazas#23",
+            "cim": "GYIK › Hogyan kerül a bevizsgálási díj a számlára?",
+            "horgony": "hogyan-kerul-a-bevizsgalasi-dij-a-szamlara",
+            "szoveg": "Átvételkor a díj külön tételként szerepel, a készülék típusával a nevében – erről kap számlát az ügyfél. Javítás esetén a záró számlán már nem szerepel sem a díj, sem a levonása: csak a javítás tétele, a saját nevén, a még fizetendő összeggel (a teljes ár mínusz a már kifizetett díj).",
+            "t": "szamlazas gyi ar bevizsgalasi dij szamla gyi ar bevizsgalasi dij szamla atvetel dij kul tetelk szerepel eszkoz tipusa neve errol kap szamla ugyfel javitas ese zaro szamlan szerepel dij levonasa javitas tetele saj nev fizetendo osszeggel teljes ar minusz kifizet dij",
+            "h": 41
+        },
+        {
+            "id": "szamlazas#24",
+            "cim": "GYIK › Számlázhatom külön a bevizsgálási díjat és később a javítást?",
+            "horgony": "szamlazhatom-kulon-a-bevizsgalasi-dijat-es-kesobb-a-javitast",
+            "szoveg": "Igen, és ez a megszokott menet. Átvételkor a számlán csak a díj áll. A záró számlán a díj és a levonása már meg sem jelenik: a javítás tétele a még fizetendő összeggel kerül rá (10 000 Ft-os termék, 8 000 Ft díj → 2 000 Ft).",
+            "t": "szamlazas gyi szamlazhatom kul bevizsgalasi dij kesobb javitas gyi szamlazhatom kul bevizsgalasi dij kesobb javitas megszok men atvetel szamlan dij all zaro szamlan dij levonasa jeleni javitas tetele fizetendo osszeggel ar 10 000 ft os term 000 ft dij 000 ft",
+            "h": 41
+        },
+        {
+            "id": "szamlazas#25",
+            "cim": "GYIK › Több eszköz van a munkalapon. Kaphat mindegyik külön számlát?",
+            "horgony": "tobb-eszkoz-van-a-munkalapon-kaphat-mindegyik-kulon-szamlat",
+            "szoveg": "Igen. A számla ablakában a **Mi kerül erre a számlára** sorban válaszd ki az eszközt: csak az ő tételei maradnak bepipálva. Ismételd meg eszközönként.",
+            "t": "szamlazas gyi tobb eszkoz munkalap kaph mindegyi kul szamla gyi tobb eszkoz munkalap kaph mindegyi kul szamla szamla ablaka ar szamla sor valaszd eszkoz tetel marad bepipalva ismeteld eszkozonk",
+            "h": 29
+        },
+        {
+            "id": "szamlazas#26",
+            "cim": "GYIK › Mi az adattörlő kód, és miért nem látom a kapcsolóját?",
+            "horgony": "mi-az-adattorlo-kod-es-miert-nem-latom-a-kapcsolojat",
+            "szoveg": "Az adattörlő kódot a Számlázz.hu rendeli a tételhez. A kapcsoló csak akkor látszik, ha a Beállítások **Számlázás** lapfülén be van kapcsolva az **Adattörlő kód használata**.",
+            "t": "szamlazas gyi adattorlo kod latom kapcsoloj gyi adattorlo kod latom kapcsoloj adattorlo kod szamlazz hu rendeli tetel kapcsolo latszi beallitas szamlazas lapful kapcsolva adattorlo kod hasznalata",
+            "h": 26
+        },
+        {
+            "id": "szamlazas#27",
+            "cim": "GYIK › Elküldi a rendszer e-mailben a számlát?",
+            "horgony": "elkuldi-a-rendszer-e-mailben-a-szamlat",
+            "szoveg": "Ha a számla ablakában bepipálod az **E-mail az ügyfélnek** sort, a Számlázz.hu küldi el a vevő e-mail-címére. A levelet nem ez a rendszer küldi.",
+            "t": "szamlazas gyi elkuldi rendszer mail szamla gyi elkuldi rendszer mail szamla szamla ablaka bepipalod mail ugyfel sor szamlazz hu kuldi ugyfel mail cime level rendszer kuldi",
+            "h": 26
+        },
+        {
+            "id": "szamlazas#28",
+            "cim": "GYIK › Hol találom meg később a számla PDF-jét?",
+            "horgony": "hol-talalom-meg-kesobb-a-szamla-pdf-jet",
+            "szoveg": "A munkalap ablakának alján, a számla gombok melletti számlaszám-címkére kattintva. A PDF új lapon nyílik meg.",
+            "t": "szamlazas gyi talalom kesobb szamla pdf jet gyi talalom kesobb szamla pdf jet munkalap ablaka aljan szamla gomb melletti szamlaszam cimke kattintva pdf uj lap nyili",
+            "h": 26
+        },
+        {
+            "id": "szamlazas#29",
+            "cim": "GYIK › Elrontottam a számlát. Javíthatom a rendszerben?",
+            "horgony": "elrontottam-a-szamlat-javithatom-a-rendszerben",
+            "szoveg": "Nem. A kiállított számla végleges, a rendszerben nem módosítható és nem törölhető. A javítás a Számlázz.hu-fiókodban történik.",
+            "t": "szamlazas gyi elrontottam szamla javithatom rendszer gyi elrontottam szamla javithatom rendszer kiallit szamla vegleges rendszer modosithato torolheto javitas szamlazz hu fiokod torteni",
+            "h": 22
+        },
+        {
+            "id": "szamlazas#30",
+            "cim": "GYIK › Működik a számlázás internet nélkül?",
+            "horgony": "mukodik-a-szamlazas-internet-nelkul",
+            "szoveg": "A valódi számla nem, mert azt a Számlázz.hu állítja ki. A számla-előkészítő PDF igen: helyben készül.",
+            "t": "szamlazas gyi mukodi szamlazas intern nelkul gyi mukodi szamlazas intern nelkul valodi szamla szamlazz hu alli szamla elokeszito pdf hely keszul",
+            "h": 21
+        },
+        {
+            "id": "szamlazas#31",
+            "cim": "GYIK › Bekerül a számlaszám a pénztárba?",
+            "horgony": "bekerul-a-szamlaszam-a-penztarba",
+            "szoveg": "Igen. A számla kiállítása után a munkalap számla nélküli pénztártételei maguktól megkapják a számla számát.",
+            "t": "szamlazas gyi bekerul szamlaszam penztar gyi bekerul szamlaszam penztar szamla kiallitasa utan munkalap szamla nelkuli penztartetel mag megkapj szamla szam",
+            "h": 20
+        },
+        {
+            "id": "szamlazas#32",
+            "cim": "GYIK › Átnevezhetem a „Számla-előkészítő\" gombot?",
+            "horgony": "atnevezhetem-a-szamla-elokeszito-gombot",
+            "szoveg": "Igen, a Beállítások **Számlázás** lapfülén, **A nyomtatvány címe** mezőben. Négy cím közül választhatsz; „Számla\" nincs köztük.",
+            "t": "szamlazas gyi atnevezhetem szamla elokeszito gomb gyi atnevezhetem szamla elokeszito gomb beallitas szamlazas lapful nyomtatvany cime mezo negy cim kozul valaszthatsz szamla nincs koz",
+            "h": 24
+        }
+    ]
+}

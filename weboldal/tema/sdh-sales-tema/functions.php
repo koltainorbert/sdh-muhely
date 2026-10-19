@@ -26,3 +26,4 @@ require_once SDH_TEMA_DIR . '/inc/ikonok.php';
 require_once SDH_TEMA_DIR . '/inc/alap.php';
 require_once SDH_TEMA_DIR . '/inc/seo.php';
 require_once SDH_TEMA_DIR . '/inc/szekciok.php';
+require_once SDH_TEMA_DIR . '/inc/arak.php';

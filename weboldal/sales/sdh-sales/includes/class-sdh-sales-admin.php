@@ -169,7 +169,7 @@ final class SDH_Sales_Admin
             'nyelvek'   => $nyelv,
             'panelek'   => self::panelek($utak),
             'utak'      => $utak,
-            'lepesek'   => self::LEPESEK,
+            'lepesek'   => self::lepesek(),
             'lead_allapotok' => self::lead_allapotok(),
             'ujra'      => class_exists('SDH_Sales_Kiszolgalas') && method_exists('SDH_Sales_Kiszolgalas', 'lepes_ujra'),
             'ikonok'    => SDH_Sales_Szekcio::ikonok(),
@@ -305,13 +305,29 @@ final class SDH_Sales_Admin
             return false;
         }
 
-        foreach (self::json($lanc) as $l) {
+        foreach (self::lanc_lepesek(self::json($lanc)) as $l) {
             if (is_array($l) && ($l['allapot'] ?? '') === 'hiba') {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /** A lánc lépései – a kiszolgálás `{lepesek: {…}}` alakját és a lapos alakot is érti. @param array<string, mixed> $lanc */
+    private static function lanc_lepesek(array $lanc): array
+    {
+        return is_array($lanc['lepesek'] ?? null) ? $lanc['lepesek'] : array_filter($lanc, 'is_array');
+    }
+
+    /** @return array<string, string> lépéskulcs → név (a kiszolgálás saját listája, ha van) */
+    public static function lepesek(): array
+    {
+        if (class_exists('SDH_Sales_Kiszolgalas') && defined('SDH_Sales_Kiszolgalas::LEPES_NEV') && is_array(SDH_Sales_Kiszolgalas::LEPES_NEV)) {
+            return array_map('strval', SDH_Sales_Kiszolgalas::LEPES_NEV);
+        }
+
+        return self::LEPESEK;
     }
 
     /** @return array<string, string> */
@@ -503,14 +519,15 @@ final class SDH_Sales_Admin
             return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'sdh_nincs');
         }
 
-        $lanc = self::json($r['lanc']);
+        $lanc = self::lanc_lepesek(self::json($r['lanc']));
+        $nev  = self::lepesek();
         $l    = [];
 
-        foreach (array_unique(array_merge(array_keys(self::LEPESEK), array_keys($lanc))) as $k) {
+        foreach (array_unique(array_merge(array_keys($nev), array_keys($lanc))) as $k) {
             $s   = is_array($lanc[$k] ?? null) ? $lanc[$k] : [];
             $l[] = [
                 'kulcs'       => (string) $k,
-                'cim'         => self::LEPESEK[$k] ?? (string) $k,
+                'cim'         => $nev[$k] ?? (string) $k,
                 'allapot'     => (string) ($s['allapot'] ?? (isset($lanc[$k]) ? 'var' : 'nincs')),
                 'probalkozas' => (int) ($s['probalkozas'] ?? 0),
                 'uzenet'      => (string) ($s['uzenet'] ?? ''),
@@ -574,7 +591,7 @@ final class SDH_Sales_Admin
             return SDH_Sales_Rest::hiba('Nincs ilyen rendelés.', 404, 'sdh_nincs');
         }
 
-        if (!isset(self::LEPESEK[$lepes]) && !in_array($lepes, (array) apply_filters('sdh_sales_admin_lepesek', []), true)) {
+        if (!isset(self::lepesek()[$lepes])) {
             return SDH_Sales_Rest::hiba('Ismeretlen lépés.', 400);
         }
 
@@ -590,9 +607,10 @@ final class SDH_Sales_Admin
             return SDH_Sales_Rest::hiba('A lépés nem futott le: ' . $x->getMessage(), 500);
         }
 
-        SDH_Sales_Naplo::ir('admin', 'Lépés újraindítva: ' . (self::LEPESEK[$lepes] ?? $lepes), 'info', 'rendeles', $id);
+        $ok = is_array($ki) ? !empty($ki['ok']) : $ki !== false;
+        $uz = is_array($ki) ? (string) ($ki['uzenet'] ?? '') : '';
 
-        return new WP_REST_Response(['ok' => $ki !== false, 'eredmeny' => is_scalar($ki) || is_array($ki) ? $ki : null], 200);
+        return new WP_REST_Response(['ok' => $ok, 'uzenet' => $uz !== '' ? $uz : ($ok ? 'A lépés lefutott.' : 'A lépés nem sikerült.')], 200);
     }
 
     /* =================================================================

@@ -1,0 +1,232 @@
+{
+    "kulcs": "beallitasok",
+    "cim": "Beállítások",
+    "csoport": "Rendszer",
+    "osszefoglalo": "A Beállítások egyetlen oldal, ahol témánként külön lapfülön áll minden állítható adat; itt van a demó adatok betöltése, a stíluskalauz és a névjegy is.",
+    "darabok": [
+        {
+            "id": "beallitasok#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Beállítások** menüpont a rendszer egyetlen adminfelülete. Minden állítható adat itt van: a cég neve és logója, a munkalap számozása és állapotai, a fizetési módok, a számlázás, a levelezés, a kollégák, a naptár, az asszisztens és a készülékadatok forrásai.\n\nAz oldal egyetlen lap, témánként külön lapfüllel. Egy lapfül egy téma, és minden lapfül külön ment.\n\nEz a fejezet a Beállítások működését írja le, felsorolja az összes lapfület, és részletesen háromról szól: **Demó adatok**, **Stíluskalauz**, **Névjegy**. A többi lapfül leírása annak a menüpontnak a fejezetében van, amelyikhez tartozik.",
+            "t": "beallitas mire valo mire valo beallitas menup rendszer egyetl adminfelulete allithato ada ceg neve logo munkalap szamozasa allap fizetesi mod szamlazas levelezes kolleg naptar asszisztens keszulekad forras oldal egyetl lap temank kul lapfullel lapful tema lapful kul men fejez beallitas mukodes irja felso osszes lapful reszletes harom szol demo ada stiluskalauz nevjegy tobbi lapful leirasa ann menupon fejezete amelyi tartozi",
+            "h": 60
+        },
+        {
+            "id": "beallitasok#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "A bal oldali menü legalján áll a **Beállítások** menüpont, fogaskerék ikonnal. Beállítások megnyitása\n\n- **Csak adminisztrátor látja.** A kolléga menüjében a menüpont nem jelenik meg, és az Áttekintésen sincs csempéje.\n- Ha kolléga a címet kézzel írja be, az **Ehhez nincs jogosultságod.** oldalt kapja.\n- A Beállítások a műhely-felületen nyílik meg, ugyanabban a keretben, mint bármi más: nincs külön adminfelület, ahová át kellene lépni.\n\nA jogosultságokról bővebben: Mentés, jogosultság, biztonság.",
+            "t": "beallitas talalod talalod bal oldali menu legaljan all beallitas menup fogasker ikonnal beallitas megnyitasa adminisztrator lat kollega menu menup jeleni attekintes sincs csempe kollega cim kezzel irja ehhez nincs jogosultsagod oldal kap beallitas muhely felul nyili ugyanab ker mas nincs kul adminfelul ahova kellene lepni jogosultsag boveb mentes jogosultsag biztonsag",
+            "h": 50
+        },
+        {
+            "id": "beallitasok#3",
+            "cim": "A Beállítások oldal felépítése",
+            "horgony": "a-beallitasok-oldal-felepitese",
+            "szoveg": "Az oldal tetején a **Beállítások** cím áll, alatta a lapfülek hat sorban, csoportonként:\n\n- **Cég és megjelenés**\n- **Munkalap**\n- **Pénz és eladás**\n- **Kapcsolat és csapat**\n- **Készülékadatok**\n- **Rendszer**\n\nA kikapcsolt modul lapfüle nem látszik (például kikapcsolt SMS-értesítéseknél nincs **SMS-értesítések** lapfül). A modulokat a rendszer üzemeltetője kapcsolja ki és be.\n\nAz éppen nyitott lapfül kiemelve látszik. Ha az egeret egy lapfül fölé viszed, rövid leírás jelenik meg róla. A lapfülek alatt a kiválasztott lapfül tartalma áll: felül a neve és egy mondat arról, mire való, alatta a dobozok a mezőkkel, legalul a **Mentés** gomb.",
+            "t": "beallitas beallitas oldal felepitese beallitas oldal felepitese oldal tetej beallitas cim all alatta lapful hat sor csoportonk ceg megjelenes munkalap penz eladas kapcsol csap keszulekad rendszer kikapcsol modul lapfule latszi peldaul kikapcsol sms ertesiteseknel nincs sms ertesites lapful modul rendszer uzemelteto kapcsol epp nyit lapful kiemelve latszi eger lapful fole viszed rovid leiras jeleni rola lapful ala kivalaszt lapful tartalma all felul neve mond arrol mire valo alatta doboz mezokkel legalul mentes gomb",
+            "h": 73
+        },
+        {
+            "id": "beallitasok#4",
+            "cim": "Az összes lapfül",
+            "horgony": "az-osszes-lapful",
+            "szoveg": "A Beállítások lapfülei, abban a sorrendben, ahogy az oldalon állnak. Az utolsó oszlop azt a súgófejezetet mutatja, amely a lapfület részletesen leírja.",
+            "t": "beallitas osszes lapful osszes lapful beallitas lapful abban sorrend ahogy oldal all utolso oszlop sugofejez mut amely lapful reszletes leir",
+            "h": 20
+        },
+        {
+            "id": "beallitasok#5",
+            "cim": "Az összes lapfül",
+            "horgony": "az-osszes-lapful",
+            "szoveg": "| Lapfül | Mire való | Részletes leírás |\n|---|---|---|\n| **Logó és megjelenés** | A rendszer logója, neve, színei, a sarkok, az oldalsáv, a betűtípus és az alap betűméret, a popupok neon kerete. | Megjelenés |\n| **Áttekintés csempéi** | Melyik menüpont csempéje látszik az Áttekintés tetején, milyen sorrendben és felirattal. | Áttekintés |\n| **Nyitvatartás és óra** | Az üzlet nyitvatartása naponként, és a fejléc órája a zárásig hátralévő idővel. | Megjelenés |\n| **Ügyféloldal (RMA)** | Amit az ügyfél a QR-kód beolvasása után lát: cím, értesítés, megjelenés, nyelvek, elérhetőség. | Üzenetek és ügyféloldal |\n| **Számozás** | A munkalapszám kezdőértéke, előtagja és kitöltése. | Munkalapok |\n| **Állapotok** | A munkalap állapotai: név, szín, és hogy melyik számozott, lezárt, alapértelmezett. | Munkalapok |\n| **Hibasor-állapotok** | A munkalap hibasorainak saját állapotlistája. | Munkalapok |\n| **Gyakori hibák** | A munkalap **Hibák** lapfülén egy kattintással felvehető hibák listája. | Munkalapok |\n| **Gyakori megjegyzések** | A munkalap **Megjegyzés** lapfülén popupból választható, előre megírt megjegyzések. | Munkalapok |\n| **Űrlapok** | Mi látszódjon a munkalap, a rendelés, a napi árukiadás és a két számla ablakában; a számlára magától kerüljenek-e a tételek. Ugyanez az űrlapok fogaskerekével. | Űrlapok beállítása |\n| **Fizetési módok** | A munkalapon, az árukiadáson és a rendelésen választható fizetési módok. | Pénztár |\n| **Számlázás** | A Számlázz.hu-kapcsolat, a számlatömbök, a helyi nyomtatvány és a kiállító adatai, a bevizsgálási díj szövege. | Számlázás |\n| **Nyomtatványok** | Minden nyomtatható papír: átvételi, munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – logó, betű, méret, szövegek, példányszám, felajánlás. | Nyomtatás, PDF és e-mail |\n| **Házipénztár** | Személyek, címletek, a fizetési módok besorolása, kategóriák, a pénztár-ajánlat, a zárás utáni emlékeztető. | Pénztár |\n| **Árukiadás és rendelések** | Helyszínek (üzletek), beszállítók, a rendelés állapotainak neve, az értesítő szövege, a listák mérete. | Napi árukiadás |\n| **Levelezés** | E-mail-fiókok (IMAP / SMTP), aláírás, jelszavas zár, a levélszűrő és a rendező ügynök. | Levelezés |\n| **Csapat** | Többfelhasználós csevegés vagy üzenőfal, a fal neve, a kollégák névsora; innen nyílik a kollégák és a csoportok kezelése. | Csapat |\n| **Naptár** | A naptár alapnézete és órasávja, a kategóriák, az emlékeztetők, az e-mail értesítések és a napi összefoglaló. | Naptár |\n| **Asszisztens** | Az AI-asszisztens: be- és kikapcsolás, neve, kérdéskeret, API-kulcs, engedélyek; innen nyílnak a javaslatok, a tudástár és a mentések. | Asszisztens |\n| **IMEI-lekérdezés** | A fizetős IMEI-szolgáltató végpontja és kulcsa, és az ingyenes ellenőrző oldalak gombjai. | Eszközök |\n| **TAC adatbázis** | Az IMEI elejéből ez mondja meg a gyártót és a típust: állapot, betöltés. | Eszközök |\n| **Mentés** | A napi automatikus mentés, a megőrzött mentések száma, kézi mentés és letöltés. | Mentés, jogosultság, biztonság |\n| **Jogosultságok** | Szerepkörök és jogok (pultos, szerelő, pénztáros, admin…: modulok, pénztárriport, árak, számla, törlés), ki melyik szerepben. Egyszerre egy ablakban szerkeszthető lap: melyik rekordtípus zárol (munkalap, ügyfél, eszköz), és a zárolást felülbíráló kód. Közös fiók: a „Ki vagy?” választó be/ki, PIN be/ki, melyik fiók közös, dolgozók (név + PIN). | Munkalapok |\n| **Sebesség** | A felület stíluslapjai és szkriptjei egy-egy fájlban: kevesebb kérés, gyorsabb oldalváltás. | ez a fejezet |\n| **Demó adatok** | Fiktív ügyfelek, készülékek, munkalapok és termékek a kipróbáláshoz. | ez a fejezet |\n| **Stíluskalauz** | A rendszer színei és elemei egy helyen. | ez a fejezet |\n| **Névjegy** | Verziók, címek, és ami internet nélkül is működik. | ez a fejezet |\n\nEgy lapfül csak akkor jelenik meg, ha a hozzá tartozó modul be van töltve.",
+            "t": "beallitas osszes lapful osszes lapful lapful mire valo reszletes leiras logo megjelenes rendszer logo neve szin sar oldalsav betutipus alap betumer popup neon kerete megjelenes attekintes csemp menup csempe latszi attekintes tetej sorrend felirattal attekintes nyitvatartas ora uzl nyitvatartasa naponk fejlec ora zaras hatralevo ido megjelenes ugyfeloldal rma ugyfel qr kod beolvasasa utan lat cim ertesites megjelenes nyelv elerhetoseg uzen ugyfeloldal szamozas munkalapszam kezdoerteke elotag kitoltese munkalap allap munkalap allap nev szin szamoz lezar alapertelmez munkalap hibasor allap munkalap hibasor saj allapotlista munkalap gyakori hib munkalap hib lapful kattintassal felveheto hib lista munkalap gyakori megjegyzes munkalap megjegyzes lapful popup valaszthato elo megir megjegyzes munkalap urlap latszodj munkalap rendeles napi arukiadas ket szamla ablaka szamla maga ar tetel ugyanez urlap fogaskereke urlap beallitasa fizetesi mod munkalap arukiadas rendeles valaszthato fizetesi mod penztar szamlazas szamlazz hu kapcsol szamlatomb helyi nyomtatvany kiallito ada bevizsgalasi dij szovege szamlazas nyomtatvany nyomtathato papir atveteli munkalap arajanl szallitole bianko lap penztarzaras lis logo betu mer szoveg peldanyszam felajanlas nyomtatas pdf mail hazipenztar szemely ciml fizetesi mod besorolasa kategori penztar ajanl zaras utani emlekezteto penztar arukiadas rendeles helyszi uzl beszalli rendeles allap neve ertesito szovege lis merete napi arukiadas levelezes mail fio imap smtp alairas jelszavas zar levelszuro rendezo ugyn levelezes csap tobbfelhasznalos cseveges uzenofal fal neve kolleg nevso inn nyili kolleg csopor kezelese csap naptar naptar alapnezete orasav kategori emlekezt mail ertesites napi osszefoglalo naptar asszisztens ai asszisztens kikapcsolas neve kerdesker api kulcs engedely inn nyil javasl tudastar mentes asszisztens imei lekerdezes fizetos imei szolgaltato vegpon kulcsa ingyenes ellenorzo oldal gombj eszkoz tac adatbazis imei ele mond gyar tipus allap betoltes eszkoz mentes napi automatikus mentes megorz mentes szama kezi mentes letoltes mentes jogosultsag biztonsag jogosultsag szerep jog pultos szerelo penztaros admin modul penztarripor ar szamla torles szerep egyszer abl szerkesztheto lap rekordtipus zarol munkalap ugyfel eszkoz zarolas felulbiralo kod kozos fio valaszto pin fio kozos dolgoz nev pin munkalap sebesseg felul stiluslapj szkriptj fajl kevesebb keres gyorsabb oldalvaltas fejez demo ada fiktiv ugyfel eszkoz munkalap term kiprobalas fejez stiluskalauz rendszer szin elem hely fejez nevjegy verzi cim intern nelkul mukodi fejez lapful jeleni hozza tartozo modul toltve",
+            "h": 351
+        },
+        {
+            "id": "beallitasok#6",
+            "cim": "Lépésről lépésre: egy beállítás módosítása",
+            "horgony": "lepesrol-lepesre-egy-beallitas-modositasa",
+            "szoveg": "1. Nyisd meg a **Beállítások** menüpontot.\n2. Kattints arra a lapfülre, amelyik a témához tartozik.\n3. Írd át, amit kell. A **Mentés** gomb mellett megjelenik a **Nem mentett módosítás.** felirat.\n4. Nyomd meg a **Mentés** gombot, vagy a Ctrl+S billentyűket (Macen Cmd+S).\n5. A gomb mellett előbb **Mentés…**, majd **Elmentve.** áll. A lapfül ezután újratöltődik, és a mentett állapotot mutatja – ugyanott, ahol a görgetésben tartottál.\n\nHa mentés nélkül másik lapfülre kattintasz, a lapfülek alatt sáv jelenik meg: **Ezen a lapfülön nem mentett módosítás van.** Három gomb közül választasz:\n\n- **Mentés és tovább** – elmenti, aztán átlép a másik lapfülre.\n- **Elvetés és tovább** – a módosítás elvész, átlép a másik lapfülre.\n- **Maradok** – a sáv eltűnik, folytathatod a szerkesztést.\n\nFontos: A sáv csak lapfülváltáskor kérdez. Ha a Beállításokból egy másik menüpontra lépsz, vagy bezárod a böngészőlapot, a nem mentett módosítás kérdés nélkül elvész.",
+            "t": "beallitas lepes lepes beallitas modositasa lepes lepes beallitas modositasa nyisd beallitas menupon kattints lapful amelyi tema tartozi ird mentes gomb mell megjeleni ment modositas felir nyomd mentes gomb ctrl billenty mac cmd gomb mell elobb mentes majd elmentve all lapful ezutan ujratoltodi ment allap mut ugyan ahol gorgetes tartottal mentes nelkul masi lapful kattintasz lapful ala sav jeleni ezen lapful ment modositas harom gomb kozul valasztasz mentes tovabb elmenti aztan atlep masi lapful elvetes tovabb modositas elvesz atlep masi lapful marad sav eltuni folytathatod szerkesztes fontos sav lapfulvaltas kerdez beallitas masi menupon lepsz bezarod bongeszolap ment modositas kerdes nelkul elvesz",
+            "h": 100
+        },
+        {
+            "id": "beallitasok#7",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "A Beállítások oldal közös elemei – ezek minden lapfülön ugyanúgy működnek:\n\n- **Lapfülek** – a téma kiválasztása. Minden lapfülnek saját címe van, könyvjelzőbe tehető.\n- **Mentés** – az éppen nyitott lapfület menti.\n- **Állapotjelző a Mentés mellett** – **Nem mentett módosítás.**, **Mentés…**, **Elmentve.**, vagy pirossal a hiba szövege.\n- **Feltöltő gombok** (logó, háttérkép, háttérvideó) – a műhely-felület saját, egyszerű feltöltője. Kép: JPG, PNG, GIF vagy WebP; videó: MP4 vagy WebM. A fájl a rendszer feltöltött fájljai közé kerül.\n- **Színválasztó és színkód** – össze vannak kötve: bármelyiket állítod, a másik követi.\n- **Kapcsolók** – minden be/ki beállítás (és a popupok be/ki jelölői) egyforma kapcsoló: **zöld = bekapcsolva**, **piros = kikapcsolva**. Külön „Aktív / Inaktív” felirat nincs mellette, a mező neve mondja meg, mit kapcsol. Táblázatban (sorok kijelölése) marad a kis jelölőnégyzet.\n- **Mezők és gombok** – minden szövegmező, legördülő és gomb lekerekített; a forma (pill, lekerekített, tömör) a **Logó és megjelenés** lapfülön állítható.\n\nNéhány lapfülnek nincs közös **Mentés** gombja: az **Asszisztens**, a **TAC adatbázis** és a **Demó adatok** saját gombokkal dolgozik, a **Stíluskalauz** és a **Névjegy** csak megmutat.",
+            "t": "beallitas mez gomb mez gomb beallitas oldal kozos elem lapful ugyanugy mukod lapful tema kivalasztasa lapful saj cime konyvjelzo teheto mentes epp nyit lapful menti allapotjelzo mentes mell ment modositas mentes elmentve pirossal hiba szovege feltolto gomb logo hatterkep hattervideo muhely felul saj egyszeru feltolto kep jpg png gif webp video mp4 webm fajl rendszer feltolt fajlj koze ar szinvalaszto szinkod ossze van kotve barmelyi allitod masi koveti kapcsol beallitas popup jeloloi egyforma kapcsolo zold bekapcsolva piros kikapcsolva kul aktiv inaktiv felir nincs mellette mezo neve mond kapcsol tablaz sor kijelolese marad kis jelolonegyz mez gomb szovegmezo legordulo gomb lekerekit forma pill lekerekit tomor logo megjelenes lapful allithato nehany lapful nincs kozos mentes gomb asszisztens tac adatbazis demo ada saj gomb dolgozi stiluskalauz nevjegy megmu",
+            "h": 125
+        },
+        {
+            "id": "beallitasok#8",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Lapfülenként külön mentés.** A **Mentés** csak az éppen nyitott lapfület menti. A többi lapfül adataihoz nem nyúl.\n- **A mentő csak azt írja, amit az űrlap hozott.** Egy lapfül mentése nem ürít ki olyan beállítást, amely nem azon a lapfülön van.\n- **Csak adminisztrátor menthet.** Másnak a válasz: **A beállításokhoz adminisztrátori jog kell.**\n- **A kulcsok és jelszavak nem jelennek meg újra.** A mentett jelszó vagy kulcs mezője üres marad, helyőrző jelzi, hogy van mentett érték. Újat csak akkor írj be, ha cserélni akarod. A fizetős IMEI-szolgáltató kulcsa kivétel: az a mezőjében olvasható.\n- **A változás azonnal él.** A kollégák a következő oldalbetöltéskor látják.\n- **Minden a műhely-felületen marad.** A Beállítások, a mentés és a feltöltés sem visz máshová; mentés után ugyanarra a lapfülre térsz vissza.",
+            "t": "beallitas szabaly ami rendszer betar szabaly ami rendszer betar lapfulenk kul mentes mentes epp nyit lapful menti tobbi lapful adat nyul mento irja urlap hoz lapful mentese uri beallitas amely azon lapful adminisztrator menth mas valasz beallitas adminisztratori jog kulcs jelszav jel ujra ment jelszo kulcs mezo ures marad helyorzo jelzi ment ert uja irj cserelni akarod fizetos imei szolgaltato kulcsa kivetel mezo olvashato valtozas azonnal kolleg kovetkezo oldalbetoltes latj muhely felul marad beallitas mentes feltoltes visz mashova mentes utan ugyanar lapful tersz vissza",
+            "h": 84
+        },
+        {
+            "id": "beallitasok#9",
+            "cim": "Sebesség",
+            "horgony": "sebesseg",
+            "szoveg": "A **Beállítások › Sebesség** lapfülön egyetlen kapcsoló van: **a felület CSS- és JS-fájljai egy kérésben töltődjenek be**. Alapból be van kapcsolva.\n\nMiért van rá szükség: a műhely-felület több mint húsz stíluslapot és szkriptet használ, és mindegyik kell minden oldalon, mert a popupok (munkalap, pénztár, nyomtatás, napló, levélíró) bárhol megnyílhatnak. Ez önmagában nem sok adat, de **sok kérés** – és egy helyi szerveren minden egyes kérés sokat tart, akkor is, ha a fájl pici.\n\nBekapcsolva a rendszer ezeket a fájlokat egyetlen stíluslapba és egyetlen szkriptbe fűzi össze:\n\n- a kód **karakterre ugyanaz**, és ugyanabban a sorrendben fut – nincs tömörítés, nincs átírás,\n- a csomag a szerveren a **feltöltött fájlok mappájába** kerül (`sdh-muhely-csomag/`), nem a program mappájába,\n- a fájl neve a verzióból képződik, így **frissítés után magától új csomag készül** – nincs mit üríteni, és a böngésző sem tölt be régit,\n- a régi csomagokat a rendszer magától törli,\n- csak a **saját** fájljaihoz nyúl, máshoz nem.\n\nHa a feltöltési mappa nem írható, a lapfül ezt kiírja, és a felület – észrevétlenül – a régi módon, külön fájlokból töltődik be. A kapcsoló ilyenkor is bekapcsolva maradhat: amint a mappa írhatóvá válik, magától működni kezd.\n\n**Mikor kapcsold ki?** Ha a felület fejlesztésén dolgozol, és azt szeretnéd, hogy a böngésző fejlesztői eszközeiben külön fájlonként lásd a stílusokat és a szkripteket. A napi munkához hagyd bekapcsolva.\n\nMit NEM gyorsít ez: az adatbázis-lekérdezéseket és a munkalapok mennyiségét. Ha a lista lassú, a Hibaelhárítás fejezet szól róla.",
+            "t": "beallitas sebesseg sebesseg beallitas sebesseg lapful egyetl kapcsolo felul css js fajlj keres toltod alap kapcsolva szukseg muhely felul tobb husz stiluslap szkrip hasznal mindegyi oldal popup munkalap penztar nyomtatas naplo leveliro barhol megnyilh onmaga ada keres helyi szerver egyes keres sok tar fajl pici bekapcsolva rendszer eze fajl egyetl stiluslap egyetl szkrip fuzi ossze kod karakter ugyanaz ugyanab sorrend fut nincs tomorites nincs atiras csomag szerver feltolt fajl mappa ar sdh muhely csomag program mappa fajl neve verzio kepzodi igy frissites utan maga uj csomag keszul nincs uriteni bongeszo tol regi regi csomag rendszer maga torli saj fajlj nyul mas feltoltesi mappa irhato lapful kiir felul eszrevetlenul regi mod kul fajl toltodi kapcsolo ily bekapcsolva maradh amin mappa irhatova vali maga mukodni kezd kapcsold felul fejlesztes dolgozol szeretned bongeszo fejlesztoi eszkoz kul fajlonk lasd stilus szkrip napi munka hagyd bekapcsolva gyorsi adatbazis lekerdezes munkalap mennyiseg lista lassu hibaelharitas fejez szol rola",
+            "h": 152
+        },
+        {
+            "id": "beallitasok#10",
+            "cim": "Demó adatok",
+            "horgony": "demo-adatok",
+            "szoveg": "A **Beállítások › Demó adatok** lapfül kitalált adatokkal tölti fel a rendszert, hogy a felületet ki lehessen próbálni vagy be lehessen mutatni.\n\nMit tölt be:\n\n- **10 kitalált ügyfelet**, mindegyikhez **egy készüléket** és **egy munkalapot**. Minden mező ki van töltve: címek, telefonszámok, IMEI, zárkód, minta, garancia, tartozékok, megjegyzések.\n- A tíz munkalap az alapértelmezett **nyolc állapot mindegyikét** használja, hibasorokkal, tételekkel és fizetési adatokkal. A dátumok a mai naphoz igazodnak: lesz mai, lejárt határidejű és lezárt lap is.\n- **20 kitalált mintaterméket** a Termékek menüpontba, nyitókészlettel.\n\n### Lépésről lépésre: demó adatok betöltése\n\n1. Nyisd meg a **Beállítások › Demó adatok** lapfület.\n2. Nyomd meg a **Demó adatok betöltése** gombot.\n3. Az oldal tetején megjelenik az eredmény, például: *Demó adatok betöltve: 10 új ügyfél, 10 új eszköz, 10 új munkalap.*\n\nHa a gombot újra megnyomod, semmi nem jön létre kétszer. Ilyenkor az üzenet: **A demó adatok már mind megvannak, semmi nem jött létre újra.** A lapfül szövege azt is kiírja, hány demó ügyfél van éppen a rendszerben.\n\n### Amit a demó adatokról tudni kell\n\n- **Valódi adathoz nem nyúl.** A demó rekordok belső azonosítója `demo-` kezdetű, a betöltő csak ezeket keresi és hozza létre.\n- **A számozott demó munkalapok valódi munkalapszámot kapnak** a sorozatból. Emiatt éles rendszerbe ne töltsd be: a demó lapok elfoglalnának néhány sorszámot.\n- **Ha egy állapotot átneveztél vagy töröltél,** az a demó munkalap az alapértelmezett állapotot kapja.\n- **Eltávolító gomb nincs.** A demó adatok a többi adat között maradnak. Az ügyfelet inaktívvá teheted, a munkalapot érvénytelen állapotba teheted, de egy gombbal törölni nem lehet őket.",
+            "t": "beallitas demo ada demo ada beallitas demo ada lapful kitalal ada tolti rendsz felul lehess probalni lehess mutatni tol 10 kitalal ugyfel mindegyi eszkoz munkalap mezo toltve cim telefonszam imei zarkod minta garancia tartoz megjegyzes tiz munkalap alapertelmez nyolc allap mindegyi hasznal hibasor tetel fizetesi ada datum mai nap igazod mai lejar hatarideju lezar lap 20 kitalal mintaterm term menupon nyitokeszlettel lepes lepes demo ada betoltese nyisd beallitas demo ada lapful nyomd demo ada betoltese gomb oldal tetej megjeleni eredmeny peldaul demo ada betoltve 10 uj ugyfel 10 uj eszkoz 10 uj munkalap gomb ujra megnyomod semmi jon let ketszer ily uzen demo ada mind megvan semmi jot let ujra lapful szovege kiir hany demo ugyfel epp rendszer demo ada tudni valodi ada nyul demo rekord belso azonosito demo kezdetu betolto eze keresi hozza let szamoz demo munkalap valodi munkalapszam kap soroz emi eles rendszer ne toltsd demo lap elfoglalna nehany sorszam allap atneveztel toroltel demo munkalap alapertelmez allap kap eltavolito gomb nincs demo ada tobbi ada koz marad ugyfel inaktivva teheted munkalap ervenytel allap teheted gombbal torolni oke",
+            "h": 179
+        },
+        {
+            "id": "beallitasok#11",
+            "cim": "Stíluskalauz",
+            "horgony": "stiluskalauz",
+            "szoveg": "A **Beállítások › Stíluskalauz** lapfül egyetlen oldalon megmutatja a felület építőelemeit, a most beállított színekkel. Menteni itt nincs mit. Öt doboz van rajta:\n\n- **Színek** – tizennégy színminta a nevével: a kiemelő szín három árnyalata, a vászon, a felületek, a keretek, a szövegszínek, és a három jelzőszín (**Siker**, **Hiba**, **Figyelem**).\n- **Gombok és címkék** – elsődleges, másodlagos és letiltott gomb, címke és inaktív címke.\n- **Értesítések** – egy sikerüzenet, egy figyelmeztetés és egy hibaüzenet mintája.\n- **Űrlapmezők** – szövegmező, legördülő lista, jelölőnégyzet.\n- **Táblázat** – egy mintatáblázat, kitalált sorokkal.\n\nMire jó:\n\n- **Színváltás után ellenőrzés.** Ha a **Logó és megjelenés** lapfülön új kiemelő színt állítottál be, itt látod, olvasható-e minden.\n- **Minden módban nézd meg:** világosban, sötétben és a **Papír** módban is (profilmenü).\n- **Itt látszik először, ha valami elromlik.** Ha egy frissítés után furcsán néz ki a felület, a kalauz megmutatja, melyik elem a hibás.\n\nA színek neve mellett álló `--sdh-…` kezdetű kód a szín belső változóneve; a napi munkához nem kell.",
+            "t": "beallitas stiluskalauz stiluskalauz beallitas stiluskalauz lapful egyetl oldal megmut felul epitoelem beallit szin menteni nincs ot doboz rajta szi tizennegy szinminta neve kiemelo szin harom arnyalata vasz felul ker szovegszi harom jelzoszin siker hiba figyelem gomb cim elsodleges masodlagos letilt gomb cimke inaktiv cimke ertesites sikeruz figyelmeztetes hibauz minta urlapmez szovegmezo legordulo lista jelolonegyz tablaz mintatablaz kitalal sor mire jo szinvaltas utan ellenorzes logo megjelenes lapful uj kiemelo szin allitottal latod olvashato mod nezd vilagos sot papir mod profilmenu latszi eloszor elromli frissites utan furcsan nez felul kalauz megmut elem hibas szi neve mell allo sdh kezdetu kod szin belso valtozoneve napi munka",
+            "h": 103
+        },
+        {
+            "id": "beallitasok#12",
+            "cim": "Névjegy",
+            "horgony": "nevjegy",
+            "szoveg": "A **Beállítások › Névjegy** lapfül megmondja, melyik verzió fut, és hol érhető el a rendszer. Hibabejelentésnél ezt add meg.\n\nA frissítést a rendszer üzemeltetője végzi; a Névjegyen a futó verziót látod.\n\n### A Verziók doboz\n\nA **Verziók** doboz sorai:\n\n| Sor | Mit mutat |\n|---|---|\n| **Rendszer** | A rendszer neve, ahogy a **Logó és megjelenés** lapfülön megadtad. |\n| **Verzió** | A rendszer verziószáma. Frissítés után ennek kell megváltoznia. |\n| **Adatbázis-verzió** | Az adatbázis szerkezetének verziója. Ritkábban változik, mint a rendszeré – nem hiba, ha a kettő eltér. |\n| **Műhely-felület** | A műhely címe. Ezt add oda a kollégáknak. |\n\nAz **Ami internet nélkül is megy** doboz szerint:\n\n- **Megy enélkül is:** a felvitel, a munkalap, a pénztár és a helyi nyomtatvány. Az IMEI-ből a gyártót, a gyári számot és a kereskedelmi nevet a rendszer a saját nyilvántartásából és a helyi TAC-adatbázisból tölti ki.\n- **Internet kell hozzá:** a levelezés, a Számlázz.hu-számla és az asszisztens. A sorozatszámot, a garanciát és a gyártási dátumot fizetős IMEI-szolgáltató nélkül kézzel kell beírni.",
+            "t": "beallitas nevjegy nevjegy beallitas nevjegy lapful megmond verzio fut erheto rendszer hibabejelentesnel add frissites rendszer uzemelteto vegzi nevjegy futo verzi latod verzi doboz verzi doboz sor sor mut rendszer rendszer neve ahogy logo megjelenes lapful megadtad verzio rendszer verzioszama frissites utan enn megvaltoznia adatbazis verzio adatbazis szerkezete verzio ritkab valtozi rendsze hiba ketto elter muhely felul muhely cime add oda kolleg intern nelkul megy doboz szerin megy enelkul felvitel munkalap penztar helyi nyomtatvany imei bol gyar gyari szam kereskedelmi nev rendszer saj nyilvantartasa helyi tac adatbazis tolti intern hozza levelezes szamlazz hu szamla asszisztens sorozatszam garanci gyartasi datum fizetos imei szolgaltato nelkul kezzel beirni",
+            "h": 104
+        },
+        {
+            "id": "beallitasok#13",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„Lejárt a munkamenet – töltsd újra az oldalt, és próbáld újra.\"** Túl régóta állt nyitva az oldal. Töltsd újra az F5 billentyűvel, és mentsd újra.\n- **„A beállításokhoz adminisztrátori jog kell.\"** Nem adminisztrátorként vagy belépve.\n- **„A fájl nem érkezett meg (túl nagy, vagy megszakadt a feltöltés).\"** A kép vagy a videó nagyobb, mint amit a szerver enged. Tölts fel kisebbet.\n- **„A feltöltés nem sikerült: …\"** A fájl típusa nem megengedett, vagy a szerver elutasította. A kettőspont utáni szöveg megmondja az okot.\n\nTovábbi elakadások: Hibaelhárítás.",
+            "t": "beallitas megy megy lejar munkam toltsd ujra oldal probald ujra tul regota all nyitva oldal toltsd ujra f5 billentyu mentsd ujra beallitas adminisztratori jog adminisztratork belepve fajl erkez tul nagy megszakad feltoltes kep video nagyobb szerver enged tolts kisebb feltoltes sikerul fajl tipusa megenged szerver elutasitotta kettosp utani szoveg megmond oko tovabbi elakadas hibaelharitas",
+            "h": 54
+        },
+        {
+            "id": "beallitasok#14",
+            "cim": "GYIK › Miért nem látom a Beállítások menüpontot?",
+            "horgony": "miert-nem-latom-a-beallitasok-menupontot",
+            "szoveg": "Mert kollégaként vagy belépve. A Beállításokat csak adminisztrátor látja. Ha szükséged van rá, az adminisztrátor a **Csapat** menüpontban adminisztrátorrá tehet.",
+            "t": "beallitas gyi latom beallitas menupon gyi latom beallitas menupon kollegak belepve beallitas adminisztrator lat szukseged adminisztrator csap menupon adminisztrator teh",
+            "h": 20
+        },
+        {
+            "id": "beallitasok#15",
+            "cim": "GYIK › Egy mentéssel az összes lapfül elmentődik?",
+            "horgony": "egy-mentessel-az-osszes-lapful-elmentodik",
+            "szoveg": "Nem. A **Mentés** csak az éppen nyitott lapfület menti. Ha két lapfülön is módosítottál, mindkettőn külön kell menteni.",
+            "t": "beallitas gyi mentessel osszes lapful elmentodi gyi mentessel osszes lapful elmentodi mentes epp nyit lapful menti ket lapful modositottal mindket kul menteni",
+            "h": 22
+        },
+        {
+            "id": "beallitasok#16",
+            "cim": "GYIK › Elvész a módosításom, ha másik lapfülre kattintok?",
+            "horgony": "elvesz-a-modositasom-ha-masik-lapfulre-kattintok",
+            "szoveg": "Nem azonnal. A rendszer megkérdezi: **Mentés és tovább**, **Elvetés és tovább** vagy **Maradok**. Csak akkor vész el, ha az elvetést választod.",
+            "t": "beallitas gyi elvesz modositasom masi lapful kattin gyi elvesz modositasom masi lapful kattin azonnal rendszer megkerdezi mentes tovabb elvetes tovabb marad vesz elvetes valasztod",
+            "h": 24
+        },
+        {
+            "id": "beallitasok#17",
+            "cim": "GYIK › Van gyorsbillentyű a mentéshez?",
+            "horgony": "van-gyorsbillentyu-a-menteshez",
+            "szoveg": "Igen: Ctrl+S, Macen Cmd+S. Az éppen nyitott lapfület menti.",
+            "t": "beallitas gyi gyorsbillentyu mentes gyi gyorsbillentyu mentes ctrl mac cmd epp nyit lapful menti",
+            "h": 14
+        },
+        {
+            "id": "beallitasok#18",
+            "cim": "GYIK › Miért töltődik újra a lapfül mentés után?",
+            "horgony": "miert-toltodik-ujra-a-lapful-mentes-utan",
+            "szoveg": "Hogy a mentett állapotot lásd: az új logót, az új színeket, vagy azt, hogy a kulcs meg van adva. A görgetés helye megmarad.",
+            "t": "beallitas gyi toltodi ujra lapful mentes utan gyi toltodi ujra lapful mentes utan ment allap lasd uj log uj szin kulcs adva gorgetes helye megmarad",
+            "h": 25
+        },
+        {
+            "id": "beallitasok#19",
+            "cim": "GYIK › Hol veszek fel új kollégát?",
+            "horgony": "hol-veszek-fel-uj-kollegat",
+            "szoveg": "A kollégák a **Csapat** menüpontban vannak. A **Beállítások › Csapat** lapfülről a **Kollégák kezelése** gomb visz oda. Részletek: Csapat.",
+            "t": "beallitas gyi vesz uj kolleg gyi vesz uj kolleg kolleg csap menupon van beallitas csap lapful kolleg kezelese gomb visz oda reszl csap",
+            "h": 23
+        },
+        {
+            "id": "beallitasok#20",
+            "cim": "GYIK › Miért üres a jelszó vagy a kulcs mezője, pedig megadtam?",
+            "horgony": "miert-ures-a-jelszo-vagy-a-kulcs-mezoje-pedig-megadtam",
+            "szoveg": "Biztonsági okból a mentett jelszó és kulcs nem kerül vissza a képernyőre. A mező helyőrzője jelzi, hogy van mentett érték. Csak akkor írj bele, ha cserélni akarod.",
+            "t": "beallitas gyi ures jelszo kulcs mezo ped megadtam gyi ures jelszo kulcs mezo ped megadtam biztonsagi okbol ment jelszo kulcs ar vissza kepernyo mezo helyorzo jelzi ment ert irj bele cserelni akarod",
+            "h": 32
+        },
+        {
+            "id": "beallitasok#21",
+            "cim": "GYIK › Betölthetem a demó adatokat az éles rendszerbe?",
+            "horgony": "betolthetem-a-demo-adatokat-az-eles-rendszerbe",
+            "szoveg": "Ne tedd. A számozott demó munkalapok valódi munkalapszámot foglalnak el, és a kitalált ügyfelek összekeverednek a valódiakkal.",
+            "t": "beallitas gyi betolthetem demo ada eles rendszer gyi betolthetem demo ada eles rendszer ne tedd szamoz demo munkalap valodi munkalapszam foglal kitalal ugyfel osszekevered valodi",
+            "h": 25
+        },
+        {
+            "id": "beallitasok#22",
+            "cim": "GYIK › Hogyan törlöm a demó adatokat?",
+            "horgony": "hogyan-torlom-a-demo-adatokat",
+            "szoveg": "Egy gombbal sehogy, erre nincs felület. Az ügyfeleket inaktívvá teheted, a munkalapokat érvénytelen állapotba teheted. Ezért érdemes a demót külön próbarendszeren tartani.",
+            "t": "beallitas gyi torlom demo ada gyi torlom demo ada gombbal sehogy nincs felul ugyfel inaktivva teheted munkalap ervenytel allap teheted ezer erdemes dem kul probarendszer tartani",
+            "h": 26
+        },
+        {
+            "id": "beallitasok#23",
+            "cim": "GYIK › Kétszer megnyomtam a demó gombot, most minden duplán van?",
+            "horgony": "ketszer-megnyomtam-a-demo-gombot-most-minden-duplan-van",
+            "szoveg": "Nem. A betöltő felismeri, ami már megvan, és nem hozza létre újra. Az üzenet is ezt írja ki.",
+            "t": "beallitas gyi ketszer megnyomtam demo gomb duplan gyi ketszer megnyomtam demo gomb duplan betolto felismeri megvan hozza let ujra uzen irja",
+            "h": 21
+        },
+        {
+            "id": "beallitasok#24",
+            "cim": "GYIK › Mire jó a Stíluskalauz?",
+            "horgony": "mire-jo-a-stiluskalauz",
+            "szoveg": "Arra, hogy egy helyen lásd a felület összes elemét a beállított színekkel. Színváltás után itt ellenőrizheted, hogy minden olvasható-e.",
+            "t": "beallitas gyi mire jo stiluskalauz gyi mire jo stiluskalauz hely lasd felul osszes elem beallit szin szinvaltas utan ellenorizheted olvashato",
+            "h": 20
+        },
+        {
+            "id": "beallitasok#25",
+            "cim": "GYIK › Hol látom, melyik verzió fut?",
+            "horgony": "hol-latom-melyik-verzio-fut",
+            "szoveg": "A **Névjegy** lapfülön, a **Verzió** sorban.",
+            "t": "beallitas gyi latom verzio fut gyi latom verzio fut nevjegy lapful verzio sor",
+            "h": 13
+        },
+        {
+            "id": "beallitasok#26",
+            "cim": "GYIK › Miért más az adatbázis verziója, mint a rendszeré?",
+            "horgony": "miert-mas-az-adatbazis-verzioja-mint-a-rendszere",
+            "szoveg": "Mert az adatbázis szerkezete nem változik minden frissítéssel. Ez nem hiba.",
+            "t": "beallitas gyi mas adatbazis verzio rendsze gyi mas adatbazis verzio rendsze adatbazis szerkezete valtozi frissitessel hiba",
+            "h": 16
+        },
+        {
+            "id": "beallitasok#27",
+            "cim": "GYIK › Működik a rendszer, ha elmegy az internet?",
+            "horgony": "mukodik-a-rendszer-ha-elmegy-az-internet",
+            "szoveg": "Ha a rendszer a helyi hálózaton fut, a felvitel, a munkalap, a pénztár és a helyi nyomtatvány megy. A levelezés, a Számlázz.hu-számla és az asszisztens nem.",
+            "t": "beallitas gyi mukodi rendszer elmegy intern gyi mukodi rendszer elmegy intern rendszer helyi haloz fut felvitel munkalap penztar helyi nyomtatvany megy levelezes szamlazz hu szamla asszisztens",
+            "h": 26
+        },
+        {
+            "id": "beallitasok#28",
+            "cim": "GYIK › Ki látja, amit a Beállításokban átírok?",
+            "horgony": "ki-latja-amit-a-beallitasokban-atirok",
+            "szoveg": "Mindenki, aki a rendszert használja: ezek a cég közös beállításai. A saját gépére szóló megjelenést mindenki a profilmenüben állítja.",
+            "t": "beallitas gyi lat beallitas atir gyi lat beallitas atir mindenki rendsz hasznal ceg kozos beallitas saj gepe szolo megjelenes mindenki profilmenu alli",
+            "h": 22
+        }
+    ]
+}

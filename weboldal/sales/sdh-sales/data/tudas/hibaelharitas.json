@@ -1,0 +1,440 @@
+{
+    "kulcs": "hibaelharitas",
+    "cim": "Hibaelhárítás",
+    "csoport": "Rendszer",
+    "osszefoglalo": "A leggyakoribb elakadások tünet, ok és megoldás szerint, menüpontonként csoportosítva, a rendszer valódi hibaüzeneteivel.",
+    "darabok": [
+        {
+            "id": "hibaelharitas#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "Ez a fejezet akkor kell, amikor valami nem úgy megy, ahogy vártad. Menüpontonként sorolja fel a leggyakoribb elakadásokat, mindegyiknél három dologgal: **mit látsz** (a tünet vagy a hibaüzenet szó szerint), **miért** (az ok), és **mi a teendő**.\n\nHogyan használd:\n\n1. Olvasd el a piros üzenetet. A rendszer hibaüzenetei megmondják, mi a baj, és legtöbbször azt is, mit kell tenned.\n2. Keresd meg ebben a fejezetben a menüpontot, ahol elakadtál.\n3. Ha nem találod, nyomd meg az F1 billentyűt, és kérdezd meg az asszisztenst. Ha egy ablak hibát ad, magától is felajánlja a **Segíts** gombot.\n\nAz első segítség szinte mindenre: töltsd újra az oldalt az F5 billentyűvel. A rendszer adatot csak a mentés gombbal ír, ezért az újratöltés nem ront el semmit – legfeljebb a nyitott, el nem mentett ablak tartalma vész el.",
+            "t": "hibaelharitas mire valo mire valo fejez ami ugy megy ahogy vartad menupontonk sorol leggyakoribb elakadas mindegyiknel harom dologgal latsz tun hibauz szo szerin teendo hasznald olvasd piros uzen rendszer hibauzen megmondj baj legtobbszor tenned keresd ebb fejez menupon ahol elakadtal talalod nyomd f1 billentyu kerdezd asszisztens abl hib ad maga felajanl segits gomb elso segitseg szinte mind toltsd ujra oldal f5 billentyu rendszer ada mentes gombbal ir ezer ujratoltes ron semmi legfeljebb nyit ment abl tartalma vesz",
+            "h": 77
+        },
+        {
+            "id": "hibaelharitas#2",
+            "cim": "Belépés és oldalbetöltés",
+            "horgony": "belepes-es-oldalbetoltes",
+            "szoveg": "Elakadások a bejelentkezésnél és a műhely-felület megnyitásakor.\n\n- **„Ehhez nincs jogosultságod.\"** – *Ok:* a fiókod be van jelentkezve, de nem fér hozzá a műhelyrendszerhez, vagy kollégaként egy csak adminisztrátornak szóló oldalt nyitottál meg. *Megoldás:* szólj az adminisztrátornak. A **Beállítások** menüpont a kollégának nem jár.\n- **„Ez a fiók le van tiltva. Szólj az adminisztrátornak.\"** – *Ok:* a fiókodat letiltották. *Megoldás:* az adminisztrátor a **Csapat** menüpontban, a kolléga űrlapján állíthatja vissza **Aktív** állapotra.\n- **„Nincs ilyen oldal\" – „Ez a modul nem létezik.\"** – *Ok:* elírt vagy régi cím. *Megoldás:* válassz a bal oldali menüből, és frissítsd a könyvjelzőt.\n- **A műhely címe „nem található” oldalt ad.** – *Ok:* a rendszer címszabályai közül kiesett a műhelyé. A rendszer ezt magától pótolja. *Megoldás:* töltsd újra az oldalt. Ha így sem jó, a cím végére írd: `?muhely=attekintes` – ez mindig működik.\n- **Az oldal magától újratöltődött.** – *Ok:* a rendszer közben új verziót kapott, és a nyitott oldal egyszer frissített. *Megoldás:* nincs teendő.",
+            "t": "hibaelharitas belepes oldalbetoltes belepes oldalbetoltes elakadas bejelentkezesnel muhely felul megnyitasa ehhez nincs jogosultsagod fiokod jelentkezve fer hozza muhelyrendszer kollegak adminisztrator szolo oldal nyitottal megoldas szolj adminisztrator beallitas menup kollega jar fio tiltva szolj adminisztrator fiokod letiltot megoldas adminisztrator csap menupon kollega urlapjan allith vissza aktiv allap nincs oldal modul letezi elir regi cim megoldas valassz bal oldali menu frissitsd konyvjelz muhely cime talalhato oldal ad rendszer cimszabaly kozul kies muhelye rendszer maga potol megoldas toltsd ujra oldal igy jo cim vege ird muhely attekintes mukodi oldal maga ujratoltod rendszer koz uj verzi kap nyit oldal egyszer frissit megoldas nincs teendo",
+            "h": 100
+        },
+        {
+            "id": "hibaelharitas#3",
+            "cim": "Sebesség: ha lassú a rendszer",
+            "horgony": "sebesseg-ha-lassu-a-rendszer",
+            "szoveg": "A rendszer sok százezer ügyféllel és munkalappal is gyors, ha a szerver jól van beállítva. Két beállításon múlik a legtöbb – ezeket a rendszer üzemeltetője egyszer állítja be.",
+            "t": "hibaelharitas sebesseg lassu rendszer sebesseg lassu rendszer rendszer szazezer ugyfellel munkalappal gyors szerver jol beallitva ket beallitas muli legtobb eze rendszer uzemelteto egyszer alli",
+            "h": 24
+        },
+        {
+            "id": "hibaelharitas#4",
+            "cim": "Sebesség: ha lassú a rendszer › Gyors betöltés (Beállítások › Rendszer › Sebesség)",
+            "horgony": "sebesseg-ha-lassu-a-rendszer",
+            "szoveg": "### Gyors betöltés (Beállítások › Rendszer › Sebesség)\n\nBekapcsolva a műhely-felület két fájlban tölti be a stílusokat és a szkripteket, sok tucat helyett. Hagyd bekapcsolva.",
+            "t": "hibaelharitas sebesseg lassu rendszer gyors betoltes beallitas rendszer sebesseg sebesseg lassu rendszer gyors betoltes beallitas rendszer sebesseg gyors betoltes beallitas rendszer sebesseg bekapcsolva muhely felul ket fajl tolti stilus szkrip tuc hely hagyd bekapcsolva",
+            "h": 34
+        },
+        {
+            "id": "hibaelharitas#5",
+            "cim": "Sebesség: ha lassú a rendszer › Hol látod, hogy rendben van",
+            "horgony": "sebesseg-ha-lassu-a-rendszer",
+            "szoveg": "### Hol látod, hogy rendben van\n\n**Beállítások › Rendszer › Sebesség**, a **Gyors betöltés** doboz alján: *Szerver: PHP OPcache* (be / ki) és *MySQL puffer* (megabájtban). Ezt a webszerver PHP-ja mondja meg, nem a parancssor.",
+            "t": "hibaelharitas sebesseg lassu rendszer latod rend sebesseg lassu rendszer latod rend latod rend beallitas rendszer sebesseg gyors betoltes doboz aljan szerver php opcache mysql puffer megabaj webszerver php ja mond parancssor",
+            "h": 31
+        },
+        {
+            "id": "hibaelharitas#6",
+            "cim": "Sebesség: ha lassú a rendszer › Hardveres gyorsítás (a böngészőben)",
+            "horgony": "sebesseg-ha-lassu-a-rendszer",
+            "szoveg": "### Hardveres gyorsítás (a böngészőben)\n\nA műhely-felület mozgásai (a figura, a popupok, az árnyékok) akkor simák, ha a böngésző a videokártyával (GPU) rajzol. Weboldal ezt a böngészőben **nem tudja bekapcsolni** – csak a gép felhasználója vagy rendszergazdája –, de a CRM minden induláskor megvizsgálja:\n\n- Ha be van kapcsolva: semmi nem látszik; a **Beállítások › Rendszer › Sebesség** lapon a *Hardveres gyorsítás: be* sor áll.\n- Ha ki van kapcsolva: egy figyelmeztető sáv jelenik meg bal alul az adott böngészőre szabott lépésekkel (*Újraellenőrzés* és *Ne mutasd 7 napig* gombbal), és a felület **könnyített módba** kapcsol (nincs homályítás és nehéz árnyék), hogy a processzoron is gyors maradjon.\n\nKikényszerítés a cég gépein (Chrome és Edge, Windows): a `tools/hardveres-gyorsitas/hardveres-gyorsitas-be.reg` fájl rendszergazdaként futtatva házirendet állít be, amit a felhasználó sem tud kikapcsolni; a böngészőt utána teljesen újra kell indítani. Ellenőrzés: `chrome://policy` és `chrome://gpu`. Visszavonás: `hardveres-gyorsitas-vissza.reg`. Ha a videokártya-illesztő hibás vagy tiltólistás, a gyorsítás ettől még nem indul – ilyenkor az illesztőt kell frissíteni. Firefoxban kézzel kapcsolható (Beállítások › Általános › Teljesítmény).",
+            "t": "hibaelharitas sebesseg lassu rendszer hardveres gyorsitas bongeszo sebesseg lassu rendszer hardveres gyorsitas bongeszo hardveres gyorsitas bongeszo muhely felul mozgas figu popup arny sim bongeszo videokartya gpu rajzol weboldal bongeszo tud bekapcsolni gep felhasznalo rendszergazda crm indulas megvizsgal kapcsolva semmi latszi beallitas rendszer sebesseg lap hardveres gyorsitas sor all kapcsolva figyelmezteto sav jeleni bal alul ado bongeszo szab lepes ujraellenorzes ne mutasd nap gombbal felul konnyit mod kapcsol nincs homalyitas nehez arny processzor gyors maradj kikenyszerites ceg gepein chrome edge windows tools hardveres gyorsitas hardveres gyorsitas reg fajl rendszergazdak futtatva hazirend alli felhasznalo tud kikapcsolni bongesz utana teljes ujra inditani ellenorzes chrome policy chrome gpu visszavonas hardveres gyorsitas vissza reg videokartya illeszto hibas tiltolistas gyorsitas ettol indul ily illesz frissiteni firefox kezzel kapcsolhato beallitas altalanos teljesitmeny",
+            "h": 125
+        },
+        {
+            "id": "hibaelharitas#7",
+            "cim": "Sebesség: ha lassú a rendszer › Az ügyfélkereső frissítése után",
+            "horgony": "sebesseg-ha-lassu-a-rendszer",
+            "szoveg": "### Az ügyfélkereső frissítése után\n\nÚj verzióra lépéskor a rendszer egyszer, a háttérben feltölti az ügyfelek keresőadatait (kérésenként legfeljebb egy másodpercig, ott folytatja, ahol abbahagyta). Amíg ez tart, az ügyfélkereső a régi módon keres – ugyanazt találja, csak lassabban. Nagy állománynál ez néhány percnyi használat alatt ér véget.",
+            "t": "hibaelharitas sebesseg lassu rendszer ugyfelkereso frissitese utan sebesseg lassu rendszer ugyfelkereso frissitese utan ugyfelkereso frissitese utan uj verzio lepes rendszer egyszer hatter feltolti ugyfel keresoad keresenk legfeljebb masodperc folyt ahol abbahagyta amig tar ugyfelkereso regi mod keres ugyanaz talal lassab nagy allomanynal nehany percnyi hasznal ala er veg",
+            "h": 48
+        },
+        {
+            "id": "hibaelharitas#8",
+            "cim": "Ha nincs internet",
+            "horgony": "ha-nincs-internet",
+            "szoveg": "A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is megy. Ami internetet kér, az kimaradáskor nem várakoztat: azonnal szól, hogy most nem megy ki. A fejlécben **Nincs internet** jelzés áll, amíg vissza nem jön (percenként ellenőrzi). A **Beállítások › Rendszer › Sebesség** lapon is látszik: *Internet: van / NINCS*.\n\n**Net nélkül is megy:** munkalapok, ügyfelek, eszközök; házipénztár, napi árukiadás, rendelések; nyomtatás helyi nyomtatóra, matrica, PDF; naptár, csapatüzenetek, napló; helyi mentés; SMS a bolti telefonon át, ha a telefon a helyi hálózaton van és van térereje.\n\n**Net nélkül vár:** Számlázz.hu-számla (ha visszajött a net, a lapról újra kiállítható), e-mail, asszisztens, IMEI-lekérdezés, Google Drive / távoli FTP-mentés, frissítés-ellenőrzés, és a kívülről elérhető oldalak (ügyféloldal, időpontfoglalás, értékelés). Az elégedettségi kérdés kimaradáskor később megy ki.\n\n### Lépésről lépésre: próba élesítés előtt\n\n1. A szerver és a pultgépek a **helyi címen** érjék el a rendszert (például `http://192.168.1.10/`), ne a kívülről elérhető címen – különben net nélkül a gépek sem találják a szervert.\n2. A szerver és a switch (router) legyen **szünetmentes tápon**.\n3. Húzd ki a **net-kábelt** a routerből (a helyi hálózat maradjon).\n4. Egy percen belül megjelenik a **Nincs internet** jelzés.\n5. Próbáld ki: új munkalap, pénztármozgás, nyomtatás, mentés – mennek.\n6. Próbálj számlát kiállítani: azonnal szól, hogy most nem megy ki (nem vár percekig).\n7. Dugd vissza a kábelt: egy percen belül eltűnik a jelzés; a számlát most kiállíthatod.",
+            "t": "hibaelharitas nincs intern nincs intern rendszer ceg saj szerver fut ezer belso munka net nelkul megy intern ker kimaradas varakoz azonnal szol megy fejlec nincs intern jelzes all amig vissza jon percenk ellenorzi beallitas rendszer sebesseg lap latszi intern nincs net nelkul megy munkalap ugyfel eszkoz hazipenztar napi arukiadas rendeles nyomtatas helyi nyomtato matrica pdf naptar csapatuz naplo helyi mentes sms bolti telef telef helyi haloz tere net nelkul var szamlazz hu szamla visszaj net lap ujra kiallithato mail asszisztens imei lekerdezes google drive tavoli ftp mentes frissites ellenorzes kivul elerheto oldal ugyfeloldal idopontfoglalas ertekeles elegedettsegi kerdes kimaradas kesobb megy lepes lepes pro elesites elo szerver pultgep helyi cim erj rendsz peldaul http 192 168 10 ne kivul elerheto cim kul net nelkul gep talalj szerv szerver switch router legy szunetmentes tap huzd net kabel router helyi haloz maradj perc belul megjeleni nincs intern jelzes probald uj munkalap penztarmozgas nyomtatas mentes men probalj szamla kiallitani azonnal szol megy var perc dugd vissza kabel perc belul eltuni jelzes szamla kiallithatod",
+            "h": 169
+        },
+        {
+            "id": "hibaelharitas#9",
+            "cim": "Telefonon és tableten",
+            "horgony": "telefonon-es-tableten",
+            "szoveg": "A rendszer telefonon is használható. Keskeny képernyőn a bal oldali menü ikonokra szűkül, a fejlécben csak a kereső, az óra ideje és a gombok maradnak; a széles táblázatok a saját helyükön oldalra húzhatók (maga az oldal nem csúszik el). A felugró ablakok (munkalap, ügyfél…) telefonon kitöltik a képernyőt, és **görgethetők** – nagy képernyőn továbbra sem görgetnek, ott a tartalom fér el egyben.",
+            "t": "hibaelharitas telef tabl telef tabl rendszer telef hasznalhato keskeny keperny bal oldali menu ikon szukul fejlec kereso ora ide gomb marad szeles tablaz saj hely oldal huzh maga oldal csuszi felugro abl munkalap ugyfel telef kitolti keperny gorgeth nagy keperny tovabb gorg tartalom fer egy",
+            "h": 45
+        },
+        {
+            "id": "hibaelharitas#10",
+            "cim": "Popupok és mentés",
+            "horgony": "popupok-es-mentes",
+            "szoveg": "Bármelyik menüpont felugró ablakára (popupjára) és a mentésre érvényes elakadások.",
+            "t": "hibaelharitas popup mentes popup mentes barmelyi menup felugro ablaka popup mentes ervenyes elakadas",
+            "h": 13
+        },
+        {
+            "id": "hibaelharitas#11",
+            "cim": "Popupok és mentés",
+            "horgony": "popupok-es-mentes",
+            "szoveg": "- **„Az űrlap nem töltődött be. A szerver … hibakóddal válaszolt.\"** – *Ok:* lejárt a munkamenet (403), vagy a szerver hibát adott (500). *Megoldás:* töltsd újra az oldalt, szükség esetén lépj be újra. Ha ismétlődik, jelezd az adminisztrátornak a hibakóddal együtt.\n- **„A beküldött adat túl nagy vagy lejárt a munkamenet. Kevesebb vagy kisebb fájllal próbáld, vagy frissítsd az oldalt.\"** – *Ok:* a csatolt fájlok együtt nagyobbak, mint amit a szerver egy beküldésben elfogad, vagy az oldal túl régóta áll nyitva. *Megoldás:* csatolj kevesebb vagy kisebb fájlt; ha nem csatoltál semmit, frissítsd az oldalt.\n- **„A mentés nem sikerült. A szerver válasza nem értelmezhető.\"** – *Ok:* a szerver nem a várt választ adta (hiba vagy megszakadt kapcsolat). *Megoldás:* próbáld újra. Az ablak nyitva marad, a beírt adat megvan.\n- **„Az adatbázis visszautasította a mentést.\"** – *Ok:* az adatbázis nem fogadta el a műveletet. Előfordulhat például frissítés után, amíg az adatbázis nem igazodott az új verzióhoz. *Megoldás:* töltsd újra az oldalt, és mentsd újra. Ha megmarad, az adminisztrátor nézze meg a **Beállítások › Névjegy** lapfülön a verziókat.\n- **„Nincs ilyen rekord. Lehet, hogy időközben törölték.\"** – *Ok:* a megnyitott elem már nincs meg, vagy régi hivatkozásról jöttél. *Megoldás:* frissítsd a listát.\n- **Bezárult az ablak, és elveszett, amit beírtam.** – *Ok:* a bezárás (Esc, piros gomb, kattintás a sötét háttérre) nem kérdez rá a mentésre. *Megoldás:* mindig a mentés gombbal zárd le a munkát.\n- **Az ablak apró betűs lett.** – *Ok:* a tartalom magasabb volt a képernyőnél, és a rendszer görgetés helyett lekicsinyítette. *Megoldás:* tedd teljes képernyőre a zöld ablakgombbal, vagy a **Beállítások › Logó és megjelenés › Betű területenként** dobozban vedd nagyobbra az „Űrlapok és popup ablakok\" betűjét.\n- **Az ablak furcsa méretben nyílik.** – *Ok:* a böngésző megjegyezte a legutóbbi méretet. *Megoldás:* kattints duplán az ablak szélére – visszaáll az alapméretre.",
+            "t": "hibaelharitas popup mentes popup mentes urlap toltod szerver hibakoddal valaszol lejar munkam 403 szerver hib ado 500 megoldas toltsd ujra oldal szukseg ese lepj ujra ismetlodi jelezd adminisztrator hibakoddal egyu bekuld ada tul nagy lejar munkam kevesebb kisebb fajllal probald frissitsd oldal csa fajl egyu nagyobb szerver bekuldes elfogad oldal tul regota all nyitva megoldas csatolj kevesebb kisebb fajl csatoltal semmi frissitsd oldal mentes sikerul szerver valasza ertelmezheto szerver var valasz adta hiba megszakad kapcsol megoldas probald ujra abl nyitva marad beir ada megvan adatbazis visszautasitotta mentes adatbazis fogadta muvel elofordulh peldaul frissites utan amig adatbazis igazod uj verzio megoldas toltsd ujra oldal mentsd ujra megmarad adminisztrator nezze beallitas nevjegy lapful verzi nincs rekord idokoz torol megnyit elem nincs regi hivatkozas jottel megoldas frissitsd lis bezarul abl elvesz beirtam bezaras esc piros gomb kattintas sot hatter kerdez mentes megoldas mentes gombbal zard mun abl apro betus let tartalom magasabb kepernyonel rendszer gorgetes hely lekicsinyitette megoldas tedd teljes kepernyo zold ablakgombbal beallitas logo megjelenes betu teruletenk doboz vedd nagyobb urlap popup abl betuj abl furcsa mer nyili bongeszo megjegyezte legutobbi mer megoldas kattints duplan abl szele visszaall alapmer",
+            "h": 187
+        },
+        {
+            "id": "hibaelharitas#12",
+            "cim": "Ügyfelek és eszközök",
+            "horgony": "ugyfelek-es-eszkozok",
+            "szoveg": "Az **Ügyfelek** és az **Eszközök** menüpont, illetve az ügyfél- és eszközűrlap üzenetei.",
+            "t": "hibaelharitas ugyfel eszkoz ugyfel eszkoz ugyfel eszkoz menup illetve ugyfel eszkozurlap uzen",
+            "h": 12
+        },
+        {
+            "id": "hibaelharitas#13",
+            "cim": "Ügyfelek és eszközök",
+            "horgony": "ugyfelek-es-eszkozok",
+            "szoveg": "- **„A név kitöltése kötelező – e nélkül nem menthető az ügyfél.\"** – *Ok:* üres a név. *Megoldás:* írd be; cégnél a cég nevét, magánszemélynél a teljes nevet.\n- **„Válassz ügyfelet a listából – gépelés önmagában nem elég.\"** – *Ok:* az ügyfélmezőbe beírtál egy nevet, de nem kattintottál a lenyíló találatra. *Megoldás:* kezdd el írni a nevet, és válaszd ki a listából, vagy nyomd meg az Enter billentyűt az első találathoz. Ha az ügyfél még nincs meg, a mező melletti **+** gombbal vedd fel.\n- **„Válassz ügyfelet a listából – eszköz ügyfél nélkül nem vihető fel.\"** – *Ok:* az eszköz mindig egy ügyfélhez tartozik. *Megoldás:* előbb válaszd ki az ügyfelet.\n- **„Az ügyfél mentve, de néhány fájl nem: …\"** (eszköznél: **„Az eszköz mentve, de néhány fájl nem\"**) – *Ok:* az adatok elmentődtek, de egy csatolt fájl túl nagy vagy nem engedélyezett típusú. *Megoldás:* az üzenet megnevezi a fájlt. Nyisd meg újra, és csatold kisebb méretben vagy más formátumban. Egy fájl legfeljebb 25 MB lehet, de a szerver korlátja ennél kisebb is lehet.\n- **„A csatolt fájl nem fogadható el (túl nagy, nem engedélyezett típus vagy sérült fájl). Semmi nem mentődött.\"** – *Ok:* a fájl ellenőrzése már a mentés előtt megbukott. *Megoldás:* vedd ki a fájlt, vagy cseréld másikra, és mentsd újra.\n- **„Ez a 15 számjegy nem ad ki érvényes IMEI-t – nézd meg, nem gépelted-e el.\"** – *Ok:* az IMEI ellenőrző számjegye nem stimmel. Ez figyelmeztetés, nem tiltás. *Megoldás:* olvasd le újra a készülékről.\n- **„Előbb írd be a teljes, 15 számjegyű IMEI-t.\"** – *Ok:* a lekérdezéshez teljes IMEI kell. *Megoldás:* írd be mind a 15 számjegyet.\n- **Az IMEI-ből nem töltődik ki a gyártó és a típus.** – *Ok:* a TAC-adatbázis nincs betöltve, vagy ez a készülék nincs benne. *Megoldás:* az adminisztrátor a **Beállítások › TAC adatbázis** lapfülön töltheti be; addig írd be kézzel.",
+            "t": "hibaelharitas ugyfel eszkoz ugyfel eszkoz nev kitoltese kotelezo nelkul mentheto ugyfel ures nev megoldas ird cegnel ceg nev maganszemelynel teljes nev valassz ugyfel lista gepeles onmaga eleg ugyfelmezo beirtal nev kattintottal lenyilo talal megoldas kezdd irni nev valaszd lista nyomd enter billentyu elso talal ugyfel nincs mezo melletti gombbal vedd valassz ugyfel lista eszkoz ugyfel nelkul viheto eszkoz ugyfel tartozi megoldas elobb valaszd ugyfel ugyfel mentve nehany fajl eszkoznel eszkoz mentve nehany fajl ada elmentod csa fajl tul nagy engedelyez tipusu megoldas uzen megnevezi fajl nyisd ujra csatold kisebb mer mas formatum fajl legfeljebb 25 mb szerver korl ennel kisebb csa fajl fogadhato tul nagy engedelyez tipus serul fajl semmi mentod fajl ellenorzese mentes elo megbuk megoldas vedd fajl csereld masi mentsd ujra 15 szamjegy ad ervenyes imei nezd gepelted imei ellenorzo szamjegye stimmel figyelmeztetes tiltas megoldas olvasd ujra keszul elobb ird teljes 15 szamjegyu imei lekerdezes teljes imei megoldas ird mind 15 szamjegy imei bol toltodi gyarto tipus tac adatbazis nincs betoltve eszkoz nincs benne megoldas adminisztrator beallitas tac adatbazis lapful toltheti add ird kezzel",
+            "h": 176
+        },
+        {
+            "id": "hibaelharitas#14",
+            "cim": "Munkalapok",
+            "horgony": "munkalapok",
+            "szoveg": "A **Munkalapok** menüpont és az Áttekintés munkalap-táblázatának üzenetei.",
+            "t": "hibaelharitas munkalap munkalap munkalap menup attekintes munkalap tablazata uzen",
+            "h": 9
+        },
+        {
+            "id": "hibaelharitas#15",
+            "cim": "Munkalapok",
+            "horgony": "munkalapok",
+            "szoveg": "- **„Válassz ügyfelet a munkalaphoz – ügyfél nélkül nem adható munkalapszám.\"** – *Ok:* számozott állapotú munkalaphoz ügyfél kell. *Megoldás:* válaszd ki az ügyfelet a listából.\n- **„Válassz eszközt a munkalaphoz – a munkalap mindig egy eszközre vonatkozik.\"** – *Ok:* nincs kiválasztott eszköz. *Megoldás:* válaszd ki az ügyfél eszközét, vagy vedd fel a **+** gombbal.\n- **„A kiválasztott eszköz nem ennek az ügyfélnek a készüléke.\"** – *Ok:* az ügyfelet átírtad, de az eszköz a régié maradt. *Megoldás:* válaszd ki újra az eszközt.\n- **„A számozás épp foglalt – próbáld újra egy pillanat múlva.\"** – *Ok:* ugyanabban a pillanatban más is munkalapot mentett, és a rendszer egyszerre csak egy számot ad ki. *Megoldás:* nyomd meg újra a mentést.\n- **„Nincs ilyen munkalap. Lehet, hogy időközben törölték.\"** – *Ok:* régi hivatkozás, vagy a lista elavult. *Megoldás:* frissítsd az oldalt.\n- **„Ez az eszköz már nincs a munkalapon. Nyisd meg újra a lapot.\"** – *Ok:* közben valaki levette az eszközt a lapról. *Megoldás:* zárd be, és nyisd meg újra a munkalapot.\n- **„Egy eszközös lapon a „Fizetve\" a munkalapé – ott állítsd.\"** – *Ok:* az eszközönkénti fizetés csak több eszközös lapon él. *Megoldás:* a munkalap **Fizetve** jelölőjét használd.\n- **„A munkalap egészben ki van fizetve. Előbb a lapon vedd le a „Fizetve\" pipát.\"** – *Ok:* a teljesen kifizetett lapon az eszköz jelzője külön nem állítható. *Megoldás:* vedd le a lap **Fizetve** pipáját, aztán állítsd az eszközt.\n- **„A gyakori hibák listája betelt (60 db). A Beállításokban törölhetsz belőle.\"** – *Ok:* a lista elérte a felső határt. Ugyanez igaz a gyakori megjegyzésekre. *Megoldás:* az adminisztrátor a **Beállítások › Gyakori hibák** lapfülön ritkítja.\n- **„Legfeljebb 30 saját nézet menthető. Törölj egyet, mielőtt újat mentesz.\"** – *Ok:* az Áttekintés munkalap-táblázatának nézetei beteltek. *Megoldás:* törölj egy régit.\n- **„Ennek a munkalapnak még nincs sorszáma, ezért címke sem nyomtatható.\"** – *Ok:* a lap még nem számozott állapotú. *Megoldás:* tedd számozott állapotba, mentsd el, utána nyomtass.",
+            "t": "hibaelharitas munkalap munkalap valassz ugyfel munkalap ugyfel nelkul adhato munkalapszam szamoz allapotu munkalap ugyfel megoldas valaszd ugyfel lista valassz eszkoz munkalap munkalap eszkoz vonatkozi nincs kivalaszt eszkoz megoldas valaszd ugyfel eszkoz vedd gombbal kivalaszt eszkoz enn ugyfel keszuleke ugyfel atirtad eszkoz regie marad megoldas valaszd ujra eszkoz szamozas epp foglal probald ujra pillan mulva ugyanab pillan mas munkalap ment rendszer egyszer szam ad megoldas nyomd ujra mentes nincs munkalap idokoz torol regi hivatkozas lista elavul megoldas frissitsd oldal eszkoz nincs munkalap nyisd ujra lap koz valaki levette eszkoz lap megoldas zard nyisd ujra munkalap eszkozos lap fizetve munkalape allitsd eszkozonkenti fizetes tobb eszkozos lap megoldas munkalap fizetve jeloloj hasznald munkalap egesz fizetve elobb lap vedd fizetve pip teljes kifizet lap eszkoz jelzo kul allithato megoldas vedd lap fizetve pipaj aztan allitsd eszkoz gyakori hib lista betel 60 db beallitas torolhetsz belole lista elerte felso hatar ugyanez igaz gyakori megjegyzes megoldas adminisztrator beallitas gyakori hib lapful ritki legfeljebb 30 saj nez mentheto torolj egy miel uja mentesz attekintes munkalap tablazata nez betel megoldas torolj regi enn munkalap nincs sorszama ezer cimke nyomtathato lap szamoz allapotu megoldas tedd szamoz allap mentsd utana nyomtass",
+            "h": 191
+        },
+        {
+            "id": "hibaelharitas#16",
+            "cim": "Pénztár és fizetés",
+            "horgony": "penztar-es-fizetes",
+            "szoveg": "A **Pénztár** menüpont és a munkalap **Fizetés** ablakának üzenetei.\n\n- **„Előbb mentsd el a munkalapot.\"** – *Ok:* a **Fizetés** ablak csak elmentett munkalapról nyílik. *Megoldás:* mentsd el a lapot, aztán fizess.\n- **„Add meg a kapott összeget.\"** / **„Add meg legalább egy eszköz összegét.\"** – *Ok:* nincs beírt összeg. *Megoldás:* írd be, mennyit fizetett az ügyfél.\n- **„Jelöld be, melyik eszközt fizetik.\"** – *Ok:* több eszközös lapon nem választottál eszközt. *Megoldás:* pipáld ki azt, amelyiket most kifizetik.\n- **„Jövőbeli napra nem lehet tételt írni.\"** – *Ok:* a tétel dátuma későbbi a mainál. *Megoldás:* javítsd a napot.\n- **„A kivétnél válaszd ki, ki vette ki a pénzt.\"** – *Ok:* a kivéthez személy kell. *Megoldás:* válassz a listából. A személyeket a **Beállítások › Házipénztár** lapfül tartja.\n- **„Írj be összeget (KP, kártya vagy utalás).\"** / **„Írd be, mi történt (leírás).\"** – *Ok:* hiányzó mező a gyorsbevitelnél. *Megoldás:* töltsd ki, és nyomd meg újra az Enter billentyűt.\n- **Nap végén nem stimmel a kassza.** – *Ok:* kimaradt egy tétel, vagy rossz fizetési módra került. *Megoldás:* a **Pénztár** menüpont **Ügynök** lapfülén kérdezd meg, hol az eltérés. Részletek: Pénztár.\n- **Excel-importnál: „Csak .xlsx vagy .csv fájl tölthető fel.\"** – *Ok:* régi `.xls` fájlt választottál. *Megoldás:* Excelben mentsd el `.xlsx` formátumban. Ha **„A fájl nem érkezett meg\"** az üzenet, a fájl nagyobb, mint amit a szerver enged.",
+            "t": "hibaelharitas penztar fizetes penztar fizetes penztar menup munkalap fizetes ablaka uzen elobb mentsd munkalap fizetes abl elment munkalap nyili megoldas mentsd lap aztan fizess add kap osszeg add legalabb eszkoz osszeg nincs beir osszeg megoldas ird mennyi fizet ugyfel jelold eszkoz fizeti tobb eszkozos lap valasztottal eszkoz megoldas pipald amelyi kifizeti jovobeli nap tetel irni tetel datuma kesobbi mainal megoldas javitsd nap kivetnel valaszd vette penz kiv szemely megoldas valassz lista szemely beallitas hazipenztar lapful tar irj osszeg kp kartya utalas ird tort leiras hianyzo mezo gyorsbevitelnel megoldas toltsd nyomd ujra enter billentyu nap veg stimmel penztar kimarad tetel rossz fizetesi mod ar megoldas penztar menup ugyn lapful kerdezd elteres reszl penztar excel importnal xlsx csv fajl toltheto regi xls fajl valasztottal megoldas excel mentsd xlsx formatum fajl erkez uzen fajl nagyobb szerver enged",
+            "h": 134
+        },
+        {
+            "id": "hibaelharitas#17",
+            "cim": "Számlázás",
+            "horgony": "szamlazas",
+            "szoveg": "A munkalapról nyíló számla ablak üzenetei.",
+            "t": "hibaelharitas szamlazas szamlazas munkalap nyilo szamla abl uzen",
+            "h": 8
+        },
+        {
+            "id": "hibaelharitas#18",
+            "cim": "Számlázás",
+            "horgony": "szamlazas",
+            "szoveg": "- **„Nincs megadva a Számla Agent kulcs (Beállítások → Számlázás – Számlázz.hu).\"** – *Ok:* nincs bekötve a Számlázz.hu. *Megoldás:* az adminisztrátor a **Beállítások › Számlázás** lapfülön adja meg a kulcsot, és a **Kapcsolat ellenőrzése** gombbal próbálja ki.\n- **„A Számlázz.hu nem fogadta el a Számla Agent kulcsot.\"** (hibakód: 3) – *Ok:* hibás vagy visszavont kulcs. *Megoldás:* másold be újra a kulcsot a Számlázz.hu fiókodból.\n- **„Számla csak sorszámot kapott (számozott állapotú) munkalaphoz készíthető.\"** – *Ok:* a munkalapnak még nincs száma. *Megoldás:* tedd számozott állapotba, és mentsd el.\n- **„A vevő adatai hiányosak: …\"** – *Ok:* a számlához kötelező vevőadat hiányzik; az üzenet felsorolja, melyik. *Megoldás:* töltsd ki a számla ablakában.\n- **„Az adószám 11 számjegy, ebben az alakban: 12345678-1-12. Magánszemélynél hagyd üresen.\"** – *Ok:* hibás formátum. *Megoldás:* javítsd, vagy töröld a mezőt.\n- **„Legalább egy tétel kell: pipálj ki egyet, vagy vegyél fel újat.\"** – *Ok:* egyetlen tétel sincs kijelölve. *Megoldás:* pipálj ki legalább egyet.\n- **„Az „E-mail az ügyfélnek\" be van pipálva, de nincs e-mail-cím.\"** – *Ok:* e-mailben kérted a számlát, cím nélkül. *Megoldás:* írd be a vevő e-mail-címét, vagy vedd ki a pipát.\n- **„A Számlázz.hu nem adott vissza számlaszámot.\"** – *Ok:* a válasz megszakadt; a számla lehet, hogy elkészült. *Megoldás:* **előbb nézd meg a Számlázz.hu fiókodban**, elkészült-e, és csak utána próbáld újra – különben dupla számla lesz.\n- **„Ez a számlaszám-előtag nincs felvéve a Számlázz.hu fiókodban.\"** (hibakód: 202) – *Megoldás:* vedd fel ott az előtagot, aztán próbáld újra. Az e-számlára vonatkozó üzenetnél (hibakód: 54) kapcsold ki az e-számla jelölőt a **Beállítások › Számlázás** lapfülön, vagy engedélyezd a Számlázz.hu-n.",
+            "t": "hibaelharitas szamlazas szamlazas nincs megadva szamla agen kulcs beallitas szamlazas szamlazz hu nincs bekotve szamlazz hu megoldas adminisztrator beallitas szamlazas lapful adja kulcs kapcsol ellenorzese gombbal probal szamlazz hu fogadta szamla agen kulcs hibakod hibas visszav kulcs megoldas masold ujra kulcs szamlazz hu fiokod szamla sorszam kap szamoz allapotu munkalap keszitheto munkalap nincs szama megoldas tedd szamoz allap mentsd ugyfel ada hianyos szamla kotelezo vevoad hianyzi uzen felso megoldas toltsd szamla ablaka adoszam 11 szamjegy ebb ala 12345678 12 maganszemelynel hagyd ures hibas formatum megoldas javitsd torold mez legalabb tetel pipalj egy vegyel uja egyetl tetel sincs kijelolve megoldas pipalj legalabb egy mail ugyfel pipalva nincs mail cim mail kerted szamla cim nelkul megoldas ird ugyfel mail cim vedd pip szamlazz hu ado vissza szamlaszam valasz megszakad szamla elkeszul megoldas elobb nezd szamlazz hu fiokod elkeszul utana probald ujra kul dupla szamla szamlaszam elotag nincs felveve szamlazz hu fiokod hibakod 202 megoldas vedd elotag aztan probald ujra szamla vonatkozo uzenetnel hibakod 54 kapcsold szamla jelol beallitas szamlazas lapful engedelyezd szamlazz hu",
+            "h": 171
+        },
+        {
+            "id": "hibaelharitas#19",
+            "cim": "Napi árukiadás és rendelések",
+            "horgony": "napi-arukiadas-es-rendelesek",
+            "szoveg": "A **Napi árukiadás** és a **Rendelések** menüpont üzenetei.\n\n- **„Nincs ilyen rendelés. Lehet, hogy időközben megváltozott – frissítsd az oldalt.\"** – *Ok:* más közben módosította. *Megoldás:* frissíts.\n- **„Ehhez a rendeléshez nem küldhető értesítés (nincs ügyfele, vagy nem létezik).\"** – *Ok:* a rendeléshez nincs ügyfél rendelve. *Megoldás:* nyisd meg a rendelést, és válassz ügyfelet.\n- **„Érvénytelen e-mail cím: …\"** – *Ok:* elgépelt cím. *Megoldás:* javítsd az ügyfél e-mail-címét.",
+            "t": "hibaelharitas napi arukiadas rendeles napi arukiadas rendeles napi arukiadas rendeles menup uzen nincs rendeles idokoz megvaltoz frissitsd oldal mas koz modositotta megoldas frissits ehhez rendeles kuldheto ertesites nincs ugyfele letezi rendeles nincs ugyfel rendelve megoldas nyisd rendeles valassz ugyfel ervenytel mail cim elgepel cim megoldas javitsd ugyfel mail cim",
+            "h": 49
+        },
+        {
+            "id": "hibaelharitas#20",
+            "cim": "Üzenetek és ügyféloldal",
+            "horgony": "uzenetek-es-ugyfeloldal",
+            "szoveg": "Az **Üzenetek** menüpont és az ügyfélnek szóló ügyféloldal elakadásai.\n\n- **„Írd be az üzenetet.\"** – *Ok:* üres üzenetet küldenél. *Megoldás:* írj szöveget.\n- **Az ügyfél nem kapja meg az e-mail értesítést.** – *Ok:* nincs e-mail-címe, vagy a szerver levélküldése nem működik. *Megoldás:* ellenőrizd az ügyfél e-mail-címét; ha az jó, a szerver levélküldését a rendszer üzemeltetője tudja beállítani.\n- **Az ügyfél azt mondja, nem tud belépni az ügyféloldalra.** – *Ok:* a telefonszám vagy a munkalap sorszáma nem egyezik; több hibás próbálkozás után az oldal 15 percig nem enged újra próbálkozni. *Megoldás:* egyeztesd vele a munkalapon szereplő telefonszámot és sorszámot. Részletek: Üzenetek és ügyféloldal.",
+            "t": "hibaelharitas uzen ugyfeloldal uzen ugyfeloldal uzen menup ugyfel szolo ugyfeloldal elakadas ird uzen ures uzen kuldenel megoldas irj szoveg ugyfel kap mail ertesites nincs mail cime szerver levelkuldese mukodi megoldas ellenorizd ugyfel mail cim jo szerver levelkuldes rendszer uzemelteto tud beallitani ugyfel mond tud belepni ugyfeloldal telefonszam munkalap sorszama egyezi tobb hibas probalkozas utan oldal 15 perc enged ujra probalkozni megoldas egyeztesd vele munkalap szereplo telefonszam sorszam reszl uzen ugyfeloldal",
+            "h": 70
+        },
+        {
+            "id": "hibaelharitas#21",
+            "cim": "Levelezés",
+            "horgony": "levelezes",
+            "szoveg": "A **Levelezés** menüpont üzenetei.",
+            "t": "hibaelharitas levelezes levelezes levelezes menup uzen",
+            "h": 6
+        },
+        {
+            "id": "hibaelharitas#22",
+            "cim": "Levelezés",
+            "horgony": "levelezes",
+            "szoveg": "- **„Nincs megnyitott e-mail-fiók. Állítsd be a Beállítások → Levelezés alatt, vagy nyisd meg a jelszavával.\"** – *Ok:* nincs bekötött fiók, vagy jelszóval zárva van. *Megoldás:* az adminisztrátor kösse be, vagy írd be a fiók jelszavát.\n- **„A belépés nem sikerült: a szerver elutasította a felhasználónevet vagy a jelszót.\"** – *Ok:* hibás vagy visszavont alkalmazásjelszó. *Megoldás:* kérj újat a levelezőszolgáltatónál, és írd be a **Beállítások › Levelezés** lapfülön. A sima fiókjelszó nem jó, alkalmazásjelszó kell.\n- **„A levelezőszerver nem érhető el (…).\"** – *Ok:* nincs internet, rossz a szerver neve vagy a portja, vagy a tárhely tiltja a kimenő kapcsolatot. *Megoldás:* a **Kapcsolat ellenőrzése** gomb megmondja, a bejövő vagy a kimenő oldal hibás.\n- **„A bejövő kapcsolat él (…), de a kimenő (SMTP) nem: …\"** – *Ok:* olvasni tudsz, küldeni nem. *Megoldás:* ellenőrizd a kimenő szerver nevét, portját és titkosítását.\n- **„Ez a postafiók jelszóval védett. Előbb nyisd meg a jelszavával.\"** – *Ok:* a fióknak külön jelszava van a rendszerben. *Megoldás:* írd be.\n- **„Túl sok hibás próbálkozás. 15 perc múlva próbáld újra.\"** – *Ok:* ötször rossz jelszót írtál a postafiókhoz. *Megoldás:* várj 15 percet.\n- **„Ez a levél már nincs meg ebben a mappában. Frissítsd a listát.\"** – *Ok:* a levelet közben máshol (telefonon, webes levelezőben) törölték vagy áthelyezték. *Megoldás:* frissítsd a listát.\n- **„Véglegesen törölni csak a Kukából, a Spamből és a Piszkozatokból lehet.\"** – *Megoldás:* előbb tedd a kukába.\n- **„Valamelyik e-mail-cím hibás. A címeket vesszővel válaszd el.\"** – *Megoldás:* javítsd a címzetteket; több cím közé vessző kell.\n- **A levelezés költözés után nem megy, a jelszó „eltűnt\".** – *Ok:* a szerver titkos kulcsai megváltoztak, a titkosított jelszó nem fejthető vissza. *Megoldás:* írd be újra az alkalmazásjelszót. Lásd: Mentés, jogosultság, biztonság.",
+            "t": "hibaelharitas levelezes levelezes nincs megnyit mail fio allitsd beallitas levelezes ala nyisd jelszava nincs bekot fio jelszo zarva megoldas adminisztrator kosse ird fio jelszav belepes sikerul szerver elutasitotta felhasznalonev jelsz hibas visszav alkalmazasjelszo megoldas kerj uja levelezoszolgaltatonal ird beallitas levelezes lapful sima fiokjelszo jo alkalmazasjelszo levelezoszerver erheto nincs intern rossz szerver neve por tarhely til kimeno kapcsol megoldas kapcsol ellenorzese gomb megmond bejovo kimeno oldal hibas bejovo kapcsol kimeno smtp olvasni kuldeni megoldas ellenorizd kimeno szerver nev portj titkositas postafi jelszo ved elobb nyisd jelszava fio kul jelszava rendszer megoldas ird tul hibas probalkozas 15 perc mulva probald ujra otszor rossz jelsz irtal postafi megoldas varj 15 perc level nincs ebb mappa frissitsd lis level koz mashol telef webes levelezo torol athelyez megoldas frissitsd lis vegleges torolni kuka spam piszkoz megoldas elobb tedd kuka valamelyi mail cim hibas cim vesszo valaszd megoldas javitsd cimzet tobb cim koze vesszo levelezes koltozes utan megy jelszo eltun szerver titkos kulcs megvaltoz titkosit jelszo fejtheto vissza megoldas ird ujra alkalmazasjelsz lasd mentes jogosultsag biztonsag",
+            "h": 170
+        },
+        {
+            "id": "hibaelharitas#23",
+            "cim": "Naptár",
+            "horgony": "naptar",
+            "szoveg": "A **Naptár** menüpont üzenetei.\n\n- **„Add meg az esemény megnevezését.\"** / **„Add meg a kezdés napját.\"** / **„Válaszd ki, kinek a naptárába kerüljön.\"** – *Ok:* kötelező mező hiányzik. *Megoldás:* töltsd ki.\n- **„Ezt az eseményt csak a naptár gazdája vagy az adminisztrátor módosíthatja.\"** – *Ok:* más naptárában lévő eseményt írnál át. *Megoldás:* kérd meg a gazdáját.\n- **„Ismétlődő esemény időpontját az űrlapján lehet módosítani.\"** – *Ok:* ismétlődő eseményt húzással nem lehet áttenni. *Megoldás:* nyisd meg, és ott írd át.\n- **„A neveket az adminisztrátor szerkesztheti.\"** – *Megoldás:* a naptár neveit adminisztrátor veszi fel.\n- **Nem jön az esemény e-mail értesítése.** – *Ok:* a szerver levélküldése vagy az időzített feladatai nem futnak. *Megoldás:* szólj a rendszer üzemeltetőjének.",
+            "t": "hibaelharitas naptar naptar naptar menup uzen add esemeny megnevezes add kezdes napj valaszd kin napta kerulj kotelezo mezo hianyzi megoldas toltsd esemeny naptar gazda adminisztrator modosith mas napta levo esemeny irnal megoldas kerd gazdaj ismetlodo esemeny idopontj urlapjan modositani ismetlodo esemeny huzassal attenni megoldas nyisd ird nev adminisztrator szerkesztheti megoldas naptar nev adminisztrator veszi jon esemeny mail ertesitese szerver levelkuldese idozit felad fut megoldas szolj rendszer uzemelteto",
+            "h": 67
+        },
+        {
+            "id": "hibaelharitas#24",
+            "cim": "Csapat",
+            "horgony": "csapat",
+            "szoveg": "A **Csapat** menüpont (kollégák, csoportok, belső üzenetek) üzenetei.\n\n- **„Ez az e-mail-cím már egy másik fiókhoz tartozik.\"** / **„Ez a felhasználónév már foglalt.\"** – *Ok:* a kollégának már van fiókja. *Megoldás:* keresd meg a kollégák között – lehet, hogy le van tiltva.\n- **„A felhasználónév legalább 3 karakter legyen (ékezet és szóköz nélkül).\"** – *Megoldás:* adj hosszabb, ékezet nélküli nevet.\n- **„A jelszó legalább 8 karakter legyen – vagy hagyd üresen, és a rendszer generál egyet.\"** – *Megoldás:* adj hosszabb jelszót, vagy hagyd üresen.\n- **„Kollégát csak adminisztrátor vehet fel.\"** / **„Csoportot csak adminisztrátor kezel.\"** – *Megoldás:* kérd az adminisztrátort.\n- **„Csak a saját üzenetedet vonhatod vissza.\"** – *Ok:* más üzenetét próbáltad visszavonni.",
+            "t": "hibaelharitas csap csap csap menup kolleg csopor belso uzen uzen mail cim masi fio tartozi felhasznalonev foglal kollega fio megoldas keresd kolleg koz tiltva felhasznalonev legalabb karakter legy ekez szokoz nelkul megoldas adj hosszabb ekez nelkuli nev jelszo legalabb karakter legy hagyd ures rendszer general egy megoldas adj hosszabb jelsz hagyd ures kolleg adminisztrator veh csopor adminisztrator kezel megoldas kerd adminisztrator saj uzeneted vonhatod vissza mas uzen probaltad visszavonni",
+            "h": 69
+        },
+        {
+            "id": "hibaelharitas#25",
+            "cim": "Asszisztens",
+            "horgony": "asszisztens",
+            "szoveg": "A jobb alsó sarokban élő asszisztens üzenetei.\n\n- **„Az asszisztens ki van kapcsolva.\"** / **„Az asszisztenshez Claude API-kulcs kell.\"** – *Megoldás:* az adminisztrátor a **Beállítások › Asszisztens** lapfülön kapcsolja be, illetve adja meg a kulcsot.\n- **„Az API-kulcs érvénytelen (401). Ellenőrizd az Asszisztens beállításaiban.\"** – *Ok:* hibás vagy visszavont kulcs. *Megoldás:* írj be újat, és nyomd meg az **API teszt** gombot.\n- **„Az AI most túlterhelt – próbáld újra fél perc múlva.\"** – *Megoldás:* várj, és kérdezz újra.\n- **„Nem érem el az AI-t: …\"** – *Ok:* a szerver nem éri el az internetet. *Megoldás:* ellenőrizd a kapcsolatot.\n- **„Mára elérted a napi keretet (… kérdés).\"** – *Ok:* elfogyott a napi kérdéskeret. *Megoldás:* holnap újra megy; a keretet az adminisztrátor emelheti (**Napi kérdéskeret / kolléga**).\n- **„A megerősítő kód nem egyezik. Írd be pontosan: …\"** – *Megoldás:* a kártyán látható négy számjegyet írd be.\n- **„Ez a javaslat lejárt – kérd újra az asszisztenstől.\"** – *Ok:* hat óránál régebbi javaslat.\n- **„A rekord a művelet óta megváltozott – a visszaállítás azt is felülírná.\"** – *Ok:* a visszaállítandó adatot azóta más is módosította. *Megoldás:* nézd meg kézzel; ha biztos vagy benne, a **Mégis visszaállítom** gombbal megy.",
+            "t": "hibaelharitas asszisztens asszisztens jobb also sar elo asszisztens uzen asszisztens kapcsolva asszisztens claude api kulcs megoldas adminisztrator beallitas asszisztens lapful kapcsol illetve adja kulcs api kulcs ervenytel 401 ellenorizd asszisztens beallitas hibas visszav kulcs megoldas irj uja nyomd api tesz gomb ai tulterhel probald ujra perc mulva megoldas varj kerdezz ujra erem ai szerver eri intern megoldas ellenorizd kapcsol mara elerted napi ker kerdes elfogy napi kerdesker megoldas holnap ujra megy ker adminisztrator emelheti napi kerdesker kollega megerosito kod egyezi ird pontosan megoldas kartyan lathato negy szamjegy ird javasl lejar kerd ujra asszisztens hat oranal regebbi javasl rekord muvel ota megvaltoz visszaallitas felulirna visszaallitando ada azota mas modositotta megoldas nezd kezzel biztos benne megis visszaallitom gombbal megy",
+            "h": 117
+        },
+        {
+            "id": "hibaelharitas#26",
+            "cim": "Nyomtatás, PDF és e-mail",
+            "horgony": "nyomtatas-pdf-es-e-mail",
+            "szoveg": "A nyomtatványok (átvételi, munkalap, árajánlat, szállítólevél, pénztárzárás, listák) elakadásai. A részletek: Nyomtatás, PDF és e-mail.",
+            "t": "hibaelharitas nyomtatas pdf mail nyomtatas pdf mail nyomtatvany atveteli munkalap arajanl szallitole penztarzaras lis elakadas reszl nyomtatas pdf mail",
+            "h": 19
+        },
+        {
+            "id": "hibaelharitas#27",
+            "cim": "Nyomtatás, PDF és e-mail",
+            "horgony": "nyomtatas-pdf-es-e-mail",
+            "szoveg": "- **Az előnézet üres vagy szürke.** – *Ok:* a böngésző nem jelenít meg PDF-et keretben (telefonon gyakori). *Megoldás:* az előnézet sarkában **Megnyitás új lapon**, vagy **Mentés PDF-be**.\n- **A Nyomtatás gombra nem jön fel a nyomtatás-ablak.** – *Ok:* a böngésző nem enged a háttérből nyomtatni. *Megoldás:* az ablak néhány másodperc múlva hivatkozást ad (**Nyisd meg a PDF-et új lapon**); onnan nyomtass.\n- **„Ezen a nyomtatványon belső megjegyzés vagy zárkód van, ezért az ügyfél címére nem küldhető.”** – *Ok:* belső papírt próbáltál az ügyfélnek küldeni. *Megoldás:* a **Munkalapot** vagy az **Átvételi elismervényt** küldd.\n- **Kétszer annyi példány jött ki.** – *Ok:* a **Példányszám** mezőben és a böngésző nyomtatás-ablakában is több példány volt. *Megoldás:* a böngészőben maradjon 1.\n- **„A levél nem ment el: …”** – *Ok:* a szerver levélküldője nincs beállítva, vagy a kiválasztott postafiók nem érhető el. *Megoldás:* kösd be a postafiókot a **Beállítások › Levelezés** lapfülön, és azt válaszd **Feladónak**.\n- **„A próbanyomat nem küldhető el…”** – *Ok:* a próbanyomat kitalált adatokkal készül. *Megoldás:* valódi lapról küldj.\n- **Nincs Nyomtatás gomb a munkalapon.** – *Ok:* a lap még nincs elmentve. *Megoldás:* mentsd el; utána a rendszer felajánlja az átvételi elismervényt.\n- **Nem jelenik meg a felajánlás új lapnál vagy lezáráskor.** – *Ok:* ki van kapcsolva. *Megoldás:* **Beállítások › Nyomtatványok**, **Felajánlás és e-mail** doboz.\n- **„A mentett kulcs ezen a telepítésen nem olvasható…”** (Számlázás, IMEI-lekérdezés) – *Ok:* a rendszer másik gépre költözött, vagy megváltoztak a szerver titkos kulcsai. *Megoldás:* írd be újra a kulcsot.",
+            "t": "hibaelharitas nyomtatas pdf mail nyomtatas pdf mail elonez ures szurke bongeszo jeleni pdf et ker telef gyakori megoldas elonez sarka megnyitas uj lap mentes pdf nyomtatas gomb jon nyomtatas abl bongeszo enged hatter nyomtatni megoldas abl nehany masodperc mulva hivatkozas ad nyisd pdf et uj lap onnan nyomtass ezen nyomtatvany belso megjegyzes zarkod ezer ugyfel cime kuldheto belso papir probaltal ugyfel kuldeni megoldas munkalap atveteli elismerveny kuldd ketszer annyi peldany jot peldanyszam mezo bongeszo nyomtatas ablaka tobb peldany megoldas bongeszo maradj level men szerver levelkuldo nincs beallitva kivalaszt postafi erheto megoldas kosd postafi beallitas levelezes lapful valaszd felado probanyom kuldheto probanyom kitalal ada keszul megoldas valodi lap kuldj nincs nyomtatas gomb munkalap lap nincs elmentve megoldas mentsd utana rendszer felajanl atveteli elismerveny jeleni felajanlas uj lapnal lezaras kapcsolva megoldas beallitas nyomtatvany felajanlas mail doboz ment kulcs ezen telepites olvashato szamlazas imei lekerdezes rendszer masi gep koltoz megvaltoz szerver titkos kulcs megoldas ird ujra kulcs",
+            "h": 154
+        },
+        {
+            "id": "hibaelharitas#28",
+            "cim": "Beállítások, mentés, frissítés",
+            "horgony": "beallitasok-mentes-frissites",
+            "szoveg": "A **Beállítások** menüpont, a teljes mentés és a frissítés elakadásai – ezek az adminisztrátort érintik.\n\n- **„Lejárt a munkamenet – töltsd újra az oldalt, és próbáld újra.\"** – *Ok:* a Beállítások oldal túl régóta állt nyitva. *Megoldás:* F5, majd mentés újra.\n- **„A fájl nem érkezett meg (túl nagy, vagy megszakadt a feltöltés).\"** – *Ok:* a logó vagy a háttér nagyobb a szerver feltöltési korlátjánál. *Megoldás:* tölts fel kisebb fájlt.\n- **„A szerveren nincs gzip – a mentés nem készülhet el.\"** / **„A mentési mappa nem írható: …\"** – *Megoldás:* a tárhely üzemeltetője kapcsolja be a tömörítést, illetve adjon írási jogot a feltöltési mappára.\n- **A TAC-betöltésnél: „A data/tac.csv.gz nem olvasható.\"** – *Ok:* a rendszer hiányosan került fel. *Megoldás:* szólj a rendszer üzemeltetőjének, hogy telepítse újra.\n- **Frissítés után furcsán néz ki a felület.** – *Ok:* a böngésző még a régi stíluslapot használja. *Megoldás:* Ctrl+F5. A rendszer egyébként magától is cseréli.",
+            "t": "hibaelharitas beallitas mentes frissites beallitas mentes frissites beallitas menup teljes mentes frissites elakadas adminisztrator erinti lejar munkam toltsd ujra oldal probald ujra beallitas oldal tul regota all nyitva megoldas f5 majd mentes ujra fajl erkez tul nagy megszakad feltoltes logo hatter nagyobb szerver feltoltesi korlatjanal megoldas tolts kisebb fajl szerver nincs gzip mentes keszulh mentesi mappa irhato megoldas tarhely uzemelteto kapcsol tomorites illetve adj irasi jog feltoltesi mappa tac betoltesnel data tac csv gz olvashato rendszer hianyosan ar megoldas szolj rendszer uzemelteto telepitse ujra frissites utan furcsan nez felul bongeszo regi stiluslap hasznal megoldas ctrl f5 rendszer egyebk maga csereli",
+            "h": 100
+        },
+        {
+            "id": "hibaelharitas#29",
+            "cim": "Ismert korlátok",
+            "horgony": "ismert-korlatok",
+            "szoveg": "Ezek nem hibák, hanem a rendszer mostani működésének határai:\n\n- **Nagyított betűméretnél a popup visszakicsinyíthet.** Ha a **Betűméret** csúszkát feljebb húztad, egy magas ablak (például egy több eszközös munkalap) már nem fér ki, ezért a rendszer lekicsinyíti – így a betű végül nem lesz nagyobb. Segít a teljes képernyő, vagy ha csak az ablakok betűjét növeled a **Betű területenként** dobozban, a listákét pedig nem.\n- **Kifizetett lapra felvett új eszköz „fizetve\" lesz.** Ha egy már teljesen kifizetett munkalapra utólag új eszközt veszel fel, az is kifizetettként jelenik meg. Vedd le a lap **Fizetve** pipáját, és állítsd be eszközönként.\n- **A Számla ablak fejléce eladásnál is „Munkalap\".** Napi árukiadásról vagy rendelésről nyitva is „Munkalap\" és a sorszám áll a címben. Csak a felirat ilyen, a számla jó.\n- **A popup bezárása nem kérdez rá a mentésre.**\n- **A fejléc keresője munkalapszámra nem keres** – csak ügyfélre és eszközre.\n- **A rács keresője nagyon sok munkalapnál lassabb, ha a keresett szöveg ritka.** A „tartalmazza\" keresés minden látható oszlopot végignéz; ha sok a találat, az első oldal hamar megvan, ha alig van (vagy nincs), a teljes állományt végig kell olvasni. Szűkíts oszlopszűrővel, vagy rejtsd el a fölösleges oszlopokat.\n- **Háttérben (másik fülön) a jelvények nem frissülnek.** A közös háttérkérés rejtett lapon szünetel; visszatéréskor azonnal frissül minden. A levelek letöltése (Levelezés) ettől függetlenül a saját ütemében fut.\n- **A mentésből nincs visszatöltő felület.** (Napi mentés magától készül.) Lásd: Mentés, jogosultság, biztonság.\n- **A másoló gomb nem biztonságos (`http://`) címen egyes böngészőkben nem működik.** Ilyenkor ezt írja: *Nem sikerült kimásolni – jelöld ki, és Ctrl+C*.",
+            "t": "hibaelharitas ism korl ism korl hib hanem rendszer mostani mukodese hatar nagyit betumeretnel popup visszakicsinyith betumer csusz feljebb huztad magas abl peldaul tobb eszkozos munkalap fer ezer rendszer lekicsinyiti igy betu vegul nagyobb segi teljes kepernyo abl betuj noveled betu teruletenk doboz list ped kifizet lap felv uj eszkoz fizetve teljes kifizet munkalap utolag uj eszkoz veszel kifizetettk jeleni vedd lap fizetve pipaj allitsd eszkozonk szamla abl fejlece eladasnal munkalap napi arukiadas rendeles nyitva munkalap sorszam all cim felir szamla jo popup bezarasa kerdez mentes fejlec kereso munkalapszam keres ugyfel eszkoz racs kereso munkalapnal lassabb keres szoveg ritka tartalmazza kereses lathato oszlop vegignez talal elso oldal hamar megvan alig nincs teljes allomany veg olvasni szukits oszlopszuro rejtsd folosleges oszlop hatter masi ful jelveny frissul kozos hatterkeres rejt lap szunetel visszateres azonnal frissul level letoltese levelezes ettol fuggetlenul saj uteme fut mentes nincs visszatolto felul napi mentes maga keszul lasd mentes jogosultsag biztonsag masolo gomb biztonsagos http cim egyes bongesz mukodi ily irja sikerul kimasolni jelold ctrl",
+            "h": 166
+        },
+        {
+            "id": "hibaelharitas#30",
+            "cim": "GYIK › Mi működik, ha elmegy az internet?",
+            "horgony": "mi-mukodik-ha-elmegy-az-internet",
+            "szoveg": "Minden belső munka: munkalap, ügyfél, pénztár, nyomtatás, naptár, helyi mentés. Ami netet kér (számla, e-mail, AI, külső mentés), az azonnal szól, hogy most nem megy ki. Részletek: Hibaelhárítás › Ha nincs internet.",
+            "t": "hibaelharitas gyi mukodi elmegy intern gyi mukodi elmegy intern belso munka munkalap ugyfel penztar nyomtatas naptar helyi mentes net ker szamla mail ai kulso mentes azonnal szol megy reszl hibaelharitas nincs intern",
+            "h": 32
+        },
+        {
+            "id": "hibaelharitas#31",
+            "cim": "GYIK › Miért áll a fejlécben „Nincs internet”?",
+            "horgony": "miert-all-a-fejlecben-nincs-internet",
+            "szoveg": "A szerver percenként megnézi, eléri-e az internetet. Ha nem, ezt jelzi; a helyi munka közben is folytatható. Ha visszajött a net, egy percen belül eltűnik.",
+            "t": "hibaelharitas gyi all fejlec nincs intern gyi all fejlec nincs intern szerver percenk megnezi eleri intern jelzi helyi munka koz folytathato visszaj net perc belul eltuni",
+            "h": 26
+        },
+        {
+            "id": "hibaelharitas#32",
+            "cim": "GYIK › Nem tölt be az oldal. Mit csináljak?",
+            "horgony": "nem-tolt-be-az-oldal-mit-csinaljak",
+            "szoveg": "Töltsd újra az F5 billentyűvel. Ha a bejelentkező oldal jön, lépj be újra. Ha a „nem található\" oldal jön, ellenőrizd a címet, vagy írd a végére: `?muhely=attekintes`.",
+            "t": "hibaelharitas gyi tol oldal csinalj gyi tol oldal csinalj toltsd ujra f5 billentyu bejelentkezo oldal jon lepj ujra talalhato oldal jon ellenorizd cim ird vege muhely attekintes",
+            "h": 27
+        },
+        {
+            "id": "hibaelharitas#33",
+            "cim": "GYIK › Eltűnt egy menüpont. Hová lett?",
+            "horgony": "eltunt-egy-menupont-hova-lett",
+            "szoveg": "A **Beállítások** csak adminisztrátornak látszik. A **Csapat** közös fiókos módban az üzenőfal nevén szerepel. Ha a menü össze van csukva, csak az ikonok látszanak: nyisd ki a fejléc háromvonalas gombjával.",
+            "t": "hibaelharitas gyi eltun menup hova let gyi eltun menup hova let beallitas adminisztrator latszi csap kozos fiokos mod uzenofal nev szerepel menu ossze csukva ikon latsza nyisd fejlec haromvonalas gomb",
+            "h": 30
+        },
+        {
+            "id": "hibaelharitas#34",
+            "cim": "GYIK › Eltűntek a csempék az Áttekintésről. Miért?",
+            "horgony": "eltuntek-a-csempek-az-attekintesrol-miert",
+            "szoveg": "Vagy elrejtetted őket a **Csempék elrejtése** gombbal (ugyanott **Csempék megjelenítése**), vagy az adminisztrátor kikapcsolta a csempét a **Beállítások › Áttekintés csempéi** lapfülön.",
+            "t": "hibaelharitas gyi eltun csemp attekintes gyi eltun csemp attekintes elrejtetted oke csemp elrejtese gombbal ugyan csemp megjelenitese adminisztrator kikapcsolta csemp beallitas attekintes csemp lapful",
+            "h": 24
+        },
+        {
+            "id": "hibaelharitas#35",
+            "cim": "GYIK › Nem megy ki az e-mail. Hol keressem a hibát?",
+            "horgony": "nem-megy-ki-az-e-mail-hol-keressem-a-hibat",
+            "szoveg": "Attól függ, melyik. A **Levelezés** menüpont levelei a bekötött postafiókon mennek: ott a **Kapcsolat ellenőrzése** gomb segít. Az ügyfél-értesítők és a naptár levelei a szerver levélküldőjén mennek: azt a rendszer üzemeltetője állítja be.",
+            "t": "hibaelharitas gyi megy mail keressem hib gyi megy mail keressem hib attol fugg levelezes menup level bekot postafi men kapcsol ellenorzese gomb segi ugyfel ertesi naptar level szerver levelkuldoj men rendszer uzemelteto alli",
+            "h": 33
+        },
+        {
+            "id": "hibaelharitas#36",
+            "cim": "GYIK › Miért kapok „Nincs jogosultságod ehhez.\" üzenetet?",
+            "horgony": "miert-kapok-nincs-jogosultsagod-ehhez-uzenetet",
+            "szoveg": "A fiókod nem jogosult a műveletre – például közben kijelentkeztél egy másik lapon, vagy letiltották. Töltsd újra az oldalt, és lépj be újra. Ha megmarad, szólj az adminisztrátornak.",
+            "t": "hibaelharitas gyi kap nincs jogosultsagod ehhez uzen gyi kap nincs jogosultsagod ehhez uzen fiokod jogosul muvel peldaul koz kijelentkeztel masi lap letiltot toltsd ujra oldal lepj ujra megmarad szolj adminisztrator",
+            "h": 30
+        },
+        {
+            "id": "hibaelharitas#37",
+            "cim": "GYIK › Kidobott a rendszer munka közben. Miért?",
+            "horgony": "kidobott-a-rendszer-munka-kozben-miert",
+            "szoveg": "Lejárt a bejelentkezésed, vagy a fiókodat letiltották. Lépj be újra. Amit nem mentettél el, azt újra be kell írnod.",
+            "t": "hibaelharitas gyi kidob rendszer munka koz gyi kidob rendszer munka koz lejar bejelentkezesed fiokod letiltot lepj ujra mentettel ujra irnod",
+            "h": 20
+        },
+        {
+            "id": "hibaelharitas#38",
+            "cim": "GYIK › Miért nem tudom elmenteni a munkalapot?",
+            "horgony": "miert-nem-tudom-elmenteni-a-munkalapot",
+            "szoveg": "Olvasd el a piros üzenetet az ablak tetején. Leggyakrabban az ügyfél vagy az eszköz nincs a listából kiválasztva – a begépelt név önmagában nem elég.",
+            "t": "hibaelharitas gyi tudom elmenteni munkalap gyi tudom elmenteni munkalap olvasd piros uzen abl tetej leggyakrab ugyfel eszkoz nincs lista kivalasztva begepel nev onmaga eleg",
+            "h": 24
+        },
+        {
+            "id": "hibaelharitas#39",
+            "cim": "GYIK › Beírtam az ügyfél nevét, mégis azt mondja, válasszak ügyfelet. Miért?",
+            "horgony": "beirtam-az-ugyfel-nevet-megis-azt-mondja-valasszak-ugyfelet-miert",
+            "szoveg": "Mert a nevet ki kell választani a lenyíló listából. Így biztos, hogy a munkalap a jó ügyfélhez kerül, nem egy hasonló nevűhöz.",
+            "t": "hibaelharitas gyi beirtam ugyfel nev megis mond valassz ugyfel gyi beirtam ugyfel nev megis mond valassz ugyfel nev valasztani lenyilo lista igy biztos munkalap jo ugyfel ar hasonlo nevu",
+            "h": 29
+        },
+        {
+            "id": "hibaelharitas#40",
+            "cim": "GYIK › Miért nem találja a kereső a munkalapszámot?",
+            "horgony": "miert-nem-talalja-a-kereso-a-munkalapszamot",
+            "szoveg": "A fejléc keresője ügyfelet és eszközt keres. Munkalapszámra az Áttekintés táblázatában vagy a **Munkalapok** menüpontban keress.",
+            "t": "hibaelharitas gyi talal kereso munkalapszam gyi talal kereso munkalapszam fejlec kereso ugyfel eszkoz keres munkalapszam attekintes tablazata munkalap menupon keress",
+            "h": 20
+        },
+        {
+            "id": "hibaelharitas#41",
+            "cim": "GYIK › Miért nem találom az ügyfelet, pedig biztosan felvettük?",
+            "horgony": "miert-nem-talalom-az-ugyfelet-pedig-biztosan-felvettuk",
+            "szoveg": "Lehet, hogy inaktív. Az **Ügyfelek** listában nyomd meg az **Inaktívak** gombot. A fejléc keresője csak aktív ügyfelet mutat.",
+            "t": "hibaelharitas gyi talalom ugyfel ped biztosan felvet gyi talalom ugyfel ped biztosan felvet inaktiv ugyfel lista nyomd inaktiv gomb fejlec kereso aktiv ugyfel mut",
+            "h": 24
+        },
+        {
+            "id": "hibaelharitas#42",
+            "cim": "GYIK › Kétszer mentettem, most két munkalap van. Mit tegyek?",
+            "horgony": "ketszer-mentettem-most-ket-munkalap-van-mit-tegyek",
+            "szoveg": "Munkalapot törölni nem lehet. A fölöslegeset tedd érvénytelen állapotba; a sorszáma és a története megmarad.",
+            "t": "hibaelharitas gyi ketszer mentettem ket munkalap tegy gyi ketszer mentettem ket munkalap tegy munkalap torolni folosleges tedd ervenytel allap sorszama tortenete megmarad",
+            "h": 22
+        },
+        {
+            "id": "hibaelharitas#43",
+            "cim": "GYIK › Rossz ügyfélhez vettem fel az eszközt. Át lehet tenni?",
+            "horgony": "rossz-ugyfelhez-vettem-fel-az-eszkozt-at-lehet-tenni",
+            "szoveg": "Nyisd meg az eszközt, és válassz másik ügyfelet a listából, majd mentsd el.",
+            "t": "hibaelharitas gyi rossz ugyfel vettem eszkoz tenni gyi rossz ugyfel vettem eszkoz tenni nyisd eszkoz valassz masi ugyfel lista majd mentsd",
+            "h": 21
+        },
+        {
+            "id": "hibaelharitas#44",
+            "cim": "GYIK › Nem lehet kimásolni az adatot a másoló gombbal. Miért?",
+            "horgony": "nem-lehet-kimasolni-az-adatot-a-masolo-gombbal-miert",
+            "szoveg": "A böngésző nem engedte. Jelöld ki az adatot egérrel, és nyomd meg a Ctrl+C billentyűket. Tartós megoldás, ha a rendszer `https://` címen fut.",
+            "t": "hibaelharitas gyi kimasolni ada masolo gombbal gyi kimasolni ada masolo gombbal bongeszo engedte jelold ada egerrel nyomd ctrl billenty tartos megoldas rendszer https cim fut",
+            "h": 25
+        },
+        {
+            "id": "hibaelharitas#45",
+            "cim": "GYIK › Túl kicsi vagy túl nagy minden. Hogyan állítom vissza?",
+            "horgony": "tul-kicsi-vagy-tul-nagy-minden-hogyan-allitom-vissza",
+            "szoveg": "A profilmenüben a **Betűméret** csúszka melletti körkörös nyíl visszaáll a cég alapméretére. Nézd meg a böngésző nagyítását is: a Ctrl+0 állítja alapra.",
+            "t": "hibaelharitas gyi tul kicsi tul nagy allitom vissza gyi tul kicsi tul nagy allitom vissza profilmenu betumer csuszka melletti korkoros nyil visszaall ceg alapmerete nezd bongeszo nagyitas ctrl alli alap",
+            "h": 30
+        },
+        {
+            "id": "hibaelharitas#46",
+            "cim": "GYIK › Rossz időt mutat az óra. Hol állítom át?",
+            "horgony": "rossz-idot-mutat-az-ora-hol-allitom-at",
+            "szoveg": "Az óra a rendszer időzónája szerint jár. Ha rossz, szólj a rendszer üzemeltetőjének: ő állítja be.",
+            "t": "hibaelharitas gyi rossz ido mut ora allitom gyi rossz ido mut ora allitom ora rendszer idozona szerin jar rossz szolj rendszer uzemelteto alli",
+            "h": 23
+        },
+        {
+            "id": "hibaelharitas#47",
+            "cim": "GYIK › Miért nem látszik a „zárásig hátralévő idő\"?",
+            "horgony": "miert-nem-latszik-a-zarasig-hatralevo-ido",
+            "szoveg": "Mert nincs megadva nyitvatartás. Az adminisztrátor a **Beállítások › Nyitvatartás és óra** lapfülön adja meg.",
+            "t": "hibaelharitas gyi latszi zaras hatralevo ido gyi latszi zaras hatralevo ido nincs megadva nyitvatartas adminisztrator beallitas nyitvatartas ora lapful adja",
+            "h": 20
+        },
+        {
+            "id": "hibaelharitas#48",
+            "cim": "GYIK › Nem válaszol az asszisztens. Mi a baj?",
+            "horgony": "nem-valaszol-az-asszisztens-mi-a-baj",
+            "szoveg": "Ki van kapcsolva, nincs megadva API-kulcs, nincs internet, vagy elfogyott a napi kérdéskeret. Az üzenete megmondja, melyik.",
+            "t": "hibaelharitas gyi valaszol asszisztens baj gyi valaszol asszisztens baj kapcsolva nincs megadva api kulcs nincs intern elfogy napi kerdesker uzenete megmond",
+            "h": 21
+        },
+        {
+            "id": "hibaelharitas#49",
+            "cim": "GYIK › Az asszisztens azt mondja, megcsinálta, de nem változott semmi. Miért?",
+            "horgony": "az-asszisztens-azt-mondja-megcsinalta-de-nem-valtozott-semmi-miert",
+            "szoveg": "Mert a módosítás csak javaslat, amíg a kártyán meg nem nyomod az **Engedélyezem** gombot.",
+            "t": "hibaelharitas gyi asszisztens mond megcsinalta valtoz semmi gyi asszisztens mond megcsinalta valtoz semmi modositas javasl amig kartyan nyomod engedelyezem gomb",
+            "h": 20
+        },
+        {
+            "id": "hibaelharitas#50",
+            "cim": "GYIK › Nem készül el a számla. Hol kezdjem?",
+            "horgony": "nem-keszul-el-a-szamla-hol-kezdjem",
+            "szoveg": "Olvasd el az üzenetet: megmondja, mi hiányzik. Ha a Számlázz.hu hibakódot ad, az üzenet végén ott a szám. Hálózati hiba után először mindig a Számlázz.hu fiókodban nézd meg, elkészült-e a számla.",
+            "t": "hibaelharitas gyi keszul szamla kezdjem gyi keszul szamla kezdjem olvasd uzen megmond hianyzi szamlazz hu hibakod ad uzen veg szam halozati hiba utan eloszor szamlazz hu fiokod nezd elkeszul szamla",
+            "h": 30
+        },
+        {
+            "id": "hibaelharitas#51",
+            "cim": "GYIK › Lassú a rendszer. Mit tehetek?",
+            "horgony": "lassu-a-rendszer-mit-tehetek",
+            "szoveg": "Zárd be a fölösleges böngészőlapokat, és töltsd újra az oldalt. Ha mindenkinél lassú, az a szerver vagy a hálózat gondja – jelezd az üzemeltetőnek.",
+            "t": "hibaelharitas gyi lassu rendszer teh gyi lassu rendszer teh zard folosleges bongeszolap toltsd ujra oldal mindenkinel lassu szerver haloz gond jelezd uzemelteto",
+            "h": 22
+        },
+        {
+            "id": "hibaelharitas#52",
+            "cim": "GYIK › Nem tudok fájlt csatolni. Miért?",
+            "horgony": "nem-tudok-fajlt-csatolni-miert",
+            "szoveg": "A fájl túl nagy, vagy a típusa nem engedélyezett. Az üzenet megnevezi a fájlt és az okot.",
+            "t": "hibaelharitas gyi tud fajl csatolni gyi tud fajl csatolni fajl tul nagy tipusa engedelyez uzen megnevezi fajl oko",
+            "h": 18
+        },
+        {
+            "id": "hibaelharitas#53",
+            "cim": "GYIK › Frissítés után hibát kapok mentéskor. Mi a teendő?",
+            "horgony": "frissites-utan-hibat-kapok-menteskor-mi-a-teendo",
+            "szoveg": "Töltsd újra az oldalt: az adatbázis az első megnyitott oldalnál igazodik az új verzióhoz. Ha megmarad, az adminisztrátor ellenőrizze a **Névjegy** lapfülön a verziókat.",
+            "t": "hibaelharitas gyi frissites utan hib kap mentes teendo gyi frissites utan hib kap mentes teendo toltsd ujra oldal adatbazis elso megnyit oldalnal igazodi uj verzio megmarad adminisztrator ellenorizze nevjegy lapful verzi",
+            "h": 31
+        },
+        {
+            "id": "hibaelharitas#54",
+            "cim": "GYIK › Kinek szóljak, ha semmi nem segít?",
+            "horgony": "kinek-szoljak-ha-semmi-nem-segit",
+            "szoveg": "Az adminisztrátornak. Írd le, melyik menüpontban voltál, mit csináltál, és másold ki a hibaüzenetet szó szerint. A **Beállítások › Névjegy** lapfül verzióit is add meg.",
+            "t": "hibaelharitas gyi kin szolj semmi segi gyi kin szolj semmi segi adminisztrator ird menupon voltal csinaltal masold hibauzen szo szerin beallitas nevjegy lapful verzioi add",
+            "h": 25
+        }
+    ]
+}

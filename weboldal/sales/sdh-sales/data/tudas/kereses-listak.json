@@ -1,0 +1,168 @@
+{
+    "kulcs": "kereses-listak",
+    "cim": "Keresés, listák és űrlapok e-mailben",
+    "csoport": "Rendszer",
+    "osszefoglalo": "Minden kereső gépelés közben találatot ad és felismeri, mit írtál be (IMEI, telefonszám, sorszám, kód, márka, név); a lapozóknál oldalszámra lehet ugrani, a sorok dupla kattintásra nyílnak, az Áttekintés szűrőiben lehet keresni, az Állapot oszlop pontra csukható; minden űrlap e-mailben továbbítható, a munkalapnak Fájlok lapfüle van.",
+    "darabok": [
+        {
+            "id": "kereses-listak#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A rendszer minden keresője ugyanúgy működik, mint a fejléc keresője: **gépelés közben lenyílik a találatok listája**, és egyszerre keres ügyfelet, eszközt, munkalapot (árukiadást, rendelést), terméket és szolgáltatást. Közben felismeri, **mit írtál be**, és az ahhoz illő találatot teszi előre:\n\n| Amit beírsz | Mit ismer fel | Mi kerül előre |\n|---|---|---|\n| 14–17 számjegy (pl. 357146129282436) | **IMEI** | az eszköz, aztán a lapjai |\n| telefonszám (06 30…, +36 30…, 7–13 jegy) | **telefonszám** | a **teljes ügyfél**, aztán a lapjai |\n| rövid szám (pl. 1234) | **sorszám** | a munkalap / árukiadás / rendelés ezzel a számmal |\n| betű és szám vegyesen, szóköz nélkül (pl. R58N12ABC) | **kód** (gyári szám, modellszám, cikkszám, vonalkód) | az eszköz, a termék |\n| ismert gyártó az első szóban (pl. Samsung A52) | **márka** | a márka készülékei és termékei |\n| e-mail cím | **e-mail** | az ügyfél |\n| minden más | **név / szöveg** | az ügyfél, a termék, a szolgáltatás |\n\nA lenyíló tetején kiírja, minek ismerte fel a szöveget („Felismerve: IMEI-szám”). A találatra kattintva a rekord a **saját ablakában** nyílik (az oldal nem vált). A nyilakkal (↑ ↓) is lépkedhetsz, Enterrel nyitod meg. Ha nem választasz, az **Enter** a lista keresését indítja, mint eddig.",
+            "t": "kereses lis urlap mail mire valo mire valo rendszer kereso ugyanugy mukodi fejlec kereso gepeles koz lenyili talal lista egyszer keres ugyfel eszkoz munkalap arukiadas rendeles term szolgaltatas koz felismeri irtal ahhoz illo talal teszi elo beirsz ismer ar elo 14 17 szamjegy pl 357146129282436 imei eszkoz aztan lapj telefonszam 06 30 36 30 13 jegy telefonszam teljes ugyfel aztan lapj rovid szam pl 1234 sorszam munkalap arukiadas rendeles ezzel szammal betu szam vegyes szokoz nelkul pl r58n12abc kod gyari szam modellszam cikkszam vonalkod eszkoz term ism gyarto elso szo pl samsung a52 marka marka eszkoz term mail cim mail ugyfel mas nev szoveg ugyfel term szolgaltatas lenyilo tetej kiir min ismerte szoveg felismerve imei szam talal kattintva rekord saj ablaka nyili oldal val nyil lepkedhetsz enterrel nyitod valasztasz enter lista kereses indi edd",
+            "h": 134
+        },
+        {
+            "id": "kereses-listak#2",
+            "cim": "A listák keresése: első körben pontosan",
+            "horgony": "a-listak-keresese-elso-korben-pontosan",
+            "szoveg": "A listák (Ügyfelek, Eszközök, Munkalapok, Napi árukiadás, Rendelések, Termékek, Szolgáltatások) keresője is felismeri a beírtat, és **először csak abban keres**: IMEI-re az IMEI-ben, telefonszámra az ügyfél telefonjában, sorszámra a sorszámban, kódra a kódokban, több szóra úgy, hogy minden szó szerepeljen a névben. A keresőmező alatt kiírja, mi szerint keresett („Pontos találat: IMEI szerint”), és ott a **Keresés mindenben** link, ha mégis mindenben akarsz keresni.\n\nHa a pontos keresés nem talál semmit, a rendszer **magától mindenben keres**, és ezt is kiírja. (IMEI-nél nem: ott a pontos keresés a teljes – ha kell, a **Keresés mindenben** linkkel mégis.)",
+            "t": "kereses lis urlap mail lis keresese elso kor pontosan lis keresese elso kor pontosan lis ugyfel eszkoz munkalap napi arukiadas rendeles term szolgaltatas kereso felismeri beir eloszor abban keres imei re imei ben telefonszam ugyfel telefon sorszam sorszam kod kod tobb szo ugy szo szerepelj nev keresomezo ala kiir szerin keres pontos talal imei szerin kereses mind lin megis mind akarsz keresni pontos kereses talal semmi rendszer maga mind keres kiir imei nel pontos kereses teljes kereses mind linkkel megis",
+            "h": 80
+        },
+        {
+            "id": "kereses-listak#3",
+            "cim": "Lapozás, oldalszámra ugrás",
+            "horgony": "lapozas-oldalszamra-ugras",
+            "szoveg": "A számozott lapozó (1 2 … 11801) végén egy kis mező áll: írd be az oldalszámot, és nyomj **Entert** (vagy az **Ugrás** gombot). Az Áttekintés rácsának eszköztárában is ott a mező az oldalszám mellett. Ha nagyobb számot írsz, mint ahány oldal van, az utolsó oldalra ugrik.\n\nA nagyon hátsó oldalak is gyorsan jönnek: a lista előbb csak az oldal azonosítóit olvassa a keskeny indexről, és csak a látszó 25 sort tölti be teljesen.",
+            "t": "kereses lis urlap mail lapozas oldalszam ugras lapozas oldalszam ugras szamoz lapozo 11801 veg kis mezo all ird oldalszam nyomj ent ugras gomb attekintes racsa eszkozta mezo oldalszam mell nagyobb szam irsz ahany oldal utolso oldal ugri hatso oldal gyorsan jon lista elobb oldal azonositoi olvassa keskeny index latszo 25 sor tolti teljes",
+            "h": 53
+        },
+        {
+            "id": "kereses-listak#4",
+            "cim": "Dupla kattintás",
+            "horgony": "dupla-kattintas",
+            "szoveg": "A Munkalapok, Eszközök, Napi árukiadás, Rendelések, Termékek, Ügyfelek és Szolgáltatások listájában a sorra **duplán kattintva** megnyílik a rekord – ugyanúgy, mint a **Megnyit** gombbal. Mezőre, gombra, linkre és az állapotválasztóra a dupla kattintás nem nyit.",
+            "t": "kereses lis urlap mail dupla kattintas dupla kattintas munkalap eszkoz napi arukiadas rendeles term ugyfel szolgaltatas lista sor duplan kattintva megnyili rekord ugyanugy megnyi gombbal mezo gomb lin allapotvalaszto dupla kattintas nyi",
+            "h": 32
+        },
+        {
+            "id": "kereses-listak#5",
+            "cim": "Az Áttekintés szűrői",
+            "horgony": "az-attekintes-szuroi",
+            "szoveg": "- A **választós szűrők** (Állapot, Felelős, Jelzés, Azonosító, Garancia, Fizetve) ablakának tetején kereső áll: gépelésre a lista szűkül. **Enter** az első látható értéket jelöli ki; a **Mind** gomb kereséskor csak a láthatókat jelöli.\n- A **szöveges szűrők** (Ügyfél, Telefonszám, Gyártó, Típus, IMEI, Sorozatszám, Cím, Név, Megjegyzés…) gépelés közben **javaslatot** adnak a rekordokban előforduló értékekből; a javaslatra kattintva (vagy ↑ ↓ + Enter) az lesz a szűrő.",
+            "t": "kereses lis urlap mail attekintes szuroi attekintes szuroi valasztos szur allap felelos jelzes azonosito garancia fizetve ablaka tetej kereso all gepeles lista szukul enter elso lathato ert jeloli mind gomb kereses lath jeloli szoveges szur ugyfel telefonszam gyarto tipus imei sorozatszam cim nev megjegyzes gepeles koz javasl adn rekord elofordulo ert javasl kattintva enter szuro",
+            "h": 55
+        },
+        {
+            "id": "kereses-listak#6",
+            "cim": "Az Állapot oszlop pontként",
+            "horgony": "az-allapot-oszlop-pontkent",
+            "szoveg": "Az Áttekintés **Oszlopok** gombja alatt: **Állapot csak színes pont**. Bekapcsolva az Állapot oszlop keskeny, csak a színes pont látszik; ráállva kiírja az állapot nevét, **rákattintva ugyanúgy lenyílik az állapotválasztó**. A beállítás a te gépeden marad meg; az új felhasználók alapját a Beállítások › Keresés és listák lapfül adja.",
+            "t": "kereses lis urlap mail allap oszlop pontk allap oszlop pontk attekintes oszlop gomb ala allap szines pon bekapcsolva allap oszlop keskeny szines pon latszi raallva kiir allap nev rakattintva ugyanugy lenyili allapotvalaszto beallitas geped marad uj felhasznalo alapj beallitas kereses lis lapful adja",
+            "h": 43
+        },
+        {
+            "id": "kereses-listak#7",
+            "cim": "Űrlap továbbítása e-mailben",
+            "horgony": "urlap-tovabbitasa-e-mailben",
+            "szoveg": "Minden fő űrlap (Munkalap, Napi árukiadás, Rendelés, Ügyfél, Eszköz, Termék, Szolgáltatás) alsó gombsorának **utolsó gombja** az **E-mail**. Rákattintva kis ablak nyílik:\n\n1. **Címzett** – az ügyfél e-mail címe, ha van (több címet vesszővel írhatsz).\n2. **Tárgy** és **Üzenet** – az űrlap adataival kitöltve, átírható.\n3. A munkalapnál, árukiadásnál, rendelésnél a **nyomtatvány PDF-je** is mehet csatolmányként (kapcsoló).\n4. **Küldés** – a levél a cég levelezőfiókjából megy (Beállítások › Űrlapok e-mailben), és a lap naplójába bekerül, kinek ment.\n\nA feloldó kód és a minta soha nem kerül a levélbe. Az E-mail gomb csak mentett rekordnál látszik.",
+            "t": "kereses lis urlap mail urlap tovabbitasa mail urlap tovabbitasa mail fo urlap munkalap napi arukiadas rendeles ugyfel eszkoz term szolgaltatas also gombso utolso gomb mail rakattintva kis abl nyili cimz ugyfel mail cime tobb cim vesszo irhatsz targy uzen urlap adat kitoltve atirhato munkalapnal arukiadasnal rendelesnel nyomtatvany pdf je meh csatolmanyk kapcsolo kuldes level ceg levelezofiok megy beallitas urlap mail lap naplo bekerul kin men feloldo kod minta soha ar level mail gomb ment rekordnal latszi",
+            "h": 76
+        },
+        {
+            "id": "kereses-listak#8",
+            "cim": "A munkalap Fájlok lapfüle",
+            "horgony": "a-munkalap-fajlok-lapfule",
+            "szoveg": "A munkalap lapfüleinek utolsó eleme a **Fájlok**: ide bármilyen képet és dokumentumot feltölthetsz (fotó, PDF, számla, nyilatkozat, Word, Excel) – ugyanúgy, mint az eszköz felvételénél: húzd a mezőbe, vagy **+ Fájl hozzáadása**. A fájlok a lap **mentésekor** kerülnek fel; a × gombbal törlésre jelölöd (mentéskor törlődik).\n\nHa a Beállításokban meg van adva **a dokumentumok e-mail címe**, a lapfülön ott a **Dokumentumok elküldése** gomb: a lap összes feltöltött dokumentumát (a Fájlok és az Átvétel fotóit is) egy levélben elküldi arra a címre. Egy levél legfeljebb 20 MB lehet; ami nem fér bele, azt a levél felsorolja.",
+            "t": "kereses lis urlap mail munkalap fajl lapfule munkalap fajl lapfule munkalap lapful utolso eleme fajl ide barmily kep dokumentum feltolthetsz foto pdf szamla nyilatkoz word excel ugyanugy eszkoz felvetelenel huzd mezo fajl hozzaadasa fajl lap mentese ar gombbal torles jelolod mentes torlodi beallitas adva dokumentum mail cime lapful dokumentum elkuldese gomb lap osszes feltolt dokumentum fajl atvetel fotoi level elkuldi cim level legfeljebb 20 mb fer bele level felso",
+            "h": 69
+        },
+        {
+            "id": "kereses-listak#9",
+            "cim": "Beállítások",
+            "horgony": "beallitasok",
+            "szoveg": "- **Beállítások › Cég és megjelenés › Keresés és listák:** azonnali találatok minden keresőben; típus szerinti (okos) keresés; oldalszám-ugró; dupla kattintás; szűrő-kereső az Áttekintésben; az Állapot oszlop alapja új felhasználónak. Mindegyik külön kapcsolható.\n- **Beállítások › Munkalap › Űrlapok e-mailben:** az E-mail gomb űrlaponként; a PDF csatolása; a Fájlok lapfül; a dokumentumok e-mail címe; melyik fiókból menjen a levél.",
+            "t": "kereses lis urlap mail beallitas beallitas beallitas ceg megjelenes kereses lis azonnali talal kereso tipus szerinti okos kereses oldalszam ugro dupla kattintas szuro kereso attekintes allap oszlop alap uj felhasznalo mindegyi kul kapcsolhato beallitas munkalap urlap mail mail gomb urlaponk pdf csatolasa fajl lapful dokumentum mail cime fio menj level",
+            "h": 50
+        },
+        {
+            "id": "kereses-listak#10",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **Nem nyílik le a találatlista a lista keresőjénél:** be van-e kapcsolva az „Azonnali találatok minden keresőben” (Beállítások › Keresés és listák). Legalább két betű kell.\n- **A keresés kevesebbet talál, mint vártam:** a lista először pontosan keresett (lásd a kereső alatti sort) – kattints a **Keresés mindenben** linkre.\n- **Nincs E-mail gomb:** az űrlap még nincs mentve, vagy annál az űrlapnál ki van kapcsolva.\n- **A levél nem ment el:** Tesztüzemben levél nem megy ki. Élesben nézd meg a Levelezés fiókját, vagy válaszd a szerver levélküldőjét.\n- **Nincs Dokumentumok elküldése gomb:** nincs megadva a dokumentumok e-mail címe, vagy a lap még nincs mentve.",
+            "t": "kereses lis urlap mail megy megy nyili talalatlista lista keresojenel kapcsolva azonnali talal kereso beallitas kereses lis legalabb ket betu kereses kevesebb talal vartam lista eloszor pontosan keres lasd kereso alatti sor kattints kereses mind lin nincs mail gomb urlap nincs mentve annal urlapnal kapcsolva level men tesztuzem level megy eles nezd levelezes fiokj valaszd szerver levelkuldoj nincs dokumentum elkuldese gomb nincs megadva dokumentum mail cime lap nincs mentve",
+            "h": 69
+        },
+        {
+            "id": "kereses-listak#11",
+            "cim": "GYIK › Hogyan keresek IMEI-re?",
+            "horgony": "hogyan-keresek-imei-re",
+            "szoveg": "Írd be az IMEI-t bármelyik keresőbe (a fejlécben vagy egy listában). A rendszer felismeri, és az eszközt, majd a lapjait teszi előre.",
+            "t": "kereses lis urlap mail gyi keres imei re gyi keres imei re ird imei barmelyi kereso fejlec lista rendszer felismeri eszkoz majd lapj teszi elo",
+            "h": 25
+        },
+        {
+            "id": "kereses-listak#12",
+            "cim": "GYIK › Hogyan találom meg az ügyfelet telefonszámból?",
+            "horgony": "hogyan-talalom-meg-az-ugyfelet-telefonszambol",
+            "szoveg": "Írd be a telefonszámot (06-tal, +36-tal vagy anélkül). A teljes ügyfél kerül előre, alatta a lapjai.",
+            "t": "kereses lis urlap mail gyi talalom ugyfel telefonszam gyi talalom ugyfel telefonszam ird telefonszam 06 tal 36 tal anelkul teljes ugyfel ar elo alatta lapj",
+            "h": 25
+        },
+        {
+            "id": "kereses-listak#13",
+            "cim": "GYIK › Hogyan ugrom egy távoli oldalra?",
+            "horgony": "hogyan-ugrom-egy-tavoli-oldalra",
+            "szoveg": "A lapozó végén álló mezőbe írd be az oldalszámot, és nyomj Entert.",
+            "t": "kereses lis urlap mail gyi ugrom tavoli oldal gyi ugrom tavoli oldal lapozo veg allo mezo ird oldalszam nyomj ent",
+            "h": 20
+        },
+        {
+            "id": "kereses-listak#14",
+            "cim": "GYIK › Meg lehet nyitni a sort dupla kattintással?",
+            "horgony": "meg-lehet-nyitni-a-sort-dupla-kattintassal",
+            "szoveg": "Igen, a listák sorai dupla kattintásra megnyílnak. Kikapcsolható: Beállítások › Keresés és listák.",
+            "t": "kereses lis urlap mail gyi nyitni sor dupla kattintassal gyi nyitni sor dupla kattintassal lis sor dupla kattintas megnyil kikapcsolhato beallitas kereses lis",
+            "h": 23
+        },
+        {
+            "id": "kereses-listak#15",
+            "cim": "GYIK › Hogyan küldöm el a munkalapot e-mailben?",
+            "horgony": "hogyan-kuldom-el-a-munkalapot-e-mailben",
+            "szoveg": "A munkalap alsó gombsorának utolsó gombja az **E-mail**: címzett, tárgy, üzenet, és a PDF is mehet.",
+            "t": "kereses lis urlap mail gyi kuldom munkalap mail gyi kuldom munkalap mail munkalap also gombso utolso gomb mail cimz targy uzen pdf meh",
+            "h": 23
+        },
+        {
+            "id": "kereses-listak#16",
+            "cim": "GYIK › Hova töltsem fel a munkalaphoz tartozó dokumentumokat?",
+            "horgony": "hova-toltsem-fel-a-munkalaphoz-tartozo-dokumentumokat",
+            "szoveg": "A munkalap **Fájlok** lapfülére (a lapfülek sorának utolsó eleme).",
+            "t": "kereses lis urlap mail gyi hova toltsem munkalap tartozo dokumentum gyi hova toltsem munkalap tartozo dokumentum munkalap fajl lapfule lapful sora utolso eleme",
+            "h": 23
+        },
+        {
+            "id": "kereses-listak#17",
+            "cim": "GYIK › Hogyan küldöm el egyszerre a lap összes dokumentumát?",
+            "horgony": "hogyan-kuldom-el-egyszerre-a-lap-osszes-dokumentumat",
+            "szoveg": "A Fájlok lapfülön a **Dokumentumok elküldése** gombbal – a címet a Beállítások › Űrlapok e-mailben lapfülön adod meg.",
+            "t": "kereses lis urlap mail gyi kuldom egyszer lap osszes dokumentum gyi kuldom egyszer lap osszes dokumentum fajl lapful dokumentum elkuldese gombbal cim beallitas urlap mail lapful adod",
+            "h": 27
+        },
+        {
+            "id": "kereses-listak#18",
+            "cim": "GYIK › Miért csak színes pont látszik az Állapot oszlopban?",
+            "horgony": "miert-csak-szines-pont-latszik-az-allapot-oszlopban",
+            "szoveg": "Be van kapcsolva az **Állapot csak színes pont** (Oszlopok gomb). Ráállva látszik az állapot neve, rákattintva választhatsz.",
+            "t": "kereses lis urlap mail gyi szines pon latszi allap oszlop gyi szines pon latszi allap oszlop kapcsolva allap szines pon oszlop gomb raallva latszi allap neve rakattintva valaszthatsz",
+            "h": 28
+        },
+        {
+            "id": "kereses-listak#19",
+            "cim": "GYIK › Lehet keresni az Áttekintés szűrőiben?",
+            "horgony": "lehet-keresni-az-attekintes-szuroiben",
+            "szoveg": "Igen: a választós szűrők ablakában kereső áll, a szöveges szűrők javaslatot adnak.",
+            "t": "kereses lis urlap mail gyi keresni attekintes szuroi gyi keresni attekintes szuroi valasztos szur ablaka kereso all szoveges szur javasl adn",
+            "h": 21
+        },
+        {
+            "id": "kereses-listak#20",
+            "cim": "GYIK › Miért lassú vagy ad hibát egy nagyon hátsó oldal?",
+            "horgony": "miert-lassu-vagy-ad-hibat-egy-nagyon-hatso-oldal",
+            "szoveg": "Már nem kellene: a lista előbb csak az oldal azonosítóit olvassa egy keskeny indexről, és csak a látszó sorokat tölti be. Ha mégis lassú, a Beállítások › Sebesség › **Mérés indítása** megmutatja, melyik lépés lassú (HDD-n a hideg gyorsítótár is lassít).",
+            "t": "kereses lis urlap mail gyi lassu ad hib hatso oldal gyi lassu ad hib hatso oldal kellene lista elobb oldal azonositoi olvassa keskeny index latszo sor tolti megis lassu beallitas sebesseg meres inditasa megmut lepes lassu hdd hideg gyorsitotar lassi",
+            "h": 40
+        }
+    ]
+}

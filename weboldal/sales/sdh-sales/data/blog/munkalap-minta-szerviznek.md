@@ -112,6 +112,14 @@ Nem minden ügyfél kér papírt. Ha a nyomtatvány PDF-be menthető és e-mailb
 
 A polcon álló készülékeken a munkalap sorszámát mutató matrica sokat segít. Egy Brother címkenyomtatóval a sorszám, az ügyfél neve és a határidő is rákerülhet. A [nyomtatás](/funkciok/nyomtatas/) oldalon látod, milyen címkék készülnek.
 
+## Bianko munkalap: ha nincs kéznél a gép
+
+Előfordul, hogy a pultgép épp nem elérhető, vagy kiszálláskor kell felvenni egy készüléket. Ilyenkor jól jön egy üres, kézzel kitölthető munkalap, amelyen ugyanazok a mezők szerepelnek, mint a digitálison. Ha a bianko lap ugyanabból a nyomtatványsablonból készül, a mezők sorrendje is egyezik, így később könnyű felvinni a rendszerbe. Érdemes néhány példányt mindig a pult alatt tartani.
+
+## Hány mező a sok?
+
+A teljes munkalap sok mezőt tartalmazhat, de nem mindegyikre van minden szervizben szükség. Egy telefonszerviznek fontos az IMEI és a zárkód, egy háztartásigép-szerviznek kevésbé. A felesleges mező két kárt okoz: lassítja a felvételt, és a nyomtatványon is helyet foglal. Ha a programban elrejthetők a nem használt mezők, és a nyomtatványon kapcsolható, mi látszódjon, a papír pontosan a te munkádhoz igazodik.
+
 ## Ellenőrzőlista a saját nyomtatványodhoz
 
 - Cégadatok és logó a fejlécben

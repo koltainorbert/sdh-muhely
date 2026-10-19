@@ -1,0 +1,352 @@
+{
+    "kulcs": "eszkozok",
+    "cim": "Eszközök",
+    "csoport": "Napi munka",
+    "osszefoglalo": "Az Eszközök menüpontban az ügyfelek készülékeit tartod nyilván IMEI-vel, gyári számmal, zárkóddal és átvételi állapottal; a munkalap mindig egy eszközre hivatkozik.",
+    "darabok": [
+        {
+            "id": "eszkozok#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "Az **Eszközök** menüpont a készülékek nyilvántartása. Egy eszköz egy konkrét készülék, amely egy ügyfélhez tartozik: telefon, tablet, laptop, televízió vagy bármi más, amit javításra hoznak.\n\nA munkalap mindig egy eszközre hivatkozik. Ha ugyanaz a készülék másodszor is bejön, nem kell újra felvenned: az IMEI beírására a rendszer megtalálja, és betölti az adatait.\n\nAz eszköznél tárolod, ami a javításhoz kell: gyári szám, IMEI, sorozatszám, tartozékok, zárkód vagy feloldó minta, garancia és átvételkori állapot.",
+            "t": "eszkoz mire valo mire valo eszkoz menup eszkoz nyilvantartasa eszkoz konkr eszkoz amely ugyfel tartozi telef tabl laptop televizio mas javitas hoz munkalap eszkoz hivatkozi ugyanaz eszkoz masodszor bej ujra felvenned imei beirasa rendszer megtalal betolti ada eszkoznel tarolod javitas gyari szam imei sorozatszam tartoz zarkod feloldo minta garancia atvetelkori allap",
+            "h": 51
+        },
+        {
+            "id": "eszkozok#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- Az oldalmenüben az **Eszközök** pontra kattintva: Eszközök megnyitása.\n- A munkalapon az **Eszköz** mező mellett: pluszjel az új eszközhöz, ceruza a kiválasztott eszköz szerkesztéséhez.\n- Az ügyfél adatlapjának alján a **Készülékei** gombbal: ilyenkor a lista csak annak az ügyfélnek a készülékeit mutatja.\n\nAz eszköz adatlapja felugró ablakban nyílik. Az Eszközök lista a legutóbb módosított készülékkel kezdődik, oldalanként 25 sorral.",
+            "t": "eszkoz talalod talalod oldalmenu eszkoz pon kattintva eszkoz megnyitasa munkalap eszkoz mezo mell pluszjel uj eszkoz ceruza kivalaszt eszkoz szerkesztese ugyfel adatlap aljan eszkoz gombbal ily lista ann ugyfel eszkoz mut eszkoz adatlap felugro abl nyili eszkoz lista legutobb modosit keszul kezdodi oldalank 25 sorral",
+            "h": 45
+        },
+        {
+            "id": "eszkozok#3",
+            "cim": "Lépésről lépésre: új eszköz felvétele",
+            "horgony": "lepesrol-lepesre-uj-eszkoz-felvetele",
+            "szoveg": "1. Az Eszközök menüpontban kattints az **Új eszköz** gombra.\n2. Az **Ügyfél** mezőbe kezdd el írni az ügyfél nevét vagy telefonszámát, és válaszd ki a listából. Ha még nincs felvéve, a mező melletti pluszjellel helyben felveheted.\n3. Kattints a **Kategória** mezőre, és válaszd ki a készülék fajtáját. Az alap a Telefon.\n4. Kattints a **Gyártó** mezőre, és válassz. Ha nincs a listában, a felugró ablakban beírhatod a sajátodat.\n5. Írd be a **Gyári szám** mezőbe a gyártó modellkódját. Ez azonosítja a készüléket, nem a kereskedelmi név.\n6. A **Keresk. név** mezőbe írd azt a nevet, amin az ügyfél ismeri a készüléket.\n7. Írd be az **IMEI** számot (15 számjegy) és a **Sorozatszám** mezőt.\n8. Válaszd ki a **Szín** és a **Tartozékok** mezőt. A tartozékokból több is bejelölhető, a végén **Kész**.\n9. Ha az ügyfél megadta, írd be a **Zárkód / PIN** mezőt, vagy rajzold be a feloldó mintát.\n10. Kattints az **Eszköz létrehozása** gombra.\n\nTipp: Telefonnál kezdd az IMEI-vel. Ha a készülék járt már nálad, minden kitöltődik. Ha nem, a gyártót és a típust a rendszer akkor is felismerheti.",
+            "t": "eszkoz lepes lepes uj eszkoz felvetele lepes lepes uj eszkoz felvetele eszkoz menupon kattints uj eszkoz gomb ugyfel mezo kezdd irni ugyfel nev telefonszam valaszd lista nincs felveve mezo melletti pluszjellel hely felveheted kattints kategoria mezo valaszd eszkoz fajtaj alap telef kattints gyarto mezo valassz nincs lista felugro abl beirhatod sajatod ird gyari szam mezo gyarto modellkodj azonosi eszkoz kereskedelmi nev keres nev mezo ird nev amin ugyfel ismeri eszkoz ird imei szam 15 szamjegy sorozatszam mez valaszd szin tartoz mez tartoz tobb bejelolheto veg kesz ugyfel megadta ird zarkod pin mez rajzold feloldo min 10 kattints eszkoz letrehozasa gomb tipp telefonnal kezdd imei vel eszkoz jar nalad kitoltodi gyar tipus rendszer felismerheti",
+            "h": 113
+        },
+        {
+            "id": "eszkozok#4",
+            "cim": "Lépésről lépésre: IMEI beírása és típusfelismerés",
+            "horgony": "lepesrol-lepesre-imei-beirasa-es-tipusfelismeres",
+            "szoveg": "Az eszköz adatlapján az **IMEI** mező a 15. számjegy után magától dolgozik.\n\n1. Írd be vagy olvasd be vonalkódolvasóval az IMEI-t. A mező csak a számjegyeket tartja meg, a szóközt kiszűri.\n2. A 15. számjegy után az ablak tetején üzenet jelenik meg. Négyféle lehet:\n\n| Üzenet | Mit jelent |\n|---|---|\n| „Ez a készülék már szerepel…\" | Járt már nálad. Az adatai és az ügyfele betöltődtek, a mentés a meglévő eszközt frissíti. |\n| „Új készülék: … – az IMEI alapján.\" | Még nem járt nálad, de a típusadatbázis felismerte. A gyártó, a gyári szám és a kereskedelmi név kitöltődött. |\n| „…a gyári szám nincs az adatbázisban – írd be kézzel.\" | Csak a gyártót sikerült felismerni. A gyári számot neked kell beírnod. |\n| „Ez a készülék még nem járt nálunk – új rekord lesz.\" | Ismeretlen típus. Töltsd ki kézzel. |\n\n3. Ha elgépelted, ezt látod: „Ez a 15 számjegy nem ad ki érvényes IMEI-t – nézd meg, nem gépelted-e el.\" Ez csak figyelmeztetés, menteni így is tudsz.\n\nA típusfelismerés az IMEI első nyolc számjegyéből dolgozik. Csak az üres mezőket tölti ki: amit már beírtál, azt nem írja felül. Az adatbázis a rendszerben van, internet nélkül is működik.",
+            "t": "eszkoz lepes lepes imei beirasa tipusfelismeres lepes lepes imei beirasa tipusfelismeres eszkoz adatlapjan imei mezo 15 szamjegy utan maga dolgozi ird olvasd vonalkodolvaso imei mezo szamjegy tar szokoz kiszuri 15 szamjegy utan abl tetej uzen jeleni negyfele uzen jel eszkoz szerepel jar nalad ada ugyfele betoltod mentes meglevo eszkoz frissiti uj eszkoz imei alapjan jar nalad tipusadatbazis felismerte gyarto gyari szam kereskedelmi nev kitoltod gyari szam nincs adatbazis ird kezzel gyar sikerul felismerni gyari szam neked beirnod eszkoz jar nal uj rekord ismeretl tipus toltsd kezzel elgepelted latod 15 szamjegy ad ervenyes imei nezd gepelted figyelmeztetes menteni igy tipusfelismeres imei elso nyolc szamjegye dolgozi ures mez tolti beirtal irja felul adatbazis rendszer intern nelkul mukodi",
+            "h": 115
+        },
+        {
+            "id": "eszkozok#5",
+            "cim": "Lépésről lépésre: gyári adatok betöltése ellenőrző oldalról",
+            "horgony": "lepesrol-lepesre-gyari-adatok-betoltese-ellenorzo-oldalrol",
+            "szoveg": "A sorozatszám, a garancia és a gyártás dátuma nem olvasható ki az IMEI-ből: ezeket a gyártó tudja. Az eszköz adatlapján kétféleképp hozhatod be őket.\n\n### Ingyenes ellenőrző oldallal\n\n1. Írd be a teljes IMEI-t.\n2. Az **Ellenőrzés** sorban kattints az egyik ellenőrző oldal gombjára. Az oldal új lapon nyílik meg, az IMEI pedig a vágólapra kerül.\n3. Az ellenőrző oldalon illeszd be az IMEI-t, és kérd le az eredményt.\n4. Jelöld ki az egész eredményblokkot a címkékkel együtt, és másold ki.\n5. Az eszköz adatlapján illeszd be a **Gyári adatok** mezőbe. A feldolgozás rögtön elindul; ha nem, kattints a **Feldolgozás** gombra.\n6. Az üzenet megmondja, hány mező töltődött ki.\n\n### Előfizetett szolgáltatóval\n\nHa a Beállításokban be van kapcsolva az IMEI-lekérdezés, az **Ellenőrzés** sorban megjelenik a **Lekérdezés a szolgáltatótól** gomb. Írd be a teljes IMEI-t, és kattints rá. Siker esetén ezt látod: „Gyári adatok betöltve\", a frissült mezők számával.\n\nFigyelem: A beillesztett és a lekérdezett adat a gyártótól származik, ezért a már kitöltött mezőket is felülírja. Mentés előtt nézd át az adatlapot.",
+            "t": "eszkoz lepes lepes gyari ada betoltese ellenorzo oldal lepes lepes gyari ada betoltese ellenorzo oldal sorozatszam garancia gyartas datuma olvashato imei bol eze gyarto tud eszkoz adatlapjan ketfelekepp hozhatod oke ingyenes ellenorzo oldallal ird teljes imei ellenorzes sor kattints egyi ellenorzo oldal gomb oldal uj lap nyili imei ped vagolap ar ellenorzo oldal illeszd imei kerd eredmeny jelold egesz eredmenyblok cim egyu masold eszkoz adatlapjan illeszd gyari ada mezo feldolgozas rog elindul kattints feldolgozas gomb uzen megmond hany mezo toltod elofizet szolgaltato beallitas kapcsolva imei lekerdezes ellenorzes sor megjeleni lekerdezes szolgaltato gomb ird teljes imei kattints siker ese latod gyari ada betoltve frissul mez szama figyelem beilleszt lekerdez ada gyarto szarmazi ezer kitolt mez felulir mentes elo nezd adatlap",
+            "h": 119
+        },
+        {
+            "id": "eszkozok#6",
+            "cim": "Lépésről lépésre: feloldó minta és zárkód",
+            "horgony": "lepesrol-lepesre-feloldo-minta-es-zarkod",
+            "szoveg": "A zárkód és a feloldó minta az eszköz adatlapjának **Eszköz** lapfülén van.\n\n- A számkódot vagy jelszót a **Zárkód / PIN** mezőbe írd.\n- A mintát a jobb oldali **Feloldó minta** rácson rajzolod be.",
+            "t": "eszkoz lepes lepes feloldo minta zarkod lepes lepes feloldo minta zarkod zarkod feloldo minta eszkoz adatlap eszkoz lapful szamkod jelsz zarkod pin mezo ird min jobb oldali feloldo minta racs rajzolod",
+            "h": 31
+        },
+        {
+            "id": "eszkozok#7",
+            "cim": "A zárkód és a minta védelme",
+            "horgony": "a-zarkod-es-a-minta-vedelme",
+            "szoveg": "A zárkód és a feloldó minta az ügyfél készülékének kulcsa, ezért a rendszer **titkosítva** tárolja: aki csak az adatbázist vagy egy mentést szerez meg, nem tudja kiolvasni.\n\n- **Mentés után nem látszik magától.** Újra megnyitva az adatlapot a **Zárkód / PIN** mező üres, a helyén ez áll: *•••• mentve – írd felül, ha új*. A mintarács üres, alatta: *Mentett minta van (rejtve)*.\n- **Megmutat** – a mező mellett álló gomb előhozza a mentett kódot és mintát. Csak annak a szerepnek jelenik meg, amelyiknél a **Beállítások › Jogosultságok** rácsában be van pipálva a **Feloldó kód és minta megnézése** jog. Minden megnézés bekerül a **Naplóba** (ki, mikor, melyik eszköz).\n- **Beírni mindenki tud.** Aki nem nézheti meg, az is beírhat új kódot vagy rajzolhat új mintát – ez felülírja a régit. Ha üresen hagyod, a mentett érték marad. A mintarács **Törlés** gombja a rejtett mintát is törli.\n- **Alapból** az Admin, a Kolléga és a Szerelő szerep láthatja; a Pultos és a Pénztáros nem.\n- Az Áttekintés részletpaneljén is **•••• rejtve** áll a zárkód és a minta helyén, mellette a **Megmutat** gomb.\n- Nyomtatványra (Belső munkalap) és RMA-matricára is csak akkor kerül, ha a nyomtatást indító ember szerepe láthatja.\n- Az asszisztens soha nem kapja meg.\n\nA minta berajzolása:\n\n1. Tartsd lenyomva az egérgombot az első pöttyön, és húzd végig, ahogy az ügyfél mutatta.\n2. Engedd el az utolsó pöttynél. A vonalon nyilak jelzik az irányt, a kezdőpont gyűrűt kap.\n3. A rács alatt megjelenik a sorrend számokkal. A pöttyök számozása balról jobbra, fentről lefelé: 1–9.\n4. Ha elrontottad, a **Vissza** gomb az utolsó lépést veszi le, a **Törlés** az egészet.",
+            "t": "eszkoz zarkod minta vedelme zarkod minta vedelme zarkod feloldo minta ugyfel keszuleke kulcsa ezer rendszer titkositva tarol adatbazis mentes szerez tud kiolvasni mentes utan latszi maga ujra megnyitva adatlap zarkod pin mezo ures hely all mentve ird felul uj mintaracs ures alatta ment minta rejtve megmu mezo mell allo gomb elohozza ment kod min ann szerep jeleni amelyiknel beallitas jogosultsag racsa pipalva feloldo kod minta megnezese jog megnezes bekerul naplo eszkoz beirni mindenki tud nezheti beirh uj kod rajzolh uj min felulir regi ures hagyod ment ert marad mintaracs torles gomb rejt min torli alap admin kollega szerelo szerep lath pultos penztaros attekintes reszletpanelj rejtve all zarkod minta hely mellette megmu gomb nyomtatvany belso munkalap rma matrica ar nyomtatas indito ember szerepe lath asszisztens soha kap minta berajzolasa tartsd lenyomva egergomb elso potty huzd veg ahogy ugyfel mutatta engedd utolso pottynel vonal nyil jelzi irany kezdop gyuru kap racs ala megjeleni sorrend szam potty szamozasa bal jobb fen lefele elrontottad vissza gomb utolso lepes veszi torles egesz",
+            "h": 167
+        },
+        {
+            "id": "eszkozok#8",
+            "cim": "A zárkód és a minta védelme",
+            "horgony": "a-zarkod-es-a-minta-vedelme",
+            "szoveg": "Húzásnál a két pötty közé eső harmadik is bekerül, ahogy a telefon is teszi. Ha a minta egy pöttyöt többször érint, vagy köztes pöttyöt kihagy, pipáld be a **Szabad rajz** jelölőt: ilyenkor pöttyönként kattintva építed fel.\n\nEgy minta legalább két, legfeljebb húsz lépésből áll.",
+            "t": "eszkoz zarkod minta vedelme zarkod minta vedelme huzasnal ket potty koze eso harmadi bekerul ahogy telef teszi minta potty tobbszor erin koztes potty kihagy pipald szabad rajz jelol ily pottyonk kattintva epited minta legalabb ket legfeljebb husz lepes all",
+            "h": 39
+        },
+        {
+            "id": "eszkozok#9",
+            "cim": "Lépésről lépésre: eszköz szerkesztése a munkalapról",
+            "horgony": "lepesrol-lepesre-eszkoz-szerkesztese-a-munkalaprol",
+            "szoveg": "1. Nyisd meg a munkalapot.\n2. Az **Eszköz** mező mellett kattints a ceruzára. A ceruza csak kiválasztott eszköznél kattintható.\n3. Ugyanide jutsz az **Eszköz** lapfülön, az eszköz kártyáján a **Szerkesztés** gombbal. A csatolt további eszközöknek is saját **Szerkesztés** gombjuk van.\n4. Az eszköz ablaka a munkalap fölött nyílik. Javítsd, amit kell.\n5. Kattints a **Mentés** gombra.\n\nAz eszköz ablaka bezárul, a munkalap nyitva marad, a név és az adatok helyben frissülnek.\n\nÚj eszközt is innen vehetsz fel: az **Eszköz** mező melletti pluszjel a kiválasztott ügyféllel előtöltve nyitja az űrlapot, és mentés után az új eszköz ki van választva a lapon. Több készüléket az **Eszköz csatolása** gombbal teszel egy lapra; erről a Munkalapok fejezet ír.",
+            "t": "eszkoz lepes lepes eszkoz szerkesztese munkalap lepes lepes eszkoz szerkesztese munkalap nyisd munkalap eszkoz mezo mell kattints ceruza ceruza kivalaszt eszkoznel kattinthato ugyanide jutsz eszkoz lapful eszkoz kartyajan szerkesztes gombbal csa tovabbi eszkoz saj szerkesztes gomb eszkoz ablaka munkalap fol nyili javitsd kattints mentes gomb eszkoz ablaka bezarul munkalap nyitva marad nev ada hely frissul uj eszkoz inn vehetsz eszkoz mezo melletti pluszjel kivalaszt ugyfellel elotoltve nyi urlap mentes utan uj eszkoz valasztva lap tobb eszkoz eszkoz csatolasa gombbal teszel lap errol munkalap fejez ir",
+            "h": 85
+        },
+        {
+            "id": "eszkozok#10",
+            "cim": "Lépésről lépésre: készülékkép és csatolt fájlok",
+            "horgony": "lepesrol-lepesre-keszulekkep-es-csatolt-fajlok",
+            "szoveg": "1. Nyisd meg az eszköz adatlapját.\n2. Az alsó lapfülek közül válaszd a **Készülékkép / fájlok** fület.\n3. Felül a készülék képe áll, ha a gyári adatok hoztak képet.\n4. Alatta csatolhatsz saját fájlokat: húzd ide őket, vagy kattints a **Fájl hozzáadása** gombra.\n5. Kattints a **Mentés** gombra. A fájlok csak ekkor kerülnek fel.\n\nIde érdemes feltölteni az átvételkor készült fotókat. A lapfülön szám jelzi a csatolt fájlok darabszámát; a fájlonkénti mérethatár a fül alján olvasható.",
+            "t": "eszkoz lepes lepes keszulekkep csa fajl lepes lepes keszulekkep csa fajl nyisd eszkoz adatlapj also lapful kozul valaszd keszulekkep fajl ful felul eszkoz kepe all gyari ada hoz kep alatta csatolhatsz saj fajl huzd ide oke kattints fajl hozzaadasa gomb kattints mentes gomb fajl ekkor ar ide erdemes feltolteni atvetel keszul fot lapful szam jelzi csa fajl darabszam fajlonkenti merethatar ful aljan olvashato",
+            "h": 63
+        },
+        {
+            "id": "eszkozok#11",
+            "cim": "Az eszköz előélete",
+            "horgony": "az-eszkoz-eloelete",
+            "szoveg": "Így nézheted meg, mi történt egy készülékkel korábban:\n\n- **IMEI beírásakor:** ha a készülék már szerepel, az üzenet kiírja a nevét, az ügyfelét és azt, mikor módosították utoljára.\n- **Az Eszközök listában:** keress rá az IMEI-re vagy a sorozatszámra.\n- **A Munkalapok listában:** a kereső IMEI-re és készülékre is talál. A lista alapból a nyitott lapokat mutatja, a régiekhez állítsd át az állapotszűrőt.\n- **Az ügyfél adatlapján:** a **Készülékei** gomb az ügyfél összes eszközét listázza, a **Munkalapok** fül pedig a lapjait, eszközönként megnevezve.",
+            "t": "eszkoz eszkoz eloelete eszkoz eloelete igy nezheted tort keszul korab imei beirasa eszkoz szerepel uzen kiir nev ugyfel modositot utol eszkoz lista keress imei re sorozatszam munkalap lista kereso imei re eszkoz talal lista alap nyit lap mut regi allitsd allapotszur ugyfel adatlapjan eszkoz gomb ugyfel osszes eszkoz listazza munkalap ful ped lapj eszkozonk megnevezve",
+            "h": 55
+        },
+        {
+            "id": "eszkozok#12",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "### Az Eszközök lista oszlopai\n\n| Oszlop | Mit mutat |\n|---|---|\n| (kép) | A készülék termékképe (mockup) – lásd a Mockupok lapfület |\n| Készülék (gyári szám) | Gyártó és gyári szám; alatta halványan a kereskedelmi név és a szín |\n| Ügyfél | A tulajdonos; a névre kattintva az ügyfél adatlapja nyílik |\n| IMEI / sorozatszám | Az IMEI; ha nincs, a sorozatszám |\n| Kategória | A készülék fajtája |\n| Garancia | „garanciális\" címke, ha a készülék garanciális |\n\nA keresőmező felirata: `Gyári szám, kereskedelmi név, IMEI, sorozatszám, ügyfél…` Gyártóra és a második IMEI-re is keres.\n\n### Az Eszköz lapfül mezői\n\n- **Ügyfél** – kötelező, a listából kell választani.\n- **Kategória**, **Gyártó**, **Szín**, **Tartozékok** – kattintásra felugró választó nyílik. A gyártóhoz, a színhez és a tartozékokhoz saját szöveg is beírható.\n- **Gyári szám**, **Keresk. név**, **IMEI**, **IMEI 2.**, **Sorozatszám**, **Modellszám**.\n- **Zárkód / PIN**, **Feloldó minta**, **Ellenőrzés**, **Gyári adatok**.\n\n### A Garancia és átvétel lapfül mezői\n\n**Garanciális készülék** jelölő, **Vásárlás**, **Garancia lejár**, **Garancia áll.**, **Gyártás**, **Ország**, **SIM-zár**. A dátummezők kattintásra naptárt nyitnak.\n\n### Az alsó lapfülek\n\n- **Megjegyzés** – az ügyfél felé is megjelenhet, például nyomtatványon.\n- **Belső megjegyzés** – csak a rendszerben látszik. Az ügyfél nem látja; az ügyfélnek szóló nyomtatványokra nem kerül ki, csak a műhelynek készülő **Belső munkalapra**.\n- **Átvételkori állapot** – karcok, törött üveg, hiányzó alkatrész.",
+            "t": "eszkoz mez gomb mez gomb eszkoz lista oszlop oszlop mut kep eszkoz termekkepe mockup lasd mockup lapful eszkoz gyari szam gyarto gyari szam alatta halvanyan kereskedelmi nev szin ugyfel tulajdonos nev kattintva ugyfel adatlap nyili imei sorozatszam imei nincs sorozatszam kategoria eszkoz fajta garancia garancialis cimke eszkoz garancialis keresomezo felirata gyari szam kereskedelmi nev imei sorozatszam ugyfel gyarto masodi imei re keres eszkoz lapful mezoi ugyfel kotelezo lista valasztani kategoria gyarto szin tartoz kattintas felugro valaszto nyili gyarto szin tartoz saj szoveg beirhato gyari szam keres nev imei imei sorozatszam modellszam zarkod pin feloldo minta ellenorzes gyari ada garancia atvetel lapful mezoi garancialis eszkoz jelolo vasarlas garancia lejar garancia all gyartas orszag sim zar datummez kattintas naptar nyi also lapful megjegyzes ugyfel fele megjelenh peldaul nyomtatvany belso megjegyzes rendszer latszi ugyfel lat ugyfel szolo nyomtatvany ar muhely keszulo belso munkalap atvetelkori allap karc tor uveg hianyzo alkatresz",
+            "h": 147
+        },
+        {
+            "id": "eszkozok#13",
+            "cim": "Beállítások: IMEI-lekérdezés lapfül",
+            "horgony": "beallitasok-imei-lekerdezes-lapful",
+            "szoveg": "A Beállítások menüpont *Készülékadatok* csoportjában találod az **IMEI-lekérdezés** lapfület: Beállítások megnyitása. A Beállításokat csak adminisztrátor nyithatja meg. Itt állítod be, honnan jönnek az eszköz gyári adatai.\n\n### IMEI-szolgáltató doboz\n\nAkkor töltsd ki, ha előfizettél egy IMEI-lekérdező szolgáltatásra.\n\n- **Lekérdezés bekapcsolva** – ha be van pipálva és a végpont meg van adva, az eszköz adatlapján megjelenik a **Lekérdezés a szolgáltatótól** gomb.\n- **Végpont címe** – a szolgáltató dokumentációjából másold ide. Az IMEI helyére írd: `{imei}`, a kulcs helyére: `{kulcs}`. A rendszer behelyettesíti őket.\n- **API-kulcs** – a szolgáltatótól kapott kulcs. A rendszer a kérés fejlécében is elküldi.\n\n### Ingyenes ellenőrző oldalak doboz\n\nAz **Oldalak** mezőben soronként egy ellenőrző oldal áll, ebben a formában: `Név | URL`. Ezekből lesznek az eszköz adatlapján az **Ellenőrzés** sor gombjai.\n\n- A gomb megnyitja az oldalt, és az IMEI-t a vágólapra teszi.\n- Ha egy oldal a címében is fogadja az IMEI-t, írd a címbe az `{imei}` jelölőt: akkor már kitöltve nyílik meg.\n- Üresen hagyva az alapértelmezett lista jön vissza.\n\nA lapfül alján a **Mentés** gombbal mentesz; ez csak ennek a lapfülnek az adatait menti.",
+            "t": "eszkoz beallitas imei lekerdezes lapful beallitas imei lekerdezes lapful beallitas menup keszulekad csoport talalod imei lekerdezes lapful beallitas megnyitasa beallitas adminisztrator nyith allitod honnan jon eszkoz gyari ada imei szolgaltato doboz toltsd elofizettel imei lekerdezo szolgaltatas lekerdezes bekapcsolva pipalva vegp adva eszkoz adatlapjan megjeleni lekerdezes szolgaltato gomb vegp cime szolgaltato dokumentacio masold ide imei helye ird imei kulcs helye kulcs rendszer behelyettesiti oke api kulcs szolgaltato kap kulcs rendszer keres fejlece elkuldi ingyenes ellenorzo oldal doboz oldal mezo soronk ellenorzo oldal all ebb forma nev url eze lesz eszkoz adatlapjan ellenorzes sor gombj gomb megnyi oldal imei vagolap teszi oldal cime fogad imei ird cim imei jelol kitoltve nyili ures hagyva alapertelmez lista jon vissza lapful aljan mentes gombbal mentesz enn lapful ada menti",
+            "h": 124
+        },
+        {
+            "id": "eszkozok#14",
+            "cim": "Mockupok: termékkép minden eszköz mellett",
+            "horgony": "mockupok-termekkep-minden-eszkoz-mellett",
+            "szoveg": "Minden eszköz mellett termékkép (mockup) áll: a munkalap **Eszközök a lapon** paneljén és **Eszköz** lapfülén, az Áttekintés részletpanelén és az **Eszközök** listában. A kép a készülék **kategóriájából** adódik (telefon, tablet, laptop, okosóra…). A rendszer 20 gyári, márkajel nélküli termékfotóval érkezik, egységes stúdióstílusban.\n\nMelyik kép jelenik meg:\n\n1. Ha egy mockupnál megadtál **gyártót** vagy **típusrészletet**, és az eszköz illik rá, az nyer (például gyártó *Apple*, típus *iPhone* → saját iPhone-kép).\n2. Különben az eszköz saját fényképe, ha van (IMEI-lekérdezésből vagy feltöltve).\n3. Különben a kategória mockupja.\n4. Ha egyik sincs: a tartalék kép (az *Egyéb eszköz* – amelyiknek se kategóriája, se szabálya nincs).",
+            "t": "eszkoz mockup termekkep eszkoz mell mockup termekkep eszkoz mell eszkoz mell termekkep mockup all munkalap eszkoz lap panelj eszkoz lapful attekintes reszletpanel eszkoz lista kep eszkoz kategoria adodi telef tabl laptop okoso rendszer 20 gyari markajel nelkuli termekfoto erkezi egyseges studiostilus kep jeleni mockupnal megadtal gyar tipusreszl eszkoz illi nyer peldaul gyarto apple tipus iphone saj iphone kep kul eszkoz saj fenykepe imei lekerdezes feltoltve kul kategoria mockup egyi sincs tartal kep egyeb eszkoz amelyi se kategoria se szabalya nincs",
+            "h": 80
+        },
+        {
+            "id": "eszkozok#15",
+            "cim": "Beállítások: Mockupok lapfül",
+            "horgony": "beallitasok-mockupok-lapful",
+            "szoveg": "A Beállítások *Készülékadatok* csoportjában a **Mockupok** lapfülön szerkeszted a termékképeket. Csak adminisztrátor látja.",
+            "t": "eszkoz beallitas mockup lapful beallitas mockup lapful beallitas keszulekad csoport mockup lapful szerkeszted termekkep adminisztrator lat",
+            "h": 16
+        },
+        {
+            "id": "eszkozok#16",
+            "cim": "Beállítások: Mockupok lapfül › Generáló szöveg (prompt) sablonja doboz",
+            "horgony": "beallitasok-mockupok-lapful",
+            "szoveg": "### Generáló szöveg (prompt) sablonja doboz\n\nA **Sablon** mező adja az egységes stílust (fehér háttér, stúdiófény, márkajel nélkül). A `{eszkoz}` helyére kerül a mockup leírása. Üresen hagyva a gyári sablon áll vissza.",
+            "t": "eszkoz beallitas mockup lapful generalo szoveg promp sabl doboz beallitas mockup lapful generalo szoveg promp sabl doboz generalo szoveg promp sabl doboz sabl mezo adja egyseges stilus feher hatter studiofeny markajel nelkul eszkoz helye ar mockup leirasa ures hagyva gyari sabl all vissza",
+            "h": 43
+        },
+        {
+            "id": "eszkozok#17",
+            "cim": "Beállítások: Mockupok lapfül › Mockupok doboz",
+            "horgony": "beallitasok-mockupok-lapful",
+            "szoveg": "### Mockupok doboz\n\nMinden mockup egy sor:\n\n| Mező | Mire való |\n|---|---|\n| **Kép** | Az előnézet alatt a kép címe. **Feltöltés…** – kép a gépről; **Kép törlése** – kép nélkül a sor nem jelenik meg az eszközöknél. Ide beilleszthetsz külső képcímet is (például a Magnificből kimásolt linket): mentéskor a rendszer letölti a saját képei közé, így akkor is megmarad, ha a külső link lejár. |\n| **Név** | A mockup neve, például *Telefon*. |\n| **Gyártó (nem kötelező)** | Csak ennek a gyártónak az eszközeire illik. |\n| **Típus tartalmazza (nem kötelező)** | Vesszővel több részlet is megadható, például *iPhone, Galaxy S*. |\n| **Kategóriák** | Mely kategóriák eszközeinél jelenjen meg. Ctrl / Cmd lenyomva több is választható. |\n| **Leírás a generáló szöveghez (angolul)** | A kép tárgya angolul, például *modern smartphone with thin bezels*. |\n| **Generáló szöveg (prompt)** | Lenyitva a kész szöveg. **Másolás** – a vágólapra; **Megnyitás a Magnificben** – új lapon nyílik. |\n| **×** | A sor törlése (két kattintás: *Biztosan?*). A mentéskor kerül le. |\n\nAz **Új mockup** gombbal új sor kerül a lista végére. A **Gyári készlet visszaállítása mentéskor** pipával a lista helyére a gyári 20 kép kerül vissza (a feltöltött képek megmaradnak).",
+            "t": "eszkoz beallitas mockup lapful mockup doboz beallitas mockup lapful mockup doboz mockup doboz mockup sor mezo mire valo kep elonez ala kep cime feltoltes kep gep kep torlese kep nelkul sor jeleni eszkozoknel ide beilleszthetsz kulso kepcim peldaul magnific kimasol lin mentes rendszer letolti saj kep koze igy megmarad kulso lin lejar nev mockup neve peldaul telef gyarto kotelezo enn gyarto eszkoz illi tipus tartalmazza kotelezo vesszo tobb reszl megadhato peldaul iphone galaxy kategori kategori eszkozeinel jelenj ctrl cmd lenyomva tobb valaszthato leiras generalo szoveg angolul kep targya angolul peldaul modern smartphone thin bezels generalo szoveg promp lenyitva kesz szoveg masolas vagolap megnyitas magnific uj lap nyili sor torlese ket kattintas biztosan mentes ar uj mockup gombbal uj sor ar lista vege gyari keszl visszaallitasa mentes pipa lista helye gyari 20 kep ar vissza feltolt kep megmarad",
+            "h": 137
+        },
+        {
+            "id": "eszkozok#18",
+            "cim": "Beállítások: Mockupok lapfül › Lépésről lépésre: új mockup a Magnific segítségével",
+            "horgony": "beallitasok-mockupok-lapful",
+            "szoveg": "### Lépésről lépésre: új mockup a Magnific segítségével\n\n1. A Mockupok lapfülön kattints az **Új mockup** gombra, és írd be a **Nevet**, a **Kategóriát** (vagy a gyártót / típust) és az angol **Leírást**.\n2. Nyisd le a **Generáló szöveget**, és kattints a **Másolás** gombra.\n3. A **Megnyitás a Magnificben** gombbal nyisd meg a Magnificet, és generálj képet a szöveggel.\n4. A kész képen használd a háttér eltávolítását (*Remove background*), hogy átlátszó legyen.\n5. Töltsd le, és a sorban a **Feltöltés…** gombbal töltsd fel – vagy másold be a kép címét a képmezőbe.\n6. Kattints a **Mentés** gombra.",
+            "t": "eszkoz beallitas mockup lapful lepes lepes uj mockup magnific segitsege beallitas mockup lapful lepes lepes uj mockup magnific segitsege lepes lepes uj mockup magnific segitsege mockup lapful kattints uj mockup gomb ird nev kategori gyar tipus angol leiras nyisd generalo szoveg kattints masolas gomb megnyitas magnific gombbal nyisd magnific generalj kep szoveggel kesz kep hasznald hatter eltavolitas remove background atlatszo legy toltsd sor feltoltes gombbal toltsd masold kep cim kepmezo kattints mentes gomb",
+            "h": 73
+        },
+        {
+            "id": "eszkozok#19",
+            "cim": "Beállítások: TAC adatbázis lapfül",
+            "horgony": "beallitasok-tac-adatbazis-lapful",
+            "szoveg": "A Beállítások *Készülékadatok* csoportjának másik lapfüle a **TAC adatbázis**. Ez a típusfelismerés háttere: az IMEI első nyolc számjegyéből mondja meg a gyártót és a típust.\n\n### Állapot doboz\n\n- **Betöltött készüléktípus** – hány típust ismer most a rendszer.\n- **Saját felvitelből tanult** – ebből hányat tanult a saját eszközfelvitelekből.\n- **Forrásfájl** – megvan-e a rendszerrel szállított típuslista.\n\nA **Betöltés indítása** gomb tölti be a szállított listát. Ha már volt betöltés, a gomb felirata **Újratöltés**. A betöltés darabokban fut, és eltart egy percig; közben a gomb mellett látod, hol tart. Ismételt futtatás nem hoz létre duplikátumot.\n\n### Honnan jön az adat doboz\n\nA szállított lista egy nyilvános típusadatbázisból készült, és 2025 végéig tart. A típusok nagyjából felénél van meg a gyári szám; a többinél csak a gyártó és a kereskedelmi név.\n\nAz újabb készülékeket a rendszer magától tanulja meg: amikor egy ismeretlen típust kézzel felveszel IMEI-vel, gyártóval és gyári számmal, bekerül az adatbázisba, és legközelebb magától kitöltődik. A saját bejegyzéseidet az újratöltés nem írja felül.",
+            "t": "eszkoz beallitas tac adatbazis lapful beallitas tac adatbazis lapful beallitas keszulekad csoport masi lapfule tac adatbazis tipusfelismeres hatte imei elso nyolc szamjegye mond gyar tipus allap doboz betolt keszulektipus hany tipus ismer rendszer saj felvitel tanul ebbol hany tanul saj eszkozfelvitel forrasfajl megvan rendszerrel szallit tipuslista betoltes inditasa gomb tolti szallit lis betoltes gomb felirata ujratoltes betoltes darab fut eltar perc koz gomb mell latod tar ismetel futtatas hoz let duplikatum honnan jon ada doboz szallit lista nyilvanos tipusadatbazis keszul 2025 vege tar tipus nagy felenel gyari szam tobbinel gyarto kereskedelmi nev ujabb eszkoz rendszer maga tanul ami ismeretl tipus kezzel felveszel imei vel gyarto gyari szammal bekerul adatbazis legkozelebb maga kitoltodi saj bejegyzeseid ujratoltes irja felul",
+            "h": 117
+        },
+        {
+            "id": "eszkozok#20",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Eszköz ügyfél nélkül nem menthető.** Az ügyfelet a listából kell kiválasztani, a gépelés önmagában nem elég.\n- **Egy készülék egyszer szerepel.** Ha a beírt IMEI már megvan, a mentés a meglévő eszközt frissíti, nem készít másodikat. A mentés gomb felirata ilyenkor **Mentés** lesz.\n- A belső megjegyzés soha nem kerül az ügyfél elé.\n- A munkalapon csak a kiválasztott ügyfél eszközei választhatók. Ha szerkesztés közben az eszközt másik ügyfélhez teszed, lekerül a munkalapról.\n- Az eszköznek nincs törlés gombja: a felvett készülék a nyilvántartásban marad.\n- A listában és a fejlécben a gyártó és a gyári szám áll. Ha nincs gyári szám, a kereskedelmi név lép a helyére; ha az sincs, „Névtelen eszköz\".",
+            "t": "eszkoz szabaly ami rendszer betar szabaly ami rendszer betar eszkoz ugyfel nelkul mentheto ugyfel lista kivalasztani gepeles onmaga eleg eszkoz egyszer szerepel beir imei megvan mentes meglevo eszkoz frissiti keszi masodi mentes gomb felirata ily mentes belso megjegyzes soha ar ugyfel ele munkalap kivalaszt ugyfel eszkoz valaszth szerkesztes koz eszkoz masi ugyfel teszed lekerul munkalap eszkoz nincs torles gomb felv eszkoz nyilvantartas marad lista fejlec gyarto gyari szam all nincs gyari szam kereskedelmi nev lep helye sincs nevtel eszkoz",
+            "h": 79
+        },
+        {
+            "id": "eszkozok#21",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- A jobb alsó sarokban élő asszisztensnek írd be: „Vezess végig ezen az oldalon\". Többlépcsős túrát indít az Eszközök oldalon.\n- A teljes dokumentációt és a gyakori kérdéseket a **Súgó** menüpontban találod.\n- Az **Átvételkori állapot** fület mindig töltsd ki. Egy mondat a karcokról megvéd a későbbi vitától.\n- A zárkódot és a mintát átvételkor kérd el: enélkül a javítás nehezen tesztelhető.\n- A munkalap **Eszköz** lapfülén az IMEI, a sorozatszám és a típus mellett másoló gomb áll.",
+            "t": "eszkoz tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi eszkoz oldal teljes dokumentaci gyakori kerdes sugo menupon talalod atvetelkori allap ful toltsd mond karc megved kesobbi vita zarkod min atvetel kerd enelkul javitas nehez tesztelheto munkalap eszkoz lapful imei sorozatszam tipus mell masolo gomb all",
+            "h": 52
+        },
+        {
+            "id": "eszkozok#22",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„Válassz ügyfelet a listából – gépelés önmagában nem elég.\"** Kattints a lenyíló listában az ügyfélre, vagy vedd fel a pluszjellel.\n- **Az IMEI beírására nem történik semmi.** Számold meg a számjegyeket: pontosan 15 kell. A keresés ennél rövidebb számra nem indul el.\n- **Nem ismeri fel a típust.** A készülék újabb, mint a típuslista, vagy a lista nincs betöltve. Töltsd ki kézzel: mentés után a rendszer megjegyzi. Az adminisztrátor a Beállítások **TAC adatbázis** lapfülén ellenőrizheti a betöltést.\n- **„Ebből nem tudtam adatot kiolvasni.\"** Az egész eredményblokkot másold ki, a címkékkel együtt, ne csak az értékeket.\n- **Nincs „Lekérdezés a szolgáltatótól\" gomb.** Nincs bekapcsolva a Beállítások **IMEI-lekérdezés** lapfülén.\n- **A ceruza szürke a munkalapon.** Nincs kiválasztott eszköz. Előbb válassz ügyfelet, utána eszközt.",
+            "t": "eszkoz megy megy valassz ugyfel lista gepeles onmaga eleg kattints lenyilo lista ugyfel vedd pluszjellel imei beirasa torteni semmi szamold szamjegy pontosan 15 kereses ennel rovidebb szam indul ismeri tipus eszkoz ujabb tipuslista lista nincs betoltve toltsd kezzel mentes utan rendszer megjegyzi adminisztrator beallitas tac adatbazis lapful ellenorizheti betoltes ebbol tudtam ada kiolvasni egesz eredmenyblok masold cim egyu ne ert nincs lekerdezes szolgaltato gomb nincs bekapcsolva beallitas imei lekerdezes lapful ceruza szurke munkalap nincs kivalaszt eszkoz elobb valassz ugyfel utana eszkoz",
+            "h": 81
+        },
+        {
+            "id": "eszkozok#23",
+            "cim": "GYIK › Honnan jön a kép az eszköz mellett?",
+            "horgony": "honnan-jon-a-kep-az-eszkoz-mellett",
+            "szoveg": "A Beállítások **Mockupok** lapfüléről: a rendszer a készülék kategóriája (vagy egy gyártó / típus szabály) szerint választ termékképet. Ha az eszköznek saját fényképe van, a kategóriaképnél az áll előrébb.",
+            "t": "eszkoz gyi honnan jon kep eszkoz mell gyi honnan jon kep eszkoz mell beallitas mockup lapfule rendszer eszkoz kategoria gyarto tipus szabaly szerin valasz termekkep eszkoz saj fenykepe kategoriakepnel all elorebb",
+            "h": 31
+        },
+        {
+            "id": "eszkozok#24",
+            "cim": "GYIK › Hogyan cserélem le egy kategória képét?",
+            "horgony": "hogyan-cserelem-le-egy-kategoria-kepet",
+            "szoveg": "Beállítások › **Mockupok**: a kategória sorában **Feltöltés…**, majd **Mentés**. Ugyanilyen stílusú képhez másold ki a sor generáló szövegét, és készítsd el a Magnificben.",
+            "t": "eszkoz gyi cserelem kategoria kep gyi cserelem kategoria kep beallitas mockup kategoria sora feltoltes majd mentes ugyanily stilusu kep masold sor generalo szoveg keszitsd magnific",
+            "h": 25
+        },
+        {
+            "id": "eszkozok#25",
+            "cim": "GYIK › Miért nem látszik kép egy eszköz mellett?",
+            "horgony": "miert-nem-latszik-kep-egy-eszkoz-mellett",
+            "szoveg": "Nincs a kategóriájához mockup, és tartalék kép sincs (törölted az *Egyéb eszköz* sort vagy a képét). Vegyél fel egy mockupot kategória nélkül, vagy állítsd vissza a gyári készletet.",
+            "t": "eszkoz gyi latszi kep eszkoz mell gyi latszi kep eszkoz mell nincs kategoria mockup tartal kep sincs torolted egyeb eszkoz sor kep vegyel mockup kategoria nelkul allitsd vissza gyari keszl",
+            "h": 30
+        },
+        {
+            "id": "eszkozok#26",
+            "cim": "GYIK › Hogyan veszek fel új készüléket?",
+            "horgony": "hogyan-veszek-fel-uj-keszuleket",
+            "szoveg": "Az Eszközök menüpontban kattints az **Új eszköz** gombra, válaszd ki az ügyfelet, töltsd ki a készülék adatait, majd **Eszköz létrehozása**. Munkalap írása közben az **Eszköz** mező melletti pluszjel ugyanezt teszi.",
+            "t": "eszkoz gyi vesz uj eszkoz gyi vesz uj eszkoz eszkoz menupon kattints uj eszkoz gomb valaszd ugyfel toltsd eszkoz ada majd eszkoz letrehozasa munkalap irasa koz eszkoz mezo melletti pluszjel ugyanez teszi",
+            "h": 32
+        },
+        {
+            "id": "eszkozok#27",
+            "cim": "GYIK › Mi a különbség a gyári szám és a kereskedelmi név között?",
+            "horgony": "mi-a-kulonbseg-a-gyari-szam-es-a-kereskedelmi-nev-kozott",
+            "szoveg": "A gyári szám a gyártó modellkódja: ez azonosítja egyértelműen a készüléket, ebből rendelsz alkatrészt. A kereskedelmi név az, amin az ügyfél ismeri. A listában a gyári szám áll elöl.",
+            "t": "eszkoz gyi kulonbseg gyari szam kereskedelmi nev koz gyi kulonbseg gyari szam kereskedelmi nev koz gyari szam gyarto modellkod azonosi egyertelmu eszkoz ebbol rendelsz alkatresz kereskedelmi nev amin ugyfel ismeri lista gyari szam all elol",
+            "h": 35
+        },
+        {
+            "id": "eszkozok#28",
+            "cim": "GYIK › Mi történik, ha olyan IMEI-t írok be, ami már szerepel?",
+            "horgony": "mi-tortenik-ha-olyan-imei-t-irok-be-ami-mar-szerepel",
+            "szoveg": "A rendszer betölti a meglévő eszköz adatait és az ügyfelét, és kiírja, mikor módosították utoljára. A mentés ezt az eszközt frissíti, nem jön létre másodpéldány.",
+            "t": "eszkoz gyi torteni imei iro szerepel gyi torteni imei iro szerepel rendszer betolti meglevo eszkoz ada ugyfel kiir modositot utol mentes eszkoz frissiti jon let masodpeldany",
+            "h": 26
+        },
+        {
+            "id": "eszkozok#29",
+            "cim": "GYIK › Honnan tudja a rendszer a típust az IMEI-ből?",
+            "horgony": "honnan-tudja-a-rendszer-a-tipust-az-imei-bol",
+            "szoveg": "Az IMEI első nyolc számjegye a készüléktípust azonosítja. A rendszerben van egy típusadatbázis, abból keresi ki a gyártót és a gyári számot. Internet nem kell hozzá.",
+            "t": "eszkoz gyi honnan tud rendszer tipus imei bol gyi honnan tud rendszer tipus imei bol imei elso nyolc szamjegye keszulektipus azonosi rendszer tipusadatbazis abbol keresi gyar gyari szam intern hozza",
+            "h": 30
+        },
+        {
+            "id": "eszkozok#30",
+            "cim": "GYIK › Miért nem ismeri fel az új telefonokat?",
+            "horgony": "miert-nem-ismeri-fel-az-uj-telefonokat",
+            "szoveg": "A szállított típuslista 2025 végéig tart. Az ennél újabb készüléket egyszer kézzel kell felvenned; utána a rendszer megjegyzi, és legközelebb magától kitölti.",
+            "t": "eszkoz gyi ismeri uj telef gyi ismeri uj telef szallit tipuslista 2025 vege tar ennel ujabb eszkoz egyszer kezzel felvenned utana rendszer megjegyzi legkozelebb maga kitolti",
+            "h": 26
+        },
+        {
+            "id": "eszkozok#31",
+            "cim": "GYIK › Azt írja, hogy az IMEI nem érvényes. Menthetem?",
+            "horgony": "azt-irja-hogy-az-imei-nem-ervenyes-menthetem",
+            "szoveg": "Igen. Ez csak figyelmeztetés az elgépelésre. Nézd meg még egyszer a számot; ha biztosan jó, mentsd nyugodtan.",
+            "t": "eszkoz gyi irja imei ervenyes menthetem gyi irja imei ervenyes menthetem figyelmeztetes elgepeles nezd egyszer szam biztosan jo mentsd nyugodtan",
+            "h": 20
+        },
+        {
+            "id": "eszkozok#32",
+            "cim": "GYIK › Mit írjak be, ha a készüléknek nincs IMEI-je?",
+            "horgony": "mit-irjak-be-ha-a-keszuleknek-nincs-imei-je",
+            "szoveg": "Hagyd üresen az **IMEI** mezőt, és töltsd ki a **Sorozatszám** mezőt. A listában ilyenkor a sorozatszám jelenik meg, és keresni is lehet rá.",
+            "t": "eszkoz gyi irj keszul nincs imei je gyi irj keszul nincs imei je hagyd ures imei mez toltsd sorozatszam mez lista ily sorozatszam jeleni keresni",
+            "h": 25
+        },
+        {
+            "id": "eszkozok#33",
+            "cim": "GYIK › Kétkártyás telefonnál hová kerül a második IMEI?",
+            "horgony": "ketkartyas-telefonnal-hova-kerul-a-masodik-imei",
+            "szoveg": "Az **IMEI 2.** mezőbe. A rendszer a második IMEI alapján is megtalálja a készüléket.",
+            "t": "eszkoz gyi ketkartyas telefonnal hova ar masodi imei gyi ketkartyas telefonnal hova ar masodi imei imei mezo rendszer masodi imei alapjan megtalal eszkoz",
+            "h": 23
+        },
+        {
+            "id": "eszkozok#34",
+            "cim": "GYIK › Hogyan rögzítem a feloldó mintát?",
+            "horgony": "hogyan-rogzitem-a-feloldo-mintat",
+            "szoveg": "Az eszköz adatlapján a **Feloldó minta** rácson húzd végig az egeret, ahogy az ügyfél mutatta. A nyilak az irányt jelzik, alatta számokkal is látod a sorrendet.",
+            "t": "eszkoz gyi rogzitem feloldo min gyi rogzitem feloldo min eszkoz adatlapjan feloldo minta racs huzd veg eger ahogy ugyfel mutatta nyil irany jelzi alatta szam latod sorrend",
+            "h": 27
+        },
+        {
+            "id": "eszkozok#35",
+            "cim": "GYIK › A minta kétszer megy át ugyanazon a pöttyön. Hogyan rajzolom be?",
+            "horgony": "a-minta-ketszer-megy-at-ugyanazon-a-pottyon-hogyan-rajzolom-be",
+            "szoveg": "Pipáld be a **Szabad rajz** jelölőt, és pöttyönként kattintva építsd fel a mintát. Így egy pötty többször is érinthető, és a köztes pötty kihagyható.",
+            "t": "eszkoz gyi minta ketszer megy ugyanaz potty rajzolom gyi minta ketszer megy ugyanaz potty rajzolom pipald szabad rajz jelol pottyonk kattintva epitsd min igy potty tobbszor erintheto koztes potty kihagyhato",
+            "h": 30
+        },
+        {
+            "id": "eszkozok#36",
+            "cim": "GYIK › Hol látom a zárkódot, amikor a készüléken dolgozom?",
+            "horgony": "hol-latom-a-zarkodot-amikor-a-keszuleken-dolgozom",
+            "szoveg": "Az eszköz adatlapján és az Áttekintés részletpaneljén is rejtve áll (**•••• rejtve**): nyomd meg a **Megmutat** gombot. Ha nincs ilyen gomb, a szereped nem nézheti meg – szólj az adminisztrátornak (**Beállítások › Jogosultságok**, **Feloldó kód és minta megnézése**).",
+            "t": "eszkoz gyi latom zarkod ami keszul dolgozom gyi latom zarkod ami keszul dolgozom eszkoz adatlapjan attekintes reszletpanelj rejtve all rejtve nyomd megmu gomb nincs gomb szereped nezheti szolj adminisztrator beallitas jogosultsag feloldo kod minta megnezese",
+            "h": 35
+        },
+        {
+            "id": "eszkozok#37",
+            "cim": "GYIK › Miért nem látom a zárkódot, amit tegnap beírtam?",
+            "horgony": "miert-nem-latom-a-zarkodot-amit-tegnap-beirtam",
+            "szoveg": "Mert titkosítva tárolódik, és csak kérésre jelenik meg: nyomd meg a **Megmutat** gombot a mező mellett. A megnézés a Naplóba kerül.",
+            "t": "eszkoz gyi latom zarkod tegnap beirtam gyi latom zarkod tegnap beirtam titkositva tarolodi keres jeleni nyomd megmu gomb mezo mell megnezes naplo ar",
+            "h": 23
+        },
+        {
+            "id": "eszkozok#38",
+            "cim": "GYIK › Látja az ügyfél a belső megjegyzést?",
+            "horgony": "latja-az-ugyfel-a-belso-megjegyzest",
+            "szoveg": "Nem. A **Belső megjegyzés** csak a rendszerben látszik; az ügyfélnek szóló nyomtatványra és üzenetbe nem kerül. Egyedül a műhelynek készülő **Belső munkalapon** szerepel (a zárkóddal együtt). A sima **Megjegyzés** megjelenhet az ügyfél felé is.",
+            "t": "eszkoz gyi lat ugyfel belso megjegyzes gyi lat ugyfel belso megjegyzes belso megjegyzes rendszer latszi ugyfel szolo nyomtatvany uzen ar egyedul muhely keszulo belso munkalap szerepel zarkoddal egyu sima megjegyzes megjelenh ugyfel fele",
+            "h": 33
+        },
+        {
+            "id": "eszkozok#39",
+            "cim": "GYIK › Át tudom tenni az eszközt másik ügyfélhez?",
+            "horgony": "at-tudom-tenni-az-eszkozt-masik-ugyfelhez",
+            "szoveg": "Igen. Nyisd meg az eszközt, az **Ügyfél** mezőben válassz másik ügyfelet, és mentsd. Ha az eszköz épp egy nyitott munkalapon van, onnan lekerül, mert más ügyfél készüléke nem maradhat a lapon.",
+            "t": "eszkoz gyi tudom tenni eszkoz masi ugyfel gyi tudom tenni eszkoz masi ugyfel nyisd eszkoz ugyfel mezo valassz masi ugyfel mentsd eszkoz epp nyit munkalap onnan lekerul mas ugyfel keszuleke maradh lap",
+            "h": 32
+        },
+        {
+            "id": "eszkozok#40",
+            "cim": "GYIK › Hogyan törlök egy tévedésből felvett eszközt?",
+            "horgony": "hogyan-torlok-egy-tevedesbol-felvett-eszkozt",
+            "szoveg": "Az eszköznek nincs törlés gombja, a felvett készülék a nyilvántartásban marad. Ha csak elírtad, nyisd meg, javítsd ki az adatait, és mentsd.",
+            "t": "eszkoz gyi torl tevedes felv eszkoz gyi torl tevedes felv eszkoz eszkoz nincs torles gomb felv eszkoz nyilvantartas marad elirtad nyisd javitsd ada mentsd",
+            "h": 24
+        },
+        {
+            "id": "eszkozok#41",
+            "cim": "GYIK › A beillesztett gyári adat felülírja, amit már beírtam?",
+            "horgony": "a-beillesztett-gyari-adat-felulirja-amit-mar-beirtam",
+            "szoveg": "Igen. A gyártótól származó adat erősebb, ezért a kitöltött mezőket is felülírja. Az IMEI-ből történő típusfelismerés viszont csak az üres mezőkbe ír.",
+            "t": "eszkoz gyi beilleszt gyari ada felulir beirtam gyi beilleszt gyari ada felulir beirtam gyarto szarmazo ada erosebb ezer kitolt mez felulir imei bol torteno tipusfelismeres visz ures mez ir",
+            "h": 29
+        },
+        {
+            "id": "eszkozok#42",
+            "cim": "GYIK › Hogyan nézem meg, hányszor járt nálunk egy készülék?",
+            "horgony": "hogyan-nezem-meg-hanyszor-jart-nalunk-egy-keszulek",
+            "szoveg": "Írd be az IMEI-t a Munkalapok keresőjébe, és az állapotszűrővel a lezárt lapokat is kérd le. Az ügyfél adatlapjának **Munkalapok** fülén is látod a lapokat, a készülék nevével.",
+            "t": "eszkoz gyi nezem hanyszor jar nal eszkoz gyi nezem hanyszor jar nal eszkoz ird imei munkalap kereso allapotszuro lezar lap kerd ugyfel adatlap munkalap ful latod lap eszkoz neve",
+            "h": 29
+        },
+        {
+            "id": "eszkozok#43",
+            "cim": "GYIK › Egy ügyfél három készüléket hozott. Három munkalap kell?",
+            "horgony": "egy-ugyfel-harom-keszuleket-hozott-harom-munkalap-kell",
+            "szoveg": "Nem. Egy munkalapra több eszköz is felvehető az **Eszköz csatolása** gombbal. Mindegyiket külön kell felvenni az Eszközök közé, de egy lapon mennek.",
+            "t": "eszkoz gyi ugyfel harom eszkoz hoz harom munkalap gyi ugyfel harom eszkoz hoz harom munkalap munkalap tobb eszkoz felveheto eszkoz csatolasa gombbal mindegyi kul felvenni eszkoz koze lap men",
+            "h": 29
+        }
+    ]
+}

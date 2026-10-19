@@ -92,6 +92,16 @@ function sdh_tema_ikonok(): array
         'youtube'     => '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
         'linkedin'    => '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>',
         'instagram'   => '<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
+        // A bővítmény ikonválasztójának (SDH_Sales_Szekcio::ikonok) kulcsai is mind rajzolhatók:
+        'szerszam'    => '<path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3a4 4 0 0 0-5-5z"/><path d="m3 21 6-6"/>',
+        'email'       => '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
+        'kassza'      => '<rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V5h10v5M7 14h2M11 14h2M15 14h2M7 17h10"/>',
+        'kereses'     => '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+        'robot'       => '<rect x="3" y="8" width="18" height="12" rx="3"/><path d="M12 8V4M8 4h8M9 14h.01M15 14h.01"/>',
+        'gdpr'        => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+        'globusz'     => '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>',
+        'tamogatas'   => '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3M14.8 14.8l4.3 4.3M14.8 9.2l4.3-4.3M4.9 19.1l4.3-4.3"/>',
+        'raketa'      => '<path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-4A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/>',
     ];
 }
 
@@ -101,7 +111,8 @@ $GLOBALS['sdh_tema_hasznalt_ikonok'] = [];
 /** Inline ikon (díszítő: aria-hidden). */
 function sdh_tema_ikon(string $nev, string $osztaly = ''): string
 {
-    $nev = sanitize_key(str_replace('_', '-', $nev));
+    $nev = sanitize_key($nev);
+    $nev = isset(sdh_tema_ikonok()[$nev]) ? $nev : str_replace('_', '-', $nev);
     $nev = isset(sdh_tema_ikonok()[$nev]) ? $nev : 'pont';
 
     $GLOBALS['sdh_tema_hasznalt_ikonok'][$nev] = true;

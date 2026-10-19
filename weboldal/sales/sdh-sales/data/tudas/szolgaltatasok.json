@@ -1,0 +1,288 @@
+{
+    "kulcs": "szolgaltatasok",
+    "cim": "Szolgáltatások",
+    "csoport": "Napi munka",
+    "osszefoglalo": "A Szolgáltatások menüpont a munkadíjak és a bevizsgálási díjak törzse; innen választasz szolgáltatást a munkalapra, és itt tartod karban az árlistát.",
+    "darabok": [
+        {
+            "id": "szolgaltatasok#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Szolgáltatások** menüpont a munkadíjak törzse. Itt van minden, amit a munkalapra szolgáltatásként felírsz: kijelzőcsere munkadíja, szoftverfrissítés, adatmentés, kiszállás – és a bevizsgálási díjak is.\n\nA törzs két úton telik meg:\n\n- **Kézzel:** felveszel egy szolgáltatást, vagy egyben beilleszted a saját árlistádat.\n- **Magától:** amit a munkalap Szolgáltatások lapfülén egyszer beírtál, azt a rendszer mentéskor megjegyzi a nevével, az egységével, az árával és az áfakulcsával.\n\nLegközelebb elég kiválasztani: a munkalap sorába bekerül a név, az egység és a bruttó ár. A rendszer nem hoz magával egyetlen árat sem – az árlista a te adatod.",
+            "t": "szolgaltatas mire valo mire valo szolgaltatas menup munkadij torzse munkalap szolgaltatask felirsz kijelzocse munkadi szoftverfrissites adatmentes kiszallas bevizsgalasi dij torzs ket uton teli kezzel felveszel szolgaltatas egy beilleszted saj arlistad maga munkalap szolgaltatas lapful egyszer beirtal rendszer mentes megjegyzi neve egysege ar afakulcsa legkozelebb eleg kivalasztani munkalap sora bekerul nev egyseg brutto ar rendszer hoz maga egyetl ar arlista adatod",
+            "h": 60
+        },
+        {
+            "id": "szolgaltatasok#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- Az oldalmenüben a **Szolgáltatások** pontra kattintva: Szolgáltatások megnyitása.\n- Az Áttekintésen az **Új szolgáltatás** gombbal.\n- A munkalap **Szolgáltatások** lapfülén a szolgáltatás-választó ablakból: ott is felvehetsz és szerkeszthetsz.\n\nA Szolgáltatások oldal tetején három nézet közül választasz: **Mind**, **Bevizsgálási díjak**, **Árlista**.",
+            "t": "szolgaltatas talalod talalod oldalmenu szolgaltatas pon kattintva szolgaltatas megnyitasa attekintes uj szolgaltatas gombbal munkalap szolgaltatas lapful szolgaltatas valaszto abl felvehetsz szerkeszthetsz szolgaltatas oldal tetej harom nez kozul valasztasz mind bevizsgalasi dij arlista",
+            "h": 32
+        },
+        {
+            "id": "szolgaltatasok#3",
+            "cim": "Lépésről lépésre: új szolgáltatás felvétele",
+            "horgony": "lepesrol-lepesre-uj-szolgaltatas-felvetele",
+            "szoveg": "1. A Szolgáltatások menüpontban kattints az **Új szolgáltatás** gombra.\n2. Írd be a megnevezést a felső mezőbe. **Csak a megnevezés kötelező.**\n3. Írd be a **Bruttó ár** mezőbe az egységárat. A **Nettó ár** mellette magától kiszámolódik.\n4. Válaszd ki az **Áfakulcs** értékét.\n5. A **Menny. egység** alapból `db`. Írd át, ha kell (például óra, km).\n6. Ha szeretnéd csoportosítani, adj meg **Kategória** nevet és **Kód** értéket. A kategória mező felajánlja a már használt kategóriákat.\n7. Sávos árnál írd be az **Ár felső határa** mezőt is. Üresen hagyva az ár fix.\n8. Ha ez egy bevizsgálási díj, pipáld be a **Bevizsgálási díj** jelölőt.\n9. Az alsó mezőbe belső megjegyzést írhatsz: mit tartalmaz, mikor adható.\n10. Kattints a **Szolgáltatás létrehozása** gombra.\n\nPélda: Megnevezés: Kijelzőcsere munkadíj. Bruttó ár: 12 000 Ft. Áfakulcs: 27%. Menny. egység: db.",
+            "t": "szolgaltatas lepes lepes uj szolgaltatas felvetele lepes lepes uj szolgaltatas felvetele szolgaltatas menupon kattints uj szolgaltatas gomb ird megnevezes felso mezo megnevezes kotelezo ird brutto ar mezo egysegar netto ar mellette maga kiszamolodi valaszd afakulcs ert menny egyseg alap db ird peldaul ora km szeretned csoportositani adj kategoria nev kod ert kategoria mezo felajanl hasznal kategori savos arnal ird ar felso hata mez ures hagyva ar fix bevizsgalasi dij pipald bevizsgalasi dij jelol also mezo belso megjegyzes irhatsz tartalmaz adhato 10 kattints szolgaltatas letrehozasa gomb pelda megnevezes kijelzocse munkadij brutto ar 12 000 ft afakulcs 27 menny egyseg db",
+            "h": 99
+        },
+        {
+            "id": "szolgaltatasok#4",
+            "cim": "Lépésről lépésre: szolgáltatás szerkesztése és törlése",
+            "horgony": "lepesrol-lepesre-szolgaltatas-szerkesztese-es-torlese",
+            "szoveg": "1. A Szolgáltatások listában kattints a szolgáltatás nevére vagy a **Megnyit** gombra.\n2. Az ablak tetején látod, eddig hány munkalap-tételben szerepelt.\n3. Írd át, amit kell, és kattints a **Mentés** gombra.\n\nTörlés:\n\n1. Nyisd meg a szolgáltatást.\n2. Kattints a **Törlés** gombra. A gomb felirata „Biztosan törlöd?\" lesz.\n3. Kattints rá még egyszer néhány másodpercen belül. Ha nem teszed, a gomb visszaáll, és nem történik semmi.\n\nA törlés csak a törzsből veszi ki a szolgáltatást. A munkalapokon már szereplő tételek megmaradnak, a régi lapok nem változnak.",
+            "t": "szolgaltatas lepes lepes szolgaltatas szerkesztese torlese lepes lepes szolgaltatas szerkesztese torlese szolgaltatas lista kattints szolgaltatas neve megnyi gomb abl tetej latod edd hany munkalap tetel szerepel ird kattints mentes gomb torles nyisd szolgaltatas kattints torles gomb gomb felirata biztosan torlod kattints egyszer nehany masodperc belul teszed gomb visszaall torteni semmi torles torzs veszi szolgaltatas munkalap szereplo tetel megmarad regi lap valtoz",
+            "h": 61
+        },
+        {
+            "id": "szolgaltatasok#5",
+            "cim": "Lépésről lépésre: árlista beillesztése",
+            "horgony": "lepesrol-lepesre-arlista-beillesztese",
+            "szoveg": "Ha van kész díjlistád weboldalon, szövegszerkesztőben vagy táblázatban, nem kell egyenként felvinned.\n\n1. A Szolgáltatások menüpontban kattints az **Árlista beillesztése** gombra.\n2. Másold ki a saját árlistádat, és illeszd be a bal oldali szövegdobozba. Soronként egy tétel: megnevezés, utána az ár.\n3. A jobb oldalon rögtön megjelenik az **előnézet**: hány tételt talált, ebből mennyi a bevizsgálási díj, mennyi az új, és mennyi frissül.\n4. Nézd át az előnézet táblázatát. A **Díj** oszlop pipájával soronként átállíthatod, mi számítson bevizsgálási díjnak. Az új tételek mellett „új\" jelzés áll.\n5. Döntsd el, maradjon-e bepipálva az „Ez a teljes díjlista…\" jelölő (lásd lent).\n6. Kattints a **Beillesztés a szolgáltatások közé** gombra.\n\nMentés után az **Árlista** nézetre kerülsz, és ezt látod: „Az árlista betöltve: az új tételek létrejöttek, a meglévők ára frissült.\"",
+            "t": "szolgaltatas lepes lepes arlista beillesztese lepes lepes arlista beillesztese kesz dijlistad weboldal szovegszerkeszto tablaz egyenk felvinned szolgaltatas menupon kattints arlista beillesztese gomb masold saj arlistad illeszd bal oldali szovegdoboz soronk tetel megnevezes utana ar jobb oldal rog megjeleni elonez hany tetel talal ebbol bevizsgalasi dij uj frissul nezd elonez tablaz dij oszlop pipa soronk atallithatod szamits bevizsgalasi dij uj tetel mell uj jelzes all dontsd maradj bepipalva teljes dijlista jelolo lasd len kattints beillesztes szolgaltatas koze gomb mentes utan arlista nez kerulsz latod arlista betoltve uj tetel letrejot meglev ar frissul",
+            "h": 91
+        },
+        {
+            "id": "szolgaltatasok#6",
+            "cim": "Lépésről lépésre: árlista beillesztése › Hogyan írd a sorokat",
+            "horgony": "lepesrol-lepesre-arlista-beillesztese",
+            "szoveg": "### Hogyan írd a sorokat\n\n| Sor | Mi lesz belőle |\n|---|---|\n| `Alap bevizsgálás 5.000 Ft` | Tétel fix árral |\n| `Szoftver frissítés 3.000 – 6.000 Ft` | Tétel sávos árral |\n| `Telefon: 100-` | Kategória kóddal; az alatta álló tételek bevizsgálási díjak |\n| `Egyéb szolgáltatások` | Kategória kód nélkül; az alatta álló tételek sima szolgáltatások |\n| `Sürgősségi felár (000-2) 2.000 Ft` | Tétel saját kóddal; a felár nem lesz díj |\n\nTudnivalók:\n\n- Az ár írható így is: `5.000 Ft`, `5 000 Ft`, `5000 Ft`.\n- Ha egy kód nélküli fejlécben szerepel a „bevizsgál\" szó, az alatta álló tételek díjak lesznek.\n- A bevizsgálási díj neve „Kategória – Tétel\" formában kerül a törzsbe, hogy a díjlistában egyértelmű legyen.\n- Amelyik sorban nincs érvényes ár, az kimarad. Az előnézet alján felsorolja: „Kihagyott sorok\".\n- Ha ugyanaz a név ugyanazzal az árral kétszer szerepel, egyszer kerül be. Eltérő árnál a kategória neve kerül a név elé.",
+            "t": "szolgaltatas lepes lepes arlista beillesztese ird sor lepes lepes arlista beillesztese ird sor ird sor sor belole alap bevizsgalas 000 ft tetel fix arral szoftver frissites 000 000 ft tetel savos arral telef 100 kategoria koddal alatta allo tetel bevizsgalasi dij egyeb szolgaltatas kategoria kod nelkul alatta allo tetel sima szolgaltatas surgossegi felar 000 000 ft tetel saj koddal felar dij tudni ar irhato igy 000 ft 000 ft 5000 ft kod nelkuli fejlec szerepel bevizsgal szo alatta allo tetel dij lesz bevizsgalasi dij neve kategoria tetel forma ar torzs dijlista egyertelmu legy amelyi sor nincs ervenyes ar kimarad elonez aljan felso kihagy sor ugyanaz nev ugyanazzal arral ketszer szerepel egyszer ar eltero arnal kategoria neve ar nev ele",
+            "h": 119
+        },
+        {
+            "id": "szolgaltatasok#7",
+            "cim": "Lépésről lépésre: árlista beillesztése › A „teljes díjlista\" jelölő",
+            "horgony": "lepesrol-lepesre-arlista-beillesztese",
+            "szoveg": "### A „teljes díjlista\" jelölő\n\nAlapból be van pipálva. Ilyenkor a rendszer úgy veszi, hogy a beillesztett szöveg a teljes díjlistád: amelyik régi tétel eddig díj volt, de az új listában nincs benne, arról lekerül a „Bevizsgálási díj\" jelölés. A tétel maga megmarad szolgáltatásként.\n\nHa csak néhány új tételt illesztesz be, **vedd ki a pipát**, különben a többi díjad elveszíti a jelölését.",
+            "t": "szolgaltatas lepes lepes arlista beillesztese teljes dijlista jelolo lepes lepes arlista beillesztese teljes dijlista jelolo teljes dijlista jelolo alap pipalva ily rendszer ugy veszi beilleszt szoveg teljes dijlistad amelyi regi tetel edd dij uj lista nincs benne arrol lekerul bevizsgalasi dij jeloles tetel maga megmarad szolgaltatask nehany uj tetel illesztesz vedd pip kul tobbi dijad elvesziti jeloles",
+            "h": 57
+        },
+        {
+            "id": "szolgaltatasok#8",
+            "cim": "Lépésről lépésre: árak átírása az Árlista nézetben",
+            "horgony": "lepesrol-lepesre-arak-atirasa-az-arlista-nezetben",
+            "szoveg": "A Szolgáltatások oldal **Árlista** nézete kategóriánként mutatja a tételeket, és helyben átírhatod az árakat.\n\n1. Kattints az **Árlista** nézetre az oldal tetején.\n2. Írd át a kívánt sorban az **Ár** mezőt. Sávos árnál a **–ig** mezőbe kerül a felső határ.\n3. A **Díj** oszlop pipájával állítod, hogy a tétel bevizsgálási díj-e.\n4. A módosított sorok kiemelve állnak, amíg nem mentesz.\n5. Kattints az **Árak mentése** gombra.\n\nA gomb mellett megjelenik az eredmény: „Elmentve\", a megváltozott tételek számával, vagy „Nem volt változás.\"\n\nTovábbi gombok ebben a nézetben:\n\n- **Csak a bevizsgálási díjak** – a díjakra szűr. Visszafelé a felirata **Teljes árlista**.\n- **Nyomtatás** – kinyomtatja az árlistát.\n\nAz Árlista nézetben azok a tételek látszanak, amelyeknek van kategóriájuk, bevizsgálási díjak, vagy sávos az áruk. A kategória nélküli díjak az „Egyéb\" csoportba kerülnek.",
+            "t": "szolgaltatas lepes lepes ar atirasa arlista nez lepes lepes ar atirasa arlista nez szolgaltatas oldal arlista nezete kategoriank mut tetel hely atirhatod ar kattints arlista nez oldal tetej ird kivan sor ar mez savos arnal ig mezo ar felso hatar dij oszlop pipa allitod tetel bevizsgalasi dij modosit sor kiemelve all amig mentesz kattints ar mentese gomb gomb mell megjeleni eredmeny elmentve megvaltoz tetel szama valtozas tovabbi gomb ebb nez bevizsgalasi dij dij szur visszafele felirata teljes arlista nyomtatas kinyomt arlis arlista nez tetel latsza amely kategoria bevizsgalasi dij savos aru kategoria nelkuli dij egyeb csopor ar",
+            "h": 97
+        },
+        {
+            "id": "szolgaltatasok#9",
+            "cim": "Lépésről lépésre: szolgáltatás választása a munkalapon",
+            "horgony": "lepesrol-lepesre-szolgaltatas-valasztasa-a-munkalapon",
+            "szoveg": "A munkalap **Szolgáltatások** lapfülén a szolgáltatást felugró választóból veszed fel.\n\n1. Nyisd meg a munkalapot, és kattints a **Szolgáltatások** lapfülre.\n2. Kattints a pluszjeles **Szolgáltatás** gombra. Megnyílik a *Szolgáltatás választása* ablak.\n3. Kezdd el írni a megnevezést a keresőbe. A lista gépelés közben szűkül.\n4. Kattints a sorra, vagy lépj rá a ↑ ↓ nyilakkal, és nyomj Enter billentyűt.\n5. A munkalap sorába bekerül a megnevezés, az egység és a bruttó ár. A kurzor a mennyiségre áll.\n\nA választó ablak további lehetőségei:\n\n- **Új szolgáltatás** – felveszed, ami még nincs a törzsben. A keresőbe írt szöveg lesz a megnevezés, és mentés után a tétel rögtön a munkalapra kerül.\n- **Ceruza a sor végén** – a szolgáltatás szerkesztése, a választó elhagyása nélkül.\n- **Kézzel írom be** – üres sort ad a munkalapon, a nevet és az árat te írod be.\n- **Mégsem** – bezárja a választót.\n\nA lista tíz soronként lapoz, görgetősáv nincs. Elöl a bevizsgálási díjak, utánuk a leggyakrabban használt szolgáltatások állnak.\n\nTipp: A munkalap sorában a Megnevezés mező végén is van egy kis gomb. Azzal – vagy a mezőben a ↓ billentyűvel – abba a sorba választasz szolgáltatást.",
+            "t": "szolgaltatas lepes lepes szolgaltatas valasztasa munkalap lepes lepes szolgaltatas valasztasa munkalap munkalap szolgaltatas lapful szolgaltatas felugro valaszto veszed nyisd munkalap kattints szolgaltatas lapful kattints pluszjeles szolgaltatas gomb megnyili szolgaltatas valasztasa abl kezdd irni megnevezes kereso lista gepeles koz szukul kattints sor lepj nyil nyomj enter billentyu munkalap sora bekerul megnevezes egyseg brutto ar kurzor mennyiseg all valaszto abl tovabbi lehetoseg uj szolgaltatas felveszed nincs torzs kereso irt szoveg megnevezes mentes utan tetel rog munkalap ar ceruza sor veg szolgaltatas szerkesztese valaszto elhagyasa nelkul kezzel irom ures sor ad munkalap nev ar irod megsem bezar valasz lista tiz soronk lapoz gorgetosav nincs elol bevizsgalasi dij utan leggyakrab hasznal szolgaltatas all tipp munkalap sora megnevezes mezo veg kis gomb azzal mezo billentyu abba sor valasztasz szolgaltatas",
+            "h": 124
+        },
+        {
+            "id": "szolgaltatasok#10",
+            "cim": "A bevizsgálási díj és a szolgáltatástörzs",
+            "horgony": "a-bevizsgalasi-dij-es-a-szolgaltatastorzs",
+            "szoveg": "A bevizsgálási díjak ugyanebben a törzsben élnek. Attól lesz egy szolgáltatás bevizsgálási díj, hogy be van pipálva rajta a **Bevizsgálási díj** jelölő. A Szolgáltatások listában az ilyen tétel neve mellett „díj\" jelvény áll, és a **Bevizsgálási díjak** nézet csak ezeket mutatja.\n\nA munkalapon a **Bevizsgálási díj** jelölő mellett a **Díjlista** gomb nyitja meg a díjválasztót. Ebben csak a díjnak jelölt szolgáltatások szerepelnek. Kereshetsz eszközre, díjra vagy kódra.\n\nAmikor kiválasztasz egy díjat:\n\n- az összege bekerül a **Fizetett (előleg)** mezőbe,\n- a **Bevizsgálási díj** jelölő bepipálódik,\n- a díj külön tételként megjelenik a munkalapon.\n\nA **Ha az ügyfél kéri a javítást** kapcsolóval döntöd el a díj sorsát: **Levonódik** – a díj levonódik a végösszegből; vagy **Munkadíj marad** – a díj megmarad munkadíjként. Erről részletesen a Munkalapok fejezet ír.\n\nA díjak árát a Szolgáltatások **Árlista** nézetében írod át. A munkalap a díjat mindig innen veszi.",
+            "t": "szolgaltatas bevizsgalasi dij szolgaltatastorzs bevizsgalasi dij szolgaltatastorzs bevizsgalasi dij ugyaneb torzs eln attol szolgaltatas bevizsgalasi dij pipalva rajta bevizsgalasi dij jelolo szolgaltatas lista tetel neve mell dij jelveny all bevizsgalasi dij nez eze mut munkalap bevizsgalasi dij jelolo mell dijlista gomb nyi dijvalasz ebb dij jelol szolgaltatas szerepel kereshetsz eszkoz dij kod ami kivalasztasz dij osszege bekerul fizet eloleg mezo bevizsgalasi dij jelolo bepipalodi dij kul tetelk megjeleni munkalap ugyfel keri javitas kapcsolo dontod dij sors levonodi dij levonodi vegosszeg munkadij marad dij megmarad munkadijk errol reszletes munkalap fejez ir dij ar szolgaltatas arlista nezete irod munkalap dij inn veszi",
+            "h": 100
+        },
+        {
+            "id": "szolgaltatasok#11",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "### A Szolgáltatások lista oszlopai\n\n| Oszlop | Mit mutat |\n|---|---|\n| Megnevezés | A név; mellette „díj\" jelvény, alatta a kategória, a kód és a megjegyzés eleje |\n| M.e. | Mennyiségi egység |\n| Bruttó ár | Fix ár vagy ársáv |\n| Nettó ár | A bruttóból számolva |\n| Áfa | Az áfakulcs |\n| Használat | Hány munkalap-tételben szerepelt |\n\n### Gombok és nézetek a lista fölött\n\n- **Árlista beillesztése** – teljes díjlista felvitele szövegből.\n- **Új szolgáltatás** – egy szolgáltatás felvétele.\n- **Mind**, **Bevizsgálási díjak**, **Árlista** – a három nézet.\n- **Keresés** – megnevezésre, megjegyzésre, kategóriára és kódra keres.\n- **Szűrő törlése** – csak keresés után látszik.\n- **Leggyakoribbak elöl** – a használat szerint rendez. Visszafelé a felirata **Névsorban**.\n\n### A szolgáltatás űrlapjának mezői\n\n- **Megnevezés** – kötelező, legfeljebb 255 karakter.\n- **Bruttó ár** – bruttó egységár forintban.\n- **Áfakulcs** – 27%, 18%, 5%, 0%, vagy valamelyik adómentes jogcím.\n- **Menny. egység** – alapból db.\n- **Nettó ár** – csak kiírás, a bruttóból és az áfakulcsból számolódik.\n- **Kategória** és **Kód** – az árlista csoportosításához.\n- **Ár felső határa** – sávos ár felső értéke. Csak akkor él, ha nagyobb a bruttó árnál.\n- **Bevizsgálási díj** – ettől kerül a tétel a díjlistába.\n- **Megjegyzés** – belső megjegyzés.",
+            "t": "szolgaltatas mez gomb mez gomb szolgaltatas lista oszlop oszlop mut megnevezes nev mellette dij jelveny alatta kategoria kod megjegyzes ele mennyisegi egyseg brutto ar fix ar arsav netto ar brutto szamolva afa afakulcs hasznal hany munkalap tetel szerepel gomb nez lista fol arlista beillesztese teljes dijlista felvitele szoveg uj szolgaltatas szolgaltatas felvetele mind bevizsgalasi dij arlista harom nez kereses megnevezes megjegyzes kategoria kod keres szuro torlese kereses utan latszi leggyakoribb elol hasznal szerin rendez visszafele felirata nevsor szolgaltatas urlap mezoi megnevezes kotelezo legfeljebb 255 karakter brutto ar brutto egysegar forin afakulcs 27 18 valamelyi adomentes jogcim menny egyseg alap db netto ar kiiras brutto afakulcs szamolodi kategoria kod arlista csoportositasa ar felso hata savos ar felso erteke nagyobb brutto arnal bevizsgalasi dij ettol ar tetel dijlista megjegyzes belso megjegyzes",
+            "h": 129
+        },
+        {
+            "id": "szolgaltatasok#12",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Egy névből csak egy van.** Két szolgáltatás akkor számít egyformának, ha a nevük megegyezik; a kis- és nagybetű, valamint a szóközök száma nem számít.\n- Ha új szolgáltatást veszel fel egy már létező névvel, nem jön létre második sor: a meglévő frissül, és a név eredeti írásmódja marad.\n- Ha egy szolgáltatást átnevezel egy már létező névre, a kettő összeolvad: egy marad, a használatuk összeadódik. Erről üzenetet kapsz: „Ilyen nevű szolgáltatás már volt – a kettőt összevontam, egy maradt.\"\n- **A munkalap mentése tanítja a törzset.** Az új nevű szolgáltatás bekerül; a meglévőnél nő a használat számlálója, és az ára a legutóbb használt árra frissül.\n- Nulla ár nem írja felül a megjegyzett árat.\n- **Az árlistás tétel árát a munkalap nem írja át.** Ami bevizsgálási díj, aminek kategóriája van, vagy sávos az ára, annak az árát csak te módosítod a Szolgáltatások menüpontban.\n- A bevizsgálási díj munkalapi tételsorát a törzs nem tanulja meg, mert a neve készülékenként más.\n- A törlés a munkalapok tételeihez nem nyúl.\n- A megnevezés nélküli szolgáltatás nem menthető.\n- A sávos ár felső határa csak akkor mentődik, ha nagyobb az alsónál.",
+            "t": "szolgaltatas szabaly ami rendszer betar szabaly ami rendszer betar nev ket szolgaltatas szami egyforma nev megegyezi kis nagybetu valamin szokoz szama szami uj szolgaltatas veszel letezo nev jon let masodi sor meglevo frissul nev eredeti irasmod marad szolgaltatas atnevezel letezo nev ketto osszeolvad marad hasznal osszeadodi errol uzen kapsz nevu szolgaltatas ket osszevontam marad munkalap mentese tani torzs uj nevu szolgaltatas bekerul meglevonel no hasznal szamlalo ar legutobb hasznal frissul nulla ar irja felul megjegyz ar arlistas tetel ar munkalap irja bevizsgalasi dij ami kategoria savos ar ann ar modositod szolgaltatas menupon bevizsgalasi dij munkalapi tetelsor torzs tanul neve keszulekenk mas torles munkalap tetel nyul megnevezes nelkuli szolgaltatas mentheto savos ar felso hata mentodi nagyobb alsonal",
+            "h": 116
+        },
+        {
+            "id": "szolgaltatasok#13",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- A jobb alsó sarokban élő asszisztensnek írd be: „Vezess végig ezen az oldalon\". Többlépcsős túrát indít a Szolgáltatások oldalon.\n- A teljes dokumentációt és a gyakori kérdéseket a **Súgó** menüpontban találod.\n- Adj beszédes nevet: a „Kijelzőcsere munkadíj\" jobb, mint a „Munkadíj\". A munkalapon és a számlán is ez a név jelenik meg.\n- Az árlistát beillesztés előtt nézd át az előnézetben. Ami ott rossz, azt a szövegdobozban javítsd ki – az előnézet azonnal frissül.\n- Áremelésnél nem kell egyenként megnyitni a tételeket: az **Árlista** nézetben egy oldalon átírod mindet, és egyszer mentesz.\n- A **Leggyakoribbak elöl** rendezés megmutatja, mely szolgáltatásokból él a műhely.\n- Árcímke a pultra: a szolgáltatás ablakának alján a **Címke** gomb Brother címkenyomtatóra nyomtat (név, ár vagy ársáv, kategória) – lásd a **Címkenyomtatás (Brother)** fejezetet.",
+            "t": "szolgaltatas tipp tipp jobb also sar elo asszisztens ird vezess veg ezen oldal tobblepcsos tur indi szolgaltatas oldal teljes dokumentaci gyakori kerdes sugo menupon talalod adj beszedes nev kijelzocse munkadij jobb munkadij munkalap szamlan nev jeleni arlis beillesztes elo nezd elonez rossz szovegdoboz javitsd elonez azonnal frissul aremelesnel egyenk megnyitni tetel arlista nez oldal atirod mind egyszer mentesz leggyakoribb elol rendezes megmut szolgaltatas muhely arcimke pul szolgaltatas ablaka aljan cimke gomb brother cimkenyomtato nyom nev ar arsav kategoria lasd cimkenyomtatas brother fejez",
+            "h": 82
+        },
+        {
+            "id": "szolgaltatasok#14",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„A megnevezés kitöltése kötelező.\"** – a felső mező üres.\n- **„Nem találtam árat tartalmazó sort.\"** – az árlista soraiban nincs felismerhető ár. Soronként legyen megnevezés, utána az ár, például „Bevizsgálás 9.000 Ft\".\n- **Egy sor kimaradt a beillesztésből.** Nézd meg az előnézet alján a kihagyott sorokat: ezekben nincs érvényes ár.\n- **Egy ezer forint alatti tételből kategória lett.** Az ezer forintnál kisebb összeget a beillesztés csak akkor veszi árnak, ha pénznem áll utána: `Fóliázás 500 Ft` vagy `Fóliázás 500,-`. A puszta `Fóliázás 500` sort kategóriának nézi – írd mögé a `Ft`-ot.\n- **Eltűnt a díj jelölés több tételről.** Részleges listát illesztettél be bepipált „teljes díjlista\" jelölővel. Az **Árlista** nézet **Díj** oszlopában pipáld vissza őket, és mentsd.\n- **A szolgáltatás nincs az Árlista nézetben.** Ott csak a kategóriás, a díjnak jelölt és a sávos árú tételek látszanak. Adj neki kategóriát, vagy keresd a **Mind** nézetben.\n- **A munkalapon a díjválasztó üres.** Még nincs bevizsgálási díj a törzsben. Illeszd be a díjlistát, vagy egy szolgáltatásnál pipáld be a **Bevizsgálási díj** jelölőt.\n- **„A szolgáltatások listája nem töltődött be.\"** – a választó nem érte el a szervert. Zárd be, és nyisd meg újra.",
+            "t": "szolgaltatas megy megy megnevezes kitoltese kotelezo felso mezo ures talaltam ar tartalmazo sor arlista sor nincs felismerheto ar soronk legy megnevezes utana ar peldaul bevizsgalas 000 ft sor kimarad beillesztes nezd elonez aljan kihagy sor eze nincs ervenyes ar ezer forin alatti tetel kategoria let ezer forintnal kisebb osszeg beillesztes veszi arn penznem all utana foliazas 500 ft foliazas 500 puszta foliazas 500 sor kategoria nezi ird moge ft ot eltun dij jeloles tobb tetel reszleges lis illesztettel bepipal teljes dijlista jelolo arlista nez dij oszlopa pipald vissza oke mentsd szolgaltatas nincs arlista nez kategorias dij jelol savos aru tetel latsza adj neki kategori keresd mind nez munkalap dijvalaszto ures nincs bevizsgalasi dij torzs illeszd dijlis szolgaltatasnal pipald bevizsgalasi dij jelol szolgaltatas lista toltod valaszto erte szerv zard nyisd ujra",
+            "h": 130
+        },
+        {
+            "id": "szolgaltatasok#15",
+            "cim": "GYIK › Hogyan veszek fel új szolgáltatást?",
+            "horgony": "hogyan-veszek-fel-uj-szolgaltatast",
+            "szoveg": "A Szolgáltatások menüpontban kattints az **Új szolgáltatás** gombra, írd be a megnevezést és a bruttó árat, majd **Szolgáltatás létrehozása**. A munkalap választó ablakából is felveheted.",
+            "t": "szolgaltatas gyi vesz uj szolgaltatas gyi vesz uj szolgaltatas szolgaltatas menupon kattints uj szolgaltatas gomb ird megnevezes brutto ar majd szolgaltatas letrehozasa munkalap valaszto ablaka felveheted",
+            "h": 26
+        },
+        {
+            "id": "szolgaltatasok#16",
+            "cim": "GYIK › Bruttó vagy nettó árat kell megadnom?",
+            "horgony": "brutto-vagy-netto-arat-kell-megadnom",
+            "szoveg": "Bruttót. A **Bruttó ár** mezőbe a bruttó egységárat írod, a nettót a rendszer az áfakulcsból számolja ki, és kiírja mellé.",
+            "t": "szolgaltatas gyi brutto netto ar megadnom gyi brutto netto ar megadnom brut brutto ar mezo brutto egysegar irod net rendszer afakulcs szamol kiir melle",
+            "h": 24
+        },
+        {
+            "id": "szolgaltatasok#17",
+            "cim": "GYIK › Fel kell vennem előre minden szolgáltatást?",
+            "horgony": "fel-kell-vennem-elore-minden-szolgaltatast",
+            "szoveg": "Nem. Amit a munkalapon kézzel beírsz, azt a rendszer a munkalap mentésekor megjegyzi. Legközelebb már a választóból kiválaszthatod.",
+            "t": "szolgaltatas gyi vennem elo szolgaltatas gyi vennem elo szolgaltatas munkalap kezzel beirsz rendszer munkalap mentese megjegyzi legkozelebb valaszto kivalaszthatod",
+            "h": 19
+        },
+        {
+            "id": "szolgaltatasok#18",
+            "cim": "GYIK › Miért nem tudok két egyforma nevű szolgáltatást felvenni?",
+            "horgony": "miert-nem-tudok-ket-egyforma-nevu-szolgaltatast-felvenni",
+            "szoveg": "Mert a törzsben egy névből mindig egy van. Így a választóban nem kell találgatnod, melyik a jó. Ha eltérő árú változat kell, adj neki eltérő nevet.",
+            "t": "szolgaltatas gyi tud ket egyforma nevu szolgaltatas felvenni gyi tud ket egyforma nevu szolgaltatas felvenni torzs nev igy valaszto talalgatnod jo eltero aru valtoz adj neki eltero nev",
+            "h": 28
+        },
+        {
+            "id": "szolgaltatasok#19",
+            "cim": "GYIK › Mi történik, ha egy szolgáltatást egy meglévő nevére nevezek át?",
+            "horgony": "mi-tortenik-ha-egy-szolgaltatast-egy-meglevo-nevere-nevezek-at",
+            "szoveg": "A kettő összeolvad: egy marad, a használatuk összeadódik. A rendszer ezt üzenetben jelzi.",
+            "t": "szolgaltatas gyi torteni szolgaltatas meglevo neve nevez gyi torteni szolgaltatas meglevo neve nevez ketto osszeolvad marad hasznal osszeadodi rendszer uzen jelzi",
+            "h": 21
+        },
+        {
+            "id": "szolgaltatasok#20",
+            "cim": "GYIK › Számít a kis- és nagybetű a névben?",
+            "horgony": "szamit-a-kis-es-nagybetu-a-nevben",
+            "szoveg": "Nem. A „Kijelzőcsere\" és a „kijelzőcsere\" ugyanaz a szolgáltatás, és a többszörös szóköz sem számít. A törzsben az elsőként rögzített írásmód marad.",
+            "t": "szolgaltatas gyi szami kis nagybetu nev gyi szami kis nagybetu nev kijelzocse kijelzocse ugyanaz szolgaltatas tobbszoros szokoz szami torzs elsok rogzit irasmod marad",
+            "h": 23
+        },
+        {
+            "id": "szolgaltatasok#21",
+            "cim": "GYIK › Ha törlök egy szolgáltatást, eltűnik a régi munkalapokról?",
+            "horgony": "ha-torlok-egy-szolgaltatast-eltunik-a-regi-munkalapokrol",
+            "szoveg": "Nem. A törlés csak a törzsből veszi ki. A munkalapokon már szereplő tételek megmaradnak.",
+            "t": "szolgaltatas gyi torl szolgaltatas eltuni regi munkalap gyi torl szolgaltatas eltuni regi munkalap torles torzs veszi munkalap szereplo tetel megmarad",
+            "h": 20
+        },
+        {
+            "id": "szolgaltatasok#22",
+            "cim": "GYIK › Miért kérdez rá kétszer a Törlés gomb?",
+            "horgony": "miert-kerdez-ra-ketszer-a-torles-gomb",
+            "szoveg": "Hogy véletlenül ne törölj. Az első kattintásra a gomb felirata „Biztosan törlöd?\" lesz, a másodikra töröl. Ha nem kattintasz, néhány másodperc múlva visszaáll.",
+            "t": "szolgaltatas gyi kerdez ketszer torles gomb gyi kerdez ketszer torles gomb veletlenul ne torolj elso kattintas gomb felirata biztosan torlod masodi torol kattintasz nehany masodperc mulva visszaall",
+            "h": 27
+        },
+        {
+            "id": "szolgaltatasok#23",
+            "cim": "GYIK › Hogyan viszem fel egyszerre a teljes árlistámat?",
+            "horgony": "hogyan-viszem-fel-egyszerre-a-teljes-arlistamat",
+            "szoveg": "Az **Árlista beillesztése** gombbal. Másold be a listát a szövegdobozba, nézd át az előnézetet, és kattints a **Beillesztés a szolgáltatások közé** gombra.",
+            "t": "szolgaltatas gyi viszem egyszer teljes arlistam gyi viszem egyszer teljes arlistam arlista beillesztese gombbal masold lis szovegdoboz nezd elonez kattints beillesztes szolgaltatas koze gomb",
+            "h": 24
+        },
+        {
+            "id": "szolgaltatasok#24",
+            "cim": "GYIK › Milyen formában kell lennie a beillesztett árlistának?",
+            "horgony": "milyen-formaban-kell-lennie-a-beillesztett-arlistanak",
+            "szoveg": "Soronként egy tétel: megnevezés, utána az ár. A kategória külön sorban áll a tételei fölött. A weboldalról, szövegszerkesztőből vagy táblázatból kimásolt szöveg általában átalakítás nélkül jó.",
+            "t": "szolgaltatas gyi forma lennie beilleszt arlista gyi forma lennie beilleszt arlista soronk tetel megnevezes utana ar kategoria kul sor all tetel fol weboldal szovegszerkeszto tablaz kimasol szoveg altala atalakitas nelkul jo",
+            "h": 31
+        },
+        {
+            "id": "szolgaltatasok#25",
+            "cim": "GYIK › Ha újra beillesztem az árlistát, megduplázódnak a tételek?",
+            "horgony": "ha-ujra-beillesztem-az-arlistat-megduplazodnak-a-tetelek",
+            "szoveg": "Nem. Név szerint azonosít: ami már megvan, annak az ára, a kategóriája és a kódja frissül, ami nincs, az létrejön. A használat számlálója megmarad.",
+            "t": "szolgaltatas gyi ujra beillesztem arlis megduplazod tetel gyi ujra beillesztem arlis megduplazod tetel nev szerin azonosi megvan ann ar kategoria kod frissul nincs letrej hasznal szamlalo megmarad",
+            "h": 27
+        },
+        {
+            "id": "szolgaltatasok#26",
+            "cim": "GYIK › Mi az a sávos ár?",
+            "horgony": "mi-az-a-savos-ar",
+            "szoveg": "Olyan ár, amelynek alsó és felső határa van, például 3 000 – 6 000 Ft. A felső határt az **Ár felső határa** mezőbe írod. A munkalapra az alsó érték kerül, azt a sorban átírhatod.",
+            "t": "szolgaltatas gyi savos ar gyi savos ar ar amely also felso hata peldaul 000 000 ft felso hatar ar felso hata mezo irod munkalap also ert ar sor atirhatod",
+            "h": 29
+        },
+        {
+            "id": "szolgaltatasok#27",
+            "cim": "GYIK › Hogyan lesz egy szolgáltatásból bevizsgálási díj?",
+            "horgony": "hogyan-lesz-egy-szolgaltatasbol-bevizsgalasi-dij",
+            "szoveg": "Nyisd meg, pipáld be a **Bevizsgálási díj** jelölőt, és mentsd. Az **Árlista** nézet **Díj** oszlopában is bepipálhatod. Ettől kezdve megjelenik a munkalap díjválasztójában.",
+            "t": "szolgaltatas gyi szolgaltatas bevizsgalasi dij gyi szolgaltatas bevizsgalasi dij nyisd pipald bevizsgalasi dij jelol mentsd arlista nez dij oszlopa bepipalhatod ettol kezdve megjeleni munkalap dijvalaszto",
+            "h": 25
+        },
+        {
+            "id": "szolgaltatasok#28",
+            "cim": "GYIK › Hol írom át a bevizsgálási díj összegét?",
+            "horgony": "hol-irom-at-a-bevizsgalasi-dij-osszeget",
+            "szoveg": "A Szolgáltatások **Árlista** nézetében, a díj sorában. Az **Árak mentése** után a munkalap díjválasztója már az új árat kínálja.",
+            "t": "szolgaltatas gyi irom bevizsgalasi dij osszeg gyi irom bevizsgalasi dij osszeg szolgaltatas arlista nezete dij sora ar mentese utan munkalap dijvalaszto uj ar kinal",
+            "h": 24
+        },
+        {
+            "id": "szolgaltatasok#29",
+            "cim": "GYIK › A munkalapon más árat írtam be, mint ami a törzsben van. Átíródik a törzs?",
+            "horgony": "a-munkalapon-mas-arat-irtam-be-mint-ami-a-torzsben-van-atirodik-a-torzs",
+            "szoveg": "Sima szolgáltatásnál igen: a törzs a legutóbb használt árat jegyzi meg. Az árlistás tételnél – díj, kategóriás vagy sávos árú – nem: annak az árát csak a Szolgáltatások menüpontban módosíthatod.",
+            "t": "szolgaltatas gyi munkalap mas ar irtam torzs atirodi torzs gyi munkalap mas ar irtam torzs atirodi torzs sima szolgaltatasnal torzs legutobb hasznal ar jegyzi arlistas tetelnel dij kategorias savos aru ann ar szolgaltatas menupon modosithatod",
+            "h": 35
+        },
+        {
+            "id": "szolgaltatasok#30",
+            "cim": "GYIK › Mit mutat a Használat oszlop?",
+            "horgony": "mit-mutat-a-hasznalat-oszlop",
+            "szoveg": "Azt, hogy a szolgáltatás hány munkalap-tételben szerepelt eddig. A **Leggyakoribbak elöl** gomb e szerint rendezi a listát.",
+            "t": "szolgaltatas gyi mut hasznal oszlop gyi mut hasznal oszlop szolgaltatas hany munkalap tetel szerepel edd leggyakoribb elol gomb szerin rendezi lis",
+            "h": 21
+        },
+        {
+            "id": "szolgaltatasok#31",
+            "cim": "GYIK › Hogyan választok szolgáltatást a munkalapra egér nélkül?",
+            "horgony": "hogyan-valasztok-szolgaltatast-a-munkalapra-eger-nelkul",
+            "szoveg": "A Megnevezés mezőben nyomd meg a ↓ billentyűt. A választóban gépelj, a nyilakkal lépj a sorra, és Enter. A kurzor a mennyiségre ugrik.",
+            "t": "szolgaltatas gyi valasz szolgaltatas munkalap eger nelkul gyi valasz szolgaltatas munkalap eger nelkul megnevezes mezo nyomd billentyu valaszto gepelj nyil lepj sor enter kurzor mennyiseg ugri",
+            "h": 26
+        },
+        {
+            "id": "szolgaltatasok#32",
+            "cim": "GYIK › Nem találom a szolgáltatást a választóban. Mit tegyek?",
+            "horgony": "nem-talalom-a-szolgaltatast-a-valasztoban-mit-tegyek",
+            "szoveg": "Írj be kevesebbet vagy más szót: minden beírt szónak szerepelnie kell a névben, de az ékezet nem számít. Ha tényleg nincs meg, az **Új szolgáltatás** gombbal helyben felveheted.",
+            "t": "szolgaltatas gyi talalom szolgaltatas valaszto tegy gyi talalom szolgaltatas valaszto tegy irj kevesebb mas szo beir szo szerepelnie nev ekez szami tenyleg nincs uj szolgaltatas gombbal hely felveheted",
+            "h": 28
+        },
+        {
+            "id": "szolgaltatasok#33",
+            "cim": "GYIK › Ki tudom nyomtatni az árlistát?",
+            "horgony": "ki-tudom-nyomtatni-az-arlistat",
+            "szoveg": "Igen. A Szolgáltatások **Árlista** nézetében kattints a **Nyomtatás** gombra. Ha csak a díjak kellenek, előbb kattints a **Csak a bevizsgálási díjak** gombra.",
+            "t": "szolgaltatas gyi tudom nyomtatni arlis gyi tudom nyomtatni arlis szolgaltatas arlista nezete kattints nyomtatas gomb dij kelle elobb kattints bevizsgalasi dij gomb",
+            "h": 22
+        },
+        {
+            "id": "szolgaltatasok#34",
+            "cim": "GYIK › Mire jó a Kategória és a Kód mező?",
+            "horgony": "mire-jo-a-kategoria-es-a-kod-mezo",
+            "szoveg": "Az árlista csoportosítására. Az **Árlista** nézet kategóriánként külön táblázatban mutatja a tételeket, a kód pedig a díjlistában segít eligazodni. Keresni is lehet rájuk.",
+            "t": "szolgaltatas gyi mire jo kategoria kod mezo gyi mire jo kategoria kod mezo arlista csoportositasa arlista nez kategoriank kul tablaz mut tetel kod ped dijlista segi eligazodni keresni raj",
+            "h": 29
+        },
+        {
+            "id": "szolgaltatasok#35",
+            "cim": "GYIK › Hozhat a rendszer magával kész árakat?",
+            "horgony": "hozhat-a-rendszer-magaval-kesz-arakat",
+            "szoveg": "Nem. Az árlista a te adatod: vagy beilleszted, vagy egyenként felveszed, vagy a munkalapok mentése során gyűlik össze.",
+            "t": "szolgaltatas gyi hozh rendszer maga kesz ar gyi hozh rendszer maga kesz ar arlista adatod beilleszted egyenk felveszed munkalap mentese soran gyuli ossze",
+            "h": 23
+        }
+    ]
+}

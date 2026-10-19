@@ -1,0 +1,424 @@
+{
+    "kulcs": "penztar",
+    "cim": "Házipénztár",
+    "csoport": "Pénz",
+    "osszefoglalo": "A napi kassza – bevételek, kivétek, kifizetések, címletes számolás és zárás, riport, statisztika és egyeztető ügynök.",
+    "darabok": [
+        {
+            "id": "penztar#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Házipénztár** a napi kassza nyilvántartása. Azt mutatja, mennyi készpénznek kell a fiókban lennie, és mi történt a pénzzel a nap folyamán.\n\nEgy tétel egy pénzmozgás. Ötféle lehet:\n\n| Típus | Mit jelent | Hatása a kasszára |\n|---|---|---|\n| **Bevétel** | Az ügyfél fizetett: készpénzzel, bankkártyával vagy utalással. | A készpénz növeli. |\n| **Kivét** | Valaki pénzt vett ki a kasszából. Mindig névvel. | Csökkenti. |\n| **Kifizetés** | A kasszából fizettél valakinek (beszállító, futár, posta). | Csökkenti. |\n| **Befizetés** | Pénz került a kasszába, ami nem bevétel (például váltópénz). | Növeli. |\n| **Nem került kasszába** | Jelölés: a fizetés megtörtént, de kérésre nem lett pénztártétel. | Nincs. |\n\nA kassza egyenlegét csak a készpénz adja. A bankkártyás és az utalásos fizetés a forgalomban látszik, a fiókban lévő pénzt nem érinti.\n\nMinden nap magától megnyílik. A nyitó összeg az előző nap záró készpénze: ha az előző napot megszámoltad, a megszámolt összeg, különben a várható.",
+            "t": "hazipenztar mire valo mire valo hazipenztar napi penztar nyilvantartasa mut keszpenz fio lennie tort penzzel nap folyaman tetel penzmozgas otfele tipus jel hatasa penztar bevetel ugyfel fizet keszpenzzel bankkartya utalassal keszpenz noveli kiv valaki penz vet penztar nev csokkenti kifizetes penztar fizettel valaki beszallito futar posta csokkenti befizetes penz ar penztar bevetel peldaul valtopenz noveli ar penztar jeloles fizetes megtort keres let penztartetel nincs penztar egyenleg keszpenz adja bankkartyas utalasos fizetes forgalom latszi fio levo penz erinti nap maga megnyili nyito osszeg elozo nap zaro keszpenze elozo nap megszamoltad megszamol osszeg kul varhato",
+            "h": 93
+        },
+        {
+            "id": "penztar#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- Az oldalmenüben: Pénztár. Az oldal címe **Házipénztár**.\n- Az Áttekintésen a **Pénztár** csempe a kasszában most várható készpénzt mutatja.\n- A munkalap, a napi árukiadás és a rendelés ablakának alján a **Fizetés** gomb a pénztárba is beírja a fizetést.\n\nAz oldal tetején a mai dátum, a nap állapota (**Nyitott** vagy **Lezárva**) és a kasszában várható készpénz áll. Alatta hat lapfül: **Ma**, **Napló**, **KP – kassza**, **Riport**, **Statisztika**, **Ügynök**. Keresésnél megjelenik egy hetedik is: **Keresés**. A rendszer megjegyzi, melyik lapfülön jártál utoljára.",
+            "t": "hazipenztar talalod talalod oldalmenu penztar oldal cime hazipenztar attekintes penztar csempe penztar varhato keszpenz mut munkalap napi arukiadas rendeles ablaka aljan fizetes gomb penztar beir fizetes oldal tetej mai datum nap allapota nyit lezarva penztar varhato keszpenz all alatta hat lapful ma naplo kp penztar ripor statisztika ugyn keresesnel megjeleni hetedi kereses rendszer megjegyzi lapful jartal utol",
+            "h": 57
+        },
+        {
+            "id": "penztar#3",
+            "cim": "Lépésről lépésre: bevétel, kivét, kifizetés rögzítése",
+            "horgony": "lepesrol-lepesre-bevetel-kivet-kifizetes-rogzitese",
+            "szoveg": "**Gyorsan, a Ma lapfülön**\n\n1. A **Ma** lapfül tetején a gyorssorba írd be, mi történt.\n2. Töltsd ki a **KP** vagy a **Kártya** mezőt. A **Név**, a **Munkalap** és a **Számlaszám** nem kötelező.\n3. Nyomd meg az Enter billentyűt, vagy kattints a **Rögzítés** gombra.\n\nHa beírod a munkalap sorszámát, a rendszer a munkalapról kitölti az üres mezőket: a nevet, a leírást és az összeget. Ha ugyanarra a munkalapra már van pénztártétel, rákérdez; az **Igen, beírom** gombbal mégis rögzítheted.\n\n**Részletesen, ablakban**\n\n1. A fejlécben kattints a **Bevétel**, a **Kivét** vagy a **Kifizetés** gombra.\n2. Az ablak tetején a típus még átváltható. Itt választható a **Befizetés** is.\n3. Töltsd ki a típushoz tartozó mezőket (lásd lent), majd kattints a **Rögzítés** gombra.\n\n| Típus | Kötelező | További mezők |\n|---|---|---|\n| **Bevétel** | **Mi történt**, **Összeg** | **Ügyfél neve**, **Fizetési mód**, **Munkalap sorszám**, **Számlaszám**, **Vonalkód / IMEI** |\n| **Kivét** | **Ki vette ki**, **Összeg** | **Megjegyzés** |\n| **Kifizetés** | **Mi történt** vagy **Kinek**, **Összeg** | **Számlaszám** |\n| **Befizetés** | **Mi történt**, **Összeg** | **Megjegyzés** |\n\nBevételnél a **Fizetési mód** lehet **Készpénz**, **Bankkártya**, **Utalás** vagy **Vegyes**. Vegyesnél három külön összegmezőt kapsz.\n\nPélda: A futárnak 3 000 Ft-ot fizetsz a kasszából. Kattints a **Kifizetés** gombra, a **Kinek** mezőbe írd be: „Példa Futár\", az **Összeg** mezőbe: `3000`. A gyakran fizetett partnerek a mező alatt gombként megjelennek.",
+            "t": "hazipenztar lepes lepes bevetel kiv kifizetes rogzitese lepes lepes bevetel kiv kifizetes rogzitese gyorsan ma lapful ma lapful tetej gyorssor ird tort toltsd kp kartya mez nev munkalap szamlaszam kotelezo nyomd enter billentyu kattints rogzites gomb beirod munkalap sorszam rendszer munkalap kitolti ures mez nev leiras osszeg ugyanar munkalap penztartetel rakerdez beirom gombbal megis rogzitheted reszletes abl fejlec kattints bevetel kiv kifizetes gomb abl tetej tipus atvalthato valaszthato befizetes toltsd tipus tartozo mez lasd len majd kattints rogzites gomb tipus kotelezo tovabbi mez bevetel tort osszeg ugyfel neve fizetesi mod munkalap sorszam szamlaszam vonalkod imei kiv vette osszeg megjegyzes kifizetes tort kin osszeg szamlaszam befizetes tort osszeg megjegyzes bevetelnel fizetesi mod keszpenz bankkartya utalas vegyes vegyesnel harom kul osszegmez kapsz pelda futar 000 ft ot fizetsz penztar kattints kifizetes gomb kin mezo ird pelda futar osszeg mezo 3000 gyakran fizet partner mezo ala gombk megjel",
+            "h": 145
+        },
+        {
+            "id": "penztar#4",
+            "cim": "Lépésről lépésre: fizetés rögzítése munkalapról",
+            "horgony": "lepesrol-lepesre-fizetes-rogzitese-munkalaprol",
+            "szoveg": "A legtöbb bevétel nem a pénztár oldalán, hanem a munkalapon keletkezik.\n\n1. Nyisd meg a munkalapot (vagy az árukiadást, rendelést), és az ablak alján kattints a **Fizetés** gombra. A rendszer előbb elmenti a lapot.\n2. A **Fizetés** ablak tetején látod a **Munkalap értéke**, az **Előleg**, a **Pénztárban eddig** és a **Fizetendő** összeget.\n3. Válaszd ki, mi történik:\n  - **Teljes fizetés – lezárom:** az ügyfél mindent kifizet. A lap **Fizetve** lesz.\n  - **Előleg / részfizetés:** csak egy részt fizet. A lap nyitva marad.\n4. Válaszd ki a **Fizetési mód** értékét: **Készpénz**, **Bankkártya**, **Utalás** vagy **Vegyes** (készpénz és kártya együtt).\n5. Ellenőrizd a **Kapott összeg** mezőt. Teljes fizetésnél a rendszer a hátralékot ajánlja fel.\n6. Hagyd bepipálva a **Kerüljön be a házipénztárba** sort, majd kattints a **Fizetés rögzítése** gombra.\n\nA fizetés a mai napra kerül a pénztárba, a munkalap sorszámával. Előlegnél a leírás elé **Előleg –** kerül. A számlaszámot nem kell beírnod: a számla kiállítása után magától bekerül a pénztártételbe.\n\n**Több eszköz egy munkalapon:** a Fizetés ablakban minden eszköz külön sor, pipával. Minden kifizetett eszköz külön pénztártétel lesz. Ha csak az egyiket fizetik ki, vedd ki a pipát a többinél: az az eszköz **Fizetve** lesz, a munkalap pedig nyitva marad.\n\nFontos: Ha kiveszed a **Kerüljön be a házipénztárba** pipát, a munkalap fizetése rögzül, de a kassza nem változik. A naplóba ilyenkor egy **Nem került kasszába** jelölés kerül az összeggel, hogy az egyeztetésnél látszódjon: ez szándékos volt.\n\nHa a munkalapon kézzel pipálod be a **Fizetve** jelölőt, vagy megnöveled az előleget, mentés után a rendszer megkérdezi: **Bekerüljön a házipénztárba?** Három válasz van: **Beírás a pénztárba**, **Nem kell** (nyoma marad), **Később**.",
+            "t": "hazipenztar lepes lepes fizetes rogzitese munkalap lepes lepes fizetes rogzitese munkalap legtobb bevetel penztar oldalan hanem munkalap keletkezi nyisd munkalap arukiadas rendeles abl aljan kattints fizetes gomb rendszer elobb elmenti lap fizetes abl tetej latod munkalap erteke eloleg penztar edd fizetendo osszeg valaszd torteni teljes fizetes lezarom ugyfel mind kifiz lap fizetve eloleg reszfizetes resz fiz lap nyitva marad valaszd fizetesi mod ert keszpenz bankkartya utalas vegyes keszpenz kartya egyu ellenorizd kap osszeg mez teljes fizetesnel rendszer hatral ajanl hagyd bepipalva kerulj hazipenztar sor majd kattints fizetes rogzitese gomb fizetes mai nap ar penztar munkalap sorszama elolegnel leiras ele eloleg ar szamlaszam beirnod szamla kiallitasa utan maga bekerul penztartetel tobb eszkoz munkalap fizetes abl eszkoz kul sor pipa kifizet eszkoz kul penztartetel egyi fizeti vedd pip tobbinel eszkoz fizetve munkalap ped nyitva marad fontos kiveszed kerulj hazipenztar pip munkalap fizetese rogzul penztar valtozi naplo ily ar penztar jeloles ar osszeggel egyeztetesnel latszodj szandekos munkalap kezzel pipalod fizetve jelol megnoveled eloleg mentes utan rendszer megkerdezi bekerulj hazipenztar harom valasz beiras penztar nyoma marad kesobb",
+            "h": 173
+        },
+        {
+            "id": "penztar#5",
+            "cim": "Lépésről lépésre: fizetés rögzítése munkalapról",
+            "horgony": "lepesrol-lepesre-fizetes-rogzitese-munkalaprol",
+            "szoveg": "Az ablak mindig csak azt ajánlja, ami **még hiányzik** a pénztárból. Ha az előleg egy része korábban már bekerült (vagy **Nem kell**-lel jelölted), az ablak tetején kiírja: *Előleg a lapon: 20 000 Ft · már a pénztárban: 8 000 Ft · hiányzik: 12 000 Ft*. Több eszköznél az eszköz neve alatt is látszik, mennyi járna rá és mennyi van már bent. Hogy mi került be korábban, azt a munkalap **Pénztárbizonylatok** lapfülén látod.",
+            "t": "hazipenztar lepes lepes fizetes rogzitese munkalap lepes lepes fizetes rogzitese munkalap abl ajanl hianyzi penztar eloleg resze korab bekerul lel jelolted abl tetej kiir eloleg lap 20 000 ft penztar 000 ft hianyzi 12 000 ft tobb eszkoznel eszkoz neve ala latszi jarna ben ar korab munkalap penztarbizonyl lapful latod",
+            "h": 50
+        },
+        {
+            "id": "penztar#6",
+            "cim": "Lépésről lépésre: a kassza megszámolása és a nap zárása",
+            "horgony": "lepesrol-lepesre-a-kassza-megszamolasa-es-a-nap-zarasa",
+            "szoveg": "1. Nyisd meg a **KP – kassza** lapfület. (A **Ma** lapfül alján a **Kassza megszámolása és zárás** hivatkozás is ide visz.)\n2. Írd be címletenként, hány darab van a fiókban. A Tab vagy az Enter a következő címletre lép, a fel és le nyíl eggyel növeli vagy csökkenti a darabszámot.\n3. Jobb oldalon azonnal látod a **Megszámolt** összeget és alatta a levezetést:\n  - **Nyitó**\n  - **+ KP bevétel**\n  - **+ Befizetés** (ha volt)\n  - **− Kifizetés**\n  - **− Kivét**\n  - **Várható a kasszában**\n4. A rendszer kiírja az eredményt: **Egyezik**, **Többlet** vagy **Hiány**, az összeggel.\n5. Ha van mit hozzáfűznöd, írd be a **Megjegyzés a zárához** mezőbe.\n6. Kattints a **Nap zárása** gombra.\n\nHa még nem akarsz zárni, a **Csak számolás mentése** gomb elmenti a darabszámokat, a nap nyitva marad.\n\n**Zárás után az asszisztens szól.** Amint a nap lezárult, az asszisztens figurája figyelmeztet a zárás utáni teendőre – alapból arra, hogy a **bankkártya-terminált is le kell zárni** (napi zárás a terminálon). A buborék nem tűnik el magától: a **Megvan ✓** gombbal igazolod vissza. Ugyanitt a **Zárás nyomtatása** gomb megnyitja a nap zárólapját. Ha az asszisztens ki van kapcsolva, ugyanez felugró ablakban jelenik meg. A szöveg és a kapcsoló a **Beállítások › Házipénztár** lapfülön van.\n\n**A zárás kinyomtatható.** A **Zárás nyomtatása** gomb megnyitja a **Pénztárzárás** nyomtatványt: összesítő, megszámolt készpénz, eltérés, címletek, a nap tételei, aláírás. Nyomtatható, PDF-be menthető, e-mailben küldhető – lásd: Nyomtatás, PDF és e-mail.\n\nHa a zárás eltéréssel ment, az egyeztető ügynök rögtön megnézi a napot, és a gombok alatt megjelenik, mit talált. Eltérésnél az **Ügynök: miért?** hivatkozással zárás előtt is megkérdezheted.",
+            "t": "hazipenztar lepes lepes penztar megszamolasa nap zarasa lepes lepes penztar megszamolasa nap zarasa nyisd kp penztar lapful ma lapful aljan penztar megszamolasa zaras hivatkozas ide visz ird cimletenk hany darab fio tab enter kovetkezo ciml lep nyil eggyel noveli csokkenti darabszam jobb oldal azonnal latod megszamol osszeg alatta levezetes nyito kp bevetel befizetes kifizetes kiv varhato penztar rendszer kiir eredmeny egyezi tobbl hiany osszeggel hozzafuznod ird megjegyzes zara mezo kattints nap zarasa gomb akarsz zarni szamolas mentese gomb elmenti darabszam nap nyitva marad zaras utan asszisztens szol amin nap lezarul asszisztens figu figyelmez zaras utani teendo alap bankkartya terminal zarni napi zaras terminal bubor tuni maga megvan gombbal igazolod vissza ugyani zaras nyomtatasa gomb megnyi nap zarolapj asszisztens kapcsolva ugyanez felugro abl jeleni szoveg kapcsolo beallitas hazipenztar lapful zaras kinyomtathato zaras nyomtatasa gomb megnyi penztarzaras nyomtatvany osszesito megszamol keszpenz elteres ciml nap tetel alairas nyomtathato pdf mentheto mail kuldheto lasd nyomtatas pdf mail zaras elteressel men egyezteto ugyn rog megnezi nap gomb ala megjeleni talal elteresnel ugyn hivatkozassal zaras elo megkerdezheted",
+            "h": 171
+        },
+        {
+            "id": "penztar#7",
+            "cim": "Lépésről lépésre: a kassza megszámolása és a nap zárása",
+            "horgony": "lepesrol-lepesre-a-kassza-megszamolasa-es-a-nap-zarasa",
+            "szoveg": "Tipp: A lapfül tetején a nyilakkal vagy a dátummezővel korábbi napot is megnyithatsz. Ha egy múltbeli nap lezáratlan maradt, az oldal tetején figyelmeztető sáv jelzi, a **Megszámolom és lezárom** gombbal.",
+            "t": "hazipenztar lepes lepes penztar megszamolasa nap zarasa lepes lepes penztar megszamolasa nap zarasa tipp lapful tetej nyil datummezo korabbi nap megnyithatsz multbeli nap lezaratlan marad oldal tetej figyelmezteto sav jelzi megszamolom lezarom gombbal",
+            "h": 33
+        },
+        {
+            "id": "penztar#8",
+            "cim": "Lépésről lépésre: lezárt nap javítása és újranyitása",
+            "horgony": "lepesrol-lepesre-lezart-nap-javitasa-es-ujranyitasa",
+            "szoveg": "A lezárt nap nem megváltoztathatatlan, de minden módosítás nyomot hagy.\n\n- **Tétel javítása lezárt napon:** kattints a tétel sorára, javítsd, és mentsd. Az ablak figyelmeztet, hogy a nap már le van zárva. A nap várható összege és eltérése újraszámolódik.\n- **Új tétel múltbeli napra:** a **Napló** lapfülön a nap fejlécében kattints a **+ tétel erre a napra** hivatkozásra, vagy az új tétel ablakában állítsd át a **Nap** mezőt. Jövőbeli napra nem írható tétel.\n- **Újraszámolás:** lezárt napon a **KP – kassza** lapfülön a gomb felirata **Újraszámolás mentése**.\n- **Újranyitás:** a **Ma** lapfül lezárást jelző sávjában vagy a **KP – kassza** lapfülön kattints az **Újranyitás** gombra, majd a megerősítésre (**Biztosan újranyitod?**).\n\nHa egy korábbi nap összege megváltozik, az utána következő napok nyitó összege is magától igazodik.\n\nHogy a mai napon ki mit rögzített, módosított, törölt, zárt vagy nyitott újra, azt a **Ma** lapfül alján a **Változásnapló** mutatja meg.",
+            "t": "hazipenztar lepes lepes lezar nap javitasa ujranyitasa lepes lepes lezar nap javitasa ujranyitasa lezar nap megvaltoztathatatlan modositas nyom hagy tetel javitasa lezar nap kattints tetel sora javitsd mentsd abl figyelmez nap zarva nap varhato osszege elterese ujraszamolodi uj tetel multbeli nap naplo lapful nap fejlece kattints tetel nap hivatkozas uj tetel ablaka allitsd nap mez jovobeli nap irhato tetel ujraszamolas lezar nap kp penztar lapful gomb felirata ujraszamolas mentese ujranyitas ma lapful lezaras jelzo sav kp penztar lapful kattints ujranyitas gomb majd megerosites biztosan ujranyitod korabbi nap osszege megvaltozi utana kovetkezo nap nyito osszege maga igazodi mai nap rogzit modosit torol zar nyit ujra ma lapful aljan valtozasnaplo mut",
+            "h": 109
+        },
+        {
+            "id": "penztar#9",
+            "cim": "Lépésről lépésre: tétel módosítása és törlése",
+            "horgony": "lepesrol-lepesre-tetel-modositasa-es-torlese",
+            "szoveg": "1. Kattints a tétel sorára a **Ma**, a **Napló** vagy a **Keresés** lapfülön.\n2. A **Pénztártétel módosítása** ablakban javítsd, amit kell, és kattints a **Mentés** gombra.\n3. Törléshez kattints a **Törlés** gombra, majd a megerősítésre (**Biztosan törlöd?**).\n\nA törölt tétel nem vész el: a kassza összegéből kikerül, de a változásnaplóban megmarad. A **Keresés** lapfülön a **Törölt tételek** szűrővel előkereshető, az ügynök pedig a nap egyeztetésénél felajánlja a **Visszaállítás** gombot.\n\nA sorok elején álló pipa nem törlés: a kipipált sor áthúzva látszik. Arra való, hogy egyeztetéskor megjelöld, amit már megnéztél. Az összegeket nem érinti. A fejléc pipája a tábla minden sorát váltja.",
+            "t": "hazipenztar lepes lepes tetel modositasa torlese lepes lepes tetel modositasa torlese kattints tetel sora ma naplo kereses lapful penztartetel modositasa abl javitsd kattints mentes gomb torles kattints torles gomb majd megerosites biztosan torlod torol tetel vesz penztar osszege kikerul valtozasnaplo megmarad kereses lapful torol tetel szuro elokeresheto ugyn ped nap egyeztetesenel felajanl visszaallitas gomb sor elej allo pipa torles kipipal sor athuzva latszi valo egyeztetes megjelold megneztel osszeg erinti fejlec pipa tabla sor val",
+            "h": 74
+        },
+        {
+            "id": "penztar#10",
+            "cim": "Lépésről lépésre: napló, keresés, riport és export",
+            "horgony": "lepesrol-lepesre-naplo-kereses-riport-es-export",
+            "szoveg": "**Napló.** A napok időrendben, a legújabb elöl, oldalanként hét nap. Minden napnál látod az állapotot, az eltérést, a nyitó összeget és a tételeket. Szűrhető: **Minden nap**, **Csak eltérés**, **Lezáratlan**. Az **Ugrás napra** mezővel egy adott napra lépsz.\n\n**Keresés.** A fejléc keresőmezőjébe írhatsz számlaszámot, munkalap sorszámot, nevet vagy összeget. A **Keresés** lapfülön tovább szűkíthetsz: időszak (**Tól**, **Ig**), **Összeg (min)** és **Összeg (max)**, típus, fizetési mód, **Számla nélkül**, **Munkalap nélkül**, **Törölt tételek**. Ha munkalapszámra keresel, a találatok fölött kártya mutatja a munkalap értékét és azt, mennyi van belőle a pénztárban. Ha fizetve van, de hiányzik a pénz, a **Beírás a pénztárba** gomb egy kattintással pótolja.\n\n**Riport.** Válassz időszakot a gombsorból (**Ma**, **Tegnap**, **Ez a hét**, **Előző hét**, **Ez a hónap**, **Előző hónap**, **Negyedév**, **Idén**, **Tavaly**, **Utolsó 12 hónap**, **Mind**, **Egyéni**). A riport mutatja a forgalmat, a készpénzes és kártyás bevételt, a kivéteket személyenként, a kifizetéseket partnerenként, a számla és munkalap nélküli tételek számát, valamint a napokat egyenként. Egy nap sorára kattintva a naplóban arra a napra ugrasz. A **Nyomtatás / PDF** gomb megnyitja az időszak **Pénztárjelentés** nyomtatványát (nyomtatás, mentés PDF-be, küldés e-mailben).\n\n**Statisztika.** Ugyanazokkal az időszakokkal dolgozik, és a bontás is választható: **Automatikus**, **Napi**, **Heti**, **Havi**, **Éves**. Látod a forgalom alakulását, a hét napjainak átlagát, a bevételt kategóriánként, a legnagyobb tételeket és eltéréseket, több évnél az évek összevetését. Az óránkénti forgalom csak a rendszerben rögzített tételekből számol, mert az importált sorok időpontja nem ismert.",
+            "t": "hazipenztar lepes lepes naplo kereses ripor expor lepes lepes naplo kereses ripor expor naplo nap idorend legujabb elol oldalank het nap napnal latod allap elteres nyito osszeg tetel szurheto nap elteres lezaratlan ugras nap mezo ado nap lepsz kereses fejlec keresomezo irhatsz szamlaszam munkalap sorszam nev osszeg kereses lapful tovabb szukithetsz idosz tol ig osszeg min osszeg max tipus fizetesi mod szamla nelkul munkalap nelkul torol tetel munkalapszam keresel talal fol kartya mut munkalap ert belole penztar fizetve hianyzi penz beiras penztar gomb kattintassal potol ripor valassz idosz gombsor ma tegnap het elozo het honap elozo honap negyedev iden tavaly utolso 12 honap mind egyeni ripor mut forgalm keszpenzes kartyas bevetel kiv szemelyenk kifizetes partnerenk szamla munkalap nelkuli tetel szam valamin nap egyenk nap sora kattintva naplo nap ugrasz nyomtatas pdf gomb megnyi idosz penztarjelentes nyomtatvany nyomtatas mentes pdf kuldes mail statisztika ugyanaz idosz dolgozi bontas valaszthato automatikus napi heti havi eves latod forgalom alakulas het nap atlag bevetel kategoriank legnagyobb tetel elteres tobb evnel eve osszevetes orankenti forgalom rendszer rogzit tetel szamol importal sor idopon ism",
+            "h": 177
+        },
+        {
+            "id": "penztar#11",
+            "cim": "Lépésről lépésre: napló, keresés, riport és export",
+            "horgony": "lepesrol-lepesre-naplo-kereses-riport-es-export",
+            "szoveg": "**Export.** A **Riport** lapfülön az **Excel (CSV) letöltés**, a **Napló** lapfülön az **Excel (CSV)** gomb tölti le a tételeket. A fájl Excelben megnyitható, napi blokkokban, naponként **Napi összesen** sorral. A törölt tételek nincsenek benne.",
+            "t": "hazipenztar lepes lepes naplo kereses ripor expor lepes lepes naplo kereses ripor expor expor ripor lapful excel csv letoltes naplo lapful excel csv gomb tolti tetel fajl excel megnyithato napi blok naponk napi osszes sorral torol tetel nincse benne",
+            "h": 39
+        },
+        {
+            "id": "penztar#12",
+            "cim": "Lépésről lépésre: az egyeztető ügynök – miért hiányzik vagy több a pénz",
+            "horgony": "lepesrol-lepesre-az-egyezteto-ugynok-miert-hianyzik-vagy-tobb-a-penz",
+            "szoveg": "Az **Ügynök** lapfül összeveti a pénztárat a munkalapokkal és a számlákkal. Csak javasol: minden javítást te hagysz jóvá egy gombbal.\n\n1. Nyisd meg az **Ügynök** lapfület. A mai nap egyeztetése magától lefut.\n2. Más naphoz állítsd be a dátumot a **Nap egyeztetése** mezőben, és kattints az **Egyeztetés** gombra.\n3. Olvasd el az összegzést. Ha a kassza nem egyezik, megmondja, mennyivel van több vagy kevesebb, mint a várható.\n4. Ha az ügynök talált olyan tételeket, amelyek együtt pontosan kiadják az eltérést, azt a **Pontos magyarázat** részben írja le.\n5. A megállapításoknál a gombbal azonnal javíthatsz.\n\n| Megállapítás | Mit ajánl |\n|---|---|\n| **Fizetve, de nincs a pénztárban** | **Beírás a pénztárba**, **Munkalap megnyitása** |\n| **Számla kiállítva, de nincs a pénztárban** | **Beírás a pénztárba** |\n| **KP-ként rögzítve, de kártyás** (és fordítva) | **Átírás kártyára** / **Átírás készpénzre** |\n| **Kétszer rögzítve?** | **Megnyitás (törlés)** |\n| **Többet rögzítettek, mint a munkalap értéke** | **Tételei megkeresése** |\n| **Számlaszám pótolható** | **Számlaszám beírása** |\n| **Kivét név nélkül** | a jogosultak neve gombként |\n| **Törölt tétel** | **Visszaállítás** |\n| **Lehetséges elgépelés** | **Tétel megnyitása** |\n| **Az előző nap nem volt megszámolva** | **A nap egyeztetése** |\n| **Zárás után módosítva** | **Változásnapló** |\n\nJobb oldalon a **Nyitott ügyek** az elmúlt három hét elmaradásait gyűjti össze: fizetett munkalap, amely nincs a pénztárban; pótolható számlaszámok (**Mind beírása**); eltéréssel zárt napok; lezáratlan napok.",
+            "t": "hazipenztar lepes lepes egyezteto ugyn hianyzi tobb penz lepes lepes egyezteto ugyn hianyzi tobb penz ugyn lapful osszeveti penztar munkalap szaml javasol javitas hagysz jova gombbal nyisd ugyn lapful mai nap egyeztetese maga lefu mas nap allitsd datum nap egyeztetese mezo kattints egyeztetes gomb olvasd osszegzes penztar egyezi megmond mennyi tobb kevesebb varhato ugyn talal tetel amely egyu pontosan kiadj elteres pontos magyaraz resz irja megallapitasoknal gombbal azonnal javithatsz megallapitas ajanl fizetve nincs penztar beiras penztar munkalap megnyitasa szamla kiallitva nincs penztar beiras penztar kp ken rogzitve kartyas forditva atiras kartya atiras keszpenz ketszer rogzitve megnyitas torles tobb rogzitet munkalap erteke tetel megkeresese szamlaszam potolhato szamlaszam beirasa kiv nev nelkul jogosul neve gombk torol tetel visszaallitas lehetseges elgepeles tetel megnyitasa elozo nap megszamolva nap egyeztetese zaras utan modositva valtozasnaplo jobb oldal nyit ugy elmul harom het elmaradas gyujti ossze fizet munkalap amely nincs penztar potolhato szamlaszam mind beirasa elteressel zar nap lezaratlan nap",
+            "h": 153
+        },
+        {
+            "id": "penztar#13",
+            "cim": "Lépésről lépésre: az egyeztető ügynök – miért hiányzik vagy több a pénz",
+            "horgony": "lepesrol-lepesre-az-egyezteto-ugynok-miert-hianyzik-vagy-tobb-a-penz",
+            "szoveg": "A kérdésmezőbe szabadon is írhatsz, például egy munkalap- vagy számlaszámot, vagy azt, hogy miért hiányzik egy összeg. A válasz fölött látszik a forrása: **Helyi keresés**, vagy – ha a rendszerben be van állítva AI-kulcs – **Claude AI**. Az ügynök kérdésre sem módosít semmit.",
+            "t": "hazipenztar lepes lepes egyezteto ugyn hianyzi tobb penz lepes lepes egyezteto ugyn hianyzi tobb penz kerdesmezo szabad irhatsz peldaul munkalap szamlaszam hianyzi osszeg valasz fol latszi forrasa helyi kereses rendszer allitva ai kulcs claude ai ugyn kerdes modosi semmi",
+            "h": 39
+        },
+        {
+            "id": "penztar#14",
+            "cim": "Lépésről lépésre: a régi Excel „Zárás\" tábla importja és visszavonása",
+            "horgony": "lepesrol-lepesre-a-regi-excel-zaras-tabla-importja-es-visszavonasa",
+            "szoveg": "Ha eddig Excel-táblában vezetted a napi zárást, a múltat betöltheted.\n\n1. A fejlécben kattints az **Import** gombra.\n2. Kattints a **Fájl kiválasztása** gombra, vagy húzd a fájlt az ablakba. `.xlsx` és `.csv` fájl tölthető fel. A régi `.xls` fájlt előbb Excelben mentsd el `.xlsx` formátumban.\n3. A rendszer beolvassa a fájlt, és **előnézetet** mutat. Ekkor még semmi nem kerül az adatbázisba. Látod: hány tételsor és hány nap van benne, mennyi az **Új** (ami már bent van, kimarad), az időszakot, a készpénzes és kártyás bevételt, a kivéteket személyenként, a kifizetéseket és a **Kezdő egyenleg** összegét.\n4. Nézd meg a figyelmeztetéseket és a **Minta** részt (az első és az utolsó öt sor).\n5. Kattints az **Importálás** gombra. A beírás adagokban halad, folyamatjelzővel.\n6. A végén a rendszer elkészíti a napok összesítőit és a záró egyenlegeket. Kattints a **Bezárás** gombra.\n\nAmit a beolvasó tud a régi tábláról:\n\n- A táblában a **Dátum** fejlécnek az A oszlopban kell állnia. A fejléc- és az összesítő sorokat átugorja.\n- Az összesítő sor **KP a kasszában** összege lesz az adott nap záró, megszámolt összege.\n- A negatív kifizetésből kivét lesz, ha a szöveg kivétet említ, és a névből felismeri a személyt; különben kifizetés. A pozitív összegből befizetés.\n- A hibás dátumú sor az előző sor dátumát kapja. Erről figyelmeztetést látsz.\n- A tábla kezdő egyenlege az első importált napra, külön nyitó tételként kerül be.\n- Az importált múltbeli napok lezárt állapotúak lesznek. Amit a rendszerben már megszámoltál vagy lezártál, azt az import nem írja felül.\n\nHa a beírás megszakad, a hibaüzenet mellett megjelenik a **Folytatás innen** gomb. A már beírt sorok nem kerülnek be kétszer. Ugyanez igaz, ha később a kibővült táblát töltöd fel újra: csak az új sorok kerülnek be.",
+            "t": "hazipenztar lepes lepes regi excel zaras tabla impor visszavonasa lepes lepes regi excel zaras tabla impor visszavonasa edd excel tabla vezetted napi zaras mul betoltheted fejlec kattints impor gomb kattints fajl kivalasztasa gomb huzd fajl abl xlsx csv fajl toltheto regi xls fajl elobb excel mentsd xlsx formatum rendszer beolvassa fajl elonez mut ekkor semmi ar adatbazis latod hany tetelsor hany nap benne uj ben kimarad idosz keszpenzes kartyas bevetel kiv szemelyenk kifizetes kezdo egyenleg osszeg nezd figyelmeztetes minta resz elso utolso ot sor kattints importalas gomb beiras adag halad folyamatjelzo veg rendszer elkesziti nap osszesitoi zaro egyenleg kattints bezaras gomb beolvaso tud regi tabla tabla datum fejlec oszlop allnia fejlec osszesito sor atugor osszesito sor kp penztar osszege ado nap zaro megszamol osszege negativ kifizetes kiv szoveg kiv emli nev felismeri szemely kul kifizetes pozitiv osszeg befizetes hibas datumu sor elozo sor datum kap errol figyelmeztetes latsz tabla kezdo egyenlege elso importal nap kul nyito tetelk ar importal multbeli nap lezar allapotu lesz rendszer megszamoltal lezartal impor irja felul beiras megszakad hibauz mell megjeleni folytatas inn gomb beir sor ar ketszer ugyanez igaz kesobb kibovul tabl toltod ujra uj sor ar",
+            "h": 192
+        },
+        {
+            "id": "penztar#15",
+            "cim": "Lépésről lépésre: a régi Excel „Zárás\" tábla importja és visszavonása",
+            "horgony": "lepesrol-lepesre-a-regi-excel-zaras-tabla-importja-es-visszavonasa",
+            "szoveg": "**Visszavonás:** az **Import** ablak alján kattints a **Korábbi import visszavonása…** hivatkozásra, majd a megerősítésre. Az összes importált sor törlődik; a rendszerben kézzel vagy munkalapról rögzített tételek megmaradnak. Újbóli importnál az előnézetben a korábban importált sorok cseréjét kérő pipával egy lépésben is lecserélheted a régit.",
+            "t": "hazipenztar lepes lepes regi excel zaras tabla impor visszavonasa lepes lepes regi excel zaras tabla impor visszavonasa visszavonas impor abl aljan kattints korabbi impor visszavonasa hivatkozas majd megerosites osszes importal sor torlodi rendszer kezzel munkalap rogzit tetel megmarad ujboli importnal elonez korab importal sor cserej kero pipa lepes lecserelheted regi",
+            "h": 50
+        },
+        {
+            "id": "penztar#16",
+            "cim": "A Beállítások „Házipénztár\" lapfüle",
+            "horgony": "a-beallitasok-hazipenztar-lapfule",
+            "szoveg": "A Beállítások menüpont **Pénz és eladás** csoportjában találod a **Házipénztár** lapfület. A Beállításokat csak adminisztrátor nyithatja meg.\n\n- **Kivétre jogosultak** – soronként egy személy, ebben az alakban: `Teljes név | becenév, becenév`. Például: `Minta Márta | Márti, Márta`. A pénzkivétnél csak közülük lehet választani. A becenevekből ismeri fel a rendszer az importált sorokban, ki vette ki a pénzt. Ha a lista üres, a kivétnél a nevet kézzel kell beírni.\n- **Címletek** – a kassza megszámolásához használt címletek forintban, vesszővel elválasztva. Üresen hagyva a szokásos címletek jönnek vissza.\n- **Készpénzes fizetési módok** – a munkalap mely fizetési módjai számítanak készpénznek.\n- **Kártyás fizetési módok** – melyek számítanak kártyásnak. A munkalap minden más fizetési módja az utalás oszlopba kerül, és nem érinti a kasszát.\n- **Statisztikai kategóriák** – soronként `Kategória: kulcsszó, kulcsszó`. A statisztika a bevétel leírásában keresi a kulcsszavakat; az első egyező sor nyer. Üresen hagyva az alap lista jön vissza.\n- **Munkalap fizetésekor ajánlja fel a pénztárba írást** – ha be van pipálva, a kézzel fizetettre állított munkalap és a számla után megjelenik a **Bekerüljön a házipénztárba?** kérdés.\n- **Záráskor mindig figyelmeztessen** és **Az emlékeztető szövege** (az **Emlékeztető a nap zárásakor** dobozban) – a nap lezárása után az asszisztens ezt a szöveget mondja el. Üresen az alap szöveg: a bankkártya-terminál napi zárása. Ide írhatsz mást is (riasztó, lámpák, kulcs).",
+            "t": "hazipenztar beallitas hazipenztar lapfule beallitas hazipenztar lapfule beallitas menup penz eladas csoport talalod hazipenztar lapful beallitas adminisztrator nyith kiv jogosul soronk szemely ebb ala teljes nev becenev becenev peldaul minta marta marti marta penzkivetnel kozul valasztani becenev ismeri rendszer importal sor vette penz lista ures kivetnel nev kezzel beirni ciml penztar megszamolasa hasznal ciml forin vesszo elvalasztva ures hagyva szokasos ciml jon vissza keszpenzes fizetesi mod munkalap fizetesi modj szamita keszpenz kartyas fizetesi mod mely szamita kartyas munkalap mas fizetesi mod utalas oszlop ar erinti penztar statiszti kategori soronk kategoria kulcsszo kulcsszo statisztika bevetel leirasa keresi kulcsszav elso egyezo sor nyer ures hagyva alap lista jon vissza munkalap fizetese ajanl penztar iras pipalva kezzel fizetet allit munkalap szamla utan megjeleni bekerulj hazipenztar kerdes zaras figyelmeztess emlekezteto szovege emlekezteto nap zarasa doboz nap lezarasa utan asszisztens szoveg mond ures alap szoveg bankkartya terminal napi zarasa ide irhatsz mas riaszto lamp kulcs",
+            "h": 150
+        },
+        {
+            "id": "penztar#17",
+            "cim": "A Beállítások „Fizetési módok\" lapfüle",
+            "horgony": "a-beallitasok-fizetesi-modok-lapfule",
+            "szoveg": "A Beállítások **Pénz és eladás** csoportjában a **Fizetési módok** lapfül azt a listát tartalmazza, amelyből a munkalapon, az árukiadáson, a rendelésen és a számla ablakában a **Fizetési mód** választható.\n\n- A szövegmezőbe soronként egy fizetési módot írj.\n- A **Nincs** mindig választható, azt nem kell felvenned.\n- A munkalapon a mód neve tárolódik. Ha átnevezel egy módot, a régi lapokon a régi név marad.\n- Üresen hagyva az alap lista jön vissza.\n\nFontos: A két lapfül összetartozik. Ha új fizetési módot veszel fel, és az készpénznek vagy kártyának számít, írd be a **Házipénztár** lapfülön a megfelelő sorba is. Különben a pénztár utalásként kezeli, és nem számolja bele a kasszába.",
+            "t": "hazipenztar beallitas fizetesi mod lapfule beallitas fizetesi mod lapfule beallitas penz eladas csoport fizetesi mod lapful lis tartalmazza amely munkalap arukiadas rendeles szamla ablaka fizetesi mod valaszthato szovegmezo soronk fizetesi mod irj nincs valaszthato felvenned munkalap mod neve tarolodi atnevezel mod regi lap regi nev marad ures hagyva alap lista jon vissza fontos ket lapful osszetartozi uj fizetesi mod veszel keszpenz kartya szami ird hazipenztar lapful megfelelo sor kul penztar utalask kezeli szamol bele penztar",
+            "h": 75
+        },
+        {
+            "id": "penztar#18",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Semmi nem törlődik véglegesen.** A törlés jelölés, és minden változás a változásnaplóba kerül: ki, mikor, mi volt előtte.\n- **A kivét és a kifizetés mindig csökkenti a kasszát,** akármilyen előjellel írod be az összeget.\n- **A kivéthez név kell.** Név nélkül a kivét nem menthető.\n- **Jövőbeli napra nem írható tétel,** és jövőbeli nap nem számolható meg.\n- **A várható készpénz** = nyitó + készpénzes bevétel + befizetés − kifizetés − kivét. **Az eltérés** = megszámolt − várható.\n- **A kártya és az utalás** a forgalomba számít, a kasszába nem.\n- **A számlaszám magától beíródik.** Számla kiállítása után a munkalap számla nélküli pénztártételei megkapják a számla számát.\n- **Több eszköznél eszközönként külön tétel** készül, az eszköz nevével.\n- **Az ügynök pénzt nem mozgat.** Csak javasol; a javítás a te gombnyomásodra történik.\n- **A Ma lapfül percenként frissül,** így a másik gépen rögzített tétel is megjelenik.",
+            "t": "hazipenztar szabaly ami rendszer betar szabaly ami rendszer betar semmi torlodi vegleges torles jeloles valtozas valtozasnaplo ar elotte kiv kifizetes csokkenti penztar akarmily elojellel irod osszeg kiv nev nev nelkul kiv mentheto jovobeli nap irhato tetel jovobeli nap szamolhato varhato keszpenz nyito keszpenzes bevetel befizetes kifizetes kiv elteres megszamol varhato kartya utalas forgalom szami penztar szamlaszam maga beirodi szamla kiallitasa utan munkalap szamla nelkuli penztartetel megkapj szamla szam tobb eszkoznel eszkozonk kul tetel keszul eszkoz neve ugyn penz mozg javasol javitas gombnyomasod torteni ma lapful percenk frissul igy masi gep rogzit tetel megjeleni",
+            "h": 93
+        },
+        {
+            "id": "penztar#19",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **A kivétnél nem tudok menteni.** Válaszd ki, ki vette ki a pénzt. Ha nincs kit választani, a Beállítások **Házipénztár** lapfülén vedd fel a jogosultakat.\n- **A kártyás fizetés készpénzként jelent meg (vagy fordítva).** Az ügynök egyeztetése felajánlja az átírást. Ha rendszeresen előfordul, ellenőrizd a **Készpénzes** és a **Kártyás fizetési módok** beállítását.\n- **A munkalap fizetve van, de nincs a pénztárban.** Az **Ügynök** lapfül **Nyitott ügyek** listájában a **Beírás** gombbal pótolhatod.\n- **Az import azt írja, nem talált tételsort.** A táblában a **Dátum** fejlécnek az A oszlopban kell állnia.\n- **Az import szerint a fájl nem érkezett meg.** A fájl nagyobb lehet, mint amit a szerver feltöltésre enged. Legfeljebb 60 MB-os fájl tölthető fel.\n- **Rossz napra került a tétel.** Nyisd meg, állítsd át a **Nap** mezőt, és mentsd. Mindkét nap összege újraszámolódik.",
+            "t": "hazipenztar megy megy kivetnel tud menteni valaszd vette penz nincs kit valasztani beallitas hazipenztar lapful vedd jogosul kartyas fizetes keszpenzk jel forditva ugyn egyeztetese felajanl atiras rendszeres elofordul ellenorizd keszpenzes kartyas fizetesi mod beallitas munkalap fizetve nincs penztar ugyn lapful nyit ugy lista beiras gombbal potolhatod impor irja talal tetelsor tabla datum fejlec oszlop allnia impor szerin fajl erkez fajl nagyobb szerver feltoltes enged legfeljebb 60 mb os fajl toltheto rossz nap ar tetel nyisd allitsd nap mez mentsd mind nap osszege ujraszamolodi",
+            "h": 83
+        },
+        {
+            "id": "penztar#20",
+            "cim": "GYIK › Miért tiszteleg az asszisztens, amikor pénzt rögzítek?",
+            "horgony": "miert-tiszteleg-az-asszisztens-amikor-penzt-rogzitek",
+            "szoveg": "Mert pénz került a kasszába. Új **bevételnél** és **befizetésnél** (a pénztár űrlapján vagy a gyors felvitellel), és amikor egy munkalapot, napi árukiadást vagy rendelést kifizettek, a figura előbb örömében felugrik, aztán **vigyázzba áll**: a két lába előbújik és összecsattan (bokacsattintás), kihúzza magát, és a jobb kezével határozottan **tiszteleg** – közben egy frappáns mondatot mond a buborékban (több mint száz közül véletlenszerűen, kétszer egymás után nem ugyanazt). Tétel módosítására, kivétre és kifizetésre nem tiszteleg. Ha nyitva van a csevegő, csak tiszteleg, nem szól közbe.",
+            "t": "hazipenztar gyi tiszteleg asszisztens ami penz rogzi gyi tiszteleg asszisztens ami penz rogzi penz ar penztar uj bevetelnel befizetesnel penztar urlapjan gyors felvitellel ami munkalap napi arukiadas rendeles kifizet figu elobb orome felugri aztan vigyazz all ket laba elobuji osszecsattan bokacsattintas kihuzza mag jobb keze hatarozottan tiszteleg koz frappans mond mond bubor tobb szaz kozul veletlenszeru ketszer egymas utan ugyanaz tetel modositasa kiv kifizetes tiszteleg nyitva csevego tiszteleg szol koz",
+            "h": 70
+        },
+        {
+            "id": "penztar#21",
+            "cim": "GYIK › Miért szól az asszisztens a bankkártya-terminálról, amikor lezárom a napot?",
+            "horgony": "miert-szol-az-asszisztens-a-bankkartya-terminalrol-amikor-lezarom-a-napot",
+            "szoveg": "Hogy ne maradjon el a terminál napi zárása. A figyelmeztetés minden zárás után megjelenik, és addig marad, amíg a **Megvan ✓** gombbal vissza nem igazolod. A szövege átírható, a figyelmeztetés kikapcsolható a **Beállítások › Házipénztár** lapfülön.",
+            "t": "hazipenztar gyi szol asszisztens bankkartya terminal ami lezarom nap gyi szol asszisztens bankkartya terminal ami lezarom nap ne maradj terminal napi zarasa figyelmeztetes zaras utan megjeleni add marad amig megvan gombbal vissza igazolod szovege atirhato figyelmeztetes kikapcsolhato beallitas hazipenztar lapful",
+            "h": 40
+        },
+        {
+            "id": "penztar#22",
+            "cim": "GYIK › Ki tudom nyomtatni a napi zárást?",
+            "horgony": "ki-tudom-nyomtatni-a-napi-zarast",
+            "szoveg": "Igen. A **KP – kassza** lapfülön a **Zárás nyomtatása** gombbal, vagy a zárás után az asszisztens buborékjából. Korábbi nap zárása is nyomtatható: lépj a napra a nyilakkal, vagy a felső fejléc nyomtató ikonjánál válaszd a **Pénztárzárás** nyomtatványt és a napot.",
+            "t": "hazipenztar gyi tudom nyomtatni napi zaras gyi tudom nyomtatni napi zaras kp penztar lapful zaras nyomtatasa gombbal zaras utan asszisztens buborek korabbi nap zarasa nyomtathato lepj nap nyil felso fejlec nyomtato ikonjanal valaszd penztarzaras nyomtatvany nap",
+            "h": 36
+        },
+        {
+            "id": "penztar#23",
+            "cim": "GYIK › Tudok papírt adni egy kivétről vagy kifizetésről?",
+            "horgony": "tudok-papirt-adni-egy-kivetrol-vagy-kifizetesrol",
+            "szoveg": "Igen. Nyisd meg a tételt, és kattints az **Igazolás** gombra: megnyílik a **Pénztártétel-igazolás** nyomtatvány, két aláírással. Ez belső nyilvántartás, nem szigorú számadású bizonylat.",
+            "t": "hazipenztar gyi tud papir adni kiv kifizetes gyi tud papir adni kiv kifizetes nyisd tetel kattints igazolas gomb megnyili penztartetel igazolas nyomtatvany ket alairassal belso nyilvantartas szigoru szamadasu bizonyl",
+            "h": 29
+        },
+        {
+            "id": "penztar#24",
+            "cim": "GYIK › Mi a különbség a kivét és a kifizetés között?",
+            "horgony": "mi-a-kulonbseg-a-kivet-es-a-kifizetes-kozott",
+            "szoveg": "A **Kivét** az, amikor valaki a cégtől pénzt vesz ki a kasszából – ehhez mindig név tartozik. A **Kifizetés** az, amikor a kasszából egy külső félnek fizetsz, például beszállítónak vagy futárnak.",
+            "t": "hazipenztar gyi kulonbseg kiv kifizetes koz gyi kulonbseg kiv kifizetes koz kiv ami valaki ceg penz vesz penztar ehhez nev tartozi kifizetes ami penztar kulso fel fizetsz peldaul beszallito futar",
+            "h": 30
+        },
+        {
+            "id": "penztar#25",
+            "cim": "GYIK › Mire való a befizetés?",
+            "horgony": "mire-valo-a-befizetes",
+            "szoveg": "Olyan pénzre, ami a kasszába kerül, de nem bevétel. Tipikusan váltópénz. A **Befizetés** a tétel ablakának tetején, a típusok között választható.",
+            "t": "hazipenztar gyi mire valo befizetes gyi mire valo befizetes penz penztar ar bevetel tipikusan valtopenz befizetes tetel ablaka tetej tipus koz valaszthato",
+            "h": 22
+        },
+        {
+            "id": "penztar#26",
+            "cim": "GYIK › Honnan jön a nyitó összeg?",
+            "horgony": "honnan-jon-a-nyito-osszeg",
+            "szoveg": "Az előző nap záró készpénzéből. Ha az előző napot megszámoltad, a megszámolt összeg a nyitó; ha nem, a várható összeg.",
+            "t": "hazipenztar gyi honnan jon nyito osszeg gyi honnan jon nyito osszeg elozo nap zaro keszpenze elozo nap megszamoltad megszamol osszeg nyito varhato osszeg",
+            "h": 23
+        },
+        {
+            "id": "penztar#27",
+            "cim": "GYIK › Kell minden nap új napot nyitnom?",
+            "horgony": "kell-minden-nap-uj-napot-nyitnom",
+            "szoveg": "Nem. Minden nap magától megnyílik.",
+            "t": "hazipenztar gyi nap uj nap nyitnom gyi nap uj nap nyitnom nap maga megnyili",
+            "h": 14
+        },
+        {
+            "id": "penztar#28",
+            "cim": "GYIK › Mi történik, ha elfelejtem lezárni a napot?",
+            "horgony": "mi-tortenik-ha-elfelejtem-lezarni-a-napot",
+            "szoveg": "A nap nyitva marad, a következő nap ettől még megnyílik. Ha a napon volt tétel, az oldal tetején figyelmeztető sáv jelzi, a **Megszámolom és lezárom** gombbal.",
+            "t": "hazipenztar gyi torteni elfelejtem lezarni nap gyi torteni elfelejtem lezarni nap nap nyitva marad kovetkezo nap ettol megnyili nap tetel oldal tetej figyelmezteto sav jelzi megszamolom lezarom gombbal",
+            "h": 28
+        },
+        {
+            "id": "penztar#29",
+            "cim": "GYIK › Lezárhatom a napot számolás nélkül?",
+            "horgony": "lezarhatom-a-napot-szamolas-nelkul",
+            "szoveg": "A **Nap zárása** gomb címletek beírása nélkül is zár, de ekkor a megszámolt összeg nulla lesz: a rendszer a teljes várható összeget hiánynak mutatja, és a következő nap nyitója is nulla lesz. Zárás előtt ezért mindig számolj.",
+            "t": "hazipenztar gyi lezarhatom nap szamolas nelkul gyi lezarhatom nap szamolas nelkul nap zarasa gomb ciml beirasa nelkul zar ekkor megszamol osszeg nulla rendszer teljes varhato osszeg hiany mut kovetkezo nap nyito nulla zaras elo ezer szamolj",
+            "h": 36
+        },
+        {
+            "id": "penztar#30",
+            "cim": "GYIK › Miért hiányzik pénz a kasszából?",
+            "horgony": "miert-hianyzik-penz-a-kasszabol",
+            "szoveg": "Nyisd meg az **Ügynök** lapfület, és nézd meg a nap egyeztetését. Hiánynál a jellemző ok egy be nem írt kivét vagy kifizetés, egy készpénzként rögzített kártyás fizetés vagy egy kétszer beírt tétel.",
+            "t": "hazipenztar gyi hianyzi penz penztar gyi hianyzi penz penztar nyisd ugyn lapful nezd nap egyeztetes hianynal jellemzo irt kiv kifizetes keszpenzk rogzit kartyas fizetes ketszer beir tetel",
+            "h": 27
+        },
+        {
+            "id": "penztar#31",
+            "cim": "GYIK › Miért van több pénz a kasszában, mint kellene?",
+            "horgony": "miert-van-tobb-penz-a-kasszaban-mint-kellene",
+            "szoveg": "Többletnél a jellemző ok egy be nem írt készpénzes fizetés, vagy egy kártyásként rögzített készpénzes. Az **Ügynök** lapfül megkeresi, melyik munkalap vagy számla pénze hiányzik a pénztárból.",
+            "t": "hazipenztar gyi tobb penz penztar kellene gyi tobb penz penztar kellene tobbletnel jellemzo irt keszpenzes fizetes kartyask rogzit keszpenzes ugyn lapful megkeresi munkalap szamla penze hianyzi penztar",
+            "h": 27
+        },
+        {
+            "id": "penztar#32",
+            "cim": "GYIK › Javít az ügynök magától?",
+            "horgony": "javit-az-ugynok-magatol",
+            "szoveg": "Nem. Csak megállapít és javasol. Minden javítás egy gomb, amit neked kell megnyomnod.",
+            "t": "hazipenztar gyi javi ugyn maga gyi javi ugyn maga megallapi javasol javitas gomb neked megnyomnod",
+            "h": 15
+        },
+        {
+            "id": "penztar#33",
+            "cim": "GYIK › Módosíthatok lezárt napon?",
+            "horgony": "modosithatok-lezart-napon",
+            "szoveg": "Igen. Az ablak figyelmeztet, a változás naplózódik, a nap várható összege és eltérése pedig újraszámolódik.",
+            "t": "hazipenztar gyi modosith lezar nap gyi modosith lezar nap abl figyelmez valtozas naplozodi nap varhato osszege elterese ped ujraszamolodi",
+            "h": 19
+        },
+        {
+            "id": "penztar#34",
+            "cim": "GYIK › Hogyan nyitok újra egy lezárt napot?",
+            "horgony": "hogyan-nyitok-ujra-egy-lezart-napot",
+            "szoveg": "A **KP – kassza** lapfülön vagy a **Ma** lapfül lezárást jelző sávjában kattints az **Újranyitás** gombra, majd erősítsd meg. Az újranyitás is bekerül a változásnaplóba.",
+            "t": "hazipenztar gyi nyi ujra lezar nap gyi nyi ujra lezar nap kp penztar lapful ma lapful lezaras jelzo sav kattints ujranyitas gomb majd erositsd ujranyitas bekerul valtozasnaplo",
+            "h": 27
+        },
+        {
+            "id": "penztar#35",
+            "cim": "GYIK › Visszahozható a törölt tétel?",
+            "horgony": "visszahozhato-a-torolt-tetel",
+            "szoveg": "Igen. Az **Ügynök** lapfülön a nap egyeztetésénél a **Törölt tétel** megállapításnál ott a **Visszaállítás** gomb.",
+            "t": "hazipenztar gyi visszahozhato torol tetel gyi visszahozhato torol tetel ugyn lapful nap egyeztetesenel torol tetel megallapitasnal visszaallitas gomb",
+            "h": 18
+        },
+        {
+            "id": "penztar#36",
+            "cim": "GYIK › Mit jelent a sor elején a pipa?",
+            "horgony": "mit-jelent-a-sor-elejen-a-pipa",
+            "szoveg": "Megjelölést: a kipipált sor áthúzva látszik. Egyeztetésnél arra jó, hogy lásd, mit néztél már meg. A tétel összegét nem érinti, és nem törli.",
+            "t": "hazipenztar gyi jel sor elej pipa gyi jel sor elej pipa megjeloles kipipal sor athuzva latszi egyeztetesnel jo lasd neztel tetel osszeg erinti torli",
+            "h": 24
+        },
+        {
+            "id": "penztar#37",
+            "cim": "GYIK › Hogyan rögzítek előleget?",
+            "horgony": "hogyan-rogzitek-eloleget",
+            "szoveg": "A munkalap **Fizetés** ablakában válaszd az **Előleg / részfizetés** lehetőséget, és írd be az összeget. A pénztárban a leírás elé **Előleg –** kerül.",
+            "t": "hazipenztar gyi rogzi eloleg gyi rogzi eloleg munkalap fizetes ablaka valaszd eloleg reszfizetes lehetoseg ird osszeg penztar leiras ele eloleg ar",
+            "h": 21
+        },
+        {
+            "id": "penztar#38",
+            "cim": "GYIK › Mi történik, ha az ügyfél részben készpénzzel, részben kártyával fizet?",
+            "horgony": "mi-tortenik-ha-az-ugyfel-reszben-keszpenzzel-reszben-kartyaval-fizet",
+            "szoveg": "A **Fizetés** ablakban válaszd a **Vegyes** módot, és írd be külön a készpénzes és a kártyás részt. A pénztárba egy tétel kerül, két összeggel.",
+            "t": "hazipenztar gyi torteni ugyfel resz keszpenzzel resz kartya fiz gyi torteni ugyfel resz keszpenzzel resz kartya fiz fizetes abl valaszd vegyes mod ird kul keszpenzes kartyas resz penztar tetel ar ket osszeggel",
+            "h": 32
+        },
+        {
+            "id": "penztar#39",
+            "cim": "GYIK › Hová kerül az utalásos fizetés?",
+            "horgony": "hova-kerul-az-utalasos-fizetes",
+            "szoveg": "Az utalás oszlopba. A forgalomba beleszámít, a kassza készpénzét nem változtatja.",
+            "t": "hazipenztar gyi hova ar utalasos fizetes gyi hova ar utalasos fizetes utalas oszlop forgalom beleszami penztar keszpenz valtozt",
+            "h": 18
+        },
+        {
+            "id": "penztar#40",
+            "cim": "GYIK › Mi az a „Nem került kasszába\" sor?",
+            "horgony": "mi-az-a-nem-kerult-kasszaba-sor",
+            "szoveg": "Jelölés arról, hogy egy munkalap fizetése megtörtént, de kérésre nem lett belőle pénztártétel. Az összege tájékoztató, a kasszát nem változtatja.",
+            "t": "hazipenztar gyi ar penztar sor gyi ar penztar sor jeloles arrol munkalap fizetese megtort keres let belole penztartetel osszege tajekoztato penztar valtozt",
+            "h": 22
+        },
+        {
+            "id": "penztar#41",
+            "cim": "GYIK › Miért kérdezi a rendszer, hogy bekerüljön-e a házipénztárba?",
+            "horgony": "miert-kerdezi-a-rendszer-hogy-bekeruljon-e-a-hazipenztarba",
+            "szoveg": "Mert a munkalapot kézzel állítottad fizetettre, vagy megnövelted az előleget, és a pénz még nincs a pénztárban. Ha nem kéred ezt a kérdést, a Beállítások **Házipénztár** lapfülén kikapcsolható.",
+            "t": "hazipenztar gyi kerdezi rendszer bekerulj hazipenztar gyi kerdezi rendszer bekerulj hazipenztar munkalap kezzel allitottad fizetet megnovelted eloleg penz nincs penztar kered kerdes beallitas hazipenztar lapful kikapcsolhato",
+            "h": 26
+        },
+        {
+            "id": "penztar#42",
+            "cim": "GYIK › Be kell írnom a számlaszámot a pénztárba?",
+            "horgony": "be-kell-irnom-a-szamlaszamot-a-penztarba",
+            "szoveg": "Nem. A számla kiállítása után a munkalap pénztártételei maguktól megkapják a számlaszámot. A korábbi, számla nélküli tételeket az **Ügynök** lapfül **Mind beírása** gombja pótolja.",
+            "t": "hazipenztar gyi irnom szamlaszam penztar gyi irnom szamlaszam penztar szamla kiallitasa utan munkalap penztartetel mag megkapj szamlaszam korabbi szamla nelkuli tetel ugyn lapful mind beirasa gomb potol",
+            "h": 27
+        },
+        {
+            "id": "penztar#43",
+            "cim": "GYIK › Tévesen rögzítettem egy fizetést. Hogyan vonom vissza?",
+            "horgony": "tevesen-rogzitettem-egy-fizetest-hogyan-vonom-vissza",
+            "szoveg": "A munkalapon vedd ki a **Fizetve** pipát. A megjelenő buborék elmondja, mi történik, és – ha a lapot fizetés zárta le – felajánlja a **Fizetés visszavonása** gombot. Utána mentsd a lapot. A pénztártétel nem törlődik magától: a Házipénztárban külön kell törölnöd.",
+            "t": "hazipenztar gyi teves rogzitettem fizetes vonom vissza gyi teves rogzitettem fizetes vonom vissza munkalap vedd fizetve pip megjeleno bubor elmond torteni lap fizetes zarta felajanl fizetes visszavonasa gomb utana mentsd lap penztartetel torlodi maga hazipenztar kul torolnod",
+            "h": 37
+        },
+        {
+            "id": "penztar#44",
+            "cim": "GYIK › Mi történik, ha kétszer írom be ugyanazt a munkalapot?",
+            "horgony": "mi-tortenik-ha-ketszer-irom-be-ugyanazt-a-munkalapot",
+            "szoveg": "A gyorssor figyelmeztet, ha a munkalapra már van pénztártétel, és megerősítést kér. Ha mégis kétszer került be, az ügynök **Kétszer rögzítve?** megállapítása jelzi.",
+            "t": "hazipenztar gyi torteni ketszer irom ugyanaz munkalap gyi torteni ketszer irom ugyanaz munkalap gyorssor figyelmez munkalap penztartetel megerosites ker megis ketszer ar ugyn ketszer rogzitve megallapitasa jelzi",
+            "h": 27
+        },
+        {
+            "id": "penztar#45",
+            "cim": "GYIK › Hogyan keresek rá egy számlaszámra vagy összegre?",
+            "horgony": "hogyan-keresek-ra-egy-szamlaszamra-vagy-osszegre",
+            "szoveg": "Írd be a fejléc keresőmezőjébe, és nyomd meg az Enter billentyűt. A rendszer felismeri, hogy számlaszámot, munkalapszámot, összeget vagy szavakat írtál.",
+            "t": "hazipenztar gyi keres szamlaszam osszeg gyi keres szamlaszam osszeg ird fejlec keresomezo nyomd enter billentyu rendszer felismeri szamlaszam munkalapszam osszeg szav irtal",
+            "h": 22
+        },
+        {
+            "id": "penztar#46",
+            "cim": "GYIK › Hogyan nézem meg, ki mennyit vett ki a hónapban?",
+            "horgony": "hogyan-nezem-meg-ki-mennyit-vett-ki-a-honapban",
+            "szoveg": "A **Riport** lapfülön válaszd az **Ez a hónap** időszakot. A **Kivét személyenként** kártya névenként mutatja az összeget és az alkalmak számát.",
+            "t": "hazipenztar gyi nezem mennyi vet honap gyi nezem mennyi vet honap ripor lapful valaszd honap idosz kiv szemelyenk kartya nevenk mut osszeg alkalm szam",
+            "h": 24
+        },
+        {
+            "id": "penztar#47",
+            "cim": "GYIK › Hogyan töltöm le a tételeket Excelbe?",
+            "horgony": "hogyan-toltom-le-a-teteleket-excelbe",
+            "szoveg": "A **Riport** lapfülön az **Excel (CSV) letöltés** gombbal a kiválasztott időszakot, a **Napló** lapfülön az **Excel (CSV)** gombbal az éppen látható napokat.",
+            "t": "hazipenztar gyi toltom tetel excel gyi toltom tetel excel ripor lapful excel csv letoltes gombbal kivalaszt idosz naplo lapful excel csv gombbal epp lathato nap",
+            "h": 25
+        },
+        {
+            "id": "penztar#48",
+            "cim": "GYIK › Elrontja az import a már rögzített tételeimet?",
+            "horgony": "elrontja-az-import-a-mar-rogzitett-teteleimet",
+            "szoveg": "Nem. Az import csak új sorokat ad hozzá, és amit a rendszerben már megszámoltál vagy lezártál, azt a napot nem írja felül. A visszavonás is csak az importált sorokat törli.",
+            "t": "hazipenztar gyi elron impor rogzit teteleim gyi elron impor rogzit teteleim impor uj sor ad hozza rendszer megszamoltal lezartal nap irja felul visszavonas importal sor torli",
+            "h": 26
+        },
+        {
+            "id": "penztar#49",
+            "cim": "GYIK › Feltölthetem újra ugyanazt a táblát?",
+            "horgony": "feltolthetem-ujra-ugyanazt-a-tablat",
+            "szoveg": "Igen. Ami már bent van, kimarad; csak az új sorok kerülnek be. Az előnézet megmutatja, mennyi az új.",
+            "t": "hazipenztar gyi feltolthetem ujra ugyanaz tabl gyi feltolthetem ujra ugyanaz tabl ben kimarad uj sor ar elonez megmut uj",
+            "h": 19
+        },
+        {
+            "id": "penztar#50",
+            "cim": "GYIK › Hogyan vonom vissza az importot?",
+            "horgony": "hogyan-vonom-vissza-az-importot",
+            "szoveg": "Az **Import** ablak alján a **Korábbi import visszavonása…** hivatkozással. Kétszer kell rákattintani: másodszor megerősítésként.",
+            "t": "hazipenztar gyi vonom vissza impor gyi vonom vissza impor impor abl aljan korabbi impor visszavonasa hivatkozassal ketszer rakattintani masodszor megerositesk",
+            "h": 20
+        },
+        {
+            "id": "penztar#51",
+            "cim": "GYIK › Hogyan veszek fel új fizetési módot?",
+            "horgony": "hogyan-veszek-fel-uj-fizetesi-modot",
+            "szoveg": "A Beállítások **Fizetési módok** lapfülén írd be új sorba. Ha készpénznek vagy kártyának számít, a **Házipénztár** lapfülön is vedd fel a megfelelő sorba.",
+            "t": "hazipenztar gyi vesz uj fizetesi mod gyi vesz uj fizetesi mod beallitas fizetesi mod lapful ird uj sor keszpenz kartya szami hazipenztar lapful vedd megfelelo sor",
+            "h": 26
+        },
+        {
+            "id": "penztar#52",
+            "cim": "GYIK › Ki nyithatja meg a pénztár beállításait?",
+            "horgony": "ki-nyithatja-meg-a-penztar-beallitasait",
+            "szoveg": "Csak adminisztrátor. A pénztár oldalát és a fizetés ablakát minden kolléga használhatja.",
+            "t": "hazipenztar gyi nyith penztar beallitas gyi nyith penztar beallitas adminisztrator penztar oldal fizetes abl kollega hasznalh",
+            "h": 16
+        }
+    ]
+}

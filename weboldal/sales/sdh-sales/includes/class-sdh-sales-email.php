@@ -190,6 +190,14 @@ final class SDH_Sales_Email
         }
 
         $nyers = self::tokenek($adat);
+
+        // A sablonban maradt, ismeretlen tokenek üresek lesznek (a látogató ne lásson „{valami}”-t).
+        if (preg_match_all('/\{([a-z0-9_]{1,40})\}/', (string) $s['html'] . (string) ($s['targy'] ?? '') . (string) ($s['szoveg'] ?? ''), $m) > 0) {
+            foreach ($m[0] as $tok) {
+                $nyers += [$tok => ''];
+            }
+        }
+
         $html  = self::feltetel((string) $s['html'], $nyers);
         $targy = self::feltetel((string) ($s['targy'] ?? ''), $nyers);
 

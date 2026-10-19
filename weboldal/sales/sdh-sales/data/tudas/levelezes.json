@@ -1,0 +1,416 @@
+{
+    "kulcs": "levelezes",
+    "cim": "Levelezés",
+    "csoport": "Kapcsolat",
+    "osszefoglalo": "A szerviz e-mail-fiókjai a rendszeren belül: olvasás, írás, válasz, csatolmány, mappák, új levél jelzése minden oldalon, és két ügynök – az egyik a fontos leveleket jelzi, a másik kérésre mappákba rendez.",
+    "darabok": [
+        {
+            "id": "levelezes#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Levelezés** menüpontban a szerviz e-mail-fiókjait kezeled anélkül, hogy kilépnél a rendszerből. Legfeljebb három fiók köthető be.\n\nA levelek a levelezőszolgáltatónál (Gmail) maradnak. Amit itt csinálsz – olvasás, törlés, áthelyezés, küldés –, az a valódi postafiókban történik: a telefonodon is úgy fogod látni.\n\nAmit a Levelezés tud:\n\n- levelek olvasása, írása, válasz, továbbítás, piszkozat, csatolmányok;\n- mappák (Gmail-címkék), áthelyezés, archiválás, spam, törlés, keresés;\n- új levél jelzése a rendszer minden oldalán, fiókonként;\n- **fontos-levél ügynök:** megmondja, melyik levélre kell gyorsan reagálni – csak jelez, mást nem tehet;\n- **rendező ügynök:** kérésre mappákba rendezi a leveleket – csak azt, amit jóváhagysz.",
+            "t": "levelezes mire valo mire valo levelezes menupon szerviz mail fiokj kezeled anelkul kilepnel rendszer legfeljebb harom fio kotheto level levelezoszolgaltatonal gmail marad csinalsz olvasas torles athelyezes kuldes valodi postafi torteni telefonod ugy fogod latni levelezes tud level olvasasa irasa valasz tovabbitas piszkoz csatolmany mapp gmail cim athelyezes archivalas spam torles kereses uj level jelzese rendszer oldalan fiokonk fontos level ugyn megmond level gyorsan reagalni jelez mas teh rendezo ugyn keres mapp rendezi level jovahagysz",
+            "h": 74
+        },
+        {
+            "id": "levelezes#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- **A menüpont:** az oldalmenüben Levelezés néven. Ha új levél jött, a neve mellett „N új” áll.\n- **Az Áttekintésen:** a Levelezés csempéje az olvasatlan levelek számát mutatja, és kiemelve jelzi, ha azonnali teendő van.\n- **A beállításai:** Beállítások → **Levelezés** lapfül (a „Kapcsolat és csapat” sorban).\n\nAmíg nincs bekötött fiók, a menüpont csak egy hivatkozást mutat a Beállítások → Levelezés lapfülre.",
+            "t": "levelezes talalod talalod menup oldalmenu levelezes nev uj level jot neve mell uj all attekintes levelezes csempe olvasatlan level szam mut kiemelve jelzi azonnali teendo beallitas beallitas levelezes lapful kapcsol csap sor amig nincs bekot fio menup hivatkozas mut beallitas levelezes lapful",
+            "h": 42
+        },
+        {
+            "id": "levelezes#3",
+            "cim": "Lépésről lépésre: Gmail-fiók bekötése",
+            "horgony": "lepesrol-lepesre-gmail-fiok-bekotese",
+            "szoveg": "A fiókot a Beállítások → **Levelezés** lapfülön kötöd be. A rendszer a fiókhoz **alkalmazásjelszóval** kapcsolódik.\n\nFontos: a Google-fiók rendes jelszavát soha ne írd be a rendszerbe. Az alkalmazásjelszó egy külön, 16 betűs jelszó, amelyet a Google ad, és amelyet bármikor visszavonhatsz.",
+            "t": "levelezes lepes lepes gmail fio bekotese lepes lepes gmail fio bekotese fio beallitas levelezes lapful kotod rendszer fio alkalmazasjelszo kapcsolodi fontos google fio rendes jelszav soha ne ird rendszer alkalmazasjelszo kul 16 betus jelszo amely google ad amely barmi visszavonhatsz",
+            "h": 40
+        },
+        {
+            "id": "levelezes#4",
+            "cim": "Lépésről lépésre: Gmail-fiók bekötése › 1. Alkalmazásjelszó kérése a Google-nél",
+            "horgony": "lepesrol-lepesre-gmail-fiok-bekotese",
+            "szoveg": "### 1. Alkalmazásjelszó kérése a Google-nél\n\n1. Lépj be a Google-fiókba, és nyisd meg a **Biztonság** részt.\n2. Kapcsold be a **Kétlépcsős azonosítás** lehetőséget. E nélkül alkalmazásjelszó nem kérhető.\n3. Nyisd meg az **Alkalmazásjelszavak** oldalt (`myaccount.google.com/apppasswords`).\n4. Hozz létre egy új jelszót, és adj neki egy felismerhető nevet (például „Műhely”).\n5. Másold ki a kapott 16 betűt.",
+            "t": "levelezes lepes lepes gmail fio bekotese alkalmazasjelszo kerese google nel lepes lepes gmail fio bekotese alkalmazasjelszo kerese google nel alkalmazasjelszo kerese google nel lepj google fio nyisd biztonsag resz kapcsold ketlepcsos azonositas lehetoseg nelkul alkalmazasjelszo kerheto nyisd alkalmazasjelszav oldal myaccoun google com apppasswords hozz let uj jelsz adj neki felismerheto nev peldaul muhely masold kap 16 betu",
+            "h": 57
+        },
+        {
+            "id": "levelezes#5",
+            "cim": "Lépésről lépésre: Gmail-fiók bekötése › 2. A fiók megadása a rendszerben",
+            "horgony": "lepesrol-lepesre-gmail-fiok-bekotese",
+            "szoveg": "### 2. A fiók megadása a rendszerben\n\n1. Nyisd meg a Beállítások → **Levelezés** lapfület. Három fiókhely van: **1. fiók**, **2. fiók**, **3. fiók**.\n2. Az **E-mail-cím** mezőbe írd be a fiók címét (például `szerviz@pelda.hu`).\n3. A **Megjelenő név (feladóként is)** mezőbe azt a nevet, amelyet a címzettek látnak.\n4. Az **Alkalmazásjelszó** mezőbe illeszd be a 16 betűt. A szóközök nem számítanak.\n5. Hagyd bepipálva: **A fiók be van kapcsolva.**\n6. Kattints a lap alján a **Mentés** gombra.",
+            "t": "levelezes lepes lepes gmail fio bekotese fio megadasa rendszer lepes lepes gmail fio bekotese fio megadasa rendszer fio megadasa rendszer nyisd beallitas levelezes lapful harom fiokhely fio fio fio mail cim mezo ird fio cim peldaul szerviz pelda hu megjeleno nev feladok mezo nev amely cimzet lat alkalmazasjelszo mezo illeszd 16 betu szokoz szamita hagyd bepipalva fio kapcsolva kattints lap aljan mentes gomb",
+            "h": 63
+        },
+        {
+            "id": "levelezes#6",
+            "cim": "Lépésről lépésre: Gmail-fiók bekötése › 3. A kapcsolat kipróbálása",
+            "horgony": "lepesrol-lepesre-gmail-fiok-bekotese",
+            "szoveg": "### 3. A kapcsolat kipróbálása\n\n1. Mentés után a jelszó mezője alatt megjelenik a **Kapcsolat ellenőrzése** gomb. Kattints rá.\n2. Ha minden rendben, ezt látod: „A kapcsolat él: N mappa látszik, és a küldés is engedélyezett. (Levél nem ment ki.)”\n3. Hiba esetén a gomb mellett megjelenik, hogy a bejövő (IMAP) vagy a kimenő (SMTP) oldal nem megy.\n4. Nyisd meg a **Levelezés** menüpontot, és küldj egy próbalevelet a saját címedre. Nézd meg, megérkezik-e, és a telefonodon is látszik-e az Elküldött mappában.\n\nFigyelem: a **Kapcsolat ellenőrzése** csak a belépést próbálja ki, levelet nem küld. Hogy a levél tényleg megérkezik-e, azt a próbalevél mutatja meg. Éles használat előtt mindig küldj egyet.\n\nA kapcsolat ellenőrzéséhez rendszergazdai jog kell.",
+            "t": "levelezes lepes lepes gmail fio bekotese kapcsol kiprobalasa lepes lepes gmail fio bekotese kapcsol kiprobalasa kapcsol kiprobalasa mentes utan jelszo mezo ala megjeleni kapcsol ellenorzese gomb kattints rend latod kapcsol mappa latszi kuldes engedelyez level men hiba ese gomb mell megjeleni bejovo imap kimeno smtp oldal megy nyisd levelezes menupon kuldj probale saj cimed nezd megerkezi telefonod latszi elkuld mappa figyelem kapcsol ellenorzese belepes probal level kuld level tenyleg megerkezi probale mut eles hasznal elo kuldj egy kapcsol ellenorzese rendszergazd jog",
+            "h": 81
+        },
+        {
+            "id": "levelezes#7",
+            "cim": "Lépésről lépésre: Gmail-fiók bekötése › Nem Gmail-fiók",
+            "horgony": "lepesrol-lepesre-gmail-fiok-bekotese",
+            "szoveg": "### Nem Gmail-fiók\n\nA **Szerver (Gmailnél nem kell átírni)** rész lenyitható. Gmailnél az alapértékek jók: bejövő `imap.gmail.com`, 993-as port, SSL/TLS; kimenő `smtp.gmail.com`, 465-ös port, SSL/TLS. Más szolgáltatónál itt írhatod át a szervert, a portot, a titkosítást és a felhasználónevet.",
+            "t": "levelezes lepes lepes gmail fio bekotese gmail fio lepes lepes gmail fio bekotese gmail fio gmail fio szerver gmailnel atirni resz lenyithato gmailnel alapert jok bejovo imap gmail com 993 as por ssl tls kimeno smtp gmail com 465 os por ssl tls mas szolgaltatonal irhatod szerv por titkositas felhasznalonev",
+            "h": 50
+        },
+        {
+            "id": "levelezes#8",
+            "cim": "Lépésről lépésre: levél olvasása",
+            "horgony": "lepesrol-lepesre-level-olvasasa",
+            "szoveg": "A Levelezés oldal három hasábból áll: balra a mappák, középen a levéllista, jobbra a megnyitott levél. Fölöttük a fiókok lapfülei.\n\n1. Ha több fiókod van, kattints a kívánt fiók lapfülére. Egyszerre egy fiók mappái és levelei látszanak, a fiókok levelei nem keverednek.\n2. Bal oldalt válassz mappát (például **Beérkezett**).\n3. A listában kattints egy levélre. Jobb oldalt megnyílik.\n4. A megnyitott levél olvasottá válik – a Gmailben is.\n\nA levéllista egy sora: jelölőnégyzet, csillag, feladó, dátum, tárgy és kivonat. Az olvasatlan levél kiemelve áll; ↩ jelzi, ha már válaszoltál rá, gemkapocs, ha csatolmánya van.\n\nEgy oldalon 25 levél fér el; a lista alján a nyilakkal lapozhatsz a régebbiekhez.\n\n### A megnyitott levél\n\n- Felül a tárgy és a műveleti gombok, alatta a **Feladó**, **Címzett**, **Másolat** és **Dátum**.\n- Ha a feladó címe egy ügyfeledé, a neve mellett megjelenik az **Ügyfél: …** hivatkozás. Rákattintva az ügyfél adatlapja nyílik meg.\n- A csatolmányok a levél fölött sorakoznak, névvel és mérettel. Kattintásra letöltődnek.\n- A levél távoli képei alapból nem töltődnek be, hogy a feladó ne lássa, megnyitottad-e. A **Képek megjelenítése** gombbal betöltheted őket.\n\n### Keresés\n\nA fejlécben a **Keresés a megnyitott mappában…** mezőbe írd be a keresett szót, és kattints a **Keresés** gombra. A keresés a levelezőszerveren fut (Gmailnél a Gmail keresője). A találatok fölött a **törlés** gombbal lépsz vissza a teljes listához.",
+            "t": "levelezes lepes lepes level olvasasa lepes lepes level olvasasa levelezes oldal harom hasab all bal mapp kozep levellista jobb megnyit level folot fio lapful tobb fiokod kattints kivan fio lapfule egyszer fio mapp level latsza fio level kevered bal oldal valassz mapp peldaul beerkez lista kattints level jobb oldal megnyili megnyit level olvasotta vali gmail levellista sora jelolonegyz csillag felado datum targy kiv olvasatlan level kiemelve all jelzi valaszoltal gemkapocs csatolmanya oldal 25 level fer lista aljan nyil lapozhatsz regebbi megnyit level felul targy muveleti gomb alatta felado cimz masol datum felado cime ugyfelede neve mell megjeleni ugyfel hivatkozas rakattintva ugyfel adatlap nyili csatolmany level fol sorakoz nev merettel kattintas letoltod level tavoli kep alap toltod felado ne lassa megnyitottad kep megjelenitese gombbal betoltheted oke kereses fejlec kereses megnyit mappa mezo ird keres szo kattints kereses gomb kereses levelezoszerver fut gmailnel gmail kereso talal fol torles gombbal lepsz vissza teljes lista",
+            "h": 151
+        },
+        {
+            "id": "levelezes#9",
+            "cim": "Lépésről lépésre: levél írása és válasz",
+            "horgony": "lepesrol-lepesre-level-irasa-es-valasz",
+            "szoveg": "### Új levél\n\n1. Kattints az **Új levél** gombra. Felugró ablak nyílik.\n2. **Feladó:** több fióknál kattints rá, és válaszd ki, melyik címről menjen a levél.\n3. **Címzett:** írd be a címet. Ahogy a mezőbe állsz, legördül, kinek szoktál írni: az **ügyfelek** e-mail-címei és a postafiók eddigi **feladói** – mindegyiknél a név, a cím és az, honnan való. Gépelve szűkül a lista (a névre és a címre is illeszkedik); a sorra kattintva vagy le-föl nyíllal és **Enterrel** választhatsz. Több címet vesszővel válassz el – a felajánlás mindig az utolsó, épp írt címre vonatkozik. Az **Esc** bezárja a listát; a cím kézzel is beírható.\n4. **Másolat:** két mező – másolat (Cc) és titkos másolat (Bcc). Nem kötelező. Ezekben is legördülnek az ismert címek.\n5. **Tárgy** és a levél szövege. A fiók aláírása magától bekerül.\n6. Kattints a **Küldés** gombra. Siker esetén: „A levél elment.”\n\nA **Mentés piszkozatként** gombbal a levél a Piszkozatok mappába kerül; onnan a **Folytatás** gombbal írhatod tovább.\n\n### Válasz és továbbítás\n\nA megnyitott levél fölött:\n\n- **Válasz** – a feladónak megy. Az eredeti szöveg idézetként a levél alá kerül.\n- **Válasz mindenkinek** – a feladónak, a többi címzett másolatban.\n- **Továbbítás** – az eredeti levél a csatolmányaival együtt megy tovább. Amelyik csatolmány nem kell, annál vedd ki a pipát.\n\nVálasznál a levél abból a fiókból megy, amelyikbe az eredeti érkezett; a feladó ilyenkor nem cserélhető.\n\n### Csatolmány küldése\n\nA levélíró alján kattints a **Fájl csatolása** gombra, és válassz egy vagy több fájlt. A nevük megjelenik a gomb mellett. A csatolmányok együtt legfeljebb 24 MB-ot tehetnek ki.\n\nHa a küldés nem sikerül, ezt látod: „A levél NEM ment el:”, utána a szolgáltató hibaüzenete.",
+            "t": "levelezes lepes lepes level irasa valasz lepes lepes level irasa valasz uj level kattints uj level gomb felugro abl nyili felado tobb fioknal kattints valaszd cim menj level cimz ird cim ahogy mezo allsz legordul kin szoktal irni ugyfel mail cim postafi eddigi feladoi mindegyiknel nev cim honnan valo gepelve szukul lista nev cim illeszkedi sor kattintva fol nyillal enterrel valaszthatsz tobb cim vesszo valassz felajanlas utolso epp irt cim vonatkozi esc bezar lis cim kezzel beirhato masol ket mezo masol cc titkos masol bcc kotelezo eze legordul ism cim targy level szovege fio alairasa maga bekerul kattints kuldes gomb siker ese level elm mentes piszkozatk gombbal level piszkoz mappa ar onnan folytatas gombbal irhatod tovabb valasz tovabbitas megnyit level fol valasz felado megy eredeti szoveg idezetk level ala ar valasz mindenki felado tobbi cimz masol tovabbitas eredeti level csatolmany egyu megy tovabb amelyi csatolmany annal vedd pip valasznal level abbol fio megy amelyi eredeti erkez felado ily cserelheto csatolmany kuldese leveliro aljan kattints fajl csatolasa gomb valassz tobb fajl nev megjeleni gomb mell csatolmany egyu legfeljebb 24 mb ot teh kuldes sikerul latod level men utana szolgaltato hibauzenete",
+            "h": 189
+        },
+        {
+            "id": "levelezes#10",
+            "cim": "Lépésről lépésre: mappák, áthelyezés, törlés",
+            "horgony": "lepesrol-lepesre-mappak-athelyezes-torles",
+            "szoveg": "### Mappák\n\nA bal hasábban felül a rendszermappák állnak: **Beérkezett**, **Csillagozott**, **Fontos**, **Elküldött**, **Piszkozatok**, **Összes levél**, **Spam**, **Kuka**. Alattuk a **Címkék** felirat után a saját mappáid (a Gmailben ezek a címkék). A mappa neve mellett az olvasatlan levelek száma áll.\n\n- **Új mappa:** kattints a lista alján az **Új mappa** gombra, írd be a nevét, majd **OK**.\n- **Átnevezés:** nyisd meg a saját mappát, és a lista fölött kattints az **Átnevezés** gombra.\n- **Mappa törlése:** ugyanott; a gomb felirata **Biztosan törlöd a mappát?** lesz, másodszor is rá kell kattintanod.\n\nA rendszermappák nem nevezhetők át és nem törölhetők.\n\n### Műveletek több levéllel\n\nPipáld ki a leveleket a listában (a lista fölötti négyzet az oldal összes levelét kijelöli), majd használd a gombsort:\n\n| Gomb | Mit csinál |\n|---|---|\n| **Olvasott** / **Olvasatlan** | Átállítja a levelek olvasottságát. |\n| **Archiválás** | A levél kikerül a Beérkezettből, az Összes levélben megmarad. |\n| **Áthelyezés…** | Megnyitja az **Áthelyezés – hová?** ablakot, ott választasz mappát. |\n| **Spam** / **Nem spam** | A Spam mappába teszi, illetve onnan visszahozza. |\n| **Törlés** | A levél a Kukába kerül. |\n| **Végleges törlés** | A Kukában, a Spamben és a Piszkozatokban. Megerősítést kér: **Biztosan? Nem vonható vissza**. |\n\nEgyetlen levélnél ugyanezek a gombok a megnyitott levél fölött is ott vannak. Csillagozni a listában a csillagra kattintva lehet.\n\nFigyelem: véglegesen törölni csak a Kukából, a Spamből és a Piszkozatokból lehet. A végleges törlés nem vonható vissza – a Gmailből is eltűnik a levél.\n\nA **Frissítés** gomb azonnal lekéri az új leveleket és a mappákat. A lista enélkül is követi, ami máshol (például a telefonodon) történt.",
+            "t": "levelezes lepes lepes mapp athelyezes torles lepes lepes mapp athelyezes torles mapp bal hasab felul rendszermapp all beerkez csillagoz fontos elkuld piszkoz osszes level spam kuka alat cim felir utan saj mappaid gmail cim mappa neve mell olvasatlan level szama all uj mappa kattints lista aljan uj mappa gomb ird nev majd atnevezes nyisd saj mapp lista fol kattints atnevezes gomb mappa torlese ugyan gomb felirata biztosan torlod mapp masodszor kattintanod rendszermapp nevezh torolh muvel tobb levellel pipald level lista lista folotti negyz oldal osszes level kijeloli majd hasznald gombsor gomb csinal olvas olvasatlan atalli level olvasottsag archivalas level kikerul beerkezet osszes level megmarad athelyezes megnyi athelyezes hova abl valasztasz mapp spam spam spam mappa teszi illetve onnan visszahozza torles level kuka ar vegleges torles kuka spam piszkoz megerosites ker biztosan vonhato vissza egyetl levelnel ugyanez gomb megnyit level fol van csillagozni lista csillag kattintva figyelem vegleges torolni kuka spam piszkoz vegleges torles vonhato vissza gmail eltuni level frissites gomb azonnal lekeri uj level mapp lista enelkul koveti mashol peldaul telefonod tort",
+            "h": 172
+        },
+        {
+            "id": "levelezes#11",
+            "cim": "Új levél jelzése",
+            "horgony": "uj-level-jelzese",
+            "szoveg": "Az új levelekről a rendszer **minden oldalon** szól, nem csak a Levelezésben.\n\n- **Az oldalmenüben** a Levelezés mellett „N új” jelenik meg. Ez nem az olvasatlan levelek száma: azt mutatja, mennyi levél jött, mióta utoljára megnézted a Beérkezett mappát.\n- **Több fióknál** a menüpont alatt fiókonként külön sor áll, így látod, melyik címre jött a levél. Rákattintva az a fiók nyílik meg.\n- **Felugró jelzés** a jobb alsó sarokban: a feladó, a tárgy, és több fióknál a fiók neve. Rákattintva megnyílik a levél. Egyszerre legfeljebb négy látszik; a többit a „+N további új levél” sor gyűjti össze. Ha az asszisztens figurája be van kapcsolva, a jelzések a figura **bal oldalán** sorakoznak, így a figura nem takarja ki őket; ha a figura épp megszólal, a buborékja a jelzések fölé emelkedik. Keskeny képernyőn (telefonon) a jelzések a figura fölé kerülnek.\n- **Hangjelzés**, ha a Beállításokban be van kapcsolva.\n- **A böngésző értesítése:** a Levelezés fejlécében megjelenő **Értesítések bekapcsolása** gombbal engedélyezheted. Így akkor is kapsz jelzést, ha másik ablakban dolgozol.\n\nA jelzés mindenkinek külön számol. A Zaj besorolású levelekről (hírlevél, reklám) a rendszer nem szól.",
+            "t": "levelezes uj level jelzese uj level jelzese uj level rendszer oldal szol levelezes oldalmenu levelezes mell uj jeleni olvasatlan level szama mut level jot miota utol megnezted beerkez mapp tobb fioknal menup ala fiokonk kul sor all igy latod cim jot level rakattintva fio nyili felugro jelzes jobb also sar felado targy tobb fioknal fio neve rakattintva megnyili level egyszer legfeljebb negy latszi tobbi tovabbi uj level sor gyujti ossze asszisztens figu kapcsolva jelzes figu bal oldalan sorakoz igy figu takar oke figu epp megszolal bubor jelzes fole emelkedi keskeny keperny telef jelzes figu fole ar hangjelzes beallitas kapcsolva bongeszo ertesitese levelezes fejlece megjeleno ertesites bekapcsolasa gombbal engedelyezheted igy kapsz jelzes masi abl dolgozol jelzes mindenki kul szamol zaj besorolasu level hirle reklam rendszer szol",
+            "h": 125
+        },
+        {
+            "id": "levelezes#12",
+            "cim": "Jelszóval védett fiók",
+            "horgony": "jelszoval-vedett-fiok",
+            "szoveg": "Egy fiókot külön jelszóval zárhatsz le a rendszeren belül – például ha a közös gépen nem mindenkinek kell látnia.\n\n- A zárolt fiók lapfülén lakat látszik.\n- Megnyitáskor ez fogad: „Ez a postafiók jelszóval védett.” Írd be a jelszót, és kattints a **Megnyitás** gombra.\n- Amíg nincs megnyitva, a fiók levelei egyáltalán nem jutnak el a böngészőbe. Új levélnél is csak annyit tudsz meg, hogy levél érkezett a védett fiókba.\n- Öt hibás próbálkozás után negyedóra szünet jön: „Túl sok hibás próbálkozás. 15 perc múlva próbáld újra.”\n- A megnyitott fiók egy idő után magától újra zár (alapból 480 perc). Kézzel a fiók címe melletti **Zárás** gombbal zárhatod le.\n\nA jelszót a Beállítások → Levelezés lapfülön, a fióknál adod meg.",
+            "t": "levelezes jelszo ved fio jelszo ved fio fio kul jelszo zarhatsz rendszer belul peldaul kozos gep mindenki latnia zarol fio lapful lak latszi megnyitas fogad postafi jelszo ved ird jelsz kattints megnyitas gomb amig nincs megnyitva fio level egyaltalan jut bongeszo uj levelnel annyi level erkez ved fio ot hibas probalkozas utan negyedo szun jon tul hibas probalkozas 15 perc mulva probald ujra megnyit fio ido utan maga ujra zar alap 480 perc kezzel fio cime melletti zaras gombbal zarhatod jelsz beallitas levelezes lapful fioknal adod",
+            "h": 86
+        },
+        {
+            "id": "levelezes#13",
+            "cim": "A fontos-levél ügynök",
+            "horgony": "a-fontos-level-ugynok",
+            "szoveg": "A fontos-levél ügynök minden beérkező levelet besorol, és megmondja, mire kell gyorsan reagálni.\n\nFontos: ez az ügynök **csak jelez**. Nem ír, nem válaszol, nem töröl, nem mozgat levelet, és nem jelöli olvasottnak. A postafiókhoz nincs is hozzáférése.\n\nA négy szint:\n\n| Szint | Mit jelent | Jellemző példa |\n|---|---|---|\n| **Azonnal** | 1 órán belül reagálni kell. | Hatósági vagy jogi ügy, fiókbiztonság, fizetési figyelmeztetés, ügyfélpanasz, sürgősnek jelzett levél, kiemelt feladó. |\n| **Ma** | Még aznap válaszolni kell. | Ismert ügyfél írt, válasz egy korábbi levélre, kérdés, ajánlatkérés. |\n| **Ráér** | Nem sürgős. | Minden más személyes vagy üzleti levél. |\n| **Zaj** | Nem kell vele foglalkozni. | Hírlevél, reklám, automatikus értesítés. |\n\nHol látod:\n\n- **A listában** a tárgy előtt **Azonnal** vagy **Ma** jelzés áll. Fölé húzva az egeret megjelenik az indok.\n- **A megnyitott levélben** sáv jelzi: „Erre 1 órán belül reagálni kell” vagy „Erre még ma válaszolni kell”, mellette az indok, és hogy szabály vagy AI döntött.\n- **A Teendők nézetben:** a mappák fölött a **Teendők** sor a fiók összes olyan levelét mutatja, amire reagálni kell. Mellette az azonnali teendők száma.\n- **A felugró jelzésben:** az azonnali levél jelzése „Azonnal reagálj” címkét kap, és nem tűnik el magától.\n\nHa végeztél a levéllel, kattints az **Elintézve** gombra a jelzősávban. A levél kikerül a teendők közül. Tévedés esetén a **Mégsem elintézett** gombbal visszateheted. Ha válaszolsz a levélre, az is elintézettnek számít.\n\nAz ügynök szabályok alapján dolgozik; hogy mely feladók és kifejezések számítanak kiemeltnek, azt a Beállításokban adod meg.",
+            "t": "levelezes fontos level ugyn fontos level ugyn fontos level ugyn beerkezo level beso megmond mire gyorsan reagalni fontos ugyn jelez ir valaszol torol mozg level jeloli olvasot postafi nincs hozzaferese negy szin szin jel jellemzo pelda azonnal oran belul reagalni hatosagi jogi ugy fiokbiztonsag fizetesi figyelmeztetes ugyfelpanasz surgos jelz level kiemel felado ma aznap valaszolni ism ugyfel irt valasz korabbi level kerdes ajanlatkeres raer surgos mas szemelyes uzleti level zaj vele foglalkozni hirle reklam automatikus ertesites latod lista targy elo azonnal ma jelzes all fole huzva eger megjeleni ind megnyit level sav jelzi oran belul reagalni ma valaszolni mellette ind szabaly ai dont teend nez mapp fol teend sor fio osszes level mut ami reagalni mellette azonnali teend szama felugro jelzes azonnali level jelzese azonnal reagalj cim kap tuni maga vegeztel levellel kattints elintezve gomb jelzosav level kikerul teend kozul tevedes ese megsem elintez gombbal visszateheted valaszolsz level elintezet szami ugyn szabaly alapjan dolgozi felad kifejezes szamita kiemel beallitas adod",
+            "h": 160
+        },
+        {
+            "id": "levelezes#14",
+            "cim": "A levél-feladat ügynök",
+            "horgony": "a-level-feladat-ugynok",
+            "szoveg": "A harmadik ügynök azokkal a levelekkel foglalkozik, amelyek **minden nap megjönnek, és mindig ugyanaz a dolgunk velük**: a beszállító számlája, a webáruház visszaigazolása. Eddig ez kézi munka volt – és el is úszott: a levél elkeveredett, a számla nem lett kinyomtatva.\n\nMit csinál, ha egy levélre ráillik egy szabály:\n\n1. **feladatot nyit** rá, és addig emlékeztet, amíg el nem intézed,\n2. **mappába teszi** a levelet (ha nincs ilyen mappa, létrehozza),\n3. **felkínálja a mellékelt PDF nyomtatását** (a számlát),\n4. **kiolvassa a levél tételeit**, és amelyikhez telefonszám tartozik, arra **címkét** kínál.\n\nAmit SOHA nem csinál: nem töröl levelet, nem válaszol, nem küld semmit, nem nyúl munkalaphoz, ügyfélhez, pénztárhoz. Nyomtatni is csak gombnyomásra nyomtat. A levél szövege adat: a benne álló „utasításoknak\" nem engedelmeskedik – a szabály a **feladótól és a tárgytól** függ, nem attól, amit a levél kér.",
+            "t": "levelezes level felad ugyn level felad ugyn harmadi ugyn azokkal level foglalkozi amely nap megj ugyanaz dolg vel beszallito szamla webaruhaz visszaigazolasa edd kezi munka usz level elkevered szamla let kinyomtatva csinal level railli szabaly felad nyi add emlekez amig intezed mappa teszi level nincs mappa letrehozza felkinal mellekel pdf nyomtatas szamla kiolvassa level tetel amelyi telefonszam tartozi cim kinal soha csinal torol level valaszol kuld semmi nyul munkalap ugyfel penztar nyomtatni gombnyomas nyom level szovege ada benne allo utasitas engedelmeskedi szabaly felado targy fugg attol level ker",
+            "h": 88
+        },
+        {
+            "id": "levelezes#15",
+            "cim": "A levél-feladat ügynök › A feladatok",
+            "horgony": "a-level-feladat-ugynok",
+            "szoveg": "### A feladatok\n\nA Levelezés oldal tetején a **Feladatok** gomb mutatja, hány teendő van nyitva. Az ablakban feladatonként ott áll:\n\n| Gomb | Mit csinál |\n|---|---|\n| **Levél megnyitása** | A levelezőben megnyitja magát a levelet. |\n| **Számla nyomtatása (fájlnév)** | Új lapon megnyitja a mellékelt PDF-et – onnan nyomtatod. |\n| **Számla megnyitása** | Ha a számla nem melléklet, hanem **link** a levélben, ez a gomb nyitja meg a beszállító oldalán. |\n| **Számla keresése** | Csak akkor látszik, ha sem melléklet, sem link nem került elő. Újraolvassa a levelet a postafiókról. |\n| **Tételek beillesztése** | Ha a tételek nem a levélben, hanem a számlában vannak: másold ide a számla tételsorait, és a rendszer ugyanúgy legyártja a címkéket. |\n| **Címkék (n tétel)** | A címkenyomtató ablaka nyílik meg a tételekkel: kipipálod, melyikre kell, és nyomtatod. |\n| **Elintézve** | Lezárja a feladatot. Ettől szűnik meg az emlékeztető. |\n\nA melléklet, a számla linkje és a tételek a feladat **első megnyitásakor** jönnek elő: a rendszer a levélnek előbb csak az elejét tölti le (abban a PDF még nincs benne), és csak akkor olvassa végig, amikor ránézel. Ezért az első megnyitás egy pillanattal tovább tart.\n\nNem minden beszállító csatolja a számlát: van, amelyik csak egy **letöltési linket** küld. Ilyenkor a melléklet helyén a **Számla megnyitása** gomb áll, és az a beszállító oldalára visz.",
+            "t": "levelezes level felad ugyn felad level felad ugyn felad felad levelezes oldal tetej felad gomb mut hany teendo nyitva abl feladatonk all gomb csinal level megnyitasa levelezo megnyi mag level szamla nyomtatasa fajlnev uj lap megnyi mellekel pdf et onnan nyomtatod szamla megnyitasa szamla mellekl hanem lin level gomb nyi beszallito oldalan szamla keresese latszi mellekl lin ar elo ujraolvassa level postafi tetel beillesztese tetel level hanem szamla van masold ide szamla tetelsor rendszer ugyanugy legyar cim cim tetel cimkenyomtato ablaka nyili tetel kipipalod melyi nyomtatod elintezve lezar felad ettol szuni emlekezteto mellekl szamla lin tetel felad elso megnyitasa jon elo rendszer level elobb elej tolti abban pdf nincs benne olvassa veg ami ranezel ezer elso megnyitas pillanattal tovabb tar beszallito csa szamla amelyi letoltesi lin kuld ily mellekl hely szamla megnyitasa gomb all beszallito oldala visz",
+            "h": 137
+        },
+        {
+            "id": "levelezes#16",
+            "cim": "A levél-feladat ügynök › Ha a tételek nem a levélben vannak",
+            "horgony": "a-level-feladat-ugynok",
+            "szoveg": "### Ha a tételek nem a levélben vannak\n\nVan beszállító, aki a levélbe csak egy értesítőt és egy linket tesz – a tételek a számlában állnak. A rendszer ilyenkor **magától megnézi a számlát**: előbb a mellékelt PDF-et, utána – ha nincs melléklet – a levélben álló számlalink mögötti PDF-et. Amit talál, abból ugyanúgy elkészülnek a tételek, és megjelenik a **Címkék (n tétel)** gomb. Semmit nem kell csinálnod.\n\nEz akkor nem megy, ha a számla csak bejelentkezés után tölthető le, vagy ha a PDF szkennelt kép (nincs benne szöveg). Ilyenkor jön a kézi út:\n\n1. Nyisd meg a számlát (**Számla nyomtatása** vagy **Számla megnyitása**).\n2. Jelöld ki a tételeket, és másold ki (Ctrl + C).\n3. A feladatnál kattints a **Tételek beillesztése** gombra, illeszd be a szöveget (Ctrl + V), és nyomj **Feldolgozás**-t.\n4. Megjelenik a **Címkék (n tétel)** gomb – onnan ugyanúgy nyomtatsz.\n\nA rendszer a **telefonszámot** keresi, és ami a sorában (vagy fölötte) áll, abból rakja össze a címkét: készülék, megnevezés, azonosító, garancia, cikkszám, megjegyzés. **Ár soha nem kerül rá.** Telefonszám nélküli tételből nem lesz címke – azokat senki nem rendelte.\n\nEz akkor is működik, ha a beszállító megváltoztatja a levele vagy a számlája formáját: a beillesztett szöveg mindig feldolgozható.\n\nAmíg van nyitott feladat, a rendszer tízpercenként szól – pontosan azért, hogy a számla kinyomtatása ne maradjon el. Az **Elintézve** után nem szól többet; a lezárt feladat az **Az elintézettek is** gombbal nézhető vissza, és újranyitható.",
+            "t": "levelezes level felad ugyn tetel level van level felad ugyn tetel level van tetel level van beszallito level ertesi lin tesz tetel szamla all rendszer ily maga megnezi szamla elobb mellekel pdf et utana nincs mellekl level allo szamlal mogotti pdf et talal abbol ugyanugy elkeszul tetel megjeleni cim tetel gomb semmi csinalnod megy szamla bejelentkezes utan toltheto pdf szkennel kep nincs benne szoveg ily jon kezi ut nyisd szamla szamla nyomtatasa szamla megnyitasa jelold tetel masold ctrl feladatnal kattints tetel beillesztese gomb illeszd szoveg ctrl nyomj feldolgozas megjeleni cim tetel gomb onnan ugyanugy nyomtatsz rendszer telefonszam keresi sora folotte all abbol rak ossze cim eszkoz megnevezes azonosito garancia cikkszam megjegyzes ar soha ar telefonszam nelkuli tetel cimke azo senki rendelte mukodi beszallito megvaltozt levele szamla formaj beilleszt szoveg feldolgozhato amig nyit felad rendszer tizpercenk szol pontosan azer szamla kinyomtatasa ne maradj elintezve utan szol tobb lezar felad elintezet gombbal nezheto vissza ujranyithato",
+            "h": 153
+        },
+        {
+            "id": "levelezes#17",
+            "cim": "A levél-feladat ügynök › Szabályok",
+            "horgony": "a-level-feladat-ugynok",
+            "szoveg": "### Szabályok\n\n**Beállítások › Levelezés › Levél-feladat ügynök**. Egy szabály két részből áll:\n\n- **Mikor:** a feladó tartalmazza…, a tárgy tartalmazza…, és (ha kell) legyen melléklet. Feltétel nélküli szabály nem fut – nehogy mindenre ráugorjon.\n- **Ettől a naptól:** a szabály csak az ennél újabb levelekkel foglalkozik. Új szabály a bekapcsolás előtti naptól figyel, így a régi postafiókra nem nyit visszamenőleg több száz feladatot. Ha utólag állítod át a napot, a rendszer a nála régebbi **nyitott** feladatokat magától kitakarítja – a lezártakat meghagyja, azok a napló részei.\n- **Mit:** melyik mappába kerüljön, emlékeztessen-e, ajánlja-e a melléklet nyomtatását, és melyik **tételolvasó** nézze át a levelet.\n\nA tételolvasó az, ami egy adott beszállító levélformátumát ismeri. Ha egy beszállítónak saját olvasó készült, az a saját beállítási lapján jelenik meg.",
+            "t": "levelezes level felad ugyn szabaly level felad ugyn szabaly szabaly beallitas levelezes level felad ugyn szabaly ket resz all felado tartalmazza targy tartalmazza legy mellekl feltetel nelkuli szabaly fut nehogy mind raugorj ettol nap szabaly ennel ujabb level foglalkozi uj szabaly bekapcsolas elotti nap figyel igy regi postafi nyi visszamenoleg tobb szaz felad utolag allitod nap rendszer nala regebbi nyit felad maga kitakari lezar meghagy naplo resz mappa kerulj emlekeztess ajanl mellekl nyomtatas tetelolvaso nezze level tetelolvaso ado beszallito levelformatum ismeri beszallito saj olvaso keszul saj beallitasi lapjan jeleni",
+            "h": 89
+        },
+        {
+            "id": "levelezes#18",
+            "cim": "A rendező ügynök",
+            "horgony": "a-rendezo-ugynok",
+            "szoveg": "A rendező ügynök kérésre mappákba rendezi a leveleket. Alapból **ki van kapcsolva**; a Beállítások → Levelezés lapfülön kapcsolod be, és ott adod meg, mit tehet.\n\nFontos: a rendező ügynök **két dolgot tehet**: leveleket áthelyez mappába, és – ha engedélyezed – új mappát hoz létre. Semmi mást. Nem töröl, nem küld levelet, nem válaszol, nem jelöl olvasottnak. A saját jogain nem tud változtatni.",
+            "t": "levelezes rendezo ugyn rendezo ugyn rendezo ugyn keres mapp rendezi level alap kapcsolva beallitas levelezes lapful kapcsolod adod teh fontos rendezo ugyn ket dolg teh level athelyez mappa engedelyezed uj mapp hoz let semmi mas torol kuld level valaszol jelol olvasot saj jogain tud valtoztatni",
+            "h": 45
+        },
+        {
+            "id": "levelezes#19",
+            "cim": "A rendező ügynök › Így használd",
+            "horgony": "a-rendezo-ugynok",
+            "szoveg": "### Így használd\n\n1. Nyisd meg azt a mappát, amelyben rendet akarsz tenni. Ha csak néhány levélről van szó, pipáld ki őket.\n2. Kattints a fejlécben a **Rendező ügynök** gombra.\n3. Az ablak tetején lista mutatja, mit tehet és mit nem ebben a fiókban.\n4. Írd le, mit kérsz – például: „A hírleveleket és a reklámokat tedd a Hírlevelek mappába.”\n5. Kattints a **Terv készítése** gombra.\n6. Megjelenik a terv: csoportonként, hogy hány levél melyik mappába kerülne, néhány példával. Amelyik csoport nem kell, annál vedd ki a pipát.\n7. Ha a tervhez új mappa kell, külön rész kér engedélyt: **Engedélyt kér: új mappa létrehozása**. A pipa alapból nincs bent – csak akkor jön létre a mappa, ha bepipálod.\n8. Kattints a **Végrehajtás** gombra. A végén a „Kész:” lista mutatja, mi történt.\n\nA **Vissza** gombbal átírhatod a kérést, a **Mégsem** gombbal kilépsz – ilyenkor semmi nem változik.",
+            "t": "levelezes rendezo ugyn igy hasznald rendezo ugyn igy hasznald igy hasznald nyisd mapp amely rend akarsz tenni nehany level szo pipald oke kattints fejlec rendezo ugyn gomb abl tetej lista mut teh ebb fio ird kersz peldaul hirle reklam tedd hirle mappa kattints terv keszitese gomb megjeleni terv csoportonk hany level mappa kerulne nehany pelda amelyi csopor annal vedd pip terv uj mappa kul resz ker engedely engedely ker uj mappa letrehozasa pipa alap nincs ben jon let mappa bepipalod kattints vegrehajtas gomb veg kesz lista mut tort vissza gombbal atirhatod keres megsem gombbal kilepsz ily semmi valtozi",
+            "h": 98
+        },
+        {
+            "id": "levelezes#20",
+            "cim": "A rendező ügynök › Szabad szavas kérés vagy szűrő",
+            "horgony": "a-rendezo-ugynok",
+            "szoveg": "### Szabad szavas kérés vagy szűrő\n\n- **Claude API-kulccsal** szabad szavakkal kérhetsz. Ilyenkor a levelek feladója, tárgya és kivonata külső szerverre megy elemzésre.\n- **Kulcs nélkül** szűrővel dolgozik: **A feladó tartalmazza**, **A tárgy tartalmazza**, **Ebbe a mappába**.",
+            "t": "levelezes rendezo ugyn szabad szavas keres szuro rendezo ugyn szabad szavas keres szuro szabad szavas keres szuro claude api kulccsal szabad szav kerhetsz ily level felado targya kivonata kulso szerver megy elemzes kulcs nelkul szuro dolgozi felado tartalmazza targy tartalmazza ebbe mappa",
+            "h": 42
+        },
+        {
+            "id": "levelezes#21",
+            "cim": "A rendező ügynök › Amit tudnod kell",
+            "horgony": "a-rendezo-ugynok",
+            "szoveg": "### Amit tudnod kell\n\n- Az ügynök a megnyitott mappa legújabb, legfeljebb 300 letöltött levelét látja – vagy csak azokat, amelyeket kijelöltél.\n- Egy kérésben legfeljebb annyi levelet mozgat, amennyit a Beállításokban megadtál (alapból 100), és legfeljebb öt új mappát kérhet.\n- A Piszkozatok, az Elküldött, a Csillagozott és a Fontos mappába soha nem tesz levelet. A Kukába és a Spambe csak akkor, ha ezt külön engedélyezted.\n- A levelek szövegében álló „utasításokat” az ügynök nem követi; a nem engedélyezett lépéseket a rendszer kiszűri.",
+            "t": "levelezes rendezo ugyn tudnod rendezo ugyn tudnod tudnod ugyn megnyit mappa legujabb legfeljebb 300 letolt level lat azo amely kijeloltel keres legfeljebb annyi level mozg amennyi beallitas megadtal alap 100 legfeljebb ot uj mapp kerh piszkoz elkuld csillagoz fontos mappa soha tesz level kuka spam kul engedelyezted level szovege allo utasitas ugyn koveti engedelyez lepes rendszer kiszuri",
+            "h": 57
+        },
+        {
+            "id": "levelezes#22",
+            "cim": "A Levelezés lapfül a Beállításokban",
+            "horgony": "a-levelezes-lapful-a-beallitasokban",
+            "szoveg": "A Beállítások → **Levelezés** lapfülön négy rész van: a fiókok, a fontos-levél ügynök, a rendező ügynök és az értesítések. A lap alján a **Mentés** gomb csak ezt a lapfület menti.",
+            "t": "levelezes levelezes lapful beallitas levelezes lapful beallitas beallitas levelezes lapful negy resz fio fontos level ugyn rendezo ugyn ertesites lap aljan mentes gomb lapful menti",
+            "h": 25
+        },
+        {
+            "id": "levelezes#23",
+            "cim": "A Levelezés lapfül a Beállításokban › Fiókok (1–3. fiók)",
+            "horgony": "a-levelezes-lapful-a-beallitasokban",
+            "szoveg": "### Fiókok (1–3. fiók)\n\n| Mező | Mire való |\n|---|---|\n| **E-mail-cím** | A fiók címe. |\n| **Megjelenő név (feladóként is)** | Ez látszik a lapfülön, és ezt látják a címzettek feladóként. |\n| **Alkalmazásjelszó** | A Google-től kapott 16 betű. Mentés után nem jelenik meg újra; csak akkor írd be, ha cserélnéd. |\n| **Kapcsolat ellenőrzése** | Kipróbálja a bejövő és a kimenő kapcsolatot. Levelet nem küld. |\n| **Jelszó törlése** | Mentéskor a rendszer elfelejti az alkalmazásjelszót. |\n| **Külön jelszó a CRM-ben (nem kötelező)** | Ha megadod, a postafiókot csak az nyithatja meg, aki ezt beírja. |\n| **Jelszavas védelem kikapcsolása** | Leveszi a fiókról a külön jelszót. |\n| **Aláírás az új levelek végén** | Magától bekerül az új levelekbe és a válaszokba. |\n| **A fiók be van kapcsolva.** | Pipa nélkül a fiók nem látszik a Levelezésben, de az adatai megmaradnak. |\n| **Szerver (Gmailnél nem kell átírni)** | Felhasználónév, bejövő és kimenő szerver, port, titkosítás. |",
+            "t": "levelezes levelezes lapful beallitas fio fio levelezes lapful beallitas fio fio fio fio mezo mire valo mail cim fio cime megjeleno nev feladok latszi lapful latj cimzet feladok alkalmazasjelszo google tol kap 16 betu mentes utan jeleni ujra ird cserelned kapcsol ellenorzese kiprobal bejovo kimeno kapcsol level kuld jelszo torlese mentes rendszer elfelejti alkalmazasjelsz kul jelszo crm ben kotelezo megadod postafi nyith beir jelszavas vedelem kikapcsolasa leveszi fio kul jelsz alairas uj level veg maga bekerul uj level valasz fio kapcsolva pipa nelkul fio latszi levelezes ada megmarad szerver gmailnel atirni felhasznalonev bejovo kimeno szerver por titkositas",
+            "h": 97
+        },
+        {
+            "id": "levelezes#24",
+            "cim": "A Levelezés lapfül a Beállításokban › Fontos-levél ügynök",
+            "horgony": "a-levelezes-lapful-a-beallitasokban",
+            "szoveg": "### Fontos-levél ügynök\n\n| Mező | Mire való |\n|---|---|\n| **Az ügynök be van kapcsolva.** | Kikapcsolva nincs besorolás és nincs Teendők-jelzés. |\n| **Kiemelt feladók – mindig azonnali** | Soronként egy cím vagy domain. Tőlük minden levél Azonnal szintű. |\n| **Partnerek – teendőnél azonnali, egyébként aznapi** | Soronként egy domain. |\n| **Figyelt kifejezések – azonnali, ha a levélben szerepelnek** | Soronként egy kifejezés, például `garanciális csere`. |\n| **Zajlista – ezekről soha nem szól** | Soronként egy cím vagy domain. |\n| **Mesterséges intelligencia (Claude) is segítsen a besorolásban.** | Bekapcsolva a levelek feladója, tárgya és szövegének eleje külső szerverre megy elemzésre. Ez adattovábbítás: az adatkezelési tájékoztatóban szerepelnie kell. |\n| **Claude API-kulcs** | Az AI-hoz és a rendező ügynök szabad szavas kéréseihez kell. Titkosítva tárolódik. |\n\nKikapcsolt AI mellett csak a szabályok döntenek, a levelek nem hagyják el a szervert. Az AI is csak besorol; amit a szabályok azonnalinak ítéltek, azt nem minősítheti le.",
+            "t": "levelezes levelezes lapful beallitas fontos level ugyn levelezes lapful beallitas fontos level ugyn fontos level ugyn mezo mire valo ugyn kapcsolva kikapcsolva nincs besorolas nincs teend jelzes kiemel felad azonnali soronk cim domain tol level azonnal szintu partner teendonel azonnali egyebk aznapi soronk domain figyel kifejezes azonnali level szerepel soronk kifejezes peldaul garancialis cse zajlista eze soha szol soronk cim domain mesterseges intelligencia claude segits besorolas bekapcsolva level felado targya szovege ele kulso szerver megy elemzes adattovabbitas adatkezelesi tajekoztato szerepelnie claude api kulcs ai hoz rendezo ugyn szabad szavas keres titkositva tarolodi kikapcsol ai mell szabaly donte level hagyj szerv ai beso szabaly azonnali itel minositheti",
+            "h": 106
+        },
+        {
+            "id": "levelezes#25",
+            "cim": "A Levelezés lapfül a Beállításokban › Rendező ügynök",
+            "horgony": "a-levelezes-lapful-a-beallitasokban",
+            "szoveg": "### Rendező ügynök\n\n| Kapcsoló | Mire való |\n|---|---|\n| **A rendező ügynök be van kapcsolva.** | E nélkül a **Rendező ügynök** gomb meg sem jelenik. |\n| **Leveleket áthelyezhet mappába.** | Az alapművelete. |\n| **Új mappát létrehozhat (minden mappa előtt engedélyt kér).** | Kikapcsolva csak meglévő mappába rendezhet. |\n| **A Kukába és a Spambe is tehet levelet.** | Alapból kikapcsolva: oda soha nem mozgat. |\n| **Mozgatás előtt mindig megmutatja a tervet, és jóváhagyást kér.** | Kikapcsolva rögtön mozgat – új mappához akkor is engedélyt kér. |\n| **Egy kérésben legfeljebb ennyi levelet mozgathat** | 1 és 300 között. |\n| **Honnan mozgathat** | **Bármelyik megnyitott mappából** vagy **Csak a Beérkezett mappából**. |\n| **Mely fiókokban dolgozhat** | Fiókonként külön pipa. Amelyik nincs bepipálva, abban az ügynök nem dolgozhat. |\n\nFigyelem: bekapcsolás után a **Mely fiókokban dolgozhat** résznél legalább egy fiókot be kell pipálnod, különben az ügynök sehol nem dolgozhat.",
+            "t": "levelezes levelezes lapful beallitas rendezo ugyn levelezes lapful beallitas rendezo ugyn rendezo ugyn kapcsolo mire valo rendezo ugyn kapcsolva nelkul rendezo ugyn gomb jeleni level athelyezh mappa alapmuvelete uj mapp letrehozh mappa elo engedely ker kikapcsolva meglevo mappa rendezh kuka spam teh level alap kikapcsolva oda soha mozg mozgatas elo megmut terv jovahagyas ker kikapcsolva rog mozg uj mappa engedely ker keres legfeljebb ennyi level mozgath 300 koz honnan mozgath barmelyi megnyit mappa beerkez mappa fio dolgozh fiokonk kul pipa amelyi nincs bepipalva abban ugyn dolgozh figyelem bekapcsolas utan fio dolgozh resznel legalabb fio pipalnod kul ugyn sehol dolgozh",
+            "h": 99
+        },
+        {
+            "id": "levelezes#26",
+            "cim": "A Levelezés lapfül a Beállításokban › Értesítések",
+            "horgony": "a-levelezes-lapful-a-beallitasokban",
+            "szoveg": "### Értesítések\n\n| Mező | Mire való |\n|---|---|\n| **Új levelek keresése (másodpercenként)** | Milyen sűrűn nézzen új levelet a rendszer. 30 és 900 másodperc között; alapból 60. |\n| **A jelszóval megnyitott fiók ennyi perc után újra zár** | 5 és 1440 perc között; alapból 480. |\n| **Hangjelzés új levélnél.** | Rövid hang az új levél jelzése mellé. |",
+            "t": "levelezes levelezes lapful beallitas ertesites levelezes lapful beallitas ertesites ertesites mezo mire valo uj level keresese masodpercenk surun nezz uj level rendszer 30 900 masodperc koz alap 60 jelszo megnyit fio ennyi perc utan ujra zar 1440 perc koz alap 480 hangjelzes uj levelnel rovid hang uj level jelzese melle",
+            "h": 50
+        },
+        {
+            "id": "levelezes#27",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- Az alkalmazásjelszó és az API-kulcs titkosítva tárolódik, és nem jelenik meg újra.\n- A zárolt fiók adatai a jelszó beírásáig nem jutnak el a böngészőbe.\n- A levélben lévő programkód nem fut le; a csatolmány mindig letöltésként érkezik.\n- A fontos-levél ügynök csak jelez. A rendező ügynök csak áthelyez, és engedéllyel mappát hoz létre.",
+            "t": "levelezes szabaly ami rendszer betar szabaly ami rendszer betar alkalmazasjelszo api kulcs titkositva tarolodi jeleni ujra zarol fio ada jelszo beirasa jut bongeszo level levo programkod fut csatolmany letoltesk erkezi fontos level ugyn jelez rendezo ugyn athelyez engedellyel mapp hoz let",
+            "h": 41
+        },
+        {
+            "id": "levelezes#28",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- Az AI-asszisztens (a jobb alsó sarokban élő figura) a „Vezess végig ezen az oldalon” kérésre bemutatja a Levelezés oldalt.\n- A legfontosabb feladóidat vedd fel a **Kiemelt feladók** közé; akinek a jelzései zavarnak, azt a **Zajlistára**.\n- A rendező ügynököt először néhány kijelölt levélen próbáld ki.\n- A teljes leírást és a gyakori kérdéseket a **Súgó** menüpontban találod.",
+            "t": "levelezes tipp tipp ai asszisztens jobb also sar elo figu vezess veg ezen oldal keres bemut levelezes oldal legfontosabb feladoid vedd kiemel felad koze aki jelzes zavar zajlista rendezo ugyn eloszor nehany kijelol level probald teljes leiras gyakori kerdes sugo menupon talalod",
+            "h": 42
+        },
+        {
+            "id": "levelezes#29",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **A Kapcsolat ellenőrzése hibát ír.** Ellenőrizd, hogy a Google-fiókban be van-e kapcsolva a kétlépcsős azonosítás, és hogy az alkalmazásjelszót – nem a rendes jelszót – írtad-e be. Kérj új alkalmazásjelszót, írd be, ments, és próbáld újra.\n- **„Kapcsolati hiba – a legutóbbi állapot látszik.”** A szolgáltató most nem érhető el; kattints később a **Frissítés** gombra.\n- **A levél nem ment el.** Olvasd el a hibaüzenetet. Gyakori ok a hibás cím vagy a túl nagy csatolmány.\n- **„A rendező ügynök ebben a fiókban nem dolgozhat.”** A Beállításokban ez a fiók nincs bepipálva a **Mely fiókokban dolgozhat** résznél.",
+            "t": "levelezes megy megy kapcsol ellenorzese hib ir ellenorizd google fio kapcsolva ketlepcsos azonositas alkalmazasjelsz rendes jelsz irtad kerj uj alkalmazasjelsz ird ments probald ujra kapcsolati hiba legutobbi allap latszi szolgaltato erheto kattints kesobb frissites gomb level men olvasd hibauzen gyakori hibas cim tul nagy csatolmany rendezo ugyn ebb fio dolgozh beallitas fio nincs bepipalva fio dolgozh resznel",
+            "h": 57
+        },
+        {
+            "id": "levelezes#30",
+            "cim": "GYIK › Milyen jelszót írjak be a fiókhoz?",
+            "horgony": "milyen-jelszot-irjak-be-a-fiokhoz",
+            "szoveg": "Alkalmazásjelszót – azt a 16 betűt, amelyet a Google-fiók **Alkalmazásjelszavak** oldalán kapsz. A Google-fiók rendes jelszavát soha ne írd be.",
+            "t": "levelezes gyi jelsz irj fio gyi jelsz irj fio alkalmazasjelsz 16 betu amely google fio alkalmazasjelszav oldalan kapsz google fio rendes jelszav soha ne ird",
+            "h": 25
+        },
+        {
+            "id": "levelezes#31",
+            "cim": "GYIK › Miért nem tudok alkalmazásjelszót kérni a Google-nél?",
+            "horgony": "miert-nem-tudok-alkalmazasjelszot-kerni-a-google-nel",
+            "szoveg": "Valószínűleg nincs bekapcsolva a kétlépcsős azonosítás. Előbb azt kell bekapcsolnod a Google-fiók **Biztonság** részében.",
+            "t": "levelezes gyi tud alkalmazasjelsz kerni google nel gyi tud alkalmazasjelsz kerni google nel valoszinuleg nincs bekapcsolva ketlepcsos azonositas elobb bekapcsolnod google fio biztonsag resze",
+            "h": 24
+        },
+        {
+            "id": "levelezes#32",
+            "cim": "GYIK › Ha itt törlök egy levelet, a telefonomról is eltűnik?",
+            "horgony": "ha-itt-torlok-egy-levelet-a-telefonomrol-is-eltunik",
+            "szoveg": "Igen. A levelek a Gmailben vannak, a rendszer azt mutatja, ami ott van. A törölt levél a Kukába kerül, ott a telefonodon is megtalálod.",
+            "t": "levelezes gyi torl level telefon eltuni gyi torl level telefon eltuni level gmail van rendszer mut torol level kuka ar telefonod megtalalod",
+            "h": 22
+        },
+        {
+            "id": "levelezes#33",
+            "cim": "GYIK › Vissza tudom hozni a törölt levelet?",
+            "horgony": "vissza-tudom-hozni-a-torolt-levelet",
+            "szoveg": "A **Törlés** a Kukába teszi a levelet; onnan az **Áthelyezés…** gombbal visszateheted bármelyik mappába. A **Végleges törlés** után már nem.",
+            "t": "levelezes gyi vissza tudom hozni torol level gyi vissza tudom hozni torol level torles kuka teszi level onnan athelyezes gombbal visszateheted barmelyi mappa vegleges torles utan",
+            "h": 26
+        },
+        {
+            "id": "levelezes#34",
+            "cim": "GYIK › Miért nem „olvasatlan” számot mutat a menü?",
+            "horgony": "miert-nem-olvasatlan-szamot-mutat-a-menu",
+            "szoveg": "Mert a menü azt jelzi, mennyi levél jött a legutóbbi megnézésed óta. Az olvasatlan levelek számát a mappa neve mellett, a fiók lapfülén és az Áttekintés csempéjén látod.",
+            "t": "levelezes gyi olvasatlan szam mut menu gyi olvasatlan szam mut menu menu jelzi level jot legutobbi megnezesed ota olvasatlan level szam mappa neve mell fio lapful attekintes csempej latod",
+            "h": 29
+        },
+        {
+            "id": "levelezes#35",
+            "cim": "GYIK › Honnan tudom, melyik fiókba jött a levél?",
+            "horgony": "honnan-tudom-melyik-fiokba-jott-a-level",
+            "szoveg": "Több fióknál az oldalmenüben a Levelezés alatt fiókonként külön sor jelenik meg, és a felugró jelzés is kiírja a fiók nevét.",
+            "t": "levelezes gyi honnan tudom fio jot level gyi honnan tudom fio jot level tobb fioknal oldalmenu levelezes ala fiokonk kul sor jeleni felugro jelzes kiir fio nev",
+            "h": 27
+        },
+        {
+            "id": "levelezes#36",
+            "cim": "GYIK › Hogyan küldök csatolmányt?",
+            "horgony": "hogyan-kuldok-csatolmanyt",
+            "szoveg": "A levélíróban kattints a **Fájl csatolása** gombra, és válaszd ki a fájlokat. Együtt legfeljebb 24 MB lehet.",
+            "t": "levelezes gyi kuld csatolmany gyi kuld csatolmany leveliro kattints fajl csatolasa gomb valaszd fajl egyu legfeljebb 24 mb",
+            "h": 18
+        },
+        {
+            "id": "levelezes#37",
+            "cim": "GYIK › Miért nem látszanak a képek a levélben?",
+            "horgony": "miert-nem-latszanak-a-kepek-a-levelben",
+            "szoveg": "A távoli képeket a rendszer alapból nem tölti be, mert azokból a feladó látná, hogy megnyitottad a levelet. A **Képek megjelenítése** gombbal betöltheted őket.",
+            "t": "levelezes gyi latsza kep level gyi latsza kep level tavoli kep rendszer alap tolti azo felado latna megnyitottad level kep megjelenitese gombbal betoltheted oke",
+            "h": 24
+        },
+        {
+            "id": "levelezes#38",
+            "cim": "GYIK › Mit jelent az „Azonnal” jelzés egy levélen?",
+            "horgony": "mit-jelent-az-azonnal-jelzes-egy-levelen",
+            "szoveg": "A fontos-levél ügynök szerint erre 1 órán belül reagálni kell. Az indokot a megnyitott levél jelzősávjában olvashatod.",
+            "t": "levelezes gyi jel azonnal jelzes level gyi jel azonnal jelzes level fontos level ugyn szerin oran belul reagalni ind megnyit level jelzosav olvashatod",
+            "h": 23
+        },
+        {
+            "id": "levelezes#39",
+            "cim": "GYIK › Tud az ügynök magától válaszolni vagy törölni?",
+            "horgony": "tud-az-ugynok-magatol-valaszolni-vagy-torolni",
+            "szoveg": "Nem. A fontos-levél ügynök csak jelez. A rendező ügynök csak áthelyez, és engedéllyel mappát hoz létre. Egyik sem tud törölni, küldeni vagy válaszolni.",
+            "t": "levelezes gyi tud ugyn maga valaszolni torolni gyi tud ugyn maga valaszolni torolni fontos level ugyn jelez rendezo ugyn athelyez engedellyel mapp hoz let egyi tud torolni kuldeni valaszolni",
+            "h": 29
+        },
+        {
+            "id": "levelezes#40",
+            "cim": "GYIK › Hogyan tüntetem el a levelet a Teendők közül?",
+            "horgony": "hogyan-tuntetem-el-a-levelet-a-teendok-kozul",
+            "szoveg": "Nyisd meg, és kattints az **Elintézve** gombra. Ha válaszolsz rá, az is elintézettnek számít.",
+            "t": "levelezes gyi tuntetem level teend kozul gyi tuntetem level teend kozul nyisd kattints elintezve gomb valaszolsz elintezet szami",
+            "h": 18
+        },
+        {
+            "id": "levelezes#41",
+            "cim": "GYIK › Az ügynök tévesen sorolt be egy levelet. Mit tehetek?",
+            "horgony": "az-ugynok-tevesen-sorolt-be-egy-levelet-mit-tehetek",
+            "szoveg": "Ha fontosat hagyott ki, vedd fel a feladót a **Kiemelt feladók** közé. Ha feleslegesen szólt, tedd a **Zajlistára**. Mindkettő a Beállítások → Levelezés lapfülön van.",
+            "t": "levelezes gyi ugyn teves sorol level teh gyi ugyn teves sorol level teh fontos hagy vedd felad kiemel felad koze felesleges szol tedd zajlista mindketto beallitas levelezes lapful",
+            "h": 28
+        },
+        {
+            "id": "levelezes#42",
+            "cim": "GYIK › A levélben nincsenek tételek. Hogyan lesz mégis címke?",
+            "horgony": "a-levelben-nincsenek-tetelek-hogyan-lesz-megis-cimke",
+            "szoveg": "A rendszer magától kiolvassa a számla PDF-jéből – a mellékletből, vagy a számlalink mögül letöltve. Ha ez nem megy (bejelentkezés kell hozzá, vagy a PDF szkennelt kép), a feladatnál a **Tételek beillesztése** gombbal másold be a tételsorokat, nyomj **Feldolgozás**-t, és kész a **Címkék** gomb.",
+            "t": "levelezes gyi level nincse tetel megis cimke gyi level nincse tetel megis cimke rendszer maga kiolvassa szamla pdf jebol mellekl szamlal mogul letoltve megy bejelentkezes hozza pdf szkennel kep feladatnal tetel beillesztese gombbal masold tetelsor nyomj feldolgozas kesz cim gomb",
+            "h": 40
+        },
+        {
+            "id": "levelezes#43",
+            "cim": "GYIK › Letölti a rendszer magától a számlát?",
+            "horgony": "letolti-a-rendszer-magatol-a-szamlat",
+            "szoveg": "Csak megnézi: a levélben álló linkre küld egy olvasó kérést, és ha PDF jön vissza, abból kiszedi a tételeket. Semmit nem ment el és nem küld sehova. Ha az oldal bejelentkezést kér, nem erőlteti.",
+            "t": "levelezes gyi letolti rendszer maga szamla gyi letolti rendszer maga szamla megnezi level allo lin kuld olvaso keres pdf jon vissza abbol kiszedi tetel semmi men kuld sehova oldal bejelentkezes ker erolteti",
+            "h": 32
+        },
+        {
+            "id": "levelezes#44",
+            "cim": "GYIK › A feladatnál nincs melléklet. Hol a számla?",
+            "horgony": "a-feladatnal-nincs-melleklet-hol-a-szamla",
+            "szoveg": "Valószínűleg link a levélben: ilyenkor a **Számla megnyitása** gomb visz a beszállító oldalára. Ha egyik sem látszik, a **Számla keresése** gombbal olvastasd újra a levelet.",
+            "t": "levelezes gyi feladatnal nincs mellekl szamla gyi feladatnal nincs mellekl szamla valoszinuleg lin level ily szamla megnyitasa gomb visz beszallito oldala egyi latszi szamla keresese gombbal olvastasd ujra level",
+            "h": 29
+        },
+        {
+            "id": "levelezes#45",
+            "cim": "GYIK › A levél-feladat ügynök régi leveleket szedett elő. Hogyan szabadulok meg tőlük?",
+            "horgony": "a-level-feladat-ugynok-regi-leveleket-szedett-elo-hogyan-szabadulok-meg-toluk",
+            "szoveg": "Állítsd át a szabály **Ettől a naptól** mezőjét, és mentsd. A nála régebbi nyitott feladatok maguktól eltűnnek.",
+            "t": "levelezes gyi level felad ugyn regi level szed elo szabadul tol gyi level felad ugyn regi level szed elo szabadul tol allitsd szabaly ettol nap mezoj mentsd nala regebbi nyit felad mag eltun",
+            "h": 33
+        },
+        {
+            "id": "levelezes#46",
+            "cim": "GYIK › Hogyan kapcsolom be a rendező ügynököt?",
+            "horgony": "hogyan-kapcsolom-be-a-rendezo-ugynokot",
+            "szoveg": "A Beállítások → Levelezés lapfülön pipáld be: **A rendező ügynök be van kapcsolva.**, és jelöld be, mely fiókokban dolgozhat. Mentés után megjelenik a **Rendező ügynök** gomb a Levelezésben.",
+            "t": "levelezes gyi kapcsolom rendezo ugyn gyi kapcsolom rendezo ugyn beallitas levelezes lapful pipald rendezo ugyn kapcsolva jelold fio dolgozh mentes utan megjeleni rendezo ugyn gomb levelezes",
+            "h": 26
+        },
+        {
+            "id": "levelezes#47",
+            "cim": "GYIK › Létrehozhat az ügynök mappát a tudtom nélkül?",
+            "horgony": "letrehozhat-az-ugynok-mappat-a-tudtom-nelkul",
+            "szoveg": "Nem. Minden új mappa előtt külön engedélyt kér, és a pipát neked kell betenned. A Beállításokban ezt a jogát teljesen ki is kapcsolhatod.",
+            "t": "levelezes gyi letrehozh ugyn mapp tudtom nelkul gyi letrehozh ugyn mapp tudtom nelkul uj mappa elo kul engedely ker pip neked betenned beallitas jog teljes kapcsolhatod",
+            "h": 26
+        },
+        {
+            "id": "levelezes#48",
+            "cim": "GYIK › Mi történik, ha a rendező ügynök rossz helyre tett leveleket?",
+            "horgony": "mi-tortenik-ha-a-rendezo-ugynok-rossz-helyre-tett-leveleket",
+            "szoveg": "Nyisd meg azt a mappát, jelöld ki a leveleket, és az **Áthelyezés…** gombbal tedd vissza őket. Az ügynök nem töröl, így levél nem veszhet el.",
+            "t": "levelezes gyi torteni rendezo ugyn rossz hely tet level gyi torteni rendezo ugyn rossz hely tet level nyisd mapp jelold level athelyezes gombbal tedd vissza oke ugyn torol igy level veszh",
+            "h": 31
+        },
+        {
+            "id": "levelezes#49",
+            "cim": "GYIK › Hogyan zárok le egy fiókot a kollégák elől?",
+            "horgony": "hogyan-zarok-le-egy-fiokot-a-kollegak-elol",
+            "szoveg": "A Beállítások → Levelezés lapfülön a fióknál töltsd ki a **Külön jelszó a CRM-ben** mezőt, és ments. Ezután a fiók csak a jelszóval nyitható meg.",
+            "t": "levelezes gyi zar fio kolleg elol gyi zar fio kolleg elol beallitas levelezes lapful fioknal toltsd kul jelszo crm ben mez ments ezutan fio jelszo nyithato",
+            "h": 26
+        },
+        {
+            "id": "levelezes#50",
+            "cim": "GYIK › Elfelejtettem a fiók külön jelszavát. Mi a teendő?",
+            "horgony": "elfelejtettem-a-fiok-kulon-jelszavat-mi-a-teendo",
+            "szoveg": "A Beállítások → Levelezés lapfülön pipáld be a **Jelszavas védelem kikapcsolása** jelölőt, ments, és ha kell, adj meg új jelszót.",
+            "t": "levelezes gyi elfelejtettem fio kul jelszav teendo gyi elfelejtettem fio kul jelszav teendo beallitas levelezes lapful pipald jelszavas vedelem kikapcsolasa jelol ments adj uj jelsz",
+            "h": 25
+        },
+        {
+            "id": "levelezes#51",
+            "cim": "GYIK › Lecseréltem az alkalmazásjelszót a Google-nél. Hol írom át?",
+            "horgony": "lecsereltem-az-alkalmazasjelszot-a-google-nel-hol-irom-at",
+            "szoveg": "A Beállítások → Levelezés lapfülön írd be az újat az **Alkalmazásjelszó** mezőbe, ments, és kattints a **Kapcsolat ellenőrzése** gombra.",
+            "t": "levelezes gyi lecsereltem alkalmazasjelsz google nel irom gyi lecsereltem alkalmazasjelsz google nel irom beallitas levelezes lapful ird uja alkalmazasjelszo mezo ments kattints kapcsol ellenorzese gomb",
+            "h": 25
+        }
+    ]
+}

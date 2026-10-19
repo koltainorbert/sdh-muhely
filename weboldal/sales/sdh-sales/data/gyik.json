@@ -899,8 +899,8 @@
  {
   "kulcs": "elegedettsegi-kerdes",
   "kategoria": "modulok",
-  "kerdes": "Hogyan gyűjthetünk több Google-értékelést?",
-  "valasz": "<p>Az elégedettségi kérdés modul a lezárt javítások után a beállított nap múlva SMS-ben vagy e-mailben 1–5 csillagos értékelést kér. Aki a küszöb fölött értékel, egy gombbal a Google-értékelő oldalra jut. Aki elégedetlen, annak a megjegyzése a munkalapra kerül, és Ön e-mailt kap, hogy felhívhassa. Minden lap csak egyszer kap kérdést.</p>",
+  "kerdes": "Hogyan kérhetünk értékelést az ügyfelektől a javítás után?",
+  "valasz": "<p>Az elégedettségi kérdés a lezárt javítások után a beállított nap múlva SMS-ben vagy e-mailben 1–5 csillagos értékelést és megjegyzést kér. Az eredmény a munkalapra és a riportokba kerül, elégedetlen ügyfélnél Ön azonnal e-mailt kap, hogy felhívhassa. Megadható a cég Google-értékelő linkje is, amelyet az oldal a beállított csillagszámtól ajánl fel. Mielőtt használja, nézze át a Google értékelési irányelveit, mert azok tiltják a csak pozitív értékelések szelektív kérését.</p>",
   "kapcsolodo": [
    "sms-hogyan-mukodik",
    "riportok"

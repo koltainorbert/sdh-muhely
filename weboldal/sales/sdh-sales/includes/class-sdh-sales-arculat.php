@@ -23,6 +23,9 @@ final class SDH_Sales_Arculat
     /** @var array<string, array{0: string, 1: string}>|null */
     private static ?array $alap_cache = null;
 
+    /** @var array<string, string>|null az admin élő előnézetének (még nem mentett) értékei erre a kérésre */
+    private static ?array $elonezet = null;
+
     public static function init(): void
     {
         add_action('wp_head', [self::class, 'kiir'], 99);
@@ -547,9 +550,15 @@ final class SDH_Sales_Arculat
         return $ki;
     }
 
+    /** Az előnézeti értékek bekapcsolása erre a kérésre (az admin előnézeti tokenje alapján). @param array<string, string> $terkep */
+    public static function elonezet(array $terkep): void
+    {
+        self::$elonezet = $terkep;
+    }
+
     public static function kiir(): void
     {
-        $css = self::css();
+        $css = self::css(self::$elonezet);
 
         if ($css !== '') {
             echo '<style id="sdh-sales-arculat">' . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- érvényesített tokenek.

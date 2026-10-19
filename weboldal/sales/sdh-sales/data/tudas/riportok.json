@@ -1,0 +1,168 @@
+{
+    "kulcs": "riportok",
+    "cim": "Riportok",
+    "csoport": "Rendszer",
+    "osszefoglalo": "A Riportok menüpont a lezárt lapokból mutatja az átfutási időt, a technikusok teljesítményét, a javítási arányt, a bevételt fajta, eszközkategória és termékkategória szerint, az árajánlatokat és az utolsó 12 hónapot.",
+    "darabok": [
+        {
+            "id": "riportok#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Riportok** egy oldalon mutatja, hogyan megy a szerviz: mennyi idő alatt készülnek el a javítások, ki mennyit javított, mennyi jön vissza garanciában, és miből jön a bevétel. Csak adminisztrátor látja.\n\nMinden szám a **lezárt** lapokból jön, a **lezárás napja** szerint: ami egy időszakban lezárult, az abba az időszakba számít. A még nyitott lapok nincsenek benne.",
+            "t": "ripor mire valo mire valo ripor oldal mut megy szerviz ido ala keszul javitas mennyi javit jon vissza garancia mibol jon bevetel adminisztrator lat szam lezar lap jon lezaras nap szerin idosz lezarul abba idosz szami nyit lap nincse benne",
+            "h": 40
+        },
+        {
+            "id": "riportok#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "A bal oldali menüben a **Riportok** menüpont (adminisztrátornak). Az oldal tetején választod az időszakot: **Ez a hónap**, **Előző hónap**, **Utolsó 30 nap**, **Idén** – vagy a **Tól** és **Ig** mezővel egyénit, a **Mutasd** gombbal.",
+            "t": "ripor talalod talalod bal oldali menu ripor menup adminisztrator oldal tetej valasztod idosz honap elozo honap utolso 30 nap iden tol ig mezo egyeni mutasd gombbal",
+            "h": 26
+        },
+        {
+            "id": "riportok#3",
+            "cim": "A számok",
+            "horgony": "a-szamok",
+            "szoveg": "| Csempe | Mit mutat |\n|---|---|\n| **Lezárt javítás** | Hány javítási munkalap zárult le az időszakban (az érvénytelen nem számít). |\n| **Átlagos átfutás** | A felvétel (Készült) és a lezárás között eltelt napok átlaga; alatta a medián (a „tipikus” érték – egy-egy nagyon hosszú javítás nem húzza el). |\n| **Sikeres javítás** | A lezárt javítások hány százaléka NEM jött vissza garanciában (Javítási garancia). Alatta: hány jött vissza. |\n| **Bevétel (bruttó)** | A lezárt lapok végösszege (javítás, árukiadás, rendelés). |\n| **Árajánlat** | Az online árajánlatok: elfogadva / elküldve, és hány lett elutasítva. |\n| **Elégedettség** | Az ügyfelek értékeléseinek átlaga (1–5 csillag), hány értékelés jött az időszakban, és ebből hány elégedett (Elégedettségi kérdés). |",
+            "t": "ripor szam szam csempe mut lezar javitas hany javitasi munkalap zarul idosz ervenytel szami atlagos atfutas felvetel keszul lezaras koz eltel nap atlaga alatta median tipikus ert hosszu javitas huzza sikeres javitas lezar javitas hany szazaleka jot vissza garancia javitasi garancia alatta hany jot vissza bevetel brutto lezar lap vegosszege javitas arukiadas rendeles arajanl online arajanl elfogadva elkuldve hany let elutasitva elegedettseg ugyfel ertekeles atlaga csillag hany ertekeles jot idosz ebbol hany eleged elegedettsegi kerdes",
+            "h": 75
+        },
+        {
+            "id": "riportok#4",
+            "cim": "Technikusonként",
+            "horgony": "technikusonkent",
+            "szoveg": "A **felelős** szerint: hány javítása zárult le, mennyi volt nála az átlagos átfutás, mekkora bevétel, és hány javítása jött vissza garanciában (és ez hány százalék). A sáv a legtöbbet javítóhoz méri a többieket.\n\nJó tudni: a felelős a munkalap **Felelős** mezője. Ha egy lapnak nincs felelőse, „(nincs felelős)” sorban áll.",
+            "t": "ripor technikusonk technikusonk felelos szerin hany javitasa zarul nala atlagos atfutas mekko bevetel hany javitasa jot vissza garancia hany szazal sav legtobb javito meri tobbi jo tudni felelos munkalap felelos mezo lap nincs felelose nincs felelos sor all",
+            "h": 38
+        },
+        {
+            "id": "riportok#5",
+            "cim": "Bevétel kategóriák szerint",
+            "horgony": "bevetel-kategoriak-szerint",
+            "szoveg": "- **Fajtánként:** javítás, napi árukiadás, rendelés – lapszám és bevétel.\n- **Tételek szerint:** a szolgáltatások és a termékek összege, a termékek a **kategóriájuk** szerint is (a legnagyobb nyolc).\n- **Javítás eszközkategóriánként:** telefon, tablet, laptop… – hány javítás és mekkora bevétel. Alatta: hány javítási lap lett érvénytelen, és hány garanciális visszatérés érkezett az időszakban.",
+            "t": "ripor bevetel kategori szerin bevetel kategori szerin fajtank javitas napi arukiadas rendeles lapszam bevetel tetel szerin szolgaltatas term osszege term kategoria szerin legnagyobb nyolc javitas eszkozkategoriank telef tabl laptop hany javitas mekko bevetel alatta hany javitasi lap let ervenytel hany garancialis visszateres erkez idosz",
+            "h": 44
+        },
+        {
+            "id": "riportok#6",
+            "cim": "Az utolsó 12 hónap",
+            "horgony": "az-utolso-12-honap",
+            "szoveg": "Havonta a lezárt javítások száma és a bevétel, sávval – így látszik a szezon és a trend.",
+            "t": "ripor utolso 12 honap utolso 12 honap havonta lezar javitas szama bevetel sav igy latszi szez trend",
+            "h": 17
+        },
+        {
+            "id": "riportok#7",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- Csak lezárt lap számít, a **lezárás napja** szerint.\n- Az **érvénytelen** lap nem számít lezárt javításnak, és bevételt sem hoz.\n- A bevétel a lap **végösszege** – nem a pénztár. A pénztár forgalmát a Pénztár riportja mutatja.\n- A garanciális visszatérés az eredeti lapnál számít (amelyiket a lap visszatérésként jelöl).",
+            "t": "ripor szabaly ami rendszer betar szabaly ami rendszer betar lezar lap szami lezaras nap szerin ervenytel lap szami lezar javitas bevetel hoz bevetel lap vegosszege penztar penztar forgalm penztar ripor mut garancialis visszateres eredeti lapnal szami amelyi lap visszateresk jelol",
+            "h": 40
+        },
+        {
+            "id": "riportok#8",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- A hónap végén nézd meg az **Előző hónap** számait: átfutás, sikeres javítás, technikusok.\n- Ha az átlagos átfutás sokkal nagyobb a mediánnál, van néhány nagyon elhúzódó javítás – keresd meg őket a Munkalapok listában.\n- A **Sikeres javítás** csak akkor pontos, ha a visszajött készüléket **Garanciális visszatérésként** rögzítitek.",
+            "t": "ripor tipp tipp honap veg nezd elozo honap szam atfutas sikeres javitas technikus atlagos atfutas sokkal nagyobb mediannal nehany elhuzodo javitas keresd oke munkalap lista sikeres javitas pontos visszaj eszkoz garancialis visszateresk rogziti",
+            "h": 33
+        },
+        {
+            "id": "riportok#9",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **Minden nulla:** az időszakban nem zárult le lap, vagy a lapoknak nincs lezárás-napja. Válassz hosszabb időszakot (Idén).\n- **Hiányzik egy technikus:** csak az látszik, akinek az időszakban volt lezárt javítása.\n- **Nem látom a menüpontot:** a Riportok csak adminisztrátornak jelenik meg.",
+            "t": "ripor megy megy nulla idosz zarul lap lap nincs lezaras nap valassz hosszabb idosz iden hianyzi technikus latszi aki idosz lezar javitasa latom menupon ripor adminisztrator jeleni",
+            "h": 27
+        },
+        {
+            "id": "riportok#10",
+            "cim": "GYIK › Hogyan nézem meg, mennyi idő alatt készülnek el a javítások?",
+            "horgony": "hogyan-nezem-meg-mennyi-ido-alatt-keszulnek-el-a-javitasok",
+            "szoveg": "A **Riportok** menüpontban az **Átlagos átfutás** csempe mutatja (alatta a medián). Technikusonként is látszik.",
+            "t": "ripor gyi nezem ido ala keszul javitas gyi nezem ido ala keszul javitas ripor menupon atlagos atfutas csempe mut alatta median technikusonk latszi",
+            "h": 23
+        },
+        {
+            "id": "riportok#11",
+            "cim": "GYIK › Ki javított a legtöbbet a hónapban?",
+            "horgony": "ki-javitott-a-legtobbet-a-honapban",
+            "szoveg": "A **Riportok › Technikusonként** táblázat a lezárt javítások száma szerint rendez.",
+            "t": "ripor gyi javit legtobb honap gyi javit legtobb honap ripor technikusonk tablaz lezar javitas szama szerin rendez",
+            "h": 17
+        },
+        {
+            "id": "riportok#12",
+            "cim": "GYIK › Mi a sikeres javítás aránya?",
+            "horgony": "mi-a-sikeres-javitas-aranya",
+            "szoveg": "A lezárt javítások közül azok aránya, amelyek nem jöttek vissza garanciában.",
+            "t": "ripor gyi sikeres javitas aranya gyi sikeres javitas aranya lezar javitas kozul aranya amely jot vissza garancia",
+            "h": 17
+        },
+        {
+            "id": "riportok#13",
+            "cim": "GYIK › Miből jön a legtöbb bevétel?",
+            "horgony": "mibol-jon-a-legtobb-bevetel",
+            "szoveg": "A **Bevétel** dobozban fajtánként és tételek szerint, a **Javítás eszközkategóriánként** dobozban készüléktípus szerint látszik.",
+            "t": "ripor gyi mibol jon legtobb bevetel gyi mibol jon legtobb bevetel bevetel doboz fajtank tetel szerin javitas eszkozkategoriank doboz keszulektipus szerin latszi",
+            "h": 22
+        },
+        {
+            "id": "riportok#14",
+            "cim": "GYIK › Hogyan nézek meg egy régebbi időszakot?",
+            "horgony": "hogyan-nezek-meg-egy-regebbi-idoszakot",
+            "szoveg": "Az oldal tetején válaszd az **Egyéni** időszakot, add meg a kezdő és a záró napot, majd **Mutasd**.",
+            "t": "ripor gyi nez regebbi idosz gyi nez regebbi idosz oldal tetej valaszd egyeni idosz add kezdo zaro nap majd mutasd",
+            "h": 20
+        },
+        {
+            "id": "riportok#15",
+            "cim": "GYIK › Miért nem látom a Riportok menüpontot?",
+            "horgony": "miert-nem-latom-a-riportok-menupontot",
+            "szoveg": "Csak adminisztrátor látja. Kérd meg az adminisztrátort, hogy nézze meg ő, vagy adjon neked adminisztrátori szerepkört.",
+            "t": "ripor gyi latom ripor menupon gyi latom ripor menupon adminisztrator lat kerd adminisztrator nezze adj neked adminisztratori szerep",
+            "h": 18
+        },
+        {
+            "id": "riportok#16",
+            "cim": "GYIK › Beleszámít az érvénytelenített munkalap?",
+            "horgony": "beleszamit-az-ervenytelenitett-munkalap",
+            "szoveg": "Nem. Az érvénytelen lapot külön számolja, a bevételbe és az átfutásba nem kerül bele.",
+            "t": "ripor gyi beleszami ervenytelenit munkalap gyi beleszami ervenytelenit munkalap ervenytel lap kul szamol bevetel atfutas ar bele",
+            "h": 17
+        },
+        {
+            "id": "riportok#17",
+            "cim": "GYIK › Mitől számít egy javítás az időszakba?",
+            "horgony": "mitol-szamit-egy-javitas-az-idoszakba",
+            "szoveg": "A lezárás napjától. A felvétel lehet korábbi is; az átfutás a felvételtől a lezárásig eltelt napok száma.",
+            "t": "ripor gyi mitol szami javitas idosz gyi mitol szami javitas idosz lezaras nap felvetel korabbi atfutas felvetel lezaras eltel nap szama",
+            "h": 21
+        },
+        {
+            "id": "riportok#18",
+            "cim": "GYIK › Mi a különbség az átlag és a medián között?",
+            "horgony": "mi-a-kulonbseg-az-atlag-es-a-median-kozott",
+            "szoveg": "Az átlagot egy-egy nagyon hosszú javítás felhúzza. A medián a középső érték: a javítások fele ennél gyorsabban készül el.",
+            "t": "ripor gyi kulonbseg atlag median koz gyi kulonbseg atlag median koz atlag hosszu javitas felhuzza median kozepso ert javitas fele ennel gyorsab keszul",
+            "h": 23
+        },
+        {
+            "id": "riportok#19",
+            "cim": "GYIK › Kinek számít a javítás, ha többen dolgoztak rajta?",
+            "horgony": "kinek-szamit-a-javitas-ha-tobben-dolgoztak-rajta",
+            "szoveg": "A munkalap felelősének. Ha nincs felelős, a „(nincs felelős)” sorba kerül.",
+            "t": "ripor gyi kin szami javitas tob dolgoz rajta gyi kin szami javitas tob dolgoz rajta munkalap felelose nincs felelos nincs felelos sor ar",
+            "h": 23
+        },
+        {
+            "id": "riportok#20",
+            "cim": "GYIK › Látszik az árajánlatok elfogadási aránya?",
+            "horgony": "latszik-az-arajanlatok-elfogadasi-aranya",
+            "szoveg": "Igen, az **Árajánlat** csempén: hányat fogadtak el az elküldöttekből, és hányat utasítottak el.",
+            "t": "ripor gyi latszi arajanl elfogadasi aranya gyi latszi arajanl elfogadasi aranya arajanl csemp hany fogad elkuldot hany utasitot",
+            "h": 18
+        }
+    ]
+}

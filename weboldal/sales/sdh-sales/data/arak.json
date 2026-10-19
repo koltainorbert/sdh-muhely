@@ -1,0 +1,439 @@
+{
+  "megjegyzes": "KITALÁLT ÁRJAVASLAT (kutató, 2026-10-19) – a piaci árakhoz igazítva (lásd dokumentacio/kutatas/arazas.md), élesítés előtt Norbi döntése. Minden ár nettó, egész forint; éves = havi × 12 − 15%.",
+  "csomagok": [
+    {
+      "kulcs": "start",
+      "nev": "Start",
+      "leiras": "Egy pultos szerviznek: munkalap fotóval és aláírással, ügyfél- és eszköztörzs, IMEI/telefonszám/sorozatszám-keresés, nyomtatványok, ügyfél-követőoldal, titkosított mentés, kétlépcsős belépés, GDPR-anonimizálás, e-mailes támogatás és frissítések.",
+      "havi": 9900,
+      "eves": 100980,
+      "felhasznalo_alap": 2,
+      "felhasznalo_extra_havi": 1900,
+      "telephely_alap": 1,
+      "telephely_extra_havi": 4900,
+      "modulok": [
+        "uzenetek",
+        "nyomtatas",
+        "tac",
+        "mockup"
+      ],
+      "kiemelt": false,
+      "cta": "Megveszem",
+      "max_peldany": 1
+    },
+    {
+      "kulcs": "pro",
+      "nev": "Pro",
+      "leiras": "A teljes szervizpult: készlet és alkatrész-foglalás, napi árukiadás, házipénztár, Számlázz.hu-számla a munkalapról, SMS-értesítés, naptár és online időpontfoglalás, IMEI-lekérdezés, Brother-címkék.",
+      "havi": 19900,
+      "eves": 202980,
+      "felhasznalo_alap": 5,
+      "felhasznalo_extra_havi": 1900,
+      "telephely_alap": 1,
+      "telephely_extra_havi": 4900,
+      "modulok": [
+        "termekek",
+        "arukiadas",
+        "rendelesek",
+        "penztar",
+        "szamlazas",
+        "uzenetek",
+        "sms",
+        "naptar",
+        "foglalas",
+        "nyomtatas",
+        "imei",
+        "tac",
+        "matrica",
+        "mockup"
+      ],
+      "kiemelt": true,
+      "cta": "Megveszem",
+      "max_peldany": 1
+    },
+    {
+      "kulcs": "business",
+      "nev": "Business",
+      "leiras": "Több kolléga, két telephely: minden modul, AI-asszisztens, levelezés a rendszerben, csapat-üzenetek, szerepkörök és jogosultságok, közös gépen PIN-es azonosítás.",
+      "havi": 34900,
+      "eves": 355980,
+      "felhasznalo_alap": 10,
+      "felhasznalo_extra_havi": 1500,
+      "telephely_alap": 2,
+      "telephely_extra_havi": 3900,
+      "modulok": [
+        "*"
+      ],
+      "kiemelt": false,
+      "cta": "Megveszem",
+      "max_peldany": 2
+    },
+    {
+      "kulcs": "enterprise",
+      "nev": "Enterprise",
+      "leiras": "Szervizláncoknak és nagy forgalomnak: minden modul, 25 felhasználó és 5 telephely-től, saját szerveres üzem, egyedi modulok, kiemelt támogatás – egyedi ajánlat alapján.",
+      "havi": 69900,
+      "eves": 712980,
+      "felhasznalo_alap": 25,
+      "felhasznalo_extra_havi": 1200,
+      "telephely_alap": 5,
+      "telephely_extra_havi": 2900,
+      "modulok": [
+        "*"
+      ],
+      "kiemelt": false,
+      "cta": "Ajánlatot kérek",
+      "max_peldany": 5,
+      "ajanlatkeres": true,
+      "ar_tol": true
+    }
+  ],
+  "modulok": [
+    {
+      "kulcs": "termekek",
+      "nev": "Termékek és készlet",
+      "csoport": "Értékesítés",
+      "havi": 2990,
+      "eves": 30498,
+      "leiras": "Termékkatalógus, készlet, vonalkód; foglalás munkalapra, utánrendelési javaslat.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "arukiadas",
+      "nev": "Napi árukiadás",
+      "csoport": "Értékesítés",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "Eladás javítás nélkül (termék vagy szolgáltatás), fizetéssel, előleggel, több helyszínnel.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "rendelesek",
+      "nev": "Rendelések",
+      "csoport": "Értékesítés",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "Beszállítói rendelések ügyfélhez kötve, értesítéssel az áru megérkezéséről. Az Ügyfélüzenetek modult igényli.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "penztar",
+      "nev": "Házipénztár",
+      "csoport": "Pénzügy",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "Napi kassza, címletes zárás, riport, statisztika, Excel-import.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "szamlazas",
+      "nev": "Számlázz.hu számlázás",
+      "csoport": "Pénzügy",
+      "havi": 2490,
+      "eves": 25398,
+      "leiras": "Valódi számla a munkalapról gombnyomásra, tételesen. A Számlázz.hu-előfizetés díja nem része.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "uzenetek",
+      "nev": "Ügyfélüzenetek és RMA-oldal",
+      "csoport": "Ügyfélkapcsolat",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "Az ügyfél QR-kóddal követi a javítást; csevegő a munkalapon, online árajánlat-elfogadás, elégedettségi kérdőív.",
+      "csomagban": [
+        "start",
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "sms",
+      "nev": "SMS-értesítések",
+      "csoport": "Ügyfélkapcsolat",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "SMS a bolti androidos telefonról: sablonok, szabályok, bejövő SMS, napló. Az Ügyfélüzenetek modult igényli; a mobilszolgáltató díja nem része.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "levelezes",
+      "nev": "Levelezés",
+      "csoport": "Ügyfélkapcsolat",
+      "havi": 2490,
+      "eves": 25398,
+      "leiras": "A cég e-mail-fiókjai a rendszerben (IMAP / SMTP), fontos levelek szűrése, rendező ügynök.",
+      "csomagban": [
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "csapat",
+      "nev": "Csapat-üzenetek",
+      "csoport": "Csapat és idő",
+      "havi": 990,
+      "eves": 10098,
+      "leiras": "Belső csevegés vagy üzenőfal (cetlik) a kollégáknak.",
+      "csomagban": [
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "naptar",
+      "nev": "Naptár",
+      "csoport": "Csapat és idő",
+      "havi": 990,
+      "eves": 10098,
+      "leiras": "Naptár névenként, emlékeztetőkkel, e-mail-értesítéssel és napi összefoglalóval.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "foglalas",
+      "nev": "Online időpontfoglalás",
+      "csoport": "Csapat és idő",
+      "havi": 1990,
+      "eves": 20298,
+      "leiras": "Az ügyfelek a weboldalról foglalnak időpontot; visszaigazoló e-mail lemondó linkkel. A Naptár modult igényli.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "asszisztens",
+      "nev": "AI-asszisztens",
+      "csoport": "Mesterséges intelligencia",
+      "havi": 3990,
+      "eves": 40698,
+      "leiras": "Szikra: végigvezet, válaszol, és csak jóváhagyással módosít. A mesterségesintelligencia-szolgáltató (Claude) használati díja nem része; saját API-kulcs kell.",
+      "csomagban": [
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "nyomtatas",
+      "nev": "Nyomtatványok",
+      "csoport": "Dokumentumok és készülékadatok",
+      "havi": 990,
+      "eves": 10098,
+      "leiras": "Átvételi elismervény, munkalap, árajánlat, szállítólevél – PDF, nyomtatás, e-mail.",
+      "csomagban": [
+        "start",
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "imei",
+      "nev": "IMEI-lekérdezés",
+      "csoport": "Dokumentumok és készülékadatok",
+      "havi": 1490,
+      "eves": 15198,
+      "leiras": "Fizetős IMEI-szolgáltató és ingyenes ellenőrző oldalak; a gyári adatok beillesztése. A szolgáltató díja nem része.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "tac",
+      "nev": "TAC-adatbázis",
+      "csoport": "Dokumentumok és készülékadatok",
+      "havi": 990,
+      "eves": 10098,
+      "leiras": "Az IMEI elejéből felismeri a gyártót és a típust, és tanul a felvitt készülékekből.",
+      "csomagban": [
+        "start",
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "matrica",
+      "nev": "Címkenyomtatás (Brother)",
+      "csoport": "Dokumentumok és készülékadatok",
+      "havi": 1490,
+      "eves": 15198,
+      "leiras": "Brother QL címkenyomtató: RMA-matrica, termék- és szolgáltatáscímke vonalkóddal.",
+      "csomagban": [
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    },
+    {
+      "kulcs": "mockup",
+      "nev": "Eszköz-mockupok",
+      "csoport": "Dokumentumok és készülékadatok",
+      "havi": 490,
+      "eves": 4998,
+      "leiras": "Termékkép minden eszköz mellett (kategória, gyártó, típus szerint), saját képekkel.",
+      "csomagban": [
+        "start",
+        "pro",
+        "business",
+        "enterprise"
+      ]
+    }
+  ],
+  "szolgaltatasok": [
+    {
+      "kulcs": "telepites",
+      "nev": "Első telepítés",
+      "tipus": "egyszeri",
+      "ar": 39900,
+      "leiras": "Telepítés a saját tárhelyre vagy szerverre, alapbeállítások (cégadatok, nyomtatványok, mentés, kétlépcsős belépés), átadás távoli kapcsolattal."
+    },
+    {
+      "kulcs": "telepites_telephely",
+      "nev": "Telepítés új telephelyre",
+      "tipus": "egyszeri",
+      "ar": 24900,
+      "leiras": "Új telephely vagy új példány beállítása a meglévő licenchez: helyszín, pénztár, nyomtatók, címkenyomtató."
+    },
+    {
+      "kulcs": "oktatas",
+      "nev": "Oktatás (1 óra)",
+      "tipus": "egyszeri",
+      "ar": 12900,
+      "egyseg": "ora",
+      "leiras": "Távoli oktatás a csapatnak óradíjban: munkalap-folyamat, készlet, pénztár, számlázás – a szerviz saját adataival."
+    },
+    {
+      "kulcs": "support_alap",
+      "nev": "Support – Alap",
+      "tipus": "havi",
+      "ar": 0,
+      "leiras": "Minden licenc része: e-mailes támogatás, frissítések, súgó és tudásbázis.",
+      "sla": {
+        "valaszido_ora": 24,
+        "munkaido": "H–P 9–17"
+      }
+    },
+    {
+      "kulcs": "support_pro",
+      "nev": "Support – Pro",
+      "tipus": "havi",
+      "ar": 9900,
+      "leiras": "Telefonos és e-mailes támogatás, távoli belépés hibakereséshez az ügyfél engedélyével, havi 1 óra beállítási segítség.",
+      "sla": {
+        "valaszido_ora": 8,
+        "munkaido": "H–P 8–18"
+      }
+    },
+    {
+      "kulcs": "support_premium",
+      "nev": "Support – Prémium",
+      "tipus": "havi",
+      "ar": 29900,
+      "leiras": "Kiemelt sor, szombati ügyelet, havi 3 óra beállítási segítség, frissítés előtti ellenőrzés a saját példányon.",
+      "sla": {
+        "valaszido_ora": 2,
+        "munkaido": "H–P 8–20, Szo 9–13"
+      }
+    },
+    {
+      "kulcs": "hibajegy_5",
+      "nev": "Hibajegy-csomag – 5 db",
+      "tipus": "egyszeri",
+      "ar": 24900,
+      "leiras": "5 egyedi kérés vagy hibaelhárítás (legfeljebb 30 perc / jegy), 12 hónapig felhasználható."
+    },
+    {
+      "kulcs": "hibajegy_10",
+      "nev": "Hibajegy-csomag – 10 db",
+      "tipus": "egyszeri",
+      "ar": 44900,
+      "leiras": "10 egyedi kérés vagy hibaelhárítás (legfeljebb 30 perc / jegy), 12 hónapig felhasználható."
+    },
+    {
+      "kulcs": "hibajegy_20",
+      "nev": "Hibajegy-csomag – 20 db",
+      "tipus": "egyszeri",
+      "ar": 79900,
+      "leiras": "20 egyedi kérés vagy hibaelhárítás (legfeljebb 30 perc / jegy), 12 hónapig felhasználható."
+    },
+    {
+      "kulcs": "modulfejlesztes",
+      "nev": "Egyedi modulfejlesztés (óradíj)",
+      "tipus": "egyszeri",
+      "ar": 14900,
+      "egyseg": "ora",
+      "leiras": "Egyedi mező, nyomtatvány, riport vagy kisebb modul a meglévő rendszerhez, előzetes becsléssel."
+    },
+    {
+      "kulcs": "egyedi_fejlesztes",
+      "nev": "Egyedi szoftverfejlesztés",
+      "tipus": "egyszeri",
+      "ar": 0,
+      "ajanlatkeres": true,
+      "leiras": "Nagyobb, egyedi rendszer vagy integráció – igényfelmérés után írásos ajánlat."
+    },
+    {
+      "kulcs": "munkalap3_atvetel",
+      "nev": "MunkaLap 3 adatátvétel",
+      "tipus": "egyszeri",
+      "ar": 49900,
+      "leiras": "Ügyfelek, eszközök, munkalapok, termékek átvétele MunkaLap 3-ból (CSV/XLSX), próbaátvétellel és ellenőrző listával."
+    }
+  ],
+  "kuponok": [
+    {
+      "kod": "PROBA10",
+      "tipus": "szazalek",
+      "ertek": 10,
+      "lejar": null,
+      "max": 100
+    },
+    {
+      "kod": "VALTAS20",
+      "tipus": "szazalek",
+      "ertek": 20,
+      "lejar": "2027-06-30",
+      "max": 50
+    },
+    {
+      "kod": "INDULO15",
+      "tipus": "szazalek",
+      "ertek": 15,
+      "lejar": "2027-03-31",
+      "max": 30
+    }
+  ]
+}

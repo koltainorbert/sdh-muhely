@@ -1,0 +1,228 @@
+{
+    "verzio": 1,
+    "forras_verzio": "0.99.4",
+    "fejezetek": [
+        {
+            "kulcs": "sugo",
+            "cim": "A súgó használata",
+            "csoport": "Kezdés",
+            "osszefoglalo": "A Súgó menüpontban egy helyen van a bemutató, a részletes dokumentáció, a kérdés–válaszok és az újdonságok – és ebből tanul az asszisztens is.",
+            "darab": 21
+        },
+        {
+            "kulcs": "elso-lepesek",
+            "cim": "Első lépések",
+            "csoport": "Kezdés",
+            "osszefoglalo": "Mi ez a rendszer, hogyan lépsz be, hogyan épül fel a felület, és milyen sorrendben érdemes elindulni az első napon.",
+            "darab": 41
+        },
+        {
+            "kulcs": "attekintes",
+            "cim": "Áttekintés",
+            "csoport": "Napi munka",
+            "osszefoglalo": "Az Áttekintés a kezdőképernyő – fent a gyors gombok és a modulok csempéi, alatta az összes munkalap szűrhető, rendezhető rácsa a kijelölt lap részleteivel.",
+            "darab": 35
+        },
+        {
+            "kulcs": "munkalapok",
+            "cim": "Munkalapok",
+            "csoport": "Napi munka",
+            "osszefoglalo": "A munkalap egy javítási ügy teljes története – ügyfél, eszköz, hibák, szolgáltatások, termékek, fizetés – a felvételtől a lezárásig.",
+            "darab": 90
+        },
+        {
+            "kulcs": "ugyfelek",
+            "cim": "Ügyfelek",
+            "csoport": "Napi munka",
+            "osszefoglalo": "Az Ügyfelek menüpontban magánszemélyeket és cégeket tartasz nyilván; minden munkalap, rendelés és eszköz egy ügyfélhez tartozik.",
+            "darab": 43
+        },
+        {
+            "kulcs": "eszkozok",
+            "cim": "Eszközök",
+            "csoport": "Napi munka",
+            "osszefoglalo": "Az Eszközök menüpontban az ügyfelek készülékeit tartod nyilván IMEI-vel, gyári számmal, zárkóddal és átvételi állapottal; a munkalap mindig egy eszközre hivatkozik.",
+            "darab": 43
+        },
+        {
+            "kulcs": "szolgaltatasok",
+            "cim": "Szolgáltatások",
+            "csoport": "Napi munka",
+            "osszefoglalo": "A Szolgáltatások menüpont a munkadíjak és a bevizsgálási díjak törzse; innen választasz szolgáltatást a munkalapra, és itt tartod karban az árlistát.",
+            "darab": 35
+        },
+        {
+            "kulcs": "termekek",
+            "cim": "Termékek",
+            "csoport": "Napi munka",
+            "osszefoglalo": "A Termékek menüpont az alkatrészek és eladható áruk törzse készlettel, beszerzési és eladási árral; a munkalapra vagy árukiadásra tett termék magától lejön a készletről.",
+            "darab": 40
+        },
+        {
+            "kulcs": "arukiadas",
+            "cim": "Napi árukiadás",
+            "csoport": "Pénz",
+            "osszefoglalo": "Pultos eladás javítás nélkül – termék és szolgáltatás rögzítése, fizetéssel, akár ügyfél megadása nélkül.",
+            "darab": 31
+        },
+        {
+            "kulcs": "rendelesek",
+            "cim": "Rendelések",
+            "csoport": "Pénz",
+            "osszefoglalo": "Az ügyfeleknek rendelt áru egy helyen – honnan jön, hol tart, ki van-e fizetve, és értesítés, ha megjött.",
+            "darab": 31
+        },
+        {
+            "kulcs": "penztar",
+            "cim": "Házipénztár",
+            "csoport": "Pénz",
+            "osszefoglalo": "A napi kassza – bevételek, kivétek, kifizetések, címletes számolás és zárás, riport, statisztika és egyeztető ügynök.",
+            "darab": 52
+        },
+        {
+            "kulcs": "szamlazas",
+            "cim": "Számlázás",
+            "csoport": "Pénz",
+            "osszefoglalo": "Számla a munkalapról a Számlázz.hu-n keresztül, és helyben készülő, számlának nem minősülő előkészítő PDF.",
+            "darab": 32
+        },
+        {
+            "kulcs": "uzenetek-rma",
+            "cim": "Üzenetek és ügyféloldal (RMA)",
+            "csoport": "Kapcsolat",
+            "osszefoglalo": "Az ügyfél a QR-kóddal vagy linkkel megnyitott oldalon látja a javítás állapotát és üzenhet; te a munkalap RMA-fülén válaszolsz, az olvasatlan üzeneteket az Üzenetek menüpont gyűjti össze.",
+            "darab": 58
+        },
+        {
+            "kulcs": "levelezes",
+            "cim": "Levelezés",
+            "csoport": "Kapcsolat",
+            "osszefoglalo": "A szerviz e-mail-fiókjai a rendszeren belül: olvasás, írás, válasz, csatolmány, mappák, új levél jelzése minden oldalon, és két ügynök – az egyik a fontos leveleket jelzi, a másik kérésre mappákba rendez.",
+            "darab": 51
+        },
+        {
+            "kulcs": "naptar",
+            "cim": "Naptár",
+            "csoport": "Csapat és idő",
+            "osszefoglalo": "Minden névnek saját naptára van; az eseményekről kártya szól, amely addig marad a képernyőn, amíg kézzel ki nem nyomod, a fontos eseményekről pedig e-mail is megy.",
+            "darab": 47
+        },
+        {
+            "kulcs": "csapat",
+            "cim": "Csapat",
+            "csoport": "Csapat és idő",
+            "osszefoglalo": "A kollégák belső üzenetei kétféle módon – saját belépéssel csevegésként, vagy egy közös fióknál üzenőfalként, cetlikkel.",
+            "darab": 47
+        },
+        {
+            "kulcs": "asszisztens",
+            "cim": "Asszisztens",
+            "csoport": "Csapat és idő",
+            "osszefoglalo": "A jobb alsó sarokban élő figura a rendszer beépített AI-segítője – elmagyaráz, végigvezet az oldalakon, utánanéz az adatoknak, és adatot csak a te jóváhagyásoddal módosít.",
+            "darab": 60
+        },
+        {
+            "kulcs": "megjelenes",
+            "cim": "Megjelenés, óra, nyitvatartás",
+            "csoport": "Rendszer",
+            "osszefoglalo": "Itt állítod, hogyan nézzen ki a rendszer – világos, sötét vagy papír megjelenés, kékfény-szűrő, betűméret, színek, logó, a bejelentkező oldal –, és a fejléc órájához a nyitvatartást.",
+            "darab": 54
+        },
+        {
+            "kulcs": "beallitasok",
+            "cim": "Beállítások",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A Beállítások egyetlen oldal, ahol témánként külön lapfülön áll minden állítható adat; itt van a demó adatok betöltése, a stíluskalauz és a névjegy is.",
+            "darab": 28
+        },
+        {
+            "kulcs": "mentes-biztonsag",
+            "cim": "Mentés, jogosultság, biztonság",
+            "csoport": "Rendszer",
+            "osszefoglalo": "Ki mit lát a rendszerben, a kétlépcsős belépés (telefonos kód), hogyan és mikor készül mentés (a gépen és külső helyre: Google Drive, FTP, NAS, saját gép), hogyan állítható vissza, hogyan költöztethető a teljes beállítás élesbe, mit nem töröl a rendszer soha, mit nem töröl a rendszer soha, és hogyan tárolja a jelszavakat és kulcsokat.",
+            "darab": 53
+        },
+        {
+            "kulcs": "hibaelharitas",
+            "cim": "Hibaelhárítás",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A leggyakoribb elakadások tünet, ok és megoldás szerint, menüpontonként csoportosítva, a rendszer valódi hibaüzeneteivel.",
+            "darab": 54
+        },
+        {
+            "kulcs": "nyomtatas",
+            "cim": "Nyomtatás, PDF és e-mail",
+            "csoport": "Napi munka",
+            "osszefoglalo": "Minden papír egy helyről – átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – előnézettel, példányszámmal, PDF-be mentve és e-mailben is; a nyomtatványok a Beállításokban szerkeszthetők.",
+            "darab": 43
+        },
+        {
+            "kulcs": "sms",
+            "cim": "SMS-értesítések",
+            "csoport": "Kapcsolat",
+            "osszefoglalo": "A rendszer az Android-telefonodon futó SMS-átjárón át küld SMS-t az ügyfeleknek – állapotváltáskor rákérdez (vagy magától küld), kézzel is küldhetsz, és a válaszok a munkalap üzenetei közé érkeznek.",
+            "darab": 19
+        },
+        {
+            "kulcs": "naplo",
+            "cim": "Napló (változásnapló)",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A Napló minden módosítást megőriz mezőnként – ki, mikor, honnan, mi volt és mi lett –, és senki nem írhatja át vagy törölheti; egy rekord története a saját Napló gombjáról, a teljes napló a Napló menüpontból látszik.",
+            "darab": 22
+        },
+        {
+            "kulcs": "matrica",
+            "cim": "Címkenyomtatás (Brother) – RMA-matrica, rendelés-, termék- és szolgáltatás-címke",
+            "csoport": "Napi munka",
+            "osszefoglalo": "Brother címkenyomtatóra nyomtatsz RMA-matricát a leadott készülékre (munkalap › Matrica), valamint termék- és szolgáltatás-címkét (az űrlapjuk Címke gombjával); a Beállításokban állítod, mi kerüljön rájuk.",
+            "darab": 25
+        },
+        {
+            "kulcs": "urlapok",
+            "cim": "Űrlapok beállítása – a fogaskerék",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A munkalap, a rendelés, a napi árukiadás és a két számla ablakának jobb felső sarkában álló fogaskerékkel állítod, mi látszódjon az űrlapon, és hogy a számlára magától kerüljenek-e a tételek; a beállítás frissítés után is megmarad.",
+            "darab": 32
+        },
+        {
+            "kulcs": "riportok",
+            "cim": "Riportok",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A Riportok menüpont a lezárt lapokból mutatja az átfutási időt, a technikusok teljesítményét, a javítási arányt, a bevételt fajta, eszközkategória és termékkategória szerint, az árajánlatokat és az utolsó 12 hónapot.",
+            "darab": 20
+        },
+        {
+            "kulcs": "kereses-listak",
+            "cim": "Keresés, listák és űrlapok e-mailben",
+            "csoport": "Rendszer",
+            "osszefoglalo": "Minden kereső gépelés közben találatot ad és felismeri, mit írtál be (IMEI, telefonszám, sorszám, kód, márka, név); a lapozóknál oldalszámra lehet ugrani, a sorok dupla kattintásra nyílnak, az Áttekintés szűrőiben lehet keresni, az Állapot oszlop pontra csukható; minden űrlap e-mailben továbbítható, a munkalapnak Fájlok lapfüle van.",
+            "darab": 20
+        },
+        {
+            "kulcs": "licenc",
+            "cim": "Licenc és támogatási hozzáférés",
+            "csoport": "Rendszer",
+            "osszefoglalo": "Ha a rendszert forgalmazótól vásároltátok, a Beállítások › Licenc lapon adod meg a központ címét és a licenckulcsot; ugyanitt engedélyezheted időkorláttal, hogy a forgalmazó támogatója belépjen.",
+            "darab": 25
+        },
+        {
+            "kulcs": "adatatvetel",
+            "cim": "Adatátvétel a régi programból",
+            "csoport": "Rendszer",
+            "osszefoglalo": "A Beállítások › Adatátvétel lapon a régi program (például a MunkaLap 3) vagy bármilyen táblázat adatait veszed át – ügyfelek, eszközök, munkalapok, tételek, hibák –, előbb írás nélküli próbával, utána adagokban, visszavonhatóan.",
+            "darab": 20
+        }
+    ],
+    "darab_ossz": 1172,
+    "kihagyva": {
+        "fejezet": [
+            "21-telepites.md",
+            "24-modulok.md",
+            "27-sdh-belso.md"
+        ],
+        "szakasz": 0,
+        "alcim": 9,
+        "pont": 2,
+        "tura": 20
+    }
+}

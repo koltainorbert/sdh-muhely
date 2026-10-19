@@ -1,0 +1,176 @@
+{
+    "kulcs": "sugo",
+    "cim": "A súgó használata",
+    "csoport": "Kezdés",
+    "osszefoglalo": "A Súgó menüpontban egy helyen van a bemutató, a részletes dokumentáció, a kérdés–válaszok és az újdonságok – és ebből tanul az asszisztens is.",
+    "darabok": [
+        {
+            "id": "sugo#1",
+            "cim": "Mit találsz a Súgóban",
+            "horgony": "mit-talalsz-a-sugoban",
+            "szoveg": "A **Súgó** menüpont négy lapfülből áll, fölöttük egy keresővel:\n\n- **Bemutató** – innen érdemes indulni. Megmutatja, milyen sorrendben ismerkedj a rendszerrel, és fejezetenként egy-egy kártyán a teljes rendszer térképét.\n- **Dokumentáció** – a részletes leírás fejezetekre bontva. Minden menüpontnak saját fejezete van: mire való, hol találod, hogyan csinálod lépésről lépésre, mit jelentenek a mezők és a gombok, milyen szabályokat tart be a rendszer.\n- **Kérdés–válasz** – a hétköznapi kérdések gyűjteménye, fejezetenként szűrve. Itt jelennek meg a cég saját kérdés–válaszai is.\n- **Újdonságok** – minden verzió minden változása, a legújabb elöl.\n\nA súgó mindig a rendszer mostani állapotát írja le. Amikor a rendszer változik, a hozzá tartozó fejezet is vele változik – és az asszisztens attól a perctől az újat tudja.",
+            "t": "sugo hasznalata talalsz sugo talalsz sugo sugo menup negy lapful all folot kereso bemutato inn erdemes indulni megmut sorrend ismerkedj rendszerrel fejezetenk kartyan teljes rendszer terkep dokumentacio reszletes leiras fejez bontva menupon saj fejezete mire valo talalod csinalod lepes lepes jelente mez gomb szabaly tar rendszer kerdes valasz hetkoznapi kerdes gyujtemenye fejezetenk szurve jel ceg saj kerdes valasz ujdonsag verzio valtozasa legujabb elol sugo rendszer mostani allap irja ami rendszer valtozi hozza tartozo fejez vele valtozi asszisztens attol perc uja tud",
+            "h": 81
+        },
+        {
+            "id": "sugo#2",
+            "cim": "Keresés a súgóban",
+            "horgony": "kereses-a-sugoban",
+            "szoveg": "A Súgó tetején álló keresőbe bármit beírhatsz, ahogy eszedbe jut: `hogyan zárom a kasszát`, `bevizsgálási díj`, `QR-kód`.\n\n- Már gépelés közben megjelennek a legjobb találatok. A ↓ és ↑ billentyűvel lépkedhetsz köztük, az Enter megnyitja a kijelöltet.\n- Kijelölés nélkül az Enter az összes találatot mutatja, a keresett szavakat kiemelve.\n- A kereső a toldalékos alakokat és a köznyelvi szavakat is érti: a „kassza\" a pénztárat, a „telefon\" az eszközt, a „vevő\" az ügyfelet is megtalálja.\n- A találat mellett látod, hogy **Dokumentáció** vagy **Kérdés–válasz**, és melyik fejezetből való.\n\nHa valamire nincs találat, a Súgó felajánlja, hogy megkérdezed az asszisztenst. A találat nélküli keresést a rendszer feljegyzi, és az adminisztrátor a **Kérdés–válasz** lapfül alján, az **Amire nem volt találat** dobozban látja.",
+            "t": "sugo hasznalata kereses sugo kereses sugo sugo tetej allo kereso barmi beirhatsz ahogy eszed jut zarom penztar bevizsgalasi dij qr kod gepeles koz megjel legjobb talal billentyu lepkedhetsz koz enter megnyi kijelol kijeloles nelkul enter osszes talal mut keres szav kiemelve kereso toldalekos ala koznyelvi szav erti penztar penztar telef eszkoz ugyfel ugyfel megtalal talal mell latod dokumentacio kerdes valasz fejez valo valami nincs talal sugo felajanl megkerdezed asszisztens talal nelkuli kereses rendszer feljegyzi adminisztrator kerdes valasz lapful aljan ami talal doboz lat",
+            "h": 83
+        },
+        {
+            "id": "sugo#3",
+            "cim": "Súgó az éppen nyitott oldalhoz",
+            "horgony": "sugo-az-eppen-nyitott-oldalhoz",
+            "szoveg": "A felső fejlécben, a nyomtató ikon mellett a **Súgó** gomb áll (kérdőjel ikonnal; telefonon csak a kérdőjel látszik). Rákattintva annak az oldalnak a fejezete nyílik meg, ahol éppen vagy – nem kell keresgélned.\n\nUgyanezt billentyűről az F1 adja: az asszisztens nyílik meg, és tőle is megkérdezheted, amit az oldalon nem értesz.",
+            "t": "sugo hasznalata sugo epp nyit oldal sugo epp nyit oldal felso fejlec nyomtato ikon mell sugo gomb all kerdojel ikonnal telef kerdojel latszi rakattintva ann oldal fejezete nyili ahol epp keresgelned ugyanez billentyu f1 adja asszisztens nyili tole megkerdezheted oldal ertesz",
+            "h": 41
+        },
+        {
+            "id": "sugo#4",
+            "cim": "Végigvezetés az oldalakon",
+            "horgony": "vegigvezetes-az-oldalakon",
+            "szoveg": "A legtöbb oldalnak van kész túrája: az asszisztens egyenként megmutatja, mi hol van.\n\n- A Súgó **Bemutató** lapján és a fejezetek tetején a **Vezess végig** gomb megnyitja az oldalt, és elindítja a túrát.\n- Bármelyik oldalon megkérheted az asszisztenst: kattints rá, és válaszd a **Vezess végig ezen az oldalon** javaslatot, vagy írd be neki.\n\nA túra lépésenként halad: a **Következő** és az **Előző** gombbal vagy a → és ← billentyűvel lépkedhetsz. Közben nyugodtan kattints bármire – a túra nem tűnik el. Ha felugró ablakot nyitsz, megvár, és onnan folytatja, ahol abbahagytad. Kilépni a buborék sarkában lévő **×** gombbal vagy az Esc billentyűvel lehet.\n\nA részleteket az Asszisztens fejezet írja le.",
+            "t": "sugo hasznalata vegigvezetes oldal vegigvezetes oldal legtobb oldal kesz tura asszisztens egyenk megmut sugo bemutato lapjan fejez tetej vezess veg gomb megnyi oldal elindi tur barmelyi oldal megkerheted asszisztens kattints valaszd vezess veg ezen oldal javasl ird neki tura lepesenk halad kovetkezo elozo gombbal billentyu lepkedhetsz koz nyugodtan kattints barmi tura tuni felugro abl nyitsz megvar onnan folyt ahol abbahagytad kilepni bubor sarka levo gombbal esc billentyu reszl asszisztens fejez irja",
+            "h": 71
+        },
+        {
+            "id": "sugo#5",
+            "cim": "Kérdés–válasz és a „Segített?\" gombok",
+            "horgony": "kerdes-valasz-es-a-segitett-gombok",
+            "szoveg": "A **Kérdés–válasz** lapfülön a kérdésre kattintva nyílik le a válasz. A fölötte álló címkékkel egy-egy fejezet kérdéseire szűrhetsz; a címkén a kérdések száma is látszik.\n\nMinden válasz alatt:\n\n- **Segített?** – a két gombbal jelezheted, hasznos volt-e a válasz. Kérdésenként egy szavazatod van, de bármikor átírhatod. Ha azt jelzed, hogy nem segített, az asszisztens felajánlja, hogy másképp magyarázza el.\n- **Tovább kérdezek** – megnyitja az asszisztenst ezzel a kérdéssel, és ott folytathatod.\n- **Fejezet: …** – a kérdéshez tartozó részletes leírásra visz.\n\nEgy kérdésre közvetlen hivatkozás is mutathat: a keresés találatai így nyitják meg, a válasz magától lenyílik.",
+            "t": "sugo hasznalata kerdes valasz segit gomb kerdes valasz segit gomb kerdes valasz lapful kerdes kattintva nyili valasz folotte allo cim fejez kerdes szurhetsz cim kerdes szama latszi valasz ala segit ket gombbal jelezheted hasznos valasz kerdesenk szavazatod barmi atirhatod jelzed segit asszisztens felajanl maskepp magyarazza tovabb kerdez megnyi asszisztens ezzel kerdessel folytathatod fejez kerdes tartozo reszletes leiras visz kerdes kozvetl hivatkozas mutath kereses talal igy nyitj valasz maga lenyili",
+            "h": 69
+        },
+        {
+            "id": "sugo#6",
+            "cim": "Saját kérdés–válasz a cég szabályairól",
+            "horgony": "sajat-kerdes-valasz-a-ceg-szabalyairol",
+            "szoveg": "A rendszer leírása minden cégnél ugyanaz – a cég saját szabályai viszont nem. Ezeket az adminisztrátor veheti fel:\n\n1. Nyisd meg a **Súgó** › **Kérdés–válasz** lapfület.\n2. Kattints a fejlécben a **Saját kérdés–válasz** gombra.\n3. Írd be a **Kérdés** és a **Válasz** mezőt; a **Kulcsszavak** segítik a keresést.\n4. **Mentés**.\n\nA saját kérdés a lista elején, **Saját** címkével jelenik meg, és a **Saját kérdések** szűrővel külön is megnézhető. Az asszisztens is ebből felel – nem kell külön megtanítani neki.\n\nA **Látszik** kapcsolót kivéve a kérdés megmarad, de se a Súgó, se az asszisztens nem használja. Az adminisztrátor a rejtett kérdést **Rejtve** címkével továbbra is látja, és a **Szerkesztés** hivatkozással visszakapcsolhatja.\n\nTipp: az **Amire nem volt találat** doboz megmutatja, mire kerestek a kollégák eredmény nélkül. A **Megválaszolom** gomb a kérdést előre kitöltve nyitja meg az űrlapot.",
+            "t": "sugo hasznalata saj kerdes valasz ceg szabaly saj kerdes valasz ceg szabaly rendszer leirasa cegnel ugyanaz ceg saj szabaly visz eze adminisztrator veheti nyisd sugo kerdes valasz lapful kattints fejlec saj kerdes valasz gomb ird kerdes valasz mez kulcsszav segiti kereses mentes saj kerdes lista elej saj cimke jeleni saj kerdes szuro kul megnezheto asszisztens ebbol felel kul megtanitani neki latszi kapcsol kiveve kerdes megmarad se sugo se asszisztens hasznal adminisztrator rejt kerdes rejtve cimke tovabb lat szerkesztes hivatkozassal visszakapcsolh tipp ami talal doboz megmut mire keres kolleg eredmeny nelkul megvalaszolom gomb kerdes elo kitoltve nyi urlap",
+            "h": 97
+        },
+        {
+            "id": "sugo#7",
+            "cim": "Nyomtatás",
+            "horgony": "nyomtatas",
+            "szoveg": "A **Dokumentáció** lapfülön a fejezet tetején a **Nyomtatás** gomb a böngésző nyomtatóablakát nyitja meg. Nyomtatásban csak a fejezet szövege jelenik meg: a menü, a kereső és a gombok nem, a kérdés–válaszok pedig mind lenyitva.",
+            "t": "sugo hasznalata nyomtatas nyomtatas dokumentacio lapful fejez tetej nyomtatas gomb bongeszo nyomtatoabl nyi nyomtatas fejez szovege jeleni menu kereso gomb kerdes valasz ped mind lenyitva",
+            "h": 25
+        },
+        {
+            "id": "sugo#8",
+            "cim": "Honnan tudja mindezt az asszisztens",
+            "horgony": "honnan-tudja-mindezt-az-asszisztens",
+            "szoveg": "A súgó, a kérdés–válaszok, az oldaltúrák és az asszisztens tudása **egy forrásból** él. Amikor kérdezel tőle:\n\n- megkapja a kérdésedhez legjobban illő súgórészeket és kérdés–válaszokat,\n- előnyben részesíti annak az oldalnak a fejezetét, ahol éppen vagy,\n- ha ez nem elég, maga is keres a súgóban, vagy elolvassa a teljes fejezetet,\n- a cég saját kérdés–válaszait és a tudástárát is figyelembe veszi.\n\nEzért nem kell külön „betanítani\": amint egy fejezet frissül, a következő kérdésnél már az újat tudja.",
+            "t": "sugo hasznalata honnan tud mindez asszisztens honnan tud mindez asszisztens sugo kerdes valasz oldaltur asszisztens tudasa forras ami kerdezel tole megkap kerdesed legjob illo sugoresz kerdes valasz elony reszesiti ann oldal fejez ahol epp eleg maga keres sugo elolvassa teljes fejez ceg saj kerdes valasz tudastar figyelem veszi ezer kul betanitani amin fejez frissul kovetkezo kerdesnel uja tud",
+            "h": 58
+        },
+        {
+            "id": "sugo#9",
+            "cim": "Útvonal",
+            "horgony": "utvonal",
+            "szoveg": "- beallitasok | beallitasok | Állítsd be az alapokat | Nyitvatartás, logó és megjelenés, számlázás, fizetési módok. Egyszer kell megcsinálni, utána a rendszer a te cégedre szabva működik.\n- ugyfelek | ugyfelek | Vedd fel az első ügyfelet | Magánszemély vagy cég, telefonszámmal. Az ügyfél a kiindulópont: hozzá tartozik minden eszköz, munkalap, rendelés.\n- eszkozok | eszkozok | Vedd fel az eszközét | Típus, IMEI vagy gyári szám. Az IMEI-ből a rendszer a típust is felismeri.\n- munkalapok | munkalapok | Nyiss munkalapot | Hiba, szolgáltatás, alkatrész, határidő, bevizsgálási díj – a javítás teljes története egy lapon, akár több eszközzel.\n- penztar | penztar | Fizetés és napi zárás | A fizetés a munkalapról a pénztárba kerül. Nap végén megszámolod a kasszát, a rendszer megmondja, stimmel-e.\n- attekintes | attekintes | Nézz rá minden reggel | Az Áttekintés mutatja, mi nyitott, mi késik, mi vár válaszra – innen indul a nap.",
+            "t": "sugo hasznalata utvonal utvonal beallitas beallitas allitsd alap nyitvatartas logo megjelenes szamlazas fizetesi mod egyszer megcsinalni utana rendszer ceged szabva mukodi ugyfel ugyfel vedd elso ugyfel maganszemely ceg telefonszammal ugyfel kiindulop hozza tartozi eszkoz munkalap rendeles eszkoz eszkoz vedd eszkoz tipus imei gyari szam imei bol rendszer tipus felismeri munkalap munkalap nyiss munkalap hiba szolgaltatas alkatresz hatarido bevizsgalasi dij javitas teljes tortenete lap akar tobb eszkozzel penztar penztar fizetes napi zaras fizetes munkalap penztar ar nap veg megszamolod penztar rendszer megmond stimmel attekintes attekintes nezz reggel attekintes mut nyit kesi var valasz inn indul nap",
+            "h": 95
+        },
+        {
+            "id": "sugo#10",
+            "cim": "GYIK › Hol kezdjem az ismerkedést a rendszerrel?",
+            "horgony": "hol-kezdjem-az-ismerkedest-a-rendszerrel",
+            "szoveg": "A **Súgó** › **Bemutató** lapon. Az **Az első napod** rész hat lépésben, sorrendben mutatja, mivel érdemes kezdeni; mindegyiknél ott a **Leírás** és – ahol van – a **Vezess végig** hivatkozás. Ha inkább egyben olvasnád el, az Első lépések fejezet erre való.",
+            "t": "sugo hasznalata gyi kezdjem ismerkedes rendszerrel gyi kezdjem ismerkedes rendszerrel sugo bemutato lap elso napod resz hat lepes sorrend mut mivel erdemes kezdeni mindegyiknel leiras ahol vezess veg hivatkozas inkabb egy olvasnad elso lepes fejez valo",
+            "h": 36
+        },
+        {
+            "id": "sugo#11",
+            "cim": "GYIK › Miben más a Dokumentáció és a Kérdés–válasz?",
+            "horgony": "miben-mas-a-dokumentacio-es-a-kerdes-valasz",
+            "szoveg": "A **Dokumentáció** a teljes leírás, rendezve: mire való egy menüpont, hogyan használd, mit jelentenek a mezők. A **Kérdés–válasz** rövid, célzott válaszokat ad egy-egy konkrét kérdésre. Ugyanarról a rendszerről szólnak; a kérdés–válasz alatti **Fejezet** hivatkozás átvisz a részletes leíráshoz.",
+            "t": "sugo hasznalata gyi mib mas dokumentacio kerdes valasz gyi mib mas dokumentacio kerdes valasz dokumentacio teljes leiras rendezve mire valo menup hasznald jelente mez kerdes valasz rovid celz valasz ad konkr kerdes ugyanar rendszer szol kerdes valasz alatti fejez hivatkozas atvisz reszletes leiras",
+            "h": 43
+        },
+        {
+            "id": "sugo#12",
+            "cim": "GYIK › Nem találom, amit keresek. Mit tegyek?",
+            "horgony": "nem-talalom-amit-keresek-mit-tegyek",
+            "szoveg": "Próbáld más szóval – a kereső a köznyelvi szavakat is érti. Ha így sincs találat, kattints a **Megkérdezem** gombra: az asszisztens a teljes dokumentációból és a rendszer mostani adataiból felel. Ha a kérdés a cég saját szabályáról szól, azt az adminisztrátor tudja felvenni saját kérdés–válaszként.",
+            "t": "sugo hasznalata gyi talalom keres tegy gyi talalom keres tegy probald mas szo kereso koznyelvi szav erti igy sincs talal kattints megkerdezem gomb asszisztens teljes dokumentacio rendszer mostani adat felel kerdes ceg saj szabalya szol adminisztrator tud felvenni saj kerdes valaszk",
+            "h": 41
+        },
+        {
+            "id": "sugo#13",
+            "cim": "GYIK › Mindig naprakész a súgó?",
+            "horgony": "mindig-naprakesz-a-sugo",
+            "szoveg": "Igen, ez a rendszer egyik alapszabálya: a súgó fejezetei a rendszer részei, és minden változtatással együtt frissülnek. A Súgó fejlécében látod a verziószámot, amelyet leír; az **Újdonságok** lapfülön pedig azt, mi változott.",
+            "t": "sugo hasznalata gyi naprakesz sugo gyi naprakesz sugo rendszer egyi alapszabalya sugo fejez rendszer resz valtoztatassal egyu frissul sugo fejlece latod verzioszam amely leir ujdonsag lapful ped valtoz",
+            "h": 28
+        },
+        {
+            "id": "sugo#14",
+            "cim": "GYIK › Ki vehet fel saját kérdés–választ?",
+            "horgony": "ki-vehet-fel-sajat-kerdes-valaszt",
+            "szoveg": "Csak az adminisztrátor. A kollégák látják és használják, de nem szerkeszthetik.",
+            "t": "sugo hasznalata gyi veh saj kerdes valasz gyi veh saj kerdes valasz adminisztrator kolleg latj hasznalj szerkesztheti",
+            "h": 17
+        },
+        {
+            "id": "sugo#15",
+            "cim": "GYIK › A saját kérdés–válaszainkat az asszisztens is tudja?",
+            "horgony": "a-sajat-kerdes-valaszainkat-az-asszisztens-is-tudja",
+            "szoveg": "Igen, azonnal. A saját kérdés–válasz az asszisztens tudástárába kerül, és a hozzá illő kérdésnél megkapja. Külön tanítani nem kell.",
+            "t": "sugo hasznalata gyi saj kerdes valasza asszisztens tud gyi saj kerdes valasza asszisztens tud azonnal saj kerdes valasz asszisztens tudasta ar hozza illo kerdesnel megkap kul tanitani",
+            "h": 27
+        },
+        {
+            "id": "sugo#16",
+            "cim": "GYIK › Hogyan indítok túrát egy oldalon?",
+            "horgony": "hogyan-inditok-turat-egy-oldalon",
+            "szoveg": "Háromféleképpen: a Súgó **Bemutató** lapján vagy egy fejezet tetején a **Vezess végig** gombbal; az adott oldalon az asszisztensre kattintva a **Vezess végig ezen az oldalon** javaslattal; vagy beírva neki ugyanezt.",
+            "t": "sugo hasznalata gyi indi tur oldal gyi indi tur oldal haromfelekepp sugo bemutato lapjan fejez tetej vezess veg gombbal ado oldal asszisztens kattintva vezess veg ezen oldal javaslattal beirva neki ugyanez",
+            "h": 31
+        },
+        {
+            "id": "sugo#17",
+            "cim": "GYIK › Eltűnik a túra, ha közben máshova kattintok?",
+            "horgony": "eltunik-a-tura-ha-kozben-mashova-kattintok",
+            "szoveg": "Nem. A túra addig marad, amíg ki nem lépsz belőle (**×** vagy Esc), vagy végig nem érsz. Közben dolgozhatsz; ha felugró ablakot nyitsz, megvár.",
+            "t": "sugo hasznalata gyi eltuni tura koz mashova kattin gyi eltuni tura koz mashova kattin tura add marad amig lepsz belole esc veg ersz koz dolgozhatsz felugro abl nyitsz megvar",
+            "h": 29
+        },
+        {
+            "id": "sugo#18",
+            "cim": "GYIK › Kinyomtathatom a leírást?",
+            "horgony": "kinyomtathatom-a-leirast",
+            "szoveg": "Igen. A **Dokumentáció** lapfülön nyisd meg a fejezetet, és kattints a **Nyomtatás** gombra. A nyomtatott oldalon csak a szöveg lesz, a kérdés–válaszok lenyitva.",
+            "t": "sugo hasznalata gyi kinyomtathatom leiras gyi kinyomtathatom leiras dokumentacio lapful nyisd fejez kattints nyomtatas gomb nyomtat oldal szoveg kerdes valasz lenyitva",
+            "h": 21
+        },
+        {
+            "id": "sugo#19",
+            "cim": "GYIK › Mit jelent az „Amire nem volt találat\" doboz?",
+            "horgony": "mit-jelent-az-amire-nem-volt-talalat-doboz",
+            "szoveg": "Az adminisztrátor látja a **Kérdés–válasz** lapfül alján. Azokat a kifejezéseket sorolja fel, amelyekre a kollégák a súgóban kerestek, de nem kaptak találatot – mellette az, hányszor és mikor. Ebből látszik, miről érdemes saját kérdés–választ írni.",
+            "t": "sugo hasznalata gyi jel ami talal doboz gyi jel ami talal doboz adminisztrator lat kerdes valasz lapful aljan azo kifejezes sorol amely kolleg sugo keres kap talal mellette hanyszor ebbol latszi mirol erdemes saj kerdes valasz irni",
+            "h": 37
+        },
+        {
+            "id": "sugo#20",
+            "cim": "GYIK › Honnan tudom, mi változott az utolsó frissítés óta?",
+            "horgony": "honnan-tudom-mi-valtozott-az-utolso-frissites-ota",
+            "szoveg": "A **Súgó** › **Újdonságok** lapfülről. Frissítés után az asszisztens is szól: egy buborékban felsorolja a legfontosabb újdonságokat.",
+            "t": "sugo hasznalata gyi honnan tudom valtoz utolso frissites ota gyi honnan tudom valtoz utolso frissites ota sugo ujdonsag lapful frissites utan asszisztens szol bubor felso legfontosabb ujdonsag",
+            "h": 27
+        },
+        {
+            "id": "sugo#21",
+            "cim": "GYIK › Működik a súgó internet nélkül?",
+            "horgony": "mukodik-a-sugo-internet-nelkul",
+            "szoveg": "A Súgó menüpont, a keresés és az oldaltúrák a saját szerveretekről jönnek, külső szolgáltatás nélkül. Az asszisztens szabad szöveges válaszaihoz viszont internet és beállított API-kulcs kell.",
+            "t": "sugo hasznalata gyi mukodi sugo intern nelkul gyi mukodi sugo intern nelkul sugo menup kereses oldaltur saj szerver jon kulso szolgaltatas nelkul asszisztens szabad szoveges valasz visz intern beallit api kulcs",
+            "h": 31
+        }
+    ]
+}

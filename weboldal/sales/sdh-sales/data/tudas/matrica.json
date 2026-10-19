@@ -1,0 +1,208 @@
+{
+    "kulcs": "matrica",
+    "cim": "Címkenyomtatás (Brother) – RMA-matrica, rendelés-, termék- és szolgáltatás-címke",
+    "csoport": "Napi munka",
+    "osszefoglalo": "Brother címkenyomtatóra nyomtatsz RMA-matricát a leadott készülékre (munkalap › Matrica), valamint termék- és szolgáltatás-címkét (az űrlapjuk Címke gombjával); a Beállításokban állítod, mi kerüljön rájuk.",
+    "darabok": [
+        {
+            "id": "matrica#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "Az **RMA-matrica** a leadott készülékre ragasztott azonosító címke: ránézésre látszik, kié a készülék, melyik munkalaphoz tartozik, mi a baja, és hogyan oldható fel.\n\nAlapból ez kerül rá, ebben a sorrendben:\n\n1. **Név** – az ügyfél neve,\n2. **Munkalapszám**,\n3. **Eszköz típusa és azonosítója** (modellszám),\n4. **RMA** – rövid RMA-kód, mellette QR-kód az ügyféloldalra,\n5. **Hiba**,\n6. **Feloldó minta és feloldó kód** – a minta kis rajzként (a kezdőpötty bekarikázva) és számokkal,\n7. **IMEI és azonosító** (sorozatszám vagy IMEI 2),\n8. **Dátum** – a felvétel napja.\n\nBekapcsolható még: telefonszám, a szerviz neve, határidő, tartozékok, szín, átvételi állapot, megjegyzés, hányadik eszköz a lapon (pl. `2/3`), vonalkód a munkalapszámmal, külön QR-kód.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke mire valo mire valo rma matrica lead eszkoz ragaszt azonosito cimke ranezes latszi kie eszkoz munkalap tartozi baja oldhato alap ar ebb sorrend nev ugyfel neve munkalapszam eszkoz tipusa azonosito modellszam rma rovid rma kod mellette qr kod ugyfeloldal hiba feloldo minta feloldo kod minta kis rajzk kezdopotty bekarikazva szam imei azonosito sorozatszam imei datum felvetel nap bekapcsolhato telefonszam szerviz neve hatarido tartoz szin atveteli allap megjegyzes hanyadi eszkoz lap pl vonalkod munkalapszammal kul qr kod",
+            "h": 84
+        },
+        {
+            "id": "matrica#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- **Nyomtatás:** a munkalap ablakának alján a **Matrica** gomb (mentett, munkalapszámot kapott javítási lapon). Ugyanez a gomb ott van a **rendelés** ablakában is – ott a **Rendelés-címke** nyomtatódik, aminek saját tartalma van.\n- **Beállítás:** **Beállítások › Címkenyomtatás** (a **Pénz és eladás** sorban) – nyomtató, címke, tartalom, előnézet, próbanyomat.\n- **Termékcímke:** a termék ablakának alján a **Címke** gomb (mentett terméknél).\n- **Szolgáltatás-címke:** a szolgáltatás ablakának alján a **Címke** gomb (mentett szolgáltatásnál).\n- **Címkék menüpont:** az oldalmenü **Címkék** pontja. Innen indul az **Egyedi címke**, és itt látod egy táblázatban, melyik címke hol érhető el és mi áll rajta.\n- **Egyedi címke:** a **Címkék** oldal **Egyedi címke** gombja – ide bármit beírhatsz, nem kell hozzá se munkalap, se termék.\n- A modul kikapcsolható (**Címkenyomtatás (Brother)**; ezt a rendszer üzemeltetője teszi); kikapcsolva nincs Matrica és Címke gomb.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke talalod talalod nyomtatas munkalap ablaka aljan matrica gomb ment munkalapszam kap javitasi lap ugyanez gomb rendeles ablaka rendeles cimke nyomtatodi ami saj tartalma beallitas beallitas cimkenyomtatas penz eladas sor nyomtato cimke tartalom elonez probanyom termekcimke term ablaka aljan cimke gomb ment termeknel szolgaltatas cimke szolgaltatas ablaka aljan cimke gomb ment szolgaltatasnal cim menup oldalmenu cim pon inn indul egyedi cimke latod tablaz cimke erheto all rajta egyedi cimke cim oldal egyedi cimke gomb ide barmi beirhatsz hozza se munkalap se term modul kikapcsolhato cimkenyomtatas brother rendszer uzemelteto teszi kikapcsolva nincs matrica cimke gomb",
+            "h": 101
+        },
+        {
+            "id": "matrica#3",
+            "cim": "Termék- és szolgáltatás-címke",
+            "horgony": "termek-es-szolgaltatas-cimke",
+            "szoveg": "Ugyanazzal a Brother nyomtatóval és tekerccsel árcímkét, polccímkét vagy alkatrész-azonosítót is nyomtathatsz.\n\n- **Termékcímke** – alapból: **megnevezés**, **bruttó ár** (nagy, félkövér), **cikkszám** és **vonalkód** középen, alatta a kód olvashatóan. A vonalkód a termék **Vonalkód** mezője; ha az üres, a **Cikkszám**. Bekapcsolható még: termékkód, gyári szám, kategória, nettó ár, mennyiségi egység, beszállító, leírás, a szerviz neve, dátum, QR-kód.\n- **Szolgáltatás-címke** – alapból: **megnevezés**, **bruttó ár** (ha a szolgáltatásnak van felső ára, „tól–ig”, például `12 000 – 18 000 Ft`) és **kategória**. Bekapcsolható még: kód, nettó ár, mennyiségi egység, megjegyzés, a szerviz neve, dátum, vonalkód és QR-kód (a kódból).\n\nNyomtatás:\n\n1. Nyisd meg a terméket vagy a szolgáltatást.\n2. Kattints az ablak alján a **Címke** gombra. Megnyílik a címke előnézete.\n3. Állítsd be a **Példány** számát a mellette lévő **−** és **+** gombbal, vagy írd be (legfeljebb 50 – például a polcon lévő darabszám).\n4. Kattints a **Nyomtatás** gombra (böngészős módban a nyomtatás-ablakban válaszd a Brother nyomtatót).\n\nBeállítás: **Beállítások › Címkenyomtatás**, felül a **Nyomtató és címke** doboz (közös), alatta a **RMA-matrica / Rendelés-címke / Termékcímke / Szolgáltatás-címke / Beszállítói tétel / Egyedi címke** fülek. Fülenként külön állítod a címke hosszát (folyamatos szalagon), a tájolást, a margót, a betűt, a példányszámot és hogy mi kerüljön rá – mindegyiknek saját élő előnézete és próbanyomata van. A nyomtató és a betett tekercs mindháromnál ugyanaz, hiszen egy nyomtatóban egyszerre egy tekercs van.\n\nA címke nyomtatása a termék, illetve a szolgáltatás **Naplójába** kerül.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke term szolgaltatas cimke term szolgaltatas cimke ugyanazzal brother nyomtato tekerccsel arcim polccim alkatresz azonosi nyomtathatsz termekcimke alap megnevezes brutto ar nagy felkover cikkszam vonalkod kozep alatta kod olvashatoan vonalkod term vonalkod mezo ures cikkszam bekapcsolhato termekkod gyari szam kategoria netto ar mennyisegi egyseg beszallito leiras szerviz neve datum qr kod szolgaltatas cimke alap megnevezes brutto ar szolgaltatas felso ar tol ig peldaul 12 000 18 000 ft kategoria bekapcsolhato kod netto ar mennyisegi egyseg megjegyzes szerviz neve datum vonalkod qr kod kod nyomtatas nyisd term szolgaltatas kattints abl aljan cimke gomb megnyili cimke elonezete allitsd peldany szam mellette levo gombbal ird legfeljebb 50 peldaul polc levo darabszam kattints nyomtatas gomb bongeszos mod nyomtatas abl valaszd brother nyomt beallitas beallitas cimkenyomtatas felul nyomtato cimke doboz kozos alatta rma matrica rendeles cimke termekcimke szolgaltatas cimke beszallitoi tetel egyedi cimke ful fulenk kul allitod cimke hossz folyamatos szalag tajolas marg betu peldanyszam kerulj mindegyi saj elo elonezete probanyomata nyomtato bet tekercs mindharomnal ugyanaz hisz nyomtato egyszer tekercs cimke nyomtatasa term illetve szolgaltatas naplo ar",
+            "h": 179
+        },
+        {
+            "id": "matrica#4",
+            "cim": "Rendelés-címke",
+            "horgony": "rendeles-cimke",
+            "szoveg": "A rendelés ablakának **Matrica** gombja a **Rendelés-címkét** nyomtatja: ez kerül a megérkezett árura, hogy a pulton látszódjon, kinek jött és melyik laphoz tartozik.\n\nAlapból ez van rajta: az **ügyfél neve**, a **lapszám**, a **telefonszám**, az **eszköz**, a **tételek** és a **dátum**. Bekapcsolható még: várható érkezés, beszállító, a beszállítói rendelés száma, előleg, végösszeg, megjegyzés, a szerviz neve, vonalkód és QR-kód.\n\n**Ár alapból nincs rajta** – az ügyfél a bizonylaton látja az árat; a polcon álló dobozra nem kell. Ha mégis kell, a **Beállítások › Címkenyomtatás › Rendelés-címke** lapon kapcsold be a *Bruttó végösszeg* vagy a *Fizetett előleg* sort.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke rendeles cimke rendeles cimke rendeles ablaka matrica gomb rendeles cim nyomt ar megerkez aru pul latszodj kin jot lap tartozi alap rajta ugyfel neve lapszam telefonszam eszkoz tetel datum bekapcsolhato varhato erkezes beszallito beszallitoi rendeles szama eloleg vegosszeg megjegyzes szerviz neve vonalkod qr kod ar alap nincs rajta ugyfel bizonyl lat ar polc allo doboz megis beallitas cimkenyomtatas rendeles cimke lap kapcsold brutto vegosszeg fizet eloleg sor",
+            "h": 75
+        },
+        {
+            "id": "matrica#5",
+            "cim": "Egyedi címke – amire hirtelen kell valamit ráírni",
+            "horgony": "egyedi-cimke-amire-hirtelen-kell-valamit-rairni",
+            "szoveg": "Nem minden címke tartozik rekordhoz: néha csak rá kell írni valamit egy dobozra, egy zacskóra vagy egy félretett alkatrészre, és kinyomtatni. Erre való az **Egyedi címke**.\n\n1. Nyisd meg az oldalmenü **Címkék** pontját, és kattints az **Egyedi címke** gombra.\n2. Írd be a szöveget. Négy sor van: az **1. sor** a nagy, félkövér felirat, a **2.** és a **3.** rendes méretű, a **4.** apró (ide való a figyelmeztetés, például „Nem adható ki!”). Az üres sor lemarad a címkéről.\n3. Az előnézet gépelés közben követi, amit írsz.\n4. Add meg a **Példány** számát, és kattints a **Nyomtatás** gombra.\n\nMi kerüljön rá azon felül, amit beírsz (a szerviz neve, a mai dátum, vonalkód vagy QR-kód az 1. sor értékéből), és melyik sor mekkora betűvel menjen: **Beállítások › Címkenyomtatás › Egyedi címke**. A nyomtató és a tekercs itt is ugyanaz, mint a többi címkénél.\n\nAz egyedi címke **nem kerül naplóba**: nincs rekord, amihez tartozna.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke egyedi cimke ami hirtel valami rairni egyedi cimke ami hirtel valami rairni cimke tartozi rekord neha irni valami doboz zacsko felret alkatresz kinyomtatni valo egyedi cimke nyisd oldalmenu cim pontj kattints egyedi cimke gomb ird szoveg negy sor sor nagy felkover felir rendes meretu apro ide valo figyelmeztetes peldaul adhato ures sor lemarad cimke elonez gepeles koz koveti irsz add peldany szam kattints nyomtatas gomb kerulj azon felul beirsz szerviz neve mai datum vonalkod qr kod sor erteke sor mekko betu menj beallitas cimkenyomtatas egyedi cimke nyomtato tekercs ugyanaz tobbi cimkenel egyedi cimke ar naplo nincs rekord ami tartozna",
+            "h": 107
+        },
+        {
+            "id": "matrica#6",
+            "cim": "Lépésről lépésre: matrica nyomtatása",
+            "horgony": "lepesrol-lepesre-matrica-nyomtatasa",
+            "szoveg": "1. Nyisd meg a munkalapot.\n2. Kattints az ablak alján a **Matrica** gombra. Megnyílik a Matrica ablak, benne minden eszköz matricájának előnézete.\n3. Több eszközös lapon pipáld ki, melyik eszköz matricája kell (alapból mind).\n4. Írd be a **Példány** számát, ha több kell ugyanabból.\n5. Kattints a **Nyomtatás** gombra:\n   - **Böngészős módban** megnyílik a böngésző nyomtatás-ablaka – válaszd a Brother nyomtatót, és nyomtass. A Matrica ablak tetején álló tipp megmondja, mit válassz: **Papírméret** (a címke Brother-neve, például „62mm” vagy „29mm x 90mm”), **Margók: Nincs**, **Méret: 100%**, a fejléc és lábléc **ki**.\n   - **Hálózati módban** a matrica azonnal a nyomtatóra megy, ablak nélkül.\n6. A **PDF megnyitása** gomb új lapon nyitja meg a matricát (mentéshez vagy kézi nyomtatáshoz).\n\nA nyomtatás a lap **Naplójába** is bekerül.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke lepes lepes matrica nyomtatasa lepes lepes matrica nyomtatasa nyisd munkalap kattints abl aljan matrica gomb megnyili matrica abl benne eszkoz matrica elonezete tobb eszkozos lap pipald eszkoz matrica alap mind ird peldany szam tobb ugyanab kattints nyomtatas gomb bongeszos mod megnyili bongeszo nyomtatas ablaka valaszd brother nyomt nyomtass matrica abl tetej allo tipp megmond valassz papirmer cimke brother neve peldaul 62mm 29mm 90mm marg nincs mer 100 fejlec lablec halozati mod matrica azonnal nyomtato megy abl nelkul pdf megnyitasa gomb uj lap nyi matric mentes kezi nyomtatas nyomtatas lap naplo bekerul",
+            "h": 99
+        },
+        {
+            "id": "matrica#7",
+            "cim": "Lépésről lépésre: a nyomtató beállítása",
+            "horgony": "lepesrol-lepesre-a-nyomtato-beallitasa",
+            "szoveg": "1. Nyisd meg a **Beállítások › Címkenyomtatás** lapfület.\n2. **Nyomtató típusa:** válaszd ki a Brother nyomtatót.\n3. **Nyomtatási mód:**\n   - **Böngésző (Brother illesztőprogram, PDF)** – minden Brother címkenyomtatóval megy (QL, PT, TD). A gépre telepítsd a Brother illesztőprogramot, és a nyomtató beállításaiban egyszer állítsd be a címke méretét (például 62 mm folyamatos).\n   - **Közvetlenül hálózaton (QL, 9100-as port)** – a hálózatos QL nyomtatókkal (QL-580N, QL-710W, QL-720NW, QL-810W, QL-820NWB, QL-1060N, QL-1110NWB, QL-1115NWB). Írd be a nyomtató **IP-címét**; a **Port** marad `9100`. A nyomtatónak a routerben állandó címet adj, és a szervernek (a gépnek, amelyen a rendszer fut) el kell érnie.\n4. **Címke / szalag:** a betett tekercs (például **DK-22205 – 62 mm folyamatos** vagy **DK-11209 – 62 × 29 mm**). Folyamatos szalagnál add meg **A matrica hossza** mezőt is.\n5. **Tájolás:** **Álló** – a sorok a szalagon keresztben; **Fekvő** – a sorok a szalag hosszában.\n6. Állítsd a **Margó**, a **Betűtípus** és az **Alap betűméret** mezőt; jobb oldalt az előnézet azonnal mutatja az eredményt.\n7. Kattints a **Próbanyomat** gombra (kitalált adatokkal nyomtat), majd a **Mentés** gombra.\n\nA **Nyomtató típusa**, a **Nyomtatási mód** és a **Címke / szalag** felül, a közös **Nyomtató és címke** dobozban van – ez a termék- és a szolgáltatás-címkére is érvényes. A hossz, a tájolás, a betű és a tartalom a fülek alatt, sablononként állítható.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke lepes lepes nyomtato beallitasa lepes lepes nyomtato beallitasa nyisd beallitas cimkenyomtatas lapful nyomtato tipusa valaszd brother nyomt nyomtatasi mod bongeszo brother illesztoprogram pdf brother cimkenyomtato megy ql pt td gep telepitsd brother illesztoprogram nyomtato beallitas egyszer allitsd cimke mer peldaul 62 mm folyamatos kozvetlenul haloz ql 9100 as por halozatos ql nyomt ql 580n ql 710w ql 720nw ql 810w ql 820nwb ql 1060n ql 1110nwb ql 1115nwb ird nyomtato ip cim por marad 9100 nyomtato router allando cim adj szerver gep amely rendszer fut ernie cimke szalag bet tekercs peldaul dk 22205 62 mm folyamatos dk 11209 62 29 mm folyamatos szalagnal add matrica hossza mez tajolas allo sor szalag keresz fekvo sor szalag hossza allitsd margo betutipus alap betumer mez jobb oldal elonez azonnal mut eredmeny kattints probanyom gomb kitalal ada nyom majd mentes gomb nyomtato tipusa nyomtatasi mod cimke szalag felul kozos nyomtato cimke doboz term szolgaltatas cimke ervenyes hossz tajolas betu tartalom ful ala sablononk allithato",
+            "h": 168
+        },
+        {
+            "id": "matrica#8",
+            "cim": "Lépésről lépésre: mi kerüljön a matricára",
+            "horgony": "lepesrol-lepesre-mi-keruljon-a-matricara",
+            "szoveg": "1. A **Mi kerüljön a matricára** dobozban minden adatnak egy sora van.\n2. Pipáld be, ami kell – a ki nem pipált adat nem kerül rá.\n3. A **felirat** mezőben a sor eleje áll (például `IMEI` → „IMEI: 3567…”); üresen csak az érték látszik.\n4. A lenyílóban a betűméret (**kicsi**, **normál**, **nagy**, **óriás**…), az **F** pipa félkövérre állítja.\n5. A **▲** és **▼** nyíllal állítsd a sorrendet.\n6. **Az RMA a matricán:** **RMA-kód és QR-kód**, **Csak az RMA-kód** vagy **Csak a QR-kód**.\n7. Figyeld az előnézetet, majd **Mentés**.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke lepes lepes kerulj matrica lepes lepes kerulj matrica kerulj matrica doboz ada sora pipald pipal ada ar felir mezo sor ele all peldaul imei imei 3567 ures ert latszi lenyilo betumer kicsi normal nagy orias pipa felkover alli nyillal allitsd sorrend rma matrican rma kod qr kod rma kod qr kod figyeld elonez majd mentes",
+            "h": 63
+        },
+        {
+            "id": "matrica#9",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "| Mező / gomb | Mire való |\n|---|---|\n| **Nyomtató típusa** | a Brother nyomtató; a hálózati módhoz a hálózatos QL-ek közül kell választani |\n| **Nyomtatási mód** | böngészőből (illesztőprogrammal) vagy közvetlenül hálózaton |\n| **A nyomtató IP-címe**, **Port** | hálózati módhoz |\n| **Címke / szalag** | a betett DK-tekercs vagy TZe-szalag, vagy **Egyedi méret** |\n| **A matrica hossza** | folyamatos szalagon egy matrica hossza mm-ben |\n| **Tájolás**, **Margó** | a sorok iránya; a szélek üresen hagyott része |\n| **Betűtípus**, **Alap betűméret** | a matrica betűje; a sorok mérete ehhez képest szorzódik |\n| **Példányszám** | a Matrica ablak alapértéke |\n| **Több eszközös lapon eszközönként külön matrica** | kikapcsolva csak a fő eszköz matricája készül |\n| **Automatikus vágás matricánként** | hálózati módban a nyomtató matricánként vág |\n| **Vékony keret a matrica szélén** | keret a matrica körül |\n| **Próbanyomat** | kitalált adatokkal nyomtat a még el nem mentett beállítással |",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke mez gomb mez gomb mezo gomb mire valo nyomtato tipusa brother nyomtato halozati mod halozatos ql ek kozul valasztani nyomtatasi mod bongeszo illesztoprogrammal kozvetlenul haloz nyomtato ip cime por halozati mod cimke szalag bet dk tekercs tze szalag egyedi mer matrica hossza folyamatos szalag matrica hossza mm ben tajolas margo sor iranya szel ures hagy resze betutipus alap betumer matrica betu sor merete ehhez kepes szorzodi peldanyszam matrica abl alaperteke tobb eszkozos lap eszkozonk kul matrica kikapcsolva fo eszkoz matrica keszul automatikus vagas matricank halozati mod nyomtato matricank vag vekony ker matrica szel ker matrica korul probanyom kitalal ada nyom ment beallitassal",
+            "h": 110
+        },
+        {
+            "id": "matrica#10",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Ha nem fér ki**, a rendszer arányosan kisebb betűvel írja (legfeljebb a felére). Ha így sem fér ki, az előnézet alatt szól: kapcsolj ki egy adatot, vagy válassz nagyobb címkét.\n- A hosszú hiba legfeljebb három sorban, az eszköz két sorban áll; ami nem fér ki, „…”-tal végződik.\n- A QR-kód az ügyféloldalra mutat (ugyanaz, mint a munkalap címkéjén); kikapcsolt Ügyfélüzenetek és RMA-oldal modulnál nincs RMA-kód és QR-kód.\n- A **102 mm**-es címke csak a széles QL nyomtatókon (QL-1050/1060N/1100/1110NWB/1115NWB) fér el.\n- A TZe-szalag és az egyedi méret csak böngészőből nyomtatható.\n- A feloldó kód és minta a matricán olvasható – csak olyan készülékre tedd, amely a szervizben marad. A matricára csak akkor kerül, ha a nyomtatást indító ember szerepe láthatja (**Feloldó kód és minta megnézése** jog); különben üresen marad.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke szabaly ami rendszer betar szabaly ami rendszer betar fer rendszer aranyosan kisebb betu irja legfeljebb fele igy fer elonez ala szol kapcsolj ada valassz nagyobb cim hosszu hiba legfeljebb harom sor eszkoz ket sor all fer tal vegzodi qr kod ugyfeloldal mut ugyanaz munkalap cimkej kikapcsol ugyfeluz rma oldal modulnal nincs rma kod qr kod 102 mm cimke szeles ql nyomt ql 1050 1060n 1100 1110nwb 1115nwb fer tze szalag egyedi mer bongeszo nyomtathato feloldo kod minta matrican olvashato eszkoz tedd amely szerviz marad matrica ar nyomtatas indito ember szerepe lath feloldo kod minta megnezese jog kul ures marad",
+            "h": 107
+        },
+        {
+            "id": "matrica#11",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- A legtöbb szervizben a **62 mm folyamatos** szalag, **álló** tájolással, 40–50 mm hosszal a legjobb: minden alapadat elfér, a minta rajza is jól látszik.\n- Kis készülékre (óra, fülhallgató) a **DK-11204 – 17 × 54 mm** címkét használd, és csak a nevet, a munkalapszámot és a dátumot hagyd bekapcsolva.\n- Böngészős nyomtatásnál a nyomtatás-ablakban a **Margók: nincs** és a **100%-os méret** a jó beállítás.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke tipp tipp legtobb szerviz 62 mm folyamatos szalag allo tajolassal 40 50 mm hosszal legjobb alapad elfer minta rajza jol latszi kis eszkoz ora fulhallgato dk 11204 17 54 mm cim hasznald nev munkalapszam datum hagyd bekapcsolva bongeszos nyomtatasnal nyomtatas abl marg nincs 100 os mer jo beallitas",
+            "h": 56
+        },
+        {
+            "id": "matrica#12",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **„A nyomtató nem érhető el”** (hálózati mód): be van kapcsolva? ugyanazon a hálózaton van, mint a szerver? jó az IP-cím? A nyomtató menüjében vagy a beállítási lapján nézd meg a címét.\n- **A matrica üres vagy el van csúszva** (hálózati mód): a **Címke / szalag** egyezzen a betett tekerccsel. Ha mást teszel be, itt is írd át.\n- **A Brother ablak: „A készülékben levő címke- vagy szalagtekercs nem egyezik az alkalmazásban kiválasztottal”** (böngészős mód): a beállított címke más, mint ami a nyomtatóban van. A Brother ablak kiírja a betett tekercset (például „62mm Folyamatos szalag”). Nyomj **Mégse**-t, a **Beállítások › Címkenyomtatás** lapon a **Címke / szalag** mezőben válaszd ugyanazt (a példában **DK-22205 – 62 mm folyamatos**), mentsd, és nyomtass újra. A nyomtatás-ablakban a **Papírméret** is ez legyen (a példában **62mm**) – a Matrica ablak kiírja, mit válassz.\n- **A böngésző nem nyitja meg a nyomtatást:** a rendszer ilyenkor új lapon megnyitja a PDF-et – onnan nyomtass.\n- **A PDF jó, de a nyomtató kicsinyíti** (böngészős mód): a Brother illesztőprogramban állítsd be ugyanazt a címkeméretet, és a nyomtatás-ablakban a 100%-os méretet.\n- **Nincs Matrica gomb:** a lapnak még nincs munkalapszáma, vagy a lap árukiadás vagy rendelés, vagy a modul ki van kapcsolva.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke megy megy nyomtato erheto halozati mod kapcsolva ugyanaz haloz szerver jo ip cim nyomtato menu beallitasi lapjan nezd cim matrica ures csuszva halozati mod cimke szalag egyezz bet tekerccsel mas teszel ird brother abl keszul levo cimke szalagtekercs egyezi alkalmazas kivalasztottal bongeszos mod beallit cimke mas nyomtato brother abl kiir bet tekercs peldaul 62mm folyamatos szalag nyomj megse beallitas cimkenyomtatas lap cimke szalag mezo valaszd ugyanaz pelda dk 22205 62 mm folyamatos mentsd nyomtass ujra nyomtatas abl papirmer legy pelda 62mm matrica abl kiir valassz bongeszo nyi nyomtatas rendszer ily uj lap megnyi pdf et onnan nyomtass pdf jo nyomtato kicsinyiti bongeszos mod brother illesztoprogram allitsd ugyanaz cimkemer nyomtatas abl 100 os mer nincs matrica gomb lap nincs munkalapszama lap arukiadas rendeles modul kapcsolva",
+            "h": 132
+        },
+        {
+            "id": "matrica#13",
+            "cim": "GYIK › Milyen Brother nyomtató kell?",
+            "horgony": "milyen-brother-nyomtato-kell",
+            "szoveg": "Böngészőből bármelyik Brother címkenyomtató jó (QL, PT, TD) a gyári illesztőprogrammal. Közvetlen, ablak nélküli nyomtatáshoz hálózatos QL kell (például QL-820NWB, QL-810W, QL-720NW).",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi brother nyomtato gyi brother nyomtato bongeszo barmelyi brother cimkenyomtato jo ql pt td gyari illesztoprogrammal kozvetl abl nelkuli nyomtatas halozatos ql peldaul ql 820nwb ql 810w ql 720nw",
+            "h": 37
+        },
+        {
+            "id": "matrica#14",
+            "cim": "GYIK › Mi az az RMA-kód a matricán?",
+            "horgony": "mi-az-az-rma-kod-a-matrican",
+            "szoveg": "Rövid, a laphoz tartozó egyedi kód (például `3F9A-12C4`). A mellette álló QR-kód az ügyféloldalra visz, ahol az ügyfél a javítás állapotát követi.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi rma kod matrican gyi rma kod matrican rovid lap tartozo egyedi kod peldaul 3f9a 12c4 mellette allo qr kod ugyfeloldal visz ahol ugyfel javitas allap koveti",
+            "h": 35
+        },
+        {
+            "id": "matrica#15",
+            "cim": "GYIK › Kinyomtathatom újra a matricát?",
+            "horgony": "kinyomtathatom-ujra-a-matricat",
+            "szoveg": "Igen, akárhányszor. Lezárt lapról is – a nyomtatás nem módosítja a lapot. Minden nyomtatás bekerül a Naplóba.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi kinyomtathatom ujra matric gyi kinyomtathatom ujra matric akarhanyszor lezar lap nyomtatas modosi lap nyomtatas bekerul naplo",
+            "h": 25
+        },
+        {
+            "id": "matrica#16",
+            "cim": "GYIK › Több eszköz van a lapon. Mindegyik kap matricát?",
+            "horgony": "tobb-eszkoz-van-a-lapon-mindegyik-kap-matricat",
+            "szoveg": "Igen, eszközönként egyet, a saját típusával, IMEI-jével, hibájával és feloldásával. A Matrica ablakban kipipálhatod, melyik kell.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi tobb eszkoz lap mindegyi kap matric gyi tobb eszkoz lap mindegyi kap matric eszkozonk egy saj tipusa imei jevel hiba feloldasa matrica abl kipipalhatod",
+            "h": 33
+        },
+        {
+            "id": "matrica#17",
+            "cim": "GYIK › Ki kell kapcsolnom a feloldó kódot a matricán?",
+            "horgony": "ki-kell-kapcsolnom-a-feloldo-kodot-a-matrican",
+            "szoveg": "Ha a készülék a szervizben marad, maradhat – a kollégáknak a munkához kell. Ha nem szeretnéd, vedd ki a pipát a **Feloldó minta és feloldó kód** sorból.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi kapcsolnom feloldo kod matrican gyi kapcsolnom feloldo kod matrican eszkoz szerviz marad maradh kolleg munka szeretned vedd pip feloldo minta feloldo kod sor",
+            "h": 32
+        },
+        {
+            "id": "matrica#18",
+            "cim": "GYIK › A nyomtató USB-n van. Mehet hálózati módban?",
+            "horgony": "a-nyomtato-usb-n-van-mehet-halozati-modban",
+            "szoveg": "Nem: a hálózati mód a szervertől egyenesen a nyomtatóhoz megy. USB-s nyomtatóval a **Böngésző** módot használd – a Brother illesztőprogrammal minden USB-s típus nyomtat.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi nyomtato usb meh halozati mod gyi nyomtato usb meh halozati mod halozati mod szerver egyenes nyomtato megy usb nyomtato bongeszo mod hasznald brother illesztoprogrammal usb tipus nyom",
+            "h": 36
+        },
+        {
+            "id": "matrica#19",
+            "cim": "GYIK › Miért kisebb a betű a matricán, mint amit beállítottam?",
+            "horgony": "miert-kisebb-a-betu-a-matrican-mint-amit-beallitottam",
+            "szoveg": "Mert különben nem férne ki minden. A rendszer arányosan kicsinyít (legfeljebb a felére); az előnézet alatt látod, hány százalékra. Kapcsolj ki egy adatot, vagy válassz nagyobb címkét.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi kisebb betu matrican beallitottam gyi kisebb betu matrican beallitottam kul ferne rendszer aranyosan kicsinyi legfeljebb fele elonez ala latod hany szazal kapcsolj ada valassz nagyobb cim",
+            "h": 35
+        },
+        {
+            "id": "matrica#20",
+            "cim": "GYIK › Hogyan változtatom meg, mi álljon a sor elején?",
+            "horgony": "hogyan-valtoztatom-meg-mi-alljon-a-sor-elejen",
+            "szoveg": "A **Beállítások › Címkenyomtatás** › **Mi kerüljön a matricára** dobozban a sor **felirat** mezőjében. Üresen csak az érték látszik.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi valtoztatom allj sor elej gyi valtoztatom allj sor elej beallitas cimkenyomtatas kerulj matrica doboz sor felir mezo ures ert latszi",
+            "h": 29
+        },
+        {
+            "id": "matrica#21",
+            "cim": "GYIK › Hol látom, mikor nyomtattak matricát egy laphoz?",
+            "horgony": "hol-latom-mikor-nyomtattak-matricat-egy-laphoz",
+            "szoveg": "A lap **Napló** gombjával: minden nyomtatás ott áll, időponttal és a kolléga nevével.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi latom nyomtat matric lap gyi latom nyomtat matric lap lap naplo gomb nyomtatas all idoponttal kollega neve",
+            "h": 26
+        },
+        {
+            "id": "matrica#22",
+            "cim": "GYIK › Nyomtathatok árcímkét a termékekre?",
+            "horgony": "nyomtathatok-arcimket-a-termekekre",
+            "szoveg": "Igen: nyisd meg a terméket, és kattints a **Címke** gombra. Mi kerüljön rá (ár, cikkszám, vonalkód…), azt a **Beállítások › Címkenyomtatás › Termékcímke** fülön állítod.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi nyomtath arcim termek gyi nyomtath arcim termek nyisd term kattints cimke gomb kerulj ar cikkszam vonalkod beallitas cimkenyomtatas termekcimke ful allitod",
+            "h": 30
+        },
+        {
+            "id": "matrica#23",
+            "cim": "GYIK › Lehet más hosszú a termékcímke, mint az RMA-matrica?",
+            "horgony": "lehet-mas-hosszu-a-termekcimke-mint-az-rma-matrica",
+            "szoveg": "Igen. Folyamatos szalagon a hossz, a tájolás és a betű fülenként külön állítható. A tekercs viszont közös: ha 62 mm-es szalag van a nyomtatóban, mindhárom címke 62 mm széles.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi mas hosszu termekcimke rma matrica gyi mas hosszu termekcimke rma matrica folyamatos szalag hossz tajolas betu fulenk kul allithato tekercs visz kozos 62 mm szalag nyomtato mindharom cimke 62 mm szeles",
+            "h": 40
+        },
+        {
+            "id": "matrica#24",
+            "cim": "GYIK › Hogyan nyomtatok a P-touch szalagos nyomtatóra?",
+            "horgony": "hogyan-nyomtatok-a-p-touch-szalagos-nyomtatora",
+            "szoveg": "Válaszd a **Címke / szalag** mezőben a szalag szélességét (TZe 12–36 mm), és a böngészős módot. A Brother illesztőprogramban ugyanazt a szalagszélességet állítsd be.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi nyomt touch szalagos nyomtato gyi nyomt touch szalagos nyomtato valaszd cimke szalag mezo szalag szelesseg tze 12 36 mm bongeszos mod brother illesztoprogram ugyanaz szalagszelesseg allitsd",
+            "h": 35
+        },
+        {
+            "id": "matrica#25",
+            "cim": "GYIK › Hogyan állítom a példányszámot a címkeablakban?",
+            "horgony": "hogyan-allitom-a-peldanyszamot-a-cimkeablakban",
+            "szoveg": "A **Példány** melletti **−** és **+** gombbal, vagy írd be a számot. 1 és 50 között lehet. Az alapértéket címketípusonként a Beállítások › Címkenyomtatás lapon adod meg.",
+            "t": "cimkenyomtatas brother rma matrica rendeles term szolgaltatas cimke gyi allitom peldanyszam cimkeabl gyi allitom peldanyszam cimkeabl peldany melletti gombbal ird szam 50 koz alap cimketipusonk beallitas cimkenyomtatas lap adod",
+            "h": 29
+        }
+    ]
+}

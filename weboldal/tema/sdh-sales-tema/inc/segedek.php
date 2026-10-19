@@ -341,7 +341,8 @@ function sdh_tema_gombok($cta, string $osztaly = ''): string
 
         $st = (string) ($g['stilus'] ?? ($i === 0 ? 'elsodleges' : 'masodlagos'));
         $st = in_array($st, ['elsodleges', 'masodlagos', 'szellem', 'link', 'neon'], true) ? $st : 'masodlagos';
-        $ki .= '<a class="s-gomb s-gomb--' . esc_attr($st) . '" href="' . esc_url($url) . '">' . esc_html($sz) . ($st === 'elsodleges' || $st === 'link' ? sdh_tema_ikon('nyil-jobb', 's-gomb__ikon') : '') . '</a>';
+        $uj  = !empty($g['uj']);
+        $ki .= '<a class="s-gomb s-gomb--' . esc_attr($st) . '" href="' . esc_url($url) . '"' . ($uj ? ' target="_blank" rel="noopener"' : '') . '>' . esc_html($sz) . ($st === 'elsodleges' || $st === 'link' ? sdh_tema_ikon('nyil-jobb', 's-gomb__ikon') : '') . '</a>';
         $i++;
     }
 
@@ -385,24 +386,79 @@ function sdh_tema_h1(?bool $beallit = null): bool
 function sdh_tema_szekcio_nyit(array $sz, array $o = []): string
 {
     $tipus = sanitize_html_class((string) ($sz['tipus'] ?? 'szekcio'));
-    $id    = sanitize_title((string) ($sz['id'] ?? ''));
-    $id    = $id !== '' ? $id : 'sz-' . (int) ($sz['_i'] ?? 0) . '-' . $tipus;
-    $hatt  = (string) ($sz['hatter'] ?? 'alap');
-    $hatt  = in_array($hatt, ['alap', 'uveg', 'kiemelt', 'sotet'], true) ? $hatt : 'alap';
+    $id    = sdh_tema_szekcio_id($sz);
+    $hatt  = sdh_tema_hatter($sz);
     $cim   = sdh_tema_mezo($sz, 'cim');
     $cimid = $id . '-cim';
     $szint = $o['szint'] ?? 'h2';
     $szel  = $o['szelesseg'] ?? (string) ($sz['szelesseg'] ?? '');
     $igaz  = $o['igazitas'] ?? (string) ($sz['igazitas'] ?? '');
+    $terk  = (string) ($sz['terkoz'] ?? '');
 
     $GLOBALS['sdh_tema_szekcio_verem'][] = $cimid;
 
-    $osztaly = 's-szekcio s-szekcio--' . $tipus . ' s-hatter--' . $hatt . (!empty($o['osztaly']) ? ' ' . $o['osztaly'] : '');
-    $ki      = '<section id="' . esc_attr($id) . '" class="' . esc_attr($osztaly) . '"' . ($cim !== '' ? ' aria-labelledby="' . esc_attr($cimid) . '"' : '') . '>';
-    $ki     .= '<div class="s-kont' . ($szel === 'szuk' ? ' s-kont--szuk' : ($szel === 'szeles' ? ' s-kont--szeles' : '')) . '">';
+    $osztaly = 's-szekcio s-szekcio--' . $tipus . ' s-hatter--' . $hatt
+        . (in_array($terk, ['kicsi', 'nagy'], true) ? ' s-terkoz--' . $terk : '')
+        . (!empty($o['osztaly']) ? ' ' . $o['osztaly'] : '');
+    $ki = '<section id="' . esc_attr($id) . '" class="' . esc_attr($osztaly) . '"' . ($cim !== '' ? ' aria-labelledby="' . esc_attr($cimid) . '"' : '') . '>';
+    $ki .= '<div class="s-kont' . (in_array($szel, ['szuk', 'keskeny'], true) ? ' s-kont--szuk' : ($szel === 'szeles' ? ' s-kont--szeles' : '')) . '">';
 
-    if (($o['fej'] ?? true) && ($cim !== '' || sdh_tema_mezo($sz, 'eyebrow') !== '' || sdh_tema_mezo($sz, 'alcim') !== '')) {
+    if (($o['fej'] ?? true) && ($cim !== '' || sdh_tema_eyebrow($sz) !== '' || sdh_tema_mezo($sz, 'alcim') !== '')) {
         $ki .= sdh_tema_szekcio_fej($sz, $cimid, $szint, $igaz);
+    }
+
+    return $ki;
+}
+
+/** A szekció horgonya: `horgony` (admin) vagy `id`; különben sorszám + típus. @param array<string, mixed> $sz */
+function sdh_tema_szekcio_id(array $sz): string
+{
+    $id = sanitize_title(ltrim(sdh_tema_mezo($sz, 'horgony', sdh_tema_mezo($sz, 'id')), '#'));
+
+    return $id !== '' ? $id : 'sz-' . (int) ($sz['_i'] ?? 0) . '-' . sanitize_html_class((string) ($sz['tipus'] ?? 'szekcio'));
+}
+
+/** Háttér-változat: alap | felulet | uveg | kiemelt | sotet | atmenet. @param array<string, mixed> $sz */
+function sdh_tema_hatter(array $sz): string
+{
+    $h = sdh_tema_mezo($sz, 'hatter', 'alap');
+
+    return in_array($h, ['alap', 'felulet', 'uveg', 'kiemelt', 'sotet', 'atmenet'], true) ? $h : 'alap';
+}
+
+/** Kis felirat a cím fölött: `eyebrow` vagy `cimke` (admin). @param array<string, mixed> $sz */
+function sdh_tema_eyebrow(array $sz): string
+{
+    return sdh_tema_mezo($sz, 'eyebrow', sdh_tema_mezo($sz, 'cimke'));
+}
+
+/**
+ * A szekció gombjai egy listában: `cta` [{szoveg, url, stilus}] és/vagy az admin `gomb` / `gomb2` link-mezői.
+ *
+ * @param array<string, mixed> $sz
+ * @return array<int, array<string, string>>
+ */
+function sdh_tema_cta(array $sz): array
+{
+    $ki  = [];
+    $cta = $sz['cta'] ?? [];
+
+    if (is_array($cta) && isset($cta['szoveg'])) {
+        $cta = [$cta];
+    }
+
+    foreach (is_array($cta) ? $cta : [] as $g) {
+        if (is_array($g)) {
+            $ki[] = $g;
+        }
+    }
+
+    foreach (['gomb' => 'elsodleges', 'gomb2' => 'masodlagos'] as $k => $st) {
+        $g = $sz[$k] ?? null;
+
+        if (is_array($g) && trim((string) ($g['szoveg'] ?? '')) !== '' && trim((string) ($g['url'] ?? '')) !== '') {
+            $ki[] = ['szoveg' => (string) $g['szoveg'], 'url' => (string) $g['url'], 'stilus' => (string) ($g['stilus'] ?? ($ki === [] ? 'elsodleges' : $st)), 'uj' => !empty($g['uj'])];
+        }
     }
 
     return $ki;
@@ -413,7 +469,7 @@ function sdh_tema_szekcio_fej(array $sz, string $cimid, string $szint = 'h2', st
 {
     $szint = in_array($szint, ['h1', 'h2', 'h3'], true) ? $szint : 'h2';
     $ki    = '<header class="s-szekcio__fej' . ($igazitas === 'bal' ? ' s-szekcio__fej--bal' : '') . '">';
-    $eb    = sdh_tema_mezo($sz, 'eyebrow');
+    $eb    = sdh_tema_eyebrow($sz);
     $cim   = sdh_tema_mezo($sz, 'cim');
     $alcim = sdh_tema_mezo($sz, 'alcim');
 
@@ -436,7 +492,7 @@ function sdh_tema_szekcio_fej(array $sz, string $cimid, string $szint = 'h2', st
 function sdh_tema_szekcio_zar(array $sz = [], bool $cta = true): string
 {
     array_pop($GLOBALS['sdh_tema_szekcio_verem']);
-    $g = $cta ? sdh_tema_gombok($sz['cta'] ?? [], 's-gombsor--kozep') : '';
+    $g = $cta ? sdh_tema_gombok(sdh_tema_cta($sz), 's-gombsor--kozep') : '';
 
     return $g . '</div></section>';
 }
@@ -454,7 +510,7 @@ function sdh_tema_mount(string $nev, array $sz = [], array $attr = [], string $t
         SDH_Sales_Front::igeny($nev);
     }
 
-    $opc = array_diff_key($sz, array_flip(['tipus', 'id', 'cim', 'alcim', 'eyebrow', 'hatter', 'cta', 'rejtett', '_i', 'szelesseg', 'igazitas']));
+    $opc = array_diff_key($sz, array_flip(['tipus', 'id', 'horgony', 'cim', 'alcim', 'eyebrow', 'cimke', 'hatter', 'terkoz', 'cta', 'rejtett', '_i', 'szelesseg', 'igazitas']));
     $ki  = '<div class="s-mount s-mount--' . esc_attr($nev) . '" data-sdh="' . esc_attr($nev) . '"';
 
     if ($opc !== []) {
@@ -572,7 +628,14 @@ function sdh_tema_kep_adat(string $kulcs): array
                 if (is_array($vv)) {
                     $add($t, (int) ($vv['w'] ?? $vv['szelesseg'] ?? $vv['width'] ?? 0), (string) ($vv['src'] ?? $vv['fajl'] ?? $vv['url'] ?? ''));
                 } elseif (is_string($vv)) {
-                    $add($t, (int) $kk, $vv);
+                    // Lista ([fájl, …]) a `szelessegek` tömbbel párban, vagy {szélesség: fájl}; végső esetben a fájlnévből (-480.avif).
+                    $sz = is_int($kk) && isset($e['szelessegek'][$kk]) ? (int) $e['szelessegek'][$kk] : (is_string($kk) ? (int) $kk : 0);
+
+                    if ($sz === 0 && preg_match('/-(\d{2,5})\.[a-z0-9]+$/i', $vv, $mm)) {
+                        $sz = (int) $mm[1];
+                    }
+
+                    $add($t, $sz, $vv);
                 }
             }
         }

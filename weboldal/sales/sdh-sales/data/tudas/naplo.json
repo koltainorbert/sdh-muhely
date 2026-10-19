@@ -1,0 +1,184 @@
+{
+    "kulcs": "naplo",
+    "cim": "Napló (változásnapló)",
+    "csoport": "Rendszer",
+    "osszefoglalo": "A Napló minden módosítást megőriz mezőnként – ki, mikor, honnan, mi volt és mi lett –, és senki nem írhatja át vagy törölheti; egy rekord története a saját Napló gombjáról, a teljes napló a Napló menüpontból látszik.",
+    "darabok": [
+        {
+            "id": "naplo#1",
+            "cim": "Mire való",
+            "horgony": "mire-valo",
+            "szoveg": "A **Napló** a rendszer változásnaplója: minden, ami a rendszer adatain változik, bekerül – visszamenőleg is látod, ki, mikor, mit és honnan módosított.\n\nMindent naplóz, mezőnként, a régi és az új értékkel:\n\n- **munkalap, napi árukiadás, rendelés** – a lap minden mezője, a hibák, a tételek (szolgáltatás, termék, díj), a csatolt eszközök, az állapot, a fizetés, a rendelés útja, a lezárás és az újranyitás,\n- **üzenetek** – az ügyfélüzenetek (RMA-csevegő), az SMS-ek és a küldési döntések, a csapatüzenetek,\n- **üzenőfal** – a cetlik létrehozása, átírása, készre jelölése, levétele (az áthúzás a falon nem számít módosításnak),\n- **naptár** – az események és a naptárak (névsor),\n- **termékek** – a terméktörzs és minden készletmozgás,\n- ügyfelek, eszközök, szolgáltatások, pénztártételek és pénztárnapok, számlák, helyszínek, beszállítók, SMS-sablonok és -szabályok,\n- a **Beállítások** változásai (a kulcsok és jelszavak értéke helyett csak annyi, hogy megváltoztak),\n- **események**: matrica- és nyomtatványnyomtatás, újranyitás az okával, elutasított szerkesztés lezárt lapon.\n\nMinden bejegyzésben benne van, **honnan** jött a módosítás: a felületről, az AI-asszisztens jóváhagyott javaslatából (a javaslat számával), időzített feladatból, az ügyféloldalról vagy az SMS-átjáróból.\n\nFontos: a naplót senki nem írhatja át és nem törölheti – a rendszer sem. Minden bejegyzést aláírás véd, és az **Épség ellenőrzése** gomb megmutatja, ha valaki az adatbázisban mégis hozzányúlt.",
+            "t": "naplo valtozasnaplo mire valo mire valo naplo rendszer valtozasnaplo rendszer adatain valtozi bekerul visszamenoleg latod honnan modosit mind naploz mezonk regi uj ert munkalap napi arukiadas rendeles lap mezo hib tetel szolgaltatas term dij csa eszkoz allap fizetes rendeles utja lezaras ujranyitas uzen ugyfeluz rma csevego sms ek kuldesi dontes csapatuz uzenofal cetli letrehozasa atirasa kesz jelolese levetele athuzas fal szami modositas naptar esemeny naptar nevsor term termektorzs keszletmozgas ugyfel eszkoz szolgaltatas penztartetel penztarnap szamla helyszi beszalli sms sabl szabaly beallitas valtozas kulcs jelszav erteke hely annyi megvaltoz esemeny matrica nyomtatvanynyomtatas ujranyitas oka elutasit szerkesztes lezar lap bejegyzes benne honnan jot modositas felul ai asszisztens jovahagy javaslata javasl szama idozit felad ugyfeloldal sms atjaro fontos napl senki irh torolheti rendszer bejegyzes alairas ved epseg ellenorzese gomb megmut valaki adatbazis megis hozzanyul",
+            "h": 131
+        },
+        {
+            "id": "naplo#2",
+            "cim": "Hol találod",
+            "horgony": "hol-talalod",
+            "szoveg": "- **Egy rekord története:** a munkalap, az árukiadás és a rendelés ablakának alján a **Napló** gomb. Ugyanilyen ablakban nyílik, a lap fölé; minden kolléga látja annak a rekordnak a történetét, amelyet egyébként is lát.\n- **A teljes napló:** a bal oldali menü **Napló** pontja, a **Beállítások** fölött. Napló megnyitása Ez adminisztrátori oldal: a kolléga menüjében nem jelenik meg.\n- **Beállítások › Változásnapló:** mit naplózzon még a rendszer (beállítások, IP-cím), hány bejegyzés legyen egy oldalon.",
+            "t": "naplo valtozasnaplo talalod talalod rekord tortenete munkalap arukiadas rendeles ablaka aljan naplo gomb ugyanily abl nyili lap fole kollega lat ann rekord torten amely egyebk lat teljes naplo bal oldali menu naplo pon beallitas fol naplo megnyitasa adminisztratori oldal kollega menu jeleni beallitas valtozasnaplo naplozz rendszer beallitas ip cim hany bejegyzes legy oldal",
+            "h": 53
+        },
+        {
+            "id": "naplo#3",
+            "cim": "Lépésről lépésre: nézd meg, mi történt egy munkalappal",
+            "horgony": "lepesrol-lepesre-nezd-meg-mi-tortent-egy-munkalappal",
+            "szoveg": "1. Nyisd meg a munkalapot (vagy az árukiadást, rendelést).\n2. Kattints az ablak alján a **Napló** gombra.\n3. Az ablakban napokra bontva, a legújabb elöl látod a történetet. Egy kártya egy mentés: fent az időpont, ki csinálta és honnan (például **Felület** vagy **AI-asszisztens**), alatta a változások. Az ablak egyszerre tizenkét bejegyzést mutat, a többit a **Régebbiek** gomb hozza – így az ablak nem nyúlik végeláthatatlanná.\n4. A módosított mezőknél áthúzva a régi, félkövérrel az új érték áll: `Állapot: Nyitott → Lezárt`. Széles ablakban a megváltozott mezők egymás mellett, több oszlopban állnak, hogy egy mentés egy pillantással átlátható legyen.\n5. Új tételnél vagy törlésnél a **Minden adata** sorra kattintva látod a teljes sort.\n6. Ha több bejegyzés van, a **Régebbiek** gomb tölti be a többit.\n7. A **Mi történt? – kérdezd az asszisztenst** gomb megkéri a figurát, hogy mondja el időrendben, mi történt a lappal.",
+            "t": "naplo valtozasnaplo lepes lepes nezd tort munkalappal lepes lepes nezd tort munkalappal nyisd munkalap arukiadas rendeles kattints abl aljan naplo gomb abl nap bontva legujabb elol latod torten kartya mentes fen idop csinalta honnan peldaul felul ai asszisztens alatta valtozas abl egyszer tizen bejegyzes mut tobbi regebbi gomb hozza igy abl nyuli vegelathatatlanna modosit mezoknel athuzva regi felkoverrel uj ert all allap nyit lezar szeles abl megvaltoz mez egymas mell tobb oszlop all mentes pillantassal atlathato legy uj tetelnel torlesnel adata sor kattintva latod teljes sor tobb bejegyzes regebbi gomb tolti tobbi tort kerdezd asszisztens gomb megkeri figur mond idorend tort lappal",
+            "h": 102
+        },
+        {
+            "id": "naplo#4",
+            "cim": "Lépésről lépésre: keresés a teljes naplóban",
+            "horgony": "lepesrol-lepesre-kereses-a-teljes-naploban",
+            "szoveg": "1. Nyisd meg a **Napló** menüpontot.\n2. A szűrőben válaszd ki, mire vagy kíváncsi:\n   - **Mi** – munkalapok, árukiadás, rendelések, termékek, üzenetek, csapatüzenetek, üzenőfal, naptár, ügyfelek, eszközök, szolgáltatások, pénztár, számlák, beállítások,\n   - **Ki** – egy kolléga,\n   - **Honnan** – felület, AI-asszisztens, időzített feladat, ügyféloldal, SMS-átjáró,\n   - **Művelet** – létrehozás, módosítás, törlés, esemény, nyomtatás, elutasítva…,\n   - **Ettől** / **Eddig** – időszak,\n   - **Munkalapszám** – egy lap minden bejegyzése,\n   - **Keresés** – név, érték vagy megjegyzés szövegére (például `25000` vagy `Minta Márta`).\n3. Kattints a **Szűrés** gombra. Az **Alaphelyzet** törli a szűrőt.\n4. A lista alján lapozhatsz. A **CSV letöltése** a szűrt bejegyzéseket Excelben nyitható fájlba menti (soronként egy mezőváltozás).",
+            "t": "naplo valtozasnaplo lepes lepes kereses teljes naplo lepes lepes kereses teljes naplo nyisd naplo menupon szuro valaszd mire kivancsi munkalap arukiadas rendeles term uzen csapatuz uzenofal naptar ugyfel eszkoz szolgaltatas penztar szamla beallitas kollega honnan felul ai asszisztens idozit felad ugyfeloldal sms atjaro muvel letrehozas modositas torles esemeny nyomtatas elutasitva ettol edd idosz munkalapszam lap bejegyzese kereses nev ert megjegyzes szovege peldaul 25000 minta marta kattints szures gomb alaphelyz torli szur lista aljan lapozhatsz csv letoltese szur bejegyzes excel nyithato fajl menti soronk mezovaltozas",
+            "h": 84
+        },
+        {
+            "id": "naplo#5",
+            "cim": "Mezők és gombok",
+            "horgony": "mezok-es-gombok",
+            "szoveg": "| Elem | Mire való |\n|---|---|\n| **bejegyzés összesen** / **ma** | hány bejegyzés van a naplóban, és ebből ma mennyi |\n| **A napló épsége** | az utolsó ellenőrzés eredménye: **Ép** vagy **Eltérés!** |\n| **Épség ellenőrzése** | minden bejegyzés aláírását ellenőrzi, és megnézi, nem hiányzik-e közülük |\n| **CSV letöltése** | a szűrt bejegyzések letöltése |\n| **Kérdezd az asszisztenst** | a figura összefoglalja a (szűrt) naplót idővonalszerűen |\n| a kártya színe | zöld: létrehozás, piros: törlés, sárga: elutasítva / védelem, lila: beállítás, kék: módosítás, szürke: esemény, nyomtatás |\n| **Felület**, **AI-asszisztens**… | honnan jött a módosítás |",
+            "t": "naplo valtozasnaplo mez gomb mez gomb elem mire valo bejegyzes osszes ma hany bejegyzes naplo ebbol ma naplo epsege utolso ellenorzes eredmenye ep elteres epseg ellenorzese bejegyzes alairas ellenorzi megnezi hianyzi kozul csv letoltese szur bejegyzes letoltese kerdezd asszisztens figu osszefoglal szur napl idovonalszeru kartya szine zold letrehozas piros torles sarga elutasitva vedelem lila beallitas kek modositas szurke esemeny nyomtatas felul ai asszisztens honnan jot modositas",
+            "h": 66
+        },
+        {
+            "id": "naplo#6",
+            "cim": "Az asszisztens és a Napló",
+            "horgony": "az-asszisztens-es-a-naplo",
+            "szoveg": "Az asszisztens a teljes naplót olvassa:\n\n- Ha egy munkalap (vagy a Napló ablaka) nyitva van, a lap története **magától** megy hozzá – kérdezd meg: `Mi történt ezzel a lappal?`, `Ki írta át a határidőt?`, `Mikor lett lezárva, és ki nyitotta újra?` –, azonnal, idővonalszerűen felel.\n- A Napló ablak megnyitásakor a figura fel is ajánlja: **Elmondjam röviden, mi történt vele?**\n- A teljes naplóban is keres: `Mit csinált ma Minta Márta?`, `Mi változott tegnap a termékeknél?`, `Ki törölt naptáreseményt a héten?`, `Ki mennyit dolgozott a rendszerben ebben a hónapban?`, `Biztos, hogy nem nyúltak a naplóhoz?`\n- A naplót csak olvassa: módosítani, törölni nem tudja – senki sem.\n- A zárkódot és a feloldó mintát a naplóból sem kapja meg; a beállítások naplóját csak adminisztrátornak mutatja.",
+            "t": "naplo valtozasnaplo asszisztens naplo asszisztens naplo asszisztens teljes napl olvassa munkalap naplo ablaka nyitva lap tortenete maga megy hozza kerdezd tort ezzel lappal irta hatarid let lezarva nyitotta ujra azonnal idovonalszeru felel naplo abl megnyitasa figu ajanl elmondjam rovid tort vele teljes naplo keres csinal ma minta marta valtoz tegnap termekeknel torol naptaresemeny het mennyi dolgoz rendszer ebb honap biztos nyul naplo napl olvassa modositani torolni tud senki zarkod feloldo min naplo kap beallitas naploj adminisztrator mut",
+            "h": 77
+        },
+        {
+            "id": "naplo#7",
+            "cim": "Beállítások › Változásnapló",
+            "horgony": "beallitasok-valtozasnaplo",
+            "szoveg": "A **Beállítások › Változásnapló** lapfülön (a **Rendszer** sorban):\n\n- **A Beállítások változásai is kerüljenek a naplóba** – alapból be van kapcsolva. A titkok (API-kulcs, jelszó, Számla Agent kulcs) értéke soha nem kerül bele, csak hogy megváltoztak.\n- **A gép hálózati címe (IP) is kerüljön a bejegyzésbe** – alapból be.\n- **Bejegyzés oldalanként** – a Napló menüpont egy oldalán (20–500).\n\nA naplózás maga **nem kapcsolható ki**, és ennek a lapfülnek a változása is bekerül a naplóba.",
+            "t": "naplo valtozasnaplo beallitas valtozasnaplo beallitas valtozasnaplo beallitas valtozasnaplo lapful rendszer sor beallitas valtozas ar naplo alap kapcsolva tit api kulcs jelszo szamla agen kulcs erteke soha ar bele megvaltoz gep halozati cime ip kerulj bejegyzes alap bejegyzes oldalank naplo menup oldalan 20 500 naplozas maga kapcsolhato enn lapful valtozasa bekerul naplo",
+            "h": 51
+        },
+        {
+            "id": "naplo#8",
+            "cim": "Szabályok, amiket a rendszer betart",
+            "horgony": "szabalyok-amiket-a-rendszer-betart",
+            "szoveg": "- **Csak hozzáfűzés.** A napló bejegyzését a rendszer soha nem írja át és nem törli. Ha bárhonnan átírási vagy törlési kísérlet jönne a napló táblájára, a rendszer nem engedi lefutni, és a kísérlet is bekerül (**Védelem**).\n- **Aláírás.** Minden bejegyzés a tartalmából és a telepítés titkos kulcsából számolt aláírást kap. Az **Épség ellenőrzése** megmutatja, ha egy bejegyzést utólag átírtak, vagy ha bejegyzések hiányoznak.\n- **Mindenhonnan.** A napló az adatbázis szintjén figyel: az űrlap, a lista, az AI-asszisztens, az import és az időzített feladat módosítása is bekerül – nincs kerülőút.\n- **Egy mentés = egy kártya.** Ami egy mentéssel változott (a lap mezői, a tételek, a hibák), az egy kártyán látszik.\n- **A zajt kihagyja:** a „módosítva” időbélyeg, a cetli helye a falon, az olvasottság és az újraszámolt pénztár-összesítő önmagában nem bejegyzés.\n- **Tömeges írás** (például egy régi táblázat importja) egyetlen összesítő bejegyzés a darabszámmal.\n- **Privát naptáresemény:** a részletei a naplóban is csak a tulajdonosának látszanak.\n- **Közös fiók:** ha a cég egy közös fiókkal dolgozik, a napló a fiók nevét mutatja; névre szóló profilokkal a kolléga nevét.",
+            "t": "naplo valtozasnaplo szabaly ami rendszer betar szabaly ami rendszer betar hozzafuzes naplo bejegyzes rendszer soha irja torli barhonnan atirasi torlesi kiserl jonne naplo tabla rendszer engedi lefutni kiserl bekerul vedelem alairas bejegyzes tartalma telepites titkos kulcsa szamol alairas kap epseg ellenorzese megmut bejegyzes utolag atir bejegyzes hianyoz mindenhonnan naplo adatbazis szintj figyel urlap lista ai asszisztens impor idozit felad modositasa bekerul nincs kerulou mentes kartya mentessel valtoz lap mezoi tetel hib kartyan latszi zaj kihagy modositva idobelyeg cetli helye fal olvasottsag ujraszamol penztar osszesito onmaga bejegyzes tomeges iras peldaul regi tablaz impor egyetl osszesito bejegyzes darabszammal priv naptaresemeny reszl naplo tulajdonosa latsza kozos fio ceg kozos fiokkal dolgozi naplo fio nev mut nev szolo profil kollega nev",
+            "h": 117
+        },
+        {
+            "id": "naplo#9",
+            "cim": "Lezárt lap és a Napló",
+            "horgony": "lezart-lap-es-a-naplo",
+            "szoveg": "A lezárt (Lezárt, Érvénytelen) lap csak olvasható: szerkeszteni a lap tetején az **Újranyitás** gombbal lehet. A naplóba kerül:\n\n- az újranyitás, az új állapot és az **ok** (ha megadták),\n- minden elutasított próbálkozás (például fizetés vagy mentés lezárt lapon) – **Elutasítva** jelzéssel.\n\nRészletek: Lezárt lap zárolása.",
+            "t": "naplo valtozasnaplo lezar lap naplo lezar lap naplo lezar lezar ervenytel lap olvashato szerkeszteni lap tetej ujranyitas gombbal naplo ar ujranyitas uj allap megad elutasit probalkozas peldaul fizetes mentes lezar lap elutasitva jelzessel reszl lezar lap zarolasa",
+            "h": 37
+        },
+        {
+            "id": "naplo#10",
+            "cim": "Tippek",
+            "horgony": "tippek",
+            "szoveg": "- Ha valami „magától” változott, nézd meg a **Honnan** oszlopot: időzített feladat, ügyféloldal vagy AI-javaslat is lehetett.\n- Napi zárás után a **Mi**: Házipénztár és az aznapi dátum szűrővel látod, ki mit írt át a kasszában.\n- Havonta egyszer nyomd meg az **Épség ellenőrzése** gombot.",
+            "t": "naplo valtozasnaplo tipp tipp maga valtoz nezd honnan oszlop idozit felad ugyfeloldal ai javasl lehet napi zaras utan hazipenztar aznapi datum szuro latod irt penztar havonta egyszer nyomd epseg ellenorzese gomb",
+            "h": 31
+        },
+        {
+            "id": "naplo#11",
+            "cim": "Ha valami nem megy",
+            "horgony": "ha-valami-nem-megy",
+            "szoveg": "- **Nem látom a Napló menüpontot.** Adminisztrátori oldal. A kolléga a rekordok **Napló** gombjával látja azok történetét.\n- **Eltérés! jelzés az épségnél.** Valaki adatbázis-szinten hozzányúlt a naplóhoz (vagy a szerver beállításaiban megváltozott a titkos kulcs). Nézd meg, ki fér hozzá a szerverhez és az adatbázishoz; a hibás bejegyzések azonosítóját az üzenet felsorolja.\n- **Egy régi változás nincs benne.** A napló a 0.59.0-s verzió telepítésétől rögzít; ami előtte történt, arról csak az állapottörténet és a pénztár saját naplója tud.",
+            "t": "naplo valtozasnaplo megy megy latom naplo menupon adminisztratori oldal kollega rekord naplo gomb lat torten elteres jelzes epsegnel valaki adatbazis szin hozzanyul naplo szerver beallitas megvaltoz titkos kulcs nezd fer hozza szerver adatbazis hibas bejegyzes azonositoj uzen felso regi valtozas nincs benne naplo 59 verzio telepitese rogzi elotte tort arrol allapottort penztar saj naplo tud",
+            "h": 55
+        },
+        {
+            "id": "naplo#12",
+            "cim": "GYIK › Ki törölheti a naplót?",
+            "horgony": "ki-torolheti-a-naplot",
+            "szoveg": "Senki. A napló csak bővül: a rendszer sem ír át és nem töröl belőle, a felületen nincs ilyen gomb, és a napló táblájára irányuló törlést a rendszer nem engedi lefutni.",
+            "t": "naplo valtozasnaplo gyi torolheti napl gyi torolheti napl senki naplo bovul rendszer ir torol belole felul nincs gomb naplo tabla iranyulo torles rendszer engedi lefutni",
+            "h": 25
+        },
+        {
+            "id": "naplo#13",
+            "cim": "GYIK › Látom, ki írta át egy munkalap árát?",
+            "horgony": "latom-ki-irta-at-egy-munkalap-arat",
+            "szoveg": "Igen. Nyisd meg a lapot, kattints a **Napló** gombra: a tétel módosításánál ott a régi és az új ár, a kolléga neve és az időpont.",
+            "t": "naplo valtozasnaplo gyi latom irta munkalap ar gyi latom irta munkalap ar nyisd lap kattints naplo gomb tetel modositasanal regi uj ar kollega neve idop",
+            "h": 25
+        },
+        {
+            "id": "naplo#14",
+            "cim": "GYIK › Látszik, ha az asszisztens módosított valamit?",
+            "horgony": "latszik-ha-az-asszisztens-modositott-valamit",
+            "szoveg": "Igen. A bejegyzés forrása **AI-asszisztens**, és a megjegyzésben ott a javaslat száma és leírása. Aki jóváhagyta, annak a neve áll a bejegyzésen.",
+            "t": "naplo valtozasnaplo gyi latszi asszisztens modosit valami gyi latszi asszisztens modosit valami bejegyzes forrasa ai asszisztens megjegyzes javasl szama leirasa jovahagyta ann neve all bejegyzes",
+            "h": 25
+        },
+        {
+            "id": "naplo#15",
+            "cim": "GYIK › Mit jelent az „Elutasítva”?",
+            "horgony": "mit-jelent-az-elutasitva",
+            "szoveg": "Valaki lezárt lapon próbált módosítani (mentés, fizetés, eszköz állapota), és a rendszer nem engedte. A lapot előbb újra kell nyitni.",
+            "t": "naplo valtozasnaplo gyi jel elutasitva gyi jel elutasitva valaki lezar lap probal modositani mentes fizetes eszkoz allapota rendszer engedte lap elobb ujra nyitni",
+            "h": 23
+        },
+        {
+            "id": "naplo#16",
+            "cim": "GYIK › Lassítja a rendszert a napló?",
+            "horgony": "lassitja-a-rendszert-a-naplo",
+            "szoveg": "Mérhetően nem: mentésenként néhány rövid adatbázis-művelettel jár. A nagy, tömeges írásokból egyetlen összesítő bejegyzés lesz.",
+            "t": "naplo valtozasnaplo gyi lassi rendsz naplo gyi lassi rendsz naplo merheto mentesenk nehany rovid adatbazis muvelettel jar nagy tomeges iras egyetl osszesito bejegyzes",
+            "h": 23
+        },
+        {
+            "id": "naplo#17",
+            "cim": "GYIK › A beállítások jelszavai is bekerülnek?",
+            "horgony": "a-beallitasok-jelszavai-is-bekerulnek",
+            "szoveg": "Nem. A titkos értékek (API-kulcs, jelszó, token) helyett csak annyi kerül a naplóba, hogy megváltoztak.",
+            "t": "naplo valtozasnaplo gyi beallitas jelszav bekerul gyi beallitas jelszav bekerul titkos ert api kulcs jelszo tok hely annyi ar naplo megvaltoz",
+            "h": 21
+        },
+        {
+            "id": "naplo#18",
+            "cim": "GYIK › Exportálhatom a naplót?",
+            "horgony": "exportalhatom-a-naplot",
+            "szoveg": "Igen, a Napló menüpont **CSV letöltése** gombjával – a szűrt bejegyzéseket, soronként egy mezőváltozással.",
+            "t": "naplo valtozasnaplo gyi exportalhatom napl gyi exportalhatom napl naplo menup csv letoltese gomb szur bejegyzes soronk mezovaltozassal",
+            "h": 17
+        },
+        {
+            "id": "naplo#19",
+            "cim": "GYIK › Megkérdezhetem az asszisztenst, mi történt egy lappal?",
+            "horgony": "megkerdezhetem-az-asszisztenst-mi-tortent-egy-lappal",
+            "szoveg": "Igen. Nyisd meg a lapot, és kérdezd meg: `Mi történt ezzel a lappal?` – a lap története magától megy hozzá. A Napló ablak **Mi történt?** gombja ugyanezt kérdezi.",
+            "t": "naplo valtozasnaplo gyi megkerdezhetem asszisztens tort lappal gyi megkerdezhetem asszisztens tort lappal nyisd lap kerdezd tort ezzel lappal lap tortenete maga megy hozza naplo abl tort gomb ugyanez kerdezi",
+            "h": 29
+        },
+        {
+            "id": "naplo#20",
+            "cim": "GYIK › Mit jelent a „Védelem” bejegyzés?",
+            "horgony": "mit-jelent-a-vedelem-bejegyzes",
+            "szoveg": "Valami megpróbálta átírni vagy törölni a napló bejegyzéseit, és a rendszer nem engedte. Nézd meg, ki fér hozzá a szerverhez és az adatbázishoz.",
+            "t": "naplo valtozasnaplo gyi jel vedelem bejegyzes gyi jel vedelem bejegyzes megprobalta atirni torolni naplo bejegyzes rendszer engedte nezd fer hozza szerver adatbazis",
+            "h": 22
+        },
+        {
+            "id": "naplo#21",
+            "cim": "GYIK › Miért nem látom a privát naptáresemény részleteit a naplóban?",
+            "horgony": "miert-nem-latom-a-privat-naptaresemeny-reszleteit-a-naploban",
+            "szoveg": "A privát esemény részletei a naplóban is csak a tulajdonosának látszanak – a többiek annyit látnak, hogy volt változás.",
+            "t": "naplo valtozasnaplo gyi latom priv naptaresemeny reszl naplo gyi latom priv naptaresemeny reszl naplo priv esemeny reszl naplo tulajdonosa latsza tobbi annyi lat valtozas",
+            "h": 24
+        },
+        {
+            "id": "naplo#22",
+            "cim": "GYIK › Benne van, ha valaki újranyit egy lezárt lapot?",
+            "horgony": "benne-van-ha-valaki-ujranyit-egy-lezart-lapot",
+            "szoveg": "Igen: az újranyitás, az új állapot, ki csinálta és az ok (ha megadta) – utána pedig minden módosítás, amit a lapon végzett.",
+            "t": "naplo valtozasnaplo gyi benne valaki ujranyi lezar lap gyi benne valaki ujranyi lezar lap ujranyitas uj allap csinalta megadta utana ped modositas lap vegz",
+            "h": 24
+        }
+    ]
+}
