@@ -1410,16 +1410,37 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 /* Online időpontfoglalás (F6, 0.88.0)                                 */
 /* ================================================================== */
 
+/* 1.0.1: széles, fekvő elrendezés – bal oldalon a nap és az időpont, jobbra az adatok; minden méret a
+   --rma-n szorzóval nő (nagy monitoron arányosan nagyobb, semmi nem csúszik el); telefonon egy oszlop. */
 .rma-ablak--foglalas {
-    width: min(560px, 100%);
+    width: min(calc(1180px * var(--rma-n, 1)), 100%);
+    height: auto;
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
 }
 
-.rma--foglalas .rma-zar h1 + p {
-    margin-top: -.3rem;
+.rma-fogl-zar {
+    gap: calc(14px * var(--rma-n, 1));
+    padding: calc(22px * var(--rma-n, 1)) calc(28px * var(--rma-n, 1)) calc(18px * var(--rma-n, 1));
+}
+
+.rma-fogl-zar > * {
+    width: 100%;
+    max-width: calc(1180px * var(--rma-n, 1));
+    margin-inline: auto;
+}
+
+.rma-fogl-fej h1 {
+    font-size: calc(22px * var(--rma-n, 1));
+}
+
+.rma-fogl-fej p {
+    margin-top: calc(4px * var(--rma-n, 1));
+    font-size: calc(14px * var(--rma-n, 1));
 }
 
 .rma-fogl-ido {
-    font-size: 17px;
+    font-size: calc(17px * var(--rma-n, 1));
 }
 
 .rma-fogl__csapda {
@@ -1430,20 +1451,58 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     overflow: hidden;
 }
 
-.rma-fogl__napok {
+.rma-fogl {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: calc(18px * var(--rma-n, 1));
+    align-items: start;
+    margin: 0 auto;
+}
+
+.rma-fogl__panel {
     display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
+    flex-direction: column;
+    gap: calc(10px * var(--rma-n, 1));
+    min-width: 0;
+    padding: calc(16px * var(--rma-n, 1));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(14px * var(--rma-n, 1));
+    background: color-mix(in srgb, var(--sdh-felulet) 70%, transparent);
+}
+
+.rma-fogl__lepes {
+    display: flex;
+    gap: calc(8px * var(--rma-n, 1));
+    align-items: center;
+    color: var(--sdh-szoveg);
+    font-size: calc(13.5px * var(--rma-n, 1));
+    font-weight: 700;
+}
+
+.rma-fogl__lepes b {
+    display: grid;
+    place-items: center;
+    width: calc(22px * var(--rma-n, 1));
+    height: calc(22px * var(--rma-n, 1));
+    border-radius: 50%;
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+    font-size: calc(12px * var(--rma-n, 1));
+}
+
+.rma-fogl__napok {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(54px * var(--rma-n, 1)), 1fr));
+    gap: calc(6px * var(--rma-n, 1));
 }
 
 .rma-fogl__nap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 52px;
-    padding: .35rem .3rem;
+    padding: calc(5px * var(--rma-n, 1)) calc(3px * var(--rma-n, 1));
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 9px;
+    border-radius: calc(10px * var(--rma-n, 1));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
@@ -1451,13 +1510,13 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 }
 
 .rma-fogl__nap b {
-    font-size: 17px;
+    font-size: calc(17px * var(--rma-n, 1));
     line-height: 1.2;
 }
 
 .rma-fogl__nap small {
     color: var(--sdh-halvany);
-    font-size: 11px;
+    font-size: calc(11px * var(--rma-n, 1));
     font-weight: 500;
 }
 
@@ -1472,23 +1531,28 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 }
 
 .rma-fogl__idok {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(70px * var(--rma-n, 1)), 1fr));
+    gap: calc(6px * var(--rma-n, 1));
     margin: 0;
     padding: 0;
     border: 0;
 }
 
 .rma-fogl__idok legend {
-    margin-bottom: .3rem;
+    margin-bottom: calc(6px * var(--rma-n, 1));
     padding: 0;
     color: var(--sdh-szoveg-2);
+    font-size: calc(13px * var(--rma-n, 1));
     font-weight: 600;
 }
 
 .js .rma-fogl__idok[data-rejtve] {
     display: none;
+}
+
+.rma-fogl__ido {
+    position: relative;
 }
 
 .rma-fogl__ido input {
@@ -1498,14 +1562,15 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
 }
 
 .rma-fogl__ido span {
-    display: inline-block;
-    padding: .45rem .7rem;
+    display: block;
+    padding: calc(8px * var(--rma-n, 1)) 0;
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 8px;
+    border-radius: calc(9px * var(--rma-n, 1));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
-    font-size: 15px;
+    font-size: calc(15px * var(--rma-n, 1));
     font-weight: 600;
+    text-align: center;
     cursor: pointer;
 }
 
@@ -1520,36 +1585,86 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     outline-offset: 2px;
 }
 
+.rma-fogl__mezok {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(10px * var(--rma-n, 1)) calc(12px * var(--rma-n, 1));
+}
+
+.rma-fogl .rma-mezo--szeles {
+    grid-column: 1 / -1;
+}
+
+.rma-fogl .rma-mezo {
+    font-size: calc(12.5px * var(--rma-n, 1));
+}
+
+.rma-fogl .rma-mezo input,
 .rma-fogl .rma-mezo select,
 .rma-fogl .rma-mezo textarea {
-    min-height: 44px;
-    padding: .55rem .8rem;
+    min-width: 0;
+    height: calc(42px * var(--rma-n, 1));
+    padding: 0 calc(12px * var(--rma-n, 1));
     border: 1px solid var(--sdh-keret-eros);
-    border-radius: 9px;
+    border-radius: calc(10px * var(--rma-n, 1));
     background: var(--sdh-felulet);
     color: var(--sdh-szoveg);
     font: inherit;
-    font-size: 16px;
+    font-size: max(16px, calc(15px * var(--rma-n, 1))); /* 16 px alatt az iPhone ráközelít */
     font-weight: 500;
+}
+
+.rma-fogl .rma-mezo textarea {
+    height: auto;
+    min-height: calc(64px * var(--rma-n, 1));
+    padding: calc(9px * var(--rma-n, 1)) calc(12px * var(--rma-n, 1));
+    resize: vertical;
 }
 
 .rma-fogl__jelolo {
     display: flex;
-    gap: .55rem;
+    gap: calc(9px * var(--rma-n, 1));
     align-items: flex-start;
     color: var(--sdh-szoveg-2);
-    font-size: 13px;
+    font-size: calc(13px * var(--rma-n, 1));
 }
 
 .rma-fogl__jelolo input {
     flex: 0 0 auto;
-    width: 18px;
-    height: 18px;
-    margin-top: .1rem;
+    width: calc(18px * var(--rma-n, 1));
+    height: calc(18px * var(--rma-n, 1));
+    margin-top: calc(2px * var(--rma-n, 1));
 }
 
 .rma-fogl__jelolo a {
     color: var(--sdh-accent-szoveg);
+}
+
+.rma-fogl .rma-gomb-nagy {
+    height: calc(48px * var(--rma-n, 1));
+    border-radius: calc(12px * var(--rma-n, 1));
+    font-size: calc(15.5px * var(--rma-n, 1));
+}
+
+.rma-fogl-zar .rma-gyors {
+    margin-top: 0;
+}
+
+/* Teljes képernyőn az ablak a kijelzőt tölti ki, a tartalom középen marad. */
+:root.is-teljes .rma-ablak--foglalas {
+    max-height: none;
+}
+
+:root.is-teljes .rma-fogl-zar {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+/* Keskenyebb képernyőn (tablet álló) egy oszlop. */
+@media (max-width: 900px) {
+    .rma-fogl {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 /* ================================================================== */
@@ -1616,9 +1731,28 @@ html.js .rma-panelek > .rma-panel--uzenetek:not(.is-aktiv) {
     font-size: 16px;
 }
 
-/* A hosszú foglalóűrlap mobilon ne középre igazodjon (a teteje kicsúszna és nem lenne görgethető). */
+/* A foglalóűrlap telefonon: egy oszlop, felülről indul (nem középre igazodik, így végiggörgethető). */
 @media (max-width: 760px) {
-    .rma-ablak--kicsi.rma-ablak--foglalas .rma-zar {
+    .rma-ablak--foglalas {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .rma-fogl-zar {
+        flex: 1 1 auto;
         justify-content: flex-start;
+        padding: 16px 14px calc(18px + env(safe-area-inset-bottom));
+    }
+
+    .rma-fogl__panel {
+        padding: 12px;
+    }
+
+    .rma-fogl__mezok {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

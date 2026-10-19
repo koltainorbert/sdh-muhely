@@ -526,7 +526,7 @@ final class SDH_Muhely_Rma_Oldal
     }
 
     /** Az ablak fejléce: márka, (munkalap), nyelv, mód, kilépés. */
-    public static function fejlec(?object $munkalap, bool $kilepes, bool $elonezet): void
+    public static function fejlec(?object $munkalap, bool $kilepes, bool $elonezet, string $alcim = ''): void
     {
         $b = SDH_Muhely_Rma::beallitas();
 
@@ -540,7 +540,7 @@ final class SDH_Muhely_Rma_Oldal
                 <?php endif; ?>
                 <span class="rma-fej__nev">
                     <b><?php echo esc_html((string) $b['szerviz_nev']); ?></b>
-                    <span><?php echo esc_html(self::t(['rendeles' => 'alcim_rendeles', 'arukiadas' => 'alcim_vasarlas'][(string) ($munkalap->fajta ?? '')] ?? 'alcim')); ?></span>
+                    <span><?php echo esc_html($alcim !== '' ? $alcim : self::t(['rendeles' => 'alcim_rendeles', 'arukiadas' => 'alcim_vasarlas'][(string) ($munkalap->fajta ?? '')] ?? 'alcim')); ?></span>
                 </span>
             </div>
 

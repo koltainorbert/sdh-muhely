@@ -394,6 +394,7 @@ Jó tudni:
 
 | Mező | Mire való |
 |---|---|
+| **Javítási garancia a munkalapon** | Kikapcsolva eltűnik a munkalapról a Javítási garancia csoport, a nyomtatványról a lejárat, és nincs visszatérő-jelzés. A lapokon megadott napok megmaradnak. |
 | **Alap garancia (nap)** | A lezárt javításra vállalt garancia napjai. Pl. 90, 180, 365. A jogszabályi jótállási időt ellenőrizd, és ahhoz igazítsd. |
 | **Visszatérő készülék jelzése** | Ki-be kapcsolja az Eszköz lapfül jelzését. |
 

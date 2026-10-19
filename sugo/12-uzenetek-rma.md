@@ -3,7 +3,7 @@ kulcs: uzenetek-rma
 cim: Üzenetek és ügyféloldal (RMA)
 csoport: Kapcsolat
 modul: uzenetek
-szakaszok: ugyfeloldal, elegedettseg
+szakaszok: ugyfeloldal, elegedettseg, ajanlat
 kulcsszavak: elégedettség, elégedettségi kérdés, értékelés, csillag, vélemény, Google-értékelés, Google review, visszajelzés, árajánlat, ajánlat elfogadása, online elfogadás, elfogadom, nem kérem, jóváhagyás, ügyfél jóváhagyja, üzenet, ügyféloldal, RMA, gyors szöveg, gyors válasz, sablon üzenet, előre megírt üzenet, kész szöveg, QR-kód, címke, vonalkód, link, csevegő, chat, ügyfél üzenete, olvasatlan, értesítés, rendelés megjött, nyelv, angol, német, belépés, telefonszám, sorszám, előnézet
 osszefoglalo: Az ügyfél a QR-kóddal vagy linkkel megnyitott oldalon látja a javítás állapotát és üzenhet; te a munkalap RMA-fülén válaszolsz, az olvasatlan üzeneteket az Üzenetek menüpont gyűjti össze.
 ---
@@ -253,6 +253,10 @@ Az ügyféloldal összegzésének tetején egy **Árajánlat** doboz: az ajánlo
 - Egy ajánlatra egyszer lehet válaszolni. Új ajánlathoz kattints az **Új ajánlat küldése** gombra.
 - Az ügyfél válasza nem számít párhuzamos szerkesztésnek: ha közben nyitva van a lap, a mentésed nem ütközik vele.
 - Lezárt (zárolt) lapról nem küldhető ajánlat.
+
+### Ki- és bekapcsolás
+
+**Beállítások › Online árajánlat**: az **Online árajánlat a munkalapon** kapcsolóval eltüntetheted a csoportot a munkalapról, ha nem használjátok. A már elküldött ajánlatok válasza megmarad.
 
 ## Elégedettségi kérdés: értékelés a javítás után
 

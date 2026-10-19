@@ -173,6 +173,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A lezárt javításra vállalt garancia napjai, és a visszatérő készülék jelzése a munkalapon.',
                 'rajz' => [SDH_Muhely_Garancia::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Garancia::class, 'beallitas_mentes'],
             ],
+            'ajanlat' => [
+                'cim' => 'Online árajánlat', 'csoport' => 'munkalap',
+                'leiras' => 'A munkalapról elküldhető árajánlat, amit az ügyfél az ügyféloldalon elfogad vagy elutasít; ki- és bekapcsolható.',
+                'rajz' => [SDH_Muhely_Ajanlat::class, 'beallitas_doboz'], 'ment' => [SDH_Muhely_Ajanlat::class, 'beallitas_mentes'],
+            ],
             'zarolas' => [
                 'cim' => 'Lezárt lapok', 'csoport' => 'munkalap',
                 'leiras' => 'A lezárt lap csak újranyitás után szerkeszthető; kötelező-e megadni az újranyitás okát.',

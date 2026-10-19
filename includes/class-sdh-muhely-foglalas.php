@@ -103,7 +103,55 @@ final class SDH_Muhely_Foglalas
             'bevezeto'       => (string) ($m['bevezeto'] ?? ''),
             'email_kotelezo' => !empty($m['email_kotelezo']),
             'adatvedelem'    => esc_url_raw((string) ($m['adatvedelem'] ?? '')),
+            'kuldo'          => sanitize_key((string) ($m['kuldo'] ?? '')),
         ];
+    }
+
+    /** A cég levelezőfiókjai, amelyekből a visszaigazolás mehet (Levelezés modul). @return array<string, string> */
+    public static function kuldo_fiokok(): array
+    {
+        return class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') ? SDH_Muhely_Levelezes::kuldo_fiokok() : [];
+    }
+
+    /** A használt küldőfiók: a beállított, különben az első bekötött fiók; '' = a szerver levélküldője. */
+    public static function kuldo(): string
+    {
+        $f = self::kuldo_fiokok();
+        $k = self::beallitas()['kuldo'];
+
+        if ($k === 'wp') {
+            return '';
+        }
+
+        return isset($f[$k]) ? $k : (string) (array_key_first($f) ?? '');
+    }
+
+    /**
+     * Levél a foglalás ügyében: a cég levelezőfiókjából (SMTP), ha van, különben a szerver levélküldőjével.
+     * Az eredmény a Beállításokban látszik. Siker: true, hiba: az oka.
+     *
+     * @return true|string
+     */
+    public static function level(string $cim, string $targy, string $torzs, string $valasz = '')
+    {
+        $fiok = self::kuldo();
+
+        if ($fiok !== '') {
+            $r = SDH_Muhely_Levelezes::egyszeru_kuldes($fiok, [$cim], $targy, $torzs);
+        } else {
+            $hiba    = '';
+            $figyelo = static function ($h) use (&$hiba): void {
+                $hiba = is_wp_error($h) ? $h->get_error_message() : '';
+            };
+            add_action('wp_mail_failed', $figyelo);
+            $ok = wp_mail($cim, $targy, $torzs, $valasz !== '' && is_email($valasz) ? ['Reply-To: ' . $valasz] : []);
+            remove_action('wp_mail_failed', $figyelo);
+            $r = $ok ? true : ($hiba !== '' ? $hiba : 'a szerver levélküldője nem fogadta el (nincs beállítva a levélküldés?).');
+        }
+
+        update_option(self::OPT . '_level', ['ido' => time(), 'cim' => $cim, 'ok' => $r === true, 'hiba' => $r === true ? '' : (string) $r, 'fiok' => $fiok], false);
+
+        return $r;
     }
 
     /** A naptár, ahova a foglalás kerül: a beállított, különben az első aktív. */
@@ -545,9 +593,10 @@ final class SDH_Muhely_Foglalas
             . $el['nev']
             . ($el['sor'] !== [] ? "\n" . implode("\n", $el['sor']) : '');
 
-        $fejlec = $el['valasz'] !== '' && is_email($el['valasz']) ? ['Reply-To: ' . str_replace(['"', "\r", "\n"], '', $el['nev']) . ' <' . $el['valasz'] . '>'] : [];
+        $ok = self::level((string) $e->foglalo_email, $el['nev'] . ' – időpontfoglalás visszaigazolása', $torzs, $el['valasz']) === true;
+        set_transient('sdh_fogl_level_' . (string) $e->foglalas_kulcs, $ok ? 1 : 0, DAY_IN_SECONDS);
 
-        return (bool) wp_mail((string) $e->foglalo_email, $el['nev'] . ' – időpontfoglalás visszaigazolása', $torzs, $fejlec);
+        return $ok;
     }
 
     private static function level_szerviznek(object $e, array $sz, string $mi): bool
@@ -565,9 +614,7 @@ final class SDH_Muhely_Foglalas
         $rendszer = class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : 'Műhely';
         $torzs    = $mi . "\n\n" . 'Időpont: ' . self::mikor((string) $e->kezdet) . "\n" . 'Naptár: ' . $sz['nev'] . "\n\n"
             . (string) $e->leiras . "\n\n" . 'A naptárban: ' . SDH_Muhely_Modulok::frontend_url(SDH_Muhely_Naptar::KULCS) . "\n";
-        $fejlec   = is_email((string) $e->foglalo_email) ? ['Reply-To: ' . (string) $e->foglalo_email] : [];
-
-        return (bool) wp_mail($cim, '[' . $rendszer . '] ' . $mi . ' – ' . self::mikor((string) $e->kezdet), $torzs, $fejlec);
+        return self::level($cim, '[' . $rendszer . '] ' . $mi . ' – ' . self::mikor((string) $e->kezdet), $torzs, is_email((string) $e->foglalo_email) ? (string) $e->foglalo_email : '') === true;
     }
 
     /* =================================================================
@@ -653,7 +700,7 @@ final class SDH_Muhely_Foglalas
         SDH_Muhely_Rma_Oldal::keret($cim, 'rma--zar rma--foglalas', static function () use ($cim, $ikon, $szoveg, $tovabb): void {
             ?>
             <div class="rma-ablak rma-ablak--kicsi">
-                <?php SDH_Muhely_Rma_Oldal::fejlec(null, false, false); ?>
+                <?php SDH_Muhely_Rma_Oldal::fejlec(null, false, false, 'Időpontfoglalás'); ?>
                 <div class="rma-zar">
                     <div class="rma-zar__ikon"><?php echo SDH_Muhely_Rma_Oldal::ikon($ikon); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
                     <h1><?php echo esc_html($cim); ?></h1>
@@ -679,7 +726,8 @@ final class SDH_Muhely_Foglalas
         self::kis_ablak('Köszönjük, várjuk!', 'ora', 'Az időpontját rögzítettük:', static function () use ($e): void {
             ?>
             <p class="rma-fogl-ido"><b><?php echo esc_html(self::mikor((string) $e->kezdet)); ?></b></p>
-            <p><?php echo esc_html(is_email((string) $e->foglalo_email) ? 'A visszaigazolást e-mailben is elküldtük, benne a lemondás linkjével.' : 'Ha mégsem tud jönni, kérjük, jelezze telefonon.'); ?></p>
+            <?php $sdh_elkuldve = get_transient('sdh_fogl_level_' . (string) $e->foglalas_kulcs); ?>
+            <p><?php echo esc_html(!is_email((string) $e->foglalo_email) ? 'Ha mégsem tud jönni, kérjük, jelezze telefonon.' : ((string) $sdh_elkuldve === '0' ? 'A visszaigazoló e-mailt most nem sikerült elküldeni – az időpontja ettől rögzítve van. Lemondáshoz hívjon minket.' : 'A visszaigazolást e-mailben is elküldtük (' . (string) $e->foglalo_email . '), benne a lemondás linkjével.')); ?></p>
             <?php
         });
     }
@@ -745,11 +793,13 @@ final class SDH_Muhely_Foglalas
 
         SDH_Muhely_Rma_Oldal::keret('Időpontfoglalás', 'rma--zar rma--foglalas', static function () use ($b, $szabad, $hiba, $v, $valasz_nap, $valasztott): void {
             ?>
-            <div class="rma-ablak rma-ablak--kicsi rma-ablak--foglalas">
-                <?php SDH_Muhely_Rma_Oldal::fejlec(null, false, false); ?>
-                <div class="rma-zar">
-                    <h1>Időpontfoglalás</h1>
-                    <?php if ($b['bevezeto'] !== '') : ?><p><?php echo esc_html($b['bevezeto']); ?></p><?php endif; ?>
+            <div class="rma-ablak rma-ablak--foglalas">
+                <?php SDH_Muhely_Rma_Oldal::fejlec(null, false, false, 'Időpontfoglalás'); ?>
+                <div class="rma-zar rma-fogl-zar">
+                    <div class="rma-fogl-fej">
+                        <h1>Időpontfoglalás</h1>
+                        <?php if ($b['bevezeto'] !== '') : ?><p><?php echo esc_html($b['bevezeto']); ?></p><?php endif; ?>
+                    </div>
                     <?php if ($hiba !== '') : ?><div class="rma-jelzes rma-jelzes--hiba" role="alert"><?php echo esc_html($hiba); ?></div><?php endif; ?>
 
                     <?php if ($szabad === []) : ?>
@@ -762,8 +812,8 @@ final class SDH_Muhely_Foglalas
                                 <label>Weboldal <input type="text" name="weboldal_cim" tabindex="-1" autocomplete="off" value=""></label>
                             </div>
 
-                            <div class="rma-mezo">
-                                <span>1. Válasszon napot</span>
+                            <section class="rma-fogl__panel rma-fogl__panel--ido" aria-label="Időpont">
+                                <div class="rma-fogl__lepes"><b>1</b>Válasszon napot</div>
                                 <div class="rma-fogl__napok" role="tablist">
                                     <?php foreach (array_keys($szabad) as $nap) :
                                         $d = new DateTimeImmutable($nap, wp_timezone());
@@ -775,10 +825,8 @@ final class SDH_Muhely_Foglalas
                                         </button>
                                     <?php endforeach; ?>
                                 </div>
-                            </div>
 
-                            <div class="rma-mezo">
-                                <span>2. Válasszon időpontot</span>
+                                <div class="rma-fogl__lepes"><b>2</b>Válasszon időpontot</div>
                                 <?php foreach ($szabad as $nap => $idok) : ?>
                                     <fieldset class="rma-fogl__idok" data-rma-fogl-idok="<?php echo esc_attr($nap); ?>"<?php echo $nap !== $valasz_nap ? ' data-rejtve' : ''; ?>>
                                         <legend><?php echo esc_html(self::nap_nev($nap)); ?></legend>
@@ -790,29 +838,33 @@ final class SDH_Muhely_Foglalas
                                         <?php endforeach; ?>
                                     </fieldset>
                                 <?php endforeach; ?>
-                            </div>
+                            </section>
 
-                            <span class="rma-mezo"><span>3. Adatai</span></span>
-                            <label class="rma-mezo"><span>Név *</span><input type="text" name="nev" autocomplete="name" required maxlength="120" value="<?php echo esc_attr($v('nev')); ?>"></label>
-                            <label class="rma-mezo"><span>Telefonszám *</span><input type="tel" name="telefon" inputmode="tel" autocomplete="tel" required maxlength="40" value="<?php echo esc_attr($v('telefon')); ?>"></label>
-                            <label class="rma-mezo"><span>E-mail<?php echo $b['email_kotelezo'] ? ' *' : ''; ?></span><input type="email" name="email" autocomplete="email" maxlength="190"<?php echo $b['email_kotelezo'] ? ' required' : ''; ?> value="<?php echo esc_attr($v('email')); ?>"></label>
-                            <?php if ($b['szolgaltatasok'] !== []) : ?>
-                                <label class="rma-mezo"><span>Mivel kapcsolatban?</span>
-                                    <select name="szolgaltatas">
-                                        <option value="">– válasszon –</option>
-                                        <?php foreach ($b['szolgaltatasok'] as $sz) : ?>
-                                            <option value="<?php echo esc_attr($sz); ?>"<?php selected($v('szolgaltatas'), $sz); ?>><?php echo esc_html($sz); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                            <section class="rma-fogl__panel rma-fogl__panel--adat" aria-label="Adatai">
+                                <div class="rma-fogl__lepes"><b>3</b>Adatai</div>
+                                <div class="rma-fogl__mezok">
+                                    <label class="rma-mezo"><span>Név *</span><input type="text" name="nev" autocomplete="name" required maxlength="120" value="<?php echo esc_attr($v('nev')); ?>"></label>
+                                    <label class="rma-mezo"><span>Telefonszám *</span><input type="tel" name="telefon" inputmode="tel" autocomplete="tel" required maxlength="40" value="<?php echo esc_attr($v('telefon')); ?>"></label>
+                                    <label class="rma-mezo"><span>E-mail<?php echo $b['email_kotelezo'] ? ' *' : ' (ide jön a visszaigazolás)'; ?></span><input type="email" name="email" autocomplete="email" maxlength="190"<?php echo $b['email_kotelezo'] ? ' required' : ''; ?> value="<?php echo esc_attr($v('email')); ?>"></label>
+                                    <?php if ($b['szolgaltatasok'] !== []) : ?>
+                                        <label class="rma-mezo"><span>Mivel kapcsolatban?</span>
+                                            <select name="szolgaltatas">
+                                                <option value="">– válasszon –</option>
+                                                <?php foreach ($b['szolgaltatasok'] as $sz) : ?>
+                                                    <option value="<?php echo esc_attr($sz); ?>"<?php selected($v('szolgaltatas'), $sz); ?>><?php echo esc_html($sz); ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </label>
+                                    <?php endif; ?>
+                                    <label class="rma-mezo<?php echo $b['szolgaltatasok'] === [] ? '' : ' rma-mezo--szeles'; ?>"><span>Készülék (márka, típus)</span><input type="text" name="eszkoz" maxlength="120" value="<?php echo esc_attr($v('eszkoz')); ?>"></label>
+                                    <label class="rma-mezo rma-mezo--szeles"><span>A hiba röviden</span><textarea name="hiba" rows="2" maxlength="1500"><?php echo esc_textarea($v('hiba')); ?></textarea></label>
+                                </div>
+                                <label class="rma-fogl__jelolo">
+                                    <input type="checkbox" name="hozzajarul" value="1" required<?php checked($v('hozzajarul'), '1'); ?>>
+                                    <span>Hozzájárulok, hogy az adataimat az időpont egyeztetéséhez kezeljék.<?php if ($b['adatvedelem'] !== '') : ?> <a href="<?php echo esc_url($b['adatvedelem']); ?>" target="_blank" rel="noopener">Adatkezelési tájékoztató</a><?php endif; ?></span>
                                 </label>
-                            <?php endif; ?>
-                            <label class="rma-mezo"><span>Készülék (márka, típus)</span><input type="text" name="eszkoz" maxlength="120" value="<?php echo esc_attr($v('eszkoz')); ?>"></label>
-                            <label class="rma-mezo"><span>A hiba röviden</span><textarea name="hiba" rows="3" maxlength="1500"><?php echo esc_textarea($v('hiba')); ?></textarea></label>
-                            <label class="rma-fogl__jelolo">
-                                <input type="checkbox" name="hozzajarul" value="1" required<?php checked($v('hozzajarul'), '1'); ?>>
-                                <span>Hozzájárulok, hogy az adataimat az időpont egyeztetéséhez kezeljék.<?php if ($b['adatvedelem'] !== '') : ?> <a href="<?php echo esc_url($b['adatvedelem']); ?>" target="_blank" rel="noopener">Adatkezelési tájékoztató</a><?php endif; ?></span>
-                            </label>
-                            <button type="submit" class="sdh-gomb sdh-gomb--elsodleges rma-gomb-nagy">Időpont foglalása</button>
+                                <button type="submit" class="sdh-gomb sdh-gomb--elsodleges rma-gomb-nagy">Időpont foglalása</button>
+                            </section>
                         </form>
                     <?php endif; ?>
 
@@ -922,6 +974,20 @@ final class SDH_Muhely_Foglalas
                     <input type="checkbox" name="foglalas[email_kotelezo]" id="foglalas_email" value="1" <?php checked($b['email_kotelezo']); ?>>
                     <label for="foglalas_email">Az e-mail-cím kötelező (különben a telefonszám elég)</label>
                 </div>
+                <?php $sdh_fiokok = self::kuldo_fiokok(); $sdh_lev = get_option(self::OPT . '_level'); ?>
+                <div class="sdh-mezo sdh-mezo--szeles">
+                    <label for="foglalas_kuldo">A visszaigazoló e-mail innen megy</label>
+                    <select name="foglalas[kuldo]" id="foglalas_kuldo">
+                        <?php foreach ($sdh_fiokok as $k => $nev) : ?>
+                            <option value="<?php echo esc_attr($k); ?>"<?php selected(self::kuldo(), $k); ?>><?php echo esc_html($nev); ?></option>
+                        <?php endforeach; ?>
+                        <option value="wp"<?php selected(self::kuldo(), ''); ?>>A szerver levélküldője<?php echo $sdh_fiokok === [] ? '' : ' (nem ajánlott)'; ?></option>
+                    </select>
+                    <span class="sdh-mezo__sugo">
+                        <?php if ($sdh_fiokok === []) : ?>Nincs bekötött levelezőfiók (Beállítások › Levelezés): a szerver levélküldője csak akkor kézbesít, ha a szerveren be van állítva a levélküldés.<?php else : ?>A cég saját postafiókjából megy, így biztosan megérkezik, és a válasz is oda jön.<?php endif; ?>
+                        <?php if (is_array($sdh_lev) && !empty($sdh_lev['ido'])) : ?><br>Utolsó levél: <?php echo esc_html(wp_date('Y.m.d. H:i', (int) $sdh_lev['ido']) . ' → ' . (string) $sdh_lev['cim'] . ': ' . (!empty($sdh_lev['ok']) ? 'elküldve' : 'NEM ment ki – ' . (string) $sdh_lev['hiba'])); ?><?php endif; ?>
+                    </span>
+                </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="foglalas_szolg">Választható témák (soronként egy, üresen nincs választó)</label>
                     <textarea name="foglalas[szolgaltatasok]" id="foglalas_szolg" rows="4"><?php echo esc_textarea(implode("\n", $b['szolgaltatasok'])); ?></textarea>
@@ -970,6 +1036,7 @@ final class SDH_Muhely_Foglalas
             'bevezeto'       => mb_substr(sanitize_textarea_field((string) ($be['bevezeto'] ?? '')), 0, 600),
             'email_kotelezo' => !empty($be['email_kotelezo']),
             'adatvedelem'    => esc_url_raw((string) ($be['adatvedelem'] ?? '')),
+            'kuldo'          => sanitize_key((string) ($be['kuldo'] ?? '')),
         ], false);
     }
 }

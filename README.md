@@ -80,6 +80,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.1 – kapcsolható garancia és árajánlat, megbízható foglalási levél, széles foglalóoldal
+- **Beállítások › Javítási garancia**: „Javítási garancia a munkalapon” kapcsoló (ki: nincs csoport, nyomtatványsor, visszatérő-jelzés).
+- **Beállítások › Online árajánlat** (új lapfül): „Online árajánlat a munkalapon” kapcsoló (`SDH_Muhely_Ajanlat::beallitas()`).
+- **Online foglalás levele**: a cég levelezőfiókjából (SMTP) megy, ha van bekötve (`SDH_Muhely_Foglalas::kuldo()` / `level()`),
+  különben a szerver levélküldőjével; az utolsó levél eredménye a lapfülön, hiba esetén a köszönőoldal is megmondja.
+- **Foglalóoldal**: széles, kéthasábos (időpont | adatok), minden méret a `--rma-n` szorzóval nő; teljes képernyőn középen;
+  ≤ 900 px egy hasáb, telefonon felülről görgethető. Fejléc alcíme: „Időpontfoglalás”. Mért: 1366×768 és 1600×900 görgetés nélkül.
+- Tesztek: t75, t76, t80 bővítve.
+
 ### 0.99.0 – élő figyelés, távoli karbantartás, licencelt modulok + SDH Központ 2.0
 - **Szívverés** 5 percenként (`SDH_Muhely_Licenc::szivveres()`, cron `sdh_muhely_szivveres`, élő követésben 30 mp):
   aláírt válasz a licenc moduljaival, jogaival (frissítés / támogatás / távoli), felhasználószámával és a központ műveleteivel.

@@ -138,6 +138,16 @@ SDH_Muhely_Rma_Oldal::nyelv_kenyszerit('en');
 T::egyezik('I accept', SDH_Muhely_Rma_Oldal::t('ajanlat_elfogad'), 'angolul is');
 SDH_Muhely_Rma_Oldal::nyelv_kenyszerit('hu');
 
+// Ki- és bekapcsolás (Beállítások › Online árajánlat).
+T::igaz(isset(SDH_Muhely_Beallitasok::szakaszok()['ajanlat']), 'Beállítások › Online árajánlat lapfül');
+$_POST = ['ajanlat' => ['be_jelen' => '1']];
+SDH_Muhely_Ajanlat::beallitas_mentes();
+$_POST = [];
+T::igaz(!SDH_Muhely_Ajanlat::elerheto(), 'kikapcsolva: nem elérhető');
+T::egyezik('', SDH_Muhely_Ajanlat::urlap_blokk(SDH_Muhely_Ajanlat::lap($ml)), 'kikapcsolva: nincs csoport a munkalapon');
+delete_option(SDH_Muhely_Ajanlat::OPT);
+T::igaz(SDH_Muhely_Ajanlat::elerheto(), 'alapból bekapcsolva');
+
 update_option('sdh_muhely_rma', $rma_b);
 
 T::vege('t76 online árajánlat (F2)');

@@ -19,6 +19,51 @@ final class SDH_Muhely_Ajanlat
 {
     public const MEGJ_HOSSZ = 500;
 
+    public const OPT = 'sdh_muhely_ajanlat';
+
+    /** @return array{be: bool} */
+    public static function beallitas(): array
+    {
+        $m = get_option(self::OPT, []);
+        $m = is_array($m) ? $m : [];
+
+        return ['be' => !isset($m['be']) || !empty($m['be'])];
+    }
+
+    /* =================================================================
+     * Beállítások › Online árajánlat
+     * ============================================================== */
+
+    public static function beallitas_doboz(): void
+    {
+        $b = self::beallitas();
+        ?>
+        <div class="sdh-doboz" id="ajanlat">
+            <h2 class="sdh-doboz__cim">Online árajánlat</h2>
+            <p class="sdh-sugo">
+                A munkalapról egy gombbal elküldhető az árajánlat (a lap végösszege): az ügyfél az ügyféloldalon elfogadja vagy
+                elutasítja, és erről értesítés jön. Kikapcsolva az „Online árajánlat” csoport eltűnik a munkalapról; a már
+                elküldött ajánlatok válasza megmarad.
+            </p>
+            <div class="sdh-mezok">
+                <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
+                    <input type="hidden" name="ajanlat[be_jelen]" value="1">
+                    <input type="checkbox" name="ajanlat[be]" id="ajanlat_be" value="1" <?php checked($b['be']); ?>>
+                    <label for="ajanlat_be">Online árajánlat a munkalapon</label>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    public static function beallitas_mentes(): void
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- a Beállítások mentése ellenőrizte.
+        $be = isset($_POST['ajanlat']) && is_array($_POST['ajanlat']) ? wp_unslash($_POST['ajanlat']) : [];
+
+        update_option(self::OPT, ['be' => !empty($be['be']) || empty($be['be_jelen'])], false);
+    }
+
     public static function init(): void
     {
         add_action('wp_ajax_sdh_muhely_ajanlat_kuld', [self::class, 'ajax_kuld']);
@@ -44,10 +89,10 @@ final class SDH_Muhely_Ajanlat
         return number_format($osszeg, 0, ',', ' ') . ' Ft';
     }
 
-    /** Elérhető-e (kell hozzá az ügyféloldal modul). */
+    /** Elérhető-e (be van kapcsolva, és kell hozzá az ügyféloldal modul). */
     public static function elerheto(): bool
     {
-        return class_exists('SDH_Muhely_Rma') && !(class_exists('SDH_Muhely_Modulok') && SDH_Muhely_Modulok::ki('uzenetek'));
+        return self::beallitas()['be'] && class_exists('SDH_Muhely_Rma') && !(class_exists('SDH_Muhely_Modulok') && SDH_Muhely_Modulok::ki('uzenetek'));
     }
 
     /**

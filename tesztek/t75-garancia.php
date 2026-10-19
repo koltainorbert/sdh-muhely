@@ -18,7 +18,7 @@ delete_option($G::OPT);
 
 T::igaz(version_compare(SDH_Muhely_Schema::DB_VERSION, '0.46.0', '>='), 'sémaverzió 0.46.0');
 T::igaz(t_oszlop($T('munkalap'), 'garancia_nap') && t_oszlop($T('munkalap'), 'garancia_elozo'), 'új oszlopok: garancia_nap, garancia_elozo');
-T::egyezik(['nap' => 180, 'jelzes' => true], $G::beallitas(), 'alap: 180 nap, jelzés be');
+T::egyezik(['be' => true, 'nap' => 180, 'jelzes' => true], $G::beallitas(), 'alap: bekapcsolva, 180 nap, jelzés be');
 
 /* --- Lejárat ---------------------------------------------------------------------------------------- */
 
@@ -122,10 +122,17 @@ T::egyezik('', (string) (SDH_Muhely_Nyomtatvany::lap_adat(t_munkalap($u, [$e]))[
 
 // Beállítások.
 T::igaz(isset(SDH_Muhely_Beallitasok::szakaszok()['garancia']), 'Beállítások › Javítási garancia lapfül');
-$_POST = ['garancia' => ['nap' => '365', 'jelzes_jelen' => '1']];
+$_POST = ['garancia' => ['nap' => '365', 'jelzes_jelen' => '1', 'be_jelen' => '1']];
 $G::beallitas_mentes();
 $_POST = [];
-T::egyezik(['nap' => 365, 'jelzes' => false], $G::beallitas(), 'mentés: 365 nap, jelzés ki (a pipa nélkül)');
+T::egyezik(['be' => false, 'nap' => 365, 'jelzes' => false], $G::beallitas(), 'mentés: 365 nap, jelzés ki, a garancia is ki (a pipák nélkül)');
+T::egyezik('', $G::urlap_blokk(null), 'kikapcsolva: nincs Javítási garancia csoport a munkalapon');
+T::egyezik('', $G::eszkoz_jelzes(1), 'kikapcsolva: nincs visszatérő-jelzés');
+T::egyezik('', $G::lejar((object) ['lezarva' => current_time('Y-m-d'), 'fajta' => 'javitas', 'garancia_nap' => 30]), 'kikapcsolva: nincs lejárat a nyomtatványon');
+$_POST = ['garancia' => ['be' => '1', 'be_jelen' => '1', 'nap' => '90', 'jelzes_jelen' => '1', 'jelzes' => '1']];
+$G::beallitas_mentes();
+$_POST = [];
+T::igaz($G::beallitas()['be'] && strpos($G::urlap_blokk(null), 'data-sdh-garancia') !== false, 'visszakapcsolva: újra a munkalapon');
 delete_option($G::OPT);
 
 T::vege('t75 javítási garancia (F1)');

@@ -33,13 +33,14 @@ final class SDH_Muhely_Garancia
         return SDH_Muhely_Schema::tabla($nev);
     }
 
-    /** @return array{nap: int, jelzes: bool} */
+    /** @return array{be: bool, nap: int, jelzes: bool} */
     public static function beallitas(): array
     {
         $m = get_option(self::OPT, []);
         $m = is_array($m) ? $m : [];
 
         return [
+            'be'     => !isset($m['be']) || !empty($m['be']),
             'nap'    => max(0, min(self::NAP_MAX, (int) ($m['nap'] ?? 180))),
             'jelzes' => !isset($m['jelzes']) || !empty($m['jelzes']),
         ];
@@ -59,7 +60,7 @@ final class SDH_Muhely_Garancia
         $lezarva = (string) ($lap->lezarva ?? '');
         $nap     = self::nap($lap);
 
-        if ($lezarva === '' || $nap < 1 || (string) ($lap->fajta ?? 'javitas') !== 'javitas') {
+        if (!self::beallitas()['be'] || $lezarva === '' || $nap < 1 || (string) ($lap->fajta ?? 'javitas') !== 'javitas') {
             return '';
         }
 
@@ -190,6 +191,10 @@ final class SDH_Muhely_Garancia
     /** A munkalap űrlapjának „Javítási garancia” csoportja (a Dátumok alatt). */
     public static function urlap_blokk(?object $lap): string
     {
+        if (!self::beallitas()['be']) {
+            return '';
+        }
+
         $alap   = self::beallitas()['nap'];
         $nap    = $lap !== null && isset($lap->garancia_nap) && $lap->garancia_nap !== null && $lap->garancia_nap !== '' ? (string) (int) $lap->garancia_nap : '';
         $elozo  = $lap !== null ? (int) ($lap->garancia_elozo ?? 0) : 0;
@@ -236,7 +241,7 @@ final class SDH_Muhely_Garancia
      */
     public static function eszkoz_jelzes(int $eszkoz_id): string
     {
-        if (!self::beallitas()['jelzes'] || $eszkoz_id < 1) {
+        if (!self::beallitas()['be'] || !self::beallitas()['jelzes'] || $eszkoz_id < 1) {
             return '';
         }
 
@@ -296,6 +301,11 @@ final class SDH_Muhely_Garancia
                 igazítsd az alapértéket.
             </p>
             <div class="sdh-mezok">
+                <div class="sdh-mezo sdh-mezo--jelolo sdh-mezo--szeles">
+                    <input type="hidden" name="garancia[be_jelen]" value="1">
+                    <input type="checkbox" name="garancia[be]" id="garancia_be" value="1" <?php checked($b['be']); ?>>
+                    <label for="garancia_be">Javítási garancia a munkalapon (a „Javítási garancia” csoport, a lejárat a nyomtatványon, a visszatérő készülék jelzése)</label>
+                </div>
                 <div class="sdh-mezo">
                     <label for="garancia_alap_nap">Alap garancia (nap)</label>
                     <input type="number" name="garancia[nap]" id="garancia_alap_nap" min="0" max="<?php echo (int) self::NAP_MAX; ?>" step="1" value="<?php echo (int) $b['nap']; ?>">
@@ -317,6 +327,7 @@ final class SDH_Muhely_Garancia
         $be = isset($_POST['garancia']) && is_array($_POST['garancia']) ? wp_unslash($_POST['garancia']) : [];
 
         update_option(self::OPT, [
+            'be'     => !empty($be['be']) || empty($be['be_jelen']),
             'nap'    => max(0, min(self::NAP_MAX, (int) ($be['nap'] ?? 180))),
             'jelzes' => !empty($be['jelzes']),
         ], false);

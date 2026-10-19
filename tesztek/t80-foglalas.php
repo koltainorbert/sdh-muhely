@@ -167,6 +167,19 @@ $_POST = [];
 $b = $F::beallitas();
 T::egyezik([true, [2, 4], '08:30', '16:00', 45, 3, ['A', 'B']], [$b['be'], $b['napok'], $b['nyit'], $b['zar'], $b['hossz'], $b['parhuzam'], $b['szolgaltatasok']], 'a beállítás mentése');
 
+// A visszaigazoló levél útja (bekötött levelezőfiók nélkül a szerver levélküldője) és az eredmény naplója.
+T::egyezik('', $F::kuldo(), 'levelezőfiók nélkül: a szerver levélküldője');
+$lv = get_option($F::OPT . '_level');
+T::igaz(is_array($lv) && !empty($lv['ido']) && array_key_exists('ok', $lv), 'az utolsó levél eredménye a Beállításokban látszik');
+ob_start();
+$F::beallitas_doboz();
+T::tartalmaz((string) ob_get_clean(), 'name="foglalas[kuldo]"', 'Beállítások: honnan menjen a visszaigazolás');
+ob_start();
+$F::oldal();
+$lap = (string) ob_get_clean();
+T::tartalmaz($lap, 'rma-fogl__panel--ido', 'foglalóoldal: széles, kéthasábos elrendezés (időpont)');
+T::tartalmaz($lap, 'rma-fogl__panel--adat', 'foglalóoldal: széles, kéthasábos elrendezés (adatok)');
+
 // Rendrakás.
 $wpdb->query($wpdb->prepare('DELETE FROM ' . $E . ' WHERE szemely_id = %d', $szid));
 $wpdb->query($wpdb->prepare('DELETE FROM ' . SDH_Muhely_Schema::tabla('naptar_szemely') . ' WHERE id = %d', $szid));

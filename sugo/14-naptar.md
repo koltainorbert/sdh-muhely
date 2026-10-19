@@ -299,13 +299,16 @@ Az ügyfelek a weboldalatokról maguk foglalhatnak időpontot. A foglalás esem�
 3. Válaszd ki, **melyik naptárba** kerüljenek a foglalások, és ha kell, a **kategóriát**.
 4. Add meg a **foglalható napokat**, az **első időpontot**, a **zárást** és **egy foglalás hosszát** (például 30 perc).
 5. **Egyszerre fogadható ügyfél**: hány foglalás eshet ugyanarra az időpontra (1 = egyszerre egy ügyfél).
-6. **Mentés**. A lapfül alján ott a **foglalóoldal címe** – ezt linkeld a weboldalatokon –, és egy **beágyazó kód**, amellyel az űrlap a weboldal egy oldalán belül jelenik meg.
+6. **A visszaigazoló e-mail innen megy**: válaszd a cég postafiókját (Beállítások › Levelezés-ben bekötött fiók) – így a levél biztosan megérkezik, és az ügyfél válasza is oda jön. A szerver levélküldője csak akkor kézbesít, ha a szerveren be van állítva a levélküldés. Alatta látod az **utolsó levél** eredményét (elküldve, vagy ha nem ment ki, miért).
+7. **Mentés**. A lapfül alján ott a **foglalóoldal címe** – ezt linkeld a weboldalatokon –, és egy **beágyazó kód**, amellyel az űrlap a weboldal egy oldalán belül jelenik meg.
 
 ### Mit lát az ügyfél
 
-1. A szabad napokat gombokként, alattuk a választott nap szabad időpontjait.
-2. A nevét, telefonszámát, e-mail-címét, a készüléket és a hibát kérő mezőket, és egy jelölőnégyzetet az adatkezelésről.
-3. Az **Időpont foglalása** gomb után egy visszaigazoló képernyőt; ha megadta az e-mail-címét, levelet is a lemondó linkkel.
+Egy széles, kéthasábos oldalt (telefonon egymás alatt):
+
+1. Balra a szabad napokat gombokként, alattuk a választott nap szabad időpontjait.
+2. Jobbra a nevét, telefonszámát, e-mail-címét, a témát, a készüléket és a hibát kérő mezőket, és egy jelölőnégyzetet az adatkezelésről.
+3. Az **Időpont foglalása** gomb után egy visszaigazoló képernyőt; ha megadta az e-mail-címét, levelet is a lemondó linkkel. Ha a levél nem ment ki, a képernyő ezt megmondja (az időpont ettől rögzítve van).
 
 ### Mi számít foglaltnak
 
