@@ -147,5 +147,6 @@ echo '</ul></div>';
 
 $megj = sdh_tema_mezo($sz, 'megjegyzes');
 
-echo '<p class="s-arak__megj">' . esc_html(sprintf(/* translators: %d: áfa % */ sdh_tema__('Minden ár nettó, a %d%% áfát a számla tartalmazza.'), sdh_tema_afa())) . ($megj !== '' ? ' ' . esc_html(sdh_tema_t($megj)) : '') . '</p>';
+// Az admin megjegyzése felülírja az alap áfa-mondatot (különben kétszer állna ugyanaz).
+echo '<p class="s-arak__megj">' . esc_html($megj !== '' ? sdh_tema_t($megj) : sprintf(/* translators: %d: áfa % */ sdh_tema__('Minden ár nettó, a %d%% áfát a számla tartalmazza.'), sdh_tema_afa())) . '</p>';
 echo sdh_tema_szekcio_zar($sz); // phpcs:ignore WordPress.Security.EscapeOutput

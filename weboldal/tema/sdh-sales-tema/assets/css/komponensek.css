@@ -26,8 +26,6 @@
 .s-kartya__lab { margin-top: auto; display: grid; gap: var(--s-t-2); }
 .s-kartya__ar { font-size: var(--s-m-xs); color: var(--s-halvany); margin: 0; }
 .s-kartya__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin: 0; font-size: var(--s-m-xs); color: var(--s-halvany); }
-.s-kartya--link { flex-direction: row; align-items: center; justify-content: space-between; min-height: 64px; padding-block: var(--s-t-4); color: var(--s-szoveg); text-decoration: none; font-weight: var(--s-suly-kozepes); }
-.s-kartya--link .s-ikon { color: var(--s-neon); }
 .s-kartya--cikk .s-kartya__cim { font-size: var(--s-m-l); }
 
 /* ---------- Pipalista, jelek ---------- */
@@ -46,8 +44,9 @@
     border: 1px solid var(--s-vonal); border-radius: var(--s-r-kartya);
     background: var(--s-felulet);
     -webkit-overflow-scrolling: touch;
+    contain: paint; /* különben a Chromium a görgetett tartalmat a dokumentum szélességébe is beszámítja */
 }
-.s-tabla-gorgeto:focus-visible { outline: var(--s-fokusz-vastag) solid var(--s-fokusz); outline-offset: 2px; }
+.s-tabla-gorgeto:focus-visible { outline: var(--s-fokusz-vastag) solid var(--s-fokusz); outline-offset: calc(-1 * var(--s-fokusz-vastag)); }
 .s-tabla, .s-proza table { width: 100%; border-collapse: collapse; font-size: var(--s-m-s); }
 .s-tabla th, .s-tabla td, .s-proza th, .s-proza td { padding: var(--s-t-3) var(--s-t-4); text-align: left; border-bottom: 1px solid var(--s-vonal); vertical-align: middle; }
 .s-tabla thead th, .s-proza thead th { position: sticky; top: 0; background: var(--s-felulet-2); font-weight: var(--s-suly-felkover); white-space: nowrap; z-index: 1; }
@@ -59,7 +58,7 @@ thead .s-tabla__elso { z-index: 3; background: var(--s-felulet-2); }
 thead .s-tabla__kiemelt { color: var(--s-kiemelo-2); }
 .s-tabla__csoport th { background: var(--s-bg-2); font-size: var(--s-m-xs); text-transform: uppercase; letter-spacing: var(--s-betukoz-felirat); color: var(--s-halvany); position: sticky; left: 0; }
 .s-tabla__megj { margin-top: var(--s-t-3); font-size: var(--s-m-xs); color: var(--s-halvany); text-align: center; }
-.tablazat { max-width: 100%; overflow-x: auto; margin-bottom: var(--s-t-5); border: 1px solid var(--s-vonal); border-radius: var(--s-r-kicsi); }
+.tablazat { max-width: 100%; overflow-x: auto; contain: paint; margin-bottom: var(--s-t-5); border: 1px solid var(--s-vonal); border-radius: var(--s-r-kicsi); }
 .tablazat table { margin: 0; }
 
 /* ---------- Harmonika (<details>) ---------- */
@@ -176,3 +175,6 @@ thead .s-tabla__kiemelt { color: var(--s-kiemelo-2); }
     .s-csontvaz { background: linear-gradient(90deg, var(--s-felulet-2) 0%, var(--s-vonal) 50%, var(--s-felulet-2) 100%); background-size: 200% 100%; animation: s-csillan 1.4s linear infinite; }
     @keyframes s-csillan { to { background-position: -200% 0; } }
 }
+
+/* A bővítmény által rajzolt felületek jelölői / rádiói: ≥ 22 px, a téma színével */
+[data-modul] input[type="checkbox"]:not(.s-kapcsolo), [data-modul] input[type="radio"]:not(.s-szegmens__radio) { width: 24px; height: 24px; accent-color: var(--s-kiemelo); flex: none; }

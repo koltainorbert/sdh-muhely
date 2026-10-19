@@ -1,31 +1,32 @@
 /**
- * SDH Értékesítés – időpontfoglalás (front). Csatolás: <div data-sdh="foglalas" data-tipus="demo"></div>
+ * Időpontfoglalás (front). Csatolás: <div data-modul="foglalas" data-tipus="demo"></div>
  * Típusválasztó, akadálymentes havi naptár (hétfővel kezdődik, nyilakkal bejárható, natív dátummező nélkül),
  * szabad sávok, űrlap, siker (ICS-letöltés). URL-paraméterek: ?tipus=…&rendeles=…&rt=… (rendeléshez kötött ajánlat),
  * ?foglalas=<token> (meglévő foglalás lemondása / áthelyezése).
- * Adat: window.SDH_FOGLALAS (rest, tipusok, max_nap, adatvedelem), window.SDH_KOZOS (rest, nonce). Vanilla JS, jQuery nélkül.
+ * Adat: window.APP_FOGLALAS (rest, tipusok, max_nap, adatvedelem, vedelem), window.APP_KOZOS (rest, nonce).
+ * Robotszűrés: window.APP.vedelem(form, APP_FOGLALAS.vedelem) – mézesbödön, időbélyeg, Turnstile. Vanilla JS, jQuery nélkül.
  */
 (function () {
   'use strict';
 
-  var CFG = window.SDH_FOGLALAS || {};
-  var KOZ = window.SDH_KOZOS || {};
+  var CFG = window.APP_FOGLALAS || {};
+  var KOZ = window.APP_KOZOS || {};
   var HONAP = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december'];
   var NAP_ROVID = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'];
   var NAP_HOSSZU = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
 
   function rest() {
-    return String(CFG.rest || KOZ.rest || '/wp-json/sdh-sales/v1').replace(/\/$/, '');
+    return String(CFG.rest || KOZ.rest || '').replace(/\/$/, '');
   }
 
-  /** Egységes API-hívás: {ok, status, adat}. A közös segédet (window.SDH.api) POST-nál használja, ha van. */
+  /** Egységes API-hívás: {ok, status, adat}. */
   function api(ut, adat, metodus) {
     metodus = metodus || (adat ? 'POST' : 'GET');
     var url = rest() + ut;
     var fej = { 'Accept': 'application/json' };
     var opt = { method: metodus, headers: fej, credentials: 'same-origin' };
 
-    if (KOZ.nonce) { fej['X-WP-Nonce'] = KOZ.nonce; }
+    if (KOZ.nonce) { fej['X-App-Nonce'] = KOZ.nonce; }
 
     if (metodus === 'GET' && adat) {
       var q = Object.keys(adat).filter(function (k) { return adat[k] !== undefined && adat[k] !== ''; })
@@ -54,6 +55,20 @@
     });
     (gyerek || []).forEach(function (g) { if (g) { e.appendChild(typeof g === 'string' ? document.createTextNode(g) : g); } });
     return e;
+  }
+
+  /** Az űrlap mezői (a robotszűrés rejtett mezőivel együtt). */
+  function mezok(f) {
+    var adat = {};
+    Array.prototype.forEach.call(f.elements, function (x) { if (x.name && x.type !== 'submit' && x.type !== 'button') { adat[x.name] = x.value; } });
+    return adat;
+  }
+
+  /** Robotszűrés a közös segéddel (mézesbödön, kitöltési idő, Turnstile); nélküle a szerver dönt. */
+  function vedelem(f) {
+    if (window.APP && typeof window.APP.vedelem === 'function' && CFG.vedelem) {
+      try { window.APP.vedelem(f, CFG.vedelem); } catch (e) { /* a szerver dönt */ }
+    }
   }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -462,9 +477,17 @@
     d.textContent = '';
 
     if (this.atfoglal) {
-      var at = el('button', { type: 'button', class: 's-fogl__gomb', text: 'Áthelyezem erre: ' + napNev(this.valasztott) + ' ' + this.sav.ido });
-      at.addEventListener('click', function () { self.kuld({ atfoglal: self.atfoglal }, at); });
-      d.appendChild(at);
+      var af = el('form', { class: 's-fogl__urlap', novalidate: true });
+      var at = el('button', { type: 'submit', class: 's-fogl__gomb', text: 'Áthelyezem erre: ' + napNev(this.valasztott) + ' ' + this.sav.ido });
+      af.appendChild(at);
+      af.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var adat = mezok(af);
+        adat.atfoglal = self.atfoglal;
+        self.kuld(adat, at);
+      });
+      d.appendChild(af);
+      vedelem(af);
       return;
     }
 
@@ -486,8 +509,7 @@
     f.appendChild(gomb);
     f.addEventListener('submit', function (e) {
       e.preventDefault();
-      var adat = {};
-      Array.prototype.forEach.call(f.elements, function (x) { if (x.name) { adat[x.name] = x.value; } });
+      var adat = mezok(f);
       var hiba = !adat.nev || adat.nev.trim().length < 2 ? 'nev' : (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(adat.email || '') ? 'email' : '');
       Array.prototype.forEach.call(f.querySelectorAll('[aria-invalid]'), function (x) { x.removeAttribute('aria-invalid'); });
       if (hiba) {
@@ -500,6 +522,7 @@
       self.kuld(adat, gomb);
     });
     d.appendChild(f);
+    vedelem(f);
     this.kitolt();
   };
 
@@ -515,9 +538,7 @@
     adat.tipus = this.tipus;
     adat.kezdet = this.sav.utc;
     if (this.rendeles) { adat.rendeles = this.rendeles; adat.rt = this.rt; }
-    if (window.SDH && typeof window.SDH.vedelem === 'function') {
-      try { Object.assign(adat, window.SDH.vedelem() || {}); } catch (e) { /* a védelem nélkül is megy, a szerver dönt */ }
-    }
+    if (!adat._t && CFG.vedelem && CFG.vedelem.t) { adat._t = CFG.vedelem.t; }
     gomb.disabled = true;
     this.uzen('Foglalás folyamatban…');
     api('/foglalas', adat, 'POST').then(function (v) {
@@ -600,15 +621,15 @@
   };
 
   function csatol(gyoker) {
-    var lista = (gyoker || document).querySelectorAll('[data-sdh="foglalas"]:not([data-sdh-kesz])');
+    var lista = (gyoker || document).querySelectorAll('[data-modul="foglalas"]:not([data-kesz])');
     Array.prototype.forEach.call(lista, function (g) {
-      g.setAttribute('data-sdh-kesz', '1');
+      g.setAttribute('data-kesz', '1');
       try { new Foglalo(g); } catch (e) { g.textContent = 'Az időpontfoglalás most nem tölthető be.'; }
     });
   }
 
-  window.SDH = window.SDH || {};
-  window.SDH.foglalas = { csatol: csatol };
+  window.APP = window.APP || {};
+  window.APP.foglalas = { csatol: csatol };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { csatol(); });

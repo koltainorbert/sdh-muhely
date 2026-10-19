@@ -49,15 +49,11 @@
     mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 30%, transparent 75%);
 }
 .s-hero__kep { box-shadow: var(--s-arnyek-emelt); }
+/* Képet tartalmazó üvegdobozon nincs fényfolt (a képet nem takarhatja). */
+.s-hero__kep.s-uveg::before, .s-kepszoveg__kep.s-uveg::before, .s-video.s-uveg::before { display: none; }
 
 /* Ikondoboz neon fénye hoverre */
 .s-kartya:hover .s-ikondoboz { box-shadow: var(--s-ragyogas-neon); }
-
-/* Görgetésre megjelenés (csak JS mellett és ha a mozgás engedett; a tartalom JS nélkül is látszik) */
-@media (prefers-reduced-motion: no-preference) {
-    .js .s-belep { opacity: 0; transform: translateY(var(--s-elmozdulas)); transition: opacity var(--s-ido-belepes) var(--s-gorbe), transform var(--s-ido-belepes) var(--s-gorbe); }
-    .js .s-belep.s-latszik { opacity: 1; transform: none; }
-}
 
 @media (prefers-reduced-transparency: reduce) {
     .s-uveg { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--s-uveg-tomor); }

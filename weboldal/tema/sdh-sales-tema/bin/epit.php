@@ -2,7 +2,7 @@
 /**
  * Téma-építés (fejlesztői eszköz, parancssorból): a CSS és a JS tömörítése az assets/dist/ alá.
  *   php bin/epit.php
- * - assets/dist/kritikus.min.css = tokenek.css + kritikus.css (a fejbe ágyazva)
+ * - assets/dist/kritikus.min.css = tokenek.css + kritikus.css (a fejbe ágyazva); kritikus-proza.min.css = + proza.css (szöveges oldalak)
  * - assets/dist/tema.min.css     = sdh_tema_css_forrasok() sorrendjében (nem blokkolva)
  * - assets/dist/<nev>.min.js     = tema, kereso, datum
  * Tömörítő: esbuild, ha elérhető (ESBUILD környezeti változó vagy a PATH), különben a beépített biztonságos CSS-tömörítő,
@@ -76,6 +76,9 @@ echo "CSS:\n";
 $k = $tomorit_css(file_get_contents($css . 'tokenek.css') . "\n" . file_get_contents($css . 'kritikus.css'));
 file_put_contents($dist . 'kritikus.min.css', $k);
 $meret('kritikus.min.css', $k);
+$kp = $tomorit_css(file_get_contents($css . 'tokenek.css') . "\n" . file_get_contents($css . 'kritikus.css') . "\n" . file_get_contents($css . 'proza.css'));
+file_put_contents($dist . 'kritikus-proza.min.css', $kp);
+$meret('kritikus-proza.min.css', $kp);
 
 $t = '';
 

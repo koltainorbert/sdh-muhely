@@ -10,7 +10,7 @@
  *  - dátumválasztó – a datum.js csak akkor töltődik, ha van [data-datum] mező az oldalon
  *  - kétlépcsős gomb ([data-ketlepcsos]) tartalék, ha a közös modul (window.APP.ketlepcsos) nincs jelen
  *  - értesítő (window.APP.uzen tartalék), videó kattintásra, árak ciklusváltó, GYIK- / kártyaszűrő,
- *    ellenőrzőlista (localStorage), tartalomjegyzék kiemelés, nyomtatás gomb, görgetésre megjelenés
+ *    ellenőrzőlista (localStorage), tartalomjegyzék kiemelés, nyomtatás gomb
  */
 (function (w, d) {
     'use strict';
@@ -360,16 +360,5 @@
     /* ---------- Nyomtatás ---------- */
     d.addEventListener('click', function (e) { if (e.target.closest('[data-nyomtat]')) { w.print(); } });
 
-    /* ---------- Görgetésre megjelenés (csak a hajtás alatti kártyákon; a mozgás tiltható) ---------- */
-    if ('IntersectionObserver' in w && !(w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-        var kartyak = $$('.s-szekcio:not(.s-hero) .s-kartya, .s-lepes, .s-szam').filter(function (k) { return k.getBoundingClientRect().top > w.innerHeight; });
-        kartyak.forEach(function (k) { k.classList.add('s-belep'); });
-        var bio = new IntersectionObserver(function (b) {
-            b.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('s-latszik'); bio.unobserve(x.target); } });
-        }, { rootMargin: '0px 0px -8% 0px' });
-        kartyak.forEach(function (k) { bio.observe(k); });
-    }
-
-    /* ---------- Kosár-számláló a fejlécben (a böngésző kosarából; a HTML gyorsítótárazható marad) ---------- */
     valtoFrissit();
 })(window, document);

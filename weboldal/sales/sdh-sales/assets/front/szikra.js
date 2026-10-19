@@ -1,17 +1,17 @@
 /**
- * SDH Értékesítés – Szikra csevegő (vanilla JS, külső függőség nélkül).
- * Csatolás: <div data-sdh="szikra" data-opciok='{"lebego":true}'></div> – lebegő indítógomb + panel;
+ * Szikra csevegő (vanilla JS, külső függőség nélkül).
+ * Csatolás: <div data-modul="szikra" data-opciok='{"lebego":true}'></div> – lebegő indítógomb + panel;
  * lebego nélkül a csevegő helyben jelenik meg (pl. egy oldal szekciójában).
- * Adat: window.SDH_SZIKRA (SDH_Sales_Szikra::js_adat). Munkamenet: sessionStorage (nincs süti).
- * Más modulnak: window.SDH.szikra.nyit(), window.SDH.szikra.kerdez(szoveg, {mod, lecke, lepes}).
+ * Adat: window.APP_SZIKRA (a szerver adja). Munkamenet: sessionStorage (nincs süti).
+ * Más modulnak: window.APP.szikra.nyit(), window.APP.szikra.kerdez(szoveg, {mod, lecke, lepes}).
  */
 (function () {
   'use strict';
 
-  var A = window.SDH_SZIKRA;
+  var A = window.APP_SZIKRA;
   if (!A || !A.rest) { return; }
   var S = A.szoveg || {};
-  var TAR = 'sdh_szikra';
+  var TAR = 'szikra';
 
   function tarOlvas() {
     try { return JSON.parse(window.sessionStorage.getItem(TAR) || 'null'); } catch (e) { return null; }
@@ -181,7 +181,7 @@
     b.appendChild(ki);
     var t = el('div', 's-szikra__szoveg');
     if (u.html) {
-      t.innerHTML = u.html; // a szerver tisztította (SDH_Sales_Szikra_Kimenet::html)
+      t.innerHTML = u.html; // a szerver tisztította (biztonságos HTML-részhalmaz)
     } else {
       t.textContent = u.szoveg || '';
     }
@@ -307,26 +307,26 @@
   };
 
   function indit() {
-    var helyek = document.querySelectorAll('[data-sdh="szikra"]:not([data-sdh-kesz])');
+    var helyek = document.querySelectorAll('[data-modul="szikra"]:not([data-kesz])');
     var vanLebego = peldanyok.some(function (p) { return p.lebego; });
     Array.prototype.forEach.call(helyek, function (g) {
       var opc = {};
       try { opc = JSON.parse(g.getAttribute('data-opciok') || '{}') || {}; } catch (e) { opc = {}; }
-      g.setAttribute('data-sdh-kesz', '1');
+      g.setAttribute('data-kesz', '1');
       if (opc.lebego && vanLebego) { g.remove(); return; }
       if (opc.lebego) { vanLebego = true; }
       new Csevego(g, opc);
     });
   }
 
-  window.SDH = window.SDH || {};
-  window.SDH.szikra = {
+  window.APP = window.APP || {};
+  window.APP.szikra = {
     nyit: function () {
       var p = peldanyok.filter(function (x) { return x.lebego; })[0] || peldanyok[0];
       if (p) { p.valt(true); }
     },
     kerdez: function (szoveg, opc) {
-      window.SDH.szikra.nyit();
+      window.APP.szikra.nyit();
       return kerdez(szoveg, opc);
     }
   };

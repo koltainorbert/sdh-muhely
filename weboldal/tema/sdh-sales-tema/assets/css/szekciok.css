@@ -152,16 +152,9 @@
 .s-kapcsolodo__leiras { font-size: var(--s-m-s); color: var(--s-halvany); }
 
 /* ---------- Jogi ---------- */
-.s-jogi__racs { display: grid; gap: var(--s-t-6); }
+.s-jogi__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-6); }
 @media (min-width: 1024px) { .s-jogi__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); } .s-jogi__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); } }
 .s-jogi__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin-bottom: var(--s-t-6); }
-
-/* ---------- 404 ---------- */
-.s-404 { overflow: hidden; isolation: isolate; text-align: center; }
-.s-404 .s-oldalfej__cim, .s-404 .s-oldalfej__alcim { margin-inline: auto; }
-.s-404__kod { font-family: var(--s-betu-cim); font-size: clamp(5rem, 3rem + 10vw, 10rem); font-weight: 800; line-height: 1; margin: 0 0 var(--s-t-4); background: var(--s-atmenet-szoveg); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.s-404__kereso { max-width: 560px; margin: var(--s-t-6) auto var(--s-t-7); }
-.s-404 .s-nepszeru { text-align: left; }
 
 /* Panel a csatolási pontok körül */
 .s-panel--kosar, .s-panel--penztar, .s-panel--fiok { min-height: 260px; }

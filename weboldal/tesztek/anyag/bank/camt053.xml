@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.08">
+ <BkToCstmrStmt>
+  <GrpHdr><MsgId>STMT-20261019</MsgId><CreDtTm>2026-10-19T18:00:00</CreDtTm></GrpHdr>
+  <Stmt>
+   <Id>1</Id>
+   <Acct><Id><IBAN>HU42117730161111101800000000</IBAN></Id><Ccy>HUF</Ccy></Acct>
+   <Ntry>
+    <Amt Ccy="HUF">{O9}</Amt><CdtDbtInd>CRDT</CdtDbtInd><Sts><Cd>BOOK</Cd></Sts>
+    <BookgDt><Dt>2026-10-19</Dt></BookgDt><ValDt><Dt>2026-10-19</Dt></ValDt><AcctSvcrRef>CAMT-0001</AcctSvcrRef>
+    <NtryDtls><TxDtls>
+      <Refs><AcctSvcrRef>CAMT-0001-TX</AcctSvcrRef><EndToEndId>NOTPROVIDED</EndToEndId></Refs>
+      <Amt Ccy="HUF">{O9}</Amt><CdtDbtInd>CRDT</CdtDbtInd>
+      <RltdPties><Dbtr><Nm>Kilencedik Kft.</Nm></Dbtr><DbtrAcct><Id><IBAN>HU93116000060000000012345676</IBAN></Id></DbtrAcct></RltdPties>
+      <RmtInf><Ustrd>{K9}</Ustrd></RmtInf>
+    </TxDtls></NtryDtls>
+   </Ntry>
+   <Ntry>
+    <Amt Ccy="HUF">3500.00</Amt><CdtDbtInd>DBIT</CdtDbtInd><Sts><Cd>BOOK</Cd></Sts>
+    <BookgDt><Dt>2026-10-19</Dt></BookgDt><AcctSvcrRef>CAMT-0002</AcctSvcrRef>
+    <AddtlNtryInf>Kártyadíj</AddtlNtryInf>
+   </Ntry>
+   <Ntry>
+    <Amt Ccy="HUF">{O10}</Amt><CdtDbtInd>CRDT</CdtDbtInd><Sts><Cd>BOOK</Cd></Sts>
+    <BookgDt><Dt>2026-10-19</Dt></BookgDt><AcctSvcrRef>CAMT-0003</AcctSvcrRef>
+    <NtryDtls><TxDtls>
+      <Amt Ccy="HUF">{O10}</Amt><CdtDbtInd>CRDT</CdtDbtInd>
+      <RltdPties><Dbtr><Nm>Tizedik Kft.</Nm></Dbtr></RltdPties>
+      <RmtInf><Ustrd>{K10}</Ustrd></RmtInf>
+    </TxDtls></NtryDtls>
+   </Ntry>
+  </Stmt>
+ </BkToCstmrStmt>
+</Document>

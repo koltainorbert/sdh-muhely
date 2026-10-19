@@ -194,7 +194,7 @@ function sdh_tema_betuk(): array
 
 /**
  * @font-face szabályok + méretre igazított tartalékbetűk (kisebb CLS a csere pillanatában).
- * A size-adjust / ascent-override értékek Chromiumban mérve (tesztek/t240-tema.php melletti mérés, Arial-hoz).
+ * A size-adjust / ascent-override értékek alapértékek (100 / 100 / 25 %), NEM mért metrikák – finomhangolás nyitott tétel.
  */
 function sdh_tema_betu_css(): string
 {
@@ -211,7 +211,7 @@ function sdh_tema_betu_css(): string
     return $ki;
 }
 
-/** Tartalékbetű-metrikák (Chromiumban mérve, lásd bin/betu-meres.py). */
+/** Tartalékbetű-metrikák – alapértékek, nem mérve (a mért CLS ezekkel is 0). */
 const SDH_TEMA_BETU_ONEST     = ['meret' => '100', 'fel' => '100', 'le' => '25'];
 const SDH_TEMA_BETU_BRICOLAGE = ['meret' => '100', 'fel' => '100', 'le' => '25'];
 
@@ -245,12 +245,29 @@ function sdh_tema_dist_jo(string $dist, array $forrasok): bool
     return true;
 }
 
-/** A kritikus CSS szövege (tokenek + kritikus.css), a fejbe ágyazva. */
+/** Szöveges oldal (blogcikk, jogi, tudásbázis, keresés): az elrendezése a proza.css-ben van → az is a fejbe kerül (CLS). */
+function sdh_tema_proza_oldal(): bool
+{
+    if (is_singular('post') || is_search() || (function_exists('sdh_tema_tudas_e') && sdh_tema_tudas_e())) {
+        return true;
+    }
+
+    if (is_page()) {
+        $id = (int) get_queried_object_id();
+
+        return get_page_template_slug($id) === 'oldalsablonok/jogi.php' || sdh_tema_van_tipus($id, 'jogi') || !sdh_tema_van_szekcio($id);
+    }
+
+    return false;
+}
+
+/** A kritikus CSS szövege (tokenek + kritikus.css [+ proza.css szöveges oldalon]), a fejbe ágyazva. */
 function sdh_tema_kritikus_css(): string
 {
-    $css  = SDH_TEMA_DIR . '/assets/css/';
-    $src  = [$css . 'tokenek.css', $css . 'kritikus.css'];
-    $dist = SDH_TEMA_DIR . '/assets/dist/kritikus.min.css';
+    $css   = SDH_TEMA_DIR . '/assets/css/';
+    $proza = sdh_tema_proza_oldal();
+    $src   = array_merge([$css . 'tokenek.css', $css . 'kritikus.css'], $proza ? [$css . 'proza.css'] : []);
+    $dist  = SDH_TEMA_DIR . '/assets/dist/' . ($proza ? 'kritikus-proza.min.css' : 'kritikus.min.css');
 
     if (sdh_tema_dist_jo($dist, $src)) {
         return (string) file_get_contents($dist);

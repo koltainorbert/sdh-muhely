@@ -43,7 +43,9 @@
 .s-cikk__meta .s-ikon { width: 16px; height: 16px; }
 .s-cikk__kep { margin-bottom: var(--s-t-7); }
 .s-cikk__kep img { border-radius: var(--s-r-popup); width: 100%; }
-.s-cikk__racs { display: grid; gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
+.s-cikk__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
+.s-cikk__racs > *, .s-tudas__racs > *, .s-jogi__racs > * { min-width: 0; }
+.s-tj__elem a { overflow-wrap: anywhere; }
 @media (min-width: 1100px) {
     .s-cikk__racs { grid-template-columns: 240px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); }
     .s-cikk__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
@@ -56,7 +58,7 @@
 .s-entitas__linkek { display: flex; flex-wrap: wrap; gap: var(--s-t-4); margin: 0; font-size: var(--s-m-s); }
 
 /* Tudásbázis-fejezet */
-.s-tudas__racs { display: grid; gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
+.s-tudas__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
 @media (min-width: 1100px) {
     .s-tudas__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); }
     .s-tudas__oldalsav { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); align-self: start; max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }

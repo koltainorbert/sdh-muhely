@@ -1,17 +1,17 @@
 /**
- * SDH Értékesítés – oktató mód (vanilla JS): kurzusok és leckék, lépésenkénti lejátszó haladásjelzővel, kvíz szerveroldali
+ * Oktató mód (vanilla JS): kurzusok és leckék, lépésenkénti lejátszó haladásjelzővel, kvíz szerveroldali
  * értékeléssel és magyarázattal, „Magyarázd el, Szikra” (oktató mód), tanúsítvány.
- * Csatolás: <div data-sdh="oktatas" data-opciok='{"modul":"","lecke":""}'></div>
- * Adat: window.SDH_OKTATAS (SDH_Sales_Oktatas::js_adat).
+ * Csatolás: <div data-modul="oktatas" data-opciok='{"modul":"","lecke":""}'></div>
+ * Adat: window.APP_OKTATAS (a szerver adja).
  * Haladás: localStorage (látogató); bejelentkezve a REST /oktatas/haladas is (a kettő összefésülve).
  */
 (function () {
   'use strict';
 
-  var A = window.SDH_OKTATAS;
+  var A = window.APP_OKTATAS;
   if (!A || !A.rest) { return; }
   var S = A.szoveg || {};
-  var TAR = 'sdh_oktatas';
+  var TAR = 'oktatas';
 
   function olvas() {
     try { var v = JSON.parse(window.localStorage.getItem(TAR) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; }
@@ -24,7 +24,7 @@
 
   function api(ut, metodus, adat) {
     var h = { 'Accept': 'application/json' };
-    if (A.nonce) { h['X-WP-Nonce'] = A.nonce; }
+    if (A.nonce) { h['X-App-Nonce'] = A.nonce; }
     var o = { method: metodus, credentials: 'same-origin', headers: h };
     if (adat !== undefined) { h['Content-Type'] = 'application/json'; o.body = JSON.stringify(adat); }
     return fetch(A.rest + ut, o).then(function (r) {
@@ -239,9 +239,9 @@
     elozo.disabled = i === 0;
     sor.appendChild(elozo);
 
-    if (A.szikra && window.SDH && window.SDH.szikra) {
+    if (A.szikra && window.APP && window.APP.szikra) {
       sor.appendChild(gomb(S.magyarazd, 's-okt__gomb--halk', function () {
-        window.SDH.szikra.kerdez(S.magyarazd_kerdes + ' (' + l.cim + ', ' + S.lepes.toLowerCase() + ' ' + (i + 1) + ')', { mod: 'oktato', lecke: kulcs, lepes: i });
+        window.APP.szikra.kerdez(S.magyarazd_kerdes + ' (' + l.cim + ', ' + S.lepes.toLowerCase() + ' ' + (i + 1) + ')', { mod: 'oktato', lecke: kulcs, lepes: i });
       }));
     }
 
@@ -336,12 +336,12 @@
   };
 
   function indit() {
-    var helyek = document.querySelectorAll('[data-sdh="oktatas"]:not([data-sdh-kesz])');
+    var helyek = document.querySelectorAll('[data-modul="oktatas"]:not([data-kesz])');
     Array.prototype.forEach.call(helyek, function (g) {
       var opc = {};
       try { opc = JSON.parse(g.getAttribute('data-opciok') || '{}') || {}; } catch (e) { opc = {}; }
-      g.setAttribute('data-sdh-kesz', '1');
-      g.__sdhOktatas = new Jatszo(g, opc);
+      g.setAttribute('data-kesz', '1');
+      g.__oktatas = new Jatszo(g, opc);
     });
   }
 

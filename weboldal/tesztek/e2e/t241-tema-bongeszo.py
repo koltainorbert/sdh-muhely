@@ -40,6 +40,7 @@ TULCSORDUL = """() => {
   const ki = [];
   document.querySelectorAll('body *').forEach(el => {
     if (el.closest('.s-tabla-gorgeto, .tablazat, pre, .s-sr, .s-sprite, [hidden], .s-kereso, .s-almenu, .s-tudas__oldalsav')) return;
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) { const o = getComputedStyle(p).overflowX; if (o === 'hidden' || o === 'clip' || o === 'auto' || o === 'scroll') return; }
     const r = el.getBoundingClientRect();
     if (r.width && (r.right > w + 1 || r.left < -1)) {
       const st = getComputedStyle(el);
@@ -57,7 +58,7 @@ KICSI = """() => {
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) return;
     const st = getComputedStyle(el);
-    if (st.visibility === 'hidden' || st.display === 'none') return;
+    if (st.visibility === 'hidden' || st.display === 'none' || st.opacity === '0') return;
     // A kártya-link célterülete a teljes kártya (::after) – a kártya méretét nézzük.
     const cel = el.classList.contains('s-kartya__link') ? el.closest('.s-kartya').getBoundingClientRect() : r;
     if (cel.height < 24 || cel.width < 24) ki.push((el.className || el.tagName) + ' ' + Math.round(cel.width) + 'x' + Math.round(cel.height));
@@ -77,6 +78,7 @@ def main():
                                     is_mobile=nezet == 'mobil', has_touch=nezet == 'mobil', locale='hu-HU')
                 ctx.add_init_script("try{localStorage.setItem('szinmod','%s')}catch(e){}" % mod)
                 ctx.add_init_script(MERO)
+                ctx.add_cookies([{'name': 'suti', 'value': '1', 'url': ALAP}]) if os.environ.get('T241_SUTI_ZAR') else None
                 for nev, ut in OLDALAK.items():
                     lap = ctx.new_page()
                     konzol = []
@@ -110,6 +112,8 @@ def main():
                     t = lap.evaluate(TULCSORDUL)
                     if t['doc'] > 0 or t['elemek']:
                         hibak.append(f'{nezet}/{mod}/{nev}: vízszintes túlcsordulás {t}')
+                    if nev == '404':
+                        konzol = [k for k in konzol if 'status of 404' not in k]  # maga a dokumentum 404
                     if konzol:
                         hibak.append(f'{nezet}/{mod}/{nev}: konzolhiba {konzol[:2]}')
                     if kulso:
@@ -123,7 +127,7 @@ def main():
                     lcp = lap.evaluate('window.__lcp')
                     cls = lap.evaluate('window.__cls')
                     meres[f'{nezet}/{mod}/{nev}'] = {'lcp_ms': round(lcp), 'cls': round(cls, 4), **bajt}
-                    lap.evaluate('window.scrollTo(0,0)')
+                    lap.evaluate("document.documentElement.style.scrollBehavior='auto';window.scrollTo(0,0)")
                     lap.wait_for_timeout(200)
                     lap.screenshot(path=os.path.join(KI, f'{nev}-{nezet}-{mod}.png'), full_page=nev in ('kezdolap', 'arak') and nezet == 'mobil' and mod == 'sotet')
                     lap.close()
@@ -138,6 +142,9 @@ def main():
         lap.click('[data-menugomb]')
         if lap.get_attribute('[data-menugomb]', 'aria-expanded') != 'true' or not lap.is_visible('#fomenu'):
             hibak.append('mobil menü nem nyílik')
+        mm = lap.evaluate("(() => { const r = document.getElementById('fomenu').getBoundingClientRect(); return [Math.round(r.height), innerHeight]; })()")
+        if mm[0] < mm[1] * 0.8:
+            hibak.append(f'mobil menü nem tölti ki a képernyőt {mm}')
         lap.screenshot(path=os.path.join(KI, 'menu-mobil.png'))
         lap.keyboard.press('Escape')
         if lap.get_attribute('[data-menugomb]', 'aria-expanded') != 'false':

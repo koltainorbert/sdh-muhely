@@ -3,7 +3,7 @@
  *
  *   APP.api(ut, adat?, opciok?)   → Promise<json>. ut: '/ar' (a kapott `rest` címhez fűzve) vagy teljes URL;
  *                                   adat nélkül GET, adattal POST JSON; opciok.metodus ('GET'|'POST'|'DELETE'), opciok.query.
- *                                   Hiba: a Promise elutasul egy Error-ral (.uzenet, .status, .kod, .adat).
+ *                                   Hiba: a Promise elutasul egy Error-ral (.uzenet, .status, .kod, .adat, .valasz = a teljes JSON).
  *   APP.kosar                     → böngészőben tárolt kosár (localStorage, tartalék: memória):
  *                                   tetelek(), opciok(), beallit(tetelek, opciok), tesz(tetel), vesz(tipus, kulcs),
  *                                   opcio(kulcs, ertek), urit(), db(), figyel(fn) – a változásra (más fülön is) szól.
@@ -73,7 +73,7 @@
                 try { j = t ? JSON.parse(t) : null; } catch (e) { j = null; }
                 if (!v.ok) {
                     var h = new Error((j && j.message) || SZ.hiba || 'Valami nem sikerült. Próbáld újra.');
-                    h.uzenet = h.message; h.status = v.status; h.kod = j && j.code; h.adat = j && j.data;
+                    h.uzenet = h.message; h.status = v.status; h.kod = j && j.code; h.adat = j && j.data; h.valasz = j || {};
                     throw h;
                 }
                 return j;

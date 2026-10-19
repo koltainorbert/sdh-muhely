@@ -263,3 +263,7 @@ html.s-suti-nyitva {
         transition: none;
     }
 }
+
+/* Mobilon a sáv soha nem szélesebb a képernyőnél. */
+.s-suti-sav, .s-suti-sav * { box-sizing: border-box; }
+.s-suti-sav { max-width: 100%; overflow-wrap: anywhere; }

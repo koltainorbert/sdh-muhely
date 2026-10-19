@@ -1,0 +1,8 @@
+Tisztelt Ügyfelünk!
+
+Számláján jóváírás történt.
+Könyvelés dátuma: 2026.10.19
+Összeg: +{O11} HUF
+Partner neve: Tizenegyedik Kft.
+Közlemény: {K11}
+Tranzakció azonosító: SMS-11-2026
