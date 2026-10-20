@@ -31,7 +31,7 @@ $id    = sdh_tema_szekcio_id($sz);
 $cimid = $id . '-cim';
 $pont  = sdh_tema_elemek($sz, 'pontok');
 
-echo '<section id="' . esc_attr($id) . '" class="' . esc_attr('s-szekcio s-hero s-hero--' . $elr . ' s-hatter--' . sdh_tema_hatter($sz)) . '" aria-labelledby="' . esc_attr($cimid) . '">';
+echo '<section id="' . esc_attr($id) . '" class="' . esc_attr('s-szekcio s-hero s-hero--' . $elr . ' s-hatter--' . sdh_tema_hatter($sz)) . '" aria-labelledby="' . esc_attr($cimid) . '"' . sdh_tema_szerk_mezo($sz) . '>';
 echo '<div class="s-hero__aurora" aria-hidden="true"></div>';
 echo '<div class="s-kont s-hero__racs">';
 echo '<div class="s-hero__szoveg">';
@@ -39,15 +39,15 @@ echo '<div class="s-hero__szoveg">';
 $eb = sdh_tema_eyebrow($sz);
 
 if ($eb !== '') {
-    echo '<p class="s-eyebrow s-eyebrow--pill">' . sdh_tema_ikon('szikra') . esc_html(sdh_tema_t($eb)) . '</p>';
+    echo '<p class="s-eyebrow s-eyebrow--pill"' . sdh_tema_szerk_mezo($sz, sdh_tema_eyebrow_mezo($sz)) . '>' . sdh_tema_ikon('szikra') . esc_html(sdh_tema_t($eb)) . '</p>';
 }
 
-echo '<' . $szint . ' id="' . esc_attr($cimid) . '" class="s-hero__cim">' . esc_html(sdh_tema_t(sdh_tema_mezo($sz, 'cim', sdh_tema_termeknev()))) . '</' . $szint . '>';
+echo '<' . $szint . ' id="' . esc_attr($cimid) . '" class="s-hero__cim"' . sdh_tema_szerk_mezo($sz, 'cim') . '>' . esc_html(sdh_tema_t(sdh_tema_mezo($sz, 'cim', sdh_tema_termeknev()))) . '</' . $szint . '>';
 
 $alcim = sdh_tema_mezo($sz, 'alcim');
 
 if ($alcim !== '') {
-    echo '<p class="s-hero__alcim">' . esc_html(sdh_tema_t($alcim)) . '</p>';
+    echo '<p class="s-hero__alcim"' . sdh_tema_szerk_mezo($sz, 'alcim') . '>' . esc_html(sdh_tema_t($alcim)) . '</p>';
 }
 
 echo sdh_tema_gombok(sdh_tema_cta($sz), 's-hero__gombok'); // phpcs:ignore WordPress.Security.EscapeOutput -- escapelve
@@ -59,7 +59,7 @@ if ($pont !== []) {
         $t = sdh_tema_mezo($p, 'szoveg');
 
         if ($t !== '') {
-            echo '<li>' . sdh_tema_ikon('pipa') . '<span>' . esc_html(sdh_tema_t($t)) . '</span></li>';
+            echo '<li' . sdh_tema_szerk_mezo($sz, 'pontok', (int) $p['_ei'], 'szoveg') . '>' . sdh_tema_ikon('pipa') . '<span>' . esc_html(sdh_tema_t($t)) . '</span></li>';
         }
     }
 
@@ -69,7 +69,7 @@ if ($pont !== []) {
 echo '</div>';
 
 if ($kep !== '' && $elr !== 'kozep') {
-    echo '<div class="s-hero__kep s-uveg">' . sdh_tema_kep_mezo($kep, 'hero', ['class' => 's-hero__img'], sdh_tema_mezo($sz, 'kep_alt')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<div class="s-hero__kep s-uveg"' . sdh_tema_szerk_mezo($sz, 'kep') . '>' . sdh_tema_kep_mezo($kep, 'hero', ['class' => 's-hero__img'], sdh_tema_mezo($sz, 'kep_alt')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 echo '</div></section>';

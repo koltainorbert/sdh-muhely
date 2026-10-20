@@ -53,16 +53,16 @@ $kartya = static function (array $x): string {
     $jel         = $jel !== '' ? sdh_tema_url($jel) : '';
     $mult        = $v < time();
 
-    $ki  = '<li class="s-kartya s-esemeny' . ($mult ? ' s-esemeny--mult' : '') . '" id="' . esc_attr('esemeny-' . $kulcs) . '">';
+    $ki  = '<li class="s-kartya s-esemeny' . ($mult ? ' s-esemeny--mult' : '') . '" id="' . esc_attr('esemeny-' . $kulcs) . '"' . sdh_tema_elem_szerk($e) . '>';
     $ki .= '<p class="s-esemeny__datum"><time datetime="' . esc_attr(wp_date('c', $k)) . '"><span class="s-esemeny__nap">' . esc_html(wp_date('j', $k)) . '</span><span class="s-esemeny__ho">' . esc_html(wp_date('M', $k)) . '</span></time></p>';
-    $ki .= '<div class="s-esemeny__test"><h3 class="s-kartya__cim">' . esc_html(sdh_tema_elem_nev($e)) . '</h3>';
+    $ki .= '<div class="s-esemeny__test"><h3 class="s-kartya__cim"' . sdh_tema_elem_szerk($e, 'nev') . '>' . esc_html(sdh_tema_elem_nev($e)) . '</h3>';
     $ki .= '<p class="s-esemeny__meta">' . sdh_tema_ikon('ora') . esc_html(wp_date('Y. F j., l H:i', $k) . '–' . wp_date('H:i', $v)) . '</p>';
     $ki .= '<p class="s-esemeny__meta">' . sdh_tema_ikon($online ? 'globus' : 'helyszin') . esc_html($online ? sdh_tema__('Online') : sdh_tema_t((string) ($a['helyszin'] ?? ''))) . ' · ' . esc_html($ar > 0 ? sdh_tema_ft($ar) . ' + ' . sdh_tema__('áfa') : sdh_tema__('Ingyenes')) . '</p>';
 
     $l = sdh_tema_elem_leiras($e, 260);
 
     if ($l !== '') {
-        $ki .= '<p class="s-kartya__szoveg">' . esc_html($l) . '</p>';
+        $ki .= '<p class="s-kartya__szoveg"' . sdh_tema_elem_szerk($e, 'leiras') . '>' . esc_html($l) . '</p>';
     }
 
     if (!$mult && $jel !== '') {

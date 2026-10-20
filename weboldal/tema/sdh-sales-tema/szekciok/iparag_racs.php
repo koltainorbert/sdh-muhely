@@ -34,7 +34,7 @@ foreach ($elemek as $e) {
         $kk = 'iparag-' . sanitize_title(strtok($k, '-'));
     }
 
-    echo '<li class="s-kartya s-kartya--iparag' . ($url !== '' ? ' s-kartya--katt' : '') . '">';
+    echo '<li class="s-kartya s-kartya--iparag' . ($url !== '' ? ' s-kartya--katt' : '') . '"' . sdh_tema_elem_szerk($e) . '>';
 
     if (sdh_tema_van_kep($kk)) {
         echo '<div class="s-kartya__media">' . sdh_tema_kep($kk, 'kartya', ['alt' => '', 'class' => 's-kartya__kep']) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
@@ -42,12 +42,12 @@ foreach ($elemek as $e) {
         echo '<span class="s-ikondoboz">' . sdh_tema_ikon((string) ($a['ikon'] ?? 'bolt')) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
-    echo '<h3 class="s-kartya__cim">' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($nev) . '</a>' : esc_html($nev)) . '</h3>';
+    echo '<h3 class="s-kartya__cim"' . sdh_tema_elem_szerk($e, 'nev') . '>' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($nev) . '</a>' : esc_html($nev)) . '</h3>';
 
     $l = sdh_tema_elem_leiras($e, 180);
 
     if ($l !== '') {
-        echo '<p class="s-kartya__szoveg">' . esc_html($l) . '</p>';
+        echo '<p class="s-kartya__szoveg"' . sdh_tema_elem_szerk($e, 'leiras') . '>' . esc_html($l) . '</p>';
     }
 
     echo '</li>';

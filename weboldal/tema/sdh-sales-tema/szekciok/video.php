@@ -35,7 +35,7 @@ $cim    = sdh_tema_t(sdh_tema_mezo($sz, 'cim', sdh_tema__('Videó')));
 $poszt  = sdh_tema_kep_mezo($sz['poszter'] ?? '', 'teljes', ['class' => 's-video__poszter', 'alt' => '']);
 
 echo sdh_tema_szekcio_nyit($sz, ['szelesseg' => 'szuk']); // phpcs:ignore WordPress.Security.EscapeOutput
-echo '<div class="s-video s-uveg" data-video="' . esc_attr($tip) . '" data-src="' . esc_url($beag) . '" data-cim="' . esc_attr($cim) . '">';
+echo '<div class="s-video s-uveg" data-video="' . esc_attr($tip) . '" data-src="' . esc_url($beag) . '" data-cim="' . esc_attr($cim) . '"' . sdh_tema_szerk_mezo($sz, 'url') . '>';
 echo $poszt; // phpcs:ignore WordPress.Security.EscapeOutput
 echo '<button class="s-video__gomb" type="button">' . sdh_tema_ikon('jatek') . '<span>' . esc_html(sdh_tema__('Videó lejátszása')) . '<span class="s-sr">: ' . esc_html($cim) . '</span></span></button>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
@@ -49,7 +49,7 @@ echo '</div>';
 $leiras = sdh_tema_mezo($sz, 'leiras');
 
 if ($leiras !== '') {
-    echo '<div class="s-video__leiras">' . sdh_tema_szoveg($leiras) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<div class="s-video__leiras"' . sdh_tema_szerk_mezo($sz, 'leiras') . '>' . sdh_tema_szoveg($leiras) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 echo sdh_tema_szekcio_zar($sz); // phpcs:ignore WordPress.Security.EscapeOutput

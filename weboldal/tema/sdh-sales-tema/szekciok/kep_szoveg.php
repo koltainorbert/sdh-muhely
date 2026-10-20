@@ -18,7 +18,7 @@ $id    = sdh_tema_szekcio_id($sz);
 echo sdh_tema_szekcio_nyit($sz, ['fej' => false, 'osztaly' => 's-kepszoveg--' . $oldal . ($kep === '' ? ' s-kepszoveg--kepnelkul' : '')]); // phpcs:ignore WordPress.Security.EscapeOutput
 echo '<div class="s-kepszoveg"><div class="s-kepszoveg__szoveg">';
 echo sdh_tema_szekcio_fej($sz, $id . '-cim', 'h2', 'bal'); // phpcs:ignore WordPress.Security.EscapeOutput
-echo '<div class="s-proza">' . sdh_tema_szoveg(sdh_tema_mezo($sz, 'html', sdh_tema_mezo($sz, 'szoveg'))) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+echo '<div class="s-proza"' . sdh_tema_szerk_mezo($sz, sdh_tema_mezo($sz, 'html') !== '' ? 'html' : 'szoveg') . '>' . sdh_tema_szoveg(sdh_tema_mezo($sz, 'html', sdh_tema_mezo($sz, 'szoveg'))) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
 $pontok = sdh_tema_elemek($sz, 'pontok');
 
@@ -26,7 +26,7 @@ if ($pontok !== []) {
     echo '<ul class="s-pipalista">';
 
     foreach ($pontok as $p) {
-        echo '<li>' . sdh_tema_ikon('pipa') . '<span>' . esc_html(sdh_tema_t(sdh_tema_mezo($p, 'szoveg'))) . '</span></li>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<li' . sdh_tema_szerk_mezo($sz, 'pontok', (int) $p['_ei'], 'szoveg') . '>' . sdh_tema_ikon('pipa') . '<span>' . esc_html(sdh_tema_t(sdh_tema_mezo($p, 'szoveg'))) . '</span></li>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
     echo '</ul>';
@@ -36,7 +36,7 @@ echo sdh_tema_gombok(sdh_tema_cta($sz)); // phpcs:ignore WordPress.Security.Esca
 echo '</div>';
 
 if ($kep !== '') {
-    echo '<figure class="s-kepszoveg__kep s-uveg">' . $kep . '</figure>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<figure class="s-kepszoveg__kep s-uveg"' . sdh_tema_szerk_mezo($sz, 'kep') . '>' . $kep . '</figure>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 echo '</div>';

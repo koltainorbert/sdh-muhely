@@ -44,14 +44,14 @@ foreach ($cs as $csnev => $lista) {
         $url = sdh_tema_elem_url($e, 'modulok');
         $nev = sdh_tema_elem_nev($e);
 
-        echo '<li class="s-kartya s-kartya--modul" id="' . esc_attr('modul-' . sanitize_title($k)) . '">';
+        echo '<li class="s-kartya s-kartya--modul" id="' . esc_attr('modul-' . sanitize_title($k)) . '"' . sdh_tema_elem_szerk($e) . '>';
         echo '<div class="s-kartya__fej"><span class="s-ikondoboz s-ikondoboz--kicsi">' . sdh_tema_ikon((string) ($a['ikon'] ?? 'modul')) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
-        echo '<h4 class="s-kartya__cim">' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($nev) . '</a>' : esc_html($nev)) . '</h4></div>';
+        echo '<h4 class="s-kartya__cim"' . sdh_tema_elem_szerk($e, 'nev') . '>' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($nev) . '</a>' : esc_html($nev)) . '</h4></div>';
 
         $l = sdh_tema_elem_leiras($e, 200);
 
         if ($l !== '') {
-            echo '<p class="s-kartya__szoveg">' . esc_html($l) . '</p>';
+            echo '<p class="s-kartya__szoveg"' . sdh_tema_elem_szerk($e, 'leiras') . '>' . esc_html($l) . '</p>';
         }
 
         $benne = [];
@@ -75,7 +75,7 @@ foreach ($cs as $csnev => $lista) {
         }
 
         if ($arak && (int) ($a['havi'] ?? 0) > 0) {
-            echo '<p class="s-kartya__ar">' . esc_html(sprintf(/* translators: %s: nettó havi ár */ sdh_tema__('külön: %s / hó + áfa'), sdh_tema_ft((int) $a['havi']))) . '</p>';
+            echo '<p class="s-kartya__ar"' . sdh_tema_elem_szerk($e, 'havi') . '>' . esc_html(sprintf(/* translators: %s: nettó havi ár */ sdh_tema__('külön: %s / hó + áfa'), sdh_tema_ft((int) $a['havi']))) . '</p>';
         }
 
         echo '</div></li>';

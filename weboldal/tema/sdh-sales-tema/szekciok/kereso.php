@@ -17,7 +17,7 @@ $hely = sdh_tema_t(sdh_tema_mezo($sz, 'helyorzo', sdh_tema__('Keress funkcióra,
 echo sdh_tema_szekcio_nyit($sz, ['szelesseg' => 'szuk']); // phpcs:ignore WordPress.Security.EscapeOutput
 echo '<form role="search" method="get" action="' . esc_url(home_url('/')) . '" class="s-oldalkereso" data-oldalkereso>';
 echo '<label class="s-sr" for="' . esc_attr($id) . '">' . esc_html(sdh_tema__('Keresés')) . '</label>';
-echo '<div class="s-oldalkereso__mezo">' . sdh_tema_ikon('kereso') . '<input class="s-mezo s-mezo--nagy" type="search" id="' . esc_attr($id) . '" name="s" placeholder="' . esc_attr($hely) . '" autocomplete="off" enterkeyhint="search" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="' . esc_attr($id . '-lista') . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+echo '<div class="s-oldalkereso__mezo"' . sdh_tema_szerk_mezo($sz, 'helyorzo') . '>' . sdh_tema_ikon('kereso') . '<input class="s-mezo s-mezo--nagy" type="search" id="' . esc_attr($id) . '" name="s" placeholder="' . esc_attr($hely) . '" autocomplete="off" enterkeyhint="search" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="' . esc_attr($id . '-lista') . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 echo '<button class="s-gomb s-gomb--elsodleges" type="submit">' . esc_html(sdh_tema__('Keresés')) . '</button>';
 echo '</form>';
 echo '<div class="s-kereso__talalatok" id="' . esc_attr($id . '-lista') . '" role="listbox" aria-label="' . esc_attr(sdh_tema__('Találatok')) . '" data-oldalkereso-lista></div>';

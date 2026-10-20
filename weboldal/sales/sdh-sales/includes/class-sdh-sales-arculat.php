@@ -110,6 +110,154 @@ final class SDH_Sales_Arculat
         return (array) apply_filters('sdh_sales_arculat_betuk', $b);
     }
 
+
+    /* =================================================================
+     * Skinek (színváltozatok a neon + üveg arculaton belül)
+     * ============================================================== */
+
+    /**
+     * A skinek alapszínei: [név, leírás, sötét: [kiemelő, 2. kiemelő, neon], világos: [kiemelő, 2. kiemelő, neon]].
+     * A „neon” az alap: pontosan a téma tokenek.css-e (nincs kiírás). A többi a kiemelő-családot cseréli (kitöltések,
+     * halvány tónusok, átmenetek, aurora, ragyogás, fókusz); a háttér, a felületek, a szöveg és az állapotszínek maradnak.
+     * Kontraszt (WCAG AA, t246 méri): a három szín szövegként ≥ 4,5:1 a háttéren mindkét módban, és a kiemelő-kitöltésen
+     * a felirat ≥ 4,5:1.
+     *
+     * @return array<string, array{0: string, 1: string, 2: array<int, string>, 3: array<int, string>}>
+     */
+    private static function skin_alapok(): array
+    {
+        return [
+            'neon'      => ['Neon', 'Az alap: korall, ibolya és cián – üveg, neon ragyogás.', ['#ff5a52', '#9d8fff', '#22d3ee'], ['#c41f1a', '#5b47d6', '#0e7490']],
+            'ibolya'    => ['Ibolya', 'Ibolya kiemelő, cián és rózsaszín fények.', ['#a596ff', '#22d3ee', '#f472b6'], ['#5b47d6', '#0e7490', '#be185d']],
+            'kobalt'    => ['Kobalt', 'Hűvös kék kiemelő cián és lila fénnyel.', ['#60a5fa', '#22d3ee', '#a78bfa'], ['#1d4ed8', '#0e7490', '#6d28d9']],
+            'smaragd'   => ['Smaragd', 'Zöld kiemelő, cián és lime fények.', ['#34d399', '#22d3ee', '#a3e635'], ['#047857', '#0e7490', '#3f6212']],
+            'borostyan' => ['Borostyán', 'Meleg borostyán kiemelő, rózsa és narancs fények.', ['#fbbf24', '#fb7185', '#fb923c'], ['#a14a06', '#be123c', '#b4380b']],
+            'magenta'   => ['Magenta', 'Magenta kiemelő, lila és cián fények.', ['#f472b6', '#a78bfa', '#22d3ee'], ['#be185d', '#6d28d9', '#0e7490']],
+        ];
+    }
+
+    /** #rrggbb + átlátszóság → rgba(). */
+    private static function rgba(string $hex, float $a): string
+    {
+        $h = ltrim($hex, '#');
+
+        return sprintf('rgba(%d, %d, %d, %s)', hexdec(substr($h, 0, 2)), hexdec(substr($h, 2, 2)), hexdec(substr($h, 4, 2)), rtrim(rtrim(number_format($a, 2, '.', ''), '0'), '.'));
+    }
+
+    /**
+     * Egy mód tokenjei a három alapszínből (a téma tokenek.css-ének szerkezetét követve).
+     *
+     * @param array<int, string> $sz [kiemelő, 2. kiemelő, neon]
+     * @return array<string, string> token (a `--s-` utáni rész) => érték
+     */
+    private static function skin_tokenek(array $sz, bool $sotet): array
+    {
+        [$k, $k2, $n] = $sz;
+        $fel = $sotet ? '#0a0b10' : '#ffffff';
+        $hv  = $sotet ? [0.14, 0.16, 0.12] : [0.09, 0.1, 0.1];
+        $gl  = $sotet ? [0.45, 0.55, 0.35] : [0.3, 0.45, 0.0];
+
+        $t = [
+            'kiemelo'             => $k,
+            'kiemelo-2'           => $k2,
+            'neon'                => $n,
+            'kiemelo-felirat'     => $fel,
+            'kiemelo-2-felirat'   => $fel,
+            'neon-felirat'        => $fel,
+            'kiemelo-halvany'     => self::rgba($k, $hv[0]),
+            'kiemelo-2-halvany'   => self::rgba($k2, $hv[1]),
+            'neon-halvany'        => self::rgba($n, $hv[2]),
+            'atmenet'             => 'linear-gradient(120deg, ' . $k . ' 0%, ' . $k2 . ' 52%, ' . $n . ' 100%)',
+            'atmenet-szoveg'      => 'linear-gradient(100deg, ' . $k . ' 0%, ' . $k2 . ' 50%, ' . $n . ' 100%)',
+            'aurora-1'            => self::rgba($k, $sotet ? 0.16 : 0.12),
+            'aurora-2'            => self::rgba($k2, $sotet ? 0.2 : 0.14),
+            'aurora-3'            => self::rgba($n, 0.12),
+            'fokusz'              => $n,
+        ];
+
+        foreach (['kiemelo' => $k, 'kiemelo-2' => $k2, 'neon' => $n] as $nev => $szin) {
+            $t['ragyogas-' . $nev] = $sotet
+                ? '0 0 0 1px ' . self::rgba($szin, $gl[0]) . ', 0 0 24px -2px ' . self::rgba($szin, $gl[1]) . ', 0 0 64px -8px ' . self::rgba($szin, $gl[2])
+                : '0 0 0 1px ' . self::rgba($szin, $gl[0]) . ', 0 12px 32px -10px ' . self::rgba($szin, $gl[1]);
+        }
+
+        $t['ragyogas-szoveg'] = $sotet ? '0 0 18px ' . self::rgba($n, 0.45) : 'none';
+
+        return $t;
+    }
+
+    /**
+     * A választható skinek. Az alap („neon”) tokenlistái üresek: az a téma saját kinézete, pixelre.
+     *
+     * @return array<string, array{kulcs: string, nev: string, leiras: string, minta: array<int, string>, minta_vilagos: array<int, string>, tokenek: array<string, string>, tokenek_sotet: array<string, string>}>
+     */
+    public static function skinek(): array
+    {
+        $ki = [];
+
+        foreach (self::skin_alapok() as $k => [$nev, $leiras, $sotet, $vilagos]) {
+            $ki[$k] = [
+                'kulcs'         => $k,
+                'nev'           => $nev,
+                'leiras'        => $leiras,
+                'minta'         => $sotet,
+                'minta_vilagos' => $vilagos,
+                'tokenek'       => $k === 'neon' ? [] : self::skin_tokenek($vilagos, false),
+                'tokenek_sotet' => $k === 'neon' ? [] : self::skin_tokenek($sotet, true),
+            ];
+        }
+
+        return (array) apply_filters('sdh_sales_arculat_skinek', $ki);
+    }
+
+    /** A beállított skin kulcsa (ismeretlen → „neon”). */
+    public static function skin(?string $ertek = null): string
+    {
+        $s = $ertek ?? (string) SDH_Sales::b('arculat.skin', 'neon');
+
+        return isset(self::skinek()[$s]) ? $s : 'neon';
+    }
+
+    /** A skin CSS-e (üres az alapnál). A kódban rögzített értékek, de kiírás előtt itt is szűrve. */
+    public static function skin_css(string $skin): string
+    {
+        $s = self::skinek()[$skin] ?? null;
+
+        if (!is_array($s) || ($s['tokenek'] === [] && $s['tokenek_sotet'] === [])) {
+            return '';
+        }
+
+        $blokk = static function (array $t): string {
+            $d = [];
+
+            foreach ($t as $k => $v) {
+                $k = (string) $k;
+                $v = (string) $v;
+
+                if (preg_match('/^[a-z0-9-]{1,40}$/', $k) === 1 && preg_match('/^[a-zA-Z0-9#%(),.\s-]{1,400}$/', $v) === 1) {
+                    $d[] = '--s-' . $k . ':' . $v;
+                }
+            }
+
+            return implode(';', $d);
+        };
+
+        $so = $blokk((array) $s['tokenek_sotet']);
+        $vi = $blokk((array) $s['tokenek']);
+        $css = '';
+
+        if ($so !== '') {
+            $css .= ':root,:root[data-tema="sotet"]{' . $so . '}';
+        }
+
+        if ($vi !== '') {
+            $css .= ':root[data-tema="vilagos"]{' . $vi . '}';
+            $css .= '@media (prefers-color-scheme: light){:root:not([data-tema="sotet"]):not([data-tema="vilagos"]){' . $vi . '}}';
+        }
+
+        return $css;
+    }
+
     /* =================================================================
      * Alapértékek
      * ============================================================== */
@@ -360,6 +508,8 @@ final class SDH_Sales_Arculat
             'logo'    => (string) SDH_Sales::b('arculat.logo', ''),
             'logo_vilagos' => (string) SDH_Sales::b('arculat.logo_vilagos', ''),
             'favicon' => (string) SDH_Sales::b('arculat.favicon', ''),
+            'skin'    => self::skin(),
+            'skinek'  => array_values(array_map(static fn ($s) => ['kulcs' => $s['kulcs'], 'nev' => $s['nev'], 'leiras' => $s['leiras'], 'minta' => $s['minta'], 'minta_vilagos' => $s['minta_vilagos']], self::skinek())),
             'tema_tokenek' => self::tema_tokenek() !== [],
         ];
     }
@@ -409,6 +559,19 @@ final class SDH_Sales_Arculat
 
         if (isset($be['mod'])) {
             $uj['arculat.mod'] = in_array($be['mod'], ['rendszer', 'sotet', 'vilagos'], true) ? (string) $be['mod'] : 'rendszer';
+        }
+
+        // Skin: az alap („neon”) = törlés (a beállításból kikerül), ismeretlen kulcs = hiba.
+        if (array_key_exists('skin', $be)) {
+            $s = sanitize_key((string) $be['skin']);
+
+            if ($s === '' || $s === 'neon') {
+                $uj['arculat.skin'] = '';
+            } elseif (isset(self::skinek()[$s])) {
+                $uj['arculat.skin'] = $s;
+            } else {
+                $hibas[] = 'skin';
+            }
         }
 
         foreach (['logo', 'logo_vilagos', 'favicon'] as $k) {
@@ -502,7 +665,8 @@ final class SDH_Sales_Arculat
             }
         }
 
-        $css = '';
+        // A skin előbb, a tokenenkénti felülírás utána (az nyer).
+        $css = self::skin_css(self::skin($ertekek !== null && array_key_exists('arculat.skin', $ertekek) ? (string) $ertekek['arculat.skin'] : null));
 
         if ($kozos !== []) {
             $css .= ':root{' . implode(';', $kozos) . '}';
@@ -514,7 +678,8 @@ final class SDH_Sales_Arculat
 
         if ($vil !== []) {
             $css .= ':root[data-tema="vilagos"]{' . implode(';', $vil) . '}';
-            $css .= '@media (prefers-color-scheme: light){:root:not([data-tema]){' . implode(';', $vil) . '}}';
+            // Ugyanaz a szelektor, mint a téma rendszer-világos blokkjáé (különben annak nagyobb a specifikussága).
+            $css .= '@media (prefers-color-scheme: light){:root:not([data-tema="sotet"]):not([data-tema="vilagos"]){' . implode(';', $vil) . '}}';
         }
 
         // Végső védőháló: semmi, ami kitörhetne a <style>-ból.
@@ -530,6 +695,10 @@ final class SDH_Sales_Arculat
     public static function terkep(array $be): array
     {
         $ki = [];
+
+        if (array_key_exists('skin', $be)) {
+            $ki['arculat.skin'] = sanitize_key((string) $be['skin']);
+        }
 
         foreach ((array) ($be['ertekek'] ?? []) as $tok => $v) {
             $tok = (string) $tok;

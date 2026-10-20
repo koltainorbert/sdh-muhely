@@ -25,10 +25,10 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 </head>
 <body class="<?php echo esc_attr(sdh_tema_body_osztaly()); ?>">
 <?php wp_body_open(); ?>
-<a class="s-ugro" href="#tartalom"><?php echo esc_html(sdh_tema__('Ugrás a tartalomra')); ?></a>
+<a class="s-ugro" href="#tartalom"<?php echo sdh_tema_szerk_felirat('Ugrás a tartalomra'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Ugrás a tartalomra')); ?></a>
 <header class="s-fejlec" id="fejlec" data-fejlec>
 	<div class="s-kont s-fejlec__belso">
-		<a class="s-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="<?php echo esc_attr(sprintf(/* translators: %s: terméknév */ sdh_tema__('%s – kezdőlap'), sdh_tema_termeknev())); ?>">
+		<a class="s-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="<?php echo esc_attr(sprintf(/* translators: %s: terméknév */ sdh_tema__('%s – kezdőlap'), sdh_tema_termeknev())); ?>"<?php echo sdh_tema_szerk('b:arculat.logo'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 			<?php if ($sdh_logo !== '') : ?>
 				<img class="s-logo__kep s-logo__kep--sotet" src="<?php echo esc_url($sdh_logo); ?>" alt="" width="140" height="32" decoding="async">
 				<?php if ($sdh_logo2 !== '' && $sdh_logo2 !== $sdh_logo) : ?>
@@ -36,7 +36,7 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 				<?php endif; ?>
 			<?php else : ?>
 				<span class="s-logo__jel" aria-hidden="true"><?php echo sdh_tema_ikon('villam'); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
-				<span class="s-logo__nev"><?php echo esc_html(sdh_tema_termeknev()); ?></span>
+				<span class="s-logo__nev"<?php echo sdh_tema_szerk('b:termeknev'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema_termeknev()); ?></span>
 			<?php endif; ?>
 		</a>
 
@@ -48,7 +48,7 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 					$sdh_gy  = (array) $sdh_e['gyerekek'];
 					$sdh_akt = $sdh_e['url'] !== '' && untrailingslashit((string) strtok($sdh_e['url'], '#?')) === untrailingslashit(home_url(add_query_arg([])));
 					?>
-					<li class="s-fomenu__elem<?php echo $sdh_gy !== [] ? ' s-fomenu__elem--szulo' : ''; ?>">
+					<li class="s-fomenu__elem<?php echo $sdh_gy !== [] ? ' s-fomenu__elem--szulo' : ''; ?>"<?php echo sdh_tema_szerk('m:fo/' . $sdh_i); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 						<?php if ($sdh_gy !== []) : ?>
 							<button class="s-fomenu__link s-fomenu__nyito" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr('almenu-' . $sdh_i); ?>">
 								<?php echo esc_html($sdh_e['cim']); ?><?php echo sdh_tema_ikon('nyil-le', 's-fomenu__nyil'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -58,9 +58,9 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 									<?php if ($sdh_e['url'] !== '') : ?>
 										<li><a class="s-almenu__link s-almenu__link--osszes" href="<?php echo esc_url($sdh_e['url']); ?>"><?php echo esc_html(sprintf(/* translators: %s: menüpont */ sdh_tema__('%s – áttekintés'), $sdh_e['cim'])); ?></a></li>
 									<?php endif; ?>
-									<?php foreach ($sdh_gy as $sdh_g) : ?>
+									<?php foreach ($sdh_gy as $sdh_j => $sdh_g) : ?>
 										<?php if ($sdh_g['url'] === '') { continue; } ?>
-										<li><a class="s-almenu__link" href="<?php echo esc_url($sdh_g['url']); ?>"><?php echo esc_html($sdh_g['cim']); ?></a></li>
+										<li<?php echo sdh_tema_szerk('m:fo/' . $sdh_i . '/' . $sdh_j); // phpcs:ignore WordPress.Security.EscapeOutput ?>><a class="s-almenu__link" href="<?php echo esc_url($sdh_g['url']); ?>"><?php echo esc_html($sdh_g['cim']); ?></a></li>
 									<?php endforeach; ?>
 								</ul>
 							</div>
@@ -72,10 +72,10 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 			</ul>
 			<div class="s-fomenu__cta">
 				<?php if ($sdh_arak !== '') : ?>
-					<a class="s-gomb s-gomb--masodlagos" href="<?php echo esc_url($sdh_arak); ?>"><?php echo esc_html(sdh_tema__('Árak')); ?></a>
+					<a class="s-gomb s-gomb--masodlagos" href="<?php echo esc_url($sdh_arak); ?>"<?php echo sdh_tema_szerk_felirat('Árak'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Árak')); ?></a>
 				<?php endif; ?>
 				<?php if ($sdh_demo !== '') : ?>
-					<a class="s-gomb s-gomb--elsodleges" href="<?php echo esc_url($sdh_demo); ?>"><?php echo esc_html(sdh_tema__('Demó')); ?></a>
+					<a class="s-gomb s-gomb--elsodleges" href="<?php echo esc_url($sdh_demo); ?>"<?php echo sdh_tema_szerk_felirat('Demó'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Demó')); ?></a>
 				<?php endif; ?>
 			</div>
 		</nav>
@@ -84,7 +84,7 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 		<div class="s-fejlec__eszkozok">
 			<button class="s-ikongomb s-kereso-gomb" type="button" data-kereso-nyit aria-haspopup="dialog" aria-keyshortcuts="Control+K /">
 				<?php echo sdh_tema_ikon('kereso'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-				<span class="s-kereso-gomb__szoveg"><?php echo esc_html(sdh_tema__('Keresés')); ?></span>
+				<span class="s-kereso-gomb__szoveg"<?php echo sdh_tema_szerk_felirat('Keresés'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Keresés')); ?></span>
 				<kbd class="s-kbd" aria-hidden="true">Ctrl K</kbd>
 				<span class="s-sr"><?php echo esc_html(sdh_tema__('(Ctrl+K)')); ?></span>
 			</button>
@@ -94,10 +94,10 @@ $sdh_logo2 = class_exists('SDH_Sales_Arculat') ? (string) SDH_Sales_Arculat::log
 				<span class="s-sr" data-temavalto-felirat><?php echo esc_html(sdh_tema__('Világos mód bekapcsolása')); ?></span>
 			</button>
 			<?php if ($sdh_arak !== '') : ?>
-				<a class="s-gomb s-gomb--masodlagos s-fejlec__cta" href="<?php echo esc_url($sdh_arak); ?>"><?php echo esc_html(sdh_tema__('Árak')); ?></a>
+				<a class="s-gomb s-gomb--masodlagos s-fejlec__cta" href="<?php echo esc_url($sdh_arak); ?>"<?php echo sdh_tema_szerk_felirat('Árak'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Árak')); ?></a>
 			<?php endif; ?>
 			<?php if ($sdh_demo !== '') : ?>
-				<a class="s-gomb s-gomb--elsodleges s-fejlec__cta" href="<?php echo esc_url($sdh_demo); ?>"><?php echo esc_html(sdh_tema__('Demó')); ?></a>
+				<a class="s-gomb s-gomb--elsodleges s-fejlec__cta" href="<?php echo esc_url($sdh_demo); ?>"<?php echo sdh_tema_szerk_felirat('Demó'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Demó')); ?></a>
 			<?php endif; ?>
 			<?php if ($sdh_menu !== []) : ?>
 				<button class="s-ikongomb s-menugomb" type="button" aria-expanded="false" aria-controls="fomenu" data-menugomb>
