@@ -33,7 +33,8 @@ if (!defined('SDH_MUHELY_TESZTUZEM')) {
 }
 
 foreach (['', '-generator', '-pillanatkep', '-keret', '-inditas', '-kimeno', '-vedelem', '-sav', '-admin'] as $sdh_demo_resz) {
-    require_once SDH_DEMO_DIR . 'includes/class-sdh-demo' . $sdh_demo_resz . '.php';
+    // A fájlnév előtagja a tárolóban `class-sdh-demo`, a semleges csomagban `class-b` (eszkozok/csomagol.sh).
+    require_once SDH_DEMO_DIR . 'includes/' . (is_file(SDH_DEMO_DIR . 'includes/class-b.php') ? 'class-b' : 'class-sdh-demo') . $sdh_demo_resz . '.php';
 }
 
 unset($sdh_demo_resz);

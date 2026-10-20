@@ -209,4 +209,13 @@ T::egyezik('tobb_jelolt', SDH_Sales_Bank_Import::parosit($t5 + ['kozlemeny' => $
 $rossz = substr((string) $k[1], 0, -1) . ((substr((string) $k[1], -1) === 'A') ? 'C' : 'A');
 T::egyezik(null, SDH_Sales_Bank_Import::parosit($t5 + ['kozlemeny' => $rossz])['rendeles'], 'M-5: rossz ellenőrző karakterű közlemény nem párosít');
 
+// Egysoros értesítő: a partner neve a következő címkénél véget ér (nem viszi a közleményt); a „Kft.” pontja megmarad.
+$e1 = SDH_Sales_Bank_Import::level_ertelmez('Jóváírás 20 000 Ft. Partner: Teszt Elek. Közlemény: R-2026-000004');
+$e1 = is_array($e1[0] ?? null) ? $e1[0] : $e1;
+T::egyezik('Teszt Elek', (string) ($e1['partner'] ?? ''), 'egysoros értesítő: partner a közlemény nélkül');
+T::egyezik('R-2026-000004', (string) ($e1['kozlemeny'] ?? ''), 'egysoros értesítő: közlemény');
+$e2 = SDH_Sales_Bank_Import::level_ertelmez("Összeg: 14 266 HUF\nPartner neve: Anna Szerviz Kft.\nKözlemény: R-2026-000004");
+$e2 = is_array($e2[0] ?? null) ? $e2[0] : $e2;
+T::egyezik('Anna Szerviz Kft.', (string) ($e2['partner'] ?? ''), 'többsoros értesítő: a név pontja megmarad');
+
 T::vege('t214 banki import');

@@ -48,6 +48,10 @@ if [ -n "$FO" ]; then
   cp -a "$DEMO_DIR/." "$MUNKA/bemutato/"
   mv "$MUNKA/bemutato/$(basename "$FO")" "$MUNKA/bemutato/bemutato.php"
   sed -i 's/^ \* Plugin Name:.*/ * Plugin Name:       Bemutató/' "$MUNKA/bemutato/bemutato.php"
+  for f in "$MUNKA"/bemutato/includes/class-sdh-demo*.php; do
+    n="$(basename "$f" | sed 's/^class-sdh-demo/class-b/')"; mv "$f" "$MUNKA/bemutato/includes/$n"
+  done
+  printf 'Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n' > "$MUNKA/bemutato/includes/.htaccess"
   # A demó készülékképei a bővítmény kepek/ mappájába (a generátor ott is keresi).
   [ -d "$GYOKER/demo-adat/kepek" ] && cp -a "$GYOKER/demo-adat/kepek" "$MUNKA/bemutato/kepek"
 fi

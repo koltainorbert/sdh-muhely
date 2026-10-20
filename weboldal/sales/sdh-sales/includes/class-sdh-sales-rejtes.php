@@ -108,6 +108,9 @@ final class SDH_Sales_Rejtes
             add_filter('wp_redirect', [self::class, 'atiranyit_szuro'], 99);
             add_filter('login_headerurl', static fn (): string => home_url('/'));
             add_filter('login_headertext', static fn (): string => SDH_Sales::termeknev());
+            // A belépő oldal címe („Log In ‹ … — WordPress”) semleges, magyar.
+            // Csak ha a cím árulkodik – egy másik bővítmény (pl. a Műhely) saját, semleges címét nem írjuk felül.
+            add_filter('login_title', static fn ($t): string => preg_match('~wordpress~i', (string) $t) === 1 ? esc_html__('Belépés', 'sdh-sales') . ' – ' . SDH_Sales::termeknev() : (string) $t, 99);
             add_action('login_enqueue_scripts', [self::class, 'belepo_stilus']);
             add_filter('login_display_language_dropdown', '__return_false');
             add_filter('allow_password_reset', '__return_false');

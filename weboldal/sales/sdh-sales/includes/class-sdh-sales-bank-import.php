@@ -485,10 +485,16 @@ final class SDH_Sales_Bank_Import
             return null;
         }
 
-        $mezo = static function (array $kulcsok) use ($s): string {
+        // Az összes ismert címke: egysoros értesítőben („Partner: X. Közlemény: Y”) az érték a következő címkéig tart.
+        $cimkek = ['Könyvelés dátuma', 'Dátum', 'Értéknap', 'Időpont', 'Partner neve', 'Partner számlaszáma', 'Partner', 'Küldő',
+            'Fizető neve', 'Befizető', 'Ellenoldali név', 'Kitől', 'Megbízó', 'Ellenszámla', 'Számlaszám', 'Közlemény', 'Megjegyzés',
+            'Reference', 'Tranzakció azonosító', 'Tranzakcióazonosító', 'Hivatkozás', 'Azonosító', 'Összeg', 'Egyenleg'];
+        $kov    = '(?=[ \t]*[.,;]?[ \t]*(?:' . implode('|', array_map(static fn ($c) => preg_quote($c, '/'), $cimkek)) . ')[ \t]*[:=]|$)';
+
+        $mezo = static function (array $kulcsok) use ($s, $kov): string {
             foreach ($kulcsok as $k) {
-                if (preg_match('/' . $k . '\s*[:=]\s*(.+)$/miu', $s, $m) === 1) {
-                    return trim($m[1]);
+                if (preg_match('/(?<![\p{L}])' . $k . '\s*[:=]\s*(.+?)' . $kov . '/miu', $s, $m) === 1) {
+                    return trim($m[1], " \t,;");
                 }
             }
 
