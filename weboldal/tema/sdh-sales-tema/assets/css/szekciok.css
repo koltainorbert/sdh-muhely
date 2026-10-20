@@ -41,7 +41,8 @@
 .s-lepes__szam {
     flex: none; display: grid; place-items: center;
     width: 44px; height: 44px; border-radius: 50%;
-    background: var(--s-atmenet); color: #fff;
+    /* a felirat a kiemelő-felirat tokenje: sötétben sötét a világos átmeneten, világosban fehér a sötét átmeneten (≥ 4,5:1) */
+    background: var(--s-atmenet) var(--s-kiemelo-2); color: var(--s-kiemelo-felirat);
     font-family: var(--s-betu-cim); font-weight: var(--s-suly-cim); font-size: var(--s-m-l);
 }
 .s-lepes__ikon { color: var(--s-neon); margin-bottom: var(--s-t-2); width: 24px; height: 24px; }

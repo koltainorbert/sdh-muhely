@@ -118,7 +118,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
 [data-ketlepcsos].s-biztos, .s-gomb.s-biztos { background: var(--s-hiba); color: var(--s-kiemelo-felirat); border-color: var(--s-hiba); }
 
 /* Linkként kinéző gomb (lábléc: Süti-beállítások) */
-.s-linkgomb { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 0.18em; min-height: 24px; }
+.s-linkgomb { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 0.18em; min-height: 24px; border-radius: 6px; }
 .s-linkgomb:hover { color: var(--s-szoveg); }
 
 /* ---------- Dátumválasztó (assets/js/datum.js) ---------- */

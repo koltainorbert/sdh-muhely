@@ -109,6 +109,25 @@ switch ($parancs) {
         SDH_Sales::b_ment(['szikra.aktiv' => true, 'fizetes.atutalas' => true]);
         $ki['szikra_aktiv'] = SDH_Sales_Szikra::aktiv();
 
+        // Teszt-kupon (a kosár sikeres beváltásához).
+        if (SDH_Sales_Katalogus::kupon('TESZT10') === null) {
+            SDH_Sales_Tartalom::ment('kupon', 'TESZT10', ['kod' => 'TESZT10', 'tipus' => 'szazalek', 'ertek' => 10, 'aktiv' => true], 'TESZT10');
+        }
+
+        // Ismételt futásnál nem hozunk létre újabb rendeléseket: a már elkészített adatokat adjuk vissza.
+        $volt = get_option('vqa_modulok_adat');
+
+        if (is_array($volt) && !empty($volt['statusz_url'])) {
+            $uid = seg_vevo_id($EMAIL);
+            $ki  = $volt + $ki;
+
+            if ($uid > 0) {
+                $ki['belepo_url'] = SDH_Sales_Fiok::fiok_url(['belepes' => SDH_Sales_Fiok::link_letrehoz($uid, $EMAIL)]);
+            }
+
+            break;
+        }
+
         // Teszt-rendelések.
         $csomagok = SDH_Sales_Katalogus::csomagok();
         $kulcsok  = array_keys($csomagok);
@@ -156,6 +175,7 @@ switch ($parancs) {
 
         $ki['fiok_url']    = SDH_Sales_Fiok::fiok_url();
         $ki['penztar_url'] = SDH_Sales_Kosar::penztar_url();
+        update_option('vqa_modulok_adat', array_diff_key($ki, ['belepo_url' => 1]), false);
         break;
 
     case 'belepo':

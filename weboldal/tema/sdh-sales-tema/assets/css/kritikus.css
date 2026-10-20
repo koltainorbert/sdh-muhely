@@ -90,8 +90,11 @@ address { font-style: normal; }
 .s-fo:focus { outline: none; }
 
 .s-szekcio { position: relative; padding-block: var(--s-t-szekcio); }
-.s-szekcio + .s-szekcio.s-hatter--alap,
-.s-szekcio.s-hatter--alap + .s-szekcio.s-hatter--alap { padding-top: 0; }
+/* Azonos hátterű szomszédok között egy padding a köz; sávhatáron (eltérő háttér) mindkét oldal megtartja a sajátját. */
+.s-szekcio.s-hatter--alap + .s-szekcio.s-hatter--alap,
+.s-szekcio.s-hatter--felulet + .s-szekcio.s-hatter--felulet,
+.s-szekcio.s-hatter--uveg + .s-szekcio.s-hatter--uveg,
+.s-szekcio.s-hatter--sotet + .s-szekcio.s-hatter--sotet { padding-top: 0; }
 .s-terkoz--kicsi { padding-block: var(--s-t-7); }
 .s-terkoz--nagy { padding-block: calc(var(--s-t-szekcio) * 1.4); }
 .s-hatter--felulet, .s-hatter--uveg { background: var(--s-bg-2); }
@@ -114,7 +117,8 @@ address { font-style: normal; }
 .s-eyebrow--pill {
     padding: var(--s-t-1) var(--s-t-3) var(--s-t-1) var(--s-t-2);
     border: 1px solid var(--s-uveg-keret); border-radius: var(--s-r-pill);
-    background: var(--s-neon-halvany);
+    /* tömör alap a halvány tónus alatt: az aurora-háttér nem rontja a 13 px-es felirat kontrasztját */
+    background: linear-gradient(var(--s-neon-halvany), var(--s-neon-halvany)) var(--s-felulet);
 }
 .s-eyebrow .s-ikon { width: 16px; height: 16px; }
 .s-csoportcim { font-size: var(--s-m-l); margin: var(--s-t-7) 0 var(--s-t-4); color: var(--s-halvany); font-family: var(--s-betu-szoveg), "Onest Tartalek"; font-weight: var(--s-suly-felkover); letter-spacing: 0; }
@@ -349,7 +353,10 @@ address { font-style: normal; }
 .s-hero--kozep .s-hero__racs { text-align: center; justify-items: center; }
 .s-hero--kozep .s-hero__szoveg { max-width: 52rem; }
 .s-hero--kozep .s-gombsor, .s-hero--kozep .s-hero__pontok { justify-content: center; }
-.s-hero__cim { font-size: var(--s-m-5xl); line-height: var(--s-sorkoz-szoros); margin-bottom: var(--s-t-5); }
+.s-hero__cim { font-size: var(--s-m-5xl); line-height: var(--s-sorkoz-szoros); margin-bottom: var(--s-t-5); overflow-wrap: break-word; }
+/* A cím a saját hasábjához méreteződik (kétoszlopos heróban a leghosszabb szó – pl. „mindennapjaira” – se lógjon ki). */
+.s-hero__szoveg { container-type: inline-size; width: 100%; }
+@supports (font-size: 1cqi) { .s-hero__cim { font-size: clamp(2.5rem, 12cqi, 5.5rem); } }
 .s-hero__alcim { font-size: var(--s-m-l); color: var(--s-halvany); max-width: 40rem; margin-bottom: 0; }
 .s-hero--kozep .s-hero__alcim { margin-inline: auto; }
 .s-hero__pontok { display: flex; flex-wrap: wrap; gap: var(--s-t-2) var(--s-t-5); list-style: none; padding: 0; margin: var(--s-t-6) 0 0; color: var(--s-halvany); font-size: var(--s-m-s); }

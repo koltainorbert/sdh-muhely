@@ -20,6 +20,7 @@ szélességen, sötét és világos módban, és minden oldalon méri (kovetes/v
 
 Futtatás: python3 weboldal/tesztek/e2e/tema-vizualis.py http://127.0.0.1:8871/wp [kimeneti mappa] [--gyors] [--oldal=<részlet>] [--kep]
   --gyors : csak 390 + 1366, mindkét mód      --oldal=arak : csak az illeszkedő oldalak      --kep : teljes oldalas képernyőképek
+  --szel=390,768 : csak ezek a szélességek    --mod=sotet|vilagos : csak ez a mód             --nincs-interakcio : csak az oldalbejárás
 Kimenet: hibatábla ellenőrzésenként (db + első találatok), hibak.json + képek a kimeneti mappában. Kilépési kód 0, ha nincs hiba.
 """
 import json
@@ -77,7 +78,14 @@ OLDALAK = [
 NEZETEK = [(390, 844), (768, 1024), (1366, 900), (1920, 1080)]
 if GYORS:
     NEZETEK = [(390, 844), (1366, 900)]
+SZEL = next((a.split('=', 1)[1] for a in sys.argv if a.startswith('--szel=')), '')
+if SZEL:
+    NEZETEK = [x for x in NEZETEK if str(x[0]) in SZEL.split(',')]
 MODOK = ('sotet', 'vilagos')
+MODSZ = next((a.split('=', 1)[1] for a in sys.argv if a.startswith('--mod=')), '')
+if MODSZ:
+    MODOK = tuple(m for m in MODOK if m == MODSZ)
+INTERAKCIO = '--nincs-interakcio' not in sys.argv
 
 MERO = """
 window.__cls = 0;
@@ -94,7 +102,24 @@ ELLENORZES = r"""() => {
   const ut = el => { const p = []; let e = el; while (e && e !== document.body && p.length < 3) { p.unshift(sel(e)); e = e.parentElement; } return p.join('>'); };
   const rov = s => String(s || '').replace(/\s+/g, ' ').trim().slice(0, 40);
   const cs = el => getComputedStyle(el);
-  const lathato = el => { const st = cs(el); if (st.display === 'none' || st.visibility === 'hidden' || st.opacity === '0') return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+  const lathato = el => {
+    const st = cs(el); if (st.display === 'none' || st.visibility === 'hidden' || st.opacity === '0') return false;
+    /* zárt <details> tartalma (content-visibility: hidden) és rejtett ősök */
+    if (el.checkVisibility && !el.checkVisibility({ contentVisibilityAuto: false, opacityProperty: true, visibilityProperty: true })) return false;
+    const d = el.closest('details:not([open])'); if (d && !el.closest('summary')) return false;
+    const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
+  };
+  /* Hány sorba tört egy elem szövege (a szövegcsomópontok soronkénti téglalapjai alapján) */
+  const sorszam = el => {
+    const tetok = new Set();
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (!n.textContent.trim() || (n.parentElement && n.parentElement.closest('.s-sr'))) continue;
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const r of rg.getClientRects()) { if (r.width > 1 && r.height > 1) tetok.add(Math.round(r.top / 4)); }
+    }
+    return tetok.size;
+  };
   const sajatSzoveg = el => { for (const n of el.childNodes) { if (n.nodeType === 3 && n.textContent.trim()) return true; } return false; };
   const KIHAGY = '[hidden], .s-sr, .s-sprite, script, style, noscript, template, .s-kereso, .s-suti, .s-ertesitok, .s-ugro, .s-szikra, [data-modul]';
   const mind = Array.from(document.querySelectorAll('body *')).filter(el => !el.closest(KIHAGY) && lathato(el));
@@ -186,12 +211,12 @@ ELLENORZES = r"""() => {
   document.querySelectorAll('.s-gomb, .s-fomenu__link, .s-pill').forEach(g => {
     if (!lathato(g) || g.closest(KIHAGY)) return;
     const r = g.getBoundingClientRect();
-    const lh = parseFloat(cs(g).lineHeight) || parseFloat(cs(g).fontSize) * 1.3;
     const szul = g.parentElement ? g.parentElement.getBoundingClientRect().width : 0;
-    if (r.height > lh * 2.2 && szul >= 200) add('szoveg', ut(g) + ' gombszöveg két sorban ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (szülő ' + Math.round(szul) + 'px)');
+    const n = sorszam(g);
+    if (n > 1 && szul >= 200) add('szoveg', ut(g) + ' gombszöveg ' + n + ' sorban ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (szülő ' + Math.round(szul) + 'px) „' + rov(g.textContent) + '”');
   });
   const betuk = {};
-  try { document.fonts.forEach(f => { const k = f.family.replace(/"/g, '') + (/0100-02BA/.test(f.unicodeRange) ? ' ext' : ''); if (f.status === 'loaded') betuk[k] = true; }); } catch (e) {}
+  try { document.fonts.forEach(f => { const k = f.family.replace(/"/g, '') + (/U\+0?100-/i.test(f.unicodeRange) ? ' ext' : ''); if (f.status === 'loaded') betuk[k] = true; }); } catch (e) {}
   const kellBetu = ['Onest Variable', 'Onest Variable ext', 'Bricolage Grotesque Variable', 'Bricolage Grotesque Variable ext'];
   if (document.querySelector('.s-proza pre, .s-proza code')) kellBetu.push('JetBrains Mono Variable');
   kellBetu.forEach(k => { if (!betuk[k]) add('szoveg', 'betű nincs betöltve: ' + k); });
@@ -281,9 +306,11 @@ ELLENORZES = r"""() => {
     const ta = tart(a), tb = tart(b);
     const res = tb.top - ta.bottom;
     const pb = parseFloat(cs(a).paddingBottom), pt = parseFloat(cs(b).paddingTop);
-    const sav = /s-hatter--(felulet|uveg|sotet|kiemelt|atmenet)/.test(a.className);
-    if (sav && pt < 24 && b.classList.contains('s-szekcio')) add('ritmus', sel(a) + ' → ' + sel(b) + ': sáv után ' + Math.round(pt) + 'px felső padding');
-    if (res > 220) add('ritmus', sel(a) + ' → ' + sel(b) + ': ' + Math.round(res) + 'px levegő (pb ' + Math.round(pb) + ' + pt ' + Math.round(pt) + ')');
+    /* azonos (alap) háttér: egy szekció-padding a köz (dupla margó hiba); eltérő háttér (sávhatár): mindkét oldalon a saját padding */
+    const hat = el => (el.className.match(/s-hatter--(\w+)/) || [, 'alap'])[1];
+    const azonos = hat(a) === hat(b) && !/kiemelt|atmenet/.test(hat(a));
+    if (azonos && res > Math.max(pb, pt, 64) * 1.5 + 40) add('ritmus', sel(a) + ' → ' + sel(b) + ': ' + Math.round(res) + 'px levegő azonos háttéren (pb ' + Math.round(pb) + ' + pt ' + Math.round(pt) + ')');
+    if (!azonos && b.classList.contains('s-szekcio') && pt < 24 && !b.classList.contains('s-hero')) add('ritmus', sel(a) + ' → ' + sel(b) + ': sávhatár után csak ' + Math.round(pt) + 'px felső padding');
     if (res < 24) add('ritmus', sel(a) + ' → ' + sel(b) + ': csak ' + Math.round(res) + 'px levegő');
   }
   const lab = document.querySelector('.s-lablec');
@@ -444,7 +471,7 @@ def main():
                 ctx.close()
 
         # ---------- Interakciók ----------
-        for mod in MODOK:
+        for mod in (MODOK if INTERAKCIO else ()):
             # Mobil: menü, kereső, témaváltó, harmonika, árkártya szalag, összehasonlító tábla
             ctx = b.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, color_scheme='dark' if mod == 'sotet' else 'light', locale='hu-HU')
             ctx.add_init_script("try{localStorage.setItem('szinmod','%s')}catch(e){}" % mod)
@@ -597,14 +624,15 @@ def main():
                 ctx.close()
 
         # Csökkentett mozgás
-        ctx = b.new_context(viewport={'width': 1366, 'height': 900}, reduced_motion='reduce', locale='hu-HU')
-        ctx.add_cookies([suti_cookie()])
-        lap = ctx.new_page()
-        for ut in ('/', '/arak/', '/gyik/', '/blog/'):
-            lap.goto(ALAP + ut, wait_until='networkidle')
-            for x in lap.evaluate(MOZGAS):
-                hiba('mozgas', f'{ut}: {x}')
-        ctx.close()
+        for _ in ([1] if INTERAKCIO else []):
+          ctx = b.new_context(viewport={'width': 1366, 'height': 900}, reduced_motion='reduce', locale='hu-HU')
+          ctx.add_cookies([suti_cookie()])
+          lap = ctx.new_page()
+          for ut in ('/', '/arak/', '/gyik/', '/blog/', '/funkciok/', '/szerviz-kpi-mutatok-riportok/'):
+              lap.goto(ALAP + ut, wait_until='networkidle')
+              for x in lap.evaluate(MOZGAS):
+                  hiba('mozgas', f'{ut}: {x}')
+          ctx.close()
         b.close()
 
     with open(os.path.join(KI, 'hibak.json'), 'w', encoding='utf-8') as f:
