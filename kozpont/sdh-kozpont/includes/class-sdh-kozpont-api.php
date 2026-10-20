@@ -22,35 +22,11 @@ final class SDH_Kozpont_Api
     {
         $ns = SDH_Kozpont::NS;
 
-        /* --- A példányoké (nyilvános, a licenckulcs azonosít) --------------------------------------------------- */
+        /* --- A példányoké (nyilvános, a licenckulcs azonosít) – a régi és a semleges `licenc/v1` névtérben is ------- */
 
-        register_rest_route($ns, '/szivveres', [
-            'methods'             => 'POST',
-            'permission_callback' => '__return_true',
-            'callback'            => static fn (WP_REST_Request $r) => rest_ensure_response(SDH_Kozpont::alair(SDH_Kozpont::szivveres_feldolgoz((array) $r->get_json_params()))),
-        ]);
-
-        register_rest_route($ns, '/jelentes', [
-            'methods'             => 'POST',
-            'permission_callback' => '__return_true',
-            'callback'            => static fn (WP_REST_Request $r) => rest_ensure_response(SDH_Kozpont::alair(SDH_Kozpont::jelentes_feldolgoz((array) $r->get_json_params()))),
-        ]);
-
-        register_rest_route($ns, '/csomag', [
-            'methods'             => 'GET',
-            'permission_callback' => '__return_true',
-            'callback'            => [self::class, 'csomag'],
-        ]);
-
-        register_rest_route($ns, '/tamogatas', [
-            'methods'             => 'POST',
-            'permission_callback' => '__return_true',
-            'callback'            => static function (WP_REST_Request $r) {
-                $hiba = SDH_Kozpont::tamogatas_rogzit((array) $r->get_json_params());
-
-                return $hiba === '' ? rest_ensure_response(['ok' => true]) : new WP_Error('sdh_kozpont_tamogatas', $hiba, ['status' => 403]);
-            },
-        ]);
+        foreach ([SDH_Kozpont::NS, SDH_Kozpont_Kiszolgalas::NS_SEMLEGES] as $pns) {
+            self::peldany_utak($pns);
+        }
 
         /* --- A Központ felülete ---------------------------------------------------------------------------------- */
 
@@ -89,6 +65,38 @@ final class SDH_Kozpont_Api
         }
     }
 
+    /** A példányok nyilvános útjai egy névtérben (a vevők Műhelye hívja; a hibakódok semlegesek). */
+    private static function peldany_utak(string $ns): void
+    {
+        register_rest_route($ns, '/szivveres', [
+            'methods'             => 'POST',
+            'permission_callback' => '__return_true',
+            'callback'            => static fn (WP_REST_Request $r) => rest_ensure_response(SDH_Kozpont::alair(SDH_Kozpont::szivveres_feldolgoz((array) $r->get_json_params()))),
+        ]);
+
+        register_rest_route($ns, '/jelentes', [
+            'methods'             => 'POST',
+            'permission_callback' => '__return_true',
+            'callback'            => static fn (WP_REST_Request $r) => rest_ensure_response(SDH_Kozpont::alair(SDH_Kozpont::jelentes_feldolgoz((array) $r->get_json_params()))),
+        ]);
+
+        register_rest_route($ns, '/csomag', [
+            'methods'             => 'GET',
+            'permission_callback' => '__return_true',
+            'callback'            => [self::class, 'csomag'],
+        ]);
+
+        register_rest_route($ns, '/tamogatas', [
+            'methods'             => 'POST',
+            'permission_callback' => '__return_true',
+            'callback'            => static function (WP_REST_Request $r) {
+                $hiba = SDH_Kozpont::tamogatas_rogzit((array) $r->get_json_params());
+
+                return $hiba === '' ? rest_ensure_response(['ok' => true]) : new WP_Error('elutasitva', $hiba, ['status' => 403]);
+            },
+        ]);
+    }
+
     /* =================================================================
      * Segédek
      * ============================================================== */
@@ -100,7 +108,7 @@ final class SDH_Kozpont_Api
 
     private static function hiba(string $uzenet, int $status = 400): WP_Error
     {
-        return new WP_Error('sdh_kozpont', $uzenet, ['status' => $status]);
+        return new WP_Error('hiba', $uzenet, ['status' => $status]);
     }
 
     private static function ts(?string $mysql): int
@@ -283,12 +291,12 @@ final class SDH_Kozpont_Api
         $f = (string) $k['fajl'];
 
         if (!SDH_Kozpont::csomag_szabad((string) $r->get_param('kulcs'), (string) $r->get_param('peldany')) || $f === '' || !is_file($f)) {
-            return new WP_Error('sdh_kozpont_tiltva', 'Nincs érvényes licenc ehhez a letöltéshez.', ['status' => 403]);
+            return new WP_Error('tiltva', 'Nincs érvényes licenc ehhez a letöltéshez.', ['status' => 403]);
         }
 
         nocache_headers();
         header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="sdh-muhely-' . preg_replace('/[^0-9.]/', '', (string) $k['verzio']) . '.zip"');
+        header('Content-Disposition: attachment; filename="' . SDH_Kozpont_Kiszolgalas::fajlnev((string) $k['verzio']) . '"');
         header('Content-Length: ' . (string) filesize($f));
         readfile($f); // phpcs:ignore WordPress.WP.AlternativeFunctions
         exit;

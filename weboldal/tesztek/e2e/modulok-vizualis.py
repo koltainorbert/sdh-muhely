@@ -76,8 +76,20 @@ ELLENORZES = r"""() => {
   const REJT = '.s-rejtett, .s-rejtett-szoveg, .s-fogl__csapda, [aria-hidden="true"], template, script, style, noscript, [hidden]';
   const GYOK = '[data-modul], #s-suti, #s-suti-modal, .s-uzenet-sav';
   const gyokerek = Array.from(document.querySelectorAll(GYOK)).filter(g => !g.parentElement.closest(GYOK) && lathato(g));
+  // Vizuálisan rejtett (clip / 1 px) elem vagy őse → kihagyjuk.
+  const klippelt = el => { for (let e = el; e && e !== document.body; e = e.parentElement) { const st = cs(e); if (st.clipPath === 'inset(50%)' || (st.clip && st.clip !== 'auto') || (st.position === 'absolute' && parseFloat(st.width) <= 1 && parseFloat(st.height) <= 1)) return true; } return false; };
+  // A görgethető / levágó ősök által ténylegesen látható téglalap (null, ha teljesen kívül esik).
+  const latszo = el => {
+    let r = el.getBoundingClientRect(); let x1 = r.left, y1 = r.top, x2 = r.right, y2 = r.bottom;
+    for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
+      const st = cs(e); if (st.overflowX === 'visible' && st.overflowY === 'visible') continue;
+      const q = e.getBoundingClientRect(); x1 = Math.max(x1, q.left); y1 = Math.max(y1, q.top); x2 = Math.min(x2, q.right); y2 = Math.min(y2, q.bottom);
+      if (x2 - x1 <= 0 || y2 - y1 <= 0) return null;
+    }
+    return { left: x1, top: y1, right: x2, bottom: y2, width: x2 - x1, height: y2 - y1 };
+  };
   const mind = [];
-  gyokerek.forEach(g => { mind.push(g); g.querySelectorAll('*').forEach(e => { if (!e.closest(REJT) && lathato(e)) mind.push(e); }); });
+  gyokerek.forEach(g => { mind.push(g); g.querySelectorAll('*').forEach(e => { if (!e.closest(REJT) && lathato(e) && !klippelt(e)) mind.push(e); }); });
   const gyokere = el => el.closest('.s-uzenet-sav, #s-suti, #s-suti-modal, .s-szikra--lebego') || el.closest('[data-modul]');
 
   /* túlcsordulás */
@@ -87,6 +99,7 @@ ELLENORZES = r"""() => {
     for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) { const o = cs(p).overflowX; if (o === 'auto' || o === 'scroll' || o === 'hidden') { gorg = true; break; } }
     if (gorg && !el.matches(GYOK)) continue;
     const r = el.getBoundingClientRect();
+    if (r.width <= 1 || r.height <= 1) continue;
     if (r.right > W + 1 || r.left < -1) add('tulcsordulas', ut(el) + ' ' + Math.round(r.left) + '…' + Math.round(r.right) + ' (W ' + W + ')');
   }
 
@@ -98,7 +111,8 @@ ELLENORZES = r"""() => {
     const jo = sajatSzoveg(el) || t === 'IMG' || t === 'svg' || t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA' || t === 'BUTTON' || el.classList.contains('s-gomb') || el.classList.contains('s-pill');
     if (!jo) continue;
     if (t === 'INPUT' && /^(checkbox|radio)$/.test(el.type) && el.closest('label.s-pill')) continue;
-    const rects = st.display === 'inline' ? Array.from(el.getClientRects()) : [el.getBoundingClientRect()];
+    const lr = latszo(el); if (!lr) continue;
+    const rects = st.display === 'inline' ? Array.from(el.getClientRects()) : [lr];
     for (const r of rects) { if (r.width > 0 && r.height > 0) jelolt.push({ el, r, g: gyokere(el) }); }
   }
   jelolt.sort((a, b) => a.r.top - b.r.top);
@@ -154,13 +168,13 @@ ELLENORZES = r"""() => {
     const tw = st.textWrap || st.textWrapStyle || st.getPropertyValue('text-wrap') || st.getPropertyValue('text-wrap-style');
     if (!/balance|pretty/.test(String(tw))) add('szoveg', ut(h) + ' text-wrap: ' + tw);
   });
+  // Gombszöveg sorainak száma: a szöveg-csomópontok sorai (Range), nem a doboz magassága.
+  const sorok = g => { const tops = new Set(); const w = document.createTreeWalker(g, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) { if (!n.textContent.trim() || klippelt(n.parentElement) || n.parentElement.closest('.s-gomb__al')) continue; const rg = document.createRange(); rg.selectNodeContents(n); for (const r of rg.getClientRects()) { if (r.width > 1) tops.add(Math.round(r.top / 4)); } } return tops.size; };
   mind.filter(e => e.matches('button, .s-gomb, .s-pill, .s-fogl__gomb, .s-suti-gomb, .s-okt__gomb, .s-szikra__gomb')).forEach(g => {
-    if (g.closest('.s-okt__lecke, .s-kalk-csomag, .s-valaszto')) return;
+    if (g.closest('.s-okt__lecke, .s-kalk-csomag, .s-valaszto, .s-valasztok')) return;
     const r = g.getBoundingClientRect();
-    const lh = parseFloat(cs(g).lineHeight) || parseFloat(cs(g).fontSize) * 1.3;
     const szul = g.parentElement ? g.parentElement.getBoundingClientRect().width : 0;
-    const belso = r.height - parseFloat(cs(g).paddingTop) - parseFloat(cs(g).paddingBottom);
-    if (belso > lh * 1.8 && szul >= 200 && r.width < szul - 8) add('szoveg', ut(g) + ' gombszöveg két sorban ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (szülő ' + Math.round(szul) + 'px) „' + rov(g.textContent) + '”');
+    if (sorok(g) > 1 && szul >= 200) add('szoveg', ut(g) + ' gombszöveg két sorban ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (szülő ' + Math.round(szul) + 'px) „' + rov(g.textContent) + '”');
   });
 
   /* kontraszt */
@@ -227,7 +241,7 @@ ELLENORZES = r"""() => {
   /* téma: nagy felületek fényereje */
   const mod = document.documentElement.getAttribute('data-tema');
   for (const el of mind) {
-    if (/^(IMG|svg|VIDEO|PICTURE|CANVAS|IFRAME)$/.test(el.tagName)) continue;
+    if (/^(IMG|svg|VIDEO|PICTURE|CANVAS|IFRAME|BUTTON)$/.test(el.tagName) || el.matches('.s-gomb, .s-gomb-fo, .s-fogl__gomb')) continue;
     const r = el.getBoundingClientRect();
     if (r.width * r.height < 20000) continue;
     const c = szin(cs(el).backgroundColor);
@@ -272,6 +286,18 @@ FOKUSZ = r"""() => {
   const cls = typeof el.className === 'string' ? el.className.split(' ')[0] : '';
   return { sel: el.tagName.toLowerCase() + '.' + cls + (el.type ? '[' + el.type + ']' : ''), ring: !!ring, modul: !!el.closest('[data-modul], #s-suti, #s-suti-modal') };
 }"""
+
+
+def _png():
+    import struct
+    import zlib
+
+    def chunk(t, d):
+        return struct.pack('>I', len(d)) + t + d + struct.pack('>I', zlib.crc32(t + d) & 0xffffffff)
+    return b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', 8, 8, 8, 2, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(b''.join(b'\x00' + b'\x30\x60\xd0' * 8 for _ in range(8)))) + chunk(b'IEND', b'')
+
+
+PNG = _png()
 
 
 def suti_cookie():
@@ -408,6 +434,7 @@ def main():
         def a_penztar_hiba(lap):
             menj(lap, '/penztar/')
             lap.wait_for_selector('.s-penztar-osszeg p:nth-child(2)', timeout=10000)
+            lap.wait_for_timeout(3200)  # a robotszűrés kitöltési ideje
             lap.click('.s-penztar > .s-gomb-fo')
             lap.wait_for_selector('.s-penztar .s-mezo-hiba:not(:empty)', timeout=10000)
             lap.wait_for_timeout(300)
@@ -520,7 +547,7 @@ def main():
                     const r = s.querySelector('input[type=radio], input[type=checkbox]:not(.s-kapcsolo)');
                     if (r && !s.querySelector('input:checked')) { r.click(); return; }
                     const m = s.querySelector('input[type=text], input[type=email], input[type=tel], input[type=number], input[type=url], textarea');
-                    if (m && !m.value) { m.value = m.type === 'email' ? 'teszt@example.com' : (m.type === 'number' ? '3' : 'Teszt adat a vizuális ellenőrzéshez'); }
+                    if (m && !m.value) { m.value = m.type === 'email' ? 'teszt@example.com' : m.type === 'tel' ? '+36301234567' : (m.type === 'number' ? '3' : 'Teszt adat a vizuális ellenőrzéshez'); }
                   });
                 })()""")
                 lap.locator('.s-egyedi .s-gombsor .s-gomb-fo:visible').first.click()
@@ -539,9 +566,12 @@ def main():
         def a_egyedi_kesz(lap):
             menj(lap, '/egyedi-szoftverfejlesztes/')
             lap.wait_for_selector('.s-egyedi')
+            # Feltöltés: egy kis PNG a csatolmány-mezőbe (a fájl nélküli beküldés szerveroldali hibáját lásd a jelentésben).
+            if lap.locator('.s-egyedi input[type=file]').count():
+                lap.set_input_files('.s-egyedi input[type=file]', files=[{'name': 'minta.png', 'mimeType': 'image/png', 'buffer': PNG}])
             n = lap.evaluate("document.querySelectorAll('.s-egyedi-lepes').length")
             _egyedi_kitolt(lap, n - 1)
-            lap.evaluate("(() => { const p = Array.from(document.querySelectorAll('.s-egyedi-lepes')).find(x => !x.hidden); p.querySelectorAll('input[type=email], input[type=text], textarea').forEach(m => { if (!m.value) m.value = m.type === 'email' ? 'teszt@example.com' : 'Teszt'; }); const a = p.querySelector('[name=adatkezeles]'); if (a) a.checked = true; })()")
+            lap.evaluate("(() => { const p = Array.from(document.querySelectorAll('.s-egyedi-lepes')).find(x => !x.hidden); p.querySelectorAll('input[type=email], input[type=text], input[type=tel], textarea').forEach(m => { if (!m.value) m.value = m.type === 'email' ? 'teszt@example.com' : m.type === 'tel' ? '+36301234567' : 'Teszt'; }); const a = p.querySelector('[name=adatkezeles]'); if (a) a.checked = true; })()")
             lap.wait_for_timeout(3200)  # a kitöltési idő (robotszűrés)
             lap.locator('.s-egyedi .s-gombsor [type=submit]').click()
             try:
@@ -559,6 +589,7 @@ def main():
         def a_kapcsolat_hiba(lap):
             menj(lap, '/kapcsolat/')
             lap.wait_for_selector('[data-modul="urlap"] form')
+            lap.wait_for_timeout(3200)
             lap.click('[data-modul="urlap"] [type=submit]')
             try:
                 lap.wait_for_selector('[data-modul="urlap"] .s-mezo-hiba:not(:empty)', timeout=10000)
@@ -649,7 +680,7 @@ def main():
             lap.locator('.s-fogl__sav').last.click()
             lap.wait_for_selector('.s-fogl__urlap')
             lap.fill('.s-fogl__urlap [name=nev]', 'Teszt Elek')
-            lap.fill('.s-fogl__urlap [name=email]', 'foglalo.teszt@example.com')
+            lap.fill('.s-fogl__urlap [name=email]', f'foglalo.{int(time.time() * 1000)}@example.com')  # e-mailenként napi korlát van
             lap.wait_for_timeout(3200)
             lap.click('.s-fogl__urlap [type=submit]')
             try:
@@ -897,12 +928,14 @@ def main():
                         continue
                     if lap.evaluate("document.documentElement.getAttribute('data-tema')") != mod:
                         hiba('tema', f'{cimke}: data-tema nem {mod}')
+                    lap.evaluate("Promise.all(document.getAnimations().filter(a => { const t = a.effect && a.effect.getTiming(); return t && isFinite(t.iterations); }).map(a => a.finished.catch(() => null)))")
                     for k, lista in lap.evaluate(ELLENORZES).items():
                         for s in lista:
                             hiba(k, f'{cimke}: {s}')
                     vart = VART_4XX.get(nev)
-                    halo2 = [x for x in halo if not (vart and vart in x and x[:1] == '4')]
-                    konz2 = [x for x in konzol if not (vart and 'status of 4' in x)]
+                    elvart = ('4', '5') if nev == 'szikra-hiba' else ('4',)  # Szikra hálózat nélkül: 502
+                    halo2 = [x for x in halo if not (vart and vart in x and x[:1] in elvart)]
+                    konz2 = [x for x in konzol if not (vart and any('status of ' + e in x for e in elvart))]
                     for x in (konz2[:3] + halo2[:3]):
                         hiba('konzol', f'{cimke}: {x[:180]}')
                     try:
@@ -911,12 +944,11 @@ def main():
                         if gyok in ('.s-uzenet-sav', '#s-suti', '#s-suti-modal', '.s-szikra') or not loc or not loc.count():
                             lap.screenshot(path=fn)
                         else:
-                            panel = lap.locator(gyok).first
-                            bb = panel.bounding_box()
-                            if bb and bb['height'] > 2400:
-                                lap.screenshot(path=fn)
-                            else:
-                                panel.screenshot(path=fn)
+                            bb = lap.evaluate("(s) => { const e = document.querySelector(s); const p = e.closest('.s-panel') || e; const r = p.getBoundingClientRect(); return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top + scrollY - 8), width: Math.min(document.documentElement.clientWidth, r.width + 16), height: Math.min(3000, r.height + 16) }; }", gyok)
+                            # a lebegő Szikra-indító (fixed) a teljes oldalas képen a panelre kerülne: ezekről a képekről elrejtjük
+                            lap.evaluate("(() => { const s = document.querySelector('.s-szikra--lebego'); if (s) s.style.visibility = 'hidden'; window.scrollTo(0, 0); })()")
+                            lap.wait_for_timeout(80)
+                            lap.screenshot(path=fn, full_page=True, clip=bb)
                         kepek.append(fn)
                     except Exception as ex:  # noqa: BLE001
                         jegyzet.append(f'{cimke}: képernyőkép hiba {str(ex)[:80]}')

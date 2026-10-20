@@ -94,4 +94,52 @@ $e = SDH_Sales_Rendeles::letrehoz(['tipus' => 'bovites', 'licenc_kulcs' => 'MUNK
 T::igaz(empty($e['ok']), 'kijelentkezve: elutasítva');
 T::egyezik(401, t_rest('GET', '/fiok')->get_status(), 'GET /fiok kijelentkezve 401');
 
+
+// Független ellenőrzés (2026-10-20), M-1: a vevő nem írhatja át a saját e-mail-címét (core REST, wp_update_user, profil),
+// és a fiók / licenc-tulajdon a fiókhoz (user_id) kötött – egy egyező e-mail-cím nem ad hozzáférést idegen rendeléshez.
+add_action('sdh_sales_fizetve', ['SDH_Sales_Kiszolgalas', 'fizetve_hook'], 20, 1);
+$b_id  = wp_insert_user(['user_login' => 'aldozat' . wp_rand(), 'user_email' => 'b' . wp_rand() . '@example.com', 'user_pass' => wp_generate_password(), 'role' => 'sdh_vevo']);
+$konyv = 'konyveles' . wp_rand(1000, 99999) . '@aldozat.example';
+wp_set_current_user((int) $b_id);
+$bo = t_rendeles(['vevo' => t_vevo(['email' => $konyv])]);
+SDH_Sales_Rendeles::fizetve((int) $bo['id'], 'kezi', 'm1-' . wp_rand(), (int) $bo['r']['brutto']);
+$bkulcs = (string) SDH_Sales_Rendeles::rendeles((int) $bo['id'])['licenc_kulcs'];
+$a_mail = 'tamado' . wp_rand() . '@example.com';
+wp_set_current_user(0);
+t_rendeles(['vevo' => t_vevo(['email' => $a_mail])]);
+$a_id = (int) get_user_by('email', $a_mail)->ID;
+wp_set_current_user($a_id);
+$q = new WP_REST_Request('POST', '/wp/v2/users/me');
+$q->set_header('content-type', 'application/json');
+$q->set_body((string) wp_json_encode(['email' => $konyv]));
+T::egyezik(403, rest_do_request($q)->get_status(), 'M-1: POST /wp/v2/users/me {email}: 403');
+T::egyezik($a_mail, get_userdata($a_id)->user_email, 'M-1: az e-mail-cím nem változott (REST)');
+wp_update_user(['ID' => $a_id, 'user_email' => $konyv]);
+clean_user_cache($a_id);
+T::egyezik($a_mail, get_userdata($a_id)->user_email, 'M-1: wp_update_user a vevő nevében sem cseréli');
+$hib = new WP_Error();
+SDH_Sales_Fiok::profil_hiba($hib, true, (object) ['ID' => $a_id, 'user_email' => $konyv]);
+T::igaz($hib->has_errors(), 'M-1: profil-oldal: hibaüzenet e-mail-cserére');
+// a tulajdon a fiókhoz kötött: ha a cím valahogy egyezne (pl. adminisztrátor átírta), az idegen rendelés akkor sem látszik
+wp_set_current_user(1);
+wp_update_user(['ID' => $a_id, 'user_email' => $konyv]);
+clean_user_cache($a_id);
+T::egyezik($konyv, get_userdata($a_id)->user_email, 'M-1: adminisztrátor módosíthatja a címet');
+$ad = SDH_Sales_Fiok::adat($a_id);
+T::igaz(!in_array($bo['azon'], array_column($ad['rendelesek'], 'azon'), true), 'M-1: egyező e-mail-címmel sem látszik az idegen rendelés');
+T::egyezik([], array_column($ad['licencek'], 'kulcs'), 'M-1: … sem az idegen licenckulcs');
+T::egyezik([], array_column($ad['letoltesek'], 'url'), 'M-1: … sem az idegen letöltő link');
+T::igaz($bkulcs !== '' && SDH_Sales_Rendeles::licenc_sajat($bkulcs, $a_id) === null, 'M-1: licenc_sajat: az idegen licenc nem az övé');
+T::igaz(SDH_Sales_Rendeles::licenc_sajat($bkulcs, (int) $b_id) !== null, 'M-1: a valódi tulajdonosé marad');
+T::egyezik($a_mail, (string) (SDH_Sales_Rendeles::utolso_vevo($a_id, $konyv)['email'] ?? ''), 'M-1: a pénztár-előtöltés a saját rendelésből jön');
+// a core REST a vevőnek a rejtésben is zárva (bejelentkezve is 404)
+wp_set_current_user($a_id);
+$_SERVER['REQUEST_URI'] = '/wp/api/wp/v2/users/me';
+$z = SDH_Sales_Rejtes::rest_zar(null);
+T::igaz(is_wp_error($z) && (int) ($z->get_error_data()['status'] ?? 0) === 404, 'M-1: rejtés: bejelentkezett vevőnek a core REST 404');
+$_SERVER['REQUEST_URI'] = '/wp/api/portal/v1/fiok';
+T::egyezik(null, SDH_Sales_Rejtes::rest_zar(null), 'M-1: … a saját névtér nyitva');
+$_SERVER['REQUEST_URI'] = '/wp/';
+wp_set_current_user(0);
+
 T::vege('t218 fiók');

@@ -8,7 +8,12 @@
  *   email, telefon}, licenc:{csomag, modulok:[…]|"*", max_felhasznalo, max_peldany, ciklus, lejar?, dij, esedekes?},
  *   licenc_kulcs?} → {ok, licenc_kulcs, licenc_id, vevo_id, lejar, letoltes_url, …} vagy {ok:false, uzenet}.
  *   Ugyanazzal a `rendeles` azonosítóval ismételt kérés a tárolt választ adja (a letöltő link minden alkalommal friss,
- *   mert a tokent csak lenyomatként tároljuk).
+ *   mert a tokent csak lenyomatként tároljuk) – de csak ugyanannak a vevőnek: a tárolt válasz a kérés lenyomatához
+ *   (művelet, e-mail, adószám, licenckulcs, értékesítő oldali ügyfél-azonosító) kötött; eltérésnél hiba, nincs link.
+ * - Vevő-párosítás: adószám ÉS (azonos e-mail vagy azonos, nem ingyenes levelezős domain), különben pontos e-mail (ha az
+ *   adószám nem ütközik). Név vagy puszta adószám alapján soha – ilyenkor új vevő készül, „ellenorizendo” címkével.
+ *   Tulajdon (`sajat`, megújítás / bővítés): az értékesítő oldali ügyfél-azonosító (`vevo.ugyfel`) egyezése a licenc
+ *   korábbi rendelésével, a pontos e-mail, vagy adószám ÉS céges domain – puszta adószám nem elég.
  * - POST `kiszolgalas` {adat: base64(json), alairas: base64(Ed25519)} – az értékesítő webhely kulcsával aláírva
  *   (Beállítások › Értékesítő webhely), időbélyeg ±300 mp, egyszer használható `nonce` (10 perc), opcionális IP-lista.
  *   Hibás kérésre 401, részletek nélkül. A válasz a Központ kulcsával aláírva (`SDH_Kozpont::alair()`).
@@ -342,11 +347,12 @@ final class SDH_Kozpont_Kiszolgalas
             return self::hiba('Hiányzó vagy hibás rendelésazonosító.');
         }
 
-        $t = SDH_Kozpont::t('rendeles');
-        $m = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE rendeles = %s", $rendeles));
+        $t   = SDH_Kozpont::t('rendeles');
+        $m   = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE rendeles = %s", $rendeles));
+        $ujj = self::keres_lenyomat($keres);
 
         if ($m !== null) {
-            return self::ismetles($m, $muvelet);
+            return self::ismetles($m, $muvelet, $ujj);
         }
 
         // Foglalás: párhuzamos ugyanazzal az azonosítóval nem fut kétszer.
@@ -357,7 +363,7 @@ final class SDH_Kozpont_Kiszolgalas
         if ($fog === false) {
             $m = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$t} WHERE rendeles = %s", $rendeles));
 
-            return $m !== null ? self::ismetles($m, $muvelet) : self::hiba('A rendelés most nem dolgozható fel, próbáld újra.');
+            return $m !== null ? self::ismetles($m, $muvelet, $ujj) : self::hiba('A rendelés most nem dolgozható fel, próbáld újra.');
         }
 
         $fid = (int) $wpdb->insert_id;
@@ -378,6 +384,8 @@ final class SDH_Kozpont_Kiszolgalas
 
         $tarolt = $v;
         unset($tarolt['letoltes_url']);
+        $tarolt['_ujj']    = $ujj;
+        $tarolt['_ugyfel'] = self::ugyfel($keres);
 
         $wpdb->update($t, [
             'licenc_id' => (int) $v['licenc_id'],
@@ -390,11 +398,37 @@ final class SDH_Kozpont_Kiszolgalas
         return $v;
     }
 
+    /** Az értékesítő oldali ügyfél-azonosító (a fiók sózott lenyomata), ha a kérés hozza. @param array<string, mixed> $keres */
+    private static function ugyfel(array $keres): string
+    {
+        $u = (string) ($keres['vevo']['ugyfel'] ?? '');
+
+        return preg_match('/^[A-Za-z0-9_-]{8,64}$/', $u) === 1 ? $u : '';
+    }
+
+    /**
+     * A kérés vevőjének lenyomata (az idempotencia ehhez kötött).
+     *
+     * @param array<string, mixed> $keres
+     */
+    public static function keres_lenyomat(array $keres): string
+    {
+        $v = is_array($keres['vevo'] ?? null) ? $keres['vevo'] : [];
+
+        return hash('sha256', implode('|', [
+            (string) ($keres['muvelet'] ?? ''),
+            strtolower(trim(sanitize_email((string) ($v['email'] ?? '')))),
+            self::adoszam_norm((string) ($v['adoszam'] ?? '')),
+            strtoupper(trim((string) ($keres['licenc_kulcs'] ?? ''))),
+            self::ugyfel($keres),
+        ]));
+    }
+
     /**
      * @param object $m a tárolt rendeléssor
      * @return array<string, mixed>
      */
-    private static function ismetles(object $m, string $muvelet): array
+    private static function ismetles(object $m, string $muvelet, string $ujj = ''): array
     {
         $v = json_decode((string) ($m->valasz ?? ''), true);
 
@@ -406,6 +440,15 @@ final class SDH_Kozpont_Kiszolgalas
             return self::hiba('Ezzel a rendelésazonosítóval már más művelet futott.');
         }
 
+        // Más vevő (vagy egy klónozott értékesítő adatbázis más rendelése) ugyanazzal az azonosítóval: nincs tárolt válasz,
+        // nincs letöltő link.
+        if ($ujj !== '' && isset($v['_ujj']) && !hash_equals((string) $v['_ujj'], $ujj)) {
+            SDH_Kozpont::naplo('kiszolgalas', 'Rendelésazonosító-ütközés (' . (string) $m->rendeles . '): más vevő adataival érkezett kérés – elutasítva.', 'figyel', [], self::KI);
+
+            return self::hiba('Ez a rendelésazonosító már egy másik vevő rendeléséhez tartozik.');
+        }
+
+        unset($v['_ujj'], $v['_ugyfel']);
         $v['ismetles']     = true;
         $v['letoltes_url'] = $muvelet === 'uj' ? self::letoltes_link((int) $m->licenc_id, (string) $m->rendeles) : '';
 
@@ -603,12 +646,80 @@ final class SDH_Kozpont_Kiszolgalas
         return preg_replace('/[^0-9A-Za-z]/', '', strtoupper($a)) ?? '';
     }
 
+    /** Ingyenes levelezők: a domain-egyezés itt nem jelent egy céget. */
+    private const INGYENES_DOMAIN = [
+        'gmail.com', 'googlemail.com', 'freemail.hu', 'citromail.hu', 'yahoo.com', 'yahoo.co.uk', 'hotmail.com', 'outlook.com',
+        'outlook.hu', 'live.com', 'icloud.com', 'me.com', 'mail.com', 'gmx.com', 'gmx.net', 't-online.hu', 'invitel.hu', 'vipmail.hu',
+        'indamail.hu', 'proton.me', 'protonmail.com', 'aol.com', 'yandex.com', 'upcmail.hu', 'chello.hu', 'digikabel.hu',
+    ];
+
+    private static function domain(string $email): string
+    {
+        $email = strtolower(trim($email));
+
+        return strpos($email, '@') !== false ? substr($email, (int) strrpos($email, '@') + 1) : '';
+    }
+
+    /** Ugyanaz a cég-e: azonos e-mail, vagy azonos, nem ingyenes levelezős domain. */
+    private static function email_egyezik(string $a, string $b): bool
+    {
+        $a = strtolower(trim($a));
+        $b = strtolower(trim($b));
+
+        if ($a === '' || $b === '') {
+            return false;
+        }
+
+        if ($a === $b) {
+            return true;
+        }
+
+        $d = self::domain($a);
+
+        return $d !== '' && $d === self::domain($b) && !in_array($d, self::INGYENES_DOMAIN, true);
+    }
+
     /**
-     * Meglévő vevő keresése: adószám → e-mail → név. Nincs találat: 0.
+     * Meglévő vevő keresése: adószám ÉS e-mail / céges domain; különben pontos e-mail (ha az adószám nem ütközik).
+     * Név vagy puszta (nyilvános) adószám alapján nem párosít. Nincs találat: 0.
      *
      * @param array<string, mixed> $vevo
      */
     public static function vevo_keres(array $vevo): int
+    {
+        global $wpdb;
+
+        $t     = SDH_Kozpont::t('vevo');
+        $ado   = self::adoszam_norm((string) ($vevo['adoszam'] ?? ''));
+        $email = strtolower(sanitize_email((string) ($vevo['email'] ?? '')));
+
+        if (strlen($ado) >= 8 && $email !== '') {
+            foreach ((array) $wpdb->get_results("SELECT id, adoszam, email FROM {$t} WHERE adoszam <> '' ORDER BY id ASC") as $s) {
+                if (self::adoszam_norm((string) $s->adoszam) === $ado && self::email_egyezik($email, (string) $s->email)) {
+                    return (int) $s->id;
+                }
+            }
+        }
+
+        if ($email !== '') {
+            foreach ((array) $wpdb->get_results($wpdb->prepare("SELECT id, adoszam FROM {$t} WHERE LOWER(email) = %s ORDER BY id ASC LIMIT 20", $email)) as $s) {
+                $sado = self::adoszam_norm((string) $s->adoszam);
+
+                if (strlen($ado) < 8 || strlen($sado) < 8 || $sado === $ado) {
+                    return (int) $s->id;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Lehetséges egyezés (azonos név vagy adószám) – csak jelzésre: új vevő készül, de a Központban ellenőrizendő.
+     *
+     * @param array<string, mixed> $vevo
+     */
+    public static function vevo_hasonlo(array $vevo): int
     {
         global $wpdb;
 
@@ -623,23 +734,9 @@ final class SDH_Kozpont_Kiszolgalas
             }
         }
 
-        $email = strtolower(sanitize_email((string) ($vevo['email'] ?? '')));
-
-        if ($email !== '') {
-            $id = (int) $wpdb->get_var($wpdb->prepare("SELECT id FROM {$t} WHERE LOWER(email) = %s ORDER BY id ASC LIMIT 1", $email));
-
-            if ($id > 0) {
-                return $id;
-            }
-        }
-
         $nev = trim(sanitize_text_field((string) ($vevo['nev'] ?? '')));
 
-        if ($nev !== '') {
-            return (int) $wpdb->get_var($wpdb->prepare("SELECT id FROM {$t} WHERE nev = %s ORDER BY id ASC LIMIT 1", $nev));
-        }
-
-        return 0;
+        return $nev !== '' ? (int) $wpdb->get_var($wpdb->prepare("SELECT id FROM {$t} WHERE nev = %s ORDER BY id ASC LIMIT 1", $nev)) : 0;
     }
 
     /**
@@ -689,20 +786,28 @@ final class SDH_Kozpont_Kiszolgalas
             return $vid;
         }
 
-        return SDH_Kozpont::vevo_ment([
+        $hasonlo = self::vevo_hasonlo($vevo + ['nev' => $nev]);
+        $uj      = SDH_Kozpont::vevo_ment([
             'nev'            => $nev,
             'kapcsolattarto' => (string) ($vevo['kapcsolattarto'] ?? ''),
             'email'          => (string) ($vevo['email'] ?? ''),
             'telefon'        => (string) ($vevo['telefon'] ?? ''),
             'cim'            => (string) ($vevo['cim'] ?? ''),
             'adoszam'        => (string) ($vevo['adoszam'] ?? ''),
-            'cimkek'         => 'webshop',
+            'cimkek'         => $hasonlo > 0 ? 'webshop, ellenorizendo' : 'webshop',
             'allapot'        => 'aktiv',
         ], $ki);
+
+        if ($hasonlo > 0 && is_int($uj)) {
+            SDH_Kozpont::naplo('vevo', 'Új vevő az értékesítő webhelyről: ' . $nev . ' – azonos nevű / adószámú vevő már van (#' . $hasonlo . '); nem vontam össze, ellenőrizd.', 'figyel', ['vevo_id' => $uj], $ki);
+        }
+
+        return $uj;
     }
 
     /**
-     * A licenc a kérés vevőjéé-e: egyező adószám vagy e-mail-cím (a licenc vevőjénél).
+     * A licenc a kérés vevőjéé-e: az értékesítő oldali ügyfél-azonosító egyezik a licenc egy korábbi rendelésével, vagy a
+     * pontos e-mail-cím, vagy adószám ÉS céges domain. Puszta (nyilvános) adószám nem elég.
      *
      * @param array<string, mixed> $vevo
      */
@@ -710,21 +815,37 @@ final class SDH_Kozpont_Kiszolgalas
     {
         global $wpdb;
 
+        $u = self::ugyfel(['vevo' => $vevo]);
+
+        if ($u !== '') {
+            foreach ((array) $wpdb->get_col($wpdb->prepare('SELECT valasz FROM ' . SDH_Kozpont::t('rendeles') . ' WHERE licenc_id = %d ORDER BY id ASC LIMIT 50', (int) $l->id)) as $vj) {
+                $d = json_decode((string) $vj, true);
+
+                if (is_array($d) && (string) ($d['_ugyfel'] ?? '') !== '' && hash_equals((string) $d['_ugyfel'], $u)) {
+                    return true;
+                }
+            }
+        }
+
         $v = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Kozpont::t('vevo') . ' WHERE id = %d', (int) $l->vevo_id));
 
         if ($v === null) {
             return false;
         }
 
-        $ado = self::adoszam_norm((string) ($vevo['adoszam'] ?? ''));
+        $ado   = self::adoszam_norm((string) ($vevo['adoszam'] ?? ''));
+        $sado  = self::adoszam_norm((string) $v->adoszam);
+        $email = strtolower(sanitize_email((string) ($vevo['email'] ?? '')));
 
-        if (strlen($ado) >= 8 && $ado === self::adoszam_norm((string) $v->adoszam)) {
+        if ($email === '') {
+            return false;
+        }
+
+        if ($email === strtolower((string) $v->email)) {
             return true;
         }
 
-        $email = strtolower(sanitize_email((string) ($vevo['email'] ?? '')));
-
-        return $email !== '' && $email === strtolower((string) $v->email);
+        return strlen($ado) >= 8 && $ado === $sado && self::email_egyezik($email, (string) $v->email);
     }
 
     /* =================================================================

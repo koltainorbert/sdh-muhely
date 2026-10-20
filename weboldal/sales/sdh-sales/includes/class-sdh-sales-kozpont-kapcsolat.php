@@ -161,6 +161,14 @@ final class SDH_Sales_Kozpont_Kapcsolat
             return self::hiba('Nincs megadva a Központ címe (Beállítások › Központ).', true);
         }
 
+        // Titkosítatlan kapcsolaton az első válasz kulcsát (TOFU) bárki az útvonalon meghamisíthatná: csak https,
+        // kivéve a gépen belüli (fejlesztői) címet.
+        $host = strtolower((string) wp_parse_url($cim, PHP_URL_HOST));
+
+        if (strtolower((string) wp_parse_url($cim, PHP_URL_SCHEME)) !== 'https' && !in_array($host, ['localhost', '127.0.0.1', '::1', '[::1]'], true)) {
+            return self::hiba('A Központ címe csak https:// kezdetű lehet (Beállítások › Központ).', false);
+        }
+
         $kp    = self::kulcspar();
         $nonce = SDH_Sales::token(24);
         $adat  = $keres + ['ido' => time(), 'nonce' => $nonce, 'kuldo' => home_url('/')];

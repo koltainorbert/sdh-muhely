@@ -1,11 +1,8 @@
 /* Szekció-specifikus stílusok (a váz a kritikus CSS-ben). */
 
-/* ---------- Logósáv ---------- */
-.s-logo-sav__cim { font-size: var(--s-m-s); text-align: center; color: var(--s-halvany); font-family: var(--s-betu-szoveg); font-weight: var(--s-suly-kozepes); letter-spacing: var(--s-betukoz-felirat); text-transform: uppercase; margin-bottom: var(--s-t-5); }
-.s-logo-sav { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--s-t-6) var(--s-t-7); list-style: none; padding: 0; margin: 0; }
-.s-logo-sav__elem img { max-height: 40px; width: auto; filter: grayscale(1); opacity: 0.75; transition: opacity var(--s-ido), filter var(--s-ido); }
+/* ---------- Logósáv (a váz a kritikus CSS-ben: jellemzően a hero alatt, az első képernyőn áll) ---------- */
+.s-logo-sav__elem img { filter: grayscale(1); opacity: 0.75; transition: opacity var(--s-ido), filter var(--s-ido); }
 .s-logo-sav__elem a:hover img { filter: none; opacity: 1; }
-.s-logo-sav__nev { font-family: var(--s-betu-cim); font-weight: var(--s-suly-cim); font-size: var(--s-m-l); color: var(--s-halvany); }
 
 /* ---------- Árak ---------- */
 .s-arak__doboz { display: flex; flex-direction: column; align-items: stretch; }
@@ -23,6 +20,8 @@
 .s-ar { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s-t-1); margin: 0; }
 .s-ar__osszeg { font-family: var(--s-betu-cim), "Bricolage Tartalek"; font-size: var(--s-m-3xl); font-weight: var(--s-suly-cim); letter-spacing: var(--s-betukoz-cim); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .s-ar__osszeg--szoveg { font-size: var(--s-m-2xl); }
+/* Négy hasábban (≥ 1024 px, ~240 px tartalom) a nagy ár mellé is kiférjen a „/ év” (különben külön sorba törne) */
+@media (min-width: 1024px) { .s-racs--4 .s-ar__osszeg { font-size: var(--s-m-2xl); } .s-racs--4 .s-ar__osszeg--szoveg { font-size: var(--s-m-xl); } }
 .s-ar__per { color: var(--s-halvany); font-weight: var(--s-suly-kozepes); }
 .s-ar__afa { font-size: var(--s-m-xs); color: var(--s-halvany); margin: var(--s-t-1) 0 0; }
 .s-ar__megj { font-size: var(--s-m-xs); color: var(--s-ok); margin: var(--s-t-1) 0 0; font-weight: var(--s-suly-kozepes); }
@@ -88,7 +87,8 @@
 
 /* ---------- Számok ---------- */
 .s-szamok { display: grid; gap: var(--s-t-5); grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); margin: 0; }
-.s-szam { display: flex; flex-direction: column-reverse; gap: var(--s-t-2); padding: var(--s-t-5); border-left: 2px solid var(--s-kiemelo-2); }
+/* column-reverse: az érték (DOM-ban a címke után) felül; flex-end = a doboz teteje → az értékek egy vonalban, bármilyen hosszú a címke */
+.s-szam { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s-t-2); padding: var(--s-t-5); border-left: 2px solid var(--s-kiemelo-2); }
 .s-szam__ertek { margin: 0; font-family: var(--s-betu-cim); font-size: var(--s-m-4xl); font-weight: var(--s-suly-cim); line-height: 1; letter-spacing: var(--s-betukoz-cim); background: var(--s-atmenet-szoveg); -webkit-background-clip: text; background-clip: text; color: transparent; font-variant-numeric: tabular-nums; }
 .s-szam__cimke { display: flex; gap: var(--s-t-2); align-items: center; color: var(--s-halvany); }
 .s-szam__cimke .s-ikon { color: var(--s-neon); }
@@ -96,7 +96,7 @@
 /* ---------- CTA ---------- */
 .s-cta {
     position: relative; overflow: hidden; isolation: isolate;
-    padding: clamp(var(--s-t-7), 6vw, var(--s-t-9)) clamp(var(--s-t-5), 4vw, var(--s-t-8));
+    padding: clamp(var(--s-t-7), 6vw, var(--s-t-9)) clamp(var(--s-t-4), 4vw, var(--s-t-8));
     border-radius: var(--s-r-popup); text-align: center;
     border: 1px solid var(--s-uveg-keret);
     background: var(--s-felulet);
@@ -152,10 +152,5 @@
 .s-kapcsolodo__nev { font-weight: var(--s-suly-felkover); }
 .s-kapcsolodo__leiras { font-size: var(--s-m-s); color: var(--s-halvany); }
 
-/* ---------- Jogi ---------- */
-.s-jogi__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-6); }
-@media (min-width: 1024px) { .s-jogi__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); } .s-jogi__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); } }
-.s-jogi__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin-bottom: var(--s-t-6); }
+/* ---------- Jogi: a rács a proza.css-ben (a jogi oldalakon kritikus – különben a betöltéskor átrendeződne) ---------- */
 
-/* Panel a csatolási pontok körül */
-.s-panel--kosar, .s-panel--penztar, .s-panel--fiok { min-height: 260px; }

@@ -75,8 +75,15 @@ verziónapló. Csomagolás: `sh weboldal/eszkozok/csomagol.sh` → `weboldal/dis
   fejléc-takarítás, kimeneti szűrő, önellenőrzés). 57 teszt (t200–t309), mind zöld.
 - **Licencközpont 2.1.0** (a Műhely `kozpont/` mappájában): aláírt kiszolgálási végpont, egyszer használható letöltés,
   licenckulcs-előtag beállítás – a Műhely README 0.99.5 bejegyzése.
-- **Demó** (`bemutato`): lásd `dokumentacio/demo.md` és a demó-ügynök jelentése (10 000 rekord, IP-nkénti korlát, éjszakai
-  visszaállítás, Kimenő üzenetek, tiltott funkciók, BEMUTATÓ sáv).
+- **Bemutató 1.0.0** (demó-korlátozó, `bemutato`; külön webhelyen a Műhely vevői csomagjával, tesztüzemben): generátor
+  (~10 000 kitalált rekord: ügyfél, eszköz, munkalap tételekkel és hibákkal 18 hónapra, termék készlettel, szolgáltatás,
+  pénztár, naptár + 170 készülékfotó és 230 átvételi fotó; mért 1,5–4,3 s SQLite-on), pillanatkép + éjszakai visszaállítás
+  03:00-kor (48 tábla, ~40 900 sor, 942 KB; mentés 0,4–1,3 s, visszaállítás 1,4–4,1 s), egykattintásos indítás
+  (`?bemutato=indit`, Turnstile, 24 órás ideiglenes fiók, jelszó soha nem látszik), IP-nként 10 új rekord / 24 óra (érthető
+  magyar hibaüzenettel a felugró ablakban), a látogatói rekordok 24 óra után törlődnek, kimenő e-mail és SMS csak a
+  „Kimenő üzenetek” nézetbe kerül, Számlázz.hu csak teszt-kulccsal és „MINTA”-ként, tiltva: frissítés, modulok, külső mentés,
+  fiókkezelés, licenc, érzékeny beállítások, import / export / anonimizálás (szerepkör + menü + szerveroldali tiltás, 117
+  ellenőrzés), „BEMUTATÓ” sáv (visszaállításig hátralévő idő, megmaradt keret). t290–t299, böngészős folyamat 13/13.
 - Nyitott (Norbi): terméknév és domain választása (`kutatas/nevek.md`), árszint jóváhagyása, Számlázz.hu teszt-kulcs,
   bankadatok, Turnstile-kulcs, Szikra API-kulcs, jogász (`[DÖNTENDŐ]` pontok), Magnific-képek letöltése
   (`magnific-koltseg.md`), szerverbeállítások (`rejtes-uzemeltetes.md`).

@@ -9,6 +9,9 @@
  * Fiók: GET /fiok → rendelések (állapot, összeg, számla-linkek, fizetési adatok), licencek (lejárat, megújítás / bővítés),
  * letöltések (a kiszolgálási láncból), foglalások, egyedi fejlesztési igények, oktatás (`sdh_sales_fiok_oktatas` szűrő).
  * POST /fiok/kilepes. Megújítás / bővítés rendelése: POST /rendeles {tipus: 'megujitas'|'bovites', licenc_kulcs}.
+ * A rendelések, licencek és letöltések a fiókhoz (user_id) kötöttek. A vevő (felhasználó-kezelési jog nélkül) a saját
+ * e-mail-címét / felhasználónevét / jelszavát semmilyen úton (core REST, profil-oldal, más bővítmény) nem módosíthatja –
+ * ezt csak az adminisztrátor teheti (`email_vedelem`, `rest_vedelem`, `profil_hiba`).
  *
  *   link_kuld(string $email): bool          – igaz, ha ment ki levél (a REST-válasz ettől függetlenül egyforma)
  *   link_letrehoz(int $user_id, string $email, string $cel = ''): string – a token (teszt, admin)
@@ -35,6 +38,87 @@ final class SDH_Sales_Fiok
         add_action('init', [self::class, 'front'], 6);
         add_action(SDH_Sales::CRON, [self::class, 'takarit'], 30, 0);
         add_filter('show_admin_bar', [self::class, 'admin_sav'], 99);
+        add_filter('wp_pre_insert_user_data', [self::class, 'email_vedelem'], 99, 4);
+        add_filter('rest_pre_dispatch', [self::class, 'rest_vedelem'], 4, 3);
+        add_action('user_profile_update_errors', [self::class, 'profil_hiba'], 10, 3);
+        add_filter('send_email_change_email', [self::class, 'csere_level'], 10, 3);
+    }
+
+    /** Módosíthatja-e a bejelentkezett felhasználó a fiókok azonosító adatait (e-mail, név, jelszó). */
+    public static function fiok_szerkeszthet(): bool
+    {
+        return current_user_can('edit_users') || current_user_can('manage_options');
+    }
+
+    /**
+     * Utolsó védvonal: bármely úton (REST, profil, más kód) érkező e-mail-csere a nem adminisztrátor saját fiókján
+     * visszaáll a régi címre. Rendszerfolyamat (nincs bejelentkezett felhasználó) és adminisztrátor nem érintett.
+     *
+     * @param array<string, mixed> $adat
+     * @return array<string, mixed>
+     */
+    public static function email_vedelem($adat, $frissit = false, $user_id = null, $nyers = [])
+    {
+        if (!is_array($adat) || !$frissit || (int) $user_id <= 0 || get_current_user_id() === 0 || self::fiok_szerkeszthet()) {
+            return $adat;
+        }
+
+        $regi = get_userdata((int) $user_id);
+
+        if (!$regi instanceof WP_User) {
+            return $adat;
+        }
+
+        if (isset($adat['user_email']) && strtolower((string) $adat['user_email']) !== strtolower((string) $regi->user_email)) {
+            SDH_Sales_Naplo::ir('fiok', 'Elutasított e-mail-csere a vevői fiókon (#' . (int) $user_id . ').', 'figyel', 'user', (int) $user_id);
+            $adat['user_email'] = (string) $regi->user_email;
+        }
+
+        if (isset($adat['user_login']) && (string) $adat['user_login'] !== (string) $regi->user_login) {
+            $adat['user_login'] = (string) $regi->user_login;
+        }
+
+        return $adat;
+    }
+
+    /**
+     * Core REST: a felhasználó-végpontok írása (e-mail, név, jelszó…) nem adminisztrátornak tiltott – a belső
+     * `rest_do_request` hívásokra is (ott a hitelesítési szűrő nem fut).
+     *
+     * @param mixed $eredmeny
+     * @return mixed
+     */
+    public static function rest_vedelem($eredmeny, $szerver, $keres)
+    {
+        if ($eredmeny !== null || !$keres instanceof WP_REST_Request || self::fiok_szerkeszthet()) {
+            return $eredmeny;
+        }
+
+        if (preg_match('~^/wp/v2/users(/|$)~', (string) $keres->get_route()) === 1 && $keres->get_method() !== 'GET') {
+            return new WP_Error('tiltott', __('A fiók adatait ügyfélszolgálatunk módosítja – írj nekünk.', 'sdh-sales'), ['status' => 403]);
+        }
+
+        return $eredmeny;
+    }
+
+    /** Profil-oldal: e-mail-csere nem adminisztrátornak hibaüzenettel. @param WP_Error $hibak */
+    public static function profil_hiba($hibak, $frissit = false, $user = null): void
+    {
+        if (!$frissit || !is_object($user) || empty($user->ID) || self::fiok_szerkeszthet() || !$hibak instanceof WP_Error) {
+            return;
+        }
+
+        $regi = get_userdata((int) $user->ID);
+
+        if ($regi instanceof WP_User && isset($user->user_email) && strtolower((string) $user->user_email) !== strtolower((string) $regi->user_email)) {
+            $hibak->add('email', __('Az e-mail-címet ügyfélszolgálatunk módosítja – írj nekünk.', 'sdh-sales'));
+        }
+    }
+
+    /** E-mail-csere értesítő: nem adminisztrátor cseréje nem történik meg, így levél sem megy. @param mixed $kuld */
+    public static function csere_level($kuld, $regi = [], $uj = [])
+    {
+        return self::fiok_szerkeszthet() ? $kuld : false;
     }
 
     public static function front(): void
@@ -100,7 +184,7 @@ final class SDH_Sales_Fiok
             return $u;
         }
 
-        $van = (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('rendeles') . ' WHERE user_id = %d OR email = %s', (int) $u->ID, strtolower($email)));
+        $van = (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('rendeles') . ' WHERE user_id = %d OR (user_id = 0 AND email = %s)', (int) $u->ID, strtolower($email)));
 
         // Adminisztrátor e-mailes linkkel nem léphet be (az ő belépése jelszó + kétlépcsős kód).
         return $van > 0 && !user_can($u, 'manage_options') && !user_can($u, SDH_Sales::JOG) ? $u : null;
@@ -185,7 +269,8 @@ final class SDH_Sales_Fiok
         $u     = get_userdata($uid);
         $email = $u instanceof WP_User ? strtolower((string) $u->user_email) : '';
         $t     = SDH_Sales_Schema::t('rendeles');
-        $ids   = (array) $wpdb->get_col($wpdb->prepare("SELECT id FROM {$t} WHERE user_id = %d OR email = %s ORDER BY id DESC LIMIT 200", $uid, $email));
+        // A rendelések a fiókhoz (user_id) kötöttek; e-mail szerint csak a fiók nélküli (user_id = 0) régi rendelések.
+        $ids   = (array) $wpdb->get_col($wpdb->prepare("SELECT id FROM {$t} WHERE user_id = %d OR (user_id = 0 AND email = %s) ORDER BY id DESC LIMIT 200", $uid, $email));
         $rend  = [];
         $lic   = [];
         $let   = [];

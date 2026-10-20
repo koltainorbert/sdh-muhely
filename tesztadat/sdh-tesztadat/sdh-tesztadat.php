@@ -116,7 +116,16 @@ final class SDH_Tesztadat
     {
         global $wpdb;
 
-        $p = (is_object($wpdb->dbh ?? null) && method_exists($wpdb->dbh, 'get_pdo')) ? $wpdb->dbh->get_pdo() : null;
+        $p  = null;
+        $dh = $wpdb->dbh ?? null;
+
+        if (is_object($dh) && method_exists($dh, 'get_pdo')) {
+            $p = $dh->get_pdo();
+        } elseif (is_object($dh) && method_exists($dh, 'get_connection')) {
+            // Újabb SQLite-illesztő: a PDO a kapcsolat-objektumon át érhető el.
+            $k = $dh->get_connection();
+            $p = is_object($k) && method_exists($k, 'get_pdo') ? $k->get_pdo() : null;
+        }
 
         if ($p instanceof PDO) {
             $p->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

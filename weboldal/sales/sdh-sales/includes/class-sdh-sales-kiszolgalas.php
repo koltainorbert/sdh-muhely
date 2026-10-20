@@ -66,6 +66,35 @@ final class SDH_Sales_Kiszolgalas
 
         SDH_Sales_Rest::ut('/admin/kiszolgalas/(?P<id>\d+)', 'GET', [self::class, 'rest_allapot'], 'admin');
         SDH_Sales_Rest::ut('/admin/kiszolgalas/(?P<id>\d+)/ujra', 'POST', [self::class, 'rest_ujra'], 'admin', ['kiszolgalas_ujra', 30, 60]);
+        add_action('init', [self::class, 'vezerlo_atiranyit'], 1);
+    }
+
+    /**
+     * Semleges hivatkozás a rendelés admin-oldalára (a levelekben nincs rendszer-útvonal és belső név):
+     * `<webhely>/?vezerlo=r<id>` → adminnak az admin oldal, kijelentkezve a titkos belépő (utána vissza ide).
+     */
+    public static function admin_link(int $rendeles_id): string
+    {
+        return add_query_arg('vezerlo', 'r' . $rendeles_id, home_url('/'));
+    }
+
+    public static function vezerlo_atiranyit(): void
+    {
+        $v = isset($_GET['vezerlo']) ? sanitize_key(wp_unslash((string) $_GET['vezerlo'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+
+        if (preg_match('/^r(\d{1,12})$/', $v, $m) !== 1) {
+            return;
+        }
+
+        if (SDH_Sales::admin()) {
+            wp_safe_redirect(admin_url('admin.php?page=sdh-sales#/rendeles/' . (int) $m[1]));
+            exit;
+        }
+
+        if (!is_user_logged_in()) {
+            wp_safe_redirect(wp_login_url(self::admin_link((int) $m[1])));
+            exit;
+        }
     }
 
     /** @param mixed $rendeles_id */
@@ -387,6 +416,12 @@ final class SDH_Sales_Kiszolgalas
      * 1. Központ
      * ============================================================== */
 
+    /** Az értékesítő oldali ügyfél-azonosító a Központnak (a fiók sózott lenyomata – a fiók számát nem árulja el). */
+    public static function ugyfel_azon(int $user_id): string
+    {
+        return substr(hash_hmac('sha256', 'ugyfel|' . $user_id . '|' . untrailingslashit(home_url()), wp_salt('auth')), 0, 32);
+    }
+
     /** @param array<string, mixed> $r @return array<string, mixed> */
     public static function vevo_adat(array $r): array
     {
@@ -579,10 +614,18 @@ final class SDH_Sales_Kiszolgalas
             $kl = ['ciklus' => $lic['ciklus'], 'dij' => (int) $lic['dij']];
         }
 
+        $vevo = self::vevo_adat($r);
+
+        // Az értékesítő oldali ügyfél-azonosító (a fiók sózott lenyomata): a Központ ehhez köti a licenc tulajdonát és az
+        // idempotenciát (más vevő ugyanazzal a rendelésazonosítóval nem kapja meg a tárolt választ).
+        if ((int) ($r['user_id'] ?? 0) > 0) {
+            $vevo['ugyfel'] = self::ugyfel_azon((int) $r['user_id']);
+        }
+
         $keres = [
             'muvelet'  => $m,
             'rendeles' => (string) $r['azon'],
-            'vevo'     => self::vevo_adat($r),
+            'vevo'     => $vevo,
             'licenc'   => $kl,
         ];
 
@@ -904,7 +947,7 @@ final class SDH_Sales_Kiszolgalas
             'lejar'        => self::datum((string) ($k['lejar'] ?? '')),
             'szamlaszam'   => (string) $r['szamla_vegszamla'],
             'lanc'         => implode(' · ', $l),
-            'admin_url'    => admin_url('admin.php?page=sdh-sales#/rendeles/' . (int) $r['id']),
+            'admin_url'    => self::admin_link((int) $r['id']),
         ]);
 
         return $ok ? ['allapot' => 'ok', 'uzenet' => 'Értesítés elküldve.'] : ['allapot' => 'ujra', 'uzenet' => 'Az értesítő levél nem ment ki.'];
@@ -933,7 +976,7 @@ final class SDH_Sales_Kiszolgalas
             'probalkozas'  => (string) (int) $l['probalkozas'],
             'vevo_nev'     => $v['nev'],
             'vevo_email'   => $v['email'],
-            'admin_url'    => admin_url('admin.php?page=sdh-sales#/rendeles/' . (int) $r['id']),
+            'admin_url'    => self::admin_link((int) $r['id']),
         ]);
     }
 
@@ -1040,20 +1083,27 @@ final class SDH_Sales_Kiszolgalas
         global $wpdb;
 
         $most = is_int($most) && $most > 0 ? $most : time();
-        $ids  = (array) $wpdb->get_col($wpdb->prepare(
-            'SELECT id FROM ' . SDH_Sales_Schema::t('rendeles') . " WHERE allapot IN ('fizetve', 'kiszolgalva') AND (lanc IS NULL OR lanc = '' OR lanc NOT LIKE %s) AND (fizetve_ido IS NULL OR fizetve_ido > %s) ORDER BY id ASC LIMIT 50",
+        // Csak az azonosító és a lánc jön (olcsó); az esedékesség a LIMIT előtt dől el, így a kézi beavatkozásra vagy
+        // későbbi újrapróbára váró régi láncok nem szorítják ki az újakat. Futásonként legfeljebb 50 lánc, a legrégebbitől.
+        $sorok = (array) $wpdb->get_results($wpdb->prepare(
+            'SELECT id, lanc FROM ' . SDH_Sales_Schema::t('rendeles') . " WHERE allapot IN ('fizetve', 'kiszolgalva') AND (lanc IS NULL OR lanc = '' OR lanc NOT LIKE %s) AND (fizetve_ido IS NULL OR fizetve_ido > %s) ORDER BY id ASC LIMIT 2000",
             '%"kesz":true%',
             gmdate('Y-m-d H:i:s', $most - 45 * DAY_IN_SECONDS)
-        ));
+        ), ARRAY_A);
+        $futott = 0;
 
-        foreach ($ids as $id) {
-            $r = self::rendeles((int) $id);
+        foreach ($sorok as $s) {
+            $lanc = json_decode((string) ($s['lanc'] ?? ''), true);
 
-            if ($r === null || !self::esedekes($r, $most)) {
+            if (!self::esedekes(['lanc' => is_array($lanc) ? $lanc : []], $most)) {
                 continue;
             }
 
-            self::indit((int) $id, $most);
+            if (++$futott > 50) {
+                break;
+            }
+
+            self::indit((int) $s['id'], $most);
         }
 
         if (get_transient('sdh_sales_lejarat_nap') === false) {
@@ -1093,12 +1143,55 @@ final class SDH_Sales_Kiszolgalas
     }
 
     /**
+     * A licenc-térkép olvas-módosít-ír lépése zár alatt (a korlát-tábla elsődleges kulcsa a zár), a gyorsítótár
+     * megkerülésével – két párhuzamos lánc nem írja felül egymás bejegyzését. A visszahívás az új térképet adja.
+     */
+    private static function terkep_modosit(callable $fv): void
+    {
+        global $wpdb;
+
+        $t  = SDH_Sales_Schema::t('korlat');
+        $k  = 'zar:licenc_terkep';
+        $ok = false;
+
+        for ($i = 0; $i < 40 && !$ok; $i++) {
+            $wpdb->query($wpdb->prepare("DELETE FROM {$t} WHERE kulcs = %s AND lejar < %s", $k, gmdate('Y-m-d H:i:s')));
+            $elnyom = $wpdb->suppress_errors(true);
+            $ok     = (bool) $wpdb->insert($t, ['kulcs' => $k, 'db' => 1, 'lejar' => gmdate('Y-m-d H:i:s', time() + 30)]);
+            $wpdb->suppress_errors($elnyom);
+
+            if (!$ok) {
+                usleep(50000);
+            }
+        }
+
+        try {
+            wp_cache_delete(self::OPT_LICENC, 'options');
+            update_option(self::OPT_LICENC, $fv(self::licencek()), false);
+        } finally {
+            if ($ok) {
+                $wpdb->delete($t, ['kulcs' => $k]);
+            }
+        }
+    }
+
+    /**
      * @param array<string, mixed> $e a Központ ellenőrzött eredménye
      * @param array<string, mixed> $r
      */
     private static function licenc_tarol(string $kulcs, array $e, array $r): void
     {
-        $m    = self::licencek();
+        self::terkep_modosit(static fn (array $m): array => self::licenc_bejegyzes($m, $kulcs, $e, $r));
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $m
+     * @param array<string, mixed>                $e
+     * @param array<string, mixed>                $r
+     * @return array<string, array<string, mixed>>
+     */
+    private static function licenc_bejegyzes(array $m, string $kulcs, array $e, array $r): array
+    {
         $regi = (array) ($m[$kulcs] ?? []);
         $v    = self::vevo_adat($r);
 
@@ -1113,7 +1206,7 @@ final class SDH_Sales_Kiszolgalas
             'kuldve'      => (string) ($regi['lejar'] ?? '') === (string) $e['lejar'] ? (array) ($regi['kuldve'] ?? []) : [],
         ];
 
-        update_option(self::OPT_LICENC, $m, false);
+        return $m;
     }
 
     public static function megujitas_url(string $kulcs): string
@@ -1129,6 +1222,8 @@ final class SDH_Sales_Kiszolgalas
         $m    = self::licencek();
         $db   = 0;
         $valt = false;
+        $uj_lejar = [];
+        $uj_jel   = [];
 
         foreach ($m as $kulcs => $l) {
             $lejar = (string) ($l['lejar'] ?? '');
@@ -1145,6 +1240,7 @@ final class SDH_Sales_Kiszolgalas
                     $lejar             = (string) ($kl->lejar ?? '');
                     $m[$kulcs]['lejar'] = $lejar;
                     $m[$kulcs]['kuldve'] = [];
+                    $uj_lejar[$kulcs]  = $lejar;
                     $valt              = true;
                 }
             }
@@ -1186,13 +1282,30 @@ final class SDH_Sales_Kiszolgalas
 
             if ($ok) {
                 $m[$kulcs]['kuldve'][] = $jel;
+                $uj_jel[$kulcs][]      = $jel;
                 $valt                  = true;
                 $db++;
             }
         }
 
         if ($valt) {
-            update_option(self::OPT_LICENC, $m, false);
+            // Csak a most módosított mezők kerülnek vissza (zár alatt, friss térképre) – a közben tárolt új licenc megmarad.
+            self::terkep_modosit(static function (array $friss) use ($uj_lejar, $uj_jel): array {
+                foreach ($uj_lejar as $kulcs => $lejar) {
+                    if (isset($friss[$kulcs])) {
+                        $friss[$kulcs]['lejar']  = $lejar;
+                        $friss[$kulcs]['kuldve'] = [];
+                    }
+                }
+
+                foreach ($uj_jel as $kulcs => $jelek) {
+                    if (isset($friss[$kulcs])) {
+                        $friss[$kulcs]['kuldve'] = array_values(array_unique(array_merge((array) ($friss[$kulcs]['kuldve'] ?? []), $jelek)));
+                    }
+                }
+
+                return $friss;
+            });
         }
 
         return $db;

@@ -106,7 +106,7 @@ ELLENORZES = r"""() => {
     const st = cs(el); if (st.display === 'none' || st.visibility === 'hidden' || st.opacity === '0') return false;
     /* zárt <details> tartalma (content-visibility: hidden) és rejtett ősök */
     if (el.checkVisibility && !el.checkVisibility({ contentVisibilityAuto: false, opacityProperty: true, visibilityProperty: true })) return false;
-    const d = el.closest('details:not([open])'); if (d && !el.closest('summary')) return false;
+    const d = el.closest('details:not([open])'); if (d && d !== el && !el.closest('summary')) return false;
     const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
   };
   /* Hány sorba tört egy elem szövege (a szövegcsomópontok soronkénti téglalapjai alapján) */
@@ -121,7 +121,7 @@ ELLENORZES = r"""() => {
     return tetok.size;
   };
   const sajatSzoveg = el => { for (const n of el.childNodes) { if (n.nodeType === 3 && n.textContent.trim()) return true; } return false; };
-  const KIHAGY = '[hidden], .s-sr, .s-sprite, script, style, noscript, template, .s-kereso, .s-suti, .s-ertesitok, .s-ugro, .s-szikra, [data-modul]';
+  const KIHAGY = '[hidden], .s-sr, .screen-reader-text, .s-sprite, script, style, noscript, template, .s-kereso, .s-suti, .s-ertesitok, .s-ugro, .s-szikra, [data-modul]';
   const mind = Array.from(document.querySelectorAll('body *')).filter(el => !el.closest(KIHAGY) && lathato(el));
 
   /* 1. túlcsordulás */
@@ -186,8 +186,15 @@ ELLENORZES = r"""() => {
   document.querySelectorAll('a[href], button, input:not([type=hidden]), select, textarea, summary, [role=button]').forEach(el => {
     if (!lathato(el) || el.closest(KIHAGY)) return;
     if (el.closest('.s-proza, p, .s-morzsa, .s-kartya__szoveg, .s-tj, .s-forraslista, .s-lablec__ceg, .s-lablec__jogi, .s-entitas__linkek, address, .s-fejezetlista, .s-kartya__cim, .s-eyebrow, li.s-tj__elem, .s-pillsor')) return;
-    const r = el.classList.contains('s-kartya__link') && el.closest('.s-kartya') ? el.closest('.s-kartya').getBoundingClientRect() : el.getBoundingClientRect();
-    if (r.height < 44 || r.width < 44) add('racs', ut(el) + ' célterület ' + Math.round(r.width) + '×' + Math.round(r.height) + ' „' + rov(el.textContent || el.value) + '”');
+    let r = el.classList.contains('s-kartya__link') && el.closest('.s-kartya') ? el.closest('.s-kartya').getBoundingClientRect() : el.getBoundingClientRect();
+    /* jelölő / rádió: a hozzá tartozó címke (vagy a .s-jelolo sor) is célterület */
+    if (el.labels && el.labels.length && /checkbox|radio/.test(el.type)) {
+      const sor = el.closest('.s-jelolo, label') || el.labels[0];
+      const lr = sor.getBoundingClientRect(); if (lr.height > r.height) r = lr;
+    }
+    /* érintőképernyőn ≥ 44 px (a QA-szabály), egérrel a WCAG 2.5.8 AA minimum (≥ 24 px) */
+    const min = matchMedia('(pointer: coarse)').matches ? 44 : 24;
+    if (r.height < min || r.width < min) add('racs', ut(el) + ' célterület ' + Math.round(r.width) + '×' + Math.round(r.height) + ' „' + rov(el.textContent || el.value) + '”');
   });
 
   /* 4. szöveg */
@@ -197,9 +204,10 @@ ELLENORZES = r"""() => {
     if (st.display === 'inline' || st.textOverflow === 'ellipsis' || st.overflowX === 'auto' || st.overflowX === 'scroll') continue;
     if (el.closest('.s-tabla-gorgeto, .tablazat, pre, code')) continue;
     if (el.scrollWidth > el.clientWidth + 1) add('szoveg', ut(el) + ' levágva/kilóg ' + el.scrollWidth + '>' + el.clientWidth + ' „' + rov(el.textContent) + '”');
-    if (el.tagName === 'P' && el.textContent.trim().length > 160 && !el.closest('.s-kartya, .s-harmonika, .s-lablec, .s-tabla')) {
-      const ch = el.getBoundingClientRect().width / (parseFloat(st.fontSize) * 0.5);
-      if (ch > 82) add('szoveg', ut(el) + ' sorhossz ≈ ' + Math.round(ch) + 'ch');
+    /* sorhossz: a bekezdés tényleges karakter / sor átlaga (az utolsó, rövid sor nélkül) */
+    if (el.tagName === 'P' && el.textContent.trim().length > 240 && !el.closest('.s-kartya, .s-harmonika, .s-lablec, .s-tabla')) {
+      const n = sorszam(el);
+      if (n >= 3) { const kps = el.textContent.replace(/\s+/g, ' ').trim().length / (n - 0.5); if (kps > 82) add('szoveg', ut(el) + ' sorhossz ≈ ' + Math.round(kps) + ' karakter/sor'); }
     }
   }
   document.querySelectorAll('h1, h2, h3').forEach(h => {
@@ -208,6 +216,20 @@ ELLENORZES = r"""() => {
     const tw = st.textWrap || st.textWrapStyle || st.getPropertyValue('text-wrap') || st.getPropertyValue('text-wrap-style');
     if (!/balance/.test(String(tw))) add('szoveg', ut(h) + ' text-wrap: ' + tw);
   });
+  /* szó közepén tört cím / gomb (overflow-wrap: break-word mentette meg a kilógástól, de csúnya): egy szó két sorban */
+  document.querySelectorAll('h1, h2, h3, .s-gomb, .s-kartya__cim').forEach(h => {
+    if (!lathato(h) || h.closest(KIHAGY)) return;
+    const w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      const t = n.textContent; const re = /[^\s\-–‑\/]+/g; let m;
+      while ((m = re.exec(t))) {
+        if (m[0].length < 4) continue;
+        const rg = document.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
+        const tetok = new Set(Array.from(rg.getClientRects()).filter(r => r.width > 1).map(r => Math.round(r.top / 4)));
+        if (tetok.size > 1) { add('szoveg', ut(h) + ' szó közepén tört: „' + m[0] + '”'); return; }
+      }
+    }
+  });
   document.querySelectorAll('.s-gomb, .s-fomenu__link, .s-pill').forEach(g => {
     if (!lathato(g) || g.closest(KIHAGY)) return;
     const r = g.getBoundingClientRect();
@@ -215,11 +237,19 @@ ELLENORZES = r"""() => {
     const n = sorszam(g);
     if (n > 1 && szul >= 200) add('szoveg', ut(g) + ' gombszöveg ' + n + ' sorban ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (szülő ' + Math.round(szul) + 'px) „' + rov(g.textContent) + '”');
   });
+  /* betűk: amelyik család (+ latin-ext tartomány, pl. ő ű) a látható szövegben ténylegesen kell, az be van-e töltve */
   const betuk = {};
   try { document.fonts.forEach(f => { const k = f.family.replace(/"/g, '') + (/U\+0?100-/i.test(f.unicodeRange) ? ' ext' : ''); if (f.status === 'loaded') betuk[k] = true; }); } catch (e) {}
-  const kellBetu = ['Onest Variable', 'Onest Variable ext', 'Bricolage Grotesque Variable', 'Bricolage Grotesque Variable ext'];
-  if (document.querySelector('.s-proza pre, .s-proza code')) kellBetu.push('JetBrains Mono Variable');
-  kellBetu.forEach(k => { if (!betuk[k]) add('szoveg', 'betű nincs betöltve: ' + k); });
+  const kell = new Set();
+  for (const el of mind) {
+    if (!sajatSzoveg(el)) continue;
+    const csal = cs(el).fontFamily.split(',')[0].replace(/["']/g, '').trim();
+    if (!/Onest|Bricolage|JetBrains/.test(csal)) continue;
+    let t = ''; for (const n of el.childNodes) { if (n.nodeType === 3) t += n.textContent; }
+    if (/[A-Za-z0-9]/.test(t)) kell.add(csal);
+    if (/[\u0100-\u02BA]/.test(t)) kell.add(csal + ' ext');
+  }
+  kell.forEach(k => { if (!betuk[k]) add('szoveg', 'betű nincs betöltve: ' + k); });
   const h1 = document.querySelector('h1');
   if (h1 && !/Bricolage/.test(cs(h1).fontFamily)) add('szoveg', 'h1 betűcsalád: ' + cs(h1).fontFamily);
 
@@ -548,13 +578,15 @@ def main():
             tb = lap.evaluate("""(() => { const g = document.querySelector('.s-tabla-gorgeto'); if (!g) return null; g.scrollLeft = 120; const e = g.querySelector('tbody .s-tabla__elso'); const r = g.getBoundingClientRect(), er = e.getBoundingClientRect(); return { belso: g.scrollWidth > g.clientWidth, jobb: Math.round(r.right), w: innerWidth, dok: document.documentElement.scrollWidth - document.documentElement.clientWidth, ragad: Math.round(er.left - r.left) }; })()""")
             if tb and (not tb['belso'] or tb['jobb'] > tb['w'] + 1 or tb['dok'] > 0 or tb['ragad'] > 2):
                 hiba('tulcsordulas', f'összehasonlító tábla 390 ({mod}): {tb}')
+            lap.evaluate("(() => { const g = document.querySelector('.s-tabla-gorgeto'); if (g) { document.documentElement.style.scrollBehavior = 'auto'; g.scrollIntoView({block: 'center'}); } })()")
+            lap.wait_for_timeout(150)
             lap.screenshot(path=os.path.join(KI, f'osszehasonlitas-tabla-390-{mod}.png'))
             if konzol:
                 hiba('konzol', f'interakció 390 ({mod}): {konzol[:2]}')
             ctx.close()
 
             # Asztal: legördülők (1100, 1366, 1920), fókuszgyűrű, hover, nyomtatás, csökkentett mozgás
-            for w in (1100, 1366, 1920):
+            for w in (1100, 1180, 1280, 1366, 1920):
                 ctx = b.new_context(viewport={'width': w, 'height': 900}, color_scheme='dark' if mod == 'sotet' else 'light', locale='hu-HU')
                 ctx.add_init_script("try{localStorage.setItem('szinmod','%s')}catch(e){}" % mod)
                 ctx.add_cookies([suti_cookie()])
@@ -564,7 +596,9 @@ def main():
                 for i in range(n):
                     lap.locator('.s-fomenu__nyito').nth(i).click()
                     lap.wait_for_timeout(120)
-                    d = lap.evaluate("""(i) => { const b = document.querySelectorAll('.s-fomenu__nyito')[i]; const a = document.getElementById(b.getAttribute('aria-controls')); const r = a.getBoundingClientRect(); const lk = Array.from(a.querySelectorAll('a')).map(x => x.getBoundingClientRect()); return { hidden: a.hidden, bal: Math.round(r.left), jobb: Math.round(innerWidth - r.right), alj: Math.round(innerHeight - r.bottom), kilog: lk.filter(x => x.right > r.right + 1).length, cim: b.textContent.trim() }; }""", i)
+                    d = lap.evaluate("""(i) => { const b = document.querySelectorAll('.s-fomenu__nyito')[i]; const a = document.getElementById(b.getAttribute('aria-controls')); const r = a.getBoundingClientRect(); const lk = Array.from(a.querySelectorAll('a')).map(x => x.getBoundingClientRect()); const f = document.querySelector('.s-fejlec'); const fr = f.getBoundingClientRect(); const bg = getComputedStyle(a).backgroundColor; const alfa = (bg.match(/rgba\\(([^)]+)\\)/) || [, '0,0,0,1'])[1].split(',').map(Number)[3]; const kilogFej = Array.from(f.querySelectorAll('.s-fejlec__belso > *, .s-fejlec__eszkozok > *')).filter(e => e.getBoundingClientRect().right > innerWidth + 1).length; return { hidden: a.hidden, poz: getComputedStyle(a).position, fejMag: Math.round(fr.height), kilogFej: kilogFej, alfa: alfa, bal: Math.round(r.left), jobb: Math.round(innerWidth - r.right), alj: Math.round(innerHeight - r.bottom), kilog: lk.filter(x => x.right > r.right + 1).length, cim: b.textContent.trim() }; }""", i)
+                    if d['poz'] != 'absolute' or d['fejMag'] != 72 or d['kilogFej'] or (d['alfa'] is not None and d['alfa'] < 0.97):
+                        hiba('fejlec', f'legördülő „{d["cim"]}” {w}px ({mod}): elrendezés / háttér hibás {d}')
                     if d['hidden'] or d['bal'] < 0 or d['jobb'] < 0 or d['kilog']:
                         hiba('fejlec', f'legördülő „{d["cim"]}” {w}px ({mod}): {d}')
                     if d['alj'] < 0:

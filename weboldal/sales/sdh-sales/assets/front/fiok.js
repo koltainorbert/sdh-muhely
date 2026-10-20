@@ -53,10 +53,10 @@
                 var meg = el('a', { osztaly: 's-gomb', href: D.penztar + (D.penztar.indexOf('?') < 0 ? '?' : '&') + 'tipus=megujitas&licenc=' + encodeURIComponent(l.kulcs), szoveg: 'Megújítás' });
                 var bov = el('a', { osztaly: 's-gomb', href: D.penztar + (D.penztar.indexOf('?') < 0 ? '?' : '&') + 'tipus=bovites&licenc=' + encodeURIComponent(l.kulcs), szoveg: 'Bővítés' });
                 return el('article', { osztaly: 's-kartya s-fiok-licenc' + (l.lejart ? ' s-lejart' : l.hamarosan ? ' s-hamarosan' : '') }, [
-                    el('h3', { szoveg: l.csomag }),
+                    el('h3', {}, [l.csomag, el('span', { osztaly: 's-fiok-jelveny', szoveg: l.lejart ? 'Lejárt' : l.hamarosan ? 'Hamarosan lejár' : 'Érvényes' })]),
                     el('p', {}, ['Licenckulcs: ', el('code', { szoveg: l.kulcs })]),
                     el('p', { szoveg: 'Felhasználók: ' + (l.felhasznalo || '–') + ', telephelyek: ' + (l.telephely || '–') + ', ' + (l.ciklus === 'havi' ? 'havi' : 'éves') + ' díj' }),
-                    el('p', {}, ['Érvényes: ', el('strong', { szoveg: l.lejar ? datum(l.lejar) : 'a kiszolgálás után' }), l.lejart ? ' – lejárt' : l.hamarosan ? ' – hamarosan lejár' : '']),
+                    el('p', {}, [l.lejart ? 'Lejárt: ' : 'Érvényes: ', el('strong', { szoveg: l.lejar ? datum(l.lejar) : 'a kiszolgálás után' })]),
                     el('div', { osztaly: 's-gombsor' }, [meg, bov])
                 ]);
             });
@@ -68,12 +68,13 @@
 
             // Rendelések
             var rend = (a.rendelesek || []).map(function (r) {
+                // data-cimke: keskeny képernyőn a sor kártya, a cella fölött a fejléc szövege áll (CSS)
                 return el('tr', {}, [
-                    el('td', {}, [el('a', { href: r.statusz, szoveg: r.azon })]),
-                    el('td', { szoveg: datum(r.datum) }),
-                    el('td', { szoveg: r.allapot_szoveg }),
-                    el('td', { osztaly: 's-szam', szoveg: ft(r.brutto) }),
-                    el('td', {}, [r.szamla_url ? el('a', { href: r.szamla_url, szoveg: 'Számla' }) : r.dijbekero_url ? el('a', { href: r.dijbekero_url, szoveg: 'Díjbekérő' }) : '–'])
+                    el('td', { 'data-cimke': 'Rendelés' }, [el('a', { href: r.statusz, szoveg: r.azon })]),
+                    el('td', { 'data-cimke': 'Dátum', szoveg: datum(r.datum) }),
+                    el('td', { 'data-cimke': 'Állapot', szoveg: r.allapot_szoveg }),
+                    el('td', { 'data-cimke': 'Összeg', osztaly: 's-szam', szoveg: ft(r.brutto) }),
+                    el('td', { 'data-cimke': 'Bizonylat' }, [r.szamla_url ? el('a', { href: r.szamla_url, szoveg: 'Számla' }) : r.dijbekero_url ? el('a', { href: r.dijbekero_url, szoveg: 'Díjbekérő' }) : '–'])
                 ]);
             });
             gy.appendChild(szakasz('Rendeléseim', rend.length ? [el('table', { osztaly: 's-tabla' }, [el('thead', {}, [el('tr', {}, ['Rendelés', 'Dátum', 'Állapot', 'Összeg', 'Bizonylat'].map(function (x) { return el('th', { szoveg: x }); }))]), el('tbody', {}, rend)])] : [el('p', { osztaly: 's-halvany', szoveg: 'Még nincs rendelésed.' })]));
@@ -81,7 +82,7 @@
             if ((a.foglalasok || []).length) {
                 gy.appendChild(szakasz('Időpontjaim', [el('ul', {}, a.foglalasok.map(function (x) {
                     var t = new Date(String(x.kezdet).replace(' ', 'T') + 'Z');
-                    return el('li', { szoveg: ({ demo: 'Bemutató', telepites: 'Telepítés', oktatas: 'Oktatás', support: 'Támogatás' }[x.tipus] || x.tipus) + ': ' + (isNaN(t) ? x.kezdet : t.toLocaleString('hu-HU', { dateStyle: 'long', timeStyle: 'short' })) + ' (' + x.allapot + ')' });
+                    return el('li', { szoveg: ({ demo: 'Bemutató', telepites: 'Telepítés', oktatas: 'Oktatás', support: 'Támogatás' }[x.tipus] || x.tipus) + ': ' + (isNaN(t) ? x.kezdet : t.toLocaleString('hu-HU', { dateStyle: 'long', timeStyle: 'short' })) + ' (' + ({ foglalt: 'lefoglalva', lemondva: 'lemondva', athelyezve: 'áthelyezve', megtartva: 'megtartva' }[x.allapot] || x.allapot) + ')' });
                 }))]));
             }
 

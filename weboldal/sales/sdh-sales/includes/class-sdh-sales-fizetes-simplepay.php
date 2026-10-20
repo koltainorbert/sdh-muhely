@@ -248,7 +248,11 @@ final class SDH_Sales_Fizetes_Simplepay
 
         $r = SDH_Sales_Rendeles::azon_szerint($v['rendeles']);
 
-        if ($r !== null && in_array($v['esemeny'], ['FAIL', 'CANCEL', 'TIMEOUT'], true)) {
+        // A sikertelen-visszatérés csak a rendelés AKTUÁLIS tranzakciójára hat (egy korábbi, aláírt FAIL-link újrajátszása
+        // nem buktatja el a folyamatban lévő új fizetést).
+        $aktualis = $r !== null ? (string) ($r['vevo']['_kartya']['azon'] ?? '') : '';
+
+        if ($r !== null && in_array($v['esemeny'], ['FAIL', 'CANCEL', 'TIMEOUT'], true) && $aktualis !== '' && hash_equals($aktualis, (string) $v['tranzakcio'])) {
             $a = self::allapot($v['tranzakcio']);
 
             if ($a['allapot'] !== 'fizetve') {

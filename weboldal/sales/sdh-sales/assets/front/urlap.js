@@ -9,7 +9,9 @@
     var el = APP.el;
 
     APP.modulok('urlap', function (gy, o) {
-        var tipus = (D.mezok || {})[o.tipus] ? o.tipus : 'kapcsolat';
+        // Az űrlap fajtája: data-opciok.tipus, vagy a téma csatolási pontjáé (data-opciok.urlap / data-urlap).
+        var kert = o.tipus || o.urlap || gy.getAttribute('data-urlap') || '';
+        var tipus = (D.mezok || {})[kert] ? kert : 'kapcsolat';
         var azon = 'urlap-' + tipus + '-' + Math.random().toString(36).slice(2, 7);
         var f = el('form', { osztaly: 's-urlap', novalidate: '' });
         gy.textContent = '';
@@ -58,13 +60,14 @@
                 gomb.disabled = false;
                 var hb = (h.valasz || {}).hibak || {};
                 Array.prototype.forEach.call(f.querySelectorAll('.s-mezo-hiba'), function (p) { p.textContent = ''; });
+                Array.prototype.forEach.call(f.querySelectorAll('[aria-invalid]'), function (m) { m.removeAttribute('aria-invalid'); });
                 var elso = null;
                 Object.keys(hb).forEach(function (k) {
                     var s = f.querySelector('[data-mezo="' + k + '"]');
                     if (!s) { return; }
                     s.querySelector('.s-mezo-hiba').textContent = hb[k];
                     var m = s.querySelector('input,select,textarea');
-                    if (m) { m.setAttribute('aria-invalid', 'true'); if (!elso) { elso = m; } }
+                    if (m) { m.setAttribute('aria-invalid', 'true'); m.setAttribute('aria-describedby', s.querySelector('.s-mezo-hiba').id); if (!elso) { elso = m; } }
                 });
                 if (elso) { elso.focus(); }
                 APP.uzen(h.uzenet, 'hiba');

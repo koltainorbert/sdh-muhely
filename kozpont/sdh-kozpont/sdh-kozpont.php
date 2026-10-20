@@ -23,6 +23,9 @@
  * - GET  `letoltes`  (2.1) ?t=<token> → egyszer használható letöltő link az új vevőnek (14 nap, legfeljebb 3 letöltés,
  *   a licenc csatornájának aktuális kiadása, semleges fájlnévvel: `<termeknev>-<verzio>.zip`)
  * - 2.1: a `kiszolgalas` és a `letoltes` a semleges `licenc/v1` névtérben is él – a vevő ezt látja (a link így készül).
+ *   A példány-utak (`szivveres`, `jelentes`, `csomag`, `tamogatas`) is ott vannak; semleges hibakódok, a frissítő csomag
+ *   neve `<termék>-<verzió>.zip`. Vevő-párosítás: adószám ÉS e-mail / céges domain, vagy pontos e-mail (név szerint soha);
+ *   az idempotencia a kérő vevő lenyomatához kötött (más vevő ugyanazzal a rendelésazonosítóval hibát kap).
  *   Licenckulcs-előtag: Beállítások › Értékesítő webhely (`kulcs_elotag`, alapból a terméknévből, végül „LIC”);
  *   a régi `SDH-` kulcsok változatlanul érvényesek.
  * - `app/*` – a Központ felülete (bejelentkezett adminisztrátor, REST-nonce)

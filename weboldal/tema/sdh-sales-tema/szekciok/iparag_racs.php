@@ -28,6 +28,12 @@ foreach ($elemek as $e) {
     $nev = sdh_tema_elem_nev($e);
     $kk  = 'iparag-' . sanitize_title($k);
 
+    // Összetett kulcsnál (pl. „allami-szektor”) a kép az első tagról is nevezhető („iparag-allami”) – ne maradjon kép nélkül
+    // egyetlen kártya a képes rácsban.
+    if (!sdh_tema_van_kep($kk) && str_contains($k, '-')) {
+        $kk = 'iparag-' . sanitize_title(strtok($k, '-'));
+    }
+
     echo '<li class="s-kartya s-kartya--iparag' . ($url !== '' ? ' s-kartya--katt' : '') . '">';
 
     if (sdh_tema_van_kep($kk)) {

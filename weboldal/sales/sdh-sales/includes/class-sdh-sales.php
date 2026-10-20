@@ -294,15 +294,96 @@ final class SDH_Sales
      * IP, lenyomat
      * ============================================================== */
 
+    /**
+     * A Cloudflare közzétett címtartományai (https://www.cloudflare.com/ips-v4 és /ips-v6, 2026-10-20). A `proxy.cloudflare_ip`
+     * beállítás (soronként / vesszővel tagolt CIDR-lista) felülírja – ha a Cloudflare bővíti a listát, ott frissíthető.
+     */
+    public const CLOUDFLARE_IP = [
+        '173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22', '141.101.64.0/18', '108.162.192.0/18',
+        '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13',
+        '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+        '2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32', '2405:8100::/32', '2a06:98c0::/29', '2c0f:f248::/32',
+    ];
+
+    /** Benne van-e az IP a CIDR-tartományban (IPv4 és IPv6). */
+    public static function ip_tartomanyban(string $ip, string $cidr): bool
+    {
+        $cidr = trim($cidr);
+
+        if ($cidr === '') {
+            return false;
+        }
+
+        [$halo, $bit] = array_pad(explode('/', $cidr, 2), 2, null);
+        $a = @inet_pton($ip);
+        $h = @inet_pton((string) $halo);
+
+        if ($a === false || $h === false || strlen($a) !== strlen($h)) {
+            return false;
+        }
+
+        $max = strlen($a) * 8;
+        $bit = $bit === null || $bit === '' ? $max : (int) $bit;
+
+        if ($bit < 0 || $bit > $max) {
+            return false;
+        }
+
+        $teljes = intdiv($bit, 8);
+        $marad  = $bit % 8;
+
+        if (substr($a, 0, $teljes) !== substr($h, 0, $teljes)) {
+            return false;
+        }
+
+        return $marad === 0 || ((ord($a[$teljes]) ^ ord($h[$teljes])) & (0xFF << (8 - $marad)) & 0xFF) === 0;
+    }
+
+    /** @param array<int, string>|string $lista */
+    private static function ip_listaban(string $ip, $lista): bool
+    {
+        $lista = is_array($lista) ? $lista : (preg_split('/[\s,;]+/', (string) $lista) ?: []);
+
+        foreach ($lista as $c) {
+            if (self::ip_tartomanyban($ip, (string) $c)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * A látogató IP-címe. Alapból a REMOTE_ADDR – a továbbított fejléceket (CF-Connecting-IP, X-Forwarded-For) csak akkor
+     * vesszük figyelembe, ha a közvetlen küldő megbízható proxy: Cloudflare-nél (`cloudflare` beállítás) a REMOTE_ADDR a
+     * Cloudflare közzétett tartományában van, saját proxynál (`proxy.megbizhato`: CIDR-lista) abban. Így a fejléc nem
+     * hamisítható közvetlen kéréssel (korlátok, IPN IP-szűrő, naplók).
+     */
     public static function ip(): string
     {
-        $ip = '';
+        $tav = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+        $tav = filter_var($tav, FILTER_VALIDATE_IP) ? $tav : '';
+        $ip  = $tav;
 
-        // Cloudflare mögött a valódi cím ebben áll (csak ha a kérés tényleg a Cloudflare-től jön, azt a webszerver dönti el).
-        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP']) && (bool) self::b('cloudflare', true)) {
-            $ip = (string) $_SERVER['HTTP_CF_CONNECTING_IP'];
-        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-            $ip = (string) $_SERVER['REMOTE_ADDR'];
+        if ($tav !== '') {
+            $cf_lista = trim((string) self::b('proxy.cloudflare_ip', ''));
+            $cf       = (bool) self::b('cloudflare', true) && !empty($_SERVER['HTTP_CF_CONNECTING_IP'])
+                && self::ip_listaban($tav, $cf_lista !== '' ? $cf_lista : self::CLOUDFLARE_IP);
+            $sajat    = trim((string) self::b('proxy.megbizhato', ''));
+
+            if ($cf) {
+                $ip = trim((string) $_SERVER['HTTP_CF_CONNECTING_IP']);
+            } elseif ($sajat !== '' && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) && self::ip_listaban($tav, $sajat)) {
+                // A lánc jobbról balra: az első nem megbízható cím a kliens.
+                $lanc = array_reverse(array_map('trim', explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR'])));
+
+                foreach ($lanc as $x) {
+                    if (filter_var($x, FILTER_VALIDATE_IP) && !self::ip_listaban($x, $sajat)) {
+                        $ip = $x;
+                        break;
+                    }
+                }
+            }
         }
 
         $ip = (string) apply_filters('sdh_sales_ip', $ip);

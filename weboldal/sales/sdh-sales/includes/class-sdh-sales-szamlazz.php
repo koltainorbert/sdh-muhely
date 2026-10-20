@@ -209,6 +209,9 @@ final class SDH_Sales_Szamlazz
     /**
      * A számla sorai a rendelés tételeiből. Nettó egységár × mennyiség = nettó, nettó × kulcs / 100 = áfa (2 tizedes,
      * mint a Műhelyben – így megy át az Agent ellenőrzésén). Tételek nélkül egyetlen sor a rendelés nettójával.
+     * Forint-egyezés: ha minden sor egész forint és azonos kulcsú, és a sorok nettója a rendelés nettója, az áfa soronként
+     * egész forintra kerül úgy (lefelé kerekítve + a legnagyobb maradékok kapják a +1 Ft-ot), hogy Σ áfa = a rendelés áfája –
+     * így a díjbekérő / végszámla végösszege fillérre a fizetendő (QR, levél, kártya) összeg.
      *
      * @return array<int, array{megnevezes: string, mennyiseg: float, me: string, netto_egysegar: float, afakulcs: string, netto: float, afa: float, brutto: float, megjegyzes: string}>
      */
@@ -264,9 +267,14 @@ final class SDH_Sales_Szamlazz
             ];
         }
 
+        if ($sorok !== []) {
+            $sorok = self::afa_elosztas($sorok, $r);
+        }
+
         if ($sorok === []) {
             $netto   = (float) (int) $r['netto'];
             $afa     = round($netto * $szazalek($alap_kulcs) / 100, $tized);
+            $afa     = isset($r['afa']) && is_numeric($alap_kulcs) && abs($afa - (float) (int) $r['afa']) < 1 ? (float) (int) $r['afa'] : $afa;
             $sorok[] = [
                 'megnevezes'     => SDH_Sales::termeknev() . ' – ' . (string) $r['azon'],
                 'mennyiseg'      => 1.0,
@@ -278,6 +286,64 @@ final class SDH_Sales_Szamlazz
                 'brutto'         => round($netto + $afa, 2),
                 'megjegyzes'     => '',
             ];
+        }
+
+        return $sorok;
+    }
+
+    /**
+     * A sorok áfája egész forintra, legnagyobb maradékkal, hogy Σ = a rendelés áfája (ha a feltételek teljesülnek).
+     *
+     * @param array<int, array<string, mixed>> $sorok
+     * @param array<string, mixed>             $r
+     * @return array<int, array<string, mixed>>
+     */
+    public static function afa_elosztas(array $sorok, array $r): array
+    {
+        if (!isset($r['afa'], $r['netto']) || !is_numeric($r['afa'])) {
+            return $sorok;
+        }
+
+        $kulcsok = array_unique(array_map(static fn (array $s): string => (string) $s['afakulcs'], $sorok));
+        $kulcs   = (string) reset($kulcsok);
+        $netto   = 0;
+
+        foreach ($sorok as $s) {
+            if (abs((float) $s['netto'] - round((float) $s['netto'])) > 0.000001) {
+                return $sorok;
+            }
+
+            $netto += (int) round((float) $s['netto']);
+        }
+
+        if (count($kulcsok) !== 1 || !is_numeric($kulcs) || $netto !== (int) $r['netto']) {
+            return $sorok;
+        }
+
+        $k     = (int) round((float) $kulcs * 100);
+        $cel   = (int) $r['afa'];
+        $resz  = [];
+        $alap  = 0;
+
+        foreach ($sorok as $i => $s) {
+            $x        = (int) round((float) $s['netto']) * $k;  // áfa × 10000
+            $resz[$i] = [intdiv($x, 10000), $x % 10000];
+            $alap    += $resz[$i][0];
+        }
+
+        $marad = $cel - $alap;
+
+        if ($marad < 0 || $marad > count($sorok)) {
+            return $sorok;
+        }
+
+        $sorr = array_keys($sorok);
+        usort($sorr, static fn (int $a, int $b): int => $resz[$b][1] <=> $resz[$a][1] ?: $a <=> $b);
+
+        foreach ($sorr as $n => $i) {
+            $afa                   = $resz[$i][0] + ($n < $marad ? 1 : 0);
+            $sorok[$i]['afa']      = (float) $afa;
+            $sorok[$i]['brutto']   = round((float) $sorok[$i]['netto'] + $afa, 2);
         }
 
         return $sorok;
@@ -1309,7 +1375,8 @@ final class SDH_Sales_Szamlazz
             return new WP_REST_Response(['ok' => true], 200);
         }
 
-        $ok = SDH_Sales_Rendeles::fizetve($id, 'szamlazz', 'ipn:' . $dbk . ':' . $fiz, $uj, ['ipn' => $q->get_params(), 'ellenorizve' => $ell !== null]);
+        // A titkos token (`k`) nem kerül a nyers adatba.
+        $ok = SDH_Sales_Rendeles::fizetve($id, 'szamlazz', 'ipn:' . $dbk . ':' . $fiz, $uj, ['ipn' => array_diff_key($q->get_params(), ['k' => 1]), 'ellenorizve' => $ell !== null]);
 
         return new WP_REST_Response(['ok' => (bool) $ok], 200);
     }

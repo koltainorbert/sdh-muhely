@@ -45,7 +45,8 @@
                     if (m.tipus === 'textarea') { a.rows = '6'; sor.appendChild(el('textarea', a)); } else {
                         a.type = m.tipus;
                         if (m.tipus === 'number') { a.min = '1'; a.inputmode = 'numeric'; a.value = '1'; }
-                        sor.appendChild(el('input', a));
+                        var mez = el('input', a);
+                        sor.appendChild(m.tipus === 'number' && APP.lepteto ? APP.lepteto(mez, m.cimke, 'input') : mez);
                     }
                 }
                 sor.appendChild(el('p', { osztaly: 's-mezo-hiba', id: id + '-hiba', 'aria-live': 'polite' }));
@@ -82,14 +83,20 @@
 
         function hibat(n, s) {
             var sor = f.querySelector('[data-mezo="' + n + '"]');
-            if (sor) { sor.querySelector('.s-mezo-hiba').textContent = s; }
+            if (!sor) { return; }
+            var p = sor.querySelector('.s-mezo-hiba');
+            p.textContent = s;
+            // a mező kerete is jelez (a szöveg mellett), a képernyőolvasó a hibaszöveget is felolvassa
+            Array.prototype.forEach.call(sor.querySelectorAll('input:not([type=hidden]), textarea, select'), function (m) {
+                if (s) { m.setAttribute('aria-invalid', 'true'); m.setAttribute('aria-describedby', p.id); } else { m.removeAttribute('aria-invalid'); }
+            });
         }
 
         function lepesJo(i) {
             var jo = true;
             lepesek[i].mezok.forEach(function (m) {
                 var sor = f.querySelector('[data-mezo="' + m.nev + '"]');
-                sor.querySelector('.s-mezo-hiba').textContent = '';
+                hibat(m.nev, '');
                 if (!m.kotelezo) { return; }
                 var ok;
                 if (m.tipus === 'radio' || m.tipus === 'checkbox') { ok = !!sor.querySelector('input:checked'); }

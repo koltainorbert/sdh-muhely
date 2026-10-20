@@ -3,7 +3,13 @@
  * Rejtés (weboldal/REJTES.md): a látogató semmiből nem tudhatja meg, mire épül a webhely és ki áll mögötte.
  *
  * Mit csinál (mind kapcsolható a `rejtes.*` beállításokkal, alapból mind be):
- * - REST-előtag `api` (`rejtes.api`); a rendszer saját REST-útjai és a `?rest_route=` látogatónak 404; nincs REST-link a fejben / fejlécben.
+ * - REST-előtag `api` (`rejtes.api`); a rendszer saját REST-útjai, a névtér-indexek, az OPTIONS (séma) és a `?rest_route=`
+ *   látogatónak és vevőnek (szerkesztési jog nélkül) 404 – kivétel a saját névtér útjai és a Központ nyilvános
+ *   példány-útjai (`/sdh-kozpont/v1/…`, `/licenc/v1/…`: szívverés, jelentés, csomag, támogatás, kiszolgálás, letöltés),
+ *   mindkét alakban (`/api/…` és `?rest_route=`), mert a vevők Műhelye így hívja a Központot.
+ * - REST-válasz: nincs `Link: …api.w.org` fejléc, `X-WP-*` fejléc a látogatónak, a CORS-listákban semleges nevek; a rendszer
+ *   hibakódjai és angol üzenetei semleges magyar kódra / szövegre cserélve (`nincs`, `tiltott`, `hibas_adat`, `lejart`…).
+ *   Nincs REST-link a fejben / fejlécben.
  * - Útvonal-álnevek (`rejtes.alias`): tartalom → /static/, bővítmények → /static/m/, témák → /static/t/, feltöltések → /media/,
  *   rendszer-fájlok → /lib/ (URL-szűrők + .htaccess-szabályok; nginx: dokumentacio/rejtes-uzemeltetes.md; `php -S`: eszkozok/router.php).
  * - Fej és fejléc: nincs generator / RSD / wlwmanifest / shortlink / oEmbed / emoji / speculation rules / block-library CSS /
@@ -41,6 +47,13 @@ final class SDH_Sales_Rejtes
 
         add_filter('rest_url_prefix', [self::class, 'rest_elotag']);
         add_filter('rest_authentication_errors', [self::class, 'rest_zar'], 99);
+        add_filter('rest_pre_dispatch', [self::class, 'rest_elotte'], 5, 3);
+        add_filter('rest_request_after_callbacks', [self::class, 'rest_hiba_csere'], 99, 3);
+        add_filter('rest_post_dispatch', [self::class, 'rest_valasz_csere'], 99, 3);
+        add_filter('rest_pre_serve_request', [self::class, 'rest_fejlec_takarit'], 0, 4);
+        add_filter('rest_exposed_cors_headers', [self::class, 'cors_kitett'], 99);
+        add_filter('rest_allowed_cors_headers', [self::class, 'cors_engedett'], 99);
+        add_filter('rest_jsonp_enabled', '__return_false');
         add_action('init', [self::class, 'korai'], 0);
         add_action('init', [self::class, 'fej_takarit'], 20);
         add_action('wp_enqueue_scripts', [self::class, 'front_takarit'], 999);
@@ -179,35 +192,240 @@ final class SDH_Sales_Rejtes
         return self::api();
     }
 
+    /** A Központ nyilvános (példány-) útjai: a vevők Műhelye és az értékesítő webhely hívja – látogatóként is elérhetők. */
+    public const KOZPONT_UTAK = ['szivveres', 'jelentes', 'csomag', 'tamogatas', 'kiszolgalas', 'letoltes'];
+
+    /** Szerkesztő / adminisztrátor (a rendszer REST-útjait használó belső felhasználó). */
+    public static function belso(): bool
+    {
+        return current_user_can('edit_posts') || SDH_Sales::admin();
+    }
+
     /**
-     * A rendszer saját REST-útjai csak bejelentkezve; látogatónak 404 (mintha nem is volna).
+     * Nyilvános-e egy REST-út (látogatónak / vevőnek): a saját névtér útjai (a névtér-index nem), a Központ példány-útjai
+     * mindkét névtérben, és a `sdh_sales_rest_nyilvanos` szűrő további előtagjai (mindig `/`-rel folytatva).
+     */
+    public static function nyilvanos_ut(string $ut): bool
+    {
+        $ut = '/' . ltrim((string) preg_replace('~[?#].*$~', '', $ut), '/');
+
+        if (preg_match('~^/(sdh-kozpont|licenc)/v1/(' . implode('|', self::KOZPONT_UTAK) . ')/?$~', $ut) === 1) {
+            return true;
+        }
+
+        foreach ((array) apply_filters('sdh_sales_rest_nyilvanos', ['/' . SDH_Sales_Rest::NS]) as $e) {
+            $e = '/' . trim((string) $e, '/');
+
+            if ($e !== '/' && strpos($ut, $e . '/') === 0 && strlen($ut) > strlen($e) + 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** A kért REST-út (pretty és ?rest_route= alakból). */
+    private static function kert_ut(): string
+    {
+        $wp = $GLOBALS['wp'] ?? null;
+        $ut = is_object($wp) ? (string) ($wp->query_vars['rest_route'] ?? '') : '';
+
+        if ($ut === '' && isset($_GET['rest_route'])) {
+            $ut = (string) wp_unslash($_GET['rest_route']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+        }
+
+        if ($ut === '' && isset($_SERVER['REQUEST_URI'])) {
+            $ut = (string) wp_parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $ut = (string) preg_replace('~^.*?/' . preg_quote(self::api(), '~') . '(?=/|$)~', '', $ut);
+        }
+
+        return $ut;
+    }
+
+    /**
+     * A rendszer saját REST-útjai csak belső felhasználónak; látogatónak és vevőnek 404 (mintha nem is volna).
+     * (A vevő így a core `/wp/v2/users/me` útján sem írhatja át az e-mail-címét.)
      *
      * @param mixed $hiba
      * @return mixed
      */
     public static function rest_zar($hiba)
     {
-        if ($hiba !== null || is_user_logged_in()) {
+        if ($hiba !== null || self::belso()) {
             return $hiba;
         }
 
-        $wp = $GLOBALS['wp'] ?? null;
-        $ut = is_object($wp) ? (string) ($wp->query_vars['rest_route'] ?? '') : '';
+        return self::nyilvanos_ut(self::kert_ut()) ? $hiba : new WP_Error('nincs', 'Nincs ilyen cím.', ['status' => 404]);
+    }
 
-        if ($ut === '' && isset($_SERVER['REQUEST_URI'])) {
-            $ut = (string) wp_parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            $ut = (string) preg_replace('~^.*?/' . preg_quote(self::api(), '~') . '~', '', $ut);
+    /**
+     * Útválasztás előtt: látogatónak / vevőnek a névtér-indexek, a séma (OPTIONS) és a nem nyilvános utak 404
+     * (a `?rest_route=` és a `/api/` alakra egyaránt; a hitelesítési szűrő mellett ez a névtér-indexet is fogja).
+     *
+     * @param mixed $eredmeny
+     * @return mixed
+     */
+    public static function rest_elotte($eredmeny, $szerver, $keres)
+    {
+        // Csak a kívülről érkező (HTTP) REST-kérésre: a szerveren belüli `rest_do_request` hívásokat (előtöltés, blokkok,
+        // más bővítmények) nem zárjuk el.
+        if ($eredmeny !== null || !$keres instanceof WP_REST_Request || !(defined('REST_REQUEST') && REST_REQUEST) || self::belso()) {
+            return $eredmeny;
         }
 
-        $sajat = (array) apply_filters('sdh_sales_rest_nyilvanos', ['/' . SDH_Sales_Rest::NS, '/licenc/v1', '/sdh-kozpont/v1']);
+        if ($keres->get_method() === 'OPTIONS' || !self::nyilvanos_ut((string) $keres->get_route())) {
+            return new WP_Error('nincs', 'Nincs ilyen cím.', ['status' => 404]);
+        }
 
-        foreach ($sajat as $e) {
-            if (strpos($ut, (string) $e) === 0) {
-                return $hiba;
+        return $eredmeny;
+    }
+
+    /**
+     * A rendszer hibakódjai → semleges kód + magyar szöveg (null szöveg: a saját, magyar üzenet marad, csak a kód cserélődik).
+     *
+     * @return array{0: string, 1: ?string}|null
+     */
+    public static function hiba_semleges(string $kod, int $status): ?array
+    {
+        if ($kod !== '' && strpos($kod, 'rest_') !== 0 && stripos($kod, 'sdh') === false) {
+            return null;
+        }
+
+        if (stripos($kod, 'sdh') !== false) {
+            return [$status === 401 || $status === 403 ? 'tiltott' : ($status === 404 ? 'nincs' : 'hiba'), null];
+        }
+
+        $m = [
+            'rest_no_route'                => ['nincs', 'Nincs ilyen cím.'],
+            'rest_forbidden'               => ['tiltott', 'Ehhez nincs jogosultságod.'],
+            'rest_cannot_view'             => ['tiltott', 'Ehhez nincs jogosultságod.'],
+            'rest_cannot_edit'             => ['tiltott', 'Ehhez nincs jogosultságod.'],
+            'rest_not_logged_in'           => ['tiltott', 'Ehhez be kell jelentkezned.'],
+            'rest_cookie_invalid_nonce'    => ['lejart', 'A munkamenet lejárt – töltsd újra az oldalt.'],
+            'rest_invalid_param'           => ['hibas_adat', 'Hibás adat a kérésben.'],
+            'rest_missing_callback_param'  => ['hianyzo_adat', 'Hiányzó adat a kérésben.'],
+            'rest_invalid_json'            => ['hibas_adat', 'Hibás adat a kérésben.'],
+            'rest_invalid_handler'         => ['hiba', 'A kérés most nem teljesíthető.'],
+            'rest_no_route_options'        => ['nincs', 'Nincs ilyen cím.'],
+        ];
+
+        if (isset($m[$kod])) {
+            return $m[$kod];
+        }
+
+        if ($status === 404) {
+            return ['nincs', 'Nincs ilyen cím.'];
+        }
+
+        return $status === 401 || $status === 403 ? ['tiltott', 'Ehhez nincs jogosultságod.'] : ['hiba', 'A kérés most nem teljesíthető.'];
+    }
+
+    /** Hibaobjektum semlegesítése (a belső felhasználó a kódot megtartja, csak a szöveg magyar). */
+    private static function wp_error_csere(WP_Error $e): WP_Error
+    {
+        $kod    = (string) $e->get_error_code();
+        $adat   = $e->get_error_data();
+        $status = is_array($adat) ? (int) ($adat['status'] ?? 500) : 500;
+        $u      = self::hiba_semleges($kod, $status);
+
+        if ($u === null) {
+            return $e;
+        }
+
+        $uj_adat = ['status' => $status];
+
+        if (is_array($adat) && isset($adat['params']) && is_array($adat['params'])) {
+            $uj_adat['mezok'] = array_keys($adat['params']);
+        }
+
+        return new WP_Error(self::belso() ? $kod : $u[0], $u[1] ?? $e->get_error_message(), $uj_adat);
+    }
+
+    /**
+     * @param mixed $valasz
+     * @return mixed
+     */
+    public static function rest_hiba_csere($valasz, $kezelo = null, $keres = null)
+    {
+        return $valasz instanceof WP_Error ? self::wp_error_csere($valasz) : $valasz;
+    }
+
+    /**
+     * A kész válasz: hibatörzs semlegesítése, a rendszer-fejlécek eltávolítása a válaszobjektumból.
+     *
+     * @param mixed $valasz
+     * @return mixed
+     */
+    public static function rest_valasz_csere($valasz, $szerver = null, $keres = null)
+    {
+        if (!$valasz instanceof WP_HTTP_Response) {
+            return $valasz;
+        }
+
+        $d = $valasz->get_data();
+
+        if ($valasz->get_status() >= 400 && is_array($d) && isset($d['code'])) {
+            $u = self::hiba_semleges((string) $d['code'], $valasz->get_status());
+
+            if ($u !== null) {
+                $d['code']    = self::belso() ? (string) $d['code'] : $u[0];
+                $d['message'] = $u[1] ?? (string) ($d['message'] ?? '');
+
+                if (isset($d['data']) && is_array($d['data'])) {
+                    $d['data'] = ['status' => $valasz->get_status()] + (isset($d['data']['params']) && is_array($d['data']['params']) ? ['mezok' => array_keys($d['data']['params'])] : []);
+                }
+
+                unset($d['additional_errors']);
+                $valasz->set_data($d);
             }
         }
 
-        return new WP_Error('rest_no_route', 'Nincs ilyen cím.', ['status' => 404]);
+        if (!self::belso()) {
+            $h = $valasz->get_headers();
+            unset($h['Link'], $h['X-WP-Total'], $h['X-WP-TotalPages'], $h['X-WP-Nonce']);
+            $valasz->set_headers($h);
+        }
+
+        return $valasz;
+    }
+
+    /**
+     * Kiszolgálás előtt (a fejlécek még nem mentek ki): `Link: …api.w.org`, és látogatónak / vevőnek az `X-WP-*` ki.
+     *
+     * @param mixed $kiszolgalva
+     * @return mixed
+     */
+    public static function rest_fejlec_takarit($kiszolgalva, $valasz = null, $keres = null, $szerver = null)
+    {
+        if (!headers_sent()) {
+            header_remove('Link');
+
+            if (!self::belso()) {
+                foreach (['X-WP-Nonce', 'X-WP-Total', 'X-WP-TotalPages'] as $f) {
+                    header_remove($f);
+                }
+            }
+
+            if (self::cors_kitett([]) === []) {
+                header_remove('Access-Control-Expose-Headers');
+            }
+        }
+
+        return $kiszolgalva;
+    }
+
+    /** @param array<int, string> $h @return array<int, string> */
+    public static function cors_kitett(array $h): array
+    {
+        return array_values(array_diff($h, ['X-WP-Total', 'X-WP-TotalPages', 'Link']));
+    }
+
+    /** @param array<int, string> $h @return array<int, string> */
+    public static function cors_engedett(array $h): array
+    {
+        $h = array_values(array_diff($h, ['X-WP-Nonce']));
+
+        return in_array('X-App-Nonce', $h, true) ? $h : array_merge($h, ['X-App-Nonce']);
     }
 
     /* =================================================================
@@ -221,8 +439,8 @@ final class SDH_Sales_Rejtes
         $home = rtrim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/');
         $rel  = $home !== '' && strpos($ut, $home) === 0 ? substr($ut, strlen($home)) : $ut;
 
-        // A ?rest_route= kerülőút látogatónak.
-        if (isset($_GET['rest_route']) && !is_user_logged_in()) {
+        // A ?rest_route= kerülőút látogatónak / vevőnek – kivéve a nyilvános utakat (a vevők Műhelye így hívja a Központot).
+        if (self::kerulout_tiltott()) {
             self::nincs();
         }
 
@@ -258,6 +476,20 @@ final class SDH_Sales_Rejtes
         if (is_admin() && !is_user_logged_in() && !wp_doing_ajax() && !(defined('DOING_CRON') && DOING_CRON)) {
             self::nincs();
         }
+    }
+
+    /** A `?rest_route=` alakú kérés tiltott-e (látogató / vevő, nem nyilvános útra). */
+    public static function kerulout_tiltott(): bool
+    {
+        if (!isset($_GET['rest_route'])) {
+            return false;
+        }
+
+        if (is_user_logged_in() && self::belso()) {
+            return false;
+        }
+
+        return !self::nyilvanos_ut((string) wp_unslash($_GET['rest_route'])); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
     }
 
     /** A titkos belépő: a valódi belépőt szolgálja ki ezen a címen (wp_loaded, hogy minden bővítmény betöltött). */

@@ -106,7 +106,11 @@ switch ($parancs) {
     case 'elokeszit':
         // Szikra: hamis kulcs → a lebegő csevegő megjelenik; a válasz hálózat nélkül hibaüzenet (ezt nézzük).
         SDH_Sales::titkos_ment(SDH_Sales_Szikra::TITOK, 'sk-ant-teszt-nem-valodi');
-        SDH_Sales::b_ment(['szikra.aktiv' => true, 'fizetes.atutalas' => true]);
+        SDH_Sales::b_ment([
+            'szikra.aktiv' => true, 'fizetes.atutalas' => true,
+            // Teszt bankadatok (az állapotoldal átutalási táblája és az MNB QR-kód ezekből készül).
+            'ceg.bankszamla' => '11773016-11111018-00000000', 'ceg.iban' => 'HU42117730161111101800000000', 'ceg.bic' => 'OTPVHUHB',
+        ]);
         $ki['szikra_aktiv'] = SDH_Sales_Szikra::aktiv();
 
         // Teszt-kupon (a kosár sikeres beváltásához).

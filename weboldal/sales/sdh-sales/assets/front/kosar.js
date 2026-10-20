@@ -62,10 +62,9 @@
                 var ls = el('div', { osztaly: 's-kosar-letszam' });
                 [['felhasznalo', 'Felhasználók'], ['telephely', 'Telephelyek']].forEach(function (x) {
                     var id = 'kosar-' + x[0];
-                    var i = el('input', { type: 'number', min: '1', step: '1', inputmode: 'numeric', id: id, osztaly: 's-mezo', value: String(ar[x[0]] || 1) });
+                    var i = el('input', { type: 'number', min: '1', max: x[0] === 'telephely' ? '100' : '1000', step: '1', inputmode: 'numeric', id: id, osztaly: 's-mezo', value: String(ar[x[0]] || 1) });
                     i.addEventListener('change', function () { APP.kosar.opcio(x[0], i.value === '' ? null : parseInt(i.value, 10)); });
-                    ls.appendChild(el('label', { for: id, szoveg: x[1] }));
-                    ls.appendChild(i);
+                    ls.appendChild(el('div', { osztaly: 's-mezo-sor' }, [el('label', { for: id, szoveg: x[1] }), APP.lepteto ? APP.lepteto(i, x[1], 'change') : i]));
                 });
                 fo.appendChild(ls);
             }

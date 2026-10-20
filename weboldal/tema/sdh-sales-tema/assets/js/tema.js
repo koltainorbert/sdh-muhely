@@ -354,8 +354,12 @@
         }, { rootMargin: '-80px 0px -60% 0px' });
         cimek.forEach(function (c) { io.observe(c); });
     }
-    // Keskeny képernyőn a TJ alapból csukva.
-    if (w.innerWidth < 1100) { $$('.s-tj__doboz[open]').forEach(function (x) { x.open = false; }); }
+    // A TJ csukva érkezik (keskeny képernyőn a tartalom fölött áll – nyitva-csukás után ugrana, CLS); ahol oldalsávban,
+    // a tartalom mellett áll (kétoszlopos rács), ott a kinyitása semmit nem tol el, ezért kinyitjuk.
+    $$('.s-tj__doboz:not([open])').forEach(function (x) {
+        var racs = x.closest('.s-cikk__racs, .s-tudas__racs, .s-jogi__racs');
+        if (racs && getComputedStyle(racs).gridTemplateColumns.trim().split(/\s+/).length > 1) { x.open = true; }
+    });
 
     /* ---------- Nyomtatás ---------- */
     d.addEventListener('click', function (e) { if (e.target.closest('[data-nyomtat]')) { w.print(); } });

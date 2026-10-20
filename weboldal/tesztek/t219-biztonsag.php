@@ -155,4 +155,61 @@ T::igaz(SDH_Sales_Biztonsag::kotelezo($u), 'kötelező adminnak (beállítás)')
 SDH_Sales_Biztonsag::kikapcsol($uid);
 T::igaz(!SDH_Sales_Biztonsag::aktiv($uid), 'kikapcsolva');
 
+
+// Független ellenőrzés (2026-10-20), M-2: a CF-Connecting-IP / X-Forwarded-For csak megbízható proxytól számít.
+$ip_elozo = $_SERVER['REMOTE_ADDR'];
+T::igaz(SDH_Sales::ip_tartomanyban('173.245.48.7', '173.245.48.0/20') && !SDH_Sales::ip_tartomanyban('173.245.64.1', '173.245.48.0/20'), 'M-2: CIDR (IPv4)');
+T::igaz(SDH_Sales::ip_tartomanyban('2606:4700::1', '2606:4700::/32') && !SDH_Sales::ip_tartomanyban('2607:4700::1', '2606:4700::/32'), 'M-2: CIDR (IPv6)');
+T::igaz(!SDH_Sales::ip_tartomanyban('2606:4700::1', '173.245.48.0/20') && !SDH_Sales::ip_tartomanyban('x', '10.0.0.0/8'), 'M-2: CIDR: vegyes / hibás');
+SDH_Sales::b_ment(['cloudflare' => true]);
+SDH_Sales::urit_cache();
+$_SERVER['REMOTE_ADDR']          = '198.51.100.9';
+$_SERVER['HTTP_CF_CONNECTING_IP'] = '203.0.113.77';
+T::egyezik('198.51.100.9', SDH_Sales::ip(), 'M-2: közvetlen kérés hamis CF-fejléccel: a REMOTE_ADDR számít');
+$_SERVER['REMOTE_ADDR'] = '173.245.48.7';
+T::egyezik('203.0.113.77', SDH_Sales::ip(), 'M-2: Cloudflare-címről jövő kérésnél a CF-fejléc számít');
+$_SERVER['REMOTE_ADDR'] = '2400:cb00::5';
+T::egyezik('203.0.113.77', SDH_Sales::ip(), 'M-2: … IPv6 Cloudflare-címről is');
+SDH_Sales::b_ment(['cloudflare' => false]);
+SDH_Sales::urit_cache();
+T::egyezik('2400:cb00::5', SDH_Sales::ip(), 'M-2: „cloudflare” kikapcsolva: csak a REMOTE_ADDR');
+unset($_SERVER['HTTP_CF_CONNECTING_IP']);
+$_SERVER['REMOTE_ADDR']          = '10.0.0.5';
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.88, 10.0.0.9';
+T::egyezik('10.0.0.5', SDH_Sales::ip(), 'M-2: X-Forwarded-For megbízható proxy-lista nélkül nem számít');
+SDH_Sales::b_ment(['proxy.megbizhato' => '10.0.0.0/8']);
+SDH_Sales::urit_cache();
+T::egyezik('203.0.113.88', SDH_Sales::ip(), 'M-2: megbízható proxy mögött a lánc első nem megbízható címe');
+$_SERVER['REMOTE_ADDR'] = '198.51.100.20';
+T::egyezik('198.51.100.20', SDH_Sales::ip(), 'M-2: nem megbízható küldő X-Forwarded-For-ja nem számít');
+SDH_Sales::b_ment(['proxy.megbizhato' => '', 'cloudflare' => true]);
+SDH_Sales::urit_cache();
+unset($_SERVER['HTTP_X_FORWARDED_FOR']);
+// korlát: változó hamis CF-fejléccel sem kerülhető meg (a p1 bizonyítás tükre); a számlálás atomi (növel, majd dönt)
+t_korlat_ki(false);
+$_SERVER['REMOTE_ADDR'] = '198.51.100.' . wp_rand(30, 250);
+$atjut = 0;
+for ($i = 0; $i < 30; $i++) {
+    $_SERVER['HTTP_CF_CONNECTING_IP'] = '203.0.113.' . ($i + 1);
+    $atjut += SDH_Sales_Rest::korlat('m2_proba', 20, 600) ? 1 : 0;
+}
+unset($_SERVER['HTTP_CF_CONNECTING_IP']);
+T::egyezik(20, $atjut, 'M-2: 30 kérés változó hamis CF-IP-vel: 20 fér át (20/600 s)');
+// Számlázz.hu IPN: a hivatalos IP-t csak a fejlécben hamisító kérés 403
+SDH_Sales::b_ment(['fizetes.automatizalas' => 'szamlazz', 'szamlazz.ipn_ip_szures' => true]);
+SDH_Sales::urit_cache();
+$_SERVER['HTTP_CF_CONNECTING_IP'] = SDH_Sales_Szamlazz::IPN_IP[0];
+$_SERVER['REMOTE_ADDR']           = '198.51.100.66';
+$ipn = SDH_Sales_Szamlazz::ipn_url();
+parse_str((string) wp_parse_url($ipn, PHP_URL_QUERY), $iq);
+$q = new WP_REST_Request('POST', '/' . SDH_Sales_Rest::NS . '/szamlazz/ipn');
+$q->set_query_params(['k' => (string) ($iq['k'] ?? '')]);
+$q->set_body_params(['szlahu_dijbekero_szama' => 'D-NINCS', 'szlahu_kifizetettbrutto' => '1000']);
+T::egyezik(403, rest_do_request($q)->get_status(), 'M-2: IPN hamis CF-fejléccel (nem Cloudflare-címről): 403');
+unset($_SERVER['HTTP_CF_CONNECTING_IP']);
+SDH_Sales::b_ment(['fizetes.automatizalas' => 'import']);
+SDH_Sales::urit_cache();
+t_korlat_ki(true);
+$_SERVER['REMOTE_ADDR'] = $ip_elozo;
+
 T::vege('t219 biztonság');

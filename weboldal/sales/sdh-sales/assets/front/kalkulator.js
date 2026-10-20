@@ -268,12 +268,15 @@
         urlap.appendChild(cs);
 
         // Létszám
+        var leptetok = [];
         function szam(nev, cimke) {
-            var i = el('input', { type: 'number', inputmode: 'numeric', min: '1', step: '1', id: azon + '-' + nev, osztaly: 's-mezo' });
+            var i = el('input', { type: 'number', inputmode: 'numeric', min: '1', max: String(nev === 'telephely' ? MAX_TELEPHELY : MAX_FELHASZNALO), step: '1', id: azon + '-' + nev, osztaly: 's-mezo' });
             i.addEventListener('input', function () { all[nev] = i.value === '' ? null : i.value; frissit(); });
-            return [el('label', { for: azon + '-' + nev, szoveg: cimke }), i];
+            var l = gyoker.APP && gyoker.APP.lepteto ? gyoker.APP.lepteto(i, cimke, 'input') : i;
+            if (l !== i) { leptetok.push(l); }
+            return el('div', { osztaly: 's-mezo-sor' }, [el('label', { for: azon + '-' + nev, szoveg: cimke }), l]);
         }
-        var fs = el('fieldset', { osztaly: 's-kalk-letszam' }, [el('legend', { szoveg: 'Méret' })].concat(szam('felhasznalo', 'Felhasználók'), szam('telephely', 'Telephelyek')));
+        var fs = el('fieldset', { osztaly: 's-kalk-letszam' }, [el('legend', { szoveg: 'Méret' }), szam('felhasznalo', 'Felhasználók'), szam('telephely', 'Telephelyek')]);
         urlap.appendChild(fs);
 
         var modDoboz = el('fieldset', { osztaly: 's-kalk-modulok' });
@@ -289,7 +292,7 @@
             all.modulok = all.modulok.filter(function (k) { return mods.some(function (m) { return m.kulcs === k; }); });
             if (!mods.length) { modDoboz.appendChild(el('p', { osztaly: 's-halvany', szoveg: 'Ebben a csomagban minden modul benne van.' })); return; }
             mods.forEach(function (m) {
-                var i = el('input', { type: 'checkbox', value: m.kulcs, id: azon + '-m-' + m.kulcs });
+                var i = el('input', { type: 'checkbox', role: 'switch', osztaly: 's-kapcsolo s-kalk-kapcsolo', value: m.kulcs, id: azon + '-m-' + m.kulcs });
                 if (all.modulok.indexOf(m.kulcs) >= 0) { i.checked = true; }
                 i.addEventListener('change', function () {
                     all.modulok = all.modulok.filter(function (k) { return k !== m.kulcs; });
@@ -304,7 +307,7 @@
         if ((D.szolgaltatasok || []).length) {
             var sz = el('fieldset', { osztaly: 's-kalk-szolg' }, [el('legend', { szoveg: 'Szolgáltatások' })]);
             D.szolgaltatasok.forEach(function (s) {
-                var i = el('input', { type: 'checkbox', value: s.kulcs, id: azon + '-s-' + s.kulcs });
+                var i = el('input', { type: 'checkbox', role: 'switch', osztaly: 's-kapcsolo s-kalk-kapcsolo', value: s.kulcs, id: azon + '-s-' + s.kulcs });
                 i.addEventListener('change', function () { if (i.checked) { all.szolg[s.kulcs] = 1; } else { delete all.szolg[s.kulcs]; } frissit(); });
                 var utotag = s.tipus === 'havi' ? '/hó' : (s.tipus === 'eves' ? '/év' : ' egyszeri');
                 sz.appendChild(el('label', { osztaly: 's-kalk-modul', for: azon + '-s-' + s.kulcs }, [i, ' ' + (s.nev || s.kulcs) + ' – ' + ft(int(s.ar)) + utotag]));
@@ -332,6 +335,7 @@
             var fi = doc.getElementById(azon + '-felhasznalo'), ti = doc.getElementById(azon + '-telephely');
             if (fi && all.felhasznalo === null) { fi.value = String(Math.max(1, int(c.felhasznalo_alap) || 1)); }
             if (ti && all.telephely === null) { ti.value = String(Math.max(1, int(c.telephely_alap) || 1)); }
+            leptetok.forEach(function (l) { if (l.frissit) { l.frissit(); } });
             osszeg.textContent = '';
             var tb = el('table', { osztaly: 's-kalk-sorok' });
             e.sorok.forEach(function (s) {

@@ -542,7 +542,7 @@
                         return;
                     }
                     const d = $('[data-pillek]', w);
-                    d.innerHTML = kiv.map((k, i) => `<span class="sa-pill">${e(nev(k))}<button type="button" data-ki="${i}" aria-label="${e(nev(k))} eltávolítása">${I('x')}</button></span>`).join('')
+                    d.innerHTML = kiv.map((k, i) => `<span class="sa-pill" title="${e(nev(k))}"><span>${e(nev(k))}</span><button type="button" data-ki="${i}" aria-label="${e(nev(k))} eltávolítása">${I('x')}</button></span>`).join('')
                         + `<select class="sa-select" id="${id}" aria-label="${e(m.c)} – hozzáadás"><option value="">+ Hozzáadás…</option>${lista.filter((x) => !kiv.includes(x.kulcs)).map((x) => `<option value="${e(x.kulcs)}">${e(x.cim)}</option>`).join('')}</select>`;
                 };
                 w.addEventListener('change', (ev) => {
@@ -591,14 +591,14 @@
                         const d = document.createElement('div');
                         d.className = 'sa-ismetlo__elem';
                         d.setAttribute('role', 'listitem');
-                        d.innerHTML = `<div class="sa-ismetlo__fej"><button type="button" class="sa-ismetlo__nyit" aria-expanded="${s.nyitva}">${I(s.nyitva ? 'le' : 'jobbra')}<span>${e(cimOf(s.adat, i))}</span></button>
+                        d.innerHTML = `<div class="sa-ismetlo__fej"><button type="button" class="sa-ismetlo__nyit" aria-expanded="${s.nyitva}" title="${e(cimOf(s.adat, i))}">${I(s.nyitva ? 'le' : 'jobbra')}<span>${e(cimOf(s.adat, i))}</span></button>
                             <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-m="fel" aria-label="Feljebb" ${i === 0 ? 'disabled' : ''}>${I('fel')}</button>
                             <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-m="le" aria-label="Lejjebb" ${i === sorok.length - 1 ? 'disabled' : ''}>${I('le')}</button>
                             <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi sa-ikon-gomb--veszely" data-m="torol" aria-label="Elem törlése" data-ketlepcsos="Biztos? Katt újra a törléshez">${I('torol')}</button></div>`;
                         if (s.nyitva) {
                             const t = document.createElement('div');
                             t.className = 'sa-ismetlo__test';
-                            const f = urlapMezok(al, s.adat, { ...ctx, valtozas: () => { valt(); const sp = $('.sa-ismetlo__nyit span', d); atvesz(); sp.textContent = cimOf(sorok[i].adat, i); } });
+                            const f = urlapMezok(al, s.adat, { ...ctx, valtozas: () => { valt(); const sp = $('.sa-ismetlo__nyit span', d); atvesz(); sp.textContent = cimOf(sorok[i].adat, i); sp.parentElement.title = sp.textContent; } });
                             f.vezerlok.forEach((x) => t.appendChild(x.el));
                             d.appendChild(t);
                             vez[i] = { ertek: f.ertek };
@@ -889,8 +889,8 @@
         panelek().filter(([, p]) => p.elerheto).forEach(([k, p]) => { let c = csop.find((x) => x[0] === p.csoport); if (!c) { c = [p.csoport, []]; csop.push(c); } c[1].push([k, p]); });
         const monogram = (B.teljes || B.nev || '?').trim().split(/\s+/).map((x) => x[0]).slice(0, 2).join('').toUpperCase();
         app.innerHTML = `
-            <aside class="sa-oldalsav" aria-label="Oldalsáv">
-                <a class="sa-logo" href="#/"><span class="sa-logo__jel">${I('rendeles')}</span><span class="sa-logo__nev">Értékesítés<small>${e(B.termeknev)}</small></span></a>
+            <aside class="sa-oldalsav" id="sa-oldalsav" aria-label="Oldalsáv">
+                <div class="sa-oldalsav__fej"><a class="sa-logo" href="#/"><span class="sa-logo__jel">${I('rendeles')}</span><span class="sa-logo__nev">Értékesítés<small title="${e(B.termeknev)}">${e(B.termeknev)}</small></span></a><button type="button" class="sa-ikon-gomb sa-oldalsav__zar" data-menu-zar aria-label="Menü bezárása">${I('x')}</button></div>
                 <nav class="sa-menu" aria-label="Fő menü">
                     ${csop.map(([c, l]) => (c ? `<div class="sa-menu__cim" aria-hidden="true">${e(c)}</div>` : '') + l.map(([k, p]) => `<a href="#/${k === 'attekintes' ? '' : e(k)}" data-menupont="${e(k)}">${I(p.ikon || PANEL_IKON[k] || 'info')}<span>${e(p.cim)}</span><span class="sa-menu__jel" data-jel="${e(k)}" hidden></span></a>`).join('')).join('')}
                 </nav>
@@ -900,9 +900,10 @@
                     <div class="sa-halvany sa-kicsi" style="padding:2px 12px">v${e(B.verzio)}</div>
                 </div>
             </aside>
+            <div class="sa-menu-fatyol" data-menu-zar aria-hidden="true"></div>
             <div class="sa-fo">
                 <header class="sa-fejlec">
-                    <button type="button" class="sa-ikon-gomb sa-mobil-menu" data-menu aria-label="Menü" aria-expanded="false">${I('hamburger')}</button>
+                    <button type="button" class="sa-ikon-gomb sa-mobil-menu" data-menu aria-label="Menü" aria-expanded="false" aria-controls="sa-oldalsav">${I('hamburger')}</button>
                     <h1 class="sa-fejlec__cim" data-cim>Áttekintés</h1>
                     <span class="sa-fejlec__ter"></span>
                     ${(B.nyelvek || []).length > 1 ? `<select class="sa-select sa-select--kicsi" data-nyelv aria-label="Tartalom nyelve" style="width:auto">${B.nyelvek.map((n) => `<option value="${e(n)}">${e(n.toUpperCase())}</option>`).join('')}</select>` : ''}
@@ -915,11 +916,25 @@
             </div>`;
         const av = $('[data-avatar]', app);
         if (av) av.addEventListener('error', () => { av.replaceWith(document.createTextNode(monogram)); });
-        $('[data-menu]', app).addEventListener('click', (ev) => { const be = app.classList.toggle('is-menu'); ev.currentTarget.setAttribute('aria-expanded', String(be)); });
+        $('[data-menu]', app).addEventListener('click', () => menuNyit(!app.classList.contains('is-menu')));
+        $$('[data-menu-zar]', app).forEach((x) => x.addEventListener('click', () => menuNyit(false)));
+        app.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && app.classList.contains('is-menu')) { ev.preventDefault(); menuNyit(false); } });
         $('[data-paletta]', app).addEventListener('click', paletta);
         $('[data-tema-gomb]', app).addEventListener('click', temaValt);
         const ny = $('[data-nyelv]', app);
         if (ny) ny.addEventListener('change', () => { S.nyelv = ny.value; Object.keys(elemCache).forEach((k) => delete elemCache[k]); route(); });
+    }
+
+    /** Mobil oldalsáv (≤ 960 px): fátyol, Esc, fókusz be / vissza, görgetészár. */
+    function menuNyit(be, fokusz = true) {
+        const app = $('#sa-app');
+        const g = $('[data-menu]', app);
+        if (!g || app.classList.contains('is-menu') === be) return;
+        app.classList.toggle('is-menu', be);
+        document.documentElement.classList.toggle('sa-zar', be);
+        g.setAttribute('aria-expanded', String(be));
+        if (!fokusz) return;
+        if (be) { const a = $('.sa-menu a[aria-current="page"]', app) || $('.sa-menu a', app); if (a) setTimeout(() => a.focus(), 30); } else g.focus();
     }
 
     function temaValt() {
@@ -932,7 +947,9 @@
     }
 
     function cim(szoveg, morzsa = '') {
-        $('[data-cim]').innerHTML = (morzsa ? `<span class="sa-fejlec__morzsa">${morzsa} / </span>` : '') + e(szoveg);
+        const h = $('[data-cim]');
+        h.innerHTML = (morzsa ? `<span class="sa-fejlec__morzsa">${morzsa} / </span>` : '') + e(szoveg);
+        h.title = h.textContent;
         document.title = `${szoveg} · Értékesítés · ${B.termeknev}`;
     }
 
@@ -955,7 +972,7 @@
         elozoHash = hash;
         $('.sa-naptar, .sa-ikonracs')?.remove();
         const app = $('#sa-app');
-        app.classList.remove('is-menu');
+        menuNyit(false, false);
         const [k, ...param] = hash.slice(2).split('/');
         const kulcs = k || 'attekintes';
         const p = (B.panelek || {})[kulcs];
@@ -1016,12 +1033,12 @@
             <div class="sa-racs sa-racs--2">
                 <div class="sa-kartya"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Bevétel (bruttó, fizetés napja szerint)</h2><span class="sa-ter"></span><span class="sa-kartya__al">30 nap · összesen ${e(ft(a.kpi.ho.bevetel_brutto))}</span></div><div data-diagram></div></div>
                 <div class="sa-kartya"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Kiszolgálási hibák</h2><span class="sa-ter"></span>${a.lanc_hiba ? `<a class="sa-gomb sa-gomb--kicsi" href="#/rendelesek/hiba">Mind</a>` : ''}</div>
-                    ${a.hibas.length ? `<div class="sa-lista">${a.hibas.map((r) => `<div class="sa-lista__elem is-katt" data-rendeles="${r.id}" tabindex="0" role="button"><div class="sa-lista__test"><div class="sa-lista__fo sa-mono">${e(r.azon)}</div><div class="sa-lista__al">${e(r.vevo || r.email)}</div></div>${cimke('Hiba', 'hiba')}</div>`).join('')}</div>` : ures('Minden rendelés kiszolgálása rendben fut.', 'pipa')}
+                    ${a.hibas.length ? `<div class="sa-lista">${a.hibas.map((r) => `<div class="sa-lista__elem is-katt" data-rendeles="${r.id}" tabindex="0" role="button"><div class="sa-lista__test"><div class="sa-lista__fo sa-mono">${e(r.azon)}</div><div class="sa-lista__al sa-egysor" title="${e(r.vevo || r.email)}">${e(r.vevo || r.email)}</div></div>${cimke('Hiba', 'hiba')}</div>`).join('')}</div>` : ures('Minden rendelés kiszolgálása rendben fut.', 'pipa')}
                 </div>
             </div>
             <div class="sa-racs sa-racs--2">
                 <div class="sa-kartya sa-kartya--sima"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Legutóbbi rendelések</h2><span class="sa-ter"></span><a class="sa-gomb sa-gomb--kicsi" href="#/rendelesek">Összes</a></div>
-                    ${a.utolso.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Azonosító</th><th>Vevő</th><th>Állapot</th><th class="sa-jobb">Bruttó</th><th>Létrehozva</th></tr></thead><tbody>${a.utolso.map((r) => `<tr class="is-katt" data-rendeles="${r.id}" tabindex="0"><td class="sa-mono">${e(r.azon)}</td><td class="sa-egysor">${e(r.vevo || r.email)}</td><td>${allapotCimke(r.allapot)}</td><td class="sa-jobb">${e(ft(r.brutto))}</td><td class="sa-halvany">${e(relativ(r.letrehozva))}</td></tr>`).join('')}</tbody></table></div>` : ures('Még nincs rendelés.', 'rendeles')}
+                    ${a.utolso.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Azonosító</th><th>Vevő</th><th>Állapot</th><th class="sa-jobb">Bruttó</th><th>Létrehozva</th></tr></thead><tbody>${a.utolso.map((r) => `<tr class="is-katt" data-rendeles="${r.id}" tabindex="0"><td class="sa-mono">${e(r.azon)}</td><td><div class="sa-egysor" style="--sa-cella-max:180px" title="${e(r.vevo || r.email)}">${e(r.vevo || r.email)}</div></td><td>${allapotCimke(r.allapot)}</td><td class="sa-jobb">${e(ft(r.brutto))}</td><td class="sa-halvany">${e(relativ(r.letrehozva))}</td></tr>`).join('')}</tbody></table></div>` : ures('Még nincs rendelés.', 'rendeles')}
                 </div>
                 <div class="sa-kartya"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Napló</h2><span class="sa-ter"></span><a class="sa-gomb sa-gomb--kicsi" href="#/naplo">Mind</a></div>
                     ${a.naplo.length ? `<div class="sa-lista">${a.naplo.map((n) => `<div class="sa-lista__elem"><span class="sa-cimke sa-cimke--${SZINT[n.szint] || 'szurke'}" style="padding:3px 6px"><span class="sa-pont"></span></span><div class="sa-lista__test"><div class="sa-kicsi">${e(n.szoveg)}</div><div class="sa-lista__al">${e(relativ(n.ido))} · ${e(n.ki)}</div></div></div>`).join('')}</div>` : ures('Még üres.')}
@@ -1051,7 +1068,7 @@
             const r = await api('admin/rendelesek', { query: { allapot: f.allapot, q: f.q, fizmod: f.fizmod, tipus: f.tipus, oldal: f.oldal, db: 25 } });
             lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Azonosító</th><th>Vevő</th><th>Típus</th><th>Állapot</th><th>Fizetés</th><th class="sa-jobb">Nettó</th><th class="sa-jobb">Bruttó</th><th>Létrehozva</th></tr></thead><tbody>${r.lista.map((x) => `
                 <tr class="is-katt" data-rendeles="${x.id}" tabindex="0"><td class="sa-mono">${e(x.azon)} ${x.lanc_hiba ? `<span class="sa-cimke sa-cimke--hiba" title="Kiszolgálási hiba">${I('figyel')}</span>` : ''}</td>
-                <td><div class="sa-egysor" style="max-width:260px">${e(x.vevo || '–')}</div><div class="sa-kicsi sa-halvany sa-egysor" style="max-width:260px">${e(x.email)}</div></td>
+                <td><div class="sa-egysor" title="${e(x.vevo || '')}">${e(x.vevo || '–')}</div><div class="sa-kicsi sa-halvany sa-egysor" title="${e(x.email)}">${e(x.email)}</div></td>
                 <td>${e(RTIPUS[x.tipus] || x.tipus)} <span class="sa-halvany sa-kicsi">${e(CIKLUS[x.ciklus] || '')}</span></td><td>${allapotCimke(x.allapot)}</td><td>${e(FIZMOD[x.fizmod] || x.fizmod)}</td>
                 <td class="sa-jobb">${e(ft(x.netto))}</td><td class="sa-jobb sa-vastag">${e(ft(x.brutto))}</td><td class="sa-halvany">${e(datumIdo(x.letrehozva))}</td></tr>`).join('')}</tbody></table></div>`
                 : ures(f.q ? 'Nincs a keresésnek megfelelő rendelés.' : 'Ebben a nézetben nincs rendelés.', 'rendeles');
@@ -1139,7 +1156,7 @@
         const tolt2 = async () => {
             const r = await api('admin/vevok', { query: { q: f.q, oldal: f.oldal } });
             S.vevok = r.lista;
-            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Vevő</th><th>E-mail</th><th class="sa-jobb">Rendelés</th><th class="sa-jobb">Költés (bruttó)</th><th>Licencek</th><th>Utolsó</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-vevo="${i}" tabindex="0"><td><div class="sa-vastag sa-egysor" style="max-width:260px">${e(x.ceg || x.nev || '–')}</div><div class="sa-kicsi sa-halvany">${e(x.ceg ? x.nev : '')}</div></td><td>${e(x.email)}</td><td class="sa-jobb">${szam(x.rendeles)}</td><td class="sa-jobb">${e(ft(x.koltes))}</td><td>${x.licencek.length ? x.licencek.slice(0, 2).map((k) => `<span class="sa-cimke sa-cimke--mono">${e(k)}</span>`).join(' ') + (x.licencek.length > 2 ? ` <span class="sa-halvany">+${x.licencek.length - 2}</span>` : '') : '<span class="sa-halvany">–</span>'}</td><td class="sa-halvany">${e(relativ(x.utolso))}</td></tr>`).join('')}</tbody></table></div>` : ures(f.q ? 'Nincs ilyen vevő.' : 'Még nincs vevő.', 'vevo');
+            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Vevő</th><th>E-mail</th><th class="sa-jobb">Rendelés</th><th class="sa-jobb">Költés (bruttó)</th><th>Licencek</th><th>Utolsó</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-vevo="${i}" tabindex="0"><td><div class="sa-vastag sa-egysor" title="${e(x.ceg || x.nev || '')}">${e(x.ceg || x.nev || '–')}</div><div class="sa-kicsi sa-halvany sa-egysor">${e(x.ceg ? x.nev : '')}</div></td><td><div class="sa-egysor" style="--sa-cella-max:280px" title="${e(x.email)}">${e(x.email)}</div></td><td class="sa-jobb">${szam(x.rendeles)}</td><td class="sa-jobb">${e(ft(x.koltes))}</td><td>${x.licencek.length ? x.licencek.slice(0, 2).map((k) => `<span class="sa-cimke sa-cimke--mono">${e(k)}</span>`).join(' ') + (x.licencek.length > 2 ? ` <span class="sa-halvany">+${x.licencek.length - 2}</span>` : '') : '<span class="sa-halvany">–</span>'}</td><td class="sa-halvany">${e(relativ(x.utolso))}</td></tr>`).join('')}</tbody></table></div>` : ures(f.q ? 'Nincs ilyen vevő.' : 'Még nincs vevő.', 'vevo');
             if (r.ossz > r.db) lista.appendChild(lapozo(r.ossz, r.oldal, r.db, (o) => { f.oldal = o; tolt2(); }));
         };
         $('[data-q]', hova).addEventListener('input', kesleltet((ev) => { f.q = ev.target.value.trim(); f.oldal = 1; tolt2(); }));
@@ -1176,7 +1193,7 @@
             const db = (r.szamok && r.szamok.forras) || {};
             const ossz = Object.values(db).reduce((a, b) => a + b, 0);
             $('[data-forras]', hova).innerHTML = szegmens('Forrás', Object.assign({ mind: `Mind <small>${ossz}</small>` }, Object.fromEntries(Object.entries(LEAD_FORRAS).map(([k, v]) => [k, `${e(v)} <small>${db[k] || 0}</small>`]))), f.forras);
-            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Kapcsolat</th><th>Forrás</th><th>Állapot</th><th>Érkezett</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-lead="${i}" tabindex="0"><td><div class="sa-vastag">${e(x.nev || x.email)}</div><div class="sa-kicsi sa-halvany">${e([x.ceg, x.nev ? x.email : ''].filter(Boolean).join(' · '))}</div></td><td>${cimke(LEAD_FORRAS[x.forras] || x.forras, 'kiemelo')}</td><td>${cimke(ALL[x.allapot] || x.allapot, { uj: 'figyel', nyert: 'ok', elveszett: 'szurke', spam: 'szurke' }[x.allapot] || 'szurke')}</td><td class="sa-halvany">${e(datumIdo(x.ido))}</td></tr>`).join('')}</tbody></table></div>` : ures('Ebben a nézetben nincs lead.', 'lead');
+            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Kapcsolat</th><th>Forrás</th><th>Állapot</th><th>Érkezett</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-lead="${i}" tabindex="0"><td><div class="sa-vastag sa-egysor" style="--sa-cella-max:360px" title="${e(x.nev || x.email)}">${e(x.nev || x.email)}</div><div class="sa-kicsi sa-halvany sa-egysor" style="--sa-cella-max:360px" title="${e([x.ceg, x.nev ? x.email : ''].filter(Boolean).join(' · '))}">${e([x.ceg, x.nev ? x.email : ''].filter(Boolean).join(' · '))}</div></td><td>${cimke(LEAD_FORRAS[x.forras] || x.forras, 'kiemelo')}</td><td>${cimke(ALL[x.allapot] || x.allapot, { uj: 'figyel', nyert: 'ok', elveszett: 'szurke', spam: 'szurke' }[x.allapot] || 'szurke')}</td><td class="sa-halvany">${e(datumIdo(x.ido))}</td></tr>`).join('')}</tbody></table></div>` : ures('Ebben a nézetben nincs lead.', 'lead');
             if (r.ossz > r.db) lista.appendChild(lapozo(r.ossz, r.oldal, r.db, (o) => { f.oldal = o; tolt2(); }));
         };
         hova.addEventListener('valtozas', (ev) => { if (ev.target.closest('[data-forras]')) { f.forras = ev.detail; f.oldal = 1; tolt2(); } });

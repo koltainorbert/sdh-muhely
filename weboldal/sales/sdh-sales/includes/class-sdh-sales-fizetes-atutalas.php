@@ -125,7 +125,15 @@ final class SDH_Sales_Fizetes_Atutalas
             return '';
         }
 
-        $f = trailingslashit(get_temp_dir()) . 'atutalas-qr-' . sanitize_file_name((string) $r['azon']) . '.png';
+        // Kitalálhatatlan, saját (0700) almappa a közös temp-ben; a csatolmány neve marad olvasható.
+        $d = trailingslashit(get_temp_dir()) . 'p-' . bin2hex(random_bytes(12));
+
+        if (!wp_mkdir_p($d)) {
+            return '';
+        }
+
+        @chmod($d, 0700); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        $f = $d . '/atutalas-qr-' . sanitize_file_name((string) $r['azon']) . '.png';
 
         return file_put_contents($f, SDH_Sales_Qr::png($adat, 6, 4)) ? $f : '';
     }
@@ -153,6 +161,7 @@ final class SDH_Sales_Fizetes_Atutalas
         } finally {
             if ($qr !== '' && is_file($qr)) {
                 wp_delete_file($qr);
+                @rmdir(dirname($qr)); // phpcs:ignore WordPress.PHP.NoSilencedErrors
             }
         }
     }

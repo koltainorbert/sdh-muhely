@@ -19,7 +19,7 @@ final class SDH_Demo_Keret
 {
     /** Az „új rekord” táblák (műhely-táblanév az `sdh_` előtag után). */
     public const FO_TABLAK = [
-        'ugyfel', 'eszkoz', 'munkalap', 'termek', 'szolgaltatas', 'penztar', 'naptar_esemeny', 'naptar_szemely',
+        'ugyfel', 'eszkoz', 'munkalap', 'termek', 'szolgaltatas', 'penztar', 'naptar_esemeny',
         'beszallito', 'helyszin', 'szamla', 'csapat_uzenet', 'csapat_cetli', 'csapat_csoport',
     ];
 
@@ -42,7 +42,7 @@ final class SDH_Demo_Keret
     private static ?bool $figyelt = null;
     private static int $figyelt_uid = -1;
 
-    /** @var array{0: int, 1: string}|null a számolt INSERT napló-sora és táblája (az azonosító a következő lekérdezésnél jön) */
+    /** @var array{0: int, 1: string, 2: string}|null a számolt INSERT napló-sora, táblája és maga a lekérdezés (az azonosító a következő lekérdezésnél jön) */
     private static ?array $fuggo = null;
 
     /** @var array<string, int> kérésen belüli számlálók */
@@ -53,7 +53,12 @@ final class SDH_Demo_Keret
 
     public static function init(): void
     {
-        add_action('shutdown', [self::class, 'felold'], 0);
+        add_action('shutdown', [self::class, 'vege'], 0);
+    }
+
+    public static function vege(): void
+    {
+        self::felold(true);
     }
 
     /** Teszthez: a kérésen belüli állapot eldobása. */
@@ -125,12 +130,18 @@ final class SDH_Demo_Keret
                 SDH_Demo::megallit(429, 'A bemutatóban egy címről egy nap alatt ennyi módosítás fér el. Holnap újra kipróbálhatod – vagy kérj saját próbapéldányt.');
             }
 
+            if ($fo && self::$fuggo !== null) {
+                self::$benn = false;
+                self::felold(true);
+                self::$benn = true;
+            }
+
             $tipus = $fo ? 'rekord' : 'iras';
             $id    = SDH_Demo::naplo($tipus, $ip, $tabla, get_current_user_id());
             self::$db[$ip . '|' . $tipus] = self::szam($ip, $tipus) + 1;
 
             if ($fo) {
-                self::$fuggo = [$id, $tabla];
+                self::$fuggo = [$id, $tabla, $q];
             }
         } finally {
             self::$benn = false;
@@ -182,7 +193,7 @@ final class SDH_Demo_Keret
     }
 
     /** Az előző (számolt) INSERT azonosítójának feljegyzése – a következő lekérdezésnél, vagy a kérés végén. */
-    public static function felold(): void
+    public static function felold(bool $vege = false): void
     {
         global $wpdb;
 
@@ -190,15 +201,18 @@ final class SDH_Demo_Keret
             return;
         }
 
-        [$naplo_id, $tabla] = self::$fuggo;
-        self::$fuggo = null;
+        [$naplo_id, , $lekerdezes] = self::$fuggo;
 
-        $id = (int) $wpdb->insert_id;
+        // Csak ha a számolt INSERT már lefutott (ő az utolsó lekérdezés). Ha közben más szűrő kérdez (még előtte),
+        // várunk; a kérés végén (vagy a következő számolt INSERT előtt) azonosító nélkül zárjuk.
+        $lefutott = (string) $wpdb->last_query === $lekerdezes;
 
-        // Sikertelen INSERT után a régi azonosító maradhat: ilyenkor nincs mit megjegyezni.
-        if ($id === $naplo_id || (string) $wpdb->last_error !== '') {
-            $id = 0;
+        if (!$lefutott && !$vege) {
+            return;
         }
+
+        self::$fuggo = null;
+        $id = $lefutott && (string) $wpdb->last_error === '' ? self::utolso_azonosito() : 0;
 
         self::$benn = true;
 
@@ -207,6 +221,27 @@ final class SDH_Demo_Keret
         } finally {
             self::$benn = false;
         }
+    }
+
+    /**
+     * Az utolsó INSERT azonosítója. A $wpdb->insert() a következő beszúrás elején nullázza az insert_id-t (még a
+     * lekérdezése előtt) – ilyenkor a kapcsolattól kérdezzük (lekérdezés nélkül: mysqli / PDO).
+     */
+    private static function utolso_azonosito(): int
+    {
+        global $wpdb;
+
+        if ((int) $wpdb->insert_id > 0) {
+            return (int) $wpdb->insert_id;
+        }
+
+        $pdo = SDH_Demo_Pillanatkep::pdo();
+
+        if ($pdo !== null) {
+            return (int) $pdo->lastInsertId();
+        }
+
+        return $wpdb->dbh instanceof mysqli ? (int) mysqli_insert_id($wpdb->dbh) : 0;
     }
 
     /** Hátralévő új rekord a mostani címnek. */

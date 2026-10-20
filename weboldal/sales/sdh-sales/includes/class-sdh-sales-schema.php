@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Schema
 {
-    public const DB_VERSION = '1.0.0';
+    public const DB_VERSION = '1.0.1';
     private const OPT = 'sdh_sales_db';
 
     public static function init(): void
@@ -88,9 +88,14 @@ final class SDH_Sales_Schema
             ido datetime NULL,
             nyers longtext NULL,
             allapot varchar(20) NOT NULL default 'ok',
+            csatorna varchar(20) NOT NULL default '',
+            datum date NULL,
+            lenyomat varchar(64) NOT NULL default '',
+            parositva bigint(20) NOT NULL default 0,
             PRIMARY KEY  (id),
             UNIQUE KEY forras_tranz (forras, tranzakcio),
-            KEY rendeles_id (rendeles_id)
+            KEY rendeles_id (rendeles_id),
+            KEY lenyomat (lenyomat)
         ) {$c};");
 
         dbDelta('CREATE TABLE ' . self::t('tartalom') . " (

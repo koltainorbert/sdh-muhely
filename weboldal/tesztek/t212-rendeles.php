@@ -101,4 +101,27 @@ T::egyezik(404, $v->get_status(), 'állapot: rossz tokennel 404');
 $v = t_latogato(static fn () => t_rest('GET', '/rendeles/' . $r['azon'] . '/qr', ['t' => $r['token']]));
 T::igaz($v->get_status() === 200 && strncmp((string) $v->get_data(), "\x89PNG", 4) === 0 && SDH_Sales_Rendeles::nyers_e($v), 'QR PNG végpont');
 
+
+// Független ellenőrzés (2026-10-20), K-1: a 0 Ft-os (nem kifejezetten ingyenes) kosár ajánlatkérés – nincs „fizetve”,
+// nincs kiszolgálás, nincs vevői fiók; a 100%-os kupon és a katalógusban `ingyenes: true` tétel továbbra is kiszolgálható.
+global $wpdb;
+$GLOBALS['sdh_t_levelek'] = [];
+$GLOBALS['t_fizetve']     = [];
+$em = 'ingyen' . wp_rand(1000, 99999) . '@example.com';
+$v  = t_latogato(static fn () => t_rest('POST', '/rendeles', t_vedelem() + ['tipus' => 'szolgaltatas', 'tetelek' => [['tipus' => 'szolgaltatas', 'kulcs' => 'ingyen_s']], 'opciok' => ['ciklus' => 'havi'], 'vevo' => t_vevo(['email' => $em]), 'fizmod' => 'atutalas', 'elfogad' => ['vallalkozas' => 1, 'aszf' => 1]]));
+$az = (string) ($v->get_data()['azon'] ?? '');
+$ra = SDH_Sales_Rendeles::azon_szerint($az);
+T::egyezik('ajanlat', (string) ($v->get_data()['allapot'] ?? ''), 'K-1: 0 Ft-os szolgáltatás: ajánlatkérés (nem „fizetve”)');
+T::igaz($ra !== null && (string) $ra['allapot'] === 'ajanlat' && (string) $ra['tipus'] === 'ajanlat', 'K-1: a rendelés állapota / típusa ajánlatkérés');
+T::egyezik(0, (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('fizetes') . ' WHERE rendeles_id = %d', (int) ($ra['id'] ?? 0))), 'K-1: nincs „ingyenes” befizetés-sor');
+T::igaz(empty($GLOBALS['t_fizetve'][(int) ($ra['id'] ?? 0)]), 'K-1: nincs fizetve-hook / kiszolgálás');
+T::igaz(!get_user_by('email', $em), 'K-1: nem jön létre vevői fiók');
+T::egyezik([], t_levelek($em), 'K-1: a vevő nem kap „Megérkezett a fizetés” levelet');
+T::igaz((int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('lead') . " WHERE forras = 'ajanlat' AND email = %s", $em)) === 1, 'K-1: érdeklődésként (lead) rögzítve');
+T::igaz(count(t_levelek('norbi@example.com')) === 1, 'K-1: a forgalmazó levelet kap az ajánlatkérésről');
+SDH_Sales_Tartalom::ment('szolgaltatas', 'ingyen_ok', ['kulcs' => 'ingyen_ok', 'nev' => 'Ingyenes bevezető', 'tipus' => 'egyszeri', 'ar' => 0, 'ingyenes' => true], null, 98, true, 'hu', false);
+SDH_Sales_Tartalom::urit();
+$ik = t_rendeles(['tipus' => 'szolgaltatas', 'tetelek' => [['tipus' => 'szolgaltatas', 'kulcs' => 'ingyen_ok']], 'elfogad' => ['vallalkozas' => 1, 'aszf' => 1]]);
+T::egyezik('fizetve', (string) ($ik['allapot'] ?? ''), 'K-1: kifejezetten ingyenes (`ingyenes: true`) tétel: kiszolgálható');
+
 T::vege('t212 rendelés');

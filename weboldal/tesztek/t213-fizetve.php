@@ -101,4 +101,21 @@ T::egyezik(3 * $b6, $x['fizetett'], 'verseny: minden befizetés összeadva (2 t�
 array_map('unlink', glob($dir . '/*') ?: []);
 rmdir($dir);
 
+
+// Független ellenőrzés (2026-10-20), KR-1: a túlfizetés levele ellenőrzést kér, nem visszautalást; ajánlatkérésre érkező
+// pénz sem indít semmit; a részfizetés soha nem indít kiszolgálást.
+$GLOBALS['sdh_t_levelek'] = [];
+$tr = t_rendeles();
+SDH_Sales_Rendeles::fizetve((int) $tr['id'], 'bank_import', 'ref:TUL1', (int) $tr['r']['brutto']);
+SDH_Sales_Rendeles::fizetve((int) $tr['id'], 'kezi', 'kezi-tul-1', 500);
+$lv = t_levelek('norbi@example.com');
+T::igaz(count($lv) === 1 && stripos((string) $lv[0]['subject'], 'Ellenőrizendő') !== false, 'KR-1: túlfizetésnél „Ellenőrizendő befizetés” levél');
+T::nem_tartalmaz((string) ($lv[0]['message'] ?? ''), 'Visszautalás szükséges', 'KR-1: a levél nem állítja, hogy vissza kell utalni');
+$rp = t_rendeles([], 20000);
+$GLOBALS['t_fizetve'] = [];
+foreach ([5000, 5000, 9999] as $i => $o) {
+    SDH_Sales_Rendeles::fizetve((int) $rp['id'], 'bank_import', 'ref:RESZ' . $i, $o);
+}
+T::igaz((string) SDH_Sales_Rendeles::rendeles((int) $rp['id'])['allapot'] === 'dijbekero' && empty($GLOBALS['t_fizetve'][(int) $rp['id']]), 'KR-1: 19 999 / 20 000 Ft: nincs „fizetve”, nincs kiszolgálás');
+
 T::vege('t213 fizetve');

@@ -830,7 +830,7 @@ function sdh_tema_tj_html(array $tj, string $cim = ''): string
         return '';
     }
 
-    $ki = '<nav class="s-tj" aria-label="' . esc_attr(sdh_tema__('Tartalomjegyzék')) . '"><details class="s-tj__doboz" open><summary class="s-tj__cim">' . esc_html($cim !== '' ? $cim : sdh_tema__('Tartalomjegyzék')) . '</summary><ol class="s-tj__lista">';
+    $ki = '<nav class="s-tj" aria-label="' . esc_attr(sdh_tema__('Tartalomjegyzék')) . '"><details class="s-tj__doboz"><summary class="s-tj__cim">' . esc_html($cim !== '' ? $cim : sdh_tema__('Tartalomjegyzék')) . '</summary><ol class="s-tj__lista">';
 
     foreach ($tj as $e) {
         $ki .= '<li class="s-tj__elem s-tj__elem--' . (int) $e['szint'] . '"><a href="#' . esc_attr($e['id']) . '">' . esc_html($e['cim']) . '</a></li>';

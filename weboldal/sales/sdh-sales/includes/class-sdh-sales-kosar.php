@@ -97,7 +97,13 @@ final class SDH_Sales_Kosar
     public static function rest_ellenoriz(WP_REST_Request $r): WP_REST_Response
     {
         $tetelek = SDH_Sales_Ar::tetelek_tisztit($r->get_param('tetelek'));
-        $ar      = SDH_Sales_Ar::szamol($tetelek, SDH_Sales_Ar::opciok_tisztit($r->get_param('opciok')));
+        $opciok  = SDH_Sales_Kupon::opciok_szur(SDH_Sales_Ar::opciok_tisztit($r->get_param('opciok')), $hiba);
+        $ar      = SDH_Sales_Ar::szamol($tetelek, $opciok);
+        SDH_Sales_Kupon::eredmeny_jelez($opciok, $ar);
+
+        if ($hiba !== null) {
+            $ar['hibak'][] = $hiba;
+        }
 
         return new WP_REST_Response([
             'ok'       => $ar['hibak'] === [],

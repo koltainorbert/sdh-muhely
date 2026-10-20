@@ -232,9 +232,14 @@ final class SDH_Sales_Egyedi
             return ['ok' => false, 'hiba' => sprintf(__('A(z) „%s” típusa nem engedett (PDF, kép, Office, TXT, CSV, ZIP).', 'sdh-sales'), $nev)];
         }
 
+        // Tartalom szerinti típus kötelező: ha a szerveren nincs fileinfo (vagy nem dönt), a fájl nem fogadható el.
         $mime = function_exists('finfo_open') ? (string) finfo_file(finfo_open(FILEINFO_MIME_TYPE), $tmp) : '';
 
-        if ($mime !== '' && !in_array($mime, self::TIPUSOK[$kit], true)) {
+        if ($mime === '') {
+            return ['ok' => false, 'hiba' => sprintf(__('A(z) „%s” típusa most nem ellenőrizhető – küldd el e-mailben.', 'sdh-sales'), $nev)];
+        }
+
+        if (!in_array($mime, self::TIPUSOK[$kit], true)) {
             return ['ok' => false, 'hiba' => sprintf(__('A(z) „%s” tartalma nem egyezik a kiterjesztésével.', 'sdh-sales'), $nev)];
         }
 

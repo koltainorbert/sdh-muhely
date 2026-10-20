@@ -103,15 +103,22 @@ T::egyezik($licdb, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $K::t('licenc'
 T::igaz((string) $v1b['letoltes_url'] !== '' && $v1b['letoltes_url'] !== $v1['letoltes_url'], 'friss letöltő link (a token nincs eltárolva)');
 T::nem_tartalmaz((string) $wpdb->get_var($wpdb->prepare('SELECT valasz FROM ' . $K::t('rendeles') . ' WHERE rendeles = %s', $k1['rendeles'])), 'letoltes', 'a tárolt válaszban nincs letöltő token');
 T::egyezik(false, $KS::feldolgoz(['muvelet' => 'megujit'] + $k1)['ok'], 'azonos azonosító más művelettel: elutasítva');
+// K-6 (2026-10-20): ugyanaz az azonosító MÁS vevőtől (pl. klónozott / visszaállított értékesítő adatbázis) → hiba, nincs link.
+$k1x         = $k1;
+$k1x['vevo'] = ['nev' => 'Második Vevő T94' . $sfx, 'email' => 'masik' . $sfx . '@masik-ceg.hu', 'adoszam' => ''];
+$v1x         = $KS::feldolgoz($k1x);
+T::egyezik(false, $v1x['ok'] ?? null, 'idempotencia: más vevő ugyanazzal az azonosítóval → elutasítva');
+T::igaz(empty($v1x['letoltes_url']) && empty($v1x['licenc_kulcs']), 'idempotencia: más vevő nem kap kulcsot / letöltő linket');
+T::igaz(!empty($KS::feldolgoz($k1)['ismetles']), 'idempotencia: az eredeti vevő továbbra is a tárolt választ kapja');
 T::egyezik(1, (int) $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $K::t('rendeles') . ' WHERE rendeles = %s', $k1['rendeles'])), 'egy rendelés-sor');
 
-/* --- Vevő párosítása: adószám → e-mail → név ------------------------------------------------------------------- */
+/* --- Vevő párosítása: adószám ÉS e-mail / céges domain → pontos e-mail; névvel / puszta adószámmal soha (K-5) ---- */
 
 $k2 = $k1;
 $k2['rendeles'] = 'R-T94-' . $sfx . '-2';
 $k2['vevo']     = ['nev' => 'Egészen Más Név T94', 'adoszam' => '1234' . $sfx . '219', 'email' => 'mas' . $sfx . '@pelda.hu'];
 $v2 = $KS::feldolgoz($k2);
-T::egyezik((int) $v1['vevo_id'], (int) ($v2['vevo_id'] ?? 0), 'párosítás adószámmal (kötőjelek nélkül is)');
+T::egyezik((int) $v1['vevo_id'], (int) ($v2['vevo_id'] ?? 0), 'párosítás adószám + céges domain (kötőjelek nélkül is)');
 T::egyezik($vevo['nev'], (string) $wpdb->get_var($wpdb->prepare('SELECT nev FROM ' . $K::t('vevo') . ' WHERE id = %d', (int) $v1['vevo_id'])), 'a meglévő vevő nevét nem írja felül');
 T::igaz((int) $v2['licenc_id'] !== (int) $v1['licenc_id'], 'új rendelés: második licenc');
 
@@ -122,8 +129,15 @@ T::egyezik((int) $v1['vevo_id'], (int) ($KS::feldolgoz($k3)['vevo_id'] ?? 0), 'p
 
 $k4 = $k1;
 $k4['rendeles'] = 'R-T94-' . $sfx . '-4';
-$k4['vevo']     = ['nev' => $vevo['nev'], 'email' => 'negyedik' . $sfx . '@pelda.hu'];
-T::egyezik((int) $v1['vevo_id'], (int) ($KS::feldolgoz($k4)['vevo_id'] ?? 0), 'párosítás névvel');
+$k4['vevo']     = ['nev' => $vevo['nev'], 'email' => 'negyedik' . $sfx . '@masik-ceg.hu'];
+$v4             = $KS::feldolgoz($k4);
+T::igaz((int) ($v4['vevo_id'] ?? 0) > 0 && (int) $v4['vevo_id'] !== (int) $v1['vevo_id'], 'puszta névegyezés: NEM párosít (új vevő)');
+T::tartalmaz((string) $wpdb->get_var($wpdb->prepare('SELECT cimkek FROM ' . $K::t('vevo') . ' WHERE id = %d', (int) ($v4['vevo_id'] ?? 0))), 'ellenorizendo', 'névegyezésnél az új vevő ellenőrizendő címkét kap');
+$k4b = $k1;
+$k4b['rendeles'] = 'R-T94-' . $sfx . '-4b';
+$k4b['vevo']     = ['nev' => 'Támadó Bt. T94', 'adoszam' => $vevo['adoszam'], 'email' => 'tamado' . $sfx . '@gmail.com'];
+$v4b             = $KS::feldolgoz($k4b);
+T::igaz((int) ($v4b['vevo_id'] ?? 0) > 0 && (int) $v4b['vevo_id'] !== (int) $v1['vevo_id'], 'nyilvános adószám idegen (ingyenes levelezős) e-maillel: NEM párosít');
 
 $ures = $wpdb->get_var($wpdb->prepare('SELECT id FROM ' . $K::t('vevo') . ' WHERE nev = %s', 'Üres Telefonú T94' . $sfx));
 $uv   = $K::vevo_ment(['nev' => 'Üres Telefonú T94' . $sfx, 'email' => 'ures' . $sfx . '@pelda.hu']);
@@ -155,8 +169,11 @@ $idegen = $KS::feldolgoz(['muvelet' => 'megujit', 'rendeles' => 'R-T94-' . $sfx 
 T::egyezik(false, $idegen['ok'], 'idegen vevő nem újíthatja meg');
 T::tartalmaz((string) $idegen['uzenet'], 'nem ehhez a vevőhöz', 'és megmondja, miért');
 T::egyezik(false, $KS::feldolgoz(['muvelet' => 'megujit', 'rendeles' => 'R-T94-' . $sfx . '-M3', 'licenc_kulcs' => 'SDH-XXXX-XXXX-XXXX-XXXX', 'vevo' => ['email' => $vevo['email']]])['ok'], 'ismeretlen kulcs');
-$m4 = $KS::feldolgoz(['muvelet' => 'megujit', 'rendeles' => 'R-T94-' . $sfx . '-M4', 'licenc_kulcs' => (string) $v1['licenc_kulcs'], 'vevo' => ['adoszam' => '1234' . $sfx . '219']]);
-T::igaz(!empty($m4['ok']), 'tulajdonos adószámmal is azonosítható (második megújítás)');
+$m4x = $KS::feldolgoz(['muvelet' => 'megujit', 'rendeles' => 'R-T94-' . $sfx . '-M4x', 'licenc_kulcs' => (string) $v1['licenc_kulcs'], 'vevo' => ['adoszam' => '1234' . $sfx . '219', 'email' => 'idegen' . $sfx . '@gmail.com']]);
+T::egyezik(false, $m4x['ok'] ?? null, 'puszta adószám (idegen e-maillel) NEM elég a tulajdonhoz');
+T::egyezik(false, $KS::sajat($K::licenc((string) $v1['licenc_kulcs']), ['adoszam' => '1234' . $sfx . '219']), 'sajat(): adószám e-mail nélkül nem elég');
+$m4 = $KS::feldolgoz(['muvelet' => 'megujit', 'rendeles' => 'R-T94-' . $sfx . '-M4', 'licenc_kulcs' => (string) $v1['licenc_kulcs'], 'vevo' => ['adoszam' => '1234' . $sfx . '219', 'email' => 'konyveles' . $sfx . '@pelda.hu']]);
+T::igaz(!empty($m4['ok']), 'tulajdonos adószám + céges domain alapján azonosítható (második megújítás)');
 $uj = wp_date('Y-m-d', (int) strtotime($uj . ' +12 month'));
 T::egyezik($uj, (string) ($m4['lejar'] ?? ''), 'második megújítás: újabb + 12 hónap');
 
@@ -215,7 +232,26 @@ $r->set_query_params(['t' => 'nincs-ilyen-token-' . str_repeat('a', 10)]);
 T::egyezik(410, rest_do_request($r)->get_status(), 'REST: érvénytelen token → 410');
 $r = new WP_REST_Request('GET', '/sdh-kozpont/v1/csomag');
 $r->set_query_params(['kulcs' => (string) $v1['licenc_kulcs'], 'peldany' => 'nincs']);
-T::egyezik(403, rest_do_request($r)->get_status(), 'a régi csomag-végpont változatlan (példány nélkül nem ad)');
+$cv = rest_do_request($r);
+T::egyezik(403, $cv->get_status(), 'a régi csomag-végpont változatlan (példány nélkül nem ad)');
+// K-7 (2026-10-20): a példány-utak a semleges névtérben is élnek, a hibakódokban és a csomag nevében nincs „sdh”.
+foreach (['szivveres', 'jelentes', 'csomag', 'tamogatas'] as $ut) {
+    T::igaz(isset($utak['/licenc/v1/' . $ut]) || isset(rest_get_server()->get_routes()['/licenc/v1/' . $ut]), 'semleges példány-út: /licenc/v1/' . $ut);
+}
+$cd = rest_get_server()->response_to_data($cv, false);
+T::egyezik('tiltva', (string) ($cd['code'] ?? ''), 'csomag: semleges hibakód');
+$r2 = new WP_REST_Request('GET', '/licenc/v1/csomag');
+$r2->set_query_params(['kulcs' => (string) $v1['licenc_kulcs'], 'peldany' => 'nincs']);
+$cv2 = rest_do_request($r2);
+T::igaz($cv2->get_status() === 403 && preg_match('~sdh~i', (string) wp_json_encode(rest_get_server()->response_to_data($cv2, false))) !== 1, 'csomag a semleges névtérben: 403, „sdh” nélkül');
+$r3 = new WP_REST_Request('POST', '/licenc/v1/tamogatas');
+$r3->set_header('Content-Type', 'application/json');
+$r3->set_body('{}');
+$tv = rest_do_request($r3);
+T::igaz($tv->get_status() === 403 && preg_match('~sdh~i', (string) wp_json_encode(rest_get_server()->response_to_data($tv, false))) !== 1, 'támogatás elutasítva: semleges hibakód');
+$api_forras = (string) file_get_contents(dirname(__DIR__) . '/kozpont/sdh-kozpont/includes/class-sdh-kozpont-api.php');
+T::nem_tartalmaz($api_forras, 'filename="sdh-', 'a frissítő csomag neve nem „sdh-…”');
+T::igaz(preg_match("~WP_Error\\(\\s*'sdh~", $api_forras) !== 1, 'nincs „sdh…” kezdetű hibakód');
 
 /* --- Aláírt REST-végpont ----------------------------------------------------------------------------------------- */
 

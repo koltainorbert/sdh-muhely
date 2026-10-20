@@ -1,6 +1,7 @@
 /* Hosszú szöveg (blog, jogi, tudásbázis, szöveg-szekció): olvasható sorhossz, ritmus, TJ, cikk-elrendezés. */
 
-.s-proza { max-width: var(--s-sor-max); font-size: var(--s-m-l); line-height: 1.7; }
+/* Sorhossz: a 68ch az Onest széles „0” jele miatt ~104 karakter/sor lenne; 33em ≈ 76 karakter (mért átlag 0,434 em/betű). */
+.s-proza { max-width: min(var(--s-sor-max), 33em); font-size: var(--s-m-l); line-height: 1.7; }
 .s-proza > * + * { margin-top: 0; }
 .s-proza h2 { font-size: var(--s-m-2xl); margin: var(--s-t-7) 0 var(--s-t-4); }
 .s-proza h3 { font-size: var(--s-m-xl); margin: var(--s-t-6) 0 var(--s-t-3); }
@@ -51,11 +52,27 @@
     .s-cikk__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
 }
 @media (max-width: 1099.98px) { .s-cikk__racs { max-width: calc(var(--s-max-szuk) + 2 * var(--s-t-oldal)); } }
+/* Széles képernyőn a cikk fejléce és borítóképe a cikk hasábjával egy vonalban (a TJ-oldalsáv mellett), nem középen */
+@media (min-width: 1100px) {
+    .s-cikk__fej > .s-kont--szuk, .s-cikk__kep.s-kont--szuk {
+        max-width: calc(240px + var(--s-t-8) + var(--s-max-szuk) + 2 * var(--s-t-oldal));
+        padding-left: calc(var(--s-t-oldal) + 240px + var(--s-t-8));
+    }
+}
 .s-cikk__cimkek { margin: var(--s-t-6) 0; }
 .s-entitas { display: flex; gap: var(--s-t-4); align-items: flex-start; padding: var(--s-t-5); margin-top: var(--s-t-6); }
 .s-entitas__cim { font-size: var(--s-m-l); margin-bottom: var(--s-t-2); }
 .s-entitas__szoveg { color: var(--s-halvany); font-size: var(--s-m-s); margin-bottom: var(--s-t-2); }
 .s-entitas__linkek { display: flex; flex-wrap: wrap; gap: var(--s-t-4); margin: 0; font-size: var(--s-m-s); }
+
+/* Jogi dokumentum: TJ oldalt (széles képernyőn ragadós) */
+.s-jogi__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-6); }
+@media (min-width: 1024px) {
+    /* balra zárva: a TJ az oldalfej (morzsa, cím) bal élével egy vonalban */
+    .s-jogi__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: start; gap: var(--s-t-8); }
+    .s-jogi__oldalsav .s-tj { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
+}
+.s-jogi__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin-bottom: var(--s-t-6); }
 
 /* Tudásbázis-fejezet */
 .s-tudas__racs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-t-5); padding-bottom: var(--s-t-szekcio); }
@@ -81,9 +98,7 @@
 .s-talalat__link:hover { border-color: var(--s-vonal-eros); color: var(--s-szoveg); }
 .s-talalat__cim { font-weight: var(--s-suly-felkover); }
 .s-talalat__kivonat { font-size: var(--s-m-s); color: var(--s-halvany); }
-.s-oldalfej__kereso { max-width: 640px; margin-top: var(--s-t-5); }
 .s-kereso-urlap { display: flex; gap: var(--s-t-2); }
 .s-kereso-urlap .s-mezo { flex: 1; min-width: 0; }
 .s-kereso-urlap .s-gomb span { display: none; }
 @media (min-width: 480px) { .s-kereso-urlap .s-gomb span { display: inline; } }
-.s-pillsor--szuro { margin-top: var(--s-t-5); }

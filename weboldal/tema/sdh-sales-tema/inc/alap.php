@@ -20,6 +20,27 @@ function sdh_tema_css_forrasok(): array
     return ['uveg', 'urlap', 'komponensek', 'szekciok', 'proza', 'kereso', 'moduluk', 'lablec'];
 }
 
+/**
+ * A keresőoldal címe keresőszóval (`/kereses/?s=munkalap` – megosztott link, könyvjelző) a keresési találatokat adja:
+ * az oldal + keresés kombinációja különben 404 lenne. Csak a „kereses” oldalra és nem üres keresőszóra hat.
+ *
+ * @param array<string, mixed> $qv
+ * @return array<string, mixed>
+ */
+function sdh_tema_kereses_oldal_keres(array $qv): array
+{
+    if (is_admin() || !isset($qv['s'], $qv['pagename']) || trim((string) $qv['s']) === '') {
+        return $qv;
+    }
+
+    if (trim((string) $qv['pagename'], '/') === 'kereses') {
+        unset($qv['pagename']);
+    }
+
+    return $qv;
+}
+add_filter('request', 'sdh_tema_kereses_oldal_keres');
+
 /* =====================================================================
  * Theme supports, menük
  * ================================================================== */

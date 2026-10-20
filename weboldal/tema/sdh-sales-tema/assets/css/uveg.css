@@ -1,7 +1,9 @@
 /* Üveg (glassmorphism) és neon díszítés – nem kritikus, a kritikus váz fölé. */
 
+/* A pozíció nulla specifikusságú: a komponens saját pozíciója (pl. a legördülő .s-almenu abszolút) mindig nyer. */
+:where(.s-uveg) { position: relative; }
 .s-uveg {
-    position: relative;
+    isolation: isolate; /* saját rétegrend: a fényfolt (::before) a tartalom alá kerülhet */
     background: var(--s-uveg-tomor);
     border: 1px solid var(--s-uveg-keret);
     border-radius: var(--s-r-kartya);
@@ -20,6 +22,7 @@
     border-radius: inherit;
     background: var(--s-uveg-feny);
     pointer-events: none;
+    z-index: -1; /* a háttér fölött, de a tartalom alatt – világos módban a 80 %-os fehér fény különben kifakítja a felső sorokat */
 }
 .s-panel { padding: clamp(var(--s-t-5), 3vw, var(--s-t-7)); }
 
@@ -54,6 +57,10 @@
 
 /* Ikondoboz neon fénye hoverre */
 .s-kartya:hover .s-ikondoboz { box-shadow: var(--s-ragyogas-neon); }
+
+/* A fejlécen belüli üveg (legördülő): a fejléc saját backdrop-filtere „backdrop root”, a gyerek elmosása így nem látná az
+   oldalt, csak 66 %-os átlátszóságot adna (a hero szövege átütne) → tömör felület. */
+.s-fejlec .s-uveg { background: var(--s-uveg-tomor); -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 @media (prefers-reduced-transparency: reduce) {
     .s-uveg { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--s-uveg-tomor); }

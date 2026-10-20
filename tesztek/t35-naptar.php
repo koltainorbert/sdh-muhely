@@ -134,6 +134,15 @@ T::egyezik('2026/15', (string) $s->munkalap_szam, 'munkalap száma');
 T::egyezik(0, (int) $s->privat, 'közös fióknál nincs privát esemény');
 T::tartalmaz((string) $s->leiras, "Első sor\nMásodik sor", 'a leírás sortörése megmarad');
 
+// Ügyfélhez kötött esemény a nézetben (0.99.5: a nézet egy belső függvényt hívott → végzetes hiba).
+$e_ugyfel = t_ugyfel('Naptár Ügyfél');
+$e_u      = $N::ment(0, ['cim' => 'Ügyfél-időpont', 'szemely_id' => $norbi] + $ido($nap(2), '09:00', '09:30'));
+$wpdb->update(SDH_Muhely_Schema::tabla('naptar_esemeny'), ['ugyfel_id' => $e_ugyfel], ['id' => $e_u]);
+$nezet = $N::adat($nap(2), $nap(3));
+$talalt = array_values(array_filter((array) ($nezet['esemenyek'] ?? []), static fn ($a) => (int) ($a['id'] ?? 0) === (int) $e_u));
+T::igaz($talalt !== [] && strpos((string) ($talalt[0]['ugyfel'] ?? ''), 'Naptár Ügyfél') === 0, 'ügyfélhez kötött esemény: a nézetben az ügyfél neve');
+$wpdb->delete(SDH_Muhely_Schema::tabla('naptar_esemeny'), ['id' => $e_u]);
+
 $e2 = $N::ment(0, ['cim' => 'Szabadság', 'szemely_id' => $peter, 'egesz_nap' => 1, 'kezdet_datum' => $nap(3), 'veg_datum' => $nap(5)]);
 $s2 = $esemeny_sor($e2);
 T::egyezik($nap(3) . ' 00:00:00', (string) $s2->kezdet, 'egész nap: a nap elejétől');

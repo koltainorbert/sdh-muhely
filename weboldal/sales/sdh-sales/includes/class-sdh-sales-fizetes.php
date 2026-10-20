@@ -132,6 +132,15 @@ final class SDH_Sales_Fizetes
             return 'ismeretlen';
         }
 
+        // Csak forintos fizetés számít (a kapu más pénznemű összegét nem vesszük forintnak).
+        $penznem = strtoupper((string) ($a['nyers']['Currency'] ?? $a['nyers']['currency'] ?? 'HUF'));
+
+        if ($all === 'fizetve' && $penznem !== 'HUF' && $penznem !== '') {
+            SDH_Sales_Naplo::ir('fizetes', 'Kártyás fizetés nem forintban (' . $kapu . ', ' . mb_substr($penznem, 0, 3) . ') – nem rögzítve, ellenőrizendő.', 'hiba', 'rendeles', (int) $r['id']);
+
+            return 'ismeretlen';
+        }
+
         if ($all === 'fizetve' && (int) ($a['osszeg'] ?? 0) > 0 && (string) ($a['tranzakcio'] ?? '') !== '') {
             SDH_Sales_Rendeles::fizetve((int) $r['id'], $kapu, (string) $a['tranzakcio'], (int) $a['osszeg'], (array) ($a['nyers'] ?? []));
 
@@ -241,6 +250,11 @@ final class SDH_Sales_Fizetes
         if ($mod === 'atutalas') {
             global $wpdb;
 
+            // Már átutalásos díjbekérő: nincs újabb levél / díjbekérő (a tokenes link nem lehet levélbomba).
+            if ((string) $r['allapot'] === 'dijbekero' && (string) $r['fizmod'] === 'atutalas') {
+                return new WP_REST_Response(['ok' => true, 'rendeles' => SDH_Sales_Rendeles::nyilvanos($r)], 200);
+            }
+
             $wpdb->update(SDH_Sales_Schema::t('rendeles'), ['fizmod' => 'atutalas'], ['id' => (int) $r['id']]);
             SDH_Sales_Rendeles::allapot_valt((int) $r['id'], 'dijbekero', ['fizetesre_var', 'sikertelen'], 'átváltás átutalásra');
             do_action('sdh_sales_rendeles_letrehozva', (int) $r['id']);
@@ -288,7 +302,8 @@ final class SDH_Sales_Fizetes
         $hat = gmdate('Y-m-d H:i:s', $most - $n * DAY_IN_SECONDS);
         $db  = 0;
 
-        foreach (self::sorok("allapot = 'dijbekero' AND letrehozva <= %s", [$hat]) as $r) {
+        // A már emlékeztetett rendelések az SQL-ben kimaradnak, így a LIMIT nem „éhezteti” az újabbakat.
+        foreach (self::sorok("allapot = 'dijbekero' AND letrehozva <= %s AND vevo NOT LIKE %s", [$hat, '%' . $wpdb->esc_like('"_emlekeztetve"') . '%']) as $r) {
             $v = (array) $r['vevo'];
 
             if (!empty($v['_emlekeztetve'])) {
@@ -354,15 +369,34 @@ final class SDH_Sales_Fizetes
             return 0;
         }
 
+        global $wpdb;
+
         $perc = max(5, (int) SDH_Sales::b('fizetes.szamlazz_lekerdezes_perc', 30));
         $db   = 0;
+        $kert = 0;
 
-        foreach (self::sorok("allapot = 'dijbekero' AND szamla_dijbekero <> ''", [], 20) as $r) {
-            $kulcs = 'szlpoll_' . (int) $r['id'];
+        // A kihagyás (nemrég lekérdezve) a LIMIT ELŐTT: minden futás a következő 20 esedékest kérdezi (a legrégebbitől),
+        // így 20-nál több nyitott díjbekérőnél sem marad ki egy sem.
+        $ids = (array) $wpdb->get_col("SELECT id FROM " . SDH_Sales_Schema::t('rendeles') . " WHERE allapot = 'dijbekero' AND szamla_dijbekero <> '' ORDER BY id ASC LIMIT 5000");
+
+        foreach ($ids as $rid) {
+            $kulcs = 'szlpoll_' . (int) $rid;
 
             if (get_transient($kulcs)) {
                 continue;
             }
+
+            if ($kert >= 20) {
+                break;
+            }
+
+            $r = SDH_Sales_Rendeles::rendeles((int) $rid);
+
+            if ($r === null) {
+                continue;
+            }
+
+            $kert++;
 
             set_transient($kulcs, 1, $perc * MINUTE_IN_SECONDS);
             $f = SDH_Sales_Szamlazz::fizetettseg((string) $r['szamla_dijbekero']);

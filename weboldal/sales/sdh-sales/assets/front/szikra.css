@@ -97,6 +97,11 @@
     display: none;
 }
 
+/* Amíg a süti-sáv döntésre vár, az indító nem takarja (a sáv után jelenik meg). */
+html:has(#s-suti:not([hidden])) .s-szikra--lebego {
+    display: none;
+}
+
 .s-szikra__fej {
     display: flex;
     align-items: flex-start;
@@ -112,6 +117,8 @@
 
 .s-szikra__cim {
     margin: 0;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
     font-family: var(--s-betu-cim);
     font-size: var(--s-m-alap, 1rem);
     font-weight: var(--s-suly-cim, 720);
@@ -127,8 +134,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    margin: -4px -8px -4px 0;
     border: 1px solid transparent;
     border-radius: var(--s-r-gomb);
     background: transparent;
@@ -291,7 +300,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: var(--s-magassag-gomb-kicsi, 40px);
+    min-height: 44px;
     padding: 0 var(--s-t-4, 1rem);
     border: 1px solid var(--s-kiemelo);
     border-radius: var(--s-r-gomb);
@@ -327,16 +336,32 @@
     outline-offset: var(--s-fokusz-tav, 2px);
 }
 
-/* Mobil: a panel szinte a teljes képernyő. */
+/* Mobil: a nyitott panel teljes képernyős (fejléc a bezáróval, alul a mező); az oldal alatta nem görög. */
 @media (max-width: 520px) {
-    .s-szikra--lebego .s-szikra__panel {
-        width: calc(100vw - 2 * var(--s-t-3, 0.75rem));
-        max-height: calc(100dvh - 7rem);
-    }
-
     .s-szikra--lebego {
         right: var(--s-t-3, 0.75rem);
-        bottom: var(--s-t-3, 0.75rem);
+        bottom: max(var(--s-t-3, 0.75rem), env(safe-area-inset-bottom));
+    }
+
+    .s-szikra--lebego .s-szikra__panel {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .s-szikra--nyitva .s-szikra__indito {
+        display: none;
+    }
+
+    html:has(.s-szikra--nyitva) {
+        overflow: hidden;
     }
 }
 

@@ -206,7 +206,7 @@
         $('[data-seo]', hova).addEventListener('click', () => seoPopup(id, E, (uj) => { cim(uj.cim, '<a href="#/oldalak">Oldalak</a>'); }));
         $('[data-frissit]', hova).addEventListener('click', () => elonezet());
         $('.sa-epito__oszlop--elo [data-szegmens]', hova).addEventListener('valtozas', (ev) => $('[data-elonezet]', hova).classList.toggle('is-mobil', ev.detail === 'mobil'));
-        const keskeny = matchMedia('(max-width: 1280px) and (min-width: 961px)');
+        const keskeny = matchMedia('(max-width: 1280px)');
         const valtGombok = () => { $('[data-elo-valt]', hova).hidden = !keskeny.matches; $('[data-urlap-valt]', hova).hidden = !keskeny.matches; };
         keskeny.addEventListener('change', valtGombok);
         valtGombok();
@@ -298,7 +298,7 @@
             $('[data-ujcim]', hova).textContent = 'Új ' + s.egyes.toLowerCase();
             lista.innerHTML = l.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr>${q ? '' : '<th class="sa-fogo-cella"><span class="sa-sr">Sorrend</span></th>'}<th>${e(s.egyes)}</th><th>Kulcs</th>${penz.map((p) => `<th class="sa-jobb">${e((s.mezok.find((m) => m.k === p) || {}).c || p)}</th>`).join('')}<th>Módosítva</th><th>Látszik</th></tr></thead><tbody data-tbody>${l.map((x) => `
                 <tr class="is-katt" data-kulcs="${e(x.kulcs)}" tabindex="0">${q ? '' : `<td><button type="button" class="sa-szelem__fogo" data-fogo aria-label="${e(x.cim)} áthelyezése – ↑ ↓">${I('fogo')}</button></td>`}
-                <td><span class="sa-vastag">${e(x.cim || x.kulcs)}</span>${x.szerkesztve ? '' : ' <span class="sa-cimke sa-cimke--szurke" title="A kezdőtartalomból, még nem szerkesztett">alap</span>'}</td><td class="sa-mono sa-halvany">${e(x.kulcs)}</td>
+                <td><div class="sa-sor sa-sor--tor" style="gap:4px 8px"><span class="sa-vastag">${e(x.cim || x.kulcs)}</span>${x.szerkesztve ? '' : '<span class="sa-cimke sa-cimke--szurke" title="A kezdőtartalomból, még nem szerkesztett">alap</span>'}</div></td><td class="sa-mono sa-halvany"><div class="sa-egysor" style="--sa-cella-max:200px" title="${e(x.kulcs)}">${e(x.kulcs)}</div></td>
                 ${penz.map((p) => { const n = Number(A.kiolvas(x.adat, p)) || 0; return `<td class="sa-jobb"><div>${e(ft(n))}</div><div class="sa-kicsi sa-halvany">bruttó ${e(ft(brutto(n)))}</div></td>`; }).join('')}
                 <td class="sa-halvany">${e(relativ(x.modositva))}</td><td>${kapcsolo('sa-ea-' + x.kulcs, x.aktiv, (x.cim || x.kulcs) + ' – megjelenik a webhelyen', 'data-aktiv')}</td></tr>`).join('')}</tbody></table></div>`
                 : ures(q ? 'Nincs találat.' : `Még nincs ${s.egyes.toLowerCase()}.`, 'elem');

@@ -43,11 +43,14 @@
         function rajz(r) {
             doboz.textContent = '';
             doboz.appendChild(el('h2', { szoveg: 'Rendelés: ' + r.azon }));
-            doboz.appendChild(el('p', {}, ['Állapot: ', el('strong', { szoveg: r.allapot_szoveg })]));
+            // Állapot-pill: a színe a helyzetet jelzi (fizetve / sikertelen kártyás fizetés / várakozás).
+            doboz.appendChild(el('p', { osztaly: 's-statusz__allapot' }, ['Állapot: ', el('strong', { osztaly: 's-statusz__pill', 'data-jel': r.kesz ? 'ok' : (r.ujraproba ? 'hiba' : 'var'), szoveg: r.allapot_szoveg })]));
             if (r.kesz) {
                 doboz.appendChild(el('p', { osztaly: 's-uzenet s-uzenet-ok', szoveg: 'Köszönjük, a fizetés megérkezett. A licencet és a telepítéshez szükséges mindent e-mailben küldjük.' }));
-                if (r.szamla_url) { doboz.appendChild(el('a', { href: r.szamla_url, osztaly: 's-gomb', szoveg: 'Számla letöltése (PDF)' })); }
-                if (D.fiok_url) { doboz.appendChild(el('a', { href: D.fiok_url, osztaly: 's-gomb', szoveg: 'Fiókom' })); }
+                doboz.appendChild(el('div', { osztaly: 's-gombsor' }, [
+                    r.szamla_url ? el('a', { href: r.szamla_url, osztaly: 's-gomb s-gomb-fo', szoveg: 'Számla letöltése (PDF)' }) : null,
+                    D.fiok_url ? el('a', { href: D.fiok_url, osztaly: 's-gomb', szoveg: 'Fiókom' }) : null
+                ]));
                 if (figyelo) { clearInterval(figyelo); }
                 if (APP.kosar.db()) { APP.kosar.urit(); }
                 return;
@@ -55,26 +58,40 @@
             if (r.atutalas) {
                 var a = r.atutalas;
                 doboz.appendChild(el('p', { szoveg: 'Az alábbi adatokkal utalj; a beérkezés után a licenced automatikusan elkészül.' }));
-                doboz.appendChild(el('dl', { osztaly: 's-atutalas' }, [
-                    el('dt', { szoveg: 'Kedvezményezett' }), el('dd', { szoveg: a.kedvezmenyezett }),
-                    el('dt', { szoveg: 'Számlaszám' }), el('dd', {}, [el('code', { szoveg: a.bankszamla })]),
-                    a.iban ? el('dt', { szoveg: 'IBAN' }) : null, a.iban ? el('dd', {}, [el('code', { szoveg: a.iban })]) : null,
-                    el('dt', { szoveg: 'Összeg' }), el('dd', {}, [el('strong', { szoveg: ft(a.osszeg) })]),
-                    el('dt', { szoveg: 'Közlemény' }), el('dd', {}, [el('code', { osztaly: 's-kozlemeny', szoveg: a.kozlemeny })]),
-                    el('dt', { szoveg: 'Határidő' }), el('dd', { szoveg: a.hatarido })
+                // Értékenként másoló gomb (a vágólapra a nyers érték kerül: számlaszám, IBAN, összeg számként, közlemény).
+                var masol = function (cimke, ertek) {
+                    var g = el('button', { type: 'button', osztaly: 's-masol', 'aria-label': cimke + ' másolása', szoveg: 'Másolás' });
+                    g.addEventListener('click', function () {
+                        if (!navigator.clipboard) { return; }
+                        navigator.clipboard.writeText(String(ertek)).then(function () {
+                            g.classList.add('s-masolva');
+                            g.textContent = 'Kimásolva';
+                            APP.uzen(cimke + ' kimásolva.', 'ok');
+                            setTimeout(function () { g.classList.remove('s-masolva'); g.textContent = 'Másolás'; }, 2500);
+                        });
+                    });
+                    return g;
+                };
+                var hatarido = a.hatarido;
+                var hd = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(a.hatarido || ''));
+                if (hd) { hatarido = new Date(Date.UTC(+hd[1], +hd[2] - 1, +hd[3], 12)).toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: 'numeric' }); }
+                var racs = el('div', { osztaly: 's-atutalas-racs' });
+                doboz.appendChild(racs);
+                racs.appendChild(el('dl', { osztaly: 's-atutalas s-masolhato' }, [
+                    el('dt', { szoveg: 'Kedvezményezett' }), el('dd', {}, [el('span', { szoveg: a.kedvezmenyezett })]),
+                    el('dt', { szoveg: 'Számlaszám' }), el('dd', {}, [el('code', { szoveg: a.bankszamla }), a.bankszamla ? masol('Számlaszám', a.bankszamla) : null]),
+                    a.iban ? el('dt', { szoveg: 'IBAN' }) : null, a.iban ? el('dd', {}, [el('code', { szoveg: a.iban }), masol('IBAN', a.iban)]) : null,
+                    el('dt', { szoveg: 'Összeg' }), el('dd', {}, [el('strong', { szoveg: ft(a.osszeg) }), masol('Összeg', a.osszeg)]),
+                    el('dt', { szoveg: 'Közlemény' }), el('dd', {}, [el('code', { osztaly: 's-kozlemeny', szoveg: a.kozlemeny }), masol('Közlemény', a.kozlemeny)]),
+                    el('dt', { szoveg: 'Határidő' }), el('dd', {}, [el('span', { szoveg: hatarido })])
                 ]));
-                var masol = el('button', { type: 'button', osztaly: 's-gomb s-gomb-kicsi', szoveg: 'Közlemény másolása' });
-                masol.addEventListener('click', function () {
-                    if (navigator.clipboard) { navigator.clipboard.writeText(a.kozlemeny).then(function () { APP.uzen('Kimásolva.', 'ok'); }); }
-                });
-                doboz.appendChild(masol);
                 if (a.qr_svg) {
                     var q = el('figure', { osztaly: 's-qr' });
                     q.innerHTML = a.qr_svg; // a szerver által készített, tisztán generált SVG (csak rect + path)
                     q.appendChild(el('figcaption', { szoveg: 'Olvasd be a banki alkalmazásoddal – minden adat kitöltődik.' }));
-                    doboz.appendChild(q);
+                    racs.appendChild(q);
                 }
-                if (r.dijbekero_url) { doboz.appendChild(el('a', { href: r.dijbekero_url, osztaly: 's-gomb', szoveg: 'Díjbekérő letöltése (PDF)' })); }
+                if (r.dijbekero_url) { doboz.appendChild(el('div', { osztaly: 's-gombsor' }, [el('a', { href: r.dijbekero_url, osztaly: 's-gomb', szoveg: 'Díjbekérő letöltése (PDF)' })])); }
                 if (r.fizetett > 0) { doboz.appendChild(el('p', { osztaly: 's-uzenet s-uzenet-info', szoveg: 'Eddig beérkezett: ' + ft(r.fizetett) + ', hátralék: ' + ft(r.hatralek) + '.' })); }
             }
             if (r.ujraproba) {
@@ -166,7 +183,8 @@
         }
         f.appendChild(el('p', { osztaly: 's-halvany' }, ['Az adataidat az ', el('a', { href: (J.adatvedelem || {}).url || '#', target: '_blank', rel: 'noopener', szoveg: 'adatkezelési tájékoztató' }), ' szerint kezeljük.']));
 
-        var gomb = el('button', { type: 'submit', osztaly: 's-gomb s-gomb-fo', szoveg: 'Megrendelem (fizetési kötelezettséggel)' });
+        // Jogilag kötelező felirat; keskeny képernyőn két sorban (a zárójeles rész alsor), nem tördelődik szét.
+        var gomb = el('button', { type: 'submit', osztaly: 's-gomb s-gomb-fo' }, [el('span', { szoveg: 'Megrendelem' }), el('span', { osztaly: 's-gomb__al', szoveg: ' (fizetési kötelezettséggel)' })]);
         f.appendChild(gomb);
         APP.vedelem(f, D.vedelem);
 

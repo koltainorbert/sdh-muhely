@@ -102,6 +102,8 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
   fizetés, automatikus licenc-kiszolgálás, számla, naptár, AI-chat, GYIK, tudásbázis, admin) és demó-korlátozó; saját README a
   `weboldal/dokumentacio/` alatt.
 - Új tesztek: t94 (központ 2.1), t95 (terméknév, vevői csomag, feliratok).
+- **Javítás:** a Naptár nézete végzetes hibával állt le, ha egy esemény ügyfélhez volt kötve (belső függvényt hívott) – most
+  a nyilvános `Ugyfel::nev()`-et használja; t35 kiegészítve. Tesztadat: az újabb SQLite-illesztőn is a gyors (PDO-s) út fut.
 
 ### 0.99.4 – okos keresés mindenhol, gyors listák nagy adatnál, űrlapok e-mailben, Fájlok lapfül
 - **Nagy listák (300 000 rekord):** az Ügyfelek, Eszközök, Termékek, Szolgáltatások, Napi árukiadás / Rendelések lapozása

@@ -84,8 +84,20 @@ final class SDH_Sales_Rest
         return new WP_Error($kod, $uzenet, ['status' => $status]);
     }
 
+    /** A korlát-sor kulcsa és lejárata. @return array{0: string, 1: string} */
+    private static function korlat_kulcs(string $nev, int $mp, string $kulcs_extra = ''): array
+    {
+        $ablak = (int) floor(time() / max(1, $mp));
+
+        return [
+            mb_substr($nev . ':' . SDH_Sales::ip_hash_napi() . ($kulcs_extra !== '' ? ':' . md5($kulcs_extra) : '') . ':' . $ablak, 0, 120),
+            gmdate('Y-m-d H:i:s', ($ablak + 1) * max(1, $mp)),
+        ];
+    }
+
     /**
      * IP-nkénti korlát: igaz, ha még belefér (és számol). `$kulcs_extra` pl. e-mail vagy munkamenet.
+     * Atomi: előbb növel (INSERT … ON DUPLICATE KEY UPDATE), aztán a növelt értéket nézi – párhuzamos kérések sem lépik túl.
      */
     public static function korlat(string $nev, int $db, int $mp, string $kulcs_extra = ''): bool
     {
@@ -95,24 +107,39 @@ final class SDH_Sales_Rest
 
         global $wpdb;
 
-        $t     = SDH_Sales_Schema::t('korlat');
-        $ablak = (int) floor(time() / max(1, $mp));
-        $kulcs = mb_substr($nev . ':' . SDH_Sales::ip_hash_napi() . ($kulcs_extra !== '' ? ':' . md5($kulcs_extra) : '') . ':' . $ablak, 0, 120);
-        $lejar = gmdate('Y-m-d H:i:s', ($ablak + 1) * max(1, $mp));
+        $t              = SDH_Sales_Schema::t('korlat');
+        [$kulcs, $lejar] = self::korlat_kulcs($nev, $mp, $kulcs_extra);
 
-        $most = (int) $wpdb->get_var($wpdb->prepare("SELECT db FROM {$t} WHERE kulcs = %s", $kulcs));
+        $wpdb->query($wpdb->prepare("INSERT INTO {$t} (kulcs, db, lejar) VALUES (%s, 1, %s) ON DUPLICATE KEY UPDATE db = db + 1", $kulcs, $lejar));
 
-        if ($most >= $db) {
-            return false;
+        return (int) $wpdb->get_var($wpdb->prepare("SELECT db FROM {$t} WHERE kulcs = %s", $kulcs)) <= $db;
+    }
+
+    /** Belefér-e még (nem számol). */
+    public static function korlat_belefer(string $nev, int $db, int $mp, string $kulcs_extra = ''): bool
+    {
+        if ((bool) apply_filters('sdh_sales_korlat_ki', false, $nev)) {
+            return true;
         }
 
-        if ($most === 0) {
-            $wpdb->query($wpdb->prepare("INSERT INTO {$t} (kulcs, db, lejar) VALUES (%s, 1, %s) ON DUPLICATE KEY UPDATE db = db + 1", $kulcs, $lejar));
-        } else {
-            $wpdb->query($wpdb->prepare("UPDATE {$t} SET db = db + 1 WHERE kulcs = %s", $kulcs));
+        global $wpdb;
+
+        [$kulcs] = self::korlat_kulcs($nev, $mp, $kulcs_extra);
+
+        return (int) $wpdb->get_var($wpdb->prepare('SELECT db FROM ' . SDH_Sales_Schema::t('korlat') . ' WHERE kulcs = %s', $kulcs)) < $db;
+    }
+
+    /** Egy esemény könyvelése (nem dönt). */
+    public static function korlat_novel(string $nev, int $mp, string $kulcs_extra = ''): void
+    {
+        if ((bool) apply_filters('sdh_sales_korlat_ki', false, $nev)) {
+            return;
         }
 
-        return true;
+        global $wpdb;
+
+        [$kulcs, $lejar] = self::korlat_kulcs($nev, $mp, $kulcs_extra);
+        $wpdb->query($wpdb->prepare('INSERT INTO ' . SDH_Sales_Schema::t('korlat') . ' (kulcs, db, lejar) VALUES (%s, 1, %s) ON DUPLICATE KEY UPDATE db = db + 1', $kulcs, $lejar));
     }
 
     /** Lejárt korlát-sorok törlése (a cron hívja). */

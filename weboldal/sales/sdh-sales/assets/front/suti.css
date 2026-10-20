@@ -138,8 +138,8 @@
     position: absolute;
     top: var(--s-t-3, 0.75rem);
     right: var(--s-t-3, 0.75rem);
-    width: var(--s-magassag-gomb-kicsi, 36px);
-    height: var(--s-magassag-gomb-kicsi, 36px);
+    width: 44px;
+    height: 44px;
     font-size: var(--s-m-xl, 1.25rem);
     line-height: 1;
     color: var(--s-szoveg, CanvasText);
@@ -237,8 +237,22 @@
     cursor: not-allowed;
 }
 
+/* Görgetészár az ablak alatt; a görgetősáv helye megmarad, így a tartalom nem ugrik el. */
 html.s-suti-nyitva {
     overflow: hidden;
+    scrollbar-gutter: stable;
+}
+
+@media print {
+    .s-suti,
+    .s-suti-modal {
+        display: none;
+    }
+}
+
+/* Az ablakban a három gomb egymás alatt, egyforma szélességben (a „Kiválasztottak mentése” sem törik két sorba). */
+.s-suti-ablak .s-suti-gomb {
+    flex-basis: 100%;
 }
 
 @media (max-width: 600px) {

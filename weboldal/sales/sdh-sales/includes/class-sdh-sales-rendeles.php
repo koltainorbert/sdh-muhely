@@ -34,8 +34,11 @@ if (!defined('ABSPATH')) {
 
 final class SDH_Sales_Rendeles
 {
-    public const ALLAPOTOK = ['uj', 'dijbekero', 'fizetesre_var', 'fizetve', 'kiszolgalva', 'sikertelen', 'torolve', 'visszaterites'];
+    public const ALLAPOTOK = ['uj', 'dijbekero', 'fizetesre_var', 'fizetve', 'kiszolgalva', 'sikertelen', 'torolve', 'visszaterites', 'ajanlat'];
     public const TIPUSOK   = ['uj', 'megujitas', 'bovites', 'szolgaltatas'];
+
+    /** 0 Ft-os kosár, amely nem kifejezetten ingyen kiszolgálható tételekből áll: ajánlatkérés (lead), nem fizetett rendelés. */
+    public const TIPUS_AJANLAT = 'ajanlat';
     public const FORRASOK  = ['bank_import', 'szamlazz', 'barion', 'simplepay', 'kezi'];
 
     /** Ezekből lesz „fizetve”, ha a pénz megjött (a törölt is: késve érkező utalás). */
@@ -127,6 +130,7 @@ final class SDH_Sales_Rendeles
             'sikertelen'    => __('Sikertelen fizetés', 'sdh-sales'),
             'torolve'       => __('Törölve', 'sdh-sales'),
             'visszaterites' => __('Visszatérítve', 'sdh-sales'),
+            'ajanlat'       => __('Ajánlatkérés', 'sdh-sales'),
         ];
 
         return $m[$a] ?? $a;
@@ -134,7 +138,7 @@ final class SDH_Sales_Rendeles
 
     public static function tipus_szoveg(string $t): string
     {
-        return ['uj' => __('Új licenc', 'sdh-sales'), 'megujitas' => __('Megújítás', 'sdh-sales'), 'bovites' => __('Bővítés', 'sdh-sales'), 'szolgaltatas' => __('Szolgáltatás', 'sdh-sales')][$t] ?? $t;
+        return ['uj' => __('Új licenc', 'sdh-sales'), 'megujitas' => __('Megújítás', 'sdh-sales'), 'bovites' => __('Bővítés', 'sdh-sales'), 'szolgaltatas' => __('Szolgáltatás', 'sdh-sales'), 'ajanlat' => __('Ajánlatkérés', 'sdh-sales')][$t] ?? $t;
     }
 
     /* =================================================================
@@ -383,7 +387,8 @@ final class SDH_Sales_Rendeles
      * ============================================================== */
 
     /**
-     * A licenc legutóbbi teljesített rendelése, ha a vevőé (user_id vagy e-mail egyezik).
+     * A licenc legutóbbi teljesített rendelése, ha a vevőé. A tulajdon a fiókhoz (user_id) kötött; e-mail-egyezés csak
+     * fiók nélküli (user_id = 0) régi rendelésnél számít – így egy átírt fiók-e-mail nem ad hozzáférést idegen licenchez.
      *
      * @return array<string, mixed>|null
      */
@@ -406,7 +411,7 @@ final class SDH_Sales_Rendeles
         ), ARRAY_A);
 
         foreach ($sorok as $s) {
-            if ((int) $s['user_id'] === $user_id || ($email !== '' && strtolower((string) $s['email']) === $email)) {
+            if ((int) $s['user_id'] === $user_id || ((int) $s['user_id'] === 0 && $email !== '' && strtolower((string) $s['email']) === $email)) {
                 return self::bont($s);
             }
         }
@@ -414,7 +419,7 @@ final class SDH_Sales_Rendeles
         if (class_exists('SDH_Sales_Kiszolgalas') && method_exists('SDH_Sales_Kiszolgalas', 'licencek')) {
             $l = SDH_Sales_Kiszolgalas::licencek()[$kulcs] ?? null;
 
-            if (is_array($l) && ((int) ($l['user_id'] ?? 0) === $user_id || ($email !== '' && strtolower((string) ($l['email'] ?? '')) === $email)) && !empty($l['rendeles_id'])) {
+            if (is_array($l) && ((int) ($l['user_id'] ?? 0) === $user_id || ((int) ($l['user_id'] ?? 0) === 0 && $email !== '' && strtolower((string) ($l['email'] ?? '')) === $email)) && !empty($l['rendeles_id'])) {
                 return self::rendeles((int) $l['rendeles_id']);
             }
         }
@@ -501,6 +506,44 @@ final class SDH_Sales_Rendeles
      * ============================================================== */
 
     /**
+     * 0 Ft-os rendelés kiszolgálható-e fizetés nélkül: igen, ha a nulla egy kuponból jön (az adminisztrátor döntése), vagy
+     * ha minden tétel a katalógusban kifejezetten ingyenesnek van jelölve (`ingyenes: true`). Minden más (pl. 0 Ft-os
+     * alap-support, „ajánlatkérés” szolgáltatás) ajánlatkérés lesz – nem fizetett, nincs licenc, nincs kiszolgálás.
+     *
+     * @param array<string, mixed> $ar
+     */
+    public static function ingyen_kiszolgalhato(array $ar): bool
+    {
+        if ((int) $ar['brutto'] !== 0) {
+            return false;
+        }
+
+        if ((int) ($ar['netto_lista'] ?? 0) > 0) {
+            return !empty($ar['kupon']);
+        }
+
+        if ((array) ($ar['sorok'] ?? []) === []) {
+            return false;
+        }
+
+        foreach ((array) $ar['sorok'] as $s) {
+            $k = (string) ($s['kulcs'] ?? '');
+            $e = match ((string) ($s['tipus'] ?? '')) {
+                'csomag', 'felhasznalo', 'telephely' => SDH_Sales_Katalogus::csomag($k),
+                'modul'        => SDH_Sales_Katalogus::modul($k),
+                'szolgaltatas' => SDH_Sales_Katalogus::szolgaltatas($k),
+                default        => null,
+            };
+
+            if (!is_array($e) || empty($e['ingyenes']) || !empty($e['ajanlatkeres'])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param array<string, mixed> $be
      * @return array<string, mixed>
      */
@@ -552,7 +595,8 @@ final class SDH_Sales_Rendeles
                     + array_filter(['felhasznalo' => $keret['felhasznalo'] ?: null, 'telephely' => $keret['telephely'] ?: null])
                     + array_intersect_key($opciok, ['kupon' => 1]);
             } else {
-                $tetelek = array_values(array_filter($tetelek, static fn (array $t): bool => $t['tipus'] !== 'csomag'));
+                // A licencben már meglévő (külön vett) modult a bővítés nem számolja fel újra.
+                $tetelek = array_values(array_filter($tetelek, static fn (array $t): bool => $t['tipus'] !== 'csomag' && !($t['tipus'] === 'modul' && in_array((string) $t['kulcs'], $keret['modulok'], true))));
                 $opciok['ciklus']           = $keret['ciklus'] === 'havi' ? 'havi' : 'eves';
                 $opciok['alap_csomag']      = $keret['csomag'];
                 $opciok['alap_felhasznalo'] = $keret['felhasznalo'];
@@ -614,8 +658,26 @@ final class SDH_Sales_Rendeles
             return ['ok' => false, 'hibak' => ['kosar' => sprintf(__('Az ár időközben változott: %s. Nézd át, és küldd el újra.', 'sdh-sales'), SDH_Sales::ft((int) $ar['brutto']))], 'ar' => $ar, 'arvaltozas' => true];
         }
 
+        // 0 Ft, nem kifejezetten ingyenes tételek: ajánlatkérés (nincs fizetés, licenc, kiszolgálás, vevői fiók).
+        $ajanlat = (int) $ar['brutto'] === 0 && !self::ingyen_kiszolgalhato($ar);
+
+        if ($ajanlat) {
+            $tipus = self::TIPUS_AJANLAT;
+        }
+
+        // Kupon: vevőnkénti korlát (a kupon `vevonkent` mezője).
+        $kod = (string) ($ar['kupon']['kod'] ?? '');
+
+        if ($kod !== '') {
+            $kh = SDH_Sales_Kupon::vevo_korlat($kod, (string) $vevo['email'], $uid);
+
+            if ($kh !== '') {
+                return ['ok' => false, 'hibak' => ['kosar' => $kh], 'ar' => $ar];
+            }
+        }
+
         // --- Vevő-fiók ---------------------------------------------------------------------------
-        $user_id = $uid > 0 ? $uid : self::vevo_fiok($vevo);
+        $user_id = $uid > 0 ? $uid : ($ajanlat ? 0 : self::vevo_fiok($vevo));
 
         $vevo['_jogi'] = [
             'aszf'   => self::jogi_verzio('aszf'),
@@ -703,14 +765,27 @@ final class SDH_Sales_Rendeles
             return ['ok' => false, 'hibak' => ['rendszer' => __('Átmeneti hiba. Próbáld újra egy perc múlva.', 'sdh-sales')]];
         }
 
-        $id   = (int) $wpdb->insert_id;
+        $id = (int) $wpdb->insert_id;
+
+        // Kupon-foglalás: a beszúrás után, az azonosító sorrendjében dönt (atomi – két párhuzamos rendelésből a később
+        // beszúrt esik ki, ha a keret elfogyott). A foglalás `kupon.foglalas_ora` óráig él, ha a rendelés fizetetlen.
+        if ($kod !== '' && !SDH_Sales_Kupon::foglal($kod, $id)) {
+            $wpdb->delete($t, ['id' => $id]);
+
+            return ['ok' => false, 'hibak' => ['kosar' => sprintf(__('A(z) %s kupon elfogyott.', 'sdh-sales'), $kod)], 'ar' => $ar];
+        }
+
         $azon = SDH_Sales::azon('R', $id);
-        $uj   = $fizmod === 'atutalas' ? 'dijbekero' : 'fizetesre_var';
+        $uj   = $ajanlat ? 'ajanlat' : ($fizmod === 'atutalas' ? 'dijbekero' : 'fizetesre_var');
         $wpdb->update($t, ['azon' => $azon, 'allapot' => $uj], ['id' => $id]);
 
         SDH_Sales_Naplo::ir('rendeles', 'Új rendelés: ' . $azon . ' (' . self::tipus_szoveg($tipus) . ', ' . SDH_Sales::ft((int) $ar['brutto']) . ', ' . $fizmod . ').', 'siker', 'rendeles', $id, null, [
             'tipus' => $tipus, 'brutto' => (int) $ar['brutto'], 'kupon' => (string) ($ar['kupon']['kod'] ?? ''), 'jogi' => $vevo['_jogi'],
         ]);
+
+        if ($ajanlat) {
+            return self::ajanlat_rogzit($id);
+        }
 
         do_action('sdh_sales_rendeles_letrehozva', $id);
 
@@ -748,6 +823,51 @@ final class SDH_Sales_Rendeles
         }
 
         return $ki;
+    }
+
+    /**
+     * Ajánlatkérés rögzítése: érdeklődés (lead) + levél a forgalmazónak. Nincs díjbekérő, fizetés, licenc, vevői fiók.
+     *
+     * @return array<string, mixed>
+     */
+    private static function ajanlat_rogzit(int $id): array
+    {
+        $r = (array) self::rendeles($id);
+        $v = (array) $r['vevo'];
+        $t = array_map(static fn ($x): string => is_array($x) ? (string) ($x['nev'] ?? $x['kulcs'] ?? '') : '', (array) $r['tetelek']);
+
+        SDH_Sales_Urlap::lead_ment('ajanlat', [
+            'rendeles'       => (string) $r['azon'],
+            'ceg'            => (string) ($v['ceg'] ?? ''),
+            'nev'            => (string) ($v['kapcsolattarto'] ?? ''),
+            'telefon'        => (string) ($v['telefon'] ?? ''),
+            'tetelek'        => $t,
+            'megjegyzes'     => (string) ($v['_megjegyzes'] ?? ''),
+        ], (string) $r['email']);
+        SDH_Sales_Urlap::ertesit(sprintf(__('Ajánlatkérés %s – %s', 'sdh-sales'), (string) $r['azon'], (string) ($v['ceg'] ?? '')), [
+            __('Cég', 'sdh-sales')       => (string) ($v['ceg'] ?? ''),
+            __('Név', 'sdh-sales')       => (string) ($v['kapcsolattarto'] ?? ''),
+            __('E-mail', 'sdh-sales')    => (string) $r['email'],
+            __('Telefon', 'sdh-sales')   => (string) ($v['telefon'] ?? ''),
+            __('Tételek', 'sdh-sales')   => implode(', ', array_filter($t)),
+            __('Megjegyzés', 'sdh-sales') => (string) ($v['_megjegyzes'] ?? ''),
+        ], (string) $r['email']);
+        SDH_Sales_Naplo::ir('rendeles', 'Ajánlatkérés (0 Ft-os kosár): ' . (string) $r['azon'] . ' – nem fizetett rendelés, nincs kiszolgálás.', 'info', 'rendeles', $id);
+        do_action('sdh_sales_ajanlatkeres', $id);
+
+        return [
+            'ok'          => true,
+            'id'          => $id,
+            'azon'        => (string) $r['azon'],
+            'token'       => self::allapot_token($r),
+            'allapot'     => 'ajanlat',
+            'brutto'      => 0,
+            'kozlemeny'   => '',
+            'hatarido'    => '',
+            'fizmod'      => (string) $r['fizmod'],
+            'statusz_url' => self::statusz_url($r),
+            'uzenet'      => __('Köszönjük! Az ajánlatkérésedet rögzítettük, hamarosan jelentkezünk a részletekkel.', 'sdh-sales'),
+        ];
     }
 
     /** A vevő WordPress-fiókja e-mail alapján (új: sdh_vevo szerep, használhatatlan véletlen jelszó – belépés e-mailes linkkel). */
@@ -801,7 +921,7 @@ final class SDH_Sales_Rendeles
     {
         global $wpdb;
 
-        $r = $wpdb->get_var($wpdb->prepare('SELECT vevo FROM ' . SDH_Sales_Schema::t('rendeles') . ' WHERE user_id = %d OR email = %s ORDER BY id DESC LIMIT 1', $uid, strtolower($email)));
+        $r = $wpdb->get_var($wpdb->prepare('SELECT vevo FROM ' . SDH_Sales_Schema::t('rendeles') . ' WHERE user_id = %d OR (user_id = 0 AND email = %s) ORDER BY id DESC LIMIT 1', $uid, strtolower($email)));
         $v = json_decode((string) $r, true);
 
         if (!is_array($v)) {
@@ -820,6 +940,7 @@ final class SDH_Sales_Rendeles
         global $wpdb;
 
         $tranzakcio = mb_substr(trim($tranzakcio), 0, 120);
+        $meta       = self::fizetes_meta($forras, $nyers);
 
         if (!in_array($forras, self::FORRASOK, true) || $tranzakcio === '' || $osszeg < 0) {
             SDH_Sales_Naplo::ir('fizetes', 'Érvénytelen fizetési adat (' . $forras . ').', 'hiba', 'rendeles', $id);
@@ -848,7 +969,7 @@ final class SDH_Sales_Rendeles
             'ido'         => current_time('mysql', true),
             'nyers'       => (string) wp_json_encode($nyers, JSON_UNESCAPED_UNICODE),
             'allapot'     => 'ok',
-        ]);
+        ] + $meta);
         $wpdb->suppress_errors($elnyom);
 
         if (!$be) {
@@ -859,11 +980,13 @@ final class SDH_Sales_Rendeles
 
         $fid = (int) $wpdb->insert_id;
 
-        if (in_array((string) $r['allapot'], ['fizetve', 'kiszolgalva', 'visszaterites'], true) || ((int) $r['brutto'] > 0 && (int) $r['fizetett'] >= (int) $r['brutto'])) {
+        // Kifizetett (vagy nem fizethető: ajánlatkérés) rendelésre érkező pénz: rögzítve, de nem indít semmit. A levél
+        // ellenőrzést kér, nem visszautalást – lehet, hogy ugyanaz a jóváírás jött meg egy másik csatornán is.
+        if (in_array((string) $r['allapot'], ['fizetve', 'kiszolgalva', 'visszaterites', 'ajanlat'], true) || ((int) $r['brutto'] > 0 && (int) $r['fizetett'] >= (int) $r['brutto'])) {
             $wpdb->update($tf, ['allapot' => 'tulfizetes'], ['id' => $fid]);
             $wpdb->query($wpdb->prepare("UPDATE {$tr} SET fizetett = fizetett + %d, modositva = %s WHERE id = %d", $osszeg, current_time('mysql', true), $id));
-            SDH_Sales_Naplo::ir('fizetes', 'Túlfizetés: ' . SDH_Sales::ft($osszeg) . ' érkezett a már kifizetett ' . (string) $r['azon'] . ' rendelésre (' . $forras . '). Visszautalás kell.', 'figyel', 'rendeles', $id);
-            self::admin_level('Túlfizetés: ' . (string) $r['azon'], 'A már kifizetett ' . (string) $r['azon'] . ' rendelésre újabb ' . SDH_Sales::ft($osszeg) . ' érkezett (' . $forras . ', ' . $tranzakcio . '). Visszautalás szükséges.');
+            SDH_Sales_Naplo::ir('fizetes', 'Túlfizetés (ellenőrizendő): ' . SDH_Sales::ft($osszeg) . ' érkezett a(z) ' . (string) $r['azon'] . ' rendelésre (' . $forras . ', ' . self::allapot_szoveg((string) $r['allapot']) . '). Ellenőrizendő.', 'figyel', 'rendeles', $id);
+            self::admin_level('Ellenőrizendő befizetés: ' . (string) $r['azon'], 'A(z) ' . (string) $r['azon'] . ' rendelésre (' . self::allapot_szoveg((string) $r['allapot']) . ') újabb ' . SDH_Sales::ft($osszeg) . ' érkezett (' . $forras . ', ' . $tranzakcio . ").\nEllenőrizd a bankszámlán, hogy valóban két külön jóváírás történt-e. Ha igen, a többletet utald vissza vagy írd jóvá; ha ugyanaz a tétel két forrásból jött, nincs teendő.");
 
             return true;
         }
@@ -906,25 +1029,49 @@ final class SDH_Sales_Rendeles
         return true;
     }
 
+    /**
+     * A befizetés csatornája, könyvelési napja és csatornafüggetlen lenyomata (a banki import adja `_csatorna`, `_datum`,
+     * `_lenyomat` kulcsokkal a nyers adatban – ezek oszlopba kerülnek, a nyers adatból kimaradnak).
+     *
+     * @param array<string, mixed> $nyers
+     * @return array{csatorna: string, datum: string, lenyomat: string}
+     */
+    private static function fizetes_meta(string $forras, array &$nyers): array
+    {
+        $cs = sanitize_key((string) ($nyers['_csatorna'] ?? $forras));
+        $d  = (string) ($nyers['_datum'] ?? '');
+        $l  = (string) ($nyers['_lenyomat'] ?? '');
+        unset($nyers['_csatorna'], $nyers['_datum'], $nyers['_lenyomat']);
+
+        return [
+            'csatorna' => substr($cs !== '' ? $cs : $forras, 0, 20),
+            'datum'    => preg_match('/^\d{4}-\d{2}-\d{2}$/', $d) === 1 ? $d : wp_date('Y-m-d'),
+            'lenyomat' => preg_match('/^[a-f0-9]{16,64}$/', $l) === 1 ? $l : '',
+        ];
+    }
+
     /** Nem párosítható befizetés rögzítése (rendeles_id = 0), idempotensen. */
-    public static function ismeretlen_fizetes(string $forras, string $tranzakcio, int $osszeg, array $nyers = []): bool
+    public static function ismeretlen_fizetes(string $forras, string $tranzakcio, int $osszeg, array $nyers = [], int $rendeles_id = 0, string $allapot = 'ismeretlen'): bool
     {
         global $wpdb;
 
+        $meta   = self::fizetes_meta($forras, $nyers);
+        $allapot = in_array($allapot, ['ismeretlen', 'jovahagyasra_var', 'ellenorizendo', 'duplikat'], true) ? $allapot : 'ismeretlen';
         $elnyom = $wpdb->suppress_errors(true);
         $ok     = $wpdb->insert(SDH_Sales_Schema::t('fizetes'), [
-            'rendeles_id' => 0,
+            'rendeles_id' => max(0, $rendeles_id),
             'forras'      => in_array($forras, self::FORRASOK, true) ? $forras : 'kezi',
             'tranzakcio'  => mb_substr($tranzakcio, 0, 120),
             'osszeg'      => $osszeg,
             'ido'         => current_time('mysql', true),
             'nyers'       => (string) wp_json_encode($nyers, JSON_UNESCAPED_UNICODE),
-            'allapot'     => 'ismeretlen',
-        ]);
+            'allapot'     => $allapot,
+        ] + $meta);
         $wpdb->suppress_errors($elnyom);
 
         if ($ok) {
-            SDH_Sales_Naplo::ir('fizetes', 'Nem párosítható befizetés: ' . SDH_Sales::ft($osszeg) . ' (' . $forras . ', ' . mb_substr($tranzakcio, 0, 60) . ').', 'figyel', 'fizetes', (int) $wpdb->insert_id);
+            $mit = ['ismeretlen' => 'Nem párosítható befizetés', 'jovahagyasra_var' => 'Kézi jóváhagyásra váró befizetés', 'ellenorizendo' => 'Ellenőrizendő befizetés', 'duplikat' => 'Már rögzített jóváírás másik forrásból'][$allapot];
+            SDH_Sales_Naplo::ir('fizetes', $mit . ': ' . SDH_Sales::ft($osszeg) . ' (' . $forras . ', ' . mb_substr($tranzakcio, 0, 60) . ').', $allapot === 'duplikat' ? 'info' : 'figyel', 'fizetes', (int) $wpdb->insert_id);
         }
 
         return (bool) $ok;

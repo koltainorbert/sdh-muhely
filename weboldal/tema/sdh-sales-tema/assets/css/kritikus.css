@@ -30,6 +30,7 @@ h1, h2, h3, h4, h5, h6 {
     line-height: var(--s-sorkoz-cim);
     letter-spacing: var(--s-betukoz-cim);
     text-wrap: balance;
+    overflow-wrap: break-word; /* a keskeny dobozban sem lóghat ki egy hosszú összetett szó */
     color: var(--s-szoveg);
 }
 h1 { font-size: var(--s-m-4xl); line-height: var(--s-sorkoz-szoros); }
@@ -95,6 +96,8 @@ address { font-style: normal; }
 .s-szekcio.s-hatter--felulet + .s-szekcio.s-hatter--felulet,
 .s-szekcio.s-hatter--uveg + .s-szekcio.s-hatter--uveg,
 .s-szekcio.s-hatter--sotet + .s-szekcio.s-hatter--sotet { padding-top: 0; }
+/* Az oldalfej (cím, morzsa) után azonos háttéren nem kell teljes szekció-padding: oldalfej alja (32) + 32 px */
+.s-oldalfej + .s-szekcio.s-hatter--alap { padding-top: var(--s-t-6); }
 .s-terkoz--kicsi { padding-block: var(--s-t-7); }
 .s-terkoz--nagy { padding-block: calc(var(--s-t-szekcio) * 1.4); }
 .s-hatter--felulet, .s-hatter--uveg { background: var(--s-bg-2); }
@@ -129,9 +132,26 @@ address { font-style: normal; }
 @media (min-width: 640px) {
     .s-racs--2, .s-racs--3, .s-racs--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/* Kéthasábos rácsban a páratlan utolsó kártya középre kerül (nem árván a bal hasábban) */
+@media (min-width: 640px) and (max-width: 1023.98px) {
+    .s-racs--3 > :last-child:nth-child(odd):not(:first-child),
+    .s-racs--4 > :last-child:nth-child(odd):not(:first-child) { grid-column: 1 / -1; justify-self: center; width: calc((100% - var(--s-t-5)) / 2); }
+}
+@media (min-width: 640px) {
+    .s-racs--2 > :last-child:nth-child(odd):not(:first-child) { grid-column: 1 / -1; justify-self: center; width: calc((100% - var(--s-t-5)) / 2); }
+}
 @media (min-width: 1024px) {
     .s-racs--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .s-racs--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    /* Nincs árva kártya az utolsó sorban: 3n+1 elemnél az utolsó négy 2 × 2-ben (6 hasábos alaprács),
+       4n+1 elemnél az utolsó öt 3 + 2-ben (12 hasábos alaprács) áll. */
+    .s-racs--3:has(> :nth-child(3n+1):last-child:not(:first-child)) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .s-racs--3:has(> :nth-child(3n+1):last-child:not(:first-child)) > * { grid-column: span 2; }
+    .s-racs--3:has(> :nth-child(3n+1):last-child:not(:first-child)) > :nth-last-child(-n+4) { grid-column: span 3; }
+    .s-racs--4:has(> :nth-child(4n+1):last-child:not(:first-child)) { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .s-racs--4:has(> :nth-child(4n+1):last-child:not(:first-child)) > * { grid-column: span 3; }
+    .s-racs--4:has(> :nth-child(4n+1):last-child:not(:first-child)) > :nth-last-child(-n+5) { grid-column: span 4; }
+    .s-racs--4:has(> :nth-child(4n+1):last-child:not(:first-child)) > :nth-last-child(-n+2) { grid-column: span 6; }
 }
 
 /* Kártya váza (a díszítés a kartyak.css-ben) */
@@ -187,6 +207,8 @@ address { font-style: normal; }
 .s-gomb--neon { background: var(--s-neon); color: var(--s-neon-felirat); }
 .s-gomb--link { background: none; padding-inline: 0; color: var(--s-kiemelo-2); min-height: 44px; }
 .s-gomb--kicsi { min-height: var(--s-magassag-gomb-kicsi); padding: 0 var(--s-t-4); font-size: var(--s-m-s); }
+/* Érintőképernyőn a kis gomb is ≥ 44 px célterület */
+@media (pointer: coarse) { .s-gomb--kicsi { min-height: 44px; } }
 .s-gomb--teljes { width: 100%; }
 .s-gomb:active { transform: translateY(1px); }
 .s-gomb[disabled], .s-gomb[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
@@ -220,6 +242,7 @@ address { font-style: normal; }
     border: 1px solid var(--s-vonal-eros); border-bottom-width: 2px;
     border-radius: 6px;
     font-family: var(--s-betu-kod); font-size: var(--s-m-xs); color: var(--s-halvany);
+    white-space: nowrap;
 }
 
 /* ---------- Fejléc ---------- */
@@ -319,6 +342,10 @@ address { font-style: normal; }
 @media (min-width: 1100px) {
     .s-fomenu { display: block; margin-left: var(--s-t-4); }
     .s-menugomb { display: none; }
+}
+/* A teljes fejléc (menü + kereső felirattal + két CTA) ~1250 px-et kér: alatta a kereső csak ikon, az „Árak” CTA
+   pedig csak a menüben van (különben 1100–1240 px között kilógna a fejléc, és a „Ctrl K” két sorba törne). */
+@media (min-width: 1280px) {
     .s-fejlec__cta { display: inline-flex; }
     .s-kereso-gomb { padding-inline: var(--s-t-3) var(--s-t-2); }
     .s-kereso-gomb__szoveg, .s-kereso-gomb .s-kbd { display: inline-flex; }
@@ -356,7 +383,8 @@ address { font-style: normal; }
 .s-hero__cim { font-size: var(--s-m-5xl); line-height: var(--s-sorkoz-szoros); margin-bottom: var(--s-t-5); overflow-wrap: break-word; }
 /* A cím a saját hasábjához méreteződik (kétoszlopos heróban a leghosszabb szó – pl. „mindennapjaira” – se lógjon ki). */
 .s-hero__szoveg { container-type: inline-size; width: 100%; }
-@supports (font-size: 1cqi) { .s-hero__cim { font-size: clamp(2.5rem, 12cqi, 5.5rem); } }
+/* 11,5cqi: a leghosszabb magyar szavak (≈ 8,6 em, pl. „Esettanulmányok:”, „viszonteladóknak”) 360 px-en is egy sorban férnek el */
+@supports (font-size: 1cqi) { .s-hero__cim { font-size: clamp(2.25rem, 11.5cqi, 5.5rem); } }
 .s-hero__alcim { font-size: var(--s-m-l); color: var(--s-halvany); max-width: 40rem; margin-bottom: 0; }
 .s-hero--kozep .s-hero__alcim { margin-inline: auto; }
 .s-hero__pontok { display: flex; flex-wrap: wrap; gap: var(--s-t-2) var(--s-t-5); list-style: none; padding: 0; margin: var(--s-t-6) 0 0; color: var(--s-halvany); font-size: var(--s-m-s); }
@@ -380,10 +408,29 @@ address { font-style: normal; }
 .s-morzsa a:hover { color: var(--s-szoveg); text-decoration: underline; }
 .s-morzsa [aria-current] { color: var(--s-szoveg); }
 .s-morzsa-sav { padding-top: var(--s-t-5); }
+.s-oldalfej__kereso { max-width: 640px; margin-top: var(--s-t-5); }
+.s-pillsor--szuro { margin-top: var(--s-t-5); }
+
+/* ---------- Logósáv váza (jellemzően közvetlenül a hero alatt) ---------- */
+.s-logo-sav__cim { font-size: var(--s-m-s); text-align: center; color: var(--s-halvany); font-family: var(--s-betu-szoveg), "Onest Tartalek"; font-weight: var(--s-suly-kozepes); letter-spacing: var(--s-betukoz-felirat); text-transform: uppercase; margin-bottom: var(--s-t-5); }
+.s-logo-sav { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--s-t-6) var(--s-t-7); list-style: none; padding: 0; margin: 0; }
+.s-logo-sav__elem a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+.s-logo-sav__elem img { max-height: 40px; width: auto; }
+.s-logo-sav__nev { font-family: var(--s-betu-cim), "Bricolage Tartalek"; font-weight: var(--s-suly-cim); font-size: var(--s-m-l); color: var(--s-halvany); }
 .s-morzsa-sav .s-morzsa { margin: 0; }
 
 /* Csontváz a csatolási pontokon (a JS cseréli) */
+/* Panel a csatolási pontok körül (kosár, pénztár, fiók): a helyfoglalás az első festéskor kell */
+.s-panel--kosar, .s-panel--penztar, .s-panel--fiok { min-height: 260px; }
 .s-mount { min-height: 120px; }
+/* Helyfoglalás a tipikusan az első képernyőn álló modulokra (mért végső magasság alatt maradva → nincs üres sáv,
+   és a modul megjelenése nem tolja le az alatta lévő szekciót: CLS) */
+.s-mount--urlap { min-height: 860px; }
+.s-mount--egyedi { min-height: 600px; }
+.s-mount--foglalas { min-height: 540px; }
+@media (max-width: 1023.98px) { .s-mount--foglalas { min-height: 580px; } }
+@media (max-width: 599.98px) { .s-mount--foglalas { min-height: 720px; } }
+@media (max-width: 559.98px) { .s-mount--egyedi { min-height: 800px; } }
 .s-mount__tolt { display: grid; gap: var(--s-t-3); }
 .s-csontvaz { display: block; height: 18px; border-radius: 9px; background: var(--s-felulet-2); }
 .s-csontvaz--rovid { width: 60%; }

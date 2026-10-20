@@ -1,8 +1,11 @@
 /* Lábléc + nyomtatás. */
 
-.s-lablec { margin-top: var(--s-t-8); padding: var(--s-t-8) 0 calc(var(--s-t-5) + env(safe-area-inset-bottom)); background: var(--s-bg-2); border-top: 1px solid var(--s-vonal); font-size: var(--s-m-s); }
+/* Nincs külső margó: a tartalom utolsó szekciójának alsó paddingja adja a levegőt (különben dupla köz). */
+.s-lablec { margin-top: 0; padding: var(--s-t-8) 0 calc(var(--s-t-5) + env(safe-area-inset-bottom)); background: var(--s-bg-2); border-top: 1px solid var(--s-vonal); font-size: var(--s-m-s); }
 .s-lablec__racs { display: grid; gap: var(--s-t-6); grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .s-lablec__marka { grid-column: 1 / -1; display: grid; gap: var(--s-t-3); align-content: start; }
+/* Tablet: három hasáb (öt linkoszlop 3 + 2-ben, nem 2 + 2 + 1-ben) */
+@media (min-width: 640px) and (max-width: 899.98px) { .s-lablec__racs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 900px) {
     .s-lablec__racs { grid-template-columns: minmax(0, 1.6fr) repeat(auto-fit, minmax(150px, 1fr)); }
     .s-lablec__marka { grid-column: auto; }

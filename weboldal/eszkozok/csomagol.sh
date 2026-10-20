@@ -48,6 +48,8 @@ if [ -n "$FO" ]; then
   cp -a "$DEMO_DIR/." "$MUNKA/bemutato/"
   mv "$MUNKA/bemutato/$(basename "$FO")" "$MUNKA/bemutato/bemutato.php"
   sed -i 's/^ \* Plugin Name:.*/ * Plugin Name:       Bemutató/' "$MUNKA/bemutato/bemutato.php"
+  # A demó készülékképei a bővítmény kepek/ mappájába (a generátor ott is keresi).
+  [ -d "$GYOKER/demo-adat/kepek" ] && cp -a "$GYOKER/demo-adat/kepek" "$MUNKA/bemutato/kepek"
 fi
 
 # --- takarítás ---------------------------------------------------------------

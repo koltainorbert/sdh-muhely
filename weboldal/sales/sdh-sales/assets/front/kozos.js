@@ -16,6 +16,7 @@
  *   APP.urlap(form)               → az űrlap mezői objektumként (több azonos nevű → tömb; checkbox → bool)
  *   APP.vedelem(form, adat)       → a robotszűrés mezői (mézesbödön, időbélyeg, Turnstile) az űrlapba; adat: {turnstile, hp, t}
  *   APP.modulok(nev, fn)          → fn(gyoker, opciok) minden `[data-modul="nev"]` elemre, egyszer (DOM kész után)
+ *   APP.lepteto(mezo, cimke, esemeny) → .s-lepteto doboz (− mező +) egy számmező köré; a gombok a mező eseményét küldik
  */
 (function (w, d) {
     'use strict';
@@ -251,6 +252,39 @@
         }
     }
 
+    /**
+     * Léptető (− / +) egy számmező köré: csak a mező értékét állítja (min / max között), és a mező saját eseményét küldi
+     * (`esemeny`: 'input' vagy 'change'), így a modul meglévő kezelője számol. A − gomb a minimumon tiltott.
+     */
+    function lepteto(mezo, cimke, esemeny) {
+        var min = parseInt(mezo.getAttribute('min'), 10), max = parseInt(mezo.getAttribute('max'), 10);
+        if (isNaN(min)) { min = 1; }
+        var minusz = el('button', { type: 'button', osztaly: 's-lepteto__gomb', 'aria-label': (cimke || '') + ': eggyel kevesebb', szoveg: '−' });
+        var plusz = el('button', { type: 'button', osztaly: 's-lepteto__gomb', 'aria-label': (cimke || '') + ': eggyel több', szoveg: '+' });
+        var doboz = el('div', { osztaly: 's-lepteto' }, [minusz, mezo, plusz]);
+        function allit() {
+            var v = parseInt(mezo.value, 10);
+            minusz.disabled = !isNaN(v) && v <= min;
+            plusz.disabled = !isNaN(max) && !isNaN(v) && v >= max;
+        }
+        function lep(d) {
+            var v = parseInt(mezo.value, 10);
+            v = (isNaN(v) ? min : v) + d;
+            if (v < min) { v = min; }
+            if (!isNaN(max) && v > max) { v = max; }
+            mezo.value = String(v);
+            allit();
+            mezo.dispatchEvent(new Event(esemeny || 'input', { bubbles: true }));
+        }
+        minusz.addEventListener('click', function () { lep(-1); });
+        plusz.addEventListener('click', function () { lep(1); });
+        mezo.addEventListener('input', allit);
+        mezo.addEventListener('change', allit);
+        allit();
+        doboz.frissit = allit;
+        return doboz;
+    }
+
     function modulok(nev, fn) {
         function fut() {
             Array.prototype.forEach.call(d.querySelectorAll('[data-modul="' + nev + '"]'), function (g) {
@@ -267,6 +301,9 @@
     APP.api = api;
     APP.uzen = uzen;
     APP.ketlepcsos = ketlepcsos;
+    // A téma tartalék kétlépcsős kezelője ([data-ketlepcsos]) ezt nézi: ha a közös modul kezeli, a téma nem nyúl hozzá
+    // (különben mindkettő élesít, a gomb szövege a data-ketlepcsos értéke lesz, és az esemény kétszer mehet ki).
+    APP.ketlepcsos_kezeli = true;
     APP.kosar = kosar;
     APP.ft = ft;
     APP.esc = esc;
@@ -274,5 +311,6 @@
     APP.urlap = urlap;
     APP.vedelem = vedelem;
     APP.modulok = modulok;
+    APP.lepteto = lepteto;
     APP.afa = parseInt(K.afa, 10) || 27;
 }(window, document));

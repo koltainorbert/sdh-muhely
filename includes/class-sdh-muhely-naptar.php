@@ -958,8 +958,7 @@ final class SDH_Muhely_Naptar
         $ugyfel  = '';
 
         if (!$rejtett && (int) $e->ugyfel_id > 0 && class_exists('SDH_Muhely_Ugyfel')) {
-            $u      = SDH_Muhely_Ugyfel::egy((int) $e->ugyfel_id);
-            $ugyfel = $u ? (string) $u->nev : '';
+            $ugyfel = SDH_Muhely_Ugyfel::nev((int) $e->ugyfel_id);
         }
 
         return [

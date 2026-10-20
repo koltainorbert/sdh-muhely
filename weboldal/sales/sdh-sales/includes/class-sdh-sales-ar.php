@@ -57,16 +57,31 @@ final class SDH_Sales_Ar
         return self::szamol_tiszta($kat, $tetelek, $opciok);
     }
 
-    /** Hány élő rendelés használta a kupont (törölt / sikertelen nem számít). */
-    public static function kupon_hasznalat(string $kod, int $kiveve = 0): int
+    /**
+     * A kupon felhasználásai: a kifizetett rendelések + az élő foglalások (fizetetlen rendelés, amely `kupon.foglalas_ora`
+     * óránál – alapból 24 – nem régebbi). Törölt / sikertelen / lejárt foglalás nem számít. `$elotte` > 0: csak az ennél
+     * kisebb azonosítójú rendelések (a beszúrás utáni, atomi foglalás-ellenőrzéshez).
+     */
+    public static function kupon_hasznalat(string $kod, int $kiveve = 0, int $elotte = 0): int
     {
         global $wpdb;
 
+        $hatar = gmdate('Y-m-d H:i:s', time() - self::kupon_foglalas_ora() * HOUR_IN_SECONDS);
+
         return (int) $wpdb->get_var($wpdb->prepare(
-            'SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('rendeles') . " WHERE kupon = %s AND allapot NOT IN ('torolve','sikertelen') AND id <> %d",
+            'SELECT COUNT(*) FROM ' . SDH_Sales_Schema::t('rendeles') . " WHERE kupon = %s AND id <> %d AND (%d = 0 OR id < %d)
+             AND (allapot IN ('fizetve','kiszolgalva') OR (allapot IN ('uj','dijbekero','fizetesre_var') AND letrehozva >= %s))",
             strtoupper($kod),
-            $kiveve
+            $kiveve,
+            $elotte,
+            $elotte,
+            $hatar
         ));
+    }
+
+    public static function kupon_foglalas_ora(): int
+    {
+        return max(1, min(24 * 30, (int) SDH_Sales::b('kupon.foglalas_ora', 24)));
     }
 
     /** Egész kerekítés félre felfelé: a / b (a ≥ 0, b > 0). */
@@ -499,7 +514,13 @@ final class SDH_Sales_Ar
     /** POST /ar – nyilvános, korlátozott. Törzs: {tetelek[], opciok{}}. */
     public static function rest_ar(WP_REST_Request $r): WP_REST_Response
     {
-        $e = self::szamol(self::tetelek_tisztit($r->get_param('tetelek')), self::opciok_tisztit($r->get_param('opciok')));
+        $o = SDH_Sales_Kupon::opciok_szur(self::opciok_tisztit($r->get_param('opciok')), $hiba);
+        $e = self::szamol(self::tetelek_tisztit($r->get_param('tetelek')), $o);
+        SDH_Sales_Kupon::eredmeny_jelez($o, $e);
+
+        if ($hiba !== null) {
+            $e['hibak'][] = $hiba;
+        }
 
         return new WP_REST_Response($e, 200);
     }
