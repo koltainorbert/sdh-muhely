@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Értékesítés-admin – vizuális QA bejáró (Playwright, Chromium). Belép a titkos belépő címen, végigjárja az admin minden
+Stúdió (értékesítés-admin) – vizuális QA bejáró (Playwright, Chromium). Belép a titkos belépő címen, végigjárja az admin minden
 panelét, popupját és űrlapját 1366 / 1600 / 1920 / 1024 szélességen (és 390-en gyors használhatósági körrel), sötét és
 világos módban, és minden állapotban méri (kovetes/vizualis-qa.md, az admin-felületre alkalmazva):
 
@@ -119,7 +119,7 @@ MERO = r"""
 
   // ---- 1 túlcsordulás
   if (document.documentElement.scrollWidth > vw + 1) add('tulcsordulas', `oldal: scrollWidth ${document.documentElement.scrollWidth} > ${vw}`);
-  const SZANDEKOS_GORGETO = '.sa-tabla-doboz, .sa-almenu, .sa-fulek, .sa-elonezet, .sa-szegmens, .sa-diff pre, .sa-rt__ter, .sa-paletta__lista';
+  const SZANDEKOS_GORGETO = '.sa-tabla-doboz, .sa-almenu, .sa-fulek, .sa-elonezet, .sa-szegmens, .sa-diff pre, .sa-rt__ter, .sa-paletta__lista, .st-elo__keret, .st-konyvtar, .st-szlista, .st-tul__test';
   for (const el of vis) {
     const v = vagott(el);
     if (v.width <= 0 || v.height <= 0) continue;
@@ -145,9 +145,9 @@ MERO = r"""
     if (rejt(s.overflowX) && el.scrollWidth > el.clientWidth + 2) {
       if (s.textOverflow === 'ellipsis') {
         if (!el.closest('[title]') && !el.closest('[aria-label]')) add('levagott', `csonkolt, title nélkül: ${sel(el)}`);
-      } else if (!el.matches('.sa-kartya--sima, .sa-popup, .sa-minta, .sa-rt, .sa-szin__minta')) add('levagott', `vízszintesen levágva: ${sel(el)} (${el.scrollWidth} > ${el.clientWidth})`);
+      } else if (!el.matches('.sa-kartya--sima, .sa-popup, .sa-minta, .sa-rt, .sa-szin__minta, .st-elo, .st-elo__keret, .st-elo__vaszon, .st-skin__minta')) add('levagott', `vízszintesen levágva: ${sel(el)} (${el.scrollWidth} > ${el.clientWidth})`);
     }
-    if (rejt(s.overflowY) && el.scrollHeight > el.clientHeight + 2 && !el.matches('.sa-kartya--sima, .sa-szin__minta, .sa-rt')) add('levagott', `függőlegesen levágva: ${sel(el)} (${el.scrollHeight} > ${el.clientHeight})`);
+    if (rejt(s.overflowY) && el.scrollHeight > el.clientHeight + 2 && !el.matches('.sa-kartya--sima, .sa-szin__minta, .sa-rt, .st-elo, .st-elo__keret, .st-elo__vaszon, .st-skin__minta')) add('levagott', `függőlegesen levágva: ${sel(el)} (${el.scrollHeight} > ${el.clientHeight})`);
   }
   for (const g of root.querySelectorAll('.sa-gomb, .sa-cimke, .sa-szegmens button, .sa-fulek button')) {
     if (!latszik(g)) continue;
@@ -296,7 +296,7 @@ MERO = r"""
   for (const el of vis) {
     const r = el.getBoundingClientRect();
     if (r.width < 200 || r.height < 60) continue;
-    if (el.closest('.sa-minta, iframe, .sa-elonezet, .media-modal')) continue;
+    if (el.closest('.sa-minta, iframe, .sa-elonezet, .media-modal, .st-elo, .st-logo-elo, .st-email-elo')) continue;
     const s = cs(el);
     const c = szin(s.backgroundColor);
     if (!c || c.a < 0.5) continue;
@@ -315,7 +315,7 @@ MERO = r"""
       if (Math.max(...h) - Math.min(...h) > 2) add('igazitas', `KPI-sor eltérő magasság: ${h.map(Math.round).join('/')}`);
     }
   }
-  for (const sz of root.querySelectorAll('.sa-eszkozsor, .sa-popup__lab, .sa-epito__fej, .sa-kartya__fej')) {
+  for (const sz of root.querySelectorAll('.sa-eszkozsor, .sa-popup__lab, .sa-epito__fej, .sa-kartya__fej, .st-eszkoz, .st-panelfej')) {
     if (!latszik(sz)) continue;
     const ko = [...sz.children].filter((x) => latszik(x) && x.matches('.sa-gomb, .sa-input, .sa-select, .sa-ikon-gomb, .sa-szegmens'));
     const sorok = {};
@@ -328,7 +328,7 @@ MERO = r"""
 
   // ---- méretezetlen ikon (pl. a fejléc nélküli SVG a teljes dobozt kitölti)
   for (const sv of root.querySelectorAll('svg')) {
-    if (!latszik(sv) || sv.closest('.sa-diagram, .sa-kpi__spark, .sa-minta')) continue;
+    if (!latszik(sv) || sv.closest('.sa-diagram, .sa-kpi__spark, .sa-minta') || sv.matches('.st-vazlat')) continue;
     const r = sv.getBoundingClientRect();
     if (r.width > 48 || r.height > 48) add('ikon', `túlméretes ikon: ${sel(sv.parentElement)} › svg ${Math.round(r.width)}×${Math.round(r.height)}`);
   }
@@ -659,90 +659,180 @@ def bejar(pg, w, h, mod, jegyez):
         hash_(pg, '#/oldalak')
         oid = pg.evaluate("() => { const t = [...document.querySelectorAll('[data-oldal]')]; const k = t.find((x) => /Kezdőlap/.test(x.innerText)) || t[0]; return k ? k.dataset.oldal : ''; }")
         if not oid:
-            jegyez('allapot', f'{nev0} Építő', ['nincs szekciós oldal'])
+            jegyez('allapot', f'{nev0} Építő', ['nincs oldal'])
             return
         hash_(pg, f'#/oldalak/{oid}')
-        pg.wait_for_selector('.sa-szelem', timeout=15000)
-        pg.wait_for_timeout(1200)
+        pg.wait_for_selector('.st-szelem', timeout=15000)
+        pg.wait_for_selector('.st-elo__tolt[hidden]', state='attached', timeout=20000)
+        pg.wait_for_timeout(600)
         meres('Építő')
         fokusz('Építő', 30)
-        if w <= 1280:
-            pg.click('[data-elo-valt]')
-            pg.wait_for_timeout(700)
-            meres('Építő előnézet (keskeny)')
-        pg.click('.sa-epito__oszlop--elo [data-ertek="mobil"]')
-        pg.wait_for_timeout(500)
-        meres('Építő mobil előnézet')
-        pg.click('.sa-epito__oszlop--elo [data-ertek="asztal"]')
-        if w <= 1280:
-            pg.click('[data-urlap-valt]')
+        mobil = w <= 960
+        if mobil:
+            for f in ['fa', 'tul']:
+                pg.click(f'[data-mobilful="{f}"]')
+                pg.wait_for_timeout(200)
+                meres(f'Építő mobil fül {f}')
+            pg.click('[data-mobilful="elo"]')
+        else:
+            for m in ['tablet', 'mobil']:
+                pg.click(f'[data-meret] [data-ertek="{m}"]')
+                pg.wait_for_timeout(300)
+                meres(f'Építő {m} előnézet')
+            pg.click('[data-meret] [data-ertek="asztal"]')
+        db = pg.evaluate("() => document.querySelectorAll('.st-szelem').length")
+        for i in range(db if teljes else 1):
+            if mobil:
+                pg.click('[data-mobilful="fa"]')
+            pg.click(f'.st-szelem[data-i="{i}"] [data-nyit]')
             pg.wait_for_timeout(200)
-        db = pg.evaluate("() => document.querySelectorAll('.sa-szelem').length")
-        for i in range(db if teljes else 0):
-            pg.click(f'.sa-szelem[data-i="{i}"] [data-nyit]')
-            pg.wait_for_timeout(150)
+            if mobil:
+                pg.click('[data-mobilful="tul"]')
             meres(f'Építő szekció {i + 1}')
-            fulek_bejar(f'Építő szekció {i + 1}', '[data-urlap]')
-        popup_nyit('[data-seo]', 'SEO popup', False)
+            fulek_bejar(f'Építő szekció {i + 1}', '[data-tul]')
+        if mobil:
+            pg.click('[data-mobilful="fa"]')
+        popup_nyit('[data-beallit]', 'Oldal beállításai popup')
         popup_bezar(pg)
-        popup_nyit('[data-hozzaad]', 'Szekció hozzáadása popup', False)
-        tipusok = pg.evaluate("() => [...document.querySelectorAll('.sa-tipusracs [data-tipus]')].map((x) => x.dataset.tipus)")
+        popup_nyit('[data-reviziok]', 'Revíziók popup', False) if not mobil else None
+        popup_bezar(pg)
+        popup_nyit('[data-hozzaad]', 'Szekciókönyvtár popup', False)
+        tipusok = pg.evaluate("() => [...document.querySelectorAll('.st-konyvtar [data-tipus]')].map((x) => x.dataset.tipus)")
         popup_bezar(pg)
         for t in (tipusok if teljes else tipusok[:3]):
+            if mobil:
+                pg.click('[data-mobilful="fa"]')
             pg.click('[data-hozzaad]')
-            pg.wait_for_selector('.sa-tipusracs')
-            pg.click(f'.sa-tipusracs [data-tipus="{t}"]')
+            pg.wait_for_selector('.st-konyvtar')
+            pg.click(f'.st-konyvtar [data-tipus="{t}"]')
             pg.wait_for_timeout(250)
-            if w <= 1280 and pg.evaluate("() => document.querySelector('[data-epito]').classList.contains('is-elo')"):
-                pg.click('[data-urlap-valt]')
+            if mobil:
+                pg.click('[data-mobilful="tul"]')
+                pg.wait_for_timeout(150)
             meres(f'Szekció-űrlap {t}')
-            fulek_bejar(f'Szekció-űrlap {t}', '[data-urlap]')
-            # ismétlők: minden fülön az összes „Új elem”
-            nyitott = pg.evaluate("""() => { let n = 0; const tabs = [...document.querySelectorAll('[data-urlap] .sa-fulek [role=tab]')];
-                for (const t of (tabs.length ? tabs : [null])) { if (t) t.click(); [...document.querySelectorAll('[data-urlap] .sa-ismetlo [data-uj]')].filter((x) => x.offsetParent && !x.disabled).forEach((x) => { x.click(); n++; }); }
+            fulek_bejar(f'Szekció-űrlap {t}', '[data-tul]')
+            nyitott = pg.evaluate("""() => { let n = 0; const tabs = [...document.querySelectorAll('[data-tul] .sa-fulek [role=tab]')];
+                for (const t of (tabs.length ? tabs : [null])) { if (t) t.click(); [...document.querySelectorAll('[data-tul] .sa-ismetlo [data-uj], [data-tul] .sa-lista-mezo + .sa-sor [data-uj]')].filter((x) => x.offsetParent && !x.disabled).forEach((x) => { x.click(); n++; }); }
                 return n; }""")
             if nyitott:
                 pg.wait_for_timeout(200)
-                for i, tab in enumerate(pg.query_selector_all('[data-urlap] .sa-fulek [role=tab]') or [None]):
+                for k2, tab in enumerate(pg.query_selector_all('[data-tul] .sa-fulek [role=tab]') or [None]):
                     if tab:
                         tab.click()
                         pg.wait_for_timeout(100)
-                    meres(f'Szekció-űrlap {t} ismétlő nyitva {i + 1}')
-            ik = pg.query_selector('[data-urlap] .sa-ikonvalaszto')
+                    meres(f'Szekció-űrlap {t} ismétlő nyitva {k2 + 1}')
+            ik = pg.query_selector('[data-tul] .sa-ikonvalaszto')
             if ik and ik.is_visible():
                 ik.click()
                 pg.wait_for_timeout(150)
                 meres(f'Ikonrács {t}', '.sa-ikonracs')
                 pg.keyboard.press('Escape')
-            dt = pg.query_selector('[data-urlap] .sa-datum input')
+            dt = pg.query_selector('[data-tul] .sa-datum input')
             if dt and dt.is_visible():
                 dt.click()
                 pg.wait_for_timeout(150)
                 meres(f'Naptár {t}', '.sa-naptar')
                 pg.keyboard.press('Escape')
-            # a hozzáadott szekció törlése (kétlépcsős gomb: két katt)
-            pg.evaluate("() => { const a = document.querySelector('.sa-szelem.is-aktiv [data-torol]'); if (a) { a.click(); a.click(); } }")
+            ov = pg.query_selector('[data-tul] [data-oldalvalaszto]')
+            if ov and ov.is_visible() and t == (tipusok[0] if tipusok else ''):
+                ov.click()
+                pg.wait_for_timeout(400)
+                meres(f'Oldalválasztó {t}', '.sa-oldalvalaszto')
+                pg.keyboard.press('Escape')
+            if mobil:
+                pg.click('[data-mobilful="fa"]')
+            pg.evaluate("() => { const a = document.querySelector('.st-szelem.is-aktiv [data-torol]'); if (a) { a.click(); a.click(); } }")
             pg.wait_for_timeout(120)
         pg.evaluate("() => { const g = document.querySelector('[data-elvet]'); if (g && !g.disabled) { g.click(); g.click(); } }")
-        pg.wait_for_timeout(300)
+        pg.wait_for_timeout(600)
+        hash_(pg, '#/oldalak')
 
-    def elemek():
-        hash_(pg, '#/elemek')
-        meres('Elemek')
-        etipusok = pg.evaluate("() => [...document.querySelectorAll('.sa-almenu [data-tipus]')].map((x) => x.dataset.tipus)")
-        for t in (etipusok if teljes else etipusok[:2]):
-            pg.click(f'.sa-almenu [data-tipus="{t}"]')
-            var(pg, 350)
-            meres(f'Elemek {t}')
-            popup_nyit('[data-uj]', f'Új {t} popup')
-            popup_bezar(pg)
-            if pg.query_selector('[data-kulcs]'):
-                popup_nyit('[data-kulcs] td:nth-child(3)', f'{t} szerkesztése popup')
-                nyit = pg.evaluate("""() => { const p = [...document.querySelectorAll('.sa-popup-hatter')].pop(); const tabs = [...p.querySelectorAll('.sa-fulek [role=tab]')]; for (const t of (tabs.length ? tabs : [null])) { if (t) t.click(); const g = [...p.querySelectorAll('.sa-ismetlo__nyit')].filter((x) => x.offsetParent)[0]; if (g) { g.click(); return 1; } } return 0; }""")
-                if nyit:
-                    pg.wait_for_timeout(200)
-                    meres(f'{t} szerkesztése, ismétlő nyitva', POPUP, popup=True)
+    def tarak():
+        panelek = pg.evaluate("() => Object.entries(PA_BOOT.panelek).filter(([, p]) => p.elerheto && (p.tipusok || []).length).map(([k, p]) => [k, p.tipusok])")
+        for k, tipusok in (panelek if teljes else panelek[:2]):
+            hash_(pg, '#/' + k)
+            for t in (tipusok if teljes else tipusok[:1]):
+                if len(tipusok) > 1:
+                    pg.click(f'.sa-eszkozsor [data-ertek="{t}"]')
+                    var(pg, 350)
+                meres(f'Tár {k} {t}')
+                popup_nyit('[data-uj]', f'Új {t} popup')
                 popup_bezar(pg)
+                if pg.query_selector('[data-kulcs]'):
+                    popup_nyit('[data-kulcs] td:nth-child(3)', f'{t} szerkesztése popup')
+                    nyit = pg.evaluate("""() => { const p = [...document.querySelectorAll('.sa-popup-hatter')].pop(); const tabs = [...p.querySelectorAll('.sa-fulek [role=tab]')]; for (const t of (tabs.length ? tabs : [null])) { if (t) t.click(); const g = [...p.querySelectorAll('.sa-ismetlo__nyit')].filter((x) => x.offsetParent)[0]; if (g) { g.click(); return 1; } } return 0; }""")
+                    if nyit:
+                        pg.wait_for_timeout(200)
+                        meres(f'{t} szerkesztése, ismétlő nyitva', POPUP, popup=True)
+                    if t == 'email' and pg.query_selector('.sa-popup [data-elonezet]'):
+                        pg.click('.sa-popup [data-elonezet]')
+                        pg.wait_for_selector('.st-email-elo', timeout=10000)
+                        pg.wait_for_timeout(300)
+                        meres('E-mail előnézet popup', POPUP, popup=True)
+                    popup_bezar(pg)
+
+    def blog():
+        hash_(pg, '#/blog')
+        meres('Blog')
+        if not teljes:
+            return
+        for f in ['draft', 'trash']:
+            pg.click(f'.sa-eszkozsor [data-ertek="{f}"]')
+            var(pg, 350)
+            meres(f'Blog {f}')
+        pg.click('.sa-eszkozsor [data-ertek=""]')
+        var(pg, 350)
+        popup_nyit('[data-uj]', 'Új cikk popup', False)
+        popup_bezar(pg)
+        if pg.query_selector('[data-cikk]'):
+            pg.click('[data-cikk] td:nth-child(2)')
+            pg.wait_for_selector('.st-cikk', timeout=10000)
+            var(pg, 300)
+            meres('Cikk-szerkesztő')
+            dt = pg.query_selector('[data-nap]')
+            if dt:
+                dt.click()
+                pg.wait_for_timeout(150)
+                meres('Cikk naptár', '.sa-naptar')
+                pg.keyboard.press('Escape')
+
+    def jogi():
+        hash_(pg, '#/jogi')
+        meres('Jogi oldalak')
+        if teljes and pg.query_selector('[data-jogi]'):
+            pg.click('[data-jogi] td:nth-child(1)')
+            pg.wait_for_selector('.st-cikk', timeout=10000)
+            var(pg, 300)
+            meres('Jogi szerkesztő')
+
+    def media():
+        if not pg.query_selector('[data-menupont="media"]'):
+            return
+        hash_(pg, '#/media')
+        meres('Média')
+        if teljes and pg.query_selector('[data-media-id]'):
+            popup_nyit('[data-media-id]', 'Médiaelem popup', False)
+            popup_bezar(pg)
+
+    def megjelenes():
+        for k in ['fejlec', 'lablec', 'feliratok', 'suti', 'szikra_megj', 'urlapok', 'ertesitesek', 'kuka']:
+            if not pg.query_selector(f'[data-menupont="{k}"]'):
+                continue
+            hash_(pg, '#/' + k)
+            meres(k)
+            if k == 'kuka' and teljes:
+                pg.click('.sa-eszkozsor [data-ertek="reviziok"]')
+                var(pg, 300)
+                meres('Revíziók (rendszer)')
+            if k == 'urlapok' and teljes:
+                for t in ['ajanlat', 'partner']:
+                    pg.click(f'.sa-eszkozsor [data-ertek="{t}"]')
+                    pg.wait_for_timeout(150)
+                    meres(f'Űrlapok {t}')
+            if k == 'feliratok' and teljes:
+                pg.fill('[data-fq]', 'demó')
+                pg.wait_for_timeout(300)
+                meres('Feliratok keresés')
 
     def menuk():
         hash_(pg, '#/menuk')
@@ -810,7 +900,8 @@ def bejar(pg, w, h, mod, jegyez):
         popup_bezar(pg)
 
     for nev, fn in [('menü', menu), ('Áttekintés', attekintes), ('mobil menü', mobil_menu), ('Rendelések', rendelesek), ('Banki egyeztetés', bank), ('Vevők', vevok),
-                    ('Leadek', leadek), ('Foglalások', foglalasok), ('Oldalak', oldalak), ('Építő', epito), ('Elemek', elemek),
+                    ('Leadek', leadek), ('Foglalások', foglalasok), ('Oldalak', oldalak), ('Építő', epito), ('Tartalomtárak', tarak), ('Blog', blog),
+                    ('Jogi', jogi), ('Média', media), ('Megjelenés és rendszer', megjelenes),
                     ('Menük', menuk), ('Arculat', arculat), ('Beállítások', beallitasok), ('Napló', naplo), ('Export', export), ('Ctrl+K', paletta)]:
         lepes(nev, fn)
     return n[0]
