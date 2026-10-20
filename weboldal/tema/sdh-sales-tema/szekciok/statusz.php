@@ -42,7 +42,9 @@ if ($elemek === []) {
         $a = (string) ($e['allapot'] ?? 'ok');
         $a = isset($cimkek[$a]) ? $a : 'ok';
 
-        echo '<li class="s-statusz__sor"><span class="s-statusz__nev">' . esc_html(sdh_tema_t((string) ($e['nev'] ?? ''))) . '</span>';
+        $ei = isset($e['_ei']) ? (int) $e['_ei'] : null;
+
+        echo '<li class="s-statusz__sor"' . ($ei !== null ? sdh_tema_szerk_mezo($sz, 'elemek', $ei) : '') . '><span class="s-statusz__nev">' . esc_html(sdh_tema_t((string) ($e['nev'] ?? ''))) . '</span>';
         echo '<span class="s-pill s-pill--' . esc_attr($a) . '">' . sdh_tema_ikon($cimkek[$a][1]) . esc_html($cimkek[$a][0]) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
         if (!empty($e['megj'])) {
@@ -58,7 +60,7 @@ if ($elemek === []) {
 $fr = sdh_tema_mezo($sz, 'frissitve');
 
 if ($fr !== '') {
-    echo '<p class="s-halvany s-statusz__ido">' . esc_html(sprintf(/* translators: %s: idő */ sdh_tema__('Frissítve: %s'), $fr)) . '</p>';
+    echo '<p class="s-halvany s-statusz__ido"' . sdh_tema_szerk_mezo($sz, 'frissitve') . '>' . esc_html(sprintf(/* translators: %s: idő */ sdh_tema__('Frissítve: %s'), $fr)) . '</p>';
 }
 
 echo sdh_tema_szekcio_zar($sz); // phpcs:ignore WordPress.Security.EscapeOutput

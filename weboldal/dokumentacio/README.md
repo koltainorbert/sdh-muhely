@@ -43,7 +43,7 @@ verziónapló. Csomagolás: `sh weboldal/eszkozok/csomagol.sh` → `weboldal/dis
 ## Fejlesztés és tesztek
 - Tesztoldal: WP 6.8.3 + SQLite (`sh weboldal/eszkozok/sajat-teszthely.sh <név>`), a bővítmények szimlinkelve.
   Futtatás: `SDH_TESZT_ADATBAZIS=1 SDH_WP_LOAD=/home/claude/env/<név>/wp/wp-load.php SDH_TESZT_DB=… SDH_TESZT_ALAP=…
-  php weboldal/tesztek/futtat.php [szűrő]` (tesztenként egy összegző sor). Böngészős: `php -S 127.0.0.1:<port> -t
+  php weboldal/tesztek/futtat.php [szűrő]` (tesztenként egy összegző sor). Böngészős: `PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:<port> -t
   /home/claude/env/<név> weboldal/eszkozok/router.php` (az útvonal-álneveket is kiszolgálja), majd
   `tesztek/e2e/t241-tema-bongeszo.py`, `rejtes-bejaras.py`, `*-vizualis.py`.
 - Téma-CSS: `assets/css/*.css` → `php tema/sdh-sales-tema/bin/epit.php` (esbuild) → `assets/dist/*.min.css`.

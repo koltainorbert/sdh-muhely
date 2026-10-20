@@ -4,7 +4,8 @@ header_remove('X-Powered-By');
  * Fejlesztői útválasztó a `php -S`-hez: a rejtés útvonal-álneveit (static/m, static/t, media, static, lib) a valódi
  * mappákra képezi, a valódi rendszer-útvonalakat közvetlenül 404-gyel válaszolja (mint élesben a webszerver-szabály),
  * minden mást a WordPress index.php-ja kap.
- *   php -S 127.0.0.1:8765 -t /home/claude/env/<n> /home/claude/sdh-muhely/weboldal/eszkozok/router.php
+ *   PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8765 -t /home/claude/env/<n> /home/claude/sdh-muhely/weboldal/eszkozok/router.php
+ *   (a WORKERS kell: az álnév-próba a szerver saját magának küld kérést – egy szálon ez 8 mp-es várakozás és „sikertelen”.)
  * A WordPress a docroot `wp/` almappájában van (siteurl/home: http://127.0.0.1:<port>/wp).
  */
 $_rt_gyoker = $_SERVER['DOCUMENT_ROOT'];

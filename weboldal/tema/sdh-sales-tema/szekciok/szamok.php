@@ -10,7 +10,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$sz_ = sdh_tema_elemek($sz, 'szamok') ?: sdh_tema_elemek($sz);
+$lk  = sdh_tema_elemek($sz, 'szamok') !== [] ? 'szamok' : 'elemek';
+$sz_ = sdh_tema_elemek($sz, $lk);
 
 if ($sz_ === []) {
     echo sdh_tema_admin_megjegyzes('szamok: nincs elem'); // phpcs:ignore WordPress.Security.EscapeOutput
@@ -23,9 +24,11 @@ echo '<dl class="s-szamok">';
 foreach ($sz_ as $e) {
     $ikon = sdh_tema_mezo($e, 'ikon');
 
-    echo '<div class="s-szam">';
-    echo '<dt class="s-szam__cimke">' . ($ikon !== '' ? sdh_tema_ikon($ikon) : '') . esc_html(sdh_tema_t(sdh_tema_mezo($e, 'cimke'))) . '</dt>'; // phpcs:ignore WordPress.Security.EscapeOutput
-    echo '<dd class="s-szam__ertek">' . esc_html(sdh_tema_t(sdh_tema_mezo($e, 'ertek'))) . '</dd>';
+    $ei = (int) $e['_ei'];
+
+    echo '<div class="s-szam"' . sdh_tema_szerk_mezo($sz, $lk, $ei) . '>';
+    echo '<dt class="s-szam__cimke"' . sdh_tema_szerk_mezo($sz, $lk, $ei, 'cimke') . '>' . ($ikon !== '' ? sdh_tema_ikon($ikon) : '') . esc_html(sdh_tema_t(sdh_tema_mezo($e, 'cimke'))) . '</dt>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<dd class="s-szam__ertek"' . sdh_tema_szerk_mezo($sz, $lk, $ei, 'ertek') . '>' . esc_html(sdh_tema_t(sdh_tema_mezo($e, 'ertek'))) . '</dd>';
     echo '</div>';
 }
 
