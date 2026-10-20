@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 /** A nem kritikus CSS forrásai, betöltési sorrendben (bin/epit.php is ezt használja). @return array<int, string> */
 function sdh_tema_css_forrasok(): array
 {
-    return ['uveg', 'urlap', 'komponensek', 'szekciok', 'proza', 'kereso', 'lablec'];
+    return ['uveg', 'urlap', 'komponensek', 'szekciok', 'proza', 'kereso', 'moduluk', 'lablec'];
 }
 
 /* =====================================================================
