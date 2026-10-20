@@ -39,6 +39,13 @@ final class SDH_Sales_Urlap
      */
     public static function mezok(string $tipus): array
     {
+        // A Stúdió (Kommunikáció › Űrlapok) ezen a szűrőn át írja felül a feliratokat / kötelezőséget / láthatóságot.
+        return array_values((array) apply_filters('sdh_sales_urlap_mezok', self::mezok_alap($tipus), $tipus));
+    }
+
+    /** @return array<int, array<string, mixed>> a beépített mezőlista */
+    public static function mezok_alap(string $tipus): array
+    {
         $kozos = [
             ['nev' => 'nev', 'cimke' => __('Neved', 'sdh-sales'), 'tipus' => 'text', 'kotelezo' => true, 'max' => 120],
             ['nev' => 'email', 'cimke' => __('E-mail-cím', 'sdh-sales'), 'tipus' => 'email', 'kotelezo' => true, 'max' => 190],

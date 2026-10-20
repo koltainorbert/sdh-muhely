@@ -432,14 +432,58 @@ final class SDH_Sales_Admin_Beallitas
      * Arculat
      * ============================================================== */
 
+    /** @return array<string, array<string, mixed>> a téma skinjei (kulcs → {nev, leiras, tokenek, tokenek_sotet}), ha a téma ad ilyet */
+    public static function skinek(): array
+    {
+        if (!method_exists('SDH_Sales_Arculat', 'skinek')) {
+            return [];
+        }
+
+        $ki = [];
+
+        foreach ((array) SDH_Sales_Arculat::skinek() as $k => $x) {
+            if (!is_array($x)) {
+                continue;
+            }
+
+            $kulcs = sanitize_key((string) ($x['kulcs'] ?? $k));
+
+            if ($kulcs !== '') {
+                $ki[$kulcs] = ['kulcs' => $kulcs, 'nev' => (string) ($x['nev'] ?? $kulcs), 'leiras' => (string) ($x['leiras'] ?? ''), 'tokenek' => (array) ($x['tokenek'] ?? []), 'tokenek_sotet' => (array) ($x['tokenek_sotet'] ?? [])];
+            }
+        }
+
+        return $ki;
+    }
+
     public static function r_arculat(): WP_REST_Response
     {
-        return new WP_REST_Response(SDH_Sales_Arculat::allapot() + ['css' => SDH_Sales_Arculat::css()], 200);
+        $a = SDH_Sales_Arculat::allapot();
+        $s = self::skinek();
+
+        return new WP_REST_Response($a + [
+            'css'    => SDH_Sales_Arculat::css(),
+            'skinek' => array_values($s),
+            'skin'   => (string) ($a['skin'] ?? SDH_Sales::b('skin', $s !== [] ? (string) array_key_first($s) : '')),
+        ], 200);
     }
 
     public static function r_arculat_ment(WP_REST_Request $r)
     {
-        $e = SDH_Sales_Arculat::ment((array) $r->get_json_params());
+        $be = (array) $r->get_json_params();
+
+        // Skin (ha a téma ad skineket): ismert kulcs, a `skin` beállításba.
+        if (isset($be['skin'])) {
+            $sk = sanitize_key((string) $be['skin']);
+
+            if (isset(self::skinek()[$sk]) && (string) SDH_Sales::b('skin', '') !== $sk) {
+                SDH_Sales::b_ment(['skin' => $sk], 'arculat');
+            }
+
+            unset($be['skin']);
+        }
+
+        $e = SDH_Sales_Arculat::ment($be);
 
         if ($e['hibas'] !== []) {
             return new WP_Error('ervenytelen', 'Érvénytelen érték: ' . implode(', ', $e['hibas']) . '. A többi mentve.', ['status' => 422, 'hibas' => $e['hibas']]);
