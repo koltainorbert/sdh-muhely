@@ -68,9 +68,9 @@
     --sa-szoveg-2: #464c63;
     --sa-szoveg-3: #596076;
     --sa-kiemelo: #5b4cf0;
-    --sa-kiemelo-szoveg: #5b4cf0;
+    --sa-kiemelo-szoveg: #4c3ddb;
     --sa-kiemelo-halvany: rgba(91, 76, 240, .11);
-    --sa-ok: #047857;
+    --sa-ok: #036b4e;
     --sa-figyel: #9a4508;
     --sa-hiba: #be123c;
     --sa-info: #0e6a80;
@@ -91,8 +91,8 @@
     :root:not([data-tema="sotet"]):not([data-tema="vilagos"]) {
         --sa-hatter: #f3f4f8; --sa-hatter-2: #eceef4; --sa-panel: rgba(255, 255, 255, .86); --sa-panel-eros: #fff;
         --sa-panel-halvany: rgba(15, 23, 42, .035); --sa-vonal: rgba(15, 23, 42, .09); --sa-vonal-eros: rgba(15, 23, 42, .18);
-        --sa-szoveg: #0f1222; --sa-szoveg-2: #464c63; --sa-szoveg-3: #596076; --sa-kiemelo: #5b4cf0; --sa-kiemelo-szoveg: #5b4cf0; --sa-kiemelo-halvany: rgba(91, 76, 240, .11);
-        --sa-ok: #047857; --sa-figyel: #9a4508; --sa-hiba: #be123c; --sa-info: #0e6a80; --sa-hiba-szoveg: #fff; --sa-figyel-szoveg: #fff; --sa-mezo-keret: #7d8296; --sa-mezo-keret-eros: #646a7e;
+        --sa-szoveg: #0f1222; --sa-szoveg-2: #464c63; --sa-szoveg-3: #596076; --sa-kiemelo: #5b4cf0; --sa-kiemelo-szoveg: #4c3ddb; --sa-kiemelo-halvany: rgba(91, 76, 240, .11);
+        --sa-ok: #036b4e; --sa-figyel: #9a4508; --sa-hiba: #be123c; --sa-info: #0e6a80; --sa-hiba-szoveg: #fff; --sa-figyel-szoveg: #fff; --sa-mezo-keret: #7d8296; --sa-mezo-keret-eros: #646a7e;
         --sa-arnyek: 0 1px 2px rgba(15, 23, 42, .04), 0 14px 40px -18px rgba(15, 23, 42, .2);
         --sa-arnyek-popup: 0 40px 120px -20px rgba(15, 23, 42, .35), 0 0 0 1px rgba(15, 23, 42, .08);
         --sa-aurora-1: rgba(124, 108, 255, .12); --sa-aurora-2: rgba(34, 211, 238, .08); --sa-mezo: rgba(15, 23, 42, .04);
@@ -177,9 +177,9 @@ button { font: inherit; color: inherit; }
 .sa-menu__jel--ok { background: color-mix(in srgb, var(--sa-ok) 9%, var(--sa-panel-eros)); color: var(--sa-ok); }
 
 .sa-oldalsav__alja { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding-top: 10px; }
-.sa-wp-gomb { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: var(--sa-r-gomb); border: 1px solid var(--sa-vonal); color: var(--sa-szoveg-2); font-weight: 500; text-decoration: none; }
-.sa-wp-gomb:hover { border-color: var(--sa-vonal-eros); color: var(--sa-szoveg); }
-.sa-wp-gomb svg { width: 18px; height: 18px; flex: none; }
+.sa-oldalsav-gomb { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: var(--sa-r-gomb); border: 1px solid var(--sa-vonal); color: var(--sa-szoveg-2); font-weight: 500; text-decoration: none; }
+.sa-oldalsav-gomb:hover { border-color: var(--sa-vonal-eros); color: var(--sa-szoveg); }
+.sa-oldalsav-gomb svg { width: 18px; height: 18px; flex: none; }
 
 .sa-fo { min-width: 0; display: flex; flex-direction: column; }
 
@@ -375,7 +375,7 @@ button { font: inherit; color: inherit; }
 .sa-select { appearance: none; padding-right: 34px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a90a6' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; }
 .sa-select option { background: var(--sa-panel-eros); color: var(--sa-szoveg); }
 .sa-input:hover, .sa-select:hover, .sa-textarea:hover { border-color: var(--sa-mezo-keret-eros); }
-.sa-input[readonly] { border-style: dashed; }
+.sa-input[readonly]:not([aria-haspopup]) { border-style: dashed; }
 .sa-input:focus, .sa-select:focus, .sa-textarea:focus { border-color: var(--sa-mezo-fokusz); box-shadow: 0 0 0 4px var(--sa-kiemelo-halvany); }
 .sa-input--mono { font-family: var(--sa-mono); letter-spacing: .02em; }
 .sa-input--kicsi, .sa-select--kicsi { height: 32px; font-size: 12.5px; border-radius: 10px; }
@@ -480,6 +480,7 @@ button { font: inherit; color: inherit; }
 .sa-ismetlo__fej { display: flex; align-items: center; gap: 6px; padding: 4px 6px 4px 10px; min-height: 40px; }
 .sa-ismetlo__fej > button.sa-ismetlo__nyit { flex: 1; min-width: 0; text-align: left; border: 0; background: none; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; gap: 8px; align-items: center; height: 30px; border-radius: 8px; padding: 0 4px; }
 .sa-ismetlo__fej > button.sa-ismetlo__nyit span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sa-ismetlo__fej > button.sa-ismetlo__nyit > svg { width: 14px; height: 14px; flex: none; color: var(--sa-szoveg-3); }
 .sa-ismetlo__fej > button.sa-ismetlo__nyit small { color: var(--sa-szoveg-3); font-weight: 600; }
 .sa-ismetlo__test { padding: 4px 12px 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
 .sa-ismetlo__test > .sa-mezo { grid-column: 1 / -1; }
@@ -625,6 +626,8 @@ button { font: inherit; color: inherit; }
 .sa-diff pre { margin: 0; white-space: pre-wrap; font: 11.5px/1.45 var(--sa-mono); max-height: 160px; overflow: auto; }
 
 .sa-ejto { border: 2px dashed var(--sa-vonal-eros); border-radius: var(--sa-ivel); padding: 26px; text-align: center; color: var(--sa-szoveg-2); cursor: pointer; }
+.sa-ejto svg { display: block; width: 28px; height: 28px; margin: 0 auto 10px; color: var(--sa-kiemelo-szoveg); }
+.sa-ejto.is-tolt { opacity: .6; pointer-events: none; }
 .sa-ejto.is-felette, .sa-ejto:hover, .sa-ejto:focus-visible { border-color: var(--sa-kiemelo); background: var(--sa-kiemelo-halvany); outline: none; }
 
 /* ---------- Mobil ---------- */

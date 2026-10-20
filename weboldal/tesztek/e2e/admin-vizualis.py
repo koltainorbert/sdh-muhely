@@ -10,6 +10,7 @@ világos módban, és minden állapotban méri (kovetes/vizualis-qa.md, az admin
   levagott      – levágott tartalom (overflow), „…”-ra csonkolt szöveg title nélkül
   popup         – 1366×768-on a popup törzse görgetés nélkül fér el, és a popup a nézeten belül van
   iv            – minden mező / legördülő / gomb / pill lekerekített; többsoros mező íve ≤ 15 px
+  ikon          – méretezetlen (48 px-nél nagyobb) ikon
   kapcsolo      – kapcsoló mellett nincs Aktív/Inaktív felirat, körülötte ≥ 6 px levegő
   kontraszt     – szöveg ≥ 4,5:1 (nagy szöveg ≥ 3:1), mezőkeret ≥ 3:1
   tema          – a kért mód él; nagy felület rossz fényerővel (sötétben világos / világosban sötét)
@@ -325,11 +326,18 @@ MERO = r"""
     }
   }
 
+  // ---- méretezetlen ikon (pl. a fejléc nélküli SVG a teljes dobozt kitölti)
+  for (const sv of root.querySelectorAll('svg')) {
+    if (!latszik(sv) || sv.closest('.sa-diagram, .sa-kpi__spark, .sa-minta')) continue;
+    const r = sv.getBoundingClientRect();
+    if (r.width > 48 || r.height > 48) add('ikon', `túlméretes ikon: ${sel(sv.parentElement)} › svg ${Math.round(r.width)}×${Math.round(r.height)}`);
+  }
+
   // ---- célterület
   for (const el of root.querySelectorAll('button, a[href], input:not([type=hidden]), select, [role=button], [role=tab], summary')) {
     if (!latszik(el)) continue;
     if (el.matches('.sa-kapcsolo input, input[type=color], .sa-ugro')) continue;
-    if (el.matches('a') && !el.matches('.sa-gomb, .sa-ikon-gomb, .sa-wp-gomb, .sa-logo, .sa-menu a') && el.closest('p, dd, li, td, .sa-kv, .sa-fejlec__cim')) continue; // szövegközi link
+    if (el.matches('a') && !el.matches('.sa-gomb, .sa-ikon-gomb, .sa-oldalsav-gomb, .sa-logo, .sa-menu a') && el.closest('p, dd, li, td, .sa-kv, .sa-fejlec__cim')) continue; // szövegközi link
     const r = el.getBoundingClientRect();
     if (r.width < 23.5 || r.height < 23.5) add('celterulet', `${sel(el)} ${Math.round(r.width)}×${Math.round(r.height)}`);
   }
@@ -410,7 +418,7 @@ def main():
     jegyez('konzol', 'konzol', sorted(set(konzol)))
 
     print(f'Admin vizuális QA – {osszes_allapot} állapot, {round(time.time() - kezdes)} s')
-    nevek = ['tulcsordulas', 'tabla', 'atfedes', 'levagott', 'popup', 'iv', 'kapcsolo', 'kontraszt', 'tema', 'igazitas', 'celterulet', 'fokusz', 'menu', 'mozgas', 'konzol', 'allapot']
+    nevek = ['tulcsordulas', 'tabla', 'atfedes', 'levagott', 'popup', 'iv', 'ikon', 'kapcsolo', 'kontraszt', 'tema', 'igazitas', 'celterulet', 'fokusz', 'menu', 'mozgas', 'konzol', 'allapot']
     ossz = 0
     for k in nevek:
         l = hibak.get(k, [])
