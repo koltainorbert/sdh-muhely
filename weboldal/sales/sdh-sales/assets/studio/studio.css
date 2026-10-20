@@ -90,10 +90,10 @@
 .st-szelem__nyit span { min-width: 0; display: flex; flex-direction: column; }
 .st-szelem__nyit b { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .st-szelem__nyit small { font-size: 11.5px; color: var(--sa-szoveg-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* A sor gombjai a szöveg fölé úsznak (rejtve nem foglalnak helyet), egérrel / fókusszal / kijelölve látszanak. */
-.st-szelem__gombok { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); display: inline-flex; gap: 0; padding: 2px; border-radius: 10px;
-    background: var(--sa-panel-eros); box-shadow: -14px 0 14px -6px var(--sa-panel-eros); opacity: 0; pointer-events: none; transition: opacity .12s; }
-.st-szelem:hover .st-szelem__gombok, .st-szelem:focus-within .st-szelem__gombok { opacity: 1; pointer-events: auto; }
+/* A sor műveletei (elrejtés, másolás, törlés) a kijelölt sorban, a cím alatt (a többi sor csak a címet mutatja). */
+.st-szelem { flex-wrap: wrap; }
+.st-szelem__gombok { display: none; width: 100%; justify-content: flex-end; gap: 4px; padding: 2px 2px 2px 30px; }
+.st-szelem.is-aktiv .st-szelem__gombok { display: flex; }
 .st-szelem .sa-szelem__fogo { flex: none; }
 .st-ures { list-style: none; }
 
@@ -127,7 +127,7 @@
 .st-vazlat .kt { fill: var(--sa-kiemelo); font-family: Georgia, serif; }
 
 /* Oldal-beállítások: találati előnézet */
-.st-serp { margin-top: 14px; padding: 14px; }
+.st-serp { margin-top: 10px; padding: 10px 14px; }
 .st-serp__url { color: var(--sa-ok); margin-top: 4px; }
 .st-serp__cim { color: var(--sa-kiemelo-szoveg); font-size: 17px; margin-top: 2px; }
 
@@ -228,7 +228,7 @@ span.st-fa__ag { display: inline-block; }
     .st-mobil-fulek button[aria-selected="true"] { background: var(--sa-kiemelo-halvany); border-color: color-mix(in srgb, var(--sa-kiemelo) 55%, transparent); }
     .st-eszkoz { flex-wrap: wrap; row-gap: 6px; }
     .st-eszkoz [data-meret], .st-eszkoz [data-uj-lap], .st-eszkoz [data-mod-valt], .st-eszkoz [data-reviziok] { display: none; }
-    .st-szelem__gombok { position: static; transform: none; opacity: 1; pointer-events: auto; box-shadow: none; background: none; }
+
     .st-cikk__oldal { grid-template-columns: minmax(0, 1fr); }
     .st-media-reszlet { grid-template-columns: minmax(0, 1fr); }
     .st-felirat { grid-template-columns: minmax(0, 1fr); gap: 6px; }
@@ -237,5 +237,5 @@ span.st-fa__ag { display: inline-block; }
 
 @media (prefers-reduced-motion: reduce) {
     .st-elo__tolt span, .sa-mezo.is-kiemelt, .sa-ismetlo__elem.is-kiemelt { animation: none; }
-    .st-elo__vaszon, .sa-menu__nyil, .st-szelem__gombok { transition: none; }
+    .st-elo__vaszon, .sa-menu__nyil { transition: none; }
 }

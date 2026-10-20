@@ -858,8 +858,8 @@
                     <button type="button" class="sa-gomb sa-gomb--kicsi" data-masol>${I('duplikal')}Másolat</button>
                     ${o.kezdolap ? '' : `<button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--veszely" data-kuka data-ketlepcsos="Biztos? A kukába teszem">${I('torol')}Kukába</button>`}</div>`],
                 ['seo', 'SEO és megosztás', `<div class="sa-mezok">
-                    <div class="sa-mezo sa-mezo--szeles"><label class="sa-mezo__cim" for="st-seo-t">Keresőben megjelenő cím (title)${sz('t', 60)}</label><input class="sa-input" id="st-seo-t" maxlength="200" value="${e(o.seo.title)}" placeholder="${e(o.cim)}"><span class="sa-mezo__sugo">Ajánlott: 50–60 karakter. Tokenek: {termeknev}, {ceg}.</span></div>
-                    <div class="sa-mezo sa-mezo--szeles"><label class="sa-mezo__cim" for="st-seo-d">Leírás (meta description)${sz('d', 160)}</label><textarea class="sa-textarea" id="st-seo-d" rows="3" maxlength="400">${e(o.seo.description)}</textarea><span class="sa-mezo__sugo">Ajánlott: 120–160 karakter.</span></div>
+                    <div class="sa-mezo sa-mezo--szeles"><label class="sa-mezo__cim" for="st-seo-t">Keresőben megjelenő cím (title)${sz('t', 60)}</label><input class="sa-input" id="st-seo-t" maxlength="200" value="${e(o.seo.title)}" placeholder="${e(o.cim)}" title="Ajánlott: 50–60 karakter (cím), 120–160 (leírás). Tokenek: {termeknev}, {ceg}."></div>
+                    <div class="sa-mezo sa-mezo--szeles"><label class="sa-mezo__cim" for="st-seo-d">Leírás (meta description)${sz('d', 160)}</label><textarea class="sa-textarea" id="st-seo-d" rows="2" maxlength="400">${e(o.seo.description)}</textarea></div>
                     <div class="sa-mezo"><label class="sa-mezo__cim" for="st-seo-k">Fókusz-kulcsszó</label><input class="sa-input" id="st-seo-k" maxlength="120" value="${e(o.seo.kulcsszo)}"></div>
                     <div class="sa-mezo"><label class="sa-mezo__cim" for="st-seo-c">Kanonikus cím (üresen: az oldal saját címe)</label><input class="sa-input sa-input--mono" id="st-seo-c" value="${e(o.seo.kanonikus || '')}" placeholder="https://…"></div>
                     <div class="sa-mezo sa-mezo--szeles"><label class="sa-mezo__cim" for="st-seo-og">Megosztási kép (OG)</label><div class="sa-kep"><span class="sa-kep__elo" data-ogelo style="background-image:${o.seo.og_kep ? `url('${e(o.seo.og_kep)}')` : 'none'}"></span><input class="sa-input" id="st-seo-og" value="${e(o.seo.og_kep || '')}" readonly placeholder="Nincs (a webhely alapképe él)"><button type="button" class="sa-gomb" data-og>${I('kep')}Médiatár</button><button type="button" class="sa-ikon-gomb" data-og-torol aria-label="Megosztási kép törlése">${I('x')}</button></div></div>
@@ -878,6 +878,7 @@
             [['t', t], ['d', d]].forEach(([n, x]) => { const s = $(`[data-sz="${n}"]`, el); const max = Number(s.dataset.max); s.textContent = `${x.value.length}/${max}`; s.classList.toggle('is-sok', x.value.length > max); });
             $('[data-serp-u]', el).textContent = (B.webhely || '').replace(/\/$/, '') + '/' + ($('#st-ob-s', el).value || o.slug) + '/';
             $('[data-serp-t]', el).textContent = (t.value || c.value).replace('{termeknev}', B.termeknev);
+            $('[data-serp-t]', el).title = $('[data-serp-t]', el).textContent;
             $('[data-serp-d]', el).textContent = (d.value || 'Nincs leírás – a kereső maga választ szöveget.').replace('{termeknev}', B.termeknev);
         };
         el.addEventListener('input', frissit);

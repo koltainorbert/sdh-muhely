@@ -662,9 +662,12 @@ def bejar(pg, w, h, mod, jegyez):
             jegyez('allapot', f'{nev0} Építő', ['nincs oldal'])
             return
         hash_(pg, f'#/oldalak/{oid}')
-        pg.wait_for_selector('.st-szelem', timeout=15000)
-        pg.wait_for_selector('.st-elo__tolt[hidden]', state='attached', timeout=20000)
-        pg.wait_for_timeout(600)
+        pg.wait_for_selector('.st-szelem', state='attached', timeout=15000)
+        try:
+            pg.wait_for_function("() => [...document.querySelectorAll('[data-iframe]')].some((f) => /elonezet=/.test(f.src)) && document.querySelector('[data-tolt]').hidden", timeout=25000)
+        except Exception:
+            pass
+        pg.wait_for_timeout(800)
         meres('Építő')
         fokusz('Építő', 30)
         mobil = w <= 960
@@ -684,7 +687,7 @@ def bejar(pg, w, h, mod, jegyez):
         for i in range(db if teljes else 1):
             if mobil:
                 pg.click('[data-mobilful="fa"]')
-            pg.click(f'.st-szelem[data-i="{i}"] [data-nyit]')
+            pg.evaluate("i => document.querySelector(`.st-szelem[data-i=\"${i}\"] [data-nyit]`).click()", i)  # (a Playwright stabilitás-várakozása ezen a gombon nem tér vissza)
             pg.wait_for_timeout(200)
             if mobil:
                 pg.click('[data-mobilful="tul"]')
