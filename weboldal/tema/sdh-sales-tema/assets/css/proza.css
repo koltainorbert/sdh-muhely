@@ -79,6 +79,9 @@
 @media (min-width: 1100px) {
     .s-tudas__racs { grid-template-columns: 260px minmax(0, var(--s-max-szuk)); justify-content: center; gap: var(--s-t-8); }
     .s-tudas__oldalsav { position: sticky; top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); align-self: start; max-height: calc(100vh - var(--s-fejlec-magassag) - var(--s-t-7)); overflow: auto; }
+    /* A TJ-t a JS nyitja ki (ld. tema.js) – alul áll, így a kinyílása nem tolja el a fejezetlistát (CLS) */
+    .s-tudas__oldalsav { display: flex; flex-direction: column; }
+    .s-tudas__oldalsav > .s-tj { order: 2; margin: var(--s-t-6) 0 0; }
 }
 .s-tudas-darab { scroll-margin-top: calc(var(--s-fejlec-magassag) + var(--s-t-5)); }
 .s-tudas-darab + .s-tudas-darab { margin-top: var(--s-t-7); padding-top: var(--s-t-6); border-top: 1px solid var(--s-vonal); }

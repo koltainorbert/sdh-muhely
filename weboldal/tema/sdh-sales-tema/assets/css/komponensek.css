@@ -3,7 +3,7 @@
  * dobozok, értesítők (toast), modál, lapozó, pipalista, jelek.
  */
 
-/* ---------- Kártyák ---------- */
+/* ---------- Kártyák (a méretet adó váz – média, fej, láb, meta, címméret – a kritikus CSS-ben) ---------- */
 .s-kartya {
     box-shadow: var(--s-arnyek-kicsi);
     transition: border-color var(--s-ido) var(--s-gorbe), transform var(--s-ido) var(--s-gorbe), box-shadow var(--s-ido) var(--s-gorbe);
@@ -15,18 +15,9 @@
 .s-kartya__link:focus-visible { outline: none; }
 .s-kartya:has(.s-kartya__link:focus-visible) { outline: var(--s-fokusz-vastag) solid var(--s-fokusz); outline-offset: var(--s-fokusz-tav); }
 .s-kartya__link:hover { color: inherit; }
-.s-kartya__tovabb { display: inline-flex; align-items: center; gap: var(--s-t-1); margin-top: auto; color: var(--s-neon); font-weight: var(--s-suly-felkover); font-size: var(--s-m-s); }
 .s-kartya__tovabb .s-ikon { width: 16px; height: 16px; transition: transform var(--s-ido) var(--s-gorbe); }
 .s-kartya:hover .s-kartya__tovabb .s-ikon { transform: translateX(3px); }
-.s-kartya__media { margin: calc(-1 * var(--s-t-5)) calc(-1 * var(--s-t-5)) var(--s-t-2); border-radius: var(--s-r-kartya) var(--s-r-kartya) 0 0; overflow: hidden; aspect-ratio: 3 / 2; background: var(--s-felulet-2); }
-.s-kartya__media img, .s-kartya__media picture { width: 100%; height: 100%; object-fit: cover; }
 .s-kartya__kep { border-radius: var(--s-r-kicsi); }
-.s-kartya__fej { display: flex; align-items: center; gap: var(--s-t-3); }
-.s-kartya__fej .s-kartya__cim { font-size: var(--s-m-l); }
-.s-kartya__lab { margin-top: auto; display: grid; gap: var(--s-t-2); }
-.s-kartya__ar { font-size: var(--s-m-xs); color: var(--s-halvany); margin: 0; }
-.s-kartya__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin: 0; font-size: var(--s-m-xs); color: var(--s-halvany); }
-.s-kartya--cikk .s-kartya__cim { font-size: var(--s-m-l); }
 
 /* ---------- Pipalista, jelek ---------- */
 .s-pipalista { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-t-2); }
@@ -88,15 +79,7 @@ thead .s-tabla__kiemelt { color: var(--s-kiemelo-2); }
 .s-gyik-szuro { margin-bottom: var(--s-t-5); }
 .s-forraslista { font-size: var(--s-m-xs); display: grid; gap: var(--s-t-2); padding-left: 1.1em; }
 
-/* ---------- Dobozok ---------- */
-.s-doboz {
-    display: flex; gap: var(--s-t-3); align-items: flex-start;
-    padding: var(--s-t-4) var(--s-t-5);
-    border: 1px solid var(--s-vonal); border-radius: var(--s-r-kicsi);
-    background: var(--s-felulet-2);
-    margin: 0 0 var(--s-t-5);
-}
-.s-doboz > .s-ikon { margin-top: 3px; color: var(--s-neon); }
+/* ---------- Dobozok (a váz a kritikus CSS-ben: rövid oldalakon az első képernyőn áll) ---------- */
 .s-doboz p:last-child { margin-bottom: 0; }
 .s-doboz--info { border-color: var(--s-neon-halvany); background: var(--s-neon-halvany); }
 .s-doboz--figyel { border-color: var(--s-figyel-halvany); background: var(--s-figyel-halvany); }

@@ -175,4 +175,16 @@ $s = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . SDH_Kozpont::t('letoltes')
 T::egyezik(14, (int) round((strtotime((string) $s->lejar . ' UTC') - strtotime((string) $s->letrehozva . ' UTC')) / DAY_IN_SECONDS), 'érvényesség: 14 nap');
 T::igaz(is_string(SDH_Kozpont_Kiszolgalas::letoltes_ellenoriz(t25_token(SDH_Kozpont_Kiszolgalas::letoltes_link((int) t25_r($id)['kozpont_licenc_id'], 'x', time() - 14 * DAY_IN_SECONDS - 60)))), '14 nap után elutasítva');
 
+
+// Független ellenőrzés (2026-10-20), alacsony 1: a forgalmazónak szóló levelekben sincs rendszer-útvonal / belső név.
+$GLOBALS['t25_levelek'] = [];
+SDH_Sales::b_ment(['email.ertesites' => 'norbi@pelda.hu']);
+$ida = t25_rendeles();
+t25_fizet($ida);
+$adm = t25_levelek('admin_ertesites');
+$sz  = implode("\n", array_map(static fn (array $l): string => (string) $l['targy'] . "\n" . (string) $l['html'] . "\n" . (string) $l['szoveg'], $adm));
+T::igaz($adm !== [] && preg_match('~/wp-admin/|\bsdh\b|sdh[-_]~i', $sz) !== 1, 'alacsony-1: az admin-értesítőben nincs /wp-admin/ és „sdh”');
+T::tartalmaz($sz, '?vezerlo=r' . $ida, 'alacsony-1: semleges vezérlőpult-hivatkozás a levélben');
+T::igaz(preg_match('~wp-admin|sdh~i', SDH_Sales_Kiszolgalas::admin_link(42)) !== 1, 'alacsony-1: admin_link semleges');
+
 T::vege('t254 e-mail és letöltő link');

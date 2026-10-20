@@ -167,6 +167,15 @@ address { font-style: normal; }
 .s-kartya__cim { font-size: var(--s-m-xl); margin: 0; }
 .s-kartya__szoveg { color: var(--s-halvany); margin: 0; }
 .s-kartya__szoveg p:last-child { margin-bottom: 0; }
+.s-kartya__tovabb { display: inline-flex; align-items: center; gap: var(--s-t-1); margin-top: auto; color: var(--s-neon); font-weight: var(--s-suly-felkover); font-size: var(--s-m-s); }
+.s-kartya__media { margin: calc(-1 * var(--s-t-5)) calc(-1 * var(--s-t-5)) var(--s-t-2); border-radius: var(--s-r-kartya) var(--s-r-kartya) 0 0; overflow: hidden; aspect-ratio: 3 / 2; background: var(--s-felulet-2); }
+.s-kartya__media img, .s-kartya__media picture { width: 100%; height: 100%; object-fit: cover; }
+.s-kartya__fej { display: flex; align-items: center; gap: var(--s-t-3); }
+.s-kartya__fej .s-kartya__cim { font-size: var(--s-m-l); }
+.s-kartya__lab { margin-top: auto; display: grid; gap: var(--s-t-2); }
+.s-kartya__ar { font-size: var(--s-m-xs); color: var(--s-halvany); margin: 0; }
+.s-kartya__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-t-2); margin: 0; font-size: var(--s-m-xs); color: var(--s-halvany); }
+.s-kartya--cikk .s-kartya__cim { font-size: var(--s-m-l); }
 .s-ikondoboz {
     display: inline-grid; place-items: center; flex: none;
     width: 48px; height: 48px;
@@ -434,6 +443,16 @@ address { font-style: normal; }
 .s-mount__tolt { display: grid; gap: var(--s-t-3); }
 .s-csontvaz { display: block; height: 18px; border-radius: 9px; background: var(--s-felulet-2); }
 .s-csontvaz--rovid { width: 60%; }
+
+/* ---------- Doboz váza (állapot-, üres- és infódobozok – rövid oldalakon az első képernyőn) ---------- */
+.s-doboz {
+    display: flex; gap: var(--s-t-3); align-items: flex-start;
+    padding: var(--s-t-4) var(--s-t-5);
+    border: 1px solid var(--s-vonal); border-radius: var(--s-r-kicsi);
+    background: var(--s-felulet-2);
+    margin: 0 0 var(--s-t-5);
+}
+.s-doboz > .s-ikon { margin-top: 3px; color: var(--s-neon); }
 
 /* ---------- 404 (az első képernyő) ---------- */
 .s-404 { position: relative; overflow: hidden; isolation: isolate; text-align: center; }

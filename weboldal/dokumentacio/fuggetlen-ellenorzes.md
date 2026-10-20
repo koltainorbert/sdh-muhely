@@ -208,3 +208,49 @@ a teszt beégetett dátumot használ (`2026-10-20T07:00:00Z`, t266:14), ami ma m
 - **Feltöltés**: kiterjesztés-fehérlista + tartalom szerinti MIME + kettős kiterjesztés / PHP-tartalom tiltva, véletlen
   fájlnév, tiltott mappa, csak admin tölti le `attachment` + `nosniff` fejléccel.
 - **TOTP**: ±1 lépés, egy kód egyszer (`META_LEPES`), tartalékkódok HMAC-lenyomattal.
+
+---
+
+## Javítások (2026-10-20)
+
+Javító ügynök („javito”). Minden javításhoz regressziós teszt, amely a javítás előtti kódon (`e1d06d0`) **bukik**, utána
+zöld (mérve: a régi kódra kötött saját oldalon a bővített t211–t221, t252–t263, t311 bukik / leáll; a t266 tesztjavítás).
+Bizonyító szkriptek újrafuttatva (p1–p4, saját oldal) – az eredmény lent, megjegyzéssel, ahol a szkript a régi viselkedést modellezi.
+
+| # | Lelet | Javítás (fájl) | Teszt |
+|---|---|---|---|
+| KR-1 | ✅ Kettős könyvelés értesítő + kivonat + IPN + kézi | `fizetes` tábla: `csatorna`, `datum`, `lenyomat`, `parositva` (DB 1.0.1). Lenyomat = összeg + partner (számlaszám / név) + közlemény-kód + sorszám; azonos nap (vagy újra bemásolt értesítő) = ugyanaz a tétel. Csatornák közti párosítás ±7 nap (Számlázz.hu: halmozott összeg) → `duplikat` sor, nem könyvel. Hiányzó értesítő-dátum üres (nem „ma”). Kifizetett rendelésre jövő banki tétel → `ellenorizendo` (nem könyvel). A túlfizetés-levél „Ellenőrizendő befizetés”, nem „visszautalás”. Részfizetés soha nem „fizetve” (`fizetett ≥ brutto` feltételes UPDATE – ellenőrizve). (`bank-import`, `rendeles`, `schema`) | t214 (KR-1 a–c), t213 |
+| M-1 | ✅ E-mail-csere core REST-tel → idegen rendelés / licenc | Vevő (felhasználó-kezelési jog nélkül) e-mail / név: `wp_pre_insert_user_data` visszaállít, `/wp/v2/users*` írás 403, profil-hiba, nincs csere-levél; core REST vevőnek is 404 (rejtés). Fiók, `licenc_sajat`, `utolso_vevo`: `user_id` (e-mail csak fiók nélküli régi rendelésnél). (`fiok`, `rendeles`, `rejtes`) | t218 (M-1) |
+| M-2 | ✅ Hamisítható CF-Connecting-IP | `SDH_Sales::ip()`: CF-fejléc csak Cloudflare-tartományból jövő REMOTE_ADDR-nél (beágyazott IPv4/IPv6 lista 2026-10-20, `proxy.cloudflare_ip` felülírja), X-Forwarded-For csak `proxy.megbizhato` CIDR-listánál; különben REMOTE_ADDR. Az IPN IP-szűrő így nem kerülhető meg. Korlát atomi (növel, majd dönt). (`class-sdh-sales.php`, `rest`) | t219 (M-2) |
+| M-3 | ✅ REST-ujjlenyomat | `Link: …api.w.org` ki, `X-WP-*` látogatónak / vevőnek ki, CORS-listák (X-App-Nonce), `rest_*` kódok + angol szöveg → `nincs` / `tiltott` / `hibas_adat` / `lejart` magyarul; névtér-index, `/api/` gyökér, OPTIONS látogatónak 404; JSONP ki. (`rejtes`) | t311 (élő HTTP is) |
+| M-4 | ✅ Műhely → Központ `?rest_route=` 404 | `korai()` / `rest_zar`: a Központ példány-útjai (`szivveres`, `jelentes`, `csomag`, `tamogatas`, `kiszolgalas`, `letoltes`) mindkét névtérben és mindkét alakban nyitva; a core és a Központ-felület (`app/*`) zárva. Élő szimulált Műhely-szívverés: 200, aláírt, `aktiv`. (`rejtes`) | t311 |
+| M-5 | ✅ Téves párosítás (összeg + név, „nr 2026 000004”) | Összeg + név csak javaslat: „kézi jóváhagyásra vár” sor a rendelésen (nem fizet, nem indít), erős névhasonlóság (általános szavak, kapcsolattartó nélkül); rendelésazonosító csak pontos `R-ÉÉÉÉ-NNNNNN` szó, több azonosító = nem egyértelmű; közlemény ellenőrző karakterrel. Admin REST: `GET /admin/bank/fuggo`, `POST /admin/bank/fizetes/{id}/jovahagy|elutasit`. Wise: a konkrétabb oszlop (Payment Reference) nyer. (`bank-import`) | t214 (M-5 a–c) |
+| K-1 | ✅ 0 Ft-os rendelés „fizetve” | 0 Ft-os, nem `ingyenes: true` tételekből álló kosár → `ajanlat` típus / állapot: lead + levél a forgalmazónak, nincs fizetés, licenc, fiók. 100%-os kupon és `ingyenes: true` tétel kiszolgálható marad. (`rendeles`) | t212 (K-1) |
+| K-2 | ✅ Kupon-kimerítés, próbálgatás | Használat = kifizetett + élő foglalás (`kupon.foglalas_ora`, alap 24); keret a beszúrás után, azonosító-sorrendben (atomi); `vevonkent` mező; sikertelen kuponpróbák közös IP-kerete (10 / 15 perc) a /kupon, /ar, /kosar/ellenoriz végponton. (`kupon`, `ar`, `kosar`, `rendeles`) | t211 (K-2) |
+| K-3 | ✅ Számla ≠ fizetendő | Sorok áfája egész Ft, legnagyobb maradékkal → Σ = rendelés áfa (P8: 14 266). (`szamlazz::afa_elosztas`) | t260 (K-3, 300 véletlen kosár) |
+| K-4 | ✅ Cron-éhezés | Emlékeztető: a kihagyás SQL-ben; Számlázz.hu-lekérdezés: kihagyás a LIMIT előtt, futásonként a következő 20; kiszolgálás-cron: esedékesség a LIMIT előtt (2000 jelölt, 50 futtatás). (`fizetes`, `kiszolgalas`) | t221 (K-4 a–c) |
+| K-5 | ✅ Központ: vevő név / adószám szerint | Adószám ÉS (e-mail vagy nem ingyenes céges domain), különben pontos e-mail (ütköző adószám nélkül); név szerint soha → új vevő `ellenorizendo` címkével + napló. `sajat()`: ügyfél-azonosító / pontos e-mail / adószám + céges domain. (`kozpont-kiszolgalas`) | t94 |
+| K-6 | ✅ Központ-idempotencia csak azonosítóra | A tárolt válasz a kérés lenyomatához (művelet, e-mail, adószám, licenckulcs, `vevo.ugyfel` – a fiók sózott lenyomata) kötött; más vevő → hiba, nincs kulcs / link. (`kozpont-kiszolgalas`, `kiszolgalas`) | t94 |
+| K-7 | ✅ „sdh” a Központ útjain | Példány-utak `licenc/v1` alatt is (a régi `sdh-kozpont/v1` álnév marad – a Műhely t85/t92 zöld), hibakódok `tiltva` / `elutasitva` / `hiba`, a csomag neve `fajlnev()`. (`kozpont-api`) | t94, t311 |
+| A-1 | ✅ /wp-admin/ + „sdh” az admin-levélben | Semleges `?vezerlo=r<id>` hivatkozás (adminnak átirányít, kijelentkezve a titkos belépőre). | t254 |
+| A-2 | ✅ IPN-token a nyers adatban | `k` kihagyva. | t263 |
+| A-3 | ✅ Díjbekérő-levélbomba | Díjbekérős átutalásos rendelésnél a „fizetés újra (átutalás)” nem küld újra. | t217 |
+| A-4 | ✅ Nem atomi korlát | INSERT … ON DUPLICATE KEY, utána dönt. | t219 |
+| A-5 | ✅ TOFU http-n | Távoli Központ csak https (kivéve localhost). (A kulcs kézi rögzítése nem kötelező – nyitott.) | t252 |
+| A-6 | ✅ Barion pénznem | Nem HUF → nem rögzül, napló. | t217 |
+| A-7 | ✅ SimplePay FAIL-visszajátszás | Csak az aktuális tranzakcióra hat. | t217 |
+| A-8 | ✅ QR temp-fájl | Véletlen nevű 0700 almappa. | t216 |
+| A-9 | ⏳ CSP csak report | Nem módosítva (élesítés előtt a front teljes bejárása kell – nem „olcsó és biztos”). | – |
+| A-10 | ✅ / ⏳ fileinfo nélkül nincs MIME-ellenőrzés | Kötelező (szűrhető); a megőrzési idő szabályozása nyitott. | t220 |
+| A-11 | ✅ Licenc-térkép versenyhelyzet | Zár (korlát-tábla) + friss olvasás, az emlékeztető csak a módosított mezőket írja vissza. | t253 |
+| A-12 | ✅ Bővítésnél újra felszámolt modul | A licencben meglévő modul kimarad. | t253 |
+| A-13 | ✅ Szikra harmadik fél adata | Lead csak a látogató által beírt e-mail-címmel. | t287 |
+| t266 | ✅ Beégetett dátum | Relatív dátumok (következő ünnepmentes hét, helyi idő → UTC, téli/nyári idő), ünnepnap szűrővel. | t266 |
+
+Bizonyító szkriptek a javítás után (saját oldal): P1 hamis CF-IP 20/30 (korlát tart); P2 `201 / ajanlat`, nincs fizetés, fiók,
+levél; P3 kivonat után `10000 / 20000 / dijbekero`; P4 / P5 nem párosít; P8 14 266 = 14 266; p3: `/wp/v2/users/me` 403, a fiókban
+csak a saját rendelés, `licenc_sajat` false; p4: `12573/12573`, nincs túlfizetés-levél, újrabeillesztés „már feldolgozva”;
+p2 R2: 0 tiltott minta a levelekben; K2 elutasítva, nincs link. Megjegyzések: P7 a 24 órás foglalás miatt marad „elfogyott”
+(a foglalás lejárta után nem – t211); p2 K1 2–3. sora azért egyezik, mert a szkript mindkét vevőt `@example.com` címmel
+hozza (azonos céges domain + adószám = ugyanaz a cég) – idegen domainnel nem párosít (t94); p2 R1 „rossz metódus” a belső
+`rest_do_request`-ben angol marad – HTTP-n semleges (t311 élő).

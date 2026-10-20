@@ -104,6 +104,9 @@
     const LEAD_FORRAS = { kapcsolat: 'Kapcsolat', ajanlat: 'Ajánlatkérés', szikra: 'Szikra', egyedi: 'Egyedi igény', partner: 'Partner', demo: 'Demó' };
     const LANC = { ok: ['ok', 'pipa'], kihagyva: ['ok', 'pipa'], hiba: ['hiba', 'figyel'], var: ['var', 'ora'], fut: ['var', 'ujra'], nincs: ['', 'ora'] };
     const SZINT = { info: 'szurke', siker: 'ok', figyel: 'figyel', hiba: 'hiba' };
+    /** A lead-adat mezőkulcsainak magyar felirata (ismeretlen kulcs: „Kulcs neve”). */
+    const LEAD_MEZO = { nev: 'Név', kapcsolattarto: 'Kapcsolattartó', ceg: 'Cég', cegnev: 'Cég', telefon: 'Telefon', email: 'E-mail', uzenet: 'Üzenet', targy: 'Tárgy', csomag: 'Csomag', modulok: 'Modulok', modul: 'Modul', telephely: 'Telephelyek', telephelyek: 'Telephelyek', felhasznalo: 'Felhasználók', felhasznalok: 'Felhasználók', iparag: 'Iparág', varos: 'Város', cim: 'Cím', weboldal: 'Weboldal', adoszam: 'Adószám', hatarido: 'Határidő', keret: 'Keret', koltsegkeret: 'Költségkeret', leiras: 'Leírás', forras_oldal: 'Forrás oldal', oldal: 'Oldal', utm: 'Kampány (UTM)', hozzajarulas: 'Hozzájárulás', adatkezeles: 'Adatkezelés elfogadva', hirlevel: 'Hírlevél', nyelv: 'Nyelv', idopont: 'Időpont', beszelgetes: 'Beszélgetés', osszefoglalo: 'Összefoglaló' };
+    const mezoNev = (k) => LEAD_MEZO[k] || (String(k).charAt(0).toUpperCase() + String(k).slice(1)).replace(/_/g, ' ');
 
     const cimke = (szoveg, tipus = 'szurke', extra = '') => `<span class="sa-cimke sa-cimke--${e(tipus)} ${extra}">${e(szoveg)}</span>`;
     const allapotCimke = (a) => { const x = ALLAPOT[a] || [a, 'szurke']; return cimke(x[0], x[1]); };
@@ -1211,7 +1214,7 @@
             cim: `${LEAD_FORRAS[l.forras] || l.forras}: ${l.nev || l.email}`,
             meret: 'kozepes',
             test: `<div class="sa-sor sa-sor--tor"><span class="sa-mezo__cim">Állapot</span>${szegmens('Állapot', Object.fromEntries(Object.entries(ALL).map(([k, v]) => [k, e(v)])), l.allapot)}</div>
-                <div style="max-height:300px;overflow:auto"><dl class="sa-kv"><dt>E-mail</dt><dd><a href="mailto:${e(l.email)}">${e(l.email)}</a></dd><dt>Érkezett</dt><dd>${e(datumIdo(l.ido))}</dd>${adat.map(([k, v]) => `<dt>${e(k)}</dt><dd style="white-space:pre-wrap">${e(ertek(v))}</dd>`).join('')}</dl></div>
+                <div style="max-height:300px;overflow:auto"><dl class="sa-kv"><dt>E-mail</dt><dd><a href="mailto:${e(l.email)}">${e(l.email)}</a></dd><dt>Érkezett</dt><dd>${e(datumIdo(l.ido))}</dd>${adat.map(([k, v]) => `<dt>${e(mezoNev(k))}</dt><dd style="white-space:pre-wrap">${e(ertek(v))}</dd>`).join('')}</dl></div>
                 <div class="sa-mezo"><label class="sa-mezo__cim" for="sa-lead-m">Belső megjegyzés</label><textarea class="sa-textarea" id="sa-lead-m" rows="3" maxlength="2000">${e((l.adat || {}).admin_megjegyzes || '')}</textarea></div>`,
             lab: `<a class="sa-gomb" href="mailto:${e(l.email)}">${I('email')}Válasz</a><span class="sa-ter"></span><button type="button" class="sa-gomb" data-bezar>Mégse</button><button type="button" class="sa-gomb sa-gomb--fo" data-ment>${I('mentes')}Mentés</button>`,
         });

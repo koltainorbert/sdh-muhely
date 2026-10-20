@@ -116,6 +116,12 @@ $e = SDH_Sales_Szikra_Eszkozok::atadas_emberre(['ok' => 'szerződés', 'osszefog
 T::igaz($e['mentve'] === true && $leadek() === $elotte + 2, 'átadás hozzájárulással: lead');
 T::egyezik('atadas', json_decode((string) $wpdb->get_var("SELECT adat FROM {$lt} ORDER BY id DESC LIMIT 1"), true)['tipus'] ?? '', 'átadás-lead típusa');
 T::igaz(SDH_Sales_Szikra_Eszkozok::lead_mentes(['email' => 'nem-email', 'igeny' => 'x'])['mentve'] === false, 'érvénytelen e-mail nem menthető');
+// Független ellenőrzés (2026-10-20), alacsony 13: csak a látogató által beírt cím menthető (harmadik fél / a modell címe nem).
+$elotte13 = $leadek();
+SDH_Sales_Szikra_Eszkozok::kornyezet(['munkamenet' => $mm(), 'hozzajarulas' => true, 'latogato' => "Szia! Az én címem: sajat@pelda.hu\nKérek ajánlatot."]);
+$x13 = SDH_Sales_Szikra_Eszkozok::lead_mentes(['email' => 'harmadik@pelda.hu', 'igeny' => 'x']);
+T::igaz($x13['mentve'] === false && $leadek() === $elotte13, 'alacsony-13: a beszélgetésben a látogató által nem írt cím nem menthető');
+T::igaz(SDH_Sales_Szikra_Eszkozok::lead_mentes(['email' => 'sajat@pelda.hu', 'igeny' => 'x'])['mentve'] === true, 'alacsony-13: a látogató saját címe menthető');
 // A naplóban az eszköz bemenetének e-mailje maszkolva.
 T::nem_tartalmaz((string) $wpdb->get_var("SELECT GROUP_CONCAT(szoveg) FROM " . SDH_Sales_Schema::t('szikra') . " WHERE szerep = 'eszkoz'"), 'marta@example.com', 'eszköznapló: e-mail maszkolva');
 

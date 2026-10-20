@@ -201,4 +201,12 @@ SDH_Sales::b_ment(['kozpont.mod' => 'helyi']);
 T::igaz($KK::helyi_elerheto(), 'helyi mód: a Központ elérhető');
 T::egyezik(home_url('/'), $KK::kozpont_cim(), 'helyi mód: a Központ címe a webhely');
 
+
+// Független ellenőrzés (2026-10-20), alacsony 5: távoli Központ csak https-en (a kulcs első megjegyzése ne legyen hamisítható).
+SDH_Sales::b_ment(['kozpont.mod' => 'tavoli', 'kozpont.url' => 'http://kozpont.example.hu/']);
+$GLOBALS['sdh_t_keresek'] = [];
+$hv = $KK::kuld(['muvelet' => 'proba']);
+T::igaz(empty($hv['ok']) && strpos((string) $hv['uzenet'], 'https') !== false && $GLOBALS['sdh_t_keresek'] === [], 'alacsony-5: http:// Központ-cím: nincs kérés, magyar hibaüzenet');
+SDH_Sales::b_ment(['kozpont.mod' => 'helyi', 'kozpont.url' => '']);
+
 T::vege('t252 távoli Központ: aláírás mindkét irányban');

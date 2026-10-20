@@ -122,4 +122,43 @@ T::egyezik($elotte + 1, count($GLOBALS['t25_levelek']), 'cron: a napi emlékezte
 SDH_Sales_Kiszolgalas::cron($ts(wp_date('Y-m-d', strtotime($j4 . ' -1 day'))) + 300);
 T::egyezik($elotte + 1, count($GLOBALS['t25_levelek']), 'cron 5 perc múlva: nem fut újra');
 
+
+// Független ellenőrzés (2026-10-20), alacsony 11: a lejárat-emlékeztető nem írja felül a közben tárolt új licencet.
+$opt = 'sdh_sales_licenc_lejar';
+$elotte_m = get_option($opt, []);
+$kozben   = 'MUNKORA-KOZB-' . wp_rand(1000, 9999);
+$egyszer  = false;
+add_filter('sdh_sales_email_kuldes', static function ($null, array $l) use ($opt, $kozben, &$egyszer) {
+    if (!$egyszer && ($l['sablon'] ?? '') === 'lejarat_emlekezteto') {
+        $egyszer = true;
+        $m = get_option($opt, []);
+        $m[$kozben] = ['lejar' => '2099-01-01', 'ciklus' => 'eves', 'csomag' => 'Pro', 'email' => 'kozben@pelda.hu', 'rendeles_id' => 0, 'user_id' => 0, 'kuldve' => []];
+        update_option($opt, $m, false);
+    }
+
+    return $null;
+}, 5, 2);
+$lm = get_option($opt, []);
+$lk = 'MUNKORA-EML-' . wp_rand(1000, 9999);
+$lm[$lk] = ['lejar' => wp_date('Y-m-d', time() + 2 * DAY_IN_SECONDS), 'ciklus' => 'eves', 'csomag' => 'Pro', 'email' => 'eml@pelda.hu', 'nev' => 'Eml', 'rendeles_id' => 0, 'user_id' => 0, 'kuldve' => []];
+update_option($opt, $lm, false);
+SDH_Sales::b_ment(['kozpont.mod' => 'tavoli']);
+SDH_Sales_Kiszolgalas::emlekeztetok();
+SDH_Sales::b_ment(['kozpont.mod' => 'helyi']);
+wp_cache_delete($opt, 'options');
+$utana = get_option($opt, []);
+T::igaz($egyszer && isset($utana[$kozben]), 'alacsony-11: a levelezés közben tárolt licenc megmaradt');
+T::igaz(!empty($utana[$lk]['kuldve']), 'alacsony-11: az emlékeztető jele is mentve');
+
+// alacsony 12: bővítésnél a licencben már meglévő modul nem számolódik fel újra
+$ado12 = (static function (string $h): string { $s = 0; foreach ([9, 7, 3, 1, 9, 7, 3] as $i => $w) { $s += (int) $h[$i] * $w; } return $h . ((10 - $s % 10) % 10) . '-2-19'; })('7654321');
+$tulaj = wp_insert_user(['user_login' => 'bovito' . wp_rand(), 'user_email' => 'bovito' . wp_rand() . '@pelda.hu', 'user_pass' => wp_generate_password(), 'role' => 'sdh_vevo']);
+$bid12 = t25_rendeles(['email' => (string) get_userdata((int) $tulaj)->user_email, 'tetelek' => [['tipus' => 'csomag', 'kulcs' => 'start'], ['tipus' => 'modul', 'kulcs' => 'sms']]]);
+$GLOBALS['wpdb']->update(SDH_Sales_Schema::t('rendeles'), ['user_id' => (int) $tulaj, 'licenc_kulcs' => 'MUNKORA-B12-' . $bid12, 'allapot' => 'kiszolgalva', 'vevo' => (string) wp_json_encode(['ceg' => 'Bővítő Kft.', 'adoszam' => '', 'email' => (string) get_userdata((int) $tulaj)->user_email, '_opciok' => ['csomag' => 'start', 'extra_modulok' => ['sms'], 'ciklus' => 'havi']])], ['id' => $bid12]);
+wp_set_current_user((int) $tulaj);
+$b12 = SDH_Sales_Rendeles::letrehoz(['tipus' => 'bovites', 'licenc_kulcs' => 'MUNKORA-B12-' . $bid12, 'tetelek' => [['tipus' => 'modul', 'kulcs' => 'sms'], ['tipus' => 'modul', 'kulcs' => 'naptar']], 'vevo' => ['ceg' => 'Bővítő Kft.', 'adoszam' => $ado12, 'kapcsolattarto' => 'Bő Vítő', 'email' => (string) get_userdata((int) $tulaj)->user_email, 'telefon' => '+36 30 123 4567', 'irsz' => '8200', 'telepules' => 'Veszprém', 'utca' => 'Fő utca 1.'], 'fizmod' => 'atutalas', 'elfogad' => ['vallalkozas' => 1, 'aszf' => 1, 'eula' => 1]]);
+wp_set_current_user(1);
+$tet12 = !empty($b12['ok']) ? array_column((array) SDH_Sales_Rendeles::rendeles((int) $b12['id'])['tetelek'], 'kulcs') : ['hiba: ' . wp_json_encode($b12['hibak'] ?? [], JSON_UNESCAPED_UNICODE)];
+T::egyezik(['naptar'], $tet12, 'alacsony-12: bővítés: a már meglévő SMS modul nem számolódik fel újra');
+
 T::vege('t253 megújítás, bővítés, lejárat-emlékeztető');

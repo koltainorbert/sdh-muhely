@@ -207,3 +207,18 @@ Mindhárom csomag verziója **3 helyen**: fejléc `Version:`, konstans (`SDH_SAL
 - `seo.*` beállítások: lásd `class-sdh-sales-seo.php` fejléce (ai_botok, bingbot, sameas, logo, og_kep, localbusiness…).
 - GYIK-szekció: a téma `SDH_Sales_Gyik::szekcio($sz)`-t hívja (ez gyűjti a FAQPage-et), a kérdés `id`-je az `anchor`.
   Morzsa: `SDH_Sales_Seo::morzsa()`, kapcsolódó blokk: `SDH_Sales_Seo::kapcsolodo($tipus, $kulcs)`.
+
+## 12. Biztonsági javítások után (2026-10-20, DB 1.0.1) – `dokumentacio/fuggetlen-ellenorzes.md`
+- `fizetes` tábla új mezői: `csatorna` (értesítő / kivonat / kapu / kézi), `datum` (a jóváírás napja), `lenyomat` (kanonikus
+  ujjlenyomat: dátum + összeg + partner + normalizált közlemény [+ banki hivatkozás] – a forrásokon átívelő duplikáció ellen),
+  `parositva` (melyik korábbi sorral azonos). Sor-állapotok: `ok`, `jovahagyasra_var` (név + összeg egyezés, közlemény nélkül –
+  automatikus kiszolgálás NINCS, adminnak kell jóváhagynia: `GET /admin/bank/fuggo`, `POST /admin/bank/fizetes/{id}/jovahagy|elutasit`),
+  `ellenorizendo`, `duplikat`, `elutasitva`.
+- Rendelés-típus és -állapot `ajanlat`: 0 Ft-os / ajánlatkérő tételek (support-ajánlat, egyedi fejlesztés) nem lesznek „fizetve”,
+  licenc nem megy – ajánlatkérésként (lead) kezeljük.
+- A kiszolgálás kizárólag teljes fizetés után indul (`fizetett ≥ brutto`); részfizetés soha.
+- IP: a `CF-Connecting-IP` csak akkor hiteles, ha a kérés a Cloudflare közzétett címtartományából jön (`proxy.cloudflare_ip`),
+  más proxy csak a `proxy.megbizhato` listából. Kupon: a fizetetlen rendelés `kupon.foglalas_ora` óráig foglal; `vevonkent` korlát.
+- A vevő e-mail-címe / felhasználóneve a rendszer saját REST-jén és profilján át nem írható (fiókátvétel ellen).
+- REST: a rendszer saját útvonalai, indexei, `Link`/`X-WP-*` fejlécei látogatónak nem látszanak, a hibaüzenetek magyarok és
+  semlegesek; a licencközpont nyilvános útjai (`sdh-kozpont/v1`, `licenc/v1`) `?rest_route=` alakban is elérhetők (a vevők Műhelye).

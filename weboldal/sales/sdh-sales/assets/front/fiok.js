@@ -90,7 +90,7 @@
                 return el('article', { osztaly: 's-kartya' }, [
                     el('h3', { szoveg: x.azon + ' – ' + x.allapot_szoveg }),
                     el('ul', {}, (x.osszefoglalo || []).map(function (s) { return el('li', { szoveg: s }); })),
-                    x.becsles ? el('p', { osztaly: 's-becsles', szoveg: x.becsles.cimke + ' ' + x.becsles.ora_min + '–' + x.becsles.ora_max + ' óra, ' + ft(x.becsles.ar_min) + ' – ' + ft(x.becsles.ar_max) + ' + áfa.' }) : null
+                    x.becsles ? el('p', { osztaly: 's-becsles', szoveg: x.becsles.cimke + ' ' + x.becsles.ora_min + '–' + x.becsles.ora_max + ' óra, ' + ft(x.becsles.ar_min) + ' – ' + ft(x.becsles.ar_max) + ' nettó + ' + APP.afa + '% áfa (bruttó ' + ft(Math.round(x.becsles.ar_min * (100 + APP.afa) / 100)) + ' – ' + ft(Math.round(x.becsles.ar_max * (100 + APP.afa) / 100)) + ').' }) : null
                 ]);
             });
             if (egy.length) { gy.appendChild(szakasz('Egyedi fejlesztési igényeim', egy)); }

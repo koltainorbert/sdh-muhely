@@ -159,4 +159,34 @@ T::egyezik('1000', $d3->getElementsByTagName('nettoErtek')->item(0)->textContent
 
 // Rejtés: a Számlázz.hu-nak küldött XML (a vevő számláján is megjelenő mezőkkel) nem árulkodik.
 t_rejtett(SDH_Sales_Szamlazz::xml('dijbekero', SDH_Sales_Szamlazz::rendeles($id)) . SDH_Sales_Szamlazz::xml('vegszamla', SDH_Sales_Szamlazz::rendeles($id)), 'számla-XML (díjbekérő + végszámla)');
+
+// Független ellenőrzés (2026-10-20), K-3: a számla végösszege fillérre a fizetendő (rendelés) bruttó – az áfa soronként
+// egész forint, legnagyobb maradékkal elosztva (P8: 9 900 + 1 333 nettó → 14 266, nem 14 265,91).
+$k3 = t26_rendeles(['tetelek' => wp_json_encode([['nev' => 'Start csomag', 'mennyiseg' => 1, 'netto' => 9900], ['nev' => 'Címke modul', 'mennyiseg' => 1, 'netto' => 1333]]), 'netto' => 11233, 'afa' => 3033, 'brutto' => 14266]);
+$s3 = SDH_Sales_Szamlazz::sorok(SDH_Sales_Szamlazz::rendeles($k3));
+T::egyezik(14266.0, (float) array_sum(array_column($s3, 'brutto')), 'K-3: a számlasorok bruttó összege = a fizetendő 14 266 Ft');
+T::egyezik([2673.0, 360.0], array_map('floatval', array_column($s3, 'afa')), 'K-3: áfa soronként egész forint (2 673 + 360)');
+preg_match_all('#<bruttoErtek>([^<]+)</bruttoErtek>#', SDH_Sales_Szamlazz::xml('dijbekero', SDH_Sales_Szamlazz::rendeles($k3)), $bm);
+T::egyezik(14266.0, (float) array_sum(array_map('floatval', $bm[1])), 'K-3: a díjbekérő XML bruttó értékeinek összege 14 266');
+$hiba3 = 0;
+mt_srand(20261020);
+for ($i = 0; $i < 300; $i++) {
+    $db = mt_rand(1, 6);
+    $sor = [];
+    $n3  = 0;
+    for ($j = 0; $j < $db; $j++) {
+        $x     = mt_rand(1, 250000);
+        $sor[] = ['nev' => 'Tétel ' . $j, 'mennyiseg' => 1, 'netto' => $x];
+        $n3   += $x;
+    }
+    $a3 = SDH_Sales_Ar::kerek($n3 * 27, 100);
+    $ss = SDH_Sales_Szamlazz::sorok(['tetelek' => $sor, 'netto' => $n3, 'afa' => $a3, 'azon' => 'R-T260']);
+    $ok = abs((float) array_sum(array_column($ss, 'brutto')) - ($n3 + $a3)) < 0.001;
+    foreach ($ss as $q) {
+        $ok = $ok && abs((float) $q['afa'] - (float) $q['netto'] * 0.27) < 1.0 && abs((float) $q['afa'] - round((float) $q['afa'])) < 0.001;
+    }
+    $hiba3 += $ok ? 0 : 1;
+}
+T::egyezik(0, $hiba3, 'K-3: 300 véletlen kosár: Σ számlasor-bruttó = rendelés-bruttó, soronként < 1 Ft eltérés, egész forint');
+
 T::vege('t260 számla-XML');

@@ -233,7 +233,7 @@ final class SDH_Sales_Egyedi
         }
 
         // Tartalom szerinti típus kötelező: ha a szerveren nincs fileinfo (vagy nem dönt), a fájl nem fogadható el.
-        $mime = function_exists('finfo_open') ? (string) finfo_file(finfo_open(FILEINFO_MIME_TYPE), $tmp) : '';
+        $mime = (string) apply_filters('sdh_sales_feltoltes_mime', function_exists('finfo_open') ? (string) finfo_file(finfo_open(FILEINFO_MIME_TYPE), $tmp) : '', $tmp);
 
         if ($mime === '') {
             return ['ok' => false, 'hiba' => sprintf(__('A(z) „%s” típusa most nem ellenőrizhető – küldd el e-mailben.', 'sdh-sales'), $nev)];

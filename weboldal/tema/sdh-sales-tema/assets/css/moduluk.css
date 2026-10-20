@@ -1,13 +1,13 @@
 /*
- * Interaktív modulok (a bővítmény front-JS-e rajzolja a markupot, a téma csak stílust ad):
+ * Interaktív modulok (a front-JS rajzolja a markupot, ez a fájl csak stílust ad):
  * kalkulátor (.s-kalk-*), kosár (.s-kosar-*), pénztár + állapotoldal (.s-penztar*, .s-statusz, .s-atutalas, .s-qr),
  * fiók (.s-fiok-*), egyedi fejlesztés (.s-egyedi*, .s-lepesjelzo), űrlapok (.s-mezo-sor, .s-pipa, .s-mezo-hiba),
- * foglalás (.s-fogl – a bővítmény saját alapstílusa fölé), oktatás (.s-okt), értesítő sáv (.s-uzenet-sav).
- * A téma összevont CSS-ének része (inc/alap.php sdh_tema_css_forrasok()).
+ * foglalás (.s-fogl – a modul saját alapstílusa fölé), oktatás (.s-okt), értesítő sáv (.s-uzenet-sav).
+ * Az összevont stíluslap része.
  * Csak --s-* változók; minden mező, gomb, pill lekerekített; célterület ≥ 44 px; kapcsoló felirat nélkül, ≥ 6 px levegő.
- * A bővítmény saját CSS-e (szikra.css, suti.css, a foglalás beágyazott stílusa) később kerül a lapra, ezért az itteni
+ * A modulok saját CSS-e (szikra.css, suti.css, a foglalás beágyazott stílusa) később kerül a lapra, ezért az itteni
  * felülírások egy szinttel specifikusabbak ([data-modul] előtag). A léptetőt (APP.lepteto), a másoló gombokat és a
- * táblacellák data-cimke címkéit a bővítmény front-JS-e rajzolja.
+ * táblacellák data-cimke címkéit a front-JS rajzolja.
  */
 
 /* =====================================================================
@@ -50,7 +50,7 @@
     overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
-/* ---------- Gombok (a bővítmény osztályai: .s-gomb, .s-gomb-fo, .s-gomb-kicsi, .s-gomb-biztos) ---------- */
+/* ---------- Gombok (a modulok osztályai: .s-gomb, .s-gomb-fo, .s-gomb-kicsi, .s-gomb-biztos) ---------- */
 [data-modul] .s-gomb, .s-uzenet-sav .s-gomb {
     background: var(--s-uveg); color: var(--s-szoveg); border-color: var(--s-uveg-keret);
 }
@@ -69,7 +69,7 @@
 [data-modul] a.s-gomb { text-decoration: none; }
 
 /* ---------- Mezők ---------- */
-[data-modul] .s-mezo-sor { display: grid; gap: var(--s-t-2); min-width: 0; }
+[data-modul] .s-mezo-sor { display: grid; gap: var(--s-t-2); align-content: start; min-width: 0; }
 [data-modul] .s-mezo-sor > label, [data-modul] .s-kosar-letszam > label, [data-modul] .s-kalk-letszam > label,
 [data-modul] .s-fiok-belepes > label, [data-modul] .s-kosar-kupon > label {
     font-weight: var(--s-suly-kozepes); font-size: var(--s-m-s); color: var(--s-szoveg);
@@ -136,7 +136,6 @@
 
 /* ---------- Kapcsoló (felirat nélkül, ≥ 6 px levegő – az urlap.css .s-kapcsolo-ját használja) ---------- */
 [data-modul] .s-kapcsolo-sor, [data-modul] .s-mezo-sor.s-kapcsolo-sor { display: flex; align-items: center; justify-content: flex-start; flex-wrap: nowrap; gap: var(--s-t-2) var(--s-t-3); min-height: 44px; }
-[data-modul] .s-kapcsolo-sor > .s-kapcsolo { margin-left: 0; }
 [data-modul] .s-kapcsolo-sor > label { flex: 1 1 auto; min-width: 0; }
 [data-modul] .s-kapcsolo-sor > label { cursor: pointer; }
 [data-modul] .s-kapcsolo-sor > .s-mezo-hiba:not(:empty) { flex-basis: 100%; }
@@ -185,7 +184,7 @@
 [data-modul] .s-kalk-ciklus label.s-pill:hover { color: var(--s-szoveg); }
 [data-modul] .s-kalk-ciklus label.s-pill:has(> input:checked) { background: var(--s-szoveg); color: var(--s-bg); }
 
-/* ---------- Léptető (− / + a számmezők köré; a bővítmény APP.lepteto() segédje rajzolja) ---------- */
+/* ---------- Léptető (− / + a számmezők köré; az APP.lepteto() segéd rajzolja) ---------- */
 .s-lepteto { display: flex; align-items: stretch; min-width: 0; }
 .s-lepteto > .s-mezo { flex: 1 1 auto; min-width: 0; text-align: center; border-radius: 0; border-inline: 0; padding-inline: var(--s-t-2); }
 .s-lepteto__gomb {
@@ -344,7 +343,7 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 }
 [data-modul] .s-kalk-modul:hover { border-color: var(--s-vonal-eros); }
 [data-modul] .s-kalk-modul:has(> input:checked) { border-color: var(--s-ok); background: var(--s-ok-halvany); }
-/* A kapcsoló a téma .s-kapcsolo-ja (urlap.css); a kikapcsolt állapot kerete a sor felületén is látsszon (≥ 3:1) */
+/* A kapcsoló a közös .s-kapcsolo (urlap.css); a kikapcsolt állapot kerete a sor felületén is látsszon (≥ 3:1) */
 [data-modul] .s-kalk-modul > .s-kapcsolo:not(:checked) { box-shadow: inset 0 0 0 1px var(--s-mezo-keret); }
 [data-modul] .s-kalk-modul > .s-kapcsolo:focus-visible { outline: var(--s-fokusz-vastag) solid var(--s-fokusz); outline-offset: var(--s-fokusz-tav); }
 
@@ -442,7 +441,7 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 .s-penztar-osszeg > p:last-child:not(.s-mezo-hiba) > strong { display: block; font-family: var(--s-betu-cim), "Bricolage Tartalek"; font-size: var(--s-m-xl); color: var(--s-szoveg); font-variant-numeric: tabular-nums; }
 .s-penztar-osszeg > .s-mezo-hiba:empty { display: none; }
 
-.s-penztar fieldset { display: grid; gap: var(--s-t-4); grid-template-columns: minmax(0, 1fr); }
+.s-penztar fieldset { display: grid; gap: var(--s-t-4); grid-template-columns: minmax(0, 1fr); align-items: start; }
 @media (min-width: 640px) {
     .s-penztar fieldset:not([data-mezo="fizmod"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .s-penztar fieldset > legend, .s-penztar [data-mezo="ceg"], .s-penztar [data-mezo="utca"] { grid-column: 1 / -1; }
@@ -492,6 +491,7 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
     @keyframes s-lukteto { 50% { opacity: 0.35; } }
 }
 [data-modul] .s-statusz > .s-gombsor { margin-top: var(--s-t-5); }
+@media (max-width: 479px) { [data-modul] .s-statusz > .s-gombsor > .s-gomb { flex: 1 1 100%; } }
 
 /* Átutalási tábla + QR-kártya: asztalon egymás mellett */
 [data-modul] .s-atutalas-racs { display: grid; gap: var(--s-t-4); grid-template-columns: minmax(0, 1fr); align-items: start; }
@@ -656,13 +656,13 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 }
 
 /* =====================================================================
- * 7. Általános űrlap (kapcsolat / ajánlat / partner – .s-urlap a téma urlap.css-éből)
+ * 7. Általános űrlap (kapcsolat / ajánlat / partner – .s-urlap az urlap.css-ből)
  * ================================================================== */
 [data-modul] .s-urlap > .s-gomb-fo { justify-self: start; }
 @media (max-width: 479px) { [data-modul] .s-urlap > .s-gomb-fo { justify-self: stretch; } }
 
 /* =====================================================================
- * 8. Időpontfoglalás – a bővítmény beágyazott alapstílusa fölé (célterület ≥ 44 px, téma-gombok)
+ * 8. Időpontfoglalás – a modul beágyazott alapstílusa fölé (célterület ≥ 44 px, közös gombok)
  * ================================================================== */
 .s-fogl[data-modul] { gap: var(--s-t-5); }
 @media (min-width: 760px) { .s-fogl[data-modul] .s-fogl__racs { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: var(--s-t-6); } }
@@ -728,7 +728,7 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 }
 
 /* =====================================================================
- * 9. Oktatás – a bővítmény szikra.css-e fölé (célterület ≥ 44 px)
+ * 9. Oktatás – a szikra.css fölé (célterület ≥ 44 px)
  * ================================================================== */
 [data-modul] .s-okt__gomb { min-height: 44px; padding: 0 var(--s-t-5); font-weight: var(--s-suly-felkover); }
 [data-modul] .s-okt__lecke { padding: var(--s-t-1) var(--s-t-2) var(--s-t-1) var(--s-t-1); border-radius: 18px; background: var(--s-felulet); }
@@ -744,6 +744,11 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 .s-okt[data-modul] > .s-okt__cim { margin-bottom: var(--s-t-4); }
 [data-modul] .s-okt__kerdes > legend { float: left; width: 100%; margin-bottom: var(--s-t-2); font-family: var(--s-betu-szoveg), "Onest Tartalek"; font-size: var(--s-m-alap); letter-spacing: 0; }
 [data-modul] .s-okt__kerdes > legend + * { clear: both; }
+@media (max-width: 479px) {
+    [data-modul] .s-okt__kurzus, [data-modul] .s-okt__lepes, [data-modul] .s-okt__kviz { padding: var(--s-t-4); }
+    [data-modul] .s-okt__kerdes { padding: var(--s-t-3); }
+    [data-modul] .s-okt__gombsor > .s-okt__gomb { flex: 1 1 auto; }
+}
 
 /* =====================================================================
  * 10. Csökkentett mozgás: az átmenetek a tokenek idejét használják (prefers-reduced-motion mellett 0,01 ms – tokenek.css),

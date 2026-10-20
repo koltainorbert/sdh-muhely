@@ -113,6 +113,10 @@ switch ($parancs) {
         ]);
         $ki['szikra_aktiv'] = SDH_Sales_Szikra::aktiv();
 
+        // Ismételt bejárásnál az IP-nkénti korlátok (lead, igényfelmérés, foglalás) betelnének: a SAJÁT tesztoldalon ürítjük.
+        global $wpdb;
+        $wpdb->query('DELETE FROM ' . SDH_Sales_Schema::t('korlat')); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
         // Teszt-kupon (a kosár sikeres beváltásához).
         if (SDH_Sales_Katalogus::kupon('TESZT10') === null) {
             SDH_Sales_Tartalom::ment('kupon', 'TESZT10', ['kod' => 'TESZT10', 'tipus' => 'szazalek', 'ertek' => 10, 'aktiv' => true], 'TESZT10');

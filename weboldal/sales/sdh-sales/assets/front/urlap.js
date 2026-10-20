@@ -9,7 +9,7 @@
     var el = APP.el;
 
     APP.modulok('urlap', function (gy, o) {
-        // Az űrlap fajtája: data-opciok.tipus, vagy a téma csatolási pontjáé (data-opciok.urlap / data-urlap).
+        // Az űrlap fajtája: data-opciok.tipus, vagy a csatolási ponté (data-opciok.urlap / data-urlap).
         var kert = o.tipus || o.urlap || gy.getAttribute('data-urlap') || '';
         var tipus = (D.mezok || {})[kert] ? kert : 'kapcsolat';
         var azon = 'urlap-' + tipus + '-' + Math.random().toString(36).slice(2, 7);

@@ -400,6 +400,11 @@ final class SDH_Sales_Szikra_Eszkozok
             return ['mentve' => false, 'hiba' => 'Érvényes e-mail-cím kell. Kérd el a látogatótól (ne találd ki).'];
         }
 
+        // Csak a látogató által (ebben a beszélgetésben) beírt cím menthető – harmadik fél / a tudásbázis címe nem.
+        if (array_key_exists('latogato', self::$kornyezet) && stripos((string) self::$kornyezet['latogato'], (string) $adat['email']) === false) {
+            return ['mentve' => false, 'hiba' => 'Ezt az e-mail-címet nem a látogató írta be. Csak a saját, általa megadott elérhetőségét mentheted – kérd el tőle.'];
+        }
+
         if (empty(self::$kornyezet['hozzajarulas'])) {
             set_transient(self::fuggo_kulcs(), ['adat' => $adat, 'tipus' => $tipus], HOUR_IN_SECONDS);
             self::$jelzes['hozzajarulas_kell'] = true;

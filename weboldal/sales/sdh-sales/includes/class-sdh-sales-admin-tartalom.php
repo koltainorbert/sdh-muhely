@@ -268,6 +268,12 @@ final class SDH_Sales_Admin_Tartalom
         nocache_headers();
         header('X-Robots-Tag: noindex, nofollow');
         add_filter('show_admin_bar', '__return_false');
+
+        // Az építő előnézetét ne takarja a süti-sáv (a szerkesztő a lap tartalmát nézi, nem a hozzájárulást).
+        if (class_exists('SDH_Sales_Suti')) {
+            remove_action('wp_body_open', ['SDH_Sales_Suti', 'panel'], 5);
+            remove_action('wp_footer', ['SDH_Sales_Suti', 'panel'], 1);
+        }
     }
 
     /**

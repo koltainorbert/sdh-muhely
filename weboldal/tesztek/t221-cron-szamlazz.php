@@ -88,4 +88,44 @@ if (class_exists('SDH_Sales_Szamlazz')) {
 T::igaz(has_action(SDH_Sales::CRON, ['SDH_Sales_Fizetes', 'cron']) !== false, 'cron-hook regisztrálva');
 T::igaz(has_action(SDH_Sales::CRON, ['SDH_Sales_Fiok', 'takarit']) !== false, 'fiók-link takarítás a cronban');
 
+
+// Független ellenőrzés (2026-10-20), K-4: a LIMIT nem „éhezteti” az újabb tételeket.
+// a) Számlázz.hu fizetettség: 45 nyitott díjbekérő – két futás 40 különbözőt kérdez (régen: 20, a második 0).
+$ids4 = [];
+for ($i = 0; $i < 45; $i++) {
+    $q4 = t_rendeles();
+    $wpdb->update($t, ['szamla_dijbekero' => 'D-K4-' . $i], ['id' => (int) $q4['id']]);
+    $ids4[] = (int) $q4['id'];
+}
+SDH_Sales::b_ment(['fizetes.automatizalas' => 'szamlazz']);
+foreach (array_merge($ids4, [(int) $sz['id']]) as $i4) {
+    delete_transient('szlpoll_' . $i4);
+}
+$kerdezett = static fn (): int => count(array_filter(array_merge($ids4, [(int) $sz['id']]), static fn (int $i): bool => (bool) get_transient('szlpoll_' . $i)));
+SDH_Sales_Fizetes::szamlazz_lekerdez($most);
+$k1 = $kerdezett();
+SDH_Sales_Fizetes::szamlazz_lekerdez($most);
+T::igaz($k1 === 20 && $kerdezett() === 40, 'K-4: Számlázz.hu-lekérdezés: futásonként a következő 20 (20 → 40; most ' . $k1 . ' → ' . $kerdezett() . ')');
+SDH_Sales::b_ment(['fizetes.automatizalas' => 'import']);
+// b) emlékeztető: 55 már emlékeztetett régi díjbekérő mellett az új esedékes is megkapja
+$wpdb->query("UPDATE {$t} SET allapot = 'torolve' WHERE allapot = 'dijbekero'");
+for ($i = 0; $i < 55; $i++) {
+    $q4 = t_rendeles();
+    $vv = (array) SDH_Sales_Rendeles::rendeles((int) $q4['id'])['vevo'] + ['_emlekeztetve' => gmdate('c', $most - DAY_IN_SECONDS)];
+    $wpdb->update($t, ['letrehozva' => gmdate('Y-m-d H:i:s', $most - 7 * DAY_IN_SECONDS), 'vevo' => (string) wp_json_encode($vv, JSON_UNESCAPED_UNICODE)], ['id' => (int) $q4['id']]);
+}
+$friss4 = t_rendeles();
+$wpdb->update($t, ['letrehozva' => gmdate('Y-m-d H:i:s', $most - 6 * DAY_IN_SECONDS)], ['id' => (int) $friss4['id']]);
+T::egyezik(1, SDH_Sales_Fizetes::emlekeztetok($most), 'K-4: emlékeztető: 55 már emlékeztetett mellett az új is (1 levél)');
+// c) kiszolgálási lánc: 55 adminra váró (kézi számla) lánc mellett az új fizetett rendelés lánca elindul
+$var_lanc = (string) wp_json_encode(['lepesek' => ['kozpont' => ['allapot' => 'ok'], 'szamla' => ['allapot' => 'var', 'kezi' => true, 'kovetkezo' => 0], 'email' => ['allapot' => 'ok'], 'idopont' => ['allapot' => 'kihagyva'], 'ertesites' => ['allapot' => 'ok']], 'kesz' => false]);
+for ($i = 0; $i < 55; $i++) {
+    $q4 = t_rendeles();
+    $wpdb->update($t, ['allapot' => 'kiszolgalva', 'fizetve_ido' => gmdate('Y-m-d H:i:s', $most - DAY_IN_SECONDS), 'lanc' => $var_lanc], ['id' => (int) $q4['id']]);
+}
+$uj4 = t_rendeles();
+$wpdb->update($t, ['allapot' => 'fizetve', 'fizetve_ido' => gmdate('Y-m-d H:i:s', $most), 'lanc' => ''], ['id' => (int) $uj4['id']]);
+SDH_Sales_Kiszolgalas::cron($most);
+T::igaz(!empty(SDH_Sales_Rendeles::rendeles((int) $uj4['id'])['lanc']['lepesek']), 'K-4: kiszolgálás-cron: 55 adminra váró lánc mellett az új lánc is elindul');
+
 T::vege('t221 cron + Számlázz.hu');

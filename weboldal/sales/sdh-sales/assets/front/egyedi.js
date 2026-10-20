@@ -129,7 +129,7 @@
                     el('h2', { szoveg: 'Köszönjük! Azonosító: ' + v.azon }),
                     el('p', { szoveg: v.uzenet }),
                     el('ul', {}, (b.osszefoglalo || []).map(function (s) { return el('li', { szoveg: s }); })),
-                    el('p', { osztaly: 's-becsles' }, [el('strong', { szoveg: b.cimke || 'BECSLÉS' }), el('br'), 'Munkaigény: ' + b.ora_min + '–' + b.ora_max + ' óra, kb. ' + ft(b.ar_min) + ' – ' + ft(b.ar_max) + ' + áfa, ' + b.het_min + '–' + b.het_max + ' hét.']),
+                    el('p', { osztaly: 's-becsles' }, [el('strong', { szoveg: b.cimke || 'BECSLÉS' }), el('br'), 'Munkaigény: ' + b.ora_min + '–' + b.ora_max + ' óra, kb. ' + ft(b.ar_min) + ' – ' + ft(b.ar_max) + ' nettó + ' + APP.afa + '% áfa (bruttó ' + ft(Math.round(b.ar_min * (100 + APP.afa) / 100)) + ' – ' + ft(Math.round(b.ar_max * (100 + APP.afa) / 100)) + '), ' + b.het_min + '–' + b.het_max + ' hét.']),
                     (v.hibak || []).length ? el('p', { osztaly: 's-uzenet s-uzenet-figyel', szoveg: v.hibak.join(' ') }) : null
                 ]));
             }, function (h) {

@@ -146,7 +146,7 @@ button { font: inherit; color: inherit; }
 
 .sa-oldalsav__fej { display: flex; align-items: flex-start; gap: 8px; }
 .sa-oldalsav__fej .sa-logo { flex: 1; }
-.sa-oldalsav__zar, .sa-menu-fatyol { display: none; }
+.sa-oldalsav .sa-oldalsav__zar, .sa-menu-fatyol { display: none; }
 .sa-logo { display: flex; align-items: center; gap: 12px; padding: 6px 10px 14px; text-decoration: none; min-width: 0; }
 .sa-logo__jel { width: 36px; height: 36px; border-radius: 11px; background: var(--sa-atmenet); display: grid; place-items: center; box-shadow: 0 8px 24px -8px rgba(124, 108, 255, .7); flex: none; }
 .sa-logo__jel svg { width: 20px; height: 20px; color: var(--sa-gomb-szoveg); }
@@ -214,7 +214,9 @@ button { font: inherit; color: inherit; }
 /* ---------- Kártya, rács ---------- */
 
 .sa-racs { display: grid; gap: 16px; }
-.sa-racs--kpi { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.sa-racs--kpi { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 1500px) { .sa-racs--kpi { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .sa-racs--kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .sa-kpi .sa-kpi__ertek { font-size: 22px; } .sa-kartya.sa-kpi { padding: 14px; } }
 .sa-racs--2 { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 .sa-racs--fele { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .sa-oszlop { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
@@ -631,7 +633,7 @@ button { font: inherit; color: inherit; }
     .sa-oldalsav { position: fixed; left: 0; top: 0; bottom: 0; width: 270px; z-index: 60; transform: translateX(-100%); transition: transform .2s; background: var(--sa-panel-eros); }
     .sa-app.is-menu .sa-oldalsav { transform: none; box-shadow: var(--sa-arnyek-popup); }
     .sa-app.is-menu .sa-menu-fatyol { display: block; position: fixed; inset: 0; z-index: 55; background: var(--sa-fatyol); backdrop-filter: blur(2px); }
-    .sa-oldalsav__zar { display: grid; margin-top: 4px; }
+    .sa-oldalsav .sa-oldalsav__zar { display: grid; margin-top: 4px; }
     html.sa-zar { overflow: hidden; }
     .sa-mobil-menu { display: grid; }
     .sa-kereso { min-width: 0; }

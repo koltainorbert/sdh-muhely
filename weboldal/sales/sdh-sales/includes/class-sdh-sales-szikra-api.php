@@ -229,9 +229,11 @@ TXT;
     public static function valaszol(string $mm, string $uzenet, string $mod, array $opc = [])
     {
         self::$hasznalat = ['be' => 0, 'ki' => 0];
-        SDH_Sales_Szikra_Eszkozok::kornyezet(['munkamenet' => $mm, 'hozzajarulas' => !empty($opc['hozzajarulas'])]);
-
         $elozo = SDH_Sales_Szikra::elozmeny($mm, max(0, SDH_Sales_Szikra::i('szikra.elozmeny')));
+
+        // A látogató saját szövege (a lead csak az általa beírt e-mail-címmel menthető – nem a modell / tudásbázis címével).
+        $latogato = implode("\n", array_merge(array_column(array_filter($elozo, static fn (array $e): bool => $e['szerep'] === 'user'), 'szoveg'), [$uzenet]));
+        SDH_Sales_Szikra_Eszkozok::kornyezet(['munkamenet' => $mm, 'hozzajarulas' => !empty($opc['hozzajarulas']), 'latogato' => $latogato]);
         $megj  = '';
 
         // A felületen adott hozzájárulás: a függő mentést a szerver végzi el (nem a modell).

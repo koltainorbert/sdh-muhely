@@ -301,7 +301,7 @@
     APP.api = api;
     APP.uzen = uzen;
     APP.ketlepcsos = ketlepcsos;
-    // A téma tartalék kétlépcsős kezelője ([data-ketlepcsos]) ezt nézi: ha a közös modul kezeli, a téma nem nyúl hozzá
+    // A lap tartalék kétlépcsős kezelője ([data-ketlepcsos]) ezt nézi: ha a közös modul kezeli, a tartalék nem nyúl hozzá
     // (különben mindkettő élesít, a gomb szövege a data-ketlepcsos értéke lesz, és az esemény kétszer mehet ki).
     APP.ketlepcsos_kezeli = true;
     APP.kosar = kosar;

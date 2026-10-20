@@ -110,6 +110,11 @@ T::igaz(empty($r->get_data()['ok']), 'IPN: eltérő rendelésszám elutasítva')
 $GLOBALS['t26_agent_fv'] = static fn () => t_valasz(200, '<?xml version="1.0"?><szamla xmlns="http://www.szamlazz.hu/szamla"><kifizetesek></kifizetesek><osszegek><totalossz><brutto>190500</brutto></totalossz></osszegek></szamla>');
 $r = t_latogato(static fn () => t_rest('POST', '/szamlazz/ipn', $adat));
 T::igaz(empty($r->get_data()['ok']), 'IPN: a Számlázz.hu adata nem igazolja → elutasítva');
+// Független ellenőrzés (2026-10-20), alacsony 2: az IPN titkos tokenje nem kerül a nyers fizetési adatba.
+if (class_exists('SDH_Sales_Schema') && !property_exists('SDH_Sales_Rendeles', 'h')) {
+    $nyers3 = (string) $wpdb->get_var($wpdb->prepare('SELECT nyers FROM ' . SDH_Sales_Schema::t('fizetes') . ' WHERE tranzakcio = %s', 'ipn:D-IPN-1:190500'));
+    T::igaz($nyers3 !== '' && strpos($nyers3, (string) $iq['k']) === false && strpos($nyers3, '"k"') === false, 'alacsony-2: a nyers IPN-adatban nincs titkos token');
+}
 $_SERVER['REMOTE_ADDR'] = '203.0.113.7';
 
 // Régi mappa (uploads/sdh-sales-szamla) átnevezése az új semleges névre, a PDF-ek megmaradnak.

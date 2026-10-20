@@ -162,6 +162,28 @@ T::egyezik('CANCEL', $v->get_data()['esemeny'] ?? '', 'SimplePay vissza: esemén
 T::egyezik('sikertelen', SDH_Sales_Rendeles::rendeles((int) $r4['id'])['allapot'], 'SimplePay vissza CANCEL → sikertelen');
 T::egyezik(400, t_latogato(static fn () => t_rest('GET', '/fizetes/simplepay/vissza', ['r' => base64_encode($rj), 's' => 'rossz']))->get_status(), 'SimplePay vissza: rossz aláírás 400');
 
+// Független ellenőrzés (2026-10-20), alacsony 7: egy korábbi tranzakció aláírt FAIL-linkje nem buktatja el az új fizetést.
+$tid = '501234569';
+$r5  = t_latogato(static fn () => t_rendeles(['fizmod' => 'simplepay']));
+$spRend = $r5['azon']; $spAllapot = 'FAIL';
+$tid = '501234570';
+SDH_Sales_Fizetes::kartya_indit((int) $r5['id'], 'simplepay');
+$spAllapot = 'INPAYMENT';
+$regi = (string) wp_json_encode(['r' => 0, 't' => 501234569, 'e' => 'FAIL', 'm' => 'PUBLICTESTHUF', 'o' => $r5['azon']]);
+t_latogato(static fn () => t_rest('GET', '/fizetes/simplepay/vissza', ['r' => base64_encode($regi), 's' => $alair($regi)]));
+T::egyezik('fizetesre_var', SDH_Sales_Rendeles::rendeles((int) $r5['id'])['allapot'], 'alacsony-7: régi FAIL-link újrajátszása nem állítja „sikertelen”-re a folyamatban lévő új fizetést');
+// alacsony 6: nem forintos kapu-összeg nem rögzül fizetésként
+$r6 = t_rendeles();
+T::egyezik('ismeretlen', SDH_Sales_Fizetes::kapu_eredmeny(SDH_Sales_Rendeles::rendeles((int) $r6['id']), 'barion', ['allapot' => 'fizetve', 'tranzakcio' => 'barion:eur-1', 'osszeg' => (int) $r6['r']['brutto'], 'rendeles' => $r6['azon'], 'nyers' => ['Currency' => 'EUR']]), 'alacsony-6: EUR-ban igazolt fizetés nem rögzül');
+T::egyezik('dijbekero', SDH_Sales_Rendeles::rendeles((int) $r6['id'])['allapot'], 'alacsony-6: a rendelés nyitott marad');
+// alacsony 3: a díjbekérő újraküldése tokenes linkkel nem ismételhető (levélbomba ellen)
+$r7 = t_rendeles();
+$GLOBALS['sdh_t_levelek'] = [];
+for ($i = 0; $i < 3; $i++) {
+    t_latogato(static fn () => t_rest('POST', '/fizetes/ujra', ['azon' => $r7['azon'], 't' => $r7['token'], 'fizmod' => 'atutalas']));
+}
+T::egyezik(0, count(t_levelek((string) $r7['r']['email'])), 'alacsony-3: díjbekérős rendelésen a „fizetés újra (átutalás)” nem küld újabb levelet');
+
 // A titok nem jelenhet meg REST-válaszban
 $v = t_rest('POST', '/kosar/ellenoriz', ['tetelek' => [['tipus' => 'csomag', 'kulcs' => 'start']]]);
 T::nem_tartalmaz(wp_json_encode($v->get_data()), 'FxDa5w314k', 'titok nincs a REST-válaszban');

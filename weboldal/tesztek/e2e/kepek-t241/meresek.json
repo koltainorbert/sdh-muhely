@@ -1,0 +1,223 @@
+{
+ "asztal/sotet/kezdolap": {
+  "lcp_ms": 800,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 44278,
+  "html": 138731
+ },
+ "asztal/sotet/funkcio": {
+  "lcp_ms": 644,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 35160,
+  "html": 113291
+ },
+ "asztal/sotet/arak": {
+  "lcp_ms": 720,
+  "cls": 0,
+  "css": 102276,
+  "js": 81259,
+  "font": 143960,
+  "kep": 0,
+  "html": 132147
+ },
+ "asztal/sotet/blogcikk": {
+  "lcp_ms": 568,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 93751
+ },
+ "asztal/sotet/404": {
+  "lcp_ms": 596,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 69958
+ },
+ "asztal/sotet/tudasbazis": {
+  "lcp_ms": 316,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 108947
+ },
+ "asztal/vilagos/kezdolap": {
+  "lcp_ms": 508,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 44278,
+  "html": 138731
+ },
+ "asztal/vilagos/funkcio": {
+  "lcp_ms": 808,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 35160,
+  "html": 113291
+ },
+ "asztal/vilagos/arak": {
+  "lcp_ms": 796,
+  "cls": 0,
+  "css": 102276,
+  "js": 81259,
+  "font": 143960,
+  "kep": 0,
+  "html": 132147
+ },
+ "asztal/vilagos/blogcikk": {
+  "lcp_ms": 656,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 93751
+ },
+ "asztal/vilagos/404": {
+  "lcp_ms": 392,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 69958
+ },
+ "asztal/vilagos/tudasbazis": {
+  "lcp_ms": 632,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 108947
+ },
+ "mobil/sotet/kezdolap": {
+  "lcp_ms": 492,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 8298,
+  "html": 138731
+ },
+ "mobil/sotet/funkcio": {
+  "lcp_ms": 508,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 3134,
+  "html": 113291
+ },
+ "mobil/sotet/arak": {
+  "lcp_ms": 400,
+  "cls": 0,
+  "css": 102276,
+  "js": 81259,
+  "font": 122224,
+  "kep": 0,
+  "html": 132147
+ },
+ "mobil/sotet/blogcikk": {
+  "lcp_ms": 540,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 0,
+  "html": 93751
+ },
+ "mobil/sotet/404": {
+  "lcp_ms": 500,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 103556,
+  "kep": 0,
+  "html": 69958
+ },
+ "mobil/sotet/tudasbazis": {
+  "lcp_ms": 416,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 108947
+ },
+ "mobil/vilagos/kezdolap": {
+  "lcp_ms": 644,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 8298,
+  "html": 138731
+ },
+ "mobil/vilagos/funkcio": {
+  "lcp_ms": 584,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 3134,
+  "html": 113291
+ },
+ "mobil/vilagos/arak": {
+  "lcp_ms": 448,
+  "cls": 0,
+  "css": 102276,
+  "js": 81259,
+  "font": 103556,
+  "kep": 0,
+  "html": 132147
+ },
+ "mobil/vilagos/blogcikk": {
+  "lcp_ms": 728,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 122224,
+  "kep": 0,
+  "html": 93751
+ },
+ "mobil/vilagos/404": {
+  "lcp_ms": 284,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 103556,
+  "kep": 0,
+  "html": 69958
+ },
+ "mobil/vilagos/tudasbazis": {
+  "lcp_ms": 344,
+  "cls": 0,
+  "css": 102276,
+  "js": 57636,
+  "font": 162628,
+  "kep": 0,
+  "html": 108947
+ },
+ "kereso": {
+  "munkalp_talalat": 24,
+  "elso": "Munkalapok",
+  "szamlazz_talalat": 9
+ }
+}

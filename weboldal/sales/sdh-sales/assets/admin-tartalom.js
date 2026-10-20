@@ -109,7 +109,7 @@
                 const t = SZT[sz.tipus] || { cim: sz.tipus, ikon: 'info' };
                 return `<li class="sa-szelem ${i === E.aktiv ? 'is-aktiv' : ''} ${sz.rejtett ? 'is-rejtett' : ''}" data-i="${i}">
                     <button type="button" class="sa-szelem__fogo" data-fogo aria-label="${i + 1}. szekció (${e(t.cim)}) áthelyezése – ↑ ↓">${I('fogo')}</button>
-                    <button type="button" class="sa-szelem__nyit" data-nyit aria-current="${i === E.aktiv}">${WI(t.ikon)}<span><b>${e(t.cim)}${sz.rejtett ? ' · rejtett' : ''}</b><small>${e(szAlcim(sz))}</small></span></button>
+                    <button type="button" class="sa-szelem__nyit" data-nyit aria-current="${i === E.aktiv}" title="${e(t.cim + ' – ' + szAlcim(sz))}">${WI(t.ikon)}<span><b>${e(t.cim)}${sz.rejtett ? ' · rejtett' : ''}</b><small>${e(szAlcim(sz))}</small></span></button>
                     <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-rejt aria-label="${sz.rejtett ? 'Megjelenítés' : 'Elrejtés'}" aria-pressed="${!!sz.rejtett}" title="${sz.rejtett ? 'Megjelenítés' : 'Elrejtés'}">${I(sz.rejtett ? 'szem_ki' : 'szem')}</button>
                     <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-dup aria-label="Duplikálás" title="Duplikálás">${I('duplikal')}</button>
                     <button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi sa-ikon-gomb--veszely" data-torol aria-label="Törlés" title="Törlés" data-ketlepcsos="Biztos? Katt újra a törléshez">${I('torol')}</button></li>`;
@@ -136,7 +136,7 @@
             E.szekciok[E.aktiv] = Object.assign({}, sz, E.urlap.ertek(), { tipus: sz.tipus, rejtett: sz.rejtett });
             if (!E.szekciok[E.aktiv].rejtett) delete E.szekciok[E.aktiv].rejtett;
             const li = lista.children[E.aktiv];
-            if (li) $('small', li).textContent = szAlcim(E.szekciok[E.aktiv]);
+            if (li) { $('small', li).textContent = szAlcim(E.szekciok[E.aktiv]); $('[data-nyit]', li).title = `${(SZT[sz.tipus] || { cim: sz.tipus }).cim} – ${szAlcim(E.szekciok[E.aktiv])}`; }
             piszkos();
             elonezet();
         }, 220);
@@ -272,7 +272,7 @@
     /* ================================================================== Elemek */
 
     const ES = B.elemek || {};
-    const PENZ = (s) => (s.mezok || []).filter((m) => m.penz).map((m) => m.k);
+    const PENZ = (s) => (s.mezok || []).filter((m) => m.penz).map((m) => m.k).slice(0, 2);
 
     A.panel('elemek', async (hova, [tipusParam]) => {
         const tipusok = Object.keys(ES);

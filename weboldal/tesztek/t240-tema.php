@@ -413,4 +413,16 @@ foreach (['/' => 200, '/arak/' => 200, '/nincs-ilyen-oldal-t240/' => 404] as $ut
     T::tartalmaz($h, '</html>', "bővítmény nélkül teljes oldal: {$ut}");
 }
 
+/* ------------------------------------------------------------------
+ * Takarítás: a teszt saját elemei ne maradjanak a webhely tartalmában (különben a vizuális bejáró is látja őket)
+ * ---------------------------------------------------------------- */
+
+if (class_exists('SDH_Sales_Tartalom')) {
+    foreach ([['esemeny', 't240-webinar'], ['gyik', 't240-xss'], ['funkcio', 't240-xss'], ['esemeny', 't240-xss']] as [$sdh_tt, $sdh_tk]) {
+        SDH_Sales_Tartalom::torol($sdh_tt, $sdh_tk);
+    }
+
+    T::egyezik([], array_values(array_filter(array_column(SDH_Sales_Tartalom::lista('esemeny', false), 'kulcs'), static fn ($k) => str_starts_with((string) $k, 't240-'))), 'takarítás: nem marad t240-es esemény');
+}
+
 T::vege('t240 téma');

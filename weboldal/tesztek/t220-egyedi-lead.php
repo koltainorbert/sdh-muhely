@@ -47,6 +47,10 @@ T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz($f('x.php', '<?php echo 1;'))['ok'], '
 T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz($f('kep.php.png', 'x'))['ok'], 'kettős kiterjesztés elutasítva');
 T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz($f('hamis.pdf', '<?php system($_GET[1]);'))['ok'], 'PDF-nek álcázott PHP elutasítva');
 T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz($f('rajz.svg', '<svg/>'))['ok'], 'SVG elutasítva');
+// Független ellenőrzés (2026-10-20), alacsony 10: tartalom szerinti típus nélkül (nincs fileinfo) a fájl nem fogadható el.
+add_filter('sdh_sales_feltoltes_mime', '__return_empty_string');
+T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz($f('minta2.pdf', $pdf))['ok'], 'alacsony-10: MIME-ellenőrzés nélkül a PDF sem megy át');
+remove_filter('sdh_sales_feltoltes_mime', '__return_empty_string');
 T::igaz(!SDH_Sales_Egyedi::fajl_ellenoriz(['size' => SDH_Sales_Egyedi::MAX_FAJL_BAJT + 1] + $f('nagy.txt', 'x'))['ok'], 'túl nagy elutasítva');
 
 // REST beküldés fájllal

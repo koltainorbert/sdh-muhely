@@ -68,4 +68,16 @@ if ($ki === 'NINCS' || $ki === '') {
 array_map('unlink', glob($dir . '/*') ?: []);
 rmdir($dir);
 
+
+// Független ellenőrzés (2026-10-20), alacsony 8: az átutalási QR ideiglenes fájlja kitalálhatatlan, saját almappában van.
+$qrm = new ReflectionMethod('SDH_Sales_Fizetes_Atutalas', 'qr_fajl');
+$qrm->setAccessible(true);
+$qro = t_rendeles();
+$qrf = (string) $qrm->invoke(null, SDH_Sales_Rendeles::rendeles((int) $qro['id']));
+T::igaz($qrf !== '' && preg_match('~/p-[0-9a-f]{24}/atutalas-qr-R-\d{4}-\d{6}\.png$~', $qrf) === 1, 'alacsony-8: véletlen nevű almappa, olvasható csatolmánynév');
+if ($qrf !== '' && is_file($qrf)) {
+    unlink($qrf);
+    rmdir(dirname($qrf));
+}
+
 T::vege('t216 QR');
