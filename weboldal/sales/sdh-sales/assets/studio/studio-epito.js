@@ -68,7 +68,7 @@
         const f = S.szurok.oldalak = Object.assign({ nezet: 'mind', q: '' }, S.szurok.oldalak || {});
         const [r, kuka] = await Promise.all([api('admin/oldalak'), api('admin/oldalak', { query: { kuka: 1 } }).catch(() => ({ lista: [] }))]);
         let oldalak = r.lista;
-        hova.innerHTML = `<div class="sa-eszkozsor">${szegmens('Nézet', { mind: `Minden oldal <small>${oldalak.length}</small>`, szekcios: `Szekciós <small>${oldalak.filter((x) => x.szekcios).length}</small>`, vazlat: `Vázlatok <small>${oldalak.filter((x) => x.statusz !== 'publish' || x.vazlat).length}</small>`, kuka: `Kuka <small>${kuka.lista.length}</small>` }, f.nezet)}<span class="sa-ter"></span>
+        hova.innerHTML = `<div class="sa-eszkozsor">${szegmens('Nézet', { mind: `Minden oldal <small>${oldalak.length}</small>`, szekcios: `Szekciós <small>${oldalak.filter((x) => x.szekcios).length}</small>`, vazlat: `Vázlatok <small>${oldalak.filter((x) => x.statusz !== 'publish' || x.piszkozat).length}</small>`, kuka: `Kuka <small>${kuka.lista.length}</small>` }, f.nezet)}<span class="sa-ter"></span>
             <input class="sa-input" type="search" data-q placeholder="Cím vagy útvonal…" aria-label="Keresés az oldalak között" value="${e(f.q)}">
             <button type="button" class="sa-gomb sa-gomb--fo" data-uj>${I('plusz')}Új oldal</button></div>
             <div class="sa-kartya sa-kartya--sima" data-lista aria-live="polite"></div>`;
@@ -77,9 +77,9 @@
         const rajzol = () => {
             const q = f.q.toLowerCase();
             const forras = f.nezet === 'kuka' ? kuka.lista : oldalak;
-            const l = forras.filter((x) => (f.nezet !== 'szekcios' || x.szekcios) && (f.nezet !== 'vazlat' || x.statusz !== 'publish' || x.vazlat) && (!q || x.cim.toLowerCase().includes(q) || x.ut.includes(q)));
+            const l = forras.filter((x) => (f.nezet !== 'szekcios' || x.szekcios) && (f.nezet !== 'vazlat' || x.statusz !== 'publish' || x.piszkozat) && (!q || x.cim.toLowerCase().includes(q) || x.ut.includes(q)));
             lista.innerHTML = l.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Oldal</th><th>Útvonal</th><th class="sa-jobb">Szekciók</th><th>Állapot</th><th>Módosítva</th><th class="sa-jobb"><span class="sa-sr">Műveletek</span></th></tr></thead><tbody>${l.map((x) => `
-                <tr class="${f.nezet === 'kuka' ? '' : 'is-katt'}" data-oldal="${x.id}" ${f.nezet === 'kuka' ? '' : 'tabindex="0"'}><td><span class="st-fa-behuz" style="--m:${q ? 0 : melyseg(x)}"></span><span class="sa-vastag">${e(x.cim || '(cím nélkül)')}</span>${x.kezdolap ? ' ' + cimke('Kezdőlap', 'kiemelo') : ''}${x.vazlat ? ' ' + cimke('Mentetlen piszkozat', 'figyel') : ''}${x.jogi ? ' ' + cimke('Jogi', 'szurke') : ''}</td><td class="sa-mono sa-halvany"><div class="sa-egysor" style="--sa-cella-max:240px" title="/${e(x.ut)}">/${e(x.ut)}</div></td>
+                <tr class="${f.nezet === 'kuka' ? '' : 'is-katt'}" data-oldal="${x.id}" ${f.nezet === 'kuka' ? '' : 'tabindex="0"'}><td><span class="st-fa-behuz" style="--m:${q ? 0 : melyseg(x)}"></span><span class="sa-vastag">${e(x.cim || '(cím nélkül)')}</span>${x.kezdolap ? ' ' + cimke('Kezdőlap', 'kiemelo') : ''}${x.piszkozat ? ' ' + cimke('Mentetlen piszkozat', 'figyel') : ''}${x.jogi ? ' ' + cimke('Jogi', 'szurke') : ''}</td><td class="sa-mono sa-halvany"><div class="sa-egysor" style="--sa-cella-max:240px" title="/${e(x.ut)}">/${e(x.ut)}</div></td>
                 <td class="sa-jobb">${x.szekcios ? A.szam(x.szekcio_db) : '<span class="sa-halvany">–</span>'}</td><td>${cimke(...(STATUSZ[x.statusz] || [x.statusz, 'szurke']))}</td><td class="sa-halvany">${e(relativ(x.modositva))}</td>
                 <td class="sa-jobb"><span class="sa-sor" style="justify-content:flex-end;gap:4px">${f.nezet === 'kuka'
                     ? `<button type="button" class="sa-gomb sa-gomb--kicsi" data-vissza="${x.id}">${I('visszaall')}Visszaállítás</button><button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--veszely" data-vegleges="${x.id}" data-ketlepcsos="Biztos? Véglegesen törlöm">${I('torol')}Végleges törlés</button>`
@@ -151,6 +151,8 @@
         if (m[1] === 'o') {
             const x = { fajta: 'o', post: Number(d[0]), i: Number(d[1]), mezo: d[2] || '' };
             if (d.length >= 5) { x.elem = Number(d[3]); x.almezo = d[4]; }
+            // A téma gombsora: o:{post}/{i}/cta/{n} – az első a „gomb”, a második a „gomb2” mező.
+            if (x.mezo === 'cta' && d.length === 4) { x.mezo = Number(d[3]) === 0 ? 'gomb' : 'gomb2'; }
             return Number.isInteger(x.i) ? x : null;
         }
         if (m[1] === 'f') return { fajta: 'f', kulcs: m[2] };
@@ -429,7 +431,7 @@
             const nev = (sz, gy) => {
                 if (sz) {
                     const u = utBont(sz.getAttribute('data-s-szerk'));
-                    if (u && u.fajta === 'o') { const s0 = E.szekciok[u.i]; const m = s0 && mezoSema(s0.tipus, u.mezo, u.almezo); return (m ? m.c : u.mezo) + (u.elem !== undefined ? ` · ${u.elem + 1}. elem` : ''); }
+                    if (u && u.fajta === 'o') { const s0 = E.szekciok[u.i]; if (!u.mezo) return s0 ? `${u.i + 1}. ${(SZT[s0.tipus] || { cim: s0.tipus }).cim}` : 'Szekció'; const m = s0 && mezoSema(s0.tipus, u.mezo, u.almezo); return (m ? m.c : u.mezo) + (u.elem !== undefined ? ` · ${u.elem + 1}. elem` : ''); }
                     return { f: 'Felirat', b: 'Beállítás (az egész webhelyen)', m: 'Menüpont', t: 'Tartalomtár-elem' }[u ? u.fajta : ''] || 'Elem';
                 }
                 if (gy) { const s0 = E.szekciok[Number(gy.getAttribute('data-s-gyoker'))]; return s0 ? `${Number(gy.getAttribute('data-s-gyoker')) + 1}. ${(SZT[s0.tipus] || { cim: s0.tipus }).cim}` : 'Szekció'; }
@@ -553,7 +555,7 @@
                 mobilFul(window.innerWidth <= 960 ? 'tul' : null);
                 const sz = E.szekciok[u.i];
                 const m = mezoSema(sz.tipus, u.mezo, u.almezo);
-                if (E._jeloloHelyez && el) E._jeloloHelyez(el, (m ? m.c : u.mezo) + (u.elem !== undefined ? ` · ${u.elem + 1}. elem` : ''));
+                if (E._jeloloHelyez && el) E._jeloloHelyez(el, !u.mezo ? `${u.i + 1}. ${(SZT[sz.tipus] || { cim: sz.tipus }).cim}` : (m ? m.c : u.mezo) + (u.elem !== undefined ? ` · ${u.elem + 1}. elem` : ''));
                 if (!m || !kattintas) return;
                 const ertek = u.elem !== undefined ? ((sz[u.mezo] || [])[u.elem] || {})[u.almezo] : A.kiolvas(sz, u.mezo);
                 if (m.t === 'kep') { A.mediaValaszt({ cim: m.c, tipus: 'image' }).then((x) => { if (!x) return; if (u.elem !== undefined) { const l = (sz[u.mezo] || []).map((y) => Object.assign({}, y)); if (l[u.elem]) { l[u.elem][u.almezo] = x.url; sz[u.mezo] = l; } } else A.beir(sz, u.mezo, x.url); tulRajzol(); valtozott(); }); return; }
@@ -596,10 +598,28 @@
             }
             if (u.fajta === 'b') {
                 tulFej(I('beallitas'), 'Beállítás', 'Az egész webhelyre hat, azonnal mentődik.');
+                if (u.kulcs === 'arculat.logo' || u.kulcs === 'arculat.logo_vilagos') {
+                    tulFej(I('kep'), 'Logó', 'A fejlécben és a láblécben – azonnal mentődik.');
+                    const a = await api('admin/arculat');
+                    tul.innerHTML = `<div class="sa-mezok">${['logo', 'logo_vilagos'].map((k) => `<div class="sa-mezo sa-mezo--szeles"><span class="sa-mezo__cim">${k === 'logo' ? 'Logó sötét háttérre' : 'Logó világos háttérre'}</span><div class="st-logo-elo st-logo-elo--${k === 'logo' ? 'sotet' : 'vilagos'}" data-elo="${k}">${a[k] ? `<img src="${e(a[k])}" alt="">` : '<span class="sa-kicsi">Nincs – a terméknév jelenik meg</span>'}</div><div class="sa-sor" style="margin-top:6px"><button type="button" class="sa-gomb sa-gomb--kicsi" data-logo="${k}">${I('kep')}Médiatár</button><button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--szoveg" data-logo-ki="${k}">Eltávolítás</button></div></div>`).join('')}</div>${vissza2}`;
+                    $('.sa-mezok', tul).addEventListener('click', async (ev) => {
+                        const g = ev.target.closest('[data-logo], [data-logo-ki]');
+                        if (!g) return;
+                        const k = g.dataset.logo || g.dataset.logoKi;
+                        let url = '';
+                        if (g.dataset.logo) { const x = await A.mediaValaszt({ cim: 'Logó kiválasztása' }); if (!x) return; url = x.url; }
+                        try { const r = await api('admin/arculat', { method: 'POST', body: { [k]: url } }); $(`[data-elo="${k}"]`, tul).innerHTML = r[k] ? `<img src="${e(r[k])}" alt="">` : '<span class="sa-kicsi">Nincs – a terméknév jelenik meg</span>'; jelez('Logó mentve.'); elonezet(true); } catch (y) { jelez(y.message, 'hiba'); }
+                    });
+                    return vege();
+                }
                 beallCache = beallCache || await api('admin/beallitasok');
-                const m = Object.values(beallCache.csoportok).flatMap((c) => c.mezok).find((y) => y.k === u.kulcs);
-                if (!m || m.t === 'titok') { tul.innerHTML = ures('Ez a beállítás itt nem szerkeszthető – a Beállítások között találod.', 'beallitas') + vissza2; return vege(); }
-                const f = urlap([m], beallCache.ertekek, {});
+                const osszes = Object.values(beallCache.csoportok).flatMap((c) => c.mezok);
+                // Egy kulcs, vagy egy csoport (pl. b:ceg – a cég összes adata).
+                let mezok = osszes.filter((y) => y.k === u.kulcs);
+                if (!mezok.length) mezok = osszes.filter((y, i, a) => y.k.startsWith(u.kulcs + '.') && a.findIndex((z) => z.k === y.k) === i);
+                mezok = mezok.filter((y) => y.t !== 'titok');
+                if (!mezok.length) { tul.innerHTML = ures('Ez a beállítás itt nem szerkeszthető – a Beállítások között találod.', 'beallitas') + vissza2; return vege(); }
+                const f = urlap(mezok, beallCache.ertekek, {});
                 tul.innerHTML = '';
                 tul.appendChild(f.el);
                 tul.insertAdjacentHTML('beforeend', `<div class="sa-sor sa-sor--veg"><button type="button" class="sa-gomb sa-gomb--fo" data-ment>${I('mentes')}Mentés</button></div>${vissza2}`);

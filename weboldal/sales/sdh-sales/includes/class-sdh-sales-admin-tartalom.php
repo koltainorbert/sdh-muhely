@@ -64,7 +64,7 @@ final class SDH_Sales_Admin_Tartalom
             'url'       => (string) get_permalink($p),
             'modositva' => strtotime((string) $p->post_modified_gmt . ' UTC') ?: 0,
             'kezdolap'  => (int) get_option('page_on_front') === (int) $p->ID,
-            'vazlat'    => metadata_exists('post', (int) $p->ID, SDH_Sales_Studio::META_VAZLAT),
+            'piszkozat' => metadata_exists('post', (int) $p->ID, SDH_Sales_Studio::META_VAZLAT),
             'jogi'      => in_array('jogi', array_column($sz, 'tipus'), true),
             'sorrend'   => (int) $p->menu_order,
         ];

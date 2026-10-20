@@ -277,13 +277,10 @@
     A.skinKartya = async (hova) => {
         const a = await api('admin/arculat');
         if (!(a.skinek || []).length) return false;
-        const minta = (t, ts) => {
-            const v = (k, alap) => (t && t[k]) || alap;
-            const s = (k, alap) => (ts && ts[k]) || v(k, alap);
-            return `<span class="st-skin__minta" aria-hidden="true"><i style="background:${e(s('bg', '#0b0d14'))}"></i><i style="background:${e(s('felulet', '#151823'))}"></i><i style="background:${e(v('kiemelo', '#7c6cff'))}"></i><i style="background:${e(v('kiemelo-2', '#22d3ee'))}"></i><i style="background:${e(v('neon', v('kiemelo-2', '#22d3ee')))}"></i></span>`;
-        };
+        // Minta: a sötét és a világos változat három kiemelőszíne (kiemelő, 2. kiemelő, neon).
+        const minta = (s0) => `<span class="st-skin__minta" aria-hidden="true">${[...(s0.minta || []), ...(s0.minta_vilagos || [])].map((c) => `<i style="background:${/^#[0-9a-f]{3,8}$/i.test(c) ? c : 'transparent'}"></i>`).join('')}</span>`;
         hova.innerHTML = `<div class="sa-kartya"><div class="sa-kartya__fej"><div><h2 class="sa-kartya__cim">Skin</h2><div class="sa-kartya__al">Előre hangolt színvilág – világos és sötét módban is. A finomhangolás lent, tokenenként.</div></div><span class="sa-ter"></span></div>
-            <div class="st-skinek" role="radiogroup" aria-label="Skin">${a.skinek.map((s) => `<button type="button" class="st-skin" role="radio" aria-checked="${s.kulcs === a.skin}" data-skin="${e(s.kulcs)}">${minta(s.tokenek, s.tokenek_sotet)}<b>${e(s.nev)}</b><small>${e(s.leiras)}</small></button>`).join('')}</div></div>`;
+            <div class="st-skinek" role="radiogroup" aria-label="Skin">${a.skinek.map((s) => `<button type="button" class="st-skin" role="radio" aria-checked="${s.kulcs === a.skin}" data-skin="${e(s.kulcs)}">${minta(s)}<b>${e(s.nev)}</b><small>${e(s.leiras)}</small></button>`).join('')}</div></div>`;
         hova.addEventListener('click', (ev) => {
             const g = ev.target.closest('[data-skin]');
             if (!g || g.getAttribute('aria-checked') === 'true') return;

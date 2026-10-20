@@ -216,8 +216,9 @@ final class SDH_Sales_Studio_Tar
         if ($nap !== '') {
             $ora = (string) ($r->get_param('ora') ?: '09:00');
 
-            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $nap) !== 1 || preg_match('/^\d{1,2}:\d{2}$/', $ora) !== 1) {
-                return SDH_Sales_Rest::hiba('Hibás dátum.', 422, 'ervenytelen');
+            if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $nap, $dn) !== 1 || !checkdate((int) $dn[2], (int) $dn[3], (int) $dn[1])
+                || preg_match('/^(\d{1,2}):(\d{2})$/', $ora, $on) !== 1 || (int) $on[1] > 23 || (int) $on[2] > 59) {
+                return SDH_Sales_Rest::hiba('Hibás dátum vagy időpont.', 422, 'ervenytelen');
             }
 
             $d = DateTimeImmutable::createFromFormat('Y-m-d H:i', $nap . ' ' . $ora, wp_timezone());
