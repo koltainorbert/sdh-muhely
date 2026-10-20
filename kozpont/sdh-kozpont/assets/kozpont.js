@@ -1,8 +1,9 @@
-/* SDH Központ 2.1 – egyoldalas felület (külső könyvtár nélkül). */
+/* Licencközpont 2.2 – egyoldalas felület (külső könyvtár nélkül). A kiszolgált fájlban nincs rendszer- / márkanév
+   (beágyazva a Portál csomagjában is ez fut – REJTES.md). */
 (() => {
     'use strict';
 
-    const B = window.SDH_KP || {};
+    const B = window.LK_BOOT || {};
     const $ = (s, el = document) => el.querySelector(s);
     const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
     const e = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -356,7 +357,7 @@
         const app = $('#kp-app');
         app.innerHTML = `
             <aside class="kp-oldalsav">
-                <a class="kp-logo" href="#/"><span class="kp-logo__jel"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span><span class="kp-logo__nev">SDH Központ<small>Vezérlőközpont</small></span></a>
+                <a class="kp-logo" href="#/"><span class="kp-logo__jel"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span><span class="kp-logo__nev">${e(B.cim || 'Licencközpont')}<small>${e(B.alcim || 'Vezérlőközpont')}</small></span></a>
                 <nav class="kp-menu" aria-label="Fő menü">
                     ${MENU.slice(0, 2).map(menuPont).join('')}
                     <div class="kp-menu__cim">Ügyfélkezelés</div>
@@ -367,7 +368,7 @@
                     ${MENU.slice(7).map(menuPont).join('')}
                 </nav>
                 <div class="kp-oldalsav__alja">
-                    <a class="kp-wp-gomb" href="${e(B.wp)}">${I('wp')}<span>WordPress admin</span></a>
+                    <a class="kp-wp-gomb" href="${e(B.wp)}">${I('wp')}<span>${e(B.wp_cim || 'Rendszer-admin')}</span></a>
                     <a class="kp-wp-gomb" href="${e(B.oldal)}" target="_blank" rel="noopener">${I('kulso')}<span>Webhely megnyitása</span></a>
                     <div class="kp-halvany kp-kicsi" style="padding:4px 12px">v${e(B.verzio)}</div>
                 </div>
@@ -404,7 +405,7 @@
 
     function cim(szoveg, morzsa = '') {
         $('[data-cim]').innerHTML = (morzsa ? `<span class="kp-fejlec__morzsa">${morzsa} / </span>` : '') + e(szoveg);
-        document.title = `${szoveg} · SDH Központ`;
+        document.title = `${szoveg} · ${B.cim || 'Licencközpont'}`;
     }
 
     function menuJelek(adat) {
@@ -585,7 +586,7 @@
 
     const CIMKEK = {
         rendszer: ['Szerver', 'szerver', { os: 'Operációs rendszer', szerver: 'Webszerver', sapi: 'PHP-futtató', php: 'PHP', memoria_mb: 'PHP-memória (MB)', max_exec: 'Max. futásidő (s)', feltoltes_mb: 'Feltöltési korlát (MB)', opcache: 'OPcache', https: 'HTTPS', idozona: 'Időzóna', nyelv: 'Nyelv', wp: 'Keretrendszer', db_motor: 'Adatbázis-motor', db_verzio: 'Adatbázis-verzió', cron_tiltva: 'Beépített ütemező tiltva', debug_kijelzes: 'Hibák kiírása', multisite: 'Többoldalas', cpu: 'Processzormagok', terheles: 'Terhelés (1 perc)' }],
-        muhely: ['SDH Műhely', 'modul', { verzio: 'Verzió', db_verzio: 'Adatbázis-séma', tesztuzem: 'Tesztüzem', git: 'Fejlesztői (git) példány', ketlepcsos: 'Kétlépcsős belépés', tavoli: 'Távoli karbantartás engedélyezve', licenc_allapot: 'Licenc a vevő szerint', kozos_fiok: 'Közös fiók', zart_mod: 'Zárt mód' }],
+        muhely: ['A program', 'modul', { verzio: 'Verzió', db_verzio: 'Adatbázis-séma', tesztuzem: 'Tesztüzem', git: 'Fejlesztői (git) példány', ketlepcsos: 'Kétlépcsős belépés', tavoli: 'Távoli karbantartás engedélyezve', licenc_allapot: 'Licenc a vevő szerint', kozos_fiok: 'Közös fiók', zart_mod: 'Zárt mód' }],
         adat: ['Adatok', 'db', { munkalap: 'Munkalap (összes)', munkalap_nyitott: 'Nyitott munkalap', munkalap_ma: 'Munkalap ma', munkalap_30: 'Munkalap 30 nap', ugyfel: 'Ügyfél', eszkoz: 'Eszköz', termek: 'Termék', felhasznalo: 'Felhasználó', db_mb: 'Adatbázis (MB)', feltoltes_mb: 'Feltöltések (MB)', tablak: 'Táblák' }],
         mentes: ['Mentés', 'mentes', { utolso: 'Utolsó mentés', db: 'Mentések száma', meret_mb: 'Utolsó mérete (MB)', kulso: 'Külső másolat', kulso_hiba: 'Külső mentés hibája', megtartas: 'Megtartás (nap)' }],
         halozat: ['Hálózat', 'halozat', { online: 'Internet', ellenorizve: 'Ellenőrizve', sms: 'SMS-telefon', szamlazas: 'Számlázás beállítva', levelezes: 'Levelezés beállítva' }],
@@ -1036,7 +1037,7 @@
         const ossz = Object.values(a.verziok).reduce((x, y) => x + y, 0) || 1;
         tartalom().innerHTML = `
             <div class="kp-racs kp-racs--2">
-                <section class="kp-kartya"><div class="kp-kartya__fej"><h3 class="kp-kartya__cim">Új kiadás feltöltése</h3><span class="kp-kartya__al">az SDH Műhely vevői zipje (benne: sdh-muhely/sdh-muhely.php)</span></div>
+                <section class="kp-kartya"><div class="kp-kartya__fej"><h3 class="kp-kartya__cim">Új kiadás feltöltése</h3><span class="kp-kartya__al">a vevői zip (benne a program fő fájlja verziófejléccel)</span></div>
                     <label class="kp-feltolto" data-feltolto>${I('feltolt')}<b data-fajlnev>Húzd ide a zipet, vagy kattints</b><div class="kp-halvany kp-kicsi">A verziót a fájl fejlécéből olvasom ki.</div><input type="file" accept=".zip" hidden data-fajl></label>
                     <div class="kp-mezok" style="margin-top:14px">${mezo('Csatorna', szegmens('csatorna', { stabil: 'Stabil – mindenkinek', teszt: 'Teszt – csak a teszt csatornás licenceknek' }, 'stabil'))}${mezo('Mi változott?', input('megjegyzes', '', 'placeholder="pl. gyorsabb rács, új riport"'))}</div>
                     <div class="kp-sor" style="margin-top:14px;justify-content:flex-end"><button class="kp-gomb kp-gomb--fo" data-feltolt disabled>${I('feltolt')}Feltöltés és kiadás</button></div></section>
@@ -1126,7 +1127,7 @@
         tartalom().innerHTML = `
             <div class="kp-racs kp-racs--fele">
                 <section class="kp-kartya" data-b="altalanos"><div class="kp-kartya__fej"><h3 class="kp-kartya__cim">Általános</h3></div>
-                    <div class="kp-problemak">${kapcsolosor('belepeskor', b.belepeskor, 'Belépéskor a Központ nyíljon meg', 'A WordPress vezérlőpult helyett; a „WordPress admin” gombbal mehetsz tovább.')}
+                    <div class="kp-problemak">${kapcsolosor('belepeskor', b.belepeskor, 'Belépéskor a Központ nyíljon meg', 'Az alap vezérlőpult helyett; a bal alsó admin gombbal mehetsz tovább.')}
                     ${kapcsolosor('email_riasztas', b.email_riasztas, 'E-mail riasztás', 'Új hibánál, álló rendszernél és támogatási linknél.')}</div>
                     <div class="kp-mezok" style="margin-top:14px">${mezo('Riasztás ide', input('email_cim', b.email_cim, `inputmode="email" placeholder="${e(a.admin_email)}"`), 'Üresen a webhely adminisztrátori címére megy.', 'kp-mezo--szeles')}</div>
                     <div class="kp-sor" style="justify-content:flex-end;margin-top:14px"><button class="kp-gomb kp-gomb--fo" data-bment="altalanos">Mentés</button></div></section>
@@ -1145,7 +1146,7 @@
                 ${mezo('Terméknév a vevőknek', input('termek_nev', b.termek_nev, 'placeholder="pl. Munkora" maxlength="60"'), 'A letöltött csomag neve ebből lesz (pl. munkora-1.2.0.zip). Üresen az ugyanitt futó értékesítő oldal terméknevét használja.')}
                 ${mezo('Licenckulcs előtagja', input('kulcs_elotag', b.kulcs_elotag, `placeholder="${e(a.kulcs_elotag)}" maxlength="10" spellcheck="false" style="text-transform:uppercase"`), 'Az új kulcsok eleje (2–10 betű / szám). Üresen a terméknévből készül. A korábbi kulcsok érvényesek maradnak.')}</div>
                 <dl class="kp-kv" style="margin-top:14px"><dt>A Központ kulcsa</dt><dd><span class="kp-licenckulcs" data-masol="${e(a.kulcs)}" style="word-break:break-all">${e(a.kulcs)}</span></dd><dt>Verzió</dt><dd>${e(a.verzio)}</dd></dl>
-                <p class="kp-halvany kp-kicsi" style="margin:12px 0 0">Ha az értékesítő webhely ezen a WordPressen fut, nem kell semmit beállítani. Külön webhelynél a fenti Központ-kulcsot és címet ott add meg, az ottani nyilvános kulcsot pedig ide másold.</p>
+                <p class="kp-halvany kp-kicsi" style="margin:12px 0 0">Ha az értékesítő webhely ugyanezen a webhelyen fut, nem kell semmit beállítani. Külön webhelynél a fenti Központ-kulcsot és címet ott add meg, az ottani nyilvános kulcsot pedig ide másold.</p>
                 <div class="kp-sor" style="justify-content:flex-end;margin-top:14px"><button class="kp-gomb kp-gomb--fo" data-bment="ertekesito">Mentés</button></div></section>`;
         $$('[data-masol]').forEach((x) => x.addEventListener('click', () => masol(x.dataset.masol)));
         $$('[data-bment]').forEach((g) => g.addEventListener('click', async () => {
@@ -1192,7 +1193,7 @@
             ['Új vevő', 'vevo', () => vevoPopup(null, (id) => { location.hash = '#/vevo/' + id; })],
             ['Kiadás feltöltése', 'kiadas', () => { location.hash = '#/kiadasok'; }],
             ...MENU.map(([ut, ik, nev]) => [nev, ik, () => { location.hash = '#/' + ut; }]),
-            ['WordPress admin', 'wp', () => { location.href = B.wp; }],
+            [B.wp_cim || 'Rendszer-admin', 'wp', () => { location.href = B.wp; }],
             ['Világos / sötét téma', 'nap', temaValt],
         ];
         const hatter = document.createElement('div');

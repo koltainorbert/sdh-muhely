@@ -1,0 +1,17 @@
+{
+  "cim": "Licenckulcs (kézi küldés)",
+  "leiras": "A Licencek panelről küldve: a licenckulcs, a központ címe, a csomag és – ha kérted – új, egyszer használható letöltő link.",
+  "targy": "A(z) {termeknev} licenckulcsod",
+  "html": "<h1>A(z) {termeknev} licenckulcsod</h1><p>Kedves {nev}!</p><p>Az alábbi adatokkal tudod a rendszert aktiválni (Beállítások › Rendszer › Licenc).</p><div class=\"doboz\"><table><tr><th>Licenckulcs</th><td><code>{licenc_kulcs}</code></td></tr>{#kozpont_url}<tr><th>A központ címe</th><td><code>{kozpont_url}</code></td></tr>{/kozpont_url}{#csomag}<tr><th>Csomag</th><td>{csomag}</td></tr>{/csomag}{#modulok}<tr><th>Modulok</th><td>{modulok}</td></tr>{/modulok}{#lejar}<tr><th>Érvényes</th><td>{lejar}-ig</td></tr>{/lejar}</table></div>{#letoltes_url}<p><a class=\"gomb\" href=\"{letoltes_url}\">A telepítőcsomag letöltése</a></p><p>A letöltő link biztonsági okból 14 napig él, és legfeljebb háromszor használható.</p>{/letoltes_url}<p>A fiókodban bármikor megtalálod a licencedet és a számláidat: <a href=\"{fiok_url}\">{fiok_url}</a></p><p>Üdvözlettel:<br>{ceg}</p>",
+  "tokenek": [
+    "nev",
+    "vevo_ceg",
+    "licenc_kulcs",
+    "kozpont_url",
+    "csomag",
+    "modulok",
+    "lejar",
+    "letoltes_url",
+    "fiok_url"
+  ]
+}
