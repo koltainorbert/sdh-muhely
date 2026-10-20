@@ -291,7 +291,7 @@ final class SDH_Sales_Egyedi
         }
 
         if (!is_array($f['name'])) {
-            return [$f];
+            return (int) ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE && (string) $f['name'] === '' ? [] : [$f];
         }
 
         $ki = [];
@@ -300,7 +300,8 @@ final class SDH_Sales_Egyedi
             $ki[] = ['name' => $f['name'][$i], 'type' => $f['type'][$i] ?? '', 'tmp_name' => $f['tmp_name'][$i] ?? '', 'error' => $f['error'][$i] ?? UPLOAD_ERR_NO_FILE, 'size' => $f['size'][$i] ?? 0];
         }
 
-        return $ki;
+        // Üresen hagyott fájlmező (UPLOAD_ERR_NO_FILE, név nélkül): nem csatolmány, kimarad – a csatolmány nem kötelező.
+        return array_values(array_filter($ki, static fn (array $x): bool => !((int) $x['error'] === UPLOAD_ERR_NO_FILE && (string) $x['name'] === '')));
     }
 
     /* =================================================================
@@ -374,22 +375,22 @@ final class SDH_Sales_Egyedi
 
     public static function rest_bekuld(WP_REST_Request $q)
     {
+        $p = (array) $q->get_params();
+        $e = self::ellenoriz($p);
+
+        if (empty($p['adatkezeles'])) {
+            $e['hibak']['adatkezeles'] = __('Az elküldéshez fogadd el az adatkezelési tájékoztatót.', 'sdh-sales');
+        }
+
+        if ($e['hibak'] !== []) {
+            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => $e['hibak']], 400);
+        }
+
+        // A robotszűrés a mezők után: a hiányos űrlapra a mezőhibák jönnek, nem „robot” üzenet.
         $v = SDH_Sales_Biztonsag::ellenoriz($q);
 
         if (is_wp_error($v)) {
             return $v;
-        }
-
-        $p = (array) $q->get_params();
-
-        if (empty($p['adatkezeles'])) {
-            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => ['adatkezeles' => __('Az elküldéshez fogadd el az adatkezelési tájékoztatót.', 'sdh-sales')]], 400);
-        }
-
-        $e = self::ellenoriz($p);
-
-        if ($e['hibak'] !== []) {
-            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => $e['hibak']], 400);
         }
 
         $fajlok = self::fajlok_normal($q);

@@ -357,6 +357,7 @@ final class SDH_Sales_Szekcio
                 ['k' => 'tipus', 't' => 'valaszto', 'c' => 'Kedvezmény', 'o' => ['szazalek' => 'Százalék', 'osszeg' => 'Összeg (nettó Ft)'], 'alap' => 'szazalek', 'fel' => true],
                 ['k' => 'ertek', 't' => 'szam', 'c' => 'Érték', 'min' => 0, 'max' => 10000000, 'fel' => true],
                 ['k' => 'max', 't' => 'szam', 'c' => 'Felhasználható (db, 0 = korlátlan)', 'min' => 0, 'max' => 1000000, 'fel' => true],
+                ['k' => 'vevonkent', 't' => 'szam', 'c' => 'Vevőnként legfeljebb (db, 0 = korlátlan)', 'min' => 0, 'max' => 1000, 'fel' => true, 's' => 'Egy e-mail-cím / fiók ennyiszer használhatja.'],
                 ['k' => 'lejar', 't' => 'datum', 'c' => 'Lejárat', 'fel' => true],
                 ['k' => 'leiras', 't' => 'hosszu', 'c' => 'Belső megjegyzés', 'max' => 400],
             ]],

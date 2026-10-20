@@ -164,20 +164,22 @@ final class SDH_Sales_Urlap
             return SDH_Sales_Rest::hiba(__('Ismeretlen űrlap.', 'sdh-sales'), 400, 'urlap');
         }
 
+        // Előbb a mezők (mind egyszerre, az adatkezelési hozzájárulással együtt), csak utána a robotszűrés:
+        // így a felhasználó minden hibát egyszerre lát, és nem kap „robot” üzenetet egy hiányos űrlapra.
+        $e = self::ellenoriz(self::mezok($tipus), (array) $q->get_params());
+
+        if (empty($q->get_param('adatkezeles'))) {
+            $e['hibak']['adatkezeles'] = __('Az elküldéshez fogadd el az adatkezelési tájékoztatót.', 'sdh-sales');
+        }
+
+        if ($e['hibak'] !== []) {
+            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => $e['hibak']], 400);
+        }
+
         $v = SDH_Sales_Biztonsag::ellenoriz($q);
 
         if (is_wp_error($v)) {
             return $v;
-        }
-
-        if (empty($q->get_param('adatkezeles'))) {
-            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => ['adatkezeles' => __('Az elküldéshez fogadd el az adatkezelési tájékoztatót.', 'sdh-sales')]], 400);
-        }
-
-        $e = self::ellenoriz(self::mezok($tipus), (array) $q->get_params());
-
-        if ($e['hibak'] !== []) {
-            return new WP_REST_Response(['ok' => false, 'message' => __('Ellenőrizd a megjelölt mezőket.', 'sdh-sales'), 'hibak' => $e['hibak']], 400);
         }
 
         $forras = ['kapcsolat' => 'kapcsolat', 'ajanlat' => 'ajanlat', 'partner' => 'partner'][$tipus];

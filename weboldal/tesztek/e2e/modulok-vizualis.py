@@ -892,6 +892,8 @@ def main():
         allapotok = [a for a in ALLAPOTOK if not SZURO or SZURO in a[0]]
         # A sikeres beküldések (új lead / foglalás / igény) csak egy szélességen futnak, hogy ne szemeteljék a tesztoldalt.
         EGYSZER = {'egyedi-kesz', 'kapcsolat-kesz', 'foglalas-kesz'}
+        # Beküldő állapotok: előttük a tesztoldal IP-nkénti korlátait ürítjük (különben egy teljes bejárás alatt betelnek).
+        KORLATOS = {'penztar-hiba', 'fiok-link', 'egyedi-kesz', 'kapcsolat-hiba', 'kapcsolat-kesz', 'foglalas-kesz', 'kosar-kupon-hiba', 'kosar-kupon-ok'}
 
         for (w, h) in NEZETEK:
             for mod in MODOK:
@@ -909,6 +911,8 @@ def main():
                         ctx.add_cookies([suti_cookie()])
                     if belepve and belepve_suti:
                         ctx.add_cookies(belepve_suti)
+                    if nev in KORLATOS:
+                        seged('korlat')
                     lap = ctx.new_page()
                     konzol, halo = [], []
                     lap.on('console', lambda m, k=konzol: k.append(m.type + ': ' + m.text) if m.type in ('error', 'warning') else None)

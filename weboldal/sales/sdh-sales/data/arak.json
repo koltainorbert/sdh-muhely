@@ -344,7 +344,8 @@
       "sla": {
         "valaszido_ora": 24,
         "munkaido": "H–P 9–17"
-      }
+      },
+      "csomagban": true
     },
     {
       "kulcs": "support_pro",
@@ -403,7 +404,8 @@
       "tipus": "egyszeri",
       "ar": 0,
       "ajanlatkeres": true,
-      "leiras": "Nagyobb, egyedi rendszer vagy integráció – igényfelmérés után írásos ajánlat."
+      "leiras": "Nagyobb, egyedi rendszer vagy integráció – igényfelmérés után írásos ajánlat.",
+      "url": "/egyedi-szoftverfejlesztes/"
     },
     {
       "kulcs": "munkalap3_atvetel",

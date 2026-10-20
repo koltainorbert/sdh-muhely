@@ -7,6 +7,7 @@
  *                mód nélkül (átutalás), teszt-rendelések: egy díjbekérős (állapotoldal), két kifizetett licenccel
  *                (egy hamarosan lejáró, egy lejárt) + letöltés; a vevő fiók e-mailes belépő linkje.
  *   belepo     – csak új belépő link a tesztvevőnek.
+ *   korlat     – az IP-nkénti beküldési korlátok ürítése (ismételt beküldések előtt).
  *   takarit    – a hamis Szikra-kulcs ki (a többi tesztadat marad, a saját tesztoldalon nem zavar).
  * Hálózat nincs: a díjbekérő-levél wp_mail-je hibára fut (nincs levelező), ezt elnyeljük.
  *
@@ -189,6 +190,12 @@ switch ($parancs) {
     case 'belepo':
         $uid = seg_vevo_id($EMAIL);
         $ki['belepo_url'] = $uid > 0 ? SDH_Sales_Fiok::fiok_url(['belepes' => SDH_Sales_Fiok::link_letrehoz($uid, $EMAIL)]) : '';
+        break;
+
+    case 'korlat':
+        // Csak a SAJÁT tesztoldalon: az IP-nkénti beküldési korlátok ürítése (a bejárás sok szándékos beküldést tesz).
+        global $wpdb;
+        $wpdb->query('DELETE FROM ' . SDH_Sales_Schema::t('korlat')); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         break;
 
     case 'takarit':

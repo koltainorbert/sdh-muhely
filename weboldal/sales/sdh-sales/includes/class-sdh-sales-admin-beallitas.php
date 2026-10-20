@@ -55,7 +55,11 @@ final class SDH_Sales_Admin_Beallitas
                 $f('szlogen', 'szoveg', 'Szlogen', ['max' => 160]),
                 $f('nyelvek', 'nyelvek', 'Nyelvek', ['s' => 'Most csak a magyar tartalom készült el.']),
                 $f('demo.url', 'url', 'Demó webhely címe', ['fel' => true]),
-                $f('cloudflare', 'kapcsolo', 'Cloudflare mögött fut (valódi IP a CF-fejlécből)', ['fel' => true]),
+            ]],
+            'halozat' => ['Hálózat és proxy', 'pajzs', 'Honnan jön a látogató valódi IP-címe (korlátok, naplók, fizetési jelzések szűrése). A továbbított fejlécet csak megbízható küldőtől fogadjuk el.', [
+                $f('cloudflare', 'kapcsolo', 'Cloudflare mögött fut (valódi IP a CF-fejlécből, csak Cloudflare-címről)', ['fel' => true, 'alap' => true]),
+                $f('proxy.cloudflare_ip', 'hosszu', 'Cloudflare címtartományai (felülírás)', ['max' => 4000, 's' => 'CIDR-lista, soronként vagy vesszővel (pl. 173.245.48.0/20). Üresen a beépített, közzétett lista él.']),
+                $f('proxy.megbizhato', 'hosszu', 'Saját megbízható proxyk', ['max' => 4000, 's' => 'CIDR-lista (pl. 10.0.0.0/8). Csak ezektől fogadjuk el az X-Forwarded-For fejlécet; üresen senkitől.']),
             ]],
             'ceg' => ['Cégadatok', 'ceg', 'Számlán, leveleken, jogi oldalakon és a láblécben jelenik meg.', [
                 $f('ceg.nev', 'szoveg', 'Cégnév', ['max' => 160, 'fel' => true, 'kotelezo' => true]),
@@ -76,6 +80,7 @@ final class SDH_Sales_Admin_Beallitas
                 $f('fizetes.dijbekero_nap', 'szam', 'Díjbekérő fizetési határideje (nap)', ['min' => 1, 'max' => 60, 'fel' => true]),
                 $f('fizetes.atutalas', 'kapcsolo', 'Banki átutalás (díjbekérő + QR)', ['fel' => true]),
                 $f('fizetes.automatizalas', 'valaszto', 'Fizetés párosítása', ['o' => ['import' => 'Bankkivonat-import', 'szamlazz' => 'Számlázz.hu jelzés', 'kartya' => 'Csak kártyás kapu', 'kezi' => 'Kézi jelölés'], 'fel' => true]),
+                $f('kupon.foglalas_ora', 'szam', 'Kupon foglalása fizetetlen rendelésnél (óra)', ['min' => 1, 'max' => 720, 'alap' => 24, 'fel' => true, 's' => 'Ennyi ideig számít bele a kupon keretébe egy még ki nem fizetett rendelés.']),
             ]],
             'barion' => ['Barion', 'kartya', 'Kártyás fizetés Barionnal. Éles kulcsot csak a tulajdonos ad meg.', [
                 $f('fizetes.barion.aktiv', 'kapcsolo', 'Barion bekapcsolva', ['fel' => true]),

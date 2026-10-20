@@ -118,7 +118,7 @@ MERO = r"""
 
   // ---- 1 túlcsordulás
   if (document.documentElement.scrollWidth > vw + 1) add('tulcsordulas', `oldal: scrollWidth ${document.documentElement.scrollWidth} > ${vw}`);
-  const SZANDEKOS_GORGETO = '.sa-tabla-doboz, .sa-fulek, .sa-elonezet, .sa-szegmens, .sa-diff pre, .sa-rt__ter, .sa-paletta__lista';
+  const SZANDEKOS_GORGETO = '.sa-tabla-doboz, .sa-almenu, .sa-fulek, .sa-elonezet, .sa-szegmens, .sa-diff pre, .sa-rt__ter, .sa-paletta__lista';
   for (const el of vis) {
     const v = vagott(el);
     if (v.width <= 0 || v.height <= 0) continue;
@@ -162,7 +162,22 @@ MERO = r"""
     if (el.matches('input, select, textarea, button, img, svg, .sa-kapcsolo, .sa-cimke, .sa-pill, .sa-kpi__spark, iframe')) return true;
     return [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
   }).filter((el) => !(el.matches('input') && el.closest('.sa-kapcsolo, .sa-szin__minta')) && !(el.tagName.toLowerCase() === 'svg' && el.closest('button, a, .sa-cimke, .sa-kpi__cimke, .sa-lanc__jel, .sa-kereso, .sa-ikonvalaszto, .sa-ures')));
-  const doboz = levelek.map((el) => ({ el, r: vagott(el) })).filter((x) => x.r.width > 1 && x.r.height > 1).slice(0, 1400);
+  // Sortörő inline elemnél a sorok téglalapjai külön (a befoglaló téglalap a két sort is lefedi – az nem átfedés).
+  const doboz = [];
+  for (const el of levelek) {
+    const v = vagott(el);
+    if (v.width <= 1 || v.height <= 1) continue;
+    const rs = cs(el).display === 'inline' ? [...el.getClientRects()] : [];
+    if (rs.length > 1) {
+      for (const q of rs) {
+        const r = { left: Math.max(q.left, v.left), right: Math.min(q.right, v.right), top: Math.max(q.top, v.top), bottom: Math.min(q.bottom, v.bottom) };
+        r.width = r.right - r.left; r.height = r.bottom - r.top;
+        if (r.width > 1 && r.height > 1) doboz.push({ el, r });
+      }
+    } else doboz.push({ el, r: v });
+    if (doboz.length > 1400) break;
+  }
+  const ragados = (el) => !!el.closest('.sa-fejlec');
   let atf = 0;
   for (let i = 0; i < doboz.length; i++) {
     for (let j = i + 1; j < doboz.length; j++) {
@@ -170,7 +185,8 @@ MERO = r"""
       const ix = Math.min(a.r.right, b.r.right) - Math.max(a.r.left, b.r.left);
       const iy = Math.min(a.r.bottom, b.r.bottom) - Math.max(a.r.top, b.r.top);
       if (ix <= 2 || iy <= 2) continue;
-      if (a.el.contains(b.el) || b.el.contains(a.el)) continue;
+      if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
+      if (ragados(a.el) !== ragados(b.el)) continue; // a ragadós fejléc görgetéskor szándékosan a tartalom fölött
       // kapcsoló: a láthatatlan input és a sín egy egység
       if (a.el.closest('.sa-kapcsolo') && a.el.closest('.sa-kapcsolo') === b.el.closest('.sa-kapcsolo')) continue;
       if (atf++ < 40) add('atfedes', `${sel(a.el)} ⟂ ${sel(b.el)} (${Math.round(ix)}×${Math.round(iy)})`);
@@ -330,8 +346,11 @@ FOKUSZ_JS = r"""
   const kep = (x) => { if (!x) return ''; const s = getComputedStyle(x); return [s.outlineStyle, s.outlineWidth, s.outlineColor, s.boxShadow, s.borderColor, s.backgroundColor].join('|'); };
   const t = [el, el.nextElementSibling, el.parentElement];
   const be = t.map(kep);
+  const regi = t.map((x) => (x ? x.style.transition : ''));
+  t.forEach((x) => { if (x) x.style.transition = 'none'; });
   el.blur();
   const ki = t.map(kep);
+  t.forEach((x, i) => { if (x) x.style.transition = regi[i]; });
   return { nev, latszik: be.some((x, i) => x !== ki[i]), kapcsolo: !!el.closest('.sa-kapcsolo') };
 }
 """
@@ -442,6 +461,8 @@ def bejar(pg, w, h, mod, jegyez):
     def meres(allapot, scope='#sa-app', popup=False):
         n[0] += 1
         a = f'{nev0} {allapot}'
+        # a be-úszó / áttűnő animációk vége (a végtelenek – csontváz, forgó jel – nem számítanak)
+        pg.evaluate("() => Promise.race([Promise.all(document.getAnimations().filter((x) => x.effect && isFinite(x.effect.getComputedTiming().endTime)).map((x) => x.finished.catch(() => {}))), new Promise((r) => setTimeout(r, 1500))])")
         r = pg.evaluate(MERO, [scope, {'w': w, 'mod': mod, 'popup': popup}])
         for k, l in r.items():
             jegyez(k, a, l)
@@ -471,6 +492,7 @@ def bejar(pg, w, h, mod, jegyez):
         rossz = []
         for _ in range(db):
             pg.keyboard.press('Tab')
+            pg.wait_for_timeout(200)  # a fókusz-átmenet (border / box-shadow .15 s) vége
             r = pg.evaluate(FOKUSZ_JS)
             if r and not r['latszik']:
                 rossz.append(r['nev'])
@@ -555,7 +577,7 @@ def bejar(pg, w, h, mod, jegyez):
         hash_(pg, '#/rendelesek')
         meres('Rendelések')
         fokusz('Rendelések', 25)
-        for f in (['nyitott', 'hiba', 'torolve'] if teljes else []):
+        for f in (['nyitott', 'ajanlat', 'hiba', 'torolve'] if teljes else []):
             pg.click(f'.sa-eszkozsor [data-ertek="{f}"]')
             var(pg, 300)
             meres(f'Rendelések {f}')
@@ -571,6 +593,28 @@ def bejar(pg, w, h, mod, jegyez):
             popup_nyit(f'tr[data-rendeles="{rid}"] td:nth-child(3)', f'Rendelés #{rid} popup')
             if i == 0 and w == 1366:
                 fokusz(f'Rendelés #{rid} popup', 20)
+            popup_bezar(pg)
+
+    def bank():
+        if not pg.query_selector('[data-menupont="bank"]'):
+            return
+        hash_(pg, '#/bank')
+        pg.wait_for_selector('[data-fuggo] .sa-kartya__fej', timeout=10000)
+        meres('Banki egyeztetés')
+        fokusz('Banki egyeztetés', 25)
+        # bemásolt értesítő (nem párosítható közlemény – első futáskor függő tétel, utána „már feldolgozva”)
+        pg.fill('#sa-bank-l', 'Jóváírás érkezett: +12 345 Ft. Küldő: VQA Teszt Elek. Közlemény: vizualis-proba-0001. Dátum: 2026.10.20.')
+        pg.click('[data-level]')
+        pg.wait_for_selector('[data-jelentes]:not([hidden]) .sa-kartya__fej', timeout=10000)
+        pg.wait_for_timeout(300)
+        meres('Banki egyeztetés – értesítő eredménye')
+        g = pg.query_selector('[data-jovahagy]')
+        if g:
+            g.click()  # kétlépcsős: az első katt csak élesít
+            pg.wait_for_timeout(150)
+            meres('Banki egyeztetés – élesített jóváhagyás')
+        if teljes and pg.query_selector('[data-rendeles-nyit]'):
+            popup_nyit('[data-rendeles-nyit]', 'Banki tétel rendelése popup', False)
             popup_bezar(pg)
 
     def vevok():
@@ -757,7 +801,7 @@ def bejar(pg, w, h, mod, jegyez):
         meres('Ctrl+K keresés', POPUP)
         popup_bezar(pg)
 
-    for nev, fn in [('menü', menu), ('Áttekintés', attekintes), ('mobil menü', mobil_menu), ('Rendelések', rendelesek), ('Vevők', vevok),
+    for nev, fn in [('menü', menu), ('Áttekintés', attekintes), ('mobil menü', mobil_menu), ('Rendelések', rendelesek), ('Banki egyeztetés', bank), ('Vevők', vevok),
                     ('Leadek', leadek), ('Foglalások', foglalasok), ('Oldalak', oldalak), ('Építő', epito), ('Elemek', elemek),
                     ('Menük', menuk), ('Arculat', arculat), ('Beállítások', beallitasok), ('Napló', naplo), ('Export', export), ('Ctrl+K', paletta)]:
         lepes(nev, fn)

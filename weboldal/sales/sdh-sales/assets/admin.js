@@ -36,6 +36,7 @@
         pipa: '<path d="M20 6 9 17l-5-5"/>',
         figyel: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>',
         info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+        bank: '<path d="M3 21h18M4 10h16M12 3l9 5H3z"/><path d="M6 10v7M10 10v7M14 10v7M18 10v7"/>',
         penz: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
         szamla: '<path d="M4 2v20l3-2 3 2 3-2 3 2 3-2 2 2V2l-2 2-3-2-3 2-3-2-3 2-3-2z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
         kulcs: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>',
@@ -97,15 +98,15 @@
         return datum(ts);
     };
 
-    const ALLAPOT = { uj: ['Új', 'szurke'], dijbekero: ['Díjbekérő', 'figyel'], fizetesre_var: ['Fizetésre vár', 'figyel'], fizetve: ['Fizetve', 'kiemelo'], kiszolgalva: ['Kiszolgálva', 'ok'], sikertelen: ['Sikertelen', 'hiba'], torolve: ['Törölve', 'szurke'], visszaterites: ['Visszatérítés', 'hiba'] };
+    const ALLAPOT = { uj: ['Új', 'szurke'], dijbekero: ['Díjbekérő', 'figyel'], fizetesre_var: ['Fizetésre vár', 'figyel'], fizetve: ['Fizetve', 'kiemelo'], kiszolgalva: ['Kiszolgálva', 'ok'], sikertelen: ['Sikertelen', 'hiba'], torolve: ['Törölve', 'szurke'], visszaterites: ['Visszatérítés', 'hiba'], ajanlat: ['Ajánlatkérés', 'info'] };
     const FIZMOD = { atutalas: 'Átutalás', barion: 'Barion', simplepay: 'SimplePay' };
-    const RTIPUS = { uj: 'Új', megujitas: 'Megújítás', bovites: 'Bővítés', szolgaltatas: 'Szolgáltatás' };
+    const RTIPUS = { uj: 'Új', megujitas: 'Megújítás', bovites: 'Bővítés', szolgaltatas: 'Szolgáltatás', ajanlat: 'Ajánlatkérés' };
     const CIKLUS = { havi: 'havi', eves: 'éves', egyszeri: 'egyszeri' };
     const LEAD_FORRAS = { kapcsolat: 'Kapcsolat', ajanlat: 'Ajánlatkérés', szikra: 'Szikra', egyedi: 'Egyedi igény', partner: 'Partner', demo: 'Demó' };
     const LANC = { ok: ['ok', 'pipa'], kihagyva: ['ok', 'pipa'], hiba: ['hiba', 'figyel'], var: ['var', 'ora'], fut: ['var', 'ujra'], nincs: ['', 'ora'] };
     const SZINT = { info: 'szurke', siker: 'ok', figyel: 'figyel', hiba: 'hiba' };
     /** A lead-adat mezőkulcsainak magyar felirata (ismeretlen kulcs: „Kulcs neve”). */
-    const LEAD_MEZO = { nev: 'Név', kapcsolattarto: 'Kapcsolattartó', ceg: 'Cég', cegnev: 'Cég', telefon: 'Telefon', email: 'E-mail', uzenet: 'Üzenet', targy: 'Tárgy', csomag: 'Csomag', modulok: 'Modulok', modul: 'Modul', telephely: 'Telephelyek', telephelyek: 'Telephelyek', felhasznalo: 'Felhasználók', felhasznalok: 'Felhasználók', iparag: 'Iparág', varos: 'Város', cim: 'Cím', weboldal: 'Weboldal', adoszam: 'Adószám', hatarido: 'Határidő', keret: 'Keret', koltsegkeret: 'Költségkeret', leiras: 'Leírás', forras_oldal: 'Forrás oldal', oldal: 'Oldal', utm: 'Kampány (UTM)', hozzajarulas: 'Hozzájárulás', adatkezeles: 'Adatkezelés elfogadva', hirlevel: 'Hírlevél', nyelv: 'Nyelv', idopont: 'Időpont', beszelgetes: 'Beszélgetés', osszefoglalo: 'Összefoglaló' };
+    const LEAD_MEZO = { nev: 'Név', kapcsolattarto: 'Kapcsolattartó', ceg: 'Cég', cegnev: 'Cég', telefon: 'Telefon', email: 'E-mail', uzenet: 'Üzenet', targy: 'Tárgy', csomag: 'Csomag', modulok: 'Modulok', modul: 'Modul', telephely: 'Telephelyek', telephelyek: 'Telephelyek', felhasznalo: 'Felhasználók', felhasznalok: 'Felhasználók', iparag: 'Iparág', varos: 'Város', cim: 'Cím', weboldal: 'Weboldal', adoszam: 'Adószám', hatarido: 'Határidő', keret: 'Keret', koltsegkeret: 'Költségkeret', leiras: 'Leírás', forras_oldal: 'Forrás oldal', oldal: 'Oldal', utm: 'Kampány (UTM)', hozzajarulas: 'Hozzájárulás', adatkezeles: 'Adatkezelés elfogadva', hirlevel: 'Hírlevél', nyelv: 'Nyelv', idopont: 'Időpont', beszelgetes: 'Beszélgetés', osszefoglalo: 'Összefoglaló', megjegyzes: 'Megjegyzés', ar: 'Ár', ajanlat: 'Ajánlat', szerviz: 'Szerviz', meret: 'Méret', forras: 'Forrás' };
     const mezoNev = (k) => LEAD_MEZO[k] || (String(k).charAt(0).toUpperCase() + String(k).slice(1)).replace(/_/g, ' ');
 
     const cimke = (szoveg, tipus = 'szurke', extra = '') => `<span class="sa-cimke sa-cimke--${e(tipus)} ${extra}">${e(szoveg)}</span>`;
@@ -128,7 +129,7 @@
         try { j = await r.json(); } catch (x) { j = null; }
         if (!r.ok) {
             if (j && j.code === 'rest_cookie_invalid_nonce') { jelez('A munkamenet lejárt – újratöltöm az oldalt.', 'figyel'); setTimeout(() => location.reload(), 1200); }
-            const h = new Error((j && j.message) || `Hiba (${r.status})`);
+            const h = new Error((j && (j.message || j.uzenet)) || `Hiba (${r.status})`);
             h.status = r.status; h.adat = j && j.data;
             throw h;
         }
@@ -338,7 +339,7 @@
     function mezoVezerlo(m, v, ctx = {}) {
         const id = 'sa-m-' + (++mezoSzam);
         const w = document.createElement('div');
-        w.className = 'sa-mezo' + (m.fel ? ' sa-mezo--fel' : ' sa-mezo--szeles');
+        w.className = 'sa-mezo' + (m.fel && !['kep', 'link'].includes(m.t) ? ' sa-mezo--fel' : ' sa-mezo--szeles'); // kép / link: mindig teljes szélesség (több vezérlő egy sorban)
         w.dataset.mezo = m.k;
         const cimHtml = `<label class="sa-mezo__cim" for="${id}">${e(m.c)}${m.kotelezo ? '<em aria-hidden="true">*</em>' : ''}${m.max && ['szoveg', 'hosszu'].includes(m.t) && m.max >= 120 ? `<span class="sa-szamlalo" data-szamlalo aria-hidden="true"></span>` : ''}</label>`;
         const sugo = m.s ? `<span class="sa-mezo__sugo" id="${id}-s">${e(m.s)}</span>` : '';
@@ -882,7 +883,7 @@
 
     const S = { nyelv: (B.nyelvek || ['hu'])[0], oldal: '', mentetlen: null, kilepes: null, szurok: {} };
     const RAJZOLOK = {};
-    const PANEL_IKON = { attekintes: 'attekintes', rendelesek: 'rendeles', vevok: 'vevo', leadek: 'lead', foglalasok: 'naptar', oldalak: 'oldal', elemek: 'elem', menuk: 'menu', arculat: 'arculat', beallitasok: 'beallitas', naplo: 'naplo', export: 'export' };
+    const PANEL_IKON = { attekintes: 'attekintes', rendelesek: 'rendeles', bank: 'bank', vevok: 'vevo', leadek: 'lead', foglalasok: 'naptar', oldalak: 'oldal', elemek: 'elem', menuk: 'menu', arculat: 'arculat', beallitasok: 'beallitas', naplo: 'naplo', export: 'export' };
 
     function panelek() { return Object.entries(B.panelek || {}); }
 
@@ -1004,6 +1005,7 @@
             const jel = (k, n, ok = false) => { const j = $(`[data-jel="${k}"]`); if (!j) return; j.hidden = !n; j.textContent = n; j.className = 'sa-menu__jel' + (ok ? ' sa-menu__jel--ok' : ''); };
             jel('rendelesek', a.lanc_hiba);
             jel('leadek', a.uj_lead, true);
+            if (van('/admin/bank/fuggo')) api('admin/bank/fuggo').then((l) => jel('bank', (Array.isArray(l) ? l : (l.lista || [])).length)).catch(() => {});
             return a;
         } catch (x) { return null; }
     }
@@ -1058,7 +1060,7 @@
     RAJZOLOK.rendelesek = async (hova, [elo]) => {
         const f = S.szurok.rendelesek = Object.assign({ allapot: 'mind', q: '', fizmod: '', tipus: '', oldal: 1 }, S.szurok.rendelesek || {});
         if (elo) { f.allapot = elo; f.oldal = 1; }
-        const ALL = { mind: 'Mind', nyitott: 'Nyitott', fizetve: 'Fizetve', kiszolgalva: 'Kiszolgálva', hiba: 'Hibás lánc', sikertelen: 'Sikertelen', torolve: 'Törölve' };
+        const ALL = { mind: 'Mind', nyitott: 'Nyitott', ajanlat: 'Ajánlatkérés', fizetve: 'Fizetve', kiszolgalva: 'Kiszolgálva', hiba: 'Hibás lánc', sikertelen: 'Sikertelen', torolve: 'Törölve' };
         hova.innerHTML = `
             <div class="sa-eszkozsor">${szegmens('Állapot', ALL, f.allapot)}<span class="sa-ter"></span>
                 <select class="sa-select" data-f="tipus" aria-label="Típus" style="width:auto"><option value="">Minden típus</option>${Object.entries(RTIPUS).map(([k, v]) => `<option value="${k}" ${f.tipus === k ? 'selected' : ''}>${e(v)}</option>`).join('')}</select>
@@ -1110,7 +1112,7 @@
         const lanc = `<div class="sa-lanc">${r.lanc.map((l) => { const [cls, ik] = LANC[l.allapot] || ['', 'ora']; return `<div class="sa-lanc__lepes sa-lanc__lepes--${cls}"><span class="sa-lanc__jel">${I(ik)}</span><div class="sa-lanc__szoveg"><b>${e(l.cim)}</b> <span class="sa-halvany sa-kicsi">${e({ ok: 'kész', kihagyva: 'kihagyva', hiba: 'hiba', var: 'vár', fut: 'fut', nincs: 'még nem indult' }[l.allapot] || l.allapot)}${l.probalkozas ? ` · ${l.probalkozas}. próbálkozás` : ''}${l.ido ? ' · ' + e(datumIdo(l.ido)) : ''}</span>${l.uzenet ? `<small>${e(l.uzenet)}</small>` : ''}</div>
             ${B.ujra && !['ok', 'kihagyva'].includes(l.allapot) && ['fizetve', 'kiszolgalva'].includes(r.allapot) ? `<button type="button" class="sa-gomb sa-gomb--kicsi" data-ujra="${e(l.kulcs)}" data-ketlepcsos="Biztos? Újraindítás">${I('ujra')}Újra</button>` : '<span></span>'}</div>`; }).join('')}</div>
             ${B.ujra ? '' : '<p class="sa-kicsi sa-halvany">A kiszolgálás modul még nincs bekapcsolva – a lépések nem indíthatók újra.</p>'}`;
-        const fiz = (r.fizetesek.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla sa-tabla--suru"><thead><tr><th>Forrás</th><th>Tranzakció</th><th class="sa-jobb">Összeg</th><th>Idő</th><th>Állapot</th></tr></thead><tbody>${r.fizetesek.map((x) => `<tr><td>${e(x.forras)}</td><td class="sa-mono"><div class="sa-egysor" style="--sa-cella-max:220px" title="${e(x.tranzakcio)}">${e(x.tranzakcio)}</div></td><td class="sa-jobb">${e(ft(x.osszeg))}</td><td class="sa-halvany">${e(datumIdo(x.ido))}</td><td>${cimke(x.allapot, x.allapot === 'ok' ? 'ok' : 'szurke')}</td></tr>`).join('')}</tbody></table></div>` : ures('Még nem érkezett fizetés.', 'penz'))
+        const fiz = (r.fizetesek.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla sa-tabla--suru"><thead><tr><th>Forrás</th><th>Tranzakció</th><th class="sa-jobb">Összeg</th><th>Idő</th><th>Állapot</th></tr></thead><tbody>${r.fizetesek.map((x) => `<tr><td>${e(x.forras)}</td><td class="sa-mono"><div class="sa-egysor" style="--sa-cella-max:220px" title="${e(x.tranzakcio)}">${e(x.tranzakcio)}</div></td><td class="sa-jobb">${e(ft(x.osszeg))}</td><td class="sa-halvany">${e(datumIdo(x.ido))}</td><td>${bankCimke(x.allapot)}</td></tr>`).join('')}</tbody></table></div>` : ures('Még nem érkezett fizetés.', 'penz'))
             + (fizetheto ? `<div class="sa-kartya" style="padding:14px"><div class="sa-mezok sa-mezok--3"><div class="sa-mezo"><label class="sa-mezo__cim" for="sa-fiz-o">Összeg (bruttó Ft)</label><input class="sa-input" id="sa-fiz-o" inputmode="numeric" value="${Math.max(0, r.brutto - r.fizetett)}"></div><div class="sa-mezo"><label class="sa-mezo__cim" for="sa-fiz-t">Hivatkozás / megjegyzés</label><input class="sa-input" id="sa-fiz-t" placeholder="pl. bankkivonat sorszáma" maxlength="100"></div><div class="sa-mezo" style="justify-content:flex-end"><button type="button" class="sa-gomb sa-gomb--fo" data-fizetve data-ketlepcsos="Biztos? Fizetettnek jelölöm">${I('pipa')}Fizetve</button></div></div><p class="sa-kicsi sa-halvany" style="margin:8px 0 0">Kézi jelölés: a fizetés naplózva, és elindítja a kiszolgálást.</p></div>` : '');
         const szamlak = `${kv([['Díjbekérő', r.szamla_dijbekero || '–'], ['Végszámla', r.szamla_vegszamla || '–']])}
             ${van('/admin/szamla/{}/pdf') ? `<div class="sa-sor sa-sor--tor">${r.szamla_dijbekero ? `<button type="button" class="sa-gomb" data-pdf="dijbekero">${I('letolt')}Díjbekérő PDF</button>` : ''}${r.szamla_vegszamla ? `<button type="button" class="sa-gomb" data-pdf="vegszamla">${I('letolt')}Végszámla PDF</button>` : ''}</div>` : '<p class="sa-kicsi sa-halvany">A számlázás modul még nincs bekapcsolva.</p>'}
@@ -1152,6 +1154,111 @@
 
     /* ------------------------------------------------------------------ Vevők */
 
+    /* ------------------------------------------------------------------ Banki egyeztetés (kivonat, értesítő, függő tételek) */
+
+    const BANK_ALLAPOT = {
+        parositva: ['Párosítva', 'ok'], osszeg_elteres: ['Összegeltérés', 'figyel'], jovahagyasra_var: ['Jóváhagyásra vár', 'kiemelo'],
+        ellenorizendo: ['Ellenőrizendő', 'info'], nem_parosithato: ['Nem párosítható', 'hiba'], ismeretlen: ['Nem párosítható', 'hiba'],
+        mar_feldolgozva: ['Már feldolgozva', 'szurke'], duplikat: ['Duplikát (másik csatorna)', 'keret'], elutasitva: ['Elutasítva', 'szurke'], ok: ['Rendben', 'ok'],
+    };
+    const BANK_SORREND = ['parositva', 'osszeg_elteres', 'jovahagyasra_var', 'ellenorizendo', 'nem_parosithato', 'mar_feldolgozva'];
+    const bankCimke = (a) => { const x = BANK_ALLAPOT[a] || [a, 'szurke']; return cimke(x[0], x[1]); };
+    const bankDatum = (d) => (d ? String(d).slice(0, 10).replace(/-/g, '.') + '.' : '–');
+    const cella = (szoveg, max = 220, osztaly = '') => `<div class="sa-egysor ${osztaly}" style="--sa-cella-max:${max}px" title="${e(szoveg)}">${e(szoveg || '–')}</div>`;
+
+    RAJZOLOK.bank = async (hova) => {
+        if (!van('/admin/bank/fuggo')) { hova.innerHTML = nincsBekapcsolva('Banki egyeztetés'); return; }
+        hova.innerHTML = `<div class="sa-racs sa-racs--fele">
+                <div class="sa-kartya"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Bankkivonat beolvasása</h2></div>
+                    <div class="sa-ejto" data-ejto tabindex="0" role="button" aria-describedby="sa-bank-s">${I('feltolt')}<div>Húzd ide a kivonatot (CSV vagy CAMT.053 XML), vagy kattints a kiválasztáshoz</div><input type="file" accept=".csv,.txt,.xml,text/csv,text/xml,application/xml" hidden data-fajl></div>
+                    <p class="sa-kicsi sa-halvany" id="sa-bank-s" style="margin:10px 0 0">OTP, K&amp;H, Erste, MBH, Raiffeisen, Wise és általános fejléces CSV. Csak a bejövő forintos jóváírás számít; a már rögzített tétel nem könyvelődik újra.</p></div>
+                <div class="sa-kartya"><div class="sa-kartya__fej"><h2 class="sa-kartya__cim">Banki értesítő bemásolása</h2></div>
+                    <div class="sa-mezo"><label class="sa-mezo__cim" for="sa-bank-l">Az értesítő e-mail vagy SMS szövege</label><textarea class="sa-textarea" id="sa-bank-l" rows="4" maxlength="5000" placeholder="pl. Jóváírás: +12 700 Ft · Közlemény: R-2026-000123"></textarea></div>
+                    <div class="sa-sor sa-sor--veg" style="margin-top:10px"><button type="button" class="sa-gomb sa-gomb--fo" data-level>${I('pipa')}Feldolgozás</button></div></div>
+            </div>
+            <div class="sa-kartya" data-jelentes aria-live="polite" hidden></div>
+            <div class="sa-kartya sa-kartya--sima" data-fuggo aria-live="polite"><div class="sa-csontvaz" style="height:160px;border-radius:0"></div></div>`;
+        const jBox = $('[data-jelentes]', hova), fBox = $('[data-fuggo]', hova);
+        let nyitottak = null;
+
+        const jelentes = (r) => {
+            const j = r.jelentes || {};
+            const sorok = [];
+            BANK_SORREND.forEach((k) => (j[k] || []).forEach((s) => sorok.push(Object.assign({ _a: k === 'mar_feldolgozva' && s.masik_csatorna ? 'duplikat' : k }, s))));
+            const osszesito = BANK_SORREND.filter((k) => (j[k] || []).length).map((k) => `<span class="sa-sor" style="gap:6px">${bankCimke(k)}<b>${szam(j[k].length)}</b></span>`).join('');
+            jBox.hidden = false;
+            jBox.innerHTML = `<div class="sa-kartya__fej"><div><h2 class="sa-kartya__cim">A beolvasás eredménye</h2><div class="sa-kartya__al">${e(r.formatum || '')} · ${szam(r.sorok || 0)} tétel${j.kihagyva ? ` · ${szam(j.kihagyva)} kihagyva (terhelés vagy deviza)` : ''}</div></div><span class="sa-ter"></span><button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-jelentes-zar aria-label="Az eredmény bezárása">${I('x')}</button></div>
+                ${osszesito ? `<div class="sa-sor sa-sor--tor" style="gap:8px 16px;margin-bottom:12px">${osszesito}</div>` : ''}
+                ${(r.hibak || []).map((h) => `<div style="margin-bottom:6px">${cimke(h, 'hiba')}</div>`).join('')}
+                ${sorok.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla sa-tabla--suru"><thead><tr><th>Eredmény</th><th>Dátum</th><th class="sa-jobb">Összeg</th><th>Partner</th><th>Közlemény</th><th>Rendelés</th></tr></thead><tbody>${sorok.map((s) => `<tr><td>${bankCimke(s._a)}</td><td class="sa-halvany" style="white-space:nowrap">${e(bankDatum(s.datum))}</td><td class="sa-jobb sa-vastag" style="white-space:nowrap">${e(ft(s.osszeg))}${s.vart ? `<div class="sa-kicsi sa-halvany">várt: ${e(ft(s.vart))}</div>` : ''}</td><td>${cella(s.partner, 200)}</td><td>${cella(s.kozlemeny, 240, 'sa-mono')}</td><td class="sa-mono">${e(s.rendeles || '–')}</td></tr>`).join('')}</tbody></table></div>` : ures('Nem volt feldolgozható jóváírás.', 'info')}`;
+            $('[data-jelentes-zar]', jBox).addEventListener('click', () => { jBox.hidden = true; jBox.innerHTML = ''; });
+        };
+
+        const fuggo = async () => {
+            const v = await api('admin/bank/fuggo');
+            const l = Array.isArray(v) ? v : (v.lista || []);
+            if (l.some((x) => !x.rendeles_id) && nyitottak === null) {
+                try { nyitottak = (await api('admin/rendelesek', { query: { allapot: 'nyitott', db: 100 } })).lista; } catch (x) { nyitottak = []; }
+            }
+            const valaszto = (x) => `<select class="sa-select sa-select--kicsi" data-rendeles-val="${x.id}" aria-label="Melyik rendeléshez tartozik (${e(ft(x.osszeg))})" style="width:auto;max-width:190px"><option value="">Válassz rendelést…</option>${(nyitottak || []).map((r) => `<option value="${r.id}">${e(r.azon)} · ${e(ft(r.brutto - r.fizetett))}</option>`).join('')}</select>`;
+            fBox.innerHTML = `<div class="sa-kartya__fej"><div><h2 class="sa-kartya__cim">Függő banki tételek</h2><div class="sa-kartya__al">Jóváhagyásra váró, ellenőrizendő és nem párosítható jóváírások – jóváhagyásig nem könyvelődnek.</div></div><span class="sa-ter"></span>${l.length ? cimke(`${l.length} tétel`, 'figyel') : ''}</div>`
+                + (l.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Állapot</th><th>Dátum</th><th class="sa-jobb">Összeg</th><th>Partner, közlemény</th><th>Rendelés</th><th class="sa-jobb"><span class="sa-sr">Műveletek</span></th></tr></thead><tbody>${l.map((x) => `<tr data-fuggo-sor="${x.id}">
+                    <td>${bankCimke(x.allapot)}</td><td class="sa-halvany" style="white-space:nowrap">${e(bankDatum(x.datum))}</td><td class="sa-jobb sa-vastag" style="white-space:nowrap">${e(ft(x.osszeg))}</td>
+                    <td>${cella(x.partner, 200)}<div class="sa-kicsi sa-halvany">${cella(x.kozlemeny, 200, 'sa-mono')}</div></td>
+                    <td>${x.rendeles_id ? `<button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--szoveg sa-mono" data-rendeles-nyit="${x.rendeles_id}">${e(x.rendeles || '#' + x.rendeles_id)}</button>` : valaszto(x)}</td>
+                    <td class="sa-jobb"><div class="sa-sor sa-sor--veg" style="gap:6px"><button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--fo" data-jovahagy="${x.id}" data-ketlepcsos="Biztos? Könyvelem">${I('pipa')}Jóváhagyás</button><button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--veszely" data-elutasit="${x.id}" data-ketlepcsos="Biztos? Elutasítom">Elutasítás</button></div></td></tr>`).join('')}</tbody></table></div>`
+                    : ures('Nincs függő tétel – minden jóváírás rendezett.', 'pipa'));
+        };
+
+        const fajl = $('[data-fajl]', hova), ejto = $('[data-ejto]', hova);
+        const beolvas = async (f) => {
+            if (f.size > 5 * 1024 * 1024) { jelez('A fájl túl nagy (legfeljebb 5 MB).', 'hiba'); return; }
+            if (!/\.(csv|txt|xml)$/i.test(f.name)) { jelez('Csak CSV vagy XML (CAMT.053) kivonat tölthető fel.', 'hiba'); return; }
+            const b = new Uint8Array(await f.arrayBuffer());
+            let bin = '';
+            for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000));
+            await tolt(ejto, async () => {
+                try { jelentes(await api('admin/bank/import', { method: 'POST', body: { tartalom: 'base64:' + btoa(bin), fajlnev: f.name } })); await fuggo(); menuJelek(); }
+                catch (x) { jelez(x.message, 'hiba'); }
+            });
+        };
+        ejto.addEventListener('click', () => fajl.click());
+        ejto.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); fajl.click(); } });
+        ['dragenter', 'dragover'].forEach((n) => ejto.addEventListener(n, (ev) => { ev.preventDefault(); ejto.classList.add('is-felette'); }));
+        ['dragleave', 'drop'].forEach((n) => ejto.addEventListener(n, () => ejto.classList.remove('is-felette')));
+        ejto.addEventListener('drop', (ev) => { ev.preventDefault(); const f = ev.dataTransfer.files[0]; if (f) beolvas(f); });
+        fajl.addEventListener('change', () => { if (fajl.files[0]) beolvas(fajl.files[0]); fajl.value = ''; });
+        $('[data-level]', hova).addEventListener('click', (ev) => tolt(ev.currentTarget, async () => {
+            const t = $('#sa-bank-l', hova);
+            if (!t.value.trim()) { t.focus(); jelez('Másold be az értesítő szövegét.', 'figyel'); return; }
+            try { jelentes(await api('admin/bank/level', { method: 'POST', body: { szoveg: t.value } })); t.value = ''; await fuggo(); menuJelek(); }
+            catch (x) { jelez(x.message, 'hiba'); }
+        }));
+        fBox.addEventListener('click', (ev) => {
+            const ny = ev.target.closest('[data-rendeles-nyit]');
+            if (ny) { rendelesPopup(Number(ny.dataset.rendelesNyit), fuggo); return; }
+            const g = ev.target.closest('[data-jovahagy], [data-elutasit]');
+            if (!g) return;
+            const id = Number(g.dataset.jovahagy || g.dataset.elutasit);
+            tolt(g, async () => {
+                try {
+                    if (g.dataset.jovahagy) {
+                        const s = $(`[data-rendeles-val="${id}"]`, fBox);
+                        if (s && !s.value) { s.focus(); jelez('Válaszd ki, melyik rendeléshez tartozik a befizetés.', 'figyel'); return; }
+                        const r = await api(`admin/bank/fizetes/${id}/jovahagy`, { method: 'POST', body: s ? { rendeles_id: Number(s.value) } : {} });
+                        jelez(r.uzenet || 'A befizetés rögzítve.', r.ok ? 'ok' : 'figyel');
+                    } else {
+                        await api(`admin/bank/fizetes/${id}/elutasit`, { method: 'POST', body: {} });
+                        jelez('A tétel elutasítva – nem könyvelődik.');
+                    }
+                    await fuggo();
+                    menuJelek();
+                } catch (x) { jelez(x.message, 'hiba'); fuggo(); }
+            });
+        });
+        await fuggo();
+    };
+
     RAJZOLOK.vevok = async (hova) => {
         const f = S.szurok.vevok = Object.assign({ q: '', oldal: 1 }, S.szurok.vevok || {});
         hova.innerHTML = `<div class="sa-eszkozsor"><input class="sa-input" type="search" data-q placeholder="Cég, e-mail, licenckulcs…" aria-label="Keresés a vevők között" value="${e(f.q)}"><span class="sa-ter"></span><span class="sa-kicsi sa-halvany">A vevők a rendelésekből állnak össze (e-mail-cím szerint).</span></div><div class="sa-kartya sa-kartya--sima" data-lista aria-live="polite"></div>`;
@@ -1159,7 +1266,7 @@
         const tolt2 = async () => {
             const r = await api('admin/vevok', { query: { q: f.q, oldal: f.oldal } });
             S.vevok = r.lista;
-            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Vevő</th><th>E-mail</th><th class="sa-jobb">Rendelés</th><th class="sa-jobb">Költés (bruttó)</th><th>Licencek</th><th>Utolsó</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-vevo="${i}" tabindex="0"><td><div class="sa-vastag sa-egysor" style="--sa-cella-max:200px" title="${e(x.ceg || x.nev || '')}">${e(x.ceg || x.nev || '–')}</div><div class="sa-kicsi sa-halvany sa-egysor">${e(x.ceg ? x.nev : '')}</div></td><td><div class="sa-egysor" style="--sa-cella-max:220px" title="${e(x.email)}">${e(x.email)}</div></td><td class="sa-jobb">${szam(x.rendeles)}</td><td class="sa-jobb">${e(ft(x.koltes))}</td><td>${x.licencek.length ? x.licencek.slice(0, 2).map((k) => `<span class="sa-cimke sa-cimke--mono">${e(k)}</span>`).join(' ') + (x.licencek.length > 2 ? ` <span class="sa-halvany">+${x.licencek.length - 2}</span>` : '') : '<span class="sa-halvany">–</span>'}</td><td class="sa-halvany">${e(relativ(x.utolso))}</td></tr>`).join('')}</tbody></table></div>` : ures(f.q ? 'Nincs ilyen vevő.' : 'Még nincs vevő.', 'vevo');
+            lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Vevő</th><th>E-mail</th><th class="sa-jobb">Rendelés</th><th class="sa-jobb">Költés (bruttó)</th><th>Licencek</th><th>Utolsó</th></tr></thead><tbody>${r.lista.map((x, i) => `<tr class="is-katt" data-vevo="${i}" tabindex="0"><td><div class="sa-vastag sa-egysor" style="--sa-cella-max:180px" title="${e(x.ceg || x.nev || '')}">${e(x.ceg || x.nev || '–')}</div><div class="sa-kicsi sa-halvany sa-egysor">${e(x.ceg ? x.nev : '')}</div></td><td><div class="sa-egysor" style="--sa-cella-max:220px" title="${e(x.email)}">${e(x.email)}</div></td><td class="sa-jobb">${szam(x.rendeles)}</td><td class="sa-jobb">${e(ft(x.koltes))}</td><td>${x.licencek.length ? x.licencek.slice(0, 2).map((k) => `<span class="sa-cimke sa-cimke--mono">${e(k)}</span>`).join(' ') + (x.licencek.length > 2 ? ` <span class="sa-halvany">+${x.licencek.length - 2}</span>` : '') : '<span class="sa-halvany">–</span>'}</td><td class="sa-halvany">${e(relativ(x.utolso))}</td></tr>`).join('')}</tbody></table></div>` : ures(f.q ? 'Nincs ilyen vevő.' : 'Még nincs vevő.', 'vevo');
             if (r.ossz > r.db) lista.appendChild(lapozo(r.ossz, r.oldal, r.db, (o) => { f.oldal = o; tolt2(); }));
         };
         $('[data-q]', hova).addEventListener('input', kesleltet((ev) => { f.q = ev.target.value.trim(); f.oldal = 1; tolt2(); }));

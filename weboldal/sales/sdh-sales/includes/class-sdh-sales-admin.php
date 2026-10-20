@@ -102,6 +102,7 @@ final class SDH_Sales_Admin
         $p = [
             'attekintes' => ['cim' => 'Áttekintés', 'ikon' => 'attekintes', 'csoport' => '', 'sorrend' => 10],
             'rendelesek' => ['cim' => 'Rendelések', 'ikon' => 'rendeles', 'csoport' => 'Értékesítés', 'sorrend' => 20],
+            'bank'       => ['cim' => 'Banki egyeztetés', 'ikon' => 'bank', 'csoport' => 'Értékesítés', 'sorrend' => 25, 'elerheto' => $van('/admin/bank/fuggo')],
             'vevok'      => ['cim' => 'Vevők', 'ikon' => 'vevo', 'csoport' => 'Értékesítés', 'sorrend' => 30],
             'leadek'     => ['cim' => 'Leadek', 'ikon' => 'lead', 'csoport' => 'Értékesítés', 'sorrend' => 40],
             'foglalasok' => ['cim' => 'Foglalások', 'ikon' => 'naptar', 'csoport' => 'Értékesítés', 'sorrend' => 50, 'elerheto' => $van('/admin/foglalasok')],

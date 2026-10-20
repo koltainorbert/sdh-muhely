@@ -754,3 +754,8 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
  * 10. Csökkentett mozgás: az átmenetek a tokenek idejét használják (prefers-reduced-motion mellett 0,01 ms – tokenek.css),
  *     az ismétlődő animációk csak no-preference mellett futnak.
  * ================================================================== */
+
+/* 0 Ft-os szolgáltatás: tájékoztató sor a kapcsolók alatt (a licenc része / ajánlatkérés). */
+.s-kalk-szolg > .s-kalk-megj { grid-column: 1 / -1; }
+.s-kalk-megj { margin: var(--s-t-2, .5rem) 0 0; color: var(--s-halvany); font-size: var(--s-m-s, .9rem); line-height: 1.5; }
+.s-kalk-megj a { display: inline-flex; align-items: center; min-height: 44px; margin-left: .25rem; color: var(--s-kiemelo); font-weight: 600; text-underline-offset: 3px; }

@@ -306,11 +306,23 @@
 
         if ((D.szolgaltatasok || []).length) {
             var sz = el('fieldset', { osztaly: 's-kalk-szolg' }, [el('legend', { szoveg: 'Szolgáltatások' })]);
+            var megjegyzesek = [];
             D.szolgaltatasok.forEach(function (s) {
+                // 0 Ft-os tétel: vagy a licenc része (nem választható), vagy ajánlatkérés (link az igényfelmérőre) – nem kerül a kosárba.
+                if (int(s.ar) === 0) {
+                    megjegyzesek.push(s);
+                    return;
+                }
                 var i = el('input', { type: 'checkbox', role: 'switch', osztaly: 's-kapcsolo s-kalk-kapcsolo', value: s.kulcs, id: azon + '-s-' + s.kulcs });
                 i.addEventListener('change', function () { if (i.checked) { all.szolg[s.kulcs] = 1; } else { delete all.szolg[s.kulcs]; } frissit(); });
                 var utotag = s.tipus === 'havi' ? '/hó' : (s.tipus === 'eves' ? '/év' : ' egyszeri');
                 sz.appendChild(el('label', { osztaly: 's-kalk-modul', for: azon + '-s-' + s.kulcs }, [i, ' ' + (s.nev || s.kulcs) + ' – ' + ft(int(s.ar)) + utotag]));
+            });
+            megjegyzesek.forEach(function (s) {
+                var szoveg = s.ajanlatkeres ? ' – egyedi ajánlat alapján' : (s.csomagban ? ' – minden licenc része' : '');
+                var sor = el('p', { osztaly: 's-kalk-megj' }, [(s.nev || s.kulcs) + szoveg + (s.ajanlatkeres && s.url ? ' ' : '')]);
+                if (s.ajanlatkeres && s.url) { sor.appendChild(el('a', { href: s.url, szoveg: 'Ajánlatot kérek' })); }
+                sz.appendChild(sor);
             });
             urlap.appendChild(sz);
         }

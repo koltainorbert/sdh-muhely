@@ -107,6 +107,22 @@ $v = t_latogato(static fn () => t_rest('POST', '/lead', ['tipus' => 'partner', '
 T::igaz(isset($v->get_data()['hibak']['partner_tipus']), 'partner: listán kívüli érték');
 T::egyezik(400, t_latogato(static fn () => t_rest('POST', '/lead', ['tipus' => 'hack'] + t_vedelem()))->get_status(), 'ismeretlen űrlap');
 
+// Vizuális QA (2026-10-20) által talált hibák:
+// – üresen hagyott fájlmezővel (a böngésző üres fajlok[]-ot küld) is beküldhető az igényfelmérő;
+$q3 = new WP_REST_Request('POST', '/' . SDH_Sales_Rest::NS . '/egyedi');
+$q3->set_body_params($jo + t_vedelem());
+$q3->set_file_params(['fajlok' => ['name' => [''], 'type' => [''], 'tmp_name' => [''], 'error' => [UPLOAD_ERR_NO_FILE], 'size' => [0]]]);
+$r3 = t_latogato(static fn () => rest_do_request($q3));
+T::egyezik(201, $r3->get_status(), 'igényfelmérő csatolmány nélkül (üres fájlmező) beküldhető');
+T::egyezik(0, (int) ($r3->get_data()['fajlok'] ?? -1), '…és nincs mentett fájl');
+// – az üres kapcsolati űrlapra az összes kötelező mező hibája egyszerre jön (nem csak az adatkezelésé);
+$v = t_latogato(static fn () => t_rest('POST', '/lead', ['tipus' => 'kapcsolat'] + t_vedelem()));
+$h = (array) ($v->get_data()['hibak'] ?? []);
+T::igaz($v->get_status() === 400 && isset($h['nev'], $h['email'], $h['adatkezeles']), 'üres kapcsolati űrlap: minden kötelező mező hibája egyszerre');
+// – a hiányos, gyorsan beküldött űrlap mezőhibát kap, nem „robot” üzenetet.
+$v = t_latogato(static fn () => t_rest('POST', '/lead', ['tipus' => 'kapcsolat', '_t' => SDH_Sales_Biztonsag::urlap_token(time()), 'weboldal_cim' => '']));
+T::igaz($v->get_status() === 400 && isset(((array) ($v->get_data()['hibak'] ?? []))['nev']), 'gyors, hiányos beküldés: mezőhiba, nem robot-üzenet');
+
 array_map('unlink', glob($dir . '/*') ?: []);
 rmdir($dir);
 T::vege('t220 egyedi + lead');
