@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Hardveres gyorsítás (0.65.0).
+ * Hardveres gyorsítás (0.65.0).
  *
  * Egy weboldal nem tudja átállítani a böngésző beállítását (ez biztonsági korlát:
  * csak a felhasználó vagy a rendszergazda írhatja át). Amit a felület megtehet, és

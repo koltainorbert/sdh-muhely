@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Nyomtatás (0.52).
+ * Nyomtatás (0.52).
  *
  *  - [data-sdh-nyomtat="<id>"] gombok: megnyitják a Nyomtatás ablakot – a
  *    saját szintjük FÖLÉ, így a munkalap-ablak nyitva marad alatta.

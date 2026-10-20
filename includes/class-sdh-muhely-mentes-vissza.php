@@ -286,7 +286,7 @@ final class SDH_Muhely_Mentes_Vissza
             gzclose($f);
             self::eldob($gz, $kibontott);
 
-            return 'Ez a fájl nem SDH Műhely mentés.';
+            return 'Ez a fájl nem ' . SDH_Muhely_Arculat::termeknev() . ' mentés.';
         }
 
         $tablak = [];
@@ -355,7 +355,7 @@ final class SDH_Muhely_Mentes_Vissza
         if (!is_array($fej) || !isset($fej['mentes'])) {
             gzclose($f);
 
-            return 'Ez a fájl nem SDH Műhely mentés.';
+            return 'Ez a fájl nem ' . SDH_Muhely_Arculat::termeknev() . ' mentés.';
         }
 
         $tipus = (string) ($fej['tipus'] ?? 'teljes');

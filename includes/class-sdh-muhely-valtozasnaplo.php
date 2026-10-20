@@ -325,7 +325,7 @@ final class SDH_Muhely_Valtozasnaplo
         } catch (Throwable $h) {
             // A napló hibája soha nem akaszthatja meg a munkát.
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log('SDH Változásnapló: ' . $h->getMessage()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                error_log('Változásnapló: ' . $h->getMessage()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
             }
         } finally {
             foreach ($mentes as $p => $v) {

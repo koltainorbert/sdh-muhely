@@ -28,7 +28,11 @@ if (!defined('ABSPATH')) {
 final class SDH_Muhely_Mentes_Gdrive extends SDH_Muhely_Mentes_Cel_Alap
 {
     public const HATOKOR = 'https://www.googleapis.com/auth/drive.file';
-    public const MAPPA   = 'SDH Műhely mentés';
+    /** A mentések mappája a Drive-on: „<termék neve> mentés” (0.99.5; a belső példányban a régi név). */
+    public static function mappa_nev(): string
+    {
+        return SDH_Muhely_Arculat::termeknev() . ' mentés';
+    }
 
     private const TOKEN   = 'https://oauth2.googleapis.com/token';
     private const ESZKOZ  = 'https://oauth2.googleapis.com/device/code';
@@ -267,7 +271,7 @@ final class SDH_Muhely_Mentes_Gdrive extends SDH_Muhely_Mentes_Cel_Alap
             }
         }
 
-        $q = "name='" . self::MAPPA . "' and mimeType='application/vnd.google-apps.folder' and trashed=false";
+        $q = "name='" . str_replace(['\\', "'"], ['\\\\', "\\'"], self::mappa_nev()) . "' and mimeType='application/vnd.google-apps.folder' and trashed=false";
         $r = $this->api('GET', self::API . 'files?fields=files(id)&pageSize=1&q=' . rawurlencode($q));
 
         if (is_string($r)) {
@@ -283,7 +287,7 @@ final class SDH_Muhely_Mentes_Gdrive extends SDH_Muhely_Mentes_Cel_Alap
         } else {
             $r = $this->api('POST', self::API . 'files?fields=id', [
                 'headers' => ['Content-Type' => 'application/json; charset=UTF-8'],
-                'body'    => wp_json_encode(['name' => self::MAPPA, 'mimeType' => 'application/vnd.google-apps.folder']),
+                'body'    => wp_json_encode(['name' => self::mappa_nev(), 'mimeType' => 'application/vnd.google-apps.folder']),
             ]);
 
             if (is_string($r)) {

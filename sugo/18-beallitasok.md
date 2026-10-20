@@ -195,6 +195,7 @@ A **Verziók** doboz sorai:
 
 | Sor | Mit mutat |
 |---|---|
+| **Termék** | A szoftver neve (**Logó és megjelenés › Termék neve**). |
 | **Rendszer** | A rendszer neve, ahogy a **Logó és megjelenés** lapfülön megadtad. |
 | **Verzió** | A rendszer verziószáma. Frissítés után ennek kell megváltoznia. |
 | **Adatbázis-verzió** | Az adatbázis szerkezetének verziója. Ritkábban változik, mint a rendszeré – nem hiba, ha a kettő eltér. |

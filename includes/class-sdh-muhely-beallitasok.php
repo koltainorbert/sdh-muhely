@@ -81,7 +81,7 @@ final class SDH_Muhely_Beallitasok
             'eszkozok'   => 'Készülékadatok',
             'rendszer'   => 'Rendszer',
             // Csak akkor jelenik meg, ha van benne lapfül (az SDH belső modulja adja; eladáskor nincs).
-            'sdh'        => 'SDH – belső',
+            'sdh'        => SDH_Muhely_Arculat::rovidnev() . ' – belső',
         ];
     }
 
@@ -711,6 +711,7 @@ final class SDH_Muhely_Beallitasok
             <h2 class="sdh-doboz__cim">Verziók</h2>
             <table class="sdh-tabla sdh-tabla--keskeny">
                 <tbody>
+                    <tr><th>Termék</th><td><?php echo esc_html(SDH_Muhely_Arculat::termeknev()); ?></td></tr>
                     <tr><th>Rendszer</th><td><?php echo esc_html(SDH_Muhely_Arculat::rendszer_nev()); ?></td></tr>
                     <tr><th>Verzió</th><td><code><?php echo esc_html(SDH_MUHELY_VERSION); ?></code></td></tr>
                     <tr><th>Adatbázis-verzió</th><td><code><?php echo esc_html(SDH_Muhely_Schema::DB_VERSION); ?></code></td></tr>

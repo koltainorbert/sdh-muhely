@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Házipénztár (0.35).
+ * Házipénztár (0.35).
  *
  * Két része van:
  *  1. MINDEN CRM-oldalon: a munkalap „Fizetés" gombja, és a munkalap mentése
@@ -833,7 +833,7 @@
 
     gyoker.innerHTML =
         '<header class="sdh-pt__fej">' +
-        '  <div class="sdh-pt__cim"><p class="sdh-fejlec__kalap">SDH Műhely</p><h1>Házipénztár</h1><p class="sdh-pt__alcim" data-pt-alcim></p></div>' +
+        '  <div class="sdh-pt__cim"><p class="sdh-fejlec__kalap">' + e(B.rendszer || '') + '</p><h1>Házipénztár</h1><p class="sdh-pt__alcim" data-pt-alcim></p></div>' +
         '  <form class="sdh-pt__kereso" data-pt-kereso role="search">' + IKON.kereso +
         '    <input type="search" name="q" autocomplete="off" placeholder="Számlaszám, munkalap sorszám, név, összeg…" aria-label="Keresés a pénztárban">' +
         '  </form>' +

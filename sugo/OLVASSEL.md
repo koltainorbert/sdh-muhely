@@ -78,8 +78,11 @@ A `## Túra: <modulkulcs>` szakasz az adott oldal végigvezetése. Soronként eg
 - **Cégadat nem kerülhet bele:** se cégnév, se valódi személy, se ár. A példák kitaláltak
   („Minta Márta", „+36 30 123 4567", „12 000 Ft").
 - Belső kódnév (függvény, tábla) csak a `Rendszer` csoport fejezeteiben szerepelhet.
+- **A termék nevét soha ne írd be kézzel (0.99.5).** Helyette `{termeknev}` (a Beállítások › Logó és megjelenés ›
+  **Termék neve**, vevőnél alapból „Munkora”), szerepnévben `{rovidnev}`, a licencközpontra `{kozpontnev}`. A súgó
+  olvasáskor cseréli őket; a `t95` elbukik, ha egy nem fejlesztőnek szóló fejezetben a belső kódnév áll.
 - **A rendszer nem árulja el, mi fut alatta (0.78).** Csak a fejlesztő (a WordPress-adminisztrátor) tudja,
-  hogy WordPress-bővítmény. A többiek – az SDH adminisztrátor is – szövegében nem szerepelhet: WordPress,
+  hogy WordPress-bővítmény. A többiek – a rendszer adminisztrátora is – szövegében nem szerepelhet: WordPress,
   WP, wp-admin, wp-config, wp-content, plugin, bővítmény, LocalWP, GitHub, git, `.php` fájlnév. Helyette:
   „a rendszer”, „a szerver”, „a rendszer üzemeltetője”, „a feltöltött fájlok mappája”. A `t36` ezt
   minden nem fejlesztőnek látszó szövegen ellenőrzi (`SDH_Muhely_Rejtes::arulkodo()`).

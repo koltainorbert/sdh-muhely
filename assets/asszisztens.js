@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – AI-asszisztens: az „élő" figura és a beszélgetés (0.38).
+ * AI-asszisztens: az „élő" figura és a beszélgetés (0.38).
  *
  * Minden CRM-oldal jobb alsó sarkában él egy kis neon lény: lélegzik,
  * pislog, a szemével követi az egeret, elalszik, ha sokáig nincs mozgás,
@@ -1787,7 +1787,7 @@
 
         return {
             kulcs: modulKulcs(),
-            cim: cim ? cim.textContent.trim() : document.title.replace(/\s+–\s+SDH Műhely$/, ''),
+            cim: cim ? cim.textContent.trim() : (B.rendszer ? document.title.split(' – ' + B.rendszer)[0] : document.title),
             ablak: ablakCim ? ablakCim.textContent.trim() : '',
             hiba: hiba && lathato(hiba) ? hiba.textContent.trim().slice(0, 300) : '',
             rekord: rekordElem ? String(rekordElem.getAttribute('data-sdh-naplo-rekord') || '').replace(/[^a-z_:0-9]/g, '') : ''

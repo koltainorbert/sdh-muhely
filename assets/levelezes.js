@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Levelezés (0.32).
+ * Levelezés (0.32).
  *
  * Két része van:
  *  1. Jelzés MINDEN CRM-oldalon: percenként megkérdezi a szervert, jött-e új

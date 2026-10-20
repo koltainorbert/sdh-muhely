@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Napló és lezárt lap (0.59).
+ * Napló és lezárt lap (0.59).
  *
  * - A rekordok „Napló" gombja (data-sdh-naplo-nyit) a Napló ablakot nyitja
  *   popupban, a már nyitott ablak fölé; a „Régebbiek" gomb lapoz.

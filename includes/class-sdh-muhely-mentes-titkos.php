@@ -169,7 +169,7 @@ final class SDH_Muhely_Mentes_Titkos
         if (strlen($fejlec) !== $hossz || strncmp($fejlec, self::MAGIC, strlen(self::MAGIC)) !== 0) {
             fclose($be); // phpcs:ignore WordPress.WP.AlternativeFunctions
 
-            return 'Ez nem titkosított SDH-mentés.';
+            return 'Ez nem titkosított ' . (class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : 'Műhely') . '-mentés.';
         }
 
         $p    = unpack('Nops/Nmem', substr($fejlec, strlen(self::MAGIC), 8));

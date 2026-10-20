@@ -139,6 +139,6 @@ final class SDH_Muhely_Ajax_Vedo
         }
 
         $akcio = isset($_REQUEST['action']) ? sanitize_key((string) $_REQUEST['action']) : ''; // phpcs:ignore WordPress.Security.NonceVerification
-        error_log('[SDH Műhely] AJAX-kimenet javítva (' . $akcio . '): ' . self::elso_sor($szemet)); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
+        error_log('[' . (class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : 'Műhely') . '] AJAX-kimenet javítva (' . $akcio . '): ' . self::elso_sor($szemet)); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
     }
 }

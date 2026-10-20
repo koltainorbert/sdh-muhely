@@ -252,7 +252,7 @@ final class SDH_Muhely_Frissites
         $f  = self::forras();
 
         return (object) [
-            'name'          => 'SDH Műhely',
+            'name'          => SDH_Muhely_Arculat::termeknev(),
             'slug'          => self::MAPPA,
             'version'       => $uj['verzio'] !== '' ? $uj['verzio'] : SDH_MUHELY_VERSION,
             'homepage'      => 'https://github.com/' . $f['repo'],
@@ -283,7 +283,7 @@ final class SDH_Muhely_Frissites
         }
 
         if (!$wp_filesystem->exists(trailingslashit($forras) . self::FAJL)) {
-            return new WP_Error('sdh_frissites_csomag', 'A letöltött csomag nem SDH Műhely csomag (nincs benne a fő fájl).');
+            return new WP_Error('sdh_frissites_csomag', 'A letöltött csomag nem ' . SDH_Muhely_Arculat::termeknev() . ' csomag (nincs benne a fő fájl).');
         }
 
         $uj = trailingslashit($tavoli) . self::MAPPA . '/';

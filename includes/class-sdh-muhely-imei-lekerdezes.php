@@ -230,7 +230,7 @@ final class SDH_Muhely_Imei_Lekerdezes
         if (!self::beallitva()) {
             wp_send_json_error([
                 'uzenet' => 'Nincs beállítva IMEI-szolgáltató. '
-                    . 'SDH Műhely → Beállítások, ott add meg a végpontot és a kulcsot.',
+                    . 'Beállítások › IMEI-lekérdezés: ott add meg a végpontot és a kulcsot.',
             ]);
         }
 

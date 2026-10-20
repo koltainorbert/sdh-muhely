@@ -24,7 +24,7 @@ Saját példánynál (amit nem forgalmazótól vettetek) a lapot üresen hagyod:
 
 1. Nyisd meg: **Beállítások › Rendszer › Licenc**.
 2. **A központ címe**: a forgalmazótól kapott cím (például `https://kozpont.pelda.hu/`).
-3. **Licenckulcs**: `SDH-XXXX-XXXX-XXXX-XXXX` alakú, a forgalmazótól kaptad.
+3. **Licenckulcs**: `XXXX-XXXX-XXXX-XXXX` alakú (elöl a forgalmazó rövid előtagjával), a forgalmazótól kaptad.
 4. **Mentés**. A rendszer azonnal jelentkezik a központnál.
 5. Az **Állapot** sorban látod: *Aktív*, a vevő neve, és meddig érvényes.
 

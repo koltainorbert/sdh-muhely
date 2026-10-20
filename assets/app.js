@@ -1,5 +1,5 @@
 /*
- * SDH Műhely – popup (modál) kezelés.
+ * popup (modál) kezelés.
  *
  * Mindkét felületen ugyanez fut: az adminban és a saját műhely-felületen.
  * A natív <dialog> elemre épül, nem kell hozzá könyvtár.
@@ -12611,7 +12611,7 @@
     });
 }());
 
-/* N6 (0.92.0): fejlesztői fiók átállítása SDH adminisztrátorra – kétlépcsős gomb. */
+/* N6 (0.92.0): fejlesztői fiók átállítása rendszer-adminisztrátorra – kétlépcsős gomb. */
 (function () {
     'use strict';
 

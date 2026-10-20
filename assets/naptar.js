@@ -1,5 +1,5 @@
 /*
- * SDH Műhely – Naptár (0.50).
+ * Naptár (0.50).
  *
  *  1. MINDEN oldalon: az esedékes események kártyái. A pulzus (csapat.js,
  *     15 másodpercenként) hozza a ki nem nyomott jelzéseket; a kártya addig

@@ -237,7 +237,7 @@ final class SDH_Muhely_Csapat
         }
 
         if (get_role(self::SZEREP) === null) {
-            add_role(self::SZEREP, 'SDH kolléga', ['read' => true, SDH_Muhely_Admin_UI::JOG => true]);
+            add_role(self::SZEREP, SDH_Muhely_Arculat::rovidnev() . ' kolléga', ['read' => true, SDH_Muhely_Admin_UI::JOG => true]);
         }
 
         update_option('sdh_muhely_kollega_szerep', '1');

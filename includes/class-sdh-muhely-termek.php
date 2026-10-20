@@ -1925,7 +1925,7 @@ final class SDH_Muhely_Termek
                 'kategoria'       => $p[1],
                 'beszallito'      => $p[2],
                 'gyari_szam'      => $sorszam === 20 ? '350000000000' . sprintf('%03d', 417) : '',
-                'cikkszam'        => sprintf('SDH-%s-%04d', $rovid[$p[1]] ?? 'TRM', $sorszam),
+                'cikkszam'        => sprintf('DEMO-%s-%04d', $rovid[$p[1]] ?? 'TRM', $sorszam),
                 'termekkod'       => sprintf('G%06d', 100000 + $sorszam * 137),
                 'vonalkod'        => self::ean13(sprintf('599900%06d', 4200 + $sorszam * 31)),
                 'osztaly'         => $p[3],

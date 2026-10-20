@@ -109,7 +109,7 @@ final class SDH_Muhely_Admin_UI
     {
         // Az „SDH adminisztrátor": a rendszer minden beállítása, de nem a WordPress-admin.
         if (get_role(self::ADMIN_SZEREP) === null) {
-            add_role(self::ADMIN_SZEREP, 'SDH adminisztrátor', ['read' => true, self::JOG => true, self::ADMIN_JOG => true]);
+            add_role(self::ADMIN_SZEREP, (class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rovidnev() : 'Rendszer') . ' adminisztrátor', ['read' => true, self::JOG => true, self::ADMIN_JOG => true]);
         }
 
         $jel = self::JOG . '+' . self::ADMIN_JOG;
@@ -543,6 +543,9 @@ final class SDH_Muhely_Admin_UI
             // Az irányítószám-lista verziója: a böngésző egy napig tárolja a
             // listát, új adatfájlnál ettől kéri le azonnal az újat.
             'iszVerzio' => self::eszkoz_verzio('data/iranyitoszam.csv.gz'),
+            // A rendszer neve (címsor) és a termék neve (0.99.5) – a szkriptek feliratai ebből jönnek.
+            'rendszer'  => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rendszer_nev() : '',
+            'termeknev' => class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : '',
             // Levelezés: van-e bekötött fiók (csak akkor indul az új levelek figyelése), és hol a levelező.
             'level'     => class_exists('SDH_Muhely_Levelezes') && SDH_Muhely_Modulok::be('levelezes') && SDH_Muhely_Levelezes::van_fiok(),
             'levelUrl'  => SDH_Muhely_Modulok::url('levelezes'),

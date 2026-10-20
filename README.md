@@ -80,6 +80,29 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.5 – terméknév, vevői csomag licencszöveggel, központ 2.1
+- **Termék neve** (Beállítások › Logó és megjelenés): a szoftver neve egyetlen beállítás (`SDH_Muhely_Arculat::termeknev()`);
+  vevőnél üresen „Munkora”, a saját példányon a belső név (`includes/sdh/data/termek.json`). Ez áll a súgóban (`{termeknev}`,
+  `{rovidnev}`, `{kozpontnev}` jelölők, olvasáskor cserélve), az asszisztens bemutatkozásában, a Névjegyen, a PDF-ek adataiban,
+  a Drive-mentés mappájában, az ütemező és a szerepek nevében; jel és logó nélkül a bal felső sarokban is. A nem fejlesztőnek
+  szóló szövegekben és súgófejezetekben nincs belső kódnév; a licenckulcs mintája előtag nélküli (`XXXX-XXXX-XXXX-XXXX`).
+- **Vevői csomag** (`tools/vevo-csomag.sh`): benne a `LICENSE` (GNU GPL v2 – a kód GPL v2 vagy későbbi alatt terjed; nélküle a
+  szkript megáll), a fő fájl fejlécében a termék neve (`VEVO_TERMEKNEV`), `--munkafa` mód a még nem véglegesített
+  változások próbájához. A bővítmény fejlécében `License: GPL-2.0-or-later`.
+- **Központ 2.1.0** (`kozpont/sdh-kozpont`): automatikus kiszolgálás az értékesítő webhelynek (`SDH_Kozpont_Kiszolgalas::feldolgoz`):
+  a fizetett rendelésből vevő (adószám → e-mail → név alapján keresve, különben új) és licenc (csomag, modulok, felhasználó- és
+  példányszám, ciklus, lejárat, díj); megújításnál +1 ciklus, bővítésnél modulok és extra helyek a tulajdonos ellenőrzésével;
+  rendelésenként idempotens (`rendeles` tábla). Aláírt végpont `kiszolgalas` (`sdh-kozpont/v1` és a semleges `licenc/v1`):
+  Ed25519 az értékesítő webhely kulcsával, időbélyeg ±300 mp, egyszer használható nonce (10 perc), opcionális IP-lista; hibára
+  401 részletek nélkül; a válasz aláírva. Egyszer használható letöltés (`/licenc/letoltes/?t=`): 14 nap, legfeljebb 3 letöltés,
+  a licenchez kötve, semleges fájlnévvel, naplózva; a `csomag` végpont változatlan. Beállítások › Értékesítő webhely: nyilvános
+  kulcs, IP-lista, terméknév, licenckulcs-előtag (a régi `SDH-` kulcsok érvényesek maradnak). DB 2.1.0 (`rendeles`, `letoltes`,
+  `nonce`).
+- **Értékesítő webhely** (`weboldal/`, külön csomagok – nem része a Műhely telepítőjének): téma, értékesítő bővítmény (webshop,
+  fizetés, automatikus licenc-kiszolgálás, számla, naptár, AI-chat, GYIK, tudásbázis, admin) és demó-korlátozó; saját README a
+  `weboldal/dokumentacio/` alatt.
+- Új tesztek: t94 (központ 2.1), t95 (terméknév, vevői csomag, feliratok).
+
 ### 0.99.4 – okos keresés mindenhol, gyors listák nagy adatnál, űrlapok e-mailben, Fájlok lapfül
 - **Nagy listák (300 000 rekord):** az Ügyfelek, Eszközök, Termékek, Szolgáltatások, Napi árukiadás / Rendelések lapozása
   halasztott összekapcsolással (előbb az oldal azonosítói a keskeny indexről, aztán csak a látszó sorok); az oldalszám az

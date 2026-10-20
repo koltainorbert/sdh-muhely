@@ -134,7 +134,7 @@ class SDH_Muhely_Csomag
             // Szkriptnél (0.64) minden fájl saját try-blokkban fut: ha az egyik indulás közben hibát dob,
             // a többi ugyanúgy elindul, mint külön fájlként (a fájlok önálló függvényblokkok).
             $szoveg .= $kiterjesztes === 'js'
-                ? '/* ' . basename($fajl) . " */\ntry {\n" . $tartalom . "\n} catch (sdhHiba) { if (window.console) { console.error('SDH Műhely – " . basename($fajl) . "', sdhHiba); } }\n"
+                ? '/* ' . basename($fajl) . " */\ntry {\n" . $tartalom . "\n} catch (sdhHiba) { if (window.console) { console.error(" . wp_json_encode(basename($fajl)) . ", sdhHiba); } }\n"
                 : '/* ' . basename($fajl) . " */\n" . $tartalom . "\n";
         }
 

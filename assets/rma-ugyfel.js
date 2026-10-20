@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – ügyféloldal (RMA), 0.27.
+ * ügyféloldal (RMA), 0.27.
  *
  * Lapfülek (billentyűvel is), világos/sötét mód váltása (a böngésző
  * megjegyzi), az üzenetszál a legfrissebbnél nyílik, Ctrl+Enter küld,

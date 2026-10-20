@@ -104,7 +104,7 @@ Ha az adminisztrátor kizárta magát, a `wp-config.php`-ban: `define('SDH_MUHEL
 
 ## Szerepkörök és jogok
 
-**Három szint van.** A **fejlesztő** (a rendszer eredeti, teljes jogú fiókja) mindent lát, a háttérrendszer teljes adminisztrációját is, és csak ő éri el a **Modulok** oldalt, a **Frissítést** és a technikai adatokat (Névjegy). Az **adminisztrátor** a rendszer minden beállítását kezeli (Beállítások, Mentés, Napló, Jogosultságok), de a háttérrendszer adminisztrációja nem látszik neki: belépés után a műhelybe kerül, nincs admin sáv, és a bejelentkező képernyő sem árulja el, mi fut alatta. Az új adminisztrátor fiókot a fejlesztő hozza létre „SDH adminisztrátor" szereppel. Belépni a saját bejelentkező oldalon lehet; a jelszót elfelejtő kollégának az adminisztrátor ad újat. A **többiek** (kolléga, pultos, szerelő, pénztáros…) az alábbi szerepkörök szerint dolgoznak.
+**Három szint van.** A **fejlesztő** (a rendszer eredeti, teljes jogú fiókja) mindent lát, a háttérrendszer teljes adminisztrációját is, és csak ő éri el a **Modulok** oldalt, a **Frissítést** és a technikai adatokat (Névjegy). Az **adminisztrátor** a rendszer minden beállítását kezeli (Beállítások, Mentés, Napló, Jogosultságok), de a háttérrendszer adminisztrációja nem látszik neki: belépés után a műhelybe kerül, nincs admin sáv, és a bejelentkező képernyő sem árulja el, mi fut alatta. Az új adminisztrátor fiókot a fejlesztő hozza létre „{rovidnev} adminisztrátor" szereppel. Belépni a saját bejelentkező oldalon lehet; a jelszót elfelejtő kollégának az adminisztrátor ad újat. A **többiek** (kolléga, pultos, szerelő, pénztáros…) az alábbi szerepkörök szerint dolgoznak.
 
 Nem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül tetején a **Szerepkörök és jogok** rács mutatja, melyik szerep mit tehet. Alapból öt szerep van: **Admin** (mindent), **Kolléga** (a régi állapot: mindent lát és csinál, a Beállításokon kívül), **Pultos**, **Szerelő** és **Pénztáros**. Bármelyik átírható, újat is felvehetsz (az új a Kolléga jogaival indul; törléséhez ürítsd ki a nevét – akié volt, kolléga lesz).
 
@@ -116,7 +116,7 @@ Nem mindenki csinálhat mindent. A **Beállítások › Jogosultságok** fül te
 
 ### Régi adminisztrátorok átállítása [fejlesztő]
 
-Akit korábban a Csapatban tettetek adminná, az fejlesztő lett (a háttérrendszer adminisztrációját is látja). A **Beállítások › Jogosultságok** lap alján a **Fejlesztői fiókok** doboz sorolja fel őket (saját magadat nem). Az **SDH adminisztrátorrá** gomb kétszeri kattintásra átállítja: a rendszerben minden adminisztrátori joga megmarad, a háttérrendszer elrejtve. Legalább egy fejlesztő mindig marad; az átállítás a Naplóba kerül.
+Akit korábban a Csapatban tettetek adminná, az fejlesztő lett (a háttérrendszer adminisztrációját is látja). A **Beállítások › Jogosultságok** lap alján a **Fejlesztői fiókok** doboz sorolja fel őket (saját magadat nem). Az adminisztrátorrá tevő gomb (**{rovidnev} adminisztrátorrá**) kétszeri kattintásra átállítja: a rendszerben minden adminisztrátori joga megmarad, a háttérrendszer elrejtve. Legalább egy fejlesztő mindig marad; az átállítás a Naplóba kerül.
 
 ## Ügyfél és eszköz a munkalapon
 

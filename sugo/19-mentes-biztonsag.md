@@ -158,7 +158,7 @@ A Google-nak egyszeri beállítás kell (kb. 5 perc, a saját Google-fiókodban)
 4. A rendszerben a Google Drive kártyán írd be mindkettőt, és nyomd meg az **Összekapcsolás a Google-fiókkal** gombot.
 5. Megjelenik egy kód és egy cím. Nyisd meg a címet, írd be a kódot, és engedélyezd a hozzáférést. A rendszer magától észreveszi, és kiírja az összekapcsolt fiókot.
 
-A rendszer csak a **saját maga által létrehozott** fájlokhoz és mappához fér hozzá (`drive.file` jogosultság), a többi Drive-fájlodat nem látja. A mentések a **SDH Műhely mentés** nevű mappába kerülnek. Ha a Google később visszavonja a hozzáférést, a kártya kiírja, hogy a kapcsolat lejárt – nyomd meg újra az **Összekapcsolás** gombot.
+A rendszer csak a **saját maga által létrehozott** fájlokhoz és mappához fér hozzá (`drive.file` jogosultság), a többi Drive-fájlodat nem látja. A mentések a **{termeknev} mentés** nevű mappába kerülnek. Ha a Google később visszavonja a hozzáférést, a kártya kiírja, hogy a kapcsolat lejárt – nyomd meg újra az **Összekapcsolás** gombot.
 
 ## Visszaállítás mentésből
 

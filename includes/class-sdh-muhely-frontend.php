@@ -485,6 +485,9 @@ final class SDH_Muhely_Frontend
                 <?php endif; ?>
                 <?php if ($sdh_arc['nev'] !== '') : ?>
                     <span class="sdh-sav__nev"><?php echo esc_html($sdh_arc['nev']); ?></span>
+                <?php elseif ($sdh_arc['jel'] === '' && $sdh_arc['logo'] === '') : ?>
+                    <?php // Se logó, se jel, se név (vevői alapállapot, 0.99.5): a termék neve áll. ?>
+                    <span class="sdh-sav__nev"><?php echo esc_html(SDH_Muhely_Arculat::termeknev()); ?></span>
                 <?php endif; ?>
             </a>
 

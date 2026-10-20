@@ -111,7 +111,7 @@ final class SDH_Muhely_Szamla
             'eszamla'            => true,
             'elotag_fo'          => '',
             'elotag_sdh'         => 'SD',
-            'gomb_sdh'           => 'SDH számla',
+            'gomb_sdh'           => 'Belső számla',
             'hatarido_nap'       => 8,
             'alap_fizmod'        => 'Készpénz',
             'email_kuldes'       => false,
@@ -2554,7 +2554,7 @@ final class SDH_Muhely_Szamla
         $pdf->SetCompression(true);
         $pdf->SetTitle($cim . ' ' . $szam, true);
         $pdf->SetAuthor($kiallito, true);
-        $pdf->SetCreator('SDH Műhely', true);
+        $pdf->SetCreator(SDH_Muhely_Arculat::termeknev(), true);
         $pdf->AddFont('DejaVu', '', 'DejaVuSansCondensed.ttf', true);
         $pdf->AddFont('DejaVu', 'B', 'DejaVuSansCondensed-Bold.ttf', true);
         $pdf->SetMargins($bal, 18, 210 - $jobb);
@@ -2968,7 +2968,7 @@ final class SDH_Muhely_Szamla
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
             . '<xmlszamlaxml xmlns="http://www.szamlazz.hu/xmlszamlaxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . "\n"
-            . self::elemek(['szamlaagentkulcs' => (string) self::beallitas()['kulcs'], 'szamlaszam' => 'SDH-KAPCSOLAT-ELLENORZES'], '  ')
+            . self::elemek(['szamlaagentkulcs' => (string) self::beallitas()['kulcs'], 'szamlaszam' => 'KAPCSOLAT-ELLENORZES'], '  ')
             . "</xmlszamlaxml>\n";
 
         $valasz = self::agent_kuld('action-szamla_agent_xml', $xml);

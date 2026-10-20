@@ -5,7 +5,7 @@ csoport: Rendszer
 csak: fejleszto
 modul:
 szakaszok: tesztadat
-kulcsszavak: tesztadat, tesztüzem, terheléses teszt, próbaadat, 300 000, generálás, licenc, központ, SDH Központ, eladás, vevő, licenckulcs, kiadás, telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
+kulcsszavak: tesztadat, tesztüzem, terheléses teszt, próbaadat, 300 000, generálás, licenc, központ, licencközpont, eladás, vevő, licenckulcs, kiadás, telepítés, telepít, frissítés, frissít, frissítés elérhető, GitHub, frissítő gomb, automatikus frissítés, új verzió, verzió, zip, bővítmény, plugin, WordPress, PHP, követelmény, bekapcsolás, aktiválás, cím, URL, időzóna, SMTP, levélküldés, élesítés, költöztetés, kikapcsolás, törlés
 osszefoglalo: Mit kíván a rendszer, hogyan telepíted egy külön belső WordPressbe, hogyan frissíted egy kattintással a GitHubról vagy a teljes zip feltöltésével úgy, hogy az adatok megmaradnak, és mit próbálj ki élesítés előtt.
 ---
 
@@ -157,12 +157,12 @@ Ami a frissítéskor magától megtörténik:
 
 ## Forgalmazói központ és licenc (eladáshoz)
 
-A vevőknek eladott példányokat a **SDH Központ** bővítmény kezeli. Ez a forgalmazó saját WordPressére kerül, nem a vevőkhöz (a forrásban: `kozpont/sdh-kozpont/`, külön zip: `sdh-kozpont-1.0.0.zip`).
+A vevőknek eladott példányokat a forgalmazói központ (**{kozpontnev}**) bővítmény kezeli. Ez a forgalmazó saját WordPressére kerül, nem a vevőkhöz (a forrásban: `kozpont/sdh-kozpont/`, külön zip: `sdh-kozpont-1.0.0.zip`).
 
 ### Lépésről lépésre: központ beállítása
 
-1. A forgalmazói webhelyen: **Bővítmények › Új › Feltöltés**, `sdh-kozpont-1.0.0.zip`, bekapcsolás. Bal oldalt megjelenik az **SDH Központ** menü.
-2. **Licencek** fül: vevő neve, vevőazonosító, lejárat (üresen soha), példányszám → **Licenc létrehozása**. A kulcs (`SDH-XXXX-…`) magától készül.
+1. A forgalmazói webhelyen: **Bővítmények › Új › Feltöltés**, `sdh-kozpont-1.0.0.zip`, bekapcsolás. Bal oldalt megjelenik a központ menüje (**{kozpontnev}**).
+2. **Licencek** fül: vevő neve, vevőazonosító, lejárat (üresen soha), példányszám → **Licenc létrehozása**. A kulcs (`ELŐTAG-XXXX-…`; az előtag a központ beállítása, alapból a termék rövid neve) magától készül.
 3. **Kiadás** fül: töltsd fel a **vevői** telepítő zipet. Ezt a forrásból a `sh tools/vevo-csomag.sh` készíti (`sdh-muhely-<verzió>-vevo.zip`): kimarad belőle a belső `includes/sdh/` mappa (saját modulok, cégadatok, frissítési tároló), a fejlesztői eszközök és a verziónapló. A verziót a zip `sdh-muhely/sdh-muhely.php` fejlécéből olvassa ki.
 4. A vevőnek add meg: a központ címét (a **Kulcs** fül alján áll) és a licenckulcsot. Ő a saját rendszerében a **Beállítások › Licenc** lapon írja be.
 5. **Példányok** fül: minden telepítés, a verziója és az utolsó jelentés ideje (ügyféladat nincs). **Támogatás** fül: a vevők által engedélyezett, időkorlátos belépő linkek.
@@ -191,7 +191,7 @@ Költöztetéskor a teljes WordPresst vidd át: az adatbázist és a fájlokat i
 
 ## Tesztadat és tesztüzem (terheléses teszt)
 
-Nagy adatmennyiséggel a sebesség és a keresés csak úgy próbálható ki, ha van mivel. Erre való a külön **SDH Tesztadat** kiegészítő (a forrásban: `tesztadat/sdh-tesztadat/`, zip: `sdh-tesztadat-1.0.0.zip`). **Csak próbapéldányra** kerülhet – a LocalWP-ben az oldal klónjára (jobb klikk az oldalon › Clone), soha nem az éles rendszerre.
+Nagy adatmennyiséggel a sebesség és a keresés csak úgy próbálható ki, ha van mivel. Erre való a külön **Tesztadat** kiegészítő (a forrásban: `tesztadat/sdh-tesztadat/`, zip: `sdh-tesztadat-1.0.0.zip`). **Csak próbapéldányra** kerülhet – a LocalWP-ben az oldal klónjára (jobb klikk az oldalon › Clone), soha nem az éles rendszerre.
 
 1. A klónon kapcsold be a kiegészítőt. A felület tetején megjelenik a **Tesztüzem** sáv: ettől kezdve SMS csak szimuláció, e-mail, számla és külső mentés nem megy ki, napi automatikus mentés nincs.
 2. **Beállítások › Rendszer › Tesztadat**: válaszd a méretet (1 000 / 10 000 / 100 000 / 300 000 mindenből), és nyomd meg kétszer a **Generálás indítása** gombot.

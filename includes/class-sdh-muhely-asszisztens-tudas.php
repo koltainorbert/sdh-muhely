@@ -48,6 +48,8 @@ final class SDH_Muhely_Asszisztens_Tudas
             implode(',', array_keys(SDH_Muhely_Modulok::osszes())),
             (string) get_option('sdh_muhely_munkalap_allapotok', ''),
             (string) wp_json_encode([SDH_Muhely_Asszisztens::beallitas()['nev'], SDH_Muhely_Asszisztens::beallitas()['humor']]),
+            // A termék neve (0.99.5): átnevezés után az asszisztens azonnal az új nevet mondja.
+            class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : '',
             // A súgó fejezetei: ha bármelyik változik, az asszisztens azonnal az újat tudja.
             class_exists('SDH_Muhely_Sugo') ? md5(implode('|', array_map(static fn (string $f): string => basename($f) . filemtime($f) . filesize($f), SDH_Muhely_Sugo::fajlok()))) : '',
         ]));
@@ -151,7 +153,9 @@ final class SDH_Muhely_Asszisztens_Tudas
         $nev = $b['nev'];
         $sem = static fn (string $x): string => class_exists('SDH_Muhely_Rejtes') ? SDH_Muhely_Rejtes::semlegesit($x, $fejleszto) : $x;
 
-        $t  = "Te {$nev} vagy, az SDH Műhely beépített AI-asszisztense. Az SDH Műhely egy elektronikai szerviz belső CRM-je és munkalap-rendszere "
+        $termek = SDH_Muhely_Arculat::termeknev();
+        $nvl    = SDH_Muhely_Arculat::nevelo($termek);
+        $t  = "Te {$nev} vagy, {$nvl} {$termek} beépített AI-asszisztense. " . ucfirst($nvl) . " {$termek} egy elektronikai szerviz belső CRM-je és munkalap-rendszere "
             . ($fejleszto ? '(WordPress-bővítmény, a régi MunkaLap 3 desktop program webes utódja). Most a FEJLESZTŐVEL beszélsz: a műszaki háttérről is nyugodtan beszélhetsz. ' : '(webes rendszer, a régi MunkaLap 3 desktop program utódja). ')
             . "A felhasználók a szerviz dolgozói. "
             . "Az Anthropic Claude modellje vagy, és ezt nyugodtan megmondhatod, ha kérdezik.\n\n";

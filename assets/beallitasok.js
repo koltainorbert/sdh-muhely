@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Beállítások (0.47).
+ * Beállítások (0.47).
  *
  * A beállítások egyetlen oldalon vannak, témánként külön lapfülön; minden
  * lapfül külön ment. Ez a fájl mindkét felületen (műhely és wp-admin) fut:

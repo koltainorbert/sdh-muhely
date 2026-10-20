@@ -23,6 +23,85 @@ final class SDH_Muhely_Arculat
 {
     public const KULCS = 'arculat';
 
+    /** A termék neve a vevői csomagban, amíg a Beállításokban mást nem adnak meg (0.99.5). */
+    public const TERMEKNEV_ALAP = 'Munkora';
+
+    /**
+     * A saját (belső) példány alapnevei (0.99.5): az includes/sdh/data/termek.json adja
+     * (termeknev, rovid, jel, nev, kozpont). A vevői csomagban a mappa nincs – ott üres tömb.
+     *
+     * @return array<string, string>
+     */
+    public static function belso_adat(): array
+    {
+        $a = function_exists('sdh_muhely_kezdo_adat') ? sdh_muhely_kezdo_adat('termek.json') : [];
+        $a = (array) apply_filters('sdh_muhely_belso_termek', $a);
+
+        return array_map('strval', array_filter($a, 'is_scalar'));
+    }
+
+    /** Belső példány-e (0.99.5): van saját termékadat (includes/sdh/data/termek.json). */
+    public static function belso(): bool
+    {
+        return trim((string) (self::belso_adat()['termeknev'] ?? '')) !== '';
+    }
+
+    /** A Termék neve mező üres értéke: belsőben a régi név, vevőnél „Munkora”. */
+    public static function termeknev_alap(): string
+    {
+        return self::belso() ? (string) self::belso_adat()['termeknev'] : self::TERMEKNEV_ALAP;
+    }
+
+    /**
+     * A termék neve (0.99.5) – a feliratok, a súgó ({termeknev}), az asszisztens és a
+     * sablonok ezt használják. Beállítások › Logó és megjelenés › Termék neve.
+     */
+    public static function termeknev(): string
+    {
+        $mentett = get_option('sdh_muhely_arculat', []);
+        $nev     = is_array($mentett) ? trim((string) ($mentett['termeknev'] ?? '')) : '';
+
+        return $nev !== '' ? $nev : self::termeknev_alap();
+    }
+
+    /**
+     * A névelő a név elé (a / az): magánhangzóval kezdődő szó, vagy olyan betűszó,
+     * amelynek első betűjét magánhangzóval ejtjük (SDH → „az”, Munkora → „a”).
+     */
+    public static function nevelo(string $nev): string
+    {
+        $nev  = trim($nev);
+        $elso = mb_substr($nev, 0, 1);
+
+        if ($elso === '') {
+            return 'a';
+        }
+
+        if (mb_stripos('aáeéiíoóöőuúüű', $elso) !== false) {
+            return 'az';
+        }
+
+        $betuszo = preg_match('/^\p{Lu}{2,}(?![\p{Ll}])/u', $nev) === 1;
+
+        return $betuszo && strpos('FLMNRSX', $elso) !== false ? 'az' : 'a';
+    }
+
+    /** Rövid név szerepnevekhez („… adminisztrátor”): belsőben a régi rövid jel, különben a termék neve. */
+    public static function rovidnev(): string
+    {
+        $r = trim((string) (self::belso_adat()['rovid'] ?? ''));
+
+        return $r !== '' ? $r : self::termeknev();
+    }
+
+    /** A licencközpont neve a feliratokban: belsőben a régi név, különben „Licencközpont”. */
+    public static function kozpontnev(): string
+    {
+        $k = trim((string) (self::belso_adat()['kozpont'] ?? ''));
+
+        return $k !== '' ? $k : 'Licencközpont';
+    }
+
     public static function init(): void
     {
         // Nincs saját menüpontja: a Beállítások „Logó és megjelenés" lapfüle
@@ -34,7 +113,7 @@ final class SDH_Muhely_Arculat
      * ============================================================== */
 
     /**
-     * @return array{uveg: string, betutipus: string, betutipus_egyeni: string, nagyitas: int, logo: string, jel: string, nev: string, szin_egyeni: string, sarok: string, sav: string, tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
+     * @return array{uveg: string, betutipus: string, betutipus_egyeni: string, nagyitas: int, logo: string, jel: string, nev: string, termeknev: string, szin_egyeni: string, sarok: string, sav: string, tema: string, szin: string, neon: string, neon_egyeni: string, neon_ero: string}
      */
     public static function beallitas(): array
     {
@@ -67,8 +146,12 @@ final class SDH_Muhely_Arculat
             'nagyitas'         => self::nagyitas_szukit((int) ($mentett['nagyitas'] ?? 100)),
             // A rendszer jele és neve (oldalsáv, címsor) és a logó – cégenként más, ezért beállítás.
             'logo'        => esc_url_raw((string) ($mentett['logo'] ?? '')),
-            'jel'         => isset($mentett['jel']) ? (string) $mentett['jel'] : 'SDH',
-            'nev'         => isset($mentett['nev']) ? (string) $mentett['nev'] : 'Műhely',
+            // A vevői csomagban jel nincs, a név a termék neve (0.99.5); a belső példányban a régi alap.
+            'jel'         => isset($mentett['jel']) ? (string) $mentett['jel'] : (string) (self::belso_adat()['jel'] ?? ''),
+            // Üres jel és név mellett a termék neve látszik (rendszer_nev(), oldalsáv) – átnevezéskor vele változik.
+            'nev'         => isset($mentett['nev']) ? (string) $mentett['nev'] : (string) (self::belso_adat()['nev'] ?? ''),
+            // A termék neve, ahogy beírták (üres = alapérték, lásd termeknev()).
+            'termeknev'   => mb_substr(trim((string) ($mentett['termeknev'] ?? '')), 0, 40),
             'szin_egyeni' => $egyeni,
             'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
             'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',
@@ -378,13 +461,13 @@ final class SDH_Muhely_Arculat
         ];
     }
 
-    /** A rendszer teljes neve: jel + név (pl. „SDH Műhely") – címsor, morzsa, menü. */
+    /** A rendszer teljes neve: jel + név – címsor, morzsa, menü. Üresen a termék neve. */
     public static function rendszer_nev(): string
     {
         $b   = self::beallitas();
         $nev = trim($b['jel'] . ' ' . $b['nev']);
 
-        return $nev !== '' ? $nev : 'Műhely';
+        return $nev !== '' ? $nev : self::termeknev();
     }
 
     /** A színkód három összetevője (0–255). */
@@ -513,7 +596,7 @@ final class SDH_Muhely_Arculat
 
     /**
      * A választható kiemelő színek. A kulcs a data-accent értéke;
-     * az üres kulcs az alapértelmezett SDH piros.
+     * az üres kulcs az alapértelmezett piros.
      *
      * @return array<string, array{nev: string, hex: string, hex2: string}>
      */
@@ -714,7 +797,14 @@ final class SDH_Muhely_Arculat
                             <label for="arculat_nev">Név</label>
                             <input type="text" name="arculat_nev" id="arculat_nev" maxlength="30" autocomplete="off"
                                    value="<?php echo esc_attr($b['nev']); ?>">
-                            <span class="sdh-mezo__sugo">A rendszer neve most: <strong><?php echo esc_html(self::rendszer_nev()); ?></strong></span>
+                            <span class="sdh-mezo__sugo">Jel és név nélkül a termék neve áll. A rendszer neve most: <strong><?php echo esc_html(self::rendszer_nev()); ?></strong></span>
+                        </div>
+
+                        <div class="sdh-mezo">
+                            <label for="arculat_termeknev">Termék neve</label>
+                            <input type="text" name="arculat_termeknev" id="arculat_termeknev" maxlength="40" autocomplete="off"
+                                   value="<?php echo esc_attr($b['termeknev']); ?>" placeholder="<?php echo esc_attr(self::termeknev_alap()); ?>">
+                            <span class="sdh-mezo__sugo">A szoftver neve a súgóban, az asszisztensnél, a Névjegyen és a PDF-ekben. Üresen: <strong><?php echo esc_html(self::termeknev_alap()); ?></strong>.</span>
                         </div>
                     </div>
                 </div>
@@ -1151,6 +1241,10 @@ final class SDH_Muhely_Arculat
                 'logo'        => isset($_POST['arculat_logo']) ? esc_url_raw(trim((string) wp_unslash($_POST['arculat_logo']))) : '',
                 'jel'         => mb_substr(sanitize_text_field(isset($_POST['arculat_jel']) ? wp_unslash($_POST['arculat_jel']) : ''), 0, 4),
                 'nev'         => mb_substr(sanitize_text_field(isset($_POST['arculat_nev']) ? wp_unslash($_POST['arculat_nev']) : ''), 0, 30),
+                // A termék neve (0.99.5): ha a mező nem jött, a régi marad.
+                'termeknev'   => isset($_POST['arculat_termeknev'])
+                    ? mb_substr(trim(sanitize_text_field(wp_unslash((string) $_POST['arculat_termeknev']))), 0, 40)
+                    : $regi['termeknev'],
                 'szin_egyeni' => $szin_egyeni,
                 'sarok'       => isset(self::sarkok()[$sarok]) ? $sarok : 'normal',
                 'sav'         => isset(self::savok()[$sav]) ? $sav : 'vilagos',

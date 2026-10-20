@@ -1214,7 +1214,7 @@ final class SDH_Muhely_Matrica
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
         $pdf->SetCompression(true);
-        $pdf->SetCreator('SDH Műhely', true);
+        $pdf->SetCreator(SDH_Muhely_Arculat::termeknev(), true);
         $pdf->SetTitle(self::SABLONOK[self::sablon($b['sablon'] ?? 'rma')], true);
         $pdf->AddFont('F', '', $f[0], true);
         $pdf->AddFont('F', 'B', $f[1], true);

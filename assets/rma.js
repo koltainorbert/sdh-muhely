@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – RMA a CRM-ben (0.27).
+ * RMA a CRM-ben (0.27).
  *
  *  - Üzenet küldése az ügyfélnek a munkalap RMA lapfüléről (munkalap-ablak
  *    és Áttekintés). Űrlapon belül áll, ezért nincs <form>: gomb / Ctrl+Enter.

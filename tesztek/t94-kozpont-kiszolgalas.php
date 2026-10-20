@@ -89,7 +89,8 @@ T::tartalmaz((string) $lic->megjegyzes, $k1['rendeles'], 'a licencnél a rendel�
 $vsor = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $K::t('vevo') . ' WHERE id = %d', (int) $v1['vevo_id']));
 T::igaz($vsor !== null && (string) $vsor->nev === $vevo['nev'] && (string) $vsor->email === $vevo['email'] && (string) $vsor->adoszam === $vevo['adoszam'], 'új vevő az adataival');
 T::tartalmaz((string) $vsor->cimkek, 'webshop', 'vevő címkéje: webshop');
-T::igaz(strpos((string) $v1['letoltes_url'], '/licenc/letoltes/?t=') !== false, 'letöltő link a válaszban (semleges cím)');
+// Szép permalinknél /licenc/letoltes/?t=…, sima permalinknél ?licenc_letoltes=… – mindkettő semleges.
+T::igaz(strpos((string) $v1['letoltes_url'], '/licenc/letoltes/?t=') !== false || strpos((string) $v1['letoltes_url'], '?licenc_letoltes=') !== false, 'letöltő link a válaszban (semleges cím)');
 T::igaz(preg_match('~sdh|wp-json|rest_route|wordpress~i', (string) $v1['letoltes_url']) !== 1, 'a linkben nincs sdh / wp-json / rest_route');
 
 /* --- Idempotencia ------------------------------------------------------------------------------------------------- */
@@ -187,7 +188,7 @@ T::egyezik('', $K::kiadas_be($zip, 'stabil', 't94', 'teszt'), 'kiadás feltöltv
 $tok = static function (string $url): string {
     parse_str((string) wp_parse_url($url, PHP_URL_QUERY), $q);
 
-    return (string) ($q['t'] ?? '');
+    return (string) ($q['t'] ?? $q['licenc_letoltes'] ?? '');
 };
 $t1 = $tok((string) $v1['letoltes_url']);
 $e  = $KS::letoltes_ellenoriz($t1, false);

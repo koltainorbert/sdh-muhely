@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Súgó (0.51).
+ * Súgó (0.51).
  *
  *  - Keresés gépelés közben: a legjobb találatok a mező alatt (nyilakkal
  *    léptethető, Enter megnyitja; Enter kijelölés nélkül a teljes találati lista).

@@ -657,7 +657,7 @@ final class SDH_Muhely_Level_Feladat
             $valasz = wp_safe_remote_get($url, [
                 'timeout'     => 12,
                 'redirection' => 3,
-                'user-agent'  => 'SDH Muhely/' . SDH_MUHELY_VERSION,
+                'user-agent'  => str_replace(' ', '-', remove_accents(SDH_Muhely_Arculat::termeknev())) . '/' . SDH_MUHELY_VERSION,
             ]);
 
             if (is_wp_error($valasz) || (int) wp_remote_retrieve_response_code($valasz) !== 200) {

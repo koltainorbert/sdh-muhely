@@ -94,6 +94,24 @@ final class SDH_Muhely_Sugo
         return SDH_MUHELY_DIR . 'sugo/';
     }
 
+    /**
+     * A fejezetekben használható nevek (0.99.5) – a Beállítások › Logó és megjelenés › Termék neve szerint.
+     *
+     * @return array<string, string>
+     */
+    public static function tokenek(): array
+    {
+        if (!class_exists('SDH_Muhely_Arculat')) {
+            return ['{termeknev}' => 'a rendszer', '{rovidnev}' => 'rendszer', '{kozpontnev}' => 'Licencközpont'];
+        }
+
+        return [
+            '{termeknev}'  => SDH_Muhely_Arculat::termeknev(),
+            '{rovidnev}'   => SDH_Muhely_Arculat::rovidnev(),
+            '{kozpontnev}' => SDH_Muhely_Arculat::kozpontnev(),
+        ];
+    }
+
     /** A fejezetfájlok (NN-kulcs.md), sorrendben. */
     public static function fajlok(): array
     {
@@ -181,6 +199,8 @@ final class SDH_Muhely_Sugo
         $fejleszto = $fejleszto ?? self::fejleszto();
         $nyers = is_readable($ut) ? (string) file_get_contents($ut) : '';
         $nyers = str_replace(["\r\n", "\r"], "\n", $nyers);
+        // A termék neve (0.99.5): a fejezetekben {termeknev}, {rovidnev}, {kozpontnev} áll, itt kap értéket.
+        $nyers = strtr($nyers, self::tokenek());
 
         if (preg_match('/\A---\n(.*?)\n---\n(.*)\z/s', $nyers, $m) !== 1) {
             return null;
@@ -418,7 +438,7 @@ final class SDH_Muhely_Sugo
         }
 
         // A kikapcsolt modulok is benne vannak: átkapcsolás után a tartalomjegyzék újraépül.
-        $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()) . '|' . implode(',', SDH_Muhely_Modulok::licenc_tiltott()));
+        $ujj = md5($ujj . SDH_MUHELY_VERSION . '|' . implode('|', self::tokenek()) . '|' . implode(',', SDH_Muhely_Modulok::kikapcsoltak()) . '|' . implode(',', SDH_Muhely_Modulok::licenc_tiltott()));
         // A fejlesztő több fejezetet lát: neki külön tartalomjegyzék jár (a kettő nem írja felül egymást).
         $tkulcs = 'sdh_muhely_sugo_index' . (self::fejleszto() ? '_f' : '');
         $c      = get_transient($tkulcs);

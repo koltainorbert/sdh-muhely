@@ -60,7 +60,7 @@ final class SDH_Muhely_Meres
         $sqlite = self::sqlite();
         $T      = static fn (string $n): string => SDH_Muhely_Schema::tabla($n);
 
-        $ki[] = 'SDH Műhely mérés (csak olvas) – verzió ' . SDH_MUHELY_VERSION . ', séma ' . get_option('sdh_muhely_db_version');
+        $ki[] = SDH_Muhely_Arculat::termeknev() . ' mérés (csak olvas) – verzió ' . SDH_MUHELY_VERSION . ', séma ' . get_option('sdh_muhely_db_version');
         $ki[] = str_repeat('=', 90);
 
         if (!$sqlite) {

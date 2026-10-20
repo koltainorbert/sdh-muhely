@@ -130,7 +130,7 @@ final class SDH_Muhely_Szemely
     public static function szerep(): void
     {
         if (function_exists('get_role') && get_role(self::SZEREP) === null) {
-            add_role(self::SZEREP, 'SDH dolgozó (közös fiók)', []);
+            add_role(self::SZEREP, (class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::rovidnev() : 'Rendszer') . ' dolgozó (közös fiók)', []);
         }
     }
 

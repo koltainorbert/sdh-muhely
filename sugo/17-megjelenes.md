@@ -135,7 +135,8 @@ Ez látszik a bal felső sarokban, a böngészőfül címében és a menüben.
 |---|---|
 | **Logó** | A **Feltöltés…** gombbal tölthetsz fel képet, vagy beírhatod a címét. Átlátszó hátterű PNG vagy SVG a legjobb. A **Törlés** gomb leveszi. |
 | **Jel (logó nélkül ez látszik)** | Legfeljebb 4 betű a színes négyzetben. |
-| **Név** | A logó vagy a jel mellett áll. Üresen hagyva csak a logó marad. |
+| **Név** | A logó vagy a jel mellett áll. Üresen hagyva csak a logó marad; ha jel és logó sincs, a termék neve áll. |
+| **Termék neve** | A szoftver neve – most **{termeknev}**. Ez áll a súgóban, az asszisztens bemutatkozásában, a **Névjegyen**, a PDF-ek adataiban és a Drive-mentés mappájának nevében; jel és név nélkül a bal felső sarokban is. Üresen az alapnév marad. |
 
 ### Alapértelmezett megjelenés
 

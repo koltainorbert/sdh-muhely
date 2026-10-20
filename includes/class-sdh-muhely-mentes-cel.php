@@ -446,7 +446,7 @@ final class SDH_Muhely_Mentes_Cel
         switch ($id) {
             case 'gep':
                 return [
-                    'mappa' => ['cim' => 'Mappa', 'tipus' => 'szoveg', 'alap' => '', 'sugo' => 'Teljes út, pl. D:\\SDH-mentes (Windows) vagy /mnt/mentes. Ne a rendszer saját mentési mappája legyen.'],
+                    'mappa' => ['cim' => 'Mappa', 'tipus' => 'szoveg', 'alap' => '', 'sugo' => 'Teljes út, pl. D:\\Mentes (Windows) vagy /mnt/mentes. Ne a rendszer saját mentési mappája legyen.'],
                 ];
 
             case 'nas':

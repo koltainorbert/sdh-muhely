@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Párhuzamos szerkesztés védelme (0.70.0, H1).
+ * Párhuzamos szerkesztés védelme (0.70.0, H1).
  *
  * Két feladata van:
  *

@@ -61,7 +61,7 @@ final class SDH_Muhely_Admin_Atallas
         $u->set_role(SDH_Muhely_Admin_UI::ADMIN_SZEREP);
 
         if (class_exists('SDH_Muhely_Valtozasnaplo')) {
-            SDH_Muhely_Valtozasnaplo::esemeny('felhasznalo', $user_id, (string) $u->display_name . ': fejlesztőből SDH adminisztrátor (N6).');
+            SDH_Muhely_Valtozasnaplo::esemeny('felhasznalo', $user_id, (string) $u->display_name . ': fejlesztőből ' . SDH_Muhely_Arculat::rovidnev() . ' adminisztrátor (N6).');
         }
 
         return '';
@@ -77,7 +77,7 @@ final class SDH_Muhely_Admin_Atallas
             wp_send_json_error(['uzenet' => $hiba]);
         }
 
-        wp_send_json_success(['uzenet' => 'Átállítva: mostantól SDH adminisztrátor.']);
+        wp_send_json_success(['uzenet' => 'Átállítva: mostantól ' . SDH_Muhely_Arculat::rovidnev() . ' adminisztrátor.']);
     }
 
     /** Doboz a Jogosultságok lapon (csak fejlesztőnek, és csak ha van kit átállítani). */
@@ -98,7 +98,7 @@ final class SDH_Muhely_Admin_Atallas
             <h2 class="sdh-doboz__cim">Fejlesztői fiókok [fejlesztő]</h2>
             <p class="sdh-sugo">
                 Ezek a fiókok a WordPress-adminba is beléphetnek (fejlesztők). Akit korábban a Csapatban tettetek adminná,
-                az valójában a rendszer adminisztrátora: állítsd át <strong>SDH adminisztrátor</strong>-ra – a rendszerben
+                az valójában a rendszer adminisztrátora: állítsd át <strong><?php echo esc_html(SDH_Muhely_Arculat::rovidnev()); ?> adminisztrátor</strong> szerepre – a rendszerben
                 minden adminisztrátori joga megmarad, csak a WordPress marad előtte rejtve.
             </p>
             <table class="sdh-tabla">
@@ -109,7 +109,7 @@ final class SDH_Muhely_Admin_Atallas
                         <td><?php echo esc_html((string) $u->display_name); ?></td>
                         <td><?php echo esc_html((string) $u->user_login); ?></td>
                         <td><?php echo esc_html((string) $u->user_email); ?></td>
-                        <td><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-atallit="<?php echo (int) $u->ID; ?>">SDH adminisztrátorrá</button>
+                        <td><button type="button" class="sdh-gomb sdh-gomb--vilagos" data-sdh-atallit="<?php echo (int) $u->ID; ?>"><?php echo esc_html(SDH_Muhely_Arculat::rovidnev()); ?> adminisztrátorrá</button>
                             <span class="sdh-mezo__sugo" data-sdh-atallit-uzenet role="status"></span></td>
                     </tr>
                 <?php endforeach; ?>

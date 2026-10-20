@@ -83,7 +83,7 @@ class SDH_Muhely_Nyomtatvany_Pdf extends tFPDF
         $this->SetMargins($this->margo, $this->margo, $this->margo);
         $this->SetAutoPageBreak(true, $this->margo + $this->lab_magas);
         $this->SetCompression(true);
-        $this->SetCreator('SDH Műhely', true);
+        $this->SetCreator(class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : 'Műhely', true);
         $this->tinta();
     }
 

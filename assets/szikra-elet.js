@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Szikra élete (0.65.0).
+ * Szikra élete (0.65.0).
  *
  * Az asszisztens.js figurájára épül (window.SDH_SZIKRA): több száz arckifejezés
  * (mimika), szükségletek (éhség, pisi, kaki, fáradtság, büdösség, magány,

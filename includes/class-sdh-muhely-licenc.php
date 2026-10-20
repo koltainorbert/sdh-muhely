@@ -58,7 +58,7 @@ final class SDH_Muhely_Licenc
     /** @param array<string, array<string, mixed>> $s */
     public static function utemezesek(array $s): array
     {
-        $s['sdh_muhely_5perc'] = ['interval' => 300, 'display' => 'SDH Műhely – 5 percenként'];
+        $s['sdh_muhely_5perc'] = ['interval' => 300, 'display' => (class_exists('SDH_Muhely_Arculat') ? SDH_Muhely_Arculat::termeknev() : 'Műhely') . ' – 5 percenként'];
 
         return $s;
     }
@@ -752,7 +752,7 @@ final class SDH_Muhely_Licenc
                 </div>
                 <div class="sdh-mezo sdh-mezo--szeles">
                     <label for="licenc_kulcs">Licenckulcs</label>
-                    <input type="text" name="licenc[kulcs]" id="licenc_kulcs" value="<?php echo esc_attr($b['kulcs']); ?>" autocomplete="off" spellcheck="false" placeholder="SDH-XXXX-XXXX-XXXX-XXXX">
+                    <input type="text" name="licenc[kulcs]" id="licenc_kulcs" value="<?php echo esc_attr($b['kulcs']); ?>" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX">
                 </div>
             </div>
             <p class="sdh-sugo">

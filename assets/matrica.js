@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – RMA-matrica (0.59).
+ * RMA-matrica (0.59).
  *
  * - A munkalap „Matrica" gombja (data-sdh-matrica) a Matrica ablakot nyitja:
  *   eszközönként egy előnézet, pipával választható, példányszám.

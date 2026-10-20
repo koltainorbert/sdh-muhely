@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – eladás: napi árukiadás és rendelések (0.45).
+ * eladás: napi árukiadás és rendelések (0.45).
  *
  * Az űrlap a munkalapé (app.js), a fizetés ablaka a pénztáré (penztar.js);
  * ez a fájl azt adja hozzá, ami az eladásé:

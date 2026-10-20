@@ -1,5 +1,5 @@
 /*
- * SDH Műhely – munkalap-rács és részletpanel (kezdőképernyő).
+ * munkalap-rács és részletpanel (kezdőképernyő).
  *
  * A MunkaLap 3 főablakának webes megfelelője. A szerver szűr, rendez és
  * lapoz (includes/class-sdh-muhely-racs.php) – ez a fájl csak kirajzol és

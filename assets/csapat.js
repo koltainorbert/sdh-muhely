@@ -1,5 +1,5 @@
 /**
- * SDH Műhely – Csapat: belső üzenetek (0.38).
+ * Csapat: belső üzenetek (0.38).
  *
  * Két része van:
  *  1. MINDEN CRM-oldalon: a „pulzus" – 30 másodpercenként (0.64; rejtett lapon

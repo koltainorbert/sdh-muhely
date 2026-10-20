@@ -377,7 +377,7 @@ final class SDH_Muhely_Levelezes
                 A CRM a fiókokhoz IMAP-on és SMTP-n kapcsolódik, <strong>alkalmazásjelszóval</strong> – a Google-fiók
                 rendes jelszavát ide soha ne írd be. Alkalmazásjelszó: Google-fiók → <em>Biztonság</em> →
                 <em>Kétlépcsős azonosítás</em> (be kell kapcsolni) → <em>Alkalmazásjelszavak</em>
-                (<code>myaccount.google.com/apppasswords</code>) → új jelszó „SDH Műhely" néven → a kapott 16 betűt másold ide.
+                (<code>myaccount.google.com/apppasswords</code>) → új jelszó „<?php echo esc_html(SDH_Muhely_Arculat::termeknev()); ?>" néven → a kapott 16 betűt másold ide.
                 A levelek a Gmailben maradnak: amit a CRM-ben törölsz vagy áthelyezel, az a telefonon is úgy lesz.
             </p>
 
