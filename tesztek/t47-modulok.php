@@ -86,7 +86,7 @@ try {
 
     $kat = $Mo::katalogus();
 
-    T::egyezik(17, count($kat), '17 kikapcsolható fő modul (0.99.3: Online időpontfoglalás)');
+    T::egyezik(18, count($kat), '18 kikapcsolható fő modul (0.99.6: Munkalapszoftver Clone)');
     T::egyezik(10, count($Mo::alapreszek()), '10 alaprész (mindig fut; 0.59: Napló, 0.87: Riportok)');
     T::egyezik([], array_intersect(array_keys($kat), array_keys($Mo::alapreszek())), 'alaprész nem kapcsolható ki');
 
@@ -140,9 +140,9 @@ try {
     $oldal = (string) ob_get_clean();
 
     T::tartalmaz($oldal, 'data-sdh-modulok', 'a Modulok oldal kirajzolódik');
-    T::egyezik(17, substr_count($oldal, 'name="be[]"'), '17 kapcsoló');
-    T::egyezik(17, substr_count($oldal, 'name="be[]" id="sdh-modul-') , 'minden kapcsolónak saját azonosítója');
-    T::egyezik(17, preg_match_all('/name="be\[\]" id="[^"]+" value="[a-z]+"\s+checked/', $oldal), 'alapból mind bekapcsolva');
+    T::egyezik(18, substr_count($oldal, 'name="be[]"'), '18 kapcsoló');
+    T::egyezik(18, substr_count($oldal, 'name="be[]" id="sdh-modul-') , 'minden kapcsolónak saját azonosítója');
+    T::egyezik(18, preg_match_all('/name="be\[\]" id="[^"]+" value="[a-z]+"\s+checked/', $oldal), 'alapból mind bekapcsolva');
     T::egyezik(10, substr_count($oldal, 'sdh-modulkartya--alap'), 'az alaprendszer 10 kártyája');
     T::tartalmaz($oldal, 'Ehhez kell: Ügyfélüzenetek és RMA-oldal', 'a függőség kiírva');
     T::tartalmaz($oldal, 'value="sdh_muhely_modulok"', 'az űrlap a mentésre küld');
@@ -160,7 +160,7 @@ try {
     $e = $ment(['naptar', 'sms', 'nyomtatas', 'mockup', 'imei', 'tac', 'asszisztens']);
     T::igaz($e['ok'], 'mentés: ok');
     T::egyezik(['asszisztens', 'foglalas', 'imei', 'mockup', 'naptar', 'nyomtatas', 'sms', 'tac'], $Mo::kikapcsoltak(), 'a kikapcsoltak listája (a foglalás a Naptárral együtt)');
-    T::tartalmaz($e['uzenet'], '9 modul bekapcsolva, 8 kikapcsolva', 'az üzenet a darabszámokkal');
+    T::tartalmaz($e['uzenet'], '10 modul bekapcsolva, 8 kikapcsolva', 'az üzenet a darabszámokkal');
 
     T::igaz($Mo::egy('naptar') === null && $Mo::egy('sms') === null, 'a kikapcsolt modul nincs bejegyezve');
     T::igaz(!isset($Mo::osszes()['naptar']), 'az összes modul között sincs');

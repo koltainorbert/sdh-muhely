@@ -11108,3 +11108,145 @@ button.sdh-allapot,
     align-items: center;
     gap: .35rem;
 }
+
+/* Munkalapszoftver Clone (0.99.6): Beállítások › Rendszer › Munkalapszoftver Clone. */
+.sdh-ml3__lepesek {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+    margin: 0 0 calc(14px * var(--sdh-n));
+    padding: 0;
+    list-style: none;
+}
+
+.sdh-ml3__lepes {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(8px * var(--sdh-n));
+    padding: calc(6px * var(--sdh-n)) calc(14px * var(--sdh-n)) calc(6px * var(--sdh-n)) calc(6px * var(--sdh-n));
+    border: 1px solid var(--sdh-keret);
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet);
+    color: var(--sdh-halvany);
+    font-size: calc(13px * var(--sdh-n));
+}
+
+.sdh-ml3__lepes span {
+    display: inline-grid;
+    place-items: center;
+    width: calc(22px * var(--sdh-n));
+    height: calc(22px * var(--sdh-n));
+    border-radius: 50%;
+    background: var(--sdh-felulet-2);
+    font-weight: 700;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ml3__lepes.is-aktiv {
+    border-color: var(--sdh-accent);
+    color: var(--sdh-szoveg);
+    font-weight: 600;
+}
+
+.sdh-ml3__lepes.is-aktiv span {
+    background: var(--sdh-accent);
+    color: var(--sdh-accent-felirat);
+}
+
+.sdh-ml3__lepes.is-kesz span {
+    background: var(--sdh-siker);
+    color: #fff;
+}
+
+.sdh-ml3__allapot {
+    margin: calc(10px * var(--sdh-n)) 0;
+}
+
+.sdh-ml3__csik {
+    height: calc(12px * var(--sdh-n));
+    overflow: hidden;
+    border-radius: calc(999px * var(--sdh-n));
+    background: var(--sdh-felulet-2);
+    border: 1px solid var(--sdh-keret);
+}
+
+.sdh-ml3__csik span {
+    display: block;
+    height: 100%;
+    border-radius: calc(999px * var(--sdh-n));
+    background: linear-gradient(90deg, var(--sdh-accent), color-mix(in srgb, var(--sdh-accent) 60%, #fff));
+    transition: width .4s ease;
+}
+
+.sdh-ml3__reszlet {
+    margin: calc(8px * var(--sdh-n)) 0 0;
+}
+
+.sdh-ml3__resz {
+    margin-top: calc(18px * var(--sdh-n));
+    padding-top: calc(14px * var(--sdh-n));
+    border-top: 1px solid var(--sdh-keret);
+}
+
+.sdh-ml3__resz h3 {
+    margin: 0 0 calc(8px * var(--sdh-n));
+}
+
+.sdh-ml3__resz .sdh-tabla {
+    margin: calc(6px * var(--sdh-n)) 0 calc(14px * var(--sdh-n));
+}
+
+.sdh-ml3__resz select,
+.sdh-ml3__resz input[type="text"],
+.sdh-ml3__resz input[type="search"] {
+    border-radius: var(--sdh-r);
+}
+
+.sdh-ml3__kapcsolok {
+    display: grid;
+    gap: calc(10px * var(--sdh-n));
+    margin: calc(12px * var(--sdh-n)) 0;
+}
+
+.sdh-ml3__kapcsolok .sdh-kapcsolo {
+    gap: calc(10px * var(--sdh-n));
+}
+
+.sdh-ml3__gombok {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(8px * var(--sdh-n));
+}
+
+.sdh-ml3__regi table {
+    width: 100%;
+}
+
+.sdh-ml3__regi td {
+    vertical-align: top;
+}
+
+.sdh-ml3__adat {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: calc(2px * var(--sdh-n)) calc(12px * var(--sdh-n));
+    margin: 0;
+    font-size: calc(12px * var(--sdh-n));
+}
+
+.sdh-ml3__adat dt {
+    color: var(--sdh-halvany);
+}
+
+.sdh-ml3__adat dd {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.sdh-ml3__lapozo {
+    display: flex;
+    gap: calc(8px * var(--sdh-n));
+    align-items: center;
+    margin-top: calc(8px * var(--sdh-n));
+}

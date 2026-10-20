@@ -329,6 +329,8 @@ final class SDH_Muhely_Frontend
             'naplo'        => '<path d="M3.6 10a6.4 6.4 0 1 0 1.9-4.5"/><path d="M3.2 3.6v2.6h2.6"/><path d="M10 6.4V10l2.4 1.6"/>',
             // RMA-matrica (0.59): címke lyukkal.
             'matrica'      => '<path d="M3 5.2A1.7 1.7 0 0 1 4.7 3.5h6.6l5.7 5.7-6.5 6.5L3 9.9z"/><circle cx="7" cy="7.4" r="1.3"/><path d="M8.6 11.4l2.6-2.6"/>',
+            // Munkalapszoftver Clone (0.99.6): adatbázis-henger, nyíl kifelé – a régi program adatai átjönnek.
+            'munkalapclone' => '<ellipse cx="7.4" cy="5" rx="4.4" ry="1.8"/><path d="M3 5v9.6c0 1 2 1.8 4.4 1.8"/><path d="M11.8 5v3.2"/><path d="M3 9.8c0 1 2 1.8 4.4 1.8"/><path d="M10.4 13.6h6.4M14.2 11l2.6 2.6-2.6 2.6"/>',
             'mentes'       => '<path d="M4 4.8A1.8 1.8 0 0 1 5.8 3h7.4L16 5.8v9.4a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 15.2z"/><path d="M7 3v4h5.5V3M7 17v-5h6v5"/>',
 
             // --- Gombok (nem modulok) ---

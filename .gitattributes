@@ -9,3 +9,8 @@
 /tesztadat      export-ignore
 # Az értékesítő webhely (téma, sales, demó) külön csomagok – a Műhely telepítőjébe nem kerülnek.
 /weboldal       export-ignore
+
+# A MunkaLap 3 átalakító Windows-parancsfájlja CRLF sorvéggel marad.
+/assets/ml3/*.bat -text
+/assets/ml3/*.txt -text
+/tools/ml3-atalakito export-ignore

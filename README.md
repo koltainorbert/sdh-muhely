@@ -80,6 +80,26 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.6 – Munkalapszoftver Clone: a MunkaLap 3 teljes átvétele
+- **Új, ki-be kapcsolható modul** (Modulok › Átállás › Munkalapszoftver Clone; felülete: Beállítások › Rendszer ›
+  Munkalapszoftver Clone): a MunkaLap 3 mentése (`.wdg` – ZIP, benne a program Apache Derby adatbázisa) minden adattal.
+- **Átalakító** (`assets/ml3/munkalap-atalakito.jar`, forrás: `tools/ml3-atalakito/`, Java 8+): a MunkaLap 3 SAJÁT Javájával
+  és `lib/derby.jar`-jával olvassa ki a mentést egy ideiglenes másolatból → csomag (`manifest.json` táblánként darabszám +
+  SHA-1, `tables/*.jsonl`, `files/…`). A szerver magától futtatja (háttérben, állapotfájllal), ha eléri a MunkaLap mappáját;
+  különben letölthető (`Atalakitas.bat`), és a kész csomag feltölthető. Bélyegképek és jelszó-kivonatok nélkül.
+- **Feltöltés darabolva** (8 MB, méretkorlát nélkül) vagy szerveren lévő útvonal; ékezetes útvonalnál előbb munkamásolat.
+- **Átvétel** (`SDH_Muhely_Ml3`, `SDH_Muhely_Ml3_Lekepzes`): minden régi sor a nyers tárba (`sdh_ml3_nyers`, saját
+  sémaverzió), és ha van helye, rekord lesz belőle: ügyfél (címek, település, több telefon, adóügyi állapot, kategória),
+  eszköz (kategória a tárgynévből, IMEI-k, garancia, egyedi mezők párosítással), munkalap (régi szám; foglalt számnál új +
+  megjegyzés; állapot, felelős, fizetés, előleg, tartozékok) + állapottörténet a naplóba, hiba (Javítandó/Kijavított/Nem
+  javítható/Nem javítandó), tétel (sztornó csak a megjegyzésbe), termék, szolgáltatás (egyforma név összevonva, legújabb ár),
+  készletmozgás (a készlet a régivel egyezik, eltérésnél korrekció), csatolmányok, elküldött e-mailek HTML-ben a Fájlok fülre.
+  „Vásárlás” tárgy → Napi árukiadás (kapcsolható). Időkeretes, tranzakciós adagok, egyszerre egy lépés (zár), folytatható.
+- **Újraátvétel** csak a változást írja (lenyomat soronként), az új állapotváltások a naplóba; **visszavonás** mindent töröl,
+  amit a modul létrehozott, és visszaállítja a kiegészített beállításokat (fizetési módok, „Nem javítandó”).
+- **Ellenőrző riport** (régi sorok ↔ nyers tár, új rekordok, végösszeg, fájlok) és **Régi adatok** böngésző (keresés,
+  fájlletöltés). Súgó: `sugo/32-munkalapclone.md`. Teszt: `t96` (122 állítás); `t47` 18 modulra.
+
 ### 0.99.5 – terméknév, vevői csomag licencszöveggel, központ 2.1
 - **Termék neve** (Beállítások › Logó és megjelenés): a szoftver neve egyetlen beállítás (`SDH_Muhely_Arculat::termeknev()`);
   vevőnél üresen „Munkora”, a saját példányon a belső név (`includes/sdh/data/termek.json`). Ez áll a súgóban (`{termeknev}`,

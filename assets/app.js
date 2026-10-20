@@ -13672,3 +13672,406 @@ document.addEventListener('focusin', function (e) {
         });
     });
 }());
+
+/* Munkalapszoftver Clone (0.99.6): Beállítások › Munkalapszoftver Clone – darabolt feltöltés, folyamatjelző
+   (átalakítás, kibontás, átvétel, visszavonás), párosítás, a régi adatok böngészése. */
+(function () {
+    'use strict';
+
+    var doboz = document.querySelector('[data-sdh-ml3]');
+
+    if (!doboz) {
+        return;
+    }
+
+    var B = window.SDH_MUHELY || {};
+    var AJAX = B.ajax || '/wp-admin/admin-ajax.php';
+    var uzenet = doboz.querySelector('[data-sdh-ml3-uzenet]');
+    var hibak = 0;
+
+    function el(cimke, szoveg, osztaly) {
+        var e = document.createElement(cimke);
+
+        if (szoveg !== undefined && szoveg !== null) {
+            e.textContent = szoveg;
+        }
+
+        if (osztaly) {
+            e.className = osztaly;
+        }
+
+        return e;
+    }
+
+    function hivas(adat, kesz) {
+        var fd = adat instanceof FormData ? adat : new FormData();
+
+        if (!(adat instanceof FormData)) {
+            Object.keys(adat).forEach(function (k) { fd.set(k, adat[k]); });
+        }
+
+        fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
+
+        fetch(AJAX, { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (v) { return v.json(); })
+            .then(kesz)
+            .catch(function () { kesz({ success: false, data: { uzenet: 'Nincs kapcsolat a szerverrel.', halozat: true } }); });
+    }
+
+    function kiir(szoveg) {
+        if (uzenet) {
+            uzenet.textContent = szoveg || '';
+        }
+    }
+
+    function allapot(d) {
+        var a = doboz.querySelector('[data-sdh-ml3-allapot]');
+
+        if (!a || !d) {
+            return;
+        }
+
+        a.hidden = false;
+        a.querySelector('[data-sdh-ml3-csik]').style.width = Math.max(0, Math.min(100, d.szazalek || 0)) + '%';
+        a.querySelector('[data-sdh-ml3-szazalek]').textContent = (d.szazalek || 0) + '%';
+        a.querySelector('[data-sdh-ml3-reszlet]').textContent = d.reszlet || '';
+        kiir(d.uzenet);
+    }
+
+    // A folyamat léptetése: amíg a szerver azt mondja, „tovább”, újra hívjuk; a végén újratöltjük a lapot.
+    function folyamat() {
+        hivas({ action: 'sdh_muhely_ml3_lepes' }, function (v) {
+            if (!v || !v.success) {
+                hibak++;
+                kiir(((v && v.data && v.data.uzenet) || 'Hiba') + (hibak < 20 ? ' – újrapróbálom…' : ''));
+
+                if (hibak < 20) {
+                    window.setTimeout(folyamat, 3000);
+                }
+
+                return;
+            }
+
+            hibak = 0;
+            allapot(v.data);
+
+            if (v.data.tovabb) {
+                window.setTimeout(folyamat, v.data.fazis === 'atalakitas' ? 2000 : 30);
+
+                return;
+            }
+
+            window.location.reload();
+        });
+    }
+
+    function ketlepcsos(g) {
+        if (!g.hasAttribute('data-elso')) {
+            g.setAttribute('data-elso', '1');
+            g.setAttribute('data-eredeti', g.textContent);
+            g.textContent = 'Biztosan? Kattints újra';
+            window.setTimeout(function () {
+                if (g.hasAttribute('data-elso')) {
+                    g.removeAttribute('data-elso');
+                    g.textContent = g.getAttribute('data-eredeti');
+                }
+            }, 4000);
+
+            return false;
+        }
+
+        g.removeAttribute('data-elso');
+
+        return true;
+    }
+
+    // Darabolt feltöltés (a PHP feltöltési korlátja nem számít).
+    function feltolt(f, g) {
+        var meret = parseInt(doboz.getAttribute('data-resz'), 10) || 8388608;
+        var osszes = Math.max(1, Math.ceil(f.size / meret));
+        var azon = (Date.now().toString(36) + Math.random().toString(36).slice(2, 8)).replace(/[^a-z0-9]/g, '');
+        var indult = Date.now();
+
+        g.disabled = true;
+
+        (function resz(i, proba) {
+            var fd = new FormData();
+
+            fd.set('action', 'sdh_muhely_ml3_feltolt_resz');
+            fd.set('azon', azon);
+            fd.set('resz', i);
+            fd.set('osszes', osszes);
+            fd.set('nev', f.name);
+            fd.append('darab', f.slice(i * meret, Math.min(f.size, (i + 1) * meret)), 'resz.bin');
+
+            hivas(fd, function (v) {
+                if (!v || !v.success) {
+                    if (v && v.data && v.data.halozat && proba < 5) {
+                        window.setTimeout(function () { resz(i, proba + 1); }, 2000);
+
+                        return;
+                    }
+
+                    g.disabled = false;
+                    kiir((v && v.data && v.data.uzenet) || 'A feltöltés nem sikerült.');
+
+                    return;
+                }
+
+                var mp = (Date.now() - indult) / 1000;
+                var kesz = (i + 1) / osszes;
+
+                allapot({
+                    szazalek: Math.floor(kesz * 100),
+                    reszlet: 'Feltöltés: ' + Math.round(Math.min(f.size, (i + 1) * meret) / 1048576) + ' / ' + Math.round(f.size / 1048576) + ' MB'
+                        + (kesz < 1 && mp > 3 ? ' · hátravan kb. ' + Math.round(mp / kesz - mp) + ' mp' : ''),
+                    uzenet: ''
+                });
+
+                if (i + 1 < osszes) {
+                    resz(i + 1, 0);
+
+                    return;
+                }
+
+                kiir(v.data.uzenet || 'Feltöltve.');
+                folyamat();
+            });
+        }(0, 0));
+    }
+
+    function beallitas() {
+        var b = { mezok: {}, felhasznalok: {}, arukiadas: false, kiegeszit: false };
+
+        doboz.querySelectorAll('[data-sdh-ml3-mezo]').forEach(function (s) {
+            var r = s.getAttribute('data-sdh-ml3-mezo').split('|');
+
+            b.mezok[r[0]] = b.mezok[r[0]] || {};
+            b.mezok[r[0]][r[1]] = s.value;
+        });
+
+        doboz.querySelectorAll('[data-sdh-ml3-felh]').forEach(function (s) {
+            b.felhasznalok[s.getAttribute('data-sdh-ml3-felh')] = parseInt(s.value, 10) || 0;
+        });
+
+        doboz.querySelectorAll('[data-sdh-ml3-opcio]').forEach(function (c) {
+            b[c.getAttribute('data-sdh-ml3-opcio')] = c.checked;
+        });
+
+        return b;
+    }
+
+    /* --- A régi adatok böngészése ----------------------------------------------------------------------- */
+
+    var regiOldal = 1;
+
+    function ertek(v) {
+        if (v === null || v === undefined) {
+            return null;
+        }
+
+        if (typeof v === 'object') {
+            return v;
+        }
+
+        return String(v);
+    }
+
+    function regi(oldal) {
+        var lista = doboz.querySelector('[data-sdh-ml3-regi-lista]');
+        var info = doboz.querySelector('[data-sdh-ml3-regi-info]');
+
+        regiOldal = oldal;
+        info.textContent = 'Keresés…';
+
+        hivas({
+            action: 'sdh_muhely_ml3_regi',
+            tabla: doboz.querySelector('[data-sdh-ml3-regi-tabla]').value,
+            keres: doboz.querySelector('[data-sdh-ml3-regi-keres]').value,
+            oldal: oldal
+        }, function (v) {
+            lista.textContent = '';
+
+            if (!v || !v.success) {
+                info.textContent = (v && v.data && v.data.uzenet) || 'Nem sikerült.';
+
+                return;
+            }
+
+            info.textContent = v.data.db + ' sor';
+
+            var t = el('table', null, 'sdh-tabla');
+            var fej = el('tr');
+
+            ['Azonosító', 'Mi lett belőle', 'Adatok'].forEach(function (c) { fej.appendChild(el('th', c)); });
+            t.appendChild(el('thead')).appendChild(fej);
+
+            var tb = el('tbody');
+
+            v.data.sorok.forEach(function (s) {
+                var tr = el('tr');
+                var dl = el('dl', null, 'sdh-ml3__adat');
+
+                tr.appendChild(el('td', s.kulcs));
+                tr.appendChild(el('td', s.uj || s.megj || '–'));
+
+                Object.keys(s.adat || {}).forEach(function (k) {
+                    var e = ertek(s.adat[k]);
+
+                    if (e === null || e === '') {
+                        return;
+                    }
+
+                    dl.appendChild(el('dt', k));
+
+                    var dd = el('dd');
+
+                    if (typeof e === 'object' && e.$fajl) {
+                        if (e.tar && e.tar.indexOf('fajlok/') === 0) {
+                            var a = el('a', 'letöltés (' + Math.round((e.meret || 0) / 1024) + ' kB)');
+
+                            a.href = lista.getAttribute('data-fajl-url') + '&f=' + encodeURIComponent(e.tar);
+                            dd.appendChild(a);
+                        } else {
+                            dd.textContent = e.tar && e.tar.indexOf('csatolmany:') === 0 ? 'a rendszerben (csatolmány #' + e.tar.split(':')[1] + ')' : 'fájl';
+                        }
+                    } else {
+                        dd.textContent = typeof e === 'object' ? JSON.stringify(e) : e;
+                    }
+
+                    dl.appendChild(dd);
+                });
+
+                tr.appendChild(el('td')).appendChild(dl);
+                tb.appendChild(tr);
+            });
+
+            t.appendChild(tb);
+            lista.appendChild(t);
+
+            if (v.data.lapok > 1) {
+                var lap = el('div', null, 'sdh-ml3__lapozo');
+                var elozo = el('button', '‹ Előző', 'sdh-gomb sdh-gomb--vilagos');
+                var kov = el('button', 'Következő ›', 'sdh-gomb sdh-gomb--vilagos');
+
+                elozo.type = 'button';
+                kov.type = 'button';
+                elozo.disabled = v.data.oldal <= 1;
+                kov.disabled = v.data.oldal >= v.data.lapok;
+                elozo.addEventListener('click', function () { regi(regiOldal - 1); });
+                kov.addEventListener('click', function () { regi(regiOldal + 1); });
+                lap.appendChild(elozo);
+                lap.appendChild(el('span', v.data.oldal + ' / ' + v.data.lapok));
+                lap.appendChild(kov);
+                lista.appendChild(lap);
+            }
+        });
+    }
+
+    doboz.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && e.target.matches('[data-sdh-ml3-regi-keres]')) {
+            e.preventDefault();
+            regi(1);
+        }
+    });
+
+    doboz.addEventListener('click', function (e) {
+        var g = e.target.closest && e.target.closest('button');
+
+        if (!g || !doboz.contains(g)) {
+            return;
+        }
+
+        if (g.hasAttribute('data-sdh-ml3-feltolt')) {
+            var f = doboz.querySelector('[data-sdh-ml3-fajl]').files[0];
+
+            if (!f) {
+                kiir('Válaszd ki a mentést (.wdg) vagy a csomagot (.zip).');
+
+                return;
+            }
+
+            feltolt(f, g);
+
+            return;
+        }
+
+        if (g.hasAttribute('data-sdh-ml3-szerver')) {
+            g.disabled = true;
+            hivas({ action: 'sdh_muhely_ml3_szerver_fajl', ut: doboz.querySelector('[data-sdh-ml3-ut]').value }, function (v) {
+                g.disabled = false;
+
+                if (!v || !v.success) {
+                    kiir((v && v.data && v.data.uzenet) || 'Nem sikerült.');
+
+                    return;
+                }
+
+                allapot(v.data);
+                folyamat();
+            });
+
+            return;
+        }
+
+        if (g.hasAttribute('data-sdh-ml3-beall')) {
+            g.disabled = true;
+            kiir('Mentés és próba…');
+            hivas({
+                action: 'sdh_muhely_ml3_beall_ment',
+                mappa: doboz.querySelector('[data-sdh-ml3-mappa]').value,
+                java: doboz.querySelector('[data-sdh-ml3-java]').value
+            }, function (v) {
+                g.disabled = false;
+                kiir((v && v.data && v.data.uzenet) || 'Nem sikerült.');
+            });
+
+            return;
+        }
+
+        if (g.hasAttribute('data-sdh-ml3-regi-mutat')) {
+            regi(1);
+
+            return;
+        }
+
+        var akcio = g.hasAttribute('data-sdh-ml3-indit') ? 'indit'
+            : g.hasAttribute('data-sdh-ml3-visszavon') ? 'visszavon'
+                : g.hasAttribute('data-sdh-ml3-munkafajlok') ? 'munkafajlok'
+                    : g.hasAttribute('data-sdh-ml3-alaphelyzet') ? 'alaphelyzet' : '';
+
+        if (akcio === '' || !ketlepcsos(g)) {
+            return;
+        }
+
+        g.disabled = true;
+
+        var adat = { action: 'sdh_muhely_ml3_' + akcio };
+
+        if (akcio === 'indit') {
+            adat.beallitas = JSON.stringify(beallitas());
+        }
+
+        hivas(adat, function (v) {
+            if (!v || !v.success) {
+                g.disabled = false;
+                kiir((v && v.data && v.data.uzenet) || 'Nem sikerült.');
+
+                return;
+            }
+
+            if (v.data && v.data.tovabb) {
+                allapot(v.data);
+                folyamat();
+
+                return;
+            }
+
+            window.location.reload();
+        });
+    });
+
+    if (doboz.getAttribute('data-folyik') === '1') {
+        folyamat();
+    }
+}());

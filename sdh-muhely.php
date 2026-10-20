@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       SDH Műhely
  * Description:       Műhely- és ügyfélkezelő rendszer (CRM + munkalap) javítószervizeknek: munkalap, ügyfél, eszköz, pénztár, nyomtatványok.
- * Version:           0.99.5
+ * Version:           0.99.6
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            InfoStudio Hungary – Koltai Norbert
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
  * Alapértékek – egy helyen, hogy sehol ne kelljen útvonalat kézzel írni
  * ================================================================== */
 
-define('SDH_MUHELY_VERSION', '0.99.5');
+define('SDH_MUHELY_VERSION', '0.99.6');
 define('SDH_MUHELY_FILE', __FILE__);
 define('SDH_MUHELY_DIR', plugin_dir_path(__FILE__));   // .../wp-content/plugins/sdh-muhely/
 define('SDH_MUHELY_URL', plugin_dir_url(__FILE__));
@@ -138,6 +138,9 @@ $sdh_muhely_modulok = [
     'includes/class-sdh-muhely-tavoli.php'          => 'SDH_Muhely_Tavoli',
     // U1 (0.94.0): adatátvétel a MunkaLap 3-ból / táblázatból – próba, adagos átvétel, visszavonás.
     'includes/class-sdh-muhely-adatatvetel.php'     => 'SDH_Muhely_Adatatvetel',
+    // Munkalapszoftver Clone (0.99.6): a MunkaLap 3 teljes mentésének (.wdg) átvétele – Java-átalakító, nyers tár, riport.
+    'includes/class-sdh-muhely-ml3-lekepzes.php'    => 'SDH_Muhely_Ml3_Lekepzes',
+    'includes/class-sdh-muhely-ml3.php'             => 'SDH_Muhely_Ml3',
     // Párhuzamos szerkesztés (0.70.0): „közben módosította" és „X is szerkeszti" – a Változásnaplóra és a pulzusra épül.
     'includes/class-sdh-muhely-utkozes.php'         => 'SDH_Muhely_Utkozes',
     'includes/class-sdh-muhely-szemely.php'         => 'SDH_Muhely_Szemely',

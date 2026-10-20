@@ -60,6 +60,7 @@ A bal oldali menü legalján, a **Beállítások** alatt áll a **Modulok** men�
 | IMEI-lekérdezés | szolgáltató, ellenőrző oldalak, beillesztés | eltűnik az eszköz űrlapjáról az Ellenőrzés és a Gyári adatok sor |
 | TAC-adatbázis | gyártó és típus felismerése az IMEI-ből | nincs felismerés, és nem tanul |
 | Eszköz-mockupok | termékkép az eszközök mellett | nincs termékkép |
+| Munkalapszoftver Clone | a MunkaLap 3 teljes mentésének (.wdg) átvétele minden adattal, ellenőrző riporttal, visszavonhatóan | eltűnik a **Beállítások › Munkalapszoftver Clone** lapfül; az átvett adatok és a régi adatok tára megmaradnak |
 | Címkenyomtatás (Brother) | RMA-matrica a készülékre, termék- és szolgáltatás-címke Brother címkenyomtatóval | eltűnik a munkalap **Matrica** gombja, a termék és a szolgáltatás **Címke** gombja és a **Beállítások › Címkenyomtatás** lapfül |
 
 Az **Alaprendszer** – Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés, Napló – mindig fut, nem kapcsolható ki. Az oldal alján tájékoztatásul ezek is látszanak.

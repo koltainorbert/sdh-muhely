@@ -16,6 +16,8 @@ osszefoglalo: A Beállítások › Adatátvétel lapon a régi program (példáu
 
 **Beállítások › Rendszer › Adatátvétel**. Csak adminisztrátor látja.
 
+> **Tipp:** MunkaLap 3-ból egyszerűbb és teljesebb a [Munkalapszoftver Clone](sugo:munkalapclone): a program mentését (.wdg) egyben veszi át, minden táblával, képpel és csatolmánnyal. Ez a lap akkor kell, ha más programból vagy táblázatból jönnek az adatok.
+
 ## Mielőtt elkezded
 
 1. Készíts **mentést**: Beállítások › Mentés › Mentés most.

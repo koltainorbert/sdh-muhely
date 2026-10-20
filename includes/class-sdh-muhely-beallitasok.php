@@ -281,6 +281,11 @@ final class SDH_Muhely_Beallitasok
                 'leiras' => 'A régi program (MunkaLap 3) vagy bármilyen táblázat adatainak átvétele: ügyfelek, eszközök, munkalapok, tételek, hibák – próbával, visszavonhatóan.',
                 'rajz' => [SDH_Muhely_Adatatvetel::class, 'beallitas_doboz'],
             ],
+            'munkalapclone' => [
+                'cim' => 'Munkalapszoftver Clone', 'csoport' => 'rendszer',
+                'leiras' => 'A MunkaLap 3 teljes mentésének (.wdg) átvétele minden adattal – feltöltés, átalakítás, párosítás, adagos átvétel, ellenőrző riport, visszavonás, a régi adatok böngészése.',
+                'rajz' => [SDH_Muhely_Ml3::class, 'beallitas_doboz'],
+            ],
             'licenc' => [
                 'cim' => 'Licenc', 'csoport' => 'rendszer',
                 'leiras' => 'A licenckulcs és a forgalmazó központja (frissítés, állapot), és a támogatási hozzáférés engedélyezése meghatározott időre.',

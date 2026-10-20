@@ -291,6 +291,14 @@ final class SDH_Muhely_Modulok
                 'leiras' => 'Termékkép minden eszköz mellett (kategória, gyártó, típus szerint), saját képekkel.',
                 'szakaszok' => ['mockupok'],
             ],
+
+            // --- Átállás -------------------------------------------------------
+            'munkalapclone' => [
+                'cim' => 'Munkalapszoftver Clone', 'csoport' => 'Átállás', 'ikon' => 'munkalapclone',
+                'leiras' => 'A MunkaLap 3 teljes mentésének (.wdg) átvétele minden adattal: ügyfelek, eszközök, munkalapok állapottörténettel, tételek, hibák, termékek, készlet, képek, e-mailek – ellenőrző riporttal, visszavonhatóan.',
+                'ajax' => ['ml3_'],
+                'szakaszok' => ['munkalapclone'],
+            ],
         ];
     }
 

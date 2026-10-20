@@ -1,0 +1,23 @@
+MunkaLap 3 átalakító – Munkalapszoftver Clone
+==============================================
+
+Mire jó?
+  A MunkaLap 3 mentését (.wdg) olyan csomaggá alakítja, amelyet a rendszer
+  Beállítások › Rendszer › Munkalapszoftver Clone lapján fel lehet tölteni.
+  Akkor kell, ha a rendszer nem azon a gépen fut, ahol a MunkaLap 3 van.
+
+Hogyan?
+  1. Bontsd ki ezt a mappát a MunkaLap 3 gépén (pl. az Asztalra).
+  2. A MunkaLap 3-ban készíts friss mentést (Adatbázis › Mentés) – ez egy .wdg fájl.
+  3. Húzd a .wdg fájlt az Atalakitas.bat-ra.
+  4. Pár perc múlva a .wdg mellett megjelenik a „…-csomag.zip”. Ezt töltsd fel.
+
+Tudnivalók
+  - Semmit nem kell telepíteni: az átalakító a MunkaLap 3 saját Javáját és
+    adatbázismotorját használja (C:\MunkaLap\MunkaLap-3). Ha máshol van a program,
+    add meg a mappáját második paraméterként:
+      Atalakitas.bat "mentes.wdg" "D:\MunkaLap\MunkaLap-3"
+  - Az eredeti mentéshez nem nyúl: egy ideiglenes másolatot olvas, amit a végén töröl.
+  - A csomagban minden adat benne van (ügyfelek, munkalapok, képek, csatolmányok…),
+    kivéve a bélyegképeket (a képekből újra elkészülnek) és a régi jelszó-kivonatokat.
+  - A csomag személyes adatokat tartalmaz: feltöltés után töröld.
