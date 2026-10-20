@@ -26,7 +26,9 @@ verziónapló. Csomagolás: `sh weboldal/eszkozok/csomagol.sh` → `weboldal/dis
   `dokumentacio/fuggetlen-ellenorzes.md`.
 
 ## Telepítés (röviden)
-1. Friss webhely (PHP 8.1+, MySQL 8 / MariaDB 10.6+, HTTPS). A `rejtes-uzemeltetes.md` wp-config- és szerver-beállításai.
+1. Friss webhely (PHP 8.1+, MySQL 8 / MariaDB 10.6+, HTTPS), **a webhely nyelve magyar** (Beállítások › Általános › A honlap
+   nyelve: Magyar – különben a dátumok angolul jelennek meg), időzóna Europe/Budapest. A `rejtes-uzemeltetes.md` wp-config- és
+   szerver-beállításai.
 2. Bővítmények › Új › Feltöltés: `portal-<v>.zip` (bekapcsolás: táblák, szerepkör `sdh_vevo`, kezdőtartalom – 84 oldal,
    22 cikk, GYIK, árak, menük – a `data/` mappából), Megjelenés › Témák: `kirakat-<v>.zip` (bekapcsolás).
 3. Admin › Értékesítés (`admin.php?page=ertekesites`): Beállítások – terméknév (**egy mező**, mindenhol cserél), cégadatok

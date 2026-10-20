@@ -544,7 +544,7 @@ html:has(.s-szikra--lebego) .s-lablec { padding-bottom: calc(var(--s-t-5) + var(
 }
 [data-modul] .s-qr > svg {
     width: 100%; max-width: 220px; height: auto; padding: 10px;
-    border-radius: 16px; background: var(--s-qr-alap, white); /* a QR-kód csak fehér csendes zónával olvasható – mindkét módban (tokenigény: --s-qr-alap) */ box-shadow: var(--s-ragyogas-neon);
+    border-radius: 16px; background: var(--s-qr-alap); /* a QR-kód csak fehér csendes zónával olvasható – mindkét módban */ box-shadow: var(--s-ragyogas-neon);
 }
 [data-modul] .s-qr > figcaption { font-size: var(--s-m-s); color: var(--s-halvany); max-width: 30ch; }
 

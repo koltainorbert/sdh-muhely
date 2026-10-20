@@ -146,6 +146,7 @@
     --s-kiemelo: #ff5a52;          /* márkapiros, sötét háttérre világosítva */
     --s-kiemelo-2: #9d8fff;        /* Központ-ibolya */
     --s-neon: #22d3ee;             /* cián neon */
+    --s-qr-alap: #ffffff;         /* QR-kód háttér: mindkét módban fehér (csak így olvasható) */
     --s-ok: #34d399;
     --s-figyel: #fbbf24;
     --s-hiba: #fb7185;
