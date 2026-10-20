@@ -20,17 +20,19 @@ foreach ($elemek as $e) {
     $cim = sdh_tema_t(sdh_tema_mezo($e, 'cim'));
     $url = sdh_tema_url(sdh_tema_mezo($e, 'url'));
 
-    echo '<li class="s-kartya s-kartya--jellemzo">';
-    echo '<span class="s-ikondoboz">' . sdh_tema_ikon(sdh_tema_mezo($e, 'ikon', 'pipa')) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    $ei = (int) $e['_ei'];
+
+    echo '<li class="s-kartya s-kartya--jellemzo"' . sdh_tema_szerk_mezo($sz, 'elemek', $ei) . '>';
+    echo '<span class="s-ikondoboz"' . sdh_tema_szerk_mezo($sz, 'elemek', $ei, 'ikon') . '>' . sdh_tema_ikon(sdh_tema_mezo($e, 'ikon', 'pipa')) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
     if ($cim !== '') {
-        echo '<h3 class="s-kartya__cim">' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($cim) . '</a>' : esc_html($cim)) . '</h3>';
+        echo '<h3 class="s-kartya__cim"' . sdh_tema_szerk_mezo($sz, 'elemek', $ei, 'cim') . '>' . ($url !== '' ? '<a class="s-kartya__link" href="' . esc_url($url) . '">' . esc_html($cim) . '</a>' : esc_html($cim)) . '</h3>';
     }
 
     $sz_ = sdh_tema_mezo($e, 'szoveg');
 
     if ($sz_ !== '') {
-        echo '<div class="s-kartya__szoveg">' . sdh_tema_szoveg($sz_) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<div class="s-kartya__szoveg"' . sdh_tema_szerk_mezo($sz, 'elemek', $ei, 'szoveg') . '>' . sdh_tema_szoveg($sz_) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
     echo '</li>';

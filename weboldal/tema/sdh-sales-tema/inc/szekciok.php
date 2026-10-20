@@ -69,6 +69,7 @@ function sdh_tema_van_tipus(int $post_id, string $tipus): bool
 function sdh_tema_szekciok(int $post_id): void
 {
     foreach (sdh_tema_szekcio_adat($post_id) as $i => $sz) {
+        $sz['_post'] = $post_id; // a Stúdió szerkesztési útjához (o:{post}/{szekcio}/{mezo})
         sdh_tema_szekcio($sz, (int) $i);
     }
 }
@@ -162,6 +163,31 @@ function sdh_tema_elem_nev(array $e): string
     $a = (array) ($e['adat'] ?? []);
 
     return sdh_tema_t((string) ($a['nev'] ?? $a['cim'] ?? $e['cim'] ?? $e['kulcs'] ?? ''));
+}
+
+/**
+ * Tartalomtár-elem szerkesztési jelölése: `t:{tipus}/{kulcs}[/{mezo}]` (a Stúdió kattintható előnézetéhez).
+ *
+ * @param array<string, mixed> $e a SDH_Sales_Tartalom::lista() egy sora
+ */
+function sdh_tema_elem_szerk(array $e, string $mezo = ''): string
+{
+    $t = (string) ($e['tipus'] ?? '');
+    $k = (string) ($e['kulcs'] ?? '');
+
+    if ($t === '' || $k === '') {
+        return '';
+    }
+
+    if ($mezo === 'nev') {
+        $a    = (array) ($e['adat'] ?? []);
+        $mezo = isset($a['nev']) && $a['nev'] !== '' ? 'nev' : 'cim';
+    } elseif ($mezo === 'leiras') {
+        $a    = (array) ($e['adat'] ?? []);
+        $mezo = isset($a['rovid']) && $a['rovid'] !== '' ? 'rovid' : 'leiras';
+    }
+
+    return sdh_tema_szerk('t:' . $t . '/' . $k . ($mezo !== '' ? '/' . $mezo : ''));
 }
 
 /** Egy elem rövid leírása (rovid / leiras, HTML nélkül). @param array<string, mixed> $e */

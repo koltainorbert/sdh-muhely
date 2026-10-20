@@ -70,9 +70,11 @@ foreach ($cs as $kat => $lista) {
     foreach ($lista as $e) {
         $anchor = sanitize_html_class((string) ($e['anchor'] ?? ('gyik-' . ($e['kulcs'] ?? ''))));
 
-        echo '<details class="s-harmonika" id="' . esc_attr($anchor) . '">';
-        echo '<summary class="s-harmonika__fej"><span class="s-harmonika__cim">' . esc_html(sdh_tema_t(wp_strip_all_tags((string) ($e['kerdes'] ?? '')))) . '</span>' . sdh_tema_ikon('plusz', 's-harmonika__ikon') . '</summary>'; // phpcs:ignore WordPress.Security.EscapeOutput
-        echo '<div class="s-harmonika__test s-proza">' . sdh_tema_html((string) ($e['valasz'] ?? '')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        $tu = !empty($e['kulcs']) ? 't:gyik/' . (string) $e['kulcs'] : '';
+
+        echo '<details class="s-harmonika" id="' . esc_attr($anchor) . '"' . sdh_tema_szerk($tu) . '>';
+        echo '<summary class="s-harmonika__fej"><span class="s-harmonika__cim"' . ($tu !== '' ? sdh_tema_szerk($tu . '/kerdes') : '') . '>' . esc_html(sdh_tema_t(wp_strip_all_tags((string) ($e['kerdes'] ?? '')))) . '</span>' . sdh_tema_ikon('plusz', 's-harmonika__ikon') . '</summary>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<div class="s-harmonika__test s-proza"' . ($tu !== '' ? sdh_tema_szerk($tu . '/valasz') : '') . '>' . sdh_tema_html((string) ($e['valasz'] ?? '')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
         echo '</details>';
     }
 

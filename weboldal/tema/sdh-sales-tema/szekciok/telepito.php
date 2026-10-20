@@ -43,15 +43,15 @@ foreach (sdh_tema_lista('telepites') as $e) {
     if (is_array($a['lepesek'] ?? null)) {
         foreach ($a['lepesek'] as $l) {
             if (is_array($l) && !empty($l['cim'])) {
-                $lepesek[] = ['cim' => (string) $l['cim'], 'szoveg' => (string) ($l['leiras'] ?? $l['szoveg'] ?? ''), 'kulcs' => sanitize_title((string) $l['cim'])];
+                $lepesek[] = ['cim' => (string) $l['cim'], 'szoveg' => (string) ($l['leiras'] ?? $l['szoveg'] ?? ''), 'kulcs' => sanitize_title((string) $l['cim']), 'ut' => 't:telepites/' . $e['kulcs'] . '/lepesek'];
             } elseif (is_string($l) && trim($l) !== '') {
-                $lepesek[] = ['cim' => $l, 'szoveg' => '', 'kulcs' => sanitize_title($l)];
+                $lepesek[] = ['cim' => $l, 'szoveg' => '', 'kulcs' => sanitize_title($l), 'ut' => 't:telepites/' . $e['kulcs'] . '/lepesek'];
             }
         }
         continue;
     }
 
-    $lepesek[] = ['cim' => sdh_tema_elem_nev($e), 'szoveg' => (string) ($a['leiras'] ?? $a['szoveg'] ?? ''), 'kulcs' => sanitize_title((string) $e['kulcs'])];
+    $lepesek[] = ['cim' => sdh_tema_elem_nev($e), 'szoveg' => (string) ($a['leiras'] ?? $a['szoveg'] ?? ''), 'kulcs' => sanitize_title((string) $e['kulcs']), 'ut' => 't:telepites/' . $e['kulcs']];
 }
 
 if ($lepesek === [] && $kov === [] && $lista === []) {
@@ -75,7 +75,7 @@ if ($lepesek !== []) {
     echo '<ol class="s-lepesek s-lepesek--fuggoleges">';
 
     foreach ($lepesek as $i => $l) {
-        echo '<li class="s-lepes" id="' . esc_attr('lepes-' . $l['kulcs']) . '"><span class="s-lepes__szam" aria-hidden="true">' . (int) ($i + 1) . '</span><div class="s-lepes__test">';
+        echo '<li class="s-lepes" id="' . esc_attr('lepes-' . $l['kulcs']) . '"' . sdh_tema_szerk((string) $l['ut']) . '><span class="s-lepes__szam" aria-hidden="true">' . (int) ($i + 1) . '</span><div class="s-lepes__test">';
         echo '<h3 class="s-lepes__cim">' . esc_html(sdh_tema_t($l['cim'])) . '</h3>';
         echo '<div class="s-lepes__szoveg s-proza">' . sdh_tema_szoveg($l['szoveg']) . '</div></div></li>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }

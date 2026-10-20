@@ -40,7 +40,8 @@ if ($sorok !== []) {
     echo '<thead><tr><th scope="col" class="s-tabla__elso">' . esc_html(sdh_tema__('Szempont')) . '</th><th scope="col" class="s-tabla__kiemelt">' . esc_html(sdh_tema_termeknev()) . '</th><th scope="col">' . esc_html(sdh_tema__('Más rendszerek')) . '</th></tr></thead><tbody>';
 
     foreach ($sorok as $s) {
-        echo '<tr><th scope="row" class="s-tabla__elso">' . esc_html(sdh_tema_t(sdh_tema_mezo($s, 'szempont'))) . '</th><td class="s-tabla__kiemelt">' . $jel(sdh_tema_mezo($s, 'mi')) . '</td><td>' . $jel(sdh_tema_mezo($s, 'mas')) . '</td></tr>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        $ei = (int) $s['_ei'];
+        echo '<tr' . sdh_tema_szerk_mezo($sz, 'sorok', $ei) . '><th scope="row" class="s-tabla__elso"' . sdh_tema_szerk_mezo($sz, 'sorok', $ei, 'szempont') . '>' . esc_html(sdh_tema_t(sdh_tema_mezo($s, 'szempont'))) . '</th><td class="s-tabla__kiemelt"' . sdh_tema_szerk_mezo($sz, 'sorok', $ei, 'mi') . '>' . $jel(sdh_tema_mezo($s, 'mi')) . '</td><td' . sdh_tema_szerk_mezo($sz, 'sorok', $ei, 'mas') . '>' . $jel(sdh_tema_mezo($s, 'mas')) . '</td></tr>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
     echo '</tbody></table></div>';
@@ -78,7 +79,7 @@ if ($sorok !== []) {
         foreach ($kon as $k) {
             $a   = (array) $k['adat'];
             $nev = sdh_tema_elem_nev($k);
-            echo '<th scope="col">' . esc_html($nev) . '</th>';
+            echo '<th scope="col"' . sdh_tema_elem_szerk($k, 'nev') . '>' . esc_html($nev) . '</th>';
         }
 
         echo '</tr></thead><tbody>';
@@ -131,7 +132,7 @@ if ($sorok !== []) {
 $megj = sdh_tema_mezo($sz, 'megjegyzes');
 
 if ($megj !== '') {
-    echo '<p class="s-tabla__megj">' . esc_html(sdh_tema_t($megj)) . '</p>';
+    echo '<p class="s-tabla__megj"' . sdh_tema_szerk_mezo($sz, 'megjegyzes') . '>' . esc_html(sdh_tema_t($megj)) . '</p>';
 }
 
 echo sdh_tema_szekcio_zar($sz); // phpcs:ignore WordPress.Security.EscapeOutput

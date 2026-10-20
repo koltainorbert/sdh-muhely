@@ -19,15 +19,15 @@ $sdh_ceg    = sdh_tema_ceg();
 	<div class="s-kont">
 		<div class="s-lablec__racs">
 			<div class="s-lablec__marka">
-				<a class="s-logo" href="<?php echo esc_url(home_url('/')); ?>">
+				<a class="s-logo" href="<?php echo esc_url(home_url('/')); ?>"<?php echo sdh_tema_szerk('b:termeknev'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 					<span class="s-logo__jel" aria-hidden="true"><?php echo sdh_tema_ikon('villam'); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 					<span class="s-logo__nev"><?php echo esc_html(sdh_tema_termeknev()); ?></span>
 				</a>
 				<?php $sdh_szlogen = trim(sdh_tema_t('{szlogen}')); ?>
 				<?php if ($sdh_szlogen !== '') : ?>
-					<p class="s-lablec__szlogen"><?php echo esc_html($sdh_szlogen); ?></p>
+					<p class="s-lablec__szlogen"<?php echo sdh_tema_szerk('b:szlogen'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html($sdh_szlogen); ?></p>
 				<?php endif; ?>
-				<address class="s-lablec__ceg">
+				<address class="s-lablec__ceg"<?php echo sdh_tema_szerk('b:ceg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 					<strong><?php echo esc_html($sdh_ceg['nev']); ?></strong>
 					<?php if ($sdh_ceg['cim'] !== '') : ?>
 						<span><?php echo esc_html($sdh_ceg['cim']); ?></span>
@@ -49,7 +49,7 @@ $sdh_ceg    = sdh_tema_ceg();
 
 			<?php foreach ($sdh_lablec as $sdh_i => $sdh_o) : ?>
 				<?php $sdh_gy = (array) $sdh_o['gyerekek']; ?>
-				<nav class="s-lablec__oszlop" aria-labelledby="<?php echo esc_attr('lablec-' . $sdh_i); ?>">
+				<nav class="s-lablec__oszlop" aria-labelledby="<?php echo esc_attr('lablec-' . $sdh_i); ?>"<?php echo sdh_tema_szerk('m:lablec/' . $sdh_i); // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 					<h2 class="s-lablec__cim" id="<?php echo esc_attr('lablec-' . $sdh_i); ?>">
 						<?php if ($sdh_gy === [] && $sdh_o['url'] !== '') : ?>
 							<a href="<?php echo esc_url($sdh_o['url']); ?>"><?php echo esc_html($sdh_o['cim']); ?></a>
@@ -59,9 +59,9 @@ $sdh_ceg    = sdh_tema_ceg();
 					</h2>
 					<?php if ($sdh_gy !== []) : ?>
 						<ul>
-							<?php foreach ($sdh_gy as $sdh_g) : ?>
+							<?php foreach ($sdh_gy as $sdh_j => $sdh_g) : ?>
 								<?php if ($sdh_g['url'] === '') { continue; } ?>
-								<li><a href="<?php echo esc_url($sdh_g['url']); ?>"><?php echo esc_html($sdh_g['cim']); ?></a></li>
+								<li<?php echo sdh_tema_szerk('m:lablec/' . $sdh_i . '/' . $sdh_j); // phpcs:ignore WordPress.Security.EscapeOutput ?>><a href="<?php echo esc_url($sdh_g['url']); ?>"><?php echo esc_html($sdh_g['cim']); ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
@@ -73,11 +73,11 @@ $sdh_ceg    = sdh_tema_ceg();
 			<p class="s-lablec__copy">&copy; <?php echo esc_html(wp_date('Y') . ' ' . $sdh_ceg['nev']); ?></p>
 			<nav class="s-lablec__jogi" aria-label="<?php echo esc_attr(sdh_tema__('Jogi információk')); ?>">
 				<ul>
-					<?php foreach ($sdh_jogi as $sdh_j) : ?>
+					<?php foreach ($sdh_jogi as $sdh_ji => $sdh_j) : ?>
 						<?php if ($sdh_j['url'] === '') { continue; } ?>
-						<li><a href="<?php echo esc_url($sdh_j['url']); ?>"><?php echo esc_html($sdh_j['cim']); ?></a></li>
+						<li<?php echo sdh_tema_szerk('m:jogi/' . $sdh_ji); // phpcs:ignore WordPress.Security.EscapeOutput ?>><a href="<?php echo esc_url($sdh_j['url']); ?>"><?php echo esc_html($sdh_j['cim']); ?></a></li>
 					<?php endforeach; ?>
-					<li><button type="button" class="s-linkgomb s-suti-megnyit"><?php echo esc_html(sdh_tema__('Süti-beállítások')); ?></button></li>
+					<li><button type="button" class="s-linkgomb s-suti-megnyit"<?php echo sdh_tema_szerk_felirat('Süti-beállítások'); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo esc_html(sdh_tema__('Süti-beállítások')); ?></button></li>
 				</ul>
 			</nav>
 		</div>

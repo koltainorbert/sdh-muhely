@@ -22,7 +22,7 @@ echo sdh_tema_szekcio_nyit($sz + ['cim' => ''], ['fej' => false]); // phpcs:igno
 $cim = sdh_tema_mezo($sz, 'cim');
 
 if ($cim !== '') {
-    echo '<h2 class="s-logo-sav__cim">' . esc_html(sdh_tema_t($cim)) . '</h2>';
+    echo '<h2 class="s-logo-sav__cim"' . sdh_tema_szerk_mezo($sz, 'cim') . '>' . esc_html(sdh_tema_t($cim)) . '</h2>';
 }
 
 echo '<ul class="s-logo-sav" role="list">';
@@ -37,7 +37,7 @@ foreach ($logok as $l) {
         continue;
     }
 
-    echo '<li class="s-logo-sav__elem">' . ($url !== '' ? '<a href="' . esc_url($url) . '" rel="noopener" target="_blank" aria-label="' . esc_attr($nev) . '">' . $belo . '</a>' : $belo) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput
+    echo '<li class="s-logo-sav__elem"' . sdh_tema_szerk_mezo($sz, 'logok', (int) $l['_ei']) . '>' . ($url !== '' ? '<a href="' . esc_url($url) . '" rel="noopener" target="_blank" aria-label="' . esc_attr($nev) . '">' . $belo . '</a>' : $belo) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 echo '</ul>';

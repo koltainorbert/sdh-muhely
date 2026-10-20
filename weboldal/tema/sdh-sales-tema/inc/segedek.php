@@ -43,11 +43,154 @@ function sdh_tema_t(string $s): string
     return (string) preg_replace('/\{[a-z_]+\}/', '', $s);
 }
 
-/** Fordítható + tokenezett szöveg a témából. */
+/**
+ * Fordítható + tokenezett szöveg a témából. Ha a szöveg szerepel a feliratjegyzékben (inc/feliratok.php), a Stúdióban
+ * megadott felülírás érvényes (sdh_tema_f) – így a téma minden kódba írt felirata szerkeszthető.
+ */
 function sdh_tema__(string $s): string
 {
+    $k = sdh_tema_felirat_kulcs($s);
+
+    if ($k !== '') {
+        return sdh_tema_f($k, $s);
+    }
+
     // A szöveg fordítás után megy a tokencserén át (a fordítás is tartalmazhat tokent).
     return sdh_tema_t(translate($s, 'sdh-sales-tema')); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+}
+
+/**
+ * A téma feliratainak jegyzéke: kulcs => ['alap', 'csoport', 'leiras'] (a Stúdió „Feliratok” lapja ebből dolgozik).
+ *
+ * @return array<string, array{alap: string, csoport: string, leiras: string}>
+ */
+function sdh_tema_feliratok(): array
+{
+    static $j = null;
+
+    if ($j === null) {
+        $f = __DIR__ . '/feliratok.php';
+        $j = is_file($f) ? (array) include $f : [];
+        $j = (array) apply_filters('sdh_tema_feliratok', $j);
+    }
+
+    return $j;
+}
+
+/** Az alapszöveghez tartozó feliratkulcs ('' ha nincs a jegyzékben). */
+function sdh_tema_felirat_kulcs(string $alap): string
+{
+    static $vissza = null;
+
+    if ($vissza === null) {
+        $vissza = [];
+
+        foreach (sdh_tema_feliratok() as $k => $f) {
+            $a = (string) ($f['alap'] ?? '');
+
+            if ($a !== '' && !isset($vissza[$a])) {
+                $vissza[$a] = (string) $k;
+            }
+        }
+    }
+
+    return $vissza[$alap] ?? '';
+}
+
+/** @return array<string, string> a Stúdióban felülírt feliratok (kulcs => szöveg) */
+function sdh_tema_felirat_felulirasok(): array
+{
+    // A get_option a WP objektum-gyorsítótárából jön (autoload) – kérésen belül olcsó, és mentés után azonnal friss.
+    $o = get_option('sdh_sales_feliratok', []);
+    $f = [];
+
+    foreach (is_array($o) ? $o : [] as $k => $v) {
+        if (is_string($k) && is_scalar($v)) {
+            $v = trim(wp_strip_all_tags((string) $v));
+
+            if ($v !== '') {
+                $f[$k] = mb_substr($v, 0, 500);
+            }
+        }
+    }
+
+    return $f;
+}
+
+/**
+ * Egy felirat a látogatónak: a Stúdióban megadott felülírás (sdh_sales_feliratok opció), különben az alapszöveg
+ * (fordítva). Mindkettő a tokencserén megy át ({termeknev}…). A kimenet sima szöveg – a hívó escapel.
+ */
+function sdh_tema_f(string $kulcs, string $alap): string
+{
+    $fel = sdh_tema_felirat_felulirasok();
+
+    if (isset($fel[$kulcs])) {
+        return sdh_tema_t($fel[$kulcs]);
+    }
+
+    return sdh_tema_t(translate($alap, 'sdh-sales-tema')); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+}
+
+/**
+ * Kattintható szerkesztés jelölése (a Stúdió élő előnézetéhez): ` data-…="út"` attribútum, ha a bővítmény Stúdiója aktív,
+ * különben ''. Út: `o:{post}/{szekcio}/{mezo}[/{elem}/{almezo}]`, `f:{felirat}`, `b:{beallitas}`, `m:{hely}/{index}`,
+ * `t:{tipus}/{kulcs}/{mezo}`. A visszatérés már escapelt attribútum-szöveg (vezető szóközzel).
+ */
+function sdh_tema_szerk(string $ut): string
+{
+    if ($ut === '') {
+        return '';
+    }
+
+    /**
+     * Szűrő a Stúdió előtt (teszt, más szerkesztő): nem-null érték esetén az az attribútum-szöveg.
+     *
+     * @param string|null $attr
+     */
+    $a = apply_filters('sdh_tema_szerk_attr', null, $ut);
+
+    if ($a === null) {
+        if (!class_exists('SDH_Sales_Studio') || !method_exists('SDH_Sales_Studio', 'attr')) {
+            return '';
+        }
+
+        try {
+            $a = SDH_Sales_Studio::attr($ut);
+        } catch (Throwable $e) {
+            return '';
+        }
+    }
+
+    $a = trim((string) $a);
+
+    return $a === '' ? '' : ' ' . $a;
+}
+
+/** Egy kódba írt felirat szerkesztési jelölése az alapszövege alapján (`f:{kulcs}`; '' ha nincs a jegyzékben). */
+function sdh_tema_szerk_felirat(string $alap): string
+{
+    $k = sdh_tema_felirat_kulcs($alap);
+
+    return $k !== '' ? sdh_tema_szerk('f:' . $k) : '';
+}
+
+/** A szerkesztési út egy szekció-mezőhöz (a szekció adata `_post` és `_i` mezőt kap a diszpécsertől). @param array<string, mixed> $sz */
+function sdh_tema_szerk_mezo(array $sz, string $mezo = '', ?int $elem = null, string $almezo = ''): string
+{
+    $post = (int) ($sz['_post'] ?? 0);
+
+    if ($post <= 0) {
+        return '';
+    }
+
+    $ut = 'o:' . $post . '/' . (int) ($sz['_i'] ?? 0) . ($mezo !== '' ? '/' . $mezo : '');
+
+    if ($elem !== null) {
+        $ut .= '/' . $elem . ($almezo !== '' ? '/' . $almezo : '');
+    }
+
+    return sdh_tema_szerk($ut);
 }
 
 function sdh_tema_termeknev(): string
@@ -91,7 +234,8 @@ function sdh_tema_lista(string $tipus): array
     }
 
     try {
-        return SDH_Sales_Tartalom::lista($tipus);
+        // A típus minden sorba (a Stúdió szerkesztési útjához: t:{tipus}/{kulcs}/{mezo}).
+        return array_map(static fn ($e) => is_array($e) ? $e + ['tipus' => $tipus] : $e, SDH_Sales_Tartalom::lista($tipus));
     } catch (Throwable $e) {
         return [];
     }
@@ -297,9 +441,17 @@ function sdh_tema_mezo(array $sz, string $kulcs, string $alap = ''): string
 /** Egy szekció-mező listaként (csak a tömb-elemek). @param array<string, mixed> $sz @return array<int, array<string, mixed>> */
 function sdh_tema_elemek(array $sz, string $kulcs = 'elemek'): array
 {
-    $v = $sz[$kulcs] ?? [];
+    $v  = $sz[$kulcs] ?? [];
+    $ki = [];
 
-    return is_array($v) ? array_values(array_filter($v, 'is_array')) : [];
+    foreach (is_array($v) ? $v : [] as $i => $e) {
+        if (is_array($e)) {
+            $e['_ei'] = is_int($i) ? $i : count($ki); // az eredeti sorszám (a Stúdió szerkesztési útjához)
+            $ki[]     = $e;
+        }
+    }
+
+    return $ki;
 }
 
 /** Szöveges lista (kulcsok, pillek). @param array<string, mixed> $sz @return array<int, string> */
@@ -347,7 +499,8 @@ function sdh_tema_gombok($cta, string $osztaly = ''): string
         $st = (string) ($g['stilus'] ?? ($i === 0 ? 'elsodleges' : 'masodlagos'));
         $st = in_array($st, ['elsodleges', 'masodlagos', 'szellem', 'link', 'neon'], true) ? $st : 'masodlagos';
         $uj  = !empty($g['uj']);
-        $ki .= '<a class="s-gomb s-gomb--' . esc_attr($st) . '" href="' . esc_url($url) . '"' . ($uj ? ' target="_blank" rel="noopener"' : '') . '>' . esc_html($sz) . ($st === 'elsodleges' || $st === 'link' ? sdh_tema_ikon('nyil-jobb', 's-gomb__ikon') : '') . '</a>';
+        $sa  = !empty($g['_ut']) ? sdh_tema_szerk_mezo($g, (string) $g['_ut']) : (!empty($g['_szerk']) ? sdh_tema_szerk((string) $g['_szerk']) : '');
+        $ki .= '<a class="s-gomb s-gomb--' . esc_attr($st) . '" href="' . esc_url($url) . '"' . ($uj ? ' target="_blank" rel="noopener"' : '') . $sa . '>' . esc_html($sz) . ($st === 'elsodleges' || $st === 'link' ? sdh_tema_ikon('nyil-jobb', 's-gomb__ikon') : '') . '</a>';
         $i++;
     }
 
@@ -405,7 +558,7 @@ function sdh_tema_szekcio_nyit(array $sz, array $o = []): string
     $osztaly = 's-szekcio s-szekcio--' . $tipus . ' s-hatter--' . $hatt
         . (in_array($terk, ['kicsi', 'nagy'], true) ? ' s-terkoz--' . $terk : '')
         . (!empty($o['osztaly']) ? ' ' . $o['osztaly'] : '');
-    $ki = '<section id="' . esc_attr($id) . '" class="' . esc_attr($osztaly) . '"' . ($cim !== '' ? ' aria-labelledby="' . esc_attr($cimid) . '"' : '') . '>';
+    $ki = '<section id="' . esc_attr($id) . '" class="' . esc_attr($osztaly) . '"' . ($cim !== '' ? ' aria-labelledby="' . esc_attr($cimid) . '"' : '') . sdh_tema_szerk_mezo($sz) . '>';
     $ki .= '<div class="s-kont' . (in_array($szel, ['szuk', 'keskeny'], true) ? ' s-kont--szuk' : ($szel === 'szeles' ? ' s-kont--szeles' : '')) . '">';
 
     if (($o['fej'] ?? true) && ($cim !== '' || sdh_tema_eyebrow($sz) !== '' || sdh_tema_mezo($sz, 'alcim') !== '')) {
@@ -437,6 +590,12 @@ function sdh_tema_eyebrow(array $sz): string
     return sdh_tema_mezo($sz, 'eyebrow', sdh_tema_mezo($sz, 'cimke'));
 }
 
+/** Melyik mezőből jön a kis felirat (a szerkesztési úthoz). @param array<string, mixed> $sz */
+function sdh_tema_eyebrow_mezo(array $sz): string
+{
+    return sdh_tema_mezo($sz, 'eyebrow') !== '' ? 'eyebrow' : 'cimke';
+}
+
 /**
  * A szekció gombjai egy listában: `cta` [{szoveg, url, stilus}] és/vagy az admin `gomb` / `gomb2` link-mezői.
  *
@@ -452,9 +611,12 @@ function sdh_tema_cta(array $sz): array
         $cta = [$cta];
     }
 
-    foreach (is_array($cta) ? $cta : [] as $g) {
+    $egy = is_array($sz['cta'] ?? null) && isset($sz['cta']['szoveg']);
+
+    foreach (is_array($cta) ? $cta : [] as $n => $g) {
         if (is_array($g)) {
-            $ki[] = $g;
+            $g['_ut'] = $egy ? 'cta' : 'cta/' . (int) $n;
+            $ki[]     = $g;
         }
     }
 
@@ -462,8 +624,13 @@ function sdh_tema_cta(array $sz): array
         $g = $sz[$k] ?? null;
 
         if (is_array($g) && trim((string) ($g['szoveg'] ?? '')) !== '' && trim((string) ($g['url'] ?? '')) !== '') {
-            $ki[] = ['szoveg' => (string) $g['szoveg'], 'url' => (string) $g['url'], 'stilus' => (string) ($g['stilus'] ?? ($ki === [] ? 'elsodleges' : $st)), 'uj' => !empty($g['uj'])];
+            $ki[] = ['szoveg' => (string) $g['szoveg'], 'url' => (string) $g['url'], 'stilus' => (string) ($g['stilus'] ?? ($ki === [] ? 'elsodleges' : $st)), 'uj' => !empty($g['uj']), '_ut' => $k];
         }
+    }
+
+    foreach ($ki as $n => $g) {
+        $ki[$n]['_post'] = (int) ($sz['_post'] ?? 0);
+        $ki[$n]['_i']    = (int) ($sz['_i'] ?? 0);
     }
 
     return $ki;
@@ -479,15 +646,15 @@ function sdh_tema_szekcio_fej(array $sz, string $cimid, string $szint = 'h2', st
     $alcim = sdh_tema_mezo($sz, 'alcim');
 
     if ($eb !== '') {
-        $ki .= '<p class="s-eyebrow">' . esc_html(sdh_tema_t($eb)) . '</p>';
+        $ki .= '<p class="s-eyebrow"' . sdh_tema_szerk_mezo($sz, sdh_tema_eyebrow_mezo($sz)) . '>' . esc_html(sdh_tema_t($eb)) . '</p>';
     }
 
     if ($cim !== '') {
-        $ki .= '<' . $szint . ' id="' . esc_attr($cimid) . '" class="s-szekcio__cim">' . esc_html(sdh_tema_t($cim)) . '</' . $szint . '>';
+        $ki .= '<' . $szint . ' id="' . esc_attr($cimid) . '" class="s-szekcio__cim"' . sdh_tema_szerk_mezo($sz, 'cim') . '>' . esc_html(sdh_tema_t($cim)) . '</' . $szint . '>';
     }
 
     if ($alcim !== '') {
-        $ki .= '<p class="s-szekcio__alcim">' . esc_html(sdh_tema_t($alcim)) . '</p>';
+        $ki .= '<p class="s-szekcio__alcim"' . sdh_tema_szerk_mezo($sz, (string) ($sz['_alcim_mezo'] ?? 'alcim')) . '>' . esc_html(sdh_tema_t($alcim)) . '</p>';
     }
 
     return $ki . '</header>';
@@ -515,7 +682,7 @@ function sdh_tema_mount(string $nev, array $sz = [], array $attr = [], string $t
         SDH_Sales_Front::igeny($nev);
     }
 
-    $opc = array_diff_key($sz, array_flip(['tipus', 'id', 'horgony', 'cim', 'alcim', 'eyebrow', 'cimke', 'hatter', 'terkoz', 'cta', 'rejtett', '_i', 'szelesseg', 'igazitas']));
+    $opc = array_diff_key($sz, array_flip(['tipus', 'id', 'horgony', 'cim', 'alcim', 'eyebrow', 'cimke', 'hatter', 'terkoz', 'cta', 'rejtett', '_i', '_post', 'szelesseg', 'igazitas']));
     $ki  = '<div class="s-mount s-mount--' . esc_attr($nev) . '" data-modul="' . esc_attr($nev) . '"';
 
     if ($opc !== []) {

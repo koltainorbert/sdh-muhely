@@ -60,22 +60,24 @@ foreach ($csomagok as $k => $c) {
     $ked     = sdh_tema_eves_kedvezmeny($c);
     $cimid   = sdh_tema_azon('csomag-' . $k);
 
-    echo '<li class="s-kartya s-arkartya' . ($kiemelt ? ' s-arkartya--kiemelt' : '') . '" id="' . esc_attr('csomag-' . sanitize_title((string) $k)) . '" aria-labelledby="' . esc_attr($cimid) . '">';
+    $tu = 't:csomag/' . $k;
+
+    echo '<li class="s-kartya s-arkartya' . ($kiemelt ? ' s-arkartya--kiemelt' : '') . '" id="' . esc_attr('csomag-' . sanitize_title((string) $k)) . '" aria-labelledby="' . esc_attr($cimid) . '"' . sdh_tema_szerk($tu) . '>';
 
     if ($kiemelt) {
-        echo '<p class="s-arkartya__szalag"><span class="s-pill s-pill--neon">' . esc_html(sdh_tema__('Legnépszerűbb')) . '</span></p>';
+        echo '<p class="s-arkartya__szalag"><span class="s-pill s-pill--neon"' . sdh_tema_szerk_felirat('Legnépszerűbb') . '>' . esc_html(sdh_tema__('Legnépszerűbb')) . '</span></p>';
     }
 
-    echo '<h3 class="s-arkartya__nev" id="' . esc_attr($cimid) . '">' . esc_html(sdh_tema_t((string) $c['nev'])) . '</h3>';
+    echo '<h3 class="s-arkartya__nev" id="' . esc_attr($cimid) . '"' . sdh_tema_szerk($tu . '/nev') . '>' . esc_html(sdh_tema_t((string) $c['nev'])) . '</h3>';
 
     if (!empty($c['leiras'])) {
-        echo '<p class="s-arkartya__leiras">' . esc_html(sdh_tema_t((string) $c['leiras'])) . '</p>';
+        echo '<p class="s-arkartya__leiras"' . sdh_tema_szerk($tu . '/leiras') . '>' . esc_html(sdh_tema_t((string) $c['leiras'])) . '</p>';
     }
 
     if ($havi <= 0 && $eves <= 0) {
         echo '<div class="s-arkartya__ar"><p class="s-ar"><span class="s-ar__osszeg s-ar__osszeg--szoveg">' . esc_html(sdh_tema__('Egyedi ajánlat')) . '</span></p><p class="s-ar__afa">' . esc_html(sdh_tema__('Az igényeid alapján árazzuk.')) . '</p></div>';
     } else {
-        echo '<div class="s-arkartya__ar s-ar--havi">' . sdh_tema_ar_blokk($havi, sdh_tema__('/ hó')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<div class="s-arkartya__ar s-ar--havi"' . sdh_tema_szerk($tu . '/havi') . '>' . sdh_tema_ar_blokk($havi, sdh_tema__('/ hó')) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 
         $megj = $eves > 0 ? sprintf(/* translators: %s: havi átlag */ sdh_tema__('havonta átlagosan %s'), sdh_tema_ft((int) round($eves / 12))) : '';
 
@@ -83,7 +85,7 @@ foreach ($csomagok as $k => $c) {
             $megj .= ' · ' . sprintf(/* translators: %d: % */ sdh_tema__('%d%% megtakarítás'), $ked);
         }
 
-        echo '<div class="s-arkartya__ar s-ar--eves">' . sdh_tema_ar_blokk($eves > 0 ? $eves : $havi * 12, sdh_tema__('/ év'), $megj) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<div class="s-arkartya__ar s-ar--eves"' . sdh_tema_szerk($tu . '/eves') . '>' . sdh_tema_ar_blokk($eves > 0 ? $eves : $havi * 12, sdh_tema__('/ év'), $megj) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
     // Keretek: felhasználó, telephely, példány.
@@ -138,7 +140,7 @@ foreach ($csomagok as $k => $c) {
     $gomb = sdh_tema_t((string) ($c['cta'] ?? '')) ?: sdh_tema__('Megveszem');
     $url  = add_query_arg(['csomag' => rawurlencode((string) $k)], sdh_tema_kosar_url('kosar'));
 
-    echo '<a class="s-gomb ' . ($kiemelt ? 's-gomb--elsodleges' : 's-gomb--masodlagos') . ' s-gomb--teljes" href="' . esc_url($url) . '" data-kosarba="' . sdh_tema_json_attr(['csomag' => (string) $k]) . '" data-ciklus-link>'
+    echo '<a class="s-gomb ' . ($kiemelt ? 's-gomb--elsodleges' : 's-gomb--masodlagos') . ' s-gomb--teljes" href="' . esc_url($url) . '" data-kosarba="' . sdh_tema_json_attr(['csomag' => (string) $k]) . '" data-ciklus-link' . sdh_tema_szerk($tu . '/cta') . '>'
         . esc_html($gomb) . '<span class="s-sr"> – ' . esc_html(sdh_tema_t((string) $c['nev'])) . '</span></a>';
     echo '</li>';
 }
@@ -148,5 +150,5 @@ echo '</ul></div>';
 $megj = sdh_tema_mezo($sz, 'megjegyzes');
 
 // Az admin megjegyzése felülírja az alap áfa-mondatot (különben kétszer állna ugyanaz).
-echo '<p class="s-arak__megj">' . esc_html($megj !== '' ? sdh_tema_t($megj) : sprintf(/* translators: %d: áfa % */ sdh_tema__('Minden ár nettó, a %d%% áfát a számla tartalmazza.'), sdh_tema_afa())) . '</p>';
+echo '<p class="s-arak__megj"' . ($megj !== '' ? sdh_tema_szerk_mezo($sz, 'megjegyzes') : sdh_tema_szerk_felirat('Minden ár nettó, a %d%% áfát a számla tartalmazza.')) . '>' . esc_html($megj !== '' ? sdh_tema_t($megj) : sprintf(/* translators: %d: áfa % */ sdh_tema__('Minden ár nettó, a %d%% áfát a számla tartalmazza.'), sdh_tema_afa())) . '</p>';
 echo sdh_tema_szekcio_zar($sz); // phpcs:ignore WordPress.Security.EscapeOutput

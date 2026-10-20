@@ -63,7 +63,7 @@ echo '<table class="s-tabla s-tabla--osszevet"><caption class="s-sr">' . esc_htm
 echo '<thead><tr><th scope="col" class="s-tabla__elso">' . esc_html(sdh_tema__('Szempont')) . '</th>';
 
 foreach ($csomagok as $c) {
-    echo '<th scope="col"' . (!empty($c['kiemelt']) ? ' class="s-tabla__kiemelt"' : '') . '>' . esc_html(sdh_tema_t((string) $c['nev'])) . '</th>';
+    echo '<th scope="col"' . (!empty($c['kiemelt']) ? ' class="s-tabla__kiemelt"' : '') . sdh_tema_szerk('t:csomag/' . (string) ($c['kulcs'] ?? '') . '/nev') . '>' . esc_html(sdh_tema_t((string) $c['nev'])) . '</th>';
 }
 
 echo '</tr></thead><tbody>';
