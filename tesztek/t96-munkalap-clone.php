@@ -93,7 +93,14 @@ $tablak = [
     'APP.EMAIL_ATTACHEMENT' => ['EMAIL_ATTACHEMENT_ID', [
         ['EMAIL_ATTACHEMENT_ID' => 1, 'CONNECTION_ID' => 1, 'NAME' => 'Munkalap (880001)', 'EXTENSION' => 'pdf', 'CONTENT' => ['$fajl' => 'files/EMAIL_ATTACHEMENT/1.CONTENT.pdf']],
     ]],
-    'APP.SYSTEM_PROPERTY' => ['PROPERTY_KEY', [['PROPERTY_KEY' => 'worksheet.editor.defaultState', 'PROPERTY' => '1']]],
+    'APP.SYSTEM_PROPERTY' => ['PROPERTY_KEY', [
+        ['PROPERTY_KEY' => 'worksheet.editor.defaultState', 'PROPERTY' => '1'],
+        // Csak kis- és nagybetűben különböző, és 64 karakternél hosszabb, csak a végén eltérő kulcsok (a valódi mentésben is vannak).
+        ['PROPERTY_KEY' => 'ACCESS.version', 'PROPERTY' => '1.11'],
+        ['PROPERTY_KEY' => 'access.version', 'PROPERTY' => '1.12'],
+        ['PROPERTY_KEY' => str_repeat('worksheet.printout.internal.', 3) . 'xerox workcentre 3025', 'PROPERTY' => 'a'],
+        ['PROPERTY_KEY' => str_repeat('worksheet.printout.internal.', 3) . 'xerox workcentre 3215', 'PROPERTY' => 'b'],
+    ]],
     'APP.FILE' => ['FILE_ID', [['FILE_ID' => 1, 'FILE_KEY' => 'printout.header.logo', 'BYTES' => ['$fajl' => 'files/FILE/1.BYTES.bin']]]],
 ];
 
@@ -252,11 +259,29 @@ try {
     $jav = $a['javaslat'];
     $jav['mezok']['THING']['28'] = 'kihagy';
     T::egyezik('', $M::indit($jav), 'átvétel indítva');
+    // Apró időkeret: sok kérés, a táblahatárok kérésen belül is átlépődnek (a hivatkozás-térkép ne legyen részleges).
+    $kicsi = static fn (): float => 0.003;
+    add_filter('sdh_muhely_ml3_idokeret', $kicsi);
+    $lepes_db = 0;
+
+    for ($i = 0; $i < 3000; $i++) {
+        $M::urit();          // minden lépés új kérés (üres gyorsítótárral), kevés sorral
+        $o = $M::lepes();
+        $lepes_db++;
+
+        if (!$o['tovabb']) {
+            break;
+        }
+    }
+
+    remove_filter('sdh_muhely_ml3_idokeret', $kicsi);
+    T::igaz($lepes_db > 5, 'sok kis lépésben (' . $lepes_db . ')');
     $o = $futtat();
     T::egyezik('befejezve', $o['fazis'], 'az átvétel befejeződött');
     $a = $M::allapot();
     T::egyezik(0, (int) ($a['hibak_db'] ?? 0), 'hiba nélkül (' . implode(' | ', (array) ($a['hibak'] ?? [])) . ')');
 
+    T::egyezik(0, (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $M::nyers_tabla() . " WHERE megj LIKE '%nincs meg%'"), 'minden hivatkozás feloldva (nincs „gazdarekord nincs meg”)');
     $nyers_db = (int) $wpdb->get_var('SELECT COUNT(*) FROM ' . $M::nyers_tabla());
     $regi_db  = array_sum(array_map(static fn (array $t): int => count($t[1]), $tablak));
     T::egyezik($regi_db, $nyers_db, 'minden régi sor a nyers tárban (' . $regi_db . ')');

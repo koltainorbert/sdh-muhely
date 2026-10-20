@@ -33,7 +33,7 @@ final class SDH_Muhely_Ml3
     public const OPT        = 'sdh_muhely_ml3_allapot';
     public const OPT_BEALL  = 'sdh_muhely_ml3_beallitasok';
     public const OPT_DB     = 'sdh_muhely_ml3_db_version';
-    public const DB_VERZIO  = '1.0.0';
+    public const DB_VERZIO  = '1.1.0';
     public const IMPORT_ID  = 'ml3';
     public const FORRAS     = 'munkalap3';
     public const MAPPA      = 'sdh-muhely/munkalap3';
@@ -108,7 +108,9 @@ final class SDH_Muhely_Ml3
     /** A modul saját táblája (a fő sémától függetlenül, hogy ki-be kapcsolható modul maradjon). */
     public static function tabla_telepit(): void
     {
-        if (get_option(self::OPT_DB) === self::DB_VERZIO) {
+        $volt = get_option(self::OPT_DB);
+
+        if ($volt === self::DB_VERZIO) {
             return;
         }
 
@@ -116,10 +118,23 @@ final class SDH_Muhely_Ml3
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-        dbDelta('CREATE TABLE ' . self::nyers_tabla() . " (
+        $nt = self::nyers_tabla();
+
+        // 1.0.0 → 1.1.0: a kulcs egyedisége kis- és nagybetű-érzékeny lenyomaton (a MunkaLap kulcsai csak kisbetű-
+        // nagybetűben is különbözhetnek, és 64 karakternél hosszabbak is lehetnek).
+        if ($volt === '1.0.0') {
+            if ((int) $wpdb->get_var("SELECT COUNT(*) FROM {$nt}") === 0) {
+                $wpdb->query("DROP TABLE IF EXISTS {$nt}");
+            } else {
+                $wpdb->query("ALTER TABLE {$nt} DROP INDEX tabla_kulcs");
+            }
+        }
+
+        dbDelta('CREATE TABLE ' . $nt . " (
             id bigint(20) unsigned NOT NULL auto_increment,
             tabla varchar(40) NOT NULL default '',
-            kulcs varchar(64) NOT NULL default '',
+            kulcs varchar(190) NOT NULL default '',
+            kh char(32) NOT NULL default '',
             szulo varchar(64) NOT NULL default '',
             adat longtext NULL,
             hash char(32) NOT NULL default '',
@@ -130,10 +145,17 @@ final class SDH_Muhely_Ml3
             megj varchar(255) NOT NULL default '',
             atveve datetime NULL,
             PRIMARY KEY  (id),
-            UNIQUE KEY tabla_kulcs (tabla,kulcs),
+            UNIQUE KEY tabla_kh (tabla,kh),
+            KEY tabla_kulcs (tabla,kulcs),
             KEY tabla_szulo (tabla,szulo),
             KEY uj (uj_tabla,uj_id)
         ) " . $wpdb->get_charset_collate() . ';');
+
+        if ($volt === '1.0.0') {
+            foreach ((array) $wpdb->get_results("SELECT id, kulcs FROM {$nt} WHERE kh = ''") as $s) {
+                $wpdb->update($nt, ['kh' => md5((string) $s->kulcs)], ['id' => (int) $s->id]);
+            }
+        }
 
         update_option(self::OPT_DB, self::DB_VERZIO, false);
     }
@@ -236,7 +258,7 @@ final class SDH_Muhely_Ml3
             return null;
         }
 
-        $adat = $wpdb->get_var($wpdb->prepare('SELECT adat FROM ' . self::nyers_tabla() . ' WHERE tabla = %s AND kulcs = %s', $tabla, $kulcs));
+        $adat = $wpdb->get_var($wpdb->prepare('SELECT adat FROM ' . self::nyers_tabla() . ' WHERE tabla = %s AND kh = %s', $tabla, md5($kulcs)));
         $d    = $adat !== null ? json_decode((string) $adat, true) : null;
 
         if (count(self::$nyers_tar[$tabla] ?? []) > 5000) {
@@ -628,7 +650,7 @@ final class SDH_Muhely_Ml3
 
     private static function van_ido(): bool
     {
-        return microtime(true) - self::$indult < self::IDOKERET;
+        return microtime(true) - self::$indult < (float) apply_filters('sdh_muhely_ml3_idokeret', self::IDOKERET);
     }
 
     /**
@@ -1086,9 +1108,8 @@ final class SDH_Muhely_Ml3
                 }
 
                 fseek($f, (int) $at['offset']);
-                $db = 0;
 
-                while (($db++ % 25 !== 0 || self::van_ido()) && ($l = fgets($f)) !== false) {
+                while (self::van_ido() && ($l = fgets($f)) !== false) {
                     $at['offset'] = ftell($f);
                     $at['kesz_sorok']++;
 
@@ -1207,7 +1228,7 @@ final class SDH_Muhely_Ml3
             return;
         }
 
-        $kulcs = mb_substr(self::kulcs($a, $tabla, $sor), 0, 64);
+        $kulcs = mb_substr(self::kulcs($a, $tabla, $sor), 0, 190);
         $hash  = md5($sor_json);
         $nt    = self::nyers_tabla();
 
@@ -1228,7 +1249,7 @@ final class SDH_Muhely_Ml3
             return;
         }
 
-        $meg   = $volt !== null ? $wpdb->get_row($wpdb->prepare("SELECT id, uj_tabla, uj_id, letrehozta, kapcsolt, adat FROM {$nt} WHERE tabla = %s AND kulcs = %s", $tabla, $kulcs)) : null;
+        $meg   = $volt !== null ? $wpdb->get_row($wpdb->prepare("SELECT id, uj_tabla, uj_id, letrehozta, kapcsolt, adat FROM {$nt} WHERE tabla = %s AND kh = %s", $tabla, md5($kulcs))) : null;
         $elozo = $meg !== null ? json_decode((string) $meg->adat, true) : null;
 
         // A fájlok: a leképezés a rendszerbe teszi őket, ami nem kell sehova, az a modul tárába kerül.
@@ -1258,7 +1279,7 @@ final class SDH_Muhely_Ml3
         }
 
         $nyers = [
-            'tabla' => $tabla, 'kulcs' => $kulcs, 'szulo' => mb_substr(self::szulo($tabla, $sor), 0, 64),
+            'tabla' => $tabla, 'kulcs' => $kulcs, 'kh' => md5($kulcs), 'szulo' => mb_substr(self::szulo($tabla, $sor), 0, 64),
             'adat' => (string) wp_json_encode($sor, JSON_UNESCAPED_UNICODE), 'hash' => $hash, 'atveve' => current_time('mysql'),
             'uj_tabla' => (string) $ered['uj_tabla'], 'uj_id' => (int) $ered['uj_id'], 'letrehozta' => (int) $ered['letrehozta'],
             'kapcsolt' => mb_substr((string) $ered['kapcsolt'], 0, 255), 'megj' => mb_substr((string) $ered['megj'], 0, 255),
@@ -1281,7 +1302,8 @@ final class SDH_Muhely_Ml3
             self::$nyers_tar[$tabla][$kulcs] = $sor;
         }
 
-        if ((int) $ered['uj_id'] > 0) {
+        // Csak a már betöltött térképhez adjuk hozzá: egy itt létrehozott, részleges térkép elfedné a korábbi kérések sorait.
+        if ((int) $ered['uj_id'] > 0 && isset(self::$uj_tar[$tabla])) {
             self::$uj_tar[$tabla][$kulcs] = (int) $ered['uj_id'];
         }
 
@@ -1953,6 +1975,7 @@ final class SDH_Muhely_Ml3
             'ido' => current_time('mysql'), 'nyers' => (int) $wpdb->get_var("SELECT COUNT(*) FROM {$nt}"), 'regi_sorok' => (int) ($a['manifest']['osszes_sor'] ?? 0),
             'tablak' => $tablak, 'uj' => $uj, 'regi_brutto' => $regi_brutto, 'uj_brutto' => round($uj_brutto, 2),
             'fajlok_regi' => (int) ($a['manifest']['fajlok'] ?? 0), 'fajlok_bent' => $fajl_db, 'hibak_db' => (int) ($a['hibak_db'] ?? 0),
+            'feloldatlan' => (int) $wpdb->get_var("SELECT COUNT(*) FROM {$nt} WHERE megj LIKE '%nincs meg%'"),
             'perc' => max(1, (int) round((time() - (int) ($a['atvetel']['indult'] ?? time())) / 60)),
         ];
     }
@@ -2670,6 +2693,9 @@ final class SDH_Muhely_Ml3
                 <?php echo esc_html(self::szam((int) $e['regi_sorok'])); ?> régi sorból <?php echo esc_html(self::szam((int) $e['nyers'])); ?> van a régi adatok tárában
                 <?php echo $ok ? '– minden sor megvan.' : '– HIÁNYZIK ' . esc_html(self::szam((int) $e['regi_sorok'] - (int) $e['nyers'])) . ' sor (lásd a figyelmeztetéseket).'; ?>
                 Fájlok: <?php echo esc_html(self::szam((int) $e['fajlok_bent'])); ?> / <?php echo esc_html(self::szam((int) $e['fajlok_regi'])); ?>.
+                <?php if ((int) ($e['feloldatlan'] ?? 0) > 0) : ?>
+                    <?php echo esc_html(self::szam((int) $e['feloldatlan'])); ?> régi sor gazdája hiányzott a mentésből (pl. törölt munkalap hibája) – ezek csak a régi adatok közt vannak.
+                <?php endif; ?>
             </p>
             <table class="sdh-tabla">
                 <thead><tr><th>Létrejött</th><th>Darab</th></tr></thead>

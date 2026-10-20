@@ -98,7 +98,15 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 - **Újraátvétel** csak a változást írja (lenyomat soronként), az új állapotváltások a naplóba; **visszavonás** mindent töröl,
   amit a modul létrehozott, és visszaállítja a kiegészített beállításokat (fizetési módok, „Nem javítandó”).
 - **Ellenőrző riport** (régi sorok ↔ nyers tár, új rekordok, végösszeg, fájlok) és **Régi adatok** böngésző (keresés,
-  fájlletöltés). Súgó: `sugo/32-munkalapclone.md`. Teszt: `t96` (122 állítás); `t47` 18 modulra.
+  fájlletöltés). Súgó: `sugo/32-munkalapclone.md`. Teszt: `t96` (124 állítás); `t47` 18 modulra.
+- **Próba a valódi mentéssel** (MunkaLap 3.857, 2026-10-09; SQLite-os tesztoldalon): átalakítás 55–80 s; átvétel 24 perc;
+  287 948 / 287 948 régi sor a tárban, 7 851 / 7 851 fájl; 34 928 munkalap (ebből 8 042 napi árukiadás), 16 237 ügyfél,
+  24 317 eszköz, 96 373 állapotváltás, 28 480 hiba, 67 057 tétel, 13 269 termék, 5 891 szolgáltatás (9 124-ből összevonva),
+  43 682 készletmozgás, 12 761 fájl; a munkalapok végösszege egyezik (954 918 457 Ft). A régi adatbázisban gazdátlan sorok
+  (13 e-mail-melléklet, 1 hiba, 6 lap törölt ügyféllel) csak a régi adatok közt vannak – a riport jelzi.
+- A próba közben javítva: a régi kulcsok egyedisége kis-/nagybetű-érzékeny lenyomaton (`kh`, a MunkaLap beállításkulcsai csak
+  betűméretben is eltérnek, és 64 karakternél hosszabbak); a hivatkozás-térkép kérésen belül nem lehet részleges (a
+  táblahatáron átnyúló kérésben elveszett volna csatolmány / hiba-hivatkozás).
 
 ### 0.99.5 – terméknév, vevői csomag licencszöveggel, központ 2.1
 - **Termék neve** (Beállítások › Logó és megjelenés): a szoftver neve egyetlen beállítás (`SDH_Muhely_Arculat::termeknev()`);
