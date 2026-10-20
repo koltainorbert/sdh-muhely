@@ -24,9 +24,9 @@ $_SERVER['REMOTE_ADDR'] = '203.0.113.50';
 
 /* --- Verzió, séma ----------------------------------------------------------------------------------------------- */
 
-T::egyezik('2.1.0', SDH_KOZPONT_VERSION, 'verzió 2.1.0');
+T::egyezik('2.2.0', SDH_KOZPONT_VERSION, 'verzió 2.2.0 (2.2: beágyazható a Portálba)');
 $fej = (string) file_get_contents(dirname(__DIR__) . '/kozpont/sdh-kozpont/sdh-kozpont.php');
-T::igaz(preg_match('/^\s*\*\s*Version:\s*2\.1\.0\s*$/m', $fej) === 1, 'fejléc: Version 2.1.0');
+T::igaz(preg_match('/^\s*\*\s*Version:\s*2\.2\.0\s*$/m', $fej) === 1, 'fejléc: Version 2.2.0');
 T::tartalmaz($fej, '`kiszolgalas`', 'fejléc: a kiszolgálási végpont leírva');
 T::tartalmaz($fej, '`letoltes`', 'fejléc: a letöltő végpont leírva');
 T::egyezik('2.1.0', (string) get_option('sdh_kozpont_db'), 'DB 2.1.0');

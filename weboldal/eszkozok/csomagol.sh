@@ -2,7 +2,7 @@
 # Az értékesítő webhely csomagjai – semleges mappa- és fájlnevekkel (REJTES.md: a kimenetben nem lehet „sdh”).
 #   sh weboldal/eszkozok/csomagol.sh [kimeneti mappa]     (alap: weboldal/dist)
 # Kimenet:
-#   portal-<v>.zip     – az értékesítő bővítmény (mappa: portal/, fő fájl: portal.php)
+#   portal-<v>.zip     – az értékesítő bővítmény (mappa: portal/, fő fájl: portal.php; benne a licencközpont: licenc/)
 #   kirakat-<v>.zip    – a téma (mappa: kirakat/)
 #   bemutato-<v>.zip   – a demó-korlátozó (mappa: bemutato/, fő fájl: bemutato.php)
 # A csomagba nem kerül: tesztek, fejlesztői dokumentáció, forrás-segédek (bin/), .map, rejtett fájlok.
@@ -29,6 +29,24 @@ for d in includes data; do
   printf 'Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n' > "$MUNKA/portal/$d/.htaccess"
   [ -f "$MUNKA/portal/$d/index.php" ] || printf '<?php\n// Csend.\n' > "$MUNKA/portal/$d/index.php"
 done
+
+# A licencközpont beágyazva (licenc/): egy telepítéssel jön, ha a különálló Központ nincs bekapcsolva (SDH_Sales_Licenc).
+KOZPONT_DIR="$GYOKER/../kozpont/sdh-kozpont"
+if [ -f "$KOZPONT_DIR/sdh-kozpont.php" ]; then
+  mkdir -p "$MUNKA/portal/licenc"
+  cp -a "$KOZPONT_DIR/." "$MUNKA/portal/licenc/"
+  mv "$MUNKA/portal/licenc/sdh-kozpont.php" "$MUNKA/portal/licenc/kozpont.php"
+  # Nem bővítmény-fejléc (a beágyazott fájl sosem jelenik meg külön bővítményként).
+  sed -i 's/^ \* Plugin Name:.*/ * Licencközpont – a Portál beágyazott része./; s/^ \* Text Domain:.*/ */' "$MUNKA/portal/licenc/kozpont.php"
+  for f in "$MUNKA"/portal/licenc/includes/class-sdh-kozpont*.php; do
+    n="$(basename "$f" | sed 's/^class-sdh-kozpont/class-k/')"; mv "$f" "$MUNKA/portal/licenc/includes/$n"
+  done
+  printf 'Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n' > "$MUNKA/portal/licenc/includes/.htaccess"
+  printf '<?php\n// Csend.\n' > "$MUNKA/portal/licenc/includes/index.php"
+  [ -f "$MUNKA/portal/licenc/index.php" ] || printf '<?php\n// Csend.\n' > "$MUNKA/portal/licenc/index.php"
+else
+  echo "HIBA: a licencközpont forrása nincs meg ($KOZPONT_DIR)"; exit 1
+fi
 
 # --- téma ---------------------------------------------------------------------
 V_TEMA="$(verzio "$GYOKER/tema/sdh-sales-tema/style.css")"

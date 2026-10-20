@@ -69,6 +69,20 @@ final class SDH_Kozpont
         add_action(self::CRON, [self::class, 'idozitett']);
     }
 
+    /** A Portál (értékesítő bővítmény) csomagjában fut-e, beágyazva. */
+    public static function beagyazott(): bool
+    {
+        return defined('SDH_KOZPONT_BEAGYAZVA') && SDH_KOZPONT_BEAGYAZVA;
+    }
+
+    /** Ahol a licenceket kezelik (a riasztó levelekben is ez a link). Beágyazva a Portál adja meg a szűrővel. */
+    public static function felulet_url(): string
+    {
+        $alap = admin_url('admin.php?page=' . (class_exists('SDH_Kozpont_App') ? SDH_Kozpont_App::oldal_kulcs() : 'sdh-kozpont'));
+
+        return (string) apply_filters('sdh_kozpont_felulet_url', $alap);
+    }
+
     public static function t(string $nev): string
     {
         global $wpdb;
@@ -829,7 +843,7 @@ final class SDH_Kozpont
         }
 
         $up    = wp_upload_dir();
-        $mappa = trailingslashit($up['basedir']) . 'sdh-kozpont';
+        $mappa = trailingslashit($up['basedir']) . (self::beagyazott() ? 'licenc-kiadas' : 'sdh-kozpont');
         wp_mkdir_p($mappa);
 
         if (!is_file($mappa . '/.htaccess')) {
@@ -837,7 +851,7 @@ final class SDH_Kozpont
             file_put_contents($mappa . '/index.php', "<?php\n"); // phpcs:ignore WordPress.WP.AlternativeFunctions
         }
 
-        $cel = $mappa . '/sdh-muhely-' . $m[1] . '-' . wp_generate_password(12, false, false) . '.zip';
+        $cel = $mappa . '/' . (self::beagyazott() ? 'kiadas-' : 'sdh-muhely-') . $m[1] . '-' . wp_generate_password(12, false, false) . '.zip';
 
         if (!copy($tmp, $cel)) {
             return 'A fájl nem menthető.';
@@ -1290,7 +1304,7 @@ final class SDH_Kozpont
             return;
         }
 
-        wp_mail($cim, '[SDH Központ] ' . $targy, $szoveg . "\n\n" . admin_url('admin.php?page=sdh-kozpont'));
+        wp_mail($cim, '[' . (self::beagyazott() ? 'Licencközpont' : 'SDH Központ') . '] ' . $targy, $szoveg . "\n\n" . self::felulet_url());
     }
 
     /**
