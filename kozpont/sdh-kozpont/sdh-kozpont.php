@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       SDH Központ
  * Description:       Az SDH Műhely forgalmazói központja: vevők (CRM), licencek és jogok, élő rendszerfigyelés, távoli karbantartás és támogatás, kiadások.
- * Version:           2.1.0
+ * Version:           2.2.0
  * Requires PHP:      8.0
  * Text Domain:       sdh-kozpont
  *
@@ -29,6 +29,10 @@
  *   Licenckulcs-előtag: Beállítások › Értékesítő webhely (`kulcs_elotag`, alapból a terméknévből, végül „LIC”);
  *   a régi `SDH-` kulcsok változatlanul érvényesek.
  * - `app/*` – a Központ felülete (bejelentkezett adminisztrátor, REST-nonce)
+ * - 2.2: beágyazható – az értékesítő bővítmény (Portál) a saját csomagjában hozza (`licenc/` mappa, semleges fájlnevek:
+ *   `kozpont.php`, `includes/class-k*.php`), ha a különálló Központ nincs bekapcsolva. Beágyazva (`SDH_KOZPONT_BEAGYAZVA`)
+ *   nincs saját felső menü, belépés utáni átirányítás és admin-sáv gomb; a licenceket a Portál adminja kezeli, a teljes
+ *   központ-felület rejtett haladó oldalként érhető el. Ha a különálló bővítmény is aktív, az fut (nincs dupla betöltés).
  *
  * @package SDH_Kozpont
  */
@@ -37,14 +41,23 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SDH_KOZPONT_VERSION', '2.1.0');
+// Egy példány fut: ha egy másik másolat (különálló bővítmény / beágyazott) már betöltődött, ez kimarad.
+if (defined('SDH_KOZPONT_VERSION') || class_exists('SDH_Kozpont', false)) {
+    return;
+}
+
+define('SDH_KOZPONT_VERSION', '2.2.0');
 define('SDH_KOZPONT_FILE', __FILE__);
 define('SDH_KOZPONT_DIR', __DIR__);
 
-require_once __DIR__ . '/includes/class-sdh-kozpont.php';
-require_once __DIR__ . '/includes/class-sdh-kozpont-api.php';
-require_once __DIR__ . '/includes/class-sdh-kozpont-app.php';
-require_once __DIR__ . '/includes/class-sdh-kozpont-kiszolgalas.php';
+// A fájlnév előtagja a tárolóban `class-sdh-kozpont`, a semleges (beágyazott) csomagban `class-k`.
+$sdh_kozpont_elotag = is_file(__DIR__ . '/includes/class-k.php') ? 'class-k' : 'class-sdh-kozpont';
+
+foreach (['', '-api', '-app', '-kiszolgalas'] as $sdh_kozpont_v) {
+    require_once __DIR__ . '/includes/' . $sdh_kozpont_elotag . $sdh_kozpont_v . '.php';
+}
+
+unset($sdh_kozpont_elotag, $sdh_kozpont_v);
 
 SDH_Kozpont::init();
 SDH_Kozpont_Api::init();
