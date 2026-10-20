@@ -172,7 +172,7 @@
         const cs = r.csoportok.filter((c) => !csak || csak.includes(c.cim));
         const f = { csop: opciok.csop || (cs[0] || {}).cim || '', q: '', csakFelulirt: false, oldal: 1 };
         const valt = {};
-        const LAP = 20;
+        let LAP = 20;
         hova.innerHTML = `<div class="${cs.length > 1 && !csak ? 'sa-ketpanel' : ''}">
             ${cs.length > 1 && !csak ? `<nav class="sa-kartya sa-almenu" aria-label="Felirat-csoportok">${cs.map((c) => `<button type="button" data-fcsop="${e(c.cim)}" aria-current="${c.cim === f.csop}">${I('felirat')}<span>${e(c.cim)}</span><small>${c.elemek.length}</small></button>`).join('')}</nav>` : ''}
             <div class="sa-oszlop"><div class="sa-kartya"><div class="sa-kartya__fej"><div><h2 class="sa-kartya__cim" data-fcim>${e(opciok.cim || 'Feliratok')}</h2><div class="sa-kartya__al">Üresen hagyva az alapszöveg él. Tokenek: {termeknev}, {ceg}.</div></div><span class="sa-ter"></span><span data-allapot></span></div>
@@ -184,6 +184,7 @@
         const ertekOf = (x) => (valt[x.kulcs] !== undefined ? valt[x.kulcs] : x.ertek);
         const jel = () => { const p = Object.keys(valt).length > 0; $('[data-allapot]', hova).innerHTML = p ? cimke(`${Object.keys(valt).length} mentetlen`, 'figyel') : ''; $('[data-fment]', hova).disabled = !p; $('[data-felvet]', hova).disabled = !p; };
         const rajzol = () => {
+            LAP = A.lapMeret(flista, 86);
             const q = f.q.toLowerCase();
             const l = minden().filter((x) => (!q || (x.kulcs + ' ' + x.alap + ' ' + ertekOf(x) + ' ' + x.leiras).toLowerCase().includes(q)) && (!f.csakFelulirt || ertekOf(x)));
             const max = Math.max(1, Math.ceil(l.length / LAP));

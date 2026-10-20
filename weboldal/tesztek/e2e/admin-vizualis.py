@@ -349,7 +349,7 @@ MERO = r"""
 FOKUSZ_JS = r"""
 () => {
   const el = document.activeElement;
-  if (!el || el === document.body) return null;
+  if (!el || el === document.body || el.tagName === 'IFRAME') return null; // az előnézet: a fókusz a betöltött oldal saját elemein látszik
   const nev = el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.split(/\s+/).filter(Boolean).slice(0, 2).join('.') : '') + ' «' + ((el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 24)) + '»';
   const kep = (x) => { if (!x) return ''; const s = getComputedStyle(x); return [s.outlineStyle, s.outlineWidth, s.outlineColor, s.boxShadow, s.borderColor, s.backgroundColor].join('|'); };
   const t = [el, el.nextElementSibling, el.parentElement];

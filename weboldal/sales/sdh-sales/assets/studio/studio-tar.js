@@ -10,7 +10,7 @@
 
     const ES = B.elemek || {};
     const PENZ = (s) => (s.mezok || []).filter((m) => m.penz).map((m) => m.k).slice(0, 2);
-    const LAP = 20;
+    let LAP = 20;
 
     /* ================================================================== Általános tartalomtár-panel */
 
@@ -35,6 +35,7 @@
             return elemek.filter((x) => (!q || (x.cim + ' ' + x.kulcs + ' ' + JSON.stringify(x.adat)).toLowerCase().includes(q)) && (!f.kat || !km || String(A.kiolvas(x.adat, km.k) || '') === f.kat));
         };
         const rajzol = () => {
+            LAP = A.lapMeret(lista);
             const s = ES[f.tipus];
             const penz = PENZ(s);
             const km = katMezo();
@@ -59,6 +60,7 @@
                 <td class="sa-jobb"><span class="sa-sor" style="justify-content:flex-end;gap:4px"><button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-masol aria-label="${e(x.cim)} másolása" title="Másolat">${I('duplikal')}</button><button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi sa-ikon-gomb--veszely" data-torol aria-label="${e(x.cim)} törlése" title="Kukába" data-ketlepcsos="Biztos? Kukába teszem">${I('torol')}</button></span></td></tr>`).join('')}</tbody></table></div>`
                 : ures(f.q || f.kat ? 'Nincs találat.' : `Még nincs ${s.egyes.toLowerCase()}.`, 'elem');
             if (l.length > LAP) lista.appendChild(lapozo(l.length, f.oldal, LAP, (n) => { f.oldal = n; rajzol(); }));
+            if (!lista.dataset.igazitva && l.length > LAP && A.tulcsordul()) { lista.dataset.igazitva = '1'; rajzol(); }
         };
         const toltes = async () => { elemek = (await api('admin/elemek', { query: { tipus: f.tipus } })).lista; rajzol(); };
         const sz = $('[data-szegmens]', hova);
@@ -184,6 +186,7 @@
             <div class="sa-kartya sa-kartya--sima" data-lista aria-live="polite"></div>`;
         const lista = $('[data-lista]', hova);
         const rajzol = async () => {
+            LAP = A.lapMeret(lista, 57);
             const r = await api('admin/blog', { query: { statusz: f.statusz, kategoria: f.kat, q: f.q, oldal: f.oldal, db: LAP } });
             lista.innerHTML = r.lista.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Cikk</th><th>Kategória</th><th>Állapot</th><th>Dátum</th><th class="sa-jobb"><span class="sa-sr">Műveletek</span></th></tr></thead><tbody>${r.lista.map((x) => `
                 <tr class="${f.statusz === 'trash' ? '' : 'is-katt'}" data-cikk="${x.id}" ${f.statusz === 'trash' ? '' : 'tabindex="0"'}><td><div class="sa-sor" style="gap:10px;flex-wrap:nowrap">${x.kep ? `<img src="${e(x.kep)}" alt="" class="st-blog-kep" loading="lazy">` : `<span class="st-blog-kep st-blog-kep--ures">${I('kep')}</span>`}<span class="sa-vastag sa-egysor" style="--sa-cella-max:420px" title="${e(x.cim)}">${e(x.cim || '(cím nélkül)')}</span></div></td>

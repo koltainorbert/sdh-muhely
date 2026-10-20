@@ -960,6 +960,19 @@
         return d;
     }
 
+    /** Lapméret a nézethez: asztalon (≥ 1024 px) annyi sor, amennyi görgetés nélkül elfér (KERET: asztalon nincs oldalgörgetés). */
+    function lapMeret(el, sor = 53, alap = 20) {
+        if (!el || window.innerWidth < 1024) return alap;
+        const volt = el.querySelector('tbody tr, .st-felirat');
+        if (volt) sor = Math.max(sor, Math.ceil(volt.getBoundingClientRect().height));
+        const fent = el.getBoundingClientRect().top + window.scrollY;
+        const hely = window.innerHeight - fent - 44 - 64 - 44; // táblafej + lapozó + alsó levegő
+        return Math.max(5, Math.min(alap, Math.floor(hely / sor)));
+    }
+
+    /** Az oldal görget-e (asztalon a lista első rajzolása után egyszer újramérünk a valódi sormagassággal). */
+    const tulcsordul = () => window.innerWidth >= 1024 && document.documentElement.scrollHeight > window.innerHeight + 1;
+
     /** Kattintható sor: Enter / Szóköz is nyitja. */
     function sorKattint(hova, szelektor, fn) {
         hova.addEventListener('click', (ev) => { const s = ev.target.closest(szelektor); if (s && !ev.target.closest('button, a, input, select, label')) fn(s); });
@@ -1588,7 +1601,7 @@
 
     window.PA = {
         B, S, $, $$, e, I, WI, api, jelez, bemond, masol, letolt, tolt, popup, popupHiba, fulek, fulHtml, urlap, urlapMezok, mezoVezerlo, kapcsolo,
-        szegmens, lapozo, sorKattint, kesleltet, rendezheto, elemLista, elemCache, ures, csontvaz, hibaKartya, nincsBekapcsolva, cim, diffHtml, lapit,
+        szegmens, lapozo, lapMeret, tulcsordul, sorKattint, kesleltet, rendezheto, elemLista, elemCache, ures, csontvaz, hibaKartya, nincsBekapcsolva, cim, diffHtml, lapit,
         cimke, ft, szam, brutto, datum, datumIdo, relativ, van, lebego, kiolvas, beir, rendelesPopup, mediaValaszt, oldalLista, oldalValaszto, naptar,
         panelek: () => panelek(), menuCsopAllit, route,
         panel: (kulcs, fn) => { RAJZOLOK[kulcs] = fn; },

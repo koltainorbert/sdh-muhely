@@ -65,7 +65,7 @@
 
     A.panel('oldalak', async (hova, [id]) => {
         if (id) return epito(hova, Number(id));
-        const f = S.szurok.oldalak = Object.assign({ nezet: 'mind', q: '' }, S.szurok.oldalak || {});
+        const f = S.szurok.oldalak = Object.assign({ nezet: 'mind', q: '', oldal: 1 }, S.szurok.oldalak || {});
         const [r, kuka] = await Promise.all([api('admin/oldalak'), api('admin/oldalak', { query: { kuka: 1 } }).catch(() => ({ lista: [] }))]);
         let oldalak = r.lista;
         hova.innerHTML = `<div class="sa-eszkozsor">${szegmens('Nézet', { mind: `Minden oldal <small>${oldalak.length}</small>`, szekcios: `Szekciós <small>${oldalak.filter((x) => x.szekcios).length}</small>`, vazlat: `Vázlatok <small>${oldalak.filter((x) => x.statusz !== 'publish' || x.piszkozat).length}</small>`, kuka: `Kuka <small>${kuka.lista.length}</small>` }, f.nezet)}<span class="sa-ter"></span>
@@ -77,7 +77,10 @@
         const rajzol = () => {
             const q = f.q.toLowerCase();
             const forras = f.nezet === 'kuka' ? kuka.lista : oldalak;
-            const l = forras.filter((x) => (f.nezet !== 'szekcios' || x.szekcios) && (f.nezet !== 'vazlat' || x.statusz !== 'publish' || x.piszkozat) && (!q || x.cim.toLowerCase().includes(q) || x.ut.includes(q)));
+            const osszes = forras.filter((x) => (f.nezet !== 'szekcios' || x.szekcios) && (f.nezet !== 'vazlat' || x.statusz !== 'publish' || x.piszkozat) && (!q || x.cim.toLowerCase().includes(q) || x.ut.includes(q)));
+            const LAP = A.lapMeret(lista);
+            f.oldal = Math.min(Math.max(1, f.oldal), Math.max(1, Math.ceil(osszes.length / LAP)));
+            const l = osszes.slice((f.oldal - 1) * LAP, f.oldal * LAP);
             lista.innerHTML = l.length ? `<div class="sa-tabla-doboz"><table class="sa-tabla"><thead><tr><th>Oldal</th><th>Útvonal</th><th class="sa-jobb">Szekciók</th><th>Állapot</th><th>Módosítva</th><th class="sa-jobb"><span class="sa-sr">Műveletek</span></th></tr></thead><tbody>${l.map((x) => `
                 <tr class="${f.nezet === 'kuka' ? '' : 'is-katt'}" data-oldal="${x.id}" ${f.nezet === 'kuka' ? '' : 'tabindex="0"'}><td><span class="st-fa-behuz" style="--m:${q ? 0 : melyseg(x)}"></span><span class="sa-vastag">${e(x.cim || '(cím nélkül)')}</span>${x.kezdolap ? ' ' + cimke('Kezdőlap', 'kiemelo') : ''}${x.piszkozat ? ' ' + cimke('Mentetlen piszkozat', 'figyel') : ''}${x.jogi ? ' ' + cimke('Jogi', 'szurke') : ''}</td><td class="sa-mono sa-halvany"><div class="sa-egysor" style="--sa-cella-max:240px" title="/${e(x.ut)}">/${e(x.ut)}</div></td>
                 <td class="sa-jobb">${x.szekcios ? A.szam(x.szekcio_db) : '<span class="sa-halvany">–</span>'}</td><td>${cimke(...(STATUSZ[x.statusz] || [x.statusz, 'szurke']))}</td><td class="sa-halvany">${e(relativ(x.modositva))}</td>
@@ -85,10 +88,12 @@
                     ? `<button type="button" class="sa-gomb sa-gomb--kicsi" data-vissza="${x.id}">${I('visszaall')}Visszaállítás</button><button type="button" class="sa-gomb sa-gomb--kicsi sa-gomb--veszely" data-vegleges="${x.id}" data-ketlepcsos="Biztos? Véglegesen törlöm">${I('torol')}Végleges törlés</button>`
                     : `<button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-masol="${x.id}" aria-label="${e(x.cim)} másolása" title="Másolat (vázlat)">${I('duplikal')}</button>${x.statusz === 'publish' && !x.kezdolap ? `<button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi" data-kezdo="${x.id}" aria-label="${e(x.cim)} legyen a kezdőlap" title="Legyen a kezdőlap" data-ketlepcsos="Biztos? Ez lesz a kezdőlap">${I('csillag')}</button>` : ''}${x.kezdolap ? '' : `<button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi sa-ikon-gomb--veszely" data-kuka="${x.id}" aria-label="${e(x.cim)} kukába" title="Kukába" data-ketlepcsos="Biztos? A kukába teszem">${I('torol')}</button>`}<a class="sa-ikon-gomb sa-ikon-gomb--kicsi" href="${e(x.url)}" target="_blank" rel="noopener" aria-label="${e(x.cim)} megnyitása a webhelyen" title="Megnyitás a webhelyen">${I('kulso')}</a>`}</span></td></tr>`).join('')}</tbody></table></div>`
                 : ures(f.nezet === 'kuka' ? 'A kuka üres.' : (q ? 'Nincs találat.' : 'Még nincs oldal.'), 'oldal');
+            if (osszes.length > LAP) lista.appendChild(A.lapozo(osszes.length, f.oldal, LAP, (n) => { f.oldal = n; rajzol(); }));
+            if (!lista.dataset.igazitva && osszes.length > LAP && A.tulcsordul()) { lista.dataset.igazitva = '1'; rajzol(); }
         };
         const frissit = async () => { oldalak = (await api('admin/oldalak')).lista; kuka.lista = (await api('admin/oldalak', { query: { kuka: 1 } })).lista; A.oldalLista(true); rajzol(); };
-        $('[data-szegmens]', hova).addEventListener('valtozas', (ev) => { f.nezet = ev.detail; rajzol(); });
-        $('[data-q]', hova).addEventListener('input', kesleltet((ev) => { f.q = ev.target.value.trim(); rajzol(); }, 150));
+        $('[data-szegmens]', hova).addEventListener('valtozas', (ev) => { f.nezet = ev.detail; f.oldal = 1; rajzol(); });
+        $('[data-q]', hova).addEventListener('input', kesleltet((ev) => { f.q = ev.target.value.trim(); f.oldal = 1; rajzol(); }, 150));
         $('[data-uj]', hova).addEventListener('click', () => ujOldal(oldalak));
         lista.addEventListener('click', async (ev) => {
             const g = ev.target.closest('button');

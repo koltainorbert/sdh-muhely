@@ -80,6 +80,9 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### Központ 2.2.0 – beágyazható a Portálba (2026-10-20)
+- A licencközpont a Portál (értékesítő webhely) csomagjában is fut, semleges fájlnevekkel; ha a különálló Központ aktív, az fut. Részletek: `weboldal/dokumentacio/README.md` 1.1.0. t94 igazítva.
+
 ### 0.99.6 – Munkalapszoftver Clone: a MunkaLap 3 teljes átvétele
 - **Új, ki-be kapcsolható modul** (Modulok › Átállás › Munkalapszoftver Clone; felülete: Beállítások › Rendszer ›
   Munkalapszoftver Clone): a MunkaLap 3 mentése (`.wdg` – ZIP, benne a program Apache Derby adatbázisa) minden adattal.
