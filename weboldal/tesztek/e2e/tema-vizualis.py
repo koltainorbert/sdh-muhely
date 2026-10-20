@@ -625,16 +625,32 @@ def main():
                         lap.wait_for_timeout(300)
                         bb = g.bounding_box()
                         lap.screenshot(path=os.path.join(KI, f'hover-gomb-{mod}.png'), clip={'x': max(0, bb['x'] - 30), 'y': max(0, bb['y'] - 30), 'width': bb['width'] + 60, 'height': bb['height'] + 60})
-                    # Kereső asztali
+                    # Kereső asztali: görgetészár, nincs szélességváltás (görgetősáv-kompenzáció), fókuszcsapda, Esc
+                    elotte = lap.evaluate("[document.documentElement.clientWidth, Math.round(document.querySelector('.s-fejlec__belso').getBoundingClientRect().left), Math.round(document.querySelector('.s-hero__cim, h1').getBoundingClientRect().left)]")
                     lap.keyboard.press('Control+k')
                     try:
                         lap.wait_for_selector('[data-kereso]:not([hidden])', timeout=5000)
                         lap.keyboard.type('szamla')
                         lap.wait_for_timeout(700)
+                        ut_ = lap.evaluate("[document.documentElement.clientWidth, Math.round(document.querySelector('.s-fejlec__belso').getBoundingClientRect().left), Math.round(document.querySelector('.s-hero__cim, h1').getBoundingClientRect().left), getComputedStyle(document.documentElement).overflow]")
+                        if ut_[3] != 'hidden':
+                            hiba('allapot', f'kereső 1366 ({mod}): nincs görgetészár ({ut_[3]})')
+                        if abs(ut_[1] - elotte[1]) > 1 or abs(ut_[2] - elotte[2]) > 1:
+                            hiba('allapot', f'kereső 1366 ({mod}): a tartalom elmozdul nyitáskor {elotte} → {ut_}')
+                        kint = 0
+                        for _ in range(12):
+                            lap.keyboard.press('Tab')
+                            if not lap.evaluate("!!(document.activeElement && document.activeElement.closest('[data-kereso]'))"):
+                                kint += 1
+                        if kint:
+                            hiba('allapot', f'kereső 1366 ({mod}): a fókusz {kint}× kiszökött (nincs fókuszcsapda)')
                         lap.screenshot(path=os.path.join(KI, f'kereso-1366-{mod}.png'))
                         lap.keyboard.press('Escape')
-                    except Exception:
-                        hiba('fejlec', f'kereső 1366 ({mod}): nem nyílik')
+                        lap.wait_for_timeout(200)
+                        if not lap.evaluate("document.querySelector('[data-kereso]').hidden") or lap.evaluate("getComputedStyle(document.documentElement).overflow") == 'hidden':
+                            hiba('allapot', f'kereső 1366 ({mod}): Esc után nyitva marad / a görgetészár megmarad')
+                    except Exception as ex:
+                        hiba('fejlec', f'kereső 1366 ({mod}): nem nyílik ({str(ex)[:80]})')
                     # Blog TJ a láblécen (görgetés az aljára, több lépésben)
                     lap.goto(ALAP + next(o[1] for o in OLDALAK if o[0] == 'cikk'), wait_until='networkidle')
                     for y in (800, 2000, 4000, 99999):

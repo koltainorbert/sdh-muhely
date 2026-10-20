@@ -254,6 +254,7 @@
         const frissit = () => {
             [['t', t], ['d', d]].forEach(([n, x]) => { const s = $(`[data-sz="${n}"]`, el); const max = Number(s.dataset.max); s.textContent = `${x.value.length}/${max}`; s.classList.toggle('is-sok', x.value.length > max); });
             $('[data-serp-t]', el).textContent = (t.value || c.value).replace('{termeknev}', B.termeknev);
+            $('[data-serp-t]', el).title = $('[data-serp-t]', el).textContent;
             $('[data-serp-d]', el).textContent = (d.value || 'Nincs leírás – a kereső maga választ szöveget.').replace('{termeknev}', B.termeknev);
         };
         [t, d, c].forEach((x) => x.addEventListener('input', frissit));

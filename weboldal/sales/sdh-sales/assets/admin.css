@@ -35,9 +35,9 @@
     --sa-aurora-2: rgba(34, 211, 238, .1);
     --sa-mezo: rgba(255, 255, 255, .045);
     /* Mezőkeret: a környezetéhez ≥ 3:1 (WCAG 1.4.11) – a mező így háttér nélkül is felismerhető. */
-    --sa-mezo-keret: #62677b;
-    --sa-mezo-keret-eros: #7c8297;
-    --sa-mezo-fokusz: rgba(124, 108, 255, .6);
+    --sa-mezo-keret: #696e83;
+    --sa-mezo-keret-eros: #80869b;
+    --sa-mezo-fokusz: #7c6cff;
     --sa-fatyol: rgba(4, 5, 10, .6);
     --sa-ivel: 18px;
     --sa-ivel-kicsi: 12px;
@@ -165,8 +165,8 @@ button { font: inherit; color: inherit; }
 .sa-menu a:hover { background: var(--sa-panel-halvany); color: var(--sa-szoveg); }
 .sa-menu a[aria-current="page"] { background: var(--sa-kiemelo-halvany); color: var(--sa-szoveg); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sa-kiemelo) 30%, transparent); }
 .sa-menu a[aria-current="page"] svg { color: var(--sa-kiemelo); opacity: 1; }
-.sa-menu__jel { margin-left: auto; min-width: 22px; height: 20px; padding: 0 7px; border-radius: var(--sa-r-pill); font-size: 11px; font-weight: 700; display: grid; place-items: center; background: var(--sa-hiba-halvany); color: var(--sa-hiba); }
-.sa-menu__jel--ok { background: var(--sa-ok-halvany); color: var(--sa-ok); }
+.sa-menu__jel { margin-left: auto; min-width: 22px; height: 20px; padding: 0 7px; border-radius: var(--sa-r-pill); font-size: 11px; font-weight: 700; display: grid; place-items: center; background: color-mix(in srgb, var(--sa-hiba) 12%, var(--sa-panel-eros)); color: var(--sa-hiba); }
+.sa-menu__jel--ok { background: color-mix(in srgb, var(--sa-ok) 12%, var(--sa-panel-eros)); color: var(--sa-ok); }
 
 .sa-oldalsav__alja { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 12px; }
 .sa-wp-gomb { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--sa-r-gomb); border: 1px solid var(--sa-vonal); color: var(--sa-szoveg-2); font-weight: 500; text-decoration: none; }
@@ -460,7 +460,7 @@ button { font: inherit; color: inherit; }
 .sa-rt__ter { min-height: 110px; max-height: 260px; overflow-y: auto; padding: 10px 12px; outline: none; font-size: 13.5px; line-height: 1.55; }
 .sa-rt__ter p, .sa-rt__ter ul, .sa-rt__ter ol { margin: 0 0 8px; }
 .sa-rt__ter h2, .sa-rt__ter h3, .sa-rt__ter h4 { margin: 4px 0 8px; font-size: 15px; }
-.sa-rt__ter a { color: var(--sa-kiemelo); }
+.sa-rt__ter a { color: var(--sa-kiemelo-szoveg); }
 .sa-rt__ter:empty::before { content: attr(data-hely); color: var(--sa-szoveg-3); }
 
 /* Ismétlő */
@@ -500,6 +500,7 @@ button { font: inherit; color: inherit; }
 .sa-popup__fej { display: flex; align-items: center; gap: 12px; padding: 16px 20px 12px; border-bottom: 1px solid var(--sa-vonal); flex: none; }
 .sa-popup__cim { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sa-popup__test { padding: 16px 20px; overflow: auto; display: flex; flex-direction: column; gap: 12px; min-height: 0; flex: 1; }
+.sa-popup__test > * { flex-shrink: 0; }
 .sa-popup__test > .sa-fulek { margin-bottom: 0; }
 .sa-popup__lab { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--sa-vonal); background: var(--sa-panel-halvany); border-radius: 0 0 20px 20px; flex: none; flex-wrap: wrap; }
 .sa-popup__hiba { color: var(--sa-hiba); font-size: 13px; margin-right: auto; }
