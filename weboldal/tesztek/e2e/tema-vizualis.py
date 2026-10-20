@@ -68,7 +68,7 @@ OLDALAK = [
     ('jogi-aszf', '/jogi/aszf/', True),
     ('tudasbazis', '/tudasbazis/', True),
     ('tudas-fejezet', '/tudasbazis/elso-lepesek/', True),
-    ('kereses', '/kereses/', True),
+    ('kereses', '/kereses/?s=munkalap', True),
     ('kereses-talalat', '/?s=munkalap', True),
     ('kosar', '/kosar/', True),
     ('404', '/nincs-ilyen/', True),
