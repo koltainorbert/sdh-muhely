@@ -48,6 +48,11 @@ Header always unset X-Powered-By
 php.ini: `expose_php = Off`.
 
 ## 4. Nginx
+> A Portál az útvonal-álneveket csak akkor kapcsolja be, ha egy próba-kérés igazolja, hogy a szerver kiszolgálja őket – szabály
+> nélkül (pl. Local, alap nginx) az oldal a valódi útvonalakkal működik, az admin egy figyelmeztetést mutat. A lenti szabályok
+> beírása után legfeljebb 10 perc (vagy azonnal: Értékesítés › Beállítások › Mentés), és az álnevek maguktól bekapcsolnak.
+> Local: Site › Open site folder › `conf/nginx/site.conf.hbs` – a `location`-blokkok a `server { … }` blokkba, majd a site újraindítása.
+
 ```nginx
 server_tokens off;
 fastcgi_hide_header X-Powered-By;

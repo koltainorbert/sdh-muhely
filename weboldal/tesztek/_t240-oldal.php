@@ -61,5 +61,11 @@ register_shutdown_function(static function (): void {
     echo "\n<<<T240>>>" . json_encode(['hibak' => $GLOBALS['t240_hibak'], 'status' => function_exists('http_response_code') ? http_response_code() : 0], JSON_UNESCAPED_UNICODE);
 });
 
+// Mint a _keret.php-ben: a tesztoldal útválasztója kiszolgálja az álneveket.
+$GLOBALS['wp_filter']['pre_option_sdh_sales_alias_proba'][10][] = [
+    'function'      => static fn () => ['ok' => getenv('SDH_TESZT_ALIAS') !== '0', 'ido' => time(), 'uzenet' => 'teszt', 'url' => ''],
+    'accepted_args' => 1,
+];
+
 define('WP_USE_THEMES', true);
 require dirname($t240_load) . '/wp-blog-header.php';

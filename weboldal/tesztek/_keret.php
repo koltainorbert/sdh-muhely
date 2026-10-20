@@ -32,6 +32,14 @@ $GLOBALS['sdh_t_keresek'] = [];
 /** @var array<int, array> a „kiküldött” levelek (wp_mail nem megy ki) */
 $GLOBALS['sdh_t_levelek'] = [];
 
+// A tesztoldal útválasztója (eszkozok/router.php) kiszolgálja az álneveket – a próba eredményét ezért „sikeres”-re
+// rögzítjük (a betöltés előtt, mert a szűrők már az init-kor erre épülnek). SDH_TESZT_ALIAS=0: a próba „sikertelen”.
+$sdh_t_alias = getenv('SDH_TESZT_ALIAS') !== '0';
+$GLOBALS['wp_filter']['pre_option_sdh_sales_alias_proba'][10][] = [
+    'function'      => static fn () => ['ok' => $sdh_t_alias, 'ido' => time(), 'uzenet' => 'teszt', 'url' => ''],
+    'accepted_args' => 1,
+];
+
 require $sdh_wp_load;
 
 add_filter('pre_http_request', static function ($pre, $args, $url) {

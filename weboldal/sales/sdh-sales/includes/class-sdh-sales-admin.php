@@ -149,7 +149,7 @@ final class SDH_Sales_Admin
         }
 
         // Rejtés: ezen az oldalon a fájlok is az álnév-útvonalakról töltődnek (a webszerver a valódiakat elzárhatja).
-        $alias = class_exists('SDH_Sales_Rejtes') && method_exists('SDH_Sales_Rejtes', 'alias_csere') && SDH_Sales_Rejtes::be('aktiv') && SDH_Sales_Rejtes::be('alias');
+        $alias = class_exists('SDH_Sales_Rejtes') && method_exists('SDH_Sales_Rejtes', 'alias_aktiv') && SDH_Sales_Rejtes::be('aktiv') && SDH_Sales_Rejtes::alias_aktiv();
         $al    = static fn (string $x): string => $alias ? SDH_Sales_Rejtes::alias_csere($x) : $x;
 
         if ($alias) {

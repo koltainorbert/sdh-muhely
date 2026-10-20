@@ -51,6 +51,14 @@ verziónapló. Csomagolás: `sh weboldal/eszkozok/csomagol.sh` → `weboldal/dis
 
 ## Verziónapló
 
+### 1.0.1 – útvonal-álnevek csak működő szerver mellett (2026-10-20)
+- **Portál**: a semleges útvonalak (`/static/…`, `/media`, `/lib`) csak akkor élnek, ha egy próba-kérés igazolja, hogy a webszerver
+  kiszolgálja őket (admin-oldalon óránként, sikertelenül 10 percenként újrapróbál). Addig a fájlok a valódi helyükről töltődnek,
+  és egy admin-értesítés mondja meg a teendőt. Korábban szabály nélküli nginx-en (pl. Local) minden CSS/JS 404 lett → stílus
+  nélküli, lassú oldal. Az Apache-szabályba a valódi útvonalak tiltása is csak sikeres próba után kerül. Teszt: t312.
+- **Portál**: a leírásból kikerült a belső név. Admin-sáv stílusa bejelentkezve megmarad.
+- **Kirakat**: a téma neve „Kirakat” (volt: „Portál”), előnézeti kép (`screenshot.jpg`).
+
 ### 1.0.0 – első kiadás (2026-10-20)
 - **Téma** (`kirakat`): 32 szekciótípus (hero, rácsok, árak, kalkulátor, összehasonlítás, GYIK, űrlapok, foglalás, demó-indítás,
   blog, tudásbázis, státusz, jogi, fiók, kosár, pénztár, oktatás, telepítő, események…), üveg + neon arculat, sötét / világos

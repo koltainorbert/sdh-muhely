@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SDH_TEMA_VERSION', '1.0.0');
+define('SDH_TEMA_VERSION', '1.0.1');
 define('SDH_TEMA_DIR', get_template_directory());
 define('SDH_TEMA_URL', get_template_directory_uri());
 

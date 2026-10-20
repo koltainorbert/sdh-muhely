@@ -87,7 +87,17 @@ final class SDH_Sales_Rejtes
         add_filter('rank_math/sitemap/remove_credit', '__return_true');
         add_filter('googlesitekit_generator', '__return_false');
 
+        // Az Apache-szabályokat a beállítás szerint mindig kiírjuk (enélkül a próba sem sikerülhet).
         if (self::be('alias')) {
+            add_filter('mod_rewrite_rules', [self::class, 'htaccess']);
+        }
+
+        // Az URL-ek csak akkor kapnak álnevet, ha a webszerver bizonyítottan kiszolgálja őket (különben minden CSS / JS 404,
+        // és minden hiányzó fájl a teljes rendszert futtatja – formázatlan, lassú oldal).
+        add_action('admin_init', [self::class, 'alias_proba_ha_kell']);
+        add_action('admin_notices', [self::class, 'alias_uzenet']);
+
+        if (self::alias_aktiv()) {
             add_filter('content_url', [self::class, 'url_alias'], 99);
             add_filter('plugins_url', [self::class, 'url_alias'], 99);
             add_filter('includes_url', [self::class, 'url_alias'], 99);
@@ -99,7 +109,6 @@ final class SDH_Sales_Rejtes
             add_filter('upload_dir', [self::class, 'feltoltes_alias'], 99);
             add_filter('wp_get_attachment_url', [self::class, 'url_alias'], 99);
             add_filter('wp_calculate_image_srcset', [self::class, 'srcset_alias'], 99);
-            add_filter('mod_rewrite_rules', [self::class, 'htaccess']);
         }
 
         if (self::be('belepo')) {
@@ -134,6 +143,89 @@ final class SDH_Sales_Rejtes
     public static function be(string $mi): bool
     {
         return (bool) SDH_Sales::b('rejtes.' . $mi, true);
+    }
+
+    public const OPT_ALIAS = 'sdh_sales_alias_proba';
+
+    /** Az útvonal-álnevek élnek-e: be vannak kapcsolva ÉS a webszerver próbán kiszolgálta őket. */
+    public static function alias_aktiv(): bool
+    {
+        if (!self::be('alias')) {
+            return false;
+        }
+
+        $p = get_option(self::OPT_ALIAS, []);
+
+        return is_array($p) && !empty($p['ok']);
+    }
+
+    /** Admin-oldalon legfeljebb óránként (sikertelen próba után 10 percenként) újrapróbál. */
+    public static function alias_proba_ha_kell(): void
+    {
+        if (!self::be('alias') || wp_doing_ajax() || !current_user_can('manage_options')) {
+            return;
+        }
+
+        $p = get_option(self::OPT_ALIAS, []);
+        $p = is_array($p) ? $p : [];
+        $koz = !empty($p['ok']) ? HOUR_IN_SECONDS : 10 * MINUTE_IN_SECONDS;
+
+        if ((int) ($p['ido'] ?? 0) > time() - $koz) {
+            return;
+        }
+
+        self::alias_proba();
+    }
+
+    /**
+     * Próba-kérés egy ismert statikus fájlra az álnév-címen (a saját közös JS-ünk). Siker: 200 és a fájl eleje egyezik.
+     *
+     * @return array{ok: bool, ido: int, uzenet: string, url: string}
+     */
+    public static function alias_proba(): array
+    {
+        $fajl = SDH_SALES_DIR . 'assets/front/kozos.js';
+        $nyers = trailingslashit(WP_PLUGIN_URL) . dirname(plugin_basename(SDH_SALES_FILE)) . '/assets/front/kozos.js';
+        $url   = self::alias_csere($nyers);
+        $ki    = ['ok' => false, 'ido' => time(), 'uzenet' => '', 'url' => $url];
+
+        if ($url === $nyers || !is_file($fajl)) {
+            $ki['uzenet'] = 'Nincs mit próbálni (az álnév nem alkalmazható erre a telepítésre).';
+        } else {
+            $r = wp_remote_get(add_query_arg('p', (string) time(), $url), ['timeout' => 8, 'redirection' => 0, 'sslverify' => false]);
+
+            if (is_wp_error($r)) {
+                $ki['uzenet'] = 'A próba-kérés nem futott le: ' . $r->get_error_message();
+            } elseif ((int) wp_remote_retrieve_response_code($r) !== 200) {
+                $ki['uzenet'] = 'A webszerver ' . (int) wp_remote_retrieve_response_code($r) . ' kóddal válaszolt – hiányzik az átírási szabály.';
+            } else {
+                $eleje = (string) file_get_contents($fajl, false, null, 0, 200);
+                $ki['ok'] = strncmp((string) wp_remote_retrieve_body($r), $eleje, strlen($eleje)) === 0;
+                $ki['uzenet'] = $ki['ok'] ? 'Az útvonal-álnevek működnek.' : 'A válasz nem a várt fájl – hiányzik az átírási szabály.';
+            }
+        }
+
+        $regi = get_option(self::OPT_ALIAS, []);
+        update_option(self::OPT_ALIAS, $ki, true);
+
+        // Állapotváltozáskor az Apache-szabályokat is újraírjuk (sikernél jöhet a valódi útvonalak tiltása).
+        if (!is_array($regi) || !empty($regi['ok']) !== $ki['ok']) {
+            flush_rewrite_rules(true);
+        }
+
+        return $ki;
+    }
+
+    public static function alias_uzenet(): void
+    {
+        if (!self::be('alias') || self::alias_aktiv() || !current_user_can('manage_options')) {
+            return;
+        }
+
+        $p = get_option(self::OPT_ALIAS, []);
+        echo '<div class="notice notice-warning"><p><strong>' . esc_html__('Rejtés – útvonal-álnevek kikapcsolva.', 'sdh-sales') . '</strong> '
+            . esc_html__('A webszerver még nem szolgálja ki a semleges útvonalakat, ezért a fájlok a megszokott helyükről töltődnek. Apache-on: Beállítások › Közvetlen hivatkozások › Mentés; nginx-en (pl. Local): a location-szabályok a rejtés üzemeltetési leírásában. A beállítás után a rendszer magától újrapróbálja (10 percenként).', 'sdh-sales')
+            . (is_array($p) && !empty($p['uzenet']) ? ' <em>' . esc_html((string) $p['uzenet']) . '</em>' : '') . '</p></div>';
     }
 
     public static function api(): string
@@ -621,12 +713,23 @@ final class SDH_Sales_Rejtes
             return;
         }
 
+        // A bejelentkezett adminnak látszó admin-sávhoz kell a saját stílusa (különben formázatlan lista a lap tetején).
+        $sav = is_admin_bar_showing();
+
         foreach (['wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'core-block-supports', 'wp-emoji-styles', 'wp-img-auto-sizes-contain', 'dashicons', 'admin-bar'] as $s) {
+            if ($sav && in_array($s, ['dashicons', 'admin-bar'], true)) {
+                continue;
+            }
+
             wp_dequeue_style($s);
             wp_deregister_style($s);
         }
 
         foreach (['wp-embed', 'comment-reply', 'admin-bar'] as $s) {
+            if ($sav && $s === 'admin-bar') {
+                continue;
+            }
+
             wp_dequeue_script($s);
         }
 
@@ -861,7 +964,11 @@ final class SDH_Sales_Rejtes
             $ki .= 'RewriteRule ^' . preg_quote($alias, '') . '/(.*)$ ' . $valodi . "/\$1 [L]\n";
         }
 
-        $ki .= "RewriteCond %{THE_REQUEST} \\s/+(wp-content|wp-includes)/ [NC]\nRewriteRule ^ - [R=404,L]\n";
+        // A valódi útvonalak tiltása csak akkor, ha az álnevek bizonyítottan működnek (különben az oldal szétesne).
+        if (self::alias_aktiv()) {
+            $ki .= "RewriteCond %{THE_REQUEST} \\s/+(wp-content|wp-includes)/ [NC]\nRewriteRule ^ - [R=404,L]\n";
+        }
+
         $ki .= "RewriteRule ^(readme\\.html|license\\.txt|wp-config-sample\\.php|xmlrpc\\.php)$ - [R=404,L]\n</IfModule>\n";
         $ki .= "<IfModule mod_headers.c>\nHeader always unset X-Powered-By\nHeader always unset X-Pingback\n</IfModule>\n\n";
 
@@ -871,6 +978,11 @@ final class SDH_Sales_Rejtes
     public static function rewrite_frissit(): void
     {
         flush_rewrite_rules(true);
+        delete_option(self::OPT_ALIAS);
+
+        if (self::be('alias') && is_admin()) {
+            self::alias_proba();
+        }
     }
 
     /* =================================================================
@@ -965,7 +1077,7 @@ final class SDH_Sales_Rejtes
             if (preg_match('~^<(script|style|pre|textarea)\b~i', $d)) {
                 // Csak a nyitó címke id/class attribútuma változik, a tartalom nem.
                 $d   = (string) preg_replace_callback('~^<[^>]+>~', static fn ($m) => (string) preg_replace('~\b(id|class)=(["\'])(wp|sdh)[-_]~i', '$1=$2x-', $m[0]), $d);
-                $ki .= self::alias_csere($d);
+                $ki .= (self::alias_aktiv() ? self::alias_csere($d) : $d);
                 $i++; // a csoport neve
                 continue;
             }
@@ -979,7 +1091,7 @@ final class SDH_Sales_Rejtes
 
                 return $m[1] . '=' . $m[2] . $ertek . $m[2];
             }, $d);
-            $ki .= self::alias_csere($d);
+            $ki .= (self::alias_aktiv() ? self::alias_csere($d) : $d);
         }
 
         return $ki;
