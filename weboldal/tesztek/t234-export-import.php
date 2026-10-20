@@ -39,7 +39,7 @@ T::egyezik('sk-titok-t234', SDH_Sales::titkos('szikra_kulcs'), 'a titok érintet
 // Másodszori import: nincs változás, nincs új naplósor a tartalomra.
 $n = SDH_Sales_Naplo::lista(['tipus' => 'tartalom'])['ossz'];
 $r = SDH_Sales_Exportimport::import(SDH_Sales_Exportimport::export());
-T::egyezik(['beallitas' => 0, 'tartalom' => 0, 'oldal' => 0], $r['db'], 'idempotens import');
+T::egyezik(['beallitas' => 0, 'tartalom' => 0, 'oldal' => 0, 'felirat' => 0], $r['db'], 'idempotens import');
 T::egyezik($n, SDH_Sales_Naplo::lista(['tipus' => 'tartalom'])['ossz'], 'nincs fölösleges napló');
 // Új oldal az importból (szülővel).
 $x = SDH_Sales_Exportimport::export();

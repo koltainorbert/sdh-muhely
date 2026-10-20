@@ -9,7 +9,7 @@ $t = SDH_Sales_Szekcio::tipusok();
 foreach ($kell as $k) {
     T::igaz(isset($t[$k]), 'szekciótípus: ' . $k);
 }
-$fajtak = ['szoveg', 'hosszu', 'html', 'kep', 'ikon', 'ismetlo', 'valaszto', 'kapcsolo', 'link', 'szin', 'szam', 'url', 'datum', 'tobb', 'egy'];
+$fajtak = ['szoveg', 'hosszu', 'html', 'kep', 'ikon', 'ismetlo', 'valaszto', 'kapcsolo', 'link', 'szin', 'szam', 'url', 'datum', 'tobb', 'egy', 'lista'];
 $rossz = [];
 $bejar = static function (array $mezok) use (&$bejar, &$rossz, $fajtak): void {
     foreach ($mezok as $m) {
