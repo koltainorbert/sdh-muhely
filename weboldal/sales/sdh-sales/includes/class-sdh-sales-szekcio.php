@@ -5,7 +5,8 @@
  * Egy séma mezőlista: [{k: kulcs, t: fajta, c: cimke, s?: súgó, o?: opciók, al?: almezők, tipus?: tartalom-típus,
  * min?, max?, penz?: bool, kotelezo?: bool, fel?: bool (fél szélesség), ful?: lapfül}].
  * Mezőfajták: szoveg, hosszu, html (tisztított richtext), kep (URL, WP médiatárból), ikon, ismetlo (almezőkkel),
- * valaszto, kapcsolo, link ({szoveg, url, uj}), szin, szam, url, datum (ÉÉÉÉ-HH-NN), tobb / egy (tartalom-kulcsok).
+ * valaszto, kapcsolo, link ({szoveg, url, uj}), szin, szam, url, datum (ÉÉÉÉ-HH-NN), tobb / egy (tartalom-kulcsok),
+ * lista (rövid szövegek listája).
  *
  * Tisztítás (`ervenyesit`): az ismert mezőket a fajtájuk szerint, az ismeretlen (más ügynök által írt) mezőket
  * általánosan – szöveg: wp_kses a biztonságos címkékkel – tisztítja, így semmilyen út nem visz be szkriptet.
@@ -154,7 +155,7 @@ final class SDH_Sales_Szekcio
             'logo_sav' => ['Logósáv', 'bolt', 'Bizalom', 'Partnerek, ügyfelek logói.', [
                 $cim,
                 ['k' => 'logok', 't' => 'ismetlo', 'c' => 'Logók', 'max' => 24, 'al' => [
-                    ['k' => 'kep', 't' => 'kep', 'c' => 'Logó'], ['k' => 'nev', 't' => 'szoveg', 'c' => 'Név', 'max' => 80], ['k' => 'url', 't' => 'url', 'c' => 'Hivatkozás'],
+                    ['k' => 'kep', 't' => 'kep', 'c' => 'Logó'], ['k' => 'nev', 't' => 'szoveg', 'c' => 'Név', 'max' => 80], ['k' => 'url', 't' => 'url', 'c' => 'Hivatkozás', 'oldal' => true],
                 ]],
             ]],
             'jellemzok' => ['Jellemzők (ikonrács)', 'villam', 'Tartalom', 'Ikon + cím + rövid szöveg rácsban.', [
@@ -209,7 +210,7 @@ final class SDH_Sales_Szekcio
                 $gomb(),
             ]],
             'video' => ['Videó', 'kamera', 'Tartalom', 'Beágyazott videó (kattintásra töltődik).', [
-                $cim, ['k' => 'url', 't' => 'url', 'c' => 'Videó címe (YouTube / Vimeo / MP4)', 'kotelezo' => true],
+                $cim, ['k' => 'url', 't' => 'url', 'c' => 'Videó címe (YouTube / Vimeo / MP4)', 'kotelezo' => true, 'media' => 'video'],
                 ['k' => 'poszter', 't' => 'kep', 'c' => 'Előnézeti kép'], ['k' => 'leiras', 't' => 'hosszu', 'c' => 'Leírás', 'max' => 600],
             ]],
             'velemeny' => ['Vélemények', 'csillag', 'Bizalom', 'Ügyfél-vélemények.', [
@@ -380,7 +381,7 @@ final class SDH_Sales_Szekcio
             ]],
             'lecke' => ['Leckék', 'Lecke', 'konyv', 'kulcs', 'cim', [
                 $kulcs, ['k' => 'cim', 't' => 'szoveg', 'c' => 'Cím', 'kotelezo' => true, 'max' => 160, 'fel' => true],
-                ['k' => 'modul', 't' => 'egy', 'tipus' => 'modul', 'c' => 'Modul', 'fel' => true], ['k' => 'video', 't' => 'url', 'c' => 'Videó', 'fel' => true],
+                ['k' => 'modul', 't' => 'egy', 'tipus' => 'modul', 'c' => 'Modul', 'fel' => true], ['k' => 'video', 't' => 'url', 'c' => 'Videó', 'fel' => true, 'media' => 'video'],
                 ['k' => 'html', 't' => 'html', 'c' => 'Tananyag', 'ful' => 'Tananyag'],
                 ['k' => 'kviz', 't' => 'ismetlo', 'c' => 'Kvízkérdések', 'max' => 20, 'ful' => 'Kvíz', 'al' => [
                     ['k' => 'kerdes', 't' => 'szoveg', 'c' => 'Kérdés', 'max' => 300], ['k' => 'valaszok', 't' => 'hosszu', 'c' => 'Válaszok (soronként egy)', 'max' => 800],
@@ -390,6 +391,18 @@ final class SDH_Sales_Szekcio
             'email' => ['E-mail sablonok', 'E-mail sablon', 'email', 'kulcs', 'targy', [
                 $kulcs, ['k' => 'targy', 't' => 'szoveg', 'c' => 'Tárgy', 'kotelezo' => true, 'max' => 200, 's' => 'Tokenek: {nev}, {rendeles}, {licenc_kulcs}, {letoltes_url}, {termeknev}…'],
                 ['k' => 'html', 't' => 'html', 'c' => 'Levél szövege'],
+            ]],
+            'telepites' => ['Telepítési útmutató', 'Telepítési lépés', 'szerszam', 'kulcs', 'cim', [
+                $kulcs, ['k' => 'cim', 't' => 'szoveg', 'c' => 'Cím', 'kotelezo' => true, 'max' => 160, 'fel' => true],
+                ['k' => 'tipus', 't' => 'valaszto', 'c' => 'Fajta', 'o' => ['' => 'Lépés', 'ellenorzolista' => 'Záró ellenőrzőlista'], 'fel' => true],
+                ['k' => 'leiras', 't' => 'hosszu', 'c' => 'Rövid leírás', 'max' => 800],
+                ['k' => 'szoveg', 't' => 'html', 'c' => 'Részletes szöveg', 'ful' => 'Szöveg'],
+                ['k' => 'ellenorzes', 't' => 'lista', 'c' => 'Ellenőrizd (pontok)', 'max' => 30, 'ful' => 'Ellenőrzés'],
+                ['k' => 'elemek', 't' => 'lista', 'c' => 'Ellenőrzőlista pontjai', 'max' => 60, 'ful' => 'Ellenőrzés'],
+                ['k' => 'kovetelmeny_tabla', 't' => 'ismetlo', 'c' => 'Követelmények', 'max' => 30, 'ful' => 'Követelmények', 'al' => [
+                    ['k' => 'mi', 't' => 'szoveg', 'c' => 'Mi', 'max' => 80], ['k' => 'mennyi', 't' => 'szoveg', 'c' => 'Mennyi / milyen', 'max' => 120],
+                    ['k' => 'megjegyzes', 't' => 'hosszu', 'c' => 'Megjegyzés', 'max' => 400],
+                ]],
             ]],
             'konkurens' => ['Konkurensek', 'Konkurens', 'grafikon', 'kulcs', 'nev', [
                 $kulcs, ['k' => 'nev', 't' => 'szoveg', 'c' => 'Név', 'kotelezo' => true, 'max' => 80, 'fel' => true],
@@ -639,6 +652,19 @@ final class SDH_Sales_Szekcio
                 }
 
                 return array_slice($l, 0, 200);
+
+            case 'lista':
+                $l = [];
+
+                foreach (array_slice(is_array($v) ? array_values($v) : (is_string($v) ? explode("\n", $v) : []), 0, $max > 0 ? $max : 50) as $x) {
+                    $x = is_scalar($x) ? mb_substr(trim(sanitize_text_field((string) $x)), 0, 300) : '';
+
+                    if ($x !== '') {
+                        $l[] = $x;
+                    }
+                }
+
+                return $l;
 
             case 'egy':
                 return mb_substr(preg_replace('/[^A-Za-z0-9_\-]/', '', is_scalar($v) ? (string) $v : '') ?? '', 0, 120);

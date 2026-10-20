@@ -7,7 +7,7 @@
  * a REST-cím mindig rest_url(SDH_Sales_Rest::NS)-ből jön.
  *
  * Ez a fájl: az oldal váza, a panel-nyilvántartás, és az Áttekintés / Rendelések / Vevők / Leadek / Napló / keresés végpontjai.
- * Tartalom (oldalak, szekciók, elemek, menük, előnézet): class-sdh-sales-admin-tartalom.php.
+ * Tartalom (oldalak, szekciók, elemek, menük, előnézet): class-sdh-sales-admin-tartalom.php; a Stúdió felülete: assets/studio/.
  * Beállítások, Arculat, Export / Import: class-sdh-sales-admin-beallitas.php.
  *
  * Bővítés:
@@ -28,6 +28,9 @@ final class SDH_Sales_Admin
 {
     public const OLDAL = 'ertekesites';
     public const META_TEMA = 'sdh_sales_admin_tema';
+
+    /** A Stúdió moduljai (assets/studio/), ebben a sorrendben töltődnek az alap admin után. */
+    public const STUDIO_JS = ['studio-epito.js', 'studio-tar.js', 'studio-megjelenes.js', 'studio-rendszer.js'];
 
     /** Kiszolgálási lánc lépései (ARCHITEKTURA.md §5). */
     public const LEPESEK = ['kozpont' => 'Központ (licenc)', 'szamla' => 'Végszámla', 'email' => 'Üdvözlő levél', 'idopont' => 'Időpont felajánlása', 'ertesites' => 'Értesítés'];
@@ -99,20 +102,46 @@ final class SDH_Sales_Admin
         $utak = $utak ?? self::utak();
         $van  = static fn (string $u): bool => in_array($u, $utak, true);
 
+        // A Stúdió menüje csoportonként (a csoportok sorrendje: az első panel sorrendje szerint).
+        $tar = static fn (string $cim, string $ikon, string $cs, int $n, array $tipusok): array => ['cim' => $cim, 'ikon' => $ikon, 'csoport' => $cs, 'sorrend' => $n, 'tipusok' => $tipusok];
+        $bea = static fn (string $cim, string $ikon, string $cs, int $n, array $csop): array => ['cim' => $cim, 'ikon' => $ikon, 'csoport' => $cs, 'sorrend' => $n, 'beallitas' => $csop];
+
         $p = [
-            'attekintes' => ['cim' => 'Áttekintés', 'ikon' => 'attekintes', 'csoport' => '', 'sorrend' => 10],
-            'rendelesek' => ['cim' => 'Rendelések', 'ikon' => 'rendeles', 'csoport' => 'Értékesítés', 'sorrend' => 20],
-            'bank'       => ['cim' => 'Banki egyeztetés', 'ikon' => 'bank', 'csoport' => 'Értékesítés', 'sorrend' => 25, 'elerheto' => $van('/admin/bank/fuggo')],
-            'vevok'      => ['cim' => 'Vevők', 'ikon' => 'vevo', 'csoport' => 'Értékesítés', 'sorrend' => 30],
-            'leadek'     => ['cim' => 'Leadek', 'ikon' => 'lead', 'csoport' => 'Értékesítés', 'sorrend' => 40],
-            'foglalasok' => ['cim' => 'Foglalások', 'ikon' => 'naptar', 'csoport' => 'Értékesítés', 'sorrend' => 50, 'elerheto' => $van('/admin/foglalasok')],
-            'oldalak'    => ['cim' => 'Oldalak', 'ikon' => 'oldal', 'csoport' => 'Tartalom', 'sorrend' => 60],
-            'elemek'     => ['cim' => 'Elemek', 'ikon' => 'elem', 'csoport' => 'Tartalom', 'sorrend' => 70],
-            'menuk'      => ['cim' => 'Menü és lábléc', 'ikon' => 'menu', 'csoport' => 'Tartalom', 'sorrend' => 80],
-            'arculat'    => ['cim' => 'Arculat', 'ikon' => 'arculat', 'csoport' => 'Tartalom', 'sorrend' => 90],
-            'beallitasok' => ['cim' => 'Beállítások', 'ikon' => 'beallitas', 'csoport' => 'Rendszer', 'sorrend' => 100],
-            'naplo'      => ['cim' => 'Napló', 'ikon' => 'naplo', 'csoport' => 'Rendszer', 'sorrend' => 110],
-            'export'     => ['cim' => 'Export / Import', 'ikon' => 'export', 'csoport' => 'Rendszer', 'sorrend' => 120],
+            'attekintes'  => ['cim' => 'Áttekintés', 'ikon' => 'attekintes', 'csoport' => '', 'sorrend' => 10],
+            'rendelesek'  => ['cim' => 'Rendelések', 'ikon' => 'rendeles', 'csoport' => 'Értékesítés', 'sorrend' => 20],
+            'bank'        => ['cim' => 'Banki egyeztetés', 'ikon' => 'bank', 'csoport' => 'Értékesítés', 'sorrend' => 25, 'elerheto' => $van('/admin/bank/fuggo')],
+            'vevok'       => ['cim' => 'Vevők', 'ikon' => 'vevo', 'csoport' => 'Értékesítés', 'sorrend' => 30],
+            'leadek'      => ['cim' => 'Leadek', 'ikon' => 'lead', 'csoport' => 'Értékesítés', 'sorrend' => 40],
+            'foglalasok'  => ['cim' => 'Foglalások', 'ikon' => 'naptar', 'csoport' => 'Értékesítés', 'sorrend' => 50, 'elerheto' => $van('/admin/foglalasok')],
+            'kuponok'     => $tar('Kuponok', 'cimke', 'Értékesítés', 55, ['kupon']),
+            'oldalak'     => ['cim' => 'Oldalak', 'ikon' => 'oldal', 'csoport' => 'Tartalom', 'sorrend' => 60],
+            'blog'        => ['cim' => 'Blog', 'ikon' => 'konyv', 'csoport' => 'Tartalom', 'sorrend' => 62, 'elerheto' => $van('/admin/blog')],
+            'gyik'        => $tar('GYIK', 'tamogatas', 'Tartalom', 64, ['gyik']),
+            'funkciok'    => $tar('Funkciók', 'munkalap', 'Tartalom', 66, ['funkcio']),
+            'iparagak'    => $tar('Iparágak', 'bolt', 'Tartalom', 68, ['iparag']),
+            'arak'        => $tar('Csomagok, modulok, árak', 'penz', 'Tartalom', 70, ['csomag', 'modul']),
+            'szolgaltatasok' => $tar('Szolgáltatások', 'szerszam', 'Tartalom', 72, ['szolgaltatas']),
+            'oktatas'     => $tar('Oktatás (leckék)', 'konyv', 'Tartalom', 74, ['lecke']),
+            'telepites'   => $tar('Telepítési útmutató', 'szerszam', 'Tartalom', 76, ['telepites']),
+            'osszehasonlitas' => $tar('Összehasonlítás', 'grafikon', 'Tartalom', 78, ['konkurens']),
+            'jogi'        => ['cim' => 'Jogi oldalak', 'ikon' => 'gdpr', 'csoport' => 'Tartalom', 'sorrend' => 80],
+            'media'       => ['cim' => 'Média', 'ikon' => 'kep', 'csoport' => 'Tartalom', 'sorrend' => 82, 'elerheto' => $van('/admin/media')],
+            'arculat'     => ['cim' => 'Arculat és skinek', 'ikon' => 'arculat', 'csoport' => 'Megjelenés', 'sorrend' => 90],
+            'fejlec'      => ['cim' => 'Fejléc', 'ikon' => 'fejlec', 'csoport' => 'Megjelenés', 'sorrend' => 92],
+            'lablec'      => ['cim' => 'Lábléc', 'ikon' => 'lablec', 'csoport' => 'Megjelenés', 'sorrend' => 94],
+            'menuk'       => ['cim' => 'Menük', 'ikon' => 'menu', 'csoport' => 'Megjelenés', 'sorrend' => 96],
+            'feliratok'   => ['cim' => 'Feliratok', 'ikon' => 'felirat', 'csoport' => 'Megjelenés', 'sorrend' => 98, 'elerheto' => $van('/admin/feliratok')],
+            'suti'        => $bea('Süti-sáv', 'suti', 'Megjelenés', 100, ['suti']),
+            'szikra_megj' => $bea('Szikra (asszisztens)', 'szikra', 'Megjelenés', 102, ['szikra']),
+            'emailek'     => $tar('E-mail-sablonok', 'email', 'Kommunikáció', 110, ['email']),
+            'urlapok'     => ['cim' => 'Űrlapok', 'ikon' => 'urlap', 'csoport' => 'Kommunikáció', 'sorrend' => 112, 'elerheto' => $van('/admin/urlapok')],
+            'ertesitesek' => $bea('Értesítések', 'csengo', 'Kommunikáció', 114, ['email']),
+            'beallitasok' => ['cim' => 'Beállítások', 'ikon' => 'beallitas', 'csoport' => 'Rendszer', 'sorrend' => 120],
+            'naplo'       => ['cim' => 'Napló', 'ikon' => 'naplo', 'csoport' => 'Rendszer', 'sorrend' => 130],
+            'kuka'        => ['cim' => 'Revíziók és kuka', 'ikon' => 'torol', 'csoport' => 'Rendszer', 'sorrend' => 135, 'elerheto' => $van('/admin/kuka')],
+            'export'      => ['cim' => 'Export / Import', 'ikon' => 'export', 'csoport' => 'Rendszer', 'sorrend' => 140],
+            // Régi cím (#/elemek/<típus>): átirányít a típus saját panelére – a menüben nem látszik.
+            'elemek'      => ['cim' => 'Elemek', 'ikon' => 'elem', 'csoport' => 'Tartalom', 'sorrend' => 999, 'menu' => false],
         ];
 
         $p = (array) apply_filters('sdh_sales_admin_panelek', $p, $utak);
@@ -130,6 +159,9 @@ final class SDH_Sales_Admin
                 'sorrend'  => (int) ($v['sorrend'] ?? 500),
                 'elerheto' => (bool) ($v['elerheto'] ?? true),
                 'js'       => isset($v['js']) ? esc_url_raw((string) $v['js']) : '',
+                'menu'     => (bool) ($v['menu'] ?? true),
+                'tipusok'  => array_values(array_map('sanitize_key', (array) ($v['tipusok'] ?? []))),
+                'beallitas' => array_values(array_map('sanitize_key', (array) ($v['beallitas'] ?? []))),
             ];
         }
 
@@ -190,6 +222,8 @@ final class SDH_Sales_Admin
             'szekciok'  => SDH_Sales_Szekcio::tipusok(),
             'elemek'    => SDH_Sales_Szekcio::elem_semak(),
             'media'     => current_user_can('upload_files'),
+            'kezdolap'  => (int) get_option('page_on_front'),
+            'helyek'    => ['fo' => 'Főmenü', 'lablec' => 'Lábléc', 'jogi' => 'Jogi sáv'],
         ];
 
         if ($boot['media']) {
@@ -217,7 +251,7 @@ final class SDH_Sales_Admin
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="dark light">
     <meta name="robots" content="noindex, nofollow">
-    <title>Értékesítés · <?php echo esc_html(SDH_Sales::termeknev()); ?></title>
+    <title>Stúdió · <?php echo esc_html(SDH_Sales::termeknev()); ?></title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236d5efc'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3Cpath d='M9 11h14l-2 9H11z' stroke='white' stroke-width='2.4' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E">
     <?php
     if ($boot['media']) {
@@ -226,16 +260,19 @@ final class SDH_Sales_Admin
     }
     ?>
     <link rel="stylesheet" href="<?php echo esc_url($alap . 'admin.css?ver=' . rawurlencode($ver('admin.css'))); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url($alap . 'studio/studio.css?ver=' . rawurlencode($ver('studio/studio.css'))); ?>">
 </head>
 <body class="sa">
     <a class="sa-ugro" href="#sa-tartalom">Ugrás a tartalomra</a>
     <div id="sa-app" class="sa-app">
-        <div class="sa-indul"><div class="sa-indul__jel"></div><span>Értékesítés</span></div>
+        <div class="sa-indul"><div class="sa-indul__jel"></div><span>Stúdió</span></div>
     </div>
     <script>window.PA_BOOT = <?php echo wp_json_encode($boot, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP); ?>;</script>
     <script src="<?php echo esc_url($alap . 'admin.js?ver=' . rawurlencode($ver('admin.js'))); ?>"></script>
-    <script src="<?php echo esc_url($alap . 'admin-tartalom.js?ver=' . rawurlencode($ver('admin-tartalom.js'))); ?>"></script>
     <script src="<?php echo esc_url($alap . 'admin-beallitas.js?ver=' . rawurlencode($ver('admin-beallitas.js'))); ?>"></script>
+    <?php foreach (self::STUDIO_JS as $sj) : ?>
+    <script src="<?php echo esc_url($alap . 'studio/' . $sj . '?ver=' . rawurlencode($ver('studio/' . $sj))); ?>"></script>
+    <?php endforeach; ?>
     <?php foreach ($extra as $js) : ?>
     <script src="<?php echo esc_url($js); ?>"></script>
     <?php endforeach; ?>

@@ -134,12 +134,19 @@ final class SDH_Sales_Email
      *
      * @return array<string, mixed>|null
      */
+    /** @var array<string, mixed>|null a Stúdió előnézete: még nem mentett sablon (csak az előnézet kérésének idejére) */
+    public static ?array $elonezet = null;
+
     public static function sablon(string $sablon): ?array
     {
         $sablon = sanitize_key($sablon);
 
         if ($sablon === '') {
             return null;
+        }
+
+        if (self::$elonezet !== null) {
+            return self::$elonezet;
         }
 
         if (class_exists('SDH_Sales_Tartalom')) {

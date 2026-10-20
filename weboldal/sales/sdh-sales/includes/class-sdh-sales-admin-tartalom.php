@@ -64,14 +64,18 @@ final class SDH_Sales_Admin_Tartalom
             'url'       => (string) get_permalink($p),
             'modositva' => strtotime((string) $p->post_modified_gmt . ' UTC') ?: 0,
             'kezdolap'  => (int) get_option('page_on_front') === (int) $p->ID,
+            'piszkozat' => metadata_exists('post', (int) $p->ID, SDH_Sales_Studio::META_VAZLAT),
+            'jogi'      => in_array('jogi', array_column($sz, 'tipus'), true),
+            'sorrend'   => (int) $p->menu_order,
         ];
     }
 
     public static function r_oldalak(WP_REST_Request $r): WP_REST_Response
     {
-        $q = get_posts([
+        $kuka = (bool) $r->get_param('kuka');
+        $q    = get_posts([
             'post_type'      => 'page',
-            'post_status'    => ['publish', 'draft', 'private', 'pending'],
+            'post_status'    => $kuka ? ['trash'] : ['publish', 'draft', 'private', 'pending'],
             'posts_per_page' => 1000,
             'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
             'no_found_rows'  => true,
@@ -126,10 +130,20 @@ final class SDH_Sales_Admin_Tartalom
             return SDH_Sales_Rest::hiba('Nincs ilyen oldal.', 404, 'nincs');
         }
 
+        $kep = (int) get_post_thumbnail_id($p);
+
         return new WP_REST_Response(self::oldal_sor($p) + [
             'szekciok' => SDH_Sales_Tartalom::szekciok((int) $p->ID),
-            'seo'      => SDH_Sales_Exportimport::seo((int) $p->ID),
+            'seo'      => SDH_Sales_Exportimport::seo((int) $p->ID) + [
+                'og_kep'    => $kep > 0 ? (string) wp_get_attachment_url($kep) : '',
+                'noindex'   => (string) get_post_meta($p->ID, '_sdh_noindex', true) === '1',
+                'kanonikus' => (string) get_post_meta($p->ID, SDH_Sales_Studio::META_KANON, true),
+            ],
+            'slug'     => (string) $p->post_name,
             'sablon'   => (string) get_post_meta($p->ID, '_wp_page_template', true),
+            'sablonok' => ['' => 'Alap'] + array_flip((array) wp_get_theme()->get_page_templates(null, 'page')),
+            'tartalom' => (string) $p->post_content,
+            'vazlat'   => SDH_Sales_Studio::vazlat((int) $p->ID),
             'forras'   => (string) get_post_meta($p->ID, SDH_Sales_Tartalom::META_FORRAS, true),
         ], 200);
     }
@@ -180,6 +194,7 @@ final class SDH_Sales_Admin_Tartalom
             }
 
             SDH_Sales_Tartalom::szekciok_ment($id, $tiszta);
+            SDH_Sales_Studio::vazlat_torol($id);
         }
 
         $seo = $r->get_param('seo');
@@ -196,6 +211,44 @@ final class SDH_Sales_Admin_Tartalom
                 SDH_Sales_Exportimport::seo_ir($id, $s);
                 SDH_Sales_Naplo::ir('oldal', 'SEO módosítva: ' . get_the_title($id), 'info', 'oldal', $id, $regi, $s);
             }
+
+            if (array_key_exists('noindex', $seo)) {
+                if (!empty($seo['noindex'])) {
+                    update_post_meta($id, '_sdh_noindex', '1');
+                } else {
+                    delete_post_meta($id, '_sdh_noindex');
+                }
+            }
+
+            if (array_key_exists('kanonikus', $seo)) {
+                $k = SDH_Sales_Szekcio::url((string) $seo['kanonikus']);
+                $k = $k !== '' && $k[0] === '/' ? home_url($k) : $k;
+
+                if ($k !== '' && preg_match('#^https?://#i', $k) === 1) {
+                    update_post_meta($id, SDH_Sales_Studio::META_KANON, esc_url_raw($k));
+                } else {
+                    delete_post_meta($id, SDH_Sales_Studio::META_KANON);
+                }
+            }
+
+            if (array_key_exists('og_kep', $seo)) {
+                $u   = SDH_Sales_Szekcio::url((string) $seo['og_kep']);
+                $att = $u !== '' ? SDH_Sales_Studio::kep_id($u) : 0;
+
+                if ($att > 0) {
+                    set_post_thumbnail($id, $att);
+                } elseif ($u === '') {
+                    delete_post_thumbnail($id);
+                } else {
+                    return SDH_Sales_Rest::hiba('A megosztási kép csak a médiatárból választható.', 422, 'ervenytelen');
+                }
+            }
+        }
+
+        $tart = $r->get_param('tartalom');
+
+        if (is_string($tart) && $tart !== $p->post_content) {
+            $postarr_t = SDH_Sales_Szekcio::html($tart);
         }
 
         $postarr = ['ID' => $id];
@@ -209,6 +262,47 @@ final class SDH_Sales_Admin_Tartalom
 
         if (in_array($st, ['publish', 'draft', 'private'], true) && $st !== $p->post_status) {
             $postarr['post_status'] = $st;
+        }
+
+        if (isset($postarr_t)) {
+            $postarr['post_content'] = $postarr_t;
+        }
+
+        $slug = $r->get_param('slug');
+
+        if (is_string($slug) && trim($slug) !== '' && sanitize_title($slug) !== $p->post_name) {
+            $postarr['post_name'] = sanitize_title($slug);
+        }
+
+        if ($r->has_param('szulo')) {
+            $szulo = (int) $r->get_param('szulo');
+
+            if ($szulo !== (int) $p->post_parent) {
+                if ($szulo === $id || ($szulo > 0 && (get_post_type($szulo) !== 'page' || in_array($id, get_post_ancestors($szulo), true)))) {
+                    return SDH_Sales_Rest::hiba('Ez nem lehet a szülő oldal.', 422, 'ervenytelen');
+                }
+
+                $postarr['post_parent'] = max(0, $szulo);
+            }
+        }
+
+        if ($r->has_param('sorrend')) {
+            $postarr['menu_order'] = max(-1000, min(1000, (int) $r->get_param('sorrend')));
+        }
+
+        if ($r->has_param('sablon')) {
+            $sablon = (string) $r->get_param('sablon');
+            $ok     = array_keys(['' => 1] + array_flip((array) wp_get_theme()->get_page_templates(null, 'page')));
+
+            if (!in_array($sablon, $ok, true)) {
+                return SDH_Sales_Rest::hiba('Ismeretlen sablon.', 422, 'ervenytelen');
+            }
+
+            if ($sablon === '') {
+                delete_post_meta($id, '_wp_page_template');
+            } else {
+                update_post_meta($id, '_wp_page_template', $sablon);
+            }
         }
 
         if (count($postarr) > 1) {
@@ -236,7 +330,9 @@ final class SDH_Sales_Admin_Tartalom
         $sz    = SDH_Sales_Szekcio::ervenyesit_lista((array) $r->get_param('szekciok'));
         $token = strtolower(wp_generate_password(32, false, false));
 
-        set_transient('sdh_sales_elonezet_' . $token, ['post_id' => $id, 'user' => get_current_user_id(), 'szekciok' => $sz], 15 * MINUTE_IN_SECONDS);
+        $fel = $r->get_param('feliratok');
+
+        set_transient('sdh_sales_elonezet_' . $token, ['post_id' => $id, 'user' => get_current_user_id(), 'szekciok' => $sz, 'feliratok' => is_array($fel) ? SDH_Sales_Studio::feliratok_tisztit($fel, true) : null], 15 * MINUTE_IN_SECONDS);
 
         $url = add_query_arg(self::ELONEZET, $token, $p->post_status === 'publish' ? (string) get_permalink($p) : (string) get_preview_post_link($p));
 
@@ -260,6 +356,10 @@ final class SDH_Sales_Admin_Tartalom
         }
 
         self::$elonezet[(int) $a['post_id']] = (array) $a['szekciok'];
+
+        if (class_exists('SDH_Sales_Studio')) {
+            SDH_Sales_Studio::mod_be(is_array($a['feliratok'] ?? null) ? $a['feliratok'] : null);
+        }
 
         if (!defined('DONOTCACHEPAGE')) {
             define('DONOTCACHEPAGE', true);

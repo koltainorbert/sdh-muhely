@@ -84,7 +84,76 @@ final class SDH_Sales_Exportimport
             'beallitas' => $b,
             'tartalom'  => $t,
             'oldalak'   => self::oldalak(),
+            'feliratok' => self::opcio_tomb('sdh_sales_feliratok'),
+            'urlapok'   => self::opcio_tomb('sdh_sales_urlap_felulir'),
         ];
+    }
+
+    /** @return array<string, mixed> */
+    private static function opcio_tomb(string $nev): array
+    {
+        $o = get_option($nev, []);
+
+        return is_array($o) ? $o : [];
+    }
+
+    /**
+     * A Stúdió feliratai és űrlap-felülírásai (ha a csomagban vannak). Vissza: hány módosult.
+     *
+     * @param array<string, mixed> $csomag
+     */
+    private static function studio_import(array $csomag): int
+    {
+        $n = 0;
+
+        if (is_array($csomag['feliratok'] ?? null) && class_exists('SDH_Sales_Studio')) {
+            $uj   = SDH_Sales_Studio::feliratok_tisztit($csomag['feliratok']);
+            $regi = self::opcio_tomb(SDH_Sales_Studio::OPT_FELIRAT);
+
+            if ($uj !== $regi) {
+                update_option(SDH_Sales_Studio::OPT_FELIRAT, $uj, true);
+                $n++;
+            }
+        }
+
+        if (is_array($csomag['urlapok'] ?? null)) {
+            $uj = [];
+
+            foreach ($csomag['urlapok'] as $t => $mezok) {
+                if (!is_string($t) || preg_match('/^[a-z0-9_]{1,30}$/', $t) !== 1 || !is_array($mezok)) {
+                    continue;
+                }
+
+                foreach ($mezok as $nev => $x) {
+                    if (!is_string($nev) || preg_match('/^[a-z0-9_]{1,40}$/', $nev) !== 1 || !is_array($x)) {
+                        continue;
+                    }
+
+                    $e = [];
+
+                    if (isset($x['cimke']) && is_scalar($x['cimke']) && trim((string) $x['cimke']) !== '') {
+                        $e['cimke'] = mb_substr(sanitize_text_field((string) $x['cimke']), 0, 120);
+                    }
+
+                    foreach (['kotelezo', 'latszik'] as $b) {
+                        if (array_key_exists($b, $x)) {
+                            $e[$b] = (bool) $x[$b];
+                        }
+                    }
+
+                    if ($e !== []) {
+                        $uj[$t][$nev] = $e;
+                    }
+                }
+            }
+
+            if ($uj !== self::opcio_tomb('sdh_sales_urlap_felulir')) {
+                update_option('sdh_sales_urlap_felulir', $uj, false);
+                $n++;
+            }
+        }
+
+        return $n;
     }
 
     /** @return array<int, array<string, mixed>> a szekciós oldalak (út szerint rendezve) */
@@ -305,7 +374,9 @@ final class SDH_Sales_Exportimport
             $db['oldal'] += self::oldal_import($p) ? 1 : 0;
         }
 
-        SDH_Sales_Naplo::ir('import', sprintf('Import: %d beállítás, %d tartalomelem, %d oldal (mentés: %s)', $db['beallitas'], $db['tartalom'], $db['oldal'], $mentes), 'figyel');
+        $db['felirat'] = self::studio_import($csomag);
+
+        SDH_Sales_Naplo::ir('import', sprintf('Import: %d beállítás, %d tartalomelem, %d oldal, %d felirat-/űrlapkészlet (mentés: %s)', $db['beallitas'], $db['tartalom'], $db['oldal'], $db['felirat'], $mentes), 'figyel');
 
         return ['ok' => true, 'hibak' => [], 'mentes' => $mentes, 'db' => $db];
     }

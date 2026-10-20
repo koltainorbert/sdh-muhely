@@ -1,4 +1,4 @@
-/* Értékesítés – admin: Beállítások (csoportos űrlapok, titkok), Arculat (élő előnézet), Export / Import (előnézeti diff). */
+/* Stúdió – Beállítások (csoportos űrlapok, titkok), Arculat (élő előnézet), Export / Import (előnézeti diff). */
 (() => {
     'use strict';
 
@@ -8,18 +8,25 @@
 
     /* ================================================================== Beállítások */
 
-    A.panel('beallitasok', async (hova, [csopParam]) => {
+    A.panel('beallitasok', (hova, [csopParam]) => beallitasNezet(hova, csopParam, null, 'beallitasok'));
+
+    /**
+     * Beállítás-csoportok kétpaneles nézete. csak: a megjelenítendő csoportkulcsok (null = mind); szuroKulcs: a
+     * panel saját emlékezete (melyik csoport volt nyitva). Egy csoportnál a bal oldali lista elmarad.
+     */
+    async function beallitasNezet(hova, csopParam, csak = null, szuroKulcs = 'beallitasok') {
         const r = await api('admin/beallitasok');
-        const cs = r.csoportok;
+        const cs = csak ? Object.fromEntries(Object.entries(r.csoportok).filter(([k]) => csak.includes(k))) : r.csoportok;
         const kulcsok = Object.keys(cs);
-        const f = S.szurok.beallitasok = Object.assign({ csop: kulcsok[0] }, S.szurok.beallitasok || {});
+        if (!kulcsok.length) { hova.innerHTML = A.nincsBekapcsolva('Beállítások'); return; }
+        const f = S.szurok[szuroKulcs] = Object.assign({ csop: kulcsok[0] }, S.szurok[szuroKulcs] || {});
         if (csopParam && cs[csopParam]) f.csop = csopParam;
         if (!cs[f.csop]) f.csop = kulcsok[0];
         let ertekek = r.ertekek, titkok = r.titkok, aktiv = null;
         S.mentetlen = () => !!(aktiv && aktiv.piszkos);
-        hova.innerHTML = `<div class="sa-ketpanel">
+        hova.innerHTML = kulcsok.length > 1 ? `<div class="sa-ketpanel">
             <nav class="sa-kartya sa-almenu" aria-label="Beállítás-csoportok">${kulcsok.map((k) => `<button type="button" data-csop="${e(k)}" aria-current="${k === f.csop}">${I(cs[k].ikon || 'beallitas')}<span>${e(cs[k].cim)}</span></button>`).join('')}</nav>
-            <div class="sa-oszlop" data-csoport></div></div>`;
+            <div class="sa-oszlop" data-csoport></div></div>` : '<div class="sa-oszlop" data-csoport></div>';
         const doboz = $('[data-csoport]', hova);
 
         const rajzol = () => {
@@ -107,7 +114,8 @@
             rajzol();
         });
         rajzol();
-    });
+    }
+    A.beallitasNezet = beallitasNezet;
 
     /* ================================================================== Arculat */
 

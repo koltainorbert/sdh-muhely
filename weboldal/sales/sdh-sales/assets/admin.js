@@ -1,6 +1,6 @@
-/* Értékesítés – admin-felület: váz, közös komponensek (popup, kétlépcsős gomb, űrlapmezők, parancspaletta),
+/* Stúdió (a webhely teljes szerkesztője és értékesítési felülete): váz, közös komponensek (popup, kétlépcsős gomb, űrlapmezők, parancspaletta),
    és az értékesítési panelek (Áttekintés, Rendelések, Vevők, Leadek, Foglalások, Napló). Külső könyvtár nélkül.
-   A tartalom-panelek: admin-tartalom.js, a beállítás-panelek: admin-beallitas.js. Külső panel:
+   A beállítás-panelek: admin-beallitas.js, a Stúdió (oldalépítő, tartalomtárak, megjelenés): studio/*.js. Külső panel:
    window.PA.panel('kulcs', async (hova, param) => {…}). */
 (() => {
     'use strict';
@@ -71,6 +71,23 @@
         visszaall: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
         letolt: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
         ora: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+        fejlec: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/>',
+        lablec: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18"/>',
+        felirat: '<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',
+        suti: '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5h.01M16 15.5h.01M12 12h.01M11 17h.01M7 14h.01"/>',
+        urlap: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/>',
+        csengo: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+        retegek: '<path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+        visszavon: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+        ujrabe: '<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+        tablet: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M11 18h2"/>',
+        ceruza: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        kozzetesz: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>',
+        elozmeny: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 3"/>',
+        kep: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+        video: '<rect x="2" y="5" width="15" height="14" rx="2"/><path d="m22 8-5 4 5 4z"/>',
+        dokumentum: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+        kijelol: '<path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51z"/>',
     };
     const I = (n, cls = '') => {
         const ut = P[n] || (B.ikonok && B.ikonok[n]) || P.info;
@@ -315,6 +332,49 @@
         return elemCache[tipus];
     }
 
+    /* ------------------------------------------------------------------ Médiatár és oldalválasztó */
+
+    /** Médiatár-választó: Promise<{url, id, alt, mime}|null>. tipus: image | video | '' (bármi). */
+    function mediaValaszt({ cim = 'Média kiválasztása', tipus = 'image' } = {}) {
+        return new Promise((kesz) => {
+            if (!(B.media && window.wp && wp.media)) { jelez('A médiatár itt nem érhető el.', 'figyel'); kesz(null); return; }
+            const keret = wp.media({ title: cim, multiple: false, library: tipus ? { type: tipus } : {}, button: { text: 'Kiválasztás' } });
+            let valasztott = null;
+            keret.on('select', () => { const a = keret.state().get('selection').first().toJSON(); valasztott = { url: a.url || '', id: a.id || 0, alt: a.alt || '', mime: a.mime || '' }; });
+            keret.on('close', () => setTimeout(() => kesz(valasztott), 0));
+            keret.open();
+        });
+    }
+
+    let oldalCache = null;
+    function oldalLista(friss = false) {
+        if (!oldalCache || friss) oldalCache = api('admin/oldalak').then((r) => r.lista || []).catch(() => []);
+        return oldalCache;
+    }
+
+    /** Lebegő oldalválasztó (keresővel); kesz('/ut/'). */
+    async function oldalValaszto(horgony, kesz) {
+        const el = document.createElement('div');
+        el.className = 'sa-oldalvalaszto';
+        el.setAttribute('role', 'dialog');
+        el.setAttribute('aria-label', 'Oldal választása');
+        el.innerHTML = `<input class="sa-input sa-input--kicsi" type="search" placeholder="Oldal keresése…" aria-label="Oldal keresése"><div class="sa-oldalvalaszto__lista" role="listbox" aria-label="Oldalak"></div>`;
+        const zar = lebego(el, horgony);
+        const inp = $('input', el), lista = $('[role=listbox]', el);
+        const oldalak = await oldalLista();
+        const rajzol = () => {
+            const q = inp.value.trim().toLowerCase();
+            const l = oldalak.filter((x) => !q || (x.cim + ' ' + x.ut).toLowerCase().includes(q)).slice(0, 40);
+            lista.innerHTML = l.map((x) => `<button type="button" role="option" data-ut="/${e(x.ut)}/"><span>${e(x.cim || '(cím nélkül)')}</span><small class="sa-mono">/${e(x.ut)}/</small></button>`).join('') || `<div class="sa-kicsi sa-halvany" style="padding:8px">Nincs találat.</div>`;
+        };
+        inp.addEventListener('input', rajzol);
+        inp.addEventListener('keydown', (ev) => { if (ev.key === 'ArrowDown') { ev.preventDefault(); const g = $('button', lista); if (g) g.focus(); } if (ev.key === 'Enter') { ev.preventDefault(); const g = $('button', lista); if (g) g.click(); } });
+        lista.addEventListener('keydown', (ev) => { const gs = $$('button', lista); const i = gs.indexOf(document.activeElement); if (ev.key === 'ArrowDown' && i < gs.length - 1) { ev.preventDefault(); gs[i + 1].focus(); } if (ev.key === 'ArrowUp') { ev.preventDefault(); if (i > 0) gs[i - 1].focus(); else inp.focus(); } });
+        lista.addEventListener('click', (ev) => { const g = ev.target.closest('[data-ut]'); if (!g) return; kesz(g.dataset.ut); zar(); });
+        rajzol();
+        setTimeout(() => inp.focus(), 20);
+    }
+
     /* ------------------------------------------------------------------ Űrlapmezők (séma alapján) */
 
     const kiolvas = (o, k) => {
@@ -352,8 +412,15 @@
             case 'szoveg': case 'email': case 'url': case 'tizedes': {
                 const tipus = m.t === 'email' ? 'email' : m.t === 'url' ? 'url' : 'text';
                 const ro = m.kulcs && ctx.szerkeszt ? 'readonly' : '';
-                w.innerHTML = cimHtml + `<input class="sa-input ${m.kulcs ? 'sa-input--mono' : ''}" id="${id}" type="${tipus}" ${m.t === 'tizedes' ? 'inputmode="decimal"' : ''} value="${e(v ?? '')}" ${m.max ? `maxlength="${Number(m.max)}"` : ''} ${ro} ${req} ${desc} autocomplete="off">` + sugo;
+                const mediaGomb = m.t === 'url' && m.media && B.media && window.wp && wp.media ? `<button type="button" class="sa-gomb" data-media>${I(m.media === 'video' ? 'video' : 'kep')}Médiatár</button>` : '';
+                const oldalGomb = m.t === 'url' && m.oldal ? `<button type="button" class="sa-gomb" data-oldalvalaszto aria-haspopup="listbox">${I('oldal')}Oldal</button>` : '';
+                const mezo = `<input class="sa-input ${m.kulcs ? 'sa-input--mono' : ''}" id="${id}" type="${tipus}" ${m.t === 'tizedes' ? 'inputmode="decimal"' : ''} value="${e(v ?? '')}" ${m.max ? `maxlength="${Number(m.max)}"` : ''} ${ro} ${req} ${desc} autocomplete="off">`;
+                w.innerHTML = cimHtml + (mediaGomb || oldalGomb ? `<div class="sa-mezo__sor">${mezo}${mediaGomb}${oldalGomb}</div>` : mezo) + sugo;
                 const inp = $('input', w);
+                const mg = $('[data-media]', w);
+                if (mg) mg.addEventListener('click', async () => { const x = await mediaValaszt({ cim: m.c, tipus: m.media === 'video' ? 'video' : 'image' }); if (x) { inp.value = x.url; inp.dispatchEvent(new Event('input', { bubbles: true })); } mg.focus(); });
+                const og = $('[data-oldalvalaszto]', w);
+                if (og) og.addEventListener('click', () => oldalValaszto(og, (u) => { inp.value = u; inp.dispatchEvent(new Event('input', { bubbles: true })); }));
                 const sz = $('[data-szamlalo]', w);
                 const frissit = () => { if (sz) { sz.textContent = `${inp.value.length}/${m.max}`; sz.classList.toggle('is-sok', inp.value.length > m.max * 0.9); } };
                 inp.addEventListener('input', () => { frissit(); valt(); });
@@ -452,11 +519,10 @@
                 inp.addEventListener('input', () => { frissit(); valt(); });
                 frissit();
                 const mg = $('[data-media]', w);
-                if (mg) mg.addEventListener('click', () => {
-                    const keret = wp.media({ title: m.c, multiple: false, library: { type: 'image' }, button: { text: 'Kiválasztás' } });
-                    keret.on('select', () => { const a = keret.state().get('selection').first().toJSON(); inp.value = a.url || ''; frissit(); valt(); });
-                    keret.on('close', () => setTimeout(() => mg.focus(), 50));
-                    keret.open();
+                if (mg) mg.addEventListener('click', async () => {
+                    const a = await mediaValaszt({ cim: m.c, tipus: 'image' });
+                    if (a) { inp.value = a.url || ''; frissit(); valt(); }
+                    setTimeout(() => mg.focus(), 50);
                 });
                 ertek = () => inp.value.trim();
                 break;
@@ -527,9 +593,12 @@
                 w.innerHTML = `<span class="sa-mezo__cim">${e(m.c)}</span><div class="sa-mezo__sor">
                     <input class="sa-input" id="${id}" value="${e(l.szoveg || '')}" placeholder="Felirat" aria-label="${e(m.c)} – felirat" maxlength="80" style="flex:.8">
                     <input class="sa-input" value="${e(l.url || '')}" placeholder="/oldal vagy https://…" aria-label="${e(m.c)} – cél">
+                    <button type="button" class="sa-ikon-gomb" data-oldalvalaszto aria-haspopup="listbox" aria-label="${e(m.c)} – oldal választása" title="Oldal választása">${I('oldal')}</button>
                     ${kapcsolo(id + '-uj', !!l.uj, m.c + ' – új lapon')}<span class="sa-kicsi sa-halvany">Új lapon</span></div>` + sugo;
                 const [sz, u] = $$('.sa-input', w);
                 const uj = $('input[type=checkbox]', w);
+                const og = $('[data-oldalvalaszto]', w);
+                og.addEventListener('click', () => oldalValaszto(og, (x) => { u.value = x; valt(); u.focus(); }));
                 [sz, u, uj].forEach((x) => x.addEventListener('input', valt));
                 ertek = () => ({ szoveg: sz.value, url: u.value.trim(), uj: uj.checked });
                 break;
@@ -559,6 +628,26 @@
                 rajzol();
                 elemLista(m.tipus).then((l) => { lista = l; rajzol(); });
                 ertek = () => (m.t === 'tobb' ? kiv.slice() : kiv);
+                break;
+            }
+            case 'lista': {
+                let l = Array.isArray(v) ? v.map(String) : [];
+                w.classList.add('sa-mezo--szeles');
+                w.innerHTML = `<span class="sa-mezo__cim" id="${id}">${e(m.c)}<span class="sa-szamlalo" data-db aria-hidden="true"></span></span><ol class="sa-lista-mezo" role="list" aria-labelledby="${id}"></ol><div class="sa-sor"><button type="button" class="sa-gomb sa-gomb--kicsi" data-uj>${I('plusz')}Új pont</button></div>` + sugo;
+                const ol = $('ol', w);
+                const rajzol = (fokusz = -1) => {
+                    ol.innerHTML = l.map((x, i) => `<li class="sa-lista-mezo__sor"><button type="button" class="sa-szelem__fogo" data-fogo aria-label="${i + 1}. pont áthelyezése – ↑ ↓">${I('fogo')}</button><input class="sa-input sa-input--kicsi" data-i="${i}" value="${e(x)}" maxlength="300" aria-label="${e(m.c)} – ${i + 1}. pont"><button type="button" class="sa-ikon-gomb sa-ikon-gomb--kicsi sa-ikon-gomb--veszely" data-torol="${i}" aria-label="${i + 1}. pont törlése">${I('x')}</button></li>`).join('');
+                    $('[data-db]', w).textContent = `${l.length}${m.max ? '/' + m.max : ''}`;
+                    $('[data-uj]', w).disabled = !!m.max && l.length >= m.max;
+                    if (fokusz >= 0) { const f = $(`[data-i="${fokusz}"]`, ol); if (f) f.focus(); }
+                };
+                ol.addEventListener('input', (ev) => { const x = ev.target.closest('[data-i]'); if (x) { l[Number(x.dataset.i)] = x.value; valt(); } });
+                ol.addEventListener('click', (ev) => { const g = ev.target.closest('[data-torol]'); if (!g) return; l.splice(Number(g.dataset.torol), 1); rajzol(Math.max(0, Number(g.dataset.torol) - 1)); valt(); });
+                ol.addEventListener('keydown', (ev) => { const x = ev.target.closest('[data-i]'); if (x && ev.key === 'Enter') { ev.preventDefault(); const i = Number(x.dataset.i) + 1; l.splice(i, 0, ''); rajzol(i); valt(); } });
+                rendezheto(ol, '.sa-lista-mezo__sor', '[data-fogo]', (a, b) => { const [x] = l.splice(a, 1); l.splice(b, 0, x); rajzol(); valt(); const g = $$('[data-fogo]', ol)[b]; if (g) g.focus(); });
+                $('[data-uj]', w).addEventListener('click', () => { l.push(''); rajzol(l.length - 1); valt(); });
+                rajzol();
+                ertek = () => l.map((x) => x.trim()).filter(Boolean);
                 break;
             }
             case 'nyelvek': {
@@ -890,13 +979,18 @@
     function vaz() {
         const app = $('#sa-app');
         const csop = [];
-        panelek().filter(([, p]) => p.elerheto).forEach(([k, p]) => { let c = csop.find((x) => x[0] === p.csoport); if (!c) { c = [p.csoport, []]; csop.push(c); } c[1].push([k, p]); });
+        panelek().filter(([, p]) => p.elerheto && p.menu !== false).forEach(([k, p]) => { let c = csop.find((x) => x[0] === p.csoport); if (!c) { c = [p.csoport, []]; csop.push(c); } c[1].push([k, p]); });
         const monogram = (B.teljes || B.nev || '?').trim().split(/\s+/).map((x) => x[0]).slice(0, 2).join('').toUpperCase();
         app.innerHTML = `
             <aside class="sa-oldalsav" id="sa-oldalsav" aria-label="Oldalsáv">
-                <div class="sa-oldalsav__fej"><a class="sa-logo" href="#/"><span class="sa-logo__jel">${I('rendeles')}</span><span class="sa-logo__nev">Értékesítés<small title="${e(B.termeknev)}">${e(B.termeknev)}</small></span></a><button type="button" class="sa-ikon-gomb sa-oldalsav__zar" data-menu-zar aria-label="Menü bezárása">${I('x')}</button></div>
+                <div class="sa-oldalsav__fej"><a class="sa-logo" href="#/"><span class="sa-logo__jel">${I('ceruza')}</span><span class="sa-logo__nev">Stúdió<small title="${e(B.termeknev)}">${e(B.termeknev)}</small></span></a><button type="button" class="sa-ikon-gomb sa-oldalsav__zar" data-menu-zar aria-label="Menü bezárása">${I('x')}</button></div>
                 <nav class="sa-menu" aria-label="Fő menü">
-                    ${csop.map(([c, l]) => (c ? `<div class="sa-menu__cim" aria-hidden="true">${e(c)}</div>` : '') + l.map(([k, p]) => `<a href="#/${k === 'attekintes' ? '' : e(k)}" data-menupont="${e(k)}">${I(p.ikon || PANEL_IKON[k] || 'info')}<span>${e(p.cim)}</span><span class="sa-menu__jel" data-jel="${e(k)}" hidden></span></a>`).join('')).join('')}
+                    ${csop.map(([c, l], ci) => {
+                        const pontok = l.map(([k, p]) => `<a href="#/${k === 'attekintes' ? '' : e(k)}" data-menupont="${e(k)}">${I(p.ikon || PANEL_IKON[k] || 'info')}<span>${e(p.cim)}</span><span class="sa-menu__jel" data-jel="${e(k)}" hidden></span></a>`).join('');
+                        if (!c) return pontok;
+                        const nyitva = menuCsopNyitva(c);
+                        return `<div class="sa-menu__csop" data-menucsop="${e(c)}"><button type="button" class="sa-menu__cim" aria-expanded="${nyitva}" aria-controls="sa-mcs-${ci}" data-csopnyit>${e(c)}${I('le', 'sa-menu__nyil')}</button><div class="sa-menu__lista" id="sa-mcs-${ci}" ${nyitva ? '' : 'hidden'}>${pontok}</div></div>`;
+                    }).join('')}
                 </nav>
                 <div class="sa-oldalsav__alja">
                     <a class="sa-oldalsav-gomb" href="${e(B.wp)}">${I('wp')}<span>Haladó rendszer-admin</span></a>
@@ -924,9 +1018,30 @@
         $$('[data-menu-zar]', app).forEach((x) => x.addEventListener('click', () => menuNyit(false)));
         app.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && app.classList.contains('is-menu')) { ev.preventDefault(); menuNyit(false); } });
         $('[data-paletta]', app).addEventListener('click', paletta);
+        $('.sa-menu', app).addEventListener('click', (ev) => {
+            const g = ev.target.closest('[data-csopnyit]');
+            if (!g) return;
+            const be = g.getAttribute('aria-expanded') !== 'true';
+            menuCsopAllit(g.closest('[data-menucsop]').dataset.menucsop, be);
+        });
         $('[data-tema-gomb]', app).addEventListener('click', temaValt);
         const ny = $('[data-nyelv]', app);
         if (ny) ny.addEventListener('change', () => { S.nyelv = ny.value; Object.keys(elemCache).forEach((k) => delete elemCache[k]); route(); });
+    }
+
+    /** Menücsoportok: csak a nyitott csoport pontjai látszanak (a menü így görgetés nélkül elfér); állapot a böngészőben. */
+    const MCS_KULCS = 'studio-menucsoportok';
+    function menuCsopAllapot() { try { return JSON.parse(localStorage.getItem(MCS_KULCS) || 'null') || {}; } catch (x) { return {}; } }
+    function menuCsopNyitva(c) { const a = menuCsopAllapot(); return a.nyitott === undefined ? c === 'Értékesítés' : a.nyitott === c; }
+    /** Harmonika: egyszerre egy csoport nyitott (a menü így asztalon görgetés nélkül elfér). */
+    function menuCsopAllit(c, be) {
+        const nyitott = be ? c : '';
+        try { localStorage.setItem(MCS_KULCS, JSON.stringify({ nyitott })); } catch (x) { /* privát mód */ }
+        $$('[data-menucsop]').forEach((d) => {
+            const ez = d.dataset.menucsop === nyitott;
+            $('[data-csopnyit]', d).setAttribute('aria-expanded', String(ez));
+            $('.sa-menu__lista', d).hidden = !ez;
+        });
     }
 
     /** Mobil oldalsáv (≤ 960 px): fátyol, Esc, fókusz be / vissza, görgetészár. */
@@ -954,7 +1069,7 @@
         const h = $('[data-cim]');
         h.innerHTML = (morzsa ? `<span class="sa-fejlec__morzsa">${morzsa} / </span>` : '') + e(szoveg);
         h.title = h.textContent;
-        document.title = `${szoveg} · Értékesítés · ${B.termeknev}`;
+        document.title = `${szoveg} · Stúdió · ${B.termeknev}`;
     }
 
     const tartalom = () => $('[data-tartalom]');
@@ -982,6 +1097,7 @@
         const p = (B.panelek || {})[kulcs];
         S.oldal = kulcs;
         $$('[data-menupont]').forEach((a) => { if (a.dataset.menupont === kulcs) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+        if (p && p.csoport) { const cs = $(`[data-menucsop="${CSS.escape(p.csoport)}"] [data-csopnyit]`); if (cs && cs.getAttribute('aria-expanded') !== 'true') menuCsopAllit(p.csoport, true); }
         // Minden panel friss tárolót kap: a korábbi panel eseménykezelői nem halmozódnak.
         const regi = tartalom();
         const hova = regi.cloneNode(false);
@@ -989,7 +1105,7 @@
         hova.className = 'sa-tartalom';
         window.scrollTo(0, 0);
         if (!p) { cim('Áttekintés'); return RAJZOLOK.attekintes(hova); }
-        cim(p.cim, p.csoport && p.csoport !== 'Értékesítés' && p.csoport !== 'Rendszer' ? e(p.csoport) : '');
+        cim(p.cim, p.csoport ? e(p.csoport) : '');
         if (!p.elerheto || !RAJZOLOK[kulcs]) { hova.innerHTML = nincsBekapcsolva(p.cim); return undefined; }
         hova.innerHTML = csontvaz();
         Promise.resolve(RAJZOLOK[kulcs](hova, param.map(decodeURIComponent))).catch((x) => { hova.innerHTML = hibaKartya(x); });
@@ -1418,7 +1534,7 @@
         if ($('.sa-paletta')) return;
         const elozo = document.activeElement;
         const alap = [
-            ...panelek().filter(([, p]) => p.elerheto).map(([k, p]) => ({ cim: p.cim, ik: p.ikon || PANEL_IKON[k], csop: 'Ugrás', fn: () => { location.hash = '#/' + (k === 'attekintes' ? '' : k); } })),
+            ...panelek().filter(([, p]) => p.elerheto && p.menu !== false).map(([k, p]) => ({ cim: p.cim, ik: p.ikon || PANEL_IKON[k], csop: 'Ugrás', fn: () => { location.hash = '#/' + (k === 'attekintes' ? '' : k); } })),
             ...PARANCSOK,
             { cim: 'Világos / sötét téma', ik: 'nap', csop: 'Parancsok', fn: temaValt },
             { cim: 'Haladó rendszer-admin', ik: 'wp', csop: 'Parancsok', fn: () => { location.href = B.wp; } },
@@ -1473,8 +1589,10 @@
     window.PA = {
         B, S, $, $$, e, I, WI, api, jelez, bemond, masol, letolt, tolt, popup, popupHiba, fulek, fulHtml, urlap, urlapMezok, mezoVezerlo, kapcsolo,
         szegmens, lapozo, sorKattint, kesleltet, rendezheto, elemLista, elemCache, ures, csontvaz, hibaKartya, nincsBekapcsolva, cim, diffHtml, lapit,
-        cimke, ft, szam, brutto, datum, datumIdo, relativ, van, lebego, kiolvas, beir, rendelesPopup,
+        cimke, ft, szam, brutto, datum, datumIdo, relativ, van, lebego, kiolvas, beir, rendelesPopup, mediaValaszt, oldalLista, oldalValaszto, naptar,
+        panelek: () => panelek(), menuCsopAllit, route,
         panel: (kulcs, fn) => { RAJZOLOK[kulcs] = fn; },
+        rajzolo: (kulcs) => RAJZOLOK[kulcs] || null,
         parancs: (cim, ik, fn, csop = 'Parancsok') => { PARANCSOK.push({ cim, ik, fn, csop }); },
         indul: () => { vaz(); route(); menuJelek(); setInterval(() => { if (!document.hidden) menuJelek(); }, 120000); },
     };

@@ -439,7 +439,8 @@ final class SDH_Sales_Admin_Beallitas
 
     public static function r_arculat_ment(WP_REST_Request $r)
     {
-        $e = SDH_Sales_Arculat::ment((array) $r->get_json_params());
+        $be = (array) $r->get_json_params();
+        $e = SDH_Sales_Arculat::ment($be);
 
         if ($e['hibas'] !== []) {
             return new WP_Error('ervenytelen', 'Érvénytelen érték: ' . implode(', ', $e['hibas']) . '. A többi mentve.', ['status' => 422, 'hibas' => $e['hibas']]);

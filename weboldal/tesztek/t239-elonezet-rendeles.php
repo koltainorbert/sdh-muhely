@@ -45,7 +45,7 @@ T::egyezik('v@example.com', t_rest('GET', '/admin/vevok')->get_data()['lista'][0
 
 // Rejtés: az admin-oldal szövegei és a JS / CSS nem említik.
 $f = '';
-foreach (['admin.js', 'admin-tartalom.js', 'admin-beallitas.js', 'admin.css'] as $x) {
+foreach (array_merge(['admin.js', 'admin-beallitas.js', 'admin.css', 'studio/studio.css'], array_map(static fn ($x) => 'studio/' . $x, SDH_Sales_Admin::STUDIO_JS)) as $x) {
     $f .= (string) file_get_contents(SDH_SALES_DIR . 'assets/' . $x);
 }
 T::igaz(preg_match('/\bSDH\b|sdh[-_]|WordPress/i', $f) !== 1, 'JS / CSS semleges');
