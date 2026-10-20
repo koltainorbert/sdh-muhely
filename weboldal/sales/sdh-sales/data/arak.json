@@ -15,7 +15,8 @@
         "uzenetek",
         "nyomtatas",
         "tac",
-        "mockup"
+        "mockup",
+        "munkalapclone"
       ],
       "kiemelt": false,
       "cta": "Megveszem",
@@ -45,7 +46,8 @@
         "imei",
         "tac",
         "matrica",
-        "mockup"
+        "mockup",
+        "munkalapclone"
       ],
       "kiemelt": true,
       "cta": "Megveszem",
@@ -412,7 +414,7 @@
       "nev": "MunkaLap 3 adatátvétel",
       "tipus": "egyszeri",
       "ar": 49900,
-      "leiras": "Ügyfelek, eszközök, munkalapok, termékek átvétele MunkaLap 3-ból (CSV/XLSX), próbaátvétellel és ellenőrző listával."
+      "leiras": "Az átvételt mi végezzük: a MunkaLap 3 teljes mentéséből (ügyfelek, eszközök, munkalapok állapottörténettel, tételek, hibák, termékek, készlet, képek) próbaátvétellel, ellenőrző riporttal, az átállás napján friss újraátvétellel."
     }
   ],
   "kuponok": [

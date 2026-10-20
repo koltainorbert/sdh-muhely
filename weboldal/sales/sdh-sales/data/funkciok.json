@@ -1,1614 +1,1614 @@
 [
- {
-  "kulcs": "munkalapok",
-  "cim": "Munkalapok",
-  "rovid": "Digitális munkalap a felvételtől a kiadásig: hibák, tételek, előleg, fizetés és állapot egy ablakban.",
-  "leiras": "A munkalap végigkíséri a javítást: ügyfél és eszköz, hibák, szolgáltatások és termékek, előleg, fizetés, számla, lezárás. A mentett lap minden változása magától mentődik, egy lapra több eszköz is kerülhet, a lezárt lap pedig csak olvasható.",
-  "ikon": "munkalap",
-  "ikon_lucide": "clipboard-list",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Egy javítás minden adata egy ablakban, a lista elhagyása nélkül",
-   "Automatikus mentés: azonnal vagy a mező elhagyásakor – nem vész el félbehagyott munka",
-   "Több eszköz egy munkalapon, eszközönkénti állapottal és részösszeggel",
-   "Bevizsgálási díj, előleg, fizetés és pénztár egy folyamatban",
-   "Lezárt lap zárolása, újranyitás csak okkal, naplózva"
-  ],
-  "kapcsolodo": [
-   "atvetel-foto-alairas",
-   "javitasi-garancia",
-   "rma",
-   "nyomtatas",
-   "szamlazas",
-   "parhuzamos-szerkesztes"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "atveteli-foto-alairas",
-   "automatikus-mentes-urlap",
-   "tobb-eszkoz-egy-lapon",
-   "javitasi-garancia",
-   "szamozas-folytatasa"
-  ],
-  "sorrend": 0
- },
- {
-  "kulcs": "ugyfelek",
-  "cim": "Ügyfelek (CRM)",
-  "rovid": "Ügyféltörzs magánszemélyekkel, cégekkel és közületekkel – munkalapokkal, rendelésekkel és vásárlásokkal egy adatlapon.",
-  "leiras": "Az ügyfelet elég egyszer felvenni: utána névre, telefonszámra vagy ügyfélszámra gépelve bárhol előhívod. Az adatlapon egy helyen látod az elérhetőségeit, a címeit, a csatolt fájlokat, a munkalapjait, a rendeléseit és a vásárlásait.",
-  "ikon": "ugyfel",
-  "ikon_lucide": "users",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Magánszemély, cég és közület egy listában, adószámmal és kapcsolattartóval",
-   "Az irányítószám beírására kitöltődik a település",
-   "Levelezési és szállítási cím, telephely ügyfelenként",
-   "Kategória és kedvezmény ügyfelenként",
-   "GDPR-kérésre anonimizálás, a számlák és a munkalapok megtartásával"
-  ],
-  "kapcsolodo": [
-   "eszkozok",
-   "munkalapok",
-   "okos-kereso",
-   "gdpr-anonimizalas",
-   "rma",
-   "sms"
-  ],
-  "kep": "funkcio-ugyfel",
-  "gyik": [
-   "okos-kereso",
-   "gdpr-anonimizalas",
-   "eszkoz-elozmenyek",
-   "adatatvetel-hogyan"
-  ],
-  "sorrend": 1
- },
- {
-  "kulcs": "eszkozok",
-  "cim": "Eszközök és előélet",
-  "rovid": "Minden készülék az ügyfeléhez kötve: IMEI, sorozatszám, tartozékok, zárkód, garancia és minden korábbi javítás.",
-  "leiras": "Ha ugyanaz a készülék újra bejön, az IMEI beírására a rendszer megtalálja, és betölti az adatait és az ügyfelét. Az eszköz előélete megmutatja, hány munkalapon szerepelt, és garanciában van-e még.",
-  "ikon": "telefon",
-  "ikon_lucide": "smartphone",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Az IMEI 15. számjegye után azonnal kiderül, járt-e már nálatok a készülék",
-   "Típusfelismerés az IMEI első nyolc számjegyéből – internet nélkül is",
-   "Feloldó kód és minta titkosítva, jogosultsághoz kötött megnézéssel",
-   "Készülékkép és csatolt fájlok az eszköz mellett",
-   "Visszatérő készülék jelzése a garancia állapotával"
-  ],
-  "kapcsolodo": [
-   "imei-tac",
-   "zarkod-titkositas",
-   "javitasi-garancia",
-   "mockupok",
-   "munkalapok",
-   "cimkenyomtatas"
-  ],
-  "kep": "funkcio-eszkoz",
-  "gyik": [
-   "eszkoz-elozmenyek",
-   "imei-tac",
-   "zarkod-titkositas",
-   "vonalkodolvaso"
-  ],
-  "sorrend": 2
- },
- {
-  "kulcs": "szolgaltatasok",
-  "cim": "Szolgáltatások és árlista",
-  "rovid": "Munkadíjak és bevizsgálási díjak törzse; a meglévő árlista egyben beilleszthető, a munkalapon egy kattintással választható.",
-  "leiras": "A törzs kézzel vagy magától telik meg: amit a munkalapon egyszer beírtál, mentéskor megjegyzi névvel, egységgel, árral és áfakulccsal. A saját árlistád szövegként, előnézettel illeszthető be. A rendszer nem hoz magával árakat – az árlista a te adatod.",
-  "ikon": "csavarkulcs",
-  "ikon_lucide": "wrench",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Árlista-beillesztés előnézettel: új, frissülő és kihagyott sorok",
-   "Fix ár és sávos ár (például 3 000 – 6 000 Ft)",
-   "Bevizsgálási díjak külön nézetben, kategóriakóddal",
-   "Árlista nézet a gyors ár-átíráshoz",
-   "Az ár átírása szerepkörhöz köthető"
-  ],
-  "kapcsolodo": [
-   "munkalapok",
-   "termekek",
-   "szerepkorok",
-   "cimkenyomtatas"
-  ],
-  "kep": "funkcio-szamlazas",
-  "gyik": [
-   "alaprendszer-mi-van-benne",
-   "urlap-testreszabas",
-   "export-adatok"
-  ],
-  "sorrend": 3
- },
- {
-  "kulcs": "attekintes",
-  "cim": "Áttekintés és munkalap-rács",
-  "rovid": "Kezdőképernyő modulcsempékkel, és egy rácsban az összes munkalap: nézetek, szűrők, oszlopok, részletpanel.",
-  "leiras": "Az Áttekintés a napi munka központja: gombsor az új lapokhoz, csempék a legfontosabb számokkal, alatta a munkalap-rács. Kész nézetek (nyitott lapok, átvételre vár, fizetendő, lejárt határidő), saját mentett nézetek, és a kijelölt lap részletei a sor alatt.",
-  "ikon": "modul",
-  "ikon_lucide": "layout-dashboard",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "9 kész nézet, például Fizetendő és Lejárt határidő",
-   "Legfeljebb 30 saját nézet fiókonként, az oszlopokkal együtt",
-   "Állapotváltás közvetlenül a rácsból",
-   "Részletpanel: nyomtatás a lap megnyitása nélkül",
-   "Csempék a modulok legfontosabb számaival"
-  ],
-  "kapcsolodo": [
-   "munkalapok",
-   "okos-kereso",
-   "riportok",
-   "arukiadas"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "alaprendszer-mi-van-benne",
-   "okos-kereso",
-   "nagy-adatbazis-sebesseg",
-   "billentyuparancsok"
-  ],
-  "sorrend": 4
- },
- {
-  "kulcs": "okos-kereso",
-  "cim": "Okos kereső",
-  "rovid": "Minden kereső felismeri, mit írtál be – IMEI, telefonszám, sorszám, kód, márka vagy e-mail –, és a hozzá illő találatot teszi előre.",
-  "leiras": "Gépelés közben lenyílik a találatok listája egyszerre ügyfélből, eszközből, munkalapból, termékből és szolgáltatásból. A találat a saját ablakában nyílik meg, az oldal nem vált; a nyilakkal és az Enterrel billentyűzetről is kezelhető.",
-  "ikon": "kereso",
-  "ikon_lucide": "search",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Felismeri a 14–17 jegyű IMEI-t és a telefonszámot 06 és +36 alakban is",
-   "Ugyanaz a kereső minden listában és a fejlécben",
-   "Ügyfélkereső 0,3–69 ms 100 000 rekordos próbaadaton (mérés, SQLite)",
-   "Oldalszám-ugró és dupla kattintásos megnyitás a listákban"
-  ],
-  "kapcsolodo": [
-   "attekintes",
-   "eszkozok",
-   "ugyfelek",
-   "imei-tac",
-   "sebessegmeres"
-  ],
-  "kep": "funkcio-ugyfel",
-  "gyik": [
-   "okos-kereso",
-   "nagy-adatbazis-sebesseg",
-   "vonalkodolvaso"
-  ],
-  "sorrend": 5
- },
- {
-  "kulcs": "beallitasok",
-  "cim": "Beállítások és űrlapok",
-  "rovid": "Egyetlen adminfelület témánkénti lapfülekkel – és a fogaskerék minden nagy űrlapon, hogy csak az látszódjon, amit használtok.",
-  "leiras": "A Beállítások külön lapfülön kezelik, amit egy szerviz a saját szokására állít: munkalapszám, állapotok színekkel, gyakori hibák és megjegyzések, fizetési módok. Az űrlapok fogaskerekével az adminisztrátor eldönti, mi látszódjon a munkalapon, a rendelésen, az árukiadáson és a számlán.",
-  "ikon": "beallitas",
-  "ikon_lucide": "settings",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Saját állapotlista névvel, színnel és lezáró jelzéssel",
-   "Munkalapszám előtagja, kezdőértéke és kitöltése",
-   "Fogaskerék: mezők, lapfülek, gombok elrejtése űrlaponként",
-   "Mezőmemória: amit egyszer beírtál, felajánlja",
-   "Minden beállítás jelszavas fájlba exportálható"
-  ],
-  "kapcsolodo": [
-   "szerepkorok",
-   "megjelenes",
-   "nyomtatas",
-   "modulrendszer"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "urlap-testreszabas",
-   "megjelenes-testreszabas",
-   "sajat-nyomtatvany",
-   "export-adatok"
-  ],
-  "sorrend": 6
- },
- {
-  "kulcs": "sugo",
-  "cim": "Súgó és oldaltúrák",
-  "rovid": "Fejezetenkénti dokumentáció, kérdés–válasz, újdonságok, és lépésenkénti túra az oldalakon – kereshetően, magyarul.",
-  "leiras": "A Súgó mindig a rendszer mostani állapotát írja le: minden menüpontnak saját fejezete van, lépésről lépésre leírásokkal. A fejléc Súgó gombja az éppen nyitott oldal fejezetét nyitja meg, a túra pedig egyenként megmutatja, mi hol van.",
-  "ikon": "tamogatas",
-  "ikon_lucide": "life-buoy",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Toldalékokat és köznyelvi szavakat értő kereső („kassza” → pénztár)",
-   "Oldalanként kész túra, Következő / Előző lépésekkel",
-   "Saját kérdés–válasz a cég szabályairól",
-   "Az „Amire nem volt találat” lista megmutatja, mit kell még leírni",
-   "Az AI-asszisztens ugyanebből a tudásból felel"
-  ],
-  "kapcsolodo": [
-   "asszisztens",
-   "beallitasok",
-   "mobil"
-  ],
-  "kep": "funkcio-ai",
-  "gyik": [
-   "sugo-a-rendszerben",
-   "oktatas",
-   "ujdonsagok",
-   "ai-asszisztens-mit-tud"
-  ],
-  "sorrend": 7
- },
- {
-  "kulcs": "rma",
-  "cim": "RMA-ügyféloldal",
-  "rovid": "Minden munkalap QR-kódot kap: az ügyfél a telefonján követi a javítást, üzen, és válaszol – telefonálás nélkül.",
-  "leiras": "Az ügyfél a QR-kóddal vagy a linkkel, a telefonszámával és a munkalap sorszámával lép be, és látja az állapotot, a történetet, a tételeket, a fizetendőt és az üzeneteket. A te oldaladon ugyanez a beszélgetés a munkalap RMA lapfülén van; az Üzenetek menüpont mutatja, hol vár olvasatlan ügyfélüzenet.",
-  "ikon": "vonalkod",
-  "ikon_lucide": "qr-code",
-  "modul": "uzenetek",
-  "modulok": [
-   "uzenetek"
-  ],
-  "csoport": "Ügyfélkapcsolat",
-  "elonyok": [
-   "QR-kódos címke a munkalapról, eszközönként",
-   "Ügyféloldal magyarul, angolul és németül",
-   "Kétirányú üzenetváltás, gyors szövegekkel",
-   "A rendeléseknek is van ügyféloldala",
-   "Az IMEI-ből csak az utolsó öt karakter látszik; a belső megjegyzés soha"
-  ],
-  "kapcsolodo": [
-   "online-arajanlat",
-   "elegedettseg",
-   "sms",
-   "munkalapok",
-   "rendelesek",
-   "cimkenyomtatas"
-  ],
-  "kep": "funkcio-sms",
-  "gyik": [
-   "ugyfeloldal-rma",
-   "ugyfeloldal-nyelvek",
-   "online-arajanlat",
-   "sms-hogyan-mukodik"
-  ],
-  "sorrend": 8
- },
- {
-  "kulcs": "online-arajanlat",
-  "cim": "Online árajánlat-elfogadás",
-  "rovid": "Az ügyfél az ügyféloldalon fogadja el vagy utasítja el a javítás árát – telefonálás nélkül, magyarul, angolul vagy németül.",
-  "leiras": "A munkalap végösszege egy gombbal megy ki árajánlatként: üzenet a csevegőbe, és ha van e-mail-cím, levél a linkkel. A válasz – Elfogadom vagy Nem kérem, megjegyzéssel – a lapon, olvasatlan üzenetként és e-mailben is megjelenik.",
-  "ikon": "szamla",
-  "ikon_lucide": "file-check",
-  "modul": "uzenetek",
-  "modulok": [
-   "uzenetek"
-  ],
-  "csoport": "Ügyfélkapcsolat",
-  "elonyok": [
-   "Visszavonás, újraküldés, „azóta változott” jelzés",
-   "Egy ajánlatra egy válasz, időbélyeggel, a Változásnaplóban",
-   "Elfogadási arány a Riportokban",
-   "Lezárt lapról nem küldhető ajánlat",
-   "Kikapcsolható, ha nem használjátok"
-  ],
-  "kapcsolodo": [
-   "rma",
-   "sms",
-   "riportok",
-   "munkalapok"
-  ],
-  "kep": "funkcio-sms",
-  "gyik": [
-   "online-arajanlat",
-   "ugyfeloldal-rma",
-   "riportok"
-  ],
-  "sorrend": 9
- },
- {
-  "kulcs": "elegedettseg",
-  "cim": "Elégedettségi kérdés",
-  "rovid": "A lezárt javítás után az ügyfél SMS-ben vagy e-mailben értékel 1–5 csillaggal; az elégedetteket a Google-értékelésre irányítja.",
-  "leiras": "A beállított nap után, a beállított órától magától megy ki a kérdés, laponként egyszer. Az értékelés a munkalapon és a Riportok Elégedettség csempéjén látszik; a küszöb (alapból 4 csillag) fölött az oldal a Google-értékelés linkjét kínálja, alatta e-mail megy a szerviznek.",
-  "ikon": "csillag",
-  "ikon_lucide": "star",
-  "modul": "uzenetek",
-  "modulok": [
-   "uzenetek"
-  ],
-  "csoport": "Ügyfélkapcsolat",
-  "elonyok": [
-   "SMS vagy e-mail, a beállított napon és órában",
-   "Google-értékelés kérése csak az elégedett ügyfelektől",
-   "Az elégedetlen visszajelzés e-mailben a szervizhez kerül",
-   "Átlag és darabszám a Riportokban",
-   "Anonimizált ügyfél és SMS-tiltás tiszteletben tartva"
-  ],
-  "kapcsolodo": [
-   "sms",
-   "rma",
-   "riportok",
-   "online-arajanlat"
-  ],
-  "kep": "funkcio-sms",
-  "gyik": [
-   "elegedettsegi-kerdes",
-   "sms-hogyan-mukodik",
-   "elegedettseg-offline"
-  ],
-  "sorrend": 10
- },
- {
-  "kulcs": "sms",
-  "cim": "SMS-értesítések",
-  "rovid": "SMS a bolti androidos telefonról: sablonok, szabályok, állapotváltáskor felugró kérdés, bejövő SMS – havidíjas SMS-kapu nélkül.",
-  "leiras": "A rendszer nem külső SMS-szolgáltatón küld, hanem a saját Android-telefonodon futó SMS-átjáró alkalmazáson át, a te számodról. Állapotváltáskor a „Küldjek SMS-t az ügyfélnek?” ablak kitöltött sablont kínál; a válasz SMS az ügyfél munkalapjához kerül.",
-  "ikon": "sms",
-  "ikon_lucide": "message-square-text",
-  "modul": "sms",
-  "modulok": [
-   "sms"
-  ],
-  "csoport": "Ügyfélkapcsolat",
-  "elonyok": [
-   "Saját telefonszám, saját SMS-díjcsomag",
-   "Verziózott sablonok, állapotonkénti szabályok, kérdés vagy automatikus küldés",
-   "Csendes idő: éjjel nem megy automatikus SMS",
-   "Bejövő SMS a munkalaphoz rendelve, STOP szóra leiratkozás",
-   "Ugyanaz az SMS nem megy ki kétszer; a napló csak bővül"
-  ],
-  "kapcsolodo": [
-   "rma",
-   "elegedettseg",
-   "online-arajanlat",
-   "rendelesek",
-   "offline"
-  ],
-  "kep": "funkcio-sms",
-  "gyik": [
-   "sms-hogyan-mukodik",
-   "sms-koltseg",
-   "sms-leiratkozas",
-   "sms-offline"
-  ],
-  "sorrend": 11
- },
- {
-  "kulcs": "levelezes",
-  "cim": "Levelezés",
-  "rovid": "A cég legfeljebb három e-mail-fiókja a rendszerben (IMAP / SMTP), a fontos levelek jelzésével és rendező ügynökkel.",
-  "leiras": "Olvasás, írás, válasz, továbbítás, mappák, keresés – a levelek a levelezőszolgáltatónál maradnak, ezért a telefonodon is ugyanígy látod őket. A fontos-levél ügynök megmondja, mire kell egy órán belül vagy még ma reagálni; csak jelez, a postafiókhoz nem nyúl.",
-  "ikon": "level",
-  "ikon_lucide": "mail",
-  "modul": "levelezes",
-  "modulok": [
-   "levelezes"
-  ],
-  "csoport": "Ügyfélkapcsolat",
-  "elonyok": [
-   "Legfeljebb 3 postafiók, Gmail alkalmazásjelszóval vagy bármely IMAP/SMTP-szolgáltató",
-   "Fontos-levél ügynök: Azonnal / Ma / Ráér / Zaj",
-   "Rendező ügynök: csak azt mozgatja, amit jóváhagysz",
-   "Levél-feladat ügynök az ismétlődő beszállítói levelekhez",
-   "Új levél jelzése minden oldalon"
-  ],
-  "kapcsolodo": [
-   "urlapok-emailben",
-   "naptar",
-   "nyomtatas",
-   "asszisztens"
-  ],
-  "kep": "funkcio-sms",
-  "gyik": [
-   "levelezes-modul",
-   "levelkuldes-smtp",
-   "integraciok-listaja"
-  ],
-  "sorrend": 12
- },
- {
-  "kulcs": "termekek",
-  "cim": "Termékek és készlet",
-  "rovid": "Terméktörzs és készletnyilvántartás: kódok, vonalkód, kategória, beszállító, beszerzési és eladási ár, készletmozgások.",
-  "leiras": "Amit a munkalapra vagy a napi árukiadásra termékként felteszel, mentéskor magától lejön a készletről; a bevételezés és a leltárkorrekció az űrlapon rögzül. Minden változás visszakereshető a készletmozgások között.",
-  "ikon": "doboz",
-  "ikon_lucide": "package",
-  "modul": "termekek",
-  "modulok": [
-   "termekek"
-  ],
-  "csoport": "Értékesítés és raktár",
-  "elonyok": [
-   "Gyári szám, cikkszám, termékkód, vonalkód",
-   "Beszerzési és eladási ár: elég az egyiket beírni, a másik számolódik",
-   "Minimumkészlet és „Rendelni kell” nézet",
-   "Készletmozgások teljes listája",
-   "Termékcímke árral, cikkszámmal, vonalkóddal"
-  ],
-  "kapcsolodo": [
-   "raktar",
-   "arukiadas",
-   "rendelesek",
-   "cimkenyomtatas",
-   "munkalapok"
-  ],
-  "kep": "funkcio-raktar",
-  "gyik": [
-   "keszletkezeles-modul",
-   "rendelesi-javaslat",
-   "brother-cimkenyomtato",
-   "vonalkodolvaso"
-  ],
-  "sorrend": 13
- },
- {
-  "kulcs": "raktar",
-  "cim": "Raktár: foglalás és rendelési javaslat",
-  "rovid": "Foglalás a nyitott munkalapokon, minimum- és célkészlet, rendelési javaslat beszállítónként, CSV és bevételezés egy gombbal.",
-  "leiras": "A nyitott munkalapra tett termék foglalt: a termék űrlapján látszik, hány darab vár javításra, és a munkalap szól, ha nincs elég raktáron. A Rendelési javaslat beszállítónként mutatja, mennyit kell rendelni a célkészletig, kész rendelési szöveggel.",
-  "ikon": "raktar",
-  "ikon_lucide": "warehouse",
-  "modul": "termekek",
-  "modulok": [
-   "termekek"
-  ],
-  "csoport": "Értékesítés és raktár",
-  "elonyok": [
-   "Foglalás nyitott munkalapokon, „Nincs elég raktáron” jelzés",
-   "Célkészlet (üresen a minimum kétszerese)",
-   "Rendelési javaslat beszállítónként, becsült nettó értékkel",
-   "Másolható rendelési szöveg és CSV Excelhez",
-   "Megérkezett gomb = bevételezés készletmozgással"
-  ],
-  "kapcsolodo": [
-   "termekek",
-   "rendelesek",
-   "munkalapok",
-   "cimkenyomtatas",
-   "riportok"
-  ],
-  "kep": "funkcio-raktar",
-  "gyik": [
-   "rendelesi-javaslat",
-   "keszletkezeles-modul",
-   "export-adatok"
-  ],
-  "sorrend": 14
- },
- {
-  "kulcs": "arukiadas",
-  "cim": "Napi árukiadás",
-  "rovid": "Pultos eladás javítás nélkül: termék és szolgáltatás vegyesen, előleggel, fizetéssel, több üzlet esetén helyszínnel.",
-  "leiras": "Az árukiadás ugyanolyan lap, mint a munkalap, csak egyszerűbb: nincs eszköz, hiba és bevizsgálási díj, ügyfelet sem kötelező megadni. A „Rögzítés és fizetés” gombbal egy eladás két mozdulat, a kifizetett eladás magától lezárul.",
-  "ikon": "bolt",
-  "ikon_lucide": "shopping-bag",
-  "modul": "arukiadas",
-  "modulok": [
-   "arukiadas"
-  ],
-  "csoport": "Értékesítés és raktár",
-  "elonyok": [
-   "Két mozdulat: rögzítés és fizetés",
-   "Termék és szolgáltatás vegyesen, kedvezménnyel",
-   "Több üzlet: helyszín eladásonként",
-   "Előleg és fizetés nélküli rögzítés is",
-   "Pénztár és számla ugyanúgy, mint a munkalapon"
-  ],
-  "kapcsolodo": [
-   "termekek",
-   "hazipenztar",
-   "szamlazas",
-   "attekintes"
-  ],
-  "kep": "funkcio-penztar",
-  "gyik": [
-   "helyszinek-tobb-uzlet",
-   "tobb-uzlet-lanc",
-   "hazipenztar-mit-tud"
-  ],
-  "sorrend": 15
- },
- {
-  "kulcs": "rendelesek",
-  "cim": "Rendelések",
-  "rovid": "Ügyfélnek rendelt áru beszállítóval, várható érkezéssel, előleggel – és egy gombos értesítés, amikor megérkezett.",
-  "leiras": "A rendelés mindig ügyfélhez kötött, és öt állapoton megy végig: Felvéve, Megrendelve, Megérkezett, Ügyfél értesítve, Átadva. A „Megjött – értesítés” gomb kitöltött üzenetet küld az ügyféloldalra és kérésre e-mailben; a rendelésnek is van ügyféloldala.",
-  "ikon": "kosar",
-  "ikon_lucide": "truck",
-  "modul": "rendelesek",
-  "modulok": [
-   "rendelesek",
-   "uzenetek"
-  ],
-  "csoport": "Értékesítés és raktár",
-  "elonyok": [
-   "Öt lépéses rendelésút, állapotváltás a listából",
-   "Beszállító és rendelésszám rendelésenként",
-   "Előleg, fizetés, pénztár és számla",
-   "Értesítés egy gombbal, ügyféloldallal",
-   "Jelvény mutatja, hány megérkezett rendelésről nem tud még az ügyfél"
-  ],
-  "kapcsolodo": [
-   "raktar",
-   "termekek",
-   "rma",
-   "sms",
-   "cimkenyomtatas"
-  ],
-  "kep": "funkcio-raktar",
-  "gyik": [
-   "rendelesi-javaslat",
-   "ugyfeloldal-rma",
-   "sms-hogyan-mukodik"
-  ],
-  "sorrend": 16
- },
- {
-  "kulcs": "hazipenztar",
-  "cim": "Házipénztár",
-  "rovid": "Napi kassza címletes zárással, riporttal, statisztikával, Excel-importtal és egyeztető ügynökkel.",
-  "leiras": "A Házipénztár megmutatja, mennyi készpénznek kell a fiókban lennie, és mi történt a pénzzel a nap folyamán. Zárás eltéréssel? Az egyeztető ügynök összeveti a pénztárat a munkalapokkal és a számlákkal, és gombbal javítható megállapításokat tesz.",
-  "ikon": "kassza",
-  "ikon_lucide": "wallet",
-  "modul": "penztar",
-  "modulok": [
-   "penztar"
-  ],
-  "csoport": "Pénzügy",
-  "elonyok": [
-   "Bevétel, kivét, kifizetés, befizetés – kivét mindig névvel",
-   "Címletes számolás: Egyezik / Többlet / Hiány",
-   "Egyeztető ügynök: miért több vagy kevesebb a pénz",
-   "Régi Excel „Zárás” tábla importja, visszavonhatóan",
-   "Pénztárzárás és pénztárjelentés nyomtatványként"
-  ],
-  "kapcsolodo": [
-   "arukiadas",
-   "szamlazas",
-   "munkalapok",
-   "riportok",
-   "nyomtatas"
-  ],
-  "kep": "funkcio-penztar",
-  "gyik": [
-   "hazipenztar-mit-tud",
-   "penztar-excel-import",
-   "konyveloprogram"
-  ],
-  "sorrend": 17
- },
- {
-  "kulcs": "szamlazas",
-  "cim": "Számlázz.hu-számlázás",
-  "rovid": "Valódi számla a munkalapról a saját Számlázz.hu-fiókodban, tételesen – és helyi számla-előkészítő PDF internet nélkül is.",
-  "leiras": "A Számlázz.hu számla gomb a számla ablakát nyitja meg: vevő, tételek, előnézet, minden átírható, és számla csak a „Számla kiállítása” gombra készül. A számla PDF-je a lapon címkeként látszik; adattörlő kód tételenként, eszközönkénti számla is lehetséges.",
-  "ikon": "szamla",
-  "ikon_lucide": "receipt",
-  "modul": "szamlazas",
-  "modulok": [
-   "szamlazas"
-  ],
-  "csoport": "Pénzügy",
-  "elonyok": [
-   "Munkalapból, árukiadásból és rendelésből, dupla adatbevitel nélkül",
-   "Számla soha nem készül magától – csak gombra",
-   "Céges vevő, adószám, e-számla, számlatömb előtag",
-   "Bevizsgálási díj és több eszköz kezelése a számlán",
-   "A Számla Agent kulcs titkosítva tárolva"
-  ],
-  "kapcsolodo": [
-   "hazipenztar",
-   "arukiadas",
-   "munkalapok",
-   "offline"
-  ],
-  "kep": "funkcio-szamlazas",
-  "gyik": [
-   "szamlazas-szamlazzhu",
-   "szamlazzhu-elofizetes",
-   "szamla-javitas",
-   "szamla-offline"
-  ],
-  "sorrend": 18
- },
- {
-  "kulcs": "riportok",
-  "cim": "Riportok",
-  "rovid": "Lezárt javítások, átlagos és medián átfutás, sikeres javítási arány, bevétel – technikusonként és az utolsó 12 hónapra.",
-  "leiras": "A Riportok egy oldalon mutatja, hogyan megy a szerviz: mennyi idő alatt készülnek el a javítások, ki mennyit javított, mennyi jön vissza garanciában, és miből jön a bevétel. Minden szám a lezárt lapokból jön, a lezárás napja szerint.",
-  "ikon": "grafikon",
-  "ikon_lucide": "chart-column",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Pénzügy",
-  "elonyok": [
-   "Időszak: ez a hónap, előző hónap, 30 nap, idén vagy egyéni",
-   "Technikusonként: darab, átfutás, bevétel, visszajött",
-   "Bevétel fajtánként, tételenként, termékkategóriánként",
-   "Árajánlat-elfogadás és elégedettség csempéi",
-   "Az utolsó 12 hónap sávokkal: szezon és trend"
-  ],
-  "kapcsolodo": [
-   "javitasi-garancia",
-   "elegedettseg",
-   "online-arajanlat",
-   "hazipenztar",
-   "attekintes"
-  ],
-  "kep": "funkcio-riport",
-  "gyik": [
-   "riportok",
-   "export-adatok",
-   "javitasi-garancia"
-  ],
-  "sorrend": 19
- },
- {
-  "kulcs": "naptar",
-  "cim": "Naptár",
-  "rovid": "Naptár névenként, tizenkét nézettel, ismétlődő eseményekkel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.",
-  "leiras": "Minden névhez saját naptár tartozik, és ezek egymás mellé tehetők: egy pillantással látszik, ki mikor foglalt. Az esedékes eseményről kártya szól a rendszer minden oldalán, és addig marad, amíg kézzel ki nem nyomod.",
-  "ikon": "naptar",
-  "ikon_lucide": "calendar",
-  "modul": "naptar",
-  "modulok": [
-   "naptar"
-  ],
-  "csoport": "Csapat és idő",
-  "elonyok": [
-   "12 nézet a mai idővonaltól az éves áttekintésig",
-   "Esemény ügyfélhez és munkalapszámhoz köthető",
-   "Ismétlődés, több emlékeztető, fontosság, privát esemény",
-   "E-mail értesítés és napi összefoglaló levél",
-   "Áthelyezés húzással"
-  ],
-  "kapcsolodo": [
-   "foglalas",
-   "csapat",
-   "levelezes",
-   "asszisztens"
-  ],
-  "kep": "funkcio-naptar",
-  "gyik": [
-   "naptar-modul",
-   "naptar-foglalas",
-   "csapat-uzenetek"
-  ],
-  "sorrend": 20
- },
- {
-  "kulcs": "foglalas",
-  "cim": "Online időpontfoglalás",
-  "rovid": "Az ügyfelek a weboldalatokról foglalnak időpontot a naptár szabad helyeire; visszaigazoló e-mail lemondó linkkel, beágyazó kód.",
-  "leiras": "A foglalás eseményként kerül a kiválasztott naptárba, az ügyfél visszaigazoló levelet kap lemondó linkkel, a naptár gazdája értesítést. A foglalóoldal önálló címen fut, és beágyazó kóddal a weboldalatok egy oldalán belül is megjelenhet.",
-  "ikon": "naptar",
-  "ikon_lucide": "calendar-check",
-  "modul": "foglalas",
-  "modulok": [
-   "foglalas",
-   "naptar"
-  ],
-  "csoport": "Csapat és idő",
-  "elonyok": [
-   "Foglalható napok, nyitás, zárás, foglalás hossza, párhuzam",
-   "Csak a valóban szabad sávok foglalhatók",
-   "Visszaigazolás a cég postafiókjából, lemondó linkkel",
-   "Meglévő ügyfélhez a telefonszám köti",
-   "Védelem: csapdamező, időbélyeg, óránként 5 foglalás címenként"
-  ],
-  "kapcsolodo": [
-   "naptar",
-   "levelezes",
-   "ugyfelek",
-   "mobil"
-  ],
-  "kep": "funkcio-naptar",
-  "gyik": [
-   "naptar-foglalas",
-   "foglalas-vedelem",
-   "naptar-modul"
-  ],
-  "sorrend": 21
- },
- {
-  "kulcs": "csapat",
-  "cim": "Csapat-üzenetek",
-  "rovid": "Belső csevegés kollégának, csoportnak vagy mindenkinek – közös fióknál üzenőfal cetlikkel.",
-  "leiras": "Többfelhasználós módban közvetlen, csoportos és mindenkinek szóló üzenetek, fontos üzenet felugró ablakban, kitűzés. Ha mindenki egy közös fiókkal dolgozik, a Csapat üzenőfallá válik: cetlik, amelyeken ott áll, kinek szól és ki írta.",
-  "ikon": "uzenet",
-  "ikon_lucide": "messages-square",
-  "modul": "csapat",
-  "modulok": [
-   "csapat"
-  ],
-  "csoport": "Csapat és idő",
-  "elonyok": [
-   "Csevegés vagy üzenőfal – a munkamódhoz igazítva",
-   "Fontos üzenet felugró ablakban, kitűzés",
-   "Gyors válasz bármelyik oldalról, a felugró kártyán",
-   "Csoportok és közös beszélgetések",
-   "A csapatüzenetek is a Változásnaplóban"
-  ],
-  "kapcsolodo": [
-   "naptar",
-   "kozos-fiok",
-   "asszisztens"
-  ],
-  "kep": "funkcio-naptar",
-  "gyik": [
-   "csapat-uzenetek",
-   "kozos-fiok-pin",
-   "naptar-modul"
-  ],
-  "sorrend": 22
- },
- {
-  "kulcs": "nyomtatas",
-  "cim": "Nyomtatványok",
-  "rovid": "Átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – nyomtatás, PDF, e-mail.",
-  "leiras": "A rendszer minden papírját ugyanaz a Nyomtatás ablak adja: előnézet, példányszám, PDF, e-mail. A nyomtatványok kinézete és szövege a Beállításokban szerkeszthető; a rendszer a lap állapotához illő nyomtatványt választja ki elsőnek.",
-  "ikon": "nyomtato",
-  "ikon_lucide": "printer",
-  "modul": "nyomtatas",
-  "modulok": [
-   "nyomtatas"
-  ],
-  "csoport": "Dokumentumok és készülékadatok",
-  "elonyok": [
-   "14 féle nyomtatvány, mindegyik szerkeszthető",
-   "Előnézet, 1–9 példány, PDF-letöltés",
-   "Küldés e-mailben PDF-csatolmányként",
-   "Belső munkalap zárkóddal – az ügyfél címére nem küldhető",
-   "Több eszközös lap: mind egy lapon vagy eszközönként"
-  ],
-  "kapcsolodo": [
-   "cimkenyomtatas",
-   "atvetel-foto-alairas",
-   "urlapok-emailben",
-   "hazipenztar"
-  ],
-  "kep": "funkcio-szamlazas",
-  "gyik": [
-   "nyomtatvanyok",
-   "sajat-nyomtatvany",
-   "brother-cimkenyomtato"
-  ],
-  "sorrend": 23
- },
- {
-  "kulcs": "cimkenyomtatas",
-  "cim": "Címkenyomtatás (Brother)",
-  "rovid": "RMA-matrica a készülékre, termék-, szolgáltatás-, rendelés- és egyedi címke Brother címkenyomtatóra, állítható tartalommal.",
-  "leiras": "A matricán ránézésre látszik, kié a készülék, melyik munkalaphoz tartozik, mi a baja és hogyan oldható fel; QR-kód visz az ügyféloldalra. Nyomtatás böngészőből (Brother illesztőprogrammal, pontos méretű PDF) vagy közvetlenül hálózaton a QL nyomtatókra.",
-  "ikon": "cimke",
-  "ikon_lucide": "tag",
-  "modul": "matrica",
-  "modulok": [
-   "matrica"
-  ],
-  "csoport": "Dokumentumok és készülékadatok",
-  "elonyok": [
-   "RMA-matrica: név, munkalapszám, típus, RMA-kód + QR, hiba, IMEI, dátum",
-   "Mezőnként be/ki, sorrend, betű – élő előnézettel",
-   "Termékcímke árral, cikkszámmal, vonalkóddal",
-   "DK-tekercsek és TZe-szalagok, álló vagy fekvő",
-   "Feloldó kód a matricán csak jogosultnak"
-  ],
-  "kapcsolodo": [
-   "nyomtatas",
-   "rma",
-   "termekek",
-   "eszkozok"
-  ],
-  "kep": "funkcio-raktar",
-  "gyik": [
-   "brother-cimkenyomtato",
-   "nyomtatvanyok",
-   "vonalkodolvaso"
-  ],
-  "sorrend": 24
- },
- {
-  "kulcs": "imei-tac",
-  "cim": "IMEI-lekérdezés és TAC-adatbázis",
-  "rovid": "Az IMEI elejéből felismeri a gyártót és a típust – internet nélkül –, a gyári adatokat pedig ellenőrző oldalról vagy fizetős szolgáltatótól tölti be.",
-  "leiras": "A TAC-adatbázis az IMEI első nyolc számjegyéből mondja meg a gyártót és a típust, és a kézzel felvitt új készülékekből tanul. A sorozatszám, a garancia és a gyártás dátuma ingyenes ellenőrző oldal eredményének beillesztésével vagy előfizetett szolgáltatótól kérdezhető le.",
-  "ikon": "vonalkod",
-  "ikon_lucide": "scan-barcode",
-  "modul": "imei",
-  "modulok": [
-   "imei",
-   "tac"
-  ],
-  "csoport": "Dokumentumok és készülékadatok",
-  "elonyok": [
-   "Típusfelismerés helyben, internet nélkül",
-   "Tanul a saját felvitelekből, az újratöltés nem írja felül",
-   "Ingyenes ellenőrző oldalak gombjai, IMEI a vágólapra",
-   "Beillesztett eredményből automatikus mezőkitöltés",
-   "Fizetős szolgáltató bekötése kulccsal"
-  ],
-  "kapcsolodo": [
-   "eszkozok",
-   "okos-kereso",
-   "mockupok"
-  ],
-  "kep": "funkcio-eszkoz",
-  "gyik": [
-   "imei-tac",
-   "imei-szolgaltato",
-   "eszkoz-elozmenyek"
-  ],
-  "sorrend": 25
- },
- {
-  "kulcs": "mockupok",
-  "cim": "Eszköz-mockupok",
-  "rovid": "Termékkép minden eszköz mellett – kategória, gyártó vagy típus szerint, saját képekkel.",
-  "leiras": "A munkalapon, az Áttekintés részletpanelén és az Eszközök listában minden készülék mellett kép áll, így ránézésre látszik, miről van szó. A rendszer gyári képkészlettel érkezik; saját kép gyártóra vagy típusrészletre szabható.",
-  "ikon": "kamera",
-  "ikon_lucide": "image",
-  "modul": "mockup",
-  "modulok": [
-   "mockup"
-  ],
-  "csoport": "Dokumentumok és készülékadatok",
-  "elonyok": [
-   "20 gyári kép kategóriánként",
-   "Saját kép gyártóra vagy típusrészletre",
-   "Az eszköz saját fotója elsőbbséget kap",
-   "Egységes stílushoz generáló szöveg (prompt) sablon"
-  ],
-  "kapcsolodo": [
-   "eszkozok",
-   "imei-tac",
-   "megjelenes"
-  ],
-  "kep": "funkcio-eszkoz",
-  "gyik": [
-   "megjelenes-testreszabas",
-   "imei-tac"
-  ],
-  "sorrend": 26
- },
- {
-  "kulcs": "urlapok-emailben",
-  "cim": "Űrlapok és dokumentumok e-mailben",
-  "rovid": "E-mail gomb minden fő űrlapon: adatlap és PDF a cég levelezőfiókjából, a munkalap Fájlok lapfülének dokumentumai egy levélben.",
-  "leiras": "A munkalap, árukiadás, rendelés, ügyfél, eszköz, termék és szolgáltatás gombsorának végén ott az E-mail: kitöltött tárgy és szöveg, a lapoknál PDF-csatolmánnyal. A munkalap Fájlok lapfülére bármilyen dokumentum feltölthető, és egy gombbal elküldhető a beállított címre.",
-  "ikon": "email",
-  "ikon_lucide": "mail-plus",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Dokumentumok és készülékadatok",
-  "elonyok": [
-   "E-mail gomb hét űrlapon, űrlaponként kapcsolható",
-   "PDF-csatolmány a lapoknál",
-   "Fájlok lapfül a munkalapon: fotó, PDF, Word, Excel",
-   "A feloldó kód és a minta soha nem kerül a levélbe",
-   "A lap naplójába bekerül, kinek ment"
-  ],
-  "kapcsolodo": [
-   "nyomtatas",
-   "levelezes",
-   "munkalapok"
-  ],
-  "kep": "funkcio-szamlazas",
-  "gyik": [
-   "levelkuldes-smtp",
-   "nyomtatvanyok",
-   "levelezes-modul"
-  ],
-  "sorrend": 27
- },
- {
-  "kulcs": "asszisztens",
-  "cim": "AI-asszisztens",
-  "rovid": "Beépített segítő minden oldalon: elmagyaráz, végigvezet, utánanéz az adatoknak – és csak jóváhagyással módosít.",
-  "leiras": "Az asszisztens a súgóból, a rendszer adataiból és a cég saját tudástárából felel; amit nem tud, arra nem talál ki választ. Adatot csak javaslatként változtat: a kártyán a régi és az új érték látszik, átírásnál megerősítő kódot is kér, és minden módosítás előtt pillanatkép készül.",
-  "ikon": "ai",
-  "ikon_lucide": "bot",
-  "modul": "asszisztens",
-  "modulok": [
-   "asszisztens"
-  ],
-  "csoport": "Mesterséges intelligencia",
-  "elonyok": [
-   "Kérdez-felel a teljes dokumentációból és az adatokból",
-   "Lépésenként végigvezet, megmutatja, hová kattints",
-   "Csak jóváhagyással módosít; átírásnál megerősítő kóddal",
-   "Zárkódot, mintát, jelszót és API-kulcsot nem lát",
-   "Napi kérdéskeret kollégánként, eszközönként kapcsolható jogok"
-  ],
-  "kapcsolodo": [
-   "sugo",
-   "valtozasnaplo",
-   "hazipenztar",
-   "levelezes"
-  ],
-  "kep": "funkcio-ai",
-  "gyik": [
-   "ai-asszisztens-mit-tud",
-   "ai-koltseg",
-   "ai-adatvedelem"
-  ],
-  "sorrend": 28
- },
- {
-  "kulcs": "biztonsag",
-  "cim": "Adatbiztonság",
-  "rovid": "Kétlépcsős belépés, titkosított zárkódok és mentések, szerepkörök, aláírt változásnapló és GDPR-anonimizálás – a saját szervereden.",
-  "leiras": "A rendszer a cég saját szerverén fut, és belépés nélkül semmit nem mutat. A titkos adatok (zárkód, API-kulcsok, jelszavak) titkosítva állnak, a mentések jelszóval titkosítva mennek külső helyre, a Változásnapló minden sorát aláírás védi.",
-  "ikon": "pajzs",
-  "ikon_lucide": "shield",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Kétlépcsős belépés, kötelezővé tehető",
-   "Zárkód, minta, API-kulcsok titkosítva",
-   "Szerepkörök és finom jogok, szerveroldali ellenőrzéssel",
-   "Aláírt, nem átírható változásnapló",
-   "GDPR-anonimizálás a számviteli megőrzés mellett"
-  ],
-  "kapcsolodo": [
-   "ketlepcsos-belepes",
-   "zarkod-titkositas",
-   "kulso-mentes",
-   "gdpr-anonimizalas",
-   "valtozasnaplo",
-   "szerepkorok"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "hol-vannak-az-adatok",
-   "mit-kuld-a-rendszer",
-   "ketlepcsos-belepes",
-   "jelszavak-kulcsok-tarolasa",
-   "zart-mod"
-  ],
-  "sorrend": 29
- },
- {
-  "kulcs": "ketlepcsos-belepes",
-  "cim": "Kétlépcsős belépés",
-  "rovid": "A jelszó mellé a telefon hitelesítő alkalmazásának 6 jegyű, 30 másodpercenként változó kódja – kötelezővé is tehető.",
-  "leiras": "Az adminisztrátor dönti el: kikapcsolva, választható, adminisztrátoroknak vagy mindenkinek kötelező. Minden kód egyszer használható, 10 tartalék kód jár hozzá, a megbízható gép 0–90 napig (alapból 30) nem kér kódot.",
-  "ikon": "pajzs-pipa",
-  "ikon_lucide": "shield-check",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Szabványos TOTP-kód (RFC 6238) bármely hitelesítő alkalmazással",
-   "10 egyszer használható tartalék kód",
-   "Kötelező adminisztrátoroknak vagy mindenkinek",
-   "Fiókonként 10 rossz kód után 15 perc zár",
-   "Elveszett telefonnál az adminisztrátor visszaállítja"
-  ],
-  "kapcsolodo": [
-   "biztonsag",
-   "szerepkorok",
-   "belepo-oldal",
-   "kozos-fiok"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "ketlepcsos-belepes",
-   "elveszett-telefon-2fa",
-   "kozos-fiok-pin"
-  ],
-  "sorrend": 30
- },
- {
-  "kulcs": "zarkod-titkositas",
-  "cim": "Zárkód-titkosítás",
-  "rovid": "A készülékek feloldó kódja és mintája titkosítva tárolódik; megnézni csak jogosult kolléga tudja, és ez naplózódik.",
-  "leiras": "A zárkód és a minta titkosítva áll az adatbázisban, a szerver kulcsaihoz kötve. Az űrlap nem küldi ki a kódot: a Megmutat gomb jogot ellenőriz, és minden megnézést – vagy elutasított próbát – a Napló rögzít.",
-  "ikon": "kulcs",
-  "ikon_lucide": "lock-keyhole",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Titkosított tárolás az adatbázisban és a mentésben",
-   "Megnézés csak „Feloldó kód és minta megnézése” joggal",
-   "Minden megnézés naplózva",
-   "Belső munkalapon és matricán is csak jogosultnak",
-   "E-mailbe és az asszisztenshez soha nem kerül"
-  ],
-  "kapcsolodo": [
-   "eszkozok",
-   "szerepkorok",
-   "biztonsag",
-   "valtozasnaplo"
-  ],
-  "kep": "funkcio-eszkoz",
-  "gyik": [
-   "zarkod-titkositas",
-   "jogosultsagok-szerepek",
-   "jelszavak-kulcsok-tarolasa"
-  ],
-  "sorrend": 31
- },
- {
-  "kulcs": "gdpr-anonimizalas",
-  "cim": "GDPR-anonimizálás",
-  "rovid": "Törlési kérésre a személyes adatok törlődnek, a munkalapok, számlák és pénztártételek a számviteli megőrzés miatt megmaradnak.",
-  "leiras": "Az Anonimizálás (GDPR) gomb előbb megmutatja, mi törlődik és mi marad, darabszámokkal, és kötelezően rögzíti, mikor és hogyan kérte az ügyfél. A név, a telefonszámok, az e-mail, a címek, a zárkódok és az ügyféloldali linkek törlődnek; az adatlap tetején igazoló sor marad.",
-  "ikon": "gdpr",
-  "ikon_lucide": "eraser",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Előnézet: mi törlődik, mi marad",
-   "Kötelező kérésrögzítés, igazoló sor az adatlapon",
-   "Választható: az üzenetek szövege is törlődjön",
-   "Visszaigazoló e-mail az ügyfélnek a törlés előtt",
-   "A naplóba egyetlen, személyes adat nélküli bejegyzés"
-  ],
-  "kapcsolodo": [
-   "ugyfelek",
-   "biztonsag",
-   "valtozasnaplo",
-   "szerepkorok"
-  ],
-  "kep": "funkcio-ugyfel",
-  "gyik": [
-   "gdpr-anonimizalas",
-   "gdpr-mi-marad",
-   "hol-vannak-az-adatok"
-  ],
-  "sorrend": 32
- },
- {
-  "kulcs": "szerepkorok",
-  "cim": "Szerepkörök és jogok",
-  "rovid": "Öt gyári szerep és legfeljebb 12 egyéni: modulonként és finom jogokkal szabályozható, ki mit láthat és tehet.",
-  "leiras": "Alapból öt szerep van: Admin, Kolléga, Pultos, Szerelő és Pénztáros. A szerepnél nem bejelölt modul el sem látszik; finom jog szól a pénztárriportról, az árak és törzsek átírásáról, a tételár átírásáról a lapon, a számláról, a törlésről és a feloldó kód megnézéséről.",
-  "ikon": "felhasznalo",
-  "ikon_lucide": "user-cog",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Tiltott modul: nincs menüpont, csempe, oldal, és a művelet sem fut",
-   "Finom jogok: pénztárriport, ár-átírás, tételár, számla, törlés, zárkód",
-   "Szerveroldali ellenőrzés, a próbálkozás a Naplóba kerül",
-   "Közös fiókon a kiválasztott dolgozó szerepe érvényes",
-   "Legfeljebb 12 egyéni szerep"
-  ],
-  "kapcsolodo": [
-   "kozos-fiok",
-   "ketlepcsos-belepes",
-   "zarkod-titkositas",
-   "valtozasnaplo"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "jogosultsagok-szerepek",
-   "kozos-fiok-pin",
-   "felhasznalok-szama-ar"
-  ],
-  "sorrend": 33
- },
- {
-  "kulcs": "parhuzamos-szerkesztes",
-  "cim": "Párhuzamos szerkesztés védelme",
-  "rovid": "Amit valaki épp szerkeszt, azt a rendszer más ablakban nem nyitja meg; ütközésnél a mentés nem írja felül csendben a másikét.",
-  "leiras": "A munkalap alapból zárol: egyszerre csak egy ablakban szerkeszthető, a doboz kiírja, ki dolgozik rajta. Ha mégis ketten mentenének, a rendszer megnevezi, ki és mikor módosított, és választást kínál: frissítés a legújabbra vagy a saját mentése.",
-  "ikon": "lakat",
-  "ikon_lucide": "lock",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Zárolás munkalapra alapból, ügyfélre és eszközre választhatóan",
-   "„X is szerkeszti” jelzés az űrlap alján",
-   "Felülbíráló kód sürgős esetre, naplózva",
-   "Ütközéskor nincs csendes adatvesztés",
-   "Közös fióknál is személyre szól"
-  ],
-  "kapcsolodo": [
-   "kozos-fiok",
-   "munkalapok",
-   "valtozasnaplo",
-   "szerepkorok"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "parhuzamos-szerkesztes",
-   "kozos-fiok-pin",
-   "valtozasnaplo"
-  ],
-  "sorrend": 34
- },
- {
-  "kulcs": "kozos-fiok",
-  "cim": "Közös fiók: „Ki vagy?”",
-  "rovid": "Ha a pultnál mindenki ugyanazzal a fiókkal dolgozik, a választó névvel és PIN-nel rögzíti, ki mit csinált.",
-  "leiras": "A közösnek jelölt fiókon induláskor „Ki vagy?” ablak jelenik meg: név és 4–8 jegyű PIN. A választott dolgozó neve kerül a naplóba, a pénztárba és a munkalap felelősébe, és az ő szerepe érvényes; váltás a profilmenüből.",
-  "ikon": "csapat",
-  "ikon_lucide": "user-check",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Név + 4–8 jegyű PIN, 5 hibás PIN után 5 perc szünet",
-   "A Napló, a pénztár és a munkalap a tényleges dolgozót mutatja",
-   "A dolgozó szerepe a közös fiókon is érvényes",
-   "A választás böngészőnként legfeljebb 12 óráig él",
-   "A PIN csak lenyomatként tárolva"
-  ],
-  "kapcsolodo": [
-   "szerepkorok",
-   "parhuzamos-szerkesztes",
-   "csapat",
-   "valtozasnaplo"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "kozos-fiok-pin",
-   "kis-uzlet-egy-gep",
-   "jogosultsagok-szerepek"
-  ],
-  "sorrend": 35
- },
- {
-  "kulcs": "valtozasnaplo",
-  "cim": "Változásnapló",
-  "rovid": "Minden módosítás mezőszinten: ki, mikor, honnan, régi és új érték – aláírt, nem átírható napló, visszakereshetően.",
-  "leiras": "A napló mindent rögzít: munkalap, árukiadás, rendelés, ügyfél, eszköz, pénztár, számla, üzenetek, naptár, készlet és a Beállítások változásai. Minden bejegyzést aláírás véd, és az „Épség ellenőrzése” gomb megmutatja, ha valaki az adatbázisban mégis hozzányúlt.",
-  "ikon": "riport",
-  "ikon_lucide": "history",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Mezőszintű napló régi → új értékkel",
-   "Honnan: felület, asszisztens, időzített feladat, ügyféloldal, SMS-átjáró",
-   "Napló gomb a lapokon: a rekord története popupban",
-   "Szűrők, CSV-export, épség-ellenőrzés",
-   "Senki nem írhatja át, a rendszer sem"
-  ],
-  "kapcsolodo": [
-   "biztonsag",
-   "asszisztens",
-   "parhuzamos-szerkesztes",
-   "szerepkorok"
-  ],
-  "kep": "funkcio-riport",
-  "gyik": [
-   "valtozasnaplo",
-   "tamogatasi-hozzaferes-mit-lat",
-   "jogosultsagok-szerepek"
-  ],
-  "sorrend": 36
- },
- {
-  "kulcs": "belepo-oldal",
-  "cim": "Testreszabható belépő oldal",
-  "rovid": "Logó, háttér (szín, színátmenet, kép, videó), a doboz helye és stílusa, szövegek – mentés előtt élő előnézettel.",
-  "leiras": "A bejelentkező oldal a cég arculatát viseli: logó és magassága, címsor, alcím, gombfelirat, háttér, üveghatás, neon fény, betűtípus. A videós háttér csak széles képernyőn töltődik le; mobilon a háttérkép áll.",
-  "ikon": "felhasznalo",
-  "ikon_lucide": "log-in",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Biztonság és adatvédelem",
-  "elonyok": [
-   "Élő előnézet asztali és mobil nézetben",
-   "Háttér: egyszínű, színátmenet, kép vagy videó",
-   "Doboz balra, középre vagy jobbra, üveghatással",
-   "Ami üres, az a cég arculata szerint látszik"
-  ],
-  "kapcsolodo": [
-   "megjelenes",
-   "ketlepcsos-belepes",
-   "biztonsag"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "megjelenes-testreszabas",
-   "ketlepcsos-belepes",
-   "zart-mod"
-  ],
-  "sorrend": 37
- },
- {
-  "kulcs": "mentes",
-  "cim": "Napi mentés és visszaállítás",
-  "rovid": "Teljes mentés minden nap magától, kézzel bármikor; visszaállítás előnézettel, egyetlen tranzakcióban.",
-  "leiras": "A rendszer naponta teljes mentést készít, és kézzel is bármikor indítható. Visszaállítás előtt előnézetet mutat (idő, verzió, táblák, sorok), biztonsági mentést készít a mostani állapotról, és hiba esetén mindent visszagördít.",
-  "ikon": "mentes",
-  "ikon_lucide": "archive-restore",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Napi automatikus teljes mentés + Mentés most gomb",
-   "Visszaállítás: adatok és beállítások, vagy csak beállítások",
-   "Biztonsági mentés minden visszaállítás és frissítés előtt",
-   "Hibánál nincs félkész állapot: egy tranzakció",
-   "Beállítások exportja és importja költözéshez"
-  ],
-  "kapcsolodo": [
-   "kulso-mentes",
-   "frissites",
-   "biztonsag",
-   "valtozasnaplo"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "napi-mentes",
-   "visszaallitas-mentesbol",
-   "mi-nincs-a-mentesben"
-  ],
-  "sorrend": 38
- },
- {
-  "kulcs": "kulso-mentes",
-  "cim": "Titkosított külső mentés",
-  "rovid": "Minden mentés után jelszóval titkosított másolat a bekapcsolt helyekre: Google Drive, FTP/FTPS, NAS (mappa vagy WebDAV), saját gép.",
-  "leiras": "A szerveren maradó mentés nem véd a lemez meghibásodása ellen, ezért minden mentésből titkosított másolat készül egy vagy több külső helyre. Ha a cél épp nem elérhető, a másolat várakozik, és 15 percenként újrapróbálkozik.",
-  "ikon": "felho",
-  "ikon_lucide": "cloud-upload",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Erős, jelszavas titkosítás – jelszó nélkül a fájl olvashatatlan",
-   "Egyszerre több cél: Drive, FTP/FTPS, NAS, saját gép",
-   "Google Drive: csak a saját létrehozott fájljaihoz fér hozzá",
-   "Újrapróbálás 15 percenként, legfeljebb hatszor",
-   "Megőrzés: a legfrissebb N, az előző napi és a visszaállítás előtti"
-  ],
-  "kapcsolodo": [
-   "mentes",
-   "biztonsag",
-   "offline"
-  ],
-  "kep": "funkcio-mentes",
-  "gyik": [
-   "titkositott-kulso-mentes",
-   "google-drive-mentes",
-   "mentesi-jelszo-elveszett"
-  ],
-  "sorrend": 39
- },
- {
-  "kulcs": "frissites",
-  "cim": "Egykattintásos frissítés",
-  "rovid": "Az új verzió egy gombbal települ; előtte a rendszer teljes mentést készít, és ha az nem sikerül, nem frissít.",
-  "leiras": "A frissítés kétlépcsős gombbal indul, az adatok és a beállítások megmaradnak, az adatbázis az első oldalnál magától igazodik. Érvényes licenccel az új verzió a forgalmazói központból jön, és a forgalmazó távoli karbantartásként is elindíthatja.",
-  "ikon": "frissites",
-  "ikon_lucide": "refresh-cw",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Teljes mentés minden frissítés előtt",
-   "Az adatok és a beállítások megmaradnak",
-   "Elakadásnál a régi verzió marad",
-   "A nyitva hagyott oldalak maguktól megújulnak",
-   "Újdonságok a Súgóban és az asszisztens tudásában"
-  ],
-  "kapcsolodo": [
-   "licenc-karbantartas",
-   "mentes",
-   "sugo"
-  ],
-  "kep": "funkcio-licenc",
-  "gyik": [
-   "frissites-menete",
-   "mi-van-ha-lejar-a-licenc",
-   "ujdonsagok"
-  ],
-  "sorrend": 40
- },
- {
-  "kulcs": "licenc-karbantartas",
-  "cim": "Licenc és távoli karbantartás",
-  "rovid": "A forgalmazó előre látja, ha baj van (lassú, fogy a tárhely, elmaradt a mentés), és távolról karbantart – a te engedélyeddel.",
-  "leiras": "A rendszer 5 percenként jelentkezik a forgalmazó központjánál műszaki állapottal és darabszámokkal – ügyfélnevet, telefonszámot, munkalap-tartalmat és forgalmat soha nem küld. A forgalmazó mentést, diagnosztikát, gyorsítótár-ürítést és frissítést indíthat; támogatási belépést csak te engedélyezhetsz, 2 órára, 1 vagy 3 napra.",
-  "ikon": "szerver",
-  "ikon_lucide": "server-cog",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Licenc: modulok, felhasználók, frissítés jogosultsága",
-   "Lejárt licencnél is minden működik, csak frissítés nincs",
-   "Távoli karbantartás, a Licenc lapon kikapcsolható",
-   "Időkorlátos támogatási belépés, minden lépés naplózva",
-   "Digitálisan aláírt központi válaszok"
-  ],
-  "kapcsolodo": [
-   "frissites",
-   "sebessegmeres",
-   "mentes",
-   "biztonsag"
-  ],
-  "kep": "funkcio-licenc",
-  "gyik": [
-   "tavoli-karbantartas",
-   "tamogatasi-hozzaferes",
-   "szivveres-mi-az",
-   "telemetria-kikapcsolasa",
-   "licenc-allapotok"
-  ],
-  "sorrend": 41
- },
- {
-  "kulcs": "sebessegmeres",
-  "cim": "Sebesség nagy adatnál",
-  "rovid": "Gyors listák több százezer rekordnál is, beépített sebességméréssel – a számok mérésből, nem ígéretből.",
-  "leiras": "A listák halasztott összekapcsolással lapoznak (előbb az azonosítók, aztán csak a látszó sorok), a gyakori számok tárolva vannak. A Sebesség lapfülön a mérés lefuttatja a gyakori lekérdezéseket, és a 300 ms fölötti lépéseket LASSÚ-ként sorolja fel.",
-  "ikon": "sebesseg",
-  "ikon_lucide": "gauge",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Termékek lista: 5,28 s → 0,38 s 300 000 rekordos próbaadaton (mérés, SQLite)",
-   "Ügyfelek 11 801. oldala: 0,589 s → 0,018 s ugyanott (mérés)",
-   "40 000 munkalapos próbaadaton minden mért lépés 300 ms alatt (mérés, SQLite)",
-   "Mérés indítása a Beállításokból, adatírás nélkül",
-   "Kiírja az OPcache és a MySQL-puffer állapotát"
-  ],
-  "kapcsolodo": [
-   "okos-kereso",
-   "attekintes",
-   "licenc-karbantartas",
-   "offline"
-  ],
-  "kep": "funkcio-riport",
-  "gyik": [
-   "nagy-adatbazis-sebesseg",
-   "szerver-meretezes",
-   "tarhely-figyeles"
-  ],
-  "sorrend": 42
- },
- {
-  "kulcs": "offline",
-  "cim": "Internet nélküli működés",
-  "rovid": "A pult akkor is dolgozik, ha elmegy az internet: munkalap, pénztár, nyomtatás, mentés helyben megy, a külső kérések nem várakoztatnak.",
-  "leiras": "A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is megy. Ami internetet kér (számla, e-mail, asszisztens), az kimaradáskor azonnal szól, és nem vár perceket; a fejlécben „Nincs internet” jelzés áll, amíg vissza nem jön.",
-  "ikon": "wifi-ki",
-  "ikon_lucide": "wifi-off",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Net nélkül is: munkalapok, ügyfelek, eszközök, pénztár, árukiadás, rendelések",
-   "Helyi nyomtatás, matrica, PDF, naptár, csapat, napló, helyi mentés",
-   "SMS a bolti telefonon át, ha az a helyi hálózaton van",
-   "A számla később a lapról kiállítható",
-   "Percenkénti ellenőrzés, jelzés a fejlécben"
-  ],
-  "kapcsolodo": [
-   "sms",
-   "kulso-mentes",
-   "szamlazas",
-   "sebessegmeres"
-  ],
-  "kep": "funkcio-licenc",
-  "gyik": [
-   "offline-mi-mukodik",
-   "offline-mi-var",
-   "offline-elofeltetel",
-   "aramszunet"
-  ],
-  "sorrend": 43
- },
- {
-  "kulcs": "adatatvetel",
-  "cim": "Adatátvétel (MunkaLap 3, Excel)",
-  "rovid": "Átálláskor a régi adatok – akár több tízezer munkalap – kézi gépelés nélkül jönnek át CSV-, TXT- vagy XLSX-fájlból.",
-  "leiras": "Sorrend: ügyfelek, eszközök, munkalapok, tételek, hibák. A rendszer felismeri a kódolást és az elválasztót, javasolja az oszlopok párosítását, és írás nélküli próbát futtat: hány sor jó, hány van már bent, hány hibás és miért. Minden átvétel visszavonható.",
-  "ikon": "import",
-  "ikon_lucide": "file-input",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "MunkaLap 3 mentései és Excel-táblák (CSV, TXT, XLSX)",
-   "Régi Windows-os ékezetek is helyesen",
-   "Próba írás nélkül, bruttó végösszeggel az egyeztetéshez",
-   "A munkalapszámok megmaradnak, a számozás utánuk folytatódik",
-   "Visszavonás átvételenként"
-  ],
-  "kapcsolodo": [
-   "ugyfelek",
-   "munkalapok",
-   "eszkozok",
-   "mentes"
-  ],
-  "kep": "funkcio-licenc",
-  "gyik": [
-   "adatatvetel-hogyan",
-   "munkalap3-atvetel",
-   "excelbol-valtas",
-   "adatatvetel-proba",
-   "adatatvetel-visszavonas"
-  ],
-  "sorrend": 44
- },
- {
-  "kulcs": "modulrendszer",
-  "cim": "Moduláris felépítés",
-  "rovid": "17 külön kapcsolható modul: a rendszer csak azt mutatja, amit használtok, és a licenc csak a megvett modulokat engedélyezi.",
-  "leiras": "Az alaprendszer (Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés) mindig fut; a többi modul egyenként kapcsolható. A kikapcsolt modul eltűnik a menüből, a csempékből, a Beállításokból és a súgóból – az adatai megmaradnak, visszakapcsolva ott folytatódik.",
-  "ikon": "modul",
-  "ikon_lucide": "puzzle",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "17 modul: értékesítés, pénzügy, ügyfélkapcsolat, csapat, AI, dokumentumok",
-   "Kikapcsolva az adat megmarad",
-   "Függőségek kezelve (például az SMS az Ügyfélüzenetekre épül)",
-   "Bővítés később, újratelepítés nélkül",
-   "Egyedi modul is fejleszthető"
-  ],
-  "kapcsolodo": [
-   "beallitasok",
-   "licenc-karbantartas",
-   "szerepkorok"
-  ],
-  "kep": "funkcio-licenc",
-  "gyik": [
-   "alaprendszer-mi-van-benne",
-   "melyik-csomag-kell",
-   "modul-utolag",
-   "modul-kikapcsolas-adat"
-  ],
-  "sorrend": 45
- },
- {
-  "kulcs": "megjelenes",
-  "cim": "Megjelenés és arculat",
-  "rovid": "Saját logó, színek, sarkok, betűk – és négy megjelenés: Rendszer, Világos, Sötét, Papír, kékfény-szűrővel.",
-  "leiras": "A cég alapértelmezését az adminisztrátor állítja be, a kolléga a saját gépén ettől eltérhet: megjelenés, kékfény-szűrő, üvegszín, betűméret. A fejléc órája a zárásig hátralévő időt is mutatja a nyitvatartás alapján.",
-  "ikon": "szikra",
-  "ikon_lucide": "palette",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Logó, cégnév, kiemelő szín, lekerekítés, betűtípus",
-   "Rendszer / Világos / Sötét / Papír megjelenés",
-   "Kékfény-szűrő az esti munkához",
-   "Betűméret gépenként, területenként",
-   "Nyitvatartás és óra a fejlécben"
-  ],
-  "kapcsolodo": [
-   "belepo-oldal",
-   "mobil",
-   "beallitasok"
-  ],
-  "kep": "funkcio-ugyfel",
-  "gyik": [
-   "megjelenes-testreszabas",
-   "telefonon-tableten",
-   "bongeszok"
-  ],
-  "sorrend": 46
- },
- {
-  "kulcs": "mobil",
-  "cim": "Telefonon és tableten",
-  "rovid": "A rendszer böngészőben fut, telefonon és tableten is: a menü ikonokra szűkül, a popupok kitöltik a képernyőt, a táblázatok oldalra húzhatók.",
-  "leiras": "Nem kell telepíteni semmit a gépekre: a pultgép, a műhely tabletje és a telefon ugyanazt a rendszert éri el. Az Átvétel lapfül telefonon a kamerát nyitja a fotóhoz, az aláírás ujjal megy.",
-  "ikon": "eszkoz",
-  "ikon_lucide": "tablet-smartphone",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Üzemeltetés",
-  "elonyok": [
-   "Böngészőben fut, nincs telepítendő program",
-   "60 oldalas bejárás 390 px széles telefonon: 0 hiba (böngészős mérés)",
-   "Fotó a kamerával, aláírás érintőképernyőn",
-   "Popupok telefonon görgethetők, asztalon egyben"
-  ],
-  "kapcsolodo": [
-   "atvetel-foto-alairas",
-   "megjelenes",
-   "offline",
-   "rma"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "telefonon-tableten",
-   "bongeszok",
-   "atveteli-foto-alairas"
-  ],
-  "sorrend": 47
- },
- {
-  "kulcs": "atvetel-foto-alairas",
-  "cim": "Átvételi fotó és aláírás",
-  "rovid": "A munkalap Átvétel lapfülén fotó a készülék állapotáról és az ügyfél aláírása érintőképernyőn – az átvételi elismervényen is.",
-  "leiras": "Telefonon vagy tableten a „Fotó készítése” gomb a kamerát nyitja: a karcok, repedések rögzítve vannak, mielőtt hozzányúlnátok a készülékhez. Az ügyfél ujjal vagy tollal aláír; az aláírás és az első négy fotó az átvételi nyomtatványra is rákerül.",
-  "ikon": "kamera",
-  "ikon_lucide": "camera",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Fotó a kamerával vagy fájlból, behúzással",
-   "Aláírás érintőképernyőn, az aláíró nevével",
-   "Az átvételi elismervényen legfeljebb 4 bélyegkép",
-   "Az aláírás a Változásnaplóba is bekerül",
-   "Vitás esetben bizonyíték az átvételkori állapotról"
-  ],
-  "kapcsolodo": [
-   "munkalapok",
-   "nyomtatas",
-   "javitasi-garancia",
-   "mobil"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "atveteli-foto-alairas",
-   "javitasi-garancia",
-   "nyomtatvanyok"
-  ],
-  "sorrend": 48
- },
- {
-  "kulcs": "javitasi-garancia",
-  "cim": "Javítási garancia",
-  "rovid": "Garancia a lezárás napjától (alapból 180 nap, laponként átírható), és jelzés, ha a készülék garanciaidőn belül visszajön.",
-  "leiras": "A garancia napjai és lejárata a munkalapon és a nyomtatványon is látszik. Ha a készülék visszajön, az Eszköz lapfül jelzi, hány lapon szerepelt és garanciában van-e; a „Garanciális visszatérésként rögzítem” gomb az új lapot az eredetihez köti.",
-  "ikon": "garancia",
-  "ikon_lucide": "badge-check",
-  "modul": "alap",
-  "modulok": [],
-  "csoport": "Napi munka",
-  "elonyok": [
-   "Alap garancia napokban, laponként felülírható",
-   "Lejárat a nyomtatványon is",
-   "Visszatérő készülék jelzése",
-   "Garanciális lánc: az eredeti lap, számla, pénztár érintetlen",
-   "Sikeres javítási arány a Riportokban"
-  ],
-  "kapcsolodo": [
-   "munkalapok",
-   "eszkozok",
-   "riportok",
-   "rma"
-  ],
-  "kep": "funkcio-munkalap",
-  "gyik": [
-   "javitasi-garancia",
-   "riportok",
-   "ugyfeloldal-rma"
-  ],
-  "sorrend": 49
- }
+  {
+    "kulcs": "munkalapok",
+    "cim": "Munkalapok",
+    "rovid": "Digitális munkalap a felvételtől a kiadásig: hibák, tételek, előleg, fizetés és állapot egy ablakban.",
+    "leiras": "A munkalap végigkíséri a javítást: ügyfél és eszköz, hibák, szolgáltatások és termékek, előleg, fizetés, számla, lezárás. A mentett lap minden változása magától mentődik, egy lapra több eszköz is kerülhet, a lezárt lap pedig csak olvasható.",
+    "ikon": "munkalap",
+    "ikon_lucide": "clipboard-list",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Egy javítás minden adata egy ablakban, a lista elhagyása nélkül",
+      "Automatikus mentés: azonnal vagy a mező elhagyásakor – nem vész el félbehagyott munka",
+      "Több eszköz egy munkalapon, eszközönkénti állapottal és részösszeggel",
+      "Bevizsgálási díj, előleg, fizetés és pénztár egy folyamatban",
+      "Lezárt lap zárolása, újranyitás csak okkal, naplózva"
+    ],
+    "kapcsolodo": [
+      "atvetel-foto-alairas",
+      "javitasi-garancia",
+      "rma",
+      "nyomtatas",
+      "szamlazas",
+      "parhuzamos-szerkesztes"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "atveteli-foto-alairas",
+      "automatikus-mentes-urlap",
+      "tobb-eszkoz-egy-lapon",
+      "javitasi-garancia",
+      "szamozas-folytatasa"
+    ],
+    "sorrend": 0
+  },
+  {
+    "kulcs": "ugyfelek",
+    "cim": "Ügyfelek (CRM)",
+    "rovid": "Ügyféltörzs magánszemélyekkel, cégekkel és közületekkel – munkalapokkal, rendelésekkel és vásárlásokkal egy adatlapon.",
+    "leiras": "Az ügyfelet elég egyszer felvenni: utána névre, telefonszámra vagy ügyfélszámra gépelve bárhol előhívod. Az adatlapon egy helyen látod az elérhetőségeit, a címeit, a csatolt fájlokat, a munkalapjait, a rendeléseit és a vásárlásait.",
+    "ikon": "ugyfel",
+    "ikon_lucide": "users",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Magánszemély, cég és közület egy listában, adószámmal és kapcsolattartóval",
+      "Az irányítószám beírására kitöltődik a település",
+      "Levelezési és szállítási cím, telephely ügyfelenként",
+      "Kategória és kedvezmény ügyfelenként",
+      "GDPR-kérésre anonimizálás, a számlák és a munkalapok megtartásával"
+    ],
+    "kapcsolodo": [
+      "eszkozok",
+      "munkalapok",
+      "okos-kereso",
+      "gdpr-anonimizalas",
+      "rma",
+      "sms"
+    ],
+    "kep": "funkcio-ugyfel",
+    "gyik": [
+      "okos-kereso",
+      "gdpr-anonimizalas",
+      "eszkoz-elozmenyek",
+      "adatatvetel-hogyan"
+    ],
+    "sorrend": 1
+  },
+  {
+    "kulcs": "eszkozok",
+    "cim": "Eszközök és előélet",
+    "rovid": "Minden készülék az ügyfeléhez kötve: IMEI, sorozatszám, tartozékok, zárkód, garancia és minden korábbi javítás.",
+    "leiras": "Ha ugyanaz a készülék újra bejön, az IMEI beírására a rendszer megtalálja, és betölti az adatait és az ügyfelét. Az eszköz előélete megmutatja, hány munkalapon szerepelt, és garanciában van-e még.",
+    "ikon": "telefon",
+    "ikon_lucide": "smartphone",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Az IMEI 15. számjegye után azonnal kiderül, járt-e már nálatok a készülék",
+      "Típusfelismerés az IMEI első nyolc számjegyéből – internet nélkül is",
+      "Feloldó kód és minta titkosítva, jogosultsághoz kötött megnézéssel",
+      "Készülékkép és csatolt fájlok az eszköz mellett",
+      "Visszatérő készülék jelzése a garancia állapotával"
+    ],
+    "kapcsolodo": [
+      "imei-tac",
+      "zarkod-titkositas",
+      "javitasi-garancia",
+      "mockupok",
+      "munkalapok",
+      "cimkenyomtatas"
+    ],
+    "kep": "funkcio-eszkoz",
+    "gyik": [
+      "eszkoz-elozmenyek",
+      "imei-tac",
+      "zarkod-titkositas",
+      "vonalkodolvaso"
+    ],
+    "sorrend": 2
+  },
+  {
+    "kulcs": "szolgaltatasok",
+    "cim": "Szolgáltatások és árlista",
+    "rovid": "Munkadíjak és bevizsgálási díjak törzse; a meglévő árlista egyben beilleszthető, a munkalapon egy kattintással választható.",
+    "leiras": "A törzs kézzel vagy magától telik meg: amit a munkalapon egyszer beírtál, mentéskor megjegyzi névvel, egységgel, árral és áfakulccsal. A saját árlistád szövegként, előnézettel illeszthető be. A rendszer nem hoz magával árakat – az árlista a te adatod.",
+    "ikon": "csavarkulcs",
+    "ikon_lucide": "wrench",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Árlista-beillesztés előnézettel: új, frissülő és kihagyott sorok",
+      "Fix ár és sávos ár (például 3 000 – 6 000 Ft)",
+      "Bevizsgálási díjak külön nézetben, kategóriakóddal",
+      "Árlista nézet a gyors ár-átíráshoz",
+      "Az ár átírása szerepkörhöz köthető"
+    ],
+    "kapcsolodo": [
+      "munkalapok",
+      "termekek",
+      "szerepkorok",
+      "cimkenyomtatas"
+    ],
+    "kep": "funkcio-szamlazas",
+    "gyik": [
+      "alaprendszer-mi-van-benne",
+      "urlap-testreszabas",
+      "export-adatok"
+    ],
+    "sorrend": 3
+  },
+  {
+    "kulcs": "attekintes",
+    "cim": "Áttekintés és munkalap-rács",
+    "rovid": "Kezdőképernyő modulcsempékkel, és egy rácsban az összes munkalap: nézetek, szűrők, oszlopok, részletpanel.",
+    "leiras": "Az Áttekintés a napi munka központja: gombsor az új lapokhoz, csempék a legfontosabb számokkal, alatta a munkalap-rács. Kész nézetek (nyitott lapok, átvételre vár, fizetendő, lejárt határidő), saját mentett nézetek, és a kijelölt lap részletei a sor alatt.",
+    "ikon": "modul",
+    "ikon_lucide": "layout-dashboard",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "9 kész nézet, például Fizetendő és Lejárt határidő",
+      "Legfeljebb 30 saját nézet fiókonként, az oszlopokkal együtt",
+      "Állapotváltás közvetlenül a rácsból",
+      "Részletpanel: nyomtatás a lap megnyitása nélkül",
+      "Csempék a modulok legfontosabb számaival"
+    ],
+    "kapcsolodo": [
+      "munkalapok",
+      "okos-kereso",
+      "riportok",
+      "arukiadas"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "alaprendszer-mi-van-benne",
+      "okos-kereso",
+      "nagy-adatbazis-sebesseg",
+      "billentyuparancsok"
+    ],
+    "sorrend": 4
+  },
+  {
+    "kulcs": "okos-kereso",
+    "cim": "Okos kereső",
+    "rovid": "Minden kereső felismeri, mit írtál be – IMEI, telefonszám, sorszám, kód, márka vagy e-mail –, és a hozzá illő találatot teszi előre.",
+    "leiras": "Gépelés közben lenyílik a találatok listája egyszerre ügyfélből, eszközből, munkalapból, termékből és szolgáltatásból. A találat a saját ablakában nyílik meg, az oldal nem vált; a nyilakkal és az Enterrel billentyűzetről is kezelhető.",
+    "ikon": "kereso",
+    "ikon_lucide": "search",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Felismeri a 14–17 jegyű IMEI-t és a telefonszámot 06 és +36 alakban is",
+      "Ugyanaz a kereső minden listában és a fejlécben",
+      "Ügyfélkereső 0,3–69 ms 100 000 rekordos próbaadaton (mérés, SQLite)",
+      "Oldalszám-ugró és dupla kattintásos megnyitás a listákban"
+    ],
+    "kapcsolodo": [
+      "attekintes",
+      "eszkozok",
+      "ugyfelek",
+      "imei-tac",
+      "sebessegmeres"
+    ],
+    "kep": "funkcio-ugyfel",
+    "gyik": [
+      "okos-kereso",
+      "nagy-adatbazis-sebesseg",
+      "vonalkodolvaso"
+    ],
+    "sorrend": 5
+  },
+  {
+    "kulcs": "beallitasok",
+    "cim": "Beállítások és űrlapok",
+    "rovid": "Egyetlen adminfelület témánkénti lapfülekkel – és a fogaskerék minden nagy űrlapon, hogy csak az látszódjon, amit használtok.",
+    "leiras": "A Beállítások külön lapfülön kezelik, amit egy szerviz a saját szokására állít: munkalapszám, állapotok színekkel, gyakori hibák és megjegyzések, fizetési módok. Az űrlapok fogaskerekével az adminisztrátor eldönti, mi látszódjon a munkalapon, a rendelésen, az árukiadáson és a számlán.",
+    "ikon": "beallitas",
+    "ikon_lucide": "settings",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Saját állapotlista névvel, színnel és lezáró jelzéssel",
+      "Munkalapszám előtagja, kezdőértéke és kitöltése",
+      "Fogaskerék: mezők, lapfülek, gombok elrejtése űrlaponként",
+      "Mezőmemória: amit egyszer beírtál, felajánlja",
+      "Minden beállítás jelszavas fájlba exportálható"
+    ],
+    "kapcsolodo": [
+      "szerepkorok",
+      "megjelenes",
+      "nyomtatas",
+      "modulrendszer"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "urlap-testreszabas",
+      "megjelenes-testreszabas",
+      "sajat-nyomtatvany",
+      "export-adatok"
+    ],
+    "sorrend": 6
+  },
+  {
+    "kulcs": "sugo",
+    "cim": "Súgó és oldaltúrák",
+    "rovid": "Fejezetenkénti dokumentáció, kérdés–válasz, újdonságok, és lépésenkénti túra az oldalakon – kereshetően, magyarul.",
+    "leiras": "A Súgó mindig a rendszer mostani állapotát írja le: minden menüpontnak saját fejezete van, lépésről lépésre leírásokkal. A fejléc Súgó gombja az éppen nyitott oldal fejezetét nyitja meg, a túra pedig egyenként megmutatja, mi hol van.",
+    "ikon": "tamogatas",
+    "ikon_lucide": "life-buoy",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Toldalékokat és köznyelvi szavakat értő kereső („kassza” → pénztár)",
+      "Oldalanként kész túra, Következő / Előző lépésekkel",
+      "Saját kérdés–válasz a cég szabályairól",
+      "Az „Amire nem volt találat” lista megmutatja, mit kell még leírni",
+      "Az AI-asszisztens ugyanebből a tudásból felel"
+    ],
+    "kapcsolodo": [
+      "asszisztens",
+      "beallitasok",
+      "mobil"
+    ],
+    "kep": "funkcio-ai",
+    "gyik": [
+      "sugo-a-rendszerben",
+      "oktatas",
+      "ujdonsagok",
+      "ai-asszisztens-mit-tud"
+    ],
+    "sorrend": 7
+  },
+  {
+    "kulcs": "rma",
+    "cim": "RMA-ügyféloldal",
+    "rovid": "Minden munkalap QR-kódot kap: az ügyfél a telefonján követi a javítást, üzen, és válaszol – telefonálás nélkül.",
+    "leiras": "Az ügyfél a QR-kóddal vagy a linkkel, a telefonszámával és a munkalap sorszámával lép be, és látja az állapotot, a történetet, a tételeket, a fizetendőt és az üzeneteket. A te oldaladon ugyanez a beszélgetés a munkalap RMA lapfülén van; az Üzenetek menüpont mutatja, hol vár olvasatlan ügyfélüzenet.",
+    "ikon": "vonalkod",
+    "ikon_lucide": "qr-code",
+    "modul": "uzenetek",
+    "modulok": [
+      "uzenetek"
+    ],
+    "csoport": "Ügyfélkapcsolat",
+    "elonyok": [
+      "QR-kódos címke a munkalapról, eszközönként",
+      "Ügyféloldal magyarul, angolul és németül",
+      "Kétirányú üzenetváltás, gyors szövegekkel",
+      "A rendeléseknek is van ügyféloldala",
+      "Az IMEI-ből csak az utolsó öt karakter látszik; a belső megjegyzés soha"
+    ],
+    "kapcsolodo": [
+      "online-arajanlat",
+      "elegedettseg",
+      "sms",
+      "munkalapok",
+      "rendelesek",
+      "cimkenyomtatas"
+    ],
+    "kep": "funkcio-sms",
+    "gyik": [
+      "ugyfeloldal-rma",
+      "ugyfeloldal-nyelvek",
+      "online-arajanlat",
+      "sms-hogyan-mukodik"
+    ],
+    "sorrend": 8
+  },
+  {
+    "kulcs": "online-arajanlat",
+    "cim": "Online árajánlat-elfogadás",
+    "rovid": "Az ügyfél az ügyféloldalon fogadja el vagy utasítja el a javítás árát – telefonálás nélkül, magyarul, angolul vagy németül.",
+    "leiras": "A munkalap végösszege egy gombbal megy ki árajánlatként: üzenet a csevegőbe, és ha van e-mail-cím, levél a linkkel. A válasz – Elfogadom vagy Nem kérem, megjegyzéssel – a lapon, olvasatlan üzenetként és e-mailben is megjelenik.",
+    "ikon": "szamla",
+    "ikon_lucide": "file-check",
+    "modul": "uzenetek",
+    "modulok": [
+      "uzenetek"
+    ],
+    "csoport": "Ügyfélkapcsolat",
+    "elonyok": [
+      "Visszavonás, újraküldés, „azóta változott” jelzés",
+      "Egy ajánlatra egy válasz, időbélyeggel, a Változásnaplóban",
+      "Elfogadási arány a Riportokban",
+      "Lezárt lapról nem küldhető ajánlat",
+      "Kikapcsolható, ha nem használjátok"
+    ],
+    "kapcsolodo": [
+      "rma",
+      "sms",
+      "riportok",
+      "munkalapok"
+    ],
+    "kep": "funkcio-sms",
+    "gyik": [
+      "online-arajanlat",
+      "ugyfeloldal-rma",
+      "riportok"
+    ],
+    "sorrend": 9
+  },
+  {
+    "kulcs": "elegedettseg",
+    "cim": "Elégedettségi kérdés",
+    "rovid": "A lezárt javítás után az ügyfél SMS-ben vagy e-mailben értékel 1–5 csillaggal; az elégedetteket a Google-értékelésre irányítja.",
+    "leiras": "A beállított nap után, a beállított órától magától megy ki a kérdés, laponként egyszer. Az értékelés a munkalapon és a Riportok Elégedettség csempéjén látszik; a küszöb (alapból 4 csillag) fölött az oldal a Google-értékelés linkjét kínálja, alatta e-mail megy a szerviznek.",
+    "ikon": "csillag",
+    "ikon_lucide": "star",
+    "modul": "uzenetek",
+    "modulok": [
+      "uzenetek"
+    ],
+    "csoport": "Ügyfélkapcsolat",
+    "elonyok": [
+      "SMS vagy e-mail, a beállított napon és órában",
+      "Google-értékelés kérése csak az elégedett ügyfelektől",
+      "Az elégedetlen visszajelzés e-mailben a szervizhez kerül",
+      "Átlag és darabszám a Riportokban",
+      "Anonimizált ügyfél és SMS-tiltás tiszteletben tartva"
+    ],
+    "kapcsolodo": [
+      "sms",
+      "rma",
+      "riportok",
+      "online-arajanlat"
+    ],
+    "kep": "funkcio-sms",
+    "gyik": [
+      "elegedettsegi-kerdes",
+      "sms-hogyan-mukodik",
+      "elegedettseg-offline"
+    ],
+    "sorrend": 10
+  },
+  {
+    "kulcs": "sms",
+    "cim": "SMS-értesítések",
+    "rovid": "SMS a bolti androidos telefonról: sablonok, szabályok, állapotváltáskor felugró kérdés, bejövő SMS – havidíjas SMS-kapu nélkül.",
+    "leiras": "A rendszer nem külső SMS-szolgáltatón küld, hanem a saját Android-telefonodon futó SMS-átjáró alkalmazáson át, a te számodról. Állapotváltáskor a „Küldjek SMS-t az ügyfélnek?” ablak kitöltött sablont kínál; a válasz SMS az ügyfél munkalapjához kerül.",
+    "ikon": "sms",
+    "ikon_lucide": "message-square-text",
+    "modul": "sms",
+    "modulok": [
+      "sms"
+    ],
+    "csoport": "Ügyfélkapcsolat",
+    "elonyok": [
+      "Saját telefonszám, saját SMS-díjcsomag",
+      "Verziózott sablonok, állapotonkénti szabályok, kérdés vagy automatikus küldés",
+      "Csendes idő: éjjel nem megy automatikus SMS",
+      "Bejövő SMS a munkalaphoz rendelve, STOP szóra leiratkozás",
+      "Ugyanaz az SMS nem megy ki kétszer; a napló csak bővül"
+    ],
+    "kapcsolodo": [
+      "rma",
+      "elegedettseg",
+      "online-arajanlat",
+      "rendelesek",
+      "offline"
+    ],
+    "kep": "funkcio-sms",
+    "gyik": [
+      "sms-hogyan-mukodik",
+      "sms-koltseg",
+      "sms-leiratkozas",
+      "sms-offline"
+    ],
+    "sorrend": 11
+  },
+  {
+    "kulcs": "levelezes",
+    "cim": "Levelezés",
+    "rovid": "A cég legfeljebb három e-mail-fiókja a rendszerben (IMAP / SMTP), a fontos levelek jelzésével és rendező ügynökkel.",
+    "leiras": "Olvasás, írás, válasz, továbbítás, mappák, keresés – a levelek a levelezőszolgáltatónál maradnak, ezért a telefonodon is ugyanígy látod őket. A fontos-levél ügynök megmondja, mire kell egy órán belül vagy még ma reagálni; csak jelez, a postafiókhoz nem nyúl.",
+    "ikon": "level",
+    "ikon_lucide": "mail",
+    "modul": "levelezes",
+    "modulok": [
+      "levelezes"
+    ],
+    "csoport": "Ügyfélkapcsolat",
+    "elonyok": [
+      "Legfeljebb 3 postafiók, Gmail alkalmazásjelszóval vagy bármely IMAP/SMTP-szolgáltató",
+      "Fontos-levél ügynök: Azonnal / Ma / Ráér / Zaj",
+      "Rendező ügynök: csak azt mozgatja, amit jóváhagysz",
+      "Levél-feladat ügynök az ismétlődő beszállítói levelekhez",
+      "Új levél jelzése minden oldalon"
+    ],
+    "kapcsolodo": [
+      "urlapok-emailben",
+      "naptar",
+      "nyomtatas",
+      "asszisztens"
+    ],
+    "kep": "funkcio-sms",
+    "gyik": [
+      "levelezes-modul",
+      "levelkuldes-smtp",
+      "integraciok-listaja"
+    ],
+    "sorrend": 12
+  },
+  {
+    "kulcs": "termekek",
+    "cim": "Termékek és készlet",
+    "rovid": "Terméktörzs és készletnyilvántartás: kódok, vonalkód, kategória, beszállító, beszerzési és eladási ár, készletmozgások.",
+    "leiras": "Amit a munkalapra vagy a napi árukiadásra termékként felteszel, mentéskor magától lejön a készletről; a bevételezés és a leltárkorrekció az űrlapon rögzül. Minden változás visszakereshető a készletmozgások között.",
+    "ikon": "doboz",
+    "ikon_lucide": "package",
+    "modul": "termekek",
+    "modulok": [
+      "termekek"
+    ],
+    "csoport": "Értékesítés és raktár",
+    "elonyok": [
+      "Gyári szám, cikkszám, termékkód, vonalkód",
+      "Beszerzési és eladási ár: elég az egyiket beírni, a másik számolódik",
+      "Minimumkészlet és „Rendelni kell” nézet",
+      "Készletmozgások teljes listája",
+      "Termékcímke árral, cikkszámmal, vonalkóddal"
+    ],
+    "kapcsolodo": [
+      "raktar",
+      "arukiadas",
+      "rendelesek",
+      "cimkenyomtatas",
+      "munkalapok"
+    ],
+    "kep": "funkcio-raktar",
+    "gyik": [
+      "keszletkezeles-modul",
+      "rendelesi-javaslat",
+      "brother-cimkenyomtato",
+      "vonalkodolvaso"
+    ],
+    "sorrend": 13
+  },
+  {
+    "kulcs": "raktar",
+    "cim": "Raktár: foglalás és rendelési javaslat",
+    "rovid": "Foglalás a nyitott munkalapokon, minimum- és célkészlet, rendelési javaslat beszállítónként, CSV és bevételezés egy gombbal.",
+    "leiras": "A nyitott munkalapra tett termék foglalt: a termék űrlapján látszik, hány darab vár javításra, és a munkalap szól, ha nincs elég raktáron. A Rendelési javaslat beszállítónként mutatja, mennyit kell rendelni a célkészletig, kész rendelési szöveggel.",
+    "ikon": "raktar",
+    "ikon_lucide": "warehouse",
+    "modul": "termekek",
+    "modulok": [
+      "termekek"
+    ],
+    "csoport": "Értékesítés és raktár",
+    "elonyok": [
+      "Foglalás nyitott munkalapokon, „Nincs elég raktáron” jelzés",
+      "Célkészlet (üresen a minimum kétszerese)",
+      "Rendelési javaslat beszállítónként, becsült nettó értékkel",
+      "Másolható rendelési szöveg és CSV Excelhez",
+      "Megérkezett gomb = bevételezés készletmozgással"
+    ],
+    "kapcsolodo": [
+      "termekek",
+      "rendelesek",
+      "munkalapok",
+      "cimkenyomtatas",
+      "riportok"
+    ],
+    "kep": "funkcio-raktar",
+    "gyik": [
+      "rendelesi-javaslat",
+      "keszletkezeles-modul",
+      "export-adatok"
+    ],
+    "sorrend": 14
+  },
+  {
+    "kulcs": "arukiadas",
+    "cim": "Napi árukiadás",
+    "rovid": "Pultos eladás javítás nélkül: termék és szolgáltatás vegyesen, előleggel, fizetéssel, több üzlet esetén helyszínnel.",
+    "leiras": "Az árukiadás ugyanolyan lap, mint a munkalap, csak egyszerűbb: nincs eszköz, hiba és bevizsgálási díj, ügyfelet sem kötelező megadni. A „Rögzítés és fizetés” gombbal egy eladás két mozdulat, a kifizetett eladás magától lezárul.",
+    "ikon": "bolt",
+    "ikon_lucide": "shopping-bag",
+    "modul": "arukiadas",
+    "modulok": [
+      "arukiadas"
+    ],
+    "csoport": "Értékesítés és raktár",
+    "elonyok": [
+      "Két mozdulat: rögzítés és fizetés",
+      "Termék és szolgáltatás vegyesen, kedvezménnyel",
+      "Több üzlet: helyszín eladásonként",
+      "Előleg és fizetés nélküli rögzítés is",
+      "Pénztár és számla ugyanúgy, mint a munkalapon"
+    ],
+    "kapcsolodo": [
+      "termekek",
+      "hazipenztar",
+      "szamlazas",
+      "attekintes"
+    ],
+    "kep": "funkcio-penztar",
+    "gyik": [
+      "helyszinek-tobb-uzlet",
+      "tobb-uzlet-lanc",
+      "hazipenztar-mit-tud"
+    ],
+    "sorrend": 15
+  },
+  {
+    "kulcs": "rendelesek",
+    "cim": "Rendelések",
+    "rovid": "Ügyfélnek rendelt áru beszállítóval, várható érkezéssel, előleggel – és egy gombos értesítés, amikor megérkezett.",
+    "leiras": "A rendelés mindig ügyfélhez kötött, és öt állapoton megy végig: Felvéve, Megrendelve, Megérkezett, Ügyfél értesítve, Átadva. A „Megjött – értesítés” gomb kitöltött üzenetet küld az ügyféloldalra és kérésre e-mailben; a rendelésnek is van ügyféloldala.",
+    "ikon": "kosar",
+    "ikon_lucide": "truck",
+    "modul": "rendelesek",
+    "modulok": [
+      "rendelesek",
+      "uzenetek"
+    ],
+    "csoport": "Értékesítés és raktár",
+    "elonyok": [
+      "Öt lépéses rendelésút, állapotváltás a listából",
+      "Beszállító és rendelésszám rendelésenként",
+      "Előleg, fizetés, pénztár és számla",
+      "Értesítés egy gombbal, ügyféloldallal",
+      "Jelvény mutatja, hány megérkezett rendelésről nem tud még az ügyfél"
+    ],
+    "kapcsolodo": [
+      "raktar",
+      "termekek",
+      "rma",
+      "sms",
+      "cimkenyomtatas"
+    ],
+    "kep": "funkcio-raktar",
+    "gyik": [
+      "rendelesi-javaslat",
+      "ugyfeloldal-rma",
+      "sms-hogyan-mukodik"
+    ],
+    "sorrend": 16
+  },
+  {
+    "kulcs": "hazipenztar",
+    "cim": "Házipénztár",
+    "rovid": "Napi kassza címletes zárással, riporttal, statisztikával, Excel-importtal és egyeztető ügynökkel.",
+    "leiras": "A Házipénztár megmutatja, mennyi készpénznek kell a fiókban lennie, és mi történt a pénzzel a nap folyamán. Zárás eltéréssel? Az egyeztető ügynök összeveti a pénztárat a munkalapokkal és a számlákkal, és gombbal javítható megállapításokat tesz.",
+    "ikon": "kassza",
+    "ikon_lucide": "wallet",
+    "modul": "penztar",
+    "modulok": [
+      "penztar"
+    ],
+    "csoport": "Pénzügy",
+    "elonyok": [
+      "Bevétel, kivét, kifizetés, befizetés – kivét mindig névvel",
+      "Címletes számolás: Egyezik / Többlet / Hiány",
+      "Egyeztető ügynök: miért több vagy kevesebb a pénz",
+      "Régi Excel „Zárás” tábla importja, visszavonhatóan",
+      "Pénztárzárás és pénztárjelentés nyomtatványként"
+    ],
+    "kapcsolodo": [
+      "arukiadas",
+      "szamlazas",
+      "munkalapok",
+      "riportok",
+      "nyomtatas"
+    ],
+    "kep": "funkcio-penztar",
+    "gyik": [
+      "hazipenztar-mit-tud",
+      "penztar-excel-import",
+      "konyveloprogram"
+    ],
+    "sorrend": 17
+  },
+  {
+    "kulcs": "szamlazas",
+    "cim": "Számlázz.hu-számlázás",
+    "rovid": "Valódi számla a munkalapról a saját Számlázz.hu-fiókodban, tételesen – és helyi számla-előkészítő PDF internet nélkül is.",
+    "leiras": "A Számlázz.hu számla gomb a számla ablakát nyitja meg: vevő, tételek, előnézet, minden átírható, és számla csak a „Számla kiállítása” gombra készül. A számla PDF-je a lapon címkeként látszik; adattörlő kód tételenként, eszközönkénti számla is lehetséges.",
+    "ikon": "szamla",
+    "ikon_lucide": "receipt",
+    "modul": "szamlazas",
+    "modulok": [
+      "szamlazas"
+    ],
+    "csoport": "Pénzügy",
+    "elonyok": [
+      "Munkalapból, árukiadásból és rendelésből, dupla adatbevitel nélkül",
+      "Számla soha nem készül magától – csak gombra",
+      "Céges vevő, adószám, e-számla, számlatömb előtag",
+      "Bevizsgálási díj és több eszköz kezelése a számlán",
+      "A Számla Agent kulcs titkosítva tárolva"
+    ],
+    "kapcsolodo": [
+      "hazipenztar",
+      "arukiadas",
+      "munkalapok",
+      "offline"
+    ],
+    "kep": "funkcio-szamlazas",
+    "gyik": [
+      "szamlazas-szamlazzhu",
+      "szamlazzhu-elofizetes",
+      "szamla-javitas",
+      "szamla-offline"
+    ],
+    "sorrend": 18
+  },
+  {
+    "kulcs": "riportok",
+    "cim": "Riportok",
+    "rovid": "Lezárt javítások, átlagos és medián átfutás, sikeres javítási arány, bevétel – technikusonként és az utolsó 12 hónapra.",
+    "leiras": "A Riportok egy oldalon mutatja, hogyan megy a szerviz: mennyi idő alatt készülnek el a javítások, ki mennyit javított, mennyi jön vissza garanciában, és miből jön a bevétel. Minden szám a lezárt lapokból jön, a lezárás napja szerint.",
+    "ikon": "grafikon",
+    "ikon_lucide": "chart-column",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Pénzügy",
+    "elonyok": [
+      "Időszak: ez a hónap, előző hónap, 30 nap, idén vagy egyéni",
+      "Technikusonként: darab, átfutás, bevétel, visszajött",
+      "Bevétel fajtánként, tételenként, termékkategóriánként",
+      "Árajánlat-elfogadás és elégedettség csempéi",
+      "Az utolsó 12 hónap sávokkal: szezon és trend"
+    ],
+    "kapcsolodo": [
+      "javitasi-garancia",
+      "elegedettseg",
+      "online-arajanlat",
+      "hazipenztar",
+      "attekintes"
+    ],
+    "kep": "funkcio-riport",
+    "gyik": [
+      "riportok",
+      "export-adatok",
+      "javitasi-garancia"
+    ],
+    "sorrend": 19
+  },
+  {
+    "kulcs": "naptar",
+    "cim": "Naptár",
+    "rovid": "Naptár névenként, tizenkét nézettel, ismétlődő eseményekkel, emlékeztetőkkel, e-mail értesítéssel és napi összefoglalóval.",
+    "leiras": "Minden névhez saját naptár tartozik, és ezek egymás mellé tehetők: egy pillantással látszik, ki mikor foglalt. Az esedékes eseményről kártya szól a rendszer minden oldalán, és addig marad, amíg kézzel ki nem nyomod.",
+    "ikon": "naptar",
+    "ikon_lucide": "calendar",
+    "modul": "naptar",
+    "modulok": [
+      "naptar"
+    ],
+    "csoport": "Csapat és idő",
+    "elonyok": [
+      "12 nézet a mai idővonaltól az éves áttekintésig",
+      "Esemény ügyfélhez és munkalapszámhoz köthető",
+      "Ismétlődés, több emlékeztető, fontosság, privát esemény",
+      "E-mail értesítés és napi összefoglaló levél",
+      "Áthelyezés húzással"
+    ],
+    "kapcsolodo": [
+      "foglalas",
+      "csapat",
+      "levelezes",
+      "asszisztens"
+    ],
+    "kep": "funkcio-naptar",
+    "gyik": [
+      "naptar-modul",
+      "naptar-foglalas",
+      "csapat-uzenetek"
+    ],
+    "sorrend": 20
+  },
+  {
+    "kulcs": "foglalas",
+    "cim": "Online időpontfoglalás",
+    "rovid": "Az ügyfelek a weboldalatokról foglalnak időpontot a naptár szabad helyeire; visszaigazoló e-mail lemondó linkkel, beágyazó kód.",
+    "leiras": "A foglalás eseményként kerül a kiválasztott naptárba, az ügyfél visszaigazoló levelet kap lemondó linkkel, a naptár gazdája értesítést. A foglalóoldal önálló címen fut, és beágyazó kóddal a weboldalatok egy oldalán belül is megjelenhet.",
+    "ikon": "naptar",
+    "ikon_lucide": "calendar-check",
+    "modul": "foglalas",
+    "modulok": [
+      "foglalas",
+      "naptar"
+    ],
+    "csoport": "Csapat és idő",
+    "elonyok": [
+      "Foglalható napok, nyitás, zárás, foglalás hossza, párhuzam",
+      "Csak a valóban szabad sávok foglalhatók",
+      "Visszaigazolás a cég postafiókjából, lemondó linkkel",
+      "Meglévő ügyfélhez a telefonszám köti",
+      "Védelem: csapdamező, időbélyeg, óránként 5 foglalás címenként"
+    ],
+    "kapcsolodo": [
+      "naptar",
+      "levelezes",
+      "ugyfelek",
+      "mobil"
+    ],
+    "kep": "funkcio-naptar",
+    "gyik": [
+      "naptar-foglalas",
+      "foglalas-vedelem",
+      "naptar-modul"
+    ],
+    "sorrend": 21
+  },
+  {
+    "kulcs": "csapat",
+    "cim": "Csapat-üzenetek",
+    "rovid": "Belső csevegés kollégának, csoportnak vagy mindenkinek – közös fióknál üzenőfal cetlikkel.",
+    "leiras": "Többfelhasználós módban közvetlen, csoportos és mindenkinek szóló üzenetek, fontos üzenet felugró ablakban, kitűzés. Ha mindenki egy közös fiókkal dolgozik, a Csapat üzenőfallá válik: cetlik, amelyeken ott áll, kinek szól és ki írta.",
+    "ikon": "uzenet",
+    "ikon_lucide": "messages-square",
+    "modul": "csapat",
+    "modulok": [
+      "csapat"
+    ],
+    "csoport": "Csapat és idő",
+    "elonyok": [
+      "Csevegés vagy üzenőfal – a munkamódhoz igazítva",
+      "Fontos üzenet felugró ablakban, kitűzés",
+      "Gyors válasz bármelyik oldalról, a felugró kártyán",
+      "Csoportok és közös beszélgetések",
+      "A csapatüzenetek is a Változásnaplóban"
+    ],
+    "kapcsolodo": [
+      "naptar",
+      "kozos-fiok",
+      "asszisztens"
+    ],
+    "kep": "funkcio-naptar",
+    "gyik": [
+      "csapat-uzenetek",
+      "kozos-fiok-pin",
+      "naptar-modul"
+    ],
+    "sorrend": 22
+  },
+  {
+    "kulcs": "nyomtatas",
+    "cim": "Nyomtatványok",
+    "rovid": "Átvételi elismervény, munkalap, belső munkalap, árajánlat, szállítólevél, bianko lap, pénztárzárás, listák – nyomtatás, PDF, e-mail.",
+    "leiras": "A rendszer minden papírját ugyanaz a Nyomtatás ablak adja: előnézet, példányszám, PDF, e-mail. A nyomtatványok kinézete és szövege a Beállításokban szerkeszthető; a rendszer a lap állapotához illő nyomtatványt választja ki elsőnek.",
+    "ikon": "nyomtato",
+    "ikon_lucide": "printer",
+    "modul": "nyomtatas",
+    "modulok": [
+      "nyomtatas"
+    ],
+    "csoport": "Dokumentumok és készülékadatok",
+    "elonyok": [
+      "14 féle nyomtatvány, mindegyik szerkeszthető",
+      "Előnézet, 1–9 példány, PDF-letöltés",
+      "Küldés e-mailben PDF-csatolmányként",
+      "Belső munkalap zárkóddal – az ügyfél címére nem küldhető",
+      "Több eszközös lap: mind egy lapon vagy eszközönként"
+    ],
+    "kapcsolodo": [
+      "cimkenyomtatas",
+      "atvetel-foto-alairas",
+      "urlapok-emailben",
+      "hazipenztar"
+    ],
+    "kep": "funkcio-szamlazas",
+    "gyik": [
+      "nyomtatvanyok",
+      "sajat-nyomtatvany",
+      "brother-cimkenyomtato"
+    ],
+    "sorrend": 23
+  },
+  {
+    "kulcs": "cimkenyomtatas",
+    "cim": "Címkenyomtatás (Brother)",
+    "rovid": "RMA-matrica a készülékre, termék-, szolgáltatás-, rendelés- és egyedi címke Brother címkenyomtatóra, állítható tartalommal.",
+    "leiras": "A matricán ránézésre látszik, kié a készülék, melyik munkalaphoz tartozik, mi a baja és hogyan oldható fel; QR-kód visz az ügyféloldalra. Nyomtatás böngészőből (Brother illesztőprogrammal, pontos méretű PDF) vagy közvetlenül hálózaton a QL nyomtatókra.",
+    "ikon": "cimke",
+    "ikon_lucide": "tag",
+    "modul": "matrica",
+    "modulok": [
+      "matrica"
+    ],
+    "csoport": "Dokumentumok és készülékadatok",
+    "elonyok": [
+      "RMA-matrica: név, munkalapszám, típus, RMA-kód + QR, hiba, IMEI, dátum",
+      "Mezőnként be/ki, sorrend, betű – élő előnézettel",
+      "Termékcímke árral, cikkszámmal, vonalkóddal",
+      "DK-tekercsek és TZe-szalagok, álló vagy fekvő",
+      "Feloldó kód a matricán csak jogosultnak"
+    ],
+    "kapcsolodo": [
+      "nyomtatas",
+      "rma",
+      "termekek",
+      "eszkozok"
+    ],
+    "kep": "funkcio-raktar",
+    "gyik": [
+      "brother-cimkenyomtato",
+      "nyomtatvanyok",
+      "vonalkodolvaso"
+    ],
+    "sorrend": 24
+  },
+  {
+    "kulcs": "imei-tac",
+    "cim": "IMEI-lekérdezés és TAC-adatbázis",
+    "rovid": "Az IMEI elejéből felismeri a gyártót és a típust – internet nélkül –, a gyári adatokat pedig ellenőrző oldalról vagy fizetős szolgáltatótól tölti be.",
+    "leiras": "A TAC-adatbázis az IMEI első nyolc számjegyéből mondja meg a gyártót és a típust, és a kézzel felvitt új készülékekből tanul. A sorozatszám, a garancia és a gyártás dátuma ingyenes ellenőrző oldal eredményének beillesztésével vagy előfizetett szolgáltatótól kérdezhető le.",
+    "ikon": "vonalkod",
+    "ikon_lucide": "scan-barcode",
+    "modul": "imei",
+    "modulok": [
+      "imei",
+      "tac"
+    ],
+    "csoport": "Dokumentumok és készülékadatok",
+    "elonyok": [
+      "Típusfelismerés helyben, internet nélkül",
+      "Tanul a saját felvitelekből, az újratöltés nem írja felül",
+      "Ingyenes ellenőrző oldalak gombjai, IMEI a vágólapra",
+      "Beillesztett eredményből automatikus mezőkitöltés",
+      "Fizetős szolgáltató bekötése kulccsal"
+    ],
+    "kapcsolodo": [
+      "eszkozok",
+      "okos-kereso",
+      "mockupok"
+    ],
+    "kep": "funkcio-eszkoz",
+    "gyik": [
+      "imei-tac",
+      "imei-szolgaltato",
+      "eszkoz-elozmenyek"
+    ],
+    "sorrend": 25
+  },
+  {
+    "kulcs": "mockupok",
+    "cim": "Eszköz-mockupok",
+    "rovid": "Termékkép minden eszköz mellett – kategória, gyártó vagy típus szerint, saját képekkel.",
+    "leiras": "A munkalapon, az Áttekintés részletpanelén és az Eszközök listában minden készülék mellett kép áll, így ránézésre látszik, miről van szó. A rendszer gyári képkészlettel érkezik; saját kép gyártóra vagy típusrészletre szabható.",
+    "ikon": "kamera",
+    "ikon_lucide": "image",
+    "modul": "mockup",
+    "modulok": [
+      "mockup"
+    ],
+    "csoport": "Dokumentumok és készülékadatok",
+    "elonyok": [
+      "20 gyári kép kategóriánként",
+      "Saját kép gyártóra vagy típusrészletre",
+      "Az eszköz saját fotója elsőbbséget kap",
+      "Egységes stílushoz generáló szöveg (prompt) sablon"
+    ],
+    "kapcsolodo": [
+      "eszkozok",
+      "imei-tac",
+      "megjelenes"
+    ],
+    "kep": "funkcio-eszkoz",
+    "gyik": [
+      "megjelenes-testreszabas",
+      "imei-tac"
+    ],
+    "sorrend": 26
+  },
+  {
+    "kulcs": "urlapok-emailben",
+    "cim": "Űrlapok és dokumentumok e-mailben",
+    "rovid": "E-mail gomb minden fő űrlapon: adatlap és PDF a cég levelezőfiókjából, a munkalap Fájlok lapfülének dokumentumai egy levélben.",
+    "leiras": "A munkalap, árukiadás, rendelés, ügyfél, eszköz, termék és szolgáltatás gombsorának végén ott az E-mail: kitöltött tárgy és szöveg, a lapoknál PDF-csatolmánnyal. A munkalap Fájlok lapfülére bármilyen dokumentum feltölthető, és egy gombbal elküldhető a beállított címre.",
+    "ikon": "email",
+    "ikon_lucide": "mail-plus",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Dokumentumok és készülékadatok",
+    "elonyok": [
+      "E-mail gomb hét űrlapon, űrlaponként kapcsolható",
+      "PDF-csatolmány a lapoknál",
+      "Fájlok lapfül a munkalapon: fotó, PDF, Word, Excel",
+      "A feloldó kód és a minta soha nem kerül a levélbe",
+      "A lap naplójába bekerül, kinek ment"
+    ],
+    "kapcsolodo": [
+      "nyomtatas",
+      "levelezes",
+      "munkalapok"
+    ],
+    "kep": "funkcio-szamlazas",
+    "gyik": [
+      "levelkuldes-smtp",
+      "nyomtatvanyok",
+      "levelezes-modul"
+    ],
+    "sorrend": 27
+  },
+  {
+    "kulcs": "asszisztens",
+    "cim": "AI-asszisztens",
+    "rovid": "Beépített segítő minden oldalon: elmagyaráz, végigvezet, utánanéz az adatoknak – és csak jóváhagyással módosít.",
+    "leiras": "Az asszisztens a súgóból, a rendszer adataiból és a cég saját tudástárából felel; amit nem tud, arra nem talál ki választ. Adatot csak javaslatként változtat: a kártyán a régi és az új érték látszik, átírásnál megerősítő kódot is kér, és minden módosítás előtt pillanatkép készül.",
+    "ikon": "ai",
+    "ikon_lucide": "bot",
+    "modul": "asszisztens",
+    "modulok": [
+      "asszisztens"
+    ],
+    "csoport": "Mesterséges intelligencia",
+    "elonyok": [
+      "Kérdez-felel a teljes dokumentációból és az adatokból",
+      "Lépésenként végigvezet, megmutatja, hová kattints",
+      "Csak jóváhagyással módosít; átírásnál megerősítő kóddal",
+      "Zárkódot, mintát, jelszót és API-kulcsot nem lát",
+      "Napi kérdéskeret kollégánként, eszközönként kapcsolható jogok"
+    ],
+    "kapcsolodo": [
+      "sugo",
+      "valtozasnaplo",
+      "hazipenztar",
+      "levelezes"
+    ],
+    "kep": "funkcio-ai",
+    "gyik": [
+      "ai-asszisztens-mit-tud",
+      "ai-koltseg",
+      "ai-adatvedelem"
+    ],
+    "sorrend": 28
+  },
+  {
+    "kulcs": "biztonsag",
+    "cim": "Adatbiztonság",
+    "rovid": "Kétlépcsős belépés, titkosított zárkódok és mentések, szerepkörök, aláírt változásnapló és GDPR-anonimizálás – a saját szervereden.",
+    "leiras": "A rendszer a cég saját szerverén fut, és belépés nélkül semmit nem mutat. A titkos adatok (zárkód, API-kulcsok, jelszavak) titkosítva állnak, a mentések jelszóval titkosítva mennek külső helyre, a Változásnapló minden sorát aláírás védi.",
+    "ikon": "pajzs",
+    "ikon_lucide": "shield",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Kétlépcsős belépés, kötelezővé tehető",
+      "Zárkód, minta, API-kulcsok titkosítva",
+      "Szerepkörök és finom jogok, szerveroldali ellenőrzéssel",
+      "Aláírt, nem átírható változásnapló",
+      "GDPR-anonimizálás a számviteli megőrzés mellett"
+    ],
+    "kapcsolodo": [
+      "ketlepcsos-belepes",
+      "zarkod-titkositas",
+      "kulso-mentes",
+      "gdpr-anonimizalas",
+      "valtozasnaplo",
+      "szerepkorok"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "hol-vannak-az-adatok",
+      "mit-kuld-a-rendszer",
+      "ketlepcsos-belepes",
+      "jelszavak-kulcsok-tarolasa",
+      "zart-mod"
+    ],
+    "sorrend": 29
+  },
+  {
+    "kulcs": "ketlepcsos-belepes",
+    "cim": "Kétlépcsős belépés",
+    "rovid": "A jelszó mellé a telefon hitelesítő alkalmazásának 6 jegyű, 30 másodpercenként változó kódja – kötelezővé is tehető.",
+    "leiras": "Az adminisztrátor dönti el: kikapcsolva, választható, adminisztrátoroknak vagy mindenkinek kötelező. Minden kód egyszer használható, 10 tartalék kód jár hozzá, a megbízható gép 0–90 napig (alapból 30) nem kér kódot.",
+    "ikon": "pajzs-pipa",
+    "ikon_lucide": "shield-check",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Szabványos TOTP-kód (RFC 6238) bármely hitelesítő alkalmazással",
+      "10 egyszer használható tartalék kód",
+      "Kötelező adminisztrátoroknak vagy mindenkinek",
+      "Fiókonként 10 rossz kód után 15 perc zár",
+      "Elveszett telefonnál az adminisztrátor visszaállítja"
+    ],
+    "kapcsolodo": [
+      "biztonsag",
+      "szerepkorok",
+      "belepo-oldal",
+      "kozos-fiok"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "ketlepcsos-belepes",
+      "elveszett-telefon-2fa",
+      "kozos-fiok-pin"
+    ],
+    "sorrend": 30
+  },
+  {
+    "kulcs": "zarkod-titkositas",
+    "cim": "Zárkód-titkosítás",
+    "rovid": "A készülékek feloldó kódja és mintája titkosítva tárolódik; megnézni csak jogosult kolléga tudja, és ez naplózódik.",
+    "leiras": "A zárkód és a minta titkosítva áll az adatbázisban, a szerver kulcsaihoz kötve. Az űrlap nem küldi ki a kódot: a Megmutat gomb jogot ellenőriz, és minden megnézést – vagy elutasított próbát – a Napló rögzít.",
+    "ikon": "kulcs",
+    "ikon_lucide": "lock-keyhole",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Titkosított tárolás az adatbázisban és a mentésben",
+      "Megnézés csak „Feloldó kód és minta megnézése” joggal",
+      "Minden megnézés naplózva",
+      "Belső munkalapon és matricán is csak jogosultnak",
+      "E-mailbe és az asszisztenshez soha nem kerül"
+    ],
+    "kapcsolodo": [
+      "eszkozok",
+      "szerepkorok",
+      "biztonsag",
+      "valtozasnaplo"
+    ],
+    "kep": "funkcio-eszkoz",
+    "gyik": [
+      "zarkod-titkositas",
+      "jogosultsagok-szerepek",
+      "jelszavak-kulcsok-tarolasa"
+    ],
+    "sorrend": 31
+  },
+  {
+    "kulcs": "gdpr-anonimizalas",
+    "cim": "GDPR-anonimizálás",
+    "rovid": "Törlési kérésre a személyes adatok törlődnek, a munkalapok, számlák és pénztártételek a számviteli megőrzés miatt megmaradnak.",
+    "leiras": "Az Anonimizálás (GDPR) gomb előbb megmutatja, mi törlődik és mi marad, darabszámokkal, és kötelezően rögzíti, mikor és hogyan kérte az ügyfél. A név, a telefonszámok, az e-mail, a címek, a zárkódok és az ügyféloldali linkek törlődnek; az adatlap tetején igazoló sor marad.",
+    "ikon": "gdpr",
+    "ikon_lucide": "eraser",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Előnézet: mi törlődik, mi marad",
+      "Kötelező kérésrögzítés, igazoló sor az adatlapon",
+      "Választható: az üzenetek szövege is törlődjön",
+      "Visszaigazoló e-mail az ügyfélnek a törlés előtt",
+      "A naplóba egyetlen, személyes adat nélküli bejegyzés"
+    ],
+    "kapcsolodo": [
+      "ugyfelek",
+      "biztonsag",
+      "valtozasnaplo",
+      "szerepkorok"
+    ],
+    "kep": "funkcio-ugyfel",
+    "gyik": [
+      "gdpr-anonimizalas",
+      "gdpr-mi-marad",
+      "hol-vannak-az-adatok"
+    ],
+    "sorrend": 32
+  },
+  {
+    "kulcs": "szerepkorok",
+    "cim": "Szerepkörök és jogok",
+    "rovid": "Öt gyári szerep és legfeljebb 12 egyéni: modulonként és finom jogokkal szabályozható, ki mit láthat és tehet.",
+    "leiras": "Alapból öt szerep van: Admin, Kolléga, Pultos, Szerelő és Pénztáros. A szerepnél nem bejelölt modul el sem látszik; finom jog szól a pénztárriportról, az árak és törzsek átírásáról, a tételár átírásáról a lapon, a számláról, a törlésről és a feloldó kód megnézéséről.",
+    "ikon": "felhasznalo",
+    "ikon_lucide": "user-cog",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Tiltott modul: nincs menüpont, csempe, oldal, és a művelet sem fut",
+      "Finom jogok: pénztárriport, ár-átírás, tételár, számla, törlés, zárkód",
+      "Szerveroldali ellenőrzés, a próbálkozás a Naplóba kerül",
+      "Közös fiókon a kiválasztott dolgozó szerepe érvényes",
+      "Legfeljebb 12 egyéni szerep"
+    ],
+    "kapcsolodo": [
+      "kozos-fiok",
+      "ketlepcsos-belepes",
+      "zarkod-titkositas",
+      "valtozasnaplo"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "jogosultsagok-szerepek",
+      "kozos-fiok-pin",
+      "felhasznalok-szama-ar"
+    ],
+    "sorrend": 33
+  },
+  {
+    "kulcs": "parhuzamos-szerkesztes",
+    "cim": "Párhuzamos szerkesztés védelme",
+    "rovid": "Amit valaki épp szerkeszt, azt a rendszer más ablakban nem nyitja meg; ütközésnél a mentés nem írja felül csendben a másikét.",
+    "leiras": "A munkalap alapból zárol: egyszerre csak egy ablakban szerkeszthető, a doboz kiírja, ki dolgozik rajta. Ha mégis ketten mentenének, a rendszer megnevezi, ki és mikor módosított, és választást kínál: frissítés a legújabbra vagy a saját mentése.",
+    "ikon": "lakat",
+    "ikon_lucide": "lock",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Zárolás munkalapra alapból, ügyfélre és eszközre választhatóan",
+      "„X is szerkeszti” jelzés az űrlap alján",
+      "Felülbíráló kód sürgős esetre, naplózva",
+      "Ütközéskor nincs csendes adatvesztés",
+      "Közös fióknál is személyre szól"
+    ],
+    "kapcsolodo": [
+      "kozos-fiok",
+      "munkalapok",
+      "valtozasnaplo",
+      "szerepkorok"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "parhuzamos-szerkesztes",
+      "kozos-fiok-pin",
+      "valtozasnaplo"
+    ],
+    "sorrend": 34
+  },
+  {
+    "kulcs": "kozos-fiok",
+    "cim": "Közös fiók: „Ki vagy?”",
+    "rovid": "Ha a pultnál mindenki ugyanazzal a fiókkal dolgozik, a választó névvel és PIN-nel rögzíti, ki mit csinált.",
+    "leiras": "A közösnek jelölt fiókon induláskor „Ki vagy?” ablak jelenik meg: név és 4–8 jegyű PIN. A választott dolgozó neve kerül a naplóba, a pénztárba és a munkalap felelősébe, és az ő szerepe érvényes; váltás a profilmenüből.",
+    "ikon": "csapat",
+    "ikon_lucide": "user-check",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Név + 4–8 jegyű PIN, 5 hibás PIN után 5 perc szünet",
+      "A Napló, a pénztár és a munkalap a tényleges dolgozót mutatja",
+      "A dolgozó szerepe a közös fiókon is érvényes",
+      "A választás böngészőnként legfeljebb 12 óráig él",
+      "A PIN csak lenyomatként tárolva"
+    ],
+    "kapcsolodo": [
+      "szerepkorok",
+      "parhuzamos-szerkesztes",
+      "csapat",
+      "valtozasnaplo"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "kozos-fiok-pin",
+      "kis-uzlet-egy-gep",
+      "jogosultsagok-szerepek"
+    ],
+    "sorrend": 35
+  },
+  {
+    "kulcs": "valtozasnaplo",
+    "cim": "Változásnapló",
+    "rovid": "Minden módosítás mezőszinten: ki, mikor, honnan, régi és új érték – aláírt, nem átírható napló, visszakereshetően.",
+    "leiras": "A napló mindent rögzít: munkalap, árukiadás, rendelés, ügyfél, eszköz, pénztár, számla, üzenetek, naptár, készlet és a Beállítások változásai. Minden bejegyzést aláírás véd, és az „Épség ellenőrzése” gomb megmutatja, ha valaki az adatbázisban mégis hozzányúlt.",
+    "ikon": "riport",
+    "ikon_lucide": "history",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Mezőszintű napló régi → új értékkel",
+      "Honnan: felület, asszisztens, időzített feladat, ügyféloldal, SMS-átjáró",
+      "Napló gomb a lapokon: a rekord története popupban",
+      "Szűrők, CSV-export, épség-ellenőrzés",
+      "Senki nem írhatja át, a rendszer sem"
+    ],
+    "kapcsolodo": [
+      "biztonsag",
+      "asszisztens",
+      "parhuzamos-szerkesztes",
+      "szerepkorok"
+    ],
+    "kep": "funkcio-riport",
+    "gyik": [
+      "valtozasnaplo",
+      "tamogatasi-hozzaferes-mit-lat",
+      "jogosultsagok-szerepek"
+    ],
+    "sorrend": 36
+  },
+  {
+    "kulcs": "belepo-oldal",
+    "cim": "Testreszabható belépő oldal",
+    "rovid": "Logó, háttér (szín, színátmenet, kép, videó), a doboz helye és stílusa, szövegek – mentés előtt élő előnézettel.",
+    "leiras": "A bejelentkező oldal a cég arculatát viseli: logó és magassága, címsor, alcím, gombfelirat, háttér, üveghatás, neon fény, betűtípus. A videós háttér csak széles képernyőn töltődik le; mobilon a háttérkép áll.",
+    "ikon": "felhasznalo",
+    "ikon_lucide": "log-in",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Biztonság és adatvédelem",
+    "elonyok": [
+      "Élő előnézet asztali és mobil nézetben",
+      "Háttér: egyszínű, színátmenet, kép vagy videó",
+      "Doboz balra, középre vagy jobbra, üveghatással",
+      "Ami üres, az a cég arculata szerint látszik"
+    ],
+    "kapcsolodo": [
+      "megjelenes",
+      "ketlepcsos-belepes",
+      "biztonsag"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "megjelenes-testreszabas",
+      "ketlepcsos-belepes",
+      "zart-mod"
+    ],
+    "sorrend": 37
+  },
+  {
+    "kulcs": "mentes",
+    "cim": "Napi mentés és visszaállítás",
+    "rovid": "Teljes mentés minden nap magától, kézzel bármikor; visszaállítás előnézettel, egyetlen tranzakcióban.",
+    "leiras": "A rendszer naponta teljes mentést készít, és kézzel is bármikor indítható. Visszaállítás előtt előnézetet mutat (idő, verzió, táblák, sorok), biztonsági mentést készít a mostani állapotról, és hiba esetén mindent visszagördít.",
+    "ikon": "mentes",
+    "ikon_lucide": "archive-restore",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Napi automatikus teljes mentés + Mentés most gomb",
+      "Visszaállítás: adatok és beállítások, vagy csak beállítások",
+      "Biztonsági mentés minden visszaállítás és frissítés előtt",
+      "Hibánál nincs félkész állapot: egy tranzakció",
+      "Beállítások exportja és importja költözéshez"
+    ],
+    "kapcsolodo": [
+      "kulso-mentes",
+      "frissites",
+      "biztonsag",
+      "valtozasnaplo"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "napi-mentes",
+      "visszaallitas-mentesbol",
+      "mi-nincs-a-mentesben"
+    ],
+    "sorrend": 38
+  },
+  {
+    "kulcs": "kulso-mentes",
+    "cim": "Titkosított külső mentés",
+    "rovid": "Minden mentés után jelszóval titkosított másolat a bekapcsolt helyekre: Google Drive, FTP/FTPS, NAS (mappa vagy WebDAV), saját gép.",
+    "leiras": "A szerveren maradó mentés nem véd a lemez meghibásodása ellen, ezért minden mentésből titkosított másolat készül egy vagy több külső helyre. Ha a cél épp nem elérhető, a másolat várakozik, és 15 percenként újrapróbálkozik.",
+    "ikon": "felho",
+    "ikon_lucide": "cloud-upload",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Erős, jelszavas titkosítás – jelszó nélkül a fájl olvashatatlan",
+      "Egyszerre több cél: Drive, FTP/FTPS, NAS, saját gép",
+      "Google Drive: csak a saját létrehozott fájljaihoz fér hozzá",
+      "Újrapróbálás 15 percenként, legfeljebb hatszor",
+      "Megőrzés: a legfrissebb N, az előző napi és a visszaállítás előtti"
+    ],
+    "kapcsolodo": [
+      "mentes",
+      "biztonsag",
+      "offline"
+    ],
+    "kep": "funkcio-mentes",
+    "gyik": [
+      "titkositott-kulso-mentes",
+      "google-drive-mentes",
+      "mentesi-jelszo-elveszett"
+    ],
+    "sorrend": 39
+  },
+  {
+    "kulcs": "frissites",
+    "cim": "Egykattintásos frissítés",
+    "rovid": "Az új verzió egy gombbal települ; előtte a rendszer teljes mentést készít, és ha az nem sikerül, nem frissít.",
+    "leiras": "A frissítés kétlépcsős gombbal indul, az adatok és a beállítások megmaradnak, az adatbázis az első oldalnál magától igazodik. Érvényes licenccel az új verzió a forgalmazói központból jön, és a forgalmazó távoli karbantartásként is elindíthatja.",
+    "ikon": "frissites",
+    "ikon_lucide": "refresh-cw",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Teljes mentés minden frissítés előtt",
+      "Az adatok és a beállítások megmaradnak",
+      "Elakadásnál a régi verzió marad",
+      "A nyitva hagyott oldalak maguktól megújulnak",
+      "Újdonságok a Súgóban és az asszisztens tudásában"
+    ],
+    "kapcsolodo": [
+      "licenc-karbantartas",
+      "mentes",
+      "sugo"
+    ],
+    "kep": "funkcio-licenc",
+    "gyik": [
+      "frissites-menete",
+      "mi-van-ha-lejar-a-licenc",
+      "ujdonsagok"
+    ],
+    "sorrend": 40
+  },
+  {
+    "kulcs": "licenc-karbantartas",
+    "cim": "Licenc és távoli karbantartás",
+    "rovid": "A forgalmazó előre látja, ha baj van (lassú, fogy a tárhely, elmaradt a mentés), és távolról karbantart – a te engedélyeddel.",
+    "leiras": "A rendszer 5 percenként jelentkezik a forgalmazó központjánál műszaki állapottal és darabszámokkal – ügyfélnevet, telefonszámot, munkalap-tartalmat és forgalmat soha nem küld. A forgalmazó mentést, diagnosztikát, gyorsítótár-ürítést és frissítést indíthat; támogatási belépést csak te engedélyezhetsz, 2 órára, 1 vagy 3 napra.",
+    "ikon": "szerver",
+    "ikon_lucide": "server-cog",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Licenc: modulok, felhasználók, frissítés jogosultsága",
+      "Lejárt licencnél is minden működik, csak frissítés nincs",
+      "Távoli karbantartás, a Licenc lapon kikapcsolható",
+      "Időkorlátos támogatási belépés, minden lépés naplózva",
+      "Digitálisan aláírt központi válaszok"
+    ],
+    "kapcsolodo": [
+      "frissites",
+      "sebessegmeres",
+      "mentes",
+      "biztonsag"
+    ],
+    "kep": "funkcio-licenc",
+    "gyik": [
+      "tavoli-karbantartas",
+      "tamogatasi-hozzaferes",
+      "szivveres-mi-az",
+      "telemetria-kikapcsolasa",
+      "licenc-allapotok"
+    ],
+    "sorrend": 41
+  },
+  {
+    "kulcs": "sebessegmeres",
+    "cim": "Sebesség nagy adatnál",
+    "rovid": "Gyors listák több százezer rekordnál is, beépített sebességméréssel – a számok mérésből, nem ígéretből.",
+    "leiras": "A listák halasztott összekapcsolással lapoznak (előbb az azonosítók, aztán csak a látszó sorok), a gyakori számok tárolva vannak. A Sebesség lapfülön a mérés lefuttatja a gyakori lekérdezéseket, és a 300 ms fölötti lépéseket LASSÚ-ként sorolja fel.",
+    "ikon": "sebesseg",
+    "ikon_lucide": "gauge",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Termékek lista: 5,28 s → 0,38 s 300 000 rekordos próbaadaton (mérés, SQLite)",
+      "Ügyfelek 11 801. oldala: 0,589 s → 0,018 s ugyanott (mérés)",
+      "40 000 munkalapos próbaadaton minden mért lépés 300 ms alatt (mérés, SQLite)",
+      "Mérés indítása a Beállításokból, adatírás nélkül",
+      "Kiírja az OPcache és a MySQL-puffer állapotát"
+    ],
+    "kapcsolodo": [
+      "okos-kereso",
+      "attekintes",
+      "licenc-karbantartas",
+      "offline"
+    ],
+    "kep": "funkcio-riport",
+    "gyik": [
+      "nagy-adatbazis-sebesseg",
+      "szerver-meretezes",
+      "tarhely-figyeles"
+    ],
+    "sorrend": 42
+  },
+  {
+    "kulcs": "offline",
+    "cim": "Internet nélküli működés",
+    "rovid": "A pult akkor is dolgozik, ha elmegy az internet: munkalap, pénztár, nyomtatás, mentés helyben megy, a külső kérések nem várakoztatnak.",
+    "leiras": "A rendszer a cég saját szerverén fut, ezért a belső munka net nélkül is megy. Ami internetet kér (számla, e-mail, asszisztens), az kimaradáskor azonnal szól, és nem vár perceket; a fejlécben „Nincs internet” jelzés áll, amíg vissza nem jön.",
+    "ikon": "wifi-ki",
+    "ikon_lucide": "wifi-off",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Net nélkül is: munkalapok, ügyfelek, eszközök, pénztár, árukiadás, rendelések",
+      "Helyi nyomtatás, matrica, PDF, naptár, csapat, napló, helyi mentés",
+      "SMS a bolti telefonon át, ha az a helyi hálózaton van",
+      "A számla később a lapról kiállítható",
+      "Percenkénti ellenőrzés, jelzés a fejlécben"
+    ],
+    "kapcsolodo": [
+      "sms",
+      "kulso-mentes",
+      "szamlazas",
+      "sebessegmeres"
+    ],
+    "kep": "funkcio-licenc",
+    "gyik": [
+      "offline-mi-mukodik",
+      "offline-mi-var",
+      "offline-elofeltetel",
+      "aramszunet"
+    ],
+    "sorrend": 43
+  },
+  {
+    "kulcs": "adatatvetel",
+    "cim": "Adatátvétel (MunkaLap 3, Excel)",
+    "rovid": "Átálláskor a régi adatok kézi gépelés nélkül jönnek át: a MunkaLap 3 teljes mentéséből minden adattal, vagy CSV-, TXT-, XLSX-fájlból.",
+    "leiras": "A MunkaLap 3 teljes mentése (.wdg) egy lépésben átjön: ügyfelek, eszközök, munkalapok állapottörténettel, tételek, hibák, termékek, készlet és képek – ellenőrző riporttal, visszavonhatóan, és az átállás napjáig újra átvehető, ha a régi program még fut. Más programból vagy Excelből CSV-, TXT- és XLSX-fájl is betölthető mezőpárosítással.",
+    "ikon": "import",
+    "ikon_lucide": "file-input",
+    "modul": "munkalapclone",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "MunkaLap 3 mentései és Excel-táblák (CSV, TXT, XLSX)",
+      "Régi Windows-os ékezetek is helyesen",
+      "Próba írás nélkül, bruttó végösszeggel az egyeztetéshez",
+      "A munkalapszámok megmaradnak, a számozás utánuk folytatódik",
+      "Visszavonás átvételenként"
+    ],
+    "kapcsolodo": [
+      "ugyfelek",
+      "munkalapok",
+      "eszkozok",
+      "mentes"
+    ],
+    "kep": "funkcio-licenc",
+    "gyik": [
+      "adatatvetel-hogyan",
+      "munkalap3-atvetel",
+      "excelbol-valtas",
+      "adatatvetel-proba",
+      "adatatvetel-visszavonas"
+    ],
+    "sorrend": 44
+  },
+  {
+    "kulcs": "modulrendszer",
+    "cim": "Moduláris felépítés",
+    "rovid": "17 külön kapcsolható modul: a rendszer csak azt mutatja, amit használtok, és a licenc csak a megvett modulokat engedélyezi.",
+    "leiras": "Az alaprendszer (Áttekintés, Munkalapok, Ügyfelek, Eszközök, Szolgáltatások, Beállítások, Súgó, Mentés) mindig fut; a többi modul egyenként kapcsolható. A kikapcsolt modul eltűnik a menüből, a csempékből, a Beállításokból és a súgóból – az adatai megmaradnak, visszakapcsolva ott folytatódik.",
+    "ikon": "modul",
+    "ikon_lucide": "puzzle",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "17 modul: értékesítés, pénzügy, ügyfélkapcsolat, csapat, AI, dokumentumok",
+      "Kikapcsolva az adat megmarad",
+      "Függőségek kezelve (például az SMS az Ügyfélüzenetekre épül)",
+      "Bővítés később, újratelepítés nélkül",
+      "Egyedi modul is fejleszthető"
+    ],
+    "kapcsolodo": [
+      "beallitasok",
+      "licenc-karbantartas",
+      "szerepkorok"
+    ],
+    "kep": "funkcio-licenc",
+    "gyik": [
+      "alaprendszer-mi-van-benne",
+      "melyik-csomag-kell",
+      "modul-utolag",
+      "modul-kikapcsolas-adat"
+    ],
+    "sorrend": 45
+  },
+  {
+    "kulcs": "megjelenes",
+    "cim": "Megjelenés és arculat",
+    "rovid": "Saját logó, színek, sarkok, betűk – és négy megjelenés: Rendszer, Világos, Sötét, Papír, kékfény-szűrővel.",
+    "leiras": "A cég alapértelmezését az adminisztrátor állítja be, a kolléga a saját gépén ettől eltérhet: megjelenés, kékfény-szűrő, üvegszín, betűméret. A fejléc órája a zárásig hátralévő időt is mutatja a nyitvatartás alapján.",
+    "ikon": "szikra",
+    "ikon_lucide": "palette",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Logó, cégnév, kiemelő szín, lekerekítés, betűtípus",
+      "Rendszer / Világos / Sötét / Papír megjelenés",
+      "Kékfény-szűrő az esti munkához",
+      "Betűméret gépenként, területenként",
+      "Nyitvatartás és óra a fejlécben"
+    ],
+    "kapcsolodo": [
+      "belepo-oldal",
+      "mobil",
+      "beallitasok"
+    ],
+    "kep": "funkcio-ugyfel",
+    "gyik": [
+      "megjelenes-testreszabas",
+      "telefonon-tableten",
+      "bongeszok"
+    ],
+    "sorrend": 46
+  },
+  {
+    "kulcs": "mobil",
+    "cim": "Telefonon és tableten",
+    "rovid": "A rendszer böngészőben fut, telefonon és tableten is: a menü ikonokra szűkül, a popupok kitöltik a képernyőt, a táblázatok oldalra húzhatók.",
+    "leiras": "Nem kell telepíteni semmit a gépekre: a pultgép, a műhely tabletje és a telefon ugyanazt a rendszert éri el. Az Átvétel lapfül telefonon a kamerát nyitja a fotóhoz, az aláírás ujjal megy.",
+    "ikon": "eszkoz",
+    "ikon_lucide": "tablet-smartphone",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Üzemeltetés",
+    "elonyok": [
+      "Böngészőben fut, nincs telepítendő program",
+      "60 oldalas bejárás 390 px széles telefonon: 0 hiba (böngészős mérés)",
+      "Fotó a kamerával, aláírás érintőképernyőn",
+      "Popupok telefonon görgethetők, asztalon egyben"
+    ],
+    "kapcsolodo": [
+      "atvetel-foto-alairas",
+      "megjelenes",
+      "offline",
+      "rma"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "telefonon-tableten",
+      "bongeszok",
+      "atveteli-foto-alairas"
+    ],
+    "sorrend": 47
+  },
+  {
+    "kulcs": "atvetel-foto-alairas",
+    "cim": "Átvételi fotó és aláírás",
+    "rovid": "A munkalap Átvétel lapfülén fotó a készülék állapotáról és az ügyfél aláírása érintőképernyőn – az átvételi elismervényen is.",
+    "leiras": "Telefonon vagy tableten a „Fotó készítése” gomb a kamerát nyitja: a karcok, repedések rögzítve vannak, mielőtt hozzányúlnátok a készülékhez. Az ügyfél ujjal vagy tollal aláír; az aláírás és az első négy fotó az átvételi nyomtatványra is rákerül.",
+    "ikon": "kamera",
+    "ikon_lucide": "camera",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Fotó a kamerával vagy fájlból, behúzással",
+      "Aláírás érintőképernyőn, az aláíró nevével",
+      "Az átvételi elismervényen legfeljebb 4 bélyegkép",
+      "Az aláírás a Változásnaplóba is bekerül",
+      "Vitás esetben bizonyíték az átvételkori állapotról"
+    ],
+    "kapcsolodo": [
+      "munkalapok",
+      "nyomtatas",
+      "javitasi-garancia",
+      "mobil"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "atveteli-foto-alairas",
+      "javitasi-garancia",
+      "nyomtatvanyok"
+    ],
+    "sorrend": 48
+  },
+  {
+    "kulcs": "javitasi-garancia",
+    "cim": "Javítási garancia",
+    "rovid": "Garancia a lezárás napjától (alapból 180 nap, laponként átírható), és jelzés, ha a készülék garanciaidőn belül visszajön.",
+    "leiras": "A garancia napjai és lejárata a munkalapon és a nyomtatványon is látszik. Ha a készülék visszajön, az Eszköz lapfül jelzi, hány lapon szerepelt és garanciában van-e; a „Garanciális visszatérésként rögzítem” gomb az új lapot az eredetihez köti.",
+    "ikon": "garancia",
+    "ikon_lucide": "badge-check",
+    "modul": "alap",
+    "modulok": [],
+    "csoport": "Napi munka",
+    "elonyok": [
+      "Alap garancia napokban, laponként felülírható",
+      "Lejárat a nyomtatványon is",
+      "Visszatérő készülék jelzése",
+      "Garanciális lánc: az eredeti lap, számla, pénztár érintetlen",
+      "Sikeres javítási arány a Riportokban"
+    ],
+    "kapcsolodo": [
+      "munkalapok",
+      "eszkozok",
+      "riportok",
+      "rma"
+    ],
+    "kep": "funkcio-munkalap",
+    "gyik": [
+      "javitasi-garancia",
+      "riportok",
+      "ugyfeloldal-rma"
+    ],
+    "sorrend": 49
+  }
 ]

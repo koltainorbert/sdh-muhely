@@ -485,6 +485,11 @@ final class SDH_Sales
     /** Biztonságos véletlen token (URL-be). */
     public static function token(int $bajt = 24): string
     {
-        return rtrim(strtr(base64_encode(random_bytes($bajt)), '+/', '-_'), '=');
+        // Kimenetbe (URL-be) kerül: árulkodó betűsor nélkül (REJTES) – ilyenkor újra.
+        do {
+            $t = rtrim(strtr(base64_encode(random_bytes($bajt)), '+/', '-_'), '=');
+        } while (preg_match('~sdh|wp~i', $t) === 1);
+
+        return $t;
     }
 }

@@ -58,6 +58,7 @@ final class SDH_Kozpont
         'asszisztens' => ['AI-asszisztens', 'Mesterséges intelligencia'],
         'nyomtatas' => ['Nyomtatványok', 'Dokumentumok'], 'imei' => ['IMEI-lekérdezés', 'Dokumentumok'], 'tac' => ['TAC-adatbázis', 'Dokumentumok'],
         'matrica' => ['Címkenyomtatás', 'Dokumentumok'], 'mockup' => ['Eszköz-mockupok', 'Dokumentumok'],
+        'munkalapclone' => ['Munkalapszoftver Clone (MunkaLap 3 átvétel)', 'Átállás'],
     ];
 
     public static function init(): void

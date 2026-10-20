@@ -154,7 +154,10 @@ final class SDH_Sales_Biztonsag
     public static function nonce(): string
     {
         if (self::$nonce === '') {
-            self::$nonce = rtrim(strtr(base64_encode(random_bytes(18)), '+/', '-_'), '=');
+            // A kiszolgált véletlen érték se tartalmazzon árulkodó betűsort (REJTES: pl. „sdh”, „wp”) – ilyenkor újra.
+            do {
+                self::$nonce = rtrim(strtr(base64_encode(random_bytes(18)), '+/', '-_'), '=');
+            } while (preg_match('~sdh|wp|w\.org~i', self::$nonce) === 1);
         }
 
         return self::$nonce;
