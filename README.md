@@ -80,6 +80,24 @@ Mindig a végén tolj fel, hogy a másik gép a `pull`-lal mindent megkapjon.
 
 ## Verziónapló
 
+### 0.99.7 – Munkalapszoftver Clone: gyors átvétel nagy adatbázisnál (2026-10-22)
+- **Ok** (Norbi éles próbája, 287 948 sor): kérésenként a feldolgozás előtt beolvasta az aktuális tábla összes már átvett
+  sorát (lenyomat), és a hivatkozás-térképeket (munkalap, termék) a teljes, nagy régi sorokkal együtt. Ez a táblával nőtt:
+  az APP.ITEM végén a 8 mp-es keretből szinte csak ez futott (Norbinál 18:12 és 21:59 között 1 345 sor ≈ 6 sor/perc).
+  Teljes átvétel 262 232 soros próbacsomaggal ebben a gépben: régi 293 s, új 305 s (gyors lemez – itt a régi sem lassult);
+  70 000. tételtől hideg adatbázissal egy teljes kérés: régi 5 769 sor / 8 s és 36 742 lemezlap, új 14 482 sor / 15 s és 1 140 lap.
+  Mérés (MariaDB, 128 MB puffer, közvetlen lemezolvasás, 70 000 / 88 005 tételnél folytatva): az első sor előtt
+  **~530 000 index/sor-olvasás és ~18 000 lemezlap (~290 MB)** kérésenként → **~91 000 indexolvasás és 120–860 lap**.
+- **Fedő index** a nyers tárban (`gyors`: tabla, kh, hash, uj_tabla, uj_id; sémaverzió 1.2.0): a lenyomat soronként egy
+  pontszerű indexkeresés, a hivatkozás-térképek és a törzs (MASTER_ITEM) csak indexlapokat olvasnak (MySQL-en index-javaslattal).
+- **Munkalapszám-ütközés**: pontszerű ellenőrzés a friss állapoton (nem kérésenkénti lista), és ütközéskor új számmal újra.
+- **Egyszerre egy lépés – adatbázis-zárral** (`GET_LOCK`): a régi, 90 mp után „elavultnak” vett opciós zárat egy elhúzódó
+  kérés mellett egy második is megkapta (ugyanaz a sor kétszer: „Duplicate entry … munkalap_szam / tabla_kh”). SQLite-on a régi zár.
+- **Hosszabb adag** (8 → 15 mp), **a fül háttérben is halad** (a következő lépés nem időzítővel indul – a böngésző a háttérfül
+  időzítőit percenként egyre fogja vissza), **időkorlát a kérésen** (120 mp) és kitartó újrapróbálás hálózati hibánál
+  (a régi 20 hiba után csendben megállt), **hátralévő idő az utolsó 5 perc tempójából**, a lépésjelző újratöltés nélkül is
+  a 4. lépésen áll. Súgó 32 frissítve (lassúság, „Nincs válasz…”, „Egy másik ablak…”). t96: +3 (index, zár).
+
 ### Központ 2.2.0 – beágyazható a Portálba (2026-10-20)
 - A licencközpont a Portál (értékesítő webhely) csomagjában is fut, semleges fájlnevekkel; ha a különálló Központ aktív, az fut. Részletek: `weboldal/dokumentacio/README.md` 1.1.0. t94 igazítva.
 

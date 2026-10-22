@@ -44,7 +44,7 @@ A régi, táblázatos átvétel ([Adatátvétel](sugo:adatatvetel)) továbbra is
    - **Felhasználók** – kihez kerüljenek a régi felhasználó munkalapjai (felelős, készítő, állapotváltás).
    - **„Vásárlás” lapok** – a MunkaLap 3-ban a javítás nélküli eladást egy „Vásárlás” nevű tárggyal rögzítették. Bekapcsolva ezek **Napi árukiadás** lesznek, eszköz nélkül.
    - **Beállítások kiegészítése** – a régi lapokon használt, itt még hiányzó fizetési módok és a „Nem javítandó” hibaállapot felvétele.
-4. **Átvétel indítása** (kétszer kattints). Táblánként, adagokban halad; a csík mutatja, hol tart, és mennyi van még hátra (becslés). Ha bezárod az oldalt, legközelebb onnan folytatja.
+4. **Átvétel indítása** (kétszer kattints). Táblánként, adagokban halad; a csík mutatja, hol tart, és mennyi van még hátra (becslés az utolsó percek tempójából). A fül lehet háttérben is, de az oldal maradjon nyitva, és a gép ne aludjon el. Ha bezárod az oldalt, legközelebb onnan folytatja.
 5. **Eredmény.** Az ellenőrző riport: hány régi sorból hány van a tárban, mi jött létre (ügyfél, eszköz, munkalap, tétel, fájl…), a régi és az átvett munkalapok végösszege, táblánként a részletek.
 6. Ha minden rendben, **Munkafájlok törlése**: a feltöltött mentés és a kibontott csomag törlődik (az átvett adatok és fájlok megmaradnak).
 
@@ -107,7 +107,9 @@ A **Visszavonás** töröl mindent, amit a modul létrehozott (ügyfelek, eszkö
 - **„Nem találom a MunkaLap 3 programmappáját”** – add meg az Átalakító részben (amelyikben a `lib\derby.jar` van), vagy használd a letölthető átalakítót a MunkaLap gépén.
 - **„Az átalakító nem indult el a szerveren”** – a szerver nem futtathat programot, vagy nem éri el a MunkaLap mappáját. Töltsd le az átalakítót, és futtasd a MunkaLap gépén; a csomagot töltsd fel.
 - **„A csomag hibás”** – a feltöltés vagy a mentés sérült. Készíts új mentést a MunkaLap 3-ban, és kezdd újra.
-- **Lassú** – nagy adatbázisnál (40 000 munkalap) az átvétel akár fél óra is lehet; ez a gép sebességétől függ. Hagyd nyitva az oldalt; ha bezárod, legközelebb folytatja.
+- **Lassú** – nagy adatbázisnál (40 000 munkalap) az átvétel a géptől függően fél óra – egy-két óra (becslés). Ha a csík percek óta nem mozdul: frissítsd az oldalt (onnan folytatja). Ha percenként csak néhány száz sor megy át, az adatbázis-szervernek kevés a memóriája: a MySQL beállításában (helyi fejlesztői környezetben a `my.cnf`) emeld az `innodb_buffer_pool_size` értékét (pl. `2G`–`4G`, ha a gépben van elég memória), és indítsd újra az adatbázist. A 0.99.7 előtti verzió a nagy táblák végén (Tételek) adagonként egyre lassabb lett – frissíts.
+- **„Nincs válasz a szervertől – újrapróbálom…”** – egy kérés nem kapott választ (pl. a gép elaludt, vagy a szerver újraindult). A lap magától újrapróbálja, és onnan folytatja; nem kell semmit tenned.
+- **„Egy másik ablak még dolgozik – várok…”** – egy másik fülön vagy gépen is nyitva van ez a lap, vagy az előző kérés még fut. Egyszerre mindig csak egy dolgozik, a másik vár; adat nem duplázódik.
 - **Figyelmeztetések** – az átvétel közben előforduló hibák a csík alatt, a **Figyelmeztetések** részben látszanak; a riport ilyenkor jelzi, ha egy tábla nem teljes.
 
 ## GYIK
@@ -162,11 +164,11 @@ Igen: a készletet a régi mozgásokból számolja; ahol eltérne, egy „egyezt
 
 ### Mennyi ideig tart?
 
-A géptől függ: egy 40 000 munkalapos adatbázis átvétele kb. 10–30 perc (becslés). A csík a hátralévő időt is mutatja.
+A géptől és az adatbázis-szerver memóriájától függ: egy 40 000 munkalapos adatbázis átvétele fél óra – egy-két óra (becslés). A csík a hátralévő időt is mutatja, az utolsó percek tempójából.
 
 ### Bezárhatom közben az oldalt?
 
-Igen. Az átvétel adagokban halad, és ha újra megnyitod ezt a lapot, onnan folytatja, ahol abbamaradt.
+Igen. Az átvétel adagokban halad, és ha újra megnyitod ezt a lapot, onnan folytatja, ahol abbamaradt. Háttérbe is teheted a fület (más programmal dolgozhatsz közben) – csak a gép ne aludjon el.
 
 ### Át lehet venni később egy újabb mentést?
 

@@ -263,6 +263,20 @@ try {
     $kicsi = static fn (): float => 0.003;
     add_filter('sdh_muhely_ml3_idokeret', $kicsi);
     $lepes_db = 0;
+    $sqlite   = class_exists('WP_SQLite_DB', false) && $wpdb instanceof WP_SQLite_DB;
+
+    // 0.99.7: fedő index a nyers tárban; adatbázis-zár (egy másik kapcsolat tartja → a lépés vár, nem dolgozik).
+    if (!$sqlite) {
+        $ix = (array) $wpdb->get_col('SHOW INDEX FROM ' . $M::nyers_tabla() . " WHERE Key_name = 'gyors'", 4);
+        T::egyezik('tabla,kh,hash,uj_tabla,uj_id', implode(',', $ix), 'a nyers tár fedő indexe (gyors)');
+        $masik = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $masik->query("SELECT GET_LOCK('" . $masik->real_escape_string($wpdb->prefix . 'sdh_muhely_ml3') . "', 0)");
+        $M::urit();
+        $v = $M::lepes();
+        T::igaz(!empty($v['var']) && $v['tovabb'], 'zárolt lépés: vár (egy másik kérés dolgozik), és jelzi a felületnek');
+        T::egyezik(0, (int) ($M::allapot()['atvetel']['kesz_sorok'] ?? -1), 'zárolt lépés: nem dolgozott fel sort');
+        $masik->close();
+    }
 
     for ($i = 0; $i < 3000; $i++) {
         $M::urit();          // minden lépés új kérés (üres gyorsítótárral), kevés sorral

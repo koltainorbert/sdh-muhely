@@ -33,11 +33,11 @@ final class SDH_Muhely_Ml3
     public const OPT        = 'sdh_muhely_ml3_allapot';
     public const OPT_BEALL  = 'sdh_muhely_ml3_beallitasok';
     public const OPT_DB     = 'sdh_muhely_ml3_db_version';
-    public const DB_VERZIO  = '1.1.0';
+    public const DB_VERZIO  = '1.2.0';
     public const IMPORT_ID  = 'ml3';
     public const FORRAS     = 'munkalap3';
     public const MAPPA      = 'sdh-muhely/munkalap3';
-    public const IDOKERET   = 8.0;
+    public const IDOKERET   = 15.0; // 0.99.7: 8 → 15 mp (kevesebb kérésenkénti indulási költség)
     public const RESZ_MERET = 8388608; // 8 MB / feltöltött darab
 
     /** A táblák feldolgozási sorrendje (ami nincs itt, az a végén, ábécérendben, csak a nyers tárba). */
@@ -83,9 +83,6 @@ final class SDH_Muhely_Ml3
 
     /** @var array<int, array{0: string, 1: int}> a még ki nem írt követett azonosítók */
     private static array $kovet_buf = [];
-
-    /** @var array<int, bool>|null a foglalt munkalapszámok */
-    private static ?array $szam_tar = null;
 
     private static float $indult = 0.0;
 
@@ -148,7 +145,8 @@ final class SDH_Muhely_Ml3
             UNIQUE KEY tabla_kh (tabla,kh),
             KEY tabla_kulcs (tabla,kulcs),
             KEY tabla_szulo (tabla,szulo),
-            KEY uj (uj_tabla,uj_id)
+            KEY uj (uj_tabla,uj_id),
+            KEY gyors (tabla,kh,hash,uj_tabla,uj_id)
         ) " . $wpdb->get_charset_collate() . ';');
 
         if ($volt === '1.0.0') {
@@ -204,7 +202,6 @@ final class SDH_Muhely_Ml3
         self::$uj_tar    = [];
         self::$nyers_tar = [];
         self::$hash_tar  = [];
-        self::$szam_tar  = null;
         self::munkalap_gyorsitotar_urit();
     }
 
@@ -286,6 +283,15 @@ final class SDH_Muhely_Ml3
         return $ki;
     }
 
+    /**
+     * Indexjavaslat a nyers tár fedő indexére (MySQL/MariaDB). A lenyomat-keresésnél a tervező magától az egyedi
+     * (tabla, kh) indexet választaná, és a nagy sort is beolvasná – a fedő index csak a kis indexlapokat olvassa.
+     */
+    private static function gyors_ix(): string
+    {
+        return class_exists('WP_SQLite_DB', false) && $GLOBALS['wpdb'] instanceof WP_SQLite_DB ? '' : ' FORCE INDEX (gyors)';
+    }
+
     /** A régi sorból lett új rekord azonosítója (0, ha nincs). */
     public static function uj_id(string $tabla, $kulcs): int
     {
@@ -300,12 +306,13 @@ final class SDH_Muhely_Ml3
         if (!isset(self::$uj_tar[$tabla])) {
             self::$uj_tar[$tabla] = [];
 
-            foreach ((array) $wpdb->get_results($wpdb->prepare('SELECT kulcs, uj_id FROM ' . self::nyers_tabla() . ' WHERE tabla = %s AND uj_id > 0', $tabla)) as $s) {
-                self::$uj_tar[$tabla][(string) $s->kulcs] = (int) $s->uj_id;
+            // 0.99.7: a fedő indexből (gyors), lenyomat szerint – nem olvassa a sorokat (a régi adat a sorban nagy).
+            foreach ((array) $wpdb->get_results($wpdb->prepare('SELECT kh, uj_id FROM ' . self::nyers_tabla() . self::gyors_ix() . ' WHERE tabla = %s AND uj_id > 0', $tabla)) as $s) {
+                self::$uj_tar[$tabla][(string) $s->kh] = (int) $s->uj_id;
             }
         }
 
-        return self::$uj_tar[$tabla][$kulcs] ?? 0;
+        return self::$uj_tar[$tabla][md5($kulcs)] ?? 0;
     }
 
     /** Az egyedi mezők (DATA_n) nevei és típusai egy táblához: id => [nev, tipus, aktiv]. */
@@ -664,12 +671,31 @@ final class SDH_Muhely_Ml3
         self::$indult = microtime(true);
         self::tabla_telepit();
 
-        // Egyszerre egy lépés fut (két nyitott ablak ne dolgozza fel kétszer ugyanazt).
+        // Egyszerre egy lépés fut (két nyitott ablak, vagy egy elhúzódó és egy újrapróbált kérés ne dolgozza fel
+        // kétszer ugyanazt). MySQL-en adatbázis-zár (0.99.7): a kapcsolathoz kötött, a kérés végén – akkor is, ha a
+        // PHP leáll – magától elenged, és nem lehet „elavultnak” tekintve elvenni (a régi, 90 mp-es opciós zárat egy
+        // 90 mp-nél hosszabb kérés mellett egy második kérés is megkapta → ugyanaz a sor kétszer, ütköző munkalapszám).
+        global $wpdb;
+
+        if (!(class_exists('WP_SQLite_DB', false) && $wpdb instanceof WP_SQLite_DB)) {
+            $nev = $wpdb->prefix . 'sdh_muhely_ml3';
+
+            if ((int) $wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 0)', $nev)) !== 1) {
+                return ['uzenet' => 'Egy másik ablak (vagy az előző kérés) még dolgozik – várok…', 'var' => true] + self::osszegzes();
+            }
+
+            try {
+                return self::lepes_zarral();
+            } finally {
+                $wpdb->query($wpdb->prepare('SELECT RELEASE_LOCK(%s)', $nev));
+            }
+        }
+
         $zar = 'sdh_muhely_ml3_zar';
 
         if (!add_option($zar, time(), '', false)) {
             if (time() - (int) get_option($zar, 0) < 90) {
-                return ['uzenet' => 'Egy másik ablak (vagy az előző kérés) még dolgozik – várok…'] + self::osszegzes();
+                return ['uzenet' => 'Egy másik ablak (vagy az előző kérés) még dolgozik – várok…', 'var' => true] + self::osszegzes();
             }
 
             update_option($zar, time(), false);
@@ -1108,8 +1134,22 @@ final class SDH_Muhely_Ml3
                 }
 
                 fseek($f, (int) $at['offset']);
+                $elore = 0;
 
-                while (self::van_ido() && ($l = fgets($f)) !== false) {
+                while (self::van_ido()) {
+                    // Előtöltés (0.99.7): a következő sorok lenyomata egy lekérdezéssel (nem soronként egy).
+                    if ($elore <= 0) {
+                        $poz   = ftell($f);
+                        $elore = self::elotolt($a, $tabla, $f, 500);
+                        fseek($f, $poz);
+                    }
+
+                    $elore--;
+
+                    if (($l = fgets($f)) === false) {
+                        break;
+                    }
+
                     $at['offset'] = ftell($f);
                     $at['kesz_sorok']++;
 
@@ -1142,6 +1182,9 @@ final class SDH_Muhely_Ml3
             $a['zaras']  = ['lepes' => 'keszlet', 'utolso' => 0];
             $a['uzenet'] = 'Zárás: készlet újraszámolása, ellenőrzés…';
         }
+
+        // A hátralévő idő a friss tempóból (0.99.7): az utolsó lépések mintája – egy leállás vagy a lassú eleje nem torzít.
+        $at['minta'] = array_slice(array_merge((array) ($at['minta'] ?? []), [[microtime(true), (int) $at['kesz_sorok']]]), -12);
 
         unset($at);
         self::kovet_ir();
@@ -1214,6 +1257,40 @@ final class SDH_Muhely_Ml3
         return '';
     }
 
+    /**
+     * A fájl következő legfeljebb $n sorának lenyomata a nyers tárból, egy lekérdezéssel (a hiányzóké null).
+     * A fájlmutatót a hívó állítja vissza. @return int az előtöltött sorok száma (0: a fájl vége)
+     */
+    private static function elotolt(array $a, string $tabla, $f, int $n): int
+    {
+        global $wpdb;
+
+        $khk = [];
+        $db  = 0;
+
+        while ($db < $n && ($l = fgets($f)) !== false) {
+            $db++;
+            $sor = json_decode($l, true);
+
+            if (is_array($sor)) {
+                $khk[md5(mb_substr(self::kulcs($a, $tabla, $sor), 0, 190))] = null;
+            }
+        }
+
+        self::$hash_tar = [$tabla => $khk]; // csak az előttünk álló sorok – a memória nem nő
+
+        if ($khk !== []) {
+            $lista = implode(',', array_map(static fn (string $k): string => "'" . $k . "'", array_keys($khk))); // md5: csak hexa
+            $nt    = self::nyers_tabla();
+
+            foreach ((array) $wpdb->get_results($wpdb->prepare("SELECT kh, hash FROM {$nt}" . self::gyors_ix() . " WHERE tabla = %s AND kh IN ({$lista})", $tabla)) as $h) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                self::$hash_tar[$tabla][(string) $h->kh] = (string) $h->hash;
+            }
+        }
+
+        return $db;
+    }
+
     /** Egy régi sor feldolgozása: leképezés + nyers tár (egy írással). */
     private static function sor(array &$a, string $tabla, string $sor_json): void
     {
@@ -1232,16 +1309,21 @@ final class SDH_Muhely_Ml3
         $hash  = md5($sor_json);
         $nt    = self::nyers_tabla();
 
-        // A táblában már bent lévő sorok lenyomata (kérésenként egyszer) – az első átvételnél nincs külön lekérdezés.
+        // A már bent lévő régi sor lenyomata (0.99.7): az előtöltésből (elotolt), különben pontszerű keresés a fedő
+        // indexben. Korábban kérésenként a tábla összes sorát beolvasta – a sorok számával nőtt, és a nagy táblák végén
+        // szinte csak ez futott (APP.ITEM: adagonként 1-2 sor).
+        $kh = md5($kulcs);
+
         if (!isset(self::$hash_tar[$tabla])) {
             self::$hash_tar = [$tabla => []];
-
-            foreach ((array) $wpdb->get_results($wpdb->prepare("SELECT kulcs, hash FROM {$nt} WHERE tabla = %s", $tabla)) as $h) {
-                self::$hash_tar[$tabla][(string) $h->kulcs] = (string) $h->hash;
-            }
         }
 
-        $volt = self::$hash_tar[$tabla][$kulcs] ?? null;
+        if (!array_key_exists($kh, self::$hash_tar[$tabla])) {
+            $h = $wpdb->get_var($wpdb->prepare("SELECT hash FROM {$nt}" . self::gyors_ix() . " WHERE tabla = %s AND kh = %s", $tabla, $kh));
+            self::$hash_tar[$tabla][$kh] = $h !== null ? (string) $h : null;
+        }
+
+        $volt = self::$hash_tar[$tabla][$kh];
 
         if ($volt === $hash) {
             self::stat($a, $tabla, 'valtozatlan');
@@ -1249,7 +1331,7 @@ final class SDH_Muhely_Ml3
             return;
         }
 
-        $meg   = $volt !== null ? $wpdb->get_row($wpdb->prepare("SELECT id, uj_tabla, uj_id, letrehozta, kapcsolt, adat FROM {$nt} WHERE tabla = %s AND kh = %s", $tabla, md5($kulcs))) : null;
+        $meg   = $volt !== null ? $wpdb->get_row($wpdb->prepare("SELECT id, uj_tabla, uj_id, letrehozta, kapcsolt, adat FROM {$nt} WHERE tabla = %s AND kh = %s", $tabla, $kh)) : null;
         $elozo = $meg !== null ? json_decode((string) $meg->adat, true) : null;
 
         // A fájlok: a leképezés a rendszerbe teszi őket, ami nem kell sehova, az a modul tárába kerül.
@@ -1296,7 +1378,7 @@ final class SDH_Muhely_Ml3
             $wpdb->update($nt, $nyers, ['id' => (int) $meg->id]);
         }
 
-        self::$hash_tar[$tabla][$kulcs] = $hash;
+        self::$hash_tar[$tabla][$kh] = $hash;
 
         if (isset(self::$nyers_tar[$tabla])) {
             self::$nyers_tar[$tabla][$kulcs] = $sor;
@@ -1304,7 +1386,7 @@ final class SDH_Muhely_Ml3
 
         // Csak a már betöltött térképhez adjuk hozzá: egy itt létrehozott, részleges térkép elfedné a korábbi kérések sorait.
         if ((int) $ered['uj_id'] > 0 && isset(self::$uj_tar[$tabla])) {
-            self::$uj_tar[$tabla][$kulcs] = (int) $ered['uj_id'];
+            self::$uj_tar[$tabla][md5($kulcs)] = (int) $ered['uj_id'];
         }
 
         self::stat($a, $tabla, 'sorok');
@@ -1684,11 +1766,8 @@ final class SDH_Muhely_Ml3
         $uj = (int) $kov['uj_id'] <= 0;
 
         if ($uj) {
-            if (self::$szam_tar === null) {
-                self::$szam_tar = array_fill_keys(array_map('intval', (array) $wpdb->get_col("SELECT munkalap_szam FROM {$tabla} WHERE munkalap_szam IS NOT NULL")), true);
-            }
-
-            $foglalt = isset(self::$szam_tar[$regi_szam]);
+            // Pontszerű keresés az indexben (0.99.7): kérésenként a teljes számlista helyett, és mindig a friss állapotot látja.
+            $foglalt = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$tabla} WHERE munkalap_szam = %d", $regi_szam)) > 0;
 
             if ($foglalt) {
                 $adat['munkalap_szam'] = max(SDH_Muhely_Munkalap::kovetkezo_szam(), (int) ($a['atvetel']['max_regi_szam'] ?? 0) + 1);
@@ -1699,13 +1778,22 @@ final class SDH_Muhely_Ml3
             }
         }
 
-        $ir = self::ir('munkalap', $adat, $kov, (string) $regi_szam);
+        try {
+            $ir = self::ir('munkalap', $adat, $kov, (string) $regi_szam);
+        } catch (RuntimeException $e) {
+            // Ütköző munkalapszám (pl. közben máshol felvett lap): új számmal, a régi szám a megjegyzésben.
+            if (!$uj || stripos($e->getMessage(), 'munkalap_szam') === false) {
+                throw $e;
+            }
+
+            $adat['munkalap_szam'] = max(SDH_Muhely_Munkalap::kovetkezo_szam(), (int) ($a['atvetel']['max_regi_szam'] ?? 0) + 1);
+            $adat['megjegyzes']    = trim('MunkaLap 3 munkalapszám: ' . $regi_szam . " (a szám itt már foglalt volt)\n\n" . preg_replace('/^MunkaLap 3 munkalapszám: \d+ \(a szám itt már foglalt volt\)\s*/u', '', (string) $adat['megjegyzes']));
+            self::stat($a, 'APP.WORKSHEET', 'uj_szammal');
+            $ir = self::ir('munkalap', $adat, $kov, (string) $regi_szam);
+        }
+
         [$id, $er] = $ir;
         $id = abs($id);
-
-        if (isset($adat['munkalap_szam']) && self::$szam_tar !== null) {
-            self::$szam_tar[(int) $adat['munkalap_szam']] = true;
-        }
 
         $ki['uj_tabla']   = 'munkalap';
         $ki['uj_id']      = $id;
@@ -1780,12 +1868,12 @@ final class SDH_Muhely_Ml3
             $tar = [];
             $kk  = array_fill_keys(array_map('intval', (array) $wpdb->get_col($wpdb->prepare('SELECT id FROM ' . SDH_Muhely_Schema::tabla('termek') . ' WHERE forras = %s AND keszletkezeles = 1', self::FORRAS))), true);
 
-            foreach ((array) $wpdb->get_results('SELECT kulcs, uj_tabla, uj_id FROM ' . self::nyers_tabla() . " WHERE tabla = 'APP.MASTER_ITEM'") as $m) {
-                $tar[(string) $m->kulcs] = [(string) $m->uj_tabla === 'termek', isset($kk[(int) $m->uj_id])];
+            foreach ((array) $wpdb->get_results('SELECT kh, uj_tabla, uj_id FROM ' . self::nyers_tabla() . self::gyors_ix() . " WHERE tabla = 'APP.MASTER_ITEM'") as $m) {
+                $tar[(string) $m->kh] = [(string) $m->uj_tabla === 'termek', isset($kk[(int) $m->uj_id])];
             }
         }
 
-        return $tar[$id] ?? null;
+        return $tar[md5($id)] ?? null;
     }
 
     private static function tetel(array &$a, array $sor, array $kov, array $ki): array
@@ -2095,6 +2183,18 @@ final class SDH_Muhely_Ml3
             $szazalek = (int) $at['osszes'] > 0 ? (int) floor(100 * (int) $at['kesz_sorok'] / (int) $at['osszes']) : 0;
             $mp       = max(1, time() - (int) $at['indult']);
             $hatra    = (int) $at['kesz_sorok'] > 0 ? (int) round($mp * ((int) $at['osszes'] - (int) $at['kesz_sorok']) / (int) $at['kesz_sorok']) : 0;
+            $minta    = (array) ($at['minta'] ?? []);
+            $utolso_t = $minta !== [] ? (float) $minta[count($minta) - 1][0] : 0.0;
+            $minta    = array_values(array_filter($minta, static fn ($m): bool => $utolso_t - (float) $m[0] <= 300)); // leállás után ne a régi minta
+
+            if (count($minta) >= 3) {
+                [$t0, $s0] = $minta[0];
+                [$t1, $s1] = $minta[count($minta) - 1];
+
+                if ($t1 - $t0 >= 10 && $s1 > $s0) {
+                    $hatra = (int) round(((int) $at['osszes'] - (int) $at['kesz_sorok']) * ($t1 - $t0) / ($s1 - $s0));
+                }
+            }
             $reszlet  = (string) ($at['tablak'][$at['i']] ?? '') . ' – ' . number_format((int) $at['kesz_sorok'], 0, ',', ' ') . ' / ' . number_format((int) $at['osszes'], 0, ',', ' ') . ' sor'
                 . ($hatra > 0 ? ' · hátravan kb. ' . ($hatra >= 120 ? round($hatra / 60) . ' perc' : $hatra . ' mp') . ' (becslés)' : '');
         } elseif ($f === 'zaras') {

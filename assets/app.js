@@ -13712,10 +13712,14 @@ document.addEventListener('focusin', function (e) {
 
         fd.set('_wpnonce', doboz.getAttribute('data-nonce') || '');
 
-        fetch(AJAX, { method: 'POST', body: fd, credentials: 'same-origin' })
+        // Időkorlát (0.99.7): egy válasz nélkül maradt kérés ne állítsa meg csendben a folyamatot.
+        var vezerlo = typeof AbortController === 'function' ? new AbortController() : null;
+        var ora = vezerlo ? window.setTimeout(function () { vezerlo.abort(); }, adat instanceof FormData ? 600000 : 120000) : 0;
+
+        fetch(AJAX, { method: 'POST', body: fd, credentials: 'same-origin', signal: vezerlo ? vezerlo.signal : undefined })
             .then(function (v) { return v.json(); })
-            .then(kesz)
-            .catch(function () { kesz({ success: false, data: { uzenet: 'Nincs kapcsolat a szerverrel.', halozat: true } }); });
+            .then(function (v) { window.clearTimeout(ora); kesz(v); })
+            .catch(function () { window.clearTimeout(ora); kesz({ success: false, data: { uzenet: 'Nincs válasz a szervertől.', halozat: true } }); });
     }
 
     function kiir(szoveg) {
@@ -13736,6 +13740,16 @@ document.addEventListener('focusin', function (e) {
         a.querySelector('[data-sdh-ml3-szazalek]').textContent = (d.szazalek || 0) + '%';
         a.querySelector('[data-sdh-ml3-reszlet]').textContent = d.reszlet || '';
         kiir(d.uzenet);
+
+        // A lépésjelző kövesse a fázist újratöltés nélkül is (0.99.7): átvétel / zárás közben a 4. lépés az aktív.
+        var lepes = { atvetel: 4, zaras: 4, befejezve: 5 }[d.fazis];
+
+        if (lepes) {
+            doboz.querySelectorAll('.sdh-ml3__lepes').forEach(function (li, i) {
+                li.classList.toggle('is-aktiv', i + 1 === lepes);
+                li.classList.toggle('is-kesz', i + 1 < lepes);
+            });
+        }
     }
 
     // A folyamat léptetése: amíg a szerver azt mondja, „tovább”, újra hívjuk; a végén újratöltjük a lapot.
@@ -13743,10 +13757,12 @@ document.addEventListener('focusin', function (e) {
         hivas({ action: 'sdh_muhely_ml3_lepes' }, function (v) {
             if (!v || !v.success) {
                 hibak++;
-                kiir(((v && v.data && v.data.uzenet) || 'Hiba') + (hibak < 20 ? ' – újrapróbálom…' : ''));
+                // Hálózati hiba / időtúllépés: kitartóan újrapróbál (a szerver onnan folytatja); más hibánál 20 után megáll.
+                var tovabbi = (v && v.data && v.data.halozat) ? hibak < 500 : hibak < 20;
+                kiir(((v && v.data && v.data.uzenet) || 'Hiba') + (tovabbi ? ' – újrapróbálom…' : ' – frissítsd az oldalt.'));
 
-                if (hibak < 20) {
-                    window.setTimeout(folyamat, 3000);
+                if (tovabbi) {
+                    window.setTimeout(folyamat, Math.min(30000, 3000 * hibak));
                 }
 
                 return;
@@ -13756,7 +13772,13 @@ document.addEventListener('focusin', function (e) {
             allapot(v.data);
 
             if (v.data.tovabb) {
-                window.setTimeout(folyamat, v.data.fazis === 'atalakitas' ? 2000 : 30);
+                // Időzítő nélkül megy tovább (0.99.7): a háttérbe tett fül időzítőit a böngésző percenként egyre
+                // fogja vissza – a válasz feldolgozása nem időzítő, így a fül háttérben is teljes tempóval halad.
+                if (v.data.fazis === 'atalakitas' || v.data.var) {
+                    window.setTimeout(folyamat, 2000);
+                } else {
+                    folyamat();
+                }
 
                 return;
             }
